@@ -327,14 +327,14 @@ export function fetchPage(id) {
   return function(dispatch) {
     return Promise.all([
       QuestionsApi.fetchPage(id),
-      QuestionsApi.fetchQuestionSets(),
-      QuestionsApi.fetchQuestions(),
-      ConditionsApi.fetchConditions(),
       DomainApi.fetchAttributes(),
-    ]).then(([element, questionsets, questions, condtitions, attributes]) => {
+      ConditionsApi.fetchConditions(),
+      QuestionsApi.fetchQuestionSets(),
+      QuestionsApi.fetchQuestions()
+    ]).then(([element, attributes, conditions, questionsets, questions]) => {
       dispatch(stopPending())
       dispatch(fetchElementSuccess({
-        element, attributes, condtitions
+        element, attributes, conditions, questionsets, questions
       }))
     }).catch(error => {
       dispatch(stopPending())
@@ -347,13 +347,14 @@ export function fetchQuestionSet(id) {
   return function(dispatch) {
     return Promise.all([
       QuestionsApi.fetchQuestionSet(id),
-      QuestionsApi.fetchQuestionSets(),
-      QuestionsApi.fetchQuestions(),
+      DomainApi.fetchAttributes(),
       ConditionsApi.fetchConditions(),
-    ]).then(([element, questionsets, questions, condtitions]) => {
+      QuestionsApi.fetchQuestionSets(),
+      QuestionsApi.fetchQuestions()
+    ]).then(([element, attributes, conditions, questionsets, questions]) => {
       dispatch(stopPending())
       dispatch(fetchElementSuccess({
-        element, questionsets, questions, condtitions
+        element, attributes, conditions, questionsets, questions
       }))
     }).catch(error => {
       dispatch(stopPending())
@@ -366,15 +367,16 @@ export function fetchQuestion(id) {
   return function(dispatch) {
     return Promise.all([
       QuestionsApi.fetchQuestion(id),
-      QuestionsApi.fetchWidgetTypes(),
-      QuestionsApi.fetchValueTypes(),
       DomainApi.fetchAttributes(),
       OptionsApi.fetchOptionSets(),
       OptionsApi.fetchOptions(),
-    ]).then(([element, widgetTypes, valueTypes, attributes, optionsets, options]) => {
+      ConditionsApi.fetchConditions(),
+      QuestionsApi.fetchWidgetTypes(),
+      QuestionsApi.fetchValueTypes()
+    ]).then(([element, attributes, optionsets, options, conditions, widgetTypes, valueTypes]) => {
       dispatch(stopPending())
       dispatch(fetchElementSuccess({
-        element, widgetTypes, valueTypes, attributes, optionsets, options
+        element, attributes, optionsets, options, conditions, widgetTypes, valueTypes
       }))
     }).catch(error => {
       dispatch(stopPending())
@@ -458,14 +460,15 @@ export function fetchTask(id) {
   return function(dispatch) {
     return Promise.all([
       TasksApi.fetchTask(id),
-      CoreApi.fetchSites(),
-      CoreApi.fetchGroups(),
       DomainApi.fetchAttributes(),
-      QuestionsApi.fetchCatalogs(true)
-    ]).then(([element, sites, groups, attributes, catalogs]) => {
+      ConditionsApi.fetchConditions(),
+      QuestionsApi.fetchCatalogs(true),
+      CoreApi.fetchSites(),
+      CoreApi.fetchGroups()
+    ]).then(([element, attributes, conditions, catalogs, sites, groups]) => {
       dispatch(stopPending())
       dispatch(fetchElementSuccess({
-        element, sites, groups, attributes, catalogs
+        element, attributes, conditions, catalogs, sites, groups
       }))
     }).catch(error => {
       dispatch(stopPending())
@@ -478,10 +481,10 @@ export function fetchView(id) {
   return function(dispatch) {
     return Promise.all([
       ViewsApi.fetchView(id),
+      QuestionsApi.fetchCatalogs(true),
       CoreApi.fetchSites(),
-      CoreApi.fetchGroups(),
-      QuestionsApi.fetchCatalogs(true)
-    ]).then(([element, sites, groups, catalogs]) => {
+      CoreApi.fetchGroups()
+    ]).then(([element, catalogs, sites, groups]) => {
       dispatch(stopPending())
       dispatch(fetchElementSuccess({
         element, sites, groups, catalogs

@@ -11,7 +11,8 @@ import UriPrefix from '../forms/UriPrefix'
 
 import ElementHeading from '../common/ElementHeading'
 
-const QuestionSet = ({ config, questionset, questionsets, questions, warnings, errors, updateQuestionSet, storeQuestionSet }) => {
+const QuestionSet = ({ config, questionset, warnings, errors, updateQuestionSet, storeQuestionSet,
+                       attributes, conditions, questionsets, questions }) => {
   return (
     <div className="panel panel-default">
       <ElementHeading verboseName={gettext('Question set')} element={questionset} onSave={storeQuestionSet} />
@@ -39,20 +40,26 @@ const QuestionSet = ({ config, questionset, questionsets, questions, warnings, e
                       warnings={warnings} errors={errors} onChange={updateQuestionSet} />
           </div>
           <div className="col-sm-12">
-            <OrderedMultiSelect config={config} element={questionset} field="questionsets" selectField="questionset"
-                                options={questionsets} warnings={warnings} errors={errors}
+            <Select config={config} element={questionset} field="attribute"
+                    warnings={warnings} errors={errors}
+                    options={attributes} onChange={updateQuestionSet} />
+          </div>
+          <div className="col-sm-12">
+            <OrderedMultiSelect config={config} element={questionset} field="questionsets"
+                                warnings={warnings} errors={errors}
+                                options={questionsets} verboseName="questionset"
                                 onChange={updateQuestionSet} />
           </div>
           <div className="col-sm-12">
-            <OrderedMultiSelect config={config} element={questionset} field="questions" selectField="question"
-                                options={questions} warnings={warnings} errors={errors}
+            <OrderedMultiSelect config={config} element={questionset} field="questions"
+                                warnings={warnings} errors={errors}
+                                options={questions}  verboseName="question"
                                 onChange={updateQuestionSet} />
           </div>
           <div className="col-sm-12">
             <Tabs id="#catalog-tabs" defaultActiveKey={0} animation={false}>
               {
                 config.settings && config.settings.languages.map(([lang_code, lang], index) => {
-                  const classNames = ''
                   return (
                     <Tab className="pt-10" key={index} eventKey={index} title={lang}>
                       <div className="row">
@@ -92,12 +99,12 @@ const QuestionSet = ({ config, questionset, questionsets, questions, warnings, e
 QuestionSet.propTypes = {
   config: PropTypes.object.isRequired,
   questionset: PropTypes.object.isRequired,
-  questionsets: PropTypes.array,
-  questions: PropTypes.array,
-  warnings: PropTypes.object,
-  errors: PropTypes.object,
+  warnings: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
   updateQuestionSet: PropTypes.func.isRequired,
-  storeQuestionSet: PropTypes.func.isRequired
+  storeQuestionSet: PropTypes.func.isRequired,
+  questionsets: PropTypes.array,
+  questions: PropTypes.array
 }
 
 export default QuestionSet

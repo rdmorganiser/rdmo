@@ -4,13 +4,15 @@ import { Tabs, Tab } from 'react-bootstrap';
 
 import Checkbox from '../forms/Checkbox'
 import OrderedMultiSelect from '../forms/OrderedMultiSelect'
+import Select from '../forms/Select'
 import Text from '../forms/Text'
 import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
 import ElementHeading from '../common/ElementHeading'
 
-const Catalog = ({ config, catalog, sections, warnings, errors, updateCatalog, storeCatalog }) => {
+const Catalog = ({ config, catalog, warnings, errors, updateCatalog, storeCatalog,
+                   sites, groups, sections }) => {
   return (
     <div className="panel panel-default">
       <ElementHeading verboseName={gettext('Catalog')} element={catalog} onSave={storeCatalog} />
@@ -38,15 +40,15 @@ const Catalog = ({ config, catalog, sections, warnings, errors, updateCatalog, s
                       warnings={warnings} errors={errors} onChange={updateCatalog} />
           </div>
           <div className="col-sm-12">
-            <OrderedMultiSelect config={config} element={catalog} field="sections" selectField="section"
-                                options={sections} warnings={warnings} errors={errors}
+            <OrderedMultiSelect config={config} element={catalog} field="sections"
+                                warnings={warnings} errors={errors}
+                                options={sections} verboseName="section"
                                 onChange={updateCatalog} />
           </div>
           <div className="col-sm-12">
             <Tabs id="#catalog-tabs" defaultActiveKey={0} animation={false}>
               {
                 config.settings && config.settings.languages.map(([lang_code, lang], index) => {
-                  const classNames = ''
                   return (
                     <Tab className="pt-10" key={index} eventKey={index} title={lang}>
                       <Text config={config} element={catalog} field={`title_${lang_code }`}
@@ -57,6 +59,12 @@ const Catalog = ({ config, catalog, sections, warnings, errors, updateCatalog, s
                   )
                 })
               }
+              <Tab className="pt-10" eventKey={config.settings.languages.length + 1} title={gettext('Visibility')}>
+                <Select config={config} element={catalog} field="groups"
+                        warnings={warnings} errors={errors} options={groups} onChange={updateCatalog} />
+                <Select config={config} element={catalog} field="sites"
+                        warnings={warnings} errors={errors} options={sites} onChange={updateCatalog} />
+              </Tab>
             </Tabs>
           </div>
         </div>
@@ -68,11 +76,13 @@ const Catalog = ({ config, catalog, sections, warnings, errors, updateCatalog, s
 Catalog.propTypes = {
   config: PropTypes.object.isRequired,
   catalog: PropTypes.object.isRequired,
-  sections: PropTypes.array,
-  warnings: PropTypes.object,
-  errors: PropTypes.object,
+  warnings: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
   updateCatalog: PropTypes.func.isRequired,
-  storeCatalog: PropTypes.func.isRequired
+  storeCatalog: PropTypes.func.isRequired,
+  sites: PropTypes.array,
+  groups: PropTypes.array,
+  sections: PropTypes.array
 }
 
 export default Catalog

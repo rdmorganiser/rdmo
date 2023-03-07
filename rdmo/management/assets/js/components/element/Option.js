@@ -64,8 +64,8 @@ const Option = ({ config, option, warnings, errors, updateOption, storeOption })
 Option.propTypes = {
   config: PropTypes.object.isRequired,
   option: PropTypes.object.isRequired,
-  warnings: PropTypes.object,
-  errors: PropTypes.object,
+  warnings: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
   updateOption: PropTypes.func.isRequired,
   storeOption: PropTypes.func.isRequired
 }

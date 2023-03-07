@@ -11,7 +11,8 @@ import UriPrefix from '../forms/UriPrefix'
 
 import ElementHeading from '../common/ElementHeading'
 
-const Task = ({ config, task, warnings, errors, attributes, catalogs, groups, sites, updateTask, storeTask }) => {
+const Task = ({ config, task, warnings, errors, updateTask, storeTask,
+                attributes, catalogs, sites, groups }) => {
   return (
     <div className="panel panel-default">
       <ElementHeading verboseName={gettext('Task')} element={task} onSave={storeTask} />
@@ -93,14 +94,14 @@ const Task = ({ config, task, warnings, errors, attributes, catalogs, groups, si
 Task.propTypes = {
   config: PropTypes.object.isRequired,
   task: PropTypes.object.isRequired,
-  warnings: PropTypes.object,
-  errors: PropTypes.object,
+  warnings: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
+  updateTask: PropTypes.func.isRequired,
+  storeTask: PropTypes.func.isRequired,
   attributes: PropTypes.array,
   catalogs: PropTypes.array,
   groups: PropTypes.array,
-  sites: PropTypes.array,
-  updateTask: PropTypes.func.isRequired,
-  storeTask: PropTypes.func.isRequired
+  sites: PropTypes.array
 }
 
 export default Task

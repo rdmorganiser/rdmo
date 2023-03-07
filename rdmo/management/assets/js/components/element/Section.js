@@ -11,7 +11,8 @@ import UriPrefix from '../forms/UriPrefix'
 
 import ElementHeading from '../common/ElementHeading'
 
-const Section = ({ config, section, pages, warnings, errors, updateSection, storeSection }) => {
+const Section = ({ config, section, warnings, errors, updateSection, storeSection,
+                   pages }) => {
   return (
     <div className="panel panel-default">
       <ElementHeading verboseName={gettext('Section')} element={section} onSave={storeSection} />
@@ -35,8 +36,9 @@ const Section = ({ config, section, pages, warnings, errors, updateSection, stor
                       warnings={warnings} errors={errors} onChange={updateSection} />
           </div>
           <div className="col-sm-12">
-            <OrderedMultiSelect config={config} element={section} field="pages" selectField="page"
-                                options={pages} warnings={warnings} errors={errors}
+            <OrderedMultiSelect config={config} element={section} field="pages"
+                                warnings={warnings} errors={errors}
+                                options={pages} verboseName="page"
                                 onChange={updateSection} />
           </div>
           <div className="col-sm-12">
@@ -64,11 +66,11 @@ const Section = ({ config, section, pages, warnings, errors, updateSection, stor
 Section.propTypes = {
   config: PropTypes.object.isRequired,
   section: PropTypes.object.isRequired,
-  pages: PropTypes.array,
-  warnings: PropTypes.object,
-  errors: PropTypes.object,
+  warnings: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
   updateSection: PropTypes.func.isRequired,
-  storeSection: PropTypes.func.isRequired
+  storeSection: PropTypes.func.isRequired,
+  pages: PropTypes.array
 }
 
 export default Section

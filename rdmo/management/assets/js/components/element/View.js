@@ -11,7 +11,8 @@ import UriPrefix from '../forms/UriPrefix'
 
 import ElementHeading from '../common/ElementHeading'
 
-const View = ({ config, view, warnings, errors, catalogs, groups, sites, updateView, storeView }) => {
+const View = ({ config, view, warnings, errors, updateView, storeView,
+                catalogs, sites, groups }) => {
   return (
     <div className="panel panel-default">
       <ElementHeading verboseName={gettext('View')} element={view} onSave={storeView} />
@@ -56,7 +57,7 @@ const View = ({ config, view, warnings, errors, catalogs, groups, sites, updateV
                   )
                 })
               }
-              <Tab className="pt-10" eventKey={config.settings.languages.length + 2} title={gettext('Visibility')}>
+              <Tab className="pt-10" eventKey={config.settings.languages.length + 1} title={gettext('Visibility')}>
                 <Select config={config} element={view} field="catalogs"
                         warnings={warnings} errors={errors} options={catalogs} onChange={updateView} />
                 <Select config={config} element={view} field="groups"
@@ -75,10 +76,13 @@ const View = ({ config, view, warnings, errors, catalogs, groups, sites, updateV
 View.propTypes = {
   config: PropTypes.object.isRequired,
   view: PropTypes.object.isRequired,
-  warnings: PropTypes.object,
-  errors: PropTypes.object,
+  warnings: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
   updateView: PropTypes.func.isRequired,
-  storeView: PropTypes.func.isRequired
+  storeView: PropTypes.func.isRequired,
+  catalogs: PropTypes.array,
+  groups: PropTypes.array,
+  sites: PropTypes.array
 }
 
 export default View

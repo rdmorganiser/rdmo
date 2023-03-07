@@ -12,7 +12,8 @@ import UriPrefix from '../forms/UriPrefix'
 
 import ElementHeading from '../common/ElementHeading'
 
-const OptionSet = ({ config, optionset, options,  providers, warnings, errors, updateOptionSet, storeOptionSet }) => {
+const OptionSet = ({ config, optionset, warnings, errors, updateOptionSet, storeOptionSet,
+                     options, providers }) => {
   return (
     <div className="panel panel-default">
       <ElementHeading verboseName={gettext('Option set')} element={optionset} onSave={storeOptionSet} />
@@ -40,8 +41,9 @@ const OptionSet = ({ config, optionset, options,  providers, warnings, errors, u
                     warnings={warnings} errors={errors} onChange={updateOptionSet} />
           </div>
           <div className="col-sm-12">
-            <OrderedMultiSelect config={config} element={optionset} field="options" selectField="option"
-                                options={options} warnings={warnings} errors={errors}
+            <OrderedMultiSelect config={config} element={optionset} field="options"
+                                warnings={warnings} errors={errors}
+                                options={options} verboseName="option"
                                 onChange={updateOptionSet} />
           </div>
           <div className="col-sm-12">
@@ -57,12 +59,12 @@ const OptionSet = ({ config, optionset, options,  providers, warnings, errors, u
 OptionSet.propTypes = {
   config: PropTypes.object.isRequired,
   optionset: PropTypes.object.isRequired,
-  options: PropTypes.array,
-  providers: PropTypes.array,
-  warnings: PropTypes.object,
-  errors: PropTypes.object,
+  warnings: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
   updateOptionSet: PropTypes.func.isRequired,
-  storeOptionSet: PropTypes.func.isRequired
+  storeOptionSet: PropTypes.func.isRequired,
+  options: PropTypes.array,
+  providers: PropTypes.array
 }
 
 export default OptionSet

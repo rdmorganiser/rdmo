@@ -10,7 +10,8 @@ import UriPrefix from '../forms/UriPrefix'
 
 import ElementHeading from '../common/ElementHeading'
 
-const Condition = ({ config, condition, warnings, errors, relations, attributes, options, updateCondition, storeCondition }) => {
+const Condition = ({ config, condition, warnings, errors, updateCondition, storeCondition,
+                     relations, attributes, options }) => {
   return (
     <div className="panel panel-default">
       <ElementHeading verboseName={gettext('Condition')} element={condition} onSave={storeCondition} />
@@ -58,13 +59,13 @@ const Condition = ({ config, condition, warnings, errors, relations, attributes,
 Condition.propTypes = {
   config: PropTypes.object.isRequired,
   condition: PropTypes.object.isRequired,
-  warnings: PropTypes.object,
-  errors: PropTypes.object,
+  warnings: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
+  updateCondition: PropTypes.func.isRequired,
+  storeCondition: PropTypes.func.isRequired,
   relations: PropTypes.array,
   attributes: PropTypes.array,
-  options: PropTypes.array,
-  updateCondition: PropTypes.func.isRequired,
-  storeCondition: PropTypes.func.isRequired
+  options: PropTypes.array
 }
 
 export default Condition

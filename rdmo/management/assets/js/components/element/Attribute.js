@@ -10,7 +10,8 @@ import UriPrefix from '../forms/UriPrefix'
 
 import ElementHeading from '../common/ElementHeading'
 
-const Attribute = ({ config, attribute, warnings, errors, attributes, updateAttribute, storeAttribute }) => {
+const Attribute = ({ config, attribute, warnings, errors, updateAttribute, storeAttribute,
+                     attributes }) => {
   return (
     <div className="panel panel-default">
       <ElementHeading verboseName={gettext('Attribute')} element={attribute} onSave={storeAttribute} />
@@ -46,11 +47,11 @@ const Attribute = ({ config, attribute, warnings, errors, attributes, updateAttr
 Attribute.propTypes = {
   config: PropTypes.object.isRequired,
   attribute: PropTypes.object.isRequired,
-  warnings: PropTypes.object,
-  errors: PropTypes.object,
-  attributes: PropTypes.array,
+  warnings: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
   updateAttribute: PropTypes.func.isRequired,
-  storeAttribute: PropTypes.func.isRequired
+  storeAttribute: PropTypes.func.isRequired,
+  attributes: PropTypes.array
 }
 
 export default Attribute
