@@ -54,55 +54,53 @@ class Main extends Component {
                 config={config} catalogs={elements.catalogs}
                 fetchCatalog={id => elementActions.fetchElement('catalogs', id)} />
             : <Catalog
-                config={config} catalog={element}
-                sites={elements.sites} groups={elements.groups} sections={elements.sections}
-                warnings={elements.warnings} errors={elements.errors}
+                config={config} catalog={element} warnings={elements.warnings} errors={elements.errors}
                 updateCatalog={(key, value) => elementActions.updateElement(element, key, value)}
-                storeCatalog={() => elementActions.storeElement('catalogs', element)} />
+                storeCatalog={() => elementActions.storeElement('catalogs', element)}
+                sites={elements.sites} groups={elements.groups} sections={elements.sections} />
         case 'sections':
           return isNil(element)
             ? <Sections
                 config={config} sections={elements.sections}
                 fetchSection={id => elementActions.fetchElement('sections', id)} />
             : <Section
-                config={config} section={element} pages={elements.pages}
-                warnings={elements.warnings} errors={elements.errors}
+                config={config} section={element} warnings={elements.warnings} errors={elements.errors}
                 updateSection={(key, value) => elementActions.updateElement(element, key, value)}
-                storeSection={() => elementActions.storeElement('sections', element)} />
+                storeSection={() => elementActions.storeElement('sections', element)}
+                pages={elements.pages} />
         case 'pages':
           return isNil(element)
             ? <Pages
                 config={config} pages={elements.pages}
                 fetchPage={id => elementActions.fetchElement('pages', id)} />
-            : <Page config={config} page={element}
-                attributes={elements.attributes} conditions={elements.attributes}
-                questionsets={elements.questionsets} questions={elements.questions}
-                warnings={elements.warnings} errors={elements.errors}
+            : <Page config={config} page={element} warnings={elements.warnings} errors={elements.errors}
                 updatePage={(key, value) => elementActions.updateElement(element, key, value)}
-                storePage={() => elementActions.storeElement('pages', element)} />
+                storePage={() => elementActions.storeElement('pages', element)}
+                attributes={elements.attributes} conditions={elements.conditions}
+                questionsets={elements.questionsets} questions={elements.questions} />
         case 'questionsets':
           return isNil(element)
             ? <QuestionSets
                 config={config} questionsets={elements.questionsets}
                 fetchQuestionSet={id => elementActions.fetchElement('questionsets', id)} />
             : <QuestionSet
-                config={config} questionset={element} questionsets={elements.questionsets}
-                questions={elements.questions} conditions={elements.attributes}
-                warnings={elements.warnings} errors={elements.errors}
+                config={config} questionset={element} warnings={elements.warnings} errors={elements.errors}
                 updateQuestionSet={(key, value) => elementActions.updateElement(element, key, value)}
-                storeQuestionSet={() => elementActions.storeElement('questionsets', element)} />
+                storeQuestionSet={() => elementActions.storeElement('questionsets', element)}
+                attributes={elements.attributes} conditions={elements.conditions}
+                questionsets={elements.questionsets} questions={elements.questions} />
         case 'questions':
           return isNil(element)
             ? <Questions
                 config={config} questions={elements.questions}
                 fetchQuestion={id => elementActions.fetchElement('questions', id)} />
             : <Question
-                config={config} question={element}
-                attributes={elements.attributes} options={elements.options}
-                widgetTypes={elements.widgetTypes} valueTypes={elements.valueTypes}
-                warnings={elements.warnings} errors={elements.errors}
+                config={config} question={element} warnings={elements.warnings} errors={elements.errors}
                 updateQuestion={(key, value) => elementActions.updateElement(element, key, value)}
-                storeQuestion={() => elementActions.storeElement('questions', element)} />
+                storeQuestion={() => elementActions.storeElement('questions', element)}
+                attributes={elements.attributes} conditions={elements.conditions}
+                optionsets={elements.optionsets} options={elements.options}
+                widgetTypes={elements.widgetTypes} valueTypes={elements.valueTypes} />
         case 'attributes':
           return isNil(element)
             ? <Attributes
@@ -110,10 +108,10 @@ class Main extends Component {
                 fetchAttribute={id => elementActions.fetchElement('attributes', id)} />
             : <Attribute
                 config={config} attribute={element}
-                attributes={elements.attributes}
                 warnings={elements.warnings} errors={elements.errors}
                 updateAttribute={(key, value) => elementActions.updateElement(element, key, value)}
-                storeAttribute={() => elementActions.storeElement('attributes', element)} />
+                storeAttribute={() => elementActions.storeElement('attributes', element)}
+                attributes={elements.attributes} />
         case 'optionsets':
           return isNil(element)
             ? <OptionSets
@@ -121,10 +119,10 @@ class Main extends Component {
                 fetchOptionSet={id => elementActions.fetchElement('optionsets', id)} />
             : <OptionSet
                 config={config} optionset={element}
-                options={elements.options} providers={elements.providers}
                 warnings={elements.warnings} errors={elements.errors}
                 updateOptionSet={(key, value) => elementActions.updateElement(element, key, value)}
-                storeOptionSet={() => elementActions.storeElement('optionsets', element)} />
+                storeOptionSet={() => elementActions.storeElement('optionsets', element)}
+                options={elements.options} providers={elements.providers} />
         case 'options':
           return isNil(element)
             ? <Options
@@ -143,9 +141,9 @@ class Main extends Component {
             : <Condition
                 config={config} condition={element}
                 warnings={elements.warnings} errors={elements.errors}
-                relations={elements.relations} attributes={elements.attributes} options={elements.options}
                 updateCondition={(key, value) => elementActions.updateElement(element, key, value)}
-                storeCondition={() => elementActions.storeElement('conditions', element)} />
+                storeCondition={() => elementActions.storeElement('conditions', element)}
+                relations={elements.relations} attributes={elements.attributes} options={elements.options} />
         case 'tasks':
           return isNil(element)
             ? <Tasks
@@ -154,21 +152,20 @@ class Main extends Component {
             : <Task
                 config={config} task={element}
                 warnings={elements.warnings} errors={elements.errors}
-                attributes={elements.attributes} catalogs={elements.catalogs}
-                groups={elements.groups} sites={elements.sites}
                 updateTask={(key, value) => elementActions.updateElement(element, key, value)}
-                storeTask={() => elementActions.storeElement('tasks', element)} />
+                storeTask={() => elementActions.storeElement('tasks', element)}
+                attributes={elements.attributes} conditions={elements.conditions}
+                catalogs={elements.catalogs} groups={elements.groups} sites={elements.sites} />
         case 'views':
           return isNil(element)
             ? <Views
                 config={config} views={elements.views}
                 fetchView={id => elementActions.fetchElement('views', id)} />
             : <View
-                config={config} view={element}
-                warnings={elements.warnings} errors={elements.errors}
-                catalogs={elements.catalogs} groups={elements.groups} sites={elements.sites}
+                config={config} view={element} warnings={elements.warnings} errors={elements.errors}
                 updateView={(key, value) => elementActions.updateElement(element, key, value)}
-                storeView={() => elementActions.storeElement('views', element)} />
+                storeView={() => elementActions.storeElement('views', element)}
+                catalogs={elements.catalogs} groups={elements.groups} sites={elements.sites} />
         default:
           return null
       }

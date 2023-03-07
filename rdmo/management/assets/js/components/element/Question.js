@@ -2,15 +2,17 @@ import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap';
 
+import Checkbox from '../forms/Checkbox'
+import MultiSelect from '../forms/MultiSelect'
+import Select from '../forms/Select'
 import Text from '../forms/Text'
 import Textarea from '../forms/Textarea'
-import Checkbox from '../forms/Checkbox'
-import Select from '../forms/Select'
 import UriPrefix from '../forms/UriPrefix'
 
 import ElementHeading from '../common/ElementHeading'
 
-const Question = ({ config, question, attributes, options, widgetTypes, valueTypes, warnings, errors, updateQuestion, storeQuestion }) => {
+const Question = ({ config, question, warnings, errors, updateQuestion, storeQuestion,
+                    attributes, optionsets, options, conditions, widgetTypes, valueTypes }) => {
   return (
     <div className="panel panel-default">
       <ElementHeading verboseName={gettext('Question')} element={question} onSave={storeQuestion} />
@@ -32,6 +34,18 @@ const Question = ({ config, question, attributes, options, widgetTypes, valueTyp
           <div className="col-sm-12">
             <Checkbox config={config} element={question} field="locked"
                       warnings={warnings} errors={errors} onChange={updateQuestion} />
+          </div>
+          <div className="col-sm-12">
+            <MultiSelect config={config} element={question} field="optionsets"
+                         warnings={warnings} errors={errors}
+                         options={optionsets} verboseName="optionset"
+                         onChange={updateQuestion} />
+          </div>
+          <div className="col-sm-12">
+            <MultiSelect config={config} element={question} field="conditions"
+                         warnings={warnings} errors={errors}
+                         options={conditions} verboseName="condition"
+                         onChange={updateQuestion} />
           </div>
           <div className="col-sm-12">
             <Tabs id="#question-tabs" defaultActiveKey={0} animation={false}>
@@ -151,14 +165,16 @@ const Question = ({ config, question, attributes, options, widgetTypes, valueTyp
 Question.propTypes = {
   config: PropTypes.object.isRequired,
   question: PropTypes.object.isRequired,
-  attributes: PropTypes.array.isRequired,
-  options: PropTypes.array.isRequired,
-  widgetTypes: PropTypes.array.isRequired,
-  valueTypes: PropTypes.array.isRequired,
-  warnings: PropTypes.object,
-  errors: PropTypes.object,
+  warnings: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
   updateQuestion: PropTypes.func.isRequired,
-  storeQuestion: PropTypes.func.isRequired
+  storeQuestion: PropTypes.func.isRequired,
+  attributes: PropTypes.array,
+  conditions: PropTypes.array,
+  optionsets: PropTypes.array,
+  options: PropTypes.array,
+  widgetTypes: PropTypes.array,
+  valueTypes: PropTypes.array
 }
 
 export default Question

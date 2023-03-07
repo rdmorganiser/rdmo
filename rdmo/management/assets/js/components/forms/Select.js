@@ -31,7 +31,7 @@ const Select = ({ config, element, field, warnings, errors, options, onChange })
     <div className={className}>
       <label className="control-label" htmlFor={id}>{label}</label>
 
-      <ReactSelect classNamePrefix="react-select" isClearable={true}
+      <ReactSelect classNamePrefix="react-select" className="react-select" isClearable={true}
                    options={selectOptions} value={selectValue}
                    onChange={option => onChange(field, isNil(option) ? null : option.value)} />
 

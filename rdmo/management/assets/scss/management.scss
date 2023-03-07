@@ -124,3 +124,22 @@ $icon-font-path: "bootstrap-sass/assets/fonts/bootstrap/";
         box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
     }
 }
+
+.ordered-multi-select-item {
+    .handle {
+        cursor: grab;
+        color: rgb(221, 221, 221);
+        font-size: 24px;
+        line-height: 32px;
+        padding-top: 2px;
+    }
+
+    .react-select {
+        margin-left: 14px;
+        margin-right: 14px;
+    }
+
+    &.over {
+        opacity: 0;
+    }
+}
