@@ -122,10 +122,8 @@ def test_create_m2m(db, client, username, password):
     instances = Catalog.objects.all()
 
     for instance in instances:
-        catalog_sections = [{
-            'section': section.section.id,
-            'order': section.order
-        } for section in instance.catalog_sections.all()[:1]]
+        catalog_sections = [section.section.id
+                            for section in instance.catalog_sections.all()[:1]]
 
         url = reverse(urlnames['list'])
         data = {
@@ -142,10 +140,8 @@ def test_create_m2m(db, client, username, password):
 
         if response.status_code == 201:
             new_instance = Catalog.objects.get(id=response.json().get('id'))
-            assert catalog_sections == [{
-                'section': catalogsection.section_id,
-                'order': catalogsection.order
-            } for catalogsection in new_instance.catalog_sections.all()]
+            assert catalog_sections == [catalogsection.section_id
+                                        for catalogsection in new_instance.catalog_sections.all()]
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -178,10 +174,8 @@ def test_update_m2m(db, client, username, password):
     instances = Catalog.objects.all()
 
     for instance in instances:
-        catalog_sections = [{
-            'section': section.section.id,
-            'order': section.order
-        } for section in instance.catalog_sections.all()[:1]]
+        catalog_sections = [section.section.id
+                            for section in instance.catalog_sections.all()[:1]]
 
         url = reverse(urlnames['detail'], args=[instance.pk])
         data = {
@@ -198,10 +192,36 @@ def test_update_m2m(db, client, username, password):
 
         if response.status_code == 200:
             instance.refresh_from_db()
-            assert catalog_sections == [{
-                'section': catalogsection.section_id,
-                'order': catalogsection.order
-            } for catalogsection in instance.catalog_sections.all()]
+            assert catalog_sections == [catalogsection.section_id
+                                        for catalogsection in instance.catalog_sections.all()]
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_update_m2m_order(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = Catalog.objects.all()
+
+    for instance in instances:
+        catalog_sections = [section.section.id
+                            for section in instance.catalog_sections.order_by('-order')]
+
+        url = reverse(urlnames['detail'], args=[instance.pk])
+        data = {
+            'uri_prefix': instance.uri_prefix,
+            'uri_path': instance.uri_path,
+            'comment': instance.comment,
+            'order': instance.order,
+            'sections': catalog_sections,
+            'title_en': instance.title_lang1,
+            'title_de': instance.title_lang2
+        }
+        response = client.put(url, data, content_type='application/json')
+        assert response.status_code == status_map['update'][username], response.json()
+
+        if response.status_code == 200:
+            instance.refresh_from_db()
+            assert catalog_sections == [catalogsection.section_id
+                                        for catalogsection in instance.catalog_sections.all()]
 
 
 @pytest.mark.parametrize('username,password', users)

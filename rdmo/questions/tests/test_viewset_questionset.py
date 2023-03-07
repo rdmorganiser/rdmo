@@ -129,22 +129,10 @@ def test_create_m2m(db, client, username, password):
     instances = QuestionSet.objects.all()
 
     for instance in instances:
-        pages = [{
-            'page': questionset_page.page.id,
-            'order': questionset_page.order
-        } for questionset_page in instance.questionset_pages.all()[:1]]
-        parents = [{
-            'parent': questionset_parent.parent.id,
-            'order': questionset_parent.order
-        } for questionset_parent in instance.questionset_parents.all()[:1]]
-        questionsets = [{
-            'questionset': questionset_questionset.questionset.id,
-            'order': questionset_questionset.order
-        } for questionset_questionset in instance.questionset_questionsets.all()[:1]]
-        questions = [{
-            'question': questionset_question.question.id,
-            'order': questionset_question.order
-        } for questionset_question in instance.questionset_questions.all()[:1]]
+        questionsets = [questionset_questionset.questionset.id
+                        for questionset_questionset in instance.questionset_questionsets.all()[:1]]
+        questions = [questionset_question.question.id
+                     for questionset_question in instance.questionset_questions.all()[:1]]
         conditions = [condition.pk for condition in instance.conditions.all()[:1]]
 
         url = reverse(urlnames['list'])
@@ -162,8 +150,6 @@ def test_create_m2m(db, client, username, password):
             'verbose_name_de': instance.verbose_name_lang2,
             'verbose_name_plural_en': instance.verbose_name_plural_lang1,
             'verbose_name_plural_de': instance.verbose_name_plural_lang2,
-            'pages': pages,
-            'parents': parents,
             'questionsets': questionsets,
             'questions': questions,
             'conditions': conditions
@@ -173,22 +159,10 @@ def test_create_m2m(db, client, username, password):
 
         if response.status_code == 201:
             new_instance = QuestionSet.objects.get(id=response.json().get('id'))
-            assert pages == [{
-                'page': questionset_page.page.id,
-                'order': questionset_page.order
-            } for questionset_page in new_instance.questionset_pages.all()]
-            assert parents == [{
-                'parent': questionset_parent.parent.id,
-                'order': questionset_parent.order
-            } for questionset_parent in new_instance.questionset_parents.all()]
-            assert questionsets == [{
-                'questionset': questionset_questionset.questionset.id,
-                'order': questionset_questionset.order
-            } for questionset_questionset in new_instance.questionset_questionsets.all()]
-            assert questions == [{
-                'question': questionset_question.question.id,
-                'order': questionset_question.order
-            } for questionset_question in new_instance.questionset_questions.all()]
+            assert questionsets == [questionset_questionset.questionset.id
+                                    for questionset_questionset in new_instance.questionset_questionsets.all()]
+            assert questions == [questionset_question.question.id
+                                 for questionset_question in new_instance.questionset_questions.all()]
             assert conditions == [condition.pk for condition in new_instance.conditions.all()]
 
 
@@ -237,22 +211,10 @@ def test_update_m2m(db, client, username, password):
     instances = QuestionSet.objects.all()
 
     for instance in instances:
-        pages = [{
-            'page': questionset_page.page.id,
-            'order': questionset_page.order
-        } for questionset_page in instance.questionset_pages.all()[:1]]
-        parents = [{
-            'parent': questionset_parent.parent.id,
-            'order': questionset_parent.order
-        } for questionset_parent in instance.questionset_parents.all()[:1]]
-        questionsets = [{
-            'questionset': questionset_questionset.questionset.id,
-            'order': questionset_questionset.order
-        } for questionset_questionset in instance.questionset_questionsets.all()[:1]]
-        questions = [{
-            'question': questionset_question.question.id,
-            'order': questionset_question.order
-        } for questionset_question in instance.questionset_questions.all()[:1]]
+        questionsets = [questionset_questionset.questionset.id
+                        for questionset_questionset in instance.questionset_questionsets.all()[:1]]
+        questions = [questionset_question.question.id
+                     for questionset_question in instance.questionset_questions.all()[:1]]
         conditions = [condition.pk for condition in instance.conditions.all()[:1]]
 
         url = reverse(urlnames['detail'], args=[instance.pk])
@@ -270,8 +232,6 @@ def test_update_m2m(db, client, username, password):
             'verbose_name_de': instance.verbose_name_lang2,
             'verbose_name_plural_en': instance.verbose_name_plural_lang1,
             'verbose_name_plural_de': instance.verbose_name_plural_lang2,
-            'pages': pages,
-            'parents': parents,
             'questionsets': questionsets,
             'questions': questions,
             'conditions': conditions
@@ -281,22 +241,53 @@ def test_update_m2m(db, client, username, password):
 
         if response.status_code == 200:
             instance.refresh_from_db()
-            assert pages == [{
-                'page': questionset_page.page.id,
-                'order': questionset_page.order
-            } for questionset_page in instance.questionset_pages.all()]
-            assert parents == [{
-                'parent': questionset_parent.parent.id,
-                'order': questionset_parent.order
-            } for questionset_parent in instance.questionset_parents.all()]
-            assert questionsets == [{
-                'questionset': questionset_questionset.questionset.id,
-                'order': questionset_questionset.order
-            } for questionset_questionset in instance.questionset_questionsets.all()]
-            assert questions == [{
-                'question': questionset_question.question.id,
-                'order': questionset_question.order
-            } for questionset_question in instance.questionset_questions.all()]
+            assert questionsets == [questionset_questionset.questionset.id
+                                    for questionset_questionset in instance.questionset_questionsets.all()]
+            assert questions == [questionset_question.question.id
+                                 for questionset_question in instance.questionset_questions.all()]
+            assert conditions == [condition.pk for condition in instance.conditions.all()]
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_update_m2m_order(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = QuestionSet.objects.all()
+
+    for instance in instances:
+        questionsets = [questionset_questionset.questionset.id
+                        for questionset_questionset in instance.questionset_questionsets.order_by('-order')]
+        questions = [questionset_question.question.id
+                     for questionset_question in instance.questionset_questions.order_by('-order')]
+        conditions = [condition.pk for condition in instance.conditions.all()]
+
+        url = reverse(urlnames['detail'], args=[instance.pk])
+        data = {
+            'uri_prefix': instance.uri_prefix,
+            'uri_path': instance.uri_path,
+            'comment': instance.comment,
+            'attribute': instance.attribute.pk if instance.attribute else None,
+            'is_collection': instance.is_collection,
+            'title_en': instance.title_lang1,
+            'title_de': instance.title_lang2,
+            'help_en': instance.help_lang1,
+            'help_de': instance.help_lang2,
+            'verbose_name_en': instance.verbose_name_lang1,
+            'verbose_name_de': instance.verbose_name_lang2,
+            'verbose_name_plural_en': instance.verbose_name_plural_lang1,
+            'verbose_name_plural_de': instance.verbose_name_plural_lang2,
+            'questionsets': questionsets,
+            'questions': questions,
+            'conditions': conditions
+        }
+        response = client.put(url, data, content_type='application/json')
+        assert response.status_code == status_map['update'][username], response.json()
+
+        if response.status_code == 200:
+            instance.refresh_from_db()
+            assert questionsets == [questionset_questionset.questionset.id
+                                    for questionset_questionset in instance.questionset_questionsets.all()]
+            assert questions == [questionset_question.question.id
+                                 for questionset_question in instance.questionset_questions.all()]
             assert conditions == [condition.pk for condition in instance.conditions.all()]
 
 

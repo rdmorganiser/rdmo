@@ -135,14 +135,6 @@ def test_create_m2m(db, client, username, password):
     instances = Question.objects.all()
 
     for instance in instances:
-        pages = [{
-            'page': question_page.page.id,
-            'order': question_page.order
-        } for question_page in instance.question_pages.all()[:1]]
-        questionsets = [{
-            'questionset': question_questionset.questionset.id,
-            'order': question_questionset.order
-        } for question_questionset in instance.question_questionsets.all()[:1]]
         optionsets = [optionset.id for optionset in instance.optionsets.all()[:1]]
         conditions = [condition.pk for condition in instance.conditions.all()[:1]]
 
@@ -167,8 +159,6 @@ def test_create_m2m(db, client, username, password):
             'maximum': instance.maximum or '',
             'step': instance.step or '',
             'unit': instance.unit or '',
-            'pages': pages,
-            'questionsets': questionsets,
             'optionsets': optionsets,
             'conditions': conditions
         }
@@ -177,14 +167,6 @@ def test_create_m2m(db, client, username, password):
 
         if response.status_code == 201:
             new_instance = Question.objects.get(id=response.json().get('id'))
-            assert pages == [{
-                'page': question_page.page.id,
-                'order': question_page.order
-            } for question_page in new_instance.question_pages.all()]
-            assert questionsets == [{
-                'questionset': question_questionset.questionset.id,
-                'order': question_questionset.order
-            } for question_questionset in new_instance.question_questionsets.all()]
             assert optionsets == [optionset.pk for optionset in new_instance.optionsets.all()]
             assert conditions == [condition.pk for condition in new_instance.conditions.all()]
 
@@ -240,14 +222,6 @@ def test_update_m2m(db, client, username, password):
     instances = Question.objects.all()
 
     for instance in instances:
-        pages = [{
-            'page': question_page.page.id,
-            'order': question_page.order
-        } for question_page in instance.question_pages.all()[:1]]
-        questionsets = [{
-            'questionset': question_questionset.questionset.id,
-            'order': question_questionset.order
-        } for question_questionset in instance.question_questionsets.all()[:1]]
         optionsets = [optionset.id for optionset in instance.optionsets.all()[:1]]
         conditions = [condition.pk for condition in instance.conditions.all()[:1]]
 
@@ -272,8 +246,6 @@ def test_update_m2m(db, client, username, password):
             'maximum': instance.maximum,
             'step': instance.step,
             'unit': instance.unit,
-            'pages': pages,
-            'questionsets': questionsets,
             'optionsets': optionsets,
             'conditions': conditions
         }
@@ -282,14 +254,6 @@ def test_update_m2m(db, client, username, password):
 
         if response.status_code == 200:
             instance.refresh_from_db()
-            assert pages == [{
-                'page': question_page.page.id,
-                'order': question_page.order
-            } for question_page in instance.question_pages.all()]
-            assert questionsets == [{
-                'questionset': question_questionset.questionset.id,
-                'order': question_questionset.order
-            } for question_questionset in instance.question_questionsets.all()]
             assert optionsets == [optionset.pk for optionset in instance.optionsets.all()]
             assert conditions == [condition.pk for condition in instance.conditions.all()]
 

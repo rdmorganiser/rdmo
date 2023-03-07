@@ -129,18 +129,10 @@ def test_create_m2m(db, client, username, password):
     instances = Page.objects.all()
 
     for instance in instances:
-        sections = [{
-            'section': page_section.section.id,
-            'order': page_section.order
-        } for page_section in instance.page_sections.all()[:1]]
-        questionsets = [{
-            'questionset': page_questionset.questionset.id,
-            'order': page_questionset.order
-        } for page_questionset in instance.page_questionsets.all()[:1]]
-        questions = [{
-            'question': page_question.question.id,
-            'order': page_question.order
-        } for page_question in instance.page_questions.all()[:1]]
+        questionsets = [page_questionset.questionset.id
+                        for page_questionset in instance.page_questionsets.all()[:1]]
+        questions = [page_question.question.id
+                     for page_question in instance.page_questions.all()[:1]]
         conditions = [condition.pk for condition in instance.conditions.all()]
 
         url = reverse(urlnames['list'])
@@ -158,7 +150,6 @@ def test_create_m2m(db, client, username, password):
             'verbose_name_de': instance.verbose_name_lang2,
             'verbose_name_plural_en': instance.verbose_name_plural_lang1,
             'verbose_name_plural_de': instance.verbose_name_plural_lang2,
-            'sections': sections,
             'questionsets': questionsets,
             'questions': questions,
             'conditions': conditions
@@ -168,19 +159,12 @@ def test_create_m2m(db, client, username, password):
 
         if response.status_code == 201:
             new_instance = Page.objects.get(id=response.json().get('id'))
-            assert sections == [{
-                'section': page_section.section.id,
-                'order': page_section.order
-            } for page_section in new_instance.page_sections.all()]
-            assert questionsets == [{
-                'questionset': page_questionset.questionset.id,
-                'order': page_questionset.order
-            } for page_questionset in new_instance.page_questionsets.all()]
-            assert questions == [{
-                'question': page_question.question.id,
-                'order': page_question.order
-            } for page_question in new_instance.page_questions.all()]
+            assert questionsets == [page_questionset.questionset.id
+                                    for page_questionset in new_instance.page_questionsets.all()]
+            assert questions == [page_question.question.id
+                                 for page_question in new_instance.page_questions.all()]
             assert conditions == [condition.pk for condition in new_instance.conditions.all()]
+
 
 @pytest.mark.parametrize('username,password', users)
 def test_update(db, client, username, password):
@@ -188,7 +172,6 @@ def test_update(db, client, username, password):
     instances = Page.objects.all()
 
     for instance in instances:
-        sections = [section.id for section in instance.sections.all()]
         questionsets = [questionset.id for questionset in instance.questionsets.all()]
         questions = [question.id for question in instance.questions.all()]
         conditions = [condition.pk for condition in instance.conditions.all()]
@@ -213,7 +196,6 @@ def test_update(db, client, username, password):
         assert response.status_code == status_map['update'][username], response.json()
 
         instance.refresh_from_db()
-        assert sections == [section.id for section in instance.sections.all()]
         assert questionsets == [questionset.id for questionset in instance.questionsets.all()]
         assert questions == [question.id for question in instance.questions.all()]
         assert conditions == [condition.pk for condition in instance.conditions.all()]
@@ -225,18 +207,10 @@ def test_update_m2m(db, client, username, password):
     instances = Page.objects.all()
 
     for instance in instances:
-        page_sections = [{
-            'section': page_section.section_id,
-            'order': page_section.order
-        } for page_section in instance.page_sections.all()[:1]]
-        page_questionsets = [{
-            'questionset': page_questionset.questionset_id,
-            'order': page_questionset.order
-        } for page_questionset in instance.page_questionsets.all()[:1]]
-        page_questions = [{
-            'question': page_question.question_id,
-            'order': page_question.order
-        } for page_question in instance.page_questions.all()[:1]]
+        page_questionsets = [page_questionset.questionset_id
+                             for page_questionset in instance.page_questionsets.all()[:1]]
+        page_questions = [page_question.question_id
+                          for page_question in instance.page_questions.all()[:1]]
         conditions = [condition.pk for condition in instance.conditions.all()[:1]]
 
         url = reverse(urlnames['detail'], args=[instance.pk])
@@ -254,7 +228,6 @@ def test_update_m2m(db, client, username, password):
             'verbose_name_de': instance.verbose_name_lang2,
             'verbose_name_plural_en': instance.verbose_name_plural_lang1,
             'verbose_name_plural_de': instance.verbose_name_plural_lang2,
-            'sections': page_sections,
             'questionsets': page_questionsets,
             'questions': page_questions,
             'conditions': conditions
@@ -264,18 +237,53 @@ def test_update_m2m(db, client, username, password):
 
         if response.status_code == 200:
             instance.refresh_from_db()
-            assert page_sections == [{
-                'section': page_section.section_id,
-                'order': page_section.order
-            } for page_section in instance.page_sections.all()]
-            assert page_questionsets == [{
-                'questionset': page_questionset.questionset_id,
-                'order': page_questionset.order
-            } for page_questionset in instance.page_questionsets.all()]
-            assert page_questions == [{
-                'question': page_question.question_id,
-                'order': page_question.order
-            } for page_question in instance.page_questions.all()]
+            assert page_questionsets == [page_questionset.questionset_id
+                                         for page_questionset in instance.page_questionsets.all()]
+            assert page_questions == [page_question.question_id
+                                      for page_question in instance.page_questions.all()]
+            assert conditions == [condition.pk for condition in instance.conditions.all()]
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_update_m2m_order(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = Page.objects.all()
+
+    for instance in instances:
+        page_questionsets = [page_questionset.questionset_id
+                             for page_questionset in instance.page_questionsets.order_by('-order')]
+        page_questions = [page_question.question_id
+                          for page_question in instance.page_questions.order_by('-order')]
+        conditions = [condition.pk for condition in instance.conditions.all()]
+
+        url = reverse(urlnames['detail'], args=[instance.pk])
+        data = {
+            'uri_prefix': instance.uri_prefix,
+            'uri_path': instance.uri_path,
+            'comment': instance.comment,
+            'attribute': instance.attribute.pk if instance.attribute else None,
+            'is_collection': instance.is_collection,
+            'title_en': instance.title_lang1,
+            'title_de': instance.title_lang2,
+            'help_en': instance.help_lang1,
+            'help_de': instance.help_lang2,
+            'verbose_name_en': instance.verbose_name_lang1,
+            'verbose_name_de': instance.verbose_name_lang2,
+            'verbose_name_plural_en': instance.verbose_name_plural_lang1,
+            'verbose_name_plural_de': instance.verbose_name_plural_lang2,
+            'questionsets': page_questionsets,
+            'questions': page_questions,
+            'conditions': conditions
+        }
+        response = client.put(url, data, content_type='application/json')
+        assert response.status_code == status_map['update'][username], response.json()
+
+        if response.status_code == 200:
+            instance.refresh_from_db()
+            assert page_questionsets == [page_questionset.questionset_id
+                                         for page_questionset in instance.page_questionsets.all()]
+            assert page_questions == [page_question.question_id
+                                      for page_question in instance.page_questions.all()]
             assert conditions == [condition.pk for condition in instance.conditions.all()]
 
 

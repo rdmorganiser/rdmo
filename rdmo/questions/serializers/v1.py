@@ -3,7 +3,8 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 
 from rdmo.conditions.models import Condition
-from rdmo.core.serializers import (SiteSerializer, ThroughModelSerializerMixin,
+from rdmo.core.serializers import (SiteSerializer, ThroughModelListField,
+                                   ThroughModelSerializerMixin,
                                    TranslationSerializerMixin)
 from rdmo.core.utils import get_language_warning
 from rdmo.domain.models import Attribute
@@ -29,7 +30,6 @@ class CatalogSectionSerializer(serializers.ModelSerializer):
         model = CatalogSection
         fields = (
             'section',
-            'order'
         )
 
 
@@ -38,7 +38,7 @@ class CatalogSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
     uri_path = serializers.CharField(required=True)
     projects_count = serializers.IntegerField(read_only=True)
 
-    sections = CatalogSectionSerializer(source='catalog_sections', read_only=False, required=False, many=True)
+    sections = ThroughModelListField(source='catalog_sections', child=CatalogSectionSerializer(), required=False)
 
     class Meta:
         model = Catalog
@@ -60,22 +60,9 @@ class CatalogSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
             'title',
             'help'
         )
-        through_fields = (
-            'catalog_sections',
-        )
         validators = (
             CatalogUniqueURIValidator(),
             CatalogLockedValidator()
-        )
-
-
-class SectionCatalogSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = CatalogSection
-        fields = (
-            'catalog',
-            'order'
         )
 
 
@@ -85,7 +72,6 @@ class SectionPageSerializer(serializers.ModelSerializer):
         model = SectionPage
         fields = (
             'page',
-            'order'
         )
 
 
@@ -93,8 +79,8 @@ class SectionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
 
     uri_path = serializers.CharField(required=True)
 
-    catalogs = SectionCatalogSerializer(source='section_catalogs', read_only=False, required=False, many=True)
-    pages = SectionPageSerializer(source='section_pages', read_only=False, required=False, many=True)
+    catalogs = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    pages = ThroughModelListField(source='section_pages', child=SectionPageSerializer(), required=False)
 
     class Meta:
         model = Section
@@ -111,23 +97,9 @@ class SectionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
         trans_fields = (
             'title',
         )
-        through_fields = (
-            'section_catalogs',
-            'section_pages'
-        )
         validators = (
             SectionUniqueURIValidator(),
             SectionLockedValidator()
-        )
-
-
-class PageSectionSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = SectionPage
-        fields = (
-            'section',
-            'order'
         )
 
 
@@ -137,7 +109,6 @@ class PageQuestionSetSerializer(serializers.ModelSerializer):
         model = PageQuestionSet
         fields = (
             'questionset',
-            'order'
         )
 
 
@@ -147,7 +118,6 @@ class PageQuestionSerializer(serializers.ModelSerializer):
         model = PageQuestion
         fields = (
             'question',
-            'order'
         )
 
 
@@ -155,9 +125,9 @@ class PageSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin, se
 
     uri_path = serializers.CharField(required=True)
 
-    sections = PageSectionSerializer(source='page_sections', read_only=False, required=False, many=True)
-    questionsets = PageQuestionSetSerializer(source='page_questionsets', read_only=False, required=False, many=True)
-    questions = PageQuestionSerializer(source='page_questions', read_only=False, required=False, many=True)
+    sections = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    questionsets = ThroughModelListField(source='page_questionsets', child=PageQuestionSetSerializer(), required=False)
+    questions = ThroughModelListField(source='page_questions', child=PageQuestionSerializer(), required=False)
 
     class Meta:
         model = Page
@@ -181,34 +151,9 @@ class PageSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin, se
             'verbose_name',
             'verbose_name_plural',
         )
-        through_fields = (
-            'page_sections',
-            'page_questionsets',
-            'page_questions'
-        )
         validators = (
             PageUniqueURIValidator(),
             PageLockedValidator()
-        )
-
-
-class QuestionSetPageSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = PageQuestionSet
-        fields = (
-            'page',
-            'order'
-        )
-
-
-class QuestionSetParentSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = QuestionSetQuestionSet
-        fields = (
-            'parent',
-            'order'
         )
 
 
@@ -218,7 +163,6 @@ class QuestionSetQuestionSetSerializer(serializers.ModelSerializer):
         model = QuestionSetQuestionSet
         fields = (
             'questionset',
-            'order'
         )
 
 
@@ -228,7 +172,6 @@ class QuestionSetQuestionSerializer(serializers.ModelSerializer):
         model = QuestionSetQuestion
         fields = (
             'question',
-            'order'
         )
 
 
@@ -236,10 +179,10 @@ class QuestionSetSerializer(ThroughModelSerializerMixin, TranslationSerializerMi
 
     uri_path = serializers.CharField(required=True)
 
-    pages = QuestionSetPageSerializer(source='questionset_pages', read_only=False, required=False, many=True)
-    parents = QuestionSetParentSerializer(source='questionset_parents', read_only=False, required=False, many=True)
-    questionsets = QuestionSetQuestionSetSerializer(source='questionset_questionsets', read_only=False, required=False, many=True)
-    questions = QuestionSetQuestionSerializer(source='questionset_questions', read_only=False, required=False, many=True)
+    pages = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    parents = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    questionsets = ThroughModelListField(source='questionset_questionsets', child=QuestionSetQuestionSetSerializer(), required=False)
+    questions = ThroughModelListField(source='questionset_questions', child=QuestionSetQuestionSerializer(), required=False)
 
     class Meta:
         model = QuestionSet
@@ -264,36 +207,10 @@ class QuestionSetSerializer(ThroughModelSerializerMixin, TranslationSerializerMi
             'verbose_name',
             'verbose_name_plural',
         )
-        through_fields = (
-            'questionset_pages',
-            'questionset_parents',
-            'questionset_questionsets',
-            'questionset_questions'
-        )
         validators = (
             QuestionSetUniqueURIValidator(),
             QuestionSetQuestionSetValidator(),
             QuestionSetLockedValidator()
-        )
-
-
-class QuestionPageSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = PageQuestion
-        fields = (
-            'page',
-            'order'
-        )
-
-
-class QuestionQuestionSetSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = QuestionSetQuestion
-        fields = (
-            'questionset',
-            'order'
         )
 
 
@@ -302,8 +219,8 @@ class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin
     uri_path = serializers.CharField(required=True)
     widget_type = serializers.ChoiceField(choices=get_widget_type_choices(), required=True)
 
-    pages = QuestionPageSerializer(source='question_pages', read_only=False, required=False, many=True)
-    questionsets = QuestionQuestionSetSerializer(source='question_questionsets', read_only=False, required=False, many=True)
+    pages = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    questionsets = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
         model = Question
@@ -337,10 +254,6 @@ class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin
             'default_text',
             'verbose_name',
             'verbose_name_plural',
-        )
-        through_fields = (
-            'question_pages',
-            'question_questionsets'
         )
         validators = (
             QuestionUniqueURIValidator(),
