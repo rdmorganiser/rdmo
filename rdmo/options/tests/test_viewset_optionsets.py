@@ -118,10 +118,8 @@ def test_create_m2m(db, client, username, password):
     instances = OptionSet.objects.all()
 
     for instance in instances:
-        optionset_options = [{
-            'option': optionset_option.option.id,
-            'order': optionset_option.order
-        } for optionset_option in instance.optionset_options.all()[:1]]
+        optionset_options = [optionset_option.option.id
+                             for optionset_option in instance.optionset_options.all()[:1]]
         conditions = [condition.pk for condition in instance.conditions.all()[:1]]
 
         url = reverse(urlnames['list'])
@@ -138,10 +136,8 @@ def test_create_m2m(db, client, username, password):
 
         if response.status_code == 201:
             new_instance = OptionSet.objects.get(id=response.json().get('id'))
-            assert optionset_options == [{
-                'option': optionset_option.option.id,
-                'order': optionset_option.order
-            } for optionset_option in new_instance.optionset_options.all()]
+            assert optionset_options == [optionset_option.option.id
+                                         for optionset_option in new_instance.optionset_options.all()]
             assert conditions == [condition.pk for condition in new_instance.conditions.all()]
 
 
@@ -175,10 +171,8 @@ def test_update_m2m(db, client, username, password):
     instances = OptionSet.objects.all()
 
     for instance in instances:
-        optionset_options = [{
-            'option': optionset_option.option.id,
-            'order': optionset_option.order
-        } for optionset_option in instance.optionset_options.all()[:1]]
+        optionset_options = [optionset_option.option.id
+                             for optionset_option in instance.optionset_options.all()[:1]]
         conditions = [condition.pk for condition in instance.conditions.all()[:1]]
 
         url = reverse(urlnames['detail'], args=[instance.pk])
@@ -195,10 +189,37 @@ def test_update_m2m(db, client, username, password):
 
         if response.status_code == 200:
             instance.refresh_from_db()
-            assert optionset_options == [{
-                'option': optionset_option.option.id,
-                'order': optionset_option.order
-            } for optionset_option in instance.optionset_options.all()]
+            assert optionset_options == [optionset_option.option.id
+                                         for optionset_option in instance.optionset_options.all()]
+            assert conditions == [condition.pk for condition in instance.conditions.all()]
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_update_m2m_order(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = OptionSet.objects.all()
+
+    for instance in instances:
+        optionset_options = [optionset_option.option.id
+                             for optionset_option in instance.optionset_options.order_by('-order')]
+        conditions = [condition.pk for condition in instance.conditions.all()[:1]]
+
+        url = reverse(urlnames['detail'], args=[instance.pk])
+        data = {
+            'uri_prefix': instance.uri_prefix,
+            'uri_path': instance.uri_path,
+            'comment': instance.comment,
+            'order': instance.order,
+            'options': optionset_options,
+            'conditions': conditions,
+        }
+        response = client.put(url, data, content_type='application/json')
+        assert response.status_code == status_map['update'][username], response.json()
+
+        if response.status_code == 200:
+            instance.refresh_from_db()
+            assert optionset_options == [optionset_option.option.id
+                                         for optionset_option in instance.optionset_options.all()]
             assert conditions == [condition.pk for condition in instance.conditions.all()]
 
 

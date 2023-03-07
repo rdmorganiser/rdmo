@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models import Prefetch
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -44,12 +43,12 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
     )
 
     def get_queryset(self):
-        queryset = Catalog.objects.annotate(projects_count=models.Count('projects')) \
-                                  .prefetch_related('sites', 'groups')
+        queryset = Catalog.objects.annotate(projects_count=models.Count('projects'))
+
         if self.action in ('nested', 'detail_export'):
             return queryset.prefetch_elements()
         else:
-            return queryset
+            return queryset.prefetch_related('sites', 'groups', 'catalog_sections__section')
 
     @action(detail=True)
     def nested(self, request, pk):
@@ -92,7 +91,7 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
         if self.action in ('nested', 'detail_export'):
             return queryset.prefetch_elements()
         else:
-            return queryset
+            return queryset.prefetch_related('catalogs', 'section_pages__page')
 
     @action(detail=True)
     def nested(self, request, pk):
@@ -134,12 +133,15 @@ class PageViewSet(CopyModelMixin, ModelViewSet):
 
     def get_queryset(self):
         queryset = Page.objects.all()
-        if self.action in ['list']:
-            return queryset.prefetch_related('conditions')
-        elif self.action in ['nested', 'detail_export']:
+        if self.action in ['nested', 'detail_export']:
             return queryset.prefetch_elements().select_related('attribute')
         else:
-            return queryset
+            return queryset.prefetch_related(
+                'conditions',
+                'sections',
+                'page_questionsets__questionset',
+                'page_questions__question'
+            ).select_related('attribute')
 
     @action(detail=True)
     def nested(self, request, pk):
@@ -185,8 +187,12 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
             return queryset.prefetch_elements().select_related('attribute')
         else:
             return queryset.prefetch_related(
-                'conditions'
-            )
+                'conditions',
+                'pages',
+                'parents',
+                'questionset_questionsets__questionset',
+                'questionset_questions__question'
+            ).select_related('attribute')
 
     @action(detail=True)
     def nested(self, request, pk):
@@ -235,7 +241,12 @@ class QuestionViewSet(CopyModelMixin, ModelViewSet):
         if self.action in ('nested', 'detail_export'):
             return queryset.prefetch_elements().select_related('attribute')
         else:
-            return queryset.prefetch_related('optionsets').select_related('attribute')
+            return queryset.prefetch_related(
+                'conditions',
+                'optionsets',
+                'pages',
+                'questionsets'
+            ).select_related('attribute')
 
     @action(detail=True)
     def nested(self, request, pk):

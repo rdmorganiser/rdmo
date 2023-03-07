@@ -1,8 +1,6 @@
 from django.conf import settings
 from django.db import models
-
 from django_filters.rest_framework import DjangoFilterBackend
-
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -25,9 +23,9 @@ from .serializers.v1 import (OptionIndexSerializer, OptionSerializer,
 class OptionSetViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
     queryset = OptionSet.objects.prefetch_related(
+        'optionset_options__option',
         'conditions',
-        'questions',
-        'options'
+        'questions'
     )
     serializer_class = OptionSetSerializer
 
@@ -67,7 +65,7 @@ class OptionViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
     queryset = Option.objects.annotate(values_count=models.Count('values')) \
                              .annotate(projects_count=models.Count('values__project', distinct=True)) \
-                             .prefetch_related('optionsets', 'conditions')
+                             .prefetch_related('option_optionsets__optionset')
     serializer_class = OptionSerializer
 
     filter_backends = (DjangoFilterBackend,)
