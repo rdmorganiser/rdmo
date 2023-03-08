@@ -45,6 +45,13 @@ status_map = {
         'bar-user': 403, 'bar-reviewer': 200, 'bar-editor': 200,
         'anonymous': 401, 'reviewer': 200, 'editor': 200,
     },
+    'nested': {
+        'site': 403,
+        'user': 403, 'example-reviewer': 200, 'example-editor': 200,
+        'foo-user': 403, 'foo-reviewer': 200, 'foo-editor': 200,
+        'bar-user': 403, 'bar-reviewer': 200, 'bar-editor': 200,
+        'anonymous': 401, 'reviewer': 200, 'editor': 200,
+    },
     'create': {
         'site': 403,
         'user': 403, 'example-reviewer': 403, 'example-editor': 201,
@@ -70,6 +77,24 @@ status_map = {
 
 
 status_map_obj_perms = {
+    'nested': {
+        'catalog': {
+            'example-editor': 200, 'foo-editor': 200, 'bar-editor': 200,
+            'example-reviewer': 200, 'foo-reviewer': 200, 'bar-reviewer': 200
+        },
+        'catalog2': {
+            'example-editor': 200, 'foo-editor': 404, 'bar-editor': 404,
+            'example-reviewer': 200, 'foo-reviewer': 404, 'bar-reviewer': 404
+        },
+        'foo-catalog': {
+            'example-editor': 404, 'foo-editor': 200, 'bar-editor': 404,
+            'example-reviewer': 404, 'foo-reviewer': 200, 'bar-reviewer': 404
+        },
+        'bar-catalog': {
+            'example-editor': 404, 'foo-editor': 404, 'bar-editor': 200,
+            'example-reviewer': 404, 'foo-reviewer': 404, 'bar-reviewer': 200
+        },
+    },
     'update': {
         'catalog': {
             'example-editor': 200, 'foo-editor': 200, 'bar-editor': 200
@@ -105,23 +130,28 @@ def get_status_code_for_catalog(username: str,
                                 method: str, 
                                 status_map: dict,
                                 status_map_obj_perms: dict) -> int:
-    test_status_user = status_map[method].get(username, None)
-    if test_status_user is None:
+    
+    try:
         test_status_user = status_map_obj_perms[method][catalog_key][username]
         print(f'catalog_key: {catalog_key}, username: {username}, method: {method}, test_status_user: {test_status_user}')
+    except KeyError:
+        test_status_user = status_map[method].get(username, None)
     return test_status_user
-#  catalog_user_combinations = [(user, passw, cat) for user,passw in users for cat in  Catalog.objects.all()]
+    # catalog_user_combinations = [(user, passw, cat) for user,passw in users for cat in  Catalog.objects.all()]
 
 
 def add_editors_to_obj_based_on_username(username: str, obj: object):
+    # lambda x: x+'.com' if x in ['example', 'foo', 'bar'] else x
     if 'example' in username:
-        obj.editors.add(Site.objects.get_or_create(domain='example.com'))
+        domain = 'example.com'
     elif 'foo' in username:
-        obj.editors.add(Site.objects.get_or_create(domain='foo.com'))
+        domain = 'foo.com'
     elif 'bar' in username:
-        obj.editors.add(Site.objects.get_or_create(domain='bar.com'))
+        domain = 'bar.com'
     else:
-        pass
+        return obj
+    user_site, _ = Site.objects.get_or_create(domain=domain)
+    obj.editors.add(user_site)
     return obj
 
 urlnames = {
@@ -184,11 +214,18 @@ def test_detail_add_editor_multisite(db, client, username, password):
 def test_nested(db, client, username, password):
     client.login(username=username, password=password)
     instances = Catalog.objects.all()
-
+    method = 'nested'
     for instance in instances:
         url = reverse(urlnames['nested'], args=[instance.pk])
         response = client.get(url)
-        assert response.status_code == status_map['detail'][username], response.json()
+        
+        test_status_user = get_status_code_for_catalog(username,
+                                                       instance.key,
+                                                       method,
+                                                       status_map,
+                                                       status_map_obj_perms)
+        
+        assert response.status_code == test_status_user, response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -250,8 +287,6 @@ def test_multisite_delete(db, client, username, password):
                                                        method,
                                                        status_map,
                                                        status_map_obj_perms)
-        if test_status_user == 204 and response.status_code == 403:
-            breakpoint()
         assert response.status_code == test_status_user
 
 @pytest.mark.parametrize('username,password', users)
