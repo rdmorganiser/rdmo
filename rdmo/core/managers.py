@@ -1,3 +1,6 @@
+from functools import reduce
+
+from django.core.exceptions import FieldDoesNotExist
 from django.conf import settings
 from django.db import models
 
@@ -14,10 +17,35 @@ class CurrentSiteQuerySetMixin(object):
 class EditableElementQuerySetMixin(models.QuerySet):
 
     def filter_related_to_user_role(self, user):
-        return self.filter(models.Q(editors=None) |
-                           models.Q(editors__in=user.role.editor.all()) |
-                           models.Q(editors__in=user.role.reviewer.all())
-                           )
+        ''' returns all objects that are related to the user editor or reviewer role'''
+
+
+        related_Q = None
+
+        try:
+            get_field = self.model._meta.get_field('sites')
+            sites_Q = (
+                models.Q(sites__in=user.role.editor.all()) |
+                models.Q(sites__in=user.role.reviewer.all())
+                )
+            related_Q = sites_Q
+        except FieldDoesNotExist:
+            pass
+
+        try:
+            get_field = self.model._meta.get_field('editors')
+            editors_Q = (
+                models.Q(editors=None) |
+                models.Q(editors__in=user.role.editor.all()) |
+                models.Q(editors__in=user.role.reviewer.all())
+            )
+
+            related_Q = related_Q | editors_Q if related_Q is not None else editors_Q
+
+        except FieldDoesNotExist:
+            pass
+        # breakpoint()
+        return related_Q
 
     def filter_user(self, user):
         if not user.is_authenticated:
@@ -33,7 +61,8 @@ class EditableElementQuerySetMixin(models.QuerySet):
                 user.is_superuser:
             return self.all()
         elif is_an_editor(user) or is_a_reviewer(user):
-            return self.filter_related_to_user_role(user)
+            related_Q = self.filter_related_to_user_role(user)
+            return self.filter(related_Q) if related_Q is not None else self.none()
         else:
             return self.none()
 
