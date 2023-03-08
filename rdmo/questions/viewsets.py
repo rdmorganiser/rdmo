@@ -54,6 +54,7 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
                     'questions__attribute',
                     'questions__optionsets',
                     'questions__conditions',
+                    'questions__editors',
                     'questionsets',
                     'questionsets__attribute',
                     'questionsets__conditions',
