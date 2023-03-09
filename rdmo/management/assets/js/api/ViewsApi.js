@@ -4,9 +4,9 @@ import { getData, postData, putData } from 'rdmo/core/assets/js/utils/api'
 
 class ViewsApi {
 
-  static fetchViews(index=false) {
+  static fetchViews(action) {
     let url = '/api/v1/views/views/'
-    if (index) url += 'index/'
+    if (action == 'index') url += 'index/'
     return getData(url)
   }
 
