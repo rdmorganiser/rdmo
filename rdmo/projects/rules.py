@@ -81,7 +81,6 @@ rules.add_perm('projects.add_value_object', is_project_author | is_project_manag
 rules.add_perm('projects.change_value_object', is_project_author | is_project_manager | is_project_owner | is_site_manager)
 rules.add_perm('projects.delete_value_object', is_project_author | is_project_manager | is_project_owner | is_site_manager)
 
-rules.add_perm('questions.view_questionset_object', (is_project_member | is_site_manager) | (is_an_editor | is_element_reviewer | is_multisite_reviewer))
 
 # TODO: use one of the permissions above
 rules.add_perm('projects.is_project_owner', is_project_owner)
