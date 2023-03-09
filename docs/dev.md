@@ -105,7 +105,7 @@ The test upload files are initialized using:
 cp -r ../rdmo/testing/media media_root
 ```
 
-Starting from RDMO `1.10.0` we use [webpack](https://webpack.js.org/) to bundle the new React based front-end. For this [nodejs](https://nodejs.org) needs to be available. The prefered way is to use [nvm.sh](https://github.com/nvm-sh/nvm). It can be installed for the current user with:
+Starting from RDMO `1.10.0` we use [webpack](https://webpack.js.org/) to bundle the new React based front-end. For this [nodejs](https://nodejs.org) needs to be available. The preferred way is to use [nvm.sh](https://github.com/nvm-sh/nvm). It can be installed for the current user with:
 
 ```
 wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
@@ -119,7 +119,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 ```
 
-to your to your `.bashrc`. Then run:
+to your `.bashrc`. Then run:
 
 ```
 nvm install    # only once, to install the node version given in .nvmrc
