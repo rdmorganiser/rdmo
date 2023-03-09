@@ -1,11 +1,8 @@
 import rules
 
-from rdmo.questions.rules import is_an_editor, is_element_reviewer, is_multisite_reviewer
 
 @rules.predicate
 def is_project_member(user, project):
-    if 'project' not in project._meta.model_name:
-        return False
     return user in project.member or (project.parent and is_project_member(user, project.parent))
 
 
@@ -36,8 +33,6 @@ def is_project_guest(user, project):
 
 @rules.predicate
 def is_site_manager(user, project):
-    if 'project' not in project._meta.model_name:
-        return False
     if user.is_authenticated:
         return user.role.manager.filter(pk=project.site.pk).exists()
     else:
@@ -81,6 +76,7 @@ rules.add_perm('projects.add_value_object', is_project_author | is_project_manag
 rules.add_perm('projects.change_value_object', is_project_author | is_project_manager | is_project_owner | is_site_manager)
 rules.add_perm('projects.delete_value_object', is_project_author | is_project_manager | is_project_owner | is_site_manager)
 
+rules.add_perm('projects.view_questionset_object', is_project_member | is_site_manager)
 
 # TODO: use one of the permissions above
 rules.add_perm('projects.is_project_owner', is_project_owner)
