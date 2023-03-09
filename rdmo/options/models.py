@@ -68,9 +68,6 @@ class OptionSet(models.Model):
         self.uri = self.build_uri(self.uri_prefix, self.uri_path)
         super().save(*args, **kwargs)
 
-        for option in self.options.all():
-            option.save()
-
     def copy(self, uri_prefix, uri_path):
         optionset = copy_model(self, uri_prefix=uri_prefix, uri_path=uri_path)
 
