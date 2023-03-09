@@ -125,7 +125,7 @@ to your to your `.bashrc`. Then run:
 nvm install    # only once, to install the node version given in .nvmrc
 nvm use        # to activate the node version
 npm install    # to install the many, many javascript dependencies
-npm run watch  # to build the fornt-end and rebuild it when changing the source
+npm run watch  # to build the front-end and rebuild it when changing the source
 ```
 
 Now the development server can be started (in a different terminal) using:
