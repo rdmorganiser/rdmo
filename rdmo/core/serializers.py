@@ -1,6 +1,7 @@
 from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
 from rest_framework import serializers
+from rest_framework.reverse import reverse
 from rest_framework.utils import model_meta
 
 from rdmo.core.utils import get_languages, markdown2html
@@ -140,6 +141,17 @@ class ThroughModelSerializerMixin(object):
                     item.delete()
 
         return instance
+
+
+class ElementSerializer(serializers.ModelSerializer):
+
+    uri_path = serializers.CharField(required=True)
+    xml_url = serializers.SerializerMethodField()
+
+    def get_xml_url(self, obj):
+        app_name = self.context['request'].version
+        basename = self.context['view'].basename
+        return reverse(f'{app_name}:{basename}-detail-export', args=[obj.pk])
 
 
 class SiteSerializer(serializers.ModelSerializer):

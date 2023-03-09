@@ -4,15 +4,17 @@ import { getData, postData, putData } from 'rdmo/core/assets/js/utils/api'
 
 class OptionsApi {
 
-  static fetchOptionSets(index=false, nested=false) {
+  static fetchOptionSets(action) {
     let url = '/api/v1/options/optionsets/'
-    if (index) url += 'index/'
-    if (nested) url += 'nested/'
+    if (action == 'index') url += 'index/'
+    if (action == 'nested') url += 'nested/'
     return getData(url)
   }
 
-  static fetchOptionSet(id) {
-    return getData(`/api/v1/options/optionsets/${id}/`)
+  static fetchOptionSet(id, action) {
+    let url = `/api/v1/options/optionsets/${id}/`
+    if (action == 'nested') url += 'nested/'
+    return getData(url)
   }
 
   static storeOptionSet(optionset) {
@@ -23,9 +25,9 @@ class OptionsApi {
     }
   }
 
-  static fetchOptions(index=false) {
+  static fetchOptions(action) {
     let url = '/api/v1/options/options/'
-    if (index) url += 'index/'
+    if (action == 'index') url += 'index/'
     return getData(url)
   }
 

@@ -291,7 +291,7 @@ export function fetchCatalog(id) {
   return function(dispatch) {
     return Promise.all([
       QuestionsApi.fetchCatalog(id),
-      QuestionsApi.fetchSections(),
+      QuestionsApi.fetchSections('index'),
       CoreApi.fetchGroups(),
       CoreApi.fetchSites(),
     ]).then(([element, sections, groups, sites]) => {
@@ -310,7 +310,7 @@ export function fetchSection(id) {
   return function(dispatch) {
     return Promise.all([
       QuestionsApi.fetchSection(id),
-      QuestionsApi.fetchPages(),
+      QuestionsApi.fetchPages('index'),
     ]).then(([element, pages]) => {
       dispatch(stopPending())
       dispatch(fetchElementSuccess({
@@ -327,10 +327,10 @@ export function fetchPage(id) {
   return function(dispatch) {
     return Promise.all([
       QuestionsApi.fetchPage(id),
-      DomainApi.fetchAttributes(),
-      ConditionsApi.fetchConditions(),
-      QuestionsApi.fetchQuestionSets(),
-      QuestionsApi.fetchQuestions()
+      DomainApi.fetchAttributes('index'),
+      ConditionsApi.fetchConditions('index'),
+      QuestionsApi.fetchQuestionSets('index'),
+      QuestionsApi.fetchQuestions('index')
     ]).then(([element, attributes, conditions, questionsets, questions]) => {
       dispatch(stopPending())
       dispatch(fetchElementSuccess({
@@ -347,10 +347,10 @@ export function fetchQuestionSet(id) {
   return function(dispatch) {
     return Promise.all([
       QuestionsApi.fetchQuestionSet(id),
-      DomainApi.fetchAttributes(),
-      ConditionsApi.fetchConditions(),
-      QuestionsApi.fetchQuestionSets(),
-      QuestionsApi.fetchQuestions()
+      DomainApi.fetchAttributes('index'),
+      ConditionsApi.fetchConditions('index'),
+      QuestionsApi.fetchQuestionSets('index'),
+      QuestionsApi.fetchQuestions('index')
     ]).then(([element, attributes, conditions, questionsets, questions]) => {
       dispatch(stopPending())
       dispatch(fetchElementSuccess({
@@ -367,10 +367,10 @@ export function fetchQuestion(id) {
   return function(dispatch) {
     return Promise.all([
       QuestionsApi.fetchQuestion(id),
-      DomainApi.fetchAttributes(),
-      OptionsApi.fetchOptionSets(),
-      OptionsApi.fetchOptions(),
-      ConditionsApi.fetchConditions(),
+      DomainApi.fetchAttributes('index'),
+      OptionsApi.fetchOptionSets('index'),
+      OptionsApi.fetchOptions('index'),
+      ConditionsApi.fetchConditions('index'),
       QuestionsApi.fetchWidgetTypes(),
       QuestionsApi.fetchValueTypes()
     ]).then(([element, attributes, optionsets, options, conditions, widgetTypes, valueTypes]) => {
@@ -389,7 +389,7 @@ export function fetchAttribute(id) {
   return function(dispatch) {
     return Promise.all([
       DomainApi.fetchAttribute(id),
-      DomainApi.fetchAttributes(),
+      DomainApi.fetchAttributes('index'),
     ]).then(([element, attributes]) => {
       dispatch(stopPending())
       dispatch(fetchElementSuccess({
@@ -406,7 +406,7 @@ export function fetchOptionSet(id) {
   return function(dispatch) {
     return Promise.all([
       OptionsApi.fetchOptionSet(id),
-      OptionsApi.fetchOptions(),
+      OptionsApi.fetchOptions('index'),
       OptionsApi.fetchProviders(),
     ]).then(([element, options, providers]) => {
       dispatch(stopPending())
@@ -424,7 +424,7 @@ export function fetchOption(id) {
   return function(dispatch) {
     return Promise.all([
       OptionsApi.fetchOption(id),
-      OptionsApi.fetchOptionSets(),
+      OptionsApi.fetchOptionSets('index'),
     ]).then(([element, optionsets]) => {
       dispatch(stopPending())
       dispatch(fetchElementSuccess({
@@ -442,8 +442,8 @@ export function fetchCondition(id) {
     return Promise.all([
       ConditionsApi.fetchCondition(id),
       ConditionsApi.fetchRelations(),
-      DomainApi.fetchAttributes(),
-      OptionsApi.fetchOptions(),
+      DomainApi.fetchAttributes('index'),
+      OptionsApi.fetchOptions('index'),
     ]).then(([element, relations, attributes, options]) => {
       dispatch(stopPending())
       dispatch(fetchElementSuccess({
@@ -460,9 +460,9 @@ export function fetchTask(id) {
   return function(dispatch) {
     return Promise.all([
       TasksApi.fetchTask(id),
-      DomainApi.fetchAttributes(),
-      ConditionsApi.fetchConditions(),
-      QuestionsApi.fetchCatalogs(true),
+      DomainApi.fetchAttributes('index'),
+      ConditionsApi.fetchConditions('index'),
+      QuestionsApi.fetchCatalogs('index'),
       CoreApi.fetchSites(),
       CoreApi.fetchGroups()
     ]).then(([element, attributes, conditions, catalogs, sites, groups]) => {
@@ -481,7 +481,7 @@ export function fetchView(id) {
   return function(dispatch) {
     return Promise.all([
       ViewsApi.fetchView(id),
-      QuestionsApi.fetchCatalogs(true),
+      QuestionsApi.fetchCatalogs('index'),
       CoreApi.fetchSites(),
       CoreApi.fetchGroups()
     ]).then(([element, catalogs, sites, groups]) => {

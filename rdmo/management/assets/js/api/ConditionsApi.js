@@ -4,9 +4,9 @@ import { getData, postData, putData } from 'rdmo/core/assets/js/utils/api'
 
 class ConditionsApi {
 
-  static fetchConditions(index=false) {
+  static fetchConditions(action) {
     let url = '/api/v1/conditions/conditions/'
-    if (index) url += 'index/'
+    if (action == 'index') url += 'index/'
     return getData(url)
   }
 

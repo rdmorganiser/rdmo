@@ -4,9 +4,9 @@ import { getData, postData, putData } from 'rdmo/core/assets/js/utils/api'
 
 class TasksApi {
 
-  static fetchTasks(index=false) {
+  static fetchTasks(action) {
     let url = '/api/v1/tasks/tasks/'
-    if (index) url += 'index/'
+    if (action == 'index') url += 'index/'
     return getData(url)
   }
 

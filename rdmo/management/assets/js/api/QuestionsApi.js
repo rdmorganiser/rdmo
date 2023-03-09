@@ -4,16 +4,16 @@ import { getData, postData, putData } from 'rdmo/core/assets/js/utils/api'
 
 class QuestionsApi {
 
-  static fetchCatalogs(index=false, nested=false) {
+  static fetchCatalogs(action) {
     let url = '/api/v1/questions/catalogs/'
-    if (index) url += 'index/'
-    if (nested) url += 'nested/'
+    if (action == 'index') url += 'index/'
+    if (action == 'nested') url += 'nested/'
     return getData(url)
   }
 
-  static fetchCatalog(id, nested=false) {
+  static fetchCatalog(id, action) {
     let url = `/api/v1/questions/catalogs/${id}/`
-    if (nested) url += 'nested/'
+    if (action == 'nested') url += 'nested/'
     return getData(url)
   }
 
@@ -25,16 +25,16 @@ class QuestionsApi {
     }
   }
 
-  static fetchSections(index=false, nested=false) {
+  static fetchSections(action) {
     let url = `/api/v1/questions/sections/`
-    if (index) url += 'index/'
-    if (nested) url += 'nested/'
+    if (action == 'index') url += 'index/'
+    if (action == 'nested') url += 'nested/'
     return getData(url)
   }
 
-  static fetchSection(id, nested=false) {
+  static fetchSection(id, action) {
     let url = `/api/v1/questions/sections/${id}/`
-    if (nested) url += 'nested/'
+    if (action == 'nested') url += 'nested/'
     return getData(url)
   }
 
@@ -46,20 +46,20 @@ class QuestionsApi {
     }
   }
 
-  static fetchPages(index=false, nested=false) {
+  static fetchPages(action) {
     let url = `/api/v1/questions/pages/`
-    if (index) url += 'index/'
-    if (nested) url += 'nested/'
+    if (action == 'index') url += 'index/'
+    if (action == 'nested') url += 'nested/'
     return getData(url)
   }
 
-  static fetchPage(id, nested=false) {
+  static fetchPage(id, action) {
     let url = `/api/v1/questions/pages/${id}/`
-    if (nested) url += 'nested/'
+    if (action == 'nested') url += 'nested/'
     return getData(url)
   }
 
-  static storePages(page) {
+  static storePage(page) {
     if (isNil(page.id)) {
       return postData(`/api/v1/questions/pages/`, page)
     } else {
@@ -67,16 +67,16 @@ class QuestionsApi {
     }
   }
 
-  static fetchQuestionSets(index=false, nested=false) {
+  static fetchQuestionSets(action) {
     let url = `/api/v1/questions/questionsets/`
-    if (index) url += 'index/'
-    if (nested) url += 'nested/'
+    if (action == 'index') url += 'index/'
+    if (action == 'nested') url += 'nested/'
     return getData(url)
   }
 
-  static fetchQuestionSet(id, nested=false) {
+  static fetchQuestionSet(id, action) {
     let url = `/api/v1/questions/questionsets/${id}/`
-    if (nested) url += 'nested/'
+    if (action == 'nested') url += 'nested/'
     return getData(url)
   }
 
@@ -88,9 +88,9 @@ class QuestionsApi {
     }
   }
 
-  static fetchQuestions(index=false) {
+  static fetchQuestions(action) {
     let url = `/api/v1/questions/questions/`
-    if (index) url += 'index/'
+    if (action == 'index') url += 'index/'
     return getData(url)
   }
 

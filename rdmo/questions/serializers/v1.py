@@ -3,7 +3,8 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 
 from rdmo.conditions.models import Condition
-from rdmo.core.serializers import (SiteSerializer, ThroughModelListField,
+from rdmo.core.serializers import (ElementSerializer, SiteSerializer,
+                                   ThroughModelListField,
                                    ThroughModelSerializerMixin,
                                    TranslationSerializerMixin)
 from rdmo.core.utils import get_language_warning
@@ -33,9 +34,8 @@ class CatalogSectionSerializer(serializers.ModelSerializer):
         )
 
 
-class CatalogSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
+class CatalogSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin, ElementSerializer):
 
-    uri_path = serializers.CharField(required=True)
     projects_count = serializers.IntegerField(read_only=True)
 
     sections = ThroughModelListField(source='catalog_sections', child=CatalogSectionSerializer(), required=False)
@@ -54,7 +54,8 @@ class CatalogSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
             'sections',
             'sites',
             'groups',
-            'projects_count'
+            'projects_count',
+            'xml_url'
         )
         trans_fields = (
             'title',
@@ -75,9 +76,7 @@ class SectionPageSerializer(serializers.ModelSerializer):
         )
 
 
-class SectionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
-
-    uri_path = serializers.CharField(required=True)
+class SectionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin, ElementSerializer):
 
     catalogs = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     pages = ThroughModelListField(source='section_pages', child=SectionPageSerializer(), required=False)
@@ -92,7 +91,8 @@ class SectionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
             'comment',
             'locked',
             'catalogs',
-            'pages'
+            'pages',
+            'xml_url'
         )
         trans_fields = (
             'title',
@@ -121,9 +121,7 @@ class PageQuestionSerializer(serializers.ModelSerializer):
         )
 
 
-class PageSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
-
-    uri_path = serializers.CharField(required=True)
+class PageSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin, ElementSerializer):
 
     sections = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     questionsets = ThroughModelListField(source='page_questionsets', child=PageQuestionSetSerializer(), required=False)
@@ -144,6 +142,7 @@ class PageSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin, se
             'questionsets',
             'questions',
             'conditions',
+            'xml_url'
         )
         trans_fields = (
             'title',
@@ -175,9 +174,7 @@ class QuestionSetQuestionSerializer(serializers.ModelSerializer):
         )
 
 
-class QuestionSetSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
-
-    uri_path = serializers.CharField(required=True)
+class QuestionSetSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin, ElementSerializer):
 
     pages = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     parents = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
@@ -200,6 +197,7 @@ class QuestionSetSerializer(ThroughModelSerializerMixin, TranslationSerializerMi
             'questionsets',
             'questions',
             'conditions',
+            'xml_url'
         )
         trans_fields = (
             'title',
@@ -214,9 +212,8 @@ class QuestionSetSerializer(ThroughModelSerializerMixin, TranslationSerializerMi
         )
 
 
-class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
+class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin, ElementSerializer):
 
-    uri_path = serializers.CharField(required=True)
     widget_type = serializers.ChoiceField(choices=get_widget_type_choices(), required=True)
 
     pages = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
@@ -246,7 +243,8 @@ class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin
             'pages',
             'questionsets',
             'optionsets',
-            'conditions'
+            'conditions',
+            'xml_url'
         )
         trans_fields = (
             'text',
@@ -271,100 +269,52 @@ class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin
 
 class CatalogIndexSerializer(serializers.ModelSerializer):
 
-    xml_url = serializers.SerializerMethodField()
-
     class Meta:
         model = Catalog
         fields = (
             'id',
-            'title',
-            'uri',
-            'uri_prefix',
-            'sites',
-            'xml_url'
+            'uri'
         )
-
-    def get_xml_url(self, obj):
-        return reverse('v1-questions:catalog-detail-export', args=[obj.pk])
 
 
 class SectionIndexSerializer(serializers.ModelSerializer):
-
-    xml_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Section
         fields = (
             'id',
-            'title',
-            'uri',
-            'uri_prefix',
-            'xml_url'
+            'uri'
         )
-
-    def get_xml_url(self, obj):
-        return reverse('v1-questions:section-detail-export', args=[obj.pk])
 
 
 class PageIndexSerializer(serializers.ModelSerializer):
-
-    xml_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Page
         fields = (
             'id',
-            'title',
-            'uri',
-            'uri_prefix',
-            'xml_url'
+            'uri'
         )
-
-    def get_xml_url(self, obj):
-        return reverse('v1-questions:page-detail-export', args=[obj.pk])
 
 
 class QuestionSetIndexSerializer(serializers.ModelSerializer):
-
-    xml_url = serializers.SerializerMethodField()
 
     class Meta:
         model = QuestionSet
         fields = (
             'id',
-            'title',
-            'uri',
-            'uri_prefix',
-            'xml_url'
+            'uri'
         )
-
-    def get_xml_url(self, obj):
-        return reverse('v1-questions:questionset-detail-export', args=[obj.pk])
 
 
 class QuestionIndexSerializer(serializers.ModelSerializer):
-
-    xml_url = serializers.SerializerMethodField()
-    attribute = serializers.CharField(source='attribute.uri', read_only=True)
-    optionsets = serializers.SerializerMethodField()
 
     class Meta:
         model = Question
         fields = (
             'id',
-            'text',
-            'uri',
-            'uri_prefix',
-            'attribute',
-            'optionsets',
-            'xml_url'
+            'uri'
         )
-
-    def get_xml_url(self, obj):
-        return reverse('v1-questions:question-detail-export', args=[obj.pk])
-
-    def get_optionsets(self, obj):
-        return [optionset.uri for optionset in obj.optionsets.all()]
 
 
 class AttributeNestedSerializer(serializers.ModelSerializer):

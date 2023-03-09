@@ -4,14 +4,17 @@ import { getData, postData, putData } from 'rdmo/core/assets/js/utils/api'
 
 class DomainApi {
 
-  static fetchAttributes(index=false) {
+  static fetchAttributes(action) {
     let url = '/api/v1/domain/attributes/'
-    if (index) url += 'index/'
+    if (action == 'index') url += 'index/'
+    if (action == 'nested') url += 'nested/'
     return getData(url)
   }
 
-  static fetchAttribute(id) {
-    return getData(`/api/v1/domain/attributes/${id}/`)
+  static fetchAttribute(id, action) {
+    let url = `/api/v1/domain/attributes/${id}/`
+    if (action == 'nested') url += 'nested/'
+    return getData(url)
   }
 
   static storeAttribute(attribute) {

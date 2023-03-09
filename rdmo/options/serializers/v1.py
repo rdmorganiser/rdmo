@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 
 from rdmo.conditions.models import Condition
-from rdmo.core.serializers import (ThroughModelListField,
+from rdmo.core.serializers import (ElementSerializer, ThroughModelListField,
                                    ThroughModelSerializerMixin,
                                    TranslationSerializerMixin)
 from rdmo.core.utils import get_language_warning
@@ -43,9 +43,7 @@ class OptionSetOptionSerializer(serializers.ModelSerializer):
         )
 
 
-class OptionSetSerializer(ThroughModelSerializerMixin, serializers.ModelSerializer):
-
-    uri_path = serializers.CharField(required=True)
+class OptionSetSerializer(ThroughModelSerializerMixin, ElementSerializer):
 
     options = ThroughModelListField(source='optionset_options', child=OptionSetOptionSerializer(), required=False)
     questions = QuestionSerializer(many=True, read_only=True)
@@ -63,7 +61,8 @@ class OptionSetSerializer(ThroughModelSerializerMixin, serializers.ModelSerializ
             'provider_key',
             'options',
             'conditions',
-            'questions'
+            'questions',
+            'xml_url'
         )
         validators = (
             OptionSetUniqueURIValidator(),
@@ -71,9 +70,7 @@ class OptionSetSerializer(ThroughModelSerializerMixin, serializers.ModelSerializ
         )
 
 
-class OptionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
-
-    uri_path = serializers.CharField(required=True)
+class OptionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin, ElementSerializer):
 
     optionsets = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     values_count = serializers.IntegerField(read_only=True)
@@ -93,7 +90,8 @@ class OptionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin, 
             'additional_input',
             'optionsets',
             'values_count',
-            'projects_count'
+            'projects_count',
+            'xml_url'
         )
         trans_fields = (
             'text',
@@ -104,26 +102,13 @@ class OptionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin, 
         )
 
 
-class OptionSetIndexOptionSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Option
-        fields = (
-            'id',
-            'uri'
-        )
-
-
 class OptionSetIndexSerializer(serializers.ModelSerializer):
-
-    options = OptionSetIndexOptionSerializer(many=True)
 
     class Meta:
         model = OptionSet
         fields = (
             'id',
-            'uri',
-            'options'
+            'uri'
         )
 
 
@@ -133,9 +118,7 @@ class OptionIndexSerializer(serializers.ModelSerializer):
         model = Option
         fields = (
             'id',
-            'optionsets',
-            'uri',
-            'text'
+            'uri'
         )
 
 
