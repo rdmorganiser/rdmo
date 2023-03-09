@@ -144,9 +144,6 @@ class Catalog(Model, TranslationMixin):
         self.uri = self.build_uri(self.uri_prefix, self.uri_path)
         super().save(*args, **kwargs)
 
-        for section in self.sections.all():
-            section.save()
-
     def copy(self, uri_prefix, uri_path):
         # create a new title
         kwargs = {}

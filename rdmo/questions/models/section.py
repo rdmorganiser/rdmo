@@ -94,11 +94,7 @@ class Section(Model, TranslationMixin):
 
     def save(self, *args, **kwargs):
         self.uri = self.build_uri(self.uri_prefix, self.uri_path)
-
         super().save(*args, **kwargs)
-
-        for page in self.pages.all():
-            page.save()
 
     def copy(self, uri_prefix, uri_path):
         section = copy_model(self, uri_prefix=uri_prefix, uri_path=uri_path)
