@@ -28,6 +28,7 @@ from rdmo.views.models import View
 from .filters import SnapshotFilterBackend, ValueFilterBackend
 from .models import (Continuation, Integration, Issue, Membership, Project,
                      Snapshot, Value)
+from .permissions import HasProjectQuestionPermission
 from .serializers.v1 import (IntegrationSerializer, IssueSerializer,
                              MembershipSerializer,
                              ProjectIntegrationSerializer,
@@ -348,7 +349,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
 
 
 class ProjectPageViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericViewSet):
-    permission_classes = (HasModelPermission | HasObjectPermission, )
+    permission_classes = (HasModelPermission | HasProjectQuestionPermission, )
     serializer_class = PageSerializer
 
     def get_queryset(self):

@@ -1,11 +1,8 @@
 import rules
 
-from rdmo.questions.rules import is_an_editor, is_element_reviewer, is_multisite_reviewer
 
 @rules.predicate
 def is_project_member(user, project):
-    if 'project' not in project._meta.model_name:
-        return False
     return user in project.member or (project.parent and is_project_member(user, project.parent))
 
 
@@ -36,8 +33,6 @@ def is_project_guest(user, project):
 
 @rules.predicate
 def is_site_manager(user, project):
-    if 'project' not in project._meta.model_name:
-        return False
     if user.is_authenticated:
         return user.role.manager.filter(pk=project.site.pk).exists()
     else:
