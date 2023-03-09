@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import \
     PermissionRequiredMixin as DjangoPermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
@@ -109,11 +110,10 @@ class PermissionRedirectMixin(object):
     def handle_no_permission(self):
         if self.request.user.is_authenticated:
             raise PermissionDenied(self.get_permission_denied_message())
-
         return redirect_to_login(self.request.get_full_path(), self.get_login_url(), self.get_redirect_field_name())
 
 
-class ModelPermissionMixin(PermissionRedirectMixin, DjangoPermissionRequiredMixin, object):
+class ModelPermissionMixin(LoginRequiredMixin, PermissionRedirectMixin, DjangoPermissionRequiredMixin, object):
     pass
 
 
