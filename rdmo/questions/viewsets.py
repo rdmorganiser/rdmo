@@ -42,8 +42,7 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
     )
 
     def get_queryset(self):
-        queryset = Catalog.objects.filter_user(self.request.user) \
-                                  .annotate(projects_count=models.Count('projects')) \
+        queryset = Catalog.objects.annotate(projects_count=models.Count('projects')) \
                                   .prefetch_related('sites', 'editors', 'groups')
         if self.action in ('nested', 'detail_export'):
             return queryset.prefetch_related(

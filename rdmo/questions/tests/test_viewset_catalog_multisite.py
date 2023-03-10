@@ -83,16 +83,16 @@ status_map_obj_perms = {
             'example-reviewer': 200, 'foo-reviewer': 200, 'bar-reviewer': 200
         },
         'catalog2': {
-            'example-editor': 200, 'foo-editor': 404, 'bar-editor': 404,
-            'example-reviewer': 200, 'foo-reviewer': 404, 'bar-reviewer': 404
+            'example-editor': 200, 'foo-editor': 200, 'bar-editor': 200,
+            'example-reviewer': 200, 'foo-reviewer': 200, 'bar-reviewer': 200
         },
         'foo-catalog': {
-            'example-editor': 404, 'foo-editor': 200, 'bar-editor': 404,
-            'example-reviewer': 404, 'foo-reviewer': 200, 'bar-reviewer': 404
+            'example-editor': 200, 'foo-editor': 200, 'bar-editor': 200,
+            'example-reviewer': 200, 'foo-reviewer': 200, 'bar-reviewer': 200
         },
         'bar-catalog': {
-            'example-editor': 404, 'foo-editor': 404, 'bar-editor': 200,
-            'example-reviewer': 404, 'foo-reviewer': 404, 'bar-reviewer': 200
+            'example-editor': 200, 'foo-editor': 200, 'bar-editor': 200,
+            'example-reviewer': 200, 'foo-reviewer': 200, 'bar-reviewer': 200
         },
     },
     'update': {
