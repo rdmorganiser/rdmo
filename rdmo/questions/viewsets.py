@@ -189,7 +189,7 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=True, permission_classes=[HasModelPermission])
     def nested(self, request, pk):
-        serializer = QuestionSetNestedSerializer(self.get_queryset())
+        serializer = QuestionSetNestedSerializer(self.get_queryset(), many=True)
         return Response(serializer.data)
 
     @action(detail=False, permission_classes=[HasModelPermission])
