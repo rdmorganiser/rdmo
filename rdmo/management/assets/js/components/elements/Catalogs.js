@@ -1,16 +1,12 @@
-import React, { Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import { filterElements } from '../../utils/filter'
 
 import ElementsHeading from '../common/ElementsHeading'
+import { EditLink, AvailableLink, LockedLink, ExportLink } from '../common/ElementLinks'
 
-const Catalogs = ({ config, catalogs, fetchCatalog }) => {
-  const handleEdit = (event, id) => {
-    event.preventDefault()
-    fetchCatalog(id)
-  }
-
+const Catalogs = ({ config, catalogs, fetchCatalog, storeCatalog }) => {
   return (
     <div className="panel panel-default">
       <ElementsHeading verboseName={gettext('Catalogs')} />
@@ -19,16 +15,14 @@ const Catalogs = ({ config, catalogs, fetchCatalog }) => {
         filterElements(config, catalogs).map((catalog, index) => {
           return (
             <li key={index} className="list-group-item">
-              <div className="pull-right">
-                <a href="" className="fa fa-pencil"
-                   title={gettext('Edit catalog')}
-                   onClick={event => handleEdit(event, catalog.id)}>
-                </a>
-                {' '}
-                <a href={catalog.xml_url} className="fa fa-download"
-                   title={gettext('Export catalog as XML')}
-                   target="blank">
-                </a>
+              <div className="element-options">
+                <EditLink element={catalog} verboseName={gettext('catalog')}
+                          onClick={catalog => fetchCatalog(catalog.id)} />
+                <AvailableLink element={catalog} verboseName={gettext('catalog')}
+                              onClick={available => storeCatalog(Object.assign({}, catalog, { available }))} />
+                <LockedLink element={catalog} verboseName={gettext('catalog')}
+                          onClick={locked => storeCatalog(Object.assign({}, catalog, { locked }))} />
+                <ExportLink element={catalog} verboseName={gettext('catalog')} />
               </div>
               <div>
                 <p>
@@ -50,7 +44,8 @@ const Catalogs = ({ config, catalogs, fetchCatalog }) => {
 Catalogs.propTypes = {
   config: PropTypes.object.isRequired,
   catalogs: PropTypes.array.isRequired,
-  fetchCatalog: PropTypes.func.isRequired
+  fetchCatalog: PropTypes.func.isRequired,
+  storeCatalog: PropTypes.func.isRequired
 }
 
 export default Catalogs

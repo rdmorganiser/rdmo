@@ -4,13 +4,9 @@ import PropTypes from 'prop-types'
 import { filterElements } from '../../utils/filter'
 
 import ElementsHeading from '../common/ElementsHeading'
+import { EditLink, LockedLink, ExportLink } from '../common/ElementLinks'
 
-const Attributes = ({ config, attributes, fetchAttribute }) => {
-  const handleEdit = (event, id) => {
-    event.preventDefault()
-    fetchAttribute(id)
-  }
-
+const Attributes = ({ config, attributes, fetchAttribute, storeAttribute }) => {
   return (
     <div className="panel panel-default">
       <ElementsHeading verboseName={gettext('Attributes')} />
@@ -19,16 +15,12 @@ const Attributes = ({ config, attributes, fetchAttribute }) => {
         filterElements(config, attributes).map((attribute, index) => {
           return (
             <li key={index} className="list-group-item">
-              <div className="pull-right">
-                <a href="" className="fa fa-pencil"
-                   title={gettext('Edit attribute')}
-                   onClick={event => handleEdit(event, attribute.id)}>
-                </a>
-                {' '}
-                <a href={attribute.xml_url} className="fa fa-download"
-                   title={gettext('Export attribute as XML')}
-                   target="blank">
-                </a>
+              <div className="element-options">
+                <EditLink element={attribute} verboseName={gettext('attribute')}
+                          onClick={attribute => fetchAttribute(attribute.id)} />
+                <LockedLink element={attribute} verboseName={gettext('attribute')}
+                            onClick={locked => storeAttribute(Object.assign({}, attribute, { locked }))} />
+                <ExportLink element={attribute} verboseName={gettext('attribute')} />
               </div>
               <div>
                 <strong>{gettext('Attribute')}{': '}</strong>
@@ -46,7 +38,8 @@ const Attributes = ({ config, attributes, fetchAttribute }) => {
 Attributes.propTypes = {
   config: PropTypes.object.isRequired,
   attributes: PropTypes.array.isRequired,
-  fetchAttribute: PropTypes.func.isRequired
+  fetchAttribute: PropTypes.func.isRequired,
+  storeAttribute: PropTypes.func.isRequired
 }
 
 export default Attributes

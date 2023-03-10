@@ -4,8 +4,9 @@ import PropTypes from 'prop-types'
 import { filterElements } from '../../utils/filter'
 
 import ElementsHeading from '../common/ElementsHeading'
+import { EditLink, LockedLink, ExportLink } from '../common/ElementLinks'
 
-const Pages = ({ config, pages, fetchPage }) => {
+const Pages = ({ config, pages, fetchPage, storePage }) => {
   const handleEdit = (event, id) => {
     event.preventDefault()
     fetchPage(id)
@@ -19,16 +20,12 @@ const Pages = ({ config, pages, fetchPage }) => {
         filterElements(config, pages).map((page, index) => {
           return (
             <li key={index} className="list-group-item">
-              <div className="pull-right">
-                <a href="" className="fa fa-pencil"
-                   title={gettext('Edit page')}
-                   onClick={event => handleEdit(event, page.id)}>
-                </a>
-                {' '}
-                <a href={page.xml_url} className="fa fa-download"
-                   title={gettext('Export pages as XML')}
-                   target="blank">
-                </a>
+              <div className="element-options">
+                <EditLink element={page} verboseName={gettext('page')}
+                          onClick={page => fetchPage(page.id)} />
+                <LockedLink element={page} verboseName={gettext('page')}
+                            onClick={locked => storePage(Object.assign({}, page, { locked }))} />
+                <ExportLink element={page} verboseName={gettext('page')} />
               </div>
               <div>
                 <p>
@@ -50,7 +47,8 @@ const Pages = ({ config, pages, fetchPage }) => {
 Pages.propTypes = {
   config: PropTypes.object.isRequired,
   pages: PropTypes.array.isRequired,
-  fetchPage: PropTypes.func.isRequired
+  fetchPage: PropTypes.func.isRequired,
+  storePage: PropTypes.func.isRequired
 }
 
 export default Pages

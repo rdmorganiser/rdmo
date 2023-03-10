@@ -4,8 +4,9 @@ import PropTypes from 'prop-types'
 import { filterElements } from '../../utils/filter'
 
 import ElementsHeading from '../common/ElementsHeading'
+import { EditLink, LockedLink, ExportLink } from '../common/ElementLinks'
 
-const Questions = ({ config, questions, fetchQuestion }) => {
+const Questions = ({ config, questions, fetchQuestion, storeQuestion }) => {
   const handleEdit = (event, id) => {
     event.preventDefault()
     fetchQuestion(id)
@@ -19,16 +20,12 @@ const Questions = ({ config, questions, fetchQuestion }) => {
         filterElements(config, questions).map((question, index) => {
           return (
             <li key={index} className="list-group-item">
-              <div className="pull-right">
-                <a href="" className="fa fa-pencil"
-                   title={gettext('Edit question')}
-                   onClick={event => handleEdit(event, question.id)}>
-                </a>
-                {' '}
-                <a href={question.xml_url} className="fa fa-download"
-                   title={gettext('Export question as XML')}
-                   target="blank">
-                </a>
+              <div className="element-options">
+                <EditLink element={question} verboseName={gettext('question')}
+                          onClick={question => fetchQuestion(question.id)} />
+                <LockedLink element={question} verboseName={gettext('question')}
+                            onClick={locked => storeQuestion(Object.assign({}, question, { locked }))} />
+                <ExportLink element={question} verboseName={gettext('question')} />
               </div>
               <div>
                 <p>
@@ -51,7 +48,8 @@ const Questions = ({ config, questions, fetchQuestion }) => {
 Questions.propTypes = {
   config: PropTypes.object.isRequired,
   questions: PropTypes.array.isRequired,
-  fetchQuestion: PropTypes.func.isRequired
+  fetchQuestion: PropTypes.func.isRequired,
+  storeQuestion: PropTypes.func.isRequired
 }
 
 export default Questions

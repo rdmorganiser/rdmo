@@ -4,8 +4,9 @@ import PropTypes from 'prop-types'
 import { filterElements } from '../../utils/filter'
 
 import ElementsHeading from '../common/ElementsHeading'
+import { EditLink, LockedLink, ExportLink } from '../common/ElementLinks'
 
-const Options = ({ config, options, fetchOption }) => {
+const Options = ({ config, options, fetchOption, storeOption }) => {
   const handleEdit = (event, id) => {
     event.preventDefault()
     fetchOption(id)
@@ -19,16 +20,12 @@ const Options = ({ config, options, fetchOption }) => {
         filterElements(config, options).map((option, index) => {
           return (
             <li key={index} className="list-group-item">
-              <div className="pull-right">
-                <a href="" className="fa fa-pencil"
-                   title={gettext('Edit option')}
-                   onClick={event => handleEdit(event, option.id)}>
-                </a>
-                {' '}
-                <a href={option.xml_url} className="fa fa-download"
-                   title={gettext('Export option as XML')}
-                   target="blank">
-                </a>
+              <div className="element-options">
+                <EditLink element={option} verboseName={gettext('option')}
+                          onClick={option => fetchOption(option.id)} />
+                <LockedLink element={option} verboseName={gettext('option')}
+                            onClick={locked => storeOption(Object.assign({}, option, { locked }))} />
+                <ExportLink element={option} verboseName={gettext('option')} />
               </div>
               <div>
                 <p>
@@ -50,7 +47,8 @@ const Options = ({ config, options, fetchOption }) => {
 Options.propTypes = {
   config: PropTypes.object.isRequired,
   options: PropTypes.array.isRequired,
-  fetchOption: PropTypes.func.isRequired
+  fetchOption: PropTypes.func.isRequired,
+  storeOption: PropTypes.func.isRequired
 }
 
 export default Options

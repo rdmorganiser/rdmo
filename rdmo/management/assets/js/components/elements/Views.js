@@ -4,8 +4,9 @@ import PropTypes from 'prop-types'
 import { filterElements } from '../../utils/filter'
 
 import ElementsHeading from '../common/ElementsHeading'
+import { EditLink, AvailableLink, LockedLink, ExportLink } from '../common/ElementLinks'
 
-const Views = ({ config, views, fetchView }) => {
+const Views = ({ config, views, fetchView, storeView }) => {
   const handleEdit = (event, id) => {
     event.preventDefault()
     fetchView(id)
@@ -20,16 +21,14 @@ const Views = ({ config, views, fetchView }) => {
         filterElements(config, views).map((view, index) => {
           return (
             <li key={index} className="list-group-item">
-              <div className="pull-right">
-                <a href="" className="fa fa-pencil"
-                   title={gettext('Edit view')}
-                   onClick={event => handleEdit(event, view.id)}>
-                </a>
-                {' '}
-                <a href={view.xml_url} className="fa fa-download"
-                   title={gettext('Export view as XML')}
-                   target="blank">
-                </a>
+              <div className="element-options">
+                <EditLink element={view} verboseName={gettext('view')}
+                          onClick={view => fetchView(view.id)} />
+                <AvailableLink element={view} verboseName={gettext('view')}
+                               onClick={available => storeView(Object.assign({}, view, { available }))} />
+                <LockedLink element={view} verboseName={gettext('view')}
+                            onClick={locked => storeView(Object.assign({}, view, { locked }))} />
+                <ExportLink element={view} verboseName={gettext('view')} />
               </div>
               <div>
                 <strong>{gettext('View')}{': '}</strong>
@@ -47,7 +46,8 @@ const Views = ({ config, views, fetchView }) => {
 Views.propTypes = {
   config: PropTypes.object.isRequired,
   views: PropTypes.array.isRequired,
-  fetchView: PropTypes.func.isRequired
+  fetchView: PropTypes.func.isRequired,
+  storeView: PropTypes.func.isRequired
 }
 
 export default Views

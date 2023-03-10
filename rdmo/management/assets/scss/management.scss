@@ -2,6 +2,10 @@ $icon-font-path: "bootstrap-sass/assets/fonts/bootstrap/";
 @import '~bootstrap-sass';
 @import '~font-awesome/css/font-awesome.css';
 
+a.disabled {
+    cursor: not-allowed;
+}
+
 .mt-0 {
     margin-top: 0;
 }
@@ -102,6 +106,16 @@ $icon-font-path: "bootstrap-sass/assets/fonts/bootstrap/";
         }
         p:last-child {
             margin-bottom: 0;
+        }
+    }
+    .element-options {
+        float: right;
+
+        a::after {
+            content: '\00a0'; // one space
+        }
+        a:last-child::after {
+            content: '';
         }
     }
 }
