@@ -4,8 +4,9 @@ import PropTypes from 'prop-types'
 import { filterElements } from '../../utils/filter'
 
 import ElementsHeading from '../common/ElementsHeading'
+import { EditLink, LockedLink, ExportLink } from '../common/ElementLinks'
 
-const Sections = ({ config, sections, fetchSection }) => {
+const Sections = ({ config, sections, fetchSection, storeSection }) => {
   const handleEdit = (event, id) => {
     event.preventDefault()
     fetchSection(id)
@@ -20,16 +21,12 @@ const Sections = ({ config, sections, fetchSection }) => {
         filterElements(config, sections).map((section, index) => {
           return (
             <li key={index} className="list-group-item">
-              <div className="pull-right">
-                <a href="" className="fa fa-pencil"
-                   title={gettext('Edit section')}
-                   onClick={event => handleEdit(event, section.id)}>
-                </a>
-                {' '}
-                <a href={section.xml_url} className="fa fa-download"
-                   title={gettext('Export section as XML')}
-                   target="blank">
-                </a>
+              <div className="element-options">
+                <EditLink element={section} verboseName={gettext('section')}
+                          onClick={section => fetchSection(section.id)} />
+                <LockedLink element={section} verboseName={gettext('section')}
+                            onClick={locked => storeSection(Object.assign({}, section, { locked }))} />
+                <ExportLink element={section} verboseName={gettext('section')} />
               </div>
               <div>
                 <p>
@@ -52,6 +49,7 @@ Sections.propTypes = {
   config: PropTypes.object.isRequired,
   sections: PropTypes.array.isRequired,
   fetchSection: PropTypes.func.isRequired,
+  storeSection: PropTypes.func.isRequired
 }
 
 export default Sections

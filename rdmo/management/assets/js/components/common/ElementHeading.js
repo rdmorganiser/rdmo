@@ -11,7 +11,7 @@ const ElementHeading = ({ verboseName, element, onSave }) => {
           {gettext('Back')}
         </button>
         {' '}
-        <button className="btn btn-xs btn-primary" onClick={event => onSave()}>
+        <button className="btn btn-xs btn-primary" onClick={event => onSave(element)}>
           {gettext('Save')}
         </button>
       </div>

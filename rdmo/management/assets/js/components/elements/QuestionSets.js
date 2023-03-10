@@ -4,8 +4,9 @@ import PropTypes from 'prop-types'
 import { filterElements } from '../../utils/filter'
 
 import ElementsHeading from '../common/ElementsHeading'
+import { EditLink, LockedLink, ExportLink } from '../common/ElementLinks'
 
-const QuestionSets = ({ config, questionsets, fetchQuestionSet }) => {
+const QuestionSets = ({ config, questionsets, fetchQuestionSet, storeQuestionSet }) => {
   const handleEdit = (event, id) => {
     event.preventDefault()
     fetchQuestionSet(id)
@@ -19,16 +20,12 @@ const QuestionSets = ({ config, questionsets, fetchQuestionSet }) => {
         filterElements(config, questionsets).map((questionset, index) => {
           return (
             <li key={index} className="list-group-item">
-              <div className="pull-right">
-                <a href="" className="fa fa-pencil"
-                   title={gettext('Edit questionset')}
-                   onClick={event => handleEdit(event, questionset.id)}>
-                </a>
-                {' '}
-                <a href={questionset.xml_url} className="fa fa-download"
-                   title={gettext('Export questionset as XML')}
-                   target="blank">
-                </a>
+              <div className="element-options">
+                <EditLink element={questionset} verboseName={gettext('questionset')}
+                          onClick={questionset => fetchQuestionSet(questionset.id)} />
+                <LockedLink element={questionset} verboseName={gettext('questionset')}
+                            onClick={locked => storeQuestionSet(Object.assign({}, questionset, { locked }))} />
+                <ExportLink element={questionset} verboseName={gettext('questionset')} />
               </div>
               <div>
                 <p>
@@ -50,7 +47,8 @@ const QuestionSets = ({ config, questionsets, fetchQuestionSet }) => {
 QuestionSets.propTypes = {
   config: PropTypes.object.isRequired,
   questionsets: PropTypes.array.isRequired,
-  fetchQuestionSet: PropTypes.func.isRequired
+  fetchQuestionSet: PropTypes.func.isRequired,
+  storeQuestionSet: PropTypes.func.isRequired
 }
 
 export default QuestionSets

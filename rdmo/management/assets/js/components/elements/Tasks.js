@@ -4,8 +4,9 @@ import PropTypes from 'prop-types'
 import { filterElements } from '../../utils/filter'
 
 import ElementsHeading from '../common/ElementsHeading'
+import { EditLink, AvailableLink, LockedLink, ExportLink } from '../common/ElementLinks'
 
-const Tasks = ({ config, tasks, fetchTask }) => {
+const Tasks = ({ config, tasks, fetchTask, storeTask }) => {
   const handleEdit = (event, id) => {
     event.preventDefault()
     fetchTask(id)
@@ -20,16 +21,14 @@ const Tasks = ({ config, tasks, fetchTask }) => {
         filterElements(config, tasks).map((task, index) => {
           return (
             <li key={index} className="list-group-item">
-              <div className="pull-right">
-                <a href="" className="fa fa-pencil"
-                   title={gettext('Edit task')}
-                   onClick={event => handleEdit(event, task.id)}>
-                </a>
-                {' '}
-                <a href={task.xml_url} className="fa fa-download"
-                   title={gettext('Export task as XML')}
-                   target="blank">
-                </a>
+              <div className="element-options">
+                <EditLink element={task} verboseName={gettext('task')}
+                          onClick={task => fetchTask(task.id)} />
+                <AvailableLink element={task} verboseName={gettext('task')}
+                               onClick={available => storeTask(Object.assign({}, task, { available }))} />
+                <LockedLink element={task} verboseName={gettext('task')}
+                            onClick={locked => storeTask(Object.assign({}, task, { locked }))} />
+                <ExportLink element={task} verboseName={gettext('task')} />
               </div>
               <div>
                 <strong>{gettext('Task')}{': '}</strong>
@@ -47,7 +46,8 @@ const Tasks = ({ config, tasks, fetchTask }) => {
 Tasks.propTypes = {
   config: PropTypes.object.isRequired,
   tasks: PropTypes.array.isRequired,
-  fetchTask: PropTypes.func.isRequired
+  fetchTask: PropTypes.func.isRequired,
+  storeTask: PropTypes.func.isRequired
 }
 
 export default Tasks

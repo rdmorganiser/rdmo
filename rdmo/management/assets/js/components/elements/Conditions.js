@@ -4,8 +4,9 @@ import PropTypes from 'prop-types'
 import { filterElements } from '../../utils/filter'
 
 import ElementsHeading from '../common/ElementsHeading'
+import { EditLink, AvailableLink, LockedLink, ExportLink } from '../common/ElementLinks'
 
-const Conditions = ({ config, conditions, fetchCondition }) => {
+const Conditions = ({ config, conditions, fetchCondition, storeCondition }) => {
   const handleEdit = (event, id) => {
     event.preventDefault()
     fetchCondition(id)
@@ -19,16 +20,12 @@ const Conditions = ({ config, conditions, fetchCondition }) => {
         filterElements(config, conditions).map((condition, index) => {
           return (
             <li key={index} className="list-group-item">
-              <div className="pull-right">
-                <a href="" className="fa fa-pencil"
-                   title={gettext('Edit section')}
-                   onClick={event => handleEdit(event, condition.id)}>
-                </a>
-                {' '}
-                <a href={condition.xml_url} className="fa fa-download"
-                   title={gettext('Export condition as XML')}
-                   target="blank">
-                </a>
+              <div className="element-options">
+                <EditLink element={condition} verboseName={gettext('condition')}
+                          onClick={condition => fetchCondition(condition.id)} />
+                <LockedLink element={condition} verboseName={gettext('condition')}
+                            onClick={locked => storeCondition(Object.assign({}, condition, { locked }))} />
+                <ExportLink element={condition} verboseName={gettext('condition')} />
               </div>
               <div>
                 <strong>{gettext('Condition')}{': '}</strong>
@@ -46,7 +43,8 @@ const Conditions = ({ config, conditions, fetchCondition }) => {
 Conditions.propTypes = {
   config: PropTypes.object.isRequired,
   conditions: PropTypes.array.isRequired,
-  fetchCondition: PropTypes.func.isRequired
+  fetchCondition: PropTypes.func.isRequired,
+  storeCondition: PropTypes.func.isRequired
 }
 
 export default Conditions
