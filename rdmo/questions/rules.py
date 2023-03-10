@@ -1,12 +1,10 @@
 import logging
 
-from django.db import models
-from django.contrib.sites.models import Site
 
 import rules
 
-from rdmo.management.rules import is_an_editor, is_a_reviewer, is_element_editor, \
-                                    is_element_reviewer, is_multisite_editor, is_multisite_reviewer
+from rdmo.management.rules import is_an_editor,is_element_editor, is_multisite_editor, \
+                                    is_a_reviewer, is_element_reviewer, is_multisite_reviewer
 
 logger = logging.getLogger(__name__)
 
@@ -51,6 +49,7 @@ rules.add_perm('questions.change_section_object', is_element_editor | is_multisi
 rules.add_perm('questions.delete_section_object', is_element_editor | is_multisite_editor)
 
 # for questionsets
+rules.add_perm('questions.view_questionset_object', is_an_editor | is_element_reviewer | is_multisite_reviewer)
 rules.add_perm('questions.add_questionset_object', is_element_editor | is_multisite_editor)
 rules.add_perm('questions.change_questionset_object', is_element_editor | is_multisite_editor)
 rules.add_perm('questions.delete_questionset_object', is_element_editor | is_multisite_editor)
