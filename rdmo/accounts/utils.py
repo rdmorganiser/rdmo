@@ -40,24 +40,42 @@ def set_group_permissions():
             group.permissions.add(permission)
 
 
-def delete_user(user, email, password):
-    username = user.username
-
-    try:
-        database_user = get_user_model().objects.get(email=email)
-    except get_user_model().DoesNotExist:
-        log.debug('User with email "%s" requested for deletion does not exist', email)
+def delete_user(user=None, email=None, password=None):
+    if user is None or email is None:
+        log.debug('Deletion failed because either User "%s" or email %s is None' % username, email)
         return False
 
-    if user == database_user and authenticate(username=username, password=password):
+    username = user.username
+
+    database_user = get_user_model().objects.filter(username=username, email=email)
+    if not database_user.exists():
+        log.debug('User "%s" requested for deletion does not exist', username)
+        return False
+    if database_user.count() > 1:
+        log.debug('User with email "%s" requested for deletion has multiple user objects', email)
+        return False
+    database_user = database_user.first()
+
+    if not user == database_user:
+        log.debug('Deletion of user "%s" failed because the user from request and database differ.', username)
+        return False
+    
+    if user.has_usable_password() and authenticate(username=username, password=password):
         try:
             user.delete()
             log.debug('User "%s" deleted', username)
             return True
-
+        except Exception as e:
+            log.debug('An exception (%s) occured during user "%s" deletion: ', (str(e), username))
+            return False
+    elif not user.has_usable_password() and settings.SHIBBOLETH:
+        try:
+            user.delete()
+            log.debug('User without usable password "%s" deleted', username)
+            return True
         except Exception as e:
             log.debug('An exception (%s) occured during user "%s" deletion: ', (str(e), username))
             return False
     else:
-        log.debug('Deletion of user "%s" failed because of an invalid password', username)
+        log.debug('Deletion of user "%s" failed.', username)
         return False

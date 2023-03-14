@@ -8,7 +8,7 @@ from django.shortcuts import render
 
 from rdmo.core.utils import get_next, get_referer_path_info
 
-from .forms import ProfileForm, RemoveForm
+from .forms import ProfileForm, RemoveForm, ShibbolethUserRemoveForm
 from .utils import delete_user
 
 log = logging.getLogger(__name__)
@@ -40,35 +40,49 @@ def profile_update(request):
 
 @login_required()
 def remove_user(request):
-    if settings.PROFILE_DELETE:
-        log.debug('Remove user form for "%s"', request.user.username)
-
-        form = RemoveForm(request.POST or None, request=request)
-
-        if request.method == 'POST':
-            if 'cancel' in request.POST:
-                log.debug('User %s removal cancelled', str(request.user))
-
-                if settings.PROFILE_UPDATE:
-                    return HttpResponseRedirect('/account')
-                else:
-                    return HttpResponseRedirect('/')
-
-            if form.is_valid():
-                log.debug('Deleting user %s', request.user.username)
-
-                if delete_user(request.user, request.POST['email'], request.POST['password']):
-                    logout(request)
-                    return render(request, 'profile/profile_remove_success.html')
-                else:
-                    return render(request, 'profile/profile_remove_failed.html')
-
-        return render(request, 'profile/profile_remove_form.html', {
-            'form': form,
-            'next': get_referer_path_info(request, default='/')
-        })
-    else:
+    if not settings.PROFILE_DELETE:
+        log.debug('Remove user form disabled in settings PROFILE_DELETE = %s' % settings.PROFILE_DELETE)
         return render(request, 'profile/profile_remove_closed.html')
+
+    if request.user.has_usable_password():
+        log.debug('Remove user form for "%s" with password' % request.user.username)
+        form = RemoveForm(request.POST or None, request=request)
+    elif not request.user.has_usable_password() and settings.SHIBBOLETH:
+        log.debug('Remove user form for "%s" without password' % request.user.username)
+        form = ShibbolethUserRemoveForm(request.POST or None, request=request)
+    else:
+        log.debug('Remove user form not possible for user %s' % request.user.username)
+        return render(request, 'profile/profile_remove_closed.html')
+
+    if request.method == 'POST':
+        if 'cancel' in request.POST:
+            log.debug('User %s removal cancelled', str(request.user))
+
+            if settings.PROFILE_UPDATE:
+                return HttpResponseRedirect('/account')
+            else:
+                return HttpResponseRedirect('/')
+
+        if form.is_valid():
+            log.debug('Deleting user %s', request.user.username)
+
+            if request.user.has_usable_password():
+                user_deleted = delete_user(user=request.user, email=request.POST['email'], password=request.POST['password'])
+            elif not request.user.has_usable_password() and settings.SHIBBOLETH:
+                user_deleted = delete_user(user=request.user, email=request.POST['email'])
+            else:
+                user_deleted = False
+
+            if user_deleted:
+                logout(request)
+                return render(request, 'profile/profile_remove_success.html')
+            else:
+                return render(request, 'profile/profile_remove_failed.html')
+
+    return render(request, 'profile/profile_remove_form.html', {
+        'form': form,
+        'next': get_referer_path_info(request, default='/')
+    })
 
 
 def terms_of_use(request):
