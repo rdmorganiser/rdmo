@@ -1,3 +1,4 @@
+import pytest
 import re
 
 from django.conf import settings
@@ -14,17 +15,21 @@ users = (
     ('anonymous', None),
 )
 
-
-def test_get_profile_update(db, client):
+@pytest.mark.parametrize('profile_update', [True, False])
+def test_get_profile_update(db, client, profile_update):
     """
     An authorized GET request to the profile update form returns the form.
     """
+    settings.PROFILE_UPDATE = profile_update
     client.login(username='user', password='user')
 
     url = reverse('profile_update')
     response = client.get(url)
-    assert response.status_code == 200
-
+    if settings.PROFILE_UPDATE:
+        assert response.status_code == 200
+    else:
+        assert response.status_code == 200
+        assert any('you cannot update your profile' in i for i in response.content.decode().splitlines()) is True
 
 def test_get_profile_update_redirect(db, client):
     """
@@ -243,6 +248,17 @@ def test_remove_user_get(db, client):
         assert response.status_code == 200
 
 
+def test_remove_user_get_when_disabled(db, client):
+    settings.PROFILE_DELETE = False
+
+    client.login(username='user', password='user')
+
+    url = reverse('profile_remove')
+    response = client.get(url)
+    assert response.status_code == 200
+    assert any('you cannot remove your profile' in i for i in response.content.decode().splitlines()) is True
+
+
 def test_remove_user_post(db, client):
     if settings.PROFILE_DELETE:
         client.login(username='user', password='user')
@@ -256,6 +272,21 @@ def test_remove_user_post(db, client):
         response = client.post(url, data)
         assert response.status_code == 200
         assert not get_user_model().objects.filter(username='user').exists()
+
+@pytest.mark.parametrize('profile_update', [True, False])
+def test_remove_user_post_cancelled(db, client, profile_update):
+    settings.PROFILE_UPDATE = profile_update
+    if settings.PROFILE_DELETE:
+        client.login(username='user', password='user')
+
+        url = reverse('profile_remove')
+        response = client.post(url, {'cancel': 'cancel'})
+        assert response.status_code == 302
+        if settings.PROFILE_UPDATE:
+            assert response.url == '/account'
+        else:
+            assert response.url == '/'
+        assert get_user_model().objects.filter(username='user').exists()
 
 
 def test_remove_user_post_invalid_email(db, client):
@@ -304,6 +335,28 @@ def test_remove_user_post_invalid_consent(db, client):
         assert get_user_model().objects.filter(username='user').exists()
 
 
+def test_remove_standard_user_without_usable_password(db, client):
+    settings.SHIBBOLETH = False # when not using shibboleth
+    username = "user-no-password"
+    email = "user-no-password@example.com"
+    user, _created = get_user_model().objects.get_or_create(username=username, email=email)
+    user.set_unusable_password()
+    user.save()
+
+    if settings.PROFILE_DELETE:
+        client.force_login(user=user)  # login without password
+
+        url = reverse('profile_remove')
+        data = {
+            'email': email,
+            'consent': True
+        }
+        response = client.post(url, data)
+        assert response.status_code == 200
+        assert any('you cannot remove your profile' in i for i in response.content.decode().splitlines()) is True
+        assert get_user_model().objects.filter(username=username).exists()
+
+
 def test_remove_shibboleth_user_without_usable_password(db, client):
     settings.SHIBBOLETH = True
     username = "user-no-password"
@@ -347,7 +400,7 @@ def test_remove_shibboleth_user_without_usable_password_invalid_consent(db, clie
         assert get_user_model().objects.filter(username=username).exists()
 
 
-def test_remove_shibboleth_user_without_usable_password_invalid_email_wrong(db, client):
+def test_remove_shibboleth_user_without_usable_password_when_invalid_email_is_wrong(db, client):
     settings.SHIBBOLETH = True
     username = "user-no-password"
     email = "user-no-password@example.com"
@@ -369,7 +422,7 @@ def test_remove_shibboleth_user_without_usable_password_invalid_email_wrong(db, 
         assert get_user_model().objects.filter(username=username).exists()
 
 
-def test_remove_shibboleth_user_without_usable_password_invalid_email_empty(db, client):
+def test_remove_shibboleth_user_without_usable_password_when_invalid_email_is_empty(db, client):
     settings.SHIBBOLETH = True
     username = "user-no-password"
     email = "user-no-password@example.com"
