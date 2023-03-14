@@ -104,3 +104,18 @@ class RemoveForm(forms.Form):
 
     consent = forms.BooleanField(required=True)
     consent.label = _("I confirm that I want my profile to be completely removed. This can not be undone!")
+
+
+class ShibbolethUserRemoveForm(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request')
+        kwargs.setdefault('label_suffix', '')
+        super().__init__(*args, **kwargs)
+
+    email = forms.CharField(widget=forms.TextInput(attrs={'required': 'false'}))
+    email.label = _('E-mail')
+    email.widget.attrs = {'class': 'form-control', 'placeholder': email.label}
+
+    consent = forms.BooleanField(required=True)
+    consent.label = _("I confirm that I want my profile to be completely removed. This can not be undone!")
