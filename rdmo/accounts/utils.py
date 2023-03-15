@@ -42,7 +42,7 @@ def set_group_permissions():
 
 def delete_user(user=None, email=None, password=None):
     if user is None or email is None:
-        log.debug('Deletion failed because either User "%s" or email %s is None' % username, email)
+        log.debug('Deletion failed because either User or email is None')
         return False
 
     username = user.username
