@@ -36,13 +36,13 @@ status_map = {
         'example-editor': 201, 'editor': 201
     },
     'update': {
-        'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 404,
-        'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 404,
+        'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 403,
+        'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 403,
         'example-editor': 200, 'editor': 200
     },
     'delete': {
-        'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 404,
-        'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 404,
+        'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 403,
+        'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 403,
         'example-editor': 204, 'editor': 204
     }
 }
