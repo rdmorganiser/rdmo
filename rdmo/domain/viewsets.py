@@ -17,7 +17,12 @@ from .serializers.v1 import (AttributeIndexSerializer,
 
 class AttributeViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission & HasObjectPermission, )
-    
+    queryset = Attribute.objects.order_by('path') \
+                        .annotate(values_count=models.Count('values')) \
+                        .annotate(projects_count=models.Count('values__project', distinct=True)) \
+                        .prefetch_related('conditions', 'questionsets', 'questions', 
+                                          'tasks_as_start', 'tasks_as_end', 'editors')
+
     serializer_class = AttributeSerializer
 
     filter_backends = (DjangoFilterBackend,)
@@ -28,20 +33,9 @@ class AttributeViewSet(CopyModelMixin, ModelViewSet):
         'parent'
     )
 
-    def get_queryset(self):
-        queryset = Attribute.objects.filter_user(self.request.user) \
-                        .order_by('path') \
-                        .annotate(values_count=models.Count('values')) \
-                        .annotate(projects_count=models.Count('values__project', distinct=True)) \
-                        .prefetch_related('conditions', 'questionsets', 'questions',
-                                          'tasks_as_start', 'tasks_as_end', 'editors')
-
-        return queryset
-
     @action(detail=False)
     def nested(self, request):
-        queryset = Attribute.objects.filter_user(self.request.user).get_cached_trees()
-        # queryset.filter_user(self.request.user)
+        queryset = Attribute.objects.get_cached_trees()
         serializer = AttributeNestedSerializer(queryset, many=True)
         return Response(serializer.data)
 
