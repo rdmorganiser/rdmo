@@ -41,6 +41,20 @@ status_map = {
         'example-editor': 200, 'editor': 200
     },
     'delete': {
+        'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 204,
+        'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 204,
+        'example-editor': 204, 'editor': 204
+    }
+}
+
+
+status_map_obj_permissions = { # these are permissions for an object with editors set to current site (=example.com)
+    'update': {
+        'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 403,
+        'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 403,
+        'example-editor': 200, 'editor': 200
+    },
+    'delete': {
         'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 403,
         'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 403,
         'example-editor': 204, 'editor': 204
@@ -122,7 +136,7 @@ def test_create(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_update_with_editors_currentsite(db, client, username, password):
+def test_update_with_obj_permissions_editors_currentsite(db, client, username, password):
     client.login(username=username, password=password)
     instances = Option.objects.all()
 
@@ -142,11 +156,11 @@ def test_update_with_editors_currentsite(db, client, username, password):
             'text_de': instance.text_lang2
         }
         response = client.put(url, data, content_type='application/json')
-        assert response.status_code == status_map['update'][username], response.json()
+        assert response.status_code == status_map_obj_permissions['update'][username], response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_delete_with_editors_currentsite(db, client, username, password):
+def test_delete_with_obj_permissions_editors_currentsit(db, client, username, password):
     client.login(username=username, password=password)
     instances = Option.objects.all()
 
@@ -157,7 +171,7 @@ def test_delete_with_editors_currentsite(db, client, username, password):
 
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.delete(url)
-        assert response.status_code == status_map['delete'][username], response.json()
+        assert response.status_code == status_map_obj_permissions['delete'][username], response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
