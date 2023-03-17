@@ -1,70 +1,52 @@
-import React, { Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Tabs, Tab } from 'react-bootstrap';
+import isUndefined from 'lodash/isUndefined'
 
-import Checkbox from '../forms/Checkbox'
-import Number from '../forms/Number'
-import OrderedMultiSelect from '../forms/OrderedMultiSelect'
-import Select from '../forms/Select'
-import Text from '../forms/Text'
-import Textarea from '../forms/Textarea'
-import UriPrefix from '../forms/UriPrefix'
+import { filterElements } from '../../utils/filter'
 
-import ElementHeading from '../common/ElementHeading'
+import Option from './Option'
+import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/ElementLinks'
 
-const OptionSet = ({ config, optionset, warnings, errors, updateOptionSet, storeOptionSet,
-                     options, providers }) => {
-  return (
-    <div className="panel panel-default">
-      <ElementHeading verboseName={gettext('Option set')} element={optionset} onSave={storeOptionSet} />
+const OptionSet = ({ config, optionset, fetchElement, storeElement, list=true }) => {
 
-      <div className="panel-body">
-        <div className="row">
-          <div className="col-sm-6">
-            <UriPrefix config={config} element={optionset} field="uri_prefix"
-                       warnings={warnings} errors={errors} onChange={updateOptionSet} />
-          </div>
-          <div className="col-sm-6">
-            <Text config={config} element={optionset} field="key"
-                  warnings={warnings} errors={errors} onChange={updateOptionSet} />
-          </div>
-          <div className="col-sm-12">
-            <Textarea config={config} element={optionset} field="comment"
-                      warnings={warnings} errors={errors} rows={4} onChange={updateOptionSet} />
-          </div>
-          <div className="col-sm-6">
-            <Checkbox config={config} element={optionset} field="locked"
-                      warnings={warnings} errors={errors} onChange={updateOptionSet} />
-          </div>
-          <div className="col-sm-6">
-            <Number config={config} element={optionset} field="order"
-                    warnings={warnings} errors={errors} onChange={updateOptionSet} />
-          </div>
-          <div className="col-sm-12">
-            <OrderedMultiSelect config={config} element={optionset} field="options"
-                                warnings={warnings} errors={errors}
-                                options={options} verboseName="option"
-                                onChange={updateOptionSet} />
-          </div>
-          <div className="col-sm-12">
-            <Select config={config} element={optionset} field="provider_key"
-                    warnings={warnings} errors={errors} options={providers} onChange={updateOptionSet} />
-          </div>
-        </div>
+  const verboseName = gettext('option set')
+
+  const fetchEdit = () => fetchElement('optionsets', optionset.id)
+  const fetchNested = () => fetchElement('optionsets', optionset.id, 'nested')
+  const toggleLocked = () => storeElement('optionsets', {...optionset, locked: !optionset.locked })
+
+  const elementNode = (
+    <div className="element">
+      <div className="element-options">
+        <EditLink element={optionset} verboseName={verboseName} onClick={fetchEdit} />
+        <LockedLink element={optionset} verboseName={verboseName} onClick={toggleLocked} />
+        <NestedLink element={optionset} verboseName={verboseName} onClick={fetchNested} />
+        <ExportLink element={optionset} verboseName={verboseName} />
+      </div>
+      <div>
+        <strong>{gettext('Option set')}{': '}</strong>
+        <code className="code-options">{optionset.uri}</code>
       </div>
     </div>
   )
+
+  if (list) {
+    return (
+      <li className="list-group-item">
+        { elementNode }
+      </li>
+    )
+  } else {
+    return elementNode
+  }
 }
 
 OptionSet.propTypes = {
   config: PropTypes.object.isRequired,
   optionset: PropTypes.object.isRequired,
-  warnings: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired,
-  updateOptionSet: PropTypes.func.isRequired,
-  storeOptionSet: PropTypes.func.isRequired,
-  options: PropTypes.array,
-  providers: PropTypes.array
+  fetchElement: PropTypes.func.isRequired,
+  storeElement: PropTypes.func.isRequired,
+  list: PropTypes.bool
 }
 
 export default OptionSet

@@ -4,7 +4,7 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 from rest_framework.utils import model_meta
 
-from rdmo.core.utils import get_languages, markdown2html
+from rdmo.core.utils import get_language_warning, get_languages, markdown2html
 
 
 class RecursiveField(serializers.Serializer):
@@ -143,15 +143,22 @@ class ThroughModelSerializerMixin(object):
         return instance
 
 
-class ElementSerializer(serializers.ModelSerializer):
-
-    uri_path = serializers.CharField(required=True)
-    xml_url = serializers.SerializerMethodField()
+class ElementExportSerializerMixin(serializers.ModelSerializer):
 
     def get_xml_url(self, obj):
         app_name = self.context['request'].version
-        basename = self.context['view'].basename
+        basename = self.Meta.model._meta.model_name
         return reverse(f'{app_name}:{basename}-detail-export', args=[obj.pk])
+
+
+class ElementWarningSerializerMixin(serializers.ModelSerializer):
+
+    def get_warning(self, obj):
+        return any([get_language_warning(obj, field_name) for field_name in self.Meta.warning_fields])
+
+
+class ElementSerializer(serializers.ModelSerializer):
+    pass
 
 
 class SiteSerializer(serializers.ModelSerializer):

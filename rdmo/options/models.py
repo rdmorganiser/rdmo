@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from rdmo.conditions.models import Condition
@@ -103,6 +104,10 @@ class OptionSet(models.Model):
     @property
     def is_locked(self):
         return self.locked
+
+    @cached_property
+    def elements(self):
+        return [element.option for element in sorted(self.optionset_options.all(), key=lambda e: e.order)]
 
     @classmethod
     def build_uri(cls, uri_prefix, uri_path):

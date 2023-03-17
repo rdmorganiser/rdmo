@@ -2,10 +2,11 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
+
 const EditLink = ({ element, verboseName, onClick }) => {
   const handleClick = (event) => {
     event.preventDefault()
-    onClick(element)
+    onClick()
   }
 
   const title = interpolate(gettext('Edit %s'), [verboseName])
@@ -28,7 +29,7 @@ EditLink.propTypes = {
 const AvailableLink = ({ element, verboseName, onClick }) => {
   const handleClick = (event) => {
     event.preventDefault()
-    if (!element.locked) onClick(!element.available)
+    onClick()
   }
 
   const className = classNames({
@@ -59,7 +60,7 @@ AvailableLink.propTypes = {
 const LockedLink = ({ element, verboseName, onClick }) => {
   const handleClick = (event) => {
     event.preventDefault()
-    onClick(!element.locked)
+    onClick()
   }
 
   const className = classNames({
@@ -90,8 +91,7 @@ const ExportLink = ({ element, verboseName }) => {
 
   return (
     <a href={element.xml_url} className="fa fa-download"
-       title={title}
-       target="blank">
+       title={title} target="_blank">
     </a>
   )
 }
@@ -101,4 +101,28 @@ ExportLink.propTypes = {
   verboseName: PropTypes.string.isRequired
 }
 
-export { EditLink, AvailableLink, LockedLink, ExportLink }
+
+const NestedLink = ({ element, verboseName, onClick }) => {
+  const handleClick = (event) => {
+    event.preventDefault()
+    onClick()
+  }
+
+  const title = gettext('View nested')
+
+  return (
+    <a href="" className="fa fa-align-right flip"
+       title={title}
+       onClick={event => handleClick(event)}>
+    </a>
+  )
+}
+
+NestedLink.propTypes = {
+  element: PropTypes.object.isRequired,
+  verboseName: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired
+}
+
+
+export { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink }

@@ -1,11 +1,8 @@
 import logging
 
 from rest_framework import serializers
-from rest_framework.reverse import reverse
 
-from rdmo.conditions.models import Condition
-from rdmo.questions.models import Question, QuestionSet
-from rdmo.tasks.models import Task
+from rdmo.core.serializers import ElementExportSerializerMixin
 
 from ..models import Attribute
 from ..validators import (AttributeLockedValidator, AttributeParentValidator,
@@ -14,58 +11,7 @@ from ..validators import (AttributeLockedValidator, AttributeParentValidator,
 log = logging.getLogger(__name__)
 
 
-class ConditionSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Condition
-        fields = (
-            'id',
-            'uri'
-        )
-
-
-class QuestionSetSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = QuestionSet
-        fields = (
-            'id',
-            'uri'
-        )
-
-
-class QuestionSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Question
-        fields = (
-            'id',
-            'uri'
-        )
-
-
-class TaskSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Task
-        fields = (
-            'id',
-            'uri'
-        )
-
-
-class AttributeSerializer(serializers.ModelSerializer):
-
-    key = serializers.SlugField(required=True)
-    parent = serializers.PrimaryKeyRelatedField(queryset=Attribute.objects.all(), default=None, allow_null=True)
-    path = serializers.CharField(required=False)
-    conditions = ConditionSerializer(many=True, read_only=True)
-    questionsets = QuestionSetSerializer(many=True, read_only=True)
-    questions = QuestionSerializer(many=True, read_only=True)
-    tasks_as_start = TaskSerializer(many=True, read_only=True)
-    tasks_as_end = TaskSerializer(many=True, read_only=True)
-    values_count = serializers.IntegerField(read_only=True)
-    projects_count = serializers.IntegerField(read_only=True)
+class BaseAttributeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Attribute
@@ -74,10 +20,28 @@ class AttributeSerializer(serializers.ModelSerializer):
             'uri',
             'uri_prefix',
             'key',
-            'path',
             'comment',
             'locked',
-            'parent',
+            'parent'
+        )
+
+
+class AttributeSerializer(BaseAttributeSerializer):
+
+    key = serializers.SlugField(required=True)
+    parent = serializers.PrimaryKeyRelatedField(queryset=Attribute.objects.all(), default=None, allow_null=True)
+    conditions = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
+    questionsets = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
+    questions = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
+    tasks_as_start = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
+    tasks_as_end = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
+    tasks_as_start = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
+    tasks_as_start = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
+    projects_count = serializers.IntegerField(read_only=True)
+    values_count = serializers.IntegerField(read_only=True)
+
+    class Meta(BaseAttributeSerializer.Meta):
+        fields = BaseAttributeSerializer.Meta.fields + (
             'conditions',
             'questionsets',
             'questions',
@@ -93,30 +57,29 @@ class AttributeSerializer(serializers.ModelSerializer):
         )
 
 
-class AttributeNestedSerializer(serializers.ModelSerializer):
+class AttributeListSerializer(ElementExportSerializerMixin, BaseAttributeSerializer):
 
-    children = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
 
-    class Meta:
-        model = Attribute
-        fields = (
-            'id',
-            'uri',
-            'uri_prefix',
-            'path',
-            'key',
-            'locked',
-            'children',
-            'xml_url'
+    class Meta(BaseAttributeSerializer.Meta):
+        fields = BaseAttributeSerializer.Meta.fields + (
+            'xml_url',
         )
 
-    def get_children(self, obj):
-        # get the children from the cached mptt tree
-        return AttributeNestedSerializer(obj.get_children(), many=True, read_only=True).data
 
-    def get_xml_url(self, obj):
-        return reverse('v1-domain:attribute-detail-export', args=[obj.pk])
+class AttributeNestedSerializer(AttributeListSerializer):
+
+    elements = serializers.SerializerMethodField()
+
+    class Meta(AttributeListSerializer.Meta):
+        fields = AttributeListSerializer.Meta.fields + (
+            'elements',
+        )
+
+    def get_elements(self, obj):
+        # get the children from the cached mptt tree
+        return AttributeNestedSerializer(obj.get_children(), many=True,
+                                         read_only=True, context=self.context).data
 
 
 class AttributeIndexSerializer(serializers.ModelSerializer):
@@ -125,8 +88,5 @@ class AttributeIndexSerializer(serializers.ModelSerializer):
         model = Attribute
         fields = (
             'id',
-            'uri',
-            'uri_prefix',
-            'key',
-            'path'
+            'uri'
         )

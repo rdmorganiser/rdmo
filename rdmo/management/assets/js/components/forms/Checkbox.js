@@ -3,20 +3,21 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
+import get from 'lodash/get'
 
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
-const Checkbox = ({ config, element, field, warnings, errors, onChange }) => {
+const Checkbox = ({ config, element, field, onChange }) => {
   const id = getId(element, field),
         label = getLabel(config, element, field),
         help = getHelp(config, element, field),
-        warningList = warnings[field],
-        errorList = errors[field]
+        warnings = get(element, ['warnings', field]),
+        errors = get(element, ['errors', field])
 
   const className = classNames({
     'form-group': true,
-    'has-warning': !isEmpty(warningList),
-    'has-error': !isEmpty(errorList)
+    'has-warning': !isEmpty(warnings),
+    'has-error': !isEmpty(errors)
   })
 
   const checked = isNil(element[field]) ? '' : element[field]
@@ -33,8 +34,8 @@ const Checkbox = ({ config, element, field, warnings, errors, onChange }) => {
 
       {help && <p className="help-block">{help}</p>}
 
-      {errorList && <ul className="help-block list-unstyled">
-        {errorList.map((error, index) => <li key={index}>{error}</li>)}
+      {errors && <ul className="help-block list-unstyled">
+        {errors.map((error, index) => <li key={index}>{error}</li>)}
       </ul>}
     </div>
   )
@@ -44,8 +45,6 @@ Checkbox.propTypes = {
   config: PropTypes.object,
   element: PropTypes.object,
   field: PropTypes.string,
-  warnings: PropTypes.object,
-  errors: PropTypes.object,
   onChange: PropTypes.func,
 }
 

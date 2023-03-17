@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
+import get from 'lodash/get'
 
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
@@ -71,17 +72,17 @@ const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions,
   )
 }
 
-const OrderedMultiSelect = ({ config, element, field, warnings, errors, options, verboseName, onChange }) => {
+const OrderedMultiSelect = ({ config, element, field, options, verboseName, onChange }) => {
   const id = getId(element, field),
         label = getLabel(config, element, field),
         help = getHelp(config, element, field),
-        warningList = warnings[field],
-        errorList = errors[field]
+        warnings = get(element, ['warnings', field]),
+        errors = get(element, ['errors', field])
 
   const className = classNames({
     'form-group': true,
-    'has-warning': !isEmpty(warningList),
-    'has-error': !isEmpty(errorList)
+    'has-warning': !isEmpty(warnings),
+    'has-error': !isEmpty(errors)
   })
 
   const values = element[field]
@@ -126,7 +127,7 @@ const OrderedMultiSelect = ({ config, element, field, warnings, errors, options,
           return (
             <OrderedMultiSelectItem key={index} index={index} field={field}
                                     selectValue={selectValue} selectOptions={selectOptions}
-                                    errors={errorList} handleChange={handleChange} handleDrag={handleDrag} />
+                                    errors={errors} handleChange={handleChange} handleDrag={handleDrag} />
           )
         })
       }
@@ -155,8 +156,6 @@ OrderedMultiSelect.propTypes = {
   config: PropTypes.object,
   element: PropTypes.object,
   field: PropTypes.string,
-  warnings: PropTypes.object,
-  errors: PropTypes.object,
   options: PropTypes.array,
   verboseName: PropTypes.string,
   onChange: PropTypes.func

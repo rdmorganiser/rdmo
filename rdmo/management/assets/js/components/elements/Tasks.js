@@ -3,40 +3,23 @@ import PropTypes from 'prop-types'
 
 import { filterElements } from '../../utils/filter'
 
-import ElementsHeading from '../common/ElementsHeading'
-import { EditLink, AvailableLink, LockedLink, ExportLink } from '../common/ElementLinks'
+import Task from '../element/Task'
+import ElementButtons from '../common/ElementButtons'
 
-const Tasks = ({ config, tasks, fetchTask, storeTask }) => {
-  const handleEdit = (event, id) => {
-    event.preventDefault()
-    fetchTask(id)
-  }
-
+const Tasks = ({ config, tasks, fetchElement, storeElement }) => {
   return (
     <div className="panel panel-default">
-      <ElementsHeading verboseName={gettext('Tasks')} />
+      <div className="panel-heading">
+        <ElementButtons />
+        <strong>{gettext('Tasks')}</strong>
+      </div>
 
       <ul className="list-group">
       {
-        filterElements(config, tasks).map((task, index) => {
-          return (
-            <li key={index} className="list-group-item">
-              <div className="element-options">
-                <EditLink element={task} verboseName={gettext('task')}
-                          onClick={task => fetchTask(task.id)} />
-                <AvailableLink element={task} verboseName={gettext('task')}
-                               onClick={available => storeTask(Object.assign({}, task, { available }))} />
-                <LockedLink element={task} verboseName={gettext('task')}
-                            onClick={locked => storeTask(Object.assign({}, task, { locked }))} />
-                <ExportLink element={task} verboseName={gettext('task')} />
-              </div>
-              <div>
-                <strong>{gettext('Task')}{': '}</strong>
-                <code className="code-tasks">{task.uri}</code>
-              </div>
-            </li>
-          )
-        })
+        filterElements(config, tasks).map((task, index) => (
+          <Task key={index} config={config} task={task}
+                fetchElement={fetchElement} storeElement={storeElement} />
+        ))
       }
       </ul>
     </div>
@@ -46,8 +29,8 @@ const Tasks = ({ config, tasks, fetchTask, storeTask }) => {
 Tasks.propTypes = {
   config: PropTypes.object.isRequired,
   tasks: PropTypes.array.isRequired,
-  fetchTask: PropTypes.func.isRequired,
-  storeTask: PropTypes.func.isRequired
+  fetchElement: PropTypes.func.isRequired,
+  storeElement: PropTypes.func.isRequired
 }
 
 export default Tasks

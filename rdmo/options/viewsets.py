@@ -16,7 +16,7 @@ from .renderers import OptionRenderer, OptionSetRenderer
 from .serializers.export import (OptionExportSerializer,
                                  OptionSetExportSerializer)
 from .serializers.v1 import (OptionIndexSerializer, OptionSerializer,
-                             OptionSetIndexSerializer,
+                             OptionSetIndexSerializer, OptionSetListSerializer,
                              OptionSetNestedSerializer, OptionSetSerializer)
 
 
@@ -37,15 +37,18 @@ class OptionSetViewSet(CopyModelMixin, ModelViewSet):
         'comment'
     )
 
-    @action(detail=False)
-    def nested(self, request):
-        serializer = OptionSetNestedSerializer(self.get_queryset(), many=True)
-        return Response(serializer.data)
+    def get_serializer_class(self):
+        return OptionSetListSerializer if self.action == 'list' else OptionSetSerializer
 
     @action(detail=False)
     def index(self, request):
         queryset = OptionSet.objects.prefetch_related('options')
         serializer = OptionSetIndexSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(detail=True)
+    def nested(self, request, pk):
+        serializer = OptionSetNestedSerializer(self.get_object(), context={'request': request})
         return Response(serializer.data)
 
     @action(detail=False, permission_classes=[HasModelPermission])

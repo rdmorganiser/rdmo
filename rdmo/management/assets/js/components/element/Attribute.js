@@ -1,57 +1,60 @@
-import React, { Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Tabs, Tab } from 'react-bootstrap';
+import isUndefined from 'lodash/isUndefined'
 
-import Checkbox from '../forms/Checkbox'
-import Select from '../forms/Select'
-import Text from '../forms/Text'
-import Textarea from '../forms/Textarea'
-import UriPrefix from '../forms/UriPrefix'
+import { filterElements } from '../../utils/filter'
 
-import ElementHeading from '../common/ElementHeading'
+import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/ElementLinks'
 
-const Attribute = ({ config, attribute, warnings, errors, updateAttribute, storeAttribute,
-                     attributes }) => {
-  return (
-    <div className="panel panel-default">
-      <ElementHeading verboseName={gettext('Attribute')} element={attribute} onSave={storeAttribute} />
+const Attribute = ({ config, attribute, fetchElement, storeElement, list=true, indent=0 }) => {
 
-      <div className="panel-body">
-        <div className="row">
-          <div className="col-sm-6">
-            <UriPrefix config={config} element={attribute} field="uri_prefix"
-                  warnings={warnings} errors={errors} onChange={updateAttribute} />
-          </div>
-          <div className="col-sm-6">
-            <Text config={config} element={attribute} field="key"
-                  warnings={warnings} errors={errors} onChange={updateAttribute} />
-          </div>
-          <div className="col-sm-12">
-            <Textarea config={config} element={attribute} field="comment"
-                      warnings={warnings} errors={errors} rows={4} onChange={updateAttribute} />
-          </div>
-          <div className="col-sm-12">
-            <Checkbox config={config} element={attribute} field="locked"
-                      warnings={warnings} errors={errors} onChange={updateAttribute} />
-          </div>
-          <div className="col-sm-12">
-            <Select config={config} element={attribute} field="parent"
-                    warnings={warnings} errors={errors} options={attributes} onChange={updateAttribute} />
-          </div>
-        </div>
+  const verboseName = gettext('attribute')
+
+  const fetchEdit = () => fetchElement('attributes', attribute.id)
+  const fetchNested = () => fetchElement('attributes', attribute.id, 'nested')
+  const toggleLocked = () => storeElement('attributes', {...attribute, locked: !attribute.locked })
+
+  const elementNode = (
+    <div className="element">
+      <div className="element-options">
+        <EditLink element={attribute} verboseName={verboseName} onClick={fetchEdit} />
+        <LockedLink element={attribute} verboseName={verboseName} onClick={toggleLocked} />
+        <NestedLink element={attribute} verboseName={verboseName} onClick={fetchNested} />
+        <ExportLink element={attribute} verboseName={verboseName} />
+      </div>
+      <div style={{ paddingLeft: 15 * indent }}>
+        <strong>{gettext('Attribute')}{': '}</strong>
+        <code className="code-domain">{attribute.uri}</code>
       </div>
     </div>
   )
+
+  if (list) {
+    return (
+      <React.Fragment>
+        <li className="list-group-item">
+          { elementNode }
+        </li>
+        {
+          filterElements(config, attribute.elements).map((attribute, index) => (
+            <Attribute key={index} config={config} attribute={attribute}
+                       fetchElement={fetchElement} storeElement={storeElement} indent={indent + 1}/>
+          ))
+        }
+      </React.Fragment>
+    )
+  } else {
+    return elementNode
+  }
 }
 
 Attribute.propTypes = {
   config: PropTypes.object.isRequired,
   attribute: PropTypes.object.isRequired,
-  warnings: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired,
-  updateAttribute: PropTypes.func.isRequired,
-  storeAttribute: PropTypes.func.isRequired,
-  attributes: PropTypes.array
+  fetchElement: PropTypes.func.isRequired,
+  storeElement: PropTypes.func.isRequired,
+  list: PropTypes.bool,
+  indent: PropTypes.number
 }
 
 export default Attribute

@@ -18,20 +18,22 @@ from .serializers.export import (CatalogExportSerializer, PageExportSerializer,
                                  QuestionExportSerializer,
                                  QuestionSetExportSerializer,
                                  SectionExportSerializer)
-from .serializers.v1 import (CatalogIndexSerializer, CatalogNestedSerializer,
-                             CatalogSerializer, PageIndexSerializer,
+from .serializers.v1 import (CatalogIndexSerializer, CatalogListSerializer,
+                             CatalogNestedSerializer, CatalogSerializer,
+                             PageIndexSerializer, PageListSerializer,
                              PageNestedSerializer, PageSerializer,
-                             QuestionIndexSerializer, QuestionNestedSerializer,
+                             QuestionIndexSerializer, QuestionListSerializer,
                              QuestionSerializer, QuestionSetIndexSerializer,
+                             QuestionSetListSerializer,
                              QuestionSetNestedSerializer,
                              QuestionSetSerializer, SectionIndexSerializer,
-                             SectionNestedSerializer, SectionSerializer)
+                             SectionListSerializer, SectionNestedSerializer,
+                             SectionSerializer)
 from .utils import get_widget_type_choices
 
 
 class CatalogViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
-    serializer_class = CatalogSerializer
 
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = (
@@ -44,15 +46,17 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
 
     def get_queryset(self):
         queryset = Catalog.objects.annotate(projects_count=models.Count('projects'))
-
         if self.action in ('nested', 'detail_export'):
             return queryset.prefetch_elements()
         else:
             return queryset.prefetch_related('sites', 'groups', 'catalog_sections__section')
 
+    def get_serializer_class(self):
+        return CatalogListSerializer if self.action == 'list' else CatalogSerializer
+
     @action(detail=True)
     def nested(self, request, pk):
-        serializer = CatalogNestedSerializer(self.get_object())
+        serializer = CatalogNestedSerializer(self.get_object(), context={'request': request})
         return Response(serializer.data)
 
     @action(detail=False)
@@ -76,7 +80,6 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
 
 class SectionViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
-    serializer_class = SectionSerializer
 
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = (
@@ -93,9 +96,12 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
         else:
             return queryset.prefetch_related('catalogs', 'section_pages__page')
 
+    def get_serializer_class(self):
+        return SectionListSerializer if self.action == 'list' else SectionSerializer
+
     @action(detail=True)
     def nested(self, request, pk):
-        serializer = SectionNestedSerializer(self.get_object())
+        serializer = SectionNestedSerializer(self.get_object(), context={'request': request})
         return Response(serializer.data)
 
     @action(detail=False)
@@ -119,7 +125,6 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
 
 class PageViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
-    serializer_class = PageSerializer
 
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = (
@@ -143,9 +148,12 @@ class PageViewSet(CopyModelMixin, ModelViewSet):
                 'page_questions__question'
             ).select_related('attribute')
 
+    def get_serializer_class(self):
+        return PageListSerializer if self.action == 'list' else PageSerializer
+
     @action(detail=True)
     def nested(self, request, pk):
-        serializer = PageNestedSerializer(self.get_object())
+        serializer = PageNestedSerializer(self.get_object(), context={'request': request})
         return Response(serializer.data)
 
     @action(detail=False)
@@ -169,7 +177,6 @@ class PageViewSet(CopyModelMixin, ModelViewSet):
 
 class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
-    serializer_class = QuestionSetSerializer
 
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = (
@@ -180,6 +187,9 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
         'comment',
         'is_collection'
     )
+
+    def get_serializer_class(self):
+        return QuestionSetListSerializer if self.action == 'list' else QuestionSetSerializer
 
     def get_queryset(self):
         queryset = QuestionSet.objects.all()
@@ -196,7 +206,7 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=True)
     def nested(self, request, pk):
-        serializer = QuestionSetNestedSerializer(self.get_object())
+        serializer = QuestionSetNestedSerializer(self.get_object(), context={'request': request})
         return Response(serializer.data)
 
     @action(detail=False)
@@ -220,8 +230,6 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
 
 class QuestionViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
-    queryset = Question.objects.all()
-    serializer_class = QuestionSerializer
 
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = (
@@ -236,6 +244,9 @@ class QuestionViewSet(CopyModelMixin, ModelViewSet):
         'comment'
     )
 
+    def get_serializer_class(self):
+        return QuestionListSerializer if self.action == 'list' else QuestionSerializer
+
     def get_queryset(self):
         queryset = Question.objects.all()
         if self.action in ('nested', 'detail_export'):
@@ -247,11 +258,6 @@ class QuestionViewSet(CopyModelMixin, ModelViewSet):
                 'pages',
                 'questionsets'
             ).select_related('attribute')
-
-    @action(detail=True)
-    def nested(self, request, pk):
-        serializer = QuestionNestedSerializer(self.get_object())
-        return Response(serializer.data)
 
     @action(detail=False)
     def index(self, request):

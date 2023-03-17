@@ -42,7 +42,7 @@ export default function configureStore() {
   const fetchElementsFromLocation = (event) => {
     const baseUrl = store.getState().config.baseUrl
     const pathname = event.target.location.pathname
-    let { elementType, elementId } = parseLocation(baseUrl, pathname)
+    let { elementType, elementId, elementAction } = parseLocation(baseUrl, pathname)
 
     if (isNil(elementType)) {
       elementType = 'catalogs'
@@ -50,7 +50,7 @@ export default function configureStore() {
     if (isNil(elementId)) {
       store.dispatch(elementActions.fetchElements(elementType))
     } else {
-      store.dispatch(elementActions.fetchElement(elementType, elementId))
+      store.dispatch(elementActions.fetchElement(elementType, elementId, elementAction))
     }
   }
 

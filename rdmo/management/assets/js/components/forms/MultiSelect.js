@@ -4,20 +4,21 @@ import ReactSelect from 'react-select'
 import classNames from 'classnames'
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
+import get from 'lodash/get'
 
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
-const MultiSelect = ({ config, element, field, warnings, errors, options, verboseName, onChange }) => {
+const MultiSelect = ({ config, element, field, options, verboseName, onChange }) => {
   const id = getId(element, field),
         label = getLabel(config, element, field),
         help = getHelp(config, element, field),
-        warningList = warnings[field],
-        errorList = errors[field]
+        warnings = get(element, ['warnings', field]),
+        errors = get(element, ['errors', field])
 
   const className = classNames({
     'form-group': true,
-    'has-warning': !isEmpty(warningList),
-    'has-error': !isEmpty(errorList)
+    'has-warning': !isEmpty(warnings),
+    'has-error': !isEmpty(errors)
   })
 
   const values = element[field]
@@ -75,8 +76,6 @@ MultiSelect.propTypes = {
   config: PropTypes.object,
   element: PropTypes.object,
   field: PropTypes.string,
-  warnings: PropTypes.object,
-  errors: PropTypes.object,
   options: PropTypes.array,
   verboseName: PropTypes.string,
   onChange: PropTypes.func

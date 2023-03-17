@@ -3,40 +3,23 @@ import PropTypes from 'prop-types'
 
 import { filterElements } from '../../utils/filter'
 
-import ElementsHeading from '../common/ElementsHeading'
-import { EditLink, AvailableLink, LockedLink, ExportLink } from '../common/ElementLinks'
+import View from '../element/View'
+import ElementButtons from '../common/ElementButtons'
 
-const Views = ({ config, views, fetchView, storeView }) => {
-  const handleEdit = (event, id) => {
-    event.preventDefault()
-    fetchView(id)
-  }
-
+const Views = ({ config, views, fetchElement, storeElement }) => {
   return (
     <div className="panel panel-default">
-      <ElementsHeading verboseName={gettext('Views')} />
+      <div className="panel-heading">
+        <ElementButtons />
+        <strong>{gettext('Views')}</strong>
+      </div>
 
       <ul className="list-group">
       {
-        filterElements(config, views).map((view, index) => {
-          return (
-            <li key={index} className="list-group-item">
-              <div className="element-options">
-                <EditLink element={view} verboseName={gettext('view')}
-                          onClick={view => fetchView(view.id)} />
-                <AvailableLink element={view} verboseName={gettext('view')}
-                               onClick={available => storeView(Object.assign({}, view, { available }))} />
-                <LockedLink element={view} verboseName={gettext('view')}
-                            onClick={locked => storeView(Object.assign({}, view, { locked }))} />
-                <ExportLink element={view} verboseName={gettext('view')} />
-              </div>
-              <div>
-                <strong>{gettext('View')}{': '}</strong>
-                <code className="code-views">{view.uri}</code>
-              </div>
-            </li>
-          )
-        })
+        filterElements(config, views).map((view, index) => (
+          <View key={index} config={config} view={view}
+                fetchElement={fetchElement} storeElement={storeElement} />
+        ))
       }
       </ul>
     </div>
@@ -46,8 +29,8 @@ const Views = ({ config, views, fetchView, storeView }) => {
 Views.propTypes = {
   config: PropTypes.object.isRequired,
   views: PropTypes.array.isRequired,
-  fetchView: PropTypes.func.isRequired,
-  storeView: PropTypes.func.isRequired
+  fetchElement: PropTypes.func.isRequired,
+  storeElement: PropTypes.func.isRequired
 }
 
 export default Views

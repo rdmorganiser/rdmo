@@ -52,15 +52,6 @@ def test_list(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_nested(db, client, username, password):
-    client.login(username=username, password=password)
-
-    url = reverse(urlnames['nested'])
-    response = client.get(url)
-    assert response.status_code == status_map['list'][username], response.json()
-
-
-@pytest.mark.parametrize('username,password', users)
 def test_index(db, client, username, password):
     client.login(username=username, password=password)
 
@@ -93,6 +84,17 @@ def test_detail(db, client, username, password):
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.get(url)
         assert response.status_code == status_map['detail'][username], response.json()
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_nested(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = OptionSet.objects.all()
+
+    for instance in instances:
+        url = reverse(urlnames['nested'], args=[instance.pk])
+        response = client.get(url)
+        assert response.status_code == status_map['list'][username], response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
