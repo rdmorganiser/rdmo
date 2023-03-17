@@ -6,9 +6,17 @@ users = (
     ('site', 'site'),  # site manager for all sites
     ('editor', 'editor'),  # editor for all sites
     ('reviewer', 'reviewer'),  # reviewer for all sites
-    ('api', 'api'),  # has all roles for all sites
+    ('api', 'api'),  # has all roles for all sites, same as superuser
+    ('admin', 'admin'),  # superuser
     ('user', 'user'),
     ('anonymous', None)
+)
+
+more_example_users = (
+    'example-user',
+    'example-manager',
+    'example-editor',
+    'example-reviewer'
 )
 
 members_from_other_sites = (
@@ -25,19 +33,19 @@ members_from_other_sites = (
 
 status_map = {
     'list': {
-        'editor': 200,  'reviewer': 200, 'site': 200, 'api': 200, 'user': 200, 'anonymous': 401
+        'editor': 200,  'reviewer': 200, 'site': 200, 'api': 200, 'user': 200, 'anonymous': 401, 'admin' : 200
     },
     'detail': {
-        'editor': 404,  'reviewer': 404, 'site': 200, 'api': 200, 'user': 404, 'anonymous': 401
+        'editor': 404,  'reviewer': 404, 'site': 200, 'api': 200, 'user': 404, 'anonymous': 401, 'admin' : 200
     },
     'create': {
-        'editor': 405,  'reviewer': 405, 'site': 405, 'api': 405, 'user': 405, 'anonymous': 401
+        'editor': 405,  'reviewer': 405, 'site': 405, 'api': 405, 'user': 405, 'anonymous': 401, 'admin' : 405
     },
     'update': {
-        'editor': 405,  'reviewer': 405, 'site': 405, 'api': 405, 'user': 405, 'anonymous': 401
+        'editor': 405,  'reviewer': 405, 'site': 405, 'api': 405, 'user': 405, 'anonymous': 401, 'admin' : 405
     },
     'delete': {
-        'editor': 405,  'reviewer': 405, 'site': 405, 'api': 405, 'user': 405, 'anonymous': 401
+        'editor': 405,  'reviewer': 405, 'site': 405, 'api': 405, 'user': 405, 'anonymous': 401, 'admin' : 405
     }
 }
 
@@ -55,11 +63,14 @@ def test_list(db, client, username, password):
     response = client.get(url)
     assert response.status_code == status_map['list'][username], response.json()
     if response.status_code == 200:
-        if username == 'api':
+        if username == 'api' or username == 'admin':
             assert len(response.json()) == get_user_model().objects.count()
         elif username == 'site':
-            # the site admin must not see the user 'other' and not foo-editor and not bar-editor
+            # the site manager for example.com must see only the members of example.com
             assert len(response.json()) == get_user_model().objects.count() - len(members_from_other_sites)
+        elif username == 'editor' or username == 'reviewer':
+            # editors and reviewers can see themselves
+            assert len(response.json()) == 1
         else:
             assert len(response.json()) == 0
 
@@ -71,9 +82,12 @@ def test_detail(db, client, username, password):
     for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.get(url)
-        if username in ('site') and instance.username in members_from_other_sites:
-            # the site admin must not see the user 'members_from_other_sites'
-            assert response.status_code == 404, response.json()
+        if username == 'site' and not instance.role.member.filter(domain__contains='example.com').exists():
+            # the site manager for example.com must see only the members of example.com
+            assert response.status_code == 404, response.json()    
+        elif (username == 'editor' or username == 'reviewer') and username == instance.username:
+            # editors and reviewers can see themselves
+            assert response.status_code == 200, response.json()
         else:
             assert response.status_code == status_map['detail'][username], response.json()
 

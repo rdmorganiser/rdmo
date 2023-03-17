@@ -3,7 +3,9 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
+from rdmo.management.rules import is_an_editor, is_a_reviewer
 
+from .models import Role
 from .serializers.v1 import UserSerializer
 from .utils import is_site_manager
 
@@ -16,6 +18,9 @@ class UserViewSetMixin(object):
                 return get_user_model().objects.all()
             elif is_site_manager(user):
                 return get_user_model().objects.filter(role__member__id__in=user.role.manager.all()).distinct()
+            elif is_an_editor(user) or is_a_reviewer(user):
+                # allow editors or reviewers to see their own user object
+                return get_user_model().objects.filter(id=user.id)
         return get_user_model().objects.none()
 
 
