@@ -34,13 +34,17 @@ class RoleSerializer(serializers.ModelSerializer):
 
     member = SiteSerializer(many=True)
     manager = SiteSerializer(many=True)
+    editor = SiteSerializer(many=True)
+    reviewer = SiteSerializer(many=True)
 
     class Meta:
         model = Role
         fields = (
             'id',
             'member',
-            'manager'
+            'manager',
+            'editor',
+            'reviewer'
         )
 
 
