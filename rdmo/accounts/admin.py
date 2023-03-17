@@ -24,7 +24,7 @@ class RoleAdmin(admin.ModelAdmin):
     search_fields = ('user__username', 'user__email')
     list_filter = ('member', 'manager', 'editor', 'reviewer')
 
-    list_display = ('user', 'member_at', 'member_at', 'manager_at', 'editor_at', 'reviewer_at')
+    list_display = ('user', 'members', 'managers', 'editors', 'reviewers')
 
     def get_queryset(self, request):
         return Role.objects.prefetch_related(
@@ -33,25 +33,23 @@ class RoleAdmin(admin.ModelAdmin):
                     sites_count=Value(Site.objects.count())
                 )
 
-    def member_at(self, obj):
-        if obj.member__count == obj.sites_count:
-            return 'all sites'
-        return ', '.join([site.domain for site in obj.member.all()])
+    @staticmethod
+    def render_all_sites_or_join(obj, field_name: str) -> str:
+        if getattr(obj, f'{field_name}__count', 0) == obj.sites_count:
+            return 'all Sites'
+        return ', '.join([site.domain for site in getattr(obj, field_name).all()])
 
-    def manager_at(self, obj):
-        if obj.manager__count == obj.sites_count:
-            return 'all sites'
-        return ', '.join([site.domain for site in obj.manager.all()])
+    def members(self, obj):
+        return self.render_all_sites_or_join(obj, 'member')
 
-    def editor_at(self, obj):
-        if obj.editor__count == obj.sites_count:
-            return 'all sites'
-        return ', '.join([site.domain for site in obj.editor.all()])
+    def managers(self, obj):
+        return self.render_all_sites_or_join(obj, 'manager')
 
-    def reviewer_at(self, obj):
-        if obj.reviewer__count == obj.sites_count:
-            return 'all sites'
-        return ', '.join([site.domain for site in obj.reviewer.all()])
+    def editors(self, obj):
+        return self.render_all_sites_or_join(obj, 'editor')
+
+    def reviewers(self, obj):
+        return self.render_all_sites_or_join(obj, 'reviewer')
 
 
 admin.site.register(AdditionalField, AdditionalFieldAdmin)
