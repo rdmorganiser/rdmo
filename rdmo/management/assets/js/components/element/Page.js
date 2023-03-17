@@ -1,120 +1,73 @@
-import React, { Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Tabs, Tab } from 'react-bootstrap';
+import isUndefined from 'lodash/isUndefined'
 
-import Checkbox from '../forms/Checkbox'
-import MultiSelect from '../forms/MultiSelect'
-import OrderedMultiSelect from '../forms/OrderedMultiSelect'
-import Select from '../forms/Select'
-import Text from '../forms/Text'
-import Textarea from '../forms/Textarea'
-import UriPrefix from '../forms/UriPrefix'
+import { filterElements } from '../../utils/filter'
 
-import ElementHeading from '../common/ElementHeading'
+import QuestionSet from './QuestionSet'
+import Question from './Question'
+import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/ElementLinks'
 
-const Page = ({ config, page, warnings, errors, updatePage, storePage,
-                attributes, conditions, questionsets, questions }) => {
-  console.log(conditions)
-  return (
-    <div className="panel panel-default">
-      <ElementHeading verboseName={gettext('Page')} element={page} onSave={storePage} />
+const Page = ({ config, page, fetchElement, storeElement, list=true, indent=0 }) => {
 
-      <div className="panel-body">
-        <div className="row">
-          <div className="col-sm-6">
-            <UriPrefix config={config} element={page} field="uri_prefix"
-                  warnings={warnings} errors={errors} onChange={updatePage} />
-          </div>
-          <div className="col-sm-6">
-            <Text config={config} element={page} field="key"
-                  warnings={warnings} errors={errors} onChange={updatePage} />
-          </div>
-          <div className="col-sm-12">
-            <Textarea config={config} element={page} field="comment"
-                      warnings={warnings} errors={errors} rows={4} onChange={updatePage} />
-          </div>
-          <div className="col-sm-6">
-            <Checkbox config={config} element={page} field="locked"
-                      warnings={warnings} errors={errors} onChange={updatePage} />
-          </div>
-          <div className="col-sm-6">
-            <Checkbox config={config} element={page} field="is_collection"
-                      warnings={warnings} errors={errors} onChange={updatePage} />
-          </div>
-          <div className="col-sm-12">
-            <Select config={config} element={page} field="attribute"
-                    warnings={warnings} errors={errors}
-                    options={attributes} onChange={updatePage} />
-          </div>
-          <div className="col-sm-12">
-            <OrderedMultiSelect config={config} element={page} field="questionsets"
-                                warnings={warnings} errors={errors}
-                                options={questionsets} verboseName="questionset"
-                                onChange={updatePage} />
-          </div>
-          <div className="col-sm-12">
-            <OrderedMultiSelect config={config} element={page} field="questions"
-                                warnings={warnings} errors={errors}
-                                options={questions} verboseName="question"
-                                onChange={updatePage} />
-          </div>
-          <div className="col-sm-12">
-            <MultiSelect config={config} element={page} field="conditions"
-                         warnings={warnings} errors={errors}
-                         options={conditions} verboseName="condition"
-                         onChange={updatePage} />
-          </div>
-          <div className="col-sm-12">
-            <Tabs id="#catalog-tabs" defaultActiveKey={0} animation={false}>
-              {
-                config.settings && config.settings.languages.map(([lang_code, lang], index) => {
-                  return (
-                    <Tab className="pt-10" key={index} eventKey={index} title={lang}>
-                      <div className="row">
-                        <div className="col-sm-12">
-                          <Text config={config} element={page}
-                                field={`title_${lang_code }`} warnings={warnings} errors={errors}
-                                onChange={updatePage} />
-                        </div>
-                        <div className="col-sm-12">
-                          <Textarea config={config} element={page}
-                                    field={`help_${lang_code }`} warnings={warnings} errors={errors}
-                                    rows={4} onChange={updatePage} />
-                        </div>
-                        <div className="col-sm-6">
-                          <Text config={config} element={page}
-                                field={`verbose_name_${lang_code }`} warnings={warnings} errors={errors}
-                                onChange={updatePage} />
-                        </div>
-                        <div className="col-sm-6">
-                          <Text config={config} element={page}
-                                field={`verbose_name_plural_${lang_code }`} warnings={warnings} errors={errors}
-                                onChange={updatePage} />
-                        </div>
-                      </div>
-                    </Tab>
-                  )
-                })
-              }
-            </Tabs>
-          </div>
-        </div>
+  const verboseName = gettext('page')
+
+  const fetchEdit = () => fetchElement('pages', page.id)
+  const fetchNested = () => fetchElement('pages', page.id, 'nested')
+  const toggleLocked = () => storeElement('pages', {...page, locked: !page.locked })
+
+  const elementNode = (
+    <div className="element">
+      <div className="element-options">
+        <EditLink element={page} verboseName={verboseName} onClick={fetchEdit} />
+        <LockedLink element={page} verboseName={verboseName} onClick={toggleLocked} />
+        <NestedLink element={page} verboseName={verboseName} onClick={fetchNested} />
+        <ExportLink element={page} verboseName={verboseName} />
+      </div>
+      <div style={{ paddingLeft: 15 * indent }}>
+        <p>
+          <strong>{gettext('Page')}{': '}</strong> {page.title}
+        </p>
+        <p>
+          <code className="code-questions">{page.uri}</code>
+        </p>
       </div>
     </div>
   )
+
+  if (list) {
+    return (
+      <React.Fragment>
+        <li className="list-group-item">
+          { elementNode }
+        </li>
+        {
+          filterElements(config, page.elements).map((element, index) => {
+            if (isUndefined(element.text)) {
+              return <QuestionSet key={index} config={config} questionset={element}
+                                  fetchElement={fetchElement} storeElement={storeElement}
+                                  indent={indent + 1} />
+            } else {
+              return <Question key={index} config={config} question={element}
+                               fetchElement={fetchElement} storeElement={storeElement}
+                               indent={indent + 1} />
+            }
+          })
+        }
+      </React.Fragment>
+    )
+  } else {
+    return elementNode
+  }
 }
 
 Page.propTypes = {
   config: PropTypes.object.isRequired,
   page: PropTypes.object.isRequired,
-  warnings: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired,
-  updatePage: PropTypes.func.isRequired,
-  storePage: PropTypes.func.isRequired,
-  attributes: PropTypes.array,
-  conditions: PropTypes.array,
-  questionsets: PropTypes.array,
-  questions: PropTypes.array
+  fetchElement: PropTypes.func.isRequired,
+  storeElement: PropTypes.func.isRequired,
+  list: PropTypes.bool,
+  indent: PropTypes.number
 }
 
 export default Page

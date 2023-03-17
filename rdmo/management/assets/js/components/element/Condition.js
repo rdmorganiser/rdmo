@@ -1,71 +1,37 @@
-import React, { Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Tabs, Tab } from 'react-bootstrap';
 
-import Checkbox from '../forms/Checkbox'
-import Select from '../forms/Select'
-import Text from '../forms/Text'
-import Textarea from '../forms/Textarea'
-import UriPrefix from '../forms/UriPrefix'
+import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/ElementLinks'
 
-import ElementHeading from '../common/ElementHeading'
+const Condition = ({ config, condition, fetchElement, storeElement }) => {
 
-const Condition = ({ config, condition, warnings, errors, updateCondition, storeCondition,
-                     relations, attributes, options }) => {
+  const verboseName = gettext('condition')
+
+  const fetchEdit = () => fetchElement('conditions', condition.id)
+  const toggleLocked = () => storeElement('conditions', {...condition, locked: !condition.locked })
+
   return (
-    <div className="panel panel-default">
-      <ElementHeading verboseName={gettext('Condition')} element={condition} onSave={storeCondition} />
-
-      <div className="panel-body">
-        <div className="row">
-          <div className="col-sm-6">
-            <UriPrefix config={config} element={condition} field="uri_prefix"
-                       warnings={warnings} errors={errors} onChange={updateCondition} />
-          </div>
-          <div className="col-sm-6">
-            <Text config={config} element={condition} field="key"
-                  warnings={warnings} errors={errors} onChange={updateCondition} />
-          </div>
-          <div className="col-sm-12">
-            <Textarea config={config} element={condition} field="comment"
-                      warnings={warnings} errors={errors} rows={4} onChange={updateCondition} />
-          </div>
-          <div className="col-sm-12">
-            <Checkbox config={config} element={condition} field="locked"
-                      warnings={warnings} errors={errors} onChange={updateCondition} />
-          </div>
-          <div className="col-sm-6">
-            <Select config={config} element={condition} field="source"
-                    warnings={warnings} errors={errors} options={attributes} onChange={updateCondition} />
-          </div>
-          <div className="col-sm-6">
-            <Select config={config} element={condition} field="relation"
-                    warnings={warnings} errors={errors} options={relations} onChange={updateCondition} />
-          </div>
-          <div className="col-sm-6">
-            <Text config={config} element={condition} field="target_text"
-                  warnings={warnings} errors={errors} onChange={updateCondition} />
-          </div>
-          <div className="col-sm-6">
-            <Select config={config} element={condition} field="target_option"
-                    warnings={warnings} errors={errors} options={options} onChange={updateCondition} />
-          </div>
+    <li className="list-group-item">
+      <div className="element">
+        <div className="element-options">
+          <EditLink element={condition} verboseName={verboseName} onClick={fetchEdit} />
+          <LockedLink element={condition} verboseName={verboseName} onClick={toggleLocked} />
+          <ExportLink element={condition} verboseName={verboseName} />
+        </div>
+        <div>
+          <strong>{gettext('Condition')}{': '}</strong>
+          <code className="code-conditions">{condition.uri}</code>
         </div>
       </div>
-    </div>
+    </li>
   )
 }
 
 Condition.propTypes = {
   config: PropTypes.object.isRequired,
   condition: PropTypes.object.isRequired,
-  warnings: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired,
-  updateCondition: PropTypes.func.isRequired,
-  storeCondition: PropTypes.func.isRequired,
-  relations: PropTypes.array,
-  attributes: PropTypes.array,
-  options: PropTypes.array
+  fetchElement: PropTypes.func.isRequired,
+  storeElement: PropTypes.func.isRequired
 }
 
 export default Condition

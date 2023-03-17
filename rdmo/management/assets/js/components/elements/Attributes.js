@@ -3,32 +3,23 @@ import PropTypes from 'prop-types'
 
 import { filterElements } from '../../utils/filter'
 
-import ElementsHeading from '../common/ElementsHeading'
-import { EditLink, LockedLink, ExportLink } from '../common/ElementLinks'
+import Attribute from '../element/Attribute'
+import ElementButtons from '../common/ElementButtons'
 
-const Attributes = ({ config, attributes, fetchAttribute, storeAttribute }) => {
+const Attributes = ({ config, attributes, fetchElement, storeElement }) => {
   return (
     <div className="panel panel-default">
-      <ElementsHeading verboseName={gettext('Attributes')} />
+      <div className="panel-heading">
+        <ElementButtons />
+        <strong>{gettext('Attributes')}</strong>
+      </div>
+
       <ul className="list-group">
       {
-        filterElements(config, attributes).map((attribute, index) => {
-          return (
-            <li key={index} className="list-group-item">
-              <div className="element-options">
-                <EditLink element={attribute} verboseName={gettext('attribute')}
-                          onClick={attribute => fetchAttribute(attribute.id)} />
-                <LockedLink element={attribute} verboseName={gettext('attribute')}
-                            onClick={locked => storeAttribute(Object.assign({}, attribute, { locked }))} />
-                <ExportLink element={attribute} verboseName={gettext('attribute')} />
-              </div>
-              <div>
-                <strong>{gettext('Attribute')}{': '}</strong>
-                <code className="code-domain">{attribute.uri}</code>
-              </div>
-            </li>
-          )
-        })
+        filterElements(config, attributes).map((attribute, index) => (
+          <Attribute key={index} config={config} attribute={attribute}
+                     fetchElement={fetchElement} storeElement={storeElement} />
+        ))
       }
       </ul>
     </div>
@@ -38,8 +29,8 @@ const Attributes = ({ config, attributes, fetchAttribute, storeAttribute }) => {
 Attributes.propTypes = {
   config: PropTypes.object.isRequired,
   attributes: PropTypes.array.isRequired,
-  fetchAttribute: PropTypes.func.isRequired,
-  storeAttribute: PropTypes.func.isRequired
+  fetchElement: PropTypes.func.isRequired,
+  storeElement: PropTypes.func.isRequired
 }
 
 export default Attributes

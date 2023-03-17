@@ -10,7 +10,8 @@ from rdmo.core.viewsets import CopyModelMixin
 from .models import Task
 from .renderers import TaskRenderer
 from .serializers.export import TaskExportSerializer
-from .serializers.v1 import TaskIndexSerializer, TaskSerializer
+from .serializers.v1 import (TaskIndexSerializer, TaskListSerializer,
+                             TaskSerializer)
 
 
 class TaskViewSet(CopyModelMixin, ModelViewSet):
@@ -25,6 +26,9 @@ class TaskViewSet(CopyModelMixin, ModelViewSet):
         'key',
         'comment'
     )
+
+    def get_serializer_class(self):
+        return TaskListSerializer if self.action == 'list' else TaskSerializer
 
     @action(detail=False)
     def index(self, request):

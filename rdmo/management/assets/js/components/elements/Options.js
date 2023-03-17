@@ -3,41 +3,23 @@ import PropTypes from 'prop-types'
 
 import { filterElements } from '../../utils/filter'
 
-import ElementsHeading from '../common/ElementsHeading'
-import { EditLink, LockedLink, ExportLink } from '../common/ElementLinks'
+import Option from '../element/Option'
+import ElementButtons from '../common/ElementButtons'
 
-const Options = ({ config, options, fetchOption, storeOption }) => {
-  const handleEdit = (event, id) => {
-    event.preventDefault()
-    fetchOption(id)
-  }
-
+const Options = ({ config, options, fetchElement, storeElement }) => {
   return (
     <div className="panel panel-default">
-      <ElementsHeading verboseName={gettext('Catalogs')} />
+      <div className="panel-heading">
+        <ElementButtons />
+        <strong>{gettext('Options')}</strong>
+      </div>
+
       <ul className="list-group">
       {
-        filterElements(config, options).map((option, index) => {
-          return (
-            <li key={index} className="list-group-item">
-              <div className="element-options">
-                <EditLink element={option} verboseName={gettext('option')}
-                          onClick={option => fetchOption(option.id)} />
-                <LockedLink element={option} verboseName={gettext('option')}
-                            onClick={locked => storeOption(Object.assign({}, option, { locked }))} />
-                <ExportLink element={option} verboseName={gettext('option')} />
-              </div>
-              <div>
-                <p>
-                  <strong>{gettext('Option')}{': '}</strong> {option.text}
-                </p>
-                <p>
-                  <code className="code-options">{option.uri}</code>
-                </p>
-              </div>
-            </li>
-          )
-        })
+        filterElements(config, options).map((option, index) => (
+          <Option key={index} config={config} option={option}
+                  fetchElement={fetchElement} storeElement={storeElement} />
+        ))
       }
       </ul>
     </div>
@@ -47,8 +29,8 @@ const Options = ({ config, options, fetchOption, storeOption }) => {
 Options.propTypes = {
   config: PropTypes.object.isRequired,
   options: PropTypes.array.isRequired,
-  fetchOption: PropTypes.func.isRequired,
-  storeOption: PropTypes.func.isRequired
+  fetchElement: PropTypes.func.isRequired,
+  storeElement: PropTypes.func.isRequired
 }
 
 export default Options

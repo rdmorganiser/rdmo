@@ -11,7 +11,7 @@ from rdmo.core.viewsets import CopyModelMixin
 from .models import Attribute
 from .renderers import AttributeRenderer
 from .serializers.export import AttributeExportSerializer
-from .serializers.v1 import (AttributeIndexSerializer,
+from .serializers.v1 import (AttributeIndexSerializer, AttributeListSerializer,
                              AttributeNestedSerializer, AttributeSerializer)
 
 
@@ -22,8 +22,6 @@ class AttributeViewSet(CopyModelMixin, ModelViewSet):
                         .annotate(projects_count=models.Count('values__project', distinct=True)) \
                         .prefetch_related('conditions', 'questionsets', 'questions', 'tasks_as_start', 'tasks_as_end')
 
-    serializer_class = AttributeSerializer
-
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = (
         'uri',
@@ -32,16 +30,18 @@ class AttributeViewSet(CopyModelMixin, ModelViewSet):
         'parent'
     )
 
-    @action(detail=False)
-    def nested(self, request):
-        queryset = Attribute.objects.get_cached_trees()
-        serializer = AttributeNestedSerializer(queryset, many=True)
-        return Response(serializer.data)
+    def get_serializer_class(self):
+        return AttributeListSerializer if self.action == 'list' else AttributeSerializer
 
     @action(detail=False)
     def index(self, request):
         queryset = Attribute.objects.order_by('path')
         serializer = AttributeIndexSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(detail=True)
+    def nested(self, request, pk):
+        serializer = AttributeNestedSerializer(self.get_object(), context={'request': request})
         return Response(serializer.data)
 
     @action(detail=False, permission_classes=[HasModelPermission])

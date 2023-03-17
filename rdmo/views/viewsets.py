@@ -10,13 +10,13 @@ from rdmo.core.viewsets import CopyModelMixin
 from .models import View
 from .renderers import ViewRenderer
 from .serializers.export import ViewExportSerializer
-from .serializers.v1 import ViewIndexSerializer, ViewSerializer
+from .serializers.v1 import (ViewIndexSerializer, ViewListSerializer,
+                             ViewSerializer)
 
 
 class ViewViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
     queryset = View.objects.prefetch_related('catalogs', 'sites', 'groups')
-    serializer_class = ViewSerializer
 
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = (
@@ -24,6 +24,9 @@ class ViewViewSet(CopyModelMixin, ModelViewSet):
         'key',
         'comment'
     )
+
+    def get_serializer_class(self):
+        return ViewListSerializer if self.action == 'list' else ViewSerializer
 
     @action(detail=False)
     def index(self, request):

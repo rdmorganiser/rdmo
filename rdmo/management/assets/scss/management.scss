@@ -6,6 +6,10 @@ a.disabled {
     cursor: not-allowed;
 }
 
+.flip {
+    transform: rotate(180deg) scaleX(-1);
+}
+
 .mt-0 {
     margin-top: 0;
 }
@@ -111,12 +115,25 @@ a.disabled {
     .element-options {
         float: right;
 
-        a::after {
-            content: '\00a0'; // one space
+        a {
+            margin-left: 4px;
         }
-        a:last-child::after {
-            content: '';
+    }
+    .element-buttons {
+        float: right;
+
+        button {
+            margin-left: 4px;
         }
+        button:first-child {
+            margin-left: 8px;
+        }
+    }
+}
+
+.list-group-item {
+    .indent {
+        padding-left: 20px;
     }
 }
 

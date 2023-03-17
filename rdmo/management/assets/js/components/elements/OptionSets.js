@@ -3,37 +3,23 @@ import PropTypes from 'prop-types'
 
 import { filterElements } from '../../utils/filter'
 
-import ElementsHeading from '../common/ElementsHeading'
-import { EditLink, LockedLink, ExportLink } from '../common/ElementLinks'
+import OptionSet from '../element/OptionSet'
+import ElementButtons from '../common/ElementButtons'
 
-const OptionSets = ({ config, optionsets, fetchOptionSet, storeOptionSet }) => {
-  const handleEdit = (event, id) => {
-    event.preventDefault()
-    fetchOptionSet(id)
-  }
-
+const OptionSets = ({ config, optionsets, fetchElement, storeElement }) => {
   return (
     <div className="panel panel-default">
-      <ElementsHeading verboseName={gettext('Catalogs')} />
+      <div className="panel-heading">
+        <ElementButtons />
+        <strong>{gettext('Option sets')}</strong>
+      </div>
+
       <ul className="list-group">
       {
-        filterElements(config, optionsets).map((optionset, index) => {
-          return (
-            <li key={index} className="list-group-item">
-              <div className="element-options">
-                <EditLink element={optionset} verboseName={gettext('optionset')}
-                          onClick={optionset => fetchOptionSet(optionset.id)} />
-                <LockedLink element={optionset} verboseName={gettext('optionset')}
-                            onClick={locked => storeOptionSet(Object.assign({}, optionset, { locked }))} />
-                <ExportLink element={optionset} verboseName={gettext('optionset')} />
-              </div>
-              <div>
-                <strong>{gettext('Option set')}{': '}</strong>
-                <code className="code-options">{optionset.uri}</code>
-              </div>
-            </li>
-          )
-        })
+        filterElements(config, optionsets).map((optionset, index) => (
+          <OptionSet key={index} config={config} optionset={optionset}
+                     fetchElement={fetchElement} storeElement={storeElement} />
+        ))
       }
       </ul>
     </div>
@@ -43,8 +29,8 @@ const OptionSets = ({ config, optionsets, fetchOptionSet, storeOptionSet }) => {
 OptionSets.propTypes = {
   config: PropTypes.object.isRequired,
   optionsets: PropTypes.array.isRequired,
-  fetchOptionSet: PropTypes.func.isRequired,
-  storeOptionSet: PropTypes.func.isRequired
+  fetchElement: PropTypes.func.isRequired,
+  storeElement: PropTypes.func.isRequired
 }
 
 export default OptionSets

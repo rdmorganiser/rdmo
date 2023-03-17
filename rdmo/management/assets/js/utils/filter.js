@@ -1,4 +1,5 @@
 import isEmpty from 'lodash/isEmpty';
+import isUndefined from 'lodash/isUndefined';
 
 const filterUri = (filterUri, element) => {
   if (isEmpty(filterUri) || element.uri.includes(filterUri)) {
@@ -17,15 +18,19 @@ const filterUriPrefix = (filterUriPrefix, element) => {
 }
 
 const filterElements = (config, elements) => {
-  return elements.reduce((filteredElements, element) => {
-    if (config.filterUri.trim().split(' ').some(
-      uri => filterUri(uri, element)
-    ) && filterUriPrefix(config.filterUriPrefix, element)) {
-      filteredElements.push(element)
-    }
+  if (isUndefined(elements)) {
+    return []
+  } else {
+    return elements.reduce((filteredElements, element) => {
+      if (config.filterUri.trim().split(' ').some(
+        uri => filterUri(uri, element)
+      ) && filterUriPrefix(config.filterUriPrefix, element)) {
+        filteredElements.push(element)
+      }
 
-    return filteredElements
-  }, [])
+      return filteredElements
+    }, [])
+  }
 }
 
 export { filterElements }

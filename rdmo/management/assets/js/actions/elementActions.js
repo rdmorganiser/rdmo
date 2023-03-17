@@ -228,34 +228,42 @@ export function fetchViews() {
 
 // fetch element
 
-export function fetchElement(elementType, elementId) {
+export function fetchElement(elementType, elementId, elementAction) {
   return function(dispatch, getState) {
-    updateLocation(getState().config.baseUrl, elementType, elementId)
+    if (isNil(elementAction)) elementAction = null
 
-    dispatch(fetchElementsInit(elementType, elementId))
+    updateLocation(getState().config.baseUrl, elementType, elementId, elementAction)
+
+    dispatch(fetchElementInit(elementType, elementId, elementAction))
     dispatch(startPending())
 
     switch (elementType) {
       case 'catalogs':
-        dispatch(fetchCatalog(elementId))
+        dispatch((elementAction == 'nested') ? fetchCatalogNested(elementId)
+                                             : fetchCatalog(elementId))
         break
       case 'sections':
-        dispatch(fetchSection(elementId))
+        dispatch((elementAction == 'nested') ? fetchSectionNested(elementId)
+                                             : fetchSection(elementId))
         break
       case 'pages':
-        dispatch(fetchPage(elementId))
+        dispatch((elementAction == 'nested') ? fetchPageNested(elementId)
+                                             : fetchPage(elementId))
         break
       case 'questionsets':
-        dispatch(fetchQuestionSet(elementId))
+        dispatch((elementAction == 'nested') ? fetchQuestionSetNested(elementId)
+                                             : fetchQuestionSet(elementId))
         break
       case 'questions':
         dispatch(fetchQuestion(elementId))
         break
       case 'attributes':
-        dispatch(fetchAttribute(elementId))
+        dispatch((elementAction == 'nested') ? fetchAttributeNested(elementId)
+                                             : fetchAttribute(elementId))
         break
       case 'optionsets':
-        dispatch(fetchOptionSet(elementId))
+        dispatch((elementAction == 'nested') ? fetchOptionSetNested(elementId)
+                                             : fetchOptionSet(elementId))
         break
       case 'options':
         dispatch(fetchOption(elementId))
@@ -275,8 +283,8 @@ export function fetchElement(elementType, elementId) {
   }
 }
 
-export function fetchElementInit(elementType, elementId) {
-  return {type: 'elements/fetchElementInit', elementType, elementId}
+export function fetchElementInit(elementType, elementId, elementAction) {
+  return {type: 'elements/fetchElementInit', elementType, elementId, elementAction}
 }
 
 export function fetchElementSuccess(elements) {
@@ -306,6 +314,19 @@ export function fetchCatalog(id) {
   }
 }
 
+export function fetchCatalogNested(id) {
+  return function(dispatch) {
+    return QuestionsApi.fetchCatalog(id, 'nested')
+      .then(element => {
+        dispatch(stopPending())
+        dispatch(fetchElementSuccess({ element }))
+      }).catch(error => {
+        dispatch(stopPending())
+        dispatch(fetchElementError(error))
+      })
+  }
+}
+
 export function fetchSection(id) {
   return function(dispatch) {
     return Promise.all([
@@ -320,6 +341,19 @@ export function fetchSection(id) {
       dispatch(stopPending())
       dispatch(fetchElementError(error))
     })
+  }
+}
+
+export function fetchSectionNested(id) {
+  return function(dispatch) {
+    return QuestionsApi.fetchSection(id, 'nested')
+      .then(element => {
+        dispatch(stopPending())
+        dispatch(fetchElementSuccess({ element }))
+      }).catch(error => {
+        dispatch(stopPending())
+        dispatch(fetchElementError(error))
+      })
   }
 }
 
@@ -343,6 +377,19 @@ export function fetchPage(id) {
   }
 }
 
+export function fetchPageNested(id) {
+  return function(dispatch) {
+    return QuestionsApi.fetchPage(id, 'nested')
+      .then(element => {
+        dispatch(stopPending())
+        dispatch(fetchElementSuccess({ element }))
+      }).catch(error => {
+        dispatch(stopPending())
+        dispatch(fetchElementError(error))
+      })
+  }
+}
+
 export function fetchQuestionSet(id) {
   return function(dispatch) {
     return Promise.all([
@@ -360,6 +407,19 @@ export function fetchQuestionSet(id) {
       dispatch(stopPending())
       dispatch(fetchElementError(error))
     })
+  }
+}
+
+export function fetchQuestionSetNested(id) {
+  return function(dispatch) {
+    return QuestionsApi.fetchQuestionSet(id, 'nested')
+      .then(element => {
+        dispatch(stopPending())
+        dispatch(fetchElementSuccess({ element }))
+      }).catch(error => {
+        dispatch(stopPending())
+        dispatch(fetchElementError(error))
+      })
   }
 }
 
@@ -402,6 +462,19 @@ export function fetchAttribute(id) {
   }
 }
 
+export function fetchAttributeNested(id) {
+  return function(dispatch) {
+    return DomainApi.fetchAttribute(id, 'nested')
+      .then(element => {
+        dispatch(stopPending())
+        dispatch(fetchElementSuccess({ element }))
+      }).catch(error => {
+        dispatch(stopPending())
+        dispatch(fetchElementError(error))
+      })
+  }
+}
+
 export function fetchOptionSet(id) {
   return function(dispatch) {
     return Promise.all([
@@ -417,6 +490,19 @@ export function fetchOptionSet(id) {
       dispatch(stopPending())
       dispatch(fetchElementError(error))
     })
+  }
+}
+
+export function fetchOptionSetNested(id) {
+  return function(dispatch) {
+    return OptionsApi.fetchOptionSet(id, 'nested')
+      .then(element => {
+        dispatch(stopPending())
+        dispatch(fetchElementSuccess({ element }))
+      }).catch(error => {
+        dispatch(stopPending())
+        dispatch(fetchElementError(error))
+      })
   }
 }
 
@@ -548,8 +634,8 @@ export function storeElementSuccess(element) {
   return {type: 'elements/storeElementSuccess', element}
 }
 
-export function storeElementError(error) {
-  return {type: 'elements/storeElementError', error}
+export function storeElementError(element, errors) {
+  return {type: 'elements/storeElementError', element, errors}
 }
 
 export function storeCatalog(catalog) {
@@ -561,7 +647,7 @@ export function storeCatalog(catalog) {
       })
       .catch(error => {
         dispatch(stopPending())
-        dispatch(storeElementError(error))
+        dispatch(storeElementError(catalog, error.errors))
       })
   }
 }
@@ -575,7 +661,7 @@ export function storeSection(section) {
       })
       .catch(error => {
         dispatch(stopPending())
-        dispatch(storeElementError(error))
+        dispatch(storeElementError(section, error.errors))
       })
   }
 }
@@ -589,7 +675,7 @@ export function storePage(page) {
       })
       .catch(error => {
         dispatch(stopPending())
-        dispatch(storeElementError(error))
+        dispatch(storeElementError(page, error.errors))
       })
   }
 }
@@ -603,7 +689,7 @@ export function storeQuestionSet(questionset) {
       })
       .catch(error => {
         dispatch(stopPending())
-        dispatch(storeElementError(error))
+        dispatch(storeElementError(questionset, error.errors))
       })
   }
 }
@@ -617,7 +703,7 @@ export function storeQuestion(question) {
       })
       .catch(error => {
         dispatch(stopPending())
-        dispatch(storeElementError(error))
+        dispatch(storeElementError(question, error.errors))
       })
   }
 }
@@ -631,7 +717,7 @@ export function storeAttribute(attribute) {
       })
       .catch(error => {
         dispatch(stopPending())
-        dispatch(storeElementError(error))
+        dispatch(storeElementError(attribute, error.errors))
       })
   }
 }
@@ -645,7 +731,7 @@ export function storeOptionSet(optionset) {
       })
       .catch(error => {
         dispatch(stopPending())
-        dispatch(storeElementError(error))
+        dispatch(storeElementError(optionset, error.errors))
       })
   }
 }
@@ -659,7 +745,7 @@ export function storeOption(option) {
       })
       .catch(error => {
         dispatch(stopPending())
-        dispatch(storeElementError(error))
+        dispatch(storeElementError(option, error.errors))
       })
   }
 }
@@ -673,7 +759,7 @@ export function storeCondition(condition) {
       })
       .catch(error => {
         dispatch(stopPending())
-        dispatch(storeElementError(error))
+        dispatch(storeElementError(condition, error.errors))
       })
   }
 }
@@ -687,7 +773,7 @@ export function storeTask(task) {
       })
       .catch(error => {
         dispatch(stopPending())
-        dispatch(storeElementError(error))
+        dispatch(storeElementError(task, error.errors))
       })
   }
 }
@@ -701,7 +787,7 @@ export function storeView(view) {
       })
       .catch(error => {
         dispatch(stopPending())
-        dispatch(storeElementError(error))
+        dispatch(storeElementError(view, error.errors))
       })
   }
 }

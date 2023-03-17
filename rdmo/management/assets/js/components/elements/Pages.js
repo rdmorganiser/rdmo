@@ -3,41 +3,23 @@ import PropTypes from 'prop-types'
 
 import { filterElements } from '../../utils/filter'
 
-import ElementsHeading from '../common/ElementsHeading'
-import { EditLink, LockedLink, ExportLink } from '../common/ElementLinks'
+import Page from '../element/Page'
+import ElementButtons from '../common/ElementButtons'
 
-const Pages = ({ config, pages, fetchPage, storePage }) => {
-  const handleEdit = (event, id) => {
-    event.preventDefault()
-    fetchPage(id)
-  }
-
+const Pages = ({ config, pages, fetchElement, storeElement }) => {
   return (
     <div className="panel panel-default">
-      <ElementsHeading verboseName={gettext('Catalogs')} />
+      <div className="panel-heading">
+        <ElementButtons />
+        <strong>{gettext('Pages')}</strong>
+      </div>
+
       <ul className="list-group">
       {
-        filterElements(config, pages).map((page, index) => {
-          return (
-            <li key={index} className="list-group-item">
-              <div className="element-options">
-                <EditLink element={page} verboseName={gettext('page')}
-                          onClick={page => fetchPage(page.id)} />
-                <LockedLink element={page} verboseName={gettext('page')}
-                            onClick={locked => storePage(Object.assign({}, page, { locked }))} />
-                <ExportLink element={page} verboseName={gettext('page')} />
-              </div>
-              <div>
-                <p>
-                  <strong>{gettext('Page')}{': '}</strong> {page.title}
-                </p>
-                <p>
-                  <code className="code-questions">{page.uri}</code>
-                </p>
-              </div>
-            </li>
-          )
-        })
+        filterElements(config, pages).map((page, index) => (
+          <Page key={index} config={config} page={page}
+                fetchElement={fetchElement} storeElement={storeElement} />
+        ))
       }
       </ul>
     </div>
@@ -47,8 +29,8 @@ const Pages = ({ config, pages, fetchPage, storePage }) => {
 Pages.propTypes = {
   config: PropTypes.object.isRequired,
   pages: PropTypes.array.isRequired,
-  fetchPage: PropTypes.func.isRequired,
-  storePage: PropTypes.func.isRequired
+  fetchElement: PropTypes.func.isRequired,
+  storeElement: PropTypes.func.isRequired
 }
 
 export default Pages

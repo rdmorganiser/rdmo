@@ -3,37 +3,23 @@ import PropTypes from 'prop-types'
 
 import { filterElements } from '../../utils/filter'
 
-import ElementsHeading from '../common/ElementsHeading'
-import { EditLink, AvailableLink, LockedLink, ExportLink } from '../common/ElementLinks'
+import Condition from '../element/Condition'
+import ElementButtons from '../common/ElementButtons'
 
-const Conditions = ({ config, conditions, fetchCondition, storeCondition }) => {
-  const handleEdit = (event, id) => {
-    event.preventDefault()
-    fetchCondition(id)
-  }
-
+const Conditions = ({ config, conditions, fetchElement, storeElement }) => {
   return (
     <div className="panel panel-default">
-      <ElementsHeading verboseName={gettext('Catalogs')} />
+      <div className="panel-heading">
+        <ElementButtons />
+        <strong>{gettext('Conditions')}</strong>
+      </div>
+
       <ul className="list-group">
       {
-        filterElements(config, conditions).map((condition, index) => {
-          return (
-            <li key={index} className="list-group-item">
-              <div className="element-options">
-                <EditLink element={condition} verboseName={gettext('condition')}
-                          onClick={condition => fetchCondition(condition.id)} />
-                <LockedLink element={condition} verboseName={gettext('condition')}
-                            onClick={locked => storeCondition(Object.assign({}, condition, { locked }))} />
-                <ExportLink element={condition} verboseName={gettext('condition')} />
-              </div>
-              <div>
-                <strong>{gettext('Condition')}{': '}</strong>
-                <code className="code-conditions">{condition.uri}</code>
-              </div>
-            </li>
-          )
-        })
+        filterElements(config, conditions).map((condition, index) => (
+          <Condition key={index} config={config} condition={condition}
+                     fetchElement={fetchElement} storeElement={storeElement} />
+        ))
       }
       </ul>
     </div>
@@ -43,8 +29,8 @@ const Conditions = ({ config, conditions, fetchCondition, storeCondition }) => {
 Conditions.propTypes = {
   config: PropTypes.object.isRequired,
   conditions: PropTypes.array.isRequired,
-  fetchCondition: PropTypes.func.isRequired,
-  storeCondition: PropTypes.func.isRequired
+  fetchElement: PropTypes.func.isRequired,
+  storeElement: PropTypes.func.isRequired
 }
 
 export default Conditions

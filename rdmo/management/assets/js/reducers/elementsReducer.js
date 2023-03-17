@@ -1,11 +1,12 @@
 import isUndefined from 'lodash/isUndefined'
 import isNil from 'lodash/isNil'
 
+import { replaceElement } from '../utils/elements'
+
 const initialState = {
   elementType: null,
   elementId: null,
   element: null,
-  warnings: {},
   errors: {},
   conditions: [],
   attributes: [],
@@ -30,8 +31,8 @@ export default function elementsReducer(state = initialState, action) {
         [action.elementType]: [],
         elementType: action.elementType,
         elementId: null,
+        elementAction: null,
         element: null,
-        warnings: {},
         errors: {}
       })
     case 'elements/fetchElementsSuccess':
@@ -46,8 +47,8 @@ export default function elementsReducer(state = initialState, action) {
       return Object.assign({}, state, {
         elementType: action.elementType,
         elementId: action.elementId,
+        elementAction: action.elementAction,
         element: null,
-        warnings: {},
         errors: {}
       })
     case 'elements/fetchElementSuccess':
@@ -62,31 +63,44 @@ export default function elementsReducer(state = initialState, action) {
 
     // store element
     case 'elements/storeElementInit':
-      return Object.assign({}, state, {
-        errors: {}
-      })
-    case 'elements/storeElementSuccess':
-      // let the element know what type it is
-      action.element.type = state.elementType
-
       if (isNil(state.element)) {
-        // find and replace the object in the elements lists ot this type
-        const elements = state[action.element.type]
-        const index = elements.findIndex(element => element.id == action.element.id)
-        elements.splice(index, 1, action.element)
-
-        return Object.assign({}, state, {
-          [action.elementType]: elements
-        })
+        return state
+      } else if (state.elementAction == 'nested') {
+        return state
       } else {
+        return Object.assign({}, state, {
+          element: {...action.element, errors: {} }
+        })
+      }
+    case 'elements/storeElementSuccess':
+      if (isNil(state.element)) {
+        const elements = state[state.elementType]
+        return {...state,
+          [state.elementType]: replaceElement(elements, action.element)
+        }
+      } else if (state.elementAction == 'nested') {
+        if (state.element.uri == action.element.uri) {
+          return {...state, element: {...state.element, ...action.element}}
+        } else {
+          const elements = state.element.elements
+          return {...state, element: {...state.element, elements: replaceElement(elements, action.element)}}
+        }
+      } else {
+        // let the element know what type it is
+        action.element.type = state.elementType
+
         return Object.assign({}, state, {
           element: action.element
         })
       }
     case 'elements/storeElementError':
-      return Object.assign({}, state, {
-        errors: action.error.errors
-      })
+      if (isNil(state.element)) {
+        return state
+      } else {
+        return Object.assign({}, state, {
+          element: {...action.element, errors: action.errors }
+        })
+      }
 
     // update element
     case 'elements/updateElement':
