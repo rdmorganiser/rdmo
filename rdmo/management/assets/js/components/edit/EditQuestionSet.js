@@ -21,8 +21,12 @@ const EditQuestionSet = ({ config, questionset, attributes, conditions,
     <div className="panel panel-default">
       <div className="panel-heading">
         <ElementButtons onSave={storeQuestionSet} />
-        <strong>{gettext('Question set')}{': '}</strong>
-        <code className="code-questions">{questionset.uri}</code>
+        {
+          questionset.id ? <div>
+            <strong>{gettext('Question set')}{': '}</strong>
+            <code className="code-questions">{questionset.uri}</code>
+          </div> : <strong>{gettext('Create question set')}</strong>
+        }
       </div>
 
       <div className="panel-body">

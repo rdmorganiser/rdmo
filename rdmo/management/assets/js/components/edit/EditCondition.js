@@ -20,8 +20,12 @@ const EditCondition = ({ config, condition, relations, attributes, options,
     <div className="panel panel-default">
       <div className="panel-heading">
         <ElementButtons onSave={storeCondition} />
-        <strong>{gettext('Condition')}{': '}</strong>
-        <code className="code-conditions">{condition.uri}</code>
+        {
+          condition.id ? <div>
+            <strong>{gettext('Condition')}{': '}</strong>
+            <code className="code-conditions">{condition.uri}</code>
+          </div> : <strong>{gettext('Create condition')}</strong>
+        }
       </div>
 
       <div className="panel-body">

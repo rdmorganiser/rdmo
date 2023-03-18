@@ -6,11 +6,14 @@ import { filterElements } from '../../utils/filter'
 import Task from '../element/Task'
 import ElementButtons from '../common/ElementButtons'
 
-const Tasks = ({ config, tasks, fetchElement, storeElement }) => {
+const Tasks = ({ config, tasks, fetchElement, createElement, storeElement }) => {
+
+  const createTask = () => createElement('tasks')
+
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <ElementButtons />
+        <ElementButtons onCreate={createTask} />
         <strong>{gettext('Tasks')}</strong>
       </div>
 
@@ -30,6 +33,7 @@ Tasks.propTypes = {
   config: PropTypes.object.isRequired,
   tasks: PropTypes.array.isRequired,
   fetchElement: PropTypes.func.isRequired,
+  createElement: PropTypes.func.isRequired,
   storeElement: PropTypes.func.isRequired
 }
 

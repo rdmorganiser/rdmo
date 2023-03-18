@@ -6,11 +6,14 @@ import { filterElements } from '../../utils/filter'
 import Section from '../element/Section'
 import ElementButtons from '../common/ElementButtons'
 
-const Sections = ({ config, sections, fetchElement, storeElement }) => {
+const Sections = ({ config, sections, fetchElement, createElement, storeElement }) => {
+
+  const createSection = () => createElement('sections')
+
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <ElementButtons />
+        <ElementButtons onCreate={createSection} />
         <strong>{gettext('Sections')}</strong>
       </div>
 
@@ -30,6 +33,7 @@ Sections.propTypes = {
   config: PropTypes.object.isRequired,
   sections: PropTypes.array.isRequired,
   fetchElement: PropTypes.func.isRequired,
+  createElement: PropTypes.func.isRequired,
   storeElement: PropTypes.func.isRequired
 }
 

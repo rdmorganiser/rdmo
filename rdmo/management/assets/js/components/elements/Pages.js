@@ -6,11 +6,14 @@ import { filterElements } from '../../utils/filter'
 import Page from '../element/Page'
 import ElementButtons from '../common/ElementButtons'
 
-const Pages = ({ config, pages, fetchElement, storeElement }) => {
+const Pages = ({ config, pages, fetchElement, createElement, storeElement }) => {
+
+  const createPage = () => createElement('pages')
+
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <ElementButtons />
+        <ElementButtons onCreate={createPage} />
         <strong>{gettext('Pages')}</strong>
       </div>
 
@@ -30,6 +33,7 @@ Pages.propTypes = {
   config: PropTypes.object.isRequired,
   pages: PropTypes.array.isRequired,
   fetchElement: PropTypes.func.isRequired,
+  createElement: PropTypes.func.isRequired,
   storeElement: PropTypes.func.isRequired
 }
 

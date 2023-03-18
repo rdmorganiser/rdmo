@@ -9,6 +9,13 @@ import QuestionsApi from '../api/QuestionsApi'
 import TasksApi from '../api/TasksApi'
 import ViewsApi from '../api/ViewsApi'
 
+import ConditionsFactory from '../factories/ConditionsFactory'
+import DomainFactory from '../factories/DomainFactory'
+import OptionsFactory from '../factories/OptionsFactory'
+import QuestionsFactory from '../factories/QuestionsFactory'
+import TasksFactory from '../factories/TasksFactory'
+import ViewsFactory from '../factories/ViewsFactory'
+
 import { updateLocation } from '../utils/location'
 
 import { startPending, stopPending } from '../actions/configActions'
@@ -789,6 +796,276 @@ export function storeView(view) {
         dispatch(stopPending())
         dispatch(storeElementError(view, error.errors))
       })
+  }
+}
+
+// createElement
+
+export function createElement(elementType) {
+  return function(dispatch, getState) {
+    updateLocation(getState().config.baseUrl, elementType, null, 'create')
+
+    dispatch(createElementInit(elementType))
+    dispatch(startPending())
+
+    switch (elementType) {
+      case 'catalogs':
+        dispatch(createCatalog())
+        break
+      case 'sections':
+        dispatch(createSection())
+        break
+      case 'pages':
+        dispatch(createPage())
+        break
+      case 'questionsets':
+        dispatch(createQuestionSet())
+        break
+      case 'questions':
+        dispatch(createQuestion())
+        break
+      case 'attributes':
+        dispatch(createAttribute())
+        break
+      case 'optionsets':
+        dispatch(createOptionSet())
+        break
+      case 'options':
+        dispatch(createOption())
+        break
+      case 'conditions':
+        dispatch(createCondition())
+        break
+      case 'tasks':
+        dispatch(createTask())
+        break
+      case 'views':
+        dispatch(createView())
+        break
+      default:
+        dispatch(stopPending())
+    }
+  }
+}
+
+export function createElementInit(elementType) {
+  return {type: 'elements/createElementInit', elementType}
+}
+
+export function createElementSuccess(elements) {
+  return {type: 'elements/createElementSuccess', elements}
+}
+
+export function createElementError(error) {
+  return {type: 'elements/createElementError', error}
+}
+
+export function createCatalog() {
+  return function(dispatch) {
+    return Promise.all([
+      QuestionsFactory.createCatalog(),
+      QuestionsApi.fetchSections('index'),
+      CoreApi.fetchGroups(),
+      CoreApi.fetchSites(),
+    ]).then(([element, sections, groups, sites]) => {
+      dispatch(stopPending())
+      dispatch(createElementSuccess({
+        element, sections, groups, sites
+      }))
+    }).catch(error => {
+      dispatch(stopPending())
+      dispatch(createElementError(error))
+    })
+  }
+}
+
+export function createSection() {
+  return function(dispatch) {
+    return Promise.all([
+      QuestionsFactory.createSection(),
+      QuestionsApi.fetchPages('index'),
+    ]).then(([element, pages]) => {
+      dispatch(stopPending())
+      dispatch(createElementSuccess({
+        element, pages
+      }))
+    }).catch(error => {
+      dispatch(stopPending())
+      dispatch(createElementError(error))
+    })
+  }
+}
+
+export function createPage() {
+  return function(dispatch) {
+    return Promise.all([
+      QuestionsFactory.createPage(),
+      DomainApi.fetchAttributes('index'),
+      ConditionsApi.fetchConditions('index'),
+      QuestionsApi.fetchQuestionSets('index'),
+      QuestionsApi.fetchQuestions('index')
+    ]).then(([element, attributes, conditions, questionsets, questions]) => {
+      dispatch(stopPending())
+      dispatch(createElementSuccess({
+        element, attributes, conditions, questionsets, questions
+      }))
+    }).catch(error => {
+      dispatch(stopPending())
+      dispatch(createElementError(error))
+    })
+  }
+}
+
+export function createQuestionSet() {
+  return function(dispatch) {
+    return Promise.all([
+      QuestionsFactory.createQuestionSet(),
+      DomainApi.fetchAttributes('index'),
+      ConditionsApi.fetchConditions('index'),
+      QuestionsApi.fetchQuestionSets('index'),
+      QuestionsApi.fetchQuestions('index')
+    ]).then(([element, attributes, conditions, questionsets, questions]) => {
+      dispatch(stopPending())
+      dispatch(createElementSuccess({
+        element, attributes, conditions, questionsets, questions
+      }))
+    }).catch(error => {
+      dispatch(stopPending())
+      dispatch(createElementError(error))
+    })
+  }
+}
+
+export function createQuestion() {
+  return function(dispatch) {
+    return Promise.all([
+      QuestionsFactory.createQuestion(),
+      DomainApi.fetchAttributes('index'),
+      OptionsApi.fetchOptionSets('index'),
+      OptionsApi.fetchOptions('index'),
+      ConditionsApi.fetchConditions('index'),
+      QuestionsApi.fetchWidgetTypes(),
+      QuestionsApi.fetchValueTypes()
+    ]).then(([element, attributes, optionsets, options, conditions, widgetTypes, valueTypes]) => {
+      dispatch(stopPending())
+      dispatch(createElementSuccess({
+        element, attributes, optionsets, options, conditions, widgetTypes, valueTypes
+      }))
+    }).catch(error => {
+      dispatch(stopPending())
+      dispatch(createElementError(error))
+    })
+  }
+}
+
+export function createAttribute() {
+  return function(dispatch) {
+    return Promise.all([
+      DomainFactory.createAttribute(),
+      DomainApi.fetchAttributes('index'),
+    ]).then(([element, attributes]) => {
+      dispatch(stopPending())
+      dispatch(createElementSuccess({
+        element, attributes
+      }))
+    }).catch(error => {
+      dispatch(stopPending())
+      dispatch(createElementError(error))
+    })
+  }
+}
+
+export function createOptionSet() {
+  return function(dispatch) {
+    return Promise.all([
+      OptionsFactory.createOptionSet(),
+      OptionsApi.fetchOptions('index'),
+      OptionsApi.fetchProviders(),
+    ]).then(([element, options, providers]) => {
+      dispatch(stopPending())
+      dispatch(createElementSuccess({
+        element, options, providers
+      }))
+    }).catch(error => {
+      dispatch(stopPending())
+      dispatch(createElementError(error))
+    })
+  }
+}
+
+export function createOption() {
+  return function(dispatch) {
+    return Promise.all([
+      OptionsFactory.createOption(),
+      OptionsApi.fetchOptionSets('index'),
+    ]).then(([element, optionsets]) => {
+      dispatch(stopPending())
+      dispatch(createElementSuccess({
+        element, optionsets
+      }))
+    }).catch(error => {
+      dispatch(stopPending())
+      dispatch(createElementError(error))
+    })
+  }
+}
+
+export function createCondition() {
+  return function(dispatch) {
+    return Promise.all([
+      ConditionsFactory.createCondition(),
+      ConditionsApi.fetchRelations(),
+      DomainApi.fetchAttributes('index'),
+      OptionsApi.fetchOptions('index'),
+    ]).then(([element, relations, attributes, options]) => {
+      dispatch(stopPending())
+      dispatch(createElementSuccess({
+        element, relations, attributes, options
+      }))
+    }).catch(error => {
+      dispatch(stopPending())
+      dispatch(createElementError(error))
+    })
+  }
+}
+
+export function createTask() {
+  return function(dispatch) {
+    return Promise.all([
+      TasksFactory.createTask(),
+      DomainApi.fetchAttributes('index'),
+      ConditionsApi.fetchConditions('index'),
+      QuestionsApi.fetchCatalogs('index'),
+      CoreApi.fetchSites(),
+      CoreApi.fetchGroups()
+    ]).then(([element, attributes, conditions, catalogs, sites, groups]) => {
+      dispatch(stopPending())
+      dispatch(createElementSuccess({
+        element, attributes, conditions, catalogs, sites, groups
+      }))
+    }).catch(error => {
+      dispatch(stopPending())
+      dispatch(createElementError(error))
+    })
+  }
+}
+
+export function createView() {
+  return function(dispatch) {
+    return Promise.all([
+      ViewsFactory.createView(),
+      QuestionsApi.fetchCatalogs('index'),
+      CoreApi.fetchSites(),
+      CoreApi.fetchGroups()
+    ]).then(([element, catalogs, sites, groups]) => {
+      dispatch(stopPending())
+      dispatch(createElementSuccess({
+        element, sites, groups, catalogs
+      }))
+    }).catch(error => {
+      dispatch(stopPending())
+      dispatch(createElementError(error))
+    })
   }
 }
 

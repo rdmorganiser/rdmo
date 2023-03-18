@@ -6,11 +6,14 @@ import { filterElements } from '../../utils/filter'
 import Option from '../element/Option'
 import ElementButtons from '../common/ElementButtons'
 
-const Options = ({ config, options, fetchElement, storeElement }) => {
+const Options = ({ config, options, fetchElement, createElement, storeElement }) => {
+
+  const createOption = () => createElement('options')
+
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <ElementButtons />
+        <ElementButtons onCreate={createOption} />
         <strong>{gettext('Options')}</strong>
       </div>
 
@@ -30,6 +33,7 @@ Options.propTypes = {
   config: PropTypes.object.isRequired,
   options: PropTypes.array.isRequired,
   fetchElement: PropTypes.func.isRequired,
+  createElement: PropTypes.func.isRequired,
   storeElement: PropTypes.func.isRequired
 }
 

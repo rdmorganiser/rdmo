@@ -20,8 +20,12 @@ const EditSection = ({ config, section, pages, updateElement, storeElement }) =>
     <div className="panel panel-default">
       <div className="panel-heading">
         <ElementButtons onSave={storeSection} />
-        <strong>{gettext('Section')}{': '}</strong>
-        <code className="code-questions">{section.uri}</code>
+        {
+          section.id ? <div>
+            <strong>{gettext('Section')}{': '}</strong>
+            <code className="code-questions">{section.uri}</code>
+          </div> : <strong>{gettext('Create section')}</strong>
+        }
       </div>
 
       <div className="panel-body">

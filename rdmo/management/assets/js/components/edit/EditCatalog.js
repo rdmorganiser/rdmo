@@ -20,8 +20,12 @@ const EditCatalog = ({ config, catalog, sites, groups, sections, updateElement, 
     <div className="panel panel-default">
       <div className="panel-heading">
         <ElementButtons onSave={storeCatalog} />
-        <strong>{gettext('Catalog')}{': '}</strong>
-        <code className="code-questions">{catalog.uri}</code>
+        {
+          catalog.id ? <div>
+            <strong>{gettext('Catalog')}{': '}</strong>
+            <code className="code-questions">{catalog.uri}</code>
+          </div> : <strong>{gettext('Create catalog')}</strong>
+        }
       </div>
 
       <div className="panel-body">

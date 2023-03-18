@@ -6,11 +6,14 @@ import { filterElements } from '../../utils/filter'
 import Attribute from '../element/Attribute'
 import ElementButtons from '../common/ElementButtons'
 
-const Attributes = ({ config, attributes, fetchElement, storeElement }) => {
+const Attributes = ({ config, attributes, fetchElement, createElement, storeElement }) => {
+
+  const createAttribute = () => createElement('attributes')
+
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <ElementButtons />
+        <ElementButtons onCreate={createAttribute} />
         <strong>{gettext('Attributes')}</strong>
       </div>
 
@@ -30,6 +33,7 @@ Attributes.propTypes = {
   config: PropTypes.object.isRequired,
   attributes: PropTypes.array.isRequired,
   fetchElement: PropTypes.func.isRequired,
+  createElement: PropTypes.func.isRequired,
   storeElement: PropTypes.func.isRequired
 }
 

@@ -6,11 +6,14 @@ import { filterElements } from '../../utils/filter'
 import QuestionSet from '../element/QuestionSet'
 import ElementButtons from '../common/ElementButtons'
 
-const QuestionSets = ({ config, questionsets, fetchElement, storeElement }) => {
+const QuestionSets = ({ config, questionsets, fetchElement, createElement, storeElement }) => {
+
+  const createQuestionSet = () => createElement('questionsets')
+
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <ElementButtons />
+        <ElementButtons onCreate={createQuestionSet} />
         <strong>{gettext('Question sets')}</strong>
       </div>
 
@@ -30,6 +33,7 @@ QuestionSets.propTypes = {
   config: PropTypes.object.isRequired,
   questionsets: PropTypes.array.isRequired,
   fetchElement: PropTypes.func.isRequired,
+  createElement: PropTypes.func.isRequired,
   storeElement: PropTypes.func.isRequired
 }
 

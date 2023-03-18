@@ -21,8 +21,12 @@ const EditTask = ({ config, task, attributes, catalogs, sites, groups,
     <div className="panel panel-default">
       <div className="panel-heading">
         <ElementButtons onSave={storeTask} />
-        <strong>{gettext('Task')}{': '}</strong>
-        <code className="code-tasks">{task.uri}</code>
+        {
+          task.id ? <div>
+            <strong>{gettext('Task')}{': '}</strong>
+            <code className="code-tasks">{task.uri}</code>
+          </div> : <strong>{gettext('Create task')}</strong>
+        }
       </div>
 
       <div className="panel-body">

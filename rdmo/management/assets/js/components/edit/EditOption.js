@@ -18,8 +18,12 @@ const EditOption = ({ config, option, updateElement, storeElement }) => {
     <div className="panel panel-default">
       <div className="panel-heading">
         <ElementButtons onSave={storeOption} />
-        <strong>{gettext('Option')}{': '}</strong>
-        <code className="code-options">{option.uri}</code>
+        {
+          option.id ? <div>
+            <strong>{gettext('Option')}{': '}</strong>
+            <code className="code-options">{option.uri}</code>
+          </div> : <strong>{gettext('Create option')}</strong>
+        }
       </div>
 
       <div className="panel-body">
