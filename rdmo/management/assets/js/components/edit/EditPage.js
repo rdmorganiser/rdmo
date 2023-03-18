@@ -22,8 +22,12 @@ const EditPage = ({ config, page, attributes, conditions, questionsets,
     <div className="panel panel-default">
       <div className="panel-heading">
         <ElementButtons onSave={storePage} />
-        <strong>{gettext('Page')}{': '}</strong>
-        <code className="code-questions">{page.uri}</code>
+        {
+          page.id ? <div>
+            <strong>{gettext('Page')}{': '}</strong>
+            <code className="code-questions">{page.uri}</code>
+          </div> : <strong>{gettext('Create page')}</strong>
+        }
       </div>
 
       <div className="panel-body">

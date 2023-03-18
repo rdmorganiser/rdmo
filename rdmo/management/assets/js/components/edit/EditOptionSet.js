@@ -21,8 +21,12 @@ const EditOptionSet = ({ config, optionset, options, providers, updateElement, s
     <div className="panel panel-default">
       <div className="panel-heading">
         <ElementButtons onSave={storeOptionSet} />
-        <strong>{gettext('Option set')}{': '}</strong>
-        <code className="code-options">{optionset.uri}</code>
+        {
+          optionset.id ? <div>
+            <strong>{gettext('Option set')}{': '}</strong>
+            <code className="code-options">{optionset.uri}</code>
+          </div> : <strong>{gettext('Create option set')}</strong>
+        }
       </div>
 
       <div className="panel-body">

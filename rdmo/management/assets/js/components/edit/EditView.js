@@ -20,8 +20,12 @@ const EditView = ({ config, view, catalogs, sites, groups, updateElement, storeE
     <div className="panel panel-default">
       <div className="panel-heading">
         <ElementButtons onSave={storeView} />
-        <strong>{gettext('View')}{': '}</strong>
-        <code className="code-views">{view.uri}</code>
+        {
+          view.id ? <div>
+            <strong>{gettext('View')}{': '}</strong>
+            <code className="code-views">{view.uri}</code>
+          </div> : <strong>{gettext('Create view')}</strong>
+        }
       </div>
 
       <div className="panel-body">

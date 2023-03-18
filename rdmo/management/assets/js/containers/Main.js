@@ -58,8 +58,8 @@ class Main extends Component {
         case 'catalogs':
           if (isNil(elements.element)) {
             return <Catalogs
-              config={config} catalogs={elements.catalogs}
-              fetchElement={elementActions.fetchElement} storeElement={elementActions.storeElement} />
+              config={config} catalogs={elements.catalogs} fetchElement={elementActions.fetchElement}
+              createElement={elementActions.createElement} storeElement={elementActions.storeElement} />
           } else if (elements.elementAction == 'nested') {
             return <NestedCatalog
               config={config} catalog={element}
@@ -73,8 +73,8 @@ class Main extends Component {
         case 'sections':
           if (isNil(elements.element)) {
             return <Sections
-              config={config} sections={elements.sections}
-              fetchElement={elementActions.fetchElement} storeElement={elementActions.storeElement} />
+              config={config} sections={elements.sections} fetchElement={elementActions.fetchElement}
+              createElement={elementActions.createElement} storeElement={elementActions.storeElement} />
           } else if (elements.elementAction == 'nested') {
             return <NestedSection
               config={config} section={element}
@@ -87,8 +87,8 @@ class Main extends Component {
         case 'pages':
           if (isNil(elements.element)) {
             return <Pages
-              config={config} pages={elements.pages}
-              fetchElement={elementActions.fetchElement} storeElement={elementActions.storeElement} />
+              config={config} pages={elements.pages} fetchElement={elementActions.fetchElement}
+              createElement={elementActions.createElement} storeElement={elementActions.storeElement} />
           } else if (elements.elementAction == 'nested') {
             return <NestedPage
               config={config} page={element}
@@ -103,8 +103,8 @@ class Main extends Component {
         case 'questionsets':
           if (isNil(elements.element)) {
             return <QuestionSets
-              config={config} questionsets={elements.questionsets}
-              fetchElement={elementActions.fetchElement} storeElement={elementActions.storeElement} />
+              config={config} questionsets={elements.questionsets} fetchElement={elementActions.fetchElement}
+              createElement={elementActions.createElement} storeElement={elementActions.storeElement} />
           } else if (elements.elementAction == 'nested') {
             return <NestedQuestionSet
               config={config} questionset={element}
@@ -119,8 +119,8 @@ class Main extends Component {
         case 'questions':
           if (isNil(elements.element)) {
             return <Questions
-              config={config} questions={elements.questions}
-              fetchElement={elementActions.fetchElement} storeElement={elementActions.storeElement} />
+              config={config} questions={elements.questions} fetchElement={elementActions.fetchElement}
+              createElement={elementActions.createElement} storeElement={elementActions.storeElement} />
           } else {
             return <EditQuestion
               config={config} question={element}
@@ -132,8 +132,8 @@ class Main extends Component {
         case 'attributes':
           if (isNil(elements.element)) {
             return <Attributes
-              config={config} attributes={elements.attributes}
-              fetchElement={elementActions.fetchElement} storeElement={elementActions.storeElement} />
+              config={config} attributes={elements.attributes} fetchElement={elementActions.fetchElement}
+              createElement={elementActions.createElement} storeElement={elementActions.storeElement} />
           } else if (elements.elementAction == 'nested') {
             return <NestedAttribute
               config={config} attribute={element}
@@ -146,8 +146,8 @@ class Main extends Component {
         case 'optionsets':
           if (isNil(elements.element)) {
             return <OptionSets
-              config={config} optionsets={elements.optionsets}
-              fetchElement={elementActions.fetchElement} storeElement={elementActions.storeElement} />
+              config={config} optionsets={elements.optionsets} fetchElement={elementActions.fetchElement}
+              createElement={elementActions.createElement} storeElement={elementActions.storeElement} />
           } else if (elements.elementAction == 'nested') {
             return <NestedOptionSet
               config={config} optionset={element}
@@ -161,8 +161,8 @@ class Main extends Component {
         case 'options':
           if (isNil(elements.element)) {
             return <Options
-              config={config} options={elements.options}
-              fetchElement={elementActions.fetchElement} storeElement={elementActions.storeElement} />
+              config={config} options={elements.options} fetchElement={elementActions.fetchElement}
+              createElement={elementActions.createElement} storeElement={elementActions.storeElement} />
           } else {
             return <EditOption
               config={config} option={element}
@@ -171,8 +171,8 @@ class Main extends Component {
         case 'conditions':
           if (isNil(elements.element)) {
             return <Conditions
-              config={config} conditions={elements.conditions}
-              fetchElement={elementActions.fetchElement} storeElement={elementActions.storeElement} />
+              config={config} conditions={elements.conditions} fetchElement={elementActions.fetchElement}
+              createElement={elementActions.createElement} storeElement={elementActions.storeElement} />
           } else {
             return <EditCondition
               config={config} condition={element} relations={elements.relations}
@@ -182,8 +182,8 @@ class Main extends Component {
         case 'tasks':
           if (isNil(elements.element)) {
             return <Tasks
-              config={config} tasks={elements.tasks}
-              fetchElement={elementActions.fetchElement} storeElement={elementActions.storeElement} />
+              config={config} tasks={elements.tasks} fetchElement={elementActions.fetchElement}
+              createElement={elementActions.createElement} storeElement={elementActions.storeElement} />
           } else {
             return <EditTask
               config={config} task={element}
@@ -194,8 +194,8 @@ class Main extends Component {
         case 'views':
           if (isNil(elements.element)) {
             return <Views
-              config={config} views={elements.views}
-              fetchElement={elementActions.fetchElement} storeElement={elementActions.storeElement} />
+              config={config} views={elements.views} fetchElement={elementActions.fetchElement}
+              createElement={elementActions.createElement} storeElement={elementActions.storeElement} />
           } else {
             return <EditView
               config={config} view={element}

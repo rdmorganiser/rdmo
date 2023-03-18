@@ -6,11 +6,14 @@ import { filterElements } from '../../utils/filter'
 import View from '../element/View'
 import ElementButtons from '../common/ElementButtons'
 
-const Views = ({ config, views, fetchElement, storeElement }) => {
+const Views = ({ config, views, fetchElement, createElement, storeElement }) => {
+
+  const createView = () => createElement('views')
+
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <ElementButtons />
+        <ElementButtons onCreate={createView} />
         <strong>{gettext('Views')}</strong>
       </div>
 
@@ -30,6 +33,7 @@ Views.propTypes = {
   config: PropTypes.object.isRequired,
   views: PropTypes.array.isRequired,
   fetchElement: PropTypes.func.isRequired,
+  createElement: PropTypes.func.isRequired,
   storeElement: PropTypes.func.isRequired
 }
 

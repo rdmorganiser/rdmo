@@ -6,11 +6,14 @@ import { filterElements } from '../../utils/filter'
 import Catalog from '../element/Catalog'
 import ElementButtons from '../common/ElementButtons'
 
-const Catalogs = ({ config, catalogs, fetchElement, storeElement }) => {
+const Catalogs = ({ config, catalogs, fetchElement, createElement, storeElement }) => {
+
+  const createCatalog = () => createElement('catalogs')
+
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <ElementButtons />
+        <ElementButtons onCreate={createCatalog} />
         <strong>{gettext('Catalogs')}</strong>
       </div>
 
@@ -30,6 +33,7 @@ Catalogs.propTypes = {
   config: PropTypes.object.isRequired,
   catalogs: PropTypes.array.isRequired,
   fetchElement: PropTypes.func.isRequired,
+  createElement: PropTypes.func.isRequired,
   storeElement: PropTypes.func.isRequired
 }
 

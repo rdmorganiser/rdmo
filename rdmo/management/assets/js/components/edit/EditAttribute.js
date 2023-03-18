@@ -19,8 +19,12 @@ const EditAttribute = ({ config, attribute, attributes, updateElement, storeElem
     <div className="panel panel-default">
       <div className="panel-heading">
         <ElementButtons onSave={storeAttribute} />
-        <strong>{gettext('Attribute')}{': '}</strong>
-        <code className="code-domain">{attribute.uri}</code>
+        {
+          attribute.id ? <div>
+            <strong>{gettext('Attribute')}{': '}</strong>
+            <code className="code-domain">{attribute.uri}</code>
+          </div> : <strong>{gettext('Create attribute')}</strong>
+        }
       </div>
 
       <div className="panel-body">

@@ -48,7 +48,11 @@ export default function configureStore() {
       elementType = 'catalogs'
     }
     if (isNil(elementId)) {
-      store.dispatch(elementActions.fetchElements(elementType))
+      if (isNil(elementAction)) {
+        store.dispatch(elementActions.fetchElements(elementType))
+      } else {
+        store.dispatch(elementActions.createElement(elementType))
+      }
     } else {
       store.dispatch(elementActions.fetchElement(elementType, elementId, elementAction))
     }

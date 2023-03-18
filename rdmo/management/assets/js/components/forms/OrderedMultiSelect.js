@@ -85,7 +85,7 @@ const OrderedMultiSelect = ({ config, element, field, options, verboseName, onCh
     'has-error': !isEmpty(errors)
   })
 
-  const values = element[field]
+  const values = isNil(element[field]) ? [] : element[field]
 
   const selectOptions = options.map(option => ({
     value: option.id,

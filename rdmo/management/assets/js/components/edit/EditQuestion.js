@@ -21,8 +21,12 @@ const EditQuestion = ({ config, question, attributes, optionsets, options,
     <div className="panel panel-default">
       <div className="panel-heading">
         <ElementButtons onSave={storeQuestion} />
-        <strong>{gettext('Question')}{': '}</strong>
-        <code className="code-questions">{question.uri}</code>
+        {
+          question.id ? <div>
+            <strong>{gettext('Question')}{': '}</strong>
+            <code className="code-questions">{question.uri}</code>
+          </div> : <strong>{gettext('Create question')}</strong>
+        }
       </div>
 
       <div className="panel-body">

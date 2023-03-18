@@ -102,6 +102,23 @@ export default function elementsReducer(state = initialState, action) {
         })
       }
 
+    // create element
+    case 'elements/createElementInit':
+      return {...state, ...{
+        elementType: action.elementType,
+        elementId: null,
+        elementAction: 'create',
+        element: null,
+        errors: {}
+      }}
+    case 'elements/createElementSuccess':
+      // let the element know what type it is
+      action.elements.element.type = state.elementType
+
+      return {...state, ...action.elements}
+    case 'elements/createElementError':
+      return state
+
     // update element
     case 'elements/updateElement':
       const element = Object.assign({}, action.element, {
