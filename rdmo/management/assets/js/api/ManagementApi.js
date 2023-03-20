@@ -1,9 +1,9 @@
-import { getData } from 'rdmo/core/assets/js/utils/api'
+import BaseApi from 'rdmo/core/assets/js/api/BaseApi'
 
-class ManagementApi {
+class ManagementApi extends BaseApi {
 
   static fetchMeta() {
-    return getData('/api/v1/management/meta/')
+    return this.get('/api/v1/management/meta/')
   }
 
 }

@@ -4,16 +4,19 @@ import PropTypes from 'prop-types'
 import { filterElements } from '../../utils/filter'
 
 import OptionSet from '../element/OptionSet'
-import ElementButtons from '../common/ElementButtons'
+import { BackButton, NewButton } from '../common/ElementButtons'
 
-const OptionSets = ({ config, optionsets, fetchElement, createElement, storeElement }) => {
+const OptionSets = ({ config, optionsets , elementActions}) => {
 
-  const createOptionSet = () => createElement('optionsets')
+  const createOptionSet = () => elementActions.createElement('optionsets')
 
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <ElementButtons onCreate={createOptionSet} />
+        <div className="pull-right">
+          <BackButton />
+          <NewButton onClick={createOptionSet} />
+        </div>
         <strong>{gettext('Option sets')}</strong>
       </div>
 
@@ -21,7 +24,7 @@ const OptionSets = ({ config, optionsets, fetchElement, createElement, storeElem
       {
         filterElements(config, optionsets).map((optionset, index) => (
           <OptionSet key={index} config={config} optionset={optionset}
-                     fetchElement={fetchElement} storeElement={storeElement} />
+                     elementActions={elementActions} />
         ))
       }
       </ul>
@@ -32,9 +35,7 @@ const OptionSets = ({ config, optionsets, fetchElement, createElement, storeElem
 OptionSets.propTypes = {
   config: PropTypes.object.isRequired,
   optionsets: PropTypes.array.isRequired,
-  fetchElement: PropTypes.func.isRequired,
-  createElement: PropTypes.func.isRequired,
-  storeElement: PropTypes.func.isRequired
+  elementActions: PropTypes.object.isRequired
 }
 
 export default OptionSets

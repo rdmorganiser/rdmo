@@ -7,17 +7,17 @@ import { filterElements } from '../../utils/filter'
 import Question from './Question'
 import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/ElementLinks'
 
-const QuestionSet = ({ config, questionset, fetchElement, storeElement, list=true, indent=0 }) => {
+const QuestionSet = ({ config, questionset, elementActions, list=true, indent=0 }) => {
 
   const verboseName = gettext('question set')
 
-  const fetchEdit = () => fetchElement('questionsets', questionset.id)
-  const fetchNested = () => fetchElement('questionsets', questionset.id, 'nested')
-  const toggleLocked = () => storeElement('questionsets', {...questionset, locked: !questionset.locked })
+  const fetchEdit = () => elementActions.fetchElement('questionsets', questionset.id)
+  const fetchNested = () => elementActions.fetchElement('questionsets', questionset.id, 'nested')
+  const toggleLocked = () => elementActions.storeElement('questionsets', {...questionset, locked: !questionset.locked })
 
   const elementNode = (
     <div className="element">
-      <div className="element-options">
+      <div className="pull-right">
         <EditLink element={questionset} verboseName={verboseName} onClick={fetchEdit} />
         <LockedLink element={questionset} verboseName={verboseName} onClick={toggleLocked} />
         <NestedLink element={questionset} verboseName={verboseName} onClick={fetchNested} />
@@ -44,12 +44,10 @@ const QuestionSet = ({ config, questionset, fetchElement, storeElement, list=tru
           filterElements(config, questionset.elements).map((element, index) => {
             if (isUndefined(element.text)) {
               return <QuestionSet key={index} config={config} questionset={element}
-                                  fetchElement={fetchElement} storeElement={storeElement}
-                                  indent={indent + 1} />
+                                  elementActions={elementActions} indent={indent + 1} />
             } else {
               return <Question key={index} config={config} question={element}
-                               fetchElement={fetchElement} storeElement={storeElement}
-                               indent={indent + 1} />
+                               elementActions={elementActions} indent={indent + 1} />
             }
           })
         }
@@ -63,8 +61,7 @@ const QuestionSet = ({ config, questionset, fetchElement, storeElement, list=tru
 QuestionSet.propTypes = {
   config: PropTypes.object.isRequired,
   questionset: PropTypes.object.isRequired,
-  fetchElement: PropTypes.func.isRequired,
-  storeElement: PropTypes.func.isRequired,
+  elementActions: PropTypes.object.isRequired,
   list: PropTypes.bool,
   indent: PropTypes.number
 }

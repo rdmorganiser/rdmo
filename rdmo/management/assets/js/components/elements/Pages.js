@@ -4,16 +4,19 @@ import PropTypes from 'prop-types'
 import { filterElements } from '../../utils/filter'
 
 import Page from '../element/Page'
-import ElementButtons from '../common/ElementButtons'
+import { BackButton, NewButton } from '../common/ElementButtons'
 
-const Pages = ({ config, pages, fetchElement, createElement, storeElement }) => {
+const Pages = ({ config, pages, elementActions }) => {
 
-  const createPage = () => createElement('pages')
+  const createPage = () => elementActions.createElement('pages')
 
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <ElementButtons onCreate={createPage} />
+        <div className="pull-right">
+          <BackButton />
+          <NewButton onClick={createPage} />
+        </div>
         <strong>{gettext('Pages')}</strong>
       </div>
 
@@ -21,7 +24,7 @@ const Pages = ({ config, pages, fetchElement, createElement, storeElement }) => 
       {
         filterElements(config, pages).map((page, index) => (
           <Page key={index} config={config} page={page}
-                fetchElement={fetchElement} storeElement={storeElement} />
+                elementActions={elementActions} />
         ))
       }
       </ul>
@@ -32,9 +35,7 @@ const Pages = ({ config, pages, fetchElement, createElement, storeElement }) => 
 Pages.propTypes = {
   config: PropTypes.object.isRequired,
   pages: PropTypes.array.isRequired,
-  fetchElement: PropTypes.func.isRequired,
-  createElement: PropTypes.func.isRequired,
-  storeElement: PropTypes.func.isRequired
+  elementActions: PropTypes.object.isRequired
 }
 
 export default Pages

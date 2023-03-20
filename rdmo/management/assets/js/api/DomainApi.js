@@ -1,28 +1,32 @@
 import isNil from 'lodash/isNil'
 
-import { getData, postData, putData } from 'rdmo/core/assets/js/utils/api'
+import BaseApi from 'rdmo/core/assets/js/api/BaseApi'
 
-class DomainApi {
+class DomainApi extends BaseApi {
 
   static fetchAttributes(action) {
     let url = '/api/v1/domain/attributes/'
     if (action == 'index') url += 'index/'
     if (action == 'nested') url += 'nested/'
-    return getData(url)
+    return this.get(url)
   }
 
   static fetchAttribute(id, action) {
     let url = `/api/v1/domain/attributes/${id}/`
     if (action == 'nested') url += 'nested/'
-    return getData(url)
+    return this.get(url)
   }
 
   static storeAttribute(attribute) {
     if (isNil(attribute.id)) {
-      return postData(`/api/v1/domain/attributes/`, attribute)
+      return this.post(`/api/v1/domain/attributes/`, attribute)
     } else {
-      return putData(`/api/v1/domain/attributes/${attribute.id}/`, attribute)
+      return this.put(`/api/v1/domain/attributes/${attribute.id}/`, attribute)
     }
+  }
+
+  static deleteAttribute(attribute) {
+    return this.delete(`/api/v1/domain/attributes/${attribute.id}/`)
   }
 
 }

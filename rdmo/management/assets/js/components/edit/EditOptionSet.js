@@ -1,4 +1,4 @@
-import React, { Component} from 'react'
+import React, { Component, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap';
 
@@ -10,17 +10,26 @@ import Text from '../forms/Text'
 import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
-import ElementButtons from '../common/ElementButtons'
+import { BackButton, SaveButton, DeleteButton } from '../common/ElementButtons'
+import { DeleteElementModal } from '../common/ElementModals'
 
-const EditOptionSet = ({ config, optionset, options, providers, updateElement, storeElement }) => {
+import useDeleteModal from '../../hooks/useDeleteModal'
 
-  const updateOptionSet = (key, value) => updateElement(optionset, key, value)
-  const storeOptionSet = () => storeElement('optionsets', optionset)
+const EditOptionSet = ({ config, optionset, options, providers, elementActions }) => {
+
+  const updateOptionSet = (key, value) => elementActions.updateElement(optionset, key, value)
+  const storeOptionSet = () => elementActions.storeElement('optionsets', optionset)
+  const deleteOptionSet = () => elementActions.deleteElement('optionsets', optionset)
+
+  const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <ElementButtons onSave={storeOptionSet} />
+        <div className="pull-right">
+          <BackButton />
+          <SaveButton onClick={storeOptionSet} />
+        </div>
         {
           optionset.id ? <div>
             <strong>{gettext('Option set')}{': '}</strong>
@@ -62,6 +71,27 @@ const EditOptionSet = ({ config, optionset, options, providers, updateElement, s
           </div>
         </div>
       </div>
+
+      <div className="panel-footer">
+        <div className="pull-right">
+          <BackButton />
+          <SaveButton onClick={storeOptionSet} />
+        </div>
+        <DeleteButton onClick={openDeleteModal} />
+      </div>
+
+      <DeleteElementModal title={gettext('Delete catalog')} show={showDeleteModal}
+                          onClose={closeDeleteModal} onDelete={deleteOptionSet}>
+        <p>
+          {gettext('You are about to permanently delete the option set:')}
+        </p>
+        <p>
+          <code className="code-options">{optionset.uri}</code>
+        </p>
+        <p className="text-danger">
+          {gettext('This action cannot be undone!')}
+        </p>
+      </DeleteElementModal>
     </div>
   )
 }
@@ -71,8 +101,7 @@ EditOptionSet.propTypes = {
   optionset: PropTypes.object.isRequired,
   options: PropTypes.array,
   providers: PropTypes.array,
-  storeElement: PropTypes.func.isRequired,
-  updateElement: PropTypes.func.isRequired
+  elementActions: PropTypes.object.isRequired
 }
 
 export default EditOptionSet

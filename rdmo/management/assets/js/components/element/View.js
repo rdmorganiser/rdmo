@@ -3,18 +3,18 @@ import PropTypes from 'prop-types'
 
 import { EditLink, AvailableLink, LockedLink, ExportLink } from '../common/ElementLinks'
 
-const View = ({ config, view, fetchElement, storeElement }) => {
+const View = ({ config, view, elementActions }) => {
 
   const verboseName = gettext('view')
 
-  const fetchEdit = () => fetchElement('views', view.id)
-  const toggleAvailable = () => storeElement('views', {...view, available: !view.available })
-  const toggleLocked = () => storeElement('views', {...view, locked: !view.locked })
+  const fetchEdit = () => elementActions.fetchElement('views', view.id)
+  const toggleAvailable = () => elementActions.storeElement('views', {...view, available: !view.available })
+  const toggleLocked = () => elementActions.storeElement('views', {...view, locked: !view.locked })
 
   return (
     <li className="list-group-item">
       <div className="element">
-        <div className="element-options">
+        <div className="pull-right">
           <EditLink element={view} verboseName={verboseName} onClick={fetchEdit} />
           <AvailableLink element={view} verboseName={verboseName} onClick={toggleAvailable} />
           <LockedLink element={view} verboseName={verboseName} onClick={toggleLocked} />
@@ -32,8 +32,7 @@ const View = ({ config, view, fetchElement, storeElement }) => {
 View.propTypes = {
   config: PropTypes.object.isRequired,
   view: PropTypes.object.isRequired,
-  fetchElement: PropTypes.func.isRequired,
-  storeElement: PropTypes.func.isRequired
+  elementActions: PropTypes.object.isRequired
 }
 
 export default View

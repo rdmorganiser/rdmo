@@ -57,150 +57,102 @@ class Main extends Component {
       switch (elements.elementType) {
         case 'catalogs':
           if (isNil(elements.element)) {
-            return <Catalogs
-              config={config} catalogs={elements.catalogs} fetchElement={elementActions.fetchElement}
-              createElement={elementActions.createElement} storeElement={elementActions.storeElement} />
+            return <Catalogs config={config} catalogs={elements.catalogs} elementActions={elementActions} />
           } else if (elements.elementAction == 'nested') {
-            return <NestedCatalog
-              config={config} catalog={element}
-              fetchElement={elementActions.fetchElement} storeElement={elementActions.storeElement} />
+            return <NestedCatalog config={config} catalog={element} elementActions={elementActions} />
           } else {
-            return <EditCatalog
-              config={config} catalog={element}
-              sites={elements.sites} groups={elements.groups} sections={elements.sections}
-              updateElement={elementActions.updateElement} storeElement={elementActions.storeElement} />
+            return <EditCatalog config={config} catalog={element} sites={elements.sites}
+                                groups={elements.groups} sections={elements.sections}
+                                elementActions={elementActions} />
           }
         case 'sections':
           if (isNil(elements.element)) {
-            return <Sections
-              config={config} sections={elements.sections} fetchElement={elementActions.fetchElement}
-              createElement={elementActions.createElement} storeElement={elementActions.storeElement} />
+            return <Sections config={config} sections={elements.sections} elementActions={elementActions} />
           } else if (elements.elementAction == 'nested') {
-            return <NestedSection
-              config={config} section={element}
-              fetchElement={elementActions.fetchElement} storeElement={elementActions.storeElement} />
+            return <NestedSection config={config} section={element} elementActions={elementActions} />
           } else {
-            return <EditSection
-              config={config} section={element} pages={elements.pages}
-              updateElement={elementActions.updateElement} storeElement={elementActions.storeElement} />
+            return <EditSection config={config} section={element} pages={elements.pages}
+                                elementActions={elementActions} />
           }
         case 'pages':
           if (isNil(elements.element)) {
-            return <Pages
-              config={config} pages={elements.pages} fetchElement={elementActions.fetchElement}
-              createElement={elementActions.createElement} storeElement={elementActions.storeElement} />
+            return <Pages config={config} pages={elements.pages} elementActions={elementActions} />
           } else if (elements.elementAction == 'nested') {
-            return <NestedPage
-              config={config} page={element}
-              fetchElement={elementActions.fetchElement} storeElement={elementActions.storeElement} />
+            return <NestedPage config={config} page={element} elementActions={elementActions} />
           } else {
-            return <EditPage
-              config={config} page={element}
-              attributes={elements.attributes} conditions={elements.conditions}
-              questionsets={elements.questionsets} questions={elements.questions}
-              updateElement={elementActions.updateElement} storeElement={elementActions.storeElement} />
+            return <EditPage config={config} page={element} attributes={elements.attributes}
+                             conditions={elements.conditions} questionsets={elements.questionsets}
+                             questions={elements.questions} elementActions={elementActions} />
           }
         case 'questionsets':
           if (isNil(elements.element)) {
-            return <QuestionSets
-              config={config} questionsets={elements.questionsets} fetchElement={elementActions.fetchElement}
-              createElement={elementActions.createElement} storeElement={elementActions.storeElement} />
+            return <QuestionSets config={config} questionsets={elements.questionsets}
+                                 elementActions={elementActions} />
           } else if (elements.elementAction == 'nested') {
-            return <NestedQuestionSet
-              config={config} questionset={element}
-              fetchElement={elementActions.fetchElement} storeElement={elementActions.storeElement} />
+            return <NestedQuestionSet config={config} questionset={element} elementActions={elementActions} />
           } else {
-            return <EditQuestionSet
-              config={config} questionset={element}
-              attributes={elements.attributes} conditions={elements.conditions}
-              questionsets={elements.questionsets} questions={elements.questions}
-              updateElement={elementActions.updateElement} storeElement={elementActions.storeElement} />
+            return <EditQuestionSet config={config} questionset={element} attributes={elements.attributes}
+                                    conditions={elements.conditions} questionsets={elements.questionsets}
+                                    questions={elements.questions} elementActions={elementActions} />
           }
         case 'questions':
           if (isNil(elements.element)) {
-            return <Questions
-              config={config} questions={elements.questions} fetchElement={elementActions.fetchElement}
-              createElement={elementActions.createElement} storeElement={elementActions.storeElement} />
+            return <Questions config={config} questions={elements.questions} elementActions={elementActions} />
           } else {
-            return <EditQuestion
-              config={config} question={element}
-              attributes={elements.attributes} conditions={elements.conditions}
-              optionsets={elements.optionsets} options={elements.options}
-              widgetTypes={elements.widgetTypes} valueTypes={elements.valueTypes}
-              updateElement={elementActions.updateElement} storeElement={elementActions.storeElement} />
+            return <EditQuestion config={config} question={element} attributes={elements.attributes}
+                                 conditions={elements.conditions} optionsets={elements.optionsets}
+                                 options={elements.options} widgetTypes={elements.widgetTypes}
+                                 valueTypes={elements.valueTypes} elementActions={elementActions} />
           }
         case 'attributes':
           if (isNil(elements.element)) {
-            return <Attributes
-              config={config} attributes={elements.attributes} fetchElement={elementActions.fetchElement}
-              createElement={elementActions.createElement} storeElement={elementActions.storeElement} />
+            return <Attributes config={config} attributes={elements.attributes} elementActions={elementActions} />
           } else if (elements.elementAction == 'nested') {
-            return <NestedAttribute
-              config={config} attribute={element}
-              fetchElement={elementActions.fetchElement} storeElement={elementActions.storeElement} />
+            return <NestedAttribute config={config} attribute={element} elementActions={elementActions} />
           } else {
-            return <EditAttribute
-              config={config} attribute={element} attributes={elements.attributes}
-              updateElement={elementActions.updateElement} storeElement={elementActions.storeElement} />
+            return <EditAttribute config={config} attribute={element} attributes={elements.attributes}
+                                  elementActions={elementActions} />
           }
         case 'optionsets':
           if (isNil(elements.element)) {
-            return <OptionSets
-              config={config} optionsets={elements.optionsets} fetchElement={elementActions.fetchElement}
-              createElement={elementActions.createElement} storeElement={elementActions.storeElement} />
+            return <OptionSets config={config} optionsets={elements.optionsets}
+                               elementActions={elementActions} />
           } else if (elements.elementAction == 'nested') {
-            return <NestedOptionSet
-              config={config} optionset={element}
-              fetchElement={elementActions.fetchElement} storeElement={elementActions.storeElement} />
+            return <NestedOptionSet config={config} optionset={element} elementActions={elementActions} />
           } else {
-            return <EditOptionSet
-              config={config} optionset={element}
-              options={elements.options} providers={elements.providers}
-              updateElement={elementActions.updateElement} storeElement={elementActions.storeElement} />
+            return <EditOptionSet config={config} optionset={element} options={elements.options}
+                                  providers={elements.providers} elementActions={elementActions} />
           }
         case 'options':
           if (isNil(elements.element)) {
-            return <Options
-              config={config} options={elements.options} fetchElement={elementActions.fetchElement}
-              createElement={elementActions.createElement} storeElement={elementActions.storeElement} />
+            return <Options config={config} options={elements.options} elementActions={elementActions} />
           } else {
-            return <EditOption
-              config={config} option={element}
-              updateElement={elementActions.updateElement} storeElement={elementActions.storeElement} />
+            return <EditOption config={config} option={element} elementActions={elementActions} />
           }
         case 'conditions':
           if (isNil(elements.element)) {
-            return <Conditions
-              config={config} conditions={elements.conditions} fetchElement={elementActions.fetchElement}
-              createElement={elementActions.createElement} storeElement={elementActions.storeElement} />
+            return <Conditions config={config} conditions={elements.conditions} elementActions={elementActions} />
           } else {
-            return <EditCondition
-              config={config} condition={element} relations={elements.relations}
-              attributes={elements.attributes} options={elements.options}
-              updateElement={elementActions.updateElement} storeElement={elementActions.storeElement} />
+            return <EditCondition config={config} condition={element} relations={elements.relations}
+                                  attributes={elements.attributes} options={elements.options}
+                                  elementActions={elementActions} />
           }
         case 'tasks':
           if (isNil(elements.element)) {
-            return <Tasks
-              config={config} tasks={elements.tasks} fetchElement={elementActions.fetchElement}
-              createElement={elementActions.createElement} storeElement={elementActions.storeElement} />
+            return <Tasks config={config} tasks={elements.tasks} elementActions={elementActions} />
           } else {
-            return <EditTask
-              config={config} task={element}
-              attributes={elements.attributes} conditions={elements.conditions}
-              catalogs={elements.catalogs} groups={elements.groups} sites={elements.sites}
-              updateElement={elementActions.updateElement} storeElement={elementActions.storeElement} />
+            return <EditTask config={config} task={element} attributes={elements.attributes}
+                             conditions={elements.conditions} catalogs={elements.catalogs}
+                             groups={elements.groups} sites={elements.sites}
+                             elementActions={elementActions} />
           }
         case 'views':
           if (isNil(elements.element)) {
-            return <Views
-              config={config} views={elements.views} fetchElement={elementActions.fetchElement}
-              createElement={elementActions.createElement} storeElement={elementActions.storeElement} />
+            return <Views config={config} views={elements.views} elementActions={elementActions} />
           } else {
-            return <EditView
-              config={config} view={element}
-              catalogs={elements.catalogs} groups={elements.groups} sites={elements.sites}
-              updateElement={elementActions.updateElement} storeElement={elementActions.storeElement} />
+            return <EditView config={config} view={element} catalogs={elements.catalogs}
+                             groups={elements.groups} sites={elements.sites}
+                             elementActions={elementActions} />
           }
         default:
           return null

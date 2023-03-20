@@ -112,6 +112,17 @@ export default function elementsReducer(state = initialState, action) {
     case 'elements/createElementError':
       return state
 
+
+    // delete element
+    case 'elements/deleteElementInit':
+      return state
+
+    case 'elements/deleteElementSuccess':
+      return state
+
+    case 'elements/deleteElementError':
+      return {...state, errors: action.error.errors}
+
     // update element
     case 'elements/updateElement':
       return {...state, element: {...action.element, [action.field]: action.value }}

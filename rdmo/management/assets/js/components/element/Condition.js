@@ -3,17 +3,17 @@ import PropTypes from 'prop-types'
 
 import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/ElementLinks'
 
-const Condition = ({ config, condition, fetchElement, storeElement }) => {
+const Condition = ({ config, condition, elementActions }) => {
 
   const verboseName = gettext('condition')
 
-  const fetchEdit = () => fetchElement('conditions', condition.id)
-  const toggleLocked = () => storeElement('conditions', {...condition, locked: !condition.locked })
+  const fetchEdit = () => elementActions.fetchElement('conditions', condition.id)
+  const toggleLocked = () => elementActions.storeElement('conditions', {...condition, locked: !condition.locked })
 
   return (
     <li className="list-group-item">
       <div className="element">
-        <div className="element-options">
+        <div className="pull-right">
           <EditLink element={condition} verboseName={verboseName} onClick={fetchEdit} />
           <LockedLink element={condition} verboseName={verboseName} onClick={toggleLocked} />
           <ExportLink element={condition} verboseName={verboseName} />
@@ -30,8 +30,7 @@ const Condition = ({ config, condition, fetchElement, storeElement }) => {
 Condition.propTypes = {
   config: PropTypes.object.isRequired,
   condition: PropTypes.object.isRequired,
-  fetchElement: PropTypes.func.isRequired,
-  storeElement: PropTypes.func.isRequired
+  elementActions: PropTypes.object.isRequired
 }
 
 export default Condition

@@ -7,17 +7,17 @@ import { filterElements } from '../../utils/filter'
 import Page from './Page'
 import { EditLink, LockedLink, NestedLink, ExportLink } from '../common/ElementLinks'
 
-const Section = ({ config, section, fetchElement, storeElement, list=true }) => {
+const Section = ({ config, section, elementActions, list=true }) => {
 
   const verboseName = gettext('section')
 
-  const fetchEdit = () => fetchElement('sections', section.id)
-  const fetchNested = () => fetchElement('sections', section.id, 'nested')
-  const toggleLocked = () => storeElement('sections', {...section, locked: !section.locked })
+  const fetchEdit = () => elementActions.fetchElement('sections', section.id)
+  const fetchNested = () => elementActions.fetchElement('sections', section.id, 'nested')
+  const toggleLocked = () => elementActions.storeElement('sections', {...section, locked: !section.locked })
 
   const elementNode = (
     <div className="element">
-      <div className="element-options">
+      <div className="pull-right">
         <EditLink element={section} verboseName={verboseName} onClick={fetchEdit} />
         <LockedLink element={section} verboseName={verboseName} onClick={toggleLocked} />
         <NestedLink element={section} verboseName={verboseName} onClick={fetchNested} />
@@ -43,7 +43,7 @@ const Section = ({ config, section, fetchElement, storeElement, list=true }) => 
         {
           filterElements(config, section.elements).map((page, index) => (
             <Page key={index} config={config} page={page}
-                  fetchElement={fetchElement} storeElement={storeElement} indent={1} />
+                  elementActions={elementActions} indent={1} />
           ))
         }
       </React.Fragment>
@@ -56,8 +56,7 @@ const Section = ({ config, section, fetchElement, storeElement, list=true }) => 
 Section.propTypes = {
   config: PropTypes.object.isRequired,
   section: PropTypes.object.isRequired,
-  fetchElement: PropTypes.func.isRequired,
-  storeElement: PropTypes.func.isRequired,
+  elementActions: PropTypes.object.isRequired,
   list: PropTypes.bool
 }
 

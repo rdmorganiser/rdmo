@@ -5,23 +5,24 @@ import { filterElements } from '../../utils/filter'
 
 import Option from '../element/Option'
 import OptionSet from '../element/OptionSet'
-import ElementButtons from '../common/ElementButtons'
+import { BackButton } from '../common/ElementButtons'
 
-
-const NestedOptionSet = ({ config, optionset, fetchElement, storeElement }) => {
+const NestedOptionSet = ({ config, optionset, elementActions }) => {
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <ElementButtons />
+        <div className="pull-right">
+          <BackButton />
+        </div>
         <OptionSet config={config} optionset={optionset}
-                   fetchElement={fetchElement} storeElement={storeElement} list={false} />
+                   elementActions={elementActions} list={false} />
       </div>
 
       <ul className="list-group">
       {
         filterElements(config, optionset.elements).map((option, index) => (
           <Option key={index} config={config} option={option}
-                  fetchElement={fetchElement} storeElement={storeElement} />
+                  elementActions={elementActions} />
         ))
       }
       </ul>
@@ -32,8 +33,7 @@ const NestedOptionSet = ({ config, optionset, fetchElement, storeElement }) => {
 NestedOptionSet.propTypes = {
   config: PropTypes.object.isRequired,
   optionset: PropTypes.object.isRequired,
-  fetchElement: PropTypes.func.isRequired,
-  storeElement: PropTypes.func.isRequired
+  elementActions: PropTypes.object.isRequired
 }
 
 export default NestedOptionSet

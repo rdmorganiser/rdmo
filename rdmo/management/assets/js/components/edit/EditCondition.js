@@ -1,4 +1,4 @@
-import React, { Component} from 'react'
+import React, { Component, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap';
 
@@ -8,18 +8,26 @@ import Text from '../forms/Text'
 import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
-import ElementButtons from '../common/ElementButtons'
+import { BackButton, SaveButton, DeleteButton } from '../common/ElementButtons'
+import { DeleteElementModal } from '../common/ElementModals'
 
-const EditCondition = ({ config, condition, relations, attributes, options,
-                         updateElement, storeElement }) => {
+import useDeleteModal from '../../hooks/useDeleteModal'
 
-  const updateCondition = (key, value) => updateElement(condition, key, value)
-  const storeCondition = () => storeElement('conditions', condition)
+const EditCondition = ({ config, condition, relations, attributes, options, elementActions }) => {
+
+  const updateCondition = (key, value) => elementActions.updateElement(condition, key, value)
+  const storeCondition = () => elementActions.storeElement('conditions', condition)
+  const deleteCondition = () => elementActions.deleteElement('conditions', condition)
+
+  const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <ElementButtons onSave={storeCondition} />
+        <div className="pull-right">
+          <BackButton />
+          <SaveButton onClick={storeCondition} />
+        </div>
         {
           condition.id ? <div>
             <strong>{gettext('Condition')}{': '}</strong>
@@ -64,6 +72,27 @@ const EditCondition = ({ config, condition, relations, attributes, options,
           </div>
         </div>
       </div>
+
+      <div className="panel-footer">
+        <div className="pull-right">
+          <BackButton />
+          <SaveButton onClick={storeCondition} />
+        </div>
+        <DeleteButton onClick={openDeleteModal} />
+      </div>
+
+      <DeleteElementModal title={gettext('Delete catalog')} show={showDeleteModal}
+                          onClose={closeDeleteModal} onDelete={deleteCondition}>
+        <p>
+          {gettext('You are about to permanently delete the condition:')}
+        </p>
+        <p>
+          <code className="code-conditions">{condition.uri}</code>
+        </p>
+        <p className="text-danger">
+          {gettext('This action cannot be undone!')}
+        </p>
+      </DeleteElementModal>
     </div>
   )
 }
@@ -74,8 +103,7 @@ EditCondition.propTypes = {
   relations: PropTypes.array,
   attributes: PropTypes.array,
   options: PropTypes.array,
-  storeElement: PropTypes.func.isRequired,
-  updateElement: PropTypes.func.isRequired
+  elementActions: PropTypes.object.isRequired
 }
 
 export default EditCondition

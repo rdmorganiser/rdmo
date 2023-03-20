@@ -4,16 +4,19 @@ import PropTypes from 'prop-types'
 import { filterElements } from '../../utils/filter'
 
 import View from '../element/View'
-import ElementButtons from '../common/ElementButtons'
+import { BackButton, NewButton } from '../common/ElementButtons'
 
-const Views = ({ config, views, fetchElement, createElement, storeElement }) => {
+const Views = ({ config, views, elementActions }) => {
 
-  const createView = () => createElement('views')
+  const createView = () => elementActions.createElement('views')
 
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <ElementButtons onCreate={createView} />
+        <div className="pull-right">
+          <BackButton />
+          <NewButton onClick={createView} />
+        </div>
         <strong>{gettext('Views')}</strong>
       </div>
 
@@ -21,7 +24,7 @@ const Views = ({ config, views, fetchElement, createElement, storeElement }) => 
       {
         filterElements(config, views).map((view, index) => (
           <View key={index} config={config} view={view}
-                fetchElement={fetchElement} storeElement={storeElement} />
+                elementActions={elementActions} />
         ))
       }
       </ul>
@@ -32,9 +35,7 @@ const Views = ({ config, views, fetchElement, createElement, storeElement }) => 
 Views.propTypes = {
   config: PropTypes.object.isRequired,
   views: PropTypes.array.isRequired,
-  fetchElement: PropTypes.func.isRequired,
-  createElement: PropTypes.func.isRequired,
-  storeElement: PropTypes.func.isRequired
+  elementActions: PropTypes.object.isRequired
 }
 
 export default Views

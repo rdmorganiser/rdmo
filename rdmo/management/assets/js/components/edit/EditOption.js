@@ -1,4 +1,4 @@
-import React, { Component} from 'react'
+import React, { Component, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap';
 
@@ -7,17 +7,26 @@ import Text from '../forms/Text'
 import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
-import ElementButtons from '../common/ElementButtons'
+import { BackButton, SaveButton, DeleteButton } from '../common/ElementButtons'
+import { DeleteElementModal } from '../common/ElementModals'
 
-const EditOption = ({ config, option, updateElement, storeElement }) => {
+import useDeleteModal from '../../hooks/useDeleteModal'
 
-  const updateOption = (key, value) => updateElement(option, key, value)
-  const storeOption = () => storeElement('options', option)
+const EditOption = ({ config, option, elementActions }) => {
+
+  const updateOption = (key, value) => elementActions.updateElement(option, key, value)
+  const storeOption = () => elementActions.storeElement('options', option)
+  const deleteOption = () => elementActions.deleteElement('options', option)
+
+  const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <ElementButtons onSave={storeOption} />
+        <div className="pull-right">
+          <BackButton />
+          <SaveButton onClick={storeOption} />
+        </div>
         {
           option.id ? <div>
             <strong>{gettext('Option')}{': '}</strong>
@@ -68,6 +77,27 @@ const EditOption = ({ config, option, updateElement, storeElement }) => {
           </div>
         </div>
       </div>
+
+      <div className="panel-footer">
+        <div className="pull-right">
+          <BackButton />
+          <SaveButton onClick={storeOption} />
+        </div>
+        <DeleteButton onClick={openDeleteModal} />
+      </div>
+
+      <DeleteElementModal title={gettext('Delete catalog')} show={showDeleteModal}
+                          onClose={closeDeleteModal} onDelete={deleteOption}>
+        <p>
+          {gettext('You are about to permanently delete the option:')}
+        </p>
+        <p>
+          <code className="code-options">{option.uri}</code>
+        </p>
+        <p className="text-danger">
+          {gettext('This action cannot be undone!')}
+        </p>
+      </DeleteElementModal>
     </div>
   )
 }
@@ -75,8 +105,7 @@ const EditOption = ({ config, option, updateElement, storeElement }) => {
 EditOption.propTypes = {
   config: PropTypes.object.isRequired,
   option: PropTypes.object.isRequired,
-  storeElement: PropTypes.func.isRequired,
-  updateElement: PropTypes.func.isRequired
+  elementActions: PropTypes.object.isRequired
 }
 
 export default EditOption

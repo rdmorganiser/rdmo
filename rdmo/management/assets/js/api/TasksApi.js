@@ -1,25 +1,29 @@
 import isNil from 'lodash/isNil'
 
-import { getData, postData, putData } from 'rdmo/core/assets/js/utils/api'
+import BaseApi from 'rdmo/core/assets/js/api/BaseApi'
 
-class TasksApi {
+class TasksApi extends BaseApi {
 
   static fetchTasks(action) {
     let url = '/api/v1/tasks/tasks/'
     if (action == 'index') url += 'index/'
-    return getData(url)
+    return this.get(url)
   }
 
   static fetchTask(id) {
-    return getData(`/api/v1/tasks/tasks/${id}/`)
+    return this.get(`/api/v1/tasks/tasks/${id}/`)
   }
 
   static storeTask(task) {
     if (isNil(task.id)) {
-      return postData(`/api/v1/tasks/tasks/`, task)
+      return this.post(`/api/v1/tasks/tasks/`, task)
     } else {
-      return putData(`/api/v1/tasks/tasks/${task.id}/`, task)
+      return this.put(`/api/v1/tasks/tasks/${task.id}/`, task)
     }
+  }
+
+  static deleteTask(task) {
+    return this.delete(`/api/v1/tasks/tasks/${task.id}/`)
   }
 
 }

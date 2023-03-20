@@ -4,22 +4,24 @@ import PropTypes from 'prop-types'
 import { filterElements } from '../../utils/filter'
 
 import Attribute from '../element/Attribute'
-import ElementButtons from '../common/ElementButtons'
+import { BackButton } from '../common/ElementButtons'
 
-const NestedAttribute = ({ config, attribute, fetchElement, storeElement }) => {
+const NestedAttribute = ({ config, attribute, elementActions }) => {
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <ElementButtons />
+        <div className="pull-right">
+          <BackButton />
+        </div>
         <Attribute config={config} attribute={attribute}
-                   fetchElement={fetchElement} storeElement={storeElement} list={false} />
+                   elementActions={elementActions} list={false} />
       </div>
 
       <ul className="list-group">
       {
         filterElements(config, attribute.elements).map((attribute, index) => (
           <Attribute key={index} config={config} attribute={attribute}
-                     fetchElement={fetchElement} storeElement={storeElement} indent={1} />
+                     elementActions={elementActions} indent={1} />
         ))
       }
       </ul>
@@ -30,8 +32,7 @@ const NestedAttribute = ({ config, attribute, fetchElement, storeElement }) => {
 NestedAttribute.propTypes = {
   config: PropTypes.object.isRequired,
   attribute: PropTypes.object.isRequired,
-  fetchElement: PropTypes.func.isRequired,
-  storeElement: PropTypes.func.isRequired
+  elementActions: PropTypes.object.isRequired
 }
 
 export default NestedAttribute

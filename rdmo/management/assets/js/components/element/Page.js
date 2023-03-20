@@ -8,17 +8,17 @@ import QuestionSet from './QuestionSet'
 import Question from './Question'
 import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/ElementLinks'
 
-const Page = ({ config, page, fetchElement, storeElement, list=true, indent=0 }) => {
+const Page = ({ config, page, elementActions, list=true, indent=0 }) => {
 
   const verboseName = gettext('page')
 
-  const fetchEdit = () => fetchElement('pages', page.id)
-  const fetchNested = () => fetchElement('pages', page.id, 'nested')
-  const toggleLocked = () => storeElement('pages', {...page, locked: !page.locked })
+  const fetchEdit = () => elementActions.fetchElement('pages', page.id)
+  const fetchNested = () => elementActions.fetchElement('pages', page.id, 'nested')
+  const toggleLocked = () => elementActions.storeElement('pages', {...page, locked: !page.locked })
 
   const elementNode = (
     <div className="element">
-      <div className="element-options">
+      <div className="pull-right">
         <EditLink element={page} verboseName={verboseName} onClick={fetchEdit} />
         <LockedLink element={page} verboseName={verboseName} onClick={toggleLocked} />
         <NestedLink element={page} verboseName={verboseName} onClick={fetchNested} />
@@ -45,12 +45,10 @@ const Page = ({ config, page, fetchElement, storeElement, list=true, indent=0 })
           filterElements(config, page.elements).map((element, index) => {
             if (isUndefined(element.text)) {
               return <QuestionSet key={index} config={config} questionset={element}
-                                  fetchElement={fetchElement} storeElement={storeElement}
-                                  indent={indent + 1} />
+                                  elementActions={elementActions} indent={indent + 1} />
             } else {
               return <Question key={index} config={config} question={element}
-                               fetchElement={fetchElement} storeElement={storeElement}
-                               indent={indent + 1} />
+                               elementActions={elementActions} indent={indent + 1} />
             }
           })
         }
@@ -64,8 +62,7 @@ const Page = ({ config, page, fetchElement, storeElement, list=true, indent=0 })
 Page.propTypes = {
   config: PropTypes.object.isRequired,
   page: PropTypes.object.isRequired,
-  fetchElement: PropTypes.func.isRequired,
-  storeElement: PropTypes.func.isRequired,
+  elementActions: PropTypes.object.isRequired,
   list: PropTypes.bool,
   indent: PropTypes.number
 }

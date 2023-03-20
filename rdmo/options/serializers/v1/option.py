@@ -21,10 +21,7 @@ class BaseOptionSerializer(TranslationSerializerMixin, serializers.ModelSerializ
             'locked',
             'text',
             'label',
-            'additional_input',
-            'optionsets',
-            'values_count',
-            'projects_count'
+            'additional_input'
         )
         trans_fields = (
             'text',

@@ -1,4 +1,4 @@
-import React, { Component} from 'react'
+import React, { Component, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap';
 
@@ -9,18 +9,27 @@ import Text from '../forms/Text'
 import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
-import ElementButtons from '../common/ElementButtons'
+import { BackButton, SaveButton, DeleteButton } from '../common/ElementButtons'
+import { DeleteElementModal } from '../common/ElementModals'
+
+import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditQuestion = ({ config, question, attributes, optionsets, options,
-                        conditions, widgetTypes, valueTypes, updateElement, storeElement }) => {
+                        conditions, widgetTypes, valueTypes , elementActions}) => {
 
-  const updateQuestion = (key, value) => updateElement(question, key, value)
-  const storeQuestion = () => storeElement('questions', question)
+  const updateQuestion = (key, value) => elementActions.updateElement(question, key, value)
+  const storeQuestion = () => elementActions.storeElement('questions', question)
+  const deleteQuestion = () => elementActions.deleteElement('questions', question)
+
+  const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <ElementButtons onSave={storeQuestion} />
+        <div className="pull-right">
+          <BackButton />
+          <SaveButton onClick={storeQuestion} />
+        </div>
         {
           question.id ? <div>
             <strong>{gettext('Question')}{': '}</strong>
@@ -163,6 +172,27 @@ const EditQuestion = ({ config, question, attributes, optionsets, options,
           </div>
         </div>
       </div>
+
+      <div className="panel-footer">
+        <div className="pull-right">
+          <BackButton />
+          <SaveButton onClick={storeQuestion} />
+        </div>
+        <DeleteButton onClick={openDeleteModal} />
+      </div>
+
+      <DeleteElementModal title={gettext('Delete catalog')} show={showDeleteModal}
+                          onClose={closeDeleteModal} onDelete={deleteQuestion}>
+        <p>
+          {gettext('You are about to permanently delete the question:')}
+        </p>
+        <p>
+          <code className="code-questions">{question.uri}</code>
+        </p>
+        <p className="text-danger">
+          {gettext('This action cannot be undone!')}
+        </p>
+      </DeleteElementModal>
     </div>
   )
 }
@@ -176,8 +206,7 @@ EditQuestion.propTypes = {
   options: PropTypes.array,
   widgetTypes: PropTypes.array,
   valueTypes: PropTypes.array,
-  storeElement: PropTypes.func.isRequired,
-  updateElement: PropTypes.func.isRequired
+  elementActions: PropTypes.object.isRequired
 }
 
 export default EditQuestion

@@ -4,16 +4,19 @@ import PropTypes from 'prop-types'
 import { filterElements } from '../../utils/filter'
 
 import QuestionSet from '../element/QuestionSet'
-import ElementButtons from '../common/ElementButtons'
+import { BackButton, NewButton } from '../common/ElementButtons'
 
-const QuestionSets = ({ config, questionsets, fetchElement, createElement, storeElement }) => {
+const QuestionSets = ({ config, questionsets, elementActions }) => {
 
-  const createQuestionSet = () => createElement('questionsets')
+  const createQuestionSet = () => elementActions.createElement('questionsets')
 
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <ElementButtons onCreate={createQuestionSet} />
+        <div className="pull-right">
+          <BackButton />
+          <NewButton onClick={createQuestionSet} />
+        </div>
         <strong>{gettext('Question sets')}</strong>
       </div>
 
@@ -21,7 +24,7 @@ const QuestionSets = ({ config, questionsets, fetchElement, createElement, store
       {
         filterElements(config, questionsets).map((questionset, index) => (
           <QuestionSet key={index} config={config} questionset={questionset}
-                       fetchElement={fetchElement} storeElement={storeElement} />
+                       elementActions={elementActions} />
         ))
       }
       </ul>
@@ -32,9 +35,7 @@ const QuestionSets = ({ config, questionsets, fetchElement, createElement, store
 QuestionSets.propTypes = {
   config: PropTypes.object.isRequired,
   questionsets: PropTypes.array.isRequired,
-  fetchElement: PropTypes.func.isRequired,
-  createElement: PropTypes.func.isRequired,
-  storeElement: PropTypes.func.isRequired
+  elementActions: PropTypes.object.isRequired
 }
 
 export default QuestionSets

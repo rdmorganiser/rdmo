@@ -40,6 +40,12 @@ export default function configReducer(state = initialState, action) {
       return {...state, ...{ pending: false }}
     case 'elements/storeElementError':
       return {...state, ...{ pending: false }}
+    case 'elements/deleteElementInit':
+      return {...state, ...{ pending: true }}
+    case 'elements/deleteElementSuccess':
+      return {...state, ...{ pending: false }}
+    case 'elements/deleteElementError':
+      return {...state, ...{ pending: false }}
     default:
       return state
   }

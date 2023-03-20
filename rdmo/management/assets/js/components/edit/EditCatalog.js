@@ -1,4 +1,4 @@
-import React, { Component} from 'react'
+import React, { Component, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap';
 
@@ -9,17 +9,26 @@ import Text from '../forms/Text'
 import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
-import ElementButtons from '../common/ElementButtons'
+import { BackButton, SaveButton, DeleteButton } from '../common/ElementButtons'
+import { DeleteElementModal } from '../common/ElementModals'
 
-const EditCatalog = ({ config, catalog, sites, groups, sections, updateElement, storeElement }) => {
+import useDeleteModal from '../../hooks/useDeleteModal'
 
-  const updateCatalog = (key, value) => updateElement(catalog, key, value)
-  const storeCatalog = () => storeElement('catalogs', catalog)
+const EditCatalog = ({ config, catalog, sites, groups, sections, elementActions }) => {
+
+  const updateCatalog = (key, value) => elementActions.updateElement(catalog, key, value)
+  const storeCatalog = () => elementActions.storeElement('catalogs', catalog)
+  const deleteCatalog = () => elementActions.deleteElement('catalogs', catalog)
+
+  const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <ElementButtons onSave={storeCatalog} />
+        <div className="pull-right">
+          <BackButton />
+          <SaveButton onClick={storeCatalog} />
+        </div>
         {
           catalog.id ? <div>
             <strong>{gettext('Catalog')}{': '}</strong>
@@ -74,9 +83,34 @@ const EditCatalog = ({ config, catalog, sites, groups, sections, updateElement, 
           </div>
         </div>
       </div>
+
+      <div className="panel-footer">
+        <div className="pull-right">
+          <BackButton />
+          <SaveButton onClick={storeCatalog} />
+        </div>
+        <DeleteButton onClick={openDeleteModal} />
+      </div>
+
+      <DeleteElementModal title={gettext('Delete catalog')} show={showDeleteModal}
+                          onClose={closeDeleteModal} onDelete={deleteCatalog}>
+        <p>
+          {gettext('You are about to permanently delete the catalog:')}
+        </p>
+        <p>
+          <code className="code-questions">{catalog.uri}</code>
+        </p>
+        <p dangerouslySetInnerHTML={{
+          __html: interpolate(gettext('This catalog is used in <b>%s projects</b>, which will not be usable afterwards.'), [catalog.projects_count])}} />
+        <p className="text-danger">
+          {gettext('This action cannot be undone!')}
+        </p>
+      </DeleteElementModal>
     </div>
   )
 }
+
+
 
 EditCatalog.propTypes = {
   config: PropTypes.object.isRequired,
@@ -84,8 +118,7 @@ EditCatalog.propTypes = {
   sites: PropTypes.array.isRequired,
   groups: PropTypes.array.isRequired,
   sections: PropTypes.array.isRequired,
-  storeElement: PropTypes.func.isRequired,
-  updateElement: PropTypes.func.isRequired
+  elementActions: PropTypes.object.isRequired
 }
 
 export default EditCatalog
