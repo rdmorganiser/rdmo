@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
 from django.db.models import Max
@@ -7,6 +9,7 @@ from rest_framework.utils import model_meta
 
 from rdmo.core.utils import get_language_warning, get_languages, markdown2html
 
+logger = logging.getLogger(__name__)
 
 class RecursiveField(serializers.Serializer):
 
@@ -187,6 +190,33 @@ class ElementWarningSerializerMixin(serializers.ModelSerializer):
 
     def get_warning(self, obj):
         return any([get_language_warning(obj, field_name) for field_name in self.Meta.warning_fields])
+
+
+class CanEditObjectSerializerMixin(object):
+    '''
+    A mixin for serializers that adds a boolean can_edit field.
+    Add the request to the context kwargs in the Serializer call:
+        ..., context={'request': request}
+
+    In the Serializer class add:
+        can_edit = serializers.SerializerMethodField(read_only=True)
+    and the field to fields:
+        can_edit
+    '''
+    @staticmethod
+    def construct_object_permission(model) -> str:
+        model_app_label = model._meta.app_label
+        model_name = model._meta.model_name
+        perm = f'{model_app_label}.change_{model_name}_object'
+        return perm
+
+    def get_can_edit(self, obj) -> bool:
+        try:
+            perm = self.construct_object_permission(self.Meta.model)
+            return self.context['request'].user.has_perm(perm, obj)
+        except Exception as exc:
+            logger.debug('CanEditObjectSerializerMixin exception: %s for obj %s' % (exc, obj))
+            return None
 
 
 class SiteSerializer(serializers.ModelSerializer):
