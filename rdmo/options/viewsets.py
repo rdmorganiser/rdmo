@@ -46,7 +46,7 @@ class OptionSetViewSet(CopyModelMixin, ModelViewSet):
     @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission, ])
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
-        serializer = OptionSetIndexSerializer(queryset, many=True)
+        serializer = OptionSetIndexSerializer(queryset, context={'request': request})
         return Response(serializer.data)
 
     @action(detail=True, permission_classes=[HasModelPermission | HasObjectPermission, ])
@@ -100,7 +100,7 @@ class OptionViewSet(CopyModelMixin, ModelViewSet):
     @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission, ])
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
-        serializer = OptionIndexSerializer(queryset, many=True)
+        serializer = OptionIndexSerializer(queryset, context={'request': request})
         return Response(serializer.data)
 
     @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission | HasObjectPermission,])
