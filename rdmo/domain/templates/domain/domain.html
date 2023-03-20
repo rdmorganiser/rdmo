@@ -115,7 +115,9 @@
                 {% include 'domain/domain_options.html' %}
             </div>
 
-            <strong>{% trans 'Attribute' %}</strong>
+            <strong ng-class="{'text-muted': !attribute.can_edit}">
+                {% trans 'Attribute' %}
+            </strong>
 
             <code>{$ attribute.uri $}</code>
         </div>
