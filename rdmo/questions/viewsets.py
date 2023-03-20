@@ -66,7 +66,7 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
     @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission, ])
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
-        serializer = CatalogIndexSerializer(queryset, many=True)
+        serializer = CatalogIndexSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
     @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission  | HasObjectPermission, ])
@@ -254,7 +254,7 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
     @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission, ])
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
-        serializer = QuestionSetIndexSerializer(queryset, many=True)
+        serializer = QuestionSetIndexSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
     @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission | HasObjectPermission, ])
