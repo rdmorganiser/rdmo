@@ -4,16 +4,19 @@ import PropTypes from 'prop-types'
 import { filterElements } from '../../utils/filter'
 
 import Section from '../element/Section'
-import ElementButtons from '../common/ElementButtons'
+import { BackButton, NewButton } from '../common/ElementButtons'
 
-const Sections = ({ config, sections, fetchElement, createElement, storeElement }) => {
+const Sections = ({ config, sections, elementActions }) => {
 
-  const createSection = () => createElement('sections')
+  const createSection = () => elementActions.createElement('sections')
 
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <ElementButtons onCreate={createSection} />
+        <div className="pull-right">
+          <BackButton />
+          <NewButton onClick={createSection} />
+        </div>
         <strong>{gettext('Sections')}</strong>
       </div>
 
@@ -21,7 +24,7 @@ const Sections = ({ config, sections, fetchElement, createElement, storeElement 
       {
         filterElements(config, sections).map((section, index) => (
           <Section key={index} config={config} section={section}
-                   fetchElement={fetchElement} storeElement={storeElement} />
+                   elementActions={elementActions} />
         ))
       }
       </ul>
@@ -32,9 +35,7 @@ const Sections = ({ config, sections, fetchElement, createElement, storeElement 
 Sections.propTypes = {
   config: PropTypes.object.isRequired,
   sections: PropTypes.array.isRequired,
-  fetchElement: PropTypes.func.isRequired,
-  createElement: PropTypes.func.isRequired,
-  storeElement: PropTypes.func.isRequired
+  elementActions: PropTypes.object.isRequired
 }
 
 export default Sections

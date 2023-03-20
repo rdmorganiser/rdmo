@@ -1,4 +1,4 @@
-import React, { Component} from 'react'
+import React, { Component, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap';
 
@@ -8,17 +8,27 @@ import Text from '../forms/Text'
 import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
-import ElementButtons from '../common/ElementButtons'
+import { BackButton, SaveButton, DeleteButton } from '../common/ElementButtons'
+import { DeleteElementModal } from '../common/ElementModals'
 
-const EditAttribute = ({ config, attribute, attributes, updateElement, storeElement }) => {
+import useDeleteModal from '../../hooks/useDeleteModal'
 
-  const updateAttribute = (key, value) => updateElement(attribute, key, value)
-  const storeAttribute = () => storeElement('attributes', attribute)
+const EditAttribute = ({ config, attribute, attributes, elementActions }) => {
+
+  const updateAttribute = (key, value) => elementActions.updateElement(attribute, key, value)
+  const storeAttribute = () => elementActions.storeElement('attributes', attribute)
+  const deleteAttribute = () => elementActions.deleteElement('attributes', attribute)
+
+  const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <ElementButtons onSave={storeAttribute} />
+        <div className="pull-right">
+          <BackButton />
+          <SaveButton onClick={storeAttribute} />
+          <DeleteButton onClick={openDeleteModal} />
+        </div>
         {
           attribute.id ? <div>
             <strong>{gettext('Attribute')}{': '}</strong>
@@ -51,6 +61,27 @@ const EditAttribute = ({ config, attribute, attributes, updateElement, storeElem
           </div>
         </div>
       </div>
+
+      <div className="panel-footer">
+        <div className="pull-right">
+          <BackButton />
+          <SaveButton onClick={storeAttribute} />
+        </div>
+        <DeleteButton onClick={openDeleteModal} />
+      </div>
+
+      <DeleteElementModal title={gettext('Delete catalog')} show={showDeleteModal}
+                          onClose={closeDeleteModal} onDelete={deleteAttribute}>
+        <p>
+          {gettext('You are about to permanently delete the attribute:')}
+        </p>
+        <p>
+          <code className="code-domain">{attribute.uri}</code>
+        </p>
+        <p className="text-danger">
+          {gettext('This action cannot be undone!')}
+        </p>
+      </DeleteElementModal>
     </div>
   )
 }
@@ -59,8 +90,7 @@ EditAttribute.propTypes = {
   config: PropTypes.object.isRequired,
   attribute: PropTypes.object.isRequired,
   attributes: PropTypes.array,
-  storeElement: PropTypes.func.isRequired,
-  updateElement: PropTypes.func.isRequired
+  elementActions: PropTypes.object.isRequired
 }
 
 export default EditAttribute

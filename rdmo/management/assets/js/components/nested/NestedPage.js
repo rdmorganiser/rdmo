@@ -7,15 +7,17 @@ import { filterElements } from '../../utils/filter'
 import Page from '../element/Page'
 import QuestionSet from '../element/QuestionSet'
 import Question from '../element/Question'
-import ElementButtons from '../common/ElementButtons'
+import { BackButton } from '../common/ElementButtons'
 
-const NestedPage = ({ config, page, fetchElement, storeElement }) => {
+const NestedPage = ({ config, page, elementActions }) => {
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <ElementButtons />
+        <div className="pull-right">
+          <BackButton />
+        </div>
         <Page config={config} page={page}
-              fetchElement={fetchElement} storeElement={storeElement} list={false} />
+              elementActions={elementActions} list={false} />
       </div>
 
       <ul className="list-group">
@@ -23,10 +25,10 @@ const NestedPage = ({ config, page, fetchElement, storeElement }) => {
           filterElements(config, page.elements).map((element, index) => {
             if (isUndefined(element.text)) {
               return <QuestionSet key={index} config={config} questionset={element}
-                                  fetchElement={fetchElement} storeElement={storeElement} />
+                                  elementActions={elementActions} />
             } else {
               return <Question key={index} config={config} question={element}
-                               fetchElement={fetchElement} storeElement={storeElement} />
+                               elementActions={elementActions} />
             }
           })
         }
@@ -38,8 +40,7 @@ const NestedPage = ({ config, page, fetchElement, storeElement }) => {
 NestedPage.propTypes = {
   config: PropTypes.object.isRequired,
   page: PropTypes.object.isRequired,
-  fetchElement: PropTypes.func.isRequired,
-  storeElement: PropTypes.func.isRequired
+  elementActions: PropTypes.object.isRequired
 }
 
 export default NestedPage

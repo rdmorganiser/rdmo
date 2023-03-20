@@ -7,18 +7,18 @@ import { filterElements } from '../../utils/filter'
 import Section from './Section'
 import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/ElementLinks'
 
-const Catalog = ({ config, catalog, fetchElement, storeElement, list=true }) => {
+const Catalog = ({ config, catalog, elementActions, list=true }) => {
 
   const verboseName = gettext('catalog')
 
-  const fetchEdit = () => fetchElement('catalogs', catalog.id)
-  const fetchNested = () => fetchElement('catalogs', catalog.id, 'nested')
-  const toggleAvailable = () => storeElement('catalogs', {...catalog, available: !catalog.available })
-  const toggleLocked = () => storeElement('catalogs', {...catalog, locked: !catalog.locked })
+  const fetchEdit = () => elementActions.fetchElement('catalogs', catalog.id)
+  const fetchNested = () => elementActions.fetchElement('catalogs', catalog.id, 'nested')
+  const toggleAvailable = () => elementActions.storeElement('catalogs', {...catalog, available: !catalog.available })
+  const toggleLocked = () => elementActions.storeElement('catalogs', {...catalog, locked: !catalog.locked })
 
   const elementNode = (
     <div className="element">
-      <div className="element-options">
+      <div className="pull-right">
         <EditLink element={catalog} verboseName={verboseName} onClick={fetchEdit} />
         <AvailableLink element={catalog} verboseName={verboseName} onClick={toggleAvailable} />
         <LockedLink element={catalog} verboseName={verboseName} onClick={toggleLocked} />
@@ -50,8 +50,7 @@ const Catalog = ({ config, catalog, fetchElement, storeElement, list=true }) => 
 Catalog.propTypes = {
   config: PropTypes.object.isRequired,
   catalog: PropTypes.object.isRequired,
-  fetchElement: PropTypes.func.isRequired,
-  storeElement: PropTypes.func.isRequired,
+  elementActions: PropTypes.object.isRequired,
   list: PropTypes.bool
 }
 

@@ -3,17 +3,17 @@ import PropTypes from 'prop-types'
 
 import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/ElementLinks'
 
-const Question = ({ config, question, fetchElement, storeElement, indent=0 }) => {
+const Question = ({ config, question,elementActions, indent=0 }) => {
 
   const verboseName = gettext('question')
 
-  const fetchEdit = () => fetchElement('questions', question.id)
-  const toggleLocked = () => storeElement('questions', {...question, locked: !question.locked })
+  const fetchEdit = () => elementActions.fetchElement('questions', question.id)
+  const toggleLocked = () => elementActions.storeElement('questions', {...question, locked: !question.locked })
 
   return (
     <li className="list-group-item">
       <div className="element">
-        <div className="element-options">
+        <div className="pull-right">
           <EditLink element={question} verboseName={verboseName} onClick={fetchEdit} />
           <LockedLink element={question} verboseName={verboseName} onClick={toggleLocked} />
           <ExportLink element={question} verboseName={verboseName} />
@@ -35,8 +35,7 @@ const Question = ({ config, question, fetchElement, storeElement, indent=0 }) =>
 Question.propTypes = {
   config: PropTypes.object.isRequired,
   question: PropTypes.object.isRequired,
-  fetchElement: PropTypes.func.isRequired,
-  storeElement: PropTypes.func.isRequired,
+  elementActions: PropTypes.object.isRequired,
   indent: PropTypes.number
 }
 

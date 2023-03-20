@@ -4,16 +4,19 @@ import PropTypes from 'prop-types'
 import { filterElements } from '../../utils/filter'
 
 import Option from '../element/Option'
-import ElementButtons from '../common/ElementButtons'
+import { BackButton, NewButton } from '../common/ElementButtons'
 
-const Options = ({ config, options, fetchElement, createElement, storeElement }) => {
+const Options = ({ config, options, elementActions }) => {
 
-  const createOption = () => createElement('options')
+  const createOption = () => elementActions.createElement('options')
 
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <ElementButtons onCreate={createOption} />
+        <div className="pull-right">
+          <BackButton />
+          <NewButton onClick={createOption} />
+        </div>
         <strong>{gettext('Options')}</strong>
       </div>
 
@@ -21,7 +24,7 @@ const Options = ({ config, options, fetchElement, createElement, storeElement })
       {
         filterElements(config, options).map((option, index) => (
           <Option key={index} config={config} option={option}
-                  fetchElement={fetchElement} storeElement={storeElement} />
+                  elementActions={elementActions} />
         ))
       }
       </ul>
@@ -32,9 +35,7 @@ const Options = ({ config, options, fetchElement, createElement, storeElement })
 Options.propTypes = {
   config: PropTypes.object.isRequired,
   options: PropTypes.array.isRequired,
-  fetchElement: PropTypes.func.isRequired,
-  createElement: PropTypes.func.isRequired,
-  storeElement: PropTypes.func.isRequired
+  elementActions: PropTypes.object.isRequired
 }
 
 export default Options

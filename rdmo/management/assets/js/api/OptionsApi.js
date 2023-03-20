@@ -1,50 +1,58 @@
 import isNil from 'lodash/isNil'
 
-import { getData, postData, putData } from 'rdmo/core/assets/js/utils/api'
+import BaseApi from 'rdmo/core/assets/js/api/BaseApi'
 
-class OptionsApi {
+class OptionsApi extends BaseApi {
 
   static fetchOptionSets(action) {
     let url = '/api/v1/options/optionsets/'
     if (action == 'index') url += 'index/'
     if (action == 'nested') url += 'nested/'
-    return getData(url)
+    return this.get(url)
   }
 
   static fetchOptionSet(id, action) {
     let url = `/api/v1/options/optionsets/${id}/`
     if (action == 'nested') url += 'nested/'
-    return getData(url)
+    return this.get(url)
   }
 
   static storeOptionSet(optionset) {
     if (isNil(optionset.id)) {
-      return postData(`/api/v1/options/optionsets/`, optionset)
+      return this.post(`/api/v1/options/optionsets/`, optionset)
     } else {
-      return putData(`/api/v1/options/optionsets/${optionset.id}/`, optionset)
+      return this.put(`/api/v1/options/optionsets/${optionset.id}/`, optionset)
     }
+  }
+
+  static deleteOptionSet(optionset) {
+    return this.delete(`/api/v1/options/optionsets/${optionset.id}/`)
   }
 
   static fetchOptions(action) {
     let url = '/api/v1/options/options/'
     if (action == 'index') url += 'index/'
-    return getData(url)
+    return this.get(url)
   }
 
   static fetchOption(id) {
-    return getData(`/api/v1/options/options/${id}/`)
+    return this.get(`/api/v1/options/options/${id}/`)
   }
 
   static storeOption(option) {
     if (isNil(option.id)) {
-      return postData(`/api/v1/options/options/`, option)
+      return this.post(`/api/v1/options/options/`, option)
     } else {
-      return putData(`/api/v1/options/options/${option.id}/`, option)
+      return this.put(`/api/v1/options/options/${option.id}/`, option)
     }
   }
 
+  static deleteOption(option) {
+    return this.delete(`/api/v1/options/options/${option.id}/`)
+  }
+
   static fetchProviders() {
-    return getData('/api/v1/options/providers/')
+    return this.get('/api/v1/options/providers/')
   }
 
 }

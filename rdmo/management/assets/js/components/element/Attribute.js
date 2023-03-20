@@ -6,17 +6,17 @@ import { filterElements } from '../../utils/filter'
 
 import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/ElementLinks'
 
-const Attribute = ({ config, attribute, fetchElement, storeElement, list=true, indent=0 }) => {
+const Attribute = ({ config, attribute, elementActions, list=true, indent=0 }) => {
 
   const verboseName = gettext('attribute')
 
-  const fetchEdit = () => fetchElement('attributes', attribute.id)
-  const fetchNested = () => fetchElement('attributes', attribute.id, 'nested')
-  const toggleLocked = () => storeElement('attributes', {...attribute, locked: !attribute.locked })
+  const fetchEdit = () => elementActions.fetchElement('attributes', attribute.id)
+  const fetchNested = () => elementActions.fetchElement('attributes', attribute.id, 'nested')
+  const toggleLocked = () => elementActions.storeElement('attributes', {...attribute, locked: !attribute.locked })
 
   const elementNode = (
     <div className="element">
-      <div className="element-options">
+      <div className="pull-right">
         <EditLink element={attribute} verboseName={verboseName} onClick={fetchEdit} />
         <LockedLink element={attribute} verboseName={verboseName} onClick={toggleLocked} />
         <NestedLink element={attribute} verboseName={verboseName} onClick={fetchNested} />
@@ -38,7 +38,7 @@ const Attribute = ({ config, attribute, fetchElement, storeElement, list=true, i
         {
           filterElements(config, attribute.elements).map((attribute, index) => (
             <Attribute key={index} config={config} attribute={attribute}
-                       fetchElement={fetchElement} storeElement={storeElement} indent={indent + 1}/>
+                       elementActions={elementActions} indent={indent + 1}/>
           ))
         }
       </React.Fragment>
@@ -51,8 +51,7 @@ const Attribute = ({ config, attribute, fetchElement, storeElement, list=true, i
 Attribute.propTypes = {
   config: PropTypes.object.isRequired,
   attribute: PropTypes.object.isRequired,
-  fetchElement: PropTypes.func.isRequired,
-  storeElement: PropTypes.func.isRequired,
+  elementActions: PropTypes.object.isRequired,
   list: PropTypes.bool,
   indent: PropTypes.number
 }

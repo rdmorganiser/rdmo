@@ -4,16 +4,19 @@ import PropTypes from 'prop-types'
 import { filterElements } from '../../utils/filter'
 
 import Task from '../element/Task'
-import ElementButtons from '../common/ElementButtons'
+import { BackButton, NewButton } from '../common/ElementButtons'
 
-const Tasks = ({ config, tasks, fetchElement, createElement, storeElement }) => {
+const Tasks = ({ config, tasks, elementActions }) => {
 
-  const createTask = () => createElement('tasks')
+  const createTask = () => elementActions.createElement('tasks')
 
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <ElementButtons onCreate={createTask} />
+        <div className="pull-right">
+          <BackButton />
+          <NewButton onClick={createTask} />
+        </div>
         <strong>{gettext('Tasks')}</strong>
       </div>
 
@@ -21,7 +24,7 @@ const Tasks = ({ config, tasks, fetchElement, createElement, storeElement }) => 
       {
         filterElements(config, tasks).map((task, index) => (
           <Task key={index} config={config} task={task}
-                fetchElement={fetchElement} storeElement={storeElement} />
+                elementActions={elementActions} />
         ))
       }
       </ul>
@@ -32,9 +35,7 @@ const Tasks = ({ config, tasks, fetchElement, createElement, storeElement }) => 
 Tasks.propTypes = {
   config: PropTypes.object.isRequired,
   tasks: PropTypes.array.isRequired,
-  fetchElement: PropTypes.func.isRequired,
-  createElement: PropTypes.func.isRequired,
-  storeElement: PropTypes.func.isRequired
+  elementActions: PropTypes.object.isRequired
 }
 
 export default Tasks

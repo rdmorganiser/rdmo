@@ -1,17 +1,17 @@
-import { getData } from '../utils/api'
+import BaseApi from './BaseApi'
 
-class CoreApi {
+class CoreApi extends BaseApi {
 
   static fetchSettings() {
-    return getData('/api/v1/core/settings/')
+    return this.get('/api/v1/core/settings/')
   }
 
   static fetchSites() {
-    return getData('/api/v1/core/sites/')
+    return this.get('/api/v1/core/sites/')
   }
 
   static fetchGroups() {
-    return getData('/api/v1/core/groups/')
+    return this.get('/api/v1/core/groups/')
   }
 
 }

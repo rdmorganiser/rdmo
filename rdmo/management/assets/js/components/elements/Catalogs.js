@@ -4,16 +4,19 @@ import PropTypes from 'prop-types'
 import { filterElements } from '../../utils/filter'
 
 import Catalog from '../element/Catalog'
-import ElementButtons from '../common/ElementButtons'
+import { BackButton, NewButton } from '../common/ElementButtons'
 
-const Catalogs = ({ config, catalogs, fetchElement, createElement, storeElement }) => {
+const Catalogs = ({ config, catalogs, elementActions }) => {
 
-  const createCatalog = () => createElement('catalogs')
+  const createCatalog = () => elementActions.createElement('catalogs')
 
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <ElementButtons onCreate={createCatalog} />
+        <div className="pull-right">
+          <BackButton />
+          <NewButton onClick={createCatalog} />
+        </div>
         <strong>{gettext('Catalogs')}</strong>
       </div>
 
@@ -21,7 +24,7 @@ const Catalogs = ({ config, catalogs, fetchElement, createElement, storeElement 
       {
         filterElements(config, catalogs).map((catalog, index) => (
           <Catalog key={index} config={config} catalog={catalog}
-                   fetchElement={fetchElement} storeElement={storeElement} />
+                   elementActions={elementActions} />
         ))
       }
       </ul>
@@ -32,9 +35,7 @@ const Catalogs = ({ config, catalogs, fetchElement, createElement, storeElement 
 Catalogs.propTypes = {
   config: PropTypes.object.isRequired,
   catalogs: PropTypes.array.isRequired,
-  fetchElement: PropTypes.func.isRequired,
-  createElement: PropTypes.func.isRequired,
-  storeElement: PropTypes.func.isRequired
+  elementActions: PropTypes.object.isRequired
 }
 
 export default Catalogs

@@ -112,20 +112,13 @@ a.disabled {
             margin-bottom: 0;
         }
     }
-    .element-options {
-        float: right;
-
-        a {
-            margin-left: 4px;
-        }
+    .element-link {
+        margin-left: 4px;
     }
-    .element-buttons {
-        float: right;
+    .element-button {
+        margin-left: 4px;
 
-        button {
-            margin-left: 4px;
-        }
-        button:first-child {
+        &:first-child {
             margin-left: 8px;
         }
     }

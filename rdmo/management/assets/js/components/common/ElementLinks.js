@@ -12,7 +12,7 @@ const EditLink = ({ element, verboseName, onClick }) => {
   const title = interpolate(gettext('Edit %s'), [verboseName])
 
   return (
-    <a href="" className="fa fa-pencil"
+    <a href="" className="element-link fa fa-pencil"
        title={title}
        onClick={event => handleClick(event)}>
     </a>
@@ -33,6 +33,7 @@ const AvailableLink = ({ element, verboseName, onClick }) => {
   }
 
   const className = classNames({
+    'element-link': true,
     'fa': true,
     'fa-toggle-on': element.available,
     'fa-toggle-off': !element.available,
@@ -64,6 +65,7 @@ const LockedLink = ({ element, verboseName, onClick }) => {
   }
 
   const className = classNames({
+    'element-link': true,
     'fa': true,
     'fa fa-lock': element.locked,
     'fa fa-unlock-alt': !element.locked
@@ -90,7 +92,7 @@ const ExportLink = ({ element, verboseName }) => {
   const title = interpolate(gettext('Export %s as XML'), [verboseName])
 
   return (
-    <a href={element.xml_url} className="fa fa-download"
+    <a href={element.xml_url} className="element-link fa fa-download"
        title={title} target="_blank">
     </a>
   )
@@ -111,7 +113,7 @@ const NestedLink = ({ element, verboseName, onClick }) => {
   const title = gettext('View nested')
 
   return (
-    <a href="" className="fa fa-align-right flip"
+    <a href="" className="element-link fa fa-align-right flip"
        title={title}
        onClick={event => handleClick(event)}>
     </a>

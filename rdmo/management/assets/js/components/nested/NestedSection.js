@@ -5,22 +5,24 @@ import { filterElements } from '../../utils/filter'
 
 import Section from '../element/Section'
 import Page from '../element/Page'
-import ElementButtons from '../common/ElementButtons'
+import { BackButton } from '../common/ElementButtons'
 
-const NestedCatalog = ({ config, section, fetchElement, storeElement }) => {
+const NestedCatalog = ({ config, section, elementActions }) => {
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <ElementButtons />
+        <div className="pull-right">
+          <BackButton />
+        </div>
         <Section config={config} section={section}
-                 fetchElement={fetchElement} storeElement={storeElement} list={false} />
+                 elementActions={elementActions} list={false} />
       </div>
 
       <ul className="list-group">
       {
         filterElements(config, section.elements).map((page, index) => (
           <Page key={index} config={config} page={page}
-                fetchElement={fetchElement} storeElement={storeElement} />
+                elementActions={elementActions} />
         ))
       }
       </ul>
@@ -31,8 +33,7 @@ const NestedCatalog = ({ config, section, fetchElement, storeElement }) => {
 NestedCatalog.propTypes = {
   config: PropTypes.object.isRequired,
   section: PropTypes.object.isRequired,
-  fetchElement: PropTypes.func.isRequired,
-  storeElement: PropTypes.func.isRequired
+  elementActions: PropTypes.object.isRequired
 }
 
 export default NestedCatalog

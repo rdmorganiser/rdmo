@@ -4,16 +4,19 @@ import PropTypes from 'prop-types'
 import { filterElements } from '../../utils/filter'
 
 import Attribute from '../element/Attribute'
-import ElementButtons from '../common/ElementButtons'
+import { BackButton, NewButton } from '../common/ElementButtons'
 
-const Attributes = ({ config, attributes, fetchElement, createElement, storeElement }) => {
+const Attributes = ({ config, attributes, elementActions }) => {
 
-  const createAttribute = () => createElement('attributes')
+  const createAttribute = () => elementActions.createElement('attributes')
 
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <ElementButtons onCreate={createAttribute} />
+        <div className="pull-right">
+          <BackButton />
+          <NewButton onClick={createAttribute} />
+        </div>
         <strong>{gettext('Attributes')}</strong>
       </div>
 
@@ -21,7 +24,7 @@ const Attributes = ({ config, attributes, fetchElement, createElement, storeElem
       {
         filterElements(config, attributes).map((attribute, index) => (
           <Attribute key={index} config={config} attribute={attribute}
-                     fetchElement={fetchElement} storeElement={storeElement} />
+                     elementActions={elementActions} />
         ))
       }
       </ul>
@@ -32,9 +35,7 @@ const Attributes = ({ config, attributes, fetchElement, createElement, storeElem
 Attributes.propTypes = {
   config: PropTypes.object.isRequired,
   attributes: PropTypes.array.isRequired,
-  fetchElement: PropTypes.func.isRequired,
-  createElement: PropTypes.func.isRequired,
-  storeElement: PropTypes.func.isRequired
+  elementActions: PropTypes.object.isRequired
 }
 
 export default Attributes

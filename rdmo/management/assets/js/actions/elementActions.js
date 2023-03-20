@@ -82,7 +82,8 @@ export function fetchElements(elementType) {
         break
     }
 
-    dispatch(action).catch(error => dispatch(fetchElementsError(error)))
+    dispatch(action)
+      .catch(error => dispatch(fetchElementsError(error)))
   }
 }
 
@@ -111,36 +112,41 @@ export function fetchElement(elementType, elementId, elementAction) {
     let action
     switch (elementType) {
       case 'catalogs':
-        action = (elementAction == 'nested')
-          ? (dispatch, getState) => QuestionsApi.fetchCatalog(elementId, 'nested')
-              .then(element => dispatch(fetchElementSuccess({ element })))
-          : (dispatch, getState) => Promise.all([
-              QuestionsApi.fetchCatalog(elementId),
-              QuestionsApi.fetchSections('index'),
-              CoreApi.fetchGroups(),
-              CoreApi.fetchSites(),
-            ]).then(([element, sections, groups, sites]) => dispatch(fetchElementSuccess({
-              element, sections, groups, sites
-            })))
+        if (elementAction == 'nested') {
+          action = (dispatch, getState) => QuestionsApi.fetchCatalog(elementId, 'nested')
+            .then(element => dispatch(fetchElementSuccess({ element })))
+        } else {
+          action = (dispatch, getState) => Promise.all([
+            QuestionsApi.fetchCatalog(elementId),
+            QuestionsApi.fetchSections('index'),
+            CoreApi.fetchGroups(),
+            CoreApi.fetchSites(),
+          ]).then(([element, sections, groups, sites]) => dispatch(fetchElementSuccess({
+            element, sections, groups, sites
+          })))
+        }
         break
 
       case 'sections':
-        action = (elementAction == 'nested')
-          ? (dispatch, getState) => QuestionsApi.fetchSection(elementId, 'nested')
-              .then(element => dispatch(fetchElementSuccess({ element })))
-                  : Promise.all([
-              QuestionsApi.fetchSection(elementId),
-              QuestionsApi.fetchPages('index'),
-            ]).then(([element, pages]) => dispatch(fetchElementSuccess({
-              element, pages
-            })))
+        if (elementAction == 'nested') {
+          action = (dispatch, getState) => QuestionsApi.fetchSection(elementId, 'nested')
+            .then(element => dispatch(fetchElementSuccess({ element })))
+        } else {
+          action = (dispatch, getState) => Promise.all([
+            QuestionsApi.fetchSection(elementId),
+            QuestionsApi.fetchPages('index'),
+          ]).then(([element, pages]) => dispatch(fetchElementSuccess({
+            element, pages
+          })))
+        }
         break
 
       case 'pages':
-        action = (elementAction == 'nested')
-          ? (dispatch, getState) => QuestionsApi.fetchPage(elementId, 'nested')
+        if (elementAction == 'nested') {
+          action = (dispatch, getState) => QuestionsApi.fetchPage(elementId, 'nested')
             .then(element => dispatch(fetchElementSuccess({ element })))
-          : (dispatch, getState) => Promise.all([
+        } else {
+          action = (dispatch, getState) => Promise.all([
             QuestionsApi.fetchPage(elementId),
             DomainApi.fetchAttributes('index'),
             ConditionsApi.fetchConditions('index'),
@@ -150,62 +156,74 @@ export function fetchElement(elementType, elementId, elementAction) {
                     questions]) => dispatch(fetchElementSuccess({
             element, attributes, conditions, questionsets, questions
           })))
+        }
         break
 
       case 'questionsets':
-        action = (elementAction == 'nested')
-          ? (dispatch, getState) => QuestionsApi.fetchQuestionSet(elementId, 'nested')
+        if (elementAction == 'nested') {
+          action = (dispatch, getState) => QuestionsApi.fetchQuestionSet(elementId, 'nested')
             .then(element => dispatch(fetchElementSuccess({ element })))
-          : (dispatch, getState) => Promise.all([
-          QuestionsApi.fetchQuestionSet(elementId),
-          DomainApi.fetchAttributes('index'),
-          ConditionsApi.fetchConditions('index'),
-          QuestionsApi.fetchQuestionSets('index'),
-          QuestionsApi.fetchQuestions('index')
-        ]).then(([element, attributes, conditions, questionsets,
-                  questions]) => dispatch(fetchElementSuccess({
-          element, attributes, conditions, questionsets, questions
-        })))
+        } else {
+          action = (dispatch, getState) => Promise.all([
+            QuestionsApi.fetchQuestionSet(elementId),
+            DomainApi.fetchAttributes('index'),
+            ConditionsApi.fetchConditions('index'),
+            QuestionsApi.fetchQuestionSets('index'),
+            QuestionsApi.fetchQuestions('index')
+          ]).then(([element, attributes, conditions, questionsets,
+                    questions]) => dispatch(fetchElementSuccess({
+            element, attributes, conditions, questionsets, questions
+          })))
+        }
         break
 
       case 'questions':
-        action = (dispatch, getState) => Promise.all([
-          QuestionsApi.fetchQuestion(elementId),
-          DomainApi.fetchAttributes('index'),
-          OptionsApi.fetchOptionSets('index'),
-          OptionsApi.fetchOptions('index'),
-          ConditionsApi.fetchConditions('index'),
-          QuestionsApi.fetchWidgetTypes(),
-          QuestionsApi.fetchValueTypes()
-        ]).then(([element, attributes, optionsets, options, conditions,
-                  widgetTypes, valueTypes]) => dispatch(fetchElementSuccess({
-          element, attributes, optionsets, options, conditions, widgetTypes, valueTypes
-        })))
+        if (elementAction == 'nested') {
+          action = (dispatch, getState) => QuestionsApi.fetchQuestion(elementId, 'nested')
+            .then(element => dispatch(fetchElementSuccess({ element })))
+        } else {
+          action = (dispatch, getState) => Promise.all([
+            QuestionsApi.fetchQuestion(elementId),
+            DomainApi.fetchAttributes('index'),
+            OptionsApi.fetchOptionSets('index'),
+            OptionsApi.fetchOptions('index'),
+            ConditionsApi.fetchConditions('index'),
+            QuestionsApi.fetchWidgetTypes(),
+            QuestionsApi.fetchValueTypes()
+          ]).then(([element, attributes, optionsets, options, conditions,
+                    widgetTypes, valueTypes]) => dispatch(fetchElementSuccess({
+            element, attributes, optionsets, options, conditions, widgetTypes, valueTypes
+          })))
+        }
         break
 
       case 'attributes':
-        action = (elementAction == 'nested')
-          ? (dispatch, getState) => DomainApi.fetchAttribute(elementId, 'nested')
+        if (elementAction == 'nested') {
+          action = (dispatch, getState) => DomainApi.fetchAttribute(elementId, 'nested')
             .then(element => dispatch(fetchElementSuccess({ element })))
-          : (dispatch, getState) => Promise.all([
+        } else {
+          action = (dispatch, getState) => Promise.all([
             DomainApi.fetchAttribute(elementId),
             DomainApi.fetchAttributes('index'),
           ]).then(([element, attributes]) => dispatch(fetchElementSuccess({
             element, attributes
           })))
+        }
         break
 
       case 'optionsets':
-        action = (elementAction == 'nested')
-          ? (dispatch, getState) => OptionsApi.fetchOptionSet(elementId, 'nested')
+        if (elementAction == 'nested') {
+          action = (dispatch, getState) => OptionsApi.fetchOptionSet(elementId, 'nested')
             .then(element => dispatch(fetchElementSuccess({element })))
-          : (dispatch, getState) => Promise.all([
+        } else {
+          action = (dispatch, getState) => Promise.all([
             OptionsApi.fetchOptionSet(elementId),
             OptionsApi.fetchOptions('index'),
             OptionsApi.fetchProviders(),
           ]).then(([element, options, providers]) => dispatch(fetchElementSuccess({
             element, options, providers
           })))
+        }
         break
 
       case 'options':
@@ -254,7 +272,8 @@ export function fetchElement(elementType, elementId, elementAction) {
         break
     }
 
-    dispatch(action).catch(error => dispatch(fetchElementError(error)))
+    dispatch(action)
+      .catch(error => dispatch(fetchElementError(error)))
   }
 }
 
@@ -334,7 +353,8 @@ export function storeElement(elementType, element) {
         break
     }
 
-    dispatch(action).catch(error => dispatch(storeElementError(element, error)))
+    dispatch(action)
+      .catch(error => dispatch(storeElementError(element, error)))
   }
 }
 
@@ -618,6 +638,81 @@ export function createView() {
       dispatch(createElementError(error))
     })
   }
+}
+
+// delete element
+
+export function deleteElement(elementType, element) {
+  return function(dispatch, getState) {
+    dispatch(deleteElementInit(element))
+
+    let action
+    switch (elementType) {
+      case 'catalogs':
+        action = (dispatch, getState) => QuestionsApi.deleteCatalog(element)
+        break
+
+      case 'sections':
+        action = (dispatch, getState) => QuestionsApi.deleteSection(element)
+        break
+
+      case 'pages':
+        action = (dispatch, getState) => QuestionsApi.deletePage(element)
+        break
+
+      case 'questionsets':
+        action = (dispatch, getState) => QuestionsApi.deleteQuestionSet(element)
+        break
+
+      case 'questions':
+        action = (dispatch, getState) => QuestionsApi.deleteQuestion(element)
+        break
+
+      case 'attributes':
+        action = (dispatch, getState) => DomainApi.deleteAttribute(element)
+        break
+
+      case 'optionsets':
+        action = (dispatch, getState) => OptionsApi.deleteOptionSet(element)
+        break
+
+      case 'options':
+        action = (dispatch, getState) => OptionsApi.deleteOption(element)
+        break
+
+      case 'conditions':
+        action = (dispatch, getState) => ConditionsApi.deleteCondition(element)
+
+        break
+
+      case 'tasks':
+        action = (dispatch, getState) => TasksApi.deleteTask(element)
+        break
+
+      case 'views':
+        action = (dispatch, getState) => ViewsApi.deleteView(element)
+        break
+    }
+
+    dispatch(action)
+      .then(() => {
+        dispatch(deleteElementSuccess(element))
+        dispatch(fetchElements(elementType))
+      })
+      .catch(error => dispatch(deleteElementError(element, error)))
+  }
+}
+
+export function deleteElementInit(element) {
+  return {type: 'elements/deleteElementInit', element}
+}
+
+export function deleteElementSuccess(element) {
+  return {type: 'elements/deleteElementSuccess', element}
+}
+
+export function deleteElementError(element, error) {
+  return {type: 'elements/deleteElementError', element, error}
 }
 
 // update elements
