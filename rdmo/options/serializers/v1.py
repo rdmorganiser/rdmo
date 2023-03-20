@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 
 from rdmo.conditions.models import Condition
-from rdmo.core.serializers import TranslationSerializerMixin, SiteSerializer
+from rdmo.core.serializers import TranslationSerializerMixin, SiteSerializer, CanEditObjectSerializerMixin
 from rdmo.core.utils import get_language_warning
 from rdmo.questions.models import QuestionSet
 
@@ -32,11 +32,11 @@ class ConditionSerializer(serializers.ModelSerializer):
         )
 
 
-class OptionSetSerializer(serializers.ModelSerializer):
+class OptionSetSerializer(CanEditObjectSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.SlugField(required=True)
     questions = QuestionSerializer(many=True, read_only=True)
-    editors = SiteSerializer(many=True, read_only=True)
+    can_edit = serializers.SerializerMethodField()
 
     class Meta:
         model = OptionSet
@@ -47,6 +47,7 @@ class OptionSetSerializer(serializers.ModelSerializer):
             'key',
             'comment',
             'locked',
+            'can_edit',
             'order',
             'editors',
             'provider_key',
@@ -59,14 +60,14 @@ class OptionSetSerializer(serializers.ModelSerializer):
         )
 
 
-class OptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
+class OptionSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.SlugField(required=True)
     optionset = serializers.PrimaryKeyRelatedField(queryset=OptionSet.objects.all(), required=True)
     conditions = ConditionSerializer(many=True, read_only=True)
     values_count = serializers.IntegerField(read_only=True)
     projects_count = serializers.IntegerField(read_only=True)
-    editors = SiteSerializer(many=True, read_only=True)
+    can_edit = serializers.SerializerMethodField()
 
     class Meta:
         model = Option
@@ -78,6 +79,7 @@ class OptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'key',
             'comment',
             'locked',
+            'can_edit',
             'order',
             'editors',
             'text',
@@ -155,11 +157,11 @@ class ProviderNestedSerializer(serializers.Serializer):
         )
 
 
-class OptionNestedSerializer(serializers.ModelSerializer):
+class OptionNestedSerializer(CanEditObjectSerializerMixin, serializers.ModelSerializer):
 
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
-    editors = SiteSerializer(many=True, read_only=True)
+    can_edit = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Option
@@ -169,6 +171,7 @@ class OptionNestedSerializer(serializers.ModelSerializer):
             'uri_prefix',
             'path',
             'locked',
+            'can_edit',
             'editors',
             'order',
             'text',
@@ -183,13 +186,14 @@ class OptionNestedSerializer(serializers.ModelSerializer):
         return reverse('v1-options:option-detail-export', args=[obj.pk])
 
 
-class OptionSetNestedSerializer(serializers.ModelSerializer):
+class OptionSetNestedSerializer(CanEditObjectSerializerMixin, serializers.ModelSerializer):
 
     options = OptionNestedSerializer(many=True)
     conditions = ConditionNestedSerializer(many=True)
     provider = ProviderNestedSerializer()
     xml_url = serializers.SerializerMethodField()
     editors = SiteSerializer(many=True, read_only=True)
+    can_edit = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = OptionSet
@@ -200,6 +204,7 @@ class OptionSetNestedSerializer(serializers.ModelSerializer):
             'key',
             'order',
             'locked',
+            'can_edit',
             'editors',
             'provider',
             'options',

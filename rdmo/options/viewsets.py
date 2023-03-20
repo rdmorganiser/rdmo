@@ -40,13 +40,13 @@ class OptionSetViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=False)
     def nested(self, request):
-        serializer = OptionSetNestedSerializer(self.get_queryset(), many=True)
+        serializer = OptionSetNestedSerializer(self.get_queryset(), many=True, context={'request': request})
         return Response(serializer.data)
 
     @action(detail=False)
     def index(self, request):
         queryset = OptionSet.objects.order_by('order').prefetch_related('options')
-        serializer = OptionSetIndexSerializer(queryset, many=True)
+        serializer = OptionSetIndexSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
     @action(detail=False, permission_classes=[HasModelPermission])
@@ -82,7 +82,7 @@ class OptionViewSet(CopyModelMixin, ModelViewSet):
     @action(detail=False)
     def index(self, request):
         queryset = Option.objects.order_by('optionset__order', 'order')
-        serializer = OptionIndexSerializer(queryset, many=True)
+        serializer = OptionIndexSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
     @action(detail=False, permission_classes=[HasModelPermission])
