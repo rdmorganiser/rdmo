@@ -69,13 +69,13 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=True, permission_classes=[HasModelPermission])
     def nested(self, request, pk):
-        serializer = CatalogNestedSerializer(self.get_object())
+        serializer = CatalogNestedSerializer(instance=self.get_object(), context={'request': request})
         return Response(serializer.data)
 
     @action(detail=False, permission_classes=[HasModelPermission])
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
-        serializer = CatalogIndexSerializer(queryset, many=True)
+        serializer = CatalogIndexSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
     @action(detail=False, permission_classes=[HasModelPermission])
@@ -129,7 +129,7 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=True, permission_classes=[HasModelPermission])
     def nested(self, request, pk):
-        serializer = SectionNestedSerializer(self.get_object())
+        serializer = SectionNestedSerializer(instance=self.get_object(), context={'request': request})
         return Response(serializer.data)
 
     @action(detail=False)
@@ -189,13 +189,13 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=True, permission_classes=[HasModelPermission])
     def nested(self, request, pk):
-        serializer = QuestionSetNestedSerializer(self.get_queryset(), many=True)
+        serializer = QuestionSetNestedSerializer(self.get_queryset(), many=True, context={'request': request})
         return Response(serializer.data)
 
     @action(detail=False, permission_classes=[HasModelPermission])
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
-        serializer = QuestionSetIndexSerializer(queryset, many=True)
+        serializer = QuestionSetIndexSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
     @action(detail=False, permission_classes=[HasModelPermission])
@@ -244,7 +244,7 @@ class QuestionViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=True, permission_classes=[HasModelPermission])
     def nested(self, request, pk):
-        serializer = QuestionNestedSerializer(self.get_object())
+        serializer = QuestionNestedSerializer(instance=self.get_object(), context={'request': request})
         return Response(serializer.data)
 
     @action(detail=False, permission_classes=[HasModelPermission])
