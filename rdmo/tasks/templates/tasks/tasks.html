@@ -102,6 +102,9 @@
                         ng-show="task.warning"></span>
 
                     <i class="fa fa-lock text-danger" ng-show="task.locked"></i>
+                    <i class="fa fa-ban text-muted" ng-hide="task.can_edit"
+                        title="{% trans 'Read only' %}">
+                    </i>
 
                     <a href="" class="fa fa-pencil"
                         title="{% trans 'Update task' %}"
@@ -128,7 +131,9 @@
                         ng-click="service.openDeleteModal('tasks', task)">
                     </a>
                 </div>
-                <strong>{% trans 'Task' %}</strong>
+                <strong ng-class="{'text-muted': !task.can_edit}">
+                    {% trans 'Task' %}
+                </strong>
                 <code class="code-tasks">{$ task.uri $}</code>
             </div>
 
