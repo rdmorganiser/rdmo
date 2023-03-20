@@ -3,16 +3,17 @@ from rest_framework import exceptions, serializers
 from rest_framework.reverse import reverse
 
 from rdmo.core.serializers import (MarkdownSerializerMixin, SiteSerializer,
-                                   TranslationSerializerMixin)
+                                   TranslationSerializerMixin, CanEditObjectSerializerMixin)
 from rdmo.core.utils import get_language_warning
 
 from ..models import View
 from ..validators import ViewLockedValidator, ViewUniqueURIValidator
 
 
-class ViewSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
+class ViewSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.SlugField(required=True)
+    can_edit = serializers.SerializerMethodField()
 
     def validate(self, data):
         # try to render the template to see that the syntax is ok (if the editor was used)
@@ -39,6 +40,7 @@ class ViewSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'catalogs',
             'sites',
             'editors',
+            'can_edit',
             'groups',
             'template'
         )
@@ -52,7 +54,7 @@ class ViewSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
         )
 
 
-class ViewIndexSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
+class ViewIndexSerializer(CanEditObjectSerializerMixin, MarkdownSerializerMixin, serializers.ModelSerializer):
 
     markdown_fields = ('help', )
 
@@ -60,6 +62,7 @@ class ViewIndexSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
     editors = SiteSerializer(many=True, read_only=True)
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
+    can_edit = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = View
@@ -72,6 +75,7 @@ class ViewIndexSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
             'available',
             'sites',
             'editors',
+            'can_edit',
             'title',
             'help',
             'warning',
