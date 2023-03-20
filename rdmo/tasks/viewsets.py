@@ -29,7 +29,7 @@ class TaskViewSet(CopyModelMixin, ModelViewSet):
     @action(detail=False)
     def index(self, request):
         queryset = Task.objects.select_related('start_attribute', 'end_attribute')
-        serializer = TaskIndexSerializer(queryset, many=True)
+        serializer = TaskIndexSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
     @action(detail=False, permission_classes=[HasModelPermission])

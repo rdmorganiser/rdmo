@@ -2,16 +2,17 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 
 from rdmo.core.serializers import (MarkdownSerializerMixin, SiteSerializer,
-                                   TranslationSerializerMixin)
+                                   TranslationSerializerMixin, CanEditObjectSerializerMixin)
 from rdmo.core.utils import get_language_warning
 
 from ..models import Task
 from ..validators import TaskLockedValidator, TaskUniqueURIValidator
 
 
-class TaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
+class TaskSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.SlugField(required=True)
+    can_edit = serializers.SerializerMethodField()
 
     class Meta:
         model = Task
@@ -26,6 +27,7 @@ class TaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'catalogs',
             'sites',
             'editors',
+            'can_edit',
             'groups',
             'start_attribute',
             'end_attribute',
@@ -43,7 +45,7 @@ class TaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
         )
 
 
-class TaskIndexSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
+class TaskIndexSerializer(CanEditObjectSerializerMixin, MarkdownSerializerMixin, serializers.ModelSerializer):
 
     markdown_fields = ('text', )
 
@@ -51,6 +53,7 @@ class TaskIndexSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
     editors = SiteSerializer(many=True, read_only=True)
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
+    can_edit = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Task
@@ -63,6 +66,7 @@ class TaskIndexSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
             'available',
             'sites',
             'editors',
+            'can_edit',
             'title',
             'text',
             'warning',
