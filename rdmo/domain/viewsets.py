@@ -36,13 +36,13 @@ class AttributeViewSet(CopyModelMixin, ModelViewSet):
     @action(detail=False)
     def nested(self, request):
         queryset = Attribute.objects.get_cached_trees()
-        serializer = AttributeNestedSerializer(queryset, many=True)
+        serializer = AttributeNestedSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
     @action(detail=False)
     def index(self, request):
         queryset = Attribute.objects.order_by('path')
-        serializer = AttributeIndexSerializer(queryset, many=True)
+        serializer = AttributeIndexSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
     @action(detail=False, permission_classes=[HasModelPermission & HasObjectPermission])

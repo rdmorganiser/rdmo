@@ -3,6 +3,7 @@ import logging
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
+from rdmo.core.serializers import CanEditObjectSerializerMixin
 from rdmo.conditions.models import Condition
 from rdmo.questions.models import Question, QuestionSet
 from rdmo.tasks.models import Task
@@ -58,7 +59,7 @@ class TaskSerializer(serializers.ModelSerializer):
         )
 
 
-class AttributeSerializer(serializers.ModelSerializer):
+class AttributeSerializer(CanEditObjectSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.SlugField(required=True)
     parent = serializers.PrimaryKeyRelatedField(queryset=Attribute.objects.all(), default=None, allow_null=True)
@@ -70,6 +71,7 @@ class AttributeSerializer(serializers.ModelSerializer):
     tasks_as_end = TaskSerializer(many=True, read_only=True)
     values_count = serializers.IntegerField(read_only=True)
     projects_count = serializers.IntegerField(read_only=True)
+    can_edit = serializers.SerializerMethodField()
 
     class Meta:
         model = Attribute
@@ -81,6 +83,7 @@ class AttributeSerializer(serializers.ModelSerializer):
             'path',
             'comment',
             'locked',
+            'can_edit',
             'editors',
             'parent',
             'conditions',
@@ -98,10 +101,11 @@ class AttributeSerializer(serializers.ModelSerializer):
         )
 
 
-class AttributeNestedSerializer(serializers.ModelSerializer):
+class AttributeNestedSerializer(CanEditObjectSerializerMixin, serializers.ModelSerializer):
 
     children = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
+    can_edit = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Attribute
@@ -112,19 +116,22 @@ class AttributeNestedSerializer(serializers.ModelSerializer):
             'path',
             'key',
             'locked',
+            'can_edit',
             'children',
             'xml_url'
         )
 
     def get_children(self, obj):
         # get the children from the cached mptt tree
-        return AttributeNestedSerializer(obj.get_children(), many=True, read_only=True).data
+        return AttributeNestedSerializer(obj.get_children(), many=True, read_only=True, context=self.context).data
 
     def get_xml_url(self, obj):
         return reverse('v1-domain:attribute-detail-export', args=[obj.pk])
 
 
-class AttributeIndexSerializer(serializers.ModelSerializer):
+class AttributeIndexSerializer(CanEditObjectSerializerMixin, serializers.ModelSerializer):
+
+    can_edit = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Attribute
@@ -132,5 +139,6 @@ class AttributeIndexSerializer(serializers.ModelSerializer):
             'id',
             'uri',
             'key',
-            'path'
+            'path',
+            'can_edit'
         )
