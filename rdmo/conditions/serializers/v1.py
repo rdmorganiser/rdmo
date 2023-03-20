@@ -1,7 +1,8 @@
 from rest_framework import serializers
 
 from rdmo.core.serializers import (ElementExportSerializerMixin,
-                                   ElementModelSerializerMixin)
+                                   ElementModelSerializerMixin,
+                                   CanEditObjectSerializerMixin)
 from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Page, Question, QuestionSet
@@ -11,7 +12,7 @@ from ..models import Condition
 from ..validators import ConditionLockedValidator, ConditionUniqueURIValidator
 
 
-class ConditionSerializer(ElementModelSerializerMixin, serializers.ModelSerializer):
+class ConditionSerializer(CanEditObjectSerializerMixin, ElementModelSerializerMixin, serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
     key = serializers.SlugField(required=True)
@@ -22,6 +23,7 @@ class ConditionSerializer(ElementModelSerializerMixin, serializers.ModelSerializ
     questionsets = serializers.PrimaryKeyRelatedField(queryset=QuestionSet.objects.all(), required=False, many=True)
     questions = serializers.PrimaryKeyRelatedField(queryset=Question.objects.all(), required=False, many=True)
     tasks = serializers.PrimaryKeyRelatedField(queryset=Task.objects.all(), required=False, many=True)
+    can_edit = serializers.SerializerMethodField()
 
     class Meta:
         model = Condition
@@ -33,7 +35,6 @@ class ConditionSerializer(ElementModelSerializerMixin, serializers.ModelSerializ
             'key',
             'comment',
             'locked',
-            'editors',
             'source',
             'relation',
             'target_text',
@@ -49,9 +50,8 @@ class ConditionSerializer(ElementModelSerializerMixin, serializers.ModelSerializ
             ConditionLockedValidator()
         )
 
-
 class ConditionListSerializer(ElementExportSerializerMixin, ConditionSerializer):
-
+    
     xml_url = serializers.SerializerMethodField()
 
     class Meta(ConditionSerializer.Meta):
