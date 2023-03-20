@@ -9,7 +9,7 @@ import Text from '../forms/Text'
 import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
-import { BackButton, SaveButton, DeleteButton } from '../common/ElementButtons'
+import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/ElementButtons'
 import { DeleteElementModal } from '../common/ElementModals'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
@@ -27,7 +27,10 @@ const EditView = ({ config, view, catalogs, sites, groups, elementActions }) => 
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          <SaveButton onClick={storeView} />
+          {
+            view.id ? <SaveButton onClick={storeView} />
+                         : <CreateButton onClick={storeView} />
+          }
         </div>
         {
           view.id ? <div>
@@ -93,9 +96,12 @@ const EditView = ({ config, view, catalogs, sites, groups, elementActions }) => 
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton onClick={storeView} />
+          {
+            view.id ? <SaveButton onClick={storeView} />
+                    : <CreateButton onClick={storeView} />
+          }
         </div>
-        <DeleteButton onClick={openDeleteModal} />
+        {view.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
       <DeleteElementModal title={gettext('Delete catalog')} show={showDeleteModal}

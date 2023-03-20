@@ -1,6 +1,7 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
-import isUndefined from 'lodash/isUndefined'
+import classNames from 'classnames'
+import isNil from 'lodash/isNil'
 
 const BackButton = () => (
   <button className="element-button btn btn-xs btn-default" onClick={event => history.back()}>
@@ -15,7 +16,17 @@ const SaveButton = ({ onClick }) => (
 )
 
 SaveButton.propTypes = {
-  onClick: PropTypes.func
+  onClick: PropTypes.func.isRequired
+}
+
+const CreateButton = ({ onClick }) => (
+  <button className="element-button btn btn-xs btn-success" onClick={event => onClick()}>
+    {gettext('Create')}
+  </button>
+)
+
+CreateButton.propTypes = {
+  onClick: PropTypes.func.isRequired
 }
 
 const NewButton = ({ onClick }) => (
@@ -25,7 +36,7 @@ const NewButton = ({ onClick }) => (
 )
 
 NewButton.propTypes = {
-  onClick: PropTypes.func
+  onClick: PropTypes.func.isRequired
 }
 
 const DeleteButton = ({ onClick }) => (
@@ -35,7 +46,7 @@ const DeleteButton = ({ onClick }) => (
 )
 
 DeleteButton.propTypes = {
-  onClick: PropTypes.func
+  onClick: PropTypes.func.isRequired
 }
 
-export { BackButton, NewButton, SaveButton, DeleteButton }
+export { BackButton, SaveButton, CreateButton, NewButton, DeleteButton }

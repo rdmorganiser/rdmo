@@ -23,27 +23,20 @@ export default function configReducer(state = initialState, action) {
     case 'config/fetchMetaSuccess':
       return {...state, ...{ meta: action.meta }}
     case 'elements/fetchElementsInit':
-      return {...state, ...{ pending: true }}
-    case 'elements/fetchElementsSuccess':
-      return {...state, ...{ pending: false }}
-    case 'elements/fetchElementsError':
-      return {...state, ...{ pending: false }}
     case 'elements/fetchElementInit':
-      return {...state, ...{ pending: true }}
-    case 'elements/fetchElementSuccess':
-      return {...state, ...{ pending: false }}
-    case 'elements/fetchElementError':
-      return {...state, ...{ pending: false }}
     case 'elements/storeElementInit':
-      return {...state, ...{ pending: true }}
-    case 'elements/storeElementSuccess':
-      return {...state, ...{ pending: false }}
-    case 'elements/storeElementError':
-      return {...state, ...{ pending: false }}
+    case 'elements/createElementInit':
     case 'elements/deleteElementInit':
       return {...state, ...{ pending: true }}
+    case 'elements/fetchElementsSuccess':
+    case 'elements/fetchElementsError':
+    case 'elements/fetchElementSuccess':
+    case 'elements/fetchElementError':
+    case 'elements/storeElementSuccess':
+    case 'elements/storeElementError':
+    case 'elements/createElementSuccess':
+    case 'elements/createElementError':
     case 'elements/deleteElementSuccess':
-      return {...state, ...{ pending: false }}
     case 'elements/deleteElementError':
       return {...state, ...{ pending: false }}
     default:
