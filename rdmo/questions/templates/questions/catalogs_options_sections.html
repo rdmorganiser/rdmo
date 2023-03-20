@@ -2,6 +2,9 @@
 
     <i class="fa fa-lock text-muted" ng-show="service.catalog.locked"></i>
     <i class="fa fa-lock text-danger" ng-show="section.locked"></i>
+    <i class="fa fa-ban text-muted" ng-hide="section.can_edit"
+        title="{% trans 'Read only' %}">
+    </i>
 
     <a href="" class="fa fa-plus"
         title="{% trans 'Add question set' %}"

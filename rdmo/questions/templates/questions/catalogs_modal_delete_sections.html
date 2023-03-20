@@ -48,10 +48,14 @@
                 </div>
 
                 <div class="modal-footer">
+                    <div class="alert alert-warning pull-left" ng-show="service.errors.detail" role="alert">
+                        {$ service.errors.detail $}
+                    </div>
                     <button type="button" class="btn btn-default" data-dismiss="modal">
                         {% trans 'Close' %}
                     </button>
                     <button type="button" class="btn btn-danger"
+                            ng-class="{'disabled': service.values.can_edit == false}"
                             ng-click="service.submitDeleteModal('sections')">
                         {% trans 'Delete' %}
                     </button>

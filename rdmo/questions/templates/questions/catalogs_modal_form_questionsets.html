@@ -325,10 +325,14 @@
                 </div>
 
                 <div class="modal-footer">
+                    <div class="alert alert-warning pull-left" ng-show="service.errors.detail" role="alert">
+                        {$ service.errors.detail $}
+                    </div>
                     <button type="button" class="btn btn-default" data-dismiss="modal">
                         {% trans 'Close' %}
                     </button>
                     <button type="button" class="btn btn-primary"
+                            ng-class="{'disabled': service.values.can_edit == false}"
                             ng-click="service.submitFormModal('questionsets')">
                         <span ng-show="service.copy">{% trans 'Copy' %}</span>
                         <span ng-hide="service.copy">{% trans 'Save' %}</span>
