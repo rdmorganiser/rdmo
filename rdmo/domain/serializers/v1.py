@@ -2,9 +2,11 @@ import logging
 
 from rest_framework import serializers
 
+from rdmo.core.serializers import CanEditObjectSerializerMixin
 from rdmo.conditions.models import Condition
 from rdmo.core.serializers import (ElementExportSerializerMixin,
-                                   ElementModelSerializerMixin)
+                                   ElementModelSerializerMixin,
+                                   CanEditObjectSerializerMixin)
 from rdmo.questions.models import Page, Question, QuestionSet
 
 from ..models import Attribute
@@ -14,9 +16,10 @@ from ..validators import (AttributeLockedValidator, AttributeParentValidator,
 log = logging.getLogger(__name__)
 
 
-class BaseAttributeSerializer(ElementModelSerializerMixin, serializers.ModelSerializer):
+class BaseAttributeSerializer(CanEditObjectSerializerMixin, ElementModelSerializerMixin, serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
+    can_edit = serializers.SerializerMethodField()
 
     class Meta:
         model = Attribute
@@ -28,6 +31,7 @@ class BaseAttributeSerializer(ElementModelSerializerMixin, serializers.ModelSeri
             'key',
             'comment',
             'locked',
+            'can_edit',
             'parent'
         )
 
@@ -73,6 +77,7 @@ class AttributeSerializer(BaseAttributeSerializer):
 class AttributeListSerializer(ElementExportSerializerMixin, BaseAttributeSerializer):
 
     xml_url = serializers.SerializerMethodField()
+    can_edit = serializers.SerializerMethodField(read_only=True)
 
     class Meta(BaseAttributeSerializer.Meta):
         fields = BaseAttributeSerializer.Meta.fields + (
@@ -95,7 +100,9 @@ class AttributeNestedSerializer(AttributeListSerializer):
                                          read_only=True, context=self.context).data
 
 
-class AttributeIndexSerializer(serializers.ModelSerializer):
+class AttributeIndexSerializer(CanEditObjectSerializerMixin, serializers.ModelSerializer):
+
+    can_edit = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Attribute

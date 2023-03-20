@@ -40,7 +40,7 @@ class AttributeViewSet(CopyModelMixin, ModelViewSet):
     @action(detail=False, permission_classes = (HasModelPermission | HasObjectPermission, ))
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
-        serializer = AttributeIndexSerializer(queryset, many=True)
+        serializer = AttributeIndexSerializer(queryset, context={'request': request})
         return Response(serializer.data)
 
     @action(detail=True, permission_classes = (HasModelPermission | HasObjectPermission, ))
