@@ -119,7 +119,7 @@ def test_create(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_update_with_editors_currentsite(db, client, username, password):
+def test_update_with_obj_permissions_editors_currentsite(db, client, username, password):
     client.login(username=username, password=password)
     instances = Attribute.objects.order_by('-level')
 
@@ -140,7 +140,7 @@ def test_update_with_editors_currentsite(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_delete_with_editors_currentsite(db, client, username, password):
+def test_delete_with_obj_permissions_editors_currentsite(db, client, username, password):
     client.login(username=username, password=password)
     instances = Attribute.objects.order_by('-level')
 
