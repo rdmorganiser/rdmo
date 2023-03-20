@@ -3,16 +3,18 @@ from rest_framework import serializers
 from rdmo.core.serializers import (ElementExportSerializerMixin,
                                    ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
-                                   TranslationSerializerMixin)
+                                   TranslationSerializerMixin,
+                                   CanEditObjectSerializerMixin)
 
 from ..models import Task
 from ..validators import TaskLockedValidator, TaskUniqueURIValidator
 
 
-class BaseTaskSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
-                         serializers.ModelSerializer):
+class BaseTaskSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin, 
+                         ElementModelSerializerMixin,serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
+    can_edit = serializers.SerializerMethodField()
 
     class Meta:
         model = Task
@@ -27,7 +29,7 @@ class BaseTaskSerializer(TranslationSerializerMixin, ElementModelSerializerMixin
             'available',
             'catalogs',
             'sites',
-            'editors',
+            'can_edit',
             'groups',
             'start_attribute',
             'end_attribute',
@@ -61,7 +63,6 @@ class TaskSerializer(BaseTaskSerializer):
 class TaskListSerializer(ElementExportSerializerMixin, ElementWarningSerializerMixin,
                          BaseTaskSerializer):
 
-    editors = SiteSerializer(many=True, read_only=True)
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
 

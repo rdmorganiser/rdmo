@@ -38,7 +38,7 @@ class TaskViewSet(CopyModelMixin, ModelViewSet):
     @action(detail=False)
     def index(self, request, permission_classes=[HasModelPermission | HasObjectPermission, ]):
         queryset = self.filter_queryset(self.get_queryset())
-        serializer = TaskIndexSerializer(queryset, many=True)
+        serializer = TaskIndexSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
     @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission | HasObjectPermission, ])
