@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
-from rdmo.core.serializers import SiteSerializer
+from rdmo.core.serializers import SiteSerializer, CanEditObjectSerializerMixin
 from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Question, QuestionSet
@@ -51,7 +51,7 @@ class TaskSerializer(serializers.ModelSerializer):
         )
 
 
-class ConditionSerializer(serializers.ModelSerializer):
+class ConditionSerializer(CanEditObjectSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.SlugField(required=True)
     source = serializers.PrimaryKeyRelatedField(queryset=Attribute.objects.all(), required=True)
@@ -59,6 +59,7 @@ class ConditionSerializer(serializers.ModelSerializer):
     questionsets = QuestionSetSerializer(many=True, read_only=True)
     questions = QuestionSerializer(many=True, read_only=True)
     tasks = TaskSerializer(many=True, read_only=True)
+    can_edit = serializers.SerializerMethodField()
 
     class Meta:
         model = Condition
@@ -69,6 +70,7 @@ class ConditionSerializer(serializers.ModelSerializer):
             'key',
             'comment',
             'locked',
+            'can_edit',
             'editors',
             'source',
             'relation',
@@ -85,12 +87,13 @@ class ConditionSerializer(serializers.ModelSerializer):
         )
 
 
-class ConditionIndexSerializer(serializers.ModelSerializer):
+class ConditionIndexSerializer(CanEditObjectSerializerMixin, serializers.ModelSerializer):
 
     target_option_uri = serializers.CharField(source='target_option.uri', default=None, read_only=True)
     target_option_text = serializers.CharField(source='target_option.text', default=None, read_only=True)
     xml_url = serializers.SerializerMethodField()
     editors = SiteSerializer(many=True, read_only=True)
+    can_edit = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Condition
@@ -101,6 +104,7 @@ class ConditionIndexSerializer(serializers.ModelSerializer):
             'key',
             'comment',
             'locked',
+            'can_edit',
             'editors',
             'source_label',
             'relation_label',

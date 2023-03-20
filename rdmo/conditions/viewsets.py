@@ -18,7 +18,8 @@ from .serializers.v1 import ConditionIndexSerializer, ConditionSerializer
 class ConditionViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission & HasObjectPermission, )
     queryset = Condition.objects.select_related('source', 'target_option') \
-                                .prefetch_related('optionsets', 'questionsets', 'questions', 'tasks')
+                                .prefetch_related('optionsets', 'questionsets', 'questions', 'tasks',
+                                                  'editors')
     serializer_class = ConditionSerializer
 
     filter_backends = (DjangoFilterBackend,)
@@ -34,7 +35,7 @@ class ConditionViewSet(CopyModelMixin, ModelViewSet):
     @action(detail=False)
     def index(self, request):
         queryset = Condition.objects.select_related('source', 'target_option')
-        serializer = ConditionIndexSerializer(queryset, many=True)
+        serializer = ConditionIndexSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
     @action(detail=False, permission_classes=[HasModelPermission])
