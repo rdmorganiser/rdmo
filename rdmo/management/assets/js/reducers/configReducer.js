@@ -11,7 +11,7 @@ const initialState = {
 export default function configReducer(state = initialState, action) {
   switch(action.type) {
     case 'config/updateConfig':
-      const newState = Object.assign({}, state, action.config)
+      const newState = {...state, ...{ settings: action.config }}
 
       // store the new state in the local storage
       lsKeys.forEach(key => ls.set(`rdmo.management.config.${key}`, newState[key]))
@@ -19,13 +19,27 @@ export default function configReducer(state = initialState, action) {
       // return the new state
       return newState
     case 'config/fetchSettingsSuccess':
-      return Object.assign({}, state, {
-        settings: action.settings
-      })
+      return {...state, ...{ settings: action.settings }}
     case 'config/fetchMetaSuccess':
-      return Object.assign({}, state, {
-        meta: action.meta
-      })
+      return {...state, ...{ meta: action.meta }}
+    case 'elements/fetchElementsInit':
+      return {...state, ...{ pending: true }}
+    case 'elements/fetchElementsSuccess':
+      return {...state, ...{ pending: false }}
+    case 'elements/fetchElementsError':
+      return {...state, ...{ pending: false }}
+    case 'elements/fetchElementInit':
+      return {...state, ...{ pending: true }}
+    case 'elements/fetchElementSuccess':
+      return {...state, ...{ pending: false }}
+    case 'elements/fetchElementError':
+      return {...state, ...{ pending: false }}
+    case 'elements/storeElementInit':
+      return {...state, ...{ pending: true }}
+    case 'elements/storeElementSuccess':
+      return {...state, ...{ pending: false }}
+    case 'elements/storeElementError':
+      return {...state, ...{ pending: false }}
     default:
       return state
   }
