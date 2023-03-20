@@ -27,39 +27,35 @@ export default function elementsReducer(state = initialState, action) {
   switch(action.type) {
     // fetch elements
     case 'elements/fetchElementsInit':
-      return Object.assign({}, state, {
+      return {...state,
         [action.elementType]: [],
         elementType: action.elementType,
         elementId: null,
         elementAction: null,
         element: null,
         errors: {}
-      })
+      }
     case 'elements/fetchElementsSuccess':
-      return Object.assign({}, state, action.elements)
+      return {...state, ...action.elements}
     case 'elements/fetchElementsError':
-      return Object.assign({}, state, {
-        errors: action.error.errors
-      })
+      return {...state, errors: action.error.errors}
 
     // fetch element
     case 'elements/fetchElementInit':
-      return Object.assign({}, state, {
+      return {...state,
         elementType: action.elementType,
         elementId: action.elementId,
         elementAction: action.elementAction,
         element: null,
         errors: {}
-      })
+      }
     case 'elements/fetchElementSuccess':
       // let the element know what type it is
       action.elements.element.type = state.elementType
 
-      return Object.assign({}, state, action.elements)
+      return {...state, ...action.elements}
     case 'elements/fetchElementError':
-      return Object.assign({}, state, {
-        errors: action.error.errors
-      })
+      return {...state, errors: action.error.errors}
 
     // store element
     case 'elements/storeElementInit':
@@ -68,11 +64,10 @@ export default function elementsReducer(state = initialState, action) {
       } else if (state.elementAction == 'nested') {
         return state
       } else {
-        return Object.assign({}, state, {
-          element: {...action.element, errors: {} }
-        })
+        return {...state, element: {...action.element, errors: {}}}
       }
     case 'elements/storeElementSuccess':
+
       if (isNil(state.element)) {
         const elements = state[state.elementType]
         return {...state,
@@ -89,17 +84,15 @@ export default function elementsReducer(state = initialState, action) {
         // let the element know what type it is
         action.element.type = state.elementType
 
-        return Object.assign({}, state, {
-          element: action.element
-        })
+        return {...state, element: action.element}
       }
     case 'elements/storeElementError':
       if (isNil(state.element)) {
         return state
       } else {
-        return Object.assign({}, state, {
-          element: {...action.element, errors: action.errors }
-        })
+        return {...state, ...{
+          element: {...action.element, errors: action.error.errors}
+        }}
       }
 
     // create element
@@ -121,12 +114,7 @@ export default function elementsReducer(state = initialState, action) {
 
     // update element
     case 'elements/updateElement':
-      const element = Object.assign({}, action.element, {
-        [action.field]: action.value
-      })
-      return Object.assign({}, state, {
-        element: element
-      })
+      return {...state, element: {...action.element, [action.field]: action.value }}
 
     default:
       return state

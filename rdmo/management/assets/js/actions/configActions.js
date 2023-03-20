@@ -5,18 +5,6 @@ export function updateConfig(config) {
   return {type: 'config/updateConfig', config}
 }
 
-export function startPending() {
-  return function(dispatch) {
-    dispatch(updateConfig({ pending: true }))
-  }
-}
-
-export function stopPending() {
-  return function(dispatch) {
-    dispatch(updateConfig({ pending: false }))
-  }
-}
-
 export function fetchSettings() {
   return function(dispatch) {
     return CoreApi.fetchSettings()
