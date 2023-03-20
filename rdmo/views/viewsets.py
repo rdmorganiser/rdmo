@@ -19,7 +19,7 @@ from .serializers.v1 import (ViewIndexSerializer, ViewListSerializer,
 
 class ViewViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
-    queryset = View.objects.prefetch_related('catalogs', 'sites', 'groups') \
+    queryset = View.objects.prefetch_related('catalogs', 'sites', 'editors', 'groups') \
                            .annotate(projects_count=models.Count('projects'))
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
@@ -36,8 +36,8 @@ class ViewViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission, ])
     def index(self, request):
-        queryset = self.filter_queryset(self.get_queryset())
-        serializer = ViewIndexSerializer(queryset, many=True)
+        queryset =self.filter_queryset(self.get_queryset())
+        serializer = ViewIndexSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
     @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission | HasObjectPermission, ])
