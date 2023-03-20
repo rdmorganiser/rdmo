@@ -47,117 +47,116 @@ class Main extends Component {
   }
 
   render() {
-    const { config, elements, errors, elementActions } = this.props
+    const { config, elements, elementActions } = this.props
+    const { element, elementType, elementId, elementAction, errors } = elements
 
-    if (!isNil(elements.errors) && !isNil(elements.errors.api)) {
-      return <ApiErrors errors={elements.errors.api} />
-    } else {
-      const element = elements.element
+    // check if anything was loaded yet
+    if (isNil(elementType)) {
+      return null
+    }
 
-      switch (elements.elementType) {
+    // check if an an error occured
+    if (!isNil(errors.api)) {
+      return <ApiErrors errors={errors.api} />
+    }
+
+    // check if the nested components should be displayed
+    if (!isNil(element) && elementAction == 'nested') {
+      switch (elementType) {
         case 'catalogs':
-          if (isNil(elements.element)) {
-            return <Catalogs config={config} catalogs={elements.catalogs} elementActions={elementActions} />
-          } else if (elements.elementAction == 'nested') {
-            return <NestedCatalog config={config} catalog={element} elementActions={elementActions} />
-          } else {
-            return <EditCatalog config={config} catalog={element} sites={elements.sites}
-                                groups={elements.groups} sections={elements.sections}
-                                elementActions={elementActions} />
-          }
+          return <NestedCatalog config={config} catalog={element} elementActions={elementActions} />
         case 'sections':
-          if (isNil(elements.element)) {
-            return <Sections config={config} sections={elements.sections} elementActions={elementActions} />
-          } else if (elements.elementAction == 'nested') {
-            return <NestedSection config={config} section={element} elementActions={elementActions} />
-          } else {
-            return <EditSection config={config} section={element} pages={elements.pages}
-                                elementActions={elementActions} />
-          }
+          return <NestedSection config={config} section={element} elementActions={elementActions} />
         case 'pages':
-          if (isNil(elements.element)) {
-            return <Pages config={config} pages={elements.pages} elementActions={elementActions} />
-          } else if (elements.elementAction == 'nested') {
-            return <NestedPage config={config} page={element} elementActions={elementActions} />
-          } else {
-            return <EditPage config={config} page={element} attributes={elements.attributes}
-                             conditions={elements.conditions} questionsets={elements.questionsets}
-                             questions={elements.questions} elementActions={elementActions} />
-          }
+          return <NestedPage config={config} page={element} elementActions={elementActions} />
         case 'questionsets':
-          if (isNil(elements.element)) {
-            return <QuestionSets config={config} questionsets={elements.questionsets}
-                                 elementActions={elementActions} />
-          } else if (elements.elementAction == 'nested') {
-            return <NestedQuestionSet config={config} questionset={element} elementActions={elementActions} />
-          } else {
-            return <EditQuestionSet config={config} questionset={element} attributes={elements.attributes}
-                                    conditions={elements.conditions} questionsets={elements.questionsets}
-                                    questions={elements.questions} elementActions={elementActions} />
-          }
-        case 'questions':
-          if (isNil(elements.element)) {
-            return <Questions config={config} questions={elements.questions} elementActions={elementActions} />
-          } else {
-            return <EditQuestion config={config} question={element} attributes={elements.attributes}
-                                 conditions={elements.conditions} optionsets={elements.optionsets}
-                                 options={elements.options} widgetTypes={elements.widgetTypes}
-                                 valueTypes={elements.valueTypes} elementActions={elementActions} />
-          }
+          return <NestedQuestionSet config={config} questionset={element} elementActions={elementActions} />
         case 'attributes':
-          if (isNil(elements.element)) {
-            return <Attributes config={config} attributes={elements.attributes} elementActions={elementActions} />
-          } else if (elements.elementAction == 'nested') {
-            return <NestedAttribute config={config} attribute={element} elementActions={elementActions} />
-          } else {
-            return <EditAttribute config={config} attribute={element} attributes={elements.attributes}
-                                  elementActions={elementActions} />
-          }
+          return <NestedAttribute config={config} attribute={element} elementActions={elementActions} />
         case 'optionsets':
-          if (isNil(elements.element)) {
-            return <OptionSets config={config} optionsets={elements.optionsets}
-                               elementActions={elementActions} />
-          } else if (elements.elementAction == 'nested') {
-            return <NestedOptionSet config={config} optionset={element} elementActions={elementActions} />
-          } else {
-            return <EditOptionSet config={config} optionset={element} options={elements.options}
-                                  providers={elements.providers} elementActions={elementActions} />
-          }
-        case 'options':
-          if (isNil(elements.element)) {
-            return <Options config={config} options={elements.options} elementActions={elementActions} />
-          } else {
-            return <EditOption config={config} option={element} elementActions={elementActions} />
-          }
-        case 'conditions':
-          if (isNil(elements.element)) {
-            return <Conditions config={config} conditions={elements.conditions} elementActions={elementActions} />
-          } else {
-            return <EditCondition config={config} condition={element} relations={elements.relations}
-                                  attributes={elements.attributes} options={elements.options}
-                                  elementActions={elementActions} />
-          }
-        case 'tasks':
-          if (isNil(elements.element)) {
-            return <Tasks config={config} tasks={elements.tasks} elementActions={elementActions} />
-          } else {
-            return <EditTask config={config} task={element} attributes={elements.attributes}
-                             conditions={elements.conditions} catalogs={elements.catalogs}
-                             groups={elements.groups} sites={elements.sites}
-                             elementActions={elementActions} />
-          }
-        case 'views':
-          if (isNil(elements.element)) {
-            return <Views config={config} views={elements.views} elementActions={elementActions} />
-          } else {
-            return <EditView config={config} view={element} catalogs={elements.catalogs}
-                             groups={elements.groups} sites={elements.sites}
-                             elementActions={elementActions} />
-          }
-        default:
-          return null
+          return <NestedOptionSet config={config} optionset={element} elementActions={elementActions} />
       }
     }
+
+    // check if the edit components should be displayed
+    if (!isNil(element)) {
+      switch (elementType) {
+        case 'catalogs':
+          return <EditCatalog config={config} catalog={element} sites={elements.sites}
+                              groups={elements.groups} sections={elements.sections}
+                              elementActions={elementActions} />
+        case 'sections':
+          return <EditSection config={config} section={element} pages={elements.pages}
+                              elementActions={elementActions} />
+        case 'pages':
+          return <EditPage config={config} page={element} attributes={elements.attributes}
+                           conditions={elements.conditions} questionsets={elements.questionsets}
+                           questions={elements.questions} elementActions={elementActions} />
+        case 'questionsets':
+          return <EditQuestionSet config={config} questionset={element} attributes={elements.attributes}
+                                  conditions={elements.conditions} questionsets={elements.questionsets}
+                                  questions={elements.questions} elementActions={elementActions} />
+        case 'questions':
+          return <EditQuestion config={config} question={element} attributes={elements.attributes}
+                               conditions={elements.conditions} optionsets={elements.optionsets}
+                               options={elements.options} widgetTypes={elements.widgetTypes}
+                               valueTypes={elements.valueTypes} elementActions={elementActions} />
+        case 'attributes':
+          return <EditAttribute config={config} attribute={element} attributes={elements.attributes}
+                                 elementActions={elementActions} />
+        case 'optionsets':
+          return <EditOptionSet config={config} optionset={element} options={elements.options}
+                                providers={elements.providers} elementActions={elementActions} />
+        case 'options':
+          return <EditCondition config={config} condition={element} relations={elements.relations}
+                                attributes={elements.attributes} options={elements.options}
+                                elementActions={elementActions} />
+        case 'conditions':
+          return <EditCondition config={config} condition={element} relations={elements.relations}
+                                attributes={elements.attributes} options={elements.options}
+                                elementActions={elementActions} />
+        case 'tasks':
+          return <EditTask config={config} task={element} attributes={elements.attributes}
+                           conditions={elements.conditions} catalogs={elements.catalogs}
+                           groups={elements.groups} sites={elements.sites}
+                           elementActions={elementActions} />
+        case 'views':
+          return <EditView config={config} view={element} catalogs={elements.catalogs}
+                           groups={elements.groups} sites={elements.sites}
+                           elementActions={elementActions} />
+      }
+    }
+
+    // check if the list components should be displayed
+    if (isNil(elementId) && isNil(elementAction) && !isEmpty(elements[elementType])) {
+      switch (elementType) {
+        case 'catalogs':
+          return <Catalogs config={config} catalogs={elements.catalogs} elementActions={elementActions} />
+        case 'sections':
+          return <Sections config={config} sections={elements.sections} elementActions={elementActions} />
+        case 'pages':
+          return <Pages config={config} pages={elements.pages} elementActions={elementActions} />
+        case 'questionsets':
+          return <QuestionSets config={config} questionsets={elements.questionsets} elementActions={elementActions} />
+        case 'questions':
+          return <Questions config={config} questions={elements.questions} elementActions={elementActions} />
+        case 'attributes':
+          return <Attributes config={config} attributes={elements.attributes} elementActions={elementActions} />
+        case 'optionsets':
+          return <OptionSets config={config} optionsets={elements.optionsets} elementActions={elementActions} />
+        case 'options':
+          return <Options config={config} options={elements.options} elementActions={elementActions} />
+        case 'conditions':
+          return <Conditions config={config} conditions={elements.conditions} elementActions={elementActions} />
+        case 'tasks':
+          return <Tasks config={config} tasks={elements.tasks} elementActions={elementActions} />
+        case 'views':
+          return <Views config={config} views={elements.views} elementActions={elementActions} />
+      }
+    }
+
+    // fetching the data is not complete yet, or no action was invoked yet
+    return null
   }
 
 }
