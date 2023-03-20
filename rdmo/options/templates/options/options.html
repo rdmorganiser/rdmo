@@ -110,7 +110,9 @@
             <div class="panel-heading">
                 <div class="pull-right">
                     <i class="fa fa-lock text-danger" ng-show="optionset.locked"></i>
-
+                    <i class="fa fa-ban text-muted" ng-hide="!optionset.can_edit"
+                        title="{% trans 'Read only' %}">
+                    </i>
                     <a href="" class="fa fa-plus"
                         title="{% trans 'Add option' %}"
                         ng-click="service.openFormModal('options', optionset, true)">
@@ -140,8 +142,8 @@
                         ng-click="service.openDeleteModal('optionsets', optionset)">
                     </a>
                 </div>
-                <p>
-                    <strong>{% trans 'Option set' %}</strong>
+                <p ng-class="{'text-muted': !optionset.can_edit}">
+                    <strong >{% trans 'Option set' %}</strong>
                 </p>
                 <div>
                     <code class="code-options" title="{% trans 'URI' %}">{$ optionset.uri $}</code>
@@ -192,6 +194,9 @@
 
                         <i class="fa fa-lock text-muted" ng-show="optionset.locked"></i>
                         <i class="fa fa-lock text-danger" ng-show="option.locked"></i>
+                        <i class="fa fa-ban text-muted" ng-hide="option.can_edit"
+                        title="{% trans 'Read only' %}">
+                        </i>
 
                         <a href="" class="fa fa-pencil"
                             title="{% trans 'Update option' %}"
@@ -214,7 +219,7 @@
                             ng-click="service.openDeleteModal('options', option)">
                         </a>
                     </div>
-                    <p>
+                    <p ng-class="{'text-muted': !option.can_edit}">
                         <strong>{% trans 'Option' %}</strong>
                         <span>{$ option.text $}</span>
                     </p>
