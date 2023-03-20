@@ -124,7 +124,6 @@ angular.module('catalogs', ['core'])
 
         resources.catalogs.query(catalogs_params, function(response) {
             service.catalogs = response;
-            console.log('catalogs', service.catalogs)
 
             // try to get the catalog from the address bar
             var catalog_id = $location.path().replace(/\//g,'');
