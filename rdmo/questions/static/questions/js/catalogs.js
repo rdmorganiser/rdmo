@@ -124,6 +124,7 @@ angular.module('catalogs', ['core'])
 
         resources.catalogs.query(catalogs_params, function(response) {
             service.catalogs = response;
+            console.log('catalogs', service.catalogs)
 
             // try to get the catalog from the address bar
             var catalog_id = $location.path().replace(/\//g,'');
@@ -283,6 +284,7 @@ angular.module('catalogs', ['core'])
 
     service.openDeleteModal = function(resource, obj) {
         service.values = obj;
+        service.errors = {};
         $('#' + resource + '-delete-modal').modal('show');
     };
 
@@ -305,6 +307,9 @@ angular.module('catalogs', ['core'])
             }
 
             $('#' + resource + '-delete-modal').modal('hide');
+        }
+        , function(result) {
+            service.errors = result.data;
         });
     };
 
