@@ -42,8 +42,7 @@ class OptionSetSerializer(ThroughModelSerializerMixin, BaseOptionSetSerializer):
     class Meta(BaseOptionSetSerializer.Meta):
         fields = BaseOptionSetSerializer.Meta.fields + (
             'options',
-            'conditions',
-            'questions'
+            'conditions'
         )
         validators = (
             OptionSetUniqueURIValidator(),
