@@ -31,7 +31,7 @@
                         {% trans 'Close' %}
                     </button>
                     <button type="button" class="btn btn-danger"
-                            ng-class="{'disabled': service.values.can_edit == false}"
+                            ng-class="{'disabled': !service.values.can_edit}"
                             ng-click="service.submitDeleteModal('questions')">
                         {% trans 'Delete' %}
                     </button>
