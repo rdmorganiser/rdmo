@@ -111,6 +111,11 @@ a.disabled {
         p:last-child {
             margin-bottom: 0;
         }
+
+        .panel-heading,
+        .panel-footer {
+            min-height: 41px;
+        }
     }
     .element-link {
         margin-left: 4px;
