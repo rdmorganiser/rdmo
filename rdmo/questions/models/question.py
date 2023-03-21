@@ -76,7 +76,7 @@ class Question(Model, TranslationMixin):
     editors = models.ManyToManyField(
         Site, related_name='%(class)s_editors', blank=True,
         verbose_name=_('Editors'),
-        help_text=_('The sites that can edit this catalog (in a multi site setup).')
+        help_text=_('The sites that can edit this question (in a multi site setup).')
     )
     help_lang1 = models.TextField(
         null=True, blank=True,
