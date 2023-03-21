@@ -3,7 +3,6 @@ import xml.etree.ElementTree as et
 import pytest
 from django.contrib.sites.models import Site
 from django.urls import reverse
-from django.test import TestCase
 
 from ..models import Catalog
 
@@ -25,7 +24,7 @@ users = (
 )
 
 
-groups = ( # TODO will be removed in future
+groups = (  # TODO will be removed in future
     ('api', 'api'),
 )
 
@@ -130,18 +129,16 @@ def get_status_code_for_catalog(username: str,
                                 method: str, 
                                 status_map: dict,
                                 status_map_obj_perms: dict) -> int:
-    
+
     try:
         test_status_user = status_map_obj_perms[method][catalog_key][username]
         print(f'catalog_key: {catalog_key}, username: {username}, method: {method}, test_status_user: {test_status_user}')
     except KeyError:
         test_status_user = status_map[method].get(username, None)
     return test_status_user
-    # catalog_user_combinations = [(user, passw, cat) for user,passw in users for cat in  Catalog.objects.all()]
 
 
 def add_editors_to_obj_based_on_username(username: str, obj: object):
-    # lambda x: x+'.com' if x in ['example', 'foo', 'bar'] else x
     if 'example' in username:
         domain = 'example.com'
     elif 'foo' in username:
