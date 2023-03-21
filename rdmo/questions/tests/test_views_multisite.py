@@ -5,6 +5,8 @@ from django.urls import reverse
 
 users = (
     ('editor', 'editor'),
+    ('example-user', 'example-user'),
+    ('example-reviewer', 'example-reviewer'),
     ('example-editor', 'example-editor'),
     ('foo-user', 'foo-user'),
     ('foo-reviewer', 'foo-reviewer'),
@@ -17,14 +19,16 @@ users = (
 
 status_map = {
     'catalogs': {
+        'example-user': 403, 'example-reviewer': 200, 'example-editor': 200,
         'foo-user': 403, 'foo-reviewer': 200, 'foo-editor': 200,
         'bar-user': 403, 'bar-reviewer': 200, 'bar-editor': 200,
-        'example-editor': 200, 'editor': 200
+        'reviewer': 200, 'editor': 200
     },
     'questions_catalog_export': {
+        'example-user': 403, 'example-reviewer': 200, 'example-editor': 200,
         'foo-user': 403, 'foo-reviewer': 200, 'foo-editor': 200,
         'bar-user': 403, 'bar-reviewer': 200, 'bar-editor': 200,
-        'example-editor': 200, 'editor': 200
+        'reviewer': 200, 'editor': 200
     },
 }
 
