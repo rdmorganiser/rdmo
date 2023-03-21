@@ -31,22 +31,22 @@ class AttributeSerializer(BaseAttributeSerializer):
     key = serializers.SlugField(required=True)
     parent = serializers.PrimaryKeyRelatedField(queryset=Attribute.objects.all(), default=None, allow_null=True)
     conditions = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
+    pages = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
     questionsets = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
     questions = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
-    tasks_as_start = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
-    tasks_as_end = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
-    tasks_as_start = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
-    tasks_as_start = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
+    tasks = serializers.SerializerMethodField()
+    attributes = serializers.SerializerMethodField()
     projects_count = serializers.IntegerField(read_only=True)
     values_count = serializers.IntegerField(read_only=True)
 
     class Meta(BaseAttributeSerializer.Meta):
         fields = BaseAttributeSerializer.Meta.fields + (
             'conditions',
+            'pages',
             'questionsets',
             'questions',
-            'tasks_as_start',
-            'tasks_as_end',
+            'tasks',
+            'attributes',
             'values_count',
             'projects_count'
         )
@@ -55,6 +55,12 @@ class AttributeSerializer(BaseAttributeSerializer):
             AttributeParentValidator(),
             AttributeLockedValidator()
         )
+
+    def get_tasks(self, obj):
+        return [task.id for task in obj.tasks_as_start.all()] + [task.id for task in obj.tasks_as_end.all()]
+
+    def get_attributes(self, obj):
+        return [attribute.id for attribute in obj.get_descendants()]
 
 
 class AttributeListSerializer(ElementExportSerializerMixin, BaseAttributeSerializer):

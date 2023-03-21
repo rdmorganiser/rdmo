@@ -10,12 +10,14 @@ import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
 import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/ElementButtons'
-import { DeleteElementModal } from '../common/ElementModals'
+
+import DeleteQuestionSetModal from '../modals/DeleteQuestionSetModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
 
-const EditQuestionSet = ({ config, questionset, attributes, conditions,
-                           questionsets, questions, elementActions }) => {
+const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
+
+  const { attributes, conditions, pages, questionsets, questions } = elements
 
   const updateQuestionSet = (key, value) => elementActions.updateElement(questionset, key, value)
   const storeQuestionSet = () => elementActions.storeElement('questionsets', questionset)
@@ -121,18 +123,10 @@ const EditQuestionSet = ({ config, questionset, attributes, conditions,
         {questionset.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
-      <DeleteElementModal title={gettext('Delete catalog')} show={showDeleteModal}
-                          onClose={closeDeleteModal} onDelete={deleteQuestionSet}>
-        <p>
-          {gettext('You are about to permanently delete the question set:')}
-        </p>
-        <p>
-          <code className="code-questions">{questionset.uri}</code>
-        </p>
-        <p className="text-danger">
-          {gettext('This action cannot be undone!')}
-        </p>
-      </DeleteElementModal>
+      <DeleteQuestionSetModal questionset={questionset}
+                              pages={pages.filter(e => questionset.pages.includes(e.id))}
+                              questionsets={questionsets.filter(e => questionset.parents.includes(e.id))}
+                              show={showDeleteModal} onClose={closeDeleteModal} onDelete={deleteQuestionSet} />
     </div>
   )
 }
@@ -140,8 +134,7 @@ const EditQuestionSet = ({ config, questionset, attributes, conditions,
 EditQuestionSet.propTypes = {
   config: PropTypes.object.isRequired,
   questionset: PropTypes.object.isRequired,
-  questionsets: PropTypes.array,
-  questions: PropTypes.array,
+  elements: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired
 }
 

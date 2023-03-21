@@ -10,11 +10,14 @@ import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
 import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/ElementButtons'
-import { DeleteElementModal } from '../common/ElementModals'
+
+import DeleteCatalogModal from '../modals/DeleteCatalogModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
 
-const EditCatalog = ({ config, catalog, sites, groups, sections, elementActions }) => {
+const EditCatalog = ({ config, catalog, elements, elementActions }) => {
+
+  const { sites, groups, sections } = elements
 
   const updateCatalog = (key, value) => elementActions.updateElement(catalog, key, value)
   const storeCatalog = () => elementActions.storeElement('catalogs', catalog)
@@ -98,20 +101,8 @@ const EditCatalog = ({ config, catalog, sites, groups, sections, elementActions 
         {catalog.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
-      <DeleteElementModal title={gettext('Delete catalog')} show={showDeleteModal}
-                          onClose={closeDeleteModal} onDelete={deleteCatalog}>
-        <p>
-          {gettext('You are about to permanently delete the catalog:')}
-        </p>
-        <p>
-          <code className="code-questions">{catalog.uri}</code>
-        </p>
-        <p dangerouslySetInnerHTML={{
-          __html: interpolate(gettext('This catalog is used in <b>%s projects</b>, which will not be usable afterwards.'), [catalog.projects_count])}} />
-        <p className="text-danger">
-          {gettext('This action cannot be undone!')}
-        </p>
-      </DeleteElementModal>
+      <DeleteCatalogModal catalog={catalog} show={showDeleteModal}
+                          onClose={closeDeleteModal} onDelete={deleteCatalog} />
     </div>
   )
 }
@@ -121,9 +112,7 @@ const EditCatalog = ({ config, catalog, sites, groups, sections, elementActions 
 EditCatalog.propTypes = {
   config: PropTypes.object.isRequired,
   catalog: PropTypes.object.isRequired,
-  sites: PropTypes.array.isRequired,
-  groups: PropTypes.array.isRequired,
-  sections: PropTypes.array.isRequired,
+  elements: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired
 }
 

@@ -10,11 +10,14 @@ import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
 import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/ElementButtons'
-import { DeleteElementModal } from '../common/ElementModals'
+
+import DeleteTaskModal from '../modals/DeleteTaskModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
 
-const EditTask = ({ config, task, attributes, catalogs, sites, groups , elementActions}) => {
+const EditTask = ({ config, task, elements, elementActions}) => {
+
+  const { attributes, catalogs, sites, groups } = elements
 
   const updateTask = (key, value) => elementActions.updateElement(task, key, value)
   const storeTask = () => elementActions.storeElement('tasks', task)
@@ -122,18 +125,8 @@ const EditTask = ({ config, task, attributes, catalogs, sites, groups , elementA
         {task.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
-      <DeleteElementModal title={gettext('Delete catalog')} show={showDeleteModal}
-                          onClose={closeDeleteModal} onDelete={deleteTask}>
-        <p>
-          {gettext('You are about to permanently delete the task:')}
-        </p>
-        <p>
-          <code className="code-tasks">{task.uri}</code>
-        </p>
-        <p className="text-danger">
-          {gettext('This action cannot be undone!')}
-        </p>
-      </DeleteElementModal>
+      <DeleteTaskModal task={task} show={showDeleteModal}
+                       onClose={closeDeleteModal} onDelete={deleteTask} />
     </div>
   )
 }
@@ -141,10 +134,7 @@ const EditTask = ({ config, task, attributes, catalogs, sites, groups , elementA
 EditTask.propTypes = {
   config: PropTypes.object.isRequired,
   task: PropTypes.object.isRequired,
-  attributes: PropTypes.array,
-  catalogs: PropTypes.array,
-  groups: PropTypes.array,
-  sites: PropTypes.array,
+  elements: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired
 }
 

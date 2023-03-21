@@ -9,11 +9,14 @@ import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
 import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/ElementButtons'
-import { DeleteElementModal } from '../common/ElementModals'
+
+import DeleteAttributeModal from '../modals/DeleteAttributeModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
 
-const EditAttribute = ({ config, attribute, attributes, elementActions }) => {
+const EditAttribute = ({ config, attribute, elements, elementActions }) => {
+
+  const { attributes, conditions, pages, questionsets, questions, tasks } = elements
 
   const updateAttribute = (key, value) => elementActions.updateElement(attribute, key, value)
   const storeAttribute = () => elementActions.storeElement('attributes', attribute)
@@ -75,18 +78,14 @@ const EditAttribute = ({ config, attribute, attributes, elementActions }) => {
         {attribute.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
-      <DeleteElementModal title={gettext('Delete catalog')} show={showDeleteModal}
-                          onClose={closeDeleteModal} onDelete={deleteAttribute}>
-        <p>
-          {gettext('You are about to permanently delete the attribute:')}
-        </p>
-        <p>
-          <code className="code-domain">{attribute.uri}</code>
-        </p>
-        <p className="text-danger">
-          {gettext('This action cannot be undone!')}
-        </p>
-      </DeleteElementModal>
+      <DeleteAttributeModal attribute={attribute}
+                            attributes={attributes.filter(e => attribute.attributes.includes(e.id))}
+                            conditions={conditions.filter(e => attribute.conditions.includes(e.id))}
+                            pages={pages.filter(e => attribute.pages.includes(e.id))}
+                            questionsets={questionsets.filter(e => attribute.questionsets.includes(e.id))}
+                            questions={questions.filter(e => attribute.questions.includes(e.id))}
+                            tasks={tasks.filter(e => attribute.tasks.includes(e.id))}
+                            show={showDeleteModal} onClose={closeDeleteModal} onDelete={deleteAttribute} />
     </div>
   )
 }
@@ -94,7 +93,7 @@ const EditAttribute = ({ config, attribute, attributes, elementActions }) => {
 EditAttribute.propTypes = {
   config: PropTypes.object.isRequired,
   attribute: PropTypes.object.isRequired,
-  attributes: PropTypes.array,
+  elements: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired
 }
 

@@ -8,9 +8,7 @@ from ..models import Task
 from ..validators import TaskLockedValidator, TaskUniqueURIValidator
 
 
-class TaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
-
-    key = serializers.SlugField(required=True)
+class BaseTaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     class Meta:
         model = Task
@@ -37,6 +35,17 @@ class TaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'title',
             'text'
         )
+
+
+class TaskSerializer(BaseTaskSerializer):
+
+    key = serializers.SlugField(required=True)
+    projects_count = serializers.IntegerField(read_only=True)
+
+    class Meta(BaseTaskSerializer.Meta):
+        fields = BaseTaskSerializer.Meta.fields + (
+            'projects_count',
+        )
         validators = (
             TaskUniqueURIValidator(),
             TaskLockedValidator()
@@ -44,13 +53,13 @@ class TaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
 
 class TaskListSerializer(ElementExportSerializerMixin, ElementWarningSerializerMixin,
-                         TaskSerializer):
+                         BaseTaskSerializer):
 
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
 
-    class Meta(TaskSerializer.Meta):
-        fields = TaskSerializer.Meta.fields + (
+    class Meta(BaseTaskSerializer.Meta):
+        fields = BaseTaskSerializer.Meta.fields + (
             'warning',
             'xml_url'
         )

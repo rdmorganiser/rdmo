@@ -11,12 +11,14 @@ import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
 import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/ElementButtons'
-import { DeleteElementModal } from '../common/ElementModals'
+
+import DeletePageModal from '../modals/DeletePageModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
 
-const EditPage = ({ config, page, attributes, conditions, questionsets,
-                    questions, elementActions }) => {
+const EditPage = ({ config, page, elements, elementActions }) => {
+
+  const { attributes, conditions, sections, questionsets, questions } = elements
 
   const updatePage = (key, value) => elementActions.updateElement(page, key, value)
   const storePage = () => elementActions.storeElement('pages', page)
@@ -127,18 +129,8 @@ const EditPage = ({ config, page, attributes, conditions, questionsets,
         {page.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
-      <DeleteElementModal title={gettext('Delete catalog')} show={showDeleteModal}
-                          onClose={closeDeleteModal} onDelete={deletePage}>
-        <p>
-          {gettext('You are about to permanently delete the page:')}
-        </p>
-        <p>
-          <code className="code-questions">{page.uri}</code>
-        </p>
-        <p className="text-danger">
-          {gettext('This action cannot be undone!')}
-        </p>
-      </DeleteElementModal>
+      <DeletePageModal page={page} sections={sections.filter(e => page.sections.includes(e.id))}
+                       show={showDeleteModal} onClose={closeDeleteModal} onDelete={deletePage} />
     </div>
   )
 }
@@ -146,10 +138,7 @@ const EditPage = ({ config, page, attributes, conditions, questionsets,
 EditPage.propTypes = {
   config: PropTypes.object.isRequired,
   page: PropTypes.object.isRequired,
-  attributes: PropTypes.array,
-  conditions: PropTypes.array,
-  questionsets: PropTypes.array,
-  questions: PropTypes.array,
+  elements: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired
 }
 
