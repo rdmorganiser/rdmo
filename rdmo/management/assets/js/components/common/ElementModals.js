@@ -4,7 +4,7 @@ import { Modal } from 'react-bootstrap';
 
 const DeleteElementModal = ({ title, show, onClose, onDelete, children }) => {
   return (
-    <Modal show={show} onHide={onClose} className="element-modal">
+    <Modal bsSize="large" show={show} onHide={onClose} className="element-modal">
       <Modal.Header closeButton>
         <h2 className="modal-title">{title}</h2>
       </Modal.Header>

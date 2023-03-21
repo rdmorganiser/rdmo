@@ -10,11 +10,14 @@ import Select from '../forms/Select'
 import UriPrefix from '../forms/UriPrefix'
 
 import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/ElementButtons'
-import { DeleteElementModal } from '../common/ElementModals'
+
+import DeleteSectionModal from '../modals/DeleteSectionModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
 
-const EditSection = ({ config, section, pages , elementActions}) => {
+const EditSection = ({ config, section, elements, elementActions}) => {
+
+  const { pages, catalogs } = elements
 
   const updateSection = (key, value) => elementActions.updateElement(section, key, value)
   const storeSection = () => elementActions.storeElement('sections', section)
@@ -92,18 +95,8 @@ const EditSection = ({ config, section, pages , elementActions}) => {
         {section.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
-      <DeleteElementModal title={gettext('Delete catalog')} show={showDeleteModal}
-                          onClose={closeDeleteModal} onDelete={deleteSection}>
-        <p>
-          {gettext('You are about to permanently delete the section:')}
-        </p>
-        <p>
-          <code className="code-questions">{section.uri}</code>
-        </p>
-        <p className="text-danger">
-          {gettext('This action cannot be undone!')}
-        </p>
-      </DeleteElementModal>
+      <DeleteSectionModal section={section} catalogs={catalogs.filter(e => section.catalogs.includes(e.id))}
+                          show={showDeleteModal} onClose={closeDeleteModal} onDelete={deleteSection} />
     </div>
   )
 }
@@ -111,7 +104,7 @@ const EditSection = ({ config, section, pages , elementActions}) => {
 EditSection.propTypes = {
   config: PropTypes.object.isRequired,
   section: PropTypes.object.isRequired,
-  pages: PropTypes.array,
+  elements: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired
 }
 

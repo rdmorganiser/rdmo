@@ -9,21 +9,7 @@ from ..models import View
 from ..validators import ViewLockedValidator, ViewUniqueURIValidator
 
 
-class ViewSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
-
-    key = serializers.SlugField(required=True)
-
-    def validate(self, data):
-        # try to render the template to see that the syntax is ok (if the editor was used)
-        if self.context['request'].data.get('editor'):
-            try:
-                Template(data['template']).render(Context({}))
-            except (KeyError, IndexError):
-                pass
-            except (TemplateSyntaxError, TypeError) as e:
-                raise exceptions.ValidationError({'template': '\n'.join(e.args)})
-
-        return super(ViewSerializer, self).validate(data)
+class BaseViewSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     class Meta:
         model = View
@@ -46,6 +32,29 @@ class ViewSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'title',
             'help'
         )
+
+
+class ViewSerializer(BaseViewSerializer):
+
+    key = serializers.SlugField(required=True)
+    projects_count = serializers.IntegerField(read_only=True)
+
+    def validate(self, data):
+        # try to render the template to see that the syntax is ok (if the editor was used)
+        if self.context['request'].data.get('editor'):
+            try:
+                Template(data['template']).render(Context({}))
+            except (KeyError, IndexError):
+                pass
+            except (TemplateSyntaxError, TypeError) as e:
+                raise exceptions.ValidationError({'template': '\n'.join(e.args)})
+
+        return super(ViewSerializer, self).validate(data)
+
+    class Meta(BaseViewSerializer.Meta):
+        fields = BaseViewSerializer.Meta.fields + (
+            'projects_count',
+        )
         validators = (
             ViewUniqueURIValidator(),
             ViewLockedValidator()
@@ -53,13 +62,13 @@ class ViewSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
 
 class ViewListSerializer(ElementExportSerializerMixin, ElementWarningSerializerMixin,
-                         ViewSerializer):
+                         BaseViewSerializer):
 
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
 
-    class Meta(ViewSerializer.Meta):
-        fields = ViewSerializer.Meta.fields + (
+    class Meta(BaseViewSerializer.Meta):
+        fields = BaseViewSerializer.Meta.fields + (
             'warning',
             'xml_url'
         )

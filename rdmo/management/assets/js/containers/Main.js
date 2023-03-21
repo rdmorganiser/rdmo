@@ -82,48 +82,27 @@ class Main extends Component {
     if (!isNil(element)) {
       switch (elementType) {
         case 'catalogs':
-          return <EditCatalog config={config} catalog={element} sites={elements.sites}
-                              groups={elements.groups} sections={elements.sections}
-                              elementActions={elementActions} />
+          return <EditCatalog config={config} catalog={element} elements={elements} elementActions={elementActions} />
         case 'sections':
-          return <EditSection config={config} section={element} pages={elements.pages}
-                              elementActions={elementActions} />
+          return <EditSection config={config} section={element} elements={elements} elementActions={elementActions} />
         case 'pages':
-          return <EditPage config={config} page={element} attributes={elements.attributes}
-                           conditions={elements.conditions} questionsets={elements.questionsets}
-                           questions={elements.questions} elementActions={elementActions} />
+          return <EditPage config={config} page={element} elements={elements} elementActions={elementActions} />
         case 'questionsets':
-          return <EditQuestionSet config={config} questionset={element} attributes={elements.attributes}
-                                  conditions={elements.conditions} questionsets={elements.questionsets}
-                                  questions={elements.questions} elementActions={elementActions} />
+          return <EditQuestionSet config={config} questionset={element} elements={elements} elementActions={elementActions} />
         case 'questions':
-          return <EditQuestion config={config} question={element} attributes={elements.attributes}
-                               conditions={elements.conditions} optionsets={elements.optionsets}
-                               options={elements.options} widgetTypes={elements.widgetTypes}
-                               valueTypes={elements.valueTypes} elementActions={elementActions} />
+          return <EditQuestion config={config} question={element} elements={elements} elementActions={elementActions} />
         case 'attributes':
-          return <EditAttribute config={config} attribute={element} attributes={elements.attributes}
-                                 elementActions={elementActions} />
+          return <EditAttribute config={config} attribute={element} elements={elements} elementActions={elementActions} />
         case 'optionsets':
-          return <EditOptionSet config={config} optionset={element} options={elements.options}
-                                providers={elements.providers} elementActions={elementActions} />
+          return <EditOptionSet config={config} optionset={element} elements={elements} elementActions={elementActions} />
         case 'options':
-          return <EditCondition config={config} condition={element} relations={elements.relations}
-                                attributes={elements.attributes} options={elements.options}
-                                elementActions={elementActions} />
+          return <EditOption config={config} option={element} elements={elements} elementActions={elementActions} />
         case 'conditions':
-          return <EditCondition config={config} condition={element} relations={elements.relations}
-                                attributes={elements.attributes} options={elements.options}
-                                elementActions={elementActions} />
+          return <EditCondition config={config} condition={element} elements={elements} elementActions={elementActions} />
         case 'tasks':
-          return <EditTask config={config} task={element} attributes={elements.attributes}
-                           conditions={elements.conditions} catalogs={elements.catalogs}
-                           groups={elements.groups} sites={elements.sites}
-                           elementActions={elementActions} />
+          return <EditTask config={config} task={element} elements={elements} elementActions={elementActions} />
         case 'views':
-          return <EditView config={config} view={element} catalogs={elements.catalogs}
-                           groups={elements.groups} sites={elements.sites}
-                           elementActions={elementActions} />
+          return <EditView config={config} view={element} elements={elements} elementActions={elementActions} />
       }
     }
 

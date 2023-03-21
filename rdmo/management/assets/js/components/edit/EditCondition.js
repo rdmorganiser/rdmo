@@ -9,11 +9,14 @@ import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
 import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/ElementButtons'
-import { DeleteElementModal } from '../common/ElementModals'
+
+import DeleteConditionModal from '../modals/DeleteConditionModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
 
-const EditCondition = ({ config, condition, relations, attributes, options, elementActions }) => {
+const EditCondition = ({ config, condition, elements, elementActions }) => {
+
+  const { relations, attributes, optionsets, options, pages, questionsets, questions, tasks } = elements
 
   const updateCondition = (key, value) => elementActions.updateElement(condition, key, value)
   const storeCondition = () => elementActions.storeElement('conditions', condition)
@@ -87,18 +90,13 @@ const EditCondition = ({ config, condition, relations, attributes, options, elem
         {condition.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
-      <DeleteElementModal title={gettext('Delete catalog')} show={showDeleteModal}
-                          onClose={closeDeleteModal} onDelete={deleteCondition}>
-        <p>
-          {gettext('You are about to permanently delete the condition:')}
-        </p>
-        <p>
-          <code className="code-conditions">{condition.uri}</code>
-        </p>
-        <p className="text-danger">
-          {gettext('This action cannot be undone!')}
-        </p>
-      </DeleteElementModal>
+      <DeleteConditionModal condition={condition}
+                            optionsets={optionsets.filter(e => condition.optionsets.includes(e.id))}
+                            pages={pages.filter(e => condition.pages.includes(e.id))}
+                            questionsets={questionsets.filter(e => condition.questionsets.includes(e.id))}
+                            questions={questions.filter(e => condition.questions.includes(e.id))}
+                            tasks={tasks.filter(e => condition.tasks.includes(e.id))}
+                            show={showDeleteModal} onClose={closeDeleteModal} onDelete={deleteCondition} />
     </div>
   )
 }
@@ -106,9 +104,7 @@ const EditCondition = ({ config, condition, relations, attributes, options, elem
 EditCondition.propTypes = {
   config: PropTypes.object.isRequired,
   condition: PropTypes.object.isRequired,
-  relations: PropTypes.array,
-  attributes: PropTypes.array,
-  options: PropTypes.array,
+  elements: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired
 }
 

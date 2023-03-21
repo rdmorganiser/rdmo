@@ -11,11 +11,14 @@ import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
 import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/ElementButtons'
-import { DeleteElementModal } from '../common/ElementModals'
+
+import DeleteOptionSetModal from '../modals/DeleteOptionSetModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
 
-const EditOptionSet = ({ config, optionset, options, providers, elementActions }) => {
+const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
+
+  const { options, questions, providers } = elements
 
   const updateOptionSet = (key, value) => elementActions.updateElement(optionset, key, value)
   const storeOptionSet = () => elementActions.storeElement('optionsets', optionset)
@@ -86,18 +89,8 @@ const EditOptionSet = ({ config, optionset, options, providers, elementActions }
         {optionset.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
-      <DeleteElementModal title={gettext('Delete catalog')} show={showDeleteModal}
-                          onClose={closeDeleteModal} onDelete={deleteOptionSet}>
-        <p>
-          {gettext('You are about to permanently delete the option set:')}
-        </p>
-        <p>
-          <code className="code-options">{optionset.uri}</code>
-        </p>
-        <p className="text-danger">
-          {gettext('This action cannot be undone!')}
-        </p>
-      </DeleteElementModal>
+      <DeleteOptionSetModal optionset={optionset} questions={questions.filter(e => optionset.questions.includes(e.id))}
+                            show={showDeleteModal} onClose={closeDeleteModal} onDelete={deleteOptionSet} />
     </div>
   )
 }
@@ -105,8 +98,7 @@ const EditOptionSet = ({ config, optionset, options, providers, elementActions }
 EditOptionSet.propTypes = {
   config: PropTypes.object.isRequired,
   optionset: PropTypes.object.isRequired,
-  options: PropTypes.array,
-  providers: PropTypes.array,
+  elements: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired
 }
 

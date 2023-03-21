@@ -13,6 +13,7 @@ class ConditionSerializer(serializers.ModelSerializer):
     source = serializers.PrimaryKeyRelatedField(queryset=Attribute.objects.all(), required=True)
 
     optionsets = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
+    pages = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
     questionsets = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
     questions = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
     tasks = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
@@ -31,6 +32,7 @@ class ConditionSerializer(serializers.ModelSerializer):
             'target_text',
             'target_option',
             'optionsets',
+            'pages',
             'questionsets',
             'questions',
             'tasks'

@@ -10,12 +10,14 @@ import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
 import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/ElementButtons'
-import { DeleteElementModal } from '../common/ElementModals'
+
+import DeleteQuestionModal from '../modals/DeleteQuestionModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
 
-const EditQuestion = ({ config, question, attributes, optionsets, options,
-                        conditions, widgetTypes, valueTypes , elementActions}) => {
+const EditQuestion = ({ config, question, elements, elementActions}) => {
+
+  const { attributes, optionsets, options, conditions, pages, questionsets, widgetTypes, valueTypes } = elements
 
   const updateQuestion = (key, value) => elementActions.updateElement(question, key, value)
   const storeQuestion = () => elementActions.storeElement('questions', question)
@@ -187,18 +189,10 @@ const EditQuestion = ({ config, question, attributes, optionsets, options,
         {question.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
-      <DeleteElementModal title={gettext('Delete catalog')} show={showDeleteModal}
-                          onClose={closeDeleteModal} onDelete={deleteQuestion}>
-        <p>
-          {gettext('You are about to permanently delete the question:')}
-        </p>
-        <p>
-          <code className="code-questions">{question.uri}</code>
-        </p>
-        <p className="text-danger">
-          {gettext('This action cannot be undone!')}
-        </p>
-      </DeleteElementModal>
+      <DeleteQuestionModal question={question}
+                           pages={pages.filter(e => question.pages.includes(e.id))}
+                           questionsets={questionsets.filter(e => question.questionsets.includes(e.id))}
+                           show={showDeleteModal} onClose={closeDeleteModal} onDelete={deleteQuestion} />
     </div>
   )
 }
@@ -206,12 +200,7 @@ const EditQuestion = ({ config, question, attributes, optionsets, options,
 EditQuestion.propTypes = {
   config: PropTypes.object.isRequired,
   question: PropTypes.object.isRequired,
-  attributes: PropTypes.array,
-  conditions: PropTypes.array,
-  optionsets: PropTypes.array,
-  options: PropTypes.array,
-  widgetTypes: PropTypes.array,
-  valueTypes: PropTypes.array,
+  elements: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired
 }
 

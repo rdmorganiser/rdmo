@@ -38,11 +38,13 @@ class OptionSetSerializer(ThroughModelSerializerMixin, BaseOptionSetSerializer):
 
     uri_path = serializers.CharField(required=True)
     options = ThroughModelListField(source='optionset_options', child=OptionSetOptionSerializer(), required=False)
+    questions = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta(BaseOptionSetSerializer.Meta):
         fields = BaseOptionSetSerializer.Meta.fields + (
             'options',
-            'conditions'
+            'conditions',
+            'questions'
         )
         validators = (
             OptionSetUniqueURIValidator(),

@@ -37,6 +37,7 @@ class OptionSerializer(BaseOptionSerializer):
     class Meta(BaseOptionSerializer.Meta):
         fields = BaseOptionSerializer.Meta.fields + (
             'optionsets',
+            'conditions',
             'values_count',
             'projects_count'
         )

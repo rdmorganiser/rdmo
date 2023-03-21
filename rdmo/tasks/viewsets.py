@@ -1,4 +1,7 @@
+from django.db import models
+
 from django_filters.rest_framework import DjangoFilterBackend
+
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -17,7 +20,8 @@ from .serializers.v1 import (TaskIndexSerializer, TaskListSerializer,
 class TaskViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
     queryset = Task.objects.select_related('start_attribute', 'end_attribute') \
-                           .prefetch_related('catalogs', 'sites', 'groups', 'conditions')
+                           .prefetch_related('catalogs', 'sites', 'groups', 'conditions') \
+                           .annotate(projects_count=models.Count('projects'))
     serializer_class = TaskSerializer
 
     filter_backends = (DjangoFilterBackend,)

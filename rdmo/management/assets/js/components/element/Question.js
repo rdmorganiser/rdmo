@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/ElementLinks'
 
-const Question = ({ config, question,elementActions, indent=0 }) => {
+const Question = ({ config, question, elementActions, indent=0 }) => {
 
   const verboseName = gettext('question')
 

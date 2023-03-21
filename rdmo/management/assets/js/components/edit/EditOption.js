@@ -8,11 +8,14 @@ import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
 import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/ElementButtons'
-import { DeleteElementModal } from '../common/ElementModals'
+
+import DeleteOptionModal from '../modals/DeleteOptionModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
 
-const EditOption = ({ config, option, elementActions }) => {
+const EditOption = ({ config, option, elements, elementActions }) => {
+
+  const { optionsets, conditions } = elements
 
   const updateOption = (key, value) => elementActions.updateElement(option, key, value)
   const storeOption = () => elementActions.storeElement('options', option)
@@ -86,18 +89,8 @@ const EditOption = ({ config, option, elementActions }) => {
         {option.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
-      <DeleteElementModal title={gettext('Delete catalog')} show={showDeleteModal}
-                          onClose={closeDeleteModal} onDelete={deleteOption}>
-        <p>
-          {gettext('You are about to permanently delete the option:')}
-        </p>
-        <p>
-          <code className="code-options">{option.uri}</code>
-        </p>
-        <p className="text-danger">
-          {gettext('This action cannot be undone!')}
-        </p>
-      </DeleteElementModal>
+      <DeleteOptionModal option={option} conditions={conditions.filter(e => option.conditions.includes(e.id))}
+                         show={showDeleteModal} onClose={closeDeleteModal} onDelete={deleteOption} />
     </div>
   )
 }
@@ -105,6 +98,7 @@ const EditOption = ({ config, option, elementActions }) => {
 EditOption.propTypes = {
   config: PropTypes.object.isRequired,
   option: PropTypes.object.isRequired,
+  elements: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired
 }
 

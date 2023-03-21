@@ -10,11 +10,14 @@ import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
 import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/ElementButtons'
-import { DeleteElementModal } from '../common/ElementModals'
+
+import DeleteViewModal from '../modals/DeleteViewModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
 
-const EditView = ({ config, view, catalogs, sites, groups, elementActions }) => {
+const EditView = ({ config, view, elements, elementActions }) => {
+
+  const { catalogs, sites, groups } = elements
 
   const updateView = (key, value) => elementActions.updateElement(view, key, value)
   const storeView = () => elementActions.storeElement('views', view)
@@ -104,18 +107,8 @@ const EditView = ({ config, view, catalogs, sites, groups, elementActions }) => 
         {view.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
-      <DeleteElementModal title={gettext('Delete catalog')} show={showDeleteModal}
-                          onClose={closeDeleteModal} onDelete={deleteView}>
-        <p>
-          {gettext('You are about to permanently delete the view:')}
-        </p>
-        <p>
-          <code className="code-views">{view.uri}</code>
-        </p>
-        <p className="text-danger">
-          {gettext('This action cannot be undone!')}
-        </p>
-      </DeleteElementModal>
+      <DeleteViewModal view={view} show={showDeleteModal}
+                       onClose={closeDeleteModal} onDelete={deleteView} />
     </div>
   )
 }
@@ -123,9 +116,7 @@ const EditView = ({ config, view, catalogs, sites, groups, elementActions }) => 
 EditView.propTypes = {
   config: PropTypes.object.isRequired,
   view: PropTypes.object.isRequired,
-  catalogs: PropTypes.array,
-  groups: PropTypes.array,
-  sites: PropTypes.array,
+  elements: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired
 }
 

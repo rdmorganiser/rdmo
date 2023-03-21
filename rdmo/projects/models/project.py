@@ -54,12 +54,12 @@ class Project(MPTTModel, Model):
         help_text=_('The catalog which will be used for this project.')
     )
     tasks = models.ManyToManyField(
-        Task, blank=True, through='Issue',
+        Task, blank=True, through='Issue', related_name='projects',
         verbose_name=_('Tasks'),
         help_text=_('The tasks that will be used for this project.')
     )
     views = models.ManyToManyField(
-        View, blank=True,
+        View, blank=True, related_name='projects',
         verbose_name=_('Views'),
         help_text=_('The views that will be used for this project.')
     )

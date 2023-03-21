@@ -134,9 +134,10 @@ export function fetchElement(elementType, elementId, elementAction) {
         } else {
           action = (dispatch) => Promise.all([
             QuestionsApi.fetchSection(elementId),
+            QuestionsApi.fetchCatalogs('index'),
             QuestionsApi.fetchPages('index'),
-          ]).then(([element, pages]) => dispatch(fetchElementSuccess({
-            element, pages
+          ]).then(([element, catalogs, pages]) => dispatch(fetchElementSuccess({
+            element, catalogs, pages
           })))
         }
         break
@@ -150,11 +151,12 @@ export function fetchElement(elementType, elementId, elementAction) {
             QuestionsApi.fetchPage(elementId),
             DomainApi.fetchAttributes('index'),
             ConditionsApi.fetchConditions('index'),
+            QuestionsApi.fetchSections('index'),
             QuestionsApi.fetchQuestionSets('index'),
             QuestionsApi.fetchQuestions('index')
-          ]).then(([element, attributes, conditions, questionsets,
-                    questions]) => dispatch(fetchElementSuccess({
-            element, attributes, conditions, questionsets, questions
+          ]).then(([element, attributes, conditions, sections,
+                    questionsets, questions]) => dispatch(fetchElementSuccess({
+            element, attributes, conditions, sections, questionsets, questions
           })))
         }
         break
@@ -168,11 +170,12 @@ export function fetchElement(elementType, elementId, elementAction) {
             QuestionsApi.fetchQuestionSet(elementId),
             DomainApi.fetchAttributes('index'),
             ConditionsApi.fetchConditions('index'),
+            QuestionsApi.fetchPages('index'),
             QuestionsApi.fetchQuestionSets('index'),
             QuestionsApi.fetchQuestions('index')
-          ]).then(([element, attributes, conditions, questionsets,
-                    questions]) => dispatch(fetchElementSuccess({
-            element, attributes, conditions, questionsets, questions
+          ]).then(([element, attributes, conditions, pages,
+                    questionsets, questions]) => dispatch(fetchElementSuccess({
+            element, attributes, conditions, pages, questionsets, questions
           })))
         }
         break
@@ -188,11 +191,14 @@ export function fetchElement(elementType, elementId, elementAction) {
             OptionsApi.fetchOptionSets('index'),
             OptionsApi.fetchOptions('index'),
             ConditionsApi.fetchConditions('index'),
+            QuestionsApi.fetchPages('index'),
+            QuestionsApi.fetchQuestionSets('index'),
             QuestionsApi.fetchWidgetTypes(),
             QuestionsApi.fetchValueTypes()
-          ]).then(([element, attributes, optionsets, options, conditions,
+          ]).then(([element, attributes, optionsets, options, conditions, pages, questionsets,
                     widgetTypes, valueTypes]) => dispatch(fetchElementSuccess({
-            element, attributes, optionsets, options, conditions, widgetTypes, valueTypes
+            element, attributes, optionsets, options, conditions, pages, questionsets,
+            widgetTypes, valueTypes
           })))
         }
         break
@@ -205,8 +211,13 @@ export function fetchElement(elementType, elementId, elementAction) {
           action = (dispatch) => Promise.all([
             DomainApi.fetchAttribute(elementId),
             DomainApi.fetchAttributes('index'),
-          ]).then(([element, attributes]) => dispatch(fetchElementSuccess({
-            element, attributes
+            ConditionsApi.fetchConditions('index'),
+            QuestionsApi.fetchPages('index'),
+            QuestionsApi.fetchQuestionSets('index'),
+            QuestionsApi.fetchQuestions('index'),
+            TasksApi.fetchTasks('index'),
+          ]).then(([element, attributes, conditions, pages, questionsets, questions, tasks]) => dispatch(fetchElementSuccess({
+            element, attributes, conditions, pages, questionsets, questions, tasks
           })))
         }
         break
@@ -219,9 +230,10 @@ export function fetchElement(elementType, elementId, elementAction) {
           action = (dispatch) => Promise.all([
             OptionsApi.fetchOptionSet(elementId),
             OptionsApi.fetchOptions('index'),
-            OptionsApi.fetchProviders(),
-          ]).then(([element, options, providers]) => dispatch(fetchElementSuccess({
-            element, options, providers
+            QuestionsApi.fetchQuestions('index'),
+            OptionsApi.fetchProviders()
+          ]).then(([element, options, questions, providers]) => dispatch(fetchElementSuccess({
+            element, options, questions, providers
           })))
         }
         break
@@ -230,8 +242,9 @@ export function fetchElement(elementType, elementId, elementAction) {
         action = (dispatch) => Promise.all([
           OptionsApi.fetchOption(elementId),
           OptionsApi.fetchOptionSets('index'),
-        ]).then(([element, optionsets]) => dispatch(fetchElementSuccess({
-          element, optionsets
+          ConditionsApi.fetchConditions('index'),
+        ]).then(([element, optionsets, conditions]) => dispatch(fetchElementSuccess({
+          element, optionsets, conditions
         })))
         break
 
@@ -240,9 +253,15 @@ export function fetchElement(elementType, elementId, elementAction) {
           ConditionsApi.fetchCondition(elementId),
           ConditionsApi.fetchRelations(),
           DomainApi.fetchAttributes('index'),
+          OptionsApi.fetchOptionSets('index'),
           OptionsApi.fetchOptions('index'),
-        ]).then(([element, relations, attributes, options]) => dispatch(fetchElementSuccess({
-          element, relations, attributes, options
+          QuestionsApi.fetchPages('index'),
+          QuestionsApi.fetchQuestionSets('index'),
+          QuestionsApi.fetchQuestions('index'),
+          TasksApi.fetchTasks('index'),
+        ]).then(([element, relations, attributes, optionsets, options,
+                  pages, questionsets, questions, tasks]) => dispatch(fetchElementSuccess({
+          element, relations, attributes, optionsets, options, pages, questionsets, questions, tasks
         })))
         break
 
