@@ -324,13 +324,7 @@ class QuestionSetNestedSerializer(CanEditObjectSerializerMixin, serializers.Mode
 
     def get_questionsets(self, obj):
         queryset = obj.questionsets.all()
-        # breakpoint()
-        try:
-            context = self.context
-        except AttributeError as exc:
-            context = {}
-
-        serializer = QuestionSetNestedSerializer(queryset, many=True, context=context)
+        serializer = QuestionSetNestedSerializer(queryset, many=True, context=self.context)
         return serializer.data
 
     def get_warning(self, obj):
@@ -342,7 +336,7 @@ class QuestionSetNestedSerializer(CanEditObjectSerializerMixin, serializers.Mode
 
 class SectionNestedSerializer(CanEditObjectSerializerMixin, serializers.ModelSerializer):
 
-    questionsets = QuestionSetNestedSerializer(many=True)
+    questionsets = serializers.SerializerMethodField()
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
     can_edit = serializers.SerializerMethodField(read_only=True)
@@ -368,6 +362,11 @@ class SectionNestedSerializer(CanEditObjectSerializerMixin, serializers.ModelSer
 
     def get_xml_url(self, obj):
         return reverse('v1-questions:section-detail-export', args=[obj.pk])
+
+    def get_questionsets(self, obj):
+        queryset = obj.questionsets.all()
+        serializer = QuestionSetNestedSerializer(queryset, many=True, context=self.context)
+        return serializer.data
 
 
 class CatalogNestedSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
@@ -416,8 +415,3 @@ class CatalogNestedSerializer(CanEditObjectSerializerMixin, TranslationSerialize
         for key, text in settings.EXPORT_FORMATS:
             urls[key] = reverse('questions_catalog_export', args=[obj.pk, key])
         return urls
-
-    # def get_costum_can_edit(self, obj):
-    #     # breakpoint()
-    #     perm = f'{self.instance._meta.app_label}.change_{self.instance._meta.model_name}_object'
-    #     return self.context['request'].user.has_perm(perm, obj)
