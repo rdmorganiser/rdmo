@@ -201,7 +201,7 @@
     "model": "auth.user",
     "pk": 12,
     "fields": {
-      "password": "pbkdf2_sha256$260000$OeWaEah3YzoF1BGfvO35ij$UpuJQi1MSoeHYx3YldMUOfum/vkmXmnChmkEuqaTt3M=",
+      "password": "pbkdf2_sha256$260000$ptME03p79B30xA44ZaerMT$mXJAqYUuN5oTAfMTlng43w85ridEsLn4uOPaMuZgQA0=",
       "last_login": "2023-02-06T08:42:53Z",
       "is_superuser": false,
       "username": "example-user",
