@@ -8,7 +8,7 @@ from django.shortcuts import render
 
 from rdmo.core.utils import get_next, get_referer_path_info
 
-from .forms import ProfileForm, RemoveForm, ShibbolethUserRemoveForm
+from .forms import ProfileForm, RemoveForm
 from .utils import delete_user
 
 log = logging.getLogger(__name__)
@@ -41,18 +41,15 @@ def profile_update(request):
 @login_required()
 def remove_user(request):
     if not settings.PROFILE_DELETE:
-        log.debug('Remove user form disabled in settings PROFILE_DELETE = %s' % settings.PROFILE_DELETE)
+        log.debug('Remove user form is disabled in settings PROFILE_DELETE')
         return render(request, 'profile/profile_remove_closed.html')
 
-    if request.user.has_usable_password():
-        log.debug('Remove user form for "%s" with password' % request.user.username)
+    try:
         form = RemoveForm(request.POST or None, request=request)
-    elif not request.user.has_usable_password() and settings.SHIBBOLETH:
-        log.debug('Remove user form for "%s" without password' % request.user.username)
-        form = ShibbolethUserRemoveForm(request.POST or None, request=request)
-    else:
-        log.debug('Remove user form not possible for user %s' % request.user.username)
-        return render(request, 'profile/profile_remove_closed.html')
+        log.debug('Remove user form initialized for "%s"' % request.user.username)
+    except Exception as e:
+        log.debug('Remove user form failed for user %s, because %s' % request.user.username, str(e))
+        return render(request, 'profile/profile_remove_failed.html')
 
     if request.method == 'POST':
         if 'cancel' in request.POST:
@@ -64,19 +61,15 @@ def remove_user(request):
                 return HttpResponseRedirect('/')
 
         if form.is_valid():
-            log.debug('Deleting user %s', request.user.username)
-
-            if request.user.has_usable_password():
-                user_deleted = delete_user(user=request.user, email=request.POST['email'], password=request.POST['password'])
-            elif not request.user.has_usable_password() and settings.SHIBBOLETH:
-                user_deleted = delete_user(user=request.user, email=request.POST['email'])
-            else:
-                user_deleted = False
+            user_deleted = delete_user(user=request.user,
+                                       email=request.POST['email'],
+                                       password=request.POST.get('password', None))
 
             if user_deleted:
                 logout(request)
                 return render(request, 'profile/profile_remove_success.html')
             else:
+                log.debug('User deletion failed for %s', request.user.username)
                 return render(request, 'profile/profile_remove_failed.html')
 
     return render(request, 'profile/profile_remove_form.html', {
