@@ -6,13 +6,13 @@ from rdmo.core.serializers import (ElementExportSerializerMixin,
                                    ElementWarningSerializerMixin,
                                    TranslationSerializerMixin,
                                    ReadOnlyObjectPermissionsSerializerMixin)
-from rdmo.core.utils import get_language_warning
 
 from ..models import View
 from ..validators import ViewLockedValidator, ViewUniqueURIValidator
 
 
-class ViewSerializer(ReadOnlyObjectPermissionsSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
+class BaseViewSerializer(ReadOnlyObjectPermissionsSerializerMixin, TranslationSerializerMixin, 
+                            ElementModelSerializerMixin,serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()

@@ -74,7 +74,7 @@ class AttributeSerializer(BaseAttributeSerializer):
         return [attribute.id for attribute in obj.get_descendants()]
 
 
-class AttributeNestedSerializer(ReadOnlyObjectPermissionsSerializerMixin, serializers.ModelSerializer):
+class AttributeListSerializer(ElementExportSerializerMixin, BaseAttributeSerializer):
 
     xml_url = serializers.SerializerMethodField()
 
