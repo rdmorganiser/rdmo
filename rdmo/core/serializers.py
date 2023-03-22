@@ -194,26 +194,31 @@ class ElementWarningSerializerMixin(serializers.ModelSerializer):
 
 class CanEditObjectSerializerMixin(object):
     '''
-    A mixin for serializers that adds a boolean can_edit field.
+    A mixin for serializers that adds a boolean read_only field.
     Add the request to the context kwargs in the Serializer call:
         ..., context={'request': request}
 
     In the Serializer class add:
-        can_edit = serializers.SerializerMethodField(read_only=True)
+        read_only = serializers.SerializerMethodField(read_only=True)
     and the field to fields:
-        can_edit
+        read_only
     '''
+    EDIT_PERMISSION_ACTION_NAMES = ('change', 'delete')
     @staticmethod
-    def construct_object_permission(model) -> str:
+    def construct_object_permission(model, action_name: str) -> str:
+        if not action_name:
+            return ''
         model_app_label = model._meta.app_label
         model_name = model._meta.model_name
-        perm = f'{model_app_label}.change_{model_name}_object'
+        perm = f'{model_app_label}.{action_name}_{model_name}_object'
         return perm
 
-    def get_can_edit(self, obj) -> bool:
+    def get_read_only(self, obj) -> bool:
         try:
-            perm = self.construct_object_permission(self.Meta.model)
-            return self.context['request'].user.has_perm(perm, obj)
+            user = self.context['request'].user
+            perms = (self.construct_object_permission(self.Meta.model, action_name)
+                     for action_name in self.EDIT_PERMISSION_ACTION_NAMES)
+            return not all(user.has_perm(perm, obj) for perm in perms)
         except Exception as exc:
             logger.debug('CanEditObjectSerializerMixin exception: %s for obj %s' % (exc, obj))
             return None
