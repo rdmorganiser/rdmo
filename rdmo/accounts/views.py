@@ -43,14 +43,9 @@ def remove_user(request):
     if not settings.PROFILE_DELETE:
         log.debug('Remove user form is disabled in settings PROFILE_DELETE')
         return render(request, 'profile/profile_remove_closed.html')
-
-    try:
-        form = RemoveForm(request.POST or None, request=request)
-        log.debug('Remove user form initialized for "%s"' % request.user.username)
-    except Exception as e:
-        log.debug('Remove user form failed for user %s, because %s' % request.user.username, str(e))
-        return render(request, 'profile/profile_remove_failed.html')
-
+    form = RemoveForm(request.POST or None, request=request)
+    log.debug('Remove user form initialized for "%s"' % request.user.username)
+    
     if request.method == 'POST':
         if 'cancel' in request.POST:
             log.debug('User %s removal cancelled', str(request.user))
