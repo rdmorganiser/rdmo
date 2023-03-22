@@ -273,6 +273,7 @@ def test_remove_user_get_when_disabled(db, client, settings):
     response = client.get(url)
     assert response.status_code == 200
     assertTemplateUsed(response, 'profile/profile_remove_closed.html')
+    assert get_user_model().objects.filter(username='user').exists()
 
 
 def test_remove_user_post(db, client, settings):
@@ -347,6 +348,7 @@ def test_remove_user_post_invalid_password(db, client):
         }
         response = client.post(url, data)
         assert response.status_code == 200
+        assertTemplateUsed(response, 'profile/profile_remove_failed.html')
         assert get_user_model().objects.filter(username='user').exists()
 
 
@@ -363,11 +365,11 @@ def test_remove_user_post_invalid_consent(db, client):
 
         response = client.post(url, data)
         assert response.status_code == 200
+        # assertTemplateUsed(response, 'profile/profile_remove_failed.html')
         assert get_user_model().objects.filter(username='user').exists()
 
 
-def test_remove_standard_user_without_usable_password(db, client, settings):
-    settings.SHIBBOLETH = False # when not using shibboleth
+def test_remove_a_user_without_usable_password(db, client, settings):
     username = "user-no-password"
     email = "user-no-password@example.com"
     user, _created = get_user_model().objects.get_or_create(username=username, email=email)
@@ -384,33 +386,56 @@ def test_remove_standard_user_without_usable_password(db, client, settings):
         }
         response = client.post(url, data)
         assert response.status_code == 200
-        assertTemplateUsed(response, 'profile/profile_remove_closed.html')
-        assert get_user_model().objects.filter(username=username).exists()
-
-
-def test_remove_shibboleth_user_without_usable_password(db, client, settings):
-    settings.SHIBBOLETH = True
-    username = "user-no-password"
-    email = "user-no-password@example.com"
-    user, _created = get_user_model().objects.get_or_create(username=username, email=email)
-    user.set_unusable_password()
-    user.save()
-
-    if settings.PROFILE_DELETE:
-        client.force_login(user=user)  # login without password
-
-        url = reverse('profile_remove')
-        data = {
-            'email': email,
-            'consent': True
-        }
-        response = client.post(url, data)
-        assert response.status_code == 200
+        assertTemplateUsed(response, 'profile/profile_remove_success.html')
         assert not get_user_model().objects.filter(username=username).exists()
+    client.logout()
 
 
-def test_remove_shibboleth_user_without_usable_password_invalid_consent(db, client, settings):
-    settings.SHIBBOLETH = True
+def test_remove_a_user_without_usable_password_fails_when_email_is_wrong(db, client, settings):
+    username = "user-no-password"
+    email = "user-no-password@example.com"
+    user, _created = get_user_model().objects.get_or_create(username=username, email=email)
+    user.set_unusable_password()
+    user.save()
+
+    if settings.PROFILE_DELETE:
+        client.force_login(user=user)  # login without password
+
+        url = reverse('profile_remove')
+        data = {
+            'email': 'wrong-email@mail.com',
+            'consent': True
+        }
+        response = client.post(url, data)
+        assert response.status_code == 200
+        assertTemplateUsed(response, 'profile/profile_remove_failed.html')
+        assert get_user_model().objects.filter(username=username).exists()
+    client.logout()
+
+
+def test_remove_a_user_without_usable_password_fails_when_email_is_empty(db, client, settings):
+    username = "user-no-password"
+    email = "user-no-password@example.com"
+    user, _created = get_user_model().objects.get_or_create(username=username, email=email)
+    user.set_unusable_password()
+    user.save()
+
+    if settings.PROFILE_DELETE:
+        client.force_login(user=user)  # login without password
+
+        url = reverse('profile_remove')
+        data = {
+            'email': '',
+            'consent': True
+        }
+        response = client.post(url, data)
+        assert response.status_code == 200
+        assert response.context['form'].errors['email'] == ['This field is required.']  # check if consent is required
+        assert get_user_model().objects.filter(username=username).exists()
+    client.logout()
+
+
+def test_remove_a_user_without_usable_password_fails_when_consent_is_false(db, client, settings):
     username = "user-no-password"
     email = "user-no-password@example.com"
     user, _created = get_user_model().objects.get_or_create(username=username, email=email)
@@ -432,7 +457,7 @@ def test_remove_shibboleth_user_without_usable_password_invalid_consent(db, clie
     client.logout()
 
 
-def test_remove_shibboleth_user_without_usable_password_when_invalid_email_is_wrong(db, client, settings):
+def test_remove_a_user_without_usable_password_succeeds_when_shibboleth_is_true(db, client, settings):
     settings.SHIBBOLETH = True
     username = "user-no-password"
     email = "user-no-password@example.com"
@@ -445,18 +470,18 @@ def test_remove_shibboleth_user_without_usable_password_when_invalid_email_is_wr
 
         url = reverse('profile_remove')
         data = {
-            'email': 'wrong-email@mail.com',
+            'email': email,
             'consent': True
         }
         response = client.post(url, data)
         assert response.status_code == 200
-        assertTemplateUsed(response, 'profile/profile_remove_failed.html')
-        assert get_user_model().objects.filter(username=username).exists()
+        assertTemplateUsed(response, 'profile/profile_remove_success.html')
+        assert not get_user_model().objects.filter(username=username).exists()
     settings.SHIBBOLETH = False
     client.logout()
 
 
-def test_remove_shibboleth_user_without_usable_password_when_invalid_email_is_empty(db, client, settings):
+def test_remove_a_user_without_usable_password_fails_when_shibboleth_is_true_and_consent_is_false(db, client, settings):
     settings.SHIBBOLETH = True
     username = "user-no-password"
     email = "user-no-password@example.com"
@@ -469,12 +494,12 @@ def test_remove_shibboleth_user_without_usable_password_when_invalid_email_is_em
 
         url = reverse('profile_remove')
         data = {
-            'email': '',
-            'consent': True
+            'email': email,
+            'consent': False
         }
         response = client.post(url, data)
         assert response.status_code == 200
-        assert response.context['form'].errors['email'] == ['This field is required.']  # check if consent is required
+        assert response.context['form'].errors['consent'] == ['This field is required.']  # check if consent is required
         assert get_user_model().objects.filter(username=username).exists()
     settings.SHIBBOLETH = False
     client.logout()
