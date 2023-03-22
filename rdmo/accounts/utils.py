@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 from .models import Role
 from .settings import GROUPS
@@ -47,40 +48,39 @@ def delete_user(user=None, email=None, password=None):
 
     username = user.username
 
-    database_user = get_user_model().objects.filter(username=username, email=email)
-    if not database_user.exists():
-        log.debug('User "%s" requested for deletion does not exist', username)
+    try:
+        database_user = get_user_model().objects.get(username=username, email=email)
+    except ObjectDoesNotExist:
+        log.debug('Deletion of user "%s" failed, user does not exist', username)
         return False
-    if database_user.count() > 1:
-        log.debug('User with email "%s" requested for deletion has multiple user objects', email)
+    except MultipleObjectsReturned:
+        log.debug('Deletion of user "%s" failed, there are multiple user objects', email)
         return False
-    database_user = database_user.first()
 
     if not user == database_user:
-        log.debug('Deletion of user "%s" failed because the user from request and database differ.', username)
+        log.debug('Deletion of user "%s" failed, the user from request and database differ.', username)
         return False
 
     if user.has_usable_password() and password is not None:
-
         authenticated = authenticate(username=username, password=password)
         if not authenticated:
-            log.debug('User with usable password "%s" failed to authenticate, false password.', username)
+            log.debug('Deletion of user with usable password "%s" failed, false password.', username)
             return False
         try:
             user.delete()
-            log.debug('User "%s" deleted', username)
+            log.debug('Deletion of user with usable password "%s" succeeded.', username)
             return True
         except Exception as e:
-            log.debug('An exception (%s) occured during user "%s" deletion: ', (str(e), username))
+            log.debug('Deletion of user with usable password "%s" failed, an exception (%s) occured', (str(e), username))
             return False
     elif not user.has_usable_password() and password is None:
         try:
             user.delete()
-            log.debug('User without usable password "%s" deleted', username)
+            log.debug('Deletion of user without usable password "%s" succeeded.', username)
             return True
         except Exception as e:
-            log.debug('An exception (%s) occured during user "%s" deletion: ', (str(e), username))
+            log.debug('Deletion of user without usable password "%s" failed, an exception (%s) occured', (str(e), username))
             return False
     else:
-        log.debug('Failed to delete user "%s", wrong value for password.', username)
+        log.debug('Deletion of user "%s" failed, probably wrong value for password given', username)
         return False
