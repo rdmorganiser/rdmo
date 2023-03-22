@@ -59,7 +59,7 @@ class ConditionSerializer(CanEditObjectSerializerMixin, serializers.ModelSeriali
     questionsets = QuestionSetSerializer(many=True, read_only=True)
     questions = QuestionSerializer(many=True, read_only=True)
     tasks = TaskSerializer(many=True, read_only=True)
-    can_edit = serializers.SerializerMethodField()
+    read_only = serializers.SerializerMethodField()
 
     class Meta:
         model = Condition
@@ -70,7 +70,7 @@ class ConditionSerializer(CanEditObjectSerializerMixin, serializers.ModelSeriali
             'key',
             'comment',
             'locked',
-            'can_edit',
+            'read_only',
             'editors',
             'source',
             'relation',
@@ -93,7 +93,7 @@ class ConditionIndexSerializer(CanEditObjectSerializerMixin, serializers.ModelSe
     target_option_text = serializers.CharField(source='target_option.text', default=None, read_only=True)
     xml_url = serializers.SerializerMethodField()
     editors = SiteSerializer(many=True, read_only=True)
-    can_edit = serializers.SerializerMethodField(read_only=True)
+    read_only = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Condition
@@ -104,7 +104,7 @@ class ConditionIndexSerializer(CanEditObjectSerializerMixin, serializers.ModelSe
             'key',
             'comment',
             'locked',
-            'can_edit',
+            'read_only',
             'editors',
             'source_label',
             'relation_label',

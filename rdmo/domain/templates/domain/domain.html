@@ -115,7 +115,7 @@
                 {% include 'domain/domain_options.html' %}
             </div>
 
-            <strong ng-class="{'text-muted': !attribute.can_edit}">
+            <strong ng-class="{'text-muted': attribute.read_only}">
                 {% trans 'Attribute' %}
             </strong>
 

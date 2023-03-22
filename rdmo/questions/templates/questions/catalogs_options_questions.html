@@ -2,7 +2,7 @@
 
     <i class="fa fa-lock text-muted" ng-show="questionset.locked || section.locked || service.catalog.locked"></i>
     <i class="fa fa-lock text-danger" ng-show="question.locked"></i>
-    <i class="fa fa-ban text-muted" ng-hide="question.can_edit"
+    <i class="fa fa-ban text-muted" ng-show="question.read_only"
         title="{% trans 'Read only' %}">
     </i>
 

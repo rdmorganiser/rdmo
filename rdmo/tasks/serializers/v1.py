@@ -12,7 +12,7 @@ from ..validators import TaskLockedValidator, TaskUniqueURIValidator
 class TaskSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.SlugField(required=True)
-    can_edit = serializers.SerializerMethodField()
+    read_only = serializers.SerializerMethodField()
 
     class Meta:
         model = Task
@@ -27,7 +27,7 @@ class TaskSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin, s
             'catalogs',
             'sites',
             'editors',
-            'can_edit',
+            'read_only',
             'groups',
             'start_attribute',
             'end_attribute',
@@ -53,7 +53,7 @@ class TaskIndexSerializer(CanEditObjectSerializerMixin, MarkdownSerializerMixin,
     editors = SiteSerializer(many=True, read_only=True)
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
-    can_edit = serializers.SerializerMethodField(read_only=True)
+    read_only = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Task
@@ -66,7 +66,7 @@ class TaskIndexSerializer(CanEditObjectSerializerMixin, MarkdownSerializerMixin,
             'available',
             'sites',
             'editors',
-            'can_edit',
+            'read_only',
             'title',
             'text',
             'warning',

@@ -1,7 +1,7 @@
 {% load i18n %}
     
     <i class="fa fa-lock text-muted" ng-show="service.catalog.locked"></i>
-    <i class="fa fa-ban text-muted" ng-hide="service.catalog.can_edit"
+    <i class="fa fa-ban text-muted" ng-show="service.catalog.read_only"
         title="{% trans 'Read only' %}">
     </i>
 

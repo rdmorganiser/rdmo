@@ -1,7 +1,7 @@
 {% load i18n %}
 
 <i class="fa fa-lock text-danger" ng-show="attribute.locked"></i>
-<i class="fa fa-ban text-muted" ng-hide="attribute.can_edit"
+<i class="fa fa-ban text-muted" ng-show="attribute.read_only"
     title="{% trans 'Read only' %}">
 </i>
 

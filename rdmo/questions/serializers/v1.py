@@ -22,7 +22,7 @@ class CatalogSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin
 
     key = serializers.SlugField(required=True)
     projects_count = serializers.IntegerField(read_only=True)
-    can_edit = serializers.SerializerMethodField(read_only=True)
+    read_only = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Catalog
@@ -37,7 +37,7 @@ class CatalogSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin
             'available',
             'sites',
             'editors',
-            'can_edit',
+            'read_only',
             'groups',
             'projects_count'
         )
@@ -54,7 +54,7 @@ class CatalogSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin
 class SectionSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.SlugField(required=True)
-    can_edit = serializers.SerializerMethodField()
+    read_only = serializers.SerializerMethodField()
 
     class Meta:
         model = Section
@@ -65,7 +65,7 @@ class SectionSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin
             'key',
             'comment',
             'locked',
-            'can_edit',
+            'read_only',
             'catalog',
             'order',
             'editors',
@@ -82,7 +82,7 @@ class SectionSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin
 class QuestionSetSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.SlugField(required=True)
-    can_edit = serializers.SerializerMethodField()
+    read_only = serializers.SerializerMethodField()
 
     class Meta:
         model = QuestionSet
@@ -93,7 +93,7 @@ class QuestionSetSerializer(CanEditObjectSerializerMixin, TranslationSerializerM
             'key',
             'comment',
             'locked',
-            'can_edit',
+            'read_only',
             'attribute',
             'section',
             'questionset',
@@ -119,7 +119,7 @@ class QuestionSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixi
 
     key = serializers.SlugField(required=True)
     widget_type = serializers.ChoiceField(choices=get_widget_type_choices(), required=True)
-    can_edit = serializers.SerializerMethodField(read_only=True)
+    read_only = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Question
@@ -130,7 +130,7 @@ class QuestionSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixi
             'key',
             'comment',
             'locked',
-            'can_edit',
+            'read_only',
             'attribute',
             'questionset',
             'is_collection',
@@ -172,7 +172,7 @@ class QuestionSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixi
 
 class CatalogIndexSerializer(CanEditObjectSerializerMixin, serializers.ModelSerializer):
 
-    can_edit = serializers.SerializerMethodField(read_only=True)
+    read_only = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Catalog
@@ -183,7 +183,7 @@ class CatalogIndexSerializer(CanEditObjectSerializerMixin, serializers.ModelSeri
             'key',
             'sites',
             'editors',
-            'can_edit',
+            'read_only',
         )
 
 
@@ -260,7 +260,7 @@ class QuestionNestedSerializer(CanEditObjectSerializerMixin, serializers.ModelSe
     conditions = ConditionNestedSerializer(many=True, read_only=True)
     optionsets = OptionSetNestedSerializer(read_only=True, many=True)
     xml_url = serializers.SerializerMethodField()
-    can_edit = serializers.SerializerMethodField(read_only=True)
+    read_only = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Question
@@ -270,7 +270,7 @@ class QuestionNestedSerializer(CanEditObjectSerializerMixin, serializers.ModelSe
             'uri_prefix',
             'path',
             'locked',
-            'can_edit',
+            'read_only',
             'order',
             'text',
             'attribute',
@@ -298,7 +298,7 @@ class QuestionSetNestedSerializer(CanEditObjectSerializerMixin, serializers.Mode
     attribute = AttributeNestedSerializer(read_only=True)
     conditions = ConditionNestedSerializer(many=True, read_only=True)
     xml_url = serializers.SerializerMethodField()
-    can_edit = serializers.SerializerMethodField(read_only=True)
+    read_only = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = QuestionSet
@@ -308,7 +308,7 @@ class QuestionSetNestedSerializer(CanEditObjectSerializerMixin, serializers.Mode
             'uri_prefix',
             'path',
             'locked',
-            'can_edit',
+            'read_only',
             'order',
             'title',
             'attribute',
@@ -339,7 +339,7 @@ class SectionNestedSerializer(CanEditObjectSerializerMixin, serializers.ModelSer
     questionsets = serializers.SerializerMethodField()
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
-    can_edit = serializers.SerializerMethodField(read_only=True)
+    read_only = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Section
@@ -349,7 +349,7 @@ class SectionNestedSerializer(CanEditObjectSerializerMixin, serializers.ModelSer
             'uri_prefix',
             'path',
             'locked',
-            'can_edit',
+            'read_only',
             'order',
             'title',
             'questionsets',
@@ -374,7 +374,7 @@ class CatalogNestedSerializer(CanEditObjectSerializerMixin, TranslationSerialize
     sections = SectionNestedSerializer(many=True, read_only=True)
     sites = SiteSerializer(many=True, read_only=True)
     editors = SiteSerializer(many=True, read_only=True)
-    can_edit = serializers.SerializerMethodField(read_only=True)
+    read_only = serializers.SerializerMethodField(read_only=True)
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
     export_urls = serializers.SerializerMethodField()
@@ -391,7 +391,7 @@ class CatalogNestedSerializer(CanEditObjectSerializerMixin, TranslationSerialize
             'order',
             'sites',
             'editors',
-            'can_edit',
+            'read_only',
             'title',
             'help',
             'sections',

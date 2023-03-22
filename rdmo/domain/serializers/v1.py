@@ -71,7 +71,7 @@ class AttributeSerializer(CanEditObjectSerializerMixin, serializers.ModelSeriali
     tasks_as_end = TaskSerializer(many=True, read_only=True)
     values_count = serializers.IntegerField(read_only=True)
     projects_count = serializers.IntegerField(read_only=True)
-    can_edit = serializers.SerializerMethodField()
+    read_only = serializers.SerializerMethodField()
 
     class Meta:
         model = Attribute
@@ -83,7 +83,7 @@ class AttributeSerializer(CanEditObjectSerializerMixin, serializers.ModelSeriali
             'path',
             'comment',
             'locked',
-            'can_edit',
+            'read_only',
             'editors',
             'parent',
             'conditions',
@@ -105,7 +105,7 @@ class AttributeNestedSerializer(CanEditObjectSerializerMixin, serializers.ModelS
 
     children = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
-    can_edit = serializers.SerializerMethodField(read_only=True)
+    read_only = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Attribute
@@ -116,7 +116,7 @@ class AttributeNestedSerializer(CanEditObjectSerializerMixin, serializers.ModelS
             'path',
             'key',
             'locked',
-            'can_edit',
+            'read_only',
             'children',
             'xml_url'
         )
@@ -131,7 +131,7 @@ class AttributeNestedSerializer(CanEditObjectSerializerMixin, serializers.ModelS
 
 class AttributeIndexSerializer(CanEditObjectSerializerMixin, serializers.ModelSerializer):
 
-    can_edit = serializers.SerializerMethodField(read_only=True)
+    read_only = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Attribute
@@ -140,5 +140,5 @@ class AttributeIndexSerializer(CanEditObjectSerializerMixin, serializers.ModelSe
             'uri',
             'key',
             'path',
-            'can_edit'
+            'read_only'
         )

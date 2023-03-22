@@ -48,7 +48,7 @@
                     {% include 'questions/catalogs_options_catalog.html' %}
                 </div>
                 <p>
-                    <strong ng-class="{'text-muted': !service.catalog.can_edit}">
+                    <strong ng-class="{'text-muted': service.catalog.read_only}">
                         {% trans 'Catalog' %}
                     </strong>
                     <span>{$ service.catalog.title $}</span>
@@ -114,7 +114,7 @@
                         {% include 'questions/catalogs_options_sections.html' %}
                     </div>
                     <p ng-style="(!service.showURIs) && {'margin-bottom': '0px'}">
-                        <strong ng-class="{'text-muted': !section.can_edit}">
+                        <strong ng-class="{'text-muted': section.read_only}">
                             {% trans 'Section' %}
                         </strong>
                         <span>{$ section.title $}</span>

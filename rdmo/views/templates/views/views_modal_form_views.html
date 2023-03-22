@@ -251,7 +251,7 @@
                         {% trans 'Close' %}
                     </button>
                     <button type="button" class="btn btn-primary"
-                            ng-class="{'disabled': !service.values.can_edit}"
+                            ng-class="{'disabled': service.values.read_only}"
                             ng-click="service.submitFormModal('views')">
                         {% trans 'Save' %}
                     </button>

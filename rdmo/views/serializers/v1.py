@@ -13,7 +13,7 @@ from ..validators import ViewLockedValidator, ViewUniqueURIValidator
 class ViewSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.SlugField(required=True)
-    can_edit = serializers.SerializerMethodField()
+    read_only = serializers.SerializerMethodField()
 
     def validate(self, data):
         # try to render the template to see that the syntax is ok (if the editor was used)
@@ -40,7 +40,7 @@ class ViewSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin, s
             'catalogs',
             'sites',
             'editors',
-            'can_edit',
+            'read_only',
             'groups',
             'template'
         )
@@ -62,7 +62,7 @@ class ViewIndexSerializer(CanEditObjectSerializerMixin, MarkdownSerializerMixin,
     editors = SiteSerializer(many=True, read_only=True)
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
-    can_edit = serializers.SerializerMethodField(read_only=True)
+    read_only = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = View
@@ -75,7 +75,7 @@ class ViewIndexSerializer(CanEditObjectSerializerMixin, MarkdownSerializerMixin,
             'available',
             'sites',
             'editors',
-            'can_edit',
+            'read_only',
             'title',
             'help',
             'warning',

@@ -44,7 +44,7 @@
                         {% trans 'Close' %}
                     </button>
                     <button type="button" class="btn btn-danger"
-                            ng-disabled="!service.values.can_edit"
+                            ng-disabled="service.values.read_only"
                             ng-click="service.submitDeleteModal('options')">
                         {% trans 'Delete' %}
                     </button>

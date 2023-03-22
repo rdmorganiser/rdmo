@@ -123,7 +123,7 @@
                         {% trans 'Close' %}
                     </button>
                     <button type="button" class="btn btn-primary" data-dismiss="alert" 
-                            ng-class="{'disabled': !service.values.can_edit}"
+                            ng-class="{'disabled': service.values.read_only}"
                             ng-click="service.submitFormModal('attributes')">
                         {% trans 'Save' %}
                     </button>

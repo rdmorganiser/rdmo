@@ -110,7 +110,7 @@
             <div class="panel-heading">
                 <div class="pull-right">
                     <i class="fa fa-lock text-danger" ng-show="optionset.locked"></i>
-                    <i class="fa fa-ban text-muted" ng-hide="!optionset.can_edit"
+                    <i class="fa fa-ban text-muted" ng-show="optionset.read_only"
                         title="{% trans 'Read only' %}">
                     </i>
                     <a href="" class="fa fa-plus"
@@ -142,7 +142,7 @@
                         ng-click="service.openDeleteModal('optionsets', optionset)">
                     </a>
                 </div>
-                <p ng-class="{'text-muted': !optionset.can_edit}">
+                <p ng-class="{'text-muted': optionset.read_only}">
                     <strong >{% trans 'Option set' %}</strong>
                 </p>
                 <div>
@@ -194,7 +194,7 @@
 
                         <i class="fa fa-lock text-muted" ng-show="optionset.locked"></i>
                         <i class="fa fa-lock text-danger" ng-show="option.locked"></i>
-                        <i class="fa fa-ban text-muted" ng-hide="option.can_edit"
+                        <i class="fa fa-ban text-muted" ng-show="option.read_only"
                         title="{% trans 'Read only' %}">
                         </i>
 
@@ -219,7 +219,7 @@
                             ng-click="service.openDeleteModal('options', option)">
                         </a>
                     </div>
-                    <p ng-class="{'text-muted': !option.can_edit}">
+                    <p ng-class="{'text-muted': option.read_only}">
                         <strong>{% trans 'Option' %}</strong>
                         <span>{$ option.text $}</span>
                     </p>

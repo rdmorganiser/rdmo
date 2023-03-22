@@ -36,7 +36,7 @@ class OptionSetSerializer(CanEditObjectSerializerMixin, serializers.ModelSeriali
 
     key = serializers.SlugField(required=True)
     questions = QuestionSerializer(many=True, read_only=True)
-    can_edit = serializers.SerializerMethodField()
+    read_only = serializers.SerializerMethodField()
 
     class Meta:
         model = OptionSet
@@ -47,7 +47,7 @@ class OptionSetSerializer(CanEditObjectSerializerMixin, serializers.ModelSeriali
             'key',
             'comment',
             'locked',
-            'can_edit',
+            'read_only',
             'order',
             'editors',
             'provider_key',
@@ -67,7 +67,7 @@ class OptionSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin,
     conditions = ConditionSerializer(many=True, read_only=True)
     values_count = serializers.IntegerField(read_only=True)
     projects_count = serializers.IntegerField(read_only=True)
-    can_edit = serializers.SerializerMethodField()
+    read_only = serializers.SerializerMethodField()
 
     class Meta:
         model = Option
@@ -79,7 +79,7 @@ class OptionSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin,
             'key',
             'comment',
             'locked',
-            'can_edit',
+            'read_only',
             'order',
             'editors',
             'text',
@@ -161,7 +161,7 @@ class OptionNestedSerializer(CanEditObjectSerializerMixin, serializers.ModelSeri
 
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
-    can_edit = serializers.SerializerMethodField(read_only=True)
+    read_only = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Option
@@ -171,7 +171,7 @@ class OptionNestedSerializer(CanEditObjectSerializerMixin, serializers.ModelSeri
             'uri_prefix',
             'path',
             'locked',
-            'can_edit',
+            'read_only',
             'editors',
             'order',
             'text',
@@ -193,7 +193,7 @@ class OptionSetNestedSerializer(CanEditObjectSerializerMixin, serializers.ModelS
     provider = ProviderNestedSerializer()
     xml_url = serializers.SerializerMethodField()
     editors = SiteSerializer(many=True, read_only=True)
-    can_edit = serializers.SerializerMethodField(read_only=True)
+    read_only = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = OptionSet
@@ -204,7 +204,7 @@ class OptionSetNestedSerializer(CanEditObjectSerializerMixin, serializers.ModelS
             'key',
             'order',
             'locked',
-            'can_edit',
+            'read_only',
             'editors',
             'provider',
             'options',
