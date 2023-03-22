@@ -79,7 +79,7 @@ def delete_user(user=None, email=None, password=None):
         return False
 
 
-def get_user_from_db_or_none(username: str, email: str) -> AbstractUser | None:
+def get_user_from_db_or_none(username: str, email: str):
     try:
         db_user = get_user_model().objects.get(username=username, email=email)
         return db_user
