@@ -101,7 +101,7 @@
                         ng-show="view.warning"></span>
 
                     <i class="fa fa-lock text-danger" ng-show="view.locked"></i>
-                    <i class="fa fa-ban text-muted" ng-hide="view.can_edit"
+                    <i class="fa fa-ban text-muted" ng-show="view.read_only"
                         title="{% trans 'Read only' %}">
                     </i>
 
@@ -127,7 +127,7 @@
                     </a>
                 </div>
                 <div>
-                    <strong ng-class="{'text-muted': !view.can_edit}">
+                    <strong ng-class="{'text-muted': view.read_only}">
                         {% trans 'View' %}
                     </strong>
                     <code class="code-views">{$ view.uri $}</code>

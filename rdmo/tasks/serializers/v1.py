@@ -11,10 +11,10 @@ from ..validators import TaskLockedValidator, TaskUniqueURIValidator
 
 
 class BaseTaskSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin, 
-                         ElementModelSerializerMixin,serializers.ModelSerializer):
+                         ElementModelSerializerMixin, serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
-    can_edit = serializers.SerializerMethodField()
+    read_only = serializers.SerializerMethodField()
 
     class Meta:
         model = Task
@@ -29,7 +29,8 @@ class BaseTaskSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixi
             'available',
             'catalogs',
             'sites',
-            'can_edit',
+            'editors',
+            'read_only',
             'groups',
             'start_attribute',
             'end_attribute',
@@ -65,7 +66,7 @@ class TaskListSerializer(ElementExportSerializerMixin, ElementWarningSerializerM
 
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
-
+    
     class Meta(BaseTaskSerializer.Meta):
         fields = BaseTaskSerializer.Meta.fields + (
             'warning',
@@ -74,7 +75,6 @@ class TaskListSerializer(ElementExportSerializerMixin, ElementWarningSerializerM
         warning_fields = (
             'title',
         )
-
 
 class TaskIndexSerializer(serializers.ModelSerializer):
 

@@ -15,7 +15,7 @@ class BaseViewSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixi
                         ElementModelSerializerMixin, serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
-    can_edit = serializers.SerializerMethodField()
+    read_only = serializers.SerializerMethodField()
 
 
     class Meta:
@@ -31,7 +31,8 @@ class BaseViewSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixi
             'available',
             'catalogs',
             'sites',
-            'can_edit',
+            'editors',
+            'read_only',
             'groups',
             'template',
             'title',

@@ -95,7 +95,7 @@
             <div class="panel-heading">
                 <div class="pull-right">
                     <i class="fa fa-lock text-danger" ng-show="condition.locked"></i>
-                    <i class="fa fa-ban text-muted" ng-hide="condition.can_edit"
+                    <i class="fa fa-ban text-muted" ng-show="condition.read_only"
                         title="{% trans 'Read only' %}">
                     </i>
 
@@ -120,7 +120,7 @@
                         ng-click="service.openDeleteModal('conditions', condition)">
                     </a>
                 </div>
-                <strong ng-class="{'text-muted': !condition.can_edit}">
+                <strong ng-class="{'text-muted': condition.read_only}">
                     {% trans 'Condition' %}
                 </strong>
                 <code class="code-conditions">{$ condition.uri $}</code>

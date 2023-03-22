@@ -2,7 +2,6 @@ import logging
 
 from rest_framework import serializers
 
-from rdmo.core.serializers import CanEditObjectSerializerMixin
 from rdmo.conditions.models import Condition
 from rdmo.core.serializers import (ElementExportSerializerMixin,
                                    ElementModelSerializerMixin,
@@ -19,7 +18,7 @@ log = logging.getLogger(__name__)
 class BaseAttributeSerializer(CanEditObjectSerializerMixin, ElementModelSerializerMixin, serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
-    can_edit = serializers.SerializerMethodField()
+    read_only = serializers.SerializerMethodField()
 
     class Meta:
         model = Attribute
@@ -31,8 +30,8 @@ class BaseAttributeSerializer(CanEditObjectSerializerMixin, ElementModelSerializ
             'key',
             'comment',
             'locked',
-            'can_edit',
-            'parent'
+            'parent',
+            'read_only'
         )
 
 
@@ -74,10 +73,10 @@ class AttributeSerializer(BaseAttributeSerializer):
     def get_attributes(self, obj):
         return [attribute.id for attribute in obj.get_descendants()]
 
+
 class AttributeListSerializer(ElementExportSerializerMixin, BaseAttributeSerializer):
 
     xml_url = serializers.SerializerMethodField()
-    can_edit = serializers.SerializerMethodField(read_only=True)
 
     class Meta(BaseAttributeSerializer.Meta):
         fields = BaseAttributeSerializer.Meta.fields + (
@@ -100,9 +99,7 @@ class AttributeNestedSerializer(AttributeListSerializer):
                                          read_only=True, context=self.context).data
 
 
-class AttributeIndexSerializer(CanEditObjectSerializerMixin, serializers.ModelSerializer):
-
-    can_edit = serializers.SerializerMethodField(read_only=True)
+class AttributeIndexSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Attribute

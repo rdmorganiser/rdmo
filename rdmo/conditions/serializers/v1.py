@@ -17,13 +17,11 @@ class ConditionSerializer(CanEditObjectSerializerMixin, ElementModelSerializerMi
     model = serializers.SerializerMethodField()
     key = serializers.SlugField(required=True)
     source = serializers.PrimaryKeyRelatedField(queryset=Attribute.objects.all(), required=True)
-
-    optionsets = serializers.PrimaryKeyRelatedField(queryset=OptionSet.objects.all(), required=False, many=True)
-    pages = serializers.PrimaryKeyRelatedField(queryset=Page.objects.all(), required=False, many=True)
-    questionsets = serializers.PrimaryKeyRelatedField(queryset=QuestionSet.objects.all(), required=False, many=True)
-    questions = serializers.PrimaryKeyRelatedField(queryset=Question.objects.all(), required=False, many=True)
-    tasks = serializers.PrimaryKeyRelatedField(queryset=Task.objects.all(), required=False, many=True)
-    can_edit = serializers.SerializerMethodField()
+    optionsets = OptionSetSerializer(many=True, read_only=True)
+    questionsets = QuestionSetSerializer(many=True, read_only=True)
+    questions = QuestionSerializer(many=True, read_only=True)
+    tasks = TaskSerializer(many=True, read_only=True)
+    read_only = serializers.SerializerMethodField()
 
     class Meta:
         model = Condition
@@ -35,6 +33,8 @@ class ConditionSerializer(CanEditObjectSerializerMixin, ElementModelSerializerMi
             'key',
             'comment',
             'locked',
+            'read_only',
+            'editors',
             'source',
             'relation',
             'target_text',
@@ -51,7 +51,7 @@ class ConditionSerializer(CanEditObjectSerializerMixin, ElementModelSerializerMi
         )
 
 class ConditionListSerializer(ElementExportSerializerMixin, ConditionSerializer):
-    
+
     xml_url = serializers.SerializerMethodField()
 
     class Meta(ConditionSerializer.Meta):
