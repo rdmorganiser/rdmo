@@ -51,7 +51,7 @@ def delete_user(user=None, email=None, password=None):
     try:
         database_user = get_user_model().objects.get(username=username, email=email)
     except ObjectDoesNotExist:
-        log.debug('Deletion of user "%s" failed, user does not exist', username)
+        log.debug('Deletion of user "%s" with email "%s" failed, user does not exist', username, email)
         return False
     except MultipleObjectsReturned:
         log.debug('Deletion of user "%s" failed, there are multiple user objects', email)
