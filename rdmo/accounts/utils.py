@@ -2,7 +2,7 @@ import logging
 
 from django.conf import settings
 from django.contrib.auth import authenticate, get_user_model
-from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.models import Group, Permission, AbstractUser
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
@@ -48,22 +48,15 @@ def delete_user(user=None, email=None, password=None):
 
     username = user.username
 
-    try:
-        database_user = get_user_model().objects.get(username=username, email=email)
-    except ObjectDoesNotExist:
-        log.debug('Deletion of user "%s" with email "%s" failed, user does not exist', username, email)
-        return False
-    except MultipleObjectsReturned:
-        log.debug('Deletion of user "%s" failed, there are multiple user objects', email)
-        return False
+    database_user = get_user_from_db_or_none(username, email)
 
-    if not user == database_user:
+    if user != database_user:
         log.debug('Deletion of user "%s" failed, the user from request and database differ.', username)
         return False
 
     if user.has_usable_password() and password is not None:
         authenticated = authenticate(username=username, password=password)
-        if not authenticated:
+        if authenticated is None:
             log.debug('Deletion of user with usable password "%s" failed, false password.', username)
             return False
         try:
@@ -84,3 +77,12 @@ def delete_user(user=None, email=None, password=None):
     else:
         log.debug('Deletion of user "%s" failed, probably wrong value for password given', username)
         return False
+
+
+def get_user_from_db_or_none(username: str, email: str) -> AbstractUser | None:
+    try:
+        db_user = get_user_model().objects.get(username=username, email=email)
+        return db_user
+    except ObjectDoesNotExist:
+        log.debug('Deletion of user "%s" with email "%s" failed, user does not exist', username, email)
+        return None
