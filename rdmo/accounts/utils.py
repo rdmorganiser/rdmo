@@ -59,8 +59,13 @@ def delete_user(user=None, email=None, password=None):
     if not user == database_user:
         log.debug('Deletion of user "%s" failed because the user from request and database differ.', username)
         return False
-    
-    if user.has_usable_password() and authenticate(username=username, password=password):
+
+    if user.has_usable_password() and password is not None:
+
+        authenticated = authenticate(username=username, password=password)
+        if not authenticated:
+            log.debug('User with usable password "%s" failed to authenticate, false password.', username)
+            return False
         try:
             user.delete()
             log.debug('User "%s" deleted', username)
@@ -68,7 +73,7 @@ def delete_user(user=None, email=None, password=None):
         except Exception as e:
             log.debug('An exception (%s) occured during user "%s" deletion: ', (str(e), username))
             return False
-    elif not user.has_usable_password() and settings.SHIBBOLETH:
+    elif not user.has_usable_password() and password is None:
         try:
             user.delete()
             log.debug('User without usable password "%s" deleted', username)
@@ -77,5 +82,5 @@ def delete_user(user=None, email=None, password=None):
             log.debug('An exception (%s) occured during user "%s" deletion: ', (str(e), username))
             return False
     else:
-        log.debug('Deletion of user "%s" failed.', username)
+        log.debug('Failed to delete user "%s", wrong value for password.', username)
         return False
