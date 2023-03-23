@@ -1,20 +1,37 @@
 import ls from 'local-storage'
+import set from 'lodash/set'
 
 import { lsKeys } from '../constants/config'
 
 const initialState = {
   baseUrl: '/management/',
-  filterUri: '',
-  filterUriPrefix: ''
+  filter: {
+    catalogs: { uri: '', uriPrefix: '' },
+    sections: { uri: '', uriPrefix: '' },
+    pages: { uri: '', uriPrefix: '' },
+    questionsets: { uri: '', uriPrefix: '' },
+    questions: { uri: '', uriPrefix: '' },
+    attributes: { uri: '', uriPrefix: '' },
+    optionsets: { uri: '', uriPrefix: '' },
+    conditions: { uri: '', uriPrefix: '' },
+    tasks: { uri: '', uriPrefix: '' },
+    views: { uri: '', uriPrefix: '' }
+  }
 }
 
 export default function configReducer(state = initialState, action) {
   switch(action.type) {
     case 'config/updateConfig':
-      const newState = {...state, ...{ settings: action.config }}
+      const newState = {...state}
+      const { path, value } = action
 
-      // store the new state in the local storage
-      lsKeys.forEach(key => ls.set(`rdmo.management.config.${key}`, newState[key]))
+      // set the value using lodash's set
+      set(newState, path, value)
+
+      // store the new value in the local storage
+      if (lsKeys.includes(path)) {
+        ls.set(`rdmo.management.config.${path}`, value)
+      }
 
       // return the new state
       return newState

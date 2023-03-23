@@ -1,12 +1,18 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 
-import { filterElements } from '../../utils/filter'
+import { filterElements, getUriPrefixes } from '../../utils/filter'
+
+import FilterUri from '../FilterUri'
+import FilterUriPrefix from '../FilterUriPrefix'
 
 import QuestionSet from '../element/QuestionSet'
 import { BackButton, NewButton } from '../common/ElementButtons'
 
-const QuestionSets = ({ config, questionsets, elementActions }) => {
+const QuestionSets = ({ config, questionsets, configActions, elementActions }) => {
+
+  const updateFilterUri = (uri) => configActions.updateConfig('filter.questionsets.uri', uri)
+  const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.questionsets.uriPrefix', uriPrefix)
 
   const createQuestionSet = () => elementActions.createElement('questionsets')
 
@@ -20,9 +26,22 @@ const QuestionSets = ({ config, questionsets, elementActions }) => {
         <strong>{gettext('Question sets')}</strong>
       </div>
 
+      <div className="panel-body">
+        <div className="row">
+          <div className="col-sm-8">
+            <FilterUri value={config.filter.questionsets.uri} onChange={updateFilterUri}
+                       placeholder={gettext('Filter questionsets by URI')} />
+          </div>
+          <div className="col-sm-4">
+            <FilterUriPrefix value={config.filter.questionsets.uriPrefix} onChange={updateFilterUriPrefix}
+                             options={getUriPrefixes(questionsets)} />
+          </div>
+        </div>
+      </div>
+
       <ul className="list-group">
       {
-        filterElements(config, questionsets).map((questionset, index) => (
+        filterElements(config.filter.questionsets, questionsets).map((questionset, index) => (
           <QuestionSet key={index} config={config} questionset={questionset}
                        elementActions={elementActions} />
         ))
