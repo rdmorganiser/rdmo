@@ -10,6 +10,7 @@ import UriPrefix from '../forms/UriPrefix'
 
 import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/ElementButtons'
 
+import AttributeInfo from '../info/AttributeInfo'
 import DeleteAttributeModal from '../modals/DeleteAttributeModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
@@ -23,6 +24,8 @@ const EditAttribute = ({ config, attribute, elements, elementActions }) => {
   const deleteAttribute = () => elementActions.deleteElement('attributes', attribute)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
+
+  const info = <AttributeInfo attribute={attribute} elements={elements} />
 
   return (
     <div className="panel panel-default">
@@ -40,6 +43,10 @@ const EditAttribute = ({ config, attribute, elements, elementActions }) => {
             <code className="code-domain">{attribute.uri}</code>
           </div> : <strong>{gettext('Create attribute')}</strong>
         }
+      </div>
+
+      <div className="panel-body panel-border">
+        { info }
       </div>
 
       <div className="panel-body">
@@ -78,14 +85,8 @@ const EditAttribute = ({ config, attribute, elements, elementActions }) => {
         {attribute.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
-      <DeleteAttributeModal attribute={attribute}
-                            attributes={attributes.filter(e => attribute.attributes.includes(e.id))}
-                            conditions={conditions.filter(e => attribute.conditions.includes(e.id))}
-                            pages={pages.filter(e => attribute.pages.includes(e.id))}
-                            questionsets={questionsets.filter(e => attribute.questionsets.includes(e.id))}
-                            questions={questions.filter(e => attribute.questions.includes(e.id))}
-                            tasks={tasks.filter(e => attribute.tasks.includes(e.id))}
-                            show={showDeleteModal} onClose={closeDeleteModal} onDelete={deleteAttribute} />
+      <DeleteAttributeModal attribute={attribute} info={info} show={showDeleteModal}
+                            onClose={closeDeleteModal} onDelete={deleteAttribute} />
     </div>
   )
 }

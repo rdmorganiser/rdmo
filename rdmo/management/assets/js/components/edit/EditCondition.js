@@ -10,6 +10,7 @@ import UriPrefix from '../forms/UriPrefix'
 
 import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/ElementButtons'
 
+import ConditionInfo from '../info/ConditionInfo'
 import DeleteConditionModal from '../modals/DeleteConditionModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
@@ -18,11 +19,14 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
 
   const { relations, attributes, optionsets, options, pages, questionsets, questions, tasks } = elements
 
+
   const updateCondition = (key, value) => elementActions.updateElement(condition, key, value)
   const storeCondition = () => elementActions.storeElement('conditions', condition)
   const deleteCondition = () => elementActions.deleteElement('conditions', condition)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
+
+  const info = <ConditionInfo condition={condition} elements={elements} />
 
   return (
     <div className="panel panel-default">
@@ -40,6 +44,10 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
             <code className="code-conditions">{condition.uri}</code>
           </div> : <strong>{gettext('Create condition')}</strong>
         }
+      </div>
+
+      <div className="panel-body panel-border">
+        { info }
       </div>
 
       <div className="panel-body">
@@ -90,13 +98,8 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
         {condition.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
-      <DeleteConditionModal condition={condition}
-                            optionsets={optionsets.filter(e => condition.optionsets.includes(e.id))}
-                            pages={pages.filter(e => condition.pages.includes(e.id))}
-                            questionsets={questionsets.filter(e => condition.questionsets.includes(e.id))}
-                            questions={questions.filter(e => condition.questions.includes(e.id))}
-                            tasks={tasks.filter(e => condition.tasks.includes(e.id))}
-                            show={showDeleteModal} onClose={closeDeleteModal} onDelete={deleteCondition} />
+      <DeleteConditionModal condition={condition} info={info} show={showDeleteModal}
+                            onClose={closeDeleteModal} onDelete={deleteCondition} />
     </div>
   )
 }

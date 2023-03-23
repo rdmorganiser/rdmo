@@ -12,6 +12,7 @@ import UriPrefix from '../forms/UriPrefix'
 
 import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/ElementButtons'
 
+import OptionSetInfo from '../info/OptionSetInfo'
 import DeleteOptionSetModal from '../modals/DeleteOptionSetModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
@@ -20,11 +21,15 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
 
   const { options, questions, providers } = elements
 
+  const optionsetQuestions = questions.filter(e => optionset.questions.includes(e.id))
+
   const updateOptionSet = (key, value) => elementActions.updateElement(optionset, key, value)
   const storeOptionSet = () => elementActions.storeElement('optionsets', optionset)
   const deleteOptionSet = () => elementActions.deleteElement('optionsets', optionset)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
+
+  const info = <OptionSetInfo optionset={optionset} elements={elements} />
 
   return (
     <div className="panel panel-default">
@@ -42,6 +47,10 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
             <code className="code-options">{optionset.uri}</code>
           </div> : <strong>{gettext('Create option set')}</strong>
         }
+      </div>
+
+      <div className="panel-body panel-border">
+        { info }
       </div>
 
       <div className="panel-body">
@@ -89,8 +98,8 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
         {optionset.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
-      <DeleteOptionSetModal optionset={optionset} questions={questions.filter(e => optionset.questions.includes(e.id))}
-                            show={showDeleteModal} onClose={closeDeleteModal} onDelete={deleteOptionSet} />
+      <DeleteOptionSetModal optionset={optionset} info={info} show={showDeleteModal}
+                            onClose={closeDeleteModal} onDelete={deleteOptionSet} />
     </div>
   )
 }

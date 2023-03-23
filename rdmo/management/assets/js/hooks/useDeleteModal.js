@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 
 const useDeleteModal = () => {
-  const [showDeleteModal, toggleDeleteModal] = useState(false);
-  const openDeleteModal = () => toggleDeleteModal(true)
-  const closeDeleteModal = () => toggleDeleteModal(false)
+  const [show, setShow] = useState(false);
+  const open = () => setShow(true)
+  const close = () => setShow(false)
 
-  return [showDeleteModal, openDeleteModal, closeDeleteModal]
+  return [show, open, close]
 }
 
 export default useDeleteModal

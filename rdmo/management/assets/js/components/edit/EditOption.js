@@ -9,6 +9,7 @@ import UriPrefix from '../forms/UriPrefix'
 
 import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/ElementButtons'
 
+import OptionInfo from '../info/OptionInfo'
 import DeleteOptionModal from '../modals/DeleteOptionModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
@@ -17,11 +18,15 @@ const EditOption = ({ config, option, elements, elementActions }) => {
 
   const { optionsets, conditions } = elements
 
+  const optionConditions = conditions.filter(e => option.conditions.includes(e.id))
+
   const updateOption = (key, value) => elementActions.updateElement(option, key, value)
   const storeOption = () => elementActions.storeElement('options', option)
   const deleteOption = () => elementActions.deleteElement('options', option)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
+
+  const info = <OptionInfo option={option} elements={elements} />
 
   return (
     <div className="panel panel-default">
@@ -36,6 +41,10 @@ const EditOption = ({ config, option, elements, elementActions }) => {
             <code className="code-options">{option.uri}</code>
           </div> : <strong>{gettext('Create option')}</strong>
         }
+      </div>
+
+      <div className="panel-body panel-border">
+        { info }
       </div>
 
       <div className="panel-body">
@@ -89,8 +98,8 @@ const EditOption = ({ config, option, elements, elementActions }) => {
         {option.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
-      <DeleteOptionModal option={option} conditions={conditions.filter(e => option.conditions.includes(e.id))}
-                         show={showDeleteModal} onClose={closeDeleteModal} onDelete={deleteOption} />
+      <DeleteOptionModal option={option} info={info} show={showDeleteModal}
+                         onClose={closeDeleteModal} onDelete={deleteOption} />
     </div>
   )
 }

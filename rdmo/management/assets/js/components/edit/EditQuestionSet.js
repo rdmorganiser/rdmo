@@ -11,6 +11,7 @@ import UriPrefix from '../forms/UriPrefix'
 
 import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/ElementButtons'
 
+import QuestionSetInfo from '../info/QuestionSetInfo'
 import DeleteQuestionSetModal from '../modals/DeleteQuestionSetModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
@@ -24,6 +25,8 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
   const deleteQuestionSet = () => elementActions.deleteElement('questionsets', questionset)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
+
+  const info = <QuestionSetInfo questionset={questionset} elements={elements} />
 
   return (
     <div className="panel panel-default">
@@ -41,6 +44,10 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
             <code className="code-questions">{questionset.uri}</code>
           </div> : <strong>{gettext('Create question set')}</strong>
         }
+      </div>
+
+      <div className="panel-body panel-border">
+        { info }
       </div>
 
       <div className="panel-body">
@@ -123,10 +130,8 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
         {questionset.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
-      <DeleteQuestionSetModal questionset={questionset}
-                              pages={pages.filter(e => questionset.pages.includes(e.id))}
-                              questionsets={questionsets.filter(e => questionset.parents.includes(e.id))}
-                              show={showDeleteModal} onClose={closeDeleteModal} onDelete={deleteQuestionSet} />
+      <DeleteQuestionSetModal questionset={questionset} info={info} show={showDeleteModal}
+                              onClose={closeDeleteModal} onDelete={deleteQuestionSet} />
     </div>
   )
 }

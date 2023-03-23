@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { DeleteElementModal } from '../common/ElementModals'
 
-const DeleteTaskModal = ({ task, show, onClose, onDelete }) => (
+const DeleteTaskModal = ({ task, info, show, onClose, onDelete }) => (
   <DeleteElementModal title={gettext('Delete catalog')} show={show} onClose={onClose} onDelete={onDelete}>
     <p>
       {gettext('You are about to permanently delete the task:')}
@@ -11,20 +11,16 @@ const DeleteTaskModal = ({ task, show, onClose, onDelete }) => (
     <p>
       <code className="code-tasks">{task.uri}</code>
     </p>
-    <p dangerouslySetInnerHTML={{
-      __html: interpolate(ngettext(
-        'This task is used in <b>one project</b>, from which it will be removed.',
-        'This task is used in <b>%s projects</b>, from which it will be removed.',
-        task.projects_count
-      ), [task.projects_count])}} />
+    { info }
     <p className="text-danger">
-      {gettext('This action cannot be undone!')}
+      {gettext('The task will be removed from these projects.')} {gettext('This action cannot be undone!')}
     </p>
   </DeleteElementModal>
 )
 
 DeleteTaskModal.propTypes = {
   task: PropTypes.object.isRequired,
+  info: PropTypes.object.isRequired,
   show: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired
