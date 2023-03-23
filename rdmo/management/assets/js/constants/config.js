@@ -1,4 +1,24 @@
 export const lsKeys = [
-  'filterUri',
-  'filterUriPrefix'
+  'filter.catalogs.uri',
+  'filter.catalogs.uriPrefix',
+  'filter.sections.uri',
+  'filter.sections.uriPrefix',
+  'filter.pages.uri',
+  'filter.pages.uriPrefix',
+  'filter.questionsets.uri',
+  'filter.questionsets.uriPrefix',
+  'filter.questions.uri',
+  'filter.questions.uriPrefix',
+  'filter.attributes.uri',
+  'filter.attributes.uriPrefix',
+  'filter.optionsets.uri',
+  'filter.optionsets.uriPrefix',
+  'filter.options.uri',
+  'filter.options.uriPrefix',
+  'filter.conditions.uri',
+  'filter.conditions.uriPrefix',
+  'filter.tasks.uri',
+  'filter.tasks.uriPrefix',
+  'filter.views.uri',
+  'filter.views.uriPrefix'
 ]

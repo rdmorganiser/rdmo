@@ -8,28 +8,10 @@ import Link from 'rdmo/core/assets/js/components/Link'
 import * as configActions from '../actions/configActions'
 import * as elementActions from '../actions/elementActions'
 
-import FilterUri from '../components/FilterUri'
-import FilterUriPrefix from '../components/FilterUriPrefix'
-
 class Sidebar extends Component {
 
   constructor(props) {
     super(props)
-  }
-
-  getUriPrefixes() {
-    const { elements } = this.props
-
-    if (elements.elementType) {
-      return elements[elements.elementType].reduce((acc, cur) => {
-        if (!acc.includes(cur.uri_prefix)) {
-          acc.push(cur.uri_prefix)
-        }
-        return acc
-      }, [])
-    } else {
-      return []
-    }
   }
 
   render() {
@@ -37,12 +19,6 @@ class Sidebar extends Component {
 
     return (
       <div>
-        <h2>Filter attributes</h2>
-
-        <FilterUri value={config.filterUri} onChange={filterUri => configActions.updateConfig({ filterUri })} />
-        <FilterUriPrefix options={this.getUriPrefixes()} value={config.filterUriPrefix}
-                         onChange={filterUriPrefix => configActions.updateConfig({ filterUriPrefix })} />
-
         <h2>Navigation</h2>
 
         <ul className="list-unstyled">

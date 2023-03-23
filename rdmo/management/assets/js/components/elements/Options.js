@@ -1,12 +1,18 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 
-import { filterElements } from '../../utils/filter'
+import { filterElements, getUriPrefixes } from '../../utils/filter'
+
+import FilterUri from '../FilterUri'
+import FilterUriPrefix from '../FilterUriPrefix'
 
 import Option from '../element/Option'
 import { BackButton, NewButton } from '../common/ElementButtons'
 
-const Options = ({ config, options, elementActions }) => {
+const Options = ({ config, options, configActions, elementActions }) => {
+
+  const updateFilterUri = (uri) => configActions.updateConfig('filter.options.uri', uri)
+  const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.options.uriPrefix', uriPrefix)
 
   const createOption = () => elementActions.createElement('options')
 
@@ -20,9 +26,22 @@ const Options = ({ config, options, elementActions }) => {
         <strong>{gettext('Options')}</strong>
       </div>
 
+      <div className="panel-body">
+        <div className="row">
+          <div className="col-sm-8">
+            <FilterUri value={config.filter.options.uri} onChange={updateFilterUri}
+                       placeholder={gettext('Filter options by URI')} />
+          </div>
+          <div className="col-sm-4">
+            <FilterUriPrefix value={config.filter.options.uriPrefix} onChange={updateFilterUriPrefix}
+                             options={getUriPrefixes(options)} />
+          </div>
+        </div>
+      </div>
+
       <ul className="list-group">
       {
-        filterElements(config, options).map((option, index) => (
+        filterElements(config.filter.options, options).map((option, index) => (
           <Option key={index} config={config} option={option}
                   elementActions={elementActions} />
         ))

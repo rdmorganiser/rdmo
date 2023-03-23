@@ -47,7 +47,7 @@ class Main extends Component {
   }
 
   render() {
-    const { config, elements, elementActions } = this.props
+    const { config, elements, configActions, elementActions } = this.props
     const { element, elementType, elementId, elementAction, errors } = elements
 
     // check if anything was loaded yet
@@ -110,27 +110,38 @@ class Main extends Component {
     if (isNil(elementId) && isNil(elementAction) && !isEmpty(elements[elementType])) {
       switch (elementType) {
         case 'catalogs':
-          return <Catalogs config={config} catalogs={elements.catalogs} elementActions={elementActions} />
+          return <Catalogs config={config} catalogs={elements.catalogs}
+                           configActions={configActions} elementActions={elementActions} />
         case 'sections':
-          return <Sections config={config} sections={elements.sections} elementActions={elementActions} />
+          return <Sections config={config} sections={elements.sections}
+                           configActions={configActions} elementActions={elementActions} />
         case 'pages':
-          return <Pages config={config} pages={elements.pages} elementActions={elementActions} />
+          return <Pages config={config} pages={elements.pages}
+                        configActions={configActions} elementActions={elementActions} />
         case 'questionsets':
-          return <QuestionSets config={config} questionsets={elements.questionsets} elementActions={elementActions} />
+          return <QuestionSets config={config} questionsets={elements.questionsets}
+                               configActions={configActions} elementActions={elementActions} />
         case 'questions':
-          return <Questions config={config} questions={elements.questions} elementActions={elementActions} />
+          return <Questions config={config} questions={elements.questions}
+                            configActions={configActions} elementActions={elementActions} />
         case 'attributes':
-          return <Attributes config={config} attributes={elements.attributes} elementActions={elementActions} />
+          return <Attributes config={config} attributes={elements.attributes}
+                             configActions={configActions} elementActions={elementActions} />
         case 'optionsets':
-          return <OptionSets config={config} optionsets={elements.optionsets} elementActions={elementActions} />
+          return <OptionSets config={config} optionsets={elements.optionsets}
+                             configActions={configActions} elementActions={elementActions} />
         case 'options':
-          return <Options config={config} options={elements.options} elementActions={elementActions} />
+          return <Options config={config} options={elements.options}
+                          configActions={configActions} elementActions={elementActions} />
         case 'conditions':
-          return <Conditions config={config} conditions={elements.conditions} elementActions={elementActions} />
+          return <Conditions config={config} conditions={elements.conditions}
+                             configActions={configActions} elementActions={elementActions} />
         case 'tasks':
-          return <Tasks config={config} tasks={elements.tasks} elementActions={elementActions} />
+          return <Tasks config={config} tasks={elements.tasks}
+                        configActions={configActions} elementActions={elementActions} />
         case 'views':
-          return <Views config={config} views={elements.views} elementActions={elementActions} />
+          return <Views config={config} views={elements.views}
+                        configActions={configActions} elementActions={elementActions} />
       }
     }
 

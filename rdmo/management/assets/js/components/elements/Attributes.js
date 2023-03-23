@@ -1,12 +1,18 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 
-import { filterElements } from '../../utils/filter'
+import { filterElements, getUriPrefixes } from '../../utils/filter'
+
+import FilterUri from '../FilterUri'
+import FilterUriPrefix from '../FilterUriPrefix'
 
 import Attribute from '../element/Attribute'
 import { BackButton, NewButton } from '../common/ElementButtons'
 
-const Attributes = ({ config, attributes, elementActions }) => {
+const Attributes = ({ config, attributes, configActions, elementActions }) => {
+
+  const updateFilterUri = (uri) => configActions.updateConfig('filter.attributes.uri', uri)
+  const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.attributes.uriPrefix', uriPrefix)
 
   const createAttribute = () => elementActions.createElement('attributes')
 
@@ -20,9 +26,22 @@ const Attributes = ({ config, attributes, elementActions }) => {
         <strong>{gettext('Attributes')}</strong>
       </div>
 
+      <div className="panel-body">
+        <div className="row">
+          <div className="col-sm-8">
+            <FilterUri value={config.filter.attributes.uri} onChange={updateFilterUri}
+                       placeholder={gettext('Filter attributes by URI')} />
+          </div>
+          <div className="col-sm-4">
+            <FilterUriPrefix value={config.filter.attributes.uriPrefix} onChange={updateFilterUriPrefix}
+                             options={getUriPrefixes(attributes)} />
+          </div>
+        </div>
+      </div>
+
       <ul className="list-group">
       {
-        filterElements(config, attributes).map((attribute, index) => (
+        filterElements(config.filter.attributes, attributes).map((attribute, index) => (
           <Attribute key={index} config={config} attribute={attribute}
                      elementActions={elementActions} />
         ))

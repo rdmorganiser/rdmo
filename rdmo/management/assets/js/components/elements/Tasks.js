@@ -1,12 +1,18 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 
-import { filterElements } from '../../utils/filter'
+import { filterElements, getUriPrefixes } from '../../utils/filter'
+
+import FilterUri from '../FilterUri'
+import FilterUriPrefix from '../FilterUriPrefix'
 
 import Task from '../element/Task'
 import { BackButton, NewButton } from '../common/ElementButtons'
 
-const Tasks = ({ config, tasks, elementActions }) => {
+const Tasks = ({ config, tasks, configActions, elementActions }) => {
+
+  const updateFilterUri = (uri) => configActions.updateConfig('filter.tasks.uri', uri)
+  const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.tasks.uriPrefix', uriPrefix)
 
   const createTask = () => elementActions.createElement('tasks')
 
@@ -20,9 +26,22 @@ const Tasks = ({ config, tasks, elementActions }) => {
         <strong>{gettext('Tasks')}</strong>
       </div>
 
+      <div className="panel-body">
+        <div className="row">
+          <div className="col-sm-8">
+            <FilterUri value={config.filter.tasks.uri} onChange={updateFilterUri}
+                       placeholder={gettext('Filter tasks by URI')} />
+          </div>
+          <div className="col-sm-4">
+            <FilterUriPrefix value={config.filter.tasks.uriPrefix} onChange={updateFilterUriPrefix}
+                             options={getUriPrefixes(tasks)} />
+          </div>
+        </div>
+      </div>
+
       <ul className="list-group">
       {
-        filterElements(config, tasks).map((task, index) => (
+        filterElements(config.filter.tasks, tasks).map((task, index) => (
           <Task key={index} config={config} task={task}
                 elementActions={elementActions} />
         ))

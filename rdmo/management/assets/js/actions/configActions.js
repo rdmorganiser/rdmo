@@ -1,8 +1,8 @@
 import CoreApi from 'rdmo/core/assets/js/api/CoreApi'
 import ManagementApi from '../api/ManagementApi'
 
-export function updateConfig(config) {
-  return {type: 'config/updateConfig', config}
+export function updateConfig(path, value) {
+  return {type: 'config/updateConfig', path, value}
 }
 
 export function fetchSettings() {
