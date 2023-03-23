@@ -10,7 +10,9 @@ import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
 import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/ElementButtons'
+import { DeleteElementModal } from '../common/ElementButtons'
 
+import QuestionInfo from '../info/QuestionInfo'
 import DeleteQuestionModal from '../modals/DeleteQuestionModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
@@ -24,6 +26,8 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
   const deleteQuestion = () => elementActions.deleteElement('questions', question)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
+
+  const info = <QuestionInfo question={question} elements={elements} />
 
   return (
     <div className="panel panel-default">
@@ -41,6 +45,10 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
             <code className="code-questions">{question.uri}</code>
           </div> : <strong>{gettext('Create question')}</strong>
         }
+      </div>
+
+      <div className="panel-body panel-border">
+        { info }
       </div>
 
       <div className="panel-body">
@@ -189,10 +197,8 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
         {question.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
-      <DeleteQuestionModal question={question}
-                           pages={pages.filter(e => question.pages.includes(e.id))}
-                           questionsets={questionsets.filter(e => question.questionsets.includes(e.id))}
-                           show={showDeleteModal} onClose={closeDeleteModal} onDelete={deleteQuestion} />
+      <DeleteQuestionModal question={question} info={info} show={showDeleteModal}
+                           onClose={closeDeleteModal} onDelete={deleteQuestion} />
     </div>
   )
 }

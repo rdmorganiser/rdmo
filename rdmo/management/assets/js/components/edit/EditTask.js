@@ -11,6 +11,7 @@ import UriPrefix from '../forms/UriPrefix'
 
 import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/ElementButtons'
 
+import TaskInfo from '../info/TaskInfo'
 import DeleteTaskModal from '../modals/DeleteTaskModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
@@ -24,6 +25,8 @@ const EditTask = ({ config, task, elements, elementActions}) => {
   const deleteTask = () => elementActions.deleteElement('tasks', task)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
+
+  const info = <TaskInfo task={task} elements={elements} />
 
   return (
     <div className="panel panel-default">
@@ -41,6 +44,10 @@ const EditTask = ({ config, task, elements, elementActions}) => {
             <code className="code-tasks">{task.uri}</code>
           </div> : <strong>{gettext('Create task')}</strong>
         }
+      </div>
+
+      <div className="panel-body panel-border">
+        { info }
       </div>
 
       <div className="panel-body">
@@ -125,7 +132,7 @@ const EditTask = ({ config, task, elements, elementActions}) => {
         {task.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
-      <DeleteTaskModal task={task} show={showDeleteModal}
+      <DeleteTaskModal task={task} info={info} show={showDeleteModal}
                        onClose={closeDeleteModal} onDelete={deleteTask} />
     </div>
   )

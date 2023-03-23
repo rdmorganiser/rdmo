@@ -11,6 +11,7 @@ import UriPrefix from '../forms/UriPrefix'
 
 import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/ElementButtons'
 
+import CatalogInfo from '../info/CatalogInfo'
 import DeleteCatalogModal from '../modals/DeleteCatalogModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
@@ -24,6 +25,8 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
   const deleteCatalog = () => elementActions.deleteElement('catalogs', catalog)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
+
+  const info = <CatalogInfo catalog={catalog} elements={elements} />
 
   return (
     <div className="panel panel-default">
@@ -41,6 +44,10 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
             <code className="code-questions">{catalog.uri}</code>
           </div> : <strong>{gettext('Create catalog')}</strong>
         }
+      </div>
+
+      <div className="panel-body panel-border">
+        { info }
       </div>
 
       <div className="panel-body">
@@ -101,7 +108,7 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
         {catalog.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
-      <DeleteCatalogModal catalog={catalog} show={showDeleteModal}
+      <DeleteCatalogModal catalog={catalog} info={info} show={showDeleteModal}
                           onClose={closeDeleteModal} onDelete={deleteCatalog} />
     </div>
   )

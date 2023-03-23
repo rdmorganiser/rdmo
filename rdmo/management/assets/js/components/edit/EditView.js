@@ -11,6 +11,7 @@ import UriPrefix from '../forms/UriPrefix'
 
 import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/ElementButtons'
 
+import ViewInfo from '../info/ViewInfo'
 import DeleteViewModal from '../modals/DeleteViewModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
@@ -24,6 +25,8 @@ const EditView = ({ config, view, elements, elementActions }) => {
   const deleteView = () => elementActions.deleteElement('views', view)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
+
+  const info = <ViewInfo view={view} elements={elements} />
 
   return (
     <div className="panel panel-default">
@@ -41,6 +44,10 @@ const EditView = ({ config, view, elements, elementActions }) => {
             <code className="code-views">{view.uri}</code>
           </div> : <strong>{gettext('Create view')}</strong>
         }
+      </div>
+
+      <div className="panel-body panel-border">
+        { info }
       </div>
 
       <div className="panel-body">
@@ -107,7 +114,7 @@ const EditView = ({ config, view, elements, elementActions }) => {
         {view.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
-      <DeleteViewModal view={view} show={showDeleteModal}
+      <DeleteViewModal view={view} info={info} show={showDeleteModal}
                        onClose={closeDeleteModal} onDelete={deleteView} />
     </div>
   )

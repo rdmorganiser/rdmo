@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { DeleteElementModal } from '../common/ElementModals'
 
-const DeleteQuestionModal = ({ question, pages, questionsets, show, onClose, onDelete }) => (
+const DeleteQuestionModal = ({ question, info, show, onClose, onDelete }) => (
   <DeleteElementModal title={gettext('Delete question')} show={show} onClose={onClose} onDelete={onDelete}>
     <p>
       {gettext('You are about to permanently delete the question:')}
@@ -11,34 +11,7 @@ const DeleteQuestionModal = ({ question, pages, questionsets, show, onClose, onD
     <p>
       <code className="code-questions">{question.uri}</code>
     </p>
-    {
-      pages.length > 0 && <>
-        <p>
-          {gettext('This question is used in the following pages, from which it will be removed:')}
-        </p>
-        {
-          pages.map((page, index) => (
-            <p key={index}>
-              <code className="code-questions">{page.uri}</code>
-            </p>
-          ))
-        }
-      </>
-    }
-    {
-      questionsets.length > 0 && <>
-        <p>
-          {gettext('This question is used in the following question sets, from which it will be removed:')}
-        </p>
-        {
-          questionsets.map((questionset, index) => (
-            <p key={index}>
-              <code className="code-questions">{questionset.uri}</code>
-            </p>
-          ))
-        }
-      </>
-    }
+    { info }
     <p className="text-danger">
       {gettext('This action cannot be undone!')}
     </p>
@@ -47,8 +20,7 @@ const DeleteQuestionModal = ({ question, pages, questionsets, show, onClose, onD
 
 DeleteQuestionModal.propTypes = {
   question: PropTypes.object.isRequired,
-  pages: PropTypes.array.isRequired,
-  questionsets: PropTypes.array.isRequired,
+  info: PropTypes.object.isRequired,
   show: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired

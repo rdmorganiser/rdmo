@@ -12,6 +12,7 @@ import UriPrefix from '../forms/UriPrefix'
 
 import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/ElementButtons'
 
+import PageInfo from '../info/PageInfo'
 import DeletePageModal from '../modals/DeletePageModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
@@ -20,11 +21,15 @@ const EditPage = ({ config, page, elements, elementActions }) => {
 
   const { attributes, conditions, sections, questionsets, questions } = elements
 
+  const pageSections = sections.filter(e => page.sections.includes(e.id))
+
   const updatePage = (key, value) => elementActions.updateElement(page, key, value)
   const storePage = () => elementActions.storeElement('pages', page)
   const deletePage = () => elementActions.deleteElement('pages', page)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
+
+  const info = <PageInfo page={page} elements={elements} />
 
   return (
     <div className="panel panel-default">
@@ -42,6 +47,10 @@ const EditPage = ({ config, page, elements, elementActions }) => {
             <code className="code-questions">{page.uri}</code>
           </div> : <strong>{gettext('Create page')}</strong>
         }
+      </div>
+
+      <div className="panel-body panel-border">
+        { info }
       </div>
 
       <div className="panel-body">
@@ -129,8 +138,8 @@ const EditPage = ({ config, page, elements, elementActions }) => {
         {page.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
-      <DeletePageModal page={page} sections={sections.filter(e => page.sections.includes(e.id))}
-                       show={showDeleteModal} onClose={closeDeleteModal} onDelete={deletePage} />
+      <DeletePageModal page={page} info={info} show={showDeleteModal}
+                       onClose={closeDeleteModal} onDelete={deletePage} />
     </div>
   )
 }

@@ -116,6 +116,10 @@ a.disabled {
         .panel-footer {
             min-height: 41px;
         }
+
+        .panel-border {
+            border-bottom: 1px solid #ddd;
+        }
     }
     .element-link {
         margin-left: 4px;

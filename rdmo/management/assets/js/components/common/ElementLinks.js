@@ -33,8 +33,7 @@ const AvailableLink = ({ element, verboseName, onClick }) => {
   }
 
   const className = classNames({
-    'element-link': true,
-    'fa': true,
+    'element-link fa': true,
     'fa-toggle-on': element.available,
     'fa-toggle-off': !element.available,
     'disabled': element.locked
@@ -65,10 +64,9 @@ const LockedLink = ({ element, verboseName, onClick }) => {
   }
 
   const className = classNames({
-    'element-link': true,
-    'fa': true,
-    'fa fa-lock': element.locked,
-    'fa fa-unlock-alt': !element.locked
+    'element-link fa': true,
+    'fa-lock': element.locked,
+    'fa-unlock-alt': !element.locked
   })
 
   const title = element.locked ? interpolate(gettext('Unlock %s'), [verboseName])
@@ -127,4 +125,33 @@ NestedLink.propTypes = {
 }
 
 
-export { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink }
+const ExtendLink = ({ extend, onClick }) => {
+  const handleClick = (event) => {
+    event.preventDefault()
+    onClick()
+  }
+
+  const className = classNames({
+    'element-link fa': true,
+    'fa-chevron-up': extend,
+    'fa-chevron-down': !extend
+  })
+
+  const title = extend ? gettext('Show less')
+                       : gettext('Show more')
+
+  return (
+    <a href="" className={className}
+       title={title}
+       onClick={event => handleClick(event)}>
+    </a>
+  )
+}
+
+ExtendLink.propTypes = {
+  extend: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired
+}
+
+
+export { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink, ExtendLink }

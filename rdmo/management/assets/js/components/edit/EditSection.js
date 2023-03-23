@@ -11,6 +11,7 @@ import UriPrefix from '../forms/UriPrefix'
 
 import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/ElementButtons'
 
+import SectionInfo from '../info/SectionInfo'
 import DeleteSectionModal from '../modals/DeleteSectionModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
@@ -18,12 +19,15 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 const EditSection = ({ config, section, elements, elementActions}) => {
 
   const { pages, catalogs } = elements
+  const sectionCatalogs = catalogs.filter(e => section.catalogs.includes(e.id))
 
   const updateSection = (key, value) => elementActions.updateElement(section, key, value)
   const storeSection = () => elementActions.storeElement('sections', section)
   const deleteSection = () => elementActions.deleteElement('sections', section)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
+
+  const info = <SectionInfo section={section} elements={elements} />
 
   return (
     <div className="panel panel-default">
@@ -41,6 +45,10 @@ const EditSection = ({ config, section, elements, elementActions}) => {
             <code className="code-questions">{section.uri}</code>
           </div> : <strong>{gettext('Create section')}</strong>
         }
+      </div>
+
+      <div className="panel-body panel-border">
+        { info }
       </div>
 
       <div className="panel-body">
@@ -95,8 +103,8 @@ const EditSection = ({ config, section, elements, elementActions}) => {
         {section.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
-      <DeleteSectionModal section={section} catalogs={catalogs.filter(e => section.catalogs.includes(e.id))}
-                          show={showDeleteModal} onClose={closeDeleteModal} onDelete={deleteSection} />
+      <DeleteSectionModal section={section} info={info} show={showDeleteModal}
+                          onClose={closeDeleteModal} onDelete={deleteSection} />
     </div>
   )
 }
