@@ -51,31 +51,31 @@ def delete_user(user=None, email=None, password=None):
     database_user = get_user_from_db_or_none(username, email)
 
     if user != database_user:
-        log.debug('Deletion of user "%s" failed, the user from request and database differ.', username)
+        log.info('Deletion of user "%s" failed, the user from request and database differ.', username)
         return False
 
     if user.has_usable_password() and password is not None:
         authenticated = authenticate(username=username, password=password)
         if authenticated is None:
-            log.debug('Deletion of user with usable password "%s" failed, false password.', username)
+            log.info('Deletion of user with usable password "%s" failed, false password.', username)
             return False
         try:
             user.delete()
-            log.debug('Deletion of user with usable password "%s" succeeded.', username)
+            log.info('Deletion of user with usable password "%s" succeeded.', username)
             return True
         except Exception as e:
-            log.debug('Deletion of user with usable password "%s" failed, an exception (%s) occured', (str(e), username))
+            log.error('Deletion of user with usable password "%s" failed, an exception (%s) occured', (str(e), username))
             return False
     elif not user.has_usable_password() and password is None:
         try:
             user.delete()
-            log.debug('Deletion of user without usable password "%s" succeeded.', username)
+            log.info('Deletion of user without usable password "%s" succeeded.', username)
             return True
         except Exception as e:
-            log.debug('Deletion of user without usable password "%s" failed, an exception (%s) occured', (str(e), username))
+            log.error('Deletion of user without usable password "%s" failed, an exception (%s) occured', (str(e), username))
             return False
     else:
-        log.debug('Deletion of user "%s" failed, probably wrong value for password given', username)
+        log.info('Deletion of user "%s" failed, probably wrong value for password given', username)
         return False
 
 
@@ -84,5 +84,5 @@ def get_user_from_db_or_none(username: str, email: str):
         db_user = get_user_model().objects.get(username=username, email=email)
         return db_user
     except ObjectDoesNotExist:
-        log.debug('Deletion of user "%s" with email "%s" failed, user does not exist', username, email)
+        log.error('Deletion of user "%s" with email "%s" failed, user does not exist', username, email)
         return None
