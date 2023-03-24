@@ -2,14 +2,15 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import isUndefined from 'lodash/isUndefined'
 
-import { filterElements } from '../../utils/filter'
+import { filterElement } from '../../utils/filter'
 
 import Section from './Section'
 import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/ElementLinks'
 
-const Catalog = ({ config, catalog, elementActions, list=true }) => {
+const Catalog = ({ config, catalog, elementActions, display='list', filter=null }) => {
 
   const verboseName = gettext('catalog')
+  const showElement = filterElement(filter, catalog)
 
   const fetchEdit = () => elementActions.fetchElement('catalogs', catalog.id)
   const fetchNested = () => elementActions.fetchElement('catalogs', catalog.id, 'nested')
@@ -36,14 +37,15 @@ const Catalog = ({ config, catalog, elementActions, list=true }) => {
     </div>
   )
 
-  if (list) {
-    return (
-      <li className="list-group-item">
-        { elementNode }
-      </li>
-    )
-  } else {
-    return elementNode
+  switch (display) {
+    case 'list':
+      return showElement && (
+        <li className="list-group-item">
+          { elementNode }
+        </li>
+      )
+    case 'plain':
+      return elementNode
   }
 }
 
@@ -51,7 +53,8 @@ Catalog.propTypes = {
   config: PropTypes.object.isRequired,
   catalog: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired,
-  list: PropTypes.bool
+  display: PropTypes.string,
+  filter: PropTypes.object
 }
 
 export default Catalog

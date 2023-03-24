@@ -1,15 +1,16 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import isUndefined from 'lodash/isUndefined'
+import isNil from 'lodash/isNil'
 
-import { filterElements } from '../../utils/filter'
+import { filterElement } from '../../utils/filter'
 
 import Page from './Page'
 import { EditLink, LockedLink, NestedLink, ExportLink } from '../common/ElementLinks'
 
-const Section = ({ config, section, elementActions, list=true }) => {
+const Section = ({ config, section, elementActions, display='list', filter=null, indent=0 }) => {
 
   const verboseName = gettext('section')
+  const showElement = filterElement(filter, section)
 
   const fetchEdit = () => elementActions.fetchElement('sections', section.id)
   const fetchNested = () => elementActions.fetchElement('sections', section.id, 'nested')
@@ -34,22 +35,33 @@ const Section = ({ config, section, elementActions, list=true }) => {
     </div>
   )
 
-  if (list) {
-    return (
-      <React.Fragment>
+  switch (display) {
+    case 'list':
+      return showElement && (
         <li className="list-group-item">
           { elementNode }
         </li>
-        {
-          filterElements(config, section.elements).map((page, index) => (
-            <Page key={index} config={config} page={page}
-                  elementActions={elementActions} indent={1} />
-          ))
-        }
-      </React.Fragment>
-    )
-  } else {
-    return elementNode
+      )
+    case 'nested':
+      return (
+        <>
+          {
+            showElement && <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
+              <div className="panel-heading">
+                { elementNode }
+              </div>
+            </div>
+          }
+          {
+            section.elements.map((page, index) => (
+              <Page key={index} config={config} page={page} elementActions={elementActions}
+                    display="nested" filter={filter}  indent={indent + 1} />
+            ))
+          }
+        </>
+      )
+    case 'plain':
+      return elementNode
   }
 }
 
@@ -57,7 +69,9 @@ Section.propTypes = {
   config: PropTypes.object.isRequired,
   section: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired,
-  list: PropTypes.bool
+  display: PropTypes.string,
+  filter: PropTypes.object,
+  indent: PropTypes.number
 }
 
 export default Section

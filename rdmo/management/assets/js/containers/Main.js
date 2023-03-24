@@ -64,17 +64,23 @@ class Main extends Component {
     if (!isNil(element) && elementAction == 'nested') {
       switch (elementType) {
         case 'catalogs':
-          return <NestedCatalog config={config} catalog={element} elementActions={elementActions} />
+          return <NestedCatalog config={config} catalog={element}
+                                configActions={configActions} elementActions={elementActions} />
         case 'sections':
-          return <NestedSection config={config} section={element} elementActions={elementActions} />
+          return <NestedSection config={config} section={element}
+                                configActions={configActions} elementActions={elementActions} />
         case 'pages':
-          return <NestedPage config={config} page={element} elementActions={elementActions} />
+          return <NestedPage config={config} page={element}
+                             configActions={configActions} elementActions={elementActions} />
         case 'questionsets':
-          return <NestedQuestionSet config={config} questionset={element} elementActions={elementActions} />
+          return <NestedQuestionSet config={config} questionset={element}
+                                    configActions={configActions} elementActions={elementActions} />
         case 'attributes':
-          return <NestedAttribute config={config} attribute={element} elementActions={elementActions} />
+          return <NestedAttribute config={config} attribute={element}
+                                  configActions={configActions} elementActions={elementActions} />
         case 'optionsets':
-          return <NestedOptionSet config={config} optionset={element} elementActions={elementActions} />
+          return <NestedOptionSet config={config} optionset={element}
+                                  configActions={configActions} elementActions={elementActions} />
       }
     }
 

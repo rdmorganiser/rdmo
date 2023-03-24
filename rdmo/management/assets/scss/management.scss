@@ -120,6 +120,10 @@ a.disabled {
         .panel-border {
             border-bottom: 1px solid #ddd;
         }
+
+        &.panel-nested {
+            margin-bottom: 10px;
+        }
     }
     .element-link {
         margin-left: 4px;

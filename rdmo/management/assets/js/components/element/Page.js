@@ -2,15 +2,16 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import isUndefined from 'lodash/isUndefined'
 
-import { filterElements } from '../../utils/filter'
+import { filterElement } from '../../utils/filter'
 
 import QuestionSet from './QuestionSet'
 import Question from './Question'
 import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/ElementLinks'
 
-const Page = ({ config, page, elementActions, list=true, indent=0 }) => {
+const Page = ({ config, page, elementActions, display='list', filter=null, indent=0 }) => {
 
   const verboseName = gettext('page')
+  const showElement = filterElement(filter, page)
 
   const fetchEdit = () => elementActions.fetchElement('pages', page.id)
   const fetchNested = () => elementActions.fetchElement('pages', page.id, 'nested')
@@ -24,7 +25,7 @@ const Page = ({ config, page, elementActions, list=true, indent=0 }) => {
         <NestedLink element={page} verboseName={verboseName} onClick={fetchNested} />
         <ExportLink element={page} verboseName={verboseName} />
       </div>
-      <div style={{ paddingLeft: 15 * indent }}>
+      <div>
         <p>
           <strong>{gettext('Page')}{': '}</strong> {page.title}
         </p>
@@ -35,27 +36,38 @@ const Page = ({ config, page, elementActions, list=true, indent=0 }) => {
     </div>
   )
 
-  if (list) {
-    return (
-      <React.Fragment>
+  switch (display) {
+    case 'list':
+      return showElement && (
         <li className="list-group-item">
           { elementNode }
         </li>
-        {
-          filterElements(config, page.elements).map((element, index) => {
-            if (isUndefined(element.text)) {
-              return <QuestionSet key={index} config={config} questionset={element}
-                                  elementActions={elementActions} indent={indent + 1} />
-            } else {
-              return <Question key={index} config={config} question={element}
-                               elementActions={elementActions} indent={indent + 1} />
-            }
-          })
-        }
-      </React.Fragment>
-    )
-  } else {
-    return elementNode
+      )
+    case 'nested':
+      return (
+        <>
+          {
+            showElement && <div className="panel panel-default panel-nested" style={{ marginLeft: 15 * indent }}>
+              <div className="panel-heading">
+                { elementNode }
+              </div>
+            </div>
+          }
+          {
+            page.elements.map((element, index) => {
+              if (isUndefined(element.text)) {
+                return <QuestionSet key={index} config={config} questionset={element} elementActions={elementActions}
+                                    display="nested" filter={filter}  indent={indent + 1} />
+              } else {
+                return <Question key={index} config={config} question={element} elementActions={elementActions}
+                                 display="nested" filter={filter}  indent={indent + 1}  />
+              }
+            })
+          }
+        </>
+      )
+    case 'plain':
+      return elementNode
   }
 }
 
@@ -63,7 +75,8 @@ Page.propTypes = {
   config: PropTypes.object.isRequired,
   page: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired,
-  list: PropTypes.bool,
+  display: PropTypes.string,
+  filter: PropTypes.object,
   indent: PropTypes.number
 }
 

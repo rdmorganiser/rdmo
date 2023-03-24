@@ -1,7 +1,7 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 
-import { filterElements, getUriPrefixes } from '../../utils/filter'
+import { getUriPrefixes } from '../../utils/filter'
 
 import FilterUri from '../FilterUri'
 import FilterUriPrefix from '../FilterUriPrefix'
@@ -41,9 +41,9 @@ const Attributes = ({ config, attributes, configActions, elementActions }) => {
 
       <ul className="list-group">
       {
-        filterElements(config.filter.attributes, attributes).map((attribute, index) => (
-          <Attribute key={index} config={config} attribute={attribute}
-                     elementActions={elementActions} />
+        attributes.map((attribute, index) => (
+          <Attribute key={index} config={config} attribute={attribute} elementActions={elementActions}
+                     filter={config.filter.attributes} />
         ))
       }
       </ul>
@@ -54,6 +54,7 @@ const Attributes = ({ config, attributes, configActions, elementActions }) => {
 Attributes.propTypes = {
   config: PropTypes.object.isRequired,
   attributes: PropTypes.array.isRequired,
+  configActions: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired
 }
 

@@ -3,20 +3,16 @@ import set from 'lodash/set'
 
 import { lsKeys } from '../constants/config'
 
+const initialFilter = {
+  uri: '',
+  uriPrefix: ''
+}
+
+
 const initialState = {
   baseUrl: '/management/',
-  filter: {
-    catalogs: { uri: '', uriPrefix: '' },
-    sections: { uri: '', uriPrefix: '' },
-    pages: { uri: '', uriPrefix: '' },
-    questionsets: { uri: '', uriPrefix: '' },
-    questions: { uri: '', uriPrefix: '' },
-    attributes: { uri: '', uriPrefix: '' },
-    optionsets: { uri: '', uriPrefix: '' },
-    conditions: { uri: '', uriPrefix: '' },
-    tasks: { uri: '', uriPrefix: '' },
-    views: { uri: '', uriPrefix: '' }
-  }
+  filter: {},
+  display: {}
 }
 
 export default function configReducer(state = initialState, action) {
@@ -29,7 +25,7 @@ export default function configReducer(state = initialState, action) {
       set(newState, path, value)
 
       // store the new value in the local storage
-      if (lsKeys.includes(path)) {
+      if (Object.keys(lsKeys).includes(path)) {
         ls.set(`rdmo.management.config.${path}`, value)
       }
 

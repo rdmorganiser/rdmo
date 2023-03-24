@@ -1,7 +1,7 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 
-import { filterElements, getUriPrefixes } from '../../utils/filter'
+import { getUriPrefixes } from '../../utils/filter'
 
 import FilterUri from '../FilterUri'
 import FilterUriPrefix from '../FilterUriPrefix'
@@ -41,9 +41,9 @@ const Sections = ({ config, sections, configActions, elementActions }) => {
 
       <ul className="list-group">
       {
-        filterElements(config.filter.sections, sections).map((section, index) => (
-          <Section key={index} config={config} section={section}
-                   elementActions={elementActions} />
+        sections.map((section, index) => (
+          <Section key={index} config={config} section={section} elementActions={elementActions}
+                   filter={config.filter.sections} />
         ))
       }
       </ul>
@@ -54,6 +54,7 @@ const Sections = ({ config, sections, configActions, elementActions }) => {
 Sections.propTypes = {
   config: PropTypes.object.isRequired,
   sections: PropTypes.array.isRequired,
+  configActions: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired
 }
 

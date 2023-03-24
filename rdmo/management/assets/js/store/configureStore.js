@@ -31,8 +31,8 @@ export default function configureStore() {
   // add a listener to restore the config from the local storage
   const updateConfigFromLocalStorage = (event) => {
     const config = {}
-    lsKeys.forEach(path => {
-      const value = ls.get(`rdmo.management.config.${path}`) || ''
+    Object.entries(lsKeys).forEach(([path, defaultValue]) => {
+      const value = ls.get(`rdmo.management.config.${path}`) || defaultValue
       store.dispatch(configActions.updateConfig(path, value))
     })
   }
