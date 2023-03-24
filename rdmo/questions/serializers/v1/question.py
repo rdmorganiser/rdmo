@@ -6,7 +6,6 @@ from rdmo.core.serializers import (ElementExportSerializerMixin,
                                    TranslationSerializerMixin)
 
 from ...models import Question
-from ...utils import get_widget_type_choices
 from ...validators import QuestionLockedValidator, QuestionUniqueURIValidator
 
 
@@ -78,11 +77,13 @@ class QuestionSerializer(ThroughModelSerializerMixin, BaseQuestionSerializer):
 class QuestionListSerializer(ElementExportSerializerMixin, ElementWarningSerializerMixin,
                              BaseQuestionSerializer):
 
+    attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
 
     class Meta(BaseQuestionSerializer.Meta):
         fields = BaseQuestionSerializer.Meta.fields + (
+            'attribute_uri',
             'warning',
             'xml_url'
         )

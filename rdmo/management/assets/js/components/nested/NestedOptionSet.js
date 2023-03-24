@@ -8,12 +8,15 @@ import FilterUriPrefix from '../FilterUriPrefix'
 
 import Option from '../element/Option'
 import OptionSet from '../element/OptionSet'
-import { BackButton } from '../common/ElementButtons'
+import { Checkbox } from '../common/Checkboxes'
+import { BackButton } from '../common/Buttons'
 
 const NestedOptionSet = ({ config, optionset, configActions, elementActions }) => {
 
   const updateFilterUri = (uri) => configActions.updateConfig('filter.optionset.uri', uri)
   const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.optionset.uriPrefix', uriPrefix)
+
+  const updateDisplayURI = (value) => configActions.updateConfig('display.uri.options', value)
 
   return (
     <>
@@ -36,6 +39,11 @@ const NestedOptionSet = ({ config, optionset, configActions, elementActions }) =
               <FilterUriPrefix value={config.filter.optionset.uriPrefix} onChange={updateFilterUriPrefix}
                                options={getUriPrefixes(optionset.elements)} />
             </div>
+          </div>
+          <div className="checkboxes">
+            <span className="mr-10">{gettext('Show URIs:')}</span>
+            <Checkbox label={<code className="code-options">{gettext('Options')}</code>}
+                      value={config.display.uri.options} onChange={updateDisplayURI} />
           </div>
         </div>
       </div>

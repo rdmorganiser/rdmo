@@ -7,12 +7,15 @@ import FilterUri from '../FilterUri'
 import FilterUriPrefix from '../FilterUriPrefix'
 
 import Page from '../element/Page'
-import { BackButton, NewButton } from '../common/ElementButtons'
+import { Checkbox } from '../common/Checkboxes'
+import { BackButton, NewButton } from '../common/Buttons'
 
 const Pages = ({ config, pages, configActions, elementActions }) => {
 
-  const updateFilterUri = (uri) => configActions.updateConfig('filter.pages.uri', uri)
-  const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.pages.uriPrefix', uriPrefix)
+  const updateFilterUri = (value) => configActions.updateConfig('filter.pages.uri', value)
+  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.pages.uriPrefix', value)
+  const updateDisplayPagesURI = (value) => configActions.updateConfig('display.uri.pages', value)
+  const updateDisplayAttributesURI = (value) => configActions.updateConfig('display.uri.attributes', value)
 
   const createPage = () => elementActions.createElement('pages')
 
@@ -36,6 +39,13 @@ const Pages = ({ config, pages, configActions, elementActions }) => {
             <FilterUriPrefix value={config.filter.pages.uriPrefix} onChange={updateFilterUriPrefix}
                              options={getUriPrefixes(pages)} />
           </div>
+        </div>
+        <div className="checkboxes">
+          <span className="mr-10">{gettext('Show URIs:')}</span>
+          <Checkbox label={<code className="code-questions">{gettext('Pages')}</code>}
+                    value={config.display.uri.pages} onChange={updateDisplayPagesURI} />
+          <Checkbox label={<code className="code-domain">{gettext('Attributes')}</code>}
+                    value={config.display.uri.attributes} onChange={updateDisplayAttributesURI} />
         </div>
       </div>
 

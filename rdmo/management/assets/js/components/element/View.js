@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { filterElement } from '../../utils/filter'
 
-import { EditLink, AvailableLink, LockedLink, ExportLink } from '../common/ElementLinks'
+import { EditLink, AvailableLink, LockedLink, ExportLink } from '../common/Links'
 
 const View = ({ config, view, elementActions, filter=null }) => {
 

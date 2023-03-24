@@ -5,12 +5,12 @@ import isNil from 'lodash/isNil'
 import { filterElement } from '../../utils/filter'
 
 import Page from './Page'
-import { EditLink, LockedLink, NestedLink, ExportLink } from '../common/ElementLinks'
+import { EditLink, LockedLink, NestedLink, ExportLink } from '../common/Links'
 
 const Section = ({ config, section, elementActions, display='list', filter=null, indent=0 }) => {
 
   const verboseName = gettext('section')
-  const showElement = filterElement(filter, section)
+  const showElement = filterElement(filter, section) && config.display.elements.sections
 
   const fetchEdit = () => elementActions.fetchElement('sections', section.id)
   const fetchNested = () => elementActions.fetchElement('sections', section.id, 'nested')
@@ -28,9 +28,11 @@ const Section = ({ config, section, elementActions, display='list', filter=null,
         <p>
           <strong>{gettext('Section')}{': '}</strong> {section.title}
         </p>
-        <p>
-          <code className="code-questions">{section.uri}</code>
-        </p>
+        {
+          config.display.uri.sections && <p>
+            <code className="code-questions">{section.uri}</code>
+          </p>
+        }
       </div>
     </div>
   )
@@ -55,7 +57,7 @@ const Section = ({ config, section, elementActions, display='list', filter=null,
           {
             section.elements.map((page, index) => (
               <Page key={index} config={config} page={page} elementActions={elementActions}
-                    display="nested" filter={filter}  indent={indent + 1} />
+                    display="nested" filter={filter} indent={indent + 1} />
             ))
           }
         </>

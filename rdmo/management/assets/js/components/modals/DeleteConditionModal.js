@@ -1,10 +1,10 @@
 import React, { Component, useState } from 'react'
 import PropTypes from 'prop-types'
 
-import { DeleteElementModal } from '../common/ElementModals'
+import { DeleteModal } from '../common/Modals'
 
 const DeleteConditionModal = ({ condition, info, show, onClose, onDelete }) => (
-  <DeleteElementModal title={gettext('Delete condition')} show={show} onClose={onClose} onDelete={onDelete}>
+  <DeleteModal title={gettext('Delete condition')} show={show} onClose={onClose} onDelete={onDelete}>
     <p>
       {gettext('You are about to permanently delete the condition:')}
     </p>
@@ -15,7 +15,7 @@ const DeleteConditionModal = ({ condition, info, show, onClose, onDelete }) => (
     <p className="text-danger">
       {gettext('This action cannot be undone!')}
     </p>
-  </DeleteElementModal>
+  </DeleteModal>
 )
 
 DeleteConditionModal.propTypes = {

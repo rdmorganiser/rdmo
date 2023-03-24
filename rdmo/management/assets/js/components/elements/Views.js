@@ -7,12 +7,12 @@ import FilterUri from '../FilterUri'
 import FilterUriPrefix from '../FilterUriPrefix'
 
 import View from '../element/View'
-import { BackButton, NewButton } from '../common/ElementButtons'
+import { BackButton, NewButton } from '../common/Buttons'
 
 const Views = ({ config, views, configActions, elementActions }) => {
 
-  const updateFilterUri = (uri) => configActions.updateConfig('filter.views.uri', uri)
-  const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.views.uriPrefix', uriPrefix)
+  const updateFilterUri = (value) => configActions.updateConfig('filter.views.uri', value)
+  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.views.uriPrefix', value)
 
   const createView = () => elementActions.createElement('views')
 

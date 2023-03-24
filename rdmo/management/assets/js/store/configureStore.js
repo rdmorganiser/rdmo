@@ -32,7 +32,19 @@ export default function configureStore() {
   const updateConfigFromLocalStorage = (event) => {
     const config = {}
     Object.entries(lsKeys).forEach(([path, defaultValue]) => {
-      const value = ls.get(`rdmo.management.config.${path}`) || defaultValue
+      let value = ls.get(`rdmo.management.config.${path}`) 
+      if (isNil(value)) {
+        switch(defaultValue) {
+          case 'true':
+            value = false
+            break
+          case 'false':
+            value = false
+            break
+          default:
+            value = defaultValue
+        }
+      }
       store.dispatch(configActions.updateConfig(path, value))
     })
   }

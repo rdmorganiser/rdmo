@@ -83,11 +83,13 @@ class QuestionSetSerializer(ThroughModelSerializerMixin, BaseQuestionSetSerializ
 class QuestionSetListSerializer(ElementExportSerializerMixin, ElementWarningSerializerMixin,
                                 BaseQuestionSetSerializer):
 
+    attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
 
     class Meta(BaseQuestionSetSerializer.Meta):
         fields = BaseQuestionSetSerializer.Meta.fields + (
+            'attribute_uri',
             'warning',
             'xml_url'
         )

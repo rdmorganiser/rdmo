@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 
 import { filterElement } from '../../utils/filter'
 
-import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/ElementLinks'
+import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/Links'
 
-const Option = ({ config, option, elementActions, display='list', filter=null }) => {
+const Option = ({ config, option, elementActions, display='list', indent=0, filter=null }) => {
 
   const verboseName = gettext('option')
   const showElement = filterElement(filter, option)
@@ -24,9 +24,11 @@ const Option = ({ config, option, elementActions, display='list', filter=null })
         <p>
           <strong>{gettext('Option')}{': '}</strong> {option.text}
         </p>
-        <p>
-          <code className="code-options">{option.uri}</code>
-        </p>
+        {
+          config.display.uri.options && <p>
+            <code className="code-options">{option.uri}</code>
+          </p>
+        }
       </div>
     </div>
   )
@@ -40,7 +42,7 @@ const Option = ({ config, option, elementActions, display='list', filter=null })
       )
     case 'nested':
       return showElement && (
-        <div className="panel panel-default panel-nested">
+        <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
           <div className="panel-body">
             { elementNode }
           </div>
@@ -54,6 +56,7 @@ Option.propTypes = {
   option: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired,
   display: PropTypes.string,
+  indent: PropTypes.number,
   filter: PropTypes.object
 }
 

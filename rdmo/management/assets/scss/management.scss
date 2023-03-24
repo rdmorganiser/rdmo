@@ -135,6 +135,16 @@ a.disabled {
             margin-left: 8px;
         }
     }
+    .checkboxes {
+        .checkbox {
+            display: inline-block;
+            margin-right: 20px;
+            margin-bottom: 0;
+        }
+        code {
+            user-select: none;
+        }
+    }
 }
 
 .list-group-item {

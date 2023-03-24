@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import { ExtendLink } from '../common/ElementLinks'
+import { ExtendLink } from '../common/Links'
 
 import useBool from '../../hooks/useBool'
 
