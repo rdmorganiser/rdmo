@@ -79,11 +79,13 @@ class PageSerializer(ThroughModelSerializerMixin, BasePageSerializer):
 class PageListSerializer(ElementExportSerializerMixin, ElementWarningSerializerMixin,
                          BasePageSerializer):
 
+    attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
 
     class Meta(BasePageSerializer.Meta):
         fields = BasePageSerializer.Meta.fields + (
+            'attribute_uri',
             'warning',
             'xml_url'
         )

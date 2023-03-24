@@ -7,12 +7,14 @@ import FilterUri from '../FilterUri'
 import FilterUriPrefix from '../FilterUriPrefix'
 
 import Section from '../element/Section'
-import { BackButton, NewButton } from '../common/ElementButtons'
+import { Checkbox } from '../common/Checkboxes'
+import { BackButton, NewButton } from '../common/Buttons'
 
 const Sections = ({ config, sections, configActions, elementActions }) => {
 
-  const updateFilterUri = (uri) => configActions.updateConfig('filter.sections.uri', uri)
-  const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.sections.uriPrefix', uriPrefix)
+  const updateFilterUri = (value) => configActions.updateConfig('filter.sections.uri', value)
+  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.sections.uriPrefix', value)
+  const updateDisplayURI = (value) => configActions.updateConfig('display.uri.sections', value)
 
   const createSection = () => elementActions.createElement('sections')
 
@@ -36,6 +38,11 @@ const Sections = ({ config, sections, configActions, elementActions }) => {
             <FilterUriPrefix value={config.filter.sections.uriPrefix} onChange={updateFilterUriPrefix}
                              options={getUriPrefixes(sections)} />
           </div>
+        </div>
+        <div className="checkboxes">
+          <span className="mr-10">{gettext('Show URIs:')}</span>
+          <Checkbox label={<code className="code-questions">{gettext('Sections')}</code>}
+                    value={config.display.uri.sections} onChange={updateDisplayURI} />
         </div>
       </div>
 

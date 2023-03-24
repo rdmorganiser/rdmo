@@ -4,7 +4,7 @@ import isUndefined from 'lodash/isUndefined'
 
 import { filterElement } from '../../utils/filter'
 
-import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/ElementLinks'
+import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/Links'
 
 const Attribute = ({ config, attribute, elementActions, display='list', filter=null, indent=0 }) => {
 
@@ -23,7 +23,7 @@ const Attribute = ({ config, attribute, elementActions, display='list', filter=n
         <NestedLink element={attribute} verboseName={verboseName} onClick={fetchNested} />
         <ExportLink element={attribute} verboseName={verboseName} />
       </div>
-      <div style={{ paddingLeft: 15 * indent }}>
+      <div>
         <strong>{gettext('Attribute')}{': '}</strong>
         <code className="code-domain">{attribute.uri}</code>
       </div>
@@ -41,7 +41,7 @@ const Attribute = ({ config, attribute, elementActions, display='list', filter=n
       return (
         <>
           {
-            showElement && <div className="panel panel-default">
+            showElement && <div className="panel panel-default" style={{ marginLeft: 30 * indent }}>
               <div className="panel-body">
                 { elementNode }
               </div>

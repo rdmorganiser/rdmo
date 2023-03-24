@@ -7,12 +7,12 @@ import FilterUri from '../FilterUri'
 import FilterUriPrefix from '../FilterUriPrefix'
 
 import OptionSet from '../element/OptionSet'
-import { BackButton, NewButton } from '../common/ElementButtons'
+import { BackButton, NewButton } from '../common/Buttons'
 
 const OptionSets = ({ config, optionsets, configActions, elementActions}) => {
 
-  const updateFilterUri = (uri) => configActions.updateConfig('filter.optionsets.uri', uri)
-  const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.optionsets.uriPrefix', uriPrefix)
+  const updateFilterUri = (value) => configActions.updateConfig('filter.optionsets.uri', value)
+  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.optionsets.uriPrefix', value)
 
   const createOptionSet = () => elementActions.createElement('optionsets')
 

@@ -7,7 +7,7 @@ import FilterUri from '../FilterUri'
 import FilterUriPrefix from '../FilterUriPrefix'
 
 import Attribute from '../element/Attribute'
-import { BackButton } from '../common/ElementButtons'
+import { BackButton } from '../common/Buttons'
 
 const NestedAttribute = ({ config, attribute, configActions, elementActions }) => {
 

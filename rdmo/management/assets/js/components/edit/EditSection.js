@@ -9,7 +9,7 @@ import Textarea from '../forms/Textarea'
 import Select from '../forms/Select'
 import UriPrefix from '../forms/UriPrefix'
 
-import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/ElementButtons'
+import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/Buttons'
 
 import SectionInfo from '../info/SectionInfo'
 import DeleteSectionModal from '../modals/DeleteSectionModal'

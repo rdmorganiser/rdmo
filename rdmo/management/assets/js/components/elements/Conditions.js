@@ -7,12 +7,12 @@ import FilterUri from '../FilterUri'
 import FilterUriPrefix from '../FilterUriPrefix'
 
 import Condition from '../element/Condition'
-import { BackButton, NewButton } from '../common/ElementButtons'
+import { BackButton, NewButton } from '../common/Buttons'
 
 const Conditions = ({ config, conditions, configActions, elementActions}) => {
 
-  const updateFilterUri = (uri) => configActions.updateConfig('filter.conditions.uri', uri)
-  const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.conditions.uriPrefix', uriPrefix)
+  const updateFilterUri = (value) => configActions.updateConfig('filter.conditions.uri', value)
+  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.conditions.uriPrefix', value)
 
   const createCondition = () => elementActions.createElement('conditions')
 

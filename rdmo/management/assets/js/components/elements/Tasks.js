@@ -7,12 +7,12 @@ import FilterUri from '../FilterUri'
 import FilterUriPrefix from '../FilterUriPrefix'
 
 import Task from '../element/Task'
-import { BackButton, NewButton } from '../common/ElementButtons'
+import { BackButton, NewButton } from '../common/Buttons'
 
 const Tasks = ({ config, tasks, configActions, elementActions }) => {
 
-  const updateFilterUri = (uri) => configActions.updateConfig('filter.tasks.uri', uri)
-  const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.tasks.uriPrefix', uriPrefix)
+  const updateFilterUri = (value) => configActions.updateConfig('filter.tasks.uri', value)
+  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.tasks.uriPrefix', value)
 
   const createTask = () => elementActions.createElement('tasks')
 

@@ -3,12 +3,12 @@ import PropTypes from 'prop-types'
 
 import { filterElement } from '../../utils/filter'
 
-import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/ElementLinks'
+import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/Links'
 
 const Question = ({ config, question, elementActions, display='list', filter=null, indent=0 }) => {
 
   const verboseName = gettext('question')
-  const showElement = filterElement(filter, question)
+  const showElement = filterElement(filter, question) && config.display.elements.questions
 
   const fetchEdit = () => elementActions.fetchElement('questions', question.id)
   const toggleLocked = () => elementActions.storeElement('questions', {...question, locked: !question.locked })
@@ -25,9 +25,16 @@ const Question = ({ config, question, elementActions, display='list', filter=nul
           <strong className={question.is_optional ? 'text-muted' : ''}>{gettext('Question')}{': '}</strong>
           {question.text}
         </p>
-        <p>
-          <code className="code-questions">{question.uri}</code>
-        </p>
+        {
+          config.display.uri.questions && <p>
+            <code className="code-questions">{question.uri}</code>
+          </p>
+        }
+        {
+          config.display.uri.attributes && question.attribute_uri && <p>
+            <code className="code-domain">{question.attribute_uri}</code>
+          </p>
+        }
       </div>
     </div>
   )
@@ -41,7 +48,7 @@ const Question = ({ config, question, elementActions, display='list', filter=nul
       )
     case 'nested':
       return showElement && (
-        <div className="panel panel-default panel-nested" style={{ marginLeft: 15 * indent }}>
+        <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
           <div className="panel-body">
             { elementNode }
           </div>

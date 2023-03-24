@@ -5,7 +5,7 @@ import isUndefined from 'lodash/isUndefined'
 import { filterElement } from '../../utils/filter'
 
 import Option from './Option'
-import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/ElementLinks'
+import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/Links'
 
 const OptionSet = ({ config, optionset, elementActions, display='list', filter=null }) => {
 

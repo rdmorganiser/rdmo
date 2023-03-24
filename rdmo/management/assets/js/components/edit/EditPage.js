@@ -10,7 +10,7 @@ import Text from '../forms/Text'
 import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
-import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/ElementButtons'
+import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/Buttons'
 
 import PageInfo from '../info/PageInfo'
 import DeletePageModal from '../modals/DeletePageModal'

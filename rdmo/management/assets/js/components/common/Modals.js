@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Modal } from 'react-bootstrap';
 
-const DeleteElementModal = ({ title, show, onClose, onDelete, children }) => {
+const DeleteModal = ({ title, show, onClose, onDelete, children }) => {
   return (
     <Modal bsSize="large" show={show} onHide={onClose} className="element-modal">
       <Modal.Header closeButton>
@@ -23,11 +23,11 @@ const DeleteElementModal = ({ title, show, onClose, onDelete, children }) => {
   )
 }
 
-DeleteElementModal.propTypes = {
+DeleteModal.propTypes = {
   title: PropTypes.string.isRequired,
   show: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired
 }
 
-export { DeleteElementModal }
+export { DeleteModal }

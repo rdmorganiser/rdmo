@@ -5,7 +5,7 @@ import isUndefined from 'lodash/isUndefined'
 import { filterElement } from '../../utils/filter'
 
 import Section from './Section'
-import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/ElementLinks'
+import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/Links'
 
 const Catalog = ({ config, catalog, elementActions, display='list', filter=null }) => {
 
@@ -30,9 +30,11 @@ const Catalog = ({ config, catalog, elementActions, display='list', filter=null 
         <p>
           <strong>{gettext('Catalog')}{': '}</strong> {catalog.title}
         </p>
-        <p>
-          <code className="code-questions">{catalog.uri}</code>
-        </p>
+        {
+          config.display.uri.catalogs && <p>
+            <code className="code-questions">{catalog.uri}</code>
+          </p>
+        }
       </div>
     </div>
   )

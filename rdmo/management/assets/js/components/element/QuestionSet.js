@@ -5,12 +5,12 @@ import isUndefined from 'lodash/isUndefined'
 import { filterElement } from '../../utils/filter'
 
 import Question from './Question'
-import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/ElementLinks'
+import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/Links'
 
 const QuestionSet = ({ config, questionset, elementActions, display='list', filter=null, indent=0 }) => {
 
   const verboseName = gettext('question set')
-  const showElement = filterElement(filter, questionset)
+  const showElement = filterElement(filter, questionset) && config.display.elements.questionsets
 
   const fetchEdit = () => elementActions.fetchElement('questionsets', questionset.id)
   const fetchNested = () => elementActions.fetchElement('questionsets', questionset.id, 'nested')
@@ -28,9 +28,16 @@ const QuestionSet = ({ config, questionset, elementActions, display='list', filt
         <p>
           <strong>{gettext('Question set')}{': '}</strong> {questionset.title}
         </p>
-        <p>
-          <code className="code-questions">{questionset.uri}</code>
-        </p>
+        {
+          config.display.uri.questionsets && <p>
+            <code className="code-questions">{questionset.uri}</code>
+          </p>
+        }
+        {
+          config.display.uri.attributes && questionset.attribute_uri &&<p>
+            <code className="code-domain">{questionset.attribute_uri}</code>
+          </p>
+        }
       </div>
     </div>
   )
@@ -46,7 +53,7 @@ const QuestionSet = ({ config, questionset, elementActions, display='list', filt
       return (
         <>
           {
-            showElement && <div className="panel panel-default panel-nested" style={{ marginLeft: 15 * indent }}>
+            showElement && <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
               <div className="panel-heading">
                 { elementNode }
               </div>

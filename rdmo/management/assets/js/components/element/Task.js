@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { filterElement } from '../../utils/filter'
 
-import { EditLink, AvailableLink, LockedLink, ExportLink } from '../common/ElementLinks'
+import { EditLink, AvailableLink, LockedLink, ExportLink } from '../common/Links'
 
 const Task = ({ config, task, elementActions, filter=null }) => {
 
@@ -24,9 +24,9 @@ const Task = ({ config, task, elementActions, filter=null }) => {
           <ExportLink element={task} verboseName={verboseName} />
         </div>
         <div>
-          <strong>{gettext('Task')}{': '}</strong>
-          <code className="code-tasks">{task.uri}</code>
-        </div>
+            <strong>{gettext('Task')}{': '}</strong>
+            <code className="code-tasks">{task.uri}</code>
+          </div>
       </div>
     </li>
   )

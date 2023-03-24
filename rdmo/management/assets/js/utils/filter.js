@@ -19,22 +19,6 @@ const filterUriPrefix = (filterUriPrefix, element) => {
   }
 }
 
-const filterElements = (filterConfig, elements) => {
-  if (isUndefined(elements)) {
-    return []
-  } else {
-    return elements.reduce((filteredElements, element) => {
-      if (get(filterConfig, 'uri', '').trim().split(' ').some(
-        uri => filterUri(uri, element)
-      ) && filterUriPrefix(get(filterConfig, 'uriPrefix', ''), element)) {
-        filteredElements.push(element)
-      }
-
-      return filteredElements
-    }, [])
-  }
-}
-
 const filterElement = (filter, element) => {
   if (isNil(filter)) {
     return true
@@ -54,4 +38,4 @@ const getUriPrefixes = (elements) => {
   }, [])
 }
 
-export { filterElements, filterElement, getUriPrefixes }
+export { filterElement, getUriPrefixes }
