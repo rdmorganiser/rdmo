@@ -2,14 +2,15 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import isUndefined from 'lodash/isUndefined'
 
-import { filterElements } from '../../utils/filter'
+import { filterElement } from '../../utils/filter'
 
 import Option from './Option'
 import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/ElementLinks'
 
-const OptionSet = ({ config, optionset, elementActions, list=true }) => {
+const OptionSet = ({ config, optionset, elementActions, display='list', filter=null }) => {
 
   const verboseName = gettext('option set')
+  const showElement = filterElement(filter, optionset)
 
   const fetchEdit = () => elementActions.fetchElement('optionsets', optionset.id)
   const fetchNested = () => elementActions.fetchElement('optionsets', optionset.id, 'nested')
@@ -30,14 +31,15 @@ const OptionSet = ({ config, optionset, elementActions, list=true }) => {
     </div>
   )
 
-  if (list) {
-    return (
-      <li className="list-group-item">
-        { elementNode }
-      </li>
-    )
-  } else {
-    return elementNode
+  switch (display) {
+    case 'list':
+      return showElement && (
+        <li className="list-group-item">
+          { elementNode }
+        </li>
+      )
+    case 'plain':
+      return elementNode
   }
 }
 
@@ -45,7 +47,8 @@ OptionSet.propTypes = {
   config: PropTypes.object.isRequired,
   optionset: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired,
-  list: PropTypes.bool
+  display: PropTypes.string,
+  filter: PropTypes.object
 }
 
 export default OptionSet

@@ -1,5 +1,7 @@
 import isEmpty from 'lodash/isEmpty';
 import isUndefined from 'lodash/isUndefined';
+import get from 'lodash/get';
+import isNil from 'lodash/isNil';
 
 const filterUri = (filterUri, element) => {
   if (isEmpty(filterUri) || element.uri.includes(filterUri)) {
@@ -22,14 +24,24 @@ const filterElements = (filterConfig, elements) => {
     return []
   } else {
     return elements.reduce((filteredElements, element) => {
-      if (filterConfig.uri.trim().split(' ').some(
+      if (get(filterConfig, 'uri', '').trim().split(' ').some(
         uri => filterUri(uri, element)
-      ) && filterUriPrefix(filterConfig.uriPrefix, element)) {
+      ) && filterUriPrefix(get(filterConfig, 'uriPrefix', ''), element)) {
         filteredElements.push(element)
       }
 
       return filteredElements
     }, [])
+  }
+}
+
+const filterElement = (filter, element) => {
+  if (isNil(filter)) {
+    return true
+  } else {
+    return (get(filter, 'uri', '').trim().split(' ').some(
+      uri => filterUri(uri, element)
+    ) && filterUriPrefix(get(filter, 'uriPrefix', ''), element))
   }
 }
 
@@ -42,4 +54,4 @@ const getUriPrefixes = (elements) => {
   }, [])
 }
 
-export { filterElements, getUriPrefixes }
+export { filterElements, filterElement, getUriPrefixes }
