@@ -5,6 +5,7 @@ import isUndefined from 'lodash/isUndefined'
 import { filterElement } from '../../utils/filter'
 
 import Option from './Option'
+import { ElementErrors } from '../common/Errors'
 import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/Links'
 
 const OptionSet = ({ config, optionset, elementActions, display='list', filter=null }) => {
@@ -25,8 +26,11 @@ const OptionSet = ({ config, optionset, elementActions, display='list', filter=n
         <ExportLink element={optionset} verboseName={verboseName} />
       </div>
       <div>
-        <strong>{gettext('Option set')}{': '}</strong>
-        <code className="code-options">{optionset.uri}</code>
+        <p>
+          <strong>{gettext('Option set')}{': '}</strong>
+          <code className="code-options">{optionset.uri}</code>
+        </p>
+        <ElementErrors element={optionset} />
       </div>
     </div>
   )

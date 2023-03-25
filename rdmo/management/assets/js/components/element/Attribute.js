@@ -4,6 +4,7 @@ import isUndefined from 'lodash/isUndefined'
 
 import { filterElement } from '../../utils/filter'
 
+import { ElementErrors } from '../common/Errors'
 import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/Links'
 
 const Attribute = ({ config, attribute, elementActions, display='list', filter=null, indent=0 }) => {
@@ -24,8 +25,11 @@ const Attribute = ({ config, attribute, elementActions, display='list', filter=n
         <ExportLink element={attribute} verboseName={verboseName} />
       </div>
       <div>
-        <strong>{gettext('Attribute')}{': '}</strong>
-        <code className="code-domain">{attribute.uri}</code>
+        <p>
+          <strong>{gettext('Attribute')}{': '}</strong>
+          <code className="code-domain">{attribute.uri}</code>
+        </p>
+        <ElementErrors element={attribute} />
       </div>
     </div>
   )

@@ -6,6 +6,7 @@ import { filterElement } from '../../utils/filter'
 
 import QuestionSet from './QuestionSet'
 import Question from './Question'
+import { ElementErrors } from '../common/Errors'
 import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/Links'
 
 const Page = ({ config, page, elementActions, display='list', filter=null, indent=0 }) => {
@@ -39,6 +40,7 @@ const Page = ({ config, page, elementActions, display='list', filter=null, inden
             <code className="code-domain">{page.attribute_uri}</code>
           </p>
         }
+        <ElementErrors element={page} />
       </div>
     </div>
   )

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import { filterElement } from '../../utils/filter'
 
+import { ElementErrors } from '../common/Errors'
 import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/Links'
 
 const Condition = ({ config, condition, elementActions, filter=null }) => {
@@ -22,8 +23,11 @@ const Condition = ({ config, condition, elementActions, filter=null }) => {
           <ExportLink element={condition} verboseName={verboseName} />
         </div>
         <div>
-          <strong>{gettext('Condition')}{': '}</strong>
-          <code className="code-conditions">{condition.uri}</code>
+          <p>
+            <strong>{gettext('Condition')}{': '}</strong>
+            <code className="code-conditions">{condition.uri}</code>
+          </p>
+          <ElementErrors element={condition} />
         </div>
       </div>
     </li>

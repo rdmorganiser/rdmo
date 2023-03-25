@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import { filterElement } from '../../utils/filter'
 
+import { ElementErrors } from '../common/Errors'
 import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/Links'
 
 const Option = ({ config, option, elementActions, display='list', indent=0, filter=null }) => {
@@ -29,6 +30,7 @@ const Option = ({ config, option, elementActions, display='list', indent=0, filt
             <code className="code-options">{option.uri}</code>
           </p>
         }
+        <ElementErrors element={option} />
       </div>
     </div>
   )

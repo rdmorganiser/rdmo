@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import { filterElement } from '../../utils/filter'
 
+import { ElementErrors } from '../common/Errors'
 import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/Links'
 
 const Question = ({ config, question, elementActions, display='list', filter=null, indent=0 }) => {
@@ -35,6 +36,7 @@ const Question = ({ config, question, elementActions, display='list', filter=nul
             <code className="code-domain">{question.attribute_uri}</code>
           </p>
         }
+        <ElementErrors element={question} />
       </div>
     </div>
   )

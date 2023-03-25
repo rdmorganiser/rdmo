@@ -5,6 +5,7 @@ import isUndefined from 'lodash/isUndefined'
 import { filterElement } from '../../utils/filter'
 
 import Question from './Question'
+import { ElementErrors } from '../common/Errors'
 import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/Links'
 
 const QuestionSet = ({ config, questionset, elementActions, display='list', filter=null, indent=0 }) => {
@@ -38,6 +39,7 @@ const QuestionSet = ({ config, questionset, elementActions, display='list', filt
             <code className="code-domain">{questionset.attribute_uri}</code>
           </p>
         }
+        <ElementErrors element={questionset} />
       </div>
     </div>
   )

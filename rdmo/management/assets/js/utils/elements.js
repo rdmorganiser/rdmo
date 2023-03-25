@@ -1,20 +1,24 @@
 import isEmpty from 'lodash/isEmpty';
 import isUndefined from 'lodash/isUndefined';
 
-const replaceElement = (elements, element) => {
-  const index = elements.findIndex(e => e.uri == element.uri)
-
-  if (index < 0) {
-    return elements.map(child => {
-      if (!isUndefined(child.elements) && !isEmpty(child.elements)) {
-        child.elements = replaceElement(child.elements, element)
-      }
-      return child
-    })
+const updateElement = (element, actionElement) => {
+  if (element.uri == actionElement.uri) {
+    return {...element, ...actionElement}
+  } else if (!isUndefined(element.elements)) {
+    return {...element, elements: element.elements.map(e => updateElement(e, actionElement))}
   } else {
-    elements[index] = {...elements[index], ...element}
+    return element
   }
-  return elements
 }
 
-export { replaceElement }
+const resetElement = (element) => {
+  delete element.errors
+
+  if (!isUndefined(element.elements)) {
+    element.elements.forEach(e => resetElement(e))
+  }
+
+  return element
+}
+
+export { updateElement, resetElement }

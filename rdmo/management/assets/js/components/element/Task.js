@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import { filterElement } from '../../utils/filter'
 
+import { ElementErrors } from '../common/Errors'
 import { EditLink, AvailableLink, LockedLink, ExportLink } from '../common/Links'
 
 const Task = ({ config, task, elementActions, filter=null }) => {
@@ -24,9 +25,12 @@ const Task = ({ config, task, elementActions, filter=null }) => {
           <ExportLink element={task} verboseName={verboseName} />
         </div>
         <div>
+          <p>
             <strong>{gettext('Task')}{': '}</strong>
             <code className="code-tasks">{task.uri}</code>
-          </div>
+          </p>
+          <ElementErrors element={task} />
+        </div>
       </div>
     </li>
   )

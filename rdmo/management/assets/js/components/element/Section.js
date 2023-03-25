@@ -5,6 +5,7 @@ import isNil from 'lodash/isNil'
 import { filterElement } from '../../utils/filter'
 
 import Page from './Page'
+import { ElementErrors } from '../common/Errors'
 import { EditLink, LockedLink, NestedLink, ExportLink } from '../common/Links'
 
 const Section = ({ config, section, elementActions, display='list', filter=null, indent=0 }) => {
@@ -33,6 +34,7 @@ const Section = ({ config, section, elementActions, display='list', filter=null,
             <code className="code-questions">{section.uri}</code>
           </p>
         }
+        <ElementErrors element={section} />
       </div>
     </div>
   )
