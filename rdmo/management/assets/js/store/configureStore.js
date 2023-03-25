@@ -1,6 +1,5 @@
 import { applyMiddleware, compose, createStore } from 'redux'
 import thunk from 'redux-thunk'
-import logger from 'redux-logger'
 import ls from 'local-storage'
 import isNil from 'lodash/isNil'
 
@@ -13,9 +12,16 @@ import * as configActions from '../actions/configActions'
 import * as elementActions from '../actions/elementActions'
 
 export default function configureStore() {
+  const middlewares = [thunk];
+
+  if (process.env.NODE_ENV === `development`) {
+    const { logger } = require(`redux-logger`);
+    middlewares.push(logger);
+  }
+
   const store = createStore(
     rootReducer,
-    applyMiddleware(thunk, logger)
+    applyMiddleware(...middlewares)
   )
 
   // fetch some of the django settings
