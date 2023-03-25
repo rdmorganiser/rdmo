@@ -8,7 +8,6 @@ const initialFilter = {
   uriPrefix: ''
 }
 
-
 const initialState = {
   baseUrl: '/management/',
   filter: {},

@@ -1,7 +1,7 @@
 import isUndefined from 'lodash/isUndefined'
 import isNil from 'lodash/isNil'
 
-import { replaceElement } from '../utils/elements'
+import { updateElement, resetElement } from '../utils/elements'
 
 const initialState = {
   elementType: null,
@@ -61,38 +61,29 @@ export default function elementsReducer(state = initialState, action) {
     case 'elements/storeElementInit':
       if (isNil(state.element)) {
         return state
-      } else if (state.elementAction == 'nested') {
-        return state
       } else {
-        return {...state, element: {...action.element, errors: {}}}
+        return {...state, element: resetElement(state.element)}
+      }
+    case 'elements/storeElementError':
+      if (isNil(state.element) || state.elementAction == 'nested') {
+        // create a fake element with just the uri and the error for updateElement works,
+        // but the element won't get updated in the view
+        action.element = {uri: action.element.uri, errors: action.error.errors}
+      } else {
+        action.element.errors = action.error.errors
       }
     case 'elements/storeElementSuccess':
-
       if (isNil(state.element)) {
-        const elements = state[state.elementType]
         return {...state,
-          [state.elementType]: replaceElement(elements, action.element)
+          [state.elementType]: state[state.elementType].map(element => updateElement(element, action.element))
         }
       } else if (state.elementAction == 'nested') {
-        if (state.element.uri == action.element.uri) {
-          return {...state, element: {...state.element, ...action.element}}
-        } else {
-          const elements = state.element.elements
-          return {...state, element: {...state.element, elements: replaceElement(elements, action.element)}}
-        }
+        return {...state, element: updateElement(state.element, action.element)}
       } else {
         // let the element know what type it is
         action.element.type = state.elementType
 
         return {...state, element: action.element}
-      }
-    case 'elements/storeElementError':
-      if (isNil(state.element)) {
-        return state
-      } else {
-        return {...state, ...{
-          element: {...action.element, errors: action.error.errors}
-        }}
       }
 
     // create element

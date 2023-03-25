@@ -117,15 +117,15 @@ class LockedValidator(InstanceValidator):
                     except AttributeError:
                         pass
 
-            # lock if the instance is now locked and was locked before
-            is_locked |= data.get('locked', False) and self.instance.locked
-
+        # lock if a superior element is locked
         if is_locked:
+            raise self.raise_validation_error({
+                'locked': _('A superior element is locked.')
+            })
+
+        # lock if the instance is now locked and was locked before
+        if data.get('locked', False) and self.instance.locked:
             if data.get('locked'):
                 raise self.raise_validation_error({
                     'locked': _('The element is locked.')
-                })
-            else:
-                raise self.raise_validation_error({
-                    'locked': _('A superior element is locked.')
                 })

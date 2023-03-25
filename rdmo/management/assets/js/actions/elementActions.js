@@ -364,7 +364,7 @@ export function storeElement(elementType, element) {
     dispatch(action)
       .then(element => {
         dispatch(storeElementSuccess(element))
-        if (getState().elements.elementAction) {
+        if (getState().elements.elementAction == 'create') {
           dispatch(fetchElement(getState().elements.elementType, element.id))
         }
       })

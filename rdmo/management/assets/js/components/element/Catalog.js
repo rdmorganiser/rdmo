@@ -5,6 +5,7 @@ import isUndefined from 'lodash/isUndefined'
 import { filterElement } from '../../utils/filter'
 
 import Section from './Section'
+import { ElementErrors } from '../common/Errors'
 import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/Links'
 
 const Catalog = ({ config, catalog, elementActions, display='list', filter=null }) => {
@@ -35,6 +36,7 @@ const Catalog = ({ config, catalog, elementActions, display='list', filter=null 
             <code className="code-questions">{catalog.uri}</code>
           </p>
         }
+        <ElementErrors element={catalog} />
       </div>
     </div>
   )

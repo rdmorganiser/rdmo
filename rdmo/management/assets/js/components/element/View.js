@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import { filterElement } from '../../utils/filter'
 
+import { ElementErrors } from '../common/Errors'
 import { EditLink, AvailableLink, LockedLink, ExportLink } from '../common/Links'
 
 const View = ({ config, view, elementActions, filter=null }) => {
@@ -24,8 +25,11 @@ const View = ({ config, view, elementActions, filter=null }) => {
           <ExportLink element={view} verboseName={verboseName} />
         </div>
         <div>
-          <strong>{gettext('View')}{': '}</strong>
-          <code className="code-views">{view.uri}</code>
+          <p>
+            <strong>{gettext('View')}{': '}</strong>
+            <code className="code-views">{view.uri}</code>
+          </p>
+          <ElementErrors element={view} />
         </div>
       </div>
     </li>
