@@ -1,6 +1,8 @@
 import React, { Component, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap';
+import isUndefined from 'lodash/isUndefined'
+import orderBy from 'lodash/orderBy'
 
 import Checkbox from '../forms/Checkbox'
 import MultiSelect from '../forms/MultiSelect'
@@ -21,9 +23,25 @@ const EditPage = ({ config, page, elements, elementActions }) => {
 
   const { attributes, conditions, sections, questionsets, questions } = elements
 
-  const pageSections = sections.filter(e => page.sections.includes(e.id))
+  const elementValues = orderBy(page.questions.concat(page.questionsets), ['order', 'uri'])
+  const elementOptions = elements.questions.map(question => ({
+    value: 'question-' + question.id,
+    label: interpolate(gettext('Question: %s'), [question.uri])
+  })).concat(elements.questionsets.map(questionset => ({
+    value: 'questionset-' + questionset.id,
+    label: interpolate(gettext('Question set: %s'), [questionset.uri])
+  })))
 
-  const updatePage = (key, value) => elementActions.updateElement(page, key, value)
+  const updatePage = (key, value) => {
+    if (key == 'elements') {
+      elementActions.updateElement(page, {
+        questions: value.filter(e => !isUndefined(e.question)),
+        questionsets: value.filter(e => !isUndefined(e.questionset))
+      })
+    } else {
+      elementActions.updateElement(page, { [key]: value })
+    }
+  }
   const storePage = () => elementActions.storeElement('pages', page)
   const deletePage = () => elementActions.deleteElement('pages', page)
 
@@ -80,13 +98,9 @@ const EditPage = ({ config, page, elements, elementActions }) => {
                     options={attributes} onChange={updatePage} />
           </div>
           <div className="col-sm-12">
-            <OrderedMultiSelect config={config} element={page} field="questionsets"
-                                options={questionsets} verboseName="questionset"
-                                onChange={updatePage} />
-          </div>
-          <div className="col-sm-12">
-            <OrderedMultiSelect config={config} element={page} field="questions"
-                                options={questions} verboseName="question"
+            <OrderedMultiSelect config={config} element={page} field="elements"
+                                values={elementValues} options={elementOptions}
+                                verboseName={gettext('element')}
                                 onChange={updatePage} />
           </div>
           <div className="col-sm-12">

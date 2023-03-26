@@ -20,7 +20,7 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
 
   const { sites, groups, sections } = elements
 
-  const updateCatalog = (key, value) => elementActions.updateElement(catalog, key, value)
+  const updateCatalog = (key, value) => elementActions.updateElement(catalog, {[key]: value})
   const storeCatalog = () => elementActions.storeElement('catalogs', catalog)
   const deleteCatalog = () => elementActions.deleteElement('catalogs', catalog)
 
@@ -35,7 +35,7 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
           <BackButton />
           {
             catalog.id ? <SaveButton onClick={storeCatalog} />
-                         : <CreateButton onClick={storeCatalog} />
+                       : <CreateButton onClick={storeCatalog} />
           }
         </div>
         {

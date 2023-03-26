@@ -20,7 +20,7 @@ const EditOption = ({ config, option, elements, elementActions }) => {
 
   const optionConditions = conditions.filter(e => option.conditions.includes(e.id))
 
-  const updateOption = (key, value) => elementActions.updateElement(option, key, value)
+  const updateOption = (key, value) => elementActions.updateElement(option, {[key]: value})
   const storeOption = () => elementActions.storeElement('options', option)
   const deleteOption = () => elementActions.deleteElement('options', option)
 

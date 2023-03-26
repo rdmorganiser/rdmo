@@ -23,7 +23,7 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
 
   const optionsetQuestions = questions.filter(e => optionset.questions.includes(e.id))
 
-  const updateOptionSet = (key, value) => elementActions.updateElement(optionset, key, value)
+  const updateOptionSet = (key, value) => elementActions.updateElement(optionset, {[key]: value})
   const storeOptionSet = () => elementActions.storeElement('optionsets', optionset)
   const deleteOptionSet = () => elementActions.deleteElement('optionsets', optionset)
 

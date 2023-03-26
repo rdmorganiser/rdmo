@@ -19,7 +19,7 @@ const EditAttribute = ({ config, attribute, elements, elementActions }) => {
 
   const { attributes, conditions, pages, questionsets, questions, tasks } = elements
 
-  const updateAttribute = (key, value) => elementActions.updateElement(attribute, key, value)
+  const updateAttribute = (key, value) => elementActions.updateElement(attribute, {[key]: value})
   const storeAttribute = () => elementActions.storeElement('attributes', attribute)
   const deleteAttribute = () => elementActions.deleteElement('attributes', attribute)
 

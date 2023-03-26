@@ -20,7 +20,7 @@ const EditTask = ({ config, task, elements, elementActions}) => {
 
   const { attributes, catalogs, sites, groups } = elements
 
-  const updateTask = (key, value) => elementActions.updateElement(task, key, value)
+  const updateTask = (key, value) => elementActions.updateElement(task, {[key]: value})
   const storeTask = () => elementActions.storeElement('tasks', task)
   const deleteTask = () => elementActions.deleteElement('tasks', task)
 
