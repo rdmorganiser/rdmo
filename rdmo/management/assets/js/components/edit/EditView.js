@@ -20,7 +20,7 @@ const EditView = ({ config, view, elements, elementActions }) => {
 
   const { catalogs, sites, groups } = elements
 
-  const updateView = (key, value) => elementActions.updateElement(view, key, value)
+  const updateView = (key, value) => elementActions.updateElement(view, {[key]: value})
   const storeView = () => elementActions.storeElement('views', view)
   const deleteView = () => elementActions.deleteElement('views', view)
 

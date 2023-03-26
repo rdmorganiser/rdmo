@@ -31,6 +31,7 @@ class BaseOptionSerializer(TranslationSerializerMixin, serializers.ModelSerializ
 class OptionSerializer(BaseOptionSerializer):
 
     optionsets = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    conditions = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     values_count = serializers.IntegerField(read_only=True)
     projects_count = serializers.IntegerField(read_only=True)
 

@@ -21,7 +21,7 @@ const EditSection = ({ config, section, elements, elementActions}) => {
   const { pages, catalogs } = elements
   const sectionCatalogs = catalogs.filter(e => section.catalogs.includes(e.id))
 
-  const updateSection = (key, value) => elementActions.updateElement(section, key, value)
+  const updateSection = (key, value) => elementActions.updateElement(section, {[key]: value})
   const storeSection = () => elementActions.storeElement('sections', section)
   const deleteSection = () => elementActions.deleteElement('sections', section)
 

@@ -58,22 +58,6 @@ class TranslationSerializerMixin(object):
                         allow_blank=model_field.blank)
 
 
-class ThroughModelListField(serializers.ListField):
-
-    def to_internal_value(self, data):
-        target_field_name = self.child.Meta.fields[0]
-        return super().to_internal_value([
-            {
-                target_field_name: value
-            } for value in data
-        ])
-
-    def to_representation(self, data):
-        target_field_name = self.child.Meta.fields[0]
-        items = sorted(data.all(), key=lambda e: e.order)
-        return [getattr(item, target_field_name).id for item in items]
-
-
 class ThroughModelSerializerMixin(object):
 
     def create(self, validated_data):
@@ -92,21 +76,21 @@ class ThroughModelSerializerMixin(object):
         model_info = model_meta.get_field_info(self.Meta.model)
 
         through_fields = {}
-        for field_name, field in self.get_fields().items():
-            if isinstance(field, ThroughModelListField):
-                through_model = model_info.reverse_relations[field.source].related_model
+        for field_name in self.Meta.through_fields:
+            field = self.get_fields().get(field_name)
 
-                target_field_name = field.child.Meta.fields[0]
-                for fn, f in model_meta.get_field_info(through_model).forward_relations.items():
-                    if fn != target_field_name:
-                        source_field_name = fn
+            through_model = model_info.reverse_relations[field.source].related_model
 
-                through_fields[field.source] = {
-                    'source_field_name': source_field_name,
-                    'target_field_name': target_field_name,
-                    'through_model': through_model,
-                    'validated_data': validated_data.pop(field.source, None)
-                }
+            target_field_name = field.child.Meta.fields[0]
+            for fn, f in model_meta.get_field_info(through_model).forward_relations.items():
+                if fn != target_field_name:
+                    source_field_name = fn
+            through_fields[field.source] = {
+                'source_field_name': source_field_name,
+                'target_field_name': target_field_name,
+                'through_model': through_model,
+                'validated_data': validated_data.pop(field.source, None)
+            }
 
         return through_fields
 
@@ -115,14 +99,14 @@ class ThroughModelSerializerMixin(object):
             if field_config['validated_data'] is not None:
                 items = list(getattr(instance, field_name).all())
 
-                for order, data in enumerate(field_config['validated_data']):
+                for data in field_config['validated_data']:
                     try:
                         # look for the item in items
                         item = next(filter(lambda item: getattr(item, field_config['target_field_name']) ==
                                            data.get(field_config['target_field_name']), items))
                         # update order if the item if it changed
-                        if item.order != order:
-                            item.order = order
+                        if item.order != data.get('order'):
+                            item.order = data.get('order')
                             item.save()
 
                         # remove the item from the items list so that it won't get removed
@@ -130,8 +114,7 @@ class ThroughModelSerializerMixin(object):
                     except StopIteration:
                         # create a new item
                         new_data = dict({
-                            field_config['source_field_name']: instance,
-                            'order': order
+                            field_config['source_field_name']: instance
                         }, **data)
                         new_item = field_config['through_model'](**new_data)
                         new_item.save()
@@ -155,10 +138,6 @@ class ElementWarningSerializerMixin(serializers.ModelSerializer):
 
     def get_warning(self, obj):
         return any([get_language_warning(obj, field_name) for field_name in self.Meta.warning_fields])
-
-
-class ElementSerializer(serializers.ModelSerializer):
-    pass
 
 
 class SiteSerializer(serializers.ModelSerializer):

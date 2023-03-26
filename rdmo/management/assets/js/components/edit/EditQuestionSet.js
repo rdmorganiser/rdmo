@@ -1,6 +1,8 @@
 import React, { Component, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap';
+import isUndefined from 'lodash/isUndefined'
+import orderBy from 'lodash/orderBy'
 
 import Checkbox from '../forms/Checkbox'
 import OrderedMultiSelect from '../forms/OrderedMultiSelect'
@@ -20,7 +22,25 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
 
   const { attributes, conditions, pages, questionsets, questions } = elements
 
-  const updateQuestionSet = (key, value) => elementActions.updateElement(questionset, key, value)
+  const elementValues = orderBy(questionset.questions.concat(questionset.questionsets), ['order', 'uri'])
+  const elementOptions = elements.questions.map(question => ({
+    value: 'question-' + question.id,
+    label: interpolate(gettext('Question: %s'), [question.uri])
+  })).concat(elements.questionsets.map(questionset => ({
+    value: 'questionset-' + questionset.id,
+    label: interpolate(gettext('Question set: %s'), [questionset.uri])
+  })))
+
+  const updateQuestionSet = (key, value) => {
+    if (key == 'elements') {
+      elementActions.updateElement(questionset, {
+        questions: value.filter(e => !isUndefined(e.question)),
+        questionsets: value.filter(e => !isUndefined(e.questionset))
+      })
+    } else {
+      elementActions.updateElement(questionset, { [key]: value })
+    }
+  }
   const storeQuestionSet = () => elementActions.storeElement('questionsets', questionset)
   const deleteQuestionSet = () => elementActions.deleteElement('questionsets', questionset)
 
@@ -77,13 +97,9 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
                     options={attributes} onChange={updateQuestionSet} />
           </div>
           <div className="col-sm-12">
-            <OrderedMultiSelect config={config} element={questionset} field="questionsets"
-                                options={questionsets} verboseName="questionset"
-                                onChange={updateQuestionSet} />
-          </div>
-          <div className="col-sm-12">
-            <OrderedMultiSelect config={config} element={questionset} field="questions"
-                                options={questions}  verboseName="question"
+            <OrderedMultiSelect config={config} element={questionset} field="elements"
+                                values={elementValues} options={elementOptions}
+                                verboseName={gettext('element')}
                                 onChange={updateQuestionSet} />
           </div>
           <div className="col-sm-12">

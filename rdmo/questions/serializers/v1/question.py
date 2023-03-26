@@ -47,7 +47,7 @@ class BaseQuestionSerializer(TranslationSerializerMixin, serializers.ModelSerial
         )
 
 
-class QuestionSerializer(ThroughModelSerializerMixin, BaseQuestionSerializer):
+class QuestionSerializer(BaseQuestionSerializer):
 
     uri_path = serializers.CharField(required=True)
     pages = serializers.PrimaryKeyRelatedField(many=True, read_only=True)

@@ -117,7 +117,7 @@ export default function elementsReducer(state = initialState, action) {
 
     // update element
     case 'elements/updateElement':
-      return {...state, element: {...action.element, [action.field]: action.value }}
+      return {...state, element: {...action.element, ...action.values}}
 
     default:
       return state

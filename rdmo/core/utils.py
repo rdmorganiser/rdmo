@@ -115,6 +115,17 @@ def get_model_field_meta(model):
             if hasattr(field, 'help_text'):
                 meta[field.name]['help_text'] = field.help_text
 
+    if model.__name__ == 'Page':
+        meta['elements'] = {
+            'verbose_name': _('Elements'),
+            'help_text': _('The questions and question sets for this page.')
+        }
+    elif model.__name__ == 'QuestionSet':
+        meta['elements'] = {
+            'verbose_name': _('Elements'),
+            'help_text': _('The questions and question sets for this question set.')
+        }
+
     return meta
 
 

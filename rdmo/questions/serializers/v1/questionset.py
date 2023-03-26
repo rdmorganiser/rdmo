@@ -2,7 +2,6 @@ from rest_framework import serializers
 
 from rdmo.core.serializers import (ElementExportSerializerMixin,
                                    ElementWarningSerializerMixin,
-                                   ThroughModelListField,
                                    ThroughModelSerializerMixin,
                                    TranslationSerializerMixin)
 
@@ -45,6 +44,7 @@ class QuestionSetQuestionSetSerializer(serializers.ModelSerializer):
         model = QuestionSetQuestionSet
         fields = (
             'questionset',
+            'order'
         )
 
 
@@ -54,6 +54,7 @@ class QuestionSetQuestionSerializer(serializers.ModelSerializer):
         model = QuestionSetQuestion
         fields = (
             'question',
+            'order'
         )
 
 
@@ -62,8 +63,8 @@ class QuestionSetSerializer(ThroughModelSerializerMixin, BaseQuestionSetSerializ
     uri_path = serializers.CharField(required=True)
     pages = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     parents = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    questionsets = ThroughModelListField(source='questionset_questionsets', child=QuestionSetQuestionSetSerializer(), required=False)
-    questions = ThroughModelListField(source='questionset_questions', child=QuestionSetQuestionSerializer(), required=False)
+    questionsets = QuestionSetQuestionSetSerializer(source='questionset_questionsets', read_only=False, required=False, many=True)
+    questions = QuestionSetQuestionSerializer(source='questionset_questions', read_only=False, required=False, many=True)
 
     class Meta(BaseQuestionSetSerializer.Meta):
         fields = BaseQuestionSetSerializer.Meta.fields + (
@@ -77,6 +78,10 @@ class QuestionSetSerializer(ThroughModelSerializerMixin, BaseQuestionSetSerializ
             QuestionSetUniqueURIValidator(),
             QuestionSetQuestionSetValidator(),
             QuestionSetLockedValidator()
+        )
+        through_fields = (
+            'questionsets',
+            'questions'
         )
 
 

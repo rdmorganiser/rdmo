@@ -19,8 +19,7 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
 
   const { relations, attributes, optionsets, options, pages, questionsets, questions, tasks } = elements
 
-
-  const updateCondition = (key, value) => elementActions.updateElement(condition, key, value)
+  const updateCondition = (key, value) => elementActions.updateElement(condition, {[key]: value})
   const storeCondition = () => elementActions.storeElement('conditions', condition)
   const deleteCondition = () => elementActions.deleteElement('conditions', condition)
 

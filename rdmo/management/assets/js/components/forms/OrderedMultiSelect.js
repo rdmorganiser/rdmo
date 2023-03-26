@@ -1,11 +1,15 @@
-import React, { Component, useRef } from 'react'
+import React, { Component, useRef, useState, useEffect, useCallback } from 'react'
 import ReactSelect from 'react-select'
 import { useDrag, useDrop } from 'react-dnd'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import isEmpty from 'lodash/isEmpty'
+import isUndefined from 'lodash/isUndefined'
 import isNil from 'lodash/isNil'
+import isNumber from 'lodash/isNumber'
+import toNumber from 'lodash/toNumber'
 import get from 'lodash/get'
+import maxBy from 'lodash/maxBy'
 
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
@@ -15,7 +19,6 @@ const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions,
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: field,
-    // drop: (item, monitor) => handleDrag(item.index, index),
     collect: (monitor) => ({
       isOver: monitor.isOver()
     }),
@@ -72,74 +75,144 @@ const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions,
   )
 }
 
-const OrderedMultiSelect = ({ config, element, field, options, verboseName, onChange }) => {
-  const id = getId(element, field),
-        label = getLabel(config, element, field),
-        help = getHelp(config, element, field),
-        warnings = get(element, ['warnings', field]),
-        errors = get(element, ['errors', field])
+class OrderedMultiSelect extends Component {
 
-  const className = classNames({
-    'form-group': true,
-    'has-warning': !isEmpty(warnings),
-    'has-error': !isEmpty(errors)
-  })
+  constructor(props) {
+    super(props)
 
-  const values = isNil(element[field]) ? [] : element[field]
+    this.handleDrag = this.handleDrag.bind(this)
+    this.handleChange = this.handleChange.bind(this)
+  }
 
-  const selectOptions = options.map(option => ({
-    value: option.id,
-    label: option.uri || option.text || option.name
-  }))
+  getValues() {
+    const { field, values, element } = this.props
 
-  const handleAdd = () => {
-    // add an empty value to the value array and call onChange
-    values.push(null)
+    if (isUndefined(values)) {
+      return isUndefined(element[field]) ? [] : [...element[field]]
+    } else {
+      return values
+    }
+  }
+
+  getSelectOptions() {
+    const { options } = this.props
+
+    return options.map(option => ({
+      value: option.value || option.id,
+      label: option.label || option.uri || option.text || option.name
+    }))
+  }
+
+  parseValue(option) {
+    const { field } = this.props
+
+    if (isNumber(option.value)) {
+      return [field.slice(0, -1), option.value]
+    } else {
+      const [valueField, id] = option.value.split('-')
+      return [valueField, toNumber(id)]
+    }
+  }
+
+  compareValue(option, value) {
+    const valueField = Object.keys(value).filter(k => k != 'order')[0]
+    if (isNumber(option.value)) {
+      return option.value == value[valueField]
+    } else {
+      return option.value == valueField + '-' + value[valueField]
+    }
+  }
+
+  handleAdd() {
+    const { field, onChange } = this.props
+    const values = this.getValues()
+
+    const maxValue = maxBy(values, 'order')
+    const [valueField, value] = this.parseValue(this.getSelectOptions()[0])
+    values.push({
+      [valueField]: value,
+      order: maxValue ? maxValue.order + 1 : 0
+    })
+
     onChange(field, values)
   }
 
-  const handleChange = (option, index) => {
+  handleChange(option, index) {
+    const { field, onChange } = this.props
+    const values = this.getValues()
+
     if (isNil(option)) {
       // remove this value
       values.splice(index, 1)
     } else {
-      values[index] = option.value
-    }
-    onChange(field, values)
-  }
-
-  const handleDrag = (dragIndex, dropIndex) => {
-    const value = values[dragIndex]
-    values.splice(dragIndex, 1)
-    values.splice(dropIndex, 0, value)
-    onChange(field, values)
-  }
-
-  return (
-    <div className={className}>
-      <label className="control-label" htmlFor={id}>{label}</label>
-
-      <div>
-      {
-        values.map((value, index) => {
-          const selectValue = selectOptions.find(option => (option.value == value))
-
-          return (
-            <OrderedMultiSelectItem key={index} index={index} field={field}
-                                    selectValue={selectValue} selectOptions={selectOptions}
-                                    errors={errors} handleChange={handleChange} handleDrag={handleDrag} />
-          )
-        })
+      const [valueField, value] = this.parseValue(option)
+      values[index] = {
+        [valueField]: value,
+        order: values[index].order
       }
+    }
+
+    onChange(field, values)
+  }
+
+  handleDrag(dragIndex, dropIndex) {
+    const { field, onChange } = this.props
+    const values = this.getValues()
+
+    const dragValue = values[dragIndex]
+    values.splice(dragIndex, 1)
+    values.splice(dropIndex, 0, dragValue)
+
+    // re-order the array
+    values.forEach((value, index) => {
+      value.order = index
+    })
+
+    onChange(field, values)
+  }
+
+  render() {
+    const { config, element, field, options, verboseName, onChange } = this.props
+
+    const id = getId(element, field),
+          label = getLabel(config, element, field),
+          help = getHelp(config, element, field),
+          warnings = get(element, ['warnings', field]),
+          errors = get(element, ['errors', field])
+
+    const className = classNames({
+      'form-group': true,
+      'has-warning': !isEmpty(warnings),
+      'has-error': !isEmpty(errors)
+    })
+
+    return (
+      <div className={className}>
+        <label className="control-label" htmlFor={id}>{label}</label>
+
+        <div>
+        {
+          this.getValues().map((value, index) => {
+            const selectOptions = this.getSelectOptions()
+            const selectValue = selectOptions.find(option => this.compareValue(option, value))
+            return (
+              <OrderedMultiSelectItem key={index} index={index} field={field}
+                                      selectValue={selectValue} selectOptions={selectOptions}
+                                      errors={errors} handleChange={this.handleChange}
+                                      handleDrag={this.handleDrag} />
+            )
+          })
+        }
+        </div>
+
+        <button className="btn btn-default btn-sm" onClick={() => this.handleAdd()}>
+          {interpolate(gettext('Add %s'), [verboseName])}
+        </button>
+
+        {help && <p className="help-block">{help}</p>}
       </div>
-
-      <button className="btn btn-default btn-sm" onClick={() => handleAdd()}>
-        {interpolate(gettext('Add %s'), [verboseName])}
-      </button>
-
-      {help && <p className="help-block">{help}</p>}
-    </div>
-  )
+    )
+  }
 }
 
 OrderedMultiSelectItem.propTypes = {
@@ -156,6 +229,7 @@ OrderedMultiSelect.propTypes = {
   config: PropTypes.object,
   element: PropTypes.object,
   field: PropTypes.string,
+  fields: PropTypes.array,
   options: PropTypes.array,
   verboseName: PropTypes.string,
   onChange: PropTypes.func

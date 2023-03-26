@@ -614,6 +614,6 @@ export function deleteElementError(element, error) {
 
 // update elements
 
-export function updateElement(element, field, value) {
-  return {type: 'elements/updateElement', element, field, value}
+export function updateElement(element, values) {
+  return {type: 'elements/updateElement', element, values}
 }

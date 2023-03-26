@@ -2,7 +2,6 @@ from rest_framework import serializers
 
 from rdmo.core.serializers import (ElementExportSerializerMixin,
                                    ElementWarningSerializerMixin,
-                                   ThroughModelListField,
                                    ThroughModelSerializerMixin,
                                    TranslationSerializerMixin)
 
@@ -44,6 +43,7 @@ class PageQuestionSetSerializer(serializers.ModelSerializer):
         model = PageQuestionSet
         fields = (
             'questionset',
+            'order'
         )
 
 
@@ -53,6 +53,7 @@ class PageQuestionSerializer(serializers.ModelSerializer):
         model = PageQuestion
         fields = (
             'question',
+            'order'
         )
 
 
@@ -60,8 +61,8 @@ class PageSerializer(ThroughModelSerializerMixin, BasePageSerializer):
 
     uri_path = serializers.CharField(required=True)
     sections = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    questionsets = ThroughModelListField(source='page_questionsets', child=PageQuestionSetSerializer(), required=False)
-    questions = ThroughModelListField(source='page_questions', child=PageQuestionSerializer(), required=False)
+    questionsets = PageQuestionSetSerializer(source='page_questionsets', read_only=False, required=False, many=True)
+    questions = PageQuestionSerializer(source='page_questions', read_only=False, required=False, many=True)
 
     class Meta(BasePageSerializer.Meta):
         fields = BasePageSerializer.Meta.fields + (
@@ -73,6 +74,10 @@ class PageSerializer(ThroughModelSerializerMixin, BasePageSerializer):
         validators = (
             PageUniqueURIValidator(),
             PageLockedValidator()
+        )
+        through_fields = (
+            'questionsets',
+            'questions'
         )
 
 

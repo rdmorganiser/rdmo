@@ -20,7 +20,7 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
 
   const { attributes, optionsets, options, conditions, pages, questionsets, widgetTypes, valueTypes } = elements
 
-  const updateQuestion = (key, value) => elementActions.updateElement(question, key, value)
+  const updateQuestion = (key, value) => elementActions.updateElement(question, {[key]: value})
   const storeQuestion = () => elementActions.storeElement('questions', question)
   const deleteQuestion = () => elementActions.deleteElement('questions', question)
 
