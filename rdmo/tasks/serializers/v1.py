@@ -1,17 +1,16 @@
 from rest_framework import serializers
 
 from rdmo.core.serializers import (ElementExportSerializerMixin,
-                                   ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
                                    TranslationSerializerMixin,
-                                   CanEditObjectSerializerMixin)
+                                   ReadOnlyObjectPermissionsSerializerMixin)
+from rdmo.core.utils import get_language_warning
 
 from ..models import Task
 from ..validators import TaskLockedValidator, TaskUniqueURIValidator
 
 
-class BaseTaskSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin, 
-                         ElementModelSerializerMixin, serializers.ModelSerializer):
+class TaskSerializer(ReadOnlyObjectPermissionsSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()

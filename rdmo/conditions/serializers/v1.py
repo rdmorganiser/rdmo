@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from rdmo.core.serializers import (ElementExportSerializerMixin,
                                    ElementModelSerializerMixin,
-                                   CanEditObjectSerializerMixin)
+                                   ReadOnlyObjectPermissionsSerializerMixin)
 from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Page, Question, QuestionSet
@@ -12,7 +12,7 @@ from ..models import Condition
 from ..validators import ConditionLockedValidator, ConditionUniqueURIValidator
 
 
-class ConditionSerializer(CanEditObjectSerializerMixin, ElementModelSerializerMixin, serializers.ModelSerializer):
+class ConditionSerializer(ReadOnlyObjectPermissionsSerializerMixin, ElementModelSerializerMixin, serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
     key = serializers.SlugField(required=True)

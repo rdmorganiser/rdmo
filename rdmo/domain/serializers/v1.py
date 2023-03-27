@@ -5,7 +5,7 @@ from rest_framework import serializers
 from rdmo.conditions.models import Condition
 from rdmo.core.serializers import (ElementExportSerializerMixin,
                                    ElementModelSerializerMixin,
-                                   CanEditObjectSerializerMixin)
+                                   ReadOnlyObjectPermissionsSerializerMixin)
 from rdmo.questions.models import Page, Question, QuestionSet
 
 from ..models import Attribute
@@ -15,7 +15,7 @@ from ..validators import (AttributeLockedValidator, AttributeParentValidator,
 log = logging.getLogger(__name__)
 
 
-class BaseAttributeSerializer(CanEditObjectSerializerMixin, ElementModelSerializerMixin, serializers.ModelSerializer):
+class BaseAttributeSerializer(ReadOnlyObjectPermissionsSerializerMixin, ElementModelSerializerMixin, serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()
@@ -74,7 +74,7 @@ class AttributeSerializer(BaseAttributeSerializer):
         return [attribute.id for attribute in obj.get_descendants()]
 
 
-class AttributeListSerializer(ElementExportSerializerMixin, BaseAttributeSerializer):
+class AttributeNestedSerializer(ReadOnlyObjectPermissionsSerializerMixin, serializers.ModelSerializer):
 
     xml_url = serializers.SerializerMethodField()
 
