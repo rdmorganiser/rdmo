@@ -5,7 +5,8 @@ from rdmo.core.serializers import (ElementExportSerializerMixin,
                                    ThroughModelSerializerMixin,
                                    TranslationSerializerMixin)
 
-from ...models import QuestionSet, QuestionSetQuestion, QuestionSetQuestionSet
+from ...models import (Page, QuestionSet, QuestionSetQuestion,
+                       QuestionSetQuestionSet)
 from ...validators import (QuestionSetLockedValidator,
                            QuestionSetQuestionSetValidator,
                            QuestionSetUniqueURIValidator)
@@ -61,8 +62,8 @@ class QuestionSetQuestionSerializer(serializers.ModelSerializer):
 class QuestionSetSerializer(ThroughModelSerializerMixin, BaseQuestionSetSerializer):
 
     uri_path = serializers.CharField(required=True)
-    pages = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    parents = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    pages = serializers.PrimaryKeyRelatedField(queryset=Page.objects.all(), required=False, many=True)
+    parents = serializers.PrimaryKeyRelatedField(queryset=QuestionSet.objects.all(), required=False, many=True)
     questionsets = QuestionSetQuestionSetSerializer(source='questionset_questionsets', read_only=False, required=False, many=True)
     questions = QuestionSetQuestionSerializer(source='questionset_questions', read_only=False, required=False, many=True)
 
@@ -79,9 +80,13 @@ class QuestionSetSerializer(ThroughModelSerializerMixin, BaseQuestionSetSerializ
             QuestionSetQuestionSetValidator(),
             QuestionSetLockedValidator()
         )
+        parent_fields = (
+            ('pages', 'page', 'questionset', 'page_questionsets'),
+            ('parents', 'parent', 'questionset', 'questionset_questionsets')
+        )
         through_fields = (
-            'questionsets',
-            'questions'
+            ('questionsets', 'parent', 'questionset', 'questionset_questionsets'),
+            ('questions', 'questionset', 'question', 'questionset_questions')
         )
 
 

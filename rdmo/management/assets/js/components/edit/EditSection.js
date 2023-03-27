@@ -18,7 +18,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditSection = ({ config, section, elements, elementActions}) => {
 
-  const { pages, catalogs } = elements
+  const { parent, pages, catalogs } = elements
   const sectionCatalogs = catalogs.filter(e => section.catalogs.includes(e.id))
 
   const updateSection = (key, value) => elementActions.updateElement(section, {[key]: value})
@@ -47,9 +47,19 @@ const EditSection = ({ config, section, elements, elementActions}) => {
         }
       </div>
 
-      <div className="panel-body panel-border">
-        { info }
-      </div>
+      {
+        parent.catalog && <div className="panel-body panel-border">
+          <p dangerouslySetInnerHTML={{
+            __html:interpolate(gettext('This section will be added to the catalog <code class="code-questions">%s</code>.'), [parent.catalog.uri])
+          }} />
+        </div>
+      }
+
+      {
+        section.id && <div className="panel-body panel-border">
+          { info }
+        </div>
+      }
 
       <div className="panel-body">
         <div className="row">

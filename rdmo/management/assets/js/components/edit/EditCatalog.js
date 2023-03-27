@@ -23,6 +23,7 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
   const updateCatalog = (key, value) => elementActions.updateElement(catalog, {[key]: value})
   const storeCatalog = () => elementActions.storeElement('catalogs', catalog)
   const deleteCatalog = () => elementActions.deleteElement('catalogs', catalog)
+  const createSection = () => elementActions.createElement('sections', catalog)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
@@ -46,9 +47,11 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
         }
       </div>
 
-      <div className="panel-body panel-border">
-        { info }
-      </div>
+      {
+        catalog.id && <div className="panel-body panel-border">
+          { info }
+        </div>
+      }
 
       <div className="panel-body">
         <div className="row">
@@ -70,7 +73,7 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
           <div className="col-sm-12">
             <OrderedMultiSelect config={config} element={catalog} field="sections"
                                 options={sections} verboseName="section"
-                                onChange={updateCatalog} />
+                                onChange={updateCatalog} onCreate={createSection} />
           </div>
           <div className="col-sm-12">
             <Tabs id="#catalog-tabs" defaultActiveKey={0} animation={false}>

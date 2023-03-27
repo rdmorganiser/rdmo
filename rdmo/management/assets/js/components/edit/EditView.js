@@ -46,9 +46,11 @@ const EditView = ({ config, view, elements, elementActions }) => {
         }
       </div>
 
-      <div className="panel-body panel-border">
-        { info }
-      </div>
+      {
+        view.id && <div className="panel-body panel-border">
+          { info }
+        </div>
+      }
 
       <div className="panel-body">
         <div className="row">

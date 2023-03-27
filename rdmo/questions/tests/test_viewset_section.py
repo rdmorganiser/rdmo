@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as et
 
 import pytest
+from django.db.models import Max
 from django.urls import reverse
 
 from ..models import Section
@@ -113,6 +114,36 @@ def test_create(db, client, username, password):
         }
         response = client.post(url, data, content_type='application/json')
         assert response.status_code == status_map['create'][username], response.json()
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_create_catalog(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = Section.objects.all()
+
+    for instance in instances:
+        catalog = instance.catalogs.first()
+        if catalog is not None:
+            catalog_sections = list(catalog.catalog_sections.values_list('section', 'order'))
+            order = catalog.catalog_sections.aggregate(order=Max('order')).get('order') + 1
+
+            url = reverse(urlnames['list'])
+            data = {
+                'uri_prefix': instance.uri_prefix,
+                'uri_path': '%s_new_%s' % (instance.uri_path, username),
+                'comment': instance.comment,
+                'title_en': instance.title_lang1,
+                'title_de': instance.title_lang2,
+                'catalogs': [catalog.id]
+            }
+            response = client.post(url, data, content_type='application/json')
+            assert response.status_code == status_map['create'][username], response.json()
+
+            if response.status_code == 201:
+                new_instance = Section.objects.get(id=response.json().get('id'))
+                catalog.refresh_from_db()
+                assert catalog_sections + [(new_instance.id, order)] == \
+                    list(catalog.catalog_sections.values_list('section', 'order'))
 
 
 @pytest.mark.parametrize('username,password', users)

@@ -18,7 +18,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditQuestion = ({ config, question, elements, elementActions}) => {
 
-  const { attributes, optionsets, options, conditions, pages, questionsets, widgetTypes, valueTypes } = elements
+  const { parent, attributes, optionsets, options, conditions, pages, questionsets, widgetTypes, valueTypes } = elements
 
   const updateQuestion = (key, value) => elementActions.updateElement(question, {[key]: value})
   const storeQuestion = () => elementActions.storeElement('questions', question)
@@ -46,9 +46,26 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
         }
       </div>
 
-      <div className="panel-body panel-border">
-        { info }
-      </div>
+      {
+        parent.page && <div className="panel-body panel-border">
+          <p dangerouslySetInnerHTML={{
+            __html:interpolate(gettext('This question will be added to the page <code class="code-questions">%s</code>.'), [parent.page.uri])
+          }} />
+        </div>
+      }
+      {
+        parent.questionset && <div className="panel-body panel-border">
+          <p dangerouslySetInnerHTML={{
+            __html:interpolate(gettext('This question will be added to the question set <code class="code-questions">%s</code>.'), [parent.questionset.uri])
+          }} />
+        </div>
+      }
+
+      {
+        question.id && <div className="panel-body panel-border">
+          { info }
+        </div>
+      }
 
       <div className="panel-body">
         <div className="row">

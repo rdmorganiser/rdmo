@@ -5,7 +5,7 @@ from rdmo.core.serializers import (ElementExportSerializerMixin,
                                    ThroughModelSerializerMixin,
                                    TranslationSerializerMixin)
 
-from ...models import Section, SectionPage
+from ...models import Catalog, Section, SectionPage
 from ...validators import SectionLockedValidator, SectionUniqueURIValidator
 from .page import PageNestedSerializer
 
@@ -41,7 +41,7 @@ class SectionPageSerializer(serializers.ModelSerializer):
 class SectionSerializer(ThroughModelSerializerMixin, BaseSectionSerializer):
 
     uri_path = serializers.CharField(required=True)
-    catalogs = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    catalogs = serializers.PrimaryKeyRelatedField(queryset=Catalog.objects.all(), required=False, many=True)
     pages = SectionPageSerializer(source='section_pages', read_only=False, required=False, many=True)
 
     class Meta(BaseSectionSerializer.Meta):
@@ -53,8 +53,11 @@ class SectionSerializer(ThroughModelSerializerMixin, BaseSectionSerializer):
             SectionUniqueURIValidator(),
             SectionLockedValidator()
         )
+        parent_fields = (
+            ('catalogs', 'catalog', 'section', 'catalog_sections'),
+        )
         through_fields = (
-            'pages',
+            ('pages', 'section', 'page', 'section_pages'),
         )
 
 

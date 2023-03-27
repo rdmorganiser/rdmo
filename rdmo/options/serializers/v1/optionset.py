@@ -51,10 +51,7 @@ class OptionSetSerializer(ThroughModelSerializerMixin, BaseOptionSetSerializer):
             OptionSetLockedValidator()
         )
         through_fields = (
-            'sections',
-        )
-        through_fields = (
-            'options',
+            ('options', 'optionset', 'option', 'optionset_options'),
         )
 
 

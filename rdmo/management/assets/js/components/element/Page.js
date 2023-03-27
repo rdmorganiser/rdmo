@@ -7,7 +7,7 @@ import { filterElement } from '../../utils/filter'
 import QuestionSet from './QuestionSet'
 import Question from './Question'
 import { ElementErrors } from '../common/Errors'
-import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/Links'
+import { EditLink, AddLink, AddSquareLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/Links'
 
 const Page = ({ config, page, elementActions, display='list', filter=null, indent=0 }) => {
 
@@ -18,10 +18,15 @@ const Page = ({ config, page, elementActions, display='list', filter=null, inden
   const fetchNested = () => elementActions.fetchElement('pages', page.id, 'nested')
   const toggleLocked = () => elementActions.storeElement('pages', {...page, locked: !page.locked })
 
+  const createQuestionSet = () => elementActions.createElement('questionsets', { page })
+  const createQuestion = () => elementActions.createElement('questions', { page })
+
   const elementNode = (
     <div className="element">
       <div className="pull-right">
         <EditLink element={page} verboseName={verboseName} onClick={fetchEdit} />
+        <AddLink element={page} verboseName="question" onClick={createQuestion} />
+        <AddSquareLink element={page} verboseName="questionset" onClick={createQuestionSet} />
         <LockedLink element={page} verboseName={verboseName} onClick={toggleLocked} />
         <NestedLink element={page} verboseName={verboseName} onClick={fetchNested} />
         <ExportLink element={page} verboseName={verboseName} />

@@ -6,7 +6,7 @@ import { filterElement } from '../../utils/filter'
 
 import Page from './Page'
 import { ElementErrors } from '../common/Errors'
-import { EditLink, LockedLink, NestedLink, ExportLink } from '../common/Links'
+import { EditLink, AddLink, LockedLink, NestedLink, ExportLink } from '../common/Links'
 
 const Section = ({ config, section, elementActions, display='list', filter=null, indent=0 }) => {
 
@@ -17,10 +17,13 @@ const Section = ({ config, section, elementActions, display='list', filter=null,
   const fetchNested = () => elementActions.fetchElement('sections', section.id, 'nested')
   const toggleLocked = () => elementActions.storeElement('sections', {...section, locked: !section.locked })
 
+  const createPage = () => elementActions.createElement('pages', { section })
+
   const elementNode = (
     <div className="element">
       <div className="pull-right">
         <EditLink element={section} verboseName={verboseName} onClick={fetchEdit} />
+        <AddLink element={section} verboseName="page" onClick={createPage} />
         <LockedLink element={section} verboseName={verboseName} onClick={toggleLocked} />
         <NestedLink element={section} verboseName={verboseName} onClick={fetchNested} />
         <ExportLink element={section} verboseName={verboseName} />

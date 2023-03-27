@@ -20,7 +20,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
 
-  const { attributes, conditions, pages, questionsets, questions } = elements
+  const { parent, attributes, conditions, pages, questionsets, questions } = elements
 
   const elementValues = orderBy(questionset.questions.concat(questionset.questionsets), ['order', 'uri'])
   const elementOptions = elements.questions.map(question => ({
@@ -66,9 +66,26 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
         }
       </div>
 
-      <div className="panel-body panel-border">
-        { info }
-      </div>
+      {
+        parent.page && <div className="panel-body panel-border">
+          <p dangerouslySetInnerHTML={{
+            __html:interpolate(gettext('This question set will be added to the page <code class="code-questions">%s</code>.'), [parent.page.uri])
+          }} />
+        </div>
+      }
+      {
+        parent.questionset && <div className="panel-body panel-border">
+          <p dangerouslySetInnerHTML={{
+            __html:interpolate(gettext('This question set will be added to the question set <code class="code-questions">%s</code>.'), [parent.questionset.uri])
+          }} />
+        </div>
+      }
+
+      {
+        questionset.id && <div className="panel-body panel-border">
+          { info }
+        </div>
+      }
 
       <div className="panel-body">
         <div className="row">
