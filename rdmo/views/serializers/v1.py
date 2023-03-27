@@ -3,14 +3,14 @@ from rest_framework import exceptions, serializers
 from rest_framework.reverse import reverse
 
 from rdmo.core.serializers import (MarkdownSerializerMixin, SiteSerializer,
-                                   TranslationSerializerMixin, CanEditObjectSerializerMixin)
+                                   TranslationSerializerMixin, ReadOnlyObjectPermissionsSerializerMixin)
 from rdmo.core.utils import get_language_warning
 
 from ..models import View
 from ..validators import ViewLockedValidator, ViewUniqueURIValidator
 
 
-class ViewSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
+class ViewSerializer(ReadOnlyObjectPermissionsSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.SlugField(required=True)
     read_only = serializers.SerializerMethodField()
@@ -54,7 +54,7 @@ class ViewSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin, s
         )
 
 
-class ViewIndexSerializer(CanEditObjectSerializerMixin, MarkdownSerializerMixin, serializers.ModelSerializer):
+class ViewIndexSerializer(ReadOnlyObjectPermissionsSerializerMixin, MarkdownSerializerMixin, serializers.ModelSerializer):
 
     markdown_fields = ('help', )
 

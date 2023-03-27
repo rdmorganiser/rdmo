@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
-from rdmo.core.serializers import SiteSerializer, CanEditObjectSerializerMixin
+from rdmo.core.serializers import SiteSerializer, ReadOnlyObjectPermissionsSerializerMixin
 from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Question, QuestionSet
@@ -51,7 +51,7 @@ class TaskSerializer(serializers.ModelSerializer):
         )
 
 
-class ConditionSerializer(CanEditObjectSerializerMixin, serializers.ModelSerializer):
+class ConditionSerializer(ReadOnlyObjectPermissionsSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.SlugField(required=True)
     source = serializers.PrimaryKeyRelatedField(queryset=Attribute.objects.all(), required=True)
@@ -87,7 +87,7 @@ class ConditionSerializer(CanEditObjectSerializerMixin, serializers.ModelSeriali
         )
 
 
-class ConditionIndexSerializer(CanEditObjectSerializerMixin, serializers.ModelSerializer):
+class ConditionIndexSerializer(ReadOnlyObjectPermissionsSerializerMixin, serializers.ModelSerializer):
 
     target_option_uri = serializers.CharField(source='target_option.uri', default=None, read_only=True)
     target_option_text = serializers.CharField(source='target_option.text', default=None, read_only=True)

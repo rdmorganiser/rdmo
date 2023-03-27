@@ -2,14 +2,14 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 
 from rdmo.core.serializers import (MarkdownSerializerMixin, SiteSerializer,
-                                   TranslationSerializerMixin, CanEditObjectSerializerMixin)
+                                   TranslationSerializerMixin, ReadOnlyObjectPermissionsSerializerMixin)
 from rdmo.core.utils import get_language_warning
 
 from ..models import Task
 from ..validators import TaskLockedValidator, TaskUniqueURIValidator
 
 
-class TaskSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
+class TaskSerializer(ReadOnlyObjectPermissionsSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.SlugField(required=True)
     read_only = serializers.SerializerMethodField()
@@ -45,7 +45,7 @@ class TaskSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin, s
         )
 
 
-class TaskIndexSerializer(CanEditObjectSerializerMixin, MarkdownSerializerMixin, serializers.ModelSerializer):
+class TaskIndexSerializer(ReadOnlyObjectPermissionsSerializerMixin, MarkdownSerializerMixin, serializers.ModelSerializer):
 
     markdown_fields = ('text', )
 

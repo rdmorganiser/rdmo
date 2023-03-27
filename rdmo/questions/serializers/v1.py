@@ -3,7 +3,7 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 
 from rdmo.conditions.models import Condition
-from rdmo.core.serializers import SiteSerializer, TranslationSerializerMixin, CanEditObjectSerializerMixin
+from rdmo.core.serializers import SiteSerializer, TranslationSerializerMixin, ReadOnlyObjectPermissionsSerializerMixin
 from rdmo.core.utils import get_language_warning
 from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet
@@ -18,7 +18,7 @@ from ..validators import (CatalogLockedValidator, CatalogUniqueURIValidator,
 from ..utils import get_widget_type_choices
 
 
-class CatalogSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
+class CatalogSerializer(ReadOnlyObjectPermissionsSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.SlugField(required=True)
     projects_count = serializers.IntegerField(read_only=True)
@@ -51,7 +51,7 @@ class CatalogSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin
         )
 
 
-class SectionSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
+class SectionSerializer(ReadOnlyObjectPermissionsSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.SlugField(required=True)
     read_only = serializers.SerializerMethodField()
@@ -79,7 +79,7 @@ class SectionSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin
         )
 
 
-class QuestionSetSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
+class QuestionSetSerializer(ReadOnlyObjectPermissionsSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.SlugField(required=True)
     read_only = serializers.SerializerMethodField()
@@ -115,7 +115,7 @@ class QuestionSetSerializer(CanEditObjectSerializerMixin, TranslationSerializerM
         )
 
 
-class QuestionSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
+class QuestionSerializer(ReadOnlyObjectPermissionsSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.SlugField(required=True)
     widget_type = serializers.ChoiceField(choices=get_widget_type_choices(), required=True)
@@ -170,7 +170,7 @@ class QuestionSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixi
         return super().to_internal_value(data)
 
 
-class CatalogIndexSerializer(CanEditObjectSerializerMixin, serializers.ModelSerializer):
+class CatalogIndexSerializer(ReadOnlyObjectPermissionsSerializerMixin, serializers.ModelSerializer):
 
     read_only = serializers.SerializerMethodField(read_only=True)
 
@@ -253,7 +253,7 @@ class ConditionNestedSerializer(serializers.ModelSerializer):
         )
 
 
-class QuestionNestedSerializer(CanEditObjectSerializerMixin, serializers.ModelSerializer):
+class QuestionNestedSerializer(ReadOnlyObjectPermissionsSerializerMixin, serializers.ModelSerializer):
 
     warning = serializers.SerializerMethodField()
     attribute = AttributeNestedSerializer(read_only=True)
@@ -290,7 +290,7 @@ class QuestionNestedSerializer(CanEditObjectSerializerMixin, serializers.ModelSe
         return reverse('v1-questions:question-detail-export', args=[obj.pk])
 
 
-class QuestionSetNestedSerializer(CanEditObjectSerializerMixin, serializers.ModelSerializer):
+class QuestionSetNestedSerializer(ReadOnlyObjectPermissionsSerializerMixin, serializers.ModelSerializer):
 
     questionsets = serializers.SerializerMethodField()
     questions = QuestionNestedSerializer(many=True, read_only=True)
@@ -334,7 +334,7 @@ class QuestionSetNestedSerializer(CanEditObjectSerializerMixin, serializers.Mode
         return reverse('v1-questions:questionset-detail-export', args=[obj.pk])
 
 
-class SectionNestedSerializer(CanEditObjectSerializerMixin, serializers.ModelSerializer):
+class SectionNestedSerializer(ReadOnlyObjectPermissionsSerializerMixin, serializers.ModelSerializer):
 
     questionsets = serializers.SerializerMethodField()
     warning = serializers.SerializerMethodField()
@@ -369,7 +369,7 @@ class SectionNestedSerializer(CanEditObjectSerializerMixin, serializers.ModelSer
         return serializer.data
 
 
-class CatalogNestedSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
+class CatalogNestedSerializer(ReadOnlyObjectPermissionsSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
 
     sections = SectionNestedSerializer(many=True, read_only=True)
     sites = SiteSerializer(many=True, read_only=True)

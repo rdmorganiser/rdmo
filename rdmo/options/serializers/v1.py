@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 
 from rdmo.conditions.models import Condition
-from rdmo.core.serializers import TranslationSerializerMixin, SiteSerializer, CanEditObjectSerializerMixin
+from rdmo.core.serializers import TranslationSerializerMixin, SiteSerializer, ReadOnlyObjectPermissionsSerializerMixin
 from rdmo.core.utils import get_language_warning
 from rdmo.questions.models import QuestionSet
 
@@ -32,7 +32,7 @@ class ConditionSerializer(serializers.ModelSerializer):
         )
 
 
-class OptionSetSerializer(CanEditObjectSerializerMixin, serializers.ModelSerializer):
+class OptionSetSerializer(ReadOnlyObjectPermissionsSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.SlugField(required=True)
     questions = QuestionSerializer(many=True, read_only=True)
@@ -60,7 +60,7 @@ class OptionSetSerializer(CanEditObjectSerializerMixin, serializers.ModelSeriali
         )
 
 
-class OptionSerializer(CanEditObjectSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
+class OptionSerializer(ReadOnlyObjectPermissionsSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.SlugField(required=True)
     optionset = serializers.PrimaryKeyRelatedField(queryset=OptionSet.objects.all(), required=True)
@@ -157,7 +157,7 @@ class ProviderNestedSerializer(serializers.Serializer):
         )
 
 
-class OptionNestedSerializer(CanEditObjectSerializerMixin, serializers.ModelSerializer):
+class OptionNestedSerializer(ReadOnlyObjectPermissionsSerializerMixin, serializers.ModelSerializer):
 
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
@@ -186,7 +186,7 @@ class OptionNestedSerializer(CanEditObjectSerializerMixin, serializers.ModelSeri
         return reverse('v1-options:option-detail-export', args=[obj.pk])
 
 
-class OptionSetNestedSerializer(CanEditObjectSerializerMixin, serializers.ModelSerializer):
+class OptionSetNestedSerializer(ReadOnlyObjectPermissionsSerializerMixin, serializers.ModelSerializer):
 
     options = OptionNestedSerializer(many=True)
     conditions = ConditionNestedSerializer(many=True)

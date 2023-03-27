@@ -3,7 +3,7 @@ import logging
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
-from rdmo.core.serializers import CanEditObjectSerializerMixin
+from rdmo.core.serializers import ReadOnlyObjectPermissionsSerializerMixin
 from rdmo.conditions.models import Condition
 from rdmo.questions.models import Question, QuestionSet
 from rdmo.tasks.models import Task
@@ -59,7 +59,7 @@ class TaskSerializer(serializers.ModelSerializer):
         )
 
 
-class AttributeSerializer(CanEditObjectSerializerMixin, serializers.ModelSerializer):
+class AttributeSerializer(ReadOnlyObjectPermissionsSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.SlugField(required=True)
     parent = serializers.PrimaryKeyRelatedField(queryset=Attribute.objects.all(), default=None, allow_null=True)
@@ -101,7 +101,7 @@ class AttributeSerializer(CanEditObjectSerializerMixin, serializers.ModelSeriali
         )
 
 
-class AttributeNestedSerializer(CanEditObjectSerializerMixin, serializers.ModelSerializer):
+class AttributeNestedSerializer(ReadOnlyObjectPermissionsSerializerMixin, serializers.ModelSerializer):
 
     children = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
@@ -129,7 +129,7 @@ class AttributeNestedSerializer(CanEditObjectSerializerMixin, serializers.ModelS
         return reverse('v1-domain:attribute-detail-export', args=[obj.pk])
 
 
-class AttributeIndexSerializer(CanEditObjectSerializerMixin, serializers.ModelSerializer):
+class AttributeIndexSerializer(ReadOnlyObjectPermissionsSerializerMixin, serializers.ModelSerializer):
 
     read_only = serializers.SerializerMethodField(read_only=True)
 
