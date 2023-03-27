@@ -61,7 +61,7 @@ class CatalogSerializer(ThroughModelSerializerMixin, BaseCatalogSerializer):
             CatalogLockedValidator(),
         )
         through_fields = (
-            'sections',
+            ('sections', 'catalog', 'section', 'catalog_sections'),
         )
 
 

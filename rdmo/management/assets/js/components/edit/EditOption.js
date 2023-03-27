@@ -16,7 +16,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditOption = ({ config, option, elements, elementActions }) => {
 
-  const { optionsets, conditions } = elements
+  const { parent, optionsets, conditions } = elements
 
   const optionConditions = conditions.filter(e => option.conditions.includes(e.id))
 
@@ -43,9 +43,19 @@ const EditOption = ({ config, option, elements, elementActions }) => {
         }
       </div>
 
-      <div className="panel-body panel-border">
-        { info }
-      </div>
+      {
+        parent.optionset && <div className="panel-body panel-border">
+          <p dangerouslySetInnerHTML={{
+            __html:interpolate(gettext('This option will be added to the option set <code class="code-options">%s</code>.'), [parent.optionset.uri])
+          }} />
+        </div>
+      }
+
+      {
+        option.id && <div className="panel-body panel-border">
+          { info }
+        </div>
+      }
 
       <div className="panel-body">
         <div className="row">

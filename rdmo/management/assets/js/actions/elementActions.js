@@ -101,10 +101,8 @@ export function fetchElementsError(error) {
 
 // fetch element
 
-export function fetchElement(elementType, elementId, elementAction) {
+export function fetchElement(elementType, elementId, elementAction=null) {
   return function(dispatch, getState) {
-    if (isNil(elementAction)) elementAction = null
-
     updateLocation(getState().config.baseUrl, elementType, elementId, elementAction)
 
     dispatch(fetchElementInit(elementType, elementId, elementAction))
@@ -386,7 +384,7 @@ export function storeElementError(element, error) {
 
 // createElement
 
-export function createElement(elementType) {
+export function createElement(elementType, parent={}) {
   return function(dispatch, getState) {
     updateLocation(getState().config.baseUrl, elementType, null, 'create')
 
@@ -396,7 +394,7 @@ export function createElement(elementType) {
     switch (elementType) {
       case 'catalogs':
         action = (dispatch) => Promise.all([
-          QuestionsFactory.createCatalog(),
+          QuestionsFactory.createCatalog(getState().config),
           QuestionsApi.fetchSections('index'),
           CoreApi.fetchGroups(),
           CoreApi.fetchSites(),
@@ -407,42 +405,42 @@ export function createElement(elementType) {
 
       case 'sections':
         action = (dispatch) => Promise.all([
-          QuestionsFactory.createSection(),
+          QuestionsFactory.createSection(getState().config, parent),
           QuestionsApi.fetchPages('index'),
         ]).then(([element, pages]) => dispatch(createElementSuccess({
-          element, pages
+          element, parent, pages
         })))
         break
 
       case 'pages':
         action = (dispatch) => Promise.all([
-          QuestionsFactory.createPage(),
+          QuestionsFactory.createPage(getState().config, parent),
           DomainApi.fetchAttributes('index'),
           ConditionsApi.fetchConditions('index'),
           QuestionsApi.fetchQuestionSets('index'),
           QuestionsApi.fetchQuestions('index')
         ]).then(([element, attributes, conditions,
                   questionsets, questions]) => dispatch(createElementSuccess({
-          element, attributes, conditions, questionsets, questions
+          element, parent, attributes, conditions, questionsets, questions
         })))
         break
 
       case 'questionsets':
         action = (dispatch) => Promise.all([
-          QuestionsFactory.createQuestionSet(),
+          QuestionsFactory.createQuestionSet(getState().config, parent),
           DomainApi.fetchAttributes('index'),
           ConditionsApi.fetchConditions('index'),
           QuestionsApi.fetchQuestionSets('index'),
           QuestionsApi.fetchQuestions('index')
         ]).then(([element, attributes, conditions,
                   questionsets, questions]) => dispatch(createElementSuccess({
-          element, attributes, conditions, questionsets, questions
+          element, parent, attributes, conditions, questionsets, questions
         })))
         break
 
       case 'questions':
         action = (dispatch) => Promise.all([
-          QuestionsFactory.createQuestion(),
+          QuestionsFactory.createQuestion(getState().config, parent),
           DomainApi.fetchAttributes('index'),
           OptionsApi.fetchOptionSets('index'),
           OptionsApi.fetchOptions('index'),
@@ -451,13 +449,13 @@ export function createElement(elementType) {
           QuestionsApi.fetchValueTypes()
         ]).then(([element, attributes, optionsets, options, conditions,
                   widgetTypes, valueTypes]) => dispatch(createElementSuccess({
-            element, attributes, optionsets, options, conditions, widgetTypes, valueTypes
+            element, parent, attributes, optionsets, options, conditions, widgetTypes, valueTypes
           })))
         break
 
       case 'attributes':
         action = (dispatch) => Promise.all([
-          DomainFactory.createAttribute(),
+          DomainFactory.createAttribute(getState().config),
           DomainApi.fetchAttributes('index'),
         ]).then(([element, attributes]) => dispatch(createElementSuccess({
             element, attributes
@@ -466,7 +464,7 @@ export function createElement(elementType) {
 
       case 'optionsets':
         action = (dispatch) => Promise.all([
-          OptionsFactory.createOptionSet(),
+          OptionsFactory.createOptionSet(getState().config),
           OptionsApi.fetchOptions('index'),
           OptionsApi.fetchProviders(),
         ]).then(([element, options, providers]) => dispatch(createElementSuccess({
@@ -476,16 +474,16 @@ export function createElement(elementType) {
 
       case 'options':
         action = (dispatch) => Promise.all([
-          OptionsFactory.createOption(),
+          OptionsFactory.createOption(getState().config, parent),
           OptionsApi.fetchOptionSets('index'),
         ]).then(([element, optionsets]) => dispatch(createElementSuccess({
-            element, optionsets
+            element, parent, optionsets
           })))
         break
 
       case 'conditions':
         action = (dispatch) => Promise.all([
-          ConditionsFactory.createCondition(),
+          ConditionsFactory.createCondition(getState().config),
           ConditionsApi.fetchRelations(),
           DomainApi.fetchAttributes('index'),
           OptionsApi.fetchOptions('index'),
@@ -496,7 +494,7 @@ export function createElement(elementType) {
 
       case 'tasks':
         action = (dispatch) => Promise.all([
-          TasksFactory.createTask(),
+          TasksFactory.createTask(getState().config),
           DomainApi.fetchAttributes('index'),
           ConditionsApi.fetchConditions('index'),
           QuestionsApi.fetchCatalogs('index'),
@@ -510,7 +508,7 @@ export function createElement(elementType) {
 
       case 'views':
         action = (dispatch) => Promise.all([
-          ViewsFactory.createView(),
+          ViewsFactory.createView(getState().config),
           QuestionsApi.fetchCatalogs('index'),
           CoreApi.fetchSites(),
           CoreApi.fetchGroups()

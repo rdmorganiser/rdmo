@@ -25,6 +25,49 @@ EditLink.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
+const AddLink = ({ element, verboseName, onClick }) => {
+  const handleClick = (event) => {
+    event.preventDefault()
+    onClick()
+  }
+
+  const title = interpolate(gettext('Add %s'), [verboseName])
+
+  return (
+    <a href="" className="element-link fa fa-plus"
+       title={title}
+       onClick={event => handleClick(event)}>
+    </a>
+  )
+}
+
+AddLink.propTypes = {
+  element: PropTypes.object.isRequired,
+  verboseName: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired
+}
+
+const AddSquareLink = ({ element, verboseName, onClick }) => {
+  const handleClick = (event) => {
+    event.preventDefault()
+    onClick()
+  }
+
+  const title = interpolate(gettext('Add %s'), [verboseName])
+
+  return (
+    <a href="" className="element-link fa fa-plus-square"
+       title={title}
+       onClick={event => handleClick(event)}>
+    </a>
+  )
+}
+
+AddSquareLink.propTypes = {
+  element: PropTypes.object.isRequired,
+  verboseName: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired
+}
 
 const AvailableLink = ({ element, verboseName, onClick }) => {
   const handleClick = (event) => {
@@ -153,5 +196,4 @@ ExtendLink.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-
-export { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink, ExtendLink }
+export { EditLink, AddLink, AddSquareLink, AvailableLink, LockedLink, NestedLink, ExportLink, ExtendLink }

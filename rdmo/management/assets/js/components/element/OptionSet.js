@@ -6,7 +6,7 @@ import { filterElement } from '../../utils/filter'
 
 import Option from './Option'
 import { ElementErrors } from '../common/Errors'
-import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/Links'
+import { EditLink, AddLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/Links'
 
 const OptionSet = ({ config, optionset, elementActions, display='list', filter=null }) => {
 
@@ -17,10 +17,13 @@ const OptionSet = ({ config, optionset, elementActions, display='list', filter=n
   const fetchNested = () => elementActions.fetchElement('optionsets', optionset.id, 'nested')
   const toggleLocked = () => elementActions.storeElement('optionsets', {...optionset, locked: !optionset.locked })
 
+  const createOption = () => elementActions.createElement('options', { optionset })
+
   const elementNode = (
     <div className="element">
       <div className="pull-right">
         <EditLink element={optionset} verboseName={verboseName} onClick={fetchEdit} />
+        <AddLink element={optionset} verboseName="option" onClick={createOption} />
         <LockedLink element={optionset} verboseName={verboseName} onClick={toggleLocked} />
         <NestedLink element={optionset} verboseName={verboseName} onClick={fetchNested} />
         <ExportLink element={optionset} verboseName={verboseName} />

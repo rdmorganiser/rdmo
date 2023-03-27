@@ -1,7 +1,9 @@
 class TasksFactory {
 
-  static createTask() {
-    return {}
+  static createTask(config) {
+    return {
+      uri_prefix: config.default_uri_prefix
+    }
   }
 
 }

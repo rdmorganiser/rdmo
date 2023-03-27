@@ -5,7 +5,7 @@ from rdmo.core.serializers import (ElementExportSerializerMixin,
                                    ThroughModelSerializerMixin,
                                    TranslationSerializerMixin)
 
-from ...models import Question
+from ...models import Page, Question, QuestionSet
 from ...validators import QuestionLockedValidator, QuestionUniqueURIValidator
 
 
@@ -47,11 +47,11 @@ class BaseQuestionSerializer(TranslationSerializerMixin, serializers.ModelSerial
         )
 
 
-class QuestionSerializer(BaseQuestionSerializer):
+class QuestionSerializer(ThroughModelSerializerMixin, BaseQuestionSerializer):
 
     uri_path = serializers.CharField(required=True)
-    pages = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    questionsets = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    pages = serializers.PrimaryKeyRelatedField(queryset=Page.objects.all(), required=False, many=True)
+    questionsets = serializers.PrimaryKeyRelatedField(queryset=QuestionSet.objects.all(), required=False, many=True)
 
     class Meta(BaseQuestionSerializer.Meta):
         fields = BaseQuestionSerializer.Meta.fields + (
@@ -63,6 +63,10 @@ class QuestionSerializer(BaseQuestionSerializer):
         validators = (
             QuestionUniqueURIValidator(),
             QuestionLockedValidator()
+        )
+        parent_fields = (
+            ('pages', 'page', 'question', 'page_questions'),
+            ('questionsets', 'questionset', 'question', 'questionset_questions')
         )
 
     def to_internal_value(self, data):

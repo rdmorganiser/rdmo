@@ -49,4 +49,15 @@ DeleteButton.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
+const DefaultButton = ({ text, onClick }) => (
+  <button className="element-button btn btn-default" onClick={event => onClick()}>
+    {text}
+  </button>
+)
+
+DeleteButton.propTypes = {
+  onClick: PropTypes.func.isRequired
+}
+
+
 export { BackButton, SaveButton, CreateButton, NewButton, DeleteButton }

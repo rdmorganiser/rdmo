@@ -1,11 +1,17 @@
 class OptionsFactory {
 
-  static createOptionSet() {
-    return {}
+  static createOptionSet(config) {
+    return {
+      uri_prefix: config.default_uri_prefix
+    }
   }
 
-  static createOption() {
-    return {}
+  static createOption(config, parent) {
+    return {
+      uri_prefix: config.default_uri_prefix,
+      optionsets: parent.optionset ? [parent.optionset.id] : [],
+      conditions: []
+    }
   }
 
 }

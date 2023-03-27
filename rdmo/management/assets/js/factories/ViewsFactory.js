@@ -1,7 +1,9 @@
 class ViewsFactory {
 
-  static createView() {
-    return {}
+  static createView(config) {
+    return {
+      uri_prefix: config.default_uri_prefix
+    }
   }
 
 }

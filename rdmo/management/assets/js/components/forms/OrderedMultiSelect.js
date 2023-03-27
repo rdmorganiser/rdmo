@@ -171,8 +171,13 @@ class OrderedMultiSelect extends Component {
     onChange(field, values)
   }
 
+  handleCreate() {
+    const { field, onCreate } = this.props
+    onCreate()
+  }
+
   render() {
-    const { config, element, field, options, verboseName, onChange } = this.props
+    const { config, element, field, options, verboseName, onChange, onCreate } = this.props
 
     const id = getId(element, field),
           label = getLabel(config, element, field),
@@ -205,9 +210,14 @@ class OrderedMultiSelect extends Component {
         }
         </div>
 
-        <button className="btn btn-default btn-sm" onClick={() => this.handleAdd()}>
-          {interpolate(gettext('Add %s'), [verboseName])}
+        <button className="btn btn-primary btn-xs" onClick={() => this.handleAdd()}>
+          {interpolate(gettext('Add existing %s'), [verboseName])}
         </button>
+        {
+          onCreate && <button className="btn btn-success btn-xs ml-10" onClick={() => this.handleCreate()}>
+            {interpolate(gettext('Create new %s'), [verboseName])}
+          </button>
+        }
 
         {help && <p className="help-block">{help}</p>}
       </div>
@@ -232,7 +242,8 @@ OrderedMultiSelect.propTypes = {
   fields: PropTypes.array,
   options: PropTypes.array,
   verboseName: PropTypes.string,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  onCreate: PropTypes.func
 }
 
 export default OrderedMultiSelect

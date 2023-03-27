@@ -49,9 +49,11 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
         }
       </div>
 
-      <div className="panel-body panel-border">
-        { info }
-      </div>
+      {
+        optionset.id && <div className="panel-body panel-border">
+          { info }
+        </div>
+      }
 
       <div className="panel-body">
         <div className="row">

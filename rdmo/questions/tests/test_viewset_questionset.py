@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as et
 
 import pytest
+from django.db.models import Max
 from django.urls import reverse
 
 from ..models import QuestionSet
@@ -121,6 +122,82 @@ def test_create(db, client, username, password):
         }
         response = client.post(url, data, content_type='application/json')
         assert response.status_code == status_map['create'][username], response.json()
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_create_page(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = QuestionSet.objects.all()
+
+    for instance in instances:
+        page = instance.pages.first()
+        if page is not None:
+            page_questionsets = list(page.page_questionsets.values_list('questionset', 'order'))
+            order = page.page_questionsets.aggregate(order=Max('order')).get('order') + 1
+
+            url = reverse(urlnames['list'])
+            data = {
+                'uri_prefix': instance.uri_prefix,
+                'uri_path': '%s_new_%s' % (instance.uri_path, username),
+                'comment': instance.comment,
+                'attribute': instance.attribute.pk if instance.attribute else '',
+                'is_collection': instance.is_collection,
+                'title_en': instance.title_lang1,
+                'title_de': instance.title_lang2,
+                'help_en': instance.help_lang1,
+                'help_de': instance.help_lang2,
+                'verbose_name_en': instance.verbose_name_lang1,
+                'verbose_name_de': instance.verbose_name_lang2,
+                'verbose_name_plural_en': instance.verbose_name_plural_lang1,
+                'verbose_name_plural_de': instance.verbose_name_plural_lang2,
+                'pages': [page.id]
+            }
+            response = client.post(url, data, content_type='application/json')
+            assert response.status_code == status_map['create'][username], response.json()
+
+            if response.status_code == 201:
+                new_instance = QuestionSet.objects.get(id=response.json().get('id'))
+                page.refresh_from_db()
+                assert page_questionsets + [(new_instance.id, order)] == \
+                    list(page.page_questionsets.values_list('questionset', 'order'))
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_create_parent(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = QuestionSet.objects.all()
+
+    for instance in instances:
+        parent = instance.parents.first()
+        if parent is not None:
+            parent_questionsets = list(parent.questionset_questionsets.values_list('questionset', 'order'))
+            order = parent.questionset_questionsets.aggregate(order=Max('order')).get('order') + 1
+
+            url = reverse(urlnames['list'])
+            data = {
+                'uri_prefix': instance.uri_prefix,
+                'uri_path': '%s_new_%s' % (instance.uri_path, username),
+                'comment': instance.comment,
+                'attribute': instance.attribute.pk if instance.attribute else '',
+                'is_collection': instance.is_collection,
+                'title_en': instance.title_lang1,
+                'title_de': instance.title_lang2,
+                'help_en': instance.help_lang1,
+                'help_de': instance.help_lang2,
+                'verbose_name_en': instance.verbose_name_lang1,
+                'verbose_name_de': instance.verbose_name_lang2,
+                'verbose_name_plural_en': instance.verbose_name_plural_lang1,
+                'verbose_name_plural_de': instance.verbose_name_plural_lang2,
+                'parents': [parent.id]
+            }
+            response = client.post(url, data, content_type='application/json')
+            assert response.status_code == status_map['create'][username], response.json()
+
+            if response.status_code == 201:
+                new_instance = QuestionSet.objects.get(id=response.json().get('id'))
+                parent.refresh_from_db()
+                assert parent_questionsets + [(new_instance.id, order)] == \
+                    list(parent.questionset_questionsets.values_list('questionset', 'order'))
 
 
 @pytest.mark.parametrize('username,password', users)

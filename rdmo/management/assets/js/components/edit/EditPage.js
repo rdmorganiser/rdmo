@@ -21,7 +21,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditPage = ({ config, page, elements, elementActions }) => {
 
-  const { attributes, conditions, sections, questionsets, questions } = elements
+  const { parent, attributes, conditions, sections, questionsets, questions } = elements
 
   const elementValues = orderBy(page.questions.concat(page.questionsets), ['order', 'uri'])
   const elementOptions = elements.questions.map(question => ({
@@ -67,9 +67,19 @@ const EditPage = ({ config, page, elements, elementActions }) => {
         }
       </div>
 
-      <div className="panel-body panel-border">
-        { info }
-      </div>
+      {
+        parent.section && <div className="panel-body panel-border">
+          <p dangerouslySetInnerHTML={{
+            __html:interpolate(gettext('This page will be added to the section <code class="code-questions">%s</code>.'), [parent.section.uri])
+          }} />
+        </div>
+      }
+
+      {
+        page.id && <div className="panel-body panel-border">
+          { info }
+        </div>
+      }
 
       <div className="panel-body">
         <div className="row">

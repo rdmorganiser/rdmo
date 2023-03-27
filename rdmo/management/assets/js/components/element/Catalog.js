@@ -6,7 +6,8 @@ import { filterElement } from '../../utils/filter'
 
 import Section from './Section'
 import { ElementErrors } from '../common/Errors'
-import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/Links'
+import { EditLink, AddLink, AvailableLink, LockedLink,
+         NestedLink, ExportLink } from '../common/Links'
 
 const Catalog = ({ config, catalog, elementActions, display='list', filter=null }) => {
 
@@ -18,10 +19,13 @@ const Catalog = ({ config, catalog, elementActions, display='list', filter=null 
   const toggleAvailable = () => elementActions.storeElement('catalogs', {...catalog, available: !catalog.available })
   const toggleLocked = () => elementActions.storeElement('catalogs', {...catalog, locked: !catalog.locked })
 
+  const createSection = () => elementActions.createElement('sections', { catalog })
+
   const elementNode = (
     <div className="element">
       <div className="pull-right">
         <EditLink element={catalog} verboseName={verboseName} onClick={fetchEdit} />
+        <AddLink element={catalog} verboseName="section" onClick={createSection} />
         <AvailableLink element={catalog} verboseName={verboseName} onClick={toggleAvailable} />
         <LockedLink element={catalog} verboseName={verboseName} onClick={toggleLocked} />
         <NestedLink element={catalog} verboseName={verboseName} onClick={fetchNested} />

@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as et
 
 import pytest
+from django.db.models import Max
 from django.urls import reverse
 
 from ..models import Page
@@ -121,6 +122,44 @@ def test_create(db, client, username, password):
         }
         response = client.post(url, data, content_type='application/json')
         assert response.status_code == status_map['create'][username], response.json()
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_create_section(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = Page.objects.all()
+
+    for instance in instances:
+        section = instance.sections.first()
+        if section is not None:
+            section_pages = list(section.section_pages.values_list('page', 'order'))
+            order = section.section_pages.aggregate(order=Max('order')).get('order') + 1
+
+            url = reverse(urlnames['list'])
+            data = {
+                'uri_prefix': instance.uri_prefix,
+                'uri_path': '%s_new_%s' % (instance.uri_path, username),
+                'comment': instance.comment,
+                'attribute': instance.attribute.pk if instance.attribute else '',
+                'is_collection': instance.is_collection,
+                'title_en': instance.title_lang1,
+                'title_de': instance.title_lang2,
+                'help_en': instance.help_lang1,
+                'help_de': instance.help_lang2,
+                'verbose_name_en': instance.verbose_name_lang1,
+                'verbose_name_de': instance.verbose_name_lang2,
+                'verbose_name_plural_en': instance.verbose_name_plural_lang1,
+                'verbose_name_plural_de': instance.verbose_name_plural_lang2,
+                'sections': [section.id]
+            }
+            response = client.post(url, data, content_type='application/json')
+            assert response.status_code == status_map['create'][username], response.json()
+
+            if response.status_code == 201:
+                new_instance = Page.objects.get(id=response.json().get('id'))
+                section.refresh_from_db()
+                assert section_pages + [(new_instance.id, order)] == \
+                    list(section.section_pages.values_list('page', 'order'))
 
 
 @pytest.mark.parametrize('username,password', users)

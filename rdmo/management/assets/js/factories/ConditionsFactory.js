@@ -1,7 +1,9 @@
 class ConditionsFactory {
 
-  static createCondition() {
-    return {}
+  static createCondition(config) {
+    return {
+      uri_prefix: config.default_uri_prefix
+    }
   }
 
 }
