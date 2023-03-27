@@ -59,18 +59,24 @@ class TranslationSerializerMixin(object):
                         allow_blank=model_field.blank)
 
 
-class CanEditObjectSerializerMixin(object):
+class ReadOnlyObjectPermissionsSerializerMixin(object):
     '''
-    A mixin for serializers that adds a boolean read_only field.
-    Add the request to the context kwargs in the Serializer call:
-        ..., context={'request': request}
+    A mixin class for Serializers that adds a boolean field with the name read_only.
+    It checks the object permissions based on the model of the serializer.
+    
+    Requires:
+        - the request object in the context kwargs of the Serializer call:
+            ..., context={'request': request}
+        - so that this mixin has self.context['request']
 
     In the Serializer class add:
         read_only = serializers.SerializerMethodField(read_only=True)
     and the field to fields:
         read_only
     '''
-    EDIT_PERMISSION_ACTION_NAMES = ('change', 'delete')
+    
+    OBJECT_PERMISSION_ACTION_NAMES = ('change', 'delete')
+    
     @staticmethod
     def construct_object_permission(model, action_name: str) -> str:
         if not action_name:
@@ -84,10 +90,10 @@ class CanEditObjectSerializerMixin(object):
         try:
             user = self.context['request'].user
             perms = (self.construct_object_permission(self.Meta.model, action_name)
-                     for action_name in self.EDIT_PERMISSION_ACTION_NAMES)
+                     for action_name in self.OBJECT_PERMISSION_ACTION_NAMES)
             return not all(user.has_perm(perm, obj) for perm in perms)
         except Exception as exc:
-            logger.debug('CanEditObjectSerializerMixin exception: %s for obj %s' % (exc, obj))
+            logger.debug('ReadOnlyObjectPermissionsSerializerMixin exception: %s for obj %s' % (exc, obj))
             return None
 
 
