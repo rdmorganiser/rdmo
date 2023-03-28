@@ -12,6 +12,9 @@
 {% endblock %}
 
 {% block js %}
+    <script src="{% static 'jquery/jquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+
     <script src="{% url 'javascript-catalog' %}"></script>
     <script src="{% static 'management/js/management.js' %}" defer></script>
 {% endblock %}
