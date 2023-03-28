@@ -72,10 +72,13 @@ const EditSection = ({ config, section, elements, elementActions}) => {
                   onChange={updateSection} />
           </div>
         </div>
+
         <Textarea config={config} element={section} field="comment"
                   rows={4} onChange={updateSection} />
+
         <Checkbox config={config} element={section} field="locked"
                   onChange={updateSection} />
+
         <Tabs id="#section-tabs" defaultActiveKey={0} animation={false}>
           {
             config.settings && config.settings.languages.map(([lang_code, lang], index) => (
@@ -86,6 +89,7 @@ const EditSection = ({ config, section, elements, elementActions}) => {
             ))
           }
         </Tabs>
+
         <OrderedMultiSelect config={config} element={section} field="pages"
                             options={pages} verboseName="page"
                             onChange={updateSection} onCreate={createPage} />

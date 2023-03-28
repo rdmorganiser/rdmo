@@ -1,6 +1,7 @@
 import React, { Component, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap';
+import get from 'lodash/get'
 
 import Checkbox from '../forms/Checkbox'
 import Number from '../forms/Number'
@@ -61,7 +62,9 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
             <Text config={config} element={catalog} field="uri_path" onChange={updateCatalog} />
           </div>
         </div>
+
         <Textarea config={config} element={catalog} field="comment" rows={4} onChange={updateCatalog} />
+
         <div className="row">
           <div className="col-sm-4">
             <Checkbox config={config} element={catalog} field="locked" onChange={updateCatalog} />
@@ -73,16 +76,7 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
             <Number config={config} element={catalog} field="order" onChange={updateCatalog} />
           </div>
         </div>
-        <div className="row">
-          <div className="col-sm-6">
-            <Select config={config} element={catalog} field="groups"
-                    options={groups} onChange={updateCatalog} />
-          </div>
-          <div className="col-sm-6">
-            <Select config={config} element={catalog} field="sites"
-                    options={sites} onChange={updateCatalog} />
-          </div>
-        </div>
+
         <Tabs id="#catalog-tabs" defaultActiveKey={0} animation={false}>
           {
             config.settings && config.settings.languages.map(([lang_code, lang], index) => (
@@ -95,9 +89,16 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
             ))
           }
         </Tabs>
+
         <OrderedMultiSelect config={config} element={catalog} field="sections"
                             options={sections} verboseName="section"
                             onChange={updateCatalog} onCreate={createSection} />
+
+        {get(config, 'settings.groups') && <Select config={config} element={catalog} field="groups"
+                                                   options={groups} onChange={updateCatalog} isMulti />}
+
+        {get(config, 'settings.multisite') && <Select config={config} element={catalog} field="sites"
+                                                      options={sites} onChange={updateCatalog} isMulti />}
       </div>
 
       <div className="panel-footer">
