@@ -118,19 +118,16 @@ a.disabled {
         }
 
         .panel-body {
-            padding-bottom: 0;
+            > :last-child {
+                margin-bottom: 0;
+            }
         }
 
         .panel-border {
             border-bottom: 1px solid #ddd;
-            padding-bottom: 10px;
         }
 
         &.panel-nested {
-            margin-bottom: 10px;
-        }
-
-        .form-group {
             margin-bottom: 10px;
         }
     }

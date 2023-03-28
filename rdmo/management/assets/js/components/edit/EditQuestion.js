@@ -183,11 +183,11 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
         </Tabs>
 
         <div className="row">
-          <div className="col-sm-9">
+          <div className="col-sm-6">
             <Select config={config} element={question} field="default_option"
                     options={options} onChange={updateQuestion} />
           </div>
-          <div className="col-sm-3">
+          <div className="col-sm-6">
             <Text config={config} element={question} field="default_external_id"
                   onChange={updateQuestion} />
           </div>
