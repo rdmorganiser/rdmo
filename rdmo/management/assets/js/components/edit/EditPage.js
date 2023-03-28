@@ -138,9 +138,9 @@ const EditPage = ({ config, page, elements, elementActions }) => {
                 options={attributes} onChange={updatePage} />
 
         <OrderedMultiSelect config={config} element={page} field="elements"
-                            values={elementValues} options={elementOptions}
-                            verboseName={gettext('element')}
-                            onChange={updatePage} />
+                            values={elementValues} options={elementOptions} verboseName={gettext('element')}
+                            verboseNameCreate={gettext('question')} verboseNameAltCreate={gettext('question set')}
+                            onChange={updatePage} onCreate={createQuestion} onAltCreate={createQuestionSet} />
 
         <MultiSelect config={config} element={page} field="conditions"
                      options={conditions} verboseName="condition"

@@ -148,9 +148,9 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
                 options={attributes} onChange={updateQuestionSet} />
 
         <OrderedMultiSelect config={config} element={questionset} field="elements"
-                            values={elementValues} options={elementOptions}
-                            verboseName={gettext('element')}
-                            onChange={updateQuestionSet} />
+                            values={elementValues} options={elementOptions} verboseName={gettext('element')}
+                            verboseNameCreate={gettext('question')} verboseNameAltCreate={gettext('question set')}
+                            onChange={updateQuestionSet} onCreate={createQuestion} onAltCreate={createQuestionSet} />
 
         <MultiSelect config={config} element={questionset} field="conditions"
                      options={conditions} verboseName="condition"

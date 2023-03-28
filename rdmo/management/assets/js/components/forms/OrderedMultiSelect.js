@@ -6,6 +6,7 @@ import classNames from 'classnames'
 import isEmpty from 'lodash/isEmpty'
 import isUndefined from 'lodash/isUndefined'
 import isNil from 'lodash/isNil'
+import isArray from 'lodash/isArray'
 import isNumber from 'lodash/isNumber'
 import toNumber from 'lodash/toNumber'
 import get from 'lodash/get'
@@ -171,13 +172,9 @@ class OrderedMultiSelect extends Component {
     onChange(field, values)
   }
 
-  handleCreate() {
-    const { field, onCreate } = this.props
-    onCreate()
-  }
-
   render() {
-    const { config, element, field, options, verboseName, onChange, onCreate } = this.props
+    const { config, element, field, options, verboseName, verboseNameCreate,
+            verboseNameAltCreate, onChange, onCreate, onAltCreate } = this.props
 
     const id = getId(element, field),
           label = getLabel(config, element, field),
@@ -214,8 +211,13 @@ class OrderedMultiSelect extends Component {
           {interpolate(gettext('Add existing %s'), [verboseName])}
         </button>
         {
-          onCreate && <button className="btn btn-success btn-xs ml-10" onClick={() => this.handleCreate()}>
-            {interpolate(gettext('Create new %s'), [verboseName])}
+          onCreate && <button className="btn btn-success btn-xs ml-10" onClick={onCreate}>
+            {interpolate(gettext('Create new %s'), [verboseNameCreate || verboseName])}
+          </button>
+        }
+        {
+          onAltCreate && <button className="btn btn-success btn-xs ml-10" onClick={onAltCreate}>
+            {interpolate(gettext('Create new %s'), [verboseNameAltCreate || verboseName])}
           </button>
         }
 
@@ -242,8 +244,11 @@ OrderedMultiSelect.propTypes = {
   fields: PropTypes.array,
   options: PropTypes.array,
   verboseName: PropTypes.string,
+  verboseNameCreate: PropTypes.string,
+  verboseNameAltCreate: PropTypes.string,
   onChange: PropTypes.func,
-  onCreate: PropTypes.func
+  onCreate: PropTypes.func,
+  onAltCreate: PropTypes.func
 }
 
 export default OrderedMultiSelect
