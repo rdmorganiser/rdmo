@@ -105,6 +105,102 @@ def test_create(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
+def test_create_condition(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = Attribute.objects.order_by('-level')
+
+    for instance in instances:
+        condition = instance.conditions.first()
+        if condition:
+            url = reverse(urlnames['list'])
+            data = {
+                'uri_prefix': instance.uri_prefix,
+                'key': '%s_new_%s' % (instance.key, username),
+                'comment': '',
+                'parent': instance.parent.pk if instance.parent else '',
+                'conditions': [condition.id]
+            }
+            response = client.post(url, data)
+            assert response.status_code == status_map['create'][username], response.json()
+
+            if response.status_code == 201:
+                new_instance = Attribute.objects.get(id=response.json().get('id'))
+                assert [condition.id] == [condition.id for condition in new_instance.conditions.all()]
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_create_page(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = Attribute.objects.order_by('-level')
+
+    for instance in instances:
+        page = instance.pages.first()
+        if page:
+            url = reverse(urlnames['list'])
+            data = {
+                'uri_prefix': instance.uri_prefix,
+                'key': '%s_new_%s' % (instance.key, username),
+                'comment': '',
+                'parent': instance.parent.pk if instance.parent else '',
+                'pages': [page.id]
+            }
+            response = client.post(url, data)
+            assert response.status_code == status_map['create'][username], response.json()
+
+            if response.status_code == 201:
+                new_instance = Attribute.objects.get(id=response.json().get('id'))
+                assert [page.id] == [page.id for page in new_instance.pages.all()]
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_create_questionset(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = Attribute.objects.order_by('-level')
+
+    for instance in instances:
+        questionset = instance.questionsets.first()
+        if questionset:
+            url = reverse(urlnames['list'])
+            data = {
+                'uri_prefix': instance.uri_prefix,
+                'key': '%s_new_%s' % (instance.key, username),
+                'comment': '',
+                'parent': instance.parent.pk if instance.parent else '',
+                'questionsets': [questionset.id]
+            }
+            response = client.post(url, data)
+            assert response.status_code == status_map['create'][username], response.json()
+
+            if response.status_code == 201:
+                new_instance = Attribute.objects.get(id=response.json().get('id'))
+                assert [questionset.id] == [questionset.id for questionset in new_instance.questionsets.all()]
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_create_question(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = Attribute.objects.order_by('-level')
+
+    for instance in instances:
+        question = instance.questions.first()
+        if question:
+            url = reverse(urlnames['list'])
+            data = {
+                'uri_prefix': instance.uri_prefix,
+                'key': '%s_new_%s' % (instance.key, username),
+                'comment': '',
+                'parent': instance.parent.pk if instance.parent else '',
+                'questions': [question.id]
+            }
+            response = client.post(url, data)
+            assert response.status_code == status_map['create'][username], response.json()
+
+            if response.status_code == 201:
+                new_instance = Attribute.objects.get(id=response.json().get('id'))
+                assert [question.id] == [question.id for question in new_instance.questions.all()]
+
+
+@pytest.mark.parametrize('username,password', users)
 def test_update(db, client, username, password):
     client.login(username=username, password=password)
     instances = Attribute.objects.order_by('-level')
