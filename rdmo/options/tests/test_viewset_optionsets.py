@@ -115,6 +115,30 @@ def test_create(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
+def test_create_question(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = OptionSet.objects.all()
+
+    for instance in instances:
+        question = instance.questions.first()
+        if question:
+            url = reverse(urlnames['list'])
+            data = {
+                'uri_prefix': instance.uri_prefix,
+                'uri_path': '%s_new_%s' % (instance.uri_path, username),
+                'comment': instance.comment,
+                'order': instance.order,
+                'questions': [question.id]
+            }
+            response = client.post(url, data, content_type='application/json')
+            assert response.status_code == status_map['create'][username], response.json()
+
+            if response.status_code == 201:
+                new_instance = OptionSet.objects.get(id=response.json().get('id'))
+                assert [question.id] == [question.id for question in new_instance.questions.all()]
+
+
+@pytest.mark.parametrize('username,password', users)
 def test_create_m2m(db, client, username, password):
     client.login(username=username, password=password)
     instances = OptionSet.objects.all()
