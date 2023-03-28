@@ -87,7 +87,7 @@ class ThroughModelSerializerMixin(object):
         through_fields = {}
         for field_name, source_name, target_name, through_name in self.Meta.through_fields:
             through_model = model_info.reverse_relations[through_name].related_model
-            through_fields[field_name] = (through_model, validated_data.pop(through_name, []))
+            through_fields[field_name] = (through_model, validated_data.pop(through_name, None))
 
         return through_fields
 
@@ -99,7 +99,7 @@ class ThroughModelSerializerMixin(object):
 
         for field_name, source_name, target_name, through_name in self.Meta.through_fields:
             through_model, validated_data = through_fields[field_name]
-            if validated_data:
+            if validated_data is not None:
                 items = list(getattr(instance, through_name).all())
 
                 for data in validated_data:
@@ -143,7 +143,7 @@ class ThroughModelSerializerMixin(object):
 
             through_model = parent_model_info.reverse_relations[through_name].related_model
 
-            parent_fields[field_name] = (through_model, validated_data.pop(field_name, []))
+            parent_fields[field_name] = (through_model, validated_data.pop(field_name, None))
 
         return parent_fields
 
@@ -156,13 +156,14 @@ class ThroughModelSerializerMixin(object):
         for field_name, source_name, target_name, through_name in self.Meta.parent_fields:
             through_model, validated_data = parent_fields[field_name]
 
-            for parent in validated_data:
-                order = (getattr(parent, through_name).aggregate(order=Max('order')).get('order') or 0) + 1
-                through_model(**{
-                    source_name: parent,
-                    target_name: instance,
-                    'order': order
-                }).save()
+            if validated_data is not None:
+                for parent in validated_data:
+                    order = (getattr(parent, through_name).aggregate(order=Max('order')).get('order') or 0) + 1
+                    through_model(**{
+                        source_name: parent,
+                        target_name: instance,
+                        'order': order
+                    }).save()
 
         return instance
 
