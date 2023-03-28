@@ -8,7 +8,7 @@ import get from 'lodash/get'
 
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
-const MultiSelect = ({ config, element, field, options, verboseName, onChange }) => {
+const MultiSelect = ({ config, element, field, options, verboseName, onChange, onCreate }) => {
   const id = getId(element, field),
         label = getLabel(config, element, field),
         help = getHelp(config, element, field),
@@ -63,9 +63,15 @@ const MultiSelect = ({ config, element, field, options, verboseName, onChange })
       }
       </div>
 
-      <button className="btn btn-default btn-sm" onClick={() => handleAdd()}>
+      <button className="btn btn-primary btn-xs" onClick={() => handleAdd()}>
         {interpolate(gettext('Add %s'), [verboseName])}
       </button>
+
+      {
+        onCreate && <button className="btn btn-success btn-xs ml-10" onClick={onCreate}>
+          {interpolate(gettext('Create new %s'), [verboseName])}
+        </button>
+      }
 
       {help && <p className="help-block">{help}</p>}
     </div>
@@ -78,7 +84,8 @@ MultiSelect.propTypes = {
   field: PropTypes.string,
   options: PropTypes.array,
   verboseName: PropTypes.string,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  onCreate: PropTypes.func
 }
 
 export default MultiSelect
