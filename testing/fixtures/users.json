@@ -237,11 +237,29 @@
     "model": "auth.user",
     "pk": 14,
     "fields": {
+      "password": "pbkdf2_sha256$260000$IcGdXALB0q5ydtqgKpPnxa$nti35Qd0RJH0iP3iUhOhGW3UmlgDd0dRYXwp5NAOY3c=",
+      "last_login": "2023-02-06T08:43:50Z",
+      "is_superuser": false,
+      "username": "bar-user",
+      "first_name": "Umbarto",
+      "last_name": "User",
+      "email": "bar-user@bar.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-02-06T08:43:36Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 15,
+    "fields": {
       "password": "pbkdf2_sha256$260000$B3yapDr8QuQYVB6zdZaNJM$I3RsRbPxmpGvbexpm5OL4CJRJqkKCOPcS4vvZAjoCRY=",
       "last_login": "2023-02-06T09:27:00Z",
       "is_superuser": false,
       "username": "example-manager",
-      "first_name": "Manexamply",
+      "first_name": "Manuexample",
       "last_name": "Manager",
       "email": "example-manager@example.com",
       "is_staff": false,
@@ -253,7 +271,7 @@
   },
   {
     "model": "auth.user",
-    "pk": 15,
+    "pk": 16,
     "fields": {
       "password": "pbkdf2_sha256$260000$B3yapDr8QuQYVB6zdZaNJM$I3RsRbPxmpGvbexpm5OL4CJRJqkKCOPcS4vvZAjoCRY=",
       "last_login": "2023-02-06T09:27:00Z",
@@ -271,7 +289,8 @@
   },
   {
     "model": "auth.user",
-    "pk": 16,
+    "pk": 17
+    ,
     "fields": {
       "password": "pbkdf2_sha256$260000$GMW3hAxajrYGZlSPpDkr4B$ZWcjZVRQl0LaziXqTdDPChd9K4C7ePSu3jTgmlkTs9o=",
       "last_login": "2023-02-06T09:20:00Z",
@@ -283,24 +302,6 @@
       "is_staff": false,
       "is_active": true,
       "date_joined": "2023-02-06T09:15:00Z",
-      "groups": [],
-      "user_permissions": []
-    }
-  },
-  {
-    "model": "auth.user",
-    "pk": 17,
-    "fields": {
-      "password": "pbkdf2_sha256$260000$IcGdXALB0q5ydtqgKpPnxa$nti35Qd0RJH0iP3iUhOhGW3UmlgDd0dRYXwp5NAOY3c=",
-      "last_login": "2023-02-06T08:43:50Z",
-      "is_superuser": false,
-      "username": "bar-user",
-      "first_name": "Umbarto",
-      "last_name": "User",
-      "email": "bar-user@bar.com",
-      "is_staff": false,
-      "is_active": true,
-      "date_joined": "2023-02-06T08:43:36Z",
       "groups": [],
       "user_permissions": []
     }
