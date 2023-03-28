@@ -68,10 +68,12 @@ const EditOption = ({ config, option, elements, elementActions }) => {
             <Text config={config} element={option} field="uri_path"
                   onChange={updateOption} />
           </div>
-          <div className="col-sm-12">
-            <Textarea config={config} element={option} field="comment"
-                      rows={4} onChange={updateOption} />
-          </div>
+        </div>
+
+        <Textarea config={config} element={option} field="comment"
+                  rows={4} onChange={updateOption} />
+
+        <div className="row">
           <div className="col-sm-6">
             <Checkbox config={config} element={option} field="locked"
                       onChange={updateOption} />
@@ -80,25 +82,22 @@ const EditOption = ({ config, option, elements, elementActions }) => {
             <Checkbox config={config} element={option} field="additional_input"
                       onChange={updateOption} />
           </div>
-          <div className="col-sm-12">
-            <Tabs id="#option-tabs" defaultActiveKey={0} animation={false}>
-              {
-                config.settings && config.settings.languages.map(([lang_code, lang], index) => {
-                  return (
-                    <Tab className="pt-10" key={index} eventKey={index} title={lang}>
-                      <div className="row">
-                        <div className="col-sm-12">
-                          <Text config={config} element={option} field={`text_${lang_code }`}
-                                onChange={updateOption} />
-                        </div>
-                      </div>
-                    </Tab>
-                  )
-                })
-              }
-            </Tabs>
-          </div>
         </div>
+
+        <Tabs id="#option-tabs" defaultActiveKey={0} animation={false}>
+          {
+            config.settings && config.settings.languages.map(([lang_code, lang], index) => (
+              <Tab key={index} eventKey={index} title={lang}>
+                <div className="row">
+                  <div className="col-sm-12">
+                    <Text config={config} element={option} field={`text_${lang_code }`}
+                          onChange={updateOption} />
+                  </div>
+                </div>
+              </Tab>
+            ))
+          }
+        </Tabs>
       </div>
 
       <div className="panel-footer">

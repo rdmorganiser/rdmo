@@ -75,127 +75,117 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
             <Text config={config} element={question} field="uri_path"
                   onChange={updateQuestion} />
           </div>
-          <div className="col-sm-12">
-            <Textarea config={config} element={question} field="comment"
-                      rows={4} onChange={updateQuestion} />
-          </div>
-          <div className="col-sm-12">
+        </div>
+
+        <Textarea config={config} element={question} field="comment"
+                  rows={4} onChange={updateQuestion} />
+
+        <div className="row">
+          <div className="col-sm-4">
             <Checkbox config={config} element={question} field="locked"
                       onChange={updateQuestion} />
           </div>
-          <div className="col-sm-12">
-            <MultiSelect config={config} element={question} field="optionsets"
-                         options={optionsets} verboseName="optionset"
-                         onChange={updateQuestion} />
+          <div className="col-sm-4">
+            <Checkbox config={config} element={question} field="is_collection"
+                      onChange={updateQuestion} />
           </div>
-          <div className="col-sm-12">
-            <MultiSelect config={config} element={question} field="conditions"
-                         options={conditions} verboseName="condition"
-                         onChange={updateQuestion} />
+          <div className="col-sm-4">
+            <Checkbox config={config} element={question} field="is_optional"
+                      onChange={updateQuestion} />
           </div>
-          <div className="col-sm-12">
-            <Tabs id="#question-tabs" defaultActiveKey={0} animation={false}>
+        </div>
 
-              <Tab className="pt-10" eventKey={0} title={gettext('General')}>
-                <div className="row">
-                  <div className="col-sm-12">
-                    <Select config={config} element={question} field="attribute"
-                            options={attributes} onChange={updateQuestion} />
+        <Tabs id="#question-tabs" defaultActiveKey={0} animation={false}>
+          {
+            config.settings && config.settings.languages.map(([lang_code, lang], index) => {
+              return (
+                <Tab key={index} eventKey={index} title={lang}>
+                  <Text config={config} element={question} field={`text_${lang_code }`}
+                        onChange={updateQuestion} />
+
+                  <Textarea config={config} element={question} field={`help_${lang_code }`}
+                            rows={8} onChange={updateQuestion} />
+
+                  <div className="row">
+                    <div className="col-sm-6">
+                      <Text config={config} element={question} field={`verbose_name_${lang_code }`}
+                            onChange={updateQuestion} />
+                    </div>
+                    <div className="col-sm-6">
+                      <Text config={config} element={question} field={`verbose_name_plural_${lang_code }`}
+                            onChange={updateQuestion} />
+                    </div>
                   </div>
-                  <div className="col-sm-6">
-                    <Checkbox config={config} element={question} field="is_collection"
-                              onChange={updateQuestion} />
-                  </div>
-                  <div className="col-sm-6">
-                    <Checkbox config={config} element={question} field="is_optional"
-                              onChange={updateQuestion} />
-                  </div>
-                  <div className="col-sm-3">
-                    <Select config={config} element={question} field="widget_type"
-                            options={widgetTypes} onChange={updateQuestion} />
-                  </div>
-                  <div className="col-sm-3">
-                    <Select config={config} element={question} field="value_type"
-                            options={valueTypes} onChange={updateQuestion} />
-                  </div>
-                  <div className="col-sm-3">
-                    <Text config={config} element={question} field="unit"
-                          onChange={updateQuestion} />
-                  </div>
-                  <div className="col-sm-3">
-                    <Text config={config} element={question} field="width"
-                          onChange={updateQuestion} />
-                  </div>
-                </div>
+                </Tab>
+              )
+            })
+          }
+        </Tabs>
+
+        <Select config={config} element={question} field="attribute"
+                options={attributes} onChange={updateQuestion} />
+
+        <div className="row">
+          <div className="col-sm-3">
+            <Select config={config} element={question} field="widget_type"
+                    options={widgetTypes} onChange={updateQuestion} />
+          </div>
+          <div className="col-sm-3">
+            <Select config={config} element={question} field="value_type"
+                    options={valueTypes} onChange={updateQuestion} />
+          </div>
+          <div className="col-sm-3">
+            <Text config={config} element={question} field="unit"
+                  onChange={updateQuestion} />
+          </div>
+          <div className="col-sm-3">
+            <Text config={config} element={question} field="width"
+                  onChange={updateQuestion} />
+          </div>
+        </div>
+
+        <MultiSelect config={config} element={question} field="optionsets"
+                     options={optionsets} verboseName="optionset"
+                     onChange={updateQuestion} />
+
+        <MultiSelect config={config} element={question} field="conditions"
+                     options={conditions} verboseName="condition"
+                     onChange={updateQuestion} />
+
+        <div className="row">
+          <div className="col-sm-4">
+            <Text config={config} element={question} field="minimum"
+                  onChange={updateQuestion} />
+          </div>
+          <div className="col-sm-4">
+            <Text config={config} element={question} field="maximum"
+                  onChange={updateQuestion} />
+          </div>
+          <div className="col-sm-4">
+            <Text config={config} element={question} field="step"
+                  onChange={updateQuestion} />
+          </div>
+        </div>
+
+        <Tabs id="#question-default-tabs" defaultActiveKey={0} animation={false}>
+          {
+            config.settings && config.settings.languages.map(([lang_code, lang], index) => (
+              <Tab key={index} eventKey={index} title={lang}>
+                <Textarea key={index} config={config} element={question} field={`default_text_${lang_code }`}
+                          rows={2} onChange={updateQuestion} />
               </Tab>
+            ))
+          }
+        </Tabs>
 
-              {
-                config.settings && config.settings.languages.map(([lang_code, lang], index) => {
-                  const classNames = ''
-                  return (
-                    <Tab key={index} eventKey={index + 1} title={lang}>
-                      <div className="row mt-10">
-                        <div className="col-sm-12">
-                          <Text config={config} element={question} field={`text_${lang_code }`}
-                                onChange={updateQuestion} />
-                        </div>
-                        <div className="col-sm-12">
-                          <Textarea config={config} element={question} field={`help_${lang_code }`}
-                                    rows={4} onChange={updateQuestion} />
-                        </div>
-                        <div className="col-sm-6">
-                          <Text config={config} element={question} field={`verbose_name_${lang_code }`}
-                                onChange={updateQuestion} />
-                        </div>
-                        <div className="col-sm-6">
-                          <Text config={config} element={question} field={`verbose_name_plural_${lang_code }`}
-                                onChange={updateQuestion} />
-                        </div>
-                      </div>
-                    </Tab>
-                  )
-                })
-              }
-
-              <Tab className="pt-10" eventKey={config.settings.languages.length + 1} title={gettext('Range')}>
-                <div className="row">
-                  <div className="col-sm-4">
-                    <Text config={config} element={question} field="minimum"
-                          onChange={updateQuestion} />
-                  </div>
-                  <div className="col-sm-4">
-                    <Text config={config} element={question} field="maximum"
-                          onChange={updateQuestion} />
-                  </div>
-                  <div className="col-sm-4">
-                    <Text config={config} element={question} field="step"
-                          onChange={updateQuestion} />
-                  </div>
-                </div>
-              </Tab>
-
-              <Tab className="pt-10" eventKey={config.settings.languages.length + 2} title={gettext('Default')}>
-                <div className="row">
-                  <div className="col-sm-12">
-                    {
-                      config.settings && config.settings.languages.map(([lang_code, lang], index) => (
-                        <Textarea key={index} config={config} element={question} field={`default_text_${lang_code }`}
-                                  rows={2} onChange={updateQuestion} />
-                      ))
-                    }
-                  </div>
-                  <div className="col-sm-9">
-                    <Select config={config} element={question} field="default_option"
-                            options={options} onChange={updateQuestion} />
-                  </div>
-                  <div className="col-sm-3">
-                    <Text config={config} element={question} field="default_external_id"
-                          onChange={updateQuestion} />
-                  </div>
-                </div>
-              </Tab>
-
-            </Tabs>
+        <div className="row">
+          <div className="col-sm-9">
+            <Select config={config} element={question} field="default_option"
+                    options={options} onChange={updateQuestion} />
+          </div>
+          <div className="col-sm-3">
+            <Text config={config} element={question} field="default_external_id"
+                  onChange={updateQuestion} />
           </div>
         </div>
       </div>

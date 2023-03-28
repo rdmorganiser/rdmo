@@ -26,6 +26,7 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
   const updateOptionSet = (key, value) => elementActions.updateElement(optionset, {[key]: value})
   const storeOptionSet = (back) => elementActions.storeElement('optionsets', optionset, back)
   const deleteOptionSet = () => elementActions.deleteElement('optionsets', optionset)
+  const createOption = () => elementActions.createElement('options', { optionset })
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
@@ -63,10 +64,12 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
             <Text config={config} element={optionset} field="uri_path"
                   onChange={updateOptionSet} />
           </div>
-          <div className="col-sm-12">
-            <Textarea config={config} element={optionset} field="comment"
-                      rows={4} onChange={updateOptionSet} />
-          </div>
+        </div>
+
+        <Textarea config={config} element={optionset} field="comment"
+                  rows={4} onChange={updateOptionSet} />
+
+        <div className="row">
           <div className="col-sm-6">
             <Checkbox config={config} element={optionset} field="locked"
                       onChange={updateOptionSet} />
@@ -75,16 +78,13 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
             <Number config={config} element={optionset} field="order"
                     onChange={updateOptionSet} />
           </div>
-          <div className="col-sm-12">
-            <OrderedMultiSelect config={config} element={optionset} field="options"
-                                options={options} verboseName="option"
-                                onChange={updateOptionSet} />
-          </div>
-          <div className="col-sm-12">
-            <Select config={config} element={optionset} field="provider_key"
-                    options={providers} onChange={updateOptionSet} />
-          </div>
         </div>
+
+        <OrderedMultiSelect config={config} element={optionset} field="options"
+                            options={options} verboseName="option"
+                            onChange={updateOptionSet} onCreate={createOption} />
+        <Select config={config} element={optionset} field="provider_key"
+                options={providers} onChange={updateOptionSet} />
       </div>
 
       <div className="panel-footer">

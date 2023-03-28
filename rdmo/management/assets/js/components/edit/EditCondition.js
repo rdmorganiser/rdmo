@@ -59,14 +59,15 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
             <Text config={config} element={condition} field="key"
                   onChange={updateCondition} />
           </div>
-          <div className="col-sm-12">
-            <Textarea config={config} element={condition} field="comment"
-                      rows={4} onChange={updateCondition} />
-          </div>
-          <div className="col-sm-12">
-            <Checkbox config={config} element={condition} field="locked"
-                      onChange={updateCondition} />
-          </div>
+        </div>
+
+        <Textarea config={config} element={condition} field="comment"
+                  rows={4} onChange={updateCondition} />
+
+        <Checkbox config={config} element={condition} field="locked"
+                  onChange={updateCondition} />
+
+        <div className="row">
           <div className="col-sm-6">
             <Select config={config} element={condition} field="source"
                     options={attributes} onChange={updateCondition} />
@@ -75,6 +76,9 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
             <Select config={config} element={condition} field="relation"
                     options={relations} onChange={updateCondition} />
           </div>
+        </div>
+
+        <div className="row">
           <div className="col-sm-6">
             <Text config={config} element={condition} field="target_text"
                   onChange={updateCondition} />

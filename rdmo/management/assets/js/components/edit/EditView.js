@@ -60,10 +60,12 @@ const EditView = ({ config, view, elements, elementActions }) => {
             <Text config={config} element={view} field="key"
                   onChange={updateView} />
           </div>
-          <div className="col-sm-12">
-            <Textarea config={config} element={view} field="comment"
-                      rows={4} onChange={updateView} />
-          </div>
+        </div>
+
+        <Textarea config={config} element={view} field="comment"
+                  rows={4} onChange={updateView} />
+
+        <div className="row">
           <div className="col-sm-6">
             <Checkbox config={config} element={view} field="locked"
                       onChange={updateView} />
@@ -72,35 +74,37 @@ const EditView = ({ config, view, elements, elementActions }) => {
             <Checkbox config={config} element={view} field="available"
                       onChange={updateView} />
           </div>
-          <div className="col-sm-12">
-            <CodeMirror config={config} element={view} field="template"
-                        onChange={updateView} />
-          </div>
-          <div className="col-sm-12">
-            <Tabs id="#view-tabs" defaultActiveKey={0} animation={false}>
-              {
-                config.settings && config.settings.languages.map(([lang_code, lang], index) => {
-                  return (
-                    <Tab className="pt-10" key={index} eventKey={index} title={lang}>
-                      <Text config={config} element={view} field={`title_${lang_code }`}
-                            onChange={updateView} />
-                      <Textarea config={config} element={view} field={`help_${lang_code }`}
-                                rows={8} onChange={updateView} />
-                    </Tab>
-                  )
-                })
-              }
-              <Tab className="pt-10" eventKey={config.settings.languages.length + 1} title={gettext('Visibility')}>
-                <Select config={config} element={view} field="catalogs"
-                        options={catalogs} onChange={updateView} />
-                <Select config={config} element={view} field="groups"
-                        options={groups} onChange={updateView} />
-                <Select config={config} element={view} field="sites"
-                        options={sites} onChange={updateView} />
+        </div>
+
+        <Tabs id="#view-tabs" defaultActiveKey={0} animation={false}>
+          {
+            config.settings && config.settings.languages.map(([lang_code, lang], index) => (
+              <Tab className="pt-10" key={index} eventKey={index} title={lang}>
+                <Text config={config} element={view} field={`title_${lang_code }`}
+                      onChange={updateView} />
+                <Textarea config={config} element={view} field={`help_${lang_code }`}
+                          rows={8} onChange={updateView} />
               </Tab>
-            </Tabs>
+            ))
+          }
+        </Tabs>
+
+        <Select config={config} element={view} field="catalogs"
+                options={catalogs} onChange={updateView} />
+
+        <div className="row">
+          <div className="col-sm-6">
+            <Select config={config} element={view} field="groups"
+                    options={groups} onChange={updateView} />
+          </div>
+          <div className="col-sm-6">
+            <Select config={config} element={view} field="sites"
+                    options={sites} onChange={updateView} />
           </div>
         </div>
+
+        <CodeMirror config={config} element={view} field="template"
+                    onChange={updateView} />
       </div>
 
       <div className="panel-footer">

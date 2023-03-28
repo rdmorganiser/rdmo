@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap';
 
 import Checkbox from '../forms/Checkbox'
+import Number from '../forms/Number'
 import OrderedMultiSelect from '../forms/OrderedMultiSelect'
 import Select from '../forms/Select'
 import Text from '../forms/Text'
@@ -59,43 +60,44 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
           <div className="col-sm-6">
             <Text config={config} element={catalog} field="uri_path" onChange={updateCatalog} />
           </div>
-          <div className="col-sm-12">
-            <Textarea config={config} element={catalog} field="comment" rows={4} onChange={updateCatalog} />
-          </div>
-          <div className="col-sm-6">
+        </div>
+        <Textarea config={config} element={catalog} field="comment" rows={4} onChange={updateCatalog} />
+        <div className="row">
+          <div className="col-sm-4">
             <Checkbox config={config} element={catalog} field="locked" onChange={updateCatalog} />
           </div>
-          <div className="col-sm-6">
+          <div className="col-sm-4">
             <Checkbox config={config} element={catalog} field="available" onChange={updateCatalog} />
           </div>
-          <div className="col-sm-12">
-            <OrderedMultiSelect config={config} element={catalog} field="sections"
-                                options={sections} verboseName="section"
-                                onChange={updateCatalog} onCreate={createSection} />
-          </div>
-          <div className="col-sm-12">
-            <Tabs id="#catalog-tabs" defaultActiveKey={0} animation={false}>
-              {
-                config.settings && config.settings.languages.map(([lang_code, lang], index) => {
-                  return (
-                    <Tab className="pt-10" key={index} eventKey={index} title={lang}>
-                      <Text config={config} element={catalog} field={`title_${lang_code }`}
-                            onChange={updateCatalog} />
-                      <Textarea config={config} element={catalog} field={`help_${lang_code }`}
-                                rows={4} onChange={updateCatalog} />
-                    </Tab>
-                  )
-                })
-              }
-              <Tab className="pt-10" eventKey={config.settings.languages.length + 1} title={gettext('Visibility')}>
-                <Select config={config} element={catalog} field="groups"
-                        options={groups} onChange={updateCatalog} />
-                <Select config={config} element={catalog} field="sites"
-                        options={sites} onChange={updateCatalog} />
-              </Tab>
-            </Tabs>
+          <div className="col-sm-4">
+            <Number config={config} element={catalog} field="order" onChange={updateCatalog} />
           </div>
         </div>
+        <div className="row">
+          <div className="col-sm-6">
+            <Select config={config} element={catalog} field="groups"
+                    options={groups} onChange={updateCatalog} />
+          </div>
+          <div className="col-sm-6">
+            <Select config={config} element={catalog} field="sites"
+                    options={sites} onChange={updateCatalog} />
+          </div>
+        </div>
+        <Tabs id="#catalog-tabs" defaultActiveKey={0} animation={false}>
+          {
+            config.settings && config.settings.languages.map(([lang_code, lang], index) => (
+              <Tab key={index} eventKey={index} title={lang}>
+                <Text config={config} element={catalog} field={`title_${lang_code }`}
+                      onChange={updateCatalog} />
+                <Textarea config={config} element={catalog} field={`help_${lang_code }`}
+                          rows={4} onChange={updateCatalog} />
+              </Tab>
+            ))
+          }
+        </Tabs>
+        <OrderedMultiSelect config={config} element={catalog} field="sections"
+                            options={sections} verboseName="section"
+                            onChange={updateCatalog} onCreate={createSection} />
       </div>
 
       <div className="panel-footer">

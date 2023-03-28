@@ -44,6 +44,8 @@ const EditPage = ({ config, page, elements, elementActions }) => {
   }
   const storePage = (back) => elementActions.storeElement('pages', page, back)
   const deletePage = () => elementActions.deleteElement('pages', page)
+  const createQuestionSet = () => elementActions.createElement('questionsets', { page })
+  const createQuestion = () => elementActions.createElement('questions', { page })
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
@@ -89,10 +91,12 @@ const EditPage = ({ config, page, elements, elementActions }) => {
             <Text config={config} element={page} field="uri_path"
                   onChange={updatePage} />
           </div>
-          <div className="col-sm-12">
-            <Textarea config={config} element={page} field="comment"
-                      rows={4} onChange={updatePage} />
-          </div>
+        </div>
+
+        <Textarea config={config} element={page} field="comment"
+                  rows={4} onChange={updatePage} />
+
+        <div className="row">
           <div className="col-sm-6">
             <Checkbox config={config} element={page} field="locked"
                       onChange={updatePage} />
@@ -101,52 +105,46 @@ const EditPage = ({ config, page, elements, elementActions }) => {
             <Checkbox config={config} element={page} field="is_collection"
                       onChange={updatePage} />
           </div>
-          <div className="col-sm-12">
-            <Select config={config} element={page} field="attribute"
-                    options={attributes} onChange={updatePage} />
-          </div>
-          <div className="col-sm-12">
-            <OrderedMultiSelect config={config} element={page} field="elements"
-                                values={elementValues} options={elementOptions}
-                                verboseName={gettext('element')}
-                                onChange={updatePage} />
-          </div>
-          <div className="col-sm-12">
-            <MultiSelect config={config} element={page} field="conditions"
-                         options={conditions} verboseName="condition"
-                         onChange={updatePage} />
-          </div>
-          <div className="col-sm-12">
-            <Tabs id="#catalog-tabs" defaultActiveKey={0} animation={false}>
-              {
-                config.settings && config.settings.languages.map(([lang_code, lang], index) => {
-                  return (
-                    <Tab className="pt-10" key={index} eventKey={index} title={lang}>
-                      <div className="row">
-                        <div className="col-sm-12">
-                          <Text config={config} element={page} field={`title_${lang_code }`}
-                                onChange={updatePage} />
-                        </div>
-                        <div className="col-sm-12">
-                          <Textarea config={config} element={page} field={`help_${lang_code }`}
-                                    rows={4} onChange={updatePage} />
-                        </div>
-                        <div className="col-sm-6">
-                          <Text config={config} element={page} field={`verbose_name_${lang_code }`}
-                                onChange={updatePage} />
-                        </div>
-                        <div className="col-sm-6">
-                          <Text config={config} element={page} field={`verbose_name_plural_${lang_code }`}
-                                onChange={updatePage} />
-                        </div>
-                      </div>
-                    </Tab>
-                  )
-                })
-              }
-            </Tabs>
-          </div>
         </div>
+
+        <Tabs id="#catalog-tabs" defaultActiveKey={0} animation={false}>
+          {
+            config.settings && config.settings.languages.map(([lang_code, lang], index) => (
+              <Tab key={index} eventKey={index} title={lang}>
+                <div className="row">
+                  <div className="col-sm-12">
+                    <Text config={config} element={page} field={`title_${lang_code }`}
+                          onChange={updatePage} />
+                  </div>
+                  <div className="col-sm-12">
+                    <Textarea config={config} element={page} field={`help_${lang_code }`}
+                              rows={4} onChange={updatePage} />
+                  </div>
+                  <div className="col-sm-6">
+                    <Text config={config} element={page} field={`verbose_name_${lang_code }`}
+                          onChange={updatePage} />
+                  </div>
+                  <div className="col-sm-6">
+                    <Text config={config} element={page} field={`verbose_name_plural_${lang_code }`}
+                          onChange={updatePage} />
+                  </div>
+                </div>
+              </Tab>
+            ))
+          }
+        </Tabs>
+
+        <Select config={config} element={page} field="attribute"
+                options={attributes} onChange={updatePage} />
+
+        <OrderedMultiSelect config={config} element={page} field="elements"
+                            values={elementValues} options={elementOptions}
+                            verboseName={gettext('element')}
+                            onChange={updatePage} />
+
+        <MultiSelect config={config} element={page} field="conditions"
+                     options={conditions} verboseName="condition"
+                     onChange={updatePage} />
       </div>
 
       <div className="panel-footer">
