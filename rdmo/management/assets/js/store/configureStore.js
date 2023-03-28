@@ -26,19 +26,19 @@ export default function configureStore() {
 
   // fetch some of the django settings
   const fetchSettings = (event) => {
-    store.dispatch(configActions.fetchSettings())
+    return store.dispatch(configActions.fetchSettings())
   }
 
   // fetch the model meta information
   const fetchMeta = (event) => {
-    store.dispatch(configActions.fetchMeta())
+    return store.dispatch(configActions.fetchMeta())
   }
 
   // add a listener to restore the config from the local storage
   const updateConfigFromLocalStorage = (event) => {
     const config = {}
     Object.entries(lsKeys).forEach(([path, defaultValue]) => {
-      let value = ls.get(`rdmo.management.config.${path}`) 
+      let value = ls.get(`rdmo.management.config.${path}`)
       if (isNil(value)) {
         switch(defaultValue) {
           case 'true':
@@ -76,9 +76,17 @@ export default function configureStore() {
     }
   }
 
-  window.addEventListener('load', fetchSettings)
-  window.addEventListener('load', fetchMeta)
-  window.addEventListener('load', fetchElementsFromLocation)
+  // this event is triggered when the page first loads
+  window.addEventListener('load', (event) => {
+    Promise.all([
+      fetchSettings(event),
+      fetchMeta(event)
+    ]).then(() => {
+      fetchElementsFromLocation(event)
+    })
+  })
+
+  // this event is triggered when when the forward/back buttons are used
   window.addEventListener('popstate', fetchElementsFromLocation)
 
   return store

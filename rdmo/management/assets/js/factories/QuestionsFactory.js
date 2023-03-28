@@ -2,7 +2,7 @@ class QuestionsFactory {
 
   static createCatalog(config) {
     return {
-      uri_prefix: config.default_uri_prefix,
+      uri_prefix: config.settings.default_uri_prefix,
       available: true,
       sections: []
     }
@@ -10,7 +10,7 @@ class QuestionsFactory {
 
   static createSection(config, parent) {
     return {
-      uri_prefix: config.default_uri_prefix,
+      uri_prefix: config.settings.default_uri_prefix,
       catalogs: parent.catalog ? [parent.catalog.id] : [],
       pages: []
     }
@@ -18,7 +18,7 @@ class QuestionsFactory {
 
   static createPage(config, parent) {
     return {
-      uri_prefix: config.default_uri_prefix,
+      uri_prefix: config.settings.default_uri_prefix,
       sections: parent.section ? [parent.section.id] : [],
       questionsets: [],
       questions: []
@@ -27,7 +27,7 @@ class QuestionsFactory {
 
   static createQuestionSet(config, parent) {
     return {
-      uri_prefix: config.default_uri_prefix,
+      uri_prefix: config.settings.default_uri_prefix,
       pages: parent.page ? [parent.page.id] : [],
       parents: parent.questionset ? [parent.questionset.id] : [],
       questionsets: [],
@@ -37,7 +37,7 @@ class QuestionsFactory {
 
   static createQuestion(config, parent) {
     return {
-      uri_prefix: config.default_uri_prefix,
+      uri_prefix: config.settings.default_uri_prefix,
       widget_type: 'text',
       value_type: 'text',
       pages: parent.page ? [parent.page.id] : [],
