@@ -25,7 +25,7 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
   const updateCatalog = (key, value) => elementActions.updateElement(catalog, {[key]: value})
   const storeCatalog = (back) => elementActions.storeElement('catalogs', catalog, back)
   const deleteCatalog = () => elementActions.deleteElement('catalogs', catalog)
-  const createSection = () => elementActions.createElement('sections', catalog)
+  const createSection = () => elementActions.createElement('sections', { catalog } )
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
