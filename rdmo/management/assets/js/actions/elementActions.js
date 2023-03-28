@@ -308,7 +308,7 @@ export function fetchElementError(error) {
 
 // store element
 
-export function storeElement(elementType, element) {
+export function storeElement(elementType, element, back) {
   return function(dispatch, getState) {
     dispatch(storeElementInit(element))
 
@@ -362,7 +362,9 @@ export function storeElement(elementType, element) {
     dispatch(action)
       .then(element => {
         dispatch(storeElementSuccess(element))
-        if (getState().elements.elementAction == 'create') {
+        if (back) {
+          history.back()
+        } else if (getState().elements.elementAction == 'create') {
           dispatch(fetchElement(getState().elements.elementType, element.id))
         }
       })
@@ -592,7 +594,7 @@ export function deleteElement(elementType, element) {
     dispatch(action)
       .then(() => {
         dispatch(deleteElementSuccess(element))
-        dispatch(fetchElements(elementType))
+        history.back()
       })
       .catch(error => dispatch(deleteElementError(element, error)))
   }

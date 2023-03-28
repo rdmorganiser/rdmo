@@ -8,7 +8,7 @@ import Text from '../forms/Text'
 import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
-import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/Buttons'
+import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
 
 import ConditionInfo from '../info/ConditionInfo'
 import DeleteConditionModal from '../modals/DeleteConditionModal'
@@ -20,7 +20,7 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
   const { relations, attributes, optionsets, options, pages, questionsets, questions, tasks } = elements
 
   const updateCondition = (key, value) => elementActions.updateElement(condition, {[key]: value})
-  const storeCondition = () => elementActions.storeElement('conditions', condition)
+  const storeCondition = (back) => elementActions.storeElement('conditions', condition, back)
   const deleteCondition = () => elementActions.deleteElement('conditions', condition)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
@@ -32,16 +32,14 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          {
-            condition.id ? <SaveButton onClick={storeCondition} />
-                         : <CreateButton onClick={storeCondition} />
-          }
+          <SaveButton element={condition} onClick={storeCondition} />
+          <SaveButton element={condition} onClick={storeCondition} back={true}/>
         </div>
         {
-          condition.id ? <div>
+          condition.id ? <>
             <strong>{gettext('Condition')}{': '}</strong>
             <code className="code-conditions">{condition.uri}</code>
-          </div> : <strong>{gettext('Create condition')}</strong>
+          </> : <strong>{gettext('Create condition')}</strong>
         }
       </div>
 
@@ -91,12 +89,10 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          {
-            condition.id ? <SaveButton onClick={storeCondition} />
-                         : <CreateButton onClick={storeCondition} />
-          }
+          <SaveButton element={condition} onClick={storeCondition} />
+          <SaveButton element={condition} onClick={storeCondition} back={true}/>
         </div>
-        {condition.id && <DeleteButton onClick={openDeleteModal} />}
+        <DeleteButton element={condition} onClick={openDeleteModal} />
       </div>
 
       <DeleteConditionModal condition={condition} info={info} show={showDeleteModal}

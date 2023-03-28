@@ -9,7 +9,7 @@ import Text from '../forms/Text'
 import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
-import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/Buttons'
+import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
 
 import TaskInfo from '../info/TaskInfo'
 import DeleteTaskModal from '../modals/DeleteTaskModal'
@@ -21,7 +21,7 @@ const EditTask = ({ config, task, elements, elementActions}) => {
   const { attributes, catalogs, sites, groups } = elements
 
   const updateTask = (key, value) => elementActions.updateElement(task, {[key]: value})
-  const storeTask = () => elementActions.storeElement('tasks', task)
+  const storeTask = (back) => elementActions.storeElement('tasks', task, back)
   const deleteTask = () => elementActions.deleteElement('tasks', task)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
@@ -33,16 +33,14 @@ const EditTask = ({ config, task, elements, elementActions}) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          {
-            task.id ? <SaveButton onClick={storeTask} />
-                         : <CreateButton onClick={storeTask} />
-          }
+          <SaveButton element={task} onClick={storeTask} />
+          <SaveButton element={task} onClick={storeTask} back={true}/>
         </div>
         {
-          task.id ? <div>
+          task.id ? <>
             <strong>{gettext('Task')}{': '}</strong>
             <code className="code-tasks">{task.uri}</code>
-          </div> : <strong>{gettext('Create task')}</strong>
+          </> : <strong>{gettext('Create task')}</strong>
         }
       </div>
 
@@ -126,12 +124,10 @@ const EditTask = ({ config, task, elements, elementActions}) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          {
-            task.id ? <SaveButton onClick={storeTask} />
-                         : <CreateButton onClick={storeTask} />
-          }
+          <SaveButton element={task} onClick={storeTask} />
+          <SaveButton element={task} onClick={storeTask} back={true}/>
         </div>
-        {task.id && <DeleteButton onClick={openDeleteModal} />}
+        <DeleteButton element={task} onClick={openDeleteModal} />
       </div>
 
       <DeleteTaskModal task={task} info={info} show={showDeleteModal}

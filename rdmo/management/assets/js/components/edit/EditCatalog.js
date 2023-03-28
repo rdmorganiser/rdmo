@@ -9,7 +9,7 @@ import Text from '../forms/Text'
 import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
-import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/Buttons'
+import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
 
 import CatalogInfo from '../info/CatalogInfo'
 import DeleteCatalogModal from '../modals/DeleteCatalogModal'
@@ -21,7 +21,7 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
   const { sites, groups, sections } = elements
 
   const updateCatalog = (key, value) => elementActions.updateElement(catalog, {[key]: value})
-  const storeCatalog = () => elementActions.storeElement('catalogs', catalog)
+  const storeCatalog = (back) => elementActions.storeElement('catalogs', catalog, back)
   const deleteCatalog = () => elementActions.deleteElement('catalogs', catalog)
   const createSection = () => elementActions.createElement('sections', catalog)
 
@@ -34,16 +34,14 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          {
-            catalog.id ? <SaveButton onClick={storeCatalog} />
-                       : <CreateButton onClick={storeCatalog} />
-          }
+          <SaveButton element={catalog} onClick={storeCatalog} />
+          <SaveButton element={catalog} onClick={storeCatalog} back={true}/>
         </div>
         {
-          catalog.id ? <div>
+          catalog.id ? <>
             <strong>{gettext('Catalog')}{': '}</strong>
             <code className="code-questions">{catalog.uri}</code>
-          </div> : <strong>{gettext('Create catalog')}</strong>
+          </> : <strong>{gettext('Create catalog')}</strong>
         }
       </div>
 
@@ -103,12 +101,10 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          {
-            catalog.id ? <SaveButton onClick={storeCatalog} />
-                       : <CreateButton onClick={storeCatalog} />
-          }
+          <SaveButton element={catalog} onClick={storeCatalog} />
+          <SaveButton element={catalog} onClick={storeCatalog} back={true} />
         </div>
-        {catalog.id && <DeleteButton onClick={openDeleteModal} />}
+        <DeleteButton element={catalog} onClick={openDeleteModal} />
       </div>
 
       <DeleteCatalogModal catalog={catalog} info={info} show={showDeleteModal}

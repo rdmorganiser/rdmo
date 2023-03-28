@@ -9,23 +9,22 @@ const BackButton = () => (
   </button>
 )
 
-const SaveButton = ({ onClick }) => (
-  <button className="element-button btn btn-xs btn-primary" onClick={event => onClick()}>
-    {gettext('Save')}
-  </button>
-)
+const SaveButton = ({ element, onClick, back }) => {
 
-SaveButton.propTypes = {
-  onClick: PropTypes.func.isRequired
+  const className = classNames({
+    'element-button btn btn-xs': true,
+    'btn-primary': back,
+    'btn-default': !back
+  })
+
+  return (
+    <button className={className} onClick={event => onClick(back)}>
+      {back ? gettext('Save') : gettext('Save and continue editing')}
+    </button>
+  )
 }
 
-const CreateButton = ({ onClick }) => (
-  <button className="element-button btn btn-xs btn-success" onClick={event => onClick()}>
-    {gettext('Create')}
-  </button>
-)
-
-CreateButton.propTypes = {
+SaveButton.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
@@ -39,25 +38,16 @@ NewButton.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-const DeleteButton = ({ onClick }) => (
-  <button className="element-button btn btn-xs btn-danger" onClick={event => onClick()}>
-    {gettext('Delete')}
-  </button>
-)
+const DeleteButton = ({ element, onClick }) => {
+  return element.id && (
+    <button className="element-button btn btn-xs btn-danger" onClick={event => onClick()}>
+      {gettext('Delete')}
+    </button>
+  )
+}
 
 DeleteButton.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-const DefaultButton = ({ text, onClick }) => (
-  <button className="element-button btn btn-default" onClick={event => onClick()}>
-    {text}
-  </button>
-)
-
-DeleteButton.propTypes = {
-  onClick: PropTypes.func.isRequired
-}
-
-
-export { BackButton, SaveButton, CreateButton, NewButton, DeleteButton }
+export { BackButton, SaveButton, NewButton, DeleteButton }

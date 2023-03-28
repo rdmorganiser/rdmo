@@ -9,7 +9,7 @@ import Text from '../forms/Text'
 import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
-import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/Buttons'
+import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
 
 import ViewInfo from '../info/ViewInfo'
 import DeleteViewModal from '../modals/DeleteViewModal'
@@ -21,7 +21,7 @@ const EditView = ({ config, view, elements, elementActions }) => {
   const { catalogs, sites, groups } = elements
 
   const updateView = (key, value) => elementActions.updateElement(view, {[key]: value})
-  const storeView = () => elementActions.storeElement('views', view)
+  const storeView = (back) => elementActions.storeElement('views', view, back)
   const deleteView = () => elementActions.deleteElement('views', view)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
@@ -33,16 +33,14 @@ const EditView = ({ config, view, elements, elementActions }) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          {
-            view.id ? <SaveButton onClick={storeView} />
-                         : <CreateButton onClick={storeView} />
-          }
+          <SaveButton element={view} onClick={storeView} />
+          <SaveButton element={view} onClick={storeView} back={true}/>
         </div>
         {
-          view.id ? <div>
+          view.id ? <>
             <strong>{gettext('View')}{': '}</strong>
             <code className="code-views">{view.uri}</code>
-          </div> : <strong>{gettext('Create view')}</strong>
+          </> : <strong>{gettext('Create view')}</strong>
         }
       </div>
 
@@ -108,12 +106,10 @@ const EditView = ({ config, view, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          {
-            view.id ? <SaveButton onClick={storeView} />
-                    : <CreateButton onClick={storeView} />
-          }
+          <SaveButton element={view} onClick={storeView} />
+          <SaveButton element={view} onClick={storeView} back={true}/>
         </div>
-        {view.id && <DeleteButton onClick={openDeleteModal} />}
+        <DeleteButton element={view} onClick={openDeleteModal} />
       </div>
 
       <DeleteViewModal view={view} info={info} show={showDeleteModal}
