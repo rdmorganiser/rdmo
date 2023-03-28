@@ -68,7 +68,7 @@ class OptionViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
     queryset = Option.objects.annotate(values_count=models.Count('values')) \
                              .annotate(projects_count=models.Count('values__project', distinct=True)) \
-                             .prefetch_related('option_optionsets__optionset')
+                             .prefetch_related('optionsets', 'conditions')
     serializer_class = OptionSerializer
 
     filter_backends = (DjangoFilterBackend,)

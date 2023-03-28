@@ -19,7 +19,7 @@ from .serializers.v1 import (ConditionIndexSerializer, ConditionListSerializer,
 class ConditionViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
     queryset = Condition.objects.select_related('source', 'target_option') \
-                                .prefetch_related('optionsets', 'questionsets', 'questions', 'tasks')
+                                .prefetch_related('optionsets', 'pages', 'questionsets', 'questions', 'tasks')
 
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = (
