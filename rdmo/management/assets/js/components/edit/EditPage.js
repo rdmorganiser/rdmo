@@ -44,8 +44,10 @@ const EditPage = ({ config, page, elements, elementActions }) => {
   }
   const storePage = (back) => elementActions.storeElement('pages', page, back)
   const deletePage = () => elementActions.deleteElement('pages', page)
+
   const createQuestionSet = () => elementActions.createElement('questionsets', { page })
   const createQuestion = () => elementActions.createElement('questions', { page })
+  const createCondition = () => elementActions.createElement('conditions', { page })
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
@@ -144,7 +146,7 @@ const EditPage = ({ config, page, elements, elementActions }) => {
 
         <MultiSelect config={config} element={page} field="conditions"
                      options={conditions} verboseName="condition"
-                     onChange={updatePage} />
+                     onChange={updatePage} onCreate={createCondition} />
       </div>
 
       <div className="panel-footer">

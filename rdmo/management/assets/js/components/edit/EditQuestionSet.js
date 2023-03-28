@@ -47,6 +47,7 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
 
   const createQuestionSet = () => elementActions.createElement('questionsets', { questionset })
   const createQuestion = () => elementActions.createElement('questions', { questionset })
+  const createCondition = () => elementActions.createElement('conditions', { questionset })
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
@@ -154,7 +155,7 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
 
         <MultiSelect config={config} element={questionset} field="conditions"
                      options={conditions} verboseName="condition"
-                     onChange={updateQuestionSet} />
+                     onChange={updateQuestionSet} onCreate={createCondition} />
       </div>
 
       <div className="panel-footer">

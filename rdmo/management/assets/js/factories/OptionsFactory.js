@@ -1,8 +1,9 @@
 class OptionsFactory {
 
-  static createOptionSet(config) {
+  static createOptionSet(config, parent) {
     return {
-      uri_prefix: config.settings.default_uri_prefix
+      uri_prefix: config.settings.default_uri_prefix,
+      questions: parent.question ? [parent.question.id] : []
     }
   }
 

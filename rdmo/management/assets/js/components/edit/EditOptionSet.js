@@ -5,6 +5,7 @@ import { Tabs, Tab } from 'react-bootstrap';
 import Checkbox from '../forms/Checkbox'
 import Number from '../forms/Number'
 import OrderedMultiSelect from '../forms/OrderedMultiSelect'
+import MultiSelect from '../forms/MultiSelect'
 import Select from '../forms/Select'
 import Text from '../forms/Text'
 import Textarea from '../forms/Textarea'
@@ -19,14 +20,16 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
 
-  const { options, questions, providers } = elements
+  const { parent, conditions, options, questions, providers } = elements
 
   const optionsetQuestions = questions.filter(e => optionset.questions.includes(e.id))
 
   const updateOptionSet = (key, value) => elementActions.updateElement(optionset, {[key]: value})
   const storeOptionSet = (back) => elementActions.storeElement('optionsets', optionset, back)
   const deleteOptionSet = () => elementActions.deleteElement('optionsets', optionset)
+
   const createOption = () => elementActions.createElement('options', { optionset })
+  const createCondition = () => elementActions.createElement('conditions', { optionset })
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
@@ -47,6 +50,14 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
           </> : <strong>{gettext('Create option set')}</strong>
         }
       </div>
+
+      {
+        parent && parent.question && <div className="panel-body panel-border">
+          <p dangerouslySetInnerHTML={{
+            __html:interpolate(gettext('This option set will be added to the question <code class="code-questions">%s</code>.'), [parent.question.uri])
+          }} />
+        </div>
+      }
 
       {
         optionset.id && <div className="panel-body panel-border">
@@ -83,6 +94,11 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
         <OrderedMultiSelect config={config} element={optionset} field="options"
                             options={options} verboseName="option"
                             onChange={updateOptionSet} onCreate={createOption} />
+
+        <MultiSelect config={config} element={optionset} field="conditions"
+                     options={conditions} verboseName="condition"
+                     onChange={updateOptionSet} onCreate={createCondition} />
+
         <Select config={config} element={optionset} field="provider_key"
                 options={providers} onChange={updateOptionSet} />
       </div>

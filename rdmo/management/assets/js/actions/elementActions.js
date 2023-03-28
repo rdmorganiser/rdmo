@@ -227,11 +227,12 @@ export function fetchElement(elementType, elementId, elementAction=null) {
         } else {
           action = (dispatch) => Promise.all([
             OptionsApi.fetchOptionSet(elementId),
+            ConditionsApi.fetchConditions('index'),
             OptionsApi.fetchOptions('index'),
             QuestionsApi.fetchQuestions('index'),
             OptionsApi.fetchProviders()
-          ]).then(([element, options, questions, providers]) => dispatch(fetchElementSuccess({
-            element, options, questions, providers
+          ]).then(([element, conditions, options, questions, providers]) => dispatch(fetchElementSuccess({
+            element, conditions, options, questions, providers
           })))
         }
         break
@@ -466,11 +467,11 @@ export function createElement(elementType, parent={}) {
 
       case 'optionsets':
         action = (dispatch) => Promise.all([
-          OptionsFactory.createOptionSet(getState().config),
+          OptionsFactory.createOptionSet(getState().config, parent),
           OptionsApi.fetchOptions('index'),
           OptionsApi.fetchProviders(),
         ]).then(([element, options, providers]) => dispatch(createElementSuccess({
-            element, options, providers
+            element, parent, options, providers
           })))
         break
 
@@ -485,12 +486,12 @@ export function createElement(elementType, parent={}) {
 
       case 'conditions':
         action = (dispatch) => Promise.all([
-          ConditionsFactory.createCondition(getState().config),
+          ConditionsFactory.createCondition(getState().config, parent),
           ConditionsApi.fetchRelations(),
           DomainApi.fetchAttributes('index'),
           OptionsApi.fetchOptions('index'),
         ]).then(([element, relations, attributes, options]) => dispatch(createElementSuccess({
-            element, relations, attributes, options
+            element, parent, relations, attributes, options
           })))
         break
 

@@ -17,7 +17,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditCondition = ({ config, condition, elements, elementActions }) => {
 
-  const { relations, attributes, optionsets, options, pages, questionsets, questions, tasks } = elements
+  const { parent, relations, attributes, optionsets, options, pages, questionsets, questions, tasks } = elements
 
   const updateCondition = (key, value) => elementActions.updateElement(condition, {[key]: value})
   const storeCondition = (back) => elementActions.storeElement('conditions', condition, back)
@@ -42,6 +42,42 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
           </> : <strong>{gettext('Create condition')}</strong>
         }
       </div>
+
+      {
+        parent && parent.optionset && <div className="panel-body panel-border">
+          <p dangerouslySetInnerHTML={{
+            __html:interpolate(gettext('This condition will be added to the option set <code class="code-options">%s</code>.'), [parent.optionset.uri])
+          }} />
+        </div>
+      }
+      {
+        parent && parent.page && <div className="panel-body panel-border">
+          <p dangerouslySetInnerHTML={{
+            __html:interpolate(gettext('This condition will be added to the page <code class="code-questions">%s</code>.'), [parent.page.uri])
+          }} />
+        </div>
+      }
+      {
+        parent && parent.questionset && <div className="panel-body panel-border">
+          <p dangerouslySetInnerHTML={{
+            __html:interpolate(gettext('This condition will be added to the question set <code class="code-questions">%s</code>.'), [parent.questionset.uri])
+          }} />
+        </div>
+      }
+      {
+        parent && parent.question && <div className="panel-body panel-border">
+          <p dangerouslySetInnerHTML={{
+            __html:interpolate(gettext('This condition will be added to the question <code class="code-questions">%s</code>.'), [parent.question.uri])
+          }} />
+        </div>
+      }
+      {
+        parent && parent.task && <div className="panel-body panel-border">
+          <p dangerouslySetInnerHTML={{
+            __html:interpolate(gettext('This condition will be added to the task <code class="code-tasks">%s</code>.'), [parent.task.uri])
+          }} />
+        </div>
+      }
 
       {
         condition.id && <div className="panel-body panel-border">

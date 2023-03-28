@@ -4,6 +4,7 @@ import { Tabs, Tab } from 'react-bootstrap';
 import get from 'lodash/get'
 
 import Checkbox from '../forms/Checkbox'
+import MultiSelect from '../forms/MultiSelect'
 import Number from '../forms/Number'
 import Select from '../forms/Select'
 import Text from '../forms/Text'
@@ -19,11 +20,13 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditTask = ({ config, task, elements, elementActions}) => {
 
-  const { attributes, catalogs, sites, groups } = elements
+  const { attributes, catalogs, conditions, sites, groups } = elements
 
   const updateTask = (key, value) => elementActions.updateElement(task, {[key]: value})
   const storeTask = (back) => elementActions.storeElement('tasks', task, back)
   const deleteTask = () => elementActions.deleteElement('tasks', task)
+
+  const createCondition = () => elementActions.createElement('conditions', { task })
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
@@ -89,6 +92,10 @@ const EditTask = ({ config, task, elements, elementActions}) => {
             ))
           }
         </Tabs>
+
+        <MultiSelect config={config} element={task} field="conditions"
+                     options={conditions} verboseName="condition"
+                     onChange={updateTask} onCreate={createCondition} />
 
         <Select config={config} element={task} field="start_attribute"
                 options={attributes} onChange={updateTask} />

@@ -24,6 +24,9 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
   const storeQuestion = (back) => elementActions.storeElement('questions', question, back)
   const deleteQuestion = () => elementActions.deleteElement('questions', question)
 
+  const createOptionSet = () => elementActions.createElement('optionsets', { question })
+  const createCondition = () => elementActions.createElement('conditions', { question })
+
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
   const info = <QuestionInfo question={question} elements={elements} />
@@ -146,11 +149,11 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
 
         <MultiSelect config={config} element={question} field="optionsets"
                      options={optionsets} verboseName="optionset"
-                     onChange={updateQuestion} />
+                     onChange={updateQuestion} onCreate={createOptionSet} />
 
         <MultiSelect config={config} element={question} field="conditions"
                      options={conditions} verboseName="condition"
-                     onChange={updateQuestion} />
+                     onChange={updateQuestion} onCreate={createCondition} />
 
         <div className="row">
           <div className="col-sm-4">
