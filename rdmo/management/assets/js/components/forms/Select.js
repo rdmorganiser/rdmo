@@ -8,7 +8,7 @@ import get from 'lodash/get'
 
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
-const Select = ({ config, element, field, options, isMulti, onChange }) => {
+const Select = ({ config, element, field, options, verboseName, isMulti, onChange, onCreate }) => {
   const id = getId(element, field),
         label = getLabel(config, element, field),
         help = getHelp(config, element, field),
@@ -36,6 +36,12 @@ const Select = ({ config, element, field, options, isMulti, onChange }) => {
                    options={selectOptions} value={selectValue} isMulti={isMulti}
                    onChange={option => onChange(field, isNil(option) ? null : option.value)} />
 
+      {
+        onCreate && <button className="btn btn-success btn-xs mt-10" onClick={onCreate}>
+          {interpolate(gettext('Create new %s'), [verboseName])}
+        </button>
+      }
+
       {help && <p className="help-block">{help}</p>}
 
       {errors && <ul className="help-block list-unstyled">
@@ -51,7 +57,8 @@ Select.propTypes = {
   field: PropTypes.string,
   options: PropTypes.array,
   isMulti: PropTypes.bool,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  onCreate: PropTypes.func
 }
 
 export default Select

@@ -4,6 +4,10 @@ from rest_framework import serializers
 
 from rdmo.core.serializers import ElementExportSerializerMixin
 
+from rdmo.conditions.models import Condition
+from rdmo.questions.models import Page, QuestionSet, Question
+from rdmo.tasks.models import Task
+
 from ..models import Attribute
 from ..validators import (AttributeLockedValidator, AttributeParentValidator,
                           AttributeUniqueURIValidator)
@@ -30,10 +34,12 @@ class AttributeSerializer(BaseAttributeSerializer):
 
     key = serializers.SlugField(required=True)
     parent = serializers.PrimaryKeyRelatedField(queryset=Attribute.objects.all(), default=None, allow_null=True)
-    conditions = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
-    pages = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
-    questionsets = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
-    questions = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
+
+    conditions = serializers.PrimaryKeyRelatedField(queryset=Condition.objects.all(), required=False, many=True)
+    pages = serializers.PrimaryKeyRelatedField(queryset=Page.objects.all(), required=False, many=True)
+    questionsets = serializers.PrimaryKeyRelatedField(queryset=QuestionSet.objects.all(), required=False, many=True)
+    questions = serializers.PrimaryKeyRelatedField(queryset=Question.objects.all(), required=False, many=True)
+
     tasks = serializers.SerializerMethodField()
     attributes = serializers.SerializerMethodField()
     projects_count = serializers.IntegerField(read_only=True)
