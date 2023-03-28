@@ -458,10 +458,10 @@ export function createElement(elementType, parent={}) {
 
       case 'attributes':
         action = (dispatch) => Promise.all([
-          DomainFactory.createAttribute(getState().config),
+          DomainFactory.createAttribute(getState().config, parent),
           DomainApi.fetchAttributes('index'),
         ]).then(([element, attributes]) => dispatch(createElementSuccess({
-            element, attributes
+            element, parent, attributes
           })))
         break
 

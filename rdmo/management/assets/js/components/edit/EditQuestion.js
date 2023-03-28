@@ -26,6 +26,7 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
 
   const createOptionSet = () => elementActions.createElement('optionsets', { question })
   const createCondition = () => elementActions.createElement('conditions', { question })
+  const createAttribute = () => elementActions.createElement('attributes', { question })
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
@@ -125,8 +126,8 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
           }
         </Tabs>
 
-        <Select config={config} element={question} field="attribute"
-                options={attributes} onChange={updateQuestion} />
+        <Select config={config} element={question} field="attribute" verboseName={gettext('attribute')}
+                options={attributes} onChange={updateQuestion} onCreate={createAttribute} />
 
         <div className="row">
           <div className="col-sm-3">

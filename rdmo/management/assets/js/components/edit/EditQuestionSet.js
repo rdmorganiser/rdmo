@@ -48,6 +48,7 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
   const createQuestionSet = () => elementActions.createElement('questionsets', { questionset })
   const createQuestion = () => elementActions.createElement('questions', { questionset })
   const createCondition = () => elementActions.createElement('conditions', { questionset })
+  const createAttribute = () => elementActions.createElement('attributes', { questionset })
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
@@ -145,8 +146,8 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
           }
         </Tabs>
 
-        <Select config={config} element={questionset} field="attribute"
-                options={attributes} onChange={updateQuestionSet} />
+        <Select config={config} element={questionset} field="attribute" verboseName={gettext('attribute')}
+                options={attributes} onChange={updateQuestionSet} onCreate={createAttribute} />
 
         <OrderedMultiSelect config={config} element={questionset} field="elements"
                             values={elementValues} options={elementOptions} verboseName={gettext('element')}

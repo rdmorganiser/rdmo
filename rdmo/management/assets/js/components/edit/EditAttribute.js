@@ -17,7 +17,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditAttribute = ({ config, attribute, elements, elementActions }) => {
 
-  const { attributes, conditions, pages, questionsets, questions, tasks } = elements
+  const { parent, attributes, conditions, pages, questionsets, questions, tasks } = elements
 
   const updateAttribute = (key, value) => elementActions.updateElement(attribute, {[key]: value})
   const storeAttribute = (back) => elementActions.storeElement('attributes', attribute, back)
@@ -42,6 +42,35 @@ const EditAttribute = ({ config, attribute, elements, elementActions }) => {
           </> : <strong>{gettext('Create attribute')}</strong>
         }
       </div>
+
+      {
+        parent && parent.page && <div className="panel-body panel-border">
+          <p dangerouslySetInnerHTML={{
+            __html:interpolate(gettext('This attribute will be added to the page <code class="code-questions">%s</code>.'), [parent.page.uri])
+          }} />
+        </div>
+      }
+      {
+        parent && parent.questionset && <div className="panel-body panel-border">
+          <p dangerouslySetInnerHTML={{
+            __html:interpolate(gettext('This attribute will be added to the page <code class="code-questions">%s</code>.'), [parent.questionset.uri])
+          }} />
+        </div>
+      }
+      {
+        parent && parent.question && <div className="panel-body panel-border">
+          <p dangerouslySetInnerHTML={{
+            __html:interpolate(gettext('This attribute will be added to the page <code class="code-questions">%s</code>.'), [parent.question.uri])
+          }} />
+        </div>
+      }
+      {
+        parent && parent.condition && <div className="panel-body panel-border">
+          <p dangerouslySetInnerHTML={{
+            __html:interpolate(gettext('This attribute will be added to the condition <code class="code-conditions">%s</code>.'), [parent.condition.uri])
+          }} />
+        </div>
+      }
 
       {
         attribute.id && <div className="panel-body panel-border">

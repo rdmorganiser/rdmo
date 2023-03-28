@@ -48,6 +48,7 @@ const EditPage = ({ config, page, elements, elementActions }) => {
   const createQuestionSet = () => elementActions.createElement('questionsets', { page })
   const createQuestion = () => elementActions.createElement('questions', { page })
   const createCondition = () => elementActions.createElement('conditions', { page })
+  const createAttribute = () => elementActions.createElement('attributes', { page })
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
@@ -136,8 +137,8 @@ const EditPage = ({ config, page, elements, elementActions }) => {
           }
         </Tabs>
 
-        <Select config={config} element={page} field="attribute"
-                options={attributes} onChange={updatePage} />
+        <Select config={config} element={page} field="attribute" verboseName={gettext('attribute')}
+                options={attributes} onChange={updatePage} onCreate={createAttribute}/>
 
         <OrderedMultiSelect config={config} element={page} field="elements"
                             values={elementValues} options={elementOptions} verboseName={gettext('element')}

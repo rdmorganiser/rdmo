@@ -23,6 +23,8 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
   const storeCondition = (back) => elementActions.storeElement('conditions', condition, back)
   const deleteCondition = () => elementActions.deleteElement('conditions', condition)
 
+  const createAttribute = () => elementActions.createElement('attributes', { condition })
+
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
   const info = <ConditionInfo condition={condition} elements={elements} />
@@ -103,23 +105,19 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
         <Checkbox config={config} element={condition} field="locked"
                   onChange={updateCondition} />
 
+        <Select config={config} element={condition} field="source" verboseName={gettext('attribute')}
+                options={attributes} onChange={updateCondition} onCreate={createAttribute} />
+
         <div className="row">
-          <div className="col-sm-6">
-            <Select config={config} element={condition} field="source"
-                    options={attributes} onChange={updateCondition} />
-          </div>
-          <div className="col-sm-6">
+          <div className="col-sm-4">
             <Select config={config} element={condition} field="relation"
                     options={relations} onChange={updateCondition} />
           </div>
-        </div>
-
-        <div className="row">
-          <div className="col-sm-6">
+          <div className="col-sm-4">
             <Text config={config} element={condition} field="target_text"
                   onChange={updateCondition} />
           </div>
-          <div className="col-sm-6">
+          <div className="col-sm-4">
             <Select config={config} element={condition} field="target_option"
                     options={options} onChange={updateCondition} />
           </div>
