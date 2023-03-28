@@ -59,19 +59,16 @@ const EditAttribute = ({ config, attribute, elements, elementActions }) => {
             <Text config={config} element={attribute} field="key"
                   onChange={updateAttribute} />
           </div>
-          <div className="col-sm-12">
-            <Textarea config={config} element={attribute} field="comment"
-                      rows={4} onChange={updateAttribute} />
-          </div>
-          <div className="col-sm-12">
-            <Checkbox config={config} element={attribute} field="locked"
-                      onChange={updateAttribute} />
-          </div>
-          <div className="col-sm-12">
-            <Select config={config} element={attribute} field="parent"
-                    options={attributes} onChange={updateAttribute} />
-          </div>
         </div>
+
+        <Textarea config={config} element={attribute} field="comment"
+                  rows={4} onChange={updateAttribute} />
+
+        <Checkbox config={config} element={attribute} field="locked"
+                  onChange={updateAttribute} />
+
+        <Select config={config} element={attribute} field="parent"
+                options={attributes} onChange={updateAttribute} />
       </div>
 
       <div className="panel-footer">

@@ -25,6 +25,8 @@ const EditSection = ({ config, section, elements, elementActions}) => {
   const storeSection = (back) => elementActions.storeElement('sections', section, back)
   const deleteSection = () => elementActions.deleteElement('sections', section)
 
+  const createPage = () => elementActions.createElement('pages', { section })
+
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
   const info = <SectionInfo section={section} elements={elements} />
@@ -69,35 +71,24 @@ const EditSection = ({ config, section, elements, elementActions}) => {
             <Text config={config} element={section} field="uri_path"
                   onChange={updateSection} />
           </div>
-          <div className="col-sm-12">
-            <Textarea config={config} element={section} field="comment"
-                      rows={4} onChange={updateSection} />
-          </div>
-          <div className="col-sm-12">
-            <Checkbox config={config} element={section} field="locked"
-                      onChange={updateSection} />
-          </div>
-          <div className="col-sm-12">
-            <OrderedMultiSelect config={config} element={section} field="pages"
-                                options={pages} verboseName="page"
-                                onChange={updateSection} />
-          </div>
-          <div className="col-sm-12">
-            <Tabs id="#section-tabs" defaultActiveKey={0} animation={false}>
-              {
-                config.settings && config.settings.languages.map(([lang_code, lang], index) => {
-                  const classNames = ''
-                  return (
-                    <Tab className="pt-10" key={index} eventKey={index} title={lang}>
-                      <Text config={config} element={section} field={`title_${lang_code }`}
-                            onChange={updateSection} />
-                    </Tab>
-                  )
-                })
-              }
-            </Tabs>
-          </div>
         </div>
+        <Textarea config={config} element={section} field="comment"
+                  rows={4} onChange={updateSection} />
+        <Checkbox config={config} element={section} field="locked"
+                  onChange={updateSection} />
+        <Tabs id="#section-tabs" defaultActiveKey={0} animation={false}>
+          {
+            config.settings && config.settings.languages.map(([lang_code, lang], index) => (
+              <Tab key={index} eventKey={index} title={lang}>
+                <Text config={config} element={section} field={`title_${lang_code }`}
+                      onChange={updateSection} />
+              </Tab>
+            ))
+          }
+        </Tabs>
+        <OrderedMultiSelect config={config} element={section} field="pages"
+                            options={pages} verboseName="page"
+                            onChange={updateSection} onCreate={createPage} />
       </div>
 
       <div className="panel-footer">

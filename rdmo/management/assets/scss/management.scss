@@ -117,11 +117,20 @@ a.disabled {
             min-height: 41px;
         }
 
+        .panel-body {
+            padding-bottom: 0;
+        }
+
         .panel-border {
             border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
         }
 
         &.panel-nested {
+            margin-bottom: 10px;
+        }
+
+        .form-group {
             margin-bottom: 10px;
         }
     }
@@ -144,6 +153,22 @@ a.disabled {
         code {
             user-select: none;
         }
+    }
+    .nav-tabs {
+        border-bottom: none;
+    }
+    .tab-content {
+        margin-bottom: 15px;
+    }
+    .tab-pane {
+        padding: 15px 15px 0 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+
+        &:first-child {
+            border-top-left-radius: 0;
+        }
+
     }
 }
 
