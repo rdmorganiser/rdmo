@@ -113,7 +113,7 @@ class Main extends Component {
     }
 
     // check if the list components should be displayed
-    if (isNil(elementId) && isNil(elementAction) && !isEmpty(elements[elementType])) {
+    if (isNil(elementId) && isNil(elementAction)) {
       switch (elementType) {
         case 'catalogs':
           return <Catalogs config={config} catalogs={elements.catalogs}
