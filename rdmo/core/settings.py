@@ -85,6 +85,8 @@ AUTHENTICATION_BACKENDS = [
 
 MULTISITE = False
 
+GROUPS = False
+
 PROFILE_UPDATE = True
 PROFILE_DELETE = True
 
@@ -185,6 +187,7 @@ SETTINGS_EXPORT = [
     'PROFILE_DELETE',
     'SHIBBOLETH',
     'MULTISITE',
+    'GROUPS',
     'EXPORT_FORMATS',
     'PROJECT_ISSUES',
     'PROJECT_VIEWS',
@@ -201,7 +204,8 @@ SETTINGS_API = [
     'PROJECT_QUESTIONS_CYCLE_SETS',
     'DEFAULT_URI_PREFIX',
     'LANGUAGES',
-    'MULTISITE'
+    'MULTISITE',
+    'GROUPS'
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

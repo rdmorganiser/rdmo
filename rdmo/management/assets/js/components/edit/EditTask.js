@@ -1,6 +1,7 @@
 import React, { Component, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap';
+import get from 'lodash/get'
 
 import Checkbox from '../forms/Checkbox'
 import Number from '../forms/Number'
@@ -109,16 +110,11 @@ const EditTask = ({ config, task, elements, elementActions}) => {
         <Select config={config} element={task} field="catalogs"
                 options={catalogs} onChange={updateTask} />
 
-        <div className="row">
-          <div className="col-sm-6">
-            <Select config={config} element={task} field="groups"
-                    options={groups} onChange={updateTask} />
-          </div>
-          <div className="col-sm-6">
-            <Select config={config} element={task} field="sites"
-                    options={sites} onChange={updateTask} />
-          </div>
-        </div>
+        {get(config, 'settings.groups') && <Select config={config} element={task} field="groups"
+                                                   options={groups} onChange={updateTask} isMulti />}
+
+        {get(config, 'settings.multisite') && <Select config={config} element={task} field="sites"
+                                                      options={sites} onChange={updateTask} isMulti />}
       </div>
 
       <div className="panel-footer">

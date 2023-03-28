@@ -1,6 +1,7 @@
 import React, { Component, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap';
+import get from 'lodash/get'
 
 import CodeMirror from '../forms/CodeMirror'
 import Checkbox from '../forms/Checkbox'
@@ -92,16 +93,11 @@ const EditView = ({ config, view, elements, elementActions }) => {
         <Select config={config} element={view} field="catalogs"
                 options={catalogs} onChange={updateView} />
 
-        <div className="row">
-          <div className="col-sm-6">
-            <Select config={config} element={view} field="groups"
-                    options={groups} onChange={updateView} />
-          </div>
-          <div className="col-sm-6">
-            <Select config={config} element={view} field="sites"
-                    options={sites} onChange={updateView} />
-          </div>
-        </div>
+        {get(config, 'settings.groups') && <Select config={config} element={view} field="groups"
+                                                   options={groups} onChange={updateView} isMulti />}
+
+        {get(config, 'settings.multisite') && <Select config={config} element={view} field="sites"
+                                                      options={sites} onChange={updateView} isMulti />}
 
         <CodeMirror config={config} element={view} field="template"
                     onChange={updateView} />

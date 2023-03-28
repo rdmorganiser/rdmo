@@ -8,7 +8,7 @@ import get from 'lodash/get'
 
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
-const Select = ({ config, element, field, options, onChange }) => {
+const Select = ({ config, element, field, options, isMulti, onChange }) => {
   const id = getId(element, field),
         label = getLabel(config, element, field),
         help = getHelp(config, element, field),
@@ -33,7 +33,7 @@ const Select = ({ config, element, field, options, onChange }) => {
       <label className="control-label" htmlFor={id}>{label}</label>
 
       <ReactSelect classNamePrefix="react-select" className="react-select" isClearable={true}
-                   options={selectOptions} value={selectValue}
+                   options={selectOptions} value={selectValue} isMulti={isMulti}
                    onChange={option => onChange(field, isNil(option) ? null : option.value)} />
 
       {help && <p className="help-block">{help}</p>}
@@ -50,6 +50,7 @@ Select.propTypes = {
   element: PropTypes.object,
   field: PropTypes.string,
   options: PropTypes.array,
+  isMulti: PropTypes.bool,
   onChange: PropTypes.func
 }
 
