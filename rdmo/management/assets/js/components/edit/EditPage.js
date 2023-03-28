@@ -12,7 +12,7 @@ import Text from '../forms/Text'
 import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
-import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/Buttons'
+import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
 
 import PageInfo from '../info/PageInfo'
 import DeletePageModal from '../modals/DeletePageModal'
@@ -42,7 +42,7 @@ const EditPage = ({ config, page, elements, elementActions }) => {
       elementActions.updateElement(page, { [key]: value })
     }
   }
-  const storePage = () => elementActions.storeElement('pages', page)
+  const storePage = (back) => elementActions.storeElement('pages', page, back)
   const deletePage = () => elementActions.deleteElement('pages', page)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
@@ -54,21 +54,19 @@ const EditPage = ({ config, page, elements, elementActions }) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          {
-            page.id ? <SaveButton onClick={storePage} />
-                    : <CreateButton onClick={storePage} />
-          }
+          <SaveButton element={page} onClick={storePage} />
+          <SaveButton element={page} onClick={storePage} back={true}/>
         </div>
         {
-          page.id ? <div>
+          page.id ? <>
             <strong>{gettext('Page')}{': '}</strong>
             <code className="code-questions">{page.uri}</code>
-          </div> : <strong>{gettext('Create page')}</strong>
+          </> : <strong>{gettext('Create page')}</strong>
         }
       </div>
 
       {
-        parent.section && <div className="panel-body panel-border">
+        parent && parent.section && <div className="panel-body panel-border">
           <p dangerouslySetInnerHTML={{
             __html:interpolate(gettext('This page will be added to the section <code class="code-questions">%s</code>.'), [parent.section.uri])
           }} />
@@ -154,12 +152,10 @@ const EditPage = ({ config, page, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          {
-            page.id ? <SaveButton onClick={storePage} />
-                    : <CreateButton onClick={storePage} />
-          }
+          <SaveButton element={page} onClick={storePage} />
+          <SaveButton element={page} onClick={storePage} back={true}/>
         </div>
-        {page.id && <DeleteButton onClick={openDeleteModal} />}
+        <DeleteButton element={page} onClick={openDeleteModal} />
       </div>
 
       <DeletePageModal page={page} info={info} show={showDeleteModal}

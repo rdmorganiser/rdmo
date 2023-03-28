@@ -9,7 +9,7 @@ import Text from '../forms/Text'
 import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
-import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/Buttons'
+import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
 
 import QuestionInfo from '../info/QuestionInfo'
 import DeleteQuestionModal from '../modals/DeleteQuestionModal'
@@ -21,7 +21,7 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
   const { parent, attributes, optionsets, options, conditions, pages, questionsets, widgetTypes, valueTypes } = elements
 
   const updateQuestion = (key, value) => elementActions.updateElement(question, {[key]: value})
-  const storeQuestion = () => elementActions.storeElement('questions', question)
+  const storeQuestion = (back) => elementActions.storeElement('questions', question, back)
   const deleteQuestion = () => elementActions.deleteElement('questions', question)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
@@ -33,28 +33,26 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          {
-            question.id ? <SaveButton onClick={storeQuestion} />
-                        : <CreateButton onClick={storeQuestion} />
-          }
+          <SaveButton element={question} onClick={storeQuestion} />
+          <SaveButton element={question} onClick={storeQuestion} back={true}/>
         </div>
         {
-          question.id ? <div>
+          question.id ? <>
             <strong>{gettext('Question')}{': '}</strong>
             <code className="code-questions">{question.uri}</code>
-          </div> : <strong>{gettext('Create question')}</strong>
+          </> : <strong>{gettext('Create question')}</strong>
         }
       </div>
 
       {
-        parent.page && <div className="panel-body panel-border">
+        parent && parent.page && <div className="panel-body panel-border">
           <p dangerouslySetInnerHTML={{
             __html:interpolate(gettext('This question will be added to the page <code class="code-questions">%s</code>.'), [parent.page.uri])
           }} />
         </div>
       }
       {
-        parent.questionset && <div className="panel-body panel-border">
+        parent && parent.questionset && <div className="panel-body panel-border">
           <p dangerouslySetInnerHTML={{
             __html:interpolate(gettext('This question will be added to the question set <code class="code-questions">%s</code>.'), [parent.questionset.uri])
           }} />
@@ -205,12 +203,10 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          {
-            question.id ? <SaveButton onClick={storeQuestion} />
-                        : <CreateButton onClick={storeQuestion} />
-          }
+          <SaveButton element={question} onClick={storeQuestion} />
+          <SaveButton element={question} onClick={storeQuestion} back={true}/>
         </div>
-        {question.id && <DeleteButton onClick={openDeleteModal} />}
+        <DeleteButton element={question} onClick={openDeleteModal} />
       </div>
 
       <DeleteQuestionModal question={question} info={info} show={showDeleteModal}

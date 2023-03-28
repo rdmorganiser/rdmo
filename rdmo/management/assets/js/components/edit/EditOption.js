@@ -7,7 +7,7 @@ import Text from '../forms/Text'
 import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
-import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/Buttons'
+import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
 
 import OptionInfo from '../info/OptionInfo'
 import DeleteOptionModal from '../modals/DeleteOptionModal'
@@ -21,7 +21,7 @@ const EditOption = ({ config, option, elements, elementActions }) => {
   const optionConditions = conditions.filter(e => option.conditions.includes(e.id))
 
   const updateOption = (key, value) => elementActions.updateElement(option, {[key]: value})
-  const storeOption = () => elementActions.storeElement('options', option)
+  const storeOption = (back) => elementActions.storeElement('options', option, back)
   const deleteOption = () => elementActions.deleteElement('options', option)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
@@ -33,18 +33,19 @@ const EditOption = ({ config, option, elements, elementActions }) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          {option.id ? <SaveButton onClick={storeOption} /> : <CreateButton onClick={storeOption} />}
+          <SaveButton element={option} onClick={storeOption} />
+          <SaveButton element={option} onClick={storeOption} back={true}/>
         </div>
         {
-          option.id ? <div>
+          option.id ? <>
             <strong>{gettext('Option')}{': '}</strong>
             <code className="code-options">{option.uri}</code>
-          </div> : <strong>{gettext('Create option')}</strong>
+          </> : <strong>{gettext('Create option')}</strong>
         }
       </div>
 
       {
-        parent.optionset && <div className="panel-body panel-border">
+        parent && parent.optionset && <div className="panel-body panel-border">
           <p dangerouslySetInnerHTML={{
             __html:interpolate(gettext('This option will be added to the option set <code class="code-options">%s</code>.'), [parent.optionset.uri])
           }} />
@@ -103,9 +104,10 @@ const EditOption = ({ config, option, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          {option.id ? <SaveButton onClick={storeOption} /> : <CreateButton onClick={storeOption} />}
+          <SaveButton element={option} onClick={storeOption} />
+          <SaveButton element={option} onClick={storeOption} back={true}/>
         </div>
-        {option.id && <DeleteButton onClick={openDeleteModal} />}
+        <DeleteButton element={option} onClick={openDeleteModal} />
       </div>
 
       <DeleteOptionModal option={option} info={info} show={showDeleteModal}

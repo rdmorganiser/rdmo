@@ -10,7 +10,7 @@ import Text from '../forms/Text'
 import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
-import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/Buttons'
+import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
 
 import OptionSetInfo from '../info/OptionSetInfo'
 import DeleteOptionSetModal from '../modals/DeleteOptionSetModal'
@@ -24,7 +24,7 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
   const optionsetQuestions = questions.filter(e => optionset.questions.includes(e.id))
 
   const updateOptionSet = (key, value) => elementActions.updateElement(optionset, {[key]: value})
-  const storeOptionSet = () => elementActions.storeElement('optionsets', optionset)
+  const storeOptionSet = (back) => elementActions.storeElement('optionsets', optionset, back)
   const deleteOptionSet = () => elementActions.deleteElement('optionsets', optionset)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
@@ -36,16 +36,14 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          {
-            optionset.id ? <SaveButton onClick={storeOptionSet} />
-                         : <CreateButton onClick={storeOptionSet} />
-          }
+          <SaveButton element={optionset} onClick={storeOptionSet} />
+          <SaveButton element={optionset} onClick={storeOptionSet} back={true}/>
         </div>
         {
-          optionset.id ? <div>
+          optionset.id ? <>
             <strong>{gettext('Option set')}{': '}</strong>
             <code className="code-options">{optionset.uri}</code>
-          </div> : <strong>{gettext('Create option set')}</strong>
+          </> : <strong>{gettext('Create option set')}</strong>
         }
       </div>
 
@@ -92,12 +90,10 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          {
-            optionset.id ? <SaveButton onClick={storeOptionSet} />
-                         : <CreateButton onClick={storeOptionSet} />
-          }
+          <SaveButton element={optionset} onClick={storeOptionSet} />
+          <SaveButton element={optionset} onClick={storeOptionSet} back={true}/>
         </div>
-        {optionset.id && <DeleteButton onClick={openDeleteModal} />}
+        <DeleteButton element={optionset} onClick={openDeleteModal} />
       </div>
 
       <DeleteOptionSetModal optionset={optionset} info={info} show={showDeleteModal}

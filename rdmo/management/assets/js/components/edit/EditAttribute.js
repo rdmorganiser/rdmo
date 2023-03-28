@@ -8,7 +8,7 @@ import Text from '../forms/Text'
 import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
-import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/Buttons'
+import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
 
 import AttributeInfo from '../info/AttributeInfo'
 import DeleteAttributeModal from '../modals/DeleteAttributeModal'
@@ -20,7 +20,7 @@ const EditAttribute = ({ config, attribute, elements, elementActions }) => {
   const { attributes, conditions, pages, questionsets, questions, tasks } = elements
 
   const updateAttribute = (key, value) => elementActions.updateElement(attribute, {[key]: value})
-  const storeAttribute = () => elementActions.storeElement('attributes', attribute)
+  const storeAttribute = (back) => elementActions.storeElement('attributes', attribute, back)
   const deleteAttribute = () => elementActions.deleteElement('attributes', attribute)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
@@ -32,16 +32,14 @@ const EditAttribute = ({ config, attribute, elements, elementActions }) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          {
-            attribute.id ? <SaveButton onClick={storeAttribute} />
-                         : <CreateButton onClick={storeAttribute} />
-          }
+          <SaveButton element={attribute} onClick={storeAttribute} />
+          <SaveButton element={attribute} onClick={storeAttribute} back={true}/>
         </div>
         {
-          attribute.id ? <div>
+          attribute.id ? <>
             <strong>{gettext('Attribute')}{': '}</strong>
             <code className="code-domain">{attribute.uri}</code>
-          </div> : <strong>{gettext('Create attribute')}</strong>
+          </> : <strong>{gettext('Create attribute')}</strong>
         }
       </div>
 
@@ -79,12 +77,10 @@ const EditAttribute = ({ config, attribute, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          {
-            attribute.id ? <SaveButton onClick={storeAttribute} />
-                         : <CreateButton onClick={storeAttribute} />
-          }
+          <SaveButton element={attribute} onClick={storeAttribute} />
+          <SaveButton element={attribute} onClick={storeAttribute} back={true}/>
         </div>
-        {attribute.id && <DeleteButton onClick={openDeleteModal} />}
+        <DeleteButton element={attribute} onClick={openDeleteModal} />
       </div>
 
       <DeleteAttributeModal attribute={attribute} info={info} show={showDeleteModal}

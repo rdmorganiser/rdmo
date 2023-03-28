@@ -9,7 +9,7 @@ import Textarea from '../forms/Textarea'
 import Select from '../forms/Select'
 import UriPrefix from '../forms/UriPrefix'
 
-import { BackButton, SaveButton, CreateButton, DeleteButton } from '../common/Buttons'
+import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
 
 import SectionInfo from '../info/SectionInfo'
 import DeleteSectionModal from '../modals/DeleteSectionModal'
@@ -22,7 +22,7 @@ const EditSection = ({ config, section, elements, elementActions}) => {
   const sectionCatalogs = catalogs.filter(e => section.catalogs.includes(e.id))
 
   const updateSection = (key, value) => elementActions.updateElement(section, {[key]: value})
-  const storeSection = () => elementActions.storeElement('sections', section)
+  const storeSection = (back) => elementActions.storeElement('sections', section, back)
   const deleteSection = () => elementActions.deleteElement('sections', section)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
@@ -34,21 +34,19 @@ const EditSection = ({ config, section, elements, elementActions}) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          {
-            section.id ? <SaveButton onClick={storeSection} />
-                       : <CreateButton onClick={storeSection} />
-          }
+          <SaveButton element={section} onClick={storeSection} />
+          <SaveButton element={section} onClick={storeSection} back={true}/>
         </div>
         {
-          section.id ? <div>
+          section.id ? <>
             <strong>{gettext('Section')}{': '}</strong>
             <code className="code-questions">{section.uri}</code>
-          </div> : <strong>{gettext('Create section')}</strong>
+          </> : <strong>{gettext('Create section')}</strong>
         }
       </div>
 
       {
-        parent.catalog && <div className="panel-body panel-border">
+        parent && parent.catalog && <div className="panel-body panel-border">
           <p dangerouslySetInnerHTML={{
             __html:interpolate(gettext('This section will be added to the catalog <code class="code-questions">%s</code>.'), [parent.catalog.uri])
           }} />
@@ -105,12 +103,10 @@ const EditSection = ({ config, section, elements, elementActions}) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          {
-            section.id ? <SaveButton onClick={storeSection} />
-                       : <CreateButton onClick={storeSection} />
-          }
+          <SaveButton element={section} onClick={storeSection} />
+          <SaveButton element={section} onClick={storeSection} back={true}/>
         </div>
-        {section.id && <DeleteButton onClick={openDeleteModal} />}
+        <DeleteButton element={section} onClick={openDeleteModal} />
       </div>
 
       <DeleteSectionModal section={section} info={info} show={showDeleteModal}
