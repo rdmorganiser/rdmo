@@ -17,7 +17,7 @@ users = (
 
 other_site_users = (
     'foo-user',
-    'foo-manager', 
+    'foo-manager',
     'foo-editor',
     'foo-reviewer',
     'bar-user',
@@ -26,7 +26,7 @@ other_site_users = (
     'bar-reviewer',
 )
 
-users += tuple(zip(other_site_users, other_site_users))
+users += tuple(zip(other_site_users, other_site_users))  # add (other site users and passwords)
 
 
 def test_get_profile_update(db, client):
