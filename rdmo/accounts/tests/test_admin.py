@@ -2,7 +2,8 @@ import pytest
 
 from django.urls import reverse
 
-roles = ('manager', 'editor', 'reviewer')
+
+roles = ('member', 'manager', 'editor', 'reviewer')
 
 
 @pytest.mark.parametrize('role', roles)
