@@ -44,7 +44,7 @@
     </ul>
     {% endif %}
 
-    <h2>{% trans 'Search projects' %}</h2>
+    <h2>{% trans 'Search projects' %} ({{ filter.qs|length }}/{{ number_of_projects }})</h2>
 
     <form method="GET" class="projects-search">
         <input type="text" class="form-control" id="search" name="title" placeholder="{% trans 'Search project title' %}"

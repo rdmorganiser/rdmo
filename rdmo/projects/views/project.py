@@ -61,6 +61,7 @@ class ProjectsView(LoginRequiredMixin, FilterView):
 
     def get_context_data(self, **kwargs):
         context = super(ProjectsView, self).get_context_data(**kwargs)
+        context['number_of_projects'] = self.get_queryset().count()
         context['invites'] = Invite.objects.filter(user=self.request.user)
         context['is_site_manager'] = is_site_manager(self.request.user)
         return context

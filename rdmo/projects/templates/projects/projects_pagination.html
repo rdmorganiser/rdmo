@@ -11,7 +11,7 @@
             <li>
                 {% blocktrans trimmed with number=page_obj.number num_pages=page_obj.paginator.num_pages %}
                 Page {{ number }} of {{ num_pages }}.
-                {% endblocktrans %}
+                {% endblocktrans %} ({{ projects|length }})
             </li>
             {% if page_obj.has_next %}
             <li class="next"><a href="?page={{ page_obj.next_page_number }}">{% trans 'Next' %}</a></li>
