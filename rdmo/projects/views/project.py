@@ -9,6 +9,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
+from django.utils.http import urlencode
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import DeleteView, DetailView, TemplateView
@@ -64,6 +65,13 @@ class ProjectsView(LoginRequiredMixin, FilterView):
         context['number_of_projects'] = self.get_queryset().count()
         context['invites'] = Invite.objects.filter(user=self.request.user)
         context['is_site_manager'] = is_site_manager(self.request.user)
+
+        if context["filter"].data:
+            querystring = context["filter"].data.copy()
+            if context["filter"].data.get('page'):
+                del querystring['page']
+            context['querystring'] = querystring.urlencode()
+
         return context
 
 
@@ -92,6 +100,13 @@ class SiteProjectsView(LoginRequiredMixin, FilterView):
     def get_context_data(self, **kwargs):
         context = super(SiteProjectsView, self).get_context_data(**kwargs)
         context['number_of_projects'] = self.get_queryset().count()
+
+        if context["filter"].data:
+            querystring = context["filter"].data.copy()
+            if context["filter"].data.get('page'):
+                del querystring['page']
+            context['querystring'] = querystring.urlencode()
+
         return context
 
 
