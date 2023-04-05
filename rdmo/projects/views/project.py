@@ -89,6 +89,11 @@ class SiteProjectsView(LoginRequiredMixin, FilterView):
         else:
             raise PermissionDenied()
 
+    def get_context_data(self, **kwargs):
+        context = super(SiteProjectsView, self).get_context_data(**kwargs)
+        context['number_of_projects'] = self.get_queryset().count()
+        return context
+
 
 class ProjectDetailView(ObjectPermissionMixin, DetailView):
     model = Project
