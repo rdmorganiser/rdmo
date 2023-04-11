@@ -6,7 +6,7 @@ import { filterElement } from '../../utils/filter'
 
 import Page from './Page'
 import { ElementErrors } from '../common/Errors'
-import { EditLink, AddLink, LockedLink, NestedLink, ExportLink } from '../common/Links'
+import { EditLink, AddLink, LockedLink, NestedLink, ExportLink, CodeLink } from '../common/Links'
 
 const Section = ({ config, section, elementActions, display='list', filter=null, indent=0 }) => {
 
@@ -33,9 +33,8 @@ const Section = ({ config, section, elementActions, display='list', filter=null,
           <strong>{gettext('Section')}{': '}</strong> {section.title}
         </p>
         {
-          config.display.uri.sections && <p>
-            <code className="code-questions">{section.uri}</code>
-          </p>
+          config.display.uri.sections &&
+          <CodeLink className="code-questions" uri={section.uri} onClick={() => fetchEdit()} />
         }
         <ElementErrors element={section} />
       </div>

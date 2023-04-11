@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { filterElement } from '../../utils/filter'
 
 import { ElementErrors } from '../common/Errors'
-import { EditLink, AvailableLink, LockedLink, ExportLink } from '../common/Links'
+import { EditLink, AvailableLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
 
 const Task = ({ config, task, elementActions, filter=null }) => {
 
@@ -27,7 +27,7 @@ const Task = ({ config, task, elementActions, filter=null }) => {
         <div>
           <p>
             <strong>{gettext('Task')}{': '}</strong>
-            <code className="code-tasks">{task.uri}</code>
+            <CodeLink className="code-tasks" uri={task.uri} onClick={() => fetchEdit()} />
           </p>
           <ElementErrors element={task} />
         </div>

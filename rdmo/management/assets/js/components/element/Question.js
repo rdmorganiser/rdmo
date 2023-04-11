@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { filterElement } from '../../utils/filter'
 
 import { ElementErrors } from '../common/Errors'
-import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/Links'
+import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink, CodeLink } from '../common/Links'
 
 const Question = ({ config, question, elementActions, display='list', filter=null, indent=0 }) => {
 
@@ -13,6 +13,8 @@ const Question = ({ config, question, elementActions, display='list', filter=nul
 
   const fetchEdit = () => elementActions.fetchElement('questions', question.id)
   const toggleLocked = () => elementActions.storeElement('questions', {...question, locked: !question.locked })
+
+  const fetchAttribute = () => elementActions.fetchElement('attributes', question.attribute)
 
   const elementNode = (
     <div className="element">
@@ -28,12 +30,12 @@ const Question = ({ config, question, elementActions, display='list', filter=nul
         </p>
         {
           config.display.uri.questions && <p>
-            <code className="code-questions">{question.uri}</code>
+            <CodeLink className="code-questions" uri={question.uri} onClick={() => fetchEdit()} />
           </p>
         }
         {
           config.display.uri.attributes && question.attribute_uri && <p>
-            <code className="code-domain">{question.attribute_uri}</code>
+            <CodeLink className="code-domain" uri={question.attribute_uri} onClick={() => fetchAttribute()} />
           </p>
         }
         <ElementErrors element={question} />

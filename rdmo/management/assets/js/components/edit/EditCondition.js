@@ -30,7 +30,7 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
-  const info = <ConditionInfo condition={condition} elements={elements} />
+  const info = <ConditionInfo condition={condition} elements={elements} elementActions={elementActions} />
 
   return (
     <div className="panel panel-default">

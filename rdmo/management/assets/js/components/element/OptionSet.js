@@ -6,7 +6,7 @@ import { filterElement } from '../../utils/filter'
 
 import Option from './Option'
 import { ElementErrors } from '../common/Errors'
-import { EditLink, AddLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/Links'
+import { EditLink, AddLink, AvailableLink, LockedLink, NestedLink, ExportLink, CodeLink } from '../common/Links'
 
 const OptionSet = ({ config, optionset, elementActions, display='list', filter=null }) => {
 
@@ -31,7 +31,7 @@ const OptionSet = ({ config, optionset, elementActions, display='list', filter=n
       <div>
         <p>
           <strong>{gettext('Option set')}{': '}</strong>
-          <code className="code-options">{optionset.uri}</code>
+          <CodeLink className="code-options" uri={optionset.uri} onClick={() => fetchEdit()} />
         </p>
         <ElementErrors element={optionset} />
       </div>

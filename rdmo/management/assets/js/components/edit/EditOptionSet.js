@@ -36,7 +36,7 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
-  const info = <OptionSetInfo optionset={optionset} elements={elements} />
+  const info = <OptionSetInfo optionset={optionset} elements={elements} elementActions={elementActions} />
 
   return (
     <div className="panel panel-default">

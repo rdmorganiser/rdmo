@@ -16,7 +16,7 @@ import DeleteSectionModal from '../modals/DeleteSectionModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
 
-const EditSection = ({ config, section, elements, elementActions}) => {
+const EditSection = ({ config, section, elements, elementActions }) => {
 
   const { parent, pages, catalogs } = elements
   const sectionCatalogs = catalogs.filter(e => section.catalogs.includes(e.id))
@@ -30,7 +30,7 @@ const EditSection = ({ config, section, elements, elementActions}) => {
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
-  const info = <SectionInfo section={section} elements={elements} />
+  const info = <SectionInfo section={section} elements={elements} elementActions={elementActions} />
 
   return (
     <div className="panel panel-default">
