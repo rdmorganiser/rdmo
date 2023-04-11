@@ -716,7 +716,12 @@ angular.module('project_questions')
             value.collection_index = collection_index;
 
             // store if the question is part of a set_collection
-            value.set_collection = question.set_collection
+            if (question === null) {
+                // this is the id of a new valueset
+                value.set_collection = true
+            } else {
+                value.set_collection = question.set_collection
+            }
 
             // get value_type and unit from question
             if (question === null) {
