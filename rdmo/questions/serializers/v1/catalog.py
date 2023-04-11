@@ -10,7 +10,22 @@ from ...validators import CatalogLockedValidator, CatalogUniqueURIValidator
 from .section import SectionNestedSerializer
 
 
-class BaseCatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
+class CatalogSectionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CatalogSection
+        fields = (
+            'section',
+            'order'
+        )
+
+
+class CatalogSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
+                        serializers.ModelSerializer):
+
+    uri_path = serializers.CharField(required=True)
+    projects_count = serializers.IntegerField(read_only=True)
+    sections = CatalogSectionSerializer(source='catalog_sections', read_only=False, required=False, many=True)
 
     class Meta:
         model = Catalog
@@ -27,52 +42,30 @@ class BaseCatalogSerializer(TranslationSerializerMixin, serializers.ModelSeriali
             'sites',
             'groups',
             'title',
-            'help'
+            'help',
+            'projects_count',
         )
         trans_fields = (
             'title',
             'help'
         )
-
-
-class CatalogSectionSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = CatalogSection
-        fields = (
-            'section',
-            'order'
-        )
-
-
-class CatalogSerializer(ThroughModelSerializerMixin, BaseCatalogSerializer):
-
-    uri_path = serializers.CharField(required=True)
-    projects_count = serializers.IntegerField(read_only=True)
-    sections = CatalogSectionSerializer(source='catalog_sections', read_only=False, required=False, many=True)
-
-    class Meta(BaseCatalogSerializer.Meta):
-        fields = BaseCatalogSerializer.Meta.fields + (
-            'projects_count',
-            'sections'
+        through_fields = (
+            ('sections', 'catalog', 'section', 'catalog_sections'),
         )
         validators = (
             CatalogUniqueURIValidator(),
             CatalogLockedValidator(),
         )
-        through_fields = (
-            ('sections', 'catalog', 'section', 'catalog_sections'),
-        )
 
 
 class CatalogListSerializer(ElementExportSerializerMixin, ElementWarningSerializerMixin,
-                            BaseCatalogSerializer):
+                            CatalogSerializer):
 
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
 
-    class Meta(BaseCatalogSerializer.Meta):
-        fields = BaseCatalogSerializer.Meta.fields + (
+    class Meta(CatalogSerializer.Meta):
+        fields = CatalogSerializer.Meta.fields + (
             'warning',
             'xml_url'
         )

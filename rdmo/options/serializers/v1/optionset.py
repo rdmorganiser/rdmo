@@ -10,7 +10,21 @@ from ...validators import OptionSetLockedValidator, OptionSetUniqueURIValidator
 from .option import OptionListSerializer
 
 
-class BaseOptionSetSerializer(serializers.ModelSerializer):
+class OptionSetOptionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = OptionSetOption
+        fields = (
+            'option',
+            'order'
+        )
+
+
+class OptionSetSerializer(ThroughModelSerializerMixin, serializers.ModelSerializer):
+
+    uri_path = serializers.CharField(required=True)
+    options = OptionSetOptionSerializer(source='optionset_options', read_only=False, required=False, many=True)
+    questions = serializers.PrimaryKeyRelatedField(queryset=Question.objects.all(), required=False, many=True)
 
     class Meta:
         model = OptionSet
@@ -22,47 +36,26 @@ class BaseOptionSetSerializer(serializers.ModelSerializer):
             'comment',
             'locked',
             'order',
-            'provider_key'
-        )
-
-
-class OptionSetOptionSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = OptionSetOption
-        fields = (
-            'option',
-            'order'
-        )
-
-
-class OptionSetSerializer(ThroughModelSerializerMixin, BaseOptionSetSerializer):
-
-    uri_path = serializers.CharField(required=True)
-    options = OptionSetOptionSerializer(source='optionset_options', read_only=False, required=False, many=True)
-    questions = serializers.PrimaryKeyRelatedField(queryset=Question.objects.all(), required=False, many=True)
-
-    class Meta(BaseOptionSetSerializer.Meta):
-        fields = BaseOptionSetSerializer.Meta.fields + (
+            'provider_key',
             'options',
             'conditions',
             'questions'
+        )
+        through_fields = (
+            ('options', 'optionset', 'option', 'optionset_options'),
         )
         validators = (
             OptionSetUniqueURIValidator(),
             OptionSetLockedValidator()
         )
-        through_fields = (
-            ('options', 'optionset', 'option', 'optionset_options'),
-        )
 
 
-class OptionSetListSerializer(ElementExportSerializerMixin, BaseOptionSetSerializer):
+class OptionSetListSerializer(ElementExportSerializerMixin, OptionSetSerializer):
 
     xml_url = serializers.SerializerMethodField()
 
-    class Meta(BaseOptionSetSerializer.Meta):
-        fields = BaseOptionSetSerializer.Meta.fields + (
+    class Meta(OptionSetSerializer.Meta):
+        fields = OptionSetSerializer.Meta.fields + (
             'xml_url',
         )
 

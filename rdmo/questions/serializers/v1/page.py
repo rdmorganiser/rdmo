@@ -11,32 +11,6 @@ from .question import QuestionListSerializer
 from .questionset import QuestionSetNestedSerializer
 
 
-class BasePageSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
-
-    class Meta:
-        model = Page
-        fields = (
-            'id',
-            'uri',
-            'uri_prefix',
-            'uri_path',
-            'comment',
-            'locked',
-            'attribute',
-            'is_collection',
-            'title',
-            'help',
-            'verbose_name',
-            'verbose_name_plural'
-        )
-        trans_fields = (
-            'title',
-            'help',
-            'verbose_name',
-            'verbose_name_plural'
-        )
-
-
 class PageQuestionSetSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -57,23 +31,39 @@ class PageQuestionSerializer(serializers.ModelSerializer):
         )
 
 
-class PageSerializer(ThroughModelSerializerMixin, BasePageSerializer):
+class PageSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
+                     serializers.ModelSerializer):
 
     uri_path = serializers.CharField(required=True)
     sections = serializers.PrimaryKeyRelatedField(queryset=Section.objects.all(), required=False, many=True)
     questionsets = PageQuestionSetSerializer(source='page_questionsets', read_only=False, required=False, many=True)
     questions = PageQuestionSerializer(source='page_questions', read_only=False, required=False, many=True)
 
-    class Meta(BasePageSerializer.Meta):
-        fields = BasePageSerializer.Meta.fields + (
+    class Meta:
+        model = Page
+        fields = (
+            'id',
+            'uri',
+            'uri_prefix',
+            'uri_path',
+            'comment',
+            'locked',
+            'attribute',
+            'is_collection',
+            'title',
+            'help',
+            'verbose_name',
+            'verbose_name_plural',
             'sections',
             'questionsets',
             'questions',
             'conditions'
         )
-        validators = (
-            PageUniqueURIValidator(),
-            PageLockedValidator()
+        trans_fields = (
+            'title',
+            'help',
+            'verbose_name',
+            'verbose_name_plural'
         )
         parent_fields = (
             ('sections', 'section', 'page', 'section_pages'),
@@ -82,17 +72,21 @@ class PageSerializer(ThroughModelSerializerMixin, BasePageSerializer):
             ('questionsets', 'page', 'questionset', 'page_questionsets'),
             ('questions', 'page', 'question', 'page_questions')
         )
+        validators = (
+            PageUniqueURIValidator(),
+            PageLockedValidator()
+        )
 
 
 class PageListSerializer(ElementExportSerializerMixin, ElementWarningSerializerMixin,
-                         BasePageSerializer):
+                         PageSerializer):
 
     attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
 
-    class Meta(BasePageSerializer.Meta):
-        fields = BasePageSerializer.Meta.fields + (
+    class Meta(PageSerializer.Meta):
+        fields = PageSerializer.Meta.fields + (
             'attribute_uri',
             'warning',
             'xml_url'
