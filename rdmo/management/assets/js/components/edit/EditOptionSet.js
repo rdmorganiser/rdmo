@@ -28,7 +28,10 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
   const storeOptionSet = (back) => elementActions.storeElement('optionsets', optionset, back)
   const deleteOptionSet = () => elementActions.deleteElement('optionsets', optionset)
 
+  const editOption = (value) => elementActions.fetchElement('options', value.option)
   const createOption = () => elementActions.createElement('options', { optionset })
+
+  const editCondition = (condition) => elementActions.fetchElement('conditions', condition)
   const createCondition = () => elementActions.createElement('conditions', { optionset })
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
@@ -93,11 +96,11 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
 
         <OrderedMultiSelect config={config} element={optionset} field="options"
                             options={options} verboseName="option"
-                            onChange={updateOptionSet} onCreate={createOption} />
+                            onChange={updateOptionSet} onCreate={createOption} onEdit={editOption} />
 
         <MultiSelect config={config} element={optionset} field="conditions"
                      options={conditions} verboseName="condition"
-                     onChange={updateOptionSet} onCreate={createCondition} />
+                     onChange={updateOptionSet} onCreate={createCondition} onEdit={editCondition} />
 
         <Select config={config} element={optionset} field="provider_key"
                 options={providers} onChange={updateOptionSet} />

@@ -22,6 +22,9 @@ a.disabled {
 .mr-0 {
     margin-right: 0;
 }
+.mr-5 {
+    margin-right: 5px;
+}
 .mr-10 {
     margin-right: 10px;
 }
@@ -39,6 +42,9 @@ a.disabled {
 }
 .ml-0 {
     margin-left: 0;
+}
+.ml-5 {
+    margin-left: 5px;
 }
 .ml-10 {
     margin-left: 10px;
@@ -194,6 +200,15 @@ a.disabled {
     }
 }
 
+.select-item,
+.multi-select-item,
+.ordered-multi-select-item {
+    button {
+        font-size: small;
+        height: 34px;
+    }
+}
+
 .ordered-multi-select-item {
     .handle {
         cursor: grab;
@@ -205,7 +220,7 @@ a.disabled {
 
     .react-select {
         margin-left: 14px;
-        margin-right: 14px;
+        margin-right: 130px;
     }
 
     &.over {

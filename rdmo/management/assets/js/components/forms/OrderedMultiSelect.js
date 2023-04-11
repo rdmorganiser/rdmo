@@ -14,8 +14,8 @@ import maxBy from 'lodash/maxBy'
 
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
-const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions,
-                                  errors, handleChange, handleDrag }) => {
+const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, errors,
+                                  handleChange, handleEdit, handleRemove, handleDrag }) => {
   const ref = useRef(null)
 
   const [{ isOver }, drop] = useDrop(() => ({
@@ -49,14 +49,19 @@ const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions,
   return (
     <div ref={ref} className={className}>
       <div>
-        <div className="handle pull-left text-left">
+        <div className="handle pull-left">
           <i className="fa fa-ellipsis-v"></i>
         </div>
-        <div className="handle pull-right text-right">
-          <i className="fa fa-ellipsis-v"></i>
+        <div className="pull-right">
+          <button className="btn btn-primary ml-5" onClick={() => handleEdit(index)}>
+            {gettext('Edit')}
+          </button>
+          <button className="btn btn-danger ml-5" onClick={() => handleRemove(index)}>
+            {gettext('Remove')}
+          </button>
         </div>
         <div>
-          <ReactSelect classNamePrefix="react-select" className="react-select" isClearable={true}
+          <ReactSelect classNamePrefix="react-select" className="react-select"
                        options={selectOptions} value={selectValue}
                        onChange={option => handleChange(option, index)}
                        menuPortalTarget={document.body} />
@@ -81,8 +86,10 @@ class OrderedMultiSelect extends Component {
   constructor(props) {
     super(props)
 
-    this.handleDrag = this.handleDrag.bind(this)
     this.handleChange = this.handleChange.bind(this)
+    this.handleEdit = this.handleEdit.bind(this)
+    this.handleRemove = this.handleRemove.bind(this)
+    this.handleDrag = this.handleDrag.bind(this)
   }
 
   getValues() {
@@ -143,8 +150,7 @@ class OrderedMultiSelect extends Component {
     const values = this.getValues()
 
     if (isNil(option)) {
-      // remove this value
-      values.splice(index, 1)
+      values[index] = null
     } else {
       const [valueField, value] = this.parseValue(option)
       values[index] = {
@@ -152,6 +158,22 @@ class OrderedMultiSelect extends Component {
         order: values[index].order
       }
     }
+
+    onChange(field, values)
+  }
+
+  handleEdit(index) {
+    const { onEdit } = this.props
+    const values = this.getValues()
+
+    onEdit(values[index])
+  }
+
+  handleRemove(index) {
+    const { field, onChange } = this.props
+    const values = this.getValues()
+
+    values.splice(index, 1)
 
     onChange(field, values)
   }
@@ -174,7 +196,7 @@ class OrderedMultiSelect extends Component {
 
   render() {
     const { config, element, field, options, verboseName, verboseNameCreate,
-            verboseNameAltCreate, onChange, onCreate, onAltCreate } = this.props
+            verboseNameAltCreate, onCreate, onAltCreate } = this.props
 
     const id = getId(element, field),
           label = getLabel(config, element, field),
@@ -201,6 +223,7 @@ class OrderedMultiSelect extends Component {
               <OrderedMultiSelectItem key={index} index={index} field={field}
                                       selectValue={selectValue} selectOptions={selectOptions}
                                       errors={errors} handleChange={this.handleChange}
+                                      handleEdit={this.handleEdit} handleRemove={this.handleRemove}
                                       handleDrag={this.handleDrag} />
             )
           })
@@ -233,22 +256,25 @@ OrderedMultiSelectItem.propTypes = {
   selectValue: PropTypes.object,
   selectOptions: PropTypes.array,
   errors: PropTypes.object,
-  onChange: PropTypes.func,
-  onDrag: PropTypes.func
+  handleChange: PropTypes.func,
+  handleEdit: PropTypes.func,
+  handleRemove: PropTypes.func,
+  handleDrag: PropTypes.func
 }
 
 OrderedMultiSelect.propTypes = {
-  config: PropTypes.object,
-  element: PropTypes.object,
-  field: PropTypes.string,
+  config: PropTypes.object.isRequired,
+  element: PropTypes.object.isRequired,
+  field: PropTypes.string.isRequired,
   fields: PropTypes.array,
-  options: PropTypes.array,
-  verboseName: PropTypes.string,
+  options: PropTypes.array.isRequired,
+  verboseName: PropTypes.string.isRequired,
   verboseNameCreate: PropTypes.string,
   verboseNameAltCreate: PropTypes.string,
-  onChange: PropTypes.func,
+  onChange: PropTypes.func.isRequired,
   onCreate: PropTypes.func,
-  onAltCreate: PropTypes.func
+  onAltCreate: PropTypes.func,
+  onEdit: PropTypes.func.isRequired
 }
 
 export default OrderedMultiSelect

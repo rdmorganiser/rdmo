@@ -24,8 +24,13 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
   const storeQuestion = (back) => elementActions.storeElement('questions', question, back)
   const deleteQuestion = () => elementActions.deleteElement('questions', question)
 
+  const editOptionSet = (optionset) => elementActions.fetchElement('optionsets', optionset)
   const createOptionSet = () => elementActions.createElement('optionsets', { question })
+
+  const editCondition = (condition) => elementActions.fetchElement('conditions', condition)
   const createCondition = () => elementActions.createElement('conditions', { question })
+
+  const editAttribute = (attribute) => elementActions.fetchElement('attributes', attribute)
   const createAttribute = () => elementActions.createElement('attributes', { question })
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
@@ -127,7 +132,7 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
         </Tabs>
 
         <Select config={config} element={question} field="attribute" verboseName={gettext('attribute')}
-                options={attributes} onChange={updateQuestion} onCreate={createAttribute} />
+                options={attributes} onChange={updateQuestion} onCreate={createAttribute} onEdit={editAttribute} />
 
         <div className="row">
           <div className="col-sm-3">
@@ -150,11 +155,11 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
 
         <MultiSelect config={config} element={question} field="optionsets"
                      options={optionsets} verboseName="optionset"
-                     onChange={updateQuestion} onCreate={createOptionSet} />
+                     onChange={updateQuestion} onCreate={createOptionSet} onEdit={editOptionSet} />
 
         <MultiSelect config={config} element={question} field="conditions"
                      options={conditions} verboseName="condition"
-                     onChange={updateQuestion} onCreate={createCondition} />
+                     onChange={updateQuestion} onCreate={createCondition} onEdit={editCondition} />
 
         <div className="row">
           <div className="col-sm-4">

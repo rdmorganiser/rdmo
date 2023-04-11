@@ -23,7 +23,10 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
   const storeCondition = (back) => elementActions.storeElement('conditions', condition, back)
   const deleteCondition = () => elementActions.deleteElement('conditions', condition)
 
+  const editAttribute = (attribute) => elementActions.fetchElement('attributes', attribute)
   const createAttribute = () => elementActions.createElement('attributes', { condition })
+
+  const editOption = (option) => elementActions.fetchElement('options', option)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
@@ -106,7 +109,7 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
                   onChange={updateCondition} />
 
         <Select config={config} element={condition} field="source" verboseName={gettext('attribute')}
-                options={attributes} onChange={updateCondition} onCreate={createAttribute} />
+                options={attributes} onChange={updateCondition} onCreate={createAttribute} onEdit={editAttribute} />
 
         <div className="row">
           <div className="col-sm-4">
@@ -119,7 +122,7 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
           </div>
           <div className="col-sm-4">
             <Select config={config} element={condition} field="target_option"
-                    options={options} onChange={updateCondition} />
+                    options={options} onChange={updateCondition} onEdit={editOption} />
           </div>
         </div>
       </div>

@@ -25,6 +25,8 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
   const updateCatalog = (key, value) => elementActions.updateElement(catalog, {[key]: value})
   const storeCatalog = (back) => elementActions.storeElement('catalogs', catalog, back)
   const deleteCatalog = () => elementActions.deleteElement('catalogs', catalog)
+
+  const editSection = (value) => elementActions.fetchElement('sections', value.section)
   const createSection = () => elementActions.createElement('sections', { catalog } )
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
@@ -92,7 +94,7 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
 
         <OrderedMultiSelect config={config} element={catalog} field="sections"
                             options={sections} verboseName="section"
-                            onChange={updateCatalog} onCreate={createSection} />
+                            onChange={updateCatalog} onCreate={createSection} onEdit={editSection} />
 
         {get(config, 'settings.groups') && <Select config={config} element={catalog} field="groups"
                                                    options={groups} onChange={updateCatalog} isMulti />}
