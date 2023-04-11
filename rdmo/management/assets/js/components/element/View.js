@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { filterElement } from '../../utils/filter'
 
 import { ElementErrors } from '../common/Errors'
-import { EditLink, AvailableLink, LockedLink, ExportLink } from '../common/Links'
+import { EditLink, AvailableLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
 
 const View = ({ config, view, elementActions, filter=null }) => {
 
@@ -27,7 +27,7 @@ const View = ({ config, view, elementActions, filter=null }) => {
         <div>
           <p>
             <strong>{gettext('View')}{': '}</strong>
-            <code className="code-views">{view.uri}</code>
+            <CodeLink className="code-views" uri={view.uri} onClick={() => fetchEdit()} />
           </p>
           <ElementErrors element={view} />
         </div>

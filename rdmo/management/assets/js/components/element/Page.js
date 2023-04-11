@@ -7,7 +7,8 @@ import { filterElement } from '../../utils/filter'
 import QuestionSet from './QuestionSet'
 import Question from './Question'
 import { ElementErrors } from '../common/Errors'
-import { EditLink, AddLink, AddSquareLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/Links'
+import { EditLink, AddLink, AddSquareLink, AvailableLink, LockedLink,
+         NestedLink, ExportLink, CodeLink } from '../common/Links'
 
 const Page = ({ config, page, elementActions, display='list', filter=null, indent=0 }) => {
 
@@ -20,6 +21,8 @@ const Page = ({ config, page, elementActions, display='list', filter=null, inden
 
   const createQuestionSet = () => elementActions.createElement('questionsets', { page })
   const createQuestion = () => elementActions.createElement('questions', { page })
+
+  const fetchAttribute = () => elementActions.fetchElement('attributes', page.attribute)
 
   const elementNode = (
     <div className="element">
@@ -37,12 +40,12 @@ const Page = ({ config, page, elementActions, display='list', filter=null, inden
         </p>
         {
           config.display.uri.pages && <p>
-            <code className="code-questions">{page.uri}</code>
+            <CodeLink className="code-questions" uri={page.uri} onClick={() => fetchEdit()} />
           </p>
         }
         {
           config.display.uri.attributes && page.attribute_uri && <p>
-            <code className="code-domain">{page.attribute_uri}</code>
+            <CodeLink className="code-domain" uri={page.attribute_uri} onClick={() => fetchAttribute()} />
           </p>
         }
         <ElementErrors element={page} />

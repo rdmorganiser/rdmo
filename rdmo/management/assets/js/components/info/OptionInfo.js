@@ -1,15 +1,17 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import { ExtendLink } from '../common/Links'
+import { ExtendLink, CodeLink } from '../common/Links'
 
 import useBool from '../../hooks/useBool'
 
-const OptionInfo = ({ option, elements }) => {
+const OptionInfo = ({ option, elements, elementActions }) => {
 
   const [extendConditions, toggleConditions] = useBool(false)
 
   const conditions = elements.conditions.filter(e => option.conditions.includes(e.id))
+
+  const fetchCondition = (condition) => elementActions.fetchElement('conditions', condition.id)
 
   return (
     <div className="element-info">
@@ -18,25 +20,21 @@ const OptionInfo = ({ option, elements }) => {
           'This option is used for <b>%s values</b> in <b>one project</b>.',
           'This option is used for <b>%s values</b> in <b>%s projects</b>.',
           option.projects_count), [option.values_count, option.projects_count])}} />
+      <p>
+        <span dangerouslySetInnerHTML={{
+          __html: interpolate(ngettext(
+            'This option is used in <b>one condition</b>.',
+            'This option is used in <b>%s conditions</b>.',
+            conditions.length
+          ), [conditions.length])}} />
+        {conditions.length > 0 && <ExtendLink extend={extendConditions} onClick={toggleConditions} />}
+      </p>
       {
-        conditions.length > 0 && <>
-          <p>
-            <span dangerouslySetInnerHTML={{
-              __html: interpolate(ngettext(
-                'This option is used in <b>one condition</b>.',
-                'This option is used in <b>%s conditions</b>.',
-                conditions.length
-              ), [conditions.length])}} />
-            <ExtendLink extend={extendConditions} onClick={toggleConditions} />
+        extendConditions && conditions.map((condition, index) => (
+          <p key={index}>
+            <CodeLink className="code-conditions" uri={condition.uri} onClick={() => fetchCondition(condition)} />
           </p>
-          {
-            extendConditions && conditions.map((condition, index) => (
-              <p key={index}>
-                <code className="code-conditions">{condition.uri}</code>
-              </p>
-            ))
-          }
-        </>
+        ))
       }
     </div>
   )
@@ -44,7 +42,8 @@ const OptionInfo = ({ option, elements }) => {
 
 OptionInfo.propTypes = {
   option: PropTypes.object.isRequired,
-  elements: PropTypes.object.isRequired
+  elements: PropTypes.object.isRequired,
+  elementActions: PropTypes.object.isRequired
 }
 
 export default OptionInfo

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { filterElement } from '../../utils/filter'
 
 import { ElementErrors } from '../common/Errors'
-import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink } from '../common/Links'
+import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink, CodeLink } from '../common/Links'
 
 const Option = ({ config, option, elementActions, display='list', indent=0, filter=null }) => {
 
@@ -26,9 +26,8 @@ const Option = ({ config, option, elementActions, display='list', indent=0, filt
           <strong>{gettext('Option')}{': '}</strong> {option.text}
         </p>
         {
-          config.display.uri.options && <p>
-            <code className="code-options">{option.uri}</code>
-          </p>
+          config.display.uri.options &&
+          <CodeLink className="code-options" uri={option.uri} onClick={() => fetchEdit()} />
         }
         <ElementErrors element={option} />
       </div>

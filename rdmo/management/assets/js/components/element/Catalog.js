@@ -7,7 +7,7 @@ import { filterElement } from '../../utils/filter'
 import Section from './Section'
 import { ElementErrors } from '../common/Errors'
 import { EditLink, AddLink, AvailableLink, LockedLink,
-         NestedLink, ExportLink } from '../common/Links'
+         NestedLink, ExportLink, CodeLink } from '../common/Links'
 
 const Catalog = ({ config, catalog, elementActions, display='list', filter=null }) => {
 
@@ -36,9 +36,8 @@ const Catalog = ({ config, catalog, elementActions, display='list', filter=null 
           <strong>{gettext('Catalog')}{': '}</strong> {catalog.title}
         </p>
         {
-          config.display.uri.catalogs && <p>
-            <code className="code-questions">{catalog.uri}</code>
-          </p>
+          config.display.uri.catalogs &&
+          <CodeLink className="code-questions" uri={catalog.uri} onClick={() => fetchEdit()} />
         }
         <ElementErrors element={catalog} />
       </div>

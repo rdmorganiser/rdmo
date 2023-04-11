@@ -196,4 +196,23 @@ ExtendLink.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-export { EditLink, AddLink, AddSquareLink, AvailableLink, LockedLink, NestedLink, ExportLink, ExtendLink }
+const CodeLink = ({ className, uri, onClick }) => {
+  const handleClick = (event) => {
+    event.preventDefault()
+    onClick()
+  }
+
+  return (
+    <a href="" onClick={event => handleClick(event)}>
+      <code className={className}>{uri}</code>
+    </a>
+  )
+}
+
+CodeLink.propTypes = {
+  className: PropTypes.string.isRequired,
+  uri: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired
+}
+
+export { EditLink, AddLink, AddSquareLink, AvailableLink, LockedLink, NestedLink, ExportLink, ExtendLink, CodeLink }

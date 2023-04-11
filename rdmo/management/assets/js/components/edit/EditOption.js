@@ -26,7 +26,7 @@ const EditOption = ({ config, option, elements, elementActions }) => {
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
-  const info = <OptionInfo option={option} elements={elements} />
+  const info = <OptionInfo option={option} elements={elements} elementActions={elementActions} />
 
   return (
     <div className="panel panel-default">

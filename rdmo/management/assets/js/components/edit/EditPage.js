@@ -63,7 +63,7 @@ const EditPage = ({ config, page, elements, elementActions }) => {
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
-  const info = <PageInfo page={page} elements={elements} />
+  const info = <PageInfo page={page} elements={elements} elementActions={elementActions} />
 
   return (
     <div className="panel panel-default">

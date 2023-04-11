@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import { ExtendLink } from '../common/Links'
+import { ExtendLink, CodeLink } from '../common/Links'
 
 import useBool from '../../hooks/useBool'
 
-const ConditionInfo = ({ condition, elements }) => {
+const ConditionInfo = ({ condition, elements, elementActions }) => {
 
   const [extendOptionSets, toggleOptionSets] = useBool(false)
   const [extendPages, togglePages] = useBool(false)
@@ -19,102 +19,88 @@ const ConditionInfo = ({ condition, elements }) => {
   const questions = elements.questions.filter(e => condition.questions.includes(e.id))
   const tasks = elements.tasks.filter(e => condition.tasks.includes(e.id))
 
+  const fetchOptionSet = (optionset) => elementActions.fetchElement('optionsets', optionset.id)
+  const fetchPage = (page) => elementActions.fetchElement('pages', page.id)
+  const fetchQuestionSet = (questionset) => elementActions.fetchElement('questionsets', questionset.id)
+  const fetchQuestion = (question) => elementActions.fetchElement('questions', question.id)
+  const fetchTask = (task) => elementActions.fetchElement('tasks', task.id)
+
   return (
     <div className="element-info">
+      <p>
+        <span dangerouslySetInnerHTML={{
+          __html: interpolate(ngettext(
+            'This condition is used for <b>one optionset</b>.',
+            'This condition is used for <b>%s optionsets</b>.',
+            optionsets.length), [optionsets.length])}} />
+        {optionsets.length > 0 && <ExtendLink extend={extendOptionSets} onClick={toggleOptionSets} />}
+      </p>
       {
-        optionsets.length > 0 && <>
-          <p>
-            <span dangerouslySetInnerHTML={{
-              __html: interpolate(ngettext(
-                'This condition is used for <b>one optionset</b>.',
-                'This condition is used for <b>%s optionsets</b>.',
-                optionsets.length), [optionsets.length])}} />
-            <ExtendLink extend={extendOptionSets} onClick={toggleOptionSets} />
+        extendOptionSets && optionsets.map((optionset, index) => (
+          <p key={index}>
+            <CodeLink className="code-options" uri={optionset.uri} onClick={() => fetchOptionSet(optionset)} />
           </p>
-          {
-            extendOptionSets && optionsets.map((optionset, index) => (
-              <p key={index}>
-                <code className="code-options">{optionset.uri}</code>
-              </p>
-            ))
-          }
-        </>
+        ))
       }
+      <p>
+        <span dangerouslySetInnerHTML={{
+          __html: interpolate(ngettext(
+            'This condition is used for <b>one page</b>.',
+            'This condition is used for <b>%s pages</b>.',
+            pages.length), [pages.length])}} />
+        {pages.length > 0 && <ExtendLink extend={extendPages} onClick={togglePages} />}
+      </p>
       {
-        pages.length > 0 && <>
-          <p>
-            <span dangerouslySetInnerHTML={{
-              __html: interpolate(ngettext(
-                'This condition is used for <b>one page</b>.',
-                'This condition is used for <b>%s pages</b>.',
-                pages.length), [pages.length])}} />
-            <ExtendLink extend={extendPages} onClick={togglePages} />
+        extendPages && pages.map((page, index) => (
+          <p key={index}>
+            <CodeLink className="code-questions" uri={page.uri} onClick={() => fetchPage(page)} />
           </p>
-          {
-            extendPages && pages.map((page, index) => (
-              <p key={index}>
-                <code className="code-questions">{page.uri}</code>
-              </p>
-            ))
-          }
-        </>
+        ))
       }
+      <p>
+        <span dangerouslySetInnerHTML={{
+          __html: interpolate(ngettext(
+            'This condition is used for <b>one questionset</b>.',
+            'This condition is used for <b>%s questionsets</b>.',
+            questionsets.length), [questionsets.length])}} />
+        {questionsets.length > 0 && <ExtendLink extend={extendQuestionSets} onClick={toggleQuestionSets} />}
+      </p>
       {
-        questionsets.length > 0 && <>
-          <p>
-            <span dangerouslySetInnerHTML={{
-              __html: interpolate(ngettext(
-                'This condition is used for <b>one questionset</b>.',
-                'This condition is used for <b>%s questionsets</b>.',
-                questionsets.length), [questionsets.length])}} />
-            <ExtendLink extend={extendQuestionSets} onClick={toggleQuestionSets} />
+        extendQuestionSets && questionsets.map((questionset, index) => (
+          <p key={index}>
+            <CodeLink className="code-questions" uri={questionset.uri} onClick={() => fetchQuestionSet(questionset)} />
           </p>
-          {
-            extendQuestionSets && questionsets.map((questionset, index) => (
-              <p key={index}>
-                <code className="code-questions">{questionset.uri}</code>
-              </p>
-            ))
-          }
-        </>
+        ))
       }
+      <p>
+        <span dangerouslySetInnerHTML={{
+          __html: interpolate(ngettext(
+            'This condition is used for <b>one question</b>.',
+            'This condition is used for <b>%s questions</b>.',
+            questions.length), [questions.length])}} />
+        {questions.length > 0 && <ExtendLink extend={extendQuestions} onClick={toggleQuestion} />}
+      </p>
       {
-        questions.length > 0 && <>
-          <p>
-            <span dangerouslySetInnerHTML={{
-              __html: interpolate(ngettext(
-                'This condition is used for <b>one question</b>.',
-                'This condition is used for <b>%s questions</b>.',
-                questions.length), [questions.length])}} />
-            <ExtendLink extend={extendQuestions} onClick={toggleQuestion} />
+        extendQuestions && questions.map((question, index) => (
+          <p key={index}>
+            <CodeLink className="code-questions" uri={question.uri} onClick={() => fetchQuestion(question)} />
           </p>
-          {
-            extendQuestions && questions.map((question, index) => (
-              <p key={index}>
-                <code className="code-questions">{question.uri}</code>
-              </p>
-            ))
-          }
-        </>
+        ))
       }
+      <p>
+        <span dangerouslySetInnerHTML={{
+          __html: interpolate(ngettext(
+            'This condition is used for <b>one task</b>.',
+            'This condition is used for <b>%s tasks</b>.',
+            tasks.length), [tasks.length])}} />
+        {tasks.length > 0 && <ExtendLink extend={extendTasks} onClick={toggleTasks} />}
+      </p>
       {
-        tasks.length > 0 && <>
-          <p>
-            <span dangerouslySetInnerHTML={{
-              __html: interpolate(ngettext(
-                'This condition is used for <b>one task</b>.',
-                'This condition is used for <b>%s tasks</b>.',
-                tasks.length), [tasks.length])}} />
-            <ExtendLink extend={extendTasks} onClick={toggleTasks} />
+        extendTasks && tasks.map((task, index) => (
+          <p key={index}>
+            <CodeLink className="code-tasks" uri={task.uri} onClick={() => fetchTask(task)} />
           </p>
-          {
-            extendTasks && tasks.map((task, index) => (
-              <p key={index}>
-                <code className="code-tasks">{task.uri}</code>
-              </p>
-            ))
-          }
-        </>
+        ))
       }
     </div>
   )
@@ -122,7 +108,8 @@ const ConditionInfo = ({ condition, elements }) => {
 
 ConditionInfo.propTypes = {
   condition: PropTypes.object.isRequired,
-  elements: PropTypes.object.isRequired
+  elements: PropTypes.object.isRequired,
+  elementActions: PropTypes.object.isRequired
 }
 
 export default ConditionInfo

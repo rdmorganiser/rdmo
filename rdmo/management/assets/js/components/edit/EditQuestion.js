@@ -35,7 +35,7 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
-  const info = <QuestionInfo question={question} elements={elements} />
+  const info = <QuestionInfo question={question} elements={elements} elementActions={elementActions} />
 
   return (
     <div className="panel panel-default">
