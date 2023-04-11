@@ -9,7 +9,13 @@ from ...models import Option, OptionSet
 from ...validators import OptionLockedValidator, OptionUniqueURIValidator
 
 
-class BaseOptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
+class OptionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
+                       serializers.ModelSerializer):
+
+    optionsets = serializers.PrimaryKeyRelatedField(queryset=OptionSet.objects.all(), required=False, many=True)
+    conditions = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    values_count = serializers.IntegerField(read_only=True)
+    projects_count = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Option
@@ -22,44 +28,32 @@ class BaseOptionSerializer(TranslationSerializerMixin, serializers.ModelSerializ
             'locked',
             'text',
             'label',
-            'additional_input'
-        )
-        trans_fields = (
-            'text',
-        )
-
-
-class OptionSerializer(ThroughModelSerializerMixin, BaseOptionSerializer):
-
-    optionsets = serializers.PrimaryKeyRelatedField(queryset=OptionSet.objects.all(), required=False, many=True)
-    conditions = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    values_count = serializers.IntegerField(read_only=True)
-    projects_count = serializers.IntegerField(read_only=True)
-
-    class Meta(BaseOptionSerializer.Meta):
-        fields = BaseOptionSerializer.Meta.fields + (
+            'additional_input',
             'optionsets',
             'conditions',
             'values_count',
             'projects_count'
         )
-        validators = (
-            OptionUniqueURIValidator(),
-            OptionLockedValidator()
+        trans_fields = (
+            'text',
         )
         parent_fields = (
             ('optionsets', 'optionset', 'option', 'optionset_options'),
         )
+        validators = (
+            OptionUniqueURIValidator(),
+            OptionLockedValidator()
+        )
 
 
 class OptionListSerializer(ElementExportSerializerMixin, ElementWarningSerializerMixin,
-                           BaseOptionSerializer):
+                           OptionSerializer):
 
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
 
-    class Meta(BaseOptionSerializer.Meta):
-        fields = BaseOptionSerializer.Meta.fields + (
+    class Meta(OptionSerializer.Meta):
+        fields = OptionSerializer.Meta.fields + (
             'warning',
             'xml_url'
         )

@@ -9,7 +9,12 @@ from ...models import Page, Question, QuestionSet
 from ...validators import QuestionLockedValidator, QuestionUniqueURIValidator
 
 
-class BaseQuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
+class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
+                         serializers.ModelSerializer):
+
+    uri_path = serializers.CharField(required=True)
+    pages = serializers.PrimaryKeyRelatedField(queryset=Page.objects.all(), required=False, many=True)
+    questionsets = serializers.PrimaryKeyRelatedField(queryset=QuestionSet.objects.all(), required=False, many=True)
 
     class Meta:
         model = Question
@@ -36,7 +41,11 @@ class BaseQuestionSerializer(TranslationSerializerMixin, serializers.ModelSerial
             'help',
             'default_text',
             'verbose_name',
-            'verbose_name_plural'
+            'verbose_name_plural',
+            'pages',
+            'questionsets',
+            'optionsets',
+            'conditions'
         )
         trans_fields = (
             'text',
@@ -45,28 +54,13 @@ class BaseQuestionSerializer(TranslationSerializerMixin, serializers.ModelSerial
             'verbose_name',
             'verbose_name_plural',
         )
-
-
-class QuestionSerializer(ThroughModelSerializerMixin, BaseQuestionSerializer):
-
-    uri_path = serializers.CharField(required=True)
-    pages = serializers.PrimaryKeyRelatedField(queryset=Page.objects.all(), required=False, many=True)
-    questionsets = serializers.PrimaryKeyRelatedField(queryset=QuestionSet.objects.all(), required=False, many=True)
-
-    class Meta(BaseQuestionSerializer.Meta):
-        fields = BaseQuestionSerializer.Meta.fields + (
-            'pages',
-            'questionsets',
-            'optionsets',
-            'conditions'
+        parent_fields = (
+            ('pages', 'page', 'question', 'page_questions'),
+            ('questionsets', 'questionset', 'question', 'questionset_questions')
         )
         validators = (
             QuestionUniqueURIValidator(),
             QuestionLockedValidator()
-        )
-        parent_fields = (
-            ('pages', 'page', 'question', 'page_questions'),
-            ('questionsets', 'questionset', 'question', 'questionset_questions')
         )
 
     def to_internal_value(self, data):
@@ -79,14 +73,14 @@ class QuestionSerializer(ThroughModelSerializerMixin, BaseQuestionSerializer):
 
 
 class QuestionListSerializer(ElementExportSerializerMixin, ElementWarningSerializerMixin,
-                             BaseQuestionSerializer):
+                             QuestionSerializer):
 
     attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
 
-    class Meta(BaseQuestionSerializer.Meta):
-        fields = BaseQuestionSerializer.Meta.fields + (
+    class Meta(QuestionSerializer.Meta):
+        fields = QuestionSerializer.Meta.fields + (
             'attribute_uri',
             'warning',
             'xml_url'

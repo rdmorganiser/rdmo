@@ -10,24 +10,6 @@ from ...validators import SectionLockedValidator, SectionUniqueURIValidator
 from .page import PageNestedSerializer
 
 
-class BaseSectionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
-
-    class Meta:
-        model = Section
-        fields = (
-            'id',
-            'uri',
-            'uri_prefix',
-            'uri_path',
-            'comment',
-            'locked',
-            'title'
-        )
-        trans_fields = (
-            'title',
-        )
-
-
 class SectionPageSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -38,20 +20,28 @@ class SectionPageSerializer(serializers.ModelSerializer):
         )
 
 
-class SectionSerializer(ThroughModelSerializerMixin, BaseSectionSerializer):
+class SectionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
+                        serializers.ModelSerializer):
 
     uri_path = serializers.CharField(required=True)
     catalogs = serializers.PrimaryKeyRelatedField(queryset=Catalog.objects.all(), required=False, many=True)
     pages = SectionPageSerializer(source='section_pages', read_only=False, required=False, many=True)
 
-    class Meta(BaseSectionSerializer.Meta):
-        fields = BaseSectionSerializer.Meta.fields + (
+    class Meta:
+        model = Section
+        fields = (
+            'id',
+            'uri',
+            'uri_prefix',
+            'uri_path',
+            'comment',
+            'locked',
+            'title',
             'catalogs',
             'pages'
         )
-        validators = (
-            SectionUniqueURIValidator(),
-            SectionLockedValidator()
+        trans_fields = (
+            'title',
         )
         parent_fields = (
             ('catalogs', 'catalog', 'section', 'catalog_sections'),
@@ -59,16 +49,20 @@ class SectionSerializer(ThroughModelSerializerMixin, BaseSectionSerializer):
         through_fields = (
             ('pages', 'section', 'page', 'section_pages'),
         )
+        validators = (
+            SectionUniqueURIValidator(),
+            SectionLockedValidator()
+        )
 
 
 class SectionListSerializer(ElementExportSerializerMixin, ElementWarningSerializerMixin,
-                            BaseSectionSerializer):
+                            SectionSerializer):
 
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
 
-    class Meta(BaseSectionSerializer.Meta):
-        fields = BaseSectionSerializer.Meta.fields + (
+    class Meta(SectionSerializer.Meta):
+        fields = SectionSerializer.Meta.fields + (
             'warning',
             'xml_url'
         )
