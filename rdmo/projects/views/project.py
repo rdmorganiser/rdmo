@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.db import models
 from django.db.models import F, OuterRef, Subquery
+from django.db.models.functions import Coalesce, Greatest
 from django.forms import Form
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
@@ -53,7 +54,7 @@ class ProjectsView(LoginRequiredMixin, FilterView):
         last_changed_subquery = models.Subquery(
             Value.objects.filter(project=models.OuterRef('pk')).order_by('-updated').values('updated')[:1]
         )
-        queryset = queryset.annotate(last_changed=models.functions.Greatest('updated', last_changed_subquery))
+        queryset = queryset.annotate(last_changed=Coalesce(Greatest(last_changed_subquery, 'updated'), 'updated'))
 
         # order by last changed
         queryset = queryset.order_by('-last_changed')
@@ -91,7 +92,7 @@ class SiteProjectsView(LoginRequiredMixin, FilterView):
             last_changed_subquery = models.Subquery(
                 Value.objects.filter(project=models.OuterRef('pk')).order_by('-updated').values('updated')[:1]
             )
-            queryset = queryset.annotate(last_changed=models.functions.Greatest('updated', last_changed_subquery))
+            queryset = queryset.annotate(last_changed=Coalesce(Greatest(last_changed_subquery, 'updated'), 'updated'))
 
             return queryset
         else:
