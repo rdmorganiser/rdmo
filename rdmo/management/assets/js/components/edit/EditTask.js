@@ -26,7 +26,10 @@ const EditTask = ({ config, task, elements, elementActions}) => {
   const storeTask = (back) => elementActions.storeElement('tasks', task, back)
   const deleteTask = () => elementActions.deleteElement('tasks', task)
 
+  const editCondition = (condition) => elementActions.fetchElement('conditions', condition)
   const createCondition = () => elementActions.createElement('conditions', { task })
+
+  const editAttribute = (attribute) => elementActions.fetchElement('attributes', attribute)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
@@ -95,13 +98,13 @@ const EditTask = ({ config, task, elements, elementActions}) => {
 
         <MultiSelect config={config} element={task} field="conditions"
                      options={conditions} verboseName="condition"
-                     onChange={updateTask} onCreate={createCondition} />
+                     onChange={updateTask} onCreate={createCondition} onEdit={editCondition} />
 
         <Select config={config} element={task} field="start_attribute"
-                options={attributes} onChange={updateTask} />
+                options={attributes} onChange={updateTask} onEdit={editAttribute} />
 
         <Select config={config} element={task} field="end_attribute"
-                options={attributes} onChange={updateTask} />
+                options={attributes} onChange={updateTask} onEdit={editAttribute} />
 
         <div className="row">
           <div className="col-sm-6">

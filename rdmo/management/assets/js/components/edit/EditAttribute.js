@@ -19,13 +19,14 @@ const EditAttribute = ({ config, attribute, elements, elementActions }) => {
 
   const { parent, attributes, conditions, pages, questionsets, questions, tasks } = elements
 
+  const editAttribute = (attribute) => elementActions.fetchElement('attributes', attribute)
   const updateAttribute = (key, value) => elementActions.updateElement(attribute, {[key]: value})
   const storeAttribute = (back) => elementActions.storeElement('attributes', attribute, back)
   const deleteAttribute = () => elementActions.deleteElement('attributes', attribute)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
-  const info = <AttributeInfo attribute={attribute} elements={elements} />
+  const info = <AttributeInfo attribute={attribute} elements={elements} elementActions={elementActions} />
 
   return (
     <div className="panel panel-default">
@@ -97,7 +98,7 @@ const EditAttribute = ({ config, attribute, elements, elementActions }) => {
                   onChange={updateAttribute} />
 
         <Select config={config} element={attribute} field="parent"
-                options={attributes} onChange={updateAttribute} />
+                options={attributes} onChange={updateAttribute} onEdit={editAttribute} />
       </div>
 
       <div className="panel-footer">

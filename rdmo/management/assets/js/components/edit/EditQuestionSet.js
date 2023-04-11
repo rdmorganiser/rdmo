@@ -45,9 +45,20 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
   const storeQuestionSet = (back) => elementActions.storeElement('questionsets', questionset, back)
   const deleteQuestionSet = () => elementActions.deleteElement('questionsets', questionset)
 
+  const editElement = (value) => {
+    if (value.questionset) {
+      elementActions.fetchElement('questionsets', value.questionset)
+    } else if (value.question) {
+      elementActions.fetchElement('questions', value.question)
+    }
+  }
   const createQuestionSet = () => elementActions.createElement('questionsets', { questionset })
   const createQuestion = () => elementActions.createElement('questions', { questionset })
+
+  const editCondition = (condition) => elementActions.fetchElement('conditions', condition)
   const createCondition = () => elementActions.createElement('conditions', { questionset })
+
+  const editAttribute = (attribute) => elementActions.fetchElement('attributes', attribute)
   const createAttribute = () => elementActions.createElement('attributes', { questionset })
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
@@ -147,16 +158,17 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
         </Tabs>
 
         <Select config={config} element={questionset} field="attribute" verboseName={gettext('attribute')}
-                options={attributes} onChange={updateQuestionSet} onCreate={createAttribute} />
+                options={attributes} onChange={updateQuestionSet} onCreate={createAttribute} onEdit={editAttribute} />
 
         <OrderedMultiSelect config={config} element={questionset} field="elements"
                             values={elementValues} options={elementOptions} verboseName={gettext('element')}
                             verboseNameCreate={gettext('question')} verboseNameAltCreate={gettext('question set')}
-                            onChange={updateQuestionSet} onCreate={createQuestion} onAltCreate={createQuestionSet} />
+                            onChange={updateQuestionSet} onCreate={createQuestion} onAltCreate={createQuestionSet}
+                            onEdit={editElement}/>
 
         <MultiSelect config={config} element={questionset} field="conditions"
                      options={conditions} verboseName="condition"
-                     onChange={updateQuestionSet} onCreate={createCondition} />
+                     onChange={updateQuestionSet} onCreate={createCondition} onEdit={editCondition} />
       </div>
 
       <div className="panel-footer">

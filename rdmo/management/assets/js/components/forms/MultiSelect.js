@@ -8,7 +8,7 @@ import get from 'lodash/get'
 
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
-const MultiSelect = ({ config, element, field, options, verboseName, onChange, onCreate }) => {
+const MultiSelect = ({ config, element, field, options, verboseName, onChange, onCreate, onEdit }) => {
   const id = getId(element, field),
         label = getLabel(config, element, field),
         help = getHelp(config, element, field),
@@ -28,19 +28,27 @@ const MultiSelect = ({ config, element, field, options, verboseName, onChange, o
     label: option.uri || option.text || option.name
   }))
 
+  const styles = onEdit ? {
+    container: provided => ({...provided, marginRight: 130})
+  } : {}
+
   const handleAdd = () => {
-    values.push(null)
+    values.push(selectOptions[0].value)
     onChange(field, values)
   }
 
   const handleChange = (option, index) => {
-    if (isNil(option)) {
-      // remove this value
-      values.splice(index, 1)
-    } else {
-      values[index] = option.value
-    }
+    values[index] = option.value
     onChange(field, values)
+  }
+
+  const handleRemove = (index) => {
+    values.splice(index, 1)
+    onChange(field, values)
+  }
+
+  const handleEdit = (index) => {
+    onEdit(values[index])
   }
 
   return (
@@ -53,8 +61,17 @@ const MultiSelect = ({ config, element, field, options, verboseName, onChange, o
           const selectValue = selectOptions.find(option => (option.value == value))
 
           return (
-            <div key={index} className="mb-10">
-              <ReactSelect classNamePrefix="react-select" className="react-select" isClearable={true}
+            <div key={index} className="multi-select-item mb-10">
+              <div className="pull-right">
+                <button className="btn btn-primary ml-5" onClick={() => handleEdit(index)}>
+                  {gettext('Edit')}
+                </button>
+                <button className="btn btn-danger ml-5" onClick={() => handleRemove(index)}>
+                  {gettext('Remove')}
+                </button>
+              </div>
+
+              <ReactSelect classNamePrefix="react-select" className="react-select" styles={styles}
                            options={selectOptions} value={selectValue}
                            onChange={option => handleChange(option, index)} />
             </div>
@@ -85,7 +102,8 @@ MultiSelect.propTypes = {
   options: PropTypes.array,
   verboseName: PropTypes.string,
   onChange: PropTypes.func,
-  onCreate: PropTypes.func
+  onCreate: PropTypes.func,
+  onEdit: PropTypes.func
 }
 
 export default MultiSelect

@@ -8,7 +8,7 @@ import get from 'lodash/get'
 
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
-const Select = ({ config, element, field, options, verboseName, isMulti, onChange, onCreate }) => {
+const Select = ({ config, element, field, options, verboseName, isMulti, onChange, onCreate, onEdit }) => {
   const id = getId(element, field),
         label = getLabel(config, element, field),
         help = getHelp(config, element, field),
@@ -28,13 +28,28 @@ const Select = ({ config, element, field, options, verboseName, isMulti, onChang
 
   const selectValue = selectOptions.find(option => (option.value == element[field]))
 
+  const styles = onEdit ? {
+    container: provided => ({...provided, marginRight: 50})
+  } : {}
+
   return (
     <div className={className}>
       <label className="control-label" htmlFor={id}>{label}</label>
 
-      <ReactSelect classNamePrefix="react-select" className="react-select" isClearable={true}
-                   options={selectOptions} value={selectValue} isMulti={isMulti}
-                   onChange={option => onChange(field, isNil(option) ? null : option.value)} />
+      <div className="select-item">
+        {
+          onEdit && <div className="pull-right">
+            <button className="btn btn-primary ml-5" onClick={() => onEdit(selectValue.value)} disabled={isNil(selectValue)}>
+              {gettext('Edit')}
+            </button>
+          </div>
+        }
+
+        <ReactSelect classNamePrefix="react-select" className="react-select" isClearable={true}
+                     options={selectOptions} value={selectValue} isMulti={isMulti}
+                     onChange={option => onChange(field, isNil(option) ? null : option.value)}
+                     styles={styles} />
+      </div>
 
       {
         onCreate && <button className="btn btn-success btn-xs mt-10" onClick={onCreate}>
@@ -58,7 +73,8 @@ Select.propTypes = {
   options: PropTypes.array,
   isMulti: PropTypes.bool,
   onChange: PropTypes.func,
-  onCreate: PropTypes.func
+  onCreate: PropTypes.func,
+  onEdit: PropTypes.func
 }
 
 export default Select

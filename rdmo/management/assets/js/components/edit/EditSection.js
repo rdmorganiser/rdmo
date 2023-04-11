@@ -25,6 +25,7 @@ const EditSection = ({ config, section, elements, elementActions}) => {
   const storeSection = (back) => elementActions.storeElement('sections', section, back)
   const deleteSection = () => elementActions.deleteElement('sections', section)
 
+  const editPage = (value) => elementActions.fetchElement('pages', value.page)
   const createPage = () => elementActions.createElement('pages', { section })
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
@@ -92,7 +93,7 @@ const EditSection = ({ config, section, elements, elementActions}) => {
 
         <OrderedMultiSelect config={config} element={section} field="pages"
                             options={pages} verboseName="page"
-                            onChange={updateSection} onCreate={createPage} />
+                            onChange={updateSection} onCreate={createPage} onEdit={editPage} />
       </div>
 
       <div className="panel-footer">
