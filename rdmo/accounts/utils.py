@@ -2,9 +2,9 @@ import logging
 
 from django.conf import settings
 from django.contrib.auth import authenticate, get_user_model
-from django.contrib.auth.models import Group, Permission, AbstractUser
+from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
-from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
+from django.core.exceptions import ObjectDoesNotExist
 
 from .models import Role
 from .settings import GROUPS
@@ -50,14 +50,18 @@ def delete_user(user=None, email=None, password=None):
 
     database_user = get_user_from_db_or_none(username, email)
 
+    if database_user is None:
+        log.info('Deletion of user "%s" failed, get_user_from_db_or_none returned None.', username)
+        return False
+
     if user != database_user:
-        log.info('Deletion of user "%s" failed, the user from request and database differ.', username)
+        log.info('Deletion of user "%s" failed, the user from request (pk=%s) and database (pk=%s) differ.', username, user.pk, database_user.pk)
         return False
 
     if user.has_usable_password() and password is not None:
         authenticated = authenticate(username=username, password=password)
         if authenticated is None:
-            log.info('Deletion of user with usable password "%s" failed, false password.', username)
+            log.info('Deletion of user with usable password "%s" failed, authenticate returned None.', username)
             return False
         try:
             user.delete()
@@ -84,5 +88,5 @@ def get_user_from_db_or_none(username: str, email: str):
         db_user = get_user_model().objects.get(username=username, email=email)
         return db_user
     except ObjectDoesNotExist:
-        log.error('Deletion of user "%s" with email "%s" failed, user does not exist', username, email)
+        log.error('Retrieval of user "%s" with email "%s" failed, user does not exist', username, email)
         return None
