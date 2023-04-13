@@ -1,11 +1,11 @@
 import pytest
 import re
 
-from django.conf import settings
-from django.core import mail
-from django.urls import reverse
-
 from django.contrib.auth import get_user_model
+from django.core import mail
+from django.db.models import ObjectDoesNotExist
+from django.urls import reverse
+from django.urls.exceptions import NoReverseMatch
 
 from pytest_django.asserts import assertTemplateUsed
 
@@ -17,40 +17,33 @@ users = (
     ('anonymous', None),
 )
 
+boolean_toggle = (True, False)
 
-def test_get_profile_update_true(db, client, settings):
+
+@pytest.mark.parametrize('test_setting', boolean_toggle)
+def test_get_profile_update(db, client, settings, test_setting):
     """
     An authorized GET request to the profile update form returns the form.
     """
-    settings.PROFILE_UPDATE = True
+    settings.PROFILE_UPDATE = test_setting
     client.login(username='user', password='user')
 
     url = reverse('profile_update')
     response = client.get(url)
     assert response.status_code == 200
-    assertTemplateUsed(response, 'profile/profile_update_form.html')
+    if settings.PROFILE_UPDATE:
+        assertTemplateUsed(response, 'profile/profile_update_form.html')
+    else:
+        assertTemplateUsed(response, 'profile/profile_update_closed.html')
 
 
-def test_get_profile_update_false(db, client, settings):
-    """
-    An authorized GET request to the profile update form returns the form.
-    """
-    settings.PROFILE_UPDATE = False
-    client.login(username='user', password='user')
-
-    url = reverse('profile_update')
-    response = client.get(url)
-    assert response.status_code == 200
-    assertTemplateUsed(response, 'profile/profile_update_closed.html')
-
-
-
-def test_get_profile_update_redirect(db, client, settings):
+@pytest.mark.parametrize('test_setting', boolean_toggle)
+def test_get_profile_update_redirect(db, client, settings, test_setting):
     """
     An unauthorized GET request to the profile update form gets
     redirected to login.
     """
-    settings.PROFILE_UPDATE = True
+    settings.PROFILE_UPDATE = test_setting
     client.logout()
     url = reverse('profile_update')
     response = client.get(url)
@@ -58,11 +51,13 @@ def test_get_profile_update_redirect(db, client, settings):
     assert response.url == reverse('account_login') + '?next=' + url
 
 
-def test_post_profile_update(db, client):
+@pytest.mark.parametrize('test_setting', boolean_toggle)
+def test_post_profile_update(db, client, settings, test_setting):
     """
     An authorized POST request to the profile update form updates the
     user and redirects to home.
     """
+    settings.PROFILE_UPDATE = test_setting
     client.login(username='user', password='user')
 
     url = reverse('profile_update')
@@ -81,12 +76,13 @@ def test_post_profile_update(db, client):
     else:
         assert response.status_code == 200
 
-
-def test_post_profile_update_cancel(db, client):
+@pytest.mark.parametrize('test_setting', boolean_toggle)
+def test_post_profile_update_cancel(db, client, settings, test_setting):
     """
     An authorized POST request to the profile update form updates with
     cancel redirects to home.
     """
+    settings.PROFILE_UPDATE = test_setting
     client.login(username='user', password='user')
 
     url = reverse('profile_update')
@@ -104,12 +100,13 @@ def test_post_profile_update_cancel(db, client):
     else:
         assert response.status_code == 200
 
-
-def test_post_profile_update_cancel2(db, client):
+@pytest.mark.parametrize('test_setting', boolean_toggle)
+def test_post_profile_update_cancel2(db, client, settings, test_setting):
     """
     An authorized POST request to the profile update form updates with
     cancel and the next field redirects to the given url.
     """
+    settings.PROFILE_UPDATE = test_setting
     client.login(username='user', password='user')
 
     url = reverse('profile_update')
@@ -128,12 +125,13 @@ def test_post_profile_update_cancel2(db, client):
     else:
         assert response.status_code == 200
 
-
-def test_post_profile_update_next(db, client):
+@pytest.mark.parametrize('test_setting', boolean_toggle)
+def test_post_profile_update_next(db, client, settings, test_setting):
     """
     An authorized POST request to the profile update form with next field
     updates the user and redirects to the given url.
     """
+    settings.PROFILE_UPDATE = test_setting
     client.login(username='user', password='user')
 
     url = reverse('profile_update')
@@ -153,12 +151,13 @@ def test_post_profile_update_next(db, client):
     else:
         assert response.status_code == 200
 
-
-def test_post_profile_update_next2(db, client):
+@pytest.mark.parametrize('test_setting', boolean_toggle)
+def test_post_profile_update_next2(db, client, settings, test_setting):
     """
     An authorized POST request to the profile update form with next
     field set to profile_update updates the user and redirects to home.
     """
+    settings.PROFILE_UPDATE = test_setting
     client.login(username='user', password='user')
 
     url = reverse('profile_update')
@@ -178,330 +177,308 @@ def test_post_profile_update_next2(db, client):
     else:
         assert response.status_code == 200
 
-
-def test_password_change_get(db, client):
+@pytest.mark.parametrize('test_setting', boolean_toggle)
+def test_password_change_get(db, client, settings, test_setting):
     """
     An authorized GET request to the password change form returns the form.
     """
-    if settings.ACCOUNT:
-        client.login(username='user', password='user')
+    settings.ACCOUNT = test_setting
+    # independent of the setting, the reverse url exists
+    client.login(username='user', password='user')
+    url = reverse('account_change_password')
+    response = client.get(url)
+    assert response.status_code == 200
 
-        url = reverse('account_change_password')
-        response = client.get(url)
-        assert response.status_code == 200
 
-
-def test_password_change_post(db, client):
+@pytest.mark.parametrize('test_setting', boolean_toggle)
+def test_password_change_post(db, client, settings, test_setting):
     """
     An authorized POST request to the password change form updates the
     password and redirects to home.
     """
-    if settings.ACCOUNT:
-        client.login(username='user', password='user')
+    settings.ACCOUNT = test_setting
+    
+    client.login(username='user', password='user')
+    url = reverse('account_change_password')
+    data = {
+        'old_password': 'user',
+        'new_password1': 'resu',
+        'new_password2': 'resu',
+    }
+    response = client.post(url, data)
+    assert response.status_code == 200
 
-        url = reverse('account_change_password')
-        data = {
-            'old_password': 'user',
-            'new_password1': 'resu',
-            'new_password2': 'resu',
-        }
-        response = client.post(url, data)
-        assert response.status_code == 200
 
-
-def test_password_reset_get(db, client):
+@pytest.mark.parametrize('test_setting', boolean_toggle)
+def test_password_reset_get(db, client, settings, test_setting):
     """
     A GET request to the password reset form returns the form.
     """
-    if settings.ACCOUNT:
-        url = reverse('account_reset_password')
-        response = client.get(url)
-        assert response.status_code == 200
+    settings.ACCOUNT = test_setting
+    
+    url = reverse('account_reset_password')
+    response = client.get(url)
+    assert response.status_code == 200
 
 
-def test_password_reset_post_invalid(db, client):
+@pytest.mark.parametrize('test_setting', boolean_toggle)
+def test_password_reset_post_invalid(db, client, settings, test_setting):
     """
     A POST request to the password reset form with an invalid mail address
     sends no mail.
     """
-    if settings.ACCOUNT:
-        url = reverse('account_reset_password')
-        data = {'email': 'wrong@example.com'}
-        response = client.post(url, data)
-        assert response.status_code == 200
-        assert len(mail.outbox) == 0
+    settings.ACCOUNT = test_setting
+    
+    url = reverse('account_reset_password')
+    data = {'email': 'wrong@example.com'}
+    response = client.post(url, data)
+    assert response.status_code == 200
+    assert len(mail.outbox) == 0
 
 
-def test_password_reset_post_valid(db, client):
+@pytest.mark.parametrize('test_setting', boolean_toggle)
+def test_password_reset_post_valid(db, client, settings, test_setting):
     """
     A POST request to the password reset form with an invalid mail address
     sends a mail with a correct link.
     """
-    if settings.ACCOUNT:
-        url = reverse('account_reset_password')
-        data = {'email': 'user@example.com'}
-        response = client.post(url, data)
-        assert response.status_code == 302
-        assert response.url == reverse('account_reset_password_done')
-        assert len(mail.outbox) == 1
+    settings.ACCOUNT = test_setting
 
-        # get the link from the mail
-        urls = re.findall(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', mail.outbox[0].body)
-        assert len(urls) == 1
+    # if settings.ACCOUNT:
+    url = reverse('account_reset_password')
+    data = {'email': 'user@example.com'}
+    response = client.post(url, data)
+    assert response.status_code == 302
+    assert response.url == reverse('account_reset_password_done')
+    assert len(mail.outbox) == 1
 
-        # get the password_reset page
-        response = client.get(urls[0])
-        assert response.status_code == 302
-        assert response.url == reverse('account_reset_password_from_key', args=['4','set-password'])
+    # get the link from the mail
+    # urls = re.findall(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', mail.outbox[0].body)  # complicated regex
+    urls = [i.strip() for i in mail.outbox[0].body.splitlines() if i.strip().startswith('http')]  # simpler alternative
+    assert len(urls) == 1
 
-
-def test_remove_user_get(db, client):
-    if settings.PROFILE_DELETE:
-        client.login(username='user', password='user')
-
-        url = reverse('profile_remove')
-        response = client.get(url)
-        assert response.status_code == 200
+    # get the password_reset page
+    response = client.get(urls[0])
+    assert response.status_code == 302
+    assert response.url == reverse('account_reset_password_from_key', args=['4','set-password'])
+    # else:
+    #     pytest.raises(NoReverseMatch, reverse, 'account_reset_password')
 
 
-def test_remove_user_get_when_disabled(db, client, settings):
-    settings.PROFILE_DELETE = False
+@pytest.mark.parametrize('test_setting', boolean_toggle)
+def test_remove_user_get(db, client, settings, test_setting):
+    settings.PROFILE_DELETE = test_setting
 
     client.login(username='user', password='user')
-
     url = reverse('profile_remove')
     response = client.get(url)
+
     assert response.status_code == 200
-    assertTemplateUsed(response, 'profile/profile_remove_closed.html')
+    if settings.PROFILE_DELETE:
+        assertTemplateUsed(response, 'profile/profile_remove_form.html')
+    else:
+        assertTemplateUsed(response, 'profile/profile_remove_closed.html')
+
+
+@pytest.mark.parametrize('test_setting', boolean_toggle)
+def test_remove_user_post(db, client, settings, test_setting):
+    settings.PROFILE_DELETE = test_setting
+
+    client.login(username='user', password='user')
+    url = reverse('profile_remove')
+    data = {
+        'email': 'user@example.com',
+        'password': 'user',
+        'consent': True
+    }
+    response = client.post(url, data)
+
+    assert response.status_code == 200
+    if settings.PROFILE_DELETE:
+        assertTemplateUsed(response, 'profile/profile_remove_success.html')
+        pytest.raises(ObjectDoesNotExist, get_user_model().objects.get, username='user')
+    else:
+        assertTemplateUsed(response, 'profile/profile_remove_closed.html')
+        assert get_user_model().objects.get(username='user')
+
+
+@pytest.mark.parametrize('test_setting', boolean_toggle)
+def test_remove_user_post_cancelled(db, client, settings, test_setting):
+    settings.PROFILE_UPDATE = test_setting
+    settings.PROFILE_DELETE = True
+
+    client.login(username='user', password='user')
+    url = reverse('profile_remove')
+    response = client.post(url, {'cancel': 'cancel'})
+
+    assert response.status_code == 302
     assert get_user_model().objects.filter(username='user').exists()
+    if settings.PROFILE_UPDATE:
+        assert response.url == '/account'
+    else:
+        assert response.url == '/'
 
 
-def test_remove_user_post(db, client, settings):
+@pytest.mark.parametrize('test_setting', boolean_toggle)
+def test_remove_user_post_invalid_email(db, client, settings, test_setting):
+    settings.PROFILE_DELETE = test_setting
+
+    client.login(username='user', password='user')
+    url = reverse('profile_remove')
+    data = {
+        'email': 'invalid',
+        'password': 'user',
+        'consent': True
+    }
+    response = client.post(url, data)
+
+    assert response.status_code == 200
+    assert get_user_model().objects.get(username='user')
     if settings.PROFILE_DELETE:
-        client.login(username='user', password='user')
-
-        url = reverse('profile_remove')
-        data = {
-            'email': 'user@example.com',
-            'password': 'user',
-            'consent': True
-        }
-        response = client.post(url, data)
-        assert response.status_code == 200
-        assert not get_user_model().objects.filter(username='user').exists()
-
-
-def test_remove_user_post_cancelled_when_update_is_true(db, client, settings):
-    settings.PROFILE_UPDATE = True
-    if settings.PROFILE_DELETE:
-        client.login(username='user', password='user')
-
-        url = reverse('profile_remove')
-        response = client.post(url, {'cancel': 'cancel'})
-        assert response.status_code == 302
-        if settings.PROFILE_UPDATE:
-            assert response.url == '/account'
-        else:
-            assert response.url == '/'
-        assert get_user_model().objects.filter(username='user').exists()
-
-
-def test_remove_user_post_cancelled_when_update_is_false(db, client, settings):
-    settings.PROFILE_UPDATE = False
-    if settings.PROFILE_DELETE:
-        client.login(username='user', password='user')
-
-        url = reverse('profile_remove')
-        response = client.post(url, {'cancel': 'cancel'})
-        assert response.status_code == 302
-        if settings.PROFILE_UPDATE:
-            assert response.url == '/account'
-        else:
-            assert response.url == '/'
-        assert get_user_model().objects.filter(username='user').exists()
-
-
-def test_remove_user_post_invalid_email(db, client):
-    if settings.PROFILE_DELETE:
-        client.login(username='user', password='user')
-
-        url = reverse('profile_remove')
-        data = {
-            'email': 'invalid',
-            'password': 'user',
-            'consent': True
-        }
-        response = client.post(url, data)
-        assert response.status_code == 200
-        assert get_user_model().objects.filter(username='user').exists()
-
-
-def test_remove_user_post_invalid_password(db, client):
-    if settings.PROFILE_DELETE:
-        client.login(username='user', password='user')
-
-        url = reverse('profile_remove')
-        data = {
-            'email': 'user@example.com',
-            'password': 'invalid',
-            'consent': True
-        }
-        response = client.post(url, data)
-        assert response.status_code == 200
         assertTemplateUsed(response, 'profile/profile_remove_failed.html')
-        assert get_user_model().objects.filter(username='user').exists()
+    else:
+        assertTemplateUsed(response, 'profile/profile_remove_closed.html')
 
 
-def test_remove_user_post_invalid_consent(db, client):
+
+@pytest.mark.parametrize('test_setting', boolean_toggle)
+def test_remove_user_post_invalid_password(db, client, settings, test_setting):
+    settings.PROFILE_DELETE = test_setting
+
+    client.login(username='user', password='user')
+    url = reverse('profile_remove')
+    data = {
+        'email': 'user@example.com',
+        'password': 'invalid',
+        'consent': True
+    }
+    response = client.post(url, data)
+
+    assert response.status_code == 200
+    assert get_user_model().objects.get(username='user')
     if settings.PROFILE_DELETE:
-        client.login(username='user', password='user')
-
-        url = reverse('profile_remove')
-        data = {
-            'email': 'user@example.com',
-            'password': 'user',
-            'consent': False
-        }
-
-        response = client.post(url, data)
-        assert response.status_code == 200
-        # assertTemplateUsed(response, 'profile/profile_remove_failed.html')
-        assert get_user_model().objects.filter(username='user').exists()
-
-
-def test_remove_a_user_without_usable_password(db, client, settings):
-    username = "user-no-password"
-    email = "user-no-password@example.com"
-    user, _created = get_user_model().objects.get_or_create(username=username, email=email)
-    user.set_unusable_password()
-    user.save()
-
-    if settings.PROFILE_DELETE:
-        client.force_login(user=user)  # login without password
-
-        url = reverse('profile_remove')
-        data = {
-            'email': email,
-            'consent': True
-        }
-        response = client.post(url, data)
-        assert response.status_code == 200
-        assertTemplateUsed(response, 'profile/profile_remove_success.html')
-        assert not get_user_model().objects.filter(username=username).exists()
-    client.logout()
-
-
-def test_remove_a_user_without_usable_password_fails_when_email_is_wrong(db, client, settings):
-    username = "user-no-password"
-    email = "user-no-password@example.com"
-    user, _created = get_user_model().objects.get_or_create(username=username, email=email)
-    user.set_unusable_password()
-    user.save()
-
-    if settings.PROFILE_DELETE:
-        client.force_login(user=user)  # login without password
-
-        url = reverse('profile_remove')
-        data = {
-            'email': 'wrong-email@mail.com',
-            'consent': True
-        }
-        response = client.post(url, data)
-        assert response.status_code == 200
         assertTemplateUsed(response, 'profile/profile_remove_failed.html')
-        assert get_user_model().objects.filter(username=username).exists()
-    client.logout()
+    else:
+        assertTemplateUsed(response, 'profile/profile_remove_closed.html')
 
 
-def test_remove_a_user_without_usable_password_fails_when_email_is_empty(db, client, settings):
-    username = "user-no-password"
-    email = "user-no-password@example.com"
-    user, _created = get_user_model().objects.get_or_create(username=username, email=email)
-    user.set_unusable_password()
-    user.save()
+@pytest.mark.parametrize('test_setting', boolean_toggle)
+def test_remove_user_post_invalid_consent(db, client, settings, test_setting):
+    settings.PROFILE_DELETE = test_setting
 
+    client.login(username='user', password='user')
+    url = reverse('profile_remove')
+    data = {
+        'email': 'user@example.com',
+        'password': 'user',
+        'consent': False
+    }
+
+    response = client.post(url, data)
+    assert response.status_code == 200
     if settings.PROFILE_DELETE:
-        client.force_login(user=user)  # login without password
-
-        url = reverse('profile_remove')
-        data = {
-            'email': '',
-            'consent': True
-        }
-        response = client.post(url, data)
-        assert response.status_code == 200
-        assert response.context['form'].errors['email'] == ['This field is required.']  # check if consent is required
-        assert get_user_model().objects.filter(username=username).exists()
-    client.logout()
-
-
-def test_remove_a_user_without_usable_password_fails_when_consent_is_false(db, client, settings):
-    username = "user-no-password"
-    email = "user-no-password@example.com"
-    user, _created = get_user_model().objects.get_or_create(username=username, email=email)
-    user.set_unusable_password()
-    user.save()
-
-    if settings.PROFILE_DELETE:
-        client.force_login(user=user)  # login without password
-
-        url = reverse('profile_remove')
-        data = {
-            'email': email,
-            'consent': False
-        }
-        response = client.post(url, data)
-        assert response.status_code == 200
+        assertTemplateUsed(response, 'profile/profile_remove_form.html')
         assert response.context['form'].errors['consent'] == ['This field is required.']  # check if consent is required
-        assert get_user_model().objects.filter(username=username).exists()
-    client.logout()
+    else:
+        assertTemplateUsed(response, 'profile/profile_remove_closed.html')
 
 
-def test_remove_a_user_without_usable_password_succeeds_when_shibboleth_is_true(db, client, settings):
-    settings.SHIBBOLETH = True
-    username = "user-no-password"
-    email = "user-no-password@example.com"
-    user, _created = get_user_model().objects.get_or_create(username=username, email=email)
+
+def test_remove_a_user_without_usable_password_post(db, client, settings):
+    settings.PROFILE_DELETE = True
+
+    user = get_user_model().objects.get(username='user', email='user@example.com')
     user.set_unusable_password()
     user.save()
 
-    if settings.PROFILE_DELETE:
-        client.force_login(user=user)  # login without password
+    client.force_login(user=user)  # login without password
+    url = reverse('profile_remove')
+    data = {
+        'email': user.email,
+        'consent': True
+    }
+    response = client.post(url, data)
 
-        url = reverse('profile_remove')
-        data = {
-            'email': email,
-            'consent': True
-        }
-        response = client.post(url, data)
-        assert response.status_code == 200
+    assert response.status_code == 200
+    if settings.PROFILE_DELETE:
         assertTemplateUsed(response, 'profile/profile_remove_success.html')
-        assert not get_user_model().objects.filter(username=username).exists()
-    settings.SHIBBOLETH = False
+        pytest.raises(ObjectDoesNotExist, get_user_model().objects.get, pk=user.pk)
+    else:
+        assertTemplateUsed(response, 'profile/profile_remove_closed.html')
     client.logout()
 
 
-def test_remove_a_user_without_usable_password_fails_when_shibboleth_is_true_and_consent_is_false(db, client, settings):
-    settings.SHIBBOLETH = True
-    username = "user-no-password"
-    email = "user-no-password@example.com"
-    user, _created = get_user_model().objects.get_or_create(username=username, email=email)
+def test_remove_a_user_without_usable_password_post_invalid_email(db, client, settings):
+    settings.PROFILE_DELETE = True
+
+    user = get_user_model().objects.get(username='user', email='user@example.com')
     user.set_unusable_password()
     user.save()
 
-    if settings.PROFILE_DELETE:
-        client.force_login(user=user)  # login without password
+    client.force_login(user=user)  # login without password
+    url = reverse('profile_remove')
+    data = {
+        'email': 'invalid',
+        'consent': True
+    }
+    response = client.post(url, data)
 
-        url = reverse('profile_remove')
-        data = {
-            'email': email,
-            'consent': False
-        }
-        response = client.post(url, data)
-        assert response.status_code == 200
+    assert response.status_code == 200
+    get_user_model().objects.get(pk=user.pk)
+    if settings.PROFILE_DELETE:
+        assertTemplateUsed(response, 'profile/profile_remove_failed.html')
+    else:
+        assertTemplateUsed(response, 'profile/profile_remove_closed.html')
+    client.logout()
+
+
+def test_remove_a_user_without_usable_password_post_empty_email(db, client, settings):
+    settings.PROFILE_DELETE = True
+
+    user = get_user_model().objects.get(username='user', email='user@example.com')
+    user.set_unusable_password()
+    user.save()
+
+    client.force_login(user=user)  # login without password
+    url = reverse('profile_remove')
+    data = {
+        'email': '',
+        'consent': True
+    }
+    response = client.post(url, data)
+
+    assert response.status_code == 200
+    assert get_user_model().objects.get(pk=user.pk)
+    if settings.PROFILE_DELETE:
+        assertTemplateUsed(response, 'profile/profile_remove_form.html')
+        assert response.context['form'].errors['email'] == ['This field is required.']  # check if email is required
+    else:
+        assertTemplateUsed(response, 'profile/profile_remove_closed.html')
+    client.logout()
+
+
+def test_remove_a_user_without_usable_password_post_invalid_consent(db, client, settings):
+    settings.PROFILE_DELETE = True
+    
+    user = get_user_model().objects.get(username='user', email='user@example.com')
+    user.set_unusable_password()
+    user.save()
+
+    client.force_login(user=user)  # login without password
+    url = reverse('profile_remove')
+    data = {
+        'email': user.email,
+        'consent': False
+    }
+    response = client.post(url, data)
+
+    assert response.status_code == 200
+    assert get_user_model().objects.get(pk=user.pk)
+    if settings.PROFILE_DELETE:
+        assertTemplateUsed(response, 'profile/profile_remove_form.html')
         assert response.context['form'].errors['consent'] == ['This field is required.']  # check if consent is required
-        assert get_user_model().objects.filter(username=username).exists()
-    settings.SHIBBOLETH = False
+    else:
+        assertTemplateUsed(response, 'profile/profile_remove_closed.html')
     client.logout()
 
 
