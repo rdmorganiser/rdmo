@@ -55,7 +55,8 @@ class ProjectSerializer(serializers.ModelSerializer):
             'guests',
             'created',
             'updated',
-            'site'
+            'site',
+            'views'
         )
         read_only_fields = (
             'snapshots',
