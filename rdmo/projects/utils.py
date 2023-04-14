@@ -145,3 +145,12 @@ def get_invite_email_project_path(invite) -> str:
             invited_user_member_domain = invite.user.role.member.first().domain
             project_invite_path = 'http://' + invited_user_member_domain + project_invite_path
     return project_invite_path
+
+
+def set_context_querystring_with_filter_and_page(context : dict) -> dict:
+    if context["filter"].data:
+        querystring = context["filter"].data.copy()
+        if context["filter"].data.get('page'):
+            del querystring['page']
+        context['querystring'] = querystring.urlencode()
+    return context
