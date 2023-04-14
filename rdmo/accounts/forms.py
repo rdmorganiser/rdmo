@@ -92,7 +92,9 @@ class RemoveForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request')
         kwargs.setdefault('label_suffix', '')
-        super(RemoveForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
+        if not self.request.user.has_usable_password():
+            self.fields.pop('password')
 
     email = forms.CharField(widget=forms.TextInput(attrs={'required': 'false'}))
     email.label = _('E-mail')
