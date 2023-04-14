@@ -137,14 +137,16 @@ a.disabled {
             margin-bottom: 10px;
         }
     }
-    .element-link {
-        margin-left: 4px;
-    }
-    .element-button {
-        margin-right: 4px;
+    .pull-right {
+        .element-link {
+            margin-left: 4px;
+        }
+        .element-button {
+            margin-left: 4px;
 
-        &:last-child {
-            margin-left: 0;
+            &:first-child {
+                margin-left: 8px;
+            }
         }
     }
     .checkboxes {
