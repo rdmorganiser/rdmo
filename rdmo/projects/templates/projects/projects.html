@@ -153,9 +153,13 @@
         </tbody>
     </table>
 
+    <div id="support-info"></div>
+
     {% include 'projects/projects_pagination.html' %}
 
     {% render_lang_template 'projects/overlays/projects_create_project' %}
     {% render_lang_template 'projects/overlays/projects_projects_table' %}
     {% render_lang_template 'projects/overlays/projects_import_project' %}
+    {% render_lang_template 'projects/overlays/projects_support_info' %}
+
 {% endblock %}

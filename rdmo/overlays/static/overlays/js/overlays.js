@@ -23,6 +23,12 @@ function initOverlays(url_name) {
                 'content': $(overlayId).html(),
             })
 
+            // if overlay element does not exist, proceed with next overlay
+            if (!$(elementId).length) {
+                fetchResponse('next');
+                return;
+            }
+
             // show popover
             $(elementId).popover(opts).popover('show');
 

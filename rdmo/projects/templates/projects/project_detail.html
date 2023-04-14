@@ -36,6 +36,8 @@
     {% include 'projects/project_detail_snapshots.html' %}
     {% include 'projects/project_detail_integrations.html' %}
 
+    <div id="support-info"></div>
+
     {% render_lang_template 'projects/overlays/project_project_questions' %}
     {% render_lang_template 'projects/overlays/project_project_catalog' %}
     {% render_lang_template 'projects/overlays/project_project_issues' %}
@@ -44,5 +46,6 @@
     {% render_lang_template 'projects/overlays/project_project_snapshots' %}
     {% render_lang_template 'projects/overlays/project_export_project' %}
     {% render_lang_template 'projects/overlays/project_import_project' %}
+    {% render_lang_template 'projects/overlays/project_support_info' %}
 
 {% endblock %}

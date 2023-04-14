@@ -138,6 +138,7 @@ class AttributeIndexSerializer(ReadOnlyObjectPermissionsSerializerMixin, seriali
         fields = (
             'id',
             'uri',
+            'uri_prefix',
             'key',
             'path',
             'read_only'
