@@ -27,6 +27,7 @@ from rdmo.views.models import View
 
 from ..filters import ProjectFilter
 from ..models import Integration, Invite, Membership, Project, Value
+from ..utils import set_context_querystring_with_filter_and_page
 
 logger = logging.getLogger(__name__)
 
@@ -54,6 +55,9 @@ class ProjectsView(LoginRequiredMixin, FilterView):
         last_changed_subquery = models.Subquery(
             Value.objects.filter(project=models.OuterRef('pk')).order_by('-updated').values('updated')[:1]
         )
+        # the 'updated' field from a Project always returns a valid DateTime value
+        # when Greatest returns null, then Coalesce will return the value for 'updated' as a fall-back
+        # when Greatest returns a value, then Coalesce will return this value
         queryset = queryset.annotate(last_changed=Coalesce(Greatest(last_changed_subquery, 'updated'), 'updated'))
 
         # order by last changed
@@ -66,13 +70,8 @@ class ProjectsView(LoginRequiredMixin, FilterView):
         context['number_of_projects'] = self.get_queryset().count()
         context['invites'] = Invite.objects.filter(user=self.request.user)
         context['is_site_manager'] = is_site_manager(self.request.user)
-
-        if context["filter"].data:
-            querystring = context["filter"].data.copy()
-            if context["filter"].data.get('page'):
-                del querystring['page']
-            context['querystring'] = querystring.urlencode()
-
+        context['number_of_filtered_projects'] = context["filter"].qs.count()
+        context = set_context_querystring_with_filter_and_page(context)
         return context
 
 
@@ -92,6 +91,9 @@ class SiteProjectsView(LoginRequiredMixin, FilterView):
             last_changed_subquery = models.Subquery(
                 Value.objects.filter(project=models.OuterRef('pk')).order_by('-updated').values('updated')[:1]
             )
+            # the 'updated' field from a Project always returns a valid DateTime value
+            # when Greatest returns null, then Coalesce will return the value for 'updated' as a fall-back
+            # when Greatest returns a value, then Coalesce will return this value
             queryset = queryset.annotate(last_changed=Coalesce(Greatest(last_changed_subquery, 'updated'), 'updated'))
 
             return queryset
@@ -101,13 +103,8 @@ class SiteProjectsView(LoginRequiredMixin, FilterView):
     def get_context_data(self, **kwargs):
         context = super(SiteProjectsView, self).get_context_data(**kwargs)
         context['number_of_projects'] = self.get_queryset().count()
-
-        if context["filter"].data:
-            querystring = context["filter"].data.copy()
-            if context["filter"].data.get('page'):
-                del querystring['page']
-            context['querystring'] = querystring.urlencode()
-
+        context['number_of_filtered_projects'] = context["filter"].qs.count()
+        context = set_context_querystring_with_filter_and_page(context)
         return context
 
 
