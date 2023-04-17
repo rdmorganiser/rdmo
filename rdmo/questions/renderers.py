@@ -181,6 +181,7 @@ class CatalogRenderer(XMLRenderer):
     def render_document(self, xml, catalogs):
         xml.startElement('rdmo', {
             'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            'version': self.version,
             'created': self.created
         })
         for catalog in catalogs:
@@ -193,6 +194,7 @@ class SectionRenderer(XMLRenderer):
     def render_document(self, xml, sections):
         xml.startElement('rdmo', {
             'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            'version': self.version,
             'created': self.created
         })
         for section in sections:
@@ -205,6 +207,7 @@ class PageRenderer(XMLRenderer):
     def render_document(self, xml, pages):
         xml.startElement('rdmo', {
             'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            'version': self.version,
             'created': self.created
         })
         for page in pages:
@@ -217,6 +220,7 @@ class QuestionSetRenderer(XMLRenderer):
     def render_document(self, xml, questionsets):
         xml.startElement('rdmo', {
             'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            'version': self.version,
             'created': self.created
         })
         for questionset in questionsets:
@@ -229,6 +233,7 @@ class QuestionRenderer(XMLRenderer):
     def render_document(self, xml, questions):
         xml.startElement('rdmo', {
             'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            'version': self.version,
             'created': self.created
         })
         for question in questions:
