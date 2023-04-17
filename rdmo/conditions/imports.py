@@ -1,9 +1,7 @@
 import logging
 
-from rdmo.core.imports import (get_foreign_field, set_common_fields,
+from rdmo.core.imports import (set_foreign_field, set_common_fields,
                                validate_instance)
-from rdmo.domain.models import Attribute
-from rdmo.options.models import Option
 
 from .models import Condition
 from .validators import ConditionLockedValidator, ConditionUniqueURIValidator
@@ -19,8 +17,8 @@ def import_condition(element, save=False):
 
     set_common_fields(condition, element)
 
-    condition.source = get_foreign_field(condition, element.get('source'), Attribute)
-    condition.target_option = get_foreign_field(condition, element.get('target_option'), Option)
+    set_foreign_field(condition, 'source', element)
+    set_foreign_field(condition, 'target_option', element)
 
     condition.relation = element.get('relation')
     condition.target_text = element.get('target_text') or ''

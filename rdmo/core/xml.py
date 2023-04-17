@@ -24,35 +24,47 @@ def parse_xml_string(string):
 
 
 def flat_xml_to_elements(treenode):
-    elements = []
+    elements = {}
     ns_map = get_ns_map(treenode)
     uri_attrib = get_ns_tag('dc:uri', ns_map)
 
     for node in treenode:
+        uri = get_uri(node, ns_map)
 
         element = {
             'uri': get_uri(node, ns_map),
             'type': node.tag
         }
 
-        for subnode in node:
-            tag = strip_ns(subnode.tag, ns_map)
+        for sub_node in node:
+            tag = strip_ns(sub_node.tag, ns_map)
 
-            if uri_attrib in subnode.attrib:
+            if uri_attrib in sub_node.attrib:
                 # this node has an uri!
-                element[tag] = subnode.attrib[uri_attrib]
-            elif 'lang' in subnode.attrib:
+                element[tag] = {
+                    'uri': sub_node.attrib[uri_attrib]
+                }
+            elif 'lang' in sub_node.attrib:
                 # this node has the lang attribute!
-                element['%s_%s' % (tag, subnode.attrib['lang'])] = subnode.text
-            elif list(subnode):
+                element['%s_%s' % (tag, sub_node.attrib['lang'])] = sub_node.text
+            elif list(sub_node):
                 # this node is a list!
-                element[tag] = [subsubnode.attrib[uri_attrib] for subsubnode in subnode]
+                element[tag] = []
+                for sub_sub_node in sub_node:
+                    sub_element = {
+                        'uri': sub_sub_node.attrib[uri_attrib]
+                    }
+                    if 'order' in sub_sub_node.attrib:
+                        sub_element['order'] = sub_sub_node.attrib['order']
+
+                    element[tag].append(sub_element)
+            elif sub_node.text is None or not sub_node.text.strip():
+                element[tag] = None
             else:
-                element[tag] = subnode.text
+                element[tag] = sub_node.text
 
-        elements.append(element)
+        elements[uri] = element
 
-    elements = sorted(elements, key=sort_elements)
     return elements
 
 
@@ -95,13 +107,21 @@ def filter_elements_by_type(elements, element_type):
             yield element
 
 
-def sort_elements(element):
-    # remove the uri_prefix from the uri to create the key to be sorted by
-    sort_key = element['uri'].replace(element['uri_prefix'], '')
+def order_elements(ordered_elements, unordered_elements, uri, element):
+    if element is not None:
+        for element_value in element.values():
+            if isinstance(element_value, dict):
+                sub_uri = element_value.get('uri')
+                sub_element = unordered_elements.get(sub_uri)
+                if sub_uri not in ordered_elements:
+                    order_elements(ordered_elements, unordered_elements, sub_uri, sub_element)
 
-    # remove the app name from the sort_key and replace it by its import order
-    for i, item in enumerate(IMPORT_SORT_ORDER):
-        if sort_key.startswith(item):
-            sort_key = sort_key.replace(item, str(i))
+            elif isinstance(element_value, list):
+                for value in element_value:
+                    sub_uri = value.get('uri')
+                    sub_element = unordered_elements.get(sub_uri)
+                    if sub_uri not in ordered_elements:
+                        order_elements(ordered_elements, unordered_elements, sub_uri, sub_element)
 
-    return sort_key
+        if uri not in ordered_elements:
+            ordered_elements[uri] = element
