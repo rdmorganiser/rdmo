@@ -17,7 +17,6 @@ class OptionsRenderer(BaseXMLRenderer):
                 'dc:uri': optionset_option['option']['uri'],
                 'order': str(optionset_option['order'])
             }, None)
-            self.render_text_element(xml, 'option', {'dc:uri': optionset_option.get('uri')}, None)
         xml.endElement('options')
 
         xml.startElement('conditions', {})
