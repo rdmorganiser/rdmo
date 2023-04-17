@@ -3558,8 +3558,7 @@ msgid "Previous"
 msgstr "Vorherige"
 
 #: projects/templates/projects/projects_pagination.html:12
-#, fuzzy, python-format
-#| msgid "Page %(number)s of %(num_pages)s."
+#, python-format
 msgid ""
 "Page %(number)s of %(num_pages)s with %(num_projects_in_page)s projects."
 msgstr ""
