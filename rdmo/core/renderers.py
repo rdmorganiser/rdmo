@@ -5,6 +5,8 @@ from django.utils.xmlutils import SimplerXMLGenerator
 from django.utils.encoding import smart_str
 from rest_framework.renderers import BaseRenderer
 
+from rdmo import __version__
+
 
 class BaseXMLRenderer(BaseRenderer):
 
@@ -35,6 +37,10 @@ class BaseXMLRenderer(BaseRenderer):
 
     def render_document(self, xml, data):
         pass
+
+    @property
+    def version(self):
+        return __version__
 
     @property
     def created(self):
