@@ -29,5 +29,3 @@ dist
 
 .pytest_cache
 .on-save.json
-
-.vscode/
