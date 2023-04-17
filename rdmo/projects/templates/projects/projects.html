@@ -54,9 +54,7 @@
         </a>
         <p class="text-muted">
             <small>
-                {% blocktrans trimmed count count=number_of_projects %}
-                {{ number_of_filtered_projects }} of {{ number_of_projects }} project shown
-                {% plural %}
+                {% blocktrans trimmed %}
                 {{ number_of_filtered_projects }} of {{ number_of_projects }} projects shown
                 {% endblocktrans %}
             </small>

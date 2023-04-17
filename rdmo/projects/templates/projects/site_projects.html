@@ -15,7 +15,7 @@
 {% block sidebar %}
     <h2>{% trans 'Filter projects' %} ({{ number_of_filtered_projects }}/{{ number_of_projects }})</h2>
 
-    <form method="GET">
+    <form method="GET" class="projects-search">
         <input type="text" class="form-control" id="search" name="title" placeholder="{% trans 'Search project title' %}"
                value="{{request.GET.title }}" />
         <a href="{% url 'projects' %}" class="projects-search-reset">
@@ -23,9 +23,7 @@
         </a>
         <p class="text-muted">
             <small>
-                {% blocktrans trimmed count count=number_of_projects %}
-                {{ number_of_filtered_projects }} of {{ number_of_projects }} project shown
-                {% plural %}
+                {% blocktrans trimmed %}
                 {{ number_of_filtered_projects }} of {{ number_of_projects }} projects shown
                 {% endblocktrans %}
             </small>
