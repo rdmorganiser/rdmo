@@ -13,12 +13,12 @@
 {% endblock %}
 
 {% block sidebar %}
-    <h2>{% trans 'Filter projects' %} ({{ number_of_filtered_projects }}/{{ number_of_projects }})</h2>
+    <h2>{% trans 'Filter projects' %}</h2>
 
     <form method="GET" class="projects-search">
         <input type="text" class="form-control" id="search" name="title" placeholder="{% trans 'Search project title' %}"
                value="{{request.GET.title }}" />
-        <a href="{% url 'projects' %}" class="projects-search-reset">
+        <a href="{% url 'site_projects' %}" class="projects-search-reset">
             <i class="fa fa-times" aria-hidden="true"></i>
         </a>
         <p class="text-muted">
