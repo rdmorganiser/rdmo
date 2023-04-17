@@ -1,12 +1,10 @@
 import logging
 
 from django.contrib.sites.models import Site
-from rdmo.conditions.models import Condition
-from rdmo.core.imports import (get_foreign_field, get_m2m_instances,
+from rdmo.core.imports import (set_foreign_field, set_m2m_instances,
                                set_common_fields, set_lang_field,
                                validate_instance)
-from rdmo.domain.models import Attribute
-from rdmo.questions.models import Catalog
+
 
 from .models import Task
 
@@ -24,14 +22,11 @@ def import_task(element, save=False):
     set_lang_field(task, 'title', element)
     set_lang_field(task, 'text', element)
 
-    task.start_attribute = get_foreign_field(task, element.get('start_attribute'), Attribute)
-    task.end_attribute = get_foreign_field(task, element.get('end_attribute'), Attribute)
+    set_foreign_field(task, 'start_attribute', element)
+    set_foreign_field(task, 'end_attribute', element)
 
     task.days_before = element.get('days_before')
     task.days_after = element.get('days_after')
-
-    conditions = get_m2m_instances(task, element.get('conditions'), Condition)
-    catalogs = get_m2m_instances(task, element.get('catalogs'), Catalog)
 
     if save and validate_instance(task):
         if task.id:
@@ -41,8 +36,8 @@ def import_task(element, save=False):
 
         task.save()
         task.sites.add(Site.objects.get_current())
-        task.catalogs.set(catalogs)
-        task.conditions.set(conditions)
+        set_m2m_instances(task, 'catalogs', element)
+        set_m2m_instances(task, 'conditions', element)
         task.imported = True
 
     return task

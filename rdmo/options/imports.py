@@ -1,8 +1,6 @@
 import logging
 
-from rdmo.conditions.models import Condition
-from rdmo.core.imports import (fetch_parents, get_foreign_field,
-                               get_m2m_instances, set_common_fields,
+from rdmo.core.imports import (set_m2m_instances, set_common_fields, set_m2m_through_instances,
                                set_lang_field, validate_instance)
 
 from .models import Option, OptionSet
@@ -23,8 +21,6 @@ def import_optionset(element, save=False):
     optionset.order = element.get('order') or 0
     optionset.provider_key = element.get('provider_key') or ''
 
-    conditions = get_m2m_instances(optionset, element.get('conditions'), Condition)
-
     if save and validate_instance(optionset, OptionSetLockedValidator, OptionSetUniqueURIValidator):
         if optionset.id:
             logger.info('OptionSet created with uri %s.', element.get('uri'))
@@ -32,25 +28,20 @@ def import_optionset(element, save=False):
             logger.info('OptionSet %s updated.', element.get('uri'))
 
         optionset.save()
-        optionset.conditions.set(conditions)
-        optionset.imported = True
+        set_m2m_instances(optionset, 'conditions', element)
+        set_m2m_through_instances(optionset, 'options', element, 'optionset', 'option', 'optionset_options')
 
     return optionset
 
 
-def import_option(element, optionset_uri=False, save=False):
+def import_option(element, save=False):
     try:
-        if optionset_uri is False:
-            option = Option.objects.get(uri=element.get('uri'))
-        else:
-            option = Option.objects.get(key=element.get('key'), optionset__uri=optionset_uri)
+        option = Option.objects.get(uri=element.get('uri'))
     except Option.DoesNotExist:
         option = Option()
 
     set_common_fields(option, element)
 
-    option.optionset = get_foreign_field(option, optionset_uri or element.get('optionset'), OptionSet)
-    option.order = element.get('order') or 0
     option.additional_input = element.get('additional_input') or False
 
     set_lang_field(option, 'text', element)
@@ -62,10 +53,5 @@ def import_option(element, optionset_uri=False, save=False):
             logger.info('Option %s updated.', element.get('uri'))
 
         option.save()
-        option.imported = True
 
     return option
-
-
-def fetch_option_parents(instances):
-    return fetch_parents(OptionSet, instances)
