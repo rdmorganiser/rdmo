@@ -87,8 +87,8 @@ class XMLRenderer(BaseXMLRenderer):
 
         xml.endElement('page')
 
-        # for page_questionset in page['page_questionsets']:
-        #     self.render_questionset(xml, page_questionset['questionset'])
+        for page_questionset in page['page_questionsets']:
+            self.render_questionset(xml, page_questionset['questionset'])
 
         for page_question in page['page_questions']:
             self.render_question(xml, page_question['question'])
