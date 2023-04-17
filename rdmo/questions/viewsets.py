@@ -46,7 +46,7 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
 
     def get_queryset(self):
         queryset = Catalog.objects.annotate(projects_count=models.Count('projects'))
-        if self.action in ('nested', 'detail_export'):
+        if self.action in ('nested', 'export', 'detail_export'):
             return queryset.prefetch_elements()
         else:
             return queryset.prefetch_related('sites', 'groups', 'catalog_sections__section')
@@ -91,7 +91,7 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
 
     def get_queryset(self):
         queryset = Section.objects.all()
-        if self.action in ('nested', 'detail_export'):
+        if self.action in ('nested', 'export', 'detail_export'):
             return queryset.prefetch_elements()
         else:
             return queryset.prefetch_related('catalogs', 'section_pages__page')
@@ -138,7 +138,7 @@ class PageViewSet(CopyModelMixin, ModelViewSet):
 
     def get_queryset(self):
         queryset = Page.objects.all()
-        if self.action in ['nested', 'detail_export']:
+        if self.action in ['nested', 'export', 'detail_export']:
             return queryset.prefetch_elements().select_related('attribute')
         else:
             return queryset.prefetch_related(
@@ -166,7 +166,7 @@ class PageViewSet(CopyModelMixin, ModelViewSet):
     def export(self, request):
         serializer = PageExportSerializer(self.get_queryset(), many=True)
         xml = PageRenderer().render(serializer.data)
-        return XMLResponse(xml, name='questionsets')
+        return XMLResponse(xml, name='pages')
 
     @action(detail=True, url_path='export', permission_classes=[HasModelPermission])
     def detail_export(self, request, pk=None):
@@ -193,7 +193,7 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
 
     def get_queryset(self):
         queryset = QuestionSet.objects.all()
-        if self.action in ('nested', 'detail_export'):
+        if self.action in ('nested', 'export', 'detail_export'):
             return queryset.prefetch_elements().select_related('attribute')
         else:
             return queryset.prefetch_related(
@@ -249,7 +249,7 @@ class QuestionViewSet(CopyModelMixin, ModelViewSet):
 
     def get_queryset(self):
         queryset = Question.objects.all()
-        if self.action in ('nested', 'detail_export'):
+        if self.action in ('nested', 'export', 'detail_export'):
             return queryset.prefetch_elements().select_related('attribute')
         else:
             return queryset.prefetch_related(
