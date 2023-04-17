@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-28 11:07+0100\n"
+"POT-Creation-Date: 2023-04-17 20:03+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Dario Pilori <d.pilori@inrim.it>\n"
 "Language-Team: \n"
@@ -205,7 +205,7 @@ msgstr "I siti dei quali l'utente è gestore."
 #: projects/models/membership.py:32
 #: projects/templates/projects/project_detail_invites.html:16
 #: projects/templates/projects/project_detail_memberships.html:21
-#: projects/templates/projects/projects.html:119
+#: projects/templates/projects/projects.html:126
 msgid "Role"
 msgstr "Ruolo"
 
@@ -321,14 +321,14 @@ msgstr "Conferma"
 #: accounts/templates/account/email_confirm.html:29
 #, python-format
 msgid ""
-"This e-mail confirmation link expired or is invalid. Please <a "
-"href=\"%(email_url)s\">issue a new e-mail confirmation request</a>."
+"This e-mail confirmation link expired or is invalid. Please <a href="
+"\"%(email_url)s\">issue a new e-mail confirmation request</a>."
 msgstr ""
-"Il link di conferma è scaduto. È possibile <a "
-"href=\"%(email_url)s\">chiedere una nuova e-mail di conferma</a>."
+"Il link di conferma è scaduto. È possibile <a href=\"%(email_url)s"
+"\">chiedere una nuova e-mail di conferma</a>."
 
 #: accounts/templates/account/login.html:6
-#: accounts/templates/account/login_form.html:20
+#: accounts/templates/account/login_form.html:22
 #: accounts/templates/account/password_reset_from_key_done.html:14
 #: core/templates/core/base_navigation.html:154
 #: core/templates/core/home.html:55
@@ -342,20 +342,20 @@ msgstr "Accesso con Shibboleth"
 #: accounts/templates/account/login_form_account.html:7
 #, python-format
 msgid ""
-"If you have not created an account yet, then please <a "
-"href=\"%(signup_url)s\">sign up</a> first."
+"If you have not created an account yet, then please <a href=\"%(signup_url)s"
+"\">sign up</a> first."
 msgstr ""
-"Se non hai ancora creato un account, devi prima <a "
-"href=\"%(signup_url)s\">registrarti</a>."
+"Se non hai ancora creato un account, devi prima <a href=\"%(signup_url)s"
+"\">registrarti</a>."
 
 #: accounts/templates/account/login_form_account.html:14
 #, python-format
 msgid ""
-"If you forgot your password and want to reset it, click <a "
-"href=\"%(reset_url)s\">here</a>."
+"If you forgot your password and want to reset it, click <a href="
+"\"%(reset_url)s\">here</a>."
 msgstr ""
-"Password dimenticata? Per reimpostarla, cliccare <a "
-"href=\"%(reset_url)s\">qui</a>."
+"Password dimenticata? Per reimpostarla, cliccare <a href=\"%(reset_url)s"
+"\">qui</a>."
 
 #: accounts/templates/account/login_form_socialaccount.html:9
 msgid ""
@@ -431,8 +431,8 @@ msgid ""
 "a>."
 msgstr ""
 "Il link di reimpostazione password è errato, probabilmente perché già "
-"utilizzato. È possibile richiedere una <a "
-"href=\"%(passwd_reset_url)s\">nuova reimpostazione</a>."
+"utilizzato. È possibile richiedere una <a href=\"%(passwd_reset_url)s"
+"\">nuova reimpostazione</a>."
 
 #: accounts/templates/account/password_reset_from_key.html:18
 msgid "Enter new password"
@@ -585,8 +585,8 @@ msgid ""
 "<strong>Note:</strong> you can still <a href=\"%(email_url)s\">change your e-"
 "mail address</a>."
 msgstr ""
-"<strong>Attenzione:</strong> è ancora possibile <a "
-"href=\"%(email_url)s\">cambiare il proprio indirizzo e-mail</a>."
+"<strong>Attenzione:</strong> è ancora possibile <a href=\"%(email_url)s"
+"\">cambiare il proprio indirizzo e-mail</a>."
 
 #: accounts/templates/profile/profile_remove_closed.html:6
 #: accounts/templates/profile/profile_remove_failed.html:6
@@ -653,8 +653,8 @@ msgid ""
 msgstr ""
 "Inserire le informazioni aggiornate del proprio account. La password può "
 "essere cambiata con l'apposito <a href=\"%(password_url)s\">modulo</a>. Per "
-"modificare il proprio indirizzo e-mail, visitare <a "
-"href=\"%(email_url)s\">questa pagina</a>."
+"modificare il proprio indirizzo e-mail, visitare <a href=\"%(email_url)s"
+"\">questa pagina</a>."
 
 #: accounts/templates/profile/profile_update_form.html:33
 msgid ""
@@ -708,8 +708,8 @@ msgstr "Accesso annullato"
 #, python-format
 msgid ""
 "You decided to cancel logging in to our site using one of your existing "
-"accounts. If this was a mistake, please proceed to <a "
-"href=\"%(login_url)s\">sign in</a>."
+"accounts. If this was a mistake, please proceed to <a href=\"%(login_url)s"
+"\">sign in</a>."
 msgstr ""
 "L'accesso a questo sito mediante un altro account esistente è stato "
 "interrotto. In caso di errore, è possibile <a href=\"%(login_url)s\">entrare "
@@ -725,8 +725,8 @@ msgstr ""
 "%(site_name)s. Per completare la connessione, compilare il seguente modulo:"
 
 #: accounts/templatetags/accounts_tags.py:19
-#: projects/templates/projects/projects.html:118
-#: projects/templates/projects/site_projects.html:39
+#: projects/templates/projects/projects.html:125
+#: projects/templates/projects/site_projects.html:49
 msgid "Name"
 msgstr "Nome"
 
@@ -918,7 +918,7 @@ msgstr "Tutti i prefissi dell'URI"
 #: projects/templates/projects/project_detail_sidebar.html:11
 #: projects/templates/projects/project_view.html:42
 #: projects/templates/projects/projects.html:25
-#: projects/templates/projects/site_projects.html:23
+#: projects/templates/projects/site_projects.html:33
 #: questions/templates/questions/catalog_tree.html:104
 #: questions/templates/questions/catalogs_sidebar.html:78
 #: questions/templates/questions/catalogs_sidebar_showuri_checkboxes.html:26
@@ -1152,14 +1152,14 @@ msgid "Tasks"
 msgstr "Attività"
 
 #: conditions/validators.py:14 domain/validators.py:15 options/validators.py:14
-#: options/validators.py:26 projects/forms.py:332 projects/forms.py:353
+#: options/validators.py:26 projects/forms.py:333 projects/forms.py:354
 #: questions/validators.py:16 questions/validators.py:28
 #: questions/validators.py:46 questions/validators.py:64 tasks/validators.py:14
 #: views/validators.py:14
 msgid "This field is required."
 msgstr "Questo campo è richiesto."
 
-#: core/constants.py:14 core/settings.py:291
+#: core/constants.py:14 core/settings.py:294
 #: options/templates/options/options_export.html:39
 #: options/templates/options/options_modal_form_options.html:163
 #: projects/models/value.py:64 questions/constants.py:4
@@ -1221,83 +1221,83 @@ msgstr "Inglese"
 msgid "German"
 msgstr "Tedesco"
 
-#: core/settings.py:234
+#: core/settings.py:237
 msgid "PDF"
 msgstr "PDF"
 
-#: core/settings.py:235
+#: core/settings.py:238
 msgid "Rich Text Format"
 msgstr "Rich Text Format"
 
-#: core/settings.py:236
+#: core/settings.py:239
 msgid "Open Office"
 msgstr "Open Office"
 
-#: core/settings.py:237
+#: core/settings.py:240
 msgid "Microsoft Office"
 msgstr "Microsoft Office"
 
-#: core/settings.py:238
+#: core/settings.py:241
 msgid "HTML"
 msgstr "HTML"
 
-#: core/settings.py:239
+#: core/settings.py:242
 msgid "Markdown"
 msgstr "Markdown"
 
-#: core/settings.py:240
+#: core/settings.py:243
 msgid "mediawiki"
 msgstr "mediawiki"
 
-#: core/settings.py:241
+#: core/settings.py:244
 msgid "LaTeX"
 msgstr "LaTeX"
 
-#: core/settings.py:261 core/settings.py:267
+#: core/settings.py:264 core/settings.py:270
 msgid "RDMO XML"
 msgstr "RDMO XML"
 
-#: core/settings.py:262 domain/templates/domain/domain.html:74
+#: core/settings.py:265 domain/templates/domain/domain.html:74
 msgid "CSV comma separated"
 msgstr "CSV separato da virgole"
 
-#: core/settings.py:263 domain/templates/domain/domain.html:79
+#: core/settings.py:266 domain/templates/domain/domain.html:79
 msgid "CSV semicolon separated"
 msgstr "CSV separato da punto e virgola"
 
-#: core/settings.py:292 questions/constants.py:5
+#: core/settings.py:295 questions/constants.py:5
 msgid "Textarea"
 msgstr "Textarea"
 
-#: core/settings.py:293 questions/constants.py:6
+#: core/settings.py:296 questions/constants.py:6
 msgid "Yes/No"
 msgstr "Sì/No"
 
-#: core/settings.py:294 questions/constants.py:7
+#: core/settings.py:297 questions/constants.py:7
 msgid "Checkboxes"
 msgstr "Caselle di controllo"
 
-#: core/settings.py:295 questions/constants.py:8
+#: core/settings.py:298 questions/constants.py:8
 msgid "Radio buttons"
 msgstr "Pulsanti radio"
 
-#: core/settings.py:296 questions/constants.py:9
+#: core/settings.py:299 questions/constants.py:9
 msgid "Select drop-down"
 msgstr "Seleziona il menu a tendina"
 
-#: core/settings.py:297 questions/constants.py:10
+#: core/settings.py:300 questions/constants.py:10
 msgid "Autocomplete"
 msgstr "Autocompletamento"
 
-#: core/settings.py:298 questions/constants.py:11
+#: core/settings.py:301 questions/constants.py:11
 msgid "Range slider"
 msgstr "Cursore di gamma"
 
-#: core/settings.py:299 questions/constants.py:12
+#: core/settings.py:302 questions/constants.py:12
 msgid "Date picker"
 msgstr "Raccoglitore di date"
 
-#: core/settings.py:300 questions/constants.py:13
+#: core/settings.py:303 questions/constants.py:13
 msgid "File upload"
 msgstr "Caricamento dei file"
 
@@ -1356,7 +1356,7 @@ msgstr "Gestione"
 msgid "Domain"
 msgstr "Dominio"
 
-#: core/templates/core/base_navigation.html:61 projects/forms.py:308
+#: core/templates/core/base_navigation.html:61 projects/forms.py:309
 #: projects/models/project.py:64
 #: projects/templates/projects/project_detail_views.html:11 views/apps.py:7
 #: views/models.py:123 views/templates/views/views.html:91
@@ -2024,7 +2024,7 @@ msgstr "Nome Url"
 msgid "The url_name for this overlay."
 msgstr "Il nome dell'url per questo sovrapposto."
 
-#: overlays/models.py:26 projects/forms.py:320
+#: overlays/models.py:26 projects/forms.py:321
 #: projects/templates/projects/project_answers.html:13
 #: projects/templates/projects/project_view.html:28
 msgid "Current"
@@ -2097,11 +2097,11 @@ msgstr ""
 "utenti senza notificarli via e-mail, quando selezioni la seguente casella di "
 "controllo."
 
-#: projects/forms.py:202
+#: projects/forms.py:203
 msgid "The user is already a member of the project."
 msgstr "L'utente è già membro del progetto."
 
-#: projects/forms.py:214
+#: projects/forms.py:215
 msgid ""
 "A user with this username or e-mail was not found. Only registered users can "
 "be invited."
@@ -2109,51 +2109,51 @@ msgstr ""
 "Un utente con questo nome utente o e-mail non è stato trovato. Solo gli "
 "utenti registrati possono essere invitati."
 
-#: projects/forms.py:218
+#: projects/forms.py:219
 msgid "Only existing users can be added silently."
 msgstr "Solo gli utenti esistenti possono essere aggiunti silenziosamente."
 
-#: projects/forms.py:286 projects/forms.py:290
+#: projects/forms.py:287 projects/forms.py:291
 #, python-format
 msgid "Attach %s"
 msgstr "Allega %s"
 
-#: projects/forms.py:296
+#: projects/forms.py:297
 msgid "Subject"
 msgstr "Oggetto"
 
-#: projects/forms.py:297
+#: projects/forms.py:298
 msgid "Message"
 msgstr "Messaggio"
 
-#: projects/forms.py:304
+#: projects/forms.py:305
 msgid "Answers"
 msgstr "Risposte"
 
-#: projects/forms.py:305
+#: projects/forms.py:306
 msgid "Attach the output of \"View answers\"."
 msgstr "Allega il risultato di \"Visualizza risposte\"."
 
-#: projects/forms.py:312
+#: projects/forms.py:313
 msgid "Files"
 msgstr "Files"
 
-#: projects/forms.py:319 projects/models/snapshot.py:33
+#: projects/forms.py:320 projects/models/snapshot.py:33
 #: projects/models/value.py:38
 #: projects/templates/projects/project_detail_snapshots.html:20
 #: projects/templates/projects/project_import.html:93
 msgid "Snapshot"
 msgstr "Istantanea"
 
-#: projects/forms.py:323
+#: projects/forms.py:324
 msgid "Format"
 msgstr "Formato"
 
-#: projects/forms.py:338 projects/forms.py:343
+#: projects/forms.py:339 projects/forms.py:344
 msgid "Recipients"
 msgstr "Destinatari"
 
-#: projects/forms.py:344
+#: projects/forms.py:345
 msgid "Enter recipients line by line"
 msgstr "Inserire i destinatari linea per linea"
 
@@ -2985,7 +2985,7 @@ msgstr "Aggiorna informazioni sul progetto"
 msgid "No description available."
 msgstr "Nessuna descrizione disponibile."
 
-#: projects/templates/projects/project_detail_header_hierarchy.html:6
+#: projects/templates/projects/project_detail_header_hierarchy.html:7
 #: projects/templates/projects/project_detail_sidebar.html:52
 msgid "Update parent project"
 msgstr "Aggiornare il progetto padre"
@@ -3108,23 +3108,23 @@ msgid "Import values"
 msgstr "Valori di importazione"
 
 #: projects/templates/projects/project_detail_sidebar.html:131
-#: projects/templates/projects/projects.html:62
+#: projects/templates/projects/projects.html:69
 msgid "Import from file"
 msgstr "Importazione da file"
 
 #: projects/templates/projects/project_detail_sidebar.html:139
-#: projects/templates/projects/projects.html:71
-msgid "Import directly"
-msgstr "Importare direttamente"
-
-#: projects/templates/projects/project_detail_sidebar.html:155
 msgid "Import from parent project"
 msgstr "Importazione dal progetto padre"
+
+#: projects/templates/projects/project_detail_sidebar.html:147
+#: projects/templates/projects/projects.html:78
+msgid "Import directly"
+msgstr "Importare direttamente"
 
 #: projects/templates/projects/project_detail_snapshots.html:22
 #: projects/templates/projects/project_import.html:34
 #: projects/templates/projects/project_import.html:104
-#: projects/templates/projects/site_projects.html:40
+#: projects/templates/projects/site_projects.html:50
 msgid "Created"
 msgstr "Creato"
 
@@ -3358,7 +3358,7 @@ msgid "Please select"
 msgstr "Selezionare"
 
 #: projects/templates/projects/project_questions_head.html:5
-#: projects/templates/projects/projects.html:113
+#: projects/templates/projects/projects.html:120
 msgid "My Projects"
 msgstr "I miei progetti"
 
@@ -3408,7 +3408,7 @@ msgstr ""
 "i> potrebbero essere saltate in base al tuo input."
 
 #: projects/templates/projects/project_questions_overview.html:14
-#: projects/templates/projects/site_projects.html:27
+#: projects/templates/projects/site_projects.html:37
 msgid "Back to my projects"
 msgstr "Torna ai miei progetti"
 
@@ -3471,7 +3471,7 @@ msgid "Navigation"
 msgstr "Navigazione"
 
 #: projects/templates/projects/project_view.html:90
-#: projects/views/project.py:175
+#: projects/views/project.py:198
 msgid "Error"
 msgstr "Errore"
 
@@ -3487,8 +3487,8 @@ msgstr "Visualizza tutti i progetti in %(site)s"
 
 #: projects/templates/projects/projects.html:47
 #: projects/templates/projects/site_projects.html:16
-msgid "Search projects"
-msgstr "Ricerca progetti"
+msgid "Filter projects"
+msgstr "Filtra i progetti"
 
 #: projects/templates/projects/projects.html:50
 #: projects/templates/projects/site_projects.html:19
@@ -3496,19 +3496,27 @@ msgid "Search project title"
 msgstr "Ricerca titolo del progetto"
 
 #: projects/templates/projects/projects.html:57
+#: projects/templates/projects/site_projects.html:26
+#, python-format
+msgid ""
+"%(number_of_filtered_projects)s of %(number_of_projects)s projects shown"
+msgstr ""
+"%(number_of_filtered_projects)s di %(number_of_projects)s progetti mostrati"
+
+#: projects/templates/projects/projects.html:64
 msgid "Import existing project"
 msgstr "Importazione di un progetto esistente"
 
-#: projects/templates/projects/projects.html:88
+#: projects/templates/projects/projects.html:95
 msgid "Pending invitations"
 msgstr "Inviti in sospeso"
 
-#: projects/templates/projects/projects.html:104
+#: projects/templates/projects/projects.html:111
 msgid "Click on one of the links to join the projects."
 msgstr "Clicca su uno dei link per unirti ai progetti."
 
-#: projects/templates/projects/projects.html:120
-#: projects/templates/projects/site_projects.html:41
+#: projects/templates/projects/projects.html:127
+#: projects/templates/projects/site_projects.html:51
 msgid "Last changed"
 msgstr "Ultima modifica"
 
@@ -3519,15 +3527,17 @@ msgstr "Precedente"
 
 #: projects/templates/projects/projects_pagination.html:12
 #, python-format
-msgid "Page %(number)s of %(num_pages)s."
-msgstr "Pagina %(number)s di %(num_pages)s."
+msgid ""
+"Page %(number)s of %(num_pages)s with %(num_projects_in_page)s projects."
+msgstr ""
+"Pagina %(number)s di %(num_pages)s con %(num_projects_in_page)s progetti."
 
 #: projects/templates/projects/projects_pagination.html:17
 #: projects/templates/projects/projects_pagination.html:19
 msgid "Next"
 msgstr "Successivo"
 
-#: projects/templates/projects/site_projects.html:34
+#: projects/templates/projects/site_projects.html:44
 #, python-format
 msgid "All projects on %(site)s"
 msgstr "Tutti i progetti su %(site)s"
@@ -3557,16 +3567,16 @@ msgstr "Raccolta"
 msgid "You reached the file quota for this project."
 msgstr "Hai raggiunto la quota di file per questo progetto."
 
-#: projects/views/project.py:155
+#: projects/views/project.py:178
 msgid "Sorry, your invitation has been expired."
 msgstr "Spiacente, il tuo invito è scaduto."
 
-#: projects/views/project.py:158
+#: projects/views/project.py:181
 #, python-format
 msgid "Sorry, but this invitation is for the user \"%s\"."
 msgstr "Spiacente, ma questo invito è per l'utente \"%s\"."
 
-#: projects/views/project.py:172
+#: projects/views/project.py:195
 msgid "Sorry, the invitation link is not valid."
 msgstr "Spiacente, il link di invito non è valido."
 
@@ -5044,6 +5054,9 @@ msgid "An empty list implies that the view can be used with every catalog."
 msgstr ""
 "Una lista vuota significa che questa vista può essere usata con tutti i "
 "cataloghi."
+
+#~ msgid "Search projects"
+#~ msgstr "Ricerca progetti"
 
 #~ msgid "Questionnaire"
 #~ msgstr "Questionario"
