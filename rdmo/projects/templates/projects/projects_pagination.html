@@ -9,9 +9,7 @@
             <li class="previous disabled"><a href="">{% trans 'Previous' %}</a></li>
             {% endif %}
             <li>
-                {% blocktrans trimmed with number=page_obj.number num_pages=page_obj.paginator.num_pages count num_projects_in_page=projects|length %}
-                Page {{ number }} of {{ num_pages }} with {{ num_projects_in_page }} project.
-                {% plural %}
+                {% blocktrans trimmed with number=page_obj.number num_pages=page_obj.paginator.num_pages %}
                 Page {{ number }} of {{ num_pages }} with {{ num_projects_in_page }} projects.
                 {% endblocktrans %}
             </li>
