@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdmo xmlns:dc="http://purl.org/dc/elements/1.1/" created="2023-04-20T10:51:50.597158+02:00">
+	<attribute dc:uri="http://example.com/terms/domain/set">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>set</key>
+		<path>set</path>
+		<dc:comment/>
+		<parent/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/set/collection">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>collection</key>
+		<path>set/collection</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/set/collection/text">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>text</key>
+		<path>set/collection/text</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/set/collection/textarea">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>textarea</key>
+		<path>set/collection/textarea</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/set/collection/bool">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>bool</key>
+		<path>set/collection/bool</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/set/collection/datetime">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>datetime</key>
+		<path>set/collection/datetime</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/set/collection/float">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>float</key>
+		<path>set/collection/float</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/set/collection/integer">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>integer</key>
+		<path>set/collection/integer</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/set/collection/radio">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>radio</key>
+		<path>set/collection/radio</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/set/collection/range">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>range</key>
+		<path>set/collection/range</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/set/collection/select">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>select</key>
+		<path>set/collection/select</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/set/collection/url">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>url</key>
+		<path>set/collection/url</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/set/collection/file">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>file</key>
+		<path>set/collection/file</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/set/collection/checkbox">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>checkbox</key>
+		<path>set/collection/checkbox</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/set/collection/autocomplete">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>autocomplete</key>
+		<path>set/collection/autocomplete</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/set/single">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>single</key>
+		<path>set/single</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/set/single/text">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>text</key>
+		<path>set/single/text</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/set/single/textarea">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>textarea</key>
+		<path>set/single/textarea</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/set/single/bool">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>bool</key>
+		<path>set/single/bool</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/set/single/file">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>file</key>
+		<path>set/single/file</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/set/single/datetime">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>datetime</key>
+		<path>set/single/datetime</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/set/single/float">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>float</key>
+		<path>set/single/float</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/set/single/integer">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>integer</key>
+		<path>set/single/integer</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/set/single/radio">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>radio</key>
+		<path>set/single/radio</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/set/single/range">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>range</key>
+		<path>set/single/range</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/set/single/select">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>select</key>
+		<path>set/single/select</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/set/single/url">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>url</key>
+		<path>set/single/url</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/set/single/autocomplete">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>autocomplete</key>
+		<path>set/single/autocomplete</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/set/id">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>id</key>
+		<path>set/id</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/individual">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>individual</key>
+		<path>individual</path>
+		<dc:comment/>
+		<parent/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/individual/single">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>single</key>
+		<path>individual/single</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/individual/single/bool">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>bool</key>
+		<path>individual/single/bool</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/individual/single/datetime">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>datetime</key>
+		<path>individual/single/datetime</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/individual/single/float">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>float</key>
+		<path>individual/single/float</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/individual/single/integer">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>integer</key>
+		<path>individual/single/integer</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/individual/single/radio">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>radio</key>
+		<path>individual/single/radio</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/individual/single/range">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>range</key>
+		<path>individual/single/range</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/individual/single/select">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>select</key>
+		<path>individual/single/select</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/individual/single/text">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>text</key>
+		<path>individual/single/text</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/individual/single/textarea">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>textarea</key>
+		<path>individual/single/textarea</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/individual/single/url">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>url</key>
+		<path>individual/single/url</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/individual/single/file">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>file</key>
+		<path>individual/single/file</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/individual/single/autocomplete">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>autocomplete</key>
+		<path>individual/single/autocomplete</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/individual/collection">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>collection</key>
+		<path>individual/collection</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/individual/collection/bool">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>bool</key>
+		<path>individual/collection/bool</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/individual/collection/checkbox">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>checkbox</key>
+		<path>individual/collection/checkbox</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/individual/collection/datetime">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>datetime</key>
+		<path>individual/collection/datetime</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/individual/collection/float">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>float</key>
+		<path>individual/collection/float</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/individual/collection/integer">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>integer</key>
+		<path>individual/collection/integer</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/individual/collection/radio">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>radio</key>
+		<path>individual/collection/radio</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/individual/collection/range">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>range</key>
+		<path>individual/collection/range</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/individual/collection/select">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>select</key>
+		<path>individual/collection/select</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/individual/collection/text">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>text</key>
+		<path>individual/collection/text</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/individual/collection/textarea">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>textarea</key>
+		<path>individual/collection/textarea</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/individual/collection/url">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>url</key>
+		<path>individual/collection/url</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/individual/collection/file">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>file</key>
+		<path>individual/collection/file</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/individual/collection/autocomplete">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>autocomplete</key>
+		<path>individual/collection/autocomplete</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/conditions">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>conditions</key>
+		<path>conditions</path>
+		<dc:comment/>
+		<parent/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/conditions/text">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>text</key>
+		<path>conditions/text</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/conditions"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/conditions/option">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>option</key>
+		<path>conditions/option</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/conditions"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/conditions/set">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>set</key>
+		<path>conditions/set</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/conditions"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/conditions/set/bool">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>bool</key>
+		<path>conditions/set/bool</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/conditions/set"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/conditions/set/text">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>text</key>
+		<path>conditions/set/text</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/conditions/set"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/conditions/set/set">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>set</key>
+		<path>conditions/set/set</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/conditions/set"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/conditions/set/set/text">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>text</key>
+		<path>conditions/set/set/text</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/conditions/set/set"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/conditions/optionset">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>optionset</key>
+		<path>conditions/optionset</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/conditions"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/conditions/optionset/bool">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>bool</key>
+		<path>conditions/optionset/bool</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/conditions/optionset"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/conditions/optionset/option">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>option</key>
+		<path>conditions/optionset/option</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/conditions/optionset"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/options">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>options</key>
+		<path>options</path>
+		<dc:comment/>
+		<parent/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/options/order">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>order</key>
+		<path>options/order</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/options"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/options/plugin">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>plugin</key>
+		<path>options/plugin</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/options"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/options/plugin/radio">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>radio</key>
+		<path>options/plugin/radio</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/options/plugin"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/options/plugin/select">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>select</key>
+		<path>options/plugin/select</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/options/plugin"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/options/plugin/checkboxes">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>checkboxes</key>
+		<path>options/plugin/checkboxes</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/options/plugin"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/options/plugin/autocomplete">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>autocomplete</key>
+		<path>options/plugin/autocomplete</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/options/plugin"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/options/plugin/combined">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>combined</key>
+		<path>options/plugin/combined</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/options/plugin"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/uri_prefixes">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>uri_prefixes</key>
+		<path>uri_prefixes</path>
+		<dc:comment/>
+		<parent/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/uri_prefixes/text">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>text</key>
+		<path>uri_prefixes/text</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/uri_prefixes"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms2/domain/uri_prefixes/text">
+		<uri_prefix>http://example.com/terms2</uri_prefix>
+		<key>text</key>
+		<path>uri_prefixes/text</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/uri_prefixes"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms3/domain/uri_prefixes/text">
+		<uri_prefix>http://example.com/terms3</uri_prefix>
+		<key>text</key>
+		<path>uri_prefixes/text</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/uri_prefixes"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/blocks">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>blocks</key>
+		<path>blocks</path>
+		<dc:comment/>
+		<parent/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/blocks/a">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>a</key>
+		<path>blocks/a</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/blocks"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/blocks/b">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>b</key>
+		<path>blocks/b</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/blocks"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/blocks/c">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>c</key>
+		<path>blocks/c</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/blocks"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/blocks/x">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>x</key>
+		<path>blocks/x</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/blocks"/>
+	</attribute>
+	<attribute dc:uri="http://example.com/terms/domain/blocks/y">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>y</key>
+		<path>blocks/y</path>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/blocks"/>
+	</attribute>
+</rdmo>
