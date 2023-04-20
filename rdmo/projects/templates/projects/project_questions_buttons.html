@@ -22,11 +22,17 @@
     <div class="form-group questions-buttons">
         <div class="pull-right">
             <div ng-hide="service.project.read_only || service.questionset.elements.length < 1">
+                {% if not settings.PROJECT_QUESTIONS_AUTOSAVE %}
                 <button type="button" ng-click="service.save(false)" class="btn btn-default">
                     {% trans 'Save' %}
                 </button>
+                {% endif %}
                 <button type="button" ng-click="service.save(true)" class="btn btn-primary">
+                    {% if settings.PROJECT_QUESTIONS_AUTOSAVE %}
+                    {% trans 'Proceed' %}</span>
+                    {% else %}
                     {% trans 'Save and proceed' %}</span>
+                    {% endif %}
                 </button>
             </div>
             <div ng-show="service.project.read_only || service.questionset.elements.length < 1">
