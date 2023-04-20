@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-17 20:03+0200\n"
+"POT-Creation-Date: 2023-04-21 00:59+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Dario Pilori <d.pilori@inrim.it>\n"
 "Language-Team: \n"
@@ -1514,11 +1514,11 @@ msgstr "Verranno eliminati anche i seguenti attributi:"
 #: domain/templates/domain/domain_modal_show_attributes.html:15
 #, python-format
 msgid ""
-"This attribute is used for <b>%(values_count)s values</b> in "
-"<b>%(projects_count)s projects</b>."
+"This attribute is used for <b>%(values_count)s values</b> in <b>"
+"%(projects_count)s projects</b>."
 msgstr ""
-"Questo attributo è usato per <b>%(values_count)s valori</b> in "
-"<b>%(projects_count)s progetti</b>."
+"Questo attributo è usato per <b>%(values_count)s valori</b> in <b>"
+"%(projects_count)s progetti</b>."
 
 #: domain/templates/domain/domain_modal_delete_attributes.html:42
 #: domain/templates/domain/domain_modal_show_attributes.html:18
@@ -1879,11 +1879,11 @@ msgstr ""
 #: options/templates/options/options_modal_show_options.html:15
 #, python-format
 msgid ""
-"This option is used for <b>%(values_count)s values</b> in "
-"<b>%(projects_count)s projects</b>."
+"This option is used for <b>%(values_count)s values</b> in <b>"
+"%(projects_count)s projects</b>."
 msgstr ""
-"Questa opzione è usata per <b>%(values_count)s valori</b> in "
-"<b>%(projects_count)s progetti</b>."
+"Questa opzione è usata per <b>%(values_count)s valori</b> in <b>"
+"%(projects_count)s progetti</b>."
 
 #: options/templates/options/options_modal_delete_options.html:29
 #, python-format
@@ -2813,8 +2813,8 @@ msgstr "A chi possa interessare,"
 #: projects/templates/projects/issue_send_message.txt:3
 #, python-format
 msgid ""
-"The following task was identified in the project \"%(project_title)s\" "
-"<%(project_url)s>:"
+"The following task was identified in the project \"%(project_title)s\" <"
+"%(project_url)s>:"
 msgstr ""
 "La seguente attività è stata identificata nel progetto \"%(project_title)s\" "
 "<%(project_url)s>:"
@@ -3401,8 +3401,8 @@ msgstr ""
 
 #: projects/templates/projects/project_questions_navigation_help.html:14
 msgid ""
-"Entries with <i class=\"fa fa-question-circle-o small\" aria-"
-"hidden=\"true\"></i> might be skipped based on your input."
+"Entries with <i class=\"fa fa-question-circle-o small\" aria-hidden=\"true"
+"\"></i> might be skipped based on your input."
 msgstr ""
 "Le voci con <i class=\"fa-question-circle-o small\" aria-hidden=\"true\"></"
 "i> potrebbero essere saltate in base al tuo input."
@@ -3527,10 +3527,8 @@ msgstr "Precedente"
 
 #: projects/templates/projects/projects_pagination.html:12
 #, python-format
-msgid ""
-"Page %(number)s of %(num_pages)s with %(num_projects_in_page)s projects."
-msgstr ""
-"Pagina %(number)s di %(num_pages)s con %(num_projects_in_page)s progetti."
+msgid "Page %(number)s of %(num_pages)s."
+msgstr "Pagina %(number)s di %(num_pages)s."
 
 #: projects/templates/projects/projects_pagination.html:17
 #: projects/templates/projects/projects_pagination.html:19
@@ -4298,8 +4296,8 @@ msgstr "Opzionale"
 #: questions/templates/questions/catalogs_modal_delete_catalogs.html:17
 #, python-format
 msgid ""
-"You are about to permanently delete the catalog <code class=\"text-"
-"primary\">%(object)s</code>."
+"You are about to permanently delete the catalog <code class=\"text-primary\">"
+"%(object)s</code>."
 msgstr ""
 "Il catalogo <code class=\"text-primary\">%(object)s</code> sta per essere "
 "eliminato permanentemente."
@@ -4323,8 +4321,8 @@ msgstr ""
 #: questions/templates/questions/catalogs_modal_delete_questions.html:17
 #, python-format
 msgid ""
-"You are about to permanently delete the question <code class=\"text-"
-"primary\">%(object)s</code>."
+"You are about to permanently delete the question <code class=\"text-primary"
+"\">%(object)s</code>."
 msgstr ""
 "La domanda <code class=\"text-primary\">%(object)s</code> sta per essere "
 "eliminata permanentemente."
@@ -4341,8 +4339,8 @@ msgstr ""
 #: questions/templates/questions/catalogs_modal_delete_sections.html:17
 #, python-format
 msgid ""
-"You are about to permanently delete the section <code class=\"text-"
-"primary\">%(object)s</code>."
+"You are about to permanently delete the section <code class=\"text-primary\">"
+"%(object)s</code>."
 msgstr ""
 "La sezione <code class=\"text-primary\">%(object)s</code> sta per essere "
 "eliminata permanentemente."

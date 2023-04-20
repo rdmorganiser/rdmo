@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-17 20:03+0200\n"
+"POT-Creation-Date: 2023-04-21 00:59+0200\n"
 "PO-Revision-Date: 2022-07-29 13:45+0200\n"
 "Last-Translator: DAVID MARTINEZ <dmartinezmu@cem.es>\n"
 "Language-Team: \n"
@@ -331,8 +331,8 @@ msgstr "Confirmar"
 #: accounts/templates/account/email_confirm.html:29
 #, python-format
 msgid ""
-"This e-mail confirmation link expired or is invalid. Please <a "
-"href=\"%(email_url)s\">issue a new e-mail confirmation request</a>."
+"This e-mail confirmation link expired or is invalid. Please <a href="
+"\"%(email_url)s\">issue a new e-mail confirmation request</a>."
 msgstr ""
 "Este enlace de confirmación del e-mail ha expirado o no es válido. Por favor "
 "<<a href=\"%(email_url)s\">emita un nueva petición de confirmación del e-"
@@ -353,20 +353,20 @@ msgstr "Login con Shibboleth"
 #: accounts/templates/account/login_form_account.html:7
 #, python-format
 msgid ""
-"If you have not created an account yet, then please <a "
-"href=\"%(signup_url)s\">sign up</a> first."
+"If you have not created an account yet, then please <a href=\"%(signup_url)s"
+"\">sign up</a> first."
 msgstr ""
-"Si todavía no ha creado una cuenta, por favor primero <a "
-"href=\"%(signup_url)s\">regístrese</a>."
+"Si todavía no ha creado una cuenta, por favor primero <a href="
+"\"%(signup_url)s\">regístrese</a>."
 
 #: accounts/templates/account/login_form_account.html:14
 #, python-format
 msgid ""
-"If you forgot your password and want to reset it, click <a "
-"href=\"%(reset_url)s\">here</a>."
+"If you forgot your password and want to reset it, click <a href="
+"\"%(reset_url)s\">here</a>."
 msgstr ""
-"Si ha olvidado su contraseña y quiere una nueva, pulse <a "
-"href=\"%(reset_url)s\">aquí</a>."
+"Si ha olvidado su contraseña y quiere una nueva, pulse <a href="
+"\"%(reset_url)s\">aquí</a>."
 
 #: accounts/templates/account/login_form_socialaccount.html:9
 msgid ""
@@ -3408,8 +3408,8 @@ msgstr "Mis Proyectos"
 msgid ""
 "You are about to permanently delete the %(name)s <strong>%(object)s</strong>."
 msgstr ""
-"Usted está a punto de eliminar permanentemente el %(name)s "
-"<strong>%(object)s</strong>."
+"Usted está a punto de eliminar permanentemente el %(name)s <strong>"
+"%(object)s</strong>."
 
 #: projects/templates/projects/project_questions_modal_delete_valuesets.html:23
 #, python-format
@@ -3442,11 +3442,11 @@ msgstr ""
 
 #: projects/templates/projects/project_questions_navigation_help.html:14
 msgid ""
-"Entries with <i class=\"fa fa-question-circle-o small\" aria-"
-"hidden=\"true\"></i> might be skipped based on your input."
+"Entries with <i class=\"fa fa-question-circle-o small\" aria-hidden=\"true"
+"\"></i> might be skipped based on your input."
 msgstr ""
-"Las entradas con <i class=\"fa fa-question-circle-o small\" aria-"
-"hidden=\"true\"></i> podrían ser ignoradas según lo que ha introducido."
+"Las entradas con <i class=\"fa fa-question-circle-o small\" aria-hidden="
+"\"true\"></i> podrían ser ignoradas según lo que ha introducido."
 
 #: projects/templates/projects/project_questions_overview.html:14
 #: projects/templates/projects/site_projects.html:37
@@ -3542,7 +3542,8 @@ msgstr "Buscar título de proyecto"
 msgid ""
 "%(number_of_filtered_projects)s of %(number_of_projects)s projects shown"
 msgstr ""
-"%(number_of_filtered_projects)s de los %(number_of_projects)s proyectos mostrados"
+"%(number_of_filtered_projects)s de los %(number_of_projects)s proyectos "
+"mostrados"
 
 #: projects/templates/projects/projects.html:64
 msgid "Import existing project"
@@ -3568,10 +3569,8 @@ msgstr "Previo"
 
 #: projects/templates/projects/projects_pagination.html:12
 #, python-format
-msgid ""
-"Page %(number)s of %(num_pages)s with %(num_projects_in_page)s projects."
-msgstr ""
-"Página %(number)s de %(num_pages)s con %(num_projects_in_page)s proyectos."
+msgid "Page %(number)s of %(num_pages)s."
+msgstr "Página %(number)s de %(num_pages)s."
 
 #: projects/templates/projects/projects_pagination.html:17
 #: projects/templates/projects/projects_pagination.html:19
@@ -4376,11 +4375,11 @@ msgstr ""
 #: questions/templates/questions/catalogs_modal_delete_questions.html:17
 #, python-format
 msgid ""
-"You are about to permanently delete the question <code class=\"text-"
-"primary\">%(object)s</code>."
+"You are about to permanently delete the question <code class=\"text-primary"
+"\">%(object)s</code>."
 msgstr ""
-"Usted está a punto de eliminar permanentemente la pregunta <code "
-"class=\"text-primary\">%(object)s</code>."
+"Usted está a punto de eliminar permanentemente la pregunta <code class="
+"\"text-primary\">%(object)s</code>."
 
 #: questions/templates/questions/catalogs_modal_delete_questionsets.html:17
 #, python-format

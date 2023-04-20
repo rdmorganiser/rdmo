@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-17 20:03+0200\n"
+"POT-Creation-Date: 2023-04-21 00:59+0200\n"
 "PO-Revision-Date: 2023-01-11 11:31+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
@@ -3559,10 +3559,8 @@ msgstr "Vorherige"
 
 #: projects/templates/projects/projects_pagination.html:12
 #, python-format
-msgid ""
-"Page %(number)s of %(num_pages)s with %(num_projects_in_page)s projects."
-msgstr ""
-"Seite %(number)s von %(num_pages)s mit %(num_projects_in_page)s Projekte."
+msgid "Page %(number)s of %(num_pages)s."
+msgstr "Seite %(number)s von %(num_pages)s."
 
 #: projects/templates/projects/projects_pagination.html:17
 #: projects/templates/projects/projects_pagination.html:19

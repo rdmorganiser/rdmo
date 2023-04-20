@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-17 20:03+0200\n"
+"POT-Creation-Date: 2023-04-21 00:59+0200\n"
 "PO-Revision-Date: 2022-11-28 11:11+0100\n"
 "Last-Translator: Yonny Cardenas <cardenas@cc.in2p3.fr>\n"
 "Language-Team: RDMO <cardenas@cc.in2p3.fr>\n"
@@ -3457,11 +3457,11 @@ msgstr ""
 
 #: projects/templates/projects/project_questions_navigation_help.html:14
 msgid ""
-"Entries with <i class=\"fa fa-question-circle-o small\" aria-"
-"hidden=\"true\"></i> might be skipped based on your input."
+"Entries with <i class=\"fa fa-question-circle-o small\" aria-hidden=\"true"
+"\"></i> might be skipped based on your input."
 msgstr ""
-"Les entrées avec <i class=\"fa fa-question-circle-o small\" aria-"
-"hidden=\"true\"></i> peuvent être ignorées en fonction de votre saisie."
+"Les entrées avec <i class=\"fa fa-question-circle-o small\" aria-hidden="
+"\"true\"></i> peuvent être ignorées en fonction de votre saisie."
 
 #: projects/templates/projects/project_questions_overview.html:14
 #: projects/templates/projects/site_projects.html:37
@@ -3586,10 +3586,8 @@ msgstr "Précédent"
 
 #: projects/templates/projects/projects_pagination.html:12
 #, python-format
-msgid ""
-"Page %(number)s of %(num_pages)s with %(num_projects_in_page)s projects."
-msgstr ""
-"Page %(number)s sur %(num_pages)s avec %(num_projects_in_page)s projecs."
+msgid "Page %(number)s of %(num_pages)s."
+msgstr "Page %(number)s sur %(num_pages)s."
 
 #: projects/templates/projects/projects_pagination.html:17
 #: projects/templates/projects/projects_pagination.html:19
@@ -4365,11 +4363,11 @@ msgstr "En option"
 #: questions/templates/questions/catalogs_modal_delete_catalogs.html:17
 #, python-format
 msgid ""
-"You are about to permanently delete the catalog <code class=\"text-"
-"primary\">%(object)s</code>."
+"You are about to permanently delete the catalog <code class=\"text-primary\">"
+"%(object)s</code>."
 msgstr ""
-"Vous êtes sur le point de supprimer définitivement le catalogue <code "
-"class=\"text-primary\">%(object)s</code>."
+"Vous êtes sur le point de supprimer définitivement le catalogue <code class="
+"\"text-primary\">%(object)s</code>."
 
 #: questions/templates/questions/catalogs_modal_delete_catalogs.html:24
 #, python-format
@@ -4390,11 +4388,11 @@ msgstr ""
 #: questions/templates/questions/catalogs_modal_delete_questions.html:17
 #, python-format
 msgid ""
-"You are about to permanently delete the question <code class=\"text-"
-"primary\">%(object)s</code>."
+"You are about to permanently delete the question <code class=\"text-primary"
+"\">%(object)s</code>."
 msgstr ""
-"Vous êtes sur le point de supprimer définitivement la question <code "
-"class=\"text-primary\">%(object)s</code>."
+"Vous êtes sur le point de supprimer définitivement la question <code class="
+"\"text-primary\">%(object)s</code>."
 
 #: questions/templates/questions/catalogs_modal_delete_questionsets.html:17
 #, python-format
@@ -4408,11 +4406,11 @@ msgstr ""
 #: questions/templates/questions/catalogs_modal_delete_sections.html:17
 #, python-format
 msgid ""
-"You are about to permanently delete the section <code class=\"text-"
-"primary\">%(object)s</code>."
+"You are about to permanently delete the section <code class=\"text-primary\">"
+"%(object)s</code>."
 msgstr ""
-"Vous êtes sur le point de supprimer définitivement la section <code "
-"class=\"text-primary\">%(object)s</code>."
+"Vous êtes sur le point de supprimer définitivement la section <code class="
+"\"text-primary\">%(object)s</code>."
 
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:12
 msgid "Create catalog"
@@ -4919,8 +4917,8 @@ msgstr "tous"
 #, python-format
 msgid "You are about to permanently delete the task <code>%(object)s</code>."
 msgstr ""
-"Vous êtes sur le point de supprimer définitivement la tâche "
-"<code>%(object)s</code>."
+"Vous êtes sur le point de supprimer définitivement la tâche <code>"
+"%(object)s</code>."
 
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:12
 msgid "Create task"
@@ -5393,8 +5391,8 @@ msgstr ""
 #~ msgid ""
 #~ "You are about to permanently delete the entity <code>%(object)s</code>."
 #~ msgstr ""
-#~ "Vous êtes sur le point de supprimer définitivement l'entité "
-#~ "<code>%(object)s</code>."
+#~ "Vous êtes sur le point de supprimer définitivement l'entité <code>"
+#~ "%(object)s</code>."
 
 #~ msgid "The prefix for the URI of this entity."
 #~ msgstr "Préfixe de l'URI de cette entité."
