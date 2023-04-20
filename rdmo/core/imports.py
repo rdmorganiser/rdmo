@@ -179,6 +179,41 @@ def set_m2m_through_instances(instance, field_name, element, source_name, target
                 through_instance.delete()
 
 
+def set_reverse_m2m_through_instance(instance, field_name, element, source_name, target_name, through_name):
+    if field_name in element:
+        target_element = element.get(field_name)
+
+        model_info = model_meta.get_field_info(instance)
+        through_model = model_info.reverse_relations[through_name].related_model
+        through_info = model_meta.get_field_info(through_model)
+        target_model = through_info.forward_relations[target_name].related_model
+
+        uri = target_element.get('uri')
+        order = target_element.get('order')
+
+        try:
+            target_instance = target_model.objects.get(uri=uri)
+
+            through_instance, created = through_model.objects.get_or_create(**{
+                source_name: instance,
+                target_name: target_instance
+            })
+            through_instance.order = order
+            through_instance.save()
+
+        except target_model.DoesNotExist:
+            logger.info('{target_model} {target_uri} for imported {instance_model} {instance_uri} does not exist.'.format(
+                target_model=target_model._meta.object_name,
+                target_uri=uri,
+                instance_model=instance._meta.object_name,
+                instance_uri=instance.uri
+            ))
+            instance.missing[uri] = {
+                'target_model': target_model._meta.verbose_name,
+                'target_uri': uri
+            }
+
+
 def validate_instance(instance, *validators):
     exception_message = None
     try:
@@ -186,8 +221,8 @@ def validate_instance(instance, *validators):
             data = vars(instance)
 
             # add foreign keys to parent fields to data
-            for parent_field in getattr(instance, 'parent_fields', []):
-                data[parent_field] = getattr(instance, parent_field, None)
+            # for parent_field in getattr(instance, 'parent_fields', []):
+            #     data[parent_field] = getattr(instance, parent_field, None)
 
             # run the validator
             validator(instance if instance.id else None)(data)

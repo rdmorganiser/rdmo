@@ -1,21 +1,20 @@
 import logging
 
 from django.utils.translation import gettext_lazy as _
-
 from rest_framework import viewsets
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
-from rest_framework.exceptions import PermissionDenied
-
-from rdmo.core.utils import get_model_field_meta
 
 from rdmo.conditions.models import Condition
 from rdmo.core.imports import handle_uploaded_file
-from rdmo.core.xml import flat_xml_to_elements, read_xml_file, order_elements
+from rdmo.core.utils import get_model_field_meta
+from rdmo.core.xml import (convert_elements, flat_xml_to_elements,
+                           order_elements, read_xml_file)
 from rdmo.domain.models import Attribute
-from rdmo.options.models import OptionSet, Option
-from rdmo.questions.models import Catalog, Section, Page, QuestionSet, Question
+from rdmo.options.models import Option, OptionSet
+from rdmo.questions.models import Catalog, Page, Question, QuestionSet, Section
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
@@ -83,7 +82,10 @@ class ImportViewSet(viewsets.ViewSet):
         if not check_permissions(unordered_elements, request.user):
             raise PermissionDenied()
 
-        # step 5: order the elements and return
+        # step 5: convert elements from previous versions
+        convert_elements(unordered_elements, root.attrib.get('version'))
+
+        # step 6: order the elements and return
         ordered_elements = {}
         for uri, element in unordered_elements.items():
             order_elements(ordered_elements, unordered_elements, uri, element)

@@ -58,12 +58,3 @@ PERMISSIONS = {
         'views.add_view', 'views.change_view', 'views.delete_view'
     )
 }
-
-IMPORT_SORT_ORDER = (
-    'domain',
-    'conditions',
-    'options',
-    'questions',
-    'tasks',
-    'views'
-)

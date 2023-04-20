@@ -3,9 +3,6 @@ import re
 
 import defusedxml.ElementTree as ET
 
-from .constants import IMPORT_SORT_ORDER
-
-
 log = logging.getLogger(__name__)
 
 
@@ -23,17 +20,17 @@ def parse_xml_string(string):
         log.error('Xml parsing error: ' + str(e))
 
 
-def flat_xml_to_elements(treenode):
+def flat_xml_to_elements(root):
     elements = {}
-    ns_map = get_ns_map(treenode)
+    ns_map = get_ns_map(root)
     uri_attrib = get_ns_tag('dc:uri', ns_map)
 
-    for node in treenode:
+    for node in root:
         uri = get_uri(node, ns_map)
 
         element = {
-            'uri': get_uri(node, ns_map),
-            'type': node.tag
+            'type': node.tag,
+            'uri': get_uri(node, ns_map)
         }
 
         for sub_node in node:
@@ -105,6 +102,76 @@ def filter_elements_by_type(elements, element_type):
     for element in elements:
         if element['type'] == element_type:
             yield element
+
+
+def convert_elements(elements, version):
+    # in future versions, this method can be extended
+    # using packaging.version.parse
+    if version is None:
+        convert_legacy_elements(elements)
+
+
+def convert_legacy_elements(elements):
+    # first pass: identify pages
+    for uri, element in elements.items():
+        if element['type'] == 'questionset':
+            if element.get('questionset') is None:
+                # this is now a page
+                element['type'] = 'page'
+            else:
+                del element['section']
+
+    # second pass: del key, set uri_path, add order to reverse m2m through models
+    # and sort questions into pages or questionsets
+    for uri, element in elements.items():
+        if element['type'] == 'catalog':
+            element['uri_path'] = element.pop('key')
+
+        elif element['type'] == 'section':
+            del element['key']
+            element['uri_path'] = element.pop('path')
+
+            if element.get('catalog') is not None:
+                element['catalog']['order'] = element.pop('order')
+
+        elif element['type'] == 'page':
+            del element['key']
+            element['uri_path'] = element.pop('path')
+
+            if element.get('section') is not None:
+                element['section']['order'] = element.pop('order')
+
+        elif element['type'] == 'questionset':
+            del element['key']
+            element['uri_path'] = element.pop('path')
+
+            if element.get('questionset') is not None:
+                element['questionset']['order'] = element.pop('order')
+
+        elif element['type'] == 'question':
+            del element['key']
+            element['uri_path'] = element.pop('path')
+
+            parent = element.get('questionset').get('uri')
+            if parent is not None:
+                if elements[parent].get('type') == 'page':
+                    del element['questionset']
+                    element['page'] = {
+                        'uri': parent,
+                        'order': element.pop('order')
+                    }
+                else:
+                    element['questionset']['order'] = element.pop('order')
+
+        elif element['type'] == 'optionset':
+            element['uri_path'] = element.pop('key')
+
+        elif element['type'] == 'option':
+            del element['key']
+            element['uri_path'] = element.pop('path')
+
+            if element.get('optionset') is not None:
+                element['optionset']['order'] = element.pop('order')
 
 
 def order_elements(ordered_elements, unordered_elements, uri, element):

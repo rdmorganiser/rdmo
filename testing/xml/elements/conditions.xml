@@ -1,5 +1,5 @@
-<?xml version="1.0" ?>
-<rdmo xmlns:dc="http://purl.org/dc/elements/1.1/">
+<?xml version="1.0" encoding="UTF-8"?>
+<rdmo xmlns:dc="http://purl.org/dc/elements/1.1/" created="2023-04-20T09:39:37.642472+02:00" version="1.9.2">
 	<condition dc:uri="http://example.com/terms/conditions/options_empty">
 		<uri_prefix>http://example.com/terms</uri_prefix>
 		<key>options_empty</key>
@@ -18,6 +18,15 @@
 		<target_text/>
 		<target_option dc:uri="http://example.com/terms/options/one_two_three/one"/>
 	</condition>
+	<condition dc:uri="http://example.com/terms/conditions/optionset_bool_is_true">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>optionset_bool_is_true</key>
+		<dc:comment/>
+		<source dc:uri="http://example.com/terms/domain/conditions/optionset/bool"/>
+		<relation>eq</relation>
+		<target_text>1</target_text>
+		<target_option/>
+	</condition>
 	<condition dc:uri="http://example.com/terms/conditions/options_not_empty">
 		<uri_prefix>http://example.com/terms</uri_prefix>
 		<key>options_not_empty</key>
@@ -35,6 +44,15 @@
 		<relation>neq</relation>
 		<target_text/>
 		<target_option dc:uri="http://example.com/terms/options/one_two_three/one"/>
+	</condition>
+	<condition dc:uri="http://example.com/terms/conditions/set_bool_is_true">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>set_bool_is_true</key>
+		<dc:comment/>
+		<source dc:uri="http://example.com/terms/domain/conditions/set/bool"/>
+		<relation>eq</relation>
+		<target_text>1</target_text>
+		<target_option/>
 	</condition>
 	<condition dc:uri="http://example.com/terms/conditions/text_contains_test">
 		<uri_prefix>http://example.com/terms</uri_prefix>

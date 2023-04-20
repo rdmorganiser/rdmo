@@ -2,16 +2,20 @@ import logging
 
 from django.contrib.sites.models import Site
 
-from rdmo.core.imports import (set_m2m_through_instances, set_m2m_instances,
-                               set_common_fields, set_lang_field, validate_instance, set_foreign_field)
+from rdmo.core.imports import (set_common_fields, set_foreign_field,
+                               set_lang_field, set_m2m_instances,
+                               set_m2m_through_instances,
+                               set_reverse_m2m_through_instance,
+                               validate_instance)
 
-from .models import Catalog, Question, QuestionSet, Section, Page
+from .models import Catalog, Page, Question, QuestionSet, Section
+from .utils import get_widget_types
 from .validators import (CatalogLockedValidator, CatalogUniqueURIValidator,
+                         PageLockedValidator, PageUniqueURIValidator,
                          QuestionLockedValidator, QuestionSetLockedValidator,
                          QuestionSetUniqueURIValidator,
                          QuestionUniqueURIValidator, SectionLockedValidator,
-                         SectionUniqueURIValidator, PageLockedValidator, PageUniqueURIValidator)
-from .utils import get_widget_types
+                         SectionUniqueURIValidator)
 
 logger = logging.getLogger(__name__)
 
@@ -60,6 +64,7 @@ def import_section(element, save=False):
             logger.info('Section %s updated.', element.get('uri'))
 
         section.save()
+        set_reverse_m2m_through_instance(section, 'catalog', element, 'section', 'catalog', 'section_catalogs')
         set_m2m_through_instances(section, 'pages', element, 'section', 'page', 'section_pages')
         section.imported = True
 
@@ -90,6 +95,7 @@ def import_page(element, save=False):
 
         page.save()
         set_m2m_instances(page, 'conditions', element)
+        set_reverse_m2m_through_instance(page, 'section', element, 'page', 'section', 'page_sections')
         set_m2m_through_instances(page, 'questionsets', element, 'page', 'questionset', 'page_questionsets')
         set_m2m_through_instances(page, 'questions', element, 'page', 'question', 'page_questions')
         page.imported = True
@@ -121,6 +127,8 @@ def import_questionset(element, save=False):
 
         questionset.save()
         set_m2m_instances(questionset, 'conditions', element)
+        set_reverse_m2m_through_instance(questionset, 'page', element, 'questionset', 'parent', 'questionset_parents')
+        set_reverse_m2m_through_instance(questionset, 'questionset', element, 'questionset', 'question', 'questionset_questions')
         set_m2m_through_instances(questionset, 'questionsets', element, 'parent', 'questionset', 'questionset_questionsets')
         set_m2m_through_instances(questionset, 'questions', element, 'questionset', 'question', 'questionset_questions')
         questionset.imported = True
@@ -169,6 +177,8 @@ def import_question(element, save=False):
             logger.info('Question %s updated.', element.get('uri'))
 
         question.save()
+        set_reverse_m2m_through_instance(question, 'page', element, 'question', 'page', 'question_pages')
+        set_reverse_m2m_through_instance(question, 'questionset', element, 'question', 'questionset', 'question_questionsets')
         set_m2m_instances(question, 'conditions', element)
         set_m2m_instances(question, 'optionsets', element)
         question.imported = True
