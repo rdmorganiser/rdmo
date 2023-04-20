@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from ..viewsets import MetaViewSet, ImportViewSet
+from ..viewsets import ImportViewSet, MetaViewSet
 
 router = routers.DefaultRouter()
 router.register(r'meta', MetaViewSet, basename='meta')

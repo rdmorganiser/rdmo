@@ -1,7 +1,7 @@
 import logging
 
-from rdmo.core.imports import (set_foreign_field,
-                               set_common_fields, validate_instance)
+from rdmo.core.imports import (set_common_fields, set_foreign_field,
+                               validate_instance)
 
 from .models import Attribute
 from .validators import (AttributeLockedValidator, AttributeParentValidator,

@@ -1,7 +1,9 @@
 import logging
 
-from rdmo.core.imports import (set_m2m_instances, set_common_fields, set_m2m_through_instances,
-                               set_lang_field, validate_instance)
+from rdmo.core.imports import (set_common_fields, set_lang_field,
+                               set_m2m_instances, set_m2m_through_instances,
+                               set_reverse_m2m_through_instance,
+                               validate_instance)
 
 from .models import Option, OptionSet
 from .validators import (OptionLockedValidator, OptionSetLockedValidator,
@@ -23,9 +25,9 @@ def import_optionset(element, save=False):
 
     if save and validate_instance(optionset, OptionSetLockedValidator, OptionSetUniqueURIValidator):
         if optionset.id:
-            logger.info('OptionSet created with uri %s.', element.get('uri'))
-        else:
             logger.info('OptionSet %s updated.', element.get('uri'))
+        else:
+            logger.info('OptionSet created with uri %s.', element.get('uri'))
 
         optionset.save()
         set_m2m_instances(optionset, 'conditions', element)
@@ -48,10 +50,11 @@ def import_option(element, save=False):
 
     if save and validate_instance(option, OptionLockedValidator, OptionUniqueURIValidator):
         if option.id:
-            logger.info('Option created with uri %s.', element.get('uri'))
-        else:
             logger.info('Option %s updated.', element.get('uri'))
+        else:
+            logger.info('Option created with uri %s.', element.get('uri'))
 
         option.save()
+        set_reverse_m2m_through_instance(option, 'optionset', element, 'option', 'optionset', 'option_optionsets')
 
     return option
