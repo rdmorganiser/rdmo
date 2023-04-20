@@ -38,6 +38,5 @@ def import_task(element, save=False):
         task.sites.add(Site.objects.get_current())
         set_m2m_instances(task, 'catalogs', element)
         set_m2m_instances(task, 'conditions', element)
-        task.imported = True
 
     return task

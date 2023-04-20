@@ -33,6 +33,5 @@ def import_view(element, save=False):
         view.save()
         view.sites.add(Site.objects.get_current())
         set_m2m_instances(view, 'catalogs', element)
-        view.imported = True
 
     return view

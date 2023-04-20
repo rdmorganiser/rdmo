@@ -108,7 +108,9 @@ def convert_elements(elements, version):
     # in future versions, this method can be extended
     # using packaging.version.parse
     if version is None:
-        convert_legacy_elements(elements)
+        return convert_legacy_elements(elements)
+    else:
+        return elements
 
 
 def convert_legacy_elements(elements):
@@ -173,22 +175,31 @@ def convert_legacy_elements(elements):
             if element.get('optionset') is not None:
                 element['optionset']['order'] = element.pop('order')
 
+    return elements
 
-def order_elements(ordered_elements, unordered_elements, uri, element):
+
+def order_elements(elements):
+    ordered_elements = {}
+    for uri, element in elements.items():
+        append_element(ordered_elements, elements, uri, element)
+    return ordered_elements
+
+
+def append_element(ordered_elements, unordered_elements, uri, element):
     if element is not None:
         for element_value in element.values():
             if isinstance(element_value, dict):
                 sub_uri = element_value.get('uri')
                 sub_element = unordered_elements.get(sub_uri)
                 if sub_uri not in ordered_elements:
-                    order_elements(ordered_elements, unordered_elements, sub_uri, sub_element)
+                    append_element(ordered_elements, unordered_elements, sub_uri, sub_element)
 
             elif isinstance(element_value, list):
                 for value in element_value:
                     sub_uri = value.get('uri')
                     sub_element = unordered_elements.get(sub_uri)
                     if sub_uri not in ordered_elements:
-                        order_elements(ordered_elements, unordered_elements, sub_uri, sub_element)
+                        append_element(ordered_elements, unordered_elements, sub_uri, sub_element)
 
         if uri not in ordered_elements:
             ordered_elements[uri] = element
