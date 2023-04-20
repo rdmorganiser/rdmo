@@ -135,7 +135,9 @@ angular.module('project_questions')
     };
 
     service.initView = function(questionset_id) {
-        service.error = null; // reset error
+        // service.error = null; // reset error
+        console.log('initView', questionset_id)
+
         if (initializing) return;
 
         if (questionset_id !== null) {
@@ -802,6 +804,7 @@ angular.module('project_questions')
     };
 
     service.prev = function() {
+        service.error = null; // reset error when moving to previous questionset
         if (service.questionset.prev !== null) {
             back = true;
             service.initView(service.questionset.prev);
@@ -809,18 +812,19 @@ angular.module('project_questions')
     };
 
     service.next = function() {
+        service.error = null; // reset error when moving to next questionset
         if (service.questionset.id !== null) {
             service.initView(service.questionset.next);
         }
     };
 
     service.jump = function(section, questionset) {
-        service.error = null; // reset error
+        service.error = null; // reset error before saving
         if (service.settings.project_questions_autosave) {
             service.save(false).then(function() {
-                if (angular.isDefined(questionset)) {
+                if (angular.isDefined(questionset) && service.error === null) {
                     service.initView(questionset.id);
-                } else if (angular.isDefined(section)) {
+                } else if (angular.isDefined(section)  && service.error === null) {
                     if (angular.isDefined(section.questionset)) {
                         service.initView(section.questionsets[0].id);
                     } else {
@@ -831,7 +835,10 @@ angular.module('project_questions')
                         })[0]
                         service.initView(section_from_service.questionsets[0].id);
                     }
-                } else {
+                } else if (service.error !== null) {
+                    // pass, dont jump
+                } 
+                else {
                     service.initView(null);
                 }
             });
