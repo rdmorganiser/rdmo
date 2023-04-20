@@ -10,7 +10,7 @@
             {% endif %}
             <li>
                 {% blocktrans trimmed with number=page_obj.number num_pages=page_obj.paginator.num_pages %}
-                Page {{ number }} of {{ num_pages }} with {{ num_projects_in_page }} projects.
+                Page {{ number }} of {{ num_pages }}.
                 {% endblocktrans %}
             </li>
             {% if page_obj.has_next %}
