@@ -65,7 +65,8 @@ angular.module('project_questions')
     var service = {
         set_prefix: '',
         set_index: null,
-        values: null
+        values: null,
+        error: null
     };
 
     service.init = function(project_id) {
@@ -134,6 +135,7 @@ angular.module('project_questions')
     };
 
     service.initView = function(questionset_id) {
+        service.error = null; // reset error
         if (initializing) return;
 
         if (questionset_id !== null) {
@@ -774,10 +776,12 @@ angular.module('project_questions')
                     value.changed = false;
                 }
             }, function (response) {
-                value.errors = response.data.value;
+                if (response.status == 500) {
+                    service.error = response;
+                }
             })
         }
-    };
+};
 
     service.storeValues = function() {
         var promises = [];
@@ -811,6 +815,7 @@ angular.module('project_questions')
     };
 
     service.jump = function(section, questionset) {
+        service.error = null; // reset error
         if (service.settings.project_questions_autosave) {
             service.save(false).then(function() {
                 if (angular.isDefined(questionset)) {
@@ -851,8 +856,9 @@ angular.module('project_questions')
     };
 
     service.save = function(proceed) {
+        service.error = null; // reset error
         return service.storeValues().then(function() {
-            if (angular.isDefined(proceed) && proceed) {
+            if (angular.isDefined(proceed) && proceed && service.error === null) {
                 if (service.settings.project_questions_cycle_sets && service.questionset.is_collection) {
                     if (service.set_index === null) {
                         service.next();
