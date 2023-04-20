@@ -55,12 +55,3 @@
     </div>
 
 {% endif %}
-
-<div class="text" ng-show="service.error" role="alert">
-    <p>
-        {% trans 'An error occurred while saving the answer. Please revise your answer or contact support if this problem persists.' %}
-    </p>
-    <div class="text-danger" ng-show="service.error.statusText && service.error.status" role="alert">
-        {$ service.error.statusText $} ({$ service.error.status $}).
-    </div>
-</div>

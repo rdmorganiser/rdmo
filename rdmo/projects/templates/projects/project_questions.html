@@ -72,6 +72,10 @@
         {% include 'projects/project_questions_buttons.html' %}
     </div>
 
+    <div class="project-questions-form" ng-show="service.error" role="alert">
+        {% include 'projects/project_questions_save_error.html' %}
+    </div>
+
     <div class="project-questions-form" ng-show="service.questionset && !service.questionset.id">
         <div ng-show="service.questionset.error">
             {% include 'projects/project_questions_error.html' %}
