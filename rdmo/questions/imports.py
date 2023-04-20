@@ -42,7 +42,6 @@ def import_catalog(element, save=False):
         catalog.save()
         catalog.sites.add(Site.objects.get_current())
         set_m2m_through_instances(catalog, 'sections', element, 'catalog', 'section', 'catalog_sections')
-        catalog.imported = True
 
     return catalog
 
@@ -66,7 +65,6 @@ def import_section(element, save=False):
         section.save()
         set_reverse_m2m_through_instance(section, 'catalog', element, 'section', 'catalog', 'section_catalogs')
         set_m2m_through_instances(section, 'pages', element, 'section', 'page', 'section_pages')
-        section.imported = True
 
     return section
 
@@ -98,7 +96,6 @@ def import_page(element, save=False):
         set_reverse_m2m_through_instance(page, 'section', element, 'page', 'section', 'page_sections')
         set_m2m_through_instances(page, 'questionsets', element, 'page', 'questionset', 'page_questionsets')
         set_m2m_through_instances(page, 'questions', element, 'page', 'question', 'page_questions')
-        page.imported = True
 
     return page
 
@@ -131,7 +128,6 @@ def import_questionset(element, save=False):
         set_reverse_m2m_through_instance(questionset, 'questionset', element, 'questionset', 'question', 'questionset_questions')
         set_m2m_through_instances(questionset, 'questionsets', element, 'parent', 'questionset', 'questionset_questionsets')
         set_m2m_through_instances(questionset, 'questions', element, 'questionset', 'question', 'questionset_questions')
-        questionset.imported = True
 
     return questionset
 
@@ -181,6 +177,5 @@ def import_question(element, save=False):
         set_reverse_m2m_through_instance(question, 'questionset', element, 'question', 'questionset', 'question_questionsets')
         set_m2m_instances(question, 'conditions', element)
         set_m2m_instances(question, 'optionsets', element)
-        question.imported = True
 
     return question

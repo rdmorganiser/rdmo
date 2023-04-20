@@ -30,6 +30,5 @@ def import_condition(element, save=False):
             logger.info('Catalog %s updated.', element.get('uri'))
 
         condition.save()
-        condition.imported = True
 
     return condition

@@ -30,6 +30,5 @@ def import_attribute(element, save=False):
             logger.debug('Attribute %s updated.', element.get('uri'))
 
         attribute.save()
-        attribute.imported = True
 
     return attribute

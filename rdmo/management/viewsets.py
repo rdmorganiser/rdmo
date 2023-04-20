@@ -47,9 +47,6 @@ class ImportViewSet(viewsets.ViewSet):
 
     permission_classes = (IsAuthenticated, )
 
-    def list(self, request, *args, **kwargs):
-        return Response({})
-
     def create(self, request, *args, **kwargs):
         # step 1: store xml file as tmp file
         try:
@@ -67,7 +64,7 @@ class ImportViewSet(viewsets.ViewSet):
 
         # step 3: create element dicts from xml
         try:
-            unordered_elements = flat_xml_to_elements(root)
+            elements = flat_xml_to_elements(root)
         except KeyError as e:
             logger.info('Import failed with KeyError (%s)' % e)
             raise ValidationError({'file': [_('This is not a valid RDMO XML file.')]})
@@ -79,19 +76,20 @@ class ImportViewSet(viewsets.ViewSet):
             raise ValidationError({'file': [_('This is not a valid RDMO XML file.')]})
 
         # step 4: check if the user has access to those models
-        if not check_permissions(unordered_elements, request.user):
+        if not check_permissions(elements, request.user):
             raise PermissionDenied()
 
         # step 5: convert elements from previous versions
-        convert_elements(unordered_elements, root.attrib.get('version'))
+        elements = convert_elements(elements, root.attrib.get('version'))
 
         # step 6: order the elements and return
-        ordered_elements = {}
-        for uri, element in unordered_elements.items():
-            order_elements(ordered_elements, unordered_elements, uri, element)
+        elements = order_elements(elements)
 
-        elements = ordered_elements.values()
+        # step 7: convert elements to a list
+        elements = elements.values()
 
+        # step 8: import the elements
         import_elements(elements)
 
+        # setp 9: return the list of elements
         return Response(elements)
