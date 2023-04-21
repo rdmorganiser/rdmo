@@ -22,6 +22,8 @@ from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import human2bytes, return_file_response
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Catalog, Question, QuestionSet
+from rdmo.tasks.models import Task
+from rdmo.views.models import View
 
 from .filters import SnapshotFilterBackend, ValueFilterBackend
 from .models import (Continuation, Integration, Issue, Membership, Project,
@@ -149,6 +151,23 @@ class ProjectViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         project = serializer.save(site=get_current_site(self.request))
+
+        # add all tasks to project
+        tasks = Task.objects.filter_current_site() \
+                            .filter_catalog(project.catalog) \
+                            .filter_group(self.request.user) \
+                            .filter_availability(self.request.user)
+        for task in tasks:
+            project.tasks.add(task)
+
+        if self.request.data.get('views') is None:
+            # add all views to project
+            views = View.objects.filter_current_site() \
+                                .filter_catalog(project.catalog) \
+                                .filter_group(self.request.user) \
+                                .filter_availability(self.request.user)
+            for view in views:
+                project.views.add(view)
 
         # add current user as owner
         membership = Membership(project=project, user=self.request.user, role='owner')
