@@ -253,8 +253,8 @@ def test_password_reset_post_valid(db, client, settings, test_setting):
     assert len(mail.outbox) == 1
 
     # get the link from the mail
-    # urls = re.findall(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', mail.outbox[0].body)  # complicated regex
-    urls = [i.strip() for i in mail.outbox[0].body.splitlines() if i.strip().startswith('http')]  # simpler alternative
+    urls = re.findall(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', mail.outbox[0].body)  # complicated regex
+    # urls = [i.strip() for i in mail.outbox[0].body.splitlines() if i.strip().startswith('http')]  # simpler alternative
     assert len(urls) == 1
 
     # get the password_reset page
