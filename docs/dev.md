@@ -165,6 +165,20 @@ other    -> another user without project
 
 The password for these users is the same as the username, e.g. `admin`: `admin`. You might have guessed yourself, but make sure to **never use these users in a production environment**.
 
+A local email server for development can be started by setting:
+```python
+# in local.py
+EMAIL_PORT = 8025
+```
+and using:
+
+```bash
+# for python versions >= 3.7 
+pip install aiosmtpd
+
+python -m aiosmtpd -n -l localhost:8025
+```
+
 
 Setup rdmo
 ----------
