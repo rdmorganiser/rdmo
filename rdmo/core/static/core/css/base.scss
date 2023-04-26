@@ -115,6 +115,11 @@ table {
     }
 }
 
+summary {
+    color: $link-color;
+    cursor: pointer;
+}
+
 /* navbar */
 
 .navbar-default {
