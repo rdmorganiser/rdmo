@@ -1,5 +1,6 @@
-import pytest
 import re
+
+import pytest
 
 from django.contrib.auth import get_user_model
 from django.core import mail
@@ -8,6 +9,8 @@ from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
 
 from pytest_django.asserts import assertTemplateUsed
+
+from rdmo.accounts.tests.utils import reload_app_urlconf_in_testcase
 
 users = (
     ('editor', 'editor'),
@@ -197,7 +200,6 @@ def test_password_change_post(db, client, settings, test_setting):
     password and redirects to home.
     """
     settings.ACCOUNT = test_setting
-    
     client.login(username='user', password='user')
     url = reverse('account_change_password')
     data = {
@@ -215,7 +217,7 @@ def test_password_reset_get(db, client, settings, test_setting):
     A GET request to the password reset form returns the form.
     """
     settings.ACCOUNT = test_setting
-    
+
     url = reverse('account_reset_password')
     response = client.get(url)
     assert response.status_code == 200
@@ -228,7 +230,7 @@ def test_password_reset_post_invalid(db, client, settings, test_setting):
     sends no mail.
     """
     settings.ACCOUNT = test_setting
-    
+
     url = reverse('account_reset_password')
     data = {'email': 'wrong@example.com'}
     response = client.post(url, data)
@@ -236,6 +238,7 @@ def test_password_reset_post_invalid(db, client, settings, test_setting):
     assert len(mail.outbox) == 0
 
 
+@pytest.mark.urls('rdmo.accounts.urls')
 @pytest.mark.parametrize('test_setting', boolean_toggle)
 def test_password_reset_post_valid(db, client, settings, test_setting):
     """
@@ -243,26 +246,27 @@ def test_password_reset_post_valid(db, client, settings, test_setting):
     sends a mail with a correct link.
     """
     settings.ACCOUNT = test_setting
+    reload_app_urlconf_in_testcase('accounts')
 
-    # if settings.ACCOUNT:
-    url = reverse('account_reset_password')
-    data = {'email': 'user@example.com'}
-    response = client.post(url, data)
-    assert response.status_code == 302
-    assert response.url == reverse('account_reset_password_done')
-    assert len(mail.outbox) == 1
+    if settings.ACCOUNT:
+        url = reverse('account_reset_password')
+        data = {'email': 'user@example.com'}
+        response = client.post(url, data)
+        assert response.status_code == 302
+        assert response.url == reverse('account_reset_password_done')
+        assert len(mail.outbox) == 1
 
-    # get the link from the mail
-    urls = re.findall(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', mail.outbox[0].body)  # complicated regex
-    # urls = [i.strip() for i in mail.outbox[0].body.splitlines() if i.strip().startswith('http')]  # simpler alternative
-    assert len(urls) == 1
+        # get the link from the mail
+        urls = re.findall(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', mail.outbox[0].body)  # complicated regex
+        # urls = [i.strip() for i in mail.outbox[0].body.splitlines() if i.strip().startswith('http')]  # simpler alternative
+        assert len(urls) == 1
 
-    # get the password_reset page
-    response = client.get(urls[0])
-    assert response.status_code == 302
-    assert response.url == reverse('account_reset_password_from_key', args=['4','set-password'])
-    # else:
-    #     pytest.raises(NoReverseMatch, reverse, 'account_reset_password')
+        # get the password_reset page
+        response = client.get(urls[0])
+        assert response.status_code == 302
+        assert response.url == reverse('account_reset_password_from_key', args=['4', 'set-password'])
+    else:
+        pytest.raises(NoReverseMatch, reverse, 'account_reset_password')
 
 
 @pytest.mark.parametrize('test_setting', boolean_toggle)
@@ -340,7 +344,6 @@ def test_remove_user_post_invalid_email(db, client, settings, test_setting):
         assertTemplateUsed(response, 'profile/profile_remove_closed.html')
 
 
-
 @pytest.mark.parametrize('test_setting', boolean_toggle)
 def test_remove_user_post_invalid_password(db, client, settings, test_setting):
     settings.PROFILE_DELETE = test_setting
@@ -383,9 +386,9 @@ def test_remove_user_post_invalid_consent(db, client, settings, test_setting):
         assertTemplateUsed(response, 'profile/profile_remove_closed.html')
 
 
-
-def test_remove_a_user_without_usable_password_post(db, client, settings):
-    settings.PROFILE_DELETE = True
+@pytest.mark.parametrize('test_setting', boolean_toggle)
+def test_remove_a_user_without_usable_password_post(db, client, settings, test_setting):
+    settings.PROFILE_DELETE = test_setting
 
     user = get_user_model().objects.get(username='user', email='user@example.com')
     user.set_unusable_password()
@@ -408,8 +411,9 @@ def test_remove_a_user_without_usable_password_post(db, client, settings):
     client.logout()
 
 
-def test_remove_a_user_without_usable_password_post_invalid_email(db, client, settings):
-    settings.PROFILE_DELETE = True
+@pytest.mark.parametrize('test_setting', boolean_toggle)
+def test_remove_a_user_without_usable_password_post_invalid_email(db, client, settings, test_setting):
+    settings.PROFILE_DELETE = test_setting
 
     user = get_user_model().objects.get(username='user', email='user@example.com')
     user.set_unusable_password()
@@ -432,8 +436,9 @@ def test_remove_a_user_without_usable_password_post_invalid_email(db, client, se
     client.logout()
 
 
-def test_remove_a_user_without_usable_password_post_empty_email(db, client, settings):
-    settings.PROFILE_DELETE = True
+@pytest.mark.parametrize('test_setting', boolean_toggle)
+def test_remove_a_user_without_usable_password_post_empty_email(db, client, settings, test_setting):
+    settings.PROFILE_DELETE = test_setting
 
     user = get_user_model().objects.get(username='user', email='user@example.com')
     user.set_unusable_password()
@@ -457,9 +462,10 @@ def test_remove_a_user_without_usable_password_post_empty_email(db, client, sett
     client.logout()
 
 
-def test_remove_a_user_without_usable_password_post_invalid_consent(db, client, settings):
-    settings.PROFILE_DELETE = True
-    
+@pytest.mark.parametrize('test_setting', boolean_toggle)
+def test_remove_a_user_without_usable_password_post_invalid_consent(db, client, settings, test_setting):
+    settings.PROFILE_DELETE = test_setting
+
     user = get_user_model().objects.get(username='user', email='user@example.com')
     user.set_unusable_password()
     user.save()
@@ -510,3 +516,82 @@ def test_signup_next(db, client):
 
     assert response.status_code == 302
     assert response.url == '/about/'
+
+
+@pytest.mark.parametrize('test_setting', boolean_toggle)
+@pytest.mark.parametrize('username,password', users)
+def test_terms_of_use(db, client, settings, username, password, test_setting):
+    settings.ACCOUNT_TERMS_OF_USE = test_setting
+    reload_app_urlconf_in_testcase('accounts')
+    client.login(username=username, password=password)
+    if settings.ACCOUNT_TERMS_OF_USE:
+        url = reverse('terms_of_use')
+        response = client.get(url)
+        assert response.status_code == 200
+        assertTemplateUsed('accounts/terms_of_use.html')
+    else:
+        with pytest.raises(NoReverseMatch):
+            reverse('terms_of_use')
+
+
+@pytest.mark.parametrize('test_setting', boolean_toggle)
+def test_token_get_for_user(db, client, settings, test_setting):
+    settings.ACCOUNT_ALLOW_USER_TOKEN = test_setting
+    reload_app_urlconf_in_testcase('accounts')
+
+    client.login(username='user', password='user')
+
+    if settings.ACCOUNT_ALLOW_USER_TOKEN:
+        url = reverse('account_token')
+        response = client.get(url)
+        assert response.status_code == 200
+    else:
+        with pytest.raises(NoReverseMatch):
+            reverse('account_token')
+
+
+@pytest.mark.parametrize('test_setting', boolean_toggle)
+def test_token_get_for_anonymous(db, client, settings, test_setting):
+    settings.ACCOUNT_ALLOW_USER_TOKEN = test_setting
+    reload_app_urlconf_in_testcase('accounts')
+    client.login(username='anonymous', password=None)
+
+    if settings.ACCOUNT_ALLOW_USER_TOKEN:
+        url = reverse('account_token')
+        response = client.get(url)
+        assert response.status_code == 302
+        assert response.url == reverse('account_login') + '?next=' + url
+    else:
+        with pytest.raises(NoReverseMatch):
+            reverse('account_token')
+
+
+@pytest.mark.parametrize('test_setting', boolean_toggle)
+def test_token_post_for_user(db, client, settings, test_setting):
+    settings.ACCOUNT_ALLOW_USER_TOKEN = test_setting
+    reload_app_urlconf_in_testcase('accounts')
+    client.login(username='user', password='user')
+
+    if settings.ACCOUNT_ALLOW_USER_TOKEN:
+        url = reverse('account_token')
+        response = client.post(url)
+        assert response.status_code == 200
+    else:
+        with pytest.raises(NoReverseMatch):
+            reverse('account_token')
+
+
+@pytest.mark.parametrize('test_setting', boolean_toggle)
+def test_token_post_for_anonymous(db, client, settings, test_setting):
+    settings.ACCOUNT_ALLOW_USER_TOKEN = test_setting
+    reload_app_urlconf_in_testcase('accounts')
+    client.login(username='anonymous', password=None)
+    # breakpoint()
+    if settings.ACCOUNT_ALLOW_USER_TOKEN:
+        url = reverse('account_token')
+        response = client.post(url)
+        assert response.status_code == 302
+        assert response.url == reverse('account_login') + '?next=' + url
+    else:
+        with pytest.raises(NoReverseMatch):
+            reverse('account_token')
