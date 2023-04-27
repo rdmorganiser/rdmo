@@ -1,0 +1,12 @@
+{% load i18n %}
+{% load core_tags %}
+
+    <div class="text-danger" ng-show="service.error">
+        <p>
+            {% trans 'An error occurred while saving the answer. Please contact support if this problem persists.' %}
+        </p>
+
+        <p>
+            {$ service.error.statusText $} ({$ service.error.status $}).
+        </p>
+    </div>
