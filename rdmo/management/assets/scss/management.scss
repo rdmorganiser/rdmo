@@ -10,6 +10,9 @@ a.disabled {
     transform: rotate(180deg) scaleX(-1);
 }
 
+.w-100 {
+    width: 100%;
+}
 .mt-0 {
     margin-top: 0;
 }
@@ -33,6 +36,9 @@ a.disabled {
 }
 .mb-0 {
     margin-bottom: 0;
+}
+.mb-5 {
+    margin-bottom: 5px;
 }
 .mb-10 {
     margin-bottom: 10px;
@@ -135,6 +141,17 @@ a.disabled {
 
         &.panel-nested {
             margin-bottom: 10px;
+        }
+
+        &.panel-import {
+            .checkbox {
+                position: static;
+                margin: 0;
+
+                label {
+                    font-weight: normal;
+                }
+            }
         }
     }
     .pull-right {

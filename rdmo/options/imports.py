@@ -33,6 +33,8 @@ def import_optionset(element, save=False):
         set_m2m_instances(optionset, 'conditions', element)
         set_m2m_through_instances(optionset, 'options', element, 'optionset', 'option', 'optionset_options')
 
+        element['imported'] = True
+
     return optionset
 
 
@@ -56,5 +58,7 @@ def import_option(element, save=False):
 
         option.save()
         set_reverse_m2m_through_instance(option, 'optionset', element, 'option', 'optionset', 'option_optionsets')
+
+        element['imported'] = True
 
     return option

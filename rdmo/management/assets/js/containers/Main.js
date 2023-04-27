@@ -3,9 +3,11 @@ import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import isEmpty from 'lodash/isEmpty';
+import isNil from 'lodash/isNil'
+
 import * as configActions from '../actions/configActions'
 import * as elementActions from '../actions/elementActions'
-import isNil from 'lodash/isNil'
+import * as importActions from '../actions/importActions'
 
 import ApiErrors from '../components/ApiErrors'
 
@@ -40,6 +42,8 @@ import NestedPage from '../components/nested/NestedPage'
 import NestedQuestionSet from '../components/nested/NestedQuestionSet'
 import NestedSection from '../components/nested/NestedSection'
 
+import Import from '../components/import/Import'
+
 class Main extends Component {
 
   constructor(props) {
@@ -47,7 +51,7 @@ class Main extends Component {
   }
 
   render() {
-    const { config, elements, configActions, elementActions } = this.props
+    const { config, elements, imports, configActions, elementActions, importActions } = this.props
     const { element, elementType, elementId, elementAction, errors } = elements
 
     // check if anything was loaded yet
@@ -58,6 +62,10 @@ class Main extends Component {
     // check if an an error occured
     if (!isNil(errors.api)) {
       return <ApiErrors errors={errors.api} />
+    }
+
+    if (!isEmpty(imports.elements)) {
+      return <Import config={config} elements={imports.elements} importActions={importActions} />
     }
 
     // check if the nested components should be displayed
@@ -160,21 +168,25 @@ class Main extends Component {
 Main.propTypes = {
   config: PropTypes.object.isRequired,
   elements: PropTypes.object.isRequired,
+  imports: PropTypes.object.isRequired,
   configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
+  elementActions: PropTypes.object.isRequired,
+  importActions: PropTypes.object.isRequired
 }
 
 function mapStateToProps(state, props) {
   return {
     config: state.config,
-    elements: state.elements
+    elements: state.elements,
+    imports: state.imports
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     configActions: bindActionCreators(configActions, dispatch),
-    elementActions: bindActionCreators(elementActions, dispatch)
+    elementActions: bindActionCreators(elementActions, dispatch),
+    importActions: bindActionCreators(importActions, dispatch)
   }
 }
 

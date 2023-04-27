@@ -1,5 +1,3 @@
-import json
-
 from pathlib import Path
 
 import pytest
@@ -27,7 +25,7 @@ status_map = {
 }
 
 urlnames = {
-    'list': 'v1-management:import-list'
+    'list': 'v1-management:upload-list'
 }
 
 
@@ -44,15 +42,32 @@ def test_list(db, client, username, password):
 def test_create(db, client, username, password):
     client.login(username=username, password=password)
 
-    json_file = Path(settings.BASE_DIR) / 'import' / 'catalogs.json'
-    json_data = {
-        'elements': json.loads(json_file.read_text())
-    }
+    xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'catalogs.xml'
 
     url = reverse(urlnames['list'])
-    response = client.post(url, json_data, content_type='application/json')
+    with open(xml_file, encoding='utf8') as f:
+        response = client.post(url, {'file': f})
 
     assert response.status_code == status_map['create'][username], response.json()
+    if response.status_code == 200:
+        for element in response.json():
+            assert element.get('imported') is None
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_create_import(db, client, username, password):
+    client.login(username=username, password=password)
+
+    xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'catalogs.xml'
+
+    url = reverse(urlnames['list'])
+    with open(xml_file, encoding='utf8') as f:
+        response = client.post(url, {'file': f, 'import': 'true'})
+
+    assert response.status_code == status_map['create'][username], response.json()
+    if response.status_code == 200:
+        for element in response.json():
+            assert element.get('imported') is True
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -60,7 +75,7 @@ def test_create_empty(db, client, username, password):
     client.login(username=username, password=password)
 
     url = reverse(urlnames['list'])
-    response = client.post(url, {}, content_type='application/json')
+    response = client.post(url, {})
     assert response.status_code == status_map['create_error'][username], response.json()
 
 
@@ -68,8 +83,10 @@ def test_create_empty(db, client, username, password):
 def test_create_error(db, client, username, password):
     client.login(username=username, password=password)
 
-    json_data = {'foo': 'bar'}
+    xml_file = Path(settings.BASE_DIR) / 'xml' / 'error.xml'
 
     url = reverse(urlnames['list'])
-    response = client.post(url, json_data, content_type='application/json')
+    with open(xml_file, encoding='utf8') as f:
+        response = client.post(url, {'file': f})
+
     assert response.status_code == status_map['create_error'][username], response.json()

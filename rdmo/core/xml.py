@@ -39,6 +39,7 @@ def flat_xml_to_elements(root):
             if uri_attrib in sub_node.attrib:
                 # this node has an uri!
                 element[tag] = {
+                    'type': sub_node.tag,
                     'uri': sub_node.attrib[uri_attrib]
                 }
             elif 'lang' in sub_node.attrib:
@@ -49,6 +50,7 @@ def flat_xml_to_elements(root):
                 element[tag] = []
                 for sub_sub_node in sub_node:
                     sub_element = {
+                        'type': sub_sub_node.tag,
                         'uri': sub_sub_node.attrib[uri_attrib]
                     }
                     if 'order' in sub_sub_node.attrib:

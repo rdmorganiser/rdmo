@@ -12,18 +12,32 @@ const elementTypes = [
   'views'
 ]
 
-const codeClassNames = {
-  'catalogs': 'code-questions',
-  'sections': 'code-questions',
-  'questionsets': 'code-questions',
-  'pages': 'code-questions',
-  'questions': 'code-questions',
-  'attributes': 'code-domain',
-  'optionsets': 'code-options',
-  'options': 'code-options',
-  'conditions': 'code-conditions',
-  'tasks': 'code-tasks',
-  'views': 'code-views'
+const elementModules = {
+  'catalog': 'questions',
+  'section': 'questions',
+  'questionset': 'questions',
+  'page': 'questions',
+  'question': 'questions',
+  'attribute': 'domain',
+  'optionset': 'options',
+  'option': 'options',
+  'condition': 'conditions',
+  'task': 'tasks',
+  'view': 'views'
 }
 
-export { elementTypes, codeClassNames }
+const codeClass = {
+  'catalog': 'code-questions',
+  'section': 'code-questions',
+  'questionset': 'code-questions',
+  'page': 'code-questions',
+  'question': 'code-questions',
+  'attribute': 'code-domain',
+  'optionset': 'code-options',
+  'option': 'code-options',
+  'condition': 'code-conditions',
+  'task': 'code-tasks',
+  'view': 'code-views'
+}
+
+export { elementTypes, elementModules, codeClass }

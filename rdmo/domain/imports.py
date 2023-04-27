@@ -31,4 +31,6 @@ def import_attribute(element, save=False):
 
         attribute.save()
 
+        element['imported'] = True
+
     return attribute

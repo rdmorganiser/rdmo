@@ -43,7 +43,7 @@ class MetaViewSet(viewsets.ViewSet):
         })
 
 
-class ImportViewSet(viewsets.ViewSet):
+class UploadViewSet(viewsets.ViewSet):
 
     permission_classes = (IsAuthenticated, )
 
@@ -75,21 +75,45 @@ class ImportViewSet(viewsets.ViewSet):
             logger.info('Import failed with AttributeError (%s)' % e)
             raise ValidationError({'file': [_('This is not a valid RDMO XML file.')]})
 
-        # step 4: check if the user has access to those models
+        # step 4: convert elements from previous versions
+        elements = convert_elements(elements, root.attrib.get('version'))
+
+        # step 5: order the elements and return
+        elements = order_elements(elements)
+
+        # step 6: convert elements to a list
+        elements = elements.values()
+
+        # step 7: check if the user has access to those models
         if not check_permissions(elements, request.user):
             raise PermissionDenied()
 
-        # step 5: convert elements from previous versions
-        elements = convert_elements(elements, root.attrib.get('version'))
+        # step 8: import the elements if save=True is set
+        import_elements(elements, save=request.POST.get('import', '').lower() in ['true', 't', '1'])
 
-        # step 6: order the elements and return
-        elements = order_elements(elements)
+        # step 9: return the list of elements
+        return Response(elements)
 
-        # step 7: convert elements to a list
-        elements = elements.values()
 
-        # step 8: import the elements
+class ImportViewSet(viewsets.ViewSet):
+
+    permission_classes = (IsAuthenticated, )
+
+    def create(self, request, *args, **kwargs):
+        # step 1: store xml file as tmp file
+        try:
+            elements = request.data['elements']
+        except KeyError:
+            raise ValidationError({'elements': [_('This field may not be blank.')]})
+        except TypeError:
+            raise ValidationError({'elements': [_('This is not a valid RDMO import JSON.')]})
+
+        # step 2: check if the user has access to those models
+        if not check_permissions(elements, request.user):
+            raise PermissionDenied()
+
+        # step 3: import the elements
         import_elements(elements)
 
-        # setp 9: return the list of elements
+        # step 4: return the list of elements
         return Response(elements)
