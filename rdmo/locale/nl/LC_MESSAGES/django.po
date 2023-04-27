@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-21 00:59+0200\n"
+"POT-Creation-Date: 2023-04-27 16:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,15 +30,15 @@ msgstr ""
 msgid "Last name"
 msgstr ""
 
-#: accounts/forms.py:98 core/constants.py:20 projects/models/invite.py:27
+#: accounts/forms.py:100 core/constants.py:20 projects/models/invite.py:27
 msgid "E-mail"
 msgstr ""
 
-#: accounts/forms.py:102
+#: accounts/forms.py:104
 msgid "Password"
 msgstr ""
 
-#: accounts/forms.py:106
+#: accounts/forms.py:108
 msgid ""
 "I confirm that I want my profile to be completely removed. This can not be "
 "undone!"
@@ -210,6 +210,25 @@ msgstr ""
 msgid "Roles"
 msgstr ""
 
+#: accounts/templates/account/account_token.html:6
+#: core/templates/core/base_navigation.html:123
+msgid "API token"
+msgstr ""
+
+#: accounts/templates/account/account_token.html:8
+msgid "Your API token is:"
+msgstr ""
+
+#: accounts/templates/account/account_token.html:12
+msgid "Regenerate token"
+msgstr ""
+
+#: accounts/templates/account/account_token.html:16
+msgid ""
+"You can use this token in HTTP requests by using the <code>Authorization</"
+"code> Header:"
+msgstr ""
+
 #: accounts/templates/account/email.html:6
 msgid "E-mail Addresses"
 msgstr ""
@@ -311,14 +330,14 @@ msgstr ""
 #: accounts/templates/account/email_confirm.html:29
 #, python-format
 msgid ""
-"This e-mail confirmation link expired or is invalid. Please <a href="
-"\"%(email_url)s\">issue a new e-mail confirmation request</a>."
+"This e-mail confirmation link expired or is invalid. Please <a "
+"href=\"%(email_url)s\">issue a new e-mail confirmation request</a>."
 msgstr ""
 
 #: accounts/templates/account/login.html:6
 #: accounts/templates/account/login_form.html:22
 #: accounts/templates/account/password_reset_from_key_done.html:14
-#: core/templates/core/base_navigation.html:154
+#: core/templates/core/base_navigation.html:162
 #: core/templates/core/home.html:55
 msgid "Login"
 msgstr ""
@@ -330,15 +349,15 @@ msgstr ""
 #: accounts/templates/account/login_form_account.html:7
 #, python-format
 msgid ""
-"If you have not created an account yet, then please <a href=\"%(signup_url)s"
-"\">sign up</a> first."
+"If you have not created an account yet, then please <a "
+"href=\"%(signup_url)s\">sign up</a> first."
 msgstr ""
 
 #: accounts/templates/account/login_form_account.html:14
 #, python-format
 msgid ""
-"If you forgot your password and want to reset it, click <a href="
-"\"%(reset_url)s\">here</a>."
+"If you forgot your password and want to reset it, click <a "
+"href=\"%(reset_url)s\">here</a>."
 msgstr ""
 
 #: accounts/templates/account/login_form_socialaccount.html:9
@@ -349,7 +368,7 @@ msgstr ""
 #: accounts/templates/account/logout.html:6
 #: accounts/templates/account/logout.html:19
 #: accounts/templates/account/logout_form.html:6
-#: core/templates/core/base_navigation.html:143
+#: core/templates/core/base_navigation.html:151
 #: core/templates/rest_framework_swagger/index.html:28
 msgid "Logout"
 msgstr ""
@@ -559,7 +578,7 @@ msgstr ""
 #: accounts/templates/profile/profile_remove_success.html:6
 #: accounts/templates/profile/profile_update_form.html:30
 #: accounts/templates/profile/profile_update_form.html:37
-#: core/templates/core/base_navigation.html:123
+#: core/templates/core/base_navigation.html:131
 msgid "Delete profile"
 msgstr ""
 
@@ -664,8 +683,8 @@ msgstr ""
 #, python-format
 msgid ""
 "You decided to cancel logging in to our site using one of your existing "
-"accounts. If this was a mistake, please proceed to <a href=\"%(login_url)s"
-"\">sign in</a>."
+"accounts. If this was a mistake, please proceed to <a "
+"href=\"%(login_url)s\">sign in</a>."
 msgstr ""
 
 #: accounts/templates/socialaccount/signup.html:9
@@ -1027,7 +1046,7 @@ msgstr ""
 #: options/templates/options/options_modal_form_conditions.html:34
 #: options/templates/options/options_modal_form_options.html:182
 #: options/templates/options/options_modal_form_optionsets.html:118
-#: projects/templates/projects/project_questions_buttons.html:26
+#: projects/templates/projects/project_questions_buttons.html:27
 #: projects/templates/projects/project_questions_modal_form_valuesets.html:32
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:216
 #: questions/templates/questions/catalogs_modal_form_questions.html:464
@@ -1099,7 +1118,7 @@ msgstr ""
 msgid "This field is required."
 msgstr ""
 
-#: core/constants.py:14 core/settings.py:294
+#: core/constants.py:14 core/settings.py:296
 #: options/templates/options/options_export.html:39
 #: options/templates/options/options_modal_form_options.html:163
 #: projects/models/value.py:64 questions/constants.py:4
@@ -1153,91 +1172,91 @@ msgstr ""
 msgid "updated"
 msgstr ""
 
-#: core/settings.py:123
+#: core/settings.py:124
 msgid "English"
 msgstr ""
 
-#: core/settings.py:124
+#: core/settings.py:125
 msgid "German"
 msgstr ""
 
-#: core/settings.py:237
+#: core/settings.py:239
 msgid "PDF"
 msgstr ""
 
-#: core/settings.py:238
+#: core/settings.py:240
 msgid "Rich Text Format"
 msgstr ""
 
-#: core/settings.py:239
+#: core/settings.py:241
 msgid "Open Office"
 msgstr ""
 
-#: core/settings.py:240
+#: core/settings.py:242
 msgid "Microsoft Office"
 msgstr ""
 
-#: core/settings.py:241
+#: core/settings.py:243
 msgid "HTML"
 msgstr ""
 
-#: core/settings.py:242
+#: core/settings.py:244
 msgid "Markdown"
 msgstr ""
 
-#: core/settings.py:243
+#: core/settings.py:245
 msgid "mediawiki"
 msgstr ""
 
-#: core/settings.py:244
+#: core/settings.py:246
 msgid "LaTeX"
 msgstr ""
 
-#: core/settings.py:264 core/settings.py:270
+#: core/settings.py:266 core/settings.py:272
 msgid "RDMO XML"
 msgstr ""
 
-#: core/settings.py:265 domain/templates/domain/domain.html:74
+#: core/settings.py:267 domain/templates/domain/domain.html:74
 msgid "CSV comma separated"
 msgstr ""
 
-#: core/settings.py:266 domain/templates/domain/domain.html:79
+#: core/settings.py:268 domain/templates/domain/domain.html:79
 msgid "CSV semicolon separated"
 msgstr ""
 
-#: core/settings.py:295 questions/constants.py:5
+#: core/settings.py:297 questions/constants.py:5
 msgid "Textarea"
 msgstr ""
 
-#: core/settings.py:296 questions/constants.py:6
+#: core/settings.py:298 questions/constants.py:6
 msgid "Yes/No"
 msgstr ""
 
-#: core/settings.py:297 questions/constants.py:7
+#: core/settings.py:299 questions/constants.py:7
 msgid "Checkboxes"
 msgstr ""
 
-#: core/settings.py:298 questions/constants.py:8
+#: core/settings.py:300 questions/constants.py:8
 msgid "Radio buttons"
 msgstr ""
 
-#: core/settings.py:299 questions/constants.py:9
+#: core/settings.py:301 questions/constants.py:9
 msgid "Select drop-down"
 msgstr ""
 
-#: core/settings.py:300 questions/constants.py:10
+#: core/settings.py:302 questions/constants.py:10
 msgid "Autocomplete"
 msgstr ""
 
-#: core/settings.py:301 questions/constants.py:11
+#: core/settings.py:303 questions/constants.py:11
 msgid "Range slider"
 msgstr ""
 
-#: core/settings.py:302 questions/constants.py:12
+#: core/settings.py:304 questions/constants.py:12
 msgid "Date picker"
 msgstr ""
 
-#: core/settings.py:303 questions/constants.py:13
+#: core/settings.py:305 questions/constants.py:13
 msgid "File upload"
 msgstr ""
 
@@ -1316,7 +1335,7 @@ msgstr ""
 msgid "About RDMO"
 msgstr ""
 
-#: core/templates/core/base_navigation.html:130
+#: core/templates/core/base_navigation.html:138
 #: overlays/templates/overlays/reset_overlays.html:6
 msgid "Reset tutorial overlays"
 msgstr ""
@@ -1450,8 +1469,8 @@ msgstr ""
 #: domain/templates/domain/domain_modal_show_attributes.html:15
 #, python-format
 msgid ""
-"This attribute is used for <b>%(values_count)s values</b> in <b>"
-"%(projects_count)s projects</b>."
+"This attribute is used for <b>%(values_count)s values</b> in "
+"<b>%(projects_count)s projects</b>."
 msgstr ""
 
 #: domain/templates/domain/domain_modal_delete_attributes.html:42
@@ -1572,7 +1591,7 @@ msgstr ""
 
 #: management/templates/management/import.html:70
 #: projects/templates/projects/project_questions_buttons.html:15
-#: projects/templates/projects/project_questions_buttons.html:42
+#: projects/templates/projects/project_questions_buttons.html:48
 msgid "Back"
 msgstr ""
 
@@ -1794,8 +1813,8 @@ msgstr ""
 #: options/templates/options/options_modal_show_options.html:15
 #, python-format
 msgid ""
-"This option is used for <b>%(values_count)s values</b> in <b>"
-"%(projects_count)s projects</b>."
+"This option is used for <b>%(values_count)s values</b> in "
+"<b>%(projects_count)s projects</b>."
 msgstr ""
 
 #: options/templates/options/options_modal_delete_options.html:29
@@ -2682,8 +2701,8 @@ msgstr ""
 #: projects/templates/projects/issue_send_message.txt:3
 #, python-format
 msgid ""
-"The following task was identified in the project \"%(project_title)s\" <"
-"%(project_url)s>:"
+"The following task was identified in the project \"%(project_title)s\" "
+"<%(project_url)s>:"
 msgstr ""
 
 #: projects/templates/projects/issue_send_message.txt:13
@@ -3124,16 +3143,17 @@ msgid ""
 msgstr ""
 
 #: projects/templates/projects/project_questions_buttons.html:9
-#: projects/templates/projects/project_questions_buttons.html:46
+#: projects/templates/projects/project_questions_buttons.html:52
 msgid "Skip"
 msgstr ""
 
-#: projects/templates/projects/project_questions_buttons.html:29
-msgid "Save and proceed"
+#: projects/templates/projects/project_questions_buttons.html:32
+#: projects/templates/projects/project_questions_buttons.html:40
+msgid "Proceed"
 msgstr ""
 
 #: projects/templates/projects/project_questions_buttons.html:34
-msgid "Proceed"
+msgid "Save and proceed"
 msgstr ""
 
 #: projects/templates/projects/project_questions_default.html:4
@@ -3217,8 +3237,8 @@ msgstr ""
 
 #: projects/templates/projects/project_questions_navigation_help.html:14
 msgid ""
-"Entries with <i class=\"fa fa-question-circle-o small\" aria-hidden=\"true"
-"\"></i> might be skipped based on your input."
+"Entries with <i class=\"fa fa-question-circle-o small\" aria-"
+"hidden=\"true\"></i> might be skipped based on your input."
 msgstr ""
 
 #: projects/templates/projects/project_questions_overview.html:14
@@ -3262,6 +3282,12 @@ msgid ""
 "will be referred to in following questions. You can add a new %(name)s using "
 "the green button. Once created, you can edit or delete %(name_plural)s using "
 "the buttons in the top right corner."
+msgstr ""
+
+#: projects/templates/projects/project_questions_save_error.html:6
+msgid ""
+"An error occurred while saving the answer. Please contact support if this "
+"problem persists."
 msgstr ""
 
 #: projects/templates/projects/project_questions_sidebar.html:3
@@ -3363,7 +3389,7 @@ msgstr ""
 msgid "Set"
 msgstr ""
 
-#: projects/validators.py:22 projects/viewsets.py:299
+#: projects/validators.py:22 projects/viewsets.py:318
 msgid "You reached the file quota for this project."
 msgstr ""
 
@@ -4062,8 +4088,8 @@ msgstr ""
 #: questions/templates/questions/catalogs_modal_delete_catalogs.html:17
 #, python-format
 msgid ""
-"You are about to permanently delete the catalog <code class=\"text-primary\">"
-"%(object)s</code>."
+"You are about to permanently delete the catalog <code class=\"text-"
+"primary\">%(object)s</code>."
 msgstr ""
 
 #: questions/templates/questions/catalogs_modal_delete_catalogs.html:24
@@ -4082,8 +4108,8 @@ msgstr ""
 #: questions/templates/questions/catalogs_modal_delete_questions.html:17
 #, python-format
 msgid ""
-"You are about to permanently delete the question <code class=\"text-primary"
-"\">%(object)s</code>."
+"You are about to permanently delete the question <code class=\"text-"
+"primary\">%(object)s</code>."
 msgstr ""
 
 #: questions/templates/questions/catalogs_modal_delete_questionsets.html:17
@@ -4096,8 +4122,8 @@ msgstr ""
 #: questions/templates/questions/catalogs_modal_delete_sections.html:17
 #, python-format
 msgid ""
-"You are about to permanently delete the section <code class=\"text-primary\">"
-"%(object)s</code>."
+"You are about to permanently delete the section <code class=\"text-"
+"primary\">%(object)s</code>."
 msgstr ""
 
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:12
