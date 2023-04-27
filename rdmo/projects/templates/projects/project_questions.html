@@ -47,7 +47,7 @@
 {% endblock %}
 
 {% block page %}
-    
+
     <div class="project-questions-form" ng-show="service.questionset.id" ng-cloak>
         {% include 'projects/project_questions_head.html' %}
         <h2>
@@ -70,9 +70,6 @@
         </div>
 
         {% include 'projects/project_questions_buttons.html' %}
-    </div>
-
-    <div class="project-questions-form" ng-show="service.error" role="alert">
         {% include 'projects/project_questions_save_error.html' %}
     </div>
 

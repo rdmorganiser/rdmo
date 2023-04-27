@@ -135,9 +135,6 @@ angular.module('project_questions')
     };
 
     service.initView = function(questionset_id) {
-        // service.error = null; // reset error
-        console.log('initView', questionset_id)
-
         if (initializing) return;
 
         if (questionset_id !== null) {
@@ -822,9 +819,11 @@ angular.module('project_questions')
         service.error = null; // reset error before saving
         if (service.settings.project_questions_autosave) {
             service.save(false).then(function() {
-                if (angular.isDefined(questionset) && service.error === null) {
+                if (service.error !== null) {
+                    // pass, dont jump
+                } else if (angular.isDefined(questionset)) {
                     service.initView(questionset.id);
-                } else if (angular.isDefined(section)  && service.error === null) {
+                } else if (angular.isDefined(section)) {
                     if (angular.isDefined(section.questionset)) {
                         service.initView(section.questionsets[0].id);
                     } else {
@@ -835,10 +834,7 @@ angular.module('project_questions')
                         })[0]
                         service.initView(section_from_service.questionsets[0].id);
                     }
-                } else if (service.error !== null) {
-                    // pass, dont jump
-                } 
-                else {
+                } else {
                     service.initView(null);
                 }
             });
@@ -865,7 +861,9 @@ angular.module('project_questions')
     service.save = function(proceed) {
         service.error = null; // reset error
         return service.storeValues().then(function() {
-            if (angular.isDefined(proceed) && proceed && service.error === null) {
+            if (service.error !== null) {
+                // pass
+            } else if (angular.isDefined(proceed) && proceed) {
                 if (service.settings.project_questions_cycle_sets && service.questionset.is_collection) {
                     if (service.set_index === null) {
                         service.next();

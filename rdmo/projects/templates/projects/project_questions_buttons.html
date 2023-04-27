@@ -28,11 +28,11 @@
                 </button>
                 {% endif %}
                 <button type="button" ng-click="service.save(true)" class="btn btn-primary">
-                    {% if settings.PROJECT_QUESTIONS_AUTOSAVE %}
-                    {% trans 'Proceed' %}</span>
-                    {% else %}
-                    {% trans 'Save and proceed' %}</span>
-                    {% endif %}
+                {% if settings.PROJECT_QUESTIONS_AUTOSAVE %}
+                {% trans 'Proceed' %}
+                {% else %}
+                {% trans 'Save and proceed' %}
+                {% endif %}
                 </button>
             </div>
             <div ng-show="service.project.read_only || service.questionset.elements.length < 1">
