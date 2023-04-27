@@ -44,7 +44,7 @@
     </ul>
     {% endif %}
 
-    <h2>{% trans 'Search projects' %}</h2>
+    <h2>{% trans 'Filter projects' %}</h2>
 
     <form method="GET" class="projects-search">
         <input type="text" class="form-control" id="search" name="title" placeholder="{% trans 'Search project title' %}"
@@ -52,6 +52,13 @@
         <a href="{% url 'projects' %}" class="projects-search-reset">
             <i class="fa fa-times" aria-hidden="true"></i>
         </a>
+        <p class="text-muted">
+            <small>
+                {% blocktrans trimmed %}
+                {{ number_of_filtered_projects }} of {{ number_of_projects }} projects shown
+                {% endblocktrans %}
+            </small>
+        </p>
     </form>
 
     <h2>{% trans 'Import existing project' %}</h2>

@@ -65,7 +65,8 @@ angular.module('project_questions')
     var service = {
         set_prefix: '',
         set_index: null,
-        values: null
+        values: null,
+        error: null
     };
 
     service.init = function(project_id) {
@@ -774,10 +775,12 @@ angular.module('project_questions')
                     value.changed = false;
                 }
             }, function (response) {
-                value.errors = response.data.value;
+                if (response.status == 500) {
+                    service.error = response;
+                }
             })
         }
-    };
+};
 
     service.storeValues = function() {
         var promises = [];
@@ -798,6 +801,7 @@ angular.module('project_questions')
     };
 
     service.prev = function() {
+        service.error = null; // reset error when moving to previous questionset
         if (service.questionset.prev !== null) {
             back = true;
             service.initView(service.questionset.prev);
@@ -805,15 +809,19 @@ angular.module('project_questions')
     };
 
     service.next = function() {
+        service.error = null; // reset error when moving to next questionset
         if (service.questionset.id !== null) {
             service.initView(service.questionset.next);
         }
     };
 
     service.jump = function(section, questionset) {
+        service.error = null; // reset error before saving
         if (service.settings.project_questions_autosave) {
             service.save(false).then(function() {
-                if (angular.isDefined(questionset)) {
+                if (service.error !== null) {
+                    // pass, dont jump
+                } else if (angular.isDefined(questionset)) {
                     service.initView(questionset.id);
                 } else if (angular.isDefined(section)) {
                     if (angular.isDefined(section.questionset)) {
@@ -851,8 +859,11 @@ angular.module('project_questions')
     };
 
     service.save = function(proceed) {
+        service.error = null; // reset error
         return service.storeValues().then(function() {
-            if (angular.isDefined(proceed) && proceed) {
+            if (service.error !== null) {
+                // pass
+            } else if (angular.isDefined(proceed) && proceed) {
                 if (service.settings.project_questions_cycle_sets && service.questionset.is_collection) {
                     if (service.set_index === null) {
                         service.next();
