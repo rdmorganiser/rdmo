@@ -1,0 +1,4924 @@
+[
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/individual/text/text",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/individual/text/text",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/single/text"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Text?",
+    "default_text_en": "Text",
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "￼Text?",
+    "default_text_de": "Text",
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "text",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/individual/text",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/individual/text",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Text",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Text",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/individual/text/text",
+        "order": "0"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/individual/textarea/textarea",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/individual/textarea/textarea",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/single/textarea"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Textarea?",
+    "default_text_en": "Textarea",
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Textarea?",
+    "default_text_de": "Textarea",
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "textarea",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/individual/textarea",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/individual/textarea",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Textarea",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Textarea",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/individual/textarea/textarea",
+        "order": "0"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/individual/bool/bool",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/individual/bool/bool",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/single/bool"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Yes or no?",
+    "default_text_en": "1",
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Ja oder Nein?",
+    "default_text_de": "1",
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "yesno",
+    "value_type": "boolean",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/individual/bool",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/individual/bool",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Yes or no",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Ja oder Nein",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/individual/bool/bool",
+        "order": "0"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/individual/radio/radio",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/individual/radio/radio",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/single/radio"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Radio buttons?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Radio-Buttons?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": {
+      "uri": "http://example.com/terms/options/one_two_three_other/one"
+    },
+    "default_external_id": null,
+    "widget_type": "radio",
+    "value_type": "option",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three_other"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/individual/radio",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/individual/radio",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Radio buttons",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Radio-Buttons",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/individual/radio/radio",
+        "order": "0"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/individual/select/select",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/individual/select/select",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/single/select"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Select drop-down?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Select-Aufklappmenü?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": {
+      "uri": "http://example.com/terms/options/one_two_three/one"
+    },
+    "default_external_id": null,
+    "widget_type": "select",
+    "value_type": "option",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/individual/select",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/individual/select",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Select drop-down",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Select-Aufklappmenü",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/individual/select/select",
+        "order": "0"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/individual/autocomplete/autocomplete",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/individual/autocomplete/autocomplete",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/single/autocomplete"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Autocomplete?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Autocomplete?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": {
+      "uri": "http://example.com/terms/options/one_two_three/one"
+    },
+    "default_external_id": null,
+    "widget_type": "autocomplete",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/individual/autocomplete",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/individual/autocomplete",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Autocomplete",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Autocomplete",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/individual/autocomplete/autocomplete",
+        "order": "0"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/individual/range/range",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/individual/range/range",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/single/range"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Range slider?",
+    "default_text_en": "20",
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Bereichs-Schieber?",
+    "default_text_de": "20",
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "range",
+    "value_type": "float",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/individual/range",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/individual/range",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Range slider",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Bereichs-Schieber",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/individual/range/range",
+        "order": "0"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/individual/file/file",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/individual/file/file",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/single/file"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "File?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "File?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "file",
+    "value_type": "file",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/individual/file",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/individual/file",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "File",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "File",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/individual/file/file",
+        "order": "0"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/individual/datetime/datetime",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/individual/datetime/datetime",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/single/datetime"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Date picker?",
+    "default_text_en": "2020-01-01",
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Datumsauswahl?",
+    "default_text_de": "2020-01-01",
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "date",
+    "value_type": "datetime",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/individual/datetime",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/individual/datetime",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Datetime",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Datetime",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/individual/datetime/datetime",
+        "order": "0"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "section",
+    "uri": "http://example.com/terms/questions/catalog/individual",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/individual",
+    "comment": null,
+    "title_en": "Single questions",
+    "title_de": "Einzelne Fragen",
+    "pages": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/individual/text",
+        "order": "11"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/individual/textarea",
+        "order": "12"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/individual/bool",
+        "order": "13"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/individual/radio",
+        "order": "14"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/individual/select",
+        "order": "15"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/individual/autocomplete",
+        "order": "16"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/individual/range",
+        "order": "17"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/individual/file",
+        "order": "18"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/individual/datetime",
+        "order": "19"
+      }
+    ]
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/collections/text/text",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/collections/text/text",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/collection/text"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Text?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "￼Text?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "text",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/collections/text",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/collections/text",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Text",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Text",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/collections/text/text",
+        "order": "0"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/collections/textarea/textarea",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/collections/textarea/textarea",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/collection/textarea"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Textarea?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Textarea?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "textarea",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/collections/textarea",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/collections/textarea",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Textarea",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Textarea",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/collections/textarea/textarea",
+        "order": "0"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/collections/bool/bool",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/collections/bool/bool",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/collection/bool"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Yes or no?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Ja oder Nein?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "yesno",
+    "value_type": "boolean",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/collections/bool",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/collections/bool",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Yes or no",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Ja oder Nein",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/collections/bool/bool",
+        "order": "0"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/collections/radio/radio",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/collections/radio/radio",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/collection/radio"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Radio buttons?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Radio-Buttons?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "radio",
+    "value_type": "option",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three_other"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/collections/radio",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/collections/radio",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Radio buttons",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Radio-Buttons",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/collections/radio/radio",
+        "order": "0"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/collections/select/select",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/collections/select/select",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/collection/select"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Select drop-down?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Select-Aufklappmenü?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "select",
+    "value_type": "option",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/collections/select",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/collections/select",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Select drop-down",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Select-Aufklappmenü",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/collections/select/select",
+        "order": "0"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/collections/autocomplete/autocomplete",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/collections/autocomplete/autocomplete",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/collection/autocomplete"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Autocomplete?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Autocomplete?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "autocomplete",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/collections/autocomplete",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/collections/autocomplete",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Autocomplete",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Autocomplete",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/collections/autocomplete/autocomplete",
+        "order": "0"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/collections/range/range",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/collections/range/range",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/collection/range"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Range slider?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Bereichs-Schieber?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "range",
+    "value_type": "float",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/collections/range",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/collections/range",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Range slider",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Bereichs-Schieber",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/collections/range/range",
+        "order": "0"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/collections/datetime/datetime",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/collections/datetime/datetime",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/collection/datetime"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Date picker?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Datumsauswahl?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "date",
+    "value_type": "datetime",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/collections/datetime",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/collections/datetime",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Date picker",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Datumsauswahl",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/collections/datetime/datetime",
+        "order": "0"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/collections/file/file",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/collections/file/file",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/collection/file"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "File?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "File?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "file",
+    "value_type": "file",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/collections/file",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/collections/file",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "File",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "File",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/collections/file/file",
+        "order": "0"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/collections/checkbox/checkbox",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/collections/checkbox/checkbox",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/collection/checkbox"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Checkbox?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Ankreuzfelder?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "checkbox",
+    "value_type": "option",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three_other"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/collections/checkbox",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/collections/checkbox",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Checkbox",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Ankreuzfelder",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/collections/checkbox/checkbox",
+        "order": "0"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "section",
+    "uri": "http://example.com/terms/questions/catalog/collections",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/collections",
+    "comment": null,
+    "title_en": "Collections",
+    "title_de": "Sammlungen",
+    "pages": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/collections/text",
+        "order": "21"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/collections/textarea",
+        "order": "22"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/collections/bool",
+        "order": "23"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/collections/radio",
+        "order": "24"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/collections/select",
+        "order": "25"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/collections/autocomplete",
+        "order": "26"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/collections/range",
+        "order": "27"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/collections/datetime",
+        "order": "28"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/collections/file",
+        "order": "29"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/collections/checkbox",
+        "order": "30"
+      }
+    ]
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/individual-single/text",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/individual-single/text",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/single/text"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Text?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Text?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "text",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/individual-single/textarea",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/individual-single/textarea",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/single/textarea"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Textarea?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Textarea?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "textarea",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/individual-single/bool",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/individual-single/bool",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/single/bool"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Yes or no?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Ja oder Nein?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "yesno",
+    "value_type": "boolean",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/individual-single/radio",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/individual-single/radio",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/single/radio"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Radio buttons?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Radio-Buttons?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "radio",
+    "value_type": "option",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three_other"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/individual-single/select",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/individual-single/select",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/single/select"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Select drop-down?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Select-Aufklappmenü?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "select",
+    "value_type": "option",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/individual-single/autocomplete",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/individual-single/autocomplete",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/single/autocomplete"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Autocomplete?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Autocomplete?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "autocomplete",
+    "value_type": "option",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/individual-single/range",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/individual-single/range",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/single/range"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Range slider?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Bereichs-Schieber?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "range",
+    "value_type": "float",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/individual-single/datetime",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/individual-single/datetime",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/single/datetime"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Date picker?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Datumsauswahl?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "date",
+    "value_type": "datetime",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/individual-single/file",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/individual-single/file",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/single/file"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "File?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "File?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "file",
+    "value_type": "file",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/set/individual-single",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/individual-single",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Individual sets I",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Einzelne Sets I",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/individual-single/text",
+        "order": "0"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/individual-single/textarea",
+        "order": "1"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/individual-single/bool",
+        "order": "3"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/individual-single/radio",
+        "order": "4"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/individual-single/select",
+        "order": "5"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/individual-single/autocomplete",
+        "order": "6"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/individual-single/range",
+        "order": "7"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/individual-single/datetime",
+        "order": "8"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/individual-single/file",
+        "order": "9"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/individual-collection/text",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/individual-collection/text",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/collection/text"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Text?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Text?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "text",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/individual-collection/textarea",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/individual-collection/textarea",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/collection/textarea"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Textarea?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Textarea?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "textarea",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/individual-collection/bool",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/individual-collection/bool",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/collection/bool"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Yes or no?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Ja oder Nein?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "yesno",
+    "value_type": "boolean",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/individual-collection/radio",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/individual-collection/radio",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/collection/radio"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Radio buttons?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Radio-Buttons?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "radio",
+    "value_type": "option",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three_other"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/individual-collection/select",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/individual-collection/select",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/collection/select"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Select drop-down?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Select-Aufklappmenü?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "select",
+    "value_type": "option",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/individual-collection/autocomplete",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/individual-collection/autocomplete",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/collection/autocomplete"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Autocomplete?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Autocomplete?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "autocomplete",
+    "value_type": "option",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/individual-collection/range",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/individual-collection/range",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/collection/range"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Range slider?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Bereichs-Schieber?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "range",
+    "value_type": "float",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/individual-collection/datetime",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/individual-collection/datetime",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/collection/datetime"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Date picker?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Datumsauswahl?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "date",
+    "value_type": "datetime",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/individual-collection/file",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/individual-collection/file",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/collection/file"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "File?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "File?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "file",
+    "value_type": "file",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/individual-collection/checkbox",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/individual-collection/checkbox",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/individual/collection/checkbox"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Checkbox?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Ankreuzfelder?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "checkbox",
+    "value_type": "option",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three_other"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/set/individual-collection",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/individual-collection",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Individual sets II",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Einzelne Sets II",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/individual-collection/text",
+        "order": "0"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/individual-collection/textarea",
+        "order": "1"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/individual-collection/bool",
+        "order": "3"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/individual-collection/radio",
+        "order": "4"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/individual-collection/select",
+        "order": "5"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/individual-collection/autocomplete",
+        "order": "6"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/individual-collection/range",
+        "order": "7"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/individual-collection/datetime",
+        "order": "8"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/individual-collection/file",
+        "order": "9"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/individual-collection/checkbox",
+        "order": "10"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/collection-single/text",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/collection-single/text",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/set/single/text"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Text?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Text?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "text",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/collection-single/textarea",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/collection-single/textarea",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/set/single/textarea"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Textarea?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Textarea?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "textarea",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/collection-single/bool",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/collection-single/bool",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/set/single/bool"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Yes or no?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Ja oder Nein?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "yesno",
+    "value_type": "boolean",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/collection-single/radio",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/collection-single/radio",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/set/single/radio"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Radio buttons?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Radio-Buttons?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "radio",
+    "value_type": "option",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three_other"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/collection-single/select",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/collection-single/select",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/set/single/select"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Select drop-down?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Select-Aufklappmenü?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "select",
+    "value_type": "option",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/collection-single/autocomplete",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/collection-single/autocomplete",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/set/single/autocomplete"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Autocomplete?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Autocomplete?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "autocomplete",
+    "value_type": "option",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/collection-single/range",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/collection-single/range",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/set/single/range"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Range slider?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Bereichs-Schieber?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "range",
+    "value_type": "float",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/collection-single/datetime",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/collection-single/datetime",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/set/single/datetime"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Date picker?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Datumsauswahl?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "date",
+    "value_type": "datetime",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/collection-single/file",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/collection-single/file",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/set/single/file"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "File?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "File?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "file",
+    "value_type": "file",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/set/collection-single",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/collection-single",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/set/id"
+    },
+    "is_collection": "True",
+    "title_en": "Set collections I",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Sammlungs-Sets I",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/collection-single/text",
+        "order": "0"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/collection-single/textarea",
+        "order": "1"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/collection-single/bool",
+        "order": "3"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/collection-single/radio",
+        "order": "4"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/collection-single/select",
+        "order": "5"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/collection-single/autocomplete",
+        "order": "6"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/collection-single/range",
+        "order": "7"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/collection-single/datetime",
+        "order": "8"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/collection-single/file",
+        "order": "9"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/collection-collection/text",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/collection-collection/text",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/set/collection/text"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Text?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Text?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "text",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/collection-collection/textarea",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/collection-collection/textarea",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/set/collection/textarea"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Textarea?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Textarea?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "textarea",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/collection-collection/bool",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/collection-collection/bool",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/set/collection/bool"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Yes or no?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Ja oder Nein?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "yesno",
+    "value_type": "boolean",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/collection-collection/radio",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/collection-collection/radio",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/set/collection/radio"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Radio buttons?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Radio-Buttons?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "radio",
+    "value_type": "option",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three_other"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/collection-collection/select",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/collection-collection/select",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/set/collection/select"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Select drop-down?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Select-Aufklappmenü?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "select",
+    "value_type": "option",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/collection-collection/autocomplete",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/collection-collection/autocomplete",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/set/collection/autocomplete"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Autocomplete?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Autocomplete?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "autocomplete",
+    "value_type": "option",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/collection-collection/range",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/collection-collection/range",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/set/collection/range"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Range slider?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Bereichs-Schieber?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "range",
+    "value_type": "float",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/collection-collection/datetime",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/collection-collection/datetime",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/set/collection/datetime"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Date picker?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Datumsauswahl?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "date",
+    "value_type": "datetime",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/collection-collection/file",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/collection-collection/file",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/set/collection/file"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "File?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "File?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "file",
+    "value_type": "file",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three_other"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/set/collection-collection/checkbox",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/collection-collection/checkbox",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/set/collection/checkbox"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Checkbox?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Ankreuzfelder?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "checkbox",
+    "value_type": "option",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three_other"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/set/collection-collection",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set/collection-collection",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/set/id"
+    },
+    "is_collection": "True",
+    "title_en": "Set collections II",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Sammlungs-Sets II",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/collection-collection/text",
+        "order": "0"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/collection-collection/textarea",
+        "order": "1"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/collection-collection/bool",
+        "order": "3"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/collection-collection/radio",
+        "order": "4"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/collection-collection/select",
+        "order": "5"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/collection-collection/autocomplete",
+        "order": "6"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/collection-collection/range",
+        "order": "7"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/collection-collection/datetime",
+        "order": "8"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/collection-collection/file",
+        "order": "9"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/collection-collection/checkbox",
+        "order": "10"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "section",
+    "uri": "http://example.com/terms/questions/catalog/set",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/set",
+    "comment": null,
+    "title_en": "Sets",
+    "title_de": "Sets",
+    "pages": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/individual-single",
+        "order": "11"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/individual-collection",
+        "order": "12"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/collection-single",
+        "order": "21"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set/collection-collection",
+        "order": "22"
+      }
+    ]
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/conditions/input/text",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/input/text",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/conditions/text"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Text",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Text",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "text",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/conditions/input/option",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/input/option",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/conditions/option"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Option",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Option",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "radio",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/conditions/input",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/input",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Input",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Eingabe",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/input/text",
+        "order": "0"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/input/option",
+        "order": "1"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/conditions/text_contains/text_contains",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/text_contains/text_contains",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/conditions/text"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "text_contains?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "text_contains?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "text",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/conditions/text_contains",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/text_contains",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Text I",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Text I",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/text_contains/text_contains",
+        "order": "0"
+      }
+    ],
+    "conditions": [
+      {
+        "uri": "http://example.com/terms/conditions/text_contains_test"
+      }
+    ]
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/conditions/text_empty/text_empty",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/text_empty/text_empty",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/conditions/text"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "text empty?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "text empty?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "text",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/conditions/text_empty",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/text_empty",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Text II",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Text II",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/text_empty/text_empty",
+        "order": "0"
+      }
+    ],
+    "conditions": [
+      {
+        "uri": "http://example.com/terms/conditions/text_empty"
+      }
+    ]
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/conditions/text_equal/text_equal",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/text_equal/text_equal",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/conditions/text"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "text_equal?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "text_equal?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "text",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/conditions/text_equal",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/text_equal",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Text III",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Text III",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/text_equal/text_equal",
+        "order": "0"
+      }
+    ],
+    "conditions": [
+      {
+        "uri": "http://example.com/terms/conditions/text_equal_test"
+      }
+    ]
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/conditions/text_greater_than/text_greater_than",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/text_greater_than/text_greater_than",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/conditions/text"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "text_greater_than?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "text_greater_than?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "text",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/conditions/text_greater_than",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/text_greater_than",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Text IV",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Text IV",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/text_greater_than/text_greater_than",
+        "order": "0"
+      }
+    ],
+    "conditions": [
+      {
+        "uri": "http://example.com/terms/conditions/text_greater_than_0"
+      }
+    ]
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/conditions/text_greater_than_equal/text_greater_than_equal",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/text_greater_than_equal/text_greater_than_equal",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/conditions/text"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "text_greater_than_equal?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "text_greater_than_equal?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "text",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/conditions/text_greater_than_equal",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/text_greater_than_equal",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Text V",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Text V",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/text_greater_than_equal/text_greater_than_equal",
+        "order": "0"
+      }
+    ],
+    "conditions": [
+      {
+        "uri": "http://example.com/terms/conditions/text_greater_than_equal_0"
+      }
+    ]
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/conditions/text_lesser_than/text_lesser_than",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/text_lesser_than/text_lesser_than",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/conditions/text"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "text_lesser_than?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "text_lesser_than?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "text",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/conditions/text_lesser_than",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/text_lesser_than",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Text VI",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Text VI",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/text_lesser_than/text_lesser_than",
+        "order": "0"
+      }
+    ],
+    "conditions": [
+      {
+        "uri": "http://example.com/terms/conditions/text_lesser_than_0"
+      }
+    ]
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/conditions/text_lesser_than_equal/text_lesser_than_equal",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/text_lesser_than_equal/text_lesser_than_equal",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/conditions/text"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "text_lesser_than_equal?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "text_lesser_than_equal?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "text",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/conditions/text_lesser_than_equal",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/text_lesser_than_equal",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Text VII",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Text VII",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/text_lesser_than_equal/text_lesser_than_equal",
+        "order": "0"
+      }
+    ],
+    "conditions": [
+      {
+        "uri": "http://example.com/terms/conditions/text_lesser_than_equal_0"
+      }
+    ]
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/conditions/text_not_empty/text_not_empty",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/text_not_empty/text_not_empty",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/conditions/text"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "text_not_empty?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "text_not_empty?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "text",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/conditions/text_not_empty",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/text_not_empty",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Text VIII",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Text VIII",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/text_not_empty/text_not_empty",
+        "order": "0"
+      }
+    ],
+    "conditions": [
+      {
+        "uri": "http://example.com/terms/conditions/text_not_empty"
+      }
+    ]
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/conditions/text_not_equal/text_not_equal",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/text_not_equal/text_not_equal",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/conditions/text"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "text_not_equal?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "text_not_equal?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "text",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/conditions/text_not_equal",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/text_not_equal",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Text IX",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Text IX",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/text_not_equal/text_not_equal",
+        "order": "0"
+      }
+    ],
+    "conditions": [
+      {
+        "uri": "http://example.com/terms/conditions/text_not_equal_test"
+      }
+    ]
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/conditions/option_empty/option_empty",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/option_empty/option_empty",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/conditions/option"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "option_empty?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "option_empty?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "radio",
+    "value_type": "option",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/conditions/option_empty",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/option_empty",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Options I",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Optionen I",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/option_empty/option_empty",
+        "order": "0"
+      }
+    ],
+    "conditions": [
+      {
+        "uri": "http://example.com/terms/conditions/options_empty"
+      }
+    ]
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/conditions/option_equal/option_equal",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/option_equal/option_equal",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/conditions/option"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "option_equal?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "option_equal?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "radio",
+    "value_type": "option",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/conditions/option_equal",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/option_equal",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Options II",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Optionen II",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/option_equal/option_equal",
+        "order": "0"
+      }
+    ],
+    "conditions": [
+      {
+        "uri": "http://example.com/terms/conditions/options_equal_one"
+      }
+    ]
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/conditions/option_not_empty/option_not_empty",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/option_not_empty/option_not_empty",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/conditions/option"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "option_not_empty?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "option_not_empty?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "radio",
+    "value_type": "option",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/conditions/option_not_empty",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/option_not_empty",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Options III",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Optionen III",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/option_not_empty/option_not_empty",
+        "order": "0"
+      }
+    ],
+    "conditions": [
+      {
+        "uri": "http://example.com/terms/conditions/options_not_empty"
+      }
+    ]
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/conditions/option_not_equal/option_not_equal",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/option_not_equal/option_not_equal",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/conditions/option"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "option_not_equal?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "option_not_equal?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "radio",
+    "value_type": "option",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/conditions/option_not_equal",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/option_not_equal",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Options IV",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Optionen IV",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/option_not_equal/option_not_equal",
+        "order": "0"
+      }
+    ],
+    "conditions": [
+      {
+        "uri": "http://example.com/terms/conditions/options_not_equal_one"
+      }
+    ]
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/conditions/set/bool",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/set/bool",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/conditions/set/bool"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Yes/No",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Ja/Nein",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "yesno",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/conditions/set/text",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/set/text",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/conditions/set/text"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Text",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Text",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "text",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": [
+      {
+        "uri": "http://example.com/terms/conditions/set_bool_is_true"
+      }
+    ]
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/conditions/set",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/set",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/set/id"
+    },
+    "is_collection": "True",
+    "title_en": "Set I",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Set I",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/set/bool",
+        "order": "0"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/set/text",
+        "order": "1"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/conditions/set_set/set/text",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/set_set/set/text",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/conditions/set/set/text"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Text",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Text",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "text",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "questionset",
+    "uri": "http://example.com/terms/questions/catalog/conditions/set_set/set",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/set_set/set",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/conditions/set/set"
+    },
+    "is_collection": "True",
+    "title_en": "Set",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Set",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/set_set/set/text",
+        "order": "0"
+      }
+    ],
+    "conditions": [
+      {
+        "uri": "http://example.com/terms/conditions/set_bool_is_true"
+      }
+    ]
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/conditions/set_set/bool",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/set_set/bool",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/conditions/set/bool"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Yes/No",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Ja/Nein",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "yesno",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/conditions/set_set",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/set_set",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/set/id"
+    },
+    "is_collection": "True",
+    "title_en": "Set II",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Set II",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/set_set/set",
+        "order": "1"
+      }
+    ],
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/set_set/bool",
+        "order": "0"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/conditions/optionset/bool",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/optionset/bool",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/conditions/optionset/bool"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Yes/No",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Ja/Nein",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "yesno",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/conditions/optionset/option",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/optionset/option",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/conditions/optionset/option"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Optionset",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Optionset",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "radio",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/condition"
+      },
+      {
+        "uri": "http://example.com/terms/options/one_two_three"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/conditions/optionset",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/optionset",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Optionset",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Optionset",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/optionset/bool",
+        "order": "0"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/optionset/option",
+        "order": "1"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/conditions/text_set/bool",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/text_set/bool",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/conditions/set/bool"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "Yes/No",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "Ja/Nein",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "yesno",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/conditions/text_set",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions/text_set",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/set/id"
+    },
+    "is_collection": "True",
+    "title_en": "Text Set",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Text Set",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/text_set/bool",
+        "order": "0"
+      }
+    ],
+    "conditions": [
+      {
+        "uri": "http://example.com/terms/conditions/text_contains_test"
+      }
+    ]
+  },
+  {
+    "type": "section",
+    "uri": "http://example.com/terms/questions/catalog/conditions",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/conditions",
+    "comment": null,
+    "title_en": "Conditions",
+    "title_de": "Bedingungen",
+    "pages": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/input",
+        "order": "10"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/text_contains",
+        "order": "11"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/text_empty",
+        "order": "12"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/text_equal",
+        "order": "13"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/text_greater_than",
+        "order": "14"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/text_greater_than_equal",
+        "order": "15"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/text_lesser_than",
+        "order": "16"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/text_lesser_than_equal",
+        "order": "17"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/text_not_empty",
+        "order": "18"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/text_not_equal",
+        "order": "19"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/option_empty",
+        "order": "21"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/option_equal",
+        "order": "22"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/option_not_empty",
+        "order": "23"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/option_not_equal",
+        "order": "24"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/set",
+        "order": "30"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/set_set",
+        "order": "31"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/optionset",
+        "order": "40"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions/text_set",
+        "order": "50"
+      }
+    ]
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/options/order/option",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/options/order/option",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/options/order"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "order?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "order?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "checkbox",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three"
+      },
+      {
+        "uri": "http://example.com/terms/options/one_two_three_other"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/options/order",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/options/order",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Order",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Order",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/options/order/option",
+        "order": "0"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/options/radio/radio",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/options/radio/radio",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/options/plugin/radio"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "radio?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "radio?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "radio",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/plugin"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/options/radio",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/options/radio",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Radio",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Radio",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/options/radio/radio",
+        "order": "0"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/options/select/select",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/options/select/select",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/options/plugin/select"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "select?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "select?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "select",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/plugin"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/options/select",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/options/select",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Select",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Select",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/options/select/select",
+        "order": "0"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/options/autocomplete/select",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/options/autocomplete/select",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/options/plugin/autocomplete"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "autocomplete?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "autocomplete?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": "simple_1",
+    "widget_type": "autocomplete",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/plugin"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/options/autocomplete",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/options/autocomplete",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Autocomplete",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Autocomplete",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/options/autocomplete/select",
+        "order": "0"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/options/checkboxes/checkboxes",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/options/checkboxes/checkboxes",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/options/plugin/checkboxes"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "checkboxes?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "checkboxes?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "checkbox",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/plugin"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/options/checkboxes",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/options/checkboxes",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Checkboxes",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Checkboxes",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/options/checkboxes/checkboxes",
+        "order": "0"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/options/combined/option",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/options/combined/option",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/options/plugin/combined"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "combined?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "combined?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "radio",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three_other"
+      },
+      {
+        "uri": "http://example.com/terms/options/plugin"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/options/combined",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/options/combined",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "False",
+    "title_en": "Combined",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Combined",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/options/combined/option",
+        "order": "0"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "section",
+    "uri": "http://example.com/terms/questions/catalog/options",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/options",
+    "comment": null,
+    "title_en": "Options",
+    "title_de": "Optionen",
+    "pages": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/options/order",
+        "order": "0"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/options/radio",
+        "order": "2"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/options/select",
+        "order": "3"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/options/autocomplete",
+        "order": "4"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/options/checkboxes",
+        "order": "5"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/options/combined",
+        "order": "6"
+      }
+    ]
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/blocks/set/block/block/y",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/blocks/set/block/block/y",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/blocks/y"
+    },
+    "is_collection": "False",
+    "is_optional": "True",
+    "help_en": "Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
+    "text_en": "Y?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": "Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
+    "text_de": "Y?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": {
+      "uri": "http://example.com/terms/options/one_two_three/three"
+    },
+    "default_external_id": null,
+    "widget_type": "autocomplete",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": "9",
+    "optionsets": [
+      {
+        "uri": "http://example.com/terms/options/one_two_three"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "questionset",
+    "uri": "http://example.com/terms/questions/catalog/blocks/set/block/block",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/blocks/set/block/block",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "True",
+    "title_en": "Block",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Block",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": null,
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/blocks/set/block/block/y",
+        "order": "0"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/blocks/set/block/a",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/blocks/set/block/a",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/blocks/a"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "A?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "A?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "text",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": "6",
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/blocks/set/block/b",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/blocks/set/block/b",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/blocks/b"
+    },
+    "is_collection": "False",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "B?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "B?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "text",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": "6",
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "question",
+    "uri": "http://example.com/terms/questions/catalog/blocks/set/block/c",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/blocks/set/block/c",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/blocks/c"
+    },
+    "is_collection": "True",
+    "is_optional": "False",
+    "help_en": null,
+    "text_en": "C?",
+    "default_text_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "help_de": null,
+    "text_de": "C?",
+    "default_text_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "default_option": null,
+    "default_external_id": null,
+    "widget_type": "text",
+    "value_type": "text",
+    "maximum": null,
+    "minimum": null,
+    "step": null,
+    "unit": null,
+    "width": null,
+    "optionsets": null,
+    "conditions": null
+  },
+  {
+    "type": "questionset",
+    "uri": "http://example.com/terms/questions/catalog/blocks/set/block",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/blocks/set/block",
+    "comment": null,
+    "attribute": null,
+    "is_collection": "True",
+    "title_en": "Block",
+    "help_en": null,
+    "verbose_name_en": "block",
+    "verbose_name_plural_en": "blocks",
+    "title_de": "Block",
+    "help_de": null,
+    "verbose_name_de": "Block",
+    "verbose_name_plural_de": "Blocks",
+    "questionsets": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/blocks/set/block/block",
+        "order": "10"
+      }
+    ],
+    "questions": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/blocks/set/block/a",
+        "order": "0"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/blocks/set/block/b",
+        "order": "1"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/blocks/set/block/c",
+        "order": "2"
+      }
+    ],
+    "conditions": null
+  },
+  {
+    "type": "page",
+    "uri": "http://example.com/terms/questions/catalog/blocks/set",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/blocks/set",
+    "comment": null,
+    "attribute": {
+      "uri": "http://example.com/terms/domain/set/id"
+    },
+    "is_collection": "True",
+    "title_en": "Set",
+    "help_en": null,
+    "verbose_name_en": null,
+    "verbose_name_plural_en": null,
+    "title_de": "Set",
+    "help_de": null,
+    "verbose_name_de": null,
+    "verbose_name_plural_de": null,
+    "questionsets": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/blocks/set/block",
+        "order": "0"
+      }
+    ],
+    "questions": null,
+    "conditions": null
+  },
+  {
+    "type": "section",
+    "uri": "http://example.com/terms/questions/catalog/blocks",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog/blocks",
+    "comment": null,
+    "title_en": "Blocks",
+    "title_de": "Blocks",
+    "pages": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/blocks/set",
+        "order": "0"
+      }
+    ]
+  },
+  {
+    "type": "catalog",
+    "uri": "http://example.com/terms/questions/catalog",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog",
+    "comment": null,
+    "order": "0",
+    "title_en": "Catalog",
+    "help_en": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est.",
+    "title_de": "Katalog",
+    "help_de": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est.",
+    "sections": [
+      {
+        "uri": "http://example.com/terms/questions/catalog/individual",
+        "order": "1"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/collections",
+        "order": "2"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/set",
+        "order": "3"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/conditions",
+        "order": "4"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/options",
+        "order": "5"
+      },
+      {
+        "uri": "http://example.com/terms/questions/catalog/blocks",
+        "order": "6"
+      }
+    ]
+  },
+  {
+    "type": "catalog",
+    "uri": "http://example.com/terms/questions/catalog2",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "catalog2",
+    "comment": null,
+    "order": "1",
+    "title_en": "Catalog2",
+    "help_en": null,
+    "title_de": "Katalog2",
+    "help_de": null,
+    "sections": null
+  }
+]

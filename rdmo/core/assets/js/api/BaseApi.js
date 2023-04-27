@@ -87,6 +87,29 @@ class BaseApi {
     })
   }
 
+  static upload(url, file) {
+    var formData = new FormData()
+    formData.append('file', file)
+
+    return fetch(url, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': Cookies.get('csrftoken')
+      },
+      body: formData
+    }).then(response => {
+      if (response.ok) {
+        return response.json()
+      } else if (response.status == 400) {
+        return response.json().then(errors => {
+          throw new ValidationError(errors)
+        })
+      } else {
+        throw new ApiError(response.status, response.statusText)
+      }
+    })
+  }
+
 }
 
 export default BaseApi

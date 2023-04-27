@@ -39,6 +39,8 @@ export default function configReducer(state = initialState, action) {
     case 'elements/storeElementInit':
     case 'elements/createElementInit':
     case 'elements/deleteElementInit':
+    case 'import/uploadFileInit':
+    case 'import/importElementsInit':
       return {...state, ...{ pending: true }}
     case 'elements/fetchElementsSuccess':
     case 'elements/fetchElementsError':
@@ -50,6 +52,10 @@ export default function configReducer(state = initialState, action) {
     case 'elements/createElementError':
     case 'elements/deleteElementSuccess':
     case 'elements/deleteElementError':
+    case 'import/uploadFileSuccess':
+    case 'import/uploadFileError':
+    case 'import/importElementsSuccess':
+    case 'import/importElementsError':
       return {...state, ...{ pending: false }}
     default:
       return state

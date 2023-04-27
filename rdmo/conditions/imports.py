@@ -31,4 +31,6 @@ def import_condition(element, save=False):
 
         condition.save()
 
+        element['imported'] = True
+
     return condition

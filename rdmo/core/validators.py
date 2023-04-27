@@ -60,11 +60,14 @@ class UniqueURIValidator(InstanceValidator):
             except ObjectDoesNotExist:
                 continue
 
+            message = _('%(model)s with the uri "%(uri)s" already exists.') % {
+                'model': model._meta.verbose_name.title(),
+                'uri': uri
+            }
+
             self.raise_validation_error({
-                'uri_path': _('%(model)s with the uri "%(uri)s" already exists.') % {
-                    'model': model._meta.verbose_name.title(),
-                    'uri': uri
-                }
+                'uri_path': message,
+                'key': message
             })
 
     def get_uri(self, data):

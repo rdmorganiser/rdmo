@@ -11,7 +11,7 @@ from rdmo.views.imports import import_view
 
 
 def check_permissions(elements, user):
-    element_types = set([element.get('type') for element in elements.values()])
+    element_types = set([element.get('type') for element in elements])
 
     permissions = []
     for element_type in element_types:

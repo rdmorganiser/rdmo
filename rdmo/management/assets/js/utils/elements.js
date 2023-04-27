@@ -1,6 +1,8 @@
 import isEmpty from 'lodash/isEmpty';
 import isUndefined from 'lodash/isUndefined';
 
+import { elementModules } from '../constants/elements'
+
 const updateElement = (element, actionElement) => {
   if (element.uri == actionElement.uri) {
     return {...element, ...actionElement}
@@ -21,4 +23,18 @@ const resetElement = (element) => {
   return element
 }
 
-export { updateElement, resetElement }
+const buildUri = (element) => {
+  let uri = element.uri_prefix + '/' + elementModules[element.type] + '/'
+
+  if (!isUndefined(element.uri_path)) {
+    uri += element.uri_path
+  } else if (!isUndefined(element.path)) {
+    uri += element.path
+  } else {
+    uri += element.key
+  }
+
+  return uri
+}
+
+export { updateElement, resetElement, buildUri }

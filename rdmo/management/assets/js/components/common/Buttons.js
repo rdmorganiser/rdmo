@@ -25,7 +25,9 @@ const SaveButton = ({ element, onClick, back }) => {
 }
 
 SaveButton.propTypes = {
-  onClick: PropTypes.func.isRequired
+  element: PropTypes.object.isRequired,
+  onClick: PropTypes.func.isRequired,
+  back: PropTypes.bool
 }
 
 const NewButton = ({ onClick }) => (
@@ -47,6 +49,7 @@ const DeleteButton = ({ element, onClick }) => {
 }
 
 DeleteButton.propTypes = {
+  element: PropTypes.object.isRequired,
   onClick: PropTypes.func.isRequired
 }
 

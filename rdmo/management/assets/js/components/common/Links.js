@@ -215,4 +215,34 @@ CodeLink.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-export { EditLink, AddLink, AddSquareLink, AvailableLink, LockedLink, NestedLink, ExportLink, ExtendLink, CodeLink }
+const ShowLink = ({ element, verboseName, onClick }) => {
+  const handleClick = (event) => {
+    event.preventDefault()
+    onClick()
+  }
+
+  const className = classNames({
+    'element-link fa': true,
+    'fa-eye-slash': element.show,
+    'fa-eye': !element.show
+  })
+
+  const title = element.show ? interpolate(gettext('Hide %s'), [verboseName])
+                             : interpolate(gettext('Show %s'), [verboseName])
+
+  return (
+    <a href="" className={className}
+       title={title}
+       onClick={event => handleClick(event)}>
+    </a>
+  )
+}
+
+ShowLink.propTypes = {
+  element: PropTypes.object.isRequired,
+  onClick: PropTypes.func.isRequired
+}
+
+
+export { EditLink, AddLink, AddSquareLink, AvailableLink, LockedLink,
+         NestedLink, ExportLink, ExtendLink, CodeLink, ShowLink }

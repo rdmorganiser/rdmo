@@ -39,4 +39,6 @@ def import_task(element, save=False):
         set_m2m_instances(task, 'catalogs', element)
         set_m2m_instances(task, 'conditions', element)
 
+        element['imported'] = True
+
     return task
