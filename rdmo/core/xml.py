@@ -43,9 +43,9 @@ def flat_xml_to_elements(root):
         uri = get_uri(node, ns_map)
 
         element = {
-            'tag': node.tag,
             'uri': get_uri(node, ns_map),
-            'type': element_types[node.tag]
+            'type': element_types[node.tag],
+            'model': node.tag
         }
 
         for sub_node in node:
@@ -54,7 +54,6 @@ def flat_xml_to_elements(root):
             if uri_attrib in sub_node.attrib:
                 # this node has an uri!
                 element[tag] = {
-                    'tag': sub_node.tag,
                     'uri': sub_node.attrib[uri_attrib]
                 }
                 if sub_node.tag in element_types:
@@ -67,7 +66,6 @@ def flat_xml_to_elements(root):
                 element[tag] = []
                 for sub_sub_node in sub_node:
                     sub_element = {
-                        'tag': sub_sub_node.tag,
                         'uri': sub_sub_node.attrib[uri_attrib]
                     }
                     if sub_sub_node.tag in element_types:
@@ -119,12 +117,6 @@ def strip_ns(tag, ns_map):
     return tag
 
 
-def filter_elements_by_type(elements, element_type):
-    for element in elements:
-        if element['type'] == element_type:
-            yield element
-
-
 def convert_elements(elements, version):
     # in future versions, this method can be extended
     # using packaging.version.parse
@@ -137,47 +129,47 @@ def convert_elements(elements, version):
 def convert_legacy_elements(elements):
     # first pass: identify pages
     for uri, element in elements.items():
-        if element['type'] == 'questionset':
+        if element['model'] == 'questionset':
             if element.get('questionset') is None:
                 # this is now a page
-                element['type'] = 'page'
+                element['model'] = 'page'
             else:
                 del element['section']
 
     # second pass: del key, set uri_path, add order to reverse m2m through models
     # and sort questions into pages or questionsets
     for uri, element in elements.items():
-        if element['type'] == 'catalog':
+        if element['model'] == 'catalog':
             element['uri_path'] = element.pop('key')
 
-        elif element['type'] == 'section':
+        elif element['model'] == 'section':
             del element['key']
             element['uri_path'] = element.pop('path')
 
             if element.get('catalog') is not None:
                 element['catalog']['order'] = element.pop('order')
 
-        elif element['type'] == 'page':
+        elif element['model'] == 'page':
             del element['key']
             element['uri_path'] = element.pop('path')
 
             if element.get('section') is not None:
                 element['section']['order'] = element.pop('order')
 
-        elif element['type'] == 'questionset':
+        elif element['model'] == 'questionset':
             del element['key']
             element['uri_path'] = element.pop('path')
 
             if element.get('questionset') is not None:
                 element['questionset']['order'] = element.pop('order')
 
-        elif element['type'] == 'question':
+        elif element['model'] == 'question':
             del element['key']
             element['uri_path'] = element.pop('path')
 
             parent = element.get('questionset').get('uri')
             if parent is not None:
-                if elements[parent].get('type') == 'page':
+                if elements[parent].get('model') == 'page':
                     del element['questionset']
                     element['page'] = {
                         'uri': parent,
@@ -186,10 +178,10 @@ def convert_legacy_elements(elements):
                 else:
                     element['questionset']['order'] = element.pop('order')
 
-        elif element['type'] == 'optionset':
+        elif element['model'] == 'optionset':
             element['uri_path'] = element.pop('key')
 
-        elif element['type'] == 'option':
+        elif element['model'] == 'option':
             del element['key']
             element['uri_path'] = element.pop('path')
 

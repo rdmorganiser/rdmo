@@ -8,7 +8,7 @@ import uniqueId from 'lodash/uniqueId'
 
 import { codeClass } from '../../../constants/elements'
 
-const excludeKeys = ['tag', 'type', 'uri', 'uri_prefix', 'uri_path', 'key', 'import', 'show']
+const excludeKeys = ['model', 'type', 'uri', 'uri_prefix', 'uri_path', 'key', 'import', 'show']
 
 const Fields = ({ element }) => {
   return (
