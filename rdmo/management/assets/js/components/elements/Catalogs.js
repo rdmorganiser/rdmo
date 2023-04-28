@@ -3,12 +3,11 @@ import PropTypes from 'prop-types'
 
 import { getUriPrefixes } from '../../utils/filter'
 
-import FilterUri from '../FilterUri'
-import FilterUriPrefix from '../FilterUriPrefix'
-
-import Catalog from '../element/Catalog'
+import { FilterUri, FilterUriPrefix } from '../common/Filter'
 import { Checkbox } from '../common/Checkboxes'
 import { BackButton, NewButton } from '../common/Buttons'
+
+import Catalog from '../element/Catalog'
 
 const Catalogs = ({ config, catalogs, configActions, elementActions }) => {
 

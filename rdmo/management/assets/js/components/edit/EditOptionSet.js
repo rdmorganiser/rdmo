@@ -2,14 +2,14 @@ import React, { Component, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap';
 
-import Checkbox from '../forms/Checkbox'
-import Number from '../forms/Number'
-import OrderedMultiSelect from '../forms/OrderedMultiSelect'
-import MultiSelect from '../forms/MultiSelect'
-import Select from '../forms/Select'
-import Text from '../forms/Text'
-import Textarea from '../forms/Textarea'
-import UriPrefix from '../forms/UriPrefix'
+import Checkbox from './common/Checkbox'
+import Number from './common/Number'
+import OrderedMultiSelect from './common/OrderedMultiSelect'
+import MultiSelect from './common/MultiSelect'
+import Select from './common/Select'
+import Text from './common/Text'
+import Textarea from './common/Textarea'
+import UriPrefix from './common/UriPrefix'
 
 import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
 

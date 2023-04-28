@@ -3,11 +3,10 @@ import PropTypes from 'prop-types'
 
 import { getUriPrefixes } from '../../utils/filter'
 
-import FilterUri from '../FilterUri'
-import FilterUriPrefix from '../FilterUriPrefix'
+import { FilterUri, FilterUriPrefix } from '../common/Filter'
+import { BackButton } from '../common/Buttons'
 
 import Attribute from '../element/Attribute'
-import { BackButton } from '../common/Buttons'
 
 const NestedAttribute = ({ config, attribute, configActions, elementActions }) => {
 

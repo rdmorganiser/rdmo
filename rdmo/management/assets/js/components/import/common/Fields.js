@@ -1,14 +1,14 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
-import uniqueId from 'lodash/uniqueId'
 import isNil from 'lodash/isNil'
-import isUndefined from 'lodash/isUndefined'
 import isString from 'lodash/isString'
+import isUndefined from 'lodash/isUndefined'
 import truncate from 'lodash/truncate'
+import uniqueId from 'lodash/uniqueId'
 
 import { codeClass } from '../../../constants/elements'
 
-const excludeKeys = ['type', 'uri', 'uri_prefix', 'uri_path', 'key', 'import', 'show']
+const excludeKeys = ['tag', 'type', 'uri', 'uri_prefix', 'uri_path', 'key', 'import', 'show']
 
 const Fields = ({ element }) => {
   return (

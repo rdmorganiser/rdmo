@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import uniqueId from 'lodash/uniqueId'
 
-import { ShowLink } from '../common/Links'
+import { CodeLink, ShowLink } from '../common/Links'
 
 import Fields from './common/Fields'
 import Form from './common/Form'
@@ -20,11 +20,11 @@ const ImportPage = ({ config, page, importActions }) => {
         <ShowLink element={page} onClick={showFields} />
       </div>
       <div className="checkbox">
-        <label>
+        <label className="mr-5">
           <input type="checkbox" checked={page.import} onChange={toggleImport} />
-          <strong>{gettext('Page')}{' '}</strong>
-          <code className={codeClass[page.type]}>{page.uri}</code>
+          <strong>{gettext('Page')}</strong>
         </label>
+        <CodeLink className={codeClass[page.type]} uri={page.uri} onClick={showFields} />
       </div>
       {
         page.show && <>

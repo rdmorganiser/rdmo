@@ -32,4 +32,4 @@ UploadForm.propTypes = {
   onSubmit: PropTypes.func.isRequired
 }
 
-export default UploadForm
+export { UploadForm }

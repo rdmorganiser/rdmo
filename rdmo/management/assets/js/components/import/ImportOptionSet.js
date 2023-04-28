@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import uniqueId from 'lodash/uniqueId'
 
-import { ShowLink } from '../common/Links'
+import { CodeLink, ShowLink } from '../common/Links'
 
 import Fields from './common/Fields'
 import Form from './common/Form'
@@ -20,11 +20,11 @@ const ImportOptionSet = ({ config, optionset, importActions }) => {
         <ShowLink element={optionset} onClick={showFields} />
       </div>
       <div className="checkbox">
-        <label>
+        <label className="mr-5">
           <input type="checkbox" checked={optionset.import} onChange={toggleImport} />
-          <strong>{gettext('Option set')}{' '}</strong>
-          <code className={codeClass[optionset.type]}>{optionset.uri}</code>
+          <strong>{gettext('Option set')}</strong>
         </label>
+        <CodeLink className={codeClass[optionset.type]} uri={optionset.uri} onClick={showFields} />
       </div>
       {
         optionset.show && <>

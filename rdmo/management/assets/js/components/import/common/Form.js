@@ -2,9 +2,9 @@ import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 import isUndefined from 'lodash/isUndefined'
 
-import Key from '../forms/Key'
-import UriPath from '../forms/UriPath'
-import UriPrefix from '../forms/UriPrefix'
+import Key from './Key'
+import UriPath from './UriPath'
+import UriPrefix from './UriPrefix'
 
 const Form = ({ config, element, updateElement }) => {
 

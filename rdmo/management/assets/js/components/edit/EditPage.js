@@ -4,13 +4,13 @@ import { Tabs, Tab } from 'react-bootstrap';
 import isUndefined from 'lodash/isUndefined'
 import orderBy from 'lodash/orderBy'
 
-import Checkbox from '../forms/Checkbox'
-import MultiSelect from '../forms/MultiSelect'
-import OrderedMultiSelect from '../forms/OrderedMultiSelect'
-import Select from '../forms/Select'
-import Text from '../forms/Text'
-import Textarea from '../forms/Textarea'
-import UriPrefix from '../forms/UriPrefix'
+import Checkbox from './common/Checkbox'
+import MultiSelect from './common/MultiSelect'
+import OrderedMultiSelect from './common/OrderedMultiSelect'
+import Select from './common/Select'
+import Text from './common/Text'
+import Textarea from './common/Textarea'
+import UriPrefix from './common/UriPrefix'
 
 import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
 

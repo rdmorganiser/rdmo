@@ -3,11 +3,10 @@ import PropTypes from 'prop-types'
 
 import { getUriPrefixes } from '../../utils/filter'
 
-import FilterUri from '../FilterUri'
-import FilterUriPrefix from '../FilterUriPrefix'
+import { FilterUri, FilterUriPrefix } from '../common/Filter'
+import { BackButton, NewButton } from '../common/Buttons'
 
 import OptionSet from '../element/OptionSet'
-import { BackButton, NewButton } from '../common/Buttons'
 
 const OptionSets = ({ config, optionsets, configActions, elementActions}) => {
 

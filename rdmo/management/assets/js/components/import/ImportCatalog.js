@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import uniqueId from 'lodash/uniqueId'
 
-import { ShowLink } from '../common/Links'
+import { CodeLink, ShowLink } from '../common/Links'
 
 import Fields from './common/Fields'
 import Form from './common/Form'
@@ -20,11 +20,11 @@ const ImportCatalog = ({ config, catalog, importActions }) => {
         <ShowLink element={catalog} onClick={showFields} />
       </div>
       <div className="checkbox">
-        <label>
+        <label className="mr-5">
           <input type="checkbox" checked={catalog.import} onChange={toggleImport} />
-          <strong>{gettext('Catalog')}{' '}</strong>
-          <code className={codeClass[catalog.type]}>{catalog.uri}</code>
+          <strong>{gettext('Catalog')}</strong>
         </label>
+        <CodeLink className={codeClass[catalog.type]} uri={catalog.uri} onClick={showFields} />
       </div>
       {
         catalog.show && <>

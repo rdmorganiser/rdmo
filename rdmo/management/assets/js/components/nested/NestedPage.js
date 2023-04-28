@@ -4,14 +4,13 @@ import isUndefined from 'lodash/isUndefined'
 
 import { getUriPrefixes } from '../../utils/filter'
 
-import FilterUri from '../FilterUri'
-import FilterUriPrefix from '../FilterUriPrefix'
+import { FilterUri, FilterUriPrefix } from '../common/Filter'
+import { Checkbox } from '../common/Checkboxes'
+import { BackButton } from '../common/Buttons'
 
 import Page from '../element/Page'
 import QuestionSet from '../element/QuestionSet'
 import Question from '../element/Question'
-import { Checkbox } from '../common/Checkboxes'
-import { BackButton } from '../common/Buttons'
 
 const NestedPage = ({ config, page, configActions, elementActions }) => {
 

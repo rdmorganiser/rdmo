@@ -3,12 +3,12 @@ import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap';
 import get from 'lodash/get'
 
-import CodeMirror from '../forms/CodeMirror'
-import Checkbox from '../forms/Checkbox'
-import Select from '../forms/Select'
-import Text from '../forms/Text'
-import Textarea from '../forms/Textarea'
-import UriPrefix from '../forms/UriPrefix'
+import CodeMirror from './common/CodeMirror'
+import Checkbox from './common/Checkbox'
+import Select from './common/Select'
+import Text from './common/Text'
+import Textarea from './common/Textarea'
+import UriPrefix from './common/UriPrefix'
 
 import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
 

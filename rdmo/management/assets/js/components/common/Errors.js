@@ -3,6 +3,28 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import isString from 'lodash/isString'
 
+
+const ApiErrors = ({ errors }) => {
+  return (
+    <div className="errors">
+      <div className="panel panel-default">
+        <div className="panel-body text-danger">
+          <p>
+            <strong>{gettext('One or more errors occured:')}</strong>
+          </p>
+          <ul className="mb-0">
+            { errors.map((error, index) => <li key={index}>{error}</li>) }
+          </ul>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+ApiErrors.propTypes = {
+  errors: PropTypes.array
+}
+
 const ElementErrors = ({ element }) => {
   if (element.errors) {
     const errorList = Object.values(element.errors).flat().reduce((acc, cur) => {
@@ -25,13 +47,10 @@ const ElementErrors = ({ element }) => {
   } else {
     return null
   }
-
-
-
 }
 
 ElementErrors.propTypes = {
   element: PropTypes.object.isRequired
 }
 
-export { ElementErrors }
+export { ApiErrors, ElementErrors }

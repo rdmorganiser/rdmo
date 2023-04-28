@@ -9,40 +9,12 @@ import * as configActions from '../actions/configActions'
 import * as elementActions from '../actions/elementActions'
 import * as importActions from '../actions/importActions'
 
-import ApiErrors from '../components/ApiErrors'
+import { ApiErrors } from '../components/common/Errors'
 
-import Attributes from '../components/elements/Attributes'
-import Catalogs from '../components/elements/Catalogs'
-import Conditions from '../components/elements/Conditions'
-import Options from '../components/elements/Options'
-import OptionSets from '../components/elements/OptionSets'
-import Pages from '../components/elements/Pages'
-import Questions from '../components/elements/Questions'
-import QuestionSets from '../components/elements/QuestionSets'
-import Sections from '../components/elements/Sections'
-import Tasks from '../components/elements/Tasks'
-import Views from '../components/elements/Views'
-
-import EditAttribute from '../components/edit/EditAttribute'
-import EditCatalog from '../components/edit/EditCatalog'
-import EditCondition from '../components/edit/EditCondition'
-import EditOption from '../components/edit/EditOption'
-import EditOptionSet from '../components/edit/EditOptionSet'
-import EditPage from '../components/edit/EditPage'
-import EditQuestion from '../components/edit/EditQuestion'
-import EditQuestionSet from '../components/edit/EditQuestionSet'
-import EditSection from '../components/edit/EditSection'
-import EditTask from '../components/edit/EditTask'
-import EditView from '../components/edit/EditView'
-
-import NestedAttribute from '../components/nested/NestedAttribute'
-import NestedCatalog from '../components/nested/NestedCatalog'
-import NestedOptionSet from '../components/nested/NestedOptionSet'
-import NestedPage from '../components/nested/NestedPage'
-import NestedQuestionSet from '../components/nested/NestedQuestionSet'
-import NestedSection from '../components/nested/NestedSection'
-
-import Import from '../components/import/Import'
+import Edit from '../components/main/Edit'
+import Elements from '../components/main/Elements'
+import Import from '../components/main/Import'
+import Nested from '../components/main/Nested'
 
 class Main extends Component {
 
@@ -65,98 +37,25 @@ class Main extends Component {
     }
 
     if (!isEmpty(imports.elements)) {
-      return <Import config={config} elements={imports.elements} importActions={importActions} />
+      return <Import config={config} imports={imports} importActions={importActions} />
     }
 
     // check if the nested components should be displayed
     if (!isNil(element) && elementAction == 'nested') {
-      switch (elementType) {
-        case 'catalogs':
-          return <NestedCatalog config={config} catalog={element}
-                                configActions={configActions} elementActions={elementActions} />
-        case 'sections':
-          return <NestedSection config={config} section={element}
-                                configActions={configActions} elementActions={elementActions} />
-        case 'pages':
-          return <NestedPage config={config} page={element}
-                             configActions={configActions} elementActions={elementActions} />
-        case 'questionsets':
-          return <NestedQuestionSet config={config} questionset={element}
-                                    configActions={configActions} elementActions={elementActions} />
-        case 'attributes':
-          return <NestedAttribute config={config} attribute={element}
-                                  configActions={configActions} elementActions={elementActions} />
-        case 'optionsets':
-          return <NestedOptionSet config={config} optionset={element}
-                                  configActions={configActions} elementActions={elementActions} />
-      }
+      return <Nested config={config} elements={elements}
+                     configActions={configActions} elementActions={elementActions} />
     }
 
     // check if the edit components should be displayed
     if (!isNil(element)) {
-      switch (elementType) {
-        case 'catalogs':
-          return <EditCatalog config={config} catalog={element} elements={elements} elementActions={elementActions} />
-        case 'sections':
-          return <EditSection config={config} section={element} elements={elements} elementActions={elementActions} />
-        case 'pages':
-          return <EditPage config={config} page={element} elements={elements} elementActions={elementActions} />
-        case 'questionsets':
-          return <EditQuestionSet config={config} questionset={element} elements={elements} elementActions={elementActions} />
-        case 'questions':
-          return <EditQuestion config={config} question={element} elements={elements} elementActions={elementActions} />
-        case 'attributes':
-          return <EditAttribute config={config} attribute={element} elements={elements} elementActions={elementActions} />
-        case 'optionsets':
-          return <EditOptionSet config={config} optionset={element} elements={elements} elementActions={elementActions} />
-        case 'options':
-          return <EditOption config={config} option={element} elements={elements} elementActions={elementActions} />
-        case 'conditions':
-          return <EditCondition config={config} condition={element} elements={elements} elementActions={elementActions} />
-        case 'tasks':
-          return <EditTask config={config} task={element} elements={elements} elementActions={elementActions} />
-        case 'views':
-          return <EditView config={config} view={element} elements={elements} elementActions={elementActions} />
-      }
+      return <Edit config={config} elements={elements}
+                   configActions={configActions} elementActions={elementActions} />
     }
 
     // check if the list components should be displayed
     if (isNil(elementId) && isNil(elementAction)) {
-      switch (elementType) {
-        case 'catalogs':
-          return <Catalogs config={config} catalogs={elements.catalogs}
-                           configActions={configActions} elementActions={elementActions} />
-        case 'sections':
-          return <Sections config={config} sections={elements.sections}
-                           configActions={configActions} elementActions={elementActions} />
-        case 'pages':
-          return <Pages config={config} pages={elements.pages}
-                        configActions={configActions} elementActions={elementActions} />
-        case 'questionsets':
-          return <QuestionSets config={config} questionsets={elements.questionsets}
-                               configActions={configActions} elementActions={elementActions} />
-        case 'questions':
-          return <Questions config={config} questions={elements.questions}
-                            configActions={configActions} elementActions={elementActions} />
-        case 'attributes':
-          return <Attributes config={config} attributes={elements.attributes}
-                             configActions={configActions} elementActions={elementActions} />
-        case 'optionsets':
-          return <OptionSets config={config} optionsets={elements.optionsets}
-                             configActions={configActions} elementActions={elementActions} />
-        case 'options':
-          return <Options config={config} options={elements.options}
-                          configActions={configActions} elementActions={elementActions} />
-        case 'conditions':
-          return <Conditions config={config} conditions={elements.conditions}
-                             configActions={configActions} elementActions={elementActions} />
-        case 'tasks':
-          return <Tasks config={config} tasks={elements.tasks}
-                        configActions={configActions} elementActions={elementActions} />
-        case 'views':
-          return <Views config={config} views={elements.views}
-                        configActions={configActions} elementActions={elementActions} />
-      }
+      return <Elements config={config} elements={elements}
+                       configActions={configActions} elementActions={elementActions} />
     }
 
     // fetching the data is not complete yet, or no action was invoked yet
