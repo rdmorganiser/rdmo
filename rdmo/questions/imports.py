@@ -33,6 +33,8 @@ def import_catalog(element, save=False):
     set_lang_field(catalog, 'title', element)
     set_lang_field(catalog, 'help', element)
 
+    catalog.available = element.get('available', True)
+
     if save and validate_instance(catalog, CatalogLockedValidator, CatalogUniqueURIValidator):
         if catalog.id:
             logger.info('Catalog created with uri %s.', element.get('uri'))
