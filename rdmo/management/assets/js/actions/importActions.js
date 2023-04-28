@@ -1,4 +1,8 @@
+import isNil from 'lodash/isNil'
+
 import ManagementApi from '../api/ManagementApi'
+
+import { fetchElements, fetchElement } from './elementActions'
 
 // upload file
 
@@ -33,7 +37,17 @@ export function importElements() {
     dispatch(importElementsInit())
 
     return ManagementApi.importElements(elements)
-      .then(elements => dispatch(importElementsSuccess(elements)))
+      .then(elements => {
+        dispatch(importElementsSuccess(elements))
+
+        const { elementType, elementId, elementAction } = getState().elements
+
+        if (isNil(elementId)) {
+          dispatch(fetchElements(elementType, elementId, elementAction))
+        } else {
+          dispatch(fetchElement(elementType))
+        }
+      })
       .catch(error => dispatch(importElementsError([error.message])))
   }
 }
