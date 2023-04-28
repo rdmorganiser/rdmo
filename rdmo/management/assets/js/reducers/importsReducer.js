@@ -43,7 +43,8 @@ export default function importsReducer(state = initialState, action) {
         element.uri = buildUri(element)
         return element
       })}
-
+    case 'import/resetElements':
+      return {...state, elements: []}
     default:
       return state
   }
