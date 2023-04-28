@@ -11,7 +11,7 @@ from rdmo.views.imports import import_view
 
 
 def check_permissions(elements, user):
-    model_names = set([element.get('tag') for element in elements])
+    model_names = set([element.get('model') for element in elements])
 
     permissions = []
     for model_name in model_names:
@@ -24,7 +24,7 @@ def import_elements(elements, save=True):
     instances = []
 
     for element in elements:
-        model_name = element.get('tag')
+        model_name = element.get('model')
 
         if model_name == 'condition':
             instance = import_condition(element, save)
