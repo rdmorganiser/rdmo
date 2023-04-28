@@ -22,9 +22,12 @@ const ImportSidebar = ({ config, imports, importActions }) => {
     <div className="import-sidebar">
       <h2>{gettext('Import elements')}</h2>
 
-      <p>
-        <button className="btn btn-success btn-import w-100" onClick={() => importActions.importElements()}>
+      <p className="import-buttons">
+        <button className="btn btn-success" onClick={() => importActions.importElements()}>
           {interpolate(ngettext('Import one element', 'Import %s elements', count), [count])}
+        </button>
+        <button className="btn btn-default" onClick={() => importActions.resetElements()}>
+          {gettext('Back')}
         </button>
       </p>
 

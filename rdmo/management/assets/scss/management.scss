@@ -246,3 +246,12 @@ a.disabled {
         opacity: 0;
     }
 }
+
+.import-buttons {
+    display: flex;
+    gap: 5px;
+
+    .btn-success {
+        flex: 1;
+    }
+}

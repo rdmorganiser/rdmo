@@ -59,3 +59,7 @@ export function updateElement(element, values) {
 export function updateElements(values) {
   return {type: 'import/updateElements', values}
 }
+
+export function resetElements() {
+  return {type: 'import/resetElements'}
+}
