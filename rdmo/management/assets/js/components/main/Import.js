@@ -1,32 +1,21 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import uniqueId from 'lodash/uniqueId'
 
+import ImportAttribute from '../import/ImportAttribute'
+import ImportCatalog from '../import/ImportCatalog'
+import ImportCondition from '../import/ImportCondition'
+import ImportOption from '../import/ImportOption'
+import ImportOptionSet from '../import/ImportOptionSet'
+import ImportPage from '../import/ImportPage'
+import ImportQuestion from '../import/ImportQuestion'
+import ImportQuestionSet from '../import/ImportQuestionSet'
+import ImportSection from '../import/ImportSection'
+import ImportTask from '../import/ImportTask'
+import ImportView from '../import/ImportView'
 
+const Import = ({ config, imports, importActions }) => {
+  const { elements } = imports
 
-
-
-import { ShowLink } from '../common/Links'
-
-import Fields from './common/Fields'
-import UriPrefix from './forms/UriPrefix'
-import Key from './forms/Key'
-
-import { codeClass } from '../../constants/elements'
-
-import ImportAttribute from './ImportAttribute'
-import ImportCatalog from './ImportCatalog'
-import ImportCondition from './ImportCondition'
-import ImportOption from './ImportOption'
-import ImportOptionSet from './ImportOptionSet'
-import ImportPage from './ImportPage'
-import ImportQuestion from './ImportQuestion'
-import ImportQuestionSet from './ImportQuestionSet'
-import ImportSection from './ImportSection'
-import ImportTask from './ImportTask'
-import ImportView from './ImportView'
-
-const Import = ({ config, elements, importActions }) => {
   return (
     <div className="panel panel-default panel-import">
       <div className="panel-heading">
@@ -37,27 +26,27 @@ const Import = ({ config, elements, importActions }) => {
       {
         elements.map((element, index) => {
           switch (element.type) {
-            case 'catalog':
+            case 'catalogs':
               return <ImportCatalog key={index} config={config} catalog={element} importActions={importActions} />
-            case 'section':
+            case 'sections':
               return <ImportSection key={index} config={config} section={element} importActions={importActions} />
-            case 'page':
+            case 'pages':
               return <ImportPage key={index} config={config} page={element} importActions={importActions} />
-            case 'questionset':
+            case 'questionsets':
               return <ImportQuestionSet key={index} config={config} questionset={element} importActions={importActions} />
-            case 'question':
+            case 'questions':
               return <ImportQuestion key={index} config={config} question={element} importActions={importActions} />
-            case 'attribute':
+            case 'attributes':
               return <ImportAttribute key={index} config={config} attribute={element} importActions={importActions} />
-            case 'optionset':
+            case 'optionsets':
               return <ImportOptionSet key={index} config={config} optionset={element} importActions={importActions} />
-            case 'option':
+            case 'options':
               return <ImportOption key={index} config={config} option={element} importActions={importActions} />
-            case 'condition':
+            case 'conditions':
               return <ImportCondition key={index} config={config} condition={element} importActions={importActions} />
-            case 'task':
+            case 'tasks':
               return <ImportTask key={index} config={config} task={element} importActions={importActions} />
-            case 'view':
+            case 'views':
               return <ImportView key={index} config={config} view={element} importActions={importActions} />
             default:
               return null
@@ -71,7 +60,7 @@ const Import = ({ config, elements, importActions }) => {
 
 Import.propTypes = {
   config: PropTypes.object.isRequired,
-  elements: PropTypes.array.isRequired,
+  imports: PropTypes.object.isRequired,
   importActions: PropTypes.object.isRequired
 }
 

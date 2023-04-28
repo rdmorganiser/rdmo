@@ -3,13 +3,12 @@ import PropTypes from 'prop-types'
 
 import { getUriPrefixes } from '../../utils/filter'
 
-import FilterUri from '../FilterUri'
-import FilterUriPrefix from '../FilterUriPrefix'
+import { FilterUri, FilterUriPrefix } from '../common/Filter'
+import { Checkbox } from '../common/Checkboxes'
+import { BackButton } from '../common/Buttons'
 
 import Section from '../element/Section'
 import Page from '../element/Page'
-import { Checkbox } from '../common/Checkboxes'
-import { BackButton } from '../common/Buttons'
 
 const NestedCatalog = ({ config, section, configActions, elementActions }) => {
 

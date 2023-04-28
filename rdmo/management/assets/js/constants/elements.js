@@ -1,8 +1,8 @@
 const elementTypes = [
   'catalogs',
   'sections',
-  'questionsets',
   'pages',
+  'questionsets',
   'questions',
   'attributes',
   'optionsets',
@@ -13,31 +13,31 @@ const elementTypes = [
 ]
 
 const elementModules = {
-  'catalog': 'questions',
-  'section': 'questions',
-  'questionset': 'questions',
-  'page': 'questions',
-  'question': 'questions',
-  'attribute': 'domain',
-  'optionset': 'options',
-  'option': 'options',
-  'condition': 'conditions',
-  'task': 'tasks',
-  'view': 'views'
+  'catalogs': 'questions',
+  'sections': 'questions',
+  'pages': 'questions',
+  'questionsets': 'questions',
+  'questions': 'questions',
+  'attributes': 'domain',
+  'optionsets': 'options',
+  'options': 'options',
+  'conditions': 'conditions',
+  'tasks': 'tasks',
+  'views': 'views'
 }
 
 const codeClass = {
-  'catalog': 'code-questions',
-  'section': 'code-questions',
-  'questionset': 'code-questions',
-  'page': 'code-questions',
-  'question': 'code-questions',
-  'attribute': 'code-domain',
-  'optionset': 'code-options',
-  'option': 'code-options',
-  'condition': 'code-conditions',
-  'task': 'code-tasks',
-  'view': 'code-views'
+  'catalogs': 'code-questions',
+  'sections': 'code-questions',
+  'pages': 'code-questions',
+  'questionsets': 'code-questions',
+  'questions': 'code-questions',
+  'attributes': 'code-domain',
+  'optionsets': 'code-options',
+  'options': 'code-options',
+  'conditions': 'code-conditions',
+  'tasks': 'code-tasks',
+  'views': 'code-views'
 }
 
 export { elementTypes, elementModules, codeClass }

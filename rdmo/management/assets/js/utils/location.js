@@ -33,19 +33,24 @@ const parseLocation = (basePath, pathname) => {
 }
 
 const updateLocation = (basePath, elementType, elementId, elementAction) => {
-  let pathname = basePath + elementType + '/'
-
-  if (!isNil(elementId)) {
-    pathname += elementId + '/'
-  }
-
-  if (!isNil(elementAction)) {
-    pathname += elementAction + '/'
-  }
-
+  const pathname = buildPath(basePath, elementType, elementId, elementAction)
   if (pathname != window.location.pathname) {
     history.pushState(null, null, pathname);
   }
 }
 
-export { parseLocation, updateLocation }
+const buildPath = (basePath, elementType, elementId, elementAction) => {
+  let path = basePath + elementType + '/'
+
+  if (!isNil(elementId)) {
+    path += elementId + '/'
+  }
+
+  if (!isNil(elementAction)) {
+    path += elementAction + '/'
+  }
+
+  return path
+}
+
+export { parseLocation, updateLocation, buildPath }

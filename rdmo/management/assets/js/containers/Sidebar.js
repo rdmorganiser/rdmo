@@ -4,9 +4,6 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import isEmpty from 'lodash/isEmpty'
 
-import Link from 'rdmo/core/assets/js/components/Link'
-import UploadForm from '../components/forms/UploadForm'
-
 import * as configActions from '../actions/configActions'
 import * as elementActions from '../actions/elementActions'
 import * as importActions from '../actions/importActions'

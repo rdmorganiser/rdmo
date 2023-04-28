@@ -11,11 +11,11 @@ from rdmo.views.imports import import_view
 
 
 def check_permissions(elements, user):
-    element_types = set([element.get('type') for element in elements])
+    model_names = set([element.get('tag') for element in elements])
 
     permissions = []
-    for element_type in element_types:
-        permissions += PERMISSIONS[element_type]
+    for model_name in model_names:
+        permissions += PERMISSIONS[model_name]
 
     return user.has_perms(permissions)
 

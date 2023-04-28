@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import uniqueId from 'lodash/uniqueId'
 
-import { ShowLink } from '../common/Links'
+import { CodeLink, ShowLink } from '../common/Links'
 
 import Fields from './common/Fields'
 import Form from './common/Form'
@@ -20,11 +20,11 @@ const ImportSection = ({ config, section, importActions }) => {
         <ShowLink element={section} onClick={showFields} />
       </div>
       <div className="checkbox">
-        <label>
+        <label className="mr-5">
           <input type="checkbox" checked={section.import} onChange={toggleImport} />
-          <strong>{gettext('Section')}{' '}</strong>
-          <code className={codeClass[section.type]}>{section.uri}</code>
+          <strong>{gettext('Section')}</strong>
         </label>
+        <CodeLink className={codeClass[section.type]} uri={section.uri} onClick={showFields} />
       </div>
       {
         section.show && <>

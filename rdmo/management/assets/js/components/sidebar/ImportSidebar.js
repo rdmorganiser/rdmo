@@ -6,8 +6,6 @@ import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 
 import Link from 'rdmo/core/assets/js/components/Link'
-import UploadForm from '../forms/UploadForm'
-
 
 const ImportSidebar = ({ config, imports, importActions }) => {
   const count = imports.elements.filter(e => e.import).length
@@ -18,16 +16,6 @@ const ImportSidebar = ({ config, imports, importActions }) => {
     if (!disabled) {
       importActions.updateElements({uri_prefix: uriPrefix})
     }
-  }
-
-  const selectElements = event => {
-    event.preventDefault()
-    importActions.updateElements({import: true})
-  }
-
-  const unselectElements = event => {
-    event.preventDefault()
-    importActions.updateElements({import: false})
   }
 
   return (
@@ -44,10 +32,14 @@ const ImportSidebar = ({ config, imports, importActions }) => {
 
       <ul className="list-unstyled">
         <li>
-          <a href="" onClick={selectElements}>{gettext('Select all')}</a>
+          <Link onClick={() => importActions.updateElements({import: true})}>
+            {gettext('Select all')}
+          </Link>
         </li>
         <li>
-          <a href="" onClick={unselectElements}>{gettext('Unselect all')}</a>
+          <Link onClick={() => importActions.updateElements({import: false})}>
+            {gettext('Unselect all')}
+          </Link>
         </li>
       </ul>
 

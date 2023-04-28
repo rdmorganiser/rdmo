@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import uniqueId from 'lodash/uniqueId'
 
-import { ShowLink } from '../common/Links'
+import { CodeLink, ShowLink } from '../common/Links'
 
 import Fields from './common/Fields'
 import Form from './common/Form'
@@ -20,11 +20,11 @@ const ImportCondition = ({ config, condition, importActions }) => {
         <ShowLink element={condition} onClick={showFields} />
       </div>
       <div className="checkbox">
-        <label>
+        <label className="mr-5">
           <input type="checkbox" checked={condition.import} onChange={toggleImport} />
-          <strong>{gettext('Condition')}{' '}</strong>
-          <code className={codeClass[condition.type]}>{condition.uri}</code>
+          <strong>{gettext('Condition')}</strong>
         </label>
+        <CodeLink className={codeClass[condition.type]} uri={condition.uri} onClick={showFields} />
       </div>
       {
         condition.show && <>
