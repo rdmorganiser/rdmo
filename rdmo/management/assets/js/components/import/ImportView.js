@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import uniqueId from 'lodash/uniqueId'
 
-import { CodeLink, ShowLink } from '../common/Links'
+import { AvailableLink, CodeLink, ShowLink } from '../common/Links'
 
 import Fields from './common/Fields'
 import Form from './common/Form'
@@ -12,11 +12,13 @@ import { codeClass } from '../../constants/elements'
 const ImportView = ({ config, view, importActions }) => {
   const showFields = () => importActions.updateElement(view, {show: !view.show})
   const toggleImport = () => importActions.updateElement(view, {import: !view.import})
+  const toggleAvailable = () => importActions.updateElement(view, {available: !view.available})
   const updateView = (key, value) => importActions.updateElement(view, {key: value})
 
   return (
     <li className="list-group-item">
       <div className="pull-right">
+        <AvailableLink element={view} verboseName={gettext('view')} onClick={toggleAvailable} />
         <ShowLink element={view} onClick={showFields} />
       </div>
       <div className="checkbox">

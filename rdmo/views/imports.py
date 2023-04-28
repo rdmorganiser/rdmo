@@ -24,6 +24,8 @@ def import_view(element, save=False):
     set_lang_field(view, 'title', element)
     set_lang_field(view, 'help', element)
 
+    view.available = element.get('available', True)
+
     if save and validate_instance(view, ViewLockedValidator, ViewUniqueURIValidator):
         if view.id:
             logger.info('View created with uri %s.', element.get('uri'))

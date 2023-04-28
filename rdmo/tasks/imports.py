@@ -28,6 +28,8 @@ def import_task(element, save=False):
     task.days_before = element.get('days_before')
     task.days_after = element.get('days_after')
 
+    task.available = element.get('available', True)
+
     if save and validate_instance(task):
         if task.id:
             logger.info('Task created with uri %s.', element.get('uri'))
