@@ -24,39 +24,39 @@ def import_elements(elements, save=True):
     instances = []
 
     for element in elements:
-        element_type = element.get('type')
+        model_name = element.get('tag')
 
-        if element_type == 'condition':
+        if model_name == 'condition':
             instance = import_condition(element, save)
 
-        elif element_type == 'attribute':
+        elif model_name == 'attribute':
             instance = import_attribute(element, save)
 
-        elif element_type == 'optionset':
+        elif model_name == 'optionset':
             instance = import_optionset(element, save)
 
-        elif element_type == 'option':
+        elif model_name == 'option':
             instance = import_option(element, save)
 
-        elif element_type == 'catalog':
+        elif model_name == 'catalog':
             instance = import_catalog(element, save)
 
-        elif element_type == 'section':
+        elif model_name == 'section':
             instance = import_section(element, save)
 
-        elif element_type == 'page':
+        elif model_name == 'page':
             instance = import_page(element, save)
 
-        elif element_type == 'questionset':
+        elif model_name == 'questionset':
             instance = import_questionset(element, save)
 
-        elif element_type == 'question':
+        elif model_name == 'question':
             instance = import_question(element, save)
 
-        elif element_type == 'task':
+        elif model_name == 'task':
             instance = import_task(element, save)
 
-        elif element_type == 'view':
+        elif model_name == 'view':
             instance = import_view(element, save)
 
         else:
