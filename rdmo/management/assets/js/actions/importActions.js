@@ -67,5 +67,13 @@ export function updateElements(values) {
 }
 
 export function resetElements() {
-  return {type: 'import/resetElements'}
+  return function(dispatch, getState) {
+    const { elementType, elementId, elementAction} = getState().elements
+    if (isNil(elementId)) {
+      dispatch(fetchElements(elementType, elementAction))
+    } else {
+      dispatch(fetchElement(elementType, elementId, elementAction))
+    }
+    dispatch({type: 'import/resetElements'})
+  }
 }
