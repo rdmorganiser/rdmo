@@ -2,10 +2,12 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import uniqueId from 'lodash/uniqueId'
 
-import { CodeLink, ShowLink } from '../common/Links'
+import { CodeLink, WarningLink, ErrorLink, ShowLink } from '../common/Links'
 
+import Errors from './common/Errors'
 import Fields from './common/Fields'
 import Form from './common/Form'
+import Warnings from './common/Warnings'
 
 import { codeClass } from '../../constants/elements'
 
@@ -17,6 +19,8 @@ const ImportQuestionSet = ({ config, questionset, importActions }) => {
   return (
     <li className="list-group-item">
       <div className="pull-right">
+        <WarningLink element={questionset} onClick={showFields} />
+        <ErrorLink element={questionset} onClick={showFields} />
         <ShowLink element={questionset} onClick={showFields} />
       </div>
       <div className="checkbox">
@@ -30,6 +34,8 @@ const ImportQuestionSet = ({ config, questionset, importActions }) => {
         questionset.show && <>
           <Form config={config} element={questionset} updateElement={updateQuestionSet} />
           <Fields element={questionset} />
+          <Warnings element={questionset} />
+          <Errors element={questionset} />
         </>
       }
     </li>

@@ -23,17 +23,19 @@ def import_optionset(element, save=False):
     optionset.order = element.get('order') or 0
     optionset.provider_key = element.get('provider_key') or ''
 
-    if save and validate_instance(optionset, OptionSetLockedValidator, OptionSetUniqueURIValidator):
+    validate_instance(optionset, element, OptionSetLockedValidator, OptionSetUniqueURIValidator)
+
+    if save and not element.get('errors'):
         if optionset.id:
+            element['updated'] = True
             logger.info('OptionSet %s updated.', element.get('uri'))
         else:
+            element['created'] = True
             logger.info('OptionSet created with uri %s.', element.get('uri'))
 
         optionset.save()
         set_m2m_instances(optionset, 'conditions', element)
         set_m2m_through_instances(optionset, 'options', element, 'optionset', 'option', 'optionset_options')
-
-        element['imported'] = True
 
     return optionset
 
@@ -50,15 +52,17 @@ def import_option(element, save=False):
 
     set_lang_field(option, 'text', element)
 
-    if save and validate_instance(option, OptionLockedValidator, OptionUniqueURIValidator):
+    validate_instance(option, element, OptionLockedValidator, OptionUniqueURIValidator)
+
+    if save and not element.get('errors'):
         if option.id:
+            element['updated'] = True
             logger.info('Option %s updated.', element.get('uri'))
         else:
+            element['created'] = True
             logger.info('Option created with uri %s.', element.get('uri'))
 
         option.save()
         set_reverse_m2m_through_instance(option, 'optionset', element, 'option', 'optionset', 'option_optionsets')
-
-        element['imported'] = True
 
     return option

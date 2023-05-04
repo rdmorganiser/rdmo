@@ -40,4 +40,18 @@ const codeClass = {
   'views': 'code-views'
 }
 
-export { elementTypes, elementModules, codeClass }
+const verboseNames = {
+  'catalogs': gettext('Catalogs'),
+  'sections': gettext('Section'),
+  'pages': gettext('Page'),
+  'questionsets': gettext('Question set'),
+  'questions': gettext('Question'),
+  'attributes': gettext('Attribute'),
+  'optionsets': gettext('Option set'),
+  'options': gettext('Option'),
+  'conditions': gettext('Condition'),
+  'tasks': gettext('Task'),
+  'views': gettext('View')
+}
+
+export { elementTypes, elementModules, codeClass, verboseNames }

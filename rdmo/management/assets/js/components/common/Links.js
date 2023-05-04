@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+import isEmpty from 'lodash/isEmpty'
+
+import Link from 'rdmo/core/assets/js/components/Link'
 
 const EditLink = ({ element, verboseName, onClick }) => {
   const handleClick = (event) => {
@@ -214,27 +217,42 @@ CodeLink.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-const ShowLink = ({ element, verboseName, onClick }) => {
-  const handleClick = (event) => {
-    event.preventDefault()
-    onClick()
-  }
 
+const ErrorLink = ({ element, onClick }) => {
+  return (
+    !isEmpty(element.errors) &&
+    <Link className="element-link fa fa-warning text-danger" onClick={onClick} />
+  )
+}
+
+ErrorLink.propTypes = {
+  element: PropTypes.object.isRequired,
+  onClick: PropTypes.func.isRequired
+}
+
+
+const WarningLink = ({ element, onClick }) => {
+  return (
+    !isEmpty(element.warnings) &&
+    <Link className="element-link fa fa-warning text-warning" onClick={onClick} />
+  )
+}
+
+WarningLink.propTypes = {
+  element: PropTypes.object.isRequired,
+  onClick: PropTypes.func.isRequired
+}
+
+
+const ShowLink = ({ element, onClick }) => {
+  const title = element.show ? gettext('Hide') : gettext('Show')
   const className = classNames({
     'element-link fa': true,
     'fa-eye-slash': element.show,
     'fa-eye': !element.show
   })
 
-  const title = element.show ? interpolate(gettext('Hide %s'), [verboseName])
-                             : interpolate(gettext('Show %s'), [verboseName])
-
-  return (
-    <a href="" className={className}
-       title={title}
-       onClick={event => handleClick(event)}>
-    </a>
-  )
+  return <Link className={className} title={title} onClick={onClick} />
 }
 
 ShowLink.propTypes = {
@@ -244,4 +262,4 @@ ShowLink.propTypes = {
 
 
 export { EditLink, AddLink, AddSquareLink, AvailableLink, LockedLink,
-         NestedLink, ExportLink, ExtendLink, CodeLink, ShowLink }
+         NestedLink, ExportLink, ExtendLink, CodeLink, ErrorLink, WarningLink, ShowLink }

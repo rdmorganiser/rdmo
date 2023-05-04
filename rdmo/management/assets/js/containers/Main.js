@@ -9,7 +9,7 @@ import * as configActions from '../actions/configActions'
 import * as elementActions from '../actions/elementActions'
 import * as importActions from '../actions/importActions'
 
-import { ApiErrors } from '../components/common/Errors'
+import { MainErrors } from '../components/common/Errors'
 
 import Edit from '../components/main/Edit'
 import Elements from '../components/main/Elements'
@@ -24,7 +24,7 @@ class Main extends Component {
 
   render() {
     const { config, elements, imports, configActions, elementActions, importActions } = this.props
-    const { element, elementType, elementId, elementAction, errors } = elements
+    const { element, elementType, elementId, elementAction } = elements
 
     // check if anything was loaded yet
     if (isNil(elementType)) {
@@ -32,8 +32,12 @@ class Main extends Component {
     }
 
     // check if an an error occured
-    if (!isNil(errors.api)) {
-      return <ApiErrors errors={errors.api} />
+    if (!isNil(elements.errors.api)) {
+      return <MainErrors errors={elements.errors.api} />
+    }
+
+    if (!isNil(imports.errors.file)) {
+      return <MainErrors errors={imports.errors.file} />
     }
 
     if (!isEmpty(imports.elements)) {

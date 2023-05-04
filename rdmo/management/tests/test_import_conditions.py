@@ -17,9 +17,9 @@ def test_create_conditions(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
-    assert len(root) == len(elements) == len(instances) == Condition.objects.count() == 15
+    assert len(root) == len(elements) == Condition.objects.count() == 15
 
 
 def test_update_conditions(db, settings):
@@ -31,9 +31,9 @@ def test_update_conditions(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
-    assert len(root) == len(elements) == len(instances) == Condition.objects.count() == 15
+    assert len(root) == len(elements) == Condition.objects.count() == 15
 
 
 def test_create_legacy_conditions(db, settings):
@@ -47,9 +47,9 @@ def test_create_legacy_conditions(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
-    assert len(root) == len(elements) == len(instances) == Condition.objects.count() == 15
+    assert len(root) == len(elements) == Condition.objects.count() == 15
 
 
 def test_update_legacy_conditions(db, settings):
@@ -61,6 +61,6 @@ def test_update_legacy_conditions(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
-    assert len(root) == len(elements) == len(instances) == Condition.objects.count() == 15
+    assert len(root) == len(elements) == Condition.objects.count() == 15

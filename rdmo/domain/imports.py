@@ -20,17 +20,17 @@ def import_attribute(element, save=False):
 
     set_foreign_field(attribute, 'parent', element)
 
-    if save and validate_instance(attribute,
-                                  AttributeLockedValidator,
-                                  AttributeParentValidator,
-                                  AttributeUniqueURIValidator):
+    validate_instance(attribute, element, AttributeLockedValidator,
+                      AttributeParentValidator, AttributeUniqueURIValidator)
+
+    if save and not element.get('errors'):
         if attribute.id:
-            logger.debug('Attribute created with uri %s.', element.get('uri'))
-        else:
+            element['updated'] = True
             logger.debug('Attribute %s updated.', element.get('uri'))
+        else:
+            element['created'] = True
+            logger.debug('Attribute created with uri %s.', element.get('uri'))
 
         attribute.save()
-
-        element['imported'] = True
 
     return attribute

@@ -5,14 +5,17 @@ import { buildUri } from '../utils/elements'
 
 const initialState = {
   elements: [],
-  errors: []
+  errors: [],
+  success: false
 }
 
 export default function importsReducer(state = initialState, action) {
   switch(action.type) {
     // upload file
     case 'import/uploadFileInit':
-      return {...state, elements: [], errors: []}
+    case 'elements/fetchElementsInit':
+    case 'elements/fetchElementInit':
+      return {...state, elements: [], errors: [], success: false}
     case 'import/uploadFileSuccess':
       return {...state, elements: action.elements.map(element => {
         if (['catalogs', 'tasks', 'views'].includes(element.type)) {
@@ -27,7 +30,7 @@ export default function importsReducer(state = initialState, action) {
 
     // import elements
     case 'import/importElementsSuccess':
-      return {...state, elements: []}
+      return {...state, elements: action.elements, success: true}
     case 'import/importElementsError':
       return {...state, errors: action.error.errors}
 

@@ -2,10 +2,12 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import uniqueId from 'lodash/uniqueId'
 
-import { CodeLink, ShowLink } from '../common/Links'
+import { CodeLink, WarningLink, ErrorLink, ShowLink } from '../common/Links'
 
+import Errors from './common/Errors'
 import Fields from './common/Fields'
 import Form from './common/Form'
+import Warnings from './common/Warnings'
 
 import { codeClass } from '../../constants/elements'
 
@@ -17,6 +19,8 @@ const ImportPage = ({ config, page, importActions }) => {
   return (
     <li className="list-group-item">
       <div className="pull-right">
+        <WarningLink element={page} onClick={showFields} />
+        <ErrorLink element={page} onClick={showFields} />
         <ShowLink element={page} onClick={showFields} />
       </div>
       <div className="checkbox">
@@ -30,6 +34,8 @@ const ImportPage = ({ config, page, importActions }) => {
         page.show && <>
           <Form config={config} element={page} updateElement={updatePage} />
           <Fields element={page} />
+          <Warnings element={page} />
+          <Errors element={page} />
         </>
       }
     </li>

@@ -21,9 +21,9 @@ def test_create_catalogs(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
-    assert len(root) == len(elements) == len(instances) == 148
+    assert len(root) == len(elements) == 148
     assert Catalog.objects.count() == 2
     assert Section.objects.count() == 6
     assert Page.objects.count() == 48
@@ -40,9 +40,9 @@ def test_update_catalogs(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
-    assert len(root) == len(elements) == len(instances) == 148
+    assert len(root) == len(elements) == 148
     assert Catalog.objects.count() == 2
     assert Section.objects.count() == 6
     assert Page.objects.count() == 48
@@ -64,9 +64,9 @@ def test_create_sections(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
-    assert len(root) == len(elements) == len(instances) == 146
+    assert len(root) == len(elements) == 146
     assert Section.objects.count() == 6
     assert Page.objects.count() == 48
     assert QuestionSet.objects.count() == 3
@@ -82,9 +82,9 @@ def test_update_sections(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
-    assert len(root) == len(elements) == len(instances) == 146
+    assert len(root) == len(elements) == 146
     assert Section.objects.count() == 6
     assert Page.objects.count() == 48
     assert QuestionSet.objects.count() == 3
@@ -104,9 +104,9 @@ def test_create_pages(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
-    assert len(root) == len(elements) == len(instances) == 140
+    assert len(root) == len(elements) == 140
     assert Page.objects.count() == 48
     assert QuestionSet.objects.count() == 3
     assert Question.objects.count() == 89
@@ -121,9 +121,9 @@ def test_update_pages(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
-    assert len(root) == len(elements) == len(instances) == 140
+    assert len(root) == len(elements) == 140
     assert Page.objects.count() == 48
     assert QuestionSet.objects.count() == 3
     assert Question.objects.count() == 89
@@ -142,10 +142,10 @@ def test_create_questionsets(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
     assert len(root) == 10  # two questionsets apear twice in the export file
-    assert len(elements) == len(instances) == 8
+    assert len(elements) == 8
     assert QuestionSet.objects.count() == 3
     assert Question.objects.count() == 5
 
@@ -159,10 +159,10 @@ def test_update_questionsets(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
     assert len(root) == 10  # two questionsets apear twice in the export file
-    assert len(elements) == len(instances) == 8
+    assert len(elements) == 8
     assert QuestionSet.objects.count() == 3
     assert Question.objects.count() == 89
 
@@ -180,9 +180,9 @@ def test_create_questions(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
-    assert len(root) == len(elements) == len(instances) == 89
+    assert len(root) == len(elements) == 89
     assert Question.objects.count() == 89
 
 
@@ -195,9 +195,9 @@ def test_update_questions(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
-    assert len(root) == len(elements) == len(instances) == 89
+    assert len(root) == len(elements) == 89
     assert Question.objects.count() == 89
 
 
@@ -216,9 +216,9 @@ def test_create_legacy_questions(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
-    assert len(root) == len(elements) == len(instances) == 147
+    assert len(root) == len(elements) == 147
     assert Catalog.objects.count() == 1
     assert Section.objects.count() == 6
     assert Page.objects.count() == 48
@@ -235,9 +235,9 @@ def test_update_legacy_questions(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
-    assert len(root) == len(elements) == len(instances) == 147
+    assert len(root) == len(elements) == 147
     assert Catalog.objects.count() == 2
     assert Section.objects.count() == 6
     assert Page.objects.count() == 48

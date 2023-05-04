@@ -265,10 +265,6 @@ class Question(Model, TranslationMixin):
         return question
 
     @property
-    def parent_fields(self):
-        return ('page', 'questionset')
-
-    @property
     def text(self):
         return self.trans('text')
 

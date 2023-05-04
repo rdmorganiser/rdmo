@@ -205,10 +205,6 @@ class Page(Model, TranslationMixin):
         return page
 
     @property
-    def parent_fields(self):
-        return ('section', )
-
-    @property
     def title(self):
         return self.trans('title')
 

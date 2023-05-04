@@ -35,17 +35,19 @@ def import_catalog(element, save=False):
 
     catalog.available = element.get('available', True)
 
-    if save and validate_instance(catalog, CatalogLockedValidator, CatalogUniqueURIValidator):
+    validate_instance(catalog, element, CatalogLockedValidator, CatalogUniqueURIValidator)
+
+    if save and not element.get('errors'):
         if catalog.id:
-            logger.info('Catalog created with uri %s.', element.get('uri'))
-        else:
+            element['updated'] = True
             logger.info('Catalog %s updated.', element.get('uri'))
+        else:
+            element['created'] = True
+            logger.info('Catalog created with uri %s.', element.get('uri'))
 
         catalog.save()
         catalog.sites.add(Site.objects.get_current())
         set_m2m_through_instances(catalog, 'sections', element, 'catalog', 'section', 'catalog_sections')
-
-        element['imported'] = True
 
     return catalog
 
@@ -60,17 +62,19 @@ def import_section(element, save=False):
 
     set_lang_field(section, 'title', element)
 
-    if save and validate_instance(section, SectionLockedValidator, SectionUniqueURIValidator):
+    validate_instance(section, element, SectionLockedValidator, SectionUniqueURIValidator)
+
+    if save and not element.get('errors'):
         if section.id:
-            logger.info('Section created with uri %s.', element.get('uri'))
-        else:
+            element['updated'] = True
             logger.info('Section %s updated.', element.get('uri'))
+        else:
+            element['created'] = True
+            logger.info('Section created with uri %s.', element.get('uri'))
 
         section.save()
         set_reverse_m2m_through_instance(section, 'catalog', element, 'section', 'catalog', 'section_catalogs')
         set_m2m_through_instances(section, 'pages', element, 'section', 'page', 'section_pages')
-
-        element['imported'] = True
 
     return section
 
@@ -91,19 +95,21 @@ def import_page(element, save=False):
     set_lang_field(page, 'verbose_name', element)
     set_lang_field(page, 'verbose_name_plural', element)
 
-    if save and validate_instance(page, PageLockedValidator, PageUniqueURIValidator):
+    validate_instance(page, element, PageLockedValidator, PageUniqueURIValidator)
+
+    if save and not element.get('errors'):
         if page.id:
-            logger.info('QuestionSet created with uri %s.', element.get('uri'))
-        else:
+            element['updated'] = True
             logger.info('QuestionSet %s updated.', element.get('uri'))
+        else:
+            element['created'] = True
+            logger.info('QuestionSet created with uri %s.', element.get('uri'))
 
         page.save()
         set_m2m_instances(page, 'conditions', element)
         set_reverse_m2m_through_instance(page, 'section', element, 'page', 'section', 'page_sections')
         set_m2m_through_instances(page, 'questionsets', element, 'page', 'questionset', 'page_questionsets')
         set_m2m_through_instances(page, 'questions', element, 'page', 'question', 'page_questions')
-
-        element['imported'] = True
 
     return page
 
@@ -124,11 +130,15 @@ def import_questionset(element, save=False):
     set_lang_field(questionset, 'verbose_name', element)
     set_lang_field(questionset, 'verbose_name_plural', element)
 
-    if save and validate_instance(questionset, QuestionSetLockedValidator, QuestionSetUniqueURIValidator):
+    validate_instance(questionset, element, QuestionSetLockedValidator, QuestionSetUniqueURIValidator)
+
+    if save and not element.get('errors'):
         if questionset.id:
-            logger.info('QuestionSet created with uri %s.', element.get('uri'))
-        else:
+            element['updated'] = True
             logger.info('QuestionSet %s updated.', element.get('uri'))
+        else:
+            element['created'] = True
+            logger.info('QuestionSet created with uri %s.', element.get('uri'))
 
         questionset.save()
         set_m2m_instances(questionset, 'conditions', element)
@@ -136,8 +146,6 @@ def import_questionset(element, save=False):
         set_reverse_m2m_through_instance(questionset, 'questionset', element, 'questionset', 'question', 'questionset_questions')
         set_m2m_through_instances(questionset, 'questionsets', element, 'parent', 'questionset', 'questionset_questionsets')
         set_m2m_through_instances(questionset, 'questions', element, 'questionset', 'question', 'questionset_questions')
-
-        element['imported'] = True
 
     return questionset
 
@@ -176,18 +184,20 @@ def import_question(element, save=False):
     question.unit = element.get('unit') or ''
     question.width = element.get('width')
 
-    if save and validate_instance(question, QuestionLockedValidator, QuestionUniqueURIValidator):
+    validate_instance(question, element, QuestionLockedValidator, QuestionUniqueURIValidator)
+
+    if save and not element.get('errors'):
         if question.id:
-            logger.info('Question created with uri %s.', element.get('uri'))
-        else:
+            element['updated'] = True
             logger.info('Question %s updated.', element.get('uri'))
+        else:
+            element['created'] = True
+            logger.info('Question created with uri %s.', element.get('uri'))
 
         question.save()
         set_reverse_m2m_through_instance(question, 'page', element, 'question', 'page', 'question_pages')
         set_reverse_m2m_through_instance(question, 'questionset', element, 'question', 'questionset', 'question_questionsets')
         set_m2m_instances(question, 'conditions', element)
         set_m2m_instances(question, 'optionsets', element)
-
-        element['imported'] = True
 
     return question

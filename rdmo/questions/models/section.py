@@ -105,10 +105,6 @@ class Section(Model, TranslationMixin):
         return section
 
     @property
-    def parent_fields(self):
-        return ('catalog', )
-
-    @property
     def title(self):
         return self.trans('title')
 
