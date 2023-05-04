@@ -23,14 +23,16 @@ def import_condition(element, save=False):
     condition.relation = element.get('relation')
     condition.target_text = element.get('target_text') or ''
 
-    if save and validate_instance(condition, ConditionLockedValidator, ConditionUniqueURIValidator):
+    validate_instance(condition, element, ConditionLockedValidator, ConditionUniqueURIValidator)
+
+    if save and not element.get('errors'):
         if condition.id:
-            logger.info('Catalog created with uri %s.', element.get('uri'))
+            element['updated'] = True
+            logger.info('Condition %s updated.', element.get('uri'))
         else:
-            logger.info('Catalog %s updated.', element.get('uri'))
+            element['created'] = True
+            logger.info('Condition created with uri %s.', element.get('uri'))
 
         condition.save()
-
-        element['imported'] = True
 
     return condition

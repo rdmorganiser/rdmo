@@ -4,6 +4,8 @@ import pytest
 from django.conf import settings
 from django.urls import reverse
 
+from rdmo.questions.models import Catalog, Page, Question, QuestionSet, Section
+
 users = (
     ('editor', 'editor'),
     ('reviewer', 'reviewer'),
@@ -51,11 +53,17 @@ def test_create(db, client, username, password):
     assert response.status_code == status_map['create'][username], response.json()
     if response.status_code == 200:
         for element in response.json():
-            assert element.get('imported') is None
+            assert element.get('updated') is False
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_create_import(db, client, username, password):
+def test_create_import_create(db, client, username, password):
+    Catalog.objects.all().delete()
+    Section.objects.all().delete()
+    Page.objects.all().delete()
+    QuestionSet.objects.all().delete()
+    Question.objects.all().delete()
+
     client.login(username=username, password=password)
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'catalogs.xml'
@@ -67,7 +75,25 @@ def test_create_import(db, client, username, password):
     assert response.status_code == status_map['create'][username], response.json()
     if response.status_code == 200:
         for element in response.json():
-            assert element.get('imported') is True
+            assert element.get('created') is True
+            assert element.get('updated') is False
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_create_import_update(db, client, username, password):
+    client.login(username=username, password=password)
+
+    xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'catalogs.xml'
+
+    url = reverse(urlnames['list'])
+    with open(xml_file, encoding='utf8') as f:
+        response = client.post(url, {'file': f, 'import': 'true'})
+
+    assert response.status_code == status_map['create'][username], response.json()
+    if response.status_code == 200:
+        for element in response.json():
+            assert element.get('created') is False
+            assert element.get('updated') is True
 
 
 @pytest.mark.parametrize('username,password', users)

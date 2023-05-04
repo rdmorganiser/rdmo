@@ -26,16 +26,18 @@ def import_view(element, save=False):
 
     view.available = element.get('available', True)
 
-    if save and validate_instance(view, ViewLockedValidator, ViewUniqueURIValidator):
+    validate_instance(view, element, ViewLockedValidator, ViewUniqueURIValidator)
+
+    if save and not element.get('errors'):
         if view.id:
-            logger.info('View created with uri %s.', element.get('uri'))
-        else:
+            element['updated'] = True
             logger.info('View %s updated.', element.get('uri'))
+        else:
+            element['created'] = True
+            logger.info('View created with uri %s.', element.get('uri'))
 
         view.save()
         view.sites.add(Site.objects.get_current())
         set_m2m_instances(view, 'catalogs', element)
-
-        element['imported'] = True
 
     return view

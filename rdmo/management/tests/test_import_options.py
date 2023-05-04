@@ -17,9 +17,9 @@ def test_create_optionsets(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
-    assert len(root) == len(elements) == len(instances) == 12
+    assert len(root) == len(elements) == 12
     assert OptionSet.objects.count() == 4
     assert Option.objects.count() == 8
 
@@ -32,9 +32,9 @@ def test_update_optionsets(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
-    assert len(root) == len(elements) == len(instances) == 12
+    assert len(root) == len(elements) == 12
     assert OptionSet.objects.count() == 4
     assert Option.objects.count() == 8
 
@@ -49,9 +49,9 @@ def test_create_options(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
-    assert len(root) == len(elements) == len(instances) == Option.objects.count() == 8
+    assert len(root) == len(elements) == Option.objects.count() == 8
 
 
 def test_update_options(db, settings):
@@ -62,9 +62,9 @@ def test_update_options(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
-    assert len(root) == len(elements) == len(instances) == Option.objects.count() == 8
+    assert len(root) == len(elements) == Option.objects.count() == 8
 
 
 def test_create_legacy_options(db, settings):
@@ -79,9 +79,9 @@ def test_create_legacy_options(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
-    assert len(root) == len(elements) == len(instances) == 12
+    assert len(root) == len(elements) == 12
     assert OptionSet.objects.count() == 4
     assert Option.objects.count() == 8
 
@@ -95,8 +95,8 @@ def test_update_legacy_options(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
-    assert len(root) == len(elements) == len(instances) == 12
+    assert len(root) == len(elements) == 12
     assert OptionSet.objects.count() == 4
     assert Option.objects.count() == 8

@@ -7,6 +7,7 @@ from rdmo.core.imports import (set_common_fields, set_foreign_field,
                                validate_instance)
 
 from .models import Task
+from .validators import TaskLockedValidator, TaskUniqueURIValidator
 
 logger = logging.getLogger(__name__)
 
@@ -30,17 +31,19 @@ def import_task(element, save=False):
 
     task.available = element.get('available', True)
 
-    if save and validate_instance(task):
+    validate_instance(task, element, TaskUniqueURIValidator, TaskLockedValidator)
+
+    if save and not element.get('errors'):
         if task.id:
-            logger.info('Task created with uri %s.', element.get('uri'))
-        else:
+            element['updated'] = True
             logger.info('Task %s updated.', element.get('uri'))
+        else:
+            element['created'] = True
+            logger.info('Task created with uri %s.', element.get('uri'))
 
         task.save()
         task.sites.add(Site.objects.get_current())
         set_m2m_instances(task, 'catalogs', element)
         set_m2m_instances(task, 'conditions', element)
-
-        element['imported'] = True
 
     return task

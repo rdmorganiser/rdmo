@@ -12,7 +12,9 @@ export function uploadFile(file) {
 
     return ManagementApi.uploadFile(file)
       .then(elements => dispatch(uploadFileSuccess(elements)))
-      .catch(error => dispatch(uploadFileError([error.message])))
+      .catch(error => {
+        dispatch(uploadFileError(error))
+      })
   }
 }
 
@@ -24,8 +26,8 @@ export function uploadFileSuccess(elements) {
   return {type: 'import/uploadFileSuccess', elements}
 }
 
-export function uploadFileError(errors) {
-  return {type: 'import/uploadFileError', errors}
+export function uploadFileError(error) {
+  return {type: 'import/uploadFileError', error}
 }
 
 // import elements
@@ -37,18 +39,8 @@ export function importElements() {
     dispatch(importElementsInit())
 
     return ManagementApi.importElements(elements)
-      .then(elements => {
-        dispatch(importElementsSuccess(elements))
-
-        const { elementType, elementId, elementAction } = getState().elements
-
-        if (isNil(elementId)) {
-          dispatch(fetchElements(elementType, elementId, elementAction))
-        } else {
-          dispatch(fetchElement(elementType))
-        }
-      })
-      .catch(error => dispatch(importElementsError([error.message])))
+      .then(elements => dispatch(importElementsSuccess(elements)))
+      .catch(error => dispatch(importElementsError(error)))
   }
 }
 
@@ -60,8 +52,8 @@ export function importElementsSuccess(elements) {
   return {type: 'import/importElementsSuccess', elements}
 }
 
-export function importElementsError(errors) {
-  return {type: 'import/importElementsError', errors}
+export function importElementsError(error) {
+  return {type: 'import/importElementsError', error}
 }
 
 // update elements

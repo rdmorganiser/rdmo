@@ -17,9 +17,9 @@ def test_create_conditions(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
-    assert len(root) == len(elements) == len(instances) == Attribute.objects.count() == 86
+    assert len(root) == len(elements) == Attribute.objects.count() == 86
 
 
 def test_update_conditions(db, settings):
@@ -31,9 +31,9 @@ def test_update_conditions(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
-    assert len(root) == len(elements) == len(instances) == Attribute.objects.count() == 86
+    assert len(root) == len(elements) == Attribute.objects.count() == 86
 
 
 def test_create_legacy_domain(db, settings):
@@ -47,9 +47,9 @@ def test_create_legacy_domain(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
-    assert len(root) == len(elements) == len(instances) == 86
+    assert len(root) == len(elements) == 86
     assert Attribute.objects.count() == 81
 
 
@@ -62,7 +62,7 @@ def test_update_legacy_domain(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
-    assert len(root) == len(elements) == len(instances) == 86
+    assert len(root) == len(elements) == 86
     assert Attribute.objects.count() == 86

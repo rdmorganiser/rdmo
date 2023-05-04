@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import isString from 'lodash/isString'
 
 
-const ApiErrors = ({ errors }) => {
+const MainErrors = ({ errors }) => {
   return (
     <div className="errors">
       <div className="panel panel-default">
@@ -21,7 +21,7 @@ const ApiErrors = ({ errors }) => {
   )
 }
 
-ApiErrors.propTypes = {
+MainErrors.propTypes = {
   errors: PropTypes.array
 }
 
@@ -53,4 +53,4 @@ ElementErrors.propTypes = {
   element: PropTypes.object.isRequired
 }
 
-export { ApiErrors, ElementErrors }
+export { MainErrors, ElementErrors }

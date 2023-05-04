@@ -17,9 +17,9 @@ def test_create_tasks(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
-    assert len(root) == len(elements) == len(instances) == Task.objects.count() == 2
+    assert len(root) == len(elements) == Task.objects.count() == 2
 
 
 def test_update_tasks(db, settings):
@@ -31,9 +31,9 @@ def test_update_tasks(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
-    assert len(root) == len(elements) == len(instances) == Task.objects.count() == 2
+    assert len(root) == len(elements) == Task.objects.count() == 2
 
 
 def test_create_legacy_tasks(db, settings):
@@ -47,9 +47,9 @@ def test_create_legacy_tasks(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
-    assert len(root) == len(elements) == len(instances) == Task.objects.count() == 2
+    assert len(root) == len(elements) == Task.objects.count() == 2
 
 
 def test_update_legacy_tasks(db, settings):
@@ -61,6 +61,6 @@ def test_update_legacy_tasks(db, settings):
     elements = convert_elements(elements, version)
     elements = order_elements(elements)
     elements = elements.values()
-    instances = import_elements(elements)
+    import_elements(elements)
 
-    assert len(root) == len(elements) == len(instances) == Task.objects.count() == 2
+    assert len(root) == len(elements) == Task.objects.count() == 2

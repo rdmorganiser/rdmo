@@ -55,14 +55,24 @@ a {
     &.btn {
         color: white;
 
-        &:visited {
-            color: white;
-        }
-        &:hover {
-            color: white;
-        }
+        &:visited,
+        &:hover,
         &:focus {
             color: white;
+        }
+    }
+    &.text-warning {
+        &:visited,
+        &:hover,
+        &:focus {
+            color: #8a6d3b;
+        }
+    }
+    &.text-danger {
+        &:visited,
+        &:hover,
+        &:focus {
+            color: #a94442;
         }
     }
 }

@@ -214,10 +214,6 @@ class Option(models.Model, TranslationMixin):
         return option
 
     @property
-    def parent_fields(self):
-        return ('optionsets', )
-
-    @property
     def text(self):
         return self.trans('text')
 

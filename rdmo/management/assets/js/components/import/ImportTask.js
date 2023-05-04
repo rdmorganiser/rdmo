@@ -2,10 +2,12 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import uniqueId from 'lodash/uniqueId'
 
-import { AvailableLink, CodeLink, ShowLink } from '../common/Links'
+import { AvailableLink, CodeLink, WarningLink, ErrorLink, ShowLink } from '../common/Links'
 
+import Errors from './common/Errors'
 import Fields from './common/Fields'
 import Form from './common/Form'
+import Warnings from './common/Warnings'
 
 import { codeClass } from '../../constants/elements'
 
@@ -19,6 +21,8 @@ const ImportTask = ({ config, task, importActions }) => {
     <li className="list-group-item">
       <div className="pull-right">
         <AvailableLink element={task} verboseName={gettext('task')} onClick={toggleAvailable} />
+        <WarningLink element={task} onClick={showFields} />
+        <ErrorLink element={task} onClick={showFields} />
         <ShowLink element={task} onClick={showFields} />
       </div>
       <div className="checkbox">
@@ -32,6 +36,8 @@ const ImportTask = ({ config, task, importActions }) => {
         task.show && <>
           <Form config={config} element={task} updateElement={updateTask} />
           <Fields element={task} />
+          <Warnings element={task} />
+          <Errors element={task} />
         </>
       }
     </li>

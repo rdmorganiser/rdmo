@@ -6,7 +6,6 @@ from pathlib import Path
 from random import randint
 
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
-
 from rest_framework.utils import model_meta
 
 from rdmo.core.utils import get_languages
@@ -46,13 +45,6 @@ def set_common_fields(instance, element):
     instance.key = element.get('key') or ''
     instance.comment = element.get('comment') or ''
 
-    # these are temporary fields for the import only
-    # uri is set automatically when saving the instance
-    instance.uri = element.get('uri')
-    instance.object_name = instance._meta.object_name
-    instance.missing = {}
-    instance.errors = []
-
 
 def set_lang_field(instance, field_name, element):
     for lang_code, lang_string, lang_field in get_languages():
@@ -68,25 +60,23 @@ def set_foreign_field(instance, field_name, element):
         foreign_element = element[field_name]
 
         if foreign_element:
-            uri = foreign_element.get('uri')
+            foreign_uri = foreign_element.get('uri')
 
             model_info = model_meta.get_field_info(instance)
             foreign_model = model_info.forward_relations[field_name].related_model
 
             try:
-                foreign_instance = foreign_model.objects.get(uri=uri)
+                foreign_instance = foreign_model.objects.get(uri=foreign_uri)
                 setattr(instance, field_name, foreign_instance)
             except foreign_model.DoesNotExist:
-                logger.info('{foreign_model} {foreign_uri} for {instance_model} {instance_uri} does not exist.'.format(
+                message = '{foreign_model} {foreign_uri} for {instance_model} {instance_uri} does not exist.'.format(
                     foreign_model=foreign_model._meta.object_name,
-                    foreign_uri=uri,
+                    foreign_uri=foreign_uri,
                     instance_model=instance._meta.object_name,
-                    instance_uri=instance.uri
-                ))
-                instance.missing[uri] = {
-                    'foreign_model': foreign_model._meta.verbose_name,
-                    'foreign_uri': uri
-                }
+                    instance_uri=element.get('uri')
+                )
+                logger.info(message)
+                element['warnings'][foreign_uri].append(message)
         else:
             setattr(instance, field_name, None)
 
@@ -102,22 +92,20 @@ def set_m2m_instances(instance, field_name, element):
             foreign_model = model_info.forward_relations[field_name].related_model
 
             for foreign_element in foreign_elements:
-                uri = foreign_element.get('uri')
+                foreign_uri = foreign_element.get('uri')
 
                 try:
-                    foreign_instance = foreign_model.objects.get(uri=uri)
+                    foreign_instance = foreign_model.objects.get(uri=foreign_uri)
                     foreign_instances.append(foreign_instance)
                 except foreign_model.DoesNotExist:
-                    logger.info('{foreign_model} {foreign_uri} for imported {instance_model} {instance_uri} does not exist.'.format(
+                    message = '{foreign_model} {foreign_uri} for {instance_model} {instance_uri} does not exist.'.format(
                         foreign_model=foreign_model._meta.object_name,
-                        foreign_uri=uri,
+                        foreign_uri=foreign_uri,
                         instance_model=instance._meta.object_name,
-                        instance_uri=instance.uri
-                    ))
-                    instance.missing[uri] = {
-                        'foreign_model': foreign_model._meta.verbose_name,
-                        'foreign_uri': uri
-                    }
+                        instance_uri=element.get('uri')
+                    )
+                    logger.info(message)
+                    element['warnings'][foreign_uri].append(message)
 
             getattr(instance, field_name).set(foreign_instances)
         else:
@@ -135,11 +123,11 @@ def set_m2m_through_instances(instance, field_name, element, source_name, target
 
         if target_elements:
             for target_element in target_elements:
-                uri = target_element.get('uri')
+                target_uri = target_element.get('uri')
                 order = target_element.get('order')
 
                 try:
-                    target_instance = target_model.objects.get(uri=uri)
+                    target_instance = target_model.objects.get(uri=target_uri)
 
                     try:
                         # look for the item in items
@@ -162,16 +150,14 @@ def set_m2m_through_instances(instance, field_name, element, source_name, target
                         }).save()
 
                 except target_model.DoesNotExist:
-                    logger.info('{target_model} {target_uri} for imported {instance_model} {instance_uri} does not exist.'.format(
+                    message = '{target_model} {target_uri} for imported {instance_model} {instance_uri} does not exist.'.format(
                         target_model=target_model._meta.object_name,
-                        target_uri=uri,
+                        target_uri=target_uri,
                         instance_model=instance._meta.object_name,
-                        instance_uri=instance.uri
-                    ))
-                    instance.missing[uri] = {
-                        'target_model': target_model._meta.verbose_name,
-                        'target_uri': uri
-                    }
+                        instance_uri=element.get('uri')
+                    )
+                    logger.info(message)
+                    element['warnings'][target_uri].append(message)
 
         # remove the remainders of the items list
         for through_instance in through_instances:
@@ -188,45 +174,45 @@ def set_reverse_m2m_through_instance(instance, field_name, element, source_name,
         through_info = model_meta.get_field_info(through_model)
         target_model = through_info.forward_relations[target_name].related_model
 
-        uri = target_element.get('uri')
+        target_uri = target_element.get('uri')
         order = target_element.get('order')
 
         try:
-            target_instance = target_model.objects.get(uri=uri)
-
-            through_instance, created = through_model.objects.get_or_create(**{
-                source_name: instance,
-                target_name: target_instance
-            })
-            through_instance.order = order
-            through_instance.save()
+            target_instance = target_model.objects.get(uri=target_uri)
+            if target_instance.is_locked:
+                message = '{target_model} {target_uri} for imported {instance_model} {instance_uri} is locked.'.format(
+                    target_model=target_model._meta.object_name,
+                    target_uri=target_uri,
+                    instance_model=instance._meta.object_name,
+                    instance_uri=element.get('uri')
+                )
+                logger.info(message)
+                element['errors'].append(message)
+            else:
+                through_instance, created = through_model.objects.get_or_create(**{
+                    source_name: instance,
+                    target_name: target_instance
+                })
+                through_instance.order = order
+                through_instance.save()
 
         except target_model.DoesNotExist:
-            logger.info('{target_model} {target_uri} for imported {instance_model} {instance_uri} does not exist.'.format(
+            message = '{target_model} {target_uri} for imported {instance_model} {instance_uri} does not exist.'.format(
                 target_model=target_model._meta.object_name,
-                target_uri=uri,
+                target_uri=target_uri,
                 instance_model=instance._meta.object_name,
-                instance_uri=instance.uri
-            ))
-            instance.missing[uri] = {
-                'target_model': target_model._meta.verbose_name,
-                'target_uri': uri
-            }
+                instance_uri=element.get('uri')
+            )
+            logger.info(message)
+            element['warnings'][target_uri].append(message)
 
 
-def validate_instance(instance, *validators):
+def validate_instance(instance, element, *validators):
     exception_message = None
     try:
+        instance.full_clean()
         for validator in validators:
-            data = vars(instance)
-
-            # add foreign keys to parent fields to data
-            # for parent_field in getattr(instance, 'parent_fields', []):
-            #     data[parent_field] = getattr(instance, parent_field, None)
-
-            # run the validator
-            validator(instance if instance.id else None)(data)
-
+            validator(instance if instance.id else None)(vars(instance))
     except ValidationError as e:
         try:
             exception_message = '; '.join(['{}: {}'.format(key, ', '.join(messages)) for key, messages in e.message_dict.items()])
@@ -234,14 +220,12 @@ def validate_instance(instance, *validators):
             exception_message = ''.join(e.messages)
     except ObjectDoesNotExist as e:
         exception_message = e
-    else:
-        return True
     finally:
         if exception_message is not None:
             message = '{instance_model} {instance_uri} cannot be imported ({exception}).'.format(
                 instance_model=instance._meta.object_name,
-                instance_uri=instance.uri,
+                instance_uri=element.get('uri'),
                 exception=exception_message
             )
             logger.info(message)
-            instance.errors.append(message)
+            element['errors'].append(message)
