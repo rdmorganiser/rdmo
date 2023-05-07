@@ -9,23 +9,29 @@ const BackButton = () => (
   </button>
 )
 
-const SaveButton = ({ element, onClick, back }) => {
-
-  const className = classNames({
-    'element-button btn btn-xs': true,
-    'btn-primary': back,
-    'btn-default': !back
-  })
+const SaveButton = ({ element, elementAction, onClick, back }) => {
+  let text, className = 'element-button btn btn-xs'
+  if (elementAction == 'create') {
+    text = back ? gettext('Create') : gettext('Create and continue editing')
+    className += back ? ' btn-success' : ' btn-default'
+  } else if (elementAction == 'copy') {
+    text = back ? gettext('Copy') : gettext('Copy and continue editing')
+    className += back ? ' btn-info' : ' btn-default'
+  } else {
+    text = back ? gettext('Save') : gettext('Save and continue editing')
+    className += back ? ' btn-primary' : ' btn-default'
+  }
 
   return (
     <button className={className} onClick={event => onClick(back)}>
-      {back ? gettext('Save') : gettext('Save and continue editing')}
+      {text}
     </button>
   )
 }
 
 SaveButton.propTypes = {
   element: PropTypes.object.isRequired,
+  elementAction: PropTypes.string,
   onClick: PropTypes.func.isRequired,
   back: PropTypes.bool
 }

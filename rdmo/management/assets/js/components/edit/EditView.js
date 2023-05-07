@@ -19,7 +19,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditView = ({ config, view, elements, elementActions }) => {
 
-  const { catalogs, sites, groups } = elements
+  const { elementAction, catalogs, sites, groups } = elements
 
   const updateView = (key, value) => elementActions.updateElement(view, {[key]: value})
   const storeView = (back) => elementActions.storeElement('views', view, back)
@@ -34,8 +34,8 @@ const EditView = ({ config, view, elements, elementActions }) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={view} onClick={storeView} />
-          <SaveButton element={view} onClick={storeView} back={true}/>
+          <SaveButton element={view} elementAction={elementAction} onClick={storeView} />
+          <SaveButton element={view} elementAction={elementAction} onClick={storeView} back={true}/>
         </div>
         {
           view.id ? <>
@@ -106,8 +106,8 @@ const EditView = ({ config, view, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={view} onClick={storeView} />
-          <SaveButton element={view} onClick={storeView} back={true}/>
+          <SaveButton element={view} elementAction={elementAction} onClick={storeView} />
+          <SaveButton element={view} elementAction={elementAction} onClick={storeView} back={true}/>
         </div>
         <DeleteButton element={view} onClick={openDeleteModal} />
       </div>

@@ -6,7 +6,8 @@ import { filterElement } from '../../utils/filter'
 
 import Option from './Option'
 import { ElementErrors } from '../common/Errors'
-import { EditLink, AddLink, AvailableLink, LockedLink, NestedLink, ExportLink, CodeLink } from '../common/Links'
+import { EditLink, CopyLink, AddLink, LockedLink, NestedLink,
+         ExportLink, CodeLink } from '../common/Links'
 
 const OptionSet = ({ config, optionset, elementActions, display='list', filter=null }) => {
 
@@ -14,6 +15,7 @@ const OptionSet = ({ config, optionset, elementActions, display='list', filter=n
   const showElement = filterElement(filter, optionset)
 
   const fetchEdit = () => elementActions.fetchElement('optionsets', optionset.id)
+  const fetchCopy = () => elementActions.fetchElement('optionsets', optionset.id, 'copy')
   const fetchNested = () => elementActions.fetchElement('optionsets', optionset.id, 'nested')
   const toggleLocked = () => elementActions.storeElement('optionsets', {...optionset, locked: !optionset.locked })
 
@@ -23,6 +25,7 @@ const OptionSet = ({ config, optionset, elementActions, display='list', filter=n
     <div className="element">
       <div className="pull-right">
         <EditLink element={optionset} verboseName={verboseName} onClick={fetchEdit} />
+        <CopyLink element={optionset} verboseName={verboseName} onClick={fetchCopy} />
         <AddLink element={optionset} verboseName="option" onClick={createOption} />
         <LockedLink element={optionset} verboseName={verboseName} onClick={toggleLocked} />
         <NestedLink element={optionset} verboseName={verboseName} onClick={fetchNested} />

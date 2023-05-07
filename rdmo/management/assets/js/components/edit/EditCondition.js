@@ -17,7 +17,8 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditCondition = ({ config, condition, elements, elementActions }) => {
 
-  const { parent, relations, attributes, optionsets, options, pages, questionsets, questions, tasks } = elements
+  const { elementAction, parent, relations, attributes, optionsets, options,
+          pages, questionsets, questions, tasks } = elements
 
   const updateCondition = (key, value) => elementActions.updateElement(condition, {[key]: value})
   const storeCondition = (back) => elementActions.storeElement('conditions', condition, back)
@@ -37,8 +38,8 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={condition} onClick={storeCondition} />
-          <SaveButton element={condition} onClick={storeCondition} back={true}/>
+          <SaveButton element={condition} elementAction={elementAction} onClick={storeCondition} />
+          <SaveButton element={condition} elementAction={elementAction} onClick={storeCondition} back={true}/>
         </div>
         {
           condition.id ? <>
@@ -130,8 +131,8 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={condition} onClick={storeCondition} />
-          <SaveButton element={condition} onClick={storeCondition} back={true}/>
+          <SaveButton element={condition} elementAction={elementAction} onClick={storeCondition} />
+          <SaveButton element={condition} elementAction={elementAction} onClick={storeCondition} back={true}/>
         </div>
         <DeleteButton element={condition} onClick={openDeleteModal} />
       </div>

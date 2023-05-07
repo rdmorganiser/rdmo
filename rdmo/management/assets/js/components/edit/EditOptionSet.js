@@ -20,7 +20,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
 
-  const { parent, conditions, options, questions, providers } = elements
+  const { elementAction, parent, conditions, options, questions, providers } = elements
 
   const optionsetQuestions = questions.filter(e => optionset.questions.includes(e.id))
 
@@ -43,8 +43,8 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={optionset} onClick={storeOptionSet} />
-          <SaveButton element={optionset} onClick={storeOptionSet} back={true}/>
+          <SaveButton element={optionset} elementAction={elementAction} onClick={storeOptionSet} />
+          <SaveButton element={optionset} elementAction={elementAction} onClick={storeOptionSet} back={true}/>
         </div>
         {
           optionset.id ? <>
@@ -109,8 +109,8 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={optionset} onClick={storeOptionSet} />
-          <SaveButton element={optionset} onClick={storeOptionSet} back={true}/>
+          <SaveButton element={optionset} elementAction={elementAction} onClick={storeOptionSet} />
+          <SaveButton element={optionset} elementAction={elementAction} onClick={storeOptionSet} back={true}/>
         </div>
         <DeleteButton element={optionset} onClick={openDeleteModal} />
       </div>
