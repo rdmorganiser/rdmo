@@ -17,7 +17,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditAttribute = ({ config, attribute, elements, elementActions }) => {
 
-  const { parent, attributes, conditions, pages, questionsets, questions, tasks } = elements
+  const { elementAction, parent, attributes, conditions, pages, questionsets, questions, tasks } = elements
 
   const editAttribute = (attribute) => elementActions.fetchElement('attributes', attribute)
   const updateAttribute = (key, value) => elementActions.updateElement(attribute, {[key]: value})
@@ -33,8 +33,8 @@ const EditAttribute = ({ config, attribute, elements, elementActions }) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={attribute} onClick={storeAttribute} />
-          <SaveButton element={attribute} onClick={storeAttribute} back={true}/>
+          <SaveButton element={attribute} elementAction={elementAction} onClick={storeAttribute} />
+          <SaveButton element={attribute} elementAction={elementAction} onClick={storeAttribute} back={true}/>
         </div>
         {
           attribute.id ? <>
@@ -104,8 +104,8 @@ const EditAttribute = ({ config, attribute, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={attribute} onClick={storeAttribute} />
-          <SaveButton element={attribute} onClick={storeAttribute} back={true}/>
+          <SaveButton element={attribute} elementAction={elementAction} onClick={storeAttribute} />
+          <SaveButton element={attribute} elementAction={elementAction} onClick={storeAttribute} back={true}/>
         </div>
         <DeleteButton element={attribute} onClick={openDeleteModal} />
       </div>

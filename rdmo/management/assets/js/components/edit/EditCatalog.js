@@ -20,7 +20,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditCatalog = ({ config, catalog, elements, elementActions }) => {
 
-  const { sites, groups, sections } = elements
+  const { elementAction, sites, groups, sections } = elements
 
   const updateCatalog = (key, value) => elementActions.updateElement(catalog, {[key]: value})
   const storeCatalog = (back) => elementActions.storeElement('catalogs', catalog, back)
@@ -38,8 +38,8 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={catalog} onClick={storeCatalog} />
-          <SaveButton element={catalog} onClick={storeCatalog} back={true}/>
+          <SaveButton element={catalog} elementAction={elementAction} onClick={storeCatalog}  />
+          <SaveButton element={catalog} elementAction={elementAction} onClick={storeCatalog} back={true}/>
         </div>
         {
           catalog.id ? <>
@@ -106,8 +106,8 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={catalog} onClick={storeCatalog} />
-          <SaveButton element={catalog} onClick={storeCatalog} back={true} />
+          <SaveButton element={catalog} elementAction={elementAction} onClick={storeCatalog} />
+          <SaveButton element={catalog} elementAction={elementAction} onClick={storeCatalog} back={true} />
         </div>
         <DeleteButton element={catalog} onClick={openDeleteModal} />
       </div>

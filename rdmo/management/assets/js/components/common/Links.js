@@ -6,19 +6,8 @@ import isEmpty from 'lodash/isEmpty'
 import Link from 'rdmo/core/assets/js/components/Link'
 
 const EditLink = ({ element, verboseName, onClick }) => {
-  const handleClick = (event) => {
-    event.preventDefault()
-    onClick()
-  }
-
   const title = interpolate(gettext('Edit %s'), [verboseName])
-
-  return (
-    <a href="" className="element-link fa fa-pencil"
-       title={title}
-       onClick={event => handleClick(event)}>
-    </a>
-  )
+  return <Link className="element-link fa fa-pencil" title={title} onClick={onClick} />
 }
 
 EditLink.propTypes = {
@@ -28,19 +17,8 @@ EditLink.propTypes = {
 }
 
 const AddLink = ({ element, verboseName, onClick }) => {
-  const handleClick = (event) => {
-    event.preventDefault()
-    onClick()
-  }
-
   const title = interpolate(gettext('Add %s'), [verboseName])
-
-  return (
-    <a href="" className="element-link fa fa-plus"
-       title={title}
-       onClick={event => handleClick(event)}>
-    </a>
-  )
+  return <Link className="element-link fa fa-plus" title={title} onClick={onClick} />
 }
 
 AddLink.propTypes = {
@@ -50,19 +28,8 @@ AddLink.propTypes = {
 }
 
 const AddSquareLink = ({ element, verboseName, onClick }) => {
-  const handleClick = (event) => {
-    event.preventDefault()
-    onClick()
-  }
-
   const title = interpolate(gettext('Add %s'), [verboseName])
-
-  return (
-    <a href="" className="element-link fa fa-plus-square"
-       title={title}
-       onClick={event => handleClick(event)}>
-    </a>
-  )
+  return <Link className="element-link fa fa-plus-square" title={title} onClick={onClick} />
 }
 
 AddSquareLink.propTypes = {
@@ -71,12 +38,18 @@ AddSquareLink.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-const AvailableLink = ({ element, verboseName, onClick }) => {
-  const handleClick = (event) => {
-    event.preventDefault()
-    onClick()
-  }
+const CopyLink = ({ element, verboseName, onClick }) => {
+  const title = interpolate(gettext('Copy %s'), [verboseName])
+  return <Link className="element-link fa fa-copy" title={title} onClick={onClick} />
+}
 
+CopyLink.propTypes = {
+  element: PropTypes.object.isRequired,
+  verboseName: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired
+}
+
+const AvailableLink = ({ element, verboseName, onClick }) => {
   const className = classNames({
     'element-link fa': true,
     'fa-toggle-on': element.available,
@@ -88,12 +61,7 @@ const AvailableLink = ({ element, verboseName, onClick }) => {
   if (element.available) title = interpolate(gettext('Make %s unavaiable'), [verboseName])
   if (element.locked) title = gettext('Locked')
 
-  return (
-    <a href="" className={className}
-       title={title}
-       onClick={event => handleClick(event)}>
-    </a>
-  )
+  return <Link className={className} title={title} onClick={onClick} />
 }
 
 AvailableLink.propTypes = {
@@ -103,11 +71,6 @@ AvailableLink.propTypes = {
 }
 
 const LockedLink = ({ element, verboseName, onClick }) => {
-  const handleClick = (event) => {
-    event.preventDefault()
-    onClick()
-  }
-
   const className = classNames({
     'element-link fa': true,
     'fa-lock': element.locked,
@@ -117,12 +80,7 @@ const LockedLink = ({ element, verboseName, onClick }) => {
   const title = element.locked ? interpolate(gettext('Unlock %s'), [verboseName])
                                : interpolate(gettext('Lock %s'), [verboseName])
 
-  return (
-    <a href="" className={className}
-       title={title}
-       onClick={event => handleClick(event)}>
-    </a>
-  )
+  return <Link className={className} title={title} onClick={onClick} />
 }
 
 LockedLink.propTypes = {
@@ -133,7 +91,6 @@ LockedLink.propTypes = {
 
 const ExportLink = ({ element, verboseName }) => {
   const title = interpolate(gettext('Export %s as XML'), [verboseName])
-
   return (
     <a href={element.xml_url} className="element-link fa fa-download"
        title={title} target="_blank">
@@ -146,21 +103,9 @@ ExportLink.propTypes = {
   verboseName: PropTypes.string.isRequired
 }
 
-
 const NestedLink = ({ element, verboseName, onClick }) => {
-  const handleClick = (event) => {
-    event.preventDefault()
-    onClick()
-  }
-
   const title = gettext('View nested')
-
-  return (
-    <a href="" className="element-link fa fa-align-right flip"
-       title={title}
-       onClick={event => handleClick(event)}>
-    </a>
-  )
+  return <Link className="element-link fa fa-align-right flip" title={title} onClick={onClick} />
 }
 
 NestedLink.propTypes = {
@@ -169,13 +114,7 @@ NestedLink.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-
 const ExtendLink = ({ extend, onClick }) => {
-  const handleClick = (event) => {
-    event.preventDefault()
-    onClick()
-  }
-
   const className = classNames({
     'element-link fa': true,
     'fa-chevron-up': extend,
@@ -185,12 +124,7 @@ const ExtendLink = ({ extend, onClick }) => {
   const title = extend ? gettext('Show less')
                        : gettext('Show more')
 
-  return (
-    <a href="" className={className}
-       title={title}
-       onClick={event => handleClick(event)}>
-    </a>
-  )
+  return <Link className={className} title={title} onClick={onClick} />
 }
 
 ExtendLink.propTypes = {
@@ -199,15 +133,10 @@ ExtendLink.propTypes = {
 }
 
 const CodeLink = ({ className, uri, onClick }) => {
-  const handleClick = (event) => {
-    event.preventDefault()
-    onClick()
-  }
-
   return (
-    <a href="" onClick={event => handleClick(event)}>
+    <Link onClick={onClick}>
       <code className={className}>{uri}</code>
-    </a>
+    </Link>
   )
 }
 
@@ -216,7 +145,6 @@ CodeLink.propTypes = {
   uri: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired
 }
-
 
 const ErrorLink = ({ element, onClick }) => {
   return (
@@ -260,6 +188,5 @@ ShowLink.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-
-export { EditLink, AddLink, AddSquareLink, AvailableLink, LockedLink,
+export { EditLink, CopyLink, AddLink, AddSquareLink, AvailableLink, LockedLink,
          NestedLink, ExportLink, ExtendLink, CodeLink, ErrorLink, WarningLink, ShowLink }

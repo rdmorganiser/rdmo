@@ -16,7 +16,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditOption = ({ config, option, elements, elementActions }) => {
 
-  const { parent, optionsets, conditions } = elements
+  const { elementAction, parent, optionsets, conditions } = elements
 
   const optionConditions = conditions.filter(e => option.conditions.includes(e.id))
 
@@ -33,8 +33,8 @@ const EditOption = ({ config, option, elements, elementActions }) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={option} onClick={storeOption} />
-          <SaveButton element={option} onClick={storeOption} back={true}/>
+          <SaveButton element={option} elementAction={elementAction} onClick={storeOption} />
+          <SaveButton element={option} elementAction={elementAction} onClick={storeOption} back={true}/>
         </div>
         {
           option.id ? <>
@@ -103,8 +103,8 @@ const EditOption = ({ config, option, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={option} onClick={storeOption} />
-          <SaveButton element={option} onClick={storeOption} back={true}/>
+          <SaveButton element={option} elementAction={elementAction} onClick={storeOption} />
+          <SaveButton element={option} elementAction={elementAction} onClick={storeOption} back={true}/>
         </div>
         <DeleteButton element={option} onClick={openDeleteModal} />
       </div>

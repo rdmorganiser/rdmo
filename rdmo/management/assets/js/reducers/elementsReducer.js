@@ -53,6 +53,11 @@ export default function elementsReducer(state = initialState, action) {
       // let the element know what type it is
       action.elements.element.type = state.elementType
 
+      // remove the id when copying
+      if (state.elementAction == 'copy') {
+        action.elements.element.id = null
+      }
+
       return {...state, ...action.elements}
     case 'elements/fetchElementError':
       return {...state, errors: action.error.errors}

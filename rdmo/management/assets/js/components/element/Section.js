@@ -6,7 +6,7 @@ import { filterElement } from '../../utils/filter'
 
 import Page from './Page'
 import { ElementErrors } from '../common/Errors'
-import { EditLink, AddLink, LockedLink, NestedLink, ExportLink, CodeLink } from '../common/Links'
+import { EditLink, CopyLink, AddLink, LockedLink, NestedLink, ExportLink, CodeLink } from '../common/Links'
 
 const Section = ({ config, section, elementActions, display='list', filter=null, indent=0 }) => {
 
@@ -14,6 +14,7 @@ const Section = ({ config, section, elementActions, display='list', filter=null,
   const showElement = filterElement(filter, section) && config.display.elements.sections
 
   const fetchEdit = () => elementActions.fetchElement('sections', section.id)
+  const fetchCopy = () => elementActions.fetchElement('sections', section.id, 'copy')
   const fetchNested = () => elementActions.fetchElement('sections', section.id, 'nested')
   const toggleLocked = () => elementActions.storeElement('sections', {...section, locked: !section.locked })
 
@@ -23,6 +24,7 @@ const Section = ({ config, section, elementActions, display='list', filter=null,
     <div className="element">
       <div className="pull-right">
         <EditLink element={section} verboseName={verboseName} onClick={fetchEdit} />
+        <CopyLink element={section} verboseName={verboseName} onClick={fetchCopy} />
         <AddLink element={section} verboseName="page" onClick={createPage} />
         <LockedLink element={section} verboseName={verboseName} onClick={toggleLocked} />
         <NestedLink element={section} verboseName={verboseName} onClick={fetchNested} />

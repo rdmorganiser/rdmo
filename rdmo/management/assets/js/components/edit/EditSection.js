@@ -18,7 +18,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditSection = ({ config, section, elements, elementActions }) => {
 
-  const { parent, pages, catalogs } = elements
+  const { elementAction, parent, pages, catalogs } = elements
   const sectionCatalogs = catalogs.filter(e => section.catalogs.includes(e.id))
 
   const updateSection = (key, value) => elementActions.updateElement(section, {[key]: value})
@@ -37,8 +37,8 @@ const EditSection = ({ config, section, elements, elementActions }) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={section} onClick={storeSection} />
-          <SaveButton element={section} onClick={storeSection} back={true}/>
+          <SaveButton element={section} elementAction={elementAction} onClick={storeSection} />
+          <SaveButton element={section} elementAction={elementAction} onClick={storeSection} back={true}/>
         </div>
         {
           section.id ? <>
@@ -99,8 +99,8 @@ const EditSection = ({ config, section, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={section} onClick={storeSection} />
-          <SaveButton element={section} onClick={storeSection} back={true}/>
+          <SaveButton element={section} elementAction={elementAction} onClick={storeSection} />
+          <SaveButton element={section} elementAction={elementAction} onClick={storeSection} back={true}/>
         </div>
         <DeleteButton element={section} onClick={openDeleteModal} />
       </div>

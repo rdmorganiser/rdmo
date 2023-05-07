@@ -21,7 +21,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditPage = ({ config, page, elements, elementActions }) => {
 
-  const { parent, attributes, conditions, sections, questionsets, questions } = elements
+  const { elementAction, parent, attributes, conditions, sections, questionsets, questions } = elements
 
   const elementValues = orderBy(page.questions.concat(page.questionsets), ['order', 'uri'])
   const elementOptions = elements.questions.map(question => ({
@@ -70,8 +70,8 @@ const EditPage = ({ config, page, elements, elementActions }) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={page} onClick={storePage} />
-          <SaveButton element={page} onClick={storePage} back={true}/>
+          <SaveButton element={page} elementAction={elementAction} onClick={storePage} />
+          <SaveButton element={page} elementAction={elementAction} onClick={storePage} back={true}/>
         </div>
         {
           page.id ? <>
@@ -165,8 +165,8 @@ const EditPage = ({ config, page, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={page} onClick={storePage} />
-          <SaveButton element={page} onClick={storePage} back={true}/>
+          <SaveButton element={page} elementAction={elementAction} onClick={storePage} />
+          <SaveButton element={page} elementAction={elementAction} onClick={storePage} back={true}/>
         </div>
         <DeleteButton element={page} onClick={openDeleteModal} />
       </div>

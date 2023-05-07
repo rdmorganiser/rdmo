@@ -20,7 +20,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditTask = ({ config, task, elements, elementActions}) => {
 
-  const { attributes, catalogs, conditions, sites, groups } = elements
+  const { elementAction, attributes, catalogs, conditions, sites, groups } = elements
 
   const updateTask = (key, value) => elementActions.updateElement(task, {[key]: value})
   const storeTask = (back) => elementActions.storeElement('tasks', task, back)
@@ -40,8 +40,8 @@ const EditTask = ({ config, task, elements, elementActions}) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={task} onClick={storeTask} />
-          <SaveButton element={task} onClick={storeTask} back={true}/>
+          <SaveButton element={task} elementAction={elementAction} onClick={storeTask} />
+          <SaveButton element={task} elementAction={elementAction} onClick={storeTask} back={true}/>
         </div>
         {
           task.id ? <>
@@ -130,8 +130,8 @@ const EditTask = ({ config, task, elements, elementActions}) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={task} onClick={storeTask} />
-          <SaveButton element={task} onClick={storeTask} back={true}/>
+          <SaveButton element={task} elementAction={elementAction} onClick={storeTask} />
+          <SaveButton element={task} elementAction={elementAction} onClick={storeTask} back={true}/>
         </div>
         <DeleteButton element={task} onClick={openDeleteModal} />
       </div>

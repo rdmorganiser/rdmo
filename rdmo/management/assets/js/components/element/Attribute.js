@@ -5,7 +5,7 @@ import isUndefined from 'lodash/isUndefined'
 import { filterElement } from '../../utils/filter'
 
 import { ElementErrors } from '../common/Errors'
-import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink, CodeLink } from '../common/Links'
+import { EditLink, CopyLink, LockedLink, NestedLink, ExportLink, CodeLink } from '../common/Links'
 
 const Attribute = ({ config, attribute, elementActions, display='list', filter=null, indent=0 }) => {
 
@@ -13,6 +13,7 @@ const Attribute = ({ config, attribute, elementActions, display='list', filter=n
   const showElement = filterElement(filter, attribute)
 
   const fetchEdit = () => elementActions.fetchElement('attributes', attribute.id)
+  const fetchCopy = () => elementActions.fetchElement('attributes', attribute.id, 'copy')
   const fetchNested = () => elementActions.fetchElement('attributes', attribute.id, 'nested')
   const toggleLocked = () => elementActions.storeElement('attributes', {...attribute, locked: !attribute.locked })
 
@@ -20,6 +21,7 @@ const Attribute = ({ config, attribute, elementActions, display='list', filter=n
     <div className="element">
       <div className="pull-right">
         <EditLink element={attribute} verboseName={verboseName} onClick={fetchEdit} />
+        <CopyLink element={attribute} verboseName={verboseName} onClick={fetchCopy} />
         <LockedLink element={attribute} verboseName={verboseName} onClick={toggleLocked} />
         <NestedLink element={attribute} verboseName={verboseName} onClick={fetchNested} />
         <ExportLink element={attribute} verboseName={verboseName} />

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { filterElement } from '../../utils/filter'
 
 import { ElementErrors } from '../common/Errors'
-import { EditLink, AvailableLink, LockedLink, NestedLink, ExportLink, CodeLink } from '../common/Links'
+import { EditLink, CopyLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
 
 const Option = ({ config, option, elementActions, display='list', indent=0, filter=null }) => {
 
@@ -12,12 +12,14 @@ const Option = ({ config, option, elementActions, display='list', indent=0, filt
   const showElement = filterElement(filter, option)
 
   const fetchEdit = () => elementActions.fetchElement('options', option.id)
+  const fetchCopy = () => elementActions.fetchElement('options', option.id, 'copy')
   const toggleLocked = () => elementActions.storeElement('options', {...option, locked: !option.locked })
 
   const elementNode = (
     <div className="element">
       <div className="pull-right">
         <EditLink element={option} verboseName={verboseName} onClick={fetchEdit} />
+        <CopyLink element={option} verboseName={verboseName} onClick={fetchCopy} />
         <LockedLink element={option} verboseName={verboseName} onClick={toggleLocked} />
         <ExportLink element={option} verboseName={verboseName} />
       </div>

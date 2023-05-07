@@ -18,7 +18,8 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditQuestion = ({ config, question, elements, elementActions}) => {
 
-  const { parent, attributes, optionsets, options, conditions, pages, questionsets, widgetTypes, valueTypes } = elements
+  const { elementAction, parent, attributes, optionsets, options, conditions,
+          pages, questionsets, widgetTypes, valueTypes } = elements
 
   const updateQuestion = (key, value) => elementActions.updateElement(question, {[key]: value})
   const storeQuestion = (back) => elementActions.storeElement('questions', question, back)
@@ -42,8 +43,8 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={question} onClick={storeQuestion} />
-          <SaveButton element={question} onClick={storeQuestion} back={true}/>
+          <SaveButton element={question} elementAction={elementAction} onClick={storeQuestion} />
+          <SaveButton element={question} elementAction={elementAction} onClick={storeQuestion} back={true}/>
         </div>
         {
           question.id ? <>
@@ -202,8 +203,8 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={question} onClick={storeQuestion} />
-          <SaveButton element={question} onClick={storeQuestion} back={true}/>
+          <SaveButton element={question} elementAction={elementAction} onClick={storeQuestion} />
+          <SaveButton element={question} elementAction={elementAction} onClick={storeQuestion} back={true}/>
         </div>
         <DeleteButton element={question} onClick={openDeleteModal} />
       </div>

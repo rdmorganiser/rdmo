@@ -21,7 +21,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
 
-  const { parent, attributes, conditions, pages, questionsets, questions } = elements
+  const { elementAction, parent, attributes, conditions, pages, questionsets, questions } = elements
 
   const elementValues = orderBy(questionset.questions.concat(questionset.questionsets), ['order', 'uri'])
   const elementOptions = elements.questions.map(question => ({
@@ -70,8 +70,8 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={questionset} onClick={storeQuestionSet} />
-          <SaveButton element={questionset} onClick={storeQuestionSet} back={true}/>
+          <SaveButton element={questionset} elementAction={elementAction} onClick={storeQuestionSet} />
+          <SaveButton element={questionset} elementAction={elementAction} onClick={storeQuestionSet} back={true}/>
         </div>
         {
           questionset.id ? <>
@@ -174,8 +174,8 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={questionset} onClick={storeQuestionSet} />
-          <SaveButton element={questionset} onClick={storeQuestionSet} back={true}/>
+          <SaveButton element={questionset} elementAction={elementAction} onClick={storeQuestionSet} />
+          <SaveButton element={questionset} elementAction={elementAction} onClick={storeQuestionSet} back={true}/>
         </div>
         <DeleteButton element={questionset} onClick={openDeleteModal} />
       </div>

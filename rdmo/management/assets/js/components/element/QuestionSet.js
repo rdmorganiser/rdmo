@@ -6,8 +6,8 @@ import { filterElement } from '../../utils/filter'
 
 import Question from './Question'
 import { ElementErrors } from '../common/Errors'
-import { EditLink, AddLink, AddSquareLink, AvailableLink,
-         LockedLink, NestedLink, ExportLink, CodeLink } from '../common/Links'
+import { EditLink, CopyLink, AddLink, AddSquareLink, LockedLink,
+         NestedLink, ExportLink, CodeLink } from '../common/Links'
 
 const QuestionSet = ({ config, questionset, elementActions, display='list', filter=null, indent=0 }) => {
 
@@ -15,6 +15,7 @@ const QuestionSet = ({ config, questionset, elementActions, display='list', filt
   const showElement = filterElement(filter, questionset) && config.display.elements.questionsets
 
   const fetchEdit = () => elementActions.fetchElement('questionsets', questionset.id)
+  const fetchCopy = () => elementActions.fetchElement('questionsets', questionset.id, 'copy')
   const fetchNested = () => elementActions.fetchElement('questionsets', questionset.id, 'nested')
   const toggleLocked = () => elementActions.storeElement('questionsets', {...questionset, locked: !questionset.locked })
 
@@ -27,6 +28,7 @@ const QuestionSet = ({ config, questionset, elementActions, display='list', filt
     <div className="element">
       <div className="pull-right">
         <EditLink element={questionset} verboseName={verboseName} onClick={fetchEdit} />
+        <CopyLink element={questionset} verboseName={verboseName} onClick={fetchCopy} />
         <AddLink element={questionset} verboseName="question" onClick={createQuestion} />
         <AddSquareLink element={questionset} verboseName="questionset" onClick={createQuestionSet} />
         <LockedLink element={questionset} verboseName={verboseName} onClick={toggleLocked} />
