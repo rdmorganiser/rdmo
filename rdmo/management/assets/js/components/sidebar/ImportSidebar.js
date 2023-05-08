@@ -15,7 +15,7 @@ const ImportSidebar = ({ config, imports, importActions }) => {
 
   const updateUriPrefix = () => {
     if (!disabled) {
-      importActions.updateElements({uri_prefix: uriPrefix})
+      importActions.updateUriPrefix(uriPrefix)
     }
   }
 

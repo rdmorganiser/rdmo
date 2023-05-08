@@ -62,8 +62,8 @@ export function updateElement(element, values) {
   return {type: 'import/updateElement', element, values}
 }
 
-export function updateElements(values) {
-  return {type: 'import/updateElements', values}
+export function updateUriPrefix(uriPrefix) {
+  return {type: 'import/updateUriPrefix', uriPrefix}
 }
 
 export function resetElements() {

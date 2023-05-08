@@ -1,3 +1,6 @@
+import isArray from 'lodash/isArray'
+import isNil from 'lodash/isNil'
+import isUndefined from 'lodash/isUndefined'
 import uniqueId from 'lodash/uniqueId'
 
 import { buildUri } from '../utils/elements'
@@ -43,12 +46,37 @@ export default function importsReducer(state = initialState, action) {
         elements[index].uri = buildUri(elements[index])
         return {...state, elements}
       }
-    case 'import/updateElements':
-      return {...state, elements: state.elements.map(element => {
-        Object.assign(element, action.values)
-        element.uri = buildUri(element)
+    case 'import/updateUriPrefix':
+      const elementsMap = {}
+      const elements = state.elements.map(element => {
+        element.uri_prefix = action.uriPrefix
+
+        // compute a new uri and store it in the elementMap
+        element.uri = elementsMap[element.uri] = buildUri(element)
+
         return element
-      })}
+      })
+
+      // loop over element fields and also update sub and sub-sub uris,
+      // which are in the map, i.e. are imported as well
+      elements.forEach(element => {
+        Object.keys(element).forEach(key => {
+          const subelement = element[key]
+          if (!isNil(subelement)) {
+            if (isArray(subelement)) {
+              subelement.forEach(subsubelement => {
+                if (!isUndefined(elementsMap[subsubelement.uri])) {
+                  subsubelement.uri = elementsMap[subsubelement.uri]
+                }
+              })
+            } else if (!isUndefined(elementsMap[subelement.uri])) {
+              subelement.uri = elementsMap[subelement.uri]
+            }
+          }
+        })
+      })
+
+      return {...state, elements}
     case 'import/resetElements':
       return {...state, elements: []}
     default:
