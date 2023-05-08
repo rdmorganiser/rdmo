@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterUri, FilterUriPrefix } from '../common/Filter'
+import { FilterString, FilterUriPrefix } from '../common/Filter'
 import { Checkbox } from '../common/Checkboxes'
 import { BackButton, NewButton } from '../common/Buttons'
 
@@ -11,7 +11,7 @@ import Question from '../element/Question'
 
 const Questions = ({ config, questions, configActions, elementActions }) => {
 
-  const updateFilterUri = (value) => configActions.updateConfig('filter.questions.uri', value)
+  const updateFilterString = (value) => configActions.updateConfig('filter.questions.string', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.questions.uriPrefix', value)
   const updateDisplayQuestionsURI = (value) => configActions.updateConfig('display.uri.questions', value)
   const updateDisplayAttributesURI = (value) => configActions.updateConfig('display.uri.attributes', value)
@@ -31,8 +31,8 @@ const Questions = ({ config, questions, configActions, elementActions }) => {
       <div className="panel-body">
         <div className="row">
           <div className="col-sm-8">
-            <FilterUri value={config.filter.questions.uri} onChange={updateFilterUri}
-                       placeholder={gettext('Filter questions by URI')} />
+            <FilterString value={config.filter.questions.string} onChange={updateFilterString}
+                          placeholder={gettext('Filter questions')} />
           </div>
           <div className="col-sm-4">
             <FilterUriPrefix value={config.filter.questions.uriPrefix} onChange={updateFilterUriPrefix}

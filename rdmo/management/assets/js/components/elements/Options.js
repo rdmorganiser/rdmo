@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterUri, FilterUriPrefix } from '../common/Filter'
+import { FilterString, FilterUriPrefix } from '../common/Filter'
 import { Checkbox } from '../common/Checkboxes'
 import { BackButton, NewButton } from '../common/Buttons'
 
@@ -11,7 +11,7 @@ import Option from '../element/Option'
 
 const Options = ({ config, options, configActions, elementActions }) => {
 
-  const updateFilterUri = (value) => configActions.updateConfig('filter.options.uri', value)
+  const updateFilterString = (value) => configActions.updateConfig('filter.options.string', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.options.uriPrefix', value)
   const updateDisplayURI = (value) => configActions.updateConfig('display.uri.options', value)
 
@@ -30,8 +30,8 @@ const Options = ({ config, options, configActions, elementActions }) => {
       <div className="panel-body">
         <div className="row">
           <div className="col-sm-8">
-            <FilterUri value={config.filter.options.uri} onChange={updateFilterUri}
-                       placeholder={gettext('Filter options by URI')} />
+            <FilterString value={config.filter.options.string} onChange={updateFilterString}
+                          placeholder={gettext('Filter options')} />
           </div>
           <div className="col-sm-4">
             <FilterUriPrefix value={config.filter.options.uriPrefix} onChange={updateFilterUriPrefix}

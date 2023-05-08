@@ -3,14 +3,14 @@ import PropTypes from 'prop-types'
 
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterUri, FilterUriPrefix } from '../common/Filter'
+import { FilterString, FilterUriPrefix } from '../common/Filter'
 import { BackButton, NewButton } from '../common/Buttons'
 
 import Condition from '../element/Condition'
 
 const Conditions = ({ config, conditions, configActions, elementActions}) => {
 
-  const updateFilterUri = (value) => configActions.updateConfig('filter.conditions.uri', value)
+  const updateFilterString = (value) => configActions.updateConfig('filter.conditions.string', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.conditions.uriPrefix', value)
 
   const createCondition = () => elementActions.createElement('conditions')
@@ -28,8 +28,8 @@ const Conditions = ({ config, conditions, configActions, elementActions}) => {
       <div className="panel-body">
         <div className="row">
           <div className="col-sm-8">
-            <FilterUri value={config.filter.conditions.uri} onChange={updateFilterUri}
-                       placeholder={gettext('Filter conditions by URI')} />
+            <FilterString value={config.filter.conditions.string} onChange={updateFilterString}
+                          placeholder={gettext('Filter conditions')} />
           </div>
           <div className="col-sm-4">
             <FilterUriPrefix value={config.filter.conditions.uriPrefix} onChange={updateFilterUriPrefix}

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterUri, FilterUriPrefix } from '../common/Filter'
+import { FilterString, FilterUriPrefix } from '../common/Filter'
 import { Checkbox } from '../common/Checkboxes'
 import { BackButton, NewButton } from '../common/Buttons'
 
@@ -11,7 +11,7 @@ import Section from '../element/Section'
 
 const Sections = ({ config, sections, configActions, elementActions }) => {
 
-  const updateFilterUri = (value) => configActions.updateConfig('filter.sections.uri', value)
+  const updateFilterString = (value) => configActions.updateConfig('filter.sections.string', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.sections.uriPrefix', value)
   const updateDisplayURI = (value) => configActions.updateConfig('display.uri.sections', value)
 
@@ -30,8 +30,8 @@ const Sections = ({ config, sections, configActions, elementActions }) => {
       <div className="panel-body">
         <div className="row">
           <div className="col-sm-8">
-            <FilterUri value={config.filter.sections.uri} onChange={updateFilterUri}
-                       placeholder={gettext('Filter sections by URI')} />
+            <FilterString value={config.filter.sections.string} onChange={updateFilterString}
+                          placeholder={gettext('Filter sections')} />
           </div>
           <div className="col-sm-4">
             <FilterUriPrefix value={config.filter.sections.uriPrefix} onChange={updateFilterUriPrefix}

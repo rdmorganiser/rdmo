@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterUri, FilterUriPrefix } from '../common/Filter'
+import { FilterString, FilterUriPrefix } from '../common/Filter'
 import { Checkbox } from '../common/Checkboxes'
 import { BackButton } from '../common/Buttons'
 
@@ -12,7 +12,7 @@ import OptionSet from '../element/OptionSet'
 
 const NestedOptionSet = ({ config, optionset, configActions, elementActions }) => {
 
-  const updateFilterUri = (uri) => configActions.updateConfig('filter.optionset.uri', uri)
+  const updateFilterString = (uri) => configActions.updateConfig('filter.optionset.string', uri)
   const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.optionset.uriPrefix', uriPrefix)
 
   const updateDisplayURI = (value) => configActions.updateConfig('display.uri.options', value)
@@ -31,8 +31,8 @@ const NestedOptionSet = ({ config, optionset, configActions, elementActions }) =
         <div className="panel-body">
           <div className="row">
             <div className="col-sm-8">
-              <FilterUri value={config.filter.optionset.uri} onChange={updateFilterUri}
-                         placeholder={gettext('Filter optionsets by URI')} />
+              <FilterString value={config.filter.optionset.string} onChange={updateFilterString}
+                            placeholder={gettext('Filter optionsets')} />
             </div>
             <div className="col-sm-4">
               <FilterUriPrefix value={config.filter.optionset.uriPrefix} onChange={updateFilterUriPrefix}

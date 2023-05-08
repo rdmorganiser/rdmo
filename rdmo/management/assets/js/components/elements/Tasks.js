@@ -3,14 +3,14 @@ import PropTypes from 'prop-types'
 
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterUri, FilterUriPrefix } from '../common/Filter'
+import { FilterString, FilterUriPrefix } from '../common/Filter'
 import { BackButton, NewButton } from '../common/Buttons'
 
 import Task from '../element/Task'
 
 const Tasks = ({ config, tasks, configActions, elementActions }) => {
 
-  const updateFilterUri = (value) => configActions.updateConfig('filter.tasks.uri', value)
+  const updateFilterString = (value) => configActions.updateConfig('filter.tasks.string', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.tasks.uriPrefix', value)
 
   const createTask = () => elementActions.createElement('tasks')
@@ -28,8 +28,8 @@ const Tasks = ({ config, tasks, configActions, elementActions }) => {
       <div className="panel-body">
         <div className="row">
           <div className="col-sm-8">
-            <FilterUri value={config.filter.tasks.uri} onChange={updateFilterUri}
-                       placeholder={gettext('Filter tasks by URI')} />
+            <FilterString value={config.filter.tasks.string} onChange={updateFilterString}
+                          placeholder={gettext('Filter tasks')} />
           </div>
           <div className="col-sm-4">
             <FilterUriPrefix value={config.filter.tasks.uriPrefix} onChange={updateFilterUriPrefix}

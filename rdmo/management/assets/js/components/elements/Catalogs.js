@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterUri, FilterUriPrefix } from '../common/Filter'
+import { FilterString, FilterUriPrefix } from '../common/Filter'
 import { Checkbox } from '../common/Checkboxes'
 import { BackButton, NewButton } from '../common/Buttons'
 
@@ -11,7 +11,7 @@ import Catalog from '../element/Catalog'
 
 const Catalogs = ({ config, catalogs, configActions, elementActions }) => {
 
-  const updateFilterUri = (value) => configActions.updateConfig('filter.catalogs.uri', value)
+  const updateFilterString = (value) => configActions.updateConfig('filter.catalogs.string', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.catalogs.uriPrefix', value)
   const updateDisplayURI = (value) => configActions.updateConfig('display.uri.catalogs', value)
 
@@ -30,8 +30,8 @@ const Catalogs = ({ config, catalogs, configActions, elementActions }) => {
       <div className="panel-body">
         <div className="row">
           <div className="col-sm-8">
-            <FilterUri value={config.filter.catalogs.uri} onChange={updateFilterUri}
-                       placeholder={gettext('Filter catalogs by URI')} />
+            <FilterString value={config.filter.catalogs.string} onChange={updateFilterString}
+                          placeholder={gettext('Filter catalogs')} />
           </div>
           <div className="col-sm-4">
             <FilterUriPrefix value={config.filter.catalogs.uriPrefix} onChange={updateFilterUriPrefix}
