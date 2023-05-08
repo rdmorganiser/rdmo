@@ -15,7 +15,7 @@ const ImportView = ({ config, view, importActions }) => {
   const showFields = () => importActions.updateElement(view, {show: !view.show})
   const toggleImport = () => importActions.updateElement(view, {import: !view.import})
   const toggleAvailable = () => importActions.updateElement(view, {available: !view.available})
-  const updateView = (key, value) => importActions.updateElement(view, {key: value})
+  const updateView = (key, value) => importActions.updateElement(view, {[key]: value})
 
   return (
     <li className="list-group-item">

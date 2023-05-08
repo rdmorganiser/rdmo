@@ -15,7 +15,7 @@ const ImportTask = ({ config, task, importActions }) => {
   const showFields = () => importActions.updateElement(task, {show: !task.show})
   const toggleImport = () => importActions.updateElement(task, {import: !task.import})
   const toggleAvailable = () => importActions.updateElement(task, {available: !task.available})
-  const updateTask = (key, value) => importActions.updateElement(task, {key: value})
+  const updateTask = (key, value) => importActions.updateElement(task, {[key]: value})
 
   return (
     <li className="list-group-item">
