@@ -14,7 +14,7 @@ import { codeClass } from '../../constants/elements'
 const ImportQuestionSet = ({ config, questionset, importActions }) => {
   const showFields = () => importActions.updateElement(questionset, {show: !questionset.show})
   const toggleImport = () => importActions.updateElement(questionset, {import: !questionset.import})
-  const updateQuestionSet = (key, value) => importActions.updateElement(questionset, {key: value})
+  const updateQuestionSet = (key, value) => importActions.updateElement(questionset, {[key]: value})
 
   return (
     <li className="list-group-item">

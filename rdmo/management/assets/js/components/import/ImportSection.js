@@ -14,7 +14,7 @@ import { codeClass } from '../../constants/elements'
 const ImportSection = ({ config, section, importActions }) => {
   const showFields = () => importActions.updateElement(section, {show: !section.show})
   const toggleImport = () => importActions.updateElement(section, {import: !section.import})
-  const updateSection = (key, value) => importActions.updateElement(section, {key: value})
+  const updateSection = (key, value) => importActions.updateElement(section, {[key]: value})
 
   return (
     <li className="list-group-item">

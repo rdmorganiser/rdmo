@@ -15,7 +15,7 @@ const ImportCatalog = ({ config, catalog, importActions }) => {
   const showFields = () => importActions.updateElement(catalog, {show: !catalog.show})
   const toggleImport = () => importActions.updateElement(catalog, {import: !catalog.import})
   const toggleAvailable = () => importActions.updateElement(catalog, {available: !catalog.available})
-  const updateCatalog = (key, value) => importActions.updateElement(catalog, {key: value})
+  const updateCatalog = (key, value) => importActions.updateElement(catalog, {[key]: value})
 
   return (
     <li className="list-group-item">

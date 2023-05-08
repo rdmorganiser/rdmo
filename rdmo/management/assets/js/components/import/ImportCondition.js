@@ -14,7 +14,7 @@ import { codeClass } from '../../constants/elements'
 const ImportCondition = ({ config, condition, importActions }) => {
   const showFields = () => importActions.updateElement(condition, {show: !condition.show})
   const toggleImport = () => importActions.updateElement(condition, {import: !condition.import})
-  const updateCondition = (key, value) => importActions.updateElement(condition, {key: value})
+  const updateCondition = (key, value) => importActions.updateElement(condition, {[key]: value})
 
   return (
     <li className="list-group-item">
