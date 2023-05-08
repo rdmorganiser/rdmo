@@ -1,7 +1,8 @@
-import isEmpty from 'lodash/isEmpty';
-import isUndefined from 'lodash/isUndefined';
-import get from 'lodash/get';
-import isNil from 'lodash/isNil';
+import isEmpty from 'lodash/isEmpty'
+import isUndefined from 'lodash/isUndefined'
+import get from 'lodash/get'
+import isNil from 'lodash/isNil'
+import toNumber from 'lodash/toNumber'
 
 const filterString = (string, element) => {
   return (
@@ -17,7 +18,7 @@ const filterUriPrefix = (uriPrefix, element) => {
 }
 
 const filterSite = (site, element) => {
-  return isEmpty(site) || element.site.includes(site)
+  return isEmpty(site) || element.sites.includes(toNumber(site))
 }
 
 const filterElement = (filter, element) => {
@@ -26,7 +27,7 @@ const filterElement = (filter, element) => {
   } else {
     const strings = get(filter, 'string', '').trim().split(' '),
           uriPrefix = get(filter, 'uriPrefix', ''),
-          site = ''
+          site = get(filter, 'site', '')
     return (
       strings.some(string => filterString(string, element)) &&
       filterUriPrefix(uriPrefix, element) &&

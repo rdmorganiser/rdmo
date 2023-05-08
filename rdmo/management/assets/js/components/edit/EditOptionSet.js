@@ -20,7 +20,8 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
 
-  const { elementAction, parent, conditions, options, questions, providers } = elements
+  const { providers } = config
+  const { elementAction, parent, conditions, options, questions } = elements
 
   const optionsetQuestions = questions.filter(e => optionset.questions.includes(e.id))
 

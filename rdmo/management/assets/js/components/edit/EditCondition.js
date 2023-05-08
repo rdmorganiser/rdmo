@@ -17,7 +17,8 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditCondition = ({ config, condition, elements, elementActions }) => {
 
-  const { elementAction, parent, relations, attributes, optionsets, options,
+  const { relations } = config
+  const { elementAction, parent, attributes, optionsets, options,
           pages, questionsets, questions, tasks } = elements
 
   const updateCondition = (key, value) => elementActions.updateElement(condition, {[key]: value})
@@ -112,20 +113,13 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
         <Select config={config} element={condition} field="source" verboseName={gettext('attribute')}
                 options={attributes} onChange={updateCondition} onCreate={createAttribute} onEdit={editAttribute} />
 
-        <div className="row">
-          <div className="col-sm-4">
-            <Select config={config} element={condition} field="relation"
-                    options={relations} onChange={updateCondition} />
-          </div>
-          <div className="col-sm-4">
-            <Text config={config} element={condition} field="target_text"
-                  onChange={updateCondition} />
-          </div>
-          <div className="col-sm-4">
-            <Select config={config} element={condition} field="target_option"
-                    options={options} onChange={updateCondition} onEdit={editOption} />
-          </div>
-        </div>
+        <Select config={config} element={condition} field="relation"
+                options={relations} onChange={updateCondition} />
+
+        <Text config={config} element={condition} field="target_text" onChange={updateCondition} />
+
+        <Select config={config} element={condition} field="target_option"
+                options={options} onChange={updateCondition} onEdit={editOption} />
       </div>
 
       <div className="panel-footer">

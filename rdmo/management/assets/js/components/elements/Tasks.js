@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterString, FilterUriPrefix } from '../common/Filter'
+import { FilterString, FilterUriPrefix, FilterSite } from '../common/Filter'
 import { BackButton, NewButton } from '../common/Buttons'
 
 import Task from '../element/Task'
@@ -12,6 +12,7 @@ const Tasks = ({ config, tasks, configActions, elementActions }) => {
 
   const updateFilterString = (value) => configActions.updateConfig('filter.tasks.string', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.tasks.uriPrefix', value)
+  const updateFilterSite = (value) => configActions.updateConfig('filter.tasks.site', value)
 
   const createTask = () => elementActions.createElement('tasks')
 
@@ -27,7 +28,7 @@ const Tasks = ({ config, tasks, configActions, elementActions }) => {
 
       <div className="panel-body">
         <div className="row">
-          <div className="col-sm-8">
+          <div className={config.settings.multisite ? 'col-sm-4' : 'col-sm-8'}>
             <FilterString value={config.filter.tasks.string} onChange={updateFilterString}
                           placeholder={gettext('Filter tasks')} />
           </div>
@@ -35,6 +36,12 @@ const Tasks = ({ config, tasks, configActions, elementActions }) => {
             <FilterUriPrefix value={config.filter.tasks.uriPrefix} onChange={updateFilterUriPrefix}
                              options={getUriPrefixes(tasks)} />
           </div>
+          {
+            config.settings.multisite && <div className="col-sm-4">
+              <FilterSite value={config.filter.tasks.site} onChange={updateFilterSite}
+                          options={config.sites} />
+            </div>
+          }
         </div>
       </div>
 

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterString, FilterUriPrefix } from '../common/Filter'
+import { FilterString, FilterUriPrefix, FilterSite } from '../common/Filter'
 import { Checkbox } from '../common/Checkboxes'
 import { BackButton, NewButton } from '../common/Buttons'
 
@@ -13,6 +13,7 @@ const Catalogs = ({ config, catalogs, configActions, elementActions }) => {
 
   const updateFilterString = (value) => configActions.updateConfig('filter.catalogs.string', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.catalogs.uriPrefix', value)
+  const updateFilterSite = (value) => configActions.updateConfig('filter.catalogs.site', value)
   const updateDisplayURI = (value) => configActions.updateConfig('display.uri.catalogs', value)
 
   const createCatalog = () => elementActions.createElement('catalogs')
@@ -29,7 +30,7 @@ const Catalogs = ({ config, catalogs, configActions, elementActions }) => {
 
       <div className="panel-body">
         <div className="row">
-          <div className="col-sm-8">
+          <div className={config.settings.multisite ? 'col-sm-4' : 'col-sm-8'}>
             <FilterString value={config.filter.catalogs.string} onChange={updateFilterString}
                           placeholder={gettext('Filter catalogs')} />
           </div>
@@ -37,6 +38,12 @@ const Catalogs = ({ config, catalogs, configActions, elementActions }) => {
             <FilterUriPrefix value={config.filter.catalogs.uriPrefix} onChange={updateFilterUriPrefix}
                              options={getUriPrefixes(catalogs)} />
           </div>
+          {
+            config.settings.multisite && <div className="col-sm-4">
+              <FilterSite value={config.filter.catalogs.site} onChange={updateFilterSite}
+                          options={config.sites} />
+            </div>
+          }
         </div>
         <div className="checkboxes">
           <span className="mr-10">{gettext('Show URIs:')}</span>

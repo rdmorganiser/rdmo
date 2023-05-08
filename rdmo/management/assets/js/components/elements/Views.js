@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterString, FilterUriPrefix } from '../common/Filter'
+import { FilterString, FilterUriPrefix, FilterSite } from '../common/Filter'
 import { BackButton, NewButton } from '../common/Buttons'
 
 import View from '../element/View'
@@ -12,6 +12,7 @@ const Views = ({ config, views, configActions, elementActions }) => {
 
   const updateFilterString = (value) => configActions.updateConfig('filter.views.string', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.views.uriPrefix', value)
+  const updateFilterSite = (value) => configActions.updateConfig('filter.views.site', value)
 
   const createView = () => elementActions.createElement('views')
 
@@ -27,7 +28,7 @@ const Views = ({ config, views, configActions, elementActions }) => {
 
       <div className="panel-body">
         <div className="row">
-          <div className="col-sm-8">
+          <div className={config.settings.multisite ? 'col-sm-4' : 'col-sm-8'}>
             <FilterString value={config.filter.views.string} onChange={updateFilterString}
                           placeholder={gettext('Filter views')} />
           </div>
@@ -35,6 +36,12 @@ const Views = ({ config, views, configActions, elementActions }) => {
             <FilterUriPrefix value={config.filter.views.uriPrefix} onChange={updateFilterUriPrefix}
                              options={getUriPrefixes(views)} />
           </div>
+          {
+            config.settings.multisite && <div className="col-sm-4">
+              <FilterSite value={config.filter.views.site} onChange={updateFilterSite}
+                          options={config.sites} />
+            </div>
+          }
         </div>
       </div>
 

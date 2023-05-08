@@ -20,7 +20,8 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditTask = ({ config, task, elements, elementActions}) => {
 
-  const { elementAction, attributes, catalogs, conditions, sites, groups } = elements
+  const { sites, groups } = config
+  const { elementAction, attributes, catalogs, conditions } = elements
 
   const updateTask = (key, value) => elementActions.updateElement(task, {[key]: value})
   const storeTask = (back) => elementActions.storeElement('tasks', task, back)

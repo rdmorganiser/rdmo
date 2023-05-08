@@ -24,15 +24,8 @@ export default function configureStore() {
     applyMiddleware(...middlewares)
   )
 
-  // fetch some of the django settings
-  const fetchSettings = (event) => {
-    return store.dispatch(configActions.fetchSettings())
-  }
-
-  // fetch the model meta information
-  const fetchMeta = (event) => {
-    return store.dispatch(configActions.fetchMeta())
-  }
+  // fetch some of the data which does not change
+  const fetchConfig = (event) => store.dispatch(configActions.fetchConfig())
 
   // add a listener to restore the config from the local storage
   const updateConfigFromLocalStorage = (event) => {
@@ -78,10 +71,7 @@ export default function configureStore() {
 
   // this event is triggered when the page first loads
   window.addEventListener('load', (event) => {
-    Promise.all([
-      fetchSettings(event),
-      fetchMeta(event)
-    ]).then(() => {
+    fetchConfig(event).then(() => {
       fetchElementsFromLocation(event)
     })
   })

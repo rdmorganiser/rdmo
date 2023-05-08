@@ -1,6 +1,7 @@
 export const lsKeys = {
   'filter.catalogs.string': '',
   'filter.catalogs.uriPrefix': '',
+  'filter.catalogs.site': '',
   'filter.catalogs.pages': true,
   'filter.catalogs.questionsets': true,
   'filter.catalogs.questions': true,
@@ -22,8 +23,10 @@ export const lsKeys = {
   'filter.conditions.uriPrefix': '',
   'filter.tasks.string': '',
   'filter.tasks.uriPrefix': '',
+  'filter.tasks.site': '',
   'filter.views.string': '',
   'filter.views.uriPrefix': '',
+  'filter.views.site': '',
   'filter.catalog.string': '',
   'filter.catalog.uriPrefix': '',
   'filter.section.string': '',

@@ -1,7 +1,5 @@
 import isNil from 'lodash/isNil'
 
-import CoreApi from 'rdmo/core/assets/js/api/CoreApi'
-
 import ConditionsApi from '../api/ConditionsApi'
 import DomainApi from '../api/DomainApi'
 import OptionsApi from '../api/OptionsApi'
@@ -116,11 +114,9 @@ export function fetchElement(elementType, elementId, elementAction=null) {
         } else {
           action = (dispatch) => Promise.all([
             QuestionsApi.fetchCatalog(elementId),
-            QuestionsApi.fetchSections('index'),
-            CoreApi.fetchGroups(),
-            CoreApi.fetchSites(),
-          ]).then(([element, sections, groups, sites]) => dispatch(fetchElementSuccess({
-            element, sections, groups, sites
+            QuestionsApi.fetchSections('index')
+          ]).then(([element, sections]) => dispatch(fetchElementSuccess({
+            element, sections
           })))
         }
         break
@@ -190,13 +186,10 @@ export function fetchElement(elementType, elementId, elementAction=null) {
             OptionsApi.fetchOptions('index'),
             ConditionsApi.fetchConditions('index'),
             QuestionsApi.fetchPages('index'),
-            QuestionsApi.fetchQuestionSets('index'),
-            QuestionsApi.fetchWidgetTypes(),
-            QuestionsApi.fetchValueTypes()
-          ]).then(([element, attributes, optionsets, options, conditions, pages, questionsets,
-                    widgetTypes, valueTypes]) => dispatch(fetchElementSuccess({
+            QuestionsApi.fetchQuestionSets('index')
+          ]).then(([element, attributes, optionsets, options, conditions,
+                    pages, questionsets]) => dispatch(fetchElementSuccess({
             element, attributes, optionsets, options, conditions, pages, questionsets,
-            widgetTypes, valueTypes
           })))
         }
         break
@@ -214,7 +207,8 @@ export function fetchElement(elementType, elementId, elementAction=null) {
             QuestionsApi.fetchQuestionSets('index'),
             QuestionsApi.fetchQuestions('index'),
             TasksApi.fetchTasks('index'),
-          ]).then(([element, attributes, conditions, pages, questionsets, questions, tasks]) => dispatch(fetchElementSuccess({
+          ]).then(([element, attributes, conditions, pages, questionsets,
+                    questions, tasks]) => dispatch(fetchElementSuccess({
             element, attributes, conditions, pages, questionsets, questions, tasks
           })))
         }
@@ -223,16 +217,15 @@ export function fetchElement(elementType, elementId, elementAction=null) {
       case 'optionsets':
         if (elementAction == 'nested') {
           action = (dispatch) => OptionsApi.fetchOptionSet(elementId, 'nested')
-            .then(element => dispatch(fetchElementSuccess({element })))
+            .then(element => dispatch(fetchElementSuccess({ element })))
         } else {
           action = (dispatch) => Promise.all([
             OptionsApi.fetchOptionSet(elementId),
             ConditionsApi.fetchConditions('index'),
             OptionsApi.fetchOptions('index'),
-            QuestionsApi.fetchQuestions('index'),
-            OptionsApi.fetchProviders()
-          ]).then(([element, conditions, options, questions, providers]) => dispatch(fetchElementSuccess({
-            element, conditions, options, questions, providers
+            QuestionsApi.fetchQuestions('index')
+          ]).then(([element, conditions, options, questions]) => dispatch(fetchElementSuccess({
+            element, conditions, options, questions
           })))
         }
         break
@@ -250,7 +243,6 @@ export function fetchElement(elementType, elementId, elementAction=null) {
       case 'conditions':
         action = (dispatch) => Promise.all([
           ConditionsApi.fetchCondition(elementId),
-          ConditionsApi.fetchRelations(),
           DomainApi.fetchAttributes('index'),
           OptionsApi.fetchOptionSets('index'),
           OptionsApi.fetchOptions('index'),
@@ -258,9 +250,9 @@ export function fetchElement(elementType, elementId, elementAction=null) {
           QuestionsApi.fetchQuestionSets('index'),
           QuestionsApi.fetchQuestions('index'),
           TasksApi.fetchTasks('index'),
-        ]).then(([element, relations, attributes, optionsets, options,
+        ]).then(([element, attributes, optionsets, options,
                   pages, questionsets, questions, tasks]) => dispatch(fetchElementSuccess({
-          element, relations, attributes, optionsets, options, pages, questionsets, questions, tasks
+          element, attributes, optionsets, options, pages, questionsets, questions, tasks
         })))
         break
 
@@ -269,23 +261,18 @@ export function fetchElement(elementType, elementId, elementAction=null) {
           TasksApi.fetchTask(elementId),
           DomainApi.fetchAttributes('index'),
           ConditionsApi.fetchConditions('index'),
-          QuestionsApi.fetchCatalogs('index'),
-          CoreApi.fetchSites(),
-          CoreApi.fetchGroups()
-        ]).then(([element, attributes, conditions, catalogs,
-                  sites, groups]) => dispatch(fetchElementSuccess({
-          element, attributes, conditions, catalogs, sites, groups
+          QuestionsApi.fetchCatalogs('index')
+        ]).then(([element, attributes, conditions, catalogs]) => dispatch(fetchElementSuccess({
+          element, attributes, conditions, catalogs
         })))
         break
 
       case 'views':
         action = (dispatch) => Promise.all([
           ViewsApi.fetchView(elementId),
-          QuestionsApi.fetchCatalogs('index'),
-          CoreApi.fetchSites(),
-          CoreApi.fetchGroups()
-        ]).then(([element, catalogs, sites, groups]) => dispatch(fetchElementSuccess({
-          element, sites, groups, catalogs
+          QuestionsApi.fetchCatalogs('index')
+        ]).then(([element, catalogs]) => dispatch(fetchElementSuccess({
+          element, catalogs
         })))
         break
     }
@@ -398,11 +385,9 @@ export function createElement(elementType, parent={}) {
       case 'catalogs':
         action = (dispatch) => Promise.all([
           QuestionsFactory.createCatalog(getState().config),
-          QuestionsApi.fetchSections('index'),
-          CoreApi.fetchGroups(),
-          CoreApi.fetchSites(),
-        ]).then(([element, sections, groups, sites]) => dispatch(createElementSuccess({
-          element, sections, groups, sites
+          QuestionsApi.fetchSections('index')
+        ]).then(([element, sections]) => dispatch(createElementSuccess({
+          element, sections
         })))
         break
 
@@ -450,9 +435,9 @@ export function createElement(elementType, parent={}) {
           ConditionsApi.fetchConditions('index'),
           QuestionsApi.fetchWidgetTypes(),
           QuestionsApi.fetchValueTypes()
-        ]).then(([element, attributes, optionsets, options, conditions,
-                  widgetTypes, valueTypes]) => dispatch(createElementSuccess({
-            element, parent, attributes, optionsets, options, conditions, widgetTypes, valueTypes
+        ]).then(([element, attributes, optionsets,
+                  options, conditions]) => dispatch(createElementSuccess({
+            element, parent, attributes, optionsets, options, conditions
           })))
         break
 
@@ -469,9 +454,8 @@ export function createElement(elementType, parent={}) {
         action = (dispatch) => Promise.all([
           OptionsFactory.createOptionSet(getState().config, parent),
           OptionsApi.fetchOptions('index'),
-          OptionsApi.fetchProviders(),
-        ]).then(([element, options, providers]) => dispatch(createElementSuccess({
-            element, parent, options, providers
+        ]).then(([element, options]) => dispatch(createElementSuccess({
+            element, parent, options
           })))
         break
 
@@ -487,11 +471,10 @@ export function createElement(elementType, parent={}) {
       case 'conditions':
         action = (dispatch) => Promise.all([
           ConditionsFactory.createCondition(getState().config, parent),
-          ConditionsApi.fetchRelations(),
           DomainApi.fetchAttributes('index'),
           OptionsApi.fetchOptions('index'),
-        ]).then(([element, relations, attributes, options]) => dispatch(createElementSuccess({
-            element, parent, relations, attributes, options
+        ]).then(([element, attributes, options]) => dispatch(createElementSuccess({
+            element, parent, attributes, options
           })))
         break
 
@@ -500,12 +483,9 @@ export function createElement(elementType, parent={}) {
           TasksFactory.createTask(getState().config),
           DomainApi.fetchAttributes('index'),
           ConditionsApi.fetchConditions('index'),
-          QuestionsApi.fetchCatalogs('index'),
-          CoreApi.fetchSites(),
-          CoreApi.fetchGroups()
-        ]).then(([element, attributes, conditions,
-                  catalogs, sites, groups]) => dispatch(createElementSuccess({
-            element, attributes, conditions, catalogs, sites, groups
+          QuestionsApi.fetchCatalogs('index')
+        ]).then(([element, attributes, conditions, catalogs]) => dispatch(createElementSuccess({
+            element, attributes, conditions, catalogs
           })))
         break
 
@@ -515,8 +495,8 @@ export function createElement(elementType, parent={}) {
           QuestionsApi.fetchCatalogs('index'),
           CoreApi.fetchSites(),
           CoreApi.fetchGroups()
-        ]).then(([element, catalogs, sites, groups]) => dispatch(createElementSuccess({
-          element, sites, groups, catalogs
+        ]).then(([element, catalogs]) => dispatch(createElementSuccess({
+          element, sites
         })))
         break
     }
