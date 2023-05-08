@@ -20,7 +20,8 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditCatalog = ({ config, catalog, elements, elementActions }) => {
 
-  const { elementAction, sites, groups, sections } = elements
+  const { sites, groups } = config
+  const { elementAction, sections } = elements
 
   const updateCatalog = (key, value) => elementActions.updateElement(catalog, {[key]: value})
   const storeCatalog = (back) => elementActions.storeElement('catalogs', catalog, back)

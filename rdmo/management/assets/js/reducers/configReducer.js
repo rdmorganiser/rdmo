@@ -10,6 +10,7 @@ const initialFilter = {
 
 const initialState = {
   baseUrl: '/management/',
+  settings: {},
   filter: {},
   display: {}
 }
@@ -30,10 +31,9 @@ export default function configReducer(state = initialState, action) {
 
       // return the new state
       return newState
-    case 'config/fetchSettingsSuccess':
-      return {...state, ...{ settings: action.settings }}
-    case 'config/fetchMetaSuccess':
-      return {...state, ...{ meta: action.meta }}
+    case 'config/fetchConfigSuccess':
+      return {...state, ...action.config}
+    case 'elements/fetchConfigInit':
     case 'elements/fetchElementsInit':
     case 'elements/fetchElementInit':
     case 'elements/storeElementInit':
@@ -41,7 +41,7 @@ export default function configReducer(state = initialState, action) {
     case 'elements/deleteElementInit':
     case 'import/uploadFileInit':
     case 'import/importElementsInit':
-      return {...state, ...{ pending: true }}
+      return {...state, pending: true }
     case 'elements/fetchElementsSuccess':
     case 'elements/fetchElementsError':
     case 'elements/fetchElementSuccess':
@@ -56,7 +56,7 @@ export default function configReducer(state = initialState, action) {
     case 'import/uploadFileError':
     case 'import/importElementsSuccess':
     case 'import/importElementsError':
-      return {...state, ...{ pending: false }}
+      return {...state, pending: false }
     default:
       return state
   }

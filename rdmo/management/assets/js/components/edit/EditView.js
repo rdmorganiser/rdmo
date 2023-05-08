@@ -19,7 +19,8 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditView = ({ config, view, elements, elementActions }) => {
 
-  const { elementAction, catalogs, sites, groups } = elements
+  const { sites, groups } = config
+  const { elementAction, catalogs } = elements
 
   const updateView = (key, value) => elementActions.updateElement(view, {[key]: value})
   const storeView = (back) => elementActions.storeElement('views', view, back)

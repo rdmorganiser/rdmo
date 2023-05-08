@@ -13,8 +13,6 @@ const QuestionSetInfo = ({ questionset, elements, elementActions }) => {
   const pages = elements.pages.filter(e => questionset.pages.includes(e.id))
   const questionsets = elements.questionsets.filter(e => questionset.parents.includes(e.id))
 
-  console.log(questionset.pages);
-
   const fetchPage = (page) => elementActions.fetchElement('pages', page.id)
   const fetchQuestionSet = (questionset) => elementActions.fetchElement('questionsets', questionset.id)
 
