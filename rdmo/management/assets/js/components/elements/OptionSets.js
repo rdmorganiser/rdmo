@@ -3,14 +3,14 @@ import PropTypes from 'prop-types'
 
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterUri, FilterUriPrefix } from '../common/Filter'
+import { FilterString, FilterUriPrefix } from '../common/Filter'
 import { BackButton, NewButton } from '../common/Buttons'
 
 import OptionSet from '../element/OptionSet'
 
 const OptionSets = ({ config, optionsets, configActions, elementActions}) => {
 
-  const updateFilterUri = (value) => configActions.updateConfig('filter.optionsets.uri', value)
+  const updateFilterString = (value) => configActions.updateConfig('filter.optionsets.string', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.optionsets.uriPrefix', value)
 
   const createOptionSet = () => elementActions.createElement('optionsets')
@@ -28,8 +28,8 @@ const OptionSets = ({ config, optionsets, configActions, elementActions}) => {
       <div className="panel-body">
         <div className="row">
           <div className="col-sm-8">
-            <FilterUri value={config.filter.optionsets.uri} onChange={updateFilterUri}
-                       placeholder={gettext('Filter optionsets by URI')} />
+            <FilterString value={config.filter.optionsets.string} onChange={updateFilterString}
+                          placeholder={gettext('Filter option sets')} />
           </div>
           <div className="col-sm-4">
             <FilterUriPrefix value={config.filter.optionsets.uriPrefix} onChange={updateFilterUriPrefix}

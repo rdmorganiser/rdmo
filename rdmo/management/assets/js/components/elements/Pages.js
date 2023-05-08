@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterUri, FilterUriPrefix } from '../common/Filter'
+import { FilterString, FilterUriPrefix } from '../common/Filter'
 import { Checkbox } from '../common/Checkboxes'
 import { BackButton, NewButton } from '../common/Buttons'
 
@@ -11,7 +11,7 @@ import Page from '../element/Page'
 
 const Pages = ({ config, pages, configActions, elementActions }) => {
 
-  const updateFilterUri = (value) => configActions.updateConfig('filter.pages.uri', value)
+  const updateFilterString = (value) => configActions.updateConfig('filter.pages.string', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.pages.uriPrefix', value)
   const updateDisplayPagesURI = (value) => configActions.updateConfig('display.uri.pages', value)
   const updateDisplayAttributesURI = (value) => configActions.updateConfig('display.uri.attributes', value)
@@ -31,8 +31,8 @@ const Pages = ({ config, pages, configActions, elementActions }) => {
       <div className="panel-body">
         <div className="row">
           <div className="col-sm-8">
-            <FilterUri value={config.filter.pages.uri} onChange={updateFilterUri}
-                       placeholder={gettext('Filter pages by URI')} />
+            <FilterString value={config.filter.pages.string} onChange={updateFilterString}
+                          placeholder={gettext('Filter pages')} />
           </div>
           <div className="col-sm-4">
             <FilterUriPrefix value={config.filter.pages.uriPrefix} onChange={updateFilterUriPrefix}

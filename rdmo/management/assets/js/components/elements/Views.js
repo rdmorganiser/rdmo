@@ -3,14 +3,14 @@ import PropTypes from 'prop-types'
 
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterUri, FilterUriPrefix } from '../common/Filter'
+import { FilterString, FilterUriPrefix } from '../common/Filter'
 import { BackButton, NewButton } from '../common/Buttons'
 
 import View from '../element/View'
 
 const Views = ({ config, views, configActions, elementActions }) => {
 
-  const updateFilterUri = (value) => configActions.updateConfig('filter.views.uri', value)
+  const updateFilterString = (value) => configActions.updateConfig('filter.views.string', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.views.uriPrefix', value)
 
   const createView = () => elementActions.createElement('views')
@@ -28,8 +28,8 @@ const Views = ({ config, views, configActions, elementActions }) => {
       <div className="panel-body">
         <div className="row">
           <div className="col-sm-8">
-            <FilterUri value={config.filter.views.uri} onChange={updateFilterUri}
-                       placeholder={gettext('Filter views by URI')} />
+            <FilterString value={config.filter.views.string} onChange={updateFilterString}
+                          placeholder={gettext('Filter views')} />
           </div>
           <div className="col-sm-4">
             <FilterUriPrefix value={config.filter.views.uriPrefix} onChange={updateFilterUriPrefix}

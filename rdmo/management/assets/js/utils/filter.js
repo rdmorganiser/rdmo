@@ -3,29 +3,35 @@ import isUndefined from 'lodash/isUndefined';
 import get from 'lodash/get';
 import isNil from 'lodash/isNil';
 
-const filterUri = (filterUri, element) => {
-  if (isEmpty(filterUri) || element.uri.includes(filterUri)) {
-    return true
-  } else {
-    return false
-  }
+const filterString = (string, element) => {
+  return (
+    isEmpty(string) ||
+    element.uri.includes(string) ||
+    (!isUndefined(element.title) && element.title.includes(string)) ||
+    (!isUndefined(element.text) && element.text.includes(string))
+  )
 }
 
-const filterUriPrefix = (filterUriPrefix, element) => {
-  if (isEmpty(filterUriPrefix) || element.uri.startsWith(filterUriPrefix)) {
-    return true
-  } else {
-    return false
-  }
+const filterUriPrefix = (uriPrefix, element) => {
+  return isEmpty(uriPrefix) || element.uri.startsWith(uriPrefix)
+}
+
+const filterSite = (site, element) => {
+  return isEmpty(site) || element.site.includes(site)
 }
 
 const filterElement = (filter, element) => {
   if (isNil(filter)) {
     return true
   } else {
-    return (get(filter, 'uri', '').trim().split(' ').some(
-      uri => filterUri(uri, element)
-    ) && filterUriPrefix(get(filter, 'uriPrefix', ''), element))
+    const strings = get(filter, 'string', '').trim().split(' '),
+          uriPrefix = get(filter, 'uriPrefix', ''),
+          site = ''
+    return (
+      strings.some(string => filterString(string, element)) &&
+      filterUriPrefix(uriPrefix, element) &&
+      filterSite(site, element)
+    )
   }
 }
 

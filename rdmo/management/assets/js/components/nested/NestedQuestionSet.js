@@ -4,7 +4,7 @@ import isUndefined from 'lodash/isUndefined'
 
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterUri, FilterUriPrefix } from '../common/Filter'
+import { FilterString, FilterUriPrefix } from '../common/Filter'
 import { Checkbox } from '../common/Checkboxes'
 import { BackButton } from '../common/Buttons'
 
@@ -13,7 +13,7 @@ import Question from '../element/Question'
 
 const NestedQuestionSet = ({ config, questionset, configActions, elementActions }) => {
 
-  const updateFilterUri = (uri) => configActions.updateConfig('filter.questionset.uri', uri)
+  const updateFilterString = (uri) => configActions.updateConfig('filter.questionset.string', uri)
   const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.questionset.uriPrefix', uriPrefix)
 
   const updateDisplayQuestionSets = (value) => configActions.updateConfig('display.elements.questionsets', value)
@@ -35,8 +35,8 @@ const NestedQuestionSet = ({ config, questionset, configActions, elementActions 
         <div className="panel-body">
           <div className="row">
             <div className="col-sm-8">
-              <FilterUri value={config.filter.questionset.uri} onChange={updateFilterUri}
-                         placeholder={gettext('Filter question sets by URI')} />
+              <FilterString value={config.filter.questionset.string} onChange={updateFilterString}
+                            placeholder={gettext('Filter question sets')} />
             </div>
             <div className="col-sm-4">
               <FilterUriPrefix value={config.filter.questionset.uriPrefix} onChange={updateFilterUriPrefix}

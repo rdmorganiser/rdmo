@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterUri, FilterUriPrefix } from '../common/Filter'
+import { FilterString, FilterUriPrefix } from '../common/Filter'
 import { Checkbox } from '../common/Checkboxes'
 import { BackButton } from '../common/Buttons'
 
@@ -12,7 +12,7 @@ import Page from '../element/Page'
 
 const NestedCatalog = ({ config, section, configActions, elementActions }) => {
 
-  const updateFilterUri = (uri) => configActions.updateConfig('filter.section.uri', uri)
+  const updateFilterString = (uri) => configActions.updateConfig('filter.section.string', uri)
   const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.section.uriPrefix', uriPrefix)
 
   const updateDisplayPages = (value) => configActions.updateConfig('display.elements.pages', value)
@@ -37,8 +37,8 @@ const NestedCatalog = ({ config, section, configActions, elementActions }) => {
         <div className="panel-body">
           <div className="row">
             <div className="col-sm-8">
-              <FilterUri value={config.filter.section.uri} onChange={updateFilterUri}
-                         placeholder={gettext('Filter sections by URI')} />
+              <FilterString value={config.filter.section.string} onChange={updateFilterString}
+                            placeholder={gettext('Filter sections')} />
             </div>
             <div className="col-sm-4">
               <FilterUriPrefix value={config.filter.section.uriPrefix} onChange={updateFilterUriPrefix}

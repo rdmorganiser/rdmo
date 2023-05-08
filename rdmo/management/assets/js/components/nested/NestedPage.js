@@ -4,7 +4,7 @@ import isUndefined from 'lodash/isUndefined'
 
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterUri, FilterUriPrefix } from '../common/Filter'
+import { FilterString, FilterUriPrefix } from '../common/Filter'
 import { Checkbox } from '../common/Checkboxes'
 import { BackButton } from '../common/Buttons'
 
@@ -14,7 +14,7 @@ import Question from '../element/Question'
 
 const NestedPage = ({ config, page, configActions, elementActions }) => {
 
-  const updateFilterUri = (uri) => configActions.updateConfig('filter.page.uri', uri)
+  const updateFilterString = (uri) => configActions.updateConfig('filter.page.string', uri)
   const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.page.uriPrefix', uriPrefix)
 
   const updateDisplayQuestionSets = (value) => configActions.updateConfig('display.elements.questionsets', value)
@@ -37,8 +37,8 @@ const NestedPage = ({ config, page, configActions, elementActions }) => {
         <div className="panel-body">
           <div className="row">
             <div className="col-sm-8">
-              <FilterUri value={config.filter.page.uri} onChange={updateFilterUri}
-                         placeholder={gettext('Filter pages by URI')} />
+              <FilterString value={config.filter.page.string} onChange={updateFilterString}
+                            placeholder={gettext('Filter pages')} />
             </div>
             <div className="col-sm-4">
               <FilterUriPrefix value={config.filter.page.uriPrefix} onChange={updateFilterUriPrefix}

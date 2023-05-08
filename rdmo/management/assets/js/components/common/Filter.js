@@ -1,7 +1,7 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 
-const FilterUri = ({ value, onChange, placeholder }) => {
+const FilterString = ({ value, onChange, placeholder }) => {
   return (
     <div className="form-group mb-0">
       <div className="input-group">
@@ -17,7 +17,7 @@ const FilterUri = ({ value, onChange, placeholder }) => {
   )
 }
 
-FilterUri.propTypes = {
+FilterString.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string.isRequired
@@ -42,4 +42,4 @@ FilterUriPrefix.propTypes = {
   onChange: PropTypes.func
 }
 
-export { FilterUri, FilterUriPrefix }
+export { FilterString, FilterUriPrefix }
