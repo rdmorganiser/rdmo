@@ -6,7 +6,7 @@ from rdmo.domain.models import Attribute
 from rdmo.management.imports import import_elements
 
 
-def test_create_conditions(db, settings):
+def test_create_domain(db, settings):
     Attribute.objects.all().delete()
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'attributes.xml'
@@ -22,7 +22,7 @@ def test_create_conditions(db, settings):
     assert len(root) == len(elements) == Attribute.objects.count() == 86
 
 
-def test_update_conditions(db, settings):
+def test_update_domain(db, settings):
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'attributes.xml'
 
     root = read_xml_file(xml_file)
