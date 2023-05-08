@@ -2,9 +2,10 @@ import React, { Component} from 'react'
 import ReactSelect from 'react-select'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+import get from 'lodash/get'
+import isArray from 'lodash/isArray'
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
-import get from 'lodash/get'
 
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
@@ -26,11 +27,22 @@ const Select = ({ config, element, field, options, verboseName, isMulti, onChang
     label: option.uri || option.text || option.name
   }))
 
-  const selectValue = selectOptions.find(option => (option.value == element[field]))
+  const selectValue = isArray(element[field]) ? selectOptions.filter(option => (element[field].includes(option.value)))
+                                              : selectOptions.find(option => (option.value == element[field]))
 
   const styles = onEdit ? {
     container: provided => ({...provided, marginRight: 50})
   } : {}
+
+  const handleChange = (option) => {
+    if (isNil(option)) {
+      onChange(field, null)
+    } else if (isArray(option)) {
+      onChange(field, option.map(o => o.value))
+    } else {
+      onChange(field, option.value)
+    }
+  }
 
   return (
     <div className={className}>
@@ -47,8 +59,7 @@ const Select = ({ config, element, field, options, verboseName, isMulti, onChang
 
         <ReactSelect classNamePrefix="react-select" className="react-select" isClearable={true}
                      options={selectOptions} value={selectValue} isMulti={isMulti}
-                     onChange={option => onChange(field, isNil(option) ? null : option.value)}
-                     styles={styles} />
+                     onChange={handleChange} styles={styles} />
       </div>
 
       {
