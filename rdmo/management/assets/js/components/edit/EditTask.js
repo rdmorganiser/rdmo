@@ -119,7 +119,7 @@ const EditTask = ({ config, task, elements, elementActions}) => {
         </div>
 
         <Select config={config} element={task} field="catalogs"
-                options={catalogs} onChange={updateTask} />
+                options={catalogs} onChange={updateTask} isMulti />
 
         {get(config, 'settings.groups') && <Select config={config} element={task} field="groups"
                                                    options={groups} onChange={updateTask} isMulti />}

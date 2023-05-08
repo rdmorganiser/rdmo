@@ -92,7 +92,7 @@ const EditView = ({ config, view, elements, elementActions }) => {
         </Tabs>
 
         <Select config={config} element={view} field="catalogs"
-                options={catalogs} onChange={updateView} />
+                options={catalogs} onChange={updateView} isMulti />
 
         {get(config, 'settings.groups') && <Select config={config} element={view} field="groups"
                                                    options={groups} onChange={updateView} isMulti />}
