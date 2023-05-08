@@ -73,7 +73,7 @@ AvailableLink.propTypes = {
 const LockedLink = ({ element, verboseName, onClick }) => {
   const className = classNames({
     'element-link fa': true,
-    'fa-lock': element.locked,
+    'fa-lock text-danger': element.locked,
     'fa-unlock-alt': !element.locked
   })
 
