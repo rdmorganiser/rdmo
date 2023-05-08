@@ -20,6 +20,8 @@ def import_attribute(element, save=False):
 
     set_foreign_field(attribute, 'parent', element)
 
+    attribute.path = Attribute.build_path(attribute.key, attribute.parent)
+
     validate_instance(attribute, element, AttributeLockedValidator,
                       AttributeParentValidator, AttributeUniqueURIValidator)
 
