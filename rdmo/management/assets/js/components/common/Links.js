@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import isEmpty from 'lodash/isEmpty'
+import isUndefined from 'lodash/isUndefined'
 
 import Link from 'rdmo/core/assets/js/components/Link'
 
@@ -16,26 +17,38 @@ EditLink.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-const AddLink = ({ element, verboseName, onClick }) => {
-  const title = interpolate(gettext('Add %s'), [verboseName])
-  return <Link className="element-link fa fa-plus" title={title} onClick={onClick} />
+const AddLink = ({ element, verboseName, verboseNameAlt, onClick, onAltClick }) => {
+  if (isUndefined(onAltClick)) {
+    const title = interpolate(gettext('Add %s'), [verboseName])
+    return <Link className="element-link fa fa-plus" title={title} onClick={onClick} />
+  } else {
+    const title = interpolate(gettext('Add %s or %s'), [verboseName, verboseNameAlt])
+    return (
+      <span className="dropdown">
+        <a href="" className="element-link fa fa-plus" data-toggle="dropdown"></a>
+        <ul className="dropdown-menu">
+          <li>
+            <Link href="" onClick={onClick}>
+              {interpolate(gettext('Add %s'), [verboseName])}
+            </Link>
+          </li>
+          <li>
+            <Link href="" onClick={onAltClick}>
+              {interpolate(gettext('Add %s'), [verboseNameAlt])}
+            </Link>
+          </li>
+        </ul>
+      </span>
+    )
+  }
 }
 
 AddLink.propTypes = {
   element: PropTypes.object.isRequired,
   verboseName: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired
-}
-
-const AddSquareLink = ({ element, verboseName, onClick }) => {
-  const title = interpolate(gettext('Add %s'), [verboseName])
-  return <Link className="element-link fa fa-plus-square" title={title} onClick={onClick} />
-}
-
-AddSquareLink.propTypes = {
-  element: PropTypes.object.isRequired,
-  verboseName: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired
+  verboseName: PropTypes.string,
+  onClick: PropTypes.func.isRequired,
+  onAltClick: PropTypes.func
 }
 
 const CopyLink = ({ element, verboseName, onClick }) => {
@@ -188,5 +201,5 @@ ShowLink.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-export { EditLink, CopyLink, AddLink, AddSquareLink, AvailableLink, LockedLink,
+export { EditLink, CopyLink, AddLink, AvailableLink, LockedLink,
          NestedLink, ExportLink, ExtendLink, CodeLink, ErrorLink, WarningLink, ShowLink }

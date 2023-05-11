@@ -27,7 +27,7 @@ const Catalog = ({ config, catalog, elementActions, display='list', filter=null 
       <div className="pull-right">
         <EditLink element={catalog} verboseName={verboseName} onClick={fetchEdit} />
         <CopyLink element={catalog} verboseName={verboseName} onClick={fetchCopy} />
-        <AddLink element={catalog} verboseName="section" onClick={createSection} />
+        <AddLink element={catalog} verboseName={gettext('section')} onClick={createSection} />
         <AvailableLink element={catalog} verboseName={verboseName} onClick={toggleAvailable} />
         <LockedLink element={catalog} verboseName={verboseName} onClick={toggleLocked} />
         <NestedLink element={catalog} verboseName={verboseName} onClick={fetchNested} />
