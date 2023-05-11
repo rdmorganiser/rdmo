@@ -25,7 +25,7 @@ const Section = ({ config, section, elementActions, display='list', filter=null,
       <div className="pull-right">
         <EditLink element={section} verboseName={verboseName} onClick={fetchEdit} />
         <CopyLink element={section} verboseName={verboseName} onClick={fetchCopy} />
-        <AddLink element={section} verboseName="page" onClick={createPage} />
+        <AddLink element={section} verboseName={gettext('page')} onClick={createPage} />
         <LockedLink element={section} verboseName={verboseName} onClick={toggleLocked} />
         <NestedLink element={section} verboseName={verboseName} onClick={fetchNested} />
         <ExportLink element={section} verboseName={verboseName} />

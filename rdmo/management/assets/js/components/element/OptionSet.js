@@ -26,7 +26,7 @@ const OptionSet = ({ config, optionset, elementActions, display='list', filter=n
       <div className="pull-right">
         <EditLink element={optionset} verboseName={verboseName} onClick={fetchEdit} />
         <CopyLink element={optionset} verboseName={verboseName} onClick={fetchCopy} />
-        <AddLink element={optionset} verboseName="option" onClick={createOption} />
+        <AddLink element={optionset} verboseName={gettext('option')} onClick={createOption} />
         <LockedLink element={optionset} verboseName={verboseName} onClick={toggleLocked} />
         <NestedLink element={optionset} verboseName={verboseName} onClick={fetchNested} />
         <ExportLink element={optionset} verboseName={verboseName} />

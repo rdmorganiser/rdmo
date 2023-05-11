@@ -21,7 +21,7 @@ from rdmo.conditions.models import Condition
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import human2bytes, return_file_response
 from rdmo.options.models import OptionSet
-from rdmo.questions.models import Catalog, Section, Page, Question, QuestionSet
+from rdmo.questions.models import Page, Question, QuestionSet
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 

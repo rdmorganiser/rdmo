@@ -6,7 +6,7 @@ import { filterElement } from '../../utils/filter'
 
 import Question from './Question'
 import { ElementErrors } from '../common/Errors'
-import { EditLink, CopyLink, AddLink, AddSquareLink, LockedLink,
+import { EditLink, CopyLink, AddLink, LockedLink,
          NestedLink, ExportLink, CodeLink } from '../common/Links'
 
 const QuestionSet = ({ config, questionset, elementActions, display='list', filter=null, indent=0 }) => {
@@ -29,8 +29,8 @@ const QuestionSet = ({ config, questionset, elementActions, display='list', filt
       <div className="pull-right">
         <EditLink element={questionset} verboseName={verboseName} onClick={fetchEdit} />
         <CopyLink element={questionset} verboseName={verboseName} onClick={fetchCopy} />
-        <AddLink element={questionset} verboseName="question" onClick={createQuestion} />
-        <AddSquareLink element={questionset} verboseName="questionset" onClick={createQuestionSet} />
+        <AddLink element={questionset} verboseName={gettext('question')} verboseNameAlt={gettext('question set')}
+                 onClick={createQuestion} onAltClick={createQuestionSet} />
         <LockedLink element={questionset} verboseName={verboseName} onClick={toggleLocked} />
         <NestedLink element={questionset} verboseName={verboseName} onClick={fetchNested} />
         <ExportLink element={questionset} verboseName={verboseName} />
