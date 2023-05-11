@@ -27,12 +27,12 @@ const QuestionSet = ({ config, questionset, elementActions, display='list', filt
   const elementNode = (
     <div className="element">
       <div className="pull-right">
+        <NestedLink element={questionset} verboseName={verboseName} onClick={fetchNested} />
         <EditLink element={questionset} verboseName={verboseName} onClick={fetchEdit} />
         <CopyLink element={questionset} verboseName={verboseName} onClick={fetchCopy} />
         <AddLink element={questionset} verboseName={gettext('question')} verboseNameAlt={gettext('question set')}
                  onClick={createQuestion} onAltClick={createQuestionSet} />
         <LockedLink element={questionset} verboseName={verboseName} onClick={toggleLocked} />
-        <NestedLink element={questionset} verboseName={verboseName} onClick={fetchNested} />
         <ExportLink element={questionset} verboseName={verboseName} />
       </div>
       <div>

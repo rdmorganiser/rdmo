@@ -28,12 +28,12 @@ const Page = ({ config, page, elementActions, display='list', filter=null, inden
   const elementNode = (
     <div className="element">
       <div className="pull-right">
+        <NestedLink element={page} verboseName={verboseName} onClick={fetchNested} />
         <EditLink element={page} verboseName={verboseName} onClick={fetchEdit} />
         <CopyLink element={page} verboseName={verboseName} onClick={fetchCopy} />
         <AddLink element={page} verboseName={gettext('question')} verboseNameAlt={gettext('question set')}
                  onClick={createQuestion} onAltClick={createQuestionSet} />
         <LockedLink element={page} verboseName={verboseName} onClick={toggleLocked} />
-        <NestedLink element={page} verboseName={verboseName} onClick={fetchNested} />
         <ExportLink element={page} verboseName={verboseName} />
       </div>
       <div>
