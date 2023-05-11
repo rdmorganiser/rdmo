@@ -155,50 +155,52 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
           </div>
         </div>
 
-        <MultiSelect config={config} element={question} field="optionsets"
-                     options={optionsets} verboseName="optionset"
-                     onChange={updateQuestion} onCreate={createOptionSet} onEdit={editOptionSet} />
-
-        <MultiSelect config={config} element={question} field="conditions"
-                     options={conditions} verboseName="condition"
-                     onChange={updateQuestion} onCreate={createCondition} onEdit={editCondition} />
-
-        <div className="row">
-          <div className="col-sm-4">
-            <Text config={config} element={question} field="minimum"
-                  onChange={updateQuestion} />
-          </div>
-          <div className="col-sm-4">
-            <Text config={config} element={question} field="maximum"
-                  onChange={updateQuestion} />
-          </div>
-          <div className="col-sm-4">
-            <Text config={config} element={question} field="step"
-                  onChange={updateQuestion} />
-          </div>
-        </div>
-
-        <Tabs id="#question-default-tabs" defaultActiveKey={0} animation={false}>
-          {
-            config.settings && config.settings.languages.map(([lang_code, lang], index) => (
-              <Tab key={index} eventKey={index} title={lang}>
+        <Tabs id="#question-tabs2" defaultActiveKey={0} animation={false}>
+          <Tab key={0} eventKey={0} title={gettext('Conditions')}>
+            <MultiSelect config={config} element={question} field="conditions"
+                         options={conditions} verboseName="condition"
+                         onChange={updateQuestion} onCreate={createCondition} onEdit={editCondition} />
+          </Tab>
+          <Tab key={1} eventKey={1} title={gettext('Option sets')}>
+            <MultiSelect config={config} element={question} field="optionsets"
+                         options={optionsets} verboseName="optionset"
+                         onChange={updateQuestion} onCreate={createOptionSet} onEdit={editOptionSet} />
+          </Tab>
+          <Tab key={2} eventKey={2} title={gettext('Range')}>
+            <div className="row">
+              <div className="col-sm-4">
+                <Text config={config} element={question} field="minimum"
+                      onChange={updateQuestion} />
+              </div>
+              <div className="col-sm-4">
+                <Text config={config} element={question} field="maximum"
+                      onChange={updateQuestion} />
+              </div>
+              <div className="col-sm-4">
+                <Text config={config} element={question} field="step"
+                      onChange={updateQuestion} />
+              </div>
+            </div>
+          </Tab>
+          <Tab key={3} eventKey={3} title={gettext('Default')}>
+            {
+              config.settings && config.settings.languages.map(([lang_code, lang], index) => (
                 <Textarea key={index} config={config} element={question} field={`default_text_${lang_code }`}
-                          rows={2} onChange={updateQuestion} />
-              </Tab>
-            ))
-          }
+                          rows={1} onChange={updateQuestion} />
+              ))
+            }
+            <div className="row">
+              <div className="col-sm-6">
+                <Select config={config} element={question} field="default_option"
+                        options={options} onChange={updateQuestion} />
+              </div>
+              <div className="col-sm-6">
+                <Text config={config} element={question} field="default_external_id"
+                      onChange={updateQuestion} />
+              </div>
+            </div>
+          </Tab>
         </Tabs>
-
-        <div className="row">
-          <div className="col-sm-6">
-            <Select config={config} element={question} field="default_option"
-                    options={options} onChange={updateQuestion} />
-          </div>
-          <div className="col-sm-6">
-            <Text config={config} element={question} field="default_external_id"
-                  onChange={updateQuestion} />
-          </div>
-        </div>
       </div>
 
       <div className="panel-footer">
