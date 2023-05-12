@@ -23,7 +23,8 @@ const Question = ({ config, question, elementActions, display='list', filter=nul
         <EditLink element={question} verboseName={verboseName} onClick={fetchEdit} />
         <CopyLink element={question} verboseName={verboseName} onClick={fetchCopy} />
         <LockedLink element={question} verboseName={verboseName} onClick={toggleLocked} />
-        <ExportLink element={question} verboseName={verboseName} />
+        <ExportLink element={question} elementType="questions" verboseName={verboseName}
+                    exportFormats={config.settings.export_formats} />
       </div>
       <div>
         <p>

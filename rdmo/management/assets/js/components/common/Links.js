@@ -6,6 +6,8 @@ import isUndefined from 'lodash/isUndefined'
 
 import Link from 'rdmo/core/assets/js/components/Link'
 
+import { elementModules } from '../../constants/elements'
+
 const EditLink = ({ element, verboseName, onClick }) => {
   const title = interpolate(gettext('Edit %s'), [verboseName])
   return <Link className="element-link fa fa-pencil" title={title} onClick={onClick} />
@@ -102,18 +104,30 @@ LockedLink.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-const ExportLink = ({ element, verboseName }) => {
-  const title = interpolate(gettext('Export %s as XML'), [verboseName])
+const ExportLink = ({ element, elementType, verboseName, exportFormats }) => {
+  const title = interpolate(gettext('Export %s'), [verboseName])
+  const url = `/api/v1/${elementModules[elementType]}/${elementType}`
   return (
-    <a href={element.xml_url} className="element-link fa fa-download"
-       title={title} target="_blank">
-    </a>
+    <span className="dropdown">
+      <a href="" className="element-link fa fa-download" title={title} data-toggle="dropdown"></a>
+      <ul className="dropdown-menu">
+        <li><a href={`${url}/${element.id}/export/`}>{gettext('XML')}</a></li>
+        <li role="separator" className="divider"></li>
+        {
+          exportFormats.map(([key, label], index) => <li key={index}>
+            <a href={`${url}/${element.id}/export/${key}/`} target={['pdf', 'html'].includes(key) ? '_blank' : '_self'}>{label}</a>
+          </li>)
+        }
+      </ul>
+    </span>
   )
 }
 
 ExportLink.propTypes = {
   element: PropTypes.object.isRequired,
-  verboseName: PropTypes.string.isRequired
+  elementType: PropTypes.string.isRequired,
+  verboseName: PropTypes.string.isRequired,
+  exportFormats: PropTypes.array
 }
 
 const NestedLink = ({ element, verboseName, onClick }) => {

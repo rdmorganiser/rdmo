@@ -28,7 +28,8 @@ const Section = ({ config, section, elementActions, display='list', filter=null,
         <CopyLink element={section} verboseName={verboseName} onClick={fetchCopy} />
         <AddLink element={section} verboseName={gettext('page')} onClick={createPage} />
         <LockedLink element={section} verboseName={verboseName} onClick={toggleLocked} />
-        <ExportLink element={section} verboseName={verboseName} />
+        <ExportLink element={section} elementType="sections" verboseName={verboseName}
+                    exportFormats={config.settings.export_formats} />
       </div>
       <div>
         <p>

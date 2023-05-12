@@ -205,7 +205,8 @@ SETTINGS_API = [
     'DEFAULT_URI_PREFIX',
     'LANGUAGES',
     'MULTISITE',
-    'GROUPS'
+    'GROUPS',
+    'EXPORT_FORMATS',
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

@@ -33,7 +33,8 @@ const QuestionSet = ({ config, questionset, elementActions, display='list', filt
         <AddLink element={questionset} verboseName={gettext('question')} verboseNameAlt={gettext('question set')}
                  onClick={createQuestion} onAltClick={createQuestionSet} />
         <LockedLink element={questionset} verboseName={verboseName} onClick={toggleLocked} />
-        <ExportLink element={questionset} verboseName={verboseName} />
+        <ExportLink element={questionset} elementType="questionsets" verboseName={verboseName}
+                    exportFormats={config.settings.export_formats} />
       </div>
       <div>
         <p>

@@ -24,7 +24,8 @@ const View = ({ config, view, elementActions, filter=null }) => {
           <CopyLink element={view} verboseName={verboseName} onClick={fetchCopy} />
           <AvailableLink element={view} verboseName={verboseName} onClick={toggleAvailable} />
           <LockedLink element={view} verboseName={verboseName} onClick={toggleLocked} />
-          <ExportLink element={view} verboseName={verboseName} />
+          <ExportLink element={view} elementType="views" verboseName={verboseName}
+                      exportFormats={config.settings.export_formats} />
         </div>
         <div>
           <p>

@@ -8,6 +8,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from rdmo.core.exports import XMLResponse
 from rdmo.core.permissions import HasModelPermission
+from rdmo.core.utils import render_to_format
 from rdmo.core.views import ChoicesViewSet
 from rdmo.core.viewsets import CopyModelMixin
 
@@ -51,17 +52,27 @@ class OptionSetViewSet(CopyModelMixin, ModelViewSet):
         serializer = OptionSetNestedSerializer(self.get_object(), context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=False, permission_classes=[HasModelPermission])
-    def export(self, request):
-        serializer = OptionSetExportSerializer(self.get_queryset(), many=True)
-        xml = OptionSetRenderer().render(serializer.data)
-        return XMLResponse(xml, name='optionsets')
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    def export(self, request, export_format='xml'):
+        if export_format == 'xml':
+            serializer = OptionSetExportSerializer(self.get_queryset(), many=True)
+            xml = OptionSetRenderer().render(serializer.data)
+            return XMLResponse(xml, name='optionsets')
+        else:
+            return render_to_format(self.request, export_format, 'optionsets', 'options/export/optionsets.html', {
+                'optionsets': self.get_queryset()
+            })
 
-    @action(detail=True, url_path='export', permission_classes=[HasModelPermission])
-    def detail_export(self, request, pk=None):
-        serializer = OptionSetExportSerializer(self.get_object())
-        xml = OptionSetRenderer().render([serializer.data])
-        return XMLResponse(xml, name=self.get_object().uri_path)
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    def detail_export(self, request, pk=None, export_format='xml'):
+        if export_format == 'xml':
+            serializer = OptionSetExportSerializer(self.get_object())
+            xml = OptionSetRenderer().render([serializer.data])
+            return XMLResponse(xml, name=self.get_object().uri_path)
+        else:
+            return render_to_format(self.request, export_format, self.get_object().uri_path, 'options/export/optionsets.html', {
+                'optionsets': [self.get_object()]
+            })
 
 
 class OptionViewSet(CopyModelMixin, ModelViewSet):
@@ -88,17 +99,27 @@ class OptionViewSet(CopyModelMixin, ModelViewSet):
         serializer = OptionIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, permission_classes=[HasModelPermission])
-    def export(self, request):
-        serializer = OptionExportSerializer(self.get_queryset(), many=True)
-        xml = OptionRenderer().render(serializer.data)
-        return XMLResponse(xml, name='options')
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    def export(self, request, export_format='xml'):
+        if export_format == 'xml':
+            serializer = OptionExportSerializer(self.get_queryset(), many=True)
+            xml = OptionRenderer().render(serializer.data)
+            return XMLResponse(xml, name='options')
+        else:
+            return render_to_format(self.request, export_format, 'options', 'options/export/options.html', {
+                'options': self.get_queryset()
+            })
 
-    @action(detail=True, url_path='export', permission_classes=[HasModelPermission])
-    def detail_export(self, request, pk=None):
-        serializer = OptionExportSerializer(self.get_object())
-        xml = OptionRenderer().render([serializer.data])
-        return XMLResponse(xml, name=self.get_object().uri_path)
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    def detail_export(self, request, pk=None, export_format='xml'):
+        if export_format == 'xml':
+            serializer = OptionExportSerializer(self.get_object())
+            xml = OptionRenderer().render([serializer.data])
+            return XMLResponse(xml, name=self.get_object().uri_path)
+        else:
+            return render_to_format(self.request, export_format, self.get_object().uri_path, 'options/export/options.html', {
+                'options': [self.get_object()]
+            })
 
 
 class ProviderViewSet(ChoicesViewSet):

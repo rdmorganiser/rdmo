@@ -22,7 +22,8 @@ const Condition = ({ config, condition, elementActions, filter=null }) => {
           <EditLink element={condition} verboseName={verboseName} onClick={fetchEdit} />
           <CopyLink element={condition} verboseName={verboseName} onClick={fetchCopy} />
           <LockedLink element={condition} verboseName={verboseName} onClick={toggleLocked} />
-          <ExportLink element={condition} verboseName={verboseName} />
+          <ExportLink element={condition} elementType="conditions" verboseName={verboseName}
+                      exportFormats={config.settings.export_formats} />
         </div>
         <div>
           <p>

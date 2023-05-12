@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -8,6 +9,7 @@ from rest_framework.viewsets import ModelViewSet
 from rdmo.core.constants import VALUE_TYPE_CHOICES
 from rdmo.core.exports import XMLResponse
 from rdmo.core.permissions import HasModelPermission
+from rdmo.core.utils import render_to_format
 from rdmo.core.views import ChoicesViewSet
 from rdmo.core.viewsets import CopyModelMixin
 
@@ -65,17 +67,27 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
         serializer = CatalogIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, permission_classes=[HasModelPermission])
-    def export(self, request):
-        serializer = CatalogExportSerializer(self.get_queryset(), many=True)
-        xml = CatalogRenderer().render(serializer.data)
-        return XMLResponse(xml, name='catalogs')
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    def export(self, request, export_format='xml'):
+        if export_format == 'xml':
+            serializer = CatalogExportSerializer(self.get_queryset(), many=True)
+            xml = CatalogRenderer().render(serializer.data)
+            return XMLResponse(xml, name='catalogs')
+        else:
+            return render_to_format(self.request, export_format, 'questions', 'questions/export/catalogs.html', {
+                'catalogs': self.get_queryset()
+            })
 
-    @action(detail=True, url_path='export', permission_classes=[HasModelPermission])
-    def detail_export(self, request, pk=None):
-        serializer = CatalogExportSerializer(self.get_object())
-        xml = CatalogRenderer().render([serializer.data])
-        return XMLResponse(xml, name=self.get_object().uri_path)
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    def detail_export(self, request, pk=None, export_format='xml'):
+        if export_format == 'xml':
+            serializer = CatalogExportSerializer(self.get_object())
+            xml = CatalogRenderer().render([serializer.data])
+            return XMLResponse(xml, name=self.get_object().uri_path)
+        else:
+            return render_to_format(self.request, export_format, self.get_object().uri_path, 'questions/export/catalogs.html', {
+                'catalogs': [self.get_object()]
+            })
 
 
 class SectionViewSet(CopyModelMixin, ModelViewSet):
@@ -110,17 +122,27 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
         serializer = SectionIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, permission_classes=[HasModelPermission])
-    def export(self, request):
-        serializer = SectionExportSerializer(self.get_queryset(), many=True)
-        xml = SectionRenderer().render(serializer.data)
-        return XMLResponse(xml, name='sections')
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    def export(self, request, export_format='xml'):
+        if export_format == 'xml':
+            serializer = SectionExportSerializer(self.get_queryset(), many=True)
+            xml = SectionRenderer().render(serializer.data)
+            return XMLResponse(xml, name='sections')
+        else:
+            return render_to_format(self.request, export_format, 'questions', 'questions/export/sections.html', {
+                'sections': self.get_queryset()
+            })
 
-    @action(detail=True, url_path='export', permission_classes=[HasModelPermission])
-    def detail_export(self, request, pk=None):
-        serializer = SectionExportSerializer(self.get_object())
-        xml = SectionRenderer().render([serializer.data])
-        return XMLResponse(xml, name=self.get_object().uri_path)
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    def detail_export(self, request, pk=None, export_format='xml'):
+        if export_format == 'xml':
+            serializer = SectionExportSerializer(self.get_object())
+            xml = SectionRenderer().render([serializer.data])
+            return XMLResponse(xml, name=self.get_object().uri_path)
+        else:
+            return render_to_format(self.request, export_format, self.get_object().uri_path, 'questions/export/sections.html', {
+                'sections': [self.get_object()]
+            })
 
 
 class PageViewSet(CopyModelMixin, ModelViewSet):
@@ -162,17 +184,27 @@ class PageViewSet(CopyModelMixin, ModelViewSet):
         serializer = PageIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, permission_classes=[HasModelPermission])
-    def export(self, request):
-        serializer = PageExportSerializer(self.get_queryset(), many=True)
-        xml = PageRenderer().render(serializer.data)
-        return XMLResponse(xml, name='pages')
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    def export(self, request, export_format='xml'):
+        if export_format == 'xml':
+            serializer = PageExportSerializer(self.get_queryset(), many=True)
+            xml = PageRenderer().render(serializer.data)
+            return XMLResponse(xml, name='pages')
+        else:
+            return render_to_format(self.request, export_format, 'questions', 'questions/export/pages.html', {
+                'pages': self.get_queryset()
+            })
 
-    @action(detail=True, url_path='export', permission_classes=[HasModelPermission])
-    def detail_export(self, request, pk=None):
-        serializer = PageExportSerializer(self.get_object())
-        xml = PageRenderer().render([serializer.data])
-        return XMLResponse(xml, name=self.get_object().uri_path)
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    def detail_export(self, request, pk=None, export_format='xml'):
+        if export_format == 'xml':
+            serializer = PageExportSerializer(self.get_object())
+            xml = PageRenderer().render([serializer.data])
+            return XMLResponse(xml, name=self.get_object().uri_path)
+        else:
+            return render_to_format(self.request, export_format, self.get_object().uri_path, 'questions/export/pages.html', {
+                'pages': [self.get_object()]
+            })
 
 
 class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
@@ -215,17 +247,27 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
         serializer = QuestionSetIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, permission_classes=[HasModelPermission])
-    def export(self, request):
-        serializer = QuestionSetExportSerializer(self.get_queryset(), many=True)
-        xml = QuestionSetRenderer().render(serializer.data)
-        return XMLResponse(xml, name='questionsets')
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    def export(self, request, export_format='xml'):
+        if export_format == 'xml':
+            serializer = QuestionSetExportSerializer(self.get_queryset(), many=True)
+            xml = QuestionSetRenderer().render(serializer.data)
+            return XMLResponse(xml, name='questionsets')
+        else:
+            return render_to_format(self.request, export_format, 'questionsets', 'questions/export/questionsets.html', {
+                'questionsets': self.get_queryset()
+            })
 
-    @action(detail=True, url_path='export', permission_classes=[HasModelPermission])
-    def detail_export(self, request, pk=None):
-        serializer = QuestionSetExportSerializer(self.get_object())
-        xml = QuestionSetRenderer().render([serializer.data])
-        return XMLResponse(xml, name=self.get_object().uri_path)
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    def detail_export(self, request, pk=None, export_format='xml'):
+        if export_format == 'xml':
+            serializer = QuestionSetExportSerializer(self.get_object())
+            xml = QuestionSetRenderer().render([serializer.data])
+            return XMLResponse(xml, name=self.get_object().uri_path)
+        else:
+            return render_to_format(self.request, export_format, self.get_object().uri_path, 'questions/export/questionsets.html', {
+                'questionsets': [self.get_object()]
+            })
 
 
 class QuestionViewSet(CopyModelMixin, ModelViewSet):
@@ -265,17 +307,27 @@ class QuestionViewSet(CopyModelMixin, ModelViewSet):
         serializer = QuestionIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, permission_classes=[HasModelPermission])
-    def export(self, request):
-        serializer = QuestionExportSerializer(self.get_queryset(), many=True)
-        xml = QuestionRenderer().render(serializer.data)
-        return XMLResponse(xml, name='questions')
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    def export(self, request, export_format='xml'):
+        if export_format == 'xml':
+            serializer = QuestionExportSerializer(self.get_queryset(), many=True)
+            xml = QuestionRenderer().render(serializer.data)
+            return XMLResponse(xml, name='questions')
+        else:
+            return render_to_format(self.request, export_format, 'questions', 'questions/export/questions.html', {
+                'questions': self.get_queryset()
+            })
 
-    @action(detail=True, url_path='export', permission_classes=[HasModelPermission])
-    def detail_export(self, request, pk=None):
-        serializer = QuestionExportSerializer(self.get_object())
-        xml = QuestionRenderer().render([serializer.data])
-        return XMLResponse(xml, name=self.get_object().uri_path)
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    def detail_export(self, request, pk=None, export_format='xml'):
+        if export_format == 'xml':
+            serializer = QuestionExportSerializer(self.get_object())
+            xml = QuestionRenderer().render([serializer.data])
+            return XMLResponse(xml, name=self.get_object().uri_path)
+        else:
+            return render_to_format(self.request, export_format, self.get_object().uri_path, 'questions/export/questions.html', {
+                'questions': [self.get_object()]
+            })
 
 
 class WidgetTypeViewSet(ChoicesViewSet):

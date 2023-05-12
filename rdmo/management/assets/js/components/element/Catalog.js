@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import isUndefined from 'lodash/isUndefined'
 
 import { filterElement } from '../../utils/filter'
+import { exportUrls } from '../../constants/elements'
 
 import Section from './Section'
 import { ElementErrors } from '../common/Errors'
@@ -31,7 +32,8 @@ const Catalog = ({ config, catalog, elementActions, display='list', filter=null 
         <AddLink element={catalog} verboseName={gettext('section')} onClick={createSection} />
         <AvailableLink element={catalog} verboseName={verboseName} onClick={toggleAvailable} />
         <LockedLink element={catalog} verboseName={verboseName} onClick={toggleLocked} />
-        <ExportLink element={catalog} verboseName={verboseName} />
+        <ExportLink element={catalog} elementType="catalogs" verboseName={verboseName}
+                    exportFormats={config.settings.export_formats} />
       </div>
       <div>
         <p>
