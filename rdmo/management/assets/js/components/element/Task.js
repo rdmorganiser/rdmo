@@ -24,7 +24,8 @@ const Task = ({ config, task, elementActions, filter=null }) => {
           <CopyLink element={task} verboseName={verboseName} onClick={fetchCopy} />
           <AvailableLink element={task} verboseName={verboseName} onClick={toggleAvailable} />
           <LockedLink element={task} verboseName={verboseName} onClick={toggleLocked} />
-          <ExportLink element={task} verboseName={verboseName} />
+          <ExportLink element={task} elementType="tasks" verboseName={verboseName}
+                      exportFormats={config.settings.export_formats} />
         </div>
         <div>
           <p>

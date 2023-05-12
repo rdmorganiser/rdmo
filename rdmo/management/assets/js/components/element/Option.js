@@ -21,7 +21,8 @@ const Option = ({ config, option, elementActions, display='list', indent=0, filt
         <EditLink element={option} verboseName={verboseName} onClick={fetchEdit} />
         <CopyLink element={option} verboseName={verboseName} onClick={fetchCopy} />
         <LockedLink element={option} verboseName={verboseName} onClick={toggleLocked} />
-        <ExportLink element={option} verboseName={verboseName} />
+        <ExportLink element={option} elementType="options" verboseName={verboseName}
+                    exportFormats={config.settings.export_formats} />
       </div>
       <div>
         <p>

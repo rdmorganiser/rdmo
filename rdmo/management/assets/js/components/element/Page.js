@@ -34,7 +34,8 @@ const Page = ({ config, page, elementActions, display='list', filter=null, inden
         <AddLink element={page} verboseName={gettext('question')} verboseNameAlt={gettext('question set')}
                  onClick={createQuestion} onAltClick={createQuestionSet} />
         <LockedLink element={page} verboseName={verboseName} onClick={toggleLocked} />
-        <ExportLink element={page} verboseName={verboseName} />
+        <ExportLink element={page} elementType="pages" verboseName={verboseName}
+                    exportFormats={config.settings.export_formats} />
       </div>
       <div>
         <p>

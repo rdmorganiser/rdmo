@@ -6,6 +6,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from rdmo.core.exports import XMLResponse
 from rdmo.core.permissions import HasModelPermission
+from rdmo.core.utils import render_to_csv, render_to_format
 from rdmo.core.viewsets import CopyModelMixin
 
 from .models import Attribute
@@ -44,15 +45,34 @@ class AttributeViewSet(CopyModelMixin, ModelViewSet):
         serializer = AttributeNestedSerializer(self.get_object(), context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=False, permission_classes=[HasModelPermission])
-    def export(self, request):
-        serializer = AttributeExportSerializer(self.get_queryset(), many=True)
-        xml = AttributeRenderer().render(serializer.data)
-        return XMLResponse(xml, name='attributes')
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    def export(self, request, export_format='xml'):
+        attributes = self.get_queryset()
+        if export_format == 'xml':
+            serializer = AttributeExportSerializer(attributes, many=True)
+            xml = AttributeRenderer().render(serializer.data)
+            return XMLResponse(xml, name='attributes')
+        elif export_format[:3] == 'csv':
+            rows = [(attribute.key, attribute.comment, attribute.uri) for attribute in attributes]
+            delimiter = ',' if export_format == 'csvcomma' else ';'
+            return render_to_csv('domain', rows, delimiter)
+        else:
+            return render_to_format(self.request, export_format, 'domain', 'domain/export/attributes.html', {
+                'attributes': attributes
+            })
 
-    @action(detail=True, url_path='export', permission_classes=[HasModelPermission])
-    def detail_export(self, request, pk=None):
-        queryset = self.get_object().get_descendants(include_self=True)
-        serializer = AttributeExportSerializer(queryset, many=True)
-        xml = AttributeRenderer().render(serializer.data)
-        return XMLResponse(xml, name=self.get_object().key)
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    def detail_export(self, request, pk=None, export_format='xml'):
+        attributes = self.get_object().get_descendants(include_self=True)
+        if export_format == 'xml':
+            serializer = AttributeExportSerializer(attributes, many=True)
+            xml = AttributeRenderer().render(serializer.data)
+            return XMLResponse(xml, name=self.get_object().key)
+        elif export_format[:3] == 'csv':
+            rows = [(attribute.key, attribute.comment, attribute.uri) for attribute in attributes]
+            delimiter = ',' if export_format == 'csvcomma' else ';'
+            return render_to_csv('domain', rows, delimiter)
+        else:
+            return render_to_format(self.request, export_format, self.get_object().key, 'domain/export/attributes.html', {
+                'attributes': attributes
+            })

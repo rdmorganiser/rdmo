@@ -24,7 +24,8 @@ const Attribute = ({ config, attribute, elementActions, display='list', filter=n
         <CopyLink element={attribute} verboseName={verboseName} onClick={fetchCopy} />
         <LockedLink element={attribute} verboseName={verboseName} onClick={toggleLocked} />
         <NestedLink element={attribute} verboseName={verboseName} onClick={fetchNested} />
-        <ExportLink element={attribute} verboseName={verboseName} />
+        <ExportLink element={attribute} elementType="attributes" verboseName={verboseName}
+                    exportFormats={config.settings.export_formats} />
       </div>
       <div>
         <p>

@@ -1,0 +1,19 @@
+{% load i18n %}
+
+<h2>{% trans 'Section' %} {{ section.title }}</h2>
+
+<p>
+    <strong>{% trans 'URI' %}:</strong> {{ section.uri }}
+</p>
+
+{% if section.comment %}
+
+<p>
+    <strong>{% trans 'Comment' %}:</strong> {{ section.comment }}
+</p>
+
+{% endif %}
+
+{% for page in section.elements %}
+    {% include 'questions/export/page.html' with page=page %}
+{% endfor %}

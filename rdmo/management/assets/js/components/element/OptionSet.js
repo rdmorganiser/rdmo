@@ -29,7 +29,8 @@ const OptionSet = ({ config, optionset, elementActions, display='list', filter=n
         <CopyLink element={optionset} verboseName={verboseName} onClick={fetchCopy} />
         <AddLink element={optionset} verboseName={gettext('option')} onClick={createOption} />
         <LockedLink element={optionset} verboseName={verboseName} onClick={toggleLocked} />
-        <ExportLink element={optionset} verboseName={verboseName} />
+        <ExportLink element={optionset} elementType="optionsets" verboseName={verboseName}
+                    exportFormats={config.settings.export_formats} />
       </div>
       <div>
         <p>
