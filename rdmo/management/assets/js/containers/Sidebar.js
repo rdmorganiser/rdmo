@@ -18,10 +18,11 @@ class Sidebar extends Component {
   }
 
   render() {
-    const { config, imports, configActions, elementActions, importActions } = this.props
+    const { config, elements, imports, configActions, elementActions, importActions } = this.props
 
     if (isEmpty(imports.elements)) {
-      return <ElementsSidebar config={config} elementActions={elementActions} importActions={importActions} />
+      return <ElementsSidebar config={config} elements={elements}
+                              elementActions={elementActions} importActions={importActions} />
     } else {
       return <ImportSidebar config={config} imports={imports} importActions={importActions} />
     }
