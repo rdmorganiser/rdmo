@@ -114,6 +114,17 @@ const ExportLink = ({ element, elementType, verboseName, exportFormats }) => {
         <li><a href={`${url}/${element.id}/export/`}>{gettext('XML')}</a></li>
         <li role="separator" className="divider"></li>
         {
+          elementType == 'attributes' && <>
+            <li><a href={`${url}/${element.id}/export/csvcomma/`}>
+              {gettext('CSV comma separated')}
+            </a></li>
+            <li><a href={`${url}/${element.id}/export/csvsemicolon/`}>
+              {gettext('CSV semicolon separated')}
+            </a></li>
+            <li role="separator" className="divider"></li>
+          </>
+        }
+        {
           exportFormats.map(([key, label], index) => <li key={index}>
             <a href={`${url}/${element.id}/export/${key}/`} target={['pdf', 'html'].includes(key) ? '_blank' : '_self'}>{label}</a>
           </li>)
