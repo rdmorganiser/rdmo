@@ -11,8 +11,8 @@ import Question from '../element/Question'
 
 const Questions = ({ config, questions, configActions, elementActions }) => {
 
-  const updateFilterString = (value) => configActions.updateConfig('filter.questions.string', value)
-  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.questions.uriPrefix', value)
+  const updateFilterString = (value) => configActions.updateConfig('filter.questions.search', value)
+  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.questions.uri_prefix', value)
   const updateDisplayQuestionsURI = (value) => configActions.updateConfig('display.uri.questions', value)
   const updateDisplayAttributesURI = (value) => configActions.updateConfig('display.uri.attributes', value)
 
@@ -31,11 +31,11 @@ const Questions = ({ config, questions, configActions, elementActions }) => {
       <div className="panel-body">
         <div className="row">
           <div className="col-sm-8">
-            <FilterString value={config.filter.questions.string} onChange={updateFilterString}
+            <FilterString value={config.filter.questions.search} onChange={updateFilterString}
                           placeholder={gettext('Filter questions')} />
           </div>
           <div className="col-sm-4">
-            <FilterUriPrefix value={config.filter.questions.uriPrefix} onChange={updateFilterUriPrefix}
+            <FilterUriPrefix value={config.filter.questions.uri_prefix} onChange={updateFilterUriPrefix}
                              options={getUriPrefixes(questions)} />
           </div>
         </div>

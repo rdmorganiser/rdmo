@@ -3,17 +3,23 @@ import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import isEmpty from 'lodash/isEmpty'
+import isNil from 'lodash/isNil'
+
+import { elementModules } from '../../constants/elements'
 
 import { buildPath } from '../../utils/location'
-import { elementModules } from '../../constants/elements'
+import { getExportParams } from '../../utils/filter'
 
 import Link from 'rdmo/core/assets/js/components/Link'
 
 import { UploadForm } from '../common/Forms'
 
 const ElementsSidebar = ({ config, elements, elementActions, importActions }) => {
-  const { elementType } = elements
-  const exportUrl = `/api/v1/${elementModules[elementType]}/${elementType}/export/`
+  const { elementType, elementId } = elements
+
+  const exportUrl = isNil(elementId) ? `/api/v1/${elementModules[elementType]}/${elementType}/export/`
+                                     : `/api/v1/${elementModules[elementType]}/${elementType}/${elementId}/export/`
+  const exportParams = getExportParams(config.filter[elementType])
 
   return (
     <div className="elements-sidebar">
@@ -70,17 +76,17 @@ const ElementsSidebar = ({ config, elements, elementActions, importActions }) =>
 
       <ul className="list-unstyled">
         <li>
-          <a href={exportUrl}>{gettext('XML')}</a>
+          <a href={`${exportUrl}?${exportParams}`}>{gettext('XML')}</a>
         </li>
         {
           elementType == 'attributes' && <>
             <li>
-              <a href={`${exportUrl}csvcomma/`}>
+              <a href={`${exportUrl}csvcomma/?${exportParams}`}>
                 {gettext('CSV comma separated')}
               </a>
             </li>
             <li>
-              <a href={`${exportUrl}csvsemicolon/`}>
+              <a href={`${exportUrl}csvsemicolon/?${exportParams}`}>
                 {gettext('CSV semicolon separated')}
               </a>
             </li>
@@ -89,7 +95,7 @@ const ElementsSidebar = ({ config, elements, elementActions, importActions }) =>
         {
           config.settings.export_formats &&
           config.settings.export_formats.map(([key, label], index) => <li key={index}>
-            <a href={`${exportUrl}${key}/`}
+            <a href={`${exportUrl}${key}/?${exportParams}`}
                target={['pdf', 'html'].includes(key) ? '_blank' : '_self'}>{label}</a>
           </li>)
         }

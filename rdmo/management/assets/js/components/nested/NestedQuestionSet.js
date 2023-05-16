@@ -13,8 +13,8 @@ import Question from '../element/Question'
 
 const NestedQuestionSet = ({ config, questionset, configActions, elementActions }) => {
 
-  const updateFilterString = (uri) => configActions.updateConfig('filter.questionset.string', uri)
-  const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.questionset.uriPrefix', uriPrefix)
+  const updateFilterString = (uri) => configActions.updateConfig('filter.questionset.search', uri)
+  const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.questionset.uri_prefix', uriPrefix)
 
   const updateDisplayQuestionSets = (value) => configActions.updateConfig('display.elements.questionsets', value)
   const updateDisplayQuestions = (value) => configActions.updateConfig('display.elements.questions', value)
@@ -35,11 +35,11 @@ const NestedQuestionSet = ({ config, questionset, configActions, elementActions 
         <div className="panel-body">
           <div className="row">
             <div className="col-sm-8">
-              <FilterString value={config.filter.questionset.string} onChange={updateFilterString}
+              <FilterString value={config.filter.questionset.search} onChange={updateFilterString}
                             placeholder={gettext('Filter question sets')} />
             </div>
             <div className="col-sm-4">
-              <FilterUriPrefix value={config.filter.questionset.uriPrefix} onChange={updateFilterUriPrefix}
+              <FilterUriPrefix value={config.filter.questionset.uri_prefix} onChange={updateFilterUriPrefix}
                                options={getUriPrefixes(questionset.elements)} />
             </div>
           </div>

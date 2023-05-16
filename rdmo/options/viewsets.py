@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
+from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -30,7 +31,8 @@ class OptionSetViewSet(CopyModelMixin, ModelViewSet):
     )
     serializer_class = OptionSetSerializer
 
-    filter_backends = (DjangoFilterBackend,)
+    filter_backends = (SearchFilter, DjangoFilterBackend)
+    search_fields = ('uri', )
     filterset_fields = (
         'uri',
         'uri_prefix',
@@ -43,7 +45,7 @@ class OptionSetViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=False)
     def index(self, request):
-        queryset = OptionSet.objects.prefetch_related('options')
+        queryset = self.filter_queryset(self.get_queryset())
         serializer = OptionSetIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -54,13 +56,14 @@ class OptionSetViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
     def export(self, request, export_format='xml'):
+        queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
-            serializer = OptionSetExportSerializer(self.get_queryset(), many=True)
+            serializer = OptionSetExportSerializer(queryset, many=True)
             xml = OptionSetRenderer().render(serializer.data)
             return XMLResponse(xml, name='optionsets')
         else:
             return render_to_format(self.request, export_format, 'optionsets', 'options/export/optionsets.html', {
-                'optionsets': self.get_queryset()
+                'optionsets': queryset
             })
 
     @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
@@ -82,7 +85,8 @@ class OptionViewSet(CopyModelMixin, ModelViewSet):
                              .prefetch_related('optionsets', 'conditions')
     serializer_class = OptionSerializer
 
-    filter_backends = (DjangoFilterBackend,)
+    filter_backends = (SearchFilter, DjangoFilterBackend)
+    search_fields = ('uri', 'text')
     filterset_fields = (
         'uri',
         'uri_prefix',
@@ -95,19 +99,20 @@ class OptionViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=False)
     def index(self, request):
-        queryset = Option.objects.prefetch_related('optionsets')
+        queryset = self.filter_queryset(self.get_queryset())
         serializer = OptionIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
     @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
     def export(self, request, export_format='xml'):
+        queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
-            serializer = OptionExportSerializer(self.get_queryset(), many=True)
+            serializer = OptionExportSerializer(queryset, many=True)
             xml = OptionRenderer().render(serializer.data)
             return XMLResponse(xml, name='options')
         else:
             return render_to_format(self.request, export_format, 'options', 'options/export/options.html', {
-                'options': self.get_queryset()
+                'options': queryset
             })
 
     @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])

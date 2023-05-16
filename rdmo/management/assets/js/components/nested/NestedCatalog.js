@@ -12,8 +12,8 @@ import Section from '../element/Section'
 
 const NestedCatalog = ({ config, catalog, configActions, elementActions }) => {
 
-  const updateFilterString = (value) => configActions.updateConfig('filter.catalog.string', value)
-  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.catalog.uriPrefix', value)
+  const updateFilterString = (value) => configActions.updateConfig('filter.catalog.search', value)
+  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.catalog.uri_prefix', value)
 
   const updateDisplaySections = (value) => configActions.updateConfig('display.elements.sections', value)
   const updateDisplayPages = (value) => configActions.updateConfig('display.elements.pages', value)
@@ -39,11 +39,11 @@ const NestedCatalog = ({ config, catalog, configActions, elementActions }) => {
         <div className="panel-body">
           <div className="row">
             <div className="col-sm-8">
-              <FilterString value={config.filter.catalog.string} onChange={updateFilterString}
+              <FilterString value={config.filter.catalog.search} onChange={updateFilterString}
                             placeholder={gettext('Filter catalogs')} />
             </div>
             <div className="col-sm-4">
-              <FilterUriPrefix value={config.filter.catalog.uriPrefix} onChange={updateFilterUriPrefix}
+              <FilterUriPrefix value={config.filter.catalog.uri_prefix} onChange={updateFilterUriPrefix}
                                options={getUriPrefixes(catalog.elements)} />
             </div>
           </div>

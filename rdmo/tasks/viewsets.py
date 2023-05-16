@@ -1,6 +1,7 @@
 from django.db import models
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
+from rest_framework.filters import SearchFilter
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
@@ -23,7 +24,8 @@ class TaskViewSet(CopyModelMixin, ModelViewSet):
                            .annotate(projects_count=models.Count('projects'))
     serializer_class = TaskSerializer
 
-    filter_backends = (DjangoFilterBackend,)
+    filter_backends = (SearchFilter, DjangoFilterBackend)
+    search_fields = ('uri', )
     filterset_fields = (
         'uri',
         'key',
@@ -35,19 +37,20 @@ class TaskViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=False)
     def index(self, request):
-        queryset = Task.objects.select_related('start_attribute', 'end_attribute')
+        queryset = self.filter_queryset(self.get_queryset())
         serializer = TaskIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
     @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
     def export(self, request, export_format='xml'):
+        queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
-            serializer = TaskExportSerializer(self.get_queryset(), many=True)
+            serializer = TaskExportSerializer(queryset, many=True)
             xml = TaskRenderer().render(serializer.data)
             return XMLResponse(xml, name='tasks')
         else:
             return render_to_format(self.request, export_format, 'tasks', 'tasks/export/tasks.html', {
-                'tasks': self.get_queryset()
+                'tasks': queryset
             })
 
     @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])

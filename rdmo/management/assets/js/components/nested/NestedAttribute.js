@@ -10,8 +10,8 @@ import Attribute from '../element/Attribute'
 
 const NestedAttribute = ({ config, attribute, configActions, elementActions }) => {
 
-  const updateFilterString = (uri) => configActions.updateConfig('filter.attribute.string', uri)
-  const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.attribute.uriPrefix', uriPrefix)
+  const updateFilterString = (uri) => configActions.updateConfig('filter.attribute.search', uri)
+  const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.attribute.uri_prefix', uriPrefix)
 
   return (
     <>
@@ -27,11 +27,11 @@ const NestedAttribute = ({ config, attribute, configActions, elementActions }) =
         <div className="panel-body">
           <div className="row">
             <div className="col-sm-8">
-              <FilterString value={config.filter.attribute.string} onChange={updateFilterString}
+              <FilterString value={config.filter.attribute.search} onChange={updateFilterString}
                             placeholder={gettext('Filter attributes')} />
             </div>
             <div className="col-sm-4">
-              <FilterUriPrefix value={config.filter.attribute.uriPrefix} onChange={updateFilterUriPrefix}
+              <FilterUriPrefix value={config.filter.attribute.uri_prefix} onChange={updateFilterUriPrefix}
                                options={getUriPrefixes(attribute.elements)} />
             </div>
           </div>

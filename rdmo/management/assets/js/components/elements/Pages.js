@@ -11,8 +11,8 @@ import Page from '../element/Page'
 
 const Pages = ({ config, pages, configActions, elementActions }) => {
 
-  const updateFilterString = (value) => configActions.updateConfig('filter.pages.string', value)
-  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.pages.uriPrefix', value)
+  const updateFilterString = (value) => configActions.updateConfig('filter.pages.search', value)
+  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.pages.uri_prefix', value)
   const updateDisplayPagesURI = (value) => configActions.updateConfig('display.uri.pages', value)
   const updateDisplayAttributesURI = (value) => configActions.updateConfig('display.uri.attributes', value)
 
@@ -31,11 +31,11 @@ const Pages = ({ config, pages, configActions, elementActions }) => {
       <div className="panel-body">
         <div className="row">
           <div className="col-sm-8">
-            <FilterString value={config.filter.pages.string} onChange={updateFilterString}
+            <FilterString value={config.filter.pages.search} onChange={updateFilterString}
                           placeholder={gettext('Filter pages')} />
           </div>
           <div className="col-sm-4">
-            <FilterUriPrefix value={config.filter.pages.uriPrefix} onChange={updateFilterUriPrefix}
+            <FilterUriPrefix value={config.filter.pages.uri_prefix} onChange={updateFilterUriPrefix}
                              options={getUriPrefixes(pages)} />
           </div>
         </div>

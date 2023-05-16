@@ -1,5 +1,6 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
+from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -22,9 +23,11 @@ class ConditionViewSet(CopyModelMixin, ModelViewSet):
     queryset = Condition.objects.select_related('source', 'target_option') \
                                 .prefetch_related('optionsets', 'pages', 'questionsets', 'questions', 'tasks')
 
-    filter_backends = (DjangoFilterBackend,)
+    filter_backends = (SearchFilter, DjangoFilterBackend)
+    search_fields = ('uri', )
     filterset_fields = (
         'uri',
+        'uri_prefix',
         'key',
         'source',
         'relation',
@@ -37,19 +40,20 @@ class ConditionViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=False)
     def index(self, request):
-        queryset = Condition.objects.select_related('source', 'target_option')
+        queryset = self.filter_queryset(self.get_queryset())
         serializer = ConditionIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
     @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
     def export(self, request, export_format='xml'):
+        queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
-            serializer = ConditionExportSerializer(self.get_queryset(), many=True)
+            serializer = ConditionExportSerializer(queryset, many=True)
             xml = ConditionRenderer().render(serializer.data)
             return XMLResponse(xml, name='conditions')
         else:
             return render_to_format(self.request, export_format, 'tasks', 'conditions/export/conditions.html', {
-                'conditions': self.get_queryset()
+                'conditions': queryset
             })
 
     @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])

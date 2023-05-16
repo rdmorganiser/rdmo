@@ -11,8 +11,8 @@ import Option from '../element/Option'
 
 const Options = ({ config, options, configActions, elementActions }) => {
 
-  const updateFilterString = (value) => configActions.updateConfig('filter.options.string', value)
-  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.options.uriPrefix', value)
+  const updateFilterString = (value) => configActions.updateConfig('filter.options.search', value)
+  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.options.uri_prefix', value)
   const updateDisplayURI = (value) => configActions.updateConfig('display.uri.options', value)
 
   const createOption = () => elementActions.createElement('options')
@@ -30,11 +30,11 @@ const Options = ({ config, options, configActions, elementActions }) => {
       <div className="panel-body">
         <div className="row">
           <div className="col-sm-8">
-            <FilterString value={config.filter.options.string} onChange={updateFilterString}
+            <FilterString value={config.filter.options.search} onChange={updateFilterString}
                           placeholder={gettext('Filter options')} />
           </div>
           <div className="col-sm-4">
-            <FilterUriPrefix value={config.filter.options.uriPrefix} onChange={updateFilterUriPrefix}
+            <FilterUriPrefix value={config.filter.options.uri_prefix} onChange={updateFilterUriPrefix}
                              options={getUriPrefixes(options)} />
           </div>
         </div>

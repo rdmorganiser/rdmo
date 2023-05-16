@@ -4,12 +4,12 @@ import get from 'lodash/get'
 import isNil from 'lodash/isNil'
 import toNumber from 'lodash/toNumber'
 
-const filterString = (string, element) => {
+const filterSearch = (search, element) => {
   return (
-    isEmpty(string) ||
-    element.uri.includes(string) ||
-    (!isUndefined(element.title) && element.title.includes(string)) ||
-    (!isUndefined(element.text) && element.text.includes(string))
+    isEmpty(search) ||
+    element.uri.includes(search) ||
+    (!isUndefined(element.title) && element.title.includes(search)) ||
+    (!isUndefined(element.text) && element.text.includes(search))
   )
 }
 
@@ -25,11 +25,11 @@ const filterElement = (filter, element) => {
   if (isNil(filter)) {
     return true
   } else {
-    const strings = get(filter, 'string', '').trim().split(' '),
-          uriPrefix = get(filter, 'uriPrefix', ''),
-          site = get(filter, 'site', '')
+    const strings = get(filter, 'search', '').trim().split(' '),
+          uriPrefix = get(filter, 'uri_prefix', ''),
+          site = get(filter, 'sites', '')
     return (
-      strings.some(string => filterString(string, element)) &&
+      strings.some(search => filterSearch(search, element)) &&
       filterUriPrefix(uriPrefix, element) &&
       filterSite(site, element)
     )
@@ -45,4 +45,19 @@ const getUriPrefixes = (elements) => {
   }, [])
 }
 
-export { filterElement, getUriPrefixes }
+const getExportParams = (filter) => {
+  const exportParams = new URLSearchParams()
+
+  if (!isUndefined(filter)) {
+    for (const key in filter) {
+      const value = filter[key]
+      if (!isEmpty(value)) {
+        exportParams.append(key, value)
+      }
+    }
+  }
+
+  return exportParams.toString()
+}
+
+export { filterElement, getUriPrefixes, getExportParams }

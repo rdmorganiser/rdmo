@@ -10,8 +10,8 @@ import Attribute from '../element/Attribute'
 
 const Attributes = ({ config, attributes, configActions, elementActions }) => {
 
-  const updateFilterString = (value) => configActions.updateConfig('filter.attributes.string', value)
-  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.attributes.uriPrefix', value)
+  const updateFilterString = (value) => configActions.updateConfig('filter.attributes.search', value)
+  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.attributes.uri_prefix', value)
   const createAttribute = () => elementActions.createElement('attributes')
 
   return (
@@ -27,7 +27,7 @@ const Attributes = ({ config, attributes, configActions, elementActions }) => {
       <div className="panel-body">
         <div className="row">
           <div className="col-sm-8">
-            <FilterString value={config.filter.attributes.string} onChange={updateFilterString}
+            <FilterString value={config.filter.attributes.search} onChange={updateFilterString}
                           placeholder={gettext('Filter attributes')} />
           </div>
           <div className="col-sm-4">

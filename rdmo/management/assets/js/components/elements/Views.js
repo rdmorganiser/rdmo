@@ -10,9 +10,9 @@ import View from '../element/View'
 
 const Views = ({ config, views, configActions, elementActions }) => {
 
-  const updateFilterString = (value) => configActions.updateConfig('filter.views.string', value)
-  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.views.uriPrefix', value)
-  const updateFilterSite = (value) => configActions.updateConfig('filter.views.site', value)
+  const updateFilterString = (value) => configActions.updateConfig('filter.views.search', value)
+  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.views.uri_prefix', value)
+  const updateFilterSite = (value) => configActions.updateConfig('filter.views.sites', value)
 
   const createView = () => elementActions.createElement('views')
 
@@ -29,16 +29,16 @@ const Views = ({ config, views, configActions, elementActions }) => {
       <div className="panel-body">
         <div className="row">
           <div className={config.settings.multisite ? 'col-sm-4' : 'col-sm-8'}>
-            <FilterString value={config.filter.views.string} onChange={updateFilterString}
+            <FilterString value={config.filter.views.search} onChange={updateFilterString}
                           placeholder={gettext('Filter views')} />
           </div>
           <div className="col-sm-4">
-            <FilterUriPrefix value={config.filter.views.uriPrefix} onChange={updateFilterUriPrefix}
+            <FilterUriPrefix value={config.filter.views.uri_prefix} onChange={updateFilterUriPrefix}
                              options={getUriPrefixes(views)} />
           </div>
           {
             config.settings.multisite && <div className="col-sm-4">
-              <FilterSite value={config.filter.views.site} onChange={updateFilterSite}
+              <FilterSite value={config.filter.views.sites} onChange={updateFilterSite}
                           options={config.sites} />
             </div>
           }

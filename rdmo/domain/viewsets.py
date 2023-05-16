@@ -1,6 +1,7 @@
 from django.db import models
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
+from rest_framework.filters import SearchFilter
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
@@ -23,9 +24,11 @@ class AttributeViewSet(CopyModelMixin, ModelViewSet):
                         .annotate(projects_count=models.Count('values__project', distinct=True)) \
                         .prefetch_related('conditions', 'questionsets', 'questions', 'tasks_as_start', 'tasks_as_end')
 
-    filter_backends = (DjangoFilterBackend,)
+    filter_backends = (SearchFilter, DjangoFilterBackend)
+    search_fields = ('uri', )
     filterset_fields = (
         'uri',
+        'uri_prefix',
         'path',
         'key',
         'parent'
@@ -36,7 +39,7 @@ class AttributeViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=False)
     def index(self, request):
-        queryset = Attribute.objects.order_by('path')
+        queryset = self.filter_queryset(self.get_queryset())
         serializer = AttributeIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -47,18 +50,18 @@ class AttributeViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
     def export(self, request, export_format='xml'):
-        attributes = self.get_queryset()
+        queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
-            serializer = AttributeExportSerializer(attributes, many=True)
+            serializer = AttributeExportSerializer(queryset, many=True)
             xml = AttributeRenderer().render(serializer.data)
             return XMLResponse(xml, name='attributes')
         elif export_format[:3] == 'csv':
-            rows = [(attribute.key, attribute.comment, attribute.uri) for attribute in attributes]
+            rows = [(attribute.key, attribute.comment, attribute.uri) for attribute in queryset]
             delimiter = ',' if export_format == 'csvcomma' else ';'
             return render_to_csv('domain', rows, delimiter)
         else:
             return render_to_format(self.request, export_format, 'domain', 'domain/export/attributes.html', {
-                'attributes': attributes
+                'attributes': queryset
             })
 
     @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
