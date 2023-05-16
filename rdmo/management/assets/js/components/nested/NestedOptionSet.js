@@ -12,8 +12,8 @@ import OptionSet from '../element/OptionSet'
 
 const NestedOptionSet = ({ config, optionset, configActions, elementActions }) => {
 
-  const updateFilterString = (uri) => configActions.updateConfig('filter.optionset.string', uri)
-  const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.optionset.uriPrefix', uriPrefix)
+  const updateFilterString = (uri) => configActions.updateConfig('filter.optionset.search', uri)
+  const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.optionset.uri_prefix', uriPrefix)
 
   const updateDisplayURI = (value) => configActions.updateConfig('display.uri.options', value)
 
@@ -31,11 +31,11 @@ const NestedOptionSet = ({ config, optionset, configActions, elementActions }) =
         <div className="panel-body">
           <div className="row">
             <div className="col-sm-8">
-              <FilterString value={config.filter.optionset.string} onChange={updateFilterString}
+              <FilterString value={config.filter.optionset.search} onChange={updateFilterString}
                             placeholder={gettext('Filter optionsets')} />
             </div>
             <div className="col-sm-4">
-              <FilterUriPrefix value={config.filter.optionset.uriPrefix} onChange={updateFilterUriPrefix}
+              <FilterUriPrefix value={config.filter.optionset.uri_prefix} onChange={updateFilterUriPrefix}
                                options={getUriPrefixes(optionset.elements)} />
             </div>
           </div>

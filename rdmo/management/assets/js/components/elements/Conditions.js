@@ -10,8 +10,8 @@ import Condition from '../element/Condition'
 
 const Conditions = ({ config, conditions, configActions, elementActions}) => {
 
-  const updateFilterString = (value) => configActions.updateConfig('filter.conditions.string', value)
-  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.conditions.uriPrefix', value)
+  const updateFilterString = (value) => configActions.updateConfig('filter.conditions.search', value)
+  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.conditions.uri_prefix', value)
 
   const createCondition = () => elementActions.createElement('conditions')
 
@@ -28,11 +28,11 @@ const Conditions = ({ config, conditions, configActions, elementActions}) => {
       <div className="panel-body">
         <div className="row">
           <div className="col-sm-8">
-            <FilterString value={config.filter.conditions.string} onChange={updateFilterString}
+            <FilterString value={config.filter.conditions.search} onChange={updateFilterString}
                           placeholder={gettext('Filter conditions')} />
           </div>
           <div className="col-sm-4">
-            <FilterUriPrefix value={config.filter.conditions.uriPrefix} onChange={updateFilterUriPrefix}
+            <FilterUriPrefix value={config.filter.conditions.uri_prefix} onChange={updateFilterUriPrefix}
                              options={getUriPrefixes(conditions)} />
           </div>
         </div>

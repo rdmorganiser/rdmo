@@ -11,8 +11,8 @@ import Section from '../element/Section'
 
 const Sections = ({ config, sections, configActions, elementActions }) => {
 
-  const updateFilterString = (value) => configActions.updateConfig('filter.sections.string', value)
-  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.sections.uriPrefix', value)
+  const updateFilterString = (value) => configActions.updateConfig('filter.sections.search', value)
+  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.sections.uri_prefix', value)
   const updateDisplayURI = (value) => configActions.updateConfig('display.uri.sections', value)
 
   const createSection = () => elementActions.createElement('sections')
@@ -30,11 +30,11 @@ const Sections = ({ config, sections, configActions, elementActions }) => {
       <div className="panel-body">
         <div className="row">
           <div className="col-sm-8">
-            <FilterString value={config.filter.sections.string} onChange={updateFilterString}
+            <FilterString value={config.filter.sections.search} onChange={updateFilterString}
                           placeholder={gettext('Filter sections')} />
           </div>
           <div className="col-sm-4">
-            <FilterUriPrefix value={config.filter.sections.uriPrefix} onChange={updateFilterUriPrefix}
+            <FilterUriPrefix value={config.filter.sections.uri_prefix} onChange={updateFilterUriPrefix}
                              options={getUriPrefixes(sections)} />
           </div>
         </div>

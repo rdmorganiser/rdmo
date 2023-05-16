@@ -11,9 +11,9 @@ import Catalog from '../element/Catalog'
 
 const Catalogs = ({ config, catalogs, configActions, elementActions }) => {
 
-  const updateFilterString = (value) => configActions.updateConfig('filter.catalogs.string', value)
-  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.catalogs.uriPrefix', value)
-  const updateFilterSite = (value) => configActions.updateConfig('filter.catalogs.site', value)
+  const updateFilterString = (value) => configActions.updateConfig('filter.catalogs.search', value)
+  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.catalogs.uri_prefix', value)
+  const updateFilterSite = (value) => configActions.updateConfig('filter.catalogs.sites', value)
   const updateDisplayURI = (value) => configActions.updateConfig('display.uri.catalogs', value)
 
   const createCatalog = () => elementActions.createElement('catalogs')
@@ -31,16 +31,16 @@ const Catalogs = ({ config, catalogs, configActions, elementActions }) => {
       <div className="panel-body">
         <div className="row">
           <div className={config.settings.multisite ? 'col-sm-4' : 'col-sm-8'}>
-            <FilterString value={config.filter.catalogs.string} onChange={updateFilterString}
+            <FilterString value={config.filter.catalogs.search} onChange={updateFilterString}
                           placeholder={gettext('Filter catalogs')} />
           </div>
           <div className="col-sm-4">
-            <FilterUriPrefix value={config.filter.catalogs.uriPrefix} onChange={updateFilterUriPrefix}
+            <FilterUriPrefix value={config.filter.catalogs.uri_prefix} onChange={updateFilterUriPrefix}
                              options={getUriPrefixes(catalogs)} />
           </div>
           {
             config.settings.multisite && <div className="col-sm-4">
-              <FilterSite value={config.filter.catalogs.site} onChange={updateFilterSite}
+              <FilterSite value={config.filter.catalogs.sites} onChange={updateFilterSite}
                           options={config.sites} />
             </div>
           }

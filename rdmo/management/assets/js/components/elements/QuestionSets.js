@@ -11,8 +11,8 @@ import QuestionSet from '../element/QuestionSet'
 
 const QuestionSets = ({ config, questionsets, configActions, elementActions }) => {
 
-  const updateFilterString = (value) => configActions.updateConfig('filter.questionsets.string', value)
-  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.questionsets.uriPrefix', value)
+  const updateFilterString = (value) => configActions.updateConfig('filter.questionsets.search', value)
+  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.questionsets.uri_prefix', value)
   const updateDisplayQuestioSetURI = (value) => configActions.updateConfig('display.uri.questionsets', value)
   const updateDisplayAttributesURI = (value) => configActions.updateConfig('display.uri.attributes', value)
 
@@ -31,11 +31,11 @@ const QuestionSets = ({ config, questionsets, configActions, elementActions }) =
       <div className="panel-body">
         <div className="row">
           <div className="col-sm-8">
-            <FilterString value={config.filter.questionsets.string} onChange={updateFilterString}
+            <FilterString value={config.filter.questionsets.search} onChange={updateFilterString}
                           placeholder={gettext('Filter question sets')} />
           </div>
           <div className="col-sm-4">
-            <FilterUriPrefix value={config.filter.questionsets.uriPrefix} onChange={updateFilterUriPrefix}
+            <FilterUriPrefix value={config.filter.questionsets.uri_prefix} onChange={updateFilterUriPrefix}
                              options={getUriPrefixes(questionsets)} />
           </div>
         </div>

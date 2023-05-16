@@ -10,8 +10,8 @@ import OptionSet from '../element/OptionSet'
 
 const OptionSets = ({ config, optionsets, configActions, elementActions}) => {
 
-  const updateFilterString = (value) => configActions.updateConfig('filter.optionsets.string', value)
-  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.optionsets.uriPrefix', value)
+  const updateFilterString = (value) => configActions.updateConfig('filter.optionsets.search', value)
+  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.optionsets.uri_prefix', value)
 
   const createOptionSet = () => elementActions.createElement('optionsets')
 
@@ -28,11 +28,11 @@ const OptionSets = ({ config, optionsets, configActions, elementActions}) => {
       <div className="panel-body">
         <div className="row">
           <div className="col-sm-8">
-            <FilterString value={config.filter.optionsets.string} onChange={updateFilterString}
+            <FilterString value={config.filter.optionsets.search} onChange={updateFilterString}
                           placeholder={gettext('Filter option sets')} />
           </div>
           <div className="col-sm-4">
-            <FilterUriPrefix value={config.filter.optionsets.uriPrefix} onChange={updateFilterUriPrefix}
+            <FilterUriPrefix value={config.filter.optionsets.uri_prefix} onChange={updateFilterUriPrefix}
                              options={getUriPrefixes(optionsets)} />
           </div>
         </div>

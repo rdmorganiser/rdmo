@@ -10,9 +10,9 @@ import Task from '../element/Task'
 
 const Tasks = ({ config, tasks, configActions, elementActions }) => {
 
-  const updateFilterString = (value) => configActions.updateConfig('filter.tasks.string', value)
-  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.tasks.uriPrefix', value)
-  const updateFilterSite = (value) => configActions.updateConfig('filter.tasks.site', value)
+  const updateFilterString = (value) => configActions.updateConfig('filter.tasks.search', value)
+  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.tasks.uri_prefix', value)
+  const updateFilterSite = (value) => configActions.updateConfig('filter.tasks.sites', value)
 
   const createTask = () => elementActions.createElement('tasks')
 
@@ -29,16 +29,16 @@ const Tasks = ({ config, tasks, configActions, elementActions }) => {
       <div className="panel-body">
         <div className="row">
           <div className={config.settings.multisite ? 'col-sm-4' : 'col-sm-8'}>
-            <FilterString value={config.filter.tasks.string} onChange={updateFilterString}
+            <FilterString value={config.filter.tasks.search} onChange={updateFilterString}
                           placeholder={gettext('Filter tasks')} />
           </div>
           <div className="col-sm-4">
-            <FilterUriPrefix value={config.filter.tasks.uriPrefix} onChange={updateFilterUriPrefix}
+            <FilterUriPrefix value={config.filter.tasks.uri_prefix} onChange={updateFilterUriPrefix}
                              options={getUriPrefixes(tasks)} />
           </div>
           {
             config.settings.multisite && <div className="col-sm-4">
-              <FilterSite value={config.filter.tasks.site} onChange={updateFilterSite}
+              <FilterSite value={config.filter.tasks.sites} onChange={updateFilterSite}
                           options={config.sites} />
             </div>
           }

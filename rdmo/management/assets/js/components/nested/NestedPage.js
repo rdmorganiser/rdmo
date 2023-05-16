@@ -14,8 +14,8 @@ import Question from '../element/Question'
 
 const NestedPage = ({ config, page, configActions, elementActions }) => {
 
-  const updateFilterString = (uri) => configActions.updateConfig('filter.page.string', uri)
-  const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.page.uriPrefix', uriPrefix)
+  const updateFilterString = (uri) => configActions.updateConfig('filter.page.search', uri)
+  const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.page.uri_prefix', uriPrefix)
 
   const updateDisplayQuestionSets = (value) => configActions.updateConfig('display.elements.questionsets', value)
   const updateDisplayQuestions = (value) => configActions.updateConfig('display.elements.questions', value)
@@ -37,11 +37,11 @@ const NestedPage = ({ config, page, configActions, elementActions }) => {
         <div className="panel-body">
           <div className="row">
             <div className="col-sm-8">
-              <FilterString value={config.filter.page.string} onChange={updateFilterString}
+              <FilterString value={config.filter.page.search} onChange={updateFilterString}
                             placeholder={gettext('Filter pages')} />
             </div>
             <div className="col-sm-4">
-              <FilterUriPrefix value={config.filter.page.uriPrefix} onChange={updateFilterUriPrefix}
+              <FilterUriPrefix value={config.filter.page.uri_prefix} onChange={updateFilterUriPrefix}
                                options={getUriPrefixes(page.elements)} />
             </div>
           </div>
