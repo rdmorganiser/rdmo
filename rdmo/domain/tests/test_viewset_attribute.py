@@ -40,6 +40,8 @@ urlnames = {
     'copy': 'v1-domain:attribute-copy'
 }
 
+export_formats = ('xml', 'csvcomma', 'csvsemicolon', 'rtf', 'odt', 'docx', 'html', 'markdown', 'tex', 'pdf')
+
 
 @pytest.mark.parametrize('username,password', users)
 def test_list(db, client, username, password):
@@ -51,14 +53,15 @@ def test_list(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_export(db, client, username, password):
+@pytest.mark.parametrize('export_format', export_formats)
+def test_export(db, client, username, password, export_format):
     client.login(username=username, password=password)
 
-    url = reverse(urlnames['export'])
+    url = reverse(urlnames['export']) + export_format + '/'
     response = client.get(url)
     assert response.status_code == status_map['list'][username], response.content
 
-    if response.status_code == 200:
+    if response.status_code == 200 and export_format == 'xml':
         root = et.fromstring(response.content)
         assert root.tag == 'rdmo'
         for child in root:
@@ -229,20 +232,20 @@ def test_delete(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_detail_export(db, client, username, password):
+@pytest.mark.parametrize('export_format', export_formats)
+def test_detail_export(db, client, username, password, export_format):
     client.login(username=username, password=password)
-    instances = Attribute.objects.all()
+    instance = Attribute.objects.first()
 
-    for instance in instances:
-        url = reverse(urlnames['detail_export'], args=[instance.pk])
-        response = client.get(url)
-        assert response.status_code == status_map['list'][username], response.content
+    url = reverse(urlnames['detail_export'], args=[instance.pk]) + export_format + '/'
+    response = client.get(url)
+    assert response.status_code == status_map['list'][username], response.content
 
-        if response.status_code == 200:
-            root = et.fromstring(response.content)
-            assert root.tag == 'rdmo'
-            for child in root:
-                assert child.tag in ['attribute']
+    if response.status_code == 200 and export_format == 'xml':
+        root = et.fromstring(response.content)
+        assert root.tag == 'rdmo'
+        for child in root:
+            assert child.tag in ['attribute']
 
 
 @pytest.mark.parametrize('username,password', users)
