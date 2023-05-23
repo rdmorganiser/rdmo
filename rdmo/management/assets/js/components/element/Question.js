@@ -9,7 +9,7 @@ import { EditLink, CopyLink, LockedLink, ExportLink, CodeLink } from '../common/
 const Question = ({ config, question, elementActions, display='list', filter=null, indent=0 }) => {
 
   const verboseName = gettext('question')
-  const showElement = filterElement(filter, question) && config.display.elements.questions
+  const showElement = filterElement(filter, question)
 
   const fetchEdit = () => elementActions.fetchElement('questions', question.id)
   const fetchCopy = () => elementActions.fetchElement('questions', question.id, 'copy')
@@ -54,7 +54,7 @@ const Question = ({ config, question, elementActions, display='list', filter=nul
         </li>
       )
     case 'nested':
-      return showElement && (
+      return showElement && config.display.elements.questions && (
         <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
           <div className="panel-body">
             { elementNode }

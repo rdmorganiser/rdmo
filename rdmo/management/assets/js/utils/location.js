@@ -12,7 +12,7 @@ const parseLocation = (basePath, pathname) => {
       elementId = null,
       elementAction = null
 
-  if (!isUndefined(tokens[0]) && elementTypes.includes(tokens[0])) {
+  if (!isUndefined(tokens[0]) && Object.values(elementTypes).includes(tokens[0])) {
     elementType = tokens[0]
 
     if (!isUndefined(tokens[1])) {

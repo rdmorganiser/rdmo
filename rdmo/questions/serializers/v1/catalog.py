@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from rdmo.core.serializers import (ElementExportSerializerMixin,
+                                   ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
                                    ThroughModelSerializerMixin,
                                    TranslationSerializerMixin)
@@ -21,8 +22,9 @@ class CatalogSectionSerializer(serializers.ModelSerializer):
 
 
 class CatalogSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
-                        serializers.ModelSerializer):
+                        ElementModelSerializerMixin, serializers.ModelSerializer):
 
+    model = serializers.SerializerMethodField()
     uri_path = serializers.CharField(required=True)
     projects_count = serializers.IntegerField(read_only=True)
     sections = CatalogSectionSerializer(source='catalog_sections', read_only=False, required=False, many=True)
@@ -31,6 +33,7 @@ class CatalogSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
         model = Catalog
         fields = (
             'id',
+            'model',
             'uri',
             'uri_prefix',
             'uri_path',

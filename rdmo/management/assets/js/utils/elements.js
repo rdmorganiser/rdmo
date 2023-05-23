@@ -4,7 +4,7 @@ import isUndefined from 'lodash/isUndefined';
 import { elementModules } from '../constants/elements'
 
 const updateElement = (element, actionElement) => {
-  if (element.uri == actionElement.uri) {
+  if (element.model == actionElement.model && element.id == actionElement.id) {
     return {...element, ...actionElement}
   } else if (!isUndefined(element.elements)) {
     return {...element, elements: element.elements.map(e => updateElement(e, actionElement))}

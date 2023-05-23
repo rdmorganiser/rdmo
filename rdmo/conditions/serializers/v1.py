@@ -1,18 +1,19 @@
 from rest_framework import serializers
 
-from rdmo.core.serializers import ElementExportSerializerMixin
+from rdmo.core.serializers import (ElementExportSerializerMixin,
+                                   ElementModelSerializerMixin)
 from rdmo.domain.models import Attribute
+from rdmo.options.models import OptionSet
+from rdmo.questions.models import Page, Question, QuestionSet
+from rdmo.tasks.models import Task
 
 from ..models import Condition
 from ..validators import ConditionLockedValidator, ConditionUniqueURIValidator
 
-from rdmo.options.models import OptionSet
-from rdmo.questions.models import Page, QuestionSet, Question
-from rdmo.tasks.models import Task
 
+class ConditionSerializer(ElementModelSerializerMixin, serializers.ModelSerializer):
 
-class ConditionSerializer(serializers.ModelSerializer):
-
+    model = serializers.SerializerMethodField()
     key = serializers.SlugField(required=True)
     source = serializers.PrimaryKeyRelatedField(queryset=Attribute.objects.all(), required=True)
 
@@ -26,6 +27,7 @@ class ConditionSerializer(serializers.ModelSerializer):
         model = Condition
         fields = (
             'id',
+            'model',
             'uri',
             'uri_prefix',
             'key',

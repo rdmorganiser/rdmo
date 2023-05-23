@@ -50,9 +50,6 @@ export default function elementsReducer(state = initialState, action) {
         errors: {}
       }
     case 'elements/fetchElementSuccess':
-      // let the element know what type it is
-      action.elements.element.type = state.elementType
-
       // remove the id when copying
       if (state.elementAction == 'copy') {
         action.elements.element.id = null
@@ -71,9 +68,9 @@ export default function elementsReducer(state = initialState, action) {
       }
     case 'elements/storeElementError':
       if (isNil(state.element) || state.elementAction == 'nested') {
-        // create a fake element with just the uri and the error for updateElement works,
+        // create a fake element with just the id and the model and the error for updateElement works,
         // but the element won't get updated in the view
-        action.element = {uri: action.element.uri, errors: action.error.errors}
+        action.element = {id: action.element.id, model: action.element.model, errors: action.error.errors}
       } else {
         action.element.errors = action.error.errors
       }
@@ -85,9 +82,6 @@ export default function elementsReducer(state = initialState, action) {
       } else if (state.elementAction == 'nested') {
         return {...state, element: updateElement(state.element, action.element)}
       } else {
-        // let the element know what type it is
-        action.element.type = state.elementType
-
         return {...state, element: action.element}
       }
 
@@ -102,9 +96,6 @@ export default function elementsReducer(state = initialState, action) {
         errors: {}
       }
     case 'elements/createElementSuccess':
-      // let the element know what type it is
-      action.elements.element.type = state.elementType
-
       return {...state, ...action.elements}
     case 'elements/createElementError':
       return {...state, errors: action.error.errors}

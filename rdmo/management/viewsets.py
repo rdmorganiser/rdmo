@@ -29,17 +29,17 @@ class MetaViewSet(viewsets.ViewSet):
 
     def list(self, request, *args, **kwargs):
         return Response({
-            'conditions': get_model_field_meta(Condition),
-            'attributes': get_model_field_meta(Attribute),
-            'optionsets': get_model_field_meta(OptionSet),
-            'options': get_model_field_meta(Option),
-            'catalogs': get_model_field_meta(Catalog),
-            'sections': get_model_field_meta(Section),
-            'pages': get_model_field_meta(Page),
-            'questionsets': get_model_field_meta(QuestionSet),
-            'questions': get_model_field_meta(Question),
-            'tasks': get_model_field_meta(Task),
-            'views': get_model_field_meta(View)
+            'conditions.condition': get_model_field_meta(Condition),
+            'domain.attribute': get_model_field_meta(Attribute),
+            'options.optionset': get_model_field_meta(OptionSet),
+            'options.option': get_model_field_meta(Option),
+            'questions.catalog': get_model_field_meta(Catalog),
+            'questions.section': get_model_field_meta(Section),
+            'questions.page': get_model_field_meta(Page),
+            'questions.questionset': get_model_field_meta(QuestionSet),
+            'questions.question': get_model_field_meta(Question),
+            'tasks.task': get_model_field_meta(Task),
+            'views.view': get_model_field_meta(View)
         })
 
 

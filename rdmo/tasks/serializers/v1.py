@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from rdmo.core.serializers import (ElementExportSerializerMixin,
+                                   ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
                                    TranslationSerializerMixin)
 
@@ -8,12 +9,16 @@ from ..models import Task
 from ..validators import TaskLockedValidator, TaskUniqueURIValidator
 
 
-class BaseTaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
+class BaseTaskSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
+                         serializers.ModelSerializer):
+
+    model = serializers.SerializerMethodField()
 
     class Meta:
         model = Task
         fields = (
             'id',
+            'model',
             'uri',
             'uri_prefix',
             'key',
