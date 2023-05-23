@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from rdmo.core.serializers import (ElementExportSerializerMixin,
+                                   ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
                                    ThroughModelSerializerMixin,
                                    TranslationSerializerMixin)
@@ -21,8 +22,9 @@ class SectionPageSerializer(serializers.ModelSerializer):
 
 
 class SectionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
-                        serializers.ModelSerializer):
+                        ElementModelSerializerMixin, serializers.ModelSerializer):
 
+    model = serializers.SerializerMethodField()
     uri_path = serializers.CharField(required=True)
     catalogs = serializers.PrimaryKeyRelatedField(queryset=Catalog.objects.all(), required=False, many=True)
     pages = SectionPageSerializer(source='section_pages', read_only=False, required=False, many=True)
@@ -31,6 +33,7 @@ class SectionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
         model = Section
         fields = (
             'id',
+            'model',
             'uri',
             'uri_prefix',
             'uri_path',

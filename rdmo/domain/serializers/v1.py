@@ -2,11 +2,10 @@ import logging
 
 from rest_framework import serializers
 
-from rdmo.core.serializers import ElementExportSerializerMixin
-
 from rdmo.conditions.models import Condition
-from rdmo.questions.models import Page, QuestionSet, Question
-from rdmo.tasks.models import Task
+from rdmo.core.serializers import (ElementExportSerializerMixin,
+                                   ElementModelSerializerMixin)
+from rdmo.questions.models import Page, Question, QuestionSet
 
 from ..models import Attribute
 from ..validators import (AttributeLockedValidator, AttributeParentValidator,
@@ -15,12 +14,15 @@ from ..validators import (AttributeLockedValidator, AttributeParentValidator,
 log = logging.getLogger(__name__)
 
 
-class BaseAttributeSerializer(serializers.ModelSerializer):
+class BaseAttributeSerializer(ElementModelSerializerMixin, serializers.ModelSerializer):
+
+    model = serializers.SerializerMethodField()
 
     class Meta:
         model = Attribute
         fields = (
             'id',
+            'model',
             'uri',
             'uri_prefix',
             'key',

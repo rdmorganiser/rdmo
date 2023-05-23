@@ -11,7 +11,7 @@ import { EditLink, CopyLink, AddLink, LockedLink, NestedLink, ExportLink, CodeLi
 const Section = ({ config, section, elementActions, display='list', filter=null, indent=0 }) => {
 
   const verboseName = gettext('section')
-  const showElement = filterElement(filter, section) && config.display.elements.sections
+  const showElement = filterElement(filter, section)
 
   const fetchEdit = () => elementActions.fetchElement('sections', section.id)
   const fetchCopy = () => elementActions.fetchElement('sections', section.id, 'copy')
@@ -55,7 +55,7 @@ const Section = ({ config, section, elementActions, display='list', filter=null,
       return (
         <>
           {
-            showElement && <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
+            showElement && config.display.elements.sections && <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
               <div className="panel-heading">
                 { elementNode }
               </div>

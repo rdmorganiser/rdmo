@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from rdmo.core.serializers import (ElementExportSerializerMixin,
+                                   ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
                                    ThroughModelSerializerMixin,
                                    TranslationSerializerMixin)
@@ -10,8 +11,9 @@ from ...validators import QuestionLockedValidator, QuestionUniqueURIValidator
 
 
 class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
-                         serializers.ModelSerializer):
+                         ElementModelSerializerMixin, serializers.ModelSerializer):
 
+    model = serializers.SerializerMethodField()
     uri_path = serializers.CharField(required=True)
     pages = serializers.PrimaryKeyRelatedField(queryset=Page.objects.all(), required=False, many=True)
     questionsets = serializers.PrimaryKeyRelatedField(queryset=QuestionSet.objects.all(), required=False, many=True)
@@ -20,6 +22,7 @@ class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin
         model = Question
         fields = (
             'id',
+            'model',
             'uri',
             'uri_prefix',
             'uri_path',

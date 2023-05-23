@@ -168,6 +168,13 @@ class ThroughModelSerializerMixin(object):
         return instance
 
 
+class ElementModelSerializerMixin(serializers.ModelSerializer):
+
+    def get_model(self, obj):
+        # return the model name in the form "domain.attribute"
+        return str(self.Meta.model._meta)
+
+
 class ElementExportSerializerMixin(serializers.ModelSerializer):
 
     def get_xml_url(self, obj):

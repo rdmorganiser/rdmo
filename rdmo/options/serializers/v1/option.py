@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from rdmo.core.serializers import (ElementExportSerializerMixin,
+                                   ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
                                    ThroughModelSerializerMixin,
                                    TranslationSerializerMixin)
@@ -10,8 +11,9 @@ from ...validators import OptionLockedValidator, OptionUniqueURIValidator
 
 
 class OptionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
-                       serializers.ModelSerializer):
+                       ElementModelSerializerMixin, serializers.ModelSerializer):
 
+    model = serializers.SerializerMethodField()
     optionsets = serializers.PrimaryKeyRelatedField(queryset=OptionSet.objects.all(), required=False, many=True)
     conditions = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     values_count = serializers.IntegerField(read_only=True)
@@ -21,6 +23,7 @@ class OptionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
         model = Option
         fields = (
             'id',
+            'model',
             'uri',
             'uri_prefix',
             'uri_path',

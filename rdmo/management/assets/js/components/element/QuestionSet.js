@@ -12,7 +12,7 @@ import { EditLink, CopyLink, AddLink, LockedLink,
 const QuestionSet = ({ config, questionset, elementActions, display='list', filter=null, indent=0 }) => {
 
   const verboseName = gettext('question set')
-  const showElement = filterElement(filter, questionset) && config.display.elements.questionsets
+  const showElement = filterElement(filter, questionset)
 
   const fetchEdit = () => elementActions.fetchElement('questionsets', questionset.id)
   const fetchCopy = () => elementActions.fetchElement('questionsets', questionset.id, 'copy')
@@ -66,11 +66,13 @@ const QuestionSet = ({ config, questionset, elementActions, display='list', filt
       return (
         <>
           {
-            showElement && <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
-              <div className="panel-heading">
-                { elementNode }
+            showElement && config.display.elements.questionsets && (
+              <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
+                <div className="panel-heading">
+                  { elementNode }
+                </div>
               </div>
-            </div>
+            )
           }
           {
             questionset.elements.map((element, index) => {

@@ -1,16 +1,16 @@
-const elementTypes = [
-  'catalogs',
-  'sections',
-  'pages',
-  'questionsets',
-  'questions',
-  'attributes',
-  'optionsets',
-  'options',
-  'conditions',
-  'tasks',
-  'views'
-]
+const elementTypes = {
+  'questions.catalog': 'catalogs',
+  'questions.section': 'sections',
+  'questions.page': 'pages',
+  'questions.questionset': 'questionsets',
+  'questions.question': 'questions',
+  'domain.attribute':'attributes',
+  'options.optionset': 'optionsets',
+  'options.option': 'options',
+  'condition.condition': 'conditions',
+  'tasks.task': 'tasks',
+  'tasks.view': 'views'
+}
 
 const elementModules = {
   'catalogs': 'questions',
@@ -27,31 +27,31 @@ const elementModules = {
 }
 
 const codeClass = {
-  'catalogs': 'code-questions',
-  'sections': 'code-questions',
-  'pages': 'code-questions',
-  'questionsets': 'code-questions',
-  'questions': 'code-questions',
-  'attributes': 'code-domain',
-  'optionsets': 'code-options',
-  'options': 'code-options',
-  'conditions': 'code-conditions',
-  'tasks': 'code-tasks',
-  'views': 'code-views'
+  'questions.catalog': 'code-questions',
+  'questions.section': 'code-questions',
+  'questions.page': 'code-questions',
+  'questions.questionset': 'code-questions',
+  'questions.question': 'code-questions',
+  'domain.attribute': 'code-domain',
+  'options.optionset': 'code-options',
+  'options.option': 'code-options',
+  'condition.condition': 'code-conditions',
+  'tasks.task': 'code-tasks',
+  'tasks.view': 'code-views'
 }
 
 const verboseNames = {
-  'catalogs': gettext('Catalogs'),
-  'sections': gettext('Section'),
-  'pages': gettext('Page'),
-  'questionsets': gettext('Question set'),
-  'questions': gettext('Question'),
-  'attributes': gettext('Attribute'),
-  'optionsets': gettext('Option set'),
-  'options': gettext('Option'),
-  'conditions': gettext('Condition'),
-  'tasks': gettext('Task'),
-  'views': gettext('View')
+  'questions.catalog': gettext('Catalogs'),
+  'questions.section': gettext('Section'),
+  'questions.page': gettext('Page'),
+  'questions.questionset': gettext('Question set'),
+  'questions.question': gettext('Question'),
+  'domain.attribute': gettext('Attribute'),
+  'options.optionset': gettext('Option set'),
+  'options.option': gettext('Option'),
+  'condition.condition': gettext('Condition'),
+  'tasks.task': gettext('Task'),
+  'tasks.view': gettext('View')
 }
 
 export { elementTypes, elementModules, codeClass, verboseNames }

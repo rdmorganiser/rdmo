@@ -13,7 +13,7 @@ import { EditLink, CopyLink, AddLink, LockedLink, NestedLink,
 const Page = ({ config, page, elementActions, display='list', filter=null, indent=0 }) => {
 
   const verboseName = gettext('page')
-  const showElement = filterElement(filter, page) && config.display.elements.pages
+  const showElement = filterElement(filter, page)
 
   const fetchEdit = () => elementActions.fetchElement('pages', page.id)
   const fetchCopy = () => elementActions.fetchElement('pages', page.id, 'copy')
@@ -67,11 +67,13 @@ const Page = ({ config, page, elementActions, display='list', filter=null, inden
       return (
         <>
           {
-            showElement && <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
-              <div className="panel-heading">
-                { elementNode }
+            showElement && config.display.elements.pages && (
+              <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
+                <div className="panel-heading">
+                  { elementNode }
+                </div>
               </div>
-            </div>
+            )
           }
           {
             page.elements.map((element, index) => {

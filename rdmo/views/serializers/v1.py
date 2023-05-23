@@ -2,6 +2,7 @@ from django.template import Context, Template, TemplateSyntaxError
 from rest_framework import exceptions, serializers
 
 from rdmo.core.serializers import (ElementExportSerializerMixin,
+                                   ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
                                    TranslationSerializerMixin)
 
@@ -9,12 +10,16 @@ from ..models import View
 from ..validators import ViewLockedValidator, ViewUniqueURIValidator
 
 
-class BaseViewSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
+class BaseViewSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
+                         serializers.ModelSerializer):
+
+    model = serializers.SerializerMethodField()
 
     class Meta:
         model = View
         fields = (
             'id',
+            'model',
             'uri',
             'uri_prefix',
             'key',
