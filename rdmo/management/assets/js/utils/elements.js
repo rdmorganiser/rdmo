@@ -1,10 +1,15 @@
 import isEmpty from 'lodash/isEmpty';
+import isNil from 'lodash/isNil';
 import isUndefined from 'lodash/isUndefined';
 
 import { elementModules } from '../constants/elements'
 
+const compareElements = (element1, element2) => {
+  return element1.model == element2.model && element1.id == element2.id
+}
+
 const updateElement = (element, actionElement) => {
-  if (element.model == actionElement.model && element.id == actionElement.id) {
+  if (compareElements(element, actionElement)) {
     return {...element, ...actionElement}
   } else if (!isUndefined(element.elements)) {
     return {...element, elements: element.elements.map(e => updateElement(e, actionElement))}
@@ -23,6 +28,74 @@ const resetElement = (element) => {
   return element
 }
 
+const moveElement = (element, dragElement, dropElement) => {
+  const dragParent = removeElement(element, dragElement)
+  const dropParent = insertElement(element, dragElement, dropElement)
+
+  updateElementElements(dragParent)
+  if (!compareElements(dragParent, dropParent)) {
+    updateElementElements(dropParent)
+  }
+
+  return { dragParent, dropParent }
+}
+
+function removeElement(element, dragElement) {
+  if (isUndefined(element.elements)) {
+    return null
+  } else {
+    const dragIndex = element.elements.findIndex(el => compareElements(el, dragElement))
+    if (dragIndex > -1) {
+      element.elements.splice(dragIndex, 1)
+      return element
+    } else {
+      // call the function recursively and return the first element which is not null
+      return element.elements.map(el => removeElement(el, dragElement))
+                             .find(el => !isNil(el))
+    }
+  }
+}
+
+function insertElement(element, dragElement, dropElement) {
+  if (isUndefined(element.elements)) {
+    return null
+  } else {
+    const dropIndex = element.elements.findIndex(el => compareElements(el, dropElement))
+    if (dropIndex > -1) {
+      // insert the dragElement after the dropElement
+      element.elements.splice(dropIndex + 1, 0, dragElement)
+      return element
+    } else {
+      // call the function recursively and return the first element which is not null
+      return element.elements.map(el => insertElement(el, dragElement, dropElement))
+                             .find(el => !isNil(el))
+    }
+  }
+}
+
+function updateElementElements(element) {
+  switch(element.model) {
+    case 'questions.catalog':
+      element.sections = element.elements.map((el, index) => ({ section: el.id, order: index }))
+    case 'questions.section':
+      element.pages = element.elements.map((el, index) => ({ page: el.id, order: index }))
+    case 'questions.page':
+    case 'questions.questionset':
+      element.questions = element.elements.reduce((questions, el, index) => {
+        if (el.model == 'questions.question') {
+          questions.push({ question: el.id, order: index })
+        }
+        return questions
+      }, [])
+      element.questionsets = element.elements.reduce((questionsets, el, index) => {
+        if (el.model == 'questions.questionset') {
+          questionsets.push({ questionset: el.id, order: index })
+        }
+        return questionsets
+      }, [])
+  }
+}
+
 const buildUri = (element) => {
   let uri = element.uri_prefix + '/' + elementModules[element.type] + '/'
 
@@ -37,4 +110,4 @@ const buildUri = (element) => {
   return uri
 }
 
-export { updateElement, resetElement, buildUri }
+export { compareElements, updateElement, resetElement, moveElement, buildUri }

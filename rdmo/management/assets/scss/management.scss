@@ -1,6 +1,7 @@
 $icon-font-path: "bootstrap-sass/assets/fonts/bootstrap/";
 @import '~bootstrap-sass';
 @import '~font-awesome/css/font-awesome.css';
+@import 'rdmo/core/assets/scss/variables';
 
 a.disabled {
     cursor: not-allowed;
@@ -195,6 +196,30 @@ a.disabled {
         }
 
     }
+
+    .drag {
+        color: $link-color;
+        cursor: grab;
+    }
+
+    .drop {
+        display: none;
+        margin-top: -10px;
+        padding: 4px 0;
+
+        &::after {
+            content: ' ';
+            height: 2px;
+            display: block;
+            background-color: transparent;
+        }
+
+        &.over {
+            &::after {
+                background-color: $link-color;
+            }
+        }
+    }
 }
 
 .list-group-item {
@@ -258,3 +283,4 @@ a.disabled {
         flex: 1;
     }
 }
+

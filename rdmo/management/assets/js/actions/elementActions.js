@@ -1,4 +1,5 @@
 import isNil from 'lodash/isNil'
+import isUndefined from 'lodash/isUndefined'
 
 import ConditionsApi from '../api/ConditionsApi'
 import DomainApi from '../api/DomainApi'
@@ -14,7 +15,9 @@ import QuestionsFactory from '../factories/QuestionsFactory'
 import TasksFactory from '../factories/TasksFactory'
 import ViewsFactory from '../factories/ViewsFactory'
 
+import { elementTypes } from '../constants/elements'
 import { updateLocation } from '../utils/location'
+import { compareElements, moveElement as moveElementUtil } from '../utils/elements'
 
 export function fetchElements(elementType) {
   return function(dispatch, getState) {
@@ -298,7 +301,7 @@ export function fetchElementError(error) {
 
 export function storeElement(elementType, element, back) {
   return function(dispatch, getState) {
-    dispatch(storeElementInit(element))
+    // dispatch(storeElementInit(element))
 
     let action
     switch (elementType) {
@@ -347,7 +350,7 @@ export function storeElement(elementType, element, back) {
         break
     }
 
-    dispatch(action)
+    return dispatch(action)
       .then(element => {
         dispatch(storeElementSuccess(element))
         if (back) {
@@ -597,4 +600,25 @@ export function deleteElementError(element, error) {
 
 export function updateElement(element, values) {
   return {type: 'elements/updateElement', element, values}
+}
+
+// move elements
+
+export function moveElement(dragElement, dropElement) {
+  return function(dispatch, getState) {
+    if (!compareElements(dragElement, dropElement)) {
+      const element = {...getState().elements.element}
+
+      const { dragParent, dropParent } = moveElementUtil(element, dragElement, dropElement)
+
+      dispatch(storeElement(elementTypes[dragParent.model], dragParent))
+      if (!compareElements(dragParent, dropParent)) {
+        dispatch(storeElement(elementTypes[dropParent.model], dropParent))
+      }
+    }
+  }
+}
+
+export function moveElementSuccess(element) {
+  return {type: 'elements/moveElementSuccess', element}
 }

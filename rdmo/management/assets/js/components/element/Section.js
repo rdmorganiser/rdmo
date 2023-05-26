@@ -7,6 +7,7 @@ import { filterElement } from '../../utils/filter'
 import Page from './Page'
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AddLink, LockedLink, NestedLink, ExportLink, CodeLink } from '../common/Links'
+import { Drag, Drop } from '../common/DragAndDrop'
 
 const Section = ({ config, section, elementActions, display='list', filter=null, indent=0 }) => {
 
@@ -30,6 +31,7 @@ const Section = ({ config, section, elementActions, display='list', filter=null,
         <LockedLink element={section} verboseName={verboseName} onClick={toggleLocked} />
         <ExportLink element={section} elementType="sections" verboseName={verboseName}
                     exportFormats={config.settings.export_formats} />
+        {display == 'nested' && <Drag element={section} />}
       </div>
       <div>
         <p>
@@ -67,6 +69,7 @@ const Section = ({ config, section, elementActions, display='list', filter=null,
                     display="nested" filter={filter} indent={indent + 1} />
             ))
           }
+          <Drop element={section} elementActions={elementActions} indent={indent} />
         </>
       )
     case 'plain':

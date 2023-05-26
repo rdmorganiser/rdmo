@@ -64,6 +64,7 @@ export default function elementsReducer(state = initialState, action) {
       if (isNil(state.element)) {
         return state
       } else {
+        // resetElements will apply the new order, when storing the element after drag and drop
         return {...state, element: resetElement(state.element)}
       }
     case 'elements/storeElementError':
@@ -114,6 +115,10 @@ export default function elementsReducer(state = initialState, action) {
     // update element
     case 'elements/updateElement':
       return {...state, element: {...action.element, ...action.values}}
+
+    // move elements
+    case 'elements/moveElementSuccess':
+      return {...state, element: updateElement(state.element, action.element)}
 
     default:
       return state
