@@ -13,8 +13,12 @@ import EditSection from '../edit/EditSection'
 import EditTask from '../edit/EditTask'
 import EditView from '../edit/EditView'
 
+import useScrollEffect from '../../hooks/useScrollEffect'
+
 const Edit = ({ config, elements, configActions, elementActions }) => {
   const { element, elementType } = elements
+
+  useScrollEffect(elementType, element.id)
 
   switch (elementType) {
     case 'catalogs':

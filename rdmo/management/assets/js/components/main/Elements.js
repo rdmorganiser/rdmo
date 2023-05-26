@@ -13,8 +13,12 @@ import Sections from '../elements/Sections'
 import Tasks from '../elements/Tasks'
 import Views from '../elements/Views'
 
+import useScrollEffect from '../../hooks/useScrollEffect'
+
 const Elements = ({ config, elements, configActions, elementActions }) => {
   const { elementType } = elements
+
+  useScrollEffect(elementType)
 
   switch (elementType) {
     case 'catalogs':

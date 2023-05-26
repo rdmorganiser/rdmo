@@ -8,8 +8,12 @@ import NestedPage from '../nested/NestedPage'
 import NestedQuestionSet from '../nested/NestedQuestionSet'
 import NestedSection from '../nested/NestedSection'
 
+import useScrollEffect from '../../hooks/useScrollEffect'
+
 const Nested = ({ config, elements, configActions, elementActions }) => {
   const { element, elementType } = elements
+
+  useScrollEffect(elementType, element.id, 'nested')
 
   switch (elementType) {
     case 'catalogs':

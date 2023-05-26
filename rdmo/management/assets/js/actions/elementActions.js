@@ -83,7 +83,7 @@ export function fetchElements(elementType) {
         break
     }
 
-    dispatch(action)
+    return dispatch(action)
       .catch(error => dispatch(fetchElementsError(error)))
   }
 }
@@ -280,7 +280,7 @@ export function fetchElement(elementType, elementId, elementAction=null) {
         break
     }
 
-    dispatch(action)
+    return dispatch(action)
       .catch(error => dispatch(fetchElementError(error)))
   }
 }
@@ -504,7 +504,7 @@ export function createElement(elementType, parent={}) {
         break
     }
 
-    dispatch(action)
+    return dispatch(action)
       .catch(error => dispatch(createElementError(error)))
   }
 }
@@ -575,7 +575,7 @@ export function deleteElement(elementType, element) {
         break
     }
 
-    dispatch(action)
+    return dispatch(action)
       .then(() => {
         dispatch(deleteElementSuccess(element))
         history.back()
