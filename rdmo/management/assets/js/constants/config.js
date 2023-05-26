@@ -32,8 +32,6 @@ export const lsKeys = {
   'filter.page.uri_prefix': '',
   'filter.questionset.search': '',
   'filter.questionset.uri_prefix': '',
-  'filter.question.search': '',
-  'filter.question.uri_prefix': '',
   'filter.attribute.search': '',
   'filter.attribute.uri_prefix': '',
   'filter.optionset.search': '',

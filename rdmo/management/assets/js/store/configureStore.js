@@ -24,11 +24,11 @@ export default function configureStore() {
     applyMiddleware(...middlewares)
   )
 
-  // fetch some of the data which does not change
-  const fetchConfig = (event) => store.dispatch(configActions.fetchConfig())
+  // load: fetch some of the data which does not change
+  const fetchConfig = () => store.dispatch(configActions.fetchConfig())
 
-  // add a listener to restore the config from the local storage
-  const updateConfigFromLocalStorage = (event) => {
+  // load: restore the config from the local storage
+  const updateConfigFromLocalStorage = () => {
     const config = {}
     Object.entries(lsKeys).forEach(([path, defaultValue]) => {
       let value = ls.get(`rdmo.management.config.${path}`)
@@ -47,12 +47,11 @@ export default function configureStore() {
       store.dispatch(configActions.updateConfig(path, value))
     })
   }
-  window.addEventListener('load', updateConfigFromLocalStorage)
 
-  // add listeners for load and popstate
-  const fetchElementsFromLocation = (event) => {
+  // load, popstate: fetch elements depending on the location
+  const fetchElementsFromLocation = () => {
     const baseUrl = store.getState().config.baseUrl
-    const pathname = event.target.location.pathname
+    const pathname = window.location.pathname
     let { elementType, elementId, elementAction } = parseLocation(baseUrl, pathname)
 
     if (isNil(elementType)) {
@@ -60,24 +59,25 @@ export default function configureStore() {
     }
     if (isNil(elementId)) {
       if (isNil(elementAction)) {
-        store.dispatch(elementActions.fetchElements(elementType))
+        return store.dispatch(elementActions.fetchElements(elementType))
       } else {
-        store.dispatch(elementActions.createElement(elementType))
+        return store.dispatch(elementActions.createElement(elementType))
       }
     } else {
-      store.dispatch(elementActions.fetchElement(elementType, elementId, elementAction))
+      return store.dispatch(elementActions.fetchElement(elementType, elementId, elementAction))
     }
   }
 
   // this event is triggered when the page first loads
-  window.addEventListener('load', (event) => {
-    fetchConfig(event).then(() => {
-      fetchElementsFromLocation(event)
-    })
+  window.addEventListener('load', () => {
+    updateConfigFromLocalStorage()
+    fetchConfig().then(() => fetchElementsFromLocation())
   })
 
   // this event is triggered when when the forward/back buttons are used
-  window.addEventListener('popstate', fetchElementsFromLocation)
+  window.addEventListener('popstate', () => {
+    fetchElementsFromLocation()
+  })
 
   return store
 }
