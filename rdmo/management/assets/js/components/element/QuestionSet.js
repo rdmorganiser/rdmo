@@ -8,6 +8,7 @@ import Question from './Question'
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AddLink, LockedLink,
          NestedLink, ExportLink, CodeLink } from '../common/Links'
+import { Drag, Drop } from '../common/DragAndDrop'
 
 const QuestionSet = ({ config, questionset, elementActions, display='list', filter=null, indent=0 }) => {
 
@@ -35,6 +36,7 @@ const QuestionSet = ({ config, questionset, elementActions, display='list', filt
         <LockedLink element={questionset} verboseName={verboseName} onClick={toggleLocked} />
         <ExportLink element={questionset} elementType="questionsets" verboseName={verboseName}
                     exportFormats={config.settings.export_formats} />
+        {display == 'nested' && <Drag element={questionset} />}
       </div>
       <div>
         <p>
@@ -85,6 +87,7 @@ const QuestionSet = ({ config, questionset, elementActions, display='list', filt
               }
             })
           }
+          <Drop element={questionset} elementActions={elementActions} indent={indent} />
         </>
       )
     case 'plain':

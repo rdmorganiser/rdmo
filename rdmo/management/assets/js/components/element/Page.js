@@ -9,6 +9,7 @@ import Question from './Question'
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AddLink, LockedLink, NestedLink,
          ExportLink, CodeLink } from '../common/Links'
+import { Drag, Drop } from '../common/DragAndDrop'
 
 const Page = ({ config, page, elementActions, display='list', filter=null, indent=0 }) => {
 
@@ -36,6 +37,7 @@ const Page = ({ config, page, elementActions, display='list', filter=null, inden
         <LockedLink element={page} verboseName={verboseName} onClick={toggleLocked} />
         <ExportLink element={page} elementType="pages" verboseName={verboseName}
                     exportFormats={config.settings.export_formats} />
+        {display == 'nested' && <Drag element={page} />}
       </div>
       <div>
         <p>
@@ -86,6 +88,7 @@ const Page = ({ config, page, elementActions, display='list', filter=null, inden
               }
             })
           }
+          <Drop element={page} elementActions={elementActions} indent={indent} />
         </>
       )
     case 'plain':

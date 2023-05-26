@@ -5,6 +5,7 @@ import { filterElement } from '../../utils/filter'
 
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
+import { Drag, Drop } from '../common/DragAndDrop'
 
 const Question = ({ config, question, elementActions, display='list', filter=null, indent=0 }) => {
 
@@ -25,6 +26,7 @@ const Question = ({ config, question, elementActions, display='list', filter=nul
         <LockedLink element={question} verboseName={verboseName} onClick={toggleLocked} />
         <ExportLink element={question} elementType="questions" verboseName={verboseName}
                     exportFormats={config.settings.export_formats} />
+        {display == 'nested' && <Drag element={question} />}
       </div>
       <div>
         <p>
@@ -54,12 +56,19 @@ const Question = ({ config, question, elementActions, display='list', filter=nul
         </li>
       )
     case 'nested':
-      return showElement && config.display.elements.questions && (
-        <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
-          <div className="panel-body">
-            { elementNode }
-          </div>
-        </div>
+      return (
+        <>
+          {
+            showElement && config.display.elements.questions && (
+              <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
+                <div className="panel-body">
+                  { elementNode }
+                </div>
+              </div>
+            )
+          }
+          <Drop element={question} elementActions={elementActions} indent={indent} />
+        </>
       )
   }
 }
