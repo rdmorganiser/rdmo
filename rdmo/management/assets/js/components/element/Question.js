@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import isEmpty from 'lodash/isEmpty'
 
 import { filterElement } from '../../utils/filter'
 
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
-import { Drag, DropAfter } from '../common/DragAndDrop'
+import { Drag, Drop } from '../common/DragAndDrop'
 
 const Question = ({ config, question, elementActions, display='list', filter=null, indent=0 }) => {
 
@@ -67,7 +68,7 @@ const Question = ({ config, question, elementActions, display='list', filter=nul
               </div>
             )
           }
-          <DropAfter element={question} elementActions={elementActions} indent={indent} />
+          <Drop element={question} elementActions={elementActions} indent={indent} mode="after" />
         </>
       )
   }

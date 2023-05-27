@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import isUndefined from 'lodash/isUndefined'
+import isEmpty from 'lodash/isEmpty'
 
 import { filterElement } from '../../utils/filter'
 
@@ -9,7 +9,7 @@ import Question from './Question'
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AddLink, LockedLink, NestedLink,
          ExportLink, CodeLink } from '../common/Links'
-import { Drag, DropAfter, DropIn } from '../common/DragAndDrop'
+import { Drag, Drop } from '../common/DragAndDrop'
 
 const Page = ({ config, page, elementActions, display='list', filter=null, indent=0 }) => {
 
@@ -70,18 +70,18 @@ const Page = ({ config, page, elementActions, display='list', filter=null, inden
         <>
           {
             showElement && config.display.elements.pages && (
-              <DropIn element={page} elementActions={elementActions}>
+              <Drop element={page} elementActions={elementActions}>
                 <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
                   <div className="panel-heading">
                     { elementNode }
                   </div>
                 </div>
-              </DropIn>
+              </Drop>
             )
           }
           {
             page.elements.map((element, index) => {
-              if (isUndefined(element.text)) {
+              if (element.model == 'questions.questionset') {
                 return <QuestionSet key={index} config={config} questionset={element} elementActions={elementActions}
                                     display="nested" filter={filter}  indent={indent + 1} />
               } else {
@@ -90,7 +90,7 @@ const Page = ({ config, page, elementActions, display='list', filter=null, inden
               }
             })
           }
-          <DropAfter element={page} elementActions={elementActions} indent={indent} />
+          <Drop element={page} elementActions={elementActions} indent={indent} mode="after" />
         </>
       )
     case 'plain':

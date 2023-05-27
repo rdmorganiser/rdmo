@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import isNil from 'lodash/isNil'
+import isEmpty from 'lodash/isEmpty'
 
 import { filterElement } from '../../utils/filter'
 
 import Page from './Page'
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AddLink, LockedLink, NestedLink, ExportLink, CodeLink } from '../common/Links'
-import { Drag, DropAfter, DropIn } from '../common/DragAndDrop'
+import { Drag, Drop } from '../common/DragAndDrop'
 
 const Section = ({ config, section, elementActions, display='list', filter=null, indent=0 }) => {
 
@@ -58,14 +58,18 @@ const Section = ({ config, section, elementActions, display='list', filter=null,
         <>
           {
             showElement && config.display.elements.sections && (
-              <DropIn element={section} elementActions={elementActions}>
+              <Drop element={section} elementActions={elementActions}>
                 <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
                   <div className="panel-heading">
                     { elementNode }
                   </div>
                 </div>
-              </DropIn>
+              </Drop>
             )
+          }
+          {
+            !isEmpty(section.elements) &&
+            <Drop element={section.elements[0]} elementActions={elementActions} indent={indent + 1} mode="before" />
           }
           {
             section.elements.map((page, index) => (
@@ -73,7 +77,7 @@ const Section = ({ config, section, elementActions, display='list', filter=null,
                     display="nested" filter={filter} indent={indent + 1} />
             ))
           }
-          <DropAfter element={section} elementActions={elementActions} indent={indent} />
+          <Drop element={section} elementActions={elementActions} indent={indent} mode="after" />
         </>
       )
     case 'plain':

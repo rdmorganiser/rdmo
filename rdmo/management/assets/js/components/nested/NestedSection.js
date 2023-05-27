@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import isEmpty from 'lodash/isEmpty'
 
 import { getUriPrefixes } from '../../utils/filter'
 
 import { FilterString, FilterUriPrefix } from '../common/Filter'
 import { Checkbox } from '../common/Checkboxes'
 import { BackButton } from '../common/Buttons'
+import { Drop } from '../common/DragAndDrop'
 
 import Section from '../element/Section'
 import Page from '../element/Page'
@@ -64,7 +66,10 @@ const NestedCatalog = ({ config, section, configActions, elementActions }) => {
           </div>
         </div>
       </div>
-
+      {
+        !isEmpty(section.elements) &&
+        <Drop element={section.elements[0]} elementActions={elementActions} indent={1} mode="before" />
+      }
       {
         section.elements.map((page, index) => (
           <Page key={index} config={config} page={page} elementActions={elementActions}

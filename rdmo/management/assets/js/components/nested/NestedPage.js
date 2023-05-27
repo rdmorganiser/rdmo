@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import isUndefined from 'lodash/isUndefined'
+import isEmpty from 'lodash/isEmpty'
 
 import { getUriPrefixes } from '../../utils/filter'
 
 import { FilterString, FilterUriPrefix } from '../common/Filter'
 import { Checkbox } from '../common/Checkboxes'
 import { BackButton } from '../common/Buttons'
+import { Drop } from '../common/DragAndDrop'
 
 import Page from '../element/Page'
 import QuestionSet from '../element/QuestionSet'
@@ -61,10 +62,13 @@ const NestedPage = ({ config, page, configActions, elementActions }) => {
           </div>
         </div>
       </div>
-
+      {
+        !isEmpty(page.elements) &&
+        <Drop element={page.elements[0]} elementActions={elementActions} indent={1} mode="before" />
+      }
       {
         page.elements.map((element, index) => {
-          if (isUndefined(element.text)) {
+          if (element.model == 'questions.questionset') {
             return <QuestionSet key={index} config={config} questionset={element} elementActions={elementActions}
                                 display="nested" filter={config.filter.page} indent={1} />
           } else {

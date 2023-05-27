@@ -25,78 +25,57 @@ Drag.propTypes = {
   element: PropTypes.object.isRequired
 }
 
-const DropAfter = ({ element, elementActions, indent=0 }) => {
+const Drop = ({ children, element, elementActions, indent=0, mode='in' }) => {
   const dropRef = useRef(null)
 
-  const dropTypes = {
-    'questions.section': ['questions.section'],
-    'questions.page': ['questions.page'],
-    'questions.questionset': ['questions.questionset', 'questions.question'],
-    'questions.question': ['questions.questionset', 'questions.question']
-  }[element.model]
+  let accept
+  if (mode == 'in') {
+    accept = {
+      'questions.section': ['questions.page'],
+      'questions.page': ['questions.questionset', 'questions.question'],
+      'questions.questionset': ['questions.questionset', 'questions.question']
+    }[element.model]
+  } else {
+    accept = {
+      'questions.section': ['questions.section'],
+      'questions.page': ['questions.page'],
+      'questions.questionset': ['questions.questionset', 'questions.question'],
+      'questions.question': ['questions.questionset', 'questions.question']
+    }[element.model]
+  }
 
   const [{ isDragging, isOver }, drop] = useDrop(() => ({
-    accept: dropTypes,
+    accept: accept,
     collect: (monitor) => ({
-      isDragging: dropTypes.includes(monitor.getItemType()),
+      isDragging: accept.includes(monitor.getItemType()),
       isOver: monitor.isOver()
     }),
     drop: (item, monitor) => {
-      elementActions.dropAfterElement(item, element);
+      elementActions.dropElement(item, element, mode);
     },
   }), [element])
 
   drop(dropRef)
 
   const dropClassName = classNames({
-    'drop-after': true,
+    'drop-in': mode == 'in',
+    'drop': mode != 'in',
     'show': isDragging,
     'over': isOver
   })
 
-  return <div className={dropClassName} ref={dropRef} style={{ marginLeft: 30 * indent }}></div>
+  if (mode == 'in') {
+    return <div className={dropClassName} ref={dropRef}>{children}</div>
+  } else {
+    return <div className={dropClassName} ref={dropRef} style={{ marginLeft: 30 * indent }}></div>
+  }
 }
 
-DropAfter.propTypes = {
+Drop.propTypes = {
   element: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired,
+  mode: PropTypes.string,
   indent: PropTypes.number
 }
 
-const DropIn = ({ element, elementActions, children }) => {
-  const dropRef = useRef(null)
-
-  const dropTypes = {
-    'questions.section': ['questions.page'],
-    'questions.page': ['questions.questionset', 'questions.question'],
-    'questions.questionset': ['questions.questionset', 'questions.question']
-  }[element.model]
-
-  const [{ isDragging, isOver }, drop] = useDrop(() => ({
-    accept: dropTypes,
-    collect: (monitor) => ({
-      isDragging: dropTypes.includes(monitor.getItemType()),
-      isOver: monitor.isOver()
-    }),
-    drop: (item, monitor) => {
-      elementActions.dropInElement(item, element);
-    },
-  }), [element])
-
-  drop(dropRef)
-
-  const dropClassName = classNames({
-    'drop-in': true,
-    'show': isDragging,
-    'over': isOver
-  })
-
-  return <div className={dropClassName} ref={dropRef}>{children}</div>
-}
-
-DropIn.propTypes = {
-  element: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
-}
-
-export { Drag, DropAfter, DropIn }
+export { Drag, Drop }
