@@ -28,7 +28,7 @@ const ImportPage = ({ config, page, importActions }) => {
           <input type="checkbox" checked={page.import} onChange={toggleImport} />
           <strong>{gettext('Page')}</strong>
         </label>
-        <CodeLink className={codeClass[page.type]} uri={page.uri} onClick={showFields} />
+        <CodeLink className={codeClass[page.model]} uri={page.uri} onClick={showFields} />
       </div>
       {
         page.show && <>

@@ -28,7 +28,7 @@ const ImportSection = ({ config, section, importActions }) => {
           <input type="checkbox" checked={section.import} onChange={toggleImport} />
           <strong>{gettext('Section')}</strong>
         </label>
-        <CodeLink className={codeClass[section.type]} uri={section.uri} onClick={showFields} />
+        <CodeLink className={codeClass[section.model]} uri={section.uri} onClick={showFields} />
       </div>
       {
         section.show && <>

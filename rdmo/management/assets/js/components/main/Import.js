@@ -33,8 +33,8 @@ const Import = ({ config, imports, importActions }) => {
             return (
               <li key={index} className="list-group-item">
                 <p>
-                  <strong>{verboseNames[element.type]}{' '}</strong>
-                  <code className={codeClass[element.type]}>{element.uri}</code>
+                  <strong>{verboseNames[element.model]}{' '}</strong>
+                  <code className={codeClass[element.model]}>{element.uri}</code>
                   {element.created && <span className="text-success">{' '}{gettext('created')}</span>}
                   {element.updated && <span className="text-info">{' '}{gettext('updated')}</span>}
                   {!isEmpty(element.errors) && <span className="text-danger">{' '}{gettext('could not be imported')}</span>}
@@ -45,28 +45,28 @@ const Import = ({ config, imports, importActions }) => {
               </li>
             )
           } else {
-            switch (element.type) {
-              case 'catalogs':
+            switch (element.model) {
+              case 'questions.catalog':
                 return <ImportCatalog key={index} config={config} catalog={element} importActions={importActions} />
-              case 'sections':
+              case 'questions.section':
                 return <ImportSection key={index} config={config} section={element} importActions={importActions} />
-              case 'pages':
+              case 'questions.page':
                 return <ImportPage key={index} config={config} page={element} importActions={importActions} />
-              case 'questionsets':
+              case 'questions.questionset':
                 return <ImportQuestionSet key={index} config={config} questionset={element} importActions={importActions} />
-              case 'questions':
+              case 'questions.question':
                 return <ImportQuestion key={index} config={config} question={element} importActions={importActions} />
-              case 'attributes':
+              case 'domain.attribute':
                 return <ImportAttribute key={index} config={config} attribute={element} importActions={importActions} />
-              case 'optionsets':
+              case 'options.optionset':
                 return <ImportOptionSet key={index} config={config} optionset={element} importActions={importActions} />
-              case 'options':
+              case 'options.option':
                 return <ImportOption key={index} config={config} option={element} importActions={importActions} />
-              case 'conditions':
+              case 'conditions.condition':
                 return <ImportCondition key={index} config={config} condition={element} importActions={importActions} />
-              case 'tasks':
+              case 'tasks.task':
                 return <ImportTask key={index} config={config} task={element} importActions={importActions} />
-              case 'views':
+              case 'views.view':
                 return <ImportView key={index} config={config} view={element} importActions={importActions} />
               default:
                 return null

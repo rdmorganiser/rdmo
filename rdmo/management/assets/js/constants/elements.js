@@ -7,23 +7,23 @@ const elementTypes = {
   'domain.attribute':'attributes',
   'options.optionset': 'optionsets',
   'options.option': 'options',
-  'condition.condition': 'conditions',
+  'conditions.condition': 'conditions',
   'tasks.task': 'tasks',
   'tasks.view': 'views'
 }
 
 const elementModules = {
-  'catalogs': 'questions',
-  'sections': 'questions',
-  'pages': 'questions',
-  'questionsets': 'questions',
-  'questions': 'questions',
-  'attributes': 'domain',
-  'optionsets': 'options',
-  'options': 'options',
-  'conditions': 'conditions',
-  'tasks': 'tasks',
-  'views': 'views'
+  'questions.catalog': 'questions',
+  'questions.section': 'questions',
+  'questions.page': 'questions',
+  'questions.questionset': 'questions',
+  'questions.question': 'questions',
+  'domain.attribute': 'domain',
+  'options.optionset': 'options',
+  'options.option': 'options',
+  'conditions.condition': 'conditions',
+  'tasks.task': 'tasks',
+  'views.view': 'views'
 }
 
 const codeClass = {
@@ -35,7 +35,7 @@ const codeClass = {
   'domain.attribute': 'code-domain',
   'options.optionset': 'code-options',
   'options.option': 'code-options',
-  'condition.condition': 'code-conditions',
+  'conditions.condition': 'code-conditions',
   'tasks.task': 'code-tasks',
   'tasks.view': 'code-views'
 }
@@ -49,7 +49,7 @@ const verboseNames = {
   'domain.attribute': gettext('Attribute'),
   'options.optionset': gettext('Option set'),
   'options.option': gettext('Option'),
-  'condition.condition': gettext('Condition'),
+  'conditions.condition': gettext('Condition'),
   'tasks.task': gettext('Task'),
   'tasks.view': gettext('View')
 }

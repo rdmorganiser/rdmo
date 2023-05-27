@@ -30,7 +30,7 @@ const ImportView = ({ config, view, importActions }) => {
           <input type="checkbox" checked={view.import} onChange={toggleImport} />
           <strong>{gettext('View')}</strong>
         </label>
-        <CodeLink className={codeClass[view.type]} uri={view.uri} onClick={showFields} />
+        <CodeLink className={codeClass[view.model]} uri={view.uri} onClick={showFields} />
       </div>
       {
         view.show && <>

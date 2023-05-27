@@ -28,7 +28,7 @@ const ImportAttribute = ({ config, attribute, importActions }) => {
           <input type="checkbox" checked={attribute.import} onChange={toggleImport} />
           <strong>{gettext('Attribute')}</strong>
         </label>
-        <CodeLink className={codeClass[attribute.type]} uri={attribute.uri} onClick={showFields} />
+        <CodeLink className={codeClass[attribute.model]} uri={attribute.uri} onClick={showFields} />
       </div>
       {
         attribute.show && <>

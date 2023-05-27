@@ -5,18 +5,18 @@ import defusedxml.ElementTree as ET
 
 log = logging.getLogger(__name__)
 
-element_types = {
-  'catalog': 'catalogs',
-  'section': 'sections',
-  'page': 'pages',
-  'questionset': 'questionsets',
-  'question': 'questions',
-  'attribute': 'attributes',
-  'optionset': 'optionsets',
-  'option': 'options',
-  'condition': 'conditions',
-  'task': 'tasks',
-  'view': 'views'
+models = {
+  'catalog': 'questions.catalog',
+  'section': 'questions.section',
+  'page': 'questions.page',
+  'questionset': 'questions.questionset',
+  'question': 'questions.question',
+  'attribute': 'domain.attribute',
+  'optionset': 'options.optionset',
+  'option': 'options.option',
+  'condition': 'conditions.condition',
+  'task': 'tasks.task',
+  'view': 'views.task'
 }
 
 
@@ -44,8 +44,7 @@ def flat_xml_to_elements(root):
 
         element = {
             'uri': get_uri(node, ns_map),
-            'type': element_types[node.tag],
-            'model': node.tag
+            'model': models[node.tag]
         }
 
         for sub_node in node:
@@ -56,8 +55,8 @@ def flat_xml_to_elements(root):
                 element[tag] = {
                     'uri': sub_node.attrib[uri_attrib]
                 }
-                if sub_node.tag in element_types:
-                    element[tag]['type'] = element_types[sub_node.tag]
+                if sub_node.tag in models:
+                    element[tag]['model'] = models[sub_node.tag]
             elif 'lang' in sub_node.attrib:
                 # this node has the lang attribute!
                 element['%s_%s' % (tag, sub_node.attrib['lang'])] = sub_node.text
@@ -68,8 +67,8 @@ def flat_xml_to_elements(root):
                     sub_element = {
                         'uri': sub_sub_node.attrib[uri_attrib]
                     }
-                    if sub_sub_node.tag in element_types:
-                        sub_element['type'] = element_types[sub_sub_node.tag]
+                    if sub_sub_node.tag in models:
+                        sub_element['model'] = models[sub_sub_node.tag]
                     if 'order' in sub_sub_node.attrib:
                         sub_element['order'] = sub_sub_node.attrib['order']
 
