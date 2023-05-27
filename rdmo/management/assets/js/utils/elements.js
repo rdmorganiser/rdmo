@@ -28,37 +28,80 @@ const resetElement = (element) => {
   return element
 }
 
+function moveElement(element, dragElement, dropElement, mode) {
+  const dragParent = removeElement(element, dragElement)
+
+  let dropParent
+  switch (mode) {
+    case 'before':
+      dropParent = insertBeforeElement(element, dragElement, dropElement)
+      break
+    case 'after':
+      dropParent = insertAfterElement(element, dragElement, dropElement)
+      break
+    default:
+      dropParent = insertInElement(dragElement, dropElement)
+      break
+  }
+
+  updateElementElements(dragParent)
+  if (!compareElements(dragParent, dropParent)) {
+    updateElementElements(dropParent)
+  }
+
+  return { dragParent, dropParent }
+}
+
 function removeElement(element, dragElement) {
-  if (isUndefined(element.elements)) {
-    return null
+  if (isUndefined(element.elements)) return null
+
+  const dragIndex = element.elements.findIndex(el => compareElements(el, dragElement))
+  if (dragIndex > -1) {
+    // remove the element
+    element.elements.splice(dragIndex, 1)
+    return element
   } else {
-    const dragIndex = element.elements.findIndex(el => compareElements(el, dragElement))
-    if (dragIndex > -1) {
-      element.elements.splice(dragIndex, 1)
-      return element
-    } else {
-      // call the function recursively and return the first element which is not null
-      return element.elements.map(el => removeElement(el, dragElement))
-                             .find(el => !isNil(el))
-    }
+    // call the function recursively and return the first element which is not null
+    return element.elements.map(el => removeElement(el, dragElement))
+                           .find(el => !isNil(el))
   }
 }
 
-function insertElement(element, dragElement, dropElement) {
-  if (isUndefined(element.elements)) {
-    return null
+function insertBeforeElement(element, dragElement, dropElement) {
+  console.log(dragElement.uri_path, dropElement.uri_path);
+  if (isUndefined(element.elements)) return null
+
+  const dropIndex = element.elements.findIndex(el => compareElements(el, dropElement))
+  if (dropIndex > -1) {
+    // insert the dragElement before the dropElement
+    element.elements.splice(dropIndex, 0, dragElement)
+    return element
   } else {
-    const dropIndex = element.elements.findIndex(el => compareElements(el, dropElement))
-    if (dropIndex > -1) {
-      // insert the dragElement after the dropElement
-      element.elements.splice(dropIndex + 1, 0, dragElement)
-      return element
-    } else {
-      // call the function recursively and return the first element which is not null
-      return element.elements.map(el => insertElement(el, dragElement, dropElement))
-                             .find(el => !isNil(el))
-    }
+    // call the function recursively and return the first element which is not null
+    return element.elements.map(el => insertBeforeElement(el, dragElement, dropElement))
+                           .find(el => !isNil(el))
   }
+}
+
+function insertAfterElement(element, dragElement, dropElement) {
+  if (isUndefined(element.elements)) return null
+
+  const dropIndex = element.elements.findIndex(el => compareElements(el, dropElement))
+  if (dropIndex > -1) {
+    // insert the dragElement after the dropElement
+    element.elements.splice(dropIndex + 1, 0, dragElement)
+    return element
+  } else {
+    // call the function recursively and return the first element which is not null
+    return element.elements.map(el => insertAfterElement(el, dragElement, dropElement))
+                           .find(el => !isNil(el))
+  }
+}
+
+function insertInElement(dragElement, dropElement) {
+  const dropParent = dropElement
+  dropParent.elements = [dragElement, ...dropParent.elements]
+  return dropParent
 }
 
 function updateElementElements(element) {
@@ -98,5 +141,4 @@ const buildUri = (element) => {
   return uri
 }
 
-export { compareElements, updateElement, resetElement, removeElement,
-         insertElement, updateElementElements, buildUri }
+export { compareElements, updateElement, moveElement, buildUri }

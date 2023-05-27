@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import isUndefined from 'lodash/isUndefined'
+import isEmpty from 'lodash/isEmpty'
 
 import { getUriPrefixes } from '../../utils/filter'
 
 import { FilterString, FilterUriPrefix } from '../common/Filter'
 import { Checkbox } from '../common/Checkboxes'
 import { BackButton } from '../common/Buttons'
+import { Drop } from '../common/DragAndDrop'
 
 import QuestionSet from '../element/QuestionSet'
 import Question from '../element/Question'
@@ -57,10 +58,13 @@ const NestedQuestionSet = ({ config, questionset, configActions, elementActions 
           </div>
         </div>
       </div>
-
+      {
+        !isEmpty(questionset.elements) &&
+        <Drop element={questionset.elements[0]} elementActions={elementActions} indent={1} mode="before" />
+      }
       {
         questionset.elements.map((element, index) => {
-          if (isUndefined(element.text)) {
+          if (element.model == 'questions.questionset') {
             return <QuestionSet key={index} config={config} questionset={element} elementActions={elementActions}
                                 display="nested" filter={config.filter.questionset} indent={1} />
           } else {
