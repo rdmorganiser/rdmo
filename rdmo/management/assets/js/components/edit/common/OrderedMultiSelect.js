@@ -11,72 +11,67 @@ import toNumber from 'lodash/toNumber'
 import get from 'lodash/get'
 import maxBy from 'lodash/maxBy'
 
+import Link from 'rdmo/core/assets/js/components/Link'
+
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
 const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, errors,
                                   handleChange, handleEdit, handleRemove, handleDrag }) => {
-  const ref = useRef(null)
-
-  const [{ isOver }, drop] = useDrop(() => ({
-    accept: field,
-    collect: (monitor) => ({
-      isOver: monitor.isOver()
-    }),
-    hover: (item) => {
-      if (!ref.current || item.index === index) {
-        return
-      } else {
-        handleDrag(item.index, index)
-        item.index = index
-      }
-    }
-  }))
+  const dragRef = useRef(null)
+  const dropRef = useRef(null)
 
   const [{}, drag] = useDrag(() => ({
     type: field,
     item: { index }
   }))
 
-  const className = classNames({
-    'ordered-multi-select-item': true,
-    'mb-10': true,
+  const [{ isDragging, isOver }, drop] = useDrop(() => ({
+    accept: field,
+    collect: (monitor) => ({
+      isDragging: monitor.getItemType() == field,
+      isOver: monitor.isOver()
+    }),
+    drop: (item) => {
+      handleDrag(item.index, index)
+    },
+  }))
+
+  const dropClassName = classNames({
+    'drop': true,
+    'show': isDragging,
     'over': isOver
   })
 
-  drag(drop(ref))
+  drag(dragRef)
+  drop(dropRef)
 
   return (
-    <div ref={ref} className={className}>
-      <div>
-        <div className="handle pull-left">
-          <i className="fa fa-ellipsis-v"></i>
+    <>
+      <div className="ordered-multi-select-item">
+        <div className="ordered-multi-select-item-options">
+          <Link className="fa fa-pencil" title={gettext('Edit')} onClick={() => handleEdit(index)} />
+          <Link className="fa fa-times" title={gettext('Remove')} onClick={() => handleRemove(index)} />
+          <i className="fa fa-arrows drag" ref={dragRef}></i>
         </div>
-        <div className="pull-right">
-          <button className="btn btn-primary ml-5" onClick={() => handleEdit(index)}>
-            {gettext('Edit')}
-          </button>
-          <button className="btn btn-danger ml-5" onClick={() => handleRemove(index)}>
-            {gettext('Remove')}
-          </button>
-        </div>
-        <div>
+        <div className="ordered-multi-select-item-select">
           <ReactSelect classNamePrefix="react-select" className="react-select"
                        options={selectOptions} value={selectValue}
                        onChange={option => handleChange(option, index)}
                        menuPortalTarget={document.body} />
         </div>
+        {
+          errors && errors[index] &&
+          <ul className="help-block list-unstyled">
+            {
+              Object.keys(errors[index]).map((key, i1) => {
+                return errors[index][key].map((error, i2) => <li key={`${i1}-${i2}`}>{error}</li>)
+              })
+            }
+          </ul>
+        }
       </div>
-      {
-        errors && errors[index] &&
-        <ul className="help-block list-unstyled">
-          {
-            Object.keys(errors[index]).map((key, i1) => {
-              return errors[index][key].map((error, i2) => <li key={`${i1}-${i2}`}>{error}</li>)
-            })
-          }
-        </ul>
-      }
-    </div>
+      <div ref={dropRef} className={dropClassName}></div>
+    </>
   )
 }
 

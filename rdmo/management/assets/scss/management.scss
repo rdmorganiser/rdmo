@@ -256,31 +256,22 @@ a.disabled {
     }
 }
 
-.select-item,
-.multi-select-item,
 .ordered-multi-select-item {
-    button {
-        font-size: small;
+    margin-bottom: 10px;
+
+    .ordered-multi-select-item-options {
+        float: right;
+        display: flex;
+        gap: 4px;
+        padding: 10px 0;
+    }
+
+    .ordered-multi-select-item-select {
         height: 34px;
-    }
-}
 
-.ordered-multi-select-item {
-    .handle {
-        cursor: grab;
-        color: rgb(221, 221, 221);
-        font-size: 24px;
-        line-height: 32px;
-        padding-top: 2px;
-    }
-
-    .react-select {
-        margin-left: 14px;
-        margin-right: 130px;
-    }
-
-    &.over {
-        opacity: 0;
+        .react-select {
+            margin-right: 54px;
+        }
     }
 }
 
