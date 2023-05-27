@@ -2,6 +2,7 @@ class ConditionsFactory {
 
   static createCondition(config, parent) {
     return {
+      model: 'conditions.condition',
       uri_prefix: config.settings.default_uri_prefix,
       relation: 'eq',
       optionsets: parent.optionset ? [parent.optionset.id] : [],
