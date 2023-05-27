@@ -54,11 +54,4 @@ const verboseNames = {
   'tasks.view': gettext('View')
 }
 
-const dragAndDropTypes = {
-  'questions.section': 'section',
-  'questions.page': 'page',
-  'questions.questionset': 'questionset-or-question',
-  'questions.question': 'questionset-or-question'
-}
-
-export { elementTypes, elementModules, codeClass, verboseNames, dragAndDropTypes }
+export { elementTypes, elementModules, codeClass, verboseNames }

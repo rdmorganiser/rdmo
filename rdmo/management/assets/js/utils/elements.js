@@ -28,18 +28,6 @@ const resetElement = (element) => {
   return element
 }
 
-const moveElement = (element, dragElement, dropElement) => {
-  const dragParent = removeElement(element, dragElement)
-  const dropParent = insertElement(element, dragElement, dropElement)
-
-  updateElementElements(dragParent)
-  if (!compareElements(dragParent, dropParent)) {
-    updateElementElements(dropParent)
-  }
-
-  return { dragParent, dropParent }
-}
-
 function removeElement(element, dragElement) {
   if (isUndefined(element.elements)) {
     return null
@@ -110,4 +98,5 @@ const buildUri = (element) => {
   return uri
 }
 
-export { compareElements, updateElement, resetElement, moveElement, buildUri }
+export { compareElements, updateElement, resetElement, removeElement,
+         insertElement, updateElementElements, buildUri }

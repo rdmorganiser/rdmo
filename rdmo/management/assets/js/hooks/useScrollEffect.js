@@ -12,12 +12,10 @@ const useScrollEffect = (elementType, elementId, elementAction) => {
     if (!isNil(elementAction)) {
       lsKey += `_${elementAction}`
     }
-    const lsValue = ls.get(lsKey)
+    const lsValue = ls.get(lsKey, 0)
 
     // scroll to the right position
-    if (!isNil(lsValue)) {
-      setTimeout(() => window.scrollTo(0, lsValue), 300);
-    }
+    setTimeout(() => window.scrollTo(0, lsValue), 0);
 
     // add a event handler to store the scroll position
     const handleScroll = () => {

@@ -17,7 +17,8 @@ import ViewsFactory from '../factories/ViewsFactory'
 
 import { elementTypes } from '../constants/elements'
 import { updateLocation } from '../utils/location'
-import { compareElements, moveElement as moveElementUtil } from '../utils/elements'
+import { compareElements, removeElement,
+         insertElement, updateElementElements } from '../utils/elements'
 
 export function fetchElements(elementType) {
   return function(dispatch, getState) {
@@ -604,21 +605,39 @@ export function updateElement(element, values) {
 
 // move elements
 
-export function moveElement(dragElement, dropElement) {
+export function dropAfterElement(dragElement, dropElement) {
   return function(dispatch, getState) {
     if (!compareElements(dragElement, dropElement)) {
       const element = {...getState().elements.element}
 
-      const { dragParent, dropParent } = moveElementUtil(element, dragElement, dropElement)
+      const dragParent = removeElement(element, dragElement)
+      const dropParent = insertElement(element, dragElement, dropElement)
 
+      updateElementElements(dragParent)
       dispatch(storeElement(elementTypes[dragParent.model], dragParent))
+
       if (!compareElements(dragParent, dropParent)) {
+        updateElementElements(dropParent)
         dispatch(storeElement(elementTypes[dropParent.model], dropParent))
       }
     }
   }
 }
 
-export function moveElementSuccess(element) {
-  return {type: 'elements/moveElementSuccess', element}
+export function dropInElement(dragElement, dropElement) {
+  return function(dispatch, getState) {
+    if (!compareElements(dragElement, dropElement)) {
+      const element = {...getState().elements.element}
+
+      const dragParent = removeElement(element, dragElement)
+      const dropParent = dropElement
+      dropParent.elements = [dragElement, ...dropParent.elements]
+
+      updateElementElements(dragParent)
+      updateElementElements(dropParent)
+
+      dispatch(storeElement(elementTypes[dragParent.model], dragParent))
+      dispatch(storeElement(elementTypes[dropParent.model], dropParent))
+    }
+  }
 }

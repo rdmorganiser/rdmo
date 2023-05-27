@@ -9,7 +9,7 @@ import Question from './Question'
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AddLink, LockedLink, NestedLink,
          ExportLink, CodeLink } from '../common/Links'
-import { Drag, Drop } from '../common/DragAndDrop'
+import { Drag, DropAfter, DropIn } from '../common/DragAndDrop'
 
 const Page = ({ config, page, elementActions, display='list', filter=null, indent=0 }) => {
 
@@ -70,11 +70,13 @@ const Page = ({ config, page, elementActions, display='list', filter=null, inden
         <>
           {
             showElement && config.display.elements.pages && (
-              <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
-                <div className="panel-heading">
-                  { elementNode }
+              <DropIn element={page} elementActions={elementActions}>
+                <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
+                  <div className="panel-heading">
+                    { elementNode }
+                  </div>
                 </div>
-              </div>
+              </DropIn>
             )
           }
           {
@@ -88,7 +90,7 @@ const Page = ({ config, page, elementActions, display='list', filter=null, inden
               }
             })
           }
-          <Drop element={page} elementActions={elementActions} indent={indent} />
+          <DropAfter element={page} elementActions={elementActions} indent={indent} />
         </>
       )
     case 'plain':
