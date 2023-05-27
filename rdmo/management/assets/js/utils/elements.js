@@ -128,7 +128,7 @@ function updateElementElements(element) {
 }
 
 const buildUri = (element) => {
-  let uri = element.uri_prefix + '/' + elementModules[element.type] + '/'
+  let uri = element.uri_prefix + '/' + elementModules[element.model] + '/'
 
   if (!isUndefined(element.uri_path)) {
     uri += element.uri_path

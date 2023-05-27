@@ -21,7 +21,7 @@ export default function importsReducer(state = initialState, action) {
       return {...state, elements: [], errors: [], success: false}
     case 'import/uploadFileSuccess':
       return {...state, elements: action.elements.map(element => {
-        if (['catalogs', 'tasks', 'views'].includes(element.type)) {
+        if (['questions.catalogs', 'tasks.task', 'views.view'].includes(element.model)) {
           element.available = true
         }
         element.show = false

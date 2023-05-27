@@ -30,7 +30,7 @@ const ImportCatalog = ({ config, catalog, importActions }) => {
           <input type="checkbox" checked={catalog.import} onChange={toggleImport} />
           <strong>{gettext('Catalog')}</strong>
         </label>
-        <CodeLink className={codeClass[catalog.type]} uri={catalog.uri} onClick={showFields} />
+        <CodeLink className={codeClass[catalog.model]} uri={catalog.uri} onClick={showFields} />
       </div>
       {
         catalog.show && <>

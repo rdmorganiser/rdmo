@@ -23,7 +23,7 @@ def check_permissions(elements, user):
 
 def import_elements(elements, save=True):
     for element in elements:
-        model_name = element.get('model')
+        model = element.get('model')
 
         element.update({
             'warnings': defaultdict(list),
@@ -32,37 +32,37 @@ def import_elements(elements, save=True):
             'updated': False
         })
 
-        if model_name == 'condition':
+        if model == 'conditions.condition':
             import_condition(element, save)
 
-        elif model_name == 'attribute':
+        elif model == 'domain.attribute':
             import_attribute(element, save)
 
-        elif model_name == 'optionset':
+        elif model == 'options.optionset':
             import_optionset(element, save)
 
-        elif model_name == 'option':
+        elif model == 'options.option':
             import_option(element, save)
 
-        elif model_name == 'catalog':
+        elif model == 'questions.catalog':
             import_catalog(element, save)
 
-        elif model_name == 'section':
+        elif model == 'questions.section':
             import_section(element, save)
 
-        elif model_name == 'page':
+        elif model == 'questions.page':
             import_page(element, save)
 
-        elif model_name == 'questionset':
+        elif model == 'questions.questionset':
             import_questionset(element, save)
 
-        elif model_name == 'question':
+        elif model == 'questions.question':
             import_question(element, save)
 
-        elif model_name == 'task':
+        elif model == 'tasks.task':
             import_task(element, save)
 
-        elif model_name == 'view':
+        elif model == 'views.view':
             import_view(element, save)
 
         element = filter_warnings(element, elements)

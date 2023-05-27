@@ -28,7 +28,7 @@ const ImportOptionSet = ({ config, optionset, importActions }) => {
           <input type="checkbox" checked={optionset.import} onChange={toggleImport} />
           <strong>{gettext('Option set')}</strong>
         </label>
-        <CodeLink className={codeClass[optionset.type]} uri={optionset.uri} onClick={showFields} />
+        <CodeLink className={codeClass[optionset.model]} uri={optionset.uri} onClick={showFields} />
       </div>
       {
         optionset.show && <>

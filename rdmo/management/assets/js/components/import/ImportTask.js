@@ -30,7 +30,7 @@ const ImportTask = ({ config, task, importActions }) => {
           <input type="checkbox" checked={task.import} onChange={toggleImport} />
           <strong>{gettext('Task')}</strong>
         </label>
-        <CodeLink className={codeClass[task.type]} uri={task.uri} onClick={showFields} />
+        <CodeLink className={codeClass[task.model]} uri={task.uri} onClick={showFields} />
       </div>
       {
         task.show && <>

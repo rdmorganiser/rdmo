@@ -28,7 +28,7 @@ const ImportQuestion = ({ config, question, importActions }) => {
           <input type="checkbox" checked={question.import} onChange={toggleImport} />
           <strong>{gettext('Question')}</strong>
         </label>
-        <CodeLink className={codeClass[question.type]} uri={question.uri} onClick={showFields} />
+        <CodeLink className={codeClass[question.model]} uri={question.uri} onClick={showFields} />
       </div>
       {
         question.show && <>

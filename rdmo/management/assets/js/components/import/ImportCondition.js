@@ -28,7 +28,7 @@ const ImportCondition = ({ config, condition, importActions }) => {
           <input type="checkbox" checked={condition.import} onChange={toggleImport} />
           <strong>{gettext('Condition')}</strong>
         </label>
-        <CodeLink className={codeClass[condition.type]} uri={condition.uri} onClick={showFields} />
+        <CodeLink className={codeClass[condition.model]} uri={condition.uri} onClick={showFields} />
       </div>
       {
         condition.show && <>
