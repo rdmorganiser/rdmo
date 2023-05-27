@@ -79,18 +79,28 @@ class QuestionListSerializer(ElementExportSerializerMixin, ElementWarningSeriali
                              QuestionSerializer):
 
     attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
+    condition_uris = serializers.SerializerMethodField()
+    optionset_uris = serializers.SerializerMethodField()
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
 
     class Meta(QuestionSerializer.Meta):
         fields = QuestionSerializer.Meta.fields + (
             'attribute_uri',
+            'condition_uris',
+            'optionset_uris',
             'warning',
             'xml_url'
         )
         warning_fields = (
             'text',
         )
+
+    def get_condition_uris(self, obj):
+        return [condition.uri for condition in obj.conditions.all()]
+
+    def get_optionset_uris(self, obj):
+        return [optionset.uri for optionset in obj.optionsets.all()]
 
 
 class QuestionIndexSerializer(serializers.ModelSerializer):

@@ -15,6 +15,7 @@ const Pages = ({ config, pages, configActions, elementActions }) => {
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.pages.uri_prefix', value)
   const updateDisplayPagesURI = (value) => configActions.updateConfig('display.uri.pages', value)
   const updateDisplayAttributesURI = (value) => configActions.updateConfig('display.uri.attributes', value)
+  const updateDisplayConditionsURI = (value) => configActions.updateConfig('display.uri.conditions', value)
 
   const createPage = () => elementActions.createElement('pages')
 
@@ -45,6 +46,8 @@ const Pages = ({ config, pages, configActions, elementActions }) => {
                     value={config.display.uri.pages} onChange={updateDisplayPagesURI} />
           <Checkbox label={<code className="code-domain">{gettext('Attributes')}</code>}
                     value={config.display.uri.attributes} onChange={updateDisplayAttributesURI} />
+          <Checkbox label={<code className="code-conditions">{gettext('Conditions')}</code>}
+                    value={config.display.uri.conditions} onChange={updateDisplayConditionsURI} />
         </div>
       </div>
 

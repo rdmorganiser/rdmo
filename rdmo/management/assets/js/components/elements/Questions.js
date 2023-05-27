@@ -15,6 +15,8 @@ const Questions = ({ config, questions, configActions, elementActions }) => {
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.questions.uri_prefix', value)
   const updateDisplayQuestionsURI = (value) => configActions.updateConfig('display.uri.questions', value)
   const updateDisplayAttributesURI = (value) => configActions.updateConfig('display.uri.attributes', value)
+  const updateDisplayConditionsURI = (value) => configActions.updateConfig('display.uri.conditions', value)
+  const updateDisplayOptionSetURI = (value) => configActions.updateConfig('display.uri.optionsets', value)
 
   const createQuestion = () => elementActions.createElement('questions')
 
@@ -45,6 +47,10 @@ const Questions = ({ config, questions, configActions, elementActions }) => {
                     value={config.display.uri.questions} onChange={updateDisplayQuestionsURI} />
           <Checkbox label={<code className="code-domain">{gettext('Attributes')}</code>}
                     value={config.display.uri.attributes} onChange={updateDisplayAttributesURI} />
+          <Checkbox label={<code className="code-conditions">{gettext('Conditions')}</code>}
+                    value={config.display.uri.conditions} onChange={updateDisplayConditionsURI} />
+          <Checkbox label={<code className="code-options">{gettext('Option sets')}</code>}
+                    value={config.display.uri.optionsets} onChange={updateDisplayOptionSetURI} />
         </div>
       </div>
 

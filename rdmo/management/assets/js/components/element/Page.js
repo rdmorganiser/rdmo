@@ -24,6 +24,7 @@ const Page = ({ config, page, elementActions, display='list', filter=null, inden
   const createQuestion = () => elementActions.createElement('questions', { page })
 
   const fetchAttribute = () => elementActions.fetchElement('attributes', page.attribute)
+  const fetchCondition = (index) => elementActions.fetchElement('conditions', page.conditions[index])
 
   const elementNode = (
     <div className="element">
@@ -51,6 +52,13 @@ const Page = ({ config, page, elementActions, display='list', filter=null, inden
           config.display.uri.attributes && page.attribute_uri && <p>
             <CodeLink className="code-domain" uri={page.attribute_uri} onClick={() => fetchAttribute()} />
           </p>
+        }
+        {
+          config.display.uri.conditions && page.condition_uris.map((uri, index) => (
+            <p key={index}>
+              <CodeLink className="code-conditions" uri={uri} onClick={() => fetchCondition(index)} />
+            </p>
+          ))
         }
         <ElementErrors element={page} />
       </div>

@@ -13,8 +13,10 @@ const QuestionSets = ({ config, questionsets, configActions, elementActions }) =
 
   const updateFilterString = (value) => configActions.updateConfig('filter.questionsets.search', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.questionsets.uri_prefix', value)
-  const updateDisplayQuestioSetURI = (value) => configActions.updateConfig('display.uri.questionsets', value)
+
+  const updateDisplayQuestionSetsURI = (value) => configActions.updateConfig('display.uri.questionsets', value)
   const updateDisplayAttributesURI = (value) => configActions.updateConfig('display.uri.attributes', value)
+  const updateDisplayConditionsURI = (value) => configActions.updateConfig('display.uri.conditions', value)
 
   const createQuestionSet = () => elementActions.createElement('questionsets')
 
@@ -42,9 +44,11 @@ const QuestionSets = ({ config, questionsets, configActions, elementActions }) =
         <div className="checkboxes">
           <span className="mr-10">{gettext('Show URIs:')}</span>
           <Checkbox label={<code className="code-questions">{gettext('Question sets')}</code>}
-                    value={config.display.uri.questionsets} onChange={updateDisplayQuestioSetURI} />
+                    value={config.display.uri.questionsets} onChange={updateDisplayQuestionSetsURI} />
           <Checkbox label={<code className="code-domain">{gettext('Attributes')}</code>}
                     value={config.display.uri.attributes} onChange={updateDisplayAttributesURI} />
+          <Checkbox label={<code className="code-conditions">{gettext('Conditions')}</code>}
+                    value={config.display.uri.conditions} onChange={updateDisplayConditionsURI} />
         </div>
       </div>
 

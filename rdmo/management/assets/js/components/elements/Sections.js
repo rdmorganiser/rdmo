@@ -13,7 +13,7 @@ const Sections = ({ config, sections, configActions, elementActions }) => {
 
   const updateFilterString = (value) => configActions.updateConfig('filter.sections.search', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.sections.uri_prefix', value)
-  const updateDisplayURI = (value) => configActions.updateConfig('display.uri.sections', value)
+  const updateDisplaySectionURI = (value) => configActions.updateConfig('display.uri.sections', value)
 
   const createSection = () => elementActions.createElement('sections')
 
@@ -41,7 +41,7 @@ const Sections = ({ config, sections, configActions, elementActions }) => {
         <div className="checkboxes">
           <span className="mr-10">{gettext('Show URIs:')}</span>
           <Checkbox label={<code className="code-questions">{gettext('Sections')}</code>}
-                    value={config.display.uri.sections} onChange={updateDisplayURI} />
+                    value={config.display.uri.sections} onChange={updateDisplaySectionURI} />
         </div>
       </div>
 
