@@ -5,7 +5,7 @@ import { filterElement } from '../../utils/filter'
 
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
-import { Drag, Drop } from '../common/DragAndDrop'
+import { Drag, DropAfter } from '../common/DragAndDrop'
 
 const Question = ({ config, question, elementActions, display='list', filter=null, indent=0 }) => {
 
@@ -67,7 +67,7 @@ const Question = ({ config, question, elementActions, display='list', filter=nul
               </div>
             )
           }
-          <Drop element={question} elementActions={elementActions} indent={indent} />
+          <DropAfter element={question} elementActions={elementActions} indent={indent} />
         </>
       )
   }

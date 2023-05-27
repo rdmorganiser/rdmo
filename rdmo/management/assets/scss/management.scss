@@ -202,7 +202,7 @@ a.disabled {
         cursor: grab;
     }
 
-    .drop {
+    .drop-after {
         display: none;
         margin-top: -10px;
         padding: 4px 0;
@@ -217,6 +217,15 @@ a.disabled {
         &.over {
             &::after {
                 background-color: $link-color;
+            }
+        }
+    }
+    .drop-in {
+        &.over .panel {
+            border: 2px solid $link-color;
+
+            .panel-heading {
+                padding: 9px 14px;
             }
         }
     }

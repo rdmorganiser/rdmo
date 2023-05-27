@@ -116,10 +116,6 @@ export default function elementsReducer(state = initialState, action) {
     case 'elements/updateElement':
       return {...state, element: {...action.element, ...action.values}}
 
-    // move elements
-    case 'elements/moveElementSuccess':
-      return {...state, element: updateElement(state.element, action.element)}
-
     default:
       return state
   }
