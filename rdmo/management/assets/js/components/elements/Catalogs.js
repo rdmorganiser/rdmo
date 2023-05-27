@@ -14,7 +14,7 @@ const Catalogs = ({ config, catalogs, configActions, elementActions }) => {
   const updateFilterString = (value) => configActions.updateConfig('filter.catalogs.search', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.catalogs.uri_prefix', value)
   const updateFilterSite = (value) => configActions.updateConfig('filter.catalogs.sites', value)
-  const updateDisplayURI = (value) => configActions.updateConfig('display.uri.catalogs', value)
+  const updateDisplayCatalogURI = (value) => configActions.updateConfig('display.uri.catalogs', value)
 
   const createCatalog = () => elementActions.createElement('catalogs')
 
@@ -48,7 +48,7 @@ const Catalogs = ({ config, catalogs, configActions, elementActions }) => {
         <div className="checkboxes">
           <span className="mr-10">{gettext('Show URIs:')}</span>
           <Checkbox label={<code className="code-questions">{gettext('Catalogs')}</code>}
-                    value={config.display.uri.catalogs} onChange={updateDisplayURI} />
+                    value={config.display.uri.catalogs} onChange={updateDisplayCatalogURI} />
         </div>
       </div>
 

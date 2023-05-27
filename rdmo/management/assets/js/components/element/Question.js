@@ -17,6 +17,8 @@ const Question = ({ config, question, elementActions, display='list', filter=nul
   const toggleLocked = () => elementActions.storeElement('questions', {...question, locked: !question.locked })
 
   const fetchAttribute = () => elementActions.fetchElement('attributes', question.attribute)
+  const fetchCondition = (index) => elementActions.fetchElement('conditions', question.conditions[index])
+  const fetchOptionSet = (index) => elementActions.fetchElement('optionsets', question.optionsets[index])
 
   const elementNode = (
     <div className="element">
@@ -42,6 +44,20 @@ const Question = ({ config, question, elementActions, display='list', filter=nul
           config.display.uri.attributes && question.attribute_uri && <p>
             <CodeLink className="code-domain" uri={question.attribute_uri} onClick={() => fetchAttribute()} />
           </p>
+        }
+        {
+          config.display.uri.conditions && question.condition_uris.map((uri, index) => (
+            <p key={index}>
+              <CodeLink className="code-conditions" uri={uri} onClick={() => fetchCondition(index)} />
+            </p>
+          ))
+        }
+        {
+          config.display.uri.optionsets && question.optionset_uris.map((uri, index) => (
+            <p key={index}>
+              <CodeLink className="code-options" uri={uri} onClick={() => fetchOptionSet(index)} />
+            </p>
+          ))
         }
         <ElementErrors element={question} />
       </div>

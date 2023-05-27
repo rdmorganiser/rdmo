@@ -23,6 +23,7 @@ const QuestionSet = ({ config, questionset, elementActions, display='list', filt
   const createQuestion = () => elementActions.createElement('questions', { questionset })
 
   const fetchAttribute = () => elementActions.fetchElement('attributes', questionset.attribute)
+  const fetchCondition = (index) => elementActions.fetchElement('conditions', questionset.conditions[index])
 
   const elementNode = (
     <div className="element">
@@ -50,6 +51,13 @@ const QuestionSet = ({ config, questionset, elementActions, display='list', filt
           config.display.uri.attributes && questionset.attribute_uri &&<p>
             <CodeLink className="code-domain" uri={questionset.attribute_uri} onClick={() => fetchAttribute()} />
           </p>
+        }
+        {
+          config.display.uri.conditions && questionset.condition_uris.map((uri, index) => (
+            <p key={index}>
+              <CodeLink className="code-conditions" uri={uri} onClick={() => fetchCondition(index)} />
+            </p>
+          ))
         }
         <ElementErrors element={questionset} />
       </div>

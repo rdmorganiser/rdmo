@@ -85,18 +85,23 @@ class PageListSerializer(ElementExportSerializerMixin, ElementWarningSerializerM
                          PageSerializer):
 
     attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
+    condition_uris = serializers.SerializerMethodField()
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
 
     class Meta(PageSerializer.Meta):
         fields = PageSerializer.Meta.fields + (
             'attribute_uri',
+            'condition_uris',
             'warning',
             'xml_url'
         )
         warning_fields = (
             'title',
         )
+
+    def get_condition_uris(self, obj):
+        return [condition.uri for condition in obj.conditions.all()]
 
 
 class PageNestedSerializer(PageListSerializer):
