@@ -19,7 +19,7 @@ class DomainApi extends BaseApi {
 
   static storeAttribute(attribute) {
     if (isNil(attribute.id)) {
-      return this.post(`/api/v1/domain/attributes/`, attribute)
+      return this.post('/api/v1/domain/attributes/', attribute)
     } else {
       return this.put(`/api/v1/domain/attributes/${attribute.id}/`, attribute)
     }

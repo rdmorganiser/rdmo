@@ -1,10 +1,9 @@
-import React, { Component, useState } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import isNil from 'lodash/isNil'
 
 const UploadForm = ({ onSubmit }) => {
-
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState(null)
 
   const handleSubmit = event => {
     event.preventDefault()

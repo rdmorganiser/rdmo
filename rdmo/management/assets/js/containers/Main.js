@@ -1,8 +1,8 @@
-import React, { Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import isEmpty from 'lodash/isEmpty';
+import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 
 import * as configActions from '../actions/configActions'
@@ -77,7 +77,7 @@ Main.propTypes = {
   importActions: PropTypes.object.isRequired
 }
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state) {
   return {
     config: state.config,
     elements: state.elements,

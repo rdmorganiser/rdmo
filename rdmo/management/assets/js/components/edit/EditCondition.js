@@ -1,6 +1,5 @@
-import React, { Component, useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { Tabs, Tab } from 'react-bootstrap';
 
 import Checkbox from './common/Checkbox'
 import Select from './common/Select'
@@ -18,8 +17,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 const EditCondition = ({ config, condition, elements, elementActions }) => {
 
   const { relations } = config
-  const { elementAction, parent, attributes, optionsets, options,
-          pages, questionsets, questions, tasks } = elements
+  const { elementAction, parent, attributes, options } = elements
 
   const updateCondition = (key, value) => elementActions.updateElement(condition, {[key]: value})
   const storeCondition = (back) => elementActions.storeElement('conditions', condition, back)
@@ -39,8 +37,8 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={condition} elementAction={elementAction} onClick={storeCondition} />
-          <SaveButton element={condition} elementAction={elementAction} onClick={storeCondition} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeCondition} />
+          <SaveButton elementAction={elementAction} onClick={storeCondition} back={true}/>
         </div>
         {
           condition.id ? <>
@@ -125,10 +123,10 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={condition} elementAction={elementAction} onClick={storeCondition} />
-          <SaveButton element={condition} elementAction={elementAction} onClick={storeCondition} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeCondition} />
+          <SaveButton elementAction={elementAction} onClick={storeCondition} back={true}/>
         </div>
-        <DeleteButton element={condition} onClick={openDeleteModal} />
+        {condition.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
       <DeleteConditionModal condition={condition} info={info} show={showDeleteModal}

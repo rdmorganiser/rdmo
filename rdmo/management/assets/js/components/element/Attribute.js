@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import isUndefined from 'lodash/isUndefined'
 
 import { filterElement } from '../../utils/filter'
 
@@ -20,8 +19,8 @@ const Attribute = ({ config, attribute, elementActions, display='list', filter=n
   const elementNode = (
     <div className="element">
       <div className="pull-right">
-        <EditLink element={attribute} verboseName={verboseName} onClick={fetchEdit} />
-        <CopyLink element={attribute} verboseName={verboseName} onClick={fetchCopy} />
+        <EditLink verboseName={verboseName} onClick={fetchEdit} />
+        <CopyLink verboseName={verboseName} onClick={fetchCopy} />
         <LockedLink element={attribute} verboseName={verboseName} onClick={toggleLocked} />
         <NestedLink element={attribute} verboseName={verboseName} onClick={fetchNested} />
         <ExportLink element={attribute} elementType="attributes" verboseName={verboseName}

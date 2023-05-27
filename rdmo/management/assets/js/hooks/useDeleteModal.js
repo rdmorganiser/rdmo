@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 const useDeleteModal = () => {
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(false)
   const open = () => setShow(true)
   const close = () => setShow(false)
 

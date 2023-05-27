@@ -19,7 +19,7 @@ class OptionsApi extends BaseApi {
 
   static storeOptionSet(optionset) {
     if (isNil(optionset.id)) {
-      return this.post(`/api/v1/options/optionsets/`, optionset)
+      return this.post('/api/v1/options/optionsets/', optionset)
     } else {
       return this.put(`/api/v1/options/optionsets/${optionset.id}/`, optionset)
     }
@@ -41,7 +41,7 @@ class OptionsApi extends BaseApi {
 
   static storeOption(option) {
     if (isNil(option.id)) {
-      return this.post(`/api/v1/options/options/`, option)
+      return this.post('/api/v1/options/options/', option)
     } else {
       return this.put(`/api/v1/options/options/${option.id}/`, option)
     }

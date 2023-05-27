@@ -1,4 +1,3 @@
-import isUndefined from 'lodash/isUndefined'
 import isNil from 'lodash/isNil'
 
 import { updateElement, resetElement } from '../utils/elements'
@@ -75,7 +74,8 @@ export default function elementsReducer(state = initialState, action) {
       } else {
         action.element.errors = action.error.errors
       }
-    case 'elements/storeElementSuccess':
+      // there is not break here on purpose
+    case 'elements/storeElementSuccess':  // eslint-disable-line no-fallthrough
       if (isNil(state.element)) {
         return {...state,
           [state.elementType]: state[state.elementType].map(element => updateElement(element, action.element))

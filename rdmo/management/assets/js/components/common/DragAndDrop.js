@@ -1,10 +1,7 @@
-import React, { Component, useRef } from 'react'
+import React, { useRef } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-
-import { dragAndDropTypes } from '../../constants/elements'
-import { compareElements } from '../../utils/elements'
 
 const Drag = ({ element }) => {
   const dragRef = useRef(null)
@@ -25,7 +22,7 @@ Drag.propTypes = {
   element: PropTypes.object.isRequired
 }
 
-const Drop = ({ children, element, elementActions, indent=0, mode='in' }) => {
+const Drop = ({ element, elementActions, indent=0, mode='in', children=null }) => {
   const dropRef = useRef(null)
 
   let accept
@@ -50,8 +47,8 @@ const Drop = ({ children, element, elementActions, indent=0, mode='in' }) => {
       isDragging: accept.includes(monitor.getItemType()),
       isOver: monitor.isOver()
     }),
-    drop: (item, monitor) => {
-      elementActions.dropElement(item, element, mode);
+    drop: (item) => {
+      elementActions.dropElement(item, element, mode)
     },
   }), [element])
 
@@ -75,7 +72,8 @@ Drop.propTypes = {
   element: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired,
   mode: PropTypes.string,
-  indent: PropTypes.number
+  indent: PropTypes.number,
+  children: PropTypes.array
 }
 
 export { Drag, Drop }

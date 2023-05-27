@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { Modal } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap'
 
 const DeleteModal = ({ title, show, onClose, onDelete, children }) => {
   return (
@@ -27,7 +27,8 @@ DeleteModal.propTypes = {
   title: PropTypes.string.isRequired,
   show: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired
+  onDelete: PropTypes.func.isRequired,
+  children: PropTypes.array.isRequired
 }
 
 export { DeleteModal }

@@ -1,6 +1,3 @@
-import isNil from 'lodash/isNil'
-import isUndefined from 'lodash/isUndefined'
-
 import ConditionsApi from '../api/ConditionsApi'
 import DomainApi from '../api/DomainApi'
 import OptionsApi from '../api/OptionsApi'
@@ -301,52 +298,52 @@ export function fetchElementError(error) {
 
 export function storeElement(elementType, element, back) {
   return function(dispatch, getState) {
-    // dispatch(storeElementInit(element))
+    dispatch(storeElementInit(element))
 
     let action
     switch (elementType) {
       case 'catalogs':
-        action = (dispatch) => QuestionsApi.storeCatalog(element)
+        action = () => QuestionsApi.storeCatalog(element)
         break
 
       case 'sections':
-        action = (dispatch) => QuestionsApi.storeSection(element)
+        action = () => QuestionsApi.storeSection(element)
         break
 
       case 'pages':
-        action = (dispatch) => QuestionsApi.storePage(element)
+        action = () => QuestionsApi.storePage(element)
         break
 
       case 'questionsets':
-        action = (dispatch) => QuestionsApi.storeQuestionSet(element)
+        action = () => QuestionsApi.storeQuestionSet(element)
         break
 
       case 'questions':
-        action = (dispatch) => QuestionsApi.storeQuestion(element)
+        action = () => QuestionsApi.storeQuestion(element)
         break
 
       case 'attributes':
-        action = (dispatch) => DomainApi.storeAttribute(element)
+        action = () => DomainApi.storeAttribute(element)
         break
 
       case 'optionsets':
-        action = (dispatch) => OptionsApi.storeOptionSet(element)
+        action = () => OptionsApi.storeOptionSet(element)
         break
 
       case 'options':
-        action = (dispatch) => OptionsApi.storeOption(element)
+        action = () => OptionsApi.storeOption(element)
         break
 
       case 'conditions':
-        action = (dispatch) => ConditionsApi.storeCondition(element)
+        action = () => ConditionsApi.storeCondition(element)
         break
 
       case 'tasks':
-        action = (dispatch) => TasksApi.storeTask(element)
+        action = () => TasksApi.storeTask(element)
         break
 
       case 'views':
-        action = (dispatch) => ViewsApi.storeView(element)
+        action = () => ViewsApi.storeView(element)
         break
     }
 
@@ -495,11 +492,9 @@ export function createElement(elementType, parent={}) {
       case 'views':
         action = (dispatch) => Promise.all([
           ViewsFactory.createView(getState().config),
-          QuestionsApi.fetchCatalogs('index'),
-          CoreApi.fetchSites(),
-          CoreApi.fetchGroups()
+          QuestionsApi.fetchCatalogs('index')
         ]).then(([element, catalogs]) => dispatch(createElementSuccess({
-          element, sites
+          element, catalogs
         })))
         break
     }
@@ -530,48 +525,48 @@ export function deleteElement(elementType, element) {
     let action
     switch (elementType) {
       case 'catalogs':
-        action = (dispatch) => QuestionsApi.deleteCatalog(element)
+        action = () => QuestionsApi.deleteCatalog(element)
         break
 
       case 'sections':
-        action = (dispatch) => QuestionsApi.deleteSection(element)
+        action = () => QuestionsApi.deleteSection(element)
         break
 
       case 'pages':
-        action = (dispatch) => QuestionsApi.deletePage(element)
+        action = () => QuestionsApi.deletePage(element)
         break
 
       case 'questionsets':
-        action = (dispatch) => QuestionsApi.deleteQuestionSet(element)
+        action = () => QuestionsApi.deleteQuestionSet(element)
         break
 
       case 'questions':
-        action = (dispatch) => QuestionsApi.deleteQuestion(element)
+        action = () => QuestionsApi.deleteQuestion(element)
         break
 
       case 'attributes':
-        action = (dispatch) => DomainApi.deleteAttribute(element)
+        action = () => DomainApi.deleteAttribute(element)
         break
 
       case 'optionsets':
-        action = (dispatch) => OptionsApi.deleteOptionSet(element)
+        action = () => OptionsApi.deleteOptionSet(element)
         break
 
       case 'options':
-        action = (dispatch) => OptionsApi.deleteOption(element)
+        action = () => OptionsApi.deleteOption(element)
         break
 
       case 'conditions':
-        action = (dispatch) => ConditionsApi.deleteCondition(element)
+        action = () => ConditionsApi.deleteCondition(element)
 
         break
 
       case 'tasks':
-        action = (dispatch) => TasksApi.deleteTask(element)
+        action = () => TasksApi.deleteTask(element)
         break
 
       case 'views':
-        action = (dispatch) => ViewsApi.deleteView(element)
+        action = () => ViewsApi.deleteView(element)
         break
     }
 

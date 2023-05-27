@@ -1,4 +1,4 @@
-import React, { Component} from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import isEmpty from 'lodash/isEmpty'
@@ -27,7 +27,7 @@ const Checkbox = ({ config, element, field, onChange }) => {
       <div className="checkbox">
           <label>
               <input id={id} type="checkbox" checked={checked}
-                     onChange={event => onChange(field, !checked)} />
+                     onChange={() => onChange(field, !checked)} />
               <span>{label}</span>
           </label>
       </div>

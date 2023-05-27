@@ -16,7 +16,7 @@ class TasksApi extends BaseApi {
 
   static storeTask(task) {
     if (isNil(task.id)) {
-      return this.post(`/api/v1/tasks/tasks/`, task)
+      return this.post('/api/v1/tasks/tasks/', task)
     } else {
       return this.put(`/api/v1/tasks/tasks/${task.id}/`, task)
     }

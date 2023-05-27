@@ -1,4 +1,4 @@
-import React, { Component} from 'react'
+import React from 'react'
 import ReactSelect from 'react-select'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
@@ -82,6 +82,7 @@ Select.propTypes = {
   element: PropTypes.object,
   field: PropTypes.string,
   options: PropTypes.array,
+  verboseName: PropTypes.string,
   isMulti: PropTypes.bool,
   onChange: PropTypes.func,
   onCreate: PropTypes.func,

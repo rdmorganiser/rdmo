@@ -1,8 +1,8 @@
-import React, { Component} from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import uniqueId from 'lodash/uniqueId'
 
-const Key = ({ config, element, onChange }) => {
+const Key = ({ element, onChange }) => {
   const id = uniqueId('key-'),
         value = element.key
 
@@ -19,7 +19,6 @@ const Key = ({ config, element, onChange }) => {
 }
 
 Key.propTypes = {
-  config: PropTypes.object.isRequired,
   element: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired
 }

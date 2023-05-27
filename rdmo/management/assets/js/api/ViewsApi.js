@@ -16,7 +16,7 @@ class ViewsApi extends BaseApi {
 
   static storeView(view) {
     if (isNil(view.id)) {
-      return this.post(`/api/v1/views/views/`, view)
+      return this.post('/api/v1/views/views/', view)
     } else {
       return this.put(`/api/v1/views/views/${view.id}/`, view)
     }

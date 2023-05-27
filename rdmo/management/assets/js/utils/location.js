@@ -35,7 +35,7 @@ const parseLocation = (basePath, pathname) => {
 const updateLocation = (basePath, elementType, elementId, elementAction) => {
   const pathname = buildPath(basePath, elementType, elementId, elementAction)
   if (pathname != window.location.pathname) {
-    history.pushState(null, null, pathname);
+    history.pushState(null, null, pathname)
   }
 }
 

@@ -1,7 +1,6 @@
 import isArray from 'lodash/isArray'
 import isNil from 'lodash/isNil'
 import isUndefined from 'lodash/isUndefined'
-import uniqueId from 'lodash/uniqueId'
 
 import { buildUri } from '../utils/elements'
 
@@ -13,6 +12,8 @@ const initialState = {
 }
 
 export default function importsReducer(state = initialState, action) {
+  let index, elements, elementsMap = {}
+
   switch(action.type) {
     // upload file
     case 'import/uploadFileInit':
@@ -39,16 +40,17 @@ export default function importsReducer(state = initialState, action) {
 
     // update element
     case 'import/updateElement':
-      const index = state.elements.findIndex(element => element == action.element)
+      index = state.elements.findIndex(element => element == action.element)
       if (index > -1) {
         const elements = [...state.elements]
         elements[index] = {...elements[index], ...action.values}
         elements[index].uri = buildUri(elements[index])
         return {...state, elements}
+      } else {
+        return state
       }
     case 'import/updateUriPrefix':
-      const elementsMap = {}
-      const elements = state.elements.map(element => {
+      elements = state.elements.map(element => {
         element.uri_prefix = action.uriPrefix
 
         // compute a new uri and store it in the elementMap

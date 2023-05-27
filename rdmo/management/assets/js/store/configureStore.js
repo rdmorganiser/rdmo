@@ -1,4 +1,4 @@
-import { applyMiddleware, compose, createStore } from 'redux'
+import { applyMiddleware, createStore } from 'redux'
 import thunk from 'redux-thunk'
 import ls from 'local-storage'
 import isNil from 'lodash/isNil'
@@ -12,11 +12,11 @@ import * as configActions from '../actions/configActions'
 import * as elementActions from '../actions/elementActions'
 
 export default function configureStore() {
-  const middlewares = [thunk];
+  const middlewares = [thunk]
 
-  if (process.env.NODE_ENV === `development`) {
-    const { logger } = require(`redux-logger`);
-    middlewares.push(logger);
+  if (process.env.NODE_ENV === 'development') {
+    const { logger } = require('redux-logger')
+    middlewares.push(logger)
   }
 
   const store = createStore(
@@ -29,7 +29,6 @@ export default function configureStore() {
 
   // load: restore the config from the local storage
   const updateConfigFromLocalStorage = () => {
-    const config = {}
     Object.entries(lsKeys).forEach(([path, defaultValue]) => {
       let value = ls.get(`rdmo.management.config.${path}`)
       if (isNil(value)) {

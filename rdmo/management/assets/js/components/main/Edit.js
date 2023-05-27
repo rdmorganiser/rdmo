@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
 import EditAttribute from '../edit/EditAttribute'
@@ -15,7 +15,7 @@ import EditView from '../edit/EditView'
 
 import useScrollEffect from '../../hooks/useScrollEffect'
 
-const Edit = ({ config, elements, configActions, elementActions }) => {
+const Edit = ({ config, elements, elementActions }) => {
   const { element, elementType } = elements
 
   useScrollEffect(elementType, element.id)
@@ -49,7 +49,6 @@ const Edit = ({ config, elements, configActions, elementActions }) => {
 Edit.propTypes = {
   config: PropTypes.object.isRequired,
   elements: PropTypes.object.isRequired,
-  configActions: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired
 }
 

@@ -1,4 +1,11 @@
 module.exports = {
+  "globals": {
+    "gettext": true,
+    "ngettext": true,
+    "interpolate": true,
+    "process": true,
+    "require": true
+  },
   "env": {
     "browser": true,
     "es2021": true
@@ -16,17 +23,8 @@ module.exports = {
     "react"
   ],
   "rules": {
-    "indent": [
-      "error",
-      2,
-      {
-        "VariableDeclarator": {
-          "var": 2,
-          "let": 2,
-          "const": 3
-        }
-      }
-    ],
+    "indent": "off",
+    "no-empty-pattern": "off",
     "linebreak-style": [
       "error",
       "unix"

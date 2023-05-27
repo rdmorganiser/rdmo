@@ -1,6 +1,5 @@
-import isEmpty from 'lodash/isEmpty';
-import isNil from 'lodash/isNil';
-import isUndefined from 'lodash/isUndefined';
+import isNil from 'lodash/isNil'
+import isUndefined from 'lodash/isUndefined'
 
 import { elementModules } from '../constants/elements'
 
@@ -68,7 +67,6 @@ function removeElement(element, dragElement) {
 }
 
 function insertBeforeElement(element, dragElement, dropElement) {
-  console.log(dragElement.uri_path, dropElement.uri_path);
   if (isUndefined(element.elements)) return null
 
   const dropIndex = element.elements.findIndex(el => compareElements(el, dropElement))
@@ -108,8 +106,10 @@ function updateElementElements(element) {
   switch(element.model) {
     case 'questions.catalog':
       element.sections = element.elements.map((el, index) => ({ section: el.id, order: index }))
+      break
     case 'questions.section':
       element.pages = element.elements.map((el, index) => ({ page: el.id, order: index }))
+      break
     case 'questions.page':
     case 'questions.questionset':
       element.questions = element.elements.reduce((questions, el, index) => {
@@ -124,6 +124,7 @@ function updateElementElements(element) {
         }
         return questionsets
       }, [])
+      break
   }
 }
 
@@ -141,4 +142,4 @@ const buildUri = (element) => {
   return uri
 }
 
-export { compareElements, updateElement, moveElement, buildUri }
+export { compareElements, updateElement, resetElement, moveElement, buildUri }

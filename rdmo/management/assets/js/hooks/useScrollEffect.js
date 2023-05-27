@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import ls from 'local-storage'
-import get from 'lodash/get'
 import isNil from 'lodash/isNil'
 
 const useScrollEffect = (elementType, elementId, elementAction) => {
@@ -15,7 +14,7 @@ const useScrollEffect = (elementType, elementId, elementAction) => {
     const lsValue = ls.get(lsKey, 0)
 
     // scroll to the right position
-    setTimeout(() => window.scrollTo(0, lsValue), 0);
+    setTimeout(() => window.scrollTo(0, lsValue), 0)
 
     // add a event handler to store the scroll position
     const handleScroll = () => {
@@ -24,7 +23,7 @@ const useScrollEffect = (elementType, elementId, elementAction) => {
     }
     window.addEventListener('scroll', handleScroll)
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', handleScroll)
     }
 
   }, [elementType, elementId, elementAction])

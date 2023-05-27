@@ -1,10 +1,8 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import isUndefined from 'lodash/isUndefined'
 
 import { filterElement } from '../../utils/filter'
 
-import Option from './Option'
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AddLink, LockedLink, NestedLink,
          ExportLink, CodeLink } from '../common/Links'
@@ -25,8 +23,8 @@ const OptionSet = ({ config, optionset, elementActions, display='list', filter=n
     <div className="element">
       <div className="pull-right">
         <NestedLink element={optionset} verboseName={verboseName} onClick={fetchNested} />
-        <EditLink element={optionset} verboseName={verboseName} onClick={fetchEdit} />
-        <CopyLink element={optionset} verboseName={verboseName} onClick={fetchCopy} />
+        <EditLink verboseName={verboseName} onClick={fetchEdit} />
+        <CopyLink verboseName={verboseName} onClick={fetchCopy} />
         <AddLink element={optionset} verboseName={gettext('option')} onClick={createOption} />
         <LockedLink element={optionset} verboseName={verboseName} onClick={toggleLocked} />
         <ExportLink element={optionset} elementType="optionsets" verboseName={verboseName}

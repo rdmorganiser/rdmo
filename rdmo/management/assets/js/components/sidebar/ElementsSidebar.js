@@ -1,8 +1,5 @@
-import React, { Component} from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 
 import { elementModules } from '../../constants/elements'
@@ -96,7 +93,8 @@ const ElementsSidebar = ({ config, elements, elementActions, importActions }) =>
           config.settings.export_formats &&
           config.settings.export_formats.map(([key, label], index) => <li key={index}>
             <a href={`${exportUrl}${key}/?${exportParams}`}
-               target={['pdf', 'html'].includes(key) ? '_blank' : '_self'}>{label}</a>
+               target={['pdf', 'html'].includes(key) ? '_blank' : '_self'}
+               rel="noreferrer">{label}</a>
           </li>)
         }
       </ul>

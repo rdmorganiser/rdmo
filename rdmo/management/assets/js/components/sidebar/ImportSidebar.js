@@ -1,7 +1,5 @@
-import React, { Component, useState } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 
@@ -70,7 +68,7 @@ const ImportSidebar = ({ config, imports, importActions }) => {
             <span className="input-group-btn">
               <button type="button" className="btn btn-default"
                 title={gettext('Insert default URI Prefix')}
-                onClick={event => setUriPrefix(config.settings.default_uri_prefix)}>
+                onClick={() => setUriPrefix(config.settings.default_uri_prefix)}>
                 <span className="fa fa-magic"></span>
               </button>
               <button type="button" className="btn btn-primary" disabled={disabled}

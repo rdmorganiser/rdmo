@@ -1,8 +1,8 @@
-import React, { Component} from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import uniqueId from 'lodash/uniqueId'
 
-const UriPrefix = ({ config, element, onChange }) => {
+const UriPrefix = ({ element, onChange }) => {
   const id = uniqueId('uriPrefix-'),
         value = element.uri_path
 
@@ -19,7 +19,6 @@ const UriPrefix = ({ config, element, onChange }) => {
 }
 
 UriPrefix.propTypes = {
-  config: PropTypes.object.isRequired,
   element: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired
 }

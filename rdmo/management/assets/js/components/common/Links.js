@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import isEmpty from 'lodash/isEmpty'
@@ -8,23 +8,23 @@ import Link from 'rdmo/core/assets/js/components/Link'
 
 import { elementModules } from '../../constants/elements'
 
-const EditLink = ({ element, verboseName, onClick }) => {
+const EditLink = ({ verboseName, onClick }) => {
   const title = interpolate(gettext('Edit %s'), [verboseName])
   return <Link className="element-link fa fa-pencil" title={title} onClick={onClick} />
 }
 
 EditLink.propTypes = {
-  element: PropTypes.object.isRequired,
   verboseName: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired
 }
 
-const AddLink = ({ element, verboseName, verboseNameAlt, onClick, onAltClick }) => {
+const AddLink = ({ verboseName, verboseNameAlt, onClick, onAltClick }) => {
+  let title
   if (isUndefined(onAltClick)) {
-    const title = interpolate(gettext('Add %s'), [verboseName])
+    title = interpolate(gettext('Add %s'), [verboseName])
     return <Link className="element-link fa fa-plus" title={title} onClick={onClick} />
   } else {
-    const title = interpolate(gettext('Add %s or %s'), [verboseName, verboseNameAlt])
+    title = interpolate(gettext('Add %s or %s'), [verboseName, verboseNameAlt])
     return (
       <span className="dropdown">
         <a href="" className="element-link fa fa-plus" data-toggle="dropdown"></a>
@@ -46,20 +46,18 @@ const AddLink = ({ element, verboseName, verboseNameAlt, onClick, onAltClick }) 
 }
 
 AddLink.propTypes = {
-  element: PropTypes.object.isRequired,
   verboseName: PropTypes.string.isRequired,
-  verboseName: PropTypes.string,
+  verboseNameAlt: PropTypes.string,
   onClick: PropTypes.func.isRequired,
   onAltClick: PropTypes.func
 }
 
-const CopyLink = ({ element, verboseName, onClick }) => {
+const CopyLink = ({ verboseName, onClick }) => {
   const title = interpolate(gettext('Copy %s'), [verboseName])
   return <Link className="element-link fa fa-copy" title={title} onClick={onClick} />
 }
 
 CopyLink.propTypes = {
-  element: PropTypes.object.isRequired,
   verboseName: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired
 }
@@ -126,7 +124,9 @@ const ExportLink = ({ element, elementType, verboseName, exportFormats }) => {
         }
         {
           exportFormats.map(([key, label], index) => <li key={index}>
-            <a href={`${url}/${element.id}/export/${key}/`} target={['pdf', 'html'].includes(key) ? '_blank' : '_self'}>{label}</a>
+            <a href={`${url}/${element.id}/export/${key}/`}
+               target={['pdf', 'html'].includes(key) ? '_blank' : '_self'}
+               rel="noreferrer">{label}</a>
           </li>)
         }
       </ul>
@@ -141,14 +141,12 @@ ExportLink.propTypes = {
   exportFormats: PropTypes.array
 }
 
-const NestedLink = ({ element, verboseName, onClick }) => {
+const NestedLink = ({ onClick }) => {
   const title = gettext('View nested')
   return <Link className="element-link fa fa-align-right flip" title={title} onClick={onClick} />
 }
 
 NestedLink.propTypes = {
-  element: PropTypes.object.isRequired,
-  verboseName: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired
 }
 

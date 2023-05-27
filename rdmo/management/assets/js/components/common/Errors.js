@@ -1,8 +1,6 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
 import isString from 'lodash/isString'
-
 
 const MainErrors = ({ errors }) => {
   return (

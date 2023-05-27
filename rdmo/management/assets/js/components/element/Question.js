@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import isEmpty from 'lodash/isEmpty'
 
 import { filterElement } from '../../utils/filter'
 
@@ -22,8 +21,8 @@ const Question = ({ config, question, elementActions, display='list', filter=nul
   const elementNode = (
     <div className="element">
       <div className="pull-right">
-        <EditLink element={question} verboseName={verboseName} onClick={fetchEdit} />
-        <CopyLink element={question} verboseName={verboseName} onClick={fetchCopy} />
+        <EditLink verboseName={verboseName} onClick={fetchEdit} />
+        <CopyLink verboseName={verboseName} onClick={fetchCopy} />
         <LockedLink element={question} verboseName={verboseName} onClick={toggleLocked} />
         <ExportLink element={question} elementType="questions" verboseName={verboseName}
                     exportFormats={config.settings.export_formats} />
