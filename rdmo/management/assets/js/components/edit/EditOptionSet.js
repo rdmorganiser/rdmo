@@ -1,6 +1,5 @@
-import React, { Component, useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { Tabs, Tab } from 'react-bootstrap';
 
 import Checkbox from './common/Checkbox'
 import Number from './common/Number'
@@ -21,9 +20,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
 
   const { providers } = config
-  const { elementAction, parent, conditions, options, questions } = elements
-
-  const optionsetQuestions = questions.filter(e => optionset.questions.includes(e.id))
+  const { elementAction, parent, conditions, options } = elements
 
   const updateOptionSet = (key, value) => elementActions.updateElement(optionset, {[key]: value})
   const storeOptionSet = (back) => elementActions.storeElement('optionsets', optionset, back)
@@ -44,8 +41,8 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={optionset} elementAction={elementAction} onClick={storeOptionSet} />
-          <SaveButton element={optionset} elementAction={elementAction} onClick={storeOptionSet} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeOptionSet} />
+          <SaveButton elementAction={elementAction} onClick={storeOptionSet} back={true}/>
         </div>
         {
           optionset.id ? <>
@@ -110,10 +107,10 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={optionset} elementAction={elementAction} onClick={storeOptionSet} />
-          <SaveButton element={optionset} elementAction={elementAction} onClick={storeOptionSet} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeOptionSet} />
+          <SaveButton elementAction={elementAction} onClick={storeOptionSet} back={true}/>
         </div>
-        <DeleteButton element={optionset} onClick={openDeleteModal} />
+        {optionset.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
       <DeleteOptionSetModal optionset={optionset} info={info} show={showDeleteModal}

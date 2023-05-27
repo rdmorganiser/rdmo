@@ -1,4 +1,4 @@
-import React, { Component} from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import uniqueId from 'lodash/uniqueId'
 
@@ -19,7 +19,7 @@ const UriPrefix = ({ config, element, onChange }) => {
         <span className="input-group-btn">
           <button type="button" className="btn btn-default btn-sm"
             title={gettext('Insert default URI Prefix')}
-            onClick={event => onChange('uri_prefix', config.settings.default_uri_prefix)}>
+            onClick={() => onChange('uri_prefix', config.settings.default_uri_prefix)}>
             <span className="fa fa-magic"></span>
           </button>
         </span>

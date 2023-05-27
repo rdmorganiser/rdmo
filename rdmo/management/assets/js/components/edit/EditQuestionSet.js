@@ -1,6 +1,6 @@
-import React, { Component, useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { Tabs, Tab } from 'react-bootstrap';
+import { Tabs, Tab } from 'react-bootstrap'
 import isUndefined from 'lodash/isUndefined'
 import orderBy from 'lodash/orderBy'
 
@@ -21,7 +21,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
 
-  const { elementAction, parent, attributes, conditions, pages, questionsets, questions } = elements
+  const { elementAction, parent, attributes, conditions } = elements
 
   const elementValues = orderBy(questionset.questions.concat(questionset.questionsets), ['order', 'uri'])
   const elementOptions = elements.questions.map(question => ({
@@ -70,8 +70,8 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={questionset} elementAction={elementAction} onClick={storeQuestionSet} />
-          <SaveButton element={questionset} elementAction={elementAction} onClick={storeQuestionSet} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeQuestionSet} />
+          <SaveButton elementAction={elementAction} onClick={storeQuestionSet} back={true}/>
         </div>
         {
           questionset.id ? <>
@@ -174,10 +174,10 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={questionset} elementAction={elementAction} onClick={storeQuestionSet} />
-          <SaveButton element={questionset} elementAction={elementAction} onClick={storeQuestionSet} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeQuestionSet} />
+          <SaveButton elementAction={elementAction} onClick={storeQuestionSet} back={true}/>
         </div>
-        <DeleteButton element={questionset} onClick={openDeleteModal} />
+        {questionset.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
       <DeleteQuestionSetModal questionset={questionset} info={info} show={showDeleteModal}

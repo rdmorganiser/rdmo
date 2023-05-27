@@ -1,4 +1,4 @@
-import React, { Component, useRef, useState, useEffect, useCallback } from 'react'
+import React, { Component, useRef } from 'react'
 import ReactSelect from 'react-select'
 import { useDrag, useDrop } from 'react-dnd'
 import PropTypes from 'prop-types'
@@ -6,7 +6,6 @@ import classNames from 'classnames'
 import isEmpty from 'lodash/isEmpty'
 import isUndefined from 'lodash/isUndefined'
 import isNil from 'lodash/isNil'
-import isArray from 'lodash/isArray'
 import isNumber from 'lodash/isNumber'
 import toNumber from 'lodash/toNumber'
 import get from 'lodash/get'
@@ -23,7 +22,7 @@ const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, erro
     collect: (monitor) => ({
       isOver: monitor.isOver()
     }),
-    hover: (item, monitor) => {
+    hover: (item) => {
       if (!ref.current || item.index === index) {
         return
       } else {
@@ -195,7 +194,7 @@ class OrderedMultiSelect extends Component {
   }
 
   render() {
-    const { config, element, field, options, verboseName, verboseNameCreate,
+    const { config, element, field, verboseName, verboseNameCreate,
             verboseNameAltCreate, onCreate, onAltCreate } = this.props
 
     const id = getId(element, field),
@@ -268,6 +267,7 @@ OrderedMultiSelect.propTypes = {
   field: PropTypes.string.isRequired,
   fields: PropTypes.array,
   options: PropTypes.array.isRequired,
+  values: PropTypes.array,
   verboseName: PropTypes.string.isRequired,
   verboseNameCreate: PropTypes.string,
   verboseNameAltCreate: PropTypes.string,

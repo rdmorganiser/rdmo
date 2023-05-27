@@ -1,4 +1,4 @@
-import React, { Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
@@ -23,7 +23,7 @@ Pending.propTypes = {
   config: PropTypes.object.isRequired,
 }
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state) {
   return {
     config: state.config,
   }

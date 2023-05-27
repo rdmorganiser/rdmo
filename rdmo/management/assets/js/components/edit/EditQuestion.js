@@ -1,6 +1,6 @@
-import React, { Component, useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { Tabs, Tab } from 'react-bootstrap';
+import { Tabs, Tab } from 'react-bootstrap'
 
 import Checkbox from './common/Checkbox'
 import MultiSelect from './common/MultiSelect'
@@ -19,8 +19,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 const EditQuestion = ({ config, question, elements, elementActions}) => {
 
   const { widgetTypes, valueTypes } = config
-  const { elementAction, parent, attributes, optionsets, options,
-          conditions, pages, questionsets } = elements
+  const { elementAction, parent, attributes, optionsets, options, conditions } = elements
 
   const updateQuestion = (key, value) => elementActions.updateElement(question, {[key]: value})
   const storeQuestion = (back) => elementActions.storeElement('questions', question, back)
@@ -44,8 +43,8 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={question} elementAction={elementAction} onClick={storeQuestion} />
-          <SaveButton element={question} elementAction={elementAction} onClick={storeQuestion} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeQuestion} />
+          <SaveButton elementAction={elementAction} onClick={storeQuestion} back={true}/>
         </div>
         {
           question.id ? <>
@@ -184,8 +183,8 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
           </Tab>
           <Tab key={3} eventKey={3} title={gettext('Default')}>
             {
-              config.settings && config.settings.languages.map(([lang_code, lang], index) => (
-                <Textarea key={index} config={config} element={question} field={`default_text_${lang_code }`}
+              config.settings && config.settings.languages.map((language, index) => (
+                <Textarea key={index} config={config} element={question} field={`default_text_${language[0]}`}
                           rows={1} onChange={updateQuestion} />
               ))
             }
@@ -206,10 +205,10 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={question} elementAction={elementAction} onClick={storeQuestion} />
-          <SaveButton element={question} elementAction={elementAction} onClick={storeQuestion} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeQuestion} />
+          <SaveButton elementAction={elementAction} onClick={storeQuestion} back={true}/>
         </div>
-        <DeleteButton element={question} onClick={openDeleteModal} />
+        {question.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
       <DeleteQuestionModal question={question} info={info} show={showDeleteModal}

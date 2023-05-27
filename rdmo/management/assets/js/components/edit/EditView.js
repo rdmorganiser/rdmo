@@ -1,6 +1,6 @@
-import React, { Component, useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { Tabs, Tab } from 'react-bootstrap';
+import { Tabs, Tab } from 'react-bootstrap'
 import get from 'lodash/get'
 
 import CodeMirror from './common/CodeMirror'
@@ -35,8 +35,8 @@ const EditView = ({ config, view, elements, elementActions }) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={view} elementAction={elementAction} onClick={storeView} />
-          <SaveButton element={view} elementAction={elementAction} onClick={storeView} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeView} />
+          <SaveButton elementAction={elementAction} onClick={storeView} back={true}/>
         </div>
         {
           view.id ? <>
@@ -107,10 +107,10 @@ const EditView = ({ config, view, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={view} elementAction={elementAction} onClick={storeView} />
-          <SaveButton element={view} elementAction={elementAction} onClick={storeView} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeView} />
+          <SaveButton elementAction={elementAction} onClick={storeView} back={true}/>
         </div>
-        <DeleteButton element={view} onClick={openDeleteModal} />
+        {view.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
       <DeleteViewModal view={view} info={info} show={showDeleteModal}

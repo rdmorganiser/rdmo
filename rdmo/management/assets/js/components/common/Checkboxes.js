@@ -1,7 +1,5 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
-import isNil from 'lodash/isNil'
 
 const Checkbox = ({ label, value, onChange }) => (
   <span className="checkbox">
@@ -13,6 +11,7 @@ const Checkbox = ({ label, value, onChange }) => (
 )
 
 Checkbox.propTypes = {
+  label: PropTypes.oneOfType([PropTypes.object, PropTypes.string]).isRequired,
   value: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired
 }

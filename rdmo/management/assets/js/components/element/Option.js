@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
 import { filterElement } from '../../utils/filter'
@@ -18,8 +18,8 @@ const Option = ({ config, option, elementActions, display='list', indent=0, filt
   const elementNode = (
     <div className="element">
       <div className="pull-right">
-        <EditLink element={option} verboseName={verboseName} onClick={fetchEdit} />
-        <CopyLink element={option} verboseName={verboseName} onClick={fetchCopy} />
+        <EditLink verboseName={verboseName} onClick={fetchEdit} />
+        <CopyLink verboseName={verboseName} onClick={fetchCopy} />
         <LockedLink element={option} verboseName={verboseName} onClick={toggleLocked} />
         <ExportLink element={option} elementType="options" verboseName={verboseName}
                     exportFormats={config.settings.export_formats} />

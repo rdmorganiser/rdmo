@@ -1,12 +1,11 @@
-import React, { Component, useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { Tabs, Tab } from 'react-bootstrap';
+import { Tabs, Tab } from 'react-bootstrap'
 
 import Checkbox from './common/Checkbox'
 import OrderedMultiSelect from './common/OrderedMultiSelect'
 import Text from './common/Text'
 import Textarea from './common/Textarea'
-import Select from './common/Select'
 import UriPrefix from './common/UriPrefix'
 
 import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
@@ -18,8 +17,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditSection = ({ config, section, elements, elementActions }) => {
 
-  const { elementAction, parent, pages, catalogs } = elements
-  const sectionCatalogs = catalogs.filter(e => section.catalogs.includes(e.id))
+  const { elementAction, parent, pages } = elements
 
   const updateSection = (key, value) => elementActions.updateElement(section, {[key]: value})
   const storeSection = (back) => elementActions.storeElement('sections', section, back)
@@ -37,8 +35,8 @@ const EditSection = ({ config, section, elements, elementActions }) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={section} elementAction={elementAction} onClick={storeSection} />
-          <SaveButton element={section} elementAction={elementAction} onClick={storeSection} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeSection} />
+          <SaveButton elementAction={elementAction} onClick={storeSection} back={true}/>
         </div>
         {
           section.id ? <>
@@ -99,10 +97,10 @@ const EditSection = ({ config, section, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={section} elementAction={elementAction} onClick={storeSection} />
-          <SaveButton element={section} elementAction={elementAction} onClick={storeSection} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeSection} />
+          <SaveButton elementAction={elementAction} onClick={storeSection} back={true}/>
         </div>
-        <DeleteButton element={section} onClick={openDeleteModal} />
+          {section.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
       <DeleteSectionModal section={section} info={info} show={showDeleteModal}

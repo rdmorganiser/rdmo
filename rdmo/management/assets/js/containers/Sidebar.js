@@ -1,10 +1,9 @@
-import React, { Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import isEmpty from 'lodash/isEmpty'
 
-import * as configActions from '../actions/configActions'
 import * as elementActions from '../actions/elementActions'
 import * as importActions from '../actions/importActions'
 
@@ -18,7 +17,7 @@ class Sidebar extends Component {
   }
 
   render() {
-    const { config, elements, imports, configActions, elementActions, importActions } = this.props
+    const { config, elements, imports, elementActions, importActions } = this.props
 
     if (isEmpty(imports.elements)) {
       return <ElementsSidebar config={config} elements={elements}
@@ -33,12 +32,11 @@ Sidebar.propTypes = {
   config: PropTypes.object.isRequired,
   elements: PropTypes.object.isRequired,
   imports: PropTypes.object.isRequired,
-  configActions: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired,
   importActions: PropTypes.object.isRequired
 }
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state) {
   return {
     config: state.config,
     elements: state.elements,
@@ -48,7 +46,6 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    configActions: bindActionCreators(configActions, dispatch),
     elementActions: bindActionCreators(elementActions, dispatch),
     importActions: bindActionCreators(importActions, dispatch)
   }

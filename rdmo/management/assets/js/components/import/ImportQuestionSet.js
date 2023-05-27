@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import uniqueId from 'lodash/uniqueId'
 
 import { CodeLink, WarningLink, ErrorLink, ShowLink } from '../common/Links'
 
@@ -43,6 +42,7 @@ const ImportQuestionSet = ({ config, questionset, importActions }) => {
 }
 
 ImportQuestionSet.propTypes = {
+  config: PropTypes.object.isRequired,
   questionset: PropTypes.object.isRequired,
   importActions: PropTypes.object.isRequired
 }

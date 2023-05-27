@@ -1,6 +1,6 @@
-import React, { Component, useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { Tabs, Tab } from 'react-bootstrap';
+import { Tabs, Tab } from 'react-bootstrap'
 
 import Checkbox from './common/Checkbox'
 import Text from './common/Text'
@@ -16,9 +16,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditOption = ({ config, option, elements, elementActions }) => {
 
-  const { elementAction, parent, optionsets, conditions } = elements
-
-  const optionConditions = conditions.filter(e => option.conditions.includes(e.id))
+  const { elementAction, parent } = elements
 
   const updateOption = (key, value) => elementActions.updateElement(option, {[key]: value})
   const storeOption = (back) => elementActions.storeElement('options', option, back)
@@ -33,8 +31,8 @@ const EditOption = ({ config, option, elements, elementActions }) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={option} elementAction={elementAction} onClick={storeOption} />
-          <SaveButton element={option} elementAction={elementAction} onClick={storeOption} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeOption} />
+          <SaveButton elementAction={elementAction} onClick={storeOption} back={true}/>
         </div>
         {
           option.id ? <>
@@ -103,10 +101,10 @@ const EditOption = ({ config, option, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={option} elementAction={elementAction} onClick={storeOption} />
-          <SaveButton element={option} elementAction={elementAction} onClick={storeOption} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeOption} />
+          <SaveButton elementAction={elementAction} onClick={storeOption} back={true}/>
         </div>
-        <DeleteButton element={option} onClick={openDeleteModal} />
+        {option.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
       <DeleteOptionModal option={option} info={info} show={showDeleteModal}

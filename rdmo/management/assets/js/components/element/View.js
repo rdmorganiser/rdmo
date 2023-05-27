@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
 import { filterElement } from '../../utils/filter'
@@ -20,8 +20,8 @@ const View = ({ config, view, elementActions, filter=null }) => {
     <li className="list-group-item">
       <div className="element">
         <div className="pull-right">
-          <EditLink element={view} verboseName={verboseName} onClick={fetchEdit} />
-          <CopyLink element={view} verboseName={verboseName} onClick={fetchCopy} />
+          <EditLink verboseName={verboseName} onClick={fetchEdit} />
+          <CopyLink verboseName={verboseName} onClick={fetchCopy} />
           <AvailableLink element={view} verboseName={verboseName} onClick={toggleAvailable} />
           <LockedLink element={view} verboseName={verboseName} onClick={toggleLocked} />
           <ExportLink element={view} elementType="views" verboseName={verboseName}

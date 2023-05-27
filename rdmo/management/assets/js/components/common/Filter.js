@@ -1,4 +1,4 @@
-import React, { Component} from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
 const FilterString = ({ value, onChange, placeholder }) => {
@@ -8,7 +8,7 @@ const FilterString = ({ value, onChange, placeholder }) => {
         <input type="text" className="form-control" placeholder={placeholder}
                value={ value } onChange={e => onChange(e.target.value)}></input>
         <span className="input-group-btn">
-          <button className="btn btn-default" onClick={e => onChange('')}>
+          <button className="btn btn-default" onClick={() => onChange('')}>
             <span className="fa fa-times"></span>
           </button>
         </span>
@@ -26,7 +26,7 @@ FilterString.propTypes = {
 const FilterUriPrefix = ({ value, options, onChange }) => {
   return (
     <div className="form-group mb-0">
-      <select className="form-control" value={value} onChange={e => onChange(e.target.value)}>
+      <select className="form-control" value={value} onChange={event => onChange(event.target.value)}>
         <option value="">{gettext('All URI prefixes')}</option>
         {
           options.map((option, index) => <option value={option} key={index}>{option}</option>)

@@ -1,11 +1,8 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import isUndefined from 'lodash/isUndefined'
 
 import { filterElement } from '../../utils/filter'
-import { exportUrls } from '../../constants/elements'
 
-import Section from './Section'
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AddLink, AvailableLink, LockedLink, NestedLink,
          ExportLink, CodeLink } from '../common/Links'
@@ -26,9 +23,9 @@ const Catalog = ({ config, catalog, elementActions, display='list', filter=null 
   const elementNode = (
     <div className="element">
       <div className="pull-right">
-        <NestedLink element={catalog} verboseName={verboseName} onClick={fetchNested} />
-        <EditLink element={catalog} verboseName={verboseName} onClick={fetchEdit} />
-        <CopyLink element={catalog} verboseName={verboseName} onClick={fetchCopy} />
+        <NestedLink onClick={fetchNested} />
+        <EditLink verboseName={verboseName} onClick={fetchEdit} />
+        <CopyLink verboseName={verboseName} onClick={fetchCopy} />
         <AddLink element={catalog} verboseName={gettext('section')} onClick={createSection} />
         <AvailableLink element={catalog} verboseName={verboseName} onClick={toggleAvailable} />
         <LockedLink element={catalog} verboseName={verboseName} onClick={toggleLocked} />

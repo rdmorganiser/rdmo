@@ -19,7 +19,7 @@ class QuestionsApi extends BaseApi {
 
   static storeCatalog(catalog) {
     if (isNil(catalog.id)) {
-      return this.post(`/api/v1/questions/catalogs/`, catalog)
+      return this.post('/api/v1/questions/catalogs/', catalog)
     } else {
       return this.put(`/api/v1/questions/catalogs/${catalog.id}/`, catalog)
     }
@@ -30,7 +30,7 @@ class QuestionsApi extends BaseApi {
   }
 
   static fetchSections(action) {
-    let url = `/api/v1/questions/sections/`
+    let url = '/api/v1/questions/sections/'
     if (action == 'index') url += 'index/'
     if (action == 'nested') url += 'nested/'
     return this.get(url)
@@ -44,7 +44,7 @@ class QuestionsApi extends BaseApi {
 
   static storeSection(section) {
     if (isNil(section.id)) {
-      return this.post(`/api/v1/questions/sections/`, section)
+      return this.post('/api/v1/questions/sections/', section)
     } else {
       return this.put(`/api/v1/questions/sections/${section.id}/`, section)
     }
@@ -55,7 +55,7 @@ class QuestionsApi extends BaseApi {
   }
 
   static fetchPages(action) {
-    let url = `/api/v1/questions/pages/`
+    let url = '/api/v1/questions/pages/'
     if (action == 'index') url += 'index/'
     if (action == 'nested') url += 'nested/'
     return this.get(url)
@@ -69,7 +69,7 @@ class QuestionsApi extends BaseApi {
 
   static storePage(page) {
     if (isNil(page.id)) {
-      return this.post(`/api/v1/questions/pages/`, page)
+      return this.post('/api/v1/questions/pages/', page)
     } else {
       return this.put(`/api/v1/questions/pages/${page.id}/`, page)
     }
@@ -80,7 +80,7 @@ class QuestionsApi extends BaseApi {
   }
 
   static fetchQuestionSets(action) {
-    let url = `/api/v1/questions/questionsets/`
+    let url = '/api/v1/questions/questionsets/'
     if (action == 'index') url += 'index/'
     if (action == 'nested') url += 'nested/'
     return this.get(url)
@@ -94,7 +94,7 @@ class QuestionsApi extends BaseApi {
 
   static storeQuestionSet(questionset) {
     if (isNil(questionset.id)) {
-      return this.post(`/api/v1/questions/questionsets/`, questionset)
+      return this.post('/api/v1/questions/questionsets/', questionset)
     } else {
       return this.put(`/api/v1/questions/questionsets/${questionset.id}/`, questionset)
     }
@@ -105,7 +105,7 @@ class QuestionsApi extends BaseApi {
   }
 
   static fetchQuestions(action) {
-    let url = `/api/v1/questions/questions/`
+    let url = '/api/v1/questions/questions/'
     if (action == 'index') url += 'index/'
     return this.get(url)
   }
@@ -116,7 +116,7 @@ class QuestionsApi extends BaseApi {
 
   static storeQuestion(question) {
     if (isNil(question.id)) {
-      return this.post(`/api/v1/questions/questions/`, question)
+      return this.post('/api/v1/questions/questions/', question)
     } else {
       return this.put(`/api/v1/questions/questions/${question.id}/`, question)
     }
@@ -126,12 +126,12 @@ class QuestionsApi extends BaseApi {
     return this.delete(`/api/v1/questions/questions/${question.id}/`)
   }
 
-  static fetchWidgetTypes(id) {
-    return this.get(`/api/v1/questions/widgettypes/`)
+  static fetchWidgetTypes() {
+    return this.get('/api/v1/questions/widgettypes/')
   }
 
-  static fetchValueTypes(id) {
-    return this.get(`/api/v1/questions/valuetypes/`)
+  static fetchValueTypes() {
+    return this.get('/api/v1/questions/valuetypes/')
   }
 
 }

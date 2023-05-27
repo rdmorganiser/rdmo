@@ -1,6 +1,5 @@
-import React, { Component, useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { Tabs, Tab } from 'react-bootstrap';
 
 import Checkbox from './common/Checkbox'
 import Select from './common/Select'
@@ -17,7 +16,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditAttribute = ({ config, attribute, elements, elementActions }) => {
 
-  const { elementAction, parent, attributes, conditions, pages, questionsets, questions, tasks } = elements
+  const { elementAction, parent, attributes } = elements
 
   const editAttribute = (attribute) => elementActions.fetchElement('attributes', attribute)
   const updateAttribute = (key, value) => elementActions.updateElement(attribute, {[key]: value})
@@ -33,8 +32,8 @@ const EditAttribute = ({ config, attribute, elements, elementActions }) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={attribute} elementAction={elementAction} onClick={storeAttribute} />
-          <SaveButton element={attribute} elementAction={elementAction} onClick={storeAttribute} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeAttribute} />
+          <SaveButton elementAction={elementAction} onClick={storeAttribute} back={true}/>
         </div>
         {
           attribute.id ? <>
@@ -104,10 +103,10 @@ const EditAttribute = ({ config, attribute, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={attribute} elementAction={elementAction} onClick={storeAttribute} />
-          <SaveButton element={attribute} elementAction={elementAction} onClick={storeAttribute} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeAttribute} />
+          <SaveButton elementAction={elementAction} onClick={storeAttribute} back={true}/>
         </div>
-        <DeleteButton element={attribute} onClick={openDeleteModal} />
+        {attribute.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
       <DeleteAttributeModal attribute={attribute} info={info} show={showDeleteModal}

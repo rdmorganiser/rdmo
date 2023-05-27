@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import isEmpty from 'lodash/isEmpty'
 
@@ -25,8 +25,8 @@ const Section = ({ config, section, elementActions, display='list', filter=null,
     <div className="element">
       <div className="pull-right">
         <NestedLink element={section} verboseName={verboseName} onClick={fetchNested} />
-        <EditLink element={section} verboseName={verboseName} onClick={fetchEdit} />
-        <CopyLink element={section} verboseName={verboseName} onClick={fetchCopy} />
+        <EditLink verboseName={verboseName} onClick={fetchEdit} />
+        <CopyLink verboseName={verboseName} onClick={fetchCopy} />
         <AddLink element={section} verboseName={gettext('page')} onClick={createPage} />
         <LockedLink element={section} verboseName={verboseName} onClick={toggleLocked} />
         <ExportLink element={section} elementType="sections" verboseName={verboseName}

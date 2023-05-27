@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import isEmpty from 'lodash/isEmpty'
 
 import { filterElement } from '../../utils/filter'
 
@@ -29,8 +28,8 @@ const QuestionSet = ({ config, questionset, elementActions, display='list', filt
     <div className="element">
       <div className="pull-right">
         <NestedLink element={questionset} verboseName={verboseName} onClick={fetchNested} />
-        <EditLink element={questionset} verboseName={verboseName} onClick={fetchEdit} />
-        <CopyLink element={questionset} verboseName={verboseName} onClick={fetchCopy} />
+        <EditLink verboseName={verboseName} onClick={fetchEdit} />
+        <CopyLink verboseName={verboseName} onClick={fetchCopy} />
         <AddLink element={questionset} verboseName={gettext('question')} verboseNameAlt={gettext('question set')}
                  onClick={createQuestion} onAltClick={createQuestionSet} />
         <LockedLink element={questionset} verboseName={verboseName} onClick={toggleLocked} />

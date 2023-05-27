@@ -1,6 +1,6 @@
-import React, { Component, useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { Tabs, Tab } from 'react-bootstrap';
+import { Tabs, Tab } from 'react-bootstrap'
 import get from 'lodash/get'
 
 import Checkbox from './common/Checkbox'
@@ -41,8 +41,8 @@ const EditTask = ({ config, task, elements, elementActions}) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={task} elementAction={elementAction} onClick={storeTask} />
-          <SaveButton element={task} elementAction={elementAction} onClick={storeTask} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeTask} />
+          <SaveButton elementAction={elementAction} onClick={storeTask} back={true}/>
         </div>
         {
           task.id ? <>
@@ -131,10 +131,10 @@ const EditTask = ({ config, task, elements, elementActions}) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={task} elementAction={elementAction} onClick={storeTask} />
-          <SaveButton element={task} elementAction={elementAction} onClick={storeTask} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeTask} />
+          <SaveButton elementAction={elementAction} onClick={storeTask} back={true}/>
         </div>
-        <DeleteButton element={task} onClick={openDeleteModal} />
+        {task.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
       <DeleteTaskModal task={task} info={info} show={showDeleteModal}

@@ -1,6 +1,6 @@
-import React, { Component, useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { Tabs, Tab } from 'react-bootstrap';
+import { Tabs, Tab } from 'react-bootstrap'
 import get from 'lodash/get'
 
 import Checkbox from './common/Checkbox'
@@ -39,8 +39,8 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={catalog} elementAction={elementAction} onClick={storeCatalog}  />
-          <SaveButton element={catalog} elementAction={elementAction} onClick={storeCatalog} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeCatalog}  />
+          <SaveButton elementAction={elementAction} onClick={storeCatalog} back={true}/>
         </div>
         {
           catalog.id ? <>
@@ -107,10 +107,10 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={catalog} elementAction={elementAction} onClick={storeCatalog} />
-          <SaveButton element={catalog} elementAction={elementAction} onClick={storeCatalog} back={true} />
+          <SaveButton elementAction={elementAction} onClick={storeCatalog} />
+          <SaveButton elementAction={elementAction} onClick={storeCatalog} back={true} />
         </div>
-        <DeleteButton element={catalog} onClick={openDeleteModal} />
+        {catalog.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
       <DeleteCatalogModal catalog={catalog} info={info} show={showDeleteModal}
@@ -118,8 +118,6 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
     </div>
   )
 }
-
-
 
 EditCatalog.propTypes = {
   config: PropTypes.object.isRequired,

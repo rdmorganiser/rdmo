@@ -1,6 +1,6 @@
-import React, { Component, useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { Tabs, Tab } from 'react-bootstrap';
+import { Tabs, Tab } from 'react-bootstrap'
 import isUndefined from 'lodash/isUndefined'
 import orderBy from 'lodash/orderBy'
 
@@ -21,7 +21,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditPage = ({ config, page, elements, elementActions }) => {
 
-  const { elementAction, parent, attributes, conditions, sections, questionsets, questions } = elements
+  const { elementAction, parent, attributes, conditions } = elements
 
   const elementValues = orderBy(page.questions.concat(page.questionsets), ['order', 'uri'])
   const elementOptions = elements.questions.map(question => ({
@@ -70,8 +70,8 @@ const EditPage = ({ config, page, elements, elementActions }) => {
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={page} elementAction={elementAction} onClick={storePage} />
-          <SaveButton element={page} elementAction={elementAction} onClick={storePage} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storePage} />
+          <SaveButton elementAction={elementAction} onClick={storePage} back={true}/>
         </div>
         {
           page.id ? <>
@@ -165,10 +165,10 @@ const EditPage = ({ config, page, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton element={page} elementAction={elementAction} onClick={storePage} />
-          <SaveButton element={page} elementAction={elementAction} onClick={storePage} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storePage} />
+          <SaveButton elementAction={elementAction} onClick={storePage} back={true}/>
         </div>
-        <DeleteButton element={page} onClick={openDeleteModal} />
+        {page.id && <DeleteButton onClick={openDeleteModal} />}
       </div>
 
       <DeletePageModal page={page} info={info} show={showDeleteModal}

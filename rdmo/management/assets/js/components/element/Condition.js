@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
 import { filterElement } from '../../utils/filter'
@@ -19,8 +19,8 @@ const Condition = ({ config, condition, elementActions, filter=null }) => {
     <li className="list-group-item">
       <div className="element">
         <div className="pull-right">
-          <EditLink element={condition} verboseName={verboseName} onClick={fetchEdit} />
-          <CopyLink element={condition} verboseName={verboseName} onClick={fetchCopy} />
+          <EditLink verboseName={verboseName} onClick={fetchEdit} />
+          <CopyLink verboseName={verboseName} onClick={fetchCopy} />
           <LockedLink element={condition} verboseName={verboseName} onClick={toggleLocked} />
           <ExportLink element={condition} elementType="conditions" verboseName={verboseName}
                       exportFormats={config.settings.export_formats} />

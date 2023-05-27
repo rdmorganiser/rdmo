@@ -1,4 +1,4 @@
-import React, { Component} from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import isNil from 'lodash/isNil'
 import isString from 'lodash/isString'

@@ -1,11 +1,11 @@
-import React, { Component} from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 import get from 'lodash/get'
-import ReactCodeMirror from '@uiw/react-codemirror';
-import { html } from '@codemirror/lang-html';
+import ReactCodeMirror from '@uiw/react-codemirror'
+import { html } from '@codemirror/lang-html'
 
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
@@ -29,7 +29,7 @@ const CodeMirror = ({ config, element, field, onChange }) => {
       <label className="control-label" htmlFor={id}>{label}</label>
 
       <ReactCodeMirror className="codemirror form-control" id={id} value={value} extensions={[html()]}
-                       onChange={(value, viewUpdate) => onChange(field, value)} />
+                       onChange={(value) => onChange(field, value)} />
 
       {help && <p className="help-block">{help}</p>}
 

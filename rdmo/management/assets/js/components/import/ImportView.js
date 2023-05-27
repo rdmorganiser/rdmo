@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import uniqueId from 'lodash/uniqueId'
 
 import { AvailableLink, CodeLink, WarningLink, ErrorLink, ShowLink } from '../common/Links'
 
@@ -45,6 +44,7 @@ const ImportView = ({ config, view, importActions }) => {
 }
 
 ImportView.propTypes = {
+  config: PropTypes.object.isRequired,
   view: PropTypes.object.isRequired,
   importActions: PropTypes.object.isRequired
 }

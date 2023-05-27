@@ -16,7 +16,7 @@ class ConditionsApi extends BaseApi {
 
   static storeCondition(condition) {
     if (isNil(condition.id)) {
-      return this.post(`/api/v1/conditions/conditions/`, condition)
+      return this.post('/api/v1/conditions/conditions/', condition)
     } else {
       return this.put(`/api/v1/conditions/conditions/${condition.id}/`, condition)
     }
