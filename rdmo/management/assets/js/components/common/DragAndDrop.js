@@ -73,7 +73,7 @@ Drop.propTypes = {
   elementActions: PropTypes.object.isRequired,
   mode: PropTypes.string,
   indent: PropTypes.number,
-  children: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node])
 }
 
 export { Drag, Drop }

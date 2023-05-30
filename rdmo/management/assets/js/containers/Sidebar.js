@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -10,21 +10,12 @@ import * as importActions from '../actions/importActions'
 import ElementsSidebar from '../components/sidebar/ElementsSidebar'
 import ImportSidebar from '../components/sidebar/ImportSidebar'
 
-class Sidebar extends Component {
-
-  constructor(props) {
-    super(props)
-  }
-
-  render() {
-    const { config, elements, imports, elementActions, importActions } = this.props
-
-    if (isEmpty(imports.elements)) {
-      return <ElementsSidebar config={config} elements={elements}
-                              elementActions={elementActions} importActions={importActions} />
-    } else {
-      return <ImportSidebar config={config} imports={imports} importActions={importActions} />
-    }
+const Sidebar = ({ config, elements, imports, elementActions, importActions }) => {
+  if (isEmpty(imports.elements)) {
+    return <ElementsSidebar config={config} elements={elements}
+                            elementActions={elementActions} importActions={importActions} />
+  } else {
+    return <ImportSidebar config={config} imports={imports} importActions={importActions} />
   }
 }
 
