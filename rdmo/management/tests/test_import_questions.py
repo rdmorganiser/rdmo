@@ -225,6 +225,12 @@ def test_create_legacy_questions(db, settings):
     assert QuestionSet.objects.count() == 3
     assert Question.objects.count() == 89
 
+    # check that all elements ended up in the catalog
+    catalog = Catalog.objects.prefetch_elements().first()
+    descendant_uris = set(element.uri for element in catalog.descendants)
+    element_uris = set(element['uri'] for element in elements if element['uri'] != catalog.uri)
+    assert descendant_uris == element_uris
+
 
 def test_update_legacy_questions(db, settings):
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'legacy' / 'questions.xml'
@@ -243,3 +249,9 @@ def test_update_legacy_questions(db, settings):
     assert Page.objects.count() == 48
     assert QuestionSet.objects.count() == 3
     assert Question.objects.count() == 89
+
+    # check that all elements ended up in the catalog
+    catalog = Catalog.objects.prefetch_elements().first()
+    descendant_uris = set(element.uri for element in catalog.descendants)
+    element_uris = set(element['uri'] for element in elements if element['uri'] != catalog.uri)
+    assert descendant_uris == element_uris
