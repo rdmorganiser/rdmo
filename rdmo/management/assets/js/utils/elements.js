@@ -27,6 +27,21 @@ const resetElement = (element) => {
   return element
 }
 
+function canMoveElement(dragElement, dropElement) {
+  if (compareElements(dragElement, dropElement)) {
+    // an element cannot be moved on itself
+    return false
+  } else if (isUndefined(dragElement.elements)) {
+    // if dragElement has no elements, the element can be moved
+    return true
+  } else {
+    // check recusively if one of the descendants of dragElement is dropElement
+    return dragElement.elements.reduce((acc, el) => {
+      return acc && canMoveElement(el, dropElement)
+    }, true)
+  }
+}
+
 function moveElement(element, dragElement, dropElement, mode) {
   const dragParent = removeElement(element, dragElement)
 
@@ -44,7 +59,9 @@ function moveElement(element, dragElement, dropElement, mode) {
   }
 
   updateElementElements(dragParent)
-  if (!compareElements(dragParent, dropParent)) {
+  if (compareElements(dragParent, dropParent)) {
+    dropParent = null
+  } else {
     updateElementElements(dropParent)
   }
 
@@ -142,4 +159,4 @@ const buildUri = (element) => {
   return uri
 }
 
-export { compareElements, updateElement, resetElement, moveElement, buildUri }
+export { compareElements, updateElement, resetElement, canMoveElement, moveElement, buildUri }
