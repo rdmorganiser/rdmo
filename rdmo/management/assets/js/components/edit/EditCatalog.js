@@ -35,7 +35,7 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
   const info = <CatalogInfo catalog={catalog} elements={elements} />
 
   return (
-    <div className="panel panel-default">
+    <div className="panel panel-default panel-edit">
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />

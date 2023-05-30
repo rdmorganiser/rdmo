@@ -128,10 +128,6 @@ a.disabled {
             margin-bottom: 0;
         }
 
-        .panel-heading,
-        .panel-footer {
-            min-height: 41px;
-        }
 
         .panel-body {
             > :last-child {
@@ -145,6 +141,13 @@ a.disabled {
 
         &.panel-nested {
             margin-bottom: 10px;
+        }
+
+        &.panel-edit {
+            .panel-heading,
+            .panel-footer {
+                min-height: 41px;
+            }
         }
 
         &.panel-import {

@@ -37,7 +37,7 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
   const info = <OptionSetInfo optionset={optionset} elements={elements} elementActions={elementActions} />
 
   return (
-    <div className="panel panel-default">
+    <div className="panel panel-default panel-edit">
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />

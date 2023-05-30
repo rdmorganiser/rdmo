@@ -27,7 +27,7 @@ const EditOption = ({ config, option, elements, elementActions }) => {
   const info = <OptionInfo option={option} elements={elements} elementActions={elementActions} />
 
   return (
-    <div className="panel panel-default">
+    <div className="panel panel-default panel-edit">
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />

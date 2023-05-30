@@ -33,7 +33,7 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
   const info = <ConditionInfo condition={condition} elements={elements} elementActions={elementActions} />
 
   return (
-    <div className="panel panel-default">
+    <div className="panel panel-default panel-edit">
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
