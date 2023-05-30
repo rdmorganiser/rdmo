@@ -1,11 +1,11 @@
-import Cookies from 'js-cookie';
-import isNil from 'lodash/isNil'
+import Cookies from 'js-cookie'
+import isUndefined from 'lodash/isUndefined'
 
-function ApiError(status, statusText) {
+function ApiError(statusText, status) {
   this.status = status
   this.statusText = statusText
   this.errors = {
-    'api': [`${statusText} (${status})`]
+    'api': isUndefined(status) ? [statusText] : [`${statusText} (${status})`]
   }
 }
 
@@ -20,8 +20,10 @@ class BaseApi {
       if (response.ok) {
         return response.json()
       } else {
-        throw new ApiError(response.status, response.statusText)
+        throw new ApiError(response.statusText, response.status)
       }
+    }).catch(error => {
+      throw new ApiError(error.message)
     })
   }
 
@@ -41,8 +43,10 @@ class BaseApi {
           throw new ValidationError(errors)
         })
       } else {
-        throw new ApiError(response.status, response.statusText)
+        throw new ApiError(response.statusText, response.status)
       }
+    }).catch(error => {
+      throw new ApiError(error.message)
     })
   }
 
@@ -62,8 +66,10 @@ class BaseApi {
           throw new ValidationError(errors)
         })
       } else {
-        throw new ApiError(response.status, response.statusText)
+        throw new ApiError(response.statusText, response.status)
       }
+    }).catch(error => {
+      throw new ApiError(error.message)
     })
   }
 
@@ -82,8 +88,10 @@ class BaseApi {
           throw new ValidationError(errors)
         })
       } else {
-        throw new ApiError(response.status, response.statusText)
+        throw new ApiError(response.statusText, response.status)
       }
+    }).catch(error => {
+      throw new ApiError(error.message)
     })
   }
 
@@ -105,8 +113,10 @@ class BaseApi {
           throw new ValidationError(errors)
         })
       } else {
-        throw new ApiError(response.status, response.statusText)
+        throw new ApiError(response.statusText, response.status)
       }
+    }).catch(error => {
+      throw new ApiError(error.message)
     })
   }
 
