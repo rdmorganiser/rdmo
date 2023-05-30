@@ -39,7 +39,7 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
   const info = <QuestionInfo question={question} elements={elements} elementActions={elementActions} />
 
   return (
-    <div className="panel panel-default">
+    <div className="panel panel-default panel-edit">
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />

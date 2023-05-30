@@ -31,7 +31,7 @@ const EditSection = ({ config, section, elements, elementActions }) => {
   const info = <SectionInfo section={section} elements={elements} elementActions={elementActions} />
 
   return (
-    <div className="panel panel-default">
+    <div className="panel panel-default panel-edit">
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />

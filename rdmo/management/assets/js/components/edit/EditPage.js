@@ -66,7 +66,7 @@ const EditPage = ({ config, page, elements, elementActions }) => {
   const info = <PageInfo page={page} elements={elements} elementActions={elementActions} />
 
   return (
-    <div className="panel panel-default">
+    <div className="panel panel-default panel-edit">
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />

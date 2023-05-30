@@ -37,7 +37,7 @@ const EditTask = ({ config, task, elements, elementActions}) => {
   const info = <TaskInfo task={task} elements={elements} />
 
   return (
-    <div className="panel panel-default">
+    <div className="panel panel-default panel-edit">
       <div className="panel-heading">
         <div className="pull-right">
           <BackButton />
