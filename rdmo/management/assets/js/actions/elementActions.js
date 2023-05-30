@@ -1,3 +1,5 @@
+import isNil from 'lodash/isNil'
+
 import ConditionsApi from '../api/ConditionsApi'
 import DomainApi from '../api/DomainApi'
 import OptionsApi from '../api/OptionsApi'
@@ -14,7 +16,7 @@ import ViewsFactory from '../factories/ViewsFactory'
 
 import { elementTypes } from '../constants/elements'
 import { updateLocation } from '../utils/location'
-import { compareElements, moveElement } from '../utils/elements'
+import { canMoveElement, moveElement } from '../utils/elements'
 
 export function fetchElements(elementType) {
   return function(dispatch, getState) {
@@ -601,12 +603,13 @@ export function updateElement(element, values) {
 
 export function dropElement(dragElement, dropElement, mode) {
   return function(dispatch, getState) {
-    if (!compareElements(dragElement, dropElement)) {
+    // an element cannot be dropped on itself or on one of its descendants
+    if (canMoveElement(dragElement, dropElement)) {
       const element = {...getState().elements.element}
       const { dragParent, dropParent } = moveElement(element, dragElement, dropElement, mode)
 
       dispatch(storeElement(elementTypes[dragParent.model], dragParent))
-      if (!compareElements(dragParent, dropParent)) {
+      if (!isNil(dropParent)) {
         dispatch(storeElement(elementTypes[dropParent.model], dropParent))
       }
     }
