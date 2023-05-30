@@ -142,8 +142,8 @@ def import_questionset(element, save=False):
 
         questionset.save()
         set_m2m_instances(questionset, 'conditions', element)
-        set_reverse_m2m_through_instance(questionset, 'page', element, 'questionset', 'parent', 'questionset_parents')
-        set_reverse_m2m_through_instance(questionset, 'questionset', element, 'questionset', 'question', 'questionset_questions')
+        set_reverse_m2m_through_instance(questionset, 'page', element, 'questionset', 'page', 'questionset_pages')
+        set_reverse_m2m_through_instance(questionset, 'questionset', element, 'questionset', 'parent', 'questionset_parents')
         set_m2m_through_instances(questionset, 'questionsets', element, 'parent', 'questionset', 'questionset_questionsets')
         set_m2m_through_instances(questionset, 'questions', element, 'questionset', 'question', 'questionset_questions')
 

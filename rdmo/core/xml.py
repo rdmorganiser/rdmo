@@ -159,8 +159,18 @@ def convert_legacy_elements(elements):
             del element['key']
             element['uri_path'] = element.pop('path')
 
-            if element.get('questionset') is not None:
-                element['questionset']['order'] = element.pop('order')
+            parent = element.get('questionset').get('uri')
+            if parent is not None:
+                if elements[parent].get('model') == 'questions.page':
+                    # this questionset belongs to a page now
+                    del element['questionset']
+                    element['page'] = {
+                        'uri': parent,
+                        'order': element.pop('order')
+                    }
+                else:
+                    # this questionset still belongs to a questionset
+                    element['questionset']['order'] = element.pop('order')
 
         elif element['model'] == 'questions.question':
             del element['key']
@@ -169,12 +179,14 @@ def convert_legacy_elements(elements):
             parent = element.get('questionset').get('uri')
             if parent is not None:
                 if elements[parent].get('model') == 'questions.page':
+                    # this question belongs to a page now
                     del element['questionset']
                     element['page'] = {
                         'uri': parent,
                         'order': element.pop('order')
                     }
                 else:
+                    # this question still belongs to a questionset
                     element['questionset']['order'] = element.pop('order')
 
         elif element['model'] == 'options.optionset':
