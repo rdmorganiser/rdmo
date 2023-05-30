@@ -16,7 +16,7 @@ models = {
   'option': 'options.option',
   'condition': 'conditions.condition',
   'task': 'tasks.task',
-  'view': 'views.task'
+  'view': 'views.view'
 }
 
 
@@ -128,47 +128,47 @@ def convert_elements(elements, version):
 def convert_legacy_elements(elements):
     # first pass: identify pages
     for uri, element in elements.items():
-        if element['model'] == 'questionset':
+        if element['model'] == 'questions.questionset':
             if element.get('questionset') is None:
                 # this is now a page
-                element['model'] = 'page'
+                element['model'] = 'questions.page'
             else:
                 del element['section']
 
     # second pass: del key, set uri_path, add order to reverse m2m through models
     # and sort questions into pages or questionsets
     for uri, element in elements.items():
-        if element['model'] == 'catalog':
+        if element['model'] == 'questions.catalog':
             element['uri_path'] = element.pop('key')
 
-        elif element['model'] == 'section':
+        elif element['model'] == 'questions.section':
             del element['key']
             element['uri_path'] = element.pop('path')
 
             if element.get('catalog') is not None:
                 element['catalog']['order'] = element.pop('order')
 
-        elif element['model'] == 'page':
+        elif element['model'] == 'questions.page':
             del element['key']
             element['uri_path'] = element.pop('path')
 
             if element.get('section') is not None:
                 element['section']['order'] = element.pop('order')
 
-        elif element['model'] == 'questionset':
+        elif element['model'] == 'questions.questionset':
             del element['key']
             element['uri_path'] = element.pop('path')
 
             if element.get('questionset') is not None:
                 element['questionset']['order'] = element.pop('order')
 
-        elif element['model'] == 'question':
+        elif element['model'] == 'questions.question':
             del element['key']
             element['uri_path'] = element.pop('path')
 
             parent = element.get('questionset').get('uri')
             if parent is not None:
-                if elements[parent].get('model') == 'page':
+                if elements[parent].get('model') == 'questions.page':
                     del element['questionset']
                     element['page'] = {
                         'uri': parent,
@@ -177,10 +177,10 @@ def convert_legacy_elements(elements):
                 else:
                     element['questionset']['order'] = element.pop('order')
 
-        elif element['model'] == 'optionset':
+        elif element['model'] == 'options.optionset':
             element['uri_path'] = element.pop('key')
 
-        elif element['model'] == 'option':
+        elif element['model'] == 'options.option':
             del element['key']
             element['uri_path'] = element.pop('path')
 
