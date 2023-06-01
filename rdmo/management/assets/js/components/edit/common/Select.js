@@ -32,7 +32,7 @@ const Select = ({ config, element, field, options, verboseName, isMulti, onChang
   const selectValue = isArray(element[field]) ? selectOptions.filter(option => (element[field].includes(option.value)))
                                               : selectOptions.find(option => (option.value == element[field]))
 
-  const styles = onEdit ? {
+  const styles = onEdit && selectValue ? {
     container: provided => ({...provided, marginRight: 8 + 12})
   } : {}
 
@@ -52,7 +52,7 @@ const Select = ({ config, element, field, options, verboseName, isMulti, onChang
 
       <div className="select-item">
         {
-          onEdit && <div className="select-item-options">
+          onEdit && selectValue && <div className="select-item-options">
             <Link className="fa fa-pencil" title={gettext('Edit')}
                   onClick={() => onEdit(selectValue.value)} disabled={isNil(selectValue)} />
           </div>
