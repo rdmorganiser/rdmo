@@ -45,6 +45,10 @@ const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, erro
   drag(dragRef)
   drop(dropRef)
 
+  const styles = {
+    container: provided => ({...provided, marginRight: 8 + 12 + 4 + 11 + 4 + 14})
+  }
+
   return (
     <>
       <div className="ordered-multi-select-item">
@@ -57,7 +61,7 @@ const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, erro
           <ReactSelect classNamePrefix="react-select" className="react-select"
                        options={selectOptions} value={selectValue}
                        onChange={option => handleChange(option, index)}
-                       menuPortalTarget={document.body} />
+                       menuPortalTarget={document.body} styles={styles} />
         </div>
         {
           errors && errors[index] &&

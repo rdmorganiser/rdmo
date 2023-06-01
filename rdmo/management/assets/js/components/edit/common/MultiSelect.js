@@ -6,6 +6,8 @@ import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 import get from 'lodash/get'
 
+import Link from 'rdmo/core/assets/js/components/Link'
+
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
 const MultiSelect = ({ config, element, field, options, verboseName, onChange, onCreate, onEdit }) => {
@@ -29,7 +31,7 @@ const MultiSelect = ({ config, element, field, options, verboseName, onChange, o
   }))
 
   const styles = onEdit ? {
-    container: provided => ({...provided, marginRight: 130})
+    container: provided => ({...provided, marginRight: 8 + 12 + 4 + 11})
   } : {}
 
   const handleAdd = () => {
@@ -62,14 +64,12 @@ const MultiSelect = ({ config, element, field, options, verboseName, onChange, o
 
           return (
             <div key={index} className="multi-select-item mb-10">
-              <div className="pull-right">
-                <button className="btn btn-primary ml-5" onClick={() => handleEdit(index)}>
-                  {gettext('Edit')}
-                </button>
-                <button className="btn btn-danger ml-5" onClick={() => handleRemove(index)}>
-                  {gettext('Remove')}
-                </button>
-              </div>
+              {
+                onEdit && <div className="multi-select-item-options">
+                  <Link className="fa fa-pencil" title={gettext('Edit')} onClick={() => handleEdit(index)} />
+                  <Link className="fa fa-times" title={gettext('Remove')} onClick={() => handleRemove(index)} />
+                </div>
+              }
 
               <ReactSelect classNamePrefix="react-select" className="react-select" styles={styles}
                            options={selectOptions} value={selectValue}
