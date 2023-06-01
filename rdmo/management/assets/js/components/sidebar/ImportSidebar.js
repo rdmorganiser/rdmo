@@ -47,12 +47,12 @@ const ImportSidebar = ({ config, imports, importActions }) => {
 
         <ul className="list-unstyled">
           <li>
-            <Link onClick={() => importActions.updateElements({import: true})}>
+            <Link onClick={() => importActions.selectElements(true)}>
               {gettext('Select all')}
             </Link>
           </li>
           <li>
-            <Link onClick={() => importActions.updateElements({import: false})}>
+            <Link onClick={() => importActions.selectElements(false)}>
               {gettext('Unselect all')}
             </Link>
           </li>
