@@ -259,22 +259,20 @@ a.disabled {
     }
 }
 
+.select-item-options,
+.multi-select-item-options,
+.ordered-multi-select-item-options {
+    float: right;
+    display: flex;
+    gap: 4px;
+    padding: 10px 0;
+}
+
 .ordered-multi-select-item {
     margin-bottom: 10px;
 
-    .ordered-multi-select-item-options {
-        float: right;
-        display: flex;
-        gap: 4px;
-        padding: 10px 0;
-    }
-
     .ordered-multi-select-item-select {
         height: 34px;
-
-        .react-select {
-            margin-right: 54px;
-        }
     }
 }
 
@@ -286,4 +284,3 @@ a.disabled {
         flex: 1;
     }
 }
-

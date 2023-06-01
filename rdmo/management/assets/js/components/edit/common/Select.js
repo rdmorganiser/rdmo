@@ -7,6 +7,8 @@ import isArray from 'lodash/isArray'
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 
+import Link from 'rdmo/core/assets/js/components/Link'
+
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
 const Select = ({ config, element, field, options, verboseName, isMulti, onChange, onCreate, onEdit }) => {
@@ -31,7 +33,7 @@ const Select = ({ config, element, field, options, verboseName, isMulti, onChang
                                               : selectOptions.find(option => (option.value == element[field]))
 
   const styles = onEdit ? {
-    container: provided => ({...provided, marginRight: 50})
+    container: provided => ({...provided, marginRight: 8 + 12})
   } : {}
 
   const handleChange = (option) => {
@@ -50,10 +52,9 @@ const Select = ({ config, element, field, options, verboseName, isMulti, onChang
 
       <div className="select-item">
         {
-          onEdit && <div className="pull-right">
-            <button className="btn btn-primary ml-5" onClick={() => onEdit(selectValue.value)} disabled={isNil(selectValue)}>
-              {gettext('Edit')}
-            </button>
+          onEdit && <div className="select-item-options">
+            <Link className="fa fa-pencil" title={gettext('Edit')}
+                  onClick={() => onEdit(selectValue.value)} disabled={isNil(selectValue)} />
           </div>
         }
 
