@@ -1,8 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import isNil from 'lodash/isNil'
+import invert from 'lodash/invert'
 
-import { elementModules } from '../../constants/elements'
+import { elementTypes, elementModules } from '../../constants/elements'
 
 import { buildPath } from '../../utils/location'
 import { getExportParams } from '../../utils/filter'
@@ -14,8 +15,9 @@ import { UploadForm } from '../common/Forms'
 const ElementsSidebar = ({ config, elements, elementActions, importActions }) => {
   const { elementType, elementId } = elements
 
-  const exportUrl = isNil(elementId) ? `/api/v1/${elementModules[elementType]}/${elementType}/export/`
-                                     : `/api/v1/${elementModules[elementType]}/${elementType}/${elementId}/export/`
+  const model = invert(elementTypes)[elementType]
+  const exportUrl = isNil(elementId) ? `/api/v1/${elementModules[model]}/${elementType}/export/`
+                                     : `/api/v1/${elementModules[model]}/${elementType}/${elementId}/export/`
   const exportParams = getExportParams(config.filter[elementType])
 
   return (
