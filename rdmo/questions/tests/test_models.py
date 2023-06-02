@@ -29,7 +29,6 @@ def test_catalog_copy(db):
         assert new_instance.uri_prefix == new_uri_prefix
         assert new_instance.key == new_key
         assert list(new_instance.sites.values('id')) == list(new_instance.sites.values('id'))
-        assert list(new_instance.editors.values('id')) == list(new_instance.editors.values('id'))
         assert list(new_instance.groups.values('id')) == list(new_instance.groups.values('id'))
         assert new_instance.sections.count() == instance.sections.count()
 
