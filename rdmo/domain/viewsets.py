@@ -16,7 +16,7 @@ from .serializers.v1 import (AttributeIndexSerializer,
 
 
 class AttributeViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission & HasObjectPermission, )
+    permission_classes = (HasModelPermission | HasObjectPermission, )
     queryset = Attribute.objects.order_by('path') \
                         .annotate(values_count=models.Count('values')) \
                         .annotate(projects_count=models.Count('values__project', distinct=True)) \
@@ -45,13 +45,13 @@ class AttributeViewSet(CopyModelMixin, ModelViewSet):
         serializer = AttributeIndexSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=False, permission_classes=[HasModelPermission & HasObjectPermission])
+    @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission])
     def export(self, request):
         serializer = AttributeExportSerializer(self.get_queryset(), many=True)
         xml = AttributeRenderer().render(serializer.data)
         return XMLResponse(xml, name='attributes')
 
-    @action(detail=True, url_path='export', permission_classes=[HasModelPermission  & HasObjectPermission])
+    @action(detail=True, url_path='export', permission_classes=[HasModelPermission | HasObjectPermission])
     def detail_export(self, request, pk=None):
         queryset = self.get_object().get_descendants(include_self=True)
         serializer = AttributeExportSerializer(queryset, many=True)

@@ -14,7 +14,7 @@ from .serializers.v1 import ViewIndexSerializer, ViewSerializer
 
 
 class ViewViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission & HasObjectPermission, )
+    permission_classes = (HasModelPermission | HasObjectPermission, )
     queryset = View.objects.prefetch_related('catalogs', 'sites', 'editors', 'groups')
     serializer_class = ViewSerializer
 

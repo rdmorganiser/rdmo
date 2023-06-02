@@ -16,7 +16,7 @@ from .serializers.v1 import ConditionIndexSerializer, ConditionSerializer
 
 
 class ConditionViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission & HasObjectPermission, )
+    permission_classes = (HasModelPermission | HasObjectPermission, )
     queryset = Condition.objects.select_related('source', 'target_option') \
                                 .prefetch_related('optionsets', 'questionsets', 'questions', 'tasks',
                                                   'editors')

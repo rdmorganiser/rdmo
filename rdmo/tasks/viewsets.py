@@ -14,7 +14,7 @@ from .serializers.v1 import TaskIndexSerializer, TaskSerializer
 
 
 class TaskViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission & HasObjectPermission, )
+    permission_classes = (HasModelPermission | HasObjectPermission, )
     queryset = Task.objects.select_related('start_attribute', 'end_attribute') \
                            .prefetch_related('catalogs', 'sites', 'groups', 'conditions')
     serializer_class = TaskSerializer
