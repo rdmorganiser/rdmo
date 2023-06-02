@@ -139,9 +139,7 @@ class View(models.Model, TranslationMixin):
 
         # copy m2m fields
         view.catalogs.set(self.catalogs.all())
-        # set current site for sites and editors
-        view.sites.set([Site.objects.get_current()])
-        view.editors.set([Site.objects.get_current()])
+        view.sites.set(self.sites.all())
         view.groups.set(self.groups.all())
 
         return view

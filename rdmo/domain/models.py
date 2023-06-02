@@ -73,10 +73,6 @@ class Attribute(MPTTModel):
 
         # copy the attribute
         attribute = copy_model(self, uri_prefix=uri_prefix, key=key, parent=parent or self.parent)
-        
-        # copy m2m fields
-        # for editors, set only current site
-        attribute.editors.set([Site.objects.get_current()])
 
         # recursively copy children
         for child in self.children.all():
