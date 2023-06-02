@@ -159,10 +159,7 @@ class Task(TranslationMixin, models.Model):
 
         # add m2m fields
         task.catalogs.set(self.catalogs.all())
-        # set current site for sites and editors
-        task.sites.set([Site.objects.get_current()])
-        task.editors.set([Site.objects.get_current()])
-
+        task.sites.set(self.sites.all())
         task.groups.set(self.groups.all())
         task.conditions.set(self.conditions.all())
 

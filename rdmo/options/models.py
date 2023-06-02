@@ -80,8 +80,6 @@ class OptionSet(models.Model):
 
         # set m2m fields for copy
         optionset.conditions.set(self.conditions.all())
-        # set current site as editor
-        optionset.editors.set([Site.objects.get_current()])
 
         # add copy to children
         for option in self.options.all():
