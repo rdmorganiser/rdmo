@@ -77,8 +77,6 @@ class OptionSet(models.Model):
 
         # copy m2m fields
         optionset.conditions.set(self.conditions.all())
-        # set current site as editor
-        optionset.editors.set([Site.objects.get_current()])
 
         # copy children
         for option in self.options.all():

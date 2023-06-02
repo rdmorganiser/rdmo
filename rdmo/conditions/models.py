@@ -95,10 +95,7 @@ class Condition(models.Model):
 
     def copy(self, uri_prefix, key):
         condition = copy_model(self, uri_prefix=uri_prefix, key=key, source=self.source, target_option=self.target_option)
-        
-        # copy m2m fields
-        # set current site as editor
-        condition.editors.set([Site.objects.get_current()])
+ 
         return condition
 
     @property

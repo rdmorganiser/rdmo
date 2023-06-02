@@ -140,10 +140,8 @@ class Catalog(Model, TranslationMixin):
         catalog = copy_model(self, uri_prefix=uri_prefix, key=key, **kwargs)
 
         # copy m2m fields
-        # for sites and editors, set only current site
-        current_site = Site.objects.get_current()
-        catalog.sites.set([current_site])
-        catalog.editors.set([current_site])
+        catalog.sites.set(self.sites.all())
+        catalog.groups.set(self.groups.all())
         
         # for groups, copy all
         catalog.groups.set(self.groups.all())
