@@ -32,19 +32,19 @@ class ConditionViewSet(CopyModelMixin, ModelViewSet):
         'target_option'
     )
 
-    @action(detail=False)
+    @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission, ])
     def index(self, request):
         queryset = Condition.objects.select_related('source', 'target_option')
         serializer = ConditionIndexSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=False, permission_classes=[HasModelPermission])
+    @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission, ])
     def export(self, request):
         serializer = ConditionExportSerializer(self.get_queryset(), many=True)
         xml = ConditionRenderer().render(serializer.data)
         return XMLResponse(xml, name='conditions')
 
-    @action(detail=True, url_path='export', permission_classes=[HasModelPermission])
+    @action(detail=True, url_path='export', permission_classes=[HasModelPermission | HasObjectPermission, ])
     def detail_export(self, request, pk=None):
         serializer = ConditionExportSerializer(self.get_object())
         xml = ConditionRenderer().render([serializer.data])
