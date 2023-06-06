@@ -1,12 +1,11 @@
 import rules
 
-from rdmo.management.rules import is_editor, is_reviewer
-
 from .models import Role
 
 
 @rules.predicate
 def is_manager_for_user(user, user_obj):
+    ''' checks if the current user is allowed to see another user object '''
     if not user.is_authenticated:
         return False
     if user.is_superuser:
@@ -19,18 +18,4 @@ def is_manager_for_user(user, user_obj):
         return False
 
 
-@rules.predicate
-def an_editor_or_reviewer_can_see_themselves(user, user_obj):
-    if not user.is_authenticated:
-        return False
-    if user.is_superuser:
-        return True
-    try:
-        if is_editor(user) or is_reviewer(user):
-            return user == user_obj
-        return False
-    except Role.DoesNotExist:
-        return False
-
-
-rules.add_perm('auth.view_user_object', is_manager_for_user | an_editor_or_reviewer_can_see_themselves)
+rules.add_perm('auth.view_user_object', is_manager_for_user)
