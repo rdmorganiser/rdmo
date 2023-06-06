@@ -6,7 +6,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from rdmo.core.permissions import HasModelPermission
+from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 
 from .serializers import GroupSerializer, SiteSerializer
 
@@ -35,7 +35,7 @@ class GroupViewSet(viewsets.ReadOnlyModelViewSet):
 
 class CopyModelMixin:
 
-    @action(detail=True, methods=['PUT'], permission_classes=[HasModelPermission])
+    @action(detail=True, methods=['PUT'], permission_classes=[HasModelPermission | HasObjectPermission])
     def copy(self, request, pk=None):
         # get the instance to be copied
         instance = self.get_object()
