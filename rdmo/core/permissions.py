@@ -83,7 +83,7 @@ class HasObjectPermission(DjangoObjectPermissions):
             except AttributeError:
                 # return True if the function is not defined in the view
                 # the permission will be checked on object level (in the next step)
-                return True
+                return super().has_permission(request, view)
 
     @log_result
     def has_object_permission(self, request, view, obj):
