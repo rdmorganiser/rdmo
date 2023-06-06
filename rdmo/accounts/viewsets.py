@@ -18,9 +18,6 @@ class UserViewSetMixin(object):
                 return get_user_model().objects.all()
             elif is_site_manager(user):
                 return get_user_model().objects.filter(role__member__id__in=user.role.manager.all()).distinct()
-            elif is_editor(user) or is_reviewer(user):
-                # allow editors or reviewers to see their own user object
-                return get_user_model().objects.filter(id=user.id)
         return get_user_model().objects.none()
 
 

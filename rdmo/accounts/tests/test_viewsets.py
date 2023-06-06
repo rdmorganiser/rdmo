@@ -68,9 +68,6 @@ def test_list(db, client, username, password):
         elif username == 'site':
             # the site manager for example.com must see only the members of example.com
             assert len(response.json()) == get_user_model().objects.count() - len(members_from_other_sites)
-        elif username == 'editor' or username == 'reviewer':
-            # editors and reviewers can see themselves
-            assert len(response.json()) == 1
         else:
             assert len(response.json()) == 0
 
@@ -84,10 +81,7 @@ def test_detail(db, client, username, password):
         response = client.get(url)
         if username == 'site' and not instance.role.member.filter(domain__contains='example.com').exists():
             # the site manager for example.com must see only the members of example.com
-            assert response.status_code == 404, response.json()    
-        elif (username == 'editor' or username == 'reviewer') and username == instance.username:
-            # editors and reviewers can see themselves
-            assert response.status_code == 200, response.json()
+            assert response.status_code == 404, response.json()
         else:
             assert response.status_code == status_map['detail'][username], response.json()
 
