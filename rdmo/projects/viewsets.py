@@ -403,7 +403,7 @@ class ProjectPageViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericV
             # indicate end of catalog
             return Response(status=204)
 
-    @action(detail=False, url_path='continue', permission_classes=(HasModelPermission | HasObjectPermission, ))
+    @action(detail=False, url_path='continue', permission_classes=(HasModelPermission | HasProjectQuestionPermission, ))
     def get_continue(self, request, pk=None, parent_lookup_project=None):
         try:
             continuation = Continuation.objects.get(project=self.project, user=self.request.user)
