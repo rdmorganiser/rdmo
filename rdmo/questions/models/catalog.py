@@ -141,7 +141,6 @@ class Catalog(Model, TranslationMixin):
 
         # copy m2m fields
         catalog.sites.set(self.sites.all())
-        catalog.groups.set(self.groups.all())
 
         # for groups, copy all
         catalog.groups.set(self.groups.all())
