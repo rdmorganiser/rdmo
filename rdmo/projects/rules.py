@@ -1,12 +1,8 @@
 import rules
 
-from rules.predicates import is_authenticated
-
 
 @rules.predicate
 def is_project_member(user, project):
-    if project is None: # needed for swagger
-        return False
     return user in project.member or (project.parent and is_project_member(user, project.parent))
 
 
@@ -17,43 +13,31 @@ def is_current_project_member(user, project):
 
 @rules.predicate
 def is_project_owner(user, project):
-    if project is None: # needed for swagger
-        return False
     return user in project.owners or (project.parent and is_project_owner(user, project.parent))
 
 
 @rules.predicate
 def is_project_manager(user, project):
-    if project is None: # needed for swagger
-        return False
     return user in project.managers or (project.parent and is_project_manager(user, project.parent))
 
 
 @rules.predicate
 def is_project_author(user, project):
-    if project is None: # needed for swagger
-        return False
     return user in project.authors or (project.parent and is_project_author(user, project.parent))
 
 
 @rules.predicate
 def is_project_guest(user, project):
-    if project is None: # needed for swagger
-        return False
     return user in project.guests or (project.parent and is_project_guest(user, project.parent))
 
 
 @rules.predicate
 def is_site_manager(user, project):
-    if project is None: # needed for swagger
-        return False
     if user.is_authenticated:
         return user.role.manager.filter(pk=project.site.pk).exists()
     else:
         return False
 
-# Users that can add projects
-rules.add_perm('projects.add_project_object', is_authenticated)
 
 rules.add_perm('projects.view_project_object', is_project_member | is_site_manager)
 rules.add_perm('projects.change_project_object', is_project_manager | is_project_owner | is_site_manager)
