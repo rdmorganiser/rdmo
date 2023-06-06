@@ -67,24 +67,24 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
         else:
             return queryset
 
-    @action(detail=True, permission_classes=[HasModelPermission])
+    @action(detail=True, permission_classes=[HasModelPermission | HasObjectPermission])
     def nested(self, request, pk):
         serializer = CatalogNestedSerializer(instance=self.get_object(), context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=False, permission_classes=[HasModelPermission])
+    @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission])
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = CatalogIndexSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=False, permission_classes=[HasModelPermission])
+    @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission])
     def export(self, request):
         serializer = CatalogExportSerializer(self.get_queryset(), many=True)
         xml = CatalogRenderer().render(serializer.data)
         return XMLResponse(xml, name='catalogs')
 
-    @action(detail=True, url_path='export', permission_classes=[HasModelPermission])
+    @action(detail=True, url_path='export', permission_classes=[HasModelPermission | HasObjectPermission])
     def detail_export(self, request, pk=None):
         serializer = CatalogExportSerializer(self.get_object())
         xml = CatalogRenderer().render([serializer.data])
@@ -127,7 +127,7 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
         else:
             return queryset
 
-    @action(detail=True, permission_classes=[HasModelPermission])
+    @action(detail=True, permission_classes=[HasModelPermission | HasObjectPermission])
     def nested(self, request, pk):
         serializer = SectionNestedSerializer(instance=self.get_object(), context={'request': request})
         return Response(serializer.data)
@@ -138,13 +138,13 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
         serializer = SectionIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, permission_classes=[HasModelPermission])
+    @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission])
     def export(self, request):
         serializer = SectionExportSerializer(self.get_queryset(), many=True)
         xml = SectionRenderer().render(serializer.data)
         return XMLResponse(xml, name='sections')
 
-    @action(detail=True, url_path='export', permission_classes=[HasModelPermission])
+    @action(detail=True, url_path='export', permission_classes=[HasModelPermission | HasObjectPermission])
     def detail_export(self, request, pk=None):
         serializer = SectionExportSerializer(self.get_object())
         xml = SectionRenderer().render([serializer.data])
@@ -187,24 +187,24 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
         else:
             return queryset
 
-    @action(detail=True, permission_classes=[HasModelPermission])
+    @action(detail=True, permission_classes=[HasModelPermission | HasObjectPermission])
     def nested(self, request, pk):
         serializer = QuestionSetNestedSerializer(self.get_queryset(), many=True, context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=False, permission_classes=[HasModelPermission])
+    @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission])
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = QuestionSetIndexSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=False, permission_classes=[HasModelPermission])
+    @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission])
     def export(self, request):
         serializer = QuestionSetExportSerializer(self.get_queryset(), many=True)
         xml = QuestionSetRenderer().render(serializer.data)
         return XMLResponse(xml, name='questionsets')
 
-    @action(detail=True, url_path='export', permission_classes=[HasModelPermission])
+    @action(detail=True, url_path='export', permission_classes=[HasModelPermission | HasObjectPermission])
     def detail_export(self, request, pk=None):
         serializer = QuestionSetExportSerializer(self.get_object())
         xml = QuestionSetRenderer().render([serializer.data])
@@ -242,24 +242,24 @@ class QuestionViewSet(CopyModelMixin, ModelViewSet):
         else:
             return queryset
 
-    @action(detail=True, permission_classes=[HasModelPermission])
+    @action(detail=True, permission_classes=[HasModelPermission | HasObjectPermission])
     def nested(self, request, pk):
         serializer = QuestionNestedSerializer(instance=self.get_object(), context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=False, permission_classes=[HasModelPermission])
+    @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission])
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = QuestionIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, permission_classes=[HasModelPermission])
+    @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission])
     def export(self, request):
         serializer = QuestionExportSerializer(self.get_queryset(), many=True)
         xml = QuestionRenderer().render(serializer.data)
         return XMLResponse(xml, name='questions')
 
-    @action(detail=True, url_path='export', permission_classes=[HasModelPermission])
+    @action(detail=True, url_path='export', permission_classes=[HasModelPermission | HasObjectPermission])
     def detail_export(self, request, pk=None):
         serializer = QuestionExportSerializer(self.get_object())
         xml = QuestionRenderer().render([serializer.data])
