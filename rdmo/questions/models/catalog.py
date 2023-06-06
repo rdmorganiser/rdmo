@@ -143,6 +143,9 @@ class Catalog(Model, TranslationMixin):
         catalog.sites.set(self.sites.all())
         catalog.groups.set(self.groups.all())
 
+        # for groups, copy all
+        catalog.groups.set(self.groups.all())
+
         # copy children
         for section in self.sections.all():
             section.copy(uri_prefix, section.key, catalog=catalog)
