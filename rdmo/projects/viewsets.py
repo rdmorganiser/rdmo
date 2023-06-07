@@ -18,7 +18,7 @@ from rest_framework.viewsets import (GenericViewSet, ModelViewSet,
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from rdmo.conditions.models import Condition
-from rdmo.core.permissions import HasModelPermission, HasObjectPermission
+from rdmo.core.permissions import HasModelPermission
 from rdmo.core.utils import human2bytes, return_file_response
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Catalog, Question, QuestionSet
@@ -26,7 +26,7 @@ from rdmo.questions.models import Catalog, Question, QuestionSet
 from .filters import SnapshotFilterBackend, ValueFilterBackend
 from .models import (Continuation, Integration, Issue, Membership, Project,
                      Snapshot, Value)
-from .permissions import HasProjectQuestionPermission
+from .permissions import HasProjectQuestionPermission, HasProjectPermission, HasProjectsPermission
 from .serializers.v1 import (IntegrationSerializer, IssueSerializer,
                              MembershipSerializer,
                              ProjectIntegrationSerializer,
@@ -42,7 +42,7 @@ from .utils import check_conditions
 
 
 class ProjectViewSet(ModelViewSet):
-    permission_classes = (HasModelPermission | HasObjectPermission, )
+    permission_classes = (HasModelPermission | HasProjectsPermission, )
     serializer_class = ProjectSerializer
 
     filter_backends = (DjangoFilterBackend,)
@@ -71,7 +71,7 @@ class ProjectViewSet(ModelViewSet):
         serializer = ProjectOverviewSerializer(project, context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=True, permission_classes=(HasModelPermission | HasObjectPermission, ))
+    @action(detail=True, permission_classes=(HasModelPermission | HasProjectPermission, ))
     def resolve(self, request, pk=None):
         snapshot_id = request.GET.get('snapshot')
         set_prefix = request.GET.get('set_prefix')
@@ -120,7 +120,7 @@ class ProjectViewSet(ModelViewSet):
 
         return Response({'result': False})
 
-    @action(detail=True, permission_classes=(HasModelPermission | HasObjectPermission, ))
+    @action(detail=True, permission_classes=(HasModelPermission | HasProjectPermission, ))
     def options(self, request, pk=None):
         project = self.get_object()
 
@@ -168,18 +168,12 @@ class ProjectNestedViewSetMixin(NestedViewSetMixin):
         except Project.DoesNotExist:
             raise Http404
 
-    def get_list_permission_object(self):
-        return self.project
-
-    def get_detail_permission_object(self, obj):
-        return self.project
-
     def perform_create(self, serializer):
         serializer.save(project=self.project)
 
 
 class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ModelViewSet):
-    permission_classes = (HasModelPermission | HasObjectPermission, )
+    permission_classes = (HasModelPermission | HasProjectPermission, )
 
     filter_backends = (DjangoFilterBackend, )
     filterset_fields = (
@@ -203,7 +197,7 @@ class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ModelViewSet):
 
 
 class ProjectIntegrationViewSet(ProjectNestedViewSetMixin, ModelViewSet):
-    permission_classes = (HasModelPermission | HasObjectPermission, )
+    permission_classes = (HasModelPermission | HasProjectPermission, )
     serializer_class = ProjectIntegrationSerializer
 
     filter_backends = (DjangoFilterBackend, )
@@ -221,7 +215,7 @@ class ProjectIntegrationViewSet(ProjectNestedViewSetMixin, ModelViewSet):
 
 class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveModelMixin,
                           UpdateModelMixin, GenericViewSet):
-    permission_classes = (HasModelPermission | HasObjectPermission, )
+    permission_classes = (HasModelPermission | HasProjectPermission, )
     serializer_class = ProjectIssueSerializer
 
     filter_backends = (DjangoFilterBackend, )
@@ -241,7 +235,7 @@ class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveMod
 
 class ProjectSnapshotViewSet(ProjectNestedViewSetMixin, CreateModelMixin, RetrieveModelMixin,
                              UpdateModelMixin, ListModelMixin, GenericViewSet):
-    permission_classes = (HasModelPermission | HasObjectPermission, )
+    permission_classes = (HasModelPermission | HasProjectPermission, )
     serializer_class = ProjectSnapshotSerializer
 
     def get_queryset(self):
@@ -253,7 +247,7 @@ class ProjectSnapshotViewSet(ProjectNestedViewSetMixin, CreateModelMixin, Retrie
 
 
 class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
-    permission_classes = (HasModelPermission | HasObjectPermission, )
+    permission_classes = (HasModelPermission | HasProjectPermission, )
     serializer_class = ProjectValueSerializer
 
     filter_backends = (ValueFilterBackend, DjangoFilterBackend)
@@ -271,7 +265,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
             return Value.objects.none()
 
     @action(detail=True, methods=['DELETE'],
-            permission_classes=(HasModelPermission | HasObjectPermission, ))
+            permission_classes=(HasModelPermission | HasProjectPermission, ))
     def set(self, request, parent_lookup_project, pk=None):
         # delete all values for questions in questionset collections with the attribute
         # for this value and the same set_prefix and set_index
@@ -287,7 +281,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         return Response(status=204)
 
     @action(detail=True, methods=['GET', 'POST'],
-            permission_classes=(HasModelPermission | HasObjectPermission, ))
+            permission_classes=(HasModelPermission | HasProjectPermission, ))
     def file(self, request, parent_lookup_project, pk=None):
         value = self.get_object()
 
@@ -375,7 +369,7 @@ class ProjectQuestionSetViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, G
 
 
 class MembershipViewSet(ReadOnlyModelViewSet):
-    permission_classes = (HasModelPermission | HasObjectPermission, )
+    permission_classes = (HasModelPermission | HasProjectsPermission, )
     serializer_class = MembershipSerializer
 
     filter_backends = (DjangoFilterBackend,)
@@ -388,12 +382,9 @@ class MembershipViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):
         return Membership.objects.filter_user(self.request.user)
 
-    def get_detail_permission_object(self, obj):
-        return obj.project
-
 
 class IntegrationViewSet(ReadOnlyModelViewSet):
-    permission_classes = (HasModelPermission | HasObjectPermission, )
+    permission_classes = (HasModelPermission | HasProjectsPermission, )
     serializer_class = IntegrationSerializer
 
     filter_backends = (DjangoFilterBackend, )
@@ -405,12 +396,9 @@ class IntegrationViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):
         return Integration.objects.filter_user(self.request.user)
 
-    def get_detail_permission_object(self, obj):
-        return obj.project
-
 
 class IssueViewSet(ReadOnlyModelViewSet):
-    permission_classes = (HasModelPermission | HasObjectPermission, )
+    permission_classes = (HasModelPermission | HasProjectsPermission, )
     serializer_class = IssueSerializer
 
     filter_backends = (DjangoFilterBackend, )
@@ -423,12 +411,9 @@ class IssueViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):
         return Issue.objects.filter_user(self.request.user).prefetch_related('resources')
 
-    def get_detail_permission_object(self, obj):
-        return obj.project
-
 
 class SnapshotViewSet(ReadOnlyModelViewSet):
-    permission_classes = (HasModelPermission | HasObjectPermission, )
+    permission_classes = (HasModelPermission | HasProjectsPermission, )
     serializer_class = SnapshotSerializer
 
     filter_backends = (DjangoFilterBackend,)
@@ -440,12 +425,9 @@ class SnapshotViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):
         return Snapshot.objects.filter_user(self.request.user)
 
-    def get_detail_permission_object(self, obj):
-        return obj.project
-
 
 class ValueViewSet(ReadOnlyModelViewSet):
-    permission_classes = (HasModelPermission | HasObjectPermission, )
+    permission_classes = (HasModelPermission | HasProjectsPermission, )
     serializer_class = ValueSerializer
 
     filter_backends = (SnapshotFilterBackend, DjangoFilterBackend)
@@ -460,10 +442,7 @@ class ValueViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):
         return Value.objects.filter_user(self.request.user).select_related('attribute', 'option')
 
-    def get_detail_permission_object(self, obj):
-        return obj.project
-
-    @action(detail=True, permission_classes=(HasModelPermission | HasObjectPermission, ))
+    @action(detail=True, permission_classes=(HasModelPermission | HasProjectsPermission, ))
     def file(self, request, pk=None):
         value = self.get_object()
 
