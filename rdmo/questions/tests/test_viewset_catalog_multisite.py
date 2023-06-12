@@ -38,17 +38,17 @@ status_map = {
         'anonymous': 401, 'reviewer': 200, 'editor': 200,
     },
     'detail': {
-        'site': 403,
-        'user': 403, 'example-reviewer': 200, 'example-editor': 200,
-        'foo-user': 403, 'foo-reviewer': 200, 'foo-editor': 200,
-        'bar-user': 403, 'bar-reviewer': 200, 'bar-editor': 200,
+        'site': 404,
+        'user': 404, 'example-reviewer': 200, 'example-editor': 200,
+        'foo-user': 404, 'foo-reviewer': 200, 'foo-editor': 200,
+        'bar-user': 404, 'bar-reviewer': 200, 'bar-editor': 200,
         'anonymous': 401, 'reviewer': 200, 'editor': 200,
     },
     'nested': {
-        'site': 403,
-        'user': 403, 'example-reviewer': 200, 'example-editor': 200,
-        'foo-user': 403, 'foo-reviewer': 200, 'foo-editor': 200,
-        'bar-user': 403, 'bar-reviewer': 200, 'bar-editor': 200,
+        'site': 404,
+        'user': 404, 'example-reviewer': 200, 'example-editor': 200,
+        'foo-user': 404, 'foo-reviewer': 200, 'foo-editor': 200,
+        'bar-user': 404, 'bar-reviewer': 200, 'bar-editor': 200,
         'anonymous': 401, 'reviewer': 200, 'editor': 200,
     },
     'create': {
@@ -58,18 +58,25 @@ status_map = {
         'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 201,
         'anonymous': 401, 'reviewer': 403, 'editor': 201,
     },
+    'copy': {
+        'site': 404,
+        'user': 404, 'example-reviewer': 403, 'example-editor': 201,
+        'foo-user': 404, 'foo-reviewer': 403, 'foo-editor': 201,
+        'bar-user': 404, 'bar-reviewer': 403, 'bar-editor': 201,
+        'anonymous': 401, 'reviewer': 403, 'editor': 201,
+    },
     'update': {
-        'site': 403,
-        'user': 403, 'example-reviewer': 403, 'example-editor': 200,
-        'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 200,
-        'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 200,
+        'site': 404,
+        'user': 404, 'example-reviewer': 404, 'example-editor': 200,
+        'foo-user': 404, 'foo-reviewer': 404, 'foo-editor': 200,
+        'bar-user': 404, 'bar-reviewer': 404, 'bar-editor': 200,
         'anonymous': 401, 'reviewer': 403, 'editor': 200,
     },
     'delete': {
-        'site': 403,
-        'user': 403, 'example-reviewer': 403, 'example-editor': 204,
-        'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 204,
-        'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 204,
+        'site': 404,
+        'user': 404, 'example-reviewer': 404, 'example-editor': 204,
+        'foo-user': 404, 'foo-reviewer': 404, 'foo-editor': 204,
+        'bar-user': 404, 'bar-reviewer': 404, 'bar-editor': 204,
         'anonymous': 401, 'reviewer': 403, 'editor': 204,
     }
 }
@@ -96,37 +103,63 @@ status_map_obj_perms = {
     },
     'update': {
         'catalog': {
-            'example-editor': 200, 'foo-editor': 200, 'bar-editor': 200
+            'example-editor': 200, 'foo-editor': 200, 'bar-editor': 200,
+            'example-reviewer': 403, 'foo-reviewer': 403, 'bar-reviewer': 403,
         },
         'catalog2': {
-            'example-editor': 200, 'foo-editor': 403, 'bar-editor': 403
+            'example-editor': 200, 'foo-editor': 404, 'bar-editor': 404,
+            'example-reviewer': 403, 'foo-reviewer': 404, 'bar-reviewer': 404,
         },
         'foo-catalog': {
-            'example-editor': 403, 'foo-editor': 200, 'bar-editor': 403
+            'example-editor': 404, 'foo-editor': 200, 'bar-editor': 404,
+            'example-reviewer': 404, 'foo-reviewer': 403, 'bar-reviewer': 404,
         },
         'bar-catalog': {
-            'example-editor': 403, 'foo-editor': 403, 'bar-editor': 200
+            'example-editor': 404, 'foo-editor': 404, 'bar-editor': 200,
+            'example-reviewer': 404, 'foo-reviewer': 404, 'bar-reviewer': 403,
         },
     },
     'delete': {
         'catalog': {
-            'example-editor': 204, 'foo-editor': 204, 'bar-editor': 204
+            'example-editor': 204, 'foo-editor': 204, 'bar-editor': 204,
+            'example-reviewer': 403, 'foo-reviewer': 403, 'bar-reviewer': 403,
         },
         'catalog2': {
-            'example-editor': 204, 'foo-editor': 403, 'bar-editor': 403
+            'example-editor': 204, 'foo-editor': 404, 'bar-editor': 404,
+            'example-reviewer': 403, 'foo-reviewer': 404, 'bar-reviewer': 404,
         },
         'foo-catalog': {
-            'example-editor': 403, 'foo-editor': 204, 'bar-editor': 403
+            'example-editor': 404, 'foo-editor': 204, 'bar-editor': 404,
+            'example-reviewer': 404, 'foo-reviewer': 403, 'bar-reviewer': 404,
         },
         'bar-catalog': {
-            'example-editor': 403, 'foo-editor': 403, 'bar-editor': 204
+            'example-editor': 404, 'foo-editor': 404, 'bar-editor': 204,
+            'example-reviewer': 404, 'foo-reviewer': 404, 'bar-reviewer': 403,
+        },
+    },
+    'copy': {
+        'catalog': {
+            'example-editor': 201, 'foo-editor': 201, 'bar-editor': 201,
+            'example-reviewer': 403, 'foo-reviewer': 403, 'bar-reviewer': 403,
+        },
+        'catalog2': {
+            'example-editor': 201, 'foo-editor': 404, 'bar-editor': 404,
+            'example-reviewer': 403, 'foo-reviewer': 404, 'bar-reviewer': 404,
+        },
+        'foo-catalog': {
+            'example-editor': 404, 'foo-editor': 201, 'bar-editor': 404,
+            'example-reviewer': 404, 'foo-reviewer': 403, 'bar-reviewer': 404,
+        },
+        'bar-catalog': {
+            'example-editor': 404, 'foo-editor': 404, 'bar-editor': 201,
+            'example-reviewer': 404, 'foo-reviewer': 404, 'bar-reviewer': 403,
         },
     }
 }
 
-def get_status_code_for_catalog(username: str, 
+def get_status_code_for_catalog(username: str,
                                 catalog_key: int,
-                                method: str, 
+                                method: str,
                                 status_map: dict,
                                 status_map_obj_perms: dict) -> int:
 
@@ -294,7 +327,7 @@ def test_multisite_detail_export(db, client, username, password):
     for instance in instances:
         url = reverse(urlnames['detail_export'], args=[instance.pk])
         response = client.get(url)
-        assert response.status_code == status_map['list'][username], response.content
+        assert response.status_code == status_map['detail'][username], response.content
 
         if response.status_code == 200:
             root = et.fromstring(response.content)
@@ -307,7 +340,7 @@ def test_multisite_detail_export(db, client, username, password):
 def test_multisite_copy(db, client, username, password):
     client.login(username=username, password=password)
     instances = Catalog.objects.all()
-
+    method = 'copy'
     for instance in instances:
         url = reverse(urlnames['copy'], args=[instance.pk])
         data = {
@@ -315,21 +348,31 @@ def test_multisite_copy(db, client, username, password):
             'key': instance.key + '-',
         }
         response = client.put(url, data, content_type='application/json')
-        assert response.status_code == status_map['create'][username], response.json()
+
+        test_status_user = get_status_code_for_catalog(username,
+                                                       instance.key,
+                                                       method,
+                                                       status_map,
+                                                       status_map_obj_perms)
+        assert response.status_code == test_status_user, response.json()
 
 @pytest.mark.parametrize('username,password', users)
 def test_multisitecopy_wrong(db, client, username, password):
     client.login(username=username, password=password)
     instance = Catalog.objects.first()
-
+    method = 'copy'
     url = reverse(urlnames['copy'], args=[instance.pk])
     data = {
         'uri_prefix': instance.uri_prefix,
         'key': instance.key
     }
     response = client.put(url, data, content_type='application/json')
-
-    if status_map['create'][username] == 201:
+    test_status_user = get_status_code_for_catalog(username,
+                                                    instance.key,
+                                                    method,
+                                                    status_map,
+                                                    status_map_obj_perms)
+    if test_status_user == 201:
         assert response.status_code == 400, response.json()
     else:
-        assert response.status_code == status_map['create'][username], response.json()
+        assert response.status_code == test_status_user, response.json()
