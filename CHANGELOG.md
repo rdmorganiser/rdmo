@@ -1,5 +1,16 @@
 # Changelog
 
+## RDMO 1.10.0 (Apr 27, 2023)
+
+* Allow users to create API access tokens (if ACCOUNT_ALLOW_USER_TOKEN is set)
+* Allow users to remove their account when using Shibboleth
+* Fix missing views when creating a project via API
+* Fix pagination when filtering projects
+* Add counter to projects filtering
+* Add an error message if save fails in the interview
+* Adjust interview buttons if PROJECT_QUESTIONS_AUTOSAVE is True
+* Adjust style for <summary> tag
+
 ## RDMO 1.9.2 (Feb 23, 2023)
 
 * Fix URL in invite emails in the multi site setup (#576)

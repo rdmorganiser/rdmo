@@ -1,8 +1,9 @@
 import re
 
 import pytest
-from pytest_django.asserts import assertContains, assertTemplateUsed
+from pytest_django.asserts import assertContains, assertNotContains, assertTemplateUsed
 from django.urls import reverse
+from pytest_django.asserts import assertTemplateUsed
 
 from rdmo.views.models import View
 
@@ -70,10 +71,13 @@ def test_list(db, client, username, password):
         assertTemplateUsed(response, 'projects/projects.html')
         if username == 'site':
             assert projects == []
+            assert response.context['number_of_projects'] == len([])
             assertContains(response, 'View all projects on')
         else:
-            assert sorted(list(set([int(project_id) for project_id in projects]))) \
-                == view_project_permission_map.get(username, [])
+            assertNotContains(response, 'View all projects on')
+            user_projects_map = view_project_permission_map.get(username, [])
+            assert sorted(list(set(map(int, projects)))) == user_projects_map
+            assert response.context['number_of_projects'] == len(user_projects_map)
     else:
         assert response.status_code == 302
 
@@ -87,12 +91,17 @@ def test_site(db, client, username, password):
 
     projects = re.findall(r'/projects/(\d+)/update/', response.content.decode())
 
-    if username == 'site':
+    if password:
+
+        if username == 'site':
         assertTemplateUsed(response, 'projects/site_projects.html')
-        assert sorted([int(project_id) for project_id in projects]) \
-            == view_project_permission_map.get(username, [])
-    elif password:
-        assert response.status_code == 403
+            assert response.status_code == 200
+            assertTemplateUsed(response, 'projects/site_projects.html')
+            user_projects_map = view_project_permission_map.get(username, [])
+            assert sorted(list(set(map(int, projects)))) == user_projects_map
+            assert response.context['number_of_projects'] == len(user_projects_map)
+        else:
+            assert response.status_code == 403
     else:
         assert response.status_code == 302
 

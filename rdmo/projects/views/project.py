@@ -4,11 +4,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.db import models
 from django.db.models import F, OuterRef, Subquery
+from django.db.models.functions import Coalesce, Greatest
 from django.forms import Form
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
+from django.utils.http import urlencode
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import DeleteView, DetailView, TemplateView
@@ -25,6 +27,7 @@ from rdmo.views.models import View
 
 from ..filters import ProjectFilter
 from ..models import Integration, Invite, Membership, Project, Value
+from ..utils import set_context_querystring_with_filter_and_page
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +55,10 @@ class ProjectsView(LoginRequiredMixin, FilterView):
         last_changed_subquery = models.Subquery(
             Value.objects.filter(project=models.OuterRef('pk')).order_by('-updated').values('updated')[:1]
         )
-        queryset = queryset.annotate(last_changed=models.functions.Greatest('updated', last_changed_subquery))
+        # the 'updated' field from a Project always returns a valid DateTime value
+        # when Greatest returns null, then Coalesce will return the value for 'updated' as a fall-back
+        # when Greatest returns a value, then Coalesce will return this value
+        queryset = queryset.annotate(last_changed=Coalesce(Greatest(last_changed_subquery, 'updated'), 'updated'))
 
         # order by last changed
         queryset = queryset.order_by('-last_changed')
@@ -61,8 +67,11 @@ class ProjectsView(LoginRequiredMixin, FilterView):
 
     def get_context_data(self, **kwargs):
         context = super(ProjectsView, self).get_context_data(**kwargs)
+        context['number_of_projects'] = self.get_queryset().count()
         context['invites'] = Invite.objects.filter(user=self.request.user)
         context['is_site_manager'] = is_site_manager(self.request.user)
+        context['number_of_filtered_projects'] = context["filter"].qs.count()
+        context = set_context_querystring_with_filter_and_page(context)
         return context
 
 
@@ -82,11 +91,21 @@ class SiteProjectsView(LoginRequiredMixin, FilterView):
             last_changed_subquery = models.Subquery(
                 Value.objects.filter(project=models.OuterRef('pk')).order_by('-updated').values('updated')[:1]
             )
-            queryset = queryset.annotate(last_changed=models.functions.Greatest('updated', last_changed_subquery))
+            # the 'updated' field from a Project always returns a valid DateTime value
+            # when Greatest returns null, then Coalesce will return the value for 'updated' as a fall-back
+            # when Greatest returns a value, then Coalesce will return this value
+            queryset = queryset.annotate(last_changed=Coalesce(Greatest(last_changed_subquery, 'updated'), 'updated'))
 
             return queryset
         else:
             raise PermissionDenied()
+
+    def get_context_data(self, **kwargs):
+        context = super(SiteProjectsView, self).get_context_data(**kwargs)
+        context['number_of_projects'] = self.get_queryset().count()
+        context['number_of_filtered_projects'] = context["filter"].qs.count()
+        context = set_context_querystring_with_filter_and_page(context)
+        return context
 
 
 class ProjectDetailView(ObjectPermissionMixin, DetailView):

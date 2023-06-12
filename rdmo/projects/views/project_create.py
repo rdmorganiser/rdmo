@@ -2,11 +2,9 @@ import logging
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, TemplateView
+
 from rdmo.core.views import RedirectViewMixin
 from rdmo.questions.models import Catalog
 from rdmo.tasks.models import Task
@@ -45,6 +43,7 @@ class ProjectCreateView(LoginRequiredMixin, RedirectViewMixin, CreateView):
 
         # add all tasks to project
         tasks = Task.objects.filter_current_site() \
+                            .filter_catalog(self.object.catalog) \
                             .filter_group(self.request.user) \
                             .filter_availability(self.request.user)
         for task in tasks:

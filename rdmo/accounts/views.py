@@ -5,6 +5,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from rest_framework.authtoken.models import Token
 
 from rdmo.core.utils import get_next, get_referer_path_info
 
@@ -40,36 +41,51 @@ def profile_update(request):
 
 @login_required()
 def remove_user(request):
-    if settings.PROFILE_DELETE:
-        log.debug('Remove user form for "%s"', request.user.username)
-
-        form = RemoveForm(request.POST or None, request=request)
-
-        if request.method == 'POST':
-            if 'cancel' in request.POST:
-                log.debug('User %s removal cancelled', str(request.user))
-
-                if settings.PROFILE_UPDATE:
-                    return HttpResponseRedirect('/account')
-                else:
-                    return HttpResponseRedirect('/')
-
-            if form.is_valid():
-                log.debug('Deleting user %s', request.user.username)
-
-                if delete_user(request.user, request.POST['email'], request.POST['password']):
-                    logout(request)
-                    return render(request, 'profile/profile_remove_success.html')
-                else:
-                    return render(request, 'profile/profile_remove_failed.html')
-
-        return render(request, 'profile/profile_remove_form.html', {
-            'form': form,
-            'next': get_referer_path_info(request, default='/')
-        })
-    else:
+    if not settings.PROFILE_DELETE:
+        log.info('Remove user form is disabled in settings PROFILE_DELETE')
         return render(request, 'profile/profile_remove_closed.html')
+    form = RemoveForm(request.POST or None, request=request)
+    log.debug('Remove user form initialized for "%s"' % request.user.username)
+    
+    if request.method == 'POST':
+        if 'cancel' in request.POST:
+            log.info('User %s removal cancelled', str(request.user))
+
+            if settings.PROFILE_UPDATE:
+                return HttpResponseRedirect('/account')
+            else:
+                return HttpResponseRedirect('/')
+
+        if form.is_valid():
+            user_is_deleted = delete_user(user=request.user,
+                                       email=request.POST['email'],
+                                       password=request.POST.get('password', None))
+
+            if user_is_deleted:
+                logout(request)
+                return render(request, 'profile/profile_remove_success.html')
+            else:
+                log.info('Remove user, deletion failed for %s', request.user.username)
+                return render(request, 'profile/profile_remove_failed.html')
+
+    return render(request, 'profile/profile_remove_form.html', {
+        'form': form,
+        'next': get_referer_path_info(request, default='/')
+    })
 
 
 def terms_of_use(request):
     return render(request, 'account/terms_of_use.html')
+
+@login_required()
+def token(request):
+    if request.method == 'POST':
+        try:
+            Token.objects.get(user=request.user).delete()
+        except Token.DoesNotExist:
+            pass
+
+    token, created = Token.objects.get_or_create(user=request.user)
+    return render(request, 'account/account_token.html', {
+        'token': token
+    })

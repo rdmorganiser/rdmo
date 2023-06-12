@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-28 11:07+0100\n"
-"PO-Revision-Date: 2022-11-28 11:11+0100\n"
+"POT-Creation-Date: 2023-04-27 16:01+0200\n"
+"PO-Revision-Date: 2023-04-27 16:09+0200\n"
 "Last-Translator: Yonny Cardenas <cardenas@cc.in2p3.fr>\n"
 "Language-Team: RDMO <cardenas@cc.in2p3.fr>\n"
 "Language: fr\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -25,15 +25,15 @@ msgstr "Prénom"
 msgid "Last name"
 msgstr "Nom de famille"
 
-#: accounts/forms.py:98 core/constants.py:20 projects/models/invite.py:27
+#: accounts/forms.py:100 core/constants.py:20 projects/models/invite.py:27
 msgid "E-mail"
 msgstr "E-mail"
 
-#: accounts/forms.py:102
+#: accounts/forms.py:104
 msgid "Password"
 msgstr "Mot de passe"
 
-#: accounts/forms.py:106
+#: accounts/forms.py:108
 msgid ""
 "I confirm that I want my profile to be completely removed. This can not be "
 "undone!"
@@ -207,13 +207,34 @@ msgstr "Les sites dont cet utilisateur est le gestionnaire."
 #: projects/models/membership.py:32
 #: projects/templates/projects/project_detail_invites.html:16
 #: projects/templates/projects/project_detail_memberships.html:21
-#: projects/templates/projects/projects.html:119
+#: projects/templates/projects/projects.html:126
 msgid "Role"
 msgstr "Rôle"
 
 #: accounts/models.py:144
 msgid "Roles"
 msgstr "Rôles"
+
+#: accounts/templates/account/account_token.html:6
+#: core/templates/core/base_navigation.html:123
+msgid "API token"
+msgstr "Jeton API"
+
+#: accounts/templates/account/account_token.html:8
+msgid "Your API token is:"
+msgstr "Votre jeton d'API est le suivant:"
+
+#: accounts/templates/account/account_token.html:12
+msgid "Regenerate token"
+msgstr "Régénérer le jeton"
+
+#: accounts/templates/account/account_token.html:16
+msgid ""
+"You can use this token in HTTP requests by using the <code>Authorization</"
+"code> Header:"
+msgstr ""
+"Vous pouvez utiliser ce jeton dans les requêtes HTTP en utilisant l'en-tête "
+"<code>Authorization</code> :"
 
 #: accounts/templates/account/email.html:6
 msgid "E-mail Addresses"
@@ -333,9 +354,9 @@ msgstr ""
 "mail </a>."
 
 #: accounts/templates/account/login.html:6
-#: accounts/templates/account/login_form.html:20
+#: accounts/templates/account/login_form.html:22
 #: accounts/templates/account/password_reset_from_key_done.html:14
-#: core/templates/core/base_navigation.html:154
+#: core/templates/core/base_navigation.html:162
 #: core/templates/core/home.html:55
 msgid "Login"
 msgstr "S'identifier"
@@ -372,7 +393,7 @@ msgstr ""
 #: accounts/templates/account/logout.html:6
 #: accounts/templates/account/logout.html:19
 #: accounts/templates/account/logout_form.html:6
-#: core/templates/core/base_navigation.html:143
+#: core/templates/core/base_navigation.html:151
 #: core/templates/rest_framework_swagger/index.html:28
 msgid "Logout"
 msgstr "Se déconnecter"
@@ -612,7 +633,7 @@ msgstr ""
 #: accounts/templates/profile/profile_remove_success.html:6
 #: accounts/templates/profile/profile_update_form.html:30
 #: accounts/templates/profile/profile_update_form.html:37
-#: core/templates/core/base_navigation.html:123
+#: core/templates/core/base_navigation.html:131
 msgid "Delete profile"
 msgstr "Supprimer le profil"
 
@@ -753,8 +774,8 @@ msgstr ""
 "terminer, veuillez remplir le formulaire suivant:"
 
 #: accounts/templatetags/accounts_tags.py:19
-#: projects/templates/projects/projects.html:118
-#: projects/templates/projects/site_projects.html:39
+#: projects/templates/projects/projects.html:125
+#: projects/templates/projects/site_projects.html:49
 msgid "Name"
 msgstr "Nom"
 
@@ -947,7 +968,7 @@ msgstr "Tous les préfixes URI"
 #: projects/templates/projects/project_detail_sidebar.html:11
 #: projects/templates/projects/project_view.html:42
 #: projects/templates/projects/projects.html:25
-#: projects/templates/projects/site_projects.html:23
+#: projects/templates/projects/site_projects.html:33
 #: questions/templates/questions/catalog_tree.html:104
 #: questions/templates/questions/catalogs_sidebar.html:78
 #: questions/templates/questions/catalogs_sidebar_showuri_checkboxes.html:26
@@ -1117,7 +1138,7 @@ msgstr "Insérer le préfixe URI par défaut"
 #: options/templates/options/options_modal_form_conditions.html:34
 #: options/templates/options/options_modal_form_options.html:182
 #: options/templates/options/options_modal_form_optionsets.html:118
-#: projects/templates/projects/project_questions_buttons.html:26
+#: projects/templates/projects/project_questions_buttons.html:27
 #: projects/templates/projects/project_questions_modal_form_valuesets.html:32
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:216
 #: questions/templates/questions/catalogs_modal_form_questions.html:464
@@ -1182,14 +1203,14 @@ msgid "Tasks"
 msgstr "Tâches"
 
 #: conditions/validators.py:14 domain/validators.py:15 options/validators.py:14
-#: options/validators.py:26 projects/forms.py:332 projects/forms.py:353
+#: options/validators.py:26 projects/forms.py:333 projects/forms.py:354
 #: questions/validators.py:16 questions/validators.py:28
 #: questions/validators.py:46 questions/validators.py:64 tasks/validators.py:14
 #: views/validators.py:14
 msgid "This field is required."
 msgstr "Ce champ est obligatoire."
 
-#: core/constants.py:14 core/settings.py:291
+#: core/constants.py:14 core/settings.py:296
 #: options/templates/options/options_export.html:39
 #: options/templates/options/options_modal_form_options.html:163
 #: projects/models/value.py:64 questions/constants.py:4
@@ -1243,91 +1264,91 @@ msgstr "créé"
 msgid "updated"
 msgstr "mise à jour"
 
-#: core/settings.py:123
+#: core/settings.py:124
 msgid "English"
 msgstr "Anglais"
 
-#: core/settings.py:124
+#: core/settings.py:125
 msgid "German"
 msgstr "Allemand"
 
-#: core/settings.py:234
+#: core/settings.py:239
 msgid "PDF"
 msgstr "PDF"
 
-#: core/settings.py:235
+#: core/settings.py:240
 msgid "Rich Text Format"
 msgstr "Rich Text Format"
 
-#: core/settings.py:236
+#: core/settings.py:241
 msgid "Open Office"
 msgstr "Open Office"
 
-#: core/settings.py:237
+#: core/settings.py:242
 msgid "Microsoft Office"
 msgstr "Microsoft Office"
 
-#: core/settings.py:238
+#: core/settings.py:243
 msgid "HTML"
 msgstr "HTML"
 
-#: core/settings.py:239
+#: core/settings.py:244
 msgid "Markdown"
 msgstr "Markdown"
 
-#: core/settings.py:240
+#: core/settings.py:245
 msgid "mediawiki"
 msgstr "mediawiki"
 
-#: core/settings.py:241
+#: core/settings.py:246
 msgid "LaTeX"
 msgstr "LaTeX"
 
-#: core/settings.py:261 core/settings.py:267
+#: core/settings.py:266 core/settings.py:272
 msgid "RDMO XML"
 msgstr "RDMO XML"
 
-#: core/settings.py:262 domain/templates/domain/domain.html:74
+#: core/settings.py:267 domain/templates/domain/domain.html:74
 msgid "CSV comma separated"
 msgstr "CSV séparées par des virgules"
 
-#: core/settings.py:263 domain/templates/domain/domain.html:79
+#: core/settings.py:268 domain/templates/domain/domain.html:79
 msgid "CSV semicolon separated"
 msgstr "CSV point-virgule séparé"
 
-#: core/settings.py:292 questions/constants.py:5
+#: core/settings.py:297 questions/constants.py:5
 msgid "Textarea"
 msgstr "Zone de texte"
 
-#: core/settings.py:293 questions/constants.py:6
+#: core/settings.py:298 questions/constants.py:6
 msgid "Yes/No"
 msgstr "Oui/Non"
 
-#: core/settings.py:294 questions/constants.py:7
+#: core/settings.py:299 questions/constants.py:7
 msgid "Checkboxes"
 msgstr "Cases à cocher"
 
-#: core/settings.py:295 questions/constants.py:8
+#: core/settings.py:300 questions/constants.py:8
 msgid "Radio buttons"
 msgstr "Boutons radio"
 
-#: core/settings.py:296 questions/constants.py:9
+#: core/settings.py:301 questions/constants.py:9
 msgid "Select drop-down"
 msgstr "Sélectionnez le menu déroulant"
 
-#: core/settings.py:297 questions/constants.py:10
+#: core/settings.py:302 questions/constants.py:10
 msgid "Autocomplete"
 msgstr "Autocomplétion"
 
-#: core/settings.py:298 questions/constants.py:11
+#: core/settings.py:303 questions/constants.py:11
 msgid "Range slider"
 msgstr "Curseur de gamme"
 
-#: core/settings.py:299 questions/constants.py:12
+#: core/settings.py:304 questions/constants.py:12
 msgid "Date picker"
 msgstr "Sélecteur de date"
 
-#: core/settings.py:300 questions/constants.py:13
+#: core/settings.py:305 questions/constants.py:13
 msgid "File upload"
 msgstr "Téléchargement de fichiers"
 
@@ -1386,7 +1407,7 @@ msgstr "Gestion"
 msgid "Domain"
 msgstr "Domaine"
 
-#: core/templates/core/base_navigation.html:61 projects/forms.py:308
+#: core/templates/core/base_navigation.html:61 projects/forms.py:309
 #: projects/models/project.py:64
 #: projects/templates/projects/project_detail_views.html:11 views/apps.py:7
 #: views/models.py:123 views/templates/views/views.html:91
@@ -1406,7 +1427,7 @@ msgstr "Langue"
 msgid "About RDMO"
 msgstr "À propos de RDMO"
 
-#: core/templates/core/base_navigation.html:130
+#: core/templates/core/base_navigation.html:138
 #: overlays/templates/overlays/reset_overlays.html:6
 msgid "Reset tutorial overlays"
 msgstr "Réinitialiser les superpositions de tutoriels"
@@ -1684,7 +1705,7 @@ msgstr "%(foreign_model)s %(foreign_uri)s n'existe pas."
 
 #: management/templates/management/import.html:70
 #: projects/templates/projects/project_questions_buttons.html:15
-#: projects/templates/projects/project_questions_buttons.html:42
+#: projects/templates/projects/project_questions_buttons.html:48
 msgid "Back"
 msgstr "Retour"
 
@@ -2064,7 +2085,7 @@ msgstr "Nom de l'URL"
 msgid "The url_name for this overlay."
 msgstr "Le nom de l'url pour cette superposition."
 
-#: overlays/models.py:26 projects/forms.py:320
+#: overlays/models.py:26 projects/forms.py:321
 #: projects/templates/projects/project_answers.html:13
 #: projects/templates/projects/project_view.html:28
 msgid "Current"
@@ -2138,11 +2159,11 @@ msgstr ""
 "directement des utilisateurs sans les avertir par courrier électronique, "
 "lorsque vous cochez la case suivante."
 
-#: projects/forms.py:202
+#: projects/forms.py:203
 msgid "The user is already a member of the project."
 msgstr "L'utilisateur est déjà membre du projet."
 
-#: projects/forms.py:214
+#: projects/forms.py:215
 msgid ""
 "A user with this username or e-mail was not found. Only registered users can "
 "be invited."
@@ -2150,51 +2171,51 @@ msgstr ""
 "Un utilisateur avec ce nom d'utilisateur ou ce courriel n'a pas été trouvé. "
 "Seuls les utilisateurs enregistrés peuvent être invités."
 
-#: projects/forms.py:218
+#: projects/forms.py:219
 msgid "Only existing users can be added silently."
 msgstr "Seuls les utilisateurs existants peuvent être ajoutés en silence."
 
-#: projects/forms.py:286 projects/forms.py:290
+#: projects/forms.py:287 projects/forms.py:291
 #, python-format
 msgid "Attach %s"
 msgstr "Joindre le %s"
 
-#: projects/forms.py:296
+#: projects/forms.py:297
 msgid "Subject"
 msgstr "Sujet"
 
-#: projects/forms.py:297
+#: projects/forms.py:298
 msgid "Message"
 msgstr "Message"
 
-#: projects/forms.py:304
+#: projects/forms.py:305
 msgid "Answers"
 msgstr "Afficher les réponses"
 
-#: projects/forms.py:305
+#: projects/forms.py:306
 msgid "Attach the output of \"View answers\"."
 msgstr "Joignez la sortie de \"Voir les réponses\"."
 
-#: projects/forms.py:312
+#: projects/forms.py:313
 msgid "Files"
 msgstr "Fichiers"
 
-#: projects/forms.py:319 projects/models/snapshot.py:33
+#: projects/forms.py:320 projects/models/snapshot.py:33
 #: projects/models/value.py:38
 #: projects/templates/projects/project_detail_snapshots.html:20
 #: projects/templates/projects/project_import.html:93
 msgid "Snapshot"
 msgstr "Instantané"
 
-#: projects/forms.py:323
+#: projects/forms.py:324
 msgid "Format"
 msgstr "Format"
 
-#: projects/forms.py:338 projects/forms.py:343
+#: projects/forms.py:339 projects/forms.py:344
 msgid "Recipients"
 msgstr "Recipients"
 
-#: projects/forms.py:344
+#: projects/forms.py:345
 msgid "Enter recipients line by line"
 msgstr "Indiquer les destinataires ligne par ligne"
 
@@ -3038,7 +3059,7 @@ msgstr "Mettre à jour les informations du projet"
 msgid "No description available."
 msgstr "Pas de description disponible."
 
-#: projects/templates/projects/project_detail_header_hierarchy.html:6
+#: projects/templates/projects/project_detail_header_hierarchy.html:7
 #: projects/templates/projects/project_detail_sidebar.html:52
 msgid "Update parent project"
 msgstr "Mise à jour du projet parent"
@@ -3162,23 +3183,23 @@ msgid "Import values"
 msgstr "Valeurs d'importation"
 
 #: projects/templates/projects/project_detail_sidebar.html:131
-#: projects/templates/projects/projects.html:62
+#: projects/templates/projects/projects.html:69
 msgid "Import from file"
 msgstr "Importation à partir d'un fichier"
 
 #: projects/templates/projects/project_detail_sidebar.html:139
-#: projects/templates/projects/projects.html:71
-msgid "Import directly"
-msgstr "Importation directe"
-
-#: projects/templates/projects/project_detail_sidebar.html:155
 msgid "Import from parent project"
 msgstr "Importation du projet parent"
+
+#: projects/templates/projects/project_detail_sidebar.html:147
+#: projects/templates/projects/projects.html:78
+msgid "Import directly"
+msgstr "Importation directe"
 
 #: projects/templates/projects/project_detail_snapshots.html:22
 #: projects/templates/projects/project_import.html:34
 #: projects/templates/projects/project_import.html:104
-#: projects/templates/projects/site_projects.html:40
+#: projects/templates/projects/site_projects.html:50
 msgid "Created"
 msgstr "Créé"
 
@@ -3356,17 +3377,18 @@ msgstr ""
 "croix bleue (&times;)."
 
 #: projects/templates/projects/project_questions_buttons.html:9
-#: projects/templates/projects/project_questions_buttons.html:46
+#: projects/templates/projects/project_questions_buttons.html:52
 msgid "Skip"
 msgstr "Sauter"
 
-#: projects/templates/projects/project_questions_buttons.html:29
-msgid "Save and proceed"
-msgstr "Enregistrez et continuez"
-
-#: projects/templates/projects/project_questions_buttons.html:34
+#: projects/templates/projects/project_questions_buttons.html:32
+#: projects/templates/projects/project_questions_buttons.html:40
 msgid "Proceed"
 msgstr "Procéder"
+
+#: projects/templates/projects/project_questions_buttons.html:34
+msgid "Save and proceed"
+msgstr "Enregistrez et continuez"
 
 #: projects/templates/projects/project_questions_default.html:4
 msgid "This is a default answer that can be customized."
@@ -3414,7 +3436,7 @@ msgid "Please select"
 msgstr "Veuillez sélectionner"
 
 #: projects/templates/projects/project_questions_head.html:5
-#: projects/templates/projects/projects.html:113
+#: projects/templates/projects/projects.html:120
 msgid "My Projects"
 msgstr "Mes projets"
 
@@ -3465,7 +3487,7 @@ msgstr ""
 "hidden=\"true\"></i> peuvent être ignorées en fonction de votre saisie."
 
 #: projects/templates/projects/project_questions_overview.html:14
-#: projects/templates/projects/site_projects.html:27
+#: projects/templates/projects/site_projects.html:37
 msgid "Back to my projects"
 msgstr "Retour à mes projets"
 
@@ -3517,6 +3539,14 @@ msgstr ""
 "pouvez éditer ou supprimer des %(name_plural)s en utilisant les boutons dans "
 "le coin supérieur droit."
 
+#: projects/templates/projects/project_questions_save_error.html:6
+msgid ""
+"An error occurred while saving the answer. Please contact support if this "
+"problem persists."
+msgstr ""
+"Une erreur s'est produite lors de l'enregistrement de la réponse. Veuillez "
+"contacter le support si ce problème persiste."
+
 #: projects/templates/projects/project_questions_sidebar.html:3
 msgid "Overview"
 msgstr "Aperçu"
@@ -3530,7 +3560,7 @@ msgid "Navigation"
 msgstr "Navigation"
 
 #: projects/templates/projects/project_view.html:90
-#: projects/views/project.py:175
+#: projects/views/project.py:198
 msgid "Error"
 msgstr "Erreur"
 
@@ -3547,8 +3577,8 @@ msgstr "Voir tous les projets sur %(site)s"
 
 #: projects/templates/projects/projects.html:47
 #: projects/templates/projects/site_projects.html:16
-msgid "Search projects"
-msgstr "Recherche de projets"
+msgid "Filter projects"
+msgstr "Filtrer les projets"
 
 #: projects/templates/projects/projects.html:50
 #: projects/templates/projects/site_projects.html:19
@@ -3556,19 +3586,27 @@ msgid "Search project title"
 msgstr "Recherche de projets"
 
 #: projects/templates/projects/projects.html:57
+#: projects/templates/projects/site_projects.html:26
+#, python-format
+msgid ""
+"%(number_of_filtered_projects)s of %(number_of_projects)s projects shown"
+msgstr ""
+"%(number_of_filtered_projects)s des %(number_of_projects)s projets présentés"
+
+#: projects/templates/projects/projects.html:64
 msgid "Import existing project"
 msgstr "Importer un projet existant"
 
-#: projects/templates/projects/projects.html:88
+#: projects/templates/projects/projects.html:95
 msgid "Pending invitations"
 msgstr "Invitations en cours"
 
-#: projects/templates/projects/projects.html:104
+#: projects/templates/projects/projects.html:111
 msgid "Click on one of the links to join the projects."
 msgstr "Cliquez sur l'un des liens pour rejoindre les projets."
 
-#: projects/templates/projects/projects.html:120
-#: projects/templates/projects/site_projects.html:41
+#: projects/templates/projects/projects.html:127
+#: projects/templates/projects/site_projects.html:51
 msgid "Last changed"
 msgstr "Dernière modification"
 
@@ -3580,14 +3618,14 @@ msgstr "Précédent"
 #: projects/templates/projects/projects_pagination.html:12
 #, python-format
 msgid "Page %(number)s of %(num_pages)s."
-msgstr "Page %(number)s de %(num_pages)s."
+msgstr "Page %(number)s sur %(num_pages)s."
 
 #: projects/templates/projects/projects_pagination.html:17
 #: projects/templates/projects/projects_pagination.html:19
 msgid "Next"
 msgstr "Suivant"
 
-#: projects/templates/projects/site_projects.html:34
+#: projects/templates/projects/site_projects.html:44
 #, python-format
 msgid "All projects on %(site)s"
 msgstr "Tous les projets sur %(site)s"
@@ -3613,21 +3651,21 @@ msgstr "Retour en arriere"
 msgid "Set"
 msgstr "Ensemble"
 
-#: projects/validators.py:22 projects/viewsets.py:299
+#: projects/validators.py:22 projects/viewsets.py:318
 msgid "You reached the file quota for this project."
 msgstr ""
 "Le titre de ce projet.Vous avez atteint le quota de dossiers pour ce projet."
 
-#: projects/views/project.py:155
+#: projects/views/project.py:178
 msgid "Sorry, your invitation has been expired."
 msgstr "Désolé, votre invitation a expiré."
 
-#: projects/views/project.py:158
+#: projects/views/project.py:181
 #, python-format
 msgid "Sorry, but this invitation is for the user \"%s\"."
 msgstr "Désolé, mais cette invitation est pour l'utilisateur \"%s\"."
 
-#: projects/views/project.py:172
+#: projects/views/project.py:195
 msgid "Sorry, the invitation link is not valid."
 msgstr "Désolé, le lien d'invitation n'est pas valide."
 
@@ -5117,6 +5155,9 @@ msgstr "Le texte d'aide pour cette vue."
 msgid "An empty list implies that the view can be used with every catalog."
 msgstr ""
 "Une liste vide implique que la vue peut être utilisée avec chaque catalogue."
+
+#~ msgid "Search projects"
+#~ msgstr "Recherche de projets"
 
 #~ msgid "Questionnaire"
 #~ msgstr "Question"
