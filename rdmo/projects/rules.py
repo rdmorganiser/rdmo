@@ -51,7 +51,7 @@ def is_site_manager_for_current_site(user, request):
 
 
 # Add rule for check in template
-rules.add_rule('projects.is_site_manager_for_current_site', is_site_manager_for_current_site | is_superuser)
+rules.add_rule('projects.can_view_all_projects', is_site_manager_for_current_site | is_superuser)
 
 
 rules.add_perm('projects.view_project_object', is_project_member | is_site_manager)
