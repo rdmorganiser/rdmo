@@ -33,13 +33,13 @@ members_from_other_sites = (
 
 status_map = {
     'list': {
-        'editor': 200,  'reviewer': 200, 'site': 200, 'api': 200, 'user': 200, 'anonymous': 401, 'admin' : 200
+        'editor': 403,  'reviewer': 403, 'site': 403, 'api': 403, 'user': 403, 'anonymous': 401, 'admin' : 200
     },
     'detail': {
         'editor': 404,  'reviewer': 404, 'site': 200, 'api': 200, 'user': 404, 'anonymous': 401, 'admin' : 200
     },
     'create': {
-        'editor': 405,  'reviewer': 405, 'site': 405, 'api': 405, 'user': 405, 'anonymous': 401, 'admin' : 405
+        'editor': 403,  'reviewer': 403, 'site': 403, 'api': 403, 'user': 403, 'anonymous': 401, 'admin' : 405
     },
     'update': {
         'editor': 405,  'reviewer': 405, 'site': 405, 'api': 405, 'user': 405, 'anonymous': 401, 'admin' : 405
