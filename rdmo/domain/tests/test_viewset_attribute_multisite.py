@@ -37,7 +37,7 @@ status_map = {
     'create': {
         'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 201,
         'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 201,
-        'user': 404, 'example-reviewer': 403, 'example-editor': 201,
+        'user': 403, 'example-reviewer': 403, 'example-editor': 201,
         'editor': 201
     },
     'copy': {
@@ -49,13 +49,13 @@ status_map = {
     'update': {
         'foo-user': 404, 'foo-reviewer': 404, 'foo-editor': 404,
         'bar-user': 404, 'bar-reviewer': 404, 'bar-editor': 404,
-        'user': 404, 'example-reviewer': 404, 'example-editor': 200,
+        'user': 404, 'example-reviewer': 403, 'example-editor': 200,
         'editor': 200
     },
     'delete': {
         'foo-user': 404, 'foo-reviewer': 404, 'foo-editor': 404,
         'bar-user': 404, 'bar-reviewer': 404, 'bar-editor': 404,
-        'user': 404, 'example-reviewer': 404, 'example-editor': 204,
+        'user': 404, 'example-reviewer': 403, 'example-editor': 204,
         'editor': 204
     }
 }
@@ -175,7 +175,7 @@ def test_detail_export(db, client, username, password):
     for instance in instances:
         url = reverse(urlnames['detail_export'], args=[instance.pk])
         response = client.get(url)
-        assert response.status_code == status_map['list'][username], response.content
+        assert response.status_code == status_map['detail'][username], response.content
 
         if response.status_code == 200:
             root = et.fromstring(response.content)
