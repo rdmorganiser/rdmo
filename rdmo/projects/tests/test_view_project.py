@@ -1,6 +1,7 @@
 import re
 
 import pytest
+from pytest_django.asserts import assertContains, assertTemplateUsed
 from django.urls import reverse
 
 from rdmo.views.models import View
@@ -66,9 +67,10 @@ def test_list(db, client, username, password):
 
     if password:
         assert response.status_code == 200
-
+        assertTemplateUsed(response, 'projects/projects.html')
         if username == 'site':
             assert projects == []
+            assertContains(response, 'View all projects on')
         else:
             assert sorted(list(set([int(project_id) for project_id in projects]))) \
                 == view_project_permission_map.get(username, [])
@@ -86,6 +88,7 @@ def test_site(db, client, username, password):
     projects = re.findall(r'/projects/(\d+)/update/', response.content.decode())
 
     if username == 'site':
+        assertTemplateUsed(response, 'projects/site_projects.html')
         assert sorted([int(project_id) for project_id in projects]) \
             == view_project_permission_map.get(username, [])
     elif password:
