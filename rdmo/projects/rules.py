@@ -1,5 +1,7 @@
 import rules
+from rules.predicates import is_superuser
 
+from django.contrib.sites.shortcuts import get_current_site
 
 @rules.predicate
 def is_project_member(user, project):
@@ -37,6 +39,19 @@ def is_site_manager(user, project):
         return user.role.manager.filter(pk=project.site.pk).exists()
     else:
         return False
+
+
+@rules.predicate
+def is_site_manager_for_current_site(user, request):
+    if user.is_authenticated:
+        current_site = get_current_site(request)
+        return user.role.manager.filter(pk=current_site.pk).exists()
+    else:
+        return False
+
+
+# Add rule for check in template
+rules.add_rule('projects.is_site_manager_for_current_site', is_site_manager_for_current_site | is_superuser)
 
 
 rules.add_perm('projects.view_project_object', is_project_member | is_site_manager)

@@ -34,7 +34,8 @@
         </li>
     </ul>
 
-    {% if is_site_manager %}
+    {% test_rule 'projects.is_site_manager_for_current_site' request.user request as is_site_manager_for_current_site %}
+    {% if is_site_manager_for_current_site %}
     <ul class="list-unstyled">
         <li>
             <a href="{% url 'site_projects' %}">

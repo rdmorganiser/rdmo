@@ -1,6 +1,7 @@
 import re
 
 import pytest
+from pytest_django.asserts import assertContains, assertTemplateUsed
 from django.urls import reverse
 from pytest_django.asserts import assertTemplateUsed
 
@@ -72,6 +73,7 @@ def test_list(db, client, username, password):
         if username == 'site':
             assert projects == []
             assert response.context['number_of_projects'] == len([])
+            assertContains(response, 'View all projects on')
         else:
             # breakpoint()
             user_projects_map = view_project_permission_map.get(username, [])
@@ -91,7 +93,7 @@ def test_site(db, client, username, password):
     projects = re.findall(r'/projects/(\d+)/update/', response.content.decode())
 
     if password:
-
+    
         if username == 'site':
             assert response.status_code == 200
             assertTemplateUsed(response, 'projects/site_projects.html')
