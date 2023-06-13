@@ -19,21 +19,25 @@ status_map = {
         'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 401
     },
     'detail': {
-        'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 401
+        'editor': 200, 'reviewer': 200, 'api': 200, 'user': 404, 'anonymous': 401
     },
     'nested': {
-        'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 401
+        'editor': 200, 'reviewer': 200, 'api': 200, 'user': 404, 'anonymous': 401
     },
     'create': {
         'editor': 201, 'reviewer': 403, 'api': 201, 'user': 403, 'anonymous': 401
     },
+    'copy': {
+        'editor': 201, 'reviewer': 403, 'api': 201, 'user': 404, 'anonymous': 401
+    },
     'update': {
-        'editor': 200, 'reviewer': 403, 'api': 200, 'user': 403, 'anonymous': 401
+        'editor': 200, 'reviewer': 403, 'api': 200, 'user': 404, 'anonymous': 401
     },
     'delete': {
-        'editor': 204, 'reviewer': 403, 'api': 204, 'user': 403, 'anonymous': 401
+        'editor': 204, 'reviewer': 403, 'api': 204, 'user': 404, 'anonymous': 401
     }
 }
+
 
 urlnames = {
     'list': 'v1-questions:question-list',
@@ -359,9 +363,10 @@ def test_detail_export(db, client, username, password, export_format):
     client.login(username=username, password=password)
     instance = Question.objects.first()
 
-    url = reverse(urlnames['detail_export'], args=[instance.pk]) + export_format + '/'
-    response = client.get(url)
-    assert response.status_code == status_map['list'][username], response.content
+    for instance in instances:
+        url = reverse(urlnames['detail_export'], args=[instance.pk]) + export_format + '/'
+        response = client.get(url)
+        assert response.status_code == status_map['detail'][username], response.content
 
     if response.status_code == 200 and export_format == 'xml':
         root = et.fromstring(response.content)
@@ -382,7 +387,7 @@ def test_copy(db, client, username, password):
             'uri_path': instance.uri_path + '-'
         }
         response = client.put(url, data, content_type='application/json')
-        assert response.status_code == status_map['create'][username], response.json()
+        assert response.status_code == status_map['copy'][username], response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -397,7 +402,7 @@ def test_copy_wrong(db, client, username, password):
     }
     response = client.put(url, data, content_type='application/json')
 
-    if status_map['create'][username] == 201:
+    if status_map['copy'][username] == 201:
         assert response.status_code == 400, response.json()
     else:
-        assert response.status_code == status_map['create'][username], response.json()
+        assert response.status_code == status_map['copy'][username], response.json()
