@@ -1,0 +1,44 @@
+{% load i18n %}
+
+<h3>{% trans 'Page' %} {{ page.title }}</h3>
+
+<p>
+    <strong>{% trans 'URI' %}:</strong> {{ page.uri }}
+</p>
+
+{% if page.comment %}
+
+<p>
+    <strong>{% trans 'Comment' %}:</strong> {{ page.comment }}
+</p>
+
+{% endif %}
+
+{% if page.help  %}
+
+<p>
+    <strong>{% trans 'Help' %}:</strong> {{ page.help }}
+</p>
+
+{% endif %}
+
+{% if page.verbose_name or page.verbose_name_plural %}
+
+<p>
+    <strong>{% trans 'Verbose name' %}:</strong>
+</p>
+
+<ul>
+    <li>{% trans 'Verbose name' %}: {{ page.verbose_name }}</li>
+    <li>{% trans 'Verbose name plural' %}: {{ page.verbose_name_plural }}</li>
+</ul>
+
+{% endif %}
+
+{% for element in page.elements %}
+    {% if element in page.questions.all %}
+    {% include 'questions/export/question.html' with question=element %}
+    {% else %}
+    {% include 'questions/export/questionset.html' with questionset=element %}
+    {% endif %}
+{% endfor %}

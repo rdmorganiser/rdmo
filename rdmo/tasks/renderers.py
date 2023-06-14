@@ -39,6 +39,7 @@ class TaskRenderer(TasksRenderer):
     def render_document(self, xml, tasks):
         xml.startElement('rdmo', {
             'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            'version': self.version,
             'created': self.created
         })
         for task in tasks:

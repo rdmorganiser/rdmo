@@ -10,23 +10,59 @@ from ..validators import SectionLockedValidator
 
 def test_create(db):
     SectionLockedValidator()({
-        'catalog': Catalog.objects.first(),
         'locked': False
     })
 
 
-def test_create_locked(db):
+def test_create_lock(db):
     SectionLockedValidator()({
-        'catalog': Catalog.objects.first(),
         'locked': True
     })
+
+
+def test_create_catalog(db):
+    catalog = Catalog.objects.first()
+
+    SectionLockedValidator()({
+        'catalogs': [catalog],
+        'locked': False
+    })
+
+
+def test_create_catalog_error(db):
+    catalog = Catalog.objects.first()
+    catalog.locked = True
+    catalog.save()
+
+    with pytest.raises(ValidationError):
+        SectionLockedValidator()({
+            'catalogs': [catalog],
+            'locked': False
+        })
 
 
 def test_update(db):
     section = Section.objects.first()
 
     SectionLockedValidator(section)({
-        'catalog': section.catalog,
+        'locked': False
+    })
+
+
+def test_update_lock(db):
+    section = Section.objects.first()
+
+    SectionLockedValidator(section)({
+        'locked': True
+    })
+
+
+def test_update_unlock(db):
+    section = Section.objects.first()
+    section.locked = True
+    section.save()
+
+    SectionLockedValidator(section)({
         'locked': False
     })
 
@@ -38,41 +74,43 @@ def test_update_error(db):
 
     with pytest.raises(ValidationError):
         SectionLockedValidator(section)({
-            'catalog': section.catalog,
             'locked': True
         })
 
 
-def test_update_parent_error(db):
+def test_update_error_catalog(db):
     section = Section.objects.first()
-    section.catalog.locked = True
-    section.catalog.save()
+    catalog = section.catalogs.first()
+    catalog.locked = True
+    catalog.save()
 
     with pytest.raises(ValidationError):
         SectionLockedValidator(section)({
-            'catalog': section.catalog,
             'locked': False
         })
 
 
-def test_update_lock(db):
-    section = Section.objects.first()
+def test_update_catalog(db):
+    catalog = Catalog.objects.first()
 
+    section = Section.objects.exclude(catalogs=catalog).first()
     SectionLockedValidator(section)({
-        'catalog': section.catalog,
-        'locked': True
-    })
-
-
-def test_update_unlock(db):
-    section = Section.objects.first()
-    section.locked = True
-    section.save()
-
-    SectionLockedValidator(section)({
-        'catalog': section.catalog,
+        'catalogs': [catalog],
         'locked': False
     })
+
+
+def test_update_catalog_error(db):
+    catalog = Catalog.objects.first()
+    catalog.locked = True
+    catalog.save()
+
+    section = Section.objects.exclude(catalogs=catalog).first()
+    with pytest.raises(ValidationError):
+        SectionLockedValidator(section)({
+            'catalogs': [catalog],
+            'locked': False
+        })
 
 
 def test_serializer_create(db):
@@ -80,7 +118,6 @@ def test_serializer_create(db):
     validator.set_context(SectionSerializer())
 
     validator({
-        'catalog': Catalog.objects.first(),
         'locked': False
     })
 
@@ -90,7 +127,6 @@ def test_serializer_create_locked(db):
     validator.set_context(SectionSerializer())
 
     validator({
-        'catalog': Catalog.objects.first(),
         'locked': True
     })
 
@@ -102,7 +138,6 @@ def test_serializer_update(db):
     validator.set_context(SectionSerializer(instance=section))
 
     validator({
-        'catalog': section.catalog,
         'locked': False
     })
 
@@ -117,47 +152,5 @@ def test_serializer_update_error(db):
 
     with pytest.raises(RestFameworkValidationError):
         validator({
-            'catalog': section.catalog,
             'locked': True
         })
-
-
-def test_serializer_update_parent_error(db):
-    section = Section.objects.first()
-    section.catalog.locked = True
-    section.catalog.save()
-
-    validator = SectionLockedValidator()
-    validator.set_context(SectionSerializer(instance=section))
-
-    with pytest.raises(RestFameworkValidationError):
-        validator({
-            'catalog': section.catalog,
-            'locked': True
-        })
-
-
-def test_serializer_update_lock(db):
-    section = Section.objects.first()
-
-    validator = SectionLockedValidator()
-    validator.set_context(SectionSerializer(instance=section))
-
-    validator({
-        'catalog': section.catalog,
-        'locked': True
-    })
-
-
-def test_serializer_update_unlock(db):
-    section = Section.objects.first()
-    section.locked = True
-    section.save()
-
-    validator = SectionLockedValidator()
-    validator.set_context(SectionSerializer(instance=section))
-
-    validator({
-        'catalog': section.catalog,
-        'locked': False
-    })

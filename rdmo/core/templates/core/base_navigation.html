@@ -26,42 +26,8 @@
                 {% has_perm 'views.view_view' request.user as can_view_view %}
 
                 {% if can_view_catalog or can_view_attribute or can_view_optionset or can_view_condition or can_view_task or can_view_view %}
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                        {% trans 'Management' %}<span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        {% if can_view_catalog %}
-                        <li>
-                            <a href="{% url 'catalogs' %}">{% trans 'Questions' %}</a>
-                        </li>
-                        {% endif %}
-                        {% if can_view_attribute %}
-                        <li>
-                            <a href="{% url 'domain' %}">{% trans 'Domain' %}</a>
-                        </li>
-                        {% endif %}
-                        {% if can_view_optionset %}
-                        <li>
-                            <a href="{% url 'options' %}">{% trans 'Options' %}</a>
-                        </li>
-                        {% endif %}
-                        {% if can_view_condition %}
-                        <li>
-                            <a href="{% url 'conditions' %}">{% trans 'Conditions' %}</a>
-                        </li>
-                        {% endif %}
-                        {% if can_view_task %}
-                        <li>
-                            <a href="{% url 'tasks' %}">{% trans 'Tasks' %}</a>
-                        </li>
-                        {% endif %}
-                        {% if can_view_view %}
-                        <li>
-                            <a href="{% url 'views' %}">{% trans 'Views' %}</a>
-                        </li>
-                        {% endif %}
-                    </ul>
+                <li>
+                    <a href="{% url 'management' %}">{% trans 'Management' %}</a>
                 </li>
                 {% endif %}
                 {% if user.is_superuser %}
@@ -74,7 +40,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li>
                     <p class="navbar-text">
-                        <pending></pending>
+                        <span id="pending"></span>
                     </p>
                 </li>
 

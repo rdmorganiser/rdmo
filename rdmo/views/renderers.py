@@ -1,5 +1,3 @@
-from django.utils.timezone import now, get_current_timezone
-
 from rdmo.core.renderers import BaseXMLRenderer
 from rdmo.core.utils import get_languages
 
@@ -31,6 +29,7 @@ class ViewRenderer(ViewsRenderer):
     def render_document(self, xml, views):
         xml.startElement('rdmo', {
             'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            'version': self.version,
             'created': self.created
         })
         for view in views:

@@ -1,0 +1,46 @@
+{% load i18n %}
+
+<p>
+    <strong>{% trans 'Question set' %}</strong> {{ questionset.title }}
+</p>
+
+<p>
+    <strong>{% trans 'URI' %}:</strong> {{ questionset.uri }}
+</p>
+
+{% if questionset.comment %}
+
+<p>
+    <strong>{% trans 'Comment' %}:</strong> {{ questionset.comment }}
+</p>
+
+{% endif %}
+
+{% if questionset.help  %}
+
+<p>
+    <strong>{% trans 'Help' %}:</strong> {{ questionset.help }}
+</p>
+
+{% endif %}
+
+{% if questionset.verbose_name or questionset.verbose_name_plural %}
+
+<p>
+    <strong>{% trans 'Verbose name' %}:</strong>
+</p>
+
+<ul>
+    <li>{% trans 'Verbose name' %}: {{ questionset.verbose_name }}</li>
+    <li>{% trans 'Verbose name plural' %}: {{ questionset.verbose_name_plural }}</li>
+</ul>
+
+{% endif %}
+
+{% for element in questionset.elements %}
+    {% if element in questionset.questions.all %}
+    {% include 'questions/export/question.html' with question=element %}
+    {% else %}
+    {% include 'questions/export/questionset.html' with questionset=element %}
+    {% endif %}
+{% endfor %}

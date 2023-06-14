@@ -22,6 +22,7 @@ class AttributeRenderer(DomainRenderer):
     def render_document(self, xml, attributes):
         xml.startElement('rdmo', {
             'xmlns:dc': "http://purl.org/dc/elements/1.1/",
+            'version': self.version,
             'created': self.created
         })
         for attribute in attributes:

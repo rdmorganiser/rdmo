@@ -90,11 +90,41 @@ def get_model_field_meta(model):
     meta = {}
 
     for field in model._meta.get_fields():
-        meta[field.name] = {}
-        if hasattr(field, 'verbose_name'):
-            meta[field.name]['verbose_name'] = field.verbose_name
-        if hasattr(field, 'help_text'):
-            meta[field.name]['help_text'] = field.help_text
+        match = re.search(r'lang(\d)$', field.name)
+        if match:
+            lang_index = int(match.group(1))
+
+            try:
+                lang_code, lang = settings.LANGUAGES[lang_index - 1]
+            except IndexError:
+                continue
+
+            field_name = field.name.replace(f'_lang{lang_index}', f'_{lang_code}')
+
+            meta[field_name] = {}
+            if hasattr(field, 'verbose_name'):
+                # remove the "(primary)" part
+                meta[field_name]['verbose_name'] = re.sub(r'\(.*\)$', f'({lang})', str(field.verbose_name))
+            if hasattr(field, 'help_text'):
+                # remove the "in the primary language" part
+                meta[field_name]['help_text'] = re.sub(r' in the .*$', r'.', str(field.help_text))
+        else:
+            meta[field.name] = {}
+            if hasattr(field, 'verbose_name'):
+                meta[field.name]['verbose_name'] = field.verbose_name
+            if hasattr(field, 'help_text'):
+                meta[field.name]['help_text'] = field.help_text
+
+    if model.__name__ == 'Page':
+        meta['elements'] = {
+            'verbose_name': _('Elements'),
+            'help_text': _('The questions and question sets for this page.')
+        }
+    elif model.__name__ == 'QuestionSet':
+        meta['elements'] = {
+            'verbose_name': _('Elements'),
+            'help_text': _('The questions and question sets for this question set.')
+        }
 
     return meta
 

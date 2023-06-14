@@ -1,0 +1,9 @@
+{% extends 'core/export.html' %}
+
+{% block body %}
+
+    {% for question in questions %}
+        {% include 'questions/export/question.html' with question=question %}
+    {% endfor %}
+
+{% endblock %}
