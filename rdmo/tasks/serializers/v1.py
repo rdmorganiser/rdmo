@@ -1,17 +1,16 @@
 from rest_framework import serializers
 
 from rdmo.core.serializers import (ElementExportSerializerMixin,
-                                   ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
                                    TranslationSerializerMixin,
                                    ReadOnlyObjectPermissionsSerializerMixin)
+from rdmo.core.utils import get_language_warning
 
 from ..models import Task
 from ..validators import TaskLockedValidator, TaskUniqueURIValidator
 
 
-class BaseTaskSerializer(ReadOnlyObjectPermissionsSerializerMixin, TranslationSerializerMixin, ElementModelSerializerMixin,
-                         serializers.ModelSerializer):
+class TaskSerializer(ReadOnlyObjectPermissionsSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()
@@ -66,7 +65,7 @@ class TaskListSerializer(ElementExportSerializerMixin, ElementWarningSerializerM
 
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
-
+    
     class Meta(BaseTaskSerializer.Meta):
         fields = BaseTaskSerializer.Meta.fields + (
             'warning',
@@ -75,7 +74,6 @@ class TaskListSerializer(ElementExportSerializerMixin, ElementWarningSerializerM
         warning_fields = (
             'title',
         )
-
 
 class TaskIndexSerializer(serializers.ModelSerializer):
 
