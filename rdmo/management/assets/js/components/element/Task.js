@@ -2,14 +2,18 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { filterElement } from '../../utils/filter'
+import { buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AvailableLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
 
 const Task = ({ config, task, elementActions, filter=null }) => {
 
-  const verboseName = gettext('task')
   const showElement = filterElement(filter, task)
+
+  const editUrl = buildPath(config.baseUrl, 'tasks', task.id)
+  const copyUrl = buildPath(config.baseUrl, 'tasks', task.id, 'copy')
+  const exportUrl = buildPath('/api/v1/', 'tasks', 'tasks', task.id, 'export')
 
   const fetchEdit = () => elementActions.fetchElement('tasks', task.id)
   const fetchCopy = () => elementActions.fetchElement('tasks', task.id, 'copy')
@@ -20,11 +24,14 @@ const Task = ({ config, task, elementActions, filter=null }) => {
     <li className="list-group-item">
       <div className="element">
         <div className="pull-right">
-          <EditLink verboseName={verboseName} onClick={fetchEdit} />
-          <CopyLink verboseName={verboseName} onClick={fetchCopy} />
-          <AvailableLink element={task} verboseName={verboseName} onClick={toggleAvailable} />
-          <LockedLink element={task} verboseName={verboseName} onClick={toggleLocked} />
-          <ExportLink element={task} elementType="tasks" verboseName={verboseName}
+          <EditLink title={gettext('Edit task')} href={editUrl} onClick={fetchEdit} />
+          <CopyLink title={gettext('Copy task')} href={copyUrl} onClick={fetchCopy} />
+          <AvailableLink title={task.available ? gettext('Make task unavailable')
+                                               : gettext('Make task available')}
+                         available={task.available} locked={task.locked} onClick={toggleAvailable} />
+          <LockedLink title={task.locked ? gettext('Unlock task') : gettext('Lock task')}
+                      locked={task.locked} onClick={toggleLocked} />
+          <ExportLink title={gettext('Export task')} exportUrl={exportUrl}
                       exportFormats={config.settings.export_formats} />
         </div>
         <div>

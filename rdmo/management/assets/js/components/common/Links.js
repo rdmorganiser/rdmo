@@ -1,44 +1,55 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import invert from 'lodash/invert'
 import isEmpty from 'lodash/isEmpty'
 import isUndefined from 'lodash/isUndefined'
 
 import Link from 'rdmo/core/assets/js/components/Link'
+import LinkButton from 'rdmo/core/assets/js/components/LinkButton'
 
-import { elementTypes, elementModules } from '../../constants/elements'
-
-const EditLink = ({ verboseName, onClick }) => {
-  const title = interpolate(gettext('Edit %s'), [verboseName])
-  return <Link className="element-link fa fa-pencil" title={title} onClick={onClick} />
+const NestedLink = ({ href, title, onClick }) => {
+  return <Link href={href} className="element-link fa fa-align-right flip" title={title} onClick={onClick} />
 }
 
-EditLink.propTypes = {
-  verboseName: PropTypes.string.isRequired,
+NestedLink.propTypes = {
+  href: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired
 }
 
-const AddLink = ({ verboseName, verboseNameAlt, onClick, onAltClick }) => {
-  let title
+const EditLink = ({ href, title, onClick }) => {
+  return <Link href={href} className="element-link fa fa-pencil" title={title} onClick={onClick} />
+}
+
+EditLink.propTypes = {
+  href: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired
+}
+
+const CopyLink = ({ href, title, onClick}) => {
+  return <Link href={href} className="element-link fa fa-copy" title={title} onClick={onClick} />
+}
+
+CopyLink.propTypes = {
+  href: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired
+}
+
+const AddLink = ({ title, altTitle, onClick, onAltClick }) => {
   if (isUndefined(onAltClick)) {
-    title = interpolate(gettext('Add %s'), [verboseName])
-    return <Link className="element-link fa fa-plus" title={title} onClick={onClick} />
+    return <LinkButton className="element-btn-link fa fa-plus" title={title} onClick={onClick} />
   } else {
-    title = interpolate(gettext('Add %s or %s'), [verboseName, verboseNameAlt])
     return (
       <span className="dropdown">
-        <a href="" className="element-link fa fa-plus" data-toggle="dropdown"></a>
+        <button className="element-btn-link btn-link fa fa-plus" data-toggle="dropdown"></button>
         <ul className="dropdown-menu">
-          <li>
-            <Link href="" onClick={onClick}>
-              {interpolate(gettext('Add %s'), [verboseName])}
-            </Link>
+          <li onClick={onClick}>
+            <Link href="" onClick={onClick}>{title}</Link>
           </li>
           <li>
-            <Link href="" onClick={onAltClick}>
-              {interpolate(gettext('Add %s'), [verboseNameAlt])}
-            </Link>
+            <Link href="" onClick={onAltClick}>{altTitle}</Link>
           </li>
         </ul>
       </span>
@@ -47,79 +58,59 @@ const AddLink = ({ verboseName, verboseNameAlt, onClick, onAltClick }) => {
 }
 
 AddLink.propTypes = {
-  verboseName: PropTypes.string.isRequired,
-  verboseNameAlt: PropTypes.string,
+  title: PropTypes.string.isRequired,
+  altTitle: PropTypes.string,
   onClick: PropTypes.func.isRequired,
   onAltClick: PropTypes.func
 }
 
-const CopyLink = ({ verboseName, onClick }) => {
-  const title = interpolate(gettext('Copy %s'), [verboseName])
-  return <Link className="element-link fa fa-copy" title={title} onClick={onClick} />
-}
-
-CopyLink.propTypes = {
-  verboseName: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired
-}
-
-const AvailableLink = ({ element, verboseName, onClick }) => {
+const AvailableLink = ({ available, locked, title, onClick }) => {
   const className = classNames({
-    'element-link fa': true,
-    'fa-toggle-on': element.available,
-    'fa-toggle-off': !element.available,
-    'disabled': element.locked
+    'element-btn-link fa': true,
+    'fa-toggle-on': available,
+    'fa-toggle-off': !available
   })
 
-  let title = interpolate(gettext('Make %s avaiable'), [verboseName])
-  if (element.available) title = interpolate(gettext('Make %s unavaiable'), [verboseName])
-  if (element.locked) title = gettext('Locked')
-
-  return <Link className={className} title={title} onClick={onClick} />
+  return <LinkButton className={className} title={locked ? gettext('Locked') : title}
+                     disabled={locked} onClick={onClick} />
 }
 
 AvailableLink.propTypes = {
-  element: PropTypes.object.isRequired,
-  verboseName: PropTypes.string.isRequired,
+  available: PropTypes.bool.isRequired,
+  locked: PropTypes.bool.isRequired,
+  title: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired
 }
 
-const LockedLink = ({ element, verboseName, onClick }) => {
+const LockedLink = ({ locked, title, onClick }) => {
   const className = classNames({
-    'element-link fa': true,
-    'fa-lock text-danger': element.locked,
-    'fa-unlock-alt': !element.locked
+    'element-btn-link fa': true,
+    'fa-lock text-danger': locked,
+    'fa-unlock-alt': !locked
   })
 
-  const title = element.locked ? interpolate(gettext('Unlock %s'), [verboseName])
-                               : interpolate(gettext('Lock %s'), [verboseName])
-
-  return <Link className={className} title={title} onClick={onClick} />
+  return <LinkButton className={className} title={title} onClick={onClick} />
 }
 
 LockedLink.propTypes = {
-  element: PropTypes.object.isRequired,
-  verboseName: PropTypes.string.isRequired,
+  locked: PropTypes.bool.isRequired,
+  title: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired
 }
 
-const ExportLink = ({ element, elementType, verboseName, exportFormats }) => {
-  const title = interpolate(gettext('Export %s'), [verboseName])
-  const model = invert(elementTypes)[elementType]
-  const url = `/api/v1/${elementModules[model]}/${elementType}`
-
+const ExportLink = ({ exportUrl, title, exportFormats, csv=false }) => {
   return (
     <span className="dropdown">
-      <a href="" className="element-link fa fa-download" title={title} data-toggle="dropdown"></a>
+      <button className="element-btn-link btn-link fa fa-download" title={title} data-toggle="dropdown"></button>
       <ul className="dropdown-menu">
-        <li><a href={`${url}/${element.id}/export/`}>{gettext('XML')}</a></li>
+        <li><a href={exportUrl}>{gettext('XML')}</a></li>
         <li role="separator" className="divider"></li>
         {
-          elementType == 'attributes' && <>
-            <li><a href={`${url}/${element.id}/export/csvcomma/`}>
+          csv && <>
+            <li><a href={`${exportUrl}csvcomma/`}>
               {gettext('CSV comma separated')}
             </a></li>
-            <li><a href={`${url}/${element.id}/export/csvsemicolon/`}>
+            <li><a href={`${exportUrl}csvsemicolon/`}>
               {gettext('CSV semicolon separated')}
             </a></li>
             <li role="separator" className="divider"></li>
@@ -127,7 +118,7 @@ const ExportLink = ({ element, elementType, verboseName, exportFormats }) => {
         }
         {
           exportFormats.map(([key, label], index) => <li key={index}>
-            <a href={`${url}/${element.id}/export/${key}/`}
+            <a href={`${exportUrl}${key}/`}
                target={['pdf', 'html'].includes(key) ? '_blank' : '_self'}
                rel="noreferrer">{label}</a>
           </li>)
@@ -138,19 +129,10 @@ const ExportLink = ({ element, elementType, verboseName, exportFormats }) => {
 }
 
 ExportLink.propTypes = {
-  element: PropTypes.object.isRequired,
-  elementType: PropTypes.string.isRequired,
-  verboseName: PropTypes.string.isRequired,
-  exportFormats: PropTypes.array
-}
-
-const NestedLink = ({ onClick }) => {
-  const title = gettext('View nested')
-  return <Link className="element-link fa fa-align-right flip" title={title} onClick={onClick} />
-}
-
-NestedLink.propTypes = {
-  onClick: PropTypes.func.isRequired
+  exportUrl: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  exportFormats: PropTypes.array,
+  csv: PropTypes.bool
 }
 
 const ExtendLink = ({ extend, onClick }) => {

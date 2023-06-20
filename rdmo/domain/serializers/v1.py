@@ -78,6 +78,7 @@ class AttributeListSerializer(ElementExportSerializerMixin, BaseAttributeSeriali
     class Meta(BaseAttributeSerializer.Meta):
         fields = BaseAttributeSerializer.Meta.fields + (
             'xml_url',
+            'is_leaf_node'
         )
 
 

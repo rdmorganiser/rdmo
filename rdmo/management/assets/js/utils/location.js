@@ -39,16 +39,14 @@ const updateLocation = (basePath, elementType, elementId, elementAction) => {
   }
 }
 
-const buildPath = (basePath, elementType, elementId, elementAction) => {
-  let path = basePath + elementType + '/'
+const buildPath = (basePath, ...args) => {
+  let path = basePath
 
-  if (!isNil(elementId)) {
-    path += elementId + '/'
-  }
-
-  if (!isNil(elementAction)) {
-    path += elementAction + '/'
-  }
+  args.forEach(arg => {
+    if (!isNil(arg)) {
+      path += arg + '/'
+    }
+  })
 
   return path
 }

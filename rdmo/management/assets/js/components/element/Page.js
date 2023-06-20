@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { filterElement } from '../../utils/filter'
+import { buildPath } from '../../utils/location'
 
 import QuestionSet from './QuestionSet'
 import Question from './Question'
@@ -12,8 +13,12 @@ import { Drag, Drop } from '../common/DragAndDrop'
 
 const Page = ({ config, page, elementActions, display='list', filter=null, indent=0 }) => {
 
-  const verboseName = gettext('page')
   const showElement = filterElement(filter, page)
+
+  const editUrl = buildPath(config.baseUrl, 'pages', page.id)
+  const copyUrl = buildPath(config.baseUrl, 'pages', page.id, 'copy')
+  const nestedUrl = buildPath(config.baseUrl, 'pages', page.id, 'nested')
+  const exportUrl = buildPath('/api/v1/', 'questions', 'pages', page.id, 'export')
 
   const fetchEdit = () => elementActions.fetchElement('pages', page.id)
   const fetchCopy = () => elementActions.fetchElement('pages', page.id, 'copy')
@@ -29,13 +34,14 @@ const Page = ({ config, page, elementActions, display='list', filter=null, inden
   const elementNode = (
     <div className="element">
       <div className="pull-right">
-        <NestedLink element={page} verboseName={verboseName} onClick={fetchNested} />
-        <EditLink verboseName={verboseName} onClick={fetchEdit} />
-        <CopyLink verboseName={verboseName} onClick={fetchCopy} />
-        <AddLink element={page} verboseName={gettext('question')} verboseNameAlt={gettext('question set')}
+        <NestedLink title={gettext('View page nested')} href={nestedUrl} onClick={fetchNested} />
+        <EditLink title={gettext('Edit page')} href={editUrl} onClick={fetchEdit} />
+        <CopyLink title={gettext('Copy page')} href={copyUrl} onClick={fetchCopy} />
+        <AddLink title={gettext('Add question')} altTitle={gettext('Add question set')}
                  onClick={createQuestion} onAltClick={createQuestionSet} />
-        <LockedLink element={page} verboseName={verboseName} onClick={toggleLocked} />
-        <ExportLink element={page} elementType="pages" verboseName={verboseName}
+        <LockedLink title={page.locked ? gettext('Unlock page') : gettext('Lock page')}
+                    locked={page.locked} onClick={toggleLocked} />
+        <ExportLink title={gettext('Export page')} exportUrl={exportUrl}
                     exportFormats={config.settings.export_formats} />
         {display == 'nested' && <Drag element={page} />}
       </div>

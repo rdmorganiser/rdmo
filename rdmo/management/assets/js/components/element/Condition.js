@@ -2,14 +2,18 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { filterElement } from '../../utils/filter'
+import { buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
 
 const Condition = ({ config, condition, elementActions, filter=null }) => {
 
-  const verboseName = gettext('condition')
   const showElement = filterElement(filter, condition)
+
+  const editUrl = buildPath(config.baseUrl, 'conditions', condition.id)
+  const copyUrl = buildPath(config.baseUrl, 'conditions', condition.id, 'copy')
+  const exportUrl = buildPath('/api/v1/', 'conditions', 'conditions', condition.id, 'export')
 
   const fetchEdit = () => elementActions.fetchElement('conditions', condition.id)
   const fetchCopy = () => elementActions.fetchElement('conditions', condition.id, 'copy')
@@ -19,10 +23,11 @@ const Condition = ({ config, condition, elementActions, filter=null }) => {
     <li className="list-group-item">
       <div className="element">
         <div className="pull-right">
-          <EditLink verboseName={verboseName} onClick={fetchEdit} />
-          <CopyLink verboseName={verboseName} onClick={fetchCopy} />
-          <LockedLink element={condition} verboseName={verboseName} onClick={toggleLocked} />
-          <ExportLink element={condition} elementType="conditions" verboseName={verboseName}
+          <EditLink title={gettext('Edit condition')} href={editUrl} onClick={fetchEdit} />
+          <CopyLink title={gettext('Copy condition')} href={copyUrl} onClick={fetchCopy} />
+          <LockedLink title={condition.locked ? gettext('Unlock condition') : gettext('Lock condition')}
+                      locked={condition.locked} onClick={toggleLocked} />
+          <ExportLink title={gettext('Export condition')} exportUrl={exportUrl}
                       exportFormats={config.settings.export_formats} />
         </div>
         <div>

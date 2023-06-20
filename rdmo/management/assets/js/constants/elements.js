@@ -41,7 +41,7 @@ const codeClass = {
 }
 
 const verboseNames = {
-  'questions.catalog': gettext('Catalogs'),
+  'questions.catalog': gettext('Catalog'),
   'questions.section': gettext('Section'),
   'questions.page': gettext('Page'),
   'questions.questionset': gettext('Question set'),

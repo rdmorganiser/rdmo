@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { filterElement } from '../../utils/filter'
+import { buildPath } from '../../utils/location'
 
 import Question from './Question'
 import { ElementErrors } from '../common/Errors'
@@ -11,8 +12,12 @@ import { Drag, Drop } from '../common/DragAndDrop'
 
 const QuestionSet = ({ config, questionset, elementActions, display='list', filter=null, indent=0 }) => {
 
-  const verboseName = gettext('question set')
   const showElement = filterElement(filter, questionset)
+
+  const editUrl = buildPath(config.baseUrl, 'questionsets', questionset.id)
+  const copyUrl = buildPath(config.baseUrl, 'questionsets', questionset.id, 'copy')
+  const nestedUrl = buildPath(config.baseUrl, 'questionsets', questionset.id, 'nested')
+  const exportUrl = buildPath('/api/v1/', 'questions', 'questionsets', questionset.id, 'export')
 
   const fetchEdit = () => elementActions.fetchElement('questionsets', questionset.id)
   const fetchCopy = () => elementActions.fetchElement('questionsets', questionset.id, 'copy')
@@ -28,13 +33,14 @@ const QuestionSet = ({ config, questionset, elementActions, display='list', filt
   const elementNode = (
     <div className="element">
       <div className="pull-right">
-        <NestedLink element={questionset} verboseName={verboseName} onClick={fetchNested} />
-        <EditLink verboseName={verboseName} onClick={fetchEdit} />
-        <CopyLink verboseName={verboseName} onClick={fetchCopy} />
-        <AddLink element={questionset} verboseName={gettext('question')} verboseNameAlt={gettext('question set')}
+        <NestedLink title={gettext('View question set nested')} href={nestedUrl} onClick={fetchNested} />
+        <EditLink title={gettext('Edit question set')} href={editUrl} onClick={fetchEdit} />
+        <CopyLink title={gettext('Copy question set')} href={copyUrl} onClick={fetchCopy} />
+        <AddLink title={gettext('Add question')} altTitle={gettext('Add question set')}
                  onClick={createQuestion} onAltClick={createQuestionSet} />
-        <LockedLink element={questionset} verboseName={verboseName} onClick={toggleLocked} />
-        <ExportLink element={questionset} elementType="questionsets" verboseName={verboseName}
+        <LockedLink title={questionset.locked ? gettext('Unlock question set') : gettext('Lock question set')}
+                    locked={questionset.locked} onClick={toggleLocked} />
+        <ExportLink title={gettext('Export question set')} exportUrl={exportUrl}
                     exportFormats={config.settings.export_formats} />
         {display == 'nested' && <Drag element={questionset} />}
       </div>

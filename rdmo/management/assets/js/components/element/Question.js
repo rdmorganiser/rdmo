@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { filterElement } from '../../utils/filter'
+import { buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
@@ -9,8 +10,11 @@ import { Drag, Drop } from '../common/DragAndDrop'
 
 const Question = ({ config, question, elementActions, display='list', filter=null, indent=0 }) => {
 
-  const verboseName = gettext('question')
   const showElement = filterElement(filter, question)
+
+  const editUrl = buildPath(config.baseUrl, 'questions', question.id)
+  const copyUrl = buildPath(config.baseUrl, 'questions', question.id, 'copy')
+  const exportUrl = buildPath('/api/v1/', 'questions', 'questions', question.id, 'export')
 
   const fetchEdit = () => elementActions.fetchElement('questions', question.id)
   const fetchCopy = () => elementActions.fetchElement('questions', question.id, 'copy')
@@ -23,10 +27,11 @@ const Question = ({ config, question, elementActions, display='list', filter=nul
   const elementNode = (
     <div className="element">
       <div className="pull-right">
-        <EditLink verboseName={verboseName} onClick={fetchEdit} />
-        <CopyLink verboseName={verboseName} onClick={fetchCopy} />
-        <LockedLink element={question} verboseName={verboseName} onClick={toggleLocked} />
-        <ExportLink element={question} elementType="questions" verboseName={verboseName}
+        <EditLink title={gettext('Edit question')} href={editUrl} onClick={fetchEdit} />
+        <CopyLink title={gettext('Copy question')} href={copyUrl} onClick={fetchCopy} />
+        <LockedLink title={question.locked ? gettext('Unlock question') : gettext('Lock question')}
+                    locked={question.locked} onClick={toggleLocked} />
+        <ExportLink title={gettext('Export question')} exportUrl={exportUrl}
                     exportFormats={config.settings.export_formats} />
         {display == 'nested' && <Drag element={question} />}
       </div>

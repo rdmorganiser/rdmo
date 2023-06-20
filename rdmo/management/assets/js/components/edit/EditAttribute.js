@@ -44,6 +44,14 @@ const EditAttribute = ({ config, attribute, elements, elementActions }) => {
       </div>
 
       {
+        parent && parent.attribute && <div className="panel-body panel-border">
+          <p dangerouslySetInnerHTML={{
+            __html:interpolate(gettext('This attribute will be added to the attribute <code class="code-domain">%s</code>.'), [parent.attribute.uri])
+          }} />
+        </div>
+      }
+
+      {
         parent && parent.page && <div className="panel-body panel-border">
           <p dangerouslySetInnerHTML={{
             __html:interpolate(gettext('This attribute will be added to the page <code class="code-questions">%s</code>.'), [parent.page.uri])

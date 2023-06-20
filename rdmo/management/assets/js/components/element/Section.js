@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import isEmpty from 'lodash/isEmpty'
 
 import { filterElement } from '../../utils/filter'
+import { buildPath } from '../../utils/location'
 
 import Page from './Page'
 import { ElementErrors } from '../common/Errors'
@@ -11,8 +12,12 @@ import { Drag, Drop } from '../common/DragAndDrop'
 
 const Section = ({ config, section, elementActions, display='list', filter=null, indent=0 }) => {
 
-  const verboseName = gettext('section')
   const showElement = filterElement(filter, section)
+
+  const editUrl = buildPath(config.baseUrl, 'sections', section.id)
+  const copyUrl = buildPath(config.baseUrl, 'sections', section.id, 'copy')
+  const nestedUrl = buildPath(config.baseUrl, 'sections', section.id, 'nested')
+  const exportUrl = buildPath('/api/v1/', 'questions', 'sections', section.id, 'export')
 
   const fetchEdit = () => elementActions.fetchElement('sections', section.id)
   const fetchCopy = () => elementActions.fetchElement('sections', section.id, 'copy')
@@ -24,12 +29,14 @@ const Section = ({ config, section, elementActions, display='list', filter=null,
   const elementNode = (
     <div className="element">
       <div className="pull-right">
-        <NestedLink element={section} verboseName={verboseName} onClick={fetchNested} />
-        <EditLink verboseName={verboseName} onClick={fetchEdit} />
-        <CopyLink verboseName={verboseName} onClick={fetchCopy} />
-        <AddLink element={section} verboseName={gettext('page')} onClick={createPage} />
-        <LockedLink element={section} verboseName={verboseName} onClick={toggleLocked} />
-        <ExportLink element={section} elementType="sections" verboseName={verboseName}
+        <NestedLink title={gettext('View section nested')} href={nestedUrl} onClick={fetchNested} />
+        <EditLink title={gettext('Edit section')} href={editUrl} onClick={fetchEdit} />
+        <CopyLink title={gettext('Copy section')} href={copyUrl} onClick={fetchCopy} />
+        <AddLink title={gettext('Add page')} onClick={createPage} />
+        <LockedLink title={section.locked ? gettext('Unlock section')
+                                          : gettext('Lock section')}
+                    locked={section.locked} onClick={toggleLocked} />
+        <ExportLink title={gettext('Export section')} exportUrl={exportUrl}
                     exportFormats={config.settings.export_formats} />
         {display == 'nested' && <Drag element={section} />}
       </div>

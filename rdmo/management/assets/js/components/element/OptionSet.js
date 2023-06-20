@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { filterElement } from '../../utils/filter'
+import { buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AddLink, LockedLink, NestedLink,
@@ -9,8 +10,12 @@ import { EditLink, CopyLink, AddLink, LockedLink, NestedLink,
 
 const OptionSet = ({ config, optionset, elementActions, display='list', filter=null }) => {
 
-  const verboseName = gettext('option set')
   const showElement = filterElement(filter, optionset)
+
+  const editUrl = buildPath(config.baseUrl, 'optionsets', optionset.id)
+  const copyUrl = buildPath(config.baseUrl, 'optionsets', optionset.id, 'copy')
+  const nestedUrl = buildPath(config.baseUrl, 'optionsets', optionset.id, 'nested')
+  const exportUrl = buildPath('/api/v1/', 'options', 'optionsets', optionset.id, 'export')
 
   const fetchEdit = () => elementActions.fetchElement('optionsets', optionset.id)
   const fetchCopy = () => elementActions.fetchElement('optionsets', optionset.id, 'copy')
@@ -22,12 +27,13 @@ const OptionSet = ({ config, optionset, elementActions, display='list', filter=n
   const elementNode = (
     <div className="element">
       <div className="pull-right">
-        <NestedLink element={optionset} verboseName={verboseName} onClick={fetchNested} />
-        <EditLink verboseName={verboseName} onClick={fetchEdit} />
-        <CopyLink verboseName={verboseName} onClick={fetchCopy} />
-        <AddLink element={optionset} verboseName={gettext('option')} onClick={createOption} />
-        <LockedLink element={optionset} verboseName={verboseName} onClick={toggleLocked} />
-        <ExportLink element={optionset} elementType="optionsets" verboseName={verboseName}
+        <NestedLink title={gettext('View option set nested')} href={nestedUrl} onClick={fetchNested} />
+        <EditLink title={gettext('Edit option set')} href={editUrl} onClick={fetchEdit} />
+        <CopyLink title={gettext('Copy option set')} href={copyUrl} onClick={fetchCopy} />
+        <AddLink title={gettext('Add option')} onClick={createOption} />
+        <LockedLink title={optionset.locked ? gettext('Unlock option set') : gettext('Lock option set')}
+                    locked={optionset.locked} onClick={toggleLocked} />
+        <ExportLink title={gettext('Export option set')} exportUrl={exportUrl}
                     exportFormats={config.settings.export_formats} />
       </div>
       <div>
