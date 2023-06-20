@@ -9,7 +9,7 @@ const elementTypes = {
   'options.option': 'options',
   'conditions.condition': 'conditions',
   'tasks.task': 'tasks',
-  'tasks.view': 'views'
+  'views.view': 'views'
 }
 
 const elementModules = {
@@ -37,7 +37,7 @@ const codeClass = {
   'options.option': 'code-options',
   'conditions.condition': 'code-conditions',
   'tasks.task': 'code-tasks',
-  'tasks.view': 'code-views'
+  'views.view': 'code-views'
 }
 
 const verboseNames = {
@@ -51,7 +51,7 @@ const verboseNames = {
   'options.option': gettext('Option'),
   'conditions.condition': gettext('Condition'),
   'tasks.task': gettext('Task'),
-  'tasks.view': gettext('View')
+  'views.view': gettext('View')
 }
 
 export { elementTypes, elementModules, codeClass, verboseNames }

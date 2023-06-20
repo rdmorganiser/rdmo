@@ -1,12 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+import invert from 'lodash/invert'
 import isEmpty from 'lodash/isEmpty'
 import isUndefined from 'lodash/isUndefined'
 
 import Link from 'rdmo/core/assets/js/components/Link'
 
-import { elementModules } from '../../constants/elements'
+import { elementTypes, elementModules } from '../../constants/elements'
 
 const EditLink = ({ verboseName, onClick }) => {
   const title = interpolate(gettext('Edit %s'), [verboseName])
@@ -104,7 +105,9 @@ LockedLink.propTypes = {
 
 const ExportLink = ({ element, elementType, verboseName, exportFormats }) => {
   const title = interpolate(gettext('Export %s'), [verboseName])
-  const url = `/api/v1/${elementModules[elementType]}/${elementType}`
+  const model = invert(elementTypes)[elementType]
+  const url = `/api/v1/${elementModules[model]}/${elementType}`
+
   return (
     <span className="dropdown">
       <a href="" className="element-link fa fa-download" title={title} data-toggle="dropdown"></a>
