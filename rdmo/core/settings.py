@@ -263,6 +263,8 @@ EXPORT_PANDOC_ARGS = {
     'rtf': ['--standalone']
 }
 
+EXPORT_CONTENT_DISPOSITION = 'attachment'
+
 PROJECT_ISSUES = True
 
 PROJECT_ISSUE_PROVIDERS = []
