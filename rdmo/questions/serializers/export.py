@@ -1,6 +1,9 @@
 from rest_framework import serializers
 
+from rdmo.conditions.serializers.export import ConditionExportSerializer
 from rdmo.core.serializers import TranslationSerializerMixin
+from rdmo.domain.serializers.export import AttributeExportSerializer
+from rdmo.options.serializers.export import OptionSetExportSerializer
 
 from ..models import (Catalog, CatalogSection, Page, PageQuestion,
                       PageQuestionSet, Question, QuestionSet,
@@ -10,10 +13,10 @@ from ..models import (Catalog, CatalogSection, Page, PageQuestion,
 
 class QuestionExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
-    attribute = serializers.CharField(source='attribute.uri', default=None, read_only=True)
+    attribute = AttributeExportSerializer()
     default_option = serializers.CharField(source='default_option.uri', default=None, read_only=True)
-    optionsets = serializers.SerializerMethodField()
-    conditions = serializers.SerializerMethodField()
+    optionsets = OptionSetExportSerializer(many=True)
+    conditions = ConditionExportSerializer(many=True)
 
     class Meta:
         model = Question
@@ -45,12 +48,6 @@ class QuestionExportSerializer(TranslationSerializerMixin, serializers.ModelSeri
             'verbose_name_plural',
         )
 
-    def get_optionsets(self, obj):
-        return [optionset.uri for optionset in obj.optionsets.all()]
-
-    def get_conditions(self, obj):
-        return [condition.uri for condition in obj.conditions.all()]
-
 
 class QuestionSetQuestionSetExportSerializer(serializers.ModelSerializer):
 
@@ -81,11 +78,11 @@ class QuestionSetQuestionExportSerializer(serializers.ModelSerializer):
 
 class QuestionSetExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
-    attribute = serializers.CharField(source='attribute.uri', default=None, read_only=True)
-    conditions = serializers.SerializerMethodField()
+    attribute = AttributeExportSerializer()
+    conditions = ConditionExportSerializer(many=True)
 
-    questionset_questionsets = QuestionSetQuestionSetExportSerializer(many=True, read_only=True)
-    questionset_questions = QuestionSetQuestionExportSerializer(many=True, read_only=True)
+    questionset_questionsets = QuestionSetQuestionSetExportSerializer(many=True)
+    questionset_questions = QuestionSetQuestionExportSerializer(many=True)
 
     class Meta:
         model = QuestionSet
@@ -106,9 +103,6 @@ class QuestionSetExportSerializer(TranslationSerializerMixin, serializers.ModelS
             'verbose_name',
             'verbose_name_plural',
         )
-
-    def get_conditions(self, obj):
-        return [condition.uri for condition in obj.conditions.all()]
 
 
 class PageQuestionSetExportSerializer(serializers.ModelSerializer):
@@ -137,11 +131,11 @@ class PageQuestionExportSerializer(serializers.ModelSerializer):
 
 class PageExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
-    attribute = serializers.CharField(source='attribute.uri', default=None, read_only=True)
-    conditions = serializers.SerializerMethodField()
+    attribute = AttributeExportSerializer()
+    conditions = ConditionExportSerializer(many=True)
 
-    page_questionsets = PageQuestionSetExportSerializer(many=True, read_only=True)
-    page_questions = PageQuestionExportSerializer(many=True, read_only=True)
+    page_questionsets = PageQuestionSetExportSerializer(many=True)
+    page_questions = PageQuestionExportSerializer(many=True)
 
     class Meta:
         model = Page
@@ -162,9 +156,6 @@ class PageExportSerializer(TranslationSerializerMixin, serializers.ModelSerializ
             'verbose_name',
             'verbose_name_plural',
         )
-
-    def get_conditions(self, obj):
-        return [condition.uri for condition in obj.conditions.all()]
 
 
 class SectionPageExportSerializer(serializers.ModelSerializer):

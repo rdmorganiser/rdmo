@@ -9,7 +9,7 @@ from rest_framework.viewsets import ModelViewSet
 from rdmo.core.constants import VALUE_TYPE_CHOICES
 from rdmo.core.exports import XMLResponse
 from rdmo.core.permissions import HasModelPermission
-from rdmo.core.utils import render_to_format
+from rdmo.core.utils import is_truthy, render_to_format
 from rdmo.core.views import ChoicesViewSet
 from rdmo.core.viewsets import CopyModelMixin
 
@@ -73,7 +73,7 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
             serializer = CatalogExportSerializer(queryset, many=True)
-            xml = CatalogRenderer().render(serializer.data)
+            xml = CatalogRenderer().render(serializer.data, context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name='catalogs')
         else:
             return render_to_format(self.request, export_format, 'questions', 'questions/export/catalogs.html', {
@@ -84,12 +84,25 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = CatalogExportSerializer(self.get_object())
-            xml = CatalogRenderer().render([serializer.data])
+            xml = CatalogRenderer().render([serializer.data], context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name=self.get_object().uri_path)
         else:
             return render_to_format(self.request, export_format, self.get_object().uri_path, 'questions/export/catalogs.html', {
                 'catalogs': [self.get_object()]
             })
+
+    def get_export_renderer_context(self, request):
+        full = is_truthy(request.GET.get('full'))
+        return {
+            'sections': full or is_truthy(request.GET.get('sections', True)),
+            'pages': full or is_truthy(request.GET.get('pages', True)),
+            'questionsets': full or is_truthy(request.GET.get('questionsets', True)),
+            'questions': full or is_truthy(request.GET.get('questions', True)),
+            'attributes': full or is_truthy(request.GET.get('attributes')),
+            'optionsets': full or is_truthy(request.GET.get('optionsets')),
+            'options': full or is_truthy(request.GET.get('options')),
+            'conditions': full or is_truthy(request.GET.get('conditions'))
+        }
 
 
 class SectionViewSet(CopyModelMixin, ModelViewSet):
@@ -130,7 +143,7 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
             serializer = SectionExportSerializer(queryset, many=True)
-            xml = SectionRenderer().render(serializer.data)
+            xml = SectionRenderer().render(serializer.data, context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name='sections')
         else:
             return render_to_format(self.request, export_format, 'questions', 'questions/export/sections.html', {
@@ -141,12 +154,24 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = SectionExportSerializer(self.get_object())
-            xml = SectionRenderer().render([serializer.data])
+            xml = SectionRenderer().render([serializer.data], context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name=self.get_object().uri_path)
         else:
             return render_to_format(self.request, export_format, self.get_object().uri_path, 'questions/export/sections.html', {
                 'sections': [self.get_object()]
             })
+
+    def get_export_renderer_context(self, request):
+        full = is_truthy(request.GET.get('full'))
+        return {
+            'pages': full or is_truthy(request.GET.get('pages', True)),
+            'questionsets': full or is_truthy(request.GET.get('questionsets', True)),
+            'questions': full or is_truthy(request.GET.get('questions', True)),
+            'attributes': full or is_truthy(request.GET.get('attributes')),
+            'optionsets': full or is_truthy(request.GET.get('optionsets')),
+            'options': full or is_truthy(request.GET.get('options')),
+            'conditions': full or is_truthy(request.GET.get('conditions'))
+        }
 
 
 class PageViewSet(CopyModelMixin, ModelViewSet):
@@ -194,7 +219,7 @@ class PageViewSet(CopyModelMixin, ModelViewSet):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
             serializer = PageExportSerializer(queryset, many=True)
-            xml = PageRenderer().render(serializer.data)
+            xml = PageRenderer().render(serializer.data, context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name='pages')
         else:
             return render_to_format(self.request, export_format, 'questions', 'questions/export/pages.html', {
@@ -205,12 +230,23 @@ class PageViewSet(CopyModelMixin, ModelViewSet):
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = PageExportSerializer(self.get_object())
-            xml = PageRenderer().render([serializer.data])
+            xml = PageRenderer().render([serializer.data], context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name=self.get_object().uri_path)
         else:
             return render_to_format(self.request, export_format, self.get_object().uri_path, 'questions/export/pages.html', {
                 'pages': [self.get_object()]
             })
+
+    def get_export_renderer_context(self, request):
+        full = is_truthy(request.GET.get('full'))
+        return {
+            'questionsets': full or is_truthy(request.GET.get('questionsets', True)),
+            'questions': full or is_truthy(request.GET.get('questions', True)),
+            'attributes': full or is_truthy(request.GET.get('attributes')),
+            'optionsets': full or is_truthy(request.GET.get('optionsets')),
+            'options': full or is_truthy(request.GET.get('options')),
+            'conditions': full or is_truthy(request.GET.get('conditions'))
+        }
 
 
 class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
@@ -259,7 +295,7 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
             serializer = QuestionSetExportSerializer(queryset, many=True)
-            xml = QuestionSetRenderer().render(serializer.data)
+            xml = QuestionSetRenderer().render(serializer.data, context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name='questionsets')
         else:
             return render_to_format(self.request, export_format, 'questionsets', 'questions/export/questionsets.html', {
@@ -270,12 +306,23 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = QuestionSetExportSerializer(self.get_object())
-            xml = QuestionSetRenderer().render([serializer.data])
+            xml = QuestionSetRenderer().render([serializer.data], context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name=self.get_object().uri_path)
         else:
             return render_to_format(self.request, export_format, self.get_object().uri_path, 'questions/export/questionsets.html', {
                 'questionsets': [self.get_object()]
             })
+
+    def get_export_renderer_context(self, request):
+        full = is_truthy(request.GET.get('full'))
+        return {
+            'questionsets': full or is_truthy(request.GET.get('questionsets', True)),
+            'questions': full or is_truthy(request.GET.get('questions', True)),
+            'attributes': full or is_truthy(request.GET.get('attributes')),
+            'optionsets': full or is_truthy(request.GET.get('optionsets')),
+            'options': full or is_truthy(request.GET.get('options')),
+            'conditions': full or is_truthy(request.GET.get('conditions'))
+        }
 
 
 class QuestionViewSet(CopyModelMixin, ModelViewSet):
@@ -321,7 +368,7 @@ class QuestionViewSet(CopyModelMixin, ModelViewSet):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
             serializer = QuestionExportSerializer(queryset, many=True)
-            xml = QuestionRenderer().render(serializer.data)
+            xml = QuestionRenderer().render(serializer.data, context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name='questions')
         else:
             return render_to_format(self.request, export_format, 'questions', 'questions/export/questions.html', {
@@ -332,12 +379,21 @@ class QuestionViewSet(CopyModelMixin, ModelViewSet):
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = QuestionExportSerializer(self.get_object())
-            xml = QuestionRenderer().render([serializer.data])
+            xml = QuestionRenderer().render([serializer.data], context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name=self.get_object().uri_path)
         else:
             return render_to_format(self.request, export_format, self.get_object().uri_path, 'questions/export/questions.html', {
                 'questions': [self.get_object()]
             })
+
+    def get_export_renderer_context(self, request):
+        full = is_truthy(request.GET.get('full'))
+        return {
+            'attributes': full or is_truthy(request.GET.get('attributes')),
+            'optionsets': full or is_truthy(request.GET.get('optionsets')),
+            'options': full or is_truthy(request.GET.get('options')),
+            'conditions': full or is_truthy(request.GET.get('conditions'))
+        }
 
 
 class WidgetTypeViewSet(ChoicesViewSet):

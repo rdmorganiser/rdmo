@@ -7,7 +7,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from rdmo.core.exports import XMLResponse
 from rdmo.core.permissions import HasModelPermission
-from rdmo.core.utils import render_to_format
+from rdmo.core.utils import is_truthy, render_to_format
 from rdmo.core.views import ChoicesViewSet
 from rdmo.core.viewsets import CopyModelMixin
 
@@ -49,7 +49,7 @@ class ConditionViewSet(CopyModelMixin, ModelViewSet):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
             serializer = ConditionExportSerializer(queryset, many=True)
-            xml = ConditionRenderer().render(serializer.data)
+            xml = ConditionRenderer().render(serializer.data, context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name='conditions')
         else:
             return render_to_format(self.request, export_format, 'tasks', 'conditions/export/conditions.html', {
@@ -60,12 +60,19 @@ class ConditionViewSet(CopyModelMixin, ModelViewSet):
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = ConditionExportSerializer(self.get_object())
-            xml = ConditionRenderer().render([serializer.data])
+            xml = ConditionRenderer().render([serializer.data], context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name=self.get_object().key)
         else:
             return render_to_format(self.request, export_format, self.get_object().key, 'conditions/export/conditions.html', {
                 'conditions': [self.get_object()]
             })
+
+    def get_export_renderer_context(self, request):
+        full = is_truthy(request.GET.get('full'))
+        return {
+            'attributes': full or is_truthy(request.GET.get('attributes')),
+            'options': full or is_truthy(request.GET.get('options'))
+        }
 
 
 class RelationViewSet(ChoicesViewSet):

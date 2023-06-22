@@ -1,8 +1,7 @@
-from rdmo.core.renderers import BaseXMLRenderer
 from rdmo.core.utils import get_languages
 
 
-class TasksRenderer(BaseXMLRenderer):
+class TasksRendererMixin:
 
     def render_task(self, xml, task):
         xml.startElement('task', {'dc:uri': task['uri']})
@@ -22,7 +21,7 @@ class TasksRenderer(BaseXMLRenderer):
         xml.startElement('conditions', {})
         if 'conditions' in task and task['conditions']:
             for condition in task['conditions']:
-                self.render_text_element(xml, 'condition', {'dc:uri': condition}, None)
+                self.render_text_element(xml, 'condition', {'dc:uri': condition['uri']}, None)
         xml.endElement('conditions')
 
         xml.startElement('catalogs', {})
@@ -33,15 +32,6 @@ class TasksRenderer(BaseXMLRenderer):
 
         xml.endElement('task')
 
-
-class TaskRenderer(TasksRenderer):
-
-    def render_document(self, xml, tasks):
-        xml.startElement('rdmo', {
-            'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
-            'version': self.version,
-            'created': self.created
-        })
-        for task in tasks:
-            self.render_task(xml, task)
-        xml.endElement('rdmo')
+        if self.context.get('conditions'):
+            for condition in task['conditions']:
+                self.render_condition(xml, condition)

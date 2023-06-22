@@ -8,6 +8,7 @@ from tempfile import mkstemp
 from urllib.parse import urlparse
 
 import pypandoc
+from defusedcsv import csv
 from django.apps import apps
 from django.conf import settings
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
@@ -15,8 +16,6 @@ from django.template.loader import get_template
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 from markdown import markdown
-
-from defusedcsv import csv
 
 log = logging.getLogger(__name__)
 
@@ -371,6 +370,10 @@ def human2bytes(string):
         return number * 1024**4
     elif unit == 'pib':
         return number * 1024**5
+
+
+def is_truthy(value):
+    return value is not None and (value is True or value.lower() in ['1', 't', 'true'])
 
 
 def markdown2html(markdown_string):

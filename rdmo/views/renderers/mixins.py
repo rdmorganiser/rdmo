@@ -1,8 +1,7 @@
-from rdmo.core.renderers import BaseXMLRenderer
 from rdmo.core.utils import get_languages
 
 
-class ViewsRenderer(BaseXMLRenderer):
+class ViewsRendererMixin:
 
     def render_view(self, xml, view):
         xml.startElement('view', {'dc:uri': view['uri']})
@@ -22,16 +21,3 @@ class ViewsRenderer(BaseXMLRenderer):
 
         self.render_text_element(xml, 'template', {}, view['template'])
         xml.endElement('view')
-
-
-class ViewRenderer(ViewsRenderer):
-
-    def render_document(self, xml, views):
-        xml.startElement('rdmo', {
-            'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
-            'version': self.version,
-            'created': self.created
-        })
-        for view in views:
-            self.render_view(xml, view)
-        xml.endElement('rdmo')

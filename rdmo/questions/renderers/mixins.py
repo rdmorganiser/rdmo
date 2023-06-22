@@ -1,8 +1,7 @@
-from rdmo.core.renderers import BaseXMLRenderer
 from rdmo.core.utils import get_languages
 
 
-class XMLRenderer(BaseXMLRenderer):
+class CatalogRendererMixin:
 
     def render_catalog(self, xml, catalog):
         xml.startElement('catalog', {'dc:uri': catalog['uri']})
@@ -25,8 +24,12 @@ class XMLRenderer(BaseXMLRenderer):
 
         xml.endElement('catalog')
 
-        for section in catalog['catalog_sections']:
-            self.render_section(xml, section.get('section'))
+        if self.context.get('sections', True):
+            for section in catalog['catalog_sections']:
+                self.render_section(xml, section.get('section'))
+
+
+class SectionRendererMixin:
 
     def render_section(self, xml, section):
         xml.startElement('section', {'dc:uri': section['uri']})
@@ -47,15 +50,24 @@ class XMLRenderer(BaseXMLRenderer):
 
         xml.endElement('section')
 
-        for section_page in section['section_pages']:
-            self.render_page(xml, section_page.get('page'))
+        if self.context.get('pages', True):
+            for section_page in section['section_pages']:
+                self.render_page(xml, section_page.get('page'))
+
+
+class PageRendererMixin:
 
     def render_page(self, xml, page):
         xml.startElement('page', {'dc:uri': page['uri']})
         self.render_text_element(xml, 'uri_prefix', {}, page['uri_prefix'])
         self.render_text_element(xml, 'uri_path', {}, page['uri_path'])
         self.render_text_element(xml, 'dc:comment', {}, page['comment'])
-        self.render_text_element(xml, 'attribute', {'dc:uri': page['attribute']}, None)
+
+        if page['attribute'] is None:
+            self.render_text_element(xml, 'attribute', {}, None)
+        else:
+            self.render_text_element(xml, 'attribute', {'dc:uri': page['attribute']['uri']}, None)
+
         self.render_text_element(xml, 'is_collection', {}, page['is_collection'])
 
         for lang_code, lang_string, lang_field in get_languages():
@@ -82,23 +94,41 @@ class XMLRenderer(BaseXMLRenderer):
 
         xml.startElement('conditions', {})
         for condition in page['conditions']:
-            self.render_text_element(xml, 'condition', {'dc:uri': condition}, None)
+            self.render_text_element(xml, 'condition', {'dc:uri': condition['uri']}, None)
         xml.endElement('conditions')
 
         xml.endElement('page')
 
-        for page_questionset in page['page_questionsets']:
-            self.render_questionset(xml, page_questionset['questionset'])
+        if self.context.get('attributes'):
+            if page['attribute'] is not None:
+                self.render_attribute(xml, page['attribute'])
 
-        for page_question in page['page_questions']:
-            self.render_question(xml, page_question['question'])
+        if self.context.get('conditions'):
+            for condition in page['conditions']:
+                self.render_condition(xml, condition)
+
+        if self.context.get('questionsets', True):
+            for page_questionset in page['page_questionsets']:
+                self.render_questionset(xml, page_questionset['questionset'])
+
+        if self.context.get('questions', True):
+            for page_question in page['page_questions']:
+                self.render_question(xml, page_question['question'])
+
+
+class QuestionSetRendererMixin:
 
     def render_questionset(self, xml, questionset):
         xml.startElement('questionset', {'dc:uri': questionset['uri']})
         self.render_text_element(xml, 'uri_prefix', {}, questionset['uri_prefix'])
         self.render_text_element(xml, 'uri_path', {}, questionset['uri_path'])
         self.render_text_element(xml, 'dc:comment', {}, questionset['comment'])
-        self.render_text_element(xml, 'attribute', {'dc:uri': questionset['attribute']}, None)
+
+        if questionset['attribute'] is None:
+            self.render_text_element(xml, 'attribute', {}, None)
+        else:
+            self.render_text_element(xml, 'attribute', {'dc:uri': questionset['attribute']['uri']}, None)
+
         self.render_text_element(xml, 'is_collection', {}, questionset['is_collection'])
 
         for lang_code, lang_string, lang_field in get_languages():
@@ -125,23 +155,41 @@ class XMLRenderer(BaseXMLRenderer):
 
         xml.startElement('conditions', {})
         for condition in questionset['conditions']:
-            self.render_text_element(xml, 'condition', {'dc:uri': condition}, None)
+            self.render_text_element(xml, 'condition', {'dc:uri': condition['uri']}, None)
         xml.endElement('conditions')
 
         xml.endElement('questionset')
 
-        for questionset_questionset in questionset['questionset_questionsets']:
-            self.render_questionset(xml, questionset_questionset['questionset'])
+        if self.context.get('attributes'):
+            if questionset['attribute'] is not None:
+                self.render_attribute(xml, questionset['attribute'])
 
-        for questionset_question in questionset['questionset_questions']:
-            self.render_question(xml, questionset_question['question'])
+        if self.context.get('conditions'):
+            for condition in questionset['conditions']:
+                self.render_condition(xml, condition)
+
+        if self.context.get('questionsets', True):
+            for questionset_questionset in questionset['questionset_questionsets']:
+                self.render_questionset(xml, questionset_questionset['questionset'])
+
+        if self.context.get('questions', True):
+            for questionset_question in questionset['questionset_questions']:
+                self.render_question(xml, questionset_question['question'])
+
+
+class QuestionRendererMixin:
 
     def render_question(self, xml, question):
         xml.startElement('question', {'dc:uri': question['uri']})
         self.render_text_element(xml, 'uri_prefix', {}, question['uri_prefix'])
         self.render_text_element(xml, 'uri_path', {}, question['uri_path'])
         self.render_text_element(xml, 'dc:comment', {}, question['comment'])
-        self.render_text_element(xml, 'attribute', {'dc:uri': question['attribute']}, None)
+
+        if question['attribute'] is None:
+            self.render_text_element(xml, 'attribute', {}, None)
+        else:
+            self.render_text_element(xml, 'attribute', {'dc:uri': question['attribute']['uri']}, None)
+
         self.render_text_element(xml, 'is_collection', {}, question['is_collection'])
         self.render_text_element(xml, 'is_optional', {}, question['is_optional'])
 
@@ -165,77 +213,24 @@ class XMLRenderer(BaseXMLRenderer):
 
         xml.startElement('optionsets', {})
         for optionset in question['optionsets']:
-            self.render_text_element(xml, 'optionset', {'dc:uri': optionset}, None)
+            self.render_text_element(xml, 'optionset', {'dc:uri': optionset['uri']}, None)
         xml.endElement('optionsets')
 
         xml.startElement('conditions', {})
         for condition in question['conditions']:
-            self.render_text_element(xml, 'condition', {'dc:uri': condition}, None)
+            self.render_text_element(xml, 'condition', {'dc:uri': condition['uri']}, None)
         xml.endElement('conditions')
 
         xml.endElement('question')
 
+        if self.context.get('attributes'):
+            if question['attribute'] is not None:
+                self.render_attribute(xml, question['attribute'])
 
-class CatalogRenderer(XMLRenderer):
+        if self.context.get('conditions'):
+            for condition in question['conditions']:
+                self.render_condition(xml, condition)
 
-    def render_document(self, xml, catalogs):
-        xml.startElement('rdmo', {
-            'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
-            'version': self.version,
-            'created': self.created
-        })
-        for catalog in catalogs:
-            self.render_catalog(xml, catalog)
-        xml.endElement('rdmo')
-
-
-class SectionRenderer(XMLRenderer):
-
-    def render_document(self, xml, sections):
-        xml.startElement('rdmo', {
-            'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
-            'version': self.version,
-            'created': self.created
-        })
-        for section in sections:
-            self.render_section(xml, section)
-        xml.endElement('rdmo')
-
-
-class PageRenderer(XMLRenderer):
-
-    def render_document(self, xml, pages):
-        xml.startElement('rdmo', {
-            'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
-            'version': self.version,
-            'created': self.created
-        })
-        for page in pages:
-            self.render_page(xml, page)
-        xml.endElement('rdmo')
-
-
-class QuestionSetRenderer(XMLRenderer):
-
-    def render_document(self, xml, questionsets):
-        xml.startElement('rdmo', {
-            'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
-            'version': self.version,
-            'created': self.created
-        })
-        for questionset in questionsets:
-            self.render_questionset(xml, questionset)
-        xml.endElement('rdmo')
-
-
-class QuestionRenderer(XMLRenderer):
-
-    def render_document(self, xml, questions):
-        xml.startElement('rdmo', {
-            'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
-            'version': self.version,
-            'created': self.created
-        })
-        for question in questions:
-            self.render_question(xml, question)
-        xml.endElement('rdmo')
+        if self.context.get('optionsets'):
+            for optionset in question['optionsets']:
+                self.render_optionset(xml, optionset)

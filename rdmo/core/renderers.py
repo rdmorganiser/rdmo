@@ -1,8 +1,8 @@
-from django.utils.timezone import now, get_current_timezone
 from io import StringIO
 
-from django.utils.xmlutils import SimplerXMLGenerator
 from django.utils.encoding import smart_str
+from django.utils.timezone import get_current_timezone, now
+from django.utils.xmlutils import SimplerXMLGenerator
 from rest_framework.renderers import BaseRenderer
 
 from rdmo import __version__
@@ -13,10 +13,12 @@ class BaseXMLRenderer(BaseRenderer):
     media_type = 'application/xml'
     format = 'xml'
 
-    def render(self, data):
+    def render(self, data, context={}):
 
         if data is None:
             return ''
+
+        self.context = context
 
         stream = StringIO()
 

@@ -9,7 +9,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from rdmo.core.exports import XMLResponse
 from rdmo.core.permissions import HasModelPermission
-from rdmo.core.utils import render_to_format
+from rdmo.core.utils import is_truthy, render_to_format
 from rdmo.core.views import ChoicesViewSet
 from rdmo.core.viewsets import CopyModelMixin
 
@@ -59,7 +59,7 @@ class OptionSetViewSet(CopyModelMixin, ModelViewSet):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
             serializer = OptionSetExportSerializer(queryset, many=True)
-            xml = OptionSetRenderer().render(serializer.data)
+            xml = OptionSetRenderer().render(serializer.data, context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name='optionsets')
         else:
             return render_to_format(self.request, export_format, 'optionsets', 'options/export/optionsets.html', {
@@ -70,12 +70,20 @@ class OptionSetViewSet(CopyModelMixin, ModelViewSet):
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = OptionSetExportSerializer(self.get_object())
-            xml = OptionSetRenderer().render([serializer.data])
+            xml = OptionSetRenderer().render([serializer.data], context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name=self.get_object().uri_path)
         else:
             return render_to_format(self.request, export_format, self.get_object().uri_path, 'options/export/optionsets.html', {
                 'optionsets': [self.get_object()]
             })
+
+    def get_export_renderer_context(self, request):
+        full = is_truthy(request.GET.get('full'))
+        return {
+            'attributes': full or is_truthy(request.GET.get('attributes')),
+            'conditions': full or is_truthy(request.GET.get('conditions')),
+            'options': full or is_truthy(request.GET.get('options'))
+        }
 
 
 class OptionViewSet(CopyModelMixin, ModelViewSet):

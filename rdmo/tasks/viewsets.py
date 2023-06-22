@@ -7,7 +7,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from rdmo.core.exports import XMLResponse
 from rdmo.core.permissions import HasModelPermission
-from rdmo.core.utils import render_to_format
+from rdmo.core.utils import is_truthy, render_to_format
 from rdmo.core.viewsets import CopyModelMixin
 
 from .models import Task
@@ -46,7 +46,7 @@ class TaskViewSet(CopyModelMixin, ModelViewSet):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
             serializer = TaskExportSerializer(queryset, many=True)
-            xml = TaskRenderer().render(serializer.data)
+            xml = TaskRenderer().render(serializer.data, context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name='tasks')
         else:
             return render_to_format(self.request, export_format, 'tasks', 'tasks/export/tasks.html', {
@@ -57,9 +57,17 @@ class TaskViewSet(CopyModelMixin, ModelViewSet):
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = TaskExportSerializer(self.get_object())
-            xml = TaskRenderer().render([serializer.data])
+            xml = TaskRenderer().render([serializer.data], context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name=self.get_object().key)
         else:
             return render_to_format(self.request, export_format, self.get_object().key, 'tasks/export/tasks.html', {
                 'tasks': [self.get_object()]
             })
+
+    def get_export_renderer_context(self, request):
+        full = is_truthy(request.GET.get('full'))
+        return {
+            'conditions': full or is_truthy(request.GET.get('conditions')),
+            'attributes': full or is_truthy(request.GET.get('attributes')),
+            'options': full or is_truthy(request.GET.get('options'))
+        }
