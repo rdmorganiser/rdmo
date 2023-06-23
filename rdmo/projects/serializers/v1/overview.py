@@ -1,13 +1,13 @@
 from rest_framework import serializers
 
 from rdmo.projects.models import Project
-from rdmo.questions.models import Catalog, QuestionSet, Section
+from rdmo.questions.models import Catalog, Page, Section
 
 
-class QuestionSetSerializer(serializers.ModelSerializer):
+class PageSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = QuestionSet
+        model = Page
         fields = (
             'id',
             'title',
@@ -17,20 +17,23 @@ class QuestionSetSerializer(serializers.ModelSerializer):
 
 class SectionSerializer(serializers.ModelSerializer):
 
-    questionsets = QuestionSetSerializer(many=True, read_only=True)
+    pages = serializers.SerializerMethodField()
 
     class Meta:
         model = Section
         fields = (
             'id',
             'title',
-            'questionsets'
+            'pages'
         )
+
+    def get_pages(self, obj):
+        return PageSerializer(obj.elements, many=True, read_only=True).data
 
 
 class CatalogSerializer(serializers.ModelSerializer):
 
-    sections = SectionSerializer(many=True, read_only=True)
+    sections = serializers.SerializerMethodField()
 
     class Meta:
         model = Catalog
@@ -39,6 +42,9 @@ class CatalogSerializer(serializers.ModelSerializer):
             'title',
             'sections'
         )
+
+    def get_sections(self, obj):
+        return SectionSerializer(obj.elements, many=True, read_only=True).data
 
 
 class ProjectOverviewSerializer(serializers.ModelSerializer):

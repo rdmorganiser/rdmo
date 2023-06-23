@@ -1,22 +1,24 @@
 from rest_framework import serializers
-from rest_framework.reverse import reverse
 
-from rdmo.core.serializers import (MarkdownSerializerMixin, SiteSerializer,
+from rdmo.core.serializers import (ElementExportSerializerMixin,
+                                   ElementModelSerializerMixin,
+                                   ElementWarningSerializerMixin,
                                    TranslationSerializerMixin)
-from rdmo.core.utils import get_language_warning
 
 from ..models import Task
 from ..validators import TaskLockedValidator, TaskUniqueURIValidator
 
 
-class TaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
+class BaseTaskSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
+                         serializers.ModelSerializer):
 
-    key = serializers.SlugField(required=True)
+    model = serializers.SerializerMethodField()
 
     class Meta:
         model = Task
         fields = (
             'id',
+            'model',
             'uri',
             'uri_prefix',
             'key',
@@ -30,11 +32,24 @@ class TaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'end_attribute',
             'days_before',
             'days_after',
-            'conditions'
+            'conditions',
+            'title',
+            'text'
         )
         trans_fields = (
             'title',
             'text'
+        )
+
+
+class TaskSerializer(BaseTaskSerializer):
+
+    key = serializers.SlugField(required=True)
+    projects_count = serializers.IntegerField(read_only=True)
+
+    class Meta(BaseTaskSerializer.Meta):
+        fields = BaseTaskSerializer.Meta.fields + (
+            'projects_count',
         )
         validators = (
             TaskUniqueURIValidator(),
@@ -42,32 +57,27 @@ class TaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
         )
 
 
-class TaskIndexSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
+class TaskListSerializer(ElementExportSerializerMixin, ElementWarningSerializerMixin,
+                         BaseTaskSerializer):
 
-    markdown_fields = ('text', )
-
-    sites = SiteSerializer(many=True, read_only=True)
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
+
+    class Meta(BaseTaskSerializer.Meta):
+        fields = BaseTaskSerializer.Meta.fields + (
+            'warning',
+            'xml_url'
+        )
+        warning_fields = (
+            'title',
+        )
+
+
+class TaskIndexSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Task
         fields = (
             'id',
-            'uri',
-            'uri_prefix',
-            'key',
-            'locked',
-            'available',
-            'sites',
-            'title',
-            'text',
-            'warning',
-            'xml_url'
+            'uri'
         )
-
-    def get_warning(self, obj):
-        return get_language_warning(obj, 'title') or get_language_warning(obj, 'text')
-
-    def get_xml_url(self, obj):
-        return reverse('v1-tasks:task-detail-export', args=[obj.pk])

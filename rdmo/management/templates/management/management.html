@@ -1,0 +1,34 @@
+{% extends 'core/page.html' %}
+{% load static %}
+{% load i18n %}
+{% load core_tags %}
+
+{% block vendor %}
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'management/css/management.css' %}" />
+    {{ block.super }}
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'jquery/jquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+
+    <script src="{% url 'javascript-catalog' %}"></script>
+    <script src="{% static 'management/js/management.js' %}" defer></script>
+{% endblock %}
+
+{% block sidebar %}
+
+    <div id="sidebar"></div>
+
+{% endblock %}
+
+{% block page %}
+
+    <h1>{% trans 'Management' %}</h1>
+
+    <div id="main" class="management"></div>
+
+{% endblock %}

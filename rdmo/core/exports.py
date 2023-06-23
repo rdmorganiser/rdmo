@@ -1,3 +1,5 @@
+from django.conf import settings
+
 from xml.dom.minidom import parseString
 
 from django.http import HttpResponse
@@ -7,8 +9,8 @@ class XMLResponse(HttpResponse):
 
     def __init__(self, xml, name=None):
         super().__init__(prettify_xml(xml), content_type='application/xml')
-        if name:
-            self['Content-Disposition'] = 'filename="{}.xml"'.format(name)
+        if name and settings.EXPORT_CONTENT_DISPOSITION == 'attachment':
+            self['Content-Disposition'] = 'attachment; filename="{}.xml"'.format(name.replace('/', '_'))
 
 
 def prettify_xml(xmlstring):

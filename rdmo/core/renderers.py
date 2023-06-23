@@ -1,9 +1,11 @@
-from django.utils.timezone import now, get_current_timezone
 from io import StringIO
 
-from django.utils.xmlutils import SimplerXMLGenerator
 from django.utils.encoding import smart_str
+from django.utils.timezone import get_current_timezone, now
+from django.utils.xmlutils import SimplerXMLGenerator
 from rest_framework.renderers import BaseRenderer
+
+from rdmo import __version__
 
 
 class BaseXMLRenderer(BaseRenderer):
@@ -11,10 +13,13 @@ class BaseXMLRenderer(BaseRenderer):
     media_type = 'application/xml'
     format = 'xml'
 
-    def render(self, data):
+    def render(self, data, context={}):
 
         if data is None:
             return ''
+
+        self.context = context
+        self.uris = set()
 
         stream = StringIO()
 
@@ -22,6 +27,7 @@ class BaseXMLRenderer(BaseRenderer):
         xml.startDocument()
         self.render_document(xml, data)
         xml.endDocument()
+
         return stream.getvalue()
 
     def render_text_element(self, xml, tag, attrs, text):
@@ -35,6 +41,10 @@ class BaseXMLRenderer(BaseRenderer):
 
     def render_document(self, xml, data):
         pass
+
+    @property
+    def version(self):
+        return __version__
 
     @property
     def created(self):

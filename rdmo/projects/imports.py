@@ -2,13 +2,12 @@ import base64
 import io
 import logging
 import mimetypes
-from urllib.parse import urlparse, quote
+from urllib.parse import quote
 
 import requests
 
 from django import forms
 from django.core.files import File
-from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
@@ -169,6 +168,18 @@ class RDMOXMLImport(Import):
             value.set_prefix = ''
 
         value.set_index = int(value_node.find('set_index').text)
+
+        try:
+            set_collection_text = value_node.find('set_collection').text
+            if set_collection_text == 'True':
+                value.set_collection = True
+            elif set_collection_text == 'False':
+                value.set_collection = False
+            else:
+                value.set_collection = None
+        except AttributeError:
+            value.set_collection = None
+
         value.collection_index = int(value_node.find('collection_index').text)
 
         value.text = value_node.find('text').text or ''

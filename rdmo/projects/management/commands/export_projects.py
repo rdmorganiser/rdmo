@@ -42,11 +42,11 @@ class Command(BaseCommand):
             Prefetch('catalog__sections__questionsets',
                      queryset=QuestionSet.objects.select_related('attribute')),
             Prefetch('catalog__sections__questionsets__questions',
-                     queryset=Question.objects.select_related('attribute', 'questionset')),
+                     queryset=Question.objects.select_related('attribute')),
             Prefetch('catalog__sections__questionsets__questionsets',
                      queryset=QuestionSet.objects.select_related('attribute')),
             Prefetch('catalog__sections__questionsets__questionsets__questions',
-                     queryset=Question.objects.select_related('attribute', 'questionset')),
+                     queryset=Question.objects.select_related('attribute')),
         )
 
     def export_answers(self):

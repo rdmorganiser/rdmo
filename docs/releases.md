@@ -7,31 +7,39 @@ Releases
 
 2) Update version in `rdmo/__init__.py`.
 
-3) Build `sdist` and `bdist_wheel`:
+3) Build production front-end files
+
+  ```
+  nvm use
+  npm install
+  npm run build:prod
+  ```
+
+4) Build `sdist` and `bdist_wheel`:
 
   ```
   python setup.py sdist bdist_wheel
   ```
 
-4) Upload with `twine` to Test PyPI:
+5) Upload with `twine` to Test PyPI:
 
   ```
   twine upload --repository-url https://test.pypi.org/legacy/ dist/*
   twine upload -r testpypi dist/*
   ```
 
-5) Check https://test.pypi.org/project/rdmo/.
+6) Check https://test.pypi.org/project/rdmo/.
 
-6) Upload with `twine` to PyPI:
+7) Upload with `twine` to PyPI:
 
   ```
   twine upload dist/*
   ```
 
-7) Check https://pypi.org/project/rdmo/.
+8) Check https://pypi.org/project/rdmo/.
 
-8) Commit local changes.
+9) Commit local changes.
 
-9) Push changes.
+10) Push changes.
 
-10) Create release on [GitHub](https://github.com/rdmorganiser/rdmo/releases).
+11) Create release on [GitHub](https://github.com/rdmorganiser/rdmo/releases).

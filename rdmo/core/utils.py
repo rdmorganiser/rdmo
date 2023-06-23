@@ -8,6 +8,7 @@ from tempfile import mkstemp
 from urllib.parse import urlparse
 
 import pypandoc
+from defusedcsv import csv
 from django.apps import apps
 from django.conf import settings
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
@@ -15,8 +16,6 @@ from django.template.loader import get_template
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 from markdown import markdown
-
-from defusedcsv import csv
 
 log = logging.getLogger(__name__)
 
@@ -90,11 +89,41 @@ def get_model_field_meta(model):
     meta = {}
 
     for field in model._meta.get_fields():
-        meta[field.name] = {}
-        if hasattr(field, 'verbose_name'):
-            meta[field.name]['verbose_name'] = field.verbose_name
-        if hasattr(field, 'help_text'):
-            meta[field.name]['help_text'] = field.help_text
+        match = re.search(r'lang(\d)$', field.name)
+        if match:
+            lang_index = int(match.group(1))
+
+            try:
+                lang_code, lang = settings.LANGUAGES[lang_index - 1]
+            except IndexError:
+                continue
+
+            field_name = field.name.replace(f'_lang{lang_index}', f'_{lang_code}')
+
+            meta[field_name] = {}
+            if hasattr(field, 'verbose_name'):
+                # remove the "(primary)" part
+                meta[field_name]['verbose_name'] = re.sub(r'\(.*\)$', f'({lang})', str(field.verbose_name))
+            if hasattr(field, 'help_text'):
+                # remove the "in the primary language" part
+                meta[field_name]['help_text'] = re.sub(r' in the .*$', r'.', str(field.help_text))
+        else:
+            meta[field.name] = {}
+            if hasattr(field, 'verbose_name'):
+                meta[field.name]['verbose_name'] = field.verbose_name
+            if hasattr(field, 'help_text'):
+                meta[field.name]['help_text'] = field.help_text
+
+    if model.__name__ == 'Page':
+        meta['elements'] = {
+            'verbose_name': _('Elements'),
+            'help_text': _('The questions and question sets for this page.')
+        }
+    elif model.__name__ == 'QuestionSet':
+        meta['elements'] = {
+            'verbose_name': _('Elements'),
+            'help_text': _('The questions and question sets for this question set.')
+        }
 
     return meta
 
@@ -341,6 +370,10 @@ def human2bytes(string):
         return number * 1024**4
     elif unit == 'pib':
         return number * 1024**5
+
+
+def is_truthy(value):
+    return value is not None and (value is True or value.lower() in ['1', 't', 'true'])
 
 
 def markdown2html(markdown_string):
