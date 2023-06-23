@@ -30,7 +30,7 @@ class MembershipAdmin(admin.ModelAdmin):
 
 class ContinuationAdmin(admin.ModelAdmin):
     search_fields = ('project__title', 'user__username')
-    list_display = ('project', 'user', 'questionset')
+    list_display = ('project', 'user', 'page')
 
 
 class IntegrationAdmin(admin.ModelAdmin):

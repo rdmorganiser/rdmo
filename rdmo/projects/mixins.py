@@ -3,11 +3,11 @@ from pathlib import Path
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ValidationError
-from django.http import HttpResponseRedirect, Http404, HttpResponse
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render, redirect
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.core.imports import handle_uploaded_file, file_path_exists
+from rdmo.core.imports import handle_uploaded_file
 from rdmo.core.plugins import get_plugin, get_plugins
 from rdmo.questions.models import Question
 
@@ -27,7 +27,7 @@ class ProjectImportMixin(object):
         return current_values
 
     def get_questions(self, catalog):
-        queryset = Question.objects.filter(questionset__section__catalog=catalog) \
+        queryset = Question.objects.filter_by_catalog(catalog) \
                                    .select_related('attribute') \
                                    .order_by('attribute__uri')
 

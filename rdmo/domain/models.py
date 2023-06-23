@@ -85,10 +85,6 @@ class Attribute(MPTTModel):
         return attribute
 
     @property
-    def parent_fields(self):
-        return ('parent', )
-
-    @property
     def is_locked(self):
         return self.get_ancestors(include_self=True).filter(locked=True).exists()
 

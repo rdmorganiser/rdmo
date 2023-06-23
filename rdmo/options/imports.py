@@ -2,10 +2,10 @@ import logging
 
 from django.contrib.sites.models import Site
 
-from rdmo.conditions.models import Condition
-from rdmo.core.imports import (fetch_parents, get_foreign_field,
-                               get_m2m_instances, set_common_fields,
-                               set_lang_field, validate_instance)
+from rdmo.core.imports import (set_common_fields, set_lang_field,
+                               set_m2m_instances, set_m2m_through_instances,
+                               set_reverse_m2m_through_instance,
+                               validate_instance)
 
 from .models import Option, OptionSet
 from .validators import (OptionLockedValidator, OptionSetLockedValidator,
@@ -25,51 +25,48 @@ def import_optionset(element, save=False):
     optionset.order = element.get('order') or 0
     optionset.provider_key = element.get('provider_key') or ''
 
-    conditions = get_m2m_instances(optionset, element.get('conditions'), Condition)
+    validate_instance(optionset, element, OptionSetLockedValidator, OptionSetUniqueURIValidator)
 
-    if save and validate_instance(optionset, OptionSetLockedValidator, OptionSetUniqueURIValidator):
+    if save and not element.get('errors'):
         if optionset.id:
-            logger.info('OptionSet created with uri %s.', element.get('uri'))
-        else:
+            element['updated'] = True
             logger.info('OptionSet %s updated.', element.get('uri'))
+        else:
+            element['created'] = True
+            logger.info('OptionSet created with uri %s.', element.get('uri'))
 
         optionset.save()
-        optionset.conditions.set(conditions)
+        set_m2m_instances(optionset, 'conditions', element)
+        set_m2m_through_instances(optionset, 'options', element, 'optionset', 'option', 'optionset_options')
         optionset.editors.add(Site.objects.get_current())
-        optionset.imported = True
 
     return optionset
 
 
-def import_option(element, optionset_uri=False, save=False):
+def import_option(element, save=False):
     try:
-        if optionset_uri is False:
-            option = Option.objects.get(uri=element.get('uri'))
-        else:
-            option = Option.objects.get(key=element.get('key'), optionset__uri=optionset_uri)
+        option = Option.objects.get(uri=element.get('uri'))
     except Option.DoesNotExist:
         option = Option()
 
     set_common_fields(option, element)
 
-    option.optionset = get_foreign_field(option, optionset_uri or element.get('optionset'), OptionSet)
-    option.order = element.get('order') or 0
     option.additional_input = element.get('additional_input') or False
 
     set_lang_field(option, 'text', element)
 
-    if save and validate_instance(option, OptionLockedValidator, OptionUniqueURIValidator):
+    validate_instance(option, element, OptionLockedValidator, OptionUniqueURIValidator)
+
+    if save and not element.get('errors'):
         if option.id:
-            logger.info('Option created with uri %s.', element.get('uri'))
-        else:
+            element['updated'] = True
             logger.info('Option %s updated.', element.get('uri'))
+        else:
+            element['created'] = True
+            logger.info('Option created with uri %s.', element.get('uri'))
 
         option.save()
+        set_reverse_m2m_through_instance(option, 'optionset', element, 'option', 'optionset', 'option_optionsets')
         option.editors.add(Site.objects.get_current())
-        option.imported = True
 
     return option
-
-
-def fetch_option_parents(instances):
-    return fetch_parents(OptionSet, instances)

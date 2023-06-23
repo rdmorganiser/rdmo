@@ -1,0 +1,78 @@
+{% load i18n %}
+
+<p>
+    <strong>{% trans 'Questions:' %} {{ question.text }}</strong>
+</p>
+
+<p>
+    <strong>{% trans 'URI' %}:</strong> {{ question.uri }}
+</p>
+
+{% if question.comment %}
+
+<p>
+    <strong>{% trans 'Comment' %}:</strong> {{ question.comment }}
+</p>
+
+{% endif %}
+
+{% if question.help  %}
+
+<p>
+    <strong>{% trans 'Help' %}:</strong> {{ question.help | default_if_none:'n/a' }}
+</p>
+
+{% endif %}
+
+{% if question.attribute.optionsets.all %}
+
+<p>
+    <strong>{% trans 'Options' %}:</strong>
+</p>
+
+<ul>
+    {% for optionset in question.attribute.optionsets.all %}
+    {% for option in optionset.options.all %}
+    <li>
+        {{ option.text }}{% if option.additional_input %}: __________{% endif %}
+    </li>
+    {% endfor %}
+    {% endfor %}
+</ul>
+
+{% endif %}
+
+{% if question.verbose_name or question.verbose_name_plural %}
+
+<p>
+    <strong>{% trans 'Verbose name' %}:</strong>
+</p>
+
+<ul>
+    <li>{% trans 'Verbose name' %}: {{ question.verbose_name }}</li>
+    <li>{% trans 'Verbose name plural' %}: {{ question.verbose_name_plural }}</li>
+</ul>
+
+{% endif %}
+
+{% if question.minimum or question.maximum or question.step %}
+
+<p>
+    <strong>{% trans 'Range' %}:</strong>
+</p>
+
+<ul>
+    <li>{% trans 'Minimum' %}: {{ question.minimum }}</li>
+    <li>{% trans 'Maximum' %}: {{ question.maximum }}</li>
+    <li>{% trans 'Step' %}: {{ question.step }}</li>
+</ul>
+
+{% endif %}
+
+{% if question.comment %}
+
+<p>
+    <strong>{% trans 'Comment' %}:</strong> {{ question.comment }}
+</p>
+
+{% endif %}

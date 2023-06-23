@@ -11,7 +11,7 @@ angular.module('project_questions')
     var resources = {
         projects: $resource(baseurl + 'api/v1/projects/projects/:id/:detail_action/'),
         values: $resource(baseurl + 'api/v1/projects/projects/:project/values/:id/:detail_action/'),
-        questionsets: $resource(baseurl + 'api/v1/projects/projects/:project/questionsets/:list_action/:id/'),
+        pages: $resource(baseurl + 'api/v1/projects/projects/:project/pages/:list_action/:id/'),
         settings: $resource(baseurl + 'api/v1/core/settings/')
     };
 
@@ -97,16 +97,16 @@ angular.module('project_questions')
                     // if users go back to /project/questions/ they just go back once more
                     $window.history.back();
                 } else if (path == 'done') {
-                    if (angular.isUndefined(service.questionset.done)) {
+                    if (angular.isUndefined(service.page.done)) {
                         service.initDone();
                     }
                 } else if (path == 'error') {
-                    if (angular.isUndefined(service.questionset.error)) {
+                    if (angular.isUndefined(service.page.error)) {
                         service.initError();
                     }
                 } else {
                     // this needs to be != and not !== since path is a string!
-                    if (path != service.questionset.id) {
+                    if (path != service.page.id) {
                         service.initView(path);
                     }
                 }
@@ -134,40 +134,40 @@ angular.module('project_questions')
         });
     };
 
-    service.initView = function(questionset_id) {
+    service.initView = function(page_id) {
         if (initializing) return;
 
-        if (questionset_id !== null) {
+        if (page_id !== null) {
             // enable initializing flag
             initializing = true;
 
-            if (angular.isDefined(service.questionset)) {
-                past.questionset = service.questionset
+            if (angular.isDefined(service.page)) {
+                past.page = service.page
                 past.set_index = service.set_index
             }
 
-            return service.fetchQuestionSet(questionset_id)
+            return service.fetchPage(page_id)
             .then(service.fetchOptions)
             .then(service.fetchValues)
             .then(service.fetchConditions)
             .then(function () {
                 // copy future objects
                 angular.forEach([
-                    'questionset', 'progress', 'attributes', 'questionsets', 'questions', 'valuesets', 'values'
+                    'page', 'progress', 'attributes', 'questionsets', 'questions', 'valuesets', 'values'
                 ], function (key) {
                     service[key] = angular.copy(future[key]);
                 });
 
                 // activate fist valueset
-                if (angular.isDefined(service.valuesets[service.questionset.id][service.set_prefix])) {
-                    if (angular.isDefined(past.questionset) &&
-                        past.questionset.is_collection &&
-                        past.questionset.attribute == service.questionset.attribute &&
+                if (angular.isDefined(service.valuesets[service.page.id][service.set_prefix])) {
+                    if (angular.isDefined(past.page) &&
+                        past.page.is_collection &&
+                        past.page.attribute == service.page.attribute &&
                         !service.settings.project_questions_cycle_sets) {
                         // use the same set index as before
                         service.set_index = past.set_index
                     } else {
-                        service.set_index = service.valuesets[service.questionset.id][service.set_prefix][0].set_index;
+                        service.set_index = service.valuesets[service.page.id][service.set_prefix][0].set_index;
                     }
                 } else {
                     service.set_index = null;
@@ -175,9 +175,9 @@ angular.module('project_questions')
 
                 // focus the first field
                 if (service.values && Object.keys(service.values).length > 0
-                                   && service.questionset.questionsets.length == 0
-                                   && service.questionset.questions.length > 0) {
-                    var first_question = service.questionset.questions[0];
+                                   && service.page.questionsets.length == 0
+                                   && service.page.questions.length > 0) {
+                    var first_question = service.page.questions[0];
                     if (first_question.widget_class == 'text') {
                         service.focusField(first_question.attribute, service.set_prefix, service.set_index, 0);
                     }
@@ -185,7 +185,7 @@ angular.module('project_questions')
 
                 // disable initializing flag again, set browser location, scroll to top and set back flag
                 initializing = false;
-                $location.path('/' + service.questionset.id + '/');
+                $location.path('/' + service.page.id + '/');
                 $window.scrollTo(0, 0);
                 back = false;
 
@@ -207,11 +207,11 @@ angular.module('project_questions')
     };
 
     service.initError = function(status, statusText) {
-        service.questionset = {
+        service.page = {
             id: false,
             progress: 0,
-            next: null,
-            prev: null,
+            next_page: null,
+            prev_page: null,
             error: true,
             status: status,
             statusText: statusText
@@ -225,11 +225,11 @@ angular.module('project_questions')
     };
 
     service.initDone = function() {
-        service.questionset = {
+        service.page = {
             id: false,
             progress: 100,
-            next: null,
-            prev: service.questionset ? service.questionset.id : null,
+            next_page: null,
+            prev_page: service.page ? service.page.id : null,
             done: true
         };
 
@@ -240,24 +240,24 @@ angular.module('project_questions')
         back = false;
     };
 
-    service.fetchQuestionSet = function(questionset_id) {
-        // fetch the current (or the first) question set from the server
-        if (questionset_id) {
-            future.questionset = resources.questionsets.get({
+    service.fetchPage = function(page_id) {
+        // fetch the current (or the first) page from the server
+        if (page_id) {
+            future.page = resources.pages.get({
                 project: service.project.id,
-                id: questionset_id,
+                id: page_id,
                 back: back
             });
         } else {
-            future.questionset = resources.questionsets.get({
+            future.page = resources.pages.get({
                 project: service.project.id,
                 list_action: 'continue'
             });
         }
 
-        // store the questionset and return the promise
-        return future.questionset.$promise.then(function() {
-            if (angular.isUndefined(future.questionset.id)) {
+        // store the page and return the promise
+        return future.page.$promise.then(function() {
+            if (angular.isUndefined(future.page.id)) {
                 // this is the end of the interview
                 return $q.reject();
             }
@@ -272,15 +272,31 @@ angular.module('project_questions')
             // (b) mark the help text of the question set 'save'
             // (c) sort questionsets and questions by order in one list called elements
             // using recursive functions!
-            service.initQuestionSet(future.questionset);
+            service.initPage(future.page);
         });
     };
 
+    service.initPage = function(page) {
+        // store attributes in a seperate array
+        if (page.attribute !== null) future.attributes.push(page.attribute);
+
+        // mark the help text of the question set 'save'
+        page.help = $sce.trustAsHtml(page.help);
+
+        // sort questionsets and questions by order in one list called elements
+        page.elements = page.questionsets.map(function(qs) {
+                return service.initQuestionSet(qs);
+            })
+            .concat(page.questions.map(function(q) {
+                return service.initQuestion(q, page);
+            }))
+            .sort(function(a, b) { return a.order - b.order; });
+
+        return page;
+    };
+
     service.initQuestionSet = function(questionset) {
-        // store attributes and questionset in seperate array
-        if (questionset.attribute !== null) {
-            future.attributes.push(questionset.attribute);
-        }
+        // store questionsets in a seperate array
         future.questionsets.push(questionset);
 
         // mark the help text of the question set 'save'
@@ -290,17 +306,17 @@ angular.module('project_questions')
         questionset.elements = questionset.questionsets.map(function(qs) {
                 return service.initQuestionSet(qs);
             })
-            .concat(questionset.questions.map(service.initQuestion))
+            .concat(questionset.questions.map(function(q) {
+                return service.initQuestion(q, questionset);
+            }))
             .sort(function(a, b) { return a.order - b.order; });
 
         return questionset;
     };
 
-    service.initQuestion = function(question) {
+    service.initQuestion = function(question, parent) {
         // store attributes and questionset in seperate array
-        if (question.attribute !== null) {
-            future.attributes.push(question.attribute);
-        }
+        if (question.attribute !== null) future.attributes.push(question.attribute);
         future.questions.push(question);
 
         // mark the help text of the question set 'save'
@@ -308,6 +324,10 @@ angular.module('project_questions')
 
         // this is a question!
         question.isQuestion = true;
+
+        // store if this question is part of a set collection
+        // to store value.set_collection later
+        question.set_collection = parent.is_collection;
 
         return question;
     };
@@ -329,17 +349,24 @@ angular.module('project_questions')
                             id: service.project.id,
                         }, function(response) {
                             question.options = question.options.concat(response.map(function(option) {
+                                option.optionset = optionset.id
                                 option.has_provider = optionset.has_provider
                                 return option
                             }));
 
                             // if any, add regular options from the optionset
                             if (question.optionsets.options !== false) {
-                                question.options = question.options.concat(optionset.options);
+                                question.options = question.options.concat(optionset.options.map(function(option) {
+                                    option.optionset = optionset.id
+                                    return option
+                                }));
                             }
                         }).$promise);
                     } else {
-                        question.options = question.options.concat(optionset.options);
+                        question.options = question.options.concat(optionset.options.map(function(option) {
+                            option.optionset = optionset.id
+                            return option
+                        }));
                     }
                 });
             }
@@ -389,9 +416,9 @@ angular.module('project_questions')
                 // init valuesets
                 future.valuesets = {};
 
-                // loop over all questionsets to initlize valuesets
+                // loop over the page and all questionsets to initialize valuesets
                 // valuesets store the set_index for each questionset and set_prefix
-                angular.forEach(future.questionsets, function(questionset) {
+                angular.forEach([future.page].concat(future.questionsets), function(questionset) {
                     // add a valueset for each questionset
                     if (angular.isUndefined(future.valuesets[questionset.id])) {
                         future.valuesets[questionset.id] = {};
@@ -442,15 +469,15 @@ angular.module('project_questions')
         }
 
         return $q.all(promises).then(function() {
-            service.initValues(future.questionset, '');
+            service.initValues(future.page, '');
         });
     };
 
     service.fetchConditions = function() {
         promises = [];
 
-        // check conditions for current questionsets and questions
-        angular.forEach(future.questionsets, function(questionset) {
+        // loop over the page and all questionsets to check conditions
+        angular.forEach([future.page].concat(future.questionsets), function(questionset) {
             angular.forEach(future.valuesets[questionset.id], function(valuesets, set_prefix) {
                 angular.forEach(valuesets, function(valueset, set_index) {
                     angular.forEach(questionset.questionsets, function(qs) {
@@ -688,6 +715,14 @@ angular.module('project_questions')
             value.set_index = set_index;
             value.collection_index = collection_index;
 
+            // store if the question is part of a set_collection
+            if (question === null) {
+                // this is the id of a new valueset
+                value.set_collection = true
+            } else {
+                value.set_collection = question.set_collection
+            }
+
             // get value_type and unit from question
             if (question === null) {
                 // this is the id of a new valueset
@@ -802,55 +837,55 @@ angular.module('project_questions')
 
     service.prev = function() {
         service.error = null; // reset error when moving to previous questionset
-        if (service.questionset.prev !== null) {
+        if (service.page.prev !== null) {
             back = true;
-            service.initView(service.questionset.prev);
+            service.initView(service.page.prev_page);
         }
     };
 
     service.next = function() {
         service.error = null; // reset error when moving to next questionset
-        if (service.questionset.id !== null) {
-            service.initView(service.questionset.next);
+        if (service.page.id !== null) {
+            service.initView(service.page.next);
         }
     };
 
-    service.jump = function(section, questionset) {
+    service.jump = function(section, page) {
         service.error = null; // reset error before saving
         if (service.settings.project_questions_autosave) {
             service.save(false).then(function() {
                 if (service.error !== null) {
                     // pass, dont jump
-                } else if (angular.isDefined(questionset)) {
-                    service.initView(questionset.id);
+                } else if (angular.isDefined(page)) {
+                    service.initView(page.id);
                 } else if (angular.isDefined(section)) {
-                    if (angular.isDefined(section.questionset)) {
-                        service.initView(section.questionsets[0].id);
+                    if (angular.isDefined(section.pages)) {
+                        service.initView(section.pages[0].id);
                     } else {
-                        // jump to first questionset of the section in breadcrumb
+                        // jump to first page of the section in breadcrumb
                         // let section_from_service = service.project.catalog.sections.find(x => x.id === section.id)
                         var section_from_service = $filter('filter')(service.project.catalog.sections, {
                             id: section.id
                         })[0]
-                        service.initView(section_from_service.questionsets[0].id);
+                        service.initView(section_from_service.pages[0].id);
                     }
                 } else {
                     service.initView(null);
                 }
             });
         } else {
-            if (angular.isDefined(questionset)) {
-                service.initView(questionset.id);
+            if (angular.isDefined(page)) {
+                service.initView(page.id);
             } else if (angular.isDefined(section)) {
-                if (angular.isDefined(section.questionset)) {
-                    service.initView(section.questionsets[0].id);
+                if (angular.isDefined(section.pages)) {
+                    service.initView(section.pages[0].id);
                 } else {
-                    // jump to first questionset of the section in breadcrumb
+                    // jump to first page of the section in breadcrumb
                     // let section_from_service = service.project.catalog.sections.find(x => x.id === section.id)
                     var section_from_service = $filter('filter')(service.project.catalog.sections, {
                         id: section.id
                     })[0]
-                    service.initView(section_from_service.questionsets[0].id);
+                    service.initView(section_from_service.pages[0].id);
                 }
             } else {
                 service.initView(null);
@@ -864,11 +899,11 @@ angular.module('project_questions')
             if (service.error !== null) {
                 // pass
             } else if (angular.isDefined(proceed) && proceed) {
-                if (service.settings.project_questions_cycle_sets && service.questionset.is_collection) {
+                if (service.settings.project_questions_cycle_sets && service.page.is_collection) {
                     if (service.set_index === null) {
                         service.next();
                     } else {
-                        var valuesets = service.valuesets[service.questionset.id][service.set_prefix];
+                        var valuesets = service.valuesets[service.page.id][service.set_prefix];
                         var index = service.findIndex(valuesets, 'set_index', service.set_index);
 
                         if (index === valuesets.length - 1) {
@@ -895,7 +930,7 @@ angular.module('project_questions')
                 });
 
                 // re-evaluate conditions
-                angular.forEach(service.questionsets, function(questionset) {
+                angular.forEach([service.page].concat(service.questionsets), function(questionset) {
                     angular.forEach(service.valuesets[questionset.id], function(valuesets, set_prefix) {
                         angular.forEach(valuesets, function(valueset, set_index) {
                             angular.forEach(questionset.questionsets, function(qs) {
@@ -1146,7 +1181,7 @@ angular.module('project_questions')
         });
 
         // switch set_index if this is the top level questionset
-        if (questionset == service.questionset) {
+        if (questionset == service.page) {
             service.set_index = set_index;
         }
     };
@@ -1178,7 +1213,7 @@ angular.module('project_questions')
 
     service.removeValueSet = function(questionset, set_prefix, set_index) {
         // check if this is the main questionset and not a questionset-in-questionset
-        if (service.questionset.id == questionset.id && questionset.attribute) {
+        if (service.page.id == questionset.id && questionset.attribute) {
             // delete all values of this set in the project using the special /set endpoint
             if (angular.isDefined(service.values[questionset.attribute])) {
                 angular.forEach(service.values[questionset.attribute][set_prefix][set_index], function(value) {
@@ -1219,7 +1254,7 @@ angular.module('project_questions')
         // if this is the top level questionset,
         // activate the set before the current one,
         // otherwise the previous set
-        if (questionset == service.questionset) {
+        if (questionset == service.page) {
             // get list of valuesets which are not removed yet
             var valuesets = $filter('filter')(service.valuesets[questionset.id][set_prefix], function(valueset) {
                 return valueset.removed === false;

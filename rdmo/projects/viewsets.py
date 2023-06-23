@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
-from django.db.models import Prefetch
+from django.db.models import prefetch_related_objects
 from django.http import Http404, HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
@@ -21,7 +21,7 @@ from rdmo.conditions.models import Condition
 from rdmo.core.permissions import HasModelPermission
 from rdmo.core.utils import human2bytes, return_file_response
 from rdmo.options.models import OptionSet
-from rdmo.questions.models import Catalog, Question, QuestionSet
+from rdmo.questions.models import Page, Question, QuestionSet
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
@@ -39,7 +39,7 @@ from .serializers.v1 import (IntegrationSerializer, IssueSerializer,
                              ProjectValueSerializer, SnapshotSerializer,
                              ValueSerializer)
 from .serializers.v1.overview import ProjectOverviewSerializer
-from .serializers.v1.questionset import QuestionSetSerializer
+from .serializers.v1.page import PageSerializer
 from .utils import check_conditions
 
 
@@ -53,8 +53,7 @@ class ProjectViewSet(ModelViewSet):
         'user',
         'user__username',
         'catalog',
-        'catalog__uri',
-        'catalog__key',
+        'catalog__uri'
     )
 
     def get_queryset(self):
@@ -63,13 +62,11 @@ class ProjectViewSet(ModelViewSet):
     @action(detail=True, permission_classes=(IsAuthenticated, ))
     def overview(self, request, pk=None):
         project = self.get_object()
-        project.catalog = Catalog.objects.prefetch_related(
-            'sections',
-            Prefetch('sections__questionsets', queryset=QuestionSet.objects.filter(questionset=None).prefetch_related(
-                'conditions',
-                'questions'
-            ))
-        ).get(id=project.catalog_id)
+
+        # prefetch only the pages (and their conditions)
+        prefetch_related_objects([project.catalog],
+                                 'catalog_sections__section__section_pages__page__conditions')
+
         serializer = ProjectOverviewSerializer(project, context={'request': request})
         return Response(serializer.data)
 
@@ -80,6 +77,16 @@ class ProjectViewSet(ModelViewSet):
         set_index = request.GET.get('set_index')
 
         values = self.get_object().values.filter(snapshot_id=snapshot_id).select_related('attribute', 'option')
+
+        page_id = request.GET.get('page')
+        if page_id:
+            try:
+                page = Page.objects.get(id=page_id)
+                conditions = page.conditions.select_related('source', 'target_option')
+                if check_conditions(conditions, values, set_prefix, set_index):
+                    return Response({'result': True})
+            except Page.DoesNotExist:
+                pass
 
         questionset_id = request.GET.get('questionset')
         if questionset_id:
@@ -148,6 +155,7 @@ class ProjectViewSet(ModelViewSet):
     @action(detail=True, permission_classes=(IsAuthenticated, ))
     def progress(self, request, pk=None):
         project = self.get_object()
+        project.catalog.prefetch_elements()
         return Response(project.progress)
 
     def perform_create(self, serializer):
@@ -271,9 +279,10 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
 
     filter_backends = (ValueFilterBackend, DjangoFilterBackend)
     filterset_fields = (
-        'attribute__path',
+        # attribute is part of ValueFilterBackend
+        'attribute__uri',
         'option',
-        'option__path',
+        'option__uri',
     )
 
     def get_queryset(self):
@@ -291,9 +300,17 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         value = self.get_object()
         value.delete()
 
-        attributes = Question.objects.filter_by_catalog(self.project.catalog) \
-                                     .filter(questionset__is_collection=True, questionset__attribute=value.attribute) \
-                                     .values_list('attribute', flat=True)
+        # prefetch most elements of the catalog
+        self.project.catalog.prefetch_elements()
+
+        # collect the attributes of all questions of all pages or questionsets
+        # of this catalog, which have the attribute of this value
+        attributes = set()
+        elements = self.project.catalog.pages + self.project.catalog.questions
+        for element in elements:
+            if element.attribute == value.attribute:
+                attributes.update([descendant.attribute for descendant in element.descendants])
+
         values = self.get_queryset().filter(attribute__in=attributes, set_prefix=value.set_prefix, set_index=value.set_index)
         values.delete()
 
@@ -325,65 +342,75 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         raise NotFound()
 
 
-class ProjectQuestionSetViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericViewSet):
+class ProjectPageViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericViewSet):
     permission_classes = (HasModelPermission | HasProjectQuestionPermission, )
-    serializer_class = QuestionSetSerializer
+    serializer_class = PageSerializer
 
     def get_queryset(self):
+        # prefetch the catalogs elements, this will also prefetch the page query below
         try:
-            return QuestionSet.objects.order_by_catalog(self.project.catalog).select_related('section', 'section__catalog')
+            self.project.catalog.prefetch_elements()
+            return Page.objects.filter_by_catalog(self.project.catalog)
         except AttributeError:
             # this is needed for the swagger ui
-            return QuestionSet.objects.none()
+            return Page.objects.none()
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['catalog'] = self.project.catalog
+        return context
 
     def dispatch(self, *args, **kwargs):
         response = super().dispatch(*args, **kwargs)
-
         if response.status_code == 200 and kwargs.get('pk'):
             try:
                 continuation = Continuation.objects.get(project=self.project, user=self.request.user)
             except Continuation.DoesNotExist:
                 continuation = Continuation(project=self.project, user=self.request.user)
 
-            continuation.questionset_id = kwargs.get('pk')
+            continuation.page_id = kwargs.get('pk')
             continuation.save()
 
         return response
 
     def retrieve(self, request, *args, **kwargs):
-        questionset = self.get_object()
-        conditions = questionset.conditions.select_related('source', 'target_option')
+        page = self.get_object()
+        conditions = page.conditions.select_related('source', 'target_option')
 
         values = self.project.values.filter(snapshot=None).select_related('attribute', 'option')
 
         if check_conditions(conditions, values):
-            serializer = self.get_serializer(questionset)
+            serializer = self.get_serializer(page)
             return Response(serializer.data)
         else:
-            if request.GET.get('back') == 'true' and questionset.prev is not None:
-                url = reverse('v1-projects:project-questionset-detail', args=[self.project.id, questionset.prev]) + '?back=true'
-                return HttpResponseRedirect(url, status=303)
-            elif questionset.next is not None:
-                url = reverse('v1-projects:project-questionset-detail', args=[self.project.id, questionset.next])
-                return HttpResponseRedirect(url, status=303)
+            if request.GET.get('back') == 'true':
+                prev_page = self.project.catalog.get_prev_page(page)
+                if prev_page is not None:
+                    url = reverse('v1-projects:project-page-detail', args=[self.project.id, prev_page.id]) + '?back=true'
+                    return HttpResponseRedirect(url, status=303)
             else:
-                # indicate end of catalog
-                return Response(status=204)
+                next_page = self.project.catalog.get_next_page(page)
+                if next_page is not None:
+                    url = reverse('v1-projects:project-page-detail', args=[self.project.id, next_page.id])
+                    return HttpResponseRedirect(url, status=303)
+
+            # indicate end of catalog
+            return Response(status=204)
 
     @action(detail=False, url_path='continue', permission_classes=(HasModelPermission | HasProjectQuestionPermission, ))
     def get_continue(self, request, pk=None, parent_lookup_project=None):
         try:
             continuation = Continuation.objects.get(project=self.project, user=self.request.user)
 
-            if continuation.questionset.section.catalog == self.project.catalog:
-                questionset = continuation.questionset
-            else:
-                questionset = self.get_queryset().first()
+            try:
+                page = Page.objects.filter_by_catalog(self.project.catalog).get(id=continuation.page_id)
+            except Page.DoesNotExist:
+                page = self.get_queryset().first()
 
         except Continuation.DoesNotExist:
-            questionset = self.get_queryset().first()
+            page = self.get_queryset().first()
 
-        serializer = self.get_serializer(questionset)
+        serializer = self.get_serializer(page)
         return Response(serializer.data)
 
 
@@ -452,10 +479,11 @@ class ValueViewSet(ReadOnlyModelViewSet):
     filter_backends = (SnapshotFilterBackend, DjangoFilterBackend)
     filterset_fields = (
         'project',
+        # snapshot is part of SnapshotFilterBackend
         'attribute',
-        'attribute__path',
+        'attribute__uri',
         'option',
-        'option__path',
+        'option__uri',
     )
 
     def get_queryset(self):

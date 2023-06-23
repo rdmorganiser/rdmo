@@ -96,27 +96,3 @@ def test_serializer_update_error(db):
         validator({
             'locked': True
         })
-
-
-def test_serializer_update_lock(db):
-    catalog = Catalog.objects.first()
-
-    validator = CatalogLockedValidator()
-    validator.set_context(CatalogSerializer(instance=catalog))
-
-    validator({
-        'locked': True
-    })
-
-
-def test_serializer_update_unlock(db):
-    catalog = Catalog.objects.first()
-    catalog.locked = True
-    catalog.save()
-
-    validator = CatalogLockedValidator()
-    validator.set_context(CatalogSerializer(instance=catalog))
-
-    validator({
-        'locked': False
-    })

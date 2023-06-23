@@ -105,7 +105,30 @@ The test upload files are initialized using:
 cp -r ../rdmo/testing/media media_root
 ```
 
-Now the development server can be started using:
+Starting from RDMO `1.10.0` we use [webpack](https://webpack.js.org/) to bundle the new React based front-end. For this [nodejs](https://nodejs.org) needs to be available. The preferred way is to use [nvm.sh](https://github.com/nvm-sh/nvm). It can be installed for the current user with:
+
+```
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+```
+
+After the installation add:
+
+```
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+```
+
+to your `.bashrc`. Then run:
+
+```
+nvm install    # only once, to install the node version given in .nvmrc
+nvm use        # to activate the node version
+npm install    # to install the many, many javascript dependencies
+npm run watch  # to build the front-end and rebuild it when changing the source
+```
+
+Now the development server can be started (in a different terminal) using:
 
 ```
 python manage.py runserver
