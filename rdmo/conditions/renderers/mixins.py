@@ -11,11 +11,14 @@ class ConditionRendererMixin:
             self.render_text_element(xml, 'source', {'dc:uri': condition['source']['uri']}, None)
             self.render_text_element(xml, 'relation', {}, condition['relation'])
             self.render_text_element(xml, 'target_text', {}, condition['target_text'])
-            self.render_text_element(xml, 'target_option', {'dc:uri': condition['target_option']['uri']}, None)
+            self.render_text_element(xml, 'target_option', {
+                'dc:uri': condition['target_option']['uri'] if condition['target_option'] is not None else None
+            }, None)
             xml.endElement('condition')
 
         if self.context.get('attributes'):
             self.render_attribute(xml, condition['source'])
 
         if self.context.get('options'):
-            self.render_option(xml, condition['target_option'])
+            if condition['target_option'] is not None:
+                self.render_option(xml, condition['target_option'])

@@ -24,5 +24,6 @@ class ConditionExportSerializer(serializers.ModelSerializer):
         )
 
     def get_target_option(self, obj):
-        from rdmo.options.serializers.export import OptionExportSerializer
-        return OptionExportSerializer(obj.target_option).data
+        if obj.target_option is not None:
+            from rdmo.options.serializers.export import OptionExportSerializer
+            return OptionExportSerializer(obj.target_option).data
