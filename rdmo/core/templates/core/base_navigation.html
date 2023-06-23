@@ -14,7 +14,7 @@
             </button>
             <a class="navbar-brand" href="{% url 'home' %}">{{ request.site.name }}</a>
         </div>
-        {% if user.is_authenticated %}
+
         <div class="collapse navbar-collapse" id="navbar-collapse">
             <ul class="nav navbar-nav">
                 {% back_to_project_link %}
