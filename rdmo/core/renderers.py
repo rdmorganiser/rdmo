@@ -19,6 +19,7 @@ class BaseXMLRenderer(BaseRenderer):
             return ''
 
         self.context = context
+        self.uris = set()
 
         stream = StringIO()
 
@@ -26,6 +27,7 @@ class BaseXMLRenderer(BaseRenderer):
         xml.startDocument()
         self.render_document(xml, data)
         xml.endDocument()
+
         return stream.getvalue()
 
     def render_text_element(self, xml, tag, attrs, text):
