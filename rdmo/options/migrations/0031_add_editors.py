@@ -7,7 +7,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('sites', '0002_alter_domain_unique'),
-        ('options', '0027_meta'),
+        ('options', '0030_optionset_options'),
     ]
 
     operations = [

@@ -7,7 +7,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('sites', '0002_alter_domain_unique'),
-        ('questions', '0068_meta'),
+        ('questions', '0089_questionset_questions'),
     ]
 
     operations = [
@@ -15,6 +15,11 @@ class Migration(migrations.Migration):
             model_name='catalog',
             name='editors',
             field=models.ManyToManyField(blank=True, help_text='The sites that can edit this catalog (in a multi site setup).', related_name='catalog_editors', to='sites.Site', verbose_name='Editors'),
+        ),
+        migrations.AddField(
+            model_name='page',
+            name='editors',
+            field=models.ManyToManyField(blank=True, help_text='The sites that can edit this page (in a multi site setup).', related_name='page_editors', to='sites.Site', verbose_name='Editors'),
         ),
         migrations.AddField(
             model_name='question',
