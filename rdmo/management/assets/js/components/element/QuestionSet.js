@@ -41,7 +41,7 @@ const QuestionSet = ({ config, questionset, elementActions, display='list', filt
         <LockedLink title={questionset.locked ? gettext('Unlock question set') : gettext('Lock question set')}
                     locked={questionset.locked} onClick={toggleLocked} />
         <ExportLink title={gettext('Export question set')} exportUrl={exportUrl}
-                    exportFormats={config.settings.export_formats} />
+                    exportFormats={config.settings.export_formats} full={true} />
         {display == 'nested' && <Drag element={questionset} />}
       </div>
       <div>

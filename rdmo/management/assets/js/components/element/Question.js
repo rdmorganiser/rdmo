@@ -32,7 +32,7 @@ const Question = ({ config, question, elementActions, display='list', filter=nul
         <LockedLink title={question.locked ? gettext('Unlock question') : gettext('Lock question')}
                     locked={question.locked} onClick={toggleLocked} />
         <ExportLink title={gettext('Export question')} exportUrl={exportUrl}
-                    exportFormats={config.settings.export_formats} />
+                    exportFormats={config.settings.export_formats} full={true} />
         {display == 'nested' && <Drag element={question} />}
       </div>
       <div>

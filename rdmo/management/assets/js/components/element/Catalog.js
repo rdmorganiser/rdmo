@@ -39,7 +39,7 @@ const Catalog = ({ config, catalog, elementActions, display='list', filter=null 
         <LockedLink title={catalog.locked ? gettext('Unlock catalog') : gettext('Lock catalog')}
                     locked={catalog.locked} onClick={toggleLocked} />
         <ExportLink title={gettext('Export catalog')} exportUrl={exportUrl}
-                    exportFormats={config.settings.export_formats} />
+                    exportFormats={config.settings.export_formats} full={true} />
       </div>
       <div>
         <p>

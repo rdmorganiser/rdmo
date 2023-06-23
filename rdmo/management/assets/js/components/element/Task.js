@@ -32,7 +32,7 @@ const Task = ({ config, task, elementActions, filter=null }) => {
           <LockedLink title={task.locked ? gettext('Unlock task') : gettext('Lock task')}
                       locked={task.locked} onClick={toggleLocked} />
           <ExportLink title={gettext('Export task')} exportUrl={exportUrl}
-                      exportFormats={config.settings.export_formats} />
+                      exportFormats={config.settings.export_formats} full={true} />
         </div>
         <div>
           <p>

@@ -98,12 +98,15 @@ LockedLink.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-const ExportLink = ({ exportUrl, title, exportFormats, csv=false }) => {
+const ExportLink = ({ exportUrl, title, exportFormats, csv=false, full=false }) => {
   return (
     <span className="dropdown">
       <button className="element-btn-link btn-link fa fa-download" title={title} data-toggle="dropdown"></button>
       <ul className="dropdown-menu">
         <li><a href={exportUrl}>{gettext('XML')}</a></li>
+        {
+          full && <li><a href={exportUrl + '?full=true'}>{gettext('XML (full)')}</a></li>
+        }
         <li role="separator" className="divider"></li>
         {
           csv && <>
@@ -132,7 +135,8 @@ ExportLink.propTypes = {
   exportUrl: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   exportFormats: PropTypes.array,
-  csv: PropTypes.bool
+  csv: PropTypes.bool,
+  full: PropTypes.bool
 }
 
 const ExtendLink = ({ extend, onClick }) => {

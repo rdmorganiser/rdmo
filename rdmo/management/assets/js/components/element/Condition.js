@@ -28,7 +28,7 @@ const Condition = ({ config, condition, elementActions, filter=null }) => {
           <LockedLink title={condition.locked ? gettext('Unlock condition') : gettext('Lock condition')}
                       locked={condition.locked} onClick={toggleLocked} />
           <ExportLink title={gettext('Export condition')} exportUrl={exportUrl}
-                      exportFormats={config.settings.export_formats} />
+                      exportFormats={config.settings.export_formats} full={true} />
         </div>
         <div>
           <p>

@@ -42,7 +42,7 @@ const Page = ({ config, page, elementActions, display='list', filter=null, inden
         <LockedLink title={page.locked ? gettext('Unlock page') : gettext('Lock page')}
                     locked={page.locked} onClick={toggleLocked} />
         <ExportLink title={gettext('Export page')} exportUrl={exportUrl}
-                    exportFormats={config.settings.export_formats} />
+                    exportFormats={config.settings.export_formats} full={true} />
         {display == 'nested' && <Drag element={page} />}
       </div>
       <div>

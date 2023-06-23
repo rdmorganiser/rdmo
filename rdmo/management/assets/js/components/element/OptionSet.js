@@ -34,7 +34,7 @@ const OptionSet = ({ config, optionset, elementActions, display='list', filter=n
         <LockedLink title={optionset.locked ? gettext('Unlock option set') : gettext('Lock option set')}
                     locked={optionset.locked} onClick={toggleLocked} />
         <ExportLink title={gettext('Export option set')} exportUrl={exportUrl}
-                    exportFormats={config.settings.export_formats} />
+                    exportFormats={config.settings.export_formats} full={true} />
       </div>
       <div>
         <p>
