@@ -102,6 +102,9 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
 
         {get(config, 'settings.multisite') && <Select config={config} element={catalog} field="sites"
                                                       options={sites} onChange={updateCatalog} isMulti />}
+
+        {get(config, 'settings.multisite') && <Select config={config} element={catalog} field="editors"
+                                                      options={sites} onChange={updateCatalog} isMulti />}
       </div>
 
       <div className="panel-footer">

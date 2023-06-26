@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import get from 'lodash/get'
 
 import Checkbox from './common/Checkbox'
 import Select from './common/Select'
@@ -16,6 +17,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditAttribute = ({ config, attribute, elements, elementActions }) => {
 
+  const { sites } = config
   const { elementAction, parent, attributes } = elements
 
   const editAttribute = (attribute) => elementActions.fetchElement('attributes', attribute)
@@ -106,6 +108,9 @@ const EditAttribute = ({ config, attribute, elements, elementActions }) => {
 
         <Select config={config} element={attribute} field="parent"
                 options={attributes} onChange={updateAttribute} onEdit={editAttribute} />
+
+        {get(config, 'settings.multisite') && <Select config={config} element={attribute} field="editors"
+                                                      options={sites} onChange={updateAttribute} isMulti />}
       </div>
 
       <div className="panel-footer">

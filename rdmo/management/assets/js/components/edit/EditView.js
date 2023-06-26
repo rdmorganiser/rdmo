@@ -100,6 +100,9 @@ const EditView = ({ config, view, elements, elementActions }) => {
         {get(config, 'settings.multisite') && <Select config={config} element={view} field="sites"
                                                       options={sites} onChange={updateView} isMulti />}
 
+        {get(config, 'settings.multisite') && <Select config={config} element={view} field="editors"
+                                                      options={sites} onChange={updateView} isMulti />}
+
         <CodeMirror config={config} element={view} field="template"
                     onChange={updateView} />
       </div>

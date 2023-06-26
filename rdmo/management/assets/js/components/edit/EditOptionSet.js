@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import get from 'lodash/get'
 
 import Checkbox from './common/Checkbox'
 import Number from './common/Number'
@@ -19,7 +20,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
 
-  const { providers } = config
+  const { sites, providers } = config
   const { elementAction, parent, conditions, options } = elements
 
   const updateOptionSet = (key, value) => elementActions.updateElement(optionset, {[key]: value})
@@ -102,6 +103,9 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
 
         <Select config={config} element={optionset} field="provider_key"
                 options={providers} onChange={updateOptionSet} />
+
+        {get(config, 'settings.multisite') && <Select config={config} element={optionset} field="editors"
+                                                      options={sites} onChange={updateOptionSet} isMulti />}
       </div>
 
       <div className="panel-footer">
