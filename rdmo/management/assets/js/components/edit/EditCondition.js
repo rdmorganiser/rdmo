@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import get from 'lodash/get'
 
 import Checkbox from './common/Checkbox'
 import Select from './common/Select'
@@ -16,7 +17,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditCondition = ({ config, condition, elements, elementActions }) => {
 
-  const { relations } = config
+  const { sites, relations } = config
   const { elementAction, parent, attributes, options } = elements
 
   const updateCondition = (key, value) => elementActions.updateElement(condition, {[key]: value})
@@ -118,6 +119,9 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
 
         <Select config={config} element={condition} field="target_option"
                 options={options} onChange={updateCondition} onEdit={editOption} />
+
+        {get(config, 'settings.multisite') && <Select config={config} element={condition} field="editors"
+                                                      options={sites} onChange={updateCondition} isMulti />}
       </div>
 
       <div className="panel-footer">

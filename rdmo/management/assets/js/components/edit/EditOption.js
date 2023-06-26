@@ -1,8 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap'
+import get from 'lodash/get'
 
 import Checkbox from './common/Checkbox'
+import Select from './common/Select'
 import Text from './common/Text'
 import Textarea from './common/Textarea'
 import UriPrefix from './common/UriPrefix'
@@ -16,6 +18,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditOption = ({ config, option, elements, elementActions }) => {
 
+  const { sites } = config
   const { elementAction, parent } = elements
 
   const updateOption = (key, value) => elementActions.updateElement(option, {[key]: value})
@@ -96,6 +99,9 @@ const EditOption = ({ config, option, elements, elementActions }) => {
             ))
           }
         </Tabs>
+
+        {get(config, 'settings.multisite') && <Select config={config} element={option} field="editors"
+                                                      options={sites} onChange={updateOption} isMulti />}
       </div>
 
       <div className="panel-footer">

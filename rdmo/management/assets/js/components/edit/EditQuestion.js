@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap'
+import get from 'lodash/get'
 
 import Checkbox from './common/Checkbox'
 import MultiSelect from './common/MultiSelect'
@@ -18,7 +19,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditQuestion = ({ config, question, elements, elementActions}) => {
 
-  const { widgetTypes, valueTypes } = config
+  const { sites, widgetTypes, valueTypes } = config
   const { elementAction, parent, attributes, optionsets, options, conditions } = elements
 
   const updateQuestion = (key, value) => elementActions.updateElement(question, {[key]: value})
@@ -199,6 +200,13 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
               </div>
             </div>
           </Tab>
+          {
+            get(config, 'settings.multisite') &&
+            <Tab key={4} eventKey={4} title={gettext('Editors')}>
+              <Select config={config} element={question} field="editors"
+                      options={sites} onChange={updateQuestion} isMulti />
+            </Tab>
+          }
         </Tabs>
       </div>
 

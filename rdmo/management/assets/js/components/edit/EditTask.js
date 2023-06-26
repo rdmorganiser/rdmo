@@ -126,6 +126,9 @@ const EditTask = ({ config, task, elements, elementActions}) => {
 
         {get(config, 'settings.multisite') && <Select config={config} element={task} field="sites"
                                                       options={sites} onChange={updateTask} isMulti />}
+
+        {get(config, 'settings.multisite') && <Select config={config} element={task} field="editors"
+                                                      options={sites} onChange={updateTask} isMulti />}
       </div>
 
       <div className="panel-footer">

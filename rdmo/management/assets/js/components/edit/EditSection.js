@@ -1,9 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap'
+import get from 'lodash/get'
 
 import Checkbox from './common/Checkbox'
 import OrderedMultiSelect from './common/OrderedMultiSelect'
+import Select from './common/Select'
 import Text from './common/Text'
 import Textarea from './common/Textarea'
 import UriPrefix from './common/UriPrefix'
@@ -17,6 +19,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditSection = ({ config, section, elements, elementActions }) => {
 
+  const { sites } = config
   const { elementAction, parent, pages } = elements
 
   const updateSection = (key, value) => elementActions.updateElement(section, {[key]: value})
@@ -92,6 +95,9 @@ const EditSection = ({ config, section, elements, elementActions }) => {
         <OrderedMultiSelect config={config} element={section} field="pages"
                             options={pages} verboseName="page"
                             onChange={updateSection} onCreate={createPage} onEdit={editPage} />
+
+        {get(config, 'settings.multisite') && <Select config={config} element={section} field="editors"
+                                                      options={sites} onChange={updateSection} isMulti />}
       </div>
 
       <div className="panel-footer">

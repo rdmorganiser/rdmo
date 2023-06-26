@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap'
+import get from 'lodash/get'
 import isUndefined from 'lodash/isUndefined'
 import orderBy from 'lodash/orderBy'
 
@@ -21,6 +22,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
 
+  const { sites } = config
   const { elementAction, parent, attributes, conditions } = elements
 
   const elementValues = orderBy(questionset.questions.concat(questionset.questionsets), ['order', 'uri'])
@@ -169,6 +171,9 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
         <MultiSelect config={config} element={questionset} field="conditions"
                      options={conditions} verboseName="condition"
                      onChange={updateQuestionSet} onCreate={createCondition} onEdit={editCondition} />
+
+        {get(config, 'settings.multisite') && <Select config={config} element={questionset} field="editors"
+                                                      options={sites} onChange={updateQuestionSet} isMulti />}
       </div>
 
       <div className="panel-footer">
