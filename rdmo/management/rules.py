@@ -3,6 +3,7 @@ import logging
 from django.contrib.sites.models import Site
 
 import rules
+from rules.predicates import is_authenticated
 
 logger = logging.getLogger(__name__)
 
@@ -66,7 +67,7 @@ def is_element_reviewer(user, obj) -> bool:
 
 
 # Add rules
-rules.add_rule('can_view_management', is_editor | is_reviewer)
+rules.add_rule('can_view_management', is_authenticated & ((is_editor | is_reviewer)))
 
 
 # Model Permissions for sites and group
