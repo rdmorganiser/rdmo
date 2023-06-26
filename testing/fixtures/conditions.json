@@ -11,7 +11,8 @@
       "source": 81,
       "relation": "eq",
       "target_text": "test",
-      "target_option": null
+      "target_option": null,
+      "editors": []
     }
   },
   {
@@ -26,7 +27,8 @@
       "source": 81,
       "relation": "neq",
       "target_text": "test",
-      "target_option": null
+      "target_option": null,
+      "editors": []
     }
   },
   {
@@ -41,7 +43,8 @@
       "source": 81,
       "relation": "contains",
       "target_text": "test",
-      "target_option": null
+      "target_option": null,
+      "editors": []
     }
   },
   {
@@ -56,7 +59,8 @@
       "source": 81,
       "relation": "gt",
       "target_text": "0",
-      "target_option": null
+      "target_option": null,
+      "editors": []
     }
   },
   {
@@ -71,7 +75,8 @@
       "source": 81,
       "relation": "gte",
       "target_text": "0",
-      "target_option": null
+      "target_option": null,
+      "editors": []
     }
   },
   {
@@ -86,7 +91,8 @@
       "source": 81,
       "relation": "lt",
       "target_text": "0",
-      "target_option": null
+      "target_option": null,
+      "editors": []
     }
   },
   {
@@ -101,7 +107,8 @@
       "source": 81,
       "relation": "lte",
       "target_text": "0",
-      "target_option": null
+      "target_option": null,
+      "editors": []
     }
   },
   {
@@ -116,7 +123,8 @@
       "source": 81,
       "relation": "empty",
       "target_text": "",
-      "target_option": null
+      "target_option": null,
+      "editors": []
     }
   },
   {
@@ -131,7 +139,8 @@
       "source": 81,
       "relation": "notempty",
       "target_text": "",
-      "target_option": null
+      "target_option": null,
+      "editors": []
     }
   },
   {
@@ -146,7 +155,8 @@
       "source": 82,
       "relation": "eq",
       "target_text": "",
-      "target_option": 1
+      "target_option": 1,
+      "editors": []
     }
   },
   {
@@ -161,7 +171,8 @@
       "source": 82,
       "relation": "neq",
       "target_text": "",
-      "target_option": 1
+      "target_option": 1,
+      "editors": []
     }
   },
   {
@@ -176,7 +187,8 @@
       "source": 82,
       "relation": "empty",
       "target_text": "",
-      "target_option": null
+      "target_option": null,
+      "editors": []
     }
   },
   {
@@ -191,7 +203,8 @@
       "source": 82,
       "relation": "notempty",
       "target_text": "",
-      "target_option": null
+      "target_option": null,
+      "editors": []
     }
   },
   {
@@ -206,7 +219,8 @@
       "source": 114,
       "relation": "eq",
       "target_text": "1",
-      "target_option": null
+      "target_option": null,
+      "editors": []
     }
   },
   {
@@ -221,7 +235,26 @@
       "source": 120,
       "relation": "eq",
       "target_text": "1",
-      "target_option": null
+      "target_option": null,
+      "editors": []
+    }
+  },
+  {
+    "model": "conditions.condition",
+    "pk": 17,
+    "fields": {
+      "uri": "https://foo.com/terms/conditions/foo-condition",
+      "uri_prefix": "https://foo.com/terms",
+      "key": "foo-condition",
+      "comment": "",
+      "locked": false,
+      "source": 122,
+      "relation": "eq",
+      "target_text": "",
+      "target_option": null,
+      "editors": [
+        2
+      ]
     }
   }
 ]
