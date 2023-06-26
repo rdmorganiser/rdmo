@@ -58,7 +58,7 @@ class HasProjectPermission(HasObjectPermission):
             return super().has_object_permission(request, view, obj)
 
 
-class HasProjectQuestionPermission(HasProjectPermission):
+class HasProjectPagePermission(HasProjectPermission):
 
     def get_required_object_permissions(self, method, model_cls):
-        return ('projects.view_questionset_object', )
+        return ('projects.view_page_object', )

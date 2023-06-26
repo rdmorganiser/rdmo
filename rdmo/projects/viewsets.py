@@ -28,7 +28,7 @@ from rdmo.views.models import View
 from .filters import SnapshotFilterBackend, ValueFilterBackend
 from .models import (Continuation, Integration, Issue, Membership, Project,
                      Snapshot, Value)
-from .permissions import HasProjectQuestionPermission, HasProjectPermission, HasProjectsPermission
+from .permissions import HasProjectPagePermission, HasProjectPermission, HasProjectsPermission
 from .serializers.v1 import (IntegrationSerializer, IssueSerializer,
                              MembershipSerializer,
                              ProjectIntegrationSerializer,
@@ -343,7 +343,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
 
 
 class ProjectPageViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericViewSet):
-    permission_classes = (HasModelPermission | HasProjectQuestionPermission, )
+    permission_classes = (HasModelPermission | HasProjectPagePermission, )
     serializer_class = PageSerializer
 
     def get_queryset(self):
@@ -397,7 +397,7 @@ class ProjectPageViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericV
             # indicate end of catalog
             return Response(status=204)
 
-    @action(detail=False, url_path='continue', permission_classes=(HasModelPermission | HasProjectQuestionPermission, ))
+    @action(detail=False, url_path='continue', permission_classes=(HasModelPermission | HasProjectPagePermission, ))
     def get_continue(self, request, pk=None, parent_lookup_project=None):
         try:
             continuation = Continuation.objects.get(project=self.project, user=self.request.user)
