@@ -52,7 +52,7 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
         if self.action in ('nested', 'export', 'detail_export'):
             return queryset.prefetch_elements()
         else:
-            return queryset.prefetch_related('sites', 'groups', 'catalog_sections__section')
+            return queryset.prefetch_related('sites', 'editors', 'groups', 'catalog_sections__section')
 
     def get_serializer_class(self):
         return CatalogListSerializer if self.action == 'list' else CatalogSerializer
@@ -122,7 +122,7 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
         if self.action in ('nested', 'export', 'detail_export'):
             return queryset.prefetch_elements()
         else:
-            return queryset.prefetch_related('catalogs', 'section_pages__page')
+            return queryset.prefetch_related('catalogs', 'editors', 'section_pages__page')
 
     def get_serializer_class(self):
         return SectionListSerializer if self.action == 'list' else SectionSerializer
@@ -196,6 +196,7 @@ class PageViewSet(CopyModelMixin, ModelViewSet):
             return queryset.prefetch_related(
                 'conditions',
                 'sections',
+                'editors',
                 'page_questionsets__questionset',
                 'page_questions__question'
             ).select_related('attribute')
@@ -275,6 +276,7 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
                 'conditions',
                 'pages',
                 'parents',
+                'editors',
                 'questionset_questionsets__questionset',
                 'questionset_questions__question'
             ).select_related('attribute')
@@ -354,7 +356,8 @@ class QuestionViewSet(CopyModelMixin, ModelViewSet):
                 'conditions',
                 'optionsets',
                 'pages',
-                'questionsets'
+                'questionsets',
+                'editors'
             ).select_related('attribute')
 
     @action(detail=False)
