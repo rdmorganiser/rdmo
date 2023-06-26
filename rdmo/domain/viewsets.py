@@ -38,19 +38,18 @@ class AttributeViewSet(CopyModelMixin, ModelViewSet):
     def get_serializer_class(self):
         return AttributeListSerializer if self.action == 'list' else AttributeSerializer
 
-    @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=False)
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = AttributeIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=True, permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=True)
     def nested(self, request, pk):
         serializer = AttributeNestedSerializer(self.get_object(), context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?',
-            permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?')
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -66,8 +65,7 @@ class AttributeViewSet(CopyModelMixin, ModelViewSet):
                 'attributes': queryset
             })
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?',
-            permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
         attributes = self.get_object().get_descendants(include_self=True)
         if export_format == 'xml':

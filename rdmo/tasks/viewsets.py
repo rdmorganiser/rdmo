@@ -39,13 +39,12 @@ class TaskViewSet(CopyModelMixin, ModelViewSet):
         return TaskListSerializer if self.action == 'list' else TaskSerializer
 
     @action(detail=False)
-    def index(self, request, permission_classes=[HasModelPermission | HasObjectPermission]):
+    def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = TaskIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?',
-            permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?')
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -57,8 +56,7 @@ class TaskViewSet(CopyModelMixin, ModelViewSet):
                 'tasks': queryset
             })
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?',
-            permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = TaskExportSerializer(self.get_object())

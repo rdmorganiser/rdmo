@@ -36,14 +36,13 @@ class ViewViewSet(CopyModelMixin, ModelViewSet):
     def get_serializer_class(self):
         return ViewListSerializer if self.action == 'list' else ViewSerializer
 
-    @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=False)
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = ViewIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?',
-            permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?')
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -55,8 +54,7 @@ class ViewViewSet(CopyModelMixin, ModelViewSet):
                 'views': queryset
             })
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?',
-            permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = ViewExportSerializer(self.get_object())

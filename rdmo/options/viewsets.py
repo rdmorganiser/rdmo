@@ -44,19 +44,18 @@ class OptionSetViewSet(CopyModelMixin, ModelViewSet):
     def get_serializer_class(self):
         return OptionSetListSerializer if self.action == 'list' else OptionSetSerializer
 
-    @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=False)
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = OptionSetIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=True, permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=True)
     def nested(self, request, pk):
         serializer = OptionSetNestedSerializer(self.get_object(), context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?',
-            permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?')
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -68,8 +67,7 @@ class OptionSetViewSet(CopyModelMixin, ModelViewSet):
                 'optionsets': queryset
             })
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?',
-            permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = OptionSetExportSerializer(self.get_object())
@@ -108,14 +106,13 @@ class OptionViewSet(CopyModelMixin, ModelViewSet):
         'comment'
     )
 
-    @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=False)
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = OptionIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?',
-            permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?')
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -127,8 +124,7 @@ class OptionViewSet(CopyModelMixin, ModelViewSet):
                 'options': queryset
             })
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?',
-            permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = OptionExportSerializer(self.get_object())

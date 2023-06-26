@@ -57,19 +57,18 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
     def get_serializer_class(self):
         return CatalogListSerializer if self.action == 'list' else CatalogSerializer
 
-    @action(detail=True, permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=True)
     def nested(self, request, pk):
         serializer = CatalogNestedSerializer(self.get_object(), context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=False)
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = CatalogIndexSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?',
-            permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?')
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -81,8 +80,7 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
                 'catalogs': queryset
             })
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?',
-            permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = CatalogExportSerializer(self.get_object())
@@ -129,19 +127,18 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
     def get_serializer_class(self):
         return SectionListSerializer if self.action == 'list' else SectionSerializer
 
-    @action(detail=True, permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=True)
     def nested(self, request, pk):
         serializer = SectionNestedSerializer(self.get_object(), context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=False)
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = SectionIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?',
-            permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?')
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -153,8 +150,7 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
                 'sections': queryset
             })
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?',
-            permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = SectionExportSerializer(self.get_object())
@@ -207,19 +203,18 @@ class PageViewSet(CopyModelMixin, ModelViewSet):
     def get_serializer_class(self):
         return PageListSerializer if self.action == 'list' else PageSerializer
 
-    @action(detail=True, permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=True)
     def nested(self, request, pk):
         serializer = PageNestedSerializer(self.get_object(), context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=False)
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = PageIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?',
-            permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?')
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -231,8 +226,7 @@ class PageViewSet(CopyModelMixin, ModelViewSet):
                 'pages': queryset
             })
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?',
-            permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = PageExportSerializer(self.get_object())
@@ -285,19 +279,18 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
                 'questionset_questions__question'
             ).select_related('attribute')
 
-    @action(detail=True, permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=True)
     def nested(self, request, pk):
         serializer = QuestionSetNestedSerializer(self.get_object(), context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=False)
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = QuestionSetIndexSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?',
-            permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?')
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -309,8 +302,7 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
                 'questionsets': queryset
             })
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?',
-            permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = QuestionSetExportSerializer(self.get_object())
@@ -365,14 +357,13 @@ class QuestionViewSet(CopyModelMixin, ModelViewSet):
                 'questionsets'
             ).select_related('attribute')
 
-    @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=False)
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = QuestionIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?',
-            permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?')
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -384,8 +375,7 @@ class QuestionViewSet(CopyModelMixin, ModelViewSet):
                 'questions': queryset
             })
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?',
-            permission_classes=[HasModelPermission | HasObjectPermission])
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = QuestionExportSerializer(self.get_object())
