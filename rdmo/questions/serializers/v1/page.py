@@ -4,7 +4,8 @@ from rdmo.core.serializers import (ElementExportSerializerMixin,
                                    ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
                                    ThroughModelSerializerMixin,
-                                   TranslationSerializerMixin)
+                                   TranslationSerializerMixin,
+                                   ReadOnlyObjectPermissionsSerializerMixin)
 
 from ...models import Page, PageQuestion, PageQuestionSet, QuestionSet, Section
 from ...validators import PageLockedValidator, PageUniqueURIValidator
@@ -33,13 +34,15 @@ class PageQuestionSerializer(serializers.ModelSerializer):
 
 
 class PageSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
-                     ElementModelSerializerMixin, serializers.ModelSerializer):
+                     ElementModelSerializerMixin, ReadOnlyObjectPermissionsSerializerMixin,
+                     serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
     uri_path = serializers.CharField(required=True)
     sections = serializers.PrimaryKeyRelatedField(queryset=Section.objects.all(), required=False, many=True)
     questionsets = PageQuestionSetSerializer(source='page_questionsets', read_only=False, required=False, many=True)
     questions = PageQuestionSerializer(source='page_questions', read_only=False, required=False, many=True)
+    read_only = serializers.SerializerMethodField()
 
     class Meta:
         model = Page
@@ -51,6 +54,7 @@ class PageSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
             'uri_path',
             'comment',
             'locked',
+            'read_only',
             'attribute',
             'is_collection',
             'title',

@@ -4,7 +4,8 @@ from rdmo.core.serializers import (ElementExportSerializerMixin,
                                    ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
                                    ThroughModelSerializerMixin,
-                                   TranslationSerializerMixin)
+                                   TranslationSerializerMixin,
+                                   ReadOnlyObjectPermissionsSerializerMixin)
 
 from ...models import Catalog, Section, SectionPage
 from ...validators import SectionLockedValidator, SectionUniqueURIValidator
@@ -22,12 +23,15 @@ class SectionPageSerializer(serializers.ModelSerializer):
 
 
 class SectionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
-                        ElementModelSerializerMixin, serializers.ModelSerializer):
+                        ElementModelSerializerMixin, ReadOnlyObjectPermissionsSerializerMixin,
+                        serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
     uri_path = serializers.CharField(required=True)
     catalogs = serializers.PrimaryKeyRelatedField(queryset=Catalog.objects.all(), required=False, many=True)
     pages = SectionPageSerializer(source='section_pages', read_only=False, required=False, many=True)
+    read_only = serializers.SerializerMethodField()
+
 
     class Meta:
         model = Section
@@ -39,6 +43,7 @@ class SectionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
             'uri_path',
             'comment',
             'locked',
+            'read_only',
             'title',
             'catalogs',
             'pages'

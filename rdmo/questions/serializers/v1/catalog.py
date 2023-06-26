@@ -4,7 +4,8 @@ from rdmo.core.serializers import (ElementExportSerializerMixin,
                                    ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
                                    ThroughModelSerializerMixin,
-                                   TranslationSerializerMixin)
+                                   TranslationSerializerMixin,
+                                   ReadOnlyObjectPermissionsSerializerMixin)
 
 from ...models import Catalog, CatalogSection
 from ...validators import CatalogLockedValidator, CatalogUniqueURIValidator
@@ -22,12 +23,14 @@ class CatalogSectionSerializer(serializers.ModelSerializer):
 
 
 class CatalogSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
-                        ElementModelSerializerMixin, serializers.ModelSerializer):
+                        ElementModelSerializerMixin, ReadOnlyObjectPermissionsSerializerMixin,
+                        serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
     uri_path = serializers.CharField(required=True)
     projects_count = serializers.IntegerField(read_only=True)
     sections = CatalogSectionSerializer(source='catalog_sections', read_only=False, required=False, many=True)
+    read_only = serializers.SerializerMethodField()
 
     class Meta:
         model = Catalog
@@ -39,6 +42,7 @@ class CatalogSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
             'uri_path',
             'comment',
             'locked',
+            'read_only',
             'order',
             'available',
             'sections',
