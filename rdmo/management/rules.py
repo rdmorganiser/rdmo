@@ -154,6 +154,16 @@ rules.add_perm('questions.add_section_object', is_element_editor)
 rules.add_perm('questions.change_section_object', is_element_editor)
 rules.add_perm('questions.delete_section_object', is_element_editor)
 
+# Model permissions for pages
+rules.add_perm('questions.view_page', is_editor | is_reviewer)
+rules.add_perm('questions.add_page', is_editor)
+
+# Object permissions for pages
+rules.add_perm('questions.view_page_object', is_element_editor | is_element_reviewer)
+rules.add_perm('questions.add_page_object', is_element_editor)
+rules.add_perm('questions.change_page_object', is_element_editor)
+rules.add_perm('questions.delete_page_object', is_element_editor)
+
 # Model permissions for questionsets
 rules.add_perm('questions.view_questionset', is_editor | is_reviewer)
 rules.add_perm('questions.add_questionset', is_editor)
