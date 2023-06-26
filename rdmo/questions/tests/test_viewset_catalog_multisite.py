@@ -107,8 +107,8 @@ status_map_obj_perms = {
             'example-reviewer': 403, 'foo-reviewer': 403, 'bar-reviewer': 403,
         },
         'catalog2': {
-            'example-editor': 200, 'foo-editor': 404, 'bar-editor': 404,
-            'example-reviewer': 403, 'foo-reviewer': 404, 'bar-reviewer': 404,
+            'example-editor': 200, 'foo-editor': 200, 'bar-editor': 200,
+            'example-reviewer': 403, 'foo-reviewer': 403, 'bar-reviewer': 403,
         },
         'foo-catalog': {
             'example-editor': 404, 'foo-editor': 200, 'bar-editor': 404,
@@ -125,8 +125,8 @@ status_map_obj_perms = {
             'example-reviewer': 403, 'foo-reviewer': 403, 'bar-reviewer': 403,
         },
         'catalog2': {
-            'example-editor': 204, 'foo-editor': 404, 'bar-editor': 404,
-            'example-reviewer': 403, 'foo-reviewer': 404, 'bar-reviewer': 404,
+            'example-editor': 204, 'foo-editor': 204, 'bar-editor': 204,
+            'example-reviewer': 403, 'foo-reviewer': 403, 'bar-reviewer': 403,
         },
         'foo-catalog': {
             'example-editor': 404, 'foo-editor': 204, 'bar-editor': 404,
@@ -143,8 +143,8 @@ status_map_obj_perms = {
             'example-reviewer': 403, 'foo-reviewer': 403, 'bar-reviewer': 403,
         },
         'catalog2': {
-            'example-editor': 201, 'foo-editor': 404, 'bar-editor': 404,
-            'example-reviewer': 403, 'foo-reviewer': 404, 'bar-reviewer': 404,
+            'example-editor': 201, 'foo-editor': 201, 'bar-editor': 201,
+            'example-reviewer': 403, 'foo-reviewer': 403, 'bar-reviewer': 403,
         },
         'foo-catalog': {
             'example-editor': 404, 'foo-editor': 201, 'bar-editor': 404,
@@ -158,14 +158,14 @@ status_map_obj_perms = {
 }
 
 def get_status_code_for_catalog(username: str,
-                                catalog_key: int,
+                                catalog_uri_path: int,
                                 method: str,
                                 status_map: dict,
                                 status_map_obj_perms: dict) -> int:
 
     try:
-        test_status_user = status_map_obj_perms[method][catalog_key][username]
-        print(f'catalog_key: {catalog_key}, username: {username}, method: {method}, test_status_user: {test_status_user}')
+        test_status_user = status_map_obj_perms[method][catalog_uri_path][username]
+        print(f'catalog_uri_path: {catalog_uri_path}, username: {username}, method: {method}, test_status_user: {test_status_user}')
     except KeyError:
         test_status_user = status_map[method].get(username, None)
     return test_status_user
@@ -225,7 +225,7 @@ def test_export(db, client, username, password):
         root = et.fromstring(response.content)
         assert root.tag == 'rdmo'
         for child in root:
-            assert child.tag in ['catalog', 'section', 'questionset', 'question']
+            assert child.tag in ['catalog', 'section', 'page', 'questionset', 'question']
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -250,7 +250,7 @@ def test_nested(db, client, username, password):
         response = client.get(url)
         
         test_status_user = get_status_code_for_catalog(username,
-                                                       instance.key,
+                                                       instance.uri_path,
                                                        method,
                                                        status_map,
                                                        status_map_obj_perms)
@@ -267,7 +267,7 @@ def test_create(db, client, username, password):
         url = reverse(urlnames['list'])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'key': '%s_new_%s' % (instance.key, username),
+            'uri_path': '%s_new_%s' % (instance.uri_path, username),
             'comment': instance.comment,
             'order': instance.order,
             'title_en': instance.title_lang1,
@@ -287,7 +287,7 @@ def test_multisite_update(db, client, username, password):
         url = reverse(urlnames['detail'], args=[instance.pk])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'key': instance.key,
+            'uri_path': instance.uri_path,
             'comment': instance.comment,
             'order': instance.order,
             'title_en': instance.title_lang1,
@@ -295,7 +295,7 @@ def test_multisite_update(db, client, username, password):
         }
 
         test_status_user = get_status_code_for_catalog(username,
-                                                       instance.key,
+                                                       instance.uri_path,
                                                        method,
                                                        status_map,
                                                        status_map_obj_perms)
@@ -313,7 +313,7 @@ def test_multisite_delete(db, client, username, password):
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.delete(url)
         test_status_user = get_status_code_for_catalog(username,
-                                                       instance.key,
+                                                       instance.uri_path,
                                                        method,
                                                        status_map,
                                                        status_map_obj_perms)
@@ -333,7 +333,7 @@ def test_multisite_detail_export(db, client, username, password):
             root = et.fromstring(response.content)
             assert root.tag == 'rdmo'
             for child in root:
-                assert child.tag in ['catalog', 'section', 'questionset', 'question']
+                assert child.tag in ['catalog', 'section', 'page', 'questionset', 'question']
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -345,12 +345,12 @@ def test_multisite_copy(db, client, username, password):
         url = reverse(urlnames['copy'], args=[instance.pk])
         data = {
             'uri_prefix': instance.uri_prefix + '-',
-            'key': instance.key + '-',
+            'uri_path': instance.uri_path + '-',
         }
         response = client.put(url, data, content_type='application/json')
 
         test_status_user = get_status_code_for_catalog(username,
-                                                       instance.key,
+                                                       instance.uri_path,
                                                        method,
                                                        status_map,
                                                        status_map_obj_perms)
@@ -364,11 +364,11 @@ def test_multisitecopy_wrong(db, client, username, password):
     url = reverse(urlnames['copy'], args=[instance.pk])
     data = {
         'uri_prefix': instance.uri_prefix,
-        'key': instance.key
+        'uri_path': instance.uri_path
     }
     response = client.put(url, data, content_type='application/json')
     test_status_user = get_status_code_for_catalog(username,
-                                                    instance.key,
+                                                    instance.uri_path,
                                                     method,
                                                     status_map,
                                                     status_map_obj_perms)
