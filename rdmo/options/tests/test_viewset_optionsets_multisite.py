@@ -6,6 +6,7 @@ from django.urls import reverse
 
 from ..models import OptionSet
 
+from .test_viewset_optionsets import export_formats
 
 
 users = (
@@ -48,18 +49,68 @@ status_map = {
         'editor': 201
     },
     'update': {
-        'foo-user': 404, 'foo-reviewer': 404, 'foo-editor': 404,
-        'bar-user': 404, 'bar-reviewer': 404, 'bar-editor': 404,
+        'foo-user': 404, 'foo-reviewer': 403, 'foo-editor': 200,
+        'bar-user': 404, 'bar-reviewer': 403, 'bar-editor': 200,
         'user': 404, 'example-reviewer': 403, 'example-editor': 200,
         'editor': 200
     },
     'delete': {
-        'foo-user': 404, 'foo-reviewer': 404, 'foo-editor': 404,
-        'bar-user': 404, 'bar-reviewer': 404, 'bar-editor': 404,
+        'foo-user': 404, 'foo-reviewer': 403, 'foo-editor': 204,
+        'bar-user': 404, 'bar-reviewer': 403, 'bar-editor': 204,
         'user': 404, 'example-reviewer': 403, 'example-editor': 204,
         'editor': 204
     }
 }
+
+
+status_map_object_permissions = {
+    'copy': {
+        'foo-optionset': {
+            'foo-reviewer': 403, 'foo-editor': 201,
+            'bar-reviewer': 404, 'bar-editor': 404,
+            'example-reviewer': 404, 'example-editor': 404,
+        },
+        'bar-optionset': {
+            'foo-reviewer': 404, 'foo-editor': 404,
+            'bar-reviewer': 403, 'bar-editor': 201,
+            'example-reviewer': 404, 'example-editor': 404,
+        }
+    },
+    'update': {
+        'foo-optionset': {
+            'foo-reviewer': 403, 'foo-editor': 200,
+            'bar-reviewer': 404, 'bar-editor': 404,
+            'example-reviewer': 404, 'example-editor': 404,
+        },
+        'bar-optionset': {
+            'foo-reviewer': 404, 'foo-editor': 404,
+            'bar-reviewer': 403, 'bar-editor': 200,
+            'example-reviewer': 404, 'example-editor': 404,
+        }
+    },
+    'delete': {
+        'foo-optionset': {
+            'foo-reviewer': 403, 'foo-editor': 204,
+            'bar-reviewer': 404, 'bar-editor': 404,
+            'example-reviewer': 404, 'example-editor': 404,
+        },
+        'bar-optionset': {
+            'foo-reviewer': 404, 'foo-editor': 404,
+            'bar-reviewer': 403, 'bar-editor': 204,
+            'example-reviewer': 404, 'example-editor': 404,
+        }
+    },
+}
+
+def get_status_map_or_obj_perms(instance, username, method):
+    ''' looks for the object permissions of the instance and returns the status code '''
+    if instance.editors.exists():
+        try:
+            return status_map_object_permissions[method][instance.uri_path][username]
+        except KeyError:
+            return status_map[method][username]
+    else:
+        return status_map[method][username]
 
 
 urlnames = {
@@ -83,12 +134,25 @@ def test_list(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
+def test_detail(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = OptionSet.objects.all()
+
+    for instance in instances:
+        url = reverse(urlnames['detail'], args=[instance.pk])
+        response = client.get(url)
+        assert response.status_code == status_map['detail'][username], response.json()
+
+
+@pytest.mark.parametrize('username,password', users)
 def test_nested(db, client, username, password):
     client.login(username=username, password=password)
+    instances = OptionSet.objects.all()
 
-    url = reverse(urlnames['nested'])
-    response = client.get(url)
-    assert response.status_code == status_map['list'][username], response.json()
+    for instance in instances:
+        url = reverse(urlnames['nested'], args=[instance.pk])
+        response = client.get(url)
+        assert response.status_code == status_map['list'][username], response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -116,17 +180,6 @@ def test_export(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_detail(db, client, username, password):
-    client.login(username=username, password=password)
-    instances = OptionSet.objects.all()
-
-    for instance in instances:
-        url = reverse(urlnames['detail'], args=[instance.pk])
-        response = client.get(url)
-        assert response.status_code == status_map['detail'][username], response.json()
-
-
-@pytest.mark.parametrize('username,password', users)
 def test_create(db, client, username, password):
     client.login(username=username, password=password)
     instances = OptionSet.objects.all()
@@ -145,41 +198,47 @@ def test_create(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_update_with_obj_permission_set_editors_currentsite(db, client, username, password):
+def test_update_m2m_multisite(db, client, username, password):
     client.login(username=username, password=password)
     instances = OptionSet.objects.all()
 
     for instance in instances:
-
-        # set current site for object permissions (=example.com)
-        instance.editors.set([Site.objects.get_current()])
+        optionset_options = [{
+            'option': optionset_option.option.id,
+            'order': optionset_option.order
+        } for optionset_option in instance.optionset_options.all()[:1]]
+        conditions = [condition.pk for condition in instance.conditions.all()[:1]]
 
         url = reverse(urlnames['detail'], args=[instance.pk])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'key': instance.key,
+            'uri_path': instance.uri_path,
             'comment': instance.comment,
             'order': instance.order,
-            'conditions': [condition.pk for condition in instance.conditions.all()],
+            'options': optionset_options,
+            'conditions': conditions,
         }
         response = client.put(url, data, content_type='application/json')
-        assert response.status_code == status_map['update'][username], response.json()
+        assert response.status_code == get_status_map_or_obj_perms(instance, username, 'update'), response.json()
 
+        if response.status_code == 200:
+            instance.refresh_from_db()
+            assert optionset_options == [{
+                'option': optionset_option.option.id,
+                'order': optionset_option.order
+            } for optionset_option in instance.optionset_options.all()]
+            assert conditions == [condition.pk for condition in instance.conditions.all()]
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_delete_with_obj_permissions_set_editors_currentsite(db, client, username, password):
+def test_delete_multisite(db, client, username, password):
     client.login(username=username, password=password)
     instances = OptionSet.objects.all()
 
     for instance in instances:
-
-        # set current site for object permissions (=example.com)
-        instance.editors.set([Site.objects.get_current()])
-
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.delete(url)
-        assert response.status_code == status_map['delete'][username]
+        assert response.status_code == get_status_map_or_obj_perms(instance, username, 'delete'), response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -200,7 +259,7 @@ def test_detail_export(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_copy(db, client, username, password):
+def test_copy_multisite(db, client, username, password):
     client.login(username=username, password=password)
     instances = OptionSet.objects.all()
 
@@ -211,7 +270,7 @@ def test_copy(db, client, username, password):
             'key': instance.key + '-'
         }
         response = client.put(url, data, content_type='application/json')
-        assert response.status_code == status_map['copy'][username], response.json()
+        assert response.status_code == get_status_map_or_obj_perms(instance, username, 'update'), response.json()
 
 
 @pytest.mark.parametrize('username,password', users)

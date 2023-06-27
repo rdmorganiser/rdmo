@@ -47,18 +47,68 @@ status_map = {
         'editor': 201
     },
     'update': {
-        'foo-user': 404, 'foo-reviewer': 404, 'foo-editor': 404,
-        'bar-user': 404, 'bar-reviewer': 404, 'bar-editor': 404,
+        'foo-user': 404, 'foo-reviewer': 403, 'foo-editor': 200,
+        'bar-user': 404, 'bar-reviewer': 403, 'bar-editor': 200,
         'user': 404, 'example-reviewer': 403, 'example-editor': 200,
         'editor': 200
     },
     'delete': {
-        'foo-user': 404, 'foo-reviewer': 404, 'foo-editor': 404,
-        'bar-user': 404, 'bar-reviewer': 404, 'bar-editor': 404,
+        'foo-user': 404, 'foo-reviewer': 403, 'foo-editor': 204,
+        'bar-user': 404, 'bar-reviewer': 403, 'bar-editor': 204,
         'user': 404, 'example-reviewer': 403, 'example-editor': 204,
         'editor': 204
     }
 }
+
+status_map_object_permissions = {
+    'copy': {
+        'foo-attribute': {
+            'foo-reviewer': 403, 'foo-editor': 201,
+            'bar-reviewer': 404, 'bar-editor': 404,
+            'example-reviewer': 404, 'example-editor': 404,
+        },
+        'bar-attribute': {
+            'foo-reviewer': 404, 'foo-editor': 404,
+            'bar-reviewer': 403, 'bar-editor': 201,
+            'example-reviewer': 404, 'example-editor': 404,
+        }
+    },
+    'update': {
+        'foo-attribute': {
+            'foo-reviewer': 403, 'foo-editor': 200,
+            'bar-reviewer': 404, 'bar-editor': 404,
+            'example-reviewer': 404, 'example-editor': 404,
+        },
+        'bar-attribute': {
+            'foo-reviewer': 404, 'foo-editor': 404,
+            'bar-reviewer': 403, 'bar-editor': 200,
+            'example-reviewer': 404, 'example-editor': 404,
+        }
+    },
+    'delete': {
+        'foo-attribute': {
+            'foo-reviewer': 403, 'foo-editor': 204,
+            'bar-reviewer': 404, 'bar-editor': 404,
+            'example-reviewer': 404, 'example-editor': 404,
+        },
+        'bar-attribute': {
+            'foo-reviewer': 404, 'foo-editor': 404,
+            'bar-reviewer': 403, 'bar-editor': 204,
+            'example-reviewer': 404, 'example-editor': 404,
+        }
+    },
+}
+
+def get_status_map_or_obj_perms(instance, username, method):
+    ''' looks for the object permissions of the instance and returns the status code '''
+    if instance.editors.exists():
+        try:
+            return status_map_object_permissions[method][instance.key][username]
+        except KeyError:
+            return status_map[method][username]
+    else:
+        return status_map[method][username]
+
 
 urlnames = {
     'list': 'v1-domain:attribute-list',
@@ -81,15 +131,19 @@ def test_list(db, client, username, password):
 
 @pytest.mark.parametrize('username,password', users)
 def test_nested(db, client, username, password):
+    ''' only users and status_map are unique for this test '''
     client.login(username=username, password=password)
+    instances = Attribute.objects.order_by('-level')
 
-    url = reverse(urlnames['nested'])
-    response = client.get(url)
-    assert response.status_code == status_map['list'][username], response.json()
+    for instance in instances:
+        url = reverse(urlnames['nested'], args=[instance.pk])
+        response = client.get(url)
+        assert response.status_code == status_map['detail'][username], response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
 def test_export(db, client, username, password):
+    ''' only users and status_map are unique for this test '''
     client.login(username=username, password=password)
 
     url = reverse(urlnames['export'])
@@ -105,6 +159,7 @@ def test_export(db, client, username, password):
 
 @pytest.mark.parametrize('username,password', users)
 def test_detail(db, client, username, password):
+    ''' only users and status_map are unique for this test '''
     client.login(username=username, password=password)
     instances = Attribute.objects.order_by('-level')
 
@@ -116,6 +171,7 @@ def test_detail(db, client, username, password):
 
 @pytest.mark.parametrize('username,password', users)
 def test_create(db, client, username, password):
+    ''' only users and status_map are unique for this test '''
     client.login(username=username, password=password)
     instances = Attribute.objects.order_by('-level')
 
@@ -129,6 +185,26 @@ def test_create(db, client, username, password):
         }
         response = client.post(url, data)
         assert response.status_code == status_map['create'][username], response.json()
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_update_multisite(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = Attribute.objects.order_by('-level')
+
+    for instance in instances:
+
+        url = reverse(urlnames['detail'], args=[instance.pk])
+        data = {
+            'uri_prefix': instance.uri_prefix,
+            'key': instance.key,
+            'comment': '',
+            'parent': instance.parent.pk if instance.parent else ''
+        }
+        response = client.put(url, data, content_type='application/json')
+        if response.status_code == 200 and get_status_map_or_obj_perms(instance, username, 'update') == 404:
+            breakpoint()
+        assert response.status_code == get_status_map_or_obj_perms(instance, username, 'update'), response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -150,6 +226,17 @@ def test_update_with_obj_permissions_editors_currentsite(db, client, username, p
         }
         response = client.put(url, data, content_type='application/json')
         assert response.status_code == status_map['update'][username], response.json()
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_delete_multisite(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = Attribute.objects.order_by('-level')
+
+    for instance in instances:
+        url = reverse(urlnames['detail'], args=[instance.pk])
+        response = client.delete(url)
+        assert response.status_code == get_status_map_or_obj_perms(instance,username,'delete'), response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -185,7 +272,7 @@ def test_detail_export(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_copy(db, client, username, password):
+def test_copy_multisite(db, client, username, password):
     client.login(username=username, password=password)
     instances = Attribute.objects.all()
 
@@ -197,11 +284,12 @@ def test_copy(db, client, username, password):
             'parent': instance.parent.pk if instance.parent else None
         }
         response = client.put(url, data, content_type='application/json')
-        assert response.status_code == status_map['copy'][username], response.json()
+        assert response.status_code == get_status_map_or_obj_perms(instance, username, 'copy'), response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
 def test_copy_wrong(db, client, username, password):
+    ''' only users and status_map are unique for this test '''
     client.login(username=username, password=password)
     instance = Attribute.objects.first()
 
