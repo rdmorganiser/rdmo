@@ -2,8 +2,8 @@ from rest_framework import serializers
 
 from rdmo.core.serializers import (ElementExportSerializerMixin,
                                    ElementModelSerializerMixin,
-                                   ThroughModelSerializerMixin,
-                                   ReadOnlyObjectPermissionsSerializerMixin)
+                                   ReadOnlyObjectPermissionsSerializerMixin,
+                                   ThroughModelSerializerMixin)
 from rdmo.questions.models import Question
 
 from ...models import OptionSet, OptionSetOption
@@ -45,7 +45,9 @@ class OptionSetSerializer(ThroughModelSerializerMixin, ElementModelSerializerMix
             'provider_key',
             'options',
             'conditions',
-            'questions'
+            'questions',
+            'editors',
+            'read_only'
         )
         through_fields = (
             ('options', 'optionset', 'option', 'optionset_options'),

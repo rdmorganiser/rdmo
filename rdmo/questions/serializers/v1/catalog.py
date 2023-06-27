@@ -3,9 +3,9 @@ from rest_framework import serializers
 from rdmo.core.serializers import (ElementExportSerializerMixin,
                                    ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
+                                   ReadOnlyObjectPermissionsSerializerMixin,
                                    ThroughModelSerializerMixin,
-                                   TranslationSerializerMixin,
-                                   ReadOnlyObjectPermissionsSerializerMixin)
+                                   TranslationSerializerMixin)
 
 from ...models import Catalog, CatalogSection
 from ...validators import CatalogLockedValidator, CatalogUniqueURIValidator
@@ -42,11 +42,12 @@ class CatalogSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
             'uri_path',
             'comment',
             'locked',
-            'read_only',
             'order',
             'available',
             'sections',
             'sites',
+            'editors',
+            'read_only',
             'groups',
             'title',
             'help',
