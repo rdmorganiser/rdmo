@@ -11,6 +11,7 @@ import Textarea from './common/Textarea'
 import UriPrefix from './common/UriPrefix'
 
 import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
+import { ReadOnlyIcon } from '../common/Icons'
 
 import QuestionInfo from '../info/QuestionInfo'
 import DeleteQuestionModal from '../modals/DeleteQuestionModal'
@@ -43,9 +44,10 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
     <div className="panel panel-default panel-edit">
       <div className="panel-heading">
         <div className="pull-right">
+          <ReadOnlyIcon title={gettext('This question is read only')} show={question.read_only} />
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storeQuestion} />
-          <SaveButton elementAction={elementAction} onClick={storeQuestion} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeQuestion} disabled={question.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storeQuestion} disabled={question.read_only} back={true}/>
         </div>
         {
           question.id ? <>
@@ -213,10 +215,10 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storeQuestion} />
-          <SaveButton elementAction={elementAction} onClick={storeQuestion} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeQuestion} disabled={question.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storeQuestion} disabled={question.read_only} back={true}/>
         </div>
-        {question.id && <DeleteButton onClick={openDeleteModal} />}
+        {question.id && <DeleteButton onClick={openDeleteModal} disabled={question.read_only} />}
       </div>
 
       <DeleteQuestionModal question={question} info={info} show={showDeleteModal}

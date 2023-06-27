@@ -12,6 +12,7 @@ import Textarea from './common/Textarea'
 import UriPrefix from './common/UriPrefix'
 
 import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
+import { ReadOnlyIcon } from '../common/Icons'
 
 import OptionSetInfo from '../info/OptionSetInfo'
 import DeleteOptionSetModal from '../modals/DeleteOptionSetModal'
@@ -41,9 +42,10 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
     <div className="panel panel-default panel-edit">
       <div className="panel-heading">
         <div className="pull-right">
+          <ReadOnlyIcon title={gettext('This option set is read only')} show={optionset.read_only} />
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storeOptionSet} />
-          <SaveButton elementAction={elementAction} onClick={storeOptionSet} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeOptionSet} disabled={optionset.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storeOptionSet} disabled={optionset.read_only} back={true}/>
         </div>
         {
           optionset.id ? <>
@@ -111,10 +113,10 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storeOptionSet} />
-          <SaveButton elementAction={elementAction} onClick={storeOptionSet} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeOptionSet} disabled={optionset.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storeOptionSet} disabled={optionset.read_only} back={true}/>
         </div>
-        {optionset.id && <DeleteButton onClick={openDeleteModal} />}
+        {optionset.id && <DeleteButton onClick={openDeleteModal} disabled={optionset.read_only} />}
       </div>
 
       <DeleteOptionSetModal optionset={optionset} info={info} show={showDeleteModal}

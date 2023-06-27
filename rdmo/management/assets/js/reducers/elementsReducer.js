@@ -52,6 +52,7 @@ export default function elementsReducer(state = initialState, action) {
       // remove the id when copying
       if (state.elementAction == 'copy') {
         action.elements.element.id = null
+        action.elements.element.read_only = false
       }
 
       return {...state, ...action.elements}

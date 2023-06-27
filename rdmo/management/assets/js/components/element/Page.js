@@ -9,6 +9,7 @@ import Question from './Question'
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AddLink, LockedLink, NestedLink,
          ExportLink, CodeLink } from '../common/Links'
+import { ReadOnlyIcon } from '../common/Icons'
 import { Drag, Drop } from '../common/DragAndDrop'
 
 const Page = ({ config, page, elementActions, display='list', filter=null, indent=0 }) => {
@@ -34,16 +35,17 @@ const Page = ({ config, page, elementActions, display='list', filter=null, inden
   const elementNode = (
     <div className="element">
       <div className="pull-right">
+        <ReadOnlyIcon title={gettext('This page is read only')} show={page.read_only} />
         <NestedLink title={gettext('View page nested')} href={nestedUrl} onClick={fetchNested} />
         <EditLink title={gettext('Edit page')} href={editUrl} onClick={fetchEdit} />
         <CopyLink title={gettext('Copy page')} href={copyUrl} onClick={fetchCopy} />
         <AddLink title={gettext('Add question')} altTitle={gettext('Add question set')}
-                 onClick={createQuestion} onAltClick={createQuestionSet} />
+                 onClick={createQuestion} onAltClick={createQuestionSet} disabled={page.read_only} />
         <LockedLink title={page.locked ? gettext('Unlock page') : gettext('Lock page')}
-                    locked={page.locked} onClick={toggleLocked} />
+                    locked={page.locked} onClick={toggleLocked} disabled={page.read_only} />
         <ExportLink title={gettext('Export page')} exportUrl={exportUrl}
                     exportFormats={config.settings.export_formats} full={true} />
-        {display == 'nested' && <Drag element={page} />}
+        <Drag element={page} show={display == 'nested'} />
       </div>
       <div>
         <p>

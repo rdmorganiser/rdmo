@@ -29,7 +29,7 @@ const CodeMirror = ({ config, element, field, onChange }) => {
       <label className="control-label" htmlFor={id}>{label}</label>
 
       <ReactCodeMirror className="codemirror form-control" id={id} value={value} extensions={[html()]}
-                       onChange={(value) => onChange(field, value)} />
+                       onChange={(value) => onChange(field, value)} disabled={element.read_only} />
 
       {help && <p className="help-block">{help}</p>}
 

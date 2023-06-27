@@ -27,11 +27,11 @@ const UriPrefix = ({ config, element, field, onChange }) => {
       <label className="control-label" htmlFor={id}>{label}</label>
 
       <div className="input-group">
-        <input className="form-control" id={id} type="text"
+        <input className="form-control" id={id} type="text" disabled={element.read_only}
                value={value} onChange={event => onChange(field, event.target.value)} />
 
         <span className="input-group-btn">
-          <button type="button" className="btn btn-default"
+          <button type="button" className="btn btn-default" disabled={element.read_only}
             title={gettext('Insert default URI Prefix')}
             onClick={() => onChange(field, config.settings.default_uri_prefix)}>
             <span className="fa fa-magic"></span>

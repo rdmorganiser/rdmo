@@ -6,6 +6,7 @@ import { buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AvailableLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
+import { ReadOnlyIcon } from '../common/Icons'
 
 const View = ({ config, view, elementActions, filter=null }) => {
 
@@ -24,13 +25,15 @@ const View = ({ config, view, elementActions, filter=null }) => {
     <li className="list-group-item">
       <div className="element">
         <div className="pull-right">
+          <ReadOnlyIcon title={gettext('This view is read only')} show={view.read_only} />
           <EditLink title={gettext('Edit view')} href={editUrl} onClick={fetchEdit} />
           <CopyLink title={gettext('Copy view')} href={copyUrl} onClick={fetchCopy} />
           <AvailableLink title={view.available ? gettext('Make view unavailable')
                                                : gettext('Make view available')}
-                         available={view.available} locked={view.locked} onClick={toggleAvailable} />
+                         available={view.available} locked={view.locked} onClick={toggleAvailable}
+                         disabled={view.read_only} />
           <LockedLink title={view.locked ? gettext('Unlock view') : gettext('Lock view')}
-                      locked={view.locked} onClick={toggleLocked} />
+                      locked={view.locked} onClick={toggleLocked} disabled={view.read_only} />
           <ExportLink title={gettext('Export view')} exportUrl={exportUrl}
                       exportFormats={config.settings.export_formats} />
         </div>

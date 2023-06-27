@@ -6,6 +6,7 @@ import { buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AvailableLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
+import { ReadOnlyIcon } from '../common/Icons'
 
 const Task = ({ config, task, elementActions, filter=null }) => {
 
@@ -24,13 +25,15 @@ const Task = ({ config, task, elementActions, filter=null }) => {
     <li className="list-group-item">
       <div className="element">
         <div className="pull-right">
+          <ReadOnlyIcon title={gettext('This task is read only')} show={task.read_only} />
           <EditLink title={gettext('Edit task')} href={editUrl} onClick={fetchEdit} />
           <CopyLink title={gettext('Copy task')} href={copyUrl} onClick={fetchCopy} />
           <AvailableLink title={task.available ? gettext('Make task unavailable')
                                                : gettext('Make task available')}
-                         available={task.available} locked={task.locked} onClick={toggleAvailable} />
+                         available={task.available} locked={task.locked} onClick={toggleAvailable}
+                         disabled={task.read_only} />
           <LockedLink title={task.locked ? gettext('Unlock task') : gettext('Lock task')}
-                      locked={task.locked} onClick={toggleLocked} />
+                      locked={task.locked} onClick={toggleLocked} disabled={task.read_only} />
           <ExportLink title={gettext('Export task')} exportUrl={exportUrl}
                       exportFormats={config.settings.export_formats} full={true} />
         </div>

@@ -3,7 +3,7 @@ import { useDrag, useDrop } from 'react-dnd'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
-const Drag = ({ element }) => {
+const Drag = ({ element, show=true }) => {
   const dragRef = useRef(null)
 
   const [{}, drag] = useDrag(() => ({
@@ -13,13 +13,14 @@ const Drag = ({ element }) => {
 
   drag(dragRef)
 
-  return <span className="element-link drag">
+  return show && <span className="element-link drag">
     <i className="fa fa-arrows drag" ref={dragRef}></i>
   </span>
 }
 
 Drag.propTypes = {
-  element: PropTypes.object.isRequired
+  element: PropTypes.object.isRequired,
+  show: PropTypes.bool
 }
 
 const Drop = ({ element, elementActions, indent=0, mode='in', children=null }) => {

@@ -9,6 +9,7 @@ import Textarea from './common/Textarea'
 import UriPrefix from './common/UriPrefix'
 
 import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
+import { ReadOnlyIcon } from '../common/Icons'
 
 import ConditionInfo from '../info/ConditionInfo'
 import DeleteConditionModal from '../modals/DeleteConditionModal'
@@ -37,9 +38,10 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
     <div className="panel panel-default panel-edit">
       <div className="panel-heading">
         <div className="pull-right">
+          <ReadOnlyIcon title={gettext('This condition is read only')} show={condition.read_only} />
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storeCondition} />
-          <SaveButton elementAction={elementAction} onClick={storeCondition} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeCondition} disabled={condition.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storeCondition} disabled={condition.read_only} back={true}/>
         </div>
         {
           condition.id ? <>
@@ -127,10 +129,10 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storeCondition} />
-          <SaveButton elementAction={elementAction} onClick={storeCondition} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeCondition} disabled={condition.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storeCondition} disabled={condition.read_only} back={true}/>
         </div>
-        {condition.id && <DeleteButton onClick={openDeleteModal} />}
+        {condition.id && <DeleteButton onClick={openDeleteModal} disabled={condition.read_only} />}
       </div>
 
       <DeleteConditionModal condition={condition} info={info} show={showDeleteModal}
