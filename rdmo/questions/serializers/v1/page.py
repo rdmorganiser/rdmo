@@ -3,9 +3,9 @@ from rest_framework import serializers
 from rdmo.core.serializers import (ElementExportSerializerMixin,
                                    ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
+                                   ReadOnlyObjectPermissionsSerializerMixin,
                                    ThroughModelSerializerMixin,
-                                   TranslationSerializerMixin,
-                                   ReadOnlyObjectPermissionsSerializerMixin)
+                                   TranslationSerializerMixin)
 
 from ...models import Page, PageQuestion, PageQuestionSet, QuestionSet, Section
 from ...validators import PageLockedValidator, PageUniqueURIValidator
@@ -54,7 +54,6 @@ class PageSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
             'uri_path',
             'comment',
             'locked',
-            'read_only',
             'attribute',
             'is_collection',
             'title',
@@ -64,7 +63,9 @@ class PageSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
             'sections',
             'questionsets',
             'questions',
-            'conditions'
+            'conditions',
+            'editors',
+            'read_only'
         )
         trans_fields = (
             'title',

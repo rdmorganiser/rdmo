@@ -3,9 +3,9 @@ from rest_framework import serializers
 from rdmo.core.serializers import (ElementExportSerializerMixin,
                                    ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
+                                   ReadOnlyObjectPermissionsSerializerMixin,
                                    ThroughModelSerializerMixin,
-                                   TranslationSerializerMixin,
-                                   ReadOnlyObjectPermissionsSerializerMixin)
+                                   TranslationSerializerMixin)
 
 from ...models import Option, OptionSet
 from ...validators import OptionLockedValidator, OptionUniqueURIValidator
@@ -32,14 +32,15 @@ class OptionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
             'uri_path',
             'comment',
             'locked',
-            'read_only',
             'text',
             'label',
             'additional_input',
             'optionsets',
             'conditions',
             'values_count',
-            'projects_count'
+            'projects_count',
+            'editors',
+            'read_only'
         )
         trans_fields = (
             'text',

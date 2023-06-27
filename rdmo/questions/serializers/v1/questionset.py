@@ -3,9 +3,9 @@ from rest_framework import serializers
 from rdmo.core.serializers import (ElementExportSerializerMixin,
                                    ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
+                                   ReadOnlyObjectPermissionsSerializerMixin,
                                    ThroughModelSerializerMixin,
-                                   TranslationSerializerMixin,
-                                   ReadOnlyObjectPermissionsSerializerMixin)
+                                   TranslationSerializerMixin)
 
 from ...models import (Page, QuestionSet, QuestionSetQuestion,
                        QuestionSetQuestionSet)
@@ -57,7 +57,6 @@ class QuestionSetSerializer(ThroughModelSerializerMixin, TranslationSerializerMi
             'uri_path',
             'comment',
             'locked',
-            'read_only',
             'attribute',
             'is_collection',
             'title',
@@ -68,7 +67,9 @@ class QuestionSetSerializer(ThroughModelSerializerMixin, TranslationSerializerMi
             'parents',
             'questionsets',
             'questions',
-            'conditions'
+            'conditions',
+            'editors',
+            'read_only'
         )
         trans_fields = (
             'title',

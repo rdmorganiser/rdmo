@@ -3,9 +3,9 @@ from rest_framework import serializers
 from rdmo.core.serializers import (ElementExportSerializerMixin,
                                    ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
+                                   ReadOnlyObjectPermissionsSerializerMixin,
                                    ThroughModelSerializerMixin,
-                                   TranslationSerializerMixin,
-                                   ReadOnlyObjectPermissionsSerializerMixin)
+                                   TranslationSerializerMixin)
 
 from ...models import Catalog, Section, SectionPage
 from ...validators import SectionLockedValidator, SectionUniqueURIValidator
@@ -32,7 +32,6 @@ class SectionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
     pages = SectionPageSerializer(source='section_pages', read_only=False, required=False, many=True)
     read_only = serializers.SerializerMethodField()
 
-
     class Meta:
         model = Section
         fields = (
@@ -43,10 +42,11 @@ class SectionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
             'uri_path',
             'comment',
             'locked',
-            'read_only',
             'title',
             'catalogs',
-            'pages'
+            'pages',
+            'editors',
+            'read_only'
         )
         trans_fields = (
             'title',
