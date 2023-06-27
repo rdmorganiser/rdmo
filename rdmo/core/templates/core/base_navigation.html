@@ -21,7 +21,7 @@
 
                 {% test_rule 'can_view_management' request.user as can_view_management %}
 
-                {% if can_view_management %}
+                {% if user.is_superuser or can_view_management %}
                 <li>
                     <a href="{% url 'management' %}">{% trans 'Management' %}</a>
                 </li>
