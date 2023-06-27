@@ -89,7 +89,7 @@ class CatalogAdmin(admin.ModelAdmin):
     list_display = ('uri', 'title', 'projects_count', 'available')
     readonly_fields = ('uri', )
     list_filter = ('available', )
-    filter_horizontal = ('sections', 'sites', 'groups')
+    filter_horizontal = ('editors', 'sites', 'groups')
 
     def get_queryset(self, request):
         return super().get_queryset(request) \
@@ -112,7 +112,7 @@ class SectionAdmin(admin.ModelAdmin):
     list_display = ('uri', 'title')
     readonly_fields = ('uri', )
     list_filter = ('catalogs', )
-    filter_vertical = ('pages', )
+    filter_horizontal = ('editors', )
 
 
 class PageQuestionSetInline(admin.TabularInline):
@@ -133,8 +133,7 @@ class PageAdmin(admin.ModelAdmin):
     list_display = ('uri', 'attribute', 'is_collection')
     readonly_fields = ('uri', )
     list_filter = ('sections__catalogs', 'sections', 'is_collection')
-    filter_vertical = ('questionsets', 'questions')
-    filter_horizontal = ('conditions', )
+    filter_horizontal = ('editors', 'conditions')
 
 
 class QuestionSetQuestionSetInline(admin.TabularInline):
@@ -156,8 +155,7 @@ class QuestionSetAdmin(admin.ModelAdmin):
     list_display = ('uri', 'attribute', 'is_collection')
     readonly_fields = ('uri', )
     list_filter = ('pages__sections__catalogs', 'pages__sections', 'pages', 'is_collection')
-    filter_vertical = ('questionsets', 'questions')
-    filter_horizontal = ('conditions', )
+    filter_horizontal = ('editors', 'conditions')
 
 
 class QuestionAdmin(admin.ModelAdmin):
@@ -167,7 +165,7 @@ class QuestionAdmin(admin.ModelAdmin):
     list_display = ('uri', 'attribute', 'text', 'is_collection')
     readonly_fields = ('uri', )
     list_filter = ('pages__sections__catalogs', 'pages__sections', 'pages', 'is_collection', 'widget_type', 'value_type')
-    filter_horizontal = ('optionsets', 'conditions')
+    filter_horizontal = ('editors', 'optionsets', 'conditions')
 
 
 admin.site.register(Catalog, CatalogAdmin)

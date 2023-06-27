@@ -26,6 +26,7 @@ class ViewAdmin(admin.ModelAdmin):
     list_display = ('uri', 'title', 'help', 'available')
     readonly_fields = ('uri', )
     list_filter = ('available', )
+    filter_horizontal = ('catalogs', 'sites', 'editors', 'groups')
 
 
 admin.site.register(View, ViewAdmin)
