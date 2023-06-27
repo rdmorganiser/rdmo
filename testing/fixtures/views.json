@@ -122,5 +122,38 @@
       ],
       "groups": []
     }
+  },
+  {
+    "model": "views.view",
+    "pk": 5,
+    "fields": {
+      "uri": "https://bar.com/terms/views/bar-view",
+      "uri_prefix": "https://bar.com/terms",
+      "key": "bar-view",
+      "comment": "",
+      "locked": false,
+      "template": "",
+      "title_lang1": "bar-view",
+      "title_lang2": "bar-view",
+      "title_lang3": "",
+      "title_lang4": "",
+      "title_lang5": "",
+      "help_lang1": "",
+      "help_lang2": "",
+      "help_lang3": "",
+      "help_lang4": "",
+      "help_lang5": "",
+      "available": true,
+      "catalogs": [
+        4
+      ],
+      "sites": [
+        3
+      ],
+      "editors": [
+        3
+      ],
+      "groups": []
+    }
   }
 ]

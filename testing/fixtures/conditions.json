@@ -256,5 +256,23 @@
         2
       ]
     }
+  },
+  {
+    "model": "conditions.condition",
+    "pk": 18,
+    "fields": {
+      "uri": "https://bar.com/terms/conditions/bar-condition",
+      "uri_prefix": "https://bar.com/terms",
+      "key": "bar-condition",
+      "comment": "",
+      "locked": false,
+      "source": 123,
+      "relation": "eq",
+      "target_text": "",
+      "target_option": null,
+      "editors": [
+        3
+      ]
+    }
   }
 ]

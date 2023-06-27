@@ -109,5 +109,42 @@
       "groups": [],
       "conditions": []
     }
+  },
+  {
+    "model": "tasks.task",
+    "pk": 4,
+    "fields": {
+      "uri": "https://bar.com/terms/tasks/bar-task",
+      "uri_prefix": "https://bar.com/terms",
+      "key": "bar-task",
+      "comment": "",
+      "locked": false,
+      "title_lang1": "bar-task",
+      "title_lang2": "bar-task",
+      "title_lang3": "",
+      "title_lang4": "",
+      "title_lang5": "",
+      "text_lang1": "",
+      "text_lang2": "",
+      "text_lang3": "",
+      "text_lang4": "",
+      "text_lang5": "",
+      "start_attribute": null,
+      "end_attribute": null,
+      "days_before": null,
+      "days_after": null,
+      "available": true,
+      "catalogs": [
+        4
+      ],
+      "sites": [
+        3
+      ],
+      "editors": [
+        3
+      ],
+      "groups": [],
+      "conditions": []
+    }
   }
 ]

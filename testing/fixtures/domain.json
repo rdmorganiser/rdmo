@@ -1566,5 +1566,25 @@
         2
       ]
     }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 123,
+    "fields": {
+      "uri": "https://bar.com/terms/domain/bar-attribute",
+      "uri_prefix": "https://bar.com/terms",
+      "key": "bar-attribute",
+      "path": "bar-attribute",
+      "comment": "",
+      "locked": false,
+      "parent": null,
+      "lft": 1,
+      "rght": 2,
+      "tree_id": 8,
+      "level": 0,
+      "editors": [
+        3
+      ]
+    }
   }
 ]
