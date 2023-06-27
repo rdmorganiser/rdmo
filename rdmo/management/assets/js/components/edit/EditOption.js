@@ -10,6 +10,7 @@ import Textarea from './common/Textarea'
 import UriPrefix from './common/UriPrefix'
 
 import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
+import { ReadOnlyIcon } from '../common/Icons'
 
 import OptionInfo from '../info/OptionInfo'
 import DeleteOptionModal from '../modals/DeleteOptionModal'
@@ -33,9 +34,10 @@ const EditOption = ({ config, option, elements, elementActions }) => {
     <div className="panel panel-default panel-edit">
       <div className="panel-heading">
         <div className="pull-right">
+          <ReadOnlyIcon title={gettext('This option is read only')} show={option.read_only} />
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storeOption} />
-          <SaveButton elementAction={elementAction} onClick={storeOption} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeOption} disabled={option.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storeOption} disabled={option.read_only} back={true}/>
         </div>
         {
           option.id ? <>
@@ -107,10 +109,10 @@ const EditOption = ({ config, option, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storeOption} />
-          <SaveButton elementAction={elementAction} onClick={storeOption} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeOption} disabled={option.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storeOption} disabled={option.read_only} back={true}/>
         </div>
-        {option.id && <DeleteButton onClick={openDeleteModal} />}
+        {option.id && <DeleteButton onClick={openDeleteModal} disabled={option.read_only} />}
       </div>
 
       <DeleteOptionModal option={option} info={info} show={showDeleteModal}

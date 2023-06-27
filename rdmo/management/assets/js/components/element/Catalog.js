@@ -7,6 +7,7 @@ import { buildPath } from '../../utils/location'
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AddLink, AvailableLink, LockedLink, NestedLink,
          ExportLink, CodeLink } from '../common/Links'
+import { ReadOnlyIcon } from '../common/Icons'
 
 const Catalog = ({ config, catalog, elementActions, display='list', filter=null }) => {
 
@@ -29,15 +30,17 @@ const Catalog = ({ config, catalog, elementActions, display='list', filter=null 
   const elementNode = (
     <div className="element">
       <div className="pull-right">
+        <ReadOnlyIcon title={gettext('This catalog is read only')} show={catalog.read_only} />
         <NestedLink title={gettext('View catalog nested')} href={nestedUrl} onClick={fetchNested} />
         <EditLink title={gettext('Edit catalog')} href={editUrl} onClick={fetchEdit} />
         <CopyLink title={gettext('Copy catalog')} href={copyUrl} onClick={fetchCopy} />
-        <AddLink title={gettext('Add section')} onClick={createSection} />
+        <AddLink title={gettext('Add section')} onClick={createSection} disabled={catalog.read_only} />
         <AvailableLink title={catalog.available ? gettext('Make catalog unavailable')
                                                 : gettext('Make catalog available')}
-                       available={catalog.available} locked={catalog.locked} onClick={toggleAvailable} />
+                       available={catalog.available} locked={catalog.locked} onClick={toggleAvailable}
+                       disabled={catalog.read_only} />
         <LockedLink title={catalog.locked ? gettext('Unlock catalog') : gettext('Lock catalog')}
-                    locked={catalog.locked} onClick={toggleLocked} />
+                    locked={catalog.locked} onClick={toggleLocked} disabled={catalog.read_only} />
         <ExportLink title={gettext('Export catalog')} exportUrl={exportUrl}
                     exportFormats={config.settings.export_formats} full={true} />
       </div>

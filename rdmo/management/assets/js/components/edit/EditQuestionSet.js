@@ -14,6 +14,7 @@ import Textarea from './common/Textarea'
 import UriPrefix from './common/UriPrefix'
 
 import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
+import { ReadOnlyIcon } from '../common/Icons'
 
 import QuestionSetInfo from '../info/QuestionSetInfo'
 import DeleteQuestionSetModal from '../modals/DeleteQuestionSetModal'
@@ -71,9 +72,10 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
     <div className="panel panel-default panel-edit">
       <div className="panel-heading">
         <div className="pull-right">
+          <ReadOnlyIcon title={gettext('This question set is read only')} show={questionset.read_only} />
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storeQuestionSet} />
-          <SaveButton elementAction={elementAction} onClick={storeQuestionSet} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeQuestionSet} disabled={questionset.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storeQuestionSet} disabled={questionset.read_only} back={true}/>
         </div>
         {
           questionset.id ? <>
@@ -179,10 +181,10 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storeQuestionSet} />
-          <SaveButton elementAction={elementAction} onClick={storeQuestionSet} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeQuestionSet} disabled={questionset.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storeQuestionSet} disabled={questionset.read_only} back={true}/>
         </div>
-        {questionset.id && <DeleteButton onClick={openDeleteModal} />}
+        {questionset.id && <DeleteButton onClick={openDeleteModal} disabled={questionset.read_only} />}
       </div>
 
       <DeleteQuestionSetModal questionset={questionset} info={info} show={showDeleteModal}

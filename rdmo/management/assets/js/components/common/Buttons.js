@@ -7,7 +7,7 @@ const BackButton = () => (
   </button>
 )
 
-const SaveButton = ({ elementAction, onClick, back }) => {
+const SaveButton = ({ elementAction, onClick, disabled=false, back=false }) => {
   let text, className = 'element-button btn btn-xs'
   if (elementAction == 'create') {
     text = back ? gettext('Create') : gettext('Create and continue editing')
@@ -21,7 +21,7 @@ const SaveButton = ({ elementAction, onClick, back }) => {
   }
 
   return (
-    <button className={className} onClick={() => onClick(back)}>
+    <button className={className} onClick={() => onClick(back)} disabled={disabled}>
       {text}
     </button>
   )
@@ -30,6 +30,7 @@ const SaveButton = ({ elementAction, onClick, back }) => {
 SaveButton.propTypes = {
   elementAction: PropTypes.string,
   onClick: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
   back: PropTypes.bool
 }
 
@@ -43,14 +44,15 @@ NewButton.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-const DeleteButton = ({ onClick }) => (
-  <button className="element-button btn btn-xs btn-danger" onClick={() => onClick()}>
+const DeleteButton = ({ onClick, disabled=false }) => (
+  <button className="element-button btn btn-xs btn-danger" onClick={() => onClick()} disabled={disabled}>
     {gettext('Delete')}
   </button>
 )
 
 DeleteButton.propTypes = {
-  onClick: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired,
+  disabled: PropTypes.bool
 }
 
 export { BackButton, SaveButton, NewButton, DeleteButton }

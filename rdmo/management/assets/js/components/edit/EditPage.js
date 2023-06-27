@@ -14,6 +14,7 @@ import Textarea from './common/Textarea'
 import UriPrefix from './common/UriPrefix'
 
 import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
+import { ReadOnlyIcon } from '../common/Icons'
 
 import PageInfo from '../info/PageInfo'
 import DeletePageModal from '../modals/DeletePageModal'
@@ -71,9 +72,10 @@ const EditPage = ({ config, page, elements, elementActions }) => {
     <div className="panel panel-default panel-edit">
       <div className="panel-heading">
         <div className="pull-right">
+          <ReadOnlyIcon title={gettext('This page is read only')} show={page.read_only} />
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storePage} />
-          <SaveButton elementAction={elementAction} onClick={storePage} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storePage} disabled={page.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storePage} disabled={page.read_only} back={true}/>
         </div>
         {
           page.id ? <>
@@ -170,10 +172,10 @@ const EditPage = ({ config, page, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storePage} />
-          <SaveButton elementAction={elementAction} onClick={storePage} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storePage} disabled={page.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storePage} disabled={page.read_only} back={true}/>
         </div>
-        {page.id && <DeleteButton onClick={openDeleteModal} />}
+        {page.id && <DeleteButton onClick={openDeleteModal} disabled={page.read_only} />}
       </div>
 
       <DeletePageModal page={page} info={info} show={showDeleteModal}

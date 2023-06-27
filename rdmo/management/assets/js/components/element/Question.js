@@ -6,6 +6,7 @@ import { buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
+import { ReadOnlyIcon } from '../common/Icons'
 import { Drag, Drop } from '../common/DragAndDrop'
 
 const Question = ({ config, question, elementActions, display='list', filter=null, indent=0 }) => {
@@ -27,13 +28,14 @@ const Question = ({ config, question, elementActions, display='list', filter=nul
   const elementNode = (
     <div className="element">
       <div className="pull-right">
+        <ReadOnlyIcon title={gettext('This question is read only')} show={question.read_only} />
         <EditLink title={gettext('Edit question')} href={editUrl} onClick={fetchEdit} />
         <CopyLink title={gettext('Copy question')} href={copyUrl} onClick={fetchCopy} />
         <LockedLink title={question.locked ? gettext('Unlock question') : gettext('Lock question')}
-                    locked={question.locked} onClick={toggleLocked} />
+                    locked={question.locked} onClick={toggleLocked} disabled={question.read_only} />
         <ExportLink title={gettext('Export question')} exportUrl={exportUrl}
                     exportFormats={config.settings.export_formats} full={true} />
-        {display == 'nested' && <Drag element={question} />}
+        <Drag element={question} show={display == 'nested'} />
       </div>
       <div>
         <p>

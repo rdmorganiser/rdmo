@@ -162,19 +162,23 @@ a.disabled {
         }
     }
     .pull-right {
-        .element-link {
-            margin-left: 4px;
-        }
-        .element-btn-link {
+        .element-link,
+        .element-btn-link,
+        .element-button {
             margin-left: 4px;
 
+            &.disabled,
+            &:disabled {
+                color: #ccc !important;
+                cursor: not-allowed !important;
+            }
+        }
+        .element-btn-link {
             padding: 0;
             border: 0;
             text-decoration: none;
         }
         .element-button {
-            margin-left: 4px;
-
             &:first-child {
                 margin-left: 8px;
             }
@@ -273,6 +277,11 @@ a.disabled {
     display: flex;
     gap: 4px;
     padding: 10px 0;
+
+    .disabled {
+        color: #ccc !important;
+        cursor: not-allowed !important;
+    }
 }
 
 .ordered-multi-select-item {

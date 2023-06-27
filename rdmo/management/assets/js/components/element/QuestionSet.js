@@ -8,6 +8,7 @@ import Question from './Question'
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AddLink, LockedLink,
          NestedLink, ExportLink, CodeLink } from '../common/Links'
+import { ReadOnlyIcon } from '../common/Icons'
 import { Drag, Drop } from '../common/DragAndDrop'
 
 const QuestionSet = ({ config, questionset, elementActions, display='list', filter=null, indent=0 }) => {
@@ -33,16 +34,17 @@ const QuestionSet = ({ config, questionset, elementActions, display='list', filt
   const elementNode = (
     <div className="element">
       <div className="pull-right">
+        <ReadOnlyIcon title={gettext('This question set is read only')} show={questionset.read_only} />
         <NestedLink title={gettext('View question set nested')} href={nestedUrl} onClick={fetchNested} />
         <EditLink title={gettext('Edit question set')} href={editUrl} onClick={fetchEdit} />
         <CopyLink title={gettext('Copy question set')} href={copyUrl} onClick={fetchCopy} />
         <AddLink title={gettext('Add question')} altTitle={gettext('Add question set')}
-                 onClick={createQuestion} onAltClick={createQuestionSet} />
+                 onClick={createQuestion} onAltClick={createQuestionSet} disabled={questionset.read_only} />
         <LockedLink title={questionset.locked ? gettext('Unlock question set') : gettext('Lock question set')}
-                    locked={questionset.locked} onClick={toggleLocked} />
+                    locked={questionset.locked} onClick={toggleLocked} disabled={questionset.read_only} />
         <ExportLink title={gettext('Export question set')} exportUrl={exportUrl}
                     exportFormats={config.settings.export_formats} full={true} />
-        {display == 'nested' && <Drag element={questionset} />}
+        <Drag element={questionset} show={display == 'nested'} />
       </div>
       <div>
         <p>

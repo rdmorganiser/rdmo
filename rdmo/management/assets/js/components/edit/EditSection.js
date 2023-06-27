@@ -11,6 +11,7 @@ import Textarea from './common/Textarea'
 import UriPrefix from './common/UriPrefix'
 
 import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
+import { ReadOnlyIcon } from '../common/Icons'
 
 import SectionInfo from '../info/SectionInfo'
 import DeleteSectionModal from '../modals/DeleteSectionModal'
@@ -37,9 +38,10 @@ const EditSection = ({ config, section, elements, elementActions }) => {
     <div className="panel panel-default panel-edit">
       <div className="panel-heading">
         <div className="pull-right">
+          <ReadOnlyIcon title={gettext('This section is read only')} show={section.read_only} />
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storeSection} />
-          <SaveButton elementAction={elementAction} onClick={storeSection} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeSection} disabled={section.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storeSection} disabled={section.read_only} back={true}/>
         </div>
         {
           section.id ? <>
@@ -103,10 +105,10 @@ const EditSection = ({ config, section, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storeSection} />
-          <SaveButton elementAction={elementAction} onClick={storeSection} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeSection} disabled={section.read_only}  />
+          <SaveButton elementAction={elementAction} onClick={storeSection} disabled={section.read_only} back={true}/>
         </div>
-          {section.id && <DeleteButton onClick={openDeleteModal} />}
+          {section.id && <DeleteButton onClick={openDeleteModal} disabled={section.read_only} />}
       </div>
 
       <DeleteSectionModal section={section} info={info} show={showDeleteModal}

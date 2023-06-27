@@ -6,6 +6,7 @@ import { buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
+import { ReadOnlyIcon } from '../common/Icons'
 
 const Condition = ({ config, condition, elementActions, filter=null }) => {
 
@@ -23,10 +24,11 @@ const Condition = ({ config, condition, elementActions, filter=null }) => {
     <li className="list-group-item">
       <div className="element">
         <div className="pull-right">
+          <ReadOnlyIcon title={gettext('This condition is read only')} show={condition.read_only} />
           <EditLink title={gettext('Edit condition')} href={editUrl} onClick={fetchEdit} />
           <CopyLink title={gettext('Copy condition')} href={copyUrl} onClick={fetchCopy} />
           <LockedLink title={condition.locked ? gettext('Unlock condition') : gettext('Lock condition')}
-                      locked={condition.locked} onClick={toggleLocked} />
+                      locked={condition.locked} onClick={toggleLocked} disabled={condition.read_only} />
           <ExportLink title={gettext('Export condition')} exportUrl={exportUrl}
                       exportFormats={config.settings.export_formats} full={true} />
         </div>

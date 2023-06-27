@@ -67,12 +67,13 @@ const MultiSelect = ({ config, element, field, options, verboseName, onChange, o
               {
                 onEdit && <div className="multi-select-item-options">
                   <Link className="fa fa-pencil" title={gettext('Edit')} onClick={() => handleEdit(index)} />
-                  <Link className="fa fa-times" title={gettext('Remove')} onClick={() => handleRemove(index)} />
+                  <Link className="fa fa-times" title={gettext('Remove')} onClick={() => handleRemove(index)}
+                        disabled={element.read_only} />
                 </div>
               }
 
               <ReactSelect classNamePrefix="react-select" className="react-select" styles={styles}
-                           options={selectOptions} value={selectValue}
+                           options={selectOptions} value={selectValue} isDisabled={element.read_only}
                            onChange={option => handleChange(option, index)} />
             </div>
           )
@@ -80,12 +81,12 @@ const MultiSelect = ({ config, element, field, options, verboseName, onChange, o
       }
       </div>
 
-      <button className="btn btn-primary btn-xs" onClick={() => handleAdd()}>
+      <button className="btn btn-primary btn-xs" onClick={() => handleAdd()} disabled={element.read_only}>
         {interpolate(gettext('Add %s'), [verboseName])}
       </button>
 
       {
-        onCreate && <button className="btn btn-success btn-xs ml-10" onClick={onCreate}>
+        onCreate && <button className="btn btn-success btn-xs ml-10" onClick={onCreate} disabled={element.read_only}>
           {interpolate(gettext('Create new %s'), [verboseName])}
         </button>
       }

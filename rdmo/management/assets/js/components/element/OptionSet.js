@@ -7,6 +7,7 @@ import { buildPath } from '../../utils/location'
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AddLink, LockedLink, NestedLink,
          ExportLink, CodeLink } from '../common/Links'
+import { ReadOnlyIcon } from '../common/Icons'
 
 const OptionSet = ({ config, optionset, elementActions, display='list', filter=null }) => {
 
@@ -27,12 +28,13 @@ const OptionSet = ({ config, optionset, elementActions, display='list', filter=n
   const elementNode = (
     <div className="element">
       <div className="pull-right">
+        <ReadOnlyIcon title={gettext('This option set is read only')} show={optionset.read_only} />
         <NestedLink title={gettext('View option set nested')} href={nestedUrl} onClick={fetchNested} />
         <EditLink title={gettext('Edit option set')} href={editUrl} onClick={fetchEdit} />
         <CopyLink title={gettext('Copy option set')} href={copyUrl} onClick={fetchCopy} />
-        <AddLink title={gettext('Add option')} onClick={createOption} />
+        <AddLink title={gettext('Add option')} onClick={createOption} disabled={optionset.read_only} />
         <LockedLink title={optionset.locked ? gettext('Unlock option set') : gettext('Lock option set')}
-                    locked={optionset.locked} onClick={toggleLocked} />
+                    locked={optionset.locked} onClick={toggleLocked} disabled={optionset.read_only} />
         <ExportLink title={gettext('Export option set')} exportUrl={exportUrl}
                     exportFormats={config.settings.export_formats} full={true} />
       </div>
