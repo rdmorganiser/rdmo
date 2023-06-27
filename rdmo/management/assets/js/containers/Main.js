@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 
@@ -27,9 +28,9 @@ const Main = ({ config, elements, imports, configActions, elementActions, import
   // check if an an error occured
   if (!isNil(elements.errors.api)) {
     return <MainErrors errors={elements.errors.api} />
-  }
-
-  if (!isNil(imports.errors.file)) {
+  } else if (get(elements, 'element.errors.api')) {
+    return <MainErrors errors={get(elements, 'element.errors.api')} />
+  } else if (!isNil(imports.errors.file)) {
     return <MainErrors errors={imports.errors.file} />
   }
 

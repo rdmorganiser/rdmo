@@ -16,14 +16,14 @@ function ValidationError(errors) {
 class BaseApi {
 
   static get(url) {
-    return fetch(url).then(response => {
+    return fetch(url).catch(error => {
+      throw new ApiError(error.message)
+    }).then(response => {
       if (response.ok) {
         return response.json()
       } else {
         throw new ApiError(response.statusText, response.status)
       }
-    }).catch(error => {
-      throw new ApiError(error.message)
     })
   }
 
@@ -35,6 +35,8 @@ class BaseApi {
         'X-CSRFToken': Cookies.get('csrftoken')
       },
       body: JSON.stringify(data)
+    }).catch(error => {
+      throw new ApiError(error.message)
     }).then(response => {
       if (response.ok) {
         return response.json()
@@ -45,8 +47,6 @@ class BaseApi {
       } else {
         throw new ApiError(response.statusText, response.status)
       }
-    }).catch(error => {
-      throw new ApiError(error.message)
     })
   }
 
@@ -58,6 +58,8 @@ class BaseApi {
         'X-CSRFToken': Cookies.get('csrftoken')
       },
       body: JSON.stringify(data)
+    }).catch(error => {
+      throw new ApiError(error.message)
     }).then(response => {
       if (response.ok) {
         return response.json()
@@ -68,8 +70,6 @@ class BaseApi {
       } else {
         throw new ApiError(response.statusText, response.status)
       }
-    }).catch(error => {
-      throw new ApiError(error.message)
     })
   }
 
@@ -80,6 +80,8 @@ class BaseApi {
         'Content-Type': 'application/json',
         'X-CSRFToken': Cookies.get('csrftoken')
       }
+    }).catch(error => {
+      throw new ApiError(error.message)
     }).then(response => {
       if (response.ok) {
         return null
@@ -90,8 +92,6 @@ class BaseApi {
       } else {
         throw new ApiError(response.statusText, response.status)
       }
-    }).catch(error => {
-      throw new ApiError(error.message)
     })
   }
 
@@ -105,6 +105,8 @@ class BaseApi {
         'X-CSRFToken': Cookies.get('csrftoken')
       },
       body: formData
+    }).catch(error => {
+      throw new ApiError(error.message)
     }).then(response => {
       if (response.ok) {
         return response.json()
@@ -115,8 +117,6 @@ class BaseApi {
       } else {
         throw new ApiError(response.statusText, response.status)
       }
-    }).catch(error => {
-      throw new ApiError(error.message)
     })
   }
 
