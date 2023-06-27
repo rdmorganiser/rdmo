@@ -42,7 +42,7 @@ class OptionSetAdmin(admin.ModelAdmin):
     search_fields = ('uri', )
     list_display = ('uri', )
     readonly_fields = ('uri', )
-    filter_horizontal = ('options', 'conditions')
+    filter_horizontal = ('editors', 'conditions')
 
 
 class OptionAdmin(admin.ModelAdmin):
@@ -51,7 +51,8 @@ class OptionAdmin(admin.ModelAdmin):
     search_fields = ['uri'] + get_language_fields('text')
     list_display = ('uri', 'text', 'additional_input')
     readonly_fields = ('uri', )
-    list_filter = ('optionsets', 'additional_input')
+    list_filter = ('editors', 'optionsets', 'additional_input')
+    filter_horizontal = ('editors', )
 
 
 admin.site.register(OptionSet, OptionSetAdmin)

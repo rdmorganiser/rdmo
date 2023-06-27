@@ -24,6 +24,7 @@ class ConditionAdmin(admin.ModelAdmin):
     list_display = ('uri', 'source', 'relation', 'target_text', 'target_option')
     readonly_fields = ('uri', )
     list_filter = ('relation', )
+    filter_horizontal = ('editors', )
 
 
 admin.site.register(Condition, ConditionAdmin)
