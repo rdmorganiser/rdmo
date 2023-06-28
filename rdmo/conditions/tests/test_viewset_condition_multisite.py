@@ -195,16 +195,150 @@ def test_create(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_update_multisite(db, client, username, password):
+def test_create_optionset(db, client, username, password):
     client.login(username=username, password=password)
     instances = Condition.objects.all()
 
     for instance in instances:
-        
+        optionset = instance.optionsets.first()
+        if optionset:
+            url = reverse(urlnames['list'])
+            data = {
+                'uri_prefix': instance.uri_prefix,
+                'key': '%s_new_%s' % (instance.key, username),
+                'comment': instance.comment,
+                'source': instance.source.pk,
+                'relation': instance.relation,
+                'target_text': instance.target_text,
+                'target_option': instance.target_option.pk if instance.target_option else '',
+                'optionsets': [optionset.id]
+            }
+            response = client.post(url, data)
+            assert response.status_code == status_map['create'][username], response.json()
+
+            if response.status_code == 201:
+                new_instance = Condition.objects.get(id=response.json().get('id'))
+                assert [optionset.id] == [optionset.id for optionset in new_instance.optionsets.all()]
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_create_page(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = Condition.objects.all()
+
+    for instance in instances:
+        page = instance.pages.first()
+        if page:
+            url = reverse(urlnames['list'])
+            data = {
+                'uri_prefix': instance.uri_prefix,
+                'key': '%s_new_%s' % (instance.key, username),
+                'comment': instance.comment,
+                'source': instance.source.pk,
+                'relation': instance.relation,
+                'target_text': instance.target_text,
+                'target_option': instance.target_option.pk if instance.target_option else '',
+                'pages': [page.id]
+            }
+            response = client.post(url, data)
+            assert response.status_code == status_map['create'][username], response.json()
+
+            if response.status_code == 201:
+                new_instance = Condition.objects.get(id=response.json().get('id'))
+                assert [page.id] == [page.id for page in new_instance.pages.all()]
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_create_questionset(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = Condition.objects.all()
+
+    for instance in instances:
+        questionset = instance.questionsets.first()
+        if questionset:
+            url = reverse(urlnames['list'])
+            data = {
+                'uri_prefix': instance.uri_prefix,
+                'key': '%s_new_%s' % (instance.key, username),
+                'comment': instance.comment,
+                'source': instance.source.pk,
+                'relation': instance.relation,
+                'target_text': instance.target_text,
+                'target_option': instance.target_option.pk if instance.target_option else '',
+                'questionsets': [questionset.id]
+            }
+            response = client.post(url, data)
+            assert response.status_code == status_map['create'][username], response.json()
+
+            if response.status_code == 201:
+                new_instance = Condition.objects.get(id=response.json().get('id'))
+                assert [questionset.id] == [questionset.id for questionset in new_instance.questionsets.all()]
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_create_question(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = Condition.objects.all()
+
+    for instance in instances:
+        question = instance.questions.first()
+        if question:
+            url = reverse(urlnames['list'])
+            data = {
+                'uri_prefix': instance.uri_prefix,
+                'key': '%s_new_%s' % (instance.key, username),
+                'comment': instance.comment,
+                'source': instance.source.pk,
+                'relation': instance.relation,
+                'target_text': instance.target_text,
+                'target_option': instance.target_option.pk if instance.target_option else '',
+                'questions': [question.id]
+            }
+            response = client.post(url, data)
+            assert response.status_code == status_map['create'][username], response.json()
+
+            if response.status_code == 201:
+                new_instance = Condition.objects.get(id=response.json().get('id'))
+                assert [question.id] == [question.id for question in new_instance.questions.all()]
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_create_task(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = Condition.objects.all()
+
+    for instance in instances:
+        task = instance.tasks.first()
+        if task:
+            url = reverse(urlnames['list'])
+            data = {
+                'uri_prefix': instance.uri_prefix,
+                'key': '%s_new_%s' % (instance.key, username),
+                'comment': instance.comment,
+                'source': instance.source.pk,
+                'relation': instance.relation,
+                'target_text': instance.target_text,
+                'target_option': instance.target_option.pk if instance.target_option else '',
+                'tasks': [task.id]
+            }
+            response = client.post(url, data)
+            assert response.status_code == status_map['create'][username], response.json()
+
+            if response.status_code == 201:
+                new_instance = Condition.objects.get(id=response.json().get('id'))
+                assert [task.id] == [task.id for task in new_instance.tasks.all()]
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_update(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = Condition.objects.all()
+
+    for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'key': instance.key + '-' + username,
+            'key': instance.key,
             'comment': instance.comment,
             'source': instance.source.pk,
             'relation': instance.relation,
@@ -216,12 +350,11 @@ def test_update_multisite(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_delete_multisite(db, client, username, password):
+def test_delete(db, client, username, password):
     client.login(username=username, password=password)
     instances = Condition.objects.all()
 
     for instance in instances:
-
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.delete(url)
         assert response.status_code == get_status_map_or_obj_perms(instance, username, 'delete'), response.json()
@@ -231,7 +364,7 @@ def test_delete_multisite(db, client, username, password):
 @pytest.mark.parametrize('export_format', export_formats)
 def test_detail_export(db, client, username, password, export_format):
     client.login(username=username, password=password)
-    instance = Condition.objects.all()
+    instance = Condition.objects.first()
 
     url = reverse(urlnames['detail_export'], args=[instance.pk]) + export_format + '/'
     response = client.get(url)
@@ -274,4 +407,4 @@ def test_copy_wrong(db, client, username, password):
     if status_map['copy'][username] == 201:
         assert response.status_code == 400, response.json()
     else:
-        assert response.status_code == status_map['copy'][username], response.json()
+        assert response.status_code == get_status_map_or_obj_perms(instance, username, 'copy'), response.json()

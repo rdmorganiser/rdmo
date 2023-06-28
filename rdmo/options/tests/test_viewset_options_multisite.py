@@ -53,8 +53,8 @@ status_map = {
         'editor': 200
     },
     'delete': {
-        'foo-user': 404, 'foo-reviewer': 404, 'foo-editor': 404,
-        'bar-user': 404, 'bar-reviewer': 404, 'bar-editor': 404,
+        'foo-user': 404, 'foo-reviewer': 403, 'foo-editor': 204,
+        'bar-user': 404, 'bar-reviewer': 403, 'bar-editor': 204,
         'user': 404, 'example-reviewer': 403, 'example-editor': 204,
         'editor': 204
     }
@@ -176,14 +176,12 @@ def test_create(db, client, username, password):
         url = reverse(urlnames['list'])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'key': '%s_new_%s' % (instance.key, username),
+            'uri_path': '%s_new_%s' % (instance.uri_path, username),
             'comment': instance.comment,
-            'optionset': instance.optionset.pk,
-            'order': instance.order,
             'text_en': instance.text_lang1,
             'text_de': instance.text_lang2
         }
-        response = client.post(url, data)
+        response = client.post(url, data, content_type='application/json')
         assert response.status_code == status_map['create'][username], response.json()
 
 
@@ -218,7 +216,7 @@ def test_delete_multisite(db, client, username, password):
     for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.delete(url)
-        assert response.status_code == get_status_map_or_obj_perms(instance, username, 'delete'), response.json()
+        assert response.status_code == get_status_map_or_obj_perms(instance, username, 'delete')
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -244,7 +242,7 @@ def test_copy_wrong(db, client, username, password):
     url = reverse(urlnames['copy'], args=[instance.pk])
     data = {
         'uri_prefix': instance.uri_prefix,
-        'key': instance.key
+        'uri_path': instance.uri_path
     }
     response = client.put(url, data, content_type='application/json')
 

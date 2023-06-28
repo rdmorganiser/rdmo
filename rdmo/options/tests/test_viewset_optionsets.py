@@ -100,7 +100,7 @@ def test_nested(db, client, username, password):
     for instance in instances:
         url = reverse(urlnames['nested'], args=[instance.pk])
         response = client.get(url)
-        assert response.status_code == status_map['list'][username], response.json()
+        assert response.status_code == status_map['detail'][username], response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -289,7 +289,7 @@ def test_detail_export(db, client, username, password, export_format):
 
     url = reverse(urlnames['detail_export'], args=[instance.pk]) + export_format + '/'
     response = client.get(url)
-    assert response.status_code == status_map['list'][username], response.content
+    assert response.status_code == status_map['detail'][username], response.content
 
     if response.status_code == 200 and export_format == 'xml':
         root = et.fromstring(response.content)

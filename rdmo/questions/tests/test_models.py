@@ -5,7 +5,7 @@ def test_catalog_str(db):
     instances = Catalog.objects.all()
     for instance in instances:
         assert str(instance)
-        assert str(instance) == instance.key
+        assert str(instance) == instance.uri
 
 
 def test_catalog_property_is_locked(db):
@@ -78,7 +78,7 @@ def test_section_str(db):
     instances = Section.objects.all()
     for instance in instances:
         assert str(instance)
-        assert str(instance) == instance.path
+        assert str(instance) == instance.uri
 
 def test_section_property_is_locked(db):
     instances = Section.objects.all()
@@ -203,7 +203,7 @@ def test_questionset_str(db):
     instances = QuestionSet.objects.all()
     for instance in instances:
         assert str(instance)
-        assert str(instance) == instance.path
+        assert str(instance) == instance.uri
 
 
 def test_questionset_property_is_locked(db):
@@ -263,7 +263,7 @@ def test_question_str(db):
     instances = Question.objects.all()
     for instance in instances:
         assert str(instance)
-        assert str(instance) == instance.path
+        assert str(instance) == instance.uri
 
 
 def test_question_clean(db):

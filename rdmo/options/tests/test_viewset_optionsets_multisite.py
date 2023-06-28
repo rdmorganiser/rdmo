@@ -152,7 +152,7 @@ def test_nested(db, client, username, password):
     for instance in instances:
         url = reverse(urlnames['nested'], args=[instance.pk])
         response = client.get(url)
-        assert response.status_code == status_map['list'][username], response.json()
+        assert response.status_code == status_map['detail'][username], response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -188,7 +188,7 @@ def test_create(db, client, username, password):
         url = reverse(urlnames['list'])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'key': '%s_new_%s' % (instance.key, username),
+            'uri_path': '%s_new_%s' % (instance.uri_path, username),
             'comment': instance.comment,
             'order': instance.order,
             'conditions': [condition.pk for condition in instance.conditions.all()],
@@ -249,7 +249,7 @@ def test_detail_export(db, client, username, password):
     for instance in instances:
         url = reverse(urlnames['detail_export'], args=[instance.pk])
         response = client.get(url)
-        assert response.status_code == status_map['list'][username], response.content
+        assert response.status_code == status_map['detail'][username], response.content
 
         if response.status_code == 200:
             root = et.fromstring(response.content)
@@ -267,10 +267,10 @@ def test_copy_multisite(db, client, username, password):
         url = reverse(urlnames['copy'], args=[instance.pk])
         data = {
             'uri_prefix': instance.uri_prefix + '-',
-            'key': instance.key + '-'
+            'uri_path': instance.uri_path + '-'
         }
         response = client.put(url, data, content_type='application/json')
-        assert response.status_code == get_status_map_or_obj_perms(instance, username, 'update'), response.json()
+        assert response.status_code == get_status_map_or_obj_perms(instance, username, 'copy'), response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -281,7 +281,7 @@ def test_copy_wrong(db, client, username, password):
     url = reverse(urlnames['copy'], args=[instance.pk])
     data = {
         'uri_prefix': instance.uri_prefix,
-        'key': instance.key
+        'uri_path': instance.uri_path
     }
     response = client.put(url, data, content_type='application/json')
 

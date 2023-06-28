@@ -208,27 +208,6 @@ def test_update_multisite(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_update_with_obj_permissions_editors_currentsite(db, client, username, password):
-    client.login(username=username, password=password)
-    instances = Attribute.objects.order_by('-level')
-
-    for instance in instances:
-
-        # set current site for object permissions, example-com
-        instance.editors.set([Site.objects.get_current()])
-
-        url = reverse(urlnames['detail'], args=[instance.pk])
-        data = {
-            'uri_prefix': instance.uri_prefix,
-            'key': instance.key,
-            'comment': '',
-            'parent': instance.parent.pk if instance.parent else ''
-        }
-        response = client.put(url, data, content_type='application/json')
-        assert response.status_code == status_map['update'][username], response.json()
-
-
-@pytest.mark.parametrize('username,password', users)
 def test_delete_multisite(db, client, username, password):
     client.login(username=username, password=password)
     instances = Attribute.objects.order_by('-level')
@@ -237,21 +216,6 @@ def test_delete_multisite(db, client, username, password):
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.delete(url)
         assert response.status_code == get_status_map_or_obj_perms(instance,username,'delete'), response.json()
-
-
-@pytest.mark.parametrize('username,password', users)
-def test_delete_with_obj_permissions_editors_currentsite(db, client, username, password):
-    client.login(username=username, password=password)
-    instances = Attribute.objects.order_by('-level')
-
-    for instance in instances:
-
-        # set current site for object permissions, example.com
-        instance.editors.set([Site.objects.get_current()])
-
-        url = reverse(urlnames['detail'], args=[instance.pk])
-        response = client.delete(url)
-        assert response.status_code == status_map['delete'][username], response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
