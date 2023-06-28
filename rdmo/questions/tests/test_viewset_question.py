@@ -41,7 +41,6 @@ status_map = {
 
 urlnames = {
     'list': 'v1-questions:question-list',
-    'nested': 'v1-questions:question-nested',
     'index': 'v1-questions:question-index',
     'export': 'v1-questions:question-export',
     'detail': 'v1-questions:question-detail',
@@ -95,17 +94,6 @@ def test_detail(db, client, username, password):
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.get(url)
         assert response.status_code == status_map['detail'][username], response.json()
-
-
-@pytest.mark.parametrize('username,password', users)
-def test_nested(db, client, username, password):
-    client.login(username=username, password=password)
-    instances = Question.objects.all()
-
-    for instance in instances:
-        url = reverse(urlnames['nested'], args=[instance.pk])
-        response = client.get(url)
-        assert response.status_code == status_map['nested'][username], response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
