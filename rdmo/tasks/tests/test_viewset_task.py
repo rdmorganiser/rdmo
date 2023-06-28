@@ -108,8 +108,8 @@ def test_create(db, client, username, password):
             'text_de': instance.text_lang2,
             'start_attribute': instance.start_attribute.pk if instance.start_attribute else '',
             'end_attribute': instance.end_attribute.pk if instance.end_attribute else '',
-            'days_before': instance.days_before,
-            'days_after': instance.days_after,
+            'days_before': instance.days_before or 0,
+            'days_after': instance.days_before or 0,
             'conditions': [condition.pk for condition in instance.conditions.all()]
         }
         response = client.post(url, data)
@@ -160,7 +160,7 @@ def test_detail_export(db, client, username, password, export_format):
 
     url = reverse(urlnames['detail_export'], args=[instance.pk]) + export_format + '/'
     response = client.get(url)
-    assert response.status_code == status_map['list'][username], response.content
+    assert response.status_code == status_map['detail'][username], response.content
 
     if response.status_code == 200 and export_format == 'xml':
         root = et.fromstring(response.content)
