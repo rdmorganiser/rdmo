@@ -214,7 +214,7 @@ class ReadOnlyObjectPermissionsSerializerMixin:
     def construct_object_permission(model, action_name: str) -> str:
         model_app_label = model._meta.app_label
         model_name = model._meta.model_name
-        perm = f'{model_app_label}.{action_name}_{model_name}_object'
+        perm = '%s.%s_%s_object' % (model_app_label, action_name, model_name)
         return perm
 
     def get_read_only(self, obj) -> bool:
