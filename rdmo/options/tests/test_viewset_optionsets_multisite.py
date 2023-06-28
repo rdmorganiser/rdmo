@@ -6,122 +6,12 @@ from django.urls import reverse
 
 from ..models import OptionSet
 
+from ...core.tests import multisite_status_map as status_map
+from ...core.tests import multisite_users as users
+from ...core.tests import get_obj_perms_status_code
+
 from .test_viewset_optionsets import export_formats
-
-
-users = (
-    ('editor', 'editor'),
-    ('user', 'user'),
-    ('example-reviewer', 'example-reviewer'),
-    ('example-editor', 'example-editor'),
-    ('foo-user', 'foo-user'),
-    ('foo-reviewer', 'foo-reviewer'),
-    ('foo-editor', 'foo-editor'),
-    ('bar-user', 'bar-user'),
-    ('bar-reviewer', 'bar-reviewer'),
-    ('bar-editor', 'bar-editor'),
-)
-
-
-status_map = {
-    'list': {
-        'foo-user': 403, 'foo-reviewer': 200, 'foo-editor': 200,
-        'bar-user': 403, 'bar-reviewer': 200, 'bar-editor': 200,
-        'user': 403, 'example-reviewer': 200, 'example-editor': 200,
-        'editor': 200
-    },
-    'detail': {
-        'foo-user': 404, 'foo-reviewer': 200, 'foo-editor': 200,
-        'bar-user': 404, 'bar-reviewer': 200, 'bar-editor': 200,
-        'user': 404, 'example-reviewer': 200, 'example-editor': 200,
-        'editor': 200
-    },
-    'create': {
-        'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 201,
-        'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 201,
-        'user': 403, 'example-reviewer': 403, 'example-editor': 201,
-        'editor': 201
-    },
-    'copy': {
-        'foo-user': 404, 'foo-reviewer': 403, 'foo-editor': 201,
-        'bar-user': 404, 'bar-reviewer': 403, 'bar-editor': 201,
-        'user': 404, 'example-reviewer': 403, 'example-editor': 201,
-        'editor': 201
-    },
-    'update': {
-        'foo-user': 404, 'foo-reviewer': 403, 'foo-editor': 200,
-        'bar-user': 404, 'bar-reviewer': 403, 'bar-editor': 200,
-        'user': 404, 'example-reviewer': 403, 'example-editor': 200,
-        'editor': 200
-    },
-    'delete': {
-        'foo-user': 404, 'foo-reviewer': 403, 'foo-editor': 204,
-        'bar-user': 404, 'bar-reviewer': 403, 'bar-editor': 204,
-        'user': 404, 'example-reviewer': 403, 'example-editor': 204,
-        'editor': 204
-    }
-}
-
-
-status_map_object_permissions = {
-    'copy': {
-        'foo-optionset': {
-            'foo-reviewer': 403, 'foo-editor': 201,
-            'bar-reviewer': 404, 'bar-editor': 404,
-            'example-reviewer': 404, 'example-editor': 404,
-        },
-        'bar-optionset': {
-            'foo-reviewer': 404, 'foo-editor': 404,
-            'bar-reviewer': 403, 'bar-editor': 201,
-            'example-reviewer': 404, 'example-editor': 404,
-        }
-    },
-    'update': {
-        'foo-optionset': {
-            'foo-reviewer': 403, 'foo-editor': 200,
-            'bar-reviewer': 404, 'bar-editor': 404,
-            'example-reviewer': 404, 'example-editor': 404,
-        },
-        'bar-optionset': {
-            'foo-reviewer': 404, 'foo-editor': 404,
-            'bar-reviewer': 403, 'bar-editor': 200,
-            'example-reviewer': 404, 'example-editor': 404,
-        }
-    },
-    'delete': {
-        'foo-optionset': {
-            'foo-reviewer': 403, 'foo-editor': 204,
-            'bar-reviewer': 404, 'bar-editor': 404,
-            'example-reviewer': 404, 'example-editor': 404,
-        },
-        'bar-optionset': {
-            'foo-reviewer': 404, 'foo-editor': 404,
-            'bar-reviewer': 403, 'bar-editor': 204,
-            'example-reviewer': 404, 'example-editor': 404,
-        }
-    },
-}
-
-def get_status_map_or_obj_perms(instance, username, method):
-    ''' looks for the object permissions of the instance and returns the status code '''
-    if instance.editors.exists():
-        try:
-            return status_map_object_permissions[method][instance.uri_path][username]
-        except KeyError:
-            return status_map[method][username]
-    else:
-        return status_map[method][username]
-
-
-urlnames = {
-    'list': 'v1-options:optionset-list',
-    'nested': 'v1-options:optionset-nested',
-    'index': 'v1-options:optionset-index',
-    'export': 'v1-options:optionset-export',
-    'detail': 'v1-options:optionset-detail',
-    'detail_export': 'v1-options:optionset-detail-export',
-    'copy': 'v1-options:optionset-copy'
-}
+from .test_viewset_optionsets import urlnames
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -219,7 +109,7 @@ def test_update_m2m_multisite(db, client, username, password):
             'conditions': conditions,
         }
         response = client.put(url, data, content_type='application/json')
-        assert response.status_code == get_status_map_or_obj_perms(instance, username, 'update'), response.json()
+        assert response.status_code == get_obj_perms_status_code(instance, username, 'update'), response.json()
 
         if response.status_code == 200:
             instance.refresh_from_db()
@@ -238,7 +128,7 @@ def test_delete_multisite(db, client, username, password):
     for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.delete(url)
-        assert response.status_code == get_status_map_or_obj_perms(instance, username, 'delete'), response.json()
+        assert response.status_code == get_obj_perms_status_code(instance, username, 'delete'), response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -270,7 +160,7 @@ def test_copy_multisite(db, client, username, password):
             'uri_path': instance.uri_path + '-'
         }
         response = client.put(url, data, content_type='application/json')
-        assert response.status_code == get_status_map_or_obj_perms(instance, username, 'copy'), response.json()
+        assert response.status_code == get_obj_perms_status_code(instance, username, 'copy'), response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
