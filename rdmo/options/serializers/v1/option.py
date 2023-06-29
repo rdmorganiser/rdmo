@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
-from rdmo.core.serializers import (ElementExportSerializerMixin,
-                                   ElementModelSerializerMixin,
+from rdmo.core.serializers import (ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
                                    ReadOnlyObjectPermissionsSerializerMixin,
                                    ThroughModelSerializerMixin,
@@ -12,16 +11,20 @@ from ...validators import OptionLockedValidator, OptionUniqueURIValidator
 
 
 class OptionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
-                       ElementModelSerializerMixin, ReadOnlyObjectPermissionsSerializerMixin,
-                       serializers.ModelSerializer):
+                       ElementModelSerializerMixin, ElementWarningSerializerMixin,
+                       ReadOnlyObjectPermissionsSerializerMixin, serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
     uri_path = serializers.CharField(required=True)
+
     optionsets = serializers.PrimaryKeyRelatedField(queryset=OptionSet.objects.all(), required=False, many=True)
     conditions = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+
+    warning = serializers.SerializerMethodField()
+    read_only = serializers.SerializerMethodField()
+
     values_count = serializers.IntegerField(read_only=True)
     projects_count = serializers.IntegerField(read_only=True)
-    read_only = serializers.SerializerMethodField()
 
     class Meta:
         model = Option
@@ -41,7 +44,8 @@ class OptionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
             'values_count',
             'projects_count',
             'editors',
-            'read_only'
+            'warning',
+            'read_only',
         )
         trans_fields = (
             'text',
@@ -52,19 +56,6 @@ class OptionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
         validators = (
             OptionUniqueURIValidator(),
             OptionLockedValidator()
-        )
-
-
-class OptionListSerializer(ElementExportSerializerMixin, ElementWarningSerializerMixin,
-                           OptionSerializer):
-
-    warning = serializers.SerializerMethodField()
-    xml_url = serializers.SerializerMethodField()
-
-    class Meta(OptionSerializer.Meta):
-        fields = OptionSerializer.Meta.fields + (
-            'warning',
-            'xml_url'
         )
         warning_fields = (
             'text',

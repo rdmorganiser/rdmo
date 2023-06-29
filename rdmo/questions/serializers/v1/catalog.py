@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
-from rdmo.core.serializers import (ElementExportSerializerMixin,
-                                   ElementModelSerializerMixin,
+from rdmo.core.serializers import (ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
                                    ReadOnlyObjectPermissionsSerializerMixin,
                                    ThroughModelSerializerMixin,
@@ -23,14 +22,18 @@ class CatalogSectionSerializer(serializers.ModelSerializer):
 
 
 class CatalogSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
-                        ElementModelSerializerMixin, ReadOnlyObjectPermissionsSerializerMixin,
-                        serializers.ModelSerializer):
+                        ElementModelSerializerMixin, ElementWarningSerializerMixin,
+                        ReadOnlyObjectPermissionsSerializerMixin, serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
     uri_path = serializers.CharField(required=True)
-    projects_count = serializers.IntegerField(read_only=True)
+
     sections = CatalogSectionSerializer(source='catalog_sections', read_only=False, required=False, many=True)
+
+    warning = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()
+
+    projects_count = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Catalog
@@ -47,10 +50,11 @@ class CatalogSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
             'sections',
             'sites',
             'editors',
-            'read_only',
             'groups',
             'title',
             'help',
+            'warning',
+            'read_only',
             'projects_count',
         )
         trans_fields = (
@@ -64,30 +68,17 @@ class CatalogSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
             CatalogUniqueURIValidator(),
             CatalogLockedValidator(),
         )
-
-
-class CatalogListSerializer(ElementExportSerializerMixin, ElementWarningSerializerMixin,
-                            CatalogSerializer):
-
-    warning = serializers.SerializerMethodField()
-    xml_url = serializers.SerializerMethodField()
-
-    class Meta(CatalogSerializer.Meta):
-        fields = CatalogSerializer.Meta.fields + (
-            'warning',
-            'xml_url'
-        )
         warning_fields = (
             'title',
         )
 
 
-class CatalogNestedSerializer(CatalogListSerializer):
+class CatalogNestedSerializer(CatalogSerializer):
 
     elements = serializers.SerializerMethodField()
 
-    class Meta(CatalogListSerializer.Meta):
-        fields = CatalogListSerializer.Meta.fields + (
+    class Meta(CatalogSerializer.Meta):
+        fields = CatalogSerializer.Meta.fields + (
             'elements',
         )
 

@@ -12,17 +12,16 @@ from rdmo.core.utils import is_truthy, render_to_format
 from .models import Task
 from .renderers import TaskRenderer
 from .serializers.export import TaskExportSerializer
-from .serializers.v1 import (TaskIndexSerializer, TaskListSerializer,
-                             TaskSerializer)
+from .serializers.v1 import TaskIndexSerializer, TaskSerializer
 
 
 class TaskViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
+    serializer_class = TaskSerializer
     queryset = Task.objects.select_related('start_attribute', 'end_attribute') \
                            .prefetch_related('catalogs', 'sites', 'editors', 'groups', 'conditions') \
                            .annotate(projects_count=models.Count('projects')) \
                            .order_by('uri')
-    serializer_class = TaskSerializer
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
     search_fields = ('uri', )
@@ -34,9 +33,6 @@ class TaskViewSet(ModelViewSet):
         'sites',
         'editors'
     )
-
-    def get_serializer_class(self):
-        return TaskListSerializer if self.action == 'list' else TaskSerializer
 
     @action(detail=False)
     def index(self, request):

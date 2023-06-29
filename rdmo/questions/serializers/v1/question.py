@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
-from rdmo.core.serializers import (ElementExportSerializerMixin,
-                                   ElementModelSerializerMixin,
+from rdmo.core.serializers import (ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
                                    ReadOnlyObjectPermissionsSerializerMixin,
                                    ThroughModelSerializerMixin,
@@ -12,14 +11,21 @@ from ...validators import QuestionLockedValidator, QuestionUniqueURIValidator
 
 
 class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
-                         ElementModelSerializerMixin, ReadOnlyObjectPermissionsSerializerMixin,
-                         serializers.ModelSerializer):
+                         ElementModelSerializerMixin, ElementWarningSerializerMixin,
+                         ReadOnlyObjectPermissionsSerializerMixin, serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
     uri_path = serializers.CharField(required=True)
+
     pages = serializers.PrimaryKeyRelatedField(queryset=Page.objects.all(), required=False, many=True)
     questionsets = serializers.PrimaryKeyRelatedField(queryset=QuestionSet.objects.all(), required=False, many=True)
+
+    warning = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()
+
+    attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
+    condition_uris = serializers.SerializerMethodField()
+    optionset_uris = serializers.SerializerMethodField()
 
     class Meta:
         model = Question
@@ -53,7 +59,11 @@ class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin
             'optionsets',
             'conditions',
             'editors',
-            'read_only'
+            'warning',
+            'read_only',
+            'attribute_uri',
+            'condition_uris',
+            'optionset_uris'
         )
         trans_fields = (
             'text',
@@ -70,6 +80,9 @@ class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin
             QuestionUniqueURIValidator(),
             QuestionLockedValidator()
         )
+        warning_fields = (
+            'text',
+        )
 
     def to_internal_value(self, data):
         # handles an empty width, maximum, minimum, or step field
@@ -78,28 +91,6 @@ class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin
                 data[field] = None
 
         return super().to_internal_value(data)
-
-
-class QuestionListSerializer(ElementExportSerializerMixin, ElementWarningSerializerMixin,
-                             QuestionSerializer):
-
-    attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
-    condition_uris = serializers.SerializerMethodField()
-    optionset_uris = serializers.SerializerMethodField()
-    warning = serializers.SerializerMethodField()
-    xml_url = serializers.SerializerMethodField()
-
-    class Meta(QuestionSerializer.Meta):
-        fields = QuestionSerializer.Meta.fields + (
-            'attribute_uri',
-            'condition_uris',
-            'optionset_uris',
-            'warning',
-            'xml_url'
-        )
-        warning_fields = (
-            'text',
-        )
 
     def get_condition_uris(self, obj):
         return [condition.uri for condition in obj.conditions.all()]

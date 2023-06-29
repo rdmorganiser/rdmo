@@ -1,20 +1,25 @@
 from rest_framework import serializers
 
-from rdmo.core.serializers import (ElementExportSerializerMixin,
-                                   ElementModelSerializerMixin,
+from rdmo.core.serializers import (ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
-                                   TranslationSerializerMixin,
-                                   ReadOnlyObjectPermissionsSerializerMixin)
+                                   ReadOnlyObjectPermissionsSerializerMixin,
+                                   TranslationSerializerMixin)
 
 from ..models import Task
 from ..validators import TaskLockedValidator, TaskUniqueURIValidator
 
 
-class BaseTaskSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
-                         ReadOnlyObjectPermissionsSerializerMixin, serializers.ModelSerializer):
+class TaskSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
+                     ElementWarningSerializerMixin, ReadOnlyObjectPermissionsSerializerMixin,
+                     serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
+    uri_path = serializers.CharField(required=True)
+
+    warning = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()
+
+    projects_count = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Task
@@ -30,7 +35,6 @@ class BaseTaskSerializer(TranslationSerializerMixin, ElementModelSerializerMixin
             'catalogs',
             'sites',
             'editors',
-            'read_only',
             'groups',
             'start_attribute',
             'end_attribute',
@@ -38,39 +42,18 @@ class BaseTaskSerializer(TranslationSerializerMixin, ElementModelSerializerMixin
             'days_after',
             'conditions',
             'title',
-            'text'
+            'text',
+            'warning',
+            'read_only',
+            'projects_count',
         )
         trans_fields = (
             'title',
             'text'
         )
-
-
-class TaskSerializer(BaseTaskSerializer):
-
-    uri_path = serializers.CharField(required=True)
-    projects_count = serializers.IntegerField(read_only=True)
-
-    class Meta(BaseTaskSerializer.Meta):
-        fields = BaseTaskSerializer.Meta.fields + (
-            'projects_count',
-        )
         validators = (
             TaskUniqueURIValidator(),
             TaskLockedValidator()
-        )
-
-
-class TaskListSerializer(ElementExportSerializerMixin, ElementWarningSerializerMixin,
-                         BaseTaskSerializer):
-
-    warning = serializers.SerializerMethodField()
-    xml_url = serializers.SerializerMethodField()
-
-    class Meta(BaseTaskSerializer.Meta):
-        fields = BaseTaskSerializer.Meta.fields + (
-            'warning',
-            'xml_url'
         )
         warning_fields = (
             'title',

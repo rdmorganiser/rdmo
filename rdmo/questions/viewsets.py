@@ -19,22 +19,20 @@ from .serializers.export import (CatalogExportSerializer, PageExportSerializer,
                                  QuestionExportSerializer,
                                  QuestionSetExportSerializer,
                                  SectionExportSerializer)
-from .serializers.v1 import (CatalogIndexSerializer, CatalogListSerializer,
-                             CatalogNestedSerializer, CatalogSerializer,
-                             PageIndexSerializer, PageListSerializer,
+from .serializers.v1 import (CatalogIndexSerializer, CatalogNestedSerializer,
+                             CatalogSerializer, PageIndexSerializer,
                              PageNestedSerializer, PageSerializer,
-                             QuestionIndexSerializer, QuestionListSerializer,
-                             QuestionSerializer, QuestionSetIndexSerializer,
-                             QuestionSetListSerializer,
+                             QuestionIndexSerializer, QuestionSerializer,
+                             QuestionSetIndexSerializer,
                              QuestionSetNestedSerializer,
                              QuestionSetSerializer, SectionIndexSerializer,
-                             SectionListSerializer, SectionNestedSerializer,
-                             SectionSerializer)
+                             SectionNestedSerializer, SectionSerializer)
 from .utils import get_widget_type_choices
 
 
 class CatalogViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission,)
+    serializer_class = CatalogSerializer
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
     search_fields = ('uri', 'title')
@@ -52,9 +50,6 @@ class CatalogViewSet(ModelViewSet):
             return queryset.prefetch_elements()
         else:
             return queryset.prefetch_related('sites', 'editors', 'groups', 'catalog_sections__section')
-
-    def get_serializer_class(self):
-        return CatalogListSerializer if self.action == 'list' else CatalogSerializer
 
     @action(detail=True)
     def nested(self, request, pk):
@@ -106,6 +101,7 @@ class CatalogViewSet(ModelViewSet):
 
 class SectionViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
+    serializer_class = SectionSerializer
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
     search_fields = ('uri', 'title')
@@ -122,9 +118,6 @@ class SectionViewSet(ModelViewSet):
             return queryset.prefetch_elements()
         else:
             return queryset.prefetch_related('catalogs', 'editors', 'section_pages__page')
-
-    def get_serializer_class(self):
-        return SectionListSerializer if self.action == 'list' else SectionSerializer
 
     @action(detail=True)
     def nested(self, request, pk):
@@ -175,6 +168,7 @@ class SectionViewSet(ModelViewSet):
 
 class PageViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
+    serializer_class = PageSerializer
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
     search_fields = ('uri', 'title')
@@ -199,9 +193,6 @@ class PageViewSet(ModelViewSet):
                 'page_questionsets__questionset',
                 'page_questions__question'
             ).select_related('attribute')
-
-    def get_serializer_class(self):
-        return PageListSerializer if self.action == 'list' else PageSerializer
 
     @action(detail=True)
     def nested(self, request, pk):
@@ -251,6 +242,7 @@ class PageViewSet(ModelViewSet):
 
 class QuestionSetViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
+    serializer_class = QuestionSetSerializer
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
     search_fields = ('uri', 'title')
@@ -262,9 +254,6 @@ class QuestionSetViewSet(ModelViewSet):
         'comment',
         'is_collection'
     )
-
-    def get_serializer_class(self):
-        return QuestionSetListSerializer if self.action == 'list' else QuestionSetSerializer
 
     def get_queryset(self):
         queryset = QuestionSet.objects.all()
@@ -328,6 +317,7 @@ class QuestionSetViewSet(ModelViewSet):
 
 class QuestionViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
+    serializer_class = QuestionSerializer
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
     search_fields = ('uri', 'text')
@@ -342,9 +332,6 @@ class QuestionViewSet(ModelViewSet):
         'unit',
         'comment'
     )
-
-    def get_serializer_class(self):
-        return QuestionListSerializer if self.action == 'list' else QuestionSerializer
 
     def get_queryset(self):
         queryset = Question.objects.all()

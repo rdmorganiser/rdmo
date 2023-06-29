@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
-from rdmo.core.serializers import (ElementExportSerializerMixin,
-                                   ElementModelSerializerMixin,
+from rdmo.core.serializers import (ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
                                    ReadOnlyObjectPermissionsSerializerMixin,
                                    ThroughModelSerializerMixin,
@@ -9,7 +8,7 @@ from rdmo.core.serializers import (ElementExportSerializerMixin,
 
 from ...models import Page, PageQuestion, PageQuestionSet, QuestionSet, Section
 from ...validators import PageLockedValidator, PageUniqueURIValidator
-from .question import QuestionListSerializer
+from .question import QuestionSerializer
 from .questionset import QuestionSetNestedSerializer
 
 
@@ -34,15 +33,21 @@ class PageQuestionSerializer(serializers.ModelSerializer):
 
 
 class PageSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
-                     ElementModelSerializerMixin, ReadOnlyObjectPermissionsSerializerMixin,
-                     serializers.ModelSerializer):
+                     ElementModelSerializerMixin, ElementWarningSerializerMixin,
+                     ReadOnlyObjectPermissionsSerializerMixin, serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
     uri_path = serializers.CharField(required=True)
+
     sections = serializers.PrimaryKeyRelatedField(queryset=Section.objects.all(), required=False, many=True)
     questionsets = PageQuestionSetSerializer(source='page_questionsets', read_only=False, required=False, many=True)
     questions = PageQuestionSerializer(source='page_questions', read_only=False, required=False, many=True)
+
+    warning = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()
+
+    attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
+    condition_uris = serializers.SerializerMethodField()
 
     class Meta:
         model = Page
@@ -65,7 +70,10 @@ class PageSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
             'questions',
             'conditions',
             'editors',
-            'read_only'
+            'warning',
+            'read_only',
+            'attribute_uri',
+            'condition_uris'
         )
         trans_fields = (
             'title',
@@ -84,23 +92,6 @@ class PageSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
             PageUniqueURIValidator(),
             PageLockedValidator()
         )
-
-
-class PageListSerializer(ElementExportSerializerMixin, ElementWarningSerializerMixin,
-                         PageSerializer):
-
-    attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
-    condition_uris = serializers.SerializerMethodField()
-    warning = serializers.SerializerMethodField()
-    xml_url = serializers.SerializerMethodField()
-
-    class Meta(PageSerializer.Meta):
-        fields = PageSerializer.Meta.fields + (
-            'attribute_uri',
-            'condition_uris',
-            'warning',
-            'xml_url'
-        )
         warning_fields = (
             'title',
         )
@@ -109,12 +100,12 @@ class PageListSerializer(ElementExportSerializerMixin, ElementWarningSerializerM
         return [condition.uri for condition in obj.conditions.all()]
 
 
-class PageNestedSerializer(PageListSerializer):
+class PageNestedSerializer(PageSerializer):
 
     elements = serializers.SerializerMethodField()
 
-    class Meta(PageListSerializer.Meta):
-        fields = PageListSerializer.Meta.fields + (
+    class Meta(PageSerializer.Meta):
+        fields = PageSerializer.Meta.fields + (
             'elements',
         )
 
@@ -123,7 +114,7 @@ class PageNestedSerializer(PageListSerializer):
             if isinstance(element, QuestionSet):
                 yield QuestionSetNestedSerializer(element, context=self.context).data
             else:
-                yield QuestionListSerializer(element, context=self.context).data
+                yield QuestionSerializer(element, context=self.context).data
 
 
 class PageIndexSerializer(serializers.ModelSerializer):

@@ -1,4 +1,3 @@
-from .option import (OptionIndexSerializer, OptionListSerializer,
-                     OptionSerializer)
-from .optionset import (OptionSetIndexSerializer, OptionSetListSerializer,
-                        OptionSetNestedSerializer, OptionSetSerializer)
+from .option import OptionIndexSerializer, OptionSerializer
+from .optionset import (OptionSetIndexSerializer, OptionSetNestedSerializer,
+                        OptionSetSerializer)

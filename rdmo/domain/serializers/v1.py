@@ -3,8 +3,7 @@ import logging
 from rest_framework import serializers
 
 from rdmo.conditions.models import Condition
-from rdmo.core.serializers import (ElementExportSerializerMixin,
-                                   ElementModelSerializerMixin,
+from rdmo.core.serializers import (ElementModelSerializerMixin,
                                    ReadOnlyObjectPermissionsSerializerMixin)
 from rdmo.questions.models import Page, Question, QuestionSet
 
@@ -76,14 +75,11 @@ class AttributeSerializer(BaseAttributeSerializer):
         return [attribute.id for attribute in obj.get_descendants()]
 
 
-class AttributeListSerializer(ElementExportSerializerMixin, BaseAttributeSerializer):
+class AttributeListSerializer(BaseAttributeSerializer):
 
-    xml_url = serializers.SerializerMethodField()
-    
     class Meta(BaseAttributeSerializer.Meta):
         fields = BaseAttributeSerializer.Meta.fields + (
-            'xml_url',
-            'is_leaf_node'
+            'is_leaf_node',
         )
 
 

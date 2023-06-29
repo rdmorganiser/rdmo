@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
-from rdmo.core.serializers import (ElementExportSerializerMixin,
-                                   ElementModelSerializerMixin,
+from rdmo.core.serializers import (ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
                                    ReadOnlyObjectPermissionsSerializerMixin,
                                    ThroughModelSerializerMixin,
@@ -23,13 +22,16 @@ class SectionPageSerializer(serializers.ModelSerializer):
 
 
 class SectionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
-                        ElementModelSerializerMixin, ReadOnlyObjectPermissionsSerializerMixin,
-                        serializers.ModelSerializer):
+                        ElementModelSerializerMixin, ElementWarningSerializerMixin,
+                        ReadOnlyObjectPermissionsSerializerMixin, serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
     uri_path = serializers.CharField(required=True)
+
     catalogs = serializers.PrimaryKeyRelatedField(queryset=Catalog.objects.all(), required=False, many=True)
     pages = SectionPageSerializer(source='section_pages', read_only=False, required=False, many=True)
+
+    warning = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()
 
     class Meta:
@@ -46,6 +48,7 @@ class SectionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
             'catalogs',
             'pages',
             'editors',
+            'warning',
             'read_only'
         )
         trans_fields = (
@@ -61,30 +64,17 @@ class SectionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
             SectionUniqueURIValidator(),
             SectionLockedValidator()
         )
-
-
-class SectionListSerializer(ElementExportSerializerMixin, ElementWarningSerializerMixin,
-                            SectionSerializer):
-
-    warning = serializers.SerializerMethodField()
-    xml_url = serializers.SerializerMethodField()
-
-    class Meta(SectionSerializer.Meta):
-        fields = SectionSerializer.Meta.fields + (
-            'warning',
-            'xml_url'
-        )
         warning_fields = (
             'title',
         )
 
 
-class SectionNestedSerializer(SectionListSerializer):
+class SectionNestedSerializer(SectionSerializer):
 
     elements = serializers.SerializerMethodField()
 
-    class Meta(SectionListSerializer.Meta):
-        fields = SectionListSerializer.Meta.fields + (
+    class Meta(SectionSerializer.Meta):
+        fields = SectionSerializer.Meta.fields + (
             'elements',
         )
 

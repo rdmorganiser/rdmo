@@ -17,19 +17,19 @@ from .renderers import OptionRenderer, OptionSetRenderer
 from .serializers.export import (OptionExportSerializer,
                                  OptionSetExportSerializer)
 from .serializers.v1 import (OptionIndexSerializer, OptionSerializer,
-                             OptionSetIndexSerializer, OptionSetListSerializer,
+                             OptionSetIndexSerializer,
                              OptionSetNestedSerializer, OptionSetSerializer)
 
 
 class OptionSetViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
+    serializer_class = OptionSetSerializer
     queryset = OptionSet.objects.prefetch_related(
         'optionset_options__option',
         'conditions',
         'questions',
         'editors'
     )
-    serializer_class = OptionSetSerializer
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
     search_fields = ('uri', )
@@ -39,9 +39,6 @@ class OptionSetViewSet(ModelViewSet):
         'uri_path',
         'comment'
     )
-
-    def get_serializer_class(self):
-        return OptionSetListSerializer if self.action == 'list' else OptionSetSerializer
 
     @action(detail=False)
     def index(self, request):
@@ -88,10 +85,10 @@ class OptionSetViewSet(ModelViewSet):
 
 class OptionViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
+    serializer_class = OptionSerializer
     queryset = Option.objects.annotate(values_count=models.Count('values')) \
                              .annotate(projects_count=models.Count('values__project', distinct=True)) \
                              .prefetch_related('optionsets', 'conditions', 'editors')
-    serializer_class = OptionSerializer
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
     search_fields = ('uri', 'text')

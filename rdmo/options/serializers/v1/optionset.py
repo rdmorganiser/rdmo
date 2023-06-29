@@ -1,14 +1,13 @@
 from rest_framework import serializers
 
-from rdmo.core.serializers import (ElementExportSerializerMixin,
-                                   ElementModelSerializerMixin,
+from rdmo.core.serializers import (ElementModelSerializerMixin,
                                    ReadOnlyObjectPermissionsSerializerMixin,
                                    ThroughModelSerializerMixin)
 from rdmo.questions.models import Question
 
 from ...models import OptionSet, OptionSetOption
 from ...validators import OptionSetLockedValidator, OptionSetUniqueURIValidator
-from .option import OptionListSerializer
+from .option import OptionSerializer
 
 
 class OptionSetOptionSerializer(serializers.ModelSerializer):
@@ -26,8 +25,10 @@ class OptionSetSerializer(ThroughModelSerializerMixin, ElementModelSerializerMix
 
     model = serializers.SerializerMethodField()
     uri_path = serializers.CharField(required=True)
+
     options = OptionSetOptionSerializer(source='optionset_options', read_only=False, required=False, many=True)
     questions = serializers.PrimaryKeyRelatedField(queryset=Question.objects.all(), required=False, many=True)
+
     read_only = serializers.SerializerMethodField()
 
     class Meta:
@@ -47,7 +48,7 @@ class OptionSetSerializer(ThroughModelSerializerMixin, ElementModelSerializerMix
             'conditions',
             'questions',
             'editors',
-            'read_only'
+            'read_only',
         )
         through_fields = (
             ('options', 'optionset', 'option', 'optionset_options'),
@@ -58,28 +59,18 @@ class OptionSetSerializer(ThroughModelSerializerMixin, ElementModelSerializerMix
         )
 
 
-class OptionSetListSerializer(ElementExportSerializerMixin, OptionSetSerializer):
-
-    xml_url = serializers.SerializerMethodField()
-
-    class Meta(OptionSetSerializer.Meta):
-        fields = OptionSetSerializer.Meta.fields + (
-            'xml_url',
-        )
-
-
-class OptionSetNestedSerializer(OptionSetListSerializer):
+class OptionSetNestedSerializer(OptionSetSerializer):
 
     elements = serializers.SerializerMethodField()
 
-    class Meta(OptionSetListSerializer.Meta):
-        fields = OptionSetListSerializer.Meta.fields + (
+    class Meta(OptionSetSerializer.Meta):
+        fields = OptionSetSerializer.Meta.fields + (
             'elements',
         )
 
     def get_elements(self, obj):
         for element in obj.elements:
-            yield OptionListSerializer(element, context=self.context).data
+            yield OptionSerializer(element, context=self.context).data
 
 
 class OptionSetIndexSerializer(serializers.ModelSerializer):

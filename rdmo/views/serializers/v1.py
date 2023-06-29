@@ -1,21 +1,38 @@
 from django.template import Context, Template, TemplateSyntaxError
 from rest_framework import exceptions, serializers
 
-from rdmo.core.serializers import (ElementExportSerializerMixin,
-                                   ElementModelSerializerMixin,
+from rdmo.core.serializers import (ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
-                                   TranslationSerializerMixin,
-                                   ReadOnlyObjectPermissionsSerializerMixin)
+                                   ReadOnlyObjectPermissionsSerializerMixin,
+                                   TranslationSerializerMixin)
 
 from ..models import View
 from ..validators import ViewLockedValidator, ViewUniqueURIValidator
 
 
-class BaseViewSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
-                         ReadOnlyObjectPermissionsSerializerMixin, serializers.ModelSerializer):
+class ViewSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
+                     ElementWarningSerializerMixin, ReadOnlyObjectPermissionsSerializerMixin,
+                     serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
+    uri_path = serializers.CharField(required=True)
+
+    warning = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()
+
+    projects_count = serializers.IntegerField(read_only=True)
+
+    def validate(self, data):
+        # try to render the template to see that the syntax is ok (if the editor was used)
+        if self.context['request'].data.get('editor'):
+            try:
+                Template(data['template']).render(Context({}))
+            except (KeyError, IndexError):
+                pass
+            except (TemplateSyntaxError, TypeError) as e:
+                raise exceptions.ValidationError({'template': '\n'.join(e.args)})
+
+        return super().validate(data)
 
     class Meta:
         model = View
@@ -31,55 +48,21 @@ class BaseViewSerializer(TranslationSerializerMixin, ElementModelSerializerMixin
             'catalogs',
             'sites',
             'editors',
-            'read_only',
             'groups',
             'template',
             'title',
-            'help'
+            'help',
+            'warning',
+            'read_only',
+            'projects_count'
         )
         trans_fields = (
             'title',
             'help'
         )
-
-
-class ViewSerializer(BaseViewSerializer):
-
-    uri_path = serializers.CharField(required=True)
-    projects_count = serializers.IntegerField(read_only=True)
-
-    def validate(self, data):
-        # try to render the template to see that the syntax is ok (if the editor was used)
-        if self.context['request'].data.get('editor'):
-            try:
-                Template(data['template']).render(Context({}))
-            except (KeyError, IndexError):
-                pass
-            except (TemplateSyntaxError, TypeError) as e:
-                raise exceptions.ValidationError({'template': '\n'.join(e.args)})
-
-        return super(ViewSerializer, self).validate(data)
-
-    class Meta(BaseViewSerializer.Meta):
-        fields = BaseViewSerializer.Meta.fields + (
-            'projects_count',
-        )
         validators = (
             ViewUniqueURIValidator(),
             ViewLockedValidator()
-        )
-
-
-class ViewListSerializer(ElementExportSerializerMixin, ElementWarningSerializerMixin,
-                         BaseViewSerializer):
-
-    warning = serializers.SerializerMethodField()
-    xml_url = serializers.SerializerMethodField()
-
-    class Meta(BaseViewSerializer.Meta):
-        fields = BaseViewSerializer.Meta.fields + (
-            'warning',
-            'xml_url'
         )
         warning_fields = (
             'title',

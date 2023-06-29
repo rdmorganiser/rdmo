@@ -179,14 +179,6 @@ class ElementModelSerializerMixin(serializers.ModelSerializer):
         return str(self.Meta.model._meta)
 
 
-class ElementExportSerializerMixin(serializers.ModelSerializer):
-
-    def get_xml_url(self, obj):
-        app_name = self.context['request'].version
-        basename = self.Meta.model._meta.model_name
-        return reverse(f'{app_name}:{basename}-detail-export', args=[obj.pk])
-
-
 class ElementWarningSerializerMixin(serializers.ModelSerializer):
 
     def get_warning(self, obj):

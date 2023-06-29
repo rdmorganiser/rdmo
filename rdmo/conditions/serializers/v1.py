@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
-from rdmo.core.serializers import (ElementExportSerializerMixin,
-                                   ElementModelSerializerMixin,
+from rdmo.core.serializers import (ElementModelSerializerMixin,
                                    ReadOnlyObjectPermissionsSerializerMixin)
 from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet
@@ -17,8 +16,8 @@ class ConditionSerializer(ElementModelSerializerMixin, ReadOnlyObjectPermissions
 
     model = serializers.SerializerMethodField()
     uri_path = serializers.CharField(required=True)
-    source = serializers.PrimaryKeyRelatedField(queryset=Attribute.objects.all(), required=True)
 
+    source = serializers.PrimaryKeyRelatedField(queryset=Attribute.objects.all(), required=True)
     optionsets = serializers.PrimaryKeyRelatedField(queryset=OptionSet.objects.all(), required=False, many=True)
     pages = serializers.PrimaryKeyRelatedField(queryset=Page.objects.all(), required=False, many=True)
     questionsets = serializers.PrimaryKeyRelatedField(queryset=QuestionSet.objects.all(), required=False, many=True)
@@ -37,7 +36,6 @@ class ConditionSerializer(ElementModelSerializerMixin, ReadOnlyObjectPermissions
             'uri_path',
             'comment',
             'locked',
-            'read_only',
             'editors',
             'source',
             'relation',
@@ -47,21 +45,12 @@ class ConditionSerializer(ElementModelSerializerMixin, ReadOnlyObjectPermissions
             'pages',
             'questionsets',
             'questions',
-            'tasks'
+            'tasks',
+            'read_only'
         )
         validators = (
             ConditionUniqueURIValidator(),
             ConditionLockedValidator()
-        )
-
-
-class ConditionListSerializer(ElementExportSerializerMixin, ConditionSerializer):
-
-    xml_url = serializers.SerializerMethodField()
-
-    class Meta(ConditionSerializer.Meta):
-        fields = ConditionSerializer.Meta.fields + (
-            'xml_url',
         )
 
 

@@ -1,9 +1,9 @@
 from django.db import models
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
+from rest_framework.filters import SearchFilter
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.filters import SearchFilter
 
 from rdmo.core.exports import XMLResponse
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
@@ -12,12 +12,12 @@ from rdmo.core.utils import render_to_format
 from .models import View
 from .renderers import ViewRenderer
 from .serializers.export import ViewExportSerializer
-from .serializers.v1 import (ViewIndexSerializer, ViewListSerializer,
-                             ViewSerializer)
+from .serializers.v1 import ViewIndexSerializer, ViewSerializer
 
 
 class ViewViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
+    serializer_class = ViewSerializer
     queryset = View.objects.prefetch_related('catalogs', 'sites', 'editors', 'groups') \
                            .annotate(projects_count=models.Count('projects')) \
                            .order_by('uri')
@@ -32,9 +32,6 @@ class ViewViewSet(ModelViewSet):
         'sites',
         'editors'
     )
-
-    def get_serializer_class(self):
-        return ViewListSerializer if self.action == 'list' else ViewSerializer
 
     @action(detail=False)
     def index(self, request):

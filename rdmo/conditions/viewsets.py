@@ -13,12 +13,12 @@ from rdmo.core.views import ChoicesViewSet
 from .models import Condition
 from .renderers import ConditionRenderer
 from .serializers.export import ConditionExportSerializer
-from .serializers.v1 import (ConditionIndexSerializer, ConditionListSerializer,
-                             ConditionSerializer)
+from .serializers.v1 import ConditionIndexSerializer, ConditionSerializer
 
 
 class ConditionViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
+    serializer_class = ConditionSerializer
     queryset = Condition.objects.select_related('source', 'target_option') \
                                 .prefetch_related('optionsets', 'pages', 'questionsets',
                                                   'questions', 'tasks', 'editors')
@@ -34,9 +34,6 @@ class ConditionViewSet(ModelViewSet):
         'target_text',
         'target_option'
     )
-
-    def get_serializer_class(self):
-        return ConditionListSerializer if self.action == 'list' else ConditionSerializer
 
     @action(detail=False)
     def index(self, request):
