@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
 from django.db.models import Max
@@ -7,6 +9,7 @@ from rest_framework.utils import model_meta
 
 from rdmo.core.utils import get_language_warning, get_languages, markdown2html
 
+logger = logging.getLogger(__name__)
 
 class RecursiveField(serializers.Serializer):
 
@@ -187,6 +190,38 @@ class ElementWarningSerializerMixin(serializers.ModelSerializer):
 
     def get_warning(self, obj):
         return any([get_language_warning(obj, field_name) for field_name in self.Meta.warning_fields])
+
+
+class ReadOnlyObjectPermissionsSerializerMixin:
+    '''
+    A mixin class for Serializers that adds a boolean field with the name read_only.
+    It checks the object permissions based on the model of the serializer.
+    
+    Requires:
+        - the request object in the context kwargs of the Serializer call:
+            ..., context={'request': request}
+        - so that this mixin has self.context['request']
+
+    In the Serializer class add:
+        read_only = serializers.SerializerMethodField(read_only=True)
+    and the field to fields:
+        read_only
+    '''
+    
+    OBJECT_PERMISSION_ACTION_NAMES = ('change', 'delete')
+    
+    @staticmethod
+    def construct_object_permission(model, action_name: str) -> str:
+        model_app_label = model._meta.app_label
+        model_name = model._meta.model_name
+        perm = '%s.%s_%s_object' % (model_app_label, action_name, model_name)
+        return perm
+
+    def get_read_only(self, obj) -> bool:
+        user = self.context['request'].user
+        perms = (self.construct_object_permission(self.Meta.model, action_name)
+                    for action_name in self.OBJECT_PERMISSION_ACTION_NAMES)
+        return not all(user.has_perm(perm, obj) for perm in perms)
 
 
 class SiteSerializer(serializers.ModelSerializer):

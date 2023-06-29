@@ -26,6 +26,7 @@
       "sites": [
         1
       ],
+      "editors": [],
       "groups": []
     }
   },
@@ -56,6 +57,7 @@
       "sites": [
         1
       ],
+      "editors": [],
       "groups": []
     }
   },
@@ -83,6 +85,73 @@
       "catalogs": [],
       "sites": [
         1
+      ],
+      "editors": [],
+      "groups": []
+    }
+  },
+  {
+    "model": "views.view",
+    "pk": 4,
+    "fields": {
+      "uri": "https://foo.com/terms/views/foo-view",
+      "uri_prefix": "https://foo.com/terms",
+      "key": "foo-view",
+      "comment": "",
+      "locked": false,
+      "template": "",
+      "title_lang1": "foo-view",
+      "title_lang2": "foo-view",
+      "title_lang3": "",
+      "title_lang4": "",
+      "title_lang5": "",
+      "help_lang1": "",
+      "help_lang2": "",
+      "help_lang3": "",
+      "help_lang4": "",
+      "help_lang5": "",
+      "available": true,
+      "catalogs": [
+        3
+      ],
+      "sites": [
+        2
+      ],
+      "editors": [
+        2
+      ],
+      "groups": []
+    }
+  },
+  {
+    "model": "views.view",
+    "pk": 5,
+    "fields": {
+      "uri": "https://bar.com/terms/views/bar-view",
+      "uri_prefix": "https://bar.com/terms",
+      "key": "bar-view",
+      "comment": "",
+      "locked": false,
+      "template": "",
+      "title_lang1": "bar-view",
+      "title_lang2": "bar-view",
+      "title_lang3": "",
+      "title_lang4": "",
+      "title_lang5": "",
+      "help_lang1": "",
+      "help_lang2": "",
+      "help_lang3": "",
+      "help_lang4": "",
+      "help_lang5": "",
+      "available": true,
+      "catalogs": [
+        4
+      ],
+      "sites": [
+        3
+      ],
+      "editors": [
+        3
       ],
       "groups": []
     }

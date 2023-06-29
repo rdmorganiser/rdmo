@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap'
+import get from 'lodash/get'
 import isUndefined from 'lodash/isUndefined'
 import orderBy from 'lodash/orderBy'
 
@@ -13,6 +14,7 @@ import Textarea from './common/Textarea'
 import UriPrefix from './common/UriPrefix'
 
 import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
+import { ReadOnlyIcon } from '../common/Icons'
 
 import PageInfo from '../info/PageInfo'
 import DeletePageModal from '../modals/DeletePageModal'
@@ -21,6 +23,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditPage = ({ config, page, elements, elementActions }) => {
 
+  const { sites } = config
   const { elementAction, parent, attributes, conditions } = elements
 
   const elementValues = orderBy(page.questions.concat(page.questionsets), ['order', 'uri'])
@@ -69,9 +72,10 @@ const EditPage = ({ config, page, elements, elementActions }) => {
     <div className="panel panel-default panel-edit">
       <div className="panel-heading">
         <div className="pull-right">
+          <ReadOnlyIcon title={gettext('This page is read only')} show={page.read_only} />
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storePage} />
-          <SaveButton elementAction={elementAction} onClick={storePage} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storePage} disabled={page.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storePage} disabled={page.read_only} back={true}/>
         </div>
         {
           page.id ? <>
@@ -160,15 +164,18 @@ const EditPage = ({ config, page, elements, elementActions }) => {
         <MultiSelect config={config} element={page} field="conditions"
                      options={conditions} verboseName="condition"
                      onChange={updatePage} onCreate={createCondition} onEdit={editCondition} />
+
+        {get(config, 'settings.multisite') && <Select config={config} element={page} field="editors"
+                                                      options={sites} onChange={updatePage} isMulti />}
       </div>
 
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storePage} />
-          <SaveButton elementAction={elementAction} onClick={storePage} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storePage} disabled={page.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storePage} disabled={page.read_only} back={true}/>
         </div>
-        {page.id && <DeleteButton onClick={openDeleteModal} />}
+        {page.id && <DeleteButton onClick={openDeleteModal} disabled={page.read_only} />}
       </div>
 
       <DeletePageModal page={page} info={info} show={showDeleteModal}

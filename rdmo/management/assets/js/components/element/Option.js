@@ -6,6 +6,7 @@ import { buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
+import { ReadOnlyIcon } from '../common/Icons'
 
 const Option = ({ config, option, elementActions, display='list', indent=0, filter=null }) => {
 
@@ -22,10 +23,11 @@ const Option = ({ config, option, elementActions, display='list', indent=0, filt
   const elementNode = (
     <div className="element">
       <div className="pull-right">
+        <ReadOnlyIcon title={gettext('This option is read only')} show={option.read_only} />
         <EditLink title={gettext('Edit option')} href={editUrl} onClick={fetchEdit} />
         <CopyLink title={gettext('Copy option')} href={copyUrl} onClick={fetchCopy} />
         <LockedLink title={option.locked ? gettext('Unlock option') : gettext('Lock option')}
-                    locked={option.locked} onClick={toggleLocked} />
+                    locked={option.locked} onClick={toggleLocked} disabled={option.read_only} />
         <ExportLink title={gettext('Export option')} exportUrl={exportUrl}
                     exportFormats={config.settings.export_formats} />
       </div>

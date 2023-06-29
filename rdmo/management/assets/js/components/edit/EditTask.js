@@ -12,6 +12,7 @@ import Textarea from './common/Textarea'
 import UriPrefix from './common/UriPrefix'
 
 import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
+import { ReadOnlyIcon } from '../common/Icons'
 
 import TaskInfo from '../info/TaskInfo'
 import DeleteTaskModal from '../modals/DeleteTaskModal'
@@ -40,9 +41,10 @@ const EditTask = ({ config, task, elements, elementActions}) => {
     <div className="panel panel-default panel-edit">
       <div className="panel-heading">
         <div className="pull-right">
+          <ReadOnlyIcon title={gettext('This task is read only')} show={task.read_only} />
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storeTask} />
-          <SaveButton elementAction={elementAction} onClick={storeTask} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeTask} disabled={task.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storeTask} disabled={task.read_only} back={true}/>
         </div>
         {
           task.id ? <>
@@ -126,15 +128,18 @@ const EditTask = ({ config, task, elements, elementActions}) => {
 
         {get(config, 'settings.multisite') && <Select config={config} element={task} field="sites"
                                                       options={sites} onChange={updateTask} isMulti />}
+
+        {get(config, 'settings.multisite') && <Select config={config} element={task} field="editors"
+                                                      options={sites} onChange={updateTask} isMulti />}
       </div>
 
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storeTask} />
-          <SaveButton elementAction={elementAction} onClick={storeTask} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeTask} disabled={task.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storeTask} disabled={task.read_only} back={true}/>
         </div>
-        {task.id && <DeleteButton onClick={openDeleteModal} />}
+        {task.id && <DeleteButton onClick={openDeleteModal} disabled={task.read_only} />}
       </div>
 
       <DeleteTaskModal task={task} info={info} show={showDeleteModal}

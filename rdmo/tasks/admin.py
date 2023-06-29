@@ -26,6 +26,7 @@ class TaskAdmin(admin.ModelAdmin):
     list_display = ('uri', 'title', 'text', 'available')
     readonly_fields = ('uri', )
     list_filter = ('available', )
+    filter_horizontal = ('catalogs', 'sites', 'editors', 'groups', 'conditions')
 
 
 admin.site.register(Task, TaskAdmin)

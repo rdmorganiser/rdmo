@@ -26,7 +26,7 @@ const Checkbox = ({ config, element, field, onChange }) => {
     <div className={className}>
       <div className="checkbox">
           <label>
-              <input id={id} type="checkbox" checked={checked}
+              <input id={id} type="checkbox" checked={checked} disabled={element.read_only}
                      onChange={() => onChange(field, !checked)} />
               <span>{label}</span>
           </label>

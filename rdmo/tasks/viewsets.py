@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from rdmo.core.exports import XMLResponse
-from rdmo.core.permissions import HasModelPermission
+from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import is_truthy, render_to_format
 from rdmo.core.viewsets import CopyModelMixin
 
@@ -18,9 +18,9 @@ from .serializers.v1 import (TaskIndexSerializer, TaskListSerializer,
 
 
 class TaskViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission, )
+    permission_classes = (HasModelPermission | HasObjectPermission, )
     queryset = Task.objects.select_related('start_attribute', 'end_attribute') \
-                           .prefetch_related('catalogs', 'sites', 'groups', 'conditions') \
+                           .prefetch_related('catalogs', 'sites', 'editors', 'groups', 'conditions') \
                            .annotate(projects_count=models.Count('projects'))
     serializer_class = TaskSerializer
 
@@ -28,8 +28,11 @@ class TaskViewSet(CopyModelMixin, ModelViewSet):
     search_fields = ('uri', )
     filterset_fields = (
         'uri',
+        'uri_prefix',
         'key',
-        'comment'
+        'comment',
+        'sites',
+        'editors'
     )
 
     def get_serializer_class(self):
@@ -41,7 +44,7 @@ class TaskViewSet(CopyModelMixin, ModelViewSet):
         serializer = TaskIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?')
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -53,7 +56,7 @@ class TaskViewSet(CopyModelMixin, ModelViewSet):
                 'tasks': queryset
             })
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = TaskExportSerializer(self.get_object())

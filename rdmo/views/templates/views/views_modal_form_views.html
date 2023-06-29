@@ -144,6 +144,16 @@
                                         <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                                     </a>
                                 </li>
+                                <li role="presentation" ng-class="{
+                                    'has-error': service.errors.editors,
+                                }">
+                                    <a class="control-label" href="#views-editors"
+                                        role="tab" data-toggle="tab" aria-controls="views-editors">
+
+                                        {% trans 'Editors' %}
+                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                    </a>
+                                </li>
                                 {% endif %}
                             </ul>
                             <div class="tab-content">
@@ -215,6 +225,18 @@
                                         data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
                                     </formgroup>
                                 </div>
+                                <div role="tabpanel" class="tab-pane" id="views-editors">
+                                    <formgroup
+                                        data-id="view_editors"
+                                        data-type="selectmultiple"
+                                        data-label="{% trans 'Editors' %}"
+                                        data-model="service.values.editors"s
+                                        data-errors="service.errors.editors"
+                                        data-options="service.sites"
+                                        data-options-label="name"
+                                        data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
+                                    </formgroup>
+                                </div>
                                 {% endif %}
                             </div>
                         </div>
@@ -222,10 +244,14 @@
                 </div>
 
                 <div class="modal-footer">
+                    <div class="alert alert-warning pull-left" ng-show="service.errors.detail" role="alert">
+                        {$ service.errors.detail $}
+                    </div>
                     <button type="button" class="btn btn-default" data-dismiss="modal">
                         {% trans 'Close' %}
                     </button>
                     <button type="button" class="btn btn-primary"
+                            ng-class="{'disabled': service.values.read_only}"
                             ng-click="service.submitFormModal('views')">
                         {% trans 'Save' %}
                     </button>

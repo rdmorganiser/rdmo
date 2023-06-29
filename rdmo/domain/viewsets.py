@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from rdmo.core.exports import XMLResponse
-from rdmo.core.permissions import HasModelPermission
+from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import render_to_csv, render_to_format
 from rdmo.core.viewsets import CopyModelMixin
 
@@ -18,11 +18,12 @@ from .serializers.v1 import (AttributeIndexSerializer, AttributeListSerializer,
 
 
 class AttributeViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission, )
+    permission_classes = (HasModelPermission | HasObjectPermission, )
     queryset = Attribute.objects.order_by('path') \
                         .annotate(values_count=models.Count('values')) \
                         .annotate(projects_count=models.Count('values__project', distinct=True)) \
-                        .prefetch_related('conditions', 'questionsets', 'questions', 'tasks_as_start', 'tasks_as_end')
+                        .prefetch_related('conditions', 'pages', 'questionsets', 'questions', 
+                                          'tasks_as_start', 'tasks_as_end', 'editors')
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
     search_fields = ('uri', )
@@ -48,7 +49,7 @@ class AttributeViewSet(CopyModelMixin, ModelViewSet):
         serializer = AttributeNestedSerializer(self.get_object(), context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?')
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -64,7 +65,7 @@ class AttributeViewSet(CopyModelMixin, ModelViewSet):
                 'attributes': queryset
             })
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
         attributes = self.get_object().get_descendants(include_self=True)
         if export_format == 'xml':

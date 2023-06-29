@@ -145,6 +145,16 @@
                                         <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                                     </a>
                                 </li>
+                                <li role="presentation" ng-class="{
+                                    'has-error': service.errors.editors,
+                                }">
+                                    <a class="control-label" href="#tasks-editors"
+                                        role="tab" data-toggle="tab" aria-controls="tasks-editors">
+
+                                        {% trans 'Editors' %}
+                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                    </a>
+                                </li>
                                 {% endif %}
                             </ul>
                             <div class="tab-content">
@@ -200,7 +210,7 @@
                                         data-model="service.values.groups"
                                         data-errors="service.errors.groups"
                                         data-options="service.groups"
-                                        data-options-label="uri"
+                                        data-options-label="name"
                                         data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
                                     </formgroup>
                                 </div>
@@ -213,7 +223,19 @@
                                         data-model="service.values.sites"
                                         data-errors="service.errors.sites"
                                         data-options="service.sites"
-                                        data-options-label="uri"
+                                        data-options-label="name"
+                                        data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
+                                    </formgroup>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="tasks-editors">
+                                    <formgroup
+                                        data-id="task_editors"
+                                        data-type="selectmultiple"
+                                        data-label="{% trans 'Editors' %}"
+                                        data-model="service.values.editors"
+                                        data-errors="service.errors.editors"
+                                        data-options="service.sites"
+                                        data-options-label="name"
                                         data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
                                     </formgroup>
                                 </div>
@@ -224,10 +246,14 @@
                 </div>
 
                 <div class="modal-footer">
+                    <div class="alert alert-warning pull-left" ng-show="service.errors.detail" role="alert">
+                        {$ service.errors.detail $}
+                    </div>
                     <button type="button" class="btn btn-default" data-dismiss="modal">
                         {% trans 'Close' %}
                     </button>
                     <button type="button" class="btn btn-primary"
+                            ng-class="{'disabled': service.values.read_only}"
                             ng-click="service.submitFormModal('tasks')">
                         {% trans 'Save' %}
                     </button>

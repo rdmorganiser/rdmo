@@ -35,7 +35,7 @@ class GroupViewSet(viewsets.ReadOnlyModelViewSet):
 
 class CopyModelMixin:
 
-    @action(detail=True, methods=['PUT'], permission_classes=[HasModelPermission])
+    @action(detail=True, methods=['PUT'])
     def copy(self, request, pk=None):
         # get the instance to be copied
         instance = self.get_object()

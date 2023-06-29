@@ -7,14 +7,15 @@ import isUndefined from 'lodash/isUndefined'
 import Link from 'rdmo/core/assets/js/components/Link'
 import LinkButton from 'rdmo/core/assets/js/components/LinkButton'
 
-const NestedLink = ({ href, title, onClick }) => {
-  return <Link href={href} className="element-link fa fa-align-right flip" title={title} onClick={onClick} />
+const NestedLink = ({ href, title, onClick, show=true }) => {
+  return show && <Link href={href} className="element-link fa fa-align-right flip" title={title} onClick={onClick} />
 }
 
 NestedLink.propTypes = {
   href: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired,
+  show: PropTypes.bool
 }
 
 const EditLink = ({ href, title, onClick }) => {
@@ -27,7 +28,7 @@ EditLink.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-const CopyLink = ({ href, title, onClick}) => {
+const CopyLink = ({ href, title, onClick }) => {
   return <Link href={href} className="element-link fa fa-copy" title={title} onClick={onClick} />
 }
 
@@ -37,9 +38,9 @@ CopyLink.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-const AddLink = ({ title, altTitle, onClick, onAltClick }) => {
+const AddLink = ({ title, altTitle, onClick, onAltClick, disabled }) => {
   if (isUndefined(onAltClick)) {
-    return <LinkButton className="element-btn-link fa fa-plus" title={title} onClick={onClick} />
+    return <LinkButton className="element-btn-link fa fa-plus" title={title} onClick={onClick} disabled={disabled} />
   } else {
     return (
       <span className="dropdown">
@@ -61,10 +62,11 @@ AddLink.propTypes = {
   title: PropTypes.string.isRequired,
   altTitle: PropTypes.string,
   onClick: PropTypes.func.isRequired,
-  onAltClick: PropTypes.func
+  onAltClick: PropTypes.func,
+  disabled: PropTypes.bool
 }
 
-const AvailableLink = ({ available, locked, title, onClick }) => {
+const AvailableLink = ({ available, locked, title, onClick, disabled }) => {
   const className = classNames({
     'element-btn-link fa': true,
     'fa-toggle-on': available,
@@ -72,30 +74,32 @@ const AvailableLink = ({ available, locked, title, onClick }) => {
   })
 
   return <LinkButton className={className} title={locked ? gettext('Locked') : title}
-                     disabled={locked} onClick={onClick} />
+                     disabled={locked || disabled} onClick={onClick} />
 }
 
 AvailableLink.propTypes = {
   available: PropTypes.bool.isRequired,
   locked: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired,
+  disabled: PropTypes.bool
 }
 
-const LockedLink = ({ locked, title, onClick }) => {
+const LockedLink = ({ locked, title, onClick, disabled }) => {
   const className = classNames({
     'element-btn-link fa': true,
     'fa-lock text-danger': locked,
     'fa-unlock-alt': !locked
   })
 
-  return <LinkButton className={className} title={title} onClick={onClick} />
+  return <LinkButton className={className} title={title} onClick={onClick} disabled={disabled} />
 }
 
 LockedLink.propTypes = {
   locked: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired,
+  disabled: PropTypes.bool
 }
 
 const ExportLink = ({ exportUrl, title, exportFormats, csv=false, full=false }) => {

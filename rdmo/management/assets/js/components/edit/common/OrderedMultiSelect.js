@@ -15,7 +15,7 @@ import Link from 'rdmo/core/assets/js/components/Link'
 
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
-const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, errors,
+const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, errors, disabled,
                                   handleChange, handleEdit, handleRemove, handleDrag }) => {
   const dragRef = useRef(null)
   const dropRef = useRef(null)
@@ -42,8 +42,15 @@ const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, erro
     'over': isOver
   })
 
-  drag(dragRef)
-  drop(dropRef)
+  const dragClassName = classNames({
+    'fa fa-arrows drag': true,
+    disabled: disabled
+  })
+
+  if (!disabled) {
+    drag(dragRef)
+    drop(dropRef)
+  }
 
   const styles = {
     container: provided => ({...provided, marginRight: 8 + 12 + 4 + 11 + 4 + 14})
@@ -53,15 +60,17 @@ const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, erro
     <>
       <div className="ordered-multi-select-item">
         <div className="ordered-multi-select-item-options">
-          <Link className="fa fa-pencil" title={gettext('Edit')} onClick={() => handleEdit(index)} />
-          <Link className="fa fa-times" title={gettext('Remove')} onClick={() => handleRemove(index)} />
-          <i className="fa fa-arrows drag" ref={dragRef}></i>
+          <Link className="fa fa-pencil" title={gettext('Edit')}
+                onClick={() => handleEdit(index)} />
+          <Link className="fa fa-times" title={gettext('Remove')} disabled={disabled}
+                onClick={() => !disabled && handleRemove(index)} />
+          <i className={dragClassName} ref={dragRef}></i>
         </div>
         <div className="ordered-multi-select-item-select">
           <ReactSelect classNamePrefix="react-select" className="react-select"
                        options={selectOptions} value={selectValue}
                        onChange={option => handleChange(option, index)}
-                       menuPortalTarget={document.body} styles={styles} />
+                       menuPortalTarget={document.body} styles={styles} isDisabled={disabled} />
         </div>
         {
           errors && errors[index] &&
@@ -222,22 +231,25 @@ class OrderedMultiSelect extends Component {
                                       selectValue={selectValue} selectOptions={selectOptions}
                                       errors={errors} handleChange={this.handleChange}
                                       handleEdit={this.handleEdit} handleRemove={this.handleRemove}
-                                      handleDrag={this.handleDrag} />
+                                      handleDrag={this.handleDrag} disabled={element.read_only} />
             )
           })
         }
         </div>
 
-        <button className="btn btn-primary btn-xs" onClick={() => this.handleAdd()}>
+        <button className="btn btn-primary btn-xs" onClick={() => this.handleAdd()}
+                disabled={element.read_only}>
           {interpolate(gettext('Add existing %s'), [verboseName])}
         </button>
         {
-          onCreate && <button className="btn btn-success btn-xs ml-10" onClick={onCreate}>
+          onCreate && <button className="btn btn-success btn-xs ml-10" onClick={onCreate}
+                              disabled={element.read_only}>
             {interpolate(gettext('Create new %s'), [verboseNameCreate || verboseName])}
           </button>
         }
         {
-          onAltCreate && <button className="btn btn-success btn-xs ml-10" onClick={onAltCreate}>
+          onAltCreate && <button className="btn btn-success btn-xs ml-10" onClick={onAltCreate}
+                                 disabled={element.read_only}>
             {interpolate(gettext('Create new %s'), [verboseNameAltCreate || verboseName])}
           </button>
         }
@@ -254,6 +266,7 @@ OrderedMultiSelectItem.propTypes = {
   selectValue: PropTypes.object,
   selectOptions: PropTypes.array,
   errors: PropTypes.object,
+  disabled: PropTypes.bool,
   handleChange: PropTypes.func,
   handleEdit: PropTypes.func,
   handleRemove: PropTypes.func,

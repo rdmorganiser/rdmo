@@ -37,7 +37,8 @@ def import_view(element, save=False):
             logger.info('View created with uri %s.', element.get('uri'))
 
         view.save()
-        view.sites.add(Site.objects.get_current())
         set_m2m_instances(view, 'catalogs', element)
+        view.sites.add(Site.objects.get_current())
+        view.editors.add(Site.objects.get_current()) 
 
     return view

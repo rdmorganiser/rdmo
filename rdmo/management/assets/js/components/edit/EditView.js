@@ -11,6 +11,7 @@ import Textarea from './common/Textarea'
 import UriPrefix from './common/UriPrefix'
 
 import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
+import { ReadOnlyIcon } from '../common/Icons'
 
 import ViewInfo from '../info/ViewInfo'
 import DeleteViewModal from '../modals/DeleteViewModal'
@@ -34,9 +35,10 @@ const EditView = ({ config, view, elements, elementActions }) => {
     <div className="panel panel-default panel-edit">
       <div className="panel-heading">
         <div className="pull-right">
+          <ReadOnlyIcon title={gettext('This view is read only')} show={view.read_only} />
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storeView} />
-          <SaveButton elementAction={elementAction} onClick={storeView} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeView} disabled={view.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storeView} disabled={view.read_only} back={true}/>
         </div>
         {
           view.id ? <>
@@ -100,6 +102,9 @@ const EditView = ({ config, view, elements, elementActions }) => {
         {get(config, 'settings.multisite') && <Select config={config} element={view} field="sites"
                                                       options={sites} onChange={updateView} isMulti />}
 
+        {get(config, 'settings.multisite') && <Select config={config} element={view} field="editors"
+                                                      options={sites} onChange={updateView} isMulti />}
+
         <CodeMirror config={config} element={view} field="template"
                     onChange={updateView} />
       </div>
@@ -107,10 +112,10 @@ const EditView = ({ config, view, elements, elementActions }) => {
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storeView} />
-          <SaveButton elementAction={elementAction} onClick={storeView} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeView} disabled={view.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storeView} disabled={view.read_only} back={true}/>
         </div>
-        {view.id && <DeleteButton onClick={openDeleteModal} />}
+        {view.id && <DeleteButton onClick={openDeleteModal} disabled={view.read_only} />}
       </div>
 
       <DeleteViewModal view={view} info={info} show={showDeleteModal}

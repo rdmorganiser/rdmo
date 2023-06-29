@@ -71,6 +71,11 @@ class Catalog(Model, TranslationMixin):
         verbose_name=_('Sites'),
         help_text=_('The sites this catalog belongs to (in a multi site setup).')
     )
+    editors = models.ManyToManyField(
+        Site, related_name='%(class)s_editors', blank=True,
+        verbose_name=_('Editors'),
+        help_text=_('The sites that can edit this catalog (in a multi site setup).')
+    )
     groups = models.ManyToManyField(
         Group, blank=True,
         verbose_name=_('Group'),
@@ -156,6 +161,8 @@ class Catalog(Model, TranslationMixin):
         # copy m2m fields
         catalog.sections.set(self.sections.all())
         catalog.sites.set(self.sites.all())
+
+        # for groups, copy all
         catalog.groups.set(self.groups.all())
 
         return catalog

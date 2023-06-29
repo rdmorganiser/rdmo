@@ -46,8 +46,9 @@ def import_catalog(element, save=False):
             logger.info('Catalog created with uri %s.', element.get('uri'))
 
         catalog.save()
-        catalog.sites.add(Site.objects.get_current())
         set_m2m_through_instances(catalog, 'sections', element, 'catalog', 'section', 'catalog_sections')
+        catalog.sites.add(Site.objects.get_current())
+        catalog.editors.add(Site.objects.get_current())
 
     return catalog
 
@@ -75,6 +76,7 @@ def import_section(element, save=False):
         section.save()
         set_reverse_m2m_through_instance(section, 'catalog', element, 'section', 'catalog', 'section_catalogs')
         set_m2m_through_instances(section, 'pages', element, 'section', 'page', 'section_pages')
+        section.editors.add(Site.objects.get_current())
 
     return section
 
@@ -110,6 +112,7 @@ def import_page(element, save=False):
         set_reverse_m2m_through_instance(page, 'section', element, 'page', 'section', 'page_sections')
         set_m2m_through_instances(page, 'questionsets', element, 'page', 'questionset', 'page_questionsets')
         set_m2m_through_instances(page, 'questions', element, 'page', 'question', 'page_questions')
+        page.editors.add(Site.objects.get_current())
 
     return page
 
@@ -146,6 +149,7 @@ def import_questionset(element, save=False):
         set_reverse_m2m_through_instance(questionset, 'questionset', element, 'questionset', 'parent', 'questionset_parents')
         set_m2m_through_instances(questionset, 'questionsets', element, 'parent', 'questionset', 'questionset_questionsets')
         set_m2m_through_instances(questionset, 'questions', element, 'questionset', 'question', 'questionset_questions')
+        questionset.editors.add(Site.objects.get_current())
 
     return questionset
 
@@ -199,5 +203,6 @@ def import_question(element, save=False):
         set_reverse_m2m_through_instance(question, 'questionset', element, 'question', 'questionset', 'question_questionsets')
         set_m2m_instances(question, 'conditions', element)
         set_m2m_instances(question, 'optionsets', element)
+        question.editors.add(Site.objects.get_current())
 
     return question

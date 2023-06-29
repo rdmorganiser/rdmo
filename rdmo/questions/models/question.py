@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
@@ -61,6 +62,11 @@ class Question(Model, TranslationMixin):
         default=False,
         verbose_name=_('is optional'),
         help_text=_('Designates whether this question is optional.')
+    )
+    editors = models.ManyToManyField(
+        Site, related_name='%(class)s_editors', blank=True,
+        verbose_name=_('Editors'),
+        help_text=_('The sites that can edit this question (in a multi site setup).')
     )
     help_lang1 = models.TextField(
         null=True, blank=True,

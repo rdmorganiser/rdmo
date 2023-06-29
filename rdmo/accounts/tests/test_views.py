@@ -16,9 +16,23 @@ users = (
     ('editor', 'editor'),
     ('reviewer', 'reviewer'),
     ('user', 'user'),
+    ('site', 'site'),
     ('api', 'api'),
     ('anonymous', None),
 )
+
+other_site_users = (
+    'foo-user',
+    'foo-manager',
+    'foo-editor',
+    'foo-reviewer',
+    'bar-user',
+    'bar-manager',
+    'bar-editor',
+    'bar-reviewer',
+)
+
+users += tuple(zip(other_site_users, other_site_users))  # add (other site users and passwords)
 
 boolean_toggle = (True, False)
 

@@ -1,7 +1,8 @@
 from rest_framework import serializers
 
 from rdmo.core.serializers import (ElementExportSerializerMixin,
-                                   ElementModelSerializerMixin)
+                                   ElementModelSerializerMixin,
+                                   ReadOnlyObjectPermissionsSerializerMixin)
 from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Page, Question, QuestionSet
@@ -11,7 +12,8 @@ from ..models import Condition
 from ..validators import ConditionLockedValidator, ConditionUniqueURIValidator
 
 
-class ConditionSerializer(ElementModelSerializerMixin, serializers.ModelSerializer):
+class ConditionSerializer(ElementModelSerializerMixin, ReadOnlyObjectPermissionsSerializerMixin,
+                          serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
     key = serializers.SlugField(required=True)
@@ -23,6 +25,8 @@ class ConditionSerializer(ElementModelSerializerMixin, serializers.ModelSerializ
     questions = serializers.PrimaryKeyRelatedField(queryset=Question.objects.all(), required=False, many=True)
     tasks = serializers.PrimaryKeyRelatedField(queryset=Task.objects.all(), required=False, many=True)
 
+    read_only = serializers.SerializerMethodField()
+
     class Meta:
         model = Condition
         fields = (
@@ -33,6 +37,8 @@ class ConditionSerializer(ElementModelSerializerMixin, serializers.ModelSerializ
             'key',
             'comment',
             'locked',
+            'read_only',
+            'editors',
             'source',
             'relation',
             'target_text',

@@ -10,6 +10,7 @@
       "locked": false,
       "order": 0,
       "provider_key": "",
+      "editors": [],
       "conditions": []
     }
   },
@@ -24,6 +25,7 @@
       "locked": false,
       "order": 1,
       "provider_key": "",
+      "editors": [],
       "conditions": []
     }
   },
@@ -38,6 +40,7 @@
       "locked": false,
       "order": 2,
       "provider_key": "",
+      "editors": [],
       "conditions": [
         16
       ]
@@ -54,6 +57,41 @@
       "locked": false,
       "order": 4,
       "provider_key": "simple",
+      "editors": [],
+      "conditions": []
+    }
+  },
+  {
+    "model": "options.optionset",
+    "pk": 5,
+    "fields": {
+      "uri": "https://foo.com/terms/options/foo-optionset",
+      "uri_prefix": "https://foo.com/terms",
+      "uri_path": "foo-optionset",
+      "comment": "",
+      "locked": false,
+      "order": 0,
+      "provider_key": "",
+      "editors": [
+        2
+      ],
+      "conditions": []
+    }
+  },
+  {
+    "model": "options.optionset",
+    "pk": 6,
+    "fields": {
+      "uri": "https://bar.com/terms/options/bar-optionset",
+      "uri_prefix": "https://bar.com/terms",
+      "uri_path": "bar-optionset",
+      "comment": "",
+      "locked": false,
+      "order": 0,
+      "provider_key": "",
+      "editors": [
+        3
+      ],
       "conditions": []
     }
   },
@@ -130,6 +168,42 @@
     }
   },
   {
+    "model": "options.optionsetoption",
+    "pk": 9,
+    "fields": {
+      "optionset": 5,
+      "option": 9,
+      "order": 1
+    }
+  },
+  {
+    "model": "options.optionsetoption",
+    "pk": 10,
+    "fields": {
+      "optionset": 5,
+      "option": 10,
+      "order": 2
+    }
+  },
+  {
+    "model": "options.optionsetoption",
+    "pk": 11,
+    "fields": {
+      "optionset": 6,
+      "option": 11,
+      "order": 1
+    }
+  },
+  {
+    "model": "options.optionsetoption",
+    "pk": 12,
+    "fields": {
+      "optionset": 6,
+      "option": 12,
+      "order": 2
+    }
+  },
+  {
     "model": "options.option",
     "pk": 1,
     "fields": {
@@ -143,7 +217,8 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false
+      "additional_input": false,
+      "editors": []
     }
   },
   {
@@ -160,7 +235,8 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false
+      "additional_input": false,
+      "editors": []
     }
   },
   {
@@ -177,7 +253,8 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false
+      "additional_input": false,
+      "editors": []
     }
   },
   {
@@ -194,7 +271,8 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false
+      "additional_input": false,
+      "editors": []
     }
   },
   {
@@ -211,7 +289,8 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false
+      "additional_input": false,
+      "editors": []
     }
   },
   {
@@ -228,7 +307,8 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false
+      "additional_input": false,
+      "editors": []
     }
   },
   {
@@ -245,7 +325,8 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": true
+      "additional_input": true,
+      "editors": []
     }
   },
   {
@@ -262,7 +343,88 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": true
+      "additional_input": true,
+      "editors": []
+    }
+  },
+  {
+    "model": "options.option",
+    "pk": 9,
+    "fields": {
+      "uri": "https://foo.com/terms/options/foo-option-1",
+      "uri_prefix": "https://foo.com/terms",
+      "uri_path": "foo-option-1",
+      "comment": "",
+      "locked": false,
+      "text_lang1": "foo-option-1",
+      "text_lang2": "foo-option-1",
+      "text_lang3": "",
+      "text_lang4": "",
+      "text_lang5": "",
+      "additional_input": false,
+      "editors": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "options.option",
+    "pk": 10,
+    "fields": {
+      "uri": "https://foo.com/terms/options/foo-option-2",
+      "uri_prefix": "https://foo.com/terms",
+      "uri_path": "foo-option-2",
+      "comment": "",
+      "locked": false,
+      "text_lang1": "foo-option-2",
+      "text_lang2": "foo-option-2",
+      "text_lang3": "",
+      "text_lang4": "",
+      "text_lang5": "",
+      "additional_input": false,
+      "editors": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "options.option",
+    "pk": 11,
+    "fields": {
+      "uri": "https://bar.com/terms/options/bar-option-1",
+      "uri_prefix": "https://bar.com/terms",
+      "uri_path": "bar-option-1",
+      "comment": "",
+      "locked": false,
+      "text_lang1": "bar-option-1",
+      "text_lang2": "bar-option-1",
+      "text_lang3": "",
+      "text_lang4": "",
+      "text_lang5": "",
+      "additional_input": false,
+      "editors": [
+        3
+      ]
+    }
+  },
+  {
+    "model": "options.option",
+    "pk": 12,
+    "fields": {
+      "uri": "https://bar.com/terms/options/bar-option-2",
+      "uri_prefix": "https://bar.com/terms",
+      "uri_path": "bar-option-2",
+      "comment": "",
+      "locked": false,
+      "text_lang1": "bar-option-2",
+      "text_lang2": "bar-option-2",
+      "text_lang3": "",
+      "text_lang4": "",
+      "text_lang5": "",
+      "additional_input": false,
+      "editors": [
+        3
+      ]
     }
   }
 ]

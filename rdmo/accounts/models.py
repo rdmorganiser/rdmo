@@ -137,6 +137,16 @@ class Role(models.Model):
         verbose_name=_('Manager'),
         help_text=_('The sites for which this user is manager.')
     )
+    editor = models.ManyToManyField(
+        Site, related_name='editors', blank=True,
+        verbose_name=_('Editor'),
+        help_text=_('The sites for which this user is an editor.')
+    )
+    reviewer = models.ManyToManyField(
+        Site, related_name='reviewers', blank=True,
+        verbose_name=_('Reviewer'),
+        help_text=_('The sites for which this user is a reviewer.')
+    )
 
     class Meta:
         ordering = ('user', )

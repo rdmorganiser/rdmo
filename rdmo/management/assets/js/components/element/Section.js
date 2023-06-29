@@ -8,6 +8,7 @@ import { buildPath } from '../../utils/location'
 import Page from './Page'
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AddLink, LockedLink, NestedLink, ExportLink, CodeLink } from '../common/Links'
+import { ReadOnlyIcon } from '../common/Icons'
 import { Drag, Drop } from '../common/DragAndDrop'
 
 const Section = ({ config, section, elementActions, display='list', filter=null, indent=0 }) => {
@@ -29,16 +30,17 @@ const Section = ({ config, section, elementActions, display='list', filter=null,
   const elementNode = (
     <div className="element">
       <div className="pull-right">
+        <ReadOnlyIcon title={gettext('This section is read only')} show={section.read_only} />
         <NestedLink title={gettext('View section nested')} href={nestedUrl} onClick={fetchNested} />
         <EditLink title={gettext('Edit section')} href={editUrl} onClick={fetchEdit} />
         <CopyLink title={gettext('Copy section')} href={copyUrl} onClick={fetchCopy} />
-        <AddLink title={gettext('Add page')} onClick={createPage} />
+        <AddLink title={gettext('Add page')} onClick={createPage} disabled={section.read_only} />
         <LockedLink title={section.locked ? gettext('Unlock section')
                                           : gettext('Lock section')}
-                    locked={section.locked} onClick={toggleLocked} />
+                    locked={section.locked} onClick={toggleLocked} disabled={section.read_only} />
         <ExportLink title={gettext('Export section')} exportUrl={exportUrl}
                     exportFormats={config.settings.export_formats} full={true} />
-        {display == 'nested' && <Drag element={section} />}
+        <Drag element={section} show={display == 'nested'} />
       </div>
       <div>
         <p>

@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap'
+import get from 'lodash/get'
 import isUndefined from 'lodash/isUndefined'
 import orderBy from 'lodash/orderBy'
 
@@ -13,6 +14,7 @@ import Textarea from './common/Textarea'
 import UriPrefix from './common/UriPrefix'
 
 import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
+import { ReadOnlyIcon } from '../common/Icons'
 
 import QuestionSetInfo from '../info/QuestionSetInfo'
 import DeleteQuestionSetModal from '../modals/DeleteQuestionSetModal'
@@ -21,6 +23,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
 
+  const { sites } = config
   const { elementAction, parent, attributes, conditions } = elements
 
   const elementValues = orderBy(questionset.questions.concat(questionset.questionsets), ['order', 'uri'])
@@ -69,9 +72,10 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
     <div className="panel panel-default panel-edit">
       <div className="panel-heading">
         <div className="pull-right">
+          <ReadOnlyIcon title={gettext('This question set is read only')} show={questionset.read_only} />
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storeQuestionSet} />
-          <SaveButton elementAction={elementAction} onClick={storeQuestionSet} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeQuestionSet} disabled={questionset.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storeQuestionSet} disabled={questionset.read_only} back={true}/>
         </div>
         {
           questionset.id ? <>
@@ -169,15 +173,18 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
         <MultiSelect config={config} element={questionset} field="conditions"
                      options={conditions} verboseName="condition"
                      onChange={updateQuestionSet} onCreate={createCondition} onEdit={editCondition} />
+
+        {get(config, 'settings.multisite') && <Select config={config} element={questionset} field="editors"
+                                                      options={sites} onChange={updateQuestionSet} isMulti />}
       </div>
 
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storeQuestionSet} />
-          <SaveButton elementAction={elementAction} onClick={storeQuestionSet} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeQuestionSet} disabled={questionset.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storeQuestionSet} disabled={questionset.read_only} back={true}/>
         </div>
-        {questionset.id && <DeleteButton onClick={openDeleteModal} />}
+        {questionset.id && <DeleteButton onClick={openDeleteModal} disabled={questionset.read_only} />}
       </div>
 
       <DeleteQuestionSetModal questionset={questionset} info={info} show={showDeleteModal}

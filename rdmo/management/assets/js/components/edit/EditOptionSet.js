@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import get from 'lodash/get'
 
 import Checkbox from './common/Checkbox'
 import Number from './common/Number'
@@ -11,6 +12,7 @@ import Textarea from './common/Textarea'
 import UriPrefix from './common/UriPrefix'
 
 import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
+import { ReadOnlyIcon } from '../common/Icons'
 
 import OptionSetInfo from '../info/OptionSetInfo'
 import DeleteOptionSetModal from '../modals/DeleteOptionSetModal'
@@ -19,7 +21,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
 
-  const { providers } = config
+  const { sites, providers } = config
   const { elementAction, parent, conditions, options } = elements
 
   const updateOptionSet = (key, value) => elementActions.updateElement(optionset, {[key]: value})
@@ -40,9 +42,10 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
     <div className="panel panel-default panel-edit">
       <div className="panel-heading">
         <div className="pull-right">
+          <ReadOnlyIcon title={gettext('This option set is read only')} show={optionset.read_only} />
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storeOptionSet} />
-          <SaveButton elementAction={elementAction} onClick={storeOptionSet} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeOptionSet} disabled={optionset.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storeOptionSet} disabled={optionset.read_only} back={true}/>
         </div>
         {
           optionset.id ? <>
@@ -102,15 +105,18 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
 
         <Select config={config} element={optionset} field="provider_key"
                 options={providers} onChange={updateOptionSet} />
+
+        {get(config, 'settings.multisite') && <Select config={config} element={optionset} field="editors"
+                                                      options={sites} onChange={updateOptionSet} isMulti />}
       </div>
 
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storeOptionSet} />
-          <SaveButton elementAction={elementAction} onClick={storeOptionSet} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeOptionSet} disabled={optionset.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storeOptionSet} disabled={optionset.read_only} back={true}/>
         </div>
-        {optionset.id && <DeleteButton onClick={openDeleteModal} />}
+        {optionset.id && <DeleteButton onClick={openDeleteModal} disabled={optionset.read_only} />}
       </div>
 
       <DeleteOptionSetModal optionset={optionset} info={info} show={showDeleteModal}

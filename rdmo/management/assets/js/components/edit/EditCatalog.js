@@ -12,6 +12,7 @@ import Textarea from './common/Textarea'
 import UriPrefix from './common/UriPrefix'
 
 import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
+import { ReadOnlyIcon } from '../common/Icons'
 
 import CatalogInfo from '../info/CatalogInfo'
 import DeleteCatalogModal from '../modals/DeleteCatalogModal'
@@ -38,9 +39,10 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
     <div className="panel panel-default panel-edit">
       <div className="panel-heading">
         <div className="pull-right">
+          <ReadOnlyIcon title={gettext('This catalog is read only')} show={catalog.read_only} />
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storeCatalog}  />
-          <SaveButton elementAction={elementAction} onClick={storeCatalog} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeCatalog} disabled={catalog.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storeCatalog} disabled={catalog.read_only} back={true}/>
         </div>
         {
           catalog.id ? <>
@@ -102,15 +104,18 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
 
         {get(config, 'settings.multisite') && <Select config={config} element={catalog} field="sites"
                                                       options={sites} onChange={updateCatalog} isMulti />}
+
+        {get(config, 'settings.multisite') && <Select config={config} element={catalog} field="editors"
+                                                      options={sites} onChange={updateCatalog} isMulti />}
       </div>
 
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storeCatalog} />
-          <SaveButton elementAction={elementAction} onClick={storeCatalog} back={true} />
+          <SaveButton elementAction={elementAction} onClick={storeCatalog} disabled={catalog.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storeCatalog} disabled={catalog.read_only} back={true} />
         </div>
-        {catalog.id && <DeleteButton onClick={openDeleteModal} />}
+        {catalog.id && <DeleteButton onClick={openDeleteModal} disabled={catalog.read_only} />}
       </div>
 
       <DeleteCatalogModal catalog={catalog} info={info} show={showDeleteModal}

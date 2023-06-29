@@ -4,16 +4,18 @@ from rest_framework import exceptions, serializers
 from rdmo.core.serializers import (ElementExportSerializerMixin,
                                    ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
-                                   TranslationSerializerMixin)
+                                   TranslationSerializerMixin,
+                                   ReadOnlyObjectPermissionsSerializerMixin)
 
 from ..models import View
 from ..validators import ViewLockedValidator, ViewUniqueURIValidator
 
 
 class BaseViewSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
-                         serializers.ModelSerializer):
+                         ReadOnlyObjectPermissionsSerializerMixin, serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
+    read_only = serializers.SerializerMethodField()
 
     class Meta:
         model = View
@@ -28,6 +30,8 @@ class BaseViewSerializer(TranslationSerializerMixin, ElementModelSerializerMixin
             'available',
             'catalogs',
             'sites',
+            'editors',
+            'read_only',
             'groups',
             'template',
             'title',

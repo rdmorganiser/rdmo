@@ -1,14 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap'
+import get from 'lodash/get'
 
 import Checkbox from './common/Checkbox'
 import OrderedMultiSelect from './common/OrderedMultiSelect'
+import Select from './common/Select'
 import Text from './common/Text'
 import Textarea from './common/Textarea'
 import UriPrefix from './common/UriPrefix'
 
 import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
+import { ReadOnlyIcon } from '../common/Icons'
 
 import SectionInfo from '../info/SectionInfo'
 import DeleteSectionModal from '../modals/DeleteSectionModal'
@@ -17,6 +20,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditSection = ({ config, section, elements, elementActions }) => {
 
+  const { sites } = config
   const { elementAction, parent, pages } = elements
 
   const updateSection = (key, value) => elementActions.updateElement(section, {[key]: value})
@@ -34,9 +38,10 @@ const EditSection = ({ config, section, elements, elementActions }) => {
     <div className="panel panel-default panel-edit">
       <div className="panel-heading">
         <div className="pull-right">
+          <ReadOnlyIcon title={gettext('This section is read only')} show={section.read_only} />
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storeSection} />
-          <SaveButton elementAction={elementAction} onClick={storeSection} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeSection} disabled={section.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storeSection} disabled={section.read_only} back={true}/>
         </div>
         {
           section.id ? <>
@@ -92,15 +97,18 @@ const EditSection = ({ config, section, elements, elementActions }) => {
         <OrderedMultiSelect config={config} element={section} field="pages"
                             options={pages} verboseName="page"
                             onChange={updateSection} onCreate={createPage} onEdit={editPage} />
+
+        {get(config, 'settings.multisite') && <Select config={config} element={section} field="editors"
+                                                      options={sites} onChange={updateSection} isMulti />}
       </div>
 
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storeSection} />
-          <SaveButton elementAction={elementAction} onClick={storeSection} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeSection} disabled={section.read_only}  />
+          <SaveButton elementAction={elementAction} onClick={storeSection} disabled={section.read_only} back={true}/>
         </div>
-          {section.id && <DeleteButton onClick={openDeleteModal} />}
+          {section.id && <DeleteButton onClick={openDeleteModal} disabled={section.read_only} />}
       </div>
 
       <DeleteSectionModal section={section} info={info} show={showDeleteModal}

@@ -283,6 +283,7 @@ angular.module('catalogs', ['core'])
 
     service.openDeleteModal = function(resource, obj) {
         service.values = obj;
+        service.errors = {};
         $('#' + resource + '-delete-modal').modal('show');
     };
 
@@ -305,6 +306,9 @@ angular.module('catalogs', ['core'])
             }
 
             $('#' + resource + '-delete-modal').modal('hide');
+        }
+        , function(result) {
+            service.errors = result.data;
         });
     };
 

@@ -42,8 +42,9 @@ def import_task(element, save=False):
             logger.info('Task created with uri %s.', element.get('uri'))
 
         task.save()
-        task.sites.add(Site.objects.get_current())
         set_m2m_instances(task, 'catalogs', element)
         set_m2m_instances(task, 'conditions', element)
+        task.sites.add(Site.objects.get_current())
+        task.editors.add(Site.objects.get_current())
 
     return task

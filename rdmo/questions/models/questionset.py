@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
@@ -69,6 +70,11 @@ class QuestionSet(Model, TranslationMixin):
         default=False,
         verbose_name=_('is collection'),
         help_text=_('Designates whether this question set is a collection.')
+    )
+    editors = models.ManyToManyField(
+        Site, related_name='%(class)s_editors', blank=True,
+        verbose_name=_('Editors'),
+        help_text=_('The sites that can edit this questionset (in a multi site setup).')
     )
     title_lang1 = models.CharField(
         max_length=256, blank=True,

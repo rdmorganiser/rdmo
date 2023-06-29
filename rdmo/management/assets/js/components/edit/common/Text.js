@@ -26,7 +26,7 @@ const Text = ({ config, element, field, onChange }) => {
     <div className={className}>
       <label className="control-label" htmlFor={id}>{label}</label>
 
-      <input className="form-control" id={id} type="text"
+      <input className="form-control" id={id} type="text" disabled={element.read_only}
              value={value} onChange={event => onChange(field, event.target.value)} />
 
       {help && <p className="help-block">{help}</p>}

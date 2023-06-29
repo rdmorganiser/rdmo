@@ -14,6 +14,7 @@ angular.module('conditions', ['core'])
         attributes: $resource(baseurl + 'api/v1/domain/attributes/:id/'),
         options: $resource(baseurl + 'api/v1/options/options/:id/'),
         settings: $resource(baseurl + 'api/v1/core/settings/'),
+        sites: $resource(baseurl + 'api/v1/core/sites/')
     };
 
     /* configure factories */
@@ -36,6 +37,7 @@ angular.module('conditions', ['core'])
     service.init = function(options) {
         service.relations = resources.relations.query();
         service.settings = resources.settings.get();
+        service.sites = resources.sites.query();
         service.uri_prefixes = []
         service.uri_prefix = ''
         service.filter = sessionStorage.getItem('conditions_filter') || '';

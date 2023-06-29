@@ -102,6 +102,9 @@
                         ng-show="task.warning"></span>
 
                     <i class="fa fa-lock text-danger" ng-show="task.locked"></i>
+                    <i class="fa fa-ban text-muted" ng-show="task.read_only"
+                        title="{% trans 'Read only' %}">
+                    </i>
 
                     <a href="" class="fa fa-pencil"
                         title="{% trans 'Update task' %}"
@@ -128,7 +131,9 @@
                         ng-click="service.openDeleteModal('tasks', task)">
                     </a>
                 </div>
-                <strong>{% trans 'Task' %}</strong>
+                <strong ng-class="{'text-muted': task.read_only}">
+                    {% trans 'Task' %}
+                </strong>
                 <code class="code-tasks">{$ task.uri $}</code>
             </div>
 
@@ -141,13 +146,38 @@
 
             {% if settings.MULTISITE %}
             <div class="panel-footer">
-                <strong>{% trans 'Sites'%}</strong>
-                <span ng-show="task.sites.length" ng-repeat="site in task.sites">
-                    {$ site.name $}{$ $last ? '' : ', ' $}
-                </span>
-                <span ng-hide="task.sites.length">
-                    {% trans 'all' %}
-                </span>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <strong>{% trans 'Sites' %}</strong>
+                    </div>
+                    <div class="col-sm-9">
+                        <ul>
+                            <li ng-show="task.sites.length > 0 && task.sites.length < service.sites.length"
+                                ng-repeat="site in task.sites">
+                                {$ site.name $}
+                            </li>
+                            <li ng-show="task.sites.length == 0 || task.sites.length == service.sites.length">
+                                {% trans 'All sites' %}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <strong>{% trans 'Editors' %}</strong>
+                    </div>
+                    <div class="col-sm-9">
+                        <ul>
+                            <li ng-show="task.editors.length > 0 && task.editors.length < service.sites.length"
+                                ng-repeat="editor in task.editors">
+                                {$ editor.name $}
+                            </li>
+                            <li ng-show="task.editors.length == 0 || task.editors.length == service.sites.length">
+                                {% trans 'All sites' %}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
             {% endif %}
         </div>

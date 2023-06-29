@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import get from 'lodash/get'
 
 import Checkbox from './common/Checkbox'
 import Select from './common/Select'
@@ -8,6 +9,7 @@ import Textarea from './common/Textarea'
 import UriPrefix from './common/UriPrefix'
 
 import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
+import { ReadOnlyIcon } from '../common/Icons'
 
 import AttributeInfo from '../info/AttributeInfo'
 import DeleteAttributeModal from '../modals/DeleteAttributeModal'
@@ -16,6 +18,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditAttribute = ({ config, attribute, elements, elementActions }) => {
 
+  const { sites } = config
   const { elementAction, parent, attributes } = elements
 
   const editAttribute = (attribute) => elementActions.fetchElement('attributes', attribute)
@@ -31,9 +34,10 @@ const EditAttribute = ({ config, attribute, elements, elementActions }) => {
     <div className="panel panel-default panel-edit">
       <div className="panel-heading">
         <div className="pull-right">
+          <ReadOnlyIcon title={gettext('This attribute is read only')} show={attribute.read_only} />
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storeAttribute} />
-          <SaveButton elementAction={elementAction} onClick={storeAttribute} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeAttribute} disabled={attribute.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storeAttribute} disabled={attribute.read_only} back={true}/>
         </div>
         {
           attribute.id ? <>
@@ -106,15 +110,18 @@ const EditAttribute = ({ config, attribute, elements, elementActions }) => {
 
         <Select config={config} element={attribute} field="parent"
                 options={attributes} onChange={updateAttribute} onEdit={editAttribute} />
+
+        {get(config, 'settings.multisite') && <Select config={config} element={attribute} field="editors"
+                                                      options={sites} onChange={updateAttribute} isMulti />}
       </div>
 
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storeAttribute} />
-          <SaveButton elementAction={elementAction} onClick={storeAttribute} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeAttribute} disabled={attribute.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storeAttribute} disabled={attribute.read_only} back={true}/>
         </div>
-        {attribute.id && <DeleteButton onClick={openDeleteModal} />}
+        {attribute.id && <DeleteButton onClick={openDeleteModal} disabled={attribute.read_only} />}
       </div>
 
       <DeleteAttributeModal attribute={attribute} info={info} show={showDeleteModal}

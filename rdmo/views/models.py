@@ -51,6 +51,11 @@ class View(models.Model, TranslationMixin):
         verbose_name=_('Sites'),
         help_text=_('The sites this view belongs to (in a multi site setup).')
     )
+    editors = models.ManyToManyField(
+        Site, related_name='%(class)s_editors', blank=True,
+        verbose_name=_('Editors'),
+        help_text=_('The sites that can edit this view (in a multi site setup).')
+    )
     groups = models.ManyToManyField(
         Group, blank=True,
         verbose_name=_('Group'),

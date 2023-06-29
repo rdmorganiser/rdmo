@@ -51,6 +51,11 @@ class Task(TranslationMixin, models.Model):
         verbose_name=_('Sites'),
         help_text=_('The sites this task belongs to (in a multi site setup).')
     )
+    editors = models.ManyToManyField(
+        Site, related_name='%(class)s_editors', blank=True,
+        verbose_name=_('Editors'),
+        help_text=_('The sites that can edit this task (in a multi site setup).')
+    )
     groups = models.ManyToManyField(
         Group, blank=True,
         verbose_name=_('Group'),

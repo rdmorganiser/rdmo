@@ -3,7 +3,7 @@ from django.urls import reverse
 
 users = (
     ('editor', 'editor'),
-    ('editor', 'editor'),
+    ('reviewer', 'reviewer'),
     ('user', 'user'),
     ('api', 'api'),
     ('anonymous', None),

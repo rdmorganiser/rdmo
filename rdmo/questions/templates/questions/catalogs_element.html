@@ -16,7 +16,9 @@
         </div>
 
         <p ng-style="!service.showURIs && {'margin-bottom':'0px'}">
-            <strong>{% trans 'Question set' %}</strong>
+            <strong ng-class="{'text-muted': questionset.read_only}">
+                {% trans 'Question set' %}
+            </strong>
             <span>{$ questionset.title $}</span>
         </p>
         <div ng-show="service.showURIs">
@@ -49,7 +51,7 @@
             {% include 'questions/catalogs_options_questions.html' %}
         </div>
         <p ng-style="(!service.showURIs) && {'margin-bottom':'0px'}">
-            <strong ng-class="{'text-muted': question.is_optional}">{% trans 'Question' %}</strong>
+            <strong ng-class="{'text-muted': question.is_optional || question.read_only}">{% trans 'Question' %}</strong>
             <span>{$ question.text $}</span>
         </p>
         <div ng-show="service.showURIs && service.showURIQuestions">

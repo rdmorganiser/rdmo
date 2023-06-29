@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from rdmo.core.exports import XMLResponse
-from rdmo.core.permissions import HasModelPermission
+from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import is_truthy, render_to_format
 from rdmo.core.views import ChoicesViewSet
 from rdmo.core.viewsets import CopyModelMixin
@@ -23,11 +23,12 @@ from .serializers.v1 import (OptionIndexSerializer, OptionSerializer,
 
 
 class OptionSetViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission, )
+    permission_classes = (HasModelPermission | HasObjectPermission, )
     queryset = OptionSet.objects.prefetch_related(
         'optionset_options__option',
         'conditions',
-        'questions'
+        'questions',
+        'editors'
     )
     serializer_class = OptionSetSerializer
 
@@ -54,7 +55,7 @@ class OptionSetViewSet(CopyModelMixin, ModelViewSet):
         serializer = OptionSetNestedSerializer(self.get_object(), context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?')
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -66,7 +67,7 @@ class OptionSetViewSet(CopyModelMixin, ModelViewSet):
                 'optionsets': queryset
             })
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = OptionSetExportSerializer(self.get_object())
@@ -87,10 +88,10 @@ class OptionSetViewSet(CopyModelMixin, ModelViewSet):
 
 
 class OptionViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission, )
+    permission_classes = (HasModelPermission | HasObjectPermission, )
     queryset = Option.objects.annotate(values_count=models.Count('values')) \
                              .annotate(projects_count=models.Count('values__project', distinct=True)) \
-                             .prefetch_related('optionsets', 'conditions')
+                             .prefetch_related('optionsets', 'conditions', 'editors')
     serializer_class = OptionSerializer
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
@@ -111,7 +112,7 @@ class OptionViewSet(CopyModelMixin, ModelViewSet):
         serializer = OptionIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?')
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -123,7 +124,7 @@ class OptionViewSet(CopyModelMixin, ModelViewSet):
                 'options': queryset
             })
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = OptionExportSerializer(self.get_object())

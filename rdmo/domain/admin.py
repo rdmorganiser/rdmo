@@ -26,6 +26,7 @@ class AttributeAdmin(admin.ModelAdmin):
     list_display = ('uri', 'projects_count', 'values_count')
     search_fields = ('uri', )
     readonly_fields = ('uri', 'path', 'projects_count', 'values_count')
+    filter_horizontal = ('editors', )
 
     def get_queryset(self, request):
         return super().get_queryset(request) \

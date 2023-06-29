@@ -26,7 +26,7 @@ const Textarea = ({ config, element, field, rows, onChange }) => {
     <div className={className}>
       <label className="control-label" htmlFor={id}>{label}</label>
 
-      <textarea className="form-control" id={id} rows={rows} type="text"
+      <textarea className="form-control" id={id} rows={rows} type="text" disabled={element.read_only}
                 value={value} onChange={event => onChange(field, event.target.value)}  />
 
       {help && <p className="help-block">{help}</p>}

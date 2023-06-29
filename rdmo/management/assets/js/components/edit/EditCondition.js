@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import get from 'lodash/get'
 
 import Checkbox from './common/Checkbox'
 import Select from './common/Select'
@@ -8,6 +9,7 @@ import Textarea from './common/Textarea'
 import UriPrefix from './common/UriPrefix'
 
 import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
+import { ReadOnlyIcon } from '../common/Icons'
 
 import ConditionInfo from '../info/ConditionInfo'
 import DeleteConditionModal from '../modals/DeleteConditionModal'
@@ -16,7 +18,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditCondition = ({ config, condition, elements, elementActions }) => {
 
-  const { relations } = config
+  const { sites, relations } = config
   const { elementAction, parent, attributes, options } = elements
 
   const updateCondition = (key, value) => elementActions.updateElement(condition, {[key]: value})
@@ -36,9 +38,10 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
     <div className="panel panel-default panel-edit">
       <div className="panel-heading">
         <div className="pull-right">
+          <ReadOnlyIcon title={gettext('This condition is read only')} show={condition.read_only} />
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storeCondition} />
-          <SaveButton elementAction={elementAction} onClick={storeCondition} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeCondition} disabled={condition.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storeCondition} disabled={condition.read_only} back={true}/>
         </div>
         {
           condition.id ? <>
@@ -118,15 +121,18 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
 
         <Select config={config} element={condition} field="target_option"
                 options={options} onChange={updateCondition} onEdit={editOption} />
+
+        {get(config, 'settings.multisite') && <Select config={config} element={condition} field="editors"
+                                                      options={sites} onChange={updateCondition} isMulti />}
       </div>
 
       <div className="panel-footer">
         <div className="pull-right">
           <BackButton />
-          <SaveButton elementAction={elementAction} onClick={storeCondition} />
-          <SaveButton elementAction={elementAction} onClick={storeCondition} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeCondition} disabled={condition.read_only} />
+          <SaveButton elementAction={elementAction} onClick={storeCondition} disabled={condition.read_only} back={true}/>
         </div>
-        {condition.id && <DeleteButton onClick={openDeleteModal} />}
+        {condition.id && <DeleteButton onClick={openDeleteModal} disabled={condition.read_only} />}
       </div>
 
       <DeleteConditionModal condition={condition} info={info} show={showDeleteModal}

@@ -3,6 +3,7 @@ from rest_framework import serializers
 from rdmo.core.serializers import (ElementExportSerializerMixin,
                                    ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
+                                   ReadOnlyObjectPermissionsSerializerMixin,
                                    ThroughModelSerializerMixin,
                                    TranslationSerializerMixin)
 
@@ -35,7 +36,8 @@ class QuestionSetQuestionSerializer(serializers.ModelSerializer):
 
 
 class QuestionSetSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
-                            ElementModelSerializerMixin, serializers.ModelSerializer):
+                            ElementModelSerializerMixin, ReadOnlyObjectPermissionsSerializerMixin,
+                            serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
     uri_path = serializers.CharField(required=True)
@@ -43,6 +45,7 @@ class QuestionSetSerializer(ThroughModelSerializerMixin, TranslationSerializerMi
     parents = serializers.PrimaryKeyRelatedField(queryset=QuestionSet.objects.all(), required=False, many=True)
     questionsets = QuestionSetQuestionSetSerializer(source='questionset_questionsets', read_only=False, required=False, many=True)
     questions = QuestionSetQuestionSerializer(source='questionset_questions', read_only=False, required=False, many=True)
+    read_only = serializers.SerializerMethodField()
 
     class Meta:
         model = QuestionSet
@@ -64,7 +67,9 @@ class QuestionSetSerializer(ThroughModelSerializerMixin, TranslationSerializerMi
             'parents',
             'questionsets',
             'questions',
-            'conditions'
+            'conditions',
+            'editors',
+            'read_only'
         )
         trans_fields = (
             'title',

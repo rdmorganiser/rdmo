@@ -60,7 +60,7 @@ const Select = ({ config, element, field, options, verboseName, isMulti, onChang
 
         <ReactSelect classNamePrefix="react-select" className="react-select" isClearable={true}
                      options={selectOptions} value={selectValue} isMulti={isMulti}
-                     onChange={handleChange} styles={styles} />
+                     onChange={handleChange} styles={styles} isDisabled={element.read_only} />
       </div>
 
       {

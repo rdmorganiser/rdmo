@@ -1,5 +1,7 @@
 import logging
 
+from django.contrib.sites.models import Site
+
 from rdmo.core.imports import (set_common_fields, set_lang_field,
                                set_m2m_instances, set_m2m_through_instances,
                                set_reverse_m2m_through_instance,
@@ -36,6 +38,7 @@ def import_optionset(element, save=False):
         optionset.save()
         set_m2m_instances(optionset, 'conditions', element)
         set_m2m_through_instances(optionset, 'options', element, 'optionset', 'option', 'optionset_options')
+        optionset.editors.add(Site.objects.get_current())
 
     return optionset
 
@@ -64,5 +67,6 @@ def import_option(element, save=False):
 
         option.save()
         set_reverse_m2m_through_instance(option, 'optionset', element, 'option', 'optionset', 'option_optionsets')
+        option.editors.add(Site.objects.get_current())
 
     return option
