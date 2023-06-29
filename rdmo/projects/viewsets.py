@@ -405,10 +405,10 @@ class ProjectPageViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericV
             try:
                 page = Page.objects.filter_by_catalog(self.project.catalog).get(id=continuation.page_id)
             except Page.DoesNotExist:
-                page = self.get_queryset().first()
+                page = self.project.catalog.pages[0]
 
         except Continuation.DoesNotExist:
-            page = self.get_queryset().first()
+            page = self.project.catalog.pages[0]
 
         serializer = self.get_serializer(page)
         return Response(serializer.data)
