@@ -100,7 +100,7 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
                        onChange={updateCondition} />
           </div>
           <div className="col-sm-6">
-            <Text config={config} element={condition} field="key"
+            <Text config={config} element={condition} field="uri_path"
                   onChange={updateCondition} />
           </div>
         </div>

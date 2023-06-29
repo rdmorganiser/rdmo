@@ -67,7 +67,7 @@ class ProjectWrapper(object):
     def conditions(self):
         conditions = {}
         for condition in self._conditions:
-            conditions[condition.uri] = conditions[condition.key] = self._resolve_condition(condition)
+            conditions[condition.uri] = conditions[condition.uri_path] = self._resolve_condition(condition)
         return conditions
 
     @cached_property
@@ -128,7 +128,7 @@ class ProjectWrapper(object):
         if urlparse(condition).scheme:
             conditions = filter(lambda c: c.uri == condition, conditions)
         else:
-            conditions = filter(lambda c: c.key == condition, conditions)
+            conditions = filter(lambda c: c.uri_path == condition, conditions)
 
         return self._resolve_conditions(conditions, set_prefix=set_prefix, set_index=set_index)
 

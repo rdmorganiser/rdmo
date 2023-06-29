@@ -9,7 +9,7 @@ class TasksRendererMixin:
 
             xml.startElement('task', {'dc:uri': task['uri']})
             self.render_text_element(xml, 'uri_prefix', {}, task['uri_prefix'])
-            self.render_text_element(xml, 'key', {}, task['key'])
+            self.render_text_element(xml, 'uri_path', {}, task['uri_path'])
             self.render_text_element(xml, 'dc:comment', {}, task['comment'])
 
             for lang_code, lang_string, lang_field in get_languages():

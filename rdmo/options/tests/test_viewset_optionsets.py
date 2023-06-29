@@ -23,9 +23,6 @@ status_map = {
     'create': {
         'editor': 201, 'reviewer': 403, 'api': 201, 'user': 403, 'anonymous': 401
     },
-    'copy': {
-        'editor': 201, 'reviewer': 403, 'api': 201, 'user': 404, 'anonymous': 401
-    },
     'update': {
         'editor': 200, 'reviewer': 403, 'api': 200, 'user': 404, 'anonymous': 401
     },
@@ -296,36 +293,3 @@ def test_detail_export(db, client, username, password, export_format):
         assert root.tag == 'rdmo'
         for child in root:
             assert child.tag in ['optionset', 'option']
-
-
-@pytest.mark.parametrize('username,password', users)
-def test_copy(db, client, username, password):
-    client.login(username=username, password=password)
-    instances = OptionSet.objects.all()
-
-    for instance in instances:
-        url = reverse(urlnames['copy'], args=[instance.pk])
-        data = {
-            'uri_prefix': instance.uri_prefix + '-',
-            'uri_path': instance.uri_path + '-'
-        }
-        response = client.put(url, data, content_type='application/json')
-        assert response.status_code == status_map['copy'][username], response.json()
-
-
-@pytest.mark.parametrize('username,password', users)
-def test_copy_wrong(db, client, username, password):
-    client.login(username=username, password=password)
-    instance = OptionSet.objects.first()
-
-    url = reverse(urlnames['copy'], args=[instance.pk])
-    data = {
-        'uri_prefix': instance.uri_prefix,
-        'uri_path': instance.uri_path
-    }
-    response = client.put(url, data, content_type='application/json')
-
-    if status_map['copy'][username] == 201:
-        assert response.status_code == 400, response.json()
-    else:
-        assert response.status_code == status_map['copy'][username], response.json()

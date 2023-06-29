@@ -194,16 +194,6 @@ class QuestionSet(Model, TranslationMixin):
         self.uri = self.build_uri(self.uri_prefix, self.uri_path)
         super().save(*args, **kwargs)
 
-    def copy(self, uri_prefix, uri_path):
-        questionset = copy_model(self, uri_prefix=uri_prefix, uri_path=uri_path, attribute=self.attribute)
-
-        # copy m2m fields
-        questionset.questionsets.set(self.questionsets.all())
-        questionset.questions.set(self.questions.all())
-        questionset.conditions.set(self.conditions.all())
-
-        return questionset
-
     @property
     def title(self):
         return self.trans('title')

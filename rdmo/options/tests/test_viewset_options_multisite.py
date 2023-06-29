@@ -106,36 +106,3 @@ def test_delete_multisite(db, client, username, password):
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.delete(url)
         assert response.status_code == get_obj_perms_status_code(instance, username, 'delete')
-
-
-@pytest.mark.parametrize('username,password', users)
-def test_copy_multisite(db, client, username, password):
-    client.login(username=username, password=password)
-    instances = Option.objects.all()
-
-    for instance in instances:
-        url = reverse(urlnames['copy'], args=[instance.pk])
-        data = {
-            'uri_prefix': instance.uri_prefix + '-',
-            'uri_path': instance.uri_path + '-'
-        }
-        response = client.put(url, data, content_type='application/json')
-        assert response.status_code == get_obj_perms_status_code(instance, username, 'copy'), response.json()
-
-
-@pytest.mark.parametrize('username,password', users)
-def test_copy_wrong(db, client, username, password):
-    client.login(username=username, password=password)
-    instance = Option.objects.first()
-
-    url = reverse(urlnames['copy'], args=[instance.pk])
-    data = {
-        'uri_prefix': instance.uri_prefix,
-        'uri_path': instance.uri_path
-    }
-    response = client.put(url, data, content_type='application/json')
-
-    if status_map['copy'][username] == 201:
-        assert response.status_code == 400, response.json()
-    else:
-        assert response.status_code == status_map['copy'][username], response.json()

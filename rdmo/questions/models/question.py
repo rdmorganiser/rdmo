@@ -261,15 +261,6 @@ class Question(Model, TranslationMixin):
         self.uri = self.build_uri(self.uri_prefix, self.uri_path)
         super().save(*args, **kwargs)
 
-    def copy(self, uri_prefix, uri_path):
-        question = copy_model(self, uri_prefix=uri_prefix, uri_path=uri_path, attribute=self.attribute)
-
-        # copy m2m fields
-        question.optionsets.set(self.optionsets.all())
-        question.conditions.set(self.conditions.all())
-
-        return question
-
     @property
     def text(self):
         return self.trans('text')

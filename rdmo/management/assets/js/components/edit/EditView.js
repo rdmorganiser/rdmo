@@ -61,7 +61,7 @@ const EditView = ({ config, view, elements, elementActions }) => {
                        onChange={updateView} />
           </div>
           <div className="col-sm-6">
-            <Text config={config} element={view} field="key"
+            <Text config={config} element={view} field="uri_path"
                   onChange={updateView} />
           </div>
         </div>

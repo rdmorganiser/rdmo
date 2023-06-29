@@ -16,6 +16,7 @@ class OptionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
                        serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
+    uri_path = serializers.CharField(required=True)
     optionsets = serializers.PrimaryKeyRelatedField(queryset=OptionSet.objects.all(), required=False, many=True)
     conditions = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     values_count = serializers.IntegerField(read_only=True)

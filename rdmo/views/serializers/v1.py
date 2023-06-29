@@ -24,7 +24,7 @@ class BaseViewSerializer(TranslationSerializerMixin, ElementModelSerializerMixin
             'model',
             'uri',
             'uri_prefix',
-            'key',
+            'uri_path',
             'comment',
             'locked',
             'available',
@@ -45,7 +45,7 @@ class BaseViewSerializer(TranslationSerializerMixin, ElementModelSerializerMixin
 
 class ViewSerializer(BaseViewSerializer):
 
-    key = serializers.SlugField(required=True)
+    uri_path = serializers.CharField(required=True)
     projects_count = serializers.IntegerField(read_only=True)
 
     def validate(self, data):

@@ -17,7 +17,7 @@ class View(models.Model, TranslationMixin):
     objects = ViewManager()
 
     uri = models.URLField(
-        max_length=640, blank=True,
+        max_length=800, blank=True,
         verbose_name=_('URI'),
         help_text=_('The Uniform Resource Identifier of this view (auto-generated).')
     )
@@ -26,10 +26,10 @@ class View(models.Model, TranslationMixin):
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this view.')
     )
-    key = models.SlugField(
-        max_length=128, blank=True,
-        verbose_name=_('Key'),
-        help_text=_('The internal identifier of this view.')
+    uri_path = models.SlugField(
+        max_length=512, blank=True,
+        verbose_name=_('URI Path'),
+        help_text=_('The path for the URI of this view.')
     )
     comment = models.TextField(
         blank=True,
@@ -123,26 +123,16 @@ class View(models.Model, TranslationMixin):
     )
 
     class Meta:
-        ordering = ('key', )
+        ordering = ('uri', )
         verbose_name = _('View')
         verbose_name_plural = _('Views')
 
     def __str__(self):
-        return self.key
+        return self.uri
 
     def save(self, *args, **kwargs):
-        self.uri = self.build_uri(self.uri_prefix, self.key)
+        self.uri = self.build_uri(self.uri_prefix, self.uri_path)
         super().save(*args, **kwargs)
-
-    def copy(self, uri_prefix, key):
-        view = copy_model(self, uri_prefix=uri_prefix, key=key)
-
-        # copy m2m fields
-        view.catalogs.set(self.catalogs.all())
-        view.sites.set(self.sites.all())
-        view.groups.set(self.groups.all())
-
-        return view
 
     @property
     def title(self):
@@ -168,6 +158,7 @@ class View(models.Model, TranslationMixin):
         }))
 
     @classmethod
-    def build_uri(cls, uri_prefix, key):
-        assert key
-        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/views/', key)
+    def build_uri(cls, uri_prefix, uri_path):
+        if not uri_path:
+            raise RuntimeError('uri_path is missing')
+        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/views/', uri_path)

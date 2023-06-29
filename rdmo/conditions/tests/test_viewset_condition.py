@@ -28,9 +28,6 @@ status_map = {
     },
     'delete': {
         'editor': 204, 'reviewer': 403, 'api': 204, 'user': 404, 'anonymous': 401
-    },
-    'copy': {
-        'editor': 201, 'reviewer': 403, 'api': 201, 'user': 404, 'anonymous': 401
     }
 }
 
@@ -100,7 +97,7 @@ def test_create(db, client, username, password):
         url = reverse(urlnames['list'])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'key': '%s_new_%s' % (instance.key, username),
+            'uri_path': '%s_new_%s' % (instance.uri_path, username),
             'comment': instance.comment,
             'source': instance.source.pk,
             'relation': instance.relation,
@@ -122,7 +119,7 @@ def test_create_optionset(db, client, username, password):
             url = reverse(urlnames['list'])
             data = {
                 'uri_prefix': instance.uri_prefix,
-                'key': '%s_new_%s' % (instance.key, username),
+                'uri_path': '%s_new_%s' % (instance.uri_path, username),
                 'comment': instance.comment,
                 'source': instance.source.pk,
                 'relation': instance.relation,
@@ -149,7 +146,7 @@ def test_create_page(db, client, username, password):
             url = reverse(urlnames['list'])
             data = {
                 'uri_prefix': instance.uri_prefix,
-                'key': '%s_new_%s' % (instance.key, username),
+                'uri_path': '%s_new_%s' % (instance.uri_path, username),
                 'comment': instance.comment,
                 'source': instance.source.pk,
                 'relation': instance.relation,
@@ -176,7 +173,7 @@ def test_create_questionset(db, client, username, password):
             url = reverse(urlnames['list'])
             data = {
                 'uri_prefix': instance.uri_prefix,
-                'key': '%s_new_%s' % (instance.key, username),
+                'uri_path': '%s_new_%s' % (instance.uri_path, username),
                 'comment': instance.comment,
                 'source': instance.source.pk,
                 'relation': instance.relation,
@@ -203,7 +200,7 @@ def test_create_question(db, client, username, password):
             url = reverse(urlnames['list'])
             data = {
                 'uri_prefix': instance.uri_prefix,
-                'key': '%s_new_%s' % (instance.key, username),
+                'uri_path': '%s_new_%s' % (instance.uri_path, username),
                 'comment': instance.comment,
                 'source': instance.source.pk,
                 'relation': instance.relation,
@@ -230,7 +227,7 @@ def test_create_task(db, client, username, password):
             url = reverse(urlnames['list'])
             data = {
                 'uri_prefix': instance.uri_prefix,
-                'key': '%s_new_%s' % (instance.key, username),
+                'uri_path': '%s_new_%s' % (instance.uri_path, username),
                 'comment': instance.comment,
                 'source': instance.source.pk,
                 'relation': instance.relation,
@@ -255,7 +252,7 @@ def test_update(db, client, username, password):
         url = reverse(urlnames['detail'], args=[instance.pk])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'key': instance.key,
+            'uri_path': instance.uri_path,
             'comment': instance.comment,
             'source': instance.source.pk,
             'relation': instance.relation,
@@ -292,36 +289,3 @@ def test_detail_export(db, client, username, password, export_format):
         assert root.tag == 'rdmo'
         for child in root:
             assert child.tag in ['condition']
-
-
-@pytest.mark.parametrize('username,password', users)
-def test_copy(db, client, username, password):
-    client.login(username=username, password=password)
-    instances = Condition.objects.all()
-
-    for instance in instances:
-        url = reverse(urlnames['copy'], args=[instance.pk])
-        data = {
-            'uri_prefix': instance.uri_prefix + '-',
-            'key': instance.key + '-'
-        }
-        response = client.put(url, data, content_type='application/json')
-        assert response.status_code == status_map['copy'][username], response.json()
-
-
-@pytest.mark.parametrize('username,password', users)
-def test_copy_wrong(db, client, username, password):
-    client.login(username=username, password=password)
-    instance = Condition.objects.first()
-
-    url = reverse(urlnames['copy'], args=[instance.pk])
-    data = {
-        'uri_prefix': instance.uri_prefix,
-        'key': instance.key
-    }
-    response = client.put(url, data, content_type='application/json')
-
-    if status_map['copy'][username] == 201:
-        assert response.status_code == 400, response.json()
-    else:
-        assert response.status_code == status_map['copy'][username], response.json()

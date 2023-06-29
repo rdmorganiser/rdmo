@@ -102,14 +102,6 @@ class Section(Model, TranslationMixin):
         self.uri = self.build_uri(self.uri_prefix, self.uri_path)
         super().save(*args, **kwargs)
 
-    def copy(self, uri_prefix, uri_path):
-        section = copy_model(self, uri_prefix=uri_prefix, uri_path=uri_path)
-
-        # copy m2m fields
-        section.pages.set(self.pages.all())
-
-        return section
-
     @property
     def title(self):
         return self.trans('title')

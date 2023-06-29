@@ -8,7 +8,7 @@ from .validators import TaskLockedValidator, TaskUniqueURIValidator
 
 
 class TaskAdminForm(forms.ModelForm):
-    key = forms.SlugField(required=True)
+    uri_path = forms.SlugField(required=True)
 
     class Meta:
         model = Task

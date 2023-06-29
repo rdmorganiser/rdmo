@@ -11,7 +11,6 @@ from rdmo.core.exports import XMLResponse
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import is_truthy, render_to_format
 from rdmo.core.views import ChoicesViewSet
-from rdmo.core.viewsets import CopyModelMixin
 
 from .models import Catalog, Page, Question, QuestionSet, Section
 from .renderers import (CatalogRenderer, PageRenderer, QuestionRenderer,
@@ -34,7 +33,7 @@ from .serializers.v1 import (CatalogIndexSerializer, CatalogListSerializer,
 from .utils import get_widget_type_choices
 
 
-class CatalogViewSet(CopyModelMixin, ModelViewSet):
+class CatalogViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission,)
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
@@ -105,7 +104,7 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
         }
 
 
-class SectionViewSet(CopyModelMixin, ModelViewSet):
+class SectionViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
@@ -174,7 +173,7 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
         }
 
 
-class PageViewSet(CopyModelMixin, ModelViewSet):
+class PageViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
@@ -250,7 +249,7 @@ class PageViewSet(CopyModelMixin, ModelViewSet):
         }
 
 
-class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
+class QuestionSetViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
@@ -327,7 +326,7 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
         }
 
 
-class QuestionViewSet(CopyModelMixin, ModelViewSet):
+class QuestionViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
 
     filter_backends = (SearchFilter, DjangoFilterBackend)

@@ -23,7 +23,7 @@ class BaseTaskSerializer(TranslationSerializerMixin, ElementModelSerializerMixin
             'model',
             'uri',
             'uri_prefix',
-            'key',
+            'uri_path',
             'comment',
             'locked',
             'available',
@@ -48,7 +48,7 @@ class BaseTaskSerializer(TranslationSerializerMixin, ElementModelSerializerMixin
 
 class TaskSerializer(BaseTaskSerializer):
 
-    key = serializers.SlugField(required=True)
+    uri_path = serializers.CharField(required=True)
     projects_count = serializers.IntegerField(read_only=True)
 
     class Meta(BaseTaskSerializer.Meta):

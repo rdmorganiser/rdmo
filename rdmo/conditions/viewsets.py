@@ -9,7 +9,6 @@ from rdmo.core.exports import XMLResponse
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import is_truthy, render_to_format
 from rdmo.core.views import ChoicesViewSet
-from rdmo.core.viewsets import CopyModelMixin
 
 from .models import Condition
 from .renderers import ConditionRenderer
@@ -18,7 +17,7 @@ from .serializers.v1 import (ConditionIndexSerializer, ConditionListSerializer,
                              ConditionSerializer)
 
 
-class ConditionViewSet(CopyModelMixin, ModelViewSet):
+class ConditionViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
     queryset = Condition.objects.select_related('source', 'target_option') \
                                 .prefetch_related('optionsets', 'pages', 'questionsets',
@@ -29,7 +28,7 @@ class ConditionViewSet(CopyModelMixin, ModelViewSet):
     filterset_fields = (
         'uri',
         'uri_prefix',
-        'key',
+        'uri_path',
         'source',
         'relation',
         'target_text',
@@ -62,9 +61,9 @@ class ConditionViewSet(CopyModelMixin, ModelViewSet):
         if export_format == 'xml':
             serializer = ConditionExportSerializer(self.get_object())
             xml = ConditionRenderer().render([serializer.data], context=self.get_export_renderer_context(request))
-            return XMLResponse(xml, name=self.get_object().key)
+            return XMLResponse(xml, name=self.get_object().uri_path)
         else:
-            return render_to_format(self.request, export_format, self.get_object().key, 'conditions/export/conditions.html', {
+            return render_to_format(self.request, export_format, self.get_object().uri_path, 'conditions/export/conditions.html', {
                 'conditions': [self.get_object()]
             })
 

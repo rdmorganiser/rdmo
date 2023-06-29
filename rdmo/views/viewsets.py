@@ -8,7 +8,6 @@ from rest_framework.filters import SearchFilter
 from rdmo.core.exports import XMLResponse
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import render_to_format
-from rdmo.core.viewsets import CopyModelMixin
 
 from .models import View
 from .renderers import ViewRenderer
@@ -17,17 +16,18 @@ from .serializers.v1 import (ViewIndexSerializer, ViewListSerializer,
                              ViewSerializer)
 
 
-class ViewViewSet(CopyModelMixin, ModelViewSet):
+class ViewViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
     queryset = View.objects.prefetch_related('catalogs', 'sites', 'editors', 'groups') \
-                           .annotate(projects_count=models.Count('projects'))
+                           .annotate(projects_count=models.Count('projects')) \
+                           .order_by('uri')
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
     search_fields = ('uri', )
     filterset_fields = (
         'uri',
         'uri_prefix',
-        'key',
+        'uri_path',
         'comment',
         'sites',
         'editors'
@@ -59,8 +59,8 @@ class ViewViewSet(CopyModelMixin, ModelViewSet):
         if export_format == 'xml':
             serializer = ViewExportSerializer(self.get_object())
             xml = ViewRenderer().render([serializer.data])
-            return XMLResponse(xml, name=self.get_object().key)
+            return XMLResponse(xml, name=self.get_object().uri_path)
         else:
-            return render_to_format(self.request, export_format, self.get_object().key, 'views/export/views.html', {
+            return render_to_format(self.request, export_format, self.get_object().uri_path, 'views/export/views.html', {
                 'views': [self.get_object()]
             })

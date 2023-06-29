@@ -8,7 +8,6 @@ from rest_framework.viewsets import ModelViewSet
 from rdmo.core.exports import XMLResponse
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import is_truthy, render_to_format
-from rdmo.core.viewsets import CopyModelMixin
 
 from .models import Task
 from .renderers import TaskRenderer
@@ -17,11 +16,12 @@ from .serializers.v1 import (TaskIndexSerializer, TaskListSerializer,
                              TaskSerializer)
 
 
-class TaskViewSet(CopyModelMixin, ModelViewSet):
+class TaskViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
     queryset = Task.objects.select_related('start_attribute', 'end_attribute') \
                            .prefetch_related('catalogs', 'sites', 'editors', 'groups', 'conditions') \
-                           .annotate(projects_count=models.Count('projects'))
+                           .annotate(projects_count=models.Count('projects')) \
+                           .order_by('uri')
     serializer_class = TaskSerializer
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
@@ -29,7 +29,7 @@ class TaskViewSet(CopyModelMixin, ModelViewSet):
     filterset_fields = (
         'uri',
         'uri_prefix',
-        'key',
+        'uri_path',
         'comment',
         'sites',
         'editors'
@@ -61,9 +61,9 @@ class TaskViewSet(CopyModelMixin, ModelViewSet):
         if export_format == 'xml':
             serializer = TaskExportSerializer(self.get_object())
             xml = TaskRenderer().render([serializer.data], context=self.get_export_renderer_context(request))
-            return XMLResponse(xml, name=self.get_object().key)
+            return XMLResponse(xml, name=self.get_object().uri_path)
         else:
-            return render_to_format(self.request, export_format, self.get_object().key, 'tasks/export/tasks.html', {
+            return render_to_format(self.request, export_format, self.get_object().uri_path, 'tasks/export/tasks.html', {
                 'tasks': [self.get_object()]
             })
 

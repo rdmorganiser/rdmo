@@ -8,7 +8,7 @@ from .validators import ViewLockedValidator, ViewUniqueURIValidator
 
 
 class ViewAdminForm(forms.ModelForm):
-    key = forms.SlugField(required=True)
+    uri_path = forms.SlugField(required=True)
 
     class Meta:
         model = View

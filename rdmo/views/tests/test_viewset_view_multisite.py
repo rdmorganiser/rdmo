@@ -67,7 +67,7 @@ def test_create(db, client, username, password):
         url = reverse(urlnames['list'])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'key': '%s_new_%s' % (instance.key, username),
+            'uri_path': '%s_new_%s' % (instance.uri_path, username),
             'comment': instance.comment,
             'template': instance.template,
             'title_en': instance.title_lang1,
@@ -88,7 +88,7 @@ def test_update(db, client, username, password):
         url = reverse(urlnames['detail'], args=[instance.pk])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'key': instance.key,
+            'uri_path': instance.uri_path,
             'comment': instance.comment,
             'template': instance.template,
             'title_en': instance.title_lang1,
@@ -126,36 +126,3 @@ def test_detail_export(db, client, username, password, export_format):
         assert root.tag == 'rdmo'
         for child in root:
             assert child.tag in ['view']
-
-
-@pytest.mark.parametrize('username,password', users)
-def test_copy(db, client, username, password):
-    client.login(username=username, password=password)
-    instances = View.objects.all()
-
-    for instance in instances:
-        url = reverse(urlnames['copy'], args=[instance.pk])
-        data = {
-            'uri_prefix': instance.uri_prefix + '-',
-            'key': instance.key + '-'
-        }
-        response = client.put(url, data, content_type='application/json')
-        assert response.status_code == get_obj_perms_status_code(instance, username, 'copy'), response.json()
-
-
-@pytest.mark.parametrize('username,password', users)
-def test_copy_wrong(db, client, username, password):
-    client.login(username=username, password=password)
-    instance = View.objects.first()
-
-    url = reverse(urlnames['copy'], args=[instance.pk])
-    data = {
-        'uri_prefix': instance.uri_prefix,
-        'key': instance.key
-    }
-    response = client.put(url, data, content_type='application/json')
-
-    if status_map['copy'][username] == 201 and response.status_code != 404:
-        assert response.status_code == 400, response.json()
-    else:
-        assert response.status_code == get_obj_perms_status_code(instance, username, 'copy'), response.json()

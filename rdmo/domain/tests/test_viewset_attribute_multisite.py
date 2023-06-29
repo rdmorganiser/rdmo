@@ -127,38 +127,3 @@ def test_detail_export(db, client, username, password):
             assert root.tag == 'rdmo'
             for child in root:
                 assert child.tag in ['attribute']
-
-
-@pytest.mark.parametrize('username,password', users)
-def test_copy_multisite(db, client, username, password):
-    client.login(username=username, password=password)
-    instances = Attribute.objects.all()
-
-    for instance in instances:
-        url = reverse(urlnames['copy'], args=[instance.pk])
-        data = {
-            'uri_prefix': instance.uri_prefix + '-',
-            'key': instance.key + '-',
-            'parent': instance.parent.pk if instance.parent else None
-        }
-        response = client.put(url, data, content_type='application/json')
-        assert response.status_code == get_obj_perms_status_code(instance, username, 'copy'), response.json()
-
-
-@pytest.mark.parametrize('username,password', users)
-def test_copy_wrong(db, client, username, password):
-    ''' only users and status_map are unique for this test '''
-    client.login(username=username, password=password)
-    instance = Attribute.objects.first()
-
-    url = reverse(urlnames['copy'], args=[instance.pk])
-    data = {
-        'uri_prefix': instance.uri_prefix,
-        'key': instance.key
-    }
-    response = client.put(url, data, content_type='application/json')
-
-    if status_map['copy'][username] == 201:
-        assert response.status_code == 400, response.json()
-    else:
-        assert response.status_code == status_map['copy'][username], response.json()

@@ -216,15 +216,6 @@ class Option(models.Model, TranslationMixin):
         self.uri = self.build_uri(self.uri_prefix, self.uri_path)
         super().save(*args, **kwargs)
 
-    def copy(self, uri_prefix, uri_path):
-        option = copy_model(self, uri_prefix=uri_prefix, uri_path=uri_path)
-
-        # set m2m fields for copy
-        option.optionsets.set(self.optionsets.all())
-        option.editors.set([Site.objects.get_current()])
-
-        return option
-
     @property
     def text(self):
         return self.trans('text')

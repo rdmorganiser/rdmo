@@ -31,7 +31,7 @@ class Condition(models.Model):
     )
 
     uri = models.URLField(
-        max_length=640, blank=True,
+        max_length=800, blank=True,
         verbose_name=_('URI'),
         help_text=_('The Uniform Resource Identifier of this condition (auto-generated).')
     )
@@ -40,10 +40,10 @@ class Condition(models.Model):
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this condition.')
     )
-    key = models.SlugField(
-        max_length=128, blank=True,
-        verbose_name=_('Key'),
-        help_text=_('The internal identifier of this condition.')
+    uri_path = models.SlugField(
+        max_length=512, blank=True,
+        verbose_name=_('URI Path'),
+        help_text=_('The path for the URI of this condition.')
     )
     comment = models.TextField(
         blank=True,
@@ -87,16 +87,11 @@ class Condition(models.Model):
         verbose_name_plural = _('Conditions')
 
     def __str__(self):
-        return self.key
+        return self.uri
 
     def save(self, *args, **kwargs):
-        self.uri = self.build_uri(self.uri_prefix, self.key)
+        self.uri = self.build_uri(self.uri_prefix, self.uri_path)
         super().save(*args, **kwargs)
-
-    def copy(self, uri_prefix, key):
-        condition = copy_model(self, uri_prefix=uri_prefix, key=key, source=self.source, target_option=self.target_option)
- 
-        return condition
 
     @property
     def source_label(self):
@@ -238,6 +233,7 @@ class Condition(models.Model):
         return False
 
     @classmethod
-    def build_uri(cls, uri_prefix, key):
-        assert key
-        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/conditions/', key)
+    def build_uri(cls, uri_prefix, uri_path):
+        if not uri_path:
+            raise RuntimeError('uri_path is missing')
+        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/conditions/', uri_path)

@@ -16,7 +16,7 @@ class ConditionSerializer(ElementModelSerializerMixin, ReadOnlyObjectPermissions
                           serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
-    key = serializers.SlugField(required=True)
+    uri_path = serializers.CharField(required=True)
     source = serializers.PrimaryKeyRelatedField(queryset=Attribute.objects.all(), required=True)
 
     optionsets = serializers.PrimaryKeyRelatedField(queryset=OptionSet.objects.all(), required=False, many=True)
@@ -34,7 +34,7 @@ class ConditionSerializer(ElementModelSerializerMixin, ReadOnlyObjectPermissions
             'model',
             'uri',
             'uri_prefix',
-            'key',
+            'uri_path',
             'comment',
             'locked',
             'read_only',

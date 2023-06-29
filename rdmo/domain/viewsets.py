@@ -8,7 +8,6 @@ from rest_framework.viewsets import ModelViewSet
 from rdmo.core.exports import XMLResponse
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import render_to_csv, render_to_format
-from rdmo.core.viewsets import CopyModelMixin
 
 from .models import Attribute
 from .renderers import AttributeRenderer
@@ -17,13 +16,13 @@ from .serializers.v1 import (AttributeIndexSerializer, AttributeListSerializer,
                              AttributeNestedSerializer, AttributeSerializer)
 
 
-class AttributeViewSet(CopyModelMixin, ModelViewSet):
+class AttributeViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
-    queryset = Attribute.objects.order_by('path') \
-                        .annotate(values_count=models.Count('values')) \
-                        .annotate(projects_count=models.Count('values__project', distinct=True)) \
-                        .prefetch_related('conditions', 'pages', 'questionsets', 'questions', 
-                                          'tasks_as_start', 'tasks_as_end', 'editors')
+    queryset = Attribute.objects.annotate(values_count=models.Count('values')) \
+                                .annotate(projects_count=models.Count('values__project', distinct=True)) \
+                                .prefetch_related('conditions', 'pages', 'questionsets', 'questions',
+                                                  'tasks_as_start', 'tasks_as_end', 'editors') \
+                                .order_by('path')
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
     search_fields = ('uri', )

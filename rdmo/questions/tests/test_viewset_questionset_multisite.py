@@ -337,36 +337,3 @@ def test_detail_export(db, client, username, password, export_format):
         assert root.tag == 'rdmo'
         for child in root:
             assert child.tag in ['questionset', 'question']
-
-
-@pytest.mark.parametrize('username,password', users)
-def test_copy(db, client, username, password):
-    client.login(username=username, password=password)
-    instances = QuestionSet.objects.all()
-
-    for instance in instances:
-        url = reverse(urlnames['copy'], args=[instance.pk])
-        data = {
-            'uri_prefix': instance.uri_prefix + '-',
-            'uri_path': instance.uri_path + '-'
-        }
-        response = client.put(url, data, content_type='application/json')
-        assert response.status_code == get_obj_perms_status_code(instance, username, 'copy'), response.json()
-
-
-@pytest.mark.parametrize('username,password', users)
-def test_copy_wrong(db, client, username, password):
-    client.login(username=username, password=password)
-    instance = QuestionSet.objects.first()
-
-    url = reverse(urlnames['copy'], args=[instance.pk])
-    data = {
-        'uri_prefix': instance.uri_prefix,
-        'uri_path': instance.uri_path
-    }
-    response = client.put(url, data, content_type='application/json')
-
-    if get_obj_perms_status_code(instance, username, 'copy') == 201:
-        assert response.status_code == 400, response.json()
-    else:
-        assert response.status_code == get_obj_perms_status_code(instance, username, 'copy'), response.json()

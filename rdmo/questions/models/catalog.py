@@ -149,24 +149,6 @@ class Catalog(Model, TranslationMixin):
         self.uri = self.build_uri(self.uri_prefix, self.uri_path)
         super().save(*args, **kwargs)
 
-    def copy(self, uri_prefix, uri_path):
-        # create a new title
-        kwargs = {}
-        for field in get_language_fields('title'):
-            kwargs[field] = getattr(self, field) + '*'
-
-        # copy instance
-        catalog = copy_model(self, uri_prefix=uri_prefix, uri_path=uri_path, **kwargs)
-
-        # copy m2m fields
-        catalog.sections.set(self.sections.all())
-        catalog.sites.set(self.sites.all())
-
-        # for groups, copy all
-        catalog.groups.set(self.groups.all())
-
-        return catalog
-
     @property
     def title(self):
         return self.trans('title')

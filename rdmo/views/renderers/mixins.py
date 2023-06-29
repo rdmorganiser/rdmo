@@ -9,7 +9,7 @@ class ViewsRendererMixin:
 
             xml.startElement('view', {'dc:uri': view['uri']})
             self.render_text_element(xml, 'uri_prefix', {}, view['uri_prefix'])
-            self.render_text_element(xml, 'key', {}, view['key'])
+            self.render_text_element(xml, 'uri_path', {}, view['uri_path'])
             self.render_text_element(xml, 'dc:comment', {}, view['comment'])
 
             for lang_code, lang_string, lang_field in get_languages():

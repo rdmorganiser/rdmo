@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from rest_framework.exceptions import \
     ValidationError as RestFameworkValidationError
 
-from ..models import Page, QuestionSet, QuestionSet
+from ..models import Page, QuestionSet
 from ..serializers.v1 import QuestionSetSerializer
 from ..validators import QuestionSetLockedValidator
 

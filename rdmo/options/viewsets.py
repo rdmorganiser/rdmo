@@ -11,7 +11,6 @@ from rdmo.core.exports import XMLResponse
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import is_truthy, render_to_format
 from rdmo.core.views import ChoicesViewSet
-from rdmo.core.viewsets import CopyModelMixin
 
 from .models import Option, OptionSet
 from .renderers import OptionRenderer, OptionSetRenderer
@@ -22,7 +21,7 @@ from .serializers.v1 import (OptionIndexSerializer, OptionSerializer,
                              OptionSetNestedSerializer, OptionSetSerializer)
 
 
-class OptionSetViewSet(CopyModelMixin, ModelViewSet):
+class OptionSetViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
     queryset = OptionSet.objects.prefetch_related(
         'optionset_options__option',
@@ -87,7 +86,7 @@ class OptionSetViewSet(CopyModelMixin, ModelViewSet):
         }
 
 
-class OptionViewSet(CopyModelMixin, ModelViewSet):
+class OptionViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
     queryset = Option.objects.annotate(values_count=models.Count('values')) \
                              .annotate(projects_count=models.Count('values__project', distinct=True)) \

@@ -67,7 +67,7 @@ const EditTask = ({ config, task, elements, elementActions}) => {
                        onChange={updateTask} />
           </div>
           <div className="col-sm-6">
-            <Text config={config} element={task} field="key"
+            <Text config={config} element={task} field="uri_path"
                   onChange={updateTask} />
           </div>
         </div>

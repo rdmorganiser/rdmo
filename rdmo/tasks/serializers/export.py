@@ -18,7 +18,7 @@ class TaskExportSerializer(TranslationSerializerMixin, serializers.ModelSerializ
         fields = (
             'uri',
             'uri_prefix',
-            'key',
+            'uri_path',
             'comment',
             'start_attribute',
             'end_attribute',

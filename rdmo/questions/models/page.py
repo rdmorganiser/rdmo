@@ -199,17 +199,6 @@ class Page(Model, TranslationMixin):
         self.uri = self.build_uri(self.uri_prefix, self.uri_path)
         super().save(*args, **kwargs)
 
-    def copy(self, uri_prefix, uri_path):
-        page = copy_model(self, uri_prefix=uri_prefix, uri_path=uri_path,
-                          attribute=self.attribute)
-
-        # copy m2m fields
-        page.questionsets.set(self.questionsets.all())
-        page.questions.set(self.questions.all())
-        page.conditions.set(self.conditions.all())
-
-        return page
-
     @property
     def title(self):
         return self.trans('title')

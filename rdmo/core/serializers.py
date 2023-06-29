@@ -11,6 +11,7 @@ from rdmo.core.utils import get_language_warning, get_languages, markdown2html
 
 logger = logging.getLogger(__name__)
 
+
 class RecursiveField(serializers.Serializer):
 
     def to_representation(self, value):

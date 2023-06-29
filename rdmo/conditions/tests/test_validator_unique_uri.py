@@ -12,7 +12,7 @@ from ..validators import ConditionUniqueURIValidator
 def test_unique_uri_validator_create(db):
     ConditionUniqueURIValidator()({
         'uri_prefix': settings.DEFAULT_URI_PREFIX,
-        'key': 'test'
+        'uri_path': 'test'
     })
 
 
@@ -20,7 +20,7 @@ def test_unique_uri_validator_create_error(db):
     with pytest.raises(ValidationError):
         ConditionUniqueURIValidator()({
             'uri_prefix': settings.DEFAULT_URI_PREFIX,
-            'uri_path': Condition.objects.last().key
+            'uri_path': Condition.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).last().uri_path
         })
 
 
@@ -29,17 +29,17 @@ def test_unique_uri_validator_update(db):
 
     ConditionUniqueURIValidator(condition)({
         'uri_prefix': condition.uri_prefix,
-        'key': condition.key
+        'uri_path': condition.uri_path
     })
 
 
 def test_unique_uri_validator_update_error(db):
-    condition = Condition.objects.first()
+    condition = Condition.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).first()
 
     with pytest.raises(ValidationError):
         ConditionUniqueURIValidator(condition)({
             'uri_prefix': condition.uri_prefix,
-            'uri_path': Condition.objects.last().key
+            'uri_path': Condition.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).last().uri_path
         })
 
 
@@ -49,7 +49,7 @@ def test_unique_uri_validator_serializer_create(db):
 
     validator({
         'uri_prefix': settings.DEFAULT_URI_PREFIX,
-        'key': 'test'
+        'uri_path': 'test'
     })
 
 
@@ -60,7 +60,7 @@ def test_unique_uri_validator_serializer_create_error(db):
     with pytest.raises(RestFameworkValidationError):
         validator({
             'uri_prefix': settings.DEFAULT_URI_PREFIX,
-            'uri_path': Condition.objects.last().key
+            'uri_path': Condition.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).last().uri_path
         })
 
 
@@ -72,12 +72,12 @@ def test_unique_uri_validator_serializer_update(db):
 
     validator({
         'uri_prefix': condition.uri_prefix,
-        'key': condition.key
+        'uri_path': condition.uri_path
     })
 
 
 def test_unique_uri_validator_serializer_update_error(db):
-    condition = Condition.objects.first()
+    condition = Condition.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).first()
 
     validator = ConditionUniqueURIValidator()
     validator.set_context(ConditionSerializer(instance=condition))
@@ -85,5 +85,5 @@ def test_unique_uri_validator_serializer_update_error(db):
     with pytest.raises(RestFameworkValidationError):
         validator({
             'uri_prefix': condition.uri_prefix,
-            'uri_path': Condition.objects.last().key
+            'uri_path': Condition.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).last().uri_path
         })
