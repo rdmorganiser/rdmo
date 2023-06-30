@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from rdmo.core.serializers import (ElementModelSerializerMixin,
-                                   ReadOnlyObjectPermissionsSerializerMixin,
+                                   ReadOnlyObjectPermissionSerializerMixin,
                                    ThroughModelSerializerMixin)
 from rdmo.questions.models import Question
 
@@ -21,7 +21,7 @@ class OptionSetOptionSerializer(serializers.ModelSerializer):
 
 
 class OptionSetSerializer(ThroughModelSerializerMixin, ElementModelSerializerMixin,
-                          ReadOnlyObjectPermissionsSerializerMixin, serializers.ModelSerializer):
+                          ReadOnlyObjectPermissionSerializerMixin, serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
     uri_path = serializers.CharField(required=True)

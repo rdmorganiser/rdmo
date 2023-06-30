@@ -185,7 +185,7 @@ class ElementWarningSerializerMixin(serializers.ModelSerializer):
         return any([get_language_warning(obj, field_name) for field_name in self.Meta.warning_fields])
 
 
-class ReadOnlyObjectPermissionsSerializerMixin:
+class ReadOnlyObjectPermissionSerializerMixin:
     '''
     A mixin class for Serializers that adds a boolean field with the name read_only.
     It checks the object permissions based on the model of the serializer.

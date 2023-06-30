@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from rdmo.conditions.models import Condition
 from rdmo.core.serializers import (ElementModelSerializerMixin,
-                                   ReadOnlyObjectPermissionsSerializerMixin)
+                                   ReadOnlyObjectPermissionSerializerMixin)
 from rdmo.questions.models import Page, Question, QuestionSet
 
 from ..models import Attribute
@@ -14,7 +14,7 @@ from ..validators import (AttributeLockedValidator, AttributeParentValidator,
 log = logging.getLogger(__name__)
 
 
-class BaseAttributeSerializer(ElementModelSerializerMixin, ReadOnlyObjectPermissionsSerializerMixin,
+class BaseAttributeSerializer(ElementModelSerializerMixin, ReadOnlyObjectPermissionSerializerMixin,
                               serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()

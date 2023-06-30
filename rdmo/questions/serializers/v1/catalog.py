@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from rdmo.core.serializers import (ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
-                                   ReadOnlyObjectPermissionsSerializerMixin,
+                                   ReadOnlyObjectPermissionSerializerMixin,
                                    ThroughModelSerializerMixin,
                                    TranslationSerializerMixin)
 
@@ -23,7 +23,7 @@ class CatalogSectionSerializer(serializers.ModelSerializer):
 
 class CatalogSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
                         ElementModelSerializerMixin, ElementWarningSerializerMixin,
-                        ReadOnlyObjectPermissionsSerializerMixin, serializers.ModelSerializer):
+                        ReadOnlyObjectPermissionSerializerMixin, serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
     uri_path = serializers.CharField(required=True)

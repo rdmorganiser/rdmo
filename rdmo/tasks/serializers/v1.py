@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from rdmo.core.serializers import (ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
-                                   ReadOnlyObjectPermissionsSerializerMixin,
+                                   ReadOnlyObjectPermissionSerializerMixin,
                                    TranslationSerializerMixin)
 
 from ..models import Task
@@ -10,7 +10,7 @@ from ..validators import TaskLockedValidator, TaskUniqueURIValidator
 
 
 class TaskSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
-                     ElementWarningSerializerMixin, ReadOnlyObjectPermissionsSerializerMixin,
+                     ElementWarningSerializerMixin, ReadOnlyObjectPermissionSerializerMixin,
                      serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()

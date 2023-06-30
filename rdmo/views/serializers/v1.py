@@ -3,7 +3,7 @@ from rest_framework import exceptions, serializers
 
 from rdmo.core.serializers import (ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
-                                   ReadOnlyObjectPermissionsSerializerMixin,
+                                   ReadOnlyObjectPermissionSerializerMixin,
                                    TranslationSerializerMixin)
 
 from ..models import View
@@ -11,7 +11,7 @@ from ..validators import ViewLockedValidator, ViewUniqueURIValidator
 
 
 class ViewSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
-                     ElementWarningSerializerMixin, ReadOnlyObjectPermissionsSerializerMixin,
+                     ElementWarningSerializerMixin, ReadOnlyObjectPermissionSerializerMixin,
                      serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()

@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from rdmo.core.serializers import (ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
-                                   ReadOnlyObjectPermissionsSerializerMixin,
+                                   ReadOnlyObjectPermissionSerializerMixin,
                                    ThroughModelSerializerMixin,
                                    TranslationSerializerMixin)
 
@@ -12,7 +12,7 @@ from ...validators import QuestionLockedValidator, QuestionUniqueURIValidator
 
 class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
                          ElementModelSerializerMixin, ElementWarningSerializerMixin,
-                         ReadOnlyObjectPermissionsSerializerMixin, serializers.ModelSerializer):
+                         ReadOnlyObjectPermissionSerializerMixin, serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
     uri_path = serializers.CharField(required=True)
