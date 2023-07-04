@@ -307,6 +307,8 @@ QUESTIONS_WIDGETS = [
 
 DEFAULT_URI_PREFIX = 'http://example.com/terms'
 
+REPLACE_MISSING_TRANSLATION = False
+
 VENDOR_CDN = True
 
 VENDOR = {
