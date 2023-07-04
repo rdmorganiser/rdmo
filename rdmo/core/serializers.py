@@ -50,17 +50,19 @@ class TranslationSerializerMixin(object):
         super(TranslationSerializerMixin, self).__init__(*args, **kwargs)
 
         meta = getattr(self, 'Meta', None)
-        if meta:
-            for lang_code, lang_string, lang_field in get_languages():
-                for field in meta.trans_fields:
-                    field_name = '%s_%s' % (field, lang_field)
-                    model_field = meta.model._meta.get_field(field_name)
+        if meta is None:
+            return
 
-                    self.fields['%s_%s' % (field, lang_code)] = serializers.CharField(
-                        source=field_name,
-                        required=not model_field.blank,
-                        allow_null=model_field.null,
-                        allow_blank=model_field.blank)
+        for lang_code, lang_string, lang_field in get_languages():
+            for field in meta.trans_fields:
+                field_name = '%s_%s' % (field, lang_field)
+                model_field = meta.model._meta.get_field(field_name)
+
+                self.fields['%s_%s' % (field, lang_code)] = serializers.CharField(
+                    source=field_name,
+                    required=not model_field.blank,
+                    allow_null=model_field.null,
+                    allow_blank=model_field.blank)
 
 
 class ThroughModelSerializerMixin(object):
@@ -103,32 +105,33 @@ class ThroughModelSerializerMixin(object):
 
         for field_name, source_name, target_name, through_name in self.Meta.through_fields:
             through_model, validated_data = through_fields[field_name]
-            if validated_data is not None:
-                items = list(getattr(instance, through_name).all())
+            if validated_data is None:
+                continue
+            items = list(getattr(instance, through_name).all())
 
-                for data in validated_data:
-                    try:
-                        # look for the item in items
-                        item = next(filter(lambda item: getattr(item, target_name) ==
-                                           data.get(target_name), items))
-                        # update order if the item if it changed
-                        if item.order != data.get('order'):
-                            item.order = data.get('order')
-                            item.save()
+            for data in validated_data:
+                try:
+                    # look for the item in items
+                    item = next(filter(lambda item: getattr(item, target_name) ==
+                                        data.get(target_name), items))
+                    # update order if the item if it changed
+                    if item.order != data.get('order'):
+                        item.order = data.get('order')
+                        item.save()
 
-                        # remove the item from the items list so that it won't get removed
-                        items.remove(item)
-                    except StopIteration:
-                        # create a new item
-                        new_data = dict({
-                            source_name: instance
-                        }, **data)
-                        new_item = through_model(**new_data)
-                        new_item.save()
+                    # remove the item from the items list so that it won't get removed
+                    items.remove(item)
+                except StopIteration:
+                    # create a new item
+                    new_data = dict({
+                        source_name: instance
+                    }, **data)
+                    new_item = through_model(**new_data)
+                    new_item.save()
 
-                # remove the remainders of the items list
-                for item in items:
-                    item.delete()
+            # remove the remainders of the items list
+            for item in items:
+                item.delete()
 
         return instance
 
@@ -160,14 +163,15 @@ class ThroughModelSerializerMixin(object):
         for field_name, source_name, target_name, through_name in self.Meta.parent_fields:
             through_model, validated_data = parent_fields[field_name]
 
-            if validated_data is not None:
-                for parent in validated_data:
-                    order = (getattr(parent, through_name).aggregate(order=Max('order')).get('order') or 0) + 1
-                    through_model(**{
-                        source_name: parent,
-                        target_name: instance,
-                        'order': order
-                    }).save()
+            if validated_data is None:
+                continue
+            for parent in validated_data:
+                order = (getattr(parent, through_name).aggregate(order=Max('order')).get('order') or 0) + 1
+                through_model(**{
+                    source_name: parent,
+                    target_name: instance,
+                    'order': order
+                }).save()
 
         return instance
 
@@ -189,7 +193,7 @@ class ReadOnlyObjectPermissionSerializerMixin:
     '''
     A mixin class for Serializers that adds a boolean field with the name read_only.
     It checks the object permissions based on the model of the serializer.
-    
+
     Requires:
         - the request object in the context kwargs of the Serializer call:
             ..., context={'request': request}
@@ -200,9 +204,9 @@ class ReadOnlyObjectPermissionSerializerMixin:
     and the field to fields:
         read_only
     '''
-    
+
     OBJECT_PERMISSION_ACTION_NAMES = ('change', 'delete')
-    
+
     @staticmethod
     def construct_object_permission(model, action_name: str) -> str:
         model_app_label = model._meta.app_label
