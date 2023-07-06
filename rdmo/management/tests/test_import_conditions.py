@@ -20,6 +20,8 @@ def test_create_conditions(db, settings):
     import_elements(elements)
 
     assert len(root) == len(elements) == Condition.objects.count() == 15
+    assert all([element['created'] is True for element in elements])
+    assert all([element['updated'] is False for element in elements])
 
 
 def test_update_conditions(db, settings):
@@ -33,7 +35,9 @@ def test_update_conditions(db, settings):
     elements = elements.values()
     import_elements(elements)
 
-    assert len(root) == len(elements) == Condition.objects.count() == 15
+    assert len(root) == len(elements)
+    assert all([element['created'] is False for element in elements])
+    assert all([element['updated'] is True for element in elements])
 
 
 def test_create_legacy_conditions(db, settings):
@@ -50,6 +54,8 @@ def test_create_legacy_conditions(db, settings):
     import_elements(elements)
 
     assert len(root) == len(elements) == Condition.objects.count() == 15
+    assert all([element['created'] is True for element in elements])
+    assert all([element['updated'] is False for element in elements])
 
 
 def test_update_legacy_conditions(db, settings):
@@ -63,4 +69,6 @@ def test_update_legacy_conditions(db, settings):
     elements = elements.values()
     import_elements(elements)
 
-    assert len(root) == len(elements) == Condition.objects.count() == 15
+    assert len(root) == len(elements) == 15
+    assert all([element['created'] is False for element in elements])
+    assert all([element['updated'] is True for element in elements])

@@ -138,7 +138,10 @@ def convert_legacy_elements(elements):
     # second pass: del key, set uri_path, add order to reverse m2m through models
     # and sort questions into pages or questionsets
     for uri, element in elements.items():
-        if element['model'] == 'questions.catalog':
+        if element['model'] == 'conditions.condition':
+            element['uri_path'] = element.pop('key')
+
+        elif element['model'] == 'questions.catalog':
             element['uri_path'] = element.pop('key')
 
         elif element['model'] == 'questions.section':
@@ -198,6 +201,12 @@ def convert_legacy_elements(elements):
 
             if element.get('optionset') is not None:
                 element['optionset']['order'] = element.pop('order')
+
+        if element['model'] == 'tasks.task':
+            element['uri_path'] = element.pop('key')
+
+        if element['model'] == 'views.view':
+            element['uri_path'] = element.pop('key')
 
     return elements
 
