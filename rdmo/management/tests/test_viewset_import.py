@@ -18,13 +18,13 @@ users = (
 
 status_map = {
     'list': {
-        'editor': 405, 'reviewer': 403, 'api': 405, 'user': 403, 'anonymous': 401
+        'editor': 405, 'reviewer': 405, 'api': 405, 'user': 405, 'anonymous': 401
     },
     'create': {
-        'editor': 200, 'reviewer': 403, 'api': 200, 'user': 403, 'anonymous': 401
+        'editor': 200, 'reviewer': 200, 'api': 200, 'user': 200, 'anonymous': 401
     },
     'create_error': {
-        'editor': 400, 'reviewer': 403, 'api': 400, 'user': 403, 'anonymous': 401
+        'editor': 400, 'reviewer': 400, 'api': 400, 'user': 400, 'anonymous': 401
     }
 }
 
@@ -63,7 +63,7 @@ def test_create_create(db, client, username, password):
     assert response.status_code == status_map['create'][username], response.json()
     if response.status_code == 200:
         for element in response.json():
-            assert element.get('created') is True
+            assert element.get('created') is False if username in ['reviewer', 'user'] else True
             assert element.get('updated') is False
 
 
@@ -83,7 +83,7 @@ def test_create_update(db, client, username, password):
     if response.status_code == 200:
         for element in response.json():
             assert element.get('created') is False
-            assert element.get('updated') is True
+            assert element.get('updated') is False if username in ['reviewer', 'user'] else True
 
 
 @pytest.mark.parametrize('username,password', users)

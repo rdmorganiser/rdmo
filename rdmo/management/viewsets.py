@@ -18,7 +18,6 @@ from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
 from .imports import import_elements
-from .permissions import IsEditor
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +44,7 @@ class MetaViewSet(viewsets.ViewSet):
 
 class UploadViewSet(viewsets.ViewSet):
 
-    permission_classes = (IsEditor, )
+    permission_classes = (IsAuthenticated, )
 
     def create(self, request, *args, **kwargs):
         # step 1: store xml file as tmp file
@@ -93,7 +92,7 @@ class UploadViewSet(viewsets.ViewSet):
 
 class ImportViewSet(viewsets.ViewSet):
 
-    permission_classes = (IsEditor, )
+    permission_classes = (IsAuthenticated, )
 
     def create(self, request, *args, **kwargs):
         # step 1: store xml file as tmp file

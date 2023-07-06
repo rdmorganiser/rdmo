@@ -14,7 +14,14 @@ class AttributeUniqueURIValidator(UniqueURIValidator):
         if not data.get('key'):
             self.raise_validation_error({'key': _('This field is required.')})
         else:
-            path = self.model.build_path(data.get('key'), data.get('parent'))
+            parent = data.get('parent')
+            if parent is None:
+                # workaround for import
+                parent_id = data.get('parent_id')
+                if parent_id:
+                    parent = Attribute.objects.get(id=data.get('parent_id'))
+
+            path = self.model.build_path(data.get('key'), parent)
             uri = self.model.build_uri(data.get('uri_prefix'), path)
             return uri
 
@@ -23,6 +30,12 @@ class AttributeParentValidator(InstanceValidator):
 
     def __call__(self, data):
         parent = data.get('parent')
+        if parent is None:
+            # workaround for import
+            parent_id = data.get('parent_id')
+            if parent_id:
+                parent = Attribute.objects.get(id=data.get('parent_id'))
+
         if parent:
             if self.serializer:
                 # check copied attributes

@@ -54,7 +54,7 @@ def test_create_legacy_domain(db, settings):
     import_elements(elements)
 
     assert len(root) == len(elements) == 86
-    assert Attribute.objects.count() == 81
+    assert Attribute.objects.count() == 86
     assert all([element['created'] is True for element in elements])
     assert all([element['updated'] is False for element in elements])
 
