@@ -18,13 +18,13 @@ users = (
 
 status_map = {
     'list': {
-        'editor': 405, 'reviewer': 405, 'api': 405, 'user': 405, 'anonymous': 401
+        'editor': 405, 'reviewer': 403, 'api': 405, 'user': 403, 'anonymous': 401
     },
     'create': {
         'editor': 200, 'reviewer': 403, 'api': 200, 'user': 403, 'anonymous': 401
     },
     'create_error': {
-        'editor': 400, 'reviewer': 400, 'api': 400, 'user': 400, 'anonymous': 401
+        'editor': 400, 'reviewer': 403, 'api': 400, 'user': 403, 'anonymous': 401
     }
 }
 

@@ -2,9 +2,9 @@ import logging
 
 from django.contrib.sites.models import Site
 
-from rdmo.core.imports import (set_common_fields, set_foreign_field,
-                               set_lang_field, set_m2m_instances,
-                               validate_instance)
+from rdmo.core.imports import (check_permissions, set_common_fields,
+                               set_foreign_field, set_lang_field,
+                               set_m2m_instances, validate_instance)
 
 from .models import Task
 from .validators import TaskLockedValidator, TaskUniqueURIValidator
@@ -12,7 +12,7 @@ from .validators import TaskLockedValidator, TaskUniqueURIValidator
 logger = logging.getLogger(__name__)
 
 
-def import_task(element, save=False):
+def import_task(element, save=False, user=None):
     try:
         task = Task.objects.get(uri=element.get('uri'))
     except Task.DoesNotExist:
@@ -32,6 +32,8 @@ def import_task(element, save=False):
     task.available = element.get('available', True)
 
     validate_instance(task, element, TaskUniqueURIValidator, TaskLockedValidator)
+
+    check_permissions(task, element, user)
 
     if save and not element.get('errors'):
         if task.id:

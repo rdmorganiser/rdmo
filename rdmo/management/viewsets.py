@@ -2,14 +2,13 @@ import logging
 
 from django.utils.translation import gettext_lazy as _
 from rest_framework import viewsets
-from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 
 from rdmo.conditions.models import Condition
 from rdmo.core.imports import handle_uploaded_file
-from rdmo.core.utils import get_model_field_meta
+from rdmo.core.utils import get_model_field_meta, is_truthy
 from rdmo.core.xml import (convert_elements, flat_xml_to_elements,
                            order_elements, read_xml_file)
 from rdmo.domain.models import Attribute
@@ -18,7 +17,8 @@ from rdmo.questions.models import Catalog, Page, Question, QuestionSet, Section
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
-from .imports import check_permissions, import_elements
+from .imports import import_elements
+from .permissions import IsEditor
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +45,7 @@ class MetaViewSet(viewsets.ViewSet):
 
 class UploadViewSet(viewsets.ViewSet):
 
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsEditor, )
 
     def create(self, request, *args, **kwargs):
         # step 1: store xml file as tmp file
@@ -84,12 +84,8 @@ class UploadViewSet(viewsets.ViewSet):
         # step 6: convert elements to a list
         elements = elements.values()
 
-        # step 7: check if the user has access to those models
-        if not check_permissions(elements, request.user):
-            raise PermissionDenied()
-
         # step 8: import the elements if save=True is set
-        import_elements(elements, save=request.POST.get('import', '').lower() in ['true', 't', '1'])
+        import_elements(elements, save=is_truthy(request.POST.get('import')), user=request.user)
 
         # step 9: return the list of elements
         return Response(elements)
@@ -97,7 +93,7 @@ class UploadViewSet(viewsets.ViewSet):
 
 class ImportViewSet(viewsets.ViewSet):
 
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsEditor, )
 
     def create(self, request, *args, **kwargs):
         # step 1: store xml file as tmp file
@@ -108,12 +104,8 @@ class ImportViewSet(viewsets.ViewSet):
         except TypeError:
             raise ValidationError({'elements': [_('This is not a valid RDMO import JSON.')]})
 
-        # step 2: check if the user has access to those models
-        if not check_permissions(elements, request.user):
-            raise PermissionDenied()
-
         # step 3: import the elements
-        import_elements(elements)
+        import_elements(elements, user=request.user)
 
         # step 4: return the list of elements
         return Response(elements)

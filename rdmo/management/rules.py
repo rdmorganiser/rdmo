@@ -1,8 +1,7 @@
 import logging
 
-from django.contrib.sites.models import Site
-
 import rules
+from django.contrib.sites.models import Site
 from rules.predicates import is_authenticated
 
 logger = logging.getLogger(__name__)
@@ -27,6 +26,10 @@ def is_multisite_editor(user) -> bool:
 def is_element_editor(user, obj) -> bool:
     ''' Checks if the user is an editor for the sites to which this element is editable '''
     if obj is None:
+        return is_editor(user)
+
+    if obj.id is None:
+        # if the element does not exist yet, it can be created by all users with an editor role
         return is_editor(user)
 
     if not obj.editors.exists():

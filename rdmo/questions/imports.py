@@ -2,9 +2,9 @@ import logging
 
 from django.contrib.sites.models import Site
 
-from rdmo.core.imports import (set_common_fields, set_foreign_field,
-                               set_lang_field, set_m2m_instances,
-                               set_m2m_through_instances,
+from rdmo.core.imports import (check_permissions, set_common_fields,
+                               set_foreign_field, set_lang_field,
+                               set_m2m_instances, set_m2m_through_instances,
                                set_reverse_m2m_through_instance,
                                validate_instance)
 
@@ -20,7 +20,7 @@ from .validators import (CatalogLockedValidator, CatalogUniqueURIValidator,
 logger = logging.getLogger(__name__)
 
 
-def import_catalog(element, save=False):
+def import_catalog(element, save=False, user=None):
     try:
         catalog = Catalog.objects.get(uri=element.get('uri'))
     except Catalog.DoesNotExist:
@@ -36,6 +36,8 @@ def import_catalog(element, save=False):
     catalog.available = element.get('available', True)
 
     validate_instance(catalog, element, CatalogLockedValidator, CatalogUniqueURIValidator)
+
+    check_permissions(catalog, element, user)
 
     if save and not element.get('errors'):
         if catalog.id:
@@ -53,7 +55,7 @@ def import_catalog(element, save=False):
     return catalog
 
 
-def import_section(element, save=False):
+def import_section(element, save=False, user=None):
     try:
         section = Section.objects.get(uri=element.get('uri'))
     except Section.DoesNotExist:
@@ -64,6 +66,8 @@ def import_section(element, save=False):
     set_lang_field(section, 'title', element)
 
     validate_instance(section, element, SectionLockedValidator, SectionUniqueURIValidator)
+
+    check_permissions(section, element, user)
 
     if save and not element.get('errors'):
         if section.id:
@@ -81,7 +85,7 @@ def import_section(element, save=False):
     return section
 
 
-def import_page(element, save=False):
+def import_page(element, save=False, user=None):
     try:
         page = Page.objects.get(uri=element.get('uri'))
     except Page.DoesNotExist:
@@ -98,6 +102,8 @@ def import_page(element, save=False):
     set_lang_field(page, 'verbose_name_plural', element)
 
     validate_instance(page, element, PageLockedValidator, PageUniqueURIValidator)
+
+    check_permissions(page, element, user)
 
     if save and not element.get('errors'):
         if page.id:
@@ -117,7 +123,7 @@ def import_page(element, save=False):
     return page
 
 
-def import_questionset(element, save=False):
+def import_questionset(element, save=False, user=None):
     try:
         questionset = QuestionSet.objects.get(uri=element.get('uri'))
     except QuestionSet.DoesNotExist:
@@ -134,6 +140,8 @@ def import_questionset(element, save=False):
     set_lang_field(questionset, 'verbose_name_plural', element)
 
     validate_instance(questionset, element, QuestionSetLockedValidator, QuestionSetUniqueURIValidator)
+
+    check_permissions(questionset, element, user)
 
     if save and not element.get('errors'):
         if questionset.id:
@@ -154,7 +162,7 @@ def import_questionset(element, save=False):
     return questionset
 
 
-def import_question(element, save=False):
+def import_question(element, save=False, user=None):
     try:
         question = Question.objects.get(uri=element.get('uri'))
     except Question.DoesNotExist:
@@ -189,6 +197,8 @@ def import_question(element, save=False):
     question.width = element.get('width')
 
     validate_instance(question, element, QuestionLockedValidator, QuestionUniqueURIValidator)
+
+    check_permissions(question, element, user)
 
     if save and not element.get('errors'):
         if question.id:
