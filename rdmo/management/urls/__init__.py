@@ -1,7 +1,7 @@
-from django.urls import path
+from django.urls import re_path
 
 from ..views import ManagementView
 
 urlpatterns = [
-    path('', ManagementView.as_view(), name='management')
+    re_path('', ManagementView.as_view(), name='management')
 ]
