@@ -1,21 +1,19 @@
 import logging
 
-from django.contrib.sites.models import Site
+from django.conf import settings
 from django.http import (HttpResponseBadRequest, HttpResponseForbidden,
                          HttpResponseRedirect)
 from django.shortcuts import get_object_or_404
-from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.generic import DeleteView, UpdateView
 from django.views.generic.edit import FormView
 
 from rdmo.accounts.utils import is_site_manager
-from rdmo.core.mail import send_mail
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 
 from ..forms import MembershipCreateForm
 from ..models import Membership, Project
-from ..utils import is_last_owner, get_invite_email_project_path
+from ..utils import is_last_owner, send_invite_email
 
 logger = logging.getLogger(__name__)
 
@@ -47,23 +45,8 @@ class MembershipCreateView(ObjectPermissionMixin, RedirectViewMixin, FormView):
 
     def form_valid(self, form):
         invite = form.save()
-        if invite is not None:
-            
-            project_invite_path = get_invite_email_project_path(invite)
-            context = {
-                'invite_url': self.request.build_absolute_uri(project_invite_path),
-                'invite_user': invite.user,
-                'project': invite.project,
-                'user': self.request.user,
-                'site': Site.objects.get_current()
-            }
-
-            subject = render_to_string('projects/email/project_invite_subject.txt', context)
-            message = render_to_string('projects/email/project_invite_message.txt', context)
-
-            # send the email
-            send_mail(subject, message, to=[invite.email])
-
+        if invite is not None and settings.PROJECT_SEND_INVITE:
+            send_invite_email(self.request, invite)
         return super().form_valid(form)
 
 

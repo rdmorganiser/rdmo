@@ -6,11 +6,14 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
 from ..constants import ROLE_CHOICES
+from ..managers import InviteManager
 
 
 class Invite(models.Model):
 
     key_salt = 'rdmo.projects.models.invite.Invite'
+
+    objects = InviteManager()
 
     project = models.ForeignKey(
         'Project', on_delete=models.CASCADE, related_name='invites',

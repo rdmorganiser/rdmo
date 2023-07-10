@@ -133,5 +133,9 @@ GROUPS = (
       ('projects', 'integration', 'change_integration'),
       ('projects', 'integration', 'delete_integration'),
       ('projects', 'integration', 'view_integration'),
+      ('projects', 'invite', 'add_invite'),
+      ('projects', 'invite', 'change_invite'),
+      ('projects', 'invite', 'delete_invite'),
+      ('projects', 'invite', 'view_invite'),
   ))
 )
