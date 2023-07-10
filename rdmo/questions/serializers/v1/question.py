@@ -1,5 +1,8 @@
 from rest_framework import serializers
 
+from django.utils.translation import gettext_lazy as _
+
+from rdmo.core.constants import VALUE_TYPE_DATETIME, VALUE_TYPE_BOOLEAN
 from rdmo.core.serializers import (ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
                                    ReadOnlyObjectPermissionSerializerMixin,
@@ -97,6 +100,32 @@ class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin
 
     def get_optionset_uris(self, obj):
         return [optionset.uri for optionset in obj.optionsets.all()]
+
+    def validate(self, data):
+        is_collection = data.get('is_collection')
+        widget_type = data.get('widget_type')
+        value_type = data.get('value_type')
+
+        if widget_type == 'checkbox' and not is_collection:
+            message = _('If the "Checkboxes" widget is used, "is_collection" must be checked.')
+            raise serializers.ValidationError({
+                'widget_type': message,
+                'is_collection': message,
+            })
+        elif widget_type == 'date' and not value_type == VALUE_TYPE_DATETIME:
+            message = _('If the "Date picker" widget is used, the value type must be "Datetime".')
+            raise serializers.ValidationError({
+                'widget_type': message,
+                'value_type': message,
+            })
+        elif widget_type == 'yesno' and not value_type == VALUE_TYPE_BOOLEAN:
+            message = _('If the "Yes/No" widget is used, the value type must be "Boolean".')
+            raise serializers.ValidationError({
+                'widget_type': message,
+                'value_type': message,
+            })
+
+        return data
 
 
 class QuestionIndexSerializer(serializers.ModelSerializer):
