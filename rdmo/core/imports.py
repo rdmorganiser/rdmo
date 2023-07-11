@@ -122,7 +122,7 @@ def set_m2m_through_instances(instance, field_name, element, source_name, target
     if field_name not in element:
         return
 
-    target_elements = element.get(field_name, [])
+    target_elements = element.get(field_name) or []
 
     model_info = model_meta.get_field_info(instance)
     through_model = model_info.reverse_relations[through_name].related_model
@@ -172,7 +172,7 @@ def set_m2m_through_instances(instance, field_name, element, source_name, target
             through_instance.delete()
 
 
-def set_reverse_m2m_through_instance(instance, field_name, element, source_name, target_name, through_name):
+def set_reverse_m2m_through_instance(instance, field_name, element, source_name, target_name, through_name) -> None:
     if field_name not in element:
         return
 
