@@ -1,6 +1,16 @@
 name: pytest
 
-on: [push, pull_request]
+on: 
+  push:
+    branches: 
+      - master
+      - 'releases/**'
+    tags:
+      - '*.*.*'
+  pull_request:
+    branches: 
+      - master
+      - 'dev-*.*.*'
 
 jobs:
   build:
