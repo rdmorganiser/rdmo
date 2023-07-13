@@ -253,7 +253,7 @@ def check_permissions(instance, element, user):
     else:
         perms = [f'{app_label}.add_{model_name}_object']
 
-    if not user.has_perms(perms):
+    if not user.has_perms(perms, instance):
         message = 'You have no permissions to import {instance_model} {instance_uri}.'.format(
             instance_model=instance._meta.object_name,
             instance_uri=element.get('uri')
