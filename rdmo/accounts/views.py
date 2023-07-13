@@ -5,6 +5,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 from rest_framework.authtoken.models import Token
 
 from rdmo.core.utils import get_next, get_referer_path_info
@@ -46,7 +47,7 @@ def remove_user(request):
         return render(request, 'profile/profile_remove_closed.html')
     form = RemoveForm(request.POST or None, request=request)
     log.debug('Remove user form initialized for "%s"' % request.user.username)
-    
+
     if request.method == 'POST':
         if 'cancel' in request.POST:
             log.info('User %s removal cancelled', str(request.user))
@@ -58,8 +59,8 @@ def remove_user(request):
 
         if form.is_valid():
             user_is_deleted = delete_user(user=request.user,
-                                       email=request.POST['email'],
-                                       password=request.POST.get('password', None))
+                                          email=request.POST['email'],
+                                          password=request.POST.get('password', None))
 
             if user_is_deleted:
                 logout(request)
@@ -77,6 +78,7 @@ def remove_user(request):
 def terms_of_use(request):
     return render(request, 'account/terms_of_use.html')
 
+
 @login_required()
 def token(request):
     if request.method == 'POST':
@@ -89,3 +91,18 @@ def token(request):
     return render(request, 'account/account_token.html', {
         'token': token
     })
+
+
+def shibboleth_login(request):
+    if request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('projects'))
+    else:
+        login_url = settings.SHIBBOLETH_LOGIN_URL + f'?target={request.path}'
+        return HttpResponseRedirect(login_url)
+
+
+def shibboleth_logout(request):
+    logout_url = reverse('account_logout')
+    if request.user.username.endswith('@hu-berlin.de'):
+        logout_url += f'?next={settings.SHIBBOLETH_LOGOUT_URL}'
+    return HttpResponseRedirect(logout_url)
