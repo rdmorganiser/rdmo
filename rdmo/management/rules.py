@@ -24,6 +24,10 @@ def is_editor_for_current_site(user, site) -> bool:
 def is_element_editor(user, obj) -> bool:
     ''' Checks if the user is an editor for the sites to which this element is editable '''
 
+    if obj.id is None: # for _add_object permissions
+        # if the element does not exist yet, it can be created by all users with an editor role
+        return is_editor(user)
+
     if not obj.editors.exists():
         # if the element has no editors, it is editable by all users with an editor role
         return is_editor(user)
