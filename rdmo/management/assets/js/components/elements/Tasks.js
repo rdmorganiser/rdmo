@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterString, FilterUriPrefix, FilterSite } from '../common/Filter'
+import { FilterString, FilterUriPrefix, FilterSite, FilterEditor } from '../common/Filter'
 import { BackButton, NewButton } from '../common/Buttons'
 
 import Task from '../element/Task'
@@ -13,6 +13,7 @@ const Tasks = ({ config, tasks, configActions, elementActions }) => {
   const updateFilterString = (value) => configActions.updateConfig('filter.tasks.search', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.tasks.uri_prefix', value)
   const updateFilterSite = (value) => configActions.updateConfig('filter.tasks.sites', value)
+  const updateFilterEditor = (value) => configActions.updateConfig('filter.tasks.editors', value)
 
   const createTask = () => elementActions.createElement('tasks')
 
@@ -37,8 +38,14 @@ const Tasks = ({ config, tasks, configActions, elementActions }) => {
                              options={getUriPrefixes(tasks)} />
           </div>
           {
-            config.settings.multisite && <div className="col-sm-4">
+            config.settings.multisite && <div className="col-sm-2">
               <FilterSite value={config.filter.tasks.sites} onChange={updateFilterSite}
+                          options={config.sites} />
+            </div>
+          }
+          {
+            config.settings.multisite && <div className="col-sm-2">
+              <FilterEditor value={config.filter.tasks.editors} onChange={updateFilterEditor}
                           options={config.sites} />
             </div>
           }

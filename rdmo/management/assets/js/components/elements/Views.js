@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterString, FilterUriPrefix, FilterSite } from '../common/Filter'
+import { FilterString, FilterUriPrefix, FilterSite, FilterEditor } from '../common/Filter'
 import { BackButton, NewButton } from '../common/Buttons'
 
 import View from '../element/View'
@@ -13,6 +13,7 @@ const Views = ({ config, views, configActions, elementActions }) => {
   const updateFilterString = (value) => configActions.updateConfig('filter.views.search', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.views.uri_prefix', value)
   const updateFilterSite = (value) => configActions.updateConfig('filter.views.sites', value)
+  const updateFilterEditor = (value) => configActions.updateConfig('filter.views.editors', value)
 
   const createView = () => elementActions.createElement('views')
 
@@ -37,8 +38,14 @@ const Views = ({ config, views, configActions, elementActions }) => {
                              options={getUriPrefixes(views)} />
           </div>
           {
-            config.settings.multisite && <div className="col-sm-4">
+            config.settings.multisite && <div className="col-sm-2">
               <FilterSite value={config.filter.views.sites} onChange={updateFilterSite}
+                          options={config.sites} />
+            </div>
+          }
+          {
+            config.settings.multisite && <div className="col-sm-2">
+              <FilterEditor value={config.filter.views.editors} onChange={updateFilterEditor}
                           options={config.sites} />
             </div>
           }

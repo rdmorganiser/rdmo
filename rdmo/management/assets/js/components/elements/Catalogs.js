@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterString, FilterUriPrefix, FilterSite } from '../common/Filter'
+import { FilterString, FilterUriPrefix, FilterSite, FilterEditor} from '../common/Filter'
 import { Checkbox } from '../common/Checkboxes'
 import { BackButton, NewButton } from '../common/Buttons'
 
@@ -14,6 +14,7 @@ const Catalogs = ({ config, catalogs, configActions, elementActions }) => {
   const updateFilterString = (value) => configActions.updateConfig('filter.catalogs.search', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.catalogs.uri_prefix', value)
   const updateFilterSite = (value) => configActions.updateConfig('filter.catalogs.sites', value)
+  const updateFilterEditor = (value) => configActions.updateConfig('filter.catalogs.editors', value)
   const updateDisplayCatalogURI = (value) => configActions.updateConfig('display.uri.catalogs', value)
 
   const createCatalog = () => elementActions.createElement('catalogs')
@@ -39,8 +40,14 @@ const Catalogs = ({ config, catalogs, configActions, elementActions }) => {
                              options={getUriPrefixes(catalogs)} />
           </div>
           {
-            config.settings.multisite && <div className="col-sm-4">
+            config.settings.multisite && <div className="col-sm-2">
               <FilterSite value={config.filter.catalogs.sites} onChange={updateFilterSite}
+                          options={config.sites} />
+            </div>
+          }
+          {
+            config.settings.multisite && <div className="col-sm-2">
+              <FilterEditor value={config.filter.catalogs.editors} onChange={updateFilterEditor}
                           options={config.sites} />
             </div>
           }

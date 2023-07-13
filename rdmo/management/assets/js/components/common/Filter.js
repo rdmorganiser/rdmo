@@ -61,4 +61,23 @@ FilterSite.propTypes = {
   onChange: PropTypes.func
 }
 
-export { FilterString, FilterUriPrefix, FilterSite }
+const FilterEditor = ({ value, options, onChange }) => {
+  return (
+    <div className="form-group mb-0">
+      <select className="form-control" value={value} onChange={event => onChange(event.target.value)}>
+        <option value="">{gettext('All editors')}</option>
+        {
+          options.map((option, index) => <option value={option.id} key={index}>{option.name}</option>)
+        }
+      </select>
+    </div>
+  )
+}
+
+FilterEditor.propTypes = {
+  value: PropTypes.string,
+  options: PropTypes.array,
+  onChange: PropTypes.func
+}
+
+export { FilterString, FilterUriPrefix, FilterSite, FilterEditor }

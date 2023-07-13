@@ -21,17 +21,23 @@ const filterSite = (site, element) => {
   return isEmpty(site) || element.sites.includes(toNumber(site))
 }
 
+const filterEditor = (editor, element) => {
+  return isEmpty(editor) || element.editors.includes(toNumber(editor))
+}
+
 const filterElement = (filter, element) => {
   if (isNil(filter)) {
     return true
   } else {
     const strings = get(filter, 'search', '').trim().split(' '),
           uriPrefix = get(filter, 'uri_prefix', ''),
-          site = get(filter, 'sites', '')
+          site = get(filter, 'sites', ''),
+          editor = get(filter, 'editor', '')
     return (
       strings.some(search => filterSearch(search, element)) &&
       filterUriPrefix(uriPrefix, element) &&
-      filterSite(site, element)
+      filterSite(site, element) &&
+      filterEditor(editor, element)
     )
   }
 }
