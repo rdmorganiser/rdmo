@@ -5364,5 +5364,33 @@
     "title_de": "Katalog2",
     "help_de": null,
     "sections": null
+  },
+  {
+    "uri": "https://foo.com/terms/questions/foo-catalog",
+    "type": "catalogs",
+    "model": "questions.catalog",
+    "uri_prefix": "https://foo.com/terms",
+    "uri_path": "foo-catalog",
+    "comment": null,
+    "order": "1",
+    "title_en": "foo-catalog",
+    "help_en": null,
+    "title_de": "foo-catalog",
+    "help_de": null,
+    "sections": null
+  },
+  {
+    "uri": "https://bar.com/terms/questions/bar-catalog",
+    "type": "catalogs",
+    "model": "questions.catalog",
+    "uri_prefix": "https://bar.com/terms",
+    "uri_path": "bar-catalog",
+    "comment": null,
+    "order": "1",
+    "title_en": "bar-catalog",
+    "help_en": null,
+    "title_de": "bar-catalog",
+    "help_de": null,
+    "sections": null
   }
 ]
