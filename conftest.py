@@ -1,3 +1,4 @@
+import json
 import subprocess
 from pathlib import Path
 
@@ -42,3 +43,12 @@ def files():
 
     setup()
     return setup
+
+
+@pytest.fixture
+def json_data():
+    json_file = Path(settings.BASE_DIR) / 'import' / 'catalogs.json'
+    json_data = {
+        'elements': json.loads(json_file.read_text())
+    }
+    return json_data

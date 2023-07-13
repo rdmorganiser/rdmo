@@ -1,9 +1,5 @@
-import json
-
-from pathlib import Path
-
 import pytest
-from django.conf import settings
+
 from django.urls import reverse
 
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet, Section
@@ -43,7 +39,7 @@ def test_list(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_create_create(db, client, username, password):
+def test_create_create(db, client, username, password, json_data):
     Catalog.objects.all().delete()
     Section.objects.all().delete()
     Page.objects.all().delete()
@@ -52,29 +48,22 @@ def test_create_create(db, client, username, password):
 
     client.login(username=username, password=password)
 
-    json_file = Path(settings.BASE_DIR) / 'import' / 'catalogs.json'
-    json_data = {
-        'elements': json.loads(json_file.read_text())
-    }
-
     url = reverse(urlnames['list'])
     response = client.post(url, json_data, content_type='application/json')
 
     assert response.status_code == status_map['create'][username], response.json()
     if response.status_code == 200:
         for element in response.json():
-            assert element.get('created') is False if username in ['reviewer', 'user'] else True
+            if username in ['reviewer', 'user']:
+                assert element.get('created') is False
+            else:
+                assert element.get('created') is True
             assert element.get('updated') is False
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_create_update(db, client, username, password):
+def test_create_update(db, client, username, password, json_data):
     client.login(username=username, password=password)
-
-    json_file = Path(settings.BASE_DIR) / 'import' / 'catalogs.json'
-    json_data = {
-        'elements': json.loads(json_file.read_text())
-    }
 
     url = reverse(urlnames['list'])
     response = client.post(url, json_data, content_type='application/json')
