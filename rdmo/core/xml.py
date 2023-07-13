@@ -219,20 +219,22 @@ def order_elements(elements):
 
 
 def append_element(ordered_elements, unordered_elements, uri, element):
-    if element is not None:
-        for element_value in element.values():
-            if isinstance(element_value, dict):
-                sub_uri = element_value.get('uri')
+    if element is None:
+        return
+
+    for element_value in element.values():
+        if isinstance(element_value, dict):
+            sub_uri = element_value.get('uri')
+            sub_element = unordered_elements.get(sub_uri)
+            if sub_uri not in ordered_elements:
+                append_element(ordered_elements, unordered_elements, sub_uri, sub_element)
+
+        elif isinstance(element_value, list):
+            for value in element_value:
+                sub_uri = value.get('uri')
                 sub_element = unordered_elements.get(sub_uri)
                 if sub_uri not in ordered_elements:
                     append_element(ordered_elements, unordered_elements, sub_uri, sub_element)
 
-            elif isinstance(element_value, list):
-                for value in element_value:
-                    sub_uri = value.get('uri')
-                    sub_element = unordered_elements.get(sub_uri)
-                    if sub_uri not in ordered_elements:
-                        append_element(ordered_elements, unordered_elements, sub_uri, sub_element)
-
-        if uri not in ordered_elements:
-            ordered_elements[uri] = element
+    if uri not in ordered_elements:
+        ordered_elements[uri] = element
