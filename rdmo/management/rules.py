@@ -23,12 +23,6 @@ def is_editor_for_current_site(user, site) -> bool:
 @rules.predicate
 def is_element_editor(user, obj) -> bool:
     ''' Checks if the user is an editor for the sites to which this element is editable '''
-    if obj is None:
-        return is_editor(user)
-
-    if obj.id is None:
-        # if the element does not exist yet, it can be created by all users with an editor role
-        return is_editor(user)
 
     if not obj.editors.exists():
         # if the element has no editors, it is editable by all users with an editor role
@@ -55,8 +49,6 @@ def is_reviewer_for_current_site(user, site) -> bool:
 @rules.predicate
 def is_element_reviewer(user, obj) -> bool:
     ''' Checks if the user is an reviewer for the sites to which this element is editable '''
-    if obj is None:
-        return is_reviewer(user)
 
     # if the element has no editors, it is reviewable by all reviewers
     if not obj.editors.exists():
