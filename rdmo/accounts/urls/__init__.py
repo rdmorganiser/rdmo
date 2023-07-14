@@ -29,8 +29,10 @@ else:
 
 if settings.SHIBBOLETH:
     if settings.SHIBBOLETH_LOGIN_URL:
-        re_path('^shibboleth/login/', shibboleth_login, name='shibboleth_login'),
-        re_path('^shibboleth/logout/', shibboleth_logout, name='shibboleth_logout'),
+        urlpatterns += [
+            re_path('^shibboleth/login/', shibboleth_login, name='shibboleth_login'),
+            re_path('^shibboleth/logout/', shibboleth_logout, name='shibboleth_logout'),
+        ]
     else:
         urlpatterns += [
             re_path('^logout/', auth_views.LogoutView.as_view(next_page=settings.SHIBBOLETH_LOGOUT_URL), name='account_logout'),
