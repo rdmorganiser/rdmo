@@ -1,4 +1,5 @@
 import logging
+import re
 
 from django.conf import settings
 from django.contrib.auth import logout
@@ -103,6 +104,7 @@ def shibboleth_login(request):
 
 def shibboleth_logout(request):
     logout_url = reverse('account_logout')
-    if request.user.username.endswith('@hu-berlin.de'):
+    if settings.SHIBBOLETH_USERNAME_PATTERN is None \
+            or re.search(settings.SHIBBOLETH_USERNAME_PATTERN, request.user.username):
         logout_url += f'?next={settings.SHIBBOLETH_LOGOUT_URL}'
     return HttpResponseRedirect(logout_url)
