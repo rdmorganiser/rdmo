@@ -59,6 +59,21 @@
                 {% endblocktrans %}
             </small>
         </p>
+        {{ request.GET.catalog|floatformat }}<br>
+        {% for catalog in filter.filters.catalog.extra.queryset %}
+        {{ catalog.id }} {% if catalog == request.GET.catalog %}selected{% endif %}<br>
+        {% comment %} TODO fix, the select is not work properly atm {% endcomment %}
+        {% endfor %}
+        <label for="id_catalog"></label> 
+          <select name="catalog" id="id_catalog" class="form-control">
+            <option value="">{% trans 'Search project catalog' %}</option>
+            {% for catalog in filter.filters.catalog.extra.queryset %}
+              <option value="{{ catalog.id }}" {% if catalog.id|floatformat == request.GET.catalog|floatformat %}selected{% endif %}>
+                  {{ catalog.title }}
+              </option>
+            {% endfor %}
+          </select>
+        <button type="submit" class="btn btn-primary">search</button>
     </form>
 
     <h2>{% trans 'Import existing project' %}</h2>
@@ -122,7 +137,8 @@
     <table class="table projects-table" id="projects-table">
         <thead>
             <tr>
-                <th style="width: 60%;">{% trans 'Name' %}</th>
+                <th style="width: 50%;">{% trans 'Name' %}</th>
+                <th style="width: 10%;">{% trans 'Catalog' %}</th>
                 <th style="width: 10%;">{% trans 'Role' %}</th>
                 <th style="width: 23%;">{% trans 'Last changed' %}</th>
                 <th style="width: 7%;"></th>
@@ -136,6 +152,9 @@
                     {% for ancestor in project.get_ancestors %}{{ ancestor }} / {% endfor %}
                     <strong>{{ project.title }}</strong>
                     </a>
+                </td>
+                <td>
+                    {{ project.catalog.title }}
                 </td>
                 <td>
                     {{ project.role|projects_role }}

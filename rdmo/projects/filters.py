@@ -1,15 +1,29 @@
-from django_filters import CharFilter, FilterSet
+from django_filters import CharFilter, FilterSet, ModelChoiceFilter
 from rest_framework.filters import BaseFilterBackend
+
+from rdmo.questions.models import Catalog
 
 from .models import Project
 
 
+def catalogs_for_user(request):
+    if request is None:
+        return Catalog.objects.none()
+
+    catalogs = Catalog.objects.filter_current_site() \
+            .filter_group(request.user) \
+            .filter_availability(request.user)
+    return catalogs
+
+
 class ProjectFilter(FilterSet):
     title = CharFilter(field_name='title', lookup_expr='icontains')
-
+    catalog = ModelChoiceFilter(queryset=catalogs_for_user)
     class Meta:
         model = Project
-        fields = ('title', )
+        fields = ('title', 'catalog')
+
+
 
 
 class SnapshotFilterBackend(BaseFilterBackend):
