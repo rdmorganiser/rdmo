@@ -803,15 +803,28 @@ angular.module('project_questions')
     service.prev = function() {
         service.error = null; // reset error when moving to previous questionset
         if (service.questionset.prev !== null) {
-            back = true;
-            service.initView(service.questionset.prev);
+            if (service.settings.project_questions_autosave) {
+                service.save(false).then(function() {
+                    back = true;
+                    service.initView(service.questionset.prev);
+                })
+            } else {
+                back = true;
+                service.initView(service.questionset.prev);
+            }
         }
     };
 
     service.next = function() {
         service.error = null; // reset error when moving to next questionset
         if (service.questionset.id !== null) {
-            service.initView(service.questionset.next);
+            if (service.settings.project_questions_autosave) {
+                service.save(false).then(function() {
+                    service.initView(service.questionset.next);
+                })
+            } else {
+                service.initView(service.questionset.next);
+            }
         }
     };
 
