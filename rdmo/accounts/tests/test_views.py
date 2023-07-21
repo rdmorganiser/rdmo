@@ -8,7 +8,9 @@ from django.db.models import ObjectDoesNotExist
 from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
 
-from pytest_django.asserts import assertTemplateUsed
+from pytest_django.asserts import assertTemplateUsed, assertRedirects, \
+                                    assertInHTML, assertContains, \
+                                    assertNotContains, assertURLEqual
 
 from rdmo.accounts.tests.utils import reload_app_urlconf_in_testcase
 
@@ -595,3 +597,95 @@ def test_token_post_for_anonymous(db, client, settings, test_setting):
     else:
         with pytest.raises(NoReverseMatch):
             reverse('account_token')
+
+
+@pytest.mark.parametrize('LOGIN_FORM', boolean_toggle)
+@pytest.mark.parametrize('username,password', users)
+def test_home_login_form(db, client, settings, LOGIN_FORM, username, password):
+    settings.LOGIN_FORM = LOGIN_FORM
+    reload_app_urlconf_in_testcase('accounts')
+    # Anonymous user lands on home
+    client.login(username='anonymous', password=None)
+    url = reverse('home')
+    response = client.get(url)
+    response.status_code == 200
+    if LOGIN_FORM:
+        assertContains(response, f'<form method="post" action="{reverse("account_login")}"')
+    else:
+        assertNotContains(response, f'<form method="post" action="{reverse("account_login")}"')
+
+
+@pytest.mark.parametrize('SHIBBOLETH', boolean_toggle)
+@pytest.mark.parametrize('SHIBBOLETH_LOGIN_URL', (None, '/shibboleth/login'))
+@pytest.mark.parametrize('username,password', users)
+def test_shibboleth_for_home_url(db, client, settings, SHIBBOLETH, SHIBBOLETH_LOGIN_URL, username, password):
+    settings.SHIBBOLETH = SHIBBOLETH
+    settings.SHIBBOLETH_LOGIN_URL  = SHIBBOLETH_LOGIN_URL
+    settings.ACCOUNT = False
+    reload_app_urlconf_in_testcase('accounts')
+    # Anonymous user lands on home
+    client.login(username='anonymous', password=None)
+    url = reverse('home')
+    response = client.get(url)
+
+    if SHIBBOLETH:
+        # Anyonymous user is redirected to login
+        response.status_code == 200
+
+        if SHIBBOLETH_LOGIN_URL:
+            assertContains(response, 'href="' + reverse('shibboleth_login'))
+        else:
+            assertContains(response, 'href="' + reverse('account_login'))
+
+
+@pytest.mark.parametrize('SHIBBOLETH', boolean_toggle)
+@pytest.mark.parametrize('SHIBBOLETH_LOGIN_URL', (None, '/shibboleth/login'))
+@pytest.mark.parametrize('username,password', users)
+def test_shibboleth_for_projects_url(db, client, settings, SHIBBOLETH, SHIBBOLETH_LOGIN_URL, username, password):
+    settings.SHIBBOLETH = SHIBBOLETH
+    settings.SHIBBOLETH_LOGIN_URL  = SHIBBOLETH_LOGIN_URL
+    settings.ACCOUNT = False
+    reload_app_urlconf_in_testcase('accounts')
+    client.login(username='anonymous', password=None)
+    # Try to access projects
+    url = reverse('projects')
+    response = client.get(url)
+
+    if SHIBBOLETH and SHIBBOLETH_LOGIN_URL:
+        # Anyonymous user is redirected to login
+        response.status_code == 302
+
+        assertRedirects(response, reverse('account_login') + '?next=' + reverse('projects'))
+
+        response = client.get(response.url)
+        # Shibboleth login is shown
+        response.status_code == 200
+        assertContains(response, 'href="/account/shibboleth/login/">')
+
+        # Redirected user logges in 
+        client.login(username=username, password=password)
+        response = client.get(response)
+
+        if password:
+            # Logged in user lands on projects
+            response.status_code == 200
+        else:
+            # Anonymous user is redirected to shibboleth login
+            response.status_code == 404
+
+
+@pytest.mark.parametrize('SHIBBOLETH', boolean_toggle)
+@pytest.mark.parametrize('username,password', users)
+def test_shibboleth_logout_username_pattern(db, client, settings, SHIBBOLETH, username, password):
+    settings.SHIBBOLETH = SHIBBOLETH
+    settings.SHIBBOLETH_USERNAME_PATTERN  = username
+    reload_app_urlconf_in_testcase('accounts')
+
+    client.login(username=username, password=password)
+    if SHIBBOLETH:
+        url = reverse('shibboleth_logout')
+        response = client.get(url)
+        if password is not None:
+            assertURLEqual(response.url, reverse('account_logout') + f'?next={settings.SHIBBOLETH_LOGOUT_URL}')
+        else:
+            assertURLEqual(response.url, reverse('account_logout'))
