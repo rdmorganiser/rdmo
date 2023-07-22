@@ -195,7 +195,7 @@ class ReadOnlyObjectPermissionSerializerMixin:
     '''
     A mixin class for Serializers that adds a boolean field with the name read_only.
     It checks the object permissions based on the model of the serializer.
-    
+
     Requires:
         - the request object in the context kwargs of the Serializer call:
             ..., context={'request': request}
@@ -206,9 +206,9 @@ class ReadOnlyObjectPermissionSerializerMixin:
     and the field to fields:
         read_only
     '''
-    
+
     OBJECT_PERMISSION_ACTION_NAMES = ('change', 'delete')
-    
+
     @staticmethod
     def construct_object_permission(model, action_name: str) -> str:
         model_app_label = model._meta.app_label
@@ -219,19 +219,25 @@ class ReadOnlyObjectPermissionSerializerMixin:
     def get_read_only(self, obj) -> bool:
         user = self.context['request'].user
         perms = (self.construct_object_permission(self.Meta.model, action_name)
-                    for action_name in self.OBJECT_PERMISSION_ACTION_NAMES)
+                 for action_name in self.OBJECT_PERMISSION_ACTION_NAMES)
         return not all(user.has_perm(perm, obj) for perm in perms)
 
 
 class SiteSerializer(serializers.ModelSerializer):
+
+    current = serializers.SerializerMethodField()
 
     class Meta:
         model = Site
         fields = (
             'id',
             'domain',
-            'name'
+            'name',
+            'current'
         )
+
+    def get_current(self, obj):
+        return obj == Site.objects.get_current()
 
 
 class GroupSerializer(serializers.ModelSerializer):
