@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterString, FilterUriPrefix, FilterSite, FilterEditor } from '../common/Filter'
+import { FilterString, FilterUriPrefix, FilterSite} from '../common/Filter'
 import { BackButton, NewButton } from '../common/Buttons'
 
 import Task from '../element/Task'
@@ -38,16 +38,16 @@ const Tasks = ({ config, tasks, configActions, elementActions }) => {
                              options={getUriPrefixes(tasks)} />
           </div>
           {
-            config.settings.multisite && <div className="col-sm-2">
+            config.settings.multisite && <>
+            <div className="col-sm-2">
               <FilterSite value={config.filter.tasks.sites} onChange={updateFilterSite}
                           options={config.sites} />
             </div>
-          }
-          {
-            config.settings.multisite && <div className="col-sm-2">
-              <FilterEditor value={config.filter.tasks.editors} onChange={updateFilterEditor}
-                          options={config.sites} />
+            <div className="col-sm-2">
+              <FilterSite value={config.filter.tasks.editors} onChange={updateFilterEditor}
+                          options={config.sites} allLabel='All editors' />
             </div>
+            </>
           }
         </div>
       </div>

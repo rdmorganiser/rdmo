@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterString, FilterUriPrefix } from '../common/Filter'
+import { FilterString, FilterUriPrefix, FilterSite } from '../common/Filter'
 import { BackButton, NewButton } from '../common/Buttons'
 
 import Attribute from '../element/Attribute'
@@ -12,6 +12,7 @@ const Attributes = ({ config, attributes, configActions, elementActions }) => {
 
   const updateFilterString = (value) => configActions.updateConfig('filter.attributes.search', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.attributes.uri_prefix', value)
+  const updateFilterEditor = (value) => configActions.updateConfig('filter.attributes.editors', value)
   const createAttribute = () => elementActions.createElement('attributes')
 
   return (
@@ -30,10 +31,16 @@ const Attributes = ({ config, attributes, configActions, elementActions }) => {
             <FilterString value={config.filter.attributes.search} onChange={updateFilterString}
                           placeholder={gettext('Filter attributes')} />
           </div>
-          <div className="col-sm-4">
+          <div className={config.settings.multisite ? 'col-sm-2' : 'col-sm-4'}>
             <FilterUriPrefix value={config.filter.attributes.uriPrefix} onChange={updateFilterUriPrefix}
                              options={getUriPrefixes(attributes)} />
           </div>
+          {
+            config.settings.multisite && <div className="col-sm-2">
+              <FilterSite value={config.filter.attributes.editors} onChange={updateFilterEditor}
+                          options={config.sites} allLabel='All editors' />
+            </div>
+          }
         </div>
       </div>
 
