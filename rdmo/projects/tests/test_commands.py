@@ -59,12 +59,14 @@ def test_prune_projects_output2(db, settings):
 def test_prune_projects_remove(db, settings):
     stdout, stderr = io.StringIO(), io.StringIO()
 
-    instances = Project.objects.filter(id__in=projects_without_owner)
+    instances = list(Project.objects.filter(id__in=projects_without_owner).all()).copy()
 
     call_command('prune_projects', '--remove', stdout=stdout, stderr=stderr)
 
-    assert stdout.getvalue() == \
-        "Found projects without ['owner']:\n%s" % (get_prune_output(instances, True))
+    std_output = stdout.getvalue()
+    prune_output = "Found projects without ['owner']:\n%s" % (get_prune_output(instances, True))
+
+    assert std_output == prune_output
     assert not stderr.getvalue()
 
     stdout, stderr = io.StringIO(), io.StringIO()
