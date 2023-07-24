@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import get from 'lodash/get'
 
 import { filterElement } from '../../utils/filter'
 import { buildPath } from '../../utils/location'
@@ -9,7 +10,7 @@ import { EditLink, CopyLink, AddLink, AvailableLink, LockedLink, NestedLink,
          ExportLink, CodeLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 
-const Catalog = ({ config, catalog, elementActions, display='list', filter=null }) => {
+const Catalog = ({ config, catalog, configActions, elementActions, display='list', filter=null }) => {
 
   const showElement = filterElement(filter, catalog)
 
@@ -49,7 +50,7 @@ const Catalog = ({ config, catalog, elementActions, display='list', filter=null 
           <strong>{gettext('Catalog')}{': '}</strong> {catalog.title}
         </p>
         {
-          config.display.uri.catalogs &&
+          get(config, 'display.uri.catalogs', true) &&
           <CodeLink className="code-questions" uri={catalog.uri} onClick={() => fetchEdit()} />
         }
         <ElementErrors element={catalog} />
@@ -72,6 +73,7 @@ const Catalog = ({ config, catalog, elementActions, display='list', filter=null 
 Catalog.propTypes = {
   config: PropTypes.object.isRequired,
   catalog: PropTypes.object.isRequired,
+  configActions: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired,
   display: PropTypes.string,
   filter: PropTypes.object

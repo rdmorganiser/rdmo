@@ -8,7 +8,7 @@ import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AddLink, LockedLink, NestedLink, ExportLink, CodeLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 
-const Attribute = ({ config, attribute, elementActions, display='list', filter=null, indent=0 }) => {
+const Attribute = ({ config, attribute, configActions, elementActions, display='list', filter=null, indent=0 }) => {
 
   const showElement = filterElement(filter, attribute)
 
@@ -81,6 +81,7 @@ const Attribute = ({ config, attribute, elementActions, display='list', filter=n
 Attribute.propTypes = {
   config: PropTypes.object.isRequired,
   attribute: PropTypes.object.isRequired,
+  configActions: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired,
   display: PropTypes.string,
   filter: PropTypes.object,

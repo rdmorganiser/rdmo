@@ -1,6 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
+
+import Link from 'rdmo/core/assets/js/components/Link'
 
 import { getUriPrefixes } from '../../utils/filter'
 
@@ -17,8 +20,7 @@ const NestedQuestionSet = ({ config, questionset, configActions, elementActions 
   const updateFilterString = (uri) => configActions.updateConfig('filter.questionset.search', uri)
   const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.questionset.uri_prefix', uriPrefix)
 
-  const updateDisplayQuestionSets = (value) => configActions.updateConfig('display.elements.questionsets', value)
-  const updateDisplayQuestions = (value) => configActions.updateConfig('display.elements.questions', value)
+  const toggleQuestionSets = () => configActions.toggleDescandants(questionset, 'questionsets')
 
   const updateDisplayQuestionSetsURI = (value) => configActions.updateConfig('display.uri.questionsets', value)
   const updateDisplayQuestionsURI = (value) => configActions.updateConfig('display.uri.questions', value)
@@ -34,37 +36,36 @@ const NestedQuestionSet = ({ config, questionset, configActions, elementActions 
             <BackButton />
           </div>
           <QuestionSet config={config} questionset={questionset}
-                       elementActions={elementActions} display="plain" />
+                       configActions={configActions} elementActions={elementActions} display="plain" />
         </div>
 
         <div className="panel-body">
           <div className="row">
             <div className="col-sm-8">
-              <FilterString value={config.filter.questionset.search} onChange={updateFilterString}
+              <FilterString value={get(config, 'filter.questionset.search', '')} onChange={updateFilterString}
                             placeholder={gettext('Filter question sets')} />
             </div>
             <div className="col-sm-4">
-              <FilterUriPrefix value={config.filter.questionset.uri_prefix} onChange={updateFilterUriPrefix}
+              <FilterUriPrefix value={get(config, 'filter.questionset.uri_prefix', '')} onChange={updateFilterUriPrefix}
                                options={getUriPrefixes(questionset.elements)} />
             </div>
           </div>
           <div className="checkboxes">
             <span className="mr-10">{gettext('Show elements:')}</span>
-            <Checkbox label={gettext('Question sets')} value={config.display.elements.questionsets} onChange={updateDisplayQuestionSets} />
-            <Checkbox label={gettext('Questions')} value={config.display.elements.questions} onChange={updateDisplayQuestions} />
+            <Link className="mr-10" onClick={toggleQuestionSets}>{gettext('Question sets')}</Link>
           </div>
           <div className="checkboxes">
             <span className="mr-10">{gettext('Show URIs:')}</span>
             <Checkbox label={<code className="code-questions">{gettext('Question sets')}</code>}
-                      value={config.display.uri.questionsets} onChange={updateDisplayQuestionSetsURI} />
+                      value={get(config, 'display.uri.questionsets', true)} onChange={updateDisplayQuestionSetsURI} />
             <Checkbox label={<code className="code-questions">{gettext('Questions')}</code>}
-                      value={config.display.uri.questions} onChange={updateDisplayQuestionsURI} />
+                      value={get(config, 'display.uri.questions', true)} onChange={updateDisplayQuestionsURI} />
             <Checkbox label={<code className="code-domain">{gettext('Attributes')}</code>}
-                      value={config.display.uri.attributes} onChange={updateDisplayAttributesURI} />
+                      value={get(config, 'display.uri.attributes', true)} onChange={updateDisplayAttributesURI} />
             <Checkbox label={<code className="code-conditions">{gettext('Conditions')}</code>}
-                      value={config.display.uri.conditions} onChange={updateDisplayConditionsURI} />
+                      value={get(config, 'display.uri.conditions', true)} onChange={updateDisplayConditionsURI} />
             <Checkbox label={<code className="code-options">{gettext('Option sets')}</code>}
-                      value={config.display.uri.optionsets} onChange={updateDisplayOptionSetURI} />
+                      value={get(config, 'display.uri.optionsets', true)} onChange={updateDisplayOptionSetURI} />
           </div>
         </div>
       </div>
@@ -75,11 +76,13 @@ const NestedQuestionSet = ({ config, questionset, configActions, elementActions 
       {
         questionset.elements.map((element, index) => {
           if (element.model == 'questions.questionset') {
-            return <QuestionSet key={index} config={config} questionset={element} elementActions={elementActions}
-                                display="nested" filter={config.filter.questionset} indent={1} />
+            return <QuestionSet key={index} config={config} questionset={element}
+                                configActions={configActions} elementActions={elementActions}
+                                display="nested" filter={get(config, 'filter.questionset')} indent={1} />
           } else {
-            return <Question key={index} config={config} question={element} elementActions={elementActions}
-                             display="nested" filter={config.filter.questionset} indent={1} />
+            return <Question key={index} config={config} question={element}
+                             configActions={configActions} elementActions={elementActions}
+                             display="nested" filter={get(config, 'filter.questionset')} indent={1} />
           }
         })
       }

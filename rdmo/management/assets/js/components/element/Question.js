@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import get from 'lodash/get'
 
 import { filterElement } from '../../utils/filter'
 import { buildPath } from '../../utils/location'
@@ -9,7 +10,7 @@ import { EditLink, CopyLink, LockedLink, ExportLink, CodeLink } from '../common/
 import { ReadOnlyIcon } from '../common/Icons'
 import { Drag, Drop } from '../common/DragAndDrop'
 
-const Question = ({ config, question, elementActions, display='list', filter=null, indent=0 }) => {
+const Question = ({ config, question, configActions, elementActions, display='list', filter=null, indent=0 }) => {
 
   const showElement = filterElement(filter, question)
 
@@ -43,24 +44,24 @@ const Question = ({ config, question, elementActions, display='list', filter=nul
           {question.text}
         </p>
         {
-          config.display.uri.questions && <p>
+          get(config, 'display.uri.questions', true) && <p>
             <CodeLink className="code-questions" uri={question.uri} onClick={() => fetchEdit()} />
           </p>
         }
         {
-          config.display.uri.attributes && question.attribute_uri && <p>
+          get(config, 'display.uri.attributes', true) && question.attribute_uri && <p>
             <CodeLink className="code-domain" uri={question.attribute_uri} onClick={() => fetchAttribute()} />
           </p>
         }
         {
-          config.display.uri.conditions && question.condition_uris.map((uri, index) => (
+          get(config, 'display.uri.conditions', true) && question.condition_uris.map((uri, index) => (
             <p key={index}>
               <CodeLink className="code-conditions" uri={uri} onClick={() => fetchCondition(index)} />
             </p>
           ))
         }
         {
-          config.display.uri.optionsets && question.optionset_uris.map((uri, index) => (
+          get(config, 'display.uri.optionsets', true) && question.optionset_uris.map((uri, index) => (
             <p key={index}>
               <CodeLink className="code-options" uri={uri} onClick={() => fetchOptionSet(index)} />
             </p>
@@ -82,7 +83,7 @@ const Question = ({ config, question, elementActions, display='list', filter=nul
       return (
         <>
           {
-            showElement && config.display.elements.questions && (
+            showElement && (
               <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
                 <div className="panel-body">
                   { elementNode }
@@ -99,6 +100,7 @@ const Question = ({ config, question, elementActions, display='list', filter=nul
 Question.propTypes = {
   config: PropTypes.object.isRequired,
   question: PropTypes.object.isRequired,
+  configActions: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired,
   display: PropTypes.string,
   filter: PropTypes.object,

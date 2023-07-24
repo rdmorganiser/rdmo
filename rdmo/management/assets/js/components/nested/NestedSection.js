@@ -1,6 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
+
+import Link from 'rdmo/core/assets/js/components/Link'
 
 import { getUriPrefixes } from '../../utils/filter'
 
@@ -17,9 +20,8 @@ const NestedCatalog = ({ config, section, configActions, elementActions }) => {
   const updateFilterString = (uri) => configActions.updateConfig('filter.section.search', uri)
   const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.section.uri_prefix', uriPrefix)
 
-  const updateDisplayPages = (value) => configActions.updateConfig('display.elements.pages', value)
-  const updateDisplayQuestionSets = (value) => configActions.updateConfig('display.elements.questionsets', value)
-  const updateDisplayQuestions = (value) => configActions.updateConfig('display.elements.questions', value)
+  const togglePages = () => configActions.toggleDescandants(section, 'pages')
+  const toggleQuestionSets = () => configActions.toggleDescandants(section, 'questionsets')
 
   const updateDisplaySectionURI = (value) => configActions.updateConfig('display.uri.sections', value)
   const updateDisplayPagesURI = (value) => configActions.updateConfig('display.uri.pages', value)
@@ -37,42 +39,41 @@ const NestedCatalog = ({ config, section, configActions, elementActions }) => {
             <BackButton />
           </div>
           <Section config={config} section={section}
-                   elementActions={elementActions} display="plain" />
+                   configActions={configActions} elementActions={elementActions} display="plain" />
         </div>
 
         <div className="panel-body">
           <div className="row">
             <div className="col-sm-8">
-              <FilterString value={config.filter.section.search} onChange={updateFilterString}
+              <FilterString value={get(config, 'filter.section.search', '')} onChange={updateFilterString}
                             placeholder={gettext('Filter sections')} />
             </div>
             <div className="col-sm-4">
-              <FilterUriPrefix value={config.filter.section.uri_prefix} onChange={updateFilterUriPrefix}
+              <FilterUriPrefix value={get(config, 'filter.section.uri_prefix', '')} onChange={updateFilterUriPrefix}
                                options={getUriPrefixes(section.elements)} />
             </div>
           </div>
           <div className="checkboxes">
             <span className="mr-10">{gettext('Show elements:')}</span>
-            <Checkbox label={gettext('Pages')} value={config.display.elements.pages} onChange={updateDisplayPages} />
-            <Checkbox label={gettext('Question sets')} value={config.display.elements.questionsets} onChange={updateDisplayQuestionSets} />
-            <Checkbox label={gettext('Questions')} value={config.display.elements.questions} onChange={updateDisplayQuestions} />
+            <Link className="mr-10" onClick={togglePages}>{gettext('Pages')}</Link>
+            <Link className="mr-10" onClick={toggleQuestionSets}>{gettext('Question sets')}</Link>
           </div>
           <div className="checkboxes">
             <span className="mr-10">{gettext('Show URIs:')}</span>
             <Checkbox label={<code className="code-questions">{gettext('Sections')}</code>}
-                      value={config.display.uri.sections} onChange={updateDisplaySectionURI} />
+                      value={get(config, 'config.display.uri.sections', true)} onChange={updateDisplaySectionURI} />
             <Checkbox label={<code className="code-questions">{gettext('Pages')}</code>}
-                      value={config.display.uri.pages} onChange={updateDisplayPagesURI} />
+                      value={get(config, 'config.display.uri.pages', true)} onChange={updateDisplayPagesURI} />
             <Checkbox label={<code className="code-questions">{gettext('Question sets')}</code>}
-                      value={config.display.uri.questionsets} onChange={updateDisplayQuestionSetsURI} />
+                      value={get(config, 'config.display.uri.questionsets', true)} onChange={updateDisplayQuestionSetsURI} />
             <Checkbox label={<code className="code-questions">{gettext('Questions')}</code>}
-                      value={config.display.uri.questions} onChange={updateDisplayQuestionsURI} />
+                      value={get(config, 'config.display.uri.questions', true)} onChange={updateDisplayQuestionsURI} />
             <Checkbox label={<code className="code-domain">{gettext('Attributes')}</code>}
-                      value={config.display.uri.attributes} onChange={updateDisplayAttributesURI} />
+                      value={get(config, 'config.display.uri.attributes', true)} onChange={updateDisplayAttributesURI} />
             <Checkbox label={<code className="code-conditions">{gettext('Conditions')}</code>}
-                      value={config.display.uri.conditions} onChange={updateDisplayConditionsURI} />
+                      value={get(config, 'config.display.uri.conditions', true)} onChange={updateDisplayConditionsURI} />
             <Checkbox label={<code className="code-options">{gettext('Option sets')}</code>}
-                      value={config.display.uri.optionsets} onChange={updateDisplayOptionSetURI} />
+                      value={get(config, 'config.display.uri.optionsets', true)} onChange={updateDisplayOptionSetURI} />
           </div>
         </div>
       </div>
@@ -82,8 +83,9 @@ const NestedCatalog = ({ config, section, configActions, elementActions }) => {
       }
       {
         section.elements.map((page, index) => (
-          <Page key={index} config={config} page={page} elementActions={elementActions}
-                display="nested" filter={config.filter.section} indent={1} />
+          <Page key={index} config={config} page={page}
+                configActions={configActions} elementActions={elementActions}
+                display="nested" filter={get(config, 'filter.section')} indent={1} />
         ))
       }
     </>

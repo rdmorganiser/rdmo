@@ -8,7 +8,7 @@ import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 
-const Condition = ({ config, condition, elementActions, filter=null }) => {
+const Condition = ({ config, condition, configActions, elementActions, filter=null }) => {
 
   const showElement = filterElement(filter, condition)
 
@@ -47,6 +47,7 @@ const Condition = ({ config, condition, elementActions, filter=null }) => {
 Condition.propTypes = {
   config: PropTypes.object.isRequired,
   condition: PropTypes.object.isRequired,
+  configActions: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired,
   filter: PropTypes.object
 }

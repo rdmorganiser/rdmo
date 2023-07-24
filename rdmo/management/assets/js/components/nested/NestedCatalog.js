@@ -1,9 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 
-import { getUriPrefixes } from '../../utils/filter'
+import Link from 'rdmo/core/assets/js/components/Link'
 
+import { getUriPrefixes } from '../../utils/filter'
 import { FilterString, FilterUriPrefix } from '../common/Filter'
 import { Checkbox } from '../common/Checkboxes'
 import { BackButton } from '../common/Buttons'
@@ -17,10 +19,9 @@ const NestedCatalog = ({ config, catalog, configActions, elementActions }) => {
   const updateFilterString = (value) => configActions.updateConfig('filter.catalog.search', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.catalog.uri_prefix', value)
 
-  const updateDisplaySections = (value) => configActions.updateConfig('display.elements.sections', value)
-  const updateDisplayPages = (value) => configActions.updateConfig('display.elements.pages', value)
-  const updateDisplayQuestionSets = (value) => configActions.updateConfig('display.elements.questionsets', value)
-  const updateDisplayQuestions = (value) => configActions.updateConfig('display.elements.questions', value)
+  const toggleSections = () => configActions.toggleDescandants(catalog, 'sections')
+  const togglePages = () => configActions.toggleDescandants(catalog, 'pages')
+  const toggleQuestionSets = () => configActions.toggleDescandants(catalog, 'questionsets')
 
   const updateDisplayCatalogURI = (value) => configActions.updateConfig('display.uri.catalogs', value)
   const updateDisplaySectionsURI = (value) => configActions.updateConfig('display.uri.sections', value)
@@ -39,45 +40,44 @@ const NestedCatalog = ({ config, catalog, configActions, elementActions }) => {
             <BackButton />
           </div>
           <Catalog config={config} catalog={catalog}
-                   elementActions={elementActions} display="plain" />
+                   configActions={configActions} elementActions={elementActions} display="plain" />
         </div>
 
         <div className="panel-body">
           <div className="row">
             <div className="col-sm-8">
-              <FilterString value={config.filter.catalog.search} onChange={updateFilterString}
+              <FilterString value={get(config, 'filter.catalog.search', '')} onChange={updateFilterString}
                             placeholder={gettext('Filter catalogs')} />
             </div>
             <div className="col-sm-4">
-              <FilterUriPrefix value={config.filter.catalog.uri_prefix} onChange={updateFilterUriPrefix}
+              <FilterUriPrefix value={get(config, 'filter.catalog.uri_prefix', '')} onChange={updateFilterUriPrefix}
                                options={getUriPrefixes(catalog.elements)} />
             </div>
           </div>
-          <div className="checkboxes">
-            <span className="mr-10">{gettext('Show elements:')}</span>
-            <Checkbox label={gettext('Sections')} value={config.display.elements.sections} onChange={updateDisplaySections} />
-            <Checkbox label={gettext('Pages')} value={config.display.elements.pages} onChange={updateDisplayPages} />
-            <Checkbox label={gettext('Question sets')} value={config.display.elements.questionsets} onChange={updateDisplayQuestionSets} />
-            <Checkbox label={gettext('Questions')} value={config.display.elements.questions} onChange={updateDisplayQuestions} />
+          <div className="mt-10">
+            <span className="mr-10">{gettext('Toggle elements:')}</span>
+            <Link className="mr-10" onClick={toggleSections}>{gettext('Sections')}</Link>
+            <Link className="mr-10" onClick={togglePages}>{gettext('Pages')}</Link>
+            <Link className="mr-10" onClick={toggleQuestionSets}>{gettext('Question sets')}</Link>
           </div>
           <div className="checkboxes">
             <span className="mr-10">{gettext('Show URIs:')}</span>
             <Checkbox label={<code className="code-questions">{gettext('Catalogs')}</code>}
-                      value={config.display.uri.catalogs} onChange={updateDisplayCatalogURI} />
+                      value={get(config, 'display.uri.catalogs', true)} onChange={updateDisplayCatalogURI} />
             <Checkbox label={<code className="code-questions">{gettext('Sections')}</code>}
-                      value={config.display.uri.sections} onChange={updateDisplaySectionsURI} />
+                      value={get(config, 'display.uri.sections', true)} onChange={updateDisplaySectionsURI} />
             <Checkbox label={<code className="code-questions">{gettext('Pages')}</code>}
-                      value={config.display.uri.pages} onChange={updateDisplayPagesURI} />
+                      value={get(config, 'display.uri.pages', true)} onChange={updateDisplayPagesURI} />
             <Checkbox label={<code className="code-questions">{gettext('Question sets')}</code>}
-                      value={config.display.uri.questionsets} onChange={updateDisplayQuestionSetsURI} />
-            <Checkbox label={<code className="code-questions">{gettext('Questions')}</code>}
-                      value={config.display.uri.questions} onChange={updateDisplayQuestionsURI} />
+                      value={get(config, 'display.uri.questionsets', true)} onChange={updateDisplayQuestionSetsURI} />
+            <Checkbox label={<code className="code-questions'">{gettext('Questions')}</code>}
+                      value={get(config, 'display.uri.questions', true)} onChange={updateDisplayQuestionsURI} />
             <Checkbox label={<code className="code-domain">{gettext('Attributes')}</code>}
-                      value={config.display.uri.attributes} onChange={updateDisplayAttributesURI} />
+                      value={get(config, 'display.uri.attributes', true)} onChange={updateDisplayAttributesURI} />
             <Checkbox label={<code className="code-conditions">{gettext('Conditions')}</code>}
-                      value={config.display.uri.conditions} onChange={updateDisplayConditionsURI} />
+                      value={get(config, 'display.uri.conditions', true)} onChange={updateDisplayConditionsURI} />
             <Checkbox label={<code className="code-options">{gettext('Option sets')}</code>}
-                      value={config.display.uri.optionsets} onChange={updateDisplayOptionSetURI} />
+                      value={get(config, 'display.uri.optionsets', true)} onChange={updateDisplayOptionSetURI} />
           </div>
         </div>
       </div>
@@ -87,8 +87,9 @@ const NestedCatalog = ({ config, catalog, configActions, elementActions }) => {
       }
       {
         catalog.elements.map((section, index) => (
-          <Section key={index} config={config} section={section} elementActions={elementActions}
-                   display="nested" filter={config.filter.catalog} indent={0} />
+          <Section key={index} config={config} section={section}
+                   configActions={configActions} elementActions={elementActions}
+                   display="nested" filter={get(config, 'filter.catalog')} indent={0} />
         ))
       }
     </>

@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import get from 'lodash/get'
 
 import { getUriPrefixes } from '../../utils/filter'
 
@@ -32,37 +33,38 @@ const Pages = ({ config, pages, configActions, elementActions }) => {
 
       <div className="panel-body">
         <div className="row">
-          <div className="col-sm-8">
-            <FilterString value={config.filter.pages.search} onChange={updateFilterString}
+          <div className={config.settings.multisite ? 'col-sm-6' : 'col-sm-8'}>
+            <FilterString value={get(config, 'filter.pages.search', '')} onChange={updateFilterString}
                           placeholder={gettext('Filter pages')} />
           </div>
-          <div className={config.settings.multisite ? 'col-sm-2' : 'col-sm-4'}>
-            <FilterUriPrefix value={config.filter.pages.uri_prefix} onChange={updateFilterUriPrefix}
+          <div className="col-sm-4">
+            <FilterUriPrefix value={get(config, 'filter.pages.uri_prefix', '')} onChange={updateFilterUriPrefix}
                              options={getUriPrefixes(pages)} />
           </div>
           {
             config.settings.multisite && <div className="col-sm-2">
-              <FilterSite value={config.filter.pages.editors} onChange={updateFilterEditor}
-                          options={config.sites} allLabel='All editors' />
+              <FilterSite value={get(config, 'filter.pages.editors', '')} onChange={updateFilterEditor}
+                          options={config.sites} allLabel={gettext('All editors')} />
             </div>
           }
         </div>
         <div className="checkboxes">
           <span className="mr-10">{gettext('Show URIs:')}</span>
           <Checkbox label={<code className="code-questions">{gettext('Pages')}</code>}
-                    value={config.display.uri.pages} onChange={updateDisplayPagesURI} />
+                    value={get(config, 'display.uri.pages', true)} onChange={updateDisplayPagesURI} />
           <Checkbox label={<code className="code-domain">{gettext('Attributes')}</code>}
-                    value={config.display.uri.attributes} onChange={updateDisplayAttributesURI} />
+                    value={get(config, 'display.uri.attributes', true)} onChange={updateDisplayAttributesURI} />
           <Checkbox label={<code className="code-conditions">{gettext('Conditions')}</code>}
-                    value={config.display.uri.conditions} onChange={updateDisplayConditionsURI} />
+                    value={get(config, 'display.uri.conditions', true)} onChange={updateDisplayConditionsURI} />
         </div>
       </div>
 
       <ul className="list-group">
       {
         pages.map((page, index) => (
-          <Page key={index} config={config} page={page} elementActions={elementActions}
-                filter={config.filter.pages} />
+          <Page key={index} config={config} page={page}
+                configActions={configActions} elementActions={elementActions}
+                filter={get(config, 'filter.pages')} />
         ))
       }
       </ul>

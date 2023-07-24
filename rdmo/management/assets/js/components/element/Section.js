@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 
 import { filterElement } from '../../utils/filter'
@@ -7,13 +8,16 @@ import { buildPath } from '../../utils/location'
 
 import Page from './Page'
 import { ElementErrors } from '../common/Errors'
-import { EditLink, CopyLink, AddLink, LockedLink, NestedLink, ExportLink, CodeLink } from '../common/Links'
+import { EditLink, CopyLink, AddLink, LockedLink, NestedLink, ExportLink,
+         CodeLink, ShowElementsLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 import { Drag, Drop } from '../common/DragAndDrop'
 
-const Section = ({ config, section, elementActions, display='list', filter=null, indent=0 }) => {
+
+const Section = ({ config, section, configActions, elementActions, display='list', filter=null, indent=0 }) => {
 
   const showElement = filterElement(filter, section)
+  const showElements = get(config, `display.elements.sections.${section.id}`, true)
 
   const editUrl = buildPath(config.baseUrl, 'sections', section.id)
   const copyUrl = buildPath(config.baseUrl, 'sections', section.id, 'copy')
@@ -24,6 +28,7 @@ const Section = ({ config, section, elementActions, display='list', filter=null,
   const fetchCopy = () => elementActions.fetchElement('sections', section.id, 'copy')
   const fetchNested = () => elementActions.fetchElement('sections', section.id, 'nested')
   const toggleLocked = () => elementActions.storeElement('sections', {...section, locked: !section.locked })
+  const toggleElements = () => configActions.toggleElements(section)
 
   const createPage = () => elementActions.createElement('pages', { section })
 
@@ -31,7 +36,8 @@ const Section = ({ config, section, elementActions, display='list', filter=null,
     <div className="element">
       <div className="pull-right">
         <ReadOnlyIcon title={gettext('This section is read only')} show={section.read_only} />
-        <NestedLink title={gettext('View section nested')} href={nestedUrl} onClick={fetchNested} />
+        <NestedLink title={gettext('View section nested')} href={nestedUrl} onClick={fetchNested} show={display != 'nested'} />
+        <ShowElementsLink showElements={showElements} show={display == 'nested'} onClick={toggleElements} />
         <EditLink title={gettext('Edit section')} href={editUrl} onClick={fetchEdit} />
         <CopyLink title={gettext('Copy section')} href={copyUrl} onClick={fetchCopy} />
         <AddLink title={gettext('Add page')} onClick={createPage} disabled={section.read_only} />
@@ -47,7 +53,7 @@ const Section = ({ config, section, elementActions, display='list', filter=null,
           <strong>{gettext('Section')}{': '}</strong> {section.title}
         </p>
         {
-          config.display.uri.sections &&
+          get(config, 'display.uri.sections', true) &&
           <CodeLink className="code-questions" uri={section.uri} onClick={() => fetchEdit()} />
         }
         <ElementErrors element={section} />
@@ -66,7 +72,7 @@ const Section = ({ config, section, elementActions, display='list', filter=null,
       return (
         <>
           {
-            showElement && config.display.elements.sections && (
+            showElement && (
               <Drop element={section} elementActions={elementActions}>
                 <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
                   <div className="panel-heading">
@@ -81,8 +87,9 @@ const Section = ({ config, section, elementActions, display='list', filter=null,
             <Drop element={section.elements[0]} elementActions={elementActions} indent={indent + 1} mode="before" />
           }
           {
-            section.elements.map((page, index) => (
-              <Page key={index} config={config} page={page} elementActions={elementActions}
+            showElements && section.elements.map((page, index) => (
+              <Page key={index} config={config} page={page}
+                    configActions={configActions} elementActions={elementActions}
                     display="nested" filter={filter} indent={indent + 1} />
             ))
           }
@@ -97,6 +104,7 @@ const Section = ({ config, section, elementActions, display='list', filter=null,
 Section.propTypes = {
   config: PropTypes.object.isRequired,
   section: PropTypes.object.isRequired,
+  configActions: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired,
   display: PropTypes.string,
   filter: PropTypes.object,

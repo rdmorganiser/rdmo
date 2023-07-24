@@ -9,7 +9,7 @@ import { EditLink, CopyLink, AddLink, LockedLink, NestedLink,
          ExportLink, CodeLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 
-const OptionSet = ({ config, optionset, elementActions, display='list', filter=null }) => {
+const OptionSet = ({ config, optionset, configActions, elementActions, display='list', filter=null }) => {
 
   const showElement = filterElement(filter, optionset)
 
@@ -63,6 +63,7 @@ const OptionSet = ({ config, optionset, elementActions, display='list', filter=n
 OptionSet.propTypes = {
   config: PropTypes.object.isRequired,
   optionset: PropTypes.object.isRequired,
+  configActions: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired,
   display: PropTypes.string,
   filter: PropTypes.object

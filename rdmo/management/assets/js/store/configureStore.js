@@ -1,10 +1,8 @@
 import { applyMiddleware, createStore } from 'redux'
 import thunk from 'redux-thunk'
-import ls from 'local-storage'
 import isNil from 'lodash/isNil'
 
 import { parseLocation } from '../utils/location'
-import { lsKeys } from '../constants/config'
 
 import rootReducer from '../reducers/rootReducer'
 
@@ -29,19 +27,20 @@ export default function configureStore() {
 
   // load: restore the config from the local storage
   const updateConfigFromLocalStorage = () => {
-    Object.entries(lsKeys).forEach(([path, defaultValue]) => {
-      let value = ls.get(`rdmo.management.config.${path}`)
-      if (isNil(value)) {
-        switch(defaultValue) {
-          case 'true':
-            value = false
-            break
-          case 'false':
-            value = false
-            break
-          default:
-            value = defaultValue
-        }
+    const ls = {...localStorage}
+
+    Object.entries(ls).forEach(([lsPath, lsValue]) => {
+      const path = lsPath.replace('rdmo.management.config.', '')
+      let value
+      switch(lsValue) {
+        case 'true':
+          value = true
+          break
+        case 'false':
+          value = false
+          break
+        default:
+          value = lsValue
       }
       store.dispatch(configActions.updateConfig(path, value))
     })

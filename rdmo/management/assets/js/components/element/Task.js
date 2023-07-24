@@ -8,7 +8,7 @@ import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AvailableLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 
-const Task = ({ config, task, elementActions, filter=null }) => {
+const Task = ({ config, task, configActions, elementActions, filter=null }) => {
 
   const showElement = filterElement(filter, task)
 
@@ -52,6 +52,7 @@ const Task = ({ config, task, elementActions, filter=null }) => {
 Task.propTypes = {
   config: PropTypes.object.isRequired,
   task: PropTypes.object.isRequired,
+  configActions: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired,
   filter: PropTypes.object
 }

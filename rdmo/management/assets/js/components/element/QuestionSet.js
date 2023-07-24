@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import get from 'lodash/get'
 
 import { filterElement } from '../../utils/filter'
 import { buildPath } from '../../utils/location'
@@ -7,13 +8,14 @@ import { buildPath } from '../../utils/location'
 import Question from './Question'
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AddLink, LockedLink,
-         NestedLink, ExportLink, CodeLink } from '../common/Links'
+         NestedLink, ExportLink, CodeLink, ShowElementsLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 import { Drag, Drop } from '../common/DragAndDrop'
 
-const QuestionSet = ({ config, questionset, elementActions, display='list', filter=null, indent=0 }) => {
+const QuestionSet = ({ config, questionset, configActions, elementActions, display='list', filter=null, indent=0 }) => {
 
   const showElement = filterElement(filter, questionset)
+  const showElements = get(config, `display.elements.questionsets.${questionset.id}`, true)
 
   const editUrl = buildPath(config.baseUrl, 'questionsets', questionset.id)
   const copyUrl = buildPath(config.baseUrl, 'questionsets', questionset.id, 'copy')
@@ -24,6 +26,7 @@ const QuestionSet = ({ config, questionset, elementActions, display='list', filt
   const fetchCopy = () => elementActions.fetchElement('questionsets', questionset.id, 'copy')
   const fetchNested = () => elementActions.fetchElement('questionsets', questionset.id, 'nested')
   const toggleLocked = () => elementActions.storeElement('questionsets', {...questionset, locked: !questionset.locked })
+  const toggleElements = () => configActions.toggleElements(questionset)
 
   const createQuestionSet = () => elementActions.createElement('questionsets', { questionset })
   const createQuestion = () => elementActions.createElement('questions', { questionset })
@@ -35,7 +38,8 @@ const QuestionSet = ({ config, questionset, elementActions, display='list', filt
     <div className="element">
       <div className="pull-right">
         <ReadOnlyIcon title={gettext('This question set is read only')} show={questionset.read_only} />
-        <NestedLink title={gettext('View question set nested')} href={nestedUrl} onClick={fetchNested} />
+        <NestedLink title={gettext('View question set nested')} href={nestedUrl} onClick={fetchNested} show={display != 'nested'} />
+        <ShowElementsLink showElements={showElements} show={display == 'nested'} onClick={toggleElements} />
         <EditLink title={gettext('Edit question set')} href={editUrl} onClick={fetchEdit} />
         <CopyLink title={gettext('Copy question set')} href={copyUrl} onClick={fetchCopy} />
         <AddLink title={gettext('Add question')} altTitle={gettext('Add question set')}
@@ -51,17 +55,17 @@ const QuestionSet = ({ config, questionset, elementActions, display='list', filt
           <strong>{gettext('Question set')}{': '}</strong> {questionset.title}
         </p>
         {
-          config.display.uri.questionsets && <p>
+          get(config, 'display.uri.questionsets', true) && <p>
             <CodeLink className="code-questions" uri={questionset.uri} onClick={() => fetchEdit()} />
           </p>
         }
         {
-          config.display.uri.attributes && questionset.attribute_uri &&<p>
+          get(config, 'display.uri.attributes', true) && questionset.attribute_uri &&<p>
             <CodeLink className="code-domain" uri={questionset.attribute_uri} onClick={() => fetchAttribute()} />
           </p>
         }
         {
-          config.display.uri.conditions && questionset.condition_uris.map((uri, index) => (
+          get(config, 'display.uri.conditions', true) && questionset.condition_uris.map((uri, index) => (
             <p key={index}>
               <CodeLink className="code-conditions" uri={uri} onClick={() => fetchCondition(index)} />
             </p>
@@ -83,7 +87,7 @@ const QuestionSet = ({ config, questionset, elementActions, display='list', filt
       return (
         <>
           {
-            showElement && config.display.elements.questionsets && (
+            showElement && (
               <Drop element={questionset} elementActions={elementActions}>
                 <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
                   <div className="panel-heading">
@@ -94,13 +98,15 @@ const QuestionSet = ({ config, questionset, elementActions, display='list', filt
             )
           }
           {
-            questionset.elements.map((element, index) => {
+            showElements && questionset.elements.map((element, index) => {
               if (element.model == 'questions.questionset') {
-                return <QuestionSet key={index} config={config} questionset={element} elementActions={elementActions}
-                                    display="nested" filter={filter}  indent={indent + 1}  />
+                return <QuestionSet key={index} config={config} questionset={element}
+                                    configActions={configActions} elementActions={elementActions}
+                                    display="nested" filter={filter} indent={indent + 1}  />
               } else {
-                return <Question key={index} config={config} question={element} elementActions={elementActions}
-                                 display="nested" filter={filter}  indent={indent + 1} />
+                return <Question key={index} config={config} question={element}
+                                 configActions={configActions} elementActions={elementActions}
+                                 display="nested" filter={filter} indent={indent + 1} />
               }
             })
           }
@@ -115,6 +121,7 @@ const QuestionSet = ({ config, questionset, elementActions, display='list', filt
 QuestionSet.propTypes = {
   config: PropTypes.object.isRequired,
   questionset: PropTypes.object.isRequired,
+  configActions: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired,
   display: PropTypes.string,
   filter: PropTypes.object,
