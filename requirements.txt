@@ -2,7 +2,7 @@ coverage==5.5
 defusedcsv~=2.0.0
 defusedxml~=0.7.1
 Django~=3.2.14
-django-allauth~=0.51.0
+django-allauth~=0.53.1
 django-cleanup~=6.0.0
 django-compressor==4.0
 django-extensions~=3.2.0
