@@ -32,7 +32,7 @@ const filterElement = (filter, element) => {
     const strings = get(filter, 'search', '').trim().split(' '),
           uriPrefix = get(filter, 'uri_prefix', ''),
           site = get(filter, 'sites', ''),
-          editor = get(filter, 'editor', '')
+          editor = get(filter, 'editors', '')
     return (
       strings.some(search => filterSearch(search, element)) &&
       filterUriPrefix(uriPrefix, element) &&
