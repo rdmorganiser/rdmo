@@ -638,6 +638,30 @@ def test_shibboleth_for_home_url(db, client, settings, SHIBBOLETH, SHIBBOLETH_LO
             assertContains(response, 'href="' + reverse('account_login'))
 
 
+@pytest.mark.parametrize('username,password', users)
+def test_shibboleth_login_view(db, client, settings, username, password):
+    settings.SHIBBOLETH = True
+    settings.SHIBBOLETH_LOGIN_URL  = '/shibboleth/login'
+    reload_app_urlconf_in_testcase('accounts')
+    # Anonymous user lands on home
+    client.login(username='anonymous', password=None)
+
+    if settings.SHIBBOLETH and settings.SHIBBOLETH_LOGIN_URL:
+        url = reverse('shibboleth_login')
+        response = client.get(url)
+
+        # Anyonymous user is redirected to login
+        assertRedirects(response,
+                        settings.SHIBBOLETH_LOGIN_URL + f'?target={response.request["PATH_INFO"]}',
+                        target_status_code=404)
+
+        # Redirected user logs in
+        if password:
+            client.login(username=username, password=password)
+            response = client.get(url)
+            assertRedirects(response, reverse('projects'))
+
+
 @pytest.mark.parametrize('SHIBBOLETH', boolean_toggle)
 @pytest.mark.parametrize('SHIBBOLETH_LOGIN_URL', (None, '/shibboleth/login'))
 @pytest.mark.parametrize('username,password', users)
@@ -662,7 +686,7 @@ def test_shibboleth_for_projects_url(db, client, settings, SHIBBOLETH, SHIBBOLET
         response.status_code == 200
         assertContains(response, 'href="/account/shibboleth/login/">')
 
-        # Redirected user logges in 
+        # Redirected user logs in 
         client.login(username=username, password=password)
         response = client.get(response)
 
