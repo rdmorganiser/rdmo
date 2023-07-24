@@ -6,7 +6,11 @@
         <div class="pull-right">
             <button type="button" ng-click="service.next()" ng-disabled="!service.questionset.next"
                     class="btn btn-default btn-xs">
+                {% if settings.PROJECT_QUESTIONS_AUTOSAVE %}
+                {% trans 'Proceed' %}
+                {% else %}
                 {% trans 'Skip' %}
+                {% endif %}
             </button>
         </div>
         <div>
@@ -22,7 +26,12 @@
     <div class="form-group questions-buttons">
         <div class="pull-right">
             <div ng-hide="service.project.read_only || service.questionset.elements.length < 1">
-                {% if not settings.PROJECT_QUESTIONS_AUTOSAVE %}
+                {% if settings.PROJECT_QUESTIONS_AUTOSAVE %}
+                <button type="button" ng-click="service.prev()" ng-disabled="!service.questionset.prev"
+                        class="btn btn-default">
+                    {% trans 'Back' %}
+                </button>
+                {% else %}
                 <button type="button" ng-click="service.save(false)" class="btn btn-default">
                     {% trans 'Save' %}
                 </button>
@@ -42,6 +51,7 @@
             </div>
         </div>
 
+        {% if not settings.PROJECT_QUESTIONS_AUTOSAVE %}
         <div>
             <button type="button" ng-click="service.prev()" ng-disabled="!service.questionset.prev"
                     class="btn btn-default">
@@ -52,6 +62,7 @@
                 {% trans 'Skip' %}
             </button>
         </div>
+        {% endif %}
     </div>
 
 {% endif %}
