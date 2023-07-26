@@ -105,6 +105,9 @@ class SiteProjectsView(LoginRequiredMixin, FilterView):
         context['number_of_projects'] = self.get_queryset().count()
         context['number_of_filtered_projects'] = context["filter"].qs.count()
         context = set_context_querystring_with_filter_and_page(context)
+        context['catalogs'] = Catalog.objects.filter_current_site() \
+                                .filter_group(self.request.user) \
+                                .filter_availability(self.request.user)
         return context
 
 

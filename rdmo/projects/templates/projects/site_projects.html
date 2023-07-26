@@ -28,6 +28,15 @@
                 {% endblocktrans %}
             </small>
         </p>
+        <select name="catalog" id="id_catalog" class="form-control">
+            <option value="">{% trans 'All catalogs' %}</option>
+            {% for catalog in catalogs %}
+                <option value="{{ catalog.id }}" {% if catalog.id|stringformat:'s' == request.GET.catalog %}selected{% endif %}>
+                    {{ catalog.title }}
+                </option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-primary">{% trans 'Filter projects' %}</button>
     </form>
 
     <h2>{% trans 'Options' %}</h2>
