@@ -42,11 +42,11 @@ FilterUriPrefix.propTypes = {
   onChange: PropTypes.func
 }
 
-const FilterSite = ({ value, options, onChange }) => {
+const FilterSite = ({ value, options, onChange, allLabel = 'All sites' }) => {
   return (
     <div className="form-group mb-0">
       <select className="form-control" value={value} onChange={event => onChange(event.target.value)}>
-        <option value="">{gettext('All sites')}</option>
+       <option value="">{gettext(allLabel)}</option>
         {
           options.map((option, index) => <option value={option.id} key={index}>{option.name}</option>)
         }
@@ -58,7 +58,8 @@ const FilterSite = ({ value, options, onChange }) => {
 FilterSite.propTypes = {
   value: PropTypes.string,
   options: PropTypes.array,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  allLabel: PropTypes.string
 }
 
 export { FilterString, FilterUriPrefix, FilterSite }

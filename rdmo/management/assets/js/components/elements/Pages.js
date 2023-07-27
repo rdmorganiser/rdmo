@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterString, FilterUriPrefix } from '../common/Filter'
+import { FilterString, FilterUriPrefix, FilterSite } from '../common/Filter'
 import { Checkbox } from '../common/Checkboxes'
 import { BackButton, NewButton } from '../common/Buttons'
 
@@ -13,6 +13,7 @@ const Pages = ({ config, pages, configActions, elementActions }) => {
 
   const updateFilterString = (value) => configActions.updateConfig('filter.pages.search', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.pages.uri_prefix', value)
+  const updateFilterEditor = (value) => configActions.updateConfig('filter.pages.editors', value)
   const updateDisplayPagesURI = (value) => configActions.updateConfig('display.uri.pages', value)
   const updateDisplayAttributesURI = (value) => configActions.updateConfig('display.uri.attributes', value)
   const updateDisplayConditionsURI = (value) => configActions.updateConfig('display.uri.conditions', value)
@@ -35,10 +36,16 @@ const Pages = ({ config, pages, configActions, elementActions }) => {
             <FilterString value={config.filter.pages.search} onChange={updateFilterString}
                           placeholder={gettext('Filter pages')} />
           </div>
-          <div className="col-sm-4">
+          <div className={config.settings.multisite ? 'col-sm-2' : 'col-sm-4'}>
             <FilterUriPrefix value={config.filter.pages.uri_prefix} onChange={updateFilterUriPrefix}
                              options={getUriPrefixes(pages)} />
           </div>
+          {
+            config.settings.multisite && <div className="col-sm-2">
+              <FilterSite value={config.filter.pages.editors} onChange={updateFilterEditor}
+                          options={config.sites} allLabel='All editors' />
+            </div>
+          }
         </div>
         <div className="checkboxes">
           <span className="mr-10">{gettext('Show URIs:')}</span>

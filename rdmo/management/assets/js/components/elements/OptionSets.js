@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterString, FilterUriPrefix } from '../common/Filter'
+import { FilterString, FilterUriPrefix, FilterSite } from '../common/Filter'
 import { BackButton, NewButton } from '../common/Buttons'
 
 import OptionSet from '../element/OptionSet'
@@ -12,6 +12,7 @@ const OptionSets = ({ config, optionsets, configActions, elementActions}) => {
 
   const updateFilterString = (value) => configActions.updateConfig('filter.optionsets.search', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.optionsets.uri_prefix', value)
+  const updateFilterEditor = (value) => configActions.updateConfig('filter.optionsets.editors', value)
 
   const createOptionSet = () => elementActions.createElement('optionsets')
 
@@ -31,10 +32,16 @@ const OptionSets = ({ config, optionsets, configActions, elementActions}) => {
             <FilterString value={config.filter.optionsets.search} onChange={updateFilterString}
                           placeholder={gettext('Filter option sets')} />
           </div>
-          <div className="col-sm-4">
+          <div className={config.settings.multisite ? 'col-sm-2' : 'col-sm-4'}>
             <FilterUriPrefix value={config.filter.optionsets.uri_prefix} onChange={updateFilterUriPrefix}
                              options={getUriPrefixes(optionsets)} />
           </div>
+          {
+            config.settings.multisite && <div className="col-sm-2">
+              <FilterSite value={config.filter.optionsets.editors} onChange={updateFilterEditor}
+                          options={config.sites} allLabel='All editors' />
+            </div>
+          }
         </div>
       </div>
 
