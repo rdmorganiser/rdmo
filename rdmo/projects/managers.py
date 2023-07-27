@@ -84,6 +84,25 @@ class IntegrationQuerySet(models.QuerySet):
             return self.none()
 
 
+class InviteQuerySet(models.QuerySet):
+
+    def filter_current_site(self):
+        return self.filter(project__site=settings.SITE_ID)
+
+    def filter_user(self, user):
+        if user.is_authenticated:
+            if user.has_perm('projects.view_invite'):
+                return self.all()
+            elif is_site_manager(user):
+                return self.filter_current_site()
+            else:
+                from .models import Project
+                projects = Project.objects.filter(memberships__user=user, memberships__role='owner')
+                return self.filter(project__in=projects)
+        else:
+            return self.none()
+
+
 class SnapshotQuerySet(models.QuerySet):
 
     def filter_current_site(self):
@@ -156,6 +175,15 @@ class IntegrationManager(CurrentSiteManagerMixin, models.Manager):
 
     def get_queryset(self):
         return IntegrationQuerySet(self.model, using=self._db)
+
+    def filter_user(self, user):
+        return self.get_queryset().filter_user(user)
+
+
+class InviteManager(CurrentSiteManagerMixin, models.Manager):
+
+    def get_queryset(self):
+        return InviteQuerySet(self.model, using=self._db)
 
     def filter_user(self, user):
         return self.get_queryset().filter_user(user)

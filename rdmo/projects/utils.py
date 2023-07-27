@@ -3,7 +3,10 @@ from pathlib import Path
 
 from django.conf import settings
 from django.contrib.sites.models import Site
+from django.template.loader import render_to_string
 from django.urls import reverse
+
+from rdmo.core.mail import send_mail
 
 logger = logging.getLogger(__name__)
 
@@ -145,6 +148,23 @@ def get_invite_email_project_path(invite) -> str:
             invited_user_member_domain = invite.user.role.member.first().domain
             project_invite_path = 'http://' + invited_user_member_domain + project_invite_path
     return project_invite_path
+
+
+def send_invite_email(request, invite):
+    project_invite_path = get_invite_email_project_path(invite)
+    context = {
+        'invite_url': request.build_absolute_uri(project_invite_path),
+        'invite_user': invite.user,
+        'project': invite.project,
+        'user': request.user,
+        'site': Site.objects.get_current()
+    }
+
+    subject = render_to_string('projects/email/project_invite_subject.txt', context)
+    message = render_to_string('projects/email/project_invite_message.txt', context)
+
+    # send the email
+    send_mail(subject, message, to=[invite.email])
 
 
 def set_context_querystring_with_filter_and_page(context: dict) -> dict:

@@ -29,8 +29,8 @@ view_project_permission_map = {
     'manager': [1, 3, 5, 7],
     'author': [1, 3, 5, 8],
     'guest': [1, 3, 5, 9],
-    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 }
 
 change_project_permission_map = {
