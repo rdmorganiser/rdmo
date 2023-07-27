@@ -29,6 +29,8 @@ def test_create_catalogs(db, settings):
     assert Page.objects.count() == 48
     assert QuestionSet.objects.count() == 3
     assert Question.objects.count() == 89
+    assert all([element['created'] is True for element in elements])
+    assert all([element['updated'] is False for element in elements])
 
 
 def test_update_catalogs(db, settings):
@@ -43,11 +45,8 @@ def test_update_catalogs(db, settings):
     import_elements(elements)
 
     assert len(root) == len(elements) == 148
-    assert Catalog.objects.count() == 2
-    assert Section.objects.count() == 6
-    assert Page.objects.count() == 48
-    assert QuestionSet.objects.count() == 3
-    assert Question.objects.count() == 89
+    assert all([element['created'] is False for element in elements])
+    assert all([element['updated'] is True for element in elements])
 
 
 def test_create_sections(db, settings):
@@ -71,6 +70,8 @@ def test_create_sections(db, settings):
     assert Page.objects.count() == 48
     assert QuestionSet.objects.count() == 3
     assert Question.objects.count() == 89
+    assert all([element['created'] is True for element in elements])
+    assert all([element['updated'] is False for element in elements])
 
 
 def test_update_sections(db, settings):
@@ -85,10 +86,8 @@ def test_update_sections(db, settings):
     import_elements(elements)
 
     assert len(root) == len(elements) == 146
-    assert Section.objects.count() == 6
-    assert Page.objects.count() == 48
-    assert QuestionSet.objects.count() == 3
-    assert Question.objects.count() == 89
+    assert all([element['created'] is False for element in elements])
+    assert all([element['updated'] is True for element in elements])
 
 
 def test_create_pages(db, settings):
@@ -110,6 +109,8 @@ def test_create_pages(db, settings):
     assert Page.objects.count() == 48
     assert QuestionSet.objects.count() == 3
     assert Question.objects.count() == 89
+    assert all([element['created'] is True for element in elements])
+    assert all([element['updated'] is False for element in elements])
 
 
 def test_update_pages(db, settings):
@@ -124,9 +125,8 @@ def test_update_pages(db, settings):
     import_elements(elements)
 
     assert len(root) == len(elements) == 140
-    assert Page.objects.count() == 48
-    assert QuestionSet.objects.count() == 3
-    assert Question.objects.count() == 89
+    assert all([element['created'] is False for element in elements])
+    assert all([element['updated'] is True for element in elements])
 
 
 def test_create_questionsets(db, settings):
@@ -148,6 +148,8 @@ def test_create_questionsets(db, settings):
     assert len(elements) == 8
     assert QuestionSet.objects.count() == 3
     assert Question.objects.count() == 5
+    assert all([element['created'] is True for element in elements])
+    assert all([element['updated'] is False for element in elements])
 
 
 def test_update_questionsets(db, settings):
@@ -162,9 +164,8 @@ def test_update_questionsets(db, settings):
     import_elements(elements)
 
     assert len(root) == 10  # two questionsets apear twice in the export file
-    assert len(elements) == 8
-    assert QuestionSet.objects.count() == 3
-    assert Question.objects.count() == 89
+    assert all([element['created'] is False for element in elements])
+    assert all([element['updated'] is True for element in elements])
 
 
 def test_create_questions(db, settings):
@@ -184,6 +185,8 @@ def test_create_questions(db, settings):
 
     assert len(root) == len(elements) == 89
     assert Question.objects.count() == 89
+    assert all([element['created'] is True for element in elements])
+    assert all([element['updated'] is False for element in elements])
 
 
 def test_update_questions(db, settings):
@@ -198,7 +201,8 @@ def test_update_questions(db, settings):
     import_elements(elements)
 
     assert len(root) == len(elements) == 89
-    assert Question.objects.count() == 89
+    assert all([element['created'] is False for element in elements])
+    assert all([element['updated'] is True for element in elements])
 
 
 def test_create_legacy_questions(db, settings):
@@ -224,6 +228,8 @@ def test_create_legacy_questions(db, settings):
     assert Page.objects.count() == 48
     assert QuestionSet.objects.count() == 3
     assert Question.objects.count() == 89
+    assert all([element['created'] is True for element in elements])
+    assert all([element['updated'] is False for element in elements])
 
     # check that all elements ended up in the catalog
     catalog = Catalog.objects.prefetch_elements().first()
@@ -244,11 +250,8 @@ def test_update_legacy_questions(db, settings):
     import_elements(elements)
 
     assert len(root) == len(elements) == 147
-    assert Catalog.objects.count() == 2
-    assert Section.objects.count() == 6
-    assert Page.objects.count() == 48
-    assert QuestionSet.objects.count() == 3
-    assert Question.objects.count() == 89
+    assert all([element['created'] is False for element in elements])
+    assert all([element['updated'] is True for element in elements])
 
     # check that all elements ended up in the catalog
     catalog = Catalog.objects.prefetch_elements().first()

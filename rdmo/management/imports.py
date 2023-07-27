@@ -1,7 +1,6 @@
 from collections import defaultdict
 
 from rdmo.conditions.imports import import_condition
-from rdmo.core.constants import PERMISSIONS
 from rdmo.domain.imports import import_attribute
 from rdmo.options.imports import import_option, import_optionset
 from rdmo.questions.imports import (import_catalog, import_page,
@@ -11,17 +10,7 @@ from rdmo.tasks.imports import import_task
 from rdmo.views.imports import import_view
 
 
-def check_permissions(elements, user):
-    model_names = set([element.get('model') for element in elements])
-
-    permissions = []
-    for model_name in model_names:
-        permissions += PERMISSIONS[model_name]
-
-    return user.has_perms(permissions)
-
-
-def import_elements(elements, save=True):
+def import_elements(elements, save=True, user=None):
     for element in elements:
         model = element.get('model')
 
@@ -33,37 +22,37 @@ def import_elements(elements, save=True):
         })
 
         if model == 'conditions.condition':
-            import_condition(element, save)
+            import_condition(element, save, user)
 
         elif model == 'domain.attribute':
-            import_attribute(element, save)
+            import_attribute(element, save, user)
 
         elif model == 'options.optionset':
-            import_optionset(element, save)
+            import_optionset(element, save, user)
 
         elif model == 'options.option':
-            import_option(element, save)
+            import_option(element, save, user)
 
         elif model == 'questions.catalog':
-            import_catalog(element, save)
+            import_catalog(element, save, user)
 
         elif model == 'questions.section':
-            import_section(element, save)
+            import_section(element, save, user)
 
         elif model == 'questions.page':
-            import_page(element, save)
+            import_page(element, save, user)
 
         elif model == 'questions.questionset':
-            import_questionset(element, save)
+            import_questionset(element, save, user)
 
         elif model == 'questions.question':
-            import_question(element, save)
+            import_question(element, save, user)
 
         elif model == 'tasks.task':
-            import_task(element, save)
+            import_task(element, save, user)
 
         elif model == 'views.view':
-            import_view(element, save)
+            import_view(element, save, user)
 
         element = filter_warnings(element, elements)
 

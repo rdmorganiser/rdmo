@@ -8,9 +8,9 @@ import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AvailableLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 
-const View = ({ config, view, elementActions, filter=null }) => {
+const View = ({ config, view, elementActions, filter=false, filterSites=false, filterEditors=false }) => {
 
-  const showElement = filterElement(filter, view)
+  const showElement = filterElement(config, filter, filterSites, filterEditors, view)
 
   const editUrl = buildPath(config.baseUrl, 'views', view.id)
   const copyUrl = buildPath(config.baseUrl, 'views', view.id, 'copy')
@@ -52,8 +52,11 @@ const View = ({ config, view, elementActions, filter=null }) => {
 View.propTypes = {
   config: PropTypes.object.isRequired,
   view: PropTypes.object.isRequired,
+  configActions: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired,
-  filter: PropTypes.object
+  filter: PropTypes.string,
+  filterSites: PropTypes.bool,
+  filterEditors: PropTypes.bool
 }
 
 export default View

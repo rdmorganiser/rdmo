@@ -3,7 +3,7 @@ from rest_framework import exceptions, serializers
 
 from rdmo.core.serializers import (ElementModelSerializerMixin,
                                    ElementWarningSerializerMixin,
-                                   ReadOnlyObjectPermissionsSerializerMixin,
+                                   ReadOnlyObjectPermissionSerializerMixin,
                                    TranslationSerializerMixin)
 
 from ..models import View
@@ -11,7 +11,7 @@ from ..validators import ViewLockedValidator, ViewUniqueURIValidator
 
 
 class ViewSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
-                     ElementWarningSerializerMixin, ReadOnlyObjectPermissionsSerializerMixin,
+                     ElementWarningSerializerMixin, ReadOnlyObjectPermissionSerializerMixin,
                      serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
@@ -23,14 +23,13 @@ class ViewSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
     projects_count = serializers.IntegerField(read_only=True)
 
     def validate(self, data):
-        # try to render the template to see that the syntax is ok (if the editor was used)
-        if self.context['request'].data.get('editor'):
-            try:
-                Template(data['template']).render(Context({}))
-            except (KeyError, IndexError):
-                pass
-            except (TemplateSyntaxError, TypeError) as e:
-                raise exceptions.ValidationError({'template': '\n'.join(e.args)})
+        # try to render the template to see that the syntax is ok
+        try:
+            Template(data['template']).render(Context({}))
+        except (KeyError, IndexError):
+            pass
+        except (TemplateSyntaxError, TypeError) as e:
+            raise exceptions.ValidationError({'template': '\n'.join(e.args)})
 
         return super().validate(data)
 

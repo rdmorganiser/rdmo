@@ -138,7 +138,10 @@ def convert_legacy_elements(elements):
     # second pass: del key, set uri_path, add order to reverse m2m through models
     # and sort questions into pages or questionsets
     for uri, element in elements.items():
-        if element['model'] == 'questions.catalog':
+        if element['model'] == 'conditions.condition':
+            element['uri_path'] = element.pop('key')
+
+        elif element['model'] == 'questions.catalog':
             element['uri_path'] = element.pop('key')
 
         elif element['model'] == 'questions.section':
@@ -199,6 +202,12 @@ def convert_legacy_elements(elements):
             if element.get('optionset') is not None:
                 element['optionset']['order'] = element.pop('order')
 
+        if element['model'] == 'tasks.task':
+            element['uri_path'] = element.pop('key')
+
+        if element['model'] == 'views.view':
+            element['uri_path'] = element.pop('key')
+
     return elements
 
 
@@ -210,20 +219,22 @@ def order_elements(elements):
 
 
 def append_element(ordered_elements, unordered_elements, uri, element):
-    if element is not None:
-        for element_value in element.values():
-            if isinstance(element_value, dict):
-                sub_uri = element_value.get('uri')
+    if element is None:
+        return
+
+    for element_value in element.values():
+        if isinstance(element_value, dict):
+            sub_uri = element_value.get('uri')
+            sub_element = unordered_elements.get(sub_uri)
+            if sub_uri not in ordered_elements:
+                append_element(ordered_elements, unordered_elements, sub_uri, sub_element)
+
+        elif isinstance(element_value, list):
+            for value in element_value:
+                sub_uri = value.get('uri')
                 sub_element = unordered_elements.get(sub_uri)
                 if sub_uri not in ordered_elements:
                     append_element(ordered_elements, unordered_elements, sub_uri, sub_element)
 
-            elif isinstance(element_value, list):
-                for value in element_value:
-                    sub_uri = value.get('uri')
-                    sub_element = unordered_elements.get(sub_uri)
-                    if sub_uri not in ordered_elements:
-                        append_element(ordered_elements, unordered_elements, sub_uri, sub_element)
-
-        if uri not in ordered_elements:
-            ordered_elements[uri] = element
+    if uri not in ordered_elements:
+        ordered_elements[uri] = element

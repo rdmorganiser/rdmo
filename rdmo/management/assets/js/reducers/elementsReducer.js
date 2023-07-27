@@ -49,12 +49,6 @@ export default function elementsReducer(state = initialState, action) {
         errors: {}
       }
     case 'elements/fetchElementSuccess':
-      // remove the id when copying
-      if (state.elementAction == 'copy') {
-        action.elements.element.id = null
-        action.elements.element.read_only = false
-      }
-
       return {...state, ...action.elements}
     case 'elements/fetchElementError':
       return {...state, errors: action.error.errors}
@@ -101,7 +95,6 @@ export default function elementsReducer(state = initialState, action) {
       return {...state, ...action.elements}
     case 'elements/createElementError':
       return {...state, errors: action.error.errors}
-
 
     // delete element
     case 'elements/deleteElementInit':

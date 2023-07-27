@@ -1,9 +1,7 @@
 import logging
 
-from django.contrib.sites.models import Site
-
 import rules
-from rules.predicates import is_authenticated
+from rules.predicates import is_authenticated, is_superuser
 
 logger = logging.getLogger(__name__)
 
@@ -15,18 +13,19 @@ def is_editor(user) -> bool:
 
 
 @rules.predicate
-def is_multisite_editor(user) -> bool:
-    ''' Checks if the user is an editor for all the sites '''
+def is_editor_for_current_site(user, site) -> bool:
+    ''' Checks if any editor role exists for the user '''
     if not is_editor(user):
-        return False
-
-    return user.role.editor.count() == Site.objects.count()
+        return False  # if the user is not an editor, return False
+    return user.role.editor.filter(pk=site.pk).exists()
 
 
 @rules.predicate
 def is_element_editor(user, obj) -> bool:
     ''' Checks if the user is an editor for the sites to which this element is editable '''
-    if obj is None:
+
+    if obj.id is None:  # for _add_object permissions
+        # if the element does not exist yet, it can be created by all users with an editor role
         return is_editor(user)
 
     if not obj.editors.exists():
@@ -44,19 +43,16 @@ def is_reviewer(user) -> bool:
 
 
 @rules.predicate
-def is_multisite_reviewer(user) -> bool:
-    ''' Checks if the user is an reviewer for all the sites '''
+def is_reviewer_for_current_site(user, site) -> bool:
+    ''' Checks if any reviewer role exists for the user '''
     if not is_reviewer(user):
-        return False
-
-    return user.role.reviewer.count() == Site.objects.count()
+        return False  # if the user is not an reviewer, return False
+    return user.role.reviewer.filter(pk=site.pk).exists()
 
 
 @rules.predicate
 def is_element_reviewer(user, obj) -> bool:
     ''' Checks if the user is an reviewer for the sites to which this element is editable '''
-    if obj is None:
-        return is_reviewer(user)
 
     # if the element has no editors, it is reviewable by all reviewers
     if not obj.editors.exists():
@@ -67,7 +63,8 @@ def is_element_reviewer(user, obj) -> bool:
 
 
 # Add rules
-rules.add_rule('can_view_management', is_authenticated & ((is_editor | is_reviewer)))
+rules.add_rule('management.can_view_management',
+               is_authenticated & (is_superuser | is_editor_for_current_site | is_reviewer_for_current_site))
 
 
 # Model Permissions for sites and group

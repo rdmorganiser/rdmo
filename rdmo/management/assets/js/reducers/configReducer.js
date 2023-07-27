@@ -1,7 +1,4 @@
-import ls from 'local-storage'
 import set from 'lodash/set'
-
-import { lsKeys } from '../constants/config'
 
 const initialState = {
   baseUrl: '/management/',
@@ -16,18 +13,12 @@ export default function configReducer(state = initialState, action) {
     case 'config/updateConfig':
       newState = {...state}
 
-      // set the value using lodash's set
       set(newState, action.path, action.value)
+      localStorage.setItem(`rdmo.management.config.${action.path}`, action.value)
 
-      // store the new value in the local storage
-      if (Object.keys(lsKeys).includes(action.path)) {
-        ls.set(`rdmo.management.config.${action.path}`, action.value)
-      }
-
-      // return the new state
       return newState
     case 'config/fetchConfigSuccess':
-      return {...state, ...action.config}
+      return {...state, ...action.config, currentSite: action.config.sites.find(site => site.current)}
     case 'elements/fetchConfigInit':
     case 'elements/fetchElementsInit':
     case 'elements/fetchElementInit':

@@ -1,8 +1,20 @@
 import isEmpty from 'lodash/isEmpty'
 import isUndefined from 'lodash/isUndefined'
 import get from 'lodash/get'
-import isNil from 'lodash/isNil'
 import toNumber from 'lodash/toNumber'
+
+const filterElement = (config, filter, filterSites, filterEditors, element) => {
+  const strings = get(config, `filter.${filter}.search`, '').trim().split(' '),
+        uriPrefix = get(config, `filter.${filter}.uri_prefix`, ''),
+        site = get(config, 'filter.sites', ''),
+        editor = get(config, 'filter.editors', '')
+  return (
+    strings.some(search => filterSearch(search, element)) &&
+    filterUriPrefix(uriPrefix, element) &&
+    (!filterSites || filterSite(site, element)) &&
+    (!filterEditors || filterEditor(editor, element))
+  )
+}
 
 const filterSearch = (search, element) => {
   return (
@@ -21,19 +33,8 @@ const filterSite = (site, element) => {
   return isEmpty(site) || element.sites.includes(toNumber(site))
 }
 
-const filterElement = (filter, element) => {
-  if (isNil(filter)) {
-    return true
-  } else {
-    const strings = get(filter, 'search', '').trim().split(' '),
-          uriPrefix = get(filter, 'uri_prefix', ''),
-          site = get(filter, 'sites', '')
-    return (
-      strings.some(search => filterSearch(search, element)) &&
-      filterUriPrefix(uriPrefix, element) &&
-      filterSite(site, element)
-    )
-  }
+const filterEditor = (editor, element) => {
+  return isEmpty(editor) || element.editors.includes(toNumber(editor))
 }
 
 const getUriPrefixes = (elements) => {

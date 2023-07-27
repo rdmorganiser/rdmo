@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import get from 'lodash/get'
 
 import { filterElement } from '../../utils/filter'
 import { buildPath } from '../../utils/location'
@@ -9,9 +10,10 @@ import { EditLink, CopyLink, AddLink, AvailableLink, LockedLink, NestedLink,
          ExportLink, CodeLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 
-const Catalog = ({ config, catalog, elementActions, display='list', filter=null }) => {
+const Catalog = ({ config, catalog, elementActions, display='list',
+                   filter=false, filterSites=false, filterEditors=false }) => {
 
-  const showElement = filterElement(filter, catalog)
+  const showElement = filterElement(config, filter, filterSites, filterEditors, catalog)
 
   const editUrl = buildPath(config.baseUrl, 'catalogs', catalog.id)
   const copyUrl = buildPath(config.baseUrl, 'catalogs', catalog.id, 'copy')
@@ -49,7 +51,7 @@ const Catalog = ({ config, catalog, elementActions, display='list', filter=null 
           <strong>{gettext('Catalog')}{': '}</strong> {catalog.title}
         </p>
         {
-          config.display.uri.catalogs &&
+          get(config, 'display.uri.catalogs', true) &&
           <CodeLink className="code-questions" uri={catalog.uri} onClick={() => fetchEdit()} />
         }
         <ElementErrors element={catalog} />
@@ -74,7 +76,9 @@ Catalog.propTypes = {
   catalog: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired,
   display: PropTypes.string,
-  filter: PropTypes.object
+  filter: PropTypes.string,
+  filterSites: PropTypes.bool,
+  filterEditors: PropTypes.bool
 }
 
 export default Catalog

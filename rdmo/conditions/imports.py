@@ -2,8 +2,8 @@ import logging
 
 from django.contrib.sites.models import Site
 
-from rdmo.core.imports import (set_common_fields, set_foreign_field,
-                               validate_instance)
+from rdmo.core.imports import (check_permissions, set_common_fields,
+                               set_foreign_field, validate_instance)
 
 from .models import Condition
 from .validators import ConditionLockedValidator, ConditionUniqueURIValidator
@@ -11,7 +11,7 @@ from .validators import ConditionLockedValidator, ConditionUniqueURIValidator
 logger = logging.getLogger(__name__)
 
 
-def import_condition(element, save=False):
+def import_condition(element, save=False, user=None):
     try:
         condition = Condition.objects.get(uri=element.get('uri'))
     except Condition.DoesNotExist:
@@ -26,6 +26,8 @@ def import_condition(element, save=False):
     condition.target_text = element.get('target_text') or ''
 
     validate_instance(condition, element, ConditionLockedValidator, ConditionUniqueURIValidator)
+
+    check_permissions(condition, element, user)
 
     if save and not element.get('errors'):
         if condition.id:

@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import get from 'lodash/get'
 
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterString, FilterUriPrefix, FilterSite } from '../common/Filter'
+import { FilterString, FilterUriPrefix, FilterSite} from '../common/Filter'
 import { BackButton, NewButton } from '../common/Buttons'
 
 import View from '../element/View'
@@ -12,7 +13,8 @@ const Views = ({ config, views, configActions, elementActions }) => {
 
   const updateFilterString = (value) => configActions.updateConfig('filter.views.search', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.views.uri_prefix', value)
-  const updateFilterSite = (value) => configActions.updateConfig('filter.views.sites', value)
+  const updateFilterSite = (value) => configActions.updateConfig('filter.sites', value)
+  const updateFilterEditor = (value) => configActions.updateConfig('filter.editors', value)
 
   const createView = () => elementActions.createElement('views')
 
@@ -29,18 +31,24 @@ const Views = ({ config, views, configActions, elementActions }) => {
       <div className="panel-body">
         <div className="row">
           <div className={config.settings.multisite ? 'col-sm-4' : 'col-sm-8'}>
-            <FilterString value={config.filter.views.search} onChange={updateFilterString}
+            <FilterString value={get(config, 'filter.views.search', '')} onChange={updateFilterString}
                           placeholder={gettext('Filter views')} />
           </div>
           <div className="col-sm-4">
-            <FilterUriPrefix value={config.filter.views.uri_prefix} onChange={updateFilterUriPrefix}
+            <FilterUriPrefix value={get(config, 'filter.views.uri_prefix', '')} onChange={updateFilterUriPrefix}
                              options={getUriPrefixes(views)} />
           </div>
           {
-            config.settings.multisite && <div className="col-sm-4">
-              <FilterSite value={config.filter.views.sites} onChange={updateFilterSite}
-                          options={config.sites} />
-            </div>
+            config.settings.multisite && <>
+              <div className="col-sm-2">
+                <FilterSite value={get(config, 'filter.sites', '')} onChange={updateFilterSite}
+                            options={config.sites} />
+              </div>
+              <div className="col-sm-2">
+                <FilterSite value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
+                            options={config.sites} allLabel={gettext('All editors')} />
+              </div>
+            </>
           }
         </div>
       </div>
@@ -48,8 +56,9 @@ const Views = ({ config, views, configActions, elementActions }) => {
       <ul className="list-group">
       {
         views.map((view, index) => (
-          <View key={index} config={config} view={view} elementActions={elementActions}
-                filter={config.filter.views} />
+          <View key={index} config={config} view={view}
+                configActions={configActions} elementActions={elementActions}
+                filter="views" filterSites={true} filterEditors={true} />
         ))
       }
       </ul>

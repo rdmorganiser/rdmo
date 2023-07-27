@@ -1,4 +1,5 @@
 
+from rdmo.core.models import Model
 
 multisite_users = (
     ('user', 'user'),
@@ -64,6 +65,11 @@ multisite_status_map = {
 
 status_map_object_permissions = {
     'copy': {
+        'all-element': {
+            'foo-reviewer': 403, 'foo-editor': 201,
+            'bar-reviewer': 403, 'bar-editor': 201,
+            'example-reviewer': 403, 'example-editor': 201,
+        },
         'foo-element': {
             'foo-reviewer': 403, 'foo-editor': 201,
             'bar-reviewer': 404, 'bar-editor': 404,
@@ -76,6 +82,11 @@ status_map_object_permissions = {
         }
     },
     'update': {
+        'all-element': {
+            'foo-reviewer': 403, 'foo-editor': 200,
+            'bar-reviewer': 403, 'bar-editor': 200,
+            'example-reviewer': 403, 'example-editor': 200,
+        },
         'foo-element': {
             'foo-reviewer': 403, 'foo-editor': 200,
             'bar-reviewer': 404, 'bar-editor': 404,
@@ -88,6 +99,11 @@ status_map_object_permissions = {
         }
     },
     'delete': {
+        'all-element': {
+            'foo-reviewer': 403, 'foo-editor': 204,
+            'bar-reviewer': 403, 'bar-editor': 204,
+            'example-reviewer': 403, 'example-editor': 204,
+        },
         'foo-element': {
             'foo-reviewer': 403, 'foo-editor': 204,
             'bar-reviewer': 404, 'bar-editor': 404,
@@ -104,15 +120,22 @@ status_map_object_permissions = {
 
 def get_obj_perms_status_code(instance, username, method):
     ''' looks for the object permissions of the instance and returns the status code '''
-    if not instance.editors.exists():
-        return multisite_status_map[method][username]
-    
+
+    if isinstance(instance, Model):
+        try:
+            if not instance.editors.exists():
+                return multisite_status_map[method][username]
+        except AttributeError as exc:
+            raise AttributeError(f'instance {instance} should have an editors attribute') from exc
+    elif isinstance(instance, str):
+        pass
+
     if 'foo-' in str(instance):
         instance_obj_perms_key = 'foo-element'
     elif 'bar-' in str(instance):
         instance_obj_perms_key = 'bar-element'
     else:
-        raise ValueError('instance should have either foo or bar in name for obj perms')
+        instance_obj_perms_key = 'all-element'
 
     try:
         method_instance_obj_perms_map = status_map_object_permissions[method][instance_obj_perms_key]

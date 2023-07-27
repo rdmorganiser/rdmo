@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import get from 'lodash/get'
 
 import { filterElement } from '../../utils/filter'
 import { buildPath } from '../../utils/location'
@@ -8,9 +9,9 @@ import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 
-const Option = ({ config, option, elementActions, display='list', indent=0, filter=null }) => {
+const Option = ({ config, option, elementActions, display='list', indent=0, filter=false, filterEditors=false }) => {
 
-  const showElement = filterElement(filter, option)
+  const showElement = filterElement(config, filter, false, filterEditors, option)
 
   const editUrl = buildPath(config.baseUrl, 'options', option.id)
   const copyUrl = buildPath(config.baseUrl, 'options', option.id, 'copy')
@@ -36,7 +37,7 @@ const Option = ({ config, option, elementActions, display='list', indent=0, filt
           <strong>{gettext('Option')}{': '}</strong> {option.text}
         </p>
         {
-          config.display.uri.options &&
+          get(config, 'display.uri.options', true) &&
           <CodeLink className="code-options" uri={option.uri} onClick={() => fetchEdit()} />
         }
         <ElementErrors element={option} />
@@ -68,7 +69,8 @@ Option.propTypes = {
   elementActions: PropTypes.object.isRequired,
   display: PropTypes.string,
   indent: PropTypes.number,
-  filter: PropTypes.object
+  filter: PropTypes.string,
+  filterEditors: PropTypes.bool
 }
 
 export default Option

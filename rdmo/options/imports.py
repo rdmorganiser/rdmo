@@ -2,8 +2,9 @@ import logging
 
 from django.contrib.sites.models import Site
 
-from rdmo.core.imports import (set_common_fields, set_lang_field,
-                               set_m2m_instances, set_m2m_through_instances,
+from rdmo.core.imports import (check_permissions, set_common_fields,
+                               set_lang_field, set_m2m_instances,
+                               set_m2m_through_instances,
                                set_reverse_m2m_through_instance,
                                validate_instance)
 
@@ -14,7 +15,7 @@ from .validators import (OptionLockedValidator, OptionSetLockedValidator,
 logger = logging.getLogger(__name__)
 
 
-def import_optionset(element, save=False):
+def import_optionset(element, save=False, user=None):
     try:
         optionset = OptionSet.objects.get(uri=element.get('uri'))
     except OptionSet.DoesNotExist:
@@ -26,6 +27,8 @@ def import_optionset(element, save=False):
     optionset.provider_key = element.get('provider_key') or ''
 
     validate_instance(optionset, element, OptionSetLockedValidator, OptionSetUniqueURIValidator)
+
+    check_permissions(optionset, element, user)
 
     if save and not element.get('errors'):
         if optionset.id:
@@ -43,7 +46,7 @@ def import_optionset(element, save=False):
     return optionset
 
 
-def import_option(element, save=False):
+def import_option(element, save=False, user=None):
     try:
         option = Option.objects.get(uri=element.get('uri'))
     except Option.DoesNotExist:
@@ -56,6 +59,8 @@ def import_option(element, save=False):
     set_lang_field(option, 'text', element)
 
     validate_instance(option, element, OptionLockedValidator, OptionUniqueURIValidator)
+
+    check_permissions(option, element, user)
 
     if save and not element.get('errors'):
         if option.id:

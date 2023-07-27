@@ -37,7 +37,14 @@ const Import = ({ config, imports, importActions }) => {
                   <code className={codeClass[element.model]}>{element.uri}</code>
                   {element.created && <span className="text-success">{' '}{gettext('created')}</span>}
                   {element.updated && <span className="text-info">{' '}{gettext('updated')}</span>}
-                  {!isEmpty(element.errors) && <span className="text-danger">{' '}{gettext('could not be imported')}</span>}
+                  {
+                    !isEmpty(element.errors) && !(element.created || element.updated) &&
+                    <span className="text-danger">{' '}{gettext('could not be imported')}</span>
+                  }
+                  {
+                    !isEmpty(element.errors) && (element.created || element.updated) &&
+                    <>{', '}<span className="text-danger">{gettext('but could not be added to parent element')}</span></>
+                  }
                   {'.'}
                 </p>
                 {element.warnings.map(message => <p key={uniqueId()} className="text-warning">{message}</p>)}

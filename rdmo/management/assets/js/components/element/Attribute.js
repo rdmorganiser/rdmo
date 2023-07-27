@@ -8,9 +8,10 @@ import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AddLink, LockedLink, NestedLink, ExportLink, CodeLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 
-const Attribute = ({ config, attribute, elementActions, display='list', filter=null, indent=0 }) => {
+const Attribute = ({ config, attribute, elementActions, display='list', indent=0,
+                     filter=null, filterEditors=false }) => {
 
-  const showElement = filterElement(filter, attribute)
+  const showElement = filterElement(config, filter, false, filterEditors, attribute)
 
   const editUrl = buildPath(config.baseUrl, 'attributes', attribute.id)
   const copyUrl = buildPath(config.baseUrl, 'attributes', attribute.id, 'copy')
@@ -28,7 +29,7 @@ const Attribute = ({ config, attribute, elementActions, display='list', filter=n
     <div className="element">
       <div className="pull-right">
         <ReadOnlyIcon title={gettext('This attribute is read only')} show={attribute.read_only} />
-        <NestedLink title={gettext('View attribute nested')} href={nestedUrl} onClick={fetchNested} 
+        <NestedLink title={gettext('View attribute nested')} href={nestedUrl} onClick={fetchNested}
                     show={!attribute.is_leaf_node} />
         <EditLink title={gettext('Edit attribute')} href={editUrl} onClick={fetchEdit} />
         <CopyLink title={gettext('Copy attribute')} href={copyUrl} onClick={fetchCopy} />
@@ -83,8 +84,9 @@ Attribute.propTypes = {
   attribute: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired,
   display: PropTypes.string,
+  indent: PropTypes.number,
   filter: PropTypes.object,
-  indent: PropTypes.number
+  filterEditors: PropTypes.bool
 }
 
 export default Attribute

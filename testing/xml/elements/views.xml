@@ -2,7 +2,7 @@
 <rdmo xmlns:dc="http://purl.org/dc/elements/1.1/" created="2023-04-20T09:40:06.795538+02:00" version="1.9.2">
 	<view dc:uri="http://example.com/terms/views/view_a">
 		<uri_prefix>http://example.com/terms</uri_prefix>
-		<key>view_a</key>
+		<uri_path>view_a</uri_path>
 		<dc:comment/>
 		<title lang="en">View A</title>
 		<help lang="en">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</help>
@@ -191,7 +191,7 @@
 	</view>
 	<view dc:uri="http://example.com/terms/views/view_b">
 		<uri_prefix>http://example.com/terms</uri_prefix>
-		<key>view_b</key>
+		<uri_path>view_b</uri_path>
 		<dc:comment/>
 		<title lang="en">View B</title>
 		<help lang="en">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</help>
@@ -206,7 +206,7 @@
 	</view>
 	<view dc:uri="http://example.com/terms/views/view_c">
 		<uri_prefix>http://example.com/terms</uri_prefix>
-		<key>view_c</key>
+		<uri_path>view_c</uri_path>
 		<dc:comment/>
 		<title lang="en">Project Test View C</title>
 		<help lang="en">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</help>

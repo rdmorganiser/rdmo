@@ -8,9 +8,9 @@ import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AvailableLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 
-const Task = ({ config, task, elementActions, filter=null }) => {
+const Task = ({ config, task, elementActions, filter=false, filterSites=false, filterEditors=false }) => {
 
-  const showElement = filterElement(filter, task)
+  const showElement = filterElement(config, filter, filterSites, filterEditors, task)
 
   const editUrl = buildPath(config.baseUrl, 'tasks', task.id)
   const copyUrl = buildPath(config.baseUrl, 'tasks', task.id, 'copy')
@@ -52,8 +52,11 @@ const Task = ({ config, task, elementActions, filter=null }) => {
 Task.propTypes = {
   config: PropTypes.object.isRequired,
   task: PropTypes.object.isRequired,
+  configActions: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired,
-  filter: PropTypes.object
+  filter: PropTypes.string,
+  filterSites: PropTypes.bool,
+  filterEditors: PropTypes.bool
 }
 
 export default Task

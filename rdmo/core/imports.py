@@ -55,146 +55,106 @@ def set_lang_field(instance, field_name, element):
             setattr(instance, '%s_%s' % (field_name, lang_field), '')
 
 
-def set_foreign_field(instance, field_name, element):
-    if field_name in element:
-        foreign_element = element[field_name]
+def set_foreign_field(instance, field_name, element) -> None:
+    if field_name not in element:
+        return
 
-        if foreign_element:
-            foreign_uri = foreign_element.get('uri')
+    foreign_element = element[field_name]
 
-            model_info = model_meta.get_field_info(instance)
-            foreign_model = model_info.forward_relations[field_name].related_model
+    if not foreign_element:
+        setattr(instance, field_name, None)
+        return
 
-            try:
-                foreign_instance = foreign_model.objects.get(uri=foreign_uri)
-                setattr(instance, field_name, foreign_instance)
-            except foreign_model.DoesNotExist:
-                message = '{foreign_model} {foreign_uri} for {instance_model} {instance_uri} does not exist.'.format(
-                    foreign_model=foreign_model._meta.object_name,
-                    foreign_uri=foreign_uri,
-                    instance_model=instance._meta.object_name,
-                    instance_uri=element.get('uri')
-                )
-                logger.info(message)
-                element['warnings'][foreign_uri].append(message)
-        else:
-            setattr(instance, field_name, None)
+    foreign_uri = foreign_element.get('uri')
+
+    model_info = model_meta.get_field_info(instance)
+    foreign_model = model_info.forward_relations[field_name].related_model
+
+    try:
+        foreign_instance = foreign_model.objects.get(uri=foreign_uri)
+        setattr(instance, field_name, foreign_instance)
+    except foreign_model.DoesNotExist:
+        message = '{foreign_model} {foreign_uri} for {instance_model} {instance_uri} does not exist.'.format(
+            foreign_model=foreign_model._meta.object_name,
+            foreign_uri=foreign_uri,
+            instance_model=instance._meta.object_name,
+            instance_uri=element.get('uri')
+        )
+        logger.info(message)
+        element['warnings'][foreign_uri].append(message)
 
 
 def set_m2m_instances(instance, field_name, element):
-    if field_name in element:
-        foreign_elements = element.get(field_name, [])
+    if field_name not in element:
+        return
 
-        if foreign_elements:
-            foreign_instances = []
+    foreign_elements = element.get(field_name, [])
 
-            model_info = model_meta.get_field_info(instance)
-            foreign_model = model_info.forward_relations[field_name].related_model
+    if not foreign_elements:
+        getattr(instance, field_name).clear()
+        return
 
-            for foreign_element in foreign_elements:
-                foreign_uri = foreign_element.get('uri')
+    foreign_instances = []
 
-                try:
-                    foreign_instance = foreign_model.objects.get(uri=foreign_uri)
-                    foreign_instances.append(foreign_instance)
-                except foreign_model.DoesNotExist:
-                    message = '{foreign_model} {foreign_uri} for {instance_model} {instance_uri} does not exist.'.format(
-                        foreign_model=foreign_model._meta.object_name,
-                        foreign_uri=foreign_uri,
-                        instance_model=instance._meta.object_name,
-                        instance_uri=element.get('uri')
-                    )
-                    logger.info(message)
-                    element['warnings'][foreign_uri].append(message)
+    model_info = model_meta.get_field_info(instance)
+    foreign_model = model_info.forward_relations[field_name].related_model
 
-            getattr(instance, field_name).set(foreign_instances)
-        else:
-            getattr(instance, field_name).clear()
+    for foreign_element in foreign_elements:
+        foreign_uri = foreign_element.get('uri')
 
+        try:
+            foreign_instance = foreign_model.objects.get(uri=foreign_uri)
+            foreign_instances.append(foreign_instance)
+        except foreign_model.DoesNotExist:
+            message = '{foreign_model} {foreign_uri} for {instance_model} {instance_uri} does not exist.'.format(
+                foreign_model=foreign_model._meta.object_name,
+                foreign_uri=foreign_uri,
+                instance_model=instance._meta.object_name,
+                instance_uri=element.get('uri')
+            )
+            logger.info(message)
+            element['warnings'][foreign_uri].append(message)
 
-def set_m2m_through_instances(instance, field_name, element, source_name, target_name, through_name):
-    if field_name in element:
-        target_elements = element.get(field_name)
-
-        model_info = model_meta.get_field_info(instance)
-        through_model = model_info.reverse_relations[through_name].related_model
-        target_model = model_info.forward_relations[field_name].related_model
-        through_instances = list(getattr(instance, through_name).all())
-
-        if target_elements:
-            for target_element in target_elements:
-                target_uri = target_element.get('uri')
-                order = target_element.get('order')
-
-                try:
-                    target_instance = target_model.objects.get(uri=target_uri)
-
-                    try:
-                        # look for the item in items
-                        through_instance = next(filter(lambda item: getattr(item, target_name).uri == target_instance.uri,
-                                                       through_instances))
-
-                        # update order if the item if it changed
-                        if through_instance.order != order:
-                            through_instance.order = order
-                            through_instance.save()
-
-                        # remove the through_instance from the through_instances list so that it won't get removed
-                        through_instances.remove(through_instance)
-                    except StopIteration:
-                        # create a new item
-                        through_model(**{
-                            source_name: instance,
-                            target_name: target_instance,
-                            'order': order
-                        }).save()
-
-                except target_model.DoesNotExist:
-                    message = '{target_model} {target_uri} for imported {instance_model} {instance_uri} does not exist.'.format(
-                        target_model=target_model._meta.object_name,
-                        target_uri=target_uri,
-                        instance_model=instance._meta.object_name,
-                        instance_uri=element.get('uri')
-                    )
-                    logger.info(message)
-                    element['warnings'][target_uri].append(message)
-
-        # remove the remainders of the items list
-        for through_instance in through_instances:
-            if getattr(through_instance, target_name).uri_prefix == instance.uri_prefix:
-                through_instance.delete()
+    getattr(instance, field_name).set(foreign_instances)
 
 
-def set_reverse_m2m_through_instance(instance, field_name, element, source_name, target_name, through_name):
-    if field_name in element:
-        target_element = element.get(field_name)
+def set_m2m_through_instances(instance, field_name, element, source_name, target_name, through_name) -> None:
+    if field_name not in element:
+        return
 
-        model_info = model_meta.get_field_info(instance)
-        through_model = model_info.reverse_relations[through_name].related_model
-        through_info = model_meta.get_field_info(through_model)
-        target_model = through_info.forward_relations[target_name].related_model
+    target_elements = element.get(field_name) or []
 
+    model_info = model_meta.get_field_info(instance)
+    through_model = model_info.reverse_relations[through_name].related_model
+    target_model = model_info.forward_relations[field_name].related_model
+    through_instances = list(getattr(instance, through_name).all())
+
+    for target_element in target_elements:
         target_uri = target_element.get('uri')
         order = target_element.get('order')
 
         try:
             target_instance = target_model.objects.get(uri=target_uri)
-            if target_instance.is_locked:
-                message = '{target_model} {target_uri} for imported {instance_model} {instance_uri} is locked.'.format(
-                    target_model=target_model._meta.object_name,
-                    target_uri=target_uri,
-                    instance_model=instance._meta.object_name,
-                    instance_uri=element.get('uri')
-                )
-                logger.info(message)
-                element['errors'].append(message)
-            else:
-                through_instance, created = through_model.objects.get_or_create(**{
+
+            try:
+                # look for the item in items
+                through_instance = next(filter(lambda item: getattr(item, target_name).uri == target_instance.uri,
+                                                through_instances))
+
+                # update order if the item if it changed
+                if through_instance.order != order:
+                    through_instance.order = order
+                    through_instance.save()
+
+                # remove the through_instance from the through_instances list so that it won't get removed
+                through_instances.remove(through_instance)
+            except StopIteration:
+                # create a new item
+                through_model(**{
                     source_name: instance,
-                    target_name: target_instance
-                })
-                through_instance.order = order
-                through_instance.save()
+                    target_name: target_instance,
+                    'order': order
+                }).save()
 
         except target_model.DoesNotExist:
             message = '{target_model} {target_uri} for imported {instance_model} {instance_uri} does not exist.'.format(
@@ -205,6 +165,55 @@ def set_reverse_m2m_through_instance(instance, field_name, element, source_name,
             )
             logger.info(message)
             element['warnings'][target_uri].append(message)
+
+    # remove the remainders of the items list
+    for through_instance in through_instances:
+        if getattr(through_instance, target_name).uri_prefix == instance.uri_prefix:
+            through_instance.delete()
+
+
+def set_reverse_m2m_through_instance(instance, field_name, element, source_name, target_name, through_name) -> None:
+    if field_name not in element:
+        return
+
+    target_element = element.get(field_name)
+
+    model_info = model_meta.get_field_info(instance)
+    through_model = model_info.reverse_relations[through_name].related_model
+    through_info = model_meta.get_field_info(through_model)
+    target_model = through_info.forward_relations[target_name].related_model
+
+    target_uri = target_element.get('uri')
+    order = target_element.get('order')
+
+    try:
+        target_instance = target_model.objects.get(uri=target_uri)
+        if target_instance.is_locked:
+            message = '{target_model} {target_uri} for imported {instance_model} {instance_uri} is locked.'.format(
+                target_model=target_model._meta.object_name,
+                target_uri=target_uri,
+                instance_model=instance._meta.object_name,
+                instance_uri=element.get('uri')
+            )
+            logger.info(message)
+            element['errors'].append(message)
+        else:
+            through_instance, created = through_model.objects.get_or_create(**{
+                source_name: instance,
+                target_name: target_instance
+            })
+            through_instance.order = order
+            through_instance.save()
+
+    except target_model.DoesNotExist:
+        message = '{target_model} {target_uri} for imported {instance_model} {instance_uri} does not exist.'.format(
+            target_model=target_model._meta.object_name,
+            target_uri=target_uri,
+            instance_model=instance._meta.object_name,
+            instance_uri=element.get('uri')
+        )
+        logger.info(message)
+        element['warnings'][target_uri].append(message)
 
 
 def validate_instance(instance, element, *validators):
@@ -221,11 +230,33 @@ def validate_instance(instance, element, *validators):
     except ObjectDoesNotExist as e:
         exception_message = e
     finally:
-        if exception_message is not None:
-            message = '{instance_model} {instance_uri} cannot be imported ({exception}).'.format(
-                instance_model=instance._meta.object_name,
-                instance_uri=element.get('uri'),
-                exception=exception_message
-            )
-            logger.info(message)
-            element['errors'].append(message)
+        if exception_message is None:
+            return
+        message = '{instance_model} {instance_uri} cannot be imported ({exception}).'.format(
+            instance_model=instance._meta.object_name,
+            instance_uri=element.get('uri'),
+            exception=exception_message
+        )
+        logger.info(message)
+        element['errors'].append(message)
+
+
+def check_permissions(instance, element, user):
+    if user is None:
+        return
+
+    app_label = instance._meta.app_label
+    model_name = instance._meta.model_name
+
+    if instance.id:
+        perms = [f'{app_label}.change_{model_name}_object']
+    else:
+        perms = [f'{app_label}.add_{model_name}_object']
+
+    if not user.has_perms(perms, instance):
+        message = 'You have no permissions to import {instance_model} {instance_uri}.'.format(
+            instance_model=instance._meta.object_name,
+            instance_uri=element.get('uri')
+        )
+        logger.info(message)
+        element['errors'].append(message)
