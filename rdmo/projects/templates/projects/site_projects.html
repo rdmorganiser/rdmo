@@ -15,7 +15,7 @@
 {% block sidebar %}
     <h2>{% trans 'Filter projects' %}</h2>
 
-    <form method="GET" class="projects-search">
+    <form method="GET" id="projects-search" class="projects-search">
         <input type="text" class="form-control" id="search" name="title" placeholder="{% trans 'Search project title' %}"
                value="{{request.GET.title }}" />
         <a href="{% url 'site_projects' %}" class="projects-search-reset">
@@ -28,7 +28,7 @@
                 {% endblocktrans %}
             </small>
         </p>
-        <select name="catalog" id="id_catalog" class="form-control">
+        <select name="catalog" id="catalog" class="form-control">
             <option value="">{% trans 'All catalogs' %}</option>
             {% for catalog in catalogs %}
                 <option value="{{ catalog.id }}" {% if catalog.id|stringformat:'s' == request.GET.catalog %}selected{% endif %}>
@@ -36,8 +36,14 @@
                 </option>
             {% endfor %}
         </select>
-        <button type="submit" class="btn btn-primary">{% trans 'Filter projects' %}</button>
     </form>
+    <script>
+        $(document).ready(function() {
+            $('#catalog').change(function() {
+                $('#projects-search').trigger('submit');
+            });
+        });
+    </script>
 
     <h2>{% trans 'Options' %}</h2>
 
