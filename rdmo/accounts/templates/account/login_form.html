@@ -2,12 +2,23 @@
 
 {% if settings.SHIBBOLETH %}
 
-    <a class="btn btn-success extend" href="{{ settings.LOGIN_URL }}">
+{% if settings.SHIBBOLETH_LOGIN_URL %}
+<p>
+    <a class="btn btn-success extend" href="{% url 'shibboleth_login' %}">
         {% trans 'Login with Shibboleth' %}
     </a>
-
+</p>
 {% else %}
+<p>
+    <a class="btn btn-success extend" href="{% url 'account_login' %}">
+        {% trans 'Login with Shibboleth' %}
+    </a>
+</p>
+{% endif %}
 
+{% endif %}
+
+{% if settings.LOGIN_FORM %}
 <form method="post" action="{% url 'account_login' %}">
     {% csrf_token %}
 
@@ -21,7 +32,6 @@
 
     <input type="submit" class="btn btn-primary" value="{% trans 'Login' %}" />
 </form>
-
 {% endif %}
 
 {% if settings.ACCOUNT %}
