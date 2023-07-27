@@ -289,7 +289,7 @@ export function fetchElement(elementType, elementId, elementAction=null) {
 
           if (settings.multisite) {
             elements.element.sites = [currentSite.id]
-            elements.elementeditors = [currentSite.id]
+            elements.element.editors = [currentSite.id]
           }
         }
         return dispatch(fetchElementSuccess({ ...elements }))
