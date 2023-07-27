@@ -27,7 +27,7 @@ export default function configReducer(state = initialState, action) {
       // return the new state
       return newState
     case 'config/fetchConfigSuccess':
-      return {...state, ...action.config}
+      return {...state, ...action.config, currentSite: action.config.sites.find(site => site.current)}
     case 'elements/fetchConfigInit':
     case 'elements/fetchElementsInit':
     case 'elements/fetchElementInit':
