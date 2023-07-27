@@ -85,7 +85,7 @@ Attribute.propTypes = {
   elementActions: PropTypes.object.isRequired,
   display: PropTypes.string,
   indent: PropTypes.number,
-  filter: PropTypes.object,
+  filter: PropTypes.string,
   filterEditors: PropTypes.bool
 }
 
