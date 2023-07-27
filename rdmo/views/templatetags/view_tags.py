@@ -51,7 +51,10 @@ def get_values(context, attribute, set_prefix='*', set_index='*', index='*', pro
         if index != '*':
             values = filter(lambda value: value.collection_index == index, values)
 
-        return list(map(lambda value: value.as_dict, values))
+        if values.strip() != "" and values != None:
+            return list(map(lambda value: value.as_dict, values))
+        else:
+            return list("")
 
 
 @register.simple_tag(takes_context=True)
@@ -128,13 +131,15 @@ def get_set(context, attribute, set_prefix='', project=None):
 @register.inclusion_tag('views/tags/value.html', takes_context=True)
 def render_value(context, attribute, set_prefix='', set_index=0, index=0, project=None):
     context['value'] = get_value(context, attribute, set_prefix=set_prefix, set_index=set_index, index=index, project=project)
-    return context
+    if content != "": 
+      return context
 
 
 @register.inclusion_tag('views/tags/value_list.html', takes_context=True)
-def render_value_list(context, attribute, set_prefix='', set_index=0, project=None):
+def render_value_list(context, attribute, set_prefix='', set_index=0, project=None, sep="; ", sep_last=" and "):
     context['values'] = get_values(context, attribute, set_prefix=set_prefix, set_index=set_index, project=project)
-    return context
+    texttoprint = context[:-2]"{sep}".join(  )+sep_last+context[-1]
+    return texttoprint
 
 
 @register.inclusion_tag('views/tags/value_inline_list.html', takes_context=True)
