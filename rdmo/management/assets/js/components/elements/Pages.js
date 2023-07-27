@@ -14,7 +14,8 @@ const Pages = ({ config, pages, configActions, elementActions }) => {
 
   const updateFilterString = (value) => configActions.updateConfig('filter.pages.search', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.pages.uri_prefix', value)
-  const updateFilterEditor = (value) => configActions.updateConfig('filter.pages.editors', value)
+  const updateFilterEditor = (value) => configActions.updateConfig('filter.editors', value)
+
   const updateDisplayPagesURI = (value) => configActions.updateConfig('display.uri.pages', value)
   const updateDisplayAttributesURI = (value) => configActions.updateConfig('display.uri.attributes', value)
   const updateDisplayConditionsURI = (value) => configActions.updateConfig('display.uri.conditions', value)
@@ -43,7 +44,7 @@ const Pages = ({ config, pages, configActions, elementActions }) => {
           </div>
           {
             config.settings.multisite && <div className="col-sm-2">
-              <FilterSite value={get(config, 'filter.pages.editors', '')} onChange={updateFilterEditor}
+              <FilterSite value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
                           options={config.sites} allLabel={gettext('All editors')} />
             </div>
           }
@@ -64,7 +65,7 @@ const Pages = ({ config, pages, configActions, elementActions }) => {
         pages.map((page, index) => (
           <Page key={index} config={config} page={page}
                 configActions={configActions} elementActions={elementActions}
-                filter={get(config, 'filter.pages')} />
+                filter="pages" filterEditors={true} />
         ))
       }
       </ul>

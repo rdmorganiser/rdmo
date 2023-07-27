@@ -13,8 +13,8 @@ const Tasks = ({ config, tasks, configActions, elementActions }) => {
 
   const updateFilterString = (value) => configActions.updateConfig('filter.tasks.search', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.tasks.uri_prefix', value)
-  const updateFilterSite = (value) => configActions.updateConfig('filter.tasks.sites', value)
-  const updateFilterEditor = (value) => configActions.updateConfig('filter.tasks.editors', value)
+  const updateFilterSite = (value) => configActions.updateConfig('filter.sites', value)
+  const updateFilterEditor = (value) => configActions.updateConfig('filter.editors', value)
 
   const createTask = () => elementActions.createElement('tasks')
 
@@ -41,11 +41,11 @@ const Tasks = ({ config, tasks, configActions, elementActions }) => {
           {
             config.settings.multisite && <>
               <div className="col-sm-2">
-                <FilterSite value={get(config, 'filter.tasks.sites', '')} onChange={updateFilterSite}
+                <FilterSite value={get(config, 'filter.sites', '')} onChange={updateFilterSite}
                             options={config.sites} />
               </div>
               <div className="col-sm-2">
-                <FilterSite value={get(config, 'filter.tasks.editors', '')} onChange={updateFilterEditor}
+                <FilterSite value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
                             options={config.sites} allLabel={gettext('All editors')} />
               </div>
             </>
@@ -58,7 +58,7 @@ const Tasks = ({ config, tasks, configActions, elementActions }) => {
         tasks.map((task, index) => (
           <Task key={index} config={config} task={task}
                 configActions={configActions} elementActions={elementActions}
-                filter={get(config, 'filter.tasks')} />
+                filter="tasks" filterSites={true} filterEditors={true} />
         ))
       }
       </ul>

@@ -14,7 +14,7 @@ const QuestionSets = ({ config, questionsets, configActions, elementActions }) =
 
   const updateFilterString = (value) => configActions.updateConfig('filter.questionsets.search', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.questionsets.uri_prefix', value)
-  const updateFilterEditor = (value) => configActions.updateConfig('filter.questionsets.editors', value)
+  const updateFilterEditor = (value) => configActions.updateConfig('filter.editors', value)
 
   const updateDisplayQuestionSetsURI = (value) => configActions.updateConfig('display.uri.questionsets', value)
   const updateDisplayAttributesURI = (value) => configActions.updateConfig('display.uri.attributes', value)
@@ -44,7 +44,7 @@ const QuestionSets = ({ config, questionsets, configActions, elementActions }) =
           </div>
           {
             config.settings.multisite && <div className="col-sm-2">
-              <FilterSite value={get(config, 'filter.questionsets.editors', '')} onChange={updateFilterEditor}
+              <FilterSite value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
                           options={config.sites} allLabel={gettext('All editors')} />
             </div>
           }
@@ -65,7 +65,7 @@ const QuestionSets = ({ config, questionsets, configActions, elementActions }) =
         questionsets.map((questionset, index) => (
           <QuestionSet key={index} config={config} questionset={questionset}
                        configActions={configActions} elementActions={elementActions}
-                       filter={get(config, 'filter.questionsets')} />
+                       filter="questionsets" filterEditors={true} />
         ))
       }
       </ul>

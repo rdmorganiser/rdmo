@@ -9,9 +9,9 @@ import { EditLink, CopyLink, AddLink, LockedLink, NestedLink,
          ExportLink, CodeLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 
-const OptionSet = ({ config, optionset, configActions, elementActions, display='list', filter=null }) => {
+const OptionSet = ({ config, optionset, elementActions, display='list', filter=false, filterEditors=false }) => {
 
-  const showElement = filterElement(filter, optionset)
+  const showElement = filterElement(config, filter, false, filterEditors, optionset)
 
   const editUrl = buildPath(config.baseUrl, 'optionsets', optionset.id)
   const copyUrl = buildPath(config.baseUrl, 'optionsets', optionset.id, 'copy')
@@ -63,10 +63,10 @@ const OptionSet = ({ config, optionset, configActions, elementActions, display='
 OptionSet.propTypes = {
   config: PropTypes.object.isRequired,
   optionset: PropTypes.object.isRequired,
-  configActions: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired,
   display: PropTypes.string,
-  filter: PropTypes.object
+  filter: PropTypes.string,
+  filterEditors: PropTypes.bool
 }
 
 export default OptionSet

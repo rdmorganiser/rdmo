@@ -13,7 +13,7 @@ const Conditions = ({ config, conditions, configActions, elementActions}) => {
 
   const updateFilterString = (value) => configActions.updateConfig('filter.conditions.search', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.conditions.uri_prefix', value)
-  const updateFilterEditor = (value) => configActions.updateConfig('filter.conditions.editors', value)
+  const updateFilterEditor = (value) => configActions.updateConfig('filter.editors', value)
 
   const createCondition = () => elementActions.createElement('conditions')
 
@@ -39,7 +39,7 @@ const Conditions = ({ config, conditions, configActions, elementActions}) => {
           </div>
           {
             config.settings.multisite && <div className="col-sm-2">
-              <FilterSite value={get(config, 'filter.conditions.editors', '')} onChange={updateFilterEditor}
+              <FilterSite value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
                           options={config.sites} allLabel={gettext('All editors')} />
             </div>
           }
@@ -51,7 +51,7 @@ const Conditions = ({ config, conditions, configActions, elementActions}) => {
         conditions.map((condition, index) => (
           <Condition key={index} config={config} condition={condition}
                      configActions={configActions} elementActions={elementActions}
-                     filter={get(config, 'filter.conditions')} />
+                     filter="conditions" filterEditors={true} />
         ))
       }
       </ul>

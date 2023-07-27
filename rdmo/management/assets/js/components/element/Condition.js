@@ -8,9 +8,9 @@ import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 
-const Condition = ({ config, condition, configActions, elementActions, filter=null }) => {
+const Condition = ({ config, condition, elementActions, filter=false, filterEditors=false }) => {
 
-  const showElement = filterElement(filter, condition)
+  const showElement = filterElement(config, filter, false, filterEditors, condition)
 
   const editUrl = buildPath(config.baseUrl, 'conditions', condition.id)
   const copyUrl = buildPath(config.baseUrl, 'conditions', condition.id, 'copy')
@@ -47,9 +47,9 @@ const Condition = ({ config, condition, configActions, elementActions, filter=nu
 Condition.propTypes = {
   config: PropTypes.object.isRequired,
   condition: PropTypes.object.isRequired,
-  configActions: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired,
-  filter: PropTypes.object
+  filter: PropTypes.string,
+  filterEditors: PropTypes.bool
 }
 
 export default Condition

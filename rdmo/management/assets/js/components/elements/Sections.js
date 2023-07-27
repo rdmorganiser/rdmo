@@ -14,7 +14,8 @@ const Sections = ({ config, sections, configActions, elementActions }) => {
 
   const updateFilterString = (value) => configActions.updateConfig('filter.sections.search', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.sections.uri_prefix', value)
-  const updateFilterEditor = (value) => configActions.updateConfig('filter.sections.editors', value)
+  const updateFilterEditor = (value) => configActions.updateConfig('filter.editors', value)
+
   const updateDisplaySectionURI = (value) => configActions.updateConfig('display.uri.sections', value)
 
   const createSection = () => elementActions.createElement('sections')
@@ -41,7 +42,7 @@ const Sections = ({ config, sections, configActions, elementActions }) => {
           </div>
           {
             config.settings.multisite && <div className="col-sm-2">
-              <FilterSite value={get(config, 'filter.sections.editors', '')} onChange={updateFilterEditor}
+              <FilterSite value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
                           options={config.sites} allLabel={gettext('All editors')} />
             </div>
           }
@@ -58,7 +59,7 @@ const Sections = ({ config, sections, configActions, elementActions }) => {
         sections.map((section, index) => (
           <Section key={index} config={config} section={section}
                    configActions={configActions} elementActions={elementActions}
-                   filter={get(config, 'filter.sections')} />
+                   filter="sections" filterEditors={true} />
         ))
       }
       </ul>

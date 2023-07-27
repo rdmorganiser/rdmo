@@ -14,8 +14,8 @@ const Catalogs = ({ config, catalogs, configActions, elementActions }) => {
 
   const updateFilterString = (value) => configActions.updateConfig('filter.catalogs.search', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.catalogs.uri_prefix', value)
-  const updateFilterSite = (value) => configActions.updateConfig('filter.catalogs.sites', value)
-  const updateFilterEditor = (value) => configActions.updateConfig('filter.catalogs.editors', value)
+  const updateFilterSite = (value) => configActions.updateConfig('filter.sites', value)
+  const updateFilterEditor = (value) => configActions.updateConfig('filter.editors', value)
   const updateDisplayCatalogURI = (value) => configActions.updateConfig('display.uri.catalogs', value)
 
   const createCatalog = () => elementActions.createElement('catalogs')
@@ -43,11 +43,11 @@ const Catalogs = ({ config, catalogs, configActions, elementActions }) => {
           {
             config.settings.multisite && <>
               <div className="col-sm-2">
-                <FilterSite value={get(config, 'filter.catalogs.sites', '')} onChange={updateFilterSite}
+                <FilterSite value={get(config, 'filter.sites', '')} onChange={updateFilterSite}
                             options={config.sites} />
               </div>
               <div className="col-sm-2">
-                <FilterSite value={get(config, 'filter.catalogs.editors', '')} onChange={updateFilterEditor}
+                <FilterSite value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
                             options={config.sites} allLabel={gettext('All editors')} />
               </div>
             </>
@@ -65,7 +65,7 @@ const Catalogs = ({ config, catalogs, configActions, elementActions }) => {
         catalogs.map((catalog, index) => (
           <Catalog key={index} config={config} catalog={catalog}
                    configActions={configActions} elementActions={elementActions}
-                   filter={get(config, 'filter.catalogs')} />
+                   filter="catalogs" filterSites={true} filterEditors={true} />
         ))
       }
       </ul>

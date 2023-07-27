@@ -13,8 +13,8 @@ const Views = ({ config, views, configActions, elementActions }) => {
 
   const updateFilterString = (value) => configActions.updateConfig('filter.views.search', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.views.uri_prefix', value)
-  const updateFilterSite = (value) => configActions.updateConfig('filter.views.sites', value)
-  const updateFilterEditor = (value) => configActions.updateConfig('filter.views.editors', value)
+  const updateFilterSite = (value) => configActions.updateConfig('filter.sites', value)
+  const updateFilterEditor = (value) => configActions.updateConfig('filter.editors', value)
 
   const createView = () => elementActions.createElement('views')
 
@@ -41,11 +41,11 @@ const Views = ({ config, views, configActions, elementActions }) => {
           {
             config.settings.multisite && <>
               <div className="col-sm-2">
-                <FilterSite value={get(config, 'filter.views.sites', '')} onChange={updateFilterSite}
+                <FilterSite value={get(config, 'filter.sites', '')} onChange={updateFilterSite}
                             options={config.sites} />
               </div>
               <div className="col-sm-2">
-                <FilterSite value={get(config, 'filter.views.editors', '')} onChange={updateFilterEditor}
+                <FilterSite value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
                             options={config.sites} allLabel={gettext('All editors')} />
               </div>
             </>
@@ -58,7 +58,7 @@ const Views = ({ config, views, configActions, elementActions }) => {
         views.map((view, index) => (
           <View key={index} config={config} view={view}
                 configActions={configActions} elementActions={elementActions}
-                filter={get(config, 'filter.views')} />
+                filter="views" filterSites={true} filterEditors={true} />
         ))
       }
       </ul>

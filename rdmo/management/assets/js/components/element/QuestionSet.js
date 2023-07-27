@@ -12,9 +12,10 @@ import { EditLink, CopyLink, AddLink, LockedLink,
 import { ReadOnlyIcon } from '../common/Icons'
 import { Drag, Drop } from '../common/DragAndDrop'
 
-const QuestionSet = ({ config, questionset, configActions, elementActions, display='list', filter=null, indent=0 }) => {
+const QuestionSet = ({ config, questionset, configActions, elementActions, display='list', indent=0,
+                       filter=false, filterEditors=false }) => {
 
-  const showElement = filterElement(filter, questionset)
+  const showElement = filterElement(config, filter, false, filterEditors, questionset)
   const showElements = get(config, `display.elements.questionsets.${questionset.id}`, true)
 
   const editUrl = buildPath(config.baseUrl, 'questionsets', questionset.id)
@@ -124,8 +125,9 @@ QuestionSet.propTypes = {
   configActions: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired,
   display: PropTypes.string,
-  filter: PropTypes.object,
-  indent: PropTypes.number
+  indent: PropTypes.number,
+  filter: PropTypes.string,
+  filterEditors: PropTypes.bool
 }
 
 export default QuestionSet

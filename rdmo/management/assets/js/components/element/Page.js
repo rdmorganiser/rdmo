@@ -13,9 +13,10 @@ import { EditLink, CopyLink, AddLink, LockedLink, NestedLink,
 import { ReadOnlyIcon } from '../common/Icons'
 import { Drag, Drop } from '../common/DragAndDrop'
 
-const Page = ({ config, page, configActions, elementActions, display='list', filter=null, indent=0 }) => {
+const Page = ({ config, page, configActions, elementActions, display='list', indent=0,
+                filter=false, filterEditors=false }) => {
 
-  const showElement = filterElement(filter, page)
+  const showElement = filterElement(config, filter, false, filterEditors, page)
   const showElements = get(config, `display.elements.pages.${page.id}`, true)
 
   const editUrl = buildPath(config.baseUrl, 'pages', page.id)
@@ -125,8 +126,9 @@ Page.propTypes = {
   configActions: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired,
   display: PropTypes.string,
-  filter: PropTypes.object,
-  indent: PropTypes.number
+  indent: PropTypes.number,
+  filter: PropTypes.string,
+  filterEditors: PropTypes.bool
 }
 
 export default Page

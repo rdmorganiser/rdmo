@@ -10,9 +10,10 @@ import { EditLink, CopyLink, LockedLink, ExportLink, CodeLink } from '../common/
 import { ReadOnlyIcon } from '../common/Icons'
 import { Drag, Drop } from '../common/DragAndDrop'
 
-const Question = ({ config, question, configActions, elementActions, display='list', filter=null, indent=0 }) => {
+const Question = ({ config, question, elementActions, display='list', indent=0,
+                    filter=false, filterEditors=false }) => {
 
-  const showElement = filterElement(filter, question)
+  const showElement = filterElement(config, filter, false, filterEditors, question)
 
   const editUrl = buildPath(config.baseUrl, 'questions', question.id)
   const copyUrl = buildPath(config.baseUrl, 'questions', question.id, 'copy')
@@ -103,8 +104,9 @@ Question.propTypes = {
   configActions: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired,
   display: PropTypes.string,
-  filter: PropTypes.object,
-  indent: PropTypes.number
+  indent: PropTypes.number,
+  filter: PropTypes.string,
+  filterEditors: PropTypes.bool
 }
 
 export default Question

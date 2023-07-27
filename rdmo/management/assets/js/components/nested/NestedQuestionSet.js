@@ -78,11 +78,11 @@ const NestedQuestionSet = ({ config, questionset, configActions, elementActions 
           if (element.model == 'questions.questionset') {
             return <QuestionSet key={index} config={config} questionset={element}
                                 configActions={configActions} elementActions={elementActions}
-                                display="nested" filter={get(config, 'filter.questionset')} indent={1} />
+                                display="nested" filter="questionset" indent={1} />
           } else {
             return <Question key={index} config={config} question={element}
                              configActions={configActions} elementActions={elementActions}
-                             display="nested" filter={get(config, 'filter.questionset')} indent={1} />
+                             display="nested" filter="questionset" indent={1} />
           }
         })
       }

@@ -14,9 +14,10 @@ import { ReadOnlyIcon } from '../common/Icons'
 import { Drag, Drop } from '../common/DragAndDrop'
 
 
-const Section = ({ config, section, configActions, elementActions, display='list', filter=null, indent=0 }) => {
+const Section = ({ config, section, configActions, elementActions, display='list', indent=0,
+                   filter=false, filterEditors=false }) => {
 
-  const showElement = filterElement(filter, section)
+  const showElement = filterElement(config, filter, false, filterEditors, section)
   const showElements = get(config, `display.elements.sections.${section.id}`, true)
 
   const editUrl = buildPath(config.baseUrl, 'sections', section.id)
@@ -107,8 +108,9 @@ Section.propTypes = {
   configActions: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired,
   display: PropTypes.string,
-  filter: PropTypes.object,
-  indent: PropTypes.number
+  indent: PropTypes.number,
+  filter: PropTypes.string,
+  filterEditors: PropTypes.bool
 }
 
 export default Section

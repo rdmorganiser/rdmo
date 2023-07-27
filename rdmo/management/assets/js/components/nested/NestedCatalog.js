@@ -89,7 +89,7 @@ const NestedCatalog = ({ config, catalog, configActions, elementActions }) => {
         catalog.elements.map((section, index) => (
           <Section key={index} config={config} section={section}
                    configActions={configActions} elementActions={elementActions}
-                   display="nested" filter={get(config, 'filter.catalog')} indent={0} />
+                   display="nested" filter="catalog" indent={0} />
         ))
       }
     </>

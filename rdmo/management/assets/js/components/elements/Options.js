@@ -14,7 +14,7 @@ const Options = ({ config, options, configActions, elementActions }) => {
 
   const updateFilterString = (value) => configActions.updateConfig('filter.options.search', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.options.uri_prefix', value)
-  const updateFilterEditor = (value) => configActions.updateConfig('filter.options.editors', value)
+  const updateFilterEditor = (value) => configActions.updateConfig('filter.editors', value)
 
   const updateDisplayURI = (value) => configActions.updateConfig('display.uri.options', value)
 
@@ -42,7 +42,7 @@ const Options = ({ config, options, configActions, elementActions }) => {
           </div>
           {
             config.settings.multisite && <div className="col-sm-2">
-              <FilterSite value={get(config, 'filter.options.editors', '')} onChange={updateFilterEditor}
+              <FilterSite value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
                           options={config.sites} allLabel={gettext('All editors')} />
             </div>
           }
@@ -59,7 +59,7 @@ const Options = ({ config, options, configActions, elementActions }) => {
         options.map((option, index) => (
           <Option key={index} config={config} option={option}
                   configActions={configActions} elementActions={elementActions}
-                  filter={get(config, 'filter.options')} />
+                  filter="options" filterEditors={true} />
         ))
       }
       </ul>

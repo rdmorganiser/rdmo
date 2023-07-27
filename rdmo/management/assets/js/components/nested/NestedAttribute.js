@@ -43,7 +43,7 @@ const NestedAttribute = ({ config, attribute, configActions, elementActions }) =
         attribute.elements.map((attribute, index) => (
           <Attribute key={index} config={config} attribute={attribute}
                      configActions={configActions} elementActions={elementActions}
-                     display="nested" filter={get(config, 'filter.attribute')} indent={1} />
+                     display="nested" filter="attribute" indent={1} />
         ))
       }
     </>

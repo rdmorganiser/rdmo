@@ -13,7 +13,7 @@ const OptionSets = ({ config, optionsets, configActions, elementActions}) => {
 
   const updateFilterString = (value) => configActions.updateConfig('filter.optionsets.search', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.optionsets.uri_prefix', value)
-  const updateFilterEditor = (value) => configActions.updateConfig('filter.optionsets.editors', value)
+  const updateFilterEditor = (value) => configActions.updateConfig('filter.editors', value)
 
   const createOptionSet = () => elementActions.createElement('optionsets')
 
@@ -39,7 +39,7 @@ const OptionSets = ({ config, optionsets, configActions, elementActions}) => {
           </div>
           {
             config.settings.multisite && <div className="col-sm-2">
-              <FilterSite value={get(config, 'filter.optionsets.editors', '')} onChange={updateFilterEditor}
+              <FilterSite value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
                           options={config.sites} allLabel={gettext('All editors')} />
             </div>
           }
@@ -51,7 +51,7 @@ const OptionSets = ({ config, optionsets, configActions, elementActions}) => {
         optionsets.map((optionset, index) => (
           <OptionSet key={index} config={config} optionset={optionset}
                      configActions={configActions} elementActions={elementActions}
-                     filter={get(config, 'filter.optionsets')} />
+                     filter="optionsets" filterEditors={true} />
         ))
       }
       </ul>

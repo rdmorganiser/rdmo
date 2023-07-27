@@ -13,7 +13,7 @@ const Attributes = ({ config, attributes, configActions, elementActions }) => {
 
   const updateFilterString = (value) => configActions.updateConfig('filter.attributes.search', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.attributes.uri_prefix', value)
-  const updateFilterEditor = (value) => configActions.updateConfig('filter.attributes.editors', value)
+  const updateFilterEditor = (value) => configActions.updateConfig('filter.editors', value)
   const createAttribute = () => elementActions.createElement('attributes')
 
   return (
@@ -38,7 +38,7 @@ const Attributes = ({ config, attributes, configActions, elementActions }) => {
           </div>
           {
             config.settings.multisite && <div className="col-sm-2">
-              <FilterSite value={get(config, 'filter.attributes.editors', '')} onChange={updateFilterEditor}
+              <FilterSite value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
                           options={config.sites} allLabel={gettext('All editors')} />
             </div>
           }
@@ -50,7 +50,7 @@ const Attributes = ({ config, attributes, configActions, elementActions }) => {
         attributes.map((attribute, index) => (
           <Attribute key={index} config={config} attribute={attribute}
                      configActions={configActions} elementActions={elementActions}
-                     filter={get(config, 'filter.attributes')} />
+                     filter="attributes" filterEditors={true} />
         ))
       }
       </ul>

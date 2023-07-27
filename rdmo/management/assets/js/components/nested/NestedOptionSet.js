@@ -52,7 +52,7 @@ const NestedOptionSet = ({ config, optionset, configActions, elementActions }) =
         optionset.elements.map((option, index) => (
           <Option key={index} config={config} option={option}
                   configActions={configActions} elementActions={elementActions}
-                  display="nested" filter={get(config, 'filter.optionset')} indent={1} />
+                  display="nested" filter="optionset" indent={1} />
         ))
       }
     </>
