@@ -102,6 +102,24 @@ LockedLink.propTypes = {
   disabled: PropTypes.bool
 }
 
+const ShowElementsLink = ({ showElements, show, onClick }) => {
+  const className = classNames({
+    'element-btn-link fa': true,
+    'fa-chevron-down': showElements,
+    'fa-chevron-up': !showElements
+  })
+
+  const title = showElements ? gettext('Hide elements') : gettext('Show elements')
+
+  return show && <LinkButton className={className} title={title} onClick={onClick} />
+}
+
+ShowElementsLink.propTypes = {
+  showElements: PropTypes.bool.isRequired,
+  show: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired
+}
+
 const ExportLink = ({ exportUrl, title, exportFormats, csv=false, full=false }) => {
   return (
     <span className="dropdown">
@@ -217,5 +235,5 @@ ShowLink.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-export { EditLink, CopyLink, AddLink, AvailableLink, LockedLink,
+export { EditLink, CopyLink, AddLink, AvailableLink, LockedLink, ShowElementsLink,
          NestedLink, ExportLink, ExtendLink, CodeLink, ErrorLink, WarningLink, ShowLink }

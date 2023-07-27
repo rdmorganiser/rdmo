@@ -1,17 +1,16 @@
 import { useEffect } from 'react'
-import ls from 'local-storage'
 import isNil from 'lodash/isNil'
 
 const useScrollEffect = (elementType, elementId, elementAction) => {
   useEffect(() => {
-    let lsKey = `rdmo.management.config.scroll.${elementType}`
+    let lsKey = `rdmo.management.scroll.${elementType}`
     if (!isNil(elementId)) {
-      lsKey += `_${elementId}`
+      lsKey += `.${elementId}`
     }
     if (!isNil(elementAction)) {
-      lsKey += `_${elementAction}`
+      lsKey += `.${elementAction}`
     }
-    const lsValue = ls.get(lsKey, 0)
+    const lsValue = localStorage.getItem(lsKey, 0)
 
     // scroll to the right position
     setTimeout(() => window.scrollTo(0, lsValue), 0)
@@ -19,7 +18,7 @@ const useScrollEffect = (elementType, elementId, elementAction) => {
     // add a event handler to store the scroll position
     const handleScroll = () => {
       const lsValue = window.pageYOffset
-      ls.set(lsKey, lsValue)
+      localStorage.setItem(lsKey, lsValue)
     }
     window.addEventListener('scroll', handleScroll)
     return () => {

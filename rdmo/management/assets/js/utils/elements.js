@@ -1,7 +1,7 @@
 import isNil from 'lodash/isNil'
 import isUndefined from 'lodash/isUndefined'
 
-import { elementModules } from '../constants/elements'
+import { elementTypes, elementModules } from '../constants/elements'
 
 const compareElements = (element1, element2) => {
   return element1.model == element2.model && element1.id == element2.id
@@ -145,6 +145,22 @@ function updateElementElements(element) {
   }
 }
 
+function findDescendants(element, elementType) {
+  if (elementType == elementTypes[element.model]) {
+    return [element]
+  } else if (!isUndefined(element.elements)) {
+    return element.elements.reduce((agg, cur) => {
+      const descendants = findDescendants(cur, elementType)
+      if (!isNil(descendants)) {
+        agg = agg.concat(descendants)
+      }
+      return agg
+    }, [])
+  } else {
+    return null
+  }
+}
+
 const buildUri = (element) => {
   let uri = element.uri_prefix + '/' + elementModules[element.model] + '/'
 
@@ -159,4 +175,4 @@ const buildUri = (element) => {
   return uri
 }
 
-export { compareElements, updateElement, resetElement, canMoveElement, moveElement, buildUri }
+export { compareElements, updateElement, resetElement, canMoveElement, moveElement, findDescendants, buildUri }

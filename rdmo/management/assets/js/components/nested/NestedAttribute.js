@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import get from 'lodash/get'
 
 import { getUriPrefixes } from '../../utils/filter'
 
@@ -21,17 +22,17 @@ const NestedAttribute = ({ config, attribute, configActions, elementActions }) =
             <BackButton />
           </div>
           <Attribute config={config} attribute={attribute}
-                     elementActions={elementActions} display="plain" />
+                     configActions={configActions} elementActions={elementActions} display="plain" />
         </div>
 
         <div className="panel-body">
           <div className="row">
             <div className="col-sm-8">
-              <FilterString value={config.filter.attribute.search} onChange={updateFilterString}
+              <FilterString value={get(config, 'filter.attribute.search', '')} onChange={updateFilterString}
                             placeholder={gettext('Filter attributes')} />
             </div>
             <div className="col-sm-4">
-              <FilterUriPrefix value={config.filter.attribute.uri_prefix} onChange={updateFilterUriPrefix}
+              <FilterUriPrefix value={get(config, 'filter.attribute.uri_prefix', '')} onChange={updateFilterUriPrefix}
                                options={getUriPrefixes(attribute.elements)} />
             </div>
           </div>
@@ -40,8 +41,9 @@ const NestedAttribute = ({ config, attribute, configActions, elementActions }) =
 
       {
         attribute.elements.map((attribute, index) => (
-          <Attribute key={index} config={config} attribute={attribute} elementActions={elementActions}
-                     display="nested" filter={config.filter.attribute} indent={1} />
+          <Attribute key={index} config={config} attribute={attribute}
+                     configActions={configActions} elementActions={elementActions}
+                     display="nested" filter="attribute" indent={1} />
         ))
       }
     </>

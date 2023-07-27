@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import get from 'lodash/get'
 
 import { filterElement } from '../../utils/filter'
 import { buildPath } from '../../utils/location'
@@ -8,13 +9,15 @@ import QuestionSet from './QuestionSet'
 import Question from './Question'
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AddLink, LockedLink, NestedLink,
-         ExportLink, CodeLink } from '../common/Links'
+         ExportLink, CodeLink, ShowElementsLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 import { Drag, Drop } from '../common/DragAndDrop'
 
-const Page = ({ config, page, elementActions, display='list', filter=null, indent=0 }) => {
+const Page = ({ config, page, configActions, elementActions, display='list', indent=0,
+                filter=false, filterEditors=false }) => {
 
-  const showElement = filterElement(filter, page)
+  const showElement = filterElement(config, filter, false, filterEditors, page)
+  const showElements = get(config, `display.elements.pages.${page.id}`, true)
 
   const editUrl = buildPath(config.baseUrl, 'pages', page.id)
   const copyUrl = buildPath(config.baseUrl, 'pages', page.id, 'copy')
@@ -25,6 +28,7 @@ const Page = ({ config, page, elementActions, display='list', filter=null, inden
   const fetchCopy = () => elementActions.fetchElement('pages', page.id, 'copy')
   const fetchNested = () => elementActions.fetchElement('pages', page.id, 'nested')
   const toggleLocked = () => elementActions.storeElement('pages', {...page, locked: !page.locked })
+  const toggleElements = () => configActions.toggleElements(page)
 
   const createQuestionSet = () => elementActions.createElement('questionsets', { page })
   const createQuestion = () => elementActions.createElement('questions', { page })
@@ -36,7 +40,8 @@ const Page = ({ config, page, elementActions, display='list', filter=null, inden
     <div className="element">
       <div className="pull-right">
         <ReadOnlyIcon title={gettext('This page is read only')} show={page.read_only} />
-        <NestedLink title={gettext('View page nested')} href={nestedUrl} onClick={fetchNested} />
+        <NestedLink title={gettext('View page nested')} href={nestedUrl} onClick={fetchNested} show={display != 'nested'} />
+        <ShowElementsLink showElements={showElements} show={display == 'nested'} onClick={toggleElements} />
         <EditLink title={gettext('Edit page')} href={editUrl} onClick={fetchEdit} />
         <CopyLink title={gettext('Copy page')} href={copyUrl} onClick={fetchCopy} />
         <AddLink title={gettext('Add question')} altTitle={gettext('Add question set')}
@@ -52,17 +57,17 @@ const Page = ({ config, page, elementActions, display='list', filter=null, inden
           <strong>{gettext('Page')}{': '}</strong> {page.title}
         </p>
         {
-          config.display.uri.pages && <p>
+          get(config, 'display.uri.pages', true) && <p>
             <CodeLink className="code-questions" uri={page.uri} onClick={() => fetchEdit()} />
           </p>
         }
         {
-          config.display.uri.attributes && page.attribute_uri && <p>
+          get(config, 'display.uri.attributes', true) && page.attribute_uri && <p>
             <CodeLink className="code-domain" uri={page.attribute_uri} onClick={() => fetchAttribute()} />
           </p>
         }
         {
-          config.display.uri.conditions && page.condition_uris.map((uri, index) => (
+          get(config, 'display.uri.conditions', true) && page.condition_uris.map((uri, index) => (
             <p key={index}>
               <CodeLink className="code-conditions" uri={uri} onClick={() => fetchCondition(index)} />
             </p>
@@ -84,7 +89,7 @@ const Page = ({ config, page, elementActions, display='list', filter=null, inden
       return (
         <>
           {
-            showElement && config.display.elements.pages && (
+            showElement && (
               <Drop element={page} elementActions={elementActions}>
                 <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
                   <div className="panel-heading">
@@ -95,12 +100,14 @@ const Page = ({ config, page, elementActions, display='list', filter=null, inden
             )
           }
           {
-            page.elements.map((element, index) => {
+            showElements && page.elements.map((element, index) => {
               if (element.model == 'questions.questionset') {
-                return <QuestionSet key={index} config={config} questionset={element} elementActions={elementActions}
+                return <QuestionSet key={index} config={config} questionset={element}
+                                    configActions={configActions} elementActions={elementActions}
                                     display="nested" filter={filter}  indent={indent + 1} />
               } else {
-                return <Question key={index} config={config} question={element} elementActions={elementActions}
+                return <Question key={index} config={config} question={element}
+                                 configActions={configActions} elementActions={elementActions}
                                  display="nested" filter={filter}  indent={indent + 1}  />
               }
             })
@@ -116,10 +123,12 @@ const Page = ({ config, page, elementActions, display='list', filter=null, inden
 Page.propTypes = {
   config: PropTypes.object.isRequired,
   page: PropTypes.object.isRequired,
+  configActions: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired,
   display: PropTypes.string,
-  filter: PropTypes.object,
-  indent: PropTypes.number
+  indent: PropTypes.number,
+  filter: PropTypes.string,
+  filterEditors: PropTypes.bool
 }
 
 export default Page
