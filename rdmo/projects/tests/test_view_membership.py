@@ -28,6 +28,7 @@ membership_roles = ('owner', 'manager', 'author', 'guest')
 
 excluded_invite_ids = [1, 2]
 
+
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 def test_membership_create_get(db, client, username, password, project_id):
@@ -43,11 +44,12 @@ def test_membership_create_get(db, client, username, password, project_id):
     else:
         assert response.status_code == 302
 
+
 @pytest.mark.parametrize('PROJECT_SEND_INVITE', [False, True])
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('membership_role', membership_roles)
-def test_membership_create_post(db, client, settings, 
+def test_membership_create_post(db, client, settings,
                                 username, password, project_id, membership_role, PROJECT_SEND_INVITE):
     settings.PROJECT_SEND_INVITE = PROJECT_SEND_INVITE
     client.login(username=username, password=password)
@@ -72,15 +74,16 @@ def test_membership_create_post(db, client, settings,
         else:
             assert response.status_code == 302
 
-        assert not Invite.objects.filter_user(response.wsgi_request.user)
+        assert not Invite.objects.exclude(id__in=excluded_invite_ids).exists()
         assert len(mail.outbox) == 0
+
 
 @pytest.mark.parametrize('PROJECT_SEND_INVITE', [False, True])
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('membership_role', membership_roles)
 def test_membership_create_post_mail(db, client, settings,
-                                      username, password, project_id, membership_role, PROJECT_SEND_INVITE):
+                                     username, password, project_id, membership_role, PROJECT_SEND_INVITE):
     settings.PROJECT_SEND_INVITE = PROJECT_SEND_INVITE
     client.login(username=username, password=password)
 
@@ -104,7 +107,8 @@ def test_membership_create_post_mail(db, client, settings,
             assert response.status_code == 403
         else:
             assert response.status_code == 302
-        assert not Invite.objects.filter_user(response.wsgi_request.user).exists()
+
+        assert not Invite.objects.exclude(id__in=excluded_invite_ids).exists()
         assert len(mail.outbox) == 0
 
 
@@ -121,7 +125,7 @@ def test_membership_create_post_error(db, client, username, password, membership
     }
     response = client.post(url, data)
 
-    assert not Invite.objects.exclude(id__in=excluded_invite_ids).filter_user(response.wsgi_request.user).exists()
+    assert not Invite.objects.exclude(id__in=excluded_invite_ids).exists()
     assert len(mail.outbox) == 0
 
     if project_id in add_membership_permission_map.get(username, []):
@@ -145,9 +149,8 @@ def test_membership_create_post_mail_error(db, client, username, password, membe
         'role': membership_role
     }
     response = client.post(url, data)
-    
-    assert not Invite.objects.exclude(id__in=excluded_invite_ids).filter_user(response.wsgi_request.user).exists()
-    
+
+    assert not Invite.objects.exclude(id__in=excluded_invite_ids).exists()
     assert len(mail.outbox) == 0
 
     if project_id in add_membership_permission_map.get(username, []):
