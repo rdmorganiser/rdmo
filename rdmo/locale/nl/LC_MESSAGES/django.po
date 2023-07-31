@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-27 16:01+0200\n"
+"POT-Creation-Date: 2023-07-31 12:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,7 +30,7 @@ msgstr ""
 msgid "Last name"
 msgstr ""
 
-#: accounts/forms.py:100 core/constants.py:20 projects/models/invite.py:27
+#: accounts/forms.py:100 core/constants.py:20 projects/models/invite.py:30
 msgid "E-mail"
 msgstr ""
 
@@ -91,7 +91,7 @@ msgstr ""
 
 #: accounts/models.py:47 questions/models/catalog.py:84
 #: questions/models/question.py:77 questions/models/questionset.py:102
-#: views/models.py:91
+#: views/models.py:93
 msgid "Help (primary)"
 msgstr ""
 
@@ -103,7 +103,7 @@ msgstr ""
 
 #: accounts/models.py:52 questions/models/catalog.py:89
 #: questions/models/question.py:82 questions/models/questionset.py:107
-#: views/models.py:96
+#: views/models.py:98
 msgid "Help (secondary)"
 msgstr ""
 
@@ -115,7 +115,7 @@ msgstr ""
 
 #: accounts/models.py:57 questions/models/catalog.py:94
 #: questions/models/question.py:87 questions/models/questionset.py:112
-#: views/models.py:101
+#: views/models.py:103
 msgid "Help (tertiary)"
 msgstr ""
 
@@ -127,7 +127,7 @@ msgstr ""
 
 #: accounts/models.py:62 questions/models/catalog.py:99
 #: questions/models/question.py:92 questions/models/questionset.py:117
-#: views/models.py:106
+#: views/models.py:108
 msgid "Help (quaternary)"
 msgstr ""
 
@@ -139,7 +139,7 @@ msgstr ""
 
 #: accounts/models.py:67 questions/models/catalog.py:104
 #: questions/models/question.py:97 questions/models/questionset.py:122
-#: views/models.py:111
+#: views/models.py:113
 msgid "Help (quinary)"
 msgstr ""
 
@@ -198,7 +198,7 @@ msgstr ""
 msgid "The sites for which this user is manager."
 msgstr ""
 
-#: accounts/models.py:143 projects/models/invite.py:32
+#: accounts/models.py:143 projects/models/invite.py:35
 #: projects/models/membership.py:32
 #: projects/templates/projects/project_detail_invites.html:16
 #: projects/templates/projects/project_detail_memberships.html:21
@@ -330,34 +330,35 @@ msgstr ""
 #: accounts/templates/account/email_confirm.html:29
 #, python-format
 msgid ""
-"This e-mail confirmation link expired or is invalid. Please <a "
-"href=\"%(email_url)s\">issue a new e-mail confirmation request</a>."
+"This e-mail confirmation link expired or is invalid. Please <a href="
+"\"%(email_url)s\">issue a new e-mail confirmation request</a>."
 msgstr ""
 
 #: accounts/templates/account/login.html:6
-#: accounts/templates/account/login_form.html:22
+#: accounts/templates/account/login_form.html:33
 #: accounts/templates/account/password_reset_from_key_done.html:14
 #: core/templates/core/base_navigation.html:162
 #: core/templates/core/home.html:55
 msgid "Login"
 msgstr ""
 
-#: accounts/templates/account/login_form.html:6
+#: accounts/templates/account/login_form.html:8
+#: accounts/templates/account/login_form.html:14
 msgid "Login with Shibboleth"
 msgstr ""
 
 #: accounts/templates/account/login_form_account.html:7
 #, python-format
 msgid ""
-"If you have not created an account yet, then please <a "
-"href=\"%(signup_url)s\">sign up</a> first."
+"If you have not created an account yet, then please <a href=\"%(signup_url)s"
+"\">sign up</a> first."
 msgstr ""
 
 #: accounts/templates/account/login_form_account.html:14
 #, python-format
 msgid ""
-"If you forgot your password and want to reset it, click <a "
-"href=\"%(reset_url)s\">here</a>."
+"If you forgot your password and want to reset it, click <a href="
+"\"%(reset_url)s\">here</a>."
 msgstr ""
 
 #: accounts/templates/account/login_form_socialaccount.html:9
@@ -683,8 +684,8 @@ msgstr ""
 #, python-format
 msgid ""
 "You decided to cancel logging in to our site using one of your existing "
-"accounts. If this was a mistake, please proceed to <a "
-"href=\"%(login_url)s\">sign in</a>."
+"accounts. If this was a mistake, please proceed to <a href=\"%(login_url)s"
+"\">sign in</a>."
 msgstr ""
 
 #: accounts/templates/socialaccount/signup.html:9
@@ -696,7 +697,7 @@ msgstr ""
 
 #: accounts/templatetags/accounts_tags.py:19
 #: projects/templates/projects/projects.html:125
-#: projects/templates/projects/site_projects.html:49
+#: projects/templates/projects/site_projects.html:64
 msgid "Name"
 msgstr ""
 
@@ -741,7 +742,7 @@ msgstr ""
 #: questions/templates/questions/catalogs_element.html:56
 #: questions/templates/questions/catalogs_sidebar_showuri_checkboxes.html:8
 #: tasks/models.py:21 tasks/templates/tasks/tasks_export.html:15
-#: views/models.py:21 views/templates/views/views_export.html:15
+#: views/models.py:23 views/templates/views/views_export.html:15
 msgid "URI"
 msgstr ""
 
@@ -752,7 +753,7 @@ msgstr ""
 #: conditions/models.py:39 domain/models.py:18 options/models.py:20
 #: options/models.py:120 questions/models/catalog.py:24
 #: questions/models/question.py:27 questions/models/questionset.py:26
-#: questions/models/section.py:20 tasks/models.py:26 views/models.py:26
+#: questions/models/section.py:20 tasks/models.py:26 views/models.py:28
 msgid "URI Prefix"
 msgstr ""
 
@@ -764,7 +765,7 @@ msgstr ""
 #: options/models.py:125 projects/models/integration.py:60
 #: questions/models/catalog.py:29 questions/models/question.py:32
 #: questions/models/questionset.py:31 questions/models/section.py:25
-#: tasks/models.py:31 views/models.py:31
+#: tasks/models.py:31 views/models.py:33
 msgid "Key"
 msgstr ""
 
@@ -783,7 +784,7 @@ msgstr ""
 #: questions/templates/questions/catalog_tree.html:65
 #: questions/templates/questions/catalog_tree.html:84
 #: questions/templates/questions/catalog_tree.html:149 tasks/models.py:36
-#: tasks/templates/tasks/tasks_export.html:21 views/models.py:36
+#: tasks/templates/tasks/tasks_export.html:21 views/models.py:38
 #: views/templates/views/views_export.html:21
 msgid "Comment"
 msgstr ""
@@ -795,7 +796,7 @@ msgstr ""
 #: conditions/models.py:54 domain/models.py:38 options/models.py:35
 #: options/models.py:140 questions/models/catalog.py:39
 #: questions/models/question.py:47 questions/models/questionset.py:46
-#: questions/models/section.py:40 tasks/models.py:41 views/models.py:41
+#: questions/models/section.py:40 tasks/models.py:41 views/models.py:43
 msgid "Locked"
 msgstr ""
 
@@ -882,7 +883,7 @@ msgstr ""
 #: projects/templates/projects/project_detail_sidebar.html:11
 #: projects/templates/projects/project_view.html:42
 #: projects/templates/projects/projects.html:25
-#: projects/templates/projects/site_projects.html:33
+#: projects/templates/projects/site_projects.html:48
 #: questions/templates/questions/catalog_tree.html:104
 #: questions/templates/questions/catalogs_sidebar.html:78
 #: questions/templates/questions/catalogs_sidebar_showuri_checkboxes.html:26
@@ -1046,7 +1047,7 @@ msgstr ""
 #: options/templates/options/options_modal_form_conditions.html:34
 #: options/templates/options/options_modal_form_options.html:182
 #: options/templates/options/options_modal_form_optionsets.html:118
-#: projects/templates/projects/project_questions_buttons.html:27
+#: projects/templates/projects/project_questions_buttons.html:36
 #: projects/templates/projects/project_questions_modal_form_valuesets.html:32
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:216
 #: questions/templates/questions/catalogs_modal_form_questions.html:464
@@ -1111,14 +1112,14 @@ msgid "Tasks"
 msgstr ""
 
 #: conditions/validators.py:14 domain/validators.py:15 options/validators.py:14
-#: options/validators.py:26 projects/forms.py:333 projects/forms.py:354
+#: options/validators.py:26 projects/forms.py:338 projects/forms.py:359
 #: questions/validators.py:16 questions/validators.py:28
 #: questions/validators.py:46 questions/validators.py:64 tasks/validators.py:14
 #: views/validators.py:14
 msgid "This field is required."
 msgstr ""
 
-#: core/constants.py:14 core/settings.py:296
+#: core/constants.py:14 core/settings.py:302
 #: options/templates/options/options_export.html:39
 #: options/templates/options/options_modal_form_options.html:163
 #: projects/models/value.py:64 questions/constants.py:4
@@ -1164,99 +1165,99 @@ msgstr ""
 msgid "File"
 msgstr ""
 
-#: core/models.py:15
+#: core/models.py:16
 msgid "created"
 msgstr ""
 
-#: core/models.py:16
+#: core/models.py:17
 msgid "updated"
 msgstr ""
 
-#: core/settings.py:124
+#: core/settings.py:128
 msgid "English"
 msgstr ""
 
-#: core/settings.py:125
+#: core/settings.py:129
 msgid "German"
 msgstr ""
 
-#: core/settings.py:239
+#: core/settings.py:245
 msgid "PDF"
 msgstr ""
 
-#: core/settings.py:240
+#: core/settings.py:246
 msgid "Rich Text Format"
 msgstr ""
 
-#: core/settings.py:241
+#: core/settings.py:247
 msgid "Open Office"
 msgstr ""
 
-#: core/settings.py:242
+#: core/settings.py:248
 msgid "Microsoft Office"
 msgstr ""
 
-#: core/settings.py:243
+#: core/settings.py:249
 msgid "HTML"
 msgstr ""
 
-#: core/settings.py:244
+#: core/settings.py:250
 msgid "Markdown"
 msgstr ""
 
-#: core/settings.py:245
+#: core/settings.py:251
 msgid "mediawiki"
 msgstr ""
 
-#: core/settings.py:246
+#: core/settings.py:252
 msgid "LaTeX"
 msgstr ""
 
-#: core/settings.py:266 core/settings.py:272
+#: core/settings.py:272 core/settings.py:278
 msgid "RDMO XML"
 msgstr ""
 
-#: core/settings.py:267 domain/templates/domain/domain.html:74
+#: core/settings.py:273 domain/templates/domain/domain.html:74
 msgid "CSV comma separated"
 msgstr ""
 
-#: core/settings.py:268 domain/templates/domain/domain.html:79
+#: core/settings.py:274 domain/templates/domain/domain.html:79
 msgid "CSV semicolon separated"
 msgstr ""
 
-#: core/settings.py:297 questions/constants.py:5
+#: core/settings.py:303 questions/constants.py:5
 msgid "Textarea"
 msgstr ""
 
-#: core/settings.py:298 questions/constants.py:6
+#: core/settings.py:304 questions/constants.py:6
 msgid "Yes/No"
 msgstr ""
 
-#: core/settings.py:299 questions/constants.py:7
+#: core/settings.py:305 questions/constants.py:7
 msgid "Checkboxes"
 msgstr ""
 
-#: core/settings.py:300 questions/constants.py:8
+#: core/settings.py:306 questions/constants.py:8
 msgid "Radio buttons"
 msgstr ""
 
-#: core/settings.py:301 questions/constants.py:9
+#: core/settings.py:307 questions/constants.py:9
 msgid "Select drop-down"
 msgstr ""
 
-#: core/settings.py:302 questions/constants.py:10
+#: core/settings.py:308 questions/constants.py:10
 msgid "Autocomplete"
 msgstr ""
 
-#: core/settings.py:303 questions/constants.py:11
+#: core/settings.py:309 questions/constants.py:11
 msgid "Range slider"
 msgstr ""
 
-#: core/settings.py:304 questions/constants.py:12
+#: core/settings.py:310 questions/constants.py:12
 msgid "Date picker"
 msgstr ""
 
-#: core/settings.py:305 questions/constants.py:13
+#: core/settings.py:311 questions/constants.py:13
 msgid "File upload"
 msgstr ""
 
@@ -1315,10 +1316,10 @@ msgstr ""
 msgid "Domain"
 msgstr ""
 
-#: core/templates/core/base_navigation.html:61 projects/forms.py:309
+#: core/templates/core/base_navigation.html:61 projects/forms.py:314
 #: projects/models/project.py:64
 #: projects/templates/projects/project_detail_views.html:11 views/apps.py:7
-#: views/models.py:123 views/templates/views/views.html:91
+#: views/models.py:125 views/templates/views/views.html:91
 #: views/templates/views/views_export.html:6 views/views.py:43
 msgid "Views"
 msgstr ""
@@ -1469,8 +1470,8 @@ msgstr ""
 #: domain/templates/domain/domain_modal_show_attributes.html:15
 #, python-format
 msgid ""
-"This attribute is used for <b>%(values_count)s values</b> in "
-"<b>%(projects_count)s projects</b>."
+"This attribute is used for <b>%(values_count)s values</b> in <b>"
+"%(projects_count)s projects</b>."
 msgstr ""
 
 #: domain/templates/domain/domain_modal_delete_attributes.html:42
@@ -1590,8 +1591,9 @@ msgid "%(foreign_model)s %(foreign_uri)s does not exist."
 msgstr ""
 
 #: management/templates/management/import.html:70
-#: projects/templates/projects/project_questions_buttons.html:15
-#: projects/templates/projects/project_questions_buttons.html:48
+#: projects/templates/projects/project_questions_buttons.html:19
+#: projects/templates/projects/project_questions_buttons.html:32
+#: projects/templates/projects/project_questions_buttons.html:58
 msgid "Back"
 msgstr ""
 
@@ -1813,8 +1815,8 @@ msgstr ""
 #: options/templates/options/options_modal_show_options.html:15
 #, python-format
 msgid ""
-"This option is used for <b>%(values_count)s values</b> in "
-"<b>%(projects_count)s projects</b>."
+"This option is used for <b>%(values_count)s values</b> in <b>"
+"%(projects_count)s projects</b>."
 msgstr ""
 
 #: options/templates/options/options_modal_delete_options.html:29
@@ -1913,8 +1915,8 @@ msgstr ""
 msgid "Overlays"
 msgstr ""
 
-#: overlays/models.py:11 projects/forms.py:176
-#: projects/models/continuation.py:18 projects/models/invite.py:22
+#: overlays/models.py:11 projects/forms.py:181
+#: projects/models/continuation.py:18 projects/models/invite.py:25
 #: projects/models/membership.py:27 projects/models/project.py:34
 #: projects/templates/projects/project_detail_invites.html:14
 #: projects/templates/projects/project_detail_memberships.html:19
@@ -1941,7 +1943,7 @@ msgstr ""
 msgid "The url_name for this overlay."
 msgstr ""
 
-#: overlays/models.py:26 projects/forms.py:321
+#: overlays/models.py:26 projects/forms.py:326
 #: projects/templates/projects/project_answers.html:13
 #: projects/templates/projects/project_view.html:28
 msgid "Current"
@@ -1990,79 +1992,79 @@ msgstr ""
 msgid "Guest"
 msgstr ""
 
-#: projects/forms.py:175
+#: projects/forms.py:180
 msgid "Username or e-mail"
 msgstr ""
 
-#: projects/forms.py:177
+#: projects/forms.py:182
 msgid "The username or e-mail of the new user."
 msgstr ""
 
-#: projects/forms.py:189
+#: projects/forms.py:194
 msgid "Add member silently"
 msgstr ""
 
-#: projects/forms.py:190
+#: projects/forms.py:195
 msgid ""
 "As site manager or admin, you can directly add users without notifying them "
 "via e-mail, when you check the following checkbox."
 msgstr ""
 
-#: projects/forms.py:203
+#: projects/forms.py:208 projects/serializers/v1/__init__.py:147
 msgid "The user is already a member of the project."
 msgstr ""
 
-#: projects/forms.py:215
+#: projects/forms.py:220
 msgid ""
 "A user with this username or e-mail was not found. Only registered users can "
 "be invited."
 msgstr ""
 
-#: projects/forms.py:219
+#: projects/forms.py:224
 msgid "Only existing users can be added silently."
 msgstr ""
 
-#: projects/forms.py:287 projects/forms.py:291
+#: projects/forms.py:292 projects/forms.py:296
 #, python-format
 msgid "Attach %s"
 msgstr ""
 
-#: projects/forms.py:297
+#: projects/forms.py:302
 msgid "Subject"
 msgstr ""
 
-#: projects/forms.py:298
+#: projects/forms.py:303
 msgid "Message"
 msgstr ""
 
-#: projects/forms.py:305
+#: projects/forms.py:310
 msgid "Answers"
 msgstr ""
 
-#: projects/forms.py:306
+#: projects/forms.py:311
 msgid "Attach the output of \"View answers\"."
 msgstr ""
 
-#: projects/forms.py:313
+#: projects/forms.py:318
 msgid "Files"
 msgstr ""
 
-#: projects/forms.py:320 projects/models/snapshot.py:33
+#: projects/forms.py:325 projects/models/snapshot.py:33
 #: projects/models/value.py:38
 #: projects/templates/projects/project_detail_snapshots.html:20
 #: projects/templates/projects/project_import.html:93
 msgid "Snapshot"
 msgstr ""
 
-#: projects/forms.py:324
+#: projects/forms.py:329
 msgid "Format"
 msgstr ""
 
-#: projects/forms.py:339 projects/forms.py:344
+#: projects/forms.py:344 projects/forms.py:349
 msgid "Recipients"
 msgstr ""
 
-#: projects/forms.py:345
+#: projects/forms.py:350
 msgid "Enter recipients line by line"
 msgstr ""
 
@@ -2105,7 +2107,7 @@ msgid "Files of this type cannot be imported."
 msgstr ""
 
 #: projects/models/continuation.py:13 projects/models/integration.py:16
-#: projects/models/invite.py:17 projects/models/issue.py:28
+#: projects/models/invite.py:20 projects/models/issue.py:28
 #: projects/models/membership.py:22 projects/models/project.py:70
 #: projects/models/snapshot.py:17 projects/models/value.py:32
 #: projects/templates/projects/project_questions_overview.html:5
@@ -2197,43 +2199,43 @@ msgstr ""
 msgid "Integration options"
 msgstr ""
 
-#: projects/models/invite.py:18
+#: projects/models/invite.py:21
 msgid "The project for this invite."
 msgstr ""
 
-#: projects/models/invite.py:23 projects/models/membership.py:28
+#: projects/models/invite.py:26 projects/models/membership.py:28
 msgid "The user for this membership."
 msgstr ""
 
-#: projects/models/invite.py:28
+#: projects/models/invite.py:31
 msgid "The e-mail for this membership."
 msgstr ""
 
-#: projects/models/invite.py:33
+#: projects/models/invite.py:36
 msgid "The role for this invite."
 msgstr ""
 
-#: projects/models/invite.py:37
+#: projects/models/invite.py:40
 msgid "Token"
 msgstr ""
 
-#: projects/models/invite.py:38
+#: projects/models/invite.py:41
 msgid "The token for this invite."
 msgstr ""
 
-#: projects/models/invite.py:41
+#: projects/models/invite.py:44
 msgid "Timestamp"
 msgstr ""
 
-#: projects/models/invite.py:42
+#: projects/models/invite.py:45
 msgid "The timestamp for this invite."
 msgstr ""
 
-#: projects/models/invite.py:47
+#: projects/models/invite.py:50
 msgid "Invite"
 msgstr ""
 
-#: projects/models/invite.py:48
+#: projects/models/invite.py:51
 #: projects/templates/projects/project_detail_invites.html:10
 msgid "Invites"
 msgstr ""
@@ -2560,6 +2562,18 @@ msgstr ""
 msgid "The secret for a GitLab webhook to close a task."
 msgstr ""
 
+#: projects/serializers/v1/__init__.py:152
+msgid "A user with that e-mail is already a member of the project."
+msgstr ""
+
+#: projects/serializers/v1/__init__.py:160
+msgid "Either user or e-mail needs to be provided."
+msgstr ""
+
+#: projects/serializers/v1/__init__.py:162
+msgid "User and e-mail are mutually exclusive."
+msgstr ""
+
 #: projects/serializers/v1/questionset.py:94
 msgid "item"
 msgstr ""
@@ -2701,8 +2715,8 @@ msgstr ""
 #: projects/templates/projects/issue_send_message.txt:3
 #, python-format
 msgid ""
-"The following task was identified in the project \"%(project_title)s\" "
-"<%(project_url)s>:"
+"The following task was identified in the project \"%(project_title)s\" <"
+"%(project_url)s>:"
 msgstr ""
 
 #: projects/templates/projects/issue_send_message.txt:13
@@ -2983,7 +2997,7 @@ msgstr ""
 #: projects/templates/projects/project_detail_snapshots.html:22
 #: projects/templates/projects/project_import.html:34
 #: projects/templates/projects/project_import.html:104
-#: projects/templates/projects/site_projects.html:50
+#: projects/templates/projects/site_projects.html:65
 msgid "Created"
 msgstr ""
 
@@ -3010,7 +3024,7 @@ msgid ""
 "needed."
 msgstr ""
 
-#: projects/templates/projects/project_detail_views.html:19 views/models.py:122
+#: projects/templates/projects/project_detail_views.html:19 views/models.py:124
 #: views/templates/views/views.html:127
 msgid "View"
 msgstr ""
@@ -3142,17 +3156,18 @@ msgid ""
 "using the green button and remove them using the blue cross (&times;)."
 msgstr ""
 
-#: projects/templates/projects/project_questions_buttons.html:9
-#: projects/templates/projects/project_questions_buttons.html:52
-msgid "Skip"
-msgstr ""
-
-#: projects/templates/projects/project_questions_buttons.html:32
-#: projects/templates/projects/project_questions_buttons.html:40
+#: projects/templates/projects/project_questions_buttons.html:10
+#: projects/templates/projects/project_questions_buttons.html:41
+#: projects/templates/projects/project_questions_buttons.html:49
 msgid "Proceed"
 msgstr ""
 
-#: projects/templates/projects/project_questions_buttons.html:34
+#: projects/templates/projects/project_questions_buttons.html:12
+#: projects/templates/projects/project_questions_buttons.html:62
+msgid "Skip"
+msgstr ""
+
+#: projects/templates/projects/project_questions_buttons.html:43
 msgid "Save and proceed"
 msgstr ""
 
@@ -3237,12 +3252,12 @@ msgstr ""
 
 #: projects/templates/projects/project_questions_navigation_help.html:14
 msgid ""
-"Entries with <i class=\"fa fa-question-circle-o small\" aria-"
-"hidden=\"true\"></i> might be skipped based on your input."
+"Entries with <i class=\"fa fa-question-circle-o small\" aria-hidden=\"true"
+"\"></i> might be skipped based on your input."
 msgstr ""
 
 #: projects/templates/projects/project_questions_overview.html:14
-#: projects/templates/projects/site_projects.html:37
+#: projects/templates/projects/site_projects.html:52
 msgid "Back to my projects"
 msgstr ""
 
@@ -3303,7 +3318,7 @@ msgid "Navigation"
 msgstr ""
 
 #: projects/templates/projects/project_view.html:90
-#: projects/views/project.py:198
+#: projects/views/project.py:201
 msgid "Error"
 msgstr ""
 
@@ -3346,7 +3361,7 @@ msgid "Click on one of the links to join the projects."
 msgstr ""
 
 #: projects/templates/projects/projects.html:127
-#: projects/templates/projects/site_projects.html:51
+#: projects/templates/projects/site_projects.html:66
 msgid "Last changed"
 msgstr ""
 
@@ -3365,7 +3380,11 @@ msgstr ""
 msgid "Next"
 msgstr ""
 
-#: projects/templates/projects/site_projects.html:44
+#: projects/templates/projects/site_projects.html:32
+msgid "All catalogs"
+msgstr ""
+
+#: projects/templates/projects/site_projects.html:59
 #, python-format
 msgid "All projects on %(site)s"
 msgstr ""
@@ -3389,20 +3408,20 @@ msgstr ""
 msgid "Set"
 msgstr ""
 
-#: projects/validators.py:22 projects/viewsets.py:318
+#: projects/validators.py:22 projects/viewsets.py:350
 msgid "You reached the file quota for this project."
 msgstr ""
 
-#: projects/views/project.py:178
+#: projects/views/project.py:181
 msgid "Sorry, your invitation has been expired."
 msgstr ""
 
-#: projects/views/project.py:181
+#: projects/views/project.py:184
 #, python-format
 msgid "Sorry, but this invitation is for the user \"%s\"."
 msgstr ""
 
-#: projects/views/project.py:195
+#: projects/views/project.py:198
 msgid "Sorry, the invitation link is not valid."
 msgstr ""
 
@@ -3437,7 +3456,7 @@ msgstr ""
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:196
 #: tasks/models.py:51 tasks/templates/tasks/tasks.html:144
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:144
-#: tasks/templates/tasks/tasks_modal_form_tasks.html:212 views/models.py:51
+#: tasks/templates/tasks/tasks_modal_form_tasks.html:212 views/models.py:53
 #: views/templates/views/views.html:141
 #: views/templates/views/views_modal_form_views.html:143
 #: views/templates/views/views_modal_form_views.html:210
@@ -3448,7 +3467,7 @@ msgstr ""
 msgid "The sites this catalog belongs to (in a multi site setup)."
 msgstr ""
 
-#: questions/models/catalog.py:54 tasks/models.py:56 views/models.py:56
+#: questions/models/catalog.py:54 tasks/models.py:56 views/models.py:58
 msgid "Group"
 msgstr ""
 
@@ -3457,7 +3476,7 @@ msgid "The groups for which this catalog is active."
 msgstr ""
 
 #: questions/models/catalog.py:59 questions/models/questionset.py:77
-#: questions/models/section.py:55 tasks/models.py:61 views/models.py:66
+#: questions/models/section.py:55 tasks/models.py:61 views/models.py:68
 msgid "Title (primary)"
 msgstr ""
 
@@ -3466,7 +3485,7 @@ msgid "The title for this catalog in the primary language."
 msgstr ""
 
 #: questions/models/catalog.py:64 questions/models/questionset.py:82
-#: questions/models/section.py:60 tasks/models.py:66 views/models.py:71
+#: questions/models/section.py:60 tasks/models.py:66 views/models.py:73
 msgid "Title (secondary)"
 msgstr ""
 
@@ -3475,7 +3494,7 @@ msgid "The title for this catalog in the secondary language."
 msgstr ""
 
 #: questions/models/catalog.py:69 questions/models/questionset.py:87
-#: questions/models/section.py:65 tasks/models.py:71 views/models.py:76
+#: questions/models/section.py:65 tasks/models.py:71 views/models.py:78
 msgid "Title (tertiary)"
 msgstr ""
 
@@ -3484,7 +3503,7 @@ msgid "The title for this catalog in the tertiary language."
 msgstr ""
 
 #: questions/models/catalog.py:74 questions/models/questionset.py:92
-#: questions/models/section.py:70 tasks/models.py:76 views/models.py:81
+#: questions/models/section.py:70 tasks/models.py:76 views/models.py:83
 msgid "Title (quaternary)"
 msgstr ""
 
@@ -3493,7 +3512,7 @@ msgid "The title for this catalog in the quaternary language."
 msgstr ""
 
 #: questions/models/catalog.py:79 questions/models/questionset.py:97
-#: questions/models/section.py:75 tasks/models.py:81 views/models.py:86
+#: questions/models/section.py:75 tasks/models.py:81 views/models.py:88
 msgid "Title (quinary)"
 msgstr ""
 
@@ -3521,7 +3540,7 @@ msgstr ""
 msgid "The help text for this catalog in the quinary language."
 msgstr ""
 
-#: questions/models/catalog.py:109 tasks/models.py:136 views/models.py:116
+#: questions/models/catalog.py:109 tasks/models.py:136 views/models.py:118
 msgid "Available"
 msgstr ""
 
@@ -3531,7 +3550,7 @@ msgstr ""
 
 #: questions/models/catalog.py:116 tasks/models.py:46
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:123
-#: tasks/templates/tasks/tasks_modal_form_tasks.html:187 views/models.py:46
+#: tasks/templates/tasks/tasks_modal_form_tasks.html:187 views/models.py:48
 #: views/templates/views/views_modal_form_views.html:122
 #: views/templates/views/views_modal_form_views.html:185
 msgid "Catalogs"
@@ -4088,8 +4107,8 @@ msgstr ""
 #: questions/templates/questions/catalogs_modal_delete_catalogs.html:17
 #, python-format
 msgid ""
-"You are about to permanently delete the catalog <code class=\"text-"
-"primary\">%(object)s</code>."
+"You are about to permanently delete the catalog <code class=\"text-primary\">"
+"%(object)s</code>."
 msgstr ""
 
 #: questions/templates/questions/catalogs_modal_delete_catalogs.html:24
@@ -4108,8 +4127,8 @@ msgstr ""
 #: questions/templates/questions/catalogs_modal_delete_questions.html:17
 #, python-format
 msgid ""
-"You are about to permanently delete the question <code class=\"text-"
-"primary\">%(object)s</code>."
+"You are about to permanently delete the question <code class=\"text-primary"
+"\">%(object)s</code>."
 msgstr ""
 
 #: questions/templates/questions/catalogs_modal_delete_questionsets.html:17
@@ -4122,8 +4141,8 @@ msgstr ""
 #: questions/templates/questions/catalogs_modal_delete_sections.html:17
 #, python-format
 msgid ""
-"You are about to permanently delete the section <code class=\"text-"
-"primary\">%(object)s</code>."
+"You are about to permanently delete the section <code class=\"text-primary\">"
+"%(object)s</code>."
 msgstr ""
 
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:12
@@ -4630,90 +4649,90 @@ msgstr ""
 msgid "An empty list implies that the task can be used with every catalog."
 msgstr ""
 
-#: views/models.py:22
+#: views/models.py:24
 msgid "The Uniform Resource Identifier of this view (auto-generated)."
 msgstr ""
 
-#: views/models.py:27
+#: views/models.py:29
 msgid "The prefix for the URI of this view."
 msgstr ""
 
-#: views/models.py:32
+#: views/models.py:34
 msgid "The internal identifier of this view."
 msgstr ""
 
-#: views/models.py:37
+#: views/models.py:39
 msgid "Additional internal information about this view."
 msgstr ""
 
-#: views/models.py:42
+#: views/models.py:44
 msgid "Designates whether this view can be changed."
 msgstr ""
 
-#: views/models.py:47
+#: views/models.py:49
 msgid ""
 "The catalogs this view can be used with. An empty list implies that this "
 "view can be used with every catalog."
 msgstr ""
 
-#: views/models.py:52
+#: views/models.py:54
 msgid "The sites this view belongs to (in a multi site setup)."
 msgstr ""
 
-#: views/models.py:57
+#: views/models.py:59
 msgid "The groups for which this view is active."
 msgstr ""
 
-#: views/models.py:61 views/templates/views/views_export.html:35
+#: views/models.py:63 views/templates/views/views_export.html:35
 #: views/templates/views/views_modal_form_templates.html:11
 msgid "Template"
 msgstr ""
 
-#: views/models.py:62
+#: views/models.py:64
 msgid "The template for this view, written in Django template language."
 msgstr ""
 
-#: views/models.py:67
+#: views/models.py:69
 msgid "The title for this view in the primary language."
 msgstr ""
 
-#: views/models.py:72
+#: views/models.py:74
 msgid "The title for this view in the secondary language."
 msgstr ""
 
-#: views/models.py:77
+#: views/models.py:79
 msgid "The title for this view in the tertiary language."
 msgstr ""
 
-#: views/models.py:82
+#: views/models.py:84
 msgid "The title for this view in the quaternary language."
 msgstr ""
 
-#: views/models.py:87
+#: views/models.py:89
 msgid "The title for this view in the quinary language."
 msgstr ""
 
-#: views/models.py:92
+#: views/models.py:94
 msgid "The help text for this view in the primary language."
 msgstr ""
 
-#: views/models.py:97
+#: views/models.py:99
 msgid "The help text for this view in the secondary language."
 msgstr ""
 
-#: views/models.py:102
+#: views/models.py:104
 msgid "The help text for this view in the tertiary language."
 msgstr ""
 
-#: views/models.py:107
+#: views/models.py:109
 msgid "The help text for this view in the quaternary language."
 msgstr ""
 
-#: views/models.py:112
+#: views/models.py:114
 msgid "The help text for this view in the quinary language."
 msgstr ""
 
-#: views/models.py:117
+#: views/models.py:119
 msgid "Designates whether this view is generally available for projects."
 msgstr ""
 

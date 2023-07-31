@@ -149,7 +149,7 @@ class ProjectInviteSerializer(serializers.ModelSerializer):
 
     def validate_email(self, value):
         if self.context['view'].project.memberships.filter(user__email=value).exists():
-            raise serializers.ValidationError(_('A user with that email is already a member of the project.'))
+            raise serializers.ValidationError(_('A user with that e-mail is already a member of the project.'))
         return value
 
     def validate(self, data):
@@ -157,9 +157,9 @@ class ProjectInviteSerializer(serializers.ModelSerializer):
         email = data.get('email')
 
         if not user and not email:
-            raise serializers.ValidationError(_('Either user or email needs to be provided'))
+            raise serializers.ValidationError(_('Either user or e-mail needs to be provided.'))
         elif user and email:
-            raise serializers.ValidationError(_('User and email are mutually exclusive'))
+            raise serializers.ValidationError(_('User and e-mail are mutually exclusive.'))
         elif user:
             data['email'] = user.email
         elif email:
