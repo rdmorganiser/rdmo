@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-31 12:01+0200\n"
-"PO-Revision-Date: 2023-04-27 16:09+0200\n"
+"POT-Creation-Date: 2023-07-31 16:18+0200\n"
+"PO-Revision-Date: 2023-07-31 16:19+0200\n"
 "Last-Translator: Yonny Cardenas <cardenas@cc.in2p3.fr>\n"
 "Language-Team: RDMO <cardenas@cc.in2p3.fr>\n"
 "Language: fr\n"
@@ -305,9 +305,10 @@ msgid ""
 "%(site_domain)s will be reset. It can be safely ignored if you did not "
 "request a password reset. Click the link below to reset your password."
 msgstr ""
-"Vous recevez ce message car vous avez demandé que votre mot de passe dans "
-"%(site_domain) soit réinitialisé. Il peut être ignoré en toute sécurité si "
-"vous n'avez pas fait une demande de réinitialisation du mot de passe. "
+"Vous recevez cet e-mail parce que vous avez demandé la réinitialisation de "
+"votre mot de passe sur %(site_domain)s. Vous pouvez l'ignorer si vous n'avez "
+"pas demandé la réinitialisation de votre mot de passe. Vous pouvez l'ignorer "
+"si vous n'avez pas demandé la réinitialisation de votre mot de passe. "
 "Cliquez sur le lien ci-dessous pour réinitialiser votre mot de passe."
 
 #: accounts/templates/account/email/password_reset_key_message.txt:11
@@ -346,8 +347,8 @@ msgstr "Confirmer"
 #: accounts/templates/account/email_confirm.html:29
 #, python-format
 msgid ""
-"This e-mail confirmation link expired or is invalid. Please <a href="
-"\"%(email_url)s\">issue a new e-mail confirmation request</a>."
+"This e-mail confirmation link expired or is invalid. Please <a "
+"href=\"%(email_url)s\">issue a new e-mail confirmation request</a>."
 msgstr ""
 "Ce lien de confirmation par e-mail a expiré ou n'est pas valide. Veuillez  "
 "<a href=\"%(email_url)s\"> faire une nouvelle demande de confirmation par e-"
@@ -369,8 +370,8 @@ msgstr "Connectez-vous avec Shibboleth"
 #: accounts/templates/account/login_form_account.html:7
 #, python-format
 msgid ""
-"If you have not created an account yet, then please <a href=\"%(signup_url)s"
-"\">sign up</a> first."
+"If you have not created an account yet, then please <a "
+"href=\"%(signup_url)s\">sign up</a> first."
 msgstr ""
 "Si vous n'avez pas encore créé de compte <a href=\"%(signup_url)s \"> "
 "inscrivez-vous d'abord </a>."
@@ -378,8 +379,8 @@ msgstr ""
 #: accounts/templates/account/login_form_account.html:14
 #, python-format
 msgid ""
-"If you forgot your password and want to reset it, click <a href="
-"\"%(reset_url)s\">here</a>."
+"If you forgot your password and want to reset it, click <a "
+"href=\"%(reset_url)s\">here</a>."
 msgstr ""
 "Si vous avez oublié votre mot de passe et que vous souhaitez le "
 "réinitialiser, cliquez sur <a href=\"%(reset_url)s\"> ici </a>."
@@ -462,8 +463,9 @@ msgid ""
 "a>."
 msgstr ""
 "Le lien de réinitialisation du mot de passe n'était pas valide, peut-être "
-"parce qu'il l'a déjà été utilisé. Veuillez demander une <a href="
-"\"%(passwd_reset_url)s\"> nouvelle réinitialisation du mot de passe </a>."
+"parce qu'il l'a déjà été utilisé. Veuillez demander une <a "
+"href=\"%(passwd_reset_url)s\"> nouvelle réinitialisation du mot de passe </"
+"a>."
 
 #: accounts/templates/account/password_reset_from_key.html:18
 msgid "Enter new password"
@@ -756,8 +758,8 @@ msgstr "Connexion annulée"
 #, python-format
 msgid ""
 "You decided to cancel logging in to our site using one of your existing "
-"accounts. If this was a mistake, please proceed to <a href=\"%(login_url)s"
-"\">sign in</a>."
+"accounts. If this was a mistake, please proceed to <a "
+"href=\"%(login_url)s\">sign in</a>."
 msgstr ""
 "Vous avez décidé d'annuler la connexion à notre site en utilisant l'un de "
 "vos comptes existants S'il s'agissait d'une erreur, veuillez passer à  <a "
@@ -769,9 +771,9 @@ msgid ""
 "You are about to use your <strong>%(provider_name)s</strong> account to "
 "login to %(site_name)s. As a final step, please complete the following form:"
 msgstr ""
-"Vous êtes sur le point d'utiliser votre compte pour <strong>"
-"%(provider_name)s</strong> se connecter à %(site_name)s. Pour terminer, "
-"veuillez remplir le formulaire suivant:"
+"Vous êtes sur le point d'utiliser votre compte pour "
+"<strong>%(provider_name)s</strong> se connecter à %(site_name)s. Pour "
+"terminer, veuillez remplir le formulaire suivant:"
 
 #: accounts/templatetags/accounts_tags.py:19
 #: projects/templates/projects/projects.html:125
@@ -1045,8 +1047,8 @@ msgstr "Cible"
 msgid ""
 "You are about to permanently delete the condition <code>%(object)s</code>."
 msgstr ""
-"Vous êtes sur le point de supprimer définitivement la condition <code>"
-"%(object)s</code>."
+"Vous êtes sur le point de supprimer définitivement la condition "
+"<code>%(object)s</code>."
 
 #: conditions/templates/conditions/conditions_modal_delete_conditions.html:23
 #: conditions/templates/conditions/conditions_modal_show_conditions.html:15
@@ -1556,8 +1558,8 @@ msgstr "Supprimer l'attribut"
 msgid ""
 "You are about to permanently delete the attribute <code>%(object)s</code>."
 msgstr ""
-"Vous êtes sur le point de supprimer définitivement l'attribut <code>"
-"%(object)s</code>."
+"Vous êtes sur le point de supprimer définitivement l'attribut "
+"<code>%(object)s</code>."
 
 #: domain/templates/domain/domain_modal_delete_attributes.html:23
 msgid "This will also delete the following attributes:"
@@ -1567,8 +1569,8 @@ msgstr "Cela supprimera également les attributs suivants:"
 #: domain/templates/domain/domain_modal_show_attributes.html:15
 #, python-format
 msgid ""
-"This attribute is used for <b>%(values_count)s values</b> in <b>"
-"%(projects_count)s projects</b>."
+"This attribute is used for <b>%(values_count)s values</b> in "
+"<b>%(projects_count)s projects</b>."
 msgstr ""
 "Cet attribut est utilisé pour les valeurs de <b>%(values_count)s </b> dans "
 "<b>%(projects_count)s projets</b>."
@@ -1936,11 +1938,11 @@ msgstr ""
 #: options/templates/options/options_modal_show_options.html:15
 #, python-format
 msgid ""
-"This option is used for <b>%(values_count)s values</b> in <b>"
-"%(projects_count)s projects</b>."
+"This option is used for <b>%(values_count)s values</b> in "
+"<b>%(projects_count)s projects</b>."
 msgstr ""
-"Cette option est utilisée pour <b>%(values_count)s valeurs</b> dans <b>"
-"%(projects_count)s projets</b>."
+"Cette option est utilisée pour <b>%(values_count)s valeurs</b> dans "
+"<b>%(projects_count)s projets</b>."
 
 #: options/templates/options/options_modal_delete_options.html:29
 #, python-format
@@ -2735,20 +2737,16 @@ msgid "The secret for a GitLab webhook to close a task."
 msgstr "Le secret d'un webhook GitLab pour fermer une tâche."
 
 #: projects/serializers/v1/__init__.py:152
-#, fuzzy
-#| msgid "The user is already a member of the project."
 msgid "A user with that e-mail is already a member of the project."
-msgstr "L'utilisateur est déjà membre du projet."
+msgstr "Un utilisateur avec cet e-mail est déjà membre du projet."
 
 #: projects/serializers/v1/__init__.py:160
-#, fuzzy
-#| msgid "The username or e-mail of the new user."
 msgid "Either user or e-mail needs to be provided."
-msgstr "Le nom d'utilisateur ou l'adresse électronique du nouvel utilisateur."
+msgstr "L'utilisateur ou l'e-mail doit être indiqué."
 
 #: projects/serializers/v1/__init__.py:162
 msgid "User and e-mail are mutually exclusive."
-msgstr ""
+msgstr "L'utilisateur et le courrier électronique s'excluent mutuellement."
 
 #: projects/serializers/v1/questionset.py:94
 msgid "item"
@@ -2900,11 +2898,11 @@ msgstr "A qui cela peut concerner,"
 #: projects/templates/projects/issue_send_message.txt:3
 #, python-format
 msgid ""
-"The following task was identified in the project \"%(project_title)s\" <"
-"%(project_url)s>:"
+"The following task was identified in the project \"%(project_title)s\" "
+"<%(project_url)s>:"
 msgstr ""
-"La tâche suivante a été identifiée dans le projet \"%(project_title)s\" <"
-"%(project_url)s>:"
+"La tâche suivante a été identifiée dans le projet \"%(project_title)s\" "
+"<%(project_url)s>:"
 
 #: projects/templates/projects/issue_send_message.txt:13
 #, python-format
@@ -3463,8 +3461,8 @@ msgstr "Mes projets"
 msgid ""
 "You are about to permanently delete the %(name)s <strong>%(object)s</strong>."
 msgstr ""
-"Vous êtes sur le point de supprimer définitivement les %(name)s <strong>"
-"%(object)s</strong>."
+"Vous êtes sur le point de supprimer définitivement les %(name)s "
+"<strong>%(object)s</strong>."
 
 #: projects/templates/projects/project_questions_modal_delete_valuesets.html:23
 #, python-format
@@ -3498,11 +3496,11 @@ msgstr ""
 
 #: projects/templates/projects/project_questions_navigation_help.html:14
 msgid ""
-"Entries with <i class=\"fa fa-question-circle-o small\" aria-hidden=\"true"
-"\"></i> might be skipped based on your input."
+"Entries with <i class=\"fa fa-question-circle-o small\" aria-"
+"hidden=\"true\"></i> might be skipped based on your input."
 msgstr ""
-"Les entrées avec <i class=\"fa fa-question-circle-o small\" aria-hidden="
-"\"true\"></i> peuvent être ignorées en fonction de votre saisie."
+"Les entrées avec <i class=\"fa fa-question-circle-o small\" aria-"
+"hidden=\"true\"></i> peuvent être ignorées en fonction de votre saisie."
 
 #: projects/templates/projects/project_questions_overview.html:14
 #: projects/templates/projects/site_projects.html:52
@@ -3644,10 +3642,8 @@ msgid "Next"
 msgstr "Suivant"
 
 #: projects/templates/projects/site_projects.html:32
-#, fuzzy
-#| msgid "Catalogs"
 msgid "All catalogs"
-msgstr "Catalogues"
+msgstr "Tous les catalogues"
 
 #: projects/templates/projects/site_projects.html:59
 #, python-format
@@ -4418,11 +4414,11 @@ msgstr "En option"
 #: questions/templates/questions/catalogs_modal_delete_catalogs.html:17
 #, python-format
 msgid ""
-"You are about to permanently delete the catalog <code class=\"text-primary\">"
-"%(object)s</code>."
+"You are about to permanently delete the catalog <code class=\"text-"
+"primary\">%(object)s</code>."
 msgstr ""
-"Vous êtes sur le point de supprimer définitivement le catalogue <code class="
-"\"text-primary\">%(object)s</code>."
+"Vous êtes sur le point de supprimer définitivement le catalogue <code "
+"class=\"text-primary\">%(object)s</code>."
 
 #: questions/templates/questions/catalogs_modal_delete_catalogs.html:24
 #, python-format
@@ -4443,11 +4439,11 @@ msgstr ""
 #: questions/templates/questions/catalogs_modal_delete_questions.html:17
 #, python-format
 msgid ""
-"You are about to permanently delete the question <code class=\"text-primary"
-"\">%(object)s</code>."
+"You are about to permanently delete the question <code class=\"text-"
+"primary\">%(object)s</code>."
 msgstr ""
-"Vous êtes sur le point de supprimer définitivement la question <code class="
-"\"text-primary\">%(object)s</code>."
+"Vous êtes sur le point de supprimer définitivement la question <code "
+"class=\"text-primary\">%(object)s</code>."
 
 #: questions/templates/questions/catalogs_modal_delete_questionsets.html:17
 #, python-format
@@ -4461,11 +4457,11 @@ msgstr ""
 #: questions/templates/questions/catalogs_modal_delete_sections.html:17
 #, python-format
 msgid ""
-"You are about to permanently delete the section <code class=\"text-primary\">"
-"%(object)s</code>."
+"You are about to permanently delete the section <code class=\"text-"
+"primary\">%(object)s</code>."
 msgstr ""
-"Vous êtes sur le point de supprimer définitivement la section <code class="
-"\"text-primary\">%(object)s</code>."
+"Vous êtes sur le point de supprimer définitivement la section <code "
+"class=\"text-primary\">%(object)s</code>."
 
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:12
 msgid "Create catalog"
@@ -4972,8 +4968,8 @@ msgstr "tous"
 #, python-format
 msgid "You are about to permanently delete the task <code>%(object)s</code>."
 msgstr ""
-"Vous êtes sur le point de supprimer définitivement la tâche <code>"
-"%(object)s</code>."
+"Vous êtes sur le point de supprimer définitivement la tâche "
+"<code>%(object)s</code>."
 
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:12
 msgid "Create task"
@@ -5446,8 +5442,8 @@ msgstr ""
 #~ msgid ""
 #~ "You are about to permanently delete the entity <code>%(object)s</code>."
 #~ msgstr ""
-#~ "Vous êtes sur le point de supprimer définitivement l'entité <code>"
-#~ "%(object)s</code>."
+#~ "Vous êtes sur le point de supprimer définitivement l'entité "
+#~ "<code>%(object)s</code>."
 
 #~ msgid "The prefix for the URI of this entity."
 #~ msgstr "Préfixe de l'URI de cette entité."

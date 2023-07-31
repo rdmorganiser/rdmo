@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-31 12:01+0200\n"
-"PO-Revision-Date: 2023-04-27 16:08+0200\n"
+"POT-Creation-Date: 2023-07-31 16:18+0200\n"
+"PO-Revision-Date: 2023-07-31 13:31+0200\n"
 "Last-Translator: DAVID MARTINEZ <dmartinezmu@cem.es>\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -352,8 +352,8 @@ msgstr "Confirmar"
 #: accounts/templates/account/email_confirm.html:29
 #, python-format
 msgid ""
-"This e-mail confirmation link expired or is invalid. Please <a href="
-"\"%(email_url)s\">issue a new e-mail confirmation request</a>."
+"This e-mail confirmation link expired or is invalid. Please <a "
+"href=\"%(email_url)s\">issue a new e-mail confirmation request</a>."
 msgstr ""
 "Este enlace de confirmación del e-mail ha expirado o no es válido. Por favor "
 "<<a href=\"%(email_url)s\">emita un nueva petición de confirmación del e-"
@@ -375,20 +375,20 @@ msgstr "Login con Shibboleth"
 #: accounts/templates/account/login_form_account.html:7
 #, python-format
 msgid ""
-"If you have not created an account yet, then please <a href=\"%(signup_url)s"
-"\">sign up</a> first."
+"If you have not created an account yet, then please <a "
+"href=\"%(signup_url)s\">sign up</a> first."
 msgstr ""
-"Si todavía no ha creado una cuenta, por favor primero <a href="
-"\"%(signup_url)s\">regístrese</a>."
+"Si todavía no ha creado una cuenta, por favor primero <a "
+"href=\"%(signup_url)s\">regístrese</a>."
 
 #: accounts/templates/account/login_form_account.html:14
 #, python-format
 msgid ""
-"If you forgot your password and want to reset it, click <a href="
-"\"%(reset_url)s\">here</a>."
+"If you forgot your password and want to reset it, click <a "
+"href=\"%(reset_url)s\">here</a>."
 msgstr ""
-"Si ha olvidado su contraseña y quiere una nueva, pulse <a href="
-"\"%(reset_url)s\">aquí</a>."
+"Si ha olvidado su contraseña y quiere una nueva, pulse <a "
+"href=\"%(reset_url)s\">aquí</a>."
 
 #: accounts/templates/account/login_form_socialaccount.html:9
 msgid ""
@@ -516,8 +516,8 @@ msgstr "Crear nueva cuenta"
 msgid ""
 "Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
 msgstr ""
-"¿Ya dispone de una cuenta? Entonces por favor <a href=\"%(login_url)s"
-"\">acceda</a>."
+"¿Ya dispone de una cuenta? Entonces por favor <a "
+"href=\"%(login_url)s\">acceda</a>."
 
 #: accounts/templates/account/signup.html:34
 #: accounts/templates/socialaccount/signup.html:33
@@ -755,12 +755,12 @@ msgstr "Acceso cancelado"
 #, python-format
 msgid ""
 "You decided to cancel logging in to our site using one of your existing "
-"accounts. If this was a mistake, please proceed to <a href=\"%(login_url)s"
-"\">sign in</a>."
+"accounts. If this was a mistake, please proceed to <a "
+"href=\"%(login_url)s\">sign in</a>."
 msgstr ""
 "Usted ha cancelado el acceso a nuestro site mediante una de sus cuentas "
-"registradas. Si esto ha sido un error, por favor proceda a <a href="
-"\"%(login_url)s\">acceder</a>."
+"registradas. Si esto ha sido un error, por favor proceda a <a "
+"href=\"%(login_url)s\">acceder</a>."
 
 #: accounts/templates/socialaccount/signup.html:9
 #, python-format
@@ -1562,11 +1562,11 @@ msgstr "Esto también borrará los siguientes atributos:"
 #: domain/templates/domain/domain_modal_show_attributes.html:15
 #, python-format
 msgid ""
-"This attribute is used for <b>%(values_count)s values</b> in <b>"
-"%(projects_count)s projects</b>."
+"This attribute is used for <b>%(values_count)s values</b> in "
+"<b>%(projects_count)s projects</b>."
 msgstr ""
-"Este atributo es utilizado para <b>%(values_count)s valores</b> en <b>"
-"%(projects_count)s proyectos</b>."
+"Este atributo es utilizado para <b>%(values_count)s valores</b> en "
+"<b>%(projects_count)s proyectos</b>."
 
 #: domain/templates/domain/domain_modal_delete_attributes.html:42
 #: domain/templates/domain/domain_modal_show_attributes.html:18
@@ -1929,11 +1929,11 @@ msgstr ""
 #: options/templates/options/options_modal_show_options.html:15
 #, python-format
 msgid ""
-"This option is used for <b>%(values_count)s values</b> in <b>"
-"%(projects_count)s projects</b>."
+"This option is used for <b>%(values_count)s values</b> in "
+"<b>%(projects_count)s projects</b>."
 msgstr ""
-"Esta opción es utilizada para <b>%(values_count)s valores</b> en <b>"
-"%(projects_count)s proyectos</b>."
+"Esta opción es utilizada para <b>%(values_count)s valores</b> en "
+"<b>%(projects_count)s proyectos</b>."
 
 #: options/templates/options/options_modal_delete_options.html:29
 #, python-format
@@ -1946,8 +1946,8 @@ msgstr ""
 msgid ""
 "You are about to permanently delete the option set <code>%(object)s</code>."
 msgstr ""
-"Está usted a punto de eliminar permanentemente el conjunto de opciones <code>"
-"%(object)s</code>."
+"Está usted a punto de eliminar permanentemente el conjunto de opciones "
+"<code>%(object)s</code>."
 
 #: options/templates/options/options_modal_delete_optionsets.html:23
 msgid ""
@@ -2721,20 +2721,16 @@ msgid "The secret for a GitLab webhook to close a task."
 msgstr "El secreto para el webhook GitLab para cerrar una tarea."
 
 #: projects/serializers/v1/__init__.py:152
-#, fuzzy
-#| msgid "The user is already a member of the project."
 msgid "A user with that e-mail is already a member of the project."
-msgstr "El usuario ya es miembro del proyecto."
+msgstr "Un usuario con ese e-mail ya es miembro del proyecto."
 
 #: projects/serializers/v1/__init__.py:160
-#, fuzzy
-#| msgid "The username or e-mail of the new user."
 msgid "Either user or e-mail needs to be provided."
-msgstr "Nombre o e-mail del nuevo usuario."
+msgstr "Es necesario indicar el usuario o el correo electrónico."
 
 #: projects/serializers/v1/__init__.py:162
 msgid "User and e-mail are mutually exclusive."
-msgstr ""
+msgstr "Usuario y correo electrónico se excluyen mutuamente."
 
 #: projects/serializers/v1/questionset.py:94
 msgid "item"
@@ -2884,11 +2880,11 @@ msgstr "Para quien pueda interesar,"
 #: projects/templates/projects/issue_send_message.txt:3
 #, python-format
 msgid ""
-"The following task was identified in the project \"%(project_title)s\" <"
-"%(project_url)s>:"
+"The following task was identified in the project \"%(project_title)s\" "
+"<%(project_url)s>:"
 msgstr ""
-"Se ha identificado la siguiente tarea en el proyecto \"%(project_title)s\" <"
-"%(project_url)s>:"
+"Se ha identificado la siguiente tarea en el proyecto \"%(project_title)s\" "
+"<%(project_url)s>:"
 
 #: projects/templates/projects/issue_send_message.txt:13
 #, python-format
@@ -3447,8 +3443,8 @@ msgstr "Mis Proyectos"
 msgid ""
 "You are about to permanently delete the %(name)s <strong>%(object)s</strong>."
 msgstr ""
-"Usted está a punto de eliminar permanentemente el %(name)s <strong>"
-"%(object)s</strong>."
+"Usted está a punto de eliminar permanentemente el %(name)s "
+"<strong>%(object)s</strong>."
 
 #: projects/templates/projects/project_questions_modal_delete_valuesets.html:23
 #, python-format
@@ -3481,11 +3477,11 @@ msgstr ""
 
 #: projects/templates/projects/project_questions_navigation_help.html:14
 msgid ""
-"Entries with <i class=\"fa fa-question-circle-o small\" aria-hidden=\"true"
-"\"></i> might be skipped based on your input."
+"Entries with <i class=\"fa fa-question-circle-o small\" aria-"
+"hidden=\"true\"></i> might be skipped based on your input."
 msgstr ""
-"Las entradas con <i class=\"fa fa-question-circle-o small\" aria-hidden="
-"\"true\"></i> podrían ser ignoradas según lo que ha introducido."
+"Las entradas con <i class=\"fa fa-question-circle-o small\" aria-"
+"hidden=\"true\"></i> podrían ser ignoradas según lo que ha introducido."
 
 #: projects/templates/projects/project_questions_overview.html:14
 #: projects/templates/projects/site_projects.html:52
@@ -3625,10 +3621,8 @@ msgid "Next"
 msgstr "Siguiente"
 
 #: projects/templates/projects/site_projects.html:32
-#, fuzzy
-#| msgid "Catalogs"
 msgid "All catalogs"
-msgstr "Catálogos"
+msgstr "Todos los catálogos"
 
 #: projects/templates/projects/site_projects.html:59
 #, python-format
@@ -4402,8 +4396,8 @@ msgstr "Opcional"
 #: questions/templates/questions/catalogs_modal_delete_catalogs.html:17
 #, python-format
 msgid ""
-"You are about to permanently delete the catalog <code class=\"text-primary\">"
-"%(object)s</code>."
+"You are about to permanently delete the catalog <code class=\"text-"
+"primary\">%(object)s</code>."
 msgstr ""
 "Estás a punto de eliminar permanentemente el catálogo <code class=\"text-"
 "primary\">%(object)s</code>."
@@ -4428,11 +4422,11 @@ msgstr ""
 #: questions/templates/questions/catalogs_modal_delete_questions.html:17
 #, python-format
 msgid ""
-"You are about to permanently delete the question <code class=\"text-primary"
-"\">%(object)s</code>."
+"You are about to permanently delete the question <code class=\"text-"
+"primary\">%(object)s</code>."
 msgstr ""
-"Usted está a punto de eliminar permanentemente la pregunta <code class="
-"\"text-primary\">%(object)s</code>."
+"Usted está a punto de eliminar permanentemente la pregunta <code "
+"class=\"text-primary\">%(object)s</code>."
 
 #: questions/templates/questions/catalogs_modal_delete_questionsets.html:17
 #, python-format
@@ -4446,8 +4440,8 @@ msgstr ""
 #: questions/templates/questions/catalogs_modal_delete_sections.html:17
 #, python-format
 msgid ""
-"You are about to permanently delete the section <code class=\"text-primary\">"
-"%(object)s</code>."
+"You are about to permanently delete the section <code class=\"text-"
+"primary\">%(object)s</code>."
 msgstr ""
 "Usted está a punto de eliminar permanentemente la sección <code class=\"text-"
 "primary\">%(object)s</code>."
