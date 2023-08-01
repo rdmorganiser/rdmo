@@ -4,6 +4,8 @@ from django.contrib.sites.models import Site
 from django.db import models
 from django.template import Context, Template
 from django.utils.translation import gettext_lazy as _
+
+from rdmo import __version__
 from rdmo.core.models import TranslationMixin
 from rdmo.core.utils import copy_model, get_pandoc_main_version, join_url
 from rdmo.questions.models import Catalog
@@ -154,11 +156,17 @@ class View(models.Model, TranslationMixin):
     def render(self, project, snapshot=None, export_format=None):
         # render the template to a html string
         # it is important not to use models here
+        site = Site.objects.get_current()
         project_wrapper = ProjectWrapper(project, snapshot)
         return Template(self.template).render(Context({
             'project': project_wrapper,
             'conditions': project_wrapper.conditions,
             'format': export_format,
+            'rdmo_version': __version__,
+            'site': {
+                'name': site.name,
+                'domain': site.domain
+            },
             'pandoc_version': get_pandoc_main_version()
         }))
 
