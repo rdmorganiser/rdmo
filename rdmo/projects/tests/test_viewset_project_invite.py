@@ -129,7 +129,7 @@ def test_create_error(db, client):
     }
     response = client.post(url, data)
     assert response.status_code == 400
-    assert response.json()['non_field_errors'][0] == 'Either user or email needs to be provided'
+    assert response.json()['non_field_errors'][0] == 'Either user or e-mail needs to be provided.'
 
 
 def test_create_error_user(db, client):
@@ -156,7 +156,7 @@ def test_create_error_user_and_email(db, client):
     }
     response = client.post(url, data)
     assert response.status_code == 400
-    assert response.json()['non_field_errors'][0] == 'User and email are mutually exclusive'
+    assert response.json()['non_field_errors'][0] == 'User and e-mail are mutually exclusive.'
 
 
 @pytest.mark.parametrize('username,password', users)
