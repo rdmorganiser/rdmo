@@ -1,4 +1,4 @@
-coverage==5.5
+coverage==7.2.7
 defusedcsv~=2.0.0
 defusedxml~=0.7.1
 Django~=3.2.14
