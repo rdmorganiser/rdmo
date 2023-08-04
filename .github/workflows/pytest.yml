@@ -15,8 +15,8 @@ jobs:
     strategy:
       matrix:
         db-backend: [mysql, postgres, sqlite3]
-        python-version: ['3.6', '3.11']
-
+        python-version: ['3.6', '3.7', '3.11']
+      fail-fast: false # TODO: just to demonstrate 3.6 is failing, but 3.7-3.11 are passing
     services:
       postgres:
         image: postgres:latest
@@ -39,10 +39,7 @@ jobs:
         python -m pip install --upgrade pip
     - name: Install RDMO
       run: |
-        pip install -e .
-        pip install psycopg2-binary
-        pip install mysqlclient
-        pip install coveralls
+        pip install -e .[mysql,postgres,ci]
     - name: Prepare Env
       run: |
         cp testing/config/settings/${{ matrix.db-backend }}.py testing/config/settings/local.py
