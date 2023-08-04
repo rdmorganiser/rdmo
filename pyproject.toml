@@ -97,4 +97,4 @@ version = {attr = "rdmo.__version__"}
 DJANGO_SETTINGS_MODULE = "config.settings"
 testpaths = ["rdmo"]
 python_files = "test_*.py"
-pythonpath = [".", "testing"]
+pythonpath = ". testing"

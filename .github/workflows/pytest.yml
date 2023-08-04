@@ -9,6 +9,12 @@ on:
       - '*.*.*'
   pull_request:
 
+
+# https://docs.github.com/en/actions/using-jobs/using-concurrency
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -16,7 +22,7 @@ jobs:
       matrix:
         db-backend: [mysql, postgres, sqlite3]
         python-version: ['3.6', '3.7', '3.11']
-      fail-fast: false # TODO: just to demonstrate 3.6 is failing, but 3.7-3.11 are passing
+      fail-fast: false # TODO: demonstrate 3.6 is failing, but 3.7-3.11 are passing
     services:
       postgres:
         image: postgres:latest
