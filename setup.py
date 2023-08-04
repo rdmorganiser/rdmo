@@ -4,7 +4,7 @@ from setuptools import find_packages, setup
 
 # get metadata from mudule using a regexp
 with open('rdmo/__init__.py') as f:
-    metadata = dict(re.findall(r'__(.*)__ = [\']([^\']*)[\']', f.read()))
+    metadata = dict(re.findall(r'__(.*)__ = [\'"]([^\'"]*)[\'"]', f.read()))
 
 # get install_requires from requirements.txt
 with open('requirements.txt') as f:

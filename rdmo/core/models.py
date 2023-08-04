@@ -1,5 +1,6 @@
 import logging
 
+from django.conf import settings
 from django.db import models
 from django.utils.timezone import now
 from django.utils.translation import get_language
@@ -38,7 +39,7 @@ class TranslationMixin(object):
                 r = getattr(self, '%s_%s' % (field, lang_field)) or None
                 if r is not None:
                     return r
-                else:
+                elif settings.REPLACE_MISSING_TRANSLATION:
                     for i in range(1, 6):
                         r = getattr(self, '%s_%s' % (field, 'lang' + str(i))) or None
                         if r is not None:

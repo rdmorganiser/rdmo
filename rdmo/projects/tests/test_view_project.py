@@ -4,8 +4,11 @@ import pytest
 from pytest_django.asserts import assertContains, assertNotContains, assertTemplateUsed
 from django.urls import reverse
 
+from rdmo.questions.models import Catalog
+from rdmo.questions.tests.test_models import unavailable_catalogs_kwargs
 from rdmo.views.models import View
 
+from ..forms import CatalogChoiceField
 from ..models import Project
 
 users = (
@@ -16,6 +19,9 @@ users = (
     ('user', 'user'),
     ('site', 'site'),
     ('anonymous', None),
+    ('editor', 'editor'),
+    ('reviewer', 'reviewer'),
+    ('api', 'api'),
 )
 
 view_project_permission_map = {
@@ -23,28 +29,25 @@ view_project_permission_map = {
     'manager': [1, 3, 5, 7],
     'author': [1, 3, 5, 8],
     'guest': [1, 3, 5, 9],
-    'api': [1, 2, 3, 4, 5],
-    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 }
 
 change_project_permission_map = {
     'owner': [1, 2, 3, 4, 5, 10],
     'manager': [1, 3, 5, 7],
-    'api': [1, 2, 3, 4, 5],
     'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 }
 
 delete_project_permission_map = {
     'owner': [1, 2, 3, 4, 5, 10],
-    'api': [1, 2, 3, 4, 5],
-    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
 }
 
 export_project_permission_map = {
     'owner': [1, 2, 3, 4, 5, 10],
     'manager': [1, 3, 5, 7],
-    'api': [1, 2, 3, 4, 5],
-    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
 }
 
 projects = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -68,7 +71,8 @@ def test_list(db, client, username, password):
     if password:
         assert response.status_code == 200
         assertTemplateUsed(response, 'projects/projects.html')
-        if username == 'site':
+
+        if username in ('site', 'api'):
             assert projects == []
             assert response.context['number_of_projects'] == len([])
             assertContains(response, 'View all projects on')
@@ -113,7 +117,10 @@ def test_detail(db, client, username, password, project_id):
     response = client.get(url)
 
     if project_id in view_project_permission_map.get(username, []):
-        assert response.status_code == 200
+        if username == 'api':
+            assert response.status_code == 403
+        else:
+            assert response.status_code == 200
     else:
         if password:
             assert response.status_code == 403
@@ -130,6 +137,38 @@ def test_project_create_get(db, client, username, password):
 
     if password:
         assert response.status_code == 200
+
+        # check the parent select dropdown
+        for project_id in re.findall(r'<option value="(\d+)"', response.content.decode()):
+            assert int(project_id) in view_project_permission_map.get(username, [])
+    else:
+        assert response.status_code == 302
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_project_create_get_for_extra_users_and_unavailable_catalogs(db, client, username, password):
+
+    for catalog_kwargs in unavailable_catalogs_kwargs:
+        Catalog.objects.create(**catalog_kwargs)
+
+    client.login(username=username, password=password)
+
+    url = reverse('project_create')
+    response = client.get(url)
+
+    if password:
+        assert response.status_code == 200
+        # check the catalogs that are displayed in the form
+        find_catalog_ids = re.findall(r'id="id_catalog_(\d+)', response.content.decode())
+        catalogs_in_form = response.context_data['form'].fields['catalog'].queryset
+        # Catalog.objects.filter_availability(response.context['user'])
+        assert find_catalog_ids == list(map(str, range(catalogs_in_form.count())))
+
+        # check the unavailable catalogs that are displayed in the form
+        # should happen only for users that can see unavailable catalogs (editors, api,..)
+        for unavailable_catalog in catalogs_in_form.filter(available=False):
+            _label = unavailable_catalog.title + CatalogChoiceField._unavailable_icon
+            assert _label in response.content.decode()
 
         # check the parent select dropdown
         for project_id in re.findall(r'<option value="(\d+)"', response.content.decode()):
@@ -173,7 +212,7 @@ def test_project_create_parent_post(db, client, username, password):
     }
     response = client.post(url, data)
 
-    if username == 'user':
+    if username in ('user', 'editor', 'reviewer'):
         assert response.status_code == 200
         assert Project.objects.count() == project_count
     elif password:
@@ -565,7 +604,10 @@ def test_project_answers(db, client, username, password, project_id):
     response = client.get(url)
 
     if project_id in view_project_permission_map.get(username, []):
-        assert response.status_code == 200
+        if username == 'api':
+            assert response.status_code == 403
+        else:
+            assert response.status_code == 200
     else:
         if password:
             assert response.status_code == 403
@@ -583,7 +625,10 @@ def test_project_answers_export(db, client, username, password, project_id, expo
     response = client.get(url)
 
     if project_id in view_project_permission_map.get(username, []):
-        assert response.status_code == 200
+        if username == 'api':
+            assert response.status_code == 403
+        else:
+            assert response.status_code == 200
     else:
         if password:
             assert response.status_code == 403
@@ -602,6 +647,9 @@ def test_project_view(db, client, username, password, project_id):
         response = client.get(url)
 
         if project_id in view_project_permission_map.get(username, []):
+            if username == 'api':
+                assert response.status_code == 403
+                return
             if view in project_views:
                 assert response.status_code == 200
             else:
@@ -625,6 +673,9 @@ def test_project_view_export(db, client, username, password, project_id, export_
         response = client.get(url)
 
         if project_id in view_project_permission_map.get(username, []):
+            if username == 'api':
+                assert response.status_code == 403
+                return
             if view in project_views:
                 assert response.status_code == 200
             else:
@@ -645,6 +696,9 @@ def test_project_questions(db, client, username, password, project_id):
     response = client.get(url)
 
     if project_id in view_project_permission_map.get(username, []):
+        if username == 'api':
+            assert response.status_code == 403
+            return
         assert response.status_code == 200
     elif password:
         assert response.status_code == 403
@@ -661,7 +715,10 @@ def test_project_error(db, client, username, password, project_id):
     response = client.get(url)
 
     if project_id in view_project_permission_map.get(username, []):
-        assert response.status_code == 200
+        if username == 'api':
+            assert response.status_code == 403
+        else:
+            assert response.status_code == 200
     elif password:
         assert response.status_code == 403
     else:

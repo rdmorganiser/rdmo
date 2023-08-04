@@ -838,15 +838,28 @@ angular.module('project_questions')
     service.prev = function() {
         service.error = null; // reset error when moving to previous questionset
         if (service.page.prev !== null) {
-            back = true;
-            service.initView(service.page.prev_page);
+            if (service.settings.project_questions_autosave) {
+                service.save(false).then(function() {
+                    back = true;
+                    service.initView(service.page.prev);
+                })
+            } else {
+                back = true;
+                service.initView(service.page.prev);
+            }
         }
     };
 
     service.next = function() {
         service.error = null; // reset error when moving to next questionset
         if (service.page.id !== null) {
-            service.initView(service.page.next);
+            if (service.settings.project_questions_autosave) {
+                service.save(false).then(function() {
+                    service.initView(service.page.next);
+                })
+            } else {
+                service.initView(service.page.next);
+            }
         }
     };
 

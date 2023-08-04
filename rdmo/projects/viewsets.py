@@ -4,7 +4,6 @@ from django.db.models import prefetch_related_objects
 from django.http import Http404, HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
-
 from rest_framework import serializers
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
@@ -26,12 +25,15 @@ from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
 from .filters import SnapshotFilterBackend, ValueFilterBackend
-from .models import (Continuation, Integration, Issue, Membership, Project,
-                     Snapshot, Value)
-from .permissions import HasProjectPagePermission, HasProjectPermission, HasProjectsPermission
-from .serializers.v1 import (IntegrationSerializer, IssueSerializer,
-                             MembershipSerializer,
+from .models import (Continuation, Integration, Invite, Issue, Membership,
+                     Project, Snapshot, Value)
+from .permissions import (HasProjectPagePermission, HasProjectPermission,
+                          HasProjectsPermission)
+from .serializers.v1 import (IntegrationSerializer, InviteSerializer,
+                             IssueSerializer, MembershipSerializer,
                              ProjectIntegrationSerializer,
+                             ProjectInviteSerializer,
+                             ProjectInviteUpdateSerializer,
                              ProjectIssueSerializer,
                              ProjectMembershipSerializer,
                              ProjectMembershipUpdateSerializer,
@@ -40,7 +42,7 @@ from .serializers.v1 import (IntegrationSerializer, IssueSerializer,
                              ValueSerializer)
 from .serializers.v1.overview import ProjectOverviewSerializer
 from .serializers.v1.page import PageSerializer
-from .utils import check_conditions
+from .utils import check_conditions, send_invite_email
 
 
 class ProjectViewSet(ModelViewSet):
@@ -196,6 +198,7 @@ class ProjectNestedViewSetMixin(NestedViewSetMixin):
             raise Http404
 
     def perform_create(self, serializer):
+        # this call provides the nested serializers with the project
         serializer.save(project=self.project)
 
 
@@ -238,6 +241,36 @@ class ProjectIntegrationViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         except AttributeError:
             # this is needed for the swagger ui
             return Integration.objects.none()
+
+
+class ProjectInviteViewSet(ProjectNestedViewSetMixin, ModelViewSet):
+    permission_classes = (HasModelPermission | HasProjectPermission, )
+
+    filter_backends = (DjangoFilterBackend, )
+    filterset_fields = (
+        'user',
+        'user__username',
+        'email',
+        'role'
+    )
+
+    def get_queryset(self):
+        try:
+            return Invite.objects.filter(project=self.project)
+        except AttributeError:
+            # this is needed for the swagger ui
+            return Invite.objects.none()
+
+    def get_serializer_class(self):
+        if self.action == 'update':
+            return ProjectInviteUpdateSerializer
+        else:
+            return ProjectInviteSerializer
+
+    def perform_create(self, serializer):
+        super().perform_create(serializer)
+        if settings.PROJECT_SEND_INVITE:
+            send_invite_email(self.request, serializer.instance)
 
 
 class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveModelMixin,
@@ -441,6 +474,25 @@ class IntegrationViewSet(ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return Integration.objects.filter_user(self.request.user)
+
+
+class InviteViewSet(ReadOnlyModelViewSet):
+    permission_classes = (HasModelPermission | HasProjectsPermission, )
+    serializer_class = InviteSerializer
+
+    filter_backends = (DjangoFilterBackend, )
+    filterset_fields = (
+        'user',
+        'user__username',
+        'email',
+        'role'
+    )
+
+    def get_queryset(self):
+        return Invite.objects.filter_user(self.request.user)
+
+    def get_detail_permission_object(self, obj):
+        return obj.project
 
 
 class IssueViewSet(ReadOnlyModelViewSet):

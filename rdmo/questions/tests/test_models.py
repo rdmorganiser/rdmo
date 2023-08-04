@@ -1,6 +1,32 @@
 from ..models import Catalog, Page, Question, QuestionSet, Section
 
 
+unavailable_catalogs_kwargs = [
+    {
+        'uri': 'https://experimental.com/terms/questions/unavailable-1',
+        'uri_prefix': 'https://experimental.com/terms',
+        'key': 'unavailable-1',
+        'order': 1,
+        'title_lang1': 'New Catalog 1',
+        'title_lang2': 'Neuer Katalog 1',
+        'help_lang1': 'Help text',
+        'help_lang2': 'Hilfe Text',
+        'available': False
+    },
+    {
+        'uri': 'https://experimental.com/terms/questions/unavailable-2',
+        'uri_prefix': 'https://experimental.com/terms',
+        'key': 'unavailable-2',
+        'order': 2,
+        'title_lang1': 'New Catalog 2',
+        'title_lang2': 'Neuer Katalog 2',
+        'help_lang1': 'Help text',
+        'help_lang2': 'Hilfe Text',
+        'available': False
+    },
+]
+
+
 def test_catalog_str(db):
     instances = Catalog.objects.all()
     for instance in instances:

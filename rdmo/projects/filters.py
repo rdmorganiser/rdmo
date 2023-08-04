@@ -9,7 +9,7 @@ class ProjectFilter(FilterSet):
 
     class Meta:
         model = Project
-        fields = ('title', )
+        fields = ('title', 'catalog')
 
 
 class SnapshotFilterBackend(BaseFilterBackend):

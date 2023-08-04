@@ -476,6 +476,28 @@
     }
   },
   {
+    "model": "projects.project",
+    "pk": 11,
+    "fields": {
+      "created": "2023-07-10T14:38:32.052Z",
+      "updated": "2023-07-10T14:38:32.052Z",
+      "parent": null,
+      "site": 1,
+      "title": "Other",
+      "description": "",
+      "catalog": 1,
+      "lft": 1,
+      "rght": 2,
+      "tree_id": 2,
+      "level": 0,
+      "views": [
+        1,
+        2,
+        3
+      ]
+    }
+  },
+  {
     "model": "projects.snapshot",
     "pk": 1,
     "fields": {
@@ -5720,6 +5742,30 @@
       "value_type": "text",
       "unit": "",
       "external_id": ""
+    }
+  },
+  {
+    "model": "projects.invite",
+    "pk": 1,
+    "fields": {
+      "project": 1,
+      "user": 11,
+      "email": "other@example.com",
+      "role": "author",
+      "token": "10159fadb66e97365a36",
+      "timestamp": "2023-07-10T14:06:55.112Z"
+    }
+  },
+  {
+    "model": "projects.invite",
+    "pk": 2,
+    "fields": {
+      "project": 11,
+      "user": 4,
+      "email": "user@example.com",
+      "role": "author",
+      "token": "10159fadb66e97365a36",
+      "timestamp": "2023-07-10T14:06:55.112Z"
     }
   }
 ]

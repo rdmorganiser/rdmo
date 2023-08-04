@@ -18,7 +18,12 @@ from .models import (Integration, IntegrationOption, Invite, Membership,
 
 class CatalogChoiceField(forms.ModelChoiceField):
 
+    _unavailable_icon = ' (<span class="fa fa-eye-slash" aria-hidden="true"></span>)'
+
     def label_from_instance(self, obj):
+        if obj.available is False:
+            return mark_safe('<div class="text-muted">%s%s</br>%s</div>' % (obj.title, self._unavailable_icon, markdown2html(obj.help)))
+
         return mark_safe('<b>%s</b></br>%s' % (obj.title, markdown2html(obj.help)))
 
 

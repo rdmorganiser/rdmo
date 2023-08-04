@@ -1,5 +1,17 @@
 # Changelog
 
+## RDMO 1.11.0 (Aug 1, 2023)
+
+* Refactor Shibboleth setup, add LOGIN_FORM, SHIBBOLETH_LOGIN_URL
+* Add filter for catalogs to site_projects view
+* Add API for project Invites
+* Add catalog, site, and rdmo version to views
+* Enable PROJECT_QUESTIONS_AUTOSAVE by default
+* Remove skip button when PROJECT_QUESTIONS_AUTOSAVE is True, move back button
+* Remove automatic replacement of missing translations, unless REPLACE_MISSING_TRANSLATION is True
+* Hide html metadata tag in views
+* Update django-allauth requirement
+
 ## RDMO 1.10.0 (Apr 27, 2023)
 
 * Allow users to create API access tokens (if ACCOUNT_ALLOW_USER_TOKEN is set)

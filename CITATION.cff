@@ -49,6 +49,15 @@ authors:
   - family-names: Wuttke
     given-names:  Ulrike
     orcid:        https://orcid.org/0000-0002-8217-4025
+  - family-names: Lanza
+    given-names:  Giacomo
+    orcid:        https://orcid.org/0000-0002-2239-3955
+  - family-names: Martínez Muñoz
+    given-names:  David
+    orcid:        
+  - family-names: Pilori
+    given-names:  Dario
+    orcid:        https://orcid.org/0000-0003-4499-8573
 
 title: Research Data Management Organizer (RDMO)
 doi: 10.5281/zenodo.596581
