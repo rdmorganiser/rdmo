@@ -1,0 +1,123 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [
+  "setuptools",
+  "setuptools-scm",
+]
+
+[project]
+name = "rdmo"
+description = "RDMO is a tool to support the systematic planning, organisation and implementation of the data management throughout the course of a research project."
+readme = "README.md"
+keywords = [
+  "data management plan",
+  "dmp",
+  "rdmo",
+  "research data",
+  "research data management",
+]
+license = {text = "Apache-2.0"}
+authors = [
+    {name = "RDMO Arbeitsgemeinschaft", email = "rdmo-team@listserv.dfn.de"},
+]
+requires-python = ">=3.7" # TODO: EOL 2023-06-27
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: Web Environment",
+  "Framework :: Django :: 3.2",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: Apache Software License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.7", # TODO: EOL 2023-06-27
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+]
+dynamic = [
+  "version",
+]
+dependencies = [
+  "defusedcsv~=2.0.0",
+  "defusedxml~=0.7.1",
+  "Django~=3.2.20",
+  "django-allauth~=0.51.0",
+  "django-cleanup~=6.0.0",
+  "django-compressor~=4.1", # 4.2 drops Python 3.6 and 3.7 support, https://django-compressor.readthedocs.io/en/stable/changelog.html#v4-2-2023-01-06
+  "django-extensions~=3.2.0",
+  "django-filter~=21.1",
+  "django-libsass==0.9",
+  "django-mathfilters~=1.0.0",
+  "django-mptt~=0.13.4",
+  "django-rest-swagger~=2.2.0",
+  "django-settings-export~=1.2.1",
+  "django-widget-tweaks~=1.4.8",
+  "djangorestframework~=3.12.4",
+  "drf-extensions~=0.7.0",
+  "iso8601~=2.0.0", # 2.0.0 drops Python 3.6 support, https://github.com/micktwomey/pyiso8601/blob/main/CHANGELOG.md
+  "jsonfield~=3.1.0",
+  "Markdown~=3.3.7",
+  "pypandoc~=1.10.0",
+  "rules~=3.3.0",
+]
+[project.optional-dependencies]
+ci = [
+  "coveralls",
+  "rdmo[dev]",
+]
+dev = [
+  "pre-commit",
+  "rdmo[tests]",
+]
+mysql = [
+  "mysqlclient~=2.1.0",
+] # 2.2.0 drops Python 3.7 support, https://github.com/PyMySQL/mysqlclient/blob/main/HISTORY.rst#whats-new-in-220
+postgres = [
+  "psycopg2-binary~=2.9.6",
+]
+tests = [
+  "pytest~=7.1.0", # 7.1.0 drops Python 3.6 support, https://docs.pytest.org/en/stable/changelog.html#pytest-7-1-0-2022-03-13
+  "pytest-cov~=4.0.0",
+  "pytest-django~=4.5.0",
+  "pytest-dotenv~=0.5.2",
+  "pytest-mock~=3.7.0", # 3.7.0 drops Python 3.6 support, https://pytest-mock.readthedocs.io/en/latest/changelog.html
+]
+[project.urls]
+Changelog = "https://github.com/rdmorganiser/rdmo/blob/master/CHANGELOG.md"
+Documentation = "https://rdmo.readthedocs.io"
+Homepage = "https://rdmorganiser.github.io/"
+Issues = "https://github.com/rdmorganiser/rdmo/issues"
+Repository = "https://github.com/rdmorganiser/rdmo.git"
+
+[tool.setuptools]
+packages = ["rdmo"]
+
+[tool.setuptools.dynamic]
+version = {attr = "rdmo.__version__"}
+
+[tool.isort]
+known_django = "django"
+sections = ["FUTURE", "STDLIB", "DJANGO", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings"
+testpaths = ["rdmo"]
+python_files = "test_*.py"
+pythonpath = [".", "testing"]
+
+[tool.coverage.run]
+source = ["rdmo"]
+parallel = true
+
+[tool.coverage.report]
+omit = [
+    "*/management/*",
+    "*/migrations/*",
+    "*/tests/*",
+]
+exclude_lines = [
+    "raise Exception",
+    "except ImportError:"
+]
