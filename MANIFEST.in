@@ -1,9 +1,0 @@
-graft rdmo
-prune rdmo/management/assets
-
-global-exclude __pycache__
-global-exclude *.py[co]
-
-assets
-
-include requirements.txt

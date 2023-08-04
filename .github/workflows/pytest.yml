@@ -11,9 +11,10 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
+        python-version: ['3.7', '3.11']
         db-backend: [mysql, postgres, sqlite3]
-        python-version: ['3.6', '3.11']
-
+      fail-fast: false # TODO: for debugging tests only
+    name: "Build (Python: ${{ matrix.python-version }}, DB: ${{ matrix.db-backend }})"
     services:
       postgres:
         image: postgres:latest
@@ -24,31 +25,39 @@ jobs:
           - 5432:5432
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
+        cache: pip
     - name: Install Dependencies
       run: |
-        sudo apt update && sudo apt install -y pandoc texlive-xetex texlive-latex-extra texlive-fonts-recommended lmodern librsvg2-bin
-        sudo apt install -y libpq-dev postgresql postgresql-client
+        sudo apt update
+        sudo apt install --yes pandoc texlive-xetex texlive-latex-extra texlive-fonts-recommended lmodern librsvg2-bin
         python -m pip install --upgrade pip
-    - name: Install RDMO
+        pandoc --version
+    - name: Install rdmo
+      run: | 
+        pip install -e .[ci]
+      if: matrix.db-backend == 'sqlite3'
+    - name: Install rdmo[mysql] and start mysql
+      run: | 
+        pip install -e .[ci,mysql]
+        sudo systemctl start mysql.service
+      if: matrix.db-backend == 'mysql'
+    - name: Install rdmo[postgres] and start postgresql
       run: |
-        pip install -e .
-        pip install psycopg2-binary
-        pip install mysqlclient
-        pip install coveralls
+        pip install -e .[ci,postgres]
+      if: matrix.db-backend == 'postgres'
     - name: Prepare Env
       run: |
         cp testing/config/settings/${{ matrix.db-backend }}.py testing/config/settings/local.py
         cp -r testing/media testing/media_root
         mkdir testing/log
-        sudo systemctl start mysql.service
     - name: Run Tests
       run: |
-        pytest --cov=rdmo
+        pytest --cov
         coveralls --service=github
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
