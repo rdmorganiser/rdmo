@@ -15,7 +15,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'components_root')
 
 FIXTURE_DIRS = (
-   os.path.join(BASE_DIR, 'fixtures'),
+    os.path.join(BASE_DIR, 'fixtures'),
 )
 
 INSTALLED_APPS += [
