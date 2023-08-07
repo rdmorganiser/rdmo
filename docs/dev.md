@@ -55,13 +55,6 @@ pip install -e ../rdmo
 
 This links the cloned `rdmo` repo in a way that changes to the code will be available to the development server instantly.
 
-If you want to use PostgreSQL or MySQL for the development you need to install the Python dependencies for this as well.
-
-```
-pip install -r requirements/postgres.txt
-pip install -r requirements/mysql.txt
-```
-
 Create a `local.py`:
 
 ```bash
@@ -79,30 +72,47 @@ DATABASES = {
 }
 ```
 
+If you want to use PostgreSQL or MySQL for the development instead, you need to install the Python dependencies for this as well.
+
+```bash
+pip install -r requirements/postgres.txt  # optional: for PostgresSQL
+pip install -r requirements/mysql.txt     # optional: for MySQL
+```
+
 Then, initialize the application, using:
 
 ```bash
 python manage.py download_vendor_files  # download front-end vendor files
 python manage.py migrate                # initializes the database
-python manage.py setup_groups           # creates groups with different permissions
+python manage.py setup_groups           # optional: create groups with different permissions
 ```
 
 The testing data can be imported using:
 
 ```bash
+# on Linux or macOS
 python manage.py loaddata ../rdmo/testing/fixtures/*
-```
-To update the testing data fixtures based on the current database, each of the RDMO apps with new data needs to be dumped using the following command.
-As an example, the views and projects app contain new data:
-```bash
-python manage.py dumpdata --indent 4 -o ../rdmo/testing/fixtures/views.json views
-python manage.py dumpdata --indent 4 -o ../rdmo/testing/fixtures/projects.json projects
+
+# on Windows
+python manage.py loaddata ..\rdmo\testing\fixtures\accounts.json ^
+                          ..\rdmo\testing\fixtures\conditions.json ^
+                          ..\rdmo\testing\fixtures\domain.json ^
+                          ..\rdmo\testing\fixtures\groups.json ^
+                          ..\rdmo\testing\fixtures\options.json ^
+                          ..\rdmo\testing\fixtures\overlays.json ^
+                          ..\rdmo\testing\fixtures\projects.json ^
+                          ..\rdmo\testing\fixtures\questions.json ^
+                          ..\rdmo\testing\fixtures\sites.json ^
+                          ..\rdmo\testing\fixtures\tasks.json ^
+                          ..\rdmo\testing\fixtures\users.json ^
+                          ..\rdmo\testing\fixtures\views.json
 ```
 
 The test upload files are initialized using:
 
 ```bash
-cp -r ../rdmo/testing/media media_root
+cp -r ../rdmo/testing/media media_root       # on Linux or macOS
+xcopy ..\rdmo\testing\media media_root /e/s  # on Windows
 ```
 
 Now the development server can be started using:
