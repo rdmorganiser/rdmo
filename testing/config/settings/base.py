@@ -122,3 +122,9 @@ LOGGING = {
         }
     }
 }
+
+"""
+Settings for improved performance, when testing
+"""
+DEBUG = False
+SECRET_KEY = "this is a not very secret key"
