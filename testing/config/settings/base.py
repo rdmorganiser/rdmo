@@ -127,5 +127,16 @@ LOGGING = {
 Settings for improved performance, when testing
 """
 DEBUG = False
+TEMPLATE_DEBUG = False
+DEBUG_LOGGING = False
 SECRET_KEY = "this is a not very secret key"
 PASSWORD_HASHERS = ("django.contrib.auth.hashers.MD5PasswordHasher",)
+MIDDLEWARE = (
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+)
+
+import logging
+logging.disable(logging.CRITICAL)
