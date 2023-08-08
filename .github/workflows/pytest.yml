@@ -60,7 +60,7 @@ jobs:
         mkdir testing/log
     - name: Run Tests
       run: |
-        pytest -p no:cacheprovider --cov --reuse-db
+        pytest -p no:cacheprovider --cov --reuse-db --numprocesses=auto --dist=loadscope
         coveralls --service=github
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

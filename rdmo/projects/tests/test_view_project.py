@@ -687,7 +687,7 @@ def test_project_view(db, client, username, password, project_id):
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('export_format', export_formats)
-def test_project_view_export(db, client, username, password, project_id, export_format):
+def test_project_view_export(db, client, username, password, project_id, export_format, files):
     client.login(username=username, password=password)
     project_views = Project.objects.get(pk=project_id).views.all()
 
