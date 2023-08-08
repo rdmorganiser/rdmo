@@ -23,14 +23,6 @@ jobs:
         db-backend: [mysql, postgres, sqlite3]
       fail-fast: false # TODO: for debugging tests only
     name: "Build (Python: ${{ matrix.python-version }}, DB: ${{ matrix.db-backend }})"
-    services:
-      postgres:
-        image: postgres:latest
-        env:
-          POSTGRES_DB: rdmo
-          POSTGRES_PASSWORD: postgres_password
-        ports:
-          - 5432:5432
 
     steps:
     - uses: actions/checkout@v3
@@ -57,6 +49,9 @@ jobs:
     - name: Install rdmo[postgres] and start postgresql
       run: |
         pip install -e .[ci,postgres]
+        sudo systemctl start postgresql.service
+        pg_isready
+        sudo -u postgres psql --command="CREATE USER postgres_user PASSWORD 'postgres_password' CREATEDB"
       if: matrix.db-backend == 'postgres'
     - name: Prepare Env
       run: |
