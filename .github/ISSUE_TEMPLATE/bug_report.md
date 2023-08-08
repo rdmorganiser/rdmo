@@ -22,6 +22,17 @@ A clear and concise description of what you expected to happen.
 3. Scroll down to '....'
 4. See error
 
+### Context / Kontext
+
+Please state which OS you are using and provide the output of the following commands:
+
+```shell
+python --version
+pip --version
+pip show rdmo
+pip freeze
+```
+
 ### References / Verweise
 
 * 
