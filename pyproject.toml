@@ -83,6 +83,7 @@ tests = [
   "pytest-django~=4.5.0",
   "pytest-dotenv~=0.5.2",
   "pytest-mock~=3.7.0", # 3.7.0 drops Python 3.6 support, https://pytest-mock.readthedocs.io/en/latest/changelog.html
+  "pytest-randomly~=3.12.0", # 3.13.0 drops Python 3.7 support, https://github.com/pytest-dev/pytest-randomly/blob/main/CHANGELOG.rst#3120-2022-05-11
 ]
 [project.urls]
 Changelog = "https://github.com/rdmorganiser/rdmo/blob/master/CHANGELOG.md"
