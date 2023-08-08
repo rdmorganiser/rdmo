@@ -60,7 +60,7 @@ jobs:
         mkdir testing/log
     - name: Run Tests
       run: |
-        pytest --cov
+        pytest -p no:cacheprovider --cov
         coveralls --service=github
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
