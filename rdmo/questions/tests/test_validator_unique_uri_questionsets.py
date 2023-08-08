@@ -117,45 +117,45 @@ def test_unique_uri_validator_update_error_catalog(db):
 
 def test_unique_uri_validator_serializer_create(db):
     validator = QuestionSetUniqueURIValidator()
-    validator.set_context(QuestionSetSerializer())
+    serializer = QuestionSetSerializer()
 
     validator({
         'uri_prefix': settings.DEFAULT_URI_PREFIX,
         'uri_path': 'test'
-    })
+    }, serializer)
 
 
 def test_unique_uri_validator_serializer_create_error(db):
     validator = QuestionSetUniqueURIValidator()
-    validator.set_context(QuestionSetSerializer())
+    serializer = QuestionSetSerializer()
 
     with pytest.raises(RestFameworkValidationError):
         validator({
             'uri_prefix': settings.DEFAULT_URI_PREFIX,
             'uri_path': QuestionSet.objects.first().uri_path
-        })
+        }, serializer)
 
 
 def test_unique_uri_validator_serializer_update(db):
     instance = QuestionSet.objects.first()
 
     validator = QuestionSetUniqueURIValidator()
-    validator.set_context(QuestionSetSerializer(instance=instance))
+    serializer = QuestionSetSerializer(instance=instance)
 
     validator({
         'uri_prefix': instance.uri_prefix,
         'uri_path': instance.uri_path
-    })
+    }, serializer)
 
 
 def test_unique_uri_validator_serializer_update_error(db):
     instance = QuestionSet.objects.first()
 
     validator = QuestionSetUniqueURIValidator()
-    validator.set_context(QuestionSetSerializer(instance=instance))
+    serializer = QuestionSetSerializer(instance=instance)
 
     with pytest.raises(RestFameworkValidationError):
         validator({
             'uri_prefix': instance.uri_prefix,
             'uri_path': QuestionSet.objects.exclude(id=instance.id).first().uri_path
-        })
+        }, serializer)

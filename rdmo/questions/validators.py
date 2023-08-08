@@ -38,7 +38,9 @@ class QuestionUniqueURIValidator(UniqueURIValidator):
 
 class QuestionSetQuestionSetValidator(InstanceValidator):
 
-    def __call__(self, data):
+    def __call__(self, data, serializer=None):
+        super().__call__(data, serializer)
+
         questionsets = data.get('questionsets')
         if not questionsets:
             return

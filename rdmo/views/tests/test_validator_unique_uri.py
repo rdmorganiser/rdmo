@@ -45,45 +45,45 @@ def test_unique_uri_validator_update_error(db):
 
 def test_unique_uri_validator_serializer_create(db):
     validator = ViewUniqueURIValidator()
-    validator.set_context(ViewSerializer())
+    serializer = ViewSerializer()
 
     validator({
         'uri_prefix': settings.DEFAULT_URI_PREFIX,
         'uri_path': 'test'
-    })
+    }, serializer)
 
 
 def test_unique_uri_validator_serializer_create_error(db):
     validator = ViewUniqueURIValidator()
-    validator.set_context(ViewSerializer())
+    serializer = ViewSerializer()
 
     with pytest.raises(RestFameworkValidationError):
         validator({
             'uri_prefix': settings.DEFAULT_URI_PREFIX,
             'uri_path': View.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).last().uri_path
-        })
+        }, serializer)
 
 
 def test_unique_uri_validator_serializer_update(db):
     view = View.objects.first()
 
     validator = ViewUniqueURIValidator()
-    validator.set_context(ViewSerializer(instance=view))
+    serializer = ViewSerializer(instance=view)
 
     validator({
         'uri_prefix': view.uri_prefix,
         'uri_path': view.uri_path
-    })
+    }, serializer)
 
 
 def test_unique_uri_validator_serializer_update_error(db):
     view = View.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).first()
 
     validator = ViewUniqueURIValidator()
-    validator.set_context(ViewSerializer(instance=view))
+    serializer = ViewSerializer(instance=view)
 
     with pytest.raises(RestFameworkValidationError):
         validator({
             'uri_prefix': view.uri_prefix,
             'uri_path': View.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).last().uri_path
-        })
+        }, serializer)

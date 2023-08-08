@@ -45,45 +45,45 @@ def test_unique_uri_validator_update_error(db):
 
 def test_unique_uri_validator_serializer_create(db):
     validator = TaskUniqueURIValidator()
-    validator.set_context(TaskSerializer())
+    serializer = TaskSerializer()
 
     validator({
         'uri_prefix': settings.DEFAULT_URI_PREFIX,
         'uri_path': 'test'
-    })
+    }, serializer)
 
 
 def test_unique_uri_validator_serializer_create_error(db):
     validator = TaskUniqueURIValidator()
-    validator.set_context(TaskSerializer())
+    serializer = TaskSerializer()
 
     with pytest.raises(RestFameworkValidationError):
         validator({
             'uri_prefix': settings.DEFAULT_URI_PREFIX,
             'uri_path': Task.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).last().uri_path
-        })
+        }, serializer)
 
 
 def test_unique_uri_validator_serializer_update(db):
     task = Task.objects.first()
 
     validator = TaskUniqueURIValidator()
-    validator.set_context(TaskSerializer(instance=task))
+    serializer = TaskSerializer(instance=task)
 
     validator({
         'uri_prefix': task.uri_prefix,
         'uri_path': task.uri_path
-    })
+    }, serializer)
 
 
 def test_unique_uri_validator_serializer_update_error(db):
     task = Task.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).first()
 
     validator = TaskUniqueURIValidator()
-    validator.set_context(TaskSerializer(instance=task))
+    serializer = TaskSerializer(instance=task)
 
     with pytest.raises(RestFameworkValidationError):
         validator({
             'uri_prefix': task.uri_prefix,
             'uri_path': Task.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).last().uri_path
-        })
+        }, serializer)

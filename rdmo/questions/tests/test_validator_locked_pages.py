@@ -155,31 +155,31 @@ def test_update_section_error_catalog(db):
 
 def test_serializer_create(db):
     validator = PageLockedValidator()
-    validator.set_context(PageSerializer())
+    serializer = PageSerializer()
 
     validator({
         'locked': False
-    })
+    }, serializer)
 
 
 def test_serializer_create_locked(db):
     validator = PageLockedValidator()
-    validator.set_context(PageSerializer())
+    serializer = PageSerializer()
 
     validator({
         'locked': True
-    })
+    }, serializer)
 
 
 def test_serializer_update(db):
     page = Page.objects.first()
 
     validator = PageLockedValidator()
-    validator.set_context(PageSerializer(instance=page))
+    serializer = PageSerializer(instance=page)
 
     validator({
         'locked': False
-    })
+    }, serializer)
 
 
 def test_serializer_update_error(db):
@@ -188,9 +188,9 @@ def test_serializer_update_error(db):
     page.save()
 
     validator = PageLockedValidator()
-    validator.set_context(PageSerializer(instance=page))
+    serializer = PageSerializer(instance=page)
 
     with pytest.raises(RestFameworkValidationError):
         validator({
             'locked': True
-        })
+        }, serializer)

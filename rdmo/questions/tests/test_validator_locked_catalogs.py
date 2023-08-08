@@ -59,29 +59,29 @@ def test_update_unlock(db):
 
 def test_serializer_create(db):
     validator = CatalogLockedValidator()
-    validator.set_context(CatalogSerializer())
+    serializer = CatalogSerializer()
 
     validator({
         'locked': False
-    })
+    }, serializer)
 
 
 def test_serializer_create_locked(db):
     validator = CatalogLockedValidator()
-    validator.set_context(CatalogSerializer())
+    serializer = CatalogSerializer()
 
     validator({
         'locked': True
-    })
+    }, serializer)
 
 
 def test_serializer_update(db):
     catalog = Catalog.objects.first()
 
     validator = CatalogLockedValidator()
-    validator.set_context(CatalogSerializer(instance=catalog))
+    serializer = CatalogSerializer(instance=catalog)
 
-    validator({})
+    validator({}, serializer)
 
 
 def test_serializer_update_error(db):
@@ -90,9 +90,9 @@ def test_serializer_update_error(db):
     catalog.save()
 
     validator = CatalogLockedValidator()
-    validator.set_context(CatalogSerializer(instance=catalog))
+    serializer = CatalogSerializer(instance=catalog)
 
     with pytest.raises(RestFameworkValidationError):
         validator({
             'locked': True
-        })
+        }, serializer)

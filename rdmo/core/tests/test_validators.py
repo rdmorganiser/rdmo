@@ -21,7 +21,8 @@ def test_instance_validator_instance():
 def test_instance_validator_serializer():
     validator = InstanceValidator()
     serializer = serializers.Serializer()
-    validator.set_context(serializer)
+
+    validator({}, serializer)
 
     assert validator.serializer == serializer
     assert validator.serializer.instance is None
@@ -31,7 +32,9 @@ def test_instance_validator_serializer_instance():
     validator = InstanceValidator()
     instance = object()
     serializer = serializers.Serializer(instance=instance)
-    validator.set_context(serializer)
+
+    validator({}, serializer)
+
     assert validator.serializer == serializer
     assert validator.serializer.instance == serializer.instance
 
@@ -47,7 +50,9 @@ def test_instance_validator_validation_error():
 
 def test_instance_validator_validation_serializer_error():
     validator = InstanceValidator()
-    validator.set_context(serializers.Serializer())
+    serializer = serializers.Serializer()
+
+    validator({}, serializer)
 
     with pytest.raises(serializers.ValidationError):
         validator.raise_validation_error({

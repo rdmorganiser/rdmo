@@ -41,39 +41,39 @@ def test_serializer_create(db):
         action = 'create'
 
     validator = AttributeParentValidator()
-    validator.set_context(AttributeSerializer())
-    validator.serializer.context['view'] = MockedView()
+    serializer = AttributeSerializer()
+    serializer.context['view'] = MockedView()
 
     validator({
         'uri_prefix': settings.DEFAULT_URI_PREFIX,
         'key': 'test',
         'parent': Attribute.objects.get(uri='http://example.com/terms/domain/individual/single')
-    })
+    }, serializer)
 
 
 def test_serializer_update(db):
     attribute = Attribute.objects.get(uri='http://example.com/terms/domain/individual/single/text')
     validator = AttributeParentValidator()
-    validator.set_context(AttributeSerializer(instance=attribute))
+    serializer = AttributeSerializer(instance=attribute)
 
     validator({
         'uri_prefix': attribute.uri_prefix,
         'key': attribute.key,
         'parent':  attribute.parent
-    })
+    }, serializer)
 
 
 def test_serializer_update_error(db):
     attribute = Attribute.objects.get(uri='http://example.com/terms/domain/individual/single/text')
     validator = AttributeParentValidator()
-    validator.set_context(AttributeSerializer(instance=attribute))
+    serializer = AttributeSerializer(instance=attribute)
 
     with pytest.raises(RestFameworkValidationError):
         validator({
             'uri_prefix': attribute.uri_prefix,
             'key': attribute.key,
             'parent':  attribute  # set self as parent
-        })
+        }, serializer)
 
 
 def test_import_create(db):

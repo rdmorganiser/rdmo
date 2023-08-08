@@ -18,22 +18,22 @@ class InstanceValidator(object):
     It is used as InstanceValidator() for (1) and InstanceValidator(instance)(self.cleaned_data) for (2)
     '''
 
+    requires_context = True
+
     def __init__(self, instance=None):
         self.instance = instance
         self.serializer = None
 
-    def set_context(self, serializer):
-        self.instance = serializer.instance
-        self.serializer = serializer
+    def __call__(self, data, serializer=None):
+        if serializer is not None:
+            self.instance = serializer.instance
+            self.serializer = serializer
 
     def raise_validation_error(self, errors):
         if self.serializer:
             raise serializers.ValidationError(errors)
         else:
             raise ValidationError(errors)
-
-    def __call__(self, value):
-        raise NotImplementedError
 
 
 class UniqueURIValidator(InstanceValidator):
@@ -43,7 +43,9 @@ class UniqueURIValidator(InstanceValidator):
 
     path_pattern = re.compile(r'^[\w\-\/]+\Z')
 
-    def __call__(self, data):
+    def __call__(self, data, serializer=None):
+        super().__call__(data, serializer)
+
         self.validate(self.model, self.instance, self.get_uri(data))
 
     def validate(self, model, instance, uri):
@@ -91,7 +93,9 @@ class LockedValidator(InstanceValidator):
 
     parent_fields = ()
 
-    def __call__(self, data):
+    def __call__(self, data, serializer=None):
+        super().__call__(data, serializer)
+
         is_locked = False
 
         # lock if parent_fields are set and a parent is locked

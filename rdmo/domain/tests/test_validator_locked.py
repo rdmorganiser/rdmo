@@ -114,31 +114,31 @@ def test_update_parent_error(db):
 
 def test_serializer_create(db):
     validator = AttributeLockedValidator()
-    validator.set_context(AttributeSerializer())
+    serializer = AttributeSerializer()
 
     validator({
         'locked': False
-    })
+    }, serializer)
 
 
 def test_serializer_create_locked(db):
     validator = AttributeLockedValidator()
-    validator.set_context(AttributeSerializer())
+    serializer = AttributeSerializer()
 
     validator({
         'locked': True
-    })
+    }, serializer)
 
 
 def test_serializer_update(db):
     attribute = Attribute.objects.get(uri='http://example.com/terms/domain/individual/single/text')
 
     validator = AttributeLockedValidator()
-    validator.set_context(AttributeSerializer(instance=attribute))
+    serializer = AttributeSerializer(instance=attribute)
 
     validator({
         'locked': False
-    })
+    }, serializer)
 
 
 def test_serializer_update_error(db):
@@ -147,9 +147,9 @@ def test_serializer_update_error(db):
     attribute.save()
 
     validator = AttributeLockedValidator()
-    validator.set_context(AttributeSerializer(instance=attribute))
+    serializer = AttributeSerializer(instance=attribute)
 
     with pytest.raises(RestFameworkValidationError):
         validator({
             'locked': True
-        })
+        }, serializer)
