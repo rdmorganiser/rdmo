@@ -128,3 +128,4 @@ Settings for improved performance, when testing
 """
 DEBUG = False
 SECRET_KEY = "this is a not very secret key"
+PASSWORD_HASHERS = ("django.contrib.auth.hashers.MD5PasswordHasher",)
