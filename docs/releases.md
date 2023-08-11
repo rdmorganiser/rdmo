@@ -24,7 +24,6 @@ Releases
 5) Upload with `twine` to Test PyPI:
 
   ```
-  twine upload --repository-url https://test.pypi.org/legacy/ dist/*
   twine upload -r testpypi dist/*
   ```
 
