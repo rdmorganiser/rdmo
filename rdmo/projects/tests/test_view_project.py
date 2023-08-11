@@ -612,6 +612,23 @@ def test_project_export_csvsemicolon(db, client, username, password, project_id)
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
+def test_project_export_json(db, client, username, password, project_id):
+    client.login(username=username, password=password)
+
+    url = reverse('project_export', args=[project_id, 'json'])
+    response = client.get(url)
+
+    if project_id in export_project_permission_map.get(username, []):
+        assert response.status_code == 200
+    else:
+        if password:
+            assert response.status_code == 403
+        else:
+            assert response.status_code == 302
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
 def test_project_answers(db, client, username, password, project_id):
     client.login(username=username, password=password)
 

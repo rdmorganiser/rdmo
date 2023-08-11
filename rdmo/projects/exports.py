@@ -4,7 +4,7 @@ from django.http import HttpResponse
 
 from rdmo.core.exports import prettify_xml
 from rdmo.core.plugins import Plugin
-from rdmo.core.utils import render_to_csv
+from rdmo.core.utils import render_to_csv, render_to_json
 from rdmo.views.utils import ProjectWrapper
 from rdmo.views.templatetags import view_tags
 
@@ -78,11 +78,9 @@ class Export(Plugin):
             return default
 
 
-class CSVExport(Export):
+class AnswersExportMixin:
 
-    delimiter = ','
-
-    def render(self):
+    def get_data(self):
         # prefetch most elements of the catalog
         self.project.catalog.prefetch_elements()
 
@@ -108,9 +106,13 @@ class CSVExport(Export):
                         {}, question, set_prefix=set_prefix, set_index=set_index, project=project_wrapper
                     )
                     if result:
-                        data.append((self.stringify(question['text']), ' '.join(labels), self.stringify_values(values)))
+                        data.append({
+                            'question': self.stringify(question['text']),
+                            'set': ' '.join(labels),
+                            'values': self.stringify_values(values)
+                        })
 
-        return render_to_csv(self.project.title, data, self.delimiter)
+        return data
 
     def stringify_values(self, values):
         if values is not None:
@@ -125,12 +127,27 @@ class CSVExport(Export):
             return re.sub(r'\s+', ' ', str(el))
 
 
+class CSVExport(AnswersExportMixin, Export):
+
+    delimiter = ','
+
+    def render(self):
+        rows = [item.values() for item in self.get_data()]
+        return render_to_csv(self.project.title, rows, self.delimiter)
+
+
 class CSVCommaExport(CSVExport):
     delimiter = ','
 
 
 class CSVSemicolonExport(CSVExport):
     delimiter = ';'
+
+
+class JSONExport(AnswersExportMixin, Export):
+
+    def render(self):
+        return render_to_json(self.project.title, self.get_data())
 
 
 class RDMOXMLExport(Export):
