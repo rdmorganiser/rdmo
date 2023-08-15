@@ -1,7 +1,7 @@
 {% load i18n %}
 
 {% if settings.SHIBBOLETH %}
-<p>
+<p style="margin-bottom: 20px;">
     <a class="btn btn-success extend" href="{% url 'shibboleth_login' %}">
         {% trans 'Login with Shibboleth' %}
     </a>
