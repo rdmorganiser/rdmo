@@ -16,6 +16,13 @@ if settings.ACCOUNT_TERMS_OF_USE is True:
         re_path('^terms-of-use/', terms_of_use, name='terms_of_use')
     ]
 
+if settings.SHIBBOLETH:
+    urlpatterns += [
+        re_path('^shibboleth/login/', shibboleth_login, name='shibboleth_login'),
+        re_path('^shibboleth/logout/', shibboleth_logout, name='shibboleth_logout'),
+        re_path('^logout/', auth_views.LogoutView.as_view(next_page=settings.SHIBBOLETH_LOGOUT_URL), name='account_logout'),
+    ]
+
 if settings.ACCOUNT or settings.SOCIALACCOUNT:
     # include django-allauth urls
     urlpatterns += [
@@ -27,16 +34,6 @@ else:
         re_path('^logout/', auth_views.LogoutView.as_view(next_page=settings.LOGIN_REDIRECT_URL), name='account_logout'),
     ]
 
-if settings.SHIBBOLETH:
-    if settings.SHIBBOLETH_LOGIN_URL:
-        urlpatterns += [
-            re_path('^shibboleth/login/', shibboleth_login, name='shibboleth_login'),
-            re_path('^shibboleth/logout/', shibboleth_logout, name='shibboleth_logout'),
-        ]
-    else:
-        urlpatterns += [
-            re_path('^logout/', auth_views.LogoutView.as_view(next_page=settings.SHIBBOLETH_LOGOUT_URL), name='account_logout'),
-        ]
 
 if settings.ACCOUNT_ALLOW_USER_TOKEN:
     urlpatterns += [
