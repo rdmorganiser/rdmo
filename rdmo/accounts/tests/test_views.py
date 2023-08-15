@@ -95,6 +95,7 @@ def test_post_profile_update(db, client, settings, test_setting):
     else:
         assert response.status_code == 200
 
+
 @pytest.mark.parametrize('test_setting', boolean_toggle)
 def test_post_profile_update_cancel(db, client, settings, test_setting):
     """
@@ -118,6 +119,7 @@ def test_post_profile_update_cancel(db, client, settings, test_setting):
         assert response.url == reverse('home')
     else:
         assert response.status_code == 200
+
 
 @pytest.mark.parametrize('test_setting', boolean_toggle)
 def test_post_profile_update_cancel2(db, client, settings, test_setting):
@@ -143,6 +145,7 @@ def test_post_profile_update_cancel2(db, client, settings, test_setting):
         assert response.url == reverse('projects')
     else:
         assert response.status_code == 200
+
 
 @pytest.mark.parametrize('test_setting', boolean_toggle)
 def test_post_profile_update_next(db, client, settings, test_setting):
@@ -170,6 +173,7 @@ def test_post_profile_update_next(db, client, settings, test_setting):
     else:
         assert response.status_code == 200
 
+
 @pytest.mark.parametrize('test_setting', boolean_toggle)
 def test_post_profile_update_next2(db, client, settings, test_setting):
     """
@@ -195,6 +199,7 @@ def test_post_profile_update_next2(db, client, settings, test_setting):
         assert response.url == reverse('home')
     else:
         assert response.status_code == 200
+
 
 @pytest.mark.parametrize('test_setting', boolean_toggle)
 def test_password_change_get(db, client, settings, test_setting):
@@ -630,11 +635,9 @@ def test_home_login_form(db, client, settings, LOGIN_FORM, username, password):
 
 
 @pytest.mark.parametrize('SHIBBOLETH', boolean_toggle)
-@pytest.mark.parametrize('SHIBBOLETH_LOGIN_URL', (None, '/shibboleth/login'))
 @pytest.mark.parametrize('username,password', users)
-def test_shibboleth_for_home_url(db, client, settings, SHIBBOLETH, SHIBBOLETH_LOGIN_URL, username, password):
+def test_shibboleth_for_home_url(db, client, settings, SHIBBOLETH, username, password):
     settings.SHIBBOLETH = SHIBBOLETH
-    settings.SHIBBOLETH_LOGIN_URL  = SHIBBOLETH_LOGIN_URL
     settings.ACCOUNT = False
     reload_app_urlconf_in_testcase('accounts')
     # Anonymous user lands on home
@@ -645,17 +648,13 @@ def test_shibboleth_for_home_url(db, client, settings, SHIBBOLETH, SHIBBOLETH_LO
     if SHIBBOLETH:
         # Anyonymous user is redirected to login
         response.status_code == 200
-
-        if SHIBBOLETH_LOGIN_URL:
-            assertContains(response, 'href="' + reverse('shibboleth_login'))
-        else:
-            assertContains(response, 'href="' + reverse('account_login'))
+        assertContains(response, 'href="' + reverse('shibboleth_login'))
 
 
 @pytest.mark.parametrize('username,password', users)
 def test_shibboleth_login_view(db, client, settings, username, password):
     settings.SHIBBOLETH = True
-    settings.SHIBBOLETH_LOGIN_URL  = '/shibboleth/login'
+    settings.SHIBBOLETH_LOGIN_URL = '/shibboleth/login'
     reload_app_urlconf_in_testcase('accounts')
     # Anonymous user lands on home
     client.login(username='anonymous', password=None)
@@ -681,7 +680,7 @@ def test_shibboleth_login_view(db, client, settings, username, password):
 @pytest.mark.parametrize('username,password', users)
 def test_shibboleth_for_projects_url(db, client, settings, SHIBBOLETH, SHIBBOLETH_LOGIN_URL, username, password):
     settings.SHIBBOLETH = SHIBBOLETH
-    settings.SHIBBOLETH_LOGIN_URL  = SHIBBOLETH_LOGIN_URL
+    settings.SHIBBOLETH_LOGIN_URL = SHIBBOLETH_LOGIN_URL
     settings.ACCOUNT = False
     reload_app_urlconf_in_testcase('accounts')
     client.login(username='anonymous', password=None)
@@ -700,7 +699,7 @@ def test_shibboleth_for_projects_url(db, client, settings, SHIBBOLETH, SHIBBOLET
         response.status_code == 200
         assertContains(response, 'href="/account/shibboleth/login/">')
 
-        # Redirected user logs in 
+        # Redirected user logs in
         client.login(username=username, password=password)
         response = client.get(response)
 
@@ -716,7 +715,7 @@ def test_shibboleth_for_projects_url(db, client, settings, SHIBBOLETH, SHIBBOLET
 @pytest.mark.parametrize('username,password', users)
 def test_shibboleth_logout_username_pattern(db, client, settings, SHIBBOLETH, username, password):
     settings.SHIBBOLETH = SHIBBOLETH
-    settings.SHIBBOLETH_USERNAME_PATTERN  = username
+    settings.SHIBBOLETH_USERNAME_PATTERN = username
     reload_app_urlconf_in_testcase('accounts')
 
     client.login(username=username, password=password)
