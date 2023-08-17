@@ -17,7 +17,7 @@ mkdir path/to/rdmorganiser
 cd path/to/rdmorganiser
 ```
 
-Next clone the `rdmo-app` and the `rdmo` repositories from GitHub. If you have an account there, and added your public ssh key you can use:
+Next clone the `rdmo-app` and the `rdmo` repositories from GitHub. If you have an account there, and [added your public SSH key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh) you can use:
 
 ```bash
 git clone git@github.com:rdmorganiser/rdmo-app
@@ -31,8 +31,13 @@ git clone https://github.com/rdmorganiser/rdmo-app
 git clone https://github.com/rdmorganiser/rdmo
 ```
 
-You should now have two directories in `rdmorganiser`: `rdmo` and `rdmo-app`.
+You should now have two directories in `rdmorganiser`:
 
+```tree result="shell"
+rdmorganiser
+    rdmo
+    rdmo-app
+```
 
 Setup rdmo-app
 --------------
@@ -58,8 +63,8 @@ This links the cloned `rdmo` repo in a way that changes to the code will be avai
 If you want to use PostgreSQL or MySQL for the development you need to install the Python dependencies for this as well.
 
 ```
-pip install -r requirements/postgres.txt
-pip install -r requirements/mysql.txt
+pip install -e ../"rdmo[postgres]"
+pip install -e ../"rdmo[mysql]"
 ```
 
 Create a `local.py`:
@@ -166,8 +171,8 @@ Again install `rdmo` in editable mode and install the database prerequisites:
 ```
 pip install -e .
 
-pip install psycopg2-binary                 # for PostgreSQL
-pip install mysqlclient                     # for MySQL
+pip install ".[postgres]"                   # for PostgreSQL
+pip install ".[mysql]"                      # for MySQL
 ```
 
 Create a `local.py` as before, but this time in `testing/config/settings/local.py`:

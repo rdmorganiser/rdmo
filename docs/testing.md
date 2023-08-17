@@ -21,7 +21,8 @@ Running tests
 # from the root directory of the rdmo repo
 pytest
 pytest -x                                                       # stop after the first failed test
-python --reuse-db                                               # keep the database between test runs
+pytest --reuse-db                                               # keep the database between test runs
+pytest --numprocesses=auto --dist=loadscope                     # run tests in parallel
 pytest rdmo/domain                                              # test only the domain app
 pytest rdmo/domain/tests/test_viewsets.py                       # run only a specific test file
 pytest rdmo/domain/tests/test_viewsets.py::test_attribute_list  # run only a specific test
