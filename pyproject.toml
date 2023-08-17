@@ -68,14 +68,33 @@ ci = [
   "rdmo[dev]",
 ]
 dev = [
+  "django-debug-toolbar",
   "pre-commit",
   "rdmo[tests]",
 ]
+docs = [
+  "recommonmark",
+  "sphinx",
+  "sphinx-autobuild",
+  "sphinx_rtd_theme",
+]
+gunicorn = [
+  "gunicorn>=19.9",
+]
+ldap = [
+  "django-auth-ldap>=2",
+]
+memcached = [
+  "python-memcached>=1.58",
+]
 mysql = [
-  "mysqlclient~=2.1.0",
-] # 2.2.0 drops Python 3.7 support, https://github.com/PyMySQL/mysqlclient/blob/main/HISTORY.rst#whats-new-in-220
+  "mysqlclient~=2.1.0", # 2.2.0 drops Python 3.7 support, https://github.com/PyMySQL/mysqlclient/blob/main/HISTORY.rst#whats-new-in-220
+] 
 postgres = [
   "psycopg2-binary~=2.9.6",
+]
+shibboleth = [
+  "django-shibboleth-remoteuser@ git+https://github.com/Brown-University-Library/django-shibboleth-remoteuser.git@main",
 ]
 tests = [
   "pytest~=7.1.0", # 7.1.0 drops Python 3.6 support, https://docs.pytest.org/en/stable/changelog.html#pytest-7-1-0-2022-03-13
