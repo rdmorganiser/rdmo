@@ -24,14 +24,7 @@ A clear and concise description of what you expected to happen.
 
 ### Context / Kontext
 
-Please state which OS you are using and provide the output of the following commands:
-
-```shell
-python --version
-pip --version
-pip show rdmo
-pip freeze
-```
+Please state your operating system, the RDMO version, and (if applicable) the browser the error occured in.
 
 ### References / Verweise
 
