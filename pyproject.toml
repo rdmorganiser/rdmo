@@ -20,7 +20,7 @@ license = {text = "Apache-2.0"}
 authors = [
     {name = "RDMO Arbeitsgemeinschaft", email = "rdmo-team@listserv.dfn.de"},
 ]
-requires-python = ">=3.7" # TODO: EOL 2023-06-27
+requires-python = ">=3.8"
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Environment :: Web Environment",
@@ -30,7 +30,6 @@ classifiers = [
   "Operating System :: OS Independent",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.7", # TODO: EOL 2023-06-27
   "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
@@ -45,7 +44,7 @@ dependencies = [
   "Django~=3.2.20",
   "django-allauth~=0.51.0",
   "django-cleanup~=6.0.0",
-  "django-compressor~=4.1", # 4.2 drops Python 3.6 and 3.7 support, https://django-compressor.readthedocs.io/en/stable/changelog.html#v4-2-2023-01-06
+  "django-compressor~=4.4",
   "django-extensions~=3.2.0",
   "django-filter~=21.1",
   "django-libsass==0.9",
@@ -56,7 +55,7 @@ dependencies = [
   "django-widget-tweaks~=1.4.8",
   "djangorestframework~=3.12.4",
   "drf-extensions~=0.7.0",
-  "iso8601~=2.0.0", # 2.0.0 drops Python 3.6 support, https://github.com/micktwomey/pyiso8601/blob/main/CHANGELOG.md
+  "iso8601~=2.0.0",
   "jsonfield~=3.1.0",
   "Markdown~=3.3.7",
   "pypandoc~=1.10.0",
@@ -88,7 +87,7 @@ memcached = [
   "python-memcached>=1.58",
 ]
 mysql = [
-  "mysqlclient~=2.1.0", # 2.2.0 drops Python 3.7 support, https://github.com/PyMySQL/mysqlclient/blob/main/HISTORY.rst#whats-new-in-220
+  "mysqlclient~=2.2.0",
 ]
 postgres = [
   "psycopg2-binary~=2.9.6",
@@ -97,12 +96,12 @@ shibboleth = [
   "django-shibboleth-remoteuser@ git+https://github.com/Brown-University-Library/django-shibboleth-remoteuser.git@main",
 ]
 tests = [
-  "pytest~=7.1.0", # 7.1.0 drops Python 3.6 support, https://docs.pytest.org/en/stable/changelog.html#pytest-7-1-0-2022-03-13
+  "pytest~=7.4.0",
   "pytest-cov~=4.0.0",
   "pytest-django~=4.5.0",
   "pytest-dotenv~=0.5.2",
-  "pytest-mock~=3.7.0", # 3.7.0 drops Python 3.6 support, https://pytest-mock.readthedocs.io/en/latest/changelog.html
-  "pytest-randomly~=3.12.0", # 3.13.0 drops Python 3.7 support, https://github.com/pytest-dev/pytest-randomly/blob/main/CHANGELOG.rst#3120-2022-05-11
+  "pytest-mock~=3.11.0",
+  "pytest-randomly~=3.15.0",
   "pytest-xdist~=3.3.1",
 ]
 [project.urls]
@@ -121,10 +120,10 @@ version = {attr = "rdmo.__version__"}
 [tool.black]
 line-length = 120
 skip-string-normalization = true
-target_version = ["py37", "py38", "py39", "py310", "py311"] # TODO: EOL 2023-06-27
+target_version = ["py38", "py39", "py310", "py311"]
 
 [tool.ruff]
-target-version = "py37" # TODO: EOL 2023-06-27
+target-version = "py38"
 line-length = 120
 select = [
   "B",    # flake8-bugbear

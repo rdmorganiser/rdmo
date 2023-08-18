@@ -13,6 +13,8 @@ concurrency:
 
 env:
   PYTHONDONTWRITEBYTECODE: 1
+  FORCE_COLOR: 1 # colored output by pytest etc.
+  CLICOLOR_FORCE: 1 # colored output by ruff
 
 jobs:
 
@@ -40,7 +42,7 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        python-version: ['3.7', '3.11']
+        python-version: ['3.8', '3.11']
         db-backend: [mysql, postgres, sqlite3]
       fail-fast: false # TODO: for debugging tests only
     name: "Test (Python: ${{ matrix.python-version }}, DB: ${{ matrix.db-backend }})"
