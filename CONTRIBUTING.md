@@ -44,6 +44,8 @@ Version: 1.11.0
 [...]
 ```
 
+See also: [Dev](https://github.com/rdmorganiser/rdmo/blob/master/docs/dev.md).
+
 ## How to test the project
 
 Run the full test suite with pytest:
@@ -51,6 +53,8 @@ Run the full test suite with pytest:
 ```console
 $ pytest
 ```
+
+See also: [Testing](https://github.com/rdmorganiser/rdmo/blob/master/docs/testing.md).
 
 ## How to submit changes
 
