@@ -4,7 +4,7 @@
     "pk": 1,
     "fields": {
       "password": "md5$8cjVlPxyyWeO00Ba61X0oo$67ec7e03216bf7d0f12c8e712cddc1e1",
-      "last_login": "2020-10-20T09:52:00.396Z",
+      "last_login": "2023-08-18T16:02:07.423Z",
       "is_superuser": true,
       "username": "admin",
       "first_name": "Anna",
@@ -201,7 +201,7 @@
     "model": "auth.user",
     "pk": 12,
     "fields": {
-      "password": "pbkdf2_sha256$260000$ptME03p79B30xA44ZaerMT$mXJAqYUuN5oTAfMTlng43w85ridEsLn4uOPaMuZgQA0=",
+      "password": "md5$8QPGMDARQa9QLZzsRZImox$7f476c45296ad21723c466f069622507",
       "last_login": "2023-02-06T08:42:53Z",
       "is_superuser": false,
       "username": "example-user",
@@ -219,7 +219,7 @@
     "model": "auth.user",
     "pk": 13,
     "fields": {
-      "password": "pbkdf2_sha256$260000$OeWaEah3YzoF1BGfvO35ij$UpuJQi1MSoeHYx3YldMUOfum/vkmXmnChmkEuqaTt3M=",
+      "password": "md5$WTtAYdz7Rvq9qJWD9IV8h3$d29ebb49c7f7b820a7347953a7382bdc",
       "last_login": "2023-02-06T08:42:53Z",
       "is_superuser": false,
       "username": "foo-user",
@@ -237,7 +237,7 @@
     "model": "auth.user",
     "pk": 14,
     "fields": {
-      "password": "pbkdf2_sha256$260000$IcGdXALB0q5ydtqgKpPnxa$nti35Qd0RJH0iP3iUhOhGW3UmlgDd0dRYXwp5NAOY3c=",
+      "password": "md5$8GuRdWPPcFtBUn5AxuE3ot$5f738091a40eaaa7e5e9aaa285dc56ca",
       "last_login": "2023-02-06T08:43:50Z",
       "is_superuser": false,
       "username": "bar-user",
@@ -255,7 +255,7 @@
     "model": "auth.user",
     "pk": 15,
     "fields": {
-      "password": "pbkdf2_sha256$260000$B3yapDr8QuQYVB6zdZaNJM$I3RsRbPxmpGvbexpm5OL4CJRJqkKCOPcS4vvZAjoCRY=",
+      "password": "md5$2G83ryswyn0cOj1ObC6nG4$3c9ca8d4ca6a334dadbf8767a6c1d67a",
       "last_login": "2023-02-06T09:27:00Z",
       "is_superuser": false,
       "username": "example-manager",
@@ -273,7 +273,7 @@
     "model": "auth.user",
     "pk": 16,
     "fields": {
-      "password": "pbkdf2_sha256$260000$B3yapDr8QuQYVB6zdZaNJM$I3RsRbPxmpGvbexpm5OL4CJRJqkKCOPcS4vvZAjoCRY=",
+      "password": "md5$7XCv9zfq6xsi6FjyRX0D24$c4898671bb0275f4aad21db756f7ca5a",
       "last_login": "2023-02-06T09:27:00Z",
       "is_superuser": false,
       "username": "foo-manager",
@@ -289,10 +289,9 @@
   },
   {
     "model": "auth.user",
-    "pk": 17
-    ,
+    "pk": 17,
     "fields": {
-      "password": "pbkdf2_sha256$260000$GMW3hAxajrYGZlSPpDkr4B$ZWcjZVRQl0LaziXqTdDPChd9K4C7ePSu3jTgmlkTs9o=",
+      "password": "md5$z9zBIQvV4JH1rXtoAQnikE$cf593283f261e5f714f380ae3426790b",
       "last_login": "2023-02-06T09:20:00Z",
       "is_superuser": false,
       "username": "bar-manager",
@@ -310,7 +309,7 @@
     "model": "auth.user",
     "pk": 18,
     "fields": {
-      "password": "pbkdf2_sha256$260000$gZIqFR1eb0tkxJc74CcmS0$VFUh82PTMFGnyd2uIcYyhPeBGnq9KTelORl6TTej3yw=",
+      "password": "md5$4Bo8hxXbAPqIj8qgzJpm0k$b5d8b50e1f2d3bb225969ad28db54bd6",
       "last_login": null,
       "is_superuser": false,
       "username": "example-editor",
@@ -328,7 +327,7 @@
     "model": "auth.user",
     "pk": 19,
     "fields": {
-      "password": "pbkdf2_sha256$260000$76AzvgKfzDck6vAsME0QUX$8glueBNTjTaqCZxd6gmZkfIVXWOKMQgVHAof3LG662o=",
+      "password": "md5$jXCd0Evzpi977qS521sxRm$ebed95944fece3ed0af070b7f2eb5c99",
       "last_login": "2023-01-16T09:44:40Z",
       "is_superuser": false,
       "username": "foo-editor",
@@ -346,7 +345,7 @@
     "model": "auth.user",
     "pk": 20,
     "fields": {
-      "password": "pbkdf2_sha256$260000$Pjfpn2zWzUGqNZUT8UDrGu$PEDpHcQzCzn/O3q8Zkm5OlbnE59W/k5nWeuQ91IkfzQ=",
+      "password": "md5$sTczZgVSNPmwq9HorZ6MLX$59adeed41696db43f7841d8ba40044ed",
       "last_login": "2023-01-16T15:52:22Z",
       "is_superuser": false,
       "username": "bar-editor",
@@ -364,7 +363,7 @@
     "model": "auth.user",
     "pk": 21,
     "fields": {
-      "password": "pbkdf2_sha256$260000$yxY3ODmNl8Q9HdhVfjZNZC$j/V1Wps7i1RBZ/radDZ6mYfQorqwuHDwFDiedq0d/uk=",
+      "password": "md5$hbMV2HMEakiuOzF3nMrqvU$b115f98d73ff79b0ff949dc49f885f0d",
       "last_login": null,
       "is_superuser": false,
       "username": "example-reviewer",
@@ -382,7 +381,7 @@
     "model": "auth.user",
     "pk": 22,
     "fields": {
-      "password": "pbkdf2_sha256$260000$NqfJA8rYTGuPIEwXP7sHvF$UQ2rqzBTtJh4lx189c9gEHk5wX5nmUzLmlTYiEG9kc0=",
+      "password": "md5$UTScKuWZWNoL5glcppff7W$3b8c65f71d7bcb6494b2115ee15a1e7e",
       "last_login": "2023-02-17T14:50:45.341Z",
       "is_superuser": false,
       "username": "foo-reviewer",
@@ -400,7 +399,7 @@
     "model": "auth.user",
     "pk": 23,
     "fields": {
-      "password": "pbkdf2_sha256$260000$SHU2slkGZKGTfCIMkB1i62$qs58u+sW5wCtKzzgPhBAPdK0M38SrDDqSCpziYEeCZE=",
+      "password": "md5$rXiNxL4vXiHYWajmFY6iiB$001289de95aab05dbf87b182b00930eb",
       "last_login": "2023-02-17T12:30:00Z",
       "is_superuser": false,
       "username": "bar-reviewer",
