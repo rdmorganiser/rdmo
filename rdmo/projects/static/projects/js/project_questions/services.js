@@ -907,6 +907,17 @@ angular.module('project_questions')
                     }
                 });
 
+                // check if we need to refresh the site
+                angular.forEach([service.page].concat(service.questionsets), function(questionset) {
+                    angular.forEach(questionset.questions, function(question) {
+                        angular.forEach(question.optionsets, function(optionset) {
+                            if (optionset.has_refresh) {
+                                return service.initView(service.page.id);
+                            }
+                        });
+                    });
+                });
+
                 // re-evaluate conditions
                 angular.forEach(service.questionsets, function(questionset) {
                     angular.forEach(service.valuesets[questionset.id], function(valuesets, set_prefix) {
@@ -1360,6 +1371,8 @@ angular.module('project_questions')
         value.autocomplete_locked = true;
         value.selected = option.id.toString();
         value.autocomplete_text = option.text;
+
+        service.changed(value, true);
     }
 
     // called when the user clicks outside the autocomplete field
