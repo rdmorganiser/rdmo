@@ -71,12 +71,6 @@ dev = [
   "pre-commit",
   "rdmo[tests]",
 ]
-docs = [
-  "recommonmark",
-  "sphinx",
-  "sphinx-autobuild",
-  "sphinx_rtd_theme",
-]
 gunicorn = [
   "gunicorn>=19.9",
 ]
