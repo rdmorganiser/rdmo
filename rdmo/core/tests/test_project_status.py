@@ -6,12 +6,17 @@ def test_makemigrations_has_no_changes(db, capsys):
     captured = capsys.readouterr()
     assert "No changes detected" in captured.out
 
-
-# TODO
-@pytest.mark.skip(reason="test failing on CI")
 def test_compilemessages_is_already_up_to_date(capsys):
+    """Test compilemessages output contains "is already up to date"
+
+    Runs the management command "compilemessages".
+    The output of the command looks like this:
+    'File “[...]/rdmo/locale/{language}/LC_MESSAGES/django.po” is already compiled and up to date.'
+    For each supported language look for this pattern.
+    """
     call_command("compilemessages")
     captured = capsys.readouterr()
-    uptodate_message = "is already compiled and up to date"
     languages = ("de", "es", "fr", "it", "nl")
-    assert len(languages) == captured.out.count(uptodate_message)
+    for language in languages:
+        uptodate_message = f'/rdmo/locale/{language}/LC_MESSAGES/django.po” is already compiled and up to date'
+        assert uptodate_message in captured.out
