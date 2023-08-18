@@ -355,31 +355,31 @@ def test_update_questionset_error_catalog(db):
 
 def test_serializer_create(db):
     validator = QuestionSetLockedValidator()
-    validator.set_context(QuestionSetSerializer())
+    serializer = QuestionSetSerializer()
 
     validator({
         'locked': False
-    })
+    }, serializer)
 
 
 def test_serializer_create_locked(db):
     validator = QuestionSetLockedValidator()
-    validator.set_context(QuestionSetSerializer())
+    serializer = QuestionSetSerializer()
 
     validator({
         'locked': True
-    })
+    }, serializer)
 
 
 def test_serializer_update(db):
     instance = QuestionSet.objects.first()
 
     validator = QuestionSetLockedValidator()
-    validator.set_context(QuestionSetSerializer(instance=instance))
+    serializer = QuestionSetSerializer(instance=instance)
 
     validator({
         'locked': False
-    })
+    }, serializer)
 
 
 def test_serializer_update_error(db):
@@ -388,9 +388,9 @@ def test_serializer_update_error(db):
     instance.save()
 
     validator = QuestionSetLockedValidator()
-    validator.set_context(QuestionSetSerializer(instance=instance))
+    serializer = QuestionSetSerializer(instance=instance)
 
     with pytest.raises(RestFameworkValidationError):
         validator({
             'locked': True
-        })
+        }, serializer)

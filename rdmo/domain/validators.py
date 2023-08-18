@@ -28,7 +28,9 @@ class AttributeUniqueURIValidator(UniqueURIValidator):
 
 class AttributeParentValidator(InstanceValidator):
 
-    def __call__(self, data):
+    def __call__(self, data, serializer=None):
+        super().__call__(data, serializer)
+
         parent = data.get('parent')
         if parent is None:
             # workaround for import

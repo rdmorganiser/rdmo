@@ -25,6 +25,7 @@ python --reuse-db                                               # keep the datab
 pytest rdmo/domain                                              # test only the domain app
 pytest rdmo/domain/tests/test_viewsets.py                       # run only a specific test file
 pytest rdmo/domain/tests/test_viewsets.py::test_attribute_list  # run only a specific test
+pytest -k 'test_validator'                                      # run only set of test files, using substring matching
 ```
 
 Coverage

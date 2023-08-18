@@ -59,29 +59,29 @@ def test_update_unlock(db):
 
 def test_serializer_create(db):
     validator = TaskLockedValidator()
-    validator.set_context(TaskSerializer())
+    serializer = TaskSerializer()
 
     validator({
         'locked': False
-    })
+    }, serializer)
 
 
 def test_serializer_create_locked(db):
     validator = TaskLockedValidator()
-    validator.set_context(TaskSerializer())
+    serializer = TaskSerializer()
 
     validator({
         'locked': True
-    })
+    }, serializer)
 
 
 def test_serializer_update(db):
     task = Task.objects.first()
 
     validator = TaskLockedValidator()
-    validator.set_context(TaskSerializer(instance=task))
+    serializer = TaskSerializer(instance=task)
 
-    validator({})
+    validator({}, serializer)
 
 
 def test_serializer_update_error(db):
@@ -90,23 +90,23 @@ def test_serializer_update_error(db):
     task.save()
 
     validator = TaskLockedValidator()
-    validator.set_context(TaskSerializer(instance=task))
+    serializer = TaskSerializer(instance=task)
 
     with pytest.raises(RestFameworkValidationError):
         validator({
             'locked': True
-        })
+        }, serializer)
 
 
 def test_serializer_update_lock(db):
     task = Task.objects.first()
 
     validator = TaskLockedValidator()
-    validator.set_context(TaskSerializer(instance=task))
+    serializer = TaskSerializer(instance=task)
 
     validator({
         'locked': True
-    })
+    }, serializer)
 
 
 def test_serializer_update_unlock(db):
@@ -115,8 +115,8 @@ def test_serializer_update_unlock(db):
     task.save()
 
     validator = TaskLockedValidator()
-    validator.set_context(TaskSerializer(instance=task))
+    serializer = TaskSerializer(instance=task)
 
     validator({
         'locked': False
-    })
+    }, serializer)

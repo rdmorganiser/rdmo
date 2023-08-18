@@ -105,31 +105,31 @@ def test_update_optionset_error(db):
 
 def test_serializer_create(db):
     validator = OptionLockedValidator()
-    validator.set_context(OptionSerializer())
+    serializer = OptionSerializer()
 
     validator({
         'locked': False
-    })
+    }, serializer)
 
 
 def test_serializer_create_locked(db):
     validator = OptionLockedValidator()
-    validator.set_context(OptionSerializer())
+    serializer = OptionSerializer()
 
     validator({
         'locked': True
-    })
+    }, serializer)
 
 
 def test_serializer_update(db):
     option = Option.objects.first()
 
     validator = OptionLockedValidator()
-    validator.set_context(OptionSerializer(instance=option))
+    serializer = OptionSerializer(instance=option)
 
     validator({
         'locked': False
-    })
+    }, serializer)
 
 
 def test_serializer_update_error(db):
@@ -138,9 +138,9 @@ def test_serializer_update_error(db):
     option.save()
 
     validator = OptionLockedValidator()
-    validator.set_context(OptionSerializer(instance=option))
+    serializer = OptionSerializer(instance=option)
 
     with pytest.raises(RestFameworkValidationError):
         validator({
             'locked': True
-        })
+        }, serializer)

@@ -117,45 +117,45 @@ def test_unique_uri_validator_update_error_catalog(db):
 
 def test_unique_uri_validator_serializer_create(db):
     validator = PageUniqueURIValidator()
-    validator.set_context(PageSerializer())
+    serializer = PageSerializer()
 
     validator({
         'uri_prefix': settings.DEFAULT_URI_PREFIX,
         'uri_path': 'test'
-    })
+    }, serializer)
 
 
 def test_unique_uri_validator_serializer_create_error(db):
     validator = PageUniqueURIValidator()
-    validator.set_context(PageSerializer())
+    serializer = PageSerializer()
 
     with pytest.raises(RestFameworkValidationError):
         validator({
             'uri_prefix': settings.DEFAULT_URI_PREFIX,
             'uri_path': Page.objects.first().uri_path
-        })
+        }, serializer)
 
 
 def test_unique_uri_validator_serializer_update(db):
     instance = Page.objects.first()
 
     validator = PageUniqueURIValidator()
-    validator.set_context(PageSerializer(instance=instance))
+    serializer = PageSerializer(instance=instance)
 
     validator({
         'uri_prefix': instance.uri_prefix,
         'uri_path': instance.uri_path
-    })
+    }, serializer)
 
 
 def test_unique_uri_validator_serializer_update_error(db):
     instance = Page.objects.first()
 
     validator = PageUniqueURIValidator()
-    validator.set_context(PageSerializer(instance=instance))
+    serializer = PageSerializer(instance=instance)
 
     with pytest.raises(RestFameworkValidationError):
         validator({
             'uri_prefix': instance.uri_prefix,
             'uri_path': Page.objects.exclude(id=instance.id).first().uri_path
-        })
+        }, serializer)
