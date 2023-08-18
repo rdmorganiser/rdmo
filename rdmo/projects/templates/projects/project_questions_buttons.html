@@ -27,7 +27,7 @@
         <div class="pull-right">
             <div ng-hide="service.project.read_only || service.page.elements.length < 1">
                 {% if settings.PROJECT_QUESTIONS_AUTOSAVE %}
-                <button type="button" ng-click="service.prev()" ng-disabled="!service.page.prev"
+                <button type="button" ng-click="service.prev()" ng-disabled="!service.page.prev_page"
                         class="btn btn-default">
                     {% trans 'Back' %}
                 </button>
