@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
+from rdmo.questions.models import Catalog
 from rdmo.services.validators import ProviderValidator
 
 from ...models import (Integration, IntegrationOption, Invite, Issue,
@@ -28,11 +29,20 @@ class UserSerializer(serializers.ModelSerializer):
 
 class ProjectSerializer(serializers.ModelSerializer):
 
+    class CatalogField(serializers.PrimaryKeyRelatedField):
+
+        def get_queryset(self):
+            return Catalog.objects.filter_current_site() \
+                                  .filter_group(self.context['request'].user) \
+                                  .filter_availability(self.context['request'].user) \
+                                  .order_by('-available', 'order')
+
     class ParentField(serializers.PrimaryKeyRelatedField):
 
         def get_queryset(self):
             return Project.objects.filter_user(self.context['request'].user)
 
+    catalog = CatalogField(required=True)
     parent = ParentField(required=False)
 
     owners = UserSerializer(many=True, read_only=True)
