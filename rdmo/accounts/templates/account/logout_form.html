@@ -1,6 +1,6 @@
 {% load i18n %}
 
-    <form class="logout-form" action="{% url 'account_logout' %}" method="POST">
+    <form class="logout-form" action="{{ settings.LOGOUT_URL }}" method="POST">
         {% csrf_token %}
         <button type="submit" class="btn btn-link">
             {% trans 'Logout' %}

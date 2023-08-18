@@ -1,21 +1,11 @@
 {% load i18n %}
 
 {% if settings.SHIBBOLETH %}
-
-{% if settings.SHIBBOLETH_LOGIN_URL %}
-<p>
+<p style="margin-bottom: 20px;">
     <a class="btn btn-success extend" href="{% url 'shibboleth_login' %}">
         {% trans 'Login with Shibboleth' %}
     </a>
 </p>
-{% else %}
-<p>
-    <a class="btn btn-success extend" href="{% url 'account_login' %}">
-        {% trans 'Login with Shibboleth' %}
-    </a>
-</p>
-{% endif %}
-
 {% endif %}
 
 {% if settings.LOGIN_FORM %}
