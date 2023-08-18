@@ -1,14 +1,10 @@
-Development setup
-=================
+# Development setup
 
-Install prerequisites
----------------------
+## Install prerequisites
 
 Install the prerequisites for your Linux distribution as described [in the documentation](https://rdmo.readthedocs.io/en/latest/installation/prerequisites.html).
 
-
-Obtain repositories
--------------------
+## Obtain repositories
 
 First create a directory called `rdmorganiser` somewhere where you usually put your coding projects.
 
@@ -33,14 +29,15 @@ git clone https://github.com/rdmorganiser/rdmo
 
 You should now have two directories in `rdmorganiser`:
 
-```tree result="shell"
-rdmorganiser
-    rdmo
-    rdmo-app
+```
+📂 path/to/rdmorganiser
+ ┣ 📂 rdmo
+ ┃ ┣ ...
+ ┣ 📂 rdmo-app
+ ┃ ┣ ...
 ```
 
-Setup rdmo-app
---------------
+## Setup rdmo-app
 
 Change into `rdmo-app` and create a Python virtual environment:
 
@@ -52,7 +49,7 @@ call env\Scripts\activate.bat               # on Windows
 pip install --upgrade pip setuptools        # update pip and setuptools
 ```
 
-Install `rdmo` in *editable* mode:
+Install `rdmo` in _editable_ mode:
 
 ```
 pip install -e ../rdmo
@@ -97,8 +94,10 @@ The testing data can be imported using:
 ```bash
 python manage.py loaddata ../rdmo/testing/fixtures/*
 ```
+
 To update the testing data fixtures based on the current database, each of the RDMO apps with new data needs to be dumped using the following command.
 As an example, the views and projects app contain new data:
+
 ```bash
 python manage.py dumpdata views | python3 -m json.tool --indent 2 > ../rdmo/testing/fixtures/views.json
 python manage.py dumpdata projects | python3 -m json.tool --indent 2 > ../rdmo/testing/fixtures/projects.json
@@ -138,22 +137,22 @@ other    -> another user without project
 The password for these users is the same as the username, e.g. `admin`: `admin`. You might have guessed yourself, but make sure to **never use these users in a production environment**.
 
 A local email server for development can be started by setting:
+
 ```python
 # in local.py
 EMAIL_PORT = 8025
 ```
+
 and using:
 
 ```bash
-# for python versions >= 3.7 
+# for python versions >= 3.7
 pip install aiosmtpd
 
 python -m aiosmtpd -n -l localhost:8025
 ```
 
-
-Setup rdmo
-----------
+## Setup rdmo
 
 In order to run the test suite, the `rdmo` repo itself can be setup in a similar way in its own virtual environment:
 
@@ -195,9 +194,7 @@ pytest
 
 More about testing can be found [here](testing.md).
 
-
-Setup plugins
--------------
+## Setup plugins
 
 In order to include plugins into the development setup simply clone the plugin repository next to `rdmo` and `rdmo-app`, e.g. for `rdmo-plugins`:
 
@@ -206,7 +203,7 @@ git clone git@github.com:rdmorganiser/rdmo-plugins      # over ssh
 git clone https://github.com/rdmorganiser/rdmo-plugins  # over https
 ```
 
-Then the plugin can be added to the `env` for `rdmo-app` or `rdmo` also in *editable* mode using:
+Then the plugin can be added to the `env` for `rdmo-app` or `rdmo` also in _editable_ mode using:
 
 ```bash
 pip install -e ../rdmo-plugins
