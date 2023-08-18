@@ -296,6 +296,12 @@ def render_to_csv(title, rows, delimiter=','):
     return response
 
 
+def render_to_json(title, data, delimiter=','):
+    response = HttpResponse(json.dumps(data, indent=2), content_type='text/json')
+    response['Content-Disposition'] = 'attachment; filename="%s.json"' % title
+    return response
+
+
 def return_file_response(file_path, content_type):
     file_abspath = Path(settings.MEDIA_ROOT) / file_path
     if file_abspath.exists():

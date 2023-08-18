@@ -279,8 +279,9 @@ PROJECT_VIEWS = True
 
 PROJECT_EXPORTS = [
     ('xml', _('RDMO XML'), 'rdmo.projects.exports.RDMOXMLExport'),
-    ('csvcomma', _('CSV comma separated'), 'rdmo.projects.exports.CSVCommaExport'),
-    ('csvsemicolon', _('CSV semicolon separated'), 'rdmo.projects.exports.CSVSemicolonExport')
+    ('csvcomma', _('CSV (comma separated)'), 'rdmo.projects.exports.CSVCommaExport'),
+    ('csvsemicolon', _('CSV (semicolon separated)'), 'rdmo.projects.exports.CSVSemicolonExport'),
+    ('json', _('JSON'), 'rdmo.projects.exports.JSONExport'),
 ]
 
 PROJECT_IMPORTS = [
