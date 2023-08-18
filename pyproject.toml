@@ -61,6 +61,7 @@ dependencies = [
   "pypandoc~=1.10.0",
   "rules~=3.3.0",
 ]
+
 [project.optional-dependencies]
 ci = [
   "coveralls",
@@ -69,7 +70,7 @@ ci = [
 dev = [
   "django-debug-toolbar",
   "pre-commit",
-  "rdmo[tests]",
+  "rdmo[pytest]",
 ]
 gunicorn = [
   "gunicorn>=19.9",
@@ -89,7 +90,7 @@ postgres = [
 shibboleth = [
   "django-shibboleth-remoteuser@ git+https://github.com/Brown-University-Library/django-shibboleth-remoteuser.git@main",
 ]
-tests = [
+pytest = [
   "pytest~=7.4.0",
   "pytest-cov~=4.0.0",
   "pytest-django~=4.5.0",
@@ -98,10 +99,11 @@ tests = [
   "pytest-randomly~=3.15.0",
   "pytest-xdist~=3.3.1",
 ]
+
 [project.urls]
 Changelog = "https://github.com/rdmorganiser/rdmo/blob/master/CHANGELOG.md"
 Documentation = "https://rdmo.readthedocs.io"
-Homepage = "https://rdmorganiser.github.io/"
+Homepage = "https://rdmorganiser.github.io"
 Issues = "https://github.com/rdmorganiser/rdmo/issues"
 Repository = "https://github.com/rdmorganiser/rdmo.git"
 
@@ -139,10 +141,21 @@ ignore = [
 
 [tool.ruff.isort]
 known-first-party = ["rdmo"]
-section-order = ["future", "standard-library", "django", "third-party", "first-party", "local-folder"]
+section-order = [
+  "future",
+  "standard-library",
+  "pytest",
+  "django",
+  "rest_framework",
+  "third-party",
+  "first-party",
+  "local-folder"
+]
 
 [tool.ruff.isort.sections]
+pytest = ["pytest"]
 django = ["django"]
+rest_framework = ["rest_framework"]
 
 [tool.ruff.per-file-ignores]
 "rdmo/**/models/__init__.py" = [
