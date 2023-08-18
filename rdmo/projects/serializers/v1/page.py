@@ -30,6 +30,7 @@ class OptionSetSerializer(serializers.ModelSerializer):
             'options',
             'has_provider',
             'has_search',
+            'has_refresh',
             'has_conditions'
         )
 

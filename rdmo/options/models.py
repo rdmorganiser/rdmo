@@ -104,6 +104,10 @@ class OptionSet(models.Model):
         return self.has_provider and self.provider.search
 
     @property
+    def has_refresh(self):
+        return self.has_provider and self.provider.refresh
+
+    @property
     def has_conditions(self):
         return self.conditions.exists()
 
