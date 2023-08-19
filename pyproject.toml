@@ -1,9 +1,6 @@
 [build-system]
 build-backend = "setuptools.build_meta"
-requires = [
-  "setuptools",
-  "setuptools-scm",
-]
+requires = ["setuptools", "wheel"]
 
 [project]
 name = "rdmo"
@@ -42,7 +39,7 @@ dependencies = [
   "defusedcsv~=2.0.0",
   "defusedxml~=0.7.1",
   "Django~=3.2.20",
-  "django-allauth~=0.51.0",
+  "django-allauth~=0.53.1",
   "django-cleanup~=6.0.0",
   "django-compressor~=4.4",
   "django-extensions~=3.2.0",
@@ -107,8 +104,12 @@ Homepage = "https://rdmorganiser.github.io"
 Issues = "https://github.com/rdmorganiser/rdmo/issues"
 Repository = "https://github.com/rdmorganiser/rdmo.git"
 
-[tool.setuptools]
-packages = ["rdmo"]
+[tool.setuptools.packages.find]
+include = ["rdmo*"]
+exclude = ["*assets*", "*tests*"]
+
+[tool.setuptools.package-data]
+"*" = ["*"]
 
 [tool.setuptools.dynamic]
 version = {attr = "rdmo.__version__"}
