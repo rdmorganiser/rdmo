@@ -2,7 +2,6 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import Exists, OuterRef
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 from django.urls import reverse
@@ -12,12 +11,12 @@ from django.utils.translation import gettext_lazy as _
 from mptt.models import MPTTModel, TreeForeignKey
 
 from rdmo.core.models import Model
-from rdmo.domain.models import Attribute
-from rdmo.questions.models import Catalog, Question
+from rdmo.questions.models import Catalog
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
 from ..managers import ProjectManager
+from ..progress import get_progress
 
 
 class Project(MPTTModel, Model):
@@ -88,22 +87,7 @@ class Project(MPTTModel, Model):
 
     @property
     def progress(self):
-        # create a queryset for the attributes of the catalog for this project
-        # the subquery is used to query only attributes which have a question in the catalog, which is not optional
-        questions = Question.objects.filter_by_catalog(self.catalog) \
-                                    .filter(attribute_id=OuterRef('pk')).exclude(is_optional=True)
-        attributes = Attribute.objects.annotate(active=Exists(questions)).filter(active=True).distinct()
-
-        # query the total number of attributes from the qs above
-        total = attributes.count()
-
-        # query all current values with attributes from the qs above, but where the text, option, or file field is set,
-        # and count only one value per attribute
-        values = self.values.filter(snapshot=None) \
-                            .filter(attribute__in=attributes) \
-                            .exclude((models.Q(text='') | models.Q(text=None)) & models.Q(option=None) &
-                                     (models.Q(file='') | models.Q(file=None))) \
-                            .distinct().values('attribute').count()
+        values, total = get_progress(self)
 
         try:
             ratio = values / total
