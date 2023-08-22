@@ -62,9 +62,32 @@ def is_element_reviewer(user, obj) -> bool:
     return user.role.reviewer.filter(id__in=obj.editors.all()).exists()
 
 
+@rules.predicate
+def is_legacy_reviewer(user) -> bool:
+    ''' Checks if the user has all the view permissions an editor or reviewer needs '''
+    return user.has_perms((
+      'auth.view_group',
+      'conditions.view_condition',
+      'domain.view_attribute',
+      'options.view_option',
+      'options.view_optionset',
+      'questions.view_catalog',
+      'questions.view_page',
+      'questions.view_question',
+      'questions.view_questionset',
+      'questions.view_section',
+      'sites.view_site',
+      'tasks.view_task',
+      'views.view_view',
+    ))
+
+
 # Add rules
 rules.add_rule('management.can_view_management',
-               is_authenticated & (is_superuser | is_editor_for_current_site | is_reviewer_for_current_site))
+               is_authenticated & (is_superuser |
+                                   is_editor_for_current_site |
+                                   is_reviewer_for_current_site |
+                                   is_legacy_reviewer))
 
 
 # Model Permissions for sites and group
