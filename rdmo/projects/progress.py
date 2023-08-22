@@ -57,8 +57,9 @@ def count_questions(parent_element, sets, conditions):
             element_conditions = set(condition.id for condition in element.conditions.all())
             if not element_conditions or element_conditions.intersection(conditions):
                 if isinstance(element, Question):
-                    attributes.append(element.attribute)
-                    count += 1
+                    if not element.is_optional:
+                        attributes.append(element.attribute)
+                        count += 1
                 else:
                     if element.attribute:
                         attributes.append(element.attribute)
