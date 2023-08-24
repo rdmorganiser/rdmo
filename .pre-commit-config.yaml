@@ -18,6 +18,7 @@ repos:
       - id: check-yaml
       - id: end-of-file-fixer
       - id: trailing-whitespace
+      - id: debug-statements
   - repo: https://github.com/charliermarsh/ruff-pre-commit
     rev: v0.0.284
     hooks:
