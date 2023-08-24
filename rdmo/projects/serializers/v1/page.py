@@ -181,6 +181,7 @@ class PageSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
         return {
            'id': section.id,
            'title': section.title,
+           'first': section.elements[0].id if section.elements else None
         } if section else {}
 
     def get_prev_page(self, obj):
