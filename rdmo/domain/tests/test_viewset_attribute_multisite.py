@@ -96,8 +96,7 @@ def test_update_multisite(db, client, username, password):
             'parent': instance.parent.pk if instance.parent else ''
         }
         response = client.put(url, data, content_type='application/json')
-        if response.status_code == 200 and get_obj_perms_status_code(instance, username, 'update') == 404:
-            breakpoint()
+
         assert response.status_code == get_obj_perms_status_code(instance, username, 'update'), response.json()
 
 
