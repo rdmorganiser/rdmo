@@ -955,13 +955,11 @@ angular.module('project_questions')
                 }
             } else {
                 // update progress
-                resources.projects.get({
+                resources.projects.postAction({
                     id: service.project.id,
                     detail_action: 'progress'
                 }, function(response) {
-                    if (service.progress.values != response.values) {
-                        service.progress = response
-                    }
+                    service.progress = response
                 });
 
                 // check if we need to refresh the site

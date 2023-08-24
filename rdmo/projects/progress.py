@@ -6,7 +6,7 @@ from rdmo.conditions.models import Condition
 from rdmo.questions.models import Catalog, Section, Page, QuestionSet, Question
 
 
-def get_progress(project, snapshot=None):
+def compute_progress(project, snapshot=None):
     # get all values for this project and snapshot
     project_values = project.values.filter(snapshot=snapshot).select_related('attribute', 'option')
 

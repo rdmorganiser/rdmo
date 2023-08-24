@@ -27,6 +27,7 @@ from rdmo.views.models import View
 from .filters import SnapshotFilterBackend, ValueFilterBackend
 from .models import Continuation, Integration, Invite, Issue, Membership, Project, Snapshot, Value
 from .permissions import HasProjectPagePermission, HasProjectPermission, HasProjectsPermission
+from .progress import compute_progress
 from .serializers.v1 import (
     IntegrationSerializer,
     InviteSerializer,
@@ -158,11 +159,26 @@ class ProjectViewSet(ModelViewSet):
         # if it didn't work return 404
         raise NotFound()
 
-    @action(detail=True, permission_classes=(IsAuthenticated, ))
+    @action(detail=True, methods=['get', 'post'], permission_classes=(HasModelPermission | HasProjectPermission, ))
     def progress(self, request, pk=None):
         project = self.get_object()
-        project.catalog.prefetch_elements()
-        return Response(project.progress)
+
+        if request.method == 'POST' or project.progress_count is None or project.progress_total is None:
+            # compute the progress and store
+            project.catalog.prefetch_elements()
+            project.progress_count, project.progress_total = compute_progress(project)
+            project.save()
+
+        try:
+            ratio = project.progress_count / project.progress_total
+        except ZeroDivisionError:
+            ratio = 0
+
+        return Response({
+            'count': project.progress_count,
+            'total': project.progress_total,
+            'ratio': ratio
+        })
 
     def perform_create(self, serializer):
         project = serializer.save(site=get_current_site(self.request))

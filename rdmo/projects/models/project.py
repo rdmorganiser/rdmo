@@ -16,7 +16,6 @@ from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
 from ..managers import ProjectManager
-from ..progress import get_progress
 
 
 class Project(MPTTModel, Model):
@@ -64,6 +63,16 @@ class Project(MPTTModel, Model):
         verbose_name=_('Views'),
         help_text=_('The views that will be used for this project.')
     )
+    progress_total = models.IntegerField(
+        null=True,
+        verbose_name=_('Progress total'),
+        help_text=_('The total number of expected values for the progress bar.')
+    )
+    progress_count = models.IntegerField(
+        null=True,
+        verbose_name=_('Progress count'),
+        help_text=_('The number of values for the progress bar.')
+    )
 
     class Meta:
         ordering = ('tree_id', 'level', 'title')
@@ -84,21 +93,6 @@ class Project(MPTTModel, Model):
             raise ValidationError({
                 'parent': [_('A project may not be moved to be a child of itself or one of its descendants.')]
             })
-
-    @property
-    def progress(self):
-        values, total = get_progress(self)
-
-        try:
-            ratio = values / total
-        except ZeroDivisionError:
-            ratio = 0
-
-        return {
-            'total': total,
-            'values': values,
-            'ratio': ratio
-        }
 
     @property
     def catalog_uri(self):

@@ -18,6 +18,19 @@ def projects_indent(level):
     return mark_safe('<span class="projects-indent">' + string + '</span>')
 
 
+@register.simple_tag()
+def project_progress(project):
+    if project.progress_count is None or project.progress_total is None:
+        return ''
+
+    try:
+        ratio = project.progress_count / project.progress_total
+    except ZeroDivisionError:
+        ratio = 0
+
+    return f'{ratio:.0%}'
+
+
 @register.filter()
 @stringfilter
 def projects_role(role):

@@ -124,6 +124,7 @@
         <thead>
             <tr>
                 <th style="width: 60%;">{% trans 'Name' %}</th>
+                <th style="width: 20%;">{% trans 'Progress' %}</th>
                 <th style="width: 10%;">{% trans 'Role' %}</th>
                 <th style="width: 23%;">{% trans 'Last changed' %}</th>
                 <th style="width: 7%;"></th>
@@ -137,6 +138,9 @@
                     {% for ancestor in project.get_ancestors %}{{ ancestor }} / {% endfor %}
                     <strong>{{ project.title }}</strong>
                     </a>
+                </td>
+                <td>
+                    {% project_progress project %}
                 </td>
                 <td>
                     {{ project.role|projects_role }}
