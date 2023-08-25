@@ -837,29 +837,25 @@ angular.module('project_questions')
 
     service.prev = function() {
         service.error = null; // reset error when moving to previous questionset
-        if (service.page.prev_page !== null) {
-            if (service.settings.project_questions_autosave) {
-                service.save(false).then(function() {
-                    back = true;
-                    service.initView(service.page.prev_page);
-                })
-            } else {
+        if (service.settings.project_questions_autosave) {
+            service.save(false).then(function() {
                 back = true;
                 service.initView(service.page.prev_page);
-            }
+            })
+        } else {
+            back = true;
+            service.initView(service.page.prev_page);
         }
     };
 
     service.next = function() {
         service.error = null; // reset error when moving to next questionset
-        if (service.page.next_page !== null) {
-            if (service.settings.project_questions_autosave) {
-                service.save(false).then(function() {
-                    service.initView(service.page.next_page);
-                })
-            } else {
+        if (service.settings.project_questions_autosave) {
+            service.save(false).then(function() {
                 service.initView(service.page.next_page);
-            }
+            })
+        } else {
+            service.initView(service.page.next_page);
         }
     };
 
@@ -911,6 +907,8 @@ angular.module('project_questions')
         return service.storeValues().then(function() {
             if (service.error !== null) {
                 // pass
+            } else if (service.page.id == false) {
+                // pass, the interview is done
             } else if (angular.isDefined(proceed) && proceed) {
                 if (service.settings.project_questions_cycle_sets && service.page.is_collection) {
                     if (service.set_index === null) {
@@ -929,6 +927,7 @@ angular.module('project_questions')
                         }
                     }
                 } else {
+                    console.log('next');
                     service.next();
                 }
             } else {

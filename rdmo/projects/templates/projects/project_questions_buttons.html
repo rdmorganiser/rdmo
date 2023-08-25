@@ -37,11 +37,20 @@
                 </button>
                 {% endif %}
                 <button type="button" ng-click="service.save(true)" class="btn btn-primary">
-                {% if settings.PROJECT_QUESTIONS_AUTOSAVE %}
-                {% trans 'Proceed' %}
-                {% else %}
-                {% trans 'Save and proceed' %}
-                {% endif %}
+                    <span ng-show="service.page.next_page">
+                        {% if settings.PROJECT_QUESTIONS_AUTOSAVE %}
+                        {% trans 'Proceed' %}
+                        {% else %}
+                        {% trans 'Save and proceed' %}
+                        {% endif %}
+                    </span>
+                    <span ng-hide="service.page.next_page">
+                        {% if settings.PROJECT_QUESTIONS_AUTOSAVE %}
+                        {% trans 'Complete questionnaire' %}
+                        {% else %}
+                        {% trans 'Save and complete questionnaire' %}
+                        {% endif %}
+                    </span>
                 </button>
             </div>
             <div ng-show="service.project.read_only || service.page.elements.length < 1">
