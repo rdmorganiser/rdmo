@@ -34,17 +34,17 @@ jobs:
       with:
         path: ~/.cache/pre-commit
         key: lint-${{ hashFiles('.pre-commit-config.yaml') }}
-    - name: Run black and ruff via pre-commit
+    - name: Run ruff via pre-commit
       run: pre-commit run --all-files --color=always
       continue-on-error: true # TODO: remove once files are reformatted
-  
+
   test:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
         python-version: ['3.8', '3.11']
         db-backend: [mysql, postgres, sqlite3]
-      fail-fast: false # TODO: for debugging tests only
+
     name: "Test (Python: ${{ matrix.python-version }}, DB: ${{ matrix.db-backend }})"
     needs: lint
     steps:
@@ -57,15 +57,15 @@ jobs:
     - name: Install Dependencies
       run: |
         sudo apt update
-        sudo apt install --yes pandoc texlive-xetex texlive-latex-extra texlive-fonts-recommended lmodern librsvg2-bin gettext
+        sudo apt install --yes pandoc texlive-xetex texlive-latex-extra texlive-fonts-recommended lmodern librsvg2-bin
         python -m pip install --upgrade pip
         pandoc --version
     - name: Install rdmo
-      run: | 
+      run: |
         pip install -e .[ci]
       if: matrix.db-backend == 'sqlite3'
     - name: Install rdmo[mysql] and start mysql
-      run: | 
+      run: |
         pip install -e .[ci,mysql]
         sudo systemctl start mysql.service
       if: matrix.db-backend == 'mysql'
@@ -83,7 +83,7 @@ jobs:
         mkdir testing/log
     - name: Run Tests
       run: |
-        pytest -p no:cacheprovider --cov --reuse-db --numprocesses=auto --dist=loadscope
+        pytest -p randomly -p no:cacheprovider --cov --reuse-db --numprocesses=auto --dist=loadscope
         coveralls --service=github
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
