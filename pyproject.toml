@@ -174,7 +174,7 @@ rest_framework = ["rest_framework"]
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "config.settings"
 testpaths = ["rdmo"]
-python_files = "test_*.py"
+python_files = "test_*[!.txt].py"
 pythonpath = [".", "testing"]
 
 [tool.coverage.run]
