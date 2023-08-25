@@ -30,15 +30,6 @@ class ProjectWrapper(object):
         return self._project.description
 
     @property
-    def catalog(self):
-        return {
-            'id': self._catalog.id,
-            'uri': self._catalog.uri,
-            'title': self._catalog.title,
-            'help': self._catalog.help
-        }
-
-    @property
     def created(self):
         return self._project.created
 
