@@ -39,6 +39,13 @@ users += tuple(zip(other_site_users, other_site_users))  # add (other site users
 boolean_toggle = (True, False)
 
 
+@pytest.fixture(autouse=True, scope='function')
+def clear_url_cache_at_teardown():
+    '''Clear the url cache after the test function.'''
+
+    yield
+    reload_app_urlconf_in_testcase()
+
 @pytest.mark.parametrize('profile_update', boolean_toggle)
 def test_get_profile_update(db, client, settings, profile_update):
     """

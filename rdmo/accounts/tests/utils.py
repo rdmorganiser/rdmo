@@ -21,7 +21,8 @@ def reload_urlconf(urlconf=None, settings=None):
 
 def reload_app_urlconf_in_testcase(app_name: str=None, settings=None) -> None:
     # reload the urlconf of the app
-    reload_urlconf(urlconf=f'rdmo.{app_name}.urls', settings=settings)
+    if app_name is not None:
+        reload_urlconf(urlconf=f'rdmo.{app_name}.urls', settings=settings)
     # reload the core urlconf
     reload_urlconf(urlconf='rdmo.core.urls', settings=settings)
     # reload the testcase settings urlconf
