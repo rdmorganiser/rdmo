@@ -19,6 +19,7 @@ env2
 env3
 
 .coverage
+.coverage.*
 htmlcov
 
 node_modules

@@ -1,14 +1,10 @@
-Development setup
-=================
+# Development setup
 
-Install prerequisites
----------------------
+## Install prerequisites
 
 Install the prerequisites for your Linux distribution as described [in the documentation](https://rdmo.readthedocs.io/en/latest/installation/prerequisites.html).
 
-
-Obtain repositories
--------------------
+## Obtain repositories
 
 First create a directory called `rdmorganiser` somewhere where you usually put your coding projects.
 
@@ -17,7 +13,7 @@ mkdir path/to/rdmorganiser
 cd path/to/rdmorganiser
 ```
 
-Next clone the `rdmo-app` and the `rdmo` repositories from GitHub. If you have an account there, and added your public ssh key you can use:
+Next clone the `rdmo-app` and the `rdmo` repositories from GitHub. If you have an account there, and [added your public SSH key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh) you can use:
 
 ```bash
 git clone git@github.com:rdmorganiser/rdmo-app
@@ -31,11 +27,17 @@ git clone https://github.com/rdmorganiser/rdmo-app
 git clone https://github.com/rdmorganiser/rdmo
 ```
 
-You should now have two directories in `rdmorganiser`: `rdmo` and `rdmo-app`.
+You should now have two directories in `rdmorganiser`:
 
+```
+📂 path/to/rdmorganiser
+ ┣ 📂 rdmo
+ ┃ ┣ ...
+ ┣ 📂 rdmo-app
+ ┃ ┣ ...
+```
 
-Setup rdmo-app
---------------
+## Setup rdmo-app
 
 Change into `rdmo-app` and create a Python virtual environment:
 
@@ -47,7 +49,7 @@ call env\Scripts\activate.bat               # on Windows
 pip install --upgrade pip setuptools        # update pip and setuptools
 ```
 
-Install `rdmo` in *editable* mode:
+Install `rdmo` in _editable_ mode:
 
 ```
 pip install -e ../rdmo
@@ -72,11 +74,11 @@ DATABASES = {
 }
 ```
 
-If you want to use PostgreSQL or MySQL for the development instead, you need to install the Python dependencies for this as well.
+If you want to use PostgreSQL or MySQL for the development you need to install the Python dependencies for this as well.
 
-```bash
-pip install -r requirements/postgres.txt  # optional: for PostgresSQL
-pip install -r requirements/mysql.txt     # optional: for MySQL
+```
+pip install -e ../"rdmo[postgres]"
+pip install -e ../"rdmo[mysql]"
 ```
 
 Then, initialize the application, using:
@@ -165,9 +167,23 @@ other    -> another user without project
 
 The password for these users is the same as the username, e.g. `admin`: `admin`. You might have guessed yourself, but make sure to **never use these users in a production environment**.
 
+A local email server for development can be started by setting:
 
-Setup rdmo
-----------
+```python
+# in local.py
+EMAIL_PORT = 8025
+```
+
+and using:
+
+```bash
+# for python versions >= 3.7
+pip install aiosmtpd
+
+python -m aiosmtpd -n -l localhost:8025
+```
+
+## Setup rdmo
 
 In order to run the test suite, the `rdmo` repo itself can be setup in a similar way in its own virtual environment:
 
@@ -185,8 +201,8 @@ Again install `rdmo` in editable mode and install the database prerequisites:
 ```
 pip install -e .
 
-pip install psycopg2-binary                 # for PostgreSQL
-pip install mysqlclient                     # for MySQL
+pip install ".[postgres]"                   # for PostgreSQL
+pip install ".[mysql]"                      # for MySQL
 ```
 
 Create a `local.py` as before, but this time in `testing/config/settings/local.py`:
@@ -209,9 +225,7 @@ pytest
 
 More about testing can be found [here](testing.md).
 
-
-Setup plugins
--------------
+## Setup plugins
 
 In order to include plugins into the development setup simply clone the plugin repository next to `rdmo` and `rdmo-app`, e.g. for `rdmo-plugins`:
 
@@ -220,7 +234,7 @@ git clone git@github.com:rdmorganiser/rdmo-plugins      # over ssh
 git clone https://github.com/rdmorganiser/rdmo-plugins  # over https
 ```
 
-Then the plugin can be added to the `env` for `rdmo-app` or `rdmo` also in *editable* mode using:
+Then the plugin can be added to the `env` for `rdmo-app` or `rdmo` also in _editable_ mode using:
 
 ```bash
 pip install -e ../rdmo-plugins

@@ -22,6 +22,7 @@ module.exports = {
   "plugins": [
     "react"
   ],
+  "ignorePatterns": ["**/static/**/*.js"],
   "rules": {
     "indent": "off",
     "no-empty-pattern": "off",

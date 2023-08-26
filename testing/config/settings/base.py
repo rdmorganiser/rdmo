@@ -4,6 +4,14 @@ from django.utils.translation import gettext_lazy as _
 
 from . import INSTALLED_APPS
 
+DEBUG = False
+TEMPLATE_DEBUG = False
+DEBUG_LOGGING = False
+
+SECRET_KEY = "this is a not very secret key"
+
+PASSWORD_HASHERS = ("django.contrib.auth.hashers.MD5PasswordHasher",)
+
 SITE_ID = 1
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -12,10 +20,8 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media_root')
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 
-BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'components_root')
-
 FIXTURE_DIRS = (
-   os.path.join(BASE_DIR, 'fixtures'),
+    os.path.join(BASE_DIR, 'fixtures'),
 )
 
 INSTALLED_APPS += [

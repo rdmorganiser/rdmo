@@ -1,4 +1,4 @@
-name: pytest
+name: CI
 
 on:
   push:
@@ -6,49 +6,80 @@ on:
       - master
   pull_request:
 
+# Ref: https://docs.github.com/en/actions/using-jobs/using-concurrency
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHONDONTWRITEBYTECODE: 1
+  FORCE_COLOR: 1 # colored output by pytest etc.
+  CLICOLOR_FORCE: 1 # colored output by ruff
+
 jobs:
-  build:
-    runs-on: ubuntu-20.04
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+        cache: pip
+    - run: python -m pip install --upgrade pip
+    - run: pip install -e .[dev]
+    - name: Set up pre-commit cache
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pre-commit
+        key: lint-${{ hashFiles('.pre-commit-config.yaml') }}
+    - name: Run ruff via pre-commit
+      run: pre-commit run --all-files --color=always
+      continue-on-error: true # TODO: remove once files are reformatted
+
+  test:
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
-        db-backend: [mysql, postgres, sqlite3]
-        python-version: ['3.6', '3.11']
+        python-version: ['3.8', '3.11']
+        db-backend: [mysql, postgres]
 
-    services:
-      postgres:
-        image: postgres:latest
-        env:
-          POSTGRES_DB: rdmo
-          POSTGRES_PASSWORD: postgres_password
-        ports:
-          - 5432:5432
-
+    name: "Test (Python: ${{ matrix.python-version }}, DB: ${{ matrix.db-backend }})"
+    needs: lint
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
+        cache: pip
     - name: Install Dependencies
       run: |
-        sudo apt update && sudo apt install -y pandoc texlive-xetex texlive-latex-extra texlive-fonts-recommended lmodern librsvg2-bin
-        sudo apt install -y libpq-dev postgresql postgresql-client
+        sudo apt update
+        sudo apt install --yes pandoc texlive-xetex texlive-latex-extra texlive-fonts-recommended lmodern librsvg2-bin
         python -m pip install --upgrade pip
-    - name: Install RDMO
+        pandoc --version
+    - name: Install rdmo[mysql] and start mysql
       run: |
-        pip install -e .
-        pip install psycopg2-binary
-        pip install mysqlclient
-        pip install coveralls
+        pip install -e .[ci,mysql]
+        sudo systemctl start mysql.service
+      if: matrix.db-backend == 'mysql'
+    - name: Install rdmo[postgres] and start postgresql
+      run: |
+        pip install -e .[ci,postgres]
+        sudo systemctl start postgresql.service
+        pg_isready
+        sudo -u postgres psql --command="CREATE USER postgres_user PASSWORD 'postgres_password' CREATEDB"
+      if: matrix.db-backend == 'postgres'
     - name: Prepare Env
       run: |
         cp testing/config/settings/${{ matrix.db-backend }}.py testing/config/settings/local.py
         cp -r testing/media testing/media_root
         mkdir testing/log
-        sudo systemctl start mysql.service
     - name: Run Tests
       run: |
-        pytest --cov=rdmo
+        pytest -p randomly -p no:cacheprovider --cov --reuse-db --numprocesses=auto --dist=loadscope
         coveralls --service=github
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -57,7 +88,7 @@ jobs:
 
   coveralls:
     name: Indicate completion to coveralls
-    needs: build
+    needs: test
     runs-on: ubuntu-latest
     container: python:3-slim
     steps:
@@ -67,3 +98,32 @@ jobs:
         coveralls --service=github --finish
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  dev-setup:
+    # Ref: structlog (MIT licensed) <https://github.com/hynek/structlog/blob/main/.github/workflows/ci.yml>
+    name: "Test dev setup on ${{ matrix.os }}"
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: python -Im pip install -e .[dev]
+      - run: python -Ic 'import rdmo; print(rdmo.__version__)'
+
+  required-checks-pass:
+    if: always()
+    needs:
+      - lint
+      - test
+      - coveralls
+      - dev-setup
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: re-actors/alls-green@release/v1
+        with:
+          jobs: ${{ toJSON(needs) }}
