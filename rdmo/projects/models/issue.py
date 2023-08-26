@@ -45,7 +45,7 @@ class Issue(models.Model):
         verbose_name_plural = _('Issues')
 
     def __str__(self):
-        return '%s / %s / %s' % (self.project.title, self.task, self.status)
+        return f'{self.project.title} / {self.task} / {self.status}'
 
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.project.pk})
@@ -118,4 +118,4 @@ class IssueResource(models.Model):
         verbose_name_plural = _('Issue resources')
 
     def __str__(self):
-        return '%s / %s / %s' % (self.issue.project.title, self.issue, self.url)
+        return f'{self.issue.project.title} / {self.issue} / {self.url}'

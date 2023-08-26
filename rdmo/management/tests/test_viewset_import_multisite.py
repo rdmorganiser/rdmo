@@ -2,11 +2,9 @@ import pytest
 
 from django.urls import reverse
 
-from rdmo.core.tests import multisite_users as users
 from rdmo.core.tests import get_obj_perms_status_code
-
+from rdmo.core.tests import multisite_users as users
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet, Section
-
 
 status_map = {
     'list': {
@@ -89,7 +87,7 @@ def test_create_update(db, client, username, password, json_data):
 def test_create_update_certain_catalog(db, client, username, password, catalog_uri_path, json_data):
     client.login(username=username, password=password)
 
-    instance_json = [i for i in json_data['elements'] if i['uri_path'] == catalog_uri_path][0]
+    instance_json = next(i for i in json_data['elements'] if i['uri_path'] == catalog_uri_path)
     instance_json['title_en'] += ' (updated)'
     instance_json['title_de'] += ' (updated)'
     instance_data = {'elements': [instance_json]}
@@ -114,7 +112,8 @@ def test_create_empty(db, client, username, password):
 
     url = reverse(urlnames['list'])
     response = client.post(url, {}, content_type='application/json')
-    assert response.status_code == status_map['create_error'].get(username, status_map['create_error']['default']), response.json()
+    assert response.status_code == status_map['create_error'].get(username, status_map['create_error']['default']), \
+           response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -125,4 +124,5 @@ def test_create_error(db, client, username, password):
 
     url = reverse(urlnames['list'])
     response = client.post(url, json_data, content_type='application/json')
-    assert response.status_code == status_map['create_error'].get(username, status_map['create_error']['default']), response.json()
+    assert response.status_code == status_map['create_error'].get(username, status_map['create_error']['default']), \
+           response.json()

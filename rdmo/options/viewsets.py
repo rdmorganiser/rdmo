@@ -1,11 +1,13 @@
 from django.conf import settings
 from django.db import models
-from django_filters.rest_framework import DjangoFilterBackend
+
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+
+from django_filters.rest_framework import DjangoFilterBackend
 
 from rdmo.core.exports import XMLResponse
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
@@ -14,11 +16,14 @@ from rdmo.core.views import ChoicesViewSet
 
 from .models import Option, OptionSet
 from .renderers import OptionRenderer, OptionSetRenderer
-from .serializers.export import (OptionExportSerializer,
-                                 OptionSetExportSerializer)
-from .serializers.v1 import (OptionIndexSerializer, OptionSerializer,
-                             OptionSetIndexSerializer,
-                             OptionSetNestedSerializer, OptionSetSerializer)
+from .serializers.export import OptionExportSerializer, OptionSetExportSerializer
+from .serializers.v1 import (
+    OptionIndexSerializer,
+    OptionSerializer,
+    OptionSetIndexSerializer,
+    OptionSetNestedSerializer,
+    OptionSetSerializer,
+)
 
 
 class OptionSetViewSet(ModelViewSet):
@@ -70,9 +75,11 @@ class OptionSetViewSet(ModelViewSet):
             xml = OptionSetRenderer().render([serializer.data], context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name=self.get_object().uri_path)
         else:
-            return render_to_format(self.request, export_format, self.get_object().uri_path, 'options/export/optionsets.html', {
-                'optionsets': [self.get_object()]
-            })
+            return render_to_format(
+                self.request, export_format, self.get_object().uri_path, 'options/export/optionsets.html', {
+                    'optionsets': [self.get_object()]
+                }
+            )
 
     def get_export_renderer_context(self, request):
         full = is_truthy(request.GET.get('full'))
@@ -127,9 +134,11 @@ class OptionViewSet(ModelViewSet):
             xml = OptionRenderer().render([serializer.data])
             return XMLResponse(xml, name=self.get_object().uri_path)
         else:
-            return render_to_format(self.request, export_format, self.get_object().uri_path, 'options/export/options.html', {
-                'options': [self.get_object()]
-            })
+            return render_to_format(
+                self.request, export_format, self.get_object().uri_path, 'options/export/options.html', {
+                    'options': [self.get_object()]
+                }
+            )
 
 
 class ProviderViewSet(ChoicesViewSet):

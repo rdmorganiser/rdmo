@@ -1,17 +1,20 @@
 import logging
 
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
-from django.utils.translation import gettext_lazy as _
 from django.views.generic import UpdateView
+
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 from rdmo.questions.models import Catalog
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
-from ..forms import (ProjectForm, ProjectUpdateCatalogForm,
-                     ProjectUpdateInformationForm, ProjectUpdateParentForm,
-                     ProjectUpdateTasksForm, ProjectUpdateViewsForm)
+from ..forms import (
+    ProjectForm,
+    ProjectUpdateCatalogForm,
+    ProjectUpdateInformationForm,
+    ProjectUpdateParentForm,
+    ProjectUpdateTasksForm,
+    ProjectUpdateViewsForm,
+)
 from ..mixins import ProjectImportMixin
 from ..models import Project
 

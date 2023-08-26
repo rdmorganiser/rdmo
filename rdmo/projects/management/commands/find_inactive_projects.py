@@ -1,14 +1,12 @@
-import sys
 import csv
-
+import sys
 from datetime import datetime
 
-import pytz
-
+from django.core.management.base import BaseCommand
 from django.db import models
 from django.db.models.functions import Greatest
-from django.core.management.base import BaseCommand
 
+import pytz
 
 from rdmo.projects.models import Project, Value
 

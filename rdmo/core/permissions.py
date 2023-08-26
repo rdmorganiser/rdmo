@@ -1,7 +1,6 @@
 import logging
 
-from rest_framework.permissions import (DjangoModelPermissions,
-                                        DjangoObjectPermissions)
+from rest_framework.permissions import DjangoModelPermissions, DjangoObjectPermissions
 
 logger = logging.getLogger(__name__)
 

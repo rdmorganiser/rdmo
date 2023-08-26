@@ -27,7 +27,7 @@ class Integration(models.Model):
         verbose_name_plural = _('Integrations')
 
     def __str__(self):
-        return '%s / %s' % (self.project.title, self.provider_key)
+        return f'{self.project.title} / {self.provider_key}'
 
     @property
     def provider(self):
@@ -76,4 +76,4 @@ class IntegrationOption(models.Model):
         verbose_name_plural = _('Integration options')
 
     def __str__(self):
-        return '%s / %s / %s = %s' % (self.integration.project.title, self.integration.provider_key, self.key, self.value)
+        return f'{self.integration.project.title} / {self.integration.provider_key} / {self.key} = {self.value}'

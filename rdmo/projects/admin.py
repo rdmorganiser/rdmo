@@ -1,9 +1,18 @@
 from django.contrib import admin
 from django.db.models import Prefetch
 
-from .models import (Continuation, Integration, IntegrationOption, Invite,
-                     Issue, IssueResource, Membership, Project, Snapshot,
-                     Value)
+from .models import (
+    Continuation,
+    Integration,
+    IntegrationOption,
+    Invite,
+    Issue,
+    IssueResource,
+    Membership,
+    Project,
+    Snapshot,
+    Value,
+)
 
 
 class ProjectAdmin(admin.ModelAdmin):

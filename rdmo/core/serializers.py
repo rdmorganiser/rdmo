@@ -3,8 +3,8 @@ import logging
 from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
 from django.db.models import Max
+
 from rest_framework import serializers
-from rest_framework.reverse import reverse
 from rest_framework.utils import model_meta
 
 from rdmo.core.utils import get_language_warning, get_languages, markdown2html
@@ -35,7 +35,7 @@ class MarkdownSerializerMixin(serializers.Serializer):
     markdown_fields = ()
 
     def to_representation(self, instance):
-        response = super(MarkdownSerializerMixin, self).to_representation(instance)
+        response = super().to_representation(instance)
 
         for markdown_field in self.markdown_fields:
             if markdown_field in response and response[markdown_field]:
@@ -44,10 +44,10 @@ class MarkdownSerializerMixin(serializers.Serializer):
         return response
 
 
-class TranslationSerializerMixin(object):
+class TranslationSerializerMixin:
 
     def __init__(self, *args, **kwargs):
-        super(TranslationSerializerMixin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         meta = getattr(self, 'Meta', None)
         if meta is None:
@@ -55,17 +55,17 @@ class TranslationSerializerMixin(object):
 
         for lang_code, lang_string, lang_field in get_languages():
             for field in meta.trans_fields:
-                field_name = '%s_%s' % (field, lang_field)
+                field_name = f'{field}_{lang_field}'
                 model_field = meta.model._meta.get_field(field_name)
 
-                self.fields['%s_%s' % (field, lang_code)] = serializers.CharField(
+                self.fields[f'{field}_{lang_code}'] = serializers.CharField(
                     source=field_name,
                     required=not model_field.blank,
                     allow_null=model_field.null,
                     allow_blank=model_field.blank)
 
 
-class ThroughModelSerializerMixin(object):
+class ThroughModelSerializerMixin:
 
     def create(self, validated_data):
         parent_fields = self.get_parent_fields(validated_data)
@@ -113,8 +113,7 @@ class ThroughModelSerializerMixin(object):
             for data in validated_data:
                 try:
                     # look for the item in items
-                    item = next(filter(lambda item: getattr(item, target_name) ==
-                                        data.get(target_name), items))
+                    item = next(filter(lambda item: getattr(item, target_name) == data.get(target_name), items))
                     # update order if the item if it changed
                     if item.order != data.get('order'):
                         item.order = data.get('order')
@@ -188,7 +187,7 @@ class ElementModelSerializerMixin(serializers.ModelSerializer):
 class ElementWarningSerializerMixin(serializers.ModelSerializer):
 
     def get_warning(self, obj):
-        return any([get_language_warning(obj, field_name) for field_name in self.Meta.warning_fields])
+        return any(get_language_warning(obj, field_name) for field_name in self.Meta.warning_fields)
 
 
 class ReadOnlyObjectPermissionSerializerMixin:
@@ -213,7 +212,7 @@ class ReadOnlyObjectPermissionSerializerMixin:
     def construct_object_permission(model, action_name: str) -> str:
         model_app_label = model._meta.app_label
         model_name = model._meta.model_name
-        perm = '%s.%s_%s_object' % (model_app_label, action_name, model_name)
+        perm = f'{model_app_label}.{action_name}_{model_name}_object'
         return perm
 
     def get_read_only(self, obj) -> bool:

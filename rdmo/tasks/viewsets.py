@@ -1,9 +1,11 @@
 from django.db import models
-from django_filters.rest_framework import DjangoFilterBackend
+
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+
+from django_filters.rest_framework import DjangoFilterBackend
 
 from rdmo.core.exports import XMLResponse
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
@@ -59,9 +61,11 @@ class TaskViewSet(ModelViewSet):
             xml = TaskRenderer().render([serializer.data], context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name=self.get_object().uri_path)
         else:
-            return render_to_format(self.request, export_format, self.get_object().uri_path, 'tasks/export/tasks.html', {
-                'tasks': [self.get_object()]
-            })
+            return render_to_format(
+                self.request, export_format, self.get_object().uri_path, 'tasks/export/tasks.html', {
+                    'tasks': [self.get_object()]
+                }
+            )
 
     def get_export_renderer_context(self, request):
         full = is_truthy(request.GET.get('full'))

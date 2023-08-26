@@ -2,8 +2,7 @@ import logging
 
 from django.contrib.sites.models import Site
 
-from rdmo.core.imports import (check_permissions, set_common_fields,
-                               set_foreign_field, validate_instance)
+from rdmo.core.imports import check_permissions, set_common_fields, set_foreign_field, validate_instance
 
 from .models import Condition
 from .validators import ConditionLockedValidator, ConditionUniqueURIValidator

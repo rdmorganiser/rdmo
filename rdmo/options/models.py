@@ -226,7 +226,7 @@ class Option(models.Model, TranslationMixin):
 
     @property
     def label(self):
-        return '%s ("%s")' % (self.uri, self.text)
+        return f'{self.uri} ("{self.text}")'
 
     @property
     def is_locked(self):

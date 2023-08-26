@@ -5,7 +5,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from rdmo.core.models import Model, TranslationMixin
-from rdmo.core.utils import copy_model, join_url
+from rdmo.core.utils import join_url
 
 from ..managers import SectionManager
 
@@ -108,7 +108,7 @@ class Section(Model, TranslationMixin):
 
     @cached_property
     def is_locked(self):
-        return self.locked or any([catalog.is_locked for catalog in self.catalogs.all()])
+        return self.locked or any(catalog.is_locked for catalog in self.catalogs.all())
 
     @cached_property
     def elements(self):
@@ -119,7 +119,7 @@ class Section(Model, TranslationMixin):
     def descendants(self):
         descendants = []
         for element in self.elements:
-            descendants += [element] + element.descendants
+            descendants += [element, *element.descendants]
         return descendants
 
     def prefetch_elements(self):

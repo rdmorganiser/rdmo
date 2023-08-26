@@ -5,8 +5,8 @@ from django.contrib.sites.models import Site
 from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
 
+from rdmo.projects.models import Membership, Project
 from rdmo.questions.models import Catalog
-from rdmo.projects.models import Project, Membership
 from rdmo.views.models import View
 
 logger = logging.getLogger(__name__)

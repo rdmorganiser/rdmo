@@ -1,16 +1,15 @@
 import xml.etree.ElementTree as et
 
 import pytest
+
 from django.db.models import Max
 from django.urls import reverse
 
+from ...core.tests import get_obj_perms_status_code
 from ...core.tests import multisite_status_map as status_map
 from ...core.tests import multisite_users as users
-from ...core.tests import get_obj_perms_status_code
-
 from ..models import Page
-
-from .test_viewset_page import urlnames, export_formats
+from .test_viewset_page import export_formats, urlnames
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -78,7 +77,7 @@ def test_create(db, client, username, password):
         url = reverse(urlnames['list'])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'uri_path': '%s_new_%s' % (instance.uri_path, username),
+            'uri_path': f'{instance.uri_path}_new_{username}',
             'comment': instance.comment,
             'attribute': instance.attribute.pk if instance.attribute else '',
             'is_collection': instance.is_collection,
@@ -109,7 +108,7 @@ def test_create_section(db, client, username, password):
             url = reverse(urlnames['list'])
             data = {
                 'uri_prefix': instance.uri_prefix,
-                'uri_path': '%s_new_%s' % (instance.uri_path, username),
+                'uri_path': f'{instance.uri_path}_new_{username}',
                 'comment': instance.comment,
                 'attribute': instance.attribute.pk if instance.attribute else '',
                 'is_collection': instance.is_collection,
@@ -129,7 +128,7 @@ def test_create_section(db, client, username, password):
             if response.status_code == 201:
                 new_instance = Page.objects.get(id=response.json().get('id'))
                 section.refresh_from_db()
-                assert section_pages + [(new_instance.id, order)] == \
+                assert [*section_pages, (new_instance.id, order)] == \
                     list(section.section_pages.values_list('page', 'order'))
 
 
@@ -152,7 +151,7 @@ def test_create_m2m(db, client, username, password):
         url = reverse(urlnames['list'])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'uri_path': '%s_new_%s' % (instance.uri_path, username),
+            'uri_path': f'{instance.uri_path}_new_{username}',
             'comment': instance.comment,
             'attribute': instance.attribute.pk if instance.attribute else '',
             'is_collection': instance.is_collection,

@@ -1,5 +1,6 @@
-from django_filters import CharFilter, FilterSet
 from rest_framework.filters import BaseFilterBackend
+
+from django_filters import CharFilter, FilterSet
 
 from .models import Project
 

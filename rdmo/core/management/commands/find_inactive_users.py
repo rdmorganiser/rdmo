@@ -1,12 +1,11 @@
-import sys
 import csv
-
+import sys
 from datetime import datetime
-
-import pytz
 
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
+
+import pytz
 
 
 class Command(BaseCommand):

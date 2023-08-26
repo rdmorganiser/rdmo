@@ -3,9 +3,7 @@ from collections import defaultdict
 from rdmo.conditions.imports import import_condition
 from rdmo.domain.imports import import_attribute
 from rdmo.options.imports import import_option, import_optionset
-from rdmo.questions.imports import (import_catalog, import_page,
-                                    import_question, import_questionset,
-                                    import_section)
+from rdmo.questions.imports import import_catalog, import_page, import_question, import_questionset, import_section
 from rdmo.tasks.imports import import_task
 from rdmo.views.imports import import_view
 

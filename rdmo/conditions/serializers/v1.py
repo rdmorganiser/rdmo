@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
-from rdmo.core.serializers import (ElementModelSerializerMixin,
-                                   ReadOnlyObjectPermissionSerializerMixin)
+from rdmo.core.serializers import ElementModelSerializerMixin, ReadOnlyObjectPermissionSerializerMixin
 from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Page, Question, QuestionSet

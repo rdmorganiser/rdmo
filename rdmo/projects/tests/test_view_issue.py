@@ -1,4 +1,5 @@
 import pytest
+
 from django.core import mail
 from django.urls import reverse
 

@@ -7,4 +7,4 @@ class ManagementConfig(AppConfig):
     verbose_name = _('Management')
 
     def ready(self):
-        from . import rules
+        from . import rules  # noqa: F401

@@ -1,13 +1,13 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
+
 from rest_framework import serializers
 
 from rdmo.questions.models import Catalog
 from rdmo.services.validators import ProviderValidator
 
-from ...models import (Integration, IntegrationOption, Invite, Issue,
-                       IssueResource, Membership, Project, Snapshot, Value)
+from ...models import Integration, IntegrationOption, Invite, Issue, IssueResource, Membership, Project, Snapshot, Value
 from ...validators import ValueValidator
 
 

@@ -3,6 +3,7 @@ import re
 from pathlib import Path
 
 import pytest
+
 from django.urls import reverse
 
 from rdmo.core.constants import VALUE_TYPE_FILE
@@ -206,7 +207,7 @@ def test_project_update_import_post_import_file(db, settings, client, files, use
 
         if project_id in change_project_permission_map.get(username, []):
             assert response.status_code == 302
-            assert response.url == '/projects/{}/'.format(project_id)
+            assert response.url == f'/projects/{project_id}/'
 
         else:
             if password:
@@ -274,7 +275,7 @@ def test_project_update_import_post_import_file_cancel(db, settings, client, fil
         assert project.updated == project_updated
 
         assert response.status_code == 302
-        assert response.url == '/projects/{}/'.format(project_id)
+        assert response.url == f'/projects/{project_id}/'
     elif password:
         assert response.status_code == 403
     else:
@@ -330,7 +331,7 @@ def test_project_update_import_post_import_file_empty(db, settings, client, user
         assert project.updated == project_updated
 
         assert response.status_code == 302
-        assert response.url == '/projects/{}/'.format(project_id)
+        assert response.url == f'/projects/{project_id}/'
     elif password:
         assert response.status_code == 403
     else:
@@ -341,7 +342,8 @@ def test_project_update_import_post_import_file_empty(db, settings, client, user
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('source_id', projects)
-def test_project_update_import_post_import_project_step1(db, settings, client, username, password, project_id, source_id):
+def test_project_update_import_post_import_project_step1(db, settings, client, username, password,
+                                                         project_id, source_id):
     client.login(username=username, password=password)
 
     url = reverse('project_update_import', args=[project_id])
@@ -366,7 +368,8 @@ def test_project_update_import_post_import_project_step1(db, settings, client, u
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('source_id', projects)
-def test_project_update_import_post_import_project_step2(db, settings, client, username, password, project_id, source_id):
+def test_project_update_import_post_import_project_step2(db, settings, client, username, password,
+                                                         project_id, source_id):
     client.login(username=username, password=password)
     projects_count = Project.objects.count()
 
@@ -430,7 +433,7 @@ def test_project_update_import_post_import_project_step2(db, settings, client, u
 
             if project_id in change_project_permission_map.get(username, []):
                 assert response.status_code == 302
-                assert response.url == '/projects/{}/'.format(project_id)
+                assert response.url == f'/projects/{project_id}/'
 
             else:
                 if password:

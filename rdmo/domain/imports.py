@@ -2,12 +2,10 @@ import logging
 
 from django.contrib.sites.models import Site
 
-from rdmo.core.imports import (check_permissions, set_common_fields,
-                               set_foreign_field, validate_instance)
+from rdmo.core.imports import check_permissions, set_common_fields, set_foreign_field, validate_instance
 
 from .models import Attribute
-from .validators import (AttributeLockedValidator, AttributeParentValidator,
-                         AttributeUniqueURIValidator)
+from .validators import AttributeLockedValidator, AttributeParentValidator, AttributeUniqueURIValidator
 
 logger = logging.getLogger(__name__)
 

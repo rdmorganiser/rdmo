@@ -125,8 +125,8 @@ def get_obj_perms_status_code(instance, username, method):
         try:
             if not instance.editors.exists():
                 return multisite_status_map[method][username]
-        except AttributeError as exc:
-            raise AttributeError(f'instance {instance} should have an editors attribute') from exc
+        except AttributeError as e:
+            raise AttributeError(f'instance {instance} should have an editors attribute') from e
     elif isinstance(instance, str):
         pass
 
@@ -139,8 +139,8 @@ def get_obj_perms_status_code(instance, username, method):
 
     try:
         method_instance_obj_perms_map = status_map_object_permissions[method][instance_obj_perms_key]
-    except KeyError as exc:
-        raise KeyError('instance (%s) should be defined in status_map_object_permissions' % instance_obj_perms_key) from exc
+    except KeyError as e:
+        raise KeyError(f'instance ({instance_obj_perms_key}) should be defined in status_map_object_permissions') from e
     try:
         return method_instance_obj_perms_map[username]
     except KeyError:

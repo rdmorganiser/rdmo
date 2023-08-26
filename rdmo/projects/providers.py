@@ -1,13 +1,14 @@
 import hmac
 import json
-from urllib.parse import quote, urlencode
+from urllib.parse import quote
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
 from rdmo.core.plugins import Plugin
-from rdmo.services.providers import OauthProviderMixin, GitHubProviderMixin, GitLabProviderMixin
+from rdmo.services.providers import GitHubProviderMixin, GitLabProviderMixin, OauthProviderMixin
 
 
 class IssueProvider(Plugin):
@@ -37,7 +38,7 @@ class OauthIssueProvider(OauthProviderMixin, IssueProvider):
         return self.post(request, url, data)
 
     def post_success(self, request, response):
-        from rdmo.projects.models import Issue, Integration, IssueResource
+        from rdmo.projects.models import Integration, Issue, IssueResource
 
         # get the upstream url of the issue
         remote_url = self.get_issue_url(response)
@@ -92,7 +93,7 @@ class GitHubIssueProvider(GitHubProviderMixin, OauthIssueProvider):
     def get_post_url(self, request, issue, integration, subject, message, attachments):
         repo = self.get_repo(integration)
         if repo:
-            return 'https://api.github.com/repos/{}/issues'.format(repo)
+            return f'https://api.github.com/repos/{repo}/issues'
 
     def get_post_data(self, request, issue, integration, subject, message, attachments):
         return {
@@ -159,8 +160,8 @@ class GitLabIssueProvider(GitLabProviderMixin, OauthIssueProvider):
 
     @property
     def description(self):
-        return _('This integration allow the creation of issues in arbitrary repositories on {}. '
-                 'The upload of attachments is not supported by GitLab.'.format(self.gitlab_url))
+        return _(f'This integration allow the creation of issues in arbitrary repositories on {self.gitlab_url}. '
+                 'The upload of attachments is not supported by GitLab.')
 
     def get_repo(self, integration):
         try:

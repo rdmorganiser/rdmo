@@ -7,14 +7,15 @@ from pathlib import Path
 from tempfile import mkstemp
 from urllib.parse import urlparse
 
-import pypandoc
-from defusedcsv import csv
 from django.apps import apps
 from django.conf import settings
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.template.loader import get_template
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
+
+import pypandoc
+from defusedcsv import csv
 from markdown import markdown
 
 log = logging.getLogger(__name__)
@@ -149,7 +150,7 @@ def get_language_fields(field_name):
 
 def get_language_warning(obj, field):
     for lang_code, lang_string, lang_field in get_languages():
-        if not getattr(obj, '%s_%s' % (field, lang_field)):
+        if not getattr(obj, f'{field}_{lang_field}'):
             return True
     return False
 
@@ -158,7 +159,7 @@ def set_export_reference_document(format, context):
     # try to get the view uri from the context
     try:
         view = context['view']
-        view_uri = getattr(view, 'uri')
+        view_uri = view.uri
     except (AttributeError, KeyError, TypeError):
         view_uri = None
 
@@ -215,11 +216,11 @@ def render_to_format(request, export_format, title, template_src, context):
     if export_format == 'html':
         # create the response object
         response = HttpResponse(html)
-        response['Content-Disposition'] = 'filename="%s.%s"' % (title, export_format)
+        response['Content-Disposition'] = f'filename="{title}.{export_format}"'
 
     else:
         pandoc_args = settings.EXPORT_PANDOC_ARGS.get(export_format, [])
-        content_disposition = 'attachment; filename="%s.%s"' % (title, export_format)
+        content_disposition = f'attachment; filename="{title}.{export_format}"'
 
         if export_format == 'pdf':
             # check pandoc version (the pdf arg changed to version 2)
@@ -229,23 +230,23 @@ def render_to_format(request, export_format, title, template_src, context):
                 ) for arg in pandoc_args]
 
             # display pdf in browser
-            content_disposition = 'filename="%s.%s"' % (title, export_format)
+            content_disposition = f'filename="{title}.{export_format}"'
 
         # use reference document for certain file formats
         refdoc = set_export_reference_document(export_format, context)
         if refdoc is not None and export_format in ['docx', 'odt']:
             # check pandoc version (the args changed to version 2)
             if get_pandoc_main_version() == 1:
-                pandoc_args.append('--reference-{}={}'.format(export_format, refdoc))
+                pandoc_args.append(f'--reference-{export_format}={refdoc}')
             else:
-                pandoc_args.append('--reference-doc={}'.format(refdoc))
+                pandoc_args.append(f'--reference-doc={refdoc}')
 
         # add the possible resource-path
         if pandoc_version_at_least("2") is True:
-            pandoc_args.append('--resource-path={}'.format(settings.STATIC_ROOT))
+            pandoc_args.append(f'--resource-path={settings.STATIC_ROOT}')
             if 'resource_path' in context:
                 resource_path = Path(settings.MEDIA_ROOT).joinpath(context['resource_path'])
-                pandoc_args.append('--resource-path={}'.format(resource_path))
+                pandoc_args.append(f'--resource-path={resource_path}')
 
         # create a temporary file
         (tmp_fd, tmp_filename) = mkstemp('.' + export_format)

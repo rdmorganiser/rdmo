@@ -1,7 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.core.validators import (InstanceValidator, LockedValidator,
-                                  UniqueURIValidator)
+from rdmo.core.validators import InstanceValidator, LockedValidator, UniqueURIValidator
 
 from .models import Catalog, Page, Question, QuestionSet, Section
 
@@ -55,9 +54,10 @@ class QuestionSetQuestionSetValidator(InstanceValidator):
                 # get the original from the view when cloning an attribute
                 obj = view.get_object()
                 for questionset in questionsets:
-                    if obj in [questionset] + questionset.descendants:
+                    if obj in [questionset, *questionset.descendants]:
                         self.raise_validation_error({
-                            'questionset': [_('A question set may not be cloned to be a child of itself or one of its descendants.')]
+                            'questionset': [_('A question set may not be cloned to be a child of itself or one of '
+                                              'its descendants.')]
                         })
             if not self.instance:
                 return
@@ -67,7 +67,7 @@ class QuestionSetQuestionSetValidator(InstanceValidator):
             return
 
         for questionset in questionsets:
-            if self.instance in [questionset] + questionset.descendants:
+            if self.instance in [questionset, *questionset.descendants]:
                 self.raise_validation_error({
                     'questionsets': [_('A question set may not be a child of itself or one of its descendants.')]
                 })

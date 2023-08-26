@@ -40,9 +40,7 @@ def check_conditions(conditions, values, set_prefix=None, set_index=None):
 def save_import_values(project, values, checked):
     for value in values:
         if value.attribute:
-            value_key = '{value.attribute.uri}[{value.set_prefix}][{value.set_index}][{value.collection_index}]'.format(
-                value=value
-            )
+            value_key = f'{value.attribute.uri}[{value.set_prefix}][{value.set_index}][{value.collection_index}]'
 
             if value_key in checked:
                 current_value = value.current
@@ -103,7 +101,7 @@ def save_import_snapshot_values(project, snapshots, checked):
 
         for value in snapshot.snapshot_values:
             if value.attribute:
-                value_key = '{value.attribute.uri}[{snapshot_index}][{value.set_prefix}][{value.set_index}][{value.collection_index}]'.format(
+                value_key = '{value.attribute.uri}[{snapshot_index}][{value.set_prefix}][{value.set_index}][{value.collection_index}]'.format(  # noqa: E501
                     value=value,
                     snapshot_index=snapshot.snapshot_index
                 )

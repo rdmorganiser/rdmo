@@ -1,10 +1,13 @@
 from django.template import Context, Template, TemplateSyntaxError
+
 from rest_framework import exceptions, serializers
 
-from rdmo.core.serializers import (ElementModelSerializerMixin,
-                                   ElementWarningSerializerMixin,
-                                   ReadOnlyObjectPermissionSerializerMixin,
-                                   TranslationSerializerMixin)
+from rdmo.core.serializers import (
+    ElementModelSerializerMixin,
+    ElementWarningSerializerMixin,
+    ReadOnlyObjectPermissionSerializerMixin,
+    TranslationSerializerMixin,
+)
 
 from ..models import View
 from ..validators import ViewLockedValidator, ViewUniqueURIValidator
@@ -29,7 +32,7 @@ class ViewSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
         except (KeyError, IndexError):
             pass
         except (TemplateSyntaxError, TypeError) as e:
-            raise exceptions.ValidationError({'template': '\n'.join(e.args)})
+            raise exceptions.ValidationError({'template': '\n'.join(e.args)}) from e
 
         return super().validate(data)
 

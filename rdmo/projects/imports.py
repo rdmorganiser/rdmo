@@ -4,15 +4,15 @@ import logging
 import mimetypes
 from urllib.parse import quote
 
-import requests
-
 from django import forms
 from django.core.files import File
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.core.plugins import Plugin
+import requests
+
 from rdmo.core.imports import handle_fetched_file
+from rdmo.core.plugins import Plugin
 from rdmo.core.xml import get_ns_map, get_uri, read_xml_file
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
@@ -20,6 +20,7 @@ from rdmo.questions.models import Catalog
 from rdmo.services.providers import GitHubProviderMixin, GitLabProviderMixin
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
+
 from .models import Project, Snapshot, Value
 
 log = logging.getLogger(__name__)

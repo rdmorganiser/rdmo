@@ -1,9 +1,11 @@
 from django.db import models
-from django_filters.rest_framework import DjangoFilterBackend
+
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+
+from django_filters.rest_framework import DjangoFilterBackend
 
 from rdmo.core.exports import XMLResponse
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
@@ -12,8 +14,12 @@ from rdmo.core.utils import render_to_csv, render_to_format
 from .models import Attribute
 from .renderers import AttributeRenderer
 from .serializers.export import AttributeExportSerializer
-from .serializers.v1 import (AttributeIndexSerializer, AttributeListSerializer,
-                             AttributeNestedSerializer, AttributeSerializer)
+from .serializers.v1 import (
+    AttributeIndexSerializer,
+    AttributeListSerializer,
+    AttributeNestedSerializer,
+    AttributeSerializer,
+)
 
 
 class AttributeViewSet(ModelViewSet):
@@ -76,6 +82,8 @@ class AttributeViewSet(ModelViewSet):
             delimiter = ',' if export_format == 'csvcomma' else ';'
             return render_to_csv('domain', rows, delimiter)
         else:
-            return render_to_format(self.request, export_format, self.get_object().key, 'domain/export/attributes.html', {
-                'attributes': attributes
-            })
+            return render_to_format(
+                self.request, export_format, self.get_object().key, 'domain/export/attributes.html', {
+                    'attributes': attributes
+                }
+            )

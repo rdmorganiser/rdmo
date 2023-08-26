@@ -1,15 +1,14 @@
 import xml.etree.ElementTree as et
 
 import pytest
+
 from django.urls import reverse
 
+from ...core.tests import get_obj_perms_status_code
 from ...core.tests import multisite_status_map as status_map
 from ...core.tests import multisite_users as users
-from ...core.tests import get_obj_perms_status_code
-
 from ..models import Catalog
-
-from .test_viewset_catalog import urlnames, export_formats
+from .test_viewset_catalog import export_formats, urlnames
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -77,7 +76,7 @@ def test_create(db, client, username, password):
         url = reverse(urlnames['list'])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'uri_path': '%s_new_%s' % (instance.uri_path, username),
+            'uri_path': f'{instance.uri_path}_new_{username}',
             'comment': instance.comment,
             'order': instance.order,
             'title_en': instance.title_lang1,
@@ -101,7 +100,7 @@ def test_create_m2m(db, client, username, password):
         url = reverse(urlnames['list'])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'uri_path': '%s_new_%s' % (instance.uri_path, username),
+            'uri_path': f'{instance.uri_path}_new_{username}',
             'comment': instance.comment,
             'order': instance.order,
             'title_en': instance.title_lang1,

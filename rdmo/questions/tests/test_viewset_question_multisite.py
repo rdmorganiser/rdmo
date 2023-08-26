@@ -1,16 +1,15 @@
 import xml.etree.ElementTree as et
 
 import pytest
+
 from django.db.models import Max
 from django.urls import reverse
 
+from ...core.tests import get_obj_perms_status_code
 from ...core.tests import multisite_status_map as status_map
 from ...core.tests import multisite_users as users
-from ...core.tests import get_obj_perms_status_code
-
 from ..models import Question
-
-from .test_viewset_question import urlnames, export_formats
+from .test_viewset_question import export_formats, urlnames
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -67,7 +66,7 @@ def test_create(db, client, username, password):
         url = reverse(urlnames['list'])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'uri_path': '%s_new_%s' % (instance.uri_path, username),
+            'uri_path': f'{instance.uri_path}_new_{username}',
             'comment': instance.comment or '',
             'attribute': instance.attribute.pk if instance.attribute else '',
             'is_collection': instance.is_collection,
@@ -104,7 +103,7 @@ def test_create_page(db, client, username, password):
             url = reverse(urlnames['list'])
             data = {
                 'uri_prefix': instance.uri_prefix,
-                'uri_path': '%s_new_%s' % (instance.uri_path, username),
+                'uri_path': f'{instance.uri_path}_new_{username}',
                 'comment': instance.comment or '',
                 'attribute': instance.attribute.pk if instance.attribute else '',
                 'is_collection': instance.is_collection,
@@ -130,7 +129,7 @@ def test_create_page(db, client, username, password):
             if response.status_code == 201:
                 new_instance = Question.objects.get(id=response.json().get('id'))
                 page.refresh_from_db()
-                assert page_questions + [(new_instance.id, order)] == \
+                assert [*page_questions, (new_instance.id, order)] == \
                     list(page.page_questions.values_list('question', 'order'))
 
 
@@ -148,7 +147,7 @@ def test_create_questionset(db, client, username, password):
             url = reverse(urlnames['list'])
             data = {
                 'uri_prefix': instance.uri_prefix,
-                'uri_path': '%s_new_%s' % (instance.uri_path, username),
+                'uri_path': f'{instance.uri_path}_new_{username}',
                 'comment': instance.comment or '',
                 'attribute': instance.attribute.pk if instance.attribute else '',
                 'is_collection': instance.is_collection,
@@ -174,7 +173,7 @@ def test_create_questionset(db, client, username, password):
             if response.status_code == 201:
                 new_instance = Question.objects.get(id=response.json().get('id'))
                 questionset.refresh_from_db()
-                assert questionset_questions + [(new_instance.id, order)] == \
+                assert [*questionset_questions, (new_instance.id, order)] == \
                     list(questionset.questionset_questions.values_list('question', 'order'))
 
 
@@ -190,7 +189,7 @@ def test_create_m2m(db, client, username, password):
         url = reverse(urlnames['list'])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'uri_path': '%s_new_%s' % (instance.uri_path, username),
+            'uri_path': f'{instance.uri_path}_new_{username}',
             'comment': instance.comment or '',
             'attribute': instance.attribute.pk if instance.attribute else '',
             'is_collection': instance.is_collection,

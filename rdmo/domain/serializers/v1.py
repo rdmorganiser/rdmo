@@ -3,13 +3,11 @@ import logging
 from rest_framework import serializers
 
 from rdmo.conditions.models import Condition
-from rdmo.core.serializers import (ElementModelSerializerMixin,
-                                   ReadOnlyObjectPermissionSerializerMixin)
+from rdmo.core.serializers import ElementModelSerializerMixin, ReadOnlyObjectPermissionSerializerMixin
 from rdmo.questions.models import Page, Question, QuestionSet
 
 from ..models import Attribute
-from ..validators import (AttributeLockedValidator, AttributeParentValidator,
-                          AttributeUniqueURIValidator)
+from ..validators import AttributeLockedValidator, AttributeParentValidator, AttributeUniqueURIValidator
 
 log = logging.getLogger(__name__)
 
@@ -52,7 +50,8 @@ class AttributeSerializer(BaseAttributeSerializer):
     values_count = serializers.IntegerField(read_only=True)
 
     class Meta(BaseAttributeSerializer.Meta):
-        fields = BaseAttributeSerializer.Meta.fields + (
+        fields = (
+            *BaseAttributeSerializer.Meta.fields,
             'conditions',
             'pages',
             'questionsets',
@@ -78,8 +77,9 @@ class AttributeSerializer(BaseAttributeSerializer):
 class AttributeListSerializer(BaseAttributeSerializer):
 
     class Meta(BaseAttributeSerializer.Meta):
-        fields = BaseAttributeSerializer.Meta.fields + (
-            'is_leaf_node',
+        fields = (
+            *BaseAttributeSerializer.Meta.fields,
+            'is_leaf_node'
         )
 
 
@@ -88,8 +88,9 @@ class AttributeNestedSerializer(AttributeListSerializer):
     elements = serializers.SerializerMethodField()
 
     class Meta(AttributeListSerializer.Meta):
-        fields = AttributeListSerializer.Meta.fields + (
-            'elements',
+        fields = (
+            *AttributeListSerializer.Meta.fields,
+            'elements'
         )
 
     def get_elements(self, obj):

@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as et
 
 import pytest
+
 from django.db.models import Max
 from django.urls import reverse
 
@@ -98,7 +99,7 @@ def test_create(db, client, username, password):
         url = reverse(urlnames['list'])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'uri_path': '%s_new_%s' % (instance.uri_path, username),
+            'uri_path': f'{instance.uri_path}_new_{username}',
             'comment': instance.comment,
             'text_en': instance.text_lang1,
             'text_de': instance.text_lang2
@@ -121,7 +122,7 @@ def test_create_optionset(db, client, username, password):
             url = reverse(urlnames['list'])
             data = {
                 'uri_prefix': instance.uri_prefix,
-                'uri_path': '%s_new_%s' % (instance.uri_path, username),
+                'uri_path': f'{instance.uri_path}_new_{username}',
                 'comment': instance.comment,
                 'text_en': instance.text_lang1,
                 'text_de': instance.text_lang2,
@@ -133,7 +134,7 @@ def test_create_optionset(db, client, username, password):
             if response.status_code == 201:
                 new_instance = Option.objects.get(id=response.json().get('id'))
                 optionset.refresh_from_db()
-                assert catalog_sections + [(new_instance.id, order)] == \
+                assert [*catalog_sections, (new_instance.id, order)] == \
                     list(optionset.optionset_options.values_list('option', 'order'))
 
 

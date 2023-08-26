@@ -1,12 +1,23 @@
 from django.urls import include, path
+
 from rest_framework_extensions.routers import ExtendedDefaultRouter
 
-from ..viewsets import (IntegrationViewSet, InviteViewSet, IssueViewSet,
-                        MembershipViewSet, ProjectIntegrationViewSet,
-                        ProjectInviteViewSet, ProjectIssueViewSet,
-                        ProjectMembershipViewSet, ProjectPageViewSet,
-                        ProjectSnapshotViewSet, ProjectValueViewSet,
-                        ProjectViewSet, SnapshotViewSet, ValueViewSet)
+from ..viewsets import (
+    IntegrationViewSet,
+    InviteViewSet,
+    IssueViewSet,
+    MembershipViewSet,
+    ProjectIntegrationViewSet,
+    ProjectInviteViewSet,
+    ProjectIssueViewSet,
+    ProjectMembershipViewSet,
+    ProjectPageViewSet,
+    ProjectSnapshotViewSet,
+    ProjectValueViewSet,
+    ProjectViewSet,
+    SnapshotViewSet,
+    ValueViewSet,
+)
 
 app_name = 'v1-projects'
 

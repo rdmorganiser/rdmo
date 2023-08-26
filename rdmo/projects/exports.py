@@ -5,8 +5,8 @@ from django.http import HttpResponse
 from rdmo.core.exports import prettify_xml
 from rdmo.core.plugins import Plugin
 from rdmo.core.utils import render_to_csv, render_to_json
-from rdmo.views.utils import ProjectWrapper
 from rdmo.views.templatetags import view_tags
+from rdmo.views.utils import ProjectWrapper
 
 from .renderers import XMLRenderer
 from .serializers.export import ProjectSerializer as ExportSerializer
@@ -31,7 +31,8 @@ class Export(Plugin):
                                   .order_by('set_index', 'collection_index')
 
     def get_values(self, path, set_prefix='', set_index=0):
-        return self.project.values.filter(snapshot=self.snapshot, attribute__path=path, set_prefix=set_prefix, set_index=set_index) \
+        return self.project.values.filter(snapshot=self.snapshot, attribute__path=path,
+                                          set_prefix=set_prefix, set_index=set_index) \
                                   .order_by('collection_index')
 
     def get_value(self, path, set_prefix='', set_index=0, collection_index=0):

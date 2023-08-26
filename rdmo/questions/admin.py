@@ -5,18 +5,33 @@ from django.db import models
 from rdmo.core.admin import ElementAdminForm
 from rdmo.core.utils import get_language_fields
 
-from .models import (Catalog, CatalogSection, Page, PageQuestion,
-                     PageQuestionSet, Question, QuestionSet,
-                     QuestionSetQuestion, QuestionSetQuestionSet, Section,
-                     SectionPage)
+from .models import (
+    Catalog,
+    CatalogSection,
+    Page,
+    PageQuestion,
+    PageQuestionSet,
+    Question,
+    QuestionSet,
+    QuestionSetQuestion,
+    QuestionSetQuestionSet,
+    Section,
+    SectionPage,
+)
 from .utils import get_widget_type_choices
-from .validators import (CatalogLockedValidator, CatalogUniqueURIValidator,
-                         PageLockedValidator, PageUniqueURIValidator,
-                         QuestionLockedValidator, QuestionSetLockedValidator,
-                         QuestionSetQuestionSetValidator,
-                         QuestionSetUniqueURIValidator,
-                         QuestionUniqueURIValidator, SectionLockedValidator,
-                         SectionUniqueURIValidator)
+from .validators import (
+    CatalogLockedValidator,
+    CatalogUniqueURIValidator,
+    PageLockedValidator,
+    PageUniqueURIValidator,
+    QuestionLockedValidator,
+    QuestionSetLockedValidator,
+    QuestionSetQuestionSetValidator,
+    QuestionSetUniqueURIValidator,
+    QuestionUniqueURIValidator,
+    SectionLockedValidator,
+    SectionUniqueURIValidator,
+)
 
 
 class CatalogAdminForm(ElementAdminForm):
@@ -85,7 +100,7 @@ class CatalogAdmin(admin.ModelAdmin):
     form = CatalogAdminForm
     inlines = (CatalogSectionInline, )
 
-    search_fields = ['uri'] + get_language_fields('title')
+    search_fields = ['uri', *get_language_fields('title')]
     list_display = ('uri', 'title', 'projects_count', 'available')
     readonly_fields = ('uri', )
     list_filter = ('available', )
@@ -108,7 +123,7 @@ class SectionAdmin(admin.ModelAdmin):
     form = SectionAdminForm
     inlines = (SectionPageInline, )
 
-    search_fields = ['uri'] + get_language_fields('title')
+    search_fields = ['uri', *get_language_fields('title')]
     list_display = ('uri', 'title')
     readonly_fields = ('uri', )
     list_filter = ('catalogs', )
@@ -129,7 +144,7 @@ class PageAdmin(admin.ModelAdmin):
     form = PageAdminForm
     inlines = (PageQuestionSetInline, PageQuestionInline)
 
-    search_fields = ['uri'] + get_language_fields('title') + get_language_fields('help')
+    search_fields = ['uri', *get_language_fields('title'), *get_language_fields('help')]
     list_display = ('uri', 'attribute', 'is_collection')
     readonly_fields = ('uri', )
     list_filter = ('sections__catalogs', 'sections', 'is_collection')
@@ -151,7 +166,7 @@ class QuestionSetAdmin(admin.ModelAdmin):
     form = QuestionSetAdminForm
     inlines = (QuestionSetQuestionSetInline, QuestionSetQuestionInline)
 
-    search_fields = ['uri'] + get_language_fields('title') + get_language_fields('help')
+    search_fields = ['uri', *get_language_fields('title'), *get_language_fields('help')]
     list_display = ('uri', 'attribute', 'is_collection')
     readonly_fields = ('uri', )
     list_filter = ('pages__sections__catalogs', 'pages__sections', 'pages', 'is_collection')
@@ -161,10 +176,11 @@ class QuestionSetAdmin(admin.ModelAdmin):
 class QuestionAdmin(admin.ModelAdmin):
     form = QuestionAdminForm
 
-    search_fields = ['uri'] + get_language_fields('help') + get_language_fields('text')
+    search_fields = ['uri', *get_language_fields('help'), *get_language_fields('text')]
     list_display = ('uri', 'attribute', 'text', 'is_collection')
     readonly_fields = ('uri', )
-    list_filter = ('pages__sections__catalogs', 'pages__sections', 'pages', 'is_collection', 'widget_type', 'value_type')
+    list_filter = ('pages__sections__catalogs', 'pages__sections', 'pages', 'is_collection',
+                   'widget_type', 'value_type')
     filter_horizontal = ('editors', 'optionsets', 'conditions')
 
 

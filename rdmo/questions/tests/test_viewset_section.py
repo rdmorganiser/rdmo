@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as et
 
 import pytest
+
 from django.db.models import Max
 from django.urls import reverse
 
@@ -113,7 +114,7 @@ def test_create(db, client, username, password):
         url = reverse(urlnames['list'])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'uri_path': '%s_new_%s' % (instance.uri_path, username),
+            'uri_path': f'{instance.uri_path}_new_{username}',
             'comment': instance.comment,
             'title_en': instance.title_lang1,
             'title_de': instance.title_lang2
@@ -136,7 +137,7 @@ def test_create_catalog(db, client, username, password):
             url = reverse(urlnames['list'])
             data = {
                 'uri_prefix': instance.uri_prefix,
-                'uri_path': '%s_new_%s' % (instance.uri_path, username),
+                'uri_path': f'{instance.uri_path}_new_{username}',
                 'comment': instance.comment,
                 'title_en': instance.title_lang1,
                 'title_de': instance.title_lang2,
@@ -148,7 +149,7 @@ def test_create_catalog(db, client, username, password):
             if response.status_code == 201:
                 new_instance = Section.objects.get(id=response.json().get('id'))
                 catalog.refresh_from_db()
-                assert catalog_sections + [(new_instance.id, order)] == \
+                assert [*catalog_sections, (new_instance.id, order)] == \
                     list(catalog.catalog_sections.values_list('section', 'order'))
 
 
@@ -166,7 +167,7 @@ def test_create_m2m(db, client, username, password):
         url = reverse(urlnames['list'])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'uri_path': '%s_new_%s' % (instance.uri_path, username),
+            'uri_path': f'{instance.uri_path}_new_{username}',
             'comment': instance.comment,
             'pages': section_pages,
             'title_en': instance.title_lang1,

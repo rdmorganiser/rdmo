@@ -12,8 +12,7 @@ from rdmo.core.plugins import get_plugin
 from rdmo.core.utils import markdown2html
 
 from .constants import ROLE_CHOICES
-from .models import (Integration, IntegrationOption, Invite, Membership,
-                     Project, Snapshot)
+from .models import Integration, IntegrationOption, Invite, Membership, Project, Snapshot
 
 
 class CatalogChoiceField(forms.ModelChoiceField):
@@ -22,21 +21,23 @@ class CatalogChoiceField(forms.ModelChoiceField):
 
     def label_from_instance(self, obj):
         if obj.available is False:
-            return mark_safe('<div class="text-muted">%s%s</br>%s</div>' % (obj.title, self._unavailable_icon, markdown2html(obj.help)))
+            return mark_safe('<div class="text-muted">{}{}</br>{}</div>'.format(
+                obj.title, self._unavailable_icon, markdown2html(obj.help)
+            ))
 
-        return mark_safe('<b>%s</b></br>%s' % (obj.title, markdown2html(obj.help)))
+        return mark_safe(f'<b>{obj.title}</b></br>{markdown2html(obj.help)}')
 
 
 class TasksMultipleChoiceField(forms.ModelMultipleChoiceField):
 
     def label_from_instance(self, obj):
-        return mark_safe('<b>%s</b></br>%s' % (obj.title, markdown2html(obj.text)))
+        return mark_safe(f'<b>{obj.title}</b></br>{markdown2html(obj.text)}')
 
 
 class ViewsMultipleChoiceField(forms.ModelMultipleChoiceField):
 
     def label_from_instance(self, obj):
-        return mark_safe('<b>%s</b></br>%s' % (obj.title, markdown2html(obj.help)))
+        return mark_safe(f'<b>{obj.title}</b></br>{markdown2html(obj.help)}')
 
 
 class ProjectForm(forms.ModelForm):
@@ -166,11 +167,11 @@ class SnapshotCreateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.project = kwargs.pop('project')
-        super(SnapshotCreateForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def save(self, *args, **kwargs):
         self.instance.project = self.project
-        return super(SnapshotCreateForm, self).save(*args, **kwargs)
+        return super().save(*args, **kwargs)
 
 
 class MembershipCreateForm(forms.Form):
@@ -192,7 +193,8 @@ class MembershipCreateForm(forms.Form):
             self.fields['silent'] = forms.BooleanField(
                 required=False,
                 label=_('Add member silently'),
-                help_text=_('As site manager or admin, you can directly add users without notifying them via e-mail, when you check the following checkbox.')
+                help_text=_('As site manager or admin, you can directly add users without notifying them via e-mail, '
+                            'when you check the following checkbox.')
             )
 
     def clean_username_or_email(self):
@@ -201,13 +203,14 @@ class MembershipCreateForm(forms.Form):
 
         # check if it is a registered user
         try:
-            self.cleaned_data['user'] = usermodel.objects.get(Q(username=username_or_email) | Q(email__iexact=username_or_email))
+            self.cleaned_data['user'] = usermodel.objects.get(Q(username=username_or_email) |
+                                                              Q(email__iexact=username_or_email))
             self.cleaned_data['email'] = self.cleaned_data['user'].email
 
             if self.cleaned_data['user'] in self.project.user.all():
                 raise ValidationError(_('The user is already a member of the project.'))
 
-        except (usermodel.DoesNotExist, usermodel.MultipleObjectsReturned):
+        except (usermodel.DoesNotExist, usermodel.MultipleObjectsReturned) as e:
             if settings.PROJECT_SEND_INVITE:
                 # check if it is a valid email address, this will raise the correct ValidationError
                 EmailValidator()(username_or_email)
@@ -217,7 +220,8 @@ class MembershipCreateForm(forms.Form):
             else:
                 self.cleaned_data['user'] = None
                 self.cleaned_data['email'] = None
-                raise ValidationError(_('A user with this username or e-mail was not found. Only registered users can be invited.'))
+                raise ValidationError(_('A user with this username or e-mail was not found. '
+                                        'Only registered users can be invited.')) from e
 
     def clean(self):
         if self.cleaned_data.get('silent') is True and self.cleaned_data.get('user') is None:

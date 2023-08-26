@@ -1,6 +1,7 @@
 import io
 
 import pytest
+
 from django.core.management import call_command
 from django.core.management.base import CommandError
 
@@ -18,7 +19,7 @@ prune_assignments = [
 def get_prune_output(projects, remove=False):
     project_output = ""
     for proj in projects:
-        project_output += '%s (id=%s)\n' % (proj.title, proj.id)
+        project_output += f'{proj.title} (id={proj.id})\n'
         if remove:
             project_output += "...removing...OK\n"
     return project_output
@@ -41,7 +42,7 @@ def test_prune_projects_output(db, settings, min_role, role_list, projects):
     call_command('prune_projects', '--min_role', min_role, stdout=stdout, stderr=stderr)
 
     assert stdout.getvalue() == \
-        "Found projects without %s:\n%s" % (role_list, get_prune_output(instances))
+        f"Found projects without {role_list}:\n{get_prune_output(instances)}"
     assert not stderr.getvalue()
 
 

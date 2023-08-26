@@ -1,4 +1,4 @@
-from rdmo.core.permissions import log_result, HasObjectPermission
+from rdmo.core.permissions import HasObjectPermission, log_result
 
 
 class HasProjectsPermission(HasObjectPermission):

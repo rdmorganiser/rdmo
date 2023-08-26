@@ -1,16 +1,13 @@
 import xml.etree.ElementTree as et
 
 import pytest
-from django.contrib.sites.models import Site
+
 from django.urls import reverse
 
-from ..models import OptionSet
-
+from ...core.tests import get_obj_perms_status_code
 from ...core.tests import multisite_status_map as status_map
 from ...core.tests import multisite_users as users
-from ...core.tests import get_obj_perms_status_code
-
-from .test_viewset_optionsets import export_formats
+from ..models import OptionSet
 from .test_viewset_optionsets import urlnames
 
 
@@ -78,7 +75,7 @@ def test_create(db, client, username, password):
         url = reverse(urlnames['list'])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'uri_path': '%s_new_%s' % (instance.uri_path, username),
+            'uri_path': f'{instance.uri_path}_new_{username}',
             'comment': instance.comment,
             'order': instance.order,
             'conditions': [condition.pk for condition in instance.conditions.all()],

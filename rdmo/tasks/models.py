@@ -3,9 +3,10 @@ from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
 from rdmo.conditions.models import Condition
 from rdmo.core.models import TranslationMixin
-from rdmo.core.utils import copy_model, join_url
+from rdmo.core.utils import join_url
 from rdmo.domain.models import Attribute
 from rdmo.questions.models import Catalog
 
@@ -44,7 +45,8 @@ class Task(TranslationMixin, models.Model):
     catalogs = models.ManyToManyField(
         Catalog, blank=True,
         verbose_name=_('Catalogs'),
-        help_text=_('The catalogs this task can be used with. An empty list implies that this task can be used with every catalog.')
+        help_text=_('The catalogs this task can be used with. '
+                    'An empty list implies that this task can be used with every catalog.')
     )
     sites = models.ManyToManyField(
         Site, blank=True,
@@ -119,7 +121,8 @@ class Task(TranslationMixin, models.Model):
     end_attribute = models.ForeignKey(
         Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='tasks_as_end',
         verbose_name=_('End date attribute'),
-        help_text=_('The attribute that is setting the end date for this task (optional, if no end date attribute is given, the start date attribute sets also the end date).')
+        help_text=_('The attribute that is setting the end date for this task '
+                    '(optional, if no end date attribute is given, the start date attribute sets also the end date).')
     )
     days_before = models.IntegerField(
         blank=True, null=True,

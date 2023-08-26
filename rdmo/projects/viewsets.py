@@ -3,17 +3,17 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.db.models import prefetch_related_objects
 from django.http import Http404, HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
-from django_filters.rest_framework import DjangoFilterBackend
+
 from rest_framework import serializers
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
-from rest_framework.mixins import (CreateModelMixin, ListModelMixin,
-                                   RetrieveModelMixin, UpdateModelMixin)
+from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
-from rest_framework.viewsets import (GenericViewSet, ModelViewSet,
-                                     ReadOnlyModelViewSet)
+from rest_framework.viewsets import GenericViewSet, ModelViewSet, ReadOnlyModelViewSet
+
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from rdmo.conditions.models import Condition
@@ -25,21 +25,25 @@ from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
 from .filters import SnapshotFilterBackend, ValueFilterBackend
-from .models import (Continuation, Integration, Invite, Issue, Membership,
-                     Project, Snapshot, Value)
-from .permissions import (HasProjectPagePermission, HasProjectPermission,
-                          HasProjectsPermission)
-from .serializers.v1 import (IntegrationSerializer, InviteSerializer,
-                             IssueSerializer, MembershipSerializer,
-                             ProjectIntegrationSerializer,
-                             ProjectInviteSerializer,
-                             ProjectInviteUpdateSerializer,
-                             ProjectIssueSerializer,
-                             ProjectMembershipSerializer,
-                             ProjectMembershipUpdateSerializer,
-                             ProjectSerializer, ProjectSnapshotSerializer,
-                             ProjectValueSerializer, SnapshotSerializer,
-                             ValueSerializer)
+from .models import Continuation, Integration, Invite, Issue, Membership, Project, Snapshot, Value
+from .permissions import HasProjectPagePermission, HasProjectPermission, HasProjectsPermission
+from .serializers.v1 import (
+    IntegrationSerializer,
+    InviteSerializer,
+    IssueSerializer,
+    MembershipSerializer,
+    ProjectIntegrationSerializer,
+    ProjectInviteSerializer,
+    ProjectInviteUpdateSerializer,
+    ProjectIssueSerializer,
+    ProjectMembershipSerializer,
+    ProjectMembershipUpdateSerializer,
+    ProjectSerializer,
+    ProjectSnapshotSerializer,
+    ProjectValueSerializer,
+    SnapshotSerializer,
+    ValueSerializer,
+)
 from .serializers.v1.overview import ProjectOverviewSerializer
 from .serializers.v1.page import PageSerializer
 from .utils import check_conditions, send_invite_email
@@ -139,8 +143,8 @@ class ProjectViewSet(ModelViewSet):
             try:
                 optionset_id = request.GET.get('optionset')
                 optionset = OptionSet.objects.get(pk=optionset_id)
-            except (ValueError, OptionSet.DoesNotExist):
-                raise NotFound()
+            except (ValueError, OptionSet.DoesNotExist) as e:
+                raise NotFound() from e
 
             # check if the optionset belongs to this catalog and if it has a provider
             if Question.objects.filter_by_catalog(project.catalog).filter(optionsets=optionset) and \
@@ -194,8 +198,8 @@ class ProjectNestedViewSetMixin(NestedViewSetMixin):
     def get_project_from_parent_viewset(self):
         try:
             return Project.objects.filter_user(self.request.user).get(pk=self.get_parents_query_dict().get('project'))
-        except Project.DoesNotExist:
-            raise Http404
+        except Project.DoesNotExist as e:
+            raise Http404 from e
 
     def perform_create(self, serializer):
         # this call provides the nested serializers with the project
@@ -344,7 +348,8 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
             if element.attribute == value.attribute:
                 attributes.update([descendant.attribute for descendant in element.descendants])
 
-        values = self.get_queryset().filter(attribute__in=attributes, set_prefix=value.set_prefix, set_index=value.set_index)
+        values = self.get_queryset().filter(attribute__in=attributes, set_prefix=value.set_prefix,
+                                            set_index=value.set_index)
         values.delete()
 
         return Response(status=204)
@@ -419,7 +424,8 @@ class ProjectPageViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericV
             if request.GET.get('back') == 'true':
                 prev_page = self.project.catalog.get_prev_page(page)
                 if prev_page is not None:
-                    url = reverse('v1-projects:project-page-detail', args=[self.project.id, prev_page.id]) + '?back=true'
+                    url = reverse('v1-projects:project-page-detail',
+                                  args=[self.project.id, prev_page.id]) + '?back=true'
                     return HttpResponseRedirect(url, status=303)
             else:
                 next_page = self.project.catalog.get_next_page(page)

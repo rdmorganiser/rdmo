@@ -1,8 +1,7 @@
-import pytest
-
 import io
-
 from pathlib import Path
+
+import pytest
 
 from django.core.management import call_command
 from django.core.management.base import CommandError

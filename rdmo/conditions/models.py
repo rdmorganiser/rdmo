@@ -3,7 +3,7 @@ from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.core.utils import copy_model, join_url
+from rdmo.core.utils import join_url
 from rdmo.domain.models import Attribute
 
 
@@ -61,7 +61,8 @@ class Condition(models.Model):
         help_text=_('The sites that can edit this condition (in a multi site setup).')
     )
     source = models.ForeignKey(
-        Attribute, db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='conditions',
+        Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='conditions',
+        db_constraint=False,
         verbose_name=_('Source'),
         help_text=_('The attribute of the value for this condition.')
     )
@@ -73,10 +74,12 @@ class Condition(models.Model):
     target_text = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Target (Text)'),
-        help_text=_('If using a regular value, the text value this condition is checking against (for boolean values use 1 and 0).')
+        help_text=_('If using a regular value, the text value this condition is checking against '
+                    '(for boolean values use 1 and 0).')
     )
     target_option = models.ForeignKey(
-        'options.Option', db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='conditions',
+        'options.Option', blank=True, null=True, on_delete=models.SET_NULL, related_name='conditions',
+        db_constraint=False,
         verbose_name=_('Target (Option)'),
         help_text=_('If using a value pointing to an option, the option this condition is checking against.')
     )

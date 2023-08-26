@@ -1,17 +1,14 @@
 import xml.etree.ElementTree as et
 
 import pytest
+
 from django.urls import reverse
 
-from ..models import Condition
-
-from .test_viewset_condition import export_formats
-
+from ...core.tests import get_obj_perms_status_code
 from ...core.tests import multisite_status_map as status_map
 from ...core.tests import multisite_users as users
-from ...core.tests import get_obj_perms_status_code
-
-from .test_viewset_condition import urlnames
+from ..models import Condition
+from .test_viewset_condition import export_formats, urlnames
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -68,7 +65,7 @@ def test_create(db, client, username, password):
         url = reverse(urlnames['list'])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'uri_path': '%s_new_%s' % (instance.uri_path, username),
+            'uri_path': f'{instance.uri_path}_new_{username}',
             'comment': instance.comment,
             'source': instance.source.pk,
             'relation': instance.relation,
@@ -90,7 +87,7 @@ def test_create_optionset(db, client, username, password):
             url = reverse(urlnames['list'])
             data = {
                 'uri_prefix': instance.uri_prefix,
-                'uri_path': '%s_new_%s' % (instance.uri_path, username),
+                'uri_path': f'{instance.uri_path}_new_{username}',
                 'comment': instance.comment,
                 'source': instance.source.pk,
                 'relation': instance.relation,
@@ -117,7 +114,7 @@ def test_create_page(db, client, username, password):
             url = reverse(urlnames['list'])
             data = {
                 'uri_prefix': instance.uri_prefix,
-                'uri_path': '%s_new_%s' % (instance.uri_path, username),
+                'uri_path': f'{instance.uri_path}_new_{username}',
                 'comment': instance.comment,
                 'source': instance.source.pk,
                 'relation': instance.relation,
@@ -144,7 +141,7 @@ def test_create_questionset(db, client, username, password):
             url = reverse(urlnames['list'])
             data = {
                 'uri_prefix': instance.uri_prefix,
-                'uri_path': '%s_new_%s' % (instance.uri_path, username),
+                'uri_path': f'{instance.uri_path}_new_{username}',
                 'comment': instance.comment,
                 'source': instance.source.pk,
                 'relation': instance.relation,
@@ -171,7 +168,7 @@ def test_create_question(db, client, username, password):
             url = reverse(urlnames['list'])
             data = {
                 'uri_prefix': instance.uri_prefix,
-                'uri_path': '%s_new_%s' % (instance.uri_path, username),
+                'uri_path': f'{instance.uri_path}_new_{username}',
                 'comment': instance.comment,
                 'source': instance.source.pk,
                 'relation': instance.relation,
@@ -198,7 +195,7 @@ def test_create_task(db, client, username, password):
             url = reverse(urlnames['list'])
             data = {
                 'uri_prefix': instance.uri_prefix,
-                'uri_path': '%s_new_%s' % (instance.uri_path, username),
+                'uri_path': f'{instance.uri_path}_new_{username}',
                 'comment': instance.comment,
                 'source': instance.source.pk,
                 'relation': instance.relation,
