@@ -1,9 +1,9 @@
 from django import template
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.core.constants import (VALUE_TYPE_DATETIME, VALUE_TYPE_INTEGER,
-                                 VALUE_TYPE_TEXT)
+from rdmo.core.constants import VALUE_TYPE_DATETIME, VALUE_TYPE_INTEGER, VALUE_TYPE_TEXT
 from rdmo.projects.models import Value
+
 register = template.Library()
 
 
@@ -45,7 +45,8 @@ def get_numbers(context, attribute, set_prefix='*', set_index='*', index='*', pr
 @register.simple_tag(takes_context=True)
 def get_value(context, attribute, set_prefix='', set_index=0, index=0, project=None):
     try:
-        return get_values(context, attribute, set_prefix=set_prefix, set_index=set_index, index=index, project=project)[0]
+        return get_values(context, attribute, set_prefix=set_prefix, set_index=set_index,
+                          index=index, project=project)[0]
     except IndexError:
         return None
 
@@ -69,7 +70,8 @@ def get_set_values(context, set, attribute, set_prefix='', project=None):
 def get_set_value(context, set, attribute, set_prefix='', index=0, project=None):
     try:
         set_index = set.get('set_index')
-        return get_values(context, attribute, set_prefix=set_prefix, set_index=set_index, index=index, project=project)[0]
+        return get_values(context, attribute, set_prefix=set_prefix, set_index=set_index,
+                          index=index, project=project)[0]
     except IndexError:
         return None
 
@@ -77,7 +79,7 @@ def get_set_value(context, set, attribute, set_prefix='', index=0, project=None)
 @register.simple_tag(takes_context=True)
 def get_set_prefixes(context, attribute, project=None):
     try:
-        return sorted(set(map(lambda value: value['set_prefix'], get_values(context, attribute, project=project))))
+        return sorted({value['set_prefix'] for value in get_values(context, attribute, project=project)})
     except IndexError:
         return None
 
@@ -85,7 +87,9 @@ def get_set_prefixes(context, attribute, project=None):
 @register.simple_tag(takes_context=True)
 def get_set_indexes(context, attribute, set_prefix='', project=None):
     try:
-        return sorted(set(map(lambda value: value['set_index'], get_values(context, attribute, set_prefix=set_prefix, project=project))))
+        return sorted({
+            value['set_index'] for value in get_values(context, attribute, set_prefix=set_prefix, project=project)
+        })
     except IndexError:
         return None
 
@@ -109,7 +113,8 @@ def get_set(context, attribute, set_prefix='', project=None):
 
 @register.inclusion_tag('views/tags/value.html', takes_context=True)
 def render_value(context, attribute, set_prefix='', set_index=0, index=0, project=None):
-    context['value'] = get_value(context, attribute, set_prefix=set_prefix, set_index=set_index, index=index, project=project)
+    context['value'] = get_value(context, attribute, set_prefix=set_prefix, set_index=set_index,
+                                 index=index, project=project)
     return context
 
 
@@ -167,11 +172,12 @@ def get_labels(context, element, set_prefix='', set_index=0, project=None):
     set_labels = []
     for ancestor in element['ancestors']:
         if ancestor['is_collection']:
-            set_label = '#{}'.format(set_index + 1)
+            set_label = f'#{set_index + 1}'
 
             if ancestor['attribute']:
                 # get attribute value
-                value = get_value(context, ancestor['attribute'], set_prefix=set_prefix, set_index=set_index, index=0, project=project)
+                value = get_value(context, ancestor['attribute'], set_prefix=set_prefix, set_index=set_index,
+                                  index=0, project=project)
                 if value:
                     set_label = '"{}"'.format(value['value'])
 

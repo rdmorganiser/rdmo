@@ -5,10 +5,19 @@ from rdmo.core.serializers import TranslationSerializerMixin
 from rdmo.domain.serializers.export import AttributeExportSerializer
 from rdmo.options.serializers.export import OptionSetExportSerializer
 
-from ..models import (Catalog, CatalogSection, Page, PageQuestion,
-                      PageQuestionSet, Question, QuestionSet,
-                      QuestionSetQuestion, QuestionSetQuestionSet, Section,
-                      SectionPage)
+from ..models import (
+    Catalog,
+    CatalogSection,
+    Page,
+    PageQuestion,
+    PageQuestionSet,
+    Question,
+    QuestionSet,
+    QuestionSetQuestion,
+    QuestionSetQuestionSet,
+    Section,
+    SectionPage,
+)
 
 
 class QuestionExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):

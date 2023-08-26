@@ -1,8 +1,10 @@
 import re
 
 import pytest
-from pytest_django.asserts import assertContains, assertNotContains, assertTemplateUsed
+
 from django.urls import reverse
+
+from pytest_django.asserts import assertContains, assertNotContains, assertTemplateUsed
 
 from rdmo.questions.models import Catalog
 from rdmo.views.models import View
@@ -80,7 +82,7 @@ def test_list(db, client, username, password):
             assertContains(response, 'View all projects on')
         else:
             user_projects_map = view_project_permission_map.get(username, [])
-            assert sorted(list(set(map(int, projects)))) == user_projects_map
+            assert sorted(set(map(int, projects))) == user_projects_map
             assert response.context['number_of_projects'] == len(user_projects_map)
             assertNotContains(response, 'View all projects on')
     else:
@@ -101,7 +103,7 @@ def test_site(db, client, username, password):
             assert response.status_code == 200
             assertTemplateUsed(response, 'projects/site_projects.html')
             user_projects_map = view_project_permission_map.get(username, [])
-            assert sorted(list(set(map(int, projects)))) == user_projects_map
+            assert sorted(set(map(int, projects))) == user_projects_map
             assert response.context['number_of_projects'] == len(user_projects_map)
         else:
             assert response.status_code == 403

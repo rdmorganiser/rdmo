@@ -2,8 +2,8 @@ import pytest
 
 from django.http import QueryDict
 
-from ..utils import set_context_querystring_with_filter_and_page
 from ..filters import ProjectFilter
+from ..utils import set_context_querystring_with_filter_and_page
 
 GET_queries = [
     'page=2&title=project',

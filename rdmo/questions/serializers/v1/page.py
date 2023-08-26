@@ -1,10 +1,12 @@
 from rest_framework import serializers
 
-from rdmo.core.serializers import (ElementModelSerializerMixin,
-                                   ElementWarningSerializerMixin,
-                                   ReadOnlyObjectPermissionSerializerMixin,
-                                   ThroughModelSerializerMixin,
-                                   TranslationSerializerMixin)
+from rdmo.core.serializers import (
+    ElementModelSerializerMixin,
+    ElementWarningSerializerMixin,
+    ReadOnlyObjectPermissionSerializerMixin,
+    ThroughModelSerializerMixin,
+    TranslationSerializerMixin,
+)
 
 from ...models import Page, PageQuestion, PageQuestionSet, QuestionSet, Section
 from ...validators import PageLockedValidator, PageUniqueURIValidator
@@ -105,8 +107,9 @@ class PageNestedSerializer(PageSerializer):
     elements = serializers.SerializerMethodField()
 
     class Meta(PageSerializer.Meta):
-        fields = PageSerializer.Meta.fields + (
-            'elements',
+        fields = (
+            *PageSerializer.Meta.fields,
+            'elements'
         )
 
     def get_elements(self, obj):

@@ -1,16 +1,15 @@
 import xml.etree.ElementTree as et
 
 import pytest
+
 from django.db.models import Max
 from django.urls import reverse
 
+from ...core.tests import get_obj_perms_status_code
 from ...core.tests import multisite_status_map as status_map
 from ...core.tests import multisite_users as users
-from ...core.tests import get_obj_perms_status_code
-
 from ..models import Section
-
-from .test_viewset_section import urlnames, export_formats
+from .test_viewset_section import export_formats, urlnames
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -78,7 +77,7 @@ def test_create(db, client, username, password):
         url = reverse(urlnames['list'])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'uri_path': '%s_new_%s' % (instance.uri_path, username),
+            'uri_path': f'{instance.uri_path}_new_{username}',
             'comment': instance.comment,
             'title_en': instance.title_lang1,
             'title_de': instance.title_lang2
@@ -101,7 +100,7 @@ def test_create_catalog(db, client, username, password):
             url = reverse(urlnames['list'])
             data = {
                 'uri_prefix': instance.uri_prefix,
-                'uri_path': '%s_new_%s' % (instance.uri_path, username),
+                'uri_path': f'{instance.uri_path}_new_{username}',
                 'comment': instance.comment,
                 'title_en': instance.title_lang1,
                 'title_de': instance.title_lang2,
@@ -113,7 +112,7 @@ def test_create_catalog(db, client, username, password):
             if response.status_code == 201:
                 new_instance = Section.objects.get(id=response.json().get('id'))
                 catalog.refresh_from_db()
-                assert catalog_sections + [(new_instance.id, order)] == \
+                assert [*catalog_sections, (new_instance.id, order)] == \
                     list(catalog.catalog_sections.values_list('section', 'order'))
 
 
@@ -131,7 +130,7 @@ def test_create_m2m(db, client, username, password):
         url = reverse(urlnames['list'])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'uri_path': '%s_new_%s' % (instance.uri_path, username),
+            'uri_path': f'{instance.uri_path}_new_{username}',
             'comment': instance.comment,
             'pages': section_pages,
             'title_en': instance.title_lang1,

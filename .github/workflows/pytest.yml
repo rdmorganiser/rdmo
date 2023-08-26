@@ -36,7 +36,6 @@ jobs:
         key: lint-${{ hashFiles('.pre-commit-config.yaml') }}
     - name: Run ruff via pre-commit
       run: pre-commit run --all-files --color=always
-      continue-on-error: true # TODO: remove once files are reformatted
 
   test:
     runs-on: ubuntu-22.04

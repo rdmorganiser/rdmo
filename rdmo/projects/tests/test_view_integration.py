@@ -2,6 +2,7 @@ import hmac
 import json
 
 import pytest
+
 from django.urls import reverse
 
 from ..models import Integration, Issue
@@ -122,7 +123,8 @@ def test_integration_update_post(db, client, username, password, project_id, int
     if integration:
         if project_id in change_integration_permission_map.get(username, []):
             assert response.status_code == 302
-            values = Integration.objects.filter(project_id=project_id, id=integration_id).first().options.values('key', 'value', 'secret')
+            values = Integration.objects.filter(project_id=project_id, id=integration_id).first() \
+                                        .options.values('key', 'value', 'secret')
             assert sorted(values, key=lambda obj: obj['key']) == [
                 {
                     'key': 'repo',

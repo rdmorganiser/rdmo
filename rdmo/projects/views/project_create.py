@@ -40,7 +40,7 @@ class ProjectCreateView(LoginRequiredMixin, RedirectViewMixin, CreateView):
         form.instance.site = get_current_site(self.request)
 
         # save the project
-        response = super(ProjectCreateView, self).form_valid(form)
+        response = super().form_valid(form)
 
         # add all tasks to project
         tasks = Task.objects.filter_current_site() \

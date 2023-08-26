@@ -1,6 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
+
 from rdmo.conditions.models import Condition
 from rdmo.core.serializers import MarkdownSerializerMixin
 from rdmo.options.models import Option, OptionSet

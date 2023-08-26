@@ -2,20 +2,31 @@ import logging
 
 from django.contrib.sites.models import Site
 
-from rdmo.core.imports import (check_permissions, set_common_fields,
-                               set_foreign_field, set_lang_field,
-                               set_m2m_instances, set_m2m_through_instances,
-                               set_reverse_m2m_through_instance,
-                               validate_instance)
+from rdmo.core.imports import (
+    check_permissions,
+    set_common_fields,
+    set_foreign_field,
+    set_lang_field,
+    set_m2m_instances,
+    set_m2m_through_instances,
+    set_reverse_m2m_through_instance,
+    validate_instance,
+)
 
 from .models import Catalog, Page, Question, QuestionSet, Section
 from .utils import get_widget_types
-from .validators import (CatalogLockedValidator, CatalogUniqueURIValidator,
-                         PageLockedValidator, PageUniqueURIValidator,
-                         QuestionLockedValidator, QuestionSetLockedValidator,
-                         QuestionSetUniqueURIValidator,
-                         QuestionUniqueURIValidator, SectionLockedValidator,
-                         SectionUniqueURIValidator)
+from .validators import (
+    CatalogLockedValidator,
+    CatalogUniqueURIValidator,
+    PageLockedValidator,
+    PageUniqueURIValidator,
+    QuestionLockedValidator,
+    QuestionSetLockedValidator,
+    QuestionSetUniqueURIValidator,
+    QuestionUniqueURIValidator,
+    SectionLockedValidator,
+    SectionUniqueURIValidator,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -154,8 +165,8 @@ def import_questionset(element, save=False, user=None):
         questionset.save()
         set_m2m_instances(questionset, 'conditions', element)
         set_reverse_m2m_through_instance(questionset, 'page', element, 'questionset', 'page', 'questionset_pages')
-        set_reverse_m2m_through_instance(questionset, 'questionset', element, 'questionset', 'parent', 'questionset_parents')
-        set_m2m_through_instances(questionset, 'questionsets', element, 'parent', 'questionset', 'questionset_questionsets')
+        set_reverse_m2m_through_instance(questionset, 'questionset', element, 'questionset', 'parent', 'questionset_parents')  # noqa: E501
+        set_m2m_through_instances(questionset, 'questionsets', element, 'parent', 'questionset', 'questionset_questionsets')  # noqa: E501
         set_m2m_through_instances(questionset, 'questions', element, 'questionset', 'question', 'questionset_questions')
         questionset.editors.add(Site.objects.get_current())
 
@@ -210,7 +221,7 @@ def import_question(element, save=False, user=None):
 
         question.save()
         set_reverse_m2m_through_instance(question, 'page', element, 'question', 'page', 'question_pages')
-        set_reverse_m2m_through_instance(question, 'questionset', element, 'question', 'questionset', 'question_questionsets')
+        set_reverse_m2m_through_instance(question, 'questionset', element, 'question', 'questionset', 'question_questionsets')  # noqa: E501
         set_m2m_instances(question, 'conditions', element)
         set_m2m_instances(question, 'optionsets', element)
         question.editors.add(Site.objects.get_current())

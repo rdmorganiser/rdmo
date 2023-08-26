@@ -1,7 +1,8 @@
+from django.contrib.sites.shortcuts import get_current_site
+
 import rules
 from rules.predicates import is_superuser
 
-from django.contrib.sites.shortcuts import get_current_site
 
 @rules.predicate
 def is_project_member(user, project):
@@ -78,7 +79,7 @@ rules.add_perm('projects.delete_integration_object', is_project_owner | is_proje
 
 rules.add_perm('projects.view_issue_object', is_project_member | is_site_manager)
 rules.add_perm('projects.add_issue_object', is_project_manager | is_project_owner | is_site_manager)
-rules.add_perm('projects.change_issue_object', is_project_author | is_project_manager | is_project_owner | is_site_manager)
+rules.add_perm('projects.change_issue_object', is_project_author | is_project_manager | is_project_owner | is_site_manager)  # noqa: E501
 rules.add_perm('projects.delete_issue_object', is_project_manager | is_project_owner | is_site_manager)
 
 rules.add_perm('projects.view_snapshot_object', is_project_member | is_site_manager)
@@ -88,8 +89,8 @@ rules.add_perm('projects.rollback_snapshot_object', is_project_manager | is_proj
 
 rules.add_perm('projects.view_value_object', is_project_member | is_site_manager)
 rules.add_perm('projects.add_value_object', is_project_author | is_project_manager | is_project_owner | is_site_manager)
-rules.add_perm('projects.change_value_object', is_project_author | is_project_manager | is_project_owner | is_site_manager)
-rules.add_perm('projects.delete_value_object', is_project_author | is_project_manager | is_project_owner | is_site_manager)
+rules.add_perm('projects.change_value_object', is_project_author | is_project_manager | is_project_owner | is_site_manager)  # noqa: E501
+rules.add_perm('projects.delete_value_object', is_project_author | is_project_manager | is_project_owner | is_site_manager)  # noqa: E501
 
 rules.add_perm('projects.view_page_object', is_project_member | is_site_manager)
 

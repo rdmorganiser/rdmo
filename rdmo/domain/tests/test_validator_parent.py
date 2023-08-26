@@ -1,8 +1,9 @@
 import pytest
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from rest_framework.exceptions import \
-    ValidationError as RestFameworkValidationError
+
+from rest_framework.exceptions import ValidationError as RestFameworkValidationError
 
 from ..models import Attribute
 from ..serializers.v1 import AttributeSerializer
@@ -37,7 +38,7 @@ def test_update_error(db):
 
 
 def test_serializer_create(db):
-    class MockedView(object):
+    class MockedView:
         action = 'create'
 
     validator = AttributeParentValidator()

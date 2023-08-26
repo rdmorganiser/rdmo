@@ -2,7 +2,6 @@ import pytest
 
 from rdmo.core.models import TranslationMixin
 
-
 boolean_toggle = (True, False)
 test_languages = ('en', 'de')
 

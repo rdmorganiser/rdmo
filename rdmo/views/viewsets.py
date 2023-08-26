@@ -1,9 +1,11 @@
 from django.db import models
-from django_filters.rest_framework import DjangoFilterBackend
+
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+
+from django_filters.rest_framework import DjangoFilterBackend
 
 from rdmo.core.exports import XMLResponse
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
@@ -58,6 +60,8 @@ class ViewViewSet(ModelViewSet):
             xml = ViewRenderer().render([serializer.data])
             return XMLResponse(xml, name=self.get_object().uri_path)
         else:
-            return render_to_format(self.request, export_format, self.get_object().uri_path, 'views/export/views.html', {
-                'views': [self.get_object()]
-            })
+            return render_to_format(
+                self.request, export_format, self.get_object().uri_path, 'views/export/views.html', {
+                    'views': [self.get_object()]
+                }
+            )

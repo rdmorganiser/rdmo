@@ -80,10 +80,14 @@ class PageRendererMixin:
             self.render_text_element(xml, 'is_collection', {}, page['is_collection'])
 
             for lang_code, lang_string, lang_field in get_languages():
-                self.render_text_element(xml, 'title', {'lang': lang_code}, page['title_%s' % lang_code])
-                self.render_text_element(xml, 'help', {'lang': lang_code}, page['help_%s' % lang_code])
-                self.render_text_element(xml, 'verbose_name', {'lang': lang_code}, page['verbose_name_%s' % lang_code])
-                self.render_text_element(xml, 'verbose_name_plural', {'lang': lang_code}, page['verbose_name_plural_%s' % lang_code])
+                self.render_text_element(xml, 'title', {'lang': lang_code},
+                                         page['title_%s' % lang_code])
+                self.render_text_element(xml, 'help', {'lang': lang_code},
+                                         page['help_%s' % lang_code])
+                self.render_text_element(xml, 'verbose_name', {'lang': lang_code},
+                                         page['verbose_name_%s' % lang_code])
+                self.render_text_element(xml, 'verbose_name_plural', {'lang': lang_code},
+                                         page['verbose_name_plural_%s' % lang_code])
 
             xml.startElement('questionsets', {})
             for page_questionset in page['page_questionsets']:
@@ -144,10 +148,14 @@ class QuestionSetRendererMixin:
             self.render_text_element(xml, 'is_collection', {}, questionset['is_collection'])
 
             for lang_code, lang_string, lang_field in get_languages():
-                self.render_text_element(xml, 'title', {'lang': lang_code}, questionset['title_%s' % lang_code])
-                self.render_text_element(xml, 'help', {'lang': lang_code}, questionset['help_%s' % lang_code])
-                self.render_text_element(xml, 'verbose_name', {'lang': lang_code}, questionset['verbose_name_%s' % lang_code])
-                self.render_text_element(xml, 'verbose_name_plural', {'lang': lang_code}, questionset['verbose_name_plural_%s' % lang_code])
+                self.render_text_element(xml, 'title', {'lang': lang_code},
+                                         questionset['title_%s' % lang_code])
+                self.render_text_element(xml, 'help', {'lang': lang_code},
+                                         questionset['help_%s' % lang_code])
+                self.render_text_element(xml, 'verbose_name', {'lang': lang_code},
+                                         questionset['verbose_name_%s' % lang_code])
+                self.render_text_element(xml, 'verbose_name_plural', {'lang': lang_code},
+                                         questionset['verbose_name_plural_%s' % lang_code])
 
             xml.startElement('questionsets', {})
             for questionset_questionset in questionset['questionset_questionsets']:
@@ -209,11 +217,16 @@ class QuestionRendererMixin:
             self.render_text_element(xml, 'is_optional', {}, question['is_optional'])
 
             for lang_code, lang_string, lang_field in get_languages():
-                self.render_text_element(xml, 'help', {'lang': lang_code}, question['help_%s' % lang_code])
-                self.render_text_element(xml, 'text', {'lang': lang_code}, question['text_%s' % lang_code])
-                self.render_text_element(xml, 'default_text', {'lang': lang_code}, question['default_text_%s' % lang_code])
-                self.render_text_element(xml, 'verbose_name', {'lang': lang_code}, question['verbose_name_%s' % lang_code])
-                self.render_text_element(xml, 'verbose_name_plural', {'lang': lang_code}, question['verbose_name_plural_%s' % lang_code])
+                self.render_text_element(xml, 'help', {'lang': lang_code},
+                                         question['help_%s' % lang_code])
+                self.render_text_element(xml, 'text', {'lang': lang_code},
+                                         question['text_%s' % lang_code])
+                self.render_text_element(xml, 'default_text', {'lang': lang_code},
+                                         question['default_text_%s' % lang_code])
+                self.render_text_element(xml, 'verbose_name', {'lang': lang_code},
+                                         question['verbose_name_%s' % lang_code])
+                self.render_text_element(xml, 'verbose_name_plural', {'lang': lang_code},
+                                         question['verbose_name_plural_%s' % lang_code])
 
             self.render_text_element(xml, 'default_option', {'dc:uri': question['default_option']}, None)
             self.render_text_element(xml, 'default_external_id', {}, question['default_external_id'])

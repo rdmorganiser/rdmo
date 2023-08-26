@@ -2,9 +2,7 @@ import logging
 
 from django.contrib.sites.models import Site
 
-from rdmo.core.imports import (check_permissions, set_common_fields,
-                               set_lang_field, set_m2m_instances,
-                               validate_instance)
+from rdmo.core.imports import check_permissions, set_common_fields, set_lang_field, set_m2m_instances, validate_instance
 
 from .models import View
 from .validators import ViewLockedValidator, ViewUniqueURIValidator

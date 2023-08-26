@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as et
 
 import pytest
+
 from django.urls import reverse
 
 from ..models import Attribute
@@ -98,7 +99,7 @@ def test_create(db, client, username, password):
         url = reverse(urlnames['list'])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'key': '%s_new_%s' % (instance.key, username),
+            'key': f'{instance.key}_new_{username}',
             'comment': '',
             'parent': instance.parent.pk if instance.parent else ''
         }
@@ -117,7 +118,7 @@ def test_create_condition(db, client, username, password):
             url = reverse(urlnames['list'])
             data = {
                 'uri_prefix': instance.uri_prefix,
-                'key': '%s_new_%s' % (instance.key, username),
+                'key': f'{instance.key}_new_{username}',
                 'comment': '',
                 'parent': instance.parent.pk if instance.parent else '',
                 'conditions': [condition.id]
@@ -141,7 +142,7 @@ def test_create_page(db, client, username, password):
             url = reverse(urlnames['list'])
             data = {
                 'uri_prefix': instance.uri_prefix,
-                'key': '%s_new_%s' % (instance.key, username),
+                'key': f'{instance.key}_new_{username}',
                 'comment': '',
                 'parent': instance.parent.pk if instance.parent else '',
                 'pages': [page.id]
@@ -165,7 +166,7 @@ def test_create_questionset(db, client, username, password):
             url = reverse(urlnames['list'])
             data = {
                 'uri_prefix': instance.uri_prefix,
-                'key': '%s_new_%s' % (instance.key, username),
+                'key': f'{instance.key}_new_{username}',
                 'comment': '',
                 'parent': instance.parent.pk if instance.parent else '',
                 'questionsets': [questionset.id]
@@ -189,7 +190,7 @@ def test_create_question(db, client, username, password):
             url = reverse(urlnames['list'])
             data = {
                 'uri_prefix': instance.uri_prefix,
-                'key': '%s_new_%s' % (instance.key, username),
+                'key': f'{instance.key}_new_{username}',
                 'comment': '',
                 'parent': instance.parent.pk if instance.parent else '',
                 'questions': [question.id]

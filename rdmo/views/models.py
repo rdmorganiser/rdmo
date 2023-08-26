@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 
 from rdmo import __version__
 from rdmo.core.models import TranslationMixin
-from rdmo.core.utils import copy_model, get_pandoc_main_version, join_url
+from rdmo.core.utils import get_pandoc_main_version, join_url
 from rdmo.questions.models import Catalog
 
 from .managers import ViewManager
@@ -46,7 +46,8 @@ class View(models.Model, TranslationMixin):
     catalogs = models.ManyToManyField(
         Catalog, blank=True,
         verbose_name=_('Catalogs'),
-        help_text=_('The catalogs this view can be used with. An empty list implies that this view can be used with every catalog.')
+        help_text=_('The catalogs this view can be used with. '
+                    'An empty list implies that this view can be used with every catalog.')
     )
     sites = models.ManyToManyField(
         Site, blank=True,

@@ -59,7 +59,7 @@ def flat_xml_to_elements(root):
                     element[tag]['model'] = models[sub_node.tag]
             elif 'lang' in sub_node.attrib:
                 # this node has the lang attribute!
-                element['%s_%s' % (tag, sub_node.attrib['lang'])] = sub_node.text
+                element['{}_{}'.format(tag, sub_node.attrib['lang'])] = sub_node.text
             elif list(sub_node):
                 # this node is a list!
                 element[tag] = []
@@ -86,7 +86,7 @@ def flat_xml_to_elements(root):
 def get_ns_tag(tag, ns_map):
     tag_split = tag.split(':')
     try:
-        return '{%s}%s' % (ns_map[tag_split[0]], tag_split[1])
+        return f'{{{ns_map[tag_split[0]]}}}{tag_split[1]}'
     except KeyError:
         return None
 

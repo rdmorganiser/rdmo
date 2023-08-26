@@ -3,8 +3,7 @@ from django.contrib import admin
 from django.db import models
 
 from .models import Attribute
-from .validators import (AttributeLockedValidator, AttributeParentValidator,
-                         AttributeUniqueURIValidator)
+from .validators import AttributeLockedValidator, AttributeParentValidator, AttributeUniqueURIValidator
 
 
 class AttributeAdminForm(forms.ModelForm):

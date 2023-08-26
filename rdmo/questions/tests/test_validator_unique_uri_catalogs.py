@@ -1,10 +1,11 @@
 import pytest
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from rest_framework.exceptions import \
-    ValidationError as RestFameworkValidationError
 
-from ..models import Question, QuestionSet, Page, Catalog, Section
+from rest_framework.exceptions import ValidationError as RestFameworkValidationError
+
+from ..models import Catalog, Page, Question, QuestionSet, Section
 from ..serializers.v1 import SectionSerializer
 from ..validators import CatalogUniqueURIValidator
 

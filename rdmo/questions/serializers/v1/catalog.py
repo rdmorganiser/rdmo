@@ -1,10 +1,12 @@
 from rest_framework import serializers
 
-from rdmo.core.serializers import (ElementModelSerializerMixin,
-                                   ElementWarningSerializerMixin,
-                                   ReadOnlyObjectPermissionSerializerMixin,
-                                   ThroughModelSerializerMixin,
-                                   TranslationSerializerMixin)
+from rdmo.core.serializers import (
+    ElementModelSerializerMixin,
+    ElementWarningSerializerMixin,
+    ReadOnlyObjectPermissionSerializerMixin,
+    ThroughModelSerializerMixin,
+    TranslationSerializerMixin,
+)
 
 from ...models import Catalog, CatalogSection
 from ...validators import CatalogLockedValidator, CatalogUniqueURIValidator
@@ -78,8 +80,9 @@ class CatalogNestedSerializer(CatalogSerializer):
     elements = serializers.SerializerMethodField()
 
     class Meta(CatalogSerializer.Meta):
-        fields = CatalogSerializer.Meta.fields + (
-            'elements',
+        fields = (
+            *CatalogSerializer.Meta.fields,
+            'elements'
         )
 
     def get_elements(self, obj):

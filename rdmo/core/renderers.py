@@ -3,6 +3,7 @@ from io import StringIO
 from django.utils.encoding import smart_str
 from django.utils.timezone import get_current_timezone, now
 from django.utils.xmlutils import SimplerXMLGenerator
+
 from rest_framework.renderers import BaseRenderer
 
 from rdmo import __version__
@@ -32,7 +33,7 @@ class BaseXMLRenderer(BaseRenderer):
 
     def render_text_element(self, xml, tag, attrs, text):
         # remove None values from attrs
-        attrs = dict((key, value) for key, value in attrs.items() if value)
+        attrs = {key: value for key, value in attrs.items() if value}
 
         xml.startElement(tag, attrs)
         if text is not None:

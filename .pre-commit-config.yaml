@@ -17,7 +17,9 @@ repos:
         exclude: error\.xml$
       - id: check-yaml
       - id: end-of-file-fixer
+        exclude: \.html$|\.txt$
       - id: trailing-whitespace
+        exclude: \.dot$
       - id: debug-statements
   - repo: https://github.com/charliermarsh/ruff-pre-commit
     rev: v0.0.284

@@ -1,10 +1,12 @@
 from rest_framework import serializers
 
-from rdmo.core.serializers import (ElementModelSerializerMixin,
-                                   ElementWarningSerializerMixin,
-                                   ReadOnlyObjectPermissionSerializerMixin,
-                                   ThroughModelSerializerMixin,
-                                   TranslationSerializerMixin)
+from rdmo.core.serializers import (
+    ElementModelSerializerMixin,
+    ElementWarningSerializerMixin,
+    ReadOnlyObjectPermissionSerializerMixin,
+    ThroughModelSerializerMixin,
+    TranslationSerializerMixin,
+)
 
 from ...models import Option, OptionSet
 from ...validators import OptionLockedValidator, OptionUniqueURIValidator

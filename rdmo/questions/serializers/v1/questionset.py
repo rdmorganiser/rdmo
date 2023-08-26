@@ -1,16 +1,15 @@
 from rest_framework import serializers
 
-from rdmo.core.serializers import (ElementModelSerializerMixin,
-                                   ElementWarningSerializerMixin,
-                                   ReadOnlyObjectPermissionSerializerMixin,
-                                   ThroughModelSerializerMixin,
-                                   TranslationSerializerMixin)
+from rdmo.core.serializers import (
+    ElementModelSerializerMixin,
+    ElementWarningSerializerMixin,
+    ReadOnlyObjectPermissionSerializerMixin,
+    ThroughModelSerializerMixin,
+    TranslationSerializerMixin,
+)
 
-from ...models import (Page, QuestionSet, QuestionSetQuestion,
-                       QuestionSetQuestionSet)
-from ...validators import (QuestionSetLockedValidator,
-                           QuestionSetQuestionSetValidator,
-                           QuestionSetUniqueURIValidator)
+from ...models import Page, QuestionSet, QuestionSetQuestion, QuestionSetQuestionSet
+from ...validators import QuestionSetLockedValidator, QuestionSetQuestionSetValidator, QuestionSetUniqueURIValidator
 from .question import QuestionSerializer
 
 
@@ -43,8 +42,10 @@ class QuestionSetSerializer(ThroughModelSerializerMixin, TranslationSerializerMi
 
     pages = serializers.PrimaryKeyRelatedField(queryset=Page.objects.all(), required=False, many=True)
     parents = serializers.PrimaryKeyRelatedField(queryset=QuestionSet.objects.all(), required=False, many=True)
-    questionsets = QuestionSetQuestionSetSerializer(source='questionset_questionsets', read_only=False, required=False, many=True)
-    questions = QuestionSetQuestionSerializer(source='questionset_questions', read_only=False, required=False, many=True)
+    questionsets = QuestionSetQuestionSetSerializer(source='questionset_questionsets',
+                                                    read_only=False, required=False, many=True)
+    questions = QuestionSetQuestionSerializer(source='questionset_questions',
+                                              read_only=False, required=False, many=True)
 
     warning = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()
@@ -111,8 +112,9 @@ class QuestionSetNestedSerializer(QuestionSetSerializer):
     elements = serializers.SerializerMethodField()
 
     class Meta(QuestionSetSerializer.Meta):
-        fields = QuestionSetSerializer.Meta.fields + (
-            'elements',
+        fields = (
+            *QuestionSetSerializer.Meta.fields,
+            'elements'
         )
 
     def get_elements(self, obj):

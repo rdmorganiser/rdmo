@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 from rdmo.conditions.models import Condition
 from rdmo.core.models import Model, TranslationMixin
-from rdmo.core.utils import copy_model, join_url
+from rdmo.core.utils import join_url
 from rdmo.domain.models import Attribute
 
 from ..managers import QuestionSetManager
@@ -213,8 +213,8 @@ class QuestionSet(Model, TranslationMixin):
     @cached_property
     def is_locked(self):
         return self.locked or \
-            any([page.is_locked for page in self.pages.all()]) or \
-            any([questionset.is_locked for questionset in self.questionsets.all()])
+            any(page.is_locked for page in self.pages.all()) or \
+            any(questionset.is_locked for questionset in self.questionsets.all())
 
     @cached_property
     def has_conditions(self):
@@ -223,7 +223,8 @@ class QuestionSet(Model, TranslationMixin):
     @cached_property
     def elements(self):
         questionset_elements = list(self.questionset_questionsets.all()) + list(self.questionset_questions.all())
-        return [questionset_element.element for questionset_element in sorted(questionset_elements, key=lambda e: e.order)]
+        return [questionset_element.element
+                for questionset_element in sorted(questionset_elements, key=lambda e: e.order)]
 
     @cached_property
     def descendants(self):
@@ -231,7 +232,7 @@ class QuestionSet(Model, TranslationMixin):
         for element in self.elements:
             if element == self:
                 raise RuntimeError(f'QuestionSet {self} is descendant of itself.')
-            descendants += [element] + element.descendants
+            descendants += [element, *element.descendants]
         return descendants
 
     def prefetch_elements(self):

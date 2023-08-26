@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 from rdmo.conditions.models import Condition
 from rdmo.core.models import Model, TranslationMixin
-from rdmo.core.utils import copy_model, join_url
+from rdmo.core.utils import join_url
 from rdmo.domain.models import Attribute
 
 from ..managers import PageManager
@@ -232,7 +232,7 @@ class Page(Model, TranslationMixin):
     def descendants(self):
         descendants = []
         for element in self.elements:
-            descendants += [element] + element.descendants
+            descendants += [element, *element.descendants]
         return descendants
 
     def prefetch_elements(self):

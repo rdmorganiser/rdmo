@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as et
 
 import pytest
+
 from django.urls import reverse
 
 from ..models import OptionSet
@@ -109,7 +110,7 @@ def test_create(db, client, username, password):
         url = reverse(urlnames['list'])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'uri_path': '%s_new_%s' % (instance.uri_path, username),
+            'uri_path': f'{instance.uri_path}_new_{username}',
             'comment': instance.comment,
             'order': instance.order
         }
@@ -128,7 +129,7 @@ def test_create_question(db, client, username, password):
             url = reverse(urlnames['list'])
             data = {
                 'uri_prefix': instance.uri_prefix,
-                'uri_path': '%s_new_%s' % (instance.uri_path, username),
+                'uri_path': f'{instance.uri_path}_new_{username}',
                 'comment': instance.comment,
                 'order': instance.order,
                 'questions': [question.id]
@@ -156,7 +157,7 @@ def test_create_m2m(db, client, username, password):
         url = reverse(urlnames['list'])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'uri_path': '%s_new_%s' % (instance.uri_path, username),
+            'uri_path': f'{instance.uri_path}_new_{username}',
             'comment': instance.comment,
             'order': instance.order,
             'options': optionset_options,

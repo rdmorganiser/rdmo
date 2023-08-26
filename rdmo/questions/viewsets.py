@@ -1,10 +1,12 @@
 from django.db import models
-from django_filters.rest_framework import DjangoFilterBackend
+
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+
+from django_filters.rest_framework import DjangoFilterBackend
 
 from rdmo.core.constants import VALUE_TYPE_CHOICES
 from rdmo.core.exports import XMLResponse
@@ -13,20 +15,30 @@ from rdmo.core.utils import is_truthy, render_to_format
 from rdmo.core.views import ChoicesViewSet
 
 from .models import Catalog, Page, Question, QuestionSet, Section
-from .renderers import (CatalogRenderer, PageRenderer, QuestionRenderer,
-                        QuestionSetRenderer, SectionRenderer)
-from .serializers.export import (CatalogExportSerializer, PageExportSerializer,
-                                 QuestionExportSerializer,
-                                 QuestionSetExportSerializer,
-                                 SectionExportSerializer)
-from .serializers.v1 import (CatalogIndexSerializer, CatalogNestedSerializer,
-                             CatalogSerializer, PageIndexSerializer,
-                             PageNestedSerializer, PageSerializer,
-                             QuestionIndexSerializer, QuestionSerializer,
-                             QuestionSetIndexSerializer,
-                             QuestionSetNestedSerializer,
-                             QuestionSetSerializer, SectionIndexSerializer,
-                             SectionNestedSerializer, SectionSerializer)
+from .renderers import CatalogRenderer, PageRenderer, QuestionRenderer, QuestionSetRenderer, SectionRenderer
+from .serializers.export import (
+    CatalogExportSerializer,
+    PageExportSerializer,
+    QuestionExportSerializer,
+    QuestionSetExportSerializer,
+    SectionExportSerializer,
+)
+from .serializers.v1 import (
+    CatalogIndexSerializer,
+    CatalogNestedSerializer,
+    CatalogSerializer,
+    PageIndexSerializer,
+    PageNestedSerializer,
+    PageSerializer,
+    QuestionIndexSerializer,
+    QuestionSerializer,
+    QuestionSetIndexSerializer,
+    QuestionSetNestedSerializer,
+    QuestionSetSerializer,
+    SectionIndexSerializer,
+    SectionNestedSerializer,
+    SectionSerializer,
+)
 from .utils import get_widget_type_choices
 
 
@@ -70,9 +82,11 @@ class CatalogViewSet(ModelViewSet):
             xml = CatalogRenderer().render(serializer.data, context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name='catalogs')
         else:
-            return render_to_format(self.request, export_format, 'questions', 'questions/export/catalogs.html', {
-                'catalogs': queryset
-            })
+            return render_to_format(
+                self.request, export_format, 'questions', 'questions/export/catalogs.html', {
+                    'catalogs': queryset
+                }
+            )
 
     @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
@@ -81,9 +95,11 @@ class CatalogViewSet(ModelViewSet):
             xml = CatalogRenderer().render([serializer.data], context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name=self.get_object().uri_path)
         else:
-            return render_to_format(self.request, export_format, self.get_object().uri_path, 'questions/export/catalogs.html', {
-                'catalogs': [self.get_object()]
-            })
+            return render_to_format(
+                self.request, export_format, self.get_object().uri_path, 'questions/export/catalogs.html', {
+                    'catalogs': [self.get_object()]
+                }
+            )
 
     def get_export_renderer_context(self, request):
         full = is_truthy(request.GET.get('full'))
@@ -138,9 +154,11 @@ class SectionViewSet(ModelViewSet):
             xml = SectionRenderer().render(serializer.data, context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name='sections')
         else:
-            return render_to_format(self.request, export_format, 'questions', 'questions/export/sections.html', {
-                'sections': queryset
-            })
+            return render_to_format(
+                self.request, export_format, 'questions', 'questions/export/sections.html', {
+                    'sections': queryset
+                }
+            )
 
     @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
@@ -149,9 +167,11 @@ class SectionViewSet(ModelViewSet):
             xml = SectionRenderer().render([serializer.data], context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name=self.get_object().uri_path)
         else:
-            return render_to_format(self.request, export_format, self.get_object().uri_path, 'questions/export/sections.html', {
-                'sections': [self.get_object()]
-            })
+            return render_to_format(
+                self.request, export_format, self.get_object().uri_path, 'questions/export/sections.html', {
+                    'sections': [self.get_object()]
+                }
+            )
 
     def get_export_renderer_context(self, request):
         full = is_truthy(request.GET.get('full'))
@@ -213,9 +233,11 @@ class PageViewSet(ModelViewSet):
             xml = PageRenderer().render(serializer.data, context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name='pages')
         else:
-            return render_to_format(self.request, export_format, 'questions', 'questions/export/pages.html', {
-                'pages': queryset
-            })
+            return render_to_format(
+                self.request, export_format, 'questions', 'questions/export/pages.html', {
+                    'pages': queryset
+                }
+            )
 
     @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
@@ -224,9 +246,11 @@ class PageViewSet(ModelViewSet):
             xml = PageRenderer().render([serializer.data], context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name=self.get_object().uri_path)
         else:
-            return render_to_format(self.request, export_format, self.get_object().uri_path, 'questions/export/pages.html', {
-                'pages': [self.get_object()]
-            })
+            return render_to_format(
+                self.request, export_format, self.get_object().uri_path, 'questions/export/pages.html', {
+                    'pages': [self.get_object()]
+                }
+            )
 
     def get_export_renderer_context(self, request):
         full = is_truthy(request.GET.get('full'))
@@ -288,9 +312,11 @@ class QuestionSetViewSet(ModelViewSet):
             xml = QuestionSetRenderer().render(serializer.data, context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name='questionsets')
         else:
-            return render_to_format(self.request, export_format, 'questionsets', 'questions/export/questionsets.html', {
-                'questionsets': queryset
-            })
+            return render_to_format(
+                self.request, export_format, 'questionsets', 'questions/export/questionsets.html', {
+                    'questionsets': queryset
+                }
+            )
 
     @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
@@ -299,9 +325,11 @@ class QuestionSetViewSet(ModelViewSet):
             xml = QuestionSetRenderer().render([serializer.data], context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name=self.get_object().uri_path)
         else:
-            return render_to_format(self.request, export_format, self.get_object().uri_path, 'questions/export/questionsets.html', {
-                'questionsets': [self.get_object()]
-            })
+            return render_to_format(
+                self.request, export_format, self.get_object().uri_path, 'questions/export/questionsets.html', {
+                    'questionsets': [self.get_object()]
+                }
+            )
 
     def get_export_renderer_context(self, request):
         full = is_truthy(request.GET.get('full'))
@@ -360,9 +388,11 @@ class QuestionViewSet(ModelViewSet):
             xml = QuestionRenderer().render(serializer.data, context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name='questions')
         else:
-            return render_to_format(self.request, export_format, 'questions', 'questions/export/questions.html', {
-                'questions': queryset
-            })
+            return render_to_format(
+                self.request, export_format, 'questions', 'questions/export/questions.html', {
+                    'questions': queryset
+                }
+            )
 
     @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
@@ -371,9 +401,11 @@ class QuestionViewSet(ModelViewSet):
             xml = QuestionRenderer().render([serializer.data], context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name=self.get_object().uri_path)
         else:
-            return render_to_format(self.request, export_format, self.get_object().uri_path, 'questions/export/questions.html', {
-                'questions': [self.get_object()]
-            })
+            return render_to_format(
+                self.request, export_format, self.get_object().uri_path, 'questions/export/questions.html', {
+                    'questions': [self.get_object()]
+                }
+            )
 
     def get_export_renderer_context(self, request):
         full = is_truthy(request.GET.get('full'))

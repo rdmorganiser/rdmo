@@ -6,7 +6,7 @@ from django.utils.functional import cached_property
 from mptt.utils import get_cached_trees
 
 
-class ProjectWrapper(object):
+class ProjectWrapper:
 
     def __init__(self, project, snapshot=None):
         self._project = project
@@ -113,7 +113,7 @@ class ProjectWrapper(object):
         if index != '*':
             values = filter(lambda value: value.collection_index == index, values)
 
-        return list(map(lambda value: value.as_dict, values))
+        return [value.as_dict for value in values]
 
     def _check_element(self, element, set_prefix=None, set_index=None):
         conditions = set(filter(lambda condition: condition.uri in element['conditions'], self._conditions))

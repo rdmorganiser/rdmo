@@ -1,13 +1,15 @@
-from rest_framework import serializers
-
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.core.constants import VALUE_TYPE_DATETIME, VALUE_TYPE_BOOLEAN
-from rdmo.core.serializers import (ElementModelSerializerMixin,
-                                   ElementWarningSerializerMixin,
-                                   ReadOnlyObjectPermissionSerializerMixin,
-                                   ThroughModelSerializerMixin,
-                                   TranslationSerializerMixin)
+from rest_framework import serializers
+
+from rdmo.core.constants import VALUE_TYPE_BOOLEAN, VALUE_TYPE_DATETIME
+from rdmo.core.serializers import (
+    ElementModelSerializerMixin,
+    ElementWarningSerializerMixin,
+    ReadOnlyObjectPermissionSerializerMixin,
+    ThroughModelSerializerMixin,
+    TranslationSerializerMixin,
+)
 
 from ...models import Page, Question, QuestionSet
 from ...validators import QuestionLockedValidator, QuestionUniqueURIValidator

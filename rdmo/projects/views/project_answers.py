@@ -3,6 +3,7 @@ import logging
 from django.conf import settings
 from django.shortcuts import redirect
 from django.views.generic import DetailView
+
 from rdmo.core.constants import VALUE_TYPE_FILE
 from rdmo.core.utils import render_to_format
 from rdmo.core.views import ObjectPermissionMixin
@@ -10,6 +11,7 @@ from rdmo.views.utils import ProjectWrapper
 
 from ..models import Project, Snapshot
 from ..utils import get_value_path
+
 logger = logging.getLogger(__name__)
 
 
@@ -81,4 +83,5 @@ class ProjectAnswersExportView(ObjectPermissionMixin, DetailView):
         return context
 
     def render_to_response(self, context, **response_kwargs):
-        return render_to_format(self.request, context['format'], context['title'], 'projects/project_answers_export.html', context)
+        return render_to_format(self.request, context['format'], context['title'],
+                                'projects/project_answers_export.html', context)

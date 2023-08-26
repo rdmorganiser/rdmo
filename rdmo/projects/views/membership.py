@@ -1,8 +1,7 @@
 import logging
 
 from django.conf import settings
-from django.http import (HttpResponseBadRequest, HttpResponseForbidden,
-                         HttpResponseRedirect)
+from django.http import HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.generic import DeleteView, UpdateView
@@ -73,7 +72,8 @@ class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView)
         if (self.request.user in self.obj.project.owners) or is_site_manager(self.request.user):
             # user is owner or site manager
             if is_last_owner(self.obj.project, self.obj.user):
-                logger.info('User "%s" not allowed to remove last user "%s"', self.request.user.username, self.obj.user.username)
+                logger.info('User "%s" not allowed to remove last user "%s"',
+                            self.request.user.username, self.obj.user.username)
                 return HttpResponseBadRequest()
             else:
                 logger.info('User "%s" deletes user "%s"', self.request.user.username, self.obj.user.username)

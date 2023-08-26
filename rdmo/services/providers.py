@@ -1,22 +1,19 @@
-import hmac
-import json
 import logging
-from urllib.parse import quote, urlencode
+from urllib.parse import urlencode
 
-import requests
 from django.conf import settings
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
-from rdmo.core.plugins import Plugin
+
+import requests
 
 logger = logging.getLogger(__name__)
 
 
-class OauthProviderMixin(object):
+class OauthProviderMixin:
 
     def get(self, request, url):
         # get access token from the session
@@ -128,7 +125,7 @@ class OauthProviderMixin(object):
         raise NotImplementedError
 
     def get_session_key(self, key):
-        return '{}.{}'.format(self.class_name, key)
+        return f'{self.class_name}.{key}'
 
     def store_in_session(self, request, key, data):
         session_key = self.get_session_key(key)
@@ -143,7 +140,7 @@ class OauthProviderMixin(object):
         return request.session.pop(session_key, None)
 
     def get_authorization_headers(self, access_token):
-        return {'Authorization': 'Bearer {}'.format(access_token)}
+        return {'Authorization': f'Bearer {access_token}'}
 
     def get_authorize_params(self, request, state):
         raise NotImplementedError
@@ -183,7 +180,7 @@ class GitHubProviderMixin(OauthProviderMixin):
 
     def get_authorization_headers(self, access_token):
         return {
-            'Authorization': 'token {}'.format(access_token),
+            'Authorization': f'token {access_token}',
             'Accept': 'application/vnd.github.v3+json'
         }
 
@@ -213,15 +210,15 @@ class GitLabProviderMixin(OauthProviderMixin):
 
     @property
     def authorize_url(self):
-        return '{}/oauth/authorize'.format(self.gitlab_url)
+        return f'{self.gitlab_url}/oauth/authorize'
 
     @property
     def token_url(self):
-        return '{}/oauth/token'.format(self.gitlab_url)
+        return f'{self.gitlab_url}/oauth/token'
 
     @property
     def api_url(self):
-        return '{}/api/v4'.format(self.gitlab_url)
+        return f'{self.gitlab_url}/api/v4'
 
     @property
     def client_id(self):

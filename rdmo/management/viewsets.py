@@ -1,6 +1,7 @@
 import logging
 
 from django.utils.translation import gettext_lazy as _
+
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -9,8 +10,7 @@ from rest_framework.serializers import ValidationError
 from rdmo.conditions.models import Condition
 from rdmo.core.imports import handle_uploaded_file
 from rdmo.core.utils import get_model_field_meta, is_truthy
-from rdmo.core.xml import (convert_elements, flat_xml_to_elements,
-                           order_elements, read_xml_file)
+from rdmo.core.xml import convert_elements, flat_xml_to_elements, order_elements, read_xml_file
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option, OptionSet
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet, Section
@@ -50,8 +50,8 @@ class UploadViewSet(viewsets.ViewSet):
         # step 1: store xml file as tmp file
         try:
             uploaded_file = request.FILES['file']
-        except KeyError:
-            raise ValidationError({'file': [_('This field may not be blank.')]})
+        except KeyError as e:
+            raise ValidationError({'file': [_('This field may not be blank.')]}) from e
         else:
             import_tmpfile_name = handle_uploaded_file(uploaded_file)
 
@@ -59,20 +59,22 @@ class UploadViewSet(viewsets.ViewSet):
         root = read_xml_file(import_tmpfile_name)
         if root is None:
             logger.info('XML parsing error. Import failed.')
-            raise ValidationError({'file': [_('The content of the xml file does not consist of well formed data or markup.')]})
+            raise ValidationError({'file': [
+                _('The content of the xml file does not consist of well formed data or markup.')
+            ]})
 
         # step 3: create element dicts from xml
         try:
             elements = flat_xml_to_elements(root)
         except KeyError as e:
             logger.info('Import failed with KeyError (%s)' % e)
-            raise ValidationError({'file': [_('This is not a valid RDMO XML file.')]})
+            raise ValidationError({'file': [_('This is not a valid RDMO XML file.')]}) from e
         except TypeError as e:
             logger.info('Import failed with TypeError (%s)' % e)
-            raise ValidationError({'file': [_('This is not a valid RDMO XML file.')]})
+            raise ValidationError({'file': [_('This is not a valid RDMO XML file.')]}) from e
         except AttributeError as e:
             logger.info('Import failed with AttributeError (%s)' % e)
-            raise ValidationError({'file': [_('This is not a valid RDMO XML file.')]})
+            raise ValidationError({'file': [_('This is not a valid RDMO XML file.')]}) from e
 
         # step 4: convert elements from previous versions
         elements = convert_elements(elements, root.attrib.get('version'))
@@ -98,10 +100,10 @@ class ImportViewSet(viewsets.ViewSet):
         # step 1: store xml file as tmp file
         try:
             elements = request.data['elements']
-        except KeyError:
-            raise ValidationError({'elements': [_('This field may not be blank.')]})
-        except TypeError:
-            raise ValidationError({'elements': [_('This is not a valid RDMO import JSON.')]})
+        except KeyError as e:
+            raise ValidationError({'elements': [_('This field may not be blank.')]}) from e
+        except TypeError as e:
+            raise ValidationError({'elements': [_('This is not a valid RDMO import JSON.')]}) from e
 
         # step 3: import the elements
         import_elements(elements, user=request.user)

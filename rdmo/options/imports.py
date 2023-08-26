@@ -2,15 +2,23 @@ import logging
 
 from django.contrib.sites.models import Site
 
-from rdmo.core.imports import (check_permissions, set_common_fields,
-                               set_lang_field, set_m2m_instances,
-                               set_m2m_through_instances,
-                               set_reverse_m2m_through_instance,
-                               validate_instance)
+from rdmo.core.imports import (
+    check_permissions,
+    set_common_fields,
+    set_lang_field,
+    set_m2m_instances,
+    set_m2m_through_instances,
+    set_reverse_m2m_through_instance,
+    validate_instance,
+)
 
 from .models import Option, OptionSet
-from .validators import (OptionLockedValidator, OptionSetLockedValidator,
-                         OptionSetUniqueURIValidator, OptionUniqueURIValidator)
+from .validators import (
+    OptionLockedValidator,
+    OptionSetLockedValidator,
+    OptionSetUniqueURIValidator,
+    OptionUniqueURIValidator,
+)
 
 logger = logging.getLogger(__name__)
 

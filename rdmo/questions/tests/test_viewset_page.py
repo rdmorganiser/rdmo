@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as et
 
 import pytest
+
 from django.db.models import Max
 from django.urls import reverse
 
@@ -113,7 +114,7 @@ def test_create(db, client, username, password):
         url = reverse(urlnames['list'])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'uri_path': '%s_new_%s' % (instance.uri_path, username),
+            'uri_path': f'{instance.uri_path}_new_{username}',
             'comment': instance.comment,
             'attribute': instance.attribute.pk if instance.attribute else '',
             'is_collection': instance.is_collection,
@@ -144,7 +145,7 @@ def test_create_section(db, client, username, password):
             url = reverse(urlnames['list'])
             data = {
                 'uri_prefix': instance.uri_prefix,
-                'uri_path': '%s_new_%s' % (instance.uri_path, username),
+                'uri_path': f'{instance.uri_path}_new_{username}',
                 'comment': instance.comment,
                 'attribute': instance.attribute.pk if instance.attribute else '',
                 'is_collection': instance.is_collection,
@@ -164,7 +165,7 @@ def test_create_section(db, client, username, password):
             if response.status_code == 201:
                 new_instance = Page.objects.get(id=response.json().get('id'))
                 section.refresh_from_db()
-                assert section_pages + [(new_instance.id, order)] == \
+                assert [*section_pages, (new_instance.id, order)] == \
                     list(section.section_pages.values_list('page', 'order'))
 
 
@@ -187,7 +188,7 @@ def test_create_m2m(db, client, username, password):
         url = reverse(urlnames['list'])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'uri_path': '%s_new_%s' % (instance.uri_path, username),
+            'uri_path': f'{instance.uri_path}_new_{username}',
             'comment': instance.comment,
             'attribute': instance.attribute.pk if instance.attribute else '',
             'is_collection': instance.is_collection,

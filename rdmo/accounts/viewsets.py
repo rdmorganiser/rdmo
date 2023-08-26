@@ -1,16 +1,16 @@
 from django.contrib.auth import get_user_model
-from django_filters.rest_framework import DjangoFilterBackend
+
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
-from rdmo.core.permissions import HasModelPermission, HasObjectPermission
-from rdmo.management.rules import is_editor, is_reviewer
+from django_filters.rest_framework import DjangoFilterBackend
 
-from .models import Role
+from rdmo.core.permissions import HasModelPermission, HasObjectPermission
+
 from .serializers.v1 import UserSerializer
 from .utils import is_site_manager
 
 
-class UserViewSetMixin(object):
+class UserViewSetMixin:
 
     def get_users_for_user(self, user):
         if user.is_authenticated:

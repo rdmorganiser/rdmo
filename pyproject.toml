@@ -137,6 +137,7 @@ select = [
 ignore = [
   "B006",   # mutable-argument-default
   "B007",   # unused-loop-control-variable
+  "B018",   # useless-expression
   "RUF012", # mutable-class-default
 ]
 
@@ -162,13 +163,19 @@ rest_framework = ["rest_framework"]
 "rdmo/**/models/__init__.py" = [
   "F401", # unused-import
 ]
+"rdmo/**/serializers/v1/__init__.py" = [
+  "F401", # unused-import
+]
 "rdmo/**/views/__init__.py" = [
   "F401", # unused-import
 ]
-# Ignore certain rules for tests, e.g. usage of assert is allowed
 "rdmo/**/tests/test_*.py" = [
   "S101", # assert
   "S106", # hardcoded-password-func-arg
+]
+"testing/config/settings/__init__.py" = [
+  "F401", # unused-import
+  "F403", # undefined-names
 ]
 
 [tool.pytest.ini_options]

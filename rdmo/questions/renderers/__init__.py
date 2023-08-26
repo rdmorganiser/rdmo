@@ -1,12 +1,15 @@
 from rdmo.conditions.renderers.mixins import ConditionRendererMixin
 from rdmo.core.renderers import BaseXMLRenderer
 from rdmo.domain.renderers.mixins import AttributeRendererMixin
-from rdmo.options.renderers.mixins import (OptionRendererMixin,
-                                           OptionSetRendererMixin)
+from rdmo.options.renderers.mixins import OptionRendererMixin, OptionSetRendererMixin
 
-from .mixins import (CatalogRendererMixin, PageRendererMixin,
-                     QuestionRendererMixin, QuestionSetRendererMixin,
-                     SectionRendererMixin)
+from .mixins import (
+    CatalogRendererMixin,
+    PageRendererMixin,
+    QuestionRendererMixin,
+    QuestionSetRendererMixin,
+    SectionRendererMixin,
+)
 
 
 class CatalogRenderer(CatalogRendererMixin, SectionRendererMixin, PageRendererMixin,

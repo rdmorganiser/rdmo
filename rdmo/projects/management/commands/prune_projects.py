@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 
-from rdmo.projects.models import Project, Membership
+from rdmo.projects.models import Membership, Project
 
 
 class Command(BaseCommand):
@@ -36,7 +36,7 @@ class Command(BaseCommand):
 
         self.stdout.write('Found projects without %s:' % (roles))
         for proj in candidates:
-            self.stdout.write('%s (id=%s)' % (proj, proj.id))
+            self.stdout.write(f'{proj} (id={proj.id})')
             if options['remove']:
                 self.stdout.write('...removing...', ending='')
                 proj.delete()

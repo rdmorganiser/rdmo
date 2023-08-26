@@ -4,13 +4,10 @@ import pytest
 
 from django.urls import reverse
 
-from ..models import Attribute
-
-
+from ...core.tests import get_obj_perms_status_code
 from ...core.tests import multisite_status_map as status_map
 from ...core.tests import multisite_users as users
-from ...core.tests import get_obj_perms_status_code
-
+from ..models import Attribute
 from .test_viewset_attribute import urlnames
 
 
@@ -73,7 +70,7 @@ def test_create(db, client, username, password):
         url = reverse(urlnames['list'])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'key': '%s_new_%s' % (instance.key, username),
+            'key': f'{instance.key}_new_{username}',
             'comment': '',
             'parent': instance.parent.pk if instance.parent else ''
         }

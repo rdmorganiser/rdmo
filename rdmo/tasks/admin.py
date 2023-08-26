@@ -22,7 +22,7 @@ class TaskAdminForm(forms.ModelForm):
 class TaskAdmin(admin.ModelAdmin):
     form = TaskAdminForm
 
-    search_fields = ['uri'] + get_language_fields('title') + get_language_fields('text')
+    search_fields = ['uri', *get_language_fields('title'), *get_language_fields('text')]
     list_display = ('uri', 'title', 'text', 'available')
     readonly_fields = ('uri', )
     list_filter = ('available', )

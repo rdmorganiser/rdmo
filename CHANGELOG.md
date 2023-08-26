@@ -100,7 +100,7 @@
 * Add account deletion for LDAP users
 * Fix attribute export
 * Fix condition resolution when going backwards
-* Prevent overlay errors if custom list is used 
+* Prevent overlay errors if custom list is used
 * Various fixes
 
 ## RDMO 1.6.2 (Nov 03, 2021)

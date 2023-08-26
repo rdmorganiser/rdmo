@@ -1,8 +1,10 @@
 from rest_framework import serializers
 
-from rdmo.core.serializers import (ElementModelSerializerMixin,
-                                   ReadOnlyObjectPermissionSerializerMixin,
-                                   ThroughModelSerializerMixin)
+from rdmo.core.serializers import (
+    ElementModelSerializerMixin,
+    ReadOnlyObjectPermissionSerializerMixin,
+    ThroughModelSerializerMixin,
+)
 from rdmo.questions.models import Question
 
 from ...models import OptionSet, OptionSetOption
@@ -64,8 +66,9 @@ class OptionSetNestedSerializer(OptionSetSerializer):
     elements = serializers.SerializerMethodField()
 
     class Meta(OptionSetSerializer.Meta):
-        fields = OptionSetSerializer.Meta.fields + (
-            'elements',
+        fields = (
+            *OptionSetSerializer.Meta.fields,
+            'elements'
         )
 
     def get_elements(self, obj):

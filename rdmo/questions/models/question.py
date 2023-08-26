@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from rdmo.conditions.models import Condition
 from rdmo.core.constants import VALUE_TYPE_CHOICES
 from rdmo.core.models import Model, TranslationMixin
-from rdmo.core.utils import copy_model, join_url
+from rdmo.core.utils import join_url
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
 
@@ -284,8 +284,8 @@ class Question(Model, TranslationMixin):
     @cached_property
     def is_locked(self):
         return self.locked or \
-            any([page.is_locked for page in self.pages.all()]) or \
-            any([questionset.is_locked for questionset in self.questionsets.all()])
+            any(page.is_locked for page in self.pages.all()) or \
+            any(questionset.is_locked for questionset in self.questionsets.all())
 
     @cached_property
     def has_conditions(self):

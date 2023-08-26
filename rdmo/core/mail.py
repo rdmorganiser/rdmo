@@ -5,7 +5,7 @@ from django.core.mail import EmailMessage
 
 def send_mail(subject, message, from_email=None, to=[], cc=[], bcc=[], reply_to=None, attachments=[]):
     site = Site.objects.get_current()
-    subject = '[{}] '.format(site.name) + subject
+    subject = f'[{site.name}] ' + subject
 
     if from_email is None:
         from_email = settings.DEFAULT_FROM_EMAIL

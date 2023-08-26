@@ -2,7 +2,6 @@ import pytest
 
 from django.urls import reverse
 
-
 roles = ('member', 'manager', 'editor', 'reviewer')
 
 

@@ -6,6 +6,7 @@ from pathlib import Path
 from random import randint
 
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
+
 from rest_framework.utils import model_meta
 
 from rdmo.core.utils import get_languages
@@ -48,11 +49,11 @@ def set_common_fields(instance, element):
 
 def set_lang_field(instance, field_name, element):
     for lang_code, lang_string, lang_field in get_languages():
-        field = element.get('%s_%s' % (field_name, lang_code))
+        field = element.get(f'{field_name}_{lang_code}')
         if field:
-            setattr(instance, '%s_%s' % (field_name, lang_field), field)
+            setattr(instance, f'{field_name}_{lang_field}', field)
         else:
-            setattr(instance, '%s_%s' % (field_name, lang_field), '')
+            setattr(instance, f'{field_name}_{lang_field}', '')
 
 
 def set_foreign_field(instance, field_name, element) -> None:
@@ -139,7 +140,7 @@ def set_m2m_through_instances(instance, field_name, element, source_name, target
             try:
                 # look for the item in items
                 through_instance = next(filter(lambda item: getattr(item, target_name).uri == target_instance.uri,
-                                                through_instances))
+                                               through_instances))
 
                 # update order if the item if it changed
                 if through_instance.order != order:
@@ -224,21 +225,21 @@ def validate_instance(instance, element, *validators):
             validator(instance if instance.id else None)(vars(instance))
     except ValidationError as e:
         try:
-            exception_message = '; '.join(['{}: {}'.format(key, ', '.join(messages)) for key, messages in e.message_dict.items()])
+            exception_message = '; '.join(['{}: {}'.format(key, ', '.join(messages))
+                                           for key, messages in e.message_dict.items()])
         except AttributeError:
             exception_message = ''.join(e.messages)
     except ObjectDoesNotExist as e:
         exception_message = e
     finally:
-        if exception_message is None:
-            return
-        message = '{instance_model} {instance_uri} cannot be imported ({exception}).'.format(
-            instance_model=instance._meta.object_name,
-            instance_uri=element.get('uri'),
-            exception=exception_message
-        )
-        logger.info(message)
-        element['errors'].append(message)
+        if exception_message is not None:
+            message = '{instance_model} {instance_uri} cannot be imported ({exception}).'.format(
+                instance_model=instance._meta.object_name,
+                instance_uri=element.get('uri'),
+                exception=exception_message
+            )
+            logger.info(message)
+            element['errors'].append(message)
 
 
 def check_permissions(instance, element, user):

@@ -8,7 +8,9 @@ from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
+
 from mptt.models import MPTTModel, TreeForeignKey
+
 from rdmo.core.models import Model
 from rdmo.domain.models import Attribute
 from rdmo.questions.models import Catalog, Question
@@ -88,7 +90,8 @@ class Project(MPTTModel, Model):
     def progress(self):
         # create a queryset for the attributes of the catalog for this project
         # the subquery is used to query only attributes which have a question in the catalog, which is not optional
-        questions = Question.objects.filter_by_catalog(self.catalog).filter(attribute_id=OuterRef('pk')).exclude(is_optional=True)
+        questions = Question.objects.filter_by_catalog(self.catalog) \
+                                    .filter(attribute_id=OuterRef('pk')).exclude(is_optional=True)
         attributes = Attribute.objects.annotate(active=Exists(questions)).filter(active=True).distinct()
 
         # query the total number of attributes from the qs above
