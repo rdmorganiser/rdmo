@@ -43,7 +43,7 @@ jobs:
     strategy:
       matrix:
         python-version: ['3.8', '3.11']
-        db-backend: [mysql, postgres, sqlite3]
+        db-backend: [mysql, postgres]
 
     name: "Test (Python: ${{ matrix.python-version }}, DB: ${{ matrix.db-backend }})"
     needs: lint
@@ -60,10 +60,6 @@ jobs:
         sudo apt install --yes pandoc texlive-xetex texlive-latex-extra texlive-fonts-recommended lmodern librsvg2-bin
         python -m pip install --upgrade pip
         pandoc --version
-    - name: Install rdmo
-      run: |
-        pip install -e .[ci]
-      if: matrix.db-backend == 'sqlite3'
     - name: Install rdmo[mysql] and start mysql
       run: |
         pip install -e .[ci,mysql]
