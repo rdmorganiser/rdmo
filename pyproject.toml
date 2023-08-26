@@ -137,6 +137,7 @@ select = [
 ignore = [
   "B006",   # mutable-argument-default
   "B007",   # unused-loop-control-variable
+  "B018",   # useless-expression
   "RUF012", # mutable-class-default
 ]
 
@@ -160,6 +161,9 @@ rest_framework = ["rest_framework"]
 
 [tool.ruff.per-file-ignores]
 "rdmo/**/models/__init__.py" = [
+  "F401", # unused-import
+]
+"rdmo/**/serializers/v1/__init__.py" = [
   "F401", # unused-import
 ]
 "rdmo/**/views/__init__.py" = [
