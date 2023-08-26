@@ -36,7 +36,7 @@ def test_prune_projects_error(db, settings):
 @pytest.mark.parametrize('min_role,role_list,projects', prune_assignments)
 def test_prune_projects_output(db, settings, min_role, role_list, projects):
     stdout, stderr = io.StringIO(), io.StringIO()
-    
+
     instances = Project.objects.filter(id__in=projects).all()
     call_command('prune_projects', '--min_role', min_role, stdout=stdout, stderr=stderr)
 

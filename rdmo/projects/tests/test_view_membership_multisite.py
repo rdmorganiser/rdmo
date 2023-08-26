@@ -73,7 +73,7 @@ def test_invite_email_project_path_email_body(db, client, username, password, pr
     foo_user, _created = get_user_model().objects.get_or_create(username=f'{site_domain}-user', email=foo_email, password=foo_username)
     foo_user.role.member.set([foo_site])
     project = Project.objects.get(pk=project_id)
-    
+
     url = reverse('membership_create', args=[project_id])
     data = {
         'username_or_email': foo_email,
