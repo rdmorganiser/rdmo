@@ -84,9 +84,6 @@ mysql = [
 postgres = [
   "psycopg2-binary~=2.9.6",
 ]
-shibboleth = [
-  "django-shibboleth-remoteuser@ git+https://github.com/Brown-University-Library/django-shibboleth-remoteuser.git@main",
-]
 pytest = [
   "pytest~=7.4.0",
   "pytest-cov~=4.0.0",
