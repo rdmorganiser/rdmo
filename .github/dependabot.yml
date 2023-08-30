@@ -1,12 +1,17 @@
 version: 2
 updates:
   - package-ecosystem: pip
-    directory: "/"
+    directory: /
     schedule:
       interval: monthly
     target-branch: master
   - package-ecosystem: github-actions
-    directory: "/"
+    directory: /
+    schedule:
+      interval: monthly
+    target-branch: master
+  - package-ecosystem: npm
+    directory: /
     schedule:
       interval: monthly
     target-branch: master
