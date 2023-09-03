@@ -26,3 +26,12 @@ repos:
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v8.41.0
+    hooks:
+      - id: eslint
+        args: [--fix, --color]
+        additional_dependencies:
+          - eslint@8.41.0
+          - eslint-plugin-react@7.32.2
+          - react@18.2.0
