@@ -27,8 +27,8 @@ jobs:
       with:
         python-version: "3.11"
         cache: pip
-    - run: python -m pip install --upgrade pip
-    - run: pip install -e .[dev]
+    - run: python -m pip install --upgrade pip setuptools wheel
+    - run: python -m pip install -e .[dev]
     - name: Set up pre-commit cache
       uses: actions/cache@v3
       with:
@@ -56,17 +56,17 @@ jobs:
     - name: Install Dependencies
       run: |
         sudo apt update
-        sudo apt install --yes pandoc texlive-xetex texlive-latex-extra texlive-fonts-recommended lmodern librsvg2-bin
-        python -m pip install --upgrade pip
+        sudo apt install --yes pandoc texlive-xetex
+        python -m pip install --upgrade pip setuptools wheel
         pandoc --version
     - name: Install rdmo[mysql] and start mysql
       run: |
-        pip install -e .[ci,mysql]
+        python -m pip install -e .[ci,mysql]
         sudo systemctl start mysql.service
       if: matrix.db-backend == 'mysql'
     - name: Install rdmo[postgres] and start postgresql
       run: |
-        pip install -e .[ci,postgres]
+        python -m pip install -e .[ci,postgres]
         sudo systemctl start postgresql.service
         pg_isready
         sudo -u postgres psql --command="CREATE USER postgres_user PASSWORD 'postgres_password' CREATEDB"
@@ -93,7 +93,7 @@ jobs:
     steps:
     - name: Run Coveralls finish
       run: |
-        pip install coveralls
+        python -m pip install coveralls
         coveralls --service=github --finish
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
