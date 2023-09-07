@@ -40,7 +40,6 @@ dependencies = [
   "defusedcsv~=2.0",
   "defusedxml~=0.7",
   "Django~=3.2.20", # TODO
-  "django-allauth~=0.53.1", # TODO
   "django-cleanup~=8.0",
   "django-compressor~=4.4",
   "django-extensions~=3.2",
@@ -60,8 +59,12 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+allauth = [
+  "django-allauth~=0.56",
+]
 ci = [
   "coveralls~=3.3",
+  "rdmo[allauth]",
   "rdmo[dev]",
 ]
 dev = [
