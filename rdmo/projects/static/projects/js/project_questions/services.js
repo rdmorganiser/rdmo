@@ -194,7 +194,7 @@ angular.module('project_questions')
                 });
             }, function (result) {
                 if (angular.isDefined(result)) {
-                    // an actual error occured
+                    // an actual error occurred
                     service.initError(result.status, result.statusText);
                 } else {
                     // this is the end of the interview
@@ -268,7 +268,7 @@ angular.module('project_questions')
             future.questions = [];
 
             // loop over all elements
-            // (a) create seperate questions array
+            // (a) create separate questions array
             // (b) mark the help text of the question set 'save'
             // (c) sort questionsets and questions by order in one list called elements
             // using recursive functions!
@@ -277,7 +277,7 @@ angular.module('project_questions')
     };
 
     service.initPage = function(page) {
-        // store attributes in a seperate array
+        // store attributes in a separate array
         if (page.attribute !== null) future.attributes.push(page.attribute);
 
         // mark the help text of the question set 'save'
@@ -296,7 +296,7 @@ angular.module('project_questions')
     };
 
     service.initQuestionSet = function(questionset) {
-        // store questionsets in a seperate array
+        // store questionsets in a separate array
         future.questionsets.push(questionset);
 
         // mark the help text of the question set 'save'
@@ -315,7 +315,7 @@ angular.module('project_questions')
     };
 
     service.initQuestion = function(question, parent) {
-        // store attributes and questionset in seperate array
+        // store attributes and questionset in separate array
         if (question.attribute !== null) future.attributes.push(question.attribute);
         future.questions.push(question);
 
@@ -342,7 +342,7 @@ angular.module('project_questions')
 
                 angular.forEach(question.optionsets, function(optionset) {
                     if (optionset.has_provider) {
-                        // call the provider to get addtional options
+                        // call the provider to get additional options
                         promises.push(resources.projects.query({
                             detail_action: 'options',
                             optionset: optionset.id,
@@ -538,7 +538,7 @@ angular.module('project_questions')
             }
         }
 
-        // loop over valuesets and initialize at leat one value for each question
+        // loop over valuesets and initialize at least one value for each question
         angular.forEach(future.valuesets[questionset.id][set_prefix], function(valueset) {
             // loop over questions to initialize them with at least one value, and init checkboxes and widgets
             angular.forEach(questionset.questions, function(question) {
@@ -616,7 +616,7 @@ angular.module('project_questions')
         }
 
         // for autocomplete
-        // fuse in initalized and the widget is locked for existing values
+        // fuse in initialized and the widget is locked for existing values
         if (question.widget_class === 'autocomplete') {
             if (angular.isArray(question.options)) {
                 question.options_fuse = new Fuse(question.options, {
@@ -696,7 +696,7 @@ angular.module('project_questions')
             // remove additional_input from unselected checkboxes
             value.additional_input = {};
 
-            // delete the value if it alredy exists on the server
+            // delete the value if it already exists on the server
             if (angular.isDefined(value.id)) {
                 return resources.values.delete({
                     id: value.id,

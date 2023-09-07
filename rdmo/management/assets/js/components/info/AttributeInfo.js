@@ -40,8 +40,8 @@ const AttributeInfo = ({ attribute, elements, elementActions }) => {
       <p>
         <span dangerouslySetInnerHTML={{
           __html: interpolate(ngettext(
-            'This attribute has <b>one decendant</b>.',
-            'This attribute has <b>%s decendants</b>.',
+            'This attribute has <b>one descendant</b>.',
+            'This attribute has <b>%s descendants</b>.',
             attributes.length
           ), [attributes.length])}} />
         {attributes.length > 0 && <ExtendLink extend={extendAttributes} onClick={toggleAttributes} />}

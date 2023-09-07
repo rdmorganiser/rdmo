@@ -143,7 +143,7 @@ def test_create_questionsets(db, settings):
     elements = elements.values()
     import_elements(elements)
 
-    assert len(root) == 10  # two questionsets apear twice in the export file
+    assert len(root) == 10  # two questionsets appear twice in the export file
     assert len(elements) == 8
     assert QuestionSet.objects.count() == 3
     assert Question.objects.count() == 5
@@ -162,7 +162,7 @@ def test_update_questionsets(db, settings):
     elements = elements.values()
     import_elements(elements)
 
-    assert len(root) == 10  # two questionsets apear twice in the export file
+    assert len(root) == 10  # two questionsets appear twice in the export file
     assert all(element['created'] is False for element in elements)
     assert all(element['updated'] is True for element in elements)
 

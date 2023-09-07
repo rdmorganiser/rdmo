@@ -35,7 +35,7 @@ function canMoveElement(dragElement, dropElement) {
     // if dragElement has no elements, the element can be moved
     return true
   } else {
-    // check recusively if one of the descendants of dragElement is dropElement
+    // check recursively if one of the descendants of dragElement is dropElement
     return dragElement.elements.reduce((acc, el) => {
       return acc && canMoveElement(el, dropElement)
     }, true)
