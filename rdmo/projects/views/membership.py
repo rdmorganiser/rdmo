@@ -66,7 +66,7 @@ class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView)
     def get_queryset(self):
         return Membership.objects.filter(project_id=self.kwargs.get('project_id'))
 
-    def delete(self, *args, **kwargs):
+    def form_valid(self, form):
         self.obj = self.get_object()
 
         if (self.request.user in self.obj.project.owners) or is_site_manager(self.request.user):
