@@ -21,7 +21,7 @@ requires-python = ">=3.8"
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Environment :: Web Environment",
-  "Framework :: Django :: 3.2",# TODO
+  "Framework :: Django :: 4.2",
   "Intended Audience :: Science/Research",
   "License :: OSI Approved :: Apache Software License",
   "Operating System :: OS Independent",
@@ -39,7 +39,7 @@ dynamic = [
 dependencies = [
   "defusedcsv~=2.0",
   "defusedxml~=0.7",
-  "Django~=3.2.20", # TODO
+  "django~=4.2",
   "django-cleanup~=8.0",
   "django-compressor~=4.4",
   "django-extensions~=3.2",
@@ -53,7 +53,7 @@ dependencies = [
   "djangorestframework~=3.14",
   "drf-extensions~=0.7",
   "iso8601~=2.0",
-  "Markdown~=3.4",
+  "markdown~=3.4",
   "pypandoc~=1.11",
   "rules~=3.3",
 ]
@@ -85,7 +85,10 @@ mysql = [
   "mysqlclient~=2.2",
 ]
 postgres = [
-  "psycopg2-binary~=2.9",
+  # once python 3.12 is officially released, the psycopg team will release a psycopg-binary for it.
+  # replace these two lines with "psycopg[binary]~=3.1"
+  "psycopg[binary]~=3.1; python_version<'3.12'",
+  "psycopg2-binary~=2.9; python_version>='3.12'",
 ]
 pytest = [
   "pytest~=7.4",
