@@ -120,6 +120,24 @@ jobs:
       - run: python -Im pip install -e .[dev]
       - run: python -Ic 'import rdmo; print(rdmo.__version__)'
 
+  optional-dependencies:
+    name: Test installation of optional-dependencies
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install os requirements for python-ldap
+        run: |
+          sudo apt update
+          sudo apt install --yes libldap2-dev libsasl2-dev
+      - run: python -m pip install --upgrade pip setuptools
+      - run: python -m pip install .[ci,dev,gunicorn,ldap,memcached,mysql,postgres,pytest]
+      - run: python -m pip freeze
+      - run: python -m pip list --outdated
+
   required-checks-pass:
     if: always()
     needs:
@@ -127,6 +145,7 @@ jobs:
       - test
       - coveralls
       - dev-setup
+      - optional-dependencies
     runs-on: ubuntu-22.04
     steps:
       - uses: re-actors/alls-green@release/v1

@@ -15,13 +15,13 @@ keywords = [
 ]
 license = {text = "Apache-2.0"}
 authors = [
-    {name = "RDMO Arbeitsgemeinschaft", email = "rdmo-team@listserv.dfn.de"},
+  {name = "RDMO Arbeitsgemeinschaft", email = "rdmo-team@listserv.dfn.de"},
 ]
 requires-python = ">=3.8"
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Environment :: Web Environment",
-  "Framework :: Django :: 3.2",
+  "Framework :: Django :: 3.2",# TODO
   "Intended Audience :: Science/Research",
   "License :: OSI Approved :: Apache Software License",
   "Operating System :: OS Independent",
@@ -37,60 +37,60 @@ dynamic = [
   "version",
 ]
 dependencies = [
-  "defusedcsv~=2.0.0",
-  "defusedxml~=0.7.1",
-  "Django~=3.2.20",
-  "django-allauth~=0.53.1",
-  "django-cleanup~=6.0.0",
+  "defusedcsv~=2.0",
+  "defusedxml~=0.7",
+  "Django~=3.2.20", # TODO
+  "django-allauth~=0.53.1", # TODO
+  "django-cleanup~=8.0",
   "django-compressor~=4.4",
-  "django-extensions~=3.2.0",
-  "django-filter~=21.1",
-  "django-libsass==0.9",
-  "django-mathfilters~=1.0.0",
-  "django-mptt~=0.13.4",
-  "django-rest-swagger~=2.2.0",
-  "django-settings-export~=1.2.1",
-  "django-widget-tweaks~=1.4.8",
-  "djangorestframework~=3.12.4",
-  "drf-extensions~=0.7.0",
-  "iso8601~=2.0.0",
-  "Markdown~=3.3.7",
-  "pypandoc~=1.10.0",
-  "rules~=3.3.0",
+  "django-extensions~=3.2",
+  "django-filter~=23.2",
+  "django-libsass~=0.9",
+  "django-mathfilters~=1.0",
+  "django-mptt~=0.14",
+  "django-rest-swagger~=2.2",
+  "django-settings-export~=1.2",
+  "django-widget-tweaks~=1.5",
+  "djangorestframework~=3.14",
+  "drf-extensions~=0.7",
+  "iso8601~=2.0",
+  "Markdown~=3.4",
+  "pypandoc~=1.11",
+  "rules~=3.3",
 ]
 
 [project.optional-dependencies]
 ci = [
-  "coveralls",
+  "coveralls~=3.3",
   "rdmo[dev]",
 ]
 dev = [
-  "django-debug-toolbar",
-  "pre-commit",
+  "django-debug-toolbar~=4.2",
+  "pre-commit~=3.4",
   "rdmo[pytest]",
 ]
 gunicorn = [
-  "gunicorn>=19.9",
+  "gunicorn~=21.2",
 ]
 ldap = [
-  "django-auth-ldap>=2",
+  "django-auth-ldap~=4.5",
 ]
 memcached = [
-  "python-memcached>=1.58",
+  "python-memcached~=1.5",
 ]
 mysql = [
-  "mysqlclient~=2.2.0",
+  "mysqlclient~=2.2",
 ]
 postgres = [
-  "psycopg2-binary~=2.9.6",
+  "psycopg2-binary~=2.9",
 ]
 pytest = [
-  "pytest~=7.4.0",
-  "pytest-cov~=4.0.0",
-  "pytest-django~=4.5.0",
-  "pytest-mock~=3.11.0",
-  "pytest-randomly~=3.15.0",
-  "pytest-xdist~=3.3.1",
+  "pytest~=7.4",
+  "pytest-cov~=4.1",
+  "pytest-django~=4.5",
+  "pytest-mock~=3.11",
+  "pytest-randomly~=3.15",
+  "pytest-xdist~=3.3",
 ]
 
 [project.urls]
