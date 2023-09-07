@@ -4,14 +4,14 @@ updates:
     directory: /
     schedule:
       interval: monthly
-    target-branch: master
+    target-branch: dependency-updates
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: monthly
-    target-branch: master
+    target-branch: dependency-updates
   - package-ecosystem: npm
     directory: /
     schedule:
       interval: monthly
-    target-branch: master
+    target-branch: dependency-updates
