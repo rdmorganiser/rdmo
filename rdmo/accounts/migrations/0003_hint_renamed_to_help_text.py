@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import jsonfield.fields
 
 
 class Migration(migrations.Migration):
@@ -20,6 +19,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='detailkey',
             name='options',
-            field=jsonfield.fields.JSONField(blank=True, null=True, help_text='Enter valid JSON of the form [[key, label], [key, label], ...]'),
+            field=models.JSONField(blank=True, null=True, help_text='Enter valid JSON of the form [[key, label], [key, label], ...]'),
         ),
     ]
