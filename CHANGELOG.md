@@ -18,7 +18,10 @@
 * Add refresh to option set providers
 * Don't open XML exports in browser, except when EXPORT_CONTENT_DISPOSITION = None
 * Fix new Shibboleth setup
-* Refactor packaging, add pyproject.toml, add pre-commit-config, overhaul testing and CI
+* Refactor packaging, add pyproject.toml
+* Add pre-commit-config
+* Overhaul testing and CI
+* Update Python dependencies
 * Update CITATION.cff file
 
 ## RDMO 1.11.0 (Aug 1, 2023)
@@ -42,7 +45,7 @@
 * Add counter to projects filtering
 * Add an error message if save fails in the interview
 * Adjust interview buttons if PROJECT_QUESTIONS_AUTOSAVE is True
-* Adjust style for <summary> tag
+* Adjust style for "<summary>" tag
 
 ## RDMO 1.9.2 (Feb 23, 2023)
 
