@@ -23,6 +23,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='catalog',
             name='uri_path',
-            field=models.CharField(blank=True, help_text='The path for the URI of this catalog.', max_length=512, verbose_name='Path'),
+            field=models.CharField(blank=True, help_text='The path for the URI of this catalog.', max_length=512, verbose_name='URI Path'),
         ),
     ]
