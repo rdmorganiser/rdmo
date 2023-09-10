@@ -266,10 +266,15 @@ class IntegrationForm(forms.ModelForm):
 
         # add fields for the integration options
         for field in self.provider.fields:
-            try:
-                initial = IntegrationOption.objects.get(integration=self.instance, key=field.get('key')).value
-            except IntegrationOption.DoesNotExist:
+            # new integration instance is going to be created
+            if self.instance.pk is None:
                 initial = None
+            # existing integration is going to be updated
+            else:
+                try:
+                    initial = IntegrationOption.objects.get(integration=self.instance, key=field.get('key')).value
+                except IntegrationOption.DoesNotExist:
+                    initial = None
 
             if field.get('placeholder'):
                 attrs = {'placeholder': field.get('placeholder')}
