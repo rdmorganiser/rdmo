@@ -187,6 +187,18 @@ testpaths = ["rdmo"]
 python_files = "test_*[!.txt].py"
 pythonpath = [".", "testing"]
 addopts = "-p no:randomly"
+filterwarnings = [
+  # fail on RemovedInDjango50Warning exception
+  "error::django.utils.deprecation.RemovedInDjango50Warning",
+
+  # ignore warnings raised from within coreapi 2.3.3
+  "ignore:'cgi' is deprecated and slated for removal in Python 3.13:DeprecationWarning",
+  "ignore:pkg_resources is deprecated as an API:DeprecationWarning",
+
+  # ignore warnings raised from within django itself
+  # django/core/files/storage/__init__.py
+  "ignore:django.core.files.storage.get_storage_class is deprecated:django.utils.deprecation.RemovedInDjango51Warning",
+]
 
 [tool.coverage.run]
 source = ["rdmo"]
