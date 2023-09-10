@@ -1,5 +1,29 @@
 # Changelog
 
+## RDMO 2.0.0 (Sep 11, 2023)
+
+* Refactor data model of questions app:
+  * Introduce Pages model, replacing question sets which are not nested
+  * Use m2m relations instead of foreign keys, e.g. one catalog has now many sections,
+    but one section can be also part of many catalogs
+  * Refactor import and update elements import format, but keep old format working
+  * Rename key to uri_path in all element models, but Attribute
+* Add new React/Redux-based management interface, which replaces the 6 old interfaces:
+  * Add table-like views for all elements, with locking, availability and export buttons
+  * Add nested views for catalogs, sections, pages and question sets
+  * Improve edit views for elements, remove modals
+* Add Site-based permissions for all elements and new editor and reviewer roles
+* Add set_collection to Value model to store if this value was part of a set
+* Add JSON project export and refactor CSV exports
+* Add refresh to option set providers
+* Don't open XML exports in browser, except when EXPORT_CONTENT_DISPOSITION = None
+* Fix new Shibboleth setup
+* Refactor packaging, add pyproject.toml
+* Add pre-commit-config
+* Overhaul testing and CI
+* Update Python dependencies
+* Update CITATION.cff file
+
 ## RDMO 1.11.0 (Aug 1, 2023)
 
 * Refactor Shibboleth setup, add LOGIN_FORM, SHIBBOLETH_LOGIN_URL
@@ -21,7 +45,7 @@
 * Add counter to projects filtering
 * Add an error message if save fails in the interview
 * Adjust interview buttons if PROJECT_QUESTIONS_AUTOSAVE is True
-* Adjust style for <summary> tag
+* Adjust style for \<summary> tag
 
 ## RDMO 1.9.2 (Feb 23, 2023)
 
