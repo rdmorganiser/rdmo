@@ -188,7 +188,7 @@ python -m aiosmtpd -n -l localhost:8025
 In order to run the test suite, the `rdmo` repo itself can be setup in a similar way in its own virtual environment:
 
 ```
-deactivate                                  # if you are allready in an env
+deactivate                                  # if you are already in an env
 cd path/to/rdmorganiser/rdmo
 python3 -m venv env
 source env/bin/activate                     # on Linux or macOS

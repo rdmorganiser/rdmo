@@ -25,7 +25,7 @@ const Main = ({ config, elements, imports, configActions, elementActions, import
     return null
   }
 
-  // check if an an error occured
+  // check if an an error occurred
   if (!isNil(elements.errors.api)) {
     return <MainErrors errors={elements.errors.api} />
   } else if (get(elements, 'element.errors.api')) {

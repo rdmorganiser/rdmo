@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
-const useBool = (inital) => {
-  const [value, setValue] = useState(inital)
+const useBool = (initial) => {
+  const [value, setValue] = useState(initial)
   const toggleValue = () => setValue(!value)
 
   return [value, toggleValue]
