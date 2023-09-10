@@ -1,12 +1,32 @@
 version: 2
 updates:
   - package-ecosystem: pip
-    directory: "/"
+    directory: /
     schedule:
       interval: monthly
-    target-branch: master
+    open-pull-requests-limit: 10
+    target-branch: dependency-updates
+    labels:
+      - dependencies
+      - python
+      - type:maintenance
   - package-ecosystem: github-actions
-    directory: "/"
+    directory: /
     schedule:
       interval: monthly
-    target-branch: master
+    open-pull-requests-limit: 10
+    target-branch: dependency-updates
+    labels:
+      - dependencies
+      - github_actions
+      - type:maintenance
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 10
+    target-branch: dependency-updates
+    labels:
+      - dependencies
+      - javascript
+      - type:maintenance
