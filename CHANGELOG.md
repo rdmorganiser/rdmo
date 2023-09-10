@@ -45,7 +45,7 @@
 * Add counter to projects filtering
 * Add an error message if save fails in the interview
 * Adjust interview buttons if PROJECT_QUESTIONS_AUTOSAVE is True
-* Adjust style for "<summary>" tag
+* Adjust style for \<summary> tag
 
 ## RDMO 1.9.2 (Feb 23, 2023)
 
