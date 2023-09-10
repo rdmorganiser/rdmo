@@ -21,7 +21,7 @@
 * Refactor packaging, add pyproject.toml
 * Add pre-commit-config
 * Overhaul testing and CI
-* Update Python dependencies
+* Update Python dependencies, drop support for EOL Python 3.6 and 3.7
 * Update CITATION.cff file
 
 ## RDMO 1.11.0 (Aug 1, 2023)
