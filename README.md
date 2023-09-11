@@ -16,7 +16,7 @@ RDMO is a tool to support the systematic planning, organisation and implementati
   <dt>Source code</dt>
   <dd>https://github.com/rdmorganiser/rdmo</dd>
   <dt>Documentation</dt>
-  <dd>http://rdmo.readthedocs.io</dd>
+  <dd>https://rdmo.readthedocs.io</dd>
   <dt>Mailing list</dt>
   <dd>https://www.listserv.dfn.de/sympa/subscribe/rdmo</dd>
   <dt>Slack</dt>
