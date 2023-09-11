@@ -96,11 +96,12 @@ pytest = [
 ]
 
 [project.urls]
-Changelog = "https://github.com/rdmorganiser/rdmo/blob/master/CHANGELOG.md"
-Documentation = "https://rdmo.readthedocs.io"
-Homepage = "https://rdmorganiser.github.io"
-Issues = "https://github.com/rdmorganiser/rdmo/issues"
-Repository = "https://github.com/rdmorganiser/rdmo.git"
+changelog = "https://github.com/rdmorganiser/rdmo/blob/master/CHANGELOG.md"
+documentation = "https://rdmo.readthedocs.io"
+homepage = "https://rdmorganiser.github.io"
+issues = "https://github.com/rdmorganiser/rdmo/issues"
+repository = "https://github.com/rdmorganiser/rdmo.git"
+slack = "https://rdmo.slack.com"
 
 [tool.setuptools.packages.find]
 include = ["rdmo*"]
