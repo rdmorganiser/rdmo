@@ -43,7 +43,7 @@ class Catalog(Model, TranslationMixin):
     )
     uri_path = models.CharField(
         max_length=512, blank=True,
-        verbose_name=_('Path'),
+        verbose_name=_('URI Path'),
         help_text=_('The path for the URI of this catalog.')
     )
     comment = models.TextField(
