@@ -64,12 +64,12 @@ allauth = [
 ]
 ci = [
   "coveralls~=3.3",
-  "rdmo[allauth]",
   "rdmo[dev]",
 ]
 dev = [
   "django-debug-toolbar~=4.2",
   "pre-commit~=3.4",
+  "rdmo[allauth]",
   "rdmo[pytest]",
 ]
 gunicorn = [
