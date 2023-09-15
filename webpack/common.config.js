@@ -2,7 +2,6 @@ const webpack = require('webpack')
 const { merge } = require('webpack-merge')
 const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const base = {
   resolve: {
