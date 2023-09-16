@@ -2,7 +2,7 @@ import os
 
 from django.utils.translation import gettext_lazy as _
 
-from . import INSTALLED_APPS
+from . import INSTALLED_APPS, MIDDLEWARE
 
 DEBUG = False
 TEMPLATE_DEBUG = False
@@ -27,6 +27,10 @@ FIXTURE_DIRS = (
 INSTALLED_APPS += [
     'allauth',
     'allauth.account'
+]
+
+MIDDLEWARE += [
+    'allauth.account.middleware.AccountMiddleware'
 ]
 
 ACCOUNT = True
