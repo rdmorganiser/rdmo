@@ -64,7 +64,7 @@ class Question(Model, TranslationMixin):
         help_text=_('Designates whether this question is optional.')
     )
     editors = models.ManyToManyField(
-        Site, related_name='%(class)s_editors', blank=True,
+        Site, related_name='questions_as_editor', blank=True,
         verbose_name=_('Editors'),
         help_text=_('The sites that can edit this question (in a multi site setup).')
     )

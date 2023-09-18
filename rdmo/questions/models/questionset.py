@@ -72,7 +72,7 @@ class QuestionSet(Model, TranslationMixin):
         help_text=_('Designates whether this question set is a collection.')
     )
     editors = models.ManyToManyField(
-        Site, related_name='%(class)s_editors', blank=True,
+        Site, related_name='questionsets_as_editor', blank=True,
         verbose_name=_('Editors'),
         help_text=_('The sites that can edit this questionset (in a multi site setup).')
     )

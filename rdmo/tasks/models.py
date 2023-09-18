@@ -54,7 +54,7 @@ class Task(TranslationMixin, models.Model):
         help_text=_('The sites this task belongs to (in a multi site setup).')
     )
     editors = models.ManyToManyField(
-        Site, related_name='%(class)s_editors', blank=True,
+        Site, related_name='tasks_as_editor', blank=True,
         verbose_name=_('Editors'),
         help_text=_('The sites that can edit this task (in a multi site setup).')
     )

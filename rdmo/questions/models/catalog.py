@@ -72,7 +72,7 @@ class Catalog(Model, TranslationMixin):
         help_text=_('The sites this catalog belongs to (in a multi site setup).')
     )
     editors = models.ManyToManyField(
-        Site, related_name='%(class)s_editors', blank=True,
+        Site, related_name='catalogs_as_editor', blank=True,
         verbose_name=_('Editors'),
         help_text=_('The sites that can edit this catalog (in a multi site setup).')
     )

@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='attribute',
             name='editors',
-            field=models.ManyToManyField(blank=True, help_text='The sites that can edit this attribute (in a multi site setup).', related_name='attribute_editors', to='sites.Site', verbose_name='Editors'),
+            field=models.ManyToManyField(blank=True, help_text='The sites that can edit this attribute (in a multi site setup).', related_name='attributes_as_editor', to='sites.Site', verbose_name='Editors'),
         ),
     ]

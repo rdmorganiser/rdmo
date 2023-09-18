@@ -41,7 +41,7 @@ class Attribute(MPTTModel):
         help_text=_('Designates whether this attribute (and its descendants) can be changed.')
     )
     editors = models.ManyToManyField(
-        Site, related_name='%(class)s_editors', blank=True,
+        Site, related_name='attributes_as_editor', blank=True,
         verbose_name=_('Editors'),
         help_text=_('The sites that can edit this attribute (in a multi site setup).')
     )

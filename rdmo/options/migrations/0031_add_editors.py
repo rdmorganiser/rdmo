@@ -14,11 +14,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='option',
             name='editors',
-            field=models.ManyToManyField(blank=True, help_text='The sites that can edit this option (in a multi site setup).', related_name='option_editors', to='sites.Site', verbose_name='Editors'),
+            field=models.ManyToManyField(blank=True, help_text='The sites that can edit this option (in a multi site setup).', related_name='options_as_editor', to='sites.Site', verbose_name='Editors'),
         ),
         migrations.AddField(
             model_name='optionset',
             name='editors',
-            field=models.ManyToManyField(blank=True, help_text='The sites that can edit this option set (in a multi site setup).', related_name='optionset_editors', to='sites.Site', verbose_name='Editors'),
+            field=models.ManyToManyField(blank=True, help_text='The sites that can edit this option set (in a multi site setup).', related_name='optionsets_as_editor', to='sites.Site', verbose_name='Editors'),
         ),
     ]

@@ -77,7 +77,7 @@ class Page(Model, TranslationMixin):
         help_text=_('The questions of this page.')
     )
     editors = models.ManyToManyField(
-        Site, related_name='%(class)s_editors', blank=True,
+        Site, related_name='pages_as_editor', blank=True,
         verbose_name=_('Editors'),
         help_text=_('The sites that can edit this page (in a multi site setup).')
     )

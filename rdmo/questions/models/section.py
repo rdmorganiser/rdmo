@@ -60,7 +60,7 @@ class Section(Model, TranslationMixin):
         help_text=_('The pages of this section.')
     )
     editors = models.ManyToManyField(
-        Site, related_name='%(class)s_editors', blank=True,
+        Site, related_name='sections_as_editor', blank=True,
         verbose_name=_('Editors'),
         help_text=_('The sites that can edit this section (in a multi site setup).')
     )

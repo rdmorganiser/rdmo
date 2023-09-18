@@ -14,26 +14,26 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='catalog',
             name='editors',
-            field=models.ManyToManyField(blank=True, help_text='The sites that can edit this catalog (in a multi site setup).', related_name='catalog_editors', to='sites.Site', verbose_name='Editors'),
+            field=models.ManyToManyField(blank=True, help_text='The sites that can edit this catalog (in a multi site setup).', related_name='catalogs_as_editor', to='sites.Site', verbose_name='Editors'),
         ),
         migrations.AddField(
             model_name='page',
             name='editors',
-            field=models.ManyToManyField(blank=True, help_text='The sites that can edit this page (in a multi site setup).', related_name='page_editors', to='sites.Site', verbose_name='Editors'),
+            field=models.ManyToManyField(blank=True, help_text='The sites that can edit this page (in a multi site setup).', related_name='pages_as_editor', to='sites.Site', verbose_name='Editors'),
         ),
         migrations.AddField(
             model_name='question',
             name='editors',
-            field=models.ManyToManyField(blank=True, help_text='The sites that can edit this question (in a multi site setup).', related_name='question_editors', to='sites.Site', verbose_name='Editors'),
+            field=models.ManyToManyField(blank=True, help_text='The sites that can edit this question (in a multi site setup).', related_name='questions_as_editor', to='sites.Site', verbose_name='Editors'),
         ),
         migrations.AddField(
             model_name='questionset',
             name='editors',
-            field=models.ManyToManyField(blank=True, help_text='The sites that can edit this questionset (in a multi site setup).', related_name='questionset_editors', to='sites.Site', verbose_name='Editors'),
+            field=models.ManyToManyField(blank=True, help_text='The sites that can edit this questionset (in a multi site setup).', related_name='questionsets_as_editor', to='sites.Site', verbose_name='Editors'),
         ),
         migrations.AddField(
             model_name='section',
             name='editors',
-            field=models.ManyToManyField(blank=True, help_text='The sites that can edit this section (in a multi site setup).', related_name='section_editors', to='sites.Site', verbose_name='Editors'),
+            field=models.ManyToManyField(blank=True, help_text='The sites that can edit this section (in a multi site setup).', related_name='sections_as_editor', to='sites.Site', verbose_name='Editors'),
         ),
     ]
