@@ -2328,7 +2328,7 @@ msgstr "Diese Aufgabe wurde bereits über diese Integration versendet."
 
 #: projects/templates/projects/issue_send_message.txt:1
 msgid "To whom it may concern,"
-msgstr "Sehr geerte Damen und Herren,"
+msgstr "Sehr geehrte Damen und Herren,"
 
 #: projects/templates/projects/issue_send_message.txt:3
 #, python-format
