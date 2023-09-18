@@ -1,6 +1,6 @@
 # Changelog
 
-## RDMO 2.0.0 (Sep 11, 2023)
+## RDMO 2.0.0 (Sep 21, 2023)
 
 * Refactor data model of questions app:
   * Introduce Pages model, replacing question sets which are not nested

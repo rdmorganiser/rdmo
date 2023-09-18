@@ -17,9 +17,9 @@ authors:
     given-names:  Max
     orcid:        https://orcid.org/0000-0003-1522-494X
 
-  - family-names: Harry
-    given-names:  Enke
-    orcid:        https://orcid.org/0000-0002-2366-8316
+  - family-names: Fütterer
+    given-names:  Heinz-Alexander
+    orcid:        https://orcid.org/0000-0003-4397-027X
 
   - family-names: Lanza
     given-names:  Giacomo
@@ -31,6 +31,10 @@ authors:
   - family-names: Pilori
     given-names:  Dario
     orcid:        https://orcid.org/0000-0003-4499-8573
+
+  - family-names: Harry
+    given-names:  Enke
+    orcid:        https://orcid.org/0000-0002-2366-8316
 
 title: Research Data Management Organizer (RDMO)
 doi: 10.5281/zenodo.596581
