@@ -58,7 +58,9 @@ class CatalogViewSet(ModelViewSet):
 
     def get_queryset(self):
         queryset = Catalog.objects.annotate(projects_count=models.Count('projects'))
-        if self.action in ('nested', 'export', 'detail_export'):
+        if self.action in ['index']:
+            return queryset
+        elif self.action in ('nested', 'export', 'detail_export'):
             return queryset.prefetch_elements()
         else:
             return queryset.prefetch_related('sites', 'editors', 'groups', 'catalog_sections__section')
@@ -130,7 +132,9 @@ class SectionViewSet(ModelViewSet):
 
     def get_queryset(self):
         queryset = Section.objects.all()
-        if self.action in ('nested', 'export', 'detail_export'):
+        if self.action in ['index']:
+            return queryset
+        elif self.action in ('nested', 'export', 'detail_export'):
             return queryset.prefetch_elements()
         else:
             return queryset.prefetch_related('catalogs', 'editors', 'section_pages__page')
@@ -203,7 +207,9 @@ class PageViewSet(ModelViewSet):
 
     def get_queryset(self):
         queryset = Page.objects.all()
-        if self.action in ['nested', 'export', 'detail_export']:
+        if self.action in ['index']:
+            return queryset
+        elif self.action in ['nested', 'export', 'detail_export']:
             return queryset.prefetch_elements().select_related('attribute')
         else:
             return queryset.prefetch_related(
@@ -281,7 +287,9 @@ class QuestionSetViewSet(ModelViewSet):
 
     def get_queryset(self):
         queryset = QuestionSet.objects.all()
-        if self.action in ('nested', 'export', 'detail_export'):
+        if self.action in ['index']:
+            return queryset
+        elif self.action in ('nested', 'export', 'detail_export'):
             return queryset.prefetch_elements().select_related('attribute')
         else:
             return queryset.prefetch_related(
@@ -363,7 +371,9 @@ class QuestionViewSet(ModelViewSet):
 
     def get_queryset(self):
         queryset = Question.objects.all()
-        if self.action in ('nested', 'export', 'detail_export'):
+        if self.action in ['index']:
+            return queryset
+        elif self.action in ('nested', 'export', 'detail_export'):
             return queryset.prefetch_elements().select_related('attribute')
         else:
             return queryset.prefetch_related(
