@@ -147,6 +147,20 @@ jobs:
       - run: python -m pip freeze
       - run: python -m pip list --outdated
 
+  webpack-build:
+    name: Test webpack-build
+    needs: lint
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: npm
+      - run: npm install --dev
+      - run: npm run build
+      - run: npm run build:prod
+
   required-checks-pass:
     if: always()
     needs:
@@ -155,6 +169,7 @@ jobs:
       - coveralls
       - dev-setup
       - optional-dependencies
+      - webpack-build
     runs-on: ubuntu-22.04
     steps:
       - uses: re-actors/alls-green@release/v1
