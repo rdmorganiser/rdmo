@@ -49,6 +49,7 @@ dependencies = [
   "django-mptt~=0.14",
   "django-rest-swagger~=2.2",
   "django-settings-export~=1.2",
+  "django-split-settings~=1.2",
   "django-widget-tweaks~=1.5",
   "djangorestframework~=3.14",
   "drf-extensions~=0.7",
