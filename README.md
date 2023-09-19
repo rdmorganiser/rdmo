@@ -4,7 +4,7 @@ RDMO - Research Data Management Organiser
 [![Latest release](https://img.shields.io/pypi/v/rdmo.svg?style=flat)](https://pypi.python.org/pypi/rdmo/)
 [![Python Versions](https://img.shields.io/pypi/pyversions/rdmo.svg?style=flat)](https://www.python.org/)
 [![License](https://img.shields.io/github/license/rdmorganiser/rdmo?style=flat)](https://github.com/rdmorganiser/rdmo/blob/master/LICENSE)
-[![pytest Workflow Status](https://github.com/rdmorganiser/rdmo/actions/workflows/pytest.yml/badge.svg)](https://github.com/rdmorganiser/rdmo/actions/workflows/pytest.yml)
+[![CI Workflow Status](https://github.com/rdmorganiser/rdmo/actions/workflows/ci.yml/badge.svg)](https://github.com/rdmorganiser/rdmo/actions/workflows/ci.yml)
 [![Coverage Status](https://coveralls.io/repos/rdmorganiser/rdmo/badge.svg?branch=master&service=github)](https://coveralls.io/github/rdmorganiser/rdmo?branch=master)
 [![Documentation status](https://readthedocs.org/projects/rdmo/badge/?version=latest)](http://rdmo.readthedocs.io/en/latest/?badge=latest)
 
