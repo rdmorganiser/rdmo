@@ -38,7 +38,7 @@ dynamic = [
 ]
 dependencies = [
   "defusedcsv~=2.0",
-  "defusedxml~=0.7",
+  "defusedxml~=0.7.1",
   "django~=4.2",
   "django-cleanup~=8.0",
   "django-compressor~=4.4",
@@ -46,12 +46,12 @@ dependencies = [
   "django-filter~=23.2",
   "django-libsass~=0.9",
   "django-mathfilters~=1.0",
-  "django-mptt~=0.14",
+  "django-mptt~=0.14.0",
   "django-rest-swagger~=2.2",
   "django-settings-export~=1.2",
   "django-widget-tweaks~=1.5",
   "djangorestframework~=3.14",
-  "drf-extensions~=0.7",
+  "drf-extensions~=0.7.1",
   "iso8601~=2.0",
   "markdown~=3.4",
   "pypandoc~=1.11",
@@ -60,7 +60,7 @@ dependencies = [
 
 [project.optional-dependencies]
 allauth = [
-  "django-allauth~=0.56",
+  "django-allauth~=0.56.1",
 ]
 ci = [
   "coveralls~=3.3",
