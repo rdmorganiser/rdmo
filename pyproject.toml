@@ -79,9 +79,6 @@ gunicorn = [
 ldap = [
   "django-auth-ldap~=4.5",
 ]
-memcached = [
-  "python-memcached~=1.5",
-]
 mysql = [
   "mysqlclient~=2.2",
 ]
