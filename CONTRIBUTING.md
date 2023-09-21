@@ -6,7 +6,6 @@ Here is a list of important resources for new contributors:
 
 - [Source Code](https://github.com/rdmorganiser/rdmo)
 - [Documentation](https://rdmo.readthedocs.io)
-- [Development docs](https://github.com/rdmorganiser/rdmo/tree/master/docs)
 - [Issue Tracker](https://github.com/rdmorganiser/rdmo/issues)
 - [Code of Conduct](https://github.com/rdmorganiser/rdmo/blob/master/CODE_OF_CONDUCT.md)
 
@@ -40,11 +39,11 @@ Install the package with development requirements:
 $ pip install -e ".[dev]"
 $ pip show rdmo
 Name: rdmo
-Version: 1.11.0
+Version: 2.0.0
 [...]
 ```
 
-See also: [Dev](https://github.com/rdmorganiser/rdmo/blob/master/docs/dev.md).
+See also: [Development docs](https://rdmo.readthedocs.io/en/latest/development/setup.html).
 
 ## How to test the project
 
@@ -54,7 +53,7 @@ Run the full test suite with pytest:
 $ pytest
 ```
 
-See also: [Testing](https://github.com/rdmorganiser/rdmo/blob/master/docs/testing.md).
+See also: [Testing docs](https://rdmo.readthedocs.io/en/latest/development/testing.html).
 
 ## How to submit changes
 
