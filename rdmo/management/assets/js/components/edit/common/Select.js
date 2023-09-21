@@ -67,7 +67,7 @@ const Select = ({ config, element, field, options, verboseName, isMulti, onChang
       {
         onCreate &&
         <button className="btn btn-success btn-xs mt-10" onClick={onCreate} disabled={isNil(element.id)}
-                title={isNil(element.id) && gettext('For this action, the item must first be created.')}>
+                title={isNil(element.id) && gettext('For this action, the element must first be created.')}>
           {interpolate(gettext('Create new %s'), [verboseName])}
         </button>
       }

@@ -244,14 +244,14 @@ class OrderedMultiSelect extends Component {
         {
           onCreate && <button className="btn btn-success btn-xs ml-10" onClick={onCreate}
                               disabled={element.read_only || isNil(element.id)}
-                              title={isNil(element.id) && gettext('For this action, the item must first be created.')}>
+                              title={isNil(element.id) && gettext('For this action, the element must first be created.')}>
             {interpolate(gettext('Create new %s'), [verboseNameCreate || verboseName])}
           </button>
         }
         {
           onAltCreate && <button className="btn btn-success btn-xs ml-10" onClick={onAltCreate}
                                  disabled={element.read_only || isNil(element.id)}
-                                 title={isNil(element.id) && gettext('For this action, the item must first be created.')}>
+                                 title={isNil(element.id) && gettext('For this action, the element must first be created.')}>
             {interpolate(gettext('Create new %s'), [verboseNameAltCreate || verboseName])}
           </button>
         }
