@@ -86,7 +86,10 @@ const MultiSelect = ({ config, element, field, options, verboseName, onChange, o
       </button>
 
       {
-        onCreate && <button className="btn btn-success btn-xs ml-10" onClick={onCreate} disabled={element.read_only}>
+        onCreate &&
+        <button className="btn btn-success btn-xs ml-10" onClick={onCreate}
+                disabled={element.read_only || isNil(element.id)}
+                title={isNil(element.id) && gettext('For this action, the item must first be created.')}>
           {interpolate(gettext('Create new %s'), [verboseName])}
         </button>
       }
