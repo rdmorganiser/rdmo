@@ -55,7 +55,7 @@ dependencies = [
   "iso8601~=2.0.0",
   "jsonfield~=3.1.0",
   "Markdown~=3.3.7",
-  "pypandoc~=1.10.0",
+  "pypandoc>=1.10,<1.12",
   "rules~=3.3.0",
 ]
 
