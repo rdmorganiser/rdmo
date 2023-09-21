@@ -54,7 +54,7 @@ dependencies = [
   "drf-extensions~=0.7.0",
   "iso8601~=2.0.0",
   "jsonfield~=3.1.0",
-  "Markdown~=3.3.7",
+  "Markdown>=3.3.7,<3.5.0",
   "pypandoc~=1.10.0",
   "rules~=3.3.0",
 ]
