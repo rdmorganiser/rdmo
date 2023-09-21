@@ -173,9 +173,11 @@ rest_framework = ["rest_framework"]
   "S101", # assert
   "S106", # hardcoded-password-func-arg
 ]
-"testing/config/settings/__init__.py" = [
+"testing/config/settings/*.py" = [
   "F401", # unused-import
   "F403", # undefined-names
+  "F405", # undefined-names
+  "F821", # undefined-names
 ]
 
 [tool.pytest.ini_options]

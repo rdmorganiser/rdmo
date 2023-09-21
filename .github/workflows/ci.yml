@@ -88,7 +88,6 @@ jobs:
       if: matrix.db-backend == 'postgres'
     - name: Prepare Env
       run: |
-        cp testing/config/settings/${{ matrix.db-backend }}.py testing/config/settings/local.py
         cp -r testing/media testing/media_root
         mkdir testing/log
     - name: Run Tests
@@ -97,6 +96,7 @@ jobs:
         coveralls --service=github
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_DB_BACKEND: ${{ matrix.db-backend }}
         COVERALLS_FLAG_NAME: '${{ matrix.db-backend }}: ${{ matrix.python-version }}'
         COVERALLS_PARALLEL: true
 
