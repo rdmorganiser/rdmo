@@ -68,7 +68,6 @@ ci = [
   "rdmo[dev]",
 ]
 dev = [
-  "django-debug-toolbar~=4.2",
   "pre-commit~=3.4",
   "rdmo[allauth]",
   "rdmo[pytest]",

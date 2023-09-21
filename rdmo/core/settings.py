@@ -4,8 +4,6 @@ SITE_ID = 1
 
 DEBUG = False
 
-DEBUG_TOOLBAR = False
-
 ALLOWED_HOSTS = ['localhost', 'ip6-localhost', '127.0.0.1', '[::1]']
 
 INSTALLED_APPS = [
@@ -140,8 +138,6 @@ LANGUAGES = (
 USE_I18N = True
 
 USE_TZ = True
-
-BASE_URL = None
 
 LOGIN_URL = '/account/login/'
 LOGIN_REDIRECT_URL = '/'
