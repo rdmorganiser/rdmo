@@ -43,7 +43,7 @@ dependencies = [
   "django-cleanup~=6.0.0",
   "django-compressor~=4.4",
   "django-extensions~=3.2.0",
-  "django-filter~=21.1",
+  "django-filter>=21.1,<24.0",
   "django-libsass==0.9",
   "django-mathfilters~=1.0.0",
   "django-mptt~=0.13.4",
