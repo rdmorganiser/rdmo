@@ -34,7 +34,8 @@
         </li>
     </ul>
 
-    {% if is_site_manager %}
+    {% test_rule 'projects.can_view_all_projects' request.user request as can_view_all_projects %}
+    {% if can_view_all_projects %}
     <ul class="list-unstyled">
         <li>
             <a href="{% url 'site_projects' %}">

@@ -4,24 +4,24 @@ from django.db import models
 from .constants import PERMISSIONS
 
 
-class CurrentSiteQuerySetMixin(object):
+class CurrentSiteQuerySetMixin:
 
     def filter_current_site(self):
         return self.filter(models.Q(sites=None) | models.Q(sites=settings.SITE_ID))
 
 
-class GroupsQuerySetMixin(object):
+class GroupsQuerySetMixin:
 
     def filter_group(self, user):
         groups = user.groups.all()
         return self.filter(models.Q(groups=None) | models.Q(groups__in=groups))
 
 
-class AvailabilityQuerySetMixin(object):
+class AvailabilityQuerySetMixin:
 
     def filter_availability(self, user):
-        model_name = self.model._meta.model_name
-        permissions = PERMISSIONS[model_name]
+        model = str(self.model._meta)
+        permissions = PERMISSIONS[model]
 
         if user.has_perms(permissions):
             return self
@@ -29,19 +29,19 @@ class AvailabilityQuerySetMixin(object):
             return self.filter(available=True)
 
 
-class CurrentSiteManagerMixin(object):
+class CurrentSiteManagerMixin:
 
     def filter_current_site(self):
         return self.get_queryset().filter_current_site()
 
 
-class GroupsManagerMixin(object):
+class GroupsManagerMixin:
 
     def filter_group(self, user):
         return self.get_queryset().filter_group(user)
 
 
-class AvailabilityManagerMixin(object):
+class AvailabilityManagerMixin:
 
     def filter_availability(self, user):
         return self.get_queryset().filter_availability(user)

@@ -3,9 +3,10 @@ from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
 from rdmo.conditions.models import Condition
 from rdmo.core.models import TranslationMixin
-from rdmo.core.utils import copy_model, join_url
+from rdmo.core.utils import join_url
 from rdmo.domain.models import Attribute
 from rdmo.questions.models import Catalog
 
@@ -17,7 +18,7 @@ class Task(TranslationMixin, models.Model):
     objects = TaskManager()
 
     uri = models.URLField(
-        max_length=640, blank=True,
+        max_length=800, blank=True,
         verbose_name=_('URI'),
         help_text=_('The Uniform Resource Identifier of this task (auto-generated).')
     )
@@ -26,10 +27,10 @@ class Task(TranslationMixin, models.Model):
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this task.')
     )
-    key = models.SlugField(
-        max_length=128, blank=True,
-        verbose_name=_('Key'),
-        help_text=_('The internal identifier of this task.')
+    uri_path = models.SlugField(
+        max_length=512, blank=True,
+        verbose_name=_('URI Path'),
+        help_text=_('The path for the URI of this task.')
     )
     comment = models.TextField(
         blank=True,
@@ -44,12 +45,18 @@ class Task(TranslationMixin, models.Model):
     catalogs = models.ManyToManyField(
         Catalog, blank=True,
         verbose_name=_('Catalogs'),
-        help_text=_('The catalogs this task can be used with. An empty list implies that this task can be used with every catalog.')
+        help_text=_('The catalogs this task can be used with. '
+                    'An empty list implies that this task can be used with every catalog.')
     )
     sites = models.ManyToManyField(
         Site, blank=True,
         verbose_name=_('Sites'),
         help_text=_('The sites this task belongs to (in a multi site setup).')
+    )
+    editors = models.ManyToManyField(
+        Site, related_name='tasks_as_editor', blank=True,
+        verbose_name=_('Editors'),
+        help_text=_('The sites that can edit this task (in a multi site setup).')
     )
     groups = models.ManyToManyField(
         Group, blank=True,
@@ -114,7 +121,8 @@ class Task(TranslationMixin, models.Model):
     end_attribute = models.ForeignKey(
         Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='tasks_as_end',
         verbose_name=_('End date attribute'),
-        help_text=_('The attribute that is setting the end date for this task (optional, if no end date attribute is given, the start date attribute sets also the end date).')
+        help_text=_('The attribute that is setting the end date for this task '
+                    '(optional, if no end date attribute is given, the start date attribute sets also the end date).')
     )
     days_before = models.IntegerField(
         blank=True, null=True,
@@ -143,22 +151,11 @@ class Task(TranslationMixin, models.Model):
         verbose_name_plural = _('Tasks')
 
     def __str__(self):
-        return self.key
+        return self.uri
 
     def save(self, *args, **kwargs):
-        self.uri = self.build_uri(self.uri_prefix, self.key)
+        self.uri = self.build_uri(self.uri_prefix, self.uri_path)
         super().save(*args, **kwargs)
-
-    def copy(self, uri_prefix, key):
-        task = copy_model(self, uri_prefix=uri_prefix, key=key, start_attribute=self.start_attribute, end_attribute=self.end_attribute)
-
-        # add m2m fields
-        task.catalogs.set(self.catalogs.all())
-        task.sites.set(self.sites.all())
-        task.groups.set(self.groups.all())
-        task.conditions.set(self.conditions.all())
-
-        return task
 
     @property
     def title(self):
@@ -177,6 +174,7 @@ class Task(TranslationMixin, models.Model):
         return self.locked
 
     @classmethod
-    def build_uri(cls, uri_prefix, key):
-        assert key
-        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/tasks/', key)
+    def build_uri(cls, uri_prefix, uri_path):
+        if not uri_path:
+            raise RuntimeError('uri_path is missing')
+        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/tasks/', uri_path)

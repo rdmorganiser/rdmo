@@ -19,7 +19,10 @@ env2
 env3
 
 .coverage
+.coverage.*
 htmlcov
+
+node_modules
 
 build
 dist
@@ -29,3 +32,5 @@ dist
 
 .pytest_cache
 .on-save.json
+
+rdmo/management/static

@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
+
 from rdmo.core.models import TranslationMixin
 
 
@@ -136,6 +137,16 @@ class Role(models.Model):
         Site, related_name='managers', blank=True,
         verbose_name=_('Manager'),
         help_text=_('The sites for which this user is manager.')
+    )
+    editor = models.ManyToManyField(
+        Site, related_name='editors', blank=True,
+        verbose_name=_('Editor'),
+        help_text=_('The sites for which this user is an editor.')
+    )
+    reviewer = models.ManyToManyField(
+        Site, related_name='reviewers', blank=True,
+        verbose_name=_('Reviewer'),
+        help_text=_('The sites for which this user is a reviewer.')
     )
 
     class Meta:

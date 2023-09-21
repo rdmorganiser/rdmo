@@ -1,10 +1,10 @@
 import pytest
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
 
 from rdmo.accounts.models import Role
-from rdmo.accounts.utils import get_full_name, is_site_manager, delete_user, get_user_from_db_or_none
-
+from rdmo.accounts.utils import delete_user, get_full_name, get_user_from_db_or_none, is_site_manager
 
 normal_users = (
     ('user', 'user', 'user@example.com'),
@@ -55,34 +55,33 @@ def test_is_site_manager_returns_false_when_role_doesnotexist_(db, client, usern
 
 
 @pytest.mark.parametrize('username,password,email', users)
-def test_delete_user_returns_true(db, username, password, email):
+def test_delete_user(db, username, password, email):
     user = get_user_model().objects.get(username=username, email=email)
     assert delete_user(user=user, email=email, password=password) is True
 
 
 @pytest.mark.parametrize('username,password,email', users)
-def test_delete_user_returns_false_when_user_or_email_is_none(db, username, password, email):
+def test_delete_user_when_user_or_email_is_none(db, username, password, email):
     user = get_user_model().objects.get(username=username, email=email)
     for test_user, test_email in ((user, None), (None, email), (None, None)):
         assert delete_user(user=test_user, email=test_email) is False
 
 
 @pytest.mark.parametrize('username,password,email', users)
-def test_delete_user_returns_false_when_user_is_not_equal_to_db_user(db, username, password, email):
+def test_delete_user_when_user_is_not_equal_to_db_user(db, username, password, email):
     user = get_user_model().objects.get(username=username, email=email)
     user.pk += 1
     assert delete_user(user=user, email=email, password=None) is False
 
 
-
 @pytest.mark.parametrize('username,password,email', users)
-def test_delete_user_returns_false_when_user_with_usable_password_gives_none_for_password(db, username, password, email):
+def test_delete_user_when_user_with_usable_password_gives_none_for_password(db, username, password, email):
     user = get_user_model().objects.get(username=username, email=email)
     assert delete_user(user=user, email=email, password=None) is False
 
 
 @pytest.mark.parametrize('username,password,email', users)
-def test_delete_user_returns_false_when_delete_user_raises_an_exception(db, username, password, email):
+def test_delete_user_when_delete_user_raises_an_exception(db, username, password, email):
     user = get_user_model().objects.get(username=username, email=email)
     def _delete(): raise ValueError
     user.delete = _delete
@@ -90,7 +89,7 @@ def test_delete_user_returns_false_when_delete_user_raises_an_exception(db, user
 
 
 @pytest.mark.parametrize('username,password,email', users)
-def test_delete_user_returns_false_when_delete_is_called_for_user_without_usable_password_and_raises_an_exception(db, username, password, email):
+def test_delete_user_without_usable_password_and_raises_an_exception(db, username, password, email):
     user = get_user_model().objects.get(username=username, email=email)
     user.set_unusable_password()
     def _delete(): raise ValueError

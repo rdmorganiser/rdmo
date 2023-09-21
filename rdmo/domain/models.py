@@ -1,9 +1,11 @@
 from django.conf import settings
+from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
 from mptt.models import MPTTModel, TreeForeignKey
 
-from rdmo.core.utils import copy_model, join_url
+from rdmo.core.utils import join_url
 
 
 class Attribute(MPTTModel):
@@ -38,6 +40,11 @@ class Attribute(MPTTModel):
         verbose_name=_('Locked'),
         help_text=_('Designates whether this attribute (and its descendants) can be changed.')
     )
+    editors = models.ManyToManyField(
+        Site, related_name='attributes_as_editor', blank=True,
+        verbose_name=_('Editors'),
+        help_text=_('The sites that can edit this attribute (in a multi site setup).')
+    )
     parent = TreeForeignKey(
         'self', null=True, blank=True,
         on_delete=models.CASCADE, related_name='children', db_index=True,
@@ -61,26 +68,6 @@ class Attribute(MPTTModel):
         # recursively save children
         for child in self.children.all():
             child.save()
-
-    def copy(self, uri_prefix, key, parent=None, rebuild=True):
-        assert parent not in self.get_descendants(include_self=True)
-
-        # copy the attribute
-        attribute = copy_model(self, uri_prefix=uri_prefix, key=key, parent=parent or self.parent)
-
-        # recursively copy children
-        for child in self.children.all():
-            child.copy(uri_prefix, child.key, parent=attribute, rebuild=False)
-
-        # rebuild the mptt tree, but only for the initially copied attribute
-        if rebuild:
-            Attribute.objects.rebuild()
-
-        return attribute
-
-    @property
-    def parent_fields(self):
-        return ('parent', )
 
     @property
     def is_locked(self):

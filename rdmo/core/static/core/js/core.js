@@ -10,7 +10,7 @@ angular.module('core', ['ngResource'])
     $interpolateProvider.startSymbol('{$');
     $interpolateProvider.endSymbol('$}');
 
-    // set $reosurce not to strip slashes and add an update action
+    // set $resource not to strip slashes and add an update action
     $resourceProvider.defaults.stripTrailingSlashes = false;
     $resourceProvider.defaults.actions.update = {
         method: 'PUT',
@@ -37,7 +37,7 @@ angular.module('core', ['ngResource'])
         },
         require: 'ngModel',
         link: function(scope, element, attrs, ngModel) {
-            // instanciate CodeMirror on the element
+            // instantiate CodeMirror on the element
             editor = CodeMirror.fromTextArea(element[0], {
                 lineNumbers: true,
                 mode: attrs.mode

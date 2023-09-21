@@ -51,7 +51,7 @@ class Invite(models.Model):
         verbose_name_plural = _('Invites')
 
     def __str__(self):
-        return '%s / %s / %s' % (self.project.title, self.email, self.role)
+        return f'{self.project.title} / {self.email} / {self.role}'
 
     def save(self, *args, **kwargs):
         if self.timestamp is None:

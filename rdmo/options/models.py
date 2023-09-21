@@ -1,5 +1,7 @@
 from django.conf import settings
+from django.contrib.sites.models import Site
 from django.db import models
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from rdmo.conditions.models import Condition
@@ -11,7 +13,7 @@ from rdmo.core.utils import copy_model, join_url
 class OptionSet(models.Model):
 
     uri = models.URLField(
-        max_length=640, blank=True,
+        max_length=800, blank=True,
         verbose_name=_('URI'),
         help_text=_('The Uniform Resource Identifier of this option set (auto-generated).')
     )
@@ -20,10 +22,10 @@ class OptionSet(models.Model):
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this option set.')
     )
-    key = models.SlugField(
-        max_length=128, blank=True,
-        verbose_name=_('Key'),
-        help_text=_('The internal identifier of this option set.')
+    uri_path = models.CharField(
+        max_length=512, blank=True,
+        verbose_name=_('URI Path'),
+        help_text=_('The path for the URI of this option set.')
     )
     comment = models.TextField(
         blank=True,
@@ -40,10 +42,20 @@ class OptionSet(models.Model):
         verbose_name=_('Order'),
         help_text=_('The position of this option set in lists.')
     )
+    editors = models.ManyToManyField(
+        Site, related_name='optionsets_as_editor', blank=True,
+        verbose_name=_('Editors'),
+        help_text=_('The sites that can edit this option set (in a multi site setup).')
+    )
     provider_key = models.SlugField(
         max_length=128, blank=True,
         verbose_name=_('Provider'),
         help_text=_('The provider for this optionset. If set, it will create dynamic options for this optionset.')
+    )
+    options = models.ManyToManyField(
+        'Option', through='OptionSetOption', blank=True, related_name='optionsets',
+        verbose_name=_('Options'),
+        help_text=_('The list of options for this option set.')
     )
     conditions = models.ManyToManyField(
         Condition, blank=True, related_name='optionsets',
@@ -57,24 +69,21 @@ class OptionSet(models.Model):
         verbose_name_plural = _('Option sets')
 
     def __str__(self):
-        return self.key
+        return self.uri
 
     def save(self, *args, **kwargs):
-        self.uri = self.build_uri(self.uri_prefix, self.key)
+        self.uri = self.build_uri(self.uri_prefix, self.uri_path)
         super().save(*args, **kwargs)
 
-        for option in self.options.all():
-            option.save()
+    def copy(self, uri_prefix, uri_path):
+        optionset = copy_model(self, uri_prefix=uri_prefix, uri_path=uri_path)
 
-    def copy(self, uri_prefix, key):
-        optionset = copy_model(self, uri_prefix=uri_prefix, key=key)
-
-        # copy m2m fields
+        # set m2m fields for copy
         optionset.conditions.set(self.conditions.all())
 
-        # copy children
+        # add copy to children
         for option in self.options.all():
-            option.copy(uri_prefix, option.key, optionset=optionset)
+            option.optionsets.add(optionset)
 
         return optionset
 
@@ -106,16 +115,40 @@ class OptionSet(models.Model):
     def is_locked(self):
         return self.locked
 
+    @cached_property
+    def elements(self):
+        return [element.option for element in sorted(self.optionset_options.all(), key=lambda e: e.order)]
+
     @classmethod
-    def build_uri(cls, uri_prefix, key):
-        assert key
-        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/options/', key)
+    def build_uri(cls, uri_prefix, uri_path):
+        if not uri_path:
+            raise RuntimeError('uri_path is missing')
+        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/options/', uri_path)
+
+
+class OptionSetOption(models.Model):
+
+    optionset = models.ForeignKey(
+        'OptionSet', on_delete=models.CASCADE, related_name='optionset_options'
+    )
+    option = models.ForeignKey(
+        'Option', on_delete=models.CASCADE, related_name='option_optionsets'
+    )
+    order = models.IntegerField(
+        default=0
+    )
+
+    class Meta:
+        ordering = ('optionset', 'order')
+
+    def __str__(self):
+        return f'{self.optionset} / {self.option} [{self.order}]'
 
 
 class Option(models.Model, TranslationMixin):
 
     uri = models.URLField(
-        max_length=640, blank=True,
+        max_length=800, blank=True,
         verbose_name=_('URI'),
         help_text=_('The Uniform Resource Identifier of this option (auto-generated).')
     )
@@ -124,15 +157,10 @@ class Option(models.Model, TranslationMixin):
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this option.')
     )
-    key = models.SlugField(
-        max_length=128, blank=True,
-        verbose_name=_('Key'),
-        help_text=_('The internal identifier of this option.')
-    )
-    path = models.SlugField(
+    uri_path = models.CharField(
         max_length=512, blank=True,
-        verbose_name=_('Path'),
-        help_text=_('The path part of the URI for this option (auto-generated).')
+        verbose_name=_('URI Path'),
+        help_text=_('The path for the URI of this option.')
     )
     comment = models.TextField(
         blank=True,
@@ -144,15 +172,10 @@ class Option(models.Model, TranslationMixin):
         verbose_name=_('Locked'),
         help_text=_('Designates whether this option can be changed.')
     )
-    optionset = models.ForeignKey(
-        'OptionSet', on_delete=models.CASCADE, related_name='options',
-        verbose_name=_('Option set'),
-        help_text=_('The option set this option belongs to.')
-    )
-    order = models.IntegerField(
-        default=0,
-        verbose_name=_('Order'),
-        help_text=_('Position in lists.')
+    editors = models.ManyToManyField(
+        Site, related_name='options_as_editor', blank=True,
+        verbose_name=_('Editors'),
+        help_text=_('The sites that can edit this option (in a multi site setup).')
     )
     text_lang1 = models.CharField(
         max_length=256, blank=True,
@@ -186,24 +209,16 @@ class Option(models.Model, TranslationMixin):
     )
 
     class Meta:
-        ordering = ('optionset__order', 'optionset__key', 'order', 'key')
+        ordering = ('uri', )
         verbose_name = _('Option')
         verbose_name_plural = _('Options')
 
     def __str__(self):
-        return self.path
+        return self.uri
 
     def save(self, *args, **kwargs):
-        self.path = self.build_path(self.key, self.optionset)
-        self.uri = self.build_uri(self.uri_prefix, self.path)
+        self.uri = self.build_uri(self.uri_prefix, self.uri_path)
         super().save(*args, **kwargs)
-
-    def copy(self, uri_prefix, key, optionset=None):
-        return copy_model(self, uri_prefix=uri_prefix, key=key, optionset=optionset or self.optionset)
-
-    @property
-    def parent_fields(self):
-        return ('optionset', )
 
     @property
     def text(self):
@@ -211,19 +226,14 @@ class Option(models.Model, TranslationMixin):
 
     @property
     def label(self):
-        return '%s ("%s")' % (self.uri, self.text)
+        return f'{self.uri} ("{self.text}")'
 
     @property
     def is_locked(self):
-        return self.locked or self.optionset.locked
+        return self.locked or self.optionsets.filter(locked=True).exists()
 
     @classmethod
-    def build_path(cls, key, optionset):
-        assert key
-        assert optionset
-        return '%s/%s' % (optionset.key, key) if (optionset and key) else None
-
-    @classmethod
-    def build_uri(cls, uri_prefix, path):
-        assert path
-        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/options/', path)
+    def build_uri(cls, uri_prefix, uri_path):
+        if not uri_path:
+            raise RuntimeError('uri_path is missing')
+        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/options/', uri_path)

@@ -7,7 +7,7 @@
       "updated": "2021-06-02T15:14:32.659Z",
       "project": 1,
       "user": 1,
-      "questionset": 87
+      "page": 87
     }
   },
   {
@@ -2034,6 +2034,7 @@
       "attribute": 81,
       "set_prefix": "",
       "set_index": 0,
+      "set_collection": false,
       "collection_index": 0,
       "text": "test",
       "option": null,

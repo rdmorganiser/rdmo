@@ -1,8 +1,6 @@
 import logging
 
-from django.core.exceptions import ObjectDoesNotExist
-from rest_framework.permissions import (DjangoModelPermissions,
-                                        DjangoObjectPermissions)
+from rest_framework.permissions import DjangoModelPermissions, DjangoObjectPermissions
 
 logger = logging.getLogger(__name__)
 
@@ -38,6 +36,9 @@ class HasModelPermission(DjangoModelPermissions):
 
     @log_result
     def has_permission(self, request, view):
+        if not (request.user and request.user.is_authenticated):
+            return False
+
         return super().has_permission(request, view)
 
     @log_result
@@ -72,28 +73,4 @@ class HasObjectPermission(DjangoObjectPermissions):
             # the permission will be checked on object level (in the next step)
             return True
         else:
-            try:
-                # for list or create we need to check the permission object from the view
-                # and check that the user has the correct permission on this object
-                permission_object = view.get_list_permission_object()
-                return super().has_object_permission(request, view, permission_object)
-            except ObjectDoesNotExist:
-                # return False if the database query fails
-                return False
-            except AttributeError:
-                # return True if the function is not defined in the view
-                # the permission will be checked on object level (in the next step)
-                return True
-
-    @log_result
-    def has_object_permission(self, request, view, obj):
-        # get the permission object from the view
-        try:
-            permission_object = view.get_detail_permission_object(obj)
-            return super().has_object_permission(request, view, permission_object)
-        except ObjectDoesNotExist:
-            # return False if the database query fails
             return False
-        except AttributeError:
-            # just take the input obj if the function is not defined in the view
-            return super().has_object_permission(request, view, obj)

@@ -23,7 +23,7 @@ class Command(BaseCommand):
     def make_user_id_list(self, filename):
         user_ids = []
         try:
-            filecontent = open(filename, 'r')
+            filecontent = open(filename)
         except Exception as e:
             print('Error reading id list file. ' + str(e))
             sys.exit(1)

@@ -1,7 +1,8 @@
 from django.contrib.auth import get_user_model
-from django.contrib.sites.models import Site
-from django_filters.rest_framework import DjangoFilterBackend
+
 from rest_framework.viewsets import ReadOnlyModelViewSet
+
+from django_filters.rest_framework import DjangoFilterBackend
 
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 
@@ -9,15 +10,14 @@ from .serializers.v1 import UserSerializer
 from .utils import is_site_manager
 
 
-class UserViewSetMixin(object):
+class UserViewSetMixin:
 
     def get_users_for_user(self, user):
         if user.is_authenticated:
             if user.has_perm('auth.view_user'):
                 return get_user_model().objects.all()
             elif is_site_manager(user):
-                current_site = Site.objects.get_current()
-                return get_user_model().objects.filter(role__member=current_site)
+                return get_user_model().objects.filter(role__member__id__in=user.role.manager.all()).distinct()
         return get_user_model().objects.none()
 
 
@@ -36,4 +36,7 @@ class UserViewSet(UserViewSetMixin, ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return self.get_users_for_user(self.request.user) \
-                   .prefetch_related('groups', 'role__member', 'role__manager', 'memberships')
+                   .prefetch_related('groups',
+                                     'role__member', 'role__manager',
+                                     'role__editor', 'role__reviewer',
+                                     'memberships')

@@ -1,11 +1,12 @@
 import re
 
 import pytest
+
 from django.urls import reverse
-from pytest_django.asserts import assertTemplateUsed
+
+from pytest_django.asserts import assertContains, assertNotContains, assertTemplateUsed
 
 from rdmo.questions.models import Catalog
-from rdmo.questions.tests.test_models import unavailable_catalogs_kwargs
 from rdmo.views.models import View
 
 from ..forms import CatalogChoiceField
@@ -36,18 +37,21 @@ view_project_permission_map = {
 change_project_permission_map = {
     'owner': [1, 2, 3, 4, 5, 10],
     'manager': [1, 3, 5, 7],
-    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 }
 
 delete_project_permission_map = {
     'owner': [1, 2, 3, 4, 5, 10],
-    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
 }
 
 export_project_permission_map = {
     'owner': [1, 2, 3, 4, 5, 10],
     'manager': [1, 3, 5, 7],
-    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
 }
 
 projects = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -75,10 +79,12 @@ def test_list(db, client, username, password):
         if username in ('site', 'api'):
             assert projects == []
             assert response.context['number_of_projects'] == len([])
+            assertContains(response, 'View all projects on')
         else:
             user_projects_map = view_project_permission_map.get(username, [])
-            assert sorted(list(set(map(int, projects)))) == user_projects_map
+            assert sorted(set(map(int, projects))) == user_projects_map
             assert response.context['number_of_projects'] == len(user_projects_map)
+            assertNotContains(response, 'View all projects on')
     else:
         assert response.status_code == 302
 
@@ -93,12 +99,11 @@ def test_site(db, client, username, password):
     projects = re.findall(r'/projects/(\d+)/update/', response.content.decode())
 
     if password:
-
-        if username == 'site':
+        if username in ('site', 'api'):
             assert response.status_code == 200
             assertTemplateUsed(response, 'projects/site_projects.html')
             user_projects_map = view_project_permission_map.get(username, [])
-            assert sorted(list(set(map(int, projects)))) == user_projects_map
+            assert sorted(set(map(int, projects))) == user_projects_map
             assert response.context['number_of_projects'] == len(user_projects_map)
         else:
             assert response.status_code == 403
@@ -115,10 +120,7 @@ def test_detail(db, client, username, password, project_id):
     response = client.get(url)
 
     if project_id in view_project_permission_map.get(username, []):
-        if username == 'api':
-            assert response.status_code == 403
-        else:
-            assert response.status_code == 200
+        assert response.status_code == 200
     else:
         if password:
             assert response.status_code == 403
@@ -145,11 +147,29 @@ def test_project_create_get(db, client, username, password):
 
 @pytest.mark.parametrize('username,password', users)
 def test_project_create_get_for_extra_users_and_unavailable_catalogs(db, client, username, password):
-
-    for catalog_kwargs in unavailable_catalogs_kwargs:
-        Catalog.objects.create(**catalog_kwargs)
-
     client.login(username=username, password=password)
+
+    Catalog.objects.create(
+        uri_prefix='https://experimental.com/terms',
+        uri_path='unavailable-1',
+        order=1,
+        title_lang1='New Catalog 1',
+        title_lang2='Neuer Katalog 1',
+        help_lang1='Help text',
+        help_lang2='Hilfe Text',
+        available=False
+    )
+
+    Catalog.objects.create(
+        uri_prefix='https://experimental.com/terms',
+        uri_path='unavailable-2',
+        order=2,
+        title_lang1='New Catalog 2',
+        title_lang2='Neuer Katalog 2',
+        help_lang1='Help text',
+        help_lang2='Hilfe Text',
+        available=False
+    )
 
     url = reverse('project_create')
     response = client.get(url)
@@ -159,7 +179,6 @@ def test_project_create_get_for_extra_users_and_unavailable_catalogs(db, client,
         # check the catalogs that are displayed in the form
         find_catalog_ids = re.findall(r'id="id_catalog_(\d+)', response.content.decode())
         catalogs_in_form = response.context_data['form'].fields['catalog'].queryset
-        # Catalog.objects.filter_availability(response.context['user'])
         assert find_catalog_ids == list(map(str, range(catalogs_in_form.count())))
 
         # check the unavailable catalogs that are displayed in the form
@@ -595,6 +614,23 @@ def test_project_export_csvsemicolon(db, client, username, password, project_id)
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
+def test_project_export_json(db, client, username, password, project_id):
+    client.login(username=username, password=password)
+
+    url = reverse('project_export', args=[project_id, 'json'])
+    response = client.get(url)
+
+    if project_id in export_project_permission_map.get(username, []):
+        assert response.status_code == 200
+    else:
+        if password:
+            assert response.status_code == 403
+        else:
+            assert response.status_code == 302
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
 def test_project_answers(db, client, username, password, project_id):
     client.login(username=username, password=password)
 
@@ -602,10 +638,7 @@ def test_project_answers(db, client, username, password, project_id):
     response = client.get(url)
 
     if project_id in view_project_permission_map.get(username, []):
-        if username == 'api':
-            assert response.status_code == 403
-        else:
-            assert response.status_code == 200
+        assert response.status_code == 200
     else:
         if password:
             assert response.status_code == 403
@@ -623,10 +656,7 @@ def test_project_answers_export(db, client, username, password, project_id, expo
     response = client.get(url)
 
     if project_id in view_project_permission_map.get(username, []):
-        if username == 'api':
-            assert response.status_code == 403
-        else:
-            assert response.status_code == 200
+        assert response.status_code == 200
     else:
         if password:
             assert response.status_code == 403
@@ -645,9 +675,6 @@ def test_project_view(db, client, username, password, project_id):
         response = client.get(url)
 
         if project_id in view_project_permission_map.get(username, []):
-            if username == 'api':
-                assert response.status_code == 403
-                return
             if view in project_views:
                 assert response.status_code == 200
             else:
@@ -662,7 +689,7 @@ def test_project_view(db, client, username, password, project_id):
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('export_format', export_formats)
-def test_project_view_export(db, client, username, password, project_id, export_format):
+def test_project_view_export(db, client, username, password, project_id, export_format, files):
     client.login(username=username, password=password)
     project_views = Project.objects.get(pk=project_id).views.all()
 
@@ -671,9 +698,6 @@ def test_project_view_export(db, client, username, password, project_id, export_
         response = client.get(url)
 
         if project_id in view_project_permission_map.get(username, []):
-            if username == 'api':
-                assert response.status_code == 403
-                return
             if view in project_views:
                 assert response.status_code == 200
             else:
@@ -694,9 +718,6 @@ def test_project_questions(db, client, username, password, project_id):
     response = client.get(url)
 
     if project_id in view_project_permission_map.get(username, []):
-        if username == 'api':
-            assert response.status_code == 403
-            return
         assert response.status_code == 200
     elif password:
         assert response.status_code == 403
@@ -713,10 +734,7 @@ def test_project_error(db, client, username, password, project_id):
     response = client.get(url)
 
     if project_id in view_project_permission_map.get(username, []):
-        if username == 'api':
-            assert response.status_code == 403
-        else:
-            assert response.status_code == 200
+        assert response.status_code == 200
     elif password:
         assert response.status_code == 403
     else:

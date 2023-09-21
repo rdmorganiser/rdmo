@@ -1,5 +1,5 @@
-from shutil import copyfile
 from pathlib import Path
+from shutil import copyfile
 
 from django.apps import apps
 from django.conf import settings
@@ -19,15 +19,15 @@ class Command(BaseCommand):
         target_path = self.theme_path / Path(*path.parts[1:])
 
         if target_path.exists():
-            print('Skip {} -> {}. Target file exists.'.format(source_path, target_path))
+            print(f'Skip {source_path} -> {target_path}. Target file exists.')
         else:
-            print('Copy {} -> {}.'.format(source_path, target_path))
+            print(f'Copy {source_path} -> {target_path}.')
 
             target_path.parent.mkdir(parents=True, exist_ok=True)
             copyfile(source_path, target_path)
 
     def enable_theme(self):
-        settings_line = 'INSTALLED_APPS = [\'{}\'] + INSTALLED_APPS'.format(self.theme_name)
+        settings_line = f'INSTALLED_APPS = [\'{self.theme_name}\'] + INSTALLED_APPS'
         replaced = False
 
         local_settings = self.local_path.read_text().splitlines()
@@ -48,8 +48,10 @@ class Command(BaseCommand):
         self.local_path.write_text('\n'.join(local_settings))
 
     def add_arguments(self, parser):
-        parser.add_argument('--name', action='store', default='rdmo_theme', help='Module name for the theme.')
-        parser.add_argument('--file', action='store', help='Copy specific file/template, e.g. core/static/css/variables.scss.')
+        parser.add_argument('--name', action='store', default='rdmo_theme',
+                            help='Module name for the theme.')
+        parser.add_argument('--file', action='store',
+                            help='Copy specific file/template, e.g. core/static/css/variables.scss.')
 
     def handle(self, *args, **options):
         self.setup(options)
@@ -64,9 +66,9 @@ class Command(BaseCommand):
             self.copy(Path('core') / 'static' / 'core' / 'css' / 'variables.scss')
 
             for language, language_string in settings.LANGUAGES:
-                self.copy(Path('core') / 'templates' / 'core' / 'home_text_{}.html'.format(language))
-                self.copy(Path('core') / 'templates' / 'core' / 'about_text_{}.html'.format(language))
-                self.copy(Path('core') / 'templates' / 'core' / 'footer_text_{}.html'.format(language))
+                self.copy(Path('core') / 'templates' / 'core' / f'home_text_{language}.html')
+                self.copy(Path('core') / 'templates' / 'core' / f'about_text_{language}.html')
+                self.copy(Path('core') / 'templates' / 'core' / f'footer_text_{language}.html')
 
             print('Enable theme by adding the necessary config line.')
             self.enable_theme()

@@ -22,13 +22,12 @@ class ProfileForm(forms.ModelForm):
             fields = ('first_name', 'last_name', 'email')
 
     def __init__(self, *args, **kwargs):
-        super(ProfileForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.fields['first_name'].widget = forms.TextInput(attrs={'placeholder': _('First name')})
         self.fields['last_name'].widget = forms.TextInput(attrs={'placeholder': _('Last name')})
 
         self.additional_fields = AdditionalField.objects.all()
-        self.additional_values = self.instance.additional_values.all()
 
         # add fields and init values for the Profile model
         for additional_field in self.additional_fields:
@@ -46,11 +45,13 @@ class ProfileForm(forms.ModelForm):
 
             self.fields[additional_field.key] = field
 
-        for additional_field_value in self.additional_values:
-            self.fields[additional_field.key].initial = additional_field_value.value
+        # existing user is going to be updated
+        if self.instance.pk is not None:
+            for additional_field_value in AdditionalFieldValue.objects.filter(user=self.instance):
+                self.fields[additional_field.key].initial = additional_field_value.value
 
     def save(self, *args, **kwargs):
-        super(ProfileForm, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self._save_additional_values()
 
     def _save_additional_values(self, user=None):
@@ -72,7 +73,7 @@ class SignupForm(ProfileForm):
     use_required_attribute = False
 
     def __init__(self, *args, **kwargs):
-        super(SignupForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # add a consent field, the label is added in the template
         if settings.ACCOUNT_TERMS_OF_USE:

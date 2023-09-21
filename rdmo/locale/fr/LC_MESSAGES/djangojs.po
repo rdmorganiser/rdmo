@@ -1,0 +1,1556 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: RDMO\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-08-05 12:56+0200\n"
+"PO-Revision-Date: 2023-07-31 16:19+0200\n"
+"Last-Translator: Yonny Cardenas <cardenas@cc.in2p3.fr>\n"
+"Language-Team: RDMO <cardenas@cc.in2p3.fr>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.2.2\n"
+
+#: management/assets/js/components/common/Buttons.js:6
+#: management/assets/js/components/sidebar/ImportSidebar.js:27
+#: management/assets/js/components/sidebar/ImportSidebar.js:42
+msgid "Back"
+msgstr "Retour"
+
+#: management/assets/js/components/common/Buttons.js:13
+#, fuzzy
+#| msgid "Created"
+msgid "Create"
+msgstr "Créé"
+
+#: management/assets/js/components/common/Buttons.js:13
+#, fuzzy
+#| msgid "Create new condition"
+msgid "Create and continue editing"
+msgstr "Créer une nouvelle condition"
+
+#: management/assets/js/components/common/Buttons.js:16
+msgid "Copy"
+msgstr "Copie"
+
+#: management/assets/js/components/common/Buttons.js:16
+#, fuzzy
+#| msgid "Copy condition"
+msgid "Copy and continue editing"
+msgstr "Copier l'état"
+
+#: management/assets/js/components/common/Buttons.js:19
+msgid "Save"
+msgstr "Enregistrer"
+
+#: management/assets/js/components/common/Buttons.js:19
+#, fuzzy
+#| msgid "Save and proceed"
+msgid "Save and continue editing"
+msgstr "Enregistrez et continuez"
+
+#: management/assets/js/components/common/Buttons.js:39
+msgid "New"
+msgstr ""
+
+#: management/assets/js/components/common/Buttons.js:49
+#: management/assets/js/components/common/Modals.js:19
+msgid "Delete"
+msgstr "Supprimer"
+
+#: management/assets/js/components/common/Errors.js:11
+msgid "One or more errors occured:"
+msgstr ""
+
+#: management/assets/js/components/common/Filter.js:30
+msgid "All URI prefixes"
+msgstr "Tous les préfixes URI"
+
+#: management/assets/js/components/common/Forms.js:17
+msgid "Select file"
+msgstr "Sélectionnez le fichier xml"
+
+#: management/assets/js/components/common/Forms.js:22
+msgid "Upload"
+msgstr "Téléverser"
+
+#: management/assets/js/components/common/Links.js:76
+msgid "Locked"
+msgstr "Verrouillé"
+
+#: management/assets/js/components/common/Links.js:112
+#, fuzzy
+#| msgid "Element"
+msgid "Hide elements"
+msgstr "Èlement"
+
+#: management/assets/js/components/common/Links.js:112
+#, fuzzy
+#| msgid "Import elements"
+msgid "Show elements"
+msgstr "Importer éléments"
+
+#: management/assets/js/components/common/Links.js:128
+msgid "XML"
+msgstr "XML"
+
+#: management/assets/js/components/common/Links.js:130
+msgid "XML (full)"
+msgstr ""
+
+#: management/assets/js/components/common/Modals.js:16
+msgid "Close"
+msgstr "Fermer"
+
+#: management/assets/js/components/edit/EditAttribute.js:37
+#: management/assets/js/components/element/Attribute.js:31
+#, fuzzy
+#| msgid "The attribute this value belongs to."
+msgid "This attribute is read only"
+msgstr "L'attribut auquel cette valeur appartient."
+
+#: management/assets/js/components/edit/EditAttribute.js:44
+#: management/assets/js/components/element/Attribute.js:44
+#: management/assets/js/components/import/ImportAttribute.js:28
+#: management/assets/js/constants/elements.js:49
+msgid "Attribute"
+msgstr "Attribut"
+
+#: management/assets/js/components/edit/EditAttribute.js:46
+msgid "Create attribute"
+msgstr "Créer un nouvel attribut"
+
+#: management/assets/js/components/edit/EditAttribute.js:53
+#, javascript-format
+msgid ""
+"This attribute will be added to the attribute <code class=\"code-domain\">"
+"%s</code>."
+msgstr ""
+
+#: management/assets/js/components/edit/EditAttribute.js:61
+#: management/assets/js/components/edit/EditAttribute.js:68
+#: management/assets/js/components/edit/EditAttribute.js:75
+#, javascript-format
+msgid ""
+"This attribute will be added to the page <code class=\"code-questions\">%s</"
+"code>."
+msgstr ""
+
+#: management/assets/js/components/edit/EditAttribute.js:82
+#, javascript-format
+msgid ""
+"This attribute will be added to the condition <code class=\"code-conditions"
+"\">%s</code>."
+msgstr ""
+
+#: management/assets/js/components/edit/EditCatalog.js:42
+#: management/assets/js/components/element/Catalog.js:35
+msgid "This catalog is read only"
+msgstr ""
+
+#: management/assets/js/components/edit/EditCatalog.js:49
+#: management/assets/js/components/element/Catalog.js:51
+#: management/assets/js/components/import/ImportCatalog.js:30
+#: management/assets/js/constants/elements.js:44
+msgid "Catalog"
+msgstr "Catalogue"
+
+#: management/assets/js/components/edit/EditCatalog.js:51
+msgid "Create catalog"
+msgstr "Créer un nouveau catalogue"
+
+#: management/assets/js/components/edit/EditCondition.js:41
+#: management/assets/js/components/element/Condition.js:27
+#, fuzzy
+#| msgid "This condition is used in the following elements:"
+msgid "This condition is read only"
+msgstr "Cette condition est utilisée dans les éléments suivants :"
+
+#: management/assets/js/components/edit/EditCondition.js:48
+#: management/assets/js/components/element/Condition.js:37
+#: management/assets/js/components/import/ImportCondition.js:28
+#: management/assets/js/constants/elements.js:52
+msgid "Condition"
+msgstr "État"
+
+#: management/assets/js/components/edit/EditCondition.js:50
+msgid "Create condition"
+msgstr "Créer une nouvelle condition"
+
+#: management/assets/js/components/edit/EditCondition.js:57
+#, javascript-format
+msgid ""
+"This condition will be added to the option set <code class=\"code-options\">"
+"%s</code>."
+msgstr ""
+
+#: management/assets/js/components/edit/EditCondition.js:64
+#, javascript-format
+msgid ""
+"This condition will be added to the page <code class=\"code-questions\">%s</"
+"code>."
+msgstr ""
+
+#: management/assets/js/components/edit/EditCondition.js:71
+#, fuzzy, javascript-format
+#| msgid ""
+#| "You are about to permanently delete the question set <code class=\"text-"
+#| "primary\">%(object)s</code>."
+msgid ""
+"This condition will be added to the question set <code class=\"code-questions"
+"\">%s</code>."
+msgstr ""
+"Vous êtes sur le point de supprimer définitivement l'ensemble de questions "
+"<code class=\"text-primary\">%(object)s</code>."
+
+#: management/assets/js/components/edit/EditCondition.js:78
+#, javascript-format
+msgid ""
+"This condition will be added to the question <code class=\"code-questions\">"
+"%s</code>."
+msgstr ""
+
+#: management/assets/js/components/edit/EditCondition.js:85
+#, javascript-format
+msgid ""
+"This condition will be added to the task <code class=\"code-tasks\">%s</"
+"code>."
+msgstr ""
+
+#: management/assets/js/components/edit/EditCondition.js:114
+#, fuzzy
+#| msgid "Attribute"
+msgid "attribute"
+msgstr "Attribut"
+
+#: management/assets/js/components/edit/EditOption.js:37
+#: management/assets/js/components/element/Option.js:27
+#, fuzzy
+#| msgid "is optional"
+msgid "This option is read only"
+msgstr "est facultatif"
+
+#: management/assets/js/components/edit/EditOption.js:44
+#: management/assets/js/components/element/Option.js:37
+#: management/assets/js/components/import/ImportOption.js:28
+#: management/assets/js/constants/elements.js:51
+msgid "Option"
+msgstr "Option"
+
+#: management/assets/js/components/edit/EditOption.js:46
+msgid "Create option"
+msgstr "Créer une nouvelle option"
+
+#: management/assets/js/components/edit/EditOption.js:53
+#, javascript-format
+msgid ""
+"This option will be added to the option set <code class=\"code-options\">%s</"
+"code>."
+msgstr ""
+
+#: management/assets/js/components/edit/EditOptionSet.js:45
+#: management/assets/js/components/element/OptionSet.js:31
+#, fuzzy
+#| msgid "This option set is used in the following elements:"
+msgid "This option set is read only"
+msgstr "Cet ensemble d'options est utilisé dans les éléments suivants:"
+
+#: management/assets/js/components/edit/EditOptionSet.js:52
+#: management/assets/js/components/element/OptionSet.js:43
+#: management/assets/js/components/import/ImportOptionSet.js:28
+#: management/assets/js/constants/elements.js:50
+msgid "Option set"
+msgstr "Jeu d'options"
+
+#: management/assets/js/components/edit/EditOptionSet.js:54
+msgid "Create option set"
+msgstr "Créer un nouveau jeu d'options"
+
+#: management/assets/js/components/edit/EditOptionSet.js:61
+#, fuzzy, javascript-format
+#| msgid ""
+#| "This option set is also used in <b>%(questions_count)s questions</b>."
+msgid ""
+"This option set will be added to the question <code class=\"code-questions\">"
+"%s</code>."
+msgstr ""
+"Cet ensemble d'options est également utilisé dans <b>%(questions_count)s "
+"questions</b>."
+
+#: management/assets/js/components/edit/EditPage.js:32
+#: management/assets/js/components/edit/EditQuestionSet.js:32
+#, fuzzy, javascript-format
+#| msgid "Questions"
+msgid "Question: %s"
+msgstr "Questions"
+
+#: management/assets/js/components/edit/EditPage.js:35
+#: management/assets/js/components/edit/EditQuestionSet.js:35
+#, fuzzy, javascript-format
+#| msgid "Question sets"
+msgid "Question set: %s"
+msgstr "Ensembles de questions"
+
+#: management/assets/js/components/edit/EditPage.js:75
+#: management/assets/js/components/element/Page.js:42
+msgid "This page is read only"
+msgstr ""
+
+#: management/assets/js/components/edit/EditPage.js:82
+#: management/assets/js/components/element/Page.js:57
+#: management/assets/js/components/import/ImportPage.js:28
+#: management/assets/js/constants/elements.js:46
+msgid "Page"
+msgstr ""
+
+#: management/assets/js/components/edit/EditPage.js:84
+#, fuzzy
+#| msgid "Create task"
+msgid "Create page"
+msgstr "Créer une nouvelle tâche"
+
+#: management/assets/js/components/edit/EditPage.js:91
+#, javascript-format
+msgid ""
+"This page will be added to the section <code class=\"code-questions\">%s</"
+"code>."
+msgstr ""
+
+#: management/assets/js/components/edit/EditQuestion.js:47
+#: management/assets/js/components/element/Question.js:33
+#, fuzzy
+#| msgid "The question set for this continuation."
+msgid "This question is read only"
+msgstr "La question posée pour cette suite."
+
+#: management/assets/js/components/edit/EditQuestion.js:54
+#: management/assets/js/components/element/Question.js:44
+#: management/assets/js/components/import/ImportQuestion.js:28
+#: management/assets/js/constants/elements.js:48
+msgid "Question"
+msgstr "Question"
+
+#: management/assets/js/components/edit/EditQuestion.js:56
+msgid "Create question"
+msgstr "Créer une nouvelle question"
+
+#: management/assets/js/components/edit/EditQuestion.js:63
+#, javascript-format
+msgid ""
+"This question will be added to the page <code class=\"code-questions\">%s</"
+"code>."
+msgstr ""
+
+#: management/assets/js/components/edit/EditQuestion.js:70
+#, fuzzy, javascript-format
+#| msgid ""
+#| "You are about to permanently delete the question set <code class=\"text-"
+#| "primary\">%(object)s</code>."
+msgid ""
+"This question will be added to the question set <code class=\"code-questions"
+"\">%s</code>."
+msgstr ""
+"Vous êtes sur le point de supprimer définitivement l'ensemble de questions "
+"<code class=\"text-primary\">%(object)s</code>."
+
+#: management/assets/js/components/edit/EditQuestionSet.js:75
+#: management/assets/js/components/element/QuestionSet.js:41
+#, fuzzy
+#| msgid "The question set for this continuation."
+msgid "This question set is read only"
+msgstr "La question posée pour cette suite."
+
+#: management/assets/js/components/edit/EditQuestionSet.js:82
+#: management/assets/js/components/element/QuestionSet.js:56
+#: management/assets/js/components/import/ImportQuestionSet.js:28
+#: management/assets/js/constants/elements.js:47
+msgid "Question set"
+msgstr "Ensemble de questions"
+
+#: management/assets/js/components/edit/EditQuestionSet.js:84
+#, fuzzy
+#| msgid "Create questionset"
+msgid "Create question set"
+msgstr "Créer un nouvel ensemble de questions"
+
+#: management/assets/js/components/edit/EditQuestionSet.js:91
+#, javascript-format
+msgid ""
+"This question set will be added to the page <code class=\"code-questions\">"
+"%s</code>."
+msgstr ""
+
+#: management/assets/js/components/edit/EditQuestionSet.js:98
+#, fuzzy, javascript-format
+#| msgid ""
+#| "You are about to permanently delete the question set <code class=\"text-"
+#| "primary\">%(object)s</code>."
+msgid ""
+"This question set will be added to the question set <code class=\"code-"
+"questions\">%s</code>."
+msgstr ""
+"Vous êtes sur le point de supprimer définitivement l'ensemble de questions "
+"<code class=\"text-primary\">%(object)s</code>."
+
+#: management/assets/js/components/edit/EditSection.js:41
+#: management/assets/js/components/element/Section.js:39
+msgid "This section is read only"
+msgstr ""
+
+#: management/assets/js/components/edit/EditSection.js:48
+#: management/assets/js/components/element/Section.js:54
+#: management/assets/js/components/import/ImportSection.js:28
+#: management/assets/js/constants/elements.js:45
+msgid "Section"
+msgstr "Section"
+
+#: management/assets/js/components/edit/EditSection.js:50
+msgid "Create section"
+msgstr "Créer une nouvelle section"
+
+#: management/assets/js/components/edit/EditSection.js:57
+#, javascript-format
+msgid ""
+"This section will be added to the catalog <code class=\"code-questions\">%s</"
+"code>."
+msgstr ""
+
+#: management/assets/js/components/edit/EditTask.js:44
+#: management/assets/js/components/element/Task.js:28
+msgid "This task is read only"
+msgstr ""
+
+#: management/assets/js/components/edit/EditTask.js:51
+#: management/assets/js/components/element/Task.js:42
+#: management/assets/js/components/import/ImportTask.js:30
+#: management/assets/js/constants/elements.js:53
+msgid "Task"
+msgstr "Tâche"
+
+#: management/assets/js/components/edit/EditTask.js:53
+msgid "Create task"
+msgstr "Créer une nouvelle tâche"
+
+#: management/assets/js/components/edit/EditView.js:38
+#: management/assets/js/components/element/View.js:28
+#, fuzzy
+#| msgid "This field is required"
+msgid "This view is read only"
+msgstr "Ce champ est obligatoire"
+
+#: management/assets/js/components/edit/EditView.js:45
+#: management/assets/js/components/element/View.js:42
+#: management/assets/js/components/import/ImportView.js:30
+#: management/assets/js/constants/elements.js:54
+msgid "View"
+msgstr "Vue"
+
+#: management/assets/js/components/edit/EditView.js:47
+msgid "Create view"
+msgstr "Créer une nouvelle vue"
+
+#: management/assets/js/components/edit/common/MultiSelect.js:69
+#: management/assets/js/components/edit/common/OrderedMultiSelect.js:63
+#: management/assets/js/components/edit/common/Select.js:56
+msgid "Edit"
+msgstr ""
+
+#: management/assets/js/components/edit/common/MultiSelect.js:70
+#: management/assets/js/components/edit/common/OrderedMultiSelect.js:65
+msgid "Remove"
+msgstr "Retirer"
+
+#: management/assets/js/components/edit/common/MultiSelect.js:85
+#, fuzzy, javascript-format
+#| msgid "Add %(name)s"
+msgid "Add %s"
+msgstr "Ajouter %(name)s"
+
+#: management/assets/js/components/edit/common/MultiSelect.js:90
+#: management/assets/js/components/edit/common/Select.js:68
+#, fuzzy, javascript-format
+#| msgid "Create new task"
+msgid "Create new %s"
+msgstr "Créer une nouvelle tâche"
+
+#: management/assets/js/components/edit/common/UriPrefix.js:35
+#: management/assets/js/components/import/common/UriPrefix.js:21
+#: management/assets/js/components/sidebar/ImportSidebar.js:70
+msgid "Insert default URI Prefix"
+msgstr "Insérer le préfixe URI par défaut"
+
+#: management/assets/js/components/element/Attribute.js:32
+#, fuzzy
+#| msgid "No attribute set"
+msgid "View attribute nested"
+msgstr "Aucun ensemble d'attributs"
+
+#: management/assets/js/components/element/Attribute.js:34
+#, fuzzy
+#| msgid "Add attribute"
+msgid "Edit attribute"
+msgstr "Ajouter un attribut"
+
+#: management/assets/js/components/element/Attribute.js:35
+msgid "Copy attribute"
+msgstr "Copier l'attribut"
+
+#: management/assets/js/components/element/Attribute.js:36
+msgid "Add attribute"
+msgstr "Ajouter un attribut"
+
+#: management/assets/js/components/element/Attribute.js:37
+#, fuzzy
+#| msgid "Copy attribute"
+msgid "Unlock attribute"
+msgstr "Copier l'attribut"
+
+#: management/assets/js/components/element/Attribute.js:37
+#, fuzzy
+#| msgid "Copy attribute"
+msgid "Lock attribute"
+msgstr "Copier l'attribut"
+
+#: management/assets/js/components/element/Attribute.js:39
+#, fuzzy
+#| msgid "Export attribute as XML"
+msgid "Export attribute"
+msgstr "Exporter l'attribut au format XML"
+
+#: management/assets/js/components/element/Catalog.js:36
+#, fuzzy
+#| msgid "No catalog configured"
+msgid "View catalog nested"
+msgstr "Aucun catalogue configuré"
+
+#: management/assets/js/components/element/Catalog.js:37
+#, fuzzy
+#| msgid "Update catalog"
+msgid "Edit catalog"
+msgstr "Mettre à jour les détails du catalogue"
+
+#: management/assets/js/components/element/Catalog.js:38
+msgid "Copy catalog"
+msgstr "Copier le catalogue"
+
+#: management/assets/js/components/element/Catalog.js:39
+msgid "Add section"
+msgstr "Ajouter une section"
+
+#: management/assets/js/components/element/Catalog.js:40
+#, fuzzy
+#| msgid "Update catalog details"
+msgid "Make catalog unavailable"
+msgstr "Mettre à jour les détails du catalogue"
+
+#: management/assets/js/components/element/Catalog.js:41
+#, fuzzy
+#| msgid "Update catalog details"
+msgid "Make catalog available"
+msgstr "Mettre à jour les détails du catalogue"
+
+#: management/assets/js/components/element/Catalog.js:44
+#, fuzzy
+#| msgid "All catalogs"
+msgid "Unlock catalog"
+msgstr "Tous les catalogues"
+
+#: management/assets/js/components/element/Catalog.js:44
+#, fuzzy
+#| msgid "Copy catalog"
+msgid "Lock catalog"
+msgstr "Copier le catalogue"
+
+#: management/assets/js/components/element/Catalog.js:46
+#, fuzzy
+#| msgid "Export catalog as XML"
+msgid "Export catalog"
+msgstr "Exporter le catalogue en XML"
+
+#: management/assets/js/components/element/Condition.js:28
+#, fuzzy
+#| msgid "Update condition"
+msgid "Edit condition"
+msgstr "Condition de mise à jour"
+
+#: management/assets/js/components/element/Condition.js:29
+msgid "Copy condition"
+msgstr "Copier l'état"
+
+#: management/assets/js/components/element/Condition.js:30
+#, fuzzy
+#| msgid "Copy condition"
+msgid "Unlock condition"
+msgstr "Copier l'état"
+
+#: management/assets/js/components/element/Condition.js:30
+#, fuzzy
+#| msgid "Copy condition"
+msgid "Lock condition"
+msgstr "Copier l'état"
+
+#: management/assets/js/components/element/Condition.js:32
+#, fuzzy
+#| msgid "Export condition as XML"
+msgid "Export condition"
+msgstr "Exporter l'état au format XML"
+
+#: management/assets/js/components/element/Option.js:28
+#, fuzzy
+#| msgid "Add option"
+msgid "Edit option"
+msgstr "Ajouter une option"
+
+#: management/assets/js/components/element/Option.js:29
+msgid "Copy option"
+msgstr "Copier l'option"
+
+#: management/assets/js/components/element/Option.js:30
+#, fuzzy
+#| msgid "Copy option"
+msgid "Unlock option"
+msgstr "Copier l'option"
+
+#: management/assets/js/components/element/Option.js:30
+#, fuzzy
+#| msgid "Copy option"
+msgid "Lock option"
+msgstr "Copier l'option"
+
+#: management/assets/js/components/element/Option.js:32
+#, fuzzy
+#| msgid "Export option as XML"
+msgid "Export option"
+msgstr "Exporter l'option au format XML"
+
+#: management/assets/js/components/element/OptionSet.js:32
+#, fuzzy
+#| msgid "option sets"
+msgid "View option set nested"
+msgstr "ensembles d'options"
+
+#: management/assets/js/components/element/OptionSet.js:33
+#, fuzzy
+#| msgid "Update option set"
+msgid "Edit option set"
+msgstr "Mettre à jour le jeu d'options"
+
+#: management/assets/js/components/element/OptionSet.js:34
+msgid "Copy option set"
+msgstr "Copier l'ensemble des options"
+
+#: management/assets/js/components/element/OptionSet.js:35
+msgid "Add option"
+msgstr "Ajouter une option"
+
+#: management/assets/js/components/element/OptionSet.js:36
+#, fuzzy
+#| msgid "Copy option set"
+msgid "Unlock option set"
+msgstr "Copier l'ensemble des options"
+
+#: management/assets/js/components/element/OptionSet.js:36
+#, fuzzy
+#| msgid "Copy option set"
+msgid "Lock option set"
+msgstr "Copier l'ensemble des options"
+
+#: management/assets/js/components/element/OptionSet.js:38
+#, fuzzy
+#| msgid "Export option set as XML"
+msgid "Export option set"
+msgstr "Exporter ensemble d'options au format XML"
+
+#: management/assets/js/components/element/Page.js:43
+#, fuzzy
+#| msgid "View answers"
+msgid "View page nested"
+msgstr "Afficher les réponses"
+
+#: management/assets/js/components/element/Page.js:45
+#, fuzzy
+#| msgid "Edit template"
+msgid "Edit page"
+msgstr "Modifier le modèle"
+
+#: management/assets/js/components/element/Page.js:46
+#, fuzzy
+#| msgid "Copy catalog"
+msgid "Copy page"
+msgstr "Copier le catalogue"
+
+#: management/assets/js/components/element/Page.js:47
+#: management/assets/js/components/element/QuestionSet.js:46
+msgid "Add question"
+msgstr "Ajouter une question"
+
+#: management/assets/js/components/element/Page.js:47
+#: management/assets/js/components/element/QuestionSet.js:46
+msgid "Add question set"
+msgstr "Ajouter un ensemble de questions"
+
+#: management/assets/js/components/element/Page.js:49
+msgid "Unlock page"
+msgstr ""
+
+#: management/assets/js/components/element/Page.js:49
+#, fuzzy
+#| msgid "Locked"
+msgid "Lock page"
+msgstr "Verrouillé"
+
+#: management/assets/js/components/element/Page.js:51
+#, fuzzy
+#| msgid "Export"
+msgid "Export page"
+msgstr "Exporter"
+
+#: management/assets/js/components/element/Question.js:34
+#, fuzzy
+#| msgid "Add question"
+msgid "Edit question"
+msgstr "Ajouter une question"
+
+#: management/assets/js/components/element/Question.js:35
+msgid "Copy question"
+msgstr "Copier la question"
+
+#: management/assets/js/components/element/Question.js:36
+#, fuzzy
+#| msgid "Copy question"
+msgid "Unlock question"
+msgstr "Copier la question"
+
+#: management/assets/js/components/element/Question.js:36
+#, fuzzy
+#| msgid "Copy question"
+msgid "Lock question"
+msgstr "Copier la question"
+
+#: management/assets/js/components/element/Question.js:38
+#, fuzzy
+#| msgid "Export question as XML"
+msgid "Export question"
+msgstr "Exporter question au format XML"
+
+#: management/assets/js/components/element/QuestionSet.js:42
+#, fuzzy
+#| msgid "View questions"
+msgid "View question set nested"
+msgstr "Voir les questions"
+
+#: management/assets/js/components/element/QuestionSet.js:44
+#, fuzzy
+#| msgid "Add question set"
+msgid "Edit question set"
+msgstr "Ajouter un ensemble de questions"
+
+#: management/assets/js/components/element/QuestionSet.js:45
+msgid "Copy question set"
+msgstr "Copier l'ensemble de questions"
+
+#: management/assets/js/components/element/QuestionSet.js:48
+#, fuzzy
+#| msgid "Copy question set"
+msgid "Unlock question set"
+msgstr "Copier l'ensemble de questions"
+
+#: management/assets/js/components/element/QuestionSet.js:48
+#, fuzzy
+#| msgid "Copy question set"
+msgid "Lock question set"
+msgstr "Copier l'ensemble de questions"
+
+#: management/assets/js/components/element/QuestionSet.js:50
+#, fuzzy
+#| msgid "Export question set as XML"
+msgid "Export question set"
+msgstr "Exporter ensemble des questions au format XML"
+
+#: management/assets/js/components/element/Section.js:40
+#, fuzzy
+#| msgid "View questions"
+msgid "View section nested"
+msgstr "Voir les questions"
+
+#: management/assets/js/components/element/Section.js:42
+#, fuzzy
+#| msgid "Add section"
+msgid "Edit section"
+msgstr "Ajouter une section"
+
+#: management/assets/js/components/element/Section.js:43
+msgid "Copy section"
+msgstr "Copier la question"
+
+#: management/assets/js/components/element/Section.js:44
+#, fuzzy
+#| msgid "Add %(name)s"
+msgid "Add page"
+msgstr "Ajouter %(name)s"
+
+#: management/assets/js/components/element/Section.js:45
+#, fuzzy
+#| msgid "No sections"
+msgid "Unlock section"
+msgstr "Aucune section"
+
+#: management/assets/js/components/element/Section.js:46
+#, fuzzy
+#| msgid "No sections"
+msgid "Lock section"
+msgstr "Aucune section"
+
+#: management/assets/js/components/element/Section.js:48
+#, fuzzy
+#| msgid "Export section as XML"
+msgid "Export section"
+msgstr "Exporter section au format XML"
+
+#: management/assets/js/components/element/Task.js:29
+#, fuzzy
+#| msgid "Update task"
+msgid "Edit task"
+msgstr "Tâche de mise à jour"
+
+#: management/assets/js/components/element/Task.js:30
+msgid "Copy task"
+msgstr "Copier la tâche"
+
+#: management/assets/js/components/element/Task.js:31
+msgid "Make task unavailable"
+msgstr ""
+
+#: management/assets/js/components/element/Task.js:32
+msgid "Make task available"
+msgstr ""
+
+#: management/assets/js/components/element/Task.js:35
+#, fuzzy
+#| msgid "Send task"
+msgid "Unlock task"
+msgstr "Envoyer la tâche"
+
+#: management/assets/js/components/element/Task.js:35
+#, fuzzy
+#| msgid "Show task"
+msgid "Lock task"
+msgstr "Afficher la tâche"
+
+#: management/assets/js/components/element/Task.js:37
+#, fuzzy
+#| msgid "Export task as XML"
+msgid "Export task"
+msgstr "Exporter tâche au format XML"
+
+#: management/assets/js/components/element/View.js:29
+#, fuzzy
+#| msgid "Update view"
+msgid "Edit view"
+msgstr "Mettre à jour la vue"
+
+#: management/assets/js/components/element/View.js:30
+msgid "Copy view"
+msgstr "Affichage de la vue"
+
+#: management/assets/js/components/element/View.js:31
+msgid "Make view unavailable"
+msgstr ""
+
+#: management/assets/js/components/element/View.js:32
+msgid "Make view available"
+msgstr ""
+
+#: management/assets/js/components/element/View.js:35
+#, fuzzy
+#| msgid "Copy view"
+msgid "Unlock view"
+msgstr "Affichage de la vue"
+
+#: management/assets/js/components/element/View.js:35
+#, fuzzy
+#| msgid "Copy view"
+msgid "Lock view"
+msgstr "Affichage de la vue"
+
+#: management/assets/js/components/element/View.js:37
+#, fuzzy
+#| msgid "Export view as XML"
+msgid "Export view"
+msgstr "Exporter vue au format XML"
+
+#: management/assets/js/components/elements/Attributes.js:26
+#: management/assets/js/components/elements/Pages.js:56
+#: management/assets/js/components/elements/QuestionSets.js:56
+#: management/assets/js/components/elements/Questions.js:57
+#: management/assets/js/components/nested/NestedCatalog.js:75
+#: management/assets/js/components/nested/NestedPage.js:67
+#: management/assets/js/components/nested/NestedQuestionSet.js:63
+#: management/assets/js/components/nested/NestedSection.js:71
+msgid "Attributes"
+msgstr "Les attributs"
+
+#: management/assets/js/components/elements/Attributes.js:33
+#: management/assets/js/components/nested/NestedAttribute.js:32
+msgid "Filter attributes"
+msgstr "Filtrer attributs"
+
+#: management/assets/js/components/elements/Attributes.js:42
+#: management/assets/js/components/elements/Catalogs.js:51
+#: management/assets/js/components/elements/Conditions.js:43
+#: management/assets/js/components/elements/OptionSets.js:43
+#: management/assets/js/components/elements/Options.js:46
+#: management/assets/js/components/elements/Pages.js:48
+#: management/assets/js/components/elements/QuestionSets.js:48
+#: management/assets/js/components/elements/Questions.js:49
+#: management/assets/js/components/elements/Sections.js:46
+#: management/assets/js/components/elements/Tasks.js:49
+#: management/assets/js/components/elements/Views.js:49
+#, fuzzy
+#| msgid "All sites"
+msgid "All editors"
+msgstr "Tous les sites"
+
+#: management/assets/js/components/elements/Catalogs.js:30
+#: management/assets/js/components/elements/Catalogs.js:58
+#: management/assets/js/components/nested/NestedCatalog.js:65
+msgid "Catalogs"
+msgstr "Catalogues"
+
+#: management/assets/js/components/elements/Catalogs.js:37
+#: management/assets/js/components/nested/NestedCatalog.js:50
+#, fuzzy
+#| msgid "Filter catalogs for"
+msgid "Filter catalogs"
+msgstr "Catalogues de filtres pour"
+
+#: management/assets/js/components/elements/Catalogs.js:57
+#: management/assets/js/components/elements/Options.js:51
+#: management/assets/js/components/elements/Pages.js:53
+#: management/assets/js/components/elements/QuestionSets.js:53
+#: management/assets/js/components/elements/Questions.js:54
+#: management/assets/js/components/elements/Sections.js:51
+#: management/assets/js/components/nested/NestedCatalog.js:64
+#: management/assets/js/components/nested/NestedOptionSet.js:44
+#: management/assets/js/components/nested/NestedPage.js:60
+#: management/assets/js/components/nested/NestedQuestionSet.js:58
+#: management/assets/js/components/nested/NestedSection.js:62
+#, fuzzy
+#| msgid "Show URIs"
+msgid "Show URIs:"
+msgstr "Montrer des URIs"
+
+#: management/assets/js/components/elements/Conditions.js:27
+#: management/assets/js/components/elements/Pages.js:58
+#: management/assets/js/components/elements/QuestionSets.js:58
+#: management/assets/js/components/elements/Questions.js:59
+#: management/assets/js/components/nested/NestedCatalog.js:77
+#: management/assets/js/components/nested/NestedPage.js:69
+#: management/assets/js/components/nested/NestedQuestionSet.js:65
+#: management/assets/js/components/nested/NestedSection.js:73
+msgid "Conditions"
+msgstr "Conditions"
+
+#: management/assets/js/components/elements/Conditions.js:34
+msgid "Filter conditions"
+msgstr "Filtrer condition"
+
+#: management/assets/js/components/elements/OptionSets.js:27
+#: management/assets/js/components/elements/Questions.js:61
+#: management/assets/js/components/nested/NestedCatalog.js:79
+#: management/assets/js/components/nested/NestedPage.js:71
+#: management/assets/js/components/nested/NestedQuestionSet.js:67
+#: management/assets/js/components/nested/NestedSection.js:75
+msgid "Option sets"
+msgstr "Ensembles d'options"
+
+#: management/assets/js/components/elements/OptionSets.js:34
+#: management/assets/js/components/nested/NestedOptionSet.js:36
+#, fuzzy
+#| msgid "Filter options"
+msgid "Filter option sets"
+msgstr "Filtrer option"
+
+#: management/assets/js/components/elements/Options.js:30
+#: management/assets/js/components/elements/Options.js:52
+#: management/assets/js/components/nested/NestedOptionSet.js:45
+msgid "Options"
+msgstr "Options"
+
+#: management/assets/js/components/elements/Options.js:37
+msgid "Filter options"
+msgstr "Filtrer option"
+
+#: management/assets/js/components/elements/Pages.js:32
+#: management/assets/js/components/elements/Pages.js:54
+#: management/assets/js/components/nested/NestedCatalog.js:60
+#: management/assets/js/components/nested/NestedCatalog.js:69
+#: management/assets/js/components/nested/NestedPage.js:61
+#: management/assets/js/components/nested/NestedSection.js:58
+#: management/assets/js/components/nested/NestedSection.js:65
+msgid "Pages"
+msgstr ""
+
+#: management/assets/js/components/elements/Pages.js:39
+#: management/assets/js/components/nested/NestedPage.js:48
+#, fuzzy
+#| msgid "Filter tasks"
+msgid "Filter pages"
+msgstr "Filtrer tâche"
+
+#: management/assets/js/components/elements/QuestionSets.js:32
+#: management/assets/js/components/elements/QuestionSets.js:54
+#: management/assets/js/components/nested/NestedCatalog.js:61
+#: management/assets/js/components/nested/NestedCatalog.js:71
+#: management/assets/js/components/nested/NestedPage.js:57
+#: management/assets/js/components/nested/NestedPage.js:63
+#: management/assets/js/components/nested/NestedQuestionSet.js:55
+#: management/assets/js/components/nested/NestedQuestionSet.js:59
+#: management/assets/js/components/nested/NestedSection.js:59
+#: management/assets/js/components/nested/NestedSection.js:67
+msgid "Question sets"
+msgstr "Ensembles de questions"
+
+#: management/assets/js/components/elements/QuestionSets.js:39
+#: management/assets/js/components/nested/NestedQuestionSet.js:46
+#, fuzzy
+#| msgid "Filter questions"
+msgid "Filter question sets"
+msgstr "Filtrer question"
+
+#: management/assets/js/components/elements/Questions.js:33
+#: management/assets/js/components/elements/Questions.js:55
+#: management/assets/js/components/nested/NestedCatalog.js:73
+#: management/assets/js/components/nested/NestedPage.js:65
+#: management/assets/js/components/nested/NestedQuestionSet.js:61
+#: management/assets/js/components/nested/NestedSection.js:69
+msgid "Questions"
+msgstr "Questions"
+
+#: management/assets/js/components/elements/Questions.js:40
+msgid "Filter questions"
+msgstr "Filtrer question"
+
+#: management/assets/js/components/elements/Sections.js:30
+#: management/assets/js/components/elements/Sections.js:52
+#: management/assets/js/components/nested/NestedCatalog.js:59
+#: management/assets/js/components/nested/NestedCatalog.js:67
+#: management/assets/js/components/nested/NestedSection.js:63
+msgid "Sections"
+msgstr "Sections"
+
+#: management/assets/js/components/elements/Sections.js:37
+#: management/assets/js/components/nested/NestedSection.js:49
+#, fuzzy
+#| msgid "Filter questions"
+msgid "Filter sections"
+msgstr "Filtrer question"
+
+#: management/assets/js/components/elements/Tasks.js:28
+msgid "Tasks"
+msgstr "Tâches"
+
+#: management/assets/js/components/elements/Tasks.js:35
+msgid "Filter tasks"
+msgstr "Filtrer tâche"
+
+#: management/assets/js/components/elements/Views.js:28
+msgid "Views"
+msgstr "Vues"
+
+#: management/assets/js/components/elements/Views.js:35
+msgid "Filter views"
+msgstr "Filtrer vue"
+
+#: management/assets/js/components/import/ImportCatalog.js:22
+#, fuzzy
+#| msgid "Catalog"
+msgid "catalog"
+msgstr "Catalogue"
+
+#: management/assets/js/components/import/ImportTask.js:22
+#, fuzzy
+#| msgid "tasks"
+msgid "task"
+msgstr "tâches"
+
+#: management/assets/js/components/import/ImportView.js:22
+#, fuzzy
+#| msgid "Overview"
+msgid "view"
+msgstr "Aperçu"
+
+#: management/assets/js/components/import/common/Errors.js:9
+#, fuzzy
+#| msgid "Error"
+msgid "Errors"
+msgstr "Erreur"
+
+#: management/assets/js/components/import/common/Key.js:12
+msgid "Key"
+msgstr "Clé"
+
+#: management/assets/js/components/import/common/UriPath.js:12
+#, fuzzy
+#| msgid "Path"
+msgid "URI path"
+msgstr "Chemin"
+
+#: management/assets/js/components/import/common/UriPrefix.js:12
+#: management/assets/js/components/sidebar/ImportSidebar.js:61
+#: management/assets/js/components/sidebar/ImportSidebar.js:65
+#, fuzzy
+#| msgid "URI Prefix"
+msgid "URI prefix"
+msgstr "Préfixe URI"
+
+#: management/assets/js/components/import/common/Warnings.js:9
+#, fuzzy
+#| msgid "Warning:"
+msgid "Warnings"
+msgstr "Attention:"
+
+#: management/assets/js/components/info/AttributeInfo.js:36
+#, fuzzy, javascript-format
+#| msgid ""
+#| "This attribute is used for <b>%(values_count)s values</b> in <b>"
+#| "%(projects_count)s projects</b>."
+msgid "This attribute is used for <b>%s values</b> in <b>one project</b>."
+msgid_plural ""
+"This attribute is used for <b>%s values</b> in <b>%s projects</b>."
+msgstr[0] ""
+"Cet attribut est utilisé pour les valeurs de <b>%(values_count)s </b> dans "
+"<b>%(projects_count)s projets</b>."
+msgstr[1] ""
+"Cet attribut est utilisé pour les valeurs de <b>%(values_count)s </b> dans "
+"<b>%(projects_count)s projets</b>."
+
+#: management/assets/js/components/info/AttributeInfo.js:43
+#, javascript-format
+msgid "This attribute has <b>one decendant</b>."
+msgid_plural "This attribute has <b>%s decendants</b>."
+msgstr[0] ""
+msgstr[1] ""
+
+#: management/assets/js/components/info/AttributeInfo.js:59
+#, fuzzy, javascript-format
+#| msgid "This option is also used in <b>%(conditions_count)s conditions</b>."
+msgid "This attribute is used in <b>one condition</b>."
+msgid_plural "This attribute is used in <b>%s conditions</b>."
+msgstr[0] ""
+"Cette option est également utilisée dans <b>%(conditions_count)s conditions</"
+"b>."
+msgstr[1] ""
+"Cette option est également utilisée dans <b>%(conditions_count)s conditions</"
+"b>."
+
+#: management/assets/js/components/info/AttributeInfo.js:74
+#, fuzzy, javascript-format
+#| msgid "The attribute this question belongs to."
+msgid "This attribute is used in <b>one page</b>."
+msgid_plural "This attribute is used in <b>%s pages</b>."
+msgstr[0] "L'attribut auquel cette question appartient."
+msgstr[1] "L'attribut auquel cette question appartient."
+
+#: management/assets/js/components/info/AttributeInfo.js:89
+#, fuzzy, javascript-format
+#| msgid ""
+#| "This option set is also used in <b>%(questions_count)s questions</b>."
+msgid "This attribute is used in <b>one questionset</b>."
+msgid_plural "This attribute is used in <b>%s questionsets</b>."
+msgstr[0] ""
+"Cet ensemble d'options est également utilisé dans <b>%(questions_count)s "
+"questions</b>."
+msgstr[1] ""
+"Cet ensemble d'options est également utilisé dans <b>%(questions_count)s "
+"questions</b>."
+
+#: management/assets/js/components/info/AttributeInfo.js:104
+#, fuzzy, javascript-format
+#| msgid ""
+#| "This option set is also used in <b>%(questions_count)s questions</b>."
+msgid "This attribute is used in <b>one question</b>."
+msgid_plural "This attribute is used in <b>%s questions</b>."
+msgstr[0] ""
+"Cet ensemble d'options est également utilisé dans <b>%(questions_count)s "
+"questions</b>."
+msgstr[1] ""
+"Cet ensemble d'options est également utilisé dans <b>%(questions_count)s "
+"questions</b>."
+
+#: management/assets/js/components/info/AttributeInfo.js:119
+#, fuzzy, javascript-format
+#| msgid "The attribute this question belongs to."
+msgid "This attribute is used in <b>one task</b>."
+msgid_plural "This attribute is used in <b>%s tasks</b>."
+msgstr[0] "L'attribut auquel cette question appartient."
+msgstr[1] "L'attribut auquel cette question appartient."
+
+#: management/assets/js/components/info/CatalogInfo.js:9
+#, fuzzy, javascript-format
+#| msgid "This catalog is used in <b>%(projects_count)s projects</b>."
+msgid "This catalog is used in <b>one project</b>."
+msgid_plural "This catalog is used in <b>%s projects</b>."
+msgstr[0] "Ce catalogue est utilisé dans <b>%(projects_count)s projets</b>."
+msgstr[1] "Ce catalogue est utilisé dans <b>%(projects_count)s projets</b>."
+
+#: management/assets/js/components/info/ConditionInfo.js:33
+#, fuzzy, javascript-format
+#| msgid "The list of conditions evaluated for this option set."
+msgid "This condition is used for <b>one optionset</b>."
+msgid_plural "This condition is used for <b>%s optionsets</b>."
+msgstr[0] "Liste des conditions évaluées pour cet ensemble d'options."
+msgstr[1] "Liste des conditions évaluées pour cet ensemble d'options."
+
+#: management/assets/js/components/info/ConditionInfo.js:48
+#, fuzzy, javascript-format
+#| msgid "List of conditions evaluated for this question."
+msgid "This condition is used for <b>one page</b>."
+msgid_plural "This condition is used for <b>%s pages</b>."
+msgstr[0] "Liste des conditions évaluées pour cette question."
+msgstr[1] "Liste des conditions évaluées pour cette question."
+
+#: management/assets/js/components/info/ConditionInfo.js:63
+#, fuzzy, javascript-format
+#| msgid "List of conditions evaluated for this question set."
+msgid "This condition is used for <b>one questionset</b>."
+msgid_plural "This condition is used for <b>%s questionsets</b>."
+msgstr[0] "Liste des conditions évaluées pour cette série de questions."
+msgstr[1] "Liste des conditions évaluées pour cette série de questions."
+
+#: management/assets/js/components/info/ConditionInfo.js:78
+#, fuzzy, javascript-format
+#| msgid "List of conditions evaluated for this question."
+msgid "This condition is used for <b>one question</b>."
+msgid_plural "This condition is used for <b>%s questions</b>."
+msgstr[0] "Liste des conditions évaluées pour cette question."
+msgstr[1] "Liste des conditions évaluées pour cette question."
+
+#: management/assets/js/components/info/ConditionInfo.js:93
+#, fuzzy, javascript-format
+#| msgid "The list of conditions evaluated for this task."
+msgid "This condition is used for <b>one task</b>."
+msgid_plural "This condition is used for <b>%s tasks</b>."
+msgstr[0] "Liste des conditions évaluées pour cette tâche."
+msgstr[1] "Liste des conditions évaluées pour cette tâche."
+
+#: management/assets/js/components/info/OptionInfo.js:20
+#, fuzzy, javascript-format
+#| msgid ""
+#| "This option is used for <b>%(values_count)s values</b> in <b>"
+#| "%(projects_count)s projects</b>."
+msgid "This option is used for <b>%s values</b> in <b>one project</b>."
+msgid_plural "This option is used for <b>%s values</b> in <b>%s projects</b>."
+msgstr[0] ""
+"Cette option est utilisée pour <b>%(values_count)s valeurs</b> dans <b>"
+"%(projects_count)s projets</b>."
+msgstr[1] ""
+"Cette option est utilisée pour <b>%(values_count)s valeurs</b> dans <b>"
+"%(projects_count)s projets</b>."
+
+#: management/assets/js/components/info/OptionInfo.js:26
+#, fuzzy, javascript-format
+#| msgid "This option is also used in <b>%(conditions_count)s conditions</b>."
+msgid "This option is used in <b>one condition</b>."
+msgid_plural "This option is used in <b>%s conditions</b>."
+msgstr[0] ""
+"Cette option est également utilisée dans <b>%(conditions_count)s conditions</"
+"b>."
+msgstr[1] ""
+"Cette option est également utilisée dans <b>%(conditions_count)s conditions</"
+"b>."
+
+#: management/assets/js/components/info/OptionSetInfo.js:21
+#, fuzzy, javascript-format
+#| msgid ""
+#| "This option set is also used in <b>%(questions_count)s questions</b>."
+msgid "This option set is used in <b>one question</b>."
+msgid_plural "This option set is used in <b>%s questions</b>."
+msgstr[0] ""
+"Cet ensemble d'options est également utilisé dans <b>%(questions_count)s "
+"questions</b>."
+msgstr[1] ""
+"Cet ensemble d'options est également utilisé dans <b>%(questions_count)s "
+"questions</b>."
+
+#: management/assets/js/components/info/PageInfo.js:21
+#, fuzzy, javascript-format
+#| msgid "This catalog is used in <b>%(projects_count)s projects</b>."
+msgid "This page is used in <b>one section</b>."
+msgid_plural "This page is used in <b>%s sections</b>."
+msgstr[0] "Ce catalogue est utilisé dans <b>%(projects_count)s projets</b>."
+msgstr[1] "Ce catalogue est utilisé dans <b>%(projects_count)s projets</b>."
+
+#: management/assets/js/components/info/QuestionInfo.js:24
+#, fuzzy, javascript-format
+#| msgid "This catalog is used in <b>%(projects_count)s projects</b>."
+msgid "This question is used in <b>one page</b>."
+msgid_plural "This question is used in <b>%s pages</b>."
+msgstr[0] "Ce catalogue est utilisé dans <b>%(projects_count)s projets</b>."
+msgstr[1] "Ce catalogue est utilisé dans <b>%(projects_count)s projets</b>."
+
+#: management/assets/js/components/info/QuestionInfo.js:39
+#: management/assets/js/components/info/QuestionSetInfo.js:39
+#, fuzzy, javascript-format
+#| msgid ""
+#| "This option set is also used in <b>%(questions_count)s questions</b>."
+msgid "This question set is used in <b>one question set</b>."
+msgid_plural "This question set is used in <b>%s question sets</b>."
+msgstr[0] ""
+"Cet ensemble d'options est également utilisé dans <b>%(questions_count)s "
+"questions</b>."
+msgstr[1] ""
+"Cet ensemble d'options est également utilisé dans <b>%(questions_count)s "
+"questions</b>."
+
+#: management/assets/js/components/info/QuestionSetInfo.js:24
+#, fuzzy, javascript-format
+#| msgid "The question set for this continuation."
+msgid "This question set is used in <b>one page</b>."
+msgid_plural "This question set is used in <b>%s pages</b>."
+msgstr[0] "La question posée pour cette suite."
+msgstr[1] "La question posée pour cette suite."
+
+#: management/assets/js/components/info/SectionInfo.js:21
+#, fuzzy, javascript-format
+#| msgid "The section this subsection belongs to."
+msgid "This section is used in <b>one catalog</b>."
+msgid_plural "This section is used in <b>%s catalogs</b>."
+msgstr[0] "Section à laquelle appartient cette sous-section."
+msgstr[1] "Section à laquelle appartient cette sous-section."
+
+#: management/assets/js/components/info/TaskInfo.js:9
+#, fuzzy, javascript-format
+#| msgid "This catalog is used in <b>%(projects_count)s projects</b>."
+msgid "This task is used in <b>one project</b>."
+msgid_plural "This task is used in <b>%s projects</b>."
+msgstr[0] "Ce catalogue est utilisé dans <b>%(projects_count)s projets</b>."
+msgstr[1] "Ce catalogue est utilisé dans <b>%(projects_count)s projets</b>."
+
+#: management/assets/js/components/info/ViewInfo.js:9
+#, fuzzy, javascript-format
+#| msgid "This catalog is used in <b>%(projects_count)s projects</b>."
+msgid "This view is used in <b>one project</b>."
+msgid_plural "This view is used in <b>%s projects</b>."
+msgstr[0] "Ce catalogue est utilisé dans <b>%(projects_count)s projets</b>."
+msgstr[1] "Ce catalogue est utilisé dans <b>%(projects_count)s projets</b>."
+
+#: management/assets/js/components/main/Import.js:26
+msgid "Import"
+msgstr "Importer"
+
+#: management/assets/js/components/main/Import.js:38
+msgid "created"
+msgstr "créé"
+
+#: management/assets/js/components/main/Import.js:39
+msgid "updated"
+msgstr "mise à jour"
+
+#: management/assets/js/components/main/Import.js:42
+#, fuzzy
+#| msgid "This Answer cannot be imported."
+msgid "could not be imported"
+msgstr "Cette réponse ne peut pas être importée."
+
+#: management/assets/js/components/main/Import.js:46
+msgid "but could not be added to parent element"
+msgstr ""
+
+#: management/assets/js/components/modals/DeleteAttributeModal.js:7
+msgid "Delete attribute"
+msgstr "Supprimer l'attribut"
+
+#: management/assets/js/components/modals/DeleteAttributeModal.js:9
+#, fuzzy
+#| msgid "You are about to permanently delete this %(name)s."
+msgid "You are about to permanently delete the attribute:"
+msgstr "Vous êtes sur le point de supprimer définitivement ce %(name)s."
+
+#: management/assets/js/components/modals/DeleteAttributeModal.js:16
+#: management/assets/js/components/modals/DeleteCatalogModal.js:16
+#: management/assets/js/components/modals/DeleteConditionModal.js:16
+#: management/assets/js/components/modals/DeleteOptionModal.js:16
+#: management/assets/js/components/modals/DeleteOptionSetModal.js:16
+#: management/assets/js/components/modals/DeletePageModal.js:16
+#: management/assets/js/components/modals/DeleteQuestionModal.js:16
+#: management/assets/js/components/modals/DeleteQuestionSetModal.js:16
+#: management/assets/js/components/modals/DeleteSectionModal.js:16
+#: management/assets/js/components/modals/DeleteTaskModal.js:16
+#: management/assets/js/components/modals/DeleteViewModal.js:16
+msgid "This action cannot be undone!"
+msgstr "Cette action ne peut pas être annulée!"
+
+#: management/assets/js/components/modals/DeleteCatalogModal.js:7
+#: management/assets/js/components/modals/DeleteTaskModal.js:7
+#: management/assets/js/components/modals/DeleteViewModal.js:7
+msgid "Delete catalog"
+msgstr "Supprimer le catalogue"
+
+#: management/assets/js/components/modals/DeleteCatalogModal.js:9
+#, fuzzy
+#| msgid "You are about to permanently delete this %(name)s."
+msgid "You are about to permanently delete the catalog:"
+msgstr "Vous êtes sur le point de supprimer définitivement ce %(name)s."
+
+#: management/assets/js/components/modals/DeleteCatalogModal.js:16
+#, fuzzy
+#| msgid ""
+#| "This catalog is used in <b>%(projects_count)s projects</b>, which will "
+#| "not be usable afterwards."
+msgid "Those projects will not be usable afterwards."
+msgstr ""
+"Ce catalogue est utilisé dans <b>%(projects_count)s projets</b>, qui ne "
+"seront plus utilisables par la suite."
+
+#: management/assets/js/components/modals/DeleteConditionModal.js:7
+msgid "Delete condition"
+msgstr "Supprimer la condition"
+
+#: management/assets/js/components/modals/DeleteConditionModal.js:9
+#, fuzzy
+#| msgid "You are about to permanently delete this %(name)s."
+msgid "You are about to permanently delete the condition:"
+msgstr "Vous êtes sur le point de supprimer définitivement ce %(name)s."
+
+#: management/assets/js/components/modals/DeleteOptionModal.js:7
+msgid "Delete option"
+msgstr "Supprimer l'option"
+
+#: management/assets/js/components/modals/DeleteOptionModal.js:9
+#, fuzzy
+#| msgid "You are about to permanently delete this %(name)s."
+msgid "You are about to permanently delete the option:"
+msgstr "Vous êtes sur le point de supprimer définitivement ce %(name)s."
+
+#: management/assets/js/components/modals/DeleteOptionSetModal.js:7
+msgid "Delete option set"
+msgstr "Supprimer le jeu d'options"
+
+#: management/assets/js/components/modals/DeleteOptionSetModal.js:9
+#, fuzzy
+#| msgid "You are about to permanently delete this %(name)s."
+msgid "You are about to permanently delete the option set:"
+msgstr "Vous êtes sur le point de supprimer définitivement ce %(name)s."
+
+#: management/assets/js/components/modals/DeletePageModal.js:7
+#, fuzzy
+#| msgid "Delete task"
+msgid "Delete page"
+msgstr "Supprimer la tâche"
+
+#: management/assets/js/components/modals/DeletePageModal.js:9
+#, fuzzy
+#| msgid "You are about to permanently delete this %(name)s."
+msgid "You are about to permanently delete the page:"
+msgstr "Vous êtes sur le point de supprimer définitivement ce %(name)s."
+
+#: management/assets/js/components/modals/DeleteQuestionModal.js:7
+msgid "Delete question"
+msgstr "Supprimer la question"
+
+#: management/assets/js/components/modals/DeleteQuestionModal.js:9
+#, fuzzy
+#| msgid "You are about to permanently delete this %(name)s."
+msgid "You are about to permanently delete the question:"
+msgstr "Vous êtes sur le point de supprimer définitivement ce %(name)s."
+
+#: management/assets/js/components/modals/DeleteQuestionSetModal.js:7
+msgid "Delete question set"
+msgstr "Supprimer l'ensemble de questions"
+
+#: management/assets/js/components/modals/DeleteQuestionSetModal.js:9
+#, fuzzy
+#| msgid "You are about to permanently delete this %(name)s."
+msgid "You are about to permanently delete the question set:"
+msgstr "Vous êtes sur le point de supprimer définitivement ce %(name)s."
+
+#: management/assets/js/components/modals/DeleteSectionModal.js:7
+msgid "Delete section"
+msgstr "Supprimer la section"
+
+#: management/assets/js/components/modals/DeleteSectionModal.js:9
+#, fuzzy
+#| msgid "You are about to permanently delete this %(name)s."
+msgid "You are about to permanently delete the section:"
+msgstr "Vous êtes sur le point de supprimer définitivement ce %(name)s."
+
+#: management/assets/js/components/modals/DeleteTaskModal.js:9
+#, fuzzy
+#| msgid "You are about to permanently delete this %(name)s."
+msgid "You are about to permanently delete the task:"
+msgstr "Vous êtes sur le point de supprimer définitivement ce %(name)s."
+
+#: management/assets/js/components/modals/DeleteTaskModal.js:16
+#, fuzzy
+#| msgid "The tasks that will be used for this project."
+msgid "The task will be removed from these projects."
+msgstr "Les tâches qui seront utilisées pour ce projet."
+
+#: management/assets/js/components/modals/DeleteViewModal.js:9
+#, fuzzy
+#| msgid "You are about to permanently delete this %(name)s."
+msgid "You are about to permanently delete the view:"
+msgstr "Vous êtes sur le point de supprimer définitivement ce %(name)s."
+
+#: management/assets/js/components/modals/DeleteViewModal.js:16
+#, fuzzy
+#| msgid "The views that will be used for this project."
+msgid "The view will be removed from these projects."
+msgstr "Les vues qui seront utilisées pour ce projet."
+
+#: management/assets/js/components/nested/NestedCatalog.js:58
+#, fuzzy
+#| msgid "Import elements"
+msgid "Toggle elements:"
+msgstr "Importer éléments"
+
+#: management/assets/js/components/nested/NestedPage.js:56
+#: management/assets/js/components/nested/NestedQuestionSet.js:54
+#: management/assets/js/components/nested/NestedSection.js:57
+#, fuzzy
+#| msgid "Import elements"
+msgid "Show elements:"
+msgstr "Importer éléments"
+
+#: management/assets/js/components/sidebar/ImportSidebar.js:23
+#, fuzzy
+#| msgid "Import values"
+msgid "Import successful"
+msgstr "Valeurs d'importation"
+
+#: management/assets/js/components/sidebar/ImportSidebar.js:35
+msgid "Import elements"
+msgstr "Importer éléments"
+
+#: management/assets/js/components/sidebar/ImportSidebar.js:39
+#, fuzzy, javascript-format
+#| msgid "Import elements"
+msgid "Import one element"
+msgid_plural "Import %s elements"
+msgstr[0] "Importer éléments"
+msgstr[1] "Importer éléments"
+
+#: management/assets/js/components/sidebar/ImportSidebar.js:46
+#, fuzzy
+#| msgid "Section"
+msgid "Selection"
+msgstr "Section"
+
+#: management/assets/js/components/sidebar/ImportSidebar.js:51
+#, fuzzy
+#| msgid "Select file"
+msgid "Select all"
+msgstr "Sélectionnez le fichier xml"
+
+#: management/assets/js/components/sidebar/ImportSidebar.js:56
+#, fuzzy
+#| msgid "Select file"
+msgid "Unselect all"
+msgstr "Sélectionnez le fichier xml"
+
+#: management/assets/js/components/sidebar/ImportSidebar.js:75
+msgid "Set URI prefix for all elements"
+msgstr ""

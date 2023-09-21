@@ -20,13 +20,13 @@ class SnapshotCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView):
 
     def dispatch(self, *args, **kwargs):
         self.project = get_object_or_404(Project.objects.all(), pk=self.kwargs['project_id'])
-        return super(SnapshotCreateView, self).dispatch(*args, **kwargs)
+        return super().dispatch(*args, **kwargs)
 
     def get_permission_object(self):
         return self.project
 
     def get_form_kwargs(self):
-        kwargs = super(SnapshotCreateView, self).get_form_kwargs()
+        kwargs = super().get_form_kwargs()
         kwargs['project'] = self.project
         return kwargs
 

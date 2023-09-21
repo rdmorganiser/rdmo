@@ -39,7 +39,7 @@ class Membership(models.Model):
         verbose_name_plural = _('Memberships')
 
     def __str__(self):
-        return '%s / %s / %s' % (self.project.title, self.user.username, self.role)
+        return f'{self.project.title} / {self.user.username} / {self.role}'
 
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.project.pk})

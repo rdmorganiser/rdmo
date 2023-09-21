@@ -8,7 +8,7 @@ from .validators import ViewLockedValidator, ViewUniqueURIValidator
 
 
 class ViewAdminForm(forms.ModelForm):
-    key = forms.SlugField(required=True)
+    uri_path = forms.SlugField(required=True)
 
     class Meta:
         model = View
@@ -22,10 +22,11 @@ class ViewAdminForm(forms.ModelForm):
 class ViewAdmin(admin.ModelAdmin):
     form = ViewAdminForm
 
-    search_fields = ['uri'] + get_language_fields('title') + get_language_fields('help')
+    search_fields = ['uri', *get_language_fields('title'), *get_language_fields('help')]
     list_display = ('uri', 'title', 'help', 'available')
     readonly_fields = ('uri', )
     list_filter = ('available', )
+    filter_horizontal = ('catalogs', 'sites', 'editors', 'groups')
 
 
 admin.site.register(View, ViewAdmin)

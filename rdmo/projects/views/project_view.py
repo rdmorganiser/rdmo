@@ -4,6 +4,7 @@ from django.conf import settings
 from django.http import Http404
 from django.template import TemplateSyntaxError
 from django.views.generic import DetailView
+
 from rdmo.core.constants import VALUE_TYPE_FILE
 from rdmo.core.utils import render_to_format
 from rdmo.core.views import ObjectPermissionMixin
@@ -22,7 +23,10 @@ class ProjectViewView(ObjectPermissionMixin, DetailView):
     template_name = 'projects/project_view.html'
 
     def get_context_data(self, **kwargs):
-        context = super(ProjectViewView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
+
+        # prefetch most elements of the catalog
+        context['project'].catalog.prefetch_elements()
 
         try:
             context['current_snapshot'] = context['project'].snapshots.get(pk=self.kwargs.get('snapshot_id'))
@@ -31,8 +35,8 @@ class ProjectViewView(ObjectPermissionMixin, DetailView):
 
         try:
             context['view'] = context['project'].views.get(pk=self.kwargs.get('view_id'))
-        except View.DoesNotExist:
-            raise Http404
+        except View.DoesNotExist as e:
+            raise Http404 from e
 
         try:
             context['rendered_view'] = context['view'].render(context['project'],
@@ -61,7 +65,10 @@ class ProjectViewExportView(ObjectPermissionMixin, DetailView):
     def get_context_data(self, **kwargs):
         export_format = self.kwargs.get('format')
 
-        context = super(ProjectViewExportView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
+
+        # prefetch most elements of the catalog
+        context['project'].catalog.prefetch_elements()
 
         try:
             context['current_snapshot'] = context['project'].snapshots.get(pk=self.kwargs.get('snapshot_id'))
@@ -70,8 +77,8 @@ class ProjectViewExportView(ObjectPermissionMixin, DetailView):
 
         try:
             context['view'] = context['project'].views.get(pk=self.kwargs.get('view_id'))
-        except View.DoesNotExist:
-            raise Http404
+        except View.DoesNotExist as e:
+            raise Http404 from e
 
         try:
             context['rendered_view'] = context['view'].render(context['project'],
@@ -89,4 +96,5 @@ class ProjectViewExportView(ObjectPermissionMixin, DetailView):
         return context
 
     def render_to_response(self, context, **response_kwargs):
-        return render_to_format(self.request, context['format'], context['title'], 'projects/project_view_export.html', context)
+        return render_to_format(self.request, context['format'], context['title'],
+                                'projects/project_view_export.html', context)

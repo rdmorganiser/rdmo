@@ -1,0 +1,1261 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-08-05 12:56+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: management/assets/js/components/common/Buttons.js:6
+#: management/assets/js/components/sidebar/ImportSidebar.js:27
+#: management/assets/js/components/sidebar/ImportSidebar.js:42
+msgid "Back"
+msgstr ""
+
+#: management/assets/js/components/common/Buttons.js:13
+msgid "Create"
+msgstr ""
+
+#: management/assets/js/components/common/Buttons.js:13
+msgid "Create and continue editing"
+msgstr ""
+
+#: management/assets/js/components/common/Buttons.js:16
+msgid "Copy"
+msgstr ""
+
+#: management/assets/js/components/common/Buttons.js:16
+msgid "Copy and continue editing"
+msgstr ""
+
+#: management/assets/js/components/common/Buttons.js:19
+msgid "Save"
+msgstr ""
+
+#: management/assets/js/components/common/Buttons.js:19
+msgid "Save and continue editing"
+msgstr ""
+
+#: management/assets/js/components/common/Buttons.js:39
+msgid "New"
+msgstr ""
+
+#: management/assets/js/components/common/Buttons.js:49
+#: management/assets/js/components/common/Modals.js:19
+msgid "Delete"
+msgstr ""
+
+#: management/assets/js/components/common/Errors.js:11
+msgid "One or more errors occured:"
+msgstr ""
+
+#: management/assets/js/components/common/Filter.js:30
+msgid "All URI prefixes"
+msgstr ""
+
+#: management/assets/js/components/common/Forms.js:17
+msgid "Select file"
+msgstr ""
+
+#: management/assets/js/components/common/Forms.js:22
+msgid "Upload"
+msgstr ""
+
+#: management/assets/js/components/common/Links.js:76
+msgid "Locked"
+msgstr ""
+
+#: management/assets/js/components/common/Links.js:112
+msgid "Hide elements"
+msgstr ""
+
+#: management/assets/js/components/common/Links.js:112
+msgid "Show elements"
+msgstr ""
+
+#: management/assets/js/components/common/Links.js:128
+msgid "XML"
+msgstr ""
+
+#: management/assets/js/components/common/Links.js:130
+msgid "XML (full)"
+msgstr ""
+
+#: management/assets/js/components/common/Modals.js:16
+msgid "Close"
+msgstr ""
+
+#: management/assets/js/components/edit/EditAttribute.js:37
+#: management/assets/js/components/element/Attribute.js:31
+msgid "This attribute is read only"
+msgstr ""
+
+#: management/assets/js/components/edit/EditAttribute.js:44
+#: management/assets/js/components/element/Attribute.js:44
+#: management/assets/js/components/import/ImportAttribute.js:28
+#: management/assets/js/constants/elements.js:49
+msgid "Attribute"
+msgstr ""
+
+#: management/assets/js/components/edit/EditAttribute.js:46
+msgid "Create attribute"
+msgstr ""
+
+#: management/assets/js/components/edit/EditAttribute.js:53
+#, javascript-format
+msgid ""
+"This attribute will be added to the attribute <code class=\"code-domain\">"
+"%s</code>."
+msgstr ""
+
+#: management/assets/js/components/edit/EditAttribute.js:61
+#: management/assets/js/components/edit/EditAttribute.js:68
+#: management/assets/js/components/edit/EditAttribute.js:75
+#, javascript-format
+msgid ""
+"This attribute will be added to the page <code class=\"code-questions\">%s</"
+"code>."
+msgstr ""
+
+#: management/assets/js/components/edit/EditAttribute.js:82
+#, javascript-format
+msgid ""
+"This attribute will be added to the condition <code class=\"code-conditions"
+"\">%s</code>."
+msgstr ""
+
+#: management/assets/js/components/edit/EditCatalog.js:42
+#: management/assets/js/components/element/Catalog.js:35
+msgid "This catalog is read only"
+msgstr ""
+
+#: management/assets/js/components/edit/EditCatalog.js:49
+#: management/assets/js/components/element/Catalog.js:51
+#: management/assets/js/components/import/ImportCatalog.js:30
+#: management/assets/js/constants/elements.js:44
+msgid "Catalog"
+msgstr ""
+
+#: management/assets/js/components/edit/EditCatalog.js:51
+msgid "Create catalog"
+msgstr ""
+
+#: management/assets/js/components/edit/EditCondition.js:41
+#: management/assets/js/components/element/Condition.js:27
+msgid "This condition is read only"
+msgstr ""
+
+#: management/assets/js/components/edit/EditCondition.js:48
+#: management/assets/js/components/element/Condition.js:37
+#: management/assets/js/components/import/ImportCondition.js:28
+#: management/assets/js/constants/elements.js:52
+msgid "Condition"
+msgstr ""
+
+#: management/assets/js/components/edit/EditCondition.js:50
+msgid "Create condition"
+msgstr ""
+
+#: management/assets/js/components/edit/EditCondition.js:57
+#, javascript-format
+msgid ""
+"This condition will be added to the option set <code class=\"code-options\">"
+"%s</code>."
+msgstr ""
+
+#: management/assets/js/components/edit/EditCondition.js:64
+#, javascript-format
+msgid ""
+"This condition will be added to the page <code class=\"code-questions\">%s</"
+"code>."
+msgstr ""
+
+#: management/assets/js/components/edit/EditCondition.js:71
+#, javascript-format
+msgid ""
+"This condition will be added to the question set <code class=\"code-questions"
+"\">%s</code>."
+msgstr ""
+
+#: management/assets/js/components/edit/EditCondition.js:78
+#, javascript-format
+msgid ""
+"This condition will be added to the question <code class=\"code-questions\">"
+"%s</code>."
+msgstr ""
+
+#: management/assets/js/components/edit/EditCondition.js:85
+#, javascript-format
+msgid ""
+"This condition will be added to the task <code class=\"code-tasks\">%s</"
+"code>."
+msgstr ""
+
+#: management/assets/js/components/edit/EditCondition.js:114
+msgid "attribute"
+msgstr ""
+
+#: management/assets/js/components/edit/EditOption.js:37
+#: management/assets/js/components/element/Option.js:27
+msgid "This option is read only"
+msgstr ""
+
+#: management/assets/js/components/edit/EditOption.js:44
+#: management/assets/js/components/element/Option.js:37
+#: management/assets/js/components/import/ImportOption.js:28
+#: management/assets/js/constants/elements.js:51
+msgid "Option"
+msgstr ""
+
+#: management/assets/js/components/edit/EditOption.js:46
+msgid "Create option"
+msgstr ""
+
+#: management/assets/js/components/edit/EditOption.js:53
+#, javascript-format
+msgid ""
+"This option will be added to the option set <code class=\"code-options\">%s</"
+"code>."
+msgstr ""
+
+#: management/assets/js/components/edit/EditOptionSet.js:45
+#: management/assets/js/components/element/OptionSet.js:31
+msgid "This option set is read only"
+msgstr ""
+
+#: management/assets/js/components/edit/EditOptionSet.js:52
+#: management/assets/js/components/element/OptionSet.js:43
+#: management/assets/js/components/import/ImportOptionSet.js:28
+#: management/assets/js/constants/elements.js:50
+msgid "Option set"
+msgstr ""
+
+#: management/assets/js/components/edit/EditOptionSet.js:54
+msgid "Create option set"
+msgstr ""
+
+#: management/assets/js/components/edit/EditOptionSet.js:61
+#, javascript-format
+msgid ""
+"This option set will be added to the question <code class=\"code-questions\">"
+"%s</code>."
+msgstr ""
+
+#: management/assets/js/components/edit/EditPage.js:32
+#: management/assets/js/components/edit/EditQuestionSet.js:32
+#, javascript-format
+msgid "Question: %s"
+msgstr ""
+
+#: management/assets/js/components/edit/EditPage.js:35
+#: management/assets/js/components/edit/EditQuestionSet.js:35
+#, javascript-format
+msgid "Question set: %s"
+msgstr ""
+
+#: management/assets/js/components/edit/EditPage.js:75
+#: management/assets/js/components/element/Page.js:42
+msgid "This page is read only"
+msgstr ""
+
+#: management/assets/js/components/edit/EditPage.js:82
+#: management/assets/js/components/element/Page.js:57
+#: management/assets/js/components/import/ImportPage.js:28
+#: management/assets/js/constants/elements.js:46
+msgid "Page"
+msgstr ""
+
+#: management/assets/js/components/edit/EditPage.js:84
+msgid "Create page"
+msgstr ""
+
+#: management/assets/js/components/edit/EditPage.js:91
+#, javascript-format
+msgid ""
+"This page will be added to the section <code class=\"code-questions\">%s</"
+"code>."
+msgstr ""
+
+#: management/assets/js/components/edit/EditQuestion.js:47
+#: management/assets/js/components/element/Question.js:33
+msgid "This question is read only"
+msgstr ""
+
+#: management/assets/js/components/edit/EditQuestion.js:54
+#: management/assets/js/components/element/Question.js:44
+#: management/assets/js/components/import/ImportQuestion.js:28
+#: management/assets/js/constants/elements.js:48
+msgid "Question"
+msgstr ""
+
+#: management/assets/js/components/edit/EditQuestion.js:56
+msgid "Create question"
+msgstr ""
+
+#: management/assets/js/components/edit/EditQuestion.js:63
+#, javascript-format
+msgid ""
+"This question will be added to the page <code class=\"code-questions\">%s</"
+"code>."
+msgstr ""
+
+#: management/assets/js/components/edit/EditQuestion.js:70
+#, javascript-format
+msgid ""
+"This question will be added to the question set <code class=\"code-questions"
+"\">%s</code>."
+msgstr ""
+
+#: management/assets/js/components/edit/EditQuestionSet.js:75
+#: management/assets/js/components/element/QuestionSet.js:41
+msgid "This question set is read only"
+msgstr ""
+
+#: management/assets/js/components/edit/EditQuestionSet.js:82
+#: management/assets/js/components/element/QuestionSet.js:56
+#: management/assets/js/components/import/ImportQuestionSet.js:28
+#: management/assets/js/constants/elements.js:47
+msgid "Question set"
+msgstr ""
+
+#: management/assets/js/components/edit/EditQuestionSet.js:84
+msgid "Create question set"
+msgstr ""
+
+#: management/assets/js/components/edit/EditQuestionSet.js:91
+#, javascript-format
+msgid ""
+"This question set will be added to the page <code class=\"code-questions\">"
+"%s</code>."
+msgstr ""
+
+#: management/assets/js/components/edit/EditQuestionSet.js:98
+#, javascript-format
+msgid ""
+"This question set will be added to the question set <code class=\"code-"
+"questions\">%s</code>."
+msgstr ""
+
+#: management/assets/js/components/edit/EditSection.js:41
+#: management/assets/js/components/element/Section.js:39
+msgid "This section is read only"
+msgstr ""
+
+#: management/assets/js/components/edit/EditSection.js:48
+#: management/assets/js/components/element/Section.js:54
+#: management/assets/js/components/import/ImportSection.js:28
+#: management/assets/js/constants/elements.js:45
+msgid "Section"
+msgstr ""
+
+#: management/assets/js/components/edit/EditSection.js:50
+msgid "Create section"
+msgstr ""
+
+#: management/assets/js/components/edit/EditSection.js:57
+#, javascript-format
+msgid ""
+"This section will be added to the catalog <code class=\"code-questions\">%s</"
+"code>."
+msgstr ""
+
+#: management/assets/js/components/edit/EditTask.js:44
+#: management/assets/js/components/element/Task.js:28
+msgid "This task is read only"
+msgstr ""
+
+#: management/assets/js/components/edit/EditTask.js:51
+#: management/assets/js/components/element/Task.js:42
+#: management/assets/js/components/import/ImportTask.js:30
+#: management/assets/js/constants/elements.js:53
+msgid "Task"
+msgstr ""
+
+#: management/assets/js/components/edit/EditTask.js:53
+msgid "Create task"
+msgstr ""
+
+#: management/assets/js/components/edit/EditView.js:38
+#: management/assets/js/components/element/View.js:28
+msgid "This view is read only"
+msgstr ""
+
+#: management/assets/js/components/edit/EditView.js:45
+#: management/assets/js/components/element/View.js:42
+#: management/assets/js/components/import/ImportView.js:30
+#: management/assets/js/constants/elements.js:54
+msgid "View"
+msgstr ""
+
+#: management/assets/js/components/edit/EditView.js:47
+msgid "Create view"
+msgstr ""
+
+#: management/assets/js/components/edit/common/MultiSelect.js:69
+#: management/assets/js/components/edit/common/OrderedMultiSelect.js:63
+#: management/assets/js/components/edit/common/Select.js:56
+msgid "Edit"
+msgstr ""
+
+#: management/assets/js/components/edit/common/MultiSelect.js:70
+#: management/assets/js/components/edit/common/OrderedMultiSelect.js:65
+msgid "Remove"
+msgstr ""
+
+#: management/assets/js/components/edit/common/MultiSelect.js:85
+#, javascript-format
+msgid "Add %s"
+msgstr ""
+
+#: management/assets/js/components/edit/common/MultiSelect.js:90
+#: management/assets/js/components/edit/common/Select.js:68
+#, javascript-format
+msgid "Create new %s"
+msgstr ""
+
+#: management/assets/js/components/edit/common/UriPrefix.js:35
+#: management/assets/js/components/import/common/UriPrefix.js:21
+#: management/assets/js/components/sidebar/ImportSidebar.js:70
+msgid "Insert default URI Prefix"
+msgstr ""
+
+#: management/assets/js/components/element/Attribute.js:32
+msgid "View attribute nested"
+msgstr ""
+
+#: management/assets/js/components/element/Attribute.js:34
+msgid "Edit attribute"
+msgstr ""
+
+#: management/assets/js/components/element/Attribute.js:35
+msgid "Copy attribute"
+msgstr ""
+
+#: management/assets/js/components/element/Attribute.js:36
+msgid "Add attribute"
+msgstr ""
+
+#: management/assets/js/components/element/Attribute.js:37
+msgid "Unlock attribute"
+msgstr ""
+
+#: management/assets/js/components/element/Attribute.js:37
+msgid "Lock attribute"
+msgstr ""
+
+#: management/assets/js/components/element/Attribute.js:39
+msgid "Export attribute"
+msgstr ""
+
+#: management/assets/js/components/element/Catalog.js:36
+msgid "View catalog nested"
+msgstr ""
+
+#: management/assets/js/components/element/Catalog.js:37
+msgid "Edit catalog"
+msgstr ""
+
+#: management/assets/js/components/element/Catalog.js:38
+msgid "Copy catalog"
+msgstr ""
+
+#: management/assets/js/components/element/Catalog.js:39
+msgid "Add section"
+msgstr ""
+
+#: management/assets/js/components/element/Catalog.js:40
+msgid "Make catalog unavailable"
+msgstr ""
+
+#: management/assets/js/components/element/Catalog.js:41
+msgid "Make catalog available"
+msgstr ""
+
+#: management/assets/js/components/element/Catalog.js:44
+msgid "Unlock catalog"
+msgstr ""
+
+#: management/assets/js/components/element/Catalog.js:44
+msgid "Lock catalog"
+msgstr ""
+
+#: management/assets/js/components/element/Catalog.js:46
+msgid "Export catalog"
+msgstr ""
+
+#: management/assets/js/components/element/Condition.js:28
+msgid "Edit condition"
+msgstr ""
+
+#: management/assets/js/components/element/Condition.js:29
+msgid "Copy condition"
+msgstr ""
+
+#: management/assets/js/components/element/Condition.js:30
+msgid "Unlock condition"
+msgstr ""
+
+#: management/assets/js/components/element/Condition.js:30
+msgid "Lock condition"
+msgstr ""
+
+#: management/assets/js/components/element/Condition.js:32
+msgid "Export condition"
+msgstr ""
+
+#: management/assets/js/components/element/Option.js:28
+msgid "Edit option"
+msgstr ""
+
+#: management/assets/js/components/element/Option.js:29
+msgid "Copy option"
+msgstr ""
+
+#: management/assets/js/components/element/Option.js:30
+msgid "Unlock option"
+msgstr ""
+
+#: management/assets/js/components/element/Option.js:30
+msgid "Lock option"
+msgstr ""
+
+#: management/assets/js/components/element/Option.js:32
+msgid "Export option"
+msgstr ""
+
+#: management/assets/js/components/element/OptionSet.js:32
+msgid "View option set nested"
+msgstr ""
+
+#: management/assets/js/components/element/OptionSet.js:33
+msgid "Edit option set"
+msgstr ""
+
+#: management/assets/js/components/element/OptionSet.js:34
+msgid "Copy option set"
+msgstr ""
+
+#: management/assets/js/components/element/OptionSet.js:35
+msgid "Add option"
+msgstr ""
+
+#: management/assets/js/components/element/OptionSet.js:36
+msgid "Unlock option set"
+msgstr ""
+
+#: management/assets/js/components/element/OptionSet.js:36
+msgid "Lock option set"
+msgstr ""
+
+#: management/assets/js/components/element/OptionSet.js:38
+msgid "Export option set"
+msgstr ""
+
+#: management/assets/js/components/element/Page.js:43
+msgid "View page nested"
+msgstr ""
+
+#: management/assets/js/components/element/Page.js:45
+msgid "Edit page"
+msgstr ""
+
+#: management/assets/js/components/element/Page.js:46
+msgid "Copy page"
+msgstr ""
+
+#: management/assets/js/components/element/Page.js:47
+#: management/assets/js/components/element/QuestionSet.js:46
+msgid "Add question"
+msgstr ""
+
+#: management/assets/js/components/element/Page.js:47
+#: management/assets/js/components/element/QuestionSet.js:46
+msgid "Add question set"
+msgstr ""
+
+#: management/assets/js/components/element/Page.js:49
+msgid "Unlock page"
+msgstr ""
+
+#: management/assets/js/components/element/Page.js:49
+msgid "Lock page"
+msgstr ""
+
+#: management/assets/js/components/element/Page.js:51
+msgid "Export page"
+msgstr ""
+
+#: management/assets/js/components/element/Question.js:34
+msgid "Edit question"
+msgstr ""
+
+#: management/assets/js/components/element/Question.js:35
+msgid "Copy question"
+msgstr ""
+
+#: management/assets/js/components/element/Question.js:36
+msgid "Unlock question"
+msgstr ""
+
+#: management/assets/js/components/element/Question.js:36
+msgid "Lock question"
+msgstr ""
+
+#: management/assets/js/components/element/Question.js:38
+msgid "Export question"
+msgstr ""
+
+#: management/assets/js/components/element/QuestionSet.js:42
+msgid "View question set nested"
+msgstr ""
+
+#: management/assets/js/components/element/QuestionSet.js:44
+msgid "Edit question set"
+msgstr ""
+
+#: management/assets/js/components/element/QuestionSet.js:45
+msgid "Copy question set"
+msgstr ""
+
+#: management/assets/js/components/element/QuestionSet.js:48
+msgid "Unlock question set"
+msgstr ""
+
+#: management/assets/js/components/element/QuestionSet.js:48
+msgid "Lock question set"
+msgstr ""
+
+#: management/assets/js/components/element/QuestionSet.js:50
+msgid "Export question set"
+msgstr ""
+
+#: management/assets/js/components/element/Section.js:40
+msgid "View section nested"
+msgstr ""
+
+#: management/assets/js/components/element/Section.js:42
+msgid "Edit section"
+msgstr ""
+
+#: management/assets/js/components/element/Section.js:43
+msgid "Copy section"
+msgstr ""
+
+#: management/assets/js/components/element/Section.js:44
+msgid "Add page"
+msgstr ""
+
+#: management/assets/js/components/element/Section.js:45
+msgid "Unlock section"
+msgstr ""
+
+#: management/assets/js/components/element/Section.js:46
+msgid "Lock section"
+msgstr ""
+
+#: management/assets/js/components/element/Section.js:48
+msgid "Export section"
+msgstr ""
+
+#: management/assets/js/components/element/Task.js:29
+msgid "Edit task"
+msgstr ""
+
+#: management/assets/js/components/element/Task.js:30
+msgid "Copy task"
+msgstr ""
+
+#: management/assets/js/components/element/Task.js:31
+msgid "Make task unavailable"
+msgstr ""
+
+#: management/assets/js/components/element/Task.js:32
+msgid "Make task available"
+msgstr ""
+
+#: management/assets/js/components/element/Task.js:35
+msgid "Unlock task"
+msgstr ""
+
+#: management/assets/js/components/element/Task.js:35
+msgid "Lock task"
+msgstr ""
+
+#: management/assets/js/components/element/Task.js:37
+msgid "Export task"
+msgstr ""
+
+#: management/assets/js/components/element/View.js:29
+msgid "Edit view"
+msgstr ""
+
+#: management/assets/js/components/element/View.js:30
+msgid "Copy view"
+msgstr ""
+
+#: management/assets/js/components/element/View.js:31
+msgid "Make view unavailable"
+msgstr ""
+
+#: management/assets/js/components/element/View.js:32
+msgid "Make view available"
+msgstr ""
+
+#: management/assets/js/components/element/View.js:35
+msgid "Unlock view"
+msgstr ""
+
+#: management/assets/js/components/element/View.js:35
+msgid "Lock view"
+msgstr ""
+
+#: management/assets/js/components/element/View.js:37
+msgid "Export view"
+msgstr ""
+
+#: management/assets/js/components/elements/Attributes.js:26
+#: management/assets/js/components/elements/Pages.js:56
+#: management/assets/js/components/elements/QuestionSets.js:56
+#: management/assets/js/components/elements/Questions.js:57
+#: management/assets/js/components/nested/NestedCatalog.js:75
+#: management/assets/js/components/nested/NestedPage.js:67
+#: management/assets/js/components/nested/NestedQuestionSet.js:63
+#: management/assets/js/components/nested/NestedSection.js:71
+msgid "Attributes"
+msgstr ""
+
+#: management/assets/js/components/elements/Attributes.js:33
+#: management/assets/js/components/nested/NestedAttribute.js:32
+msgid "Filter attributes"
+msgstr ""
+
+#: management/assets/js/components/elements/Attributes.js:42
+#: management/assets/js/components/elements/Catalogs.js:51
+#: management/assets/js/components/elements/Conditions.js:43
+#: management/assets/js/components/elements/OptionSets.js:43
+#: management/assets/js/components/elements/Options.js:46
+#: management/assets/js/components/elements/Pages.js:48
+#: management/assets/js/components/elements/QuestionSets.js:48
+#: management/assets/js/components/elements/Questions.js:49
+#: management/assets/js/components/elements/Sections.js:46
+#: management/assets/js/components/elements/Tasks.js:49
+#: management/assets/js/components/elements/Views.js:49
+msgid "All editors"
+msgstr ""
+
+#: management/assets/js/components/elements/Catalogs.js:30
+#: management/assets/js/components/elements/Catalogs.js:58
+#: management/assets/js/components/nested/NestedCatalog.js:65
+msgid "Catalogs"
+msgstr ""
+
+#: management/assets/js/components/elements/Catalogs.js:37
+#: management/assets/js/components/nested/NestedCatalog.js:50
+msgid "Filter catalogs"
+msgstr ""
+
+#: management/assets/js/components/elements/Catalogs.js:57
+#: management/assets/js/components/elements/Options.js:51
+#: management/assets/js/components/elements/Pages.js:53
+#: management/assets/js/components/elements/QuestionSets.js:53
+#: management/assets/js/components/elements/Questions.js:54
+#: management/assets/js/components/elements/Sections.js:51
+#: management/assets/js/components/nested/NestedCatalog.js:64
+#: management/assets/js/components/nested/NestedOptionSet.js:44
+#: management/assets/js/components/nested/NestedPage.js:60
+#: management/assets/js/components/nested/NestedQuestionSet.js:58
+#: management/assets/js/components/nested/NestedSection.js:62
+msgid "Show URIs:"
+msgstr ""
+
+#: management/assets/js/components/elements/Conditions.js:27
+#: management/assets/js/components/elements/Pages.js:58
+#: management/assets/js/components/elements/QuestionSets.js:58
+#: management/assets/js/components/elements/Questions.js:59
+#: management/assets/js/components/nested/NestedCatalog.js:77
+#: management/assets/js/components/nested/NestedPage.js:69
+#: management/assets/js/components/nested/NestedQuestionSet.js:65
+#: management/assets/js/components/nested/NestedSection.js:73
+msgid "Conditions"
+msgstr ""
+
+#: management/assets/js/components/elements/Conditions.js:34
+msgid "Filter conditions"
+msgstr ""
+
+#: management/assets/js/components/elements/OptionSets.js:27
+#: management/assets/js/components/elements/Questions.js:61
+#: management/assets/js/components/nested/NestedCatalog.js:79
+#: management/assets/js/components/nested/NestedPage.js:71
+#: management/assets/js/components/nested/NestedQuestionSet.js:67
+#: management/assets/js/components/nested/NestedSection.js:75
+msgid "Option sets"
+msgstr ""
+
+#: management/assets/js/components/elements/OptionSets.js:34
+#: management/assets/js/components/nested/NestedOptionSet.js:36
+msgid "Filter option sets"
+msgstr ""
+
+#: management/assets/js/components/elements/Options.js:30
+#: management/assets/js/components/elements/Options.js:52
+#: management/assets/js/components/nested/NestedOptionSet.js:45
+msgid "Options"
+msgstr ""
+
+#: management/assets/js/components/elements/Options.js:37
+msgid "Filter options"
+msgstr ""
+
+#: management/assets/js/components/elements/Pages.js:32
+#: management/assets/js/components/elements/Pages.js:54
+#: management/assets/js/components/nested/NestedCatalog.js:60
+#: management/assets/js/components/nested/NestedCatalog.js:69
+#: management/assets/js/components/nested/NestedPage.js:61
+#: management/assets/js/components/nested/NestedSection.js:58
+#: management/assets/js/components/nested/NestedSection.js:65
+msgid "Pages"
+msgstr ""
+
+#: management/assets/js/components/elements/Pages.js:39
+#: management/assets/js/components/nested/NestedPage.js:48
+msgid "Filter pages"
+msgstr ""
+
+#: management/assets/js/components/elements/QuestionSets.js:32
+#: management/assets/js/components/elements/QuestionSets.js:54
+#: management/assets/js/components/nested/NestedCatalog.js:61
+#: management/assets/js/components/nested/NestedCatalog.js:71
+#: management/assets/js/components/nested/NestedPage.js:57
+#: management/assets/js/components/nested/NestedPage.js:63
+#: management/assets/js/components/nested/NestedQuestionSet.js:55
+#: management/assets/js/components/nested/NestedQuestionSet.js:59
+#: management/assets/js/components/nested/NestedSection.js:59
+#: management/assets/js/components/nested/NestedSection.js:67
+msgid "Question sets"
+msgstr ""
+
+#: management/assets/js/components/elements/QuestionSets.js:39
+#: management/assets/js/components/nested/NestedQuestionSet.js:46
+msgid "Filter question sets"
+msgstr ""
+
+#: management/assets/js/components/elements/Questions.js:33
+#: management/assets/js/components/elements/Questions.js:55
+#: management/assets/js/components/nested/NestedCatalog.js:73
+#: management/assets/js/components/nested/NestedPage.js:65
+#: management/assets/js/components/nested/NestedQuestionSet.js:61
+#: management/assets/js/components/nested/NestedSection.js:69
+msgid "Questions"
+msgstr ""
+
+#: management/assets/js/components/elements/Questions.js:40
+msgid "Filter questions"
+msgstr ""
+
+#: management/assets/js/components/elements/Sections.js:30
+#: management/assets/js/components/elements/Sections.js:52
+#: management/assets/js/components/nested/NestedCatalog.js:59
+#: management/assets/js/components/nested/NestedCatalog.js:67
+#: management/assets/js/components/nested/NestedSection.js:63
+msgid "Sections"
+msgstr ""
+
+#: management/assets/js/components/elements/Sections.js:37
+#: management/assets/js/components/nested/NestedSection.js:49
+msgid "Filter sections"
+msgstr ""
+
+#: management/assets/js/components/elements/Tasks.js:28
+msgid "Tasks"
+msgstr ""
+
+#: management/assets/js/components/elements/Tasks.js:35
+msgid "Filter tasks"
+msgstr ""
+
+#: management/assets/js/components/elements/Views.js:28
+msgid "Views"
+msgstr ""
+
+#: management/assets/js/components/elements/Views.js:35
+msgid "Filter views"
+msgstr ""
+
+#: management/assets/js/components/import/ImportCatalog.js:22
+msgid "catalog"
+msgstr ""
+
+#: management/assets/js/components/import/ImportTask.js:22
+msgid "task"
+msgstr ""
+
+#: management/assets/js/components/import/ImportView.js:22
+msgid "view"
+msgstr ""
+
+#: management/assets/js/components/import/common/Errors.js:9
+msgid "Errors"
+msgstr ""
+
+#: management/assets/js/components/import/common/Key.js:12
+msgid "Key"
+msgstr ""
+
+#: management/assets/js/components/import/common/UriPath.js:12
+msgid "URI path"
+msgstr ""
+
+#: management/assets/js/components/import/common/UriPrefix.js:12
+#: management/assets/js/components/sidebar/ImportSidebar.js:61
+#: management/assets/js/components/sidebar/ImportSidebar.js:65
+msgid "URI prefix"
+msgstr ""
+
+#: management/assets/js/components/import/common/Warnings.js:9
+msgid "Warnings"
+msgstr ""
+
+#: management/assets/js/components/info/AttributeInfo.js:36
+#, javascript-format
+msgid "This attribute is used for <b>%s values</b> in <b>one project</b>."
+msgid_plural ""
+"This attribute is used for <b>%s values</b> in <b>%s projects</b>."
+msgstr[0] ""
+msgstr[1] ""
+
+#: management/assets/js/components/info/AttributeInfo.js:43
+#, javascript-format
+msgid "This attribute has <b>one decendant</b>."
+msgid_plural "This attribute has <b>%s decendants</b>."
+msgstr[0] ""
+msgstr[1] ""
+
+#: management/assets/js/components/info/AttributeInfo.js:59
+#, javascript-format
+msgid "This attribute is used in <b>one condition</b>."
+msgid_plural "This attribute is used in <b>%s conditions</b>."
+msgstr[0] ""
+msgstr[1] ""
+
+#: management/assets/js/components/info/AttributeInfo.js:74
+#, javascript-format
+msgid "This attribute is used in <b>one page</b>."
+msgid_plural "This attribute is used in <b>%s pages</b>."
+msgstr[0] ""
+msgstr[1] ""
+
+#: management/assets/js/components/info/AttributeInfo.js:89
+#, javascript-format
+msgid "This attribute is used in <b>one questionset</b>."
+msgid_plural "This attribute is used in <b>%s questionsets</b>."
+msgstr[0] ""
+msgstr[1] ""
+
+#: management/assets/js/components/info/AttributeInfo.js:104
+#, javascript-format
+msgid "This attribute is used in <b>one question</b>."
+msgid_plural "This attribute is used in <b>%s questions</b>."
+msgstr[0] ""
+msgstr[1] ""
+
+#: management/assets/js/components/info/AttributeInfo.js:119
+#, javascript-format
+msgid "This attribute is used in <b>one task</b>."
+msgid_plural "This attribute is used in <b>%s tasks</b>."
+msgstr[0] ""
+msgstr[1] ""
+
+#: management/assets/js/components/info/CatalogInfo.js:9
+#, javascript-format
+msgid "This catalog is used in <b>one project</b>."
+msgid_plural "This catalog is used in <b>%s projects</b>."
+msgstr[0] ""
+msgstr[1] ""
+
+#: management/assets/js/components/info/ConditionInfo.js:33
+#, javascript-format
+msgid "This condition is used for <b>one optionset</b>."
+msgid_plural "This condition is used for <b>%s optionsets</b>."
+msgstr[0] ""
+msgstr[1] ""
+
+#: management/assets/js/components/info/ConditionInfo.js:48
+#, javascript-format
+msgid "This condition is used for <b>one page</b>."
+msgid_plural "This condition is used for <b>%s pages</b>."
+msgstr[0] ""
+msgstr[1] ""
+
+#: management/assets/js/components/info/ConditionInfo.js:63
+#, javascript-format
+msgid "This condition is used for <b>one questionset</b>."
+msgid_plural "This condition is used for <b>%s questionsets</b>."
+msgstr[0] ""
+msgstr[1] ""
+
+#: management/assets/js/components/info/ConditionInfo.js:78
+#, javascript-format
+msgid "This condition is used for <b>one question</b>."
+msgid_plural "This condition is used for <b>%s questions</b>."
+msgstr[0] ""
+msgstr[1] ""
+
+#: management/assets/js/components/info/ConditionInfo.js:93
+#, javascript-format
+msgid "This condition is used for <b>one task</b>."
+msgid_plural "This condition is used for <b>%s tasks</b>."
+msgstr[0] ""
+msgstr[1] ""
+
+#: management/assets/js/components/info/OptionInfo.js:20
+#, javascript-format
+msgid "This option is used for <b>%s values</b> in <b>one project</b>."
+msgid_plural "This option is used for <b>%s values</b> in <b>%s projects</b>."
+msgstr[0] ""
+msgstr[1] ""
+
+#: management/assets/js/components/info/OptionInfo.js:26
+#, javascript-format
+msgid "This option is used in <b>one condition</b>."
+msgid_plural "This option is used in <b>%s conditions</b>."
+msgstr[0] ""
+msgstr[1] ""
+
+#: management/assets/js/components/info/OptionSetInfo.js:21
+#, javascript-format
+msgid "This option set is used in <b>one question</b>."
+msgid_plural "This option set is used in <b>%s questions</b>."
+msgstr[0] ""
+msgstr[1] ""
+
+#: management/assets/js/components/info/PageInfo.js:21
+#, javascript-format
+msgid "This page is used in <b>one section</b>."
+msgid_plural "This page is used in <b>%s sections</b>."
+msgstr[0] ""
+msgstr[1] ""
+
+#: management/assets/js/components/info/QuestionInfo.js:24
+#, javascript-format
+msgid "This question is used in <b>one page</b>."
+msgid_plural "This question is used in <b>%s pages</b>."
+msgstr[0] ""
+msgstr[1] ""
+
+#: management/assets/js/components/info/QuestionInfo.js:39
+#: management/assets/js/components/info/QuestionSetInfo.js:39
+#, javascript-format
+msgid "This question set is used in <b>one question set</b>."
+msgid_plural "This question set is used in <b>%s question sets</b>."
+msgstr[0] ""
+msgstr[1] ""
+
+#: management/assets/js/components/info/QuestionSetInfo.js:24
+#, javascript-format
+msgid "This question set is used in <b>one page</b>."
+msgid_plural "This question set is used in <b>%s pages</b>."
+msgstr[0] ""
+msgstr[1] ""
+
+#: management/assets/js/components/info/SectionInfo.js:21
+#, javascript-format
+msgid "This section is used in <b>one catalog</b>."
+msgid_plural "This section is used in <b>%s catalogs</b>."
+msgstr[0] ""
+msgstr[1] ""
+
+#: management/assets/js/components/info/TaskInfo.js:9
+#, javascript-format
+msgid "This task is used in <b>one project</b>."
+msgid_plural "This task is used in <b>%s projects</b>."
+msgstr[0] ""
+msgstr[1] ""
+
+#: management/assets/js/components/info/ViewInfo.js:9
+#, javascript-format
+msgid "This view is used in <b>one project</b>."
+msgid_plural "This view is used in <b>%s projects</b>."
+msgstr[0] ""
+msgstr[1] ""
+
+#: management/assets/js/components/main/Import.js:26
+msgid "Import"
+msgstr ""
+
+#: management/assets/js/components/main/Import.js:38
+msgid "created"
+msgstr ""
+
+#: management/assets/js/components/main/Import.js:39
+msgid "updated"
+msgstr ""
+
+#: management/assets/js/components/main/Import.js:42
+msgid "could not be imported"
+msgstr ""
+
+#: management/assets/js/components/main/Import.js:46
+msgid "but could not be added to parent element"
+msgstr ""
+
+#: management/assets/js/components/modals/DeleteAttributeModal.js:7
+msgid "Delete attribute"
+msgstr ""
+
+#: management/assets/js/components/modals/DeleteAttributeModal.js:9
+msgid "You are about to permanently delete the attribute:"
+msgstr ""
+
+#: management/assets/js/components/modals/DeleteAttributeModal.js:16
+#: management/assets/js/components/modals/DeleteCatalogModal.js:16
+#: management/assets/js/components/modals/DeleteConditionModal.js:16
+#: management/assets/js/components/modals/DeleteOptionModal.js:16
+#: management/assets/js/components/modals/DeleteOptionSetModal.js:16
+#: management/assets/js/components/modals/DeletePageModal.js:16
+#: management/assets/js/components/modals/DeleteQuestionModal.js:16
+#: management/assets/js/components/modals/DeleteQuestionSetModal.js:16
+#: management/assets/js/components/modals/DeleteSectionModal.js:16
+#: management/assets/js/components/modals/DeleteTaskModal.js:16
+#: management/assets/js/components/modals/DeleteViewModal.js:16
+msgid "This action cannot be undone!"
+msgstr ""
+
+#: management/assets/js/components/modals/DeleteCatalogModal.js:7
+#: management/assets/js/components/modals/DeleteTaskModal.js:7
+#: management/assets/js/components/modals/DeleteViewModal.js:7
+msgid "Delete catalog"
+msgstr ""
+
+#: management/assets/js/components/modals/DeleteCatalogModal.js:9
+msgid "You are about to permanently delete the catalog:"
+msgstr ""
+
+#: management/assets/js/components/modals/DeleteCatalogModal.js:16
+msgid "Those projects will not be usable afterwards."
+msgstr ""
+
+#: management/assets/js/components/modals/DeleteConditionModal.js:7
+msgid "Delete condition"
+msgstr ""
+
+#: management/assets/js/components/modals/DeleteConditionModal.js:9
+msgid "You are about to permanently delete the condition:"
+msgstr ""
+
+#: management/assets/js/components/modals/DeleteOptionModal.js:7
+msgid "Delete option"
+msgstr ""
+
+#: management/assets/js/components/modals/DeleteOptionModal.js:9
+msgid "You are about to permanently delete the option:"
+msgstr ""
+
+#: management/assets/js/components/modals/DeleteOptionSetModal.js:7
+msgid "Delete option set"
+msgstr ""
+
+#: management/assets/js/components/modals/DeleteOptionSetModal.js:9
+msgid "You are about to permanently delete the option set:"
+msgstr ""
+
+#: management/assets/js/components/modals/DeletePageModal.js:7
+msgid "Delete page"
+msgstr ""
+
+#: management/assets/js/components/modals/DeletePageModal.js:9
+msgid "You are about to permanently delete the page:"
+msgstr ""
+
+#: management/assets/js/components/modals/DeleteQuestionModal.js:7
+msgid "Delete question"
+msgstr ""
+
+#: management/assets/js/components/modals/DeleteQuestionModal.js:9
+msgid "You are about to permanently delete the question:"
+msgstr ""
+
+#: management/assets/js/components/modals/DeleteQuestionSetModal.js:7
+msgid "Delete question set"
+msgstr ""
+
+#: management/assets/js/components/modals/DeleteQuestionSetModal.js:9
+msgid "You are about to permanently delete the question set:"
+msgstr ""
+
+#: management/assets/js/components/modals/DeleteSectionModal.js:7
+msgid "Delete section"
+msgstr ""
+
+#: management/assets/js/components/modals/DeleteSectionModal.js:9
+msgid "You are about to permanently delete the section:"
+msgstr ""
+
+#: management/assets/js/components/modals/DeleteTaskModal.js:9
+msgid "You are about to permanently delete the task:"
+msgstr ""
+
+#: management/assets/js/components/modals/DeleteTaskModal.js:16
+msgid "The task will be removed from these projects."
+msgstr ""
+
+#: management/assets/js/components/modals/DeleteViewModal.js:9
+msgid "You are about to permanently delete the view:"
+msgstr ""
+
+#: management/assets/js/components/modals/DeleteViewModal.js:16
+msgid "The view will be removed from these projects."
+msgstr ""
+
+#: management/assets/js/components/nested/NestedCatalog.js:58
+msgid "Toggle elements:"
+msgstr ""
+
+#: management/assets/js/components/nested/NestedPage.js:56
+#: management/assets/js/components/nested/NestedQuestionSet.js:54
+#: management/assets/js/components/nested/NestedSection.js:57
+msgid "Show elements:"
+msgstr ""
+
+#: management/assets/js/components/sidebar/ImportSidebar.js:23
+msgid "Import successful"
+msgstr ""
+
+#: management/assets/js/components/sidebar/ImportSidebar.js:35
+msgid "Import elements"
+msgstr ""
+
+#: management/assets/js/components/sidebar/ImportSidebar.js:39
+#, javascript-format
+msgid "Import one element"
+msgid_plural "Import %s elements"
+msgstr[0] ""
+msgstr[1] ""
+
+#: management/assets/js/components/sidebar/ImportSidebar.js:46
+msgid "Selection"
+msgstr ""
+
+#: management/assets/js/components/sidebar/ImportSidebar.js:51
+msgid "Select all"
+msgstr ""
+
+#: management/assets/js/components/sidebar/ImportSidebar.js:56
+msgid "Unselect all"
+msgstr ""
+
+#: management/assets/js/components/sidebar/ImportSidebar.js:75
+msgid "Set URI prefix for all elements"
+msgstr ""

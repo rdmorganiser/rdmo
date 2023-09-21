@@ -1,9 +1,8 @@
 import logging
 
-from rdmo.core.imports import (get_foreign_field, set_common_fields,
-                               validate_instance)
-from rdmo.domain.models import Attribute
-from rdmo.options.models import Option
+from django.contrib.sites.models import Site
+
+from rdmo.core.imports import check_permissions, set_common_fields, set_foreign_field, validate_instance
 
 from .models import Condition
 from .validators import ConditionLockedValidator, ConditionUniqueURIValidator
@@ -11,7 +10,7 @@ from .validators import ConditionLockedValidator, ConditionUniqueURIValidator
 logger = logging.getLogger(__name__)
 
 
-def import_condition(element, save=False):
+def import_condition(element, save=False, user=None):
     try:
         condition = Condition.objects.get(uri=element.get('uri'))
     except Condition.DoesNotExist:
@@ -19,19 +18,25 @@ def import_condition(element, save=False):
 
     set_common_fields(condition, element)
 
-    condition.source = get_foreign_field(condition, element.get('source'), Attribute)
-    condition.target_option = get_foreign_field(condition, element.get('target_option'), Option)
+    set_foreign_field(condition, 'source', element)
+    set_foreign_field(condition, 'target_option', element)
 
     condition.relation = element.get('relation')
     condition.target_text = element.get('target_text') or ''
 
-    if save and validate_instance(condition, ConditionLockedValidator, ConditionUniqueURIValidator):
+    validate_instance(condition, element, ConditionLockedValidator, ConditionUniqueURIValidator)
+
+    check_permissions(condition, element, user)
+
+    if save and not element.get('errors'):
         if condition.id:
-            logger.info('Catalog created with uri %s.', element.get('uri'))
+            element['updated'] = True
+            logger.info('Condition %s updated.', element.get('uri'))
         else:
-            logger.info('Catalog %s updated.', element.get('uri'))
+            element['created'] = True
+            logger.info('Condition created with uri %s.', element.get('uri'))
 
         condition.save()
-        condition.imported = True
+        condition.editors.add(Site.objects.get_current())
 
     return condition

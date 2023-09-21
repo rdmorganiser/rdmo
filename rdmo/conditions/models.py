@@ -1,8 +1,9 @@
 from django.conf import settings
+from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.core.utils import copy_model, join_url
+from rdmo.core.utils import join_url
 from rdmo.domain.models import Attribute
 
 
@@ -30,7 +31,7 @@ class Condition(models.Model):
     )
 
     uri = models.URLField(
-        max_length=640, blank=True,
+        max_length=800, blank=True,
         verbose_name=_('URI'),
         help_text=_('The Uniform Resource Identifier of this condition (auto-generated).')
     )
@@ -39,10 +40,10 @@ class Condition(models.Model):
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this condition.')
     )
-    key = models.SlugField(
-        max_length=128, blank=True,
-        verbose_name=_('Key'),
-        help_text=_('The internal identifier of this condition.')
+    uri_path = models.SlugField(
+        max_length=512, blank=True,
+        verbose_name=_('URI Path'),
+        help_text=_('The path for the URI of this condition.')
     )
     comment = models.TextField(
         blank=True,
@@ -54,8 +55,14 @@ class Condition(models.Model):
         verbose_name=_('Locked'),
         help_text=_('Designates whether this condition can be changed.')
     )
+    editors = models.ManyToManyField(
+        Site, related_name='conditions_as_editor', blank=True,
+        verbose_name=_('Editors'),
+        help_text=_('The sites that can edit this condition (in a multi site setup).')
+    )
     source = models.ForeignKey(
-        Attribute, db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='conditions',
+        Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='conditions',
+        db_constraint=False,
         verbose_name=_('Source'),
         help_text=_('The attribute of the value for this condition.')
     )
@@ -67,10 +74,12 @@ class Condition(models.Model):
     target_text = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Target (Text)'),
-        help_text=_('If using a regular value, the text value this condition is checking against (for boolean values use 1 and 0).')
+        help_text=_('If using a regular value, the text value this condition is checking against '
+                    '(for boolean values use 1 and 0).')
     )
     target_option = models.ForeignKey(
-        'options.Option', db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='conditions',
+        'options.Option', blank=True, null=True, on_delete=models.SET_NULL, related_name='conditions',
+        db_constraint=False,
         verbose_name=_('Target (Option)'),
         help_text=_('If using a value pointing to an option, the option this condition is checking against.')
     )
@@ -81,16 +90,11 @@ class Condition(models.Model):
         verbose_name_plural = _('Conditions')
 
     def __str__(self):
-        return self.key
+        return self.uri
 
     def save(self, *args, **kwargs):
-        self.uri = self.build_uri(self.uri_prefix, self.key)
+        self.uri = self.build_uri(self.uri_prefix, self.uri_path)
         super().save(*args, **kwargs)
-
-    def copy(self, uri_prefix, key):
-        condition = copy_model(self, uri_prefix=uri_prefix, key=key, source=self.source, target_option=self.target_option)
-
-        return condition
 
     @property
     def source_label(self):
@@ -111,19 +115,16 @@ class Condition(models.Model):
     def is_locked(self):
         return self.locked
 
-    def resolve(self, values, set_prefix=None, set_index=None, question=None):
+    def resolve(self, values, set_prefix=None, set_index=None):
         source_values = filter(lambda value: value.attribute == self.source, values)
 
         if set_prefix is not None:
             source_values = filter(lambda value: value.set_prefix == set_prefix, source_values)
 
         if set_index is not None:
-            if question and not question.questionset.is_collection:
-                # use the value without set_index since the
-                # conditions refers to a non non set question
-                pass
-            else:
-                source_values = filter(lambda value: value.set_index == int(set_index), source_values)
+            source_values = filter(lambda value: (
+                value.set_index == int(set_index) or value.set_collection is False
+            ), source_values)
 
         source_values = list(source_values)
         if not source_values:
@@ -131,7 +132,7 @@ class Condition(models.Model):
                 # try one level higher
                 rpartition = set_prefix.rpartition('|')
                 set_prefix, set_index = rpartition[0], int(rpartition[2])
-                return self.resolve(values, set_prefix, set_index, question)
+                return self.resolve(values, set_prefix, set_index)
 
         if self.relation == self.RELATION_EQUAL:
             return self._resolve_equal(source_values)
@@ -235,6 +236,7 @@ class Condition(models.Model):
         return False
 
     @classmethod
-    def build_uri(cls, uri_prefix, key):
-        assert key
-        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/conditions/', key)
+    def build_uri(cls, uri_prefix, uri_path):
+        if not uri_path:
+            raise RuntimeError('uri_path is missing')
+        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/conditions/', uri_path)

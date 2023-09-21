@@ -4,3 +4,5 @@ migrations
 
 *.xml
 *.json
+*.po
+*.mo

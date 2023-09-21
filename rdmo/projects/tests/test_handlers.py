@@ -1,4 +1,5 @@
 import itertools
+
 import pytest
 
 from django.contrib.auth.models import Group
@@ -30,15 +31,15 @@ view_update_tests = [
     ('3', [2],        [1, 2],  [1], '10', False),
     ('3', [1, 2, 3],  [1, 2],  [1], '10', False),
 
-    ('3', [],         [],      [1, 2, 3, 4], '10', True),
+    ('3', [],         [],      [1, 2, 3, 4], '10', False),
     ('3', [2],        [],      [1, 2, 3, 4], '10', False),
-    ('3', [1, 2, 3],  [],      [1, 2, 3, 4], '10', True),
+    ('3', [1, 2, 3],  [],      [1, 2, 3, 4], '10', False),
     ('3', [],         [2],     [1, 2, 3, 4], '10', False),
     ('3', [2],        [2],     [1, 2, 3, 4], '10', False),
     ('3', [1, 2, 3],  [2],     [1, 2, 3, 4], '10', False),
-    ('3', [],         [1, 2],  [1, 2, 3, 4], '10', True),
+    ('3', [],         [1, 2],  [1, 2, 3, 4], '10', False),
     ('3', [2],        [1, 2],  [1, 2, 3, 4], '10', False),
-    ('3', [1, 2, 3],  [1, 2],  [1, 2, 3, 4], '10', True)
+    ('3', [1, 2, 3],  [1, 2],  [1, 2, 3, 4], '10', False)
 ]
 
 @pytest.mark.parametrize('view_id,sites,catalogs,groups,project_id,project_exists', view_update_tests)
@@ -49,9 +50,9 @@ def test_update_projects(db, view_id, sites, catalogs, groups, project_id, proje
     view.catalogs.set(Catalog.objects.filter(pk__in=catalogs))
     view.groups.set(Group.objects.filter(pk__in=groups))
 
-    assert sorted(list(itertools.chain.from_iterable(view.sites.all().values_list('pk')))) == sites
-    assert sorted(list(itertools.chain.from_iterable(view.catalogs.all().values_list('pk')))) == catalogs
-    assert sorted(list(itertools.chain.from_iterable(view.groups.all().values_list('pk')))) == groups
+    assert sorted(itertools.chain.from_iterable(view.sites.all().values_list('pk'))) == sites
+    assert sorted(itertools.chain.from_iterable(view.catalogs.all().values_list('pk'))) == catalogs
+    assert sorted(itertools.chain.from_iterable(view.groups.all().values_list('pk'))) == groups
 
     if not project_exists:
         with pytest.raises(Project.DoesNotExist):

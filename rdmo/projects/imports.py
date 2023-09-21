@@ -2,18 +2,17 @@ import base64
 import io
 import logging
 import mimetypes
-from urllib.parse import urlparse, quote
-
-import requests
+from urllib.parse import quote
 
 from django import forms
 from django.core.files import File
-from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.core.plugins import Plugin
+import requests
+
 from rdmo.core.imports import handle_fetched_file
+from rdmo.core.plugins import Plugin
 from rdmo.core.xml import get_ns_map, get_uri, read_xml_file
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
@@ -21,6 +20,7 @@ from rdmo.questions.models import Catalog
 from rdmo.services.providers import GitHubProviderMixin, GitLabProviderMixin
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
+
 from .models import Project, Snapshot, Value
 
 log = logging.getLogger(__name__)
@@ -169,6 +169,18 @@ class RDMOXMLImport(Import):
             value.set_prefix = ''
 
         value.set_index = int(value_node.find('set_index').text)
+
+        try:
+            set_collection_text = value_node.find('set_collection').text
+            if set_collection_text == 'True':
+                value.set_collection = True
+            elif set_collection_text == 'False':
+                value.set_collection = False
+            else:
+                value.set_collection = None
+        except AttributeError:
+            value.set_collection = None
+
         value.collection_index = int(value_node.find('collection_index').text)
 
         value.text = value_node.find('text').text or ''

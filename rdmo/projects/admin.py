@@ -1,9 +1,18 @@
 from django.contrib import admin
 from django.db.models import Prefetch
 
-from .models import (Continuation, Integration, IntegrationOption, Invite,
-                     Issue, IssueResource, Membership, Project, Snapshot,
-                     Value)
+from .models import (
+    Continuation,
+    Integration,
+    IntegrationOption,
+    Invite,
+    Issue,
+    IssueResource,
+    Membership,
+    Project,
+    Snapshot,
+    Value,
+)
 
 
 class ProjectAdmin(admin.ModelAdmin):
@@ -30,7 +39,7 @@ class MembershipAdmin(admin.ModelAdmin):
 
 class ContinuationAdmin(admin.ModelAdmin):
     search_fields = ('project__title', 'user__username')
-    list_display = ('project', 'user', 'questionset')
+    list_display = ('project', 'user', 'page')
 
 
 class IntegrationAdmin(admin.ModelAdmin):

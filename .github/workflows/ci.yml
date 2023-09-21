@@ -1,0 +1,177 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    # run CI only if files in these whitelisted paths are changed
+    paths:
+      - '.github/workflows/**'
+      - 'rdmo/**'
+      - 'testing/**'
+      - .pre-commit-config.yaml
+      - conftest.py
+      - package.json
+      - pyproject.toml
+
+# Ref: https://docs.github.com/en/actions/using-jobs/using-concurrency
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHONDONTWRITEBYTECODE: 1
+  FORCE_COLOR: 1 # colored output by pytest etc.
+  CLICOLOR_FORCE: 1 # colored output by ruff
+
+jobs:
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+        cache: pip
+    - run: python -m pip install --upgrade pip setuptools wheel
+    - run: python -m pip install -e .[dev]
+    - name: Set up pre-commit cache
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pre-commit
+        key: lint-${{ hashFiles('.pre-commit-config.yaml') }}
+    - name: Run linters via pre-commit (ruff, eslint)
+      run: pre-commit run --all-files --color=always
+
+  test:
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.11']
+        db-backend: [mysql, postgres]
+        # test Python 3.12 already using 3.12-dev
+        # release is scheduled for 2023-10-02 (https://peps.python.org/pep-0693/)
+        # when released: replace "python-version: ['3.8', '3.11']" with python-version: ['3.8', '3.12']
+        include:
+        - python-version: '3.12-dev'
+          db-backend: postgres
+
+    name: "Test (Python: ${{ matrix.python-version }}, DB: ${{ matrix.db-backend }})"
+    needs: lint
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: pip
+    - name: Install Dependencies
+      run: |
+        sudo apt update
+        sudo apt install --yes pandoc texlive-xetex
+        python -m pip install --upgrade pip setuptools wheel
+        pandoc --version
+    - name: Install rdmo[mysql] and start mysql
+      run: |
+        python -m pip install -e .[ci,mysql]
+        sudo systemctl start mysql.service
+      if: matrix.db-backend == 'mysql'
+    - name: Install rdmo[postgres] and start postgresql
+      run: |
+        python -m pip install -e .[ci,postgres]
+        sudo systemctl start postgresql.service
+        pg_isready
+        sudo -u postgres psql --command="CREATE USER postgres_user PASSWORD 'postgres_password' CREATEDB"
+      if: matrix.db-backend == 'postgres'
+    - name: Prepare Env
+      run: |
+        cp -r testing/media testing/media_root
+        mkdir testing/log
+    - name: Run Tests
+      run: |
+        pytest -p randomly -p no:cacheprovider --cov --reuse-db --numprocesses=auto --dist=loadscope
+        coveralls --service=github
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_DB_BACKEND: ${{ matrix.db-backend }}
+        COVERALLS_FLAG_NAME: '${{ matrix.db-backend }}: ${{ matrix.python-version }}'
+        COVERALLS_PARALLEL: true
+
+  coveralls:
+    name: Indicate completion to coveralls
+    needs: test
+    runs-on: ubuntu-latest
+    container: python:3-slim
+    steps:
+    - name: Run Coveralls finish
+      run: |
+        python -m pip install coveralls
+        coveralls --service=github --finish
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  dev-setup:
+    # Ref: structlog (MIT licensed) <https://github.com/hynek/structlog/blob/main/.github/workflows/ci.yml>
+    name: "Test dev setup on ${{ matrix.os }}"
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: python -Im pip install -e .[dev]
+      - run: python -Ic 'import rdmo; print(rdmo.__version__)'
+
+  optional-dependencies:
+    name: Test installation of optional-dependencies
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install os requirements for python-ldap
+        run: |
+          sudo apt update
+          sudo apt install --yes libldap2-dev libsasl2-dev
+      - run: python -m pip install --upgrade pip setuptools
+      - run: python -m pip install .[allauth,ci,dev,gunicorn,ldap,mysql,postgres,pytest]
+      - run: python -m pip freeze
+      - run: python -m pip list --outdated
+
+  webpack-build:
+    name: Test webpack-build
+    needs: lint
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: npm
+      - run: npm install --dev
+      - run: npm run build
+      - run: npm run build:prod
+
+  required-checks-pass:
+    if: always()
+    needs:
+      - lint
+      - test
+      - coveralls
+      - dev-setup
+      - optional-dependencies
+      - webpack-build
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: re-actors/alls-green@release/v1
+        with:
+          jobs: ${{ toJSON(needs) }}

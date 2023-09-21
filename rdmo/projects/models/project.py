@@ -8,6 +8,7 @@ from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
+
 from mptt.models import MPTTModel, TreeForeignKey
 
 from rdmo.core.models import Model
@@ -55,12 +56,12 @@ class Project(MPTTModel, Model):
         help_text=_('The catalog which will be used for this project.')
     )
     tasks = models.ManyToManyField(
-        Task, blank=True, through='Issue',
+        Task, blank=True, through='Issue', related_name='projects',
         verbose_name=_('Tasks'),
         help_text=_('The tasks that will be used for this project.')
     )
     views = models.ManyToManyField(
-        View, blank=True,
+        View, blank=True, related_name='projects',
         verbose_name=_('Views'),
         help_text=_('The views that will be used for this project.')
     )
@@ -89,8 +90,8 @@ class Project(MPTTModel, Model):
     def progress(self):
         # create a queryset for the attributes of the catalog for this project
         # the subquery is used to query only attributes which have a question in the catalog, which is not optional
-        questions = Question.objects.filter(attribute_id=OuterRef('pk'), questionset__section__catalog_id=self.catalog.id) \
-                                    .exclude(is_optional=True)
+        questions = Question.objects.filter_by_catalog(self.catalog) \
+                                    .filter(attribute_id=OuterRef('pk')).exclude(is_optional=True)
         attributes = Attribute.objects.annotate(active=Exists(questions)).filter(active=True).distinct()
 
         # query the total number of attributes from the qs above

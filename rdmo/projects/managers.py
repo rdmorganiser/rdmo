@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+
 from mptt.models import TreeManager
 from mptt.querysets import TreeQuerySet
 

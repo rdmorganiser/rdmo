@@ -1,7 +1,8 @@
 import pytest
+
 from django.core.exceptions import ValidationError
-from rest_framework.exceptions import \
-    ValidationError as RestFameworkValidationError
+
+from rest_framework.exceptions import ValidationError as RestFameworkValidationError
 
 from ..models import Condition
 from ..serializers.v1 import ConditionSerializer
@@ -59,29 +60,29 @@ def test_update_unlock(db):
 
 def test_serializer_create(db):
     validator = ConditionLockedValidator()
-    validator.set_context(ConditionSerializer())
+    serializer = ConditionSerializer()
 
     validator({
         'locked': False
-    })
+    }, serializer)
 
 
 def test_serializer_create_locked(db):
     validator = ConditionLockedValidator()
-    validator.set_context(ConditionSerializer())
+    serializer = ConditionSerializer()
 
     validator({
         'locked': True
-    })
+    }, serializer)
 
 
 def test_serializer_update(db):
     condition = Condition.objects.first()
 
     validator = ConditionLockedValidator()
-    validator.set_context(ConditionSerializer(instance=condition))
+    serializer = ConditionSerializer(instance=condition)
 
-    validator({})
+    validator({}, serializer)
 
 
 def test_serializer_update_error(db):
@@ -90,23 +91,23 @@ def test_serializer_update_error(db):
     condition.save()
 
     validator = ConditionLockedValidator()
-    validator.set_context(ConditionSerializer(instance=condition))
+    serializer = ConditionSerializer(instance=condition)
 
     with pytest.raises(RestFameworkValidationError):
         validator({
             'locked': True
-        })
+        }, serializer)
 
 
 def test_serializer_update_lock(db):
     condition = Condition.objects.first()
 
     validator = ConditionLockedValidator()
-    validator.set_context(ConditionSerializer(instance=condition))
+    serializer = ConditionSerializer(instance=condition)
 
     validator({
         'locked': True
-    })
+    }, serializer)
 
 
 def test_serializer_update_unlock(db):
@@ -115,8 +116,8 @@ def test_serializer_update_unlock(db):
     condition.save()
 
     validator = ConditionLockedValidator()
-    validator.set_context(ConditionSerializer(instance=condition))
+    serializer = ConditionSerializer(instance=condition)
 
     validator({
         'locked': False
-    })
+    }, serializer)

@@ -15,8 +15,8 @@ class Command(BaseCommand):
             ', default is 2'
         )
         parser.add_argument(
-            '-n', '--occurence', default=3, type=int,
-            help='number of sequentially occuring timespan ' +
+            '-n', '--occurrence', default=3, type=int,
+            help='number of sequentially occurring timespan ' +
             'violations at which users are put into the ' +
             'potential spam users list, default is 3'
         )
@@ -39,7 +39,7 @@ class Command(BaseCommand):
             print('List written to ' + filename)
 
     def print_file(self, filename):
-        f = open(filename, 'r')
+        f = open(filename)
         content = f.read()
         print(content)
         f.close()
@@ -76,7 +76,7 @@ class Command(BaseCommand):
         )
         return group_list
 
-    def find_potential_spam_users(self, timespan, occurence):
+    def find_potential_spam_users(self, timespan, occurrence):
         list_users_having_projects = self.get_users_having_projects()
         arr = []
         for idx, user in enumerate(User.objects.all().order_by('date_joined')):
@@ -118,7 +118,7 @@ class Command(BaseCommand):
         grouped_clean = {}
         for group_id in grouped:
             group = grouped[group_id]
-            if len(group) > occurence:
+            if len(group) > occurrence:
                 no_potential_spam_users += len(group)
                 grouped_clean[group_id] = group
 
@@ -135,7 +135,7 @@ class Command(BaseCommand):
         print('Total no of users:    %d' % (no_total_users))
         potential_spam_users, no_users_having_projects =\
             self.find_potential_spam_users(
-                options['timespan'], options['occurence']
+                options['timespan'], options['occurrence']
             )
 
         print(

@@ -1,4 +1,5 @@
 import pytest
+
 from django.urls import reverse
 
 from ..models import Project
@@ -50,6 +51,7 @@ conditions = [1]
 project_values = 37
 project_total = 54
 catalog_id = 1
+catalog_id_not_available = 2
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -110,6 +112,33 @@ def test_create(db, client, username, password):
         assert Project.objects.get(id=response.json().get('id'))
     else:
         assert response.status_code == 401
+
+
+def test_create_catalog_missing(db, client):
+    client.login(username='user', password='user')
+
+    url = reverse(urlnames['list'])
+    data = {
+        'title': 'Lorem ipsum dolor sit amet',
+        'description': 'At vero eos et accusam et justo duo dolores et ea rebum.'
+    }
+    response = client.post(url, data)
+
+    assert response.status_code == 400
+
+
+def test_create_catalog_not_available(db, client):
+    client.login(username='user', password='user')
+
+    url = reverse(urlnames['list'])
+    data = {
+        'title': 'Lorem ipsum dolor sit amet',
+        'description': 'At vero eos et accusam et justo duo dolores et ea rebum.',
+        'catalog': catalog_id_not_available
+    }
+    response = client.post(url, data)
+
+    assert response.status_code == 400
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -215,7 +244,7 @@ def test_overview(db, client, username, password, project_id, condition_id):
 def test_resolve(db, client, username, password, project_id, condition_id):
     client.login(username=username, password=password)
 
-    url = reverse(urlnames['resolve'], args=[project_id]) + '?condition={}'.format(condition_id)
+    url = reverse(urlnames['resolve'], args=[project_id]) + f'?condition={condition_id}'
     response = client.get(url)
 
     if project_id in view_project_permission_map.get(username, []):

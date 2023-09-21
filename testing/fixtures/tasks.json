@@ -5,8 +5,9 @@
     "fields": {
       "uri": "http://example.com/terms/tasks/text_equal_test",
       "uri_prefix": "http://example.com/terms",
-      "key": "text_equal_test",
+      "uri_path": "text_equal_test",
       "comment": "1",
+      "locked": false,
       "title_lang1": "text_equal_test",
       "title_lang2": "text_equal_test",
       "title_lang3": "",
@@ -21,13 +22,16 @@
       "end_attribute": 16,
       "days_before": 1,
       "days_after": 2,
-      "conditions": [
+      "available": true,
+      "catalogs": [
         1
       ],
       "sites": [
         1
       ],
-      "catalogs": [
+      "editors": [],
+      "groups": [],
+      "conditions": [
         1
       ]
     }
@@ -38,8 +42,9 @@
     "fields": {
       "uri": "http://example.com/terms/tasks/null",
       "uri_prefix": "http://example.com/terms",
-      "key": "null",
+      "uri_path": "null",
       "comment": "1",
+      "locked": false,
       "title_lang1": "null",
       "title_lang2": "null",
       "title_lang3": "",
@@ -54,15 +59,92 @@
       "end_attribute": null,
       "days_before": 0,
       "days_after": 0,
-      "conditions": [
-        2
+      "available": true,
+      "catalogs": [
+        1
       ],
       "sites": [
         1
       ],
-      "catalogs": [
-        1
+      "editors": [],
+      "groups": [],
+      "conditions": [
+        2
       ]
+    }
+  },
+  {
+    "model": "tasks.task",
+    "pk": 3,
+    "fields": {
+      "uri": "https://foo.com/terms/tasks/foo-task",
+      "uri_prefix": "https://foo.com/terms",
+      "uri_path": "foo-task",
+      "comment": "",
+      "locked": false,
+      "title_lang1": "foo-task",
+      "title_lang2": "foo-task",
+      "title_lang3": "",
+      "title_lang4": "",
+      "title_lang5": "",
+      "text_lang1": "",
+      "text_lang2": "",
+      "text_lang3": "",
+      "text_lang4": "",
+      "text_lang5": "",
+      "start_attribute": null,
+      "end_attribute": null,
+      "days_before": null,
+      "days_after": null,
+      "available": true,
+      "catalogs": [
+        3
+      ],
+      "sites": [
+        2
+      ],
+      "editors": [
+        2
+      ],
+      "groups": [],
+      "conditions": []
+    }
+  },
+  {
+    "model": "tasks.task",
+    "pk": 4,
+    "fields": {
+      "uri": "https://bar.com/terms/tasks/bar-task",
+      "uri_prefix": "https://bar.com/terms",
+      "uri_path": "bar-task",
+      "comment": "",
+      "locked": false,
+      "title_lang1": "bar-task",
+      "title_lang2": "bar-task",
+      "title_lang3": "",
+      "title_lang4": "",
+      "title_lang5": "",
+      "text_lang1": "",
+      "text_lang2": "",
+      "text_lang3": "",
+      "text_lang4": "",
+      "text_lang5": "",
+      "start_attribute": null,
+      "end_attribute": null,
+      "days_before": null,
+      "days_after": null,
+      "available": true,
+      "catalogs": [
+        4
+      ],
+      "sites": [
+        3
+      ],
+      "editors": [
+        3
+      ],
+      "groups": [],
+      "conditions": []
     }
   }
 ]

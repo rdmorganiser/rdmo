@@ -1,14 +1,14 @@
 import mimetypes
 from pathlib import Path
 
-import iso8601
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+
+import iso8601
 from django_cleanup import cleanup
 
-from rdmo.core.constants import (VALUE_TYPE_BOOLEAN, VALUE_TYPE_CHOICES,
-                                 VALUE_TYPE_DATETIME, VALUE_TYPE_TEXT)
+from rdmo.core.constants import VALUE_TYPE_BOOLEAN, VALUE_TYPE_CHOICES, VALUE_TYPE_DATETIME, VALUE_TYPE_TEXT
 from rdmo.core.models import Model
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
@@ -53,6 +53,11 @@ class Value(Model):
         default=0,
         verbose_name=_('Set index'),
         help_text=_('The position of this value in a set (i.e. for a question set tagged as collection).')
+    )
+    set_collection = models.BooleanField(
+        null=True,
+        verbose_name=_('Set collection'),
+        help_text=_('Indicates if this value was entered as part of a set (important for conditions).')
     )
     collection_index = models.IntegerField(
         default=0,
@@ -108,6 +113,7 @@ class Value(Model):
             'updated': self.updated,
             'set_prefix': self.set_prefix,
             'set_index': self.set_index,
+            'set_collection': self.set_collection,
             'collection_index': self.collection_index,
             'value_type': self.value_type,
             'unit': self.unit,
@@ -164,7 +170,7 @@ class Value(Model):
         if value is None:
             return ''
         elif self.unit:
-            return '%s %s' % (value, self.unit)
+            return f'{value} {self.unit}'
         else:
             return value
 

@@ -25,10 +25,10 @@ class Model(models.Model):
 
         self.updated = now()
 
-        super(Model, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
-class TranslationMixin(object):
+class TranslationMixin:
 
     def trans(self, field):
         current_language = get_language()
@@ -36,12 +36,12 @@ class TranslationMixin(object):
         languages = get_languages()
         for lang_code, lang_string, lang_field in languages:
             if lang_code == current_language:
-                r = getattr(self, '%s_%s' % (field, lang_field)) or None
+                r = getattr(self, f'{field}_{lang_field}') or None
                 if r is not None:
                     return r
                 elif settings.REPLACE_MISSING_TRANSLATION:
                     for i in range(1, 6):
-                        r = getattr(self, '%s_%s' % (field, 'lang' + str(i))) or None
+                        r = getattr(self, '{}_{}'.format(field, 'lang' + str(i))) or None
                         if r is not None:
                             return r
         return ''
