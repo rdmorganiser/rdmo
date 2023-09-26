@@ -3,14 +3,17 @@ from collections import defaultdict
 from django.db.models import Exists, OuterRef, Q
 
 from rdmo.conditions.models import Condition
-from rdmo.questions.models import Catalog, Section, Page, QuestionSet, Question
+from rdmo.questions.models import Page, Question, QuestionSet
 
 
 def resolve_conditions(project, values):
     # get all conditions for this catalog
-    pages_conditions_subquery = Page.objects.filter_by_catalog(project.catalog).filter(conditions=OuterRef('pk'))
-    questionsets_conditions_subquery = QuestionSet.objects.filter_by_catalog(project.catalog).filter(conditions=OuterRef('pk'))
-    questions_conditions_subquery = Question.objects.filter_by_catalog(project.catalog).filter(conditions=OuterRef('pk'))
+    pages_conditions_subquery = Page.objects.filter_by_catalog(project.catalog) \
+                                            .filter(conditions=OuterRef('pk'))
+    questionsets_conditions_subquery = QuestionSet.objects.filter_by_catalog(project.catalog) \
+                                                          .filter(conditions=OuterRef('pk'))
+    questions_conditions_subquery = Question.objects.filter_by_catalog(project.catalog) \
+                                                    .filter(conditions=OuterRef('pk'))
 
     catalog_conditions = Condition.objects.annotate(has_page=Exists(pages_conditions_subquery)) \
                                           .annotate(has_questionset=Exists(questionsets_conditions_subquery)) \
@@ -28,13 +31,6 @@ def resolve_conditions(project, values):
     return conditions
 
 
-def compute_sets(values):
-    sets = defaultdict(list)
-    for attribute, set_index in values.values_list('attribute', 'set_index').distinct():
-        sets[attribute].append(set_index)
-    return sets
-
-
 def compute_navigation(section, project, snapshot=None):
     # get all values for this project and snapshot
     values = project.values.filter(snapshot=snapshot).select_related('attribute', 'option')
@@ -42,14 +38,14 @@ def compute_navigation(section, project, snapshot=None):
     # get true conditions
     conditions = resolve_conditions(project, values)
 
-    # compute sets from values
-    sets = compute_sets(values)
+    # query distinct, non empty set values
+    values_list = values.exclude((Q(text='') | Q(text=None)) & Q(option=None) & (Q(file='') | Q(file=None))) \
+                        .order_by('attribute').values_list('attribute', 'set_prefix', 'set_index').distinct()
 
-    # query non empty values
-    values_list = values.exclude((Q(text='') | Q(text=None)) & Q(option=None) &
-                                 (Q(file='') | Q(file=None))) \
-                        .values_list('attribute', 'set_index').distinct() \
-                        .values_list('attribute', flat=True)
+    # compute sets from values
+    sets = defaultdict(lambda: defaultdict(list))
+    for attribute, set_prefix, set_index in values_list:
+        sets[attribute][set_prefix].append(set_index)
 
     navigation = []
     for catalog_section in project.catalog.elements:
@@ -61,14 +57,15 @@ def compute_navigation(section, project, snapshot=None):
         if catalog_section.id == section.id:
             navigation_section['pages'] = []
             for page in catalog_section.elements:
-                pages_conditions = set(page.id for page in page.conditions.all())
+                pages_conditions = {page.id for page in page.conditions.all()}
                 show = bool(not pages_conditions or pages_conditions.intersection(conditions))
 
                 # count the total number of questions, taking sets and conditions into account
-                total, attributes = count_questions(page, sets, conditions)
+                counts = count_questions(page, sets, conditions)
 
-                # filter the project values for the counted questions and exclude empty values
-                count = len(tuple(filter(lambda attribute: attribute in attributes, values_list)))
+                # filter the values_list for the attributes, and compute the total sum of counts
+                count = len(tuple(filter(lambda value: value[0] in counts.keys(), values_list)))
+                total = sum(counts.values())
 
                 navigation_section['pages'].append({
                     'id': page.id,
@@ -90,63 +87,59 @@ def compute_progress(project, snapshot=None):
     # get true conditions
     conditions = resolve_conditions(project, values)
 
+    # query distinct, non empty set values
+    values_list = values.exclude((Q(text='') | Q(text=None)) & Q(option=None) & (Q(file='') | Q(file=None))) \
+                        .order_by('attribute').values_list('attribute', 'set_prefix', 'set_index').distinct()
+
     # compute sets from values
-    sets = compute_sets(values)
+    sets = defaultdict(lambda: defaultdict(list))
+    for attribute, set_prefix, set_index in values_list:
+        sets[attribute][set_prefix].append(set_index)
 
     # count the total number of questions, taking sets and conditions into account
-    total, attributes = count_questions(project.catalog, sets, conditions)
+    counts = count_questions(project.catalog, sets, conditions)
 
-    # filter the project values for the counted questions and exclude empty values
-    count = values.filter(attribute_id__in=attributes) \
-                  .exclude((Q(text='') | Q(text=None)) & Q(option=None) &
-                           (Q(file='') | Q(file=None))) \
-                  .values_list('attribute', 'set_index').distinct().count()
+    # filter the values_list for the attributes, and compute the total sum of counts
+    count = len(tuple(filter(lambda value: value[0] in counts.keys(), values_list)))
+    total = sum(counts.values())
 
     return count, total
 
 
-def count_questions(parent_element, sets, conditions):
-    count = 0
-    attributes = []
+def count_questions(element, sets, conditions):
+    counts = defaultdict(int)
 
-    for element in parent_element.elements:
-        if isinstance(element, (Catalog, Section)):
-            element_count, element_attributes = count_questions(element, sets, conditions)
-            attributes += element_attributes
-            count += element_count
-        else:
-            element_conditions = set(condition.id for condition in element.conditions.all())
-            if not element_conditions or element_conditions.intersection(conditions):
-                if isinstance(element, Question):
-                    if not element.is_optional:
-                        attributes.append(element.attribute_id)
-                        count += 1
-                else:
-                    if element.attribute_id:
-                        attributes.append(element.attribute_id)
+    if isinstance(element, (Page, QuestionSet)) and element.is_collection:
+        # count the values for the (direct) questions of this element
+        set_count = 0
 
-                    element_count, element_attributes = count_questions(element, sets, conditions)
-                    set_count = count_sets(element, sets)
-                    if set_count > 0:
-                        count += element_count * set_count
-                        attributes += element_attributes
+        if element.attribute is not None:
+            child_count = sum(len(set_indexes) for set_indexes in sets[element.attribute.id].values())
+            set_count = max(set_count, child_count)
 
-    return count, attributes
-
-
-def count_sets(parent_element, sets):
-    if parent_element.is_collection:
-        if parent_element.attribute_id:
-            count = len(sets[parent_element.attribute_id])
-        else:
-            count = 0
+        for child in element.elements:
+            if isinstance(child, Question):
+                child_count = sum(len(set_indexes) for set_indexes in sets[child.attribute.id].values())
+                set_count = max(set_count, child_count)
     else:
-        count = 1
+        set_count = 1
 
-    for element in parent_element.elements:
-        if isinstance(element, Question):
-            element_count = len(sets[element.attribute_id])
-            if element_count > count:
-                count = element_count
+    # loop over all children of this element
+    for child in element.elements:
+        # look for the elements conditions
+        if isinstance(child, (Page, QuestionSet, Question)):
+            child_conditions = {condition.id for condition in child.conditions.all()}
+        else:
+            child_conditions = []
 
-    return count
+        if not child_conditions or child_conditions.intersection(conditions):
+            if isinstance(child, Question):
+                # for questions add the set_count to the counts dict
+                # use the max function, since the same attribute could apear twice in the tree
+                if child.attribute is not None:
+                    counts[child.attribute.id] = max(counts[child.attribute.id], set_count)
+            else:
+                # for everthing else, call this function recursively
+                counts.update(count_questions(child, sets, conditions))
+
+    return counts
