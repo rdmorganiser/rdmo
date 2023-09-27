@@ -61,7 +61,7 @@ dependencies = [
 
 [project.optional-dependencies]
 allauth = [
-  "django-allauth~=0.56.1",
+  "django-allauth~=0.57.0",
 ]
 ci = [
   "coveralls~=3.3",
