@@ -175,9 +175,9 @@ angular.module('project_questions')
 
                 // focus the first field
                 if (service.values && Object.keys(service.values).length > 0
-                                   && service.page.questionsets.length == 0
-                                   && service.page.questions.length > 0) {
-                    var first_question = service.page.questions[0];
+                                   && service.questionsets.length == 0
+                                   && service.questions.length > 0) {
+                    var first_question = service.questions[0];
                     if (first_question.widget_class == 'text') {
                         service.focusField(first_question.attribute, service.set_prefix, service.set_index, 0);
                     }
@@ -283,14 +283,14 @@ angular.module('project_questions')
         // mark the help text of the question set 'save'
         page.help = $sce.trustAsHtml(page.help);
 
-        // sort questionsets and questions by order in one list called elements
-        page.elements = page.questionsets.map(function(qs) {
-                return service.initQuestionSet(qs);
-            })
-            .concat(page.questions.map(function(q) {
-                return service.initQuestion(q, page);
-            }))
-            .sort(function(a, b) { return a.order - b.order; });
+        // init questions and question sets
+        page.elements.forEach(function(element) {
+            if (element.model == 'questions.question') {
+                service.initQuestion(element, page);
+            } else {
+                service.initQuestionSet(element);
+            }
+        })
 
         return page;
     };
@@ -302,14 +302,14 @@ angular.module('project_questions')
         // mark the help text of the question set 'save'
         questionset.help = $sce.trustAsHtml(questionset.help);
 
-        // sort questionsets and questions by order in one list called elements
-        questionset.elements = questionset.questionsets.map(function(qs) {
-                return service.initQuestionSet(qs);
-            })
-            .concat(questionset.questions.map(function(q) {
-                return service.initQuestion(q, questionset);
-            }))
-            .sort(function(a, b) { return a.order - b.order; });
+        // init questions and question sets
+        questionset.elements.forEach(function(element) {
+            if (element.model == 'questions.question') {
+                service.initQuestion(element, questionset);
+            } else {
+                service.initQuestionSet(element);
+            }
+        })
 
         return questionset;
     };
@@ -541,29 +541,33 @@ angular.module('project_questions')
         // loop over valuesets and initialize at least one value for each question
         angular.forEach(future.valuesets[questionset.id][set_prefix], function(valueset) {
             // loop over questions to initialize them with at least one value, and init checkboxes and widgets
-            angular.forEach(questionset.questions, function(question) {
-                if (angular.isUndefined(future.values[question.attribute])) {
-                    future.values[question.attribute] = {};
-                }
-                if (angular.isUndefined(future.values[question.attribute][set_prefix])) {
-                    future.values[question.attribute][set_prefix] = {};
-                }
-                if (angular.isUndefined(future.values[question.attribute][set_prefix][valueset.set_index])) {
-                    future.values[question.attribute][set_prefix][valueset.set_index] = [];
-                }
-                if (angular.isUndefined(future.values[question.attribute][set_prefix][valueset.set_index][0])) {
-                    future.values[question.attribute][set_prefix][valueset.set_index].push(factories.values(question));
-                }
+            angular.forEach(questionset.elements, function(element) {
+                if (element.model == 'questions.question') {
+                    var question = element
 
-                // for a checkbox, transform the values for the question to different checkboxes
-                if (question.widget_class === 'checkbox') {
-                    future.values[question.attribute][valueset.set_prefix][valueset.set_index] = service.initCheckbox(question, future.values[question.attribute][valueset.set_prefix][valueset.set_index]);
-                }
+                    if (angular.isUndefined(future.values[question.attribute])) {
+                        future.values[question.attribute] = {};
+                    }
+                    if (angular.isUndefined(future.values[question.attribute][set_prefix])) {
+                        future.values[question.attribute][set_prefix] = {};
+                    }
+                    if (angular.isUndefined(future.values[question.attribute][set_prefix][valueset.set_index])) {
+                        future.values[question.attribute][set_prefix][valueset.set_index] = [];
+                    }
+                    if (angular.isUndefined(future.values[question.attribute][set_prefix][valueset.set_index][0])) {
+                        future.values[question.attribute][set_prefix][valueset.set_index].push(factories.values(question));
+                    }
 
-                // init the widget for every value
-                angular.forEach(future.values[question.attribute][valueset.set_prefix][valueset.set_index], function(value) {
-                    service.initWidget(question, value);
-                });
+                    // for a checkbox, transform the values for the question to different checkboxes
+                    if (question.widget_class === 'checkbox') {
+                        future.values[question.attribute][valueset.set_prefix][valueset.set_index] = service.initCheckbox(question, future.values[question.attribute][valueset.set_prefix][valueset.set_index]);
+                    }
+
+                    // init the widget for every value
+                    angular.forEach(future.values[question.attribute][valueset.set_prefix][valueset.set_index], function(value) {
+                        service.initWidget(question, value);
+                    });
+                }
             });
         });
 
