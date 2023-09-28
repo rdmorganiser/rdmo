@@ -74,6 +74,10 @@ EMAIL_RECIPIENTS_CHOICES = [
 ]
 EMAIL_RECIPIENTS_INPUT = True
 
+OPTIONSET_PROVIDERS = [
+    ('simple', _('Simple provider'), 'rdmo.options.providers.SimpleProvider')
+]
+
 PROJECT_ISSUE_PROVIDERS = [
     ('github', _('GitHub'), 'rdmo.projects.providers.GitHubIssueProvider')
 ]
