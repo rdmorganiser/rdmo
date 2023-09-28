@@ -2,7 +2,7 @@
 name: Feature request
 about: Suggest an idea for a new or extended feature in RDMO
 title: ''
-labels: 'type: feature request'
+labels: 'type:feature-request'
 assignees: ''
 
 ---
