@@ -17,6 +17,7 @@ class ConditionAdminForm(forms.ModelForm):
         ConditionLockedValidator(self.instance)(self.cleaned_data)
 
 
+@admin.register(Condition)
 class ConditionAdmin(admin.ModelAdmin):
     form = ConditionAdminForm
 
@@ -25,6 +26,3 @@ class ConditionAdmin(admin.ModelAdmin):
     readonly_fields = ('uri', )
     list_filter = ('relation', )
     filter_horizontal = ('editors', )
-
-
-admin.site.register(Condition, ConditionAdmin)
