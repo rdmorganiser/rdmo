@@ -57,6 +57,7 @@ rules.add_rule('projects.can_view_all_projects', is_site_manager_for_current_sit
 
 rules.add_perm('projects.view_project_object', is_project_member | is_site_manager)
 rules.add_perm('projects.change_project_object', is_project_manager | is_project_owner | is_site_manager)
+rules.add_perm('projects.change_project_progress_object', is_project_author | is_project_manager | is_project_owner | is_site_manager)  # noqa: E501
 rules.add_perm('projects.delete_project_object', is_project_owner | is_site_manager)
 rules.add_perm('projects.leave_project_object', is_current_project_member)
 rules.add_perm('projects.export_project_object', is_project_owner | is_project_manager | is_site_manager)

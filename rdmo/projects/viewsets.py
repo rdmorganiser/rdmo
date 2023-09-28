@@ -25,7 +25,12 @@ from rdmo.views.models import View
 
 from .filters import SnapshotFilterBackend, ValueFilterBackend
 from .models import Continuation, Integration, Invite, Issue, Membership, Project, Snapshot, Value
-from .permissions import HasProjectPagePermission, HasProjectPermission, HasProjectsPermission
+from .permissions import (
+    HasProjectPagePermission,
+    HasProjectPermission,
+    HasProjectProgressPermission,
+    HasProjectsPermission,
+)
 from .progress import compute_navigation, compute_progress
 from .serializers.v1 import (
     IntegrationSerializer,
@@ -78,8 +83,8 @@ class ProjectViewSet(ModelViewSet):
 
         try:
             section = project.catalog.sections.get(pk=section_id)
-        except ObjectDoesNotExist:
-            raise NotFound()
+        except ObjectDoesNotExist as e:
+            raise NotFound() from e
 
         project.catalog.prefetch_elements()
 
@@ -168,7 +173,8 @@ class ProjectViewSet(ModelViewSet):
         # if it didn't work return 404
         raise NotFound()
 
-    @action(detail=True, methods=['get', 'post'], permission_classes=(HasModelPermission | HasProjectPermission, ))
+    @action(detail=True, methods=['get', 'post'],
+            permission_classes=(HasModelPermission | HasProjectProgressPermission, ))
     def progress(self, request, pk=None):
         project = self.get_object()
 

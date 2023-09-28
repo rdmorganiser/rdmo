@@ -948,12 +948,14 @@ angular.module('project_questions')
                 }
             } else {
                 // update progress
-                resources.projects.postAction({
-                    id: service.project.id,
-                    detail_action: 'progress'
-                }, function(response) {
-                    service.progress = response
-                });
+                if (service.project.read_only !== true) {
+                    resources.projects.postAction({
+                        id: service.project.id,
+                        detail_action: 'progress'
+                    }, function(response) {
+                        service.progress = response
+                    });
+                }
 
                 // check if we need to refresh the site
                 angular.forEach([service.page].concat(service.questionsets), function(questionset) {
