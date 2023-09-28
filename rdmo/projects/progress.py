@@ -38,19 +38,21 @@ def compute_navigation(section, project, snapshot=None):
     # get true conditions
     conditions = resolve_conditions(project, values)
 
+    # compute sets from values (including empty values)
+    sets = defaultdict(lambda: defaultdict(list))
+    for attribute, set_prefix, set_index in values.order_by('attribute') \
+                                                  .values_list('attribute', 'set_prefix', 'set_index').distinct():
+        sets[attribute][set_prefix].append(set_index)
+
     # query distinct, non empty set values
     values_list = values.exclude((Q(text='') | Q(text=None)) & Q(option=None) & (Q(file='') | Q(file=None))) \
                         .order_by('attribute').values_list('attribute', 'set_prefix', 'set_index').distinct()
-
-    # compute sets from values
-    sets = defaultdict(lambda: defaultdict(list))
-    for attribute, set_prefix, set_index in values_list:
-        sets[attribute][set_prefix].append(set_index)
 
     navigation = []
     for catalog_section in project.catalog.elements:
         navigation_section = {
             'id': catalog_section.id,
+            'uri': catalog_section.uri,
             'title': catalog_section.title,
             'first': catalog_section.elements[0].id if section.elements else None
         }
@@ -69,6 +71,7 @@ def compute_navigation(section, project, snapshot=None):
 
                 navigation_section['pages'].append({
                     'id': page.id,
+                    'uri': page.uri,
                     'title': page.title,
                     'show': show,
                     'count': count,
@@ -87,14 +90,15 @@ def compute_progress(project, snapshot=None):
     # get true conditions
     conditions = resolve_conditions(project, values)
 
+    # compute sets from values (including empty values)
+    sets = defaultdict(lambda: defaultdict(list))
+    for attribute, set_prefix, set_index in values.order_by('attribute') \
+                                                  .values_list('attribute', 'set_prefix', 'set_index').distinct():
+        sets[attribute][set_prefix].append(set_index)
+
     # query distinct, non empty set values
     values_list = values.exclude((Q(text='') | Q(text=None)) & Q(option=None) & (Q(file='') | Q(file=None))) \
                         .order_by('attribute').values_list('attribute', 'set_prefix', 'set_index').distinct()
-
-    # compute sets from values
-    sets = defaultdict(lambda: defaultdict(list))
-    for attribute, set_prefix, set_index in values_list:
-        sets[attribute][set_prefix].append(set_index)
 
     # count the total number of questions, taking sets and conditions into account
     counts = count_questions(project.catalog, sets, conditions)
@@ -109,8 +113,10 @@ def compute_progress(project, snapshot=None):
 def count_questions(element, sets, conditions):
     counts = defaultdict(int)
 
+    # obtain the maximum number of set-distinct values the questions in this element
+    # this number is how often each question is displayed and we will use this number
+    # to determine how often a question needs to be counted
     if isinstance(element, (Page, QuestionSet)) and element.is_collection:
-        # count the values for the (direct) questions of this element
         set_count = 0
 
         if element.attribute is not None:
