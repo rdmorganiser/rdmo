@@ -94,10 +94,10 @@ class QuestionSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, s
         return OptionSetSerializer(ordered_optionsets, many=True).data
 
     def get_verbose_name(self, obj):
-        return obj.verbose_name or _('item')
+        return obj.verbose_name or _('entry')
 
     def get_verbose_name_plural(self, obj):
-        return obj.verbose_name_plural or _('items')
+        return obj.verbose_name_plural or _('entries')
 
     def get_widget_class(self, obj):
         return get_widget_class(obj.widget_type)
@@ -135,10 +135,10 @@ class QuestionSetSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin
                 yield QuestionSerializer(element, context=self.context).data
 
     def get_verbose_name(self, obj):
-        return obj.verbose_name or _('set')
+        return obj.verbose_name or _('block')
 
     def get_verbose_name_plural(self, obj):
-        return obj.verbose_name_plural or _('sets')
+        return obj.verbose_name_plural or _('blocks')
 
 
 class PageSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
