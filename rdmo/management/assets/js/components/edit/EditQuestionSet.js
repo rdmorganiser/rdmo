@@ -134,30 +134,16 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
 
         <Tabs id="#catalog-tabs" defaultActiveKey={0} animation={false}>
           {
-            config.settings && config.settings.languages.map(([lang_code, lang], index) => {
-              return (
-                <Tab className="pt-10" key={index} eventKey={index} title={lang}>
-                  <div className="row">
-                    <div className="col-sm-12">
-                      <Text config={config} element={questionset} field={`title_${lang_code }`}
-                            onChange={updateQuestionSet} />
-                    </div>
-                    <div className="col-sm-12">
-                      <Textarea config={config} element={questionset} field={`help_${lang_code }`}
-                                rows={4} onChange={updateQuestionSet} />
-                    </div>
-                    <div className="col-sm-6">
-                      <Text config={config} element={questionset} field={`verbose_name_${lang_code }`}
-                            onChange={updateQuestionSet} />
-                    </div>
-                    <div className="col-sm-6">
-                      <Text config={config} element={questionset} field={`verbose_name_plural_${lang_code }`}
-                            onChange={updateQuestionSet} />
-                    </div>
-                  </div>
-                </Tab>
-              )
-            })
+            config.settings && config.settings.languages.map(([lang_code, lang], index) => (
+              <Tab className="pt-10" key={index} eventKey={index} title={lang}>
+                <Text config={config} element={questionset} field={`title_${lang_code }`}
+                      onChange={updateQuestionSet} />
+                <Textarea config={config} element={questionset} field={`help_${lang_code }`}
+                          rows={4} onChange={updateQuestionSet} />
+                <Text config={config} element={questionset} field={`verbose_name_${lang_code }`}
+                      onChange={updateQuestionSet} />
+              </Tab>
+            ))
           }
         </Tabs>
 

@@ -53,8 +53,7 @@ class QuestionExportSerializer(TranslationSerializerMixin, serializers.ModelSeri
             'help',
             'text',
             'default_text',
-            'verbose_name',
-            'verbose_name_plural',
+            'verbose_name'
         )
 
 
@@ -109,8 +108,7 @@ class QuestionSetExportSerializer(TranslationSerializerMixin, serializers.ModelS
         trans_fields = (
             'title',
             'help',
-            'verbose_name',
-            'verbose_name_plural',
+            'verbose_name'
         )
 
 
@@ -162,8 +160,7 @@ class PageExportSerializer(TranslationSerializerMixin, serializers.ModelSerializ
         trans_fields = (
             'title',
             'help',
-            'verbose_name',
-            'verbose_name_plural',
+            'verbose_name'
         )
 
 

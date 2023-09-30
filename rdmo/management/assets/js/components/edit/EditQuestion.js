@@ -110,28 +110,16 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
 
         <Tabs id="#question-tabs" defaultActiveKey={0} animation={false}>
           {
-            config.settings && config.settings.languages.map(([lang_code, lang], index) => {
-              return (
-                <Tab key={index} eventKey={index} title={lang}>
-                  <Text config={config} element={question} field={`text_${lang_code }`}
-                        onChange={updateQuestion} />
-
-                  <Textarea config={config} element={question} field={`help_${lang_code }`}
-                            rows={8} onChange={updateQuestion} />
-
-                  <div className="row">
-                    <div className="col-sm-6">
-                      <Text config={config} element={question} field={`verbose_name_${lang_code }`}
-                            onChange={updateQuestion} />
-                    </div>
-                    <div className="col-sm-6">
-                      <Text config={config} element={question} field={`verbose_name_plural_${lang_code }`}
-                            onChange={updateQuestion} />
-                    </div>
-                  </div>
-                </Tab>
-              )
-            })
+            config.settings && config.settings.languages.map(([lang_code, lang], index) => (
+              <Tab key={index} eventKey={index} title={lang}>
+                <Text config={config} element={question} field={`text_${lang_code }`}
+                      onChange={updateQuestion} />
+                <Textarea config={config} element={question} field={`help_${lang_code }`}
+                          rows={8} onChange={updateQuestion} />
+                <Text config={config} element={question} field={`verbose_name_${lang_code }`}
+                      onChange={updateQuestion} />
+              </Tab>
+            ))
           }
         </Tabs>
 
