@@ -18,7 +18,7 @@
     "bootstrap-sass": "^3.4.1",
     "classnames": "^2.3.2",
     "font-awesome": "4.7.0",
-    "jquery": "^3.6.0",
+    "jquery": "^3.7.1",
     "js-cookie": "^2.2.1",
     "lodash": "^4.17.21",
     "popper.js": "^1.16.1",
