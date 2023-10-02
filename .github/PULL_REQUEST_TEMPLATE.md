@@ -1,3 +1,5 @@
+<!-- These comments are hidden when you submit the pull request, so you do not need to remove them. -->
+
 <!--- Provide a general summary of your changes in the Title above --->
 
 ## Description
