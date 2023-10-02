@@ -29,7 +29,7 @@ if GITHUB_DB_BACKEND == 'mysql':
 elif GITHUB_DB_BACKEND == 'postgres':
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'ENGINE': 'django.db.backends.postgresql',
             'NAME': 'rdmo',
             'USER': 'postgres_user',
             'PASSWORD': 'postgres_password',
