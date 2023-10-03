@@ -82,10 +82,7 @@ mysql = [
   "mysqlclient~=2.2",
 ]
 postgres = [
-  # once python 3.12 is officially released, the psycopg team will release a psycopg-binary for it.
-  # replace these two lines with "psycopg[binary]~=3.1"
-  "psycopg[binary]~=3.1; python_version<'3.12'",
-  "psycopg2-binary~=2.9; python_version>='3.12'",
+  "psycopg[binary]~=3.1",
 ]
 pytest = [
   "pytest~=7.4",
