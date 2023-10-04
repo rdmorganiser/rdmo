@@ -18,7 +18,14 @@
                     <span>{$ option.text $}</span><span ng-show="option.additional_input">:</span>
 
                     <input class="form-control input-sm" type="text"
-                        ng-show="option.additional_input"
+                        ng-show="option.additional_input == 'text'"
+                        ng-model="service.values[question.attribute][valueset.set_prefix][valueset.set_index][$index].additional_input[option.id]"
+                        ng-focus="checkCheckbox($event)"
+                        ng-disabled="service.project.read_only"
+                        ng-change="service.changed(service.values[question.attribute][valueset.set_prefix][valueset.set_index][$index])" />
+
+                    <textarea class="form-control input-sm" rows="4"
+                        ng-show="option.additional_input == 'textarea'"
                         ng-model="service.values[question.attribute][valueset.set_prefix][valueset.set_index][$index].additional_input[option.id]"
                         ng-focus="checkCheckbox($event)"
                         ng-disabled="service.project.read_only"

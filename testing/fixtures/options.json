@@ -204,6 +204,15 @@
     }
   },
   {
+    "model": "options.optionsetoption",
+    "pk": 13,
+    "fields": {
+      "optionset": 2,
+      "option": 13,
+      "order": 5
+    }
+  },
+  {
     "model": "options.option",
     "pk": 1,
     "fields": {
@@ -217,7 +226,7 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false,
+      "additional_input": "",
       "editors": []
     }
   },
@@ -235,7 +244,7 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false,
+      "additional_input": "",
       "editors": []
     }
   },
@@ -253,7 +262,7 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false,
+      "additional_input": "",
       "editors": []
     }
   },
@@ -271,7 +280,7 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false,
+      "additional_input": "",
       "editors": []
     }
   },
@@ -289,7 +298,7 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false,
+      "additional_input": "",
       "editors": []
     }
   },
@@ -307,7 +316,7 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false,
+      "additional_input": "",
       "editors": []
     }
   },
@@ -315,17 +324,17 @@
     "model": "options.option",
     "pk": 7,
     "fields": {
-      "uri": "http://example.com/terms/options/one_two_three_other/other",
+      "uri": "http://example.com/terms/options/one_two_three_other/text",
       "uri_prefix": "http://example.com/terms",
-      "uri_path": "one_two_three_other/other",
+      "uri_path": "one_two_three_other/text",
       "comment": "",
       "locked": false,
-      "text_lang1": "Other",
-      "text_lang2": "Sonstige",
+      "text_lang1": "Text",
+      "text_lang2": "Text",
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": true,
+      "additional_input": "text",
       "editors": []
     }
   },
@@ -343,7 +352,7 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": true,
+      "additional_input": "text",
       "editors": []
     }
   },
@@ -361,7 +370,7 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false,
+      "additional_input": "",
       "editors": [
         2
       ]
@@ -381,7 +390,7 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false,
+      "additional_input": "",
       "editors": [
         2
       ]
@@ -401,7 +410,7 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false,
+      "additional_input": "",
       "editors": [
         3
       ]
@@ -421,10 +430,28 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false,
+      "additional_input": "",
       "editors": [
         3
       ]
+    }
+  },
+  {
+    "model": "options.option",
+    "pk": 13,
+    "fields": {
+      "uri": "http://example.com/terms/options/one_two_three_other/textarea",
+      "uri_prefix": "http://example.com/terms",
+      "uri_path": "one_two_three_other/textarea",
+      "comment": "",
+      "locked": false,
+      "text_lang1": "Textarea",
+      "text_lang2": "Textarea",
+      "text_lang3": "",
+      "text_lang4": "",
+      "text_lang5": "",
+      "additional_input": "textarea",
+      "editors": []
     }
   }
 ]

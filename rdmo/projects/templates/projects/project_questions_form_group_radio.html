@@ -36,7 +36,7 @@
                                 ng-focus="value.selected = option.id.toString()"
                                 ng-disabled="service.project.read_only" />
 
-                            <textarea class="form-control input-sm" type="text" rows="4"
+                            <textarea class="form-control input-sm" rows="4"
                                 ng-show="option.additional_input == 'textarea'"
                                 ng-model="value.additional_input[option.id]"
                                 ng-change="value.selected = option.id.toString(); service.changed(value, true)"
