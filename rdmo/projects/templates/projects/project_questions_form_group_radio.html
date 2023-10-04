@@ -28,20 +28,33 @@
                                                             option.id.toString() == value.selected}"/>
 
                             <span>{$ option.text $}</span><span ng-show="option.additional_input">:</span>
+                            <span class="text-muted" ng-show="option.help" ng-hide="option.additional_input">
+                                &nbsp;{$ option.help $}
+                            </span>
 
-                            <input class="form-control input-sm" type="text"
-                                ng-show="option.additional_input == 'text'"
-                                ng-model="value.additional_input[option.id]"
-                                ng-change="value.selected = option.id.toString(); service.changed(value, true)"
-                                ng-focus="value.selected = option.id.toString()"
-                                ng-disabled="service.project.read_only" />
+                            <span ng-show="option.additional_input == 'text'">
+                                &nbsp;
+                                <input class="form-control input-sm" type="text"
+                                    ng-model="value.additional_input[option.id]"
+                                    ng-change="value.selected = option.id.toString(); service.changed(value, true)"
+                                    ng-focus="value.selected = option.id.toString()"
+                                    ng-disabled="service.project.read_only" />
+                                <span class="text-muted" ng-show="option.help">
+                                    &nbsp;{$ option.help $}
+                                </span>
+                            </span>
 
-                            <textarea class="form-control input-sm" rows="4"
-                                ng-show="option.additional_input == 'textarea'"
-                                ng-model="value.additional_input[option.id]"
-                                ng-change="value.selected = option.id.toString(); service.changed(value, true)"
-                                ng-focus="value.selected = option.id.toString()"
-                                ng-disabled="service.project.read_only" />
+                            <div ng-show="option.additional_input == 'textarea'">
+                                <textarea class="form-control input-sm" rows="4"
+                                    ng-show="option.additional_input == 'textarea'"
+                                    ng-model="value.additional_input[option.id]"
+                                    ng-change="value.selected = option.id.toString(); service.changed(value, true)"
+                                    ng-focus="value.selected = option.id.toString()"
+                                    ng-disabled="service.project.read_only" />
+                                <div class="text-muted">
+                                    {$ option.help $}
+                                </div>
+                            </div>
                         </label>
                     </div>
 

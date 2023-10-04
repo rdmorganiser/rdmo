@@ -75,6 +75,10 @@ a {
             color: #a94442;
         }
     }
+
+    &.disabled {
+        cursor: not-allowed;
+    }
 }
 
 code {

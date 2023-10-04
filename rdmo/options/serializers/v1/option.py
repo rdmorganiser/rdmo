@@ -39,6 +39,7 @@ class OptionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
             'comment',
             'locked',
             'text',
+            'help',
             'label',
             'additional_input',
             'optionsets',
@@ -51,6 +52,7 @@ class OptionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
         )
         trans_fields = (
             'text',
+            'help'
         )
         parent_fields = (
             ('optionsets', 'optionset', 'option', 'optionset_options'),

@@ -211,6 +211,31 @@ class Option(models.Model, TranslationMixin):
         verbose_name=_('Text (quinary)'),
         help_text=_('The text for this option in the quinary language.')
     )
+    help_lang1 = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('Help (primary)'),
+        help_text=_('The help text for this option in the primary language.')
+    )
+    help_lang2 = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('Help (secondary)'),
+        help_text=_('The help text for this option in the secondary language.')
+    )
+    help_lang3 = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('Help (tertiary)'),
+        help_text=_('The help text for this option in the tertiary language.')
+    )
+    help_lang4 = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('Help (quaternary)'),
+        help_text=_('The help text for this option in the quaternary language.')
+    )
+    help_lang5 = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('Help (quinary)'),
+        help_text=_('The help text for this option in the quinary language.')
+    )
     additional_input = models.CharField(
         max_length=256, blank=True, default=False, choices=ADDITIONAL_INPUT_CHOICES,
         verbose_name=_('Additional input'),
@@ -232,6 +257,14 @@ class Option(models.Model, TranslationMixin):
     @property
     def text(self):
         return self.trans('text')
+
+    @property
+    def help(self):
+        return self.trans('help')
+
+    @property
+    def text_and_help(self):
+        return f'{self.text} [{self.help}]' if self.help else self.text
 
     @property
     def label(self):

@@ -92,6 +92,8 @@ const EditOption = ({ config, option, elements, elementActions }) => {
                   <div className="col-sm-12">
                     <Text config={config} element={option} field={`text_${lang_code }`}
                           onChange={updateOption} />
+                    <Textarea config={config} element={option} field={`help_${lang_code }`}
+                              onChange={updateOption} />
                   </div>
                 </div>
               </Tab>

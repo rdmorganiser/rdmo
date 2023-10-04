@@ -65,6 +65,7 @@ def import_option(element, save=False, user=None):
     option.additional_input = element.get('additional_input')
 
     set_lang_field(option, 'text', element)
+    set_lang_field(option, 'help', element)
 
     validate_instance(option, element, OptionLockedValidator, OptionUniqueURIValidator)
 

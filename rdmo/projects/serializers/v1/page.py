@@ -16,6 +16,8 @@ class OptionSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'text',
+            'help',
+            'text_and_help',
             'additional_input'
         )
 

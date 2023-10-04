@@ -24,7 +24,7 @@
                     ng-class="{'default-value': service.isDefaultValue(question, value)}">
                     <option value="">--- {% trans 'Please select' %} ---</option>
                     <option ng-repeat="option in question.options" ng-hide="valueset.hidden.optionsets[option.optionset]" value="{$ option.id $}">
-                        {$ option.text $}
+                        {$ option.text_and_help $}
                     </option>
                 </select>
             </div>
