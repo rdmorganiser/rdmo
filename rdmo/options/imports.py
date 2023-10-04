@@ -62,7 +62,7 @@ def import_option(element, save=False, user=None):
 
     set_common_fields(option, element)
 
-    option.additional_input = element.get('additional_input') or False
+    option.additional_input = element.get('additional_input')
 
     set_lang_field(option, 'text', element)
 

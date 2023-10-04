@@ -195,6 +195,13 @@
         margin: 0;
     }
 
+    .radio-control,
+    .checkbox-control {
+        label {
+            width: 100%;
+        }
+    }
+
     .file-control {
         display: block;
         width: 100%;

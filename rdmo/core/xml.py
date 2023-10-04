@@ -2,6 +2,7 @@ import logging
 import re
 
 import defusedxml.ElementTree as ET
+from packaging.version import parse
 
 log = logging.getLogger(__name__)
 
@@ -117,12 +118,15 @@ def strip_ns(tag, ns_map):
 
 
 def convert_elements(elements, version):
-    # in future versions, this method can be extended
-    # using packaging.version.parse
-    if version is None:
-        return convert_legacy_elements(elements)
-    else:
-        return elements
+    parsed_version = parse('1.11.0') if version is None else parse(version)
+
+    if parsed_version < parse('2.0.0'):
+        elements = convert_legacy_elements(elements)
+
+    if parsed_version < parse('2.1.0'):
+        elements = convert_additional_input(elements)
+
+    return elements
 
 
 def convert_legacy_elements(elements):
@@ -207,6 +211,18 @@ def convert_legacy_elements(elements):
 
         if element['model'] == 'views.view':
             element['uri_path'] = element.pop('key')
+
+    return elements
+
+
+def convert_additional_input(elements):
+    for uri, element in elements.items():
+        if element['model'] == 'options.option':
+            additional_input = element.get('additional_input')
+            if additional_input == 'True':
+                element['additional_input'] = 'text'
+            else:
+                element['additional_input'] = ''
 
     return elements
 
