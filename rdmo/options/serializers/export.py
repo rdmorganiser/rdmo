@@ -19,7 +19,8 @@ class OptionExportSerializer(TranslationSerializerMixin, serializers.ModelSerial
         )
         trans_fields = (
             'text',
-            'help'
+            'help',
+            'view_text'
         )
 
 

@@ -236,6 +236,31 @@ class Option(models.Model, TranslationMixin):
         verbose_name=_('Help (quinary)'),
         help_text=_('The help text for this option in the quinary language.')
     )
+    view_text_lang1 = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('View text (primary)'),
+        help_text=_('The view text for this option in the primary language.')
+    )
+    view_text_lang2 = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('View text (secondary)'),
+        help_text=_('The view text for this option in the secondary language.')
+    )
+    view_text_lang3 = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('View text (tertiary)'),
+        help_text=_('The view text for this option in the tertiary language.')
+    )
+    view_text_lang4 = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('View text (quaternary)'),
+        help_text=_('The view text for this option in the quaternary language.')
+    )
+    view_text_lang5 = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('View text (quinary)'),
+        help_text=_('The view text for this option in the quinary language.')
+    )
     additional_input = models.CharField(
         max_length=256, blank=True, default=False, choices=ADDITIONAL_INPUT_CHOICES,
         verbose_name=_('Additional input'),
@@ -261,6 +286,10 @@ class Option(models.Model, TranslationMixin):
     @property
     def help(self):
         return self.trans('help')
+
+    @property
+    def view_text(self):
+        return self.trans('view_text')
 
     @property
     def text_and_help(self):

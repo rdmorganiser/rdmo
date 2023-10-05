@@ -94,6 +94,8 @@ const EditOption = ({ config, option, elements, elementActions }) => {
                           onChange={updateOption} />
                     <Textarea config={config} element={option} field={`help_${lang_code }`}
                               onChange={updateOption} />
+                    <Textarea config={config} element={option} field={`view_text_${lang_code }`}
+                              onChange={updateOption} />
                   </div>
                 </div>
               </Tab>
