@@ -477,3 +477,13 @@ li.has-warning > a.control-label > i {
     text-decoration: underline;
     text-decoration-style: dotted;
 }
+
+.more,
+.show-less {
+    display: none;
+}
+.show-more,
+.show-less {
+    color: $link-color;
+    cursor: pointer;
+}
