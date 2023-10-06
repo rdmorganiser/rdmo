@@ -384,13 +384,24 @@ def is_truthy(value):
 
 
 def markdown2html(markdown_string):
-    # adoption of the normal markdown function which also converts
-    # `[<string>]{<title>}` to <span title="<title>"><string></span> to
-    # allow for underlined tooltips
-    html = markdown(force_str(markdown_string))
+    # adoption of the normal markdown function
+    html = markdown(force_str(markdown_string)).strip()
+
+    # convert `[<string>]{<title>}` to <span title="<title>"><string></span> to allow for underlined tooltips
     html = re.sub(
         r'\[(.*?)\]\{(.*?)\}',
         r'<span data-toggle="tooltip" data-placement="bottom" data-html="true" title="\2">\1</span>',
+        html
+    )
+
+    # convert everything after `{more}` to <span class="more"><string></span> to be shown/hidden on user input
+    show_string = _('show more')
+    hide_string = _('show less')
+    html = re.sub(
+        r'(\{more\})(.*?)</p>$',
+        f'<span class="show-more" onclick="showMore(this)">... ({show_string})</span>'
+        r'<span class="more">\2</span>'
+        f'<span class="show-less" onclick="showLess(this)"> ({hide_string})</span></p>',
         html
     )
     return html
