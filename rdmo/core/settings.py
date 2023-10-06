@@ -318,6 +318,7 @@ QUESTIONS_WIDGETS = [
     ('radio', _('Radio buttons'), 'rdmo.projects.widgets.RadioWidget'),
     ('select', _('Select drop-down'), 'rdmo.projects.widgets.SelectWidget'),
     ('autocomplete', _('Autocomplete'), 'rdmo.projects.widgets.AutocompleteWidget'),
+    ('freeautocomplete', _('Free autocomplete'), 'rdmo.projects.widgets.FreeAutocompleteWidget'),
     ('range', _('Range slider'), 'rdmo.projects.widgets.RangeWidget'),
     ('date', _('Date picker'), 'rdmo.projects.widgets.DateWidget'),
     ('file', _('File upload'), 'rdmo.projects.widgets.FileWidget')

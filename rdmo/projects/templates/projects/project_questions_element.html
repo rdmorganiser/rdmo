@@ -28,10 +28,8 @@
 
 <div class="question col-md-{$ question.width || 12 $}" ng-show="element.isQuestion" ng-init="question = element">
     <div ng-hide="valueset.hidden.questions[question.id]">
-        {% for widget in widgets %}
-        {% if widget.template_name %}
-        {% include widget.template_name %}
-        {% endif %}
+        {% for template_name in widgets %}
+        {% include template_name %}
         {% endfor %}
     </div>
 </div>

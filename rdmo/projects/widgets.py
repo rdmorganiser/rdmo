@@ -31,6 +31,11 @@ class AutocompleteWidget(Widget):
     widget_class = 'autocomplete'
 
 
+class FreeAutocompleteWidget(Widget):
+    template_name = 'projects/project_questions_form_group_autocomplete.html'
+    widget_class = 'autocomplete'
+
+
 class DateWidget(Widget):
     template_name = 'projects/project_questions_form_group_date.html'
     widget_class = 'date'

@@ -272,7 +272,7 @@ class ProjectQuestionsView(ObjectPermissionMixin, DetailView):
             return redirect('project_error', pk=self.object.pk)
         else:
             context = self.get_context_data(object=self.object)
-            context['widgets'] = get_widgets()
+            context['widgets'] = {widget.template_name for widget in get_widgets() if widget.template_name}
             return self.render_to_response(context)
 
 
