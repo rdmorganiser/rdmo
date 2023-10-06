@@ -129,9 +129,14 @@ table {
     }
 }
 
+details {
+    margin-bottom: 10px;
+}
+
 summary {
-    color: $link-color;
+    display: list-item;
     cursor: pointer;
+    margin-bottom: 5px;
 }
 
 metadata {
