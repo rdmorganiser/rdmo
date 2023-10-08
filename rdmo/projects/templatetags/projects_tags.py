@@ -1,6 +1,7 @@
 from django import template
 from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe
+from django.utils.translation import gettext as _
 
 from ..models import Membership
 
@@ -11,7 +12,7 @@ register = template.Library()
 def projects_indent(level):
     string = ''
     if level > 0:
-        for _ in range(level - 1):
+        for i in range(level - 1):
             string += '&ensp;&ensp;'
         string += '&#8226;&ensp;'
 
@@ -29,6 +30,15 @@ def project_progress(project):
         ratio = 0
 
     return f'{ratio:.0%}'
+
+
+@register.simple_tag()
+def project_progress_text(project):
+    progress = project_progress(project)
+    if progress:
+        return _('(%(progress)s progress)') % {'progress': progress}
+    else:
+        return ''
 
 
 @register.filter()
