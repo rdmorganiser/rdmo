@@ -242,16 +242,18 @@ class OrderedMultiSelect extends Component {
           {interpolate(gettext('Add existing %s'), [verboseName])}
         </button>
         {
-          onCreate && <button className="btn btn-success btn-xs ml-10" onClick={onCreate}
-                              disabled={element.read_only || isNil(element.id)}
-                              title={isNil(element.id) && gettext('For this action, the element must first be created.')}>
+          onCreate &&
+          <button className="btn btn-success btn-xs ml-10" onClick={onCreate}
+                  disabled={element.read_only || isNil(element.id)}
+                  title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
             {interpolate(gettext('Create new %s'), [verboseNameCreate || verboseName])}
           </button>
         }
         {
-          onAltCreate && <button className="btn btn-success btn-xs ml-10" onClick={onAltCreate}
-                                 disabled={element.read_only || isNil(element.id)}
-                                 title={isNil(element.id) && gettext('For this action, the element must first be created.')}>
+          onAltCreate &&
+          <button className="btn btn-success btn-xs ml-10" onClick={onAltCreate}
+                  disabled={element.read_only || isNil(element.id)}
+                  title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
             {interpolate(gettext('Create new %s'), [verboseNameAltCreate || verboseName])}
           </button>
         }

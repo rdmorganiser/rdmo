@@ -31,10 +31,10 @@ jobs:
     name: Lint
     runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: actions/setup-python@v4
       with:
-        python-version: "3.11"
+        python-version: "3.12"
         cache: pip
     - run: python -m pip install --upgrade pip setuptools wheel
     - run: python -m pip install -e .[dev]
@@ -50,19 +50,12 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        python-version: ['3.8', '3.11']
+        python-version: ['3.8', '3.12']
         db-backend: [mysql, postgres]
-        # test Python 3.12 already using 3.12-dev
-        # release is scheduled for 2023-10-02 (https://peps.python.org/pep-0693/)
-        # when released: replace "python-version: ['3.8', '3.11']" with python-version: ['3.8', '3.12']
-        include:
-        - python-version: '3.12-dev'
-          db-backend: postgres
-
     name: "Test (Python: ${{ matrix.python-version }}, DB: ${{ matrix.db-backend }})"
     needs: lint
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
@@ -121,10 +114,10 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: "3.12"
           cache: pip
       - run: python -Im pip install -e .[dev]
       - run: python -Ic 'import rdmo; print(rdmo.__version__)'
@@ -133,10 +126,10 @@ jobs:
     name: Test installation of optional-dependencies
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: "3.12"
           cache: pip
       - name: Install os requirements for python-ldap
         run: |
@@ -152,7 +145,7 @@ jobs:
     needs: lint
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
         with:
           node-version: 18

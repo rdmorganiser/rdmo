@@ -36,7 +36,7 @@ authors:
     given-names:  Enke
     orcid:        https://orcid.org/0000-0002-2366-8316
 
-title: Research Data Management Organizer (RDMO)
+title: Research Data Management Organiser (RDMO)
 doi: 10.5281/zenodo.596581
 license: Apache-2.0
 repository-code: https://github.com/rdmorganiser/rdmo

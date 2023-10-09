@@ -1,5 +1,12 @@
 # Changelog
 
+
+## [RDMO 2.0.0](https://github.com/rdmorganiser/rdmo/compare/2.0.0...2.0.1) (Oct 9, 2023)
+
+* Fix question set and questions ordering on page
+* Fix removal of question sets in interview
+* Add official support for Python 3.12
+
 ## [RDMO 2.0.0](https://github.com/rdmorganiser/rdmo/compare/1.11.0...2.0.0) (Sep 22, 2023)
 
 * Refactor data model of questions app:

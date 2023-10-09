@@ -61,7 +61,7 @@ dependencies = [
 
 [project.optional-dependencies]
 allauth = [
-  "django-allauth~=0.56.1",
+  "django-allauth~=0.57.0",
 ]
 ci = [
   "coveralls~=3.3",
@@ -82,10 +82,7 @@ mysql = [
   "mysqlclient~=2.2",
 ]
 postgres = [
-  # once python 3.12 is officially released, the psycopg team will release a psycopg-binary for it.
-  # replace these two lines with "psycopg[binary]~=3.1"
-  "psycopg[binary]~=3.1; python_version<'3.12'",
-  "psycopg2-binary~=2.9; python_version>='3.12'",
+  "psycopg[binary]~=3.1",
 ]
 pytest = [
   "pytest~=7.4",
@@ -113,11 +110,6 @@ exclude = ["*assets*", "*tests*"]
 
 [tool.setuptools.dynamic]
 version = {attr = "rdmo.__version__"}
-
-[tool.black]
-line-length = 120
-skip-string-normalization = true
-target_version = ["py38", "py39", "py310", "py311"]
 
 [tool.ruff]
 target-version = "py38"
@@ -201,6 +193,7 @@ filterwarnings = [
 
 [tool.coverage.run]
 source = ["rdmo"]
+branch = true
 parallel = true
 
 [tool.coverage.report]
