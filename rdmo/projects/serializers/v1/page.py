@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from rdmo.conditions.models import Condition
-from rdmo.core.serializers import MarkdownSerializerMixin
+from rdmo.core.serializers import ElementModelSerializerMixin, MarkdownSerializerMixin
 from rdmo.options.models import Option, OptionSet
 from rdmo.questions.models import Page, Question, QuestionSet
 from rdmo.questions.utils import get_widget_class
@@ -22,7 +22,7 @@ class OptionSerializer(serializers.ModelSerializer):
 
 class OptionSetSerializer(serializers.ModelSerializer):
 
-    options = OptionSerializer(many=True)
+    options = OptionSerializer(source='elements', many=True)
 
     class Meta:
         model = OptionSet
@@ -49,10 +49,11 @@ class ConditionSerializer(serializers.ModelSerializer):
         )
 
 
-class QuestionSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
+class QuestionSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, serializers.ModelSerializer):
 
     markdown_fields = ('help', )
 
+    model = serializers.SerializerMethodField()
     conditions = ConditionSerializer(default=None, many=True)
     optionsets = serializers.SerializerMethodField()
 
@@ -64,6 +65,7 @@ class QuestionSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
         model = Question
         fields = (
             'id',
+            'model',
             'help',
             'text',
             'default_text',
@@ -88,7 +90,8 @@ class QuestionSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
         )
 
     def get_optionsets(self, obj):
-        return OptionSetSerializer(obj.optionsets.order_by('order'), many=True).data
+        ordered_optionsets = sorted(obj.optionsets.all(), key=lambda optionset: optionset.order)
+        return OptionSetSerializer(ordered_optionsets, many=True).data
 
     def get_verbose_name(self, obj):
         return obj.verbose_name or _('item')
@@ -100,13 +103,12 @@ class QuestionSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
         return get_widget_class(obj.widget_type)
 
 
-class QuestionSetSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
+class QuestionSetSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, serializers.ModelSerializer):
 
     markdown_fields = ('help', )
 
-    questionsets = serializers.SerializerMethodField()
-    questions = QuestionSerializer(many=True)
-
+    model = serializers.SerializerMethodField()
+    elements = serializers.SerializerMethodField()
     verbose_name = serializers.SerializerMethodField()
     verbose_name_plural = serializers.SerializerMethodField()
 
@@ -114,19 +116,23 @@ class QuestionSetSerializer(MarkdownSerializerMixin, serializers.ModelSerializer
         model = QuestionSet
         fields = (
             'id',
+            'model',
             'title',
             'help',
             'verbose_name',
             'verbose_name_plural',
             'attribute',
             'is_collection',
-            'questionsets',
-            'questions',
+            'elements',
             'has_conditions'
         )
 
-    def get_questionsets(self, obj):
-        return QuestionSetSerializer(obj.questionsets.all(), many=True, read_only=True).data
+    def get_elements(self, obj):
+        for element in obj.elements:
+            if isinstance(element, QuestionSet):
+                yield QuestionSetSerializer(element, context=self.context).data
+            else:
+                yield QuestionSerializer(element, context=self.context).data
 
     def get_verbose_name(self, obj):
         return obj.verbose_name or _('set')
@@ -139,9 +145,7 @@ class PageSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
 
     markdown_fields = ('help', )
 
-    questionsets = QuestionSetSerializer(many=True)
-    questions = QuestionSerializer(many=True)
-
+    elements = serializers.SerializerMethodField()
     section = serializers.SerializerMethodField()
     prev_page = serializers.SerializerMethodField()
     next_page = serializers.SerializerMethodField()
@@ -158,13 +162,19 @@ class PageSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
             'verbose_name_plural',
             'attribute',
             'is_collection',
+            'elements',
             'section',
             'prev_page',
             'next_page',
-            'questionsets',
-            'questions',
             'has_conditions'
         )
+
+    def get_elements(self, obj):
+        for element in obj.elements:
+            if isinstance(element, QuestionSet):
+                yield QuestionSetSerializer(element, context=self.context).data
+            else:
+                yield QuestionSerializer(element, context=self.context).data
 
     def get_section(self, obj):
         section = self.context['catalog'].get_section_for_page(obj)

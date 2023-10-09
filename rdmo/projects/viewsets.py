@@ -385,10 +385,14 @@ class ProjectPageViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericV
     serializer_class = PageSerializer
 
     def get_queryset(self):
-        # prefetch the catalogs elements, this will also prefetch the page query below
         try:
             self.project.catalog.prefetch_elements()
-            return Page.objects.filter_by_catalog(self.project.catalog)
+            page = Page.objects.filter_by_catalog(self.project.catalog).prefetch_related(
+                *Page.prefetch_lookups,
+                'page_questions__question__optionsets__optionset_options__option',
+                'page_questionsets__questionset__questionset_questions__question__optionsets__optionset_options__option',
+            )
+            return page
         except AttributeError:
             # this is needed for the swagger ui
             return Page.objects.none()
