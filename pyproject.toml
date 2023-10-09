@@ -193,6 +193,7 @@ filterwarnings = [
 
 [tool.coverage.run]
 source = ["rdmo"]
+branch = true
 parallel = true
 
 [tool.coverage.report]
