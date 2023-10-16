@@ -10,6 +10,8 @@ updates:
       - dependencies
       - python
       - type:maintenance
+    ignore:
+      - dependency-name: django-mptt # pinned, 0.15 requires Python >= 3.9
   - package-ecosystem: github-actions
     directory: /
     schedule:
