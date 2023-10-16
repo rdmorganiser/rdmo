@@ -28,6 +28,7 @@ log = logging.getLogger(__name__)
 
 class Import(Plugin):
 
+    accept = None
     upload = True
 
     def __init__(self, *args, **kwargs):
@@ -87,6 +88,8 @@ class Import(Plugin):
 
 
 class RDMOXMLImport(Import):
+
+    accept = '.xml'
 
     def check(self):
         file_type, encoding = mimetypes.guess_type(self.file_name)

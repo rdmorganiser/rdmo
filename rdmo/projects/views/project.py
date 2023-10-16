@@ -27,7 +27,7 @@ from rdmo.views.models import View
 
 from ..filters import ProjectFilter
 from ..models import Integration, Invite, Membership, Project, Value
-from ..utils import set_context_querystring_with_filter_and_page
+from ..utils import get_upload_accept, set_context_querystring_with_filter_and_page
 
 logger = logging.getLogger(__name__)
 
@@ -71,6 +71,7 @@ class ProjectsView(LoginRequiredMixin, FilterView):
         context['invites'] = Invite.objects.filter(user=self.request.user)
         context['is_site_manager'] = is_site_manager(self.request.user)
         context['number_of_filtered_projects'] = context["filter"].qs.count()
+        context['upload_accept'] = get_upload_accept()
         context = set_context_querystring_with_filter_and_page(context)
         return context
 
@@ -161,6 +162,7 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
         context['snapshots'] = project.snapshots.all()
         context['invites'] = project.invites.all()
         context['membership'] = Membership.objects.filter(project=project, user=self.request.user).first()
+        context['upload_accept'] = get_upload_accept()
         return context
 
 
