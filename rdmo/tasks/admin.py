@@ -19,6 +19,7 @@ class TaskAdminForm(forms.ModelForm):
         TaskLockedValidator(self.instance)(self.cleaned_data)
 
 
+@admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
     form = TaskAdminForm
 
@@ -27,6 +28,3 @@ class TaskAdmin(admin.ModelAdmin):
     readonly_fields = ('uri', )
     list_filter = ('available', )
     filter_horizontal = ('catalogs', 'sites', 'editors', 'groups', 'conditions')
-
-
-admin.site.register(Task, TaskAdmin)

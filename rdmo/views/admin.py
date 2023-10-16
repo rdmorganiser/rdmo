@@ -19,6 +19,7 @@ class ViewAdminForm(forms.ModelForm):
         ViewLockedValidator(self.instance)(self.cleaned_data)
 
 
+@admin.register(View)
 class ViewAdmin(admin.ModelAdmin):
     form = ViewAdminForm
 
@@ -27,6 +28,3 @@ class ViewAdmin(admin.ModelAdmin):
     readonly_fields = ('uri', )
     list_filter = ('available', )
     filter_horizontal = ('catalogs', 'sites', 'editors', 'groups')
-
-
-admin.site.register(View, ViewAdmin)
