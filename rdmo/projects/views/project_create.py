@@ -21,7 +21,7 @@ class ProjectCreateView(ObjectPermissionMixin, LoginRequiredMixin,
                         RedirectViewMixin, CreateView):
     model = Project
     form_class = ProjectForm
-    permission_required = 'projects.add_project_object'
+    permission_required = 'projects.add_project'
 
     def get_form_kwargs(self):
         catalogs = Catalog.objects.filter_current_site() \
@@ -70,7 +70,7 @@ class ProjectCreateView(ObjectPermissionMixin, LoginRequiredMixin,
 class ProjectCreateImportView(ObjectPermissionMixin, LoginRequiredMixin,
                               ProjectImportMixin, TemplateView):
     success_url = reverse_lazy('projects')
-    permission_required = 'projects.add_project_object'
+    permission_required = 'projects.add_project'
 
     def get(self, request, *args, **kwargs):
         self.object = None

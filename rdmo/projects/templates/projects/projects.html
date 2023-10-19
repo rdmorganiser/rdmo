@@ -22,7 +22,7 @@
 {% endblock %}
 
 {% block sidebar %}
-    {% has_perm 'projects.can_add_project' request.user project as can_add_project %}
+    {% has_perm 'projects.add_project' request.user as can_add_project %}
     {% test_rule 'projects.can_view_all_projects' request.user request as can_view_all_projects %}
 
     {% if can_add_project or can_view_all_projects %}
@@ -68,6 +68,8 @@
         </p>
     </form>
 
+    {% if can_add_project %}
+
     <h2>{% trans 'Import existing project' %}</h2>
 
     <ul class="list-unstyled">
@@ -96,6 +98,8 @@
         {% endfor %}
         {% endif %}
     </ul>
+
+    {% endif %}
 
     {% if invites %}
 
