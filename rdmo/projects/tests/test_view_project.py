@@ -2,6 +2,7 @@ import re
 
 import pytest
 
+from django.contrib.auth.models import Group, User
 from django.urls import reverse
 
 from pytest_django.asserts import assertContains, assertNotContains, assertTemplateUsed
@@ -145,6 +146,33 @@ def test_project_create_get(db, client, username, password):
         assert response.status_code == 302
 
 
+def test_project_create_restricted_get(db, client, settings):
+    settings.PROJECT_CREATE_RESTRICTED = True
+    settings.PROJECT_CREATE_GROUPS = ['projects']
+
+    group = Group.objects.create(name='projects')
+    user = User.objects.get(username='user')
+    user.groups.add(group)
+
+    client.login(username='user', password='user')
+
+    url = reverse('project_create')
+    response = client.get(url)
+
+    assert response.status_code == 200
+
+
+def test_project_create_forbidden_get(db, client, settings):
+    settings.PROJECT_CREATE_RESTRICTED = True
+
+    client.login(username='user', password='user')
+
+    url = reverse('project_create')
+    response = client.get(url)
+
+    assert response.status_code == 403
+
+
 @pytest.mark.parametrize('username,password', users)
 def test_project_create_get_for_extra_users_and_unavailable_catalogs(db, client, username, password):
     client.login(username=username, password=password)
@@ -213,6 +241,43 @@ def test_project_create_post(db, client, username, password):
     else:
         assert response.status_code == 302
         assert Project.objects.count() == project_count
+
+
+def test_project_create_post_restricted(db, client, settings):
+    settings.PROJECT_CREATE_RESTRICTED = True
+    settings.PROJECT_CREATE_GROUPS = ['projects']
+
+    group = Group.objects.create(name='projects')
+    user = User.objects.get(username='user')
+    user.groups.add(group)
+
+    client.login(username='user', password='user')
+
+    url = reverse('project_create')
+    data = {
+        'title': 'A new project',
+        'description': 'Some description',
+        'catalog': catalog_id
+    }
+    response = client.post(url, data)
+
+    assert response.status_code == 302
+
+
+def test_project_create_post_forbidden(db, client, settings):
+    settings.PROJECT_CREATE_RESTRICTED = True
+
+    client.login(username='user', password='user')
+
+    url = reverse('project_create')
+    data = {
+        'title': 'A new project',
+        'description': 'Some description',
+        'catalog': catalog_id
+    }
+    response = client.post(url, data)
+
+    assert response.status_code == 403
 
 
 @pytest.mark.parametrize('username,password', users)

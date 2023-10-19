@@ -8,11 +8,21 @@ class HasProjectsPermission(HasObjectPermission):
         if not (request.user and request.user.is_authenticated):
             return False
 
-        # always return True:
-        # for retrieve, update, partial_update, the permission will be checked on the
-        # object level (in the next step), list and create is allowed for every user since
-        # the filtering is done in the queryset
-        return True
+        if view.detail:
+            # for retrieve, update, partial_update, the permission will be checked on the
+            # object level (in the next step)
+            return True
+        else:
+            if view.action == 'list':
+                # list is allowed for every user since the filtering is done in the queryset
+                return True
+            else:
+                if 'create' in view.action_map.values():
+                    # for create, check the permission (from rules.py),
+                    # but only if it is not a ReadOnlyValueSet (i.e. only for ProjectViewSet)
+                    return super().has_permission(request, view)
+                else:
+                    return True
 
     @log_result
     def has_object_permission(self, request, view, obj):

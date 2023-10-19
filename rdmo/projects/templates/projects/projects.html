@@ -22,8 +22,13 @@
 {% endblock %}
 
 {% block sidebar %}
+    {% has_perm 'projects.can_add_project' request.user project as can_add_project %}
+    {% test_rule 'projects.can_view_all_projects' request.user request as can_view_all_projects %}
+
+    {% if can_add_project or can_view_all_projects %}
     <h2>{% trans 'Options' %}</h2>
 
+    {% if can_add_project %}
     <ul class="list-unstyled">
         <li>
             <strong>
@@ -33,8 +38,8 @@
             </strong>
         </li>
     </ul>
+    {% endif %}
 
-    {% test_rule 'projects.can_view_all_projects' request.user request as can_view_all_projects %}
     {% if can_view_all_projects %}
     <ul class="list-unstyled">
         <li>
@@ -43,6 +48,7 @@
             </a>
         </li>
     </ul>
+    {% endif %}
     {% endif %}
 
     <h2>{% trans 'Filter projects' %}</h2>
