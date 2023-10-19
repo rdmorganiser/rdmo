@@ -98,15 +98,9 @@ PROFILE_DELETE = True
 
 ACCOUNT = False
 ACCOUNT_SIGNUP = False
+ACCOUNT_GROUPS = []
 ACCOUNT_TERMS_OF_USE = False
-
-SOCIALACCOUNT = False
-
-SHIBBOLETH = False
-SHIBBOLETH_LOGIN_URL = '/Shibboleth.sso/Login'
-SHIBBOLETH_LOGOUT_URL = '/Shibboleth.sso/Logout'
-SHIBBOLETH_USERNAME_PATTERN = None
-
+ACCOUNT_ADAPTER = 'rdmo.accounts.adapter.AccountAdapter'
 ACCOUNT_SIGNUP_FORM_CLASS = 'rdmo.accounts.forms.SignupForm'
 ACCOUNT_USER_DISPLAY = 'rdmo.accounts.utils.get_full_name'
 ACCOUNT_EMAIL_REQUIRED = True
@@ -120,11 +114,16 @@ ACCOUNT_EMAIL_MAX_LENGTH = 190
 ACCOUNT_PREVENT_ENUMERATION = False
 ACCOUNT_ALLOW_USER_TOKEN = False
 
-ACCOUNT_ADAPTER = 'rdmo.accounts.adapter.AccountAdapter'
-
-SOCIALACCOUNT_ADAPTER = 'rdmo.accounts.adapter.SocialAccountAdapter'
+SOCIALACCOUNT = False
 SOCIALACCOUNT_SIGNUP = False
+SOCIALACCOUNT_GROUPS = []
 SOCIALACCOUNT_AUTO_SIGNUP = False
+SOCIALACCOUNT_ADAPTER = 'rdmo.accounts.adapter.SocialAccountAdapter'
+
+SHIBBOLETH = False
+SHIBBOLETH_LOGIN_URL = '/Shibboleth.sso/Login'
+SHIBBOLETH_LOGOUT_URL = '/Shibboleth.sso/Logout'
+SHIBBOLETH_USERNAME_PATTERN = None
 
 LANGUAGE_CODE = 'en-us'
 
