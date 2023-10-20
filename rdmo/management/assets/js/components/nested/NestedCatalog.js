@@ -40,18 +40,18 @@ const NestedCatalog = ({ config, catalog, configActions, elementActions }) => {
             <BackButton />
           </div>
           <Catalog config={config} catalog={catalog}
-                   configActions={configActions} elementActions={elementActions} display="plain" />
+            configActions={configActions} elementActions={elementActions} display="plain" />
         </div>
 
         <div className="panel-body">
           <div className="row">
             <div className="col-sm-8">
               <FilterString value={get(config, 'filter.catalog.search', '')} onChange={updateFilterString}
-                            placeholder={gettext('Filter catalogs')} />
+                placeholder={gettext('Filter catalogs')} />
             </div>
             <div className="col-sm-4">
               <FilterUriPrefix value={get(config, 'filter.catalog.uri_prefix', '')} onChange={updateFilterUriPrefix}
-                               options={getUriPrefixes(catalog.elements)} />
+                options={getUriPrefixes(catalog.elements)} />
             </div>
           </div>
           <div className="mt-10">
@@ -63,21 +63,21 @@ const NestedCatalog = ({ config, catalog, configActions, elementActions }) => {
           <div className="checkboxes">
             <span className="mr-10">{gettext('Show URIs:')}</span>
             <Checkbox label={<code className="code-questions">{gettext('Catalogs')}</code>}
-                      value={get(config, 'display.uri.catalogs', true)} onChange={updateDisplayCatalogURI} />
+              value={get(config, 'display.uri.catalogs', true)} onChange={updateDisplayCatalogURI} />
             <Checkbox label={<code className="code-questions">{gettext('Sections')}</code>}
-                      value={get(config, 'display.uri.sections', true)} onChange={updateDisplaySectionsURI} />
+              value={get(config, 'display.uri.sections', true)} onChange={updateDisplaySectionsURI} />
             <Checkbox label={<code className="code-questions">{gettext('Pages')}</code>}
-                      value={get(config, 'display.uri.pages', true)} onChange={updateDisplayPagesURI} />
+              value={get(config, 'display.uri.pages', true)} onChange={updateDisplayPagesURI} />
             <Checkbox label={<code className="code-questions">{gettext('Question sets')}</code>}
-                      value={get(config, 'display.uri.questionsets', true)} onChange={updateDisplayQuestionSetsURI} />
+              value={get(config, 'display.uri.questionsets', true)} onChange={updateDisplayQuestionSetsURI} />
             <Checkbox label={<code className="code-questions'">{gettext('Questions')}</code>}
-                      value={get(config, 'display.uri.questions', true)} onChange={updateDisplayQuestionsURI} />
+              value={get(config, 'display.uri.questions', true)} onChange={updateDisplayQuestionsURI} />
             <Checkbox label={<code className="code-domain">{gettext('Attributes')}</code>}
-                      value={get(config, 'display.uri.attributes', true)} onChange={updateDisplayAttributesURI} />
+              value={get(config, 'display.uri.attributes', true)} onChange={updateDisplayAttributesURI} />
             <Checkbox label={<code className="code-conditions">{gettext('Conditions')}</code>}
-                      value={get(config, 'display.uri.conditions', true)} onChange={updateDisplayConditionsURI} />
+              value={get(config, 'display.uri.conditions', true)} onChange={updateDisplayConditionsURI} />
             <Checkbox label={<code className="code-options">{gettext('Option sets')}</code>}
-                      value={get(config, 'display.uri.optionsets', true)} onChange={updateDisplayOptionSetURI} />
+              value={get(config, 'display.uri.optionsets', true)} onChange={updateDisplayOptionSetURI} />
           </div>
         </div>
       </div>
@@ -86,12 +86,25 @@ const NestedCatalog = ({ config, catalog, configActions, elementActions }) => {
         <Drop element={catalog.elements[0]} elementActions={elementActions} indent={0} mode="before" />
       }
       {
-        catalog.elements.map((section, index) => (
-          <Section key={index} config={config} section={section}
-                   configActions={configActions} elementActions={elementActions}
-                   display="nested" filter="catalog" indent={0} />
-        ))
+        catalog.elements.map((section, index) => {
+          const sectionInfo = catalog.sections.find(info => info.section === section.id)
+          const sectionOrder = sectionInfo ? sectionInfo.order : null // Get the order value
+
+          return (
+            <Section key={index}
+              config={config}
+              section={section}
+              configActions={configActions}
+              elementActions={elementActions}
+              display="nested"
+              filter="catalog"
+              indent={0}
+              order={sectionOrder} // Pass the order value as a prop
+            />
+          )
+        })
       }
+
     </>
   )
 }

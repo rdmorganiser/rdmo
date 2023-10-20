@@ -8,14 +8,16 @@ import { buildPath } from '../../utils/location'
 
 import Page from './Page'
 import { ElementErrors } from '../common/Errors'
-import { EditLink, CopyLink, AddLink, LockedLink, NestedLink, ExportLink,
-         CodeLink, ShowElementsLink } from '../common/Links'
+import {
+  EditLink, CopyLink, AddLink, LockedLink, NestedLink, ExportLink,
+  CodeLink, ShowElementsLink
+} from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 import { Drag, Drop } from '../common/DragAndDrop'
 
 
-const Section = ({ config, section, configActions, elementActions, display='list', indent=0,
-                   filter=false, filterEditors=false }) => {
+const Section = ({ config, section, configActions, elementActions, display = 'list', indent = 0,
+  filter = false, filterEditors = false, order }) => {
 
   const showElement = filterElement(config, filter, false, filterEditors, section)
   const showElements = get(config, `display.elements.sections.${section.id}`, true)
@@ -28,7 +30,7 @@ const Section = ({ config, section, configActions, elementActions, display='list
   const fetchEdit = () => elementActions.fetchElement('sections', section.id)
   const fetchCopy = () => elementActions.fetchElement('sections', section.id, 'copy')
   const fetchNested = () => elementActions.fetchElement('sections', section.id, 'nested')
-  const toggleLocked = () => elementActions.storeElement('sections', {...section, locked: !section.locked })
+  const toggleLocked = () => elementActions.storeElement('sections', { ...section, locked: !section.locked })
   const toggleElements = () => configActions.toggleElements(section)
 
   const createPage = () => elementActions.createElement('pages', { section })
@@ -43,10 +45,10 @@ const Section = ({ config, section, configActions, elementActions, display='list
         <CopyLink title={gettext('Copy section')} href={copyUrl} onClick={fetchCopy} />
         <AddLink title={gettext('Add page')} onClick={createPage} disabled={section.read_only} />
         <LockedLink title={section.locked ? gettext('Unlock section')
-                                          : gettext('Lock section')}
-                    locked={section.locked} onClick={toggleLocked} disabled={section.read_only} />
+          : gettext('Lock section')}
+          locked={section.locked} onClick={toggleLocked} disabled={section.read_only} />
         <ExportLink title={gettext('Export section')} exportUrl={exportUrl}
-                    exportFormats={config.settings.export_formats} full={true} />
+          exportFormats={config.settings.export_formats} full={true} />
         <Drag element={section} show={display == 'nested'} />
       </div>
       <div>
@@ -55,7 +57,7 @@ const Section = ({ config, section, configActions, elementActions, display='list
         </p>
         {
           get(config, 'display.uri.sections', true) &&
-          <CodeLink className="code-questions" uri={section.uri} onClick={() => fetchEdit()} />
+          <CodeLink className="code-questions" uri={section.uri} onClick={() => fetchEdit()} order={order} />
         }
         <ElementErrors element={section} />
       </div>
@@ -66,7 +68,7 @@ const Section = ({ config, section, configActions, elementActions, display='list
     case 'list':
       return showElement && (
         <li className="list-group-item">
-          { elementNode }
+          {elementNode}
         </li>
       )
     case 'nested':
@@ -77,7 +79,7 @@ const Section = ({ config, section, configActions, elementActions, display='list
               <Drop element={section} elementActions={elementActions}>
                 <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
                   <div className="panel-heading">
-                    { elementNode }
+                    {elementNode}
                   </div>
                 </div>
               </Drop>
@@ -88,11 +90,24 @@ const Section = ({ config, section, configActions, elementActions, display='list
             <Drop element={section.elements[0]} elementActions={elementActions} indent={indent + 1} mode="before" />
           }
           {
-            showElements && section.elements.map((page, index) => (
-              <Page key={index} config={config} page={page}
-                    configActions={configActions} elementActions={elementActions}
-                    display="nested" filter={filter} indent={indent + 1} />
-            ))
+            showElements && section.elements.map((page, index) => {
+              const pageInfo = section.pages.find(info => info.page === page.id)
+              const pageOrder = pageInfo ? pageInfo.order : null // Get the order value
+
+              return (
+                <Page
+                  key={index}
+                  config={config}
+                  page={page}
+                  configActions={configActions}
+                  elementActions={elementActions}
+                  display="nested"
+                  filter={filter}
+                  indent={indent + 1}
+                  order={pageOrder}
+                />
+              )
+            })
           }
           <Drop element={section} elementActions={elementActions} indent={indent} mode="after" />
         </>
@@ -110,7 +125,8 @@ Section.propTypes = {
   display: PropTypes.string,
   indent: PropTypes.number,
   filter: PropTypes.string,
-  filterEditors: PropTypes.bool
+  filterEditors: PropTypes.bool,
+  order: PropTypes.number
 }
 
 export default Section

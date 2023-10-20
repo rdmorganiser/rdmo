@@ -8,13 +8,15 @@ import { buildPath } from '../../utils/location'
 import QuestionSet from './QuestionSet'
 import Question from './Question'
 import { ElementErrors } from '../common/Errors'
-import { EditLink, CopyLink, AddLink, LockedLink, NestedLink,
-         ExportLink, CodeLink, ShowElementsLink } from '../common/Links'
+import {
+  EditLink, CopyLink, AddLink, LockedLink, NestedLink,
+  ExportLink, CodeLink, ShowElementsLink
+} from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 import { Drag, Drop } from '../common/DragAndDrop'
 
-const Page = ({ config, page, configActions, elementActions, display='list', indent=0,
-                filter=false, filterEditors=false }) => {
+const Page = ({ config, page, configActions, elementActions, display = 'list', indent = 0,
+  filter = false, filterEditors = false, order }) => {
 
   const showElement = filterElement(config, filter, false, filterEditors, page)
   const showElements = get(config, `display.elements.pages.${page.id}`, true)
@@ -27,7 +29,7 @@ const Page = ({ config, page, configActions, elementActions, display='list', ind
   const fetchEdit = () => elementActions.fetchElement('pages', page.id)
   const fetchCopy = () => elementActions.fetchElement('pages', page.id, 'copy')
   const fetchNested = () => elementActions.fetchElement('pages', page.id, 'nested')
-  const toggleLocked = () => elementActions.storeElement('pages', {...page, locked: !page.locked })
+  const toggleLocked = () => elementActions.storeElement('pages', { ...page, locked: !page.locked })
   const toggleElements = () => configActions.toggleElements(page)
 
   const createQuestionSet = () => elementActions.createElement('questionsets', { page })
@@ -35,7 +37,6 @@ const Page = ({ config, page, configActions, elementActions, display='list', ind
 
   const fetchAttribute = () => elementActions.fetchElement('attributes', page.attribute)
   const fetchCondition = (index) => elementActions.fetchElement('conditions', page.conditions[index])
-
   const elementNode = (
     <div className="element">
       <div className="pull-right">
@@ -45,11 +46,11 @@ const Page = ({ config, page, configActions, elementActions, display='list', ind
         <EditLink title={gettext('Edit page')} href={editUrl} onClick={fetchEdit} />
         <CopyLink title={gettext('Copy page')} href={copyUrl} onClick={fetchCopy} />
         <AddLink title={gettext('Add question')} altTitle={gettext('Add question set')}
-                 onClick={createQuestion} onAltClick={createQuestionSet} disabled={page.read_only} />
+          onClick={createQuestion} onAltClick={createQuestionSet} disabled={page.read_only} />
         <LockedLink title={page.locked ? gettext('Unlock page') : gettext('Lock page')}
-                    locked={page.locked} onClick={toggleLocked} disabled={page.read_only} />
+          locked={page.locked} onClick={toggleLocked} disabled={page.read_only} />
         <ExportLink title={gettext('Export page')} exportUrl={exportUrl}
-                    exportFormats={config.settings.export_formats} full={true} />
+          exportFormats={config.settings.export_formats} full={true} />
         <Drag element={page} show={display == 'nested'} />
       </div>
       <div>
@@ -58,7 +59,7 @@ const Page = ({ config, page, configActions, elementActions, display='list', ind
         </p>
         {
           get(config, 'display.uri.pages', true) && <p>
-            <CodeLink className="code-questions" uri={page.uri} onClick={() => fetchEdit()} />
+            <CodeLink className="code-questions" uri={page.uri} onClick={() => fetchEdit()} order={order} />
           </p>
         }
         {
@@ -82,7 +83,7 @@ const Page = ({ config, page, configActions, elementActions, display='list', ind
     case 'list':
       return showElement && (
         <li className="list-group-item">
-          { elementNode }
+          {elementNode}
         </li>
       )
     case 'nested':
@@ -93,7 +94,7 @@ const Page = ({ config, page, configActions, elementActions, display='list', ind
               <Drop element={page} elementActions={elementActions}>
                 <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
                   <div className="panel-heading">
-                    { elementNode }
+                    {elementNode}
                   </div>
                 </div>
               </Drop>
@@ -101,14 +102,16 @@ const Page = ({ config, page, configActions, elementActions, display='list', ind
           }
           {
             showElements && page.elements.map((element, index) => {
+              const questionInfo = page.questions.find(info => info.question === element.id)
+              const questionOrder = questionInfo ? questionInfo.order : null // Get the order value
               if (element.model == 'questions.questionset') {
                 return <QuestionSet key={index} config={config} questionset={element}
-                                    configActions={configActions} elementActions={elementActions}
-                                    display="nested" filter={filter}  indent={indent + 1} />
+                  configActions={configActions} elementActions={elementActions}
+                  display="nested" filter={filter} indent={indent + 1} order={questionOrder} />
               } else {
                 return <Question key={index} config={config} question={element}
-                                 configActions={configActions} elementActions={elementActions}
-                                 display="nested" filter={filter}  indent={indent + 1}  />
+                  configActions={configActions} elementActions={elementActions}
+                  display="nested" filter={filter} indent={indent + 1} order={questionOrder} />
               }
             })
           }
@@ -128,7 +131,8 @@ Page.propTypes = {
   display: PropTypes.string,
   indent: PropTypes.number,
   filter: PropTypes.string,
-  filterEditors: PropTypes.bool
+  filterEditors: PropTypes.bool,
+  order: PropTypes.number
 }
 
 export default Page
