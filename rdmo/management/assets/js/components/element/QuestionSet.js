@@ -7,13 +7,15 @@ import { buildPath } from '../../utils/location'
 
 import Question from './Question'
 import { ElementErrors } from '../common/Errors'
-import { EditLink, CopyLink, AddLink, LockedLink,
-         NestedLink, ExportLink, CodeLink, ShowElementsLink } from '../common/Links'
+import {
+  EditLink, CopyLink, AddLink, LockedLink,
+  NestedLink, ExportLink, CodeLink, ShowElementsLink
+} from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 import { Drag, Drop } from '../common/DragAndDrop'
 
-const QuestionSet = ({ config, questionset, configActions, elementActions, display='list', indent=0,
-                       filter=false, filterEditors=false }) => {
+const QuestionSet = ({ config, questionset, configActions, elementActions, display = 'list', indent = 0,
+  filter = false, filterEditors = false, order }) => {
 
   const showElement = filterElement(config, filter, false, filterEditors, questionset)
   const showElements = get(config, `display.elements.questionsets.${questionset.id}`, true)
@@ -26,7 +28,7 @@ const QuestionSet = ({ config, questionset, configActions, elementActions, displ
   const fetchEdit = () => elementActions.fetchElement('questionsets', questionset.id)
   const fetchCopy = () => elementActions.fetchElement('questionsets', questionset.id, 'copy')
   const fetchNested = () => elementActions.fetchElement('questionsets', questionset.id, 'nested')
-  const toggleLocked = () => elementActions.storeElement('questionsets', {...questionset, locked: !questionset.locked })
+  const toggleLocked = () => elementActions.storeElement('questionsets', { ...questionset, locked: !questionset.locked })
   const toggleElements = () => configActions.toggleElements(questionset)
 
   const createQuestionSet = () => elementActions.createElement('questionsets', { questionset })
@@ -44,11 +46,11 @@ const QuestionSet = ({ config, questionset, configActions, elementActions, displ
         <EditLink title={gettext('Edit question set')} href={editUrl} onClick={fetchEdit} />
         <CopyLink title={gettext('Copy question set')} href={copyUrl} onClick={fetchCopy} />
         <AddLink title={gettext('Add question')} altTitle={gettext('Add question set')}
-                 onClick={createQuestion} onAltClick={createQuestionSet} disabled={questionset.read_only} />
+          onClick={createQuestion} onAltClick={createQuestionSet} disabled={questionset.read_only} />
         <LockedLink title={questionset.locked ? gettext('Unlock question set') : gettext('Lock question set')}
-                    locked={questionset.locked} onClick={toggleLocked} disabled={questionset.read_only} />
+          locked={questionset.locked} onClick={toggleLocked} disabled={questionset.read_only} />
         <ExportLink title={gettext('Export question set')} exportUrl={exportUrl}
-                    exportFormats={config.settings.export_formats} full={true} />
+          exportFormats={config.settings.export_formats} full={true} />
         <Drag element={questionset} show={display == 'nested'} />
       </div>
       <div>
@@ -57,11 +59,11 @@ const QuestionSet = ({ config, questionset, configActions, elementActions, displ
         </p>
         {
           get(config, 'display.uri.questionsets', true) && <p>
-            <CodeLink className="code-questions" uri={questionset.uri} onClick={() => fetchEdit()} />
+            <CodeLink className="code-questions" uri={questionset.uri} onClick={() => fetchEdit()} order={order} />
           </p>
         }
         {
-          get(config, 'display.uri.attributes', true) && questionset.attribute_uri &&<p>
+          get(config, 'display.uri.attributes', true) && questionset.attribute_uri && <p>
             <CodeLink className="code-domain" uri={questionset.attribute_uri} onClick={() => fetchAttribute()} />
           </p>
         }
@@ -81,7 +83,7 @@ const QuestionSet = ({ config, questionset, configActions, elementActions, displ
     case 'list':
       return showElement && (
         <li className="list-group-item">
-          { elementNode }
+          {elementNode}
         </li>
       )
     case 'nested':
@@ -92,7 +94,7 @@ const QuestionSet = ({ config, questionset, configActions, elementActions, displ
               <Drop element={questionset} elementActions={elementActions}>
                 <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
                   <div className="panel-heading">
-                    { elementNode }
+                    {elementNode}
                   </div>
                 </div>
               </Drop>
@@ -101,13 +103,17 @@ const QuestionSet = ({ config, questionset, configActions, elementActions, displ
           {
             showElements && questionset.elements.map((element, index) => {
               if (element.model == 'questions.questionset') {
+                const questionSetInfo = questionset.questionsets.find(info => info.questionset === element.id)
+                const questionSetOrder = questionSetInfo ? questionSetInfo.order : undefined
                 return <QuestionSet key={index} config={config} questionset={element}
-                                    configActions={configActions} elementActions={elementActions}
-                                    display="nested" filter={filter} indent={indent + 1}  />
+                  configActions={configActions} elementActions={elementActions}
+                  display="nested" filter={filter} indent={indent + 1} order={questionSetOrder} />
               } else {
+                const questionInfo = questionset.questions.find(info => info.question === element.id)
+                const questionOrder = questionInfo ? questionInfo.order : undefined
                 return <Question key={index} config={config} question={element}
-                                 configActions={configActions} elementActions={elementActions}
-                                 display="nested" filter={filter} indent={indent + 1} />
+                  configActions={configActions} elementActions={elementActions}
+                  display="nested" filter={filter} indent={indent + 1} order={questionOrder} />
               }
             })
           }
@@ -127,7 +133,8 @@ QuestionSet.propTypes = {
   display: PropTypes.string,
   indent: PropTypes.number,
   filter: PropTypes.string,
-  filterEditors: PropTypes.bool
+  filterEditors: PropTypes.bool,
+  order: PropTypes.number
 }
 
 export default QuestionSet

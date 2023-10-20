@@ -88,7 +88,7 @@ const NestedCatalog = ({ config, catalog, configActions, elementActions }) => {
       {
         catalog.elements.map((section, index) => {
           const sectionInfo = catalog.sections.find(info => info.section === section.id)
-          const sectionOrder = sectionInfo ? sectionInfo.order : null // Get the order value
+          const sectionOrder = sectionInfo ? sectionInfo.order : undefined
 
           return (
             <Section key={index}
@@ -99,7 +99,7 @@ const NestedCatalog = ({ config, catalog, configActions, elementActions }) => {
               display="nested"
               filter="catalog"
               indent={0}
-              order={sectionOrder} // Pass the order value as a prop
+              order={sectionOrder}
             />
           )
         })

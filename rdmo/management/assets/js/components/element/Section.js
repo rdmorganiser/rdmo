@@ -92,7 +92,7 @@ const Section = ({ config, section, configActions, elementActions, display = 'li
           {
             showElements && section.elements.map((page, index) => {
               const pageInfo = section.pages.find(info => info.page === page.id)
-              const pageOrder = pageInfo ? pageInfo.order : null // Get the order value
+              const pageOrder = pageInfo ? pageInfo.order : undefined
 
               return (
                 <Page

@@ -102,13 +102,15 @@ const Page = ({ config, page, configActions, elementActions, display = 'list', i
           }
           {
             showElements && page.elements.map((element, index) => {
-              const questionInfo = page.questions.find(info => info.question === element.id)
-              const questionOrder = questionInfo ? questionInfo.order : null // Get the order value
               if (element.model == 'questions.questionset') {
+                const questionSetInfo = page.questionsets.find(info => info.questionset === element.id)
+                const questionSetOrder = questionSetInfo ? questionSetInfo.order : undefined
                 return <QuestionSet key={index} config={config} questionset={element}
                   configActions={configActions} elementActions={elementActions}
-                  display="nested" filter={filter} indent={indent + 1} order={questionOrder} />
+                  display="nested" filter={filter} indent={indent + 1} order={questionSetOrder} />
               } else {
+                const questionInfo = page.questions.find(info => info.question === element.id)
+                const questionOrder = questionInfo ? questionInfo.order : undefined
                 return <Question key={index} config={config} question={element}
                   configActions={configActions} elementActions={elementActions}
                   display="nested" filter={filter} indent={indent + 1} order={questionOrder} />
