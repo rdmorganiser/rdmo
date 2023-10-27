@@ -21,8 +21,6 @@ if settings.SHIBBOLETH:
                 shibboleth_login, name='shibboleth_login'),
         re_path('^shibboleth/logout/',
                 shibboleth_logout, name='shibboleth_logout'),
-        re_path('^logout/',
-                auth_views.LogoutView.as_view(next_page=settings.SHIBBOLETH_LOGOUT_URL), name='account_logout'),
     ]
 
 if settings.ACCOUNT or settings.SOCIALACCOUNT:
