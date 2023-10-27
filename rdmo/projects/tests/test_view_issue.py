@@ -49,6 +49,26 @@ integration_pk = 1
 
 issue_status = ('open', 'in_progress', 'closed')
 
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('issue_id', issues)
+def test_issue(db, client, username, password, project_id, issue_id):
+    client.login(username=username, password=password)
+    issue = Issue.objects.filter(project_id=project_id, id=issue_id).first()
+
+    url = reverse('issue', args=[project_id, issue_id])
+    response = client.get(url)
+
+    if issue:
+        if project_id in view_issue_permission_map.get(username, []):
+            assert response.status_code == 200
+        elif password:
+            assert response.status_code == 403
+        else:
+            assert response.status_code == 302
+    else:
+        assert response.status_code == 404
+
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
