@@ -52,7 +52,7 @@ const NestedPage = ({ config, page, configActions, elementActions }) => {
                                options={getUriPrefixes(page.elements)} />
             </div>
           </div>
-          <div className="checkboxes">
+          <div className="mt-10">
             <span className="mr-10">{gettext('Show elements:')}</span>
             <Link className="mr-10" onClick={toggleQuestionSets}>{gettext('Question sets')}</Link>
           </div>

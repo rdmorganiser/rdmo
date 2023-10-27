@@ -53,7 +53,7 @@ const NestedCatalog = ({ config, section, configActions, elementActions }) => {
                                options={getUriPrefixes(section.elements)} />
             </div>
           </div>
-          <div className="checkboxes">
+          <div className="mt-10">
             <span className="mr-10">{gettext('Show elements:')}</span>
             <Link className="mr-10" onClick={togglePages}>{gettext('Pages')}</Link>
             <Link className="mr-10" onClick={toggleQuestionSets}>{gettext('Question sets')}</Link>
