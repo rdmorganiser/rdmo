@@ -8,16 +8,14 @@ import { buildPath } from '../../utils/location'
 
 import Page from './Page'
 import { ElementErrors } from '../common/Errors'
-import {
-  EditLink, CopyLink, AddLink, LockedLink, NestedLink, ExportLink,
-  CodeLink, ShowElementsLink
-} from '../common/Links'
+import { EditLink, CopyLink, AddLink, LockedLink, NestedLink, ExportLink,
+         CodeLink, ShowElementsLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 import { Drag, Drop } from '../common/DragAndDrop'
 
 
-const Section = ({ config, section, configActions, elementActions, display = 'list', indent = 0,
-  filter = false, filterEditors = false, order }) => {
+const Section = ({ config, section, configActions, elementActions, display='list', indent=0,
+                   filter=false, filterEditors=false, order }) => {
 
   const showElement = filterElement(config, filter, false, filterEditors, section)
   const showElements = get(config, `display.elements.sections.${section.id}`, true)
@@ -30,7 +28,7 @@ const Section = ({ config, section, configActions, elementActions, display = 'li
   const fetchEdit = () => elementActions.fetchElement('sections', section.id)
   const fetchCopy = () => elementActions.fetchElement('sections', section.id, 'copy')
   const fetchNested = () => elementActions.fetchElement('sections', section.id, 'nested')
-  const toggleLocked = () => elementActions.storeElement('sections', { ...section, locked: !section.locked })
+  const toggleLocked = () => elementActions.storeElement('sections', {...section, locked: !section.locked })
   const toggleElements = () => configActions.toggleElements(section)
 
   const createPage = () => elementActions.createElement('pages', { section })
@@ -45,10 +43,10 @@ const Section = ({ config, section, configActions, elementActions, display = 'li
         <CopyLink title={gettext('Copy section')} href={copyUrl} onClick={fetchCopy} />
         <AddLink title={gettext('Add page')} onClick={createPage} disabled={section.read_only} />
         <LockedLink title={section.locked ? gettext('Unlock section')
-          : gettext('Lock section')}
+                                          : gettext('Lock section')}
           locked={section.locked} onClick={toggleLocked} disabled={section.read_only} />
         <ExportLink title={gettext('Export section')} exportUrl={exportUrl}
-          exportFormats={config.settings.export_formats} full={true} />
+                    exportFormats={config.settings.export_formats} full={true} />
         <Drag element={section} show={display == 'nested'} />
       </div>
       <div>
@@ -68,7 +66,7 @@ const Section = ({ config, section, configActions, elementActions, display = 'li
     case 'list':
       return showElement && (
         <li className="list-group-item">
-          {elementNode}
+          { elementNode }
         </li>
       )
     case 'nested':
@@ -79,7 +77,7 @@ const Section = ({ config, section, configActions, elementActions, display = 'li
               <Drop element={section} elementActions={elementActions}>
                 <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
                   <div className="panel-heading">
-                    {elementNode}
+                    { elementNode }
                   </div>
                 </div>
               </Drop>

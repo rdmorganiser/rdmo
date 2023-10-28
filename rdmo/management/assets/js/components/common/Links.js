@@ -7,7 +7,7 @@ import isUndefined from 'lodash/isUndefined'
 import Link from 'rdmo/core/assets/js/components/Link'
 import LinkButton from 'rdmo/core/assets/js/components/LinkButton'
 
-const NestedLink = ({ href, title, onClick, show = true }) => {
+const NestedLink = ({ href, title, onClick, show=true }) => {
   return show && <Link href={href} className="element-link fa fa-align-right flip" title={title} onClick={onClick} />
 }
 
@@ -74,7 +74,7 @@ const AvailableLink = ({ available, locked, title, onClick, disabled }) => {
   })
 
   return <LinkButton className={className} title={locked ? gettext('Locked') : title}
-    disabled={locked || disabled} onClick={onClick} />
+                     disabled={locked || disabled} onClick={onClick} />
 }
 
 AvailableLink.propTypes = {
@@ -120,7 +120,7 @@ ShowElementsLink.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-const ExportLink = ({ exportUrl, title, exportFormats, csv = false, full = false }) => {
+const ExportLink = ({ exportUrl, title, exportFormats, csv=false, full=false }) => {
   return (
     <span className="dropdown">
       <button className="element-btn-link btn-link fa fa-download" title={title} data-toggle="dropdown"></button>
@@ -144,8 +144,8 @@ const ExportLink = ({ exportUrl, title, exportFormats, csv = false, full = false
         {
           exportFormats.map(([key, label], index) => <li key={index}>
             <a href={`${exportUrl}${key}/`}
-              target={['pdf', 'html'].includes(key) ? '_blank' : '_self'}
-              rel="noreferrer">{label}</a>
+               target={['pdf', 'html'].includes(key) ? '_blank' : '_self'}
+               rel="noreferrer">{label}</a>
           </li>)
         }
       </ul>
@@ -169,7 +169,7 @@ const ExtendLink = ({ extend, onClick }) => {
   })
 
   const title = extend ? gettext('Show less')
-    : gettext('Show more')
+                       : gettext('Show more')
 
   return <Link className={className} title={title} onClick={onClick} />
 }
@@ -181,9 +181,14 @@ ExtendLink.propTypes = {
 
 const CodeLink = ({ className, uri, onClick, order }) => {
   return (
-    <><Link onClick={onClick}>
-      <code className={className}>{uri}</code>
-    </Link>{order !== undefined && order !== null ? <code className="code-order ng-binding">{order}</code> : null}</>
+    <>
+      <Link onClick={onClick}>
+        <code className={className}>{uri}</code>
+      </Link>
+      {order !== undefined && order !== null ? (
+        <>{' '}<code className="code-order ng-binding">{order}</code></>
+      ) : null}
+    </>
   )
 }
 
@@ -236,7 +241,5 @@ ShowLink.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-export {
-  EditLink, CopyLink, AddLink, AvailableLink, LockedLink, ShowElementsLink,
-  NestedLink, ExportLink, ExtendLink, CodeLink, ErrorLink, WarningLink, ShowLink
-}
+export { EditLink, CopyLink, AddLink, AvailableLink, LockedLink, ShowElementsLink,
+         NestedLink, ExportLink, ExtendLink, CodeLink, ErrorLink, WarningLink, ShowLink }

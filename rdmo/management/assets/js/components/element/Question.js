@@ -10,8 +10,8 @@ import { EditLink, CopyLink, LockedLink, ExportLink, CodeLink } from '../common/
 import { ReadOnlyIcon } from '../common/Icons'
 import { Drag, Drop } from '../common/DragAndDrop'
 
-const Question = ({ config, question, elementActions, display = 'list', indent = 0,
-  filter = false, filterEditors = false, order }) => {
+const Question = ({ config, question, elementActions, display='list', indent=0,
+                    filter=false, filterEditors=false, order }) => {
 
   const showElement = filterElement(config, filter, false, filterEditors, question)
 
@@ -21,7 +21,7 @@ const Question = ({ config, question, elementActions, display = 'list', indent =
 
   const fetchEdit = () => elementActions.fetchElement('questions', question.id)
   const fetchCopy = () => elementActions.fetchElement('questions', question.id, 'copy')
-  const toggleLocked = () => elementActions.storeElement('questions', { ...question, locked: !question.locked })
+  const toggleLocked = () => elementActions.storeElement('questions', {...question, locked: !question.locked })
 
   const fetchAttribute = () => elementActions.fetchElement('attributes', question.attribute)
   const fetchCondition = (index) => elementActions.fetchElement('conditions', question.conditions[index])
@@ -34,9 +34,9 @@ const Question = ({ config, question, elementActions, display = 'list', indent =
         <EditLink title={gettext('Edit question')} href={editUrl} onClick={fetchEdit} />
         <CopyLink title={gettext('Copy question')} href={copyUrl} onClick={fetchCopy} />
         <LockedLink title={question.locked ? gettext('Unlock question') : gettext('Lock question')}
-          locked={question.locked} onClick={toggleLocked} disabled={question.read_only} />
+                    locked={question.locked} onClick={toggleLocked} disabled={question.read_only} />
         <ExportLink title={gettext('Export question')} exportUrl={exportUrl}
-          exportFormats={config.settings.export_formats} full={true} />
+                    exportFormats={config.settings.export_formats} full={true} />
         <Drag element={question} show={display == 'nested'} />
       </div>
       <div>
@@ -77,7 +77,7 @@ const Question = ({ config, question, elementActions, display = 'list', indent =
     case 'list':
       return showElement && (
         <li className="list-group-item">
-          {elementNode}
+          { elementNode }
         </li>
       )
     case 'nested':
@@ -87,7 +87,7 @@ const Question = ({ config, question, elementActions, display = 'list', indent =
             showElement && (
               <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
                 <div className="panel-body">
-                  {elementNode}
+                  { elementNode }
                 </div>
               </div>
             )
