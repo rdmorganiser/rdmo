@@ -44,7 +44,7 @@ const Section = ({ config, section, configActions, elementActions, display='list
         <AddLink title={gettext('Add page')} onClick={createPage} disabled={section.read_only} />
         <LockedLink title={section.locked ? gettext('Unlock section')
                                           : gettext('Lock section')}
-          locked={section.locked} onClick={toggleLocked} disabled={section.read_only} />
+                    locked={section.locked} onClick={toggleLocked} disabled={section.read_only} />
         <ExportLink title={gettext('Export section')} exportUrl={exportUrl}
                     exportFormats={config.settings.export_formats} full={true} />
         <Drag element={section} show={display == 'nested'} />
