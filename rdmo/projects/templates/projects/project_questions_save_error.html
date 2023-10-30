@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load core_tags %}
 
-    <div class="text-danger" ng-show="service.error">
+    <div class="text-danger" ng-show="service.error.statusText && service.error.status">
         <p>
             {% trans 'An error occurred while saving the answer. Please contact support if this problem persists.' %}
         </p>
