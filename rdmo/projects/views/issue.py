@@ -33,13 +33,14 @@ class IssueDetailView(ObjectPermissionMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         project = self.get_object().project
+        project.catalog.prefetch_elements()
         conditions = self.get_object().task.conditions.all()
 
         sources = []
         for condition in conditions:
             sources.append({
                 'source': condition.source,
-                'questions': condition.source.questions.filter(questionset__section__catalog=project.catalog),
+                'questions': filter(lambda q: q.attribute == condition.source, project.catalog.questions),
                 'values': condition.source.values.filter(project=project, snapshot=None)
             })
 
