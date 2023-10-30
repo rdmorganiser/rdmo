@@ -24,6 +24,8 @@
                     ng-change="service.changed(value, true)"
                     ng-class="{'default-value': service.isDefaultValue(question, value)}"/>
             </div>
+
+            {% include 'projects/project_questions_value_errors.html' %}
         </div>
 
         <div ng-if="question.is_collection">

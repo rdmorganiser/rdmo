@@ -706,6 +706,9 @@ angular.module('project_questions')
     };
 
     service.storeValue = function(value, question, set_prefix, set_index, collection_index) {
+        // reset value errors
+        value.errors = []
+
         if (angular.isDefined(value.removed) && value.removed) {
             // remove additional_input from unselected checkboxes
             value.additional_input = {};
@@ -826,10 +829,16 @@ angular.module('project_questions')
             }, function (response) {
                 if (response.status == 500) {
                     service.error = response;
+                } else if (response.status == 400) {
+                    service.error = true;
+                    value.errors = Object.keys(response.data);
+                } else if (response.status == 404) {
+                    service.error = true;
+                    value.errors = ['not_found']
                 }
             })
         }
-};
+    };
 
     service.storeValues = function() {
         var promises = [];

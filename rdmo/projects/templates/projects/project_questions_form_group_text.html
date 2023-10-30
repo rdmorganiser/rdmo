@@ -21,6 +21,8 @@
                     ng-disabled="service.project.read_only"
                     ng-change="service.changed(value)"
                     ng-class="{'default-value': service.isDefaultValue(question, value)}">
+
+                {% include 'projects/project_questions_value_errors.html' %}
             </div>
         </div>
 

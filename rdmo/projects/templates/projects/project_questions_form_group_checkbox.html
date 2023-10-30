@@ -24,6 +24,9 @@
                         ng-disabled="service.project.read_only"
                         ng-change="service.changed(service.values[question.attribute][valueset.set_prefix][valueset.set_index][$index])" />
                 </label>
+                <div ng-init="value = service.values[question.attribute][valueset.set_prefix][valueset.set_index][$index]">
+                    {% include 'projects/project_questions_value_errors.html' %}
+                </div>
             </div>
         </div>
     </div>

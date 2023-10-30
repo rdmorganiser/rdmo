@@ -1,0 +1,21 @@
+{% load i18n %}
+
+    <ul class="help-block list-unstyled" ng-if="value.errors.length > 0">
+        <li class="text-danger" ng-repeat="error in value.errors">
+            <span ng-show="error == 'conflict'">
+                {% blocktrans trimmed %}
+                This field could not be saved, since somebody else did so while you were editing.
+                You will need to reload the page to make changes, but your input will be overwritten.
+                {% endblocktrans %}
+            </span>
+            <span ng-show="error == 'not_found'">
+                {% blocktrans trimmed %}
+                This field could not be saved, since somebody else removed it while you were editing.
+                You will need to reload the page to proceed, but your input will be lost.
+                {% endblocktrans %}
+            </span>
+            <span ng-show="error == 'quota'">
+                {% trans 'You reached the file quota for this project.' %}
+            </span>
+        </li>
+    </ul>
