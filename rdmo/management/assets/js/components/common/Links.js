@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import isEmpty from 'lodash/isEmpty'
+import isNil from 'lodash/isNil'
 import isUndefined from 'lodash/isUndefined'
 
 import Link from 'rdmo/core/assets/js/components/Link'
@@ -185,7 +186,7 @@ const CodeLink = ({ className, uri, onClick, order }) => {
       <Link onClick={onClick}>
         <code className={className}>{uri}</code>
       </Link>
-      {order !== undefined && order !== null ? (
+      {!isNil(order) ? (
         <>{' '}<code className="code-order ng-binding">{order}</code></>
       ) : null}
     </>
