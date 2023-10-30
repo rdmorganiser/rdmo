@@ -1067,11 +1067,19 @@ angular.module('project_questions')
         service.values[attribute][set_prefix][set_index][collection_index].autocomplete_text = '';
         service.values[attribute][set_prefix][set_index][collection_index].autocomplete_locked = false;
         service.values[attribute][set_prefix][set_index][collection_index].changed = true;
+
+        if (service.settings.project_questions_autosave) {
+            service.save(false);
+        }
     };
 
     service.removeValue = function(attribute, set_prefix, set_index, collection_index) {
         service.values[attribute][set_prefix][set_index][collection_index].removed = true;
         service.values[attribute][set_prefix][set_index][collection_index].changed = true;
+
+        if (service.settings.project_questions_autosave) {
+            service.save(false);
+        }
     };
 
     service.openValueSetFormModal = function(questionset, set_prefix, set_index) {
