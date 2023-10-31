@@ -1,5 +1,7 @@
 import { applyMiddleware, createStore } from 'redux'
+import Cookies from 'js-cookie'
 import thunk from 'redux-thunk'
+import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 
 import { parseLocation } from '../utils/location'
@@ -11,6 +13,15 @@ import * as elementActions from '../actions/elementActions'
 
 export default function configureStore() {
   const middlewares = [thunk]
+
+  // empty localStorage in new session
+  const currentStoreId = Cookies.get('storeid')
+  const localStoreId = localStorage.getItem('rdmo.storeid')
+
+  if (isEmpty(localStoreId) || localStoreId !== currentStoreId) {
+    localStorage.clear()
+    localStorage.setItem('rdmo.storeid', currentStoreId)
+  }
 
   if (process.env.NODE_ENV === 'development') {
     const { logger } = require('redux-logger')
@@ -28,7 +39,6 @@ export default function configureStore() {
   // load: restore the config from the local storage
   const updateConfigFromLocalStorage = () => {
     const ls = {...localStorage}
-
     Object.entries(ls).forEach(([lsPath, lsValue]) => {
       const path = lsPath.replace('rdmo.management.config.', '')
       let value
@@ -46,9 +56,11 @@ export default function configureStore() {
     })
   }
 
+  let currentSiteId
   // load, popstate: fetch elements depending on the location
   const fetchElementsFromLocation = () => {
     const baseUrl = store.getState().config.baseUrl
+    currentSiteId = store.getState().config.currentSite?.id.toString() || ''
     const pathname = window.location.pathname
     let { elementType, elementId, elementAction } = parseLocation(baseUrl, pathname)
 
@@ -69,7 +81,13 @@ export default function configureStore() {
   // this event is triggered when the page first loads
   window.addEventListener('load', () => {
     updateConfigFromLocalStorage()
-    fetchConfig().then(() => fetchElementsFromLocation())
+    fetchConfig().then(() => {
+      fetchElementsFromLocation()
+      if (!isEmpty(currentSiteId) && isEmpty(store.getState().config.filter) && store.getState().config.settings.multisite) {
+        store.dispatch(configActions.updateConfig('filter.sites', currentSiteId))
+      }
+    })
+
   })
 
   // this event is triggered when when the forward/back buttons are used
