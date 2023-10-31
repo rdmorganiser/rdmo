@@ -351,7 +351,7 @@ def copy_model(instance, **kwargs):
 
 
 def human2bytes(string):
-    if not string:
+    if not string or string == '0':
         return 0
 
     m = re.match(r'([0-9.]+)\s*([A-Za-z]+)', string)
