@@ -17,14 +17,14 @@ class ValueConflictValidator:
         if serializer.instance:
             # for an update, check if the value was updated in the meantime
             updated = serializer.context['view'].request.data.get('updated')
-            if parse_datetime(updated) < serializer.instance.updated:
+            if updated is not None and parse_datetime(updated) < serializer.instance.updated:
                 raise serializers.ValidationError({
                     'conflict': [_('A newer version of this value was found.')]
                 })
         else:
             # for a new value, check if there is already a value with the same attribute and indexes
             try:
-                serializer.context['view'].get_queryset().get(
+                serializer.context['view'].project.values.filter(snapshot=None).get(
                     attribute=data.get('attribute'),
                     set_prefix=data.get('set_prefix'),
                     set_index=data.get('set_index'),
@@ -47,7 +47,6 @@ class ValueQuotaValidator:
                 serializer.context['view'].get_object()
             except AssertionError as e:
                 project = serializer.context['view'].project
-
                 if project.file_size > human2bytes(settings.PROJECT_FILE_QUOTA):
                     raise serializers.ValidationError({
                         'quota': [_('The file quota for this project has been reached.')]
