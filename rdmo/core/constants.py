@@ -60,6 +60,7 @@ PERMISSIONS = {
 }
 
 HUMAN2BYTES_MAPPER = {
+    "b": {"base": 1000, "power": 0},
     "kb": {"base": 1000, "power": 1},
     "k": {"base": 1000, "power": 1},
     "mb": {"base": 1000, "power": 2},
