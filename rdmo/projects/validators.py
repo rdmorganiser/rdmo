@@ -42,12 +42,9 @@ class ValueQuotaValidator:
     requires_context = True
 
     def __call__(self, data, serializer):
-        if data.get('value_type') == VALUE_TYPE_FILE:
-            try:
-                serializer.context['view'].get_object()
-            except AssertionError as e:
-                project = serializer.context['view'].project
-                if project.file_size > human2bytes(settings.PROJECT_FILE_QUOTA):
-                    raise serializers.ValidationError({
-                        'quota': [_('The file quota for this project has been reached.')]
-                    }) from e
+        if serializer.context['view'].action == 'create' and data.get('value_type') == VALUE_TYPE_FILE:
+            project = serializer.context['view'].project
+            if project.file_size > human2bytes(settings.PROJECT_FILE_QUOTA):
+                raise serializers.ValidationError({
+                    'quota': [_('The file quota for this project has been reached.')]
+                })
