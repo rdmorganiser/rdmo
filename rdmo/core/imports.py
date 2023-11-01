@@ -1,3 +1,4 @@
+import difflib
 import logging
 import tempfile
 import time
@@ -261,3 +262,34 @@ def check_permissions(instance, element, user):
         )
         logger.info(message)
         element['errors'].append(message)
+
+
+def check_diff_instance(instance: dict, element: dict, check=False) -> dict[str, list[str]]:
+    if not check:
+        return {}
+    overlapping_keys = set(element.keys()) & set(instance.keys())
+
+    diffs = {}
+    for key in overlapping_keys:
+        element_val = element[key]
+        instance_val = instance[key]
+        if element_val is instance_val:
+            continue
+        if element_val == instance_val:
+            continue
+
+        if isinstance(element_val, str) and isinstance(instance_val, str):
+            diff = diff_str_str(element_val, instance_val)
+            if not diff:
+                continue
+
+            diffs[key] = diff
+    return diffs
+
+
+def diff_str_str(value: str, other: str) -> list[str]:
+    """ checks the diff between two strings """
+    d = difflib.Differ()
+    diff = d.compare(value.splitlines(keepends=True), other.splitlines(keepends=True))
+    ret = list(diff)
+    return ret
