@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 
-from django.db import migrations
+from django.db import connection, migrations
 
 
 def run_data_migration(apps, schema_editor):
@@ -38,6 +38,20 @@ def run_data_migration(apps, schema_editor):
             question.page = pages[question.questionset_id]
             question.questionset_id = None
             question.save()
+
+    if connection.vendor == 'postgresql':
+        # reset the autoincrement value for the page and questionset tables
+        with connection.cursor() as cursor:
+            cursor.execute('''
+                SELECT SETVAL(
+                    pg_get_serial_sequence('questions_page', 'id'),
+                    (SELECT MAX(id) FROM questions_page)
+                );
+                SELECT SETVAL(
+                    pg_get_serial_sequence('questions_questionset', 'id'),
+                    (SELECT MAX(id) FROM questions_questionset)
+                );
+            ''')
 
 
 class Migration(migrations.Migration):

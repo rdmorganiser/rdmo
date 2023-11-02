@@ -50,7 +50,7 @@ const NestedQuestionSet = ({ config, questionset, configActions, elementActions 
                                options={getUriPrefixes(questionset.elements)} />
             </div>
           </div>
-          <div className="checkboxes">
+          <div className="mt-10">
             <span className="mr-10">{gettext('Show elements:')}</span>
             <Link className="mr-10" onClick={toggleQuestionSets}>{gettext('Question sets')}</Link>
           </div>

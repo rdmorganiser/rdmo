@@ -1,5 +1,11 @@
 # Changelog
 
+## [RDMO 2.0.2](https://github.com/rdmorganiser/rdmo/compare/2.0.1...2.0.2) (Nov 2, 2023)
+
+* Fix migration to RDMO 2.0 for PostgreSQL
+* Fix Shibboleth urls
+* Fix issue view
+* Fix margins in management interface
 
 ## [RDMO 2.0.1](https://github.com/rdmorganiser/rdmo/compare/2.0.0...2.0.1) (Oct 9, 2023)
 
