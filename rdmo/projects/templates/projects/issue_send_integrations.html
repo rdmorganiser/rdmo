@@ -18,7 +18,7 @@
             <td>
                 {% for option in integration.options.all %}
                 {% if not option.secret %}
-                <p>{{ option.key.title }}: {{ option.value }}</p>
+                <p>{{ option.title }}: {{ option.value }}</p>
                 {% endif %}
                 {% endfor %}
 

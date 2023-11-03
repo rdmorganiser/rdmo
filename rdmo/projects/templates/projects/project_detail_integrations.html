@@ -32,7 +32,7 @@
                 <td>
                     {% for option in integration.options.all %}
                     {% if not option.secret %}
-                    {{ option.key.title }}: {{ option.value }}<br />
+                    {{ option.title }}: {{ option.value }}<br />
                     {% endif %}
                     {% endfor %}
 

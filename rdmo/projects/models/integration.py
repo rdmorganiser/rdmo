@@ -36,6 +36,12 @@ class Integration(models.Model):
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.project.pk})
 
+    def get_option_value(self, key):
+        try:
+            return self.options.get(key=key).value
+        except IntegrationOption.DoesNotExist:
+            return None
+
     def save_options(self, options):
         for field in self.provider.fields:
             try:
@@ -77,3 +83,7 @@ class IntegrationOption(models.Model):
 
     def __str__(self):
         return f'{self.integration.project.title} / {self.integration.provider_key} / {self.key} = {self.value}'
+
+    @property
+    def title(self):
+        return self.key.title().replace('_', ' ')
