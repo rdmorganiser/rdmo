@@ -7,6 +7,7 @@ import Errors from './common/Errors'
 import Fields from './common/Fields'
 import Form from './common/Form'
 import Warnings from './common/Warnings'
+import Diffs from './common/Diffs'
 
 import { codeClass } from '../../constants/elements'
 
@@ -35,6 +36,7 @@ const ImportAttribute = ({ config, attribute, importActions }) => {
           <Fields element={attribute} />
           <Warnings element={attribute} />
           <Errors element={attribute} />
+          <Diffs element={attribute} />
         </>
       }
     </li>
