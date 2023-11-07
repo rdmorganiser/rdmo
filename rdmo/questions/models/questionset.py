@@ -185,7 +185,7 @@ class QuestionSet(Model, TranslationMixin):
     class Meta:
         ordering = ('uri', )
         verbose_name = _('Question set')
-        verbose_name_plural = _('Question set')
+        verbose_name_plural = _('Question sets')
 
     def __str__(self):
         return self.uri
