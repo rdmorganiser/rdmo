@@ -44,11 +44,8 @@ def import_attribute(element, save=False, user=None):
 
     if element['updated']:
 
-        diffs = check_diff_instance(original_attribute, element, check=True)
-        if diffs:
-            # breakpoint()
-            diff_warning = "\n".join([f"{k}:{' '.join(val)}" for k, val in diffs.items()])
-            element['diffs'] = diff_warning
+        diffs = check_diff_instance(element, original_attribute, check=True)
+        element['diffs'] = diffs
 
     if save:
         attribute.save()
