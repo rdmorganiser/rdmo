@@ -5,6 +5,7 @@ import isString from 'lodash/isString'
 import isUndefined from 'lodash/isUndefined'
 import truncate from 'lodash/truncate'
 import uniqueId from 'lodash/uniqueId'
+import Diffs from './Diffs'
 
 import { codeClass } from '../../../constants/elements'
 
@@ -21,7 +22,8 @@ const excludeKeys = [
   'uri_path',
   'uri_prefix',
   'valid',
-  'warnings'
+  'warnings',
+  'diffs'
 ]
 
 const Fields = ({ element }) => {
@@ -50,6 +52,9 @@ const Fields = ({ element }) => {
                     isString(value) && <span>{truncate(value, {length: 512})}</span>
                   }
                 </div>
+                {
+                    <Diffs element={element} field={key} />
+                  }
               </div>
             )
           }
