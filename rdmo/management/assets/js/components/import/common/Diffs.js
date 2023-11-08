@@ -1,23 +1,26 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import isEmpty from 'lodash/isEmpty'
+import ReactDiffViewer from 'react-diff-viewer-continued'
 
 
-const Diffs = ({ element }) => {
-  return !isEmpty(element.difftables) && <div className="row text-danger mt-10">
-    <div className="col-sm-3 text-right">
-      {gettext('Diffs')}
+const Diffs = ({ element, field }) => {
+  return !isEmpty(element.diffs[field]) && <div className="col-sm-12">
+    <ReactDiffViewer
+        oldValue={element.diffs[field].old_value}
+        newValue={element.diffs[field].new_value}
+        splitView={true}
+        hideLineNumbers={true}
+        leftTitle={gettext('Current')}
+        rightTitle={gettext('Imported')}
+        >
+        </ReactDiffViewer>
     </div>
-    <div className="col-sm-9">
-    {
-      element.difftables
-    }
-    </div>
-  </div>
 }
 
 Diffs.propTypes = {
-  element: PropTypes.object.isRequired
+  element: PropTypes.object.isRequired,
+  field: PropTypes.string.isRequired,
 }
 
 export default Diffs
