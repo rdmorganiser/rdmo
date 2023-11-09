@@ -2,6 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import uniqueId from 'lodash/uniqueId'
 import isEmpty from 'lodash/isEmpty'
+import get from 'lodash/get'
+
+import { getUriPrefixes } from '../../utils/filter'
+import { FilterString, FilterUriPrefix } from '../common/Filter'
+import { Checkbox } from '../common/Checkboxes'
 
 import ImportAttribute from '../import/ImportAttribute'
 import ImportCatalog from '../import/ImportCatalog'
@@ -19,12 +24,39 @@ import { codeClass, verboseNames } from '../../constants/elements'
 
 const Import = ({ config, imports, importActions }) => {
   const { elements, success } = imports
+  const updateFilterString = (value) => importActions.updateConfig('filter.import.elements.search', value)
+  const updateFilterUriPrefix = (value) => importActions.updateConfig('filter.import.elements.uri_prefix', value)
+  const updateDisplayCatalogURI = (value) => importActions.updateConfig('display.uri.catalogs', value)
+  const updatedElements = elements.filter(element => element.updated)
 
   return (
     <div className="panel panel-default panel-import">
       <div className="panel-heading">
         <strong>{gettext('Import')}</strong>
+        <div className="pull-right">
+          {
+            updatedElements.length > 0 && <p>Updated {updatedElements.length} </p>
+          }
+        </div>
       </div>
+    <div className="panel-body">
+    <div className="row">
+      <div className={'col-sm-8'}>
+        <FilterString value={get(config, 'filter.catalogs.search', '')} onChange={updateFilterString}
+                      placeholder={gettext('Filter uri')} />
+      </div>
+      <div className="col-sm-4">
+        <FilterUriPrefix value={get(config, 'filter.catalogs.uri_prefix', '')} onChange={updateFilterUriPrefix}
+                        options={getUriPrefixes(elements)} />
+      </div>
+
+    </div>
+    <div className="checkboxes">
+      <span className="mr-10">{gettext('Show URIs:')}</span>
+      <Checkbox label={<code className="code-questions">{gettext('Catalogs')}</code>}
+                value={get(config, 'display.uri.catalogs', true)} onChange={updateDisplayCatalogURI} />
+    </div>
+    </div>
 
       <ul className="list-group">
       {
