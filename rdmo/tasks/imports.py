@@ -4,6 +4,8 @@ from django.contrib.sites.models import Site
 
 from rdmo.core.imports import (
     check_permissions,
+    get_or_return_instance,
+    make_import_info_msg,
     set_common_fields,
     set_foreign_field,
     set_lang_field,
@@ -18,10 +20,11 @@ logger = logging.getLogger(__name__)
 
 
 def import_task(element, save=False, user=None):
-    try:
-        task = Task.objects.get(uri=element.get('uri'))
-    except Task.DoesNotExist:
-        task = Task()
+    task, _created = get_or_return_instance(Task, uri=element.get('uri'))
+    element['created'] = _created
+    element['updated'] = not _created
+
+    _msg = make_import_info_msg(task._meta.verbose_name, _created, uri=element.get('uri'))
 
     set_common_fields(task, element)
 
@@ -42,14 +45,11 @@ def import_task(element, save=False, user=None):
 
     check_permissions(task, element, user)
 
-    if save and not element.get('errors'):
-        if task.id:
-            element['updated'] = True
-            logger.info('Task %s updated.', element.get('uri'))
-        else:
-            element['created'] = True
-            logger.info('Task created with uri %s.', element.get('uri'))
+    if element.get('errors'):
+        return task
 
+    if save:
+        logger.info(_msg)
         task.save()
         set_m2m_instances(task, 'catalogs', element)
         set_m2m_instances(task, 'conditions', element)
