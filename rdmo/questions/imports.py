@@ -4,6 +4,8 @@ from django.contrib.sites.models import Site
 
 from rdmo.core.imports import (
     check_permissions,
+    get_or_return_instance,
+    make_import_info_msg,
     set_common_fields,
     set_foreign_field,
     set_lang_field,
@@ -32,10 +34,12 @@ logger = logging.getLogger(__name__)
 
 
 def import_catalog(element, save=False, user=None):
-    try:
-        catalog = Catalog.objects.get(uri=element.get('uri'))
-    except Catalog.DoesNotExist:
-        catalog = Catalog()
+
+    catalog, _created = get_or_return_instance(Catalog, uri=element.get('uri'))
+    element['created'] = _created
+    element['updated'] = not _created
+
+    _msg = make_import_info_msg(catalog._meta.verbose_name, _created, uri=element.get('uri'))
 
     set_common_fields(catalog, element)
 
@@ -50,14 +54,11 @@ def import_catalog(element, save=False, user=None):
 
     check_permissions(catalog, element, user)
 
-    if save and not element.get('errors'):
-        if catalog.id:
-            element['updated'] = True
-            logger.info('Catalog %s updated.', element.get('uri'))
-        else:
-            element['created'] = True
-            logger.info('Catalog created with uri %s.', element.get('uri'))
+    if element.get('errors'):
+        return catalog
 
+    if save:
+        logger.debug(_msg)
         catalog.save()
         set_m2m_through_instances(catalog, 'sections', element, 'catalog', 'section', 'catalog_sections')
         catalog.sites.add(Site.objects.get_current())
@@ -67,10 +68,12 @@ def import_catalog(element, save=False, user=None):
 
 
 def import_section(element, save=False, user=None):
-    try:
-        section = Section.objects.get(uri=element.get('uri'))
-    except Section.DoesNotExist:
-        section = Section()
+
+    section, _created = get_or_return_instance(Section, uri=element.get('uri'))
+    element['created'] = _created
+    element['updated'] = not _created
+
+    _msg = make_import_info_msg(section._meta.verbose_name, _created, uri=element.get('uri'))
 
     set_common_fields(section, element)
 
@@ -81,14 +84,11 @@ def import_section(element, save=False, user=None):
 
     check_permissions(section, element, user)
 
-    if save and not element.get('errors'):
-        if section.id:
-            element['updated'] = True
-            logger.info('Section %s updated.', element.get('uri'))
-        else:
-            element['created'] = True
-            logger.info('Section created with uri %s.', element.get('uri'))
+    if element.get('errors'):
+        return section
 
+    if save:
+        logger.info(_msg)
         section.save()
         set_reverse_m2m_through_instance(section, 'catalog', element, 'section', 'catalog', 'section_catalogs')
         set_m2m_through_instances(section, 'pages', element, 'section', 'page', 'section_pages')
@@ -98,10 +98,12 @@ def import_section(element, save=False, user=None):
 
 
 def import_page(element, save=False, user=None):
-    try:
-        page = Page.objects.get(uri=element.get('uri'))
-    except Page.DoesNotExist:
-        page = Page()
+
+    page, _created = get_or_return_instance(Page, uri=element.get('uri'))
+    element['created'] = _created
+    element['updated'] = not _created
+
+    _msg = make_import_info_msg(page._meta.verbose_name, _created, uri=element.get('uri'))
 
     set_common_fields(page, element)
     set_foreign_field(page, 'attribute', element)
@@ -117,14 +119,11 @@ def import_page(element, save=False, user=None):
 
     check_permissions(page, element, user)
 
-    if save and not element.get('errors'):
-        if page.id:
-            element['updated'] = True
-            logger.info('QuestionSet %s updated.', element.get('uri'))
-        else:
-            element['created'] = True
-            logger.info('QuestionSet created with uri %s.', element.get('uri'))
+    if element.get('errors'):
+        return page
 
+    if save:
+        logger.info(_msg)
         page.save()
         set_m2m_instances(page, 'conditions', element)
         set_reverse_m2m_through_instance(page, 'section', element, 'page', 'section', 'page_sections')
@@ -136,10 +135,12 @@ def import_page(element, save=False, user=None):
 
 
 def import_questionset(element, save=False, user=None):
-    try:
-        questionset = QuestionSet.objects.get(uri=element.get('uri'))
-    except QuestionSet.DoesNotExist:
-        questionset = QuestionSet()
+
+    questionset, _created = get_or_return_instance(QuestionSet, uri=element.get('uri'))
+    element['created'] = _created
+    element['updated'] = not _created
+
+    _msg = make_import_info_msg(questionset._meta.verbose_name, _created, uri=element.get('uri'))
 
     set_common_fields(questionset, element)
     set_foreign_field(questionset, 'attribute', element)
@@ -154,14 +155,11 @@ def import_questionset(element, save=False, user=None):
 
     check_permissions(questionset, element, user)
 
-    if save and not element.get('errors'):
-        if questionset.id:
-            element['updated'] = True
-            logger.info('QuestionSet %s updated.', element.get('uri'))
-        else:
-            element['created'] = True
-            logger.info('QuestionSet created with uri %s.', element.get('uri'))
+    if element.get('errors'):
+        return questionset
 
+    if save:
+        logger.info(_msg)
         questionset.save()
         set_m2m_instances(questionset, 'conditions', element)
         set_reverse_m2m_through_instance(questionset, 'page', element, 'questionset', 'page', 'questionset_pages')
@@ -174,10 +172,12 @@ def import_questionset(element, save=False, user=None):
 
 
 def import_question(element, save=False, user=None):
-    try:
-        question = Question.objects.get(uri=element.get('uri'))
-    except Question.DoesNotExist:
-        question = Question()
+
+    question, _created = get_or_return_instance(Question, uri=element.get('uri'))
+    element['created'] = _created
+    element['updated'] = not _created
+
+    _msg = make_import_info_msg(question._meta.verbose_name, _created, uri=element.get('uri'))
 
     set_common_fields(question, element)
     set_foreign_field(question, 'attribute', element)
@@ -210,14 +210,11 @@ def import_question(element, save=False, user=None):
 
     check_permissions(question, element, user)
 
-    if save and not element.get('errors'):
-        if question.id:
-            element['updated'] = True
-            logger.info('Question %s updated.', element.get('uri'))
-        else:
-            element['created'] = True
-            logger.info('Question created with uri %s.', element.get('uri'))
+    if element.get('errors'):
+        return question
 
+    if save:
+        logger.info(_msg)
         question.save()
         set_reverse_m2m_through_instance(question, 'page', element, 'question', 'page', 'question_pages')
         set_reverse_m2m_through_instance(question, 'questionset', element, 'question', 'questionset', 'question_questionsets')  # noqa: E501
