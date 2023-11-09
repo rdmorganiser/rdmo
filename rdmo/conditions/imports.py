@@ -2,7 +2,14 @@ import logging
 
 from django.contrib.sites.models import Site
 
-from rdmo.core.imports import check_permissions, set_common_fields, set_foreign_field, validate_instance
+from rdmo.core.imports import (
+    check_permissions,
+    get_or_return_instance,
+    make_import_info_msg,
+    set_common_fields,
+    set_foreign_field,
+    validate_instance,
+)
 
 from .models import Condition
 from .validators import ConditionLockedValidator, ConditionUniqueURIValidator
@@ -11,10 +18,12 @@ logger = logging.getLogger(__name__)
 
 
 def import_condition(element, save=False, user=None):
-    try:
-        condition = Condition.objects.get(uri=element.get('uri'))
-    except Condition.DoesNotExist:
-        condition = Condition()
+
+    condition, _created = get_or_return_instance(Condition, uri=element.get('uri'))
+    element['created'] = _created
+    element['updated'] = not _created
+
+    _msg = make_import_info_msg(condition._meta.verbose_name, _created, uri=element.get('uri'))
 
     set_common_fields(condition, element)
 
@@ -28,14 +37,11 @@ def import_condition(element, save=False, user=None):
 
     check_permissions(condition, element, user)
 
-    if save and not element.get('errors'):
-        if condition.id:
-            element['updated'] = True
-            logger.info('Condition %s updated.', element.get('uri'))
-        else:
-            element['created'] = True
-            logger.info('Condition created with uri %s.', element.get('uri'))
+    if element.get('errors'):
+        return condition
 
+    if save:
+        logger.info(_msg)
         condition.save()
         condition.editors.add(Site.objects.get_current())
 
