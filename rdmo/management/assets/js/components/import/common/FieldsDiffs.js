@@ -7,8 +7,8 @@ import ReactDiffViewer from 'react-diff-viewer-continued'
 const Diffs = ({ element, field }) => {
   return !isEmpty(element.diffs[field]) && <div className="col-sm-12">
     <ReactDiffViewer
-        oldValue={element.diffs[field].old_value}
-        newValue={element.diffs[field].new_value}
+        oldValue={element.diffs[field].new_value}
+        newValue={element.diffs[field].old_value}
         splitView={true}
         hideLineNumbers={true}
         leftTitle={gettext('Current')}
