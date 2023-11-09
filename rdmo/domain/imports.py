@@ -1,11 +1,11 @@
-import copy
 import logging
 
 from django.contrib.sites.models import Site
 
 from rdmo.core.imports import (
-    check_diff_instance,
     check_permissions,
+    get_or_return_instance,
+    make_import_info_msg,
     set_common_fields,
     set_foreign_field,
     validate_instance,
@@ -18,15 +18,12 @@ logger = logging.getLogger(__name__)
 
 
 def import_attribute(element, save=False, user=None):
-    try:
-        attribute = Attribute.objects.get(uri=element.get('uri'))
-        original_attribute = copy.deepcopy(vars(attribute))
-        element['updated'] = True
-        _msg = 'Attribute %s updated.', element.get('uri')
-    except Attribute.DoesNotExist:
-        attribute = Attribute()
-        element['created'] = True
-        _msg = 'Attribute created with uri %s.', element.get('uri')
+
+    attribute, _created = get_or_return_instance(Attribute, uri=element.get('uri'))
+    element['created'] = _created
+    element['updated'] = not _created
+
+    _msg = make_import_info_msg(attribute._meta.verbose_name, _created, uri=element.get('uri'))
 
     set_common_fields(attribute, element)
 
@@ -42,14 +39,9 @@ def import_attribute(element, save=False, user=None):
     if element.get('errors'):
         return attribute
 
-    if element['updated']:
-
-        diffs = check_diff_instance(element, original_attribute, check=True)
-        element['diffs'] = diffs
-
     if save:
+        logger.debug(_msg)
         attribute.save()
         attribute.editors.add(Site.objects.get_current())
-        logger.debug(_msg)
 
     return attribute

@@ -4,6 +4,8 @@ from django.contrib.sites.models import Site
 
 from rdmo.core.imports import (
     check_permissions,
+    get_or_return_instance,
+    make_import_info_msg,
     set_common_fields,
     set_lang_field,
     set_m2m_instances,
@@ -24,10 +26,12 @@ logger = logging.getLogger(__name__)
 
 
 def import_optionset(element, save=False, user=None):
-    try:
-        optionset = OptionSet.objects.get(uri=element.get('uri'))
-    except OptionSet.DoesNotExist:
-        optionset = OptionSet()
+
+    optionset, _created = get_or_return_instance(OptionSet, uri=element.get('uri'))
+    element['created'] = _created
+    element['updated'] = not _created
+
+    _msg = make_import_info_msg(optionset._meta.verbose_name, _created, uri=element.get('uri'))
 
     set_common_fields(optionset, element)
 
@@ -38,14 +42,11 @@ def import_optionset(element, save=False, user=None):
 
     check_permissions(optionset, element, user)
 
-    if save and not element.get('errors'):
-        if optionset.id:
-            element['updated'] = True
-            logger.info('OptionSet %s updated.', element.get('uri'))
-        else:
-            element['created'] = True
-            logger.info('OptionSet created with uri %s.', element.get('uri'))
+    if element.get('errors'):
+        return optionset
 
+    if save:
+        logger.info(_msg)
         optionset.save()
         set_m2m_instances(optionset, 'conditions', element)
         set_m2m_through_instances(optionset, 'options', element, 'optionset', 'option', 'optionset_options')
@@ -55,10 +56,13 @@ def import_optionset(element, save=False, user=None):
 
 
 def import_option(element, save=False, user=None):
-    try:
-        option = Option.objects.get(uri=element.get('uri'))
-    except Option.DoesNotExist:
-        option = Option()
+
+    option, _created = get_or_return_instance(Option, uri=element.get('uri'))
+    element['created'] = _created
+    element['updated'] = not _created
+
+    _msg = make_import_info_msg(option._meta.verbose_name, _created, uri=element.get('uri'))
+
 
     set_common_fields(option, element)
 
@@ -72,14 +76,11 @@ def import_option(element, save=False, user=None):
 
     check_permissions(option, element, user)
 
-    if save and not element.get('errors'):
-        if option.id:
-            element['updated'] = True
-            logger.info('Option %s updated.', element.get('uri'))
-        else:
-            element['created'] = True
-            logger.info('Option created with uri %s.', element.get('uri'))
+    if element.get('errors'):
+        return option
 
+    if save:
+        logger.info(_msg)
         option.save()
         set_reverse_m2m_through_instance(option, 'optionset', element, 'option', 'optionset', 'option_optionsets')
         option.editors.add(Site.objects.get_current())

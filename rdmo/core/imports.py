@@ -4,14 +4,19 @@ import time
 from os.path import join as pj
 from pathlib import Path
 from random import randint
+from typing import Optional, Tuple
 
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.db import models
 
 from rest_framework.utils import model_meta
 
 from rdmo.core.utils import get_languages
 
 logger = logging.getLogger(__name__)
+
+
+IMPORT_INFO_MSG = 'Importing {model} {uri} from {filename}.'
 
 
 def handle_uploaded_file(filedata):
@@ -38,6 +43,24 @@ def generate_tempfile_name():
     r = randint(10000, 99999)
     fn = pj(tempfile.gettempdir(), 'upload_' + str(t) + '_' + str(r) + '.xml')
     return fn
+
+
+def get_or_return_instance(model: models.Model, uri: Optional[str]=None) -> Tuple[models.Model, bool]:
+    if uri is None:
+        return model(), True
+    try:
+        return model.objects.get(uri=uri), False
+    except model.DoesNotExist:
+        return model(), True
+
+
+def make_import_info_msg(verbose_name: str, created: bool, uri: Optional[str]=None):
+    if uri is None:
+        return "%s, no uri", verbose_name
+    if created:
+        return "%s created with %s", verbose_name, uri
+
+    return "%s %s updated", verbose_name, uri
 
 
 def set_common_fields(instance, element):
