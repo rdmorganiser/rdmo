@@ -28,6 +28,8 @@ const Import = ({ config, imports, importActions }) => {
   const updateFilterUriPrefix = (value) => importActions.updateConfig('filter.import.elements.uri_prefix', value)
   const updateDisplayCatalogURI = (value) => importActions.updateConfig('display.uri.catalogs', value)
   const updatedElements = elements.filter(element => element.updated)
+  const createdElements = elements.filter(element => element.created)
+  const importErrors = elements.filter(element => !isEmpty(element.errors))
 
   return (
     <div className="panel panel-default panel-import">
@@ -35,11 +37,18 @@ const Import = ({ config, imports, importActions }) => {
         <strong>{gettext('Import')}</strong>
         <div className="pull-right">
           {
-            updatedElements.length > 0 && <p>Updated {updatedElements.length} </p>
+            updatedElements.length > -1 && <span>{gettext('Updated')}: {updatedElements.length} </span>
+          }
+          {
+            createdElements.length > -1 && <span>{gettext('Created')}: {createdElements.length} </span>
+          }
+          {
+            importErrors.length > -1 && <span>{gettext('Errors')}: {importErrors.length} </span>
           }
         </div>
       </div>
     <div className="panel-body">
+    {/* TODO: still to implement functions for filter, uri_prefix dropdown, disply checkox etc.. */}
     <div className="row">
       <div className={'col-sm-8'}>
         <FilterString value={get(config, 'filter.catalogs.search', '')} onChange={updateFilterString}
