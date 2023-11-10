@@ -21,6 +21,10 @@ const ImportAttribute = ({ config, attribute, importActions }) => {
         <WarningLink element={attribute} onClick={showFields} />
         <ErrorLink element={attribute} onClick={showFields} />
         <ShowLink element={attribute} onClick={showFields} />
+        {
+          attribute.updated && !attribute.created &&
+          <p className="element-link fa fa-pencil"></p>
+          }
       </div>
       <div className="checkbox">
         <label className="mr-5">
