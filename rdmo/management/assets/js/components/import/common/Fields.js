@@ -5,10 +5,11 @@ import isString from 'lodash/isString'
 import isUndefined from 'lodash/isUndefined'
 import truncate from 'lodash/truncate'
 import uniqueId from 'lodash/uniqueId'
-import Diffs from './FieldsDiffs'
+import isEmpty from 'lodash/isEmpty'
+
 
 import { codeClass } from '../../../constants/elements'
-
+import FieldsDiffs from './FieldsDiffs'
 
 const excludeKeys = [
   'created',
@@ -24,7 +25,7 @@ const excludeKeys = [
   'uri_prefix',
   'valid',
   'warnings',
-  'diffs'
+  'original'
 ]
 
 const Fields = ({ element }) => {
@@ -54,7 +55,8 @@ const Fields = ({ element }) => {
                   }
                 </div>
                 {
-                  element.updated && <Diffs element={element} field={key}/>
+                  isEmpty(element.errors) && !isEmpty(element.original) && element.updated &&
+                  element.original[key] != value && <FieldsDiffs element={element} field={key}/>
                   }
               </div>
             )
