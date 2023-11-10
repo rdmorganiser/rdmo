@@ -852,7 +852,7 @@ angular.module('project_questions')
     service.prev = function() {
         service.error = null; // reset error when moving to previous questionset
         if (service.settings.project_questions_autosave) {
-            service.save(false).then(function() {
+            service.save(false, true).then(function() {
                 back = true;
                 service.initView(service.page.prev_page);
             })
@@ -865,7 +865,7 @@ angular.module('project_questions')
     service.next = function() {
         service.error = null; // reset error when moving to next questionset
         if (service.settings.project_questions_autosave) {
-            service.save(false).then(function() {
+            service.save(false, true).then(function() {
                 service.initView(service.page.next_page);
             })
         } else {
@@ -876,7 +876,7 @@ angular.module('project_questions')
     service.jump = function(section, page) {
         service.error = null; // reset error before saving
         if (service.settings.project_questions_autosave) {
-            service.save(false).then(function() {
+            service.save(false, true).then(function() {
                 if (service.error !== null) {
                     // pass, dont jump
                 } else if (angular.isDefined(page)) {
@@ -916,7 +916,7 @@ angular.module('project_questions')
         }
     };
 
-    service.save = function(proceed) {
+    service.save = function(proceed, jump) {
         service.error = null; // reset error
         return service.storeValues().then(function() {
             if (service.error !== null) {
@@ -941,7 +941,6 @@ angular.module('project_questions')
                         }
                     }
                 } else {
-                    console.log('next');
                     service.next();
                 }
             } else {
@@ -956,19 +955,20 @@ angular.module('project_questions')
                 });
 
                 // check if we need to refresh the site
-                angular.forEach([service.page].concat(service.questionsets), function(questionset) {
-                    angular.forEach(questionset.elements, function(element) {
-                        if (element.model == 'questions.question') {
-                            var question = element;
-                            angular.forEach(question.optionsets, function(optionset) {
-                                if (optionset.has_refresh) {
-                                    return service.initView(service.page.id);
-                                }
-                            });
-                        }
+                if (angular.isUndefined(jump) || !jump) {
+                    angular.forEach([service.page].concat(service.questionsets), function(questionset) {
+                        angular.forEach(questionset.elements, function(element) {
+                            if (element.model == 'questions.question') {
+                                var question = element;
+                                angular.forEach(question.optionsets, function(optionset) {
+                                    if (optionset.has_refresh) {
+                                        return service.initView(service.page.id);
+                                    }
+                                });
+                            }
+                        });
                     });
-                });
-
+                }
                 // re-evaluate conditions
                 angular.forEach([service.page].concat(service.questionsets), function(questionset) {
                     angular.forEach(service.valuesets[questionset.id], function(valuesets, set_prefix) {
