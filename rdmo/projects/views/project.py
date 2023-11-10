@@ -20,7 +20,7 @@ from django_filters.views import FilterView
 
 from rdmo.accounts.utils import is_site_manager
 from rdmo.core.plugins import get_plugin, get_plugins
-from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
+from rdmo.core.views import CSRFViewMixin, ObjectPermissionMixin, RedirectViewMixin
 from rdmo.questions.models import Catalog
 from rdmo.questions.utils import get_widgets
 from rdmo.tasks.models import Task
@@ -32,6 +32,20 @@ from ..utils import get_upload_accept, set_context_querystring_with_filter_and_p
 
 logger = logging.getLogger(__name__)
 
+# class NewProjectsView(LoginRequiredMixin, PermissionRedirectMixin, RulesPermissionRequiredMixin,
+#                      CSRFViewMixin, TemplateView):
+#     template_name = 'projects/new_projects.html'
+
+#     def has_permission(self):
+#         # Use test_rule from rules for permissions check
+#         return test_rule('projects.can_view_all_projects', self.request.user, self.request.site)
+
+class NewProjectsView(LoginRequiredMixin, CSRFViewMixin, TemplateView):
+    template_name = 'projects/new_projects.html'
+
+    # def has_permission(self):
+    #     # Use test_rule from rules for permissions check
+    #     return test_rule('projects.can_view_all_projects', self.request.user, self.request.site)
 
 class ProjectsView(LoginRequiredMixin, FilterView):
     template_name = 'projects/projects.html'
@@ -75,7 +89,6 @@ class ProjectsView(LoginRequiredMixin, FilterView):
         context['upload_accept'] = get_upload_accept()
         context = set_context_querystring_with_filter_and_page(context)
         return context
-
 
 class SiteProjectsView(LoginRequiredMixin, FilterView):
     template_name = 'projects/site_projects.html'
