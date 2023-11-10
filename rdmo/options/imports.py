@@ -1,12 +1,11 @@
 import logging
+from typing import Callable, Tuple
 
 from django.contrib.sites.models import Site
+from django.db import models
 
 from rdmo.core.imports import (
     check_permissions,
-    get_or_return_instance,
-    make_import_info_msg,
-    set_common_fields,
     set_lang_field,
     set_m2m_instances,
     set_m2m_through_instances,
@@ -14,75 +13,60 @@ from rdmo.core.imports import (
     validate_instance,
 )
 
-from .models import Option, OptionSet
-from .validators import (
-    OptionLockedValidator,
-    OptionSetLockedValidator,
-    OptionSetUniqueURIValidator,
-    OptionUniqueURIValidator,
-)
-
 logger = logging.getLogger(__name__)
 
 
-def import_optionset(element, save=False, user=None):
+def import_option(
+        instance: models.Model,
+        element: dict,
+        validators: Tuple[Callable],
+        save: bool = False,
+        user: models.Model = None
+    ):
 
-    optionset, _created = get_or_return_instance(OptionSet, uri=element.get('uri'))
-    element['created'] = _created
-    element['updated'] = not _created
+    instance.order = element.get('order') or 0
+    instance.provider_key = element.get('provider_key') or ''
 
-    _msg = make_import_info_msg(optionset._meta.verbose_name, _created, uri=element.get('uri'))
+    validate_instance(instance, element, *validators)
 
-    set_common_fields(optionset, element)
-
-    optionset.order = element.get('order') or 0
-    optionset.provider_key = element.get('provider_key') or ''
-
-    validate_instance(optionset, element, OptionSetLockedValidator, OptionSetUniqueURIValidator)
-
-    check_permissions(optionset, element, user)
+    check_permissions(instance, element, user)
 
     if element.get('errors'):
-        return optionset
+        return instance
 
     if save:
-        logger.info(_msg)
-        optionset.save()
-        set_m2m_instances(optionset, 'conditions', element)
-        set_m2m_through_instances(optionset, 'options', element, 'optionset', 'option', 'optionset_options')
-        optionset.editors.add(Site.objects.get_current())
+        instance.save()
+        set_m2m_instances(instance, 'conditions', element)
+        set_m2m_through_instances(instance, 'options', element, 'optionset', 'option', 'optionset_options')
+        instance.editors.add(Site.objects.get_current())
 
-    return optionset
-
-
-def import_option(element, save=False, user=None):
-
-    option, _created = get_or_return_instance(Option, uri=element.get('uri'))
-    element['created'] = _created
-    element['updated'] = not _created
-
-    _msg = make_import_info_msg(option._meta.verbose_name, _created, uri=element.get('uri'))
+    return instance
 
 
-    set_common_fields(option, element)
+def import_optionset(
+        instance: models.Model,
+        element: dict,
+        validators: Tuple[Callable],
+        save: bool = False,
+        user: models.Model = None
+    ):
 
-    option.additional_input = element.get('additional_input') or ''
+    instance.additional_input = element.get('additional_input') or ""
 
-    set_lang_field(option, 'text', element)
-    set_lang_field(option, 'help', element)
-    set_lang_field(option, 'view_text', element)
+    set_lang_field(instance, 'text', element)
+    set_lang_field(instance, 'help', element)
+    set_lang_field(instance, 'view_text', element)
 
-    validate_instance(option, element, OptionLockedValidator, OptionUniqueURIValidator)
+    validate_instance(instance, element, *validators)
 
-    check_permissions(option, element, user)
+    check_permissions(instance, element, user)
 
     if element.get('errors'):
-        return option
+        return instance
 
     if save:
-        logger.info(_msg)
-        option.save()
-        set_reverse_m2m_through_instance(option, 'optionset', element, 'option', 'optionset', 'option_optionsets')
-        option.editors.add(Site.objects.get_current())
+        instance.save()
+        set_reverse_m2m_through_instance(instance, 'optionset', element, 'option', 'optionset', 'option_optionsets')
+        instance.editors.add(Site.objects.get_current())
 
-    return option
+    return instance
