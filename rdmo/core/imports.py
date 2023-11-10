@@ -8,6 +8,8 @@ from typing import Optional, Tuple
 
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
+from django.forms.models import model_to_dict
+from django.utils.module_loading import import_string as django_import_string
 
 from rest_framework.utils import model_meta
 
@@ -68,6 +70,28 @@ def set_common_fields(instance, element):
     instance.uri_path = element.get('uri_path') or ''
     instance.key = element.get('key') or ''
     instance.comment = element.get('comment') or ''
+
+
+def common_import_methods(model_dotted_path: str,
+                              uri: Optional[str]=None,
+                              element: Optional[dict]=None):
+    model = django_import_string(model_dotted_path)
+    instance, _created = get_or_return_instance(model, uri=element.get('uri'))
+    element['created'] = _created
+    element['updated'] = not _created
+
+    _msg = make_import_info_msg(model._meta.verbose_name, _created, uri=element.get('uri'))
+
+     # TODO maybe move to another place
+    element['original'] = {}
+    if element.get("updated"):
+        original = model_to_dict(instance)
+        original.update(**{k : model_to_dict(val) for k, val in original.items() if isinstance(val, models.Model)})
+        element['original'] = original
+
+    set_common_fields(instance, element)
+    return instance, element, _msg
+
 
 
 def set_lang_field(instance, field_name, element):
@@ -284,23 +308,3 @@ def check_permissions(instance, element, user):
         )
         logger.info(message)
         element['errors'].append(message)
-
-
-def check_diff_instance(element: dict, original_instance: dict, check=False) -> dict[str, list[str]]:
-    if not check:
-        return {}
-    overlapping_keys = set(element.keys()) & set(original_instance.keys())
-
-    diffs = {}
-    for key in overlapping_keys:
-        element_val = element[key]
-        instance_val = original_instance[key]
-        if element_val is instance_val:
-            continue
-        if element_val == instance_val:
-            continue
-
-        if isinstance(element_val, str) and isinstance(instance_val, str):
-            diffs[key] = {"old_value": element_val, "new_value": instance_val}
-
-    return diffs

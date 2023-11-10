@@ -1,12 +1,11 @@
 import logging
+from typing import Callable, Tuple
 
 from django.contrib.sites.models import Site
+from django.db import models
 
 from rdmo.core.imports import (
     check_permissions,
-    get_or_return_instance,
-    make_import_info_msg,
-    set_common_fields,
     set_foreign_field,
     set_lang_field,
     set_m2m_instances,
@@ -15,211 +14,185 @@ from rdmo.core.imports import (
     validate_instance,
 )
 
-from .models import Catalog, Page, Question, QuestionSet, Section
 from .utils import get_widget_types
-from .validators import (
-    CatalogLockedValidator,
-    CatalogUniqueURIValidator,
-    PageLockedValidator,
-    PageUniqueURIValidator,
-    QuestionLockedValidator,
-    QuestionSetLockedValidator,
-    QuestionSetUniqueURIValidator,
-    QuestionUniqueURIValidator,
-    SectionLockedValidator,
-    SectionUniqueURIValidator,
-)
 
 logger = logging.getLogger(__name__)
 
 
-def import_catalog(element, save=False, user=None):
+def import_catalog(
+        instance: models.Model,
+        element: dict,
+        validators: Tuple[Callable],
+        save: bool = False,
+        user: models.Model = None
+    ):
 
-    catalog, _created = get_or_return_instance(Catalog, uri=element.get('uri'))
-    element['created'] = _created
-    element['updated'] = not _created
+    instance.order = element.get('order') or 0
 
-    _msg = make_import_info_msg(catalog._meta.verbose_name, _created, uri=element.get('uri'))
+    set_lang_field(instance, 'title', element)
+    set_lang_field(instance, 'help', element)
 
-    set_common_fields(catalog, element)
+    instance.available = element.get('available', True)
 
-    catalog.order = element.get('order') or 0
+    validate_instance(instance, element, *validators)
 
-    set_lang_field(catalog, 'title', element)
-    set_lang_field(catalog, 'help', element)
-
-    catalog.available = element.get('available', True)
-
-    validate_instance(catalog, element, CatalogLockedValidator, CatalogUniqueURIValidator)
-
-    check_permissions(catalog, element, user)
+    check_permissions(instance, element, user)
 
     if element.get('errors'):
-        return catalog
+        return instance
 
     if save:
-        logger.debug(_msg)
-        catalog.save()
-        set_m2m_through_instances(catalog, 'sections', element, 'catalog', 'section', 'catalog_sections')
-        catalog.sites.add(Site.objects.get_current())
-        catalog.editors.add(Site.objects.get_current())
+        set_m2m_through_instances(instance, 'sections', element, 'catalog', 'section', 'catalog_sections')
+        instance.sites.add(Site.objects.get_current())
+        instance.editors.add(Site.objects.get_current())
 
-    return catalog
+    return instance
 
 
-def import_section(element, save=False, user=None):
+def import_section(
+        instance: models.Model,
+        element: dict,
+        validators: Tuple[Callable],
+        save: bool = False,
+        user: models.Model = None
+    ):
 
-    section, _created = get_or_return_instance(Section, uri=element.get('uri'))
-    element['created'] = _created
-    element['updated'] = not _created
-
-    _msg = make_import_info_msg(section._meta.verbose_name, _created, uri=element.get('uri'))
-
-    set_common_fields(section, element)
-
-    set_lang_field(section, 'title', element)
+    set_lang_field(instance, 'title', element)
     set_lang_field(section, 'short_title', element)
 
-    validate_instance(section, element, SectionLockedValidator, SectionUniqueURIValidator)
+    validate_instance(instance, element, *validators)
 
-    check_permissions(section, element, user)
+    check_permissions(instance, element, user)
 
     if element.get('errors'):
-        return section
+        return instance
 
     if save:
-        logger.info(_msg)
-        section.save()
-        set_reverse_m2m_through_instance(section, 'catalog', element, 'section', 'catalog', 'section_catalogs')
-        set_m2m_through_instances(section, 'pages', element, 'section', 'page', 'section_pages')
-        section.editors.add(Site.objects.get_current())
+        instance.save()
+        set_reverse_m2m_through_instance(instance, 'catalog', element, 'section', 'catalog', 'section_catalogs')
+        set_m2m_through_instances(instance, 'pages', element, 'section', 'page', 'section_pages')
+        instance.editors.add(Site.objects.get_current())
 
-    return section
+    return instance
 
 
-def import_page(element, save=False, user=None):
+def import_page(
+        instance: models.Model,
+        element: dict,
+        validators: Tuple[Callable],
+        save: bool = False,
+        user: models.Model = None
+    ):
 
-    page, _created = get_or_return_instance(Page, uri=element.get('uri'))
-    element['created'] = _created
-    element['updated'] = not _created
+    set_foreign_field(instance, 'attribute', element)
 
-    _msg = make_import_info_msg(page._meta.verbose_name, _created, uri=element.get('uri'))
+    instance.is_collection = element.get('is_collection') or False
 
-    set_common_fields(page, element)
-    set_foreign_field(page, 'attribute', element)
-
-    page.is_collection = element.get('is_collection') or False
-
-    set_lang_field(page, 'title', element)
+    set_lang_field(instance, 'title', element)
     set_lang_field(page, 'short_title', element)
-    set_lang_field(page, 'help', element)
-    set_lang_field(page, 'verbose_name', element)
+    set_lang_field(instance, 'help', element)
+    set_lang_field(instance, 'verbose_name', element)
 
-    validate_instance(page, element, PageLockedValidator, PageUniqueURIValidator)
+    validate_instance(instance, element,*validators)
 
-    check_permissions(page, element, user)
+    check_permissions(instance, element, user)
 
     if element.get('errors'):
-        return page
+        return instance
 
     if save:
-        logger.info(_msg)
-        page.save()
-        set_m2m_instances(page, 'conditions', element)
-        set_reverse_m2m_through_instance(page, 'section', element, 'page', 'section', 'page_sections')
-        set_m2m_through_instances(page, 'questionsets', element, 'page', 'questionset', 'page_questionsets')
-        set_m2m_through_instances(page, 'questions', element, 'page', 'question', 'page_questions')
-        page.editors.add(Site.objects.get_current())
+        instance.save()
+        set_m2m_instances(instance, 'conditions', element)
+        set_reverse_m2m_through_instance(instance, 'section', element, 'page', 'section', 'page_sections')
+        set_m2m_through_instances(instance, 'questionsets', element, 'page', 'questionset', 'page_questionsets')
+        set_m2m_through_instances(instance, 'questions', element, 'page', 'question', 'page_questions')
+        instance.editors.add(Site.objects.get_current())
 
-    return page
+    return instance
 
 
-def import_questionset(element, save=False, user=None):
+def import_questionset(
+        instance: models.Model,
+        element: dict,
+        validators: Tuple[Callable],
+        save: bool = False,
+        user: models.Model = None
+    ):
 
-    questionset, _created = get_or_return_instance(QuestionSet, uri=element.get('uri'))
-    element['created'] = _created
-    element['updated'] = not _created
+    set_foreign_field(instance, 'attribute', element)
 
-    _msg = make_import_info_msg(questionset._meta.verbose_name, _created, uri=element.get('uri'))
-
-    set_common_fields(questionset, element)
-    set_foreign_field(questionset, 'attribute', element)
-
-    questionset.is_collection = element.get('is_collection') or False
+    instance.is_collection = element.get('is_collection') or False
 
     set_lang_field(questionset, 'title', element)
     set_lang_field(questionset, 'help', element)
     set_lang_field(questionset, 'verbose_name', element)
 
-    validate_instance(questionset, element, QuestionSetLockedValidator, QuestionSetUniqueURIValidator)
+    validate_instance(instance, element, *validators)
 
-    check_permissions(questionset, element, user)
+    check_permissions(instance, element, user)
 
     if element.get('errors'):
-        return questionset
+        return instance
 
     if save:
-        logger.info(_msg)
-        questionset.save()
-        set_m2m_instances(questionset, 'conditions', element)
-        set_reverse_m2m_through_instance(questionset, 'page', element, 'questionset', 'page', 'questionset_pages')
-        set_reverse_m2m_through_instance(questionset, 'questionset', element, 'questionset', 'parent', 'questionset_parents')  # noqa: E501
-        set_m2m_through_instances(questionset, 'questionsets', element, 'parent', 'questionset', 'questionset_questionsets')  # noqa: E501
-        set_m2m_through_instances(questionset, 'questions', element, 'questionset', 'question', 'questionset_questions')
-        questionset.editors.add(Site.objects.get_current())
+        instance.save()
+        set_m2m_instances(instance, 'conditions', element)
+        set_reverse_m2m_through_instance(instance, 'page', element, 'questionset', 'page', 'questionset_pages')
+        set_reverse_m2m_through_instance(instance, 'questionset', element, 'questionset', 'parent', 'questionset_parents')  # noqa: E501
+        set_m2m_through_instances(instance, 'questionsets', element, 'parent', 'questionset', 'questionset_questionsets')  # noqa: E501
+        set_m2m_through_instances(instance, 'questions', element, 'questionset', 'question', 'questionset_questions')
+        instance.editors.add(Site.objects.get_current())
 
-    return questionset
+    return instance
 
 
-def import_question(element, save=False, user=None):
+def import_question(
+        instance: models.Model,
+        element: dict,
+        validators: Tuple[Callable],
+        save: bool = False,
+        user: models.Model = None
+    ):
 
-    question, _created = get_or_return_instance(Question, uri=element.get('uri'))
-    element['created'] = _created
-    element['updated'] = not _created
+    set_foreign_field(instance, 'attribute', element)
 
-    _msg = make_import_info_msg(question._meta.verbose_name, _created, uri=element.get('uri'))
+    instance.is_collection = element.get('is_collection') or False
+    instance.is_optional = element.get('is_optional') or False
 
-    set_common_fields(question, element)
-    set_foreign_field(question, 'attribute', element)
+    set_lang_field(instance, 'text', element)
+    set_lang_field(instance, 'help', element)
+    set_lang_field(instance, 'default_text', element)
+    set_lang_field(instance, 'verbose_name', element)
 
-    question.is_collection = element.get('is_collection') or False
-    question.is_optional = element.get('is_optional') or False
+    set_foreign_field(instance, 'default_option', element)
 
-    set_lang_field(question, 'text', element)
-    set_lang_field(question, 'help', element)
-    set_lang_field(question, 'default_text', element)
-    set_lang_field(question, 'verbose_name', element)
-
-    set_foreign_field(question, 'default_option', element)
-
-    question.default_external_id = element.get('default_external_id') or ''
+    instance.default_external_id = element.get('default_external_id') or ''
 
     if element.get('widget_type') in get_widget_types():
-        question.widget_type = element.get('widget_type')
+        instance.widget_type = element.get('widget_type')
     else:
-        question.widget_type = 'text'
+        instance.widget_type = 'text'
 
-    question.value_type = element.get('value_type') or ''
-    question.maximum = element.get('maximum')
-    question.minimum = element.get('minimum')
-    question.step = element.get('step')
-    question.unit = element.get('unit') or ''
-    question.width = element.get('width')
+    instance.value_type = element.get('value_type') or ''
+    instance.maximum = element.get('maximum')
+    instance.minimum = element.get('minimum')
+    instance.step = element.get('step')
+    instance.unit = element.get('unit') or ''
+    instance.width = element.get('width')
 
-    validate_instance(question, element, QuestionLockedValidator, QuestionUniqueURIValidator)
+    validate_instance(instance, element, *validators)
 
-    check_permissions(question, element, user)
+    check_permissions(instance, element, user)
 
     if element.get('errors'):
-        return question
+        return instance
 
     if save:
-        logger.info(_msg)
-        question.save()
-        set_reverse_m2m_through_instance(question, 'page', element, 'question', 'page', 'question_pages')
-        set_reverse_m2m_through_instance(question, 'questionset', element, 'question', 'questionset', 'question_questionsets')  # noqa: E501
-        set_m2m_instances(question, 'conditions', element)
-        set_m2m_instances(question, 'optionsets', element)
-        question.editors.add(Site.objects.get_current())
+        instance.save()
+        set_reverse_m2m_through_instance(instance, 'page', element, 'question', 'page', 'question_pages')
+        set_reverse_m2m_through_instance(instance, 'questionset', element, 'question', 'questionset', 'question_questionsets')  # noqa: E501
+        set_m2m_instances(instance, 'conditions', element)
+        set_m2m_instances(instance, 'optionsets', element)
+        instance.editors.add(Site.objects.get_current())
 
-    return question
+    return instance

@@ -1,53 +1,46 @@
 import logging
+from typing import Callable, Tuple
 
 from django.contrib.sites.models import Site
+from django.db import models
 
 from rdmo.core.imports import (
     check_permissions,
-    get_or_return_instance,
-    make_import_info_msg,
-    set_common_fields,
     set_lang_field,
     set_m2m_instances,
     validate_instance,
 )
 
-from .models import View
-from .validators import ViewLockedValidator, ViewUniqueURIValidator
-
 logger = logging.getLogger(__name__)
 
 
-def import_view(element, save=False, user=None):
+def import_view(
+        instance: models.Model,
+        element: dict,
+        validators: Tuple[Callable],
+        save: bool = False,
+        user: models.Model = None
+    ):
 
-    view, _created = get_or_return_instance(View, uri=element.get('uri'))
-    element['created'] = _created
-    element['updated'] = not _created
+    instance.order = element.get('order') or 0
+    instance.template = element.get('template')
 
-    _msg = make_import_info_msg(view._meta.verbose_name, _created, uri=element.get('uri'))
+    set_lang_field(instance, 'title', element)
+    set_lang_field(instance, 'help', element)
 
-    set_common_fields(view, element)
+    instance.available = element.get('available', True)
 
-    view.order = element.get('order') or 0
-    view.template = element.get('template')
+    validate_instance(instance, element, *validators)
 
-    set_lang_field(view, 'title', element)
-    set_lang_field(view, 'help', element)
-
-    view.available = element.get('available', True)
-
-    validate_instance(view, element, ViewLockedValidator, ViewUniqueURIValidator)
-
-    check_permissions(view, element, user)
+    check_permissions(instance, element, user)
 
     if element.get('errors'):
-        return view
+        return instance
 
     if save:
-        logger.info(_msg)
-        view.save()
-        set_m2m_instances(view, 'catalogs', element)
-        view.sites.add(Site.objects.get_current())
-        view.editors.add(Site.objects.get_current())
+        instance.save()
+        set_m2m_instances(instance, 'catalogs', element)
+        instance.sites.add(Site.objects.get_current())
+        instance.editors.add(Site.objects.get_current())
 
-    return view
+    return instance
