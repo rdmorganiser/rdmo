@@ -2,98 +2,46 @@ import logging
 from collections import defaultdict
 from typing import Optional
 
-from django.db import models
 from django.forms.models import model_to_dict
 
-from rdmo.conditions.imports import import_condition
-from rdmo.conditions.validators import ConditionLockedValidator, ConditionUniqueURIValidator
-from rdmo.core.imports import common_import_methods
-from rdmo.domain.imports import import_attribute
-from rdmo.domain.validators import AttributeLockedValidator, AttributeParentValidator, AttributeUniqueURIValidator
-from rdmo.options.imports import import_option, import_optionset
-from rdmo.options.validators import (
-    OptionLockedValidator,
-    OptionSetLockedValidator,
-    OptionSetUniqueURIValidator,
-    OptionUniqueURIValidator,
+from rdmo.conditions.imports import import_helper_condition
+from rdmo.core.imports import common_import_methods, get_lang_field_values, set_lang_field
+from rdmo.domain.imports import import_helper_attribute
+from rdmo.options.imports import import_helper_option, import_helper_optionset
+from rdmo.questions.imports import (
+    import_helper_catalog,
+    import_helper_page,
+    import_helper_question,
+    import_helper_questionset,
+    import_helper_section,
 )
-from rdmo.questions.imports import import_catalog, import_page, import_question, import_questionset, import_section
-from rdmo.questions.validators import (
-    CatalogLockedValidator,
-    CatalogUniqueURIValidator,
-    PageLockedValidator,
-    PageUniqueURIValidator,
-    QuestionLockedValidator,
-    QuestionSetLockedValidator,
-    QuestionSetUniqueURIValidator,
-    QuestionUniqueURIValidator,
-    SectionLockedValidator,
-    SectionUniqueURIValidator,
-)
-from rdmo.tasks.imports import import_task
-from rdmo.tasks.validators import TaskLockedValidator, TaskUniqueURIValidator
-from rdmo.views.imports import import_view
-from rdmo.views.validators import ViewLockedValidator, ViewUniqueURIValidator
+from rdmo.tasks.imports import import_helper_task
+from rdmo.views.imports import import_helper_view
 
 logger = logging.getLogger(__name__)
 
-ELEMENT_MODEL_IMPORT_MAPPER = {
-    "conditions.condition": {
-        "dotted_path": 'rdmo.conditions.models.Condition',
-        "import_method": import_condition,
-        "validators": (ConditionLockedValidator, ConditionUniqueURIValidator)
-    },
-    "domain.attribute": {
-        "dotted_path": 'rdmo.domain.models.Attribute',
-        "import_method": import_attribute,
-        "validators": (AttributeLockedValidator, AttributeParentValidator, AttributeUniqueURIValidator)
-    },
-    "options.optionset": {
-        "dotted_path": "rdmo.options.models.OptionSet",
-        "import_method": import_optionset,
-        "validators": (OptionSetLockedValidator, OptionSetUniqueURIValidator),
-    },
-    "options.option": {
-        "dotted_path": "rdmo.options.models.Option",
-        "import_method": import_option,
-        "validators": (OptionLockedValidator, OptionUniqueURIValidator),
-    },
-    "questions.catalog": {
-        "dotted_path": "rdmo.questions.models.catalog.Catalog",
-        "import_method": import_catalog,
-        "validators": (CatalogLockedValidator, CatalogUniqueURIValidator),
-    },
-    "questions.section": {
-        "dotted_path": "rdmo.questions.models.section.Section",
-        "import_method": import_section,
-        "validators": (SectionLockedValidator, SectionUniqueURIValidator),
-    },
-    "questions.page": {
-        "dotted_path": "rdmo.questions.models.page.Page",
-        "import_method": import_page,
-        "validators":  (PageLockedValidator, PageUniqueURIValidator),
-    },
-    "questions.questionset": {
-        "dotted_path": "rdmo.questions.models.questionset.QuestionSet",
-        "import_method": import_questionset,
-        "validators": (QuestionSetLockedValidator, QuestionSetUniqueURIValidator),
-    },
-    "questions.question": {
-        "dotted_path": "rdmo.questions.models.question.Question",
-        "import_method": import_question,
-        "validators": (QuestionLockedValidator, QuestionUniqueURIValidator),
-    },
-    "tasks.task": {
-        "dotted_path": "rdmo.tasks.models.Task",
-        "import_method": import_task,
-        "validators": (TaskLockedValidator, TaskUniqueURIValidator),
-    },
-    "views.view": {
-        "dotted_path": "rdmo.views.models.View",
-        "import_method": import_view,
-        "validators": (ViewLockedValidator, ViewUniqueURIValidator),
-    },
-}
+
+ELEMENT_IMPORT_HELPERS = {
+    "conditions.condition": import_helper_condition,
+    "domain.attribute": import_helper_attribute,
+    "options.optionset": import_helper_optionset,
+    "options.option": import_helper_option,
+    "questions.catalog": import_helper_catalog,
+    "questions.section": import_helper_section,
+    "questions.page": import_helper_page,
+    "questions.questionset": import_helper_questionset,
+    "questions.question": import_helper_question,
+    "tasks.task": import_helper_task,
+    "views.view": import_helper_view
+    }
+
+IMPORT_ELEMENT_INIT_DICT = {
+        'warnings': defaultdict(list),
+        'errors': None,
+        'created': False,
+        'updated': False,
+        'original': defaultdict()
+    }
 
 
 def import_elements(uploaded_elements, save=True, user=None):
@@ -129,67 +77,55 @@ def import_element(
     if element is None:
         return element
 
-    element.update({
-        'warnings': defaultdict(list),
-        'errors': [],
-        'created': False,
-        'updated': False,
-        'original': defaultdict()
-    })
+    element.update(IMPORT_ELEMENT_INIT_DICT)
+    element['errors'] = []
 
     if model_path is None:
         return element
 
-    model_import = ELEMENT_MODEL_IMPORT_MAPPER[model_path]
-    import_method = model_import['import_method']
-    model_path = model_import['dotted_path']
-    validators = model_import['validators']
+    import_helper = ELEMENT_IMPORT_HELPERS[model_path]
+    import_method = import_helper.import_method
+    model_path = import_helper.dotted_path
+    validators = import_helper.validators
+    lang_field_names = import_helper.lang_fields
+    uri = element.get('uri')
 
-    instance, element, _msg, _created = common_import_methods(
+    instance, _msg, _created, original_instance = common_import_methods(
                             model_path,
-                            uri=element.get('uri'),
-                            element=element
+                            uri=uri
                     )
+    # prepare original element when updated (maybe rename into lookup)
     _updated = not _created
-    # for when the element is updated
-    # keep a dict of the original
-    # needs to be created here, else the changes will be overwritten
-    original = model_to_dict(instance) if _updated else {}
-
+    original_element = {}
+    if _updated:
+        original_element = model_to_dict(original_instance)
+        original_element = {k: original_element.get(k, element.get(k))
+                            for k in element.keys() if k not in IMPORT_ELEMENT_INIT_DICT}
+    # set common field values from element on instance
+    for common_field in import_helper.common_fields:
+        setattr(instance, common_field, element.get(common_field) or '')
+    # set language fields
+    for lang_field_name in lang_field_names:
+        set_lang_field(instance, lang_field_name, element)
+        if original_instance is not None:
+            # add the lang_code fields from the original instance
+            lang_field_values = get_lang_field_values(lang_field_name, instance=original_instance)
+            original_element.update(lang_field_values)
+    # call the element specific import method
     instance = import_method(instance, element, validators, save, user)
 
     if element.get('errors'):
         return element
+
+    if _updated:
+        element['updated'] = _updated
+        # make json serializable, keep only strings
+        original_element_json = {k: val for k, val in original_element.items() if isinstance(val, str)}
+        element['original'] = original_element_json
 
     if save:
         logger.info(_msg)
         element['created'] = _created
         element['updated'] = _updated
 
-    if _updated:
-        original = filter_original(element, original)
-        element['updated'] = _updated
-        element['original'] = original
-
     return element
-
-
-def filter_original(element, original):
-    '''select only keys for original that are in the element.'''
-    # filter for keys
-    original = {
-        k: val for k, val in
-        original.items()
-        if k in element
-    }
-    # replace the lists of nested model values
-    # in the "original" dict
-    original_replace = {
-        k: element[k] for k, val in
-        original.items() if (
-            isinstance(val, list) and
-            any(isinstance(i, models.Model) for i in val)
-        )
-    }
-    original.update(**original_replace)
-    return original
