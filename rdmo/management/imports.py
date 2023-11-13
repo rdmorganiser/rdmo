@@ -71,7 +71,7 @@ ELEMENT_MODEL_IMPORT_MAPPER = {
         "validators":  (PageLockedValidator, PageUniqueURIValidator),
     },
     "questions.questionset": {
-        "dotted_path": "rdmo.questions.models.questionset.Questionset",
+        "dotted_path": "rdmo.questions.models.questionset.QuestionSet",
         "import_method": import_questionset,
         "validators": (QuestionSetLockedValidator, QuestionSetUniqueURIValidator),
     },
@@ -81,12 +81,12 @@ ELEMENT_MODEL_IMPORT_MAPPER = {
         "validators": (QuestionLockedValidator, QuestionUniqueURIValidator),
     },
     "tasks.task": {
-        "dotted_path": "rdmo.tasks.models.task.Task",
+        "dotted_path": "rdmo.tasks.models.Task",
         "import_method": import_task,
         "validators": (TaskLockedValidator, TaskUniqueURIValidator),
     },
     "views.view": {
-        "dotted_path": "rdmo.views.models.view.View",
+        "dotted_path": "rdmo.views.models.View",
         "import_method": import_view,
         "validators": (ViewLockedValidator, ViewUniqueURIValidator),
     },
@@ -105,13 +105,25 @@ def import_elements(uploaded_elements, save=True, user=None):
     return imported_elements
 
 
+def filter_warnings(element, elements):
+    # remove warnings regarding elements which are in the elements list
+    warnings = []
+    for uri, messages in element['warnings'].items():
+        if not next(filter(lambda e: e['uri'] == uri, elements), None):
+            warnings += messages
+
+    element['warnings'] = warnings
+    return element
+
+
 def import_element(
         model_path: Optional[str] = None,
         element: Optional[dict] = None,
         save: bool = True,
-        user = None):
+        user = None
+    ):
 
-    if element is None:
+    if element is None or model_path is None:
         return element
 
     element.update({
@@ -137,24 +149,14 @@ def import_element(
     if save and not element.get('errors'):
         logger.info(_msg)
 
-    # TODO need to filter or serialize the same keys as in the element
     element = filter_original(element)
 
     return element
 
 
-def filter_warnings(element, elements):
-    # remove warnings regarding elements which are in the elements list
-    warnings = []
-    for uri, messages in element['warnings'].items():
-        if not next(filter(lambda e: e['uri'] == uri, elements), None):
-            warnings += messages
-
-    element['warnings'] = warnings
-    return element
-
 def filter_original(element):
+    '''select only keys for original that are in the element.'''
     element['original'] = {k: val for k, val in
                         element.get('original', {}).items()
-                        if k in element}
+                        if k in element and k != 'original'}
     return element
