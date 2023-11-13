@@ -5,12 +5,18 @@ from django.contrib.sites.models import Site
 from django.db import models
 
 from rdmo.core.imports import (
+    ElementImportHelper,
     check_permissions,
-    set_lang_field,
     set_m2m_instances,
     set_m2m_through_instances,
     set_reverse_m2m_through_instance,
     validate_instance,
+)
+from rdmo.options.validators import (
+    OptionLockedValidator,
+    OptionSetLockedValidator,
+    OptionSetUniqueURIValidator,
+    OptionUniqueURIValidator,
 )
 
 logger = logging.getLogger(__name__)
@@ -43,6 +49,15 @@ def import_option(
     return instance
 
 
+import_helper_option = ElementImportHelper(
+    model="options.option",
+    dotted_path="rdmo.options.models.Option",
+    import_method=import_option,
+    validators=(OptionLockedValidator, OptionUniqueURIValidator),
+    lang_fields=('text',)
+)
+
+
 def import_optionset(
         instance: models.Model,
         element: dict,
@@ -70,3 +85,11 @@ def import_optionset(
         instance.editors.add(Site.objects.get_current())
 
     return instance
+
+
+import_helper_optionset = ElementImportHelper(
+    model="options.optionset",
+    dotted_path="rdmo.options.models.OptionSet",
+    import_method=import_optionset,
+    validators=(OptionSetLockedValidator, OptionSetUniqueURIValidator),
+)

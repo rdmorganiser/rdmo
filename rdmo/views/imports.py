@@ -5,11 +5,12 @@ from django.contrib.sites.models import Site
 from django.db import models
 
 from rdmo.core.imports import (
+    ElementImportHelper,
     check_permissions,
-    set_lang_field,
     set_m2m_instances,
     validate_instance,
 )
+from rdmo.views.validators import ViewLockedValidator, ViewUniqueURIValidator
 
 logger = logging.getLogger(__name__)
 
@@ -24,9 +25,6 @@ def import_view(
 
     instance.order = element.get('order') or 0
     instance.template = element.get('template')
-
-    set_lang_field(instance, 'title', element)
-    set_lang_field(instance, 'help', element)
 
     instance.available = element.get('available', True)
 
@@ -44,3 +42,12 @@ def import_view(
         instance.editors.add(Site.objects.get_current())
 
     return instance
+
+
+import_helper_view = ElementImportHelper(
+    model="views.view",
+    dotted_path="rdmo.views.models.View",
+    import_method=import_view,
+    validators=(ViewLockedValidator, ViewUniqueURIValidator),
+    lang_fields=('title', 'help')
+)
