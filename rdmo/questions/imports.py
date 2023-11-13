@@ -5,13 +5,25 @@ from django.contrib.sites.models import Site
 from django.db import models
 
 from rdmo.core.imports import (
+    ElementImportHelper,
     check_permissions,
     set_foreign_field,
-    set_lang_field,
     set_m2m_instances,
     set_m2m_through_instances,
     set_reverse_m2m_through_instance,
     validate_instance,
+)
+from rdmo.questions.validators import (
+    CatalogLockedValidator,
+    CatalogUniqueURIValidator,
+    PageLockedValidator,
+    PageUniqueURIValidator,
+    QuestionLockedValidator,
+    QuestionSetLockedValidator,
+    QuestionSetUniqueURIValidator,
+    QuestionUniqueURIValidator,
+    SectionLockedValidator,
+    SectionUniqueURIValidator,
 )
 
 from .utils import get_widget_types
@@ -28,9 +40,6 @@ def import_catalog(
     ):
 
     instance.order = element.get('order') or 0
-
-    set_lang_field(instance, 'title', element)
-    set_lang_field(instance, 'help', element)
 
     instance.available = element.get('available', True)
 
@@ -57,9 +66,6 @@ def import_section(
         save: bool = False,
         user: models.Model = None
     ):
-
-    set_lang_field(instance, 'title', element)
-    set_lang_field(section, 'short_title', element)
 
     validate_instance(instance, element, *validators)
 
@@ -197,3 +203,42 @@ def import_question(
         instance.editors.add(Site.objects.get_current())
 
     return instance
+
+
+import_helper_catalog = ElementImportHelper(
+    model="questions.catalog",
+    dotted_path="rdmo.questions.models.catalog.Catalog",
+    import_method=import_catalog,
+    validators=(CatalogLockedValidator, CatalogUniqueURIValidator),
+    lang_fields=('title', 'help')
+)
+
+import_helper_section = ElementImportHelper(
+    model="questions.section",
+    dotted_path="rdmo.questions.models.section.Section",
+    import_method=import_section,
+    validators=(SectionLockedValidator, SectionUniqueURIValidator),
+    lang_fields=('title',)
+)
+import_helper_page = ElementImportHelper(
+    model="questions.page",
+    dotted_path="rdmo.questions.models.page.Page",
+    import_method=import_page,
+    validators= (PageLockedValidator, PageUniqueURIValidator),
+    lang_fields=('title', 'help', 'verbose_name', 'verbose_name_plural')
+)
+
+import_helper_questionset = ElementImportHelper(
+    model="questions.questionset",
+    dotted_path="rdmo.questions.models.questionset.QuestionSet",
+    import_method=import_questionset,
+    validators=(QuestionSetLockedValidator, QuestionSetUniqueURIValidator),
+    lang_fields=('title', 'help', 'verbose_name', 'verbose_name_plural')
+)
+import_helper_question = ElementImportHelper(
+    model="questions.question",
+    dotted_path="rdmo.questions.models.question.Question",
+    import_method=import_question,
+    validators=(QuestionLockedValidator, QuestionUniqueURIValidator),
+    lang_fields=('text', 'help', 'default_text', 'verbose_name', 'verbose_name_plural')
+)
