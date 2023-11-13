@@ -1,10 +1,12 @@
+import copy
 import logging
 import tempfile
 import time
+from dataclasses import dataclass, field
 from os.path import join as pj
 from pathlib import Path
 from random import randint
-from typing import Optional, Tuple
+from typing import Callable, Iterable, Optional, Sequence, Tuple
 
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
@@ -17,6 +19,12 @@ from rdmo.core.utils import get_languages
 logger = logging.getLogger(__name__)
 
 
+ELEMENT_COMMON_FIELDS = (
+    'uri_prefix',
+    'uri_path',
+    'key',
+    'comment',
+)
 IMPORT_INFO_MSG = 'Importing {model} {uri} from {filename}.'
 
 
@@ -63,34 +71,53 @@ def make_import_info_msg(verbose_name: str, created: bool, uri: Optional[str]=No
 
     return "%s %s updated", verbose_name, uri
 
+@dataclass
+class ElementImportHelper:
+    model: str
+    dotted_path: str
+    import_method: Callable
+    validators: Iterable[Callable]
+    lang_fields: Sequence[str] = field(default_factory=list)
+    common_fields: Sequence[str] = field(default=ELEMENT_COMMON_FIELDS)
 
-def set_common_fields(instance, element):
-    instance.uri_prefix = element.get('uri_prefix') or ''
-    instance.uri_path = element.get('uri_path') or ''
-    instance.key = element.get('key') or ''
-    instance.comment = element.get('comment') or ''
 
+def common_import_methods(model_dotted_path: str, uri: Optional[str] = None):
 
-def common_import_methods(model_dotted_path: str,
-                              uri: Optional[str]=None,
-                              element: Optional[dict]=None):
     model = django_import_string(model_dotted_path)
-    instance, _created = get_or_return_instance(model, uri=element.get('uri'))
+    instance, _created = get_or_return_instance(model, uri=uri)
 
-    _msg = make_import_info_msg(model._meta.verbose_name, _created, uri=element.get('uri'))
+    # for when the element is updated
+    # keep a dict of the original
+    # needs to be created here, else the changes will be overwritten
+    original = copy.deepcopy(instance) if not _created else None
 
-    set_common_fields(instance, element)
-    return instance, element, _msg, _created
+    _msg = make_import_info_msg(model._meta.verbose_name, _created, uri=uri)
+    return instance, _msg, _created, original
 
 
+def get_lang_field_values(field_name: str,
+                            element: Optional[dict] = None,
+                            instance: models.Model = None,
+                            by_field: bool = True):
+    if (element and instance):
+        raise ValueError("Please choose one of each")
+
+    ret = {}
+    for lang_code, _, lang_field in get_languages():
+        name_code = f'{field_name}_{lang_code}'
+        name_field = f'{field_name}_{lang_field}'
+        get_key = name_field if by_field else name_code
+        set_key = name_code if by_field else name_field
+        if element:
+            ret[set_key] = element.get(get_key, '')
+        if instance:
+            ret[set_key] = getattr(instance, get_key, '')
+    return ret
 
 def set_lang_field(instance, field_name, element):
-    for lang_code, lang_string, lang_field in get_languages():
-        field = element.get(f'{field_name}_{lang_code}')
-        if field:
-            setattr(instance, f'{field_name}_{lang_field}', field)
-        else:
-            setattr(instance, f'{field_name}_{lang_field}', '')
+    lang_fields = get_lang_field_values(field_name, element=element)
+    for field_lang_name, field_value in lang_fields.items():
+        setattr(instance, field_lang_name, field_value)
 
 
 def set_foreign_field(instance, field_name, element) -> None:
