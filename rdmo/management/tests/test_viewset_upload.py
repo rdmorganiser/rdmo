@@ -54,7 +54,10 @@ def test_create(db, client, username, password):
     assert response.status_code == status_map['create'][username], response.json()
     if response.status_code == 200:
         for element in response.json():
-            assert element.get('updated') is False
+            if username in ['api', 'editor']:
+                assert element.get('updated') is True
+            else:
+                assert element.get('updated') is False
 
 
 @pytest.mark.parametrize('username,password', users)
