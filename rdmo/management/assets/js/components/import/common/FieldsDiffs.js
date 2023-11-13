@@ -5,16 +5,19 @@ import ReactDiffViewer from 'react-diff-viewer-continued'
 import { isUndefined } from 'lodash'
 
 
-const FieldsDiffs = ({ element, field }) => {
-  return !isUndefined(element) &&
-          !isUndefined(element[field]) &&
-          !isEmpty(element.original) &&
-          !isEmpty(element.original[field]) &&
-          isEmpty(element.errors) &&
+const FieldsDiffs = ({ instance, field }) => {
+
+  return !isUndefined(instance) &&
+          !isUndefined(instance[field]) &&
+          !isEmpty(instance.original) &&
+          !isEmpty(instance.original[field]) &&
+          isEmpty(instance.errors) &&
+          typeof(instance[field]) === 'string' &&
+          typeof(instance.original[field]) === 'string' &&
    <div className="col-sm-12">
     <ReactDiffViewer
-        oldValue={element.original[field]}
-        newValue={element[field]}
+        oldValue={instance.original[field]}
+        newValue={instance[field]}
         splitView={true}
         hideLineNumbers={true}
         leftTitle={gettext('Current')}
@@ -25,7 +28,7 @@ const FieldsDiffs = ({ element, field }) => {
 }
 
 FieldsDiffs.propTypes = {
-  element: PropTypes.object.isRequired,
+  instance: PropTypes.object.isRequired,
   field: PropTypes.string.isRequired,
 }
 
