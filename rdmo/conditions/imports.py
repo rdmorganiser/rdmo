@@ -4,7 +4,9 @@ from typing import Callable, Tuple
 from django.contrib.sites.models import Site
 from django.db import models
 
+from rdmo.conditions.validators import ConditionLockedValidator, ConditionUniqueURIValidator
 from rdmo.core.imports import (
+    ElementImportHelper,
     check_permissions,
     set_foreign_field,
     validate_instance,
@@ -39,3 +41,11 @@ def import_condition(
         instance.editors.add(Site.objects.get_current())
 
     return instance
+
+
+import_helper_condition = ElementImportHelper(
+    model="conditions.condition",
+    dotted_path='rdmo.conditions.models.Condition',
+    import_method=import_condition,
+    validators=(ConditionLockedValidator, ConditionUniqueURIValidator),
+)

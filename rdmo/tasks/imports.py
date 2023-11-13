@@ -5,12 +5,13 @@ from django.contrib.sites.models import Site
 from django.db import models
 
 from rdmo.core.imports import (
+    ElementImportHelper,
     check_permissions,
     set_foreign_field,
-    set_lang_field,
     set_m2m_instances,
     validate_instance,
 )
+from rdmo.tasks.validators import TaskLockedValidator, TaskUniqueURIValidator
 
 logger = logging.getLogger(__name__)
 
@@ -51,3 +52,12 @@ def import_task(
         instance.editors.add(Site.objects.get_current())
 
     return instance
+
+
+import_helper_task = ElementImportHelper(
+    model="tasks.task",
+    dotted_path="rdmo.tasks.models.Task",
+    import_method=import_task,
+    validators=(TaskLockedValidator, TaskUniqueURIValidator),
+    lang_fields=('title', 'text')
+)
