@@ -2,6 +2,9 @@ import logging
 from collections import defaultdict
 from typing import Optional
 
+from django.db import models
+from django.forms.models import model_to_dict
+
 from rdmo.conditions.imports import import_condition
 from rdmo.conditions.validators import ConditionLockedValidator, ConditionUniqueURIValidator
 from rdmo.core.imports import common_import_methods
@@ -123,7 +126,7 @@ def import_element(
         user = None
     ):
 
-    if element is None or model_path is None:
+    if element is None:
         return element
 
     element.update({
@@ -134,29 +137,59 @@ def import_element(
         'original': defaultdict()
     })
 
+    if model_path is None:
+        return element
+
     model_import = ELEMENT_MODEL_IMPORT_MAPPER[model_path]
     import_method = model_import['import_method']
     model_path = model_import['dotted_path']
     validators = model_import['validators']
 
-    instance, element, _msg = common_import_methods(
+    instance, element, _msg, _created = common_import_methods(
                             model_path,
                             uri=element.get('uri'),
                             element=element
                     )
+    _updated = not _created
+    # for when the element is updated
+    # keep a dict of the original
+    # needs to be created here, else the changes will be overwritten
+    original = model_to_dict(instance) if _updated else {}
 
     instance = import_method(instance, element, validators, save, user)
-    if save and not element.get('errors'):
+
+    if element.get('errors'):
+        return element
+
+    if save:
         logger.info(_msg)
+        element['created'] = _created
+        element['updated'] = _updated
 
-    element = filter_original(element)
+    if _updated:
+        original = filter_original(element, original)
+        element['updated'] = _updated
+        element['original'] = original
 
     return element
 
 
-def filter_original(element):
+def filter_original(element, original):
     '''select only keys for original that are in the element.'''
-    element['original'] = {k: val for k, val in
-                        element.get('original', {}).items()
-                        if k in element and k != 'original'}
-    return element
+    # filter for keys
+    original = {
+        k: val for k, val in
+        original.items()
+        if k in element
+    }
+    # replace the lists of nested model values
+    # in the "original" dict
+    original_replace = {
+        k: element[k] for k, val in
+        original.items() if (
+            isinstance(val, list) and
+            any(isinstance(i, models.Model) for i in val)
+        )
+    }
+    original.update(**original_replace)
+    return original
