@@ -42,6 +42,7 @@ def import_catalog(
         return instance
 
     if save:
+        instance.save()
         set_m2m_through_instances(instance, 'sections', element, 'catalog', 'section', 'catalog_sections')
         instance.sites.add(Site.objects.get_current())
         instance.editors.add(Site.objects.get_current())
