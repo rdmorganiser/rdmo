@@ -109,10 +109,10 @@ class ImportViewSet(viewsets.ViewSet):
             raise ValidationError({'elements': [_('This is not a valid RDMO import JSON.')]}) from e
 
         # step 3: import the elements
-        import_elements(elements, user=request.user)
+        imported_elements = import_elements(elements, user=request.user)
 
         # step 4: return the list of elements
-        return Response(elements)
+        return Response(imported_elements)
 
 
 class ElementToggleCurrentSiteViewSetMixin:
