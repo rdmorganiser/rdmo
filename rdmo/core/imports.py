@@ -65,11 +65,10 @@ def get_or_return_instance(model: models.Model, uri: Optional[str]=None) -> Tupl
 
 def make_import_info_msg(verbose_name: str, created: bool, uri: Optional[str]=None):
     if uri is None:
-        return "%s, no uri", verbose_name
+        return "%s, no uri" % verbose_name
     if created:
-        return "%s created with %s", verbose_name, uri
-
-    return "%s %s updated", verbose_name, uri
+        return f"{verbose_name} created with {uri}"
+    return f"{verbose_name} {uri} updated"
 
 @dataclass
 class ElementImportHelper:
