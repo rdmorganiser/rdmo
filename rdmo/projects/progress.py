@@ -40,13 +40,11 @@ def compute_navigation(section, project, snapshot=None):
 
     # compute sets from values (including empty values)
     sets = defaultdict(lambda: defaultdict(list))
-    for attribute, set_prefix, set_index in values.order_by('attribute') \
-                                                  .values_list('attribute', 'set_prefix', 'set_index').distinct():
+    for attribute, set_prefix, set_index in values.distinct_list():
         sets[attribute][set_prefix].append(set_index)
 
     # query distinct, non empty set values
-    values_list = values.exclude((Q(text='') | Q(text=None)) & Q(option=None) & (Q(file='') | Q(file=None))) \
-                        .order_by('attribute').values_list('attribute', 'set_prefix', 'set_index').distinct()
+    values_list = values.exclude_empty().distinct_list()
 
     navigation = []
     for catalog_section in project.catalog.elements:
@@ -92,13 +90,12 @@ def compute_progress(project, snapshot=None):
 
     # compute sets from values (including empty values)
     sets = defaultdict(lambda: defaultdict(list))
-    for attribute, set_prefix, set_index in values.order_by('attribute') \
-                                                  .values_list('attribute', 'set_prefix', 'set_index').distinct():
+    for attribute, set_prefix, set_index in values.distinct_list():
         sets[attribute][set_prefix].append(set_index)
 
     # query distinct, non empty set values
-    values_list = values.exclude((Q(text='') | Q(text=None)) & Q(option=None) & (Q(file='') | Q(file=None))) \
-                        .order_by('attribute').values_list('attribute', 'set_prefix', 'set_index').distinct()
+    values_list = values.exclude_empty().distinct_list()
+
 
     # count the total number of questions, taking sets and conditions into account
     counts = count_questions(project.catalog, sets, conditions)
