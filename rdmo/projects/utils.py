@@ -101,10 +101,7 @@ def save_import_snapshot_values(project, snapshots, checked):
 
         for value in snapshot.snapshot_values:
             if value.attribute:
-                value_key = '{value.attribute.uri}[{snapshot_index}][{value.set_prefix}][{value.set_index}][{value.collection_index}]'.format(  # noqa: E501
-                    value=value,
-                    snapshot_index=snapshot.snapshot_index
-                )
+                value_key = f"{value.attribute.uri}[{snapshot.snapshot_index}][{value.set_prefix}][{value.set_index}][{value.collection_index}]" # noqa: E501
 
                 if value_key in checked:
                     # assert that this is a new value

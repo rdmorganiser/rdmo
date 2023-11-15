@@ -25,14 +25,14 @@ class OauthProviderMixin:
             response = requests.get(url, headers=self.get_authorization_headers(access_token))
 
             if response.status_code == 401:
-                logger.warn('get forbidden: %s (%s)', response.content, response.status_code)
+                logger.warning('get forbidden: %s (%s)', response.content, response.status_code)
             else:
                 try:
                     response.raise_for_status()
                     return self.get_success(request, response)
 
                 except requests.HTTPError:
-                    logger.warn('get error: %s (%s)', response.content, response.status_code)
+                    logger.warning('get error: %s (%s)', response.content, response.status_code)
 
                     return render(request, 'core/error.html', {
                         'title': _('OAuth error'),
@@ -53,14 +53,14 @@ class OauthProviderMixin:
             response = requests.post(url, json=data, headers=self.get_authorization_headers(access_token))
 
             if response.status_code == 401:
-                logger.warn('post forbidden: %s (%s)', response.content, response.status_code)
+                logger.warning('post forbidden: %s (%s)', response.content, response.status_code)
             else:
                 try:
                     response.raise_for_status()
                     return self.post_success(request, response)
 
                 except requests.HTTPError:
-                    logger.warn('post error: %s (%s)', response.content, response.status_code)
+                    logger.warning('post error: %s (%s)', response.content, response.status_code)
 
                     return render(request, 'core/error.html', {
                         'title': _('OAuth error'),
