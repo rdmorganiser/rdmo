@@ -202,8 +202,8 @@ class OrderedMultiSelect extends Component {
   }
 
   render() {
-    const { config, element, field, verboseName, verboseNameCreate,
-            verboseNameAltCreate, onCreate, onAltCreate } = this.props
+    const { config, element, field, addText, createText, altCreateText,
+            onCreate, onAltCreate } = this.props
 
     const id = getId(element, field),
           label = getLabel(config, element, field),
@@ -239,14 +239,14 @@ class OrderedMultiSelect extends Component {
 
         <button className="btn btn-primary btn-xs" onClick={() => this.handleAdd()}
                 disabled={element.read_only}>
-          {interpolate(gettext('Add existing %s'), [verboseName])}
+          {addText}
         </button>
         {
           onCreate &&
           <button className="btn btn-success btn-xs ml-10" onClick={onCreate}
                   disabled={element.read_only || isNil(element.id)}
                   title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
-            {interpolate(gettext('Create new %s'), [verboseNameCreate || verboseName])}
+            {createText}
           </button>
         }
         {
@@ -254,7 +254,7 @@ class OrderedMultiSelect extends Component {
           <button className="btn btn-success btn-xs ml-10" onClick={onAltCreate}
                   disabled={element.read_only || isNil(element.id)}
                   title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
-            {interpolate(gettext('Create new %s'), [verboseNameAltCreate || verboseName])}
+            {altCreateText}
           </button>
         }
 
@@ -284,9 +284,9 @@ OrderedMultiSelect.propTypes = {
   fields: PropTypes.array,
   options: PropTypes.array.isRequired,
   values: PropTypes.array,
-  verboseName: PropTypes.string.isRequired,
-  verboseNameCreate: PropTypes.string,
-  verboseNameAltCreate: PropTypes.string,
+  addText: PropTypes.string.isRequired,
+  createText: PropTypes.string,
+  altCreateText: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   onCreate: PropTypes.func,
   onAltCreate: PropTypes.func,

@@ -11,7 +11,7 @@ import Link from 'rdmo/core/assets/js/components/Link'
 
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
-const Select = ({ config, element, field, options, verboseName, isMulti, onChange, onCreate, onEdit }) => {
+const Select = ({ config, element, field, options, createText, isMulti, onChange, onCreate, onEdit }) => {
   const id = getId(element, field),
         label = getLabel(config, element, field),
         help = getHelp(config, element, field),
@@ -68,7 +68,7 @@ const Select = ({ config, element, field, options, verboseName, isMulti, onChang
         onCreate &&
         <button className="btn btn-success btn-xs mt-10" onClick={onCreate} disabled={isNil(element.id)}
                 title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
-          {interpolate(gettext('Create new %s'), [verboseName])}
+          {createText}
         </button>
       }
 
@@ -86,7 +86,7 @@ Select.propTypes = {
   element: PropTypes.object,
   field: PropTypes.string,
   options: PropTypes.array,
-  verboseName: PropTypes.string,
+  createText: PropTypes.string,
   isMulti: PropTypes.bool,
   onChange: PropTypes.func,
   onCreate: PropTypes.func,

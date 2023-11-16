@@ -111,7 +111,7 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
         <Checkbox config={config} element={condition} field="locked"
                   onChange={updateCondition} />
 
-        <Select config={config} element={condition} field="source" verboseName={gettext('attribute')}
+        <Select config={config} element={condition} field="source" createText={gettext('Create new attribute')}
                 options={attributes} onChange={updateCondition} onCreate={createAttribute} onEdit={editAttribute} />
 
         <Select config={config} element={condition} field="relation"

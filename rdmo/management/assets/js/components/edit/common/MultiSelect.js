@@ -10,7 +10,7 @@ import Link from 'rdmo/core/assets/js/components/Link'
 
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
-const MultiSelect = ({ config, element, field, options, verboseName, onChange, onCreate, onEdit }) => {
+const MultiSelect = ({ config, element, field, options, addText, createText, onChange, onCreate, onEdit }) => {
   const id = getId(element, field),
         label = getLabel(config, element, field),
         help = getHelp(config, element, field),
@@ -82,7 +82,7 @@ const MultiSelect = ({ config, element, field, options, verboseName, onChange, o
       </div>
 
       <button className="btn btn-primary btn-xs" onClick={() => handleAdd()} disabled={element.read_only}>
-        {interpolate(gettext('Add %s'), [verboseName])}
+        {addText}
       </button>
 
       {
@@ -90,7 +90,7 @@ const MultiSelect = ({ config, element, field, options, verboseName, onChange, o
         <button className="btn btn-success btn-xs ml-10" onClick={onCreate}
                 disabled={element.read_only || isNil(element.id)}
                 title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
-          {interpolate(gettext('Create new %s'), [verboseName])}
+          {createText}
         </button>
       }
 
@@ -104,7 +104,8 @@ MultiSelect.propTypes = {
   element: PropTypes.object,
   field: PropTypes.string,
   options: PropTypes.array,
-  verboseName: PropTypes.string,
+  addText: PropTypes.string,
+  createText: PropTypes.string,
   onChange: PropTypes.func,
   onCreate: PropTypes.func,
   onEdit: PropTypes.func

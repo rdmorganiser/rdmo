@@ -95,8 +95,8 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
           }
         </Tabs>
 
-        <OrderedMultiSelect config={config} element={catalog} field="sections"
-                            options={sections} verboseName="section"
+        <OrderedMultiSelect config={config} element={catalog} field="sections" options={sections}
+                            addText={gettext('Add existing section')} createText={gettext('Create new section')}
                             onChange={updateCatalog} onCreate={createSection} onEdit={editSection} />
 
         {get(config, 'settings.groups') && <Select config={config} element={catalog} field="groups"
