@@ -62,3 +62,14 @@ class HasProjectPagePermission(HasProjectPermission):
 
     def get_required_object_permissions(self, method, model_cls):
         return ('projects.view_page_object', )
+
+
+class HasProjectProgressPermission(HasProjectPermission):
+
+    def get_required_object_permissions(self, method, model_cls):
+        if method == 'GET':
+            return ('projects.view_project_object', )
+        elif method == 'POST':
+            return ('projects.change_project_progress_object', )
+        else:
+            raise RuntimeError('Unsupported method for HasProjectProgressPermission')

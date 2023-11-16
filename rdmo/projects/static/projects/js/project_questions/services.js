@@ -9,7 +9,7 @@ angular.module('project_questions')
     /* configure resources */
 
     var resources = {
-        projects: $resource(baseurl + 'api/v1/projects/projects/:id/:detail_action/'),
+        projects: $resource(baseurl + 'api/v1/projects/projects/:id/:detail_action/:detail_id/'),
         values: $resource(baseurl + 'api/v1/projects/projects/:project/values/:id/:detail_action/'),
         pages: $resource(baseurl + 'api/v1/projects/projects/:project/pages/:list_action/:id/'),
         settings: $resource(baseurl + 'api/v1/core/settings/')
@@ -147,13 +147,14 @@ angular.module('project_questions')
             }
 
             return service.fetchPage(page_id)
+            .then(service.fetchNavigation)
             .then(service.fetchOptions)
             .then(service.fetchValues)
             .then(service.fetchConditions)
             .then(function () {
                 // copy future objects
                 angular.forEach([
-                    'page', 'progress', 'attributes', 'questionsets', 'questions', 'valuesets', 'values'
+                    'page', 'progress', 'attributes', 'questionsets', 'questions', 'valuesets', 'values', 'navigation'
                 ], function (key) {
                     service[key] = angular.copy(future[key]);
                 });
@@ -274,6 +275,16 @@ angular.module('project_questions')
             // using recursive functions!
             service.initPage(future.page);
         });
+    };
+
+    service.fetchNavigation = function() {
+        future.navigation = resources.projects.query({
+            id: service.project.id,
+            detail_id: future.page.section.id,
+            detail_action: 'navigation'
+        });
+
+        return future.navigation.$promise
     };
 
     service.initPage = function(page) {
@@ -891,16 +902,7 @@ angular.module('project_questions')
                 } else if (angular.isDefined(page)) {
                     service.initView(page.id);
                 } else if (angular.isDefined(section)) {
-                    if (angular.isDefined(section.pages)) {
-                        service.initView(section.pages[0].id);
-                    } else {
-                        // jump to first page of the section in breadcrumb
-                        // let section_from_service = service.project.catalog.sections.find(x => x.id === section.id)
-                        var section_from_service = $filter('filter')(service.project.catalog.sections, {
-                            id: section.id
-                        })[0]
-                        service.initView(section_from_service.pages[0].id);
-                    }
+                    service.initView(section.first);
                 } else {
                     service.initView(null);
                 }
@@ -909,16 +911,7 @@ angular.module('project_questions')
             if (angular.isDefined(page)) {
                 service.initView(page.id);
             } else if (angular.isDefined(section)) {
-                if (angular.isDefined(section.pages)) {
-                    service.initView(section.pages[0].id);
-                } else {
-                    // jump to first page of the section in breadcrumb
-                    // let section_from_service = service.project.catalog.sections.find(x => x.id === section.id)
-                    var section_from_service = $filter('filter')(service.project.catalog.sections, {
-                        id: section.id
-                    })[0]
-                    service.initView(section_from_service.pages[0].id);
-                }
+                service.initView(section.first);
             } else {
                 service.initView(null);
             }
@@ -955,14 +948,14 @@ angular.module('project_questions')
                 }
             } else {
                 // update progress
-                resources.projects.get({
-                    id: service.project.id,
-                    detail_action: 'progress'
-                }, function(response) {
-                    if (service.progress.values != response.values) {
+                if (service.project.read_only !== true) {
+                    resources.projects.postAction({
+                        id: service.project.id,
+                        detail_action: 'progress'
+                    }, function(response) {
                         service.progress = response
-                    }
-                });
+                    });
+                }
 
                 // check if we need to refresh the site
                 angular.forEach([service.page].concat(service.questionsets), function(questionset) {

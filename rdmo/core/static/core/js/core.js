@@ -16,6 +16,13 @@ angular.module('core', ['ngResource'])
         method: 'PUT',
         params: {}
     };
+    $resourceProvider.defaults.actions.postAction = {
+        method: 'POST',
+        params: {
+            id: '@id',
+            detail_action: '@detail_action'
+        }
+    };
 }])
 
 .filter('capitalize', function() {
