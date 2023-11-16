@@ -4,7 +4,8 @@ class OptionsFactory {
     return {
       model: 'options.optionset',
       uri_prefix: config.settings.default_uri_prefix,
-      questions: parent.question ? [parent.question.id] : []
+      questions: parent.question ? [parent.question.id] : [],
+      editors: config.settings.multisite ? [config.currentSite.id] : [],
     }
   }
 
@@ -13,7 +14,8 @@ class OptionsFactory {
       model: 'options.option',
       uri_prefix: config.settings.default_uri_prefix,
       optionsets: parent.optionset ? [parent.optionset.id] : [],
-      conditions: []
+      conditions: [],
+      editors: config.settings.multisite ? [config.currentSite.id] : [],
     }
   }
 
