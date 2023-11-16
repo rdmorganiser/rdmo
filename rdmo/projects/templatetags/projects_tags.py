@@ -24,6 +24,16 @@ def project_progress(project):
     if project.progress_count is None or project.progress_total is None:
         return ''
 
+    return _('%(count)s of %(total)s') % {
+        'count': project.progress_count,
+        'total': project.progress_total
+    }
+
+@register.simple_tag()
+def project_progress_ratio(project):
+    if project.progress_count is None or project.progress_total is None:
+        return ''
+
     try:
         ratio = project.progress_count / project.progress_total
     except ZeroDivisionError:
