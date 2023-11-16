@@ -1,6 +1,8 @@
 import Cookies from 'js-cookie'
 import isUndefined from 'lodash/isUndefined'
 
+import baseUrl from '../utils/baseUrl'
+
 function ApiError(statusText, status) {
   this.status = status
   this.statusText = statusText
@@ -16,7 +18,7 @@ function ValidationError(errors) {
 class BaseApi {
 
   static get(url) {
-    return fetch(url).catch(error => {
+    return fetch(baseUrl + url).catch(error => {
       throw new ApiError(error.message)
     }).then(response => {
       if (response.ok) {
@@ -28,7 +30,7 @@ class BaseApi {
   }
 
   static post(url, data) {
-    return fetch(url, {
+    return fetch(baseUrl + url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -51,7 +53,7 @@ class BaseApi {
   }
 
   static put(url, data) {
-    return fetch(url, {
+    return fetch(baseUrl + url, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -74,7 +76,7 @@ class BaseApi {
   }
 
   static delete(url) {
-    return fetch(url, {
+    return fetch(baseUrl + url, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -99,7 +101,7 @@ class BaseApi {
     var formData = new FormData()
     formData.append('file', file)
 
-    return fetch(url, {
+    return fetch(baseUrl + url, {
       method: 'POST',
       headers: {
         'X-CSRFToken': Cookies.get('csrftoken')
