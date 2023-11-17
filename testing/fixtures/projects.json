@@ -15,7 +15,7 @@
     "pk": 1,
     "fields": {
       "project": 1,
-      "provider_key": "github"
+      "provider_key": "simple"
     }
   },
   {
@@ -23,7 +23,7 @@
     "pk": 2,
     "fields": {
       "project": 2,
-      "provider_key": "github"
+      "provider_key": "simple"
     }
   },
   {
@@ -31,8 +31,8 @@
     "pk": 1,
     "fields": {
       "integration": 1,
-      "key": "repo",
-      "value": "example/example",
+      "key": "project_url",
+      "value": "https://example.com/projects/1",
       "secret": false
     }
   },
@@ -51,8 +51,8 @@
     "pk": 3,
     "fields": {
       "integration": 2,
-      "key": "repo",
-      "value": "example/example",
+      "key": "project_url",
+      "value": "https://example.com/projects/1",
       "secret": false
     }
   },
@@ -135,7 +135,7 @@
     "fields": {
       "issue": 1,
       "integration": 1,
-      "url": "https://github.com/example/example/issues/1"
+      "url": "https://simple.example.com/issues/1"
     }
   },
   {

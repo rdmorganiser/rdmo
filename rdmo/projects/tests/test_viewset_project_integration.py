@@ -87,11 +87,11 @@ def test_create(db, client, username, password, project_id):
 
     url = reverse(urlnames['list'], args=[project_id])
     data = {
-        'provider_key': 'github',
+        'provider_key': 'simple',
         'options': [
             {
-                'key': 'repo',
-                'value': 'example/example'
+                'key': 'project_url',
+                'value': 'https://example.com/projects/1'
             }
         ]
     }
@@ -115,8 +115,8 @@ def test_create_error1(db, client, username, password, project_id):
         'provider_key': 'wrong',
         'options': [
             {
-                'key': 'repo',
-                'value': 'example/example'
+                'key': 'project_url',
+                'value': 'https://example.com/projects/1'
             }
         ]
     }
@@ -138,10 +138,10 @@ def test_create_error2(db, client, username, password, project_id):
 
     url = reverse(urlnames['list'], args=[project_id])
     data = {
-        'provider_key': 'github',
+        'provider_key': 'simple',
         'options': [
             {
-                'key': 'repo',
+                'key': 'project_url',
                 'value': ''
             }
         ]
@@ -164,11 +164,11 @@ def test_create_error3(db, client, username, password, project_id):
 
     url = reverse(urlnames['list'], args=[project_id])
     data = {
-        'provider_key': 'github',
+        'provider_key': 'simple',
         'options': [
             {
-                'key': 'repo',
-                'value': 'example/example'
+                'key': 'project_url',
+                'value': 'https://example.com/projects/1'
             },
             {
                 'key': 'foo',
@@ -196,11 +196,11 @@ def test_update(db, client, username, password, project_id, integration_id):
 
     url = reverse(urlnames['detail'], args=[project_id, integration_id])
     data = {
-        'provider_key': 'github',
+        'provider_key': 'simple',
         'options': [
             {
-                'key': 'repo',
-                'value': 'example/test'
+                'key': 'project_url',
+                'value': 'https://example.com/projects/2'
             }
         ]
     }
@@ -210,8 +210,8 @@ def test_update(db, client, username, password, project_id, integration_id):
         assert response.status_code == 200
         assert sorted(response.json().get('options'), key=lambda obj: obj['key']) == [
             {
-                'key': 'repo',
-                'value': 'example/test'
+                'key': 'project_url',
+                'value': 'https://example.com/projects/2'
             },
             {
                 'key': 'secret',

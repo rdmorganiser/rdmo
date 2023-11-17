@@ -79,10 +79,5 @@ OPTIONSET_PROVIDERS = [
 ]
 
 PROJECT_ISSUE_PROVIDERS = [
-    ('github', _('GitHub'), 'rdmo.projects.providers.GitHubIssueProvider')
+    ('simple', _('Simple provider'), 'rdmo.projects.providers.SimpleIssueProvider')
 ]
-
-GITHUB_PROVIDER = {
-    'client_id': '',
-    'client_secret': ''
-}
