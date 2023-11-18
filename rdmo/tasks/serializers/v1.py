@@ -21,6 +21,8 @@ class TaskSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
     warning = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()
 
+    condition_uris = serializers.SerializerMethodField()
+
     projects_count = serializers.IntegerField(read_only=True)
 
     class Meta:
@@ -47,6 +49,7 @@ class TaskSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
             'text',
             'warning',
             'read_only',
+            'condition_uris',
             'projects_count',
         )
         trans_fields = (
@@ -60,6 +63,9 @@ class TaskSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
         warning_fields = (
             'title',
         )
+
+    def get_condition_uris(self, obj):
+        return [condition.uri for condition in obj.conditions.all()]
 
 
 class TaskIndexSerializer(serializers.ModelSerializer):

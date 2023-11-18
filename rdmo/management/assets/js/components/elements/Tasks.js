@@ -6,6 +6,7 @@ import { getUriPrefixes } from '../../utils/filter'
 
 import { FilterString, FilterUriPrefix, FilterSite} from '../common/Filter'
 import { BackButton, NewButton } from '../common/Buttons'
+import { Checkbox } from '../common/Checkboxes'
 
 import Task from '../element/Task'
 
@@ -15,6 +16,9 @@ const Tasks = ({ config, tasks, configActions, elementActions }) => {
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.tasks.uri_prefix', value)
   const updateFilterSite = (value) => configActions.updateConfig('filter.sites', value)
   const updateFilterEditor = (value) => configActions.updateConfig('filter.editors', value)
+
+  const updateDisplayTasksURI = (value) => configActions.updateConfig('display.uri.tasks', value)
+  const updateDisplayConditionsURI = (value) => configActions.updateConfig('display.uri.conditions', value)
 
   const createTask = () => elementActions.createElement('tasks')
 
@@ -51,6 +55,14 @@ const Tasks = ({ config, tasks, configActions, elementActions }) => {
             </>
           }
         </div>
+        <div className="checkboxes">
+          <span className="mr-10">{gettext('Show URIs:')}</span>
+          <Checkbox label={<code className="code-tasks">{gettext('Tasks')}</code>}
+                    value={get(config, 'display.uri.tasks', true)} onChange={updateDisplayTasksURI} />
+          <Checkbox label={<code className="code-conditions">{gettext('Conditions')}</code>}
+                    value={get(config, 'display.uri.conditions', true)} onChange={updateDisplayConditionsURI} />
+        </div>
+
       </div>
 
       <ul className="list-group">
