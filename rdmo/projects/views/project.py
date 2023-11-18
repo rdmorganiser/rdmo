@@ -157,7 +157,10 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
         context['memberships'] = memberships.order_by('user__last_name', '-project__level')
         context['integrations'] = integrations.order_by('provider_key', '-project__level')
         context['providers'] = get_plugins('PROJECT_ISSUE_PROVIDERS')
-        context['issues'] = [issue for issue in project.issues.all() if issue.resolve(values)]
+        context['issues'] = [
+            issue for issue in project.issues.order_by('-status', 'task__order', 'task__uri') if issue.resolve(values)
+        ]
+        context['views'] = project.views.order_by('order', 'uri')
         context['snapshots'] = project.snapshots.all()
         context['invites'] = project.invites.all()
         context['membership'] = Membership.objects.filter(project=project, user=self.request.user).first()
