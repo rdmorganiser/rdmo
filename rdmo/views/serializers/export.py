@@ -16,6 +16,7 @@ class ViewExportSerializer(TranslationSerializerMixin, serializers.ModelSerializ
             'uri_prefix',
             'uri_path',
             'comment',
+            'order',
             'catalogs',
             'template'
         )

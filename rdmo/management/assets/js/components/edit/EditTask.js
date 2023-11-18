@@ -76,13 +76,17 @@ const EditTask = ({ config, task, elements, elementActions}) => {
                   rows={4} onChange={updateTask} />
 
         <div className="row">
-          <div className="col-sm-6">
+          <div className="col-sm-4">
             <Checkbox config={config} element={task} field="locked"
                       onChange={updateTask} />
           </div>
-          <div className="col-sm-6">
+          <div className="col-sm-4">
             <Checkbox config={config} element={task} field="available"
                       onChange={updateTask} />
+          </div>
+          <div className="col-sm-4">
+            <Number config={config} element={task} field="order"
+                    onChange={updateTask} />
           </div>
         </div>
 

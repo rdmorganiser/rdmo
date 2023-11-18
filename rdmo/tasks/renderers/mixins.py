@@ -11,6 +11,7 @@ class TasksRendererMixin:
             self.render_text_element(xml, 'uri_prefix', {}, task['uri_prefix'])
             self.render_text_element(xml, 'uri_path', {}, task['uri_path'])
             self.render_text_element(xml, 'dc:comment', {}, task['comment'])
+            self.render_text_element(xml, 'order', {}, task['order'])
 
             for lang_code, lang_string, lang_field in get_languages():
                 self.render_text_element(xml, 'title', {'lang': lang_code}, task['title_%s' % lang_code])
