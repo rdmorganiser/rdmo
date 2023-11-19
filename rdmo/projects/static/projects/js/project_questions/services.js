@@ -957,6 +957,18 @@ angular.module('project_questions')
                     });
                 }
 
+                // update navigation
+                if (service.project.read_only !== true) {
+                    resources.projects.query({
+                        id: service.project.id,
+                        detail_id: future.page.section.id,
+                        detail_action: 'navigation'
+                    }, function(response) {
+                        console.log(response);
+                        service.navigation = response
+                    });
+                }
+
                 // check if we need to refresh the site
                 angular.forEach([service.page].concat(service.questionsets), function(questionset) {
                     angular.forEach(questionset.elements, function(element) {
