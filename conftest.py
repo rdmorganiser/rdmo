@@ -10,29 +10,33 @@ from django.core.management import call_command
 from rdmo.accounts.utils import set_group_permissions
 
 
+@pytest.fixture(scope="session")
+def fixtures():
+    allowed_file_stems = {
+        'accounts',
+        'conditions',
+        'domain',
+        'groups',
+        'options',
+        'overlays',
+        'projects',
+        'questions',
+        'sites',
+        'tasks',
+        'users',
+        'views'
+    }
+    fixtures = []
+    for fixture_dir in settings.FIXTURE_DIRS:
+        filenames = [filename for filename in Path(fixture_dir).iterdir() if filename.stem in allowed_file_stems]
+        fixtures.extend(filenames)
+    return fixtures
+
+
 @pytest.fixture(scope='session')
-def django_db_setup(django_db_setup, django_db_blocker):
+def django_db_setup(django_db_setup, django_db_blocker, fixtures):
     """Populate database with test data from fixtures directories."""
     with django_db_blocker.unblock():
-        fixtures = []
-        for fixture_dir in settings.FIXTURE_DIRS:
-            for file in Path(fixture_dir).iterdir():
-                if file.stem in [
-                    'accounts',
-                    'conditions',
-                    'domain',
-                    'groups',
-                    'options',
-                    'overlays',
-                    'projects',
-                    'questions',
-                    'sites',
-                    'tasks',
-                    'users',
-                    'views'
-                ]:
-                    fixtures.append(file)
-
         call_command('loaddata', *fixtures)
         set_group_permissions()
 
@@ -49,7 +53,4 @@ def files(settings, tmp_path):
 @pytest.fixture
 def json_data():
     json_file = Path(settings.BASE_DIR) / 'import' / 'catalogs.json'
-    json_data = {
-        'elements': json.loads(json_file.read_text())
-    }
-    return json_data
+    return {'elements': json.loads(json_file.read_text())}

@@ -92,6 +92,7 @@ pytest = [
   "pytest-cov~=4.1",
   "pytest-django~=4.5",
   "pytest-mock~=3.11",
+  "pytest-playwright~=0.4.3",
   "pytest-randomly~=3.15",
   "pytest-xdist~=3.3",
 ]
@@ -180,7 +181,10 @@ DJANGO_SETTINGS_MODULE = "config.settings"
 testpaths = ["rdmo"]
 python_files = "test_*[!.txt].py"
 pythonpath = [".", "testing"]
-addopts = "-p no:randomly"
+addopts = '-p no:randomly -m "not e2e"'
+markers = [
+  "e2e: marks tests as end-to-end tests using playwright (deselect with '-m \"not e2e\"')",
+]
 filterwarnings = [
   # fail on RemovedInDjango50Warning exception
   "error::django.utils.deprecation.RemovedInDjango50Warning",

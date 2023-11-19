@@ -2,7 +2,7 @@ import os
 
 from django.utils.translation import gettext_lazy as _
 
-DEBUG = False
+DEBUG = os.getenv("DJANGO_DEBUG", False) == "True"
 TEMPLATE_DEBUG = False
 DEBUG_LOGGING = False
 

@@ -92,6 +92,30 @@ jobs:
         GITHUB_DB_BACKEND: ${{ matrix.db-backend }}
         COVERALLS_FLAG_NAME: '${{ matrix.db-backend }}: ${{ matrix.python-version }}'
         COVERALLS_PARALLEL: true
+    # end-to-end tests
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 18
+        cache: npm
+      if: matrix.python-version == '3.12' && matrix.db-backend == 'postgres'
+    - name: Cache Playwright browsers
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/ms-playwright/
+        key: playwright-browsers
+      if: matrix.python-version == '3.12' && matrix.db-backend == 'postgres'
+    - name: Install e2e tests dependencies
+      run: |
+        npm install
+        npm run build:prod
+        playwright install chromium
+      if: matrix.python-version == '3.12' && matrix.db-backend == 'postgres'
+    - name: Run end-to-end tests
+      run: pytest -p randomly -p no:cacheprovider --reuse-db --numprocesses=auto --dist=loadscope -m e2e --nomigrations
+      if: matrix.python-version == '3.12' && matrix.db-backend == 'postgres'
+      env:
+        DJANGO_DEBUG: True
+        GITHUB_DB_BACKEND: ${{ matrix.db-backend }}
 
   coveralls:
     name: Indicate completion to coveralls
@@ -140,20 +164,6 @@ jobs:
       - run: python -m pip freeze
       - run: python -m pip list --outdated
 
-  webpack-build:
-    name: Test webpack-build
-    needs: lint
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: npm
-      - run: npm install --dev
-      - run: npm run build
-      - run: npm run build:prod
-
   required-checks-pass:
     if: always()
     needs:
@@ -162,7 +172,6 @@ jobs:
       - coveralls
       - dev-setup
       - optional-dependencies
-      - webpack-build
     runs-on: ubuntu-22.04
     steps:
       - uses: re-actors/alls-green@release/v1
