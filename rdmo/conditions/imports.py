@@ -45,7 +45,6 @@ def import_condition(
 
 import_helper_condition = ElementImportHelper(
     model="conditions.condition",
-    dotted_path='rdmo.conditions.models.Condition',
     import_method=import_condition,
     validators=(ConditionLockedValidator, ConditionUniqueURIValidator),
 )
