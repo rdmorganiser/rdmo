@@ -9,20 +9,16 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 
-from rdmo.conditions.models import Condition
 from rdmo.core.imports import handle_uploaded_file
 from rdmo.core.permissions import CanToggleElementCurrentSite
 from rdmo.core.utils import get_model_field_meta, is_truthy
 from rdmo.core.xml import convert_elements, flat_xml_to_elements, order_elements, read_xml_file
-from rdmo.domain.models import Attribute
-from rdmo.options.models import Option, OptionSet
-from rdmo.questions.models import Catalog, Page, Question, QuestionSet, Section
-from rdmo.tasks.models import Task
-from rdmo.views.models import View
 
+from .constants import RDMO_MODEL_PATH_MAPPER
 from .imports import import_elements
 
 logger = logging.getLogger(__name__)
+
 
 
 class MetaViewSet(viewsets.ViewSet):
@@ -30,19 +26,7 @@ class MetaViewSet(viewsets.ViewSet):
     permission_classes = (IsAuthenticated, )
 
     def list(self, request, *args, **kwargs):
-        return Response({
-            'conditions.condition': get_model_field_meta(Condition),
-            'domain.attribute': get_model_field_meta(Attribute),
-            'options.optionset': get_model_field_meta(OptionSet),
-            'options.option': get_model_field_meta(Option),
-            'questions.catalog': get_model_field_meta(Catalog),
-            'questions.section': get_model_field_meta(Section),
-            'questions.page': get_model_field_meta(Page),
-            'questions.questionset': get_model_field_meta(QuestionSet),
-            'questions.question': get_model_field_meta(Question),
-            'tasks.task': get_model_field_meta(Task),
-            'views.view': get_model_field_meta(View)
-        })
+        return Response({k: get_model_field_meta(val) for k, val in RDMO_MODEL_PATH_MAPPER})
 
 
 class UploadViewSet(viewsets.ViewSet):
