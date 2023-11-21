@@ -46,7 +46,6 @@ def import_view(
 
 import_helper_view = ElementImportHelper(
     model="views.view",
-    dotted_path="rdmo.views.models.View",
     import_method=import_view,
     validators=(ViewLockedValidator, ViewUniqueURIValidator),
     lang_fields=('title', 'help')

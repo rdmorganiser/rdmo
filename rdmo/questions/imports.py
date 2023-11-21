@@ -100,7 +100,7 @@ def import_page(
     set_lang_field(instance, 'help', element)
     set_lang_field(instance, 'verbose_name', element)
 
-    validate_instance(instance, element,*validators)
+    validate_instance(instance, element, *validators)
 
     check_permissions(instance, element, user)
 
@@ -207,7 +207,6 @@ def import_question(
 
 import_helper_catalog = ElementImportHelper(
     model="questions.catalog",
-    dotted_path="rdmo.questions.models.catalog.Catalog",
     import_method=import_catalog,
     validators=(CatalogLockedValidator, CatalogUniqueURIValidator),
     lang_fields=('title', 'help')
@@ -215,14 +214,13 @@ import_helper_catalog = ElementImportHelper(
 
 import_helper_section = ElementImportHelper(
     model="questions.section",
-    dotted_path="rdmo.questions.models.section.Section",
     import_method=import_section,
     validators=(SectionLockedValidator, SectionUniqueURIValidator),
     lang_fields=('title',)
 )
+
 import_helper_page = ElementImportHelper(
     model="questions.page",
-    dotted_path="rdmo.questions.models.page.Page",
     import_method=import_page,
     validators= (PageLockedValidator, PageUniqueURIValidator),
     lang_fields=('title', 'help', 'verbose_name', 'verbose_name_plural')
@@ -230,14 +228,13 @@ import_helper_page = ElementImportHelper(
 
 import_helper_questionset = ElementImportHelper(
     model="questions.questionset",
-    dotted_path="rdmo.questions.models.questionset.QuestionSet",
     import_method=import_questionset,
     validators=(QuestionSetLockedValidator, QuestionSetUniqueURIValidator),
     lang_fields=('title', 'help', 'verbose_name', 'verbose_name_plural')
 )
+
 import_helper_question = ElementImportHelper(
     model="questions.question",
-    dotted_path="rdmo.questions.models.question.Question",
     import_method=import_question,
     validators=(QuestionLockedValidator, QuestionUniqueURIValidator),
     lang_fields=('text', 'help', 'default_text', 'verbose_name', 'verbose_name_plural')
