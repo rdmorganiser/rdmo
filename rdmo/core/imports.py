@@ -1,4 +1,3 @@
-import copy
 import logging
 import tempfile
 import time
@@ -10,7 +9,6 @@ from typing import Callable, Iterable, Optional, Sequence, Tuple
 
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
-from django.utils.module_loading import import_string as django_import_string
 
 from rest_framework.utils import model_meta
 
@@ -73,25 +71,10 @@ def make_import_info_msg(verbose_name: str, created: bool, uri: Optional[str]=No
 @dataclass
 class ElementImportHelper:
     model: str
-    dotted_path: str
     import_method: Callable
     validators: Iterable[Callable]
     lang_fields: Sequence[str] = field(default_factory=list)
     common_fields: Sequence[str] = field(default=ELEMENT_COMMON_FIELDS)
-
-
-def common_import_methods(model_dotted_path: str, uri: Optional[str] = None):
-
-    model = django_import_string(model_dotted_path)
-    instance, _created = get_or_return_instance(model, uri=uri)
-
-    # for when the element is updated
-    # keep a dict of the original
-    # needs to be created here, else the changes will be overwritten
-    original = copy.deepcopy(instance) if not _created else None
-
-    _msg = make_import_info_msg(model._meta.verbose_name, _created, uri=uri)
-    return instance, _msg, _created, original
 
 
 def get_lang_field_values(field_name: str,
