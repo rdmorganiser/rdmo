@@ -51,7 +51,6 @@ def import_option(
 
 import_helper_option = ElementImportHelper(
     model="options.option",
-    dotted_path="rdmo.options.models.Option",
     import_method=import_option,
     validators=(OptionLockedValidator, OptionUniqueURIValidator),
     lang_fields=('text',)
@@ -89,7 +88,6 @@ def import_optionset(
 
 import_helper_optionset = ElementImportHelper(
     model="options.optionset",
-    dotted_path="rdmo.options.models.OptionSet",
     import_method=import_optionset,
     validators=(OptionSetLockedValidator, OptionSetUniqueURIValidator),
 )

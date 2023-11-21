@@ -56,7 +56,6 @@ def import_task(
 
 import_helper_task = ElementImportHelper(
     model="tasks.task",
-    dotted_path="rdmo.tasks.models.Task",
     import_method=import_task,
     validators=(TaskLockedValidator, TaskUniqueURIValidator),
     lang_fields=('title', 'text')
