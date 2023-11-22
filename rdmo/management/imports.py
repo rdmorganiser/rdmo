@@ -1,7 +1,7 @@
 import copy
 import logging
 from collections import defaultdict
-from typing import Optional
+from typing import Dict, List, Optional
 
 from django.db import models
 from django.forms.models import model_to_dict
@@ -48,32 +48,33 @@ IMPORT_ELEMENT_INIT_DICT = {
     }
 
 
-def import_elements(uploaded_elements: list[dict], save: bool = True, user: Optional[models.Model] = None):
+def import_elements(uploaded_elements: List[Dict], save: bool = True, user: Optional[models.Model] = None):
     imported_elements = []
+    uploaded_uris = {i.get('uri') for i in uploaded_elements}
     for element in uploaded_elements:
-        model = element.get('model')
-        if model is None:
-            continue
-        element = import_element(model_path=model, element=element, save=save, user=user)
-        element = filter_warnings(element, uploaded_elements)
+        model_path = element.pop('model')
+        element = import_element(model_path=model_path, element=element, save=save, user=user)
+        # replace warnings with filtered list of warnings
+        warnings = element.pop('warnings')
+        element['warnings'] = filter_warnings(warnings, uploaded_uris)
         imported_elements.append(element)
     return imported_elements
 
 
-def filter_warnings(element: dict, elements: list[dict]):
+def filter_warnings(warnings: Dict, uploaded_uris: List[Dict]) -> List[str]:
     # remove warnings regarding elements which are in the elements list
-    warnings = []
-    for uri, messages in element['warnings'].items():
-        if not next(filter(lambda e: e['uri'] == uri, elements), None):
-            warnings += messages
-
-    element['warnings'] = warnings
-    return element
+    ret = []
+    if not warnings:
+        return ret
+    for uri, messages in warnings.items():
+        if uri not in uploaded_uris:
+            ret += messages
+    return ret
 
 
 def import_element(
         model_path: Optional[str] = None,
-        element: Optional[dict] = None,
+        element: Optional[Dict] = None,
         save: bool = True,
         user: Optional[models.Model] = None
     ):
