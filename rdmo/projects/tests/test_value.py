@@ -41,11 +41,12 @@ def test_value_radio(db, mocker):
     assert value.option_additional_input is True
 
 
-def test_value_select(db):
+def test_value_select(db, mocker):
     value = Value.objects.get(id=5)
-    assert value.value == ''
-    assert value.value_and_unit == ''
-    assert value.option_text == ''
+    mocker.patch('rdmo.options.models.Option.trans', mocked_trans)
+    assert value.value == 'One'
+    assert value.value_and_unit == 'One'
+    assert value.option_text == 'One'
     assert value.option_additional_input is False
 
 
