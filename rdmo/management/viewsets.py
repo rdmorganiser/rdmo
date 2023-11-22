@@ -26,7 +26,7 @@ class MetaViewSet(viewsets.ViewSet):
     permission_classes = (IsAuthenticated, )
 
     def list(self, request, *args, **kwargs):
-        return Response({k: get_model_field_meta(val) for k, val in RDMO_MODEL_PATH_MAPPER})
+        return Response({k: get_model_field_meta(val) for k, val in RDMO_MODEL_PATH_MAPPER.items()})
 
 
 class UploadViewSet(viewsets.ViewSet):
