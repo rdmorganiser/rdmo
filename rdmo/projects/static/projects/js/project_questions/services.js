@@ -943,7 +943,6 @@ angular.module('project_questions')
                         }
                     }
                 } else {
-                    console.log('next');
                     service.next();
                 }
             } else {
@@ -1394,12 +1393,22 @@ angular.module('project_questions')
 
                         // unset the searching flag
                         value.searching = false;
+
+                        // activate the first item
+                        if (question.widget_type == 'autocomplete' && angular.isDefined(value.items[0])) {
+                            value.items[0].active = true;
+                        }
                     });
                 }
             } else {
                 // if no search was performed, do the searching on the client
                 value.autocomplete_search = false;
                 value.items = question.options_fuse.search(value.autocomplete_input);
+
+                // activate the first item
+                if (question.widget_type == 'autocomplete' && angular.isDefined(value.items[0])) {
+                    value.items[0].active = true;
+                }
             }
         } else {
             value.items = [];
@@ -1442,8 +1451,19 @@ angular.module('project_questions')
                     value.autocomplete_input = next.text;
                 }
             } else if ($event.code == 'Enter' || $event.code == 'NumpadEnter') {
-                if (angular.isDefined(active)) {
+                if (value.autocomplete_input == '') {
+                    service.resetAutocomplete(value);
+                } else if (angular.isDefined(active)) {
                     service.selectAutocomplete(value, value.items[active]);
+                } else if (question.widget_type == 'freeautocomplete') {
+                    var matchingOptions = $filter('filter')(value.items, function(item) {
+                        return item.text.toLowerCase() == value.autocomplete_input.toLowerCase();
+                    })
+                    if (matchingOptions.length > 0) {
+                        service.selectAutocomplete(value, matchingOptions[0]);
+                    } else {
+                        service.selectAutocomplete(value, null);
+                    }
                 }
             } else if ($event.code == 'Escape') {
                 if (value.selected === '') {
@@ -1459,22 +1479,55 @@ angular.module('project_questions')
     // called when the user clicks on an option of the autocomplete field
     service.selectAutocomplete = function(value, option) {
         value.autocomplete_locked = true;
-        value.selected = option.id.toString();
-        value.autocomplete_text = option.text;
+
+        if (option === null) {
+            value.text = value.autocomplete_input;
+            value.selected = '';
+            value.autocomplete_text = value.text;
+        } else {
+            value.text = '';
+            value.selected = option.id.toString();
+            value.autocomplete_text = option.text;
+            value.autocomplete_input = option.text;
+        }
 
         service.changed(value, true);
     }
 
     // called when the user clicks outside the autocomplete field
-    service.blurAutocomplete = function(value) {
-        if (value.selected === '') {
-            value.autocomplete_input = '';
-            value.autocomplete_text = '';
-            value.items = null;
+    service.blurAutocomplete = function(question, value) {
+        if (question.widget_type == 'freeautocomplete') {
+            if (value.autocomplete_input == '') {
+                service.resetAutocomplete(value);
+            } else {
+                var matchingOptions = $filter('filter')(value.items, function(item) {
+                    return item.text.toLowerCase() == value.autocomplete_input.toLowerCase();
+                })
+                if (matchingOptions.length > 0) {
+                    service.selectAutocomplete(value, matchingOptions[0]);
+                } else {
+                    service.selectAutocomplete(value, null);
+                }
+            }
         } else {
-            value.autocomplete_locked = true;
-            value.autocomplete_input = value.autocomplete_text;
+            if (value.selected === '') {
+                service.resetAutocomplete(value);
+            } else {
+                value.autocomplete_locked = true;
+                value.autocomplete_input = value.autocomplete_text;
+            }
         }
+    }
+
+    // called when an empty string is entered in the autocomplete field
+    service.resetAutocomplete = function(value) {
+        value.text = '';
+        value.selected = '';
+        value.autocomplete_input = '';
+        value.autocomplete_text = '';
+        value.items = null;
+
+        service.changed(value, true);
     }
 
     // called when the user clicks in the autocomplete field
