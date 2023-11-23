@@ -32,6 +32,6 @@ repos:
       - id: eslint
         args: [--fix, --color]
         additional_dependencies:
-          - eslint@8.41.0
-          - eslint-plugin-react@7.32.2
+          - eslint@8.54.0
+          - eslint-plugin-react@7.33.2
           - react@18.2.0
