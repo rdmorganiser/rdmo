@@ -9,7 +9,7 @@
     <input type="hidden" name="method" value="upload_file" />
 
     <div class="upload-form-field">
-        <input type="file" name="uploaded_file" />
+        <input type="file" name="uploaded_file" {% if upload_accept %}accept="{{ upload_accept }}"{% endif %}/>
         <p>{% trans "Select file" %}</p>
     </div>
 

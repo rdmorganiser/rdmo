@@ -28,7 +28,7 @@ class RoleAdmin(admin.ModelAdmin):
     search_fields = ('user__username', 'user__email')
     list_filter = ('member', 'manager', 'editor', 'reviewer')
 
-    list_display = ('user', 'members', 'managers', 'editors', 'reviewers')
+    list_display = ('user', 'email', 'members', 'managers', 'editors', 'reviewers')
 
     def get_queryset(self, request):
         return Role.objects.prefetch_related(
@@ -42,6 +42,9 @@ class RoleAdmin(admin.ModelAdmin):
         if getattr(obj, f'{field_name}__count', 0) == obj.sites_count:
             return 'all Sites'
         return ', '.join([site.domain for site in getattr(obj, field_name).all()])
+
+    def email(self, obj):
+        return obj.user.email
 
     def members(self, obj):
         return self.render_all_sites_or_join(obj, 'member')

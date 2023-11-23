@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-22 12:31+0200\n"
-"PO-Revision-Date: 2023-09-22 12:31+0200\n"
+"PO-Revision-Date: 2023-10-16 13:11+0200\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -359,11 +359,11 @@ msgstr "Bestätigen"
 #: accounts/templates/account/email_confirm.html:29
 #, python-format
 msgid ""
-"This e-mail confirmation link expired or is invalid. Please <a "
-"href=\"%(email_url)s\">issue a new e-mail confirmation request</a>."
+"This e-mail confirmation link expired or is invalid. Please <a href="
+"\"%(email_url)s\">issue a new e-mail confirmation request</a>."
 msgstr ""
-"Dieser Bestätigungs-Link ist abgelaufen oder ungültig. Bitte <a "
-"href=\"%(email_url)s\">fordern sie eine neue Betätigungs-E-Mail an</a>."
+"Dieser Bestätigungs-Link ist abgelaufen oder ungültig. Bitte <a href="
+"\"%(email_url)s\">fordern sie eine neue Betätigungs-E-Mail an</a>."
 
 #: accounts/templates/account/login.html:6
 #: accounts/templates/account/login_form.html:23
@@ -380,17 +380,17 @@ msgstr "Mit Shibboleth einloggen"
 #: accounts/templates/account/login_form_account.html:7
 #, python-format
 msgid ""
-"If you have not created an account yet, then please <a "
-"href=\"%(signup_url)s\">sign up</a> first."
+"If you have not created an account yet, then please <a href=\"%(signup_url)s"
+"\">sign up</a> first."
 msgstr ""
-"Falls Sie noch kein Benutzerkonto haben, <a "
-"href=\"%(signup_url)s\">registrieren</a> Sie sich bitte zunächst."
+"Falls Sie noch kein Benutzerkonto haben, <a href=\"%(signup_url)s"
+"\">registrieren</a> Sie sich bitte zunächst."
 
 #: accounts/templates/account/login_form_account.html:14
 #, python-format
 msgid ""
-"If you forgot your password and want to reset it, click <a "
-"href=\"%(reset_url)s\">here</a>."
+"If you forgot your password and want to reset it, click <a href="
+"\"%(reset_url)s\">here</a>."
 msgstr ""
 "Falls Sie Ihr Passwort vergessen haben und es zurücksetzen wollen, klicken "
 "Sie bitte <a href=\"%(reset_url)s\">hier</a>."
@@ -520,8 +520,8 @@ msgstr "Neues Benutzerkonto erstellen"
 msgid ""
 "Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
 msgstr ""
-"Falls Sie schon eine Benutzerkonto haben können Sie sich <a "
-"href=\"%(login_url)s\">hier</a> anmelden."
+"Falls Sie schon eine Benutzerkonto haben können Sie sich <a href="
+"\"%(login_url)s\">hier</a> anmelden."
 
 #: accounts/templates/account/signup.html:34
 #: accounts/templates/socialaccount/signup.html:33
@@ -601,8 +601,8 @@ msgid ""
 "<strong>Note:</strong> you can still <a href=\"%(email_url)s\">change your e-"
 "mail address</a>."
 msgstr ""
-"<strong>Hinweis:</strong> Sie können immer noch Ihre <a "
-"href=\"%(email_url)s\">E-Mail Adresse ändern</a>."
+"<strong>Hinweis:</strong> Sie können immer noch Ihre <a href=\"%(email_url)s"
+"\">E-Mail Adresse ändern</a>."
 
 #: accounts/templates/profile/profile_remove_closed.html:6
 #: accounts/templates/profile/profile_remove_failed.html:6
@@ -728,12 +728,12 @@ msgstr "Anmeldung abgebrochen"
 #, python-format
 msgid ""
 "You decided to cancel logging in to our site using one of your existing "
-"accounts. If this was a mistake, please proceed to <a "
-"href=\"%(login_url)s\">sign in</a>."
+"accounts. If this was a mistake, please proceed to <a href=\"%(login_url)s"
+"\">sign in</a>."
 msgstr ""
 "Sie haben sich entschieden, die Anmeldung mit einem externen Konto "
-"abzubrechen. Falls dies versehentlich geschehen ist, könne Sie <a "
-"href=\"%(login_url)s\">hier</a> fortsetzen."
+"abzubrechen. Falls dies versehentlich geschehen ist, könne Sie <a href="
+"\"%(login_url)s\">hier</a> fortsetzen."
 
 #: accounts/templates/socialaccount/signup.html:9
 #, python-format
@@ -2337,11 +2337,11 @@ msgstr "Sehr geehrte Damen und Herren,"
 #: projects/templates/projects/issue_send_message.txt:3
 #, python-format
 msgid ""
-"The following task was identified in the project \"%(project_title)s\" "
-"<%(project_url)s>:"
+"The following task was identified in the project \"%(project_title)s\" <"
+"%(project_url)s>:"
 msgstr ""
-"Die folgende Aufgabe wurde im Projekt \"%(project_title)s\" "
-"<%(project_url)s> identifiziert:"
+"Die folgende Aufgabe wurde im Projekt \"%(project_title)s\" <"
+"%(project_url)s> identifiziert:"
 
 #: projects/templates/projects/issue_send_message.txt:13
 #, python-format
@@ -2366,8 +2366,8 @@ msgid ""
 "You are about to remove the user <strong>%(user)s</strong> from the project "
 "<strong>%(title)s</strong>."
 msgstr ""
-"Sie sind dabei den User <strong>%(user)s</strong> aus dem Projekt "
-"<strong>%(title)s</strong> zu entfernen."
+"Sie sind dabei den User <strong>%(user)s</strong> aus dem Projekt <strong>"
+"%(title)s</strong> zu entfernen."
 
 #: projects/templates/projects/membership_form.html:9
 #: projects/templates/projects/membership_form.html:11
@@ -2614,14 +2614,14 @@ msgstr "Antworten anzeigen"
 #: projects/templates/projects/project_detail_sidebar.html:57
 #: projects/templates/projects/project_form.html:23
 msgid "Update project tasks"
-msgstr "Projekt Aufgaben bearbeiten"
+msgstr "Projektaufgaben bearbeiten"
 
 #: projects/templates/projects/project_detail_sidebar.html:62
 #: projects/templates/projects/project_detail_views.html:23
 #: projects/templates/projects/project_detail_views.html:50
 #: projects/templates/projects/project_form.html:31
 msgid "Update project views"
-msgstr "Projekt Ansichten bearbeiten"
+msgstr "Projektansichten bearbeiten"
 
 #: projects/templates/projects/project_detail_sidebar.html:87
 #: projects/templates/projects/project_detail_snapshots.html:25
@@ -2958,11 +2958,11 @@ msgstr ""
 
 #: projects/templates/projects/project_questions_navigation_help.html:14
 msgid ""
-"Entries with <i class=\"fa fa-question-circle-o small\" aria-"
-"hidden=\"true\"></i> might be skipped based on your input."
+"Entries with <i class=\"fa fa-question-circle-o small\" aria-hidden=\"true"
+"\"></i> might be skipped based on your input."
 msgstr ""
-"Einträge mit <i class=\"fa fa-question-circle-o small\" aria-"
-"hidden=\"true\"></i> können aufgrund Ihrer Eingabe übersprungen werden."
+"Einträge mit <i class=\"fa fa-question-circle-o small\" aria-hidden=\"true"
+"\"></i> können aufgrund Ihrer Eingabe übersprungen werden."
 
 #: projects/templates/projects/project_questions_overview.html:14
 #: projects/templates/projects/site_projects.html:52
@@ -2987,9 +2987,9 @@ msgid ""
 msgstr ""
 "Warnung: In der Datenbank sind mehrere Antworten vorhanden. Dies kann "
 "aufgrund eines technischen Problems in der Vergangenheit geschehen. Sie "
-"können unerwünschte Antworten über das Feld \"Eintrag entfernen\" (<i "
-"class=\"fa fa-times\"></i>) entfernen. Bitte kontaktieren Sie den Support, "
-"wenn das Problem weiterhin besteht."
+"können unerwünschte Antworten über das Feld \"Eintrag entfernen\" (<i class="
+"\"fa fa-times\"></i>) entfernen. Bitte kontaktieren Sie den Support, wenn "
+"das Problem weiterhin besteht."
 
 #: projects/templates/projects/project_questions_questionset_head.html:34
 #, python-format
