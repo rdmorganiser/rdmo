@@ -68,6 +68,7 @@ updates:
     webpack:
       patterns:
       - webpack*
+      - copy-webpack-plugin
     eslint:
       patterns:
       - eslint*
