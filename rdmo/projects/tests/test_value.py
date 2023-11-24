@@ -35,10 +35,10 @@ def test_value_radio(db, mocker):
     mocker.patch('rdmo.options.models.Option.trans', mocked_trans)
 
     value = Value.objects.get(id=4)
-    assert value.value == 'Other: Lorem ipsum'
-    assert value.value_and_unit == 'Other: Lorem ipsum'
-    assert value.option_text == 'Other'
-    assert value.option_additional_input is True
+    assert value.value == 'Text: Lorem ipsum'
+    assert value.value_and_unit == 'Text: Lorem ipsum'
+    assert value.option_text == 'Text'
+    assert value.option_additional_input == 'text'
 
 
 def test_value_select(db, mocker):
@@ -47,7 +47,7 @@ def test_value_select(db, mocker):
     assert value.value == 'One'
     assert value.value_and_unit == 'One'
     assert value.option_text == 'One'
-    assert value.option_additional_input is False
+    assert value.option_additional_input == ''
 
 
 def test_value_range(db):
