@@ -147,17 +147,18 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
           }
         </Tabs>
 
-        <Select config={config} element={questionset} field="attribute" verboseName={gettext('attribute')}
+        <Select config={config} element={questionset} field="attribute" createText={gettext('Create new attribute')}
                 options={attributes} onChange={updateQuestionSet} onCreate={createAttribute} onEdit={editAttribute} />
 
         <OrderedMultiSelect config={config} element={questionset} field="elements"
-                            values={elementValues} options={elementOptions} verboseName={gettext('element')}
-                            verboseNameCreate={gettext('question')} verboseNameAltCreate={gettext('question set')}
+                            values={elementValues} options={elementOptions}
+                            addText={gettext('Add existing element')} createText={gettext('Create new question')}
+                            altCreateText={gettext('Create new question set')}
                             onChange={updateQuestionSet} onCreate={createQuestion} onAltCreate={createQuestionSet}
                             onEdit={editElement}/>
 
-        <MultiSelect config={config} element={questionset} field="conditions"
-                     options={conditions} verboseName="condition"
+        <MultiSelect config={config} element={questionset} field="conditions" options={conditions}
+                     addText={gettext('Add existing condition')} createText={gettext('Create new condition')}
                      onChange={updateQuestionSet} onCreate={createCondition} onEdit={editCondition} />
 
         {get(config, 'settings.multisite') && <Select config={config} element={questionset} field="editors"

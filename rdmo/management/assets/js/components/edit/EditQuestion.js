@@ -123,7 +123,7 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
           }
         </Tabs>
 
-        <Select config={config} element={question} field="attribute" verboseName={gettext('attribute')}
+        <Select config={config} element={question} field="attribute" createText={gettext('Create new attribute')}
                 options={attributes} onChange={updateQuestion} onCreate={createAttribute} onEdit={editAttribute} />
 
         <div className="row">
@@ -147,13 +147,13 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
 
         <Tabs id="#question-tabs2" defaultActiveKey={0} animation={false}>
           <Tab key={0} eventKey={0} title={gettext('Conditions')}>
-            <MultiSelect config={config} element={question} field="conditions"
-                         options={conditions} verboseName="condition"
+            <MultiSelect config={config} element={question} field="conditions" options={conditions}
+                         addText={gettext('Add existing condition')} createText={gettext('Create new condition')}
                          onChange={updateQuestion} onCreate={createCondition} onEdit={editCondition} />
           </Tab>
           <Tab key={1} eventKey={1} title={gettext('Option sets')}>
-            <MultiSelect config={config} element={question} field="optionsets"
-                         options={optionsets} verboseName="optionset"
+            <MultiSelect config={config} element={question} field="optionsets" options={optionsets}
+                         addText={gettext('Add existing optionset')} createText={gettext('Create new optionset')}
                          onChange={updateQuestion} onCreate={createOptionSet} onEdit={editOptionSet} />
           </Tab>
           <Tab key={2} eventKey={2} title={gettext('Range')}>

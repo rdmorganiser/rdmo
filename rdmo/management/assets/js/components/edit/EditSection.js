@@ -94,8 +94,8 @@ const EditSection = ({ config, section, elements, elementActions }) => {
           }
         </Tabs>
 
-        <OrderedMultiSelect config={config} element={section} field="pages"
-                            options={pages} verboseName="page"
+        <OrderedMultiSelect config={config} element={section} field="pages" options={pages}
+                            addText={gettext('Add existing page')} createText={gettext('Create new page')}
                             onChange={updateSection} onCreate={createPage} onEdit={editPage} />
 
         {get(config, 'settings.multisite') && <Select config={config} element={section} field="editors"

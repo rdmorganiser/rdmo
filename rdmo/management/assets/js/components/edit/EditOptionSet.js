@@ -95,12 +95,12 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
           </div>
         </div>
 
-        <OrderedMultiSelect config={config} element={optionset} field="options"
-                            options={options} verboseName="option"
+        <OrderedMultiSelect config={config} element={optionset} field="options" options={options}
+                            addText={gettext('Add existing option')} createText={gettext('Create new option')}
                             onChange={updateOptionSet} onCreate={createOption} onEdit={editOption} />
 
-        <MultiSelect config={config} element={optionset} field="conditions"
-                     options={conditions} verboseName="condition"
+        <MultiSelect config={config} element={optionset} field="conditions" options={conditions}
+                     addText={gettext('Add existing condition')} createText={gettext('Create new condition')}
                      onChange={updateOptionSet} onCreate={createCondition} onEdit={editCondition} />
 
         <Select config={config} element={optionset} field="provider_key"

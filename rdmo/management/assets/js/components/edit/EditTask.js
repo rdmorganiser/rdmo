@@ -103,8 +103,8 @@ const EditTask = ({ config, task, elements, elementActions}) => {
           }
         </Tabs>
 
-        <MultiSelect config={config} element={task} field="conditions"
-                     options={conditions} verboseName="condition"
+        <MultiSelect config={config} element={task} field="conditions" options={conditions}
+                     addText={gettext('Add existing condition')} createText={gettext('Create new condition')}
                      onChange={updateTask} onCreate={createCondition} onEdit={editCondition} />
 
         <Select config={config} element={task} field="start_attribute"
