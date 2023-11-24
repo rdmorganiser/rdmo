@@ -40,7 +40,7 @@ class Issue(models.Model):
     )
 
     class Meta:
-        ordering = ('project__title', )
+        ordering = ('project__title', 'task__uri')
         verbose_name = _('Issue')
         verbose_name_plural = _('Issues')
 

@@ -18,6 +18,7 @@ def import_view(element, save=False, user=None):
 
     set_common_fields(view, element)
 
+    view.order = element.get('order') or 0
     view.template = element.get('template')
 
     set_lang_field(view, 'title', element)

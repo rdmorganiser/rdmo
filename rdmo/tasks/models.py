@@ -42,6 +42,11 @@ class Task(TranslationMixin, models.Model):
         verbose_name=_('Locked'),
         help_text=_('Designates whether this task can be changed.')
     )
+    order = models.IntegerField(
+        default=0,
+        verbose_name=_('Order'),
+        help_text=_('The position of this task in lists.')
+    )
     catalogs = models.ManyToManyField(
         Catalog, blank=True,
         verbose_name=_('Catalogs'),

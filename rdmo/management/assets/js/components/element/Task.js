@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import get from 'lodash/get'
 
 import { filterElement } from '../../utils/filter'
 import { buildPath } from '../../utils/location'
@@ -21,6 +22,8 @@ const Task = ({ config, task, elementActions, filter=false, filterSites=false, f
   const toggleAvailable = () => elementActions.storeElement('tasks', {...task, available: !task.available })
   const toggleLocked = () => elementActions.storeElement('tasks', {...task, locked: !task.locked })
 
+  const fetchCondition = (index) => elementActions.fetchElement('conditions', task.conditions[index])
+
   return showElement && (
     <li className="list-group-item">
       <div className="element">
@@ -40,8 +43,20 @@ const Task = ({ config, task, elementActions, filter=false, filterSites=false, f
         <div>
           <p>
             <strong>{gettext('Task')}{': '}</strong>
-            <CodeLink className="code-tasks" uri={task.uri} onClick={() => fetchEdit()} />
+            {task.title}
           </p>
+          {
+            get(config, 'display.uri.tasks', true) && <p>
+              <CodeLink className="code-tasks" uri={task.uri} onClick={() => fetchEdit()} />
+            </p>
+          }
+          {
+            get(config, 'display.uri.conditions', true) && task.condition_uris.map((uri, index) => (
+              <p key={index}>
+                <CodeLink className="code-conditions" uri={uri} onClick={() => fetchCondition(index)} />
+              </p>
+            ))
+          }
           <ElementErrors element={task} />
         </div>
       </div>

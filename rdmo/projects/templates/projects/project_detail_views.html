@@ -12,7 +12,7 @@
 
     {% include 'projects/project_detail_views_help.html' %}
 
-    {% if project.views.exists %}
+    {% if views %}
 
         <table class="table">
             <thead>
@@ -27,7 +27,7 @@
                 </th>
             </thead>
             <tbody>
-                {% for view in project.views.all %}
+                {% for view in views %}
                 <tr>
                     <td>
                         <a href="{% url 'project_view' project.pk view.pk %}">{{ view.title }}</a>
