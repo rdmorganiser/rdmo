@@ -103,15 +103,15 @@
 		<text lang="de">Drei</text>
 		<additional_input>False</additional_input>
 	</option>
-	<option dc:uri="http://example.com/terms/options/one_two_three_other/other">
+	<option dc:uri="http://example.com/terms/options/one_two_three_other/text">
 		<uri_prefix>http://example.com/terms</uri_prefix>
-		<key>other</key>
-		<path>one_two_three_other/other</path>
+		<key>text</key>
+		<path>one_two_three_other/text</path>
 		<dc:comment/>
 		<optionset dc:uri="http://example.com/terms/options/one_two_three_other"/>
 		<order>4</order>
-		<text lang="en">Other</text>
-		<text lang="de">Sonstige</text>
+		<text lang="en">Text</text>
+		<text lang="de">Text</text>
 		<additional_input>True</additional_input>
 	</option>
 	<optionset dc:uri="http://example.com/terms/options/plugin">

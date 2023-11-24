@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rdmo xmlns:dc="http://purl.org/dc/elements/1.1/" created="2023-04-20T09:39:55.354321+02:00" version="1.9.2">
+<rdmo xmlns:dc="http://purl.org/dc/elements/1.1/" created="2023-04-20T09:39:55.354321+02:00" version="2.0.0">
 	<task dc:uri="http://example.com/terms/tasks/text_equal_test">
 		<uri_prefix>http://example.com/terms</uri_prefix>
 		<uri_path>text_equal_test</uri_path>
