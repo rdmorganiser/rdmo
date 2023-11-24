@@ -7,13 +7,13 @@ from rules.predicates import is_superuser
 
 @rules.predicate
 def can_add_project(user):
-    if settings.PROJECT_CREATE_RESTRICTED:
-        if settings.PROJECT_CREATE_GROUPS:
-            return user.groups.filter(name__in=settings.PROJECT_CREATE_GROUPS).exists()
-        else:
-            return False
-    else:
+    if not settings.PROJECT_CREATE_RESTRICTED:
         return True
+
+    if settings.PROJECT_CREATE_GROUPS:
+        return user.groups.filter(name__in=settings.PROJECT_CREATE_GROUPS).exists()
+    else:
+        return False
 
 
 @rules.predicate
