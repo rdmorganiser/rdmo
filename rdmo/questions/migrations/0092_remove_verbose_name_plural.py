@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('questions', '0090_add_editors'),
+        ('questions', '0091_alter_questionset_options'),
     ]
 
     operations = [
