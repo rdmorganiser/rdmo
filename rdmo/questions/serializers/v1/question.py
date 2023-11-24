@@ -58,7 +58,6 @@ class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin
             'help',
             'default_text',
             'verbose_name',
-            'verbose_name_plural',
             'pages',
             'questionsets',
             'optionsets',
@@ -74,8 +73,7 @@ class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin
             'text',
             'help',
             'default_text',
-            'verbose_name',
-            'verbose_name_plural',
+            'verbose_name'
         )
         parent_fields = (
             ('pages', 'page', 'question', 'page_questions'),

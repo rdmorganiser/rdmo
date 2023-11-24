@@ -24,16 +24,11 @@
 
 {% endif %}
 
-{% if questionset.verbose_name or questionset.verbose_name_plural %}
+{% if questionset.verbose_name %}
 
 <p>
-    <strong>{% trans 'Verbose name' %}:</strong>
+    <strong>{% trans 'Verbose name' %}: {{ questionset.verbose_name }}</strong>
 </p>
-
-<ul>
-    <li>{% trans 'Verbose name' %}: {{ questionset.verbose_name }}</li>
-    <li>{% trans 'Verbose name plural' %}: {{ questionset.verbose_name_plural }}</li>
-</ul>
 
 {% endif %}
 

@@ -178,31 +178,6 @@ class Question(Model, TranslationMixin):
         verbose_name=_('Name (quinary)'),
         help_text=_('The name displayed for this question in the quinary language.')
     )
-    verbose_name_plural_lang1 = models.CharField(
-        max_length=256, blank=True,
-        verbose_name=_('Plural name (primary)'),
-        help_text=_('The plural name displayed for this question in the primary language.')
-    )
-    verbose_name_plural_lang2 = models.CharField(
-        max_length=256, blank=True,
-        verbose_name=_('Plural name (secondary)'),
-        help_text=_('The plural name displayed for this question in the secondary language.')
-    )
-    verbose_name_plural_lang3 = models.CharField(
-        max_length=256, blank=True,
-        verbose_name=_('Plural name (tertiary)'),
-        help_text=_('The plural name displayed for this question in the tertiary language.')
-    )
-    verbose_name_plural_lang4 = models.CharField(
-        max_length=256, blank=True,
-        verbose_name=_('Plural name (quaternary)'),
-        help_text=_('The plural name displayed for this question in the quaternary language.')
-    )
-    verbose_name_plural_lang5 = models.CharField(
-        max_length=256, blank=True,
-        verbose_name=_('Plural name (quinary)'),
-        help_text=_('The plural name displayed for this question in the quinary language.')
-    )
     widget_type = models.CharField(
         max_length=16,
         verbose_name=_('Widget type'),
@@ -276,10 +251,6 @@ class Question(Model, TranslationMixin):
     @property
     def verbose_name(self):
         return self.trans('verbose_name')
-
-    @property
-    def verbose_name_plural(self):
-        return self.trans('verbose_name_plural')
 
     @cached_property
     def is_locked(self):

@@ -1,7 +1,6 @@
 {% load i18n %}
 
-    <a href="" class="close remove-set" tabindex="-1"
-        title="{% blocktrans with name='{$ questionset.verbose_name $}' %}Remove {{ name }}{% endblocktrans %}"
+    <a href="" class="close remove-set" tabindex="-1" title="{% trans 'Remove block' %}"
         ng-click="service.openValueSetDeleteModal(questionset, valueset.set_prefix, valueset.set_index)"
         ng-hide="!questionset.is_collection || service.project.read_only">
 

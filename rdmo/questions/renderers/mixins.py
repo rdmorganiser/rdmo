@@ -86,8 +86,6 @@ class PageRendererMixin:
                                          page['help_%s' % lang_code])
                 self.render_text_element(xml, 'verbose_name', {'lang': lang_code},
                                          page['verbose_name_%s' % lang_code])
-                self.render_text_element(xml, 'verbose_name_plural', {'lang': lang_code},
-                                         page['verbose_name_plural_%s' % lang_code])
 
             xml.startElement('questionsets', {})
             for page_questionset in page['page_questionsets']:
@@ -154,8 +152,6 @@ class QuestionSetRendererMixin:
                                          questionset['help_%s' % lang_code])
                 self.render_text_element(xml, 'verbose_name', {'lang': lang_code},
                                          questionset['verbose_name_%s' % lang_code])
-                self.render_text_element(xml, 'verbose_name_plural', {'lang': lang_code},
-                                         questionset['verbose_name_plural_%s' % lang_code])
 
             xml.startElement('questionsets', {})
             for questionset_questionset in questionset['questionset_questionsets']:
@@ -225,8 +221,6 @@ class QuestionRendererMixin:
                                          question['default_text_%s' % lang_code])
                 self.render_text_element(xml, 'verbose_name', {'lang': lang_code},
                                          question['verbose_name_%s' % lang_code])
-                self.render_text_element(xml, 'verbose_name_plural', {'lang': lang_code},
-                                         question['verbose_name_plural_%s' % lang_code])
 
             self.render_text_element(xml, 'default_option', {'dc:uri': question['default_option']}, None)
             self.render_text_element(xml, 'default_external_id', {}, question['default_external_id'])

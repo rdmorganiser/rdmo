@@ -86,9 +86,7 @@ def test_create(db, client, username, password):
             'help_en': instance.help_lang1,
             'help_de': instance.help_lang2,
             'verbose_name_en': instance.verbose_name_lang1,
-            'verbose_name_de': instance.verbose_name_lang2,
-            'verbose_name_plural_en': instance.verbose_name_plural_lang1,
-            'verbose_name_plural_de': instance.verbose_name_plural_lang2
+            'verbose_name_de': instance.verbose_name_lang2
         }
         response = client.post(url, data, content_type='application/json')
         assert response.status_code == status_map['create'][username], response.json()
@@ -118,8 +116,6 @@ def test_create_page(db, client, username, password):
                 'help_de': instance.help_lang2,
                 'verbose_name_en': instance.verbose_name_lang1,
                 'verbose_name_de': instance.verbose_name_lang2,
-                'verbose_name_plural_en': instance.verbose_name_plural_lang1,
-                'verbose_name_plural_de': instance.verbose_name_plural_lang2,
                 'pages': [page.id]
             }
             response = client.post(url, data, content_type='application/json')
@@ -156,8 +152,6 @@ def test_create_parent(db, client, username, password):
                 'help_de': instance.help_lang2,
                 'verbose_name_en': instance.verbose_name_lang1,
                 'verbose_name_de': instance.verbose_name_lang2,
-                'verbose_name_plural_en': instance.verbose_name_plural_lang1,
-                'verbose_name_plural_de': instance.verbose_name_plural_lang2,
                 'parents': [parent.id]
             }
             response = client.post(url, data, content_type='application/json')
@@ -199,8 +193,6 @@ def test_create_m2m(db, client, username, password):
             'help_de': instance.help_lang2,
             'verbose_name_en': instance.verbose_name_lang1,
             'verbose_name_de': instance.verbose_name_lang2,
-            'verbose_name_plural_en': instance.verbose_name_plural_lang1,
-            'verbose_name_plural_de': instance.verbose_name_plural_lang2,
             'questionsets': questionsets,
             'questions': questions,
             'conditions': conditions
@@ -245,9 +237,7 @@ def test_update(db, client, username, password):
             'help_en': instance.help_lang1,
             'help_de': instance.help_lang2,
             'verbose_name_en': instance.verbose_name_lang1,
-            'verbose_name_de': instance.verbose_name_lang2,
-            'verbose_name_plural_en': instance.verbose_name_plural_lang1,
-            'verbose_name_plural_de': instance.verbose_name_plural_lang2
+            'verbose_name_de': instance.verbose_name_lang2
         }
         response = client.put(url, data, content_type='application/json')
         assert response.status_code == get_obj_perms_status_code(instance, username, 'update'), response.json()
@@ -289,8 +279,6 @@ def test_update_m2m(db, client, username, password):
             'help_de': instance.help_lang2,
             'verbose_name_en': instance.verbose_name_lang1,
             'verbose_name_de': instance.verbose_name_lang2,
-            'verbose_name_plural_en': instance.verbose_name_plural_lang1,
-            'verbose_name_plural_de': instance.verbose_name_plural_lang2,
             'questionsets': questionsets,
             'questions': questions,
             'conditions': conditions

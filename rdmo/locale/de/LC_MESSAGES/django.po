@@ -556,7 +556,7 @@ msgid "I agree to the terms of use"
 msgstr "Ich stimme den Nutzungsbedingungen zu"
 
 #: accounts/templates/account/signup_modal_terms_of_use.html:46
-#: projects/templates/projects/project_questions_modal_delete_valuesets.html:41
+#: projects/templates/projects/project_questions_modal_delete_valuesets.html:35
 #: projects/templates/projects/project_questions_modal_form_valuesets.html:28
 msgid "Close"
 msgstr "Schließen"
@@ -745,6 +745,7 @@ msgstr ""
 "%(site_name)s anzumelden. Es sind noch zusätzliche Angaben von Ihnen nötig:"
 
 #: accounts/templatetags/accounts_tags.py:19
+#: projects/templates/projects/project_questions_modal_form_valuesets.html:19
 #: projects/templates/projects/projects.html:126
 #: projects/templates/projects/site_projects.html:64
 msgid "Name"
@@ -815,7 +816,7 @@ msgstr "Der Pfad für die URI dieser Bedingung."
 #: questions/templates/questions/export/catalog.html:12
 #: questions/templates/questions/export/page.html:12
 #: questions/templates/questions/export/question.html:14
-#: questions/templates/questions/export/question.html:75
+#: questions/templates/questions/export/question.html:70
 #: questions/templates/questions/export/questionset.html:14
 #: questions/templates/questions/export/section.html:12 tasks/models.py:37
 #: tasks/templates/tasks/export/tasks.html:21 views/models.py:38
@@ -1914,7 +1915,6 @@ msgstr "Die Site, zu der dieses Projekt gehört (in einem Multi-Standort-Setup)"
 #: projects/models/project.py:45 projects/models/snapshot.py:22
 #: projects/templates/projects/project_import.html:25
 #: projects/templates/projects/project_import.html:98
-#: projects/templates/projects/project_questions_modal_form_valuesets.html:19
 #: tasks/templates/tasks/export/tasks.html:27
 #: views/templates/views/export/views.html:27
 msgid "Title"
@@ -2174,19 +2174,23 @@ msgstr "Es muss entweder ein Benutzer oder eine E-Mail angegeben werden."
 msgid "User and e-mail are mutually exclusive."
 msgstr "Benutzer und E-Mail schließen einander aus."
 
-#: projects/serializers/v1/page.py:94
-msgid "item"
+#: projects/serializers/v1/page.py:93
+msgid "entry"
 msgstr "Eintrag"
 
-#: projects/serializers/v1/page.py:97
-msgid "items"
-msgstr "Einträge"
+#: projects/serializers/v1/page.py:128
+msgid "block"
+msgstr "Block"
 
-#: projects/serializers/v1/page.py:132 projects/serializers/v1/page.py:185
+#: projects/serializers/v1/page.py:131
+msgid "blocks"
+msgstr "Blöcke"
+
+#: projects/serializers/v1/page.py:181
 msgid "set"
 msgstr "Set"
 
-#: projects/serializers/v1/page.py:135 projects/serializers/v1/page.py:188
+#: projects/serializers/v1/page.py:184
 msgid "sets"
 msgstr "Sets"
 
@@ -2241,7 +2245,7 @@ msgstr "Sie sind dabei <strong>%(label)s</strong> permanent zu entfernen."
 
 #: projects/templates/projects/integration_confirm_delete.html:14
 #: projects/templates/projects/project_confirm_delete.html:30
-#: projects/templates/projects/project_questions_modal_delete_valuesets.html:35
+#: projects/templates/projects/project_questions_modal_delete_valuesets.html:29
 #: projects/templates/projects/snapshot_rollback.html:14
 msgid "This action cannot be undone!"
 msgstr "Diese Aktion kann nicht rückgängig gemacht werden!"
@@ -2802,33 +2806,22 @@ msgstr "Die Antwort konnte nicht importiert werden."
 msgid "Import project"
 msgstr "Projekt importieren"
 
-#: projects/templates/projects/project_questions_add_field_button.html:6
-#: projects/templates/projects/project_questions_add_set_button.html:6
-#: projects/templates/projects/project_questions_questionset_head.html:11
-#: projects/templates/projects/project_questions_questionset_head.html:27
-#, python-format
-msgid "Add %(name)s"
-msgstr "%(name)s hinzufügen"
-
 #: projects/templates/projects/project_questions_add_field_help.html:4
-#, python-format
 msgid ""
-"Please enter the %(name_plural)s line by line. You can add %(name_plural)s "
-"using the green button and remove them using the blue cross (&times;)."
+"Please enter your entries line by line. You can add lines using the green "
+"button and remove them using the blue cross (&times;)."
 msgstr ""
-"Bitte nutzen Sie für die %(name_plural)s jeweils eine eigene Zeile. Sie "
-"können weitere %(name_plural)s mit dem grünen Button hinzufügen und mit dem "
-"blauen Kreuz (&times;) entfernen."
+"Bitte nutzen Sie für die Einträge jeweils eine eigene Zeile. Sie können "
+"weitere Einträge mit dem grünen Button hinzufügen und mit dem blauen Kreuz "
+"(&times;) entfernen."
 
 #: projects/templates/projects/project_questions_add_set_help.html:4
-#, python-format
 msgid ""
-"Please enter the %(name_plural)s block by block. You can add %(name_plural)s "
-"using the green button and remove them using the blue cross (&times;)."
+"Please enter your entries block by block. You can add blocks using the green "
+"button and remove them using the blue cross (&times;)."
 msgstr ""
-"Bitte geben Sie die %(name_plural)s blockweise ein. Sie können "
-"%(name_plural)s über die grüne Schaltfläche hinzufügen und über das blaue "
-"Kreuz (&times;) entfernen."
+"Bitte geben Sie die Einträge blockweise ein. Sie können Blöcke über die "
+"grüne Schaltfläche hinzufügen und über das blaue Kreuz (&times;) entfernen."
 
 #: projects/templates/projects/project_questions_buttons.html:10
 #: projects/templates/projects/project_questions_buttons.html:42
@@ -2916,35 +2909,23 @@ msgid "My Projects"
 msgstr "Meine Projekte"
 
 #: projects/templates/projects/project_questions_modal_delete_valuesets.html:17
-#, python-format
-msgid ""
-"You are about to permanently delete the %(name)s <strong>%(object)s</strong>."
-msgstr ""
-"Sie sind dabei den %(name)s <strong>%(object)s</strong> permanent zu "
-"entfernen."
+msgid "You are about to permanently delete this tab."
+msgstr "Sie sind dabei diesen Tab permanent zu entfernen."
 
 #: projects/templates/projects/project_questions_modal_delete_valuesets.html:23
-#, python-format
-msgid "You are about to permanently delete this %(name)s."
-msgstr "Sie sind dabei diesen %(name)s permanent zu entfernen."
-
-#: projects/templates/projects/project_questions_modal_delete_valuesets.html:29
-#, python-format
 msgid ""
-"This includes all given answers for this %(name)s on all pages, not just "
-"this one."
+"This includes all given answers for this tab on all pages, not just this one."
 msgstr ""
-"Dies umfasst alle gegebenen Antworten für dieses %(name)s auf allen Seiten, "
-"nicht nur dieser."
+"Dies umfasst alle gegebenen Antworten für diesen Tab auf allen Seiten, nicht "
+"nur dieser."
 
-#: projects/templates/projects/project_questions_modal_delete_valuesets.html:45
+#: projects/templates/projects/project_questions_modal_delete_valuesets.html:39
 msgid "Delete"
 msgstr "Entfernen"
 
 #: projects/templates/projects/project_questions_modal_form_valuesets.html:20
-#, python-format
-msgid "Please give the %(name)s a meaningful name."
-msgstr "Bitte geben Sie dem %(name)s einen aus­sa­ge­kräf­tigen Namen."
+msgid "Please give the tab a meaningful name."
+msgstr "Bitte geben Sie dem Tab einen aus­sa­ge­kräf­tigen Namen."
 
 #: projects/templates/projects/project_questions_navigation_help.html:5
 msgid "Using the navigation will save your input."
@@ -2991,31 +2972,32 @@ msgstr ""
 "\"fa fa-times\"></i>) entfernen. Bitte kontaktieren Sie den Support, wenn "
 "das Problem weiterhin besteht."
 
-#: projects/templates/projects/project_questions_questionset_head.html:34
-#, python-format
-msgid "Update %(name)s"
-msgstr "%(name)s bearbeiten"
+#: projects/templates/projects/project_questions_questionset_head.html:33
+msgid "Edit tab"
+msgstr "Tab bearbeiten"
 
-#: projects/templates/projects/project_questions_questionset_head.html:39
-#: projects/templates/projects/project_questions_remove_field.html:4
-#: projects/templates/projects/project_questions_remove_set.html:4
-#, python-format
-msgid "Remove %(name)s"
-msgstr "%(name)s entfernen"
+#: projects/templates/projects/project_questions_questionset_head.html:37
+msgid "Remove tab"
+msgstr "Tab entfernen"
 
 #: projects/templates/projects/project_questions_questionset_head_help.html:4
-#, python-format
 msgid ""
-"Please fill in the form for each %(name)s. The different %(name_plural)s "
-"will be referred to in following questions. You can add a new %(name)s using "
-"the green button. Once created, you can edit or delete %(name_plural)s using "
-"the buttons in the top right corner."
+"Please fill in the form for each tab. The same tabs may be used later on "
+"other pages. You can add a new tab using the green button. Once created, you "
+"can edit or delete tabs using the buttons in the top right corner."
 msgstr ""
-"Bitte füllen Sie das Formular für jeden %(name)s aus. Die verschiedenen "
-"%(name_plural)s werden eventuell in späteren Fragen wieder verwendet. Sie "
-"können einen neuen %(name)s mit dem grünen Button hinzufügen. Bereits "
-"angelegte %(name_plural)s können mit den Buttons oben rechts bearbeitet oder "
-"wieder entfernt werden."
+"Bitte füllen Sie das Formular für jeden Tab aus. Die verschiedenen Tabs "
+"werden eventuell in späteren Fragen wieder verwendet. Sie können einen neuen "
+"Tab mit dem grünen Button hinzufügen. Bereits angelegte Tabs können mit den "
+"Buttons oben rechts bearbeitet oder wieder entfernt werden."
+
+#: projects/templates/projects/project_questions_remove_field.html:3
+msgid "Remove entry"
+msgstr "Eintrag entfernen"
+
+#: projects/templates/projects/project_questions_remove_set.html:3
+msgid "Remove block"
+msgstr "Block entfernen"
 
 #: projects/templates/projects/project_questions_save_error.html:6
 msgid ""
@@ -3681,7 +3663,7 @@ msgid "Type of value for this question."
 msgstr "Art von Wert für diese Frage."
 
 #: questions/models/question.py:218
-#: questions/templates/questions/export/question.html:65
+#: questions/templates/questions/export/question.html:60
 msgid "Minimum"
 msgstr "Minimum"
 
@@ -3690,7 +3672,7 @@ msgid "Minimal value for this question."
 msgstr "Minimaler Wert für diese Frage."
 
 #: questions/models/question.py:223
-#: questions/templates/questions/export/question.html:66
+#: questions/templates/questions/export/question.html:61
 msgid "Maximum"
 msgstr "Maximum"
 
@@ -3699,7 +3681,7 @@ msgid "Maximum value for this question."
 msgstr "Maximaler Wert für diese Frage."
 
 #: questions/models/question.py:228
-#: questions/templates/questions/export/question.html:67
+#: questions/templates/questions/export/question.html:62
 msgid "Step"
 msgstr "Schrittgröße"
 
@@ -3958,25 +3940,16 @@ msgid "Help"
 msgstr "Hilfe"
 
 #: questions/templates/questions/export/page.html:28
-#: questions/templates/questions/export/page.html:32
 #: questions/templates/questions/export/question.html:48
-#: questions/templates/questions/export/question.html:52
 #: questions/templates/questions/export/questionset.html:30
-#: questions/templates/questions/export/questionset.html:34
 msgid "Verbose name"
 msgstr "Anzeigename"
-
-#: questions/templates/questions/export/page.html:33
-#: questions/templates/questions/export/question.html:53
-#: questions/templates/questions/export/questionset.html:35
-msgid "Verbose name plural"
-msgstr "Anzeigename, plural"
 
 #: questions/templates/questions/export/question.html:4
 msgid "Questions:"
 msgstr "Fragen:"
 
-#: questions/templates/questions/export/question.html:61
+#: questions/templates/questions/export/question.html:56
 msgid "Range"
 msgstr "Bereich"
 
@@ -4263,3 +4236,40 @@ msgstr "Datei"
 #: views/templatetags/view_tags.py:184
 msgid "Set"
 msgstr "Set"
+
+#~ msgid "entries"
+#~ msgstr "Einträge"
+
+#~ msgid "Verbose name plural"
+#~ msgstr "Anzeigename, plural"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgid "Delete tab"
+#~ msgstr "Entfernen"
+
+#~ msgid "item"
+#~ msgstr "Eintrag"
+
+#~ msgid "items"
+#~ msgstr "Einträge"
+
+#, python-format
+#~ msgid "Add %(name)s"
+#~ msgstr "%(name)s hinzufügen"
+
+#, python-format
+#~ msgid ""
+#~ "You are about to permanently delete the %(name)s <strong>%(object)s</"
+#~ "strong>."
+#~ msgstr ""
+#~ "Sie sind dabei den %(name)s <strong>%(object)s</strong> permanent zu "
+#~ "entfernen."
+
+#, python-format
+#~ msgid "Update %(name)s"
+#~ msgstr "%(name)s bearbeiten"
+
+#, python-format
+#~ msgid "Remove %(name)s"
+#~ msgstr "%(name)s entfernen"

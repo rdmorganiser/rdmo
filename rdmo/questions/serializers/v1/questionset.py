@@ -68,7 +68,6 @@ class QuestionSetSerializer(ThroughModelSerializerMixin, TranslationSerializerMi
             'title',
             'help',
             'verbose_name',
-            'verbose_name_plural',
             'pages',
             'parents',
             'questionsets',
@@ -83,8 +82,7 @@ class QuestionSetSerializer(ThroughModelSerializerMixin, TranslationSerializerMi
         trans_fields = (
             'title',
             'help',
-            'verbose_name',
-            'verbose_name_plural'
+            'verbose_name'
         )
         parent_fields = (
             ('pages', 'page', 'questionset', 'page_questionsets'),

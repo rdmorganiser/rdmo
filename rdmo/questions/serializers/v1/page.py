@@ -66,7 +66,6 @@ class PageSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
             'title',
             'help',
             'verbose_name',
-            'verbose_name_plural',
             'sections',
             'questionsets',
             'questions',
@@ -80,8 +79,7 @@ class PageSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
         trans_fields = (
             'title',
             'help',
-            'verbose_name',
-            'verbose_name_plural'
+            'verbose_name'
         )
         parent_fields = (
             ('sections', 'section', 'page', 'section_pages'),
