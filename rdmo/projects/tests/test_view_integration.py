@@ -1,6 +1,3 @@
-import hmac
-import json
-
 import pytest
 
 from django.urls import reverse
@@ -42,7 +39,7 @@ integrations = [1, 2]
 def test_integration_create_get(db, client, username, password, project_id):
     client.login(username=username, password=password)
 
-    url = reverse('integration_create', args=[project_id, 'github'])
+    url = reverse('integration_create', args=[project_id, 'simple'])
     response = client.get(url)
 
     if project_id in add_integration_permission_map.get(username, []):
@@ -58,9 +55,9 @@ def test_integration_create_get(db, client, username, password, project_id):
 def test_integration_create_post(db, client, username, password, project_id):
     client.login(username=username, password=password)
 
-    url = reverse('integration_create', args=[project_id, 'github'])
+    url = reverse('integration_create', args=[project_id, 'simple'])
     data = {
-        'repo': 'example/example1'
+        'project_url': 'https://example.com/projects/1'
     }
     response = client.post(url, data)
 
@@ -69,8 +66,8 @@ def test_integration_create_post(db, client, username, password, project_id):
         values = Integration.objects.order_by('id').last().options.values('key', 'value', 'secret')
         assert sorted(values, key=lambda obj: obj['key']) == [
             {
-                'key': 'repo',
-                'value': 'example/example1',
+                'key': 'project_url',
+                'value': 'https://example.com/projects/1',
                 'secret': False
             },
             {
@@ -115,7 +112,7 @@ def test_integration_update_post(db, client, username, password, project_id, int
 
     url = reverse('integration_update', args=[project_id, integration_id])
     data = {
-        'repo': 'example/example2',
+        'project_url': 'https://example.com/projects/2',
         'secret': 'super_secret'
     }
     response = client.post(url, data)
@@ -127,8 +124,8 @@ def test_integration_update_post(db, client, username, password, project_id, int
                                         .options.values('key', 'value', 'secret')
             assert sorted(values, key=lambda obj: obj['key']) == [
                 {
-                    'key': 'repo',
-                    'value': 'example/example2',
+                    'key': 'project_url',
+                    'value': 'https://example.com/projects/2',
                     'secret': False
                 },
                 {
@@ -207,18 +204,36 @@ def test_integration_webhook_post(db, client, project_id, integration_id):
     url = reverse('integration_webhook', args=[project_id, integration_id])
     data = {
         'action': 'closed',
-        'issue': {
-            'html_url': 'https://github.com/example/example/issues/1'
-        }
+        'url': 'https://simple.example.com/issues/1'
     }
-    body = json.dumps(data)
-    signature = 'sha1=' + hmac.new(secret.encode(), body.encode(), 'sha1').hexdigest()
 
-    response = client.post(url, data, **{'HTTP_X_HUB_SIGNATURE': signature, 'content_type': 'application/json'})
+    response = client.post(url, data, **{'HTTP_X_SECRET': secret, 'content_type': 'application/json'})
 
     if integration:
         assert response.status_code == 200
         assert Issue.objects.filter(status='closed').count() == (1 if integration_id == 1 else 0)
+    else:
+        assert response.status_code == 404
+        assert Issue.objects.filter(status='closed').count() == 0
+
+
+@pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('integration_id', integrations)
+def test_integration_webhook_post_wrong_url(db, client, project_id, integration_id):
+    integration = Integration.objects.filter(project_id=project_id, id=integration_id).first()
+
+    secret = 'super_duper_secret'
+    url = reverse('integration_webhook', args=[project_id, integration_id])
+    data = {
+        'action': 'closed',
+        'url': 'https://simple.example.com/issues/2'
+    }
+
+    response = client.post(url, data, **{'HTTP_X_SECRET': secret, 'content_type': 'application/json'})
+
+    if integration:
+        assert response.status_code == 200
+        assert Issue.objects.filter(status='closed').count() == 0
     else:
         assert response.status_code == 404
         assert Issue.objects.filter(status='closed').count() == 0

@@ -59,6 +59,7 @@ dependencies = [
   "iso8601~=2.0",
   "markdown~=3.4",
   "pypandoc~=1.11",
+  "requests-toolbelt~=1.0",
   "rules~=3.3",
 ]
 
