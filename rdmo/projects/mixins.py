@@ -102,7 +102,7 @@ class ProjectImportMixin:
             import_plugin.file_name = import_file_name
             import_plugin.source_title = import_source_title
 
-            if import_plugin.upload and import_plugin.check():
+            if import_plugin.check():
                 try:
                     import_plugin.process()
                 except ValidationError as e:
