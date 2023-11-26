@@ -28,7 +28,8 @@ from .models import Continuation, Integration, Invite, Issue, Membership, Projec
 from .permissions import (
     HasProjectPagePermission,
     HasProjectPermission,
-    HasProjectProgressPermission,
+    HasProjectProgressModelPermission,
+    HasProjectProgressObjectPermission,
     HasProjectsPermission,
 )
 from .progress import compute_navigation, compute_progress
@@ -174,7 +175,7 @@ class ProjectViewSet(ModelViewSet):
         raise NotFound()
 
     @action(detail=True, methods=['get', 'post'],
-            permission_classes=(HasModelPermission | HasProjectProgressPermission, ))
+            permission_classes=(HasProjectProgressModelPermission | HasProjectProgressObjectPermission, ))
     def progress(self, request, pk=None):
         project = self.get_object()
 

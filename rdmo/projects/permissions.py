@@ -1,4 +1,4 @@
-from rdmo.core.permissions import HasObjectPermission, log_result
+from rdmo.core.permissions import HasModelPermission, HasObjectPermission, log_result
 
 
 class HasProjectsPermission(HasObjectPermission):
@@ -8,11 +8,21 @@ class HasProjectsPermission(HasObjectPermission):
         if not (request.user and request.user.is_authenticated):
             return False
 
-        # always return True:
-        # for retrieve, update, partial_update, the permission will be checked on the
-        # object level (in the next step), list and create is allowed for every user since
-        # the filtering is done in the queryset
-        return True
+        if view.detail:
+            # for retrieve, update, partial_update, the permission will be checked on the
+            # object level (in the next step)
+            return True
+
+        if view.action == 'list':
+            # list is allowed for every user since the filtering is done in the queryset
+            return True
+
+        if 'create' in view.action_map.values():
+            # for create, check the permission (from rules.py),
+            # but only if it is not a ReadOnlyValueSet (i.e. only for ProjectViewSet)
+            return super().has_permission(request, view)
+        else:
+            return True
 
     @log_result
     def has_object_permission(self, request, view, obj):
@@ -64,12 +74,19 @@ class HasProjectPagePermission(HasProjectPermission):
         return ('projects.view_page_object', )
 
 
-class HasProjectProgressPermission(HasProjectPermission):
+class HasProjectProgressModelPermission(HasModelPermission):
+
+    def get_required_permissions(self, method, model_cls):
+        if method == 'POST':
+            return ('projects.change_project', )
+        else:
+            return ('projects.view_project', )
+
+
+class HasProjectProgressObjectPermission(HasProjectPermission):
 
     def get_required_object_permissions(self, method, model_cls):
-        if method == 'GET':
-            return ('projects.view_project_object', )
-        elif method == 'POST':
+        if method == 'POST':
             return ('projects.change_project_progress_object', )
         else:
-            raise RuntimeError('Unsupported method for HasProjectProgressPermission')
+            return ('projects.view_project_object', )

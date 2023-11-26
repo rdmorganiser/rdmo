@@ -1,5 +1,6 @@
 import pytest
 
+from django.contrib.auth.models import Group, User
 from django.urls import reverse
 
 from ..models import Project
@@ -111,6 +112,43 @@ def test_create(db, client, username, password):
         assert Project.objects.get(id=response.json().get('id'))
     else:
         assert response.status_code == 401
+
+
+def test_create_restricted(db, client, settings):
+    settings.PROJECT_CREATE_RESTRICTED = True
+    settings.PROJECT_CREATE_GROUPS = ['projects']
+
+    group = Group.objects.create(name='projects')
+    user = User.objects.get(username='user')
+    user.groups.add(group)
+
+    client.login(username='user', password='user')
+
+    url = reverse(urlnames['list'])
+    data = {
+        'title': 'Lorem ipsum dolor sit amet',
+        'description': 'At vero eos et accusam et justo duo dolores et ea rebum.',
+        'catalog': catalog_id
+    }
+    response = client.post(url, data)
+
+    assert response.status_code == 201
+
+
+def test_create_forbidden(db, client, settings):
+    settings.PROJECT_CREATE_RESTRICTED = True
+
+    client.login(username='user', password='user')
+
+    url = reverse(urlnames['list'])
+    data = {
+        'title': 'Lorem ipsum dolor sit amet',
+        'description': 'At vero eos et accusam et justo duo dolores et ea rebum.',
+        'catalog': catalog_id
+    }
+    response = client.post(url, data)
+
+    assert response.status_code == 403
 
 
 def test_create_catalog_missing(db, client):

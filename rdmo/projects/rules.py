@@ -1,7 +1,19 @@
+from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 
 import rules
 from rules.predicates import is_superuser
+
+
+@rules.predicate
+def can_add_project(user):
+    if not settings.PROJECT_CREATE_RESTRICTED:
+        return True
+
+    if settings.PROJECT_CREATE_GROUPS:
+        return user.groups.filter(name__in=settings.PROJECT_CREATE_GROUPS).exists()
+    else:
+        return False
 
 
 @rules.predicate
@@ -54,7 +66,7 @@ def is_site_manager_for_current_site(user, request):
 # Add rule for check in template
 rules.add_rule('projects.can_view_all_projects', is_site_manager_for_current_site | is_superuser)
 
-
+rules.add_perm('projects.add_project', can_add_project)
 rules.add_perm('projects.view_project_object', is_project_member | is_site_manager)
 rules.add_perm('projects.change_project_object', is_project_manager | is_project_owner | is_site_manager)
 rules.add_perm('projects.change_project_progress_object', is_project_author | is_project_manager | is_project_owner | is_site_manager)  # noqa: E501
