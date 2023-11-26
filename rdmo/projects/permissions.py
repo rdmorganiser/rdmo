@@ -1,4 +1,4 @@
-from rdmo.core.permissions import HasObjectPermission, log_result
+from rdmo.core.permissions import HasModelPermission, HasObjectPermission, log_result
 
 
 class HasProjectsPermission(HasObjectPermission):
@@ -74,12 +74,19 @@ class HasProjectPagePermission(HasProjectPermission):
         return ('projects.view_page_object', )
 
 
-class HasProjectProgressPermission(HasProjectPermission):
+class HasProjectProgressModelPermission(HasModelPermission):
+
+    def get_required_permissions(self, method, model_cls):
+        if method == 'POST':
+            return ('projects.change_project', )
+        else:
+            return ('projects.view_project', )
+
+
+class HasProjectProgressObjectPermission(HasProjectPermission):
 
     def get_required_object_permissions(self, method, model_cls):
-        if method == 'GET':
-            return ('projects.view_project_object', )
-        elif method == 'POST':
+        if method == 'POST':
             return ('projects.change_project_progress_object', )
         else:
-            raise RuntimeError('Unsupported method for HasProjectProgressPermission')
+            return ('projects.view_project_object', )
