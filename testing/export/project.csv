@@ -1,7 +1,7 @@
 Text?,,Lorem ipsum dolor sit amet
 Textarea?,,"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet."
 Yes or no?,,Yes
-Radio buttons?,,Other: Lorem ipsum
+Radio buttons?,,Text: Lorem ipsum
 Select drop-down?,,One
 Range slider?,,37
 File?,,rdmo-logo.svg
@@ -18,7 +18,7 @@ Checkbox?,,One; Three
 Text?,,Lorem ipsum dolor sit amet
 Textarea?,,"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet."
 Yes or no?,,Yes
-Radio buttons?,,Other: Lorem ipsum
+Radio buttons?,,Text: Lorem ipsum
 Select drop-down?,,One
 Range slider?,,37
 Date picker?,,2018-01-01
