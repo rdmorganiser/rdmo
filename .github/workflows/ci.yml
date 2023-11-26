@@ -64,7 +64,7 @@ jobs:
     - name: Install Dependencies
       run: |
         sudo apt update
-        sudo apt install --yes pandoc texlive-xetex
+        sudo apt install --yes pandoc texlive-xetex librsvg2-bin
         python -m pip install --upgrade pip setuptools wheel
         pandoc --version
     - name: Install rdmo[mysql] and start mysql
