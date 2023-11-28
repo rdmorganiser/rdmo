@@ -15,8 +15,6 @@ from .managers import TaskManager
 
 class Task(TranslationMixin, models.Model):
 
-    objects = TaskManager()
-
     uri = models.URLField(
         max_length=800, blank=True,
         verbose_name=_('URI'),
@@ -149,6 +147,8 @@ class Task(TranslationMixin, models.Model):
         verbose_name=_('Available'),
         help_text=_('Designates whether this task is generally available for projects.')
     )
+
+    objects = TaskManager()
 
     class Meta:
         ordering = ('uri',)

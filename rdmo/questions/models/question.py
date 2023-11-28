@@ -16,15 +16,13 @@ from ..managers import QuestionManager
 
 class Question(Model, TranslationMixin):
 
-    objects = QuestionManager()
-
     prefetch_lookups = (
         'conditions',
         'optionsets'
     )
 
     uri = models.URLField(
-        max_length=800, blank=True, null=True,
+        max_length=800, blank=True, default="",
         verbose_name=_('URI'),
         help_text=_('The Uniform Resource Identifier of this question (auto-generated).')
     )
@@ -34,12 +32,12 @@ class Question(Model, TranslationMixin):
         help_text=_('The prefix for the URI of this question.')
     )
     uri_path = models.CharField(
-        max_length=512, blank=True, null=True,
+        max_length=512, blank=True, default="",
         verbose_name=_('URI Path'),
         help_text=_('The path for the URI of this question.')
     )
     comment = models.TextField(
-        blank=True, null=True,
+        blank=True, default="",
         verbose_name=_('Comment'),
         help_text=_('Additional internal information about this question.')
     )
@@ -69,77 +67,77 @@ class Question(Model, TranslationMixin):
         help_text=_('The sites that can edit this question (in a multi site setup).')
     )
     help_lang1 = models.TextField(
-        null=True, blank=True,
+        blank=True, default="",
         verbose_name=_('Help (primary)'),
         help_text=_('The help text for this question in the primary language.')
     )
     help_lang2 = models.TextField(
-        null=True, blank=True,
+        blank=True, default="",
         verbose_name=_('Help (secondary)'),
         help_text=_('The help text for this question in the secondary language.')
     )
     help_lang3 = models.TextField(
-        null=True, blank=True,
+        blank=True, default="",
         verbose_name=_('Help (tertiary)'),
         help_text=_('The help text for this question in the tertiary language.')
     )
     help_lang4 = models.TextField(
-        null=True, blank=True,
+        blank=True, default="",
         verbose_name=_('Help (quaternary)'),
         help_text=_('The help text for this question in the quaternary language.')
     )
     help_lang5 = models.TextField(
-        null=True, blank=True,
+        blank=True, default="",
         verbose_name=_('Help (quinary)'),
         help_text=_('The help text for this question in the quinary language.')
     )
     text_lang1 = models.TextField(
-        null=True, blank=True,
+        blank=True, default="",
         verbose_name=_('Text (primary)'),
         help_text=_('The text for this question in the primary language.')
     )
     text_lang2 = models.TextField(
-        null=True, blank=True,
+        blank=True, default="",
         verbose_name=_('Text (secondary)'),
         help_text=_('The text for this question in the secondary language.')
     )
     text_lang3 = models.TextField(
-        null=True, blank=True,
+        blank=True, default="",
         verbose_name=_('Text (tertiary)'),
         help_text=_('The text for this question in the tertiary language.')
     )
     text_lang4 = models.TextField(
-        null=True, blank=True,
+        blank=True, default="",
         verbose_name=_('Text (quaternary)'),
         help_text=_('The text for this question in the quaternary language.')
     )
     text_lang5 = models.TextField(
-        null=True, blank=True,
+        blank=True, default="",
         verbose_name=_('Text (quinary)'),
         help_text=_('The text for this question in the quinary language.')
     )
     default_text_lang1 = models.TextField(
-        null=True, blank=True,
+        blank=True, default="",
         verbose_name=_('Default text value (primary)'),
         help_text=_('The default text value for this question in the primary language.')
     )
     default_text_lang2 = models.TextField(
-        null=True, blank=True,
+        blank=True, default="",
         verbose_name=_('Default text value (secondary)'),
         help_text=_('The default text value for this question in the secondary language.')
     )
     default_text_lang3 = models.TextField(
-        null=True, blank=True,
+        blank=True, default="",
         verbose_name=_('Default text value (tertiary)'),
         help_text=_('The default text value for this question in the tertiary language.')
     )
     default_text_lang4 = models.TextField(
-        null=True, blank=True,
+        blank=True, default="",
         verbose_name=_('Default text value (quaternary)'),
         help_text=_('The default text value for this question in the quaternary language.')
     )
     default_text_lang5 = models.TextField(
-        null=True, blank=True,
+        default="", blank=True,
         verbose_name=_('Default text value (quinary)'),
         help_text=_('The default text value for this question in the quinary language.')
     )
@@ -223,6 +221,8 @@ class Question(Model, TranslationMixin):
         verbose_name=_('Conditions'),
         help_text=_('List of conditions evaluated for this question.')
     )
+
+    objects = QuestionManager()
 
     class Meta:
         ordering = ('uri', )

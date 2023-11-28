@@ -16,8 +16,6 @@ from .utils import ProjectWrapper
 
 class View(models.Model, TranslationMixin):
 
-    objects = ViewManager()
-
     uri = models.URLField(
         max_length=800, blank=True,
         verbose_name=_('URI'),
@@ -129,6 +127,8 @@ class View(models.Model, TranslationMixin):
         verbose_name=_('Available'),
         help_text=_('Designates whether this view is generally available for projects.')
     )
+
+    objects = ViewManager()
 
     class Meta:
         ordering = ('uri', )

@@ -13,8 +13,6 @@ class Invite(models.Model):
 
     key_salt = 'rdmo.projects.models.invite.Invite'
 
-    objects = InviteManager()
-
     project = models.ForeignKey(
         'Project', on_delete=models.CASCADE, related_name='invites',
         verbose_name=_('Project'),
@@ -44,6 +42,8 @@ class Invite(models.Model):
         verbose_name=_('Timestamp'),
         help_text=_('The timestamp for this invite.')
     )
+
+    objects = InviteManager()
 
     class Meta:
         ordering = ('timestamp', )

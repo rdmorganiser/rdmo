@@ -10,7 +10,18 @@ class ConditionAdminForm(forms.ModelForm):
 
     class Meta:
         model = Condition
-        fields = '__all__'
+        fields = [
+            "uri",
+            "uri_prefix",
+            "uri_path",
+            "comment",
+            "locked",
+            "editors",
+            "source",
+            "relation",
+            "target_text",
+            "target_option",
+        ]
 
     def clean(self):
         ConditionUniqueURIValidator(self.instance)(self.cleaned_data)

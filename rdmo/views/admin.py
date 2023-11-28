@@ -12,7 +12,29 @@ class ViewAdminForm(forms.ModelForm):
 
     class Meta:
         model = View
-        fields = '__all__'
+        fields = [
+            "uri",
+            "uri_prefix",
+            "uri_path",
+            "comment",
+            "locked",
+            "catalogs",
+            "sites",
+            "editors",
+            "groups",
+            "template",
+            "title_lang1",
+            "title_lang2",
+            "title_lang3",
+            "title_lang4",
+            "title_lang5",
+            "help_lang1",
+            "help_lang2",
+            "help_lang3",
+            "help_lang4",
+            "help_lang5",
+            "available",
+        ]
 
     def clean(self):
         ViewUniqueURIValidator(self.instance)(self.cleaned_data)
