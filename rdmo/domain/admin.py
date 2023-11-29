@@ -11,7 +11,16 @@ class AttributeAdminForm(forms.ModelForm):
 
     class Meta:
         model = Attribute
-        fields = '__all__'
+        fields = [
+            'uri',
+            'uri_prefix',
+            'key',
+            'path',
+            'comment',
+            'locked',
+            'editors',
+            'parent',
+        ]
 
     def clean(self):
         AttributeUniqueURIValidator(self.instance)(self.cleaned_data)

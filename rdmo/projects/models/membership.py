@@ -8,8 +8,6 @@ from ..managers import MembershipManager
 
 class Membership(models.Model):
 
-    objects = MembershipManager()
-
     ROLE_CHOICES = (
         ('owner', _('Owner')),
         ('manager', _('Manager')),
@@ -32,6 +30,8 @@ class Membership(models.Model):
         verbose_name=_('Role'),
         help_text=_('The role for this membership.')
     )
+
+    objects = MembershipManager()
 
     class Meta:
         ordering = ('project__title', )

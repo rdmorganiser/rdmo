@@ -125,6 +125,7 @@ line-length = 120
 select = [
   "B",    # flake8-bugbear
   "C4",   # flake8-comprehensions
+  "DJ",   # flake8-django
   "E",    # pycodestyle
   "F",    # pyflakes
   "I",    # isort
