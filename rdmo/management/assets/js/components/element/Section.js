@@ -15,7 +15,7 @@ import { Drag, Drop } from '../common/DragAndDrop'
 
 
 const Section = ({ config, section, configActions, elementActions, display='list', indent=0,
-                   filter=false, filterEditors=false }) => {
+                   filter=false, filterEditors=false, order }) => {
 
   const showElement = filterElement(config, filter, false, filterEditors, section)
   const showElements = get(config, `display.elements.sections.${section.id}`, true)
@@ -55,7 +55,7 @@ const Section = ({ config, section, configActions, elementActions, display='list
         </p>
         {
           get(config, 'display.uri.sections', true) &&
-          <CodeLink className="code-questions" uri={section.uri} onClick={() => fetchEdit()} />
+          <CodeLink className="code-questions" uri={section.uri} onClick={() => fetchEdit()} order={order} />
         }
         <ElementErrors element={section} />
       </div>
@@ -88,11 +88,24 @@ const Section = ({ config, section, configActions, elementActions, display='list
             <Drop element={section.elements[0]} elementActions={elementActions} indent={indent + 1} mode="before" />
           }
           {
-            showElements && section.elements.map((page, index) => (
-              <Page key={index} config={config} page={page}
-                    configActions={configActions} elementActions={elementActions}
-                    display="nested" filter={filter} indent={indent + 1} />
-            ))
+            showElements && section.elements.map((page, index) => {
+              const pageInfo = section.pages.find(info => info.page === page.id)
+              const pageOrder = pageInfo ? pageInfo.order : undefined
+
+              return (
+                <Page
+                  key={index}
+                  config={config}
+                  page={page}
+                  configActions={configActions}
+                  elementActions={elementActions}
+                  display="nested"
+                  filter={filter}
+                  indent={indent + 1}
+                  order={pageOrder}
+                />
+              )
+            })
           }
           <Drop element={section} elementActions={elementActions} indent={indent} mode="after" />
         </>
@@ -110,7 +123,8 @@ Section.propTypes = {
   display: PropTypes.string,
   indent: PropTypes.number,
   filter: PropTypes.string,
-  filterEditors: PropTypes.bool
+  filterEditors: PropTypes.bool,
+  order: PropTypes.number
 }
 
 export default Section

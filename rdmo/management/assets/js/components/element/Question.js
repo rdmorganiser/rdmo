@@ -11,7 +11,7 @@ import { ReadOnlyIcon } from '../common/Icons'
 import { Drag, Drop } from '../common/DragAndDrop'
 
 const Question = ({ config, question, elementActions, display='list', indent=0,
-                    filter=false, filterEditors=false }) => {
+                    filter=false, filterEditors=false, order }) => {
 
   const showElement = filterElement(config, filter, false, filterEditors, question)
 
@@ -46,7 +46,7 @@ const Question = ({ config, question, elementActions, display='list', indent=0,
         </p>
         {
           get(config, 'display.uri.questions', true) && <p>
-            <CodeLink className="code-questions" uri={question.uri} onClick={() => fetchEdit()} />
+            <CodeLink className="code-questions" uri={question.uri} onClick={() => fetchEdit()} order={order} />
           </p>
         }
         {
@@ -106,7 +106,8 @@ Question.propTypes = {
   display: PropTypes.string,
   indent: PropTypes.number,
   filter: PropTypes.string,
-  filterEditors: PropTypes.bool
+  filterEditors: PropTypes.bool,
+  order: PropTypes.number
 }
 
 export default Question

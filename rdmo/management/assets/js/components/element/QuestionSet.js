@@ -13,7 +13,7 @@ import { ReadOnlyIcon } from '../common/Icons'
 import { Drag, Drop } from '../common/DragAndDrop'
 
 const QuestionSet = ({ config, questionset, configActions, elementActions, display='list', indent=0,
-                       filter=false, filterEditors=false }) => {
+                       filter=false, filterEditors=false, order }) => {
 
   const showElement = filterElement(config, filter, false, filterEditors, questionset)
   const showElements = get(config, `display.elements.questionsets.${questionset.id}`, true)
@@ -57,7 +57,7 @@ const QuestionSet = ({ config, questionset, configActions, elementActions, displ
         </p>
         {
           get(config, 'display.uri.questionsets', true) && <p>
-            <CodeLink className="code-questions" uri={questionset.uri} onClick={() => fetchEdit()} />
+            <CodeLink className="code-questions" uri={questionset.uri} onClick={() => fetchEdit()} order={order} />
           </p>
         }
         {
@@ -101,13 +101,17 @@ const QuestionSet = ({ config, questionset, configActions, elementActions, displ
           {
             showElements && questionset.elements.map((element, index) => {
               if (element.model == 'questions.questionset') {
+                const questionSetInfo = questionset.questionsets.find(info => info.questionset === element.id)
+                const questionSetOrder = questionSetInfo ? questionSetInfo.order : undefined
                 return <QuestionSet key={index} config={config} questionset={element}
                                     configActions={configActions} elementActions={elementActions}
-                                    display="nested" filter={filter} indent={indent + 1}  />
+                                    display="nested" filter={filter} indent={indent + 1} order={questionSetOrder}  />
               } else {
+                const questionInfo = questionset.questions.find(info => info.question === element.id)
+                const questionOrder = questionInfo ? questionInfo.order : undefined
                 return <Question key={index} config={config} question={element}
                                  configActions={configActions} elementActions={elementActions}
-                                 display="nested" filter={filter} indent={indent + 1} />
+                                 display="nested" filter={filter} indent={indent + 1} order={questionOrder} />
               }
             })
           }
@@ -127,7 +131,8 @@ QuestionSet.propTypes = {
   display: PropTypes.string,
   indent: PropTypes.number,
   filter: PropTypes.string,
-  filterEditors: PropTypes.bool
+  filterEditors: PropTypes.bool,
+  order: PropTypes.number
 }
 
 export default QuestionSet
