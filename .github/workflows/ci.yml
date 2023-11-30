@@ -110,12 +110,18 @@ jobs:
         npm run build:prod
         playwright install chromium
       if: matrix.python-version == '3.12' && matrix.db-backend == 'postgres'
+    - run: mkdir screenshots
     - name: Run end-to-end tests
       run: pytest -p randomly -p no:cacheprovider --reuse-db --numprocesses=auto --dist=loadscope -m e2e --nomigrations
       if: matrix.python-version == '3.12' && matrix.db-backend == 'postgres'
       env:
         DJANGO_DEBUG: True
         GITHUB_DB_BACKEND: ${{ matrix.db-backend }}
+    - uses: actions/upload-artifact@v3
+      with:
+        name: screenshots
+        path: screenshots/*.png
+      if: matrix.python-version == '3.12' && matrix.db-backend == 'postgres'
 
   coveralls:
     name: Indicate completion to coveralls
