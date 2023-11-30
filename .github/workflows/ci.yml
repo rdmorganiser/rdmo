@@ -98,12 +98,6 @@ jobs:
         node-version: 18
         cache: npm
       if: matrix.python-version == '3.12' && matrix.db-backend == 'postgres'
-    - name: Cache Playwright browsers
-      uses: actions/cache@v3
-      with:
-        path: ~/.cache/ms-playwright/
-        key: playwright-browsers
-      if: matrix.python-version == '3.12' && matrix.db-backend == 'postgres'
     - name: Install e2e tests dependencies
       run: |
         npm install
