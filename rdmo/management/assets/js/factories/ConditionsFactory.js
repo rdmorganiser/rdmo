@@ -9,7 +9,8 @@ class ConditionsFactory {
       pages: parent.page ? [parent.page.id] : [],
       questionsets: parent.questionset ? [parent.questionset.id] : [],
       questions: parent.question ? [parent.question.id] : [],
-      tasks: parent.task ? [parent.task.id] : []
+      tasks: parent.task ? [parent.task.id] : [],
+      editors: config.settings.multisite ? [config.currentSite.id] : [],
     }
   }
 
