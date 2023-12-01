@@ -107,6 +107,12 @@ def test_management_navigation(logged_in_admin_user: Page, helper: ModelHelper) 
     url_name = url_name.replace(" ", "")
     expect(page).to_have_url(re.compile(rf".*/{url_name}/"))
 
+    # take a screenshot for visual inspection
+    if helper.model == Catalog:
+        item_in_ui = page.locator(".list-group > .list-group-item").first
+        expect(item_in_ui).to_be_visible()
+        page.screenshot(path="screenshots/management-navigation-catalog.png", full_page=True)
+
 
 @pytest.mark.parametrize("helper", model_helpers)
 def test_management_has_items(logged_in_admin_user: Page, helper: ModelHelper) -> None:

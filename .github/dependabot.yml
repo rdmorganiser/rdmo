@@ -54,6 +54,10 @@ updates:
   - dependencies
   - javascript
   - type:maintenance
+  ignore:
+  - dependency-name: react-bootstrap # rdmo still uses bootstrap 3, which is not supported by react-bootstrap > 0.33.1
+  - dependency-name: "*"
+    update-types: ["version-update:semver-patch"] # ignore patch versions for all JavaScript dependencies
   groups:
     react:
       patterns:
@@ -68,6 +72,7 @@ updates:
     webpack:
       patterns:
       - webpack*
+      - copy-webpack-plugin
     eslint:
       patterns:
       - eslint*
