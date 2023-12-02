@@ -9,7 +9,7 @@ repos:
     hooks:
       - id: check-hooks-apply
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v4.5.0
     hooks:
       - id: check-ast
       - id: check-json
@@ -21,17 +21,17 @@ repos:
       - id: trailing-whitespace
         exclude: \.dot$
       - id: debug-statements
-  - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.0.291
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.6
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
   - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v8.50.0
+    rev: v8.54.0
     hooks:
       - id: eslint
         args: [--fix, --color]
         additional_dependencies:
-          - eslint@8.41.0
-          - eslint-plugin-react@7.32.2
+          - eslint@8.54.0
+          - eslint-plugin-react@7.33.2
           - react@18.2.0
