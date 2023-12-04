@@ -660,8 +660,8 @@ angular.module('project_questions')
                 });
             } else if (value.text) {
                 value.autocomplete_locked = true;
-                value.autocomplete_input = value.text_and_help;
-                value.autocomplete_text = value.text_and_help;
+                value.autocomplete_input = value.text;
+                value.autocomplete_text = value.text;
             }
         }
     };
@@ -1481,10 +1481,12 @@ angular.module('project_questions')
         value.autocomplete_locked = true;
 
         if (option === null) {
+            // store the text value (for the free autocomplete)
             value.text = value.autocomplete_input;
-            value.selected = option.id.toString();
-            value.autocomplete_text = option.text_and_help;
+            value.selected = '';
+            value.autocomplete_text = value.text;
         } else {
+            // store the option
             value.text = '';
             value.selected = option.id.toString();
             value.autocomplete_text = option.text;
