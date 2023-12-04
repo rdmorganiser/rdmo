@@ -1,5 +1,42 @@
 # Changelog
 
+## [RDMO 2.1.0](https://github.com/rdmorganiser/rdmo/compare/2.0.2...2.1.0) (Dec 7, 2023)
+
+* Refactor progress bar and overview
+  * Fix the progress bar to consider tabs and conditions correctly
+  * Show the project progress in the projects overview and the project hierarchy
+  * Show which pages are fully or partially answered in the overview
+* Refactor options
+  * Allow `textarea` as additional input for options
+  * Add `view_text` to options to be used in the interview instead of `text`
+  * Add `help` to options to be shown next to the option in the interview
+* Fix grammar issues in automatically generated help text in the interview
+  * Use generic formulations and a "+" sign
+  * Remove `verbose_name_plural` field
+* Refactor autocomplete widget
+  * Add `freeautocomplete` which can also store arbitrary inputs
+  * Fix various issues with autocomplete
+* Improve help texts
+  * Add a custom {more} markdown tag to create a show more/less interaction
+  * Adjust the styling of details/summary html tags
+* Add restricted accounts
+  * Add `PROJECT_CREATE_RESTRICTED` and `PROJECT_CREATE_GROUPS` to restrict project creation to certain groups
+  * Add `ACCOUNT_GROUPS` and `SOCIALACCOUNT_GROUPS` to put new user automatically into groups
+* Improve new management interface
+  * Initialize filters with current site
+  * Show order parameter for ordered many to many fields
+  * Add current site to new elements
+  * Fix translation bugs in the new management interface
+* Prevent conflicts when users edit the same values simultaneously
+* Add order parameter to tasks/issues and views and order accordingly in the project overview
+* Add `option_text` and `option_additional_input` to values to be used in templates
+* `Value.value` now always returns a sting (and not `None`)
+* Move GitHub and GitLab to separate repositories
+* Fix option set refresh in the interview
+* Fix `allauth` issues
+* Add front-end tests using playwright
+* Improve continuous integration
+
 ## [RDMO 2.0.2](https://github.com/rdmorganiser/rdmo/compare/2.0.1...2.0.2) (Nov 2, 2023)
 
 * Fix migration to RDMO 2.0 for PostgreSQL
