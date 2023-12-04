@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.dateparse import parse_datetime
@@ -17,10 +19,13 @@ class ValueConflictValidator:
         if serializer.instance:
             # for an update, check if the value was updated in the meantime
             updated = serializer.context['view'].request.data.get('updated')
-            if updated is not None and parse_datetime(updated) < serializer.instance.updated:
-                raise serializers.ValidationError({
-                    'conflict': [_('A newer version of this value was found.')]
-                })
+
+            if updated is not None:
+                delta = abs(parse_datetime(updated) - serializer.instance.updated)
+                if delta > timedelta(seconds=settings.PROJECT_VALUES_CONFLICT_THRESHOLD):
+                    raise serializers.ValidationError({
+                        'conflict': [_('A newer version of this value was found.')]
+                    })
         else:
             # for a new value, check if there is already a value with the same attribute and indexes
             try:
