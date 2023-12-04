@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='option',
             name='additional_input',
-            field=models.CharField(blank=True, choices=[('', 'None'), ('text', 'Text'), ('textarea', 'Textarea')], default=False, help_text='Designates whether an additional input is possible for this option.', max_length=256, verbose_name='Additional input'),
+            field=models.CharField(blank=True, choices=[('', '---------'), ('text', 'Text'), ('textarea', 'Textarea')], default=False, help_text='Designates whether an additional input is possible for this option.', max_length=256, verbose_name='Additional input'),
         ),
         migrations.RunPython(run_data_migration),
     ]

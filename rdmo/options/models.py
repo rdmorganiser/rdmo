@@ -151,7 +151,7 @@ class Option(models.Model, TranslationMixin):
     ADDITIONAL_INPUT_TEXT = 'text'
     ADDITIONAL_INPUT_TEXTAREA = 'textarea'
     ADDITIONAL_INPUT_CHOICES = (
-        (ADDITIONAL_INPUT_NONE, _('None')),
+        (ADDITIONAL_INPUT_NONE, '---------'),
         (ADDITIONAL_INPUT_TEXT, _('Text')),
         (ADDITIONAL_INPUT_TEXTAREA, _('Textarea'))
     )
