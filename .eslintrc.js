@@ -1,4 +1,5 @@
 module.exports = {
+  'root': true,
   'globals': {
     'gettext': true,
     'ngettext': true,
