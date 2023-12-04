@@ -963,7 +963,6 @@ angular.module('project_questions')
                         detail_id: future.page.section.id,
                         detail_action: 'navigation'
                     }, function(response) {
-                        console.log(response);
                         service.navigation = response
                     });
                 }
