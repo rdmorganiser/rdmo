@@ -84,52 +84,52 @@ class Catalog(Model, TranslationMixin):
     title_lang1 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Title (primary)'),
-        help_text=_('The title for this catalog in the primary language.')
+        help_text=_('The title for this catalog (in the primary language).')
     )
     title_lang2 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Title (secondary)'),
-        help_text=_('The title for this catalog in the secondary language.')
+        help_text=_('The title for this catalog (in the secondary language).')
     )
     title_lang3 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Title (tertiary)'),
-        help_text=_('The title for this catalog in the tertiary language.')
+        help_text=_('The title for this catalog (in the tertiary language).')
     )
     title_lang4 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Title (quaternary)'),
-        help_text=_('The title for this catalog in the quaternary language.')
+        help_text=_('The title for this catalog (in the quaternary language).')
     )
     title_lang5 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Title (quinary)'),
-        help_text=_('The title for this catalog in the quinary language.')
+        help_text=_('The title for this catalog (in the quinary language).')
     )
     help_lang1 = models.TextField(
         blank=True,
         verbose_name=_('Help (primary)'),
-        help_text=_('The help text for this catalog in the primary language.')
+        help_text=_('The help text for this catalog (in the primary language).')
     )
     help_lang2 = models.TextField(
         blank=True,
         verbose_name=_('Help (secondary)'),
-        help_text=_('The help text for this catalog in the secondary language.')
+        help_text=_('The help text for this catalog (in the secondary language).')
     )
     help_lang3 = models.TextField(
         blank=True,
         verbose_name=_('Help (tertiary)'),
-        help_text=_('The help text for this catalog in the tertiary language.')
+        help_text=_('The help text for this catalog (in the tertiary language).')
     )
     help_lang4 = models.TextField(
         blank=True,
         verbose_name=_('Help (quaternary)'),
-        help_text=_('The help text for this catalog in the quaternary language.')
+        help_text=_('The help text for this catalog (in the quaternary language).')
     )
     help_lang5 = models.TextField(
         blank=True,
         verbose_name=_('Help (quinary)'),
-        help_text=_('The help text for this catalog in the quinary language.')
+        help_text=_('The help text for this catalog (in the quinary language).')
     )
     available = models.BooleanField(
         default=True,

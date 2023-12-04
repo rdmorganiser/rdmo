@@ -69,77 +69,77 @@ class Question(Model, TranslationMixin):
     help_lang1 = models.TextField(
         blank=True, default="",
         verbose_name=_('Help (primary)'),
-        help_text=_('The help text for this question in the primary language.')
+        help_text=_('The help text for this question (in the primary language).')
     )
     help_lang2 = models.TextField(
         blank=True, default="",
         verbose_name=_('Help (secondary)'),
-        help_text=_('The help text for this question in the secondary language.')
+        help_text=_('The help text for this question (in the secondary language).')
     )
     help_lang3 = models.TextField(
         blank=True, default="",
         verbose_name=_('Help (tertiary)'),
-        help_text=_('The help text for this question in the tertiary language.')
+        help_text=_('The help text for this question (in the tertiary language).')
     )
     help_lang4 = models.TextField(
         blank=True, default="",
         verbose_name=_('Help (quaternary)'),
-        help_text=_('The help text for this question in the quaternary language.')
+        help_text=_('The help text for this question (in the quaternary language).')
     )
     help_lang5 = models.TextField(
         blank=True, default="",
         verbose_name=_('Help (quinary)'),
-        help_text=_('The help text for this question in the quinary language.')
+        help_text=_('The help text for this question (in the quinary language).')
     )
     text_lang1 = models.TextField(
         blank=True, default="",
         verbose_name=_('Text (primary)'),
-        help_text=_('The text for this question in the primary language.')
+        help_text=_('The text for this question (in the primary language).')
     )
     text_lang2 = models.TextField(
         blank=True, default="",
         verbose_name=_('Text (secondary)'),
-        help_text=_('The text for this question in the secondary language.')
+        help_text=_('The text for this question (in the secondary language).')
     )
     text_lang3 = models.TextField(
         blank=True, default="",
         verbose_name=_('Text (tertiary)'),
-        help_text=_('The text for this question in the tertiary language.')
+        help_text=_('The text for this question (in the tertiary language).')
     )
     text_lang4 = models.TextField(
         blank=True, default="",
         verbose_name=_('Text (quaternary)'),
-        help_text=_('The text for this question in the quaternary language.')
+        help_text=_('The text for this question (in the quaternary language).')
     )
     text_lang5 = models.TextField(
         blank=True, default="",
         verbose_name=_('Text (quinary)'),
-        help_text=_('The text for this question in the quinary language.')
+        help_text=_('The text for this question (in the quinary language).')
     )
     default_text_lang1 = models.TextField(
         blank=True, default="",
         verbose_name=_('Default text value (primary)'),
-        help_text=_('The default text value for this question in the primary language.')
+        help_text=_('The default text value for this question (in the primary language).')
     )
     default_text_lang2 = models.TextField(
         blank=True, default="",
         verbose_name=_('Default text value (secondary)'),
-        help_text=_('The default text value for this question in the secondary language.')
+        help_text=_('The default text value for this question (in the secondary language).')
     )
     default_text_lang3 = models.TextField(
         blank=True, default="",
         verbose_name=_('Default text value (tertiary)'),
-        help_text=_('The default text value for this question in the tertiary language.')
+        help_text=_('The default text value for this question (in the tertiary language).')
     )
     default_text_lang4 = models.TextField(
         blank=True, default="",
         verbose_name=_('Default text value (quaternary)'),
-        help_text=_('The default text value for this question in the quaternary language.')
+        help_text=_('The default text value for this question (in the quaternary language).')
     )
     default_text_lang5 = models.TextField(
         default="", blank=True,
         verbose_name=_('Default text value (quinary)'),
-        help_text=_('The default text value for this question in the quinary language.')
+        help_text=_('The default text value for this question (in the quinary language).')
     )
     default_option = models.ForeignKey(
         Option, blank=True, null=True, on_delete=models.SET_NULL,
@@ -154,27 +154,27 @@ class Question(Model, TranslationMixin):
     verbose_name_lang1 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Name (primary)'),
-        help_text=_('The name displayed for this question in the primary language.')
+        help_text=_('The name displayed for this question (in the primary language).')
     )
     verbose_name_lang2 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Name (secondary)'),
-        help_text=_('The name displayed for this question in the secondary language.')
+        help_text=_('The name displayed for this question (in the secondary language).')
     )
     verbose_name_lang3 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Name (tertiary)'),
-        help_text=_('The name displayed for this question in the tertiary language.')
+        help_text=_('The name displayed for this question (in the tertiary language).')
     )
     verbose_name_lang4 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Name (quaternary)'),
-        help_text=_('The name displayed for this question in the quaternary language.')
+        help_text=_('The name displayed for this question (in the quaternary language).')
     )
     verbose_name_lang5 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Name (quinary)'),
-        help_text=_('The name displayed for this question in the quinary language.')
+        help_text=_('The name displayed for this question (in the quinary language).')
     )
     widget_type = models.CharField(
         max_length=16,

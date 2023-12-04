@@ -109,7 +109,7 @@ def get_model_field_meta(model):
                 meta[field_name]['verbose_name'] = re.sub(r'\(.*\)$', f'({lang})', str(field.verbose_name))
             if hasattr(field, 'help_text'):
                 # remove the "in the primary language" part
-                meta[field_name]['help_text'] = re.sub(r' in the .*$', r'.', str(field.help_text))
+                meta[field_name]['help_text'] = re.sub(r' \(.*\).', '.', str(field.help_text))
         else:
             meta[field.name] = {}
             if hasattr(field, 'verbose_name'):
