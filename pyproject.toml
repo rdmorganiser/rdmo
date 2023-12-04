@@ -58,6 +58,7 @@ dependencies = [
   "drf-extensions~=0.7.1",
   "iso8601~=2.0",
   "markdown~=3.4",
+  "packaging~=23.2",
   "pypandoc~=1.11",
   "requests-toolbelt~=1.0",
   "rules~=3.3",
