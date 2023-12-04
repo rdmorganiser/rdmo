@@ -20,8 +20,8 @@ const filterSearch = (search, element) => {
   return (
     isEmpty(search) ||
     element.uri.includes(search) ||
-    (!isUndefined(element.title) && element.title.includes(search)) ||
-    (!isUndefined(element.text) && element.text.includes(search))
+    (!isUndefined(element.title) && element.title.toLowerCase().includes(search.toLowerCase())) ||
+    (!isUndefined(element.text) &&  element.text.toLowerCase().includes(search.toLowerCase()))
   )
 }
 
