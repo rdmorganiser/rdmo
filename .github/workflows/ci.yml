@@ -210,10 +210,23 @@ jobs:
         run: |
           sudo apt update
           sudo apt install --yes libldap2-dev libsasl2-dev
-      - run: python -m pip install --upgrade pip setuptools
+      - run: python -m pip install --upgrade pip pipdeptree setuptools
       - run: python -m pip install .[allauth,shibboleth,ci,dev,gunicorn,ldap,mysql,postgres,pytest]
-      - run: python -m pip freeze
-      - run: python -m pip list --outdated
+      - name: Write info to step summary
+        run: |
+          {
+            echo -e "# ✓ All optional dependency groups successfully installed in combination\n\n"
+            echo '<details><summary>Installed Python packages as dependency tree</summary>'
+            echo -e "\n\`\`\`console"
+            echo "$ python -m pipdeptree --local-only --exclude=pip,pipdeptree"
+            python -m pipdeptree --local-only --exclude=pip,pipdeptree
+            echo -e "\`\`\`\n</details>"
+            echo '<details><summary>Outdated dependencies</summary>'
+            echo -e "\n\`\`\`console"
+            echo "$ python -m pip list --outdated"
+            python -m pip list --outdated
+            echo -e "\`\`\`\n</details>"
+          } >> $GITHUB_STEP_SUMMARY
 
   required-checks-pass:
     if: always()
