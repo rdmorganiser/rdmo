@@ -36,8 +36,8 @@ jobs:
       with:
         python-version: "3.12"
         cache: pip
-    - run: python -m pip install --upgrade pip setuptools wheel
-    - run: python -m pip install -e .[dev]
+    - run: python -m pip install --upgrade pip
+    - run: python -m pip install --editable .[dev]
     - name: Set up pre-commit cache
       uses: actions/cache@v3
       with:
@@ -65,16 +65,16 @@ jobs:
       run: |
         sudo apt update
         sudo apt install --yes pandoc texlive-xetex librsvg2-bin
-        python -m pip install --upgrade pip setuptools wheel
+        python -m pip install --upgrade pip
         pandoc --version
     - name: Install rdmo[mysql] and start mysql
       run: |
-        python -m pip install -e .[ci,mysql]
+        python -m pip install --editable .[ci,mysql]
         sudo systemctl start mysql.service
       if: matrix.db-backend == 'mysql'
     - name: Install rdmo[postgres] and start postgresql
       run: |
-        python -m pip install -e .[ci,postgres]
+        python -m pip install --editable .[ci,postgres]
         sudo systemctl start postgresql.service
         pg_isready
         sudo -u postgres psql --command="CREATE USER postgres_user PASSWORD 'postgres_password' CREATEDB"
@@ -159,13 +159,15 @@ jobs:
       with:
         python-version: '3.12'
         cache: pip
-    - run: python -m pip install --upgrade build pip setuptools twine wheel
+    - run: |
+        python -m pip install --upgrade pip
+        python -m pip install .[dev]
     - name: Build the wheel
       run: python -m build --wheel
     - name: Check metadata
       run: python -m twine check --strict dist/*
     - name: Install package from built wheel
-      run: python -m pip install dist/rdmo*.whl
+      run: python -m pip install --force-reinstall dist/rdmo*.whl
     - name: Write info to step summary
       run: |
         echo -e "# ✓ Wheel successfully built (v${{ steps.new-version.outputs.new_version }})\n\n" >> $GITHUB_STEP_SUMMARY
@@ -194,7 +196,7 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-      - run: python -Im pip install -e .[dev]
+      - run: python -Im pip install --editable .[dev]
       - run: python -Ic 'import rdmo; print(rdmo.__version__)'
 
   optional-dependencies:
@@ -210,7 +212,7 @@ jobs:
         run: |
           sudo apt update
           sudo apt install --yes libldap2-dev libsasl2-dev
-      - run: python -m pip install --upgrade pip pipdeptree setuptools
+      - run: python -m pip install --upgrade pip
       - run: python -m pip install .[allauth,shibboleth,ci,dev,gunicorn,ldap,mysql,postgres,pytest]
       - name: Write info to step summary
         run: |
