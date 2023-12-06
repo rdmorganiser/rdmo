@@ -30,7 +30,7 @@
 * Prevent conflicts when users edit the same values simultaneously
 * Add order parameter to tasks/issues and views and order accordingly in the project overview
 * Add `option_text` and `option_additional_input` to values to be used in templates
-* `Value.value` now always returns a sting (and not `None`)
+* `Value.value` now always returns a string (and not `None`)
 * Move GitHub and GitLab to separate repositories
 * Fix option set refresh in the interview
 * Fix `allauth` issues
