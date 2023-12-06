@@ -199,8 +199,8 @@ jobs:
       - run: python -Im pip install --editable .[dev]
       - run: python -Ic 'import rdmo; print(rdmo.__version__)'
 
-  optional-dependencies:
-    name: Test installation of optional-dependencies
+  dependencies:
+    name: Test installation of all dependencies
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
@@ -214,19 +214,34 @@ jobs:
           sudo apt install --yes libldap2-dev libsasl2-dev
       - run: python -m pip install --upgrade pip
       - run: python -m pip install .[allauth,shibboleth,ci,dev,gunicorn,ldap,mysql,postgres,pytest]
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+      - run: npm install --dev
       - name: Write info to step summary
         run: |
           {
-            echo -e "# ✓ All optional dependency groups successfully installed in combination\n\n"
-            echo '<details><summary>Installed Python packages as dependency tree</summary>'
+            echo -e "# ✓ All dependency groups successfully installed in combination\n\n"
+            echo '<details><summary>Installed Python packages (dependency tree)</summary>'
             echo -e "\n\`\`\`console"
             echo "$ python -m pipdeptree --local-only --exclude=pip,pipdeptree"
             python -m pipdeptree --local-only --exclude=pip,pipdeptree
             echo -e "\`\`\`\n</details>"
-            echo '<details><summary>Outdated dependencies</summary>'
+            echo '<details><summary>Outdated Python dependencies</summary>'
             echo -e "\n\`\`\`console"
             echo "$ python -m pip list --outdated"
             python -m pip list --outdated
+            echo -e "\`\`\`\n</details>"
+            echo '<details><summary>Installed JavaScript packages (dependency tree)</summary>'
+            echo -e "\n\`\`\`console"
+            echo "$ npm list --all"
+            npm list --all
+            echo -e "\`\`\`\n</details>"
+            echo '<details><summary>Outdated JavaScript dependencies</summary>'
+            echo -e "\n\`\`\`console"
+            echo "$ npm outdated --long"
+            npm outdated --long || true
             echo -e "\`\`\`\n</details>"
           } >> $GITHUB_STEP_SUMMARY
 
@@ -238,7 +253,7 @@ jobs:
       - coveralls
       - build-wheel
       - dev-setup
-      - optional-dependencies
+      - dependencies
     runs-on: ubuntu-22.04
     steps:
       - uses: re-actors/alls-green@release/v1
