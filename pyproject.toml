@@ -76,7 +76,12 @@ ci = [
   "rdmo[dev]",
 ]
 dev = [
+  "build~=1.0",
+  "pipdeptree~=2.13",
   "pre-commit~=3.4",
+  "setuptools~=69.0",
+  "twine~=4.0",
+  "wheel~=0.42.0",
   "rdmo[allauth]",
   "rdmo[pytest]",
 ]
