@@ -67,7 +67,9 @@ class ProjectSerializer(serializers.ModelSerializer):
             'created',
             'updated',
             'site',
-            'views'
+            'views',
+            'progress_total',
+            'progress_count'
         )
         read_only_fields = (
             'snapshots',
