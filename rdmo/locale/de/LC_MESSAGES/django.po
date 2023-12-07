@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-04 12:32+0100\n"
-"PO-Revision-Date: 2023-12-04 12:33+0100\n"
+"PO-Revision-Date: 2023-12-07 11:06+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -88,7 +88,7 @@ msgstr "Der Text für das zusätzliche Feld (fünfte Sprache)."
 #: questions/models/page.py:111 questions/models/question.py:71
 #: questions/models/questionset.py:106 views/models.py:102
 msgid "Help (primary)"
-msgstr "Help (erste Sprache)"
+msgstr "Hilfe (erste Sprache)"
 
 #: accounts/models.py:49
 msgid ""
@@ -101,7 +101,7 @@ msgstr ""
 #: questions/models/page.py:116 questions/models/question.py:76
 #: questions/models/questionset.py:111 views/models.py:107
 msgid "Help (secondary)"
-msgstr "Help (zweite Sprache)"
+msgstr "Hilfe (zweite Sprache)"
 
 #: accounts/models.py:54
 msgid ""
@@ -114,7 +114,7 @@ msgstr ""
 #: questions/models/page.py:121 questions/models/question.py:81
 #: questions/models/questionset.py:116 views/models.py:112
 msgid "Help (tertiary)"
-msgstr "Help (dritte Sprache)"
+msgstr "Hilfe (dritte Sprache)"
 
 #: accounts/models.py:59
 msgid ""
@@ -127,7 +127,7 @@ msgstr ""
 #: questions/models/page.py:126 questions/models/question.py:86
 #: questions/models/questionset.py:121 views/models.py:117
 msgid "Help (quaternary)"
-msgstr "Help (vierte Sprache)"
+msgstr "Hilfe (vierte Sprache)"
 
 #: accounts/models.py:64
 msgid ""
@@ -140,7 +140,7 @@ msgstr ""
 #: questions/models/page.py:131 questions/models/question.py:91
 #: questions/models/questionset.py:126 views/models.py:122
 msgid "Help (quinary)"
-msgstr "Help (fünfte Sprache)"
+msgstr "Hilfe (fünfte Sprache)"
 
 #: accounts/models.py:69
 msgid ""
@@ -3603,11 +3603,11 @@ msgstr "Der Text für diese Frage (erste Sprache)."
 
 #: questions/models/question.py:102
 msgid "The text for this question (in the secondary language)."
-msgstr "Der Titel für dieses Fragenset (zweite Sprache)."
+msgstr "Der Titel für diese Frage (zweite Sprache)."
 
 #: questions/models/question.py:107
 msgid "The text for this question (in the tertiary language)."
-msgstr "Der Titel für dieses Fragenset (dritte Sprache)."
+msgstr "Der Text für diese Frage (dritte Sprache)."
 
 #: questions/models/question.py:112
 msgid "The text for this question (in the quaternary language)."
@@ -3615,7 +3615,7 @@ msgstr "Der Text für diese Frage (vierte Sprache)."
 
 #: questions/models/question.py:117
 msgid "The text for this question (in the quinary language)."
-msgstr "Der Titel für dieses Fragenset (fünfte Sprache)."
+msgstr "Der Titel für diese Frage (fünfte Sprache)."
 
 #: questions/models/question.py:121
 msgid "Default text value (primary)"
