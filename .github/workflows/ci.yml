@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     # run CI only if files in these whitelisted paths are changed
     paths:

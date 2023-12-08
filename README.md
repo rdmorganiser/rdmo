@@ -4,11 +4,11 @@ RDMO - Research Data Management Organiser
 [![Latest release](https://img.shields.io/pypi/v/rdmo.svg?style=flat)](https://pypi.python.org/pypi/rdmo/)
 [![Python Versions](https://img.shields.io/pypi/pyversions/rdmo.svg?style=flat)](https://www.python.org/)
 [![Django Versions](https://img.shields.io/pypi/frameworkversions/django/rdmo)](https://pypi.python.org/pypi/rdmo/)
-[![License](https://img.shields.io/github/license/rdmorganiser/rdmo?style=flat)](https://github.com/rdmorganiser/rdmo/blob/master/LICENSE) \
+[![License](https://img.shields.io/github/license/rdmorganiser/rdmo?style=flat)](https://github.com/rdmorganiser/rdmo/blob/main/LICENSE) \
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![CI Workflow Status](https://github.com/rdmorganiser/rdmo/actions/workflows/ci.yml/badge.svg)](https://github.com/rdmorganiser/rdmo/actions/workflows/ci.yml)
-[![Coverage Status](https://coveralls.io/repos/rdmorganiser/rdmo/badge.svg?branch=master&service=github)](https://coveralls.io/github/rdmorganiser/rdmo?branch=master)
+[![Coverage Status](https://coveralls.io/repos/rdmorganiser/rdmo/badge.svg?branch=main&service=github)](https://coveralls.io/github/rdmorganiser/rdmo?branch=main)
 [![Documentation status](https://readthedocs.org/projects/rdmo/badge/?version=latest)](http://rdmo.readthedocs.io/en/latest/?badge=latest)
 
 RDMO is a tool to support the systematic planning, organisation and implementation of the data management throughout the course of a research project. RDMO is funded by the Deutsche Forschungsgemeinschaft (DFG).

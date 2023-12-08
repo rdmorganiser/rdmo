@@ -108,7 +108,7 @@ pytest = [
 ]
 
 [project.urls]
-changelog = "https://github.com/rdmorganiser/rdmo/blob/master/CHANGELOG.md"
+changelog = "https://github.com/rdmorganiser/rdmo/blob/main/CHANGELOG.md"
 documentation = "https://rdmo.readthedocs.io"
 homepage = "https://rdmorganiser.github.io"
 issues = "https://github.com/rdmorganiser/rdmo/issues"

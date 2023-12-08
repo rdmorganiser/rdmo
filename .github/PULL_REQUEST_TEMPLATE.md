@@ -35,7 +35,7 @@ Related issue: #ISSUE_NUMBER
 ## Checklist
 <!--- Go over all the following points, and put an `x` in all the boxes that apply. --->
 <!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! --->
-- [ ] I have read the [contributor guide](https://github.com/rdmorganiser/rdmo/blob/master/CONTRIBUTING.md).
+- [ ] I have read the [contributor guide](https://github.com/rdmorganiser/rdmo/blob/main/CONTRIBUTING.md).
 - [ ] My code follows the code style of this project.
 - [ ] My change requires a change to the documentation.
 - [ ] I have updated the documentation accordingly.

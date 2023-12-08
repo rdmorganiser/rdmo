@@ -7,7 +7,7 @@ Here is a list of important resources for new contributors:
 - [Source Code](https://github.com/rdmorganiser/rdmo)
 - [Documentation](https://rdmo.readthedocs.io)
 - [Issue Tracker](https://github.com/rdmorganiser/rdmo/issues)
-- [Code of Conduct](https://github.com/rdmorganiser/rdmo/blob/master/CODE_OF_CONDUCT.md)
+- [Code of Conduct](https://github.com/rdmorganiser/rdmo/blob/main/CODE_OF_CONDUCT.md)
 
 ## How to report a bug
 
