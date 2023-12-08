@@ -37,6 +37,9 @@ dynamic = [
   "version",
 ]
 dependencies = [
+  # dependencies with major version on zero are declared with
+  # major.minor.patch, because they can potentially introduce breaking changes
+  # in minor version updates anytime
   "defusedcsv~=2.0",
   "defusedxml~=0.7.1",
   "django~=4.2",
@@ -46,7 +49,7 @@ dependencies = [
   "django-filter~=23.2",
   "django-libsass~=0.9",
   "django-mathfilters~=1.0",
-  "django-mptt~=0.14.0",
+  "django-mptt==0.14.0", # pinned, 0.15 requires Python >= 3.9
   "django-rest-swagger~=2.2",
   "django-settings-export~=1.2",
   "django-split-settings~=1.2",
@@ -55,7 +58,9 @@ dependencies = [
   "drf-extensions~=0.7.1",
   "iso8601~=2.0",
   "markdown~=3.4",
+  "packaging~=23.2",
   "pypandoc~=1.11",
+  "requests-toolbelt~=1.0",
   "rules~=3.3",
 ]
 
@@ -63,12 +68,20 @@ dependencies = [
 allauth = [
   "django-allauth~=0.57.0",
 ]
+shibboleth = [
+  "django-shibboleth-remoteuser@git+https://github.com/rdmorganiser/django-shibboleth-remoteuser@v0.11"
+]
 ci = [
   "coveralls~=3.3",
   "rdmo[dev]",
 ]
 dev = [
+  "build~=1.0",
+  "pipdeptree~=2.13",
   "pre-commit~=3.4",
+  "setuptools~=69.0",
+  "twine~=4.0",
+  "wheel~=0.42.0",
   "rdmo[allauth]",
   "rdmo[pytest]",
 ]
@@ -89,6 +102,7 @@ pytest = [
   "pytest-cov~=4.1",
   "pytest-django~=4.5",
   "pytest-mock~=3.11",
+  "pytest-playwright~=0.4.3",
   "pytest-randomly~=3.15",
   "pytest-xdist~=3.3",
 ]
@@ -117,6 +131,7 @@ line-length = 120
 select = [
   "B",    # flake8-bugbear
   "C4",   # flake8-comprehensions
+  "DJ",   # flake8-django
   "E",    # pycodestyle
   "F",    # pyflakes
   "I",    # isort
@@ -175,9 +190,12 @@ rest_framework = ["rest_framework"]
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "config.settings"
 testpaths = ["rdmo"]
-python_files = "test_*[!.txt].py"
+python_files = "test_*.py"
 pythonpath = [".", "testing"]
-addopts = "-p no:randomly"
+addopts = '-p no:randomly -m "not e2e"'
+markers = [
+  "e2e: marks tests as end-to-end tests using playwright (deselect with '-m \"not e2e\"')",
+]
 filterwarnings = [
   # fail on RemovedInDjango50Warning exception
   "error::django.utils.deprecation.RemovedInDjango50Warning",

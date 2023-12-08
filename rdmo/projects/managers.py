@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.db.models import Q
 
 from mptt.models import TreeManager
 from mptt.querysets import TreeQuerySet
@@ -140,6 +141,12 @@ class ValueQuerySet(models.QuerySet):
                 return self.filter(project__in=projects)
         else:
             return self.none()
+
+    def exclude_empty(self):
+        return self.exclude((Q(text='') | Q(text=None)) & Q(option=None) & (Q(file='') | Q(file=None)))
+
+    def distinct_list(self):
+        return self.order_by('attribute').values_list('attribute', 'set_prefix', 'set_index').distinct()
 
 
 class ProjectManager(CurrentSiteManagerMixin, TreeManager):

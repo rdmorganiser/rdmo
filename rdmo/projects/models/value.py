@@ -117,6 +117,10 @@ class Value(Model):
             'collection_index': self.collection_index,
             'value_type': self.value_type,
             'unit': self.unit,
+            'text': self.text,
+            'option_uri': self.option_uri,
+            'option_text': self.option_text,
+            'option_additional_input': self.option_additional_input,
             'external_id': self.external_id,
             'value': self.value,
             'value_and_unit': self.value_and_unit,
@@ -139,7 +143,7 @@ class Value(Model):
     @property
     def value(self):
         if self.option:
-            value = self.option.text or ''
+            value = self.option.view_text or self.option.text or ''
             if self.option.additional_input and self.text:
                 value += ': ' + self.text
             return value
@@ -161,18 +165,14 @@ class Value(Model):
             else:
                 return self.text
         else:
-            return None
+            return ''
 
     @property
     def value_and_unit(self):
-        value = self.value
-
-        if value is None:
-            return ''
-        elif self.unit:
-            return f'{value} {self.unit}'
+        if self.unit:
+            return f'{self.value} {self.unit}'
         else:
-            return value
+            return self.value
 
     @property
     def is_true(self):
@@ -253,6 +253,16 @@ class Value(Model):
     def option_uri(self):
         if self.option is not None:
             return self.option.uri
+
+    @property
+    def option_text(self):
+        if self.option is not None:
+            return self.option.text
+
+    @property
+    def option_additional_input(self):
+        if self.option is not None:
+            return self.option.additional_input
 
     def copy_file(self, file_name, file_content):
         # copies a file field from a different value over to this value

@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import isEmpty from 'lodash/isEmpty'
+import isNil from 'lodash/isNil'
 import isUndefined from 'lodash/isUndefined'
 
 import Link from 'rdmo/core/assets/js/components/Link'
@@ -179,18 +180,24 @@ ExtendLink.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-const CodeLink = ({ className, uri, onClick }) => {
+const CodeLink = ({ className, uri, onClick, order }) => {
   return (
-    <Link onClick={onClick}>
-      <code className={className}>{uri}</code>
-    </Link>
+    <>
+      <Link onClick={onClick}>
+        <code className={className}>{uri}</code>
+      </Link>
+      {!isNil(order) ? (
+        <>{' '}<code className="code-order ng-binding">{order}</code></>
+      ) : null}
+    </>
   )
 }
 
 CodeLink.propTypes = {
   className: PropTypes.string.isRequired,
   uri: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired,
+  order: PropTypes.number
 }
 
 const ErrorLink = ({ element, onClick }) => {

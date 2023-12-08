@@ -18,6 +18,8 @@ import pypandoc
 from defusedcsv import csv
 from markdown import markdown
 
+from .constants import HUMAN2BYTES_MAPPER
+
 log = logging.getLogger(__name__)
 
 
@@ -107,7 +109,7 @@ def get_model_field_meta(model):
                 meta[field_name]['verbose_name'] = re.sub(r'\(.*\)$', f'({lang})', str(field.verbose_name))
             if hasattr(field, 'help_text'):
                 # remove the "in the primary language" part
-                meta[field_name]['help_text'] = re.sub(r' in the .*$', r'.', str(field.help_text))
+                meta[field_name]['help_text'] = re.sub(r' \(.*\).', '.', str(field.help_text))
         else:
             meta[field.name] = {}
             if hasattr(field, 'verbose_name'):
@@ -351,32 +353,15 @@ def copy_model(instance, **kwargs):
 
 
 def human2bytes(string):
-    if not string:
+    if not string or string == '0':
         return 0
 
     m = re.match(r'([0-9.]+)\s*([A-Za-z]+)', string)
     number, unit = float(m.group(1)), m.group(2).strip().lower()
 
-    if unit == 'kb' or unit == 'k':
-        return number * 1000
-    elif unit == 'mb' or unit == 'm':
-        return number * 1000**2
-    elif unit == 'gb' or unit == 'g':
-        return number * 1000**3
-    elif unit == 'tb' or unit == 't':
-        return number * 1000**4
-    elif unit == 'pb' or unit == 'p':
-        return number * 1000**5
-    elif unit == 'kib':
-        return number * 1024
-    elif unit == 'mib':
-        return number * 1024**2
-    elif unit == 'gib':
-        return number * 1024**3
-    elif unit == 'tib':
-        return number * 1024**4
-    elif unit == 'pib':
-        return number * 1024**5
+    conversion = HUMAN2BYTES_MAPPER[unit]
+    number = number*conversion['base']**(conversion['power'])
+    return number
 
 
 def is_truthy(value):
@@ -384,13 +369,24 @@ def is_truthy(value):
 
 
 def markdown2html(markdown_string):
-    # adoption of the normal markdown function which also converts
-    # `[<string>]{<title>}` to <span title="<title>"><string></span> to
-    # allow for underlined tooltips
-    html = markdown(force_str(markdown_string))
+    # adoption of the normal markdown function
+    html = markdown(force_str(markdown_string)).strip()
+
+    # convert `[<string>]{<title>}` to <span title="<title>"><string></span> to allow for underlined tooltips
     html = re.sub(
         r'\[(.*?)\]\{(.*?)\}',
         r'<span data-toggle="tooltip" data-placement="bottom" data-html="true" title="\2">\1</span>',
+        html
+    )
+
+    # convert everything after `{more}` to <span class="more"><string></span> to be shown/hidden on user input
+    show_string = _('show more')
+    hide_string = _('show less')
+    html = re.sub(
+        r'(\{more\})(.*?)</p>$',
+        f'<span class="show-more" onclick="showMore(this)">... ({show_string})</span>'
+        r'<span class="more">\2</span>'
+        f'<span class="show-less" onclick="showLess(this)"> ({hide_string})</span></p>',
         html
     )
     return html

@@ -51,6 +51,10 @@ class OptionsApi extends BaseApi {
     return this.delete(`/api/v1/options/options/${option.id}/`)
   }
 
+  static fetchAdditionalInputs() {
+    return this.get('/api/v1/options/additionalinputs/')
+  }
+
   static fetchProviders() {
     return this.get('/api/v1/options/providers/')
   }

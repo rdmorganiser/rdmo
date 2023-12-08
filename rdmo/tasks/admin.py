@@ -12,13 +12,40 @@ class TaskAdminForm(forms.ModelForm):
 
     class Meta:
         model = Task
-        fields = '__all__'
+        fields = [
+            "uri",
+            "uri_prefix",
+            "uri_path",
+            "comment",
+            "locked",
+            "catalogs",
+            "sites",
+            "editors",
+            "groups",
+            "title_lang1",
+            "title_lang2",
+            "title_lang3",
+            "title_lang4",
+            "title_lang5",
+            "text_lang1",
+            "text_lang2",
+            "text_lang3",
+            "text_lang4",
+            "text_lang5",
+            "start_attribute",
+            "end_attribute",
+            "days_before",
+            "days_after",
+            "conditions",
+            "available",
+        ]
 
     def clean(self):
         TaskUniqueURIValidator(self.instance)(self.cleaned_data)
         TaskLockedValidator(self.instance)(self.cleaned_data)
 
 
+@admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
     form = TaskAdminForm
 
@@ -27,6 +54,3 @@ class TaskAdmin(admin.ModelAdmin):
     readonly_fields = ('uri', )
     list_filter = ('available', )
     filter_horizontal = ('catalogs', 'sites', 'editors', 'groups', 'conditions')
-
-
-admin.site.register(Task, TaskAdmin)

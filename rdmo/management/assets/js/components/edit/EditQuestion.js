@@ -110,32 +110,20 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
 
         <Tabs id="#question-tabs" defaultActiveKey={0} animation={false}>
           {
-            config.settings && config.settings.languages.map(([lang_code, lang], index) => {
-              return (
-                <Tab key={index} eventKey={index} title={lang}>
-                  <Text config={config} element={question} field={`text_${lang_code }`}
-                        onChange={updateQuestion} />
-
-                  <Textarea config={config} element={question} field={`help_${lang_code }`}
-                            rows={8} onChange={updateQuestion} />
-
-                  <div className="row">
-                    <div className="col-sm-6">
-                      <Text config={config} element={question} field={`verbose_name_${lang_code }`}
-                            onChange={updateQuestion} />
-                    </div>
-                    <div className="col-sm-6">
-                      <Text config={config} element={question} field={`verbose_name_plural_${lang_code }`}
-                            onChange={updateQuestion} />
-                    </div>
-                  </div>
-                </Tab>
-              )
-            })
+            config.settings && config.settings.languages.map(([lang_code, lang], index) => (
+              <Tab key={index} eventKey={index} title={lang}>
+                <Text config={config} element={question} field={`text_${lang_code }`}
+                      onChange={updateQuestion} />
+                <Textarea config={config} element={question} field={`help_${lang_code }`}
+                          rows={8} onChange={updateQuestion} />
+                <Text config={config} element={question} field={`verbose_name_${lang_code }`}
+                      onChange={updateQuestion} />
+              </Tab>
+            ))
           }
         </Tabs>
 
-        <Select config={config} element={question} field="attribute" verboseName={gettext('attribute')}
+        <Select config={config} element={question} field="attribute" createText={gettext('Create new attribute')}
                 options={attributes} onChange={updateQuestion} onCreate={createAttribute} onEdit={editAttribute} />
 
         <div className="row">
@@ -159,13 +147,13 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
 
         <Tabs id="#question-tabs2" defaultActiveKey={0} animation={false}>
           <Tab key={0} eventKey={0} title={gettext('Conditions')}>
-            <MultiSelect config={config} element={question} field="conditions"
-                         options={conditions} verboseName="condition"
+            <MultiSelect config={config} element={question} field="conditions" options={conditions}
+                         addText={gettext('Add existing condition')} createText={gettext('Create new condition')}
                          onChange={updateQuestion} onCreate={createCondition} onEdit={editCondition} />
           </Tab>
           <Tab key={1} eventKey={1} title={gettext('Option sets')}>
-            <MultiSelect config={config} element={question} field="optionsets"
-                         options={optionsets} verboseName="optionset"
+            <MultiSelect config={config} element={question} field="optionsets" options={optionsets}
+                         addText={gettext('Add existing optionset')} createText={gettext('Create new optionset')}
                          onChange={updateQuestion} onCreate={createOptionSet} onEdit={editOptionSet} />
           </Tab>
           <Tab key={2} eventKey={2} title={gettext('Range')}>

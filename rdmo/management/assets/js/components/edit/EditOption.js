@@ -4,6 +4,7 @@ import { Tabs, Tab } from 'react-bootstrap'
 import get from 'lodash/get'
 
 import Checkbox from './common/Checkbox'
+import Radio from './common/Radio'
 import Select from './common/Select'
 import Text from './common/Text'
 import Textarea from './common/Textarea'
@@ -19,7 +20,7 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditOption = ({ config, option, elements, elementActions }) => {
 
-  const { sites } = config
+  const { additionalInputs, sites } = config
   const { elementAction, parent } = elements
 
   const updateOption = (key, value) => elementActions.updateElement(option, {[key]: value})
@@ -81,10 +82,6 @@ const EditOption = ({ config, option, elements, elementActions }) => {
             <Checkbox config={config} element={option} field="locked"
                       onChange={updateOption} />
           </div>
-          <div className="col-sm-6">
-            <Checkbox config={config} element={option} field="additional_input"
-                      onChange={updateOption} />
-          </div>
         </div>
 
         <Tabs id="#option-tabs" defaultActiveKey={0} animation={false}>
@@ -95,12 +92,19 @@ const EditOption = ({ config, option, elements, elementActions }) => {
                   <div className="col-sm-12">
                     <Text config={config} element={option} field={`text_${lang_code }`}
                           onChange={updateOption} />
+                    <Textarea config={config} element={option} field={`help_${lang_code }`}
+                              onChange={updateOption} />
+                    <Textarea config={config} element={option} field={`view_text_${lang_code }`}
+                              onChange={updateOption} />
                   </div>
                 </div>
               </Tab>
             ))
           }
         </Tabs>
+
+        <Radio config={config} element={option} field="additional_input"
+               options={additionalInputs} onChange={updateOption} />
 
         {get(config, 'settings.multisite') && <Select config={config} element={option} field="editors"
                                                       options={sites} onChange={updateOption} isMulti />}

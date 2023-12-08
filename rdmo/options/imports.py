@@ -62,9 +62,11 @@ def import_option(element, save=False, user=None):
 
     set_common_fields(option, element)
 
-    option.additional_input = element.get('additional_input') or False
+    option.additional_input = element.get('additional_input')
 
     set_lang_field(option, 'text', element)
+    set_lang_field(option, 'help', element)
+    set_lang_field(option, 'view_text', element)
 
     validate_instance(option, element, OptionLockedValidator, OptionUniqueURIValidator)
 

@@ -27,47 +27,47 @@ const ElementsSidebar = ({ config, elements, elementActions, importActions }) =>
       <ul className="list-unstyled">
         <li>
           <Link href={buildPath(config.baseUrl, 'catalogs')}
-                onClick={() => elementActions.fetchElements('catalogs')}>Catalogs</Link>
+                onClick={() => elementActions.fetchElements('catalogs')}>{gettext('Catalogs')}</Link>
         </li>
         <li>
           <Link href={buildPath(config.baseUrl, 'sections')}
-                onClick={() => elementActions.fetchElements('sections')}>Sections</Link>
+                onClick={() => elementActions.fetchElements('sections')}>{gettext('Sections')}</Link>
         </li>
         <li>
           <Link href={buildPath(config.baseUrl, 'pages')}
-                onClick={() => elementActions.fetchElements('pages')}>Pages</Link>
+                onClick={() => elementActions.fetchElements('pages')}>{gettext('Pages')}</Link>
         </li>
         <li>
           <Link href={buildPath(config.baseUrl, 'questionsets')}
-                onClick={() => elementActions.fetchElements('questionsets')}>Question sets</Link>
+                onClick={() => elementActions.fetchElements('questionsets')}>{gettext('Question sets')}</Link>
         </li>
         <li>
           <Link href={buildPath(config.baseUrl, 'questions')}
-                onClick={() => elementActions.fetchElements('questions')}>Questions</Link>
+                onClick={() => elementActions.fetchElements('questions')}>{gettext('Questions')}</Link>
         </li>
         <li>
           <Link href={buildPath(config.baseUrl, 'attributes')}
-                onClick={() => elementActions.fetchElements('attributes')}>Attributes</Link>
+                onClick={() => elementActions.fetchElements('attributes')}>{gettext('Attributes')}</Link>
         </li>
         <li>
           <Link href={buildPath(config.baseUrl, 'optionsets')}
-                onClick={() => elementActions.fetchElements('optionsets')}>Option sets</Link>
+                onClick={() => elementActions.fetchElements('optionsets')}>{gettext('Option sets')}</Link>
         </li>
         <li>
           <Link href={buildPath(config.baseUrl, 'options')}
-                onClick={() => elementActions.fetchElements('options')}>Options</Link>
+                onClick={() => elementActions.fetchElements('options')}>{gettext('Options')}</Link>
         </li>
         <li>
           <Link href={buildPath(config.baseUrl, 'conditions')}
-                onClick={() => elementActions.fetchElements('conditions')}>Conditions</Link>
+                onClick={() => elementActions.fetchElements('conditions')}>{gettext('Conditions')}</Link>
         </li>
         <li>
           <Link href={buildPath(config.baseUrl, 'tasks')}
-                onClick={() => elementActions.fetchElements('tasks')}>Tasks</Link>
+                onClick={() => elementActions.fetchElements('tasks')}>{gettext('Tasks')}</Link>
         </li>
         <li>
           <Link href={buildPath(config.baseUrl, 'views')}
-                onClick={() => elementActions.fetchElements('views')}>Views</Link>
+                onClick={() => elementActions.fetchElements('views')}>{gettext('Views')}</Link>
         </li>
       </ul>
 

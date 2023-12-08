@@ -12,8 +12,6 @@ from ..managers import IssueManager
 
 class Issue(models.Model):
 
-    objects = IssueManager()
-
     ISSUE_STATUS_OPEN = 'open'
     ISSUE_STATUS_IN_PROGRESS = 'in_progress'
     ISSUE_STATUS_CLOSED = 'closed'
@@ -39,8 +37,9 @@ class Issue(models.Model):
         help_text=_('The status for this issue.')
     )
 
+    objects = IssueManager()
     class Meta:
-        ordering = ('project__title', )
+        ordering = ('project__title', 'task__uri')
         verbose_name = _('Issue')
         verbose_name_plural = _('Issues')
 

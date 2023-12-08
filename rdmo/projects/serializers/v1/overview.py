@@ -1,50 +1,17 @@
 from rest_framework import serializers
 
 from rdmo.projects.models import Project
-from rdmo.questions.models import Catalog, Page, Section
-
-
-class PageSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Page
-        fields = (
-            'id',
-            'title',
-            'has_conditions'
-        )
-
-
-class SectionSerializer(serializers.ModelSerializer):
-
-    pages = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Section
-        fields = (
-            'id',
-            'title',
-            'pages'
-        )
-
-    def get_pages(self, obj):
-        return PageSerializer(obj.elements, many=True, read_only=True).data
+from rdmo.questions.models import Catalog
 
 
 class CatalogSerializer(serializers.ModelSerializer):
-
-    sections = serializers.SerializerMethodField()
 
     class Meta:
         model = Catalog
         fields = (
             'id',
-            'title',
-            'sections'
+            'title'
         )
-
-    def get_sections(self, obj):
-        return SectionSerializer(obj.elements, many=True, read_only=True).data
 
 
 class ProjectOverviewSerializer(serializers.ModelSerializer):

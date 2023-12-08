@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
-from django.db.models import prefetch_related_objects
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
 
@@ -8,7 +8,6 @@ from rest_framework import serializers
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.viewsets import GenericViewSet, ModelViewSet, ReadOnlyModelViewSet
@@ -26,7 +25,14 @@ from rdmo.views.models import View
 
 from .filters import SnapshotFilterBackend, ValueFilterBackend
 from .models import Continuation, Integration, Invite, Issue, Membership, Project, Snapshot, Value
-from .permissions import HasProjectPagePermission, HasProjectPermission, HasProjectsPermission
+from .permissions import (
+    HasProjectPagePermission,
+    HasProjectPermission,
+    HasProjectProgressModelPermission,
+    HasProjectProgressObjectPermission,
+    HasProjectsPermission,
+)
+from .progress import compute_navigation, compute_progress
 from .serializers.v1 import (
     IntegrationSerializer,
     InviteSerializer,
@@ -65,16 +71,26 @@ class ProjectViewSet(ModelViewSet):
     def get_queryset(self):
         return Project.objects.filter_user(self.request.user).select_related('catalog')
 
-    @action(detail=True, permission_classes=(IsAuthenticated, ))
+    @action(detail=True, permission_classes=(HasModelPermission | HasProjectPermission, ))
     def overview(self, request, pk=None):
         project = self.get_object()
-
-        # prefetch only the pages (and their conditions)
-        prefetch_related_objects([project.catalog],
-                                 'catalog_sections__section__section_pages__page__conditions')
-
         serializer = ProjectOverviewSerializer(project, context={'request': request})
         return Response(serializer.data)
+
+    @action(detail=True, url_path=r'navigation/(?P<section_id>\d+)',
+            permission_classes=(HasModelPermission | HasProjectPermission, ))
+    def navigation(self, request, pk=None, section_id=None):
+        project = self.get_object()
+
+        try:
+            section = project.catalog.sections.get(pk=section_id)
+        except ObjectDoesNotExist as e:
+            raise NotFound() from e
+
+        project.catalog.prefetch_elements()
+
+        navigation = compute_navigation(section, project)
+        return Response(navigation)
 
     @action(detail=True, permission_classes=(HasModelPermission | HasProjectPermission, ))
     def resolve(self, request, pk=None):
@@ -158,11 +174,27 @@ class ProjectViewSet(ModelViewSet):
         # if it didn't work return 404
         raise NotFound()
 
-    @action(detail=True, permission_classes=(IsAuthenticated, ))
+    @action(detail=True, methods=['get', 'post'],
+            permission_classes=(HasProjectProgressModelPermission | HasProjectProgressObjectPermission, ))
     def progress(self, request, pk=None):
         project = self.get_object()
-        project.catalog.prefetch_elements()
-        return Response(project.progress)
+
+        if request.method == 'POST' or project.progress_count is None or project.progress_total is None:
+            # compute the progress and store
+            project.catalog.prefetch_elements()
+            project.progress_count, project.progress_total = compute_progress(project)
+            project.save()
+
+        try:
+            ratio = project.progress_count / project.progress_total
+        except ZeroDivisionError:
+            ratio = 0
+
+        return Response({
+            'count': project.progress_count,
+            'total': project.progress_total,
+            'ratio': ratio
+        })
 
     def perform_create(self, serializer):
         project = serializer.save(site=get_current_site(self.request))

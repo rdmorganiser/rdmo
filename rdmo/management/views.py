@@ -1,3 +1,4 @@
+import hashlib
 import logging
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -18,3 +19,10 @@ class ManagementView(LoginRequiredMixin, PermissionRedirectMixin, RulesPermissio
     def has_permission(self):
         # Use test_rule from rules for permissions check
         return test_rule('management.can_view_management', self.request.user, self.request.site)
+
+    def render_to_response(self, context, **response_kwargs):
+        storeid = hashlib.sha256(self.request.session.session_key.encode()).hexdigest()
+
+        response = super().render_to_response(context, **response_kwargs)
+        response.set_cookie('storeid', storeid)
+        return response

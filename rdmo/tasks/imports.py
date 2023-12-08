@@ -25,6 +25,8 @@ def import_task(element, save=False, user=None):
 
     set_common_fields(task, element)
 
+    task.order = element.get('order') or 0
+
     set_lang_field(task, 'title', element)
     set_lang_field(task, 'text', element)
 

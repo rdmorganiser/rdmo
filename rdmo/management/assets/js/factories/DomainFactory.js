@@ -1,4 +1,4 @@
-class QuestionsFactory {
+class DomainFactory {
 
   static createAttribute(config, parent) {
     return {
@@ -8,10 +8,11 @@ class QuestionsFactory {
       conditions: parent.condition ? [parent.condition.id] : [],
       pages: parent.page ? [parent.page.id] : [],
       questionsets: parent.questionset ? [parent.questionset.id] : [],
-      questions: parent.question ? [parent.question.id] : []
+      questions: parent.question ? [parent.question.id] : [],
+      editors: config.settings.multisite ? [config.currentSite.id] : [],
     }
   }
 
 }
 
-export default QuestionsFactory
+export default DomainFactory

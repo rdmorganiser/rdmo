@@ -5,6 +5,7 @@ import get from 'lodash/get'
 
 import CodeMirror from './common/CodeMirror'
 import Checkbox from './common/Checkbox'
+import Number from './common/Number'
 import Select from './common/Select'
 import Text from './common/Text'
 import Textarea from './common/Textarea'
@@ -70,13 +71,17 @@ const EditView = ({ config, view, elements, elementActions }) => {
                   rows={4} onChange={updateView} />
 
         <div className="row">
-          <div className="col-sm-6">
+          <div className="col-sm-4">
             <Checkbox config={config} element={view} field="locked"
                       onChange={updateView} />
           </div>
-          <div className="col-sm-6">
+          <div className="col-sm-4">
             <Checkbox config={config} element={view} field="available"
                       onChange={updateView} />
+          </div>
+          <div className="col-sm-4">
+            <Number config={config} element={view} field="order"
+                    onChange={updateView} />
           </div>
         </div>
 

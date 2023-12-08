@@ -2,7 +2,7 @@ import os
 
 from django.utils.translation import gettext_lazy as _
 
-DEBUG = False
+DEBUG = os.getenv("DJANGO_DEBUG", False) == "True"
 TEMPLATE_DEBUG = False
 DEBUG_LOGGING = False
 
@@ -79,10 +79,5 @@ OPTIONSET_PROVIDERS = [
 ]
 
 PROJECT_ISSUE_PROVIDERS = [
-    ('github', _('GitHub'), 'rdmo.projects.providers.GitHubIssueProvider')
+    ('simple', _('Simple provider'), 'rdmo.projects.providers.SimpleIssueProvider')
 ]
-
-GITHUB_PROVIDER = {
-    'client_id': '',
-    'client_secret': ''
-}

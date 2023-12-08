@@ -9,7 +9,7 @@ angular.module('project_questions')
     /* configure resources */
 
     var resources = {
-        projects: $resource(baseurl + 'api/v1/projects/projects/:id/:detail_action/'),
+        projects: $resource(baseurl + 'api/v1/projects/projects/:id/:detail_action/:detail_id/'),
         values: $resource(baseurl + 'api/v1/projects/projects/:project/values/:id/:detail_action/'),
         pages: $resource(baseurl + 'api/v1/projects/projects/:project/pages/:list_action/:id/'),
         settings: $resource(baseurl + 'api/v1/core/settings/')
@@ -147,13 +147,14 @@ angular.module('project_questions')
             }
 
             return service.fetchPage(page_id)
+            .then(service.fetchNavigation)
             .then(service.fetchOptions)
             .then(service.fetchValues)
             .then(service.fetchConditions)
             .then(function () {
                 // copy future objects
                 angular.forEach([
-                    'page', 'progress', 'attributes', 'questionsets', 'questions', 'valuesets', 'values'
+                    'page', 'progress', 'attributes', 'questionsets', 'questions', 'valuesets', 'values', 'navigation'
                 ], function (key) {
                     service[key] = angular.copy(future[key]);
                 });
@@ -274,6 +275,16 @@ angular.module('project_questions')
             // using recursive functions!
             service.initPage(future.page);
         });
+    };
+
+    service.fetchNavigation = function() {
+        future.navigation = resources.projects.query({
+            id: service.project.id,
+            detail_id: future.page.section.id,
+            detail_action: 'navigation'
+        });
+
+        return future.navigation.$promise
     };
 
     service.initPage = function(page) {
@@ -634,7 +645,7 @@ angular.module('project_questions')
         if (question.widget_class === 'autocomplete') {
             if (angular.isArray(question.options)) {
                 question.options_fuse = new Fuse(question.options, {
-                    keys: ['text']
+                    keys: ['text_and_help']
                 });
             }
 
@@ -643,8 +654,8 @@ angular.module('project_questions')
                 angular.forEach(question.options, function(option) {
                     if (value.autocomplete_locked === false && option.id === value.option) {
                         value.autocomplete_locked = true;
-                        value.autocomplete_input = option.text;
-                        value.autocomplete_text = option.text;
+                        value.autocomplete_input = option.text_and_help;
+                        value.autocomplete_text = option.text_and_help;
                     }
                 });
             } else if (value.text) {
@@ -706,6 +717,9 @@ angular.module('project_questions')
     };
 
     service.storeValue = function(value, question, set_prefix, set_index, collection_index) {
+        // reset value errors
+        value.errors = []
+
         if (angular.isDefined(value.removed) && value.removed) {
             // remove additional_input from unselected checkboxes
             value.additional_input = {};
@@ -760,7 +774,7 @@ angular.module('project_questions')
                     // loop over options
                     angular.forEach(question.options, function(option) {
                         if (option.has_provider && value.selected === option.id) {
-                            value.text = option.text;
+                            value.text = option.text_and_help;
                             value.external_id = option.id;
                         } else if (value.selected === option.id.toString()) {
                             // get text from additional_input for the selected option
@@ -826,10 +840,16 @@ angular.module('project_questions')
             }, function (response) {
                 if (response.status == 500) {
                     service.error = response;
+                } else if (response.status == 400) {
+                    service.error = true;
+                    value.errors = Object.keys(response.data);
+                } else if (response.status == 404) {
+                    service.error = true;
+                    value.errors = ['not_found']
                 }
             })
         }
-};
+    };
 
     service.storeValues = function() {
         var promises = [];
@@ -852,7 +872,7 @@ angular.module('project_questions')
     service.prev = function() {
         service.error = null; // reset error when moving to previous questionset
         if (service.settings.project_questions_autosave) {
-            service.save(false).then(function() {
+            service.save(false, true).then(function() {
                 back = true;
                 service.initView(service.page.prev_page);
             })
@@ -865,7 +885,7 @@ angular.module('project_questions')
     service.next = function() {
         service.error = null; // reset error when moving to next questionset
         if (service.settings.project_questions_autosave) {
-            service.save(false).then(function() {
+            service.save(false, true).then(function() {
                 service.initView(service.page.next_page);
             })
         } else {
@@ -876,22 +896,13 @@ angular.module('project_questions')
     service.jump = function(section, page) {
         service.error = null; // reset error before saving
         if (service.settings.project_questions_autosave) {
-            service.save(false).then(function() {
+            service.save(false, true).then(function() {
                 if (service.error !== null) {
                     // pass, dont jump
                 } else if (angular.isDefined(page)) {
                     service.initView(page.id);
                 } else if (angular.isDefined(section)) {
-                    if (angular.isDefined(section.pages)) {
-                        service.initView(section.pages[0].id);
-                    } else {
-                        // jump to first page of the section in breadcrumb
-                        // let section_from_service = service.project.catalog.sections.find(x => x.id === section.id)
-                        var section_from_service = $filter('filter')(service.project.catalog.sections, {
-                            id: section.id
-                        })[0]
-                        service.initView(section_from_service.pages[0].id);
-                    }
+                    service.initView(section.first);
                 } else {
                     service.initView(null);
                 }
@@ -900,23 +911,14 @@ angular.module('project_questions')
             if (angular.isDefined(page)) {
                 service.initView(page.id);
             } else if (angular.isDefined(section)) {
-                if (angular.isDefined(section.pages)) {
-                    service.initView(section.pages[0].id);
-                } else {
-                    // jump to first page of the section in breadcrumb
-                    // let section_from_service = service.project.catalog.sections.find(x => x.id === section.id)
-                    var section_from_service = $filter('filter')(service.project.catalog.sections, {
-                        id: section.id
-                    })[0]
-                    service.initView(section_from_service.pages[0].id);
-                }
+                service.initView(section.first);
             } else {
                 service.initView(null);
             }
         }
     };
 
-    service.save = function(proceed) {
+    service.save = function(proceed, jump) {
         service.error = null; // reset error
         return service.storeValues().then(function() {
             if (service.error !== null) {
@@ -941,34 +943,45 @@ angular.module('project_questions')
                         }
                     }
                 } else {
-                    console.log('next');
                     service.next();
                 }
             } else {
                 // update progress
-                resources.projects.get({
-                    id: service.project.id,
-                    detail_action: 'progress'
-                }, function(response) {
-                    if (service.progress.values != response.values) {
+                if (service.project.read_only !== true) {
+                    resources.projects.postAction({
+                        id: service.project.id,
+                        detail_action: 'progress'
+                    }, function(response) {
                         service.progress = response
-                    }
-                });
+                    });
+                }
+
+                // update navigation
+                if (service.project.read_only !== true) {
+                    resources.projects.query({
+                        id: service.project.id,
+                        detail_id: future.page.section.id,
+                        detail_action: 'navigation'
+                    }, function(response) {
+                        service.navigation = response
+                    });
+                }
 
                 // check if we need to refresh the site
-                angular.forEach([service.page].concat(service.questionsets), function(questionset) {
-                    angular.forEach(questionset.elements, function(element) {
-                        if (element.model == 'questions.question') {
-                            var question = element;
-                            angular.forEach(question.optionsets, function(optionset) {
-                                if (optionset.has_refresh) {
-                                    return service.initView(service.page.id);
-                                }
-                            });
-                        }
+                if (angular.isUndefined(jump) || !jump) {
+                    angular.forEach([service.page].concat(service.questionsets), function(questionset) {
+                        angular.forEach(questionset.elements, function(element) {
+                            if (element.model == 'questions.question') {
+                                var question = element;
+                                angular.forEach(question.optionsets, function(optionset) {
+                                    if (optionset.has_refresh) {
+                                        return service.initView(service.page.id);
+                                    }
+                                });
+                            }
+                        });
                     });
-                });
-
+                }
                 // re-evaluate conditions
                 angular.forEach([service.page].concat(service.questionsets), function(questionset) {
                     angular.forEach(service.valuesets[questionset.id], function(valuesets, set_prefix) {
@@ -1058,11 +1071,19 @@ angular.module('project_questions')
         service.values[attribute][set_prefix][set_index][collection_index].autocomplete_text = '';
         service.values[attribute][set_prefix][set_index][collection_index].autocomplete_locked = false;
         service.values[attribute][set_prefix][set_index][collection_index].changed = true;
+
+        if (service.settings.project_questions_autosave) {
+            service.save(false);
+        }
     };
 
     service.removeValue = function(attribute, set_prefix, set_index, collection_index) {
         service.values[attribute][set_prefix][set_index][collection_index].removed = true;
         service.values[attribute][set_prefix][set_index][collection_index].changed = true;
+
+        if (service.settings.project_questions_autosave) {
+            service.save(false);
+        }
     };
 
     service.openValueSetFormModal = function(questionset, set_prefix, set_index) {
@@ -1372,12 +1393,22 @@ angular.module('project_questions')
 
                         // unset the searching flag
                         value.searching = false;
+
+                        // activate the first item
+                        if (question.widget_type == 'autocomplete' && angular.isDefined(value.items[0])) {
+                            value.items[0].active = true;
+                        }
                     });
                 }
             } else {
                 // if no search was performed, do the searching on the client
                 value.autocomplete_search = false;
                 value.items = question.options_fuse.search(value.autocomplete_input);
+
+                // activate the first item
+                if (question.widget_type == 'autocomplete' && angular.isDefined(value.items[0])) {
+                    value.items[0].active = true;
+                }
             }
         } else {
             value.items = [];
@@ -1417,11 +1448,22 @@ angular.module('project_questions')
                 }
                 if (angular.isDefined(next)) {
                     next.active = true;
-                    value.autocomplete_input = next.text;
+                    value.autocomplete_input = next.text_and_help;
                 }
             } else if ($event.code == 'Enter' || $event.code == 'NumpadEnter') {
-                if (angular.isDefined(active)) {
+                if (value.autocomplete_input == '') {
+                    service.resetAutocomplete(value);
+                } else if (angular.isDefined(active)) {
                     service.selectAutocomplete(value, value.items[active]);
+                } else if (question.widget_type == 'freeautocomplete') {
+                    var matchingOptions = $filter('filter')(value.items, function(item) {
+                        return item.text.toLowerCase() == value.autocomplete_input.toLowerCase();
+                    })
+                    if (matchingOptions.length > 0) {
+                        service.selectAutocomplete(value, matchingOptions[0]);
+                    } else {
+                        service.selectAutocomplete(value, null);
+                    }
                 }
             } else if ($event.code == 'Escape') {
                 if (value.selected === '') {
@@ -1437,22 +1479,57 @@ angular.module('project_questions')
     // called when the user clicks on an option of the autocomplete field
     service.selectAutocomplete = function(value, option) {
         value.autocomplete_locked = true;
-        value.selected = option.id.toString();
-        value.autocomplete_text = option.text;
+
+        if (option === null) {
+            // store the text value (for the free autocomplete)
+            value.text = value.autocomplete_input;
+            value.selected = '';
+            value.autocomplete_text = value.text;
+        } else {
+            // store the option
+            value.text = '';
+            value.selected = option.id.toString();
+            value.autocomplete_text = option.text;
+            value.autocomplete_input = option.text;
+        }
 
         service.changed(value, true);
     }
 
     // called when the user clicks outside the autocomplete field
-    service.blurAutocomplete = function(value) {
-        if (value.selected === '') {
-            value.autocomplete_input = '';
-            value.autocomplete_text = '';
-            value.items = null;
+    service.blurAutocomplete = function(question, value) {
+        if (question.widget_type == 'freeautocomplete') {
+            if (value.autocomplete_input == '') {
+                service.resetAutocomplete(value);
+            } else {
+                var matchingOptions = $filter('filter')(value.items, function(item) {
+                    return item.text.toLowerCase() == value.autocomplete_input.toLowerCase();
+                })
+                if (matchingOptions.length > 0) {
+                    service.selectAutocomplete(value, matchingOptions[0]);
+                } else {
+                    service.selectAutocomplete(value, null);
+                }
+            }
         } else {
-            value.autocomplete_locked = true;
-            value.autocomplete_input = value.autocomplete_text;
+            if (value.selected === '') {
+                service.resetAutocomplete(value);
+            } else {
+                value.autocomplete_locked = true;
+                value.autocomplete_input = value.autocomplete_text;
+            }
         }
+    }
+
+    // called when an empty string is entered in the autocomplete field
+    service.resetAutocomplete = function(value) {
+        value.text = '';
+        value.selected = '';
+        value.autocomplete_input = '';
+        value.autocomplete_text = '';
+        value.items = null;
+
+        service.changed(value, true);
     }
 
     // called when the user clicks in the autocomplete field

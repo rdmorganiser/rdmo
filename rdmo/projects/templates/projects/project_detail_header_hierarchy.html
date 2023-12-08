@@ -19,13 +19,13 @@
         {% if can_view_parent_project %}
            <a href="{% url 'project' node.id %}">
                 {% if node.id == project.id %}
-                <strong>{{ node.title }}</strong>
+                <strong>{{ node.title }}</strong> {% project_progress_text node %}
                 {% else %}
-                {{ node.title }}
+                {{ node.title }} {% project_progress_text node %}
                 {% endif %}
             </a>
         {% else %}
-        {{ node.title }}
+        {{ node.title }} {% project_progress_text node %}
         {% endif %}
     </li>
 {% endfor %}

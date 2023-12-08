@@ -99,15 +99,6 @@
     "model": "options.optionsetoption",
     "pk": 1,
     "fields": {
-      "optionset": 3,
-      "option": 8,
-      "order": 4
-    }
-  },
-  {
-    "model": "options.optionsetoption",
-    "pk": 2,
-    "fields": {
       "optionset": 1,
       "option": 1,
       "order": 1
@@ -115,52 +106,7 @@
   },
   {
     "model": "options.optionsetoption",
-    "pk": 3,
-    "fields": {
-      "optionset": 2,
-      "option": 4,
-      "order": 1
-    }
-  },
-  {
-    "model": "options.optionsetoption",
-    "pk": 4,
-    "fields": {
-      "optionset": 2,
-      "option": 7,
-      "order": 4
-    }
-  },
-  {
-    "model": "options.optionsetoption",
-    "pk": 5,
-    "fields": {
-      "optionset": 2,
-      "option": 6,
-      "order": 3
-    }
-  },
-  {
-    "model": "options.optionsetoption",
-    "pk": 6,
-    "fields": {
-      "optionset": 2,
-      "option": 5,
-      "order": 2
-    }
-  },
-  {
-    "model": "options.optionsetoption",
-    "pk": 7,
-    "fields": {
-      "optionset": 1,
-      "option": 3,
-      "order": 3
-    }
-  },
-  {
-    "model": "options.optionsetoption",
-    "pk": 8,
+    "pk": 2,
     "fields": {
       "optionset": 1,
       "option": 2,
@@ -169,9 +115,63 @@
   },
   {
     "model": "options.optionsetoption",
+    "pk": 3,
+    "fields": {
+      "optionset": 1,
+      "option": 3,
+      "order": 3
+    }
+  },
+  {
+    "model": "options.optionsetoption",
+    "pk": 4,
+    "fields": {
+      "optionset": 2,
+      "option": 4,
+      "order": 1
+    }
+  },
+  {
+    "model": "options.optionsetoption",
+    "pk": 5,
+    "fields": {
+      "optionset": 2,
+      "option": 5,
+      "order": 2
+    }
+  },
+  {
+    "model": "options.optionsetoption",
+    "pk": 6,
+    "fields": {
+      "optionset": 2,
+      "option": 6,
+      "order": 3
+    }
+  },
+  {
+    "model": "options.optionsetoption",
+    "pk": 7,
+    "fields": {
+      "optionset": 2,
+      "option": 7,
+      "order": 4
+    }
+  },
+  {
+    "model": "options.optionsetoption",
+    "pk": 8,
+    "fields": {
+      "optionset": 2,
+      "option": 8,
+      "order": 5
+    }
+  },
+  {
+    "model": "options.optionsetoption",
     "pk": 9,
     "fields": {
-      "optionset": 5,
+      "optionset": 3,
       "option": 9,
       "order": 1
     }
@@ -182,16 +182,16 @@
     "fields": {
       "optionset": 5,
       "option": 10,
-      "order": 2
+      "order": 1
     }
   },
   {
     "model": "options.optionsetoption",
     "pk": 11,
     "fields": {
-      "optionset": 6,
+      "optionset": 5,
       "option": 11,
-      "order": 1
+      "order": 2
     }
   },
   {
@@ -200,6 +200,15 @@
     "fields": {
       "optionset": 6,
       "option": 12,
+      "order": 1
+    }
+  },
+  {
+    "model": "options.optionsetoption",
+    "pk": 13,
+    "fields": {
+      "optionset": 6,
+      "option": 13,
       "order": 2
     }
   },
@@ -217,7 +226,7 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false,
+      "additional_input": "",
       "editors": []
     }
   },
@@ -235,7 +244,7 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false,
+      "additional_input": "",
       "editors": []
     }
   },
@@ -253,7 +262,7 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false,
+      "additional_input": "",
       "editors": []
     }
   },
@@ -271,7 +280,7 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false,
+      "additional_input": "",
       "editors": []
     }
   },
@@ -289,7 +298,7 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false,
+      "additional_input": "",
       "editors": []
     }
   },
@@ -307,7 +316,7 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false,
+      "additional_input": "",
       "editors": []
     }
   },
@@ -315,23 +324,41 @@
     "model": "options.option",
     "pk": 7,
     "fields": {
-      "uri": "http://example.com/terms/options/one_two_three_other/other",
+      "uri": "http://example.com/terms/options/one_two_three_other/text",
       "uri_prefix": "http://example.com/terms",
-      "uri_path": "one_two_three_other/other",
+      "uri_path": "one_two_three_other/text",
       "comment": "",
       "locked": false,
-      "text_lang1": "Other",
-      "text_lang2": "Sonstige",
+      "text_lang1": "Text",
+      "text_lang2": "Text",
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": true,
+      "additional_input": "text",
       "editors": []
     }
   },
   {
     "model": "options.option",
     "pk": 8,
+    "fields": {
+      "uri": "http://example.com/terms/options/one_two_three_other/textarea",
+      "uri_prefix": "http://example.com/terms",
+      "uri_path": "one_two_three_other/textarea",
+      "comment": "",
+      "locked": false,
+      "text_lang1": "Text",
+      "text_lang2": "Text",
+      "text_lang3": "",
+      "text_lang4": "",
+      "text_lang5": "",
+      "additional_input": "textarea",
+      "editors": []
+    }
+  },
+  {
+    "model": "options.option",
+    "pk": 9,
     "fields": {
       "uri": "http://example.com/terms/options/condition/other",
       "uri_prefix": "http://example.com/terms",
@@ -343,13 +370,13 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": true,
+      "additional_input": "text",
       "editors": []
     }
   },
   {
     "model": "options.option",
-    "pk": 9,
+    "pk": 10,
     "fields": {
       "uri": "https://foo.com/terms/options/foo-option-1",
       "uri_prefix": "https://foo.com/terms",
@@ -361,7 +388,7 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false,
+      "additional_input": "",
       "editors": [
         2
       ]
@@ -369,7 +396,7 @@
   },
   {
     "model": "options.option",
-    "pk": 10,
+    "pk": 11,
     "fields": {
       "uri": "https://foo.com/terms/options/foo-option-2",
       "uri_prefix": "https://foo.com/terms",
@@ -381,7 +408,7 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false,
+      "additional_input": "",
       "editors": [
         2
       ]
@@ -389,7 +416,7 @@
   },
   {
     "model": "options.option",
-    "pk": 11,
+    "pk": 12,
     "fields": {
       "uri": "https://bar.com/terms/options/bar-option-1",
       "uri_prefix": "https://bar.com/terms",
@@ -401,7 +428,7 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false,
+      "additional_input": "",
       "editors": [
         3
       ]
@@ -409,7 +436,7 @@
   },
   {
     "model": "options.option",
-    "pk": 12,
+    "pk": 13,
     "fields": {
       "uri": "https://bar.com/terms/options/bar-option-2",
       "uri_prefix": "https://bar.com/terms",
@@ -421,7 +448,7 @@
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false,
+      "additional_input": "",
       "editors": [
         3
       ]

@@ -14,7 +14,7 @@ import { ReadOnlyIcon } from '../common/Icons'
 import { Drag, Drop } from '../common/DragAndDrop'
 
 const Page = ({ config, page, configActions, elementActions, display='list', indent=0,
-                filter=false, filterEditors=false }) => {
+                filter=false, filterEditors=false, order }) => {
 
   const showElement = filterElement(config, filter, false, filterEditors, page)
   const showElements = get(config, `display.elements.pages.${page.id}`, true)
@@ -58,7 +58,7 @@ const Page = ({ config, page, configActions, elementActions, display='list', ind
         </p>
         {
           get(config, 'display.uri.pages', true) && <p>
-            <CodeLink className="code-questions" uri={page.uri} onClick={() => fetchEdit()} />
+            <CodeLink className="code-questions" uri={page.uri} onClick={() => fetchEdit()} order={order} />
           </p>
         }
         {
@@ -102,13 +102,17 @@ const Page = ({ config, page, configActions, elementActions, display='list', ind
           {
             showElements && page.elements.map((element, index) => {
               if (element.model == 'questions.questionset') {
+                const questionSetInfo = page.questionsets.find(info => info.questionset === element.id)
+                const questionSetOrder = questionSetInfo ? questionSetInfo.order : undefined
                 return <QuestionSet key={index} config={config} questionset={element}
                                     configActions={configActions} elementActions={elementActions}
-                                    display="nested" filter={filter}  indent={indent + 1} />
+                                    display="nested" filter={filter} indent={indent + 1} order={questionSetOrder} />
               } else {
+                const questionInfo = page.questions.find(info => info.question === element.id)
+                const questionOrder = questionInfo ? questionInfo.order : undefined
                 return <Question key={index} config={config} question={element}
                                  configActions={configActions} elementActions={elementActions}
-                                 display="nested" filter={filter}  indent={indent + 1}  />
+                                 display="nested" filter={filter} indent={indent + 1} order={questionOrder} />
               }
             })
           }
@@ -128,7 +132,8 @@ Page.propTypes = {
   display: PropTypes.string,
   indent: PropTypes.number,
   filter: PropTypes.string,
-  filterEditors: PropTypes.bool
+  filterEditors: PropTypes.bool,
+  order: PropTypes.number
 }
 
 export default Page

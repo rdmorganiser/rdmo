@@ -1,6 +1,6 @@
 {% load i18n %}
 
-    <div class="form-group" ng-if="question.widget_type === 'autocomplete'">
+    <div class="form-group" ng-if="question.widget_type === 'autocomplete' || question.widget_type === 'freeautocomplete'">
         {% include 'projects/project_questions_question_label.html' %}
         {% include 'projects/project_questions_question_help.html' %}
         {% include 'projects/project_questions_question_warning.html' %}
@@ -30,7 +30,7 @@
                             ng-focus="service.filterAutocomplete(question, value)"
                             ng-change="service.filterAutocomplete(question, value);"
                             ng-keydown="service.keydownAutocomplete(question, value, $event)"
-                            ng-blur="service.blurAutocomplete(value)"
+                            ng-blur="service.blurAutocomplete(question, value)"
                             ng-class="{'default-value': service.isDefaultValue(question, value)}"
                             placeholder="{% trans 'Please type and select.' %}"/>
 
@@ -38,12 +38,14 @@
                             <li ng-repeat="option in value.items"
                                 ng-class="{'active': option.active}"
                                 ng-mousedown="service.selectAutocomplete(value, option)">
-                                {$ option.text $}
+                                {$ option.text_and_help $}
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
+
+            {% include 'projects/project_questions_value_errors.html' %}
         </div>
 
         <div ng-if="question.is_collection">

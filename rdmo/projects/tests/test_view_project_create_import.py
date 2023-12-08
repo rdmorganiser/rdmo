@@ -4,6 +4,7 @@ from pathlib import Path
 
 import pytest
 
+from django.contrib.auth.models import Group, User
 from django.urls import reverse
 
 from rdmo.core.constants import VALUE_TYPE_FILE
@@ -41,6 +42,31 @@ def test_project_create_import_get(db, client, username, password):
     else:
         assert response.status_code == 302
         assert response.url.startswith('/account/login/')
+
+
+def test_project_create_import_get_restricted(db, client, settings):
+    settings.PROJECT_CREATE_RESTRICTED = True
+    settings.PROJECT_CREATE_GROUPS = ['projects']
+
+    group = Group.objects.create(name='projects')
+    user = User.objects.get(username='user')
+    user.groups.add(group)
+
+    client.login(username='user', password='user')
+
+    url = reverse('project_create_import')
+    response = client.get(url)
+    assert response.status_code == 400
+
+
+def test_project_create_import_get_forbidden(db, client, settings):
+    settings.PROJECT_CREATE_RESTRICTED = True
+
+    client.login(username='user', password='user')
+
+    url = reverse('project_create_import')
+    response = client.get(url)
+    assert response.status_code == 403
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -120,6 +146,41 @@ def test_project_create_import_post_upload_file_empty(db, client, username, pass
     else:
         assert response.status_code == 302
         assert response.url.startswith('/account/login/')
+
+
+def test_project_create_import_post_upload_file_restricted(db, client, settings):
+    settings.PROJECT_CREATE_RESTRICTED = True
+    settings.PROJECT_CREATE_GROUPS = ['projects']
+
+    group = Group.objects.create(name='projects')
+    user = User.objects.get(username='user')
+    user.groups.add(group)
+
+    client.login(username='user', password='user')
+
+    url = reverse('project_create_import')
+    xml_file = os.path.join(settings.BASE_DIR, 'xml', 'project.xml')
+    with open(xml_file, encoding='utf8') as f:
+        response = client.post(url, {
+            'method': 'upload_file',
+            'uploaded_file': f
+        })
+    assert response.status_code == 302
+
+
+def test_project_create_import_post_upload_file_forbidden(db, client, settings):
+    settings.PROJECT_CREATE_RESTRICTED = True
+
+    client.login(username='user', password='user')
+
+    url = reverse('project_create_import')
+    xml_file = os.path.join(settings.BASE_DIR, 'xml', 'project.xml')
+    with open(xml_file, encoding='utf8') as f:
+        response = client.post(url, {
+            'method': 'upload_file',
+            'uploaded_file': f
+        })
+    assert response.status_code == 403
 
 
 @pytest.mark.parametrize('username,password', users)

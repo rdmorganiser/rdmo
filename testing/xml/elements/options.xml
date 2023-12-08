@@ -1,67 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rdmo xmlns:dc="http://purl.org/dc/elements/1.1/" created="2023-04-20T09:39:26.329822+02:00" version="1.9.2">
+<rdmo xmlns:dc="http://purl.org/dc/elements/1.1/" created="2023-10-04T11:01:19.794284+02:00" version="2.0.0">
 	<option dc:uri="http://example.com/terms/options/one_two_three/one">
 		<uri_prefix>http://example.com/terms</uri_prefix>
 		<uri_path>one_two_three/one</uri_path>
 		<dc:comment/>
 		<text lang="en">One</text>
+		<help lang="en"/>
 		<text lang="de">Eins</text>
-		<additional_input>False</additional_input>
+		<help lang="de"/>
+		<additional_input/>
 	</option>
 	<option dc:uri="http://example.com/terms/options/one_two_three/two">
 		<uri_prefix>http://example.com/terms</uri_prefix>
 		<uri_path>one_two_three/two</uri_path>
 		<dc:comment/>
 		<text lang="en">Two</text>
+		<help lang="en"/>
 		<text lang="de">Zwei</text>
-		<additional_input>False</additional_input>
+		<help lang="de"/>
+		<additional_input/>
 	</option>
 	<option dc:uri="http://example.com/terms/options/one_two_three/three">
 		<uri_prefix>http://example.com/terms</uri_prefix>
 		<uri_path>one_two_three/three</uri_path>
 		<dc:comment/>
 		<text lang="en">Three</text>
+		<help lang="en"/>
 		<text lang="de">Drei</text>
-		<additional_input>False</additional_input>
+		<help lang="de"/>
+		<additional_input/>
 	</option>
 	<option dc:uri="http://example.com/terms/options/one_two_three_other/one">
 		<uri_prefix>http://example.com/terms</uri_prefix>
 		<uri_path>one_two_three_other/one</uri_path>
 		<dc:comment/>
 		<text lang="en">One</text>
+		<help lang="en"/>
 		<text lang="de">Eins</text>
-		<additional_input>False</additional_input>
+		<help lang="de"/>
+		<additional_input/>
 	</option>
 	<option dc:uri="http://example.com/terms/options/one_two_three_other/two">
 		<uri_prefix>http://example.com/terms</uri_prefix>
 		<uri_path>one_two_three_other/two</uri_path>
 		<dc:comment/>
 		<text lang="en">Two</text>
+		<help lang="en"/>
 		<text lang="de">Zwei</text>
-		<additional_input>False</additional_input>
+		<help lang="de"/>
+		<additional_input/>
 	</option>
 	<option dc:uri="http://example.com/terms/options/one_two_three_other/three">
 		<uri_prefix>http://example.com/terms</uri_prefix>
 		<uri_path>one_two_three_other/three</uri_path>
 		<dc:comment/>
 		<text lang="en">Three</text>
+		<help lang="en"/>
 		<text lang="de">Drei</text>
-		<additional_input>False</additional_input>
+		<help lang="de"/>
+		<additional_input/>
 	</option>
-	<option dc:uri="http://example.com/terms/options/one_two_three_other/other">
+	<option dc:uri="http://example.com/terms/options/one_two_three_other/text">
 		<uri_prefix>http://example.com/terms</uri_prefix>
-		<uri_path>one_two_three_other/other</uri_path>
+		<uri_path>one_two_three_other/text</uri_path>
 		<dc:comment/>
-		<text lang="en">Other</text>
-		<text lang="de">Sonstige</text>
-		<additional_input>True</additional_input>
+		<text lang="en">Text</text>
+		<help lang="en"/>
+		<text lang="de">Text</text>
+		<help lang="de"/>
+		<additional_input>text</additional_input>
+	</option>
+	<option dc:uri="http://example.com/terms/options/one_two_three_other/textarea">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>one_two_three_other/textarea</uri_path>
+		<dc:comment/>
+		<text lang="en">Text</text>
+		<help lang="en"/>
+		<text lang="de">Text</text>
+		<help lang="de"/>
+		<additional_input>textarea</additional_input>
 	</option>
 	<option dc:uri="http://example.com/terms/options/condition/other">
 		<uri_prefix>http://example.com/terms</uri_prefix>
 		<uri_path>condition/other</uri_path>
 		<dc:comment/>
 		<text lang="en">Other</text>
+		<help lang="en"/>
 		<text lang="de">Sonstige</text>
-		<additional_input>True</additional_input>
+		<help lang="de"/>
+		<additional_input>text</additional_input>
 	</option>
 </rdmo>

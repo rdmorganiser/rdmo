@@ -86,12 +86,25 @@ const NestedCatalog = ({ config, catalog, configActions, elementActions }) => {
         <Drop element={catalog.elements[0]} elementActions={elementActions} indent={0} mode="before" />
       }
       {
-        catalog.elements.map((section, index) => (
-          <Section key={index} config={config} section={section}
-                   configActions={configActions} elementActions={elementActions}
-                   display="nested" filter="catalog" indent={0} />
-        ))
+        catalog.elements.map((section, index) => {
+          const sectionInfo = catalog.sections.find(info => info.section === section.id)
+          const sectionOrder = sectionInfo ? sectionInfo.order : undefined
+
+          return (
+            <Section key={index}
+              config={config}
+              section={section}
+              configActions={configActions}
+              elementActions={elementActions}
+              display="nested"
+              filter="catalog"
+              indent={0}
+              order={sectionOrder}
+            />
+          )
+        })
       }
+
     </>
   )
 }

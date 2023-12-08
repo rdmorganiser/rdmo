@@ -27,7 +27,7 @@ from rdmo.views.models import View
 
 from ..filters import ProjectFilter
 from ..models import Integration, Invite, Membership, Project, Value
-from ..utils import set_context_querystring_with_filter_and_page
+from ..utils import get_upload_accept, set_context_querystring_with_filter_and_page
 
 logger = logging.getLogger(__name__)
 
@@ -71,6 +71,7 @@ class ProjectsView(LoginRequiredMixin, FilterView):
         context['invites'] = Invite.objects.filter(user=self.request.user)
         context['is_site_manager'] = is_site_manager(self.request.user)
         context['number_of_filtered_projects'] = context["filter"].qs.count()
+        context['upload_accept'] = get_upload_accept()
         context = set_context_querystring_with_filter_and_page(context)
         return context
 
@@ -157,10 +158,14 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
         context['memberships'] = memberships.order_by('user__last_name', '-project__level')
         context['integrations'] = integrations.order_by('provider_key', '-project__level')
         context['providers'] = get_plugins('PROJECT_ISSUE_PROVIDERS')
-        context['issues'] = [issue for issue in project.issues.all() if issue.resolve(values)]
+        context['issues'] = [
+            issue for issue in project.issues.order_by('-status', 'task__order', 'task__uri') if issue.resolve(values)
+        ]
+        context['views'] = project.views.order_by('order', 'uri')
         context['snapshots'] = project.snapshots.all()
         context['invites'] = project.invites.all()
         context['membership'] = Membership.objects.filter(project=project, user=self.request.user).first()
+        context['upload_accept'] = get_upload_accept()
         return context
 
 
@@ -272,7 +277,7 @@ class ProjectQuestionsView(ObjectPermissionMixin, DetailView):
             return redirect('project_error', pk=self.object.pk)
         else:
             context = self.get_context_data(object=self.object)
-            context['widgets'] = get_widgets()
+            context['widgets'] = {widget.template_name for widget in get_widgets() if widget.template_name}
             return self.render_to_response(context)
 
 

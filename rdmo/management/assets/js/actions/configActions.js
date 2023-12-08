@@ -17,12 +17,13 @@ export function fetchConfig() {
     CoreApi.fetchSettings(),
     CoreApi.fetchSites(),
     ManagementApi.fetchMeta(),
+    OptionsApi.fetchAdditionalInputs(),
     OptionsApi.fetchProviders(),
     QuestionsApi.fetchValueTypes(),
     QuestionsApi.fetchWidgetTypes()
-  ]).then(([relations, groups, settings, sites, meta, providers,
+  ]).then(([relations, groups, settings, sites, meta, additionalInputs, providers,
             valueTypes, widgetTypes]) => dispatch(fetchConfigSuccess({
-    relations, groups, settings, sites, meta, providers, valueTypes, widgetTypes
+    relations, groups, settings, sites, meta, additionalInputs, providers, valueTypes, widgetTypes
   })))
 }
 

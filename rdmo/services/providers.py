@@ -1,14 +1,13 @@
 import logging
 from urllib.parse import urlencode
 
-from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
 
 import requests
+from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 logger = logging.getLogger(__name__)
 
@@ -25,14 +24,14 @@ class OauthProviderMixin:
             response = requests.get(url, headers=self.get_authorization_headers(access_token))
 
             if response.status_code == 401:
-                logger.warn('get forbidden: %s (%s)', response.content, response.status_code)
+                logger.warning('get forbidden: %s (%s)', response.content, response.status_code)
             else:
                 try:
                     response.raise_for_status()
                     return self.get_success(request, response)
 
                 except requests.HTTPError:
-                    logger.warn('get error: %s (%s)', response.content, response.status_code)
+                    logger.warning('get error: %s (%s)', response.content, response.status_code)
 
                     return render(request, 'core/error.html', {
                         'title': _('OAuth error'),
@@ -40,27 +39,35 @@ class OauthProviderMixin:
                     }, status=200)
 
         # if the above did not work authorize first
-        self.store_in_session(request, 'request', ('get', url, {}))
+        self.store_in_session(request, 'request', ('get', url))
         return self.authorize(request)
 
-    def post(self, request, url, data):
+    def post(self, request, url, json=None, files=None, multipart=None):
         # get access token from the session
         access_token = self.get_from_session(request, 'access_token')
         if access_token:
             # if the access_token is available post to the upstream service
-            logger.debug('post: %s %s', url, data)
+            logger.debug('post: %s %s', url, json, files)
 
-            response = requests.post(url, json=data, headers=self.get_authorization_headers(access_token))
+            if multipart is not None:
+                multipart_encoder = MultipartEncoder(fields=multipart)
+                headers = self.get_authorization_headers(access_token)
+                headers['Content-Type'] = multipart_encoder.content_type
+                response = requests.post(url, data=multipart_encoder, headers=headers)
+            elif files is not None:
+                response = requests.post(url, files=files, headers=self.get_authorization_headers(access_token))
+            else:
+                response = requests.post(url, json=json, headers=self.get_authorization_headers(access_token))
 
             if response.status_code == 401:
-                logger.warn('post forbidden: %s (%s)', response.content, response.status_code)
+                logger.warning('post forbidden: %s (%s)', response.content, response.status_code)
             else:
                 try:
                     response.raise_for_status()
                     return self.post_success(request, response)
 
                 except requests.HTTPError:
-                    logger.warn('post error: %s (%s)', response.content, response.status_code)
+                    logger.warning('post error: %s (%s)', response.content, response.status_code)
 
                     return render(request, 'core/error.html', {
                         'title': _('OAuth error'),
@@ -68,7 +75,7 @@ class OauthProviderMixin:
                     }, status=200)
 
         # if the above did not work authorize first
-        self.store_in_session(request, 'request', ('post', url, data))
+        self.store_in_session(request, 'request', ('post', url, json, files, multipart))
         return self.authorize(request)
 
     def authorize(self, request):
@@ -105,11 +112,11 @@ class OauthProviderMixin:
 
         # get post data from session
         try:
-            method, url, data = self.pop_from_session(request, 'request')
+            method, *args = self.pop_from_session(request, 'request')
             if method == 'get':
-                return self.get(request, url)
+                return self.get(request, *args)
             elif method == 'post':
-                return self.post(request, url, data)
+                return self.post(request, *args)
         except ValueError:
             pass
 
@@ -159,95 +166,3 @@ class OauthProviderMixin:
 
     def get_error_message(self, response):
         return response.json().get('error')
-
-
-class GitHubProviderMixin(OauthProviderMixin):
-    authorize_url = 'https://github.com/login/oauth/authorize'
-    token_url = 'https://github.com/login/oauth/access_token'
-    api_url = 'https://api.github.com'
-
-    @property
-    def client_id(self):
-        return settings.GITHUB_PROVIDER['client_id']
-
-    @property
-    def client_secret(self):
-        return settings.GITHUB_PROVIDER['client_secret']
-
-    @property
-    def redirect_path(self):
-        return reverse('oauth_callback', args=['github'])
-
-    def get_authorization_headers(self, access_token):
-        return {
-            'Authorization': f'token {access_token}',
-            'Accept': 'application/vnd.github.v3+json'
-        }
-
-    def get_authorize_params(self, request, state):
-        return {
-            'authorize_url': self.authorize_url,
-            'client_id': self.client_id,
-            'redirect_uri': request.build_absolute_uri(self.redirect_path),
-            'scope': 'repo',
-            'state': state,
-        }
-
-    def get_callback_params(self, request):
-        return {
-            'token_url': self.token_url,
-            'client_id': self.client_id,
-            'client_secret': self.client_secret,
-            'code': request.GET.get('code')
-        }
-
-
-class GitLabProviderMixin(OauthProviderMixin):
-
-    @property
-    def gitlab_url(self):
-        return settings.GITLAB_PROVIDER['gitlab_url'].strip('/')
-
-    @property
-    def authorize_url(self):
-        return f'{self.gitlab_url}/oauth/authorize'
-
-    @property
-    def token_url(self):
-        return f'{self.gitlab_url}/oauth/token'
-
-    @property
-    def api_url(self):
-        return f'{self.gitlab_url}/api/v4'
-
-    @property
-    def client_id(self):
-        return settings.GITLAB_PROVIDER['client_id']
-
-    @property
-    def client_secret(self):
-        return settings.GITLAB_PROVIDER['client_secret']
-
-    @property
-    def redirect_path(self):
-        return reverse('oauth_callback', args=['gitlab'])
-
-    def get_authorize_params(self, request, state):
-        return {
-            'authorize_url': self.authorize_url,
-            'client_id': self.client_id,
-            'redirect_uri': request.build_absolute_uri(self.redirect_path),
-            'response_type': 'code',
-            'scope': 'api',
-            'state': state,
-        }
-
-    def get_callback_params(self, request):
-        return {
-            'token_url': self.token_url,
-            'client_id': self.client_id,
-            'client_secret': self.client_secret,
-            'code': request.GET.get('code'),
-            'grant_type': 'authorization_code',
-            'redirect_uri': request.build_absolute_uri(self.redirect_path)
-        }

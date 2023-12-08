@@ -8,7 +8,7 @@
             <div class="set-buttons" ng-show="service.set_index === null">
                 <button type="button" class="btn btn-success"
                     ng-click="service.openValueSetFormModal(service.page, service.set_prefix)">
-                    {% blocktrans with name='{$ service.page.verbose_name $}' %}Add {{ name }}{% endblocktrans %}
+                    <i class="fa fa-plus fa-btn"></i> {$ service.page.verbose_name|capitalize $}
                 </button>
             </div>
         </div>
@@ -24,19 +24,17 @@
             </li>
             <li ng-hide="service.project.read_only">
                 <a href="" class="add-valueset" ng-click="service.openValueSetFormModal(service.page, service.set_prefix)">
-                    {% blocktrans with name='{$ service.page.verbose_name $}' %}Add {{ name }}{% endblocktrans %}
+                    <i class="fa fa-plus fa-btn"></i> {$ service.page.verbose_name|capitalize $}
                 </a>
             </li>
         </ul>
 
         <div class="pull-right" ng-hide="service.set_index === null">
-            <a href="" class="fa fa-pencil"
-                title="{% blocktrans with name='{$ service.page.verbose_name $}' %}Update {{ name }}{% endblocktrans %}"
+            <a href="" class="fa fa-pencil" title="{% trans 'Edit tab' %}"
                 ng-click="service.openValueSetFormModal(service.page, service.set_prefix, service.set_index)"
                 ng-show="service.page.attribute && !service.project.read_only">
             </a>
-            <a href="" class="fa fa-trash"
-                title="{% blocktrans with name='{$ service.page.verbose_name $}' %}Remove {{ name }}{% endblocktrans %}"
+            <a href="" class="fa fa-trash" title="{% trans 'Remove tab' %}"
                 ng-click="service.openValueSetDeleteModal(service.page, service.set_prefix, service.set_index)"
                 ng-show="!service.project.read_only">
             </a>

@@ -278,8 +278,10 @@ class IntegrationForm(forms.ModelForm):
 
             if field.get('placeholder'):
                 attrs = {'placeholder': field.get('placeholder')}
+
             self.fields[field.get('key')] = forms.CharField(widget=forms.TextInput(attrs=attrs),
-                                                            initial=initial, required=field.get('required', True))
+                                                            initial=initial, required=field.get('required', True),
+                                                            help_text=field.get('help'))
 
     def save(self):
         # the the project and the provider_key

@@ -96,6 +96,7 @@ class CatalogSectionInline(admin.TabularInline):
     extra = 0
 
 
+@admin.register(Catalog)
 class CatalogAdmin(admin.ModelAdmin):
     form = CatalogAdminForm
     inlines = (CatalogSectionInline, )
@@ -119,6 +120,7 @@ class SectionPageInline(admin.TabularInline):
     extra = 0
 
 
+@admin.register(Section)
 class SectionAdmin(admin.ModelAdmin):
     form = SectionAdminForm
     inlines = (SectionPageInline, )
@@ -140,6 +142,7 @@ class PageQuestionInline(admin.TabularInline):
     extra = 0
 
 
+@admin.register(Page)
 class PageAdmin(admin.ModelAdmin):
     form = PageAdminForm
     inlines = (PageQuestionSetInline, PageQuestionInline)
@@ -162,6 +165,7 @@ class QuestionSetQuestionInline(admin.TabularInline):
     extra = 0
 
 
+@admin.register(QuestionSet)
 class QuestionSetAdmin(admin.ModelAdmin):
     form = QuestionSetAdminForm
     inlines = (QuestionSetQuestionSetInline, QuestionSetQuestionInline)
@@ -173,6 +177,7 @@ class QuestionSetAdmin(admin.ModelAdmin):
     filter_horizontal = ('editors', 'conditions')
 
 
+@admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
     form = QuestionAdminForm
 
@@ -182,10 +187,3 @@ class QuestionAdmin(admin.ModelAdmin):
     list_filter = ('pages__sections__catalogs', 'pages__sections', 'pages', 'is_collection',
                    'widget_type', 'value_type')
     filter_horizontal = ('editors', 'optionsets', 'conditions')
-
-
-admin.site.register(Catalog, CatalogAdmin)
-admin.site.register(Section, SectionAdmin)
-admin.site.register(Page, PageAdmin)
-admin.site.register(QuestionSet, QuestionSetAdmin)
-admin.site.register(Question, QuestionAdmin)

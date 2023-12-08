@@ -1,5 +1,6 @@
 import pytest
 
+from django.contrib.auth.models import Group, User
 from django.urls import reverse
 
 from ..models import Project
@@ -41,18 +42,17 @@ urlnames = {
     'list': 'v1-projects:project-list',
     'detail': 'v1-projects:project-detail',
     'overview': 'v1-projects:project-overview',
+    'navigation': 'v1-projects:project-navigation',
     'resolve': 'v1-projects:project-resolve',
-    'progress': 'v1-projects:project-progress'
 }
 
 projects = [1, 2, 3, 4, 5]
 conditions = [1]
 
-project_values = 37
-project_total = 54
 catalog_id = 1
 catalog_id_not_available = 2
 
+section_id = 1
 
 @pytest.mark.parametrize('username,password', users)
 def test_list(db, client, username, password):
@@ -112,6 +112,43 @@ def test_create(db, client, username, password):
         assert Project.objects.get(id=response.json().get('id'))
     else:
         assert response.status_code == 401
+
+
+def test_create_restricted(db, client, settings):
+    settings.PROJECT_CREATE_RESTRICTED = True
+    settings.PROJECT_CREATE_GROUPS = ['projects']
+
+    group = Group.objects.create(name='projects')
+    user = User.objects.get(username='user')
+    user.groups.add(group)
+
+    client.login(username='user', password='user')
+
+    url = reverse(urlnames['list'])
+    data = {
+        'title': 'Lorem ipsum dolor sit amet',
+        'description': 'At vero eos et accusam et justo duo dolores et ea rebum.',
+        'catalog': catalog_id
+    }
+    response = client.post(url, data)
+
+    assert response.status_code == 201
+
+
+def test_create_forbidden(db, client, settings):
+    settings.PROJECT_CREATE_RESTRICTED = True
+
+    client.login(username='user', password='user')
+
+    url = reverse(urlnames['list'])
+    data = {
+        'title': 'Lorem ipsum dolor sit amet',
+        'description': 'At vero eos et accusam et justo duo dolores et ea rebum.',
+        'catalog': catalog_id
+    }
+    response = client.post(url, data)
+
+    assert response.status_code == 403
 
 
 def test_create_catalog_missing(db, client):
@@ -241,15 +278,15 @@ def test_overview(db, client, username, password, project_id, condition_id):
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('condition_id', conditions)
-def test_resolve(db, client, username, password, project_id, condition_id):
+def test_navigation(db, client, username, password, project_id, condition_id):
     client.login(username=username, password=password)
 
-    url = reverse(urlnames['resolve'], args=[project_id]) + f'?condition={condition_id}'
+    url = reverse(urlnames['navigation'], args=[project_id, section_id])
     response = client.get(url)
 
     if project_id in view_project_permission_map.get(username, []):
         assert response.status_code == 200
-        assert isinstance(response.json(), dict)
+        assert isinstance(response.json(), list)
     else:
         if password:
             assert response.status_code == 404
@@ -259,22 +296,16 @@ def test_resolve(db, client, username, password, project_id, condition_id):
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
-def test_progress(db, client, username, password, project_id):
+@pytest.mark.parametrize('condition_id', conditions)
+def test_resolve(db, client, username, password, project_id, condition_id):
     client.login(username=username, password=password)
 
-    url = reverse(urlnames['progress'], args=[project_id])
+    url = reverse(urlnames['resolve'], args=[project_id]) + f'?condition={condition_id}'
     response = client.get(url)
 
     if project_id in view_project_permission_map.get(username, []):
         assert response.status_code == 200
         assert isinstance(response.json(), dict)
-
-        if project_id == 1:
-            assert response.json().get('values') == project_values
-        else:
-            assert response.json().get('values') == 1
-
-        assert response.json().get('total') == project_total
     else:
         if password:
             assert response.status_code == 404

@@ -16,6 +16,8 @@ class OptionSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'text',
+            'help',
+            'text_and_help',
             'additional_input'
         )
 
@@ -58,7 +60,6 @@ class QuestionSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, s
     optionsets = serializers.SerializerMethodField()
 
     verbose_name = serializers.SerializerMethodField()
-    verbose_name_plural = serializers.SerializerMethodField()
     widget_class = serializers.SerializerMethodField()
 
     class Meta:
@@ -72,7 +73,6 @@ class QuestionSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, s
             'default_option',
             'default_external_id',
             'verbose_name',
-            'verbose_name_plural',
             'widget_type',
             'widget_class',
             'value_type',
@@ -94,10 +94,7 @@ class QuestionSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, s
         return OptionSetSerializer(ordered_optionsets, many=True).data
 
     def get_verbose_name(self, obj):
-        return obj.verbose_name or _('item')
-
-    def get_verbose_name_plural(self, obj):
-        return obj.verbose_name_plural or _('items')
+        return obj.verbose_name or _('entry')
 
     def get_widget_class(self, obj):
         return get_widget_class(obj.widget_type)
@@ -110,7 +107,6 @@ class QuestionSetSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin
     model = serializers.SerializerMethodField()
     elements = serializers.SerializerMethodField()
     verbose_name = serializers.SerializerMethodField()
-    verbose_name_plural = serializers.SerializerMethodField()
 
     class Meta:
         model = QuestionSet
@@ -120,7 +116,6 @@ class QuestionSetSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin
             'title',
             'help',
             'verbose_name',
-            'verbose_name_plural',
             'attribute',
             'is_collection',
             'elements',
@@ -135,10 +130,7 @@ class QuestionSetSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin
                 yield QuestionSerializer(element, context=self.context).data
 
     def get_verbose_name(self, obj):
-        return obj.verbose_name or _('set')
-
-    def get_verbose_name_plural(self, obj):
-        return obj.verbose_name_plural or _('sets')
+        return obj.verbose_name or _('block')
 
 
 class PageSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
@@ -150,7 +142,6 @@ class PageSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
     prev_page = serializers.SerializerMethodField()
     next_page = serializers.SerializerMethodField()
     verbose_name = serializers.SerializerMethodField()
-    verbose_name_plural = serializers.SerializerMethodField()
 
     class Meta:
         model = Page
@@ -159,7 +150,6 @@ class PageSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
             'title',
             'help',
             'verbose_name',
-            'verbose_name_plural',
             'attribute',
             'is_collection',
             'elements',
@@ -181,6 +171,7 @@ class PageSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
         return {
            'id': section.id,
            'title': section.title,
+           'first': section.elements[0].id if section.elements else None
         } if section else {}
 
     def get_prev_page(self, obj):
@@ -193,6 +184,3 @@ class PageSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
 
     def get_verbose_name(self, obj):
         return obj.verbose_name or _('set')
-
-    def get_verbose_name_plural(self, obj):
-        return obj.verbose_name_plural or _('sets')

@@ -125,44 +125,33 @@ const EditPage = ({ config, page, elements, elementActions }) => {
           </div>
         </div>
 
-        <Tabs id="#catalog-tabs" defaultActiveKey={0} animation={false}>
+        <Tabs id="#page-tabs" defaultActiveKey={0} animation={false}>
           {
             config.settings && config.settings.languages.map(([lang_code, lang], index) => (
               <Tab key={index} eventKey={index} title={lang}>
-                <div className="row">
-                  <div className="col-sm-12">
-                    <Text config={config} element={page} field={`title_${lang_code }`}
-                          onChange={updatePage} />
-                  </div>
-                  <div className="col-sm-12">
-                    <Textarea config={config} element={page} field={`help_${lang_code }`}
-                              rows={4} onChange={updatePage} />
-                  </div>
-                  <div className="col-sm-6">
-                    <Text config={config} element={page} field={`verbose_name_${lang_code }`}
-                          onChange={updatePage} />
-                  </div>
-                  <div className="col-sm-6">
-                    <Text config={config} element={page} field={`verbose_name_plural_${lang_code }`}
-                          onChange={updatePage} />
-                  </div>
-                </div>
+                <Text config={config} element={page} field={`title_${lang_code }`}
+                      onChange={updatePage} />
+                <Textarea config={config} element={page} field={`help_${lang_code }`}
+                          rows={4} onChange={updatePage} />
+                <Text config={config} element={page} field={`verbose_name_${lang_code }`}
+                      onChange={updatePage} />
               </Tab>
             ))
           }
         </Tabs>
 
-        <Select config={config} element={page} field="attribute" verboseName={gettext('attribute')}
+        <Select config={config} element={page} field="attribute" createText={gettext('Create new attribute')}
                 options={attributes} onChange={updatePage} onCreate={createAttribute} onEdit={editAttribute} />
 
         <OrderedMultiSelect config={config} element={page} field="elements"
-                            values={elementValues} options={elementOptions} verboseName={gettext('element')}
-                            verboseNameCreate={gettext('question')} verboseNameAltCreate={gettext('question set')}
+                            values={elementValues} options={elementOptions}
+                            addText={gettext('Add existing element')} createText={gettext('Create new question')}
+                            altCreateText={gettext('Create new question set')}
                             onChange={updatePage} onCreate={createQuestion} onAltCreate={createQuestionSet}
                             onEdit={editElement} />
 
-        <MultiSelect config={config} element={page} field="conditions"
-                     options={conditions} verboseName="condition"
+        <MultiSelect config={config} element={page} field="conditions" options={conditions}
+                     addText={gettext('Add existing condition')} createText={gettext('Create new condition')}
                      onChange={updatePage} onCreate={createCondition} onEdit={editCondition} />
 
         {get(config, 'settings.multisite') && <Select config={config} element={page} field="editors"

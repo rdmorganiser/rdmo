@@ -141,6 +141,11 @@ class OptionViewSet(ModelViewSet):
             )
 
 
+class AdditionalInputsViewSet(ChoicesViewSet):
+    permission_classes = (IsAuthenticated, )
+    queryset = Option.ADDITIONAL_INPUT_CHOICES
+
+
 class ProviderViewSet(ChoicesViewSet):
     permission_classes = (IsAuthenticated, )
     queryset = settings.OPTIONSET_PROVIDERS

@@ -39,6 +39,7 @@ class OptionSetOptionInline(admin.TabularInline):
     extra = 0
 
 
+@admin.register(OptionSet)
 class OptionSetAdmin(admin.ModelAdmin):
     form = OptionSetAdminForm
     inlines = (OptionSetOptionInline, )
@@ -49,6 +50,7 @@ class OptionSetAdmin(admin.ModelAdmin):
     filter_horizontal = ('editors', 'conditions')
 
 
+@admin.register(Option)
 class OptionAdmin(admin.ModelAdmin):
     form = OptionAdminForm
 
@@ -57,7 +59,3 @@ class OptionAdmin(admin.ModelAdmin):
     readonly_fields = ('uri', )
     list_filter = ('editors', 'optionsets', 'additional_input')
     filter_horizontal = ('editors', )
-
-
-admin.site.register(OptionSet, OptionSetAdmin)
-admin.site.register(Option, OptionAdmin)

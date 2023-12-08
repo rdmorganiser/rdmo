@@ -11,6 +11,7 @@ class ViewsRendererMixin:
             self.render_text_element(xml, 'uri_prefix', {}, view['uri_prefix'])
             self.render_text_element(xml, 'uri_path', {}, view['uri_path'])
             self.render_text_element(xml, 'dc:comment', {}, view['comment'])
+            self.render_text_element(xml, 'order', {}, view['order'])
 
             for lang_code, lang_string, lang_field in get_languages():
                 self.render_text_element(xml, 'title', {'lang': lang_code}, view['title_%s' % lang_code])

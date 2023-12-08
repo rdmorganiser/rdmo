@@ -18,9 +18,9 @@ def test_create_optionsets(db, settings):
     elements = elements.values()
     import_elements(elements)
 
-    assert len(root) == len(elements) == 12
+    assert len(root) == len(elements) == 13
     assert OptionSet.objects.count() == 4
-    assert Option.objects.count() == 8
+    assert Option.objects.count() == 9
     assert all(element['created'] is True for element in elements)
     assert all(element['updated'] is False for element in elements)
 
@@ -35,7 +35,7 @@ def test_update_optionsets(db, settings):
     elements = elements.values()
     import_elements(elements)
 
-    assert len(root) == len(elements) == 12
+    assert len(root) == len(elements) == 13
     assert all(element['created'] is False for element in elements)
     assert all(element['updated'] is True for element in elements)
 
@@ -52,7 +52,7 @@ def test_create_options(db, settings):
     elements = elements.values()
     import_elements(elements)
 
-    assert len(root) == len(elements) == Option.objects.count() == 8
+    assert len(root) == len(elements) == Option.objects.count() == 9
     assert all(element['created'] is True for element in elements)
     assert all(element['updated'] is False for element in elements)
 
@@ -67,7 +67,7 @@ def test_update_options(db, settings):
     elements = elements.values()
     import_elements(elements)
 
-    assert len(root) == len(elements) == 8
+    assert len(root) == len(elements) == 9
     assert all(element['created'] is False for element in elements)
     assert all(element['updated'] is True for element in elements)
 

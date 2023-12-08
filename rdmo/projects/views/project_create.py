@@ -5,7 +5,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, TemplateView
 
-from rdmo.core.views import RedirectViewMixin
+from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 from rdmo.questions.models import Catalog
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
@@ -17,9 +17,11 @@ from ..models import Membership, Project
 logger = logging.getLogger(__name__)
 
 
-class ProjectCreateView(LoginRequiredMixin, RedirectViewMixin, CreateView):
+class ProjectCreateView(ObjectPermissionMixin, LoginRequiredMixin,
+                        RedirectViewMixin, CreateView):
     model = Project
     form_class = ProjectForm
+    permission_required = 'projects.add_project'
 
     def get_form_kwargs(self):
         catalogs = Catalog.objects.filter_current_site() \
@@ -65,8 +67,10 @@ class ProjectCreateView(LoginRequiredMixin, RedirectViewMixin, CreateView):
         return response
 
 
-class ProjectCreateImportView(ProjectImportMixin, LoginRequiredMixin, TemplateView):
+class ProjectCreateImportView(ObjectPermissionMixin, LoginRequiredMixin,
+                              ProjectImportMixin, TemplateView):
     success_url = reverse_lazy('projects')
+    permission_required = 'projects.add_project'
 
     def get(self, request, *args, **kwargs):
         self.object = None

@@ -42,16 +42,11 @@
 
 {% endif %}
 
-{% if question.verbose_name or question.verbose_name_plural %}
+{% if question.verbose_name  %}
 
 <p>
-    <strong>{% trans 'Verbose name' %}:</strong>
+    <strong>{% trans 'Verbose name' %}: {{ question.verbose_name }}</strong>
 </p>
-
-<ul>
-    <li>{% trans 'Verbose name' %}: {{ question.verbose_name }}</li>
-    <li>{% trans 'Verbose name plural' %}: {{ question.verbose_name_plural }}</li>
-</ul>
 
 {% endif %}
 

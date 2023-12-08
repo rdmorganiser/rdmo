@@ -20,6 +20,9 @@
     {% endblock %}
 
     {% block js %}
+    {% compress js %}
+    <script type="text/javascript" src="{% static 'core/js/utils.js' %}" ></script>
+    {% endcompress %}
     {% endblock %}
 
     {% block head %}{% endblock %}

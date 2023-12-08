@@ -110,7 +110,6 @@ def import_page(element, save=False, user=None):
     set_lang_field(page, 'title', element)
     set_lang_field(page, 'help', element)
     set_lang_field(page, 'verbose_name', element)
-    set_lang_field(page, 'verbose_name_plural', element)
 
     validate_instance(page, element, PageLockedValidator, PageUniqueURIValidator)
 
@@ -148,7 +147,6 @@ def import_questionset(element, save=False, user=None):
     set_lang_field(questionset, 'title', element)
     set_lang_field(questionset, 'help', element)
     set_lang_field(questionset, 'verbose_name', element)
-    set_lang_field(questionset, 'verbose_name_plural', element)
 
     validate_instance(questionset, element, QuestionSetLockedValidator, QuestionSetUniqueURIValidator)
 
@@ -189,7 +187,6 @@ def import_question(element, save=False, user=None):
     set_lang_field(question, 'help', element)
     set_lang_field(question, 'default_text', element)
     set_lang_field(question, 'verbose_name', element)
-    set_lang_field(question, 'verbose_name_plural', element)
 
     set_foreign_field(question, 'default_option', element)
 

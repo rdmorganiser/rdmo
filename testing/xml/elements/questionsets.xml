@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rdmo xmlns:dc="http://purl.org/dc/elements/1.1/" created="2023-04-20T09:39:04.312932+02:00" version="1.9.2">
+<rdmo xmlns:dc="http://purl.org/dc/elements/1.1/" created="2023-04-20T09:39:04.312932+02:00" version="2.0.0">
 	<questionset dc:uri="http://example.com/terms/questions/catalog/blocks/set/block">
 		<uri_prefix>http://example.com/terms</uri_prefix>
 		<uri_path>catalog/blocks/set/block</uri_path>

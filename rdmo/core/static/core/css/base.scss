@@ -75,6 +75,10 @@ a {
             color: #a94442;
         }
     }
+
+    &.disabled {
+        cursor: not-allowed;
+    }
 }
 
 code {
@@ -129,9 +133,14 @@ table {
     }
 }
 
+details {
+    margin-bottom: 10px;
+}
+
 summary {
-    color: $link-color;
+    display: list-item;
     cursor: pointer;
+    margin-bottom: 5px;
 }
 
 metadata {
@@ -183,7 +192,8 @@ metadata {
 .page h2:nth-child(2) {
     margin-top: 0;
 }
-.sidebar h2:first-child {
+.sidebar h2:first-child,
+.sidebar .import-buttons {
     margin-top: 70px;
 }
 
@@ -476,4 +486,14 @@ li.has-warning > a.control-label > i {
     cursor: help;
     text-decoration: underline;
     text-decoration-style: dotted;
+}
+
+.more,
+.show-less {
+    display: none;
+}
+.show-more,
+.show-less {
+    color: $link-color;
+    cursor: pointer;
 }

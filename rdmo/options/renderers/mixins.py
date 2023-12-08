@@ -49,6 +49,8 @@ class OptionRendererMixin:
 
             for lang_code, lang_string, lang_field in get_languages():
                 self.render_text_element(xml, 'text', {'lang': lang_code}, option['text_%s' % lang_code])
+                self.render_text_element(xml, 'help', {'lang': lang_code}, option['help_%s' % lang_code])
+                self.render_text_element(xml, 'view_text', {'lang': lang_code}, option['view_text_%s' % lang_code])
 
             self.render_text_element(xml, 'additional_input', {}, option['additional_input'])
             xml.endElement('option')

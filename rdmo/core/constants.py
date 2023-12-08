@@ -58,3 +58,22 @@ PERMISSIONS = {
         'views.add_view', 'views.change_view', 'views.delete_view'
     )
 }
+
+HUMAN2BYTES_MAPPER = {
+    "b": {"base": 1000, "power": 0},
+    "kb": {"base": 1000, "power": 1},
+    "k": {"base": 1000, "power": 1},
+    "mb": {"base": 1000, "power": 2},
+    "m": {"base": 1000, "power": 2},
+    "gb": {"base": 1000, "power": 3},
+    "g": {"base": 1000, "power": 3},
+    "tb": {"base": 1000, "power": 4},
+    "t": {"base": 1000, "power": 4},
+    "p": {"base": 1000, "power": 5},
+    "pb": {"base": 1000, "power": 5},
+    "kib": {"base": 1024, "power": 1},
+    "mib": {"base": 1024, "power": 2},
+    "gib": {"base": 1024, "power": 3},
+    "tib": {"base": 1024, "power": 4},
+    "pib": {"base": 1024, "power": 5},
+}

@@ -76,13 +76,17 @@ const EditTask = ({ config, task, elements, elementActions}) => {
                   rows={4} onChange={updateTask} />
 
         <div className="row">
-          <div className="col-sm-6">
+          <div className="col-sm-4">
             <Checkbox config={config} element={task} field="locked"
                       onChange={updateTask} />
           </div>
-          <div className="col-sm-6">
+          <div className="col-sm-4">
             <Checkbox config={config} element={task} field="available"
                       onChange={updateTask} />
+          </div>
+          <div className="col-sm-4">
+            <Number config={config} element={task} field="order"
+                    onChange={updateTask} />
           </div>
         </div>
 
@@ -99,8 +103,8 @@ const EditTask = ({ config, task, elements, elementActions}) => {
           }
         </Tabs>
 
-        <MultiSelect config={config} element={task} field="conditions"
-                     options={conditions} verboseName="condition"
+        <MultiSelect config={config} element={task} field="conditions" options={conditions}
+                     addText={gettext('Add existing condition')} createText={gettext('Create new condition')}
                      onChange={updateTask} onCreate={createCondition} onEdit={editCondition} />
 
         <Select config={config} element={task} field="start_attribute"

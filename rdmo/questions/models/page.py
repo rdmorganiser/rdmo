@@ -84,102 +84,77 @@ class Page(Model, TranslationMixin):
     title_lang1 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Title (primary)'),
-        help_text=_('The title for this page in the primary language.')
+        help_text=_('The title for this page (in the primary language).')
     )
     title_lang2 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Title (secondary)'),
-        help_text=_('The title for this page in the secondary language.')
+        help_text=_('The title for this page (in the secondary language).')
     )
     title_lang3 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Title (tertiary)'),
-        help_text=_('The title for this page in the tertiary language.')
+        help_text=_('The title for this page (in the tertiary language).')
     )
     title_lang4 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Title (quaternary)'),
-        help_text=_('The title for this page in the quaternary language.')
+        help_text=_('The title for this page (in the quaternary language).')
     )
     title_lang5 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Title (quinary)'),
-        help_text=_('The title for this page in the quinary language.')
+        help_text=_('The title for this page (in the quinary language).')
     )
     help_lang1 = models.TextField(
         blank=True,
         verbose_name=_('Help (primary)'),
-        help_text=_('The help text for this page in the primary language.')
+        help_text=_('The help text for this page (in the primary language).')
     )
     help_lang2 = models.TextField(
         blank=True,
         verbose_name=_('Help (secondary)'),
-        help_text=_('The help text for this page in the secondary language.')
+        help_text=_('The help text for this page (in the secondary language).')
     )
     help_lang3 = models.TextField(
         blank=True,
         verbose_name=_('Help (tertiary)'),
-        help_text=_('The help text for this page in the tertiary language.')
+        help_text=_('The help text for this page (in the tertiary language).')
     )
     help_lang4 = models.TextField(
         blank=True,
         verbose_name=_('Help (quaternary)'),
-        help_text=_('The help text for this page in the quaternary language.')
+        help_text=_('The help text for this page (in the quaternary language).')
     )
     help_lang5 = models.TextField(
         blank=True,
         verbose_name=_('Help (quinary)'),
-        help_text=_('The help text for this page in the quinary language.')
+        help_text=_('The help text for this page (in the quinary language).')
     )
     verbose_name_lang1 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Name (primary)'),
-        help_text=_('The name displayed for this page in the primary language.')
+        help_text=_('The name displayed for this page (in the primary language).')
     )
     verbose_name_lang2 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Name (secondary)'),
-        help_text=_('The name displayed for this page in the secondary language.')
+        help_text=_('The name displayed for this page (in the secondary language).')
     )
     verbose_name_lang3 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Name (tertiary)'),
-        help_text=_('The name displayed for this page in the tertiary language.')
+        help_text=_('The name displayed for this page (in the tertiary language).')
     )
     verbose_name_lang4 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Name (quaternary)'),
-        help_text=_('The name displayed for this page in the quaternary language.')
+        help_text=_('The name displayed for this page (in the quaternary language).')
     )
     verbose_name_lang5 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Name (quinary)'),
-        help_text=_('The name displayed for this page in the quinary language.')
-    )
-    verbose_name_plural_lang1 = models.CharField(
-        max_length=256, blank=True,
-        verbose_name=_('Plural name (primary)'),
-        help_text=_('The plural name displayed for this page in the primary language.')
-    )
-    verbose_name_plural_lang2 = models.CharField(
-        max_length=256, blank=True,
-        verbose_name=_('Plural name (secondary)'),
-        help_text=_('The plural name displayed for this page in the secondary language.')
-    )
-    verbose_name_plural_lang3 = models.CharField(
-        max_length=256, blank=True,
-        verbose_name=_('Plural name (tertiary)'),
-        help_text=_('The plural name displayed for this page in the tertiary language.')
-    )
-    verbose_name_plural_lang4 = models.CharField(
-        max_length=256, blank=True,
-        verbose_name=_('Plural name (quaternary)'),
-        help_text=_('The plural name displayed for this page in the quaternary language.')
-    )
-    verbose_name_plural_lang5 = models.CharField(
-        max_length=256, blank=True,
-        verbose_name=_('Plural name (quinary)'),
-        help_text=_('The plural name displayed for this page in the quinary language.')
+        help_text=_('The name displayed for this page (in the quinary language).')
     )
     conditions = models.ManyToManyField(
         Condition, blank=True, related_name='pages',
@@ -210,10 +185,6 @@ class Page(Model, TranslationMixin):
     @property
     def verbose_name(self):
         return self.trans('verbose_name')
-
-    @property
-    def verbose_name_plural(self):
-        return self.trans('verbose_name_plural')
 
     @cached_property
     def is_locked(self):

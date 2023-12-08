@@ -5,14 +5,17 @@ from django.db.models import Count, Value
 from .models import AdditionalField, AdditionalFieldValue, ConsentFieldValue, Role
 
 
+@admin.register(AdditionalField)
 class AdditionalFieldAdmin(admin.ModelAdmin):
     pass
 
 
+@admin.register(AdditionalFieldValue)
 class AdditionalFieldValueAdmin(admin.ModelAdmin):
     readonly_fields = ('user', )
 
 
+@admin.register(ConsentFieldValue)
 class ConsentFieldValueAdmin(admin.ModelAdmin):
     readonly_fields = ('user', 'consent')
 
@@ -20,11 +23,12 @@ class ConsentFieldValueAdmin(admin.ModelAdmin):
         return False
 
 
+@admin.register(Role)
 class RoleAdmin(admin.ModelAdmin):
     search_fields = ('user__username', 'user__email')
     list_filter = ('member', 'manager', 'editor', 'reviewer')
 
-    list_display = ('user', 'members', 'managers', 'editors', 'reviewers')
+    list_display = ('user', 'email', 'members', 'managers', 'editors', 'reviewers')
 
     def get_queryset(self, request):
         return Role.objects.prefetch_related(
@@ -39,6 +43,9 @@ class RoleAdmin(admin.ModelAdmin):
             return 'all Sites'
         return ', '.join([site.domain for site in getattr(obj, field_name).all()])
 
+    def email(self, obj):
+        return obj.user.email
+
     def members(self, obj):
         return self.render_all_sites_or_join(obj, 'member')
 
@@ -50,9 +57,3 @@ class RoleAdmin(admin.ModelAdmin):
 
     def reviewers(self, obj):
         return self.render_all_sites_or_join(obj, 'reviewer')
-
-
-admin.site.register(AdditionalField, AdditionalFieldAdmin)
-admin.site.register(AdditionalFieldValue, AdditionalFieldValueAdmin)
-admin.site.register(ConsentFieldValue, ConsentFieldValueAdmin)
-admin.site.register(Role, RoleAdmin)

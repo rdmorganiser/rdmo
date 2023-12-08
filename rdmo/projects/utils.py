@@ -7,6 +7,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 
 from rdmo.core.mail import send_mail
+from rdmo.core.plugins import get_plugins
 
 logger = logging.getLogger(__name__)
 
@@ -101,10 +102,7 @@ def save_import_snapshot_values(project, snapshots, checked):
 
         for value in snapshot.snapshot_values:
             if value.attribute:
-                value_key = '{value.attribute.uri}[{snapshot_index}][{value.set_prefix}][{value.set_index}][{value.collection_index}]'.format(  # noqa: E501
-                    value=value,
-                    snapshot_index=snapshot.snapshot_index
-                )
+                value_key = f"{value.attribute.uri}[{snapshot.snapshot_index}][{value.set_prefix}][{value.set_index}][{value.collection_index}]" # noqa: E501
 
                 if value_key in checked:
                     # assert that this is a new value
@@ -173,3 +171,13 @@ def set_context_querystring_with_filter_and_page(context: dict) -> dict:
             del querystring['page']
         context['querystring'] = querystring.urlencode()
     return context
+
+
+def get_upload_accept():
+    accept = set()
+    for import_plugin in get_plugins('PROJECT_IMPORTS').values():
+        if import_plugin.accept:
+            accept.add(import_plugin.accept)
+        else:
+            return None
+    return ','.join(accept)
