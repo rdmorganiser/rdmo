@@ -68,6 +68,11 @@ const EditPage = ({ config, page, elements, elementActions }) => {
 
   const info = <PageInfo page={page} elements={elements} elementActions={elementActions} />
 
+  // for reasons unknown, the strings are not picked up by makemessages from the props
+  const addElementText = gettext('Add existing element')
+  const createQuestionText = gettext('Create new question set')
+  const createQuestionSetText = gettext('Create new question')
+
   return (
     <div className="panel panel-default panel-edit">
       <div className="panel-heading">
@@ -140,13 +145,15 @@ const EditPage = ({ config, page, elements, elementActions }) => {
           }
         </Tabs>
 
+
+
         <Select config={config} element={page} field="attribute" createText={gettext('Create new attribute')}
                 options={attributes} onChange={updatePage} onCreate={createAttribute} onEdit={editAttribute} />
 
         <OrderedMultiSelect config={config} element={page} field="elements"
                             values={elementValues} options={elementOptions}
-                            addText={gettext('Add existing element')} createText={gettext('Create new question')}
-                            altCreateText={gettext('Create new question set')}
+                            addText={addElementText} createText={createQuestionText}
+                            altCreateText={createQuestionSetText}
                             onChange={updatePage} onCreate={createQuestion} onAltCreate={createQuestionSet}
                             onEdit={editElement} />
 

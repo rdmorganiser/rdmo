@@ -34,6 +34,10 @@ const EditSection = ({ config, section, elements, elementActions }) => {
 
   const info = <SectionInfo section={section} elements={elements} elementActions={elementActions} />
 
+  // for reasons unknown, the strings are not picked up by makemessages from the props
+  const addPageText = gettext('Add existing page')
+  const createPageText = gettext('Create new page')
+
   return (
     <div className="panel panel-default panel-edit">
       <div className="panel-heading">
@@ -95,7 +99,7 @@ const EditSection = ({ config, section, elements, elementActions }) => {
         </Tabs>
 
         <OrderedMultiSelect config={config} element={section} field="pages" options={pages}
-                            addText={gettext('Add existing page')} createText={gettext('Create new page')}
+                            addText={addPageText} createText={createPageText}
                             onChange={updateSection} onCreate={createPage} onEdit={editPage} />
 
         {get(config, 'settings.multisite') && <Select config={config} element={section} field="editors"

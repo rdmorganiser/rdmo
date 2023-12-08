@@ -35,6 +35,10 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
 
   const info = <CatalogInfo catalog={catalog} elements={elements} />
 
+  // for reasons unknown, the strings are not picked up by makemessages from the props
+  const addSectionText = gettext('Add existing section')
+  const createSectionText = gettext('Create new section')
+
   return (
     <div className="panel panel-default panel-edit">
       <div className="panel-heading">
@@ -96,7 +100,7 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
         </Tabs>
 
         <OrderedMultiSelect config={config} element={catalog} field="sections" options={sections}
-                            addText={gettext('Add existing section')} createText={gettext('Create new section')}
+                            addText={addSectionText} createText={createSectionText}
                             onChange={updateCatalog} onCreate={createSection} onEdit={editSection} />
 
         {get(config, 'settings.groups') && <Select config={config} element={catalog} field="groups"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-04 13:03+0100\n"
+"POT-Creation-Date: 2023-12-08 18:06+0100\n"
 "PO-Revision-Date: 2023-12-04 12:54+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
@@ -138,12 +138,20 @@ msgstr ""
 "Dieses Attribut wird der Bedingung <code class=\"code-conditions\">%s</code> "
 "hinzugefügt."
 
-#: management/assets/js/components/edit/EditCatalog.js:42
+#: management/assets/js/components/edit/EditCatalog.js:39
+msgid "Add existing section"
+msgstr "Existierenden Abschnitt hinzufügen"
+
+#: management/assets/js/components/edit/EditCatalog.js:40
+msgid "Create new section"
+msgstr "Neuen Abschnitt erstellen"
+
+#: management/assets/js/components/edit/EditCatalog.js:46
 #: management/assets/js/components/element/Catalog.js:35
 msgid "This catalog is read only"
 msgstr "Dieser Katalog ist schreibgeschützt"
 
-#: management/assets/js/components/edit/EditCatalog.js:49
+#: management/assets/js/components/edit/EditCatalog.js:53
 #: management/assets/js/components/element/Catalog.js:51
 #: management/assets/js/components/import/ImportCatalog.js:30
 #: management/assets/js/constants/elements.js:44
@@ -151,7 +159,7 @@ msgstr "Dieser Katalog ist schreibgeschützt"
 msgid "Catalog"
 msgstr "Katalog"
 
-#: management/assets/js/components/edit/EditCatalog.js:51
+#: management/assets/js/components/edit/EditCatalog.js:55
 msgid "Create catalog"
 msgstr "Neuen Katalog erstellen"
 
@@ -301,12 +309,29 @@ msgstr "Frage: %s"
 msgid "Question set: %s"
 msgstr "Fragenset: %s"
 
-#: management/assets/js/components/edit/EditPage.js:75
+#: management/assets/js/components/edit/EditPage.js:72
+#: management/assets/js/components/edit/EditQuestionSet.js:72
+#, fuzzy
+#| msgid "Add existing element"
+msgid "Add existing element"
+msgstr "Existierendes Element hinzufügen"
+
+#: management/assets/js/components/edit/EditPage.js:73
+#: management/assets/js/components/edit/EditQuestionSet.js:73
+msgid "Create new question set"
+msgstr "Neues Fragenset erstellen"
+
+#: management/assets/js/components/edit/EditPage.js:74
+#: management/assets/js/components/edit/EditQuestionSet.js:74
+msgid "Create new question"
+msgstr "Neue Frage erstellen"
+
+#: management/assets/js/components/edit/EditPage.js:80
 #: management/assets/js/components/element/Page.js:42
 msgid "This page is read only"
 msgstr "Diese Seite ist schreibgeschützt"
 
-#: management/assets/js/components/edit/EditPage.js:82
+#: management/assets/js/components/edit/EditPage.js:87
 #: management/assets/js/components/element/Page.js:57
 #: management/assets/js/components/import/ImportPage.js:28
 #: management/assets/js/constants/elements.js:46
@@ -314,11 +339,11 @@ msgstr "Diese Seite ist schreibgeschützt"
 msgid "Page"
 msgstr "Seite"
 
-#: management/assets/js/components/edit/EditPage.js:84
+#: management/assets/js/components/edit/EditPage.js:89
 msgid "Create page"
 msgstr "Seite erstellen"
 
-#: management/assets/js/components/edit/EditPage.js:91
+#: management/assets/js/components/edit/EditPage.js:96
 #, javascript-format
 msgid ""
 "This page will be added to the section <code class=\"code-questions\">%s</"
@@ -362,12 +387,12 @@ msgstr ""
 "Diese Frage wird dem Fragenset <code class=\"code-questions\">%s</code> "
 "hinzugefügt."
 
-#: management/assets/js/components/edit/EditQuestionSet.js:75
+#: management/assets/js/components/edit/EditQuestionSet.js:80
 #: management/assets/js/components/element/QuestionSet.js:41
 msgid "This question set is read only"
 msgstr "Dieses Fragenset ist schreibgeschützt"
 
-#: management/assets/js/components/edit/EditQuestionSet.js:82
+#: management/assets/js/components/edit/EditQuestionSet.js:87
 #: management/assets/js/components/element/QuestionSet.js:56
 #: management/assets/js/components/import/ImportQuestionSet.js:28
 #: management/assets/js/constants/elements.js:47
@@ -375,11 +400,11 @@ msgstr "Dieses Fragenset ist schreibgeschützt"
 msgid "Question set"
 msgstr "Fragenset"
 
-#: management/assets/js/components/edit/EditQuestionSet.js:84
+#: management/assets/js/components/edit/EditQuestionSet.js:89
 msgid "Create question set"
 msgstr "Fragenset erstellen"
 
-#: management/assets/js/components/edit/EditQuestionSet.js:91
+#: management/assets/js/components/edit/EditQuestionSet.js:96
 #, javascript-format
 msgid ""
 "This question set will be added to the page <code class=\"code-questions\">"
@@ -388,7 +413,7 @@ msgstr ""
 "Dieser Fragenset wird der Seite <code class=\"code-questions\">%s</code> "
 "hinzugefügt."
 
-#: management/assets/js/components/edit/EditQuestionSet.js:98
+#: management/assets/js/components/edit/EditQuestionSet.js:103
 #, javascript-format
 msgid ""
 "This question set will be added to the question set <code class=\"code-"
@@ -397,12 +422,20 @@ msgstr ""
 "Dieser Fragensatz wird dem Fragenset <code class=\"code-questions\">%s</"
 "code> hinzugefügt."
 
-#: management/assets/js/components/edit/EditSection.js:41
+#: management/assets/js/components/edit/EditSection.js:38
+msgid "Add existing page"
+msgstr "Existierende Seite hinzufügen"
+
+#: management/assets/js/components/edit/EditSection.js:39
+msgid "Create new page"
+msgstr "Neues Seite erstellen"
+
+#: management/assets/js/components/edit/EditSection.js:45
 #: management/assets/js/components/element/Section.js:39
 msgid "This section is read only"
 msgstr "Dieser Abschnitt ist schreibgeschützt"
 
-#: management/assets/js/components/edit/EditSection.js:48
+#: management/assets/js/components/edit/EditSection.js:52
 #: management/assets/js/components/element/Section.js:54
 #: management/assets/js/components/import/ImportSection.js:28
 #: management/assets/js/constants/elements.js:45
@@ -410,11 +443,11 @@ msgstr "Dieser Abschnitt ist schreibgeschützt"
 msgid "Section"
 msgstr "Abschnitt"
 
-#: management/assets/js/components/edit/EditSection.js:50
+#: management/assets/js/components/edit/EditSection.js:54
 msgid "Create section"
 msgstr "Neuen Abschnitt erstellen"
 
-#: management/assets/js/components/edit/EditSection.js:57
+#: management/assets/js/components/edit/EditSection.js:61
 #, javascript-format
 msgid ""
 "This section will be added to the catalog <code class=\"code-questions\">%s</"
@@ -1325,24 +1358,3 @@ msgstr "Alle abwählen"
 #: management/assets/js/components/sidebar/ImportSidebar.js:75
 msgid "Set URI prefix for all elements"
 msgstr "URI-Präfix für alle Elemente festlegen"
-
-msgid "Add existing page"
-msgstr "Existierende Seite hinzufügen"
-
-msgid "Create new page"
-msgstr "Neues Seite erstellen"
-
-msgid "Add existing section"
-msgstr "Existierenden Abschnitt hinzufügen"
-
-msgid "Create new section"
-msgstr "Neuen Abschnitt erstellen"
-
-msgid "Add existing element"
-msgstr "Existierendes Element hinzufügen"
-
-msgid "Create new question"
-msgstr "Neue Frage erstellen"
-
-msgid "Create new question set"
-msgstr "Neues Fragenset erstellen"

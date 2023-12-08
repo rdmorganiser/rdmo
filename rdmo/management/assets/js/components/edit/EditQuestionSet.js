@@ -68,6 +68,11 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
 
   const info = <QuestionSetInfo questionset={questionset} elements={elements} elementActions={elementActions} />
 
+  // for reasons unknown, the strings are not picked up by makemessages from the props
+  const addElementText = gettext('Add existing element')
+  const createQuestionText = gettext('Create new question set')
+  const createQuestionSetText = gettext('Create new question')
+
   return (
     <div className="panel panel-default panel-edit">
       <div className="panel-heading">
@@ -152,8 +157,8 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
 
         <OrderedMultiSelect config={config} element={questionset} field="elements"
                             values={elementValues} options={elementOptions}
-                            addText={gettext('Add existing element')} createText={gettext('Create new question')}
-                            altCreateText={gettext('Create new question set')}
+                            addText={addElementText} createText={createQuestionText}
+                            altCreateText={createQuestionSetText}
                             onChange={updateQuestionSet} onCreate={createQuestion} onAltCreate={createQuestionSet}
                             onEdit={editElement}/>
 
