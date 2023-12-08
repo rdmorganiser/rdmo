@@ -251,7 +251,6 @@ jobs:
       - lint
       - test
       - coveralls
-      - build-wheel
       - dev-setup
       - dependencies
     runs-on: ubuntu-22.04
