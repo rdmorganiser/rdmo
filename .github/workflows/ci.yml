@@ -218,7 +218,7 @@ jobs:
         with:
           node-version: 18
           cache: npm
-      - run: npm install --dev
+      - run: npm install --include=dev
       - name: Write info to step summary
         run: |
           {
