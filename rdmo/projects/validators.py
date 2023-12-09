@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 from django.conf import settings
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext_lazy as _
 
@@ -35,12 +35,15 @@ class ValueConflictValidator:
                     set_index=data.get('set_index'),
                     collection_index=data.get('collection_index')
                 )
-                raise serializers.ValidationError({
-                    'conflict': [_('An existing value for this attribute/set_prefix/set_index/collection_index'
-                                  ' was found.')]
-                })
             except ObjectDoesNotExist:
+                return
+            except MultipleObjectsReturned:
                 pass
+
+            raise serializers.ValidationError({
+                'conflict': [_('An existing value for this attribute/set_prefix/set_index/collection_index'
+                              ' was found.')]
+            })
 
 class ValueQuotaValidator:
 
