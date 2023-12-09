@@ -134,18 +134,22 @@ jobs:
     name: Build python wheel
     needs: test
     runs-on: ubuntu-22.04
-    if: github.event_name == 'pull_request'
     steps:
     - uses: actions/checkout@v4
     - name: Get short commit SHA
-      id: short-sha
-      run: echo "sha=$(git rev-parse --short ${{ github.event.pull_request.head.sha }})" >> $GITHUB_OUTPUT
+      run: |
+        if [ "${{ github.event_name }}" = "pull_request" ]; then
+          SHA="${{ github.event.pull_request.head.sha }}"
+        else
+          SHA="${{ github.sha }}"
+        fi
+        echo "SHA=$(git rev-parse --short $SHA)" >> $GITHUB_ENV
     - name: Get current version (MAJOR.MINOR.PATCH)
       id: current-version
       run: echo "current_version=$(grep -Po '(?<=__version__ = ")[\d\w.]+(?=")' rdmo/__init__.py)" >> $GITHUB_OUTPUT
     - name: Generate new version (current version + SHA)
       id: new-version
-      run: echo "new_version=${{ steps.current-version.outputs.current_version }}+${{ steps.short-sha.outputs.sha }}" >> $GITHUB_OUTPUT
+      run: echo "new_version=${{ steps.current-version.outputs.current_version }}+$SHA" >> $GITHUB_OUTPUT
     - name: Update version in rdmo/__init__.py
       run: |
         sed -i "s/__version__ = .*/__version__ = \"${{ steps.new-version.outputs.new_version }}\"/" rdmo/__init__.py
@@ -251,6 +255,7 @@ jobs:
       - lint
       - test
       - coveralls
+      - build-wheel
       - dev-setup
       - dependencies
     runs-on: ubuntu-22.04
