@@ -139,7 +139,7 @@ def count_questions(element, sets, conditions):
             if isinstance(child, Question):
                 # for questions add the set_count to the counts dict
                 # use the max function, since the same attribute could apear twice in the tree
-                if child.attribute is not None:
+                if child.attribute is not None and not child.is_optional:
                     counts[child.attribute.id] = max(counts[child.attribute.id], set_count)
             else:
                 # for everthing else, call this function recursively
