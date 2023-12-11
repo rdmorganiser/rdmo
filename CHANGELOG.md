@@ -1,6 +1,6 @@
 # Changelog
 
-## [RDMO 2.1.0](https://github.com/rdmorganiser/rdmo/compare/2.0.2...2.1.0) (Dec 7, 2023)
+## [RDMO 2.1.0](https://github.com/rdmorganiser/rdmo/compare/2.0.2...2.1.0) (Dec 11, 2023)
 
 * Refactor progress bar and overview
   * Fix the progress bar to consider tabs and conditions correctly
@@ -54,8 +54,7 @@
 
 * Refactor data model of questions app:
   * Introduce Pages model, replacing question sets which are not nested
-  * Use m2m relations instead of foreign keys, e.g. one catalog has now many sections,
-    but one section can be also part of many catalogs
+  * Use m2m relations instead of foreign keys, e.g. one catalog has now many sections, but one section can be also part of many catalogs
   * Refactor import and update elements import format, but keep old format working
   * Rename key to uri_path in all element models, but Attribute
 * Add new React/Redux-based management interface, which replaces the 6 old interfaces:
@@ -352,8 +351,8 @@
 ## [RDMO 1.0.4](https://github.com/rdmorganiser/rdmo/compare/1.0.3...1.0.4) (Mar 30, 2020)
 
 * Fix some issued with ORCID login. New entries were added to local.py to allow for more flexible authentication workflows:
-    * `SOCIALACCOUNT_SIGNUP` is set to False by default. Change into True to enable users to create an account via social accounts, e.g. ORCID
-    * `SOCIALACCOUNT_AUTO_SIGNUP` is set to False by default. Set it to True to enable automatic creation of an account when using a social account for the first time Otherwise new users need to fill out a signup form even if the provider does provide the email address. This should be False when using the public ORCID API, but can be set to True when you are sure that an email is provided by the OAuth provider.
+  * `SOCIALACCOUNT_SIGNUP` is set to False by default. Change into True to enable users to create an account via social accounts, e.g. ORCID
+  * `SOCIALACCOUNT_AUTO_SIGNUP` is set to False by default. Set it to True to enable automatic creation of an account when using a social account for the first time Otherwise new users need to fill out a signup form even if the provider does provide the email address. This should be False when using the public ORCID API, but can be set to True when you are sure that an email is provided by the OAuth provider.
 * Add styled ORCID login button
 * Sort question catalogs alphabetically in right side menu
 * Fix vendor files update process
