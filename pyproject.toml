@@ -68,9 +68,6 @@ dependencies = [
 allauth = [
   "django-allauth~=0.57.0",
 ]
-shibboleth = [
-  "django-shibboleth-remoteuser@git+https://github.com/rdmorganiser/django-shibboleth-remoteuser@v0.11"
-]
 ci = [
   "coveralls~=3.3",
   "rdmo[dev]",
