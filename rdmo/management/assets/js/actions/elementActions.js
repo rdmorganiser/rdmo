@@ -342,14 +342,15 @@ export function fetchElementError(error) {
 
 // store element
 
-export function storeElement(elementType, element, back) {
+export function storeElement(elementType, element, back, elementAction=null) {
   return function(dispatch, getState) {
-    dispatch(storeElementInit(element))
+
+    dispatch(storeElementInit(element, elementAction))
 
     let action
     switch (elementType) {
       case 'catalogs':
-        action = () => QuestionsApi.storeCatalog(element)
+          action = () => QuestionsApi.storeCatalog(element, elementAction)
         break
 
       case 'sections':
@@ -385,11 +386,11 @@ export function storeElement(elementType, element, back) {
         break
 
       case 'tasks':
-        action = () => TasksApi.storeTask(element)
+        action = () => TasksApi.storeTask(element, elementAction)
         break
 
       case 'views':
-        action = () => ViewsApi.storeView(element)
+        action = () => ViewsApi.storeView(element, elementAction)
         break
     }
 
@@ -406,8 +407,8 @@ export function storeElement(elementType, element, back) {
   }
 }
 
-export function storeElementInit(element) {
-  return {type: 'elements/storeElementInit', element}
+export function storeElementInit(element, elementAction) {
+  return {type: 'elements/storeElementInit', element, elementAction}
 }
 
 export function storeElementSuccess(element) {
@@ -574,7 +575,6 @@ export function deleteElement(elementType, element) {
       case 'catalogs':
         action = () => QuestionsApi.deleteCatalog(element)
         break
-
       case 'sections':
         action = () => QuestionsApi.deleteSection(element)
         break

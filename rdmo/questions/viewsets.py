@@ -13,6 +13,7 @@ from rdmo.core.filters import SearchFilter
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import is_truthy, render_to_format
 from rdmo.core.views import ChoicesViewSet
+from rdmo.management.viewsets import ElementToggleCurrentSiteViewSetMixin
 
 from .models import Catalog, Page, Question, QuestionSet, Section
 from .renderers import CatalogRenderer, PageRenderer, QuestionRenderer, QuestionSetRenderer, SectionRenderer
@@ -115,6 +116,11 @@ class CatalogViewSet(ModelViewSet):
             'options': full or is_truthy(request.GET.get('options')),
             'conditions': full or is_truthy(request.GET.get('conditions'))
         }
+
+
+class CatalogToggleCurrentSiteViewSet(ElementToggleCurrentSiteViewSetMixin):
+    serializer_class = CatalogSerializer
+    viewset_class = CatalogViewSet
 
 
 class SectionViewSet(ModelViewSet):

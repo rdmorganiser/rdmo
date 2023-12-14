@@ -2,6 +2,7 @@ import xml.etree.ElementTree as et
 
 import pytest
 
+from django.contrib.sites.models import Site
 from django.urls import reverse
 
 from ...core.tests import get_obj_perms_status_code
@@ -9,6 +10,9 @@ from ...core.tests import multisite_status_map as status_map
 from ...core.tests import multisite_users as users
 from ..models import Task
 from .test_viewset_task import export_formats, urlnames
+
+urlnames['task-toggle-site-add-site'] = 'v1-tasks:task-toggle-site-add-site'
+urlnames['task-toggle-site-remove-site'] = 'v1-tasks:task-toggle-site-remove-site'
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -132,3 +136,28 @@ def test_detail_export(db, client, username, password, export_format):
         assert root.tag == 'rdmo'
         for child in root:
             assert child.tag in ['task']
+
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('add_or_remove, has_current_site_check', [('add', True), ('remove', False)])
+def test_update_task_toggle_site(db, client, username, password, add_or_remove, has_current_site_check):
+    client.login(username=username, password=password)
+    instances = Task.objects.all()
+    current_site = Site.objects.get_current()
+
+    for instance in instances:
+        before_has_current_site = instance.sites.filter(id=current_site.id).exists()
+
+        url = reverse(urlnames[f'task-toggle-site-{add_or_remove}-site'], kwargs={'pk': instance.pk})
+
+        response = client.put(url, {}, content_type='application/json')
+        assert response.status_code == get_obj_perms_status_code(instance, username, 'toggle-site'), response.json()
+        instance.refresh_from_db()
+        after_has_current_site = instance.sites.filter(id=current_site.id).exists()
+        if response.status_code == 200:
+            # check if instance now has the current site or not
+            assert after_has_current_site is has_current_site_check
+        else:
+            # check that the instance was not updated
+            assert after_has_current_site is before_has_current_site

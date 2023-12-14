@@ -6,7 +6,7 @@ import { filterElement } from '../../utils/filter'
 import { buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
-import { EditLink, CopyLink, AvailableLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
+import { EditLink, CopyLink, AvailableLink, LockedLink, ExportLink, CodeLink, ToggleCurrentSiteLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 
 const Task = ({ config, task, elementActions, filter=false, filterSites=false, filterEditors=false }) => {
@@ -21,6 +21,9 @@ const Task = ({ config, task, elementActions, filter=false, filterSites=false, f
   const fetchCopy = () => elementActions.fetchElement('tasks', task.id, 'copy')
   const toggleAvailable = () => elementActions.storeElement('tasks', {...task, available: !task.available })
   const toggleLocked = () => elementActions.storeElement('tasks', {...task, locked: !task.locked })
+  const addCurrentSite = () => elementActions.storeElement('tasks', task, null, 'add-site')
+  const removeCurrentSite = () => elementActions.storeElement('tasks', task, null, 'remove-site')
+  let has_current_site =  config.settings.multisite ? task.sites.includes(config.currentSite.id) : true
 
   const fetchCondition = (index) => elementActions.fetchElement('conditions', task.conditions[index])
 
@@ -28,6 +31,9 @@ const Task = ({ config, task, elementActions, filter=false, filterSites=false, f
     <li className="list-group-item">
       <div className="element">
         <div className="pull-right">
+        <ToggleCurrentSiteLink has_current_site={has_current_site} locked={task.locked}
+                              onClick={has_current_site ? removeCurrentSite : addCurrentSite}
+                              show={config.settings.multisite}/>
           <ReadOnlyIcon title={gettext('This task is read only')} show={task.read_only} />
           <EditLink title={gettext('Edit task')} href={editUrl} onClick={fetchEdit} />
           <CopyLink title={gettext('Copy task')} href={copyUrl} onClick={fetchCopy} />

@@ -5,7 +5,7 @@ import { filterElement } from '../../utils/filter'
 import { buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
-import { EditLink, CopyLink, AvailableLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
+import { EditLink, CopyLink, AvailableLink, LockedLink, ExportLink, CodeLink, ToggleCurrentSiteLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 
 const View = ({ config, view, elementActions, filter=false, filterSites=false, filterEditors=false }) => {
@@ -20,11 +20,17 @@ const View = ({ config, view, elementActions, filter=false, filterSites=false, f
   const fetchCopy = () => elementActions.fetchElement('views', view.id, 'copy')
   const toggleAvailable = () => elementActions.storeElement('views', {...view, available: !view.available })
   const toggleLocked = () => elementActions.storeElement('views', {...view, locked: !view.locked })
+  const addCurrentSite = () => elementActions.storeElement('views', view, null, 'add-site')
+  const removeCurrentSite = () => elementActions.storeElement('views', view, null, 'remove-site')
+  let has_current_site =  config.settings.multisite ? view.sites.includes(config.currentSite.id) : true
 
   return showElement && (
     <li className="list-group-item">
       <div className="element">
         <div className="pull-right">
+          <ToggleCurrentSiteLink has_current_site={has_current_site} locked={view.locked}
+                              onClick={has_current_site ? removeCurrentSite : addCurrentSite}
+                              show={config.settings.multisite}/>
           <ReadOnlyIcon title={gettext('This view is read only')} show={view.read_only} />
           <EditLink title={gettext('Edit view')} href={editUrl} onClick={fetchEdit} />
           <CopyLink title={gettext('Copy view')} href={copyUrl} onClick={fetchCopy} />

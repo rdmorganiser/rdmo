@@ -10,6 +10,7 @@ from rdmo.core.exports import XMLResponse
 from rdmo.core.filters import SearchFilter
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import render_to_format
+from rdmo.management.viewsets import ElementToggleCurrentSiteViewSetMixin
 
 from .models import View
 from .renderers import ViewRenderer
@@ -65,3 +66,8 @@ class ViewViewSet(ModelViewSet):
                     'views': [self.get_object()]
                 }
             )
+
+
+class ViewToggleCurrentSiteViewSet(ElementToggleCurrentSiteViewSetMixin):
+    serializer_class = ViewSerializer
+    viewset_class = ViewViewSet
