@@ -10,6 +10,7 @@ from rdmo.core.exports import XMLResponse
 from rdmo.core.filters import SearchFilter
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import is_truthy, render_to_format
+from rdmo.management.viewsets import ElementToggleCurrentSiteViewSetMixin
 
 from .models import Task
 from .renderers import TaskRenderer
@@ -74,3 +75,7 @@ class TaskViewSet(ModelViewSet):
             'attributes': full or is_truthy(request.GET.get('attributes')),
             'options': full or is_truthy(request.GET.get('options'))
         }
+
+class TaskToggleCurrentSiteViewSet(ElementToggleCurrentSiteViewSetMixin):
+    serializer_class = TaskSerializer
+    viewset_class = TaskViewSet

@@ -17,11 +17,15 @@ class QuestionsApi extends BaseApi {
     return this.get(url)
   }
 
-  static storeCatalog(catalog) {
+  static storeCatalog(catalog, action) {
     if (isNil(catalog.id)) {
       return this.post('/api/v1/questions/catalogs/', catalog)
     } else {
-      return this.put(`/api/v1/questions/catalogs/${catalog.id}/`, catalog)
+      let url = `/api/v1/questions/catalogs/${catalog.id}/`
+      if (['add-site', 'remove-site'].includes(action)) {
+        url = `/api/v1/questions/catalog-toggle-site/${catalog.id}/${action}/`
+      }
+      return this.put(url, catalog)
     }
   }
 
