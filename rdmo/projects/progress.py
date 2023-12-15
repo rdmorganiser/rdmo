@@ -122,8 +122,9 @@ def count_questions(element, sets, conditions):
 
         for child in element.elements:
             if isinstance(child, Question):
-                child_count = sum(len(set_indexes) for set_indexes in sets[child.attribute.id].values())
-                set_count = max(set_count, child_count)
+                if child.attribute is not None:
+                    child_count = sum(len(set_indexes) for set_indexes in sets[child.attribute.id].values())
+                    set_count = max(set_count, child_count)
     else:
         set_count = 1
 
