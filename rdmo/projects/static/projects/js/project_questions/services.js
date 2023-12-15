@@ -134,7 +134,7 @@ angular.module('project_questions')
         });
     };
 
-    service.initView = function(page_id) {
+    service.initView = function(page_id, scrollUp) {
         if (initializing) return;
 
         if (page_id !== null) {
@@ -187,7 +187,9 @@ angular.module('project_questions')
                 // disable initializing flag again, set browser location, scroll to top and set back flag
                 initializing = false;
                 $location.path('/' + service.page.id + '/');
-                $window.scrollTo(0, 0);
+                if (angular.isUndefined(scrollUp) || scrollUp === true) {
+                    $window.scrollTo(0, 0);
+                }
                 back = false;
 
                 $timeout(function() {
@@ -967,6 +969,7 @@ angular.module('project_questions')
                     });
                 }
 
+
                 // check if we need to refresh the site
                 if (angular.isUndefined(jump) || !jump) {
                     angular.forEach([service.page].concat(service.questionsets), function(questionset) {
@@ -975,7 +978,7 @@ angular.module('project_questions')
                                 var question = element;
                                 angular.forEach(question.optionsets, function(optionset) {
                                     if (optionset.has_refresh) {
-                                        return service.initView(service.page.id);
+                                        return service.initView(service.page.id, false);
                                     }
                                 });
                             }
