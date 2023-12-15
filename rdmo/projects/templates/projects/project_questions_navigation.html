@@ -23,7 +23,7 @@
                         {% blocktrans with page_count='{$ page.count $}' page_total='{$ page.total $}' trimmed %}
                         ({{ page_count }} of {{ page_total }})
                         {% endblocktrans %}
-                    <span>
+                    </span>
                 </a>
                 <span class="text-muted" ng-hide="page.show">{$ page.title $}<span>
             </li>
