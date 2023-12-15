@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-08 17:11+0100\n"
-"PO-Revision-Date: 2023-12-08 19:07+0100\n"
+"POT-Creation-Date: 2023-12-15 11:37+0100\n"
+"PO-Revision-Date: 2023-12-15 11:38+0100\n"
 "Last-Translator: DAVID MARTINEZ <dmartinezmu@cem.es>\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -368,8 +368,8 @@ msgstr "Confirmar"
 #: accounts/templates/account/email_confirm.html:29
 #, python-format
 msgid ""
-"This e-mail confirmation link expired or is invalid. Please <a "
-"href=\"%(email_url)s\">issue a new e-mail confirmation request</a>."
+"This e-mail confirmation link expired or is invalid. Please <a href="
+"\"%(email_url)s\">issue a new e-mail confirmation request</a>."
 msgstr ""
 "Este enlace de confirmación del e-mail ha expirado o no es válido. Por favor "
 "<<a href=\"%(email_url)s\">emita un nueva petición de confirmación del e-"
@@ -390,20 +390,20 @@ msgstr "Login con Shibboleth"
 #: accounts/templates/account/login_form_account.html:7
 #, python-format
 msgid ""
-"If you have not created an account yet, then please <a "
-"href=\"%(signup_url)s\">sign up</a> first."
+"If you have not created an account yet, then please <a href=\"%(signup_url)s"
+"\">sign up</a> first."
 msgstr ""
-"Si todavía no ha creado una cuenta, por favor primero <a "
-"href=\"%(signup_url)s\">regístrese</a>."
+"Si todavía no ha creado una cuenta, por favor primero <a href="
+"\"%(signup_url)s\">regístrese</a>."
 
 #: accounts/templates/account/login_form_account.html:14
 #, python-format
 msgid ""
-"If you forgot your password and want to reset it, click <a "
-"href=\"%(reset_url)s\">here</a>."
+"If you forgot your password and want to reset it, click <a href="
+"\"%(reset_url)s\">here</a>."
 msgstr ""
-"Si ha olvidado su contraseña y quiere una nueva, pulse <a "
-"href=\"%(reset_url)s\">aquí</a>."
+"Si ha olvidado su contraseña y quiere una nueva, pulse <a href="
+"\"%(reset_url)s\">aquí</a>."
 
 #: accounts/templates/account/login_form_socialaccount.html:9
 msgid ""
@@ -531,8 +531,8 @@ msgstr "Crear nueva cuenta"
 msgid ""
 "Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
 msgstr ""
-"¿Ya dispone de una cuenta? Entonces por favor <a "
-"href=\"%(login_url)s\">acceda</a>."
+"¿Ya dispone de una cuenta? Entonces por favor <a href=\"%(login_url)s"
+"\">acceda</a>."
 
 #: accounts/templates/account/signup.html:34
 #: accounts/templates/socialaccount/signup.html:33
@@ -772,12 +772,12 @@ msgstr "Acceso cancelado"
 #, python-format
 msgid ""
 "You decided to cancel logging in to our site using one of your existing "
-"accounts. If this was a mistake, please proceed to <a "
-"href=\"%(login_url)s\">sign in</a>."
+"accounts. If this was a mistake, please proceed to <a href=\"%(login_url)s"
+"\">sign in</a>."
 msgstr ""
 "Usted ha cancelado el acceso a nuestro site mediante una de sus cuentas "
-"registradas. Si esto ha sido un error, por favor proceda a <a "
-"href=\"%(login_url)s\">acceder</a>."
+"registradas. Si esto ha sido un error, por favor proceda a <a href="
+"\"%(login_url)s\">acceder</a>."
 
 #: accounts/templates/socialaccount/signup.html:9
 #, python-format
@@ -2429,11 +2429,11 @@ msgstr "Para quien pueda interesar,"
 #: projects/templates/projects/issue_send_message.txt:3
 #, python-format
 msgid ""
-"The following task was identified in the project \"%(project_title)s\" "
-"<%(project_url)s>:"
+"The following task was identified in the project \"%(project_title)s\" <"
+"%(project_url)s>:"
 msgstr ""
-"Se ha identificado la siguiente tarea en el proyecto \"%(project_title)s\" "
-"<%(project_url)s>:"
+"Se ha identificado la siguiente tarea en el proyecto \"%(project_title)s\" <"
+"%(project_url)s>:"
 
 #: projects/templates/projects/issue_send_message.txt:13
 #, python-format
@@ -3016,6 +3016,11 @@ msgstr "Borrar"
 msgid "Please give the tab a meaningful name."
 msgstr "Por favor, dale a la pestaña un nombre significativo."
 
+#: projects/templates/projects/project_questions_navigation.html:23
+#, python-format
+msgid "(%(page_count)s of %(page_total)s)"
+msgstr "(%(page_count)s de %(page_total)s)"
+
 #: projects/templates/projects/project_questions_navigation_help.html:5
 msgid "Using the navigation will save your input."
 msgstr "Utilizando la navegación guardará su entrada."
@@ -3238,7 +3243,7 @@ msgstr "(%(progress)s progreso)"
 msgid "A newer version of this value was found."
 msgstr "Se ha encontrado una versión más reciente de este valor."
 
-#: projects/validators.py:39
+#: projects/validators.py:44
 msgid ""
 "An existing value for this attribute/set_prefix/set_index/collection_index "
 "was found."
@@ -3246,7 +3251,7 @@ msgstr ""
 "Se ha encontrado un valor existente para este atributo/set_prefix/set_index/"
 "collection_index."
 
-#: projects/validators.py:54
+#: projects/validators.py:57
 msgid "The file quota for this project has been reached."
 msgstr "Se ha alcanzado la cuota de archivos para este proyecto."
 
@@ -3981,8 +3986,8 @@ msgstr ""
 msgid ""
 "If the \"Date picker\" widget is used, the value type must be \"Datetime\"."
 msgstr ""
-"Si se utiliza el widget \"Date picker\", el tipo de valor debe ser "
-"\"Datetime\"."
+"Si se utiliza el widget \"Date picker\", el tipo de valor debe ser \"Datetime"
+"\"."
 
 #: questions/serializers/v1/question.py:122
 msgid "If the \"Yes/No\" widget is used, the value type must be \"Boolean\"."
@@ -4361,15 +4366,15 @@ msgstr "Establecer"
 #~ "You are about to permanently delete the %(name)s <strong>%(object)s</"
 #~ "strong>."
 #~ msgstr ""
-#~ "Usted está a punto de eliminar permanentemente el %(name)s "
-#~ "<strong>%(object)s</strong>."
+#~ "Usted está a punto de eliminar permanentemente el %(name)s <strong>"
+#~ "%(object)s</strong>."
 
 #~ msgid ""
-#~ "Entries with <i class=\"fa fa-question-circle-o small\" aria-"
-#~ "hidden=\"true\"></i> might be skipped based on your input."
+#~ "Entries with <i class=\"fa fa-question-circle-o small\" aria-hidden=\"true"
+#~ "\"></i> might be skipped based on your input."
 #~ msgstr ""
-#~ "Las entradas con <i class=\"fa fa-question-circle-o small\" aria-"
-#~ "hidden=\"true\"></i> podrían ser ignoradas según lo que ha introducido."
+#~ "Las entradas con <i class=\"fa fa-question-circle-o small\" aria-hidden="
+#~ "\"true\"></i> podrían ser ignoradas según lo que ha introducido."
 
 #, python-format
 #~ msgid "Update %(name)s"

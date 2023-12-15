@@ -20,7 +20,9 @@
                         <i class="fa fa-check" aria-hidden="true"></i>
                     </span>
                     <span ng-show="page.count > 0 && page.count != page.total">
-                        ({$ page.count $} of {$ page.total $})
+                        {% blocktrans with page_count='{$ page.count $}' page_total='{$ page.total $}' trimmed %}
+                        ({{ page_count }} of {{ page_total }})
+                        {% endblocktrans %}
                     <span>
                 </a>
                 <span class="text-muted" ng-hide="page.show">{$ page.title $}<span>

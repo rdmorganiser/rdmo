@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-08 17:11+0100\n"
+"POT-Creation-Date: 2023-12-15 11:37+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Dario Pilori <d.pilori@inrim.it>\n"
 "Language-Team: \n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -362,11 +362,11 @@ msgstr "Conferma"
 #: accounts/templates/account/email_confirm.html:29
 #, python-format
 msgid ""
-"This e-mail confirmation link expired or is invalid. Please <a "
-"href=\"%(email_url)s\">issue a new e-mail confirmation request</a>."
+"This e-mail confirmation link expired or is invalid. Please <a href="
+"\"%(email_url)s\">issue a new e-mail confirmation request</a>."
 msgstr ""
-"Il link di conferma è scaduto. È possibile <a "
-"href=\"%(email_url)s\">chiedere una nuova e-mail di conferma</a>."
+"Il link di conferma è scaduto. È possibile <a href=\"%(email_url)s"
+"\">chiedere una nuova e-mail di conferma</a>."
 
 #: accounts/templates/account/login.html:6
 #: accounts/templates/account/login_form.html:23
@@ -383,20 +383,20 @@ msgstr "Accesso con Shibboleth"
 #: accounts/templates/account/login_form_account.html:7
 #, python-format
 msgid ""
-"If you have not created an account yet, then please <a "
-"href=\"%(signup_url)s\">sign up</a> first."
+"If you have not created an account yet, then please <a href=\"%(signup_url)s"
+"\">sign up</a> first."
 msgstr ""
-"Se non hai ancora creato un account, devi prima <a "
-"href=\"%(signup_url)s\">registrarti</a>."
+"Se non hai ancora creato un account, devi prima <a href=\"%(signup_url)s"
+"\">registrarti</a>."
 
 #: accounts/templates/account/login_form_account.html:14
 #, python-format
 msgid ""
-"If you forgot your password and want to reset it, click <a "
-"href=\"%(reset_url)s\">here</a>."
+"If you forgot your password and want to reset it, click <a href="
+"\"%(reset_url)s\">here</a>."
 msgstr ""
-"Password dimenticata? Per reimpostarla, cliccare <a "
-"href=\"%(reset_url)s\">qui</a>."
+"Password dimenticata? Per reimpostarla, cliccare <a href=\"%(reset_url)s"
+"\">qui</a>."
 
 #: accounts/templates/account/login_form_socialaccount.html:9
 msgid ""
@@ -472,8 +472,8 @@ msgid ""
 "a>."
 msgstr ""
 "Il link di reimpostazione password è errato, probabilmente perché già "
-"utilizzato. È possibile richiedere una <a "
-"href=\"%(passwd_reset_url)s\">nuova reimpostazione</a>."
+"utilizzato. È possibile richiedere una <a href=\"%(passwd_reset_url)s"
+"\">nuova reimpostazione</a>."
 
 #: accounts/templates/account/password_reset_from_key.html:18
 msgid "Enter new password"
@@ -598,8 +598,8 @@ msgid ""
 "<strong>Note:</strong> you can still <a href=\"%(email_url)s\">change your e-"
 "mail address</a>."
 msgstr ""
-"<strong>Attenzione:</strong> è ancora possibile <a "
-"href=\"%(email_url)s\">cambiare il proprio indirizzo e-mail</a>."
+"<strong>Attenzione:</strong> è ancora possibile <a href=\"%(email_url)s"
+"\">cambiare il proprio indirizzo e-mail</a>."
 
 #: accounts/templates/profile/profile_remove_closed.html:6
 #: accounts/templates/profile/profile_remove_failed.html:6
@@ -666,8 +666,8 @@ msgid ""
 msgstr ""
 "Inserire le informazioni aggiornate del proprio account. La password può "
 "essere cambiata con l'apposito <a href=\"%(password_url)s\">modulo</a>. Per "
-"modificare il proprio indirizzo e-mail, visitare <a "
-"href=\"%(email_url)s\">questa pagina</a>."
+"modificare il proprio indirizzo e-mail, visitare <a href=\"%(email_url)s"
+"\">questa pagina</a>."
 
 #: accounts/templates/profile/profile_update_form.html:33
 msgid ""
@@ -750,8 +750,8 @@ msgstr "Accesso annullato"
 #, python-format
 msgid ""
 "You decided to cancel logging in to our site using one of your existing "
-"accounts. If this was a mistake, please proceed to <a "
-"href=\"%(login_url)s\">sign in</a>."
+"accounts. If this was a mistake, please proceed to <a href=\"%(login_url)s"
+"\">sign in</a>."
 msgstr ""
 "L'accesso a questo sito mediante un altro account esistente è stato "
 "interrotto. In caso di errore, è possibile <a href=\"%(login_url)s\">entrare "
@@ -2407,8 +2407,8 @@ msgstr "A chi possa interessare,"
 #: projects/templates/projects/issue_send_message.txt:3
 #, python-format
 msgid ""
-"The following task was identified in the project \"%(project_title)s\" "
-"<%(project_url)s>:"
+"The following task was identified in the project \"%(project_title)s\" <"
+"%(project_url)s>:"
 msgstr ""
 "La seguente attività è stata identificata nel progetto \"%(project_title)s\" "
 "<%(project_url)s>:"
@@ -2988,6 +2988,11 @@ msgstr "Elimina"
 msgid "Please give the tab a meaningful name."
 msgstr "Si prega di dare alla scheda un nome significativo."
 
+#: projects/templates/projects/project_questions_navigation.html:23
+#, python-format
+msgid "(%(page_count)s of %(page_total)s)"
+msgstr "(%(page_count)s of %(page_total)s)"
+
 #: projects/templates/projects/project_questions_navigation_help.html:5
 msgid "Using the navigation will save your input."
 msgstr "L'uso della navigazione salverà il tuo input."
@@ -3210,7 +3215,7 @@ msgstr "(%(progress)s progresso)"
 msgid "A newer version of this value was found."
 msgstr "È stata trovata una versione più recente di questo valore."
 
-#: projects/validators.py:39
+#: projects/validators.py:44
 msgid ""
 "An existing value for this attribute/set_prefix/set_index/collection_index "
 "was found."
@@ -3218,7 +3223,7 @@ msgstr ""
 "È stato trovato un valore esistente per questo attributo/set_prefix/"
 "set_index/collection_index."
 
-#: projects/validators.py:54
+#: projects/validators.py:57
 msgid "The file quota for this project has been reached."
 msgstr "La quota di file per questo progetto è stata raggiunta."
 
@@ -3957,8 +3962,8 @@ msgstr ""
 #: questions/serializers/v1/question.py:122
 msgid "If the \"Yes/No\" widget is used, the value type must be \"Boolean\"."
 msgstr ""
-"Se si utilizza il widget \"Sì/No\", il tipo di valore deve essere "
-"\"booleano\"."
+"Se si utilizza il widget \"Sì/No\", il tipo di valore deve essere \"booleano"
+"\"."
 
 #: questions/templates/questions/export/page.html:28
 #: questions/templates/questions/export/question.html:48
@@ -4334,11 +4339,11 @@ msgstr "Raccolta"
 #~ "permanentemente."
 
 #~ msgid ""
-#~ "Entries with <i class=\"fa fa-question-circle-o small\" aria-"
-#~ "hidden=\"true\"></i> might be skipped based on your input."
+#~ "Entries with <i class=\"fa fa-question-circle-o small\" aria-hidden=\"true"
+#~ "\"></i> might be skipped based on your input."
 #~ msgstr ""
-#~ "Le voci con <i class=\"fa-question-circle-o small\" aria-"
-#~ "hidden=\"true\"></i> potrebbero essere saltate in base al tuo input."
+#~ "Le voci con <i class=\"fa-question-circle-o small\" aria-hidden=\"true"
+#~ "\"></i> potrebbero essere saltate in base al tuo input."
 
 #, python-format
 #~ msgid "Update %(name)s"
