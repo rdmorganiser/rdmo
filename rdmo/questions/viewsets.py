@@ -1,7 +1,6 @@
 from django.db import models
 
 from rest_framework.decorators import action
-from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -10,6 +9,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from rdmo.core.constants import VALUE_TYPE_CHOICES
 from rdmo.core.exports import XMLResponse
+from rdmo.core.filters import SearchFilter
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import is_truthy, render_to_format
 from rdmo.core.views import ChoicesViewSet

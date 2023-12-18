@@ -78,6 +78,14 @@ def test_export(db, client, username, password, export_format):
             assert child.tag in ['task']
 
 
+def test_export_search(db, client):
+    client.login(username='editor', password='editor')
+
+    url = reverse(urlnames['export']) + 'xml/?search=bar'
+    response = client.get(url)
+    assert response.status_code == status_map['list']['editor'], response.content
+
+
 @pytest.mark.parametrize('username,password', users)
 def test_detail(db, client, username, password):
     client.login(username=username, password=password)
