@@ -1,4 +1,5 @@
 from collections import defaultdict
+from itertools import chain
 
 from django.db.models import Exists, OuterRef, Q
 
@@ -118,19 +119,17 @@ def count_questions(element, sets, conditions):
 
         # count the sets for the id attribute of the page or question
         if element.attribute is not None:
-            for set_indexes in sets[element.attribute.id].values():
-                for set_index in set_indexes:
-                    if set_index not in counted_sets:
-                        counted_sets.add(set_index)
+            for set_index in chain.from_iterable(sets[element.attribute.id].values()):
+                counted_sets.add(set_index)
 
         # count the sets for the questions in the page or question
         for child in element.elements:
-            if isinstance(child, Question):
-                if child.attribute is not None:
-                    for set_indexes in sets[child.attribute.id].values():
-                        for set_index in set_indexes:
-                            if set_index not in counted_sets:
-                                counted_sets.add(set_index)
+            if not isinstance(child, Question):
+                continue
+            if child.attribute is None:
+                continue
+            for set_index in chain.from_iterable(sets[child.attribute.id].values()):
+                counted_sets.add(set_index)
 
         set_count = len(counted_sets)
     else:
