@@ -132,9 +132,14 @@ export function fetchElement(elementType, elementId, elementAction=null) {
             QuestionsApi.fetchSection(elementId),
             QuestionsApi.fetchCatalogs('index'),
             QuestionsApi.fetchPages('index'),
-          ]).then(([element, catalogs, pages]) => ({
-            element, catalogs, pages
-          }))
+          ]).then(([element, catalogs, pages]) => {
+            if (elementAction == 'copy') {
+              delete element.catalogs
+            }
+            return {
+              element, catalogs, pages
+            }
+          })
         }
         break
 
@@ -151,9 +156,15 @@ export function fetchElement(elementType, elementId, elementAction=null) {
             QuestionsApi.fetchQuestionSets('index'),
             QuestionsApi.fetchQuestions('index')
           ]).then(([element, attributes, conditions, sections,
-                    questionsets, questions]) => ({
-            element, attributes, conditions, sections, questionsets, questions
-          }))
+                    questionsets, questions]) => {
+            if (elementAction == 'copy') {
+              delete element.sections
+            }
+
+            return {
+              element, attributes, conditions, sections, questionsets, questions
+            }
+          })
         }
         break
 
@@ -170,9 +181,16 @@ export function fetchElement(elementType, elementId, elementAction=null) {
             QuestionsApi.fetchQuestionSets('index'),
             QuestionsApi.fetchQuestions('index')
           ]).then(([element, attributes, conditions, pages,
-                    questionsets, questions]) => ({
-            element, attributes, conditions, pages, questionsets, questions
-          }))
+                    questionsets, questions]) => {
+            if (elementAction == 'copy') {
+              delete element.pages
+              delete element.parents
+            }
+
+            return {
+             element, attributes, conditions, pages, questionsets, questions
+            }
+          })
         }
         break
 
@@ -190,9 +208,16 @@ export function fetchElement(elementType, elementId, elementAction=null) {
             QuestionsApi.fetchPages('index'),
             QuestionsApi.fetchQuestionSets('index')
           ]).then(([element, attributes, optionsets, options, conditions,
-                    pages, questionsets]) => ({
-            element, attributes, optionsets, options, conditions, pages, questionsets
-          }))
+                    pages, questionsets]) => {
+            if (elementAction == 'copy') {
+              delete element.pages
+              delete element.questionsets
+            }
+
+            return {
+              element, attributes, optionsets, options, conditions, pages, questionsets
+            }
+          })
         }
         break
 
@@ -237,9 +262,14 @@ export function fetchElement(elementType, elementId, elementAction=null) {
           OptionsApi.fetchOption(elementId),
           OptionsApi.fetchOptionSets('index'),
           ConditionsApi.fetchConditions('index'),
-        ]).then(([element, optionsets, conditions]) => ({
-          element, optionsets, conditions
-        }))
+        ]).then(([element, optionsets, conditions]) => {
+          if (elementAction == 'copy') {
+            delete element.optionsets
+          }
+          return {
+            element, optionsets, conditions
+          }
+        })
         break
 
       case 'conditions':
