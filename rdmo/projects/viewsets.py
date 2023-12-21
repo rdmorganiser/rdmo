@@ -154,7 +154,6 @@ class ProjectViewSet(ModelViewSet):
     @action(detail=True, permission_classes=(HasModelPermission | HasProjectPermission, ))
     def options(self, request, pk=None):
         project = self.get_object()
-
         try:
             try:
                 optionset_id = request.GET.get('optionset')
@@ -163,9 +162,13 @@ class ProjectViewSet(ModelViewSet):
                 raise NotFound() from e
 
             # check if the optionset belongs to this catalog and if it has a provider
+            project.catalog.prefetch_elements()
             if Question.objects.filter_by_catalog(project.catalog).filter(optionsets=optionset) and \
                     optionset.provider is not None:
-                options = optionset.provider.get_options(project, search=request.GET.get('search'))
+                options = [
+                    dict(**option, text_and_help=option.get('text_and_help', 'text'))
+                    for option in optionset.provider.get_options(project, search=request.GET.get('search'))
+                ]
                 return Response(options)
 
         except OptionSet.DoesNotExist:
