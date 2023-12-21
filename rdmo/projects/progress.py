@@ -119,17 +119,17 @@ def count_questions(element, sets, conditions):
 
         # count the sets for the id attribute of the page or question
         if element.attribute is not None:
+            # nested loop over the seperate set_index lists in sets[element.attribute.id]
             for set_index in chain.from_iterable(sets[element.attribute.id].values()):
                 counted_sets.add(set_index)
 
         # count the sets for the questions in the page or question
         for child in element.elements:
-            if not isinstance(child, Question):
-                continue
-            if child.attribute is None:
-                continue
-            for set_index in chain.from_iterable(sets[child.attribute.id].values()):
-                counted_sets.add(set_index)
+            if isinstance(child, Question):
+                if child.attribute is not None:
+                    # nested loop over the seperate set_index lists in sets[element.attribute.id]
+                    for set_index in chain.from_iterable(sets[child.attribute.id].values()):
+                        counted_sets.add(set_index)
 
         set_count = len(counted_sets)
     else:
