@@ -38,8 +38,7 @@
                             <li ng-repeat="option in value.items"
                                 ng-class="{'active': option.active}"
                                 ng-mousedown="service.selectAutocomplete(value, option)">
-                                <span ng-show="option.text_and_help">{$ option.text_and_help $}</span>
-                                <span ng-show="option.text">{$ option.text $}</span>
+                                {$ option.text_and_help $}
                             </li>
                         </ul>
                     </div>

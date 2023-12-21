@@ -1,4 +1,5 @@
 from collections import defaultdict
+from itertools import chain
 
 from django.db.models import Exists, OuterRef, Q
 
@@ -110,20 +111,27 @@ def compute_progress(project, snapshot=None):
 def count_questions(element, sets, conditions):
     counts = defaultdict(int)
 
-    # obtain the maximum number of set-distinct values the questions in this element
-    # this number is how often each question is displayed and we will use this number
-    # to determine how often a question needs to be counted
+    # obtain the maximum number of set-distinct values for the questions in this page or
+    # question set this number is how often each question is displayed and we will use
+    # this number to determine how often a question needs to be counted
     if isinstance(element, (Page, QuestionSet)) and element.is_collection:
-        set_count = 0
+        counted_sets = set()
 
+        # count the sets for the id attribute of the page or question
         if element.attribute is not None:
-            child_count = sum(len(set_indexes) for set_indexes in sets[element.attribute.id].values())
-            set_count = max(set_count, child_count)
+            # nested loop over the seperate set_index lists in sets[element.attribute.id]
+            for set_index in chain.from_iterable(sets[element.attribute.id].values()):
+                counted_sets.add(set_index)
 
+        # count the sets for the questions in the page or question
         for child in element.elements:
             if isinstance(child, Question):
-                child_count = sum(len(set_indexes) for set_indexes in sets[child.attribute.id].values())
-                set_count = max(set_count, child_count)
+                if child.attribute is not None:
+                    # nested loop over the seperate set_index lists in sets[element.attribute.id]
+                    for set_index in chain.from_iterable(sets[child.attribute.id].values()):
+                        counted_sets.add(set_index)
+
+        set_count = len(counted_sets)
     else:
         set_count = 1
 
@@ -137,10 +145,17 @@ def count_questions(element, sets, conditions):
 
         if not child_conditions or child_conditions.intersection(conditions):
             if isinstance(child, Question):
-                # for questions add the set_count to the counts dict
+                # for regular questions add the set_count to the counts dict, since the
+                # question should be answered in every set
+                # for optional questions add just the number of present answers, so that
+                # only answered questions count for the progress/navigation
                 # use the max function, since the same attribute could apear twice in the tree
-                if child.attribute is not None and not child.is_optional:
-                    counts[child.attribute.id] = max(counts[child.attribute.id], set_count)
+                if child.attribute is not None:
+                    if child.is_optional:
+                        child_count = sum(len(set_indexes) for set_indexes in sets[child.attribute.id].values())
+                        counts[child.attribute.id] = max(counts[child.attribute.id], child_count)
+                    else:
+                        counts[child.attribute.id] = max(counts[child.attribute.id], set_count)
             else:
                 # for everthing else, call this function recursively
                 counts.update(count_questions(child, sets, conditions))

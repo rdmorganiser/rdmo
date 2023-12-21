@@ -1,5 +1,13 @@
 # Changelog
 
+## [RDMO 2.1.1](https://github.com/rdmorganiser/rdmo/compare/2.1.0...2.1.1) (Dec 21, 2023)
+
+* Fix translations
+* Fix bugs with the new progress bar
+* Fix issues with option set provider plugins
+* Fix issues with import and export in management
+* Fix management when BASE_URL is set
+
 ## [RDMO 2.1.0](https://github.com/rdmorganiser/rdmo/compare/2.0.2...2.1.0) (Dec 11, 2023)
 
 * Refactor progress bar and overview

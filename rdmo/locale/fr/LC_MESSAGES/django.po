@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-08 17:11+0100\n"
-"PO-Revision-Date: 2023-12-08 19:07+0100\n"
+"POT-Creation-Date: 2023-12-15 11:37+0100\n"
+"PO-Revision-Date: 2023-12-15 11:38+0100\n"
 "Last-Translator: Yonny Cardenas <cardenas@cc.in2p3.fr>\n"
 "Language-Team: RDMO <cardenas@cc.in2p3.fr>\n"
 "Language: fr\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -363,8 +363,8 @@ msgstr "Confirmer"
 #: accounts/templates/account/email_confirm.html:29
 #, python-format
 msgid ""
-"This e-mail confirmation link expired or is invalid. Please <a "
-"href=\"%(email_url)s\">issue a new e-mail confirmation request</a>."
+"This e-mail confirmation link expired or is invalid. Please <a href="
+"\"%(email_url)s\">issue a new e-mail confirmation request</a>."
 msgstr ""
 "Ce lien de confirmation par e-mail a expiré ou n'est pas valide. Veuillez  "
 "<a href=\"%(email_url)s\"> faire une nouvelle demande de confirmation par e-"
@@ -385,8 +385,8 @@ msgstr "Connectez-vous avec Shibboleth"
 #: accounts/templates/account/login_form_account.html:7
 #, python-format
 msgid ""
-"If you have not created an account yet, then please <a "
-"href=\"%(signup_url)s\">sign up</a> first."
+"If you have not created an account yet, then please <a href=\"%(signup_url)s"
+"\">sign up</a> first."
 msgstr ""
 "Si vous n'avez pas encore créé de compte <a href=\"%(signup_url)s \"> "
 "inscrivez-vous d'abord </a>."
@@ -394,8 +394,8 @@ msgstr ""
 #: accounts/templates/account/login_form_account.html:14
 #, python-format
 msgid ""
-"If you forgot your password and want to reset it, click <a "
-"href=\"%(reset_url)s\">here</a>."
+"If you forgot your password and want to reset it, click <a href="
+"\"%(reset_url)s\">here</a>."
 msgstr ""
 "Si vous avez oublié votre mot de passe et que vous souhaitez le "
 "réinitialiser, cliquez sur <a href=\"%(reset_url)s\"> ici </a>."
@@ -478,9 +478,8 @@ msgid ""
 "a>."
 msgstr ""
 "Le lien de réinitialisation du mot de passe n'était pas valide, peut-être "
-"parce qu'il l'a déjà été utilisé. Veuillez demander une <a "
-"href=\"%(passwd_reset_url)s\"> nouvelle réinitialisation du mot de passe </"
-"a>."
+"parce qu'il l'a déjà été utilisé. Veuillez demander une <a href="
+"\"%(passwd_reset_url)s\"> nouvelle réinitialisation du mot de passe </a>."
 
 #: accounts/templates/account/password_reset_from_key.html:18
 msgid "Enter new password"
@@ -776,8 +775,8 @@ msgstr "Connexion annulée"
 #, python-format
 msgid ""
 "You decided to cancel logging in to our site using one of your existing "
-"accounts. If this was a mistake, please proceed to <a "
-"href=\"%(login_url)s\">sign in</a>."
+"accounts. If this was a mistake, please proceed to <a href=\"%(login_url)s"
+"\">sign in</a>."
 msgstr ""
 "Vous avez décidé d'annuler la connexion à notre site en utilisant l'un de "
 "vos comptes existants S'il s'agissait d'une erreur, veuillez passer à  <a "
@@ -789,9 +788,9 @@ msgid ""
 "You are about to use your <strong>%(provider_name)s</strong> account to "
 "login to %(site_name)s. As a final step, please complete the following form:"
 msgstr ""
-"Vous êtes sur le point d'utiliser votre compte pour "
-"<strong>%(provider_name)s</strong> se connecter à %(site_name)s. Pour "
-"terminer, veuillez remplir le formulaire suivant:"
+"Vous êtes sur le point d'utiliser votre compte pour <strong>"
+"%(provider_name)s</strong> se connecter à %(site_name)s. Pour terminer, "
+"veuillez remplir le formulaire suivant:"
 
 #: accounts/templatetags/accounts_tags.py:19
 #: projects/templates/projects/project_questions_modal_form_valuesets.html:19
@@ -2442,11 +2441,11 @@ msgstr "A qui cela peut concerner,"
 #: projects/templates/projects/issue_send_message.txt:3
 #, python-format
 msgid ""
-"The following task was identified in the project \"%(project_title)s\" "
-"<%(project_url)s>:"
+"The following task was identified in the project \"%(project_title)s\" <"
+"%(project_url)s>:"
 msgstr ""
-"La tâche suivante a été identifiée dans le projet \"%(project_title)s\" "
-"<%(project_url)s>:"
+"La tâche suivante a été identifiée dans le projet \"%(project_title)s\" <"
+"%(project_url)s>:"
 
 #: projects/templates/projects/issue_send_message.txt:13
 #, python-format
@@ -3030,6 +3029,11 @@ msgstr "Supprimer"
 msgid "Please give the tab a meaningful name."
 msgstr "Veuillez donner un nom significatif à l'onglet."
 
+#: projects/templates/projects/project_questions_navigation.html:23
+#, python-format
+msgid "(%(page_count)s of %(page_total)s)"
+msgstr "(%(page_count)s de %(page_total)s)"
+
 #: projects/templates/projects/project_questions_navigation_help.html:5
 msgid "Using the navigation will save your input."
 msgstr ""
@@ -3256,7 +3260,7 @@ msgstr "(%(progress)s progrès)"
 msgid "A newer version of this value was found."
 msgstr "Une version plus récente de cette valeur a été trouvée."
 
-#: projects/validators.py:39
+#: projects/validators.py:44
 msgid ""
 "An existing value for this attribute/set_prefix/set_index/collection_index "
 "was found."
@@ -3264,7 +3268,7 @@ msgstr ""
 "Une valeur existante pour cet attribut/set_prefix/set_index/collection_index "
 "a été trouvée."
 
-#: projects/validators.py:54
+#: projects/validators.py:57
 msgid "The file quota for this project has been reached."
 msgstr "Le quota de fichiers pour ce projet a été atteint."
 
@@ -4010,8 +4014,8 @@ msgstr ""
 #: questions/serializers/v1/question.py:122
 msgid "If the \"Yes/No\" widget is used, the value type must be \"Boolean\"."
 msgstr ""
-"Si le widget \"Oui/Non\" est utilisé, le type de valeur doit être "
-"\"booléen\"."
+"Si le widget \"Oui/Non\" est utilisé, le type de valeur doit être \"booléen"
+"\"."
 
 #: questions/templates/questions/export/page.html:28
 #: questions/templates/questions/export/question.html:48
@@ -4387,15 +4391,15 @@ msgstr "Ensemble"
 #~ "You are about to permanently delete the %(name)s <strong>%(object)s</"
 #~ "strong>."
 #~ msgstr ""
-#~ "Vous êtes sur le point de supprimer définitivement les %(name)s "
-#~ "<strong>%(object)s</strong>."
+#~ "Vous êtes sur le point de supprimer définitivement les %(name)s <strong>"
+#~ "%(object)s</strong>."
 
 #~ msgid ""
-#~ "Entries with <i class=\"fa fa-question-circle-o small\" aria-"
-#~ "hidden=\"true\"></i> might be skipped based on your input."
+#~ "Entries with <i class=\"fa fa-question-circle-o small\" aria-hidden=\"true"
+#~ "\"></i> might be skipped based on your input."
 #~ msgstr ""
-#~ "Les entrées avec <i class=\"fa fa-question-circle-o small\" aria-"
-#~ "hidden=\"true\"></i> peuvent être ignorées en fonction de votre saisie."
+#~ "Les entrées avec <i class=\"fa fa-question-circle-o small\" aria-hidden="
+#~ "\"true\"></i> peuvent être ignorées en fonction de votre saisie."
 
 #, python-format
 #~ msgid "Update %(name)s"
