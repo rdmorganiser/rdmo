@@ -39,7 +39,7 @@ result_map = {
     'http://example.com/terms/questions/catalog/conditions/set_set': (0, 2, True),
     'http://example.com/terms/questions/catalog/conditions/optionset': (0, 2, True),
     'http://example.com/terms/questions/catalog/conditions/text_set': (0, 2, True),
-    'http://example.com/terms/questions/catalog/blocks/set': (6, 15, True),
+    'http://example.com/terms/questions/catalog/blocks/set': (9, 12, True),
 }
 
 
