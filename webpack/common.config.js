@@ -40,7 +40,9 @@ const base = {
         test: /(fonts|files)\/.*\.(svg|woff2?|ttf|eot|otf)(\?.*)?$/,
         loader: 'file-loader',
         options: {
-          name: 'fonts/[name].[ext]'
+          name: '[name].[ext]',
+          outputPath: 'fonts',
+          postTransformPublicPath: (p) => `'../' + ${p}`
         }
       }
     ]
