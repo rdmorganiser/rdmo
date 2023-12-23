@@ -1,5 +1,9 @@
 # Changelog
 
+## [RDMO 2.1.2](https://github.com/rdmorganiser/rdmo/compare/2.1.1...2.1.2)
+
+* Fix a bug with webpack font paths
+
 ## [RDMO 2.1.1](https://github.com/rdmorganiser/rdmo/compare/2.1.0...2.1.1) (Dec 21, 2023)
 
 * Fix translations
