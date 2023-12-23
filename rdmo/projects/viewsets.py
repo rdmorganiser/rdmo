@@ -166,7 +166,7 @@ class ProjectViewSet(ModelViewSet):
             if Question.objects.filter_by_catalog(project.catalog).filter(optionsets=optionset) and \
                     optionset.provider is not None:
                 options = [
-                    dict(**option, text_and_help=option.get('text_and_help', 'text'))
+                    dict(**option, text_and_help=option.get('text_and_help', option.get('text', '')))
                     for option in optionset.provider.get_options(project, search=request.GET.get('search'))
                 ]
                 return Response(options)
