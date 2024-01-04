@@ -151,6 +151,7 @@ def send_invite_email(request, invite):
     context = {
         'invite_url': request.build_absolute_uri(project_invite_path),
         'invite_user': invite.user,
+        'invite_email': invite.email,
         'project': invite.project,
         'user': request.user,
         'site': Site.objects.get_current()
