@@ -43,6 +43,7 @@ urlnames = {
     'detail': 'v1-projects:project-detail',
     'overview': 'v1-projects:project-overview',
     'navigation': 'v1-projects:project-navigation',
+    'options': 'v1-projects:project-options',
     'resolve': 'v1-projects:project-resolve',
 }
 
@@ -53,6 +54,10 @@ catalog_id = 1
 catalog_id_not_available = 2
 
 section_id = 1
+
+optionset_id = 4
+
+project_id = 1
 
 @pytest.mark.parametrize('username,password', users)
 def test_list(db, client, username, password):
@@ -311,3 +316,46 @@ def test_resolve(db, client, username, password, project_id, condition_id):
             assert response.status_code == 404
         else:
             assert response.status_code == 401
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_options(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['options'], args=[project_id]) + f'?optionset={optionset_id}'
+    response = client.get(url)
+
+    if project_id in view_project_permission_map.get(username, []):
+        assert response.status_code == 200
+        assert isinstance(response.json(), list)
+
+        for item in response.json():
+            assert item['text_and_help'] == '{text} [{help}]'.format(**item)
+    else:
+        if password:
+            assert response.status_code == 404
+        else:
+            assert response.status_code == 401
+
+
+def test_options_text_and_help(db, client, mocker):
+    mocker.patch('rdmo.options.providers.SimpleProvider.get_options', return_value=[
+        {
+            'id': 'simple_1',
+            'text': 'Simple answer 1'
+        }
+    ])
+
+    client.login(username='author', password='author')
+
+    url = reverse(urlnames['options'], args=[project_id]) + f'?optionset={optionset_id}'
+    response = client.get(url)
+
+    assert response.status_code == 200
+    assert response.json() == [
+        {
+            'id': 'simple_1',
+            'text': 'Simple answer 1',
+            'text_and_help': 'Simple answer 1'
+        }
+    ]

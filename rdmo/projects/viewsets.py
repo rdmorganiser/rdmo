@@ -165,10 +165,19 @@ class ProjectViewSet(ModelViewSet):
             project.catalog.prefetch_elements()
             if Question.objects.filter_by_catalog(project.catalog).filter(optionsets=optionset) and \
                     optionset.provider is not None:
-                options = [
-                    dict(**option, text_and_help=option.get('text_and_help', option.get('text', '')))
-                    for option in optionset.provider.get_options(project, search=request.GET.get('search'))
-                ]
+                options = []
+                for option in optionset.provider.get_options(project, search=request.GET.get('search')):
+                    if 'id' not in option:
+                        raise RuntimeError(f"'id' is missing in options of '{optionset.provider.class_name}'")
+                    elif 'text' not in option:
+                        raise RuntimeError(f"'text' is missing in options of '{optionset.provider.class_name}'")
+                    if 'text_and_help' not in option:
+                        if 'help' in option:
+                            option['text_and_help'] = '{text} [{help}]'.format(**option)
+                        else:
+                            option['text_and_help'] = '{text}'.format(**option)
+                    options.append(option)
+
                 return Response(options)
 
         except OptionSet.DoesNotExist:
