@@ -39,4 +39,5 @@ import_helper_attribute = ElementImportHelper(
     model="domain.attribute",
     import_method=import_attribute,
     validators=(AttributeLockedValidator, AttributeParentValidator, AttributeUniqueURIValidator),
+    lang_fields=None
 )
