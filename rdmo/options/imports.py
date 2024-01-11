@@ -34,6 +34,7 @@ def import_option(
 
     instance.order = element.get('order') or 0
     instance.provider_key = element.get('provider_key') or ''
+    instance.additional_input = element.get('additional_input') or ""
 
     validate_instance(instance, element, *validators)
 
