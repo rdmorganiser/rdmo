@@ -90,15 +90,11 @@ def import_page(
         save: bool = False,
         user: models.Model = None
     ):
+    # lang_fields are already set in management/import.py
 
     set_foreign_field(instance, 'attribute', element)
 
     instance.is_collection = element.get('is_collection') or False
-
-    set_lang_field(instance, 'title', element)
-    set_lang_field(page, 'short_title', element)
-    set_lang_field(instance, 'help', element)
-    set_lang_field(instance, 'verbose_name', element)
 
     validate_instance(instance, element, *validators)
 
@@ -125,14 +121,10 @@ def import_questionset(
         save: bool = False,
         user: models.Model = None
     ):
-
+    # lang_fields are already set in management/import.py
     set_foreign_field(instance, 'attribute', element)
 
     instance.is_collection = element.get('is_collection') or False
-
-    set_lang_field(questionset, 'title', element)
-    set_lang_field(questionset, 'help', element)
-    set_lang_field(questionset, 'verbose_name', element)
 
     validate_instance(instance, element, *validators)
 
@@ -160,16 +152,12 @@ def import_question(
         save: bool = False,
         user: models.Model = None
     ):
-
+    # lang_fields are already set in management/import.py
     set_foreign_field(instance, 'attribute', element)
 
     instance.is_collection = element.get('is_collection') or False
     instance.is_optional = element.get('is_optional') or False
 
-    set_lang_field(instance, 'text', element)
-    set_lang_field(instance, 'help', element)
-    set_lang_field(instance, 'default_text', element)
-    set_lang_field(instance, 'verbose_name', element)
 
     set_foreign_field(instance, 'default_option', element)
 
@@ -209,7 +197,7 @@ import_helper_catalog = ElementImportHelper(
     model="questions.catalog",
     import_method=import_catalog,
     validators=(CatalogLockedValidator, CatalogUniqueURIValidator),
-    lang_fields=('title', 'help')
+    lang_fields=('help', 'title')
 )
 
 import_helper_section = ElementImportHelper(
@@ -223,19 +211,19 @@ import_helper_page = ElementImportHelper(
     model="questions.page",
     import_method=import_page,
     validators= (PageLockedValidator, PageUniqueURIValidator),
-    lang_fields=('title', 'help', 'verbose_name', 'verbose_name_plural')
+    lang_fields=('help', 'title', 'verbose_name')
 )
 
 import_helper_questionset = ElementImportHelper(
     model="questions.questionset",
     import_method=import_questionset,
     validators=(QuestionSetLockedValidator, QuestionSetUniqueURIValidator),
-    lang_fields=('title', 'help', 'verbose_name', 'verbose_name_plural')
+    lang_fields=('help', 'title', 'verbose_name')
 )
 
 import_helper_question = ElementImportHelper(
     model="questions.question",
     import_method=import_question,
     validators=(QuestionLockedValidator, QuestionUniqueURIValidator),
-    lang_fields=('text', 'help', 'default_text', 'verbose_name', 'verbose_name_plural')
+    lang_fields=('text', 'help', 'default_text', 'verbose_name')
 )

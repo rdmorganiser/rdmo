@@ -65,11 +65,9 @@ def import_optionset(
         user: models.Model = None
     ):
 
-    instance.additional_input = element.get('additional_input') or ""
+    # lang_fields are already set in management/import.py
 
-    set_lang_field(instance, 'text', element)
-    set_lang_field(instance, 'help', element)
-    set_lang_field(instance, 'view_text', element)
+    instance.additional_input = element.get('additional_input') or ""
 
     validate_instance(instance, element, *validators)
 
@@ -90,4 +88,5 @@ import_helper_optionset = ElementImportHelper(
     model="options.optionset",
     import_method=import_optionset,
     validators=(OptionSetLockedValidator, OptionSetUniqueURIValidator),
+    lang_fields=None
 )
