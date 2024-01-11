@@ -48,5 +48,5 @@ import_helper_view = ElementImportHelper(
     model="views.view",
     import_method=import_view,
     validators=(ViewLockedValidator, ViewUniqueURIValidator),
-    lang_fields=('title', 'help')
+    lang_fields=( 'help', 'title')
 )

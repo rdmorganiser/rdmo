@@ -47,4 +47,5 @@ import_helper_condition = ElementImportHelper(
     model="conditions.condition",
     import_method=import_condition,
     validators=(ConditionLockedValidator, ConditionUniqueURIValidator),
+    lang_fields=None
 )
