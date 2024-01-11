@@ -7,7 +7,13 @@ from django.db import models
 from django.forms.models import model_to_dict
 
 from rdmo.conditions.imports import import_helper_condition
-from rdmo.core.imports import get_lang_field_values, get_or_return_instance, make_import_info_msg, set_lang_field
+from rdmo.core.imports import (
+    check_permissions,
+    get_lang_field_values,
+    get_or_return_instance,
+    make_import_info_msg,
+    set_lang_field,
+)
 from rdmo.domain.imports import import_helper_attribute
 from rdmo.options.imports import import_helper_option, import_helper_optionset
 from rdmo.questions.imports import (
@@ -105,6 +111,12 @@ def import_element(
 
     # prepare a log message
     _msg = make_import_info_msg(model._meta.verbose_name, _created, uri=uri)
+
+    # check the change or add permissions for the user on the instance
+    _perms_error_msg = check_permissions(instance, uri, user)
+    if _perms_error_msg:
+        # when there is an error msg, the import could be stopped and return
+        element["errors"].append(_perms_error_msg)
 
     # prepare original element when updated (maybe rename into lookup)
     _updated = not _created
