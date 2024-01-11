@@ -13,11 +13,13 @@ from rdmo.core.imports import (
 )
 from rdmo.tasks.validators import TaskLockedValidator, TaskUniqueURIValidator
 
+from .models import Task
+
 logger = logging.getLogger(__name__)
 
 
 def import_task(
-        instance: models.Model,
+        instance: Task,
         element: dict,
         validators: Tuple[Callable],
         save: bool = False,

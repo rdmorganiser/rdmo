@@ -12,11 +12,13 @@ from rdmo.core.imports import (
 )
 from rdmo.views.validators import ViewLockedValidator, ViewUniqueURIValidator
 
+from .models import View
+
 logger = logging.getLogger(__name__)
 
 
 def import_view(
-        instance: models.Model,
+        instance: View,
         element: dict,
         validators: Tuple[Callable],
         save: bool = False,

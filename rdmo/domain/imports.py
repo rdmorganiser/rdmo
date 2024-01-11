@@ -2,7 +2,6 @@ import logging
 from typing import Callable, Tuple
 
 from django.contrib.sites.models import Site
-from django.db import models
 
 from rdmo.core.imports import (
     ElementImportHelper,
@@ -12,10 +11,12 @@ from rdmo.core.imports import (
 )
 from rdmo.domain.validators import AttributeLockedValidator, AttributeParentValidator, AttributeUniqueURIValidator
 
+from .models import Attribute
+
 logger = logging.getLogger(__name__)
 
 
-def import_attribute(instance: models.Model, element: dict, validators: Tuple[Callable], save=False, user=None):
+def import_attribute(instance: Attribute, element: dict, validators: Tuple[Callable], save=False, user=None):
 
     set_foreign_field(instance, 'parent', element)
 
