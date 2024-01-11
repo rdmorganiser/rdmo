@@ -92,7 +92,7 @@ def import_element(
     import_helper = ELEMENT_IMPORT_HELPERS[model_path]
     import_method = import_helper.import_method
     validators = import_helper.validators
-    lang_field_names = import_helper.lang_fields
+    lang_field_names = import_helper.lang_fields if import_helper.lang_fields is not None else []
     uri = element.get('uri')
 
     # get or create instance from uri and model_path
@@ -103,6 +103,7 @@ def import_element(
     # needs to be created here, else the changes will be overwritten
     original_instance = copy.deepcopy(instance) if not _created else None
 
+    # prepare a log message
     _msg = make_import_info_msg(model._meta.verbose_name, _created, uri=uri)
 
     # prepare original element when updated (maybe rename into lookup)
@@ -112,6 +113,7 @@ def import_element(
         original_element = model_to_dict(original_instance)
         original_element = {k: original_element.get(k, element.get(k))
                             for k in element.keys() if k not in IMPORT_ELEMENT_INIT_DICT}
+    # start to set values on the instance
     # set common field values from element on instance
     for common_field in import_helper.common_fields:
         setattr(instance, common_field, element.get(common_field) or '')

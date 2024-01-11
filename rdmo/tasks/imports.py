@@ -23,11 +23,8 @@ def import_task(
         save: bool = False,
         user: models.Model = None
     ):
-
+    # lang_fields are already set in management/import.py
     instance.order = element.get('order') or 0
-
-    set_lang_field(instance, 'title', element)
-    set_lang_field(instance, 'text', element)
 
     set_foreign_field(instance, 'start_attribute', element)
     set_foreign_field(instance, 'end_attribute', element)
