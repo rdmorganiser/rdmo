@@ -26,13 +26,18 @@ from rdmo.questions.validators import (
     SectionUniqueURIValidator,
 )
 
+from .models.catalog import Catalog
+from .models.page import Page
+from .models.question import Question
+from .models.questionset import QuestionSet
+from .models.section import Section
 from .utils import get_widget_types
 
 logger = logging.getLogger(__name__)
 
 
 def import_catalog(
-        instance: models.Model,
+        instance: Catalog,
         element: dict,
         validators: Tuple[Callable],
         save: bool = False,
@@ -60,7 +65,7 @@ def import_catalog(
 
 
 def import_section(
-        instance: models.Model,
+        instance: Section,
         element: dict,
         validators: Tuple[Callable],
         save: bool = False,
@@ -84,7 +89,7 @@ def import_section(
 
 
 def import_page(
-        instance: models.Model,
+        instance: Page,
         element: dict,
         validators: Tuple[Callable],
         save: bool = False,
@@ -115,7 +120,7 @@ def import_page(
 
 
 def import_questionset(
-        instance: models.Model,
+        instance: QuestionSet,
         element: dict,
         validators: Tuple[Callable],
         save: bool = False,
@@ -146,7 +151,7 @@ def import_questionset(
 
 
 def import_question(
-        instance: models.Model,
+        instance: Question,
         element: dict,
         validators: Tuple[Callable],
         save: bool = False,
