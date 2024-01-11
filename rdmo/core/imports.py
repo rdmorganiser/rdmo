@@ -288,7 +288,7 @@ def validate_instance(instance, element, *validators):
             element['errors'].append(message)
 
 
-def check_permissions(instance, element, user):
+def check_permissions(instance: models.Model, element_uri: str, user: models.Model) -> Optional[str]:
     if user is None:
         return
 
@@ -301,9 +301,6 @@ def check_permissions(instance, element, user):
         perms = [f'{app_label}.add_{model_name}_object']
 
     if not user.has_perms(perms, instance):
-        message = 'You have no permissions to import {instance_model} {instance_uri}.'.format(
-            instance_model=instance._meta.object_name,
-            instance_uri=element.get('uri')
-        )
+        message = f'You have no permissions to import {instance._meta.object_name} {element_uri}.'
         logger.info(message)
-        element['errors'].append(message)
+        return message
