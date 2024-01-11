@@ -12,11 +12,13 @@ from rdmo.core.imports import (
     validate_instance,
 )
 
+from .models import Condition
+
 logger = logging.getLogger(__name__)
 
 
 def import_condition(
-        instance: models.Model,
+        instance: Condition,
         element: dict,
         validators: Tuple[Callable],
         save: bool = False,
@@ -26,7 +28,7 @@ def import_condition(
     set_foreign_field(instance, 'source', element)
     set_foreign_field(instance, 'target_option', element)
 
-    instance.relation = element.get('relation')
+    instance.relation = element.get('relation') or ''
     instance.target_text = element.get('target_text') or ''
 
     validate_instance(instance, element, *validators)

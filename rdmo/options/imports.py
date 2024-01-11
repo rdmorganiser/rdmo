@@ -19,11 +19,13 @@ from rdmo.options.validators import (
     OptionUniqueURIValidator,
 )
 
+from .models import Option, OptionSet
+
 logger = logging.getLogger(__name__)
 
 
 def import_option(
-        instance: models.Model,
+        instance: Option,
         element: dict,
         validators: Tuple[Callable],
         save: bool = False,
@@ -58,7 +60,7 @@ import_helper_option = ElementImportHelper(
 
 
 def import_optionset(
-        instance: models.Model,
+        instance: OptionSet,
         element: dict,
         validators: Tuple[Callable],
         save: bool = False,
