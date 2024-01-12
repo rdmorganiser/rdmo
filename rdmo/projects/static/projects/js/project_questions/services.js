@@ -656,17 +656,8 @@ angular.module('project_questions')
                 angular.forEach(question.options, function(option) {
                     if (value.autocomplete_locked === false && option.id === value.option) {
                         value.autocomplete_locked = true;
-                        value.autocomplete_input = option.text_and_help;
-                        value.autocomplete_text = option.text_and_help;
-                    }
-                });
-            } else if (value.external_id) {
-                value.autocomplete_locked = false;
-                angular.forEach(question.options, function(option) {
-                    if (value.autocomplete_locked === false && option.id === value.external_id) {
-                        value.autocomplete_locked = true;
-                        value.autocomplete_input = option.text_and_help;
-                        value.autocomplete_text = option.text_and_help;
+                        value.autocomplete_input = option.text;
+                        value.autocomplete_text = option.text;
                     }
                 });
             } else if (value.text) {
@@ -1460,7 +1451,7 @@ angular.module('project_questions')
                 }
                 if (angular.isDefined(next)) {
                     next.active = true;
-                    value.autocomplete_input = next.text_and_help;
+                    value.autocomplete_input = next.text;
                 }
             } else if ($event.code == 'Enter' || $event.code == 'NumpadEnter') {
                 if (value.autocomplete_input == '') {
@@ -1501,8 +1492,8 @@ angular.module('project_questions')
             // store the option
             value.text = '';
             value.selected = option.id.toString();
-            value.autocomplete_text = option.text_and_help;
-            value.autocomplete_input = option.text_and_help;
+            value.autocomplete_text = option.text;
+            value.autocomplete_input = option.text;
         }
 
         service.changed(value, true);
