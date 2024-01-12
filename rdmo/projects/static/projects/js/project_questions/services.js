@@ -660,6 +660,22 @@ angular.module('project_questions')
                         value.autocomplete_text = option.text;
                     }
                 });
+            } else if (value.external_id) {
+                value.autocomplete_locked = false;
+                angular.forEach(question.options, function(option) {
+                    if (value.autocomplete_locked === false && option.id === value.external_id) {
+                        value.autocomplete_locked = true;
+                        value.autocomplete_input = option.text;
+                        value.autocomplete_text = option.text;
+                    }
+                })
+
+                // if no option was found (for autocomplete search fields), use the text
+                if (value.text) {
+                    value.autocomplete_locked = true;
+                    value.autocomplete_input = value.text;
+                    value.autocomplete_text = value.text;
+                }
             } else if (value.text) {
                 value.autocomplete_locked = true;
                 value.autocomplete_input = value.text;
