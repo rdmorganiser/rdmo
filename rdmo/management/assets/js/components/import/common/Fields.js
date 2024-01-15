@@ -25,7 +25,8 @@ const excludeKeys = [
   'uri_prefix',
   'valid',
   'warnings',
-  'original'
+  'original',
+  'updated_and_changed',
 ]
 
 const Fields = ({ element }) => {
