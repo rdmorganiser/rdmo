@@ -25,6 +25,6 @@ class Command(BaseCommand):
             elements = flat_xml_to_elements(root)
             elements = convert_elements(elements, version)
             elements = order_elements(elements)
-            elements = elements.values()
+            parsed_elements = list(elements.values())
 
-            import_elements(elements)
+            import_elements(parsed_elements)
