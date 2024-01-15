@@ -53,6 +53,10 @@ export default function importsReducer(state = initialState, action) {
       return {...state, elements: state.elements.map(element => {
         return {...element, import: action.value}
       })}
+    case 'import/showElements':
+      return {...state, elements: state.elements.map(element => {
+        return {...element, show: action.value}
+      })}
     case 'import/updateUriPrefix':
       elements = state.elements.map(element => {
         element.uri_prefix = action.uriPrefix
