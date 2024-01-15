@@ -2,13 +2,10 @@ import logging
 from typing import Callable, Tuple
 
 from django.contrib.sites.models import Site
-from django.db import models
 
 from rdmo.conditions.validators import ConditionLockedValidator, ConditionUniqueURIValidator
 from rdmo.core.imports import (
     ElementImportHelper,
-    check_permissions,
-    set_foreign_field,
     validate_instance,
 )
 
@@ -22,18 +19,14 @@ def import_condition(
         element: dict,
         validators: Tuple[Callable],
         save: bool = False,
-        user: models.Model = None
     ):
 
-    set_foreign_field(instance, 'source', element)
-    set_foreign_field(instance, 'target_option', element)
-
+    # set_foreign_field are already set in management/import.py
+    # check_permissions already done in management/import.py
     instance.relation = element.get('relation') or ''
     instance.target_text = element.get('target_text') or ''
 
     validate_instance(instance, element, *validators)
-
-    check_permissions(instance, element, user)
 
     if element.get('errors'):
         return instance
@@ -49,5 +42,6 @@ import_helper_condition = ElementImportHelper(
     model="conditions.condition",
     import_method=import_condition,
     validators=(ConditionLockedValidator, ConditionUniqueURIValidator),
-    lang_fields=None
+    lang_fields=[],
+    foreign_fields=('source', 'target_option')
 )

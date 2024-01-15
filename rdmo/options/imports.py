@@ -6,7 +6,6 @@ from django.db import models
 
 from rdmo.core.imports import (
     ElementImportHelper,
-    check_permissions,
     set_m2m_instances,
     set_m2m_through_instances,
     set_reverse_m2m_through_instance,
@@ -31,14 +30,12 @@ def import_option(
         save: bool = False,
         user: models.Model = None
     ):
-
+    # check_permissions already done in management/import.py
     instance.order = element.get('order') or 0
     instance.provider_key = element.get('provider_key') or ''
     instance.additional_input = element.get('additional_input') or ""
 
     validate_instance(instance, element, *validators)
-
-    check_permissions(instance, element, user)
 
     if element.get('errors'):
         return instance
@@ -69,12 +66,11 @@ def import_optionset(
     ):
 
     # lang_fields are already set in management/import.py
+    # check_permissions already done in management/import.py
 
     instance.additional_input = element.get('additional_input') or ""
 
     validate_instance(instance, element, *validators)
-
-    check_permissions(instance, element, user)
 
     if element.get('errors'):
         return instance
@@ -91,5 +87,5 @@ import_helper_optionset = ElementImportHelper(
     model="options.optionset",
     import_method=import_optionset,
     validators=(OptionSetLockedValidator, OptionSetUniqueURIValidator),
-    lang_fields=None
+    lang_fields=[]
 )
