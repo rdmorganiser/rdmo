@@ -70,10 +70,10 @@ class UploadViewSet(viewsets.ViewSet):
         elements = order_elements(elements)
 
         # step 6: convert elements to a list
-        elements = list(elements.values())
+        _elements = list(elements.values())
 
         # step 8: import the elements if save=True is set
-        imported_elements = import_elements(elements, save=is_truthy(request.POST.get('import')), user=request.user)
+        imported_elements = import_elements(_elements, save=is_truthy(request.POST.get('import')), user=request.user)
 
         # step 9: return the list of, json-serializable, elements
         return Response(imported_elements)
