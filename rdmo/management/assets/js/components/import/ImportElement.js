@@ -9,6 +9,7 @@ import Form from './common/Form'
 import Warnings from './common/Warnings'
 
 import { codeClass, verboseNames } from '../../constants/elements'
+import { isEmpty } from 'lodash'
 
 const ImportElement = ({ config, instance, importActions }) => {
   const showFields = () => importActions.updateElement(instance, {show: !instance.show})
@@ -22,7 +23,7 @@ const ImportElement = ({ config, instance, importActions }) => {
         <ErrorLink element={instance} onClick={showFields} />
         <ShowLink element={instance} onClick={showFields} />
         {
-          instance.updated && !instance.created &&
+          instance.updated && !isEmpty(instance.updated_and_changed) && !instance.created &&
           <p className="element-link fa fa-pencil"></p>
         }
       </div>
