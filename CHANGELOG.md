@@ -1,9 +1,11 @@
 # Changelog
 
-## [RDMO 2.1.2](https://github.com/rdmorganiser/rdmo/compare/2.1.1...2.1.2)
+## [RDMO 2.1.2](https://github.com/rdmorganiser/rdmo/compare/2.1.1...2.1.2) (Jan 15, 2024)
 
 * Fix a bug with webpack font paths
 * Fix a bug with option set provider plugins
+* Fix a bug with the autocomplete widget
+* Add invite.email to send_invite_email context
 
 ## [RDMO 2.1.1](https://github.com/rdmorganiser/rdmo/compare/2.1.0...2.1.1) (Dec 21, 2023)
 
