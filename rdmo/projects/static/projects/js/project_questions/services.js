@@ -656,10 +656,26 @@ angular.module('project_questions')
                 angular.forEach(question.options, function(option) {
                     if (value.autocomplete_locked === false && option.id === value.option) {
                         value.autocomplete_locked = true;
-                        value.autocomplete_input = option.text_and_help;
-                        value.autocomplete_text = option.text_and_help;
+                        value.autocomplete_input = option.text;
+                        value.autocomplete_text = option.text;
                     }
                 });
+            } else if (value.external_id) {
+                value.autocomplete_locked = false;
+                angular.forEach(question.options, function(option) {
+                    if (value.autocomplete_locked === false && option.id === value.external_id) {
+                        value.autocomplete_locked = true;
+                        value.autocomplete_input = option.text;
+                        value.autocomplete_text = option.text;
+                    }
+                })
+
+                // if no option was found (for autocomplete search fields), use the text
+                if (value.text) {
+                    value.autocomplete_locked = true;
+                    value.autocomplete_input = value.text;
+                    value.autocomplete_text = value.text;
+                }
             } else if (value.text) {
                 value.autocomplete_locked = true;
                 value.autocomplete_input = value.text;
@@ -776,7 +792,7 @@ angular.module('project_questions')
                     // loop over options
                     angular.forEach(question.options, function(option) {
                         if (option.has_provider && value.selected === option.id) {
-                            value.text = option.text_and_help;
+                            value.text = option.text; // has to be value.text, since the help is not supposed to be stored
                             value.external_id = option.id;
                         } else if (value.selected === option.id.toString()) {
                             // get text from additional_input for the selected option
@@ -1451,7 +1467,7 @@ angular.module('project_questions')
                 }
                 if (angular.isDefined(next)) {
                     next.active = true;
-                    value.autocomplete_input = next.text_and_help;
+                    value.autocomplete_input = next.text;
                 }
             } else if ($event.code == 'Enter' || $event.code == 'NumpadEnter') {
                 if (value.autocomplete_input == '') {
