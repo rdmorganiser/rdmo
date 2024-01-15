@@ -6,8 +6,6 @@ from django.db import models
 
 from rdmo.core.imports import (
     ElementImportHelper,
-    check_permissions,
-    set_foreign_field,
     set_m2m_instances,
     set_m2m_through_instances,
     set_reverse_m2m_through_instance,
@@ -43,14 +41,12 @@ def import_catalog(
         save: bool = False,
         user: models.Model = None
     ):
-
+    # check_permissions already done in management/import.py
     instance.order = element.get('order') or 0
 
     instance.available = element.get('available', True)
 
     validate_instance(instance, element, *validators)
-
-    check_permissions(instance, element, user)
 
     if element.get('errors'):
         return instance
@@ -71,10 +67,8 @@ def import_section(
         save: bool = False,
         user: models.Model = None
     ):
-
+    # check_permissions already done in management/import.py
     validate_instance(instance, element, *validators)
-
-    check_permissions(instance, element, user)
 
     if element.get('errors'):
         return instance
@@ -96,14 +90,12 @@ def import_page(
         user: models.Model = None
     ):
     # lang_fields are already set in management/import.py
-
-    set_foreign_field(instance, 'attribute', element)
+    # set_foreign_field are already set in management/import.py
+    # check_permissions already done in management/import.py
 
     instance.is_collection = element.get('is_collection') or False
 
     validate_instance(instance, element, *validators)
-
-    check_permissions(instance, element, user)
 
     if element.get('errors'):
         return instance
@@ -127,13 +119,12 @@ def import_questionset(
         user: models.Model = None
     ):
     # lang_fields are already set in management/import.py
-    set_foreign_field(instance, 'attribute', element)
+    # set_foreign_field are already set in management/import.py
+    # check_permissions already done in management/import.py
 
     instance.is_collection = element.get('is_collection') or False
 
     validate_instance(instance, element, *validators)
-
-    check_permissions(instance, element, user)
 
     if element.get('errors'):
         return instance
@@ -158,13 +149,11 @@ def import_question(
         user: models.Model = None
     ):
     # lang_fields are already set in management/import.py
-    set_foreign_field(instance, 'attribute', element)
+    # set_foreign_fields are already set in management/import.py
+    # check_permissions already done in management/import.py
 
     instance.is_collection = element.get('is_collection') or False
     instance.is_optional = element.get('is_optional') or False
-
-
-    set_foreign_field(instance, 'default_option', element)
 
     instance.default_external_id = element.get('default_external_id') or ''
 
@@ -181,8 +170,6 @@ def import_question(
     instance.width = element.get('width')
 
     validate_instance(instance, element, *validators)
-
-    check_permissions(instance, element, user)
 
     if element.get('errors'):
         return instance
@@ -215,20 +202,23 @@ import_helper_section = ElementImportHelper(
 import_helper_page = ElementImportHelper(
     model="questions.page",
     import_method=import_page,
-    validators= (PageLockedValidator, PageUniqueURIValidator),
-    lang_fields=('help', 'title', 'verbose_name')
+    validators=(PageLockedValidator, PageUniqueURIValidator),
+    lang_fields=('help', 'title', 'verbose_name'),
+    foreign_fields=('attribute',)
 )
 
 import_helper_questionset = ElementImportHelper(
     model="questions.questionset",
     import_method=import_questionset,
     validators=(QuestionSetLockedValidator, QuestionSetUniqueURIValidator),
-    lang_fields=('help', 'title', 'verbose_name')
+    lang_fields=('help', 'title', 'verbose_name'),
+    foreign_fields=('attribute',)
 )
 
 import_helper_question = ElementImportHelper(
     model="questions.question",
     import_method=import_question,
     validators=(QuestionLockedValidator, QuestionUniqueURIValidator),
-    lang_fields=('text', 'help', 'default_text', 'verbose_name')
+    lang_fields=('text', 'help', 'default_text', 'verbose_name'),
+    foreign_fields=('attribute','default_option')
 )

@@ -2,11 +2,9 @@ import logging
 from typing import Callable, Tuple
 
 from django.contrib.sites.models import Site
-from django.db import models
 
 from rdmo.core.imports import (
     ElementImportHelper,
-    check_permissions,
     set_m2m_instances,
     validate_instance,
 )
@@ -22,8 +20,8 @@ def import_view(
         element: dict,
         validators: Tuple[Callable],
         save: bool = False,
-        user: models.Model = None
     ):
+    # check_permissions already done in management/import.py
 
     instance.order = element.get('order') or 0
     instance.template = element.get('template')
@@ -31,8 +29,6 @@ def import_view(
     instance.available = element.get('available', True)
 
     validate_instance(instance, element, *validators)
-
-    check_permissions(instance, element, user)
 
     if element.get('errors'):
         return instance
