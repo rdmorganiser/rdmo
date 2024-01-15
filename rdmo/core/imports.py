@@ -73,14 +73,16 @@ class ElementImportHelper:
     model: str
     import_method: Callable
     validators: Iterable[Callable]
-    lang_fields: Sequence[str] = field(default_factory=list)
     common_fields: Sequence[str] = field(default=ELEMENT_COMMON_FIELDS)
+    lang_fields: Sequence[str] = field(default_factory=list)
+    foreign_fields: Sequence[str] = field(default_factory=list)
+
 
 
 def get_lang_field_values(field_name: str,
-                            element: Optional[dict] = None,
-                            instance: models.Model = None,
-                            by_field: bool = True):
+                        element: Optional[dict] = None,
+                        instance: Optional[models.Model] = None,
+                        by_field: bool = True):
     if (element and instance):
         raise ValueError("Please choose one of each")
 
@@ -102,7 +104,7 @@ def set_lang_field(instance, field_name, element):
         setattr(instance, field_lang_name, field_value)
 
 
-def set_foreign_field(instance, field_name, element) -> None:
+def set_foreign_field(instance, field_name, element, uploaded_uris=None) -> None:
     if field_name not in element:
         return
 
@@ -120,15 +122,22 @@ def set_foreign_field(instance, field_name, element) -> None:
     try:
         foreign_instance = foreign_model.objects.get(uri=foreign_uri)
         setattr(instance, field_name, foreign_instance)
+        return
     except foreign_model.DoesNotExist:
-        message = '{foreign_model} {foreign_uri} for {instance_model} {instance_uri} does not exist.'.format(
-            foreign_model=foreign_model._meta.object_name,
-            foreign_uri=foreign_uri,
-            instance_model=instance._meta.object_name,
-            instance_uri=element.get('uri')
-        )
-        logger.info(message)
-        element['warnings'][foreign_uri].append(message)
+        # check for existence of foreign_uri in currently uploaded uris
+        uploaded_uris = uploaded_uris if uploaded_uris is not None else []
+        if foreign_uri in uploaded_uris and foreign_uri is not None:
+            setattr(instance, field_name, foreign_uri)
+            return
+
+    message = '{foreign_model} {foreign_uri} for {instance_model} {instance_uri} does not exist.'.format(
+        foreign_model=foreign_model._meta.object_name,
+        foreign_uri=foreign_uri,
+        instance_model=instance._meta.object_name,
+        instance_uri=element.get('uri')
+    )
+    logger.info(message)
+    element['warnings'][foreign_uri].append(message)
 
 
 def set_m2m_instances(instance, field_name, element):

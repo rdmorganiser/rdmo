@@ -6,8 +6,6 @@ from django.db import models
 
 from rdmo.core.imports import (
     ElementImportHelper,
-    check_permissions,
-    set_foreign_field,
     set_m2m_instances,
     validate_instance,
 )
@@ -26,10 +24,10 @@ def import_task(
         user: models.Model = None
     ):
     # lang_fields are already set in management/import.py
-    instance.order = element.get('order') or 0
+    # set_foreign_field are already set in management/import.py
+    # check_permissions already done in management/import.py
 
-    set_foreign_field(instance, 'start_attribute', element)
-    set_foreign_field(instance, 'end_attribute', element)
+    instance.order = element.get('order') or 0
 
     instance.days_before = element.get('days_before')
     instance.days_after = element.get('days_after')
@@ -37,8 +35,6 @@ def import_task(
     instance.available = element.get('available', True)
 
     validate_instance(instance, element, *validators)
-
-    check_permissions(instance, element, user)
 
     if element.get('errors'):
         return instance
@@ -57,5 +53,6 @@ import_helper_task = ElementImportHelper(
     model="tasks.task",
     import_method=import_task,
     validators=(TaskLockedValidator, TaskUniqueURIValidator),
-    lang_fields=('title', 'text')
+    lang_fields=('title', 'text'),
+    foreign_fields=('start_attribute', 'end_attribute')
 )
