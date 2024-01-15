@@ -66,6 +66,10 @@ export function selectElements(value) {
   return {type: 'import/selectElements', value}
 }
 
+export function showElements(value) {
+  return {type: 'import/showElements', value}
+}
+
 export function updateUriPrefix(uriPrefix) {
   return {type: 'import/updateUriPrefix', uriPrefix}
 }
