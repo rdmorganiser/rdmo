@@ -56,6 +56,17 @@ const ImportSidebar = ({ config, imports, importActions }) => {
               {gettext('Unselect all')}
             </Link>
           </li>
+          <br></br>
+          <li>
+            <Link onClick={() => importActions.showElements(true)}>
+              {gettext('Show all')}
+            </Link>
+          </li>
+          <li>
+            <Link onClick={() => importActions.showElements(false)}>
+              {gettext('Hide all')}
+            </Link>
+          </li>
         </ul>
 
         <h2>{gettext('URI prefix')}</h2>
