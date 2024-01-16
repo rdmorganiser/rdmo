@@ -187,21 +187,21 @@ def import_question(
 
 import_helper_catalog = ElementImportHelper(
     model="questions.catalog",
-    import_method=import_catalog,
+    import_func=import_catalog,
     validators=(CatalogLockedValidator, CatalogUniqueURIValidator),
     lang_fields=('help', 'title')
 )
 
 import_helper_section = ElementImportHelper(
     model="questions.section",
-    import_method=import_section,
+    import_func=import_section,
     validators=(SectionLockedValidator, SectionUniqueURIValidator),
     lang_fields=('title',)
 )
 
 import_helper_page = ElementImportHelper(
     model="questions.page",
-    import_method=import_page,
+    import_func=import_page,
     validators=(PageLockedValidator, PageUniqueURIValidator),
     lang_fields=('help', 'title', 'verbose_name'),
     foreign_fields=('attribute',)
@@ -209,7 +209,7 @@ import_helper_page = ElementImportHelper(
 
 import_helper_questionset = ElementImportHelper(
     model="questions.questionset",
-    import_method=import_questionset,
+    import_func=import_questionset,
     validators=(QuestionSetLockedValidator, QuestionSetUniqueURIValidator),
     lang_fields=('help', 'title', 'verbose_name'),
     foreign_fields=('attribute',)
@@ -217,7 +217,7 @@ import_helper_questionset = ElementImportHelper(
 
 import_helper_question = ElementImportHelper(
     model="questions.question",
-    import_method=import_question,
+    import_func=import_question,
     validators=(QuestionLockedValidator, QuestionUniqueURIValidator),
     lang_fields=('text', 'help', 'default_text', 'verbose_name'),
     foreign_fields=('attribute','default_option')
