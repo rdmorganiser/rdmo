@@ -51,7 +51,7 @@ def import_option(
 
 import_helper_option = ElementImportHelper(
     model="options.option",
-    import_method=import_option,
+    import_func=import_option,
     validators=(OptionLockedValidator, OptionUniqueURIValidator),
     lang_fields=('text',)
 )
@@ -85,7 +85,7 @@ def import_optionset(
 
 import_helper_optionset = ElementImportHelper(
     model="options.optionset",
-    import_method=import_optionset,
+    import_func=import_optionset,
     validators=(OptionSetLockedValidator, OptionSetUniqueURIValidator),
     lang_fields=[]
 )
