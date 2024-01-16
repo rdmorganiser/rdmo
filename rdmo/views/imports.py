@@ -44,7 +44,7 @@ def import_view(
 
 import_helper_view = ElementImportHelper(
     model="views.view",
-    import_method=import_view,
+    import_func=import_view,
     validators=(ViewLockedValidator, ViewUniqueURIValidator),
     lang_fields=( 'help', 'title')
 )
