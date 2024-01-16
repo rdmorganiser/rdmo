@@ -71,7 +71,7 @@ def make_import_info_msg(verbose_name: str, created: bool, uri: Optional[str]=No
 @dataclass
 class ElementImportHelper:
     model: str
-    import_method: Callable
+    import_func: Callable
     validators: Iterable[Callable]
     common_fields: Sequence[str] = field(default=ELEMENT_COMMON_FIELDS)
     lang_fields: Sequence[str] = field(default_factory=list)

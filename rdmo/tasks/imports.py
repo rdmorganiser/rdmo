@@ -51,7 +51,7 @@ def import_task(
 
 import_helper_task = ElementImportHelper(
     model="tasks.task",
-    import_method=import_task,
+    import_func=import_task,
     validators=(TaskLockedValidator, TaskUniqueURIValidator),
     lang_fields=('title', 'text'),
     foreign_fields=('start_attribute', 'end_attribute')
