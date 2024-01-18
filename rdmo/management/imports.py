@@ -4,14 +4,14 @@ from collections import defaultdict
 from typing import Dict, List, Optional, Sequence
 
 from django.db import models
-from django.forms.models import model_to_dict
 
 from rdmo.conditions.imports import import_helper_condition
 from rdmo.core.imports import (
     check_permissions,
-    get_lang_field_values,
     get_or_return_instance,
+    get_original_and_updated,
     make_import_info_msg,
+    prepare_element_from_original_instance,
     set_foreign_field,
     set_lang_field,
 )
@@ -47,36 +47,26 @@ ELEMENT_IMPORT_HELPERS = {
     }
 
 IMPORT_ELEMENT_INIT_DICT = {
-        'warnings': defaultdict(list),
-        'errors': [],
-        'created': False,
-        'updated': False,
-        'original': defaultdict(),
-        'updated_and_changed': defaultdict(),
+        'warnings': lambda: defaultdict(list),
+        'errors': list,
+        'created': bool,
+        'updated': bool,
+        'original': dict,
+        'updated_and_changed': dict,
     }
 
 
 def import_elements(uploaded_elements: List[Dict], save: bool = True, user: Optional[models.Model] = None):
     imported_elements = []
     uploaded_uris = {i.get('uri') for i in uploaded_elements}
-    for element in uploaded_elements:
-        element = import_element(element=element, save=save, user=user, uploaded_uris=imported_elements)
-        # replace warnings with filtered list of warnings
-        warnings = element.pop('warnings')
-        element['warnings'] = filter_warnings(warnings, uploaded_uris)
+    for uploaded_element in uploaded_elements:
+        element = import_element(element=uploaded_element, save=save, user=user, uploaded_uris=imported_elements)
+        # replace warnings with filtered flat list of warnings
+        filtered_warnings = set(filter(lambda k: k not in uploaded_uris, element['warnings'].keys()))
+        element['warnings'] = [val for k,val in element['warnings'].items() if k not in filtered_warnings]
         imported_elements.append(element)
     return imported_elements
 
-
-def filter_warnings(warnings: Dict, uploaded_uris: List[Dict]) -> List[str]:
-    # remove warnings regarding elements which are in the elements list
-    ret = []
-    if not warnings:
-        return ret
-    for uri, messages in warnings.items():
-        if uri not in uploaded_uris:
-            ret += messages
-    return ret
 
 
 def import_element(
@@ -94,12 +84,14 @@ def import_element(
         return element
 
     # initialize element dict with default values
-    element.update(IMPORT_ELEMENT_INIT_DICT)
+    for _k,_val in IMPORT_ELEMENT_INIT_DICT.items():
+        element[_k] = _val()
 
     model = RDMO_MODEL_PATH_MAPPER[model_path]
     import_helper = ELEMENT_IMPORT_HELPERS[model_path]
-    import_method = import_helper.import_method
+    import_func = import_helper.import_func
     validators = import_helper.validators
+    common_fields = import_helper.common_fields
     lang_field_names = import_helper.lang_fields if import_helper.lang_fields is not None else []
     foreign_field_names = import_helper.foreign_fields if import_helper.foreign_fields is not None else []
     uri = element.get('uri')
@@ -124,64 +116,35 @@ def import_element(
 
     # prepare original element when updated (maybe rename into lookup)
     _updated = not _created
-    original_element = {}
-    filtered_ffnames = filter(lambda x: x in original_element, foreign_field_names)
-    if _updated:
-        original_element = model_to_dict(original_instance)
-        original_element = {k: original_element.get(k, element.get(k))
-                            for k in element.keys() if k not in IMPORT_ELEMENT_INIT_DICT}
-        for _field in filtered_ffnames:
-            if original_element[_field] is None:
-                continue
-            try:
-                # set the uri for foreign fields, instead of id
-                original_element[_field] = {'uri': getattr(original_instance, _field).uri}
-            except AttributeError:
-                pass
+
     # start to set values on the instance
     # set common field values from element on instance
-    for common_field in import_helper.common_fields:
+    for common_field in common_fields:
         setattr(instance, common_field, element.get(common_field) or '')
     # set language fields
     for lang_field_name in lang_field_names:
         set_lang_field(instance, lang_field_name, element)
-        if original_instance is not None:
-            # add the lang_code fields from the original instance
-            lang_field_values = get_lang_field_values(lang_field_name, instance=original_instance)
-            original_element.update(lang_field_values)
     # set foreign fields
     for foreign_field in foreign_field_names:
         set_foreign_field(instance, foreign_field, element, uploaded_uris=uploaded_uris)
 
     # call the element specific import method
-    instance = import_method(instance, element, validators, save)
+    instance = import_func(instance, element, validators, save)
 
     if element.get('errors'):
         return element
 
     if _updated and not _created:
         element['updated'] = _updated
+        original_element = {}
+
         # and instance is not original_instance
         # keep only strings, make json serializable
+        original_element = prepare_element_from_original_instance(element, original_instance,
+                                                                    lang_field_names, foreign_field_names)
         original_element_json = {k: val for k, val in original_element.items() if isinstance(val, str)}
         element['original'] = original_element_json
-        # add updated and changed
-        instance_field_names = {i.name for i in instance._meta.local_concrete_fields}
-        updated_and_changed = {}
-        for k, val in filter(lambda x: x[0] in instance_field_names, original_element.items()):
-
-            new_val = getattr(instance, k, None)
-            if k in foreign_field_names and new_val is not None:
-                try:
-                    # set the uri for foreign fields, instead of id
-                    new_val = {'uri': getattr(instance, k).uri}
-                except AttributeError:
-                    pass
-
-            if new_val is None:
-                continue
-            if new_val != val:
-                updated_and_changed[k] = {"current": val, "uploaded": new_val}
+        updated_and_changed = get_original_and_updated(original_element, instance, foreign_field_names)
 
         element['updated_and_changed'] = updated_and_changed
 
