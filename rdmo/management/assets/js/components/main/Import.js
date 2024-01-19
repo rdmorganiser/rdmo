@@ -61,9 +61,9 @@ const Import = ({ config, imports, importActions }) => {
       {
         elements.map((element, index) => {
           if (success) {
-            return <ImportSuccesElement key={index} instance={element}/>
+            return <ImportSuccesElement key={index} element={element}/>
           } else {
-              return <ImportElement key={index} config={config} instance={element} importActions={importActions} />
+              return <ImportElement key={index} config={config} element={element} importActions={importActions} />
           }
         })
       }

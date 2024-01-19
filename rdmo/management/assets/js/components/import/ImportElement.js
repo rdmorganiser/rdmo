@@ -11,35 +11,35 @@ import Warnings from './common/Warnings'
 import { codeClass, verboseNames } from '../../constants/elements'
 import { isEmpty } from 'lodash'
 
-const ImportElement = ({ config, instance, importActions }) => {
-  const showFields = () => importActions.updateElement(instance, {show: !instance.show})
-  const toggleImport = () => importActions.updateElement(instance, {import: !instance.import})
-  const updateInstance = (key, value) => importActions.updateElement(instance, {[key]: value})
+const ImportElement = ({ config, element, importActions }) => {
+  const showFields = () => importActions.updateElement(element, {show: !element.show})
+  const toggleImport = () => importActions.updateElement(element, {import: !element.import})
+  const updateElement = (key, value) => importActions.updateElement(element, {[key]: value})
 
   return (
     <li className="list-group-item">
       <div className="pull-right">
-        <WarningLink element={instance} onClick={showFields} />
-        <ErrorLink element={instance} onClick={showFields} />
-        <ShowLink element={instance} onClick={showFields} />
+        <WarningLink element={element} onClick={showFields} />
+        <ErrorLink element={element} onClick={showFields} />
+        <ShowLink element={element} onClick={showFields} />
         {
-          instance.updated && !isEmpty(instance.updated_and_changed) && !instance.created &&
+          element.updated && !isEmpty(element.updated_and_changed) && !element.created &&
           <p className="element-link fa fa-pencil"></p>
         }
       </div>
       <div className="checkbox">
         <label className="mr-5">
-          <input type="checkbox" checked={instance.import} onChange={toggleImport} />
-          <strong>{verboseNames[instance.model]}{' '}</strong>
+          <input type="checkbox" checked={element.import} onChange={toggleImport} />
+          <strong>{verboseNames[element.model]}{' '}</strong>
         </label>
-        <CodeLink className={codeClass[instance.model]} uri={instance.uri} onClick={showFields} />
+        <CodeLink className={codeClass[element.model]} uri={element.uri} onClick={showFields} />
       </div>
       {
-        instance.show && <>
-          <Form config={config} element={instance} updateElement={updateInstance} />
-          <Fields element={instance} />
-          <Warnings element={instance} />
-          <Errors element={instance} />
+        element.show && <>
+          <Form config={config} element={element} updateElement={updateElement} />
+          <Fields element={element} />
+          <Warnings element={element} />
+          <Errors element={element} />
         </>
       }
     </li>
@@ -48,7 +48,7 @@ const ImportElement = ({ config, instance, importActions }) => {
 
 ImportElement.propTypes = {
   config: PropTypes.object.isRequired,
-  instance: PropTypes.object.isRequired,
+  element: PropTypes.object.isRequired,
   importActions: PropTypes.object.isRequired
 }
 
