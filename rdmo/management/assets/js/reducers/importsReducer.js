@@ -1,6 +1,7 @@
 import isArray from 'lodash/isArray'
 import isNil from 'lodash/isNil'
 import isUndefined from 'lodash/isUndefined'
+import { isEmpty } from 'lodash'
 
 import { buildUri } from '../utils/elements'
 
@@ -51,12 +52,30 @@ export default function importsReducer(state = initialState, action) {
       }
     case 'import/selectElements':
       return {...state, elements: state.elements.map(element => {
-        return {...element, import: action.value}
+          return {...element, import: action.value}
       })}
+    case 'import/selectChangedElements':
+      return {...state, elements: state.elements.map(element => {
+        if (element.updated && !isEmpty(element.updated_and_changed) && !element.created ) {
+          return {...element, import: action.value}
+        }
+        else if (action.value) {return {...element, import: !action.value}}
+          else { return element }
+      }
+      )}
     case 'import/showElements':
       return {...state, elements: state.elements.map(element => {
         return {...element, show: action.value}
       })}
+    case 'import/showChangedElements':
+      return {...state, elements: state.elements.map(element => {
+        if (element.updated && !isEmpty(element.updated_and_changed) && !element.created ) {
+          return {...element, show: action.value}
+        }
+        else if (action.value) {return {...element, show: !action.value}}
+        else { return element }
+      }
+      )}
     case 'import/updateUriPrefix':
       elements = state.elements.map(element => {
         element.uri_prefix = action.uriPrefix
