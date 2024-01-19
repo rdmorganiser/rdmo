@@ -5,32 +5,32 @@ import uniqueId from 'lodash/uniqueId'
 import { codeClass, verboseNames } from '../../constants/elements'
 import { isEmpty } from 'lodash'
 
-const ImportSuccessElement = ({ instance }) => {
+const ImportSuccessElement = ({ element }) => {
   return (
     <li className="list-group-item">
       <p>
-        <strong>{verboseNames[instance.model]}{' '}</strong>
-        <code className={codeClass[instance.model]}>{instance.uri}</code>
-        {instance.created && <span className="text-success">{' '}{gettext('created')}  </span> && <span className="muted element-link fa fa-plus"></span>}
-        {instance.updated && <span className="text-info">{' '}{gettext('updated')} </span> && <span className="muted element-link fa fa-pencil"></span>}
+        <strong>{verboseNames[element.model]}{' '}</strong>
+        <code className={codeClass[element.model]}>{element.uri}</code>
+        {element.created && <span className="text-success">{' '}{gettext('created')}  </span> && <span className="muted element-link fa fa-plus"></span>}
+        {element.updated && <span className="text-info">{' '}{gettext('updated')} </span> && <span className="muted element-link fa fa-pencil"></span>}
         {
-          !isEmpty(instance.errors) && !(instance.created || instance.updated) &&
+          !isEmpty(element.errors) && !(element.created || element.updated) &&
           <span className="text-danger">{' '}{gettext('could not be imported')}</span>
         }
         {
-          !isEmpty(instance.errors) && (instance.created || instance.updated) &&
+          !isEmpty(element.errors) && (element.created || element.updated) &&
           <>{', '}<span className="text-danger">{gettext('but could not be added to parent element')}</span></>
         }
         {'.'}
       </p>
-      {instance.warnings.map(message => <p key={uniqueId()} className="text-warning">{message}</p>)}
-      {instance.errors.map(message => <p key={uniqueId()} className="text-danger">{message}</p>)}
+      {element.warnings.map(message => <p key={uniqueId()} className="text-warning">{message}</p>)}
+      {element.errors.map(message => <p key={uniqueId()} className="text-danger">{message}</p>)}
     </li>
   )
 }
 
 ImportSuccessElement.propTypes = {
-  instance: PropTypes.object.isRequired,
+  element: PropTypes.object.isRequired,
 }
 
 export default ImportSuccessElement
