@@ -65,9 +65,15 @@ export function updateElement(element, values) {
 export function selectElements(value) {
   return {type: 'import/selectElements', value}
 }
+export function selectChangedElements(value) {
+  return {type: 'import/selectChangedElements', value}
+}
 
 export function showElements(value) {
   return {type: 'import/showElements', value}
+}
+export function showChangedElements(value) {
+  return {type: 'import/showChangedElements', value}
 }
 
 export function updateUriPrefix(uriPrefix) {
