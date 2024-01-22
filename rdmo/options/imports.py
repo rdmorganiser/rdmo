@@ -11,14 +11,15 @@ from rdmo.core.imports import (
     set_reverse_m2m_through_instance,
     validate_instance,
 )
-from rdmo.options.validators import (
+
+from .models import Option, OptionSet
+from .serializers.v1 import OptionSerializer, OptionSetSerializer
+from .validators import (
     OptionLockedValidator,
     OptionSetLockedValidator,
     OptionSetUniqueURIValidator,
     OptionUniqueURIValidator,
 )
-
-from .models import Option, OptionSet
 
 logger = logging.getLogger(__name__)
 
@@ -53,7 +54,8 @@ import_helper_option = ElementImportHelper(
     model="options.option",
     import_func=import_option,
     validators=(OptionLockedValidator, OptionUniqueURIValidator),
-    lang_fields=('text',)
+    lang_fields=('text',),
+    serializer = OptionSerializer
 )
 
 
@@ -87,5 +89,6 @@ import_helper_optionset = ElementImportHelper(
     model="options.optionset",
     import_func=import_optionset,
     validators=(OptionSetLockedValidator, OptionSetUniqueURIValidator),
-    lang_fields=[]
+    lang_fields=[],
+    serializer = OptionSetSerializer
 )

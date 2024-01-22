@@ -9,9 +9,10 @@ from rdmo.core.imports import (
     set_m2m_instances,
     validate_instance,
 )
-from rdmo.tasks.validators import TaskLockedValidator, TaskUniqueURIValidator
 
 from .models import Task
+from .serializers.v1 import TaskSerializer
+from .validators import TaskLockedValidator, TaskUniqueURIValidator
 
 logger = logging.getLogger(__name__)
 
@@ -54,5 +55,6 @@ import_helper_task = ElementImportHelper(
     import_func=import_task,
     validators=(TaskLockedValidator, TaskUniqueURIValidator),
     lang_fields=('title', 'text'),
-    foreign_fields=('start_attribute', 'end_attribute')
+    foreign_fields=('start_attribute', 'end_attribute'),
+    serializer=TaskSerializer
 )

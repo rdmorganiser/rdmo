@@ -5,11 +5,10 @@ from dataclasses import dataclass, field
 from os.path import join as pj
 from pathlib import Path
 from random import randint
-from typing import Callable, Dict, Iterable, List, Optional, Sequence, Tuple
+from typing import Callable, Iterable, Optional, Sequence, Tuple
 
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
-from django.forms.models import model_to_dict
 
 from rest_framework.utils import model_meta
 
@@ -73,6 +72,7 @@ class ElementImportHelper:
     model: str
     import_func: Callable
     validators: Iterable[Callable]
+    serializer: Callable
     common_fields: Sequence[str] = field(default=ELEMENT_COMMON_FIELDS)
     lang_fields: Sequence[str] = field(default_factory=list)
     foreign_fields: Sequence[str] = field(default_factory=list)
@@ -313,47 +313,3 @@ def check_permissions(instance: models.Model, element_uri: str, user: models.Mod
         message = f'You have no permissions to import {instance._meta.object_name} {element_uri}.'
         logger.info(message)
         return message
-
-
-def prepare_element_from_original_instance(element: Dict,
-                                        original_instance: models.Model,
-                                        lang_field_names: List[str],
-                                        foreign_field_names: List[str]):
-    original_element = model_to_dict(original_instance)
-
-    filtered_ffnames = filter(lambda x: x in original_element, foreign_field_names)
-    for _field in filtered_ffnames:
-        if original_element[_field] is None:
-            continue
-        try:
-            # set the uri for foreign fields, instead of id
-            original_element[_field] = {'uri': getattr(original_instance, _field).uri}
-        except AttributeError:
-            pass
-    for lang_field_name in lang_field_names:
-        # add the lang_code fields from the original instance
-        lang_field_values = get_lang_field_values(lang_field_name, instance=original_instance)
-        original_element.update(lang_field_values)
-    return original_element
-
-
-def get_original_and_updated(original_element: Dict, instance: models.Model, foreign_field_names: List[str]) -> Dict:
-
-    # add updated and changed
-    instance_field_names = {i.name for i in instance._meta.local_concrete_fields}
-    updated_and_changed = {}
-    for k, val in filter(lambda x: x[0] in instance_field_names, original_element.items()):
-
-        new_val = getattr(instance, k, None)
-        if k in foreign_field_names and new_val is not None:
-            try:
-                # set the uri for foreign fields, instead of id
-                new_val = {'uri': getattr(instance, k).uri}
-            except AttributeError:
-                pass
-
-        if new_val is None:
-            continue
-        if new_val != val:
-            updated_and_changed[k] = {"current": val, "uploaded": new_val}
-    return updated_and_changed
