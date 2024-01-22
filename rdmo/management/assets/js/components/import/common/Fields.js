@@ -56,8 +56,8 @@ const Fields = ({ element }) => {
                   }
                 </div>
                 {
-                  isEmpty(element.errors) && !isEmpty(element.original) && element.updated &&
-                  element.original[key] != value && <FieldsDiffs element={element} field={key}/>
+                  isEmpty(element.errors) && !isEmpty(element.updated_and_changed) && element.updated &&
+                  key in element.updated_and_changed && <FieldsDiffs element={element} field={key}/>
                   }
               </div>
             )
