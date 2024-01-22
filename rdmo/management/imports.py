@@ -3,15 +3,13 @@ import logging
 from collections import defaultdict
 from typing import Dict, List, Optional, Sequence
 
-from django.db import models
+from django.http import HttpRequest
 
 from rdmo.conditions.imports import import_helper_condition
 from rdmo.core.imports import (
     check_permissions,
     get_or_return_instance,
-    get_original_and_updated,
     make_import_info_msg,
-    prepare_element_from_original_instance,
     set_foreign_field,
     set_lang_field,
 )
@@ -56,14 +54,12 @@ IMPORT_ELEMENT_INIT_DICT = {
     }
 
 
-def import_elements(uploaded_elements: List[Dict], save: bool = True, user: Optional[models.Model] = None):
+def import_elements(uploaded_elements: List[Dict], save: bool = True, request: Optional[HttpRequest] = None):
     imported_elements = []
     uploaded_uris = {i.get('uri') for i in uploaded_elements}
     for uploaded_element in uploaded_elements:
-        element = import_element(element=uploaded_element, save=save, user=user, uploaded_uris=imported_elements)
-        # replace warnings with filtered flat list of warnings
-        filtered_warnings = set(filter(lambda k: k not in uploaded_uris, element['warnings'].keys()))
-        element['warnings'] = [val for k,val in element['warnings'].items() if k not in filtered_warnings]
+        element = import_element(element=uploaded_element, save=save, request=request, uploaded_uris=imported_elements)
+        element['warnings'] = [val for k, val in element['warnings'].items() if k not in uploaded_uris]
         imported_elements.append(element)
     return imported_elements
 
@@ -72,12 +68,12 @@ def import_elements(uploaded_elements: List[Dict], save: bool = True, user: Opti
 def import_element(
         element: Optional[Dict] = None,
         save: bool = True,
-        user: Optional[models.Model] = None,
+        request: Optional[HttpRequest] = None,
         uploaded_uris: Optional[Sequence[str]] = None
     ):
 
     if element is None:
-        return element
+        return
 
     model_path = element.get('model')
     if model_path is None:
@@ -88,6 +84,7 @@ def import_element(
         element[_k] = _val()
 
     model = RDMO_MODEL_PATH_MAPPER[model_path]
+    user = request.user if request is not None else None
     import_helper = ELEMENT_IMPORT_HELPERS[model_path]
     import_func = import_helper.import_func
     validators = import_helper.validators
@@ -133,18 +130,36 @@ def import_element(
 
     if element.get('errors'):
         return element
-
     if _updated and not _created:
         element['updated'] = _updated
-        original_element = {}
-
         # and instance is not original_instance
         # keep only strings, make json serializable
-        original_element = prepare_element_from_original_instance(element, original_instance,
-                                                                    lang_field_names, foreign_field_names)
-        original_element_json = {k: val for k, val in original_element.items() if isinstance(val, str)}
-        element['original'] = original_element_json
-        updated_and_changed = get_original_and_updated(original_element, instance, foreign_field_names)
+        original_serializer = import_helper.serializer(original_instance, context={'request': request})
+        original_data = original_serializer.data
+        original_element = {k: val for k,val in original_data.items() if k in element}
+        uploaded_serializer = import_helper.serializer(instance, context={'request': request})
+        uploaded_data = uploaded_serializer.data
+        uploaded_element = {k: val for k,val in uploaded_data.items() if k in original_element}
+
+        updated_and_changed = {}
+        for k, old_val in original_element.items():
+            new_val = uploaded_element[k]
+            if old_val != new_val:
+                updated_and_changed[k] = {"current": old_val, "uploaded": new_val}
+        # overwrite the "normal" element name with the value from element_uri
+        uri_keys = {k for k in list(original_data.keys())+list(uploaded_data.keys())
+                    if k.endswith('_uri') or k.endswith('_uris')}
+        for uri_key in uri_keys:
+            element_name, uri_field = uri_key.split('_')
+            if uri_key in updated_and_changed:
+                # eg. set attribute as key instead of attribute_uri
+                uri_key_val = updated_and_changed[uri_key].pop()
+                updated_and_changed[element_name] = uri_key_val
+            if element_name in element and uri_key in original_data:
+                old_val = original_data[uri_key]
+                new_val = element[element_name].get('uri')
+                if old_val != new_val:
+                    updated_and_changed[element_name] = {"current": old_val, "uploaded": new_val}
 
         element['updated_and_changed'] = updated_and_changed
 
