@@ -6,18 +6,16 @@ import { isUndefined } from 'lodash'
 
 
 const FieldsDiffs = ({ element, field }) => {
-
+  const newVal = element.updated_and_changed[field].uploaded
+  const oldVal = element.updated_and_changed[field].current
   return !isUndefined(element) &&
-          !isUndefined(element[field]) &&
-          !isEmpty(element.original) &&
-          !isEmpty(element.original[field]) &&
-          isEmpty(element.errors) &&
-          typeof(element[field]) === 'string' &&
-          typeof(element.original[field]) === 'string' &&
+        !isEmpty(oldVal) &&
+        !isEmpty(element.updated_and_changed) &&
+        !isUndefined(newVal) &&
    <div className="col-sm-12">
     <ReactDiffViewer
-        oldValue={element.original[field]}
-        newValue={element[field]}
+        oldValue={oldVal}
+        newValue={newVal}
         splitView={true}
         hideLineNumbers={true}
         leftTitle={gettext('Current')}
