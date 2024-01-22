@@ -8,9 +8,10 @@ from rdmo.core.imports import (
     set_m2m_instances,
     validate_instance,
 )
-from rdmo.views.validators import ViewLockedValidator, ViewUniqueURIValidator
 
 from .models import View
+from .serializers.v1 import ViewSerializer
+from .validators import ViewLockedValidator, ViewUniqueURIValidator
 
 logger = logging.getLogger(__name__)
 
@@ -46,5 +47,6 @@ import_helper_view = ElementImportHelper(
     model="views.view",
     import_func=import_view,
     validators=(ViewLockedValidator, ViewUniqueURIValidator),
-    lang_fields=( 'help', 'title')
+    lang_fields=( 'help', 'title'),
+    serializer=ViewSerializer
 )

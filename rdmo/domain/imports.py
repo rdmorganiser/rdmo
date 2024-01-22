@@ -7,9 +7,10 @@ from rdmo.core.imports import (
     ElementImportHelper,
     validate_instance,
 )
-from rdmo.domain.validators import AttributeLockedValidator, AttributeParentValidator, AttributeUniqueURIValidator
 
 from .models import Attribute
+from .serializers.v1 import BaseAttributeSerializer
+from .validators import AttributeLockedValidator, AttributeParentValidator, AttributeUniqueURIValidator
 
 logger = logging.getLogger(__name__)
 
@@ -40,5 +41,6 @@ import_helper_attribute = ElementImportHelper(
     import_func=import_attribute,
     validators=(AttributeLockedValidator, AttributeParentValidator, AttributeUniqueURIValidator),
     lang_fields=[],
-    foreign_fields=('parent',)
+    foreign_fields=('parent',),
+    serializer=BaseAttributeSerializer
 )
