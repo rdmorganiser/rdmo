@@ -73,7 +73,7 @@ class UploadViewSet(viewsets.ViewSet):
         _elements = list(elements.values())
 
         # step 8: import the elements if save=True is set
-        imported_elements = import_elements(_elements, save=is_truthy(request.POST.get('import')), user=request.user)
+        imported_elements = import_elements(_elements, save=is_truthy(request.POST.get('import')), request=request)
 
         # step 9: return the list of, json-serializable, elements
         return Response(imported_elements)
@@ -93,7 +93,7 @@ class ImportViewSet(viewsets.ViewSet):
             raise ValidationError({'elements': [_('This is not a valid RDMO import JSON.')]}) from e
 
         # step 3: import the elements
-        imported_elements = import_elements(elements, user=request.user)
+        imported_elements = import_elements(elements, request=request)
 
         # step 4: return the list of elements
         return Response(imported_elements)
