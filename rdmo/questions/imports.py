@@ -11,7 +11,21 @@ from rdmo.core.imports import (
     set_reverse_m2m_through_instance,
     validate_instance,
 )
-from rdmo.questions.validators import (
+
+from .models.catalog import Catalog
+from .models.page import Page
+from .models.question import Question
+from .models.questionset import QuestionSet
+from .models.section import Section
+from .serializers.v1 import (
+    CatalogSerializer,
+    PageSerializer,
+    QuestionSerializer,
+    QuestionSetSerializer,
+    SectionSerializer,
+)
+from .utils import get_widget_types
+from .validators import (
     CatalogLockedValidator,
     CatalogUniqueURIValidator,
     PageLockedValidator,
@@ -23,13 +37,6 @@ from rdmo.questions.validators import (
     SectionLockedValidator,
     SectionUniqueURIValidator,
 )
-
-from .models.catalog import Catalog
-from .models.page import Page
-from .models.question import Question
-from .models.questionset import QuestionSet
-from .models.section import Section
-from .utils import get_widget_types
 
 logger = logging.getLogger(__name__)
 
@@ -189,14 +196,16 @@ import_helper_catalog = ElementImportHelper(
     model="questions.catalog",
     import_func=import_catalog,
     validators=(CatalogLockedValidator, CatalogUniqueURIValidator),
-    lang_fields=('help', 'title')
+    lang_fields=('help', 'title'),
+    serializer = CatalogSerializer
 )
 
 import_helper_section = ElementImportHelper(
     model="questions.section",
     import_func=import_section,
     validators=(SectionLockedValidator, SectionUniqueURIValidator),
-    lang_fields=('title',)
+    lang_fields=('title',),
+    serializer = SectionSerializer
 )
 
 import_helper_page = ElementImportHelper(
@@ -204,7 +213,8 @@ import_helper_page = ElementImportHelper(
     import_func=import_page,
     validators=(PageLockedValidator, PageUniqueURIValidator),
     lang_fields=('help', 'title', 'verbose_name'),
-    foreign_fields=('attribute',)
+    foreign_fields=('attribute',),
+    serializer = PageSerializer
 )
 
 import_helper_questionset = ElementImportHelper(
@@ -212,7 +222,8 @@ import_helper_questionset = ElementImportHelper(
     import_func=import_questionset,
     validators=(QuestionSetLockedValidator, QuestionSetUniqueURIValidator),
     lang_fields=('help', 'title', 'verbose_name'),
-    foreign_fields=('attribute',)
+    foreign_fields=('attribute',),
+    serializer = QuestionSetSerializer
 )
 
 import_helper_question = ElementImportHelper(
@@ -220,5 +231,6 @@ import_helper_question = ElementImportHelper(
     import_func=import_question,
     validators=(QuestionLockedValidator, QuestionUniqueURIValidator),
     lang_fields=('text', 'help', 'default_text', 'verbose_name'),
-    foreign_fields=('attribute','default_option')
+    foreign_fields=('attribute','default_option'),
+    serializer = QuestionSerializer
 )

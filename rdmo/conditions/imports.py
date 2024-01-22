@@ -3,13 +3,14 @@ from typing import Callable, Tuple
 
 from django.contrib.sites.models import Site
 
-from rdmo.conditions.validators import ConditionLockedValidator, ConditionUniqueURIValidator
 from rdmo.core.imports import (
     ElementImportHelper,
     validate_instance,
 )
 
 from .models import Condition
+from .serializers.v1 import ConditionSerializer
+from .validators import ConditionLockedValidator, ConditionUniqueURIValidator
 
 logger = logging.getLogger(__name__)
 
@@ -43,5 +44,6 @@ import_helper_condition = ElementImportHelper(
     import_func=import_condition,
     validators=(ConditionLockedValidator, ConditionUniqueURIValidator),
     lang_fields=[],
-    foreign_fields=('source', 'target_option')
+    foreign_fields=('source', 'target_option'),
+    serializer=ConditionSerializer
 )
