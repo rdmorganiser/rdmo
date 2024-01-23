@@ -136,7 +136,8 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
         memberships = Membership.objects.filter(project__in=ancestors) \
                                         .annotate(highest=Subquery(highest.values('project__level')[:1])) \
                                         .filter(highest=F('project__level')) \
-                                        .select_related('user')
+                                        .select_related('user') \
+                                        .prefetch_related('user__socialaccount_set')
 
         integrations = Integration.objects.filter(project__in=ancestors)
         context['catalogs'] = Catalog.objects.filter_current_site() \
