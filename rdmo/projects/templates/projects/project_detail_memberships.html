@@ -1,5 +1,6 @@
 {% load i18n %}
 {% load rules %}
+{% load static %}
 {% load accounts_tags %}
 
 {% has_perm 'projects.add_membership_object' request.user project as can_add_membership %}
@@ -32,6 +33,7 @@
             <tr>
                 <td>
                     {% full_name membership.user %}
+                    {% include 'projects/project_detail_memberships_socialaccounts.html' %}
                 </td>
                 <td>
                     <a href="mailto:{{ membership.user.email }}">{{ membership.user.email }}</a>
