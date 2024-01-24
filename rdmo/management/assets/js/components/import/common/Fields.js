@@ -25,7 +25,6 @@ const excludeKeys = [
   'uri_prefix',
   'valid',
   'warnings',
-  'original',
   'updated_and_changed',
 ]
 
