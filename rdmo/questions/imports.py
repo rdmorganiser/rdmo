@@ -1,8 +1,6 @@
 import logging
 from typing import Callable, Tuple
 
-from django.db import models
-
 from rdmo.core.imports import (
     ElementImportHelper,
     set_m2m_instances,
@@ -23,7 +21,6 @@ from .serializers.v1 import (
     QuestionSetSerializer,
     SectionSerializer,
 )
-from .utils import get_widget_types
 from .validators import (
     CatalogLockedValidator,
     CatalogUniqueURIValidator,
@@ -45,13 +42,9 @@ def import_catalog(
         element: dict,
         validators: Tuple[Callable],
         save: bool = False,
-        user: models.Model = None
     ):
     # check_permissions already done in management/import.py
-    instance.order = element.get('order') or 0
-
-    instance.available = element.get('available', True)
-
+    # extra_fields are set in management/import.py
     validate_instance(instance, element, *validators)
 
     if element.get('errors'):
@@ -70,7 +63,6 @@ def import_section(
         element: dict,
         validators: Tuple[Callable],
         save: bool = False,
-        user: models.Model = None
     ):
     # check_permissions already done in management/import.py
     validate_instance(instance, element, *validators)
@@ -92,14 +84,11 @@ def import_page(
         element: dict,
         validators: Tuple[Callable],
         save: bool = False,
-        user: models.Model = None
     ):
     # lang_fields are already set in management/import.py
     # set_foreign_field are already set in management/import.py
     # check_permissions already done in management/import.py
-
-    instance.is_collection = element.get('is_collection') or False
-
+    # extra_fields are set in management/import.py
     validate_instance(instance, element, *validators)
 
     if element.get('errors'):
@@ -121,14 +110,11 @@ def import_questionset(
         element: dict,
         validators: Tuple[Callable],
         save: bool = False,
-        user: models.Model = None
     ):
     # lang_fields are already set in management/import.py
     # set_foreign_field are already set in management/import.py
     # check_permissions already done in management/import.py
-
-    instance.is_collection = element.get('is_collection') or False
-
+    # extra_fields are set in management/import.py
     validate_instance(instance, element, *validators)
 
     if element.get('errors'):
@@ -151,31 +137,12 @@ def import_question(
         element: dict,
         validators: Tuple[Callable],
         save: bool = False,
-        user: models.Model = None
     ):
     # lang_fields are already set in management/import.py
     # set_foreign_fields are already set in management/import.py
     # check_permissions already done in management/import.py
-
-    instance.is_collection = element.get('is_collection') or False
-    instance.is_optional = element.get('is_optional') or False
-
-    instance.default_external_id = element.get('default_external_id') or ''
-
-    if element.get('widget_type') in get_widget_types():
-        instance.widget_type = element.get('widget_type')
-    else:
-        instance.widget_type = 'text'
-
-    instance.value_type = element.get('value_type') or ''
-    instance.maximum = element.get('maximum')
-    instance.minimum = element.get('minimum')
-    instance.step = element.get('step')
-    instance.unit = element.get('unit') or ''
-    instance.width = element.get('width')
-
+    # extra_fields are set in management/import.py
     validate_instance(instance, element, *validators)
-
     if element.get('errors'):
         return instance
 
@@ -196,7 +163,8 @@ import_helper_catalog = ElementImportHelper(
     validators=(CatalogLockedValidator, CatalogUniqueURIValidator),
     lang_fields=('help', 'title'),
     serializer = CatalogSerializer,
-    add_current_site_sites = True
+    add_current_site_sites = True,
+    extra_fields = ('order', 'available')
 )
 
 import_helper_section = ElementImportHelper(
@@ -213,7 +181,8 @@ import_helper_page = ElementImportHelper(
     validators=(PageLockedValidator, PageUniqueURIValidator),
     lang_fields=('help', 'title', 'verbose_name'),
     foreign_fields=('attribute',),
-    serializer = PageSerializer
+    serializer = PageSerializer,
+    extra_fields = ('is_collection',)
 )
 
 import_helper_questionset = ElementImportHelper(
@@ -222,7 +191,8 @@ import_helper_questionset = ElementImportHelper(
     validators=(QuestionSetLockedValidator, QuestionSetUniqueURIValidator),
     lang_fields=('help', 'title', 'verbose_name'),
     foreign_fields=('attribute',),
-    serializer = QuestionSetSerializer
+    serializer = QuestionSetSerializer,
+    extra_fields = ('is_collection',)
 )
 
 import_helper_question = ElementImportHelper(
@@ -231,5 +201,7 @@ import_helper_question = ElementImportHelper(
     validators=(QuestionLockedValidator, QuestionUniqueURIValidator),
     lang_fields=('text', 'help', 'default_text', 'verbose_name'),
     foreign_fields=('attribute','default_option'),
-    serializer = QuestionSerializer
+    serializer = QuestionSerializer,
+    extra_fields = ('is_collection','is_optional', 'default_external_id', 'widget_type',
+                    'value_type', 'maximum', 'minimum', 'step', 'unit','width')
 )

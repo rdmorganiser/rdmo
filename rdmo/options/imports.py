@@ -1,8 +1,6 @@
 import logging
 from typing import Callable, Tuple
 
-from django.db import models
-
 from rdmo.core.imports import (
     ElementImportHelper,
     set_m2m_instances,
@@ -28,13 +26,9 @@ def import_option(
         element: dict,
         validators: Tuple[Callable],
         save: bool = False,
-        user: models.Model = None
     ):
     # check_permissions already done in management/import.py
-    instance.order = element.get('order') or 0
-    instance.provider_key = element.get('provider_key') or ''
-    instance.additional_input = element.get('additional_input') or ""
-
+    # extra_fields are set in in management/import.py
     validate_instance(instance, element, *validators)
 
     if element.get('errors'):
@@ -54,7 +48,8 @@ import_helper_option = ElementImportHelper(
     import_func=import_option,
     validators=(OptionLockedValidator, OptionUniqueURIValidator),
     lang_fields=('text',),
-    serializer = OptionSerializer
+    serializer = OptionSerializer,
+    extra_fields = ('order', 'provider_key', 'additional_input')
 )
 
 
@@ -63,14 +58,10 @@ def import_optionset(
         element: dict,
         validators: Tuple[Callable],
         save: bool = False,
-        user: models.Model = None
     ):
-
     # lang_fields are already set in management/import.py
     # check_permissions already done in management/import.py
-
-    instance.additional_input = element.get('additional_input') or ""
-
+    # extra_fields are set in in management/import.py
     validate_instance(instance, element, *validators)
 
     if element.get('errors'):
@@ -88,6 +79,6 @@ import_helper_optionset = ElementImportHelper(
     model="options.optionset",
     import_func=import_optionset,
     validators=(OptionSetLockedValidator, OptionSetUniqueURIValidator),
-    lang_fields=[],
-    serializer = OptionSetSerializer
+    serializer = OptionSetSerializer,
+    extra_fields=('additional_input',)
 )

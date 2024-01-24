@@ -11,6 +11,7 @@ from rdmo.core.imports import (
     check_permissions,
     get_or_return_instance,
     make_import_info_msg,
+    set_extra_field,
     set_foreign_field,
     set_lang_field,
 )
@@ -23,6 +24,7 @@ from rdmo.questions.imports import (
     import_helper_questionset,
     import_helper_section,
 )
+from rdmo.questions.utils import get_widget_types
 from rdmo.tasks.imports import import_helper_task
 from rdmo.views.imports import import_helper_view
 
@@ -58,9 +60,11 @@ def import_elements(uploaded_elements: List[Dict], save: bool = True, request: O
     imported_elements = []
     uploaded_uris = {i.get('uri') for i in uploaded_elements}
     current_site = get_current_site(request)
+    questions_widget_types = get_widget_types()
     for uploaded_element in uploaded_elements:
         element = import_element(element=uploaded_element, save=save, uploaded_uris=imported_elements,
-                                    request=request, current_site=current_site)
+                                    request=request, current_site=current_site,
+                                    questions_widget_types=questions_widget_types)
         element['warnings'] = [val for k, val in element['warnings'].items() if k not in uploaded_uris]
         imported_elements.append(element)
     return imported_elements
@@ -72,7 +76,8 @@ def import_element(
         save: bool = True,
         request: Optional[HttpRequest] = None,
         uploaded_uris: Optional[Sequence[str]] = None,
-        current_site = None
+        current_site = None,
+        questions_widget_types = None
     ) -> Dict:
 
     if element is None:
@@ -92,8 +97,10 @@ def import_element(
     import_func = import_helper.import_func
     validators = import_helper.validators
     common_fields = import_helper.common_fields
-    lang_field_names = import_helper.lang_fields if import_helper.lang_fields is not None else []
-    foreign_field_names = import_helper.foreign_fields if import_helper.foreign_fields is not None else []
+    lang_field_names = import_helper.lang_fields
+    foreign_field_names = import_helper.foreign_fields
+    extra_field_names = import_helper.extra_fields
+
     uri = element.get('uri')
 
     # get or create instance from uri and model_path
@@ -127,6 +134,9 @@ def import_element(
     # set foreign fields
     for foreign_field in foreign_field_names:
         set_foreign_field(instance, foreign_field, element, uploaded_uris=uploaded_uris)
+    # set extra fields
+    for extra_field in extra_field_names:
+        set_extra_field(instance, extra_field, element, questions_widget_types=questions_widget_types)
 
     # call the element specific import method
     instance = import_func(instance, element, validators, save)
