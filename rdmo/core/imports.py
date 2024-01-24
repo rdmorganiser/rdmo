@@ -5,24 +5,17 @@ from dataclasses import dataclass, field
 from os.path import join as pj
 from pathlib import Path
 from random import randint
-from typing import Any, Callable, Iterable, Optional, Sequence, Tuple
+from typing import Callable, Iterable, Optional, Sequence, Tuple
 
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
 
 from rest_framework.utils import model_meta
 
+from rdmo.core.constants import ELEMENT_COMMON_FIELDS, ELEMENT_IMPORT_EXTRA_FIELDS_DEFAULTS
 from rdmo.core.utils import get_languages
 
 logger = logging.getLogger(__name__)
-
-
-ELEMENT_COMMON_FIELDS = (
-    'uri_prefix',
-    'uri_path',
-    'key',
-    'comment',
-)
 
 
 def handle_uploaded_file(filedata):
@@ -76,7 +69,7 @@ class ElementImportHelper:
     common_fields: Sequence[str] = field(default=ELEMENT_COMMON_FIELDS)
     lang_fields: Sequence[str] = field(default_factory=list)
     foreign_fields: Sequence[str] = field(default_factory=list)
-    extra_fields: Sequence[Tuple[str, Any]] = field(default_factory=list)
+    extra_fields: Sequence[str] = field(default_factory=list)
     add_current_site_editors: bool = True
     add_current_site_sites: bool = False
 
@@ -140,6 +133,19 @@ def set_foreign_field(instance, field_name, element, uploaded_uris=None) -> None
     )
     logger.info(message)
     element['warnings'][foreign_uri].append(message)
+
+def set_extra_field(instance, field_name, element, questions_widget_types=None) -> None:
+
+    element_value = element.get(field_name)
+    default_value = ELEMENT_IMPORT_EXTRA_FIELDS_DEFAULTS.get(field_name)
+    extra_value = element_value or default_value
+    if field_name == 'widget_type':
+        if element_value in questions_widget_types:
+            extra_value = element_value
+        else:
+            extra_value = default_value
+
+    setattr(instance, field_name, extra_value)
 
 
 def set_m2m_instances(instance, field_name, element):

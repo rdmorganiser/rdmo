@@ -21,7 +21,6 @@ def import_attribute(
     # set_foreign_field are already set in management/import.py
     # check_permissions already done in management/import.py
     instance.path = instance.build_path(instance.key, instance.parent)
-
     validate_instance(instance, element, *validators)
 
     if element.get('errors'):
@@ -40,5 +39,4 @@ import_helper_attribute = ElementImportHelper(
     validators=(AttributeLockedValidator, AttributeParentValidator, AttributeUniqueURIValidator),
     foreign_fields=('parent',),
     serializer=BaseAttributeSerializer,
-
 )
