@@ -12,7 +12,9 @@ def read_xml_and_parse_to_elements(xml_file):
 
 def change_fields_elements(elements, update_dict=None, n=3):
 
+    update_dict = update_dict if update_dict is not None else {}
     _default_update_dict = {'comment':  "this is a test comment {}"}
+    update_dict.update(**_default_update_dict)
 
     if len(elements) < n:
         raise ValueError("Length of elements should not be smaller than n.")
@@ -20,9 +22,15 @@ def change_fields_elements(elements, update_dict=None, n=3):
     _changed_elements = []
     for _n,_element in enumerate(elements):
         if _n <= n-1:
-            _element['comment'] = _default_update_dict['comment'].format(_n)
-            if update_dict is not None:
-                _element.update (**update_dict)
-            _changed_elements.append(_element)
+            updated_and_changed = {}
+            changed_element = _element
+            for k,val in update_dict.items():
+                if isinstance(val, str):
+                    val = val.format(_n)
+                updated_and_changed[k]= {'current': _element[k], 'uploaded': val}
+                _element[k] = val
+            if updated_and_changed:
+                changed_element['updated_and_changed'] = updated_and_changed
+            _changed_elements.append(changed_element)
         _new_elements.append(_element)
     return _new_elements, _changed_elements
