@@ -1,7 +1,6 @@
 import logging
 from typing import Callable, Tuple
 
-from django.contrib.sites.models import Site
 from django.db import models
 
 from rdmo.core.imports import (
@@ -44,8 +43,7 @@ def import_task(
         instance.save()
         set_m2m_instances(instance, 'catalogs', element)
         set_m2m_instances(instance, 'conditions', element)
-        instance.sites.add(Site.objects.get_current())
-        instance.editors.add(Site.objects.get_current())
+        # sites and editors are added in management/import.py
 
     return instance
 

@@ -3,6 +3,7 @@ import logging
 from collections import defaultdict
 from typing import Dict, List, Optional, Sequence
 
+from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpRequest
 
 from rdmo.conditions.imports import import_helper_condition
@@ -49,7 +50,6 @@ IMPORT_ELEMENT_INIT_DICT = {
         'errors': list,
         'created': bool,
         'updated': bool,
-        'original': dict,
         'updated_and_changed': dict,
     }
 
@@ -57,8 +57,10 @@ IMPORT_ELEMENT_INIT_DICT = {
 def import_elements(uploaded_elements: List[Dict], save: bool = True, request: Optional[HttpRequest] = None):
     imported_elements = []
     uploaded_uris = {i.get('uri') for i in uploaded_elements}
+    current_site = get_current_site(request)
     for uploaded_element in uploaded_elements:
-        element = import_element(element=uploaded_element, save=save, request=request, uploaded_uris=imported_elements)
+        element = import_element(element=uploaded_element, save=save, uploaded_uris=imported_elements,
+                                    request=request, current_site=current_site)
         element['warnings'] = [val for k, val in element['warnings'].items() if k not in uploaded_uris]
         imported_elements.append(element)
     return imported_elements
@@ -69,8 +71,9 @@ def import_element(
         element: Optional[Dict] = None,
         save: bool = True,
         request: Optional[HttpRequest] = None,
-        uploaded_uris: Optional[Sequence[str]] = None
-    ):
+        uploaded_uris: Optional[Sequence[str]] = None,
+        current_site = None
+    ) -> Dict:
 
     if element is None:
         return
@@ -134,38 +137,48 @@ def import_element(
         element['updated'] = _updated
         # and instance is not original_instance
         # keep only strings, make json serializable
-        original_serializer = import_helper.serializer(original_instance, context={'request': request})
-        original_data = original_serializer.data
-        original_element = {k: val for k,val in original_data.items() if k in element}
-        uploaded_serializer = import_helper.serializer(instance, context={'request': request})
-        uploaded_data = uploaded_serializer.data
-        uploaded_element = {k: val for k,val in uploaded_data.items() if k in original_element}
-
-        updated_and_changed = {}
-        for k, old_val in original_element.items():
-            new_val = uploaded_element[k]
-            if old_val != new_val:
-                updated_and_changed[k] = {"current": old_val, "uploaded": new_val}
-        # overwrite the "normal" element name with the value from element_uri
-        uri_keys = {k for k in list(original_data.keys())+list(uploaded_data.keys())
-                    if k.endswith('_uri') or k.endswith('_uris')}
-        for uri_key in uri_keys:
-            element_name, uri_field = uri_key.split('_')
-            if uri_key in updated_and_changed:
-                # eg. set attribute as key instead of attribute_uri
-                uri_key_val = updated_and_changed[uri_key].pop()
-                updated_and_changed[element_name] = uri_key_val
-            if element_name in element and uri_key in original_data:
-                old_val = original_data[uri_key]
-                new_val = element[element_name].get('uri')
-                if old_val != new_val:
-                    updated_and_changed[element_name] = {"current": old_val, "uploaded": new_val}
-
-        element['updated_and_changed'] = updated_and_changed
+        serializer = import_helper.serializer
+        changes = get_updated_changes(element, instance, original_instance, serializer, request=None)
+        element['updated_and_changed'] = changes
 
     if save:
         logger.info(_msg)
         element['created'] = _created
         element['updated'] = _updated
+        if import_helper.add_current_site_editors:
+            instance.editors.add(current_site)
+        if import_helper.add_current_site_sites:
+            instance.sites.add(current_site)
 
     return element
+
+
+def get_updated_changes(element, new_instance,
+                        original_instance, serializer, request=None) -> Dict[str, str]:
+    original_serializer = serializer(original_instance, context={'request': request})
+    original_data = original_serializer.data
+    original_element = {k: val for k,val in original_data.items() if k in element}
+    uploaded_serializer = serializer(new_instance, context={'request': request})
+    uploaded_data = uploaded_serializer.data
+    uploaded_element = {k: val for k,val in uploaded_data.items() if k in element}
+
+    updated_and_changed = {}
+    for k, old_val in original_element.items():
+        new_val = uploaded_element[k]
+        if old_val != new_val and any([old_val,new_val]):
+            updated_and_changed[k] = {"current": old_val, "uploaded": new_val}
+    # overwrite the normal "element" name with the value from "element_uri"
+    uri_keys = {k for k in list(original_data.keys())+list(uploaded_data.keys())
+                if k.endswith('_uri') or k.endswith('_uris')}
+    for uri_key in uri_keys:
+        element_name, uri_field = uri_key.split('_')
+        if uri_key in updated_and_changed:
+            # eg. set attribute as key instead of attribute_uri
+            uri_key_val = updated_and_changed[uri_key].pop()
+            updated_and_changed[element_name] = uri_key_val
+        if element_name in element and uri_key in original_data:
+            old_val = original_data[uri_key]
+            new_val = element[element_name].get('uri')
+            if old_val != new_val and any([old_val,new_val]):
+                updated_and_changed[element_name] = {"current": old_val, "uploaded": new_val}
+    return updated_and_changed

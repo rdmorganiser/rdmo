@@ -1,7 +1,6 @@
 import logging
 from typing import Callable, Tuple
 
-from django.contrib.sites.models import Site
 from django.db import models
 
 from rdmo.core.imports import (
@@ -45,7 +44,7 @@ def import_option(
         instance.save()
         set_m2m_instances(instance, 'conditions', element)
         set_m2m_through_instances(instance, 'options', element, 'optionset', 'option', 'optionset_options')
-        instance.editors.add(Site.objects.get_current())
+        # sites and editors are added in management/import.py
 
     return instance
 
@@ -80,7 +79,7 @@ def import_optionset(
     if save:
         instance.save()
         set_reverse_m2m_through_instance(instance, 'optionset', element, 'option', 'optionset', 'option_optionsets')
-        instance.editors.add(Site.objects.get_current())
+        # sites and editors are added in management/import.py
 
     return instance
 
