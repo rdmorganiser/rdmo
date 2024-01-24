@@ -1,7 +1,6 @@
 import logging
 from typing import Callable, Tuple
 
-from django.contrib.sites.models import Site
 from django.db import models
 
 from rdmo.core.imports import (
@@ -61,8 +60,7 @@ def import_catalog(
     if save:
         instance.save()
         set_m2m_through_instances(instance, 'sections', element, 'catalog', 'section', 'catalog_sections')
-        instance.sites.add(Site.objects.get_current())
-        instance.editors.add(Site.objects.get_current())
+        # sites and editors are added in management/import.py
 
     return instance
 
@@ -84,7 +82,7 @@ def import_section(
         instance.save()
         set_reverse_m2m_through_instance(instance, 'catalog', element, 'section', 'catalog', 'section_catalogs')
         set_m2m_through_instances(instance, 'pages', element, 'section', 'page', 'section_pages')
-        instance.editors.add(Site.objects.get_current())
+        # sites and editors are added in management/import.py
 
     return instance
 
@@ -113,7 +111,7 @@ def import_page(
         set_reverse_m2m_through_instance(instance, 'section', element, 'page', 'section', 'page_sections')
         set_m2m_through_instances(instance, 'questionsets', element, 'page', 'questionset', 'page_questionsets')
         set_m2m_through_instances(instance, 'questions', element, 'page', 'question', 'page_questions')
-        instance.editors.add(Site.objects.get_current())
+        # sites and editors are added in management/import.py
 
     return instance
 
@@ -143,7 +141,7 @@ def import_questionset(
         set_reverse_m2m_through_instance(instance, 'questionset', element, 'questionset', 'parent', 'questionset_parents')  # noqa: E501
         set_m2m_through_instances(instance, 'questionsets', element, 'parent', 'questionset', 'questionset_questionsets')  # noqa: E501
         set_m2m_through_instances(instance, 'questions', element, 'questionset', 'question', 'questionset_questions')
-        instance.editors.add(Site.objects.get_current())
+        # sites and editors are added in management/import.py
 
     return instance
 
@@ -187,7 +185,7 @@ def import_question(
         set_reverse_m2m_through_instance(instance, 'questionset', element, 'question', 'questionset', 'question_questionsets')  # noqa: E501
         set_m2m_instances(instance, 'conditions', element)
         set_m2m_instances(instance, 'optionsets', element)
-        instance.editors.add(Site.objects.get_current())
+        # sites and editors are added in management/import.py
 
     return instance
 
@@ -197,7 +195,8 @@ import_helper_catalog = ElementImportHelper(
     import_func=import_catalog,
     validators=(CatalogLockedValidator, CatalogUniqueURIValidator),
     lang_fields=('help', 'title'),
-    serializer = CatalogSerializer
+    serializer = CatalogSerializer,
+    add_current_site_sites = True
 )
 
 import_helper_section = ElementImportHelper(

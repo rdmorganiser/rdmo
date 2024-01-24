@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from os.path import join as pj
 from pathlib import Path
 from random import randint
-from typing import Callable, Iterable, Optional, Sequence, Tuple
+from typing import Any, Callable, Iterable, Optional, Sequence, Tuple
 
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
@@ -51,7 +51,7 @@ def generate_tempfile_name():
     return fn
 
 
-def get_or_return_instance(model: models.Model, uri: Optional[str]=None) -> Tuple[models.Model, bool]:
+def get_or_return_instance(model: Callable, uri: Optional[str]=None) -> Tuple[models.Model, bool]:
     if uri is None:
         return model(), True
     try:
@@ -76,7 +76,9 @@ class ElementImportHelper:
     common_fields: Sequence[str] = field(default=ELEMENT_COMMON_FIELDS)
     lang_fields: Sequence[str] = field(default_factory=list)
     foreign_fields: Sequence[str] = field(default_factory=list)
-
+    extra_fields: Sequence[Tuple[str, Any]] = field(default_factory=list)
+    add_current_site_editors: bool = True
+    add_current_site_sites: bool = False
 
 
 def get_lang_field_values(field_name: str,
