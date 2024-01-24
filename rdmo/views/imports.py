@@ -21,12 +21,7 @@ def import_view(
         save: bool = False,
     ):
     # check_permissions already done in management/import.py
-
-    instance.order = element.get('order') or 0
-    instance.template = element.get('template')
-
-    instance.available = element.get('available', True)
-
+    # extra_fields are set in in management/import.py
     validate_instance(instance, element, *validators)
 
     if element.get('errors'):
@@ -44,6 +39,7 @@ import_helper_view = ElementImportHelper(
     model="views.view",
     import_func=import_view,
     validators=(ViewLockedValidator, ViewUniqueURIValidator),
-    lang_fields=( 'help', 'title'),
-    serializer=ViewSerializer
+    lang_fields=('help', 'title'),
+    serializer=ViewSerializer,
+    extra_fields=('order', 'template', 'available')
 )

@@ -77,3 +77,26 @@ HUMAN2BYTES_MAPPER = {
     "tib": {"base": 1024, "power": 4},
     "pib": {"base": 1024, "power": 5},
 }
+
+ELEMENT_COMMON_FIELDS = (
+    'uri_prefix',
+    'uri_path',
+    'key',
+    'comment',
+)
+
+ELEMENT_IMPORT_EXTRA_FIELDS_DEFAULTS = {
+    'order': 0,
+    'available': True,
+    'template': '',
+    'relation': '',
+    'target_text': '',
+    'provider_key': '',
+    'additional_input': '',
+    'is_collection': False,
+    'is_optional': False,
+    'default_external_id': '',
+    'value_type': '',
+    'unit': '',
+    'widget_type': 'text',
+}
