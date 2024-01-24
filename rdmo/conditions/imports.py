@@ -22,9 +22,7 @@ def import_condition(
 
     # set_foreign_field are already set in management/import.py
     # check_permissions already done in management/import.py
-    instance.relation = element.get('relation') or ''
-    instance.target_text = element.get('target_text') or ''
-
+    # extra_fields are set in in management/import.py
     validate_instance(instance, element, *validators)
 
     if element.get('errors'):
@@ -41,7 +39,7 @@ import_helper_condition = ElementImportHelper(
     model="conditions.condition",
     import_func=import_condition,
     validators=(ConditionLockedValidator, ConditionUniqueURIValidator),
-    lang_fields=[],
     foreign_fields=('source', 'target_option'),
-    serializer=ConditionSerializer
+    serializer=ConditionSerializer,
+    extra_fields=('relation', 'target_text')
 )

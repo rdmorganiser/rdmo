@@ -1,8 +1,6 @@
 import logging
 from typing import Callable, Tuple
 
-from django.db import models
-
 from rdmo.core.imports import (
     ElementImportHelper,
     set_m2m_instances,
@@ -21,19 +19,11 @@ def import_task(
         element: dict,
         validators: Tuple[Callable],
         save: bool = False,
-        user: models.Model = None
     ):
     # lang_fields are already set in management/import.py
     # set_foreign_field are already set in management/import.py
     # check_permissions already done in management/import.py
-
-    instance.order = element.get('order') or 0
-
-    instance.days_before = element.get('days_before')
-    instance.days_after = element.get('days_after')
-
-    instance.available = element.get('available', True)
-
+    # extra_fields are set in in management/import.py
     validate_instance(instance, element, *validators)
 
     if element.get('errors'):
@@ -54,5 +44,6 @@ import_helper_task = ElementImportHelper(
     validators=(TaskLockedValidator, TaskUniqueURIValidator),
     lang_fields=('title', 'text'),
     foreign_fields=('start_attribute', 'end_attribute'),
-    serializer=TaskSerializer
+    serializer=TaskSerializer,
+    extra_fields=('order', 'days_before', 'days_after', 'available')
 )
