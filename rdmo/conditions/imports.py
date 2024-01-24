@@ -1,8 +1,6 @@
 import logging
 from typing import Callable, Tuple
 
-from django.contrib.sites.models import Site
-
 from rdmo.core.imports import (
     ElementImportHelper,
     validate_instance,
@@ -34,7 +32,7 @@ def import_condition(
 
     if save:
         instance.save()
-        instance.editors.add(Site.objects.get_current())
+        # sites and editors are added in management/import.py
 
     return instance
 

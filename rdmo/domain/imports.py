@@ -1,8 +1,6 @@
 import logging
 from typing import Callable, Tuple
 
-from django.contrib.sites.models import Site
-
 from rdmo.core.imports import (
     ElementImportHelper,
     validate_instance,
@@ -31,7 +29,7 @@ def import_attribute(
 
     if save:
         instance.save()
-        instance.editors.add(Site.objects.get_current())
+        # sites and editors are added in management/import.py
 
     return instance
 
@@ -40,7 +38,7 @@ import_helper_attribute = ElementImportHelper(
     model="domain.attribute",
     import_func=import_attribute,
     validators=(AttributeLockedValidator, AttributeParentValidator, AttributeUniqueURIValidator),
-    lang_fields=[],
     foreign_fields=('parent',),
-    serializer=BaseAttributeSerializer
+    serializer=BaseAttributeSerializer,
+
 )
