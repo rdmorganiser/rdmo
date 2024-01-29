@@ -1,7 +1,7 @@
 import copy
 import logging
 from collections import defaultdict
-from typing import Dict, List, Optional, Sequence
+from typing import Dict, List, Optional
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpRequest
@@ -62,7 +62,7 @@ def import_elements(uploaded_elements: List[Dict], save: bool = True, request: O
     current_site = get_current_site(request)
     questions_widget_types = get_widget_types()
     for uploaded_element in uploaded_elements:
-        element = import_element(element=uploaded_element, save=save, uploaded_uris=imported_elements,
+        element = import_element(element=uploaded_element, save=save, uploaded_uris=uploaded_uris,
                                     request=request, current_site=current_site,
                                     questions_widget_types=questions_widget_types)
         element['warnings'] = [val for k, val in element['warnings'].items() if k not in uploaded_uris]
@@ -75,13 +75,13 @@ def import_element(
         element: Optional[Dict] = None,
         save: bool = True,
         request: Optional[HttpRequest] = None,
-        uploaded_uris: Optional[Sequence[str]] = None,
+        uploaded_uris: Optional[set[str]] = None,
         current_site = None,
         questions_widget_types = None
     ) -> Dict:
 
     if element is None:
-        return
+        return {}
 
     model_path = element.get('model')
     if model_path is None:
@@ -183,7 +183,7 @@ def get_updated_changes(element, new_instance,
     for uri_key in uri_keys:
         element_name, uri_field = uri_key.split('_')
         if uri_key in updated_and_changed:
-            # eg. set attribute as key instead of attribute_uri
+            # e.g. set attribute as key instead of attribute_uri
             uri_key_val = updated_and_changed[uri_key].pop()
             updated_and_changed[element_name] = uri_key_val
         if element_name in element and uri_key in original_data:
