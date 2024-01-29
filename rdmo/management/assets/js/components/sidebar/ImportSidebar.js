@@ -51,7 +51,7 @@ const ImportSidebar = ({ config, imports, importActions }) => {
               {gettext('Select all')}
             </Link>
           </li>
-          { updatedAndChangedElements.length > -1 &&
+          {updatedAndChangedElements.length > 0 &&
             <ul className="list-unstyled">
             <li>
               <Link onClick={() => importActions.selectChangedElements(true)}>
@@ -79,16 +79,16 @@ const ImportSidebar = ({ config, imports, importActions }) => {
               {gettext('Show all')}
             </Link>
           </li>
-          { updatedAndChangedElements.length > -1 &&
+          {updatedAndChangedElements.length > 0 &&
             <ul className="list-unstyled">
             <li>
               <Link onClick={() => importActions.showChangedElements(true)}>
-                {gettext('Show changed')}
+                {gettext('Show changes')}
               </Link>
             </li>
             <li>
               <Link onClick={() => importActions.showChangedElements(false)}>
-                {gettext('Hide changed')}
+                {gettext('Hide changes')}
               </Link>
             </li>
             </ul>
