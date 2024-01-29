@@ -9,7 +9,8 @@ import { buildUri } from '../utils/elements'
 const initialState = {
   elements: [],
   errors: [],
-  success: false
+  success: false,
+  file: null
 }
 
 export default function importsReducer(state = initialState, action) {
@@ -18,6 +19,7 @@ export default function importsReducer(state = initialState, action) {
   switch(action.type) {
     // upload file
     case 'import/uploadFileInit':
+      return {...state, file: action.file}
     case 'elements/fetchElementsInit':
     case 'elements/fetchElementInit':
       return {...state, elements: [], errors: [], success: false}
