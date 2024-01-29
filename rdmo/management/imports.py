@@ -65,7 +65,7 @@ def import_elements(uploaded_elements: List[Dict], save: bool = True, request: O
         element = import_element(element=uploaded_element, save=save, uploaded_uris=uploaded_uris,
                                     request=request, current_site=current_site,
                                     questions_widget_types=questions_widget_types)
-        element['warnings'] = [val for k, val in element['warnings'].items() if k not in uploaded_uris]
+        element['warnings'] = {k: val  for k, val in element['warnings'].items() if k not in uploaded_uris}
         imported_elements.append(element)
     return imported_elements
 

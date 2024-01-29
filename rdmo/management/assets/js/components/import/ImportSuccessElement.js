@@ -4,6 +4,7 @@ import uniqueId from 'lodash/uniqueId'
 
 import { codeClass, verboseNames } from '../../constants/elements'
 import { isEmpty } from 'lodash'
+import Warnings from './common/Warnings'
 
 const ImportSuccessElement = ({ element }) => {
   return (
@@ -23,7 +24,7 @@ const ImportSuccessElement = ({ element }) => {
         }
         {'.'}
       </p>
-      {element.warnings.map(message => <p key={uniqueId()} className="text-warning">{message}</p>)}
+        <Warnings element={element} success={true}/>
       {element.errors.map(message => <p key={uniqueId()} className="text-danger">{message}</p>)}
     </li>
   )
