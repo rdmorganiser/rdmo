@@ -21,11 +21,21 @@ const Import = ({ config, imports, configActions, importActions }) => {
   const updatedAndChangedElements = elements.filter(element => element.updated && !isEmpty(element.updated_and_changed))
   // const updatedAndSameElements = elements.filter(element => element.updated && isEmpty(element.updated_and_changed))
   const importErrors = elements.filter(element => !isEmpty(element.errors))
+  // const importWarnings = elements.filter(element => !isEmpty(element.warnings))
   const searchString = get(config, 'filter.import.elements.search', '')
   const selectedUriPrefix = get(config, 'filter.import.elements.uri_prefix', '')
-  const selectFilterChanged = get(config, 'filter.import.elements.changed', false)
+  const selectFilterChanged = () => {
+    const configBool = get(config, 'filter.import.elements.changed', false)
+    if (configBool === true && updatedAndChangedElements.length === 0) {
+      return false
+    }
+    else {
+      return configBool
+    }
+  }
+
   const filterByChanged = (elements, selectFilterChanged) => {
-    if (selectFilterChanged) {
+    if (selectFilterChanged === true) {
     return updatedAndChangedElements
   } else {
     return elements
