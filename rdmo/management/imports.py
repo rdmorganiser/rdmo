@@ -1,7 +1,7 @@
 import copy
 import logging
 from collections import defaultdict
-from typing import Dict, List, Optional
+from typing import AbstractSet, Dict, List, Optional
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpRequest
@@ -75,7 +75,7 @@ def import_element(
         element: Optional[Dict] = None,
         save: bool = True,
         request: Optional[HttpRequest] = None,
-        uploaded_uris: Optional[set[str]] = None,
+        uploaded_uris: Optional[AbstractSet[str]] = None,
         current_site = None,
         questions_widget_types = None
     ) -> Dict:
