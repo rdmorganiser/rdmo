@@ -14,6 +14,10 @@ from rdmo.core.imports import (
     set_extra_field,
     set_foreign_field,
     set_lang_field,
+    set_m2m_instances,
+    set_m2m_through_instances,
+    set_reverse_m2m_through_instance,
+    validate_instance,
 )
 from rdmo.domain.imports import import_helper_attribute
 from rdmo.options.imports import import_helper_option, import_helper_optionset
@@ -94,7 +98,6 @@ def import_element(
     model = RDMO_MODEL_PATH_MAPPER[model_path]
     user = request.user if request is not None else None
     import_helper = ELEMENT_IMPORT_HELPERS[model_path]
-    import_func = import_helper.import_func
     validators = import_helper.validators
     common_fields = import_helper.common_fields
     lang_field_names = import_helper.lang_fields
@@ -138,23 +141,32 @@ def import_element(
     for extra_field in extra_field_names:
         set_extra_field(instance, extra_field, element, questions_widget_types=questions_widget_types)
 
-    # call the element specific import method
-    instance = import_func(instance, element, validators, save)
+    # call the validators on the instance
+    validate_instance(instance, element, *validators)
 
     if element.get('errors'):
         return element
+
     if _updated and not _created:
         element['updated'] = _updated
         # and instance is not original_instance
         # keep only strings, make json serializable
         serializer = import_helper.serializer
-        changes = get_updated_changes(element, instance, original_instance, serializer, request=None)
+        changes = get_updated_changes(element, instance, original_instance, serializer, request=request)
         element['updated_and_changed'] = changes
 
     if save:
         logger.info(_msg)
         element['created'] = _created
         element['updated'] = _updated
+        instance.save()
+        for m2m_field in import_helper.m2m_instance_fields:
+            set_m2m_instances(instance, element, m2m_field)
+        for m2m_through_fields in import_helper.m2m_through_instance_fields:
+            set_m2m_through_instances(instance, element, **m2m_through_fields)
+        for reverse_m2m_fields in import_helper.reverse_m2m_through_instance_fields:
+            set_reverse_m2m_through_instance(instance, element, **reverse_m2m_fields)
+
         if import_helper.add_current_site_editors:
             instance.editors.add(current_site)
         if import_helper.add_current_site_sites:

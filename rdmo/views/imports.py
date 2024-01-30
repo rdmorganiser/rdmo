@@ -1,45 +1,13 @@
-import logging
-from typing import Callable, Tuple
+from rdmo.core.imports import ElementImportHelper
 
-from rdmo.core.imports import (
-    ElementImportHelper,
-    set_m2m_instances,
-    validate_instance,
-)
-
-from .models import View
 from .serializers.v1 import ViewSerializer
 from .validators import ViewLockedValidator, ViewUniqueURIValidator
 
-logger = logging.getLogger(__name__)
-
-
-def import_view(
-        instance: View,
-        element: dict,
-        validators: Tuple[Callable],
-        save: bool = False,
-    ):
-    # check_permissions already done in management/import.py
-    # extra_fields are set in in management/import.py
-    validate_instance(instance, element, *validators)
-
-    if element.get('errors'):
-        return instance
-
-    if save:
-        instance.save()
-        set_m2m_instances(instance, 'catalogs', element)
-        # sites and editors are added in management/import.py
-
-    return instance
-
-
 import_helper_view = ElementImportHelper(
     model="views.view",
-    import_func=import_view,
     validators=(ViewLockedValidator, ViewUniqueURIValidator),
     lang_fields=('help', 'title'),
     serializer=ViewSerializer,
-    extra_fields=('order', 'template', 'available')
+    extra_fields=('order', 'template', 'available'),
+    m2m_instance_fields=('catalogs',),
 )

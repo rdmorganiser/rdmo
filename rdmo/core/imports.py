@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from os.path import join as pj
 from pathlib import Path
 from random import randint
-from typing import Callable, Iterable, Optional, Sequence, Tuple
+from typing import Callable, Dict, Iterable, Optional, Sequence, Tuple
 
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
@@ -63,13 +63,15 @@ def make_import_info_msg(verbose_name: str, created: bool, uri: Optional[str]=No
 @dataclass
 class ElementImportHelper:
     model: str
-    import_func: Callable
     validators: Iterable[Callable]
     serializer: Callable
     common_fields: Sequence[str] = field(default=ELEMENT_COMMON_FIELDS)
     lang_fields: Sequence[str] = field(default_factory=list)
     foreign_fields: Sequence[str] = field(default_factory=list)
     extra_fields: Sequence[str] = field(default_factory=list)
+    m2m_instance_fields: Sequence[str] = field(default_factory=list)
+    m2m_through_instance_fields: Sequence[Dict[str, str]] = field(default_factory=list)
+    reverse_m2m_through_instance_fields: Sequence[Dict[str, str]] = field(default_factory=list)
     add_current_site_editors: bool = True
     add_current_site_sites: bool = False
 
@@ -144,11 +146,13 @@ def set_extra_field(instance, field_name, element, questions_widget_types=None) 
             extra_value = element_value
         else:
             extra_value = default_value
+    if field_name == "path" and hasattr(instance, "build_path"):
+        extra_value = instance.build_path(instance.key, instance.parent)
 
     setattr(instance, field_name, extra_value)
 
 
-def set_m2m_instances(instance, field_name, element):
+def set_m2m_instances(instance, element, field_name):
     if field_name not in element:
         return
 
@@ -182,8 +186,11 @@ def set_m2m_instances(instance, field_name, element):
     getattr(instance, field_name).set(foreign_instances)
 
 
-def set_m2m_through_instances(instance, field_name, element, source_name, target_name, through_name) -> None:
+def set_m2m_through_instances(instance, element, field_name=None, source_name=None,
+                              target_name=None, through_name=None) -> None:
     if field_name not in element:
+        return
+    if not all([source_name, target_name, through_name]):
         return
 
     target_elements = element.get(field_name) or []
@@ -236,8 +243,11 @@ def set_m2m_through_instances(instance, field_name, element, source_name, target
             through_instance.delete()
 
 
-def set_reverse_m2m_through_instance(instance, field_name, element, source_name, target_name, through_name) -> None:
+def set_reverse_m2m_through_instance(instance, element, field_name=None, source_name=None,
+                                     target_name=None, through_name=None) -> None:
     if field_name not in element:
+        return
+    if not all([source_name, target_name, through_name]):
         return
 
     target_element = element.get(field_name)
