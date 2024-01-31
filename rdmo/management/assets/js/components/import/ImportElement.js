@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { CodeLink, WarningLink, ErrorLink, ShowLink } from '../common/Links'
+import { CodeLink, WarningLink, ErrorLink, ShowLink, ShowUpdatedLink } from '../common/Links'
 
 import Errors from './common/Errors'
 import Fields from './common/Fields'
@@ -12,27 +12,25 @@ import { codeClass, verboseNames } from '../../constants/elements'
 import { isEmpty } from 'lodash'
 
 const ImportElement = ({ config, element, importActions }) => {
-  const showFields = () => importActions.updateElement(element, {show: !element.show})
+  const updateShowField = () => importActions.updateElement(element, {show: !element.show})
   const toggleImport = () => importActions.updateElement(element, {import: !element.import})
   const updateElement = (key, value) => importActions.updateElement(element, {[key]: value})
 
   return (
     <li className="list-group-item">
       <div className="pull-right">
-        <WarningLink element={element} onClick={showFields} />
-        <ErrorLink element={element} onClick={showFields} />
-        <ShowLink element={element} onClick={showFields} />
-        {
-          element.updated && !isEmpty(element.updated_and_changed) && !element.created &&
-          <p className="element-link fa fa-pencil"></p>
-        }
+        <WarningLink show={!isEmpty(element.warnings)} onClick={updateShowField} />
+        <ErrorLink show={!isEmpty(element.errors)} onClick={updateShowField} />
+        <ShowUpdatedLink show={(!isEmpty(element.updated_and_changed) && !element.created)} onClick={updateShowField} />
+        <ShowLink show={element.show} onClick={updateShowField} />
+
       </div>
       <div className="checkbox">
         <label className="mr-5">
           <input type="checkbox" checked={element.import} onChange={toggleImport} />
           <strong>{verboseNames[element.model]}{' '}</strong>
         </label>
-        <CodeLink className={codeClass[element.model]} uri={element.uri} onClick={showFields} />
+        <CodeLink className={codeClass[element.model]} uri={element.uri} onClick={updateShowField} />
       </div>
       {
         element.show && <>
