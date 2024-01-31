@@ -105,7 +105,6 @@ def import_element(
     extra_field_names = import_helper.extra_fields
 
     uri = element.get('uri')
-
     # get or create instance from uri and model_path
     instance, _created = get_or_return_instance(model, uri=uri)
 
@@ -130,7 +129,14 @@ def import_element(
     # start to set values on the instance
     # set common field values from element on instance
     for common_field in common_fields:
-        setattr(instance, common_field, element.get(common_field) or '')
+        common_value = element.get(common_field) or ''
+        # handle URI Prefix ending with slash
+        if common_field == 'uri_prefix' and common_value.endswith('/'):
+            common_value = common_value.rstrip('/')
+            element[common_field] = common_value
+            if original_instance:
+                original_instance.uri_prefix = original_instance.uri_prefix.rstrip('/')
+        setattr(instance, common_field, common_value)
     # set language fields
     for lang_field_name in lang_field_names:
         set_lang_field(instance, lang_field_name, element)
