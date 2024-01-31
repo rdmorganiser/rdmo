@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 import isUndefined from 'lodash/isUndefined'
 
@@ -219,47 +218,58 @@ CodeLink.propTypes = {
   order: PropTypes.number
 }
 
-const ErrorLink = ({ element, onClick }) => {
+const ErrorLink = ({ show, onClick }) => {
   return (
-    !isEmpty(element.errors) &&
+    show &&
     <Link className="element-link fa fa-warning text-danger" onClick={onClick} />
   )
 }
 
 ErrorLink.propTypes = {
-  element: PropTypes.object.isRequired,
+  show: PropTypes.bool,
   onClick: PropTypes.func.isRequired
 }
 
-
-const WarningLink = ({ element, onClick }) => {
+const WarningLink = ({ show= false, onClick }) => {
   return (
-    !isEmpty(element.warnings) &&
+    show &&
     <Link className="element-link fa fa-warning text-warning" onClick={onClick} />
   )
 }
 
 WarningLink.propTypes = {
-  element: PropTypes.object.isRequired,
+  show: PropTypes.bool,
+  onClick: PropTypes.func.isRequired
+}
+
+const ShowUpdatedLink = ({ show= false, onClick }) => {
+  return (
+    show &&
+    <Link className="element-link fa fa-pencil" onClick={onClick} />
+  )
+}
+
+ShowUpdatedLink.propTypes = {
+  show: PropTypes.bool,
   onClick: PropTypes.func.isRequired
 }
 
 
-const ShowLink = ({ element, onClick }) => {
-  const title = element.show ? gettext('Hide') : gettext('Show')
+const ShowLink = ({ show = false, onClick }) => {
+  const title = show ? gettext('Hide') : gettext('Show')
   const className = classNames({
     'element-link fa': true,
-    'fa-eye-slash': element.show,
-    'fa-eye': !element.show
+    'fa-eye-slash': !show,
+    'fa-eye': show
   })
 
   return <Link className={className} title={title} onClick={onClick} />
 }
 
 ShowLink.propTypes = {
-  element: PropTypes.object.isRequired,
+  show: PropTypes.bool,
   onClick: PropTypes.func.isRequired
 }
 
 export { EditLink, CopyLink, AddLink, AvailableLink, ToggleCurrentSiteLink, LockedLink, ShowElementsLink,
-         NestedLink, ExportLink, ExtendLink, CodeLink, ErrorLink, WarningLink, ShowLink }
+         NestedLink, ExportLink, ExtendLink, CodeLink, ErrorLink, WarningLink, ShowUpdatedLink, ShowLink }
