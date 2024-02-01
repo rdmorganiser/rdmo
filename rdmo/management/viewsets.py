@@ -9,6 +9,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 
+from packaging.version import parse
+
+from rdmo import __version__
 from rdmo.core.imports import handle_uploaded_file
 from rdmo.core.permissions import CanToggleElementCurrentSite
 from rdmo.core.utils import get_model_field_meta, is_truthy
@@ -50,6 +53,14 @@ class UploadViewSet(viewsets.ViewSet):
                 _('The content of the xml file does not consist of well formed data or markup.')
             ]})
 
+        # step 2.1: validate parsed xml
+        root_version = root.attrib.get('version') or '1.11.0'
+        parsed_version, rdmo_version = parse(root_version), parse(__version__)
+        if parsed_version > rdmo_version:
+            logger.info(f'Import failed version validation ({parsed_version} > {rdmo_version})')
+            raise ValidationError({'file': [_('This RDMO XML file does not have a valid version number.'),
+                                            f'RDMO XML Version: {root_version}']})
+
         # step 3: create element dicts from xml
         try:
             elements = flat_xml_to_elements(root)
@@ -64,7 +75,7 @@ class UploadViewSet(viewsets.ViewSet):
             raise ValidationError({'file': [_('This is not a valid RDMO XML file.')]}) from e
 
         # step 4: convert elements from previous versions
-        elements = convert_elements(elements, root.attrib.get('version'))
+        elements = convert_elements(elements, root_version)
 
         # step 5: order the elements and return
         elements = order_elements(elements)
