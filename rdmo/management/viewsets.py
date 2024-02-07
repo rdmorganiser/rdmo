@@ -46,12 +46,14 @@ class UploadViewSet(viewsets.ViewSet):
             import_tmpfile_name = handle_uploaded_file(uploaded_file)
 
         # step 2: parse xml
-        root = read_xml_file(import_tmpfile_name)
-        if root is None:
+        try:
+            root = read_xml_file(import_tmpfile_name)
+        except Exception as e:
             logger.info('XML parsing error. Import failed.')
             raise ValidationError({'file': [
-                _('The content of the xml file does not consist of well formed data or markup.')
-            ]})
+                _('The content of the xml file does not consist of well formed data or markup.'),
+                _('Error') + f': {e!s}'
+            ]}) from e
 
         # step 2.1: validate parsed xml
         root_version = root.attrib.get('version') or '1.11.0'
