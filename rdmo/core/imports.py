@@ -9,6 +9,7 @@ from typing import Callable, Dict, Iterable, Optional, Sequence, Tuple
 
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from rest_framework.utils import model_meta
 
@@ -84,7 +85,7 @@ def get_lang_field_values(field_name: str,
         raise ValueError("Please choose one of each")
 
     ret = {}
-    for lang_code, _, lang_field in get_languages():
+    for lang_code, lang_verbose_name, lang_field in get_languages():
         name_code = f'{field_name}_{lang_code}'
         name_field = f'{field_name}_{lang_field}'
         get_key = name_field if by_field else name_code
@@ -110,6 +111,8 @@ def set_foreign_field(instance, field_name, element, uploaded_uris=None) -> None
     if not foreign_element:
         setattr(instance, field_name, None)
         return
+    if not isinstance(foreign_element, dict):
+        raise TypeError("foreign_field must be a dictionary")
 
     foreign_uri = foreign_element.get('uri')
 
@@ -147,7 +150,17 @@ def set_extra_field(instance, field_name, element, questions_widget_types=None) 
         else:
             extra_value = default_value
     if field_name == "path" and hasattr(instance, "build_path"):
-        extra_value = instance.build_path(instance.key, instance.parent)
+        if instance.key:
+            extra_value = instance.build_path(instance.key, instance.parent)
+        else:
+            exception_message = _('This field may not be blank.')
+            message = '{instance_model} {instance_uri} cannot be imported (key: {exception}) .'.format(
+                instance_model=instance._meta.object_name,
+                instance_uri=element.get('uri'),
+                exception=exception_message
+            )
+            logger.info(message)
+            element['errors'].append(message)
 
     setattr(instance, field_name, extra_value)
 
@@ -328,6 +341,6 @@ def check_permissions(instance: models.Model, element_uri: str, user: models.Mod
         perms = [f'{app_label}.add_{model_name}_object']
 
     if not user.has_perms(perms, instance):
-        message = f'You have no permissions to import {instance._meta.object_name} {element_uri}.'
+        message = _('You have no permissions to import') + f'{instance._meta.object_name} {element_uri}.'
         logger.info(message)
         return message
