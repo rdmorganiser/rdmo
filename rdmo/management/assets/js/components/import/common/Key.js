@@ -4,7 +4,7 @@ import uniqueId from 'lodash/uniqueId'
 
 const Key = ({ element, onChange }) => {
   const id = uniqueId('key-'),
-        value = element.key
+        value = element.key ?? ''
 
   return (
     <div className="form-group mb-0">
