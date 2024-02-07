@@ -1,14 +1,14 @@
 import mimetypes
 from pathlib import Path
 
-import iso8601
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+
+import iso8601
 from django_cleanup import cleanup
 
-from rdmo.core.constants import (VALUE_TYPE_BOOLEAN, VALUE_TYPE_CHOICES,
-                                 VALUE_TYPE_DATETIME, VALUE_TYPE_TEXT)
+from rdmo.core.constants import VALUE_TYPE_BOOLEAN, VALUE_TYPE_CHOICES, VALUE_TYPE_DATETIME, VALUE_TYPE_TEXT
 from rdmo.core.models import Model
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
@@ -53,6 +53,11 @@ class Value(Model):
         default=0,
         verbose_name=_('Set index'),
         help_text=_('The position of this value in a set (i.e. for a question set tagged as collection).')
+    )
+    set_collection = models.BooleanField(
+        null=True,
+        verbose_name=_('Set collection'),
+        help_text=_('Indicates if this value was entered as part of a set (important for conditions).')
     )
     collection_index = models.IntegerField(
         default=0,
@@ -108,9 +113,14 @@ class Value(Model):
             'updated': self.updated,
             'set_prefix': self.set_prefix,
             'set_index': self.set_index,
+            'set_collection': self.set_collection,
             'collection_index': self.collection_index,
             'value_type': self.value_type,
             'unit': self.unit,
+            'text': self.text,
+            'option_uri': self.option_uri,
+            'option_text': self.option_text,
+            'option_additional_input': self.option_additional_input,
             'external_id': self.external_id,
             'value': self.value,
             'value_and_unit': self.value_and_unit,
@@ -133,7 +143,7 @@ class Value(Model):
     @property
     def value(self):
         if self.option:
-            value = self.option.text or ''
+            value = self.option.view_text or self.option.text or ''
             if self.option.additional_input and self.text:
                 value += ': ' + self.text
             return value
@@ -155,18 +165,14 @@ class Value(Model):
             else:
                 return self.text
         else:
-            return None
+            return ''
 
     @property
     def value_and_unit(self):
-        value = self.value
-
-        if value is None:
-            return ''
-        elif self.unit:
-            return '%s %s' % (value, self.unit)
+        if self.unit:
+            return f'{self.value} {self.unit}'
         else:
-            return value
+            return self.value
 
     @property
     def is_true(self):
@@ -247,6 +253,16 @@ class Value(Model):
     def option_uri(self):
         if self.option is not None:
             return self.option.uri
+
+    @property
+    def option_text(self):
+        if self.option is not None:
+            return self.option.text
+
+    @property
+    def option_additional_input(self):
+        if self.option is not None:
+            return self.option.additional_input
 
     def copy_file(self, file_name, file_content):
         # copies a file field from a different value over to this value

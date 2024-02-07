@@ -5,7 +5,7 @@
     "fields": {
       "uri": "http://example.com/terms/views/view_a",
       "uri_prefix": "http://example.com/terms",
-      "key": "view_a",
+      "uri_path": "view_a",
       "comment": "",
       "locked": false,
       "template": "{% load view_tags %}\n\n<h2>Individual</h2>\n\n<h3>Collection</h3>\n\n<ul>\n    {% render_value_list 'individual/collection/bool' %}\n</ul>\n<ul>\n    {% render_value_list 'individual/collection/checkbox' %}\n</ul>\n<ul>\n    {% render_value_list 'individual/collection/datetime' %}\n</ul>\n<ul>\n    {% render_value_list 'individual/collection/float' %}\n</ul>\n<ul>\n    {% render_value_list 'individual/collection/integer' %}\n</ul>\n<ul>\n    {% render_value_list 'individual/collection/radio' %}\n</ul>\n<ul>\n    {% render_value_list 'individual/collection/range' %}\n</ul>\n<ul>\n    {% render_value_list 'individual/collection/select' %}\n</ul>\n<ul>\n    {% render_value_list 'individual/collection/text' %}\n</ul>\n<ul>\n    {% render_value_list 'individual/collection/textarea' %}\n</ul>\n<ul>\n    {% render_value_list 'individual/collection/url' %}\n</ul>\n<ul>\n    {% render_value_list 'individual/collection/file' %}\n</ul>\n\n<h2>Individual</h2>\n\n<h3>Single</h3>\n\n<p>\n    {% render_value 'individual/single/bool' %}\n</p>\n<p>\n    {% render_value 'individual/single/checkbox' %}\n</p>\n<p>\n    {% render_value 'individual/single/datetime' %}\n</p>\n<p>\n    {% render_value 'individual/single/float' %}\n</p>\n<p>\n    {% render_value 'individual/single/integer' %}\n</p>\n<p>\n    {% render_value 'individual/single/radio' %}\n</p>\n<p>\n    {% render_value 'individual/single/range' %}\n</p>\n<p>\n    {% render_value 'individual/single/select' %}\n</p>\n<p>\n    {% render_value 'individual/single/text' %}\n</p>\n<p>\n    {% render_value 'individual/single/textarea' %}\n</p>\n<p>\n    {% render_value 'individual/single/url' %}\n</p>\n<p>\n    {% render_value 'individual/single/file' %}\n</p>\n\n<h2>Set</h2>\n\n{% get_values 'set/id' index=0 as sets %}\n\n<h3>Collection</h3>\n\n{% for set in sets %}\n\n<h4>{{ set.value }}</h4>\n\n<ul>\n    {% render_value_list 'set/collection/bool' set_index=set.set_index %}\n</ul>\n<ul>\n    {% render_value_list 'set/collection/checkbox' set_index=set.set_index %}\n</ul>\n<ul>\n    {% render_value_list 'set/collection/datetime' set_index=set.set_index %}\n</ul>\n<ul>\n    {% render_value_list 'set/collection/float' set_index=set.set_index %}\n</ul>\n<ul>\n    {% render_value_list 'set/collection/integer' set_index=set.set_index %}\n</ul>\n<ul>\n    {% render_value_list 'set/collection/radio' set_index=set.set_index %}\n</ul>\n<ul>\n    {% render_value_list 'set/collection/range' set_index=set.set_index %}\n</ul>\n<ul>\n    {% render_value_list 'set/collection/select' set_index=set.set_index %}\n</ul>\n<ul>\n    {% render_value_list 'set/collection/text' set_index=set.set_index %}\n</ul>\n<ul>\n    {% render_value_list 'set/collection/textarea' set_index=set.set_index %}\n</ul>\n<ul>\n    {% render_value_list 'set/collection/url' set_index=set.set_index %}\n</ul>\n<ul>\n    {% render_value_list 'set/collection/file' set_index=set.set_index %}\n</ul>\n\n{% endfor %}\n\n<h3>Collection</h3>\n\n{% for set in sets %}\n\n<h4>{% render_value 'set/id' set_index=set.set_index %}</h4>\n\n<p>\n    {% render_value 'set/single/bool' set_index=set.set_index %}\n</p>\n<p>\n    {% render_value 'set/single/checkbox' set_index=set.set_index %}\n</p>\n<p>\n    {% render_value 'set/single/datetime' set_index=set.set_index %}\n</p>\n<p>\n    {% render_value 'set/single/float' set_index=set.set_index %}\n</p>\n<p>\n    {% render_value 'set/single/integer' set_index=set.set_index %}\n</p>\n<p>\n    {% render_value 'set/single/radio' set_index=set.set_index %}\n</p>\n<p>\n    {% render_value 'set/single/range' set_index=set.set_index %}\n</p>\n<p>\n    {% render_value 'set/single/select' set_index=set.set_index %}\n</p>\n<p>\n    {% render_value 'set/single/text' set_index=set.set_index %}\n</p>\n<p>\n    {% render_value 'set/single/textarea' set_index=set.set_index %}\n</p>\n<p>\n    {% render_value 'set/single/url' set_index=set.set_index %}\n</p>\n<p>\n    {% render_value 'set/single/file' set_index=set.set_index %}\n</p>\n\n{% endfor %}",
@@ -26,6 +26,7 @@
       "sites": [
         1
       ],
+      "editors": [],
       "groups": []
     }
   },
@@ -35,7 +36,7 @@
     "fields": {
       "uri": "http://example.com/terms/views/view_b",
       "uri_prefix": "http://example.com/terms",
-      "key": "view_b",
+      "uri_path": "view_b",
       "comment": "",
       "locked": false,
       "template": "{% load view_tags %}\n\n<h2>Empty</h2>",
@@ -56,6 +57,7 @@
       "sites": [
         1
       ],
+      "editors": [],
       "groups": []
     }
   },
@@ -65,7 +67,7 @@
     "fields": {
       "uri": "http://example.com/terms/views/view_c",
       "uri_prefix": "http://example.com/terms",
-      "key": "view_c",
+      "uri_path": "view_c",
       "comment": "",
       "locked": false,
       "template": "{% load view_tags %}\n\n<h2>Empty</h2>",
@@ -83,6 +85,73 @@
       "catalogs": [],
       "sites": [
         1
+      ],
+      "editors": [],
+      "groups": []
+    }
+  },
+  {
+    "model": "views.view",
+    "pk": 4,
+    "fields": {
+      "uri": "https://foo.com/terms/views/foo-view",
+      "uri_prefix": "https://foo.com/terms",
+      "uri_path": "foo-view",
+      "comment": "",
+      "locked": false,
+      "template": "",
+      "title_lang1": "foo-view",
+      "title_lang2": "foo-view",
+      "title_lang3": "",
+      "title_lang4": "",
+      "title_lang5": "",
+      "help_lang1": "",
+      "help_lang2": "",
+      "help_lang3": "",
+      "help_lang4": "",
+      "help_lang5": "",
+      "available": true,
+      "catalogs": [
+        3
+      ],
+      "sites": [
+        2
+      ],
+      "editors": [
+        2
+      ],
+      "groups": []
+    }
+  },
+  {
+    "model": "views.view",
+    "pk": 5,
+    "fields": {
+      "uri": "https://bar.com/terms/views/bar-view",
+      "uri_prefix": "https://bar.com/terms",
+      "uri_path": "bar-view",
+      "comment": "",
+      "locked": false,
+      "template": "",
+      "title_lang1": "bar-view",
+      "title_lang2": "bar-view",
+      "title_lang3": "",
+      "title_lang4": "",
+      "title_lang5": "",
+      "help_lang1": "",
+      "help_lang2": "",
+      "help_lang3": "",
+      "help_lang4": "",
+      "help_lang5": "",
+      "available": true,
+      "catalogs": [
+        4
+      ],
+      "sites": [
+        3
+      ],
+      "editors": [
+        3
       ],
       "groups": []
     }

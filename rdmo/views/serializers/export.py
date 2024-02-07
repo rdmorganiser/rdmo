@@ -14,8 +14,9 @@ class ViewExportSerializer(TranslationSerializerMixin, serializers.ModelSerializ
         fields = (
             'uri',
             'uri_prefix',
-            'key',
+            'uri_path',
             'comment',
+            'order',
             'catalogs',
             'template'
         )

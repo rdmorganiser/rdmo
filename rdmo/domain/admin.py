@@ -3,8 +3,7 @@ from django.contrib import admin
 from django.db import models
 
 from .models import Attribute
-from .validators import (AttributeLockedValidator, AttributeParentValidator,
-                         AttributeUniqueURIValidator)
+from .validators import AttributeLockedValidator, AttributeParentValidator, AttributeUniqueURIValidator
 
 
 class AttributeAdminForm(forms.ModelForm):
@@ -12,7 +11,16 @@ class AttributeAdminForm(forms.ModelForm):
 
     class Meta:
         model = Attribute
-        fields = '__all__'
+        fields = [
+            'uri',
+            'uri_prefix',
+            'key',
+            'path',
+            'comment',
+            'locked',
+            'editors',
+            'parent',
+        ]
 
     def clean(self):
         AttributeUniqueURIValidator(self.instance)(self.cleaned_data)
@@ -20,12 +28,14 @@ class AttributeAdminForm(forms.ModelForm):
         AttributeLockedValidator(self.instance)(self.cleaned_data)
 
 
+@admin.register(Attribute)
 class AttributeAdmin(admin.ModelAdmin):
     form = AttributeAdminForm
 
     list_display = ('uri', 'projects_count', 'values_count')
     search_fields = ('uri', )
     readonly_fields = ('uri', 'path', 'projects_count', 'values_count')
+    filter_horizontal = ('editors', )
 
     def get_queryset(self, request):
         return super().get_queryset(request) \
@@ -37,6 +47,3 @@ class AttributeAdmin(admin.ModelAdmin):
 
     def projects_count(self, obj):
         return obj.projects_count
-
-
-admin.site.register(Attribute, AttributeAdmin)

@@ -10,13 +10,25 @@ class ConditionAdminForm(forms.ModelForm):
 
     class Meta:
         model = Condition
-        fields = '__all__'
+        fields = [
+            "uri",
+            "uri_prefix",
+            "uri_path",
+            "comment",
+            "locked",
+            "editors",
+            "source",
+            "relation",
+            "target_text",
+            "target_option",
+        ]
 
     def clean(self):
         ConditionUniqueURIValidator(self.instance)(self.cleaned_data)
         ConditionLockedValidator(self.instance)(self.cleaned_data)
 
 
+@admin.register(Condition)
 class ConditionAdmin(admin.ModelAdmin):
     form = ConditionAdminForm
 
@@ -24,6 +36,4 @@ class ConditionAdmin(admin.ModelAdmin):
     list_display = ('uri', 'source', 'relation', 'target_text', 'target_option')
     readonly_fields = ('uri', )
     list_filter = ('relation', )
-
-
-admin.site.register(Condition, ConditionAdmin)
+    filter_horizontal = ('editors', )

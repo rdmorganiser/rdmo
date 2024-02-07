@@ -1,43 +1,16 @@
 from rest_framework import serializers
 
 from rdmo.projects.models import Project
-from rdmo.questions.models import Catalog, QuestionSet, Section
-
-
-class QuestionSetSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = QuestionSet
-        fields = (
-            'id',
-            'title',
-            'has_conditions'
-        )
-
-
-class SectionSerializer(serializers.ModelSerializer):
-
-    questionsets = QuestionSetSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Section
-        fields = (
-            'id',
-            'title',
-            'questionsets'
-        )
+from rdmo.questions.models import Catalog
 
 
 class CatalogSerializer(serializers.ModelSerializer):
-
-    sections = SectionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Catalog
         fields = (
             'id',
-            'title',
-            'sections'
+            'title'
         )
 
 

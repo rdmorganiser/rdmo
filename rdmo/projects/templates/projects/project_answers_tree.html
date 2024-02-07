@@ -1,22 +1,16 @@
-{% load view_tags %}
-
-{% for section in project.catalog.sections.all %}
+{% for section in project_wrapper.catalog.sections %}
 
     <h2>{{ section.title }}</h2>
 
-    {% for questionset in section.questionsets.all %}
+    {% for page in section.pages %}
 
-        {% if not questionset.questionset %}
+        <h3>{{ page.title }}</h3>
 
-            <h3>{{ questionset.title }}</h3>
+        {% for element in page.elements %}
 
-            {% for element in questionset.elements %}
+            {% include 'projects/project_answers_element.html' %}
 
-                {% include 'projects/project_answers_element.html' %}
-
-            {% endfor %}
-
-        {% endif %}
+        {% endfor %}
 
     {% endfor %}
 

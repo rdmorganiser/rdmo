@@ -14,7 +14,7 @@ log = logging.getLogger(__name__)
 
 def get_full_name(user):
     if user.first_name and user.last_name:
-        return '%s %s' % (user.first_name, user.last_name)
+        return f'{user.first_name} {user.last_name}'
     else:
         return user.username
 
@@ -55,7 +55,8 @@ def delete_user(user=None, email=None, password=None):
         return False
 
     if user != database_user:
-        log.info('Deletion of user "%s" failed, the user from request (pk=%s) and database (pk=%s) differ.', username, user.pk, database_user.pk)
+        log.info('Deletion of user "%s" failed, the user from request (pk=%s) and database (pk=%s) differ.',
+                 username, user.pk, database_user.pk)
         return False
 
     if user.has_usable_password() and password is not None:
@@ -68,7 +69,8 @@ def delete_user(user=None, email=None, password=None):
             log.info('Deletion of user with usable password "%s" succeeded.', username)
             return True
         except Exception as e:
-            log.error('Deletion of user with usable password "%s" failed, an exception (%s) occured', (str(e), username))
+            log.error('Deletion of user with usable password "%s" failed, an exception (%s) occured',
+                      str(e), username)
             return False
     elif not user.has_usable_password() and password is None:
         try:
@@ -76,7 +78,8 @@ def delete_user(user=None, email=None, password=None):
             log.info('Deletion of user without usable password "%s" succeeded.', username)
             return True
         except Exception as e:
-            log.error('Deletion of user without usable password "%s" failed, an exception (%s) occured', (str(e), username))
+            log.error('Deletion of user without usable password "%s" failed, an exception (%s) occured',
+                      str(e), username)
             return False
     else:
         log.info('Deletion of user "%s" failed, probably wrong value for password given', username)

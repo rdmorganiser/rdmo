@@ -6,6 +6,7 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
 from ..constants import ROLE_CHOICES
+from ..managers import InviteManager
 
 
 class Invite(models.Model):
@@ -42,13 +43,15 @@ class Invite(models.Model):
         help_text=_('The timestamp for this invite.')
     )
 
+    objects = InviteManager()
+
     class Meta:
         ordering = ('timestamp', )
         verbose_name = _('Invite')
         verbose_name_plural = _('Invites')
 
     def __str__(self):
-        return '%s / %s / %s' % (self.project.title, self.email, self.role)
+        return f'{self.project.title} / {self.email} / {self.role}'
 
     def save(self, *args, **kwargs):
         if self.timestamp is None:

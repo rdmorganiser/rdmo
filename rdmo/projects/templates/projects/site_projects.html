@@ -15,7 +15,7 @@
 {% block sidebar %}
     <h2>{% trans 'Filter projects' %}</h2>
 
-    <form method="GET" class="projects-search">
+    <form method="GET" id="projects-search" class="projects-search">
         <input type="text" class="form-control" id="search" name="title" placeholder="{% trans 'Search project title' %}"
                value="{{request.GET.title }}" />
         <a href="{% url 'site_projects' %}" class="projects-search-reset">
@@ -28,7 +28,22 @@
                 {% endblocktrans %}
             </small>
         </p>
+        <select name="catalog" id="catalog" class="form-control">
+            <option value="">{% trans 'All catalogs' %}</option>
+            {% for catalog in catalogs %}
+                <option value="{{ catalog.id }}" {% if catalog.id|stringformat:'s' == request.GET.catalog %}selected{% endif %}>
+                    {{ catalog.title }}
+                </option>
+            {% endfor %}
+        </select>
     </form>
+    <script>
+        $(document).ready(function() {
+            $('#catalog').change(function() {
+                $('#projects-search').trigger('submit');
+            });
+        });
+    </script>
 
     <h2>{% trans 'Options' %}</h2>
 
@@ -46,10 +61,11 @@
     <table class="table projects-table">
         <thead>
             <tr>
-                <th style="width: 50%;">{% trans 'Name' %}</th>
+                <th style="width: 40%;">{% trans 'Name' %}</th>
+                <th style="width: 10%;">{% trans 'Progress' %}</th>
                 <th style="width: 20%;">{% trans 'Created' %}</th>
-                <th style="width: 20%;">{% trans 'Last changed' %}</th>
-                <th style="width: 10%;"></th>
+                <th style="width: 23%;">{% trans 'Last changed' %}</th>
+                <th style="width: 7%;"></th>
             </tr>
         </thead>
         <tbody>
@@ -60,6 +76,9 @@
                     {% for ancestor in project.get_ancestors %}{{ ancestor }} / {% endfor %}
                     <strong>{{ project.title }}</strong>
                     </a>
+                </td>
+                <td>
+                    {% project_progress project %}
                 </td>
                 <td>
                     {{ project.created }}

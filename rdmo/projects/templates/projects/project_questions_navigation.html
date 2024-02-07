@@ -3,22 +3,29 @@
 {% include 'projects/project_questions_navigation_help.html' %}
 
 <ul class="list-unstyled project-questions-overview">
-    <li ng-repeat="section in service.project.catalog.sections">
+    <li ng-repeat="section in service.navigation">
         <a href="" ng-click="service.jump(section)">
             {$ section.title $}
         </a>
 
         <ul class="list-unstyled"
-            ng-show="section.id == service.questionset.section.id">
-            <li ng-repeat="questionset in section.questionsets"
-                ng-class="{'active': questionset.id == service.questionset.id}">
+            ng-show="section.pages">
+            <li ng-repeat="page in section.pages"
+                ng-class="{'active': page.id == service.page.id}">
 
-                <a href="" ng-click="service.jump(section, questionset)">
-                    <span>{$ questionset.title $}<span>
-                    <span ng-show="questionset.has_conditions" class="small">
-                        <i class="fa fa-question-circle-o small" aria-hidden="true"></i>
+
+                <a href="" ng-click="service.jump(section, page)" ng-show="page.show">
+                    <span>{$ page.title $}<span>
+                    <span ng-show="page.count > 0 && page.count == page.total">
+                        <i class="fa fa-check" aria-hidden="true"></i>
+                    </span>
+                    <span ng-show="page.count > 0 && page.count != page.total">
+                        {% blocktrans with page_count='{$ page.count $}' page_total='{$ page.total $}' trimmed %}
+                        ({{ page_count }} of {{ page_total }})
+                        {% endblocktrans %}
                     </span>
                 </a>
+                <span class="text-muted" ng-hide="page.show">{$ page.title $}<span>
             </li>
         </ul>
     </li>

@@ -88,5 +88,5 @@ class IntegrationWebhookView(View):
         try:
             integration = Integration.objects.filter(project_id=project_id).get(pk=pk)
             return integration.provider.webhook(request, integration)
-        except Integration.DoesNotExist:
-            raise Http404
+        except Integration.DoesNotExist as e:
+            raise Http404 from e

@@ -1,12 +1,11 @@
 from pathlib import Path
 
 import pytest
+
 from django.conf import settings
 from django.urls import reverse
 
-from rdmo.core.constants import (VALUE_TYPE_CHOICES, VALUE_TYPE_FILE,
-                                 VALUE_TYPE_TEXT)
-from rdmo.questions.models import Question
+from rdmo.core.constants import VALUE_TYPE_CHOICES, VALUE_TYPE_FILE, VALUE_TYPE_TEXT
 
 from ..models import Value
 
@@ -51,7 +50,10 @@ values = [1, 2, 3, 4, 5, 6, 7, 238, 242, 247, 248, 249]
 attribute_id = 1
 option_id = 1
 
-set_values = [84, 85]
+set_values = [
+    (84, 23),
+    (85, 20)
+]
 set_questionsets = [42, 43]
 
 
@@ -230,27 +232,20 @@ def test_delete(db, client, username, password, project_id, value_id):
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
-@pytest.mark.parametrize('value_id', set_values)
-def test_set(db, client, username, password, project_id, value_id):
+@pytest.mark.parametrize('value_id, set_values_count', set_values)
+def test_set(db, client, username, password, project_id, value_id, set_values_count):
     client.login(username=username, password=password)
-    value = Value.objects.filter(project_id=project_id, snapshot=None, id=value_id).first()
-
-    set_attributes = Question.objects.filter(questionset__id__in=set_questionsets).values_list('attribute', flat=True)
+    value_exists = Value.objects.filter(project_id=project_id, snapshot=None, id=value_id).exists()
     values_count = Value.objects.count()
-    if value and project_id in delete_value_permission_map.get(username, []):
-        set_values_count = Value.objects.filter(project_id=project_id,
-                                                snapshot=None,
-                                                attribute__in=set_attributes,
-                                                set_index=value.set_index).count()
 
     url = reverse(urlnames['set'], args=[project_id, value_id])
     response = client.delete(url)
 
-    if value and project_id in delete_value_permission_map.get(username, []):
+    if value_exists and project_id in delete_value_permission_map.get(username, []):
         assert response.status_code == 204
         assert not Value.objects.filter(pk=value_id).exists()
         assert Value.objects.count() == values_count - set_values_count - 1  # one is for set/id
-    elif value and project_id in view_value_permission_map.get(username, []):
+    elif value_exists and project_id in view_value_permission_map.get(username, []):
         assert response.status_code == 403
         assert Value.objects.filter(pk=value_id).exists()
         assert Value.objects.count() == values_count
@@ -273,7 +268,7 @@ def test_file_get(db, client, files, username, password, project_id, value_id):
     if value and value.value_type == VALUE_TYPE_FILE and project_id in view_value_permission_map.get(username, []):
         assert response.status_code == 200
         assert response['Content-Type'] == value.file_type
-        assert response['Content-Disposition'] == 'attachment; filename={}'.format(value.file_name)
+        assert response['Content-Disposition'] == f'attachment; filename={value.file_name}'
         assert response.content == value.file.read()
     else:
         assert response.status_code == 404

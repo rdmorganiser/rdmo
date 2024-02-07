@@ -8,7 +8,7 @@ class ProjectsConfig(AppConfig):
     verbose_name = _('Projects')
 
     def ready(self):
-        from . import rules
+        from . import rules  # noqa: F401
 
         if settings.PROJECT_REMOVE_VIEWS:
-            from . import handlers
+            from . import handlers  # noqa: F401

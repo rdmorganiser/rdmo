@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdmo xmlns:dc="http://purl.org/dc/elements/1.1/" created="2023-04-20T09:39:37.642472+02:00" version="2.0.0">
+	<condition dc:uri="http://example.com/terms/conditions/options_empty">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>options_empty</uri_path>
+		<dc:comment/>
+		<source dc:uri="http://example.com/terms/domain/conditions/option"/>
+		<relation>empty</relation>
+		<target_text/>
+		<target_option/>
+	</condition>
+	<condition dc:uri="http://example.com/terms/conditions/options_equal_one">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>options_equal_one</uri_path>
+		<dc:comment/>
+		<source dc:uri="http://example.com/terms/domain/conditions/option"/>
+		<relation>eq</relation>
+		<target_text/>
+		<target_option dc:uri="http://example.com/terms/options/one_two_three/one"/>
+	</condition>
+	<condition dc:uri="http://example.com/terms/conditions/optionset_bool_is_true">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>optionset_bool_is_true</uri_path>
+		<dc:comment/>
+		<source dc:uri="http://example.com/terms/domain/conditions/optionset/bool"/>
+		<relation>eq</relation>
+		<target_text>1</target_text>
+		<target_option/>
+	</condition>
+	<condition dc:uri="http://example.com/terms/conditions/options_not_empty">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>options_not_empty</uri_path>
+		<dc:comment/>
+		<source dc:uri="http://example.com/terms/domain/conditions/option"/>
+		<relation>notempty</relation>
+		<target_text/>
+		<target_option/>
+	</condition>
+	<condition dc:uri="http://example.com/terms/conditions/options_not_equal_one">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>options_not_equal_one</uri_path>
+		<dc:comment/>
+		<source dc:uri="http://example.com/terms/domain/conditions/option"/>
+		<relation>neq</relation>
+		<target_text/>
+		<target_option dc:uri="http://example.com/terms/options/one_two_three/one"/>
+	</condition>
+	<condition dc:uri="http://example.com/terms/conditions/set_bool_is_true">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>set_bool_is_true</uri_path>
+		<dc:comment/>
+		<source dc:uri="http://example.com/terms/domain/conditions/set/bool"/>
+		<relation>eq</relation>
+		<target_text>1</target_text>
+		<target_option/>
+	</condition>
+	<condition dc:uri="http://example.com/terms/conditions/text_contains_test">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>text_contains_test</uri_path>
+		<dc:comment/>
+		<source dc:uri="http://example.com/terms/domain/conditions/text"/>
+		<relation>contains</relation>
+		<target_text>test</target_text>
+		<target_option/>
+	</condition>
+	<condition dc:uri="http://example.com/terms/conditions/text_empty">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>text_empty</uri_path>
+		<dc:comment/>
+		<source dc:uri="http://example.com/terms/domain/conditions/text"/>
+		<relation>empty</relation>
+		<target_text/>
+		<target_option/>
+	</condition>
+	<condition dc:uri="http://example.com/terms/conditions/text_equal_test">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>text_equal_test</uri_path>
+		<dc:comment/>
+		<source dc:uri="http://example.com/terms/domain/conditions/text"/>
+		<relation>eq</relation>
+		<target_text>test</target_text>
+		<target_option/>
+	</condition>
+	<condition dc:uri="http://example.com/terms/conditions/text_greater_than_0">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>text_greater_than_0</uri_path>
+		<dc:comment/>
+		<source dc:uri="http://example.com/terms/domain/conditions/text"/>
+		<relation>gt</relation>
+		<target_text>0</target_text>
+		<target_option/>
+	</condition>
+	<condition dc:uri="http://example.com/terms/conditions/text_greater_than_equal_0">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>text_greater_than_equal_0</uri_path>
+		<dc:comment/>
+		<source dc:uri="http://example.com/terms/domain/conditions/text"/>
+		<relation>gte</relation>
+		<target_text>0</target_text>
+		<target_option/>
+	</condition>
+	<condition dc:uri="http://example.com/terms/conditions/text_lesser_than_0">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>text_lesser_than_0</uri_path>
+		<dc:comment/>
+		<source dc:uri="http://example.com/terms/domain/conditions/text"/>
+		<relation>lt</relation>
+		<target_text>0</target_text>
+		<target_option/>
+	</condition>
+	<condition dc:uri="http://example.com/terms/conditions/text_lesser_than_equal_0">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>text_lesser_than_equal_0</uri_path>
+		<dc:comment/>
+		<source dc:uri="http://example.com/terms/domain/conditions/text"/>
+		<relation>lte</relation>
+		<target_text>0</target_text>
+		<target_option/>
+	</condition>
+	<condition dc:uri="http://example.com/terms/conditions/text_not_empty">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>text_not_empty</uri_path>
+		<dc:comment/>
+		<source dc:uri="http://example.com/terms/domain/conditions/text"/>
+		<relation>notempty</relation>
+		<target_text/>
+		<target_option/>
+	</condition>
+	<condition dc:uri="http://example.com/terms/conditions/text_not_equal_test">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>text_not_equal_test</uri_path>
+		<dc:comment/>
+		<source dc:uri="http://example.com/terms/domain/conditions/text"/>
+		<relation>neq</relation>
+		<target_text>test</target_text>
+		<target_option/>
+	</condition>
+</rdmo>

@@ -1,29 +1,23 @@
 import logging
 
 from django.conf import settings
-from django.db.models import Prefetch
 from django.shortcuts import redirect
 from django.views.generic import DetailView
 
 from rdmo.core.constants import VALUE_TYPE_FILE
 from rdmo.core.utils import render_to_format
 from rdmo.core.views import ObjectPermissionMixin
-from rdmo.questions.models import QuestionSet, Question
 from rdmo.views.utils import ProjectWrapper
 
 from ..models import Project, Snapshot
 from ..utils import get_value_path
+
 logger = logging.getLogger(__name__)
 
 
 class ProjectAnswersView(ObjectPermissionMixin, DetailView):
     model = Project
-    queryset = Project.objects.prefetch_related(
-        Prefetch('catalog__sections__questionsets', queryset=QuestionSet.objects.select_related('attribute')),
-        Prefetch('catalog__sections__questionsets__questions', queryset=Question.objects.select_related('attribute', 'questionset')),
-        Prefetch('catalog__sections__questionsets__questionsets', queryset=QuestionSet.objects.select_related('attribute')),
-        Prefetch('catalog__sections__questionsets__questionsets__questions', queryset=Question.objects.select_related('attribute', 'questionset')),
-    )
+    queryset = Project.objects.all()
 
     permission_required = 'projects.view_project_object'
     template_name = 'projects/project_answers.html'
@@ -40,6 +34,9 @@ class ProjectAnswersView(ObjectPermissionMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        # prefetch most elements of the catalog
+        context['project'].catalog.prefetch_elements()
 
         try:
             context['current_snapshot'] = context['project'].snapshots.get(pk=self.kwargs.get('snapshot_id'))
@@ -62,16 +59,14 @@ class ProjectAnswersView(ObjectPermissionMixin, DetailView):
 
 class ProjectAnswersExportView(ObjectPermissionMixin, DetailView):
     model = Project
-    queryset = Project.objects.prefetch_related(
-        Prefetch('catalog__sections__questionsets', queryset=QuestionSet.objects.select_related('attribute')),
-        Prefetch('catalog__sections__questionsets__questions', queryset=Question.objects.select_related('attribute', 'questionset')),
-        Prefetch('catalog__sections__questionsets__questionsets', queryset=QuestionSet.objects.select_related('attribute')),
-        Prefetch('catalog__sections__questionsets__questionsets__questions', queryset=Question.objects.select_related('attribute', 'questionset')),
-    )
+    queryset = Project.objects.all()
     permission_required = 'projects.view_project_object'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        # prefetch most elements of the catalog
+        context['project'].catalog.prefetch_elements()
 
         try:
             context['current_snapshot'] = context['project'].snapshots.get(pk=self.kwargs.get('snapshot_id'))
@@ -88,4 +83,5 @@ class ProjectAnswersExportView(ObjectPermissionMixin, DetailView):
         return context
 
     def render_to_response(self, context, **response_kwargs):
-        return render_to_format(self.request, context['format'], context['title'], 'projects/project_answers_export.html', context)
+        return render_to_format(self.request, context['format'], context['title'],
+                                'projects/project_answers_export.html', context)

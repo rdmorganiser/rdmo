@@ -1,0 +1,89 @@
+Text?,,Lorem ipsum dolor sit amet
+Textarea?,,"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet."
+Yes or no?,,Yes
+Radio buttons?,,Text: Lorem ipsum
+Select drop-down?,,One
+Range slider?,,37
+File?,,rdmo-logo.svg
+Date picker?,,2018-01-01
+Text?,,"Lorem ipsum dolor sit amet, consetetur sadipscing elitr; sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua"
+Textarea?,,"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.; Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet."
+Yes or no?,,Yes; No; Yes
+Radio buttons?,,One; Two; Three
+Select drop-down?,,One; Two; Three
+Range slider?,,0; 50; 100
+Date picker?,,2017-04-01; 2017-04-02; 2017-04-03
+File?,,test.txt; favicon.png
+Checkbox?,,One; Three
+Text?,,Lorem ipsum dolor sit amet
+Textarea?,,"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet."
+Yes or no?,,Yes
+Radio buttons?,,Text: Lorem ipsum
+Select drop-down?,,One
+Range slider?,,37
+Date picker?,,2018-01-01
+File?,,rdmo-logo.svg
+Text?,,"Lorem ipsum dolor sit amet, consetetur sadipscing elitr; sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua"
+Textarea?,,"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.; Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet."
+Yes or no?,,Yes; No; Yes
+Radio buttons?,,One; Two; Three
+Select drop-down?,,One; Two; Three
+Range slider?,,0; 50; 100
+Date picker?,,2017-04-01; 2017-04-02; 2017-04-03
+File?,,test.txt; favicon.png
+Checkbox?,,One; Three
+Text?,"Set ""First""","Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
+Text?,"Set ""Second""","Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
+Textarea?,"Set ""First""","Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet."
+Textarea?,"Set ""Second""","Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet."
+Yes or no?,"Set ""First""",Yes
+Yes or no?,"Set ""Second""",No
+Radio buttons?,"Set ""First""",One
+Radio buttons?,"Set ""Second""",Two
+Select drop-down?,"Set ""First""",One
+Select drop-down?,"Set ""Second""",Two
+Range slider?,"Set ""First""",1
+Range slider?,"Set ""Second""",2
+Date picker?,"Set ""First""",2018-01-07
+Date picker?,"Set ""Second""",2018-02-07
+Text?,"Set ""First""","Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
+Text?,"Set ""Second""","Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
+Textarea?,"Set ""First""","Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet."
+Textarea?,"Set ""Second""","Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet."
+Yes or no?,"Set ""First""",Yes; No; Yes
+Yes or no?,"Set ""Second""",No; Yes; No
+Radio buttons?,"Set ""First""",One; Two; Three
+Radio buttons?,"Set ""Second""",Three; Two; One
+Select drop-down?,"Set ""First""",One; Two
+Select drop-down?,"Set ""Second""",Three
+Range slider?,"Set ""First""",16; 31
+Range slider?,"Set ""Second""",86
+Date picker?,"Set ""First""",2018-01-07; 2018-02-07
+Date picker?,"Set ""Second""",2018-10-07; 2018-11-07
+Checkbox?,"Set ""First""",Two; Three
+Checkbox?,"Set ""Second""",One
+Text,,test
+Option,,One
+text_contains?,,test
+text_equal?,,test
+text_not_empty?,,test
+option_equal?,,One
+option_not_empty?,,One
+A?,"Set ""First"" Block #1",a0
+A?,"Set ""First"" Block #2",a1
+A?,"Set ""Second"" Block #1",
+A?,"Set ""Second"" Block #2",
+A?,"Set ""Second"" Block #3",
+B?,"Set ""First"" Block #1",b1
+B?,"Set ""First"" Block #2",b1
+B?,"Set ""Second"" Block #1",
+B?,"Set ""Second"" Block #2",
+B?,"Set ""Second"" Block #3",
+C?,"Set ""First"" Block #1",c01; c02
+C?,"Set ""First"" Block #2",c10; c11
+C?,"Set ""Second"" Block #1",
+C?,"Set ""Second"" Block #2",
+C?,"Set ""Second"" Block #3",
+Y?,"Set ""Second"" Block #3 Set #1",One
+Y?,"Set ""Second"" Block #3 Set #2",Two
+Y?,"Set ""Second"" Block #3 Set #3",Three

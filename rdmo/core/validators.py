@@ -1,10 +1,12 @@
-from django.core.exceptions import (MultipleObjectsReturned,
-                                    ObjectDoesNotExist, ValidationError)
+import re
+
+from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist, ValidationError
 from django.utils.translation import gettext_lazy as _
+
 from rest_framework import serializers
 
 
-class InstanceValidator(object):
+class InstanceValidator:
 
     '''
     BaseValidator which should work with model instances, used by
@@ -15,13 +17,16 @@ class InstanceValidator(object):
     It is used as InstanceValidator() for (1) and InstanceValidator(instance)(self.cleaned_data) for (2)
     '''
 
+    requires_context = True
+
     def __init__(self, instance=None):
         self.instance = instance
         self.serializer = None
 
-    def set_context(self, serializer):
-        self.instance = serializer.instance
-        self.serializer = serializer
+    def __call__(self, data, serializer=None):
+        if serializer is not None:
+            self.instance = serializer.instance
+            self.serializer = serializer
 
     def raise_validation_error(self, errors):
         if self.serializer:
@@ -29,62 +34,104 @@ class InstanceValidator(object):
         else:
             raise ValidationError(errors)
 
-    def __call__(self, value):
-        raise NotImplementedError
-
 
 class UniqueURIValidator(InstanceValidator):
 
     model = None
+    models = []
 
-    def __call__(self, data):
+    path_pattern = re.compile(r'^[\w\-\/]+\Z')
+
+    def __call__(self, data, serializer=None):
+        super().__call__(data, serializer)
+
         self.validate(self.model, self.instance, self.get_uri(data))
 
     def validate(self, model, instance, uri):
-        try:
-            if instance:
-                model.objects.exclude(pk=instance.id).get(uri=uri)
-            else:
-                model.objects.get(uri=uri)
-        except MultipleObjectsReturned:
-            pass
-        except ObjectDoesNotExist:
-            return
+        models = self.models or [model]
 
-        self.raise_validation_error({
-            'key': _('%(model)s with the uri "%(uri)s" already exists.') % {
+        for model in models:
+            try:
+                if instance:
+                    model.objects.exclude(pk=instance.id).get(uri=uri)
+                else:
+                    model.objects.get(uri=uri)
+            except MultipleObjectsReturned:
+                pass
+            except ObjectDoesNotExist:
+                continue
+
+            message = _('%(model)s with the uri "%(uri)s" already exists.') % {
                 'model': model._meta.verbose_name.title(),
                 'uri': uri
             }
-        })
+
+            self.raise_validation_error({
+                'uri_path': message,
+                'key': message
+            })
 
     def get_uri(self, data):
-        raise NotImplementedError
+        uri_prefix = data.get('uri_prefix')
+        uri_path = data.get('uri_path')
+
+        if not uri_path:
+            self.raise_validation_error({
+                'uri_path': _('This field is required.')
+            })
+        elif not self.path_pattern.match(uri_path):
+            self.raise_validation_error({
+                'uri_path': _('This value may contain only letters, numbers, slashes, hyphens and underscores.')
+            })
+        else:
+            uri = self.model.build_uri(uri_prefix, uri_path)
+            return uri
 
 
 class LockedValidator(InstanceValidator):
 
-    parent_field = None
+    parent_fields = ()
 
-    def __call__(self, data):
+    def __call__(self, data, serializer=None):
+        super().__call__(data, serializer)
+
         is_locked = False
 
-        # lock if a parent_field is set and a parent is set and the parent is locked
-        if self.parent_field:
-            parent = data.get(self.parent_field)
-            if parent:
+        # lock if parent_fields are set and a parent is locked
+        for parent_field in self.parent_fields:
+            parent = data.get(parent_field)
+            try:
                 is_locked |= parent.is_locked
+            except AttributeError:
+                try:
+                    for p in parent:
+                        is_locked |= p.is_locked
+                except TypeError:
+                    pass
 
-        # lock only if the instance is now locked and was locked before
         if self.instance:
-            is_locked |= data.get('locked', False) and self.instance.is_locked
+            # lock if the instance itself has locked parents
+            for parent_field in self.parent_fields:
+                parent = getattr(self.instance, parent_field)
 
+                try:
+                    is_locked |= parent.is_locked
+                except AttributeError:
+                    try:
+                        for p in parent.all():
+                            is_locked |= p.is_locked
+                    except AttributeError:
+                        pass
+
+        # lock if a superior element is locked
         if is_locked:
+            raise self.raise_validation_error({
+                'locked': _('A superior element is locked.')
+            })
+
+        # lock if the instance is now locked and was locked before
+        if data.get('locked', False) and self.instance and self.instance.locked:
             if data.get('locked'):
                 raise self.raise_validation_error({
                     'locked': _('The element is locked.')
-                })
-            else:
-                raise self.raise_validation_error({
-                    'locked': _('A superior element is locked.')
                 })

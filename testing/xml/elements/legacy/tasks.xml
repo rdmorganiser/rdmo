@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdmo xmlns:dc="http://purl.org/dc/elements/1.1/" created="2023-04-20T10:52:17.451406+02:00">
+	<task dc:uri="http://example.com/terms/tasks/null">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>null</key>
+		<dc:comment>1</dc:comment>
+		<title lang="en">null</title>
+		<text lang="en">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.</text>
+		<title lang="de">null</title>
+		<text lang="de">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.</text>
+		<start_attribute/>
+		<end_attribute/>
+		<days_before>0</days_before>
+		<days_after>0</days_after>
+		<conditions>
+			<condition dc:uri="http://example.com/terms/conditions/text_not_equal_test"/>
+		</conditions>
+		<catalogs>
+			<catalog dc:uri="http://example.com/terms/questions/catalog"/>
+		</catalogs>
+	</task>
+	<task dc:uri="http://example.com/terms/tasks/text_equal_test">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>text_equal_test</key>
+		<dc:comment>1</dc:comment>
+		<title lang="en">text_equal_test</title>
+		<text lang="en">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.</text>
+		<title lang="de">text_equal_test</title>
+		<text lang="de">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.</text>
+		<start_attribute dc:uri="http://example.com/terms/domain/set/collection/url"/>
+		<end_attribute dc:uri="http://example.com/terms/domain/individual/collection/datetime"/>
+		<days_before>1</days_before>
+		<days_after>2</days_after>
+		<conditions>
+			<condition dc:uri="http://example.com/terms/conditions/text_equal_test"/>
+		</conditions>
+		<catalogs>
+			<catalog dc:uri="http://example.com/terms/questions/catalog"/>
+		</catalogs>
+	</task>
+</rdmo>

@@ -12,8 +12,6 @@ from ..managers import IssueManager
 
 class Issue(models.Model):
 
-    objects = IssueManager()
-
     ISSUE_STATUS_OPEN = 'open'
     ISSUE_STATUS_IN_PROGRESS = 'in_progress'
     ISSUE_STATUS_CLOSED = 'closed'
@@ -39,13 +37,14 @@ class Issue(models.Model):
         help_text=_('The status for this issue.')
     )
 
+    objects = IssueManager()
     class Meta:
-        ordering = ('project__title', )
+        ordering = ('project__title', 'task__uri')
         verbose_name = _('Issue')
         verbose_name_plural = _('Issues')
 
     def __str__(self):
-        return '%s / %s / %s' % (self.project.title, self.task, self.status)
+        return f'{self.project.title} / {self.task} / {self.status}'
 
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.project.pk})
@@ -118,4 +117,4 @@ class IssueResource(models.Model):
         verbose_name_plural = _('Issue resources')
 
     def __str__(self):
-        return '%s / %s / %s' % (self.issue.project.title, self.issue, self.url)
+        return f'{self.issue.project.title} / {self.issue} / {self.url}'

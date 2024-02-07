@@ -1,9 +1,9 @@
 import pytest
+
 from django.template import Context
 
 from rdmo.projects.models import Project
-from rdmo.views.templatetags.view_tags import (get_set_value, get_set_values,
-                                               get_sets, get_value, get_values)
+from rdmo.views.templatetags.view_tags import get_set_value, get_set_values, get_sets, get_value, get_values
 from rdmo.views.utils import ProjectWrapper
 
 project_pk = 1
@@ -22,7 +22,9 @@ def context(db):
 
 @pytest.fixture
 def values(db):
-    return Project.objects.get(pk=project_pk).values.filter(snapshot=None).order_by('set_index').order_by('collection_index')
+    return Project.objects.get(pk=project_pk).values.filter(snapshot=None) \
+                                                    .order_by('set_index') \
+                                                    .order_by('collection_index')
 
 
 def test_get_value_project_title(context):
@@ -81,10 +83,12 @@ def test_get_value(context, values):
 def test_get_set_values(context, values):
     path = 'set/single/text'
     for value_set in get_sets(context, 'set'):
-        assertListEqual(get_set_values(context, value_set, path), values.filter(attribute__path=path, set_index=value_set['set_index']))
+        assertListEqual(get_set_values(context, value_set, path),
+                        values.filter(attribute__path=path, set_index=value_set['set_index']))
 
 
 def test_get_set_value(context, values):
     path = 'set/single/text'
     for value_set in get_sets(context, 'set'):
-        assert get_set_value(context, value_set, path)['id'] == values.filter(attribute__path=path, set_index=value_set['set_index']).first().id
+        assert get_set_value(context, value_set, path)['id'] == \
+               values.filter(attribute__path=path, set_index=value_set['set_index']).first().id

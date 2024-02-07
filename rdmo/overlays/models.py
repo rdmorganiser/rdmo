@@ -33,4 +33,4 @@ class Overlay(models.Model):
         verbose_name_plural = _('Overlays')
 
     def __str__(self):
-        return '{} / {}'.format(self.user, self.url_name)
+        return f'{self.user} / {self.url_name}'

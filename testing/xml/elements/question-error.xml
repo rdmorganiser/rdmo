@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdmo xmlns:dc="http://purl.org/dc/elements/1.1/" created="2023-04-20T09:39:10.351808+02:00" version="2.0.0">
+	<question dc:uri="http://example.com/terms/questions/catalog/blocks/set/block/a">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/blocks/set/block/a</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/blocks/a"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">A?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">A?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>text</widget_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width>6</width>
+		<optionsets/>
+		<conditions/>
+	</question>
+</rdmo>

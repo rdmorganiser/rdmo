@@ -5,7 +5,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, TemplateView
 
-from rdmo.core.views import RedirectViewMixin
+from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 from rdmo.questions.models import Catalog
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
@@ -17,14 +17,17 @@ from ..models import Membership, Project
 logger = logging.getLogger(__name__)
 
 
-class ProjectCreateView(LoginRequiredMixin, RedirectViewMixin, CreateView):
+class ProjectCreateView(ObjectPermissionMixin, LoginRequiredMixin,
+                        RedirectViewMixin, CreateView):
     model = Project
     form_class = ProjectForm
+    permission_required = 'projects.add_project'
 
     def get_form_kwargs(self):
         catalogs = Catalog.objects.filter_current_site() \
                                   .filter_group(self.request.user) \
-                                  .filter_availability(self.request.user)
+                                  .filter_availability(self.request.user) \
+                                  .order_by('-available', 'order')
         projects = Project.objects.filter_user(self.request.user)
 
         form_kwargs = super().get_form_kwargs()
@@ -39,7 +42,7 @@ class ProjectCreateView(LoginRequiredMixin, RedirectViewMixin, CreateView):
         form.instance.site = get_current_site(self.request)
 
         # save the project
-        response = super(ProjectCreateView, self).form_valid(form)
+        response = super().form_valid(form)
 
         # add all tasks to project
         tasks = Task.objects.filter_current_site() \
@@ -64,8 +67,10 @@ class ProjectCreateView(LoginRequiredMixin, RedirectViewMixin, CreateView):
         return response
 
 
-class ProjectCreateImportView(ProjectImportMixin, LoginRequiredMixin, TemplateView):
+class ProjectCreateImportView(ObjectPermissionMixin, LoginRequiredMixin,
+                              ProjectImportMixin, TemplateView):
     success_url = reverse_lazy('projects')
+    permission_required = 'projects.add_project'
 
     def get(self, request, *args, **kwargs):
         self.object = None

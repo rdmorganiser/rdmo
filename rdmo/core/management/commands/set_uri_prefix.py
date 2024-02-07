@@ -1,9 +1,9 @@
 from django.core.management.base import BaseCommand
 
 from rdmo.conditions.models import Condition
-from rdmo.options.models import OptionSet, Option
 from rdmo.domain.models import Attribute
-from rdmo.questions.models import Catalog, Section, Subsection, QuestionSet, Question
+from rdmo.options.models import Option, OptionSet
+from rdmo.questions.models import Catalog, Question, QuestionSet, Section, Subsection
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 

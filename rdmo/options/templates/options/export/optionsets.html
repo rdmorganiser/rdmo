@@ -1,0 +1,14 @@
+{% extends 'core/export.html' %}
+{% load i18n %}
+
+{% block body %}
+
+    <h1>{% trans 'Option sets' %}</h1>
+
+    <ul>
+    {% for optionset in optionsets %}
+        {% include 'options/export/optionset.html' with optionset=optionset %}
+    {% endfor %}
+    </ul>
+
+{% endblock %}

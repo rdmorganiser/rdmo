@@ -1,5 +1,6 @@
-from django_filters import CharFilter, FilterSet
 from rest_framework.filters import BaseFilterBackend
+
+from django_filters import CharFilter, FilterSet
 
 from .models import Project
 
@@ -9,7 +10,7 @@ class ProjectFilter(FilterSet):
 
     class Meta:
         model = Project
-        fields = ('title', )
+        fields = ('title', 'catalog')
 
 
 class SnapshotFilterBackend(BaseFilterBackend):

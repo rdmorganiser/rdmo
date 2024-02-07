@@ -1,4 +1,4 @@
-from rdmo.core.plugins import get_plugins, get_plugin
+from rdmo.core.plugins import get_plugin, get_plugins
 
 
 def get_widgets():

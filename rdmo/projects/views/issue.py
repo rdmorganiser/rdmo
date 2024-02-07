@@ -7,6 +7,7 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.template import TemplateSyntaxError
 from django.template.loader import render_to_string
 from django.views.generic import DetailView, UpdateView
+
 from rest_framework.reverse import reverse
 
 from rdmo.core.mail import send_mail
@@ -32,13 +33,14 @@ class IssueDetailView(ObjectPermissionMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         project = self.get_object().project
+        project.catalog.prefetch_elements()
         conditions = self.get_object().task.conditions.all()
 
         sources = []
         for condition in conditions:
             sources.append({
                 'source': condition.source,
-                'questions': condition.source.questions.filter(questionset__section__catalog=project.catalog),
+                'questions': filter(lambda q: q.attribute == condition.source, project.catalog.questions),
                 'values': condition.source.values.filter(project=project, snapshot=None)
             })
 
@@ -130,12 +132,12 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
 
             attachments = []
             if form.cleaned_data.get('attachments_answers'):
-                title = '{}.{}'.format(project.title, attachments_format)
+                title = f'{project.title}.{attachments_format}'
                 response = self.render_project_answers(project, snapshot, attachments_format)
                 attachments.append((title, response.content, response['content-type']))
 
             for view in form.cleaned_data.get('attachments_views'):
-                title = '{}.{}'.format(project.title, attachments_format)
+                title = f'{project.title}.{attachments_format}'
                 response = self.render_project_views(project, snapshot, view, attachments_format)
                 attachments.append((title, response.content, response['content-type']))
 
@@ -152,7 +154,8 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
                     pass
             else:
                 if mail_form.is_valid():
-                    to_emails = mail_form.cleaned_data.get('recipients', []) + mail_form.cleaned_data.get('recipients_input', [])
+                    to_emails = [*mail_form.cleaned_data.get('recipients', []),
+                                 *mail_form.cleaned_data.get('recipients_input', [])]
                     cc_emails = [request.user.email]
                     reply_to = [request.user.email]
 
@@ -168,12 +171,14 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
         return self.render_to_response(self.get_context_data(form=form, mail_form=mail_form))
 
     def render_project_answers(self, project, snapshot, attachments_format):
-        return render_to_format(self.request, attachments_format, project.title, 'projects/project_answers_export.html', {
-            'project': ProjectWrapper(project, snapshot),
-            'format': attachments_format,
-            'title': project.title,
-            'resource_path': get_value_path(project, snapshot)
-        })
+        return render_to_format(
+            self.request, attachments_format, project.title, 'projects/project_answers_export.html', {
+                'project': ProjectWrapper(project, snapshot),
+                'format': attachments_format,
+                'title': project.title,
+                'resource_path': get_value_path(project, snapshot)
+            }
+        )
 
     def render_project_views(self, project, snapshot, view, attachments_format):
         try:
@@ -181,10 +186,12 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
         except TemplateSyntaxError:
             return HttpResponse()
 
-        return render_to_format(self.request, attachments_format, project.title, 'projects/project_view_export.html', {
-            'format': attachments_format,
-            'title': project.title,
-            'view': view,
-            'rendered_view': rendered_view,
-            'resource_path': get_value_path(project, snapshot)
-        })
+        return render_to_format(
+            self.request, attachments_format, project.title, 'projects/project_view_export.html', {
+                'format': attachments_format,
+                'title': project.title,
+                'view': view,
+                'rendered_view': rendered_view,
+                'resource_path': get_value_path(project, snapshot)
+            }
+        )

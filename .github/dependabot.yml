@@ -1,0 +1,82 @@
+version: 2
+updates:
+- package-ecosystem: pip
+  directory: /
+  schedule:
+    interval: monthly
+  open-pull-requests-limit: 10
+  target-branch: dependency-updates
+  labels:
+  - dependencies
+  - python
+  - type:maintenance
+  ignore:
+  - dependency-name: django-mptt # pinned, 0.15 requires Python >= 3.9
+  groups:
+    # create a single pull request containing all updates for the optional dependencies
+    optional:
+      patterns:
+      - coveralls
+      - django-allauth
+      - django-auth-ldap
+      - gunicorn
+      - mysqlclient
+      - pre-commit
+      - psycopg*
+      - pytest*
+    # create a single pull request containing all updates for django related dependencies
+    django:
+      patterns:
+      - django*
+      - drf*
+- package-ecosystem: github-actions
+  directory: /
+  schedule:
+    interval: monthly
+  open-pull-requests-limit: 10
+  target-branch: dependency-updates
+  labels:
+  - dependencies
+  - github_actions
+  - type:maintenance
+  groups:
+    # create a single pull request containing all updates for GitHub Actions
+    github-actions:
+      patterns:
+      - '*'
+- package-ecosystem: npm
+  directory: /
+  schedule:
+    interval: monthly
+  open-pull-requests-limit: 10
+  target-branch: dependency-updates
+  labels:
+  - dependencies
+  - javascript
+  - type:maintenance
+  ignore:
+  - dependency-name: react-bootstrap # rdmo still uses bootstrap 3, which is not supported by react-bootstrap > 0.33.1
+  - dependency-name: "*"
+    update-types: ["version-update:semver-patch"] # ignore patch versions for all JavaScript dependencies
+  groups:
+    react:
+      patterns:
+      - react*
+    redux:
+      patterns:
+      - redux*
+    babel:
+      patterns:
+      - '@babel*'
+      - babel*
+    webpack:
+      patterns:
+      - webpack*
+      - copy-webpack-plugin
+    eslint:
+      patterns:
+      - eslint*
+    prod-dependencies:
+      dependency-type: production
+    dev-dependencies:
+      dependency-type: development

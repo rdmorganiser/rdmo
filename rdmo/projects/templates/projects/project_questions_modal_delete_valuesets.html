@@ -8,26 +8,20 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h2 class="modal-title">
-                        {$ service.questionset.verbose_name | capitalize $}
+                        {$ service.page.verbose_name | capitalize $}
                     </h2>
                 </div>
 
                 <div class="modal-body">
-                    <p ng-show="service.values[service.questionset.attribute.id_attribute.id][0].text">
-                        {% blocktrans trimmed with name='{$ service.questionset.verbose_name $}' object='{$ service.values[service.questionset.attribute.id_attribute.id][0].text $}' %}
-                        You are about to permanently delete the {{ name }} <strong>{{ object }}</strong>.
-                        {% endblocktrans %}
-                    </p>
-
-                    <p ng-hide="service.values[service.questionset.attribute.id_attribute.id][0].text">
-                        {% blocktrans trimmed with name='{$ service.questionset.verbose_name $}' %}
-                        You are about to permanently delete this {{ name }}.
+                    <p ng-hide="service.values[service.page.attribute.id_attribute.id][0].text">
+                        {% blocktrans trimmed %}
+                        You are about to permanently delete this tab.
                         {% endblocktrans %}
                     </p>
 
                     <p>
-                        {% blocktrans trimmed with name='{$ service.questionset.verbose_name $}' %}
-                        This includes all given answers for this {{ name }} on all pages, not just this one.
+                        {% blocktrans trimmed %}
+                        This includes all given answers for this tab on all pages, not just this one.
                         {% endblocktrans %}
                     </p>
 

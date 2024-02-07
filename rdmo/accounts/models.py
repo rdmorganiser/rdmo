@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
+
 from rdmo.core.models import TranslationMixin
 
 
@@ -20,52 +21,52 @@ class AdditionalField(models.Model, TranslationMixin):
     text_lang1 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Text (primary)'),
-        help_text=_('The text for this additional field in the primary language.')
+        help_text=_('The text for this additional field (in the primary language).')
     )
     text_lang2 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Text (secondary)'),
-        help_text=_('The text for this additional field in the secondary language.')
+        help_text=_('The text for this additional field (in the secondary language).')
     )
     text_lang3 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Text (tertiary)'),
-        help_text=_('The text for this additional field in the tertiary language.')
+        help_text=_('The text for this additional field (in the tertiary language).')
     )
     text_lang4 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Text (quaternary)'),
-        help_text=_('The text for this additional field in the quaternary language.')
+        help_text=_('The text for this additional field (in the quaternary language).')
     )
     text_lang5 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Text (quinary)'),
-        help_text=_('The text for this additional field in the quinary language.')
+        help_text=_('The text for this additional field (in the quinary language).')
     )
     help_lang1 = models.TextField(
         blank=True,
         verbose_name=_('Help (primary)'),
-        help_text=_('The help text to be displayed next to the input element in the primary language.')
+        help_text=_('The help text to be displayed next to the input element (in the primary language).')
     )
     help_lang2 = models.TextField(
         blank=True,
         verbose_name=_('Help (secondary)'),
-        help_text=_('The help text to be displayed next to the input element in the secondary language.')
+        help_text=_('The help text to be displayed next to the input element (in the secondary language).')
     )
     help_lang3 = models.TextField(
         blank=True,
         verbose_name=_('Help (tertiary)'),
-        help_text=_('The help text to be displayed next to the input element in the tertiary language.')
+        help_text=_('The help text to be displayed next to the input element (in the tertiary language).')
     )
     help_lang4 = models.TextField(
         blank=True,
         verbose_name=_('Help (quaternary)'),
-        help_text=_('The help text to be displayed next to the input element in the quaternary language.')
+        help_text=_('The help text to be displayed next to the input element (in the quaternary language).')
     )
     help_lang5 = models.TextField(
         blank=True,
         verbose_name=_('Help (quinary)'),
-        help_text=_('The help text to be displayed next to the input element in the quinary language.')
+        help_text=_('The help text to be displayed next to the input element (in the quinary language).')
     )
     required = models.BooleanField(
         verbose_name=_('Required'),
@@ -136,6 +137,16 @@ class Role(models.Model):
         Site, related_name='managers', blank=True,
         verbose_name=_('Manager'),
         help_text=_('The sites for which this user is manager.')
+    )
+    editor = models.ManyToManyField(
+        Site, related_name='editors', blank=True,
+        verbose_name=_('Editor'),
+        help_text=_('The sites for which this user is an editor.')
+    )
+    reviewer = models.ManyToManyField(
+        Site, related_name='reviewers', blank=True,
+        verbose_name=_('Reviewer'),
+        help_text=_('The sites for which this user is a reviewer.')
     )
 
     class Meta:

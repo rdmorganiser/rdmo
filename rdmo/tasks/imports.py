@@ -1,19 +1,23 @@
 import logging
 
 from django.contrib.sites.models import Site
-from rdmo.conditions.models import Condition
-from rdmo.core.imports import (get_foreign_field, get_m2m_instances,
-                               set_common_fields, set_lang_field,
-                               validate_instance)
-from rdmo.domain.models import Attribute
-from rdmo.questions.models import Catalog
+
+from rdmo.core.imports import (
+    check_permissions,
+    set_common_fields,
+    set_foreign_field,
+    set_lang_field,
+    set_m2m_instances,
+    validate_instance,
+)
 
 from .models import Task
+from .validators import TaskLockedValidator, TaskUniqueURIValidator
 
 logger = logging.getLogger(__name__)
 
 
-def import_task(element, save=False):
+def import_task(element, save=False, user=None):
     try:
         task = Task.objects.get(uri=element.get('uri'))
     except Task.DoesNotExist:
@@ -21,28 +25,35 @@ def import_task(element, save=False):
 
     set_common_fields(task, element)
 
+    task.order = element.get('order') or 0
+
     set_lang_field(task, 'title', element)
     set_lang_field(task, 'text', element)
 
-    task.start_attribute = get_foreign_field(task, element.get('start_attribute'), Attribute)
-    task.end_attribute = get_foreign_field(task, element.get('end_attribute'), Attribute)
+    set_foreign_field(task, 'start_attribute', element)
+    set_foreign_field(task, 'end_attribute', element)
 
     task.days_before = element.get('days_before')
     task.days_after = element.get('days_after')
 
-    conditions = get_m2m_instances(task, element.get('conditions'), Condition)
-    catalogs = get_m2m_instances(task, element.get('catalogs'), Catalog)
+    task.available = element.get('available', True)
 
-    if save and validate_instance(task):
+    validate_instance(task, element, TaskUniqueURIValidator, TaskLockedValidator)
+
+    check_permissions(task, element, user)
+
+    if save and not element.get('errors'):
         if task.id:
-            logger.info('Task created with uri %s.', element.get('uri'))
-        else:
+            element['updated'] = True
             logger.info('Task %s updated.', element.get('uri'))
+        else:
+            element['created'] = True
+            logger.info('Task created with uri %s.', element.get('uri'))
 
         task.save()
+        set_m2m_instances(task, 'catalogs', element)
+        set_m2m_instances(task, 'conditions', element)
         task.sites.add(Site.objects.get_current())
-        task.catalogs.set(catalogs)
-        task.conditions.set(conditions)
-        task.imported = True
+        task.editors.add(Site.objects.get_current())
 
     return task

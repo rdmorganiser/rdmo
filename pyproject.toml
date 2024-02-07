@@ -1,0 +1,223 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = ["setuptools", "wheel"]
+
+[project]
+name = "rdmo"
+description = "RDMO is a tool to support the systematic planning, organisation and implementation of the data management throughout the course of a research project."
+readme = "README.md"
+keywords = [
+  "data management plan",
+  "dmp",
+  "rdmo",
+  "research data",
+  "research data management",
+]
+license = {text = "Apache-2.0"}
+authors = [
+  {name = "RDMO Arbeitsgemeinschaft", email = "rdmo-team@listserv.dfn.de"},
+]
+requires-python = ">=3.8"
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: Web Environment",
+  "Framework :: Django :: 4.2",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: Apache Software License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+dynamic = [
+  "version",
+]
+dependencies = [
+  # dependencies with major version on zero are declared with
+  # major.minor.patch, because they can potentially introduce breaking changes
+  # in minor version updates anytime
+  "defusedcsv~=2.0",
+  "defusedxml~=0.7.1",
+  "django~=4.2",
+  "django-cleanup~=8.0",
+  "django-compressor~=4.4",
+  "django-extensions~=3.2",
+  "django-filter~=23.2",
+  "django-libsass~=0.9",
+  "django-mathfilters~=1.0",
+  "django-mptt==0.14.0", # pinned, 0.15 requires Python >= 3.9
+  "django-rest-swagger~=2.2",
+  "django-settings-export~=1.2",
+  "django-split-settings~=1.2",
+  "django-widget-tweaks~=1.5",
+  "djangorestframework~=3.14",
+  "drf-extensions~=0.7.1",
+  "iso8601~=2.0",
+  "markdown~=3.4",
+  "packaging~=23.2",
+  "pypandoc~=1.11",
+  "requests-toolbelt~=1.0",
+  "rules~=3.3",
+]
+
+[project.optional-dependencies]
+allauth = [
+  "django-allauth~=0.57.0",
+]
+ci = [
+  "coveralls~=3.3",
+  "rdmo[dev]",
+]
+dev = [
+  "build~=1.0",
+  "pipdeptree~=2.13",
+  "pre-commit~=3.4",
+  "setuptools~=69.0",
+  "twine~=4.0",
+  "wheel~=0.42.0",
+  "rdmo[allauth]",
+  "rdmo[pytest]",
+]
+gunicorn = [
+  "gunicorn~=21.2",
+]
+ldap = [
+  "django-auth-ldap~=4.5",
+]
+mysql = [
+  "mysqlclient~=2.2",
+]
+postgres = [
+  "psycopg[binary]~=3.1",
+]
+pytest = [
+  "pytest~=7.4",
+  "pytest-cov~=4.1",
+  "pytest-django~=4.5",
+  "pytest-mock~=3.11",
+  "pytest-playwright~=0.4.3",
+  "pytest-randomly~=3.15",
+  "pytest-xdist~=3.3",
+]
+
+[project.urls]
+changelog = "https://github.com/rdmorganiser/rdmo/blob/main/CHANGELOG.md"
+documentation = "https://rdmo.readthedocs.io"
+homepage = "https://rdmorganiser.github.io"
+issues = "https://github.com/rdmorganiser/rdmo/issues"
+repository = "https://github.com/rdmorganiser/rdmo.git"
+slack = "https://rdmo.slack.com"
+
+[tool.setuptools.packages.find]
+include = ["rdmo*"]
+exclude = ["*assets*", "*tests*"]
+
+[tool.setuptools.package-data]
+"*" = ["*"]
+
+[tool.setuptools.dynamic]
+version = {attr = "rdmo.__version__"}
+
+[tool.ruff]
+target-version = "py38"
+line-length = 120
+select = [
+  "B",    # flake8-bugbear
+  "C4",   # flake8-comprehensions
+  "DJ",   # flake8-django
+  "E",    # pycodestyle
+  "F",    # pyflakes
+  "I",    # isort
+  "PGH",  # pygrep-hooks
+  "RUF",  # ruff
+  "UP",   # pyupgrade
+  "W",    # pycodestyle
+  "YTT",  # flake8-2020
+]
+ignore = [
+  "B006",   # mutable-argument-default
+  "B007",   # unused-loop-control-variable
+  "B018",   # useless-expression
+  "RUF012", # mutable-class-default
+]
+
+[tool.ruff.isort]
+known-first-party = ["rdmo"]
+section-order = [
+  "future",
+  "standard-library",
+  "pytest",
+  "django",
+  "rest_framework",
+  "third-party",
+  "first-party",
+  "local-folder"
+]
+
+[tool.ruff.isort.sections]
+pytest = ["pytest"]
+django = ["django"]
+rest_framework = ["rest_framework"]
+
+[tool.ruff.per-file-ignores]
+"rdmo/**/models/__init__.py" = [
+  "F401", # unused-import
+]
+"rdmo/**/serializers/v1/__init__.py" = [
+  "F401", # unused-import
+]
+"rdmo/**/views/__init__.py" = [
+  "F401", # unused-import
+]
+"rdmo/**/tests/test_*.py" = [
+  "S101", # assert
+  "S106", # hardcoded-password-func-arg
+]
+"testing/config/settings/*.py" = [
+  "F401", # unused-import
+  "F403", # undefined-names
+  "F405", # undefined-names
+  "F821", # undefined-names
+]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings"
+testpaths = ["rdmo"]
+python_files = "test_*.py"
+pythonpath = [".", "testing"]
+addopts = '-p no:randomly -m "not e2e"'
+markers = [
+  "e2e: marks tests as end-to-end tests using playwright (deselect with '-m \"not e2e\"')",
+]
+filterwarnings = [
+  # fail on RemovedInDjango50Warning exception
+  "error::django.utils.deprecation.RemovedInDjango50Warning",
+
+  # ignore warnings raised from within coreapi 2.3.3
+  "ignore:'cgi' is deprecated and slated for removal in Python 3.13:DeprecationWarning",
+  "ignore:pkg_resources is deprecated as an API:DeprecationWarning",
+
+  # ignore warnings raised from within django itself
+  # django/core/files/storage/__init__.py
+  "ignore:django.core.files.storage.get_storage_class is deprecated:django.utils.deprecation.RemovedInDjango51Warning",
+]
+
+[tool.coverage.run]
+source = ["rdmo"]
+branch = true
+parallel = true
+
+[tool.coverage.report]
+omit = [
+    "*/management/*",
+    "*/migrations/*",
+    "*/tests/*",
+]
+exclude_lines = [
+    "raise Exception",
+    "except ImportError:"
+]

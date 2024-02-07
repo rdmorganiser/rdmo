@@ -87,7 +87,9 @@
       "member": [
         1
       ],
-      "manager": []
+      "manager": [],
+      "editor": [],
+      "reviewer": []
     }
   },
   {
@@ -98,7 +100,13 @@
       "member": [
         1
       ],
-      "manager": []
+      "manager": [],
+      "editor": [
+        3,
+        1,
+        2
+      ],
+      "reviewer": []
     }
   },
   {
@@ -109,7 +117,13 @@
       "member": [
         1
       ],
-      "manager": []
+      "manager": [],
+      "editor": [],
+      "reviewer": [
+        3,
+        1,
+        2
+      ]
     }
   },
   {
@@ -120,7 +134,9 @@
       "member": [
         1
       ],
-      "manager": []
+      "manager": [],
+      "editor": [],
+      "reviewer": []
     }
   },
   {
@@ -131,7 +147,9 @@
       "member": [
         1
       ],
-      "manager": []
+      "manager": [],
+      "editor": [],
+      "reviewer": []
     }
   },
   {
@@ -142,7 +160,9 @@
       "member": [
         1
       ],
-      "manager": []
+      "manager": [],
+      "editor": [],
+      "reviewer": []
     }
   },
   {
@@ -153,7 +173,9 @@
       "member": [
         1
       ],
-      "manager": []
+      "manager": [],
+      "editor": [],
+      "reviewer": []
     }
   },
   {
@@ -164,7 +186,9 @@
       "member": [
         1
       ],
-      "manager": []
+      "manager": [],
+      "editor": [],
+      "reviewer": []
     }
   },
   {
@@ -173,9 +197,21 @@
     "fields": {
       "user": 9,
       "member": [
-        1
+        1,
+        2,
+        3
       ],
-      "manager": []
+      "manager": [
+        3,
+        1,
+        2
+      ],
+      "editor": [
+        3,
+        1,
+        2
+      ],
+      "reviewer": []
     }
   },
   {
@@ -188,7 +224,9 @@
       ],
       "manager": [
         1
-      ]
+      ],
+      "editor": [],
+      "reviewer": []
     }
   },
   {
@@ -197,10 +235,186 @@
     "fields": {
       "user": 11,
       "member": [
-        2,
+        3,
+        2
+      ],
+      "manager": [],
+      "editor": [],
+      "reviewer": []
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 12,
+    "fields": {
+      "user": 12,
+      "member": [
+        1
+      ],
+      "manager": [],
+      "editor": [],
+      "reviewer": []
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 13,
+    "fields": {
+      "user": 13,
+      "member": [
+        2
+      ],
+      "manager": [],
+      "editor": [],
+      "reviewer": []
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 14,
+    "fields": {
+      "user": 14,
+      "member": [
         3
       ],
-      "manager": []
+      "manager": [],
+      "editor": [],
+      "reviewer": []
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 15,
+    "fields": {
+      "user": 15,
+      "member": [
+        1
+      ],
+      "manager": [
+        1
+      ],
+      "editor": [],
+      "reviewer": []
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 16,
+    "fields": {
+      "user": 16,
+      "member": [
+        2
+      ],
+      "manager": [
+        2
+      ],
+      "editor": [],
+      "reviewer": []
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 17,
+    "fields": {
+      "user": 17,
+      "member": [
+        3
+      ],
+      "manager": [
+        3
+      ],
+      "editor": [],
+      "reviewer": []
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 18,
+    "fields": {
+      "user": 18,
+      "member": [
+        1
+      ],
+      "manager": [],
+      "editor": [
+        1
+      ],
+      "reviewer": []
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 19,
+    "fields": {
+      "user": 19,
+      "member": [
+        2
+      ],
+      "manager": [],
+      "editor": [
+        2
+      ],
+      "reviewer": []
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 20,
+    "fields": {
+      "user": 20,
+      "member": [
+        3
+      ],
+      "manager": [],
+      "editor": [
+        3
+      ],
+      "reviewer": []
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 21,
+    "fields": {
+      "user": 21,
+      "member": [
+        1
+      ],
+      "manager": [],
+      "editor": [],
+      "reviewer": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 22,
+    "fields": {
+      "user": 22,
+      "member": [
+        2
+      ],
+      "manager": [],
+      "editor": [],
+      "reviewer": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 23,
+    "fields": {
+      "user": 23,
+      "member": [
+        3
+      ],
+      "manager": [],
+      "editor": [],
+      "reviewer": [
+        3
+      ]
     }
   }
 ]

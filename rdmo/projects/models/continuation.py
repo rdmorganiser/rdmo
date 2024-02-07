@@ -3,7 +3,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from rdmo.core.models import Model
-from rdmo.questions.models import QuestionSet
+from rdmo.questions.models import Page
 
 
 class Continuation(Model):
@@ -18,10 +18,10 @@ class Continuation(Model):
         verbose_name=_('User'),
         help_text=_('The user for this continuation.')
     )
-    questionset = models.ForeignKey(
-        QuestionSet, on_delete=models.CASCADE, related_name='+',
-        verbose_name=_('Question set'),
-        help_text=_('The question set for this continuation.')
+    page = models.ForeignKey(
+        Page, null=True, on_delete=models.CASCADE, related_name='+',
+        verbose_name=_('Page'),
+        help_text=_('The page for this continuation.')
     )
 
     class Meta:
@@ -30,4 +30,4 @@ class Continuation(Model):
         verbose_name_plural = _('Continuations')
 
     def __str__(self):
-        return '%s/%s/%s' % (self.project, self.user, self.questionset)
+        return f'{self.project}/{self.user}/{self.page}'

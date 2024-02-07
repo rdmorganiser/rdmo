@@ -1,4 +1,5 @@
 import pytest
+
 from django.urls import reverse
 
 from rdmo.core.constants import VALUE_TYPE_FILE
@@ -62,7 +63,7 @@ def test_list(db, client, username, password):
 def test_list_snapshot(db, client, username, password, snapshot_id):
     client.login(username=username, password=password)
 
-    url = reverse(urlnames['list']) + '?snapshot={}'.format(snapshot_id)
+    url = reverse(urlnames['list']) + f'?snapshot={snapshot_id}'
     response = client.get(url)
 
     if password:
@@ -153,7 +154,7 @@ def test_file(db, client, files, username, password, value_id):
     if value.value_type == VALUE_TYPE_FILE and value.project.id in view_value_permission_map.get(username, []):
         assert response.status_code == 200
         assert response['Content-Type'] == value.file_type
-        assert response['Content-Disposition'] == 'attachment; filename={}'.format(value.file_name)
+        assert response['Content-Disposition'] == f'attachment; filename={value.file_name}'
         assert response.content == value.file.read()
     elif password:
         assert response.status_code == 404

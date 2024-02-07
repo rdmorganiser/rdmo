@@ -8,8 +8,6 @@ from ..managers import MembershipManager
 
 class Membership(models.Model):
 
-    objects = MembershipManager()
-
     ROLE_CHOICES = (
         ('owner', _('Owner')),
         ('manager', _('Manager')),
@@ -33,13 +31,15 @@ class Membership(models.Model):
         help_text=_('The role for this membership.')
     )
 
+    objects = MembershipManager()
+
     class Meta:
         ordering = ('project__title', )
         verbose_name = _('Membership')
         verbose_name_plural = _('Memberships')
 
     def __str__(self):
-        return '%s / %s / %s' % (self.project.title, self.user.username, self.role)
+        return f'{self.project.title} / {self.user.username} / {self.role}'
 
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.project.pk})

@@ -3,7 +3,11 @@ from pathlib import Path
 
 from django.conf import settings
 from django.contrib.sites.models import Site
+from django.template.loader import render_to_string
 from django.urls import reverse
+
+from rdmo.core.mail import send_mail
+from rdmo.core.plugins import get_plugins
 
 logger = logging.getLogger(__name__)
 
@@ -37,9 +41,7 @@ def check_conditions(conditions, values, set_prefix=None, set_index=None):
 def save_import_values(project, values, checked):
     for value in values:
         if value.attribute:
-            value_key = '{value.attribute.uri}[{value.set_prefix}][{value.set_index}][{value.collection_index}]'.format(
-                value=value
-            )
+            value_key = f'{value.attribute.uri}[{value.set_prefix}][{value.set_index}][{value.collection_index}]'
 
             if value_key in checked:
                 current_value = value.current
@@ -100,10 +102,7 @@ def save_import_snapshot_values(project, snapshots, checked):
 
         for value in snapshot.snapshot_values:
             if value.attribute:
-                value_key = '{value.attribute.uri}[{snapshot_index}][{value.set_prefix}][{value.set_index}][{value.collection_index}]'.format(
-                    value=value,
-                    snapshot_index=snapshot.snapshot_index
-                )
+                value_key = f"{value.attribute.uri}[{snapshot.snapshot_index}][{value.set_prefix}][{value.set_index}][{value.collection_index}]" # noqa: E501
 
                 if value_key in checked:
                     # assert that this is a new value
@@ -147,6 +146,24 @@ def get_invite_email_project_path(invite) -> str:
     return project_invite_path
 
 
+def send_invite_email(request, invite):
+    project_invite_path = get_invite_email_project_path(invite)
+    context = {
+        'invite_url': request.build_absolute_uri(project_invite_path),
+        'invite_user': invite.user,
+        'invite_email': invite.email,
+        'project': invite.project,
+        'user': request.user,
+        'site': Site.objects.get_current()
+    }
+
+    subject = render_to_string('projects/email/project_invite_subject.txt', context)
+    message = render_to_string('projects/email/project_invite_message.txt', context)
+
+    # send the email
+    send_mail(subject, message, to=[invite.email])
+
+
 def set_context_querystring_with_filter_and_page(context: dict) -> dict:
     '''prepares the filter part of the querystring for the next and previous hyperlinks in the pagination'''
     if context["filter"].data:
@@ -155,3 +172,13 @@ def set_context_querystring_with_filter_and_page(context: dict) -> dict:
             del querystring['page']
         context['querystring'] = querystring.urlencode()
     return context
+
+
+def get_upload_accept():
+    accept = set()
+    for import_plugin in get_plugins('PROJECT_IMPORTS').values():
+        if import_plugin.accept:
+            accept.add(import_plugin.accept)
+        else:
+            return None
+    return ','.join(accept)

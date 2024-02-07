@@ -48,23 +48,24 @@
 
 {% block page %}
 
-    <div class="project-questions-form" ng-show="service.questionset.id" ng-cloak>
+    <div class="project-questions-form" ng-show="service.page.id" ng-cloak>
         {% include 'projects/project_questions_head.html' %}
+
         <h2>
-            {$ service.questionset.title $}
+            {$ service.page.title $}
         </h2>
 
-        <div class="help-text" ng-bind-html="service.questionset.help"></div>
+        <div class="help-text" ng-bind-html="service.page.help"></div>
 
-        <div ng-if="service.questionset.is_collection">
+        <div ng-if="service.page.is_collection">
             {% include 'projects/project_questions_questionset_head.html' %}
         </div>
 
         <div class="questions" ng-show="service.valuesets"
-             ng-repeat="valueset in service.valuesets[service.questionset.id][service.set_prefix] | orderBy:'set_index'">
+             ng-repeat="valueset in service.valuesets[service.page.id][service.set_prefix] | orderBy:'set_index'">
 
             <div class="row" ng-show="valueset.set_index == service.set_index">
-                <div ng-repeat="element in service.questionset.elements"
+                <div ng-repeat="element in service.page.elements"
                      ng-include src="'element.html'"></div>
             </div>
         </div>
@@ -73,11 +74,11 @@
         {% include 'projects/project_questions_save_error.html' %}
     </div>
 
-    <div class="project-questions-form" ng-show="service.questionset && !service.questionset.id">
-        <div ng-show="service.questionset.error">
+    <div class="project-questions-form" ng-show="service.page && !service.page.id">
+        <div ng-show="service.page.error">
             {% include 'projects/project_questions_error.html' %}
         </div>
-        <div ng-hide="service.questionset.error">
+        <div ng-hide="service.page.error">
             {% include 'projects/project_questions_done.html' %}
         </div>
     </div>

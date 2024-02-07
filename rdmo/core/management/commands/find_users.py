@@ -48,7 +48,7 @@ class Command(BaseCommand):
             print('List written to ' + filename)
 
     def print_file(self, filename):
-        f = open(filename, 'r')
+        f = open(filename)
         content = f.read()
         print(content)
         f.close()

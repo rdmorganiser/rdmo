@@ -1,10 +1,13 @@
 from django.db import models
 
-from rdmo.core.managers import (AvailabilityManagerMixin,
-                                AvailabilityQuerySetMixin,
-                                CurrentSiteManagerMixin,
-                                CurrentSiteQuerySetMixin, GroupsManagerMixin,
-                                GroupsQuerySetMixin)
+from rdmo.core.managers import (
+    AvailabilityManagerMixin,
+    AvailabilityQuerySetMixin,
+    CurrentSiteManagerMixin,
+    CurrentSiteQuerySetMixin,
+    GroupsManagerMixin,
+    GroupsQuerySetMixin,
+)
 
 
 class ViewQuestionSet(CurrentSiteQuerySetMixin, GroupsQuerySetMixin, AvailabilityQuerySetMixin, models.QuerySet):

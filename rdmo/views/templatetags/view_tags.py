@@ -1,9 +1,7 @@
-from urllib.parse import urlparse
-
 from django import template
+from django.utils.translation import gettext_lazy as _
 
-from rdmo.core.constants import (VALUE_TYPE_DATETIME, VALUE_TYPE_INTEGER,
-                                 VALUE_TYPE_TEXT)
+from rdmo.core.constants import VALUE_TYPE_DATETIME, VALUE_TYPE_INTEGER, VALUE_TYPE_TEXT
 from rdmo.projects.models import Value
 
 register = template.Library()
@@ -66,7 +64,8 @@ def get_numbers(context, attribute, set_prefix='*', set_index='*', index='*', pr
 @register.simple_tag(takes_context=True)
 def get_value(context, attribute, set_prefix='', set_index=0, index=0, project=None):
     try:
-        return get_values(context, attribute, set_prefix=set_prefix, set_index=set_index, index=index, project=project)[0]
+        return get_values(context, attribute, set_prefix=set_prefix, set_index=set_index,
+                          index=index, project=project)[0]
     except IndexError:
         return None
 
@@ -90,7 +89,8 @@ def get_set_values(context, set, attribute, set_prefix='', project=None):
 def get_set_value(context, set, attribute, set_prefix='', index=0, project=None):
     try:
         set_index = set.get('set_index')
-        return get_values(context, attribute, set_prefix=set_prefix, set_index=set_index, index=index, project=project)[0]
+        return get_values(context, attribute, set_prefix=set_prefix, set_index=set_index,
+                          index=index, project=project)[0]
     except IndexError:
         return None
 
@@ -98,7 +98,7 @@ def get_set_value(context, set, attribute, set_prefix='', index=0, project=None)
 @register.simple_tag(takes_context=True)
 def get_set_prefixes(context, attribute, project=None):
     try:
-        return sorted(set(map(lambda value: value['set_prefix'], get_values(context, attribute, project=project))))
+        return sorted({value['set_prefix'] for value in get_values(context, attribute, project=project)})
     except IndexError:
         return None
 
@@ -106,7 +106,9 @@ def get_set_prefixes(context, attribute, project=None):
 @register.simple_tag(takes_context=True)
 def get_set_indexes(context, attribute, set_prefix='', project=None):
     try:
-        return sorted(set(map(lambda value: value['set_index'], get_values(context, attribute, set_prefix=set_prefix, project=project))))
+        return sorted({
+            value['set_index'] for value in get_values(context, attribute, set_prefix=set_prefix, project=project)
+        })
     except IndexError:
         return None
 
@@ -131,7 +133,7 @@ def get_set(context, attribute, set_prefix='', project=None):
 @register.inclusion_tag('views/tags/value.html', takes_context=True)
 def render_value(context, attribute, set_prefix='', set_index=0, index=0, project=None):
     context['value'] = get_value(context, attribute, set_prefix=set_prefix, set_index=set_index, index=index, project=project)
-    if content != "": 
+    if content != "":
       return context
 
 
@@ -167,17 +169,48 @@ def render_set_value_inline_list(context, set, attribute, set_prefix='', project
 
 
 @register.simple_tag(takes_context=True)
+def check_element(context, element, set_prefix=None, set_index=None, project=None):
+    if project is None:
+        project = context['project']
+
+    return project._check_element(element, set_prefix=None, set_index=None)
+
+
+@register.simple_tag(takes_context=True)
 def check_condition(context, condition, set_prefix=None, set_index=None, project=None):
     if project is None:
         project = context['project']
 
-    conditions = project._conditions
-    if urlparse(condition).scheme:
-        conditions = filter(lambda c: c.uri == condition, conditions)
-    else:
-        conditions = filter(lambda c: c.key == condition, conditions)
+    return project._check_condition(condition, set_prefix=None, set_index=None)
 
-    return project._check_conditions(conditions, set_prefix=set_prefix, set_index=set_index)
+
+@register.simple_tag(takes_context=True)
+def get_labels(context, element, set_prefix='', set_index=0, project=None):
+    if project is None:
+        project = context['project']
+
+    set_labels = []
+    for ancestor in element['ancestors']:
+        if ancestor['is_collection']:
+            set_label = f'#{set_index + 1}'
+
+            if ancestor['attribute']:
+                # get attribute value
+                value = get_value(context, ancestor['attribute'], set_prefix=set_prefix, set_index=set_index,
+                                  index=0, project=project)
+                if value:
+                    set_label = '"{}"'.format(value['value'])
+
+            set_labels.append('{} {}'.format(ancestor['verbose_name'].title() or _('Set'), set_label))
+
+            if set_prefix != '':
+                rpartition = set_prefix.rpartition('|')
+                set_prefix, set_index = rpartition[0], int(rpartition[2])
+
+    # flip the list
+    set_labels.reverse()
+
+    return set_labels
 
 
 @register.filter

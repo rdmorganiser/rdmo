@@ -13,13 +13,17 @@ __pycache__
 *~
 *.swp
 .DS_Store
+.ruff_cache
 
 env
 env2
 env3
 
 .coverage
+.coverage.*
 htmlcov
+
+node_modules
 
 build
 dist
@@ -29,3 +33,7 @@ dist
 
 .pytest_cache
 .on-save.json
+
+rdmo/management/static
+
+screenshots

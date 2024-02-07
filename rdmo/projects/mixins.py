@@ -3,20 +3,19 @@ from pathlib import Path
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ValidationError
-from django.http import HttpResponseRedirect, Http404, HttpResponse
-from django.shortcuts import get_object_or_404, render, redirect
+from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.core.imports import handle_uploaded_file, file_path_exists
+from rdmo.core.imports import handle_uploaded_file
 from rdmo.core.plugins import get_plugin, get_plugins
 from rdmo.questions.models import Question
 
 from .models import Membership, Project
-from .utils import (save_import_snapshot_values, save_import_tasks,
-                    save_import_values, save_import_views)
+from .utils import save_import_snapshot_values, save_import_tasks, save_import_values, save_import_views
 
 
-class ProjectImportMixin(object):
+class ProjectImportMixin:
 
     def get_current_values(self, current_project):
         queryset = current_project.values.filter(snapshot=None).select_related('attribute', 'option')
@@ -27,7 +26,7 @@ class ProjectImportMixin(object):
         return current_values
 
     def get_questions(self, catalog):
-        queryset = Question.objects.filter(questionset__section__catalog=catalog) \
+        queryset = Question.objects.filter_by_catalog(catalog) \
                                    .select_related('attribute') \
                                    .order_by('attribute__uri')
 
@@ -103,7 +102,7 @@ class ProjectImportMixin(object):
             import_plugin.file_name = import_file_name
             import_plugin.source_title = import_source_title
 
-            if import_plugin.upload and import_plugin.check():
+            if import_plugin.check():
                 try:
                     import_plugin.process()
                 except ValidationError as e:
@@ -116,7 +115,8 @@ class ProjectImportMixin(object):
                 self.request.session['import_key'] = import_key
 
                 # attach questions and current values
-                self.update_values(current_project, import_plugin.catalog, import_plugin.values, import_plugin.snapshots)
+                self.update_values(current_project, import_plugin.catalog,
+                                   import_plugin.values, import_plugin.snapshots)
 
                 return render(self.request, 'projects/project_import.html', {
                     'method': 'import_file',
@@ -168,7 +168,8 @@ class ProjectImportMixin(object):
                     }, status=400)
 
                 # attach questions and current values
-                self.update_values(current_project, import_plugin.catalog, import_plugin.values, import_plugin.snapshots)
+                self.update_values(current_project, import_plugin.catalog,
+                                   import_plugin.values, import_plugin.snapshots)
 
                 if current_project:
                     save_import_values(self.object, import_plugin.values, checked)

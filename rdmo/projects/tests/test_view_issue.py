@@ -1,5 +1,9 @@
+from unittest.mock import Mock
+
 import pytest
+
 from django.core import mail
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from rdmo.core.constants import VALUE_TYPE_FILE
@@ -47,6 +51,26 @@ issues = [1, 2, 3, 4]
 integration_pk = 1
 
 issue_status = ('open', 'in_progress', 'closed')
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('issue_id', issues)
+def test_issue(db, client, username, password, project_id, issue_id):
+    client.login(username=username, password=password)
+    issue = Issue.objects.filter(project_id=project_id, id=issue_id).first()
+
+    url = reverse('issue', args=[project_id, issue_id])
+    response = client.get(url)
+
+    if issue:
+        if project_id in view_issue_permission_map.get(username, []):
+            assert response.status_code == 200
+        elif password:
+            assert response.status_code == 403
+        else:
+            assert response.status_code == 302
+    else:
+        assert response.status_code == 404
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -203,7 +227,10 @@ def test_issue_send_post_attachements(db, client, files, username, password, pro
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('issue_id', issues)
 @pytest.mark.parametrize('project_id', projects)
-def test_issue_send_post_integration(db, client, username, password, project_id, issue_id):
+def test_issue_send_post_integration(db, client, mocker, username, password, project_id, issue_id):
+    mocked_send_issue = Mock(return_value=HttpResponseRedirect(redirect_to='https://example.com/login/oauth/authorize'))
+    mocker.patch('rdmo.projects.providers.SimpleIssueProvider.send_issue', mocked_send_issue)
+
     client.login(username=username, password=password)
     issue = Issue.objects.filter(project_id=project_id, id=issue_id).first()
 
@@ -219,7 +246,7 @@ def test_issue_send_post_integration(db, client, username, password, project_id,
         if project_id in change_issue_permission_map.get(username, []):
             if integration_pk in Project.objects.get(pk=project_id).integrations.values_list('id', flat=True):
                 assert response.status_code == 302
-                assert response.url.startswith('https://github.com')
+                assert response.url.startswith('https://example.com')
             else:
                 assert response.status_code == 200
         else:
@@ -227,6 +254,6 @@ def test_issue_send_post_integration(db, client, username, password, project_id,
                 assert response.status_code == 403
             else:
                 assert response.status_code == 302
-                assert not response.url.startswith('https://github.com')
+                assert not response.url.startswith('https://example.com')
     else:
         assert response.status_code == 404

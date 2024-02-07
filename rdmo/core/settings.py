@@ -1,6 +1,10 @@
 from django.utils.translation import gettext_lazy as _
 
+SITE_ID = 1
+
 DEBUG = False
+
+ALLOWED_HOSTS = ['localhost', 'ip6-localhost', '127.0.0.1', '[::1]']
 
 INSTALLED_APPS = [
     # django modules
@@ -85,18 +89,18 @@ AUTHENTICATION_BACKENDS = [
 
 MULTISITE = False
 
+GROUPS = False
+
+LOGIN_FORM = True
+
 PROFILE_UPDATE = True
 PROFILE_DELETE = True
 
 ACCOUNT = False
 ACCOUNT_SIGNUP = False
+ACCOUNT_GROUPS = []
 ACCOUNT_TERMS_OF_USE = False
-
-SOCIALACCOUNT = False
-
-SHIBBOLETH = False
-SHIBBOLETH_LOGOUT_URL = '/Shibboleth.sso/Logout'
-
+ACCOUNT_ADAPTER = 'rdmo.accounts.adapter.AccountAdapter'
 ACCOUNT_SIGNUP_FORM_CLASS = 'rdmo.accounts.forms.SignupForm'
 ACCOUNT_USER_DISPLAY = 'rdmo.accounts.utils.get_full_name'
 ACCOUNT_EMAIL_REQUIRED = True
@@ -110,11 +114,16 @@ ACCOUNT_EMAIL_MAX_LENGTH = 190
 ACCOUNT_PREVENT_ENUMERATION = False
 ACCOUNT_ALLOW_USER_TOKEN = False
 
-ACCOUNT_ADAPTER = 'rdmo.accounts.adapter.AccountAdapter'
-
-SOCIALACCOUNT_ADAPTER = 'rdmo.accounts.adapter.SocialAccountAdapter'
+SOCIALACCOUNT = False
 SOCIALACCOUNT_SIGNUP = False
+SOCIALACCOUNT_GROUPS = []
 SOCIALACCOUNT_AUTO_SIGNUP = False
+SOCIALACCOUNT_ADAPTER = 'rdmo.accounts.adapter.SocialAccountAdapter'
+
+SHIBBOLETH = False
+SHIBBOLETH_LOGIN_URL = '/Shibboleth.sso/Login'
+SHIBBOLETH_LOGOUT_URL = '/Shibboleth.sso/Logout'
+SHIBBOLETH_USERNAME_PATTERN = None
 
 LANGUAGE_CODE = 'en-us'
 
@@ -126,8 +135,6 @@ LANGUAGES = (
 )
 
 USE_I18N = True
-
-USE_L10N = True
 
 USE_TZ = True
 
@@ -176,6 +183,7 @@ SETTINGS_EXPORT = [
     'SITE_ID',
     'LOGIN_URL',
     'LOGOUT_URL',
+    'LOGIN_FORM',
     'ACCOUNT',
     'ACCOUNT_SIGNUP',
     'ACCOUNT_TERMS_OF_USE',
@@ -184,7 +192,9 @@ SETTINGS_EXPORT = [
     'PROFILE_UPDATE',
     'PROFILE_DELETE',
     'SHIBBOLETH',
+    'SHIBBOLETH_LOGIN_URL',
     'MULTISITE',
+    'GROUPS',
     'EXPORT_FORMATS',
     'PROJECT_ISSUES',
     'PROJECT_VIEWS',
@@ -199,7 +209,11 @@ SETTINGS_EXPORT = [
 SETTINGS_API = [
     'PROJECT_QUESTIONS_AUTOSAVE',
     'PROJECT_QUESTIONS_CYCLE_SETS',
-    'DEFAULT_URI_PREFIX'
+    'DEFAULT_URI_PREFIX',
+    'LANGUAGES',
+    'MULTISITE',
+    'GROUPS',
+    'EXPORT_FORMATS',
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -256,6 +270,8 @@ EXPORT_PANDOC_ARGS = {
     'rtf': ['--standalone']
 }
 
+EXPORT_CONTENT_DISPOSITION = 'attachment'
+
 PROJECT_ISSUES = True
 
 PROJECT_ISSUE_PROVIDERS = []
@@ -264,8 +280,9 @@ PROJECT_VIEWS = True
 
 PROJECT_EXPORTS = [
     ('xml', _('RDMO XML'), 'rdmo.projects.exports.RDMOXMLExport'),
-    ('csvcomma', _('CSV comma separated'), 'rdmo.projects.exports.CSVCommaExport'),
-    ('csvsemicolon', _('CSV semicolon separated'), 'rdmo.projects.exports.CSVSemicolonExport')
+    ('csvcomma', _('CSV (comma separated)'), 'rdmo.projects.exports.CSVCommaExport'),
+    ('csvsemicolon', _('CSV (semicolon separated)'), 'rdmo.projects.exports.CSVSemicolonExport'),
+    ('json', _('JSON'), 'rdmo.projects.exports.JSONExport'),
 ]
 
 PROJECT_IMPORTS = [
@@ -274,7 +291,7 @@ PROJECT_IMPORTS = [
 
 PROJECT_IMPORTS_LIST = []
 
-PROJECT_QUESTIONS_AUTOSAVE = False
+PROJECT_QUESTIONS_AUTOSAVE = True
 
 PROJECT_QUESTIONS_CYCLE_SETS = False
 
@@ -288,6 +305,11 @@ PROJECT_SEND_INVITE = True
 
 PROJECT_REMOVE_VIEWS = True
 
+PROJECT_CREATE_RESTRICTED = False
+PROJECT_CREATE_GROUPS = []
+
+PROJECT_VALUES_CONFLICT_THRESHOLD = 0.01
+
 NESTED_PROJECTS = True
 
 OPTIONSET_PROVIDERS = []
@@ -300,12 +322,15 @@ QUESTIONS_WIDGETS = [
     ('radio', _('Radio buttons'), 'rdmo.projects.widgets.RadioWidget'),
     ('select', _('Select drop-down'), 'rdmo.projects.widgets.SelectWidget'),
     ('autocomplete', _('Autocomplete'), 'rdmo.projects.widgets.AutocompleteWidget'),
+    ('freeautocomplete', _('Free autocomplete'), 'rdmo.projects.widgets.FreeAutocompleteWidget'),
     ('range', _('Range slider'), 'rdmo.projects.widgets.RangeWidget'),
     ('date', _('Date picker'), 'rdmo.projects.widgets.DateWidget'),
     ('file', _('File upload'), 'rdmo.projects.widgets.FileWidget')
 ]
 
 DEFAULT_URI_PREFIX = 'http://example.com/terms'
+
+REPLACE_MISSING_TRANSLATION = False
 
 VENDOR_CDN = True
 
@@ -467,5 +492,5 @@ VENDOR = {
     }
 }
 
-# necessary since django 3.2, explicitly set primary key type to avaoid warnings
+# necessary since django 3.2, explicitly set primary key type to avoid warnings
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

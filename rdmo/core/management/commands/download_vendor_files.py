@@ -3,9 +3,10 @@ import hashlib
 import os
 import shutil
 
-import requests
 from django.conf import settings
 from django.core.management.base import BaseCommand
+
+import requests
 
 
 class Command(BaseCommand):
@@ -23,7 +24,7 @@ class Command(BaseCommand):
                 if file_type in vendor_conf:
                     for file in vendor_conf[file_type]:
                         # get the directory and the file_name
-                        path_tokens = ['vendor', key] + os.path.normpath(file['path']).split(os.path.sep)
+                        path_tokens = ['vendor', key, *os.path.normpath(file['path']).split(os.path.sep)]
                         directory = os.path.join(*path_tokens[:-1])
                         file_name = os.path.join(*path_tokens)
 
@@ -36,7 +37,7 @@ class Command(BaseCommand):
                         # get the full url of the file
                         url = requests.compat.urljoin(vendor_conf['url'], file['path'])
 
-                        print('%s -> %s' % (url, file_name))
+                        print(f'{url} -> {file_name}')
 
                         # fetch the file from the cdn
                         response = requests.get(url)

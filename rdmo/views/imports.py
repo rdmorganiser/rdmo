@@ -2,9 +2,7 @@ import logging
 
 from django.contrib.sites.models import Site
 
-from rdmo.core.imports import (get_m2m_instances, set_common_fields,
-                               set_lang_field, validate_instance)
-from rdmo.questions.models import Catalog
+from rdmo.core.imports import check_permissions, set_common_fields, set_lang_field, set_m2m_instances, validate_instance
 
 from .models import View
 from .validators import ViewLockedValidator, ViewUniqueURIValidator
@@ -12,7 +10,7 @@ from .validators import ViewLockedValidator, ViewUniqueURIValidator
 logger = logging.getLogger(__name__)
 
 
-def import_view(element, save=False):
+def import_view(element, save=False, user=None):
     try:
         view = View.objects.get(uri=element.get('uri'))
     except View.DoesNotExist:
@@ -20,22 +18,29 @@ def import_view(element, save=False):
 
     set_common_fields(view, element)
 
+    view.order = element.get('order') or 0
     view.template = element.get('template')
 
     set_lang_field(view, 'title', element)
     set_lang_field(view, 'help', element)
 
-    catalogs = get_m2m_instances(view, element.get('catalogs'), Catalog)
+    view.available = element.get('available', True)
 
-    if save and validate_instance(view, ViewLockedValidator, ViewUniqueURIValidator):
+    validate_instance(view, element, ViewLockedValidator, ViewUniqueURIValidator)
+
+    check_permissions(view, element, user)
+
+    if save and not element.get('errors'):
         if view.id:
-            logger.info('View created with uri %s.', element.get('uri'))
-        else:
+            element['updated'] = True
             logger.info('View %s updated.', element.get('uri'))
+        else:
+            element['created'] = True
+            logger.info('View created with uri %s.', element.get('uri'))
 
         view.save()
+        set_m2m_instances(view, 'catalogs', element)
         view.sites.add(Site.objects.get_current())
-        view.catalogs.set(catalogs)
-        view.imported = True
+        view.editors.add(Site.objects.get_current())
 
     return view

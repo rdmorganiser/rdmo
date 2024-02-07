@@ -17,6 +17,7 @@ class ValueSerializer(serializers.ModelSerializer):
             'attribute',
             'set_prefix',
             'set_index',
+            'set_collection',
             'collection_index',
             'text',
             'option',
@@ -49,7 +50,7 @@ class SnapshotSerializer(serializers.ModelSerializer):
         )
 
     def get_values(self, obj):
-        values = Value.objects.filter(snapshot=obj)
+        values = Value.objects.filter(snapshot=obj).select_related('attribute', 'option')
         serializer = ValueSerializer(instance=values, many=True)
         return serializer.data
 
@@ -78,7 +79,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         )
 
     def get_values(self, obj):
-        values = Value.objects.filter(project=obj, snapshot=None)
+        values = Value.objects.filter(project=obj, snapshot=None).select_related('attribute', 'option')
         serializer = ValueSerializer(instance=values, many=True)
         return serializer.data
 

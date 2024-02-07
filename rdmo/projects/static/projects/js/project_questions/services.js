@@ -9,9 +9,9 @@ angular.module('project_questions')
     /* configure resources */
 
     var resources = {
-        projects: $resource(baseurl + 'api/v1/projects/projects/:id/:detail_action/'),
+        projects: $resource(baseurl + 'api/v1/projects/projects/:id/:detail_action/:detail_id/'),
         values: $resource(baseurl + 'api/v1/projects/projects/:project/values/:id/:detail_action/'),
-        questionsets: $resource(baseurl + 'api/v1/projects/projects/:project/questionsets/:list_action/:id/'),
+        pages: $resource(baseurl + 'api/v1/projects/projects/:project/pages/:list_action/:id/'),
         settings: $resource(baseurl + 'api/v1/core/settings/')
     };
 
@@ -97,16 +97,16 @@ angular.module('project_questions')
                     // if users go back to /project/questions/ they just go back once more
                     $window.history.back();
                 } else if (path == 'done') {
-                    if (angular.isUndefined(service.questionset.done)) {
+                    if (angular.isUndefined(service.page.done)) {
                         service.initDone();
                     }
                 } else if (path == 'error') {
-                    if (angular.isUndefined(service.questionset.error)) {
+                    if (angular.isUndefined(service.page.error)) {
                         service.initError();
                     }
                 } else {
                     // this needs to be != and not !== since path is a string!
-                    if (path != service.questionset.id) {
+                    if (path != service.page.id) {
                         service.initView(path);
                     }
                 }
@@ -134,40 +134,41 @@ angular.module('project_questions')
         });
     };
 
-    service.initView = function(questionset_id) {
+    service.initView = function(page_id, scrollUp) {
         if (initializing) return;
 
-        if (questionset_id !== null) {
+        if (page_id !== null) {
             // enable initializing flag
             initializing = true;
 
-            if (angular.isDefined(service.questionset)) {
-                past.questionset = service.questionset
+            if (angular.isDefined(service.page)) {
+                past.page = service.page
                 past.set_index = service.set_index
             }
 
-            return service.fetchQuestionSet(questionset_id)
+            return service.fetchPage(page_id)
+            .then(service.fetchNavigation)
             .then(service.fetchOptions)
             .then(service.fetchValues)
             .then(service.fetchConditions)
             .then(function () {
                 // copy future objects
                 angular.forEach([
-                    'questionset', 'progress', 'attributes', 'questionsets', 'questions', 'valuesets', 'values'
+                    'page', 'progress', 'attributes', 'questionsets', 'questions', 'valuesets', 'values', 'navigation'
                 ], function (key) {
                     service[key] = angular.copy(future[key]);
                 });
 
                 // activate fist valueset
-                if (angular.isDefined(service.valuesets[service.questionset.id][service.set_prefix])) {
-                    if (angular.isDefined(past.questionset) &&
-                        past.questionset.is_collection &&
-                        past.questionset.attribute == service.questionset.attribute &&
+                if (angular.isDefined(service.valuesets[service.page.id][service.set_prefix])) {
+                    if (angular.isDefined(past.page) &&
+                        past.page.is_collection &&
+                        past.page.attribute == service.page.attribute &&
                         !service.settings.project_questions_cycle_sets) {
                         // use the same set index as before
                         service.set_index = past.set_index
                     } else {
-                        service.set_index = service.valuesets[service.questionset.id][service.set_prefix][0].set_index;
+                        service.set_index = service.valuesets[service.page.id][service.set_prefix][0].set_index;
                     }
                 } else {
                     service.set_index = null;
@@ -175,9 +176,9 @@ angular.module('project_questions')
 
                 // focus the first field
                 if (service.values && Object.keys(service.values).length > 0
-                                   && service.questionset.questionsets.length == 0
-                                   && service.questionset.questions.length > 0) {
-                    var first_question = service.questionset.questions[0];
+                                   && service.questionsets.length == 0
+                                   && service.questions.length > 0) {
+                    var first_question = service.questions[0];
                     if (first_question.widget_class == 'text') {
                         service.focusField(first_question.attribute, service.set_prefix, service.set_index, 0);
                     }
@@ -185,8 +186,10 @@ angular.module('project_questions')
 
                 // disable initializing flag again, set browser location, scroll to top and set back flag
                 initializing = false;
-                $location.path('/' + service.questionset.id + '/');
-                $window.scrollTo(0, 0);
+                $location.path('/' + service.page.id + '/');
+                if (angular.isUndefined(scrollUp) || scrollUp === true) {
+                    $window.scrollTo(0, 0);
+                }
                 back = false;
 
                 $timeout(function() {
@@ -194,7 +197,7 @@ angular.module('project_questions')
                 });
             }, function (result) {
                 if (angular.isDefined(result)) {
-                    // an actual error occured
+                    // an actual error occurred
                     service.initError(result.status, result.statusText);
                 } else {
                     // this is the end of the interview
@@ -207,11 +210,11 @@ angular.module('project_questions')
     };
 
     service.initError = function(status, statusText) {
-        service.questionset = {
+        service.page = {
             id: false,
             progress: 0,
-            next: null,
-            prev: null,
+            next_page: null,
+            prev_page: null,
             error: true,
             status: status,
             statusText: statusText
@@ -225,11 +228,11 @@ angular.module('project_questions')
     };
 
     service.initDone = function() {
-        service.questionset = {
+        service.page = {
             id: false,
             progress: 100,
-            next: null,
-            prev: service.questionset ? service.questionset.id : null,
+            next_page: null,
+            prev_page: service.page ? service.page.id : null,
             done: true
         };
 
@@ -240,24 +243,24 @@ angular.module('project_questions')
         back = false;
     };
 
-    service.fetchQuestionSet = function(questionset_id) {
-        // fetch the current (or the first) question set from the server
-        if (questionset_id) {
-            future.questionset = resources.questionsets.get({
+    service.fetchPage = function(page_id) {
+        // fetch the current (or the first) page from the server
+        if (page_id) {
+            future.page = resources.pages.get({
                 project: service.project.id,
-                id: questionset_id,
+                id: page_id,
                 back: back
             });
         } else {
-            future.questionset = resources.questionsets.get({
+            future.page = resources.pages.get({
                 project: service.project.id,
                 list_action: 'continue'
             });
         }
 
-        // store the questionset and return the promise
-        return future.questionset.$promise.then(function() {
-            if (angular.isUndefined(future.questionset.id)) {
+        // store the page and return the promise
+        return future.page.$promise.then(function() {
+            if (angular.isUndefined(future.page.id)) {
                 // this is the end of the interview
                 return $q.reject();
             }
@@ -268,39 +271,65 @@ angular.module('project_questions')
             future.questions = [];
 
             // loop over all elements
-            // (a) create seperate questions array
+            // (a) create separate questions array
             // (b) mark the help text of the question set 'save'
             // (c) sort questionsets and questions by order in one list called elements
             // using recursive functions!
-            service.initQuestionSet(future.questionset);
+            service.initPage(future.page);
         });
     };
 
+    service.fetchNavigation = function() {
+        future.navigation = resources.projects.query({
+            id: service.project.id,
+            detail_id: future.page.section.id,
+            detail_action: 'navigation'
+        });
+
+        return future.navigation.$promise
+    };
+
+    service.initPage = function(page) {
+        // store attributes in a separate array
+        if (page.attribute !== null) future.attributes.push(page.attribute);
+
+        // mark the help text of the question set 'save'
+        page.help = $sce.trustAsHtml(page.help);
+
+        // init questions and question sets
+        page.elements.forEach(function(element) {
+            if (element.model == 'questions.question') {
+                service.initQuestion(element, page);
+            } else {
+                service.initQuestionSet(element);
+            }
+        })
+
+        return page;
+    };
+
     service.initQuestionSet = function(questionset) {
-        // store attributes and questionset in seperate array
-        if (questionset.attribute !== null) {
-            future.attributes.push(questionset.attribute);
-        }
+        // store questionsets in a separate array
         future.questionsets.push(questionset);
 
         // mark the help text of the question set 'save'
         questionset.help = $sce.trustAsHtml(questionset.help);
 
-        // sort questionsets and questions by order in one list called elements
-        questionset.elements = questionset.questionsets.map(function(qs) {
-                return service.initQuestionSet(qs);
-            })
-            .concat(questionset.questions.map(service.initQuestion))
-            .sort(function(a, b) { return a.order - b.order; });
+        // init questions and question sets
+        questionset.elements.forEach(function(element) {
+            if (element.model == 'questions.question') {
+                service.initQuestion(element, questionset);
+            } else {
+                service.initQuestionSet(element);
+            }
+        })
 
         return questionset;
     };
 
-    service.initQuestion = function(question) {
-        // store attributes and questionset in seperate array
-        if (question.attribute !== null) {
-            future.attributes.push(question.attribute);
-        }
+    service.initQuestion = function(question, parent) {
+        // store attributes and questionset in separate array
+        if (question.attribute !== null) future.attributes.push(question.attribute);
         future.questions.push(question);
 
         // mark the help text of the question set 'save'
@@ -308,6 +337,10 @@ angular.module('project_questions')
 
         // this is a question!
         question.isQuestion = true;
+
+        // store if this question is part of a set collection
+        // to store value.set_collection later
+        question.set_collection = parent.is_collection;
 
         return question;
     };
@@ -322,24 +355,31 @@ angular.module('project_questions')
 
                 angular.forEach(question.optionsets, function(optionset) {
                     if (optionset.has_provider) {
-                        // call the provider to get addtional options
+                        // call the provider to get additional options
                         promises.push(resources.projects.query({
                             detail_action: 'options',
                             optionset: optionset.id,
                             id: service.project.id,
                         }, function(response) {
                             question.options = question.options.concat(response.map(function(option) {
+                                option.optionset = optionset.id
                                 option.has_provider = optionset.has_provider
                                 return option
                             }));
 
                             // if any, add regular options from the optionset
                             if (question.optionsets.options !== false) {
-                                question.options = question.options.concat(optionset.options);
+                                question.options = question.options.concat(optionset.options.map(function(option) {
+                                    option.optionset = optionset.id
+                                    return option
+                                }));
                             }
                         }).$promise);
                     } else {
-                        question.options = question.options.concat(optionset.options);
+                        question.options = question.options.concat(optionset.options.map(function(option) {
+                            option.optionset = optionset.id
+                            return option
+                        }));
                     }
                 });
             }
@@ -389,9 +429,9 @@ angular.module('project_questions')
                 // init valuesets
                 future.valuesets = {};
 
-                // loop over all questionsets to initlize valuesets
+                // loop over the page and all questionsets to initialize valuesets
                 // valuesets store the set_index for each questionset and set_prefix
-                angular.forEach(future.questionsets, function(questionset) {
+                angular.forEach([future.page].concat(future.questionsets), function(questionset) {
                     // add a valueset for each questionset
                     if (angular.isUndefined(future.valuesets[questionset.id])) {
                         future.valuesets[questionset.id] = {};
@@ -413,20 +453,24 @@ angular.module('project_questions')
                     });
 
                     // add the set_index for every value for the attribute of each question of this questionset
-                    angular.forEach(questionset.questions, function(question) {
-                        angular.forEach(future.values[question.attribute], function(sets, set_prefix) {
-                            if (angular.isUndefined(future.valuesets[questionset.id][set_prefix])) {
-                                future.valuesets[questionset.id][set_prefix] = [];
-                            }
-                            angular.forEach(sets, function(set, set_index) {
-                                var valuesets = $filter('filter')(future.valuesets[questionset.id][set_prefix], function(valueset) {
-                                    return (valueset.set_prefix == set_prefix) && (valueset.set_index == set_index);
-                                });
-                                if (valuesets.length === 0) {
-                                    future.valuesets[questionset.id][set_prefix].push(factories.valuesets(set_prefix, set_index))
+                    angular.forEach(questionset.elements, function(element) {
+                        if (element.model == 'questions.question') {
+                            var question = element;
+
+                            angular.forEach(future.values[question.attribute], function(sets, set_prefix) {
+                                if (angular.isUndefined(future.valuesets[questionset.id][set_prefix])) {
+                                    future.valuesets[questionset.id][set_prefix] = [];
                                 }
+                                angular.forEach(sets, function(set, set_index) {
+                                    var valuesets = $filter('filter')(future.valuesets[questionset.id][set_prefix], function(valueset) {
+                                        return (valueset.set_prefix == set_prefix) && (valueset.set_index == set_index);
+                                    });
+                                    if (valuesets.length === 0) {
+                                        future.valuesets[questionset.id][set_prefix].push(factories.valuesets(set_prefix, set_index))
+                                    }
+                                });
                             });
-                        });
+                        }
                     });
 
                     // sort valuesets
@@ -442,56 +486,59 @@ angular.module('project_questions')
         }
 
         return $q.all(promises).then(function() {
-            service.initValues(future.questionset, '');
+            service.initValues(future.page, '');
         });
     };
 
     service.fetchConditions = function() {
         promises = [];
 
-        // check conditions for current questionsets and questions
-        angular.forEach(future.questionsets, function(questionset) {
+        // loop over the page and all questionsets to check conditions
+        angular.forEach([future.page].concat(future.questionsets), function(questionset) {
             angular.forEach(future.valuesets[questionset.id], function(valuesets, set_prefix) {
                 angular.forEach(valuesets, function(valueset, set_index) {
-                    angular.forEach(questionset.questionsets, function(qs) {
-                        if (qs.has_conditions) {
-                            promises.push(resources.projects.get({
-                                id: service.project.id,
-                                detail_action: 'resolve',
-                                questionset: qs.id,
-                                set_prefix: set_prefix,
-                                set_index: set_index
-                            }, function(response) {
-                                valueset.hidden.questionsets[qs.id] = !response.result;
-                            }).$promise);
-                        }
-                    });
-                    angular.forEach(questionset.questions, function(q) {
-                        if (q.has_conditions) {
-                            promises.push(resources.projects.get({
-                                id: service.project.id,
-                                detail_action: 'resolve',
-                                question: q.id,
-                                set_prefix: set_prefix,
-                                set_index: set_index
-                            }, function(response) {
-                                valueset.hidden.questions[q.id] = !response.result;
-                            }).$promise);
-                        }
-
-                        angular.forEach(q.optionsets, function(optionset) {
-                            if (optionset.has_conditions) {
+                    angular.forEach(questionset.elements, function(element) {
+                        if (element.model == 'questions.questionset') {
+                            var qs = element;
+                            if (qs.has_conditions) {
                                 promises.push(resources.projects.get({
                                     id: service.project.id,
                                     detail_action: 'resolve',
-                                    optionset: optionset.id,
+                                    questionset: qs.id,
                                     set_prefix: set_prefix,
                                     set_index: set_index
                                 }, function(response) {
-                                    valueset.hidden.optionsets[optionset.id] = !response.result;
+                                    valueset.hidden.questionsets[qs.id] = !response.result;
                                 }).$promise);
                             }
-                        });
+                        } else {
+                            var q = element;
+                            if (q.has_conditions) {
+                                promises.push(resources.projects.get({
+                                    id: service.project.id,
+                                    detail_action: 'resolve',
+                                    question: q.id,
+                                    set_prefix: set_prefix,
+                                    set_index: set_index
+                                }, function(response) {
+                                    valueset.hidden.questions[q.id] = !response.result;
+                                }).$promise);
+                            }
+
+                            angular.forEach(q.optionsets, function(optionset) {
+                                if (optionset.has_conditions) {
+                                    promises.push(resources.projects.get({
+                                        id: service.project.id,
+                                        detail_action: 'resolve',
+                                        optionset: optionset.id,
+                                        set_prefix: set_prefix,
+                                        set_index: set_index
+                                    }, function(response) {
+                                        valueset.hidden.optionsets[optionset.id] = !response.result;
+                                    }).$promise);
+                                }
+                            });
+                        }
                     });
                 });
             });
@@ -511,40 +558,47 @@ angular.module('project_questions')
             }
         }
 
-        // loop over valuesets and initialize at leat one value for each question
+        // loop over valuesets and initialize at least one value for each question
         angular.forEach(future.valuesets[questionset.id][set_prefix], function(valueset) {
             // loop over questions to initialize them with at least one value, and init checkboxes and widgets
-            angular.forEach(questionset.questions, function(question) {
-                if (angular.isUndefined(future.values[question.attribute])) {
-                    future.values[question.attribute] = {};
-                }
-                if (angular.isUndefined(future.values[question.attribute][set_prefix])) {
-                    future.values[question.attribute][set_prefix] = {};
-                }
-                if (angular.isUndefined(future.values[question.attribute][set_prefix][valueset.set_index])) {
-                    future.values[question.attribute][set_prefix][valueset.set_index] = [];
-                }
-                if (angular.isUndefined(future.values[question.attribute][set_prefix][valueset.set_index][0])) {
-                    future.values[question.attribute][set_prefix][valueset.set_index].push(factories.values(question));
-                }
+            angular.forEach(questionset.elements, function(element) {
+                if (element.model == 'questions.question') {
+                    var question = element;
 
-                // for a checkbox, transform the values for the question to different checkboxes
-                if (question.widget_class === 'checkbox') {
-                    future.values[question.attribute][valueset.set_prefix][valueset.set_index] = service.initCheckbox(question, future.values[question.attribute][valueset.set_prefix][valueset.set_index]);
-                }
+                    if (angular.isUndefined(future.values[question.attribute])) {
+                        future.values[question.attribute] = {};
+                    }
+                    if (angular.isUndefined(future.values[question.attribute][set_prefix])) {
+                        future.values[question.attribute][set_prefix] = {};
+                    }
+                    if (angular.isUndefined(future.values[question.attribute][set_prefix][valueset.set_index])) {
+                        future.values[question.attribute][set_prefix][valueset.set_index] = [];
+                    }
+                    if (angular.isUndefined(future.values[question.attribute][set_prefix][valueset.set_index][0])) {
+                        future.values[question.attribute][set_prefix][valueset.set_index].push(factories.values(question));
+                    }
 
-                // init the widget for every value
-                angular.forEach(future.values[question.attribute][valueset.set_prefix][valueset.set_index], function(value) {
-                    service.initWidget(question, value);
-                });
+                    // for a checkbox, transform the values for the question to different checkboxes
+                    if (question.widget_class === 'checkbox') {
+                        future.values[question.attribute][valueset.set_prefix][valueset.set_index] = service.initCheckbox(question, future.values[question.attribute][valueset.set_prefix][valueset.set_index]);
+                    }
+
+                    // init the widget for every value
+                    angular.forEach(future.values[question.attribute][valueset.set_prefix][valueset.set_index], function(value) {
+                        service.initWidget(question, value);
+                    });
+                }
             });
         });
 
         // recursively loop over child questionsets and sets
-        angular.forEach(questionset.questionsets, function(qs) {
-            angular.forEach(future.valuesets[questionset.id][set_prefix], function(valueset, set_index) {
-                service.initValues(qs, service.joinSetPrefix(set_prefix, set_index));
-            });
+        angular.forEach(questionset.elements, function(element) {
+            if (element.model == 'questions.questionset') {
+                var qs = element;
+                angular.forEach(future.valuesets[questionset.id][set_prefix], function(valueset, set_index) {
+                    service.initValues(qs, service.joinSetPrefix(set_prefix, set_index));
+                });
+            }
         });
     };
 
@@ -589,11 +643,11 @@ angular.module('project_questions')
         }
 
         // for autocomplete
-        // fuse in initalized and the widget is locked for existing values
+        // fuse in initialized and the widget is locked for existing values
         if (question.widget_class === 'autocomplete') {
             if (angular.isArray(question.options)) {
                 question.options_fuse = new Fuse(question.options, {
-                    keys: ['text']
+                    keys: ['text_and_help']
                 });
             }
 
@@ -606,6 +660,22 @@ angular.module('project_questions')
                         value.autocomplete_text = option.text;
                     }
                 });
+            } else if (value.external_id) {
+                value.autocomplete_locked = false;
+                angular.forEach(question.options, function(option) {
+                    if (value.autocomplete_locked === false && option.id === value.external_id) {
+                        value.autocomplete_locked = true;
+                        value.autocomplete_input = option.text;
+                        value.autocomplete_text = option.text;
+                    }
+                })
+
+                // if no option was found (for autocomplete search fields), use the text
+                if (value.text) {
+                    value.autocomplete_locked = true;
+                    value.autocomplete_input = value.text;
+                    value.autocomplete_text = value.text;
+                }
             } else if (value.text) {
                 value.autocomplete_locked = true;
                 value.autocomplete_input = value.text;
@@ -665,11 +735,14 @@ angular.module('project_questions')
     };
 
     service.storeValue = function(value, question, set_prefix, set_index, collection_index) {
+        // reset value errors
+        value.errors = []
+
         if (angular.isDefined(value.removed) && value.removed) {
             // remove additional_input from unselected checkboxes
             value.additional_input = {};
 
-            // delete the value if it alredy exists on the server
+            // delete the value if it already exists on the server
             if (angular.isDefined(value.id)) {
                 return resources.values.delete({
                     id: value.id,
@@ -687,6 +760,14 @@ angular.module('project_questions')
             value.set_prefix = set_prefix;
             value.set_index = set_index;
             value.collection_index = collection_index;
+
+            // store if the question is part of a set_collection
+            if (question === null) {
+                // this is the id of a new valueset
+                value.set_collection = true
+            } else {
+                value.set_collection = question.set_collection
+            }
 
             // get value_type and unit from question
             if (question === null) {
@@ -711,7 +792,7 @@ angular.module('project_questions')
                     // loop over options
                     angular.forEach(question.options, function(option) {
                         if (option.has_provider && value.selected === option.id) {
-                            value.text = option.text;
+                            value.text = option.text; // has to be value.text, since the help is not supposed to be stored
                             value.external_id = option.id;
                         } else if (value.selected === option.id.toString()) {
                             // get text from additional_input for the selected option
@@ -777,10 +858,16 @@ angular.module('project_questions')
             }, function (response) {
                 if (response.status == 500) {
                     service.error = response;
+                } else if (response.status == 400) {
+                    service.error = true;
+                    value.errors = Object.keys(response.data);
+                } else if (response.status == 404) {
+                    service.error = true;
+                    value.errors = ['not_found']
                 }
             })
         }
-};
+    };
 
     service.storeValues = function() {
         var promises = [];
@@ -802,73 +889,66 @@ angular.module('project_questions')
 
     service.prev = function() {
         service.error = null; // reset error when moving to previous questionset
-        if (service.questionset.prev !== null) {
+        if (service.settings.project_questions_autosave) {
+            service.save(false, true).then(function() {
+                back = true;
+                service.initView(service.page.prev_page);
+            })
+        } else {
             back = true;
-            service.initView(service.questionset.prev);
+            service.initView(service.page.prev_page);
         }
     };
 
     service.next = function() {
         service.error = null; // reset error when moving to next questionset
-        if (service.questionset.id !== null) {
-            service.initView(service.questionset.next);
+        if (service.settings.project_questions_autosave) {
+            service.save(false, true).then(function() {
+                service.initView(service.page.next_page);
+            })
+        } else {
+            service.initView(service.page.next_page);
         }
     };
 
-    service.jump = function(section, questionset) {
+    service.jump = function(section, page) {
         service.error = null; // reset error before saving
         if (service.settings.project_questions_autosave) {
-            service.save(false).then(function() {
+            service.save(false, true).then(function() {
                 if (service.error !== null) {
                     // pass, dont jump
-                } else if (angular.isDefined(questionset)) {
-                    service.initView(questionset.id);
+                } else if (angular.isDefined(page)) {
+                    service.initView(page.id);
                 } else if (angular.isDefined(section)) {
-                    if (angular.isDefined(section.questionset)) {
-                        service.initView(section.questionsets[0].id);
-                    } else {
-                        // jump to first questionset of the section in breadcrumb
-                        // let section_from_service = service.project.catalog.sections.find(x => x.id === section.id)
-                        var section_from_service = $filter('filter')(service.project.catalog.sections, {
-                            id: section.id
-                        })[0]
-                        service.initView(section_from_service.questionsets[0].id);
-                    }
+                    service.initView(section.first);
                 } else {
                     service.initView(null);
                 }
             });
         } else {
-            if (angular.isDefined(questionset)) {
-                service.initView(questionset.id);
+            if (angular.isDefined(page)) {
+                service.initView(page.id);
             } else if (angular.isDefined(section)) {
-                if (angular.isDefined(section.questionset)) {
-                    service.initView(section.questionsets[0].id);
-                } else {
-                    // jump to first questionset of the section in breadcrumb
-                    // let section_from_service = service.project.catalog.sections.find(x => x.id === section.id)
-                    var section_from_service = $filter('filter')(service.project.catalog.sections, {
-                        id: section.id
-                    })[0]
-                    service.initView(section_from_service.questionsets[0].id);
-                }
+                service.initView(section.first);
             } else {
                 service.initView(null);
             }
         }
     };
 
-    service.save = function(proceed) {
+    service.save = function(proceed, jump) {
         service.error = null; // reset error
         return service.storeValues().then(function() {
             if (service.error !== null) {
                 // pass
+            } else if (service.page.id == false) {
+                // pass, the interview is done
             } else if (angular.isDefined(proceed) && proceed) {
-                if (service.settings.project_questions_cycle_sets && service.questionset.is_collection) {
+                if (service.settings.project_questions_cycle_sets && service.page.is_collection) {
                     if (service.set_index === null) {
                         service.next();
                     } else {
-                        var valuesets = service.valuesets[service.questionset.id][service.set_prefix];
+                        var valuesets = service.valuesets[service.page.id][service.set_prefix];
                         var index = service.findIndex(valuesets, 'set_index', service.set_index);
 
                         if (index === valuesets.length - 1) {
@@ -885,57 +965,87 @@ angular.module('project_questions')
                 }
             } else {
                 // update progress
-                resources.projects.get({
-                    id: service.project.id,
-                    detail_action: 'progress'
-                }, function(response) {
-                    if (service.progress.values != response.values) {
+                if (service.project.read_only !== true) {
+                    resources.projects.postAction({
+                        id: service.project.id,
+                        detail_action: 'progress'
+                    }, function(response) {
                         service.progress = response
-                    }
-                });
+                    });
+                }
 
+                // update navigation
+                if (service.project.read_only !== true) {
+                    resources.projects.query({
+                        id: service.project.id,
+                        detail_id: future.page.section.id,
+                        detail_action: 'navigation'
+                    }, function(response) {
+                        service.navigation = response
+                    });
+                }
+
+
+                // check if we need to refresh the site
+                if (angular.isUndefined(jump) || !jump) {
+                    angular.forEach([service.page].concat(service.questionsets), function(questionset) {
+                        angular.forEach(questionset.elements, function(element) {
+                            if (element.model == 'questions.question') {
+                                var question = element;
+                                angular.forEach(question.optionsets, function(optionset) {
+                                    if (optionset.has_refresh) {
+                                        return service.initView(service.page.id, false);
+                                    }
+                                });
+                            }
+                        });
+                    });
+                }
                 // re-evaluate conditions
-                angular.forEach(service.questionsets, function(questionset) {
+                angular.forEach([service.page].concat(service.questionsets), function(questionset) {
                     angular.forEach(service.valuesets[questionset.id], function(valuesets, set_prefix) {
                         angular.forEach(valuesets, function(valueset, set_index) {
-                            angular.forEach(questionset.questionsets, function(qs) {
-                                if (qs.has_conditions) {
-                                    promises.push(resources.projects.get({
-                                        id: service.project.id,
-                                        detail_action: 'resolve',
-                                        questionset: qs.id,
-                                        set_prefix: set_prefix,
-                                        set_index: set_index
-                                    }, function(response) {
-                                        valueset.hidden.questionsets[qs.id] = !response.result;
-                                    }).$promise);
-                                }
-                            });
-                            angular.forEach(questionset.questions, function(q) {
-                                if (q.has_conditions) {
-                                    promises.push(resources.projects.get({
-                                        id: service.project.id,
-                                        detail_action: 'resolve',
-                                        question: q.id,
-                                        set_prefix: set_prefix,
-                                        set_index: set_index
-                                    }, function(response) {
-                                        valueset.hidden.questions[q.id] = !response.result;
-                                    }).$promise);
-                                }
-                                angular.forEach(q.optionsets, function(optionset) {
-                                    if (optionset.has_conditions) {
+                            angular.forEach(questionset.elements, function(element) {
+                                if (element.model == 'questions.questionset') {
+                                    var qs = element;
+                                    if (qs.has_conditions) {
                                         promises.push(resources.projects.get({
                                             id: service.project.id,
                                             detail_action: 'resolve',
-                                            optionset: optionset.id,
+                                            questionset: qs.id,
                                             set_prefix: set_prefix,
                                             set_index: set_index
                                         }, function(response) {
-                                            valueset.hidden.optionsets[optionset.id] = !response.result;
+                                            valueset.hidden.questionsets[qs.id] = !response.result;
                                         }).$promise);
                                     }
-                                });
+                                } else {
+                                    var q = element;
+                                    if (q.has_conditions) {
+                                        promises.push(resources.projects.get({
+                                            id: service.project.id,
+                                            detail_action: 'resolve',
+                                            question: q.id,
+                                            set_prefix: set_prefix,
+                                            set_index: set_index
+                                        }, function(response) {
+                                            valueset.hidden.questions[q.id] = !response.result;
+                                        }).$promise);
+                                    }
+                                    angular.forEach(q.optionsets, function(optionset) {
+                                        if (optionset.has_conditions) {
+                                            promises.push(resources.projects.get({
+                                                id: service.project.id,
+                                                detail_action: 'resolve',
+                                                optionset: optionset.id,
+                                                set_prefix: set_prefix,
+                                                set_index: set_index
+                                            }, function(response) {
+                                                valueset.hidden.optionsets[optionset.id] = !response.result;
+                                            }).$promise);
+                                        }
+                                    });
+                                }
                             });
                         });
                     });
@@ -980,11 +1090,19 @@ angular.module('project_questions')
         service.values[attribute][set_prefix][set_index][collection_index].autocomplete_text = '';
         service.values[attribute][set_prefix][set_index][collection_index].autocomplete_locked = false;
         service.values[attribute][set_prefix][set_index][collection_index].changed = true;
+
+        if (service.settings.project_questions_autosave) {
+            service.save(false);
+        }
     };
 
     service.removeValue = function(attribute, set_prefix, set_index, collection_index) {
         service.values[attribute][set_prefix][set_index][collection_index].removed = true;
         service.values[attribute][set_prefix][set_index][collection_index].changed = true;
+
+        if (service.settings.project_questions_autosave) {
+            service.save(false);
+        }
     };
 
     service.openValueSetFormModal = function(questionset, set_prefix, set_index) {
@@ -1090,28 +1208,32 @@ angular.module('project_questions')
         service.valuesets[questionset.id][set_prefix].push(factories.valuesets(set_prefix, set_index));
 
         // loop over questions to initialize them with at least one value, and init checkboxes and widgets
-        angular.forEach(questionset.questions, function(question) {
-            if (angular.isUndefined(service.values[question.attribute])) {
-                service.values[question.attribute] = {};
-            }
-            if (angular.isUndefined(service.values[question.attribute][set_prefix])) {
-                service.values[question.attribute][set_prefix] = {};
-            }
-            if (angular.isUndefined(service.values[question.attribute][set_prefix][set_index])) {
-                service.values[question.attribute][set_prefix][set_index] = [];
-            }
-            if (angular.isUndefined(service.values[question.attribute][set_prefix][set_index][0])) {
-                service.values[question.attribute][set_prefix][set_index].push(factories.values(question));
-            }
+        angular.forEach(questionset.elements, function(element) {
+            if (element.model == 'questions.question') {
+                var question = element;
 
-            // for a checkbox, transform the values for the question to different checkboxes
-            if (question.widget_class === 'checkbox') {
-                service.values[question.attribute][set_prefix][set_index] = service.initCheckbox(question, service.values[question.attribute][set_prefix][set_index]);
-            }
+                if (angular.isUndefined(service.values[question.attribute])) {
+                    service.values[question.attribute] = {};
+                }
+                if (angular.isUndefined(service.values[question.attribute][set_prefix])) {
+                    service.values[question.attribute][set_prefix] = {};
+                }
+                if (angular.isUndefined(service.values[question.attribute][set_prefix][set_index])) {
+                    service.values[question.attribute][set_prefix][set_index] = [];
+                }
+                if (angular.isUndefined(service.values[question.attribute][set_prefix][set_index][0])) {
+                    service.values[question.attribute][set_prefix][set_index].push(factories.values(question));
+                }
 
-            angular.forEach(service.values[question.attribute][set_prefix][set_index], function(value) {
-                service.initWidget(question, value);
-            });
+                // for a checkbox, transform the values for the question to different checkboxes
+                if (question.widget_class === 'checkbox') {
+                    service.values[question.attribute][set_prefix][set_index] = service.initCheckbox(question, service.values[question.attribute][set_prefix][set_index]);
+                }
+
+                angular.forEach(service.values[question.attribute][set_prefix][set_index], function(value) {
+                    service.initWidget(question, value);
+                });
+            }
         });
 
         if (angular.isDefined(text) && questionset.attribute) {
@@ -1138,15 +1260,19 @@ angular.module('project_questions')
         }
 
         // recursively loop over child questionsets and sets
-        angular.forEach(questionset.questionsets, function(qs) {
-            // for non collection questionsets create at least one valueset
-            if (!qs.is_collection) {
-                service.addValueSet(qs, service.joinSetPrefix(set_prefix, set_index));
+        angular.forEach(questionset.elements, function(element) {
+            if (element.model == 'questions.questionset') {
+                var qs = element;
+
+                // for non collection questionsets create at least one valueset
+                if (!qs.is_collection) {
+                    service.addValueSet(qs, service.joinSetPrefix(set_prefix, set_index));
+                }
             }
         });
 
         // switch set_index if this is the top level questionset
-        if (questionset == service.questionset) {
+        if (questionset == service.page) {
             service.set_index = set_index;
         }
     };
@@ -1178,7 +1304,7 @@ angular.module('project_questions')
 
     service.removeValueSet = function(questionset, set_prefix, set_index) {
         // check if this is the main questionset and not a questionset-in-questionset
-        if (service.questionset.id == questionset.id && questionset.attribute) {
+        if (service.page.id == questionset.id && questionset.attribute) {
             // delete all values of this set in the project using the special /set endpoint
             if (angular.isDefined(service.values[questionset.attribute])) {
                 angular.forEach(service.values[questionset.attribute][set_prefix][set_index], function(value) {
@@ -1196,30 +1322,36 @@ angular.module('project_questions')
             }
         } else {
             // delete the values for the attribute of the questions of this questionset
-            angular.forEach(questionset.questions, function(question) {
-                angular.forEach(service.values[question.attribute][set_prefix][set_index], function(value) {
-                    if (angular.isDefined(value)) {
-                        value.removed = true;
-                        service.storeValue(value, null, set_prefix, set_index, value.collection_index);
-                    }
-                });
+            angular.forEach(questionset.elements, function(element) {
+                if (element.model == 'questions.question') {
+                    var q = element;
+                    angular.forEach(service.values[q.attribute][set_prefix][set_index], function(value) {
+                        if (angular.isDefined(value)) {
+                            value.removed = true;
+                            service.storeValue(value, null, set_prefix, set_index, value.collection_index);
+                        }
+                    });
+                }
             });
         }
 
         // recursively delete questionsets of this questionset
-        angular.forEach(questionset.questionsets, function(qs) {
-            var sp = service.joinSetPrefix(set_prefix, set_index);
+        angular.forEach(questionset.elements, function(element) {
+            if (element.model == 'questions.questionset') {
+                var qs = element;
+                var sp = service.joinSetPrefix(set_prefix, set_index);
 
-            // loop over a copy of the valueset, since elements are removed during the iteration
-            angular.forEach(angular.copy(service.valuesets[qs.id][sp]), function (v, si) {
-                service.removeValueSet(qs, sp, si);
-            });
+                // loop over a copy of the valueset, since elements are removed during the iteration
+                angular.forEach(angular.copy(service.valuesets[qs.id][sp]), function (v, si) {
+                    service.removeValueSet(qs, sp, si);
+                });
+            }
         });
 
         // if this is the top level questionset,
         // activate the set before the current one,
         // otherwise the previous set
-        if (questionset == service.questionset) {
+        if (questionset == service.page) {
             // get list of valuesets which are not removed yet
             var valuesets = $filter('filter')(service.valuesets[questionset.id][set_prefix], function(valueset) {
                 return valueset.removed === false;
@@ -1280,12 +1412,22 @@ angular.module('project_questions')
 
                         // unset the searching flag
                         value.searching = false;
+
+                        // activate the first item
+                        if (question.widget_type == 'autocomplete' && angular.isDefined(value.items[0])) {
+                            value.items[0].active = true;
+                        }
                     });
                 }
             } else {
                 // if no search was performed, do the searching on the client
                 value.autocomplete_search = false;
                 value.items = question.options_fuse.search(value.autocomplete_input);
+
+                // activate the first item
+                if (question.widget_type == 'autocomplete' && angular.isDefined(value.items[0])) {
+                    value.items[0].active = true;
+                }
             }
         } else {
             value.items = [];
@@ -1328,8 +1470,19 @@ angular.module('project_questions')
                     value.autocomplete_input = next.text;
                 }
             } else if ($event.code == 'Enter' || $event.code == 'NumpadEnter') {
-                if (angular.isDefined(active)) {
+                if (value.autocomplete_input == '') {
+                    service.resetAutocomplete(value);
+                } else if (angular.isDefined(active)) {
                     service.selectAutocomplete(value, value.items[active]);
+                } else if (question.widget_type == 'freeautocomplete') {
+                    var matchingOptions = $filter('filter')(value.items, function(item) {
+                        return item.text.toLowerCase() == value.autocomplete_input.toLowerCase();
+                    })
+                    if (matchingOptions.length > 0) {
+                        service.selectAutocomplete(value, matchingOptions[0]);
+                    } else {
+                        service.selectAutocomplete(value, null);
+                    }
                 }
             } else if ($event.code == 'Escape') {
                 if (value.selected === '') {
@@ -1345,20 +1498,57 @@ angular.module('project_questions')
     // called when the user clicks on an option of the autocomplete field
     service.selectAutocomplete = function(value, option) {
         value.autocomplete_locked = true;
-        value.selected = option.id.toString();
-        value.autocomplete_text = option.text;
+
+        if (option === null) {
+            // store the text value (for the free autocomplete)
+            value.text = value.autocomplete_input;
+            value.selected = '';
+            value.autocomplete_text = value.text;
+        } else {
+            // store the option
+            value.text = '';
+            value.selected = option.id.toString();
+            value.autocomplete_text = option.text;
+            value.autocomplete_input = option.text;
+        }
+
+        service.changed(value, true);
     }
 
     // called when the user clicks outside the autocomplete field
-    service.blurAutocomplete = function(value) {
-        if (value.selected === '') {
-            value.autocomplete_input = '';
-            value.autocomplete_text = '';
-            value.items = null;
+    service.blurAutocomplete = function(question, value) {
+        if (question.widget_type == 'freeautocomplete') {
+            if (value.autocomplete_input == '') {
+                service.resetAutocomplete(value);
+            } else {
+                var matchingOptions = $filter('filter')(value.items, function(item) {
+                    return item.text.toLowerCase() == value.autocomplete_input.toLowerCase();
+                })
+                if (matchingOptions.length > 0) {
+                    service.selectAutocomplete(value, matchingOptions[0]);
+                } else {
+                    service.selectAutocomplete(value, null);
+                }
+            }
         } else {
-            value.autocomplete_locked = true;
-            value.autocomplete_input = value.autocomplete_text;
+            if (value.selected === '') {
+                service.resetAutocomplete(value);
+            } else {
+                value.autocomplete_locked = true;
+                value.autocomplete_input = value.autocomplete_text;
+            }
         }
+    }
+
+    // called when an empty string is entered in the autocomplete field
+    service.resetAutocomplete = function(value) {
+        value.text = '';
+        value.selected = '';
+        value.autocomplete_input = '';
+        value.autocomplete_text = '';
+        value.items = null;
+
+        service.changed(value, true);
     }
 
     // called when the user clicks in the autocomplete field

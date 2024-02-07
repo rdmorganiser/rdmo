@@ -7,16 +7,18 @@ from pathlib import Path
 from tempfile import mkstemp
 from urllib.parse import urlparse
 
-import pypandoc
 from django.apps import apps
 from django.conf import settings
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.template.loader import get_template
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
+
+import pypandoc
+from defusedcsv import csv
 from markdown import markdown
 
-from defusedcsv import csv
+from .constants import HUMAN2BYTES_MAPPER
 
 log = logging.getLogger(__name__)
 
@@ -90,11 +92,41 @@ def get_model_field_meta(model):
     meta = {}
 
     for field in model._meta.get_fields():
-        meta[field.name] = {}
-        if hasattr(field, 'verbose_name'):
-            meta[field.name]['verbose_name'] = field.verbose_name
-        if hasattr(field, 'help_text'):
-            meta[field.name]['help_text'] = field.help_text
+        match = re.search(r'lang(\d)$', field.name)
+        if match:
+            lang_index = int(match.group(1))
+
+            try:
+                lang_code, lang = settings.LANGUAGES[lang_index - 1]
+            except IndexError:
+                continue
+
+            field_name = field.name.replace(f'_lang{lang_index}', f'_{lang_code}')
+
+            meta[field_name] = {}
+            if hasattr(field, 'verbose_name'):
+                # remove the "(primary)" part
+                meta[field_name]['verbose_name'] = re.sub(r'\(.*\)$', f'({lang})', str(field.verbose_name))
+            if hasattr(field, 'help_text'):
+                # remove the "in the primary language" part
+                meta[field_name]['help_text'] = re.sub(r' \(.*\).', '.', str(field.help_text))
+        else:
+            meta[field.name] = {}
+            if hasattr(field, 'verbose_name'):
+                meta[field.name]['verbose_name'] = field.verbose_name
+            if hasattr(field, 'help_text'):
+                meta[field.name]['help_text'] = field.help_text
+
+    if model.__name__ == 'Page':
+        meta['elements'] = {
+            'verbose_name': _('Elements'),
+            'help_text': _('The questions and question sets for this page.')
+        }
+    elif model.__name__ == 'QuestionSet':
+        meta['elements'] = {
+            'verbose_name': _('Elements'),
+            'help_text': _('The questions and question sets for this question set.')
+        }
 
     return meta
 
@@ -120,7 +152,7 @@ def get_language_fields(field_name):
 
 def get_language_warning(obj, field):
     for lang_code, lang_string, lang_field in get_languages():
-        if not getattr(obj, '%s_%s' % (field, lang_field)):
+        if not getattr(obj, f'{field}_{lang_field}'):
             return True
     return False
 
@@ -129,7 +161,7 @@ def set_export_reference_document(format, context):
     # try to get the view uri from the context
     try:
         view = context['view']
-        view_uri = getattr(view, 'uri')
+        view_uri = view.uri
     except (AttributeError, KeyError, TypeError):
         view_uri = None
 
@@ -186,11 +218,11 @@ def render_to_format(request, export_format, title, template_src, context):
     if export_format == 'html':
         # create the response object
         response = HttpResponse(html)
-        response['Content-Disposition'] = 'filename="%s.%s"' % (title, export_format)
+        response['Content-Disposition'] = f'filename="{title}.{export_format}"'
 
     else:
         pandoc_args = settings.EXPORT_PANDOC_ARGS.get(export_format, [])
-        content_disposition = 'attachment; filename="%s.%s"' % (title, export_format)
+        content_disposition = f'attachment; filename="{title}.{export_format}"'
 
         if export_format == 'pdf':
             # check pandoc version (the pdf arg changed to version 2)
@@ -200,23 +232,23 @@ def render_to_format(request, export_format, title, template_src, context):
                 ) for arg in pandoc_args]
 
             # display pdf in browser
-            content_disposition = 'filename="%s.%s"' % (title, export_format)
+            content_disposition = f'filename="{title}.{export_format}"'
 
         # use reference document for certain file formats
         refdoc = set_export_reference_document(export_format, context)
         if refdoc is not None and export_format in ['docx', 'odt']:
             # check pandoc version (the args changed to version 2)
             if get_pandoc_main_version() == 1:
-                pandoc_args.append('--reference-{}={}'.format(export_format, refdoc))
+                pandoc_args.append(f'--reference-{export_format}={refdoc}')
             else:
-                pandoc_args.append('--reference-doc={}'.format(refdoc))
+                pandoc_args.append(f'--reference-doc={refdoc}')
 
         # add the possible resource-path
         if pandoc_version_at_least("2") is True:
-            pandoc_args.append('--resource-path={}'.format(settings.STATIC_ROOT))
+            pandoc_args.append(f'--resource-path={settings.STATIC_ROOT}')
             if 'resource_path' in context:
                 resource_path = Path(settings.MEDIA_ROOT).joinpath(context['resource_path'])
-                pandoc_args.append('--resource-path={}'.format(resource_path))
+                pandoc_args.append(f'--resource-path={resource_path}')
 
         # create a temporary file
         (tmp_fd, tmp_filename) = mkstemp('.' + export_format)
@@ -264,6 +296,12 @@ def render_to_csv(title, rows, delimiter=','):
         writer.writerow(
             ['' if x is None else str(x) for x in row]
         )
+    return response
+
+
+def render_to_json(title, data, delimiter=','):
+    response = HttpResponse(json.dumps(data, indent=2), content_type='text/json')
+    response['Content-Disposition'] = 'attachment; filename="%s.json"' % title
     return response
 
 
@@ -315,42 +353,40 @@ def copy_model(instance, **kwargs):
 
 
 def human2bytes(string):
-    if not string:
+    if not string or string == '0':
         return 0
 
     m = re.match(r'([0-9.]+)\s*([A-Za-z]+)', string)
     number, unit = float(m.group(1)), m.group(2).strip().lower()
 
-    if unit == 'kb' or unit == 'k':
-        return number * 1000
-    elif unit == 'mb' or unit == 'm':
-        return number * 1000**2
-    elif unit == 'gb' or unit == 'g':
-        return number * 1000**3
-    elif unit == 'tb' or unit == 't':
-        return number * 1000**4
-    elif unit == 'pb' or unit == 'p':
-        return number * 1000**5
-    elif unit == 'kib':
-        return number * 1024
-    elif unit == 'mib':
-        return number * 1024**2
-    elif unit == 'gib':
-        return number * 1024**3
-    elif unit == 'tib':
-        return number * 1024**4
-    elif unit == 'pib':
-        return number * 1024**5
+    conversion = HUMAN2BYTES_MAPPER[unit]
+    number = number*conversion['base']**(conversion['power'])
+    return number
+
+
+def is_truthy(value):
+    return value is not None and (value is True or value.lower() in ['1', 't', 'true'])
 
 
 def markdown2html(markdown_string):
-    # adoption of the normal markdown function which also converts
-    # `[<string>]{<title>}` to <span title="<title>"><string></span> to
-    # allow for underlined tooltips
-    html = markdown(force_str(markdown_string))
+    # adoption of the normal markdown function
+    html = markdown(force_str(markdown_string)).strip()
+
+    # convert `[<string>]{<title>}` to <span title="<title>"><string></span> to allow for underlined tooltips
     html = re.sub(
         r'\[(.*?)\]\{(.*?)\}',
         r'<span data-toggle="tooltip" data-placement="bottom" data-html="true" title="\2">\1</span>',
+        html
+    )
+
+    # convert everything after `{more}` to <span class="more"><string></span> to be shown/hidden on user input
+    show_string = _('show more')
+    hide_string = _('show less')
+    html = re.sub(
+        r'(\{more\})(.*?)</p>$',
+        f'<span class="show-more" onclick="showMore(this)">... ({show_string})</span>'
+        r'<span class="more">\2</span>'
+        f'<span class="show-less" onclick="showLess(this)"> ({hide_string})</span></p>',
         html
     )
     return html

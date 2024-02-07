@@ -5,7 +5,7 @@ auth_app, auth_model = settings.AUTH_USER_MODEL.lower().split('.')
 user_view_permission = (
   auth_app,
   auth_model,
-  'view_{}'.format(auth_model)
+  f'view_{auth_model}'
 )
 
 GROUPS = (
@@ -34,6 +34,10 @@ GROUPS = (
       ('questions', 'catalog', 'change_catalog'),
       ('questions', 'catalog', 'delete_catalog'),
       ('questions', 'catalog', 'view_catalog'),
+      ('questions', 'page', 'add_page'),
+      ('questions', 'page', 'change_page'),
+      ('questions', 'page', 'delete_page'),
+      ('questions', 'page', 'view_page'),
       ('questions', 'questionset', 'add_questionset'),
       ('questions', 'questionset', 'change_questionset'),
       ('questions', 'questionset', 'delete_questionset'),
@@ -60,6 +64,7 @@ GROUPS = (
       ('conditions', 'condition', 'view_condition'),
       ('questions', 'catalog', 'view_catalog'),
       ('questions', 'section', 'view_section'),
+      ('questions', 'page', 'view_page'),
       ('questions', 'questionset', 'view_questionset'),
       ('questions', 'question', 'view_question'),
       ('tasks', 'task', 'view_task'),
@@ -93,6 +98,10 @@ GROUPS = (
       ('questions', 'catalog', 'change_catalog'),
       ('questions', 'catalog', 'delete_catalog'),
       ('questions', 'catalog', 'view_catalog'),
+      ('questions', 'page', 'add_page'),
+      ('questions', 'page', 'change_page'),
+      ('questions', 'page', 'delete_page'),
+      ('questions', 'page', 'view_page'),
       ('questions', 'questionset', 'add_questionset'),
       ('questions', 'questionset', 'change_questionset'),
       ('questions', 'questionset', 'delete_questionset'),
@@ -133,5 +142,9 @@ GROUPS = (
       ('projects', 'integration', 'change_integration'),
       ('projects', 'integration', 'delete_integration'),
       ('projects', 'integration', 'view_integration'),
+      ('projects', 'invite', 'add_invite'),
+      ('projects', 'invite', 'change_invite'),
+      ('projects', 'invite', 'delete_invite'),
+      ('projects', 'invite', 'view_invite'),
   ))
 )

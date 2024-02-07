@@ -1,8 +1,9 @@
 import pytest
+
 from django.core import mail
 from django.urls import reverse
 
-from ..models import Invite, Membership
+from rdmo.projects.models import Invite, Membership
 
 users = (
     ('owner', 'owner'),
@@ -25,6 +26,8 @@ memberships = [1, 2, 3, 4]
 
 membership_roles = ('owner', 'manager', 'author', 'guest')
 
+excluded_invite_ids = [1, 2]
+
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
@@ -42,10 +45,13 @@ def test_membership_create_get(db, client, username, password, project_id):
         assert response.status_code == 302
 
 
+@pytest.mark.parametrize('PROJECT_SEND_INVITE', [False, True])
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('membership_role', membership_roles)
-def test_membership_create_post(db, client, username, password, project_id, membership_role):
+def test_membership_create_post(db, client, settings,
+                                username, password, project_id, membership_role, PROJECT_SEND_INVITE):
+    settings.PROJECT_SEND_INVITE = PROJECT_SEND_INVITE
     client.login(username=username, password=password)
 
     url = reverse('membership_create', args=[project_id])
@@ -57,23 +63,28 @@ def test_membership_create_post(db, client, username, password, project_id, memb
 
     if project_id in add_membership_permission_map.get(username, []):
         assert response.status_code == 302
-        assert Invite.objects.get(project_id=project_id, user__username='user', email='user@example.com', role=membership_role)
-        assert not Membership.objects.filter(project_id=project_id, user__username='user', role=membership_role).exists()
-        assert len(mail.outbox) == 1
+        assert Invite.objects.get(project_id=project_id, user__username='user',
+                                  email='user@example.com', role=membership_role)
+        assert not Membership.objects.filter(project_id=project_id,
+                                             user__username='user', role=membership_role).exists()
+        assert len(mail.outbox) == int(PROJECT_SEND_INVITE)
     else:
         if password:
             assert response.status_code == 403
         else:
             assert response.status_code == 302
 
-        assert not Invite.objects.exists()
+        assert not Invite.objects.exclude(id__in=excluded_invite_ids).exists()
         assert len(mail.outbox) == 0
 
 
+@pytest.mark.parametrize('PROJECT_SEND_INVITE', [False, True])
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('membership_role', membership_roles)
-def test_membership_create_post_mail(db, client, username, password, project_id, membership_role):
+def test_membership_create_post_mail(db, client, settings,
+                                     username, password, project_id, membership_role, PROJECT_SEND_INVITE):
+    settings.PROJECT_SEND_INVITE = PROJECT_SEND_INVITE
     client.login(username=username, password=password)
 
     url = reverse('membership_create', args=[project_id])
@@ -84,16 +95,22 @@ def test_membership_create_post_mail(db, client, username, password, project_id,
     response = client.post(url, data)
 
     if project_id in add_membership_permission_map.get(username, []):
-        assert response.status_code == 302
-        assert Invite.objects.get(project_id=project_id, user=None, email='someuser@example.com', role=membership_role)
-        assert len(mail.outbox) == 1
+        if not PROJECT_SEND_INVITE:
+            assert response.status_code == 200
+            assert not Invite.objects.filter(project_id=project_id, user=None,
+                                             email='someuser@example.com', role=membership_role)
+        else:
+            assert response.status_code == 302
+            assert Invite.objects.get(project_id=project_id, user=None,
+                                      email='someuser@example.com', role=membership_role)
+        assert len(mail.outbox) == int(PROJECT_SEND_INVITE)
     else:
         if password:
             assert response.status_code == 403
         else:
             assert response.status_code == 302
 
-        assert not Invite.objects.exists()
+        assert not Invite.objects.exclude(id__in=excluded_invite_ids).exists()
         assert len(mail.outbox) == 0
 
 
@@ -110,7 +127,7 @@ def test_membership_create_post_error(db, client, username, password, membership
     }
     response = client.post(url, data)
 
-    assert not Invite.objects.exists(), Invite.objects.all()
+    assert not Invite.objects.exclude(id__in=excluded_invite_ids).exists()
     assert len(mail.outbox) == 0
 
     if project_id in add_membership_permission_map.get(username, []):
@@ -135,7 +152,7 @@ def test_membership_create_post_mail_error(db, client, username, password, membe
     }
     response = client.post(url, data)
 
-    assert not Invite.objects.exists(), Invite.objects.all()
+    assert not Invite.objects.exclude(id__in=excluded_invite_ids).exists()
     assert len(mail.outbox) == 0
 
     if project_id in add_membership_permission_map.get(username, []):
@@ -165,12 +182,14 @@ def test_membership_create_post_silent(db, client, username, password, membershi
         assert response.status_code == 302
 
         if username == 'site':
-            assert not Invite.objects.exists()
+            assert not Invite.objects.exclude(id__in=excluded_invite_ids).exists()
             assert Membership.objects.get(project_id=project_id, user__username='user', role=membership_role)
             assert len(mail.outbox) == 0
         else:
-            assert Invite.objects.get(project_id=project_id, user__username='user', email='user@example.com', role=membership_role)
-            assert not Membership.objects.filter(project_id=project_id, user__username='user', role=membership_role).exists()
+            assert Invite.objects.get(project_id=project_id, user__username='user',
+                                      email='user@example.com', role=membership_role)
+            assert not Membership.objects.filter(project_id=project_id, user__username='user',
+                                                 role=membership_role).exists()
             assert len(mail.outbox) == 1
 
     else:

@@ -5,11 +5,12 @@
     "fields": {
       "uri": "http://example.com/terms/options/one_two_three",
       "uri_prefix": "http://example.com/terms",
-      "key": "one_two_three",
+      "uri_path": "one_two_three",
       "comment": "",
       "locked": false,
       "order": 0,
       "provider_key": "",
+      "editors": [],
       "conditions": []
     }
   },
@@ -19,11 +20,12 @@
     "fields": {
       "uri": "http://example.com/terms/options/one_two_three_other",
       "uri_prefix": "http://example.com/terms",
-      "key": "one_two_three_other",
+      "uri_path": "one_two_three_other",
       "comment": "",
       "locked": false,
       "order": 1,
       "provider_key": "",
+      "editors": [],
       "conditions": []
     }
   },
@@ -33,11 +35,12 @@
     "fields": {
       "uri": "http://example.com/terms/options/condition",
       "uri_prefix": "http://example.com/terms",
-      "key": "condition",
+      "uri_path": "condition",
       "comment": "",
       "locked": false,
       "order": 2,
       "provider_key": "",
+      "editors": [],
       "conditions": [
         16
       ]
@@ -49,12 +52,164 @@
     "fields": {
       "uri": "http://example.com/terms/options/plugin",
       "uri_prefix": "http://example.com/terms",
-      "key": "plugin",
+      "uri_path": "plugin",
       "comment": "",
       "locked": false,
       "order": 4,
       "provider_key": "simple",
+      "editors": [],
       "conditions": []
+    }
+  },
+  {
+    "model": "options.optionset",
+    "pk": 5,
+    "fields": {
+      "uri": "https://foo.com/terms/options/foo-optionset",
+      "uri_prefix": "https://foo.com/terms",
+      "uri_path": "foo-optionset",
+      "comment": "",
+      "locked": false,
+      "order": 0,
+      "provider_key": "",
+      "editors": [
+        2
+      ],
+      "conditions": []
+    }
+  },
+  {
+    "model": "options.optionset",
+    "pk": 6,
+    "fields": {
+      "uri": "https://bar.com/terms/options/bar-optionset",
+      "uri_prefix": "https://bar.com/terms",
+      "uri_path": "bar-optionset",
+      "comment": "",
+      "locked": false,
+      "order": 0,
+      "provider_key": "",
+      "editors": [
+        3
+      ],
+      "conditions": []
+    }
+  },
+  {
+    "model": "options.optionsetoption",
+    "pk": 1,
+    "fields": {
+      "optionset": 1,
+      "option": 1,
+      "order": 1
+    }
+  },
+  {
+    "model": "options.optionsetoption",
+    "pk": 2,
+    "fields": {
+      "optionset": 1,
+      "option": 2,
+      "order": 2
+    }
+  },
+  {
+    "model": "options.optionsetoption",
+    "pk": 3,
+    "fields": {
+      "optionset": 1,
+      "option": 3,
+      "order": 3
+    }
+  },
+  {
+    "model": "options.optionsetoption",
+    "pk": 4,
+    "fields": {
+      "optionset": 2,
+      "option": 4,
+      "order": 1
+    }
+  },
+  {
+    "model": "options.optionsetoption",
+    "pk": 5,
+    "fields": {
+      "optionset": 2,
+      "option": 5,
+      "order": 2
+    }
+  },
+  {
+    "model": "options.optionsetoption",
+    "pk": 6,
+    "fields": {
+      "optionset": 2,
+      "option": 6,
+      "order": 3
+    }
+  },
+  {
+    "model": "options.optionsetoption",
+    "pk": 7,
+    "fields": {
+      "optionset": 2,
+      "option": 7,
+      "order": 4
+    }
+  },
+  {
+    "model": "options.optionsetoption",
+    "pk": 8,
+    "fields": {
+      "optionset": 2,
+      "option": 8,
+      "order": 5
+    }
+  },
+  {
+    "model": "options.optionsetoption",
+    "pk": 9,
+    "fields": {
+      "optionset": 3,
+      "option": 9,
+      "order": 1
+    }
+  },
+  {
+    "model": "options.optionsetoption",
+    "pk": 10,
+    "fields": {
+      "optionset": 5,
+      "option": 10,
+      "order": 1
+    }
+  },
+  {
+    "model": "options.optionsetoption",
+    "pk": 11,
+    "fields": {
+      "optionset": 5,
+      "option": 11,
+      "order": 2
+    }
+  },
+  {
+    "model": "options.optionsetoption",
+    "pk": 12,
+    "fields": {
+      "optionset": 6,
+      "option": 12,
+      "order": 1
+    }
+  },
+  {
+    "model": "options.optionsetoption",
+    "pk": 13,
+    "fields": {
+      "optionset": 6,
+      "option": 13,
+      "order": 2
     }
   },
   {
@@ -63,18 +218,16 @@
     "fields": {
       "uri": "http://example.com/terms/options/one_two_three/one",
       "uri_prefix": "http://example.com/terms",
-      "key": "one",
-      "path": "one_two_three/one",
+      "uri_path": "one_two_three/one",
       "comment": "",
       "locked": false,
-      "optionset": 1,
-      "order": 1,
       "text_lang1": "One",
       "text_lang2": "Eins",
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false
+      "additional_input": "",
+      "editors": []
     }
   },
   {
@@ -83,18 +236,16 @@
     "fields": {
       "uri": "http://example.com/terms/options/one_two_three/two",
       "uri_prefix": "http://example.com/terms",
-      "key": "two",
-      "path": "one_two_three/two",
+      "uri_path": "one_two_three/two",
       "comment": "",
       "locked": false,
-      "optionset": 1,
-      "order": 2,
       "text_lang1": "Two",
       "text_lang2": "Zwei",
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false
+      "additional_input": "",
+      "editors": []
     }
   },
   {
@@ -103,18 +254,16 @@
     "fields": {
       "uri": "http://example.com/terms/options/one_two_three/three",
       "uri_prefix": "http://example.com/terms",
-      "key": "three",
-      "path": "one_two_three/three",
+      "uri_path": "one_two_three/three",
       "comment": "",
       "locked": false,
-      "optionset": 1,
-      "order": 3,
       "text_lang1": "Three",
       "text_lang2": "Drei",
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false
+      "additional_input": "",
+      "editors": []
     }
   },
   {
@@ -123,18 +272,16 @@
     "fields": {
       "uri": "http://example.com/terms/options/one_two_three_other/one",
       "uri_prefix": "http://example.com/terms",
-      "key": "one",
-      "path": "one_two_three_other/one",
+      "uri_path": "one_two_three_other/one",
       "comment": "",
       "locked": false,
-      "optionset": 2,
-      "order": 1,
       "text_lang1": "One",
       "text_lang2": "Eins",
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false
+      "additional_input": "",
+      "editors": []
     }
   },
   {
@@ -143,18 +290,16 @@
     "fields": {
       "uri": "http://example.com/terms/options/one_two_three_other/two",
       "uri_prefix": "http://example.com/terms",
-      "key": "two",
-      "path": "one_two_three_other/two",
+      "uri_path": "one_two_three_other/two",
       "comment": "",
       "locked": false,
-      "optionset": 2,
-      "order": 2,
       "text_lang1": "Two",
       "text_lang2": "Zwei",
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false
+      "additional_input": "",
+      "editors": []
     }
   },
   {
@@ -163,58 +308,150 @@
     "fields": {
       "uri": "http://example.com/terms/options/one_two_three_other/three",
       "uri_prefix": "http://example.com/terms",
-      "key": "three",
-      "path": "one_two_three_other/three",
+      "uri_path": "one_two_three_other/three",
       "comment": "",
       "locked": false,
-      "optionset": 2,
-      "order": 3,
       "text_lang1": "Three",
       "text_lang2": "Drei",
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": false
+      "additional_input": "",
+      "editors": []
     }
   },
   {
     "model": "options.option",
     "pk": 7,
     "fields": {
-      "uri": "http://example.com/terms/options/one_two_three_other/other",
+      "uri": "http://example.com/terms/options/one_two_three_other/text",
       "uri_prefix": "http://example.com/terms",
-      "key": "other",
-      "path": "one_two_three_other/other",
+      "uri_path": "one_two_three_other/text",
       "comment": "",
       "locked": false,
-      "optionset": 2,
-      "order": 4,
-      "text_lang1": "Other",
-      "text_lang2": "Sonstige",
+      "text_lang1": "Text",
+      "text_lang2": "Text",
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": true
+      "additional_input": "text",
+      "editors": []
     }
   },
   {
     "model": "options.option",
     "pk": 8,
     "fields": {
-      "uri": "http://example.com/terms/options/condition/other",
+      "uri": "http://example.com/terms/options/one_two_three_other/textarea",
       "uri_prefix": "http://example.com/terms",
-      "key": "other",
-      "path": "condition/other",
+      "uri_path": "one_two_three_other/textarea",
       "comment": "",
       "locked": false,
-      "optionset": 3,
-      "order": 4,
+      "text_lang1": "Text",
+      "text_lang2": "Text",
+      "text_lang3": "",
+      "text_lang4": "",
+      "text_lang5": "",
+      "additional_input": "textarea",
+      "editors": []
+    }
+  },
+  {
+    "model": "options.option",
+    "pk": 9,
+    "fields": {
+      "uri": "http://example.com/terms/options/condition/other",
+      "uri_prefix": "http://example.com/terms",
+      "uri_path": "condition/other",
+      "comment": "",
+      "locked": false,
       "text_lang1": "Other",
       "text_lang2": "Sonstige",
       "text_lang3": "",
       "text_lang4": "",
       "text_lang5": "",
-      "additional_input": true
+      "additional_input": "text",
+      "editors": []
+    }
+  },
+  {
+    "model": "options.option",
+    "pk": 10,
+    "fields": {
+      "uri": "https://foo.com/terms/options/foo-option-1",
+      "uri_prefix": "https://foo.com/terms",
+      "uri_path": "foo-option-1",
+      "comment": "",
+      "locked": false,
+      "text_lang1": "foo-option-1",
+      "text_lang2": "foo-option-1",
+      "text_lang3": "",
+      "text_lang4": "",
+      "text_lang5": "",
+      "additional_input": "",
+      "editors": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "options.option",
+    "pk": 11,
+    "fields": {
+      "uri": "https://foo.com/terms/options/foo-option-2",
+      "uri_prefix": "https://foo.com/terms",
+      "uri_path": "foo-option-2",
+      "comment": "",
+      "locked": false,
+      "text_lang1": "foo-option-2",
+      "text_lang2": "foo-option-2",
+      "text_lang3": "",
+      "text_lang4": "",
+      "text_lang5": "",
+      "additional_input": "",
+      "editors": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "options.option",
+    "pk": 12,
+    "fields": {
+      "uri": "https://bar.com/terms/options/bar-option-1",
+      "uri_prefix": "https://bar.com/terms",
+      "uri_path": "bar-option-1",
+      "comment": "",
+      "locked": false,
+      "text_lang1": "bar-option-1",
+      "text_lang2": "bar-option-1",
+      "text_lang3": "",
+      "text_lang4": "",
+      "text_lang5": "",
+      "additional_input": "",
+      "editors": [
+        3
+      ]
+    }
+  },
+  {
+    "model": "options.option",
+    "pk": 13,
+    "fields": {
+      "uri": "https://bar.com/terms/options/bar-option-2",
+      "uri_prefix": "https://bar.com/terms",
+      "uri_path": "bar-option-2",
+      "comment": "",
+      "locked": false,
+      "text_lang1": "bar-option-2",
+      "text_lang2": "bar-option-2",
+      "text_lang3": "",
+      "text_lang4": "",
+      "text_lang5": "",
+      "additional_input": "",
+      "editors": [
+        3
+      ]
     }
   }
 ]

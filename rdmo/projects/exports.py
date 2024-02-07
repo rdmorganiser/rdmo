@@ -4,8 +4,9 @@ from django.http import HttpResponse
 
 from rdmo.core.exports import prettify_xml
 from rdmo.core.plugins import Plugin
-from rdmo.core.utils import render_to_csv
-from rdmo.questions.models import Question
+from rdmo.core.utils import render_to_csv, render_to_json
+from rdmo.views.templatetags import view_tags
+from rdmo.views.utils import ProjectWrapper
 
 from .renderers import XMLRenderer
 from .serializers.export import ProjectSerializer as ExportSerializer
@@ -30,7 +31,8 @@ class Export(Plugin):
                                   .order_by('set_index', 'collection_index')
 
     def get_values(self, path, set_prefix='', set_index=0):
-        return self.project.values.filter(snapshot=self.snapshot, attribute__path=path, set_prefix=set_prefix, set_index=set_index) \
+        return self.project.values.filter(snapshot=self.snapshot, attribute__path=path,
+                                          set_prefix=set_prefix, set_index=set_index) \
                                   .order_by('collection_index')
 
     def get_value(self, path, set_prefix='', set_index=0, collection_index=0):
@@ -77,35 +79,45 @@ class Export(Plugin):
             return default
 
 
-class CSVExport(Export):
+class AnswersExportMixin:
 
-    delimiter = ','
+    def get_data(self):
+        # prefetch most elements of the catalog
+        self.project.catalog.prefetch_elements()
 
-    def render(self):
-        queryset = self.project.values.filter(snapshot=None)
+        # create project wrapper as for the views
+        project_wrapper = ProjectWrapper(self.project, self.snapshot)
+
         data = []
+        for question in project_wrapper.questions:
+            # use the same template tags as in project_answers_element.html
+            # get labels and to correctly attribute for conditions
+            set_prefixes = view_tags.get_set_prefixes({}, question['attribute'], project=project_wrapper)
+            for set_prefix in set_prefixes:
+                set_indexes = view_tags.get_set_indexes({}, question['attribute'], set_prefix=set_prefix,
+                                                        project=project_wrapper)
+                for set_index in set_indexes:
+                    values = view_tags.get_values(
+                        {}, question['attribute'], set_prefix=set_prefix, set_index=set_index, project=project_wrapper
+                    )
+                    labels = view_tags.get_labels(
+                        {}, question, set_prefix=set_prefix, set_index=set_index, project=project_wrapper
+                    )
+                    result = view_tags.check_element(
+                        {}, question, set_prefix=set_prefix, set_index=set_index, project=project_wrapper
+                    )
+                    if result:
+                        data.append({
+                            'question': self.stringify(question['text']),
+                            'set': ' '.join(labels),
+                            'values': self.stringify_values(values)
+                        })
 
-        for question in Question.objects.order_by_catalog(self.project.catalog):
-            if question.questionset.is_collection and question.questionset.attribute:
-                if question.questionset.attribute.uri.endswith('/id'):
-                    set_attribute_uri = question.questionset.attribute.uri
-                else:
-                    set_attribute_uri = question.questionset.attribute.uri.rstrip('/') + '/id'
-
-                for value_set in queryset.filter(attribute__uri=set_attribute_uri):
-                    values = queryset.filter(attribute=question.attribute, set_index=value_set.set_index) \
-                                     .order_by('set_prefix', 'set_index', 'collection_index')
-                    data.append((self.stringify(question.text), self.stringify(value_set.value), self.stringify_values(values)))
-            else:
-                values = queryset.filter(attribute=question.attribute).order_by('set_prefix', 'set_index', 'collection_index')
-
-                data.append((self.stringify(question.text), '', self.stringify_values(values)))
-
-        return render_to_csv(self.project.title, data, self.delimiter)
+        return data
 
     def stringify_values(self, values):
         if values is not None:
-            return '; '.join([self.stringify(value.value_and_unit) for value in values])
+            return '; '.join([self.stringify(value['value_and_unit']) for value in values])
         else:
             return ''
 
@@ -116,12 +128,27 @@ class CSVExport(Export):
             return re.sub(r'\s+', ' ', str(el))
 
 
+class CSVExport(AnswersExportMixin, Export):
+
+    delimiter = ','
+
+    def render(self):
+        rows = [item.values() for item in self.get_data()]
+        return render_to_csv(self.project.title, rows, self.delimiter)
+
+
 class CSVCommaExport(CSVExport):
     delimiter = ','
 
 
 class CSVSemicolonExport(CSVExport):
     delimiter = ';'
+
+
+class JSONExport(AnswersExportMixin, Export):
+
+    def render(self):
+        return render_to_json(self.project.title, self.get_data())
 
 
 class RDMOXMLExport(Export):

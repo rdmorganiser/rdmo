@@ -22,9 +22,9 @@ def i18n_switcher():
     for language, language_string in settings.LANGUAGES:
         url = reverse('i18n_switcher', args=[language])
         if language == translation.get_language():
-            string += "<li><a href=\"%s\"><u>%s</u></a></li>" % (url, language_string)
+            string += f"<li><a href=\"{url}\"><u>{language_string}</u></a></li>"
         else:
-            string += "<li><a href=\"%s\">%s</a></li>" % (url, language_string)
+            string += f"<li><a href=\"{url}\">{language_string}</a></li>"
     return mark_safe(string)
 
 
@@ -60,34 +60,34 @@ def vendor(vendor_key):
     if 'js' in vendor_config:
         for file in vendor_config['js']:
             if settings.VENDOR_CDN:
-                tag = '<script src="%(url)s/%(path)s" integrity="%(sri)s" crossorigin="anonymous"></script>' % {
-                    'url': vendor_config['url'].rstrip('/'),
-                    'path': file['path'],
-                    'sri': file['sri'] if 'sri' in file else ''
-                }
+                tag = '<script src="{url}/{path}" integrity="{sri}" crossorigin="anonymous"></script>'.format(
+                    url=vendor_config['url'].rstrip('/'),
+                    path=file['path'],
+                    sri=file['sri'] if 'sri' in file else '',
+                )
             else:
-                tag = '<script src="%(static_url)s/%(vendor_key)s/%(path)s"></script>' % {
-                    'static_url': settings.STATIC_URL.rstrip('/'),
-                    'vendor_key': vendor_key,
-                    'path': file['path']
-                }
+                tag = '<script src="{static_url}/{vendor_key}/{path}"></script>'.format(
+                    static_url=settings.STATIC_URL.rstrip('/'),
+                    vendor_key=vendor_key,
+                    path=file['path'],
+                )
 
             tags.append(tag)
 
     if 'css' in vendor_config:
         for file in vendor_config['css']:
             if settings.VENDOR_CDN:
-                tag = '<link rel="stylesheet" href="%(url)s/%(path)s" integrity="%(sri)s" crossorigin="anonymous" />' % {
-                    'url': vendor_config['url'].rstrip('/'),
-                    'path': file['path'],
-                    'sri': file['sri'] if 'sri' in file else ''
-                }
+                tag = '<link rel="stylesheet" href="{url}/{path}" integrity="{sri}" crossorigin="anonymous" />'.format(
+                    url=vendor_config['url'].rstrip('/'),
+                    path=file['path'],
+                    sri=file['sri'] if 'sri' in file else '',
+                )
             else:
-                tag = '<link rel="stylesheet" href="%(static_url)s/%(vendor_key)s/%(path)s" />' % {
-                    'static_url': settings.STATIC_URL.rstrip('/'),
-                    'vendor_key': vendor_key,
-                    'path': file['path']
-                }
+                tag = '<link rel="stylesheet" href="{static_url}/{vendor_key}/{path}" />'.format(
+                    static_url=settings.STATIC_URL.rstrip('/'),
+                    vendor_key=vendor_key,
+                    path=file['path'],
+                )
 
             tags.append(tag)
 

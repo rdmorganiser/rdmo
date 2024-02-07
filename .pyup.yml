@@ -1,4 +1,0 @@
-update: all
-branch: master
-schedule: "every month"
-search: True

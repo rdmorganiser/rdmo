@@ -2,25 +2,36 @@ import logging
 
 from django.contrib.sites.models import Site
 
-from rdmo.conditions.models import Condition
-from rdmo.core.imports import (fetch_parents, get_foreign_field,
-                               get_m2m_instances, set_common_fields,
-                               set_lang_field, validate_instance)
-from rdmo.domain.models import Attribute
-from rdmo.options.models import Option, OptionSet
+from rdmo.core.imports import (
+    check_permissions,
+    set_common_fields,
+    set_foreign_field,
+    set_lang_field,
+    set_m2m_instances,
+    set_m2m_through_instances,
+    set_reverse_m2m_through_instance,
+    validate_instance,
+)
 
-from .models import Catalog, Question, QuestionSet, Section
-from .validators import (CatalogLockedValidator, CatalogUniqueURIValidator,
-                         QuestionLockedValidator, QuestionSetLockedValidator,
-                         QuestionSetUniqueURIValidator,
-                         QuestionUniqueURIValidator, SectionLockedValidator,
-                         SectionUniqueURIValidator)
+from .models import Catalog, Page, Question, QuestionSet, Section
 from .utils import get_widget_types
+from .validators import (
+    CatalogLockedValidator,
+    CatalogUniqueURIValidator,
+    PageLockedValidator,
+    PageUniqueURIValidator,
+    QuestionLockedValidator,
+    QuestionSetLockedValidator,
+    QuestionSetUniqueURIValidator,
+    QuestionUniqueURIValidator,
+    SectionLockedValidator,
+    SectionUniqueURIValidator,
+)
 
 logger = logging.getLogger(__name__)
 
 
-def import_catalog(element, save=False):
+def import_catalog(element, save=False, user=None):
     try:
         catalog = Catalog.objects.get(uri=element.get('uri'))
     except Catalog.DoesNotExist:
@@ -33,119 +44,159 @@ def import_catalog(element, save=False):
     set_lang_field(catalog, 'title', element)
     set_lang_field(catalog, 'help', element)
 
-    if save and validate_instance(catalog, CatalogLockedValidator, CatalogUniqueURIValidator):
+    catalog.available = element.get('available', True)
+
+    validate_instance(catalog, element, CatalogLockedValidator, CatalogUniqueURIValidator)
+
+    check_permissions(catalog, element, user)
+
+    if save and not element.get('errors'):
         if catalog.id:
-            logger.info('Catalog created with uri %s.', element.get('uri'))
-        else:
+            element['updated'] = True
             logger.info('Catalog %s updated.', element.get('uri'))
+        else:
+            element['created'] = True
+            logger.info('Catalog created with uri %s.', element.get('uri'))
 
         catalog.save()
+        set_m2m_through_instances(catalog, 'sections', element, 'catalog', 'section', 'catalog_sections')
         catalog.sites.add(Site.objects.get_current())
-        catalog.imported = True
+        catalog.editors.add(Site.objects.get_current())
 
     return catalog
 
 
-def import_section(element, catalog_uri=False, save=False):
+def import_section(element, save=False, user=None):
     try:
-        if catalog_uri is False:
-            section = Section.objects.get(uri=element.get('uri'))
-        else:
-            section = Section.objects.get(key=element.get('key'), catalog__uri=catalog_uri)
-
+        section = Section.objects.get(uri=element.get('uri'))
     except Section.DoesNotExist:
         section = Section()
 
     set_common_fields(section, element)
 
-    section.catalog = get_foreign_field(section, catalog_uri or element.get('catalog'), Catalog)
-    section.order = element.get('order') or 0
-
     set_lang_field(section, 'title', element)
 
-    if save and validate_instance(section, SectionLockedValidator, SectionUniqueURIValidator):
+    validate_instance(section, element, SectionLockedValidator, SectionUniqueURIValidator)
+
+    check_permissions(section, element, user)
+
+    if save and not element.get('errors'):
         if section.id:
-            logger.info('Section created with uri %s.', element.get('uri'))
-        else:
+            element['updated'] = True
             logger.info('Section %s updated.', element.get('uri'))
+        else:
+            element['created'] = True
+            logger.info('Section created with uri %s.', element.get('uri'))
 
         section.save()
-        section.imported = True
+        set_reverse_m2m_through_instance(section, 'catalog', element, 'section', 'catalog', 'section_catalogs')
+        set_m2m_through_instances(section, 'pages', element, 'section', 'page', 'section_pages')
+        section.editors.add(Site.objects.get_current())
 
     return section
 
 
-def import_questionset(element, section_uri=False, questionset_uri=False, save=False):
+def import_page(element, save=False, user=None):
     try:
-        if section_uri is False:
-            questionset = QuestionSet.objects.get(uri=element.get('uri'))
-        else:
-            if questionset_uri is False:
-                questionset = QuestionSet.objects.get(key=element.get('key'), section__uri=section_uri)
-            else:
-                questionset = QuestionSet.objects.get(key=element.get('key'), section__uri=section_uri, questionset__uri=questionset_uri)
+        page = Page.objects.get(uri=element.get('uri'))
+    except Page.DoesNotExist:
+        page = Page()
 
+    set_common_fields(page, element)
+    set_foreign_field(page, 'attribute', element)
+
+    page.is_collection = element.get('is_collection') or False
+
+    set_lang_field(page, 'title', element)
+    set_lang_field(page, 'help', element)
+    set_lang_field(page, 'verbose_name', element)
+
+    validate_instance(page, element, PageLockedValidator, PageUniqueURIValidator)
+
+    check_permissions(page, element, user)
+
+    if save and not element.get('errors'):
+        if page.id:
+            element['updated'] = True
+            logger.info('QuestionSet %s updated.', element.get('uri'))
+        else:
+            element['created'] = True
+            logger.info('QuestionSet created with uri %s.', element.get('uri'))
+
+        page.save()
+        set_m2m_instances(page, 'conditions', element)
+        set_reverse_m2m_through_instance(page, 'section', element, 'page', 'section', 'page_sections')
+        set_m2m_through_instances(page, 'questionsets', element, 'page', 'questionset', 'page_questionsets')
+        set_m2m_through_instances(page, 'questions', element, 'page', 'question', 'page_questions')
+        page.editors.add(Site.objects.get_current())
+
+    return page
+
+
+def import_questionset(element, save=False, user=None):
+    try:
+        questionset = QuestionSet.objects.get(uri=element.get('uri'))
     except QuestionSet.DoesNotExist:
         questionset = QuestionSet()
 
     set_common_fields(questionset, element)
+    set_foreign_field(questionset, 'attribute', element)
 
-    questionset.section = get_foreign_field(questionset, section_uri or element.get('section'), Section)
-    questionset.questionset = get_foreign_field(questionset, questionset_uri or element.get('questionset'), QuestionSet)
-    questionset.attribute = get_foreign_field(questionset, element.get('attribute'), Attribute)
     questionset.is_collection = element.get('is_collection') or False
-    questionset.order = element.get('order') or 0
 
     set_lang_field(questionset, 'title', element)
     set_lang_field(questionset, 'help', element)
     set_lang_field(questionset, 'verbose_name', element)
-    set_lang_field(questionset, 'verbose_name_plural', element)
 
-    conditions = get_m2m_instances(questionset, element.get('conditions'), Condition)
+    validate_instance(questionset, element, QuestionSetLockedValidator, QuestionSetUniqueURIValidator)
 
-    if save and validate_instance(questionset, QuestionSetLockedValidator, QuestionSetUniqueURIValidator):
+    check_permissions(questionset, element, user)
+
+    if save and not element.get('errors'):
         if questionset.id:
-            logger.info('QuestionSet created with uri %s.', element.get('uri'))
-        else:
+            element['updated'] = True
             logger.info('QuestionSet %s updated.', element.get('uri'))
+        else:
+            element['created'] = True
+            logger.info('QuestionSet created with uri %s.', element.get('uri'))
 
         questionset.save()
-        questionset.conditions.set(conditions)
-        questionset.imported = True
+        set_m2m_instances(questionset, 'conditions', element)
+        set_reverse_m2m_through_instance(questionset, 'page', element, 'questionset', 'page', 'questionset_pages')
+        set_reverse_m2m_through_instance(questionset, 'questionset', element, 'questionset', 'parent', 'questionset_parents')  # noqa: E501
+        set_m2m_through_instances(questionset, 'questionsets', element, 'parent', 'questionset', 'questionset_questionsets')  # noqa: E501
+        set_m2m_through_instances(questionset, 'questions', element, 'questionset', 'question', 'questionset_questions')
+        questionset.editors.add(Site.objects.get_current())
 
     return questionset
 
 
-def import_question(element, questionset_uri=False, save=False):
+def import_question(element, save=False, user=None):
     try:
-        if questionset_uri is False:
-            question = Question.objects.get(uri=element.get('uri'))
-        else:
-            question = Question.objects.get(key=element.get('key'), questionset__uri=questionset_uri)
+        question = Question.objects.get(uri=element.get('uri'))
     except Question.DoesNotExist:
         question = Question()
 
     set_common_fields(question, element)
+    set_foreign_field(question, 'attribute', element)
 
-    question.questionset = get_foreign_field(question, questionset_uri or element.get('questionset'), QuestionSet)
-    question.attribute = get_foreign_field(question, element.get('attribute'), Attribute)
     question.is_collection = element.get('is_collection') or False
     question.is_optional = element.get('is_optional') or False
-    question.order = element.get('order') or 0
 
     set_lang_field(question, 'text', element)
     set_lang_field(question, 'help', element)
     set_lang_field(question, 'default_text', element)
     set_lang_field(question, 'verbose_name', element)
-    set_lang_field(question, 'verbose_name_plural', element)
 
-    question.default_option = get_foreign_field(question, element.get('default_option'), Option)
+    set_foreign_field(question, 'default_option', element)
+
     question.default_external_id = element.get('default_external_id') or ''
 
     if element.get('widget_type') in get_widget_types():
         question.widget_type = element.get('widget_type')
     else:
         question.widget_type = 'text'
+
     question.value_type = element.get('value_type') or ''
     question.maximum = element.get('maximum')
     question.minimum = element.get('minimum')
@@ -153,30 +204,23 @@ def import_question(element, questionset_uri=False, save=False):
     question.unit = element.get('unit') or ''
     question.width = element.get('width')
 
-    conditions = get_m2m_instances(question, element.get('conditions'), Condition)
-    optionsets = get_m2m_instances(question, element.get('optionsets'), OptionSet)
+    validate_instance(question, element, QuestionLockedValidator, QuestionUniqueURIValidator)
 
-    if save and validate_instance(question, QuestionLockedValidator, QuestionUniqueURIValidator):
+    check_permissions(question, element, user)
+
+    if save and not element.get('errors'):
         if question.id:
-            logger.info('Question created with uri %s.', element.get('uri'))
-        else:
+            element['updated'] = True
             logger.info('Question %s updated.', element.get('uri'))
+        else:
+            element['created'] = True
+            logger.info('Question created with uri %s.', element.get('uri'))
 
         question.save()
-        question.conditions.set(conditions)
-        question.optionsets.set(optionsets)
-        question.imported = True
+        set_reverse_m2m_through_instance(question, 'page', element, 'question', 'page', 'question_pages')
+        set_reverse_m2m_through_instance(question, 'questionset', element, 'question', 'questionset', 'question_questionsets')  # noqa: E501
+        set_m2m_instances(question, 'conditions', element)
+        set_m2m_instances(question, 'optionsets', element)
+        question.editors.add(Site.objects.get_current())
 
     return question
-
-
-def fetch_section_parents(instances):
-    return fetch_parents(Catalog, instances)
-
-
-def fetch_questionset_parents(instances):
-    return fetch_parents(Section, instances)
-
-
-def fetch_question_parents(instances):
-    return fetch_parents(QuestionSet, instances)

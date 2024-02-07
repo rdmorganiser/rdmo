@@ -9,8 +9,6 @@ from ..managers import IntegrationManager
 
 class Integration(models.Model):
 
-    objects = IntegrationManager()
-
     project = models.ForeignKey(
         'Project', on_delete=models.CASCADE, related_name='integrations',
         verbose_name=_('Project'),
@@ -21,20 +19,28 @@ class Integration(models.Model):
         help_text=_('The key of the provider for this integration.')
     )
 
+    objects = IntegrationManager()
+
     class Meta:
         ordering = ('project__title', )
         verbose_name = _('Integration')
         verbose_name_plural = _('Integrations')
 
     def __str__(self):
-        return '%s / %s' % (self.project.title, self.provider_key)
+        return f'{self.project.title} / {self.provider_key}'
+
+    def get_absolute_url(self):
+        return reverse('project', kwargs={'pk': self.project.pk})
 
     @property
     def provider(self):
         return get_plugin('PROJECT_ISSUE_PROVIDERS', self.provider_key)
 
-    def get_absolute_url(self):
-        return reverse('project', kwargs={'pk': self.project.pk})
+    def get_option_value(self, key):
+        try:
+            return self.options.get(key=key).value
+        except IntegrationOption.DoesNotExist:
+            return None
 
     def save_options(self, options):
         for field in self.provider.fields:
@@ -76,4 +82,8 @@ class IntegrationOption(models.Model):
         verbose_name_plural = _('Integration options')
 
     def __str__(self):
-        return '%s / %s / %s = %s' % (self.integration.project.title, self.integration.provider_key, self.key, self.value)
+        return f'{self.integration.project.title} / {self.integration.provider_key} / {self.key} = {self.value}'
+
+    @property
+    def title(self):
+        return self.key.title().replace('_', ' ')

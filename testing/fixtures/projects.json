@@ -7,7 +7,7 @@
       "updated": "2021-06-02T15:14:32.659Z",
       "project": 1,
       "user": 1,
-      "questionset": 87
+      "page": 87
     }
   },
   {
@@ -15,7 +15,7 @@
     "pk": 1,
     "fields": {
       "project": 1,
-      "provider_key": "github"
+      "provider_key": "simple"
     }
   },
   {
@@ -23,7 +23,7 @@
     "pk": 2,
     "fields": {
       "project": 2,
-      "provider_key": "github"
+      "provider_key": "simple"
     }
   },
   {
@@ -31,8 +31,8 @@
     "pk": 1,
     "fields": {
       "integration": 1,
-      "key": "repo",
-      "value": "example/example",
+      "key": "project_url",
+      "value": "https://example.com/projects/1",
       "secret": false
     }
   },
@@ -51,8 +51,8 @@
     "pk": 3,
     "fields": {
       "integration": 2,
-      "key": "repo",
-      "value": "example/example",
+      "key": "project_url",
+      "value": "https://example.com/projects/1",
       "secret": false
     }
   },
@@ -135,7 +135,7 @@
     "fields": {
       "issue": 1,
       "integration": 1,
-      "url": "https://github.com/example/example/issues/1"
+      "url": "https://simple.example.com/issues/1"
     }
   },
   {
@@ -467,6 +467,28 @@
       "lft": 1,
       "rght": 2,
       "tree_id": 7,
+      "level": 0,
+      "views": [
+        1,
+        2,
+        3
+      ]
+    }
+  },
+  {
+    "model": "projects.project",
+    "pk": 11,
+    "fields": {
+      "created": "2023-07-10T14:38:32.052Z",
+      "updated": "2023-07-10T14:38:32.052Z",
+      "parent": null,
+      "site": 1,
+      "title": "Other",
+      "description": "",
+      "catalog": 1,
+      "lft": 1,
+      "rght": 2,
+      "tree_id": 2,
       "level": 0,
       "views": [
         1,
@@ -2012,6 +2034,7 @@
       "attribute": 81,
       "set_prefix": "",
       "set_index": 0,
+      "set_collection": false,
       "collection_index": 0,
       "text": "test",
       "option": null,
@@ -5719,6 +5742,30 @@
       "value_type": "text",
       "unit": "",
       "external_id": ""
+    }
+  },
+  {
+    "model": "projects.invite",
+    "pk": 1,
+    "fields": {
+      "project": 1,
+      "user": 11,
+      "email": "other@example.com",
+      "role": "author",
+      "token": "10159fadb66e97365a36",
+      "timestamp": "2023-07-10T14:06:55.112Z"
+    }
+  },
+  {
+    "model": "projects.invite",
+    "pk": 2,
+    "fields": {
+      "project": 11,
+      "user": 4,
+      "email": "user@example.com",
+      "role": "author",
+      "token": "10159fadb66e97365a36",
+      "timestamp": "2023-07-10T14:06:55.112Z"
     }
   }
 ]

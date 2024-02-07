@@ -1,0 +1,19 @@
+{% load i18n %}
+
+<h1>{% trans 'Catalog' %} {{ catalog.title }}</h1>
+
+<p>
+    <strong>{% trans 'URI' %}:</strong> {{ catalog.uri }}
+</p>
+
+{% if catalog.comment %}
+
+<p>
+    <strong>{% trans 'Comment' %}:</strong> {{ catalog.comment }}
+</p>
+
+{% endif %}
+
+{% for section in catalog.elements %}
+    {% include 'questions/export/section.html' with section=section %}
+{% endfor %}

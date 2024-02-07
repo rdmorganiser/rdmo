@@ -1,7 +1,30 @@
-<!DOCTYPE html>
+{% load static compress core_tags %}<!DOCTYPE html>
 <html>
 <head>
     {% include 'core/base_head.html' %}
+
+    {% block vendor %}
+    {% vendor 'jquery' %}
+    {% vendor 'bootstrap' %}
+    {% vendor 'font-awesome' %}
+    {% endblock %}
+
+    {% block css %}
+    {% compress css %}
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/base.scss' %}" />
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/fonts.scss' %}" />
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/footer.scss' %}" />
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/utils.scss' %}" />
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/style.scss' %}" />
+    {% endcompress %}
+    {% endblock %}
+
+    {% block js %}
+    {% compress js %}
+    <script type="text/javascript" src="{% static 'core/js/utils.js' %}" ></script>
+    {% endcompress %}
+    {% endblock %}
+
     {% block head %}{% endblock %}
 </head>
 

@@ -22,6 +22,10 @@ A clear and concise description of what you expected to happen.
 3. Scroll down to '....'
 4. See error
 
+### Context / Kontext
+
+Please state your operating system, the RDMO version, and (if applicable) the browser the error occured in.
+
 ### References / Verweise
 
-* 
+*

@@ -23,6 +23,8 @@
                     ng-class="{'default-value': service.isDefaultValue(question, value)}">
                 </textarea>
             </div>
+
+            {% include 'projects/project_questions_value_errors.html' %}
         </div>
 
         <div ng-if="question.is_collection">

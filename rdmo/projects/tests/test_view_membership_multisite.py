@@ -7,6 +7,7 @@ from django.urls import reverse
 
 from ..models import Invite, Project
 from ..utils import get_invite_email_project_path
+
 users = (
     ('owner', 'owner'),
     ('manager', 'manager'),
@@ -30,22 +31,26 @@ membership_roles = ('owner', 'manager', 'author', 'guest')
 
 sites_domains = ('example.com', 'foo.com', 'bar.com')
 
+
 @pytest.fixture()
-def multisite_setting(settings):
+def multisite(settings):
     settings.MULTISITE = True
+
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('membership_role', membership_roles)
 @pytest.mark.parametrize('site_domain', sites_domains)
-def test_get_invite_email_project_path_function(db, client, username, password, project_id, membership_role, site_domain, multisite_setting):
+def test_get_invite_email_project_path_function(db, client, username, password, project_id,
+                                                membership_role, site_domain, multisite):
     client.login(username=username, password=password)
 
     current_site = Site.objects.get_current()
     foo_site, _created = Site.objects.get_or_create(domain=site_domain, name=site_domain)
     foo_username = f'{site_domain}-test-user'
     foo_email = f'{foo_username}@{site_domain}'
-    foo_user, _created = get_user_model().objects.get_or_create(username=foo_username, email=foo_email, password=foo_username)
+    foo_user, _created = get_user_model().objects.get_or_create(username=foo_username, email=foo_email,
+                                                                password=foo_username)
     foo_user.role.member.set([foo_site])
     project = Project.objects.get(pk=project_id)
 
@@ -59,21 +64,24 @@ def test_get_invite_email_project_path_function(db, client, username, password, 
     else:
         assert invite_email_project_path.startswith('http://' + site_domain + '/projects')
 
+
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('membership_role', membership_roles)
 @pytest.mark.parametrize('site_domain', sites_domains)
-def test_invite_email_project_path_email_body(db, client, username, password, project_id, membership_role, site_domain, multisite_setting):
+def test_invite_email_project_path_email_body(db, client, username, password, project_id,
+                                              membership_role, site_domain, multisite):
     client.login(username=username, password=password)
 
     current_site = Site.objects.get_current()
     foo_site, _created = Site.objects.get_or_create(domain=site_domain, name=site_domain)
     foo_username = f'{site_domain}-user'
     foo_email = f'{foo_username}@{site_domain}'
-    foo_user, _created = get_user_model().objects.get_or_create(username=f'{site_domain}-user', email=foo_email, password=foo_username)
+    foo_user, _created = get_user_model().objects.get_or_create(username=f'{site_domain}-user', email=foo_email,
+                                                                password=foo_username)
     foo_user.role.member.set([foo_site])
     project = Project.objects.get(pk=project_id)
-    
+
     url = reverse('membership_create', args=[project_id])
     data = {
         'username_or_email': foo_email,

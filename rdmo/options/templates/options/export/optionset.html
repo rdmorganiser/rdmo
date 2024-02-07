@@ -1,0 +1,41 @@
+{% load i18n %}
+
+<li>
+    <p>
+        <strong>{% trans 'URI' %}:</strong> {{ optionset.uri }}
+    </p>
+
+    <p>
+        <strong>{% trans 'Options' %}:</strong>
+    </p>
+
+    <ul>
+        {% for option in optionset.elements %}
+        {% include 'options/export/option.html' with option=option %}
+        {% endfor %}
+    </ul>
+
+    {% if optionset.provider_key %}
+
+    <p>
+        <strong>{% trans 'Provider' %}:</strong> {{ optionset.provider.label }}
+    </p>
+
+    {% endif %}
+
+    {% if optionset.conditions.all %}
+
+    <p>
+        <strong>{% trans 'Conditions' %}:</strong>
+    </p>
+
+    <ul>
+        {% for condition in optionset.conditions.all %}
+        <li>
+            {{ condition.source_label }} {{ condition.relation_label }} {{ condition.target_label }}
+        </li>
+        {% endfor %}
+    </ul>
+
+    {% endif %}
+</li>

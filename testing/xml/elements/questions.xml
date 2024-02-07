@@ -1,0 +1,2659 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdmo xmlns:dc="http://purl.org/dc/elements/1.1/" created="2023-04-20T09:39:10.351808+02:00" version="2.0.0">
+	<question dc:uri="http://example.com/terms/questions/catalog/blocks/set/block/a">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/blocks/set/block/a</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/blocks/a"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">A?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">A?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>text</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width>6</width>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/blocks/set/block/b">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/blocks/set/block/b</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/blocks/b"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">B?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">B?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>text</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width>6</width>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/blocks/set/block/block/y">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/blocks/set/block/block/y</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/blocks/y"/>
+		<is_collection>False</is_collection>
+		<is_optional>True</is_optional>
+		<help lang="en">Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.</help>
+		<text lang="en">Y?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de">Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.</help>
+		<text lang="de">Y?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option dc:uri="http://example.com/terms/options/one_two_three/three"/>
+		<default_external_id/>
+		<widget_type>autocomplete</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width>9</width>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/blocks/set/block/c">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/blocks/set/block/c</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/blocks/c"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">C?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">C?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>text</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/collections/autocomplete/autocomplete">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/collections/autocomplete/autocomplete</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/collection/autocomplete"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Autocomplete?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Autocomplete?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>autocomplete</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/collections/bool/bool">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/collections/bool/bool</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/collection/bool"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Yes or no?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Ja oder Nein?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>yesno</widget_type>
+		<value_type>boolean</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/collections/checkbox/checkbox">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/collections/checkbox/checkbox</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/collection/checkbox"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Checkbox?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Ankreuzfelder?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>checkbox</widget_type>
+		<value_type>option</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three_other"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/collections/datetime/datetime">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/collections/datetime/datetime</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/collection/datetime"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Date picker?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Datumsauswahl?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>date</widget_type>
+		<value_type>datetime</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/collections/file/file">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/collections/file/file</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/collection/file"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">File?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">File?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>file</widget_type>
+		<value_type>file</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/collections/radio/radio">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/collections/radio/radio</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/collection/radio"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Radio buttons?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Radio-Buttons?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>radio</widget_type>
+		<value_type>option</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three_other"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/collections/range/range">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/collections/range/range</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/collection/range"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Range slider?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Bereichs-Schieber?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>range</widget_type>
+		<value_type>float</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/collections/select/select">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/collections/select/select</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/collection/select"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Select drop-down?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Select-Aufklappmenü?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>select</widget_type>
+		<value_type>option</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/collections/textarea/textarea">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/collections/textarea/textarea</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/collection/textarea"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Textarea?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Textarea?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>textarea</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/collections/text/text">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/collections/text/text</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/collection/text"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Text?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">￼Text?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>text</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/input/option">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/conditions/input/option</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/conditions/option"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Option</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Option</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>radio</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/input/text">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/conditions/input/text</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/conditions/text"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Text</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Text</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>text</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/option_empty/option_empty">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/conditions/option_empty/option_empty</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/conditions/option"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">option_empty?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">option_empty?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>radio</widget_type>
+		<value_type>option</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/option_equal/option_equal">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/conditions/option_equal/option_equal</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/conditions/option"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">option_equal?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">option_equal?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>radio</widget_type>
+		<value_type>option</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/option_not_empty/option_not_empty">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/conditions/option_not_empty/option_not_empty</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/conditions/option"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">option_not_empty?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">option_not_empty?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>radio</widget_type>
+		<value_type>option</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/option_not_equal/option_not_equal">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/conditions/option_not_equal/option_not_equal</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/conditions/option"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">option_not_equal?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">option_not_equal?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>radio</widget_type>
+		<value_type>option</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/optionset/bool">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/conditions/optionset/bool</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/conditions/optionset/bool"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Yes/No</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Ja/Nein</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>yesno</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/optionset/option">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/conditions/optionset/option</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/conditions/optionset/option"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Optionset</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Optionset</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>radio</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/condition"/>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/set/bool">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/conditions/set/bool</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/conditions/set/bool"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Yes/No</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Ja/Nein</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>yesno</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/set_set/bool">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/conditions/set_set/bool</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/conditions/set/bool"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Yes/No</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Ja/Nein</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>yesno</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/set_set/set/text">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/conditions/set_set/set/text</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/conditions/set/set/text"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Text</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Text</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>text</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/set/text">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/conditions/set/text</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/conditions/set/text"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Text</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Text</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>text</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions>
+			<condition dc:uri="http://example.com/terms/conditions/set_bool_is_true"/>
+		</conditions>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text_contains/text_contains">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/conditions/text_contains/text_contains</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/conditions/text"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">text_contains?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">text_contains?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>text</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text_empty/text_empty">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/conditions/text_empty/text_empty</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/conditions/text"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">text empty?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">text empty?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>text</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text_equal/text_equal">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/conditions/text_equal/text_equal</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/conditions/text"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">text_equal?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">text_equal?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>text</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text_greater_than_equal/text_greater_than_equal">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/conditions/text_greater_than_equal/text_greater_than_equal</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/conditions/text"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">text_greater_than_equal?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">text_greater_than_equal?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>text</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text_greater_than/text_greater_than">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/conditions/text_greater_than/text_greater_than</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/conditions/text"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">text_greater_than?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">text_greater_than?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>text</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text_lesser_than_equal/text_lesser_than_equal">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/conditions/text_lesser_than_equal/text_lesser_than_equal</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/conditions/text"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">text_lesser_than_equal?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">text_lesser_than_equal?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>text</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text_lesser_than/text_lesser_than">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/conditions/text_lesser_than/text_lesser_than</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/conditions/text"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">text_lesser_than?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">text_lesser_than?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>text</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text_not_empty/text_not_empty">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/conditions/text_not_empty/text_not_empty</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/conditions/text"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">text_not_empty?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">text_not_empty?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>text</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text_not_equal/text_not_equal">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/conditions/text_not_equal/text_not_equal</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/conditions/text"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">text_not_equal?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">text_not_equal?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>text</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text_set/bool">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/conditions/text_set/bool</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/conditions/set/bool"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Yes/No</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Ja/Nein</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>yesno</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/individual/autocomplete/autocomplete">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/individual/autocomplete/autocomplete</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/single/autocomplete"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Autocomplete?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Autocomplete?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option dc:uri="http://example.com/terms/options/one_two_three/one"/>
+		<default_external_id/>
+		<widget_type>autocomplete</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/individual/bool/bool">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/individual/bool/bool</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/single/bool"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Yes or no?</text>
+		<default_text lang="en">1</default_text>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Ja oder Nein?</text>
+		<default_text lang="de">1</default_text>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>yesno</widget_type>
+		<value_type>boolean</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/individual/datetime/datetime">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/individual/datetime/datetime</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/single/datetime"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Date picker?</text>
+		<default_text lang="en">2020-01-01</default_text>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Datumsauswahl?</text>
+		<default_text lang="de">2020-01-01</default_text>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>date</widget_type>
+		<value_type>datetime</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/individual/file/file">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/individual/file/file</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/single/file"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">File?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">File?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>file</widget_type>
+		<value_type>file</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/individual/radio/radio">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/individual/radio/radio</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/single/radio"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Radio buttons?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Radio-Buttons?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option dc:uri="http://example.com/terms/options/one_two_three_other/one"/>
+		<default_external_id/>
+		<widget_type>radio</widget_type>
+		<value_type>option</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three_other"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/individual/range/range">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/individual/range/range</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/single/range"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Range slider?</text>
+		<default_text lang="en">20</default_text>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Bereichs-Schieber?</text>
+		<default_text lang="de">20</default_text>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>range</widget_type>
+		<value_type>float</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/individual/select/select">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/individual/select/select</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/single/select"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Select drop-down?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Select-Aufklappmenü?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option dc:uri="http://example.com/terms/options/one_two_three/one"/>
+		<default_external_id/>
+		<widget_type>select</widget_type>
+		<value_type>option</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/individual/textarea/textarea">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/individual/textarea/textarea</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/single/textarea"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Textarea?</text>
+		<default_text lang="en">Textarea</default_text>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Textarea?</text>
+		<default_text lang="de">Textarea</default_text>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>textarea</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/individual/text/text">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/individual/text/text</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/single/text"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Text?</text>
+		<default_text lang="en">Text</default_text>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">￼Text?</text>
+		<default_text lang="de">Text</default_text>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>text</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/options/autocomplete/select">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/options/autocomplete/select</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/options/plugin/autocomplete"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">autocomplete?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">autocomplete?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id>simple_1</default_external_id>
+		<widget_type>autocomplete</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/plugin"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/options/checkboxes/checkboxes">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/options/checkboxes/checkboxes</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/options/plugin/checkboxes"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">checkboxes?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">checkboxes?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>checkbox</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/plugin"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/options/combined/option">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/options/combined/option</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/options/plugin/combined"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">combined?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">combined?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>radio</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three_other"/>
+			<optionset dc:uri="http://example.com/terms/options/plugin"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/options/order/option">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/options/order/option</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/options/order"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">order?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">order?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>checkbox</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three"/>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three_other"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/options/radio/radio">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/options/radio/radio</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/options/plugin/radio"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">radio?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">radio?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>radio</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/plugin"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/options/select/select">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/options/select/select</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/options/plugin/select"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">select?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">select?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>select</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/plugin"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-collection/autocomplete">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/collection-collection/autocomplete</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/set/collection/autocomplete"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Autocomplete?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Autocomplete?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>autocomplete</widget_type>
+		<value_type>option</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-collection/bool">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/collection-collection/bool</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/set/collection/bool"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Yes or no?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Ja oder Nein?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>yesno</widget_type>
+		<value_type>boolean</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-collection/checkbox">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/collection-collection/checkbox</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/set/collection/checkbox"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Checkbox?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Ankreuzfelder?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>checkbox</widget_type>
+		<value_type>option</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three_other"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-collection/datetime">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/collection-collection/datetime</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/set/collection/datetime"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Date picker?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Datumsauswahl?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>date</widget_type>
+		<value_type>datetime</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-collection/file">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/collection-collection/file</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/set/collection/file"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">File?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">File?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>file</widget_type>
+		<value_type>file</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three_other"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-collection/radio">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/collection-collection/radio</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/set/collection/radio"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Radio buttons?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Radio-Buttons?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>radio</widget_type>
+		<value_type>option</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three_other"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-collection/range">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/collection-collection/range</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/set/collection/range"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Range slider?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Bereichs-Schieber?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>range</widget_type>
+		<value_type>float</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-collection/select">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/collection-collection/select</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/set/collection/select"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Select drop-down?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Select-Aufklappmenü?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>select</widget_type>
+		<value_type>option</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-collection/text">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/collection-collection/text</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/set/collection/text"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Text?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Text?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>text</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-collection/textarea">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/collection-collection/textarea</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/set/collection/textarea"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Textarea?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Textarea?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>textarea</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-single/autocomplete">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/collection-single/autocomplete</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/set/single/autocomplete"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Autocomplete?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Autocomplete?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>autocomplete</widget_type>
+		<value_type>option</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-single/bool">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/collection-single/bool</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/set/single/bool"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Yes or no?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Ja oder Nein?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>yesno</widget_type>
+		<value_type>boolean</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-single/datetime">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/collection-single/datetime</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/set/single/datetime"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Date picker?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Datumsauswahl?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>date</widget_type>
+		<value_type>datetime</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-single/file">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/collection-single/file</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/set/single/file"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">File?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">File?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>file</widget_type>
+		<value_type>file</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-single/radio">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/collection-single/radio</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/set/single/radio"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Radio buttons?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Radio-Buttons?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>radio</widget_type>
+		<value_type>option</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three_other"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-single/range">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/collection-single/range</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/set/single/range"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Range slider?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Bereichs-Schieber?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>range</widget_type>
+		<value_type>float</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-single/select">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/collection-single/select</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/set/single/select"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Select drop-down?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Select-Aufklappmenü?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>select</widget_type>
+		<value_type>option</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-single/text">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/collection-single/text</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/set/single/text"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Text?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Text?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>text</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-single/textarea">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/collection-single/textarea</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/set/single/textarea"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Textarea?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Textarea?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>textarea</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-collection/autocomplete">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/individual-collection/autocomplete</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/collection/autocomplete"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Autocomplete?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Autocomplete?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>autocomplete</widget_type>
+		<value_type>option</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-collection/bool">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/individual-collection/bool</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/collection/bool"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Yes or no?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Ja oder Nein?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>yesno</widget_type>
+		<value_type>boolean</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-collection/checkbox">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/individual-collection/checkbox</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/collection/checkbox"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Checkbox?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Ankreuzfelder?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>checkbox</widget_type>
+		<value_type>option</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three_other"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-collection/datetime">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/individual-collection/datetime</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/collection/datetime"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Date picker?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Datumsauswahl?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>date</widget_type>
+		<value_type>datetime</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-collection/file">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/individual-collection/file</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/collection/file"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">File?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">File?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>file</widget_type>
+		<value_type>file</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-collection/radio">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/individual-collection/radio</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/collection/radio"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Radio buttons?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Radio-Buttons?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>radio</widget_type>
+		<value_type>option</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three_other"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-collection/range">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/individual-collection/range</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/collection/range"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Range slider?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Bereichs-Schieber?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>range</widget_type>
+		<value_type>float</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-collection/select">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/individual-collection/select</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/collection/select"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Select drop-down?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Select-Aufklappmenü?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>select</widget_type>
+		<value_type>option</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-collection/text">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/individual-collection/text</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/collection/text"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Text?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Text?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>text</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-collection/textarea">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/individual-collection/textarea</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/collection/textarea"/>
+		<is_collection>True</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Textarea?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Textarea?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>textarea</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-single/autocomplete">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/individual-single/autocomplete</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/single/autocomplete"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Autocomplete?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Autocomplete?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>autocomplete</widget_type>
+		<value_type>option</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-single/bool">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/individual-single/bool</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/single/bool"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Yes or no?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Ja oder Nein?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>yesno</widget_type>
+		<value_type>boolean</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-single/datetime">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/individual-single/datetime</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/single/datetime"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Date picker?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Datumsauswahl?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>date</widget_type>
+		<value_type>datetime</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-single/file">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/individual-single/file</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/single/file"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">File?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">File?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>file</widget_type>
+		<value_type>file</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-single/radio">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/individual-single/radio</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/single/radio"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Radio buttons?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Radio-Buttons?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>radio</widget_type>
+		<value_type>option</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three_other"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-single/range">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/individual-single/range</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/single/range"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Range slider?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Bereichs-Schieber?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>range</widget_type>
+		<value_type>float</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-single/select">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/individual-single/select</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/single/select"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Select drop-down?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Select-Aufklappmenü?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>select</widget_type>
+		<value_type>option</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets>
+			<optionset dc:uri="http://example.com/terms/options/one_two_three"/>
+		</optionsets>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-single/text">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/individual-single/text</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/single/text"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Text?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Text?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>text</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-single/textarea">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog/set/individual-single/textarea</uri_path>
+		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/single/textarea"/>
+		<is_collection>False</is_collection>
+		<is_optional>False</is_optional>
+		<help lang="en"/>
+		<text lang="en">Textarea?</text>
+		<default_text lang="en"/>
+		<verbose_name lang="en"/>
+		<verbose_name_plural lang="en"/>
+		<help lang="de"/>
+		<text lang="de">Textarea?</text>
+		<default_text lang="de"/>
+		<verbose_name lang="de"/>
+		<verbose_name_plural lang="de"/>
+		<default_option/>
+		<default_external_id/>
+		<widget_type>textarea</widget_type>
+		<value_type>text</value_type>
+		<maximum/>
+		<minimum/>
+		<step/>
+		<unit/>
+		<width/>
+		<optionsets/>
+		<conditions/>
+	</question>
+</rdmo>

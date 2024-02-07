@@ -4,62 +4,39 @@ authors:
   - family-names: Klar
     given-names:  Jochen
     orcid:        https://orcid.org/0000-0002-5883-4273
+
   - family-names: Michaelis
     given-names:  Olaf
     orcid:        https://orcid.org/0000-0002-5282-703X
-  - family-names: Engelhardt
-    given-names:  Claudia
-    orcid:        https://orcid.org/0000-0002-3391-7638
-  - family-names: Enke
-    given-names:  Harry
-    orcid:        https://orcid.org/0000-0002-2366-8316
-  - family-names: Frenzel
-    given-names:  Johannes
-    orcid:        https://orcid.org/0000-0003-0458-5424
-  - family-names: Hausen
-    given-names:  Daniela
-    orcid:        https://orcid.org/0000-0001-9083-0670
-  - family-names: Jagusch
-    given-names:  Gerald
-    orcid:        https://orcid.org/0000-0001-9964-1112
-  - family-names: Kramer
-    given-names:  Claudia
-    orcid:        https://orcid.org/0000-0001-9355-857X
-  - family-names: Lindstädt
-    given-names:  Birte
-    orcid:        https://orcid.org/0000-0002-8251-1597
-  - family-names: Ludwig
-    given-names:  Jens
-    orcid:        https://orcid.org/0000-0002-2998-1696
-  - family-names: Heike
-    given-names:  Neuroth
-    orcid:        https://orcid.org/0000-0003-4925-7248
-  - family-names: Straka
-    given-names:  Janine
-    orcid:        https://orcid.org/0000-0002-0695-1689
-  - family-names: Strötgen
-    given-names:  Robert
-    orcid:        https://orcid.org/0000-0003-3320-5187
-  - family-names: Ulrich
-    given-names:  Robert
-    orcid:        https://orcid.org/0000-0001-9063-2703
-  - family-names: Wedlich-Zachodin
-    given-names:  Kerstin
-    orcid:        https://orcid.org/0000-0001-7740-7966
-  - family-names: Wuttke
-    given-names:  Ulrike
-    orcid:        https://orcid.org/0000-0002-8217-4025
+
+  - family-names: Wallace
+    given-names:  David
+    orcid:        https://orcid.org/0000-0001-8958-4601
+
+  - family-names: Schröder
+    given-names:  Max
+    orcid:        https://orcid.org/0000-0003-1522-494X
+
+  - family-names: Fütterer
+    given-names:  Heinz-Alexander
+    orcid:        https://orcid.org/0000-0003-4397-027X
+
   - family-names: Lanza
     given-names:  Giacomo
     orcid:        https://orcid.org/0000-0002-2239-3955
+
   - family-names: Martínez Muñoz
     given-names:  David
-    orcid:        
+
   - family-names: Pilori
     given-names:  Dario
     orcid:        https://orcid.org/0000-0003-4499-8573
 
-title: Research Data Management Organizer (RDMO)
+  - family-names: Harry
+    given-names:  Enke
+    orcid:        https://orcid.org/0000-0002-2366-8316
+
+title: Research Data Management Organiser (RDMO)
 doi: 10.5281/zenodo.596581
 license: Apache-2.0
 repository-code: https://github.com/rdmorganiser/rdmo

@@ -16,14 +16,36 @@
                         ng-change="service.changed(service.values[question.attribute][valueset.set_prefix][valueset.set_index][$index], true)" />
 
                     <span>{$ option.text $}</span><span ng-show="option.additional_input">:</span>
+                    <span class="text-muted" ng-show="option.help" ng-hide="option.additional_input">
+                        &nbsp;{$ option.help $}
+                    </span>
 
-                    <input class="form-control input-sm" type="text"
-                        ng-show="option.additional_input"
-                        ng-model="service.values[question.attribute][valueset.set_prefix][valueset.set_index][$index].additional_input[option.id]"
-                        ng-focus="checkCheckbox($event)"
-                        ng-disabled="service.project.read_only"
-                        ng-change="service.changed(service.values[question.attribute][valueset.set_prefix][valueset.set_index][$index])" />
+                    <span ng-show="option.additional_input == 'text'">
+                        &nbsp;
+                        <input class="form-control input-sm" type="text"
+                            ng-model="service.values[question.attribute][valueset.set_prefix][valueset.set_index][$index].additional_input[option.id]"
+                            ng-focus="checkCheckbox($event)"
+                            ng-disabled="service.project.read_only"
+                            ng-change="service.changed(service.values[question.attribute][valueset.set_prefix][valueset.set_index][$index])" />
+                        <span class="text-muted" ng-show="option.help">
+                            &nbsp;{$ option.help $}
+                        </span>
+                    </span>
+
+                    <div ng-show="option.additional_input == 'textarea'">
+                        <textarea class="form-control input-sm" rows="4"
+                            ng-model="service.values[question.attribute][valueset.set_prefix][valueset.set_index][$index].additional_input[option.id]"
+                            ng-focus="checkCheckbox($event)"
+                            ng-disabled="service.project.read_only"
+                            ng-change="service.changed(service.values[question.attribute][valueset.set_prefix][valueset.set_index][$index])" />
+                        <div class="text-muted">
+                            {$ option.help $}
+                        </div>
+                    </div>
                 </label>
+                <div ng-init="value = service.values[question.attribute][valueset.set_prefix][valueset.set_index][$index]">
+                    {% include 'projects/project_questions_value_errors.html' %}
+                </div>
             </div>
         </div>
     </div>

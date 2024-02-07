@@ -1,47 +1,55 @@
-from rdmo.core.serializers import TranslationSerializerMixin
 from rest_framework import serializers
 
-from ..models import Option, OptionSet
+from rdmo.conditions.serializers.export import ConditionExportSerializer
+from rdmo.core.serializers import TranslationSerializerMixin
+
+from ..models import Option, OptionSet, OptionSetOption
 
 
 class OptionExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
-
-    optionset = serializers.CharField(source='optionset.uri', default=None, read_only=True)
 
     class Meta:
         model = Option
         fields = (
             'uri',
             'uri_prefix',
-            'key',
-            'path',
+            'uri_path',
             'comment',
-            'order',
-            'additional_input',
-            'optionset'
+            'additional_input'
         )
         trans_fields = (
             'text',
+            'help',
+            'view_text'
+        )
+
+
+class OptionSetOptionExportSerializer(serializers.ModelSerializer):
+
+    option = OptionExportSerializer()
+
+    class Meta:
+        model = OptionSetOption
+        fields = (
+            'option',
+            'order'
         )
 
 
 class OptionSetExportSerializer(serializers.ModelSerializer):
 
-    options = OptionExportSerializer(many=True)
-    conditions = serializers.SerializerMethodField()
+    optionset_options = OptionSetOptionExportSerializer(many=True)
+    conditions = ConditionExportSerializer(many=True)
 
     class Meta:
         model = OptionSet
         fields = (
             'uri',
             'uri_prefix',
-            'key',
+            'uri_path',
             'comment',
             'order',
             'provider_key',
-            'options',
+            'optionset_options',
             'conditions'
         )
-
-    def get_conditions(self, obj):
-        return [condition.uri for condition in obj.conditions.all()]

@@ -1,7 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.core.validators import (InstanceValidator, LockedValidator,
-                                  UniqueURIValidator)
+from rdmo.core.validators import InstanceValidator, LockedValidator, UniqueURIValidator
 
 from .models import Attribute
 
@@ -14,15 +13,30 @@ class AttributeUniqueURIValidator(UniqueURIValidator):
         if not data.get('key'):
             self.raise_validation_error({'key': _('This field is required.')})
         else:
-            path = self.model.build_path(data.get('key'), data.get('parent'))
+            parent = data.get('parent')
+            if parent is None:
+                # workaround for import
+                parent_id = data.get('parent_id')
+                if parent_id:
+                    parent = Attribute.objects.get(id=data.get('parent_id'))
+
+            path = self.model.build_path(data.get('key'), parent)
             uri = self.model.build_uri(data.get('uri_prefix'), path)
             return uri
 
 
 class AttributeParentValidator(InstanceValidator):
 
-    def __call__(self, data):
+    def __call__(self, data, serializer=None):
+        super().__call__(data, serializer)
+
         parent = data.get('parent')
+        if parent is None:
+            # workaround for import
+            parent_id = data.get('parent_id')
+            if parent_id:
+                parent = Attribute.objects.get(id=data.get('parent_id'))
+
         if parent:
             if self.serializer:
                 # check copied attributes
@@ -31,17 +45,21 @@ class AttributeParentValidator(InstanceValidator):
                     # get the original from the view when cloning an attribute
                     if parent in view.get_object().get_descendants(include_self=True):
                         self.raise_validation_error({
-                            'parent': [_('An attribute may not be cloned to be a child of itself or one of its descendants.')]
+                            'parent': [
+                                _('An attribute may not be cloned to be a child of itself or one of its descendants.')
+                            ]
                         })
 
             # only check updated attributes
             if self.instance:
                 if parent in self.instance.get_descendants(include_self=True):
                     self.raise_validation_error({
-                        'parent': [_('An attribute may not be moved to be a child of itself or one of its descendants.')]
+                        'parent': [
+                            _('An attribute may not be moved to be a child of itself or one of its descendants.')
+                        ]
                     })
 
 
 class AttributeLockedValidator(LockedValidator):
 
-    parent_field = 'parent'
+    parent_fields = ('parent', )

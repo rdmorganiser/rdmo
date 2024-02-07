@@ -2,8 +2,8 @@ import logging
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import \
-    PermissionRequiredMixin as DjangoPermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin as DjangoPermissionRequiredMixin
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
@@ -13,10 +13,11 @@ from django.utils import translation
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic.base import View
+
 from rest_framework import mixins, viewsets
 from rest_framework.response import Response
-from rules.contrib.views import \
-    PermissionRequiredMixin as RulesPermissionRequiredMixin
+
+from rules.contrib.views import PermissionRequiredMixin as RulesPermissionRequiredMixin
 
 from .serializers import ChoicesSerializer
 from .utils import get_next, get_referer, get_referer_path_info
@@ -28,17 +29,18 @@ def home(request):
     if request.user.is_authenticated:
         return HttpResponseRedirect(reverse('projects'))
     else:
-        if settings.SHIBBOLETH:
-            return render(request, 'core/home.html')
-        elif settings.ACCOUNT or settings.SOCIALACCOUNT:
-            from allauth.account.forms import LoginForm
-            return render(request, 'core/home.html', {
-                'form': LoginForm(),
-                'signup_url': reverse("account_signup")
-            })
+        if settings.LOGIN_FORM:
+            if settings.ACCOUNT or settings.SOCIALACCOUNT:
+                from allauth.account.forms import LoginForm
+                return render(request, 'core/home.html', {
+                    'form': LoginForm(),
+                    'signup_url': reverse("account_signup")
+                })
+            else:
+                from django.contrib.auth.forms import AuthenticationForm
+                return render(request, 'core/home.html', {'form': AuthenticationForm()})
         else:
-            from django.contrib.auth.forms import AuthenticationForm
-            return render(request, 'core/home.html', {'form': AuthenticationForm()})
+            return render(request, 'core/home.html')
 
 
 @login_required
@@ -87,10 +89,10 @@ class RedirectViewMixin(View):
         if 'cancel' in request.POST:
             return HttpResponseRedirect(get_next(request))
         else:
-            return super(RedirectViewMixin, self).post(request, *args, **kwargs)
+            return super().post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        context_data = super(RedirectViewMixin, self).get_context_data(**kwargs)
+        context_data = super().get_context_data(**kwargs)
         if 'next' in self.request.GET:
             context_data['next'] = self.request.GET['next']
         else:
@@ -101,23 +103,22 @@ class RedirectViewMixin(View):
         if 'next' in self.request.GET:
             return self.request.GET['next']
         else:
-            return super(RedirectViewMixin, self).get_success_url()
+            return super().get_success_url()
 
 
-class PermissionRedirectMixin(object):
+class PermissionRedirectMixin:
 
     def handle_no_permission(self):
         if self.request.user.is_authenticated:
             raise PermissionDenied(self.get_permission_denied_message())
-
         return redirect_to_login(self.request.get_full_path(), self.get_login_url(), self.get_redirect_field_name())
 
 
-class ModelPermissionMixin(PermissionRedirectMixin, DjangoPermissionRequiredMixin, object):
+class ModelPermissionMixin(LoginRequiredMixin, PermissionRedirectMixin, DjangoPermissionRequiredMixin):
     pass
 
 
-class ObjectPermissionMixin(PermissionRedirectMixin, RulesPermissionRequiredMixin, object):
+class ObjectPermissionMixin(PermissionRedirectMixin, RulesPermissionRequiredMixin):
     pass
 
 
