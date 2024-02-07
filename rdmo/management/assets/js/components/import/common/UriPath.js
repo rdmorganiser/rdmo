@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import uniqueId from 'lodash/uniqueId'
 
-const UriPrefix = ({ element, onChange }) => {
-  const id = uniqueId('uriPrefix-'),
-        value = element.uri_path
+const UriPath = ({ element, onChange }) => {
+  const id = uniqueId('uriPath-'),
+        value = element.uri_path ?? ''
 
   return (
     <div className="form-group mb-0">
@@ -18,9 +18,9 @@ const UriPrefix = ({ element, onChange }) => {
   )
 }
 
-UriPrefix.propTypes = {
+UriPath.propTypes = {
   element: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired
 }
 
-export default UriPrefix
+export default UriPath
