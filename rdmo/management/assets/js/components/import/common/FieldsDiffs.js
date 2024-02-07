@@ -5,15 +5,15 @@ import ReactDiffViewer from 'react-diff-viewer-continued'
 import { isUndefined } from 'lodash'
 
 const FieldsDiffs = ({ element, field }) => {
-  const newVal = element.updated_and_changed[field].uploaded
-  const oldVal = element.updated_and_changed[field].current
+  const newVal = element.updated_and_changed[field].uploaded ?? ''
+  const oldVal = element.updated_and_changed[field].current ?? ''
   return (!isUndefined(element) &&
           !isEmpty(element.updated_and_changed) &&
           !isUndefined(newVal) &&
      <div className="col-sm-12">
       <ReactDiffViewer
-          oldValue={oldVal}
-          newValue={newVal}
+          oldValue={oldVal.toString()}
+          newValue={newVal.toString()}
           splitView={true}
           hideLineNumbers={true}
           leftTitle={gettext('Current')}
