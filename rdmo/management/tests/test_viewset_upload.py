@@ -31,6 +31,11 @@ urlnames = {
     'list': 'v1-management:upload-list'
 }
 
+xml_error_files = [
+    ('file-does-not-exist.xml', 'may not be blank'),
+    ('xml/error.xml', 'syntax error'),
+    ('xml/error-version.xml', 'RDMO XML Version: 99'),
+]
 
 @pytest.mark.parametrize('username,password', users)
 def test_list(db, client, username, password):
@@ -110,13 +115,19 @@ def test_create_empty(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_create_error(db, client, username, password):
+@pytest.mark.parametrize('xml_file_path, error_message', xml_error_files)
+def test_create_error(db, client, username, password, xml_file_path, error_message):
     client.login(username=username, password=password)
 
-    xml_file = Path(settings.BASE_DIR) / 'xml' / 'error.xml'
-
+    xml_file = Path(settings.BASE_DIR).joinpath(xml_file_path)
     url = reverse(urlnames['list'])
-    with open(xml_file, encoding='utf8') as f:
-        response = client.post(url, {'file': f})
+    try:
+        with open(xml_file, encoding='utf8') as f:
+            response = client.post(url, {'file': f})
+    except FileNotFoundError:
+        response = client.post(url)
 
     assert response.status_code == status_map['create_error'][username], response.json()
+    if response.status_code == 400:
+        response_msg = ",".join(response.json()['file'])
+        assert error_message in response_msg
