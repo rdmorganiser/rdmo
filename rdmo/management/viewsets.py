@@ -47,7 +47,7 @@ class UploadViewSet(viewsets.ViewSet):
 
         # step 2: parse xml
         try:
-            root = read_xml_file(import_tmpfile_name)
+            root = read_xml_file(import_tmpfile_name, raise_exception=True)
         except Exception as e:
             logger.info('XML parsing error. Import failed.')
             raise ValidationError({'file': [

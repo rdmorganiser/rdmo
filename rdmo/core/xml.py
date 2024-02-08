@@ -21,12 +21,13 @@ models = {
 }
 
 
-def read_xml_file(file_name):
+def read_xml_file(file_name, raise_exception=False):
     try:
         return ET.parse(file_name).getroot()
     except Exception as e:
         log.error('Xml parsing error: ' + str(e))
-        raise e from e
+        if raise_exception:
+            raise e from e
 
 
 def parse_xml_string(string):
