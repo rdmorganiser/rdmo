@@ -11,8 +11,8 @@ from ...core.tests import multisite_users as users
 from ..models import View
 from .test_viewset_view import export_formats, urlnames
 
-urlnames['view-toggle-site-add-site'] = 'v1-views:view-toggle-site-add-site'
-urlnames['view-toggle-site-remove-site'] = 'v1-views:view-toggle-site-remove-site'
+urlnames['view-add-site'] = 'v1-views:view-add-site'
+urlnames['view-remove-site'] = 'v1-views:view-remove-site'
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -140,7 +140,7 @@ def test_update_view_toggle_site(db, client, username, password, add_or_remove, 
     for instance in instances:
         before_has_current_site = instance.sites.filter(id=current_site.id).exists()
 
-        url = reverse(urlnames[f'view-toggle-site-{add_or_remove}-site'], kwargs={'pk': instance.pk})
+        url = reverse(urlnames[f'view-{add_or_remove}-site'], kwargs={'pk': instance.pk})
 
         response = client.put(url, {}, content_type='application/json')
         assert response.status_code == get_obj_perms_status_code(instance, username, 'toggle-site'), response.json()

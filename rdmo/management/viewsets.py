@@ -115,18 +115,9 @@ class ImportViewSet(viewsets.ViewSet):
         return Response(elements)
 
 
-class ElementToggleCurrentSiteViewSetMixin(viewsets.GenericViewSet):
-    permission_classes = (CanToggleElementCurrentSite, )
-    serializer_class = None
-    viewset_class = None
+class ElementToggleCurrentSiteViewSetMixin:
 
-    def get_queryset(self):
-        # needed to pass to the has_permission method
-        viewset_class = self.viewset_class
-        viewset_class.action = self.action
-        return viewset_class.get_queryset(viewset_class)
-
-    @action(detail=True, methods=['put'], url_path="add-site")
+    @action(detail=True, methods=['put'], url_path="add-site", permission_classes=[CanToggleElementCurrentSite])
     def add_site(self, request, pk=None):
         obj = self.get_object()
         current_site = get_current_site(request)
@@ -137,7 +128,7 @@ class ElementToggleCurrentSiteViewSetMixin(viewsets.GenericViewSet):
         serializer = self.serializer_class(obj, context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=True, methods=['put'], url_path="remove-site")
+    @action(detail=True, methods=['put'], url_path="remove-site", permission_classes=[CanToggleElementCurrentSite])
     def remove_site(self, request, pk=None):
         obj = self.get_object()
         current_site = get_current_site(request)

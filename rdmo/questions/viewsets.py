@@ -43,7 +43,7 @@ from .serializers.v1 import (
 from .utils import get_widget_type_choices
 
 
-class CatalogViewSet(ModelViewSet):
+class CatalogViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission,)
     serializer_class = CatalogSerializer
 
@@ -116,11 +116,6 @@ class CatalogViewSet(ModelViewSet):
             'options': full or is_truthy(request.GET.get('options')),
             'conditions': full or is_truthy(request.GET.get('conditions'))
         }
-
-
-class CatalogToggleCurrentSiteViewSet(ElementToggleCurrentSiteViewSetMixin):
-    serializer_class = CatalogSerializer
-    viewset_class = CatalogViewSet
 
 
 class SectionViewSet(ModelViewSet):
