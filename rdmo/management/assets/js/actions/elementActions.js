@@ -6,6 +6,7 @@ import OptionsApi from '../api/OptionsApi'
 import QuestionsApi from '../api/QuestionsApi'
 import TasksApi from '../api/TasksApi'
 import ViewsApi from '../api/ViewsApi'
+import MultiSiteApi from '../api/MultiSiteApi'
 
 import ConditionsFactory from '../factories/ConditionsFactory'
 import DomainFactory from '../factories/DomainFactory'
@@ -342,14 +343,19 @@ export function fetchElementError(error) {
 
 // store element
 
-export function storeElement(elementType, element, back) {
+export function storeElement(elementType, element, back, elementAction=null) {
   return function(dispatch, getState) {
-    dispatch(storeElementInit(element))
+
+    dispatch(storeElementInit(element, elementAction))
 
     let action
     switch (elementType) {
       case 'catalogs':
-        action = () => QuestionsApi.storeCatalog(element)
+        if (isNil(elementAction)) {
+          action = () => QuestionsApi.storeCatalog(element)
+        } else {
+          action = () => MultiSiteApi.UpdateElementAction(element, elementAction)
+        }
         break
 
       case 'sections':
@@ -385,11 +391,19 @@ export function storeElement(elementType, element, back) {
         break
 
       case 'tasks':
-        action = () => TasksApi.storeTask(element)
+        if (isNil(elementAction)) {
+          action = () => TasksApi.storeTask(element, elementAction)
+        } else {
+          action = () => MultiSiteApi.UpdateElementAction(element, elementAction)
+        }
         break
 
       case 'views':
-        action = () => ViewsApi.storeView(element)
+        if (isNil(elementAction)) {
+          action = () => ViewsApi.storeView(element, elementAction)
+        } else {
+          action = () => MultiSiteApi.UpdateElementAction(element, elementAction)
+        }
         break
     }
 
@@ -406,8 +420,8 @@ export function storeElement(elementType, element, back) {
   }
 }
 
-export function storeElementInit(element) {
-  return {type: 'elements/storeElementInit', element}
+export function storeElementInit(element, elementAction) {
+  return {type: 'elements/storeElementInit', element, elementAction}
 }
 
 export function storeElementSuccess(element) {
@@ -574,7 +588,6 @@ export function deleteElement(elementType, element) {
       case 'catalogs':
         action = () => QuestionsApi.deleteCatalog(element)
         break
-
       case 'sections':
         action = () => QuestionsApi.deleteSection(element)
         break

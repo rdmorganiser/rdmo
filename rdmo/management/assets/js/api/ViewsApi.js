@@ -18,7 +18,8 @@ class ViewsApi extends BaseApi {
     if (isNil(view.id)) {
       return this.post('/api/v1/views/views/', view)
     } else {
-      return this.put(`/api/v1/views/views/${view.id}/`, view)
+      let url= `/api/v1/views/views/${view.id}/`
+      return this.put(url, view)
     }
   }
 

@@ -22,7 +22,6 @@ router.register(r'questionsets', QuestionSetViewSet, basename='questionset')
 router.register(r'questions', QuestionViewSet, basename='question')
 router.register(r'widgettypes', WidgetTypeViewSet, basename='widgettype')
 router.register(r'valuetypes', ValueTypeViewSet, basename='valuetype')
-
 urlpatterns = [
     path('', include(router.urls)),
 ]

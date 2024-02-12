@@ -7,6 +7,8 @@ users = (
     ('reviewer', 'reviewer'),
     ('user', 'user'),
     ('api', 'api'),
+    ('example-editor', 'example-editor'),
+    ('example-reviewer', 'example-reviewer'),
 )
 
 
@@ -57,7 +59,7 @@ def test_i18n_switcher(db, client):
 def test_can_view_management(db, client, username, password):
     client.login(username=username, password=password)
     response = client.get(reverse('management'))
-    if username in ('editor', 'reviewer', 'api'):
+    if username in ('editor', 'reviewer', 'api', 'example-editor', 'example-reviewer'):
         assert response.status_code == 200
     else:
         assert response.status_code == 403

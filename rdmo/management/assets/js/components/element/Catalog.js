@@ -6,7 +6,7 @@ import { filterElement } from '../../utils/filter'
 import { buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
-import { EditLink, CopyLink, AddLink, AvailableLink, LockedLink, NestedLink,
+import { EditLink, CopyLink, AddLink, AvailableLink, ToggleCurrentSiteLink, LockedLink, NestedLink,
          ExportLink, CodeLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 
@@ -26,12 +26,15 @@ const Catalog = ({ config, catalog, elementActions, display='list',
 
   const toggleAvailable = () => elementActions.storeElement('catalogs', {...catalog, available: !catalog.available })
   const toggleLocked = () => elementActions.storeElement('catalogs', {...catalog, locked: !catalog.locked })
-
+  const toggleCurrentSite = () => elementActions.storeElement('catalogs', catalog, null, 'toggle-site')
+  let has_current_site =  config.settings.multisite ? catalog.sites.includes(config.currentSite.id) : true
   const createSection = () => elementActions.createElement('sections', { catalog })
 
   const elementNode = (
     <div className="element">
       <div className="pull-right">
+        <ToggleCurrentSiteLink has_current_site={has_current_site} locked={catalog.locked}
+                              onClick={toggleCurrentSite} show={config.settings.multisite}/>
         <ReadOnlyIcon title={gettext('This catalog is read only')} show={catalog.read_only} />
         <NestedLink title={gettext('View catalog nested')} href={nestedUrl} onClick={fetchNested} />
         <EditLink title={gettext('Edit catalog')} href={editUrl} onClick={fetchEdit} />

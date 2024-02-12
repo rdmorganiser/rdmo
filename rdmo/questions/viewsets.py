@@ -13,6 +13,7 @@ from rdmo.core.filters import SearchFilter
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import is_truthy, render_to_format
 from rdmo.core.views import ChoicesViewSet
+from rdmo.management.viewsets import ElementToggleCurrentSiteViewSetMixin
 
 from .models import Catalog, Page, Question, QuestionSet, Section
 from .renderers import CatalogRenderer, PageRenderer, QuestionRenderer, QuestionSetRenderer, SectionRenderer
@@ -42,7 +43,7 @@ from .serializers.v1 import (
 from .utils import get_widget_type_choices
 
 
-class CatalogViewSet(ModelViewSet):
+class CatalogViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission,)
     serializer_class = CatalogSerializer
 
