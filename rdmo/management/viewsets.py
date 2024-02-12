@@ -117,24 +117,15 @@ class ImportViewSet(viewsets.ViewSet):
 
 class ElementToggleCurrentSiteViewSetMixin:
 
-    @action(detail=True, methods=['put'], url_path="add-site", permission_classes=[CanToggleElementCurrentSite])
-    def add_site(self, request, pk=None):
+    @action(detail=True, methods=['put'], url_path="toggle-site", permission_classes=[CanToggleElementCurrentSite])
+    def toggle_site(self, request, pk=None):
         obj = self.get_object()
         current_site = get_current_site(request)
         has_current_site = obj.sites.filter(id=current_site.id).exists()
-        if request.method.lower() == 'put' and not has_current_site:
-            obj.sites.add(current_site)
-        # need to return obj element for ElementSucces reducer?
-        serializer = self.serializer_class(obj, context={'request': request})
-        return Response(serializer.data)
-
-    @action(detail=True, methods=['put'], url_path="remove-site", permission_classes=[CanToggleElementCurrentSite])
-    def remove_site(self, request, pk=None):
-        obj = self.get_object()
-        current_site = get_current_site(request)
-        has_current_site = obj.sites.filter(id=current_site.id).exists()
-        if request.method.lower() == 'put' and has_current_site:
+        if has_current_site:
             obj.sites.remove(current_site)
+        else:
+            obj.sites.add(current_site)
         # need to return obj element for ElementSucces reducer?
         serializer = self.serializer_class(obj, context={'request': request})
         return Response(serializer.data)

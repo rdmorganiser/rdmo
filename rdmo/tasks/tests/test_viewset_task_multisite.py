@@ -11,8 +11,7 @@ from ...core.tests import multisite_users as users
 from ..models import Task
 from .test_viewset_task import export_formats, urlnames
 
-urlnames['task-add-site'] = 'v1-tasks:task-add-site'
-urlnames['task-remove-site'] = 'v1-tasks:task-remove-site'
+urlnames['task-toggle-site'] = 'v1-tasks:task-toggle-site'
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -147,9 +146,14 @@ def test_update_task_toggle_site(db, client, username, password, add_or_remove, 
     current_site = Site.objects.get_current()
 
     for instance in instances:
+        if add_or_remove == 'add':
+            instance.sites.remove(current_site)
+        elif add_or_remove == 'remove':
+            instance.sites.add(current_site)
+
         before_has_current_site = instance.sites.filter(id=current_site.id).exists()
 
-        url = reverse(urlnames[f'task-{add_or_remove}-site'], kwargs={'pk': instance.pk})
+        url = reverse(urlnames['task-toggle-site'], kwargs={'pk': instance.pk})
 
         response = client.put(url, {}, content_type='application/json')
         assert response.status_code == get_obj_perms_status_code(instance, username, 'toggle-site'), response.json()
