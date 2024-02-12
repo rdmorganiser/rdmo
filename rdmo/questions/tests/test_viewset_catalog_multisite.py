@@ -11,8 +11,7 @@ from ...core.tests import multisite_users as users
 from ..models import Catalog
 from .test_viewset_catalog import export_formats, urlnames
 
-urlnames['catalog-add-site'] = 'v1-questions:catalog-add-site'
-urlnames['catalog-remove-site'] = 'v1-questions:catalog-remove-site'
+urlnames['catalog-toggle-site'] = 'v1-questions:catalog-toggle-site'
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -220,9 +219,14 @@ def test_update_catalog_toggle_site(db, client, username, password, add_or_remov
     current_site = Site.objects.get_current()
 
     for instance in instances:
+        if add_or_remove == 'add':
+            instance.sites.remove(current_site)
+        elif add_or_remove == 'remove':
+            instance.sites.add(current_site)
+
         before_has_current_site = instance.sites.filter(id=current_site.id).exists()
 
-        url = reverse(urlnames[f'catalog-{add_or_remove}-site'], kwargs={'pk': instance.pk})
+        url = reverse(urlnames['catalog-toggle-site'], kwargs={'pk': instance.pk})
 
         response = client.put(url, {}, content_type='application/json')
         assert response.status_code == get_obj_perms_status_code(instance, username, 'toggle-site'), response.json()
