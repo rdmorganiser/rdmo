@@ -18,7 +18,7 @@ from .serializers.export import ViewExportSerializer
 from .serializers.v1 import ViewIndexSerializer, ViewSerializer
 
 
-class ViewViewSet(ModelViewSet):
+class ViewViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = ViewSerializer
     queryset = View.objects.prefetch_related('catalogs', 'sites', 'editors', 'groups') \
@@ -66,8 +66,3 @@ class ViewViewSet(ModelViewSet):
                     'views': [self.get_object()]
                 }
             )
-
-
-class ViewToggleCurrentSiteViewSet(ElementToggleCurrentSiteViewSetMixin):
-    serializer_class = ViewSerializer
-    viewset_class = ViewViewSet

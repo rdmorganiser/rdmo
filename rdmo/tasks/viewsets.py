@@ -18,7 +18,7 @@ from .serializers.export import TaskExportSerializer
 from .serializers.v1 import TaskIndexSerializer, TaskSerializer
 
 
-class TaskViewSet(ModelViewSet):
+class TaskViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = TaskSerializer
     queryset = Task.objects.select_related('start_attribute', 'end_attribute') \
@@ -75,7 +75,3 @@ class TaskViewSet(ModelViewSet):
             'attributes': full or is_truthy(request.GET.get('attributes')),
             'options': full or is_truthy(request.GET.get('options'))
         }
-
-class TaskToggleCurrentSiteViewSet(ElementToggleCurrentSiteViewSetMixin):
-    serializer_class = TaskSerializer
-    viewset_class = TaskViewSet

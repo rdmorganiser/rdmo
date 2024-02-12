@@ -3,7 +3,6 @@ from django.urls import include, path
 from rest_framework import routers
 
 from ..viewsets import (
-    CatalogToggleCurrentSiteViewSet,
     CatalogViewSet,
     PageViewSet,
     QuestionSetViewSet,
@@ -17,7 +16,6 @@ app_name = 'v1-questions'
 
 router = routers.DefaultRouter()
 router.register(r'catalogs', CatalogViewSet, basename='catalog')
-router.register(r'catalog-toggle-site', CatalogToggleCurrentSiteViewSet, basename='catalog-toggle-site')
 router.register(r'sections', SectionViewSet, basename='section')
 router.register(r'pages', PageViewSet, basename='page')
 router.register(r'questionsets', QuestionSetViewSet, basename='questionset')
