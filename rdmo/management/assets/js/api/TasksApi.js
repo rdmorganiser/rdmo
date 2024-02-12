@@ -14,15 +14,11 @@ class TasksApi extends BaseApi {
     return this.get(`/api/v1/tasks/tasks/${id}/`)
   }
 
-  static storeTask(task, action) {
+  static storeTask(task) {
     if (isNil(task.id)) {
       return this.post('/api/v1/tasks/tasks/', task)
     } else {
-      let url = `/api/v1/tasks/tasks/${task.id}/`
-      if (['add-site', 'remove-site'].includes(action)) {
-        url = `/api/v1/tasks/task-toggle-site/${task.id}/${action}/`
-      }
-      return this.put(url, task)
+      return this.put(`/api/v1/tasks/tasks/${task.id}/`, task)
     }
   }
 
