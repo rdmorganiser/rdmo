@@ -14,14 +14,11 @@ class ViewsApi extends BaseApi {
     return this.get(`/api/v1/views/views/${id}/`)
   }
 
-  static storeView(view, action) {
+  static storeView(view) {
     if (isNil(view.id)) {
       return this.post('/api/v1/views/views/', view)
     } else {
       let url= `/api/v1/views/views/${view.id}/`
-      if (['add-site', 'remove-site'].includes(action)) {
-        url = `/api/v1/views/view-toggle-site/${view.id}/${action}/`
-      }
       return this.put(url, view)
     }
   }

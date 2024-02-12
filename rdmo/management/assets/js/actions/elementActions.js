@@ -6,6 +6,7 @@ import OptionsApi from '../api/OptionsApi'
 import QuestionsApi from '../api/QuestionsApi'
 import TasksApi from '../api/TasksApi'
 import ViewsApi from '../api/ViewsApi'
+import MultiSiteApi from '../api/MultiSiteApi'
 
 import ConditionsFactory from '../factories/ConditionsFactory'
 import DomainFactory from '../factories/DomainFactory'
@@ -350,7 +351,11 @@ export function storeElement(elementType, element, back, elementAction=null) {
     let action
     switch (elementType) {
       case 'catalogs':
-          action = () => QuestionsApi.storeCatalog(element, elementAction)
+        if (isNil(elementAction)) {
+          action = () => QuestionsApi.storeCatalog(element)
+        } else {
+          action = () => MultiSiteApi.UpdateElementAction(element, elementAction)
+        }
         break
 
       case 'sections':
@@ -386,11 +391,19 @@ export function storeElement(elementType, element, back, elementAction=null) {
         break
 
       case 'tasks':
-        action = () => TasksApi.storeTask(element, elementAction)
+        if (isNil(elementAction)) {
+          action = () => TasksApi.storeTask(element, elementAction)
+        } else {
+          action = () => MultiSiteApi.UpdateElementAction(element, elementAction)
+        }
         break
 
       case 'views':
-        action = () => ViewsApi.storeView(element, elementAction)
+        if (isNil(elementAction)) {
+          action = () => ViewsApi.storeView(element, elementAction)
+        } else {
+          action = () => MultiSiteApi.UpdateElementAction(element, elementAction)
+        }
         break
     }
 
