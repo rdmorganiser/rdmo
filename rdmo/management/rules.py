@@ -1,6 +1,6 @@
 import logging
 
-from django.contrib.sites.models import Site
+from django.conf import settings
 
 import rules
 from rules.predicates import is_authenticated, is_superuser
@@ -19,8 +19,7 @@ def is_editor_for_current_site(user) -> bool:
     ''' Checks if any editor role exists for the user '''
     if not is_editor(user):
         return False  # if the user is not an editor, return False
-    current_site = Site.objects.get_current()
-    return user.role.editor.filter(id=current_site.id).exists()
+    return user.role.editor.filter(id=settings.SITE_ID).exists()
 
 
 @rules.predicate
@@ -52,8 +51,7 @@ def is_reviewer_for_current_site(user) -> bool:
     ''' Checks if any reviewer role exists for the user '''
     if not is_reviewer(user):
         return False  # if the user is not an reviewer, return False
-    current_site = Site.objects.get_current()
-    return user.role.reviewer.filter(id=current_site.id).exists()
+    return user.role.reviewer.filter(id=settings.SITE_ID).exists()
 
 
 @rules.predicate
@@ -153,7 +151,7 @@ rules.add_perm('tasks.add_task_object', is_element_editor)
 rules.add_perm('tasks.change_task_object', is_element_editor)
 rules.add_perm('tasks.delete_task_object', is_element_editor)
 # toggle current site field perm
-rules.add_perm('tasks.change_task_toggle_own_site', is_element_editor | is_editor_for_current_site)
+rules.add_perm('tasks.change_task_toggle_site', is_editor_for_current_site)
 
 # Model Permissions for views
 rules.add_perm('views.view_view', is_editor | is_reviewer)
@@ -165,7 +163,7 @@ rules.add_perm('views.add_view_object', is_element_editor)
 rules.add_perm('views.change_view_object', is_element_editor)
 rules.add_perm('views.delete_view_object', is_element_editor)
 # toggle current site field perm
-rules.add_perm('views.change_view_toggle_own_site', is_element_editor | is_editor_for_current_site)
+rules.add_perm('views.change_view_toggle_site', is_editor_for_current_site)
 
 # Model permissions for catalogs
 rules.add_perm('questions.view_catalog', is_editor | is_reviewer)
@@ -177,7 +175,7 @@ rules.add_perm('questions.add_catalog_object', is_element_editor)
 rules.add_perm('questions.change_catalog_object', is_element_editor)
 rules.add_perm('questions.delete_catalog_object', is_element_editor)
 # toggle current site field perm
-rules.add_perm('questions.change_catalog_toggle_own_site', is_element_editor | is_editor_for_current_site)
+rules.add_perm('questions.change_catalog_toggle_site', is_editor_for_current_site)
 
 # Model permissions for sections
 rules.add_perm('questions.view_section', is_editor | is_reviewer)

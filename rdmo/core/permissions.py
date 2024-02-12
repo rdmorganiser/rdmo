@@ -81,8 +81,7 @@ class HasObjectPermission(DjangoObjectPermissions):
 class CanToggleElementCurrentSite(DjangoModelPermissions):
 
     perms_map = {
-        'GET': ['%(app_label)s.view_%(model_name)s'],
-        'PUT': ['%(app_label)s.change_%(model_name)s_toggle_own_site'],
+        'PUT': ['%(app_label)s.change_%(model_name)s_toggle_site'],
     }
 
     @log_result
