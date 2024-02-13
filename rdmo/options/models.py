@@ -262,7 +262,7 @@ class Option(models.Model, TranslationMixin):
         help_text=_('The view text for this option (in the quinary language).')
     )
     additional_input = models.CharField(
-        max_length=256, blank=True, default=False, choices=ADDITIONAL_INPUT_CHOICES,
+        max_length=256, blank=True, default=ADDITIONAL_INPUT_NONE, choices=ADDITIONAL_INPUT_CHOICES,
         verbose_name=_('Additional input'),
         help_text=_('Designates whether an additional input is possible for this option.')
     )
