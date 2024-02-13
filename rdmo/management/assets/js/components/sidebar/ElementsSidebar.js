@@ -29,7 +29,7 @@ const ElementsSidebar = ({ config, elements, elementActions, importActions }) =>
       <ul className="list-unstyled">
         <li>
           <Link href={buildPath(config.baseUrl, 'catalogs')}
-                onClick={() => elementActions.fetchElements('catalogs')}>{gettext('Catalogs1')}</Link>
+                onClick={() => elementActions.fetchElements('catalogs')}>{gettext('Catalogs')}</Link>
         </li>
         <li>
           <Link href={buildPath(config.baseUrl, 'sections')}
