@@ -1,5 +1,10 @@
 # Changelog
 
+## [RDMO 2.1.3](https://github.com/rdmorganiser/rdmo/compare/2.1.2...2.1.3) (Feb 13, 2024)
+
+* Fix the migration of options with additional_input (#912)
+* Fix export urls in management when using BASE_PATH (#915)
+
 ## [RDMO 2.1.2](https://github.com/rdmorganiser/rdmo/compare/2.1.1...2.1.2) (Jan 15, 2024)
 
 * Fix a bug with webpack font paths
