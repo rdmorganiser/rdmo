@@ -7,7 +7,7 @@ def run_data_migration(apps, schema_editor):
     Option = apps.get_model('options', 'Option')
 
     for option in Option.objects.all():
-        option.additional_input_string = 'text' if option.additional_input is True else ''
+        option.additional_input_string = 'text' if option.additional_input else ''
         option.save()
 
 
