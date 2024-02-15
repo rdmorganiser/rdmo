@@ -7,6 +7,8 @@ from django.urls import reverse
 
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet, Section
 
+from . import xml_error_files
+
 users = (
     ('editor', 'editor'),
     ('reviewer', 'reviewer'),
@@ -31,11 +33,7 @@ urlnames = {
     'list': 'v1-management:upload-list'
 }
 
-xml_error_files = [
-    ('file-does-not-exist.xml', 'may not be blank'),
-    ('xml/error.xml', 'syntax error'),
-    ('xml/error-version.xml', 'RDMO XML Version: 99'),
-]
+
 
 @pytest.mark.parametrize('username,password', users)
 def test_list(db, client, username, password):
@@ -125,9 +123,10 @@ def test_create_error(db, client, username, password, xml_file_path, error_messa
         with open(xml_file, encoding='utf8') as f:
             response = client.post(url, {'file': f})
     except FileNotFoundError:
+        # one test case is for a non-existent file
         response = client.post(url)
 
     assert response.status_code == status_map['create_error'][username], response.json()
     if response.status_code == 400:
-        response_msg = ",".join(response.json()['file'])
+        response_msg = " ".join(response.json()['file'])
         assert error_message in response_msg

@@ -5,7 +5,11 @@ import pytest
 from rdmo.management.imports import import_elements
 from rdmo.options.models import Option, OptionSet
 
-from . import change_fields_elements, read_xml_and_parse_to_elements
+from . import (
+    _test_helper_change_fields_elements,
+    _test_helper_filter_updated_and_changed,
+    read_xml_and_parse_to_elements,
+)
 
 imported_update_changes = [None]
 
@@ -45,10 +49,11 @@ def test_update_optionsets_with_changed_fields(db, settings, update_dict):
     imported_elements = import_elements(elements)
     assert len(root) == len(imported_elements) == 13
     # start test with fresh options in db
-    elements, changed_elements = change_fields_elements(elements, update_dict=update_dict, n=7)
+    _n_change = int(Option.objects.count() / 2)
+    elements, changed_elements = _test_helper_change_fields_elements(elements, update_dict=update_dict, n=7)
     imported_elements = import_elements(elements)
     assert len(root) == len(imported_elements) == 13
-    imported_and_changed = [i for i in elements if i['updated_and_changed']]
+    imported_and_changed = _test_helper_filter_updated_and_changed(imported_elements)
     assert all(element['created'] is False for element in imported_elements)
     assert all(element['updated'] is True for element in imported_elements)
     assert len(imported_and_changed) == len(changed_elements)
@@ -91,9 +96,9 @@ def test_update_options_with_changed_fields(db, settings, update_dict):
     imported_elements = import_elements(elements)
     assert len(root) == len(imported_elements) == 9
     # start test with fresh options in db
-    elements, changed_elements = change_fields_elements(elements, update_dict=update_dict, n=4)
+    elements, changed_elements = _test_helper_change_fields_elements(elements, update_dict=update_dict, n=4)
     imported_elements = import_elements(elements)
-    imported_and_changed = [i for i in elements if i['updated_and_changed']]
+    imported_and_changed = _test_helper_filter_updated_and_changed(imported_elements)
     assert len(root) == len(imported_elements) == 9
     assert all(element['created'] is False for element in imported_elements)
     assert all(element['updated'] is True for element in imported_elements)

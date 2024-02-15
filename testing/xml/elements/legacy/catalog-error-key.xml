@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdmo xmlns:dc="http://purl.org/dc/elements/1.1/" created="2023-04-20T09:38:39.297292+02:00">
+	<catalog dc:uri="http://example.com/terms/questions/catalog">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<uri_path>catalog-legacy-error-title</uri_path>
+		<dc:comment/>
+		<order>0</order>
+		<sections>
+			<section dc:uri="http://example.com/terms/questions/catalog/individual" order="1"/>
+		</sections>
+	</catalog>
+</rdmo>

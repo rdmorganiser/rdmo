@@ -9,13 +9,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 
-from packaging.version import parse
-
-from rdmo import __version__
 from rdmo.core.imports import handle_uploaded_file
 from rdmo.core.permissions import CanToggleElementCurrentSite
 from rdmo.core.utils import get_model_field_meta, is_truthy
-from rdmo.core.xml import convert_elements, flat_xml_to_elements, order_elements, read_xml_file
+from rdmo.core.xml import XmlParser
 
 from .constants import RDMO_MODEL_PATH_MAPPER
 from .imports import import_elements
@@ -44,49 +41,23 @@ class UploadViewSet(viewsets.ViewSet):
             raise ValidationError({'file': [_('This field may not be blank.')]}) from e
         else:
             import_tmpfile_name = handle_uploaded_file(uploaded_file)
-
-        # step 2: parse xml
         try:
-            root = read_xml_file(import_tmpfile_name, raise_exception=True)
-        except Exception as e:
-            logger.info('XML parsing error. Import failed.')
-            raise ValidationError({'file': [
-                _('The content of the xml file does not consist of well formed data or markup.'),
-                _('Error') + f': {e!s}'
-            ]}) from e
+            # step 1.1: initialize XmlParser
+            # step 2-6: parse xml, validate and convert to
+            xml_parser = XmlParser(import_tmpfile_name)
+        except ValidationError as e:
+            logger.info('Import failed with XML parsing errors.')
+            raise ValidationError({'file': e}) from e
 
-        # step 2.1: validate parsed xml
-        root_version = root.attrib.get('version') or '1.11.0'
-        parsed_version, rdmo_version = parse(root_version), parse(__version__)
-        if parsed_version > rdmo_version:
-            logger.info(f'Import failed version validation ({parsed_version} > {rdmo_version})')
-            raise ValidationError({'file': [_('This RDMO XML file does not have a valid version number.'),
-                                            f'RDMO XML Version: {root_version}']})
-
-        # step 3: create element dicts from xml
-        try:
-            elements = flat_xml_to_elements(root)
-        except KeyError as e:
-            logger.info('Import failed with KeyError (%s)' % e)
-            raise ValidationError({'file': [_('This is not a valid RDMO XML file.')]}) from e
-        except TypeError as e:
-            logger.info('Import failed with TypeError (%s)' % e)
-            raise ValidationError({'file': [_('This is not a valid RDMO XML file.')]}) from e
-        except AttributeError as e:
-            logger.info('Import failed with AttributeError (%s)' % e)
-            raise ValidationError({'file': [_('This is not a valid RDMO XML file.')]}) from e
-
-        # step 4: convert elements from previous versions
-        elements = convert_elements(elements, root_version)
-
-        # step 5: order the elements and return
-        elements = order_elements(elements)
-
-        # step 6: convert elements to a list
-        _elements = list(elements.values())
+        # step 7: check if valid
+        if not xml_parser.is_valid():
+            logger.info('Import failed with XML validation errors.')
+            raise ValidationError({'file': xml_parser.errors})
 
         # step 8: import the elements if save=True is set
-        imported_elements = import_elements(_elements, save=is_truthy(request.POST.get('import')), request=request)
+        imported_elements = import_elements(xml_parser.parsed_elements,
+                                            save=is_truthy(request.POST.get('import')),
+                                            request=request)
 
         # step 9: return the list of, json-serializable, elements
         return Response(imported_elements)
@@ -99,7 +70,9 @@ class ImportViewSet(viewsets.ViewSet):
     def create(self, request, *args, **kwargs):
         # step 1: store xml file as tmp file
         try:
-            elements = request.data['elements']
+            elements_data = request.data['elements']
+            _elements = filter(lambda x: 'uri' in x, elements_data)
+            elements = {i['uri']: i for i in _elements}
         except KeyError as e:
             raise ValidationError({'elements': [_('This field may not be blank.')]}) from e
         except TypeError as e:
