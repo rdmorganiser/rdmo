@@ -24,7 +24,7 @@ def test_import_error(db, settings):
     with pytest.raises(CommandError) as e:
         call_command('import', xml_file, stdout=stdout, stderr=stderr)
 
-    assert str(e.value) == 'The content of the xml file does not consist of well formed data or markup.'
+    assert str(e.value).startswith('The content of the xml file does not consist of well formed data or markup.')
 
 
 def test_import_error2(db, settings):

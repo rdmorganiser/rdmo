@@ -60,12 +60,12 @@ IMPORT_ELEMENT_INIT_DICT = {
     }
 
 
-def import_elements(uploaded_elements: List[Dict], save: bool = True, request: Optional[HttpRequest] = None):
+def import_elements(uploaded_elements: Dict, save: bool = True, request: Optional[HttpRequest] = None) -> List[Dict]:
     imported_elements = []
-    uploaded_uris = {i.get('uri') for i in uploaded_elements}
+    uploaded_uris = set(uploaded_elements.keys())
     current_site = get_current_site(request)
     questions_widget_types = get_widget_types()
-    for uploaded_element in uploaded_elements:
+    for _uri, uploaded_element in uploaded_elements.items():
         element = import_element(element=uploaded_element, save=save, uploaded_uris=uploaded_uris,
                                     request=request, current_site=current_site,
                                     questions_widget_types=questions_widget_types)
