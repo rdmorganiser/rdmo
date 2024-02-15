@@ -3,7 +3,11 @@ from pathlib import Path
 from rdmo.domain.models import Attribute
 from rdmo.management.imports import import_elements
 
-from . import change_fields_elements, read_xml_and_parse_to_elements
+from . import (
+    _test_helper_change_fields_elements,
+    _test_helper_filter_updated_and_changed,
+    read_xml_and_parse_to_elements,
+)
 
 
 def test_create_domain(db, settings):
@@ -34,9 +38,10 @@ def test_update_attributes_with_changed_fields(db, settings):
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'attributes.xml'
 
     elements, root = read_xml_and_parse_to_elements(xml_file)
-    elements, changed_elements = change_fields_elements(elements, n=50)
+    _change_count = Attribute.objects.count() / 2
+    elements, changed_elements = _test_helper_change_fields_elements(elements, n=_change_count)
     imported_elements = import_elements(elements)
-    imported_and_changed = [i for i in elements if i['updated_and_changed']]
+    imported_and_changed = _test_helper_filter_updated_and_changed(imported_elements)
     assert len(root) == len(imported_elements) == 86
     assert all(element['created'] is False for element in imported_elements)
     assert all(element['updated'] is True for element in imported_elements)

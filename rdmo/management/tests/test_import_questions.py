@@ -5,7 +5,11 @@ import pytest
 from rdmo.management.imports import import_elements
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet, Section
 
-from . import change_fields_elements, read_xml_and_parse_to_elements
+from . import (
+    _test_helper_change_fields_elements,
+    _test_helper_filter_updated_and_changed,
+    read_xml_and_parse_to_elements,
+)
 
 imported_update_changes = [None]
 
@@ -57,9 +61,9 @@ def test_update_catalogs_with_changed_fields(db, settings, update_dict):
     assert len(root) == len(imported_elements) == 148
     # start test with fresh elements in db
 
-    elements, changed_elements = change_fields_elements(elements, update_dict=update_dict, n=75)
+    elements, changed_elements = _test_helper_change_fields_elements(elements, update_dict=update_dict, n=75)
     imported_elements = import_elements(elements)
-    imported_and_changed = [i for i in elements if i['updated_and_changed']]
+    imported_and_changed = _test_helper_filter_updated_and_changed(imported_elements)
     assert len(imported_elements) == 148
     assert all(element['created'] is False for element in imported_elements)
     assert all(element['updated'] is True for element in imported_elements)
@@ -114,9 +118,9 @@ def test_update_sections_with_changed_fields(db, settings, update_dict):
     assert len(root) == len(imported_elements) == 146
     # start test with fresh elements in db
 
-    elements, changed_elements = change_fields_elements(elements, update_dict=update_dict, n=75)
+    elements, changed_elements = _test_helper_change_fields_elements(elements, update_dict=update_dict, n=75)
     imported_elements = import_elements(elements)
-    imported_and_changed = [i for i in elements if i['updated_and_changed']]
+    imported_and_changed = _test_helper_filter_updated_and_changed(imported_elements)
     assert all(element['created'] is False for element in imported_elements)
     assert all(element['updated'] is True for element in imported_elements)
     assert len(imported_and_changed) == len(changed_elements)
@@ -167,9 +171,9 @@ def test_update_pages_with_changed_fields(db, settings, update_dict):
     imported_elements = import_elements(elements)
     assert len(root) == len(imported_elements) == 140
     # start test with fresh elements in db
-    elements, changed_elements = change_fields_elements(elements, update_dict=update_dict, n=75)
+    elements, changed_elements = _test_helper_change_fields_elements(elements, update_dict=update_dict, n=75)
     imported_elements = import_elements(elements)
-    imported_and_changed = [i for i in elements if i['updated_and_changed']]
+    imported_and_changed = _test_helper_filter_updated_and_changed(imported_elements)
     assert len(imported_elements) == 140
     assert all(element['created'] is False for element in imported_elements)
     assert all(element['updated'] is True for element in imported_elements)
@@ -223,9 +227,9 @@ def test_update_questionsets_with_changed_fields(db, settings, update_dict):
     assert len(root) == 10  # two questionsets appear twice in the export file
     assert len(imported_elements) == 8
     # start test with fresh elements in db
-    elements, changed_elements = change_fields_elements(elements, update_dict=update_dict, n=5)
+    elements, changed_elements = _test_helper_change_fields_elements(elements, update_dict=update_dict, n=5)
     imported_elements = import_elements(elements)
-    imported_and_changed = [i for i in elements if i['updated_and_changed']]
+    imported_and_changed = _test_helper_filter_updated_and_changed(imported_elements)
     assert len(imported_elements) == 8
     assert all(element['created'] is False for element in imported_elements)
     assert all(element['updated'] is True for element in imported_elements)
@@ -275,9 +279,9 @@ def test_update_questions_with_changed_fields(db, settings, update_dict):
     imported_elements = import_elements(elements)
     assert len(root) == len(imported_elements) == 89
     # start test with fresh elements in db
-    elements, changed_elements = change_fields_elements(elements, update_dict=update_dict, n=45)
+    elements, changed_elements = _test_helper_change_fields_elements(elements, update_dict=update_dict, n=45)
     imported_elements = import_elements(elements)
-    imported_and_changed = [i for i in elements if i['updated_and_changed']]
+    imported_and_changed = _test_helper_filter_updated_and_changed(imported_elements)
     assert len(imported_elements) == 89
     assert all(element['created'] is False for element in imported_elements)
     assert all(element['updated'] is True for element in imported_elements)
@@ -311,7 +315,7 @@ def test_create_legacy_questions(db, settings):
     # check that all elements ended up in the catalog
     catalog = Catalog.objects.prefetch_elements().first()
     descendant_uris = {element.uri for element in catalog.descendants}
-    element_uris = {element['uri'] for element in elements if element['uri'] != catalog.uri}
+    element_uris = {element['uri'] for _uri, element in elements.items() if element['uri'] != catalog.uri}
     assert descendant_uris == element_uris
 
 
@@ -328,5 +332,5 @@ def test_update_legacy_questions(db, settings):
     # check that all elements ended up in the catalog
     catalog = Catalog.objects.prefetch_elements().first()
     descendant_uris = {element.uri for element in catalog.descendants}
-    element_uris = {element['uri'] for element in elements if element['uri'] != catalog.uri}
+    element_uris = {element['uri'] for _uri, element in elements.items() if element['uri'] != catalog.uri}
     assert descendant_uris == element_uris
