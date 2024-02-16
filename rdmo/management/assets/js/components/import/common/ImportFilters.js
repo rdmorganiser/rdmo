@@ -5,82 +5,59 @@ import get from 'lodash/get'
 import {getUriPrefixes} from '../../../utils/filter'
 import {Checkbox} from '../../common/Checkboxes'
 
-const ImportFilters = ({ config, elements, updatedAndChanged, configActions }) => {
-
+const ImportFilters = ({ config, elements, updatedAndChanged, filteredElements, configActions }) => {
+  console.log('importFilter', updatedAndChanged, elements)
   const updateFilterString = (value) => configActions.updateConfig('filter.import.elements.search', value)
+  const getValueFilterString = () => get(config, 'filter.import.elements.search', '')
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.import.elements.uri_prefix', value)
+  const getValueFilterUirPrefix = () => get(config, 'filter.import.elements.uri_prefix', '')
   const updateFilterChanged = (value) => configActions.updateConfig('filter.import.elements.changed', value)
-
-  const searchString = get(config, 'filter.import.elements.search', '')
-  const selectedUriPrefix = get(config, 'filter.import.elements.uri_prefix', '')
-  const selectFilterChanged = get(config, 'filter.import.elements.changed', false)
-
-  const filterByChanged = (elements, selectFilterChanged) => {
-    if (selectFilterChanged === true && updatedAndChanged.length > 0) {
-    return updatedAndChanged
-  } else {
-    return elements
-  }}
-  const filterByUriSearch = (elements, searchString) => {
-    if (searchString) {
-      const lowercaseSearch = searchString.toLowerCase()
-      return elements.filter((element) =>
-        element.uri.toLowerCase().includes(lowercaseSearch)
-          // || element.title.toLowerCase().includes(lowercaseSearch)
-      )
-    } else {
-      return elements
-    }
-  }
-    const filterByUriPrefix = (elements, searchUriPrefix) => {
-    if (searchUriPrefix) {
-      return elements.filter((element) =>
-        element.uri_prefix.toLowerCase().includes(searchUriPrefix)
-          // || element.title.toLowerCase().includes(lowercaseSearch)
-      )
-    } else {
-      return elements
-    }
-  }
-  const filteredElements = filterByUriSearch(
-                                  filterByUriPrefix(
-                                        filterByChanged(elements, selectFilterChanged),
-                                  selectedUriPrefix),
-                          searchString)
-
+  const getValueFilterChanged = () => get(config, 'filter.import.elements.changed', false)
 
   return (
+    <div className="panel-body">
     <div className="row">
       <div className="row">
         <div className={'col-sm-8'}>
-          <FilterString value={get(config, 'filter.import.elements.search', '')} onChange={updateFilterString}
+          <FilterString value={getValueFilterString()} onChange={updateFilterString}
                         placeholder={gettext('Filter uri')}/>
         </div>
         <div className="col-sm-4">
-          <FilterUriPrefix value={get(config, 'filter.import.elements.uri_prefix', '')}
+          <FilterUriPrefix value={getValueFilterUirPrefix()}
                            onChange={updateFilterUriPrefix}
                            options={getUriPrefixes(elements)}/>
         </div>
       </div>
       <div className="row-checkbox">
         {
-          updatedAndChanged.length > 0 && <div className="checkboxes">
-            <span className="mr-10">{gettext('Changed:')}</span>
-            <Checkbox label={<code className="code-questions">{gettext('Filter changed')}</code>}
-                      value={get(config, 'filter.import.elements.changed', false)} onChange={updateFilterChanged}/>
+          updatedAndChanged.length > 0 &&
+          <div className="pull-left">
+            <div className="checkboxes">
+              <span className="mr-10">{gettext('Changed:')}</span>
+              <Checkbox label={<code
+                className="code-questions">{gettext('Filter changed')}{' ('}{updatedAndChanged.length}{') '}</code>}
+                        value={getValueFilterChanged()} onChange={updateFilterChanged}/>
+            </div>
           </div>
         }
-        {filteredElements.length}
+        { filteredElements.length > 0 &&
+          <div className="pull-right">
+            <span>{gettext('Shown')}: {filteredElements.length} / {elements.length} </span>
+          </div>
+        }
+
+
       </div>
     </div>
-
-)
+    </div>
+  )
 }
 
 ImportFilters.propTypes = {
   config: PropTypes.object.isRequired,
-  elements: PropTypes.object.isRequired,
-  updatedAndChanged: PropTypes.array,
+  elements: PropTypes.array.isRequired,
+  updatedAndChanged: PropTypes.array.isRequired,
+  filteredElements: PropTypes.array.isRequired,
   configActions: PropTypes.object.isRequired,
 }
 
