@@ -7,8 +7,8 @@ import ImportSuccessElement from '../import/ImportSuccessElement'
 import ImportWarningsPanel from '../import/ImportWarningsPanel'
 import ImportErrorsPanel from '../import/ImportErrorsPanel'
 import ImportInfo from '../import/common/ImportInfo'
-import ImportFilters from '../import/common/ImportInfo'
-
+import ImportFilters from '../import/common/ImportFilters'
+import get from 'lodash/get'
 
 const Import = ({ config, imports, configActions, importActions }) => {
   const { file, elements, success } = imports
@@ -21,7 +21,44 @@ const Import = ({ config, imports, configActions, importActions }) => {
   const importWarnings = elements.filter(element => !isEmpty(element.warnings))
   const importErrors = elements.filter(element => !isEmpty(element.errors))
 
-  const filteredElements = elements
+  const searchString = get(config, 'filter.import.elements.search', '')
+  const selectedUriPrefix = get(config, 'filter.import.elements.uri_prefix', '')
+  const selectFilterChanged = get(config, 'filter.import.elements.changed', false)
+
+  // filter func callbacks
+  const filterByChanged = (elements, selectFilterChanged, updatedAndChangedElements) => {
+    if (selectFilterChanged === true && updatedAndChangedElements.length > 0) {
+    return updatedAndChangedElements
+  } else {
+    return elements
+  }}
+  const filterByUriSearch = (elements, searchString) => {
+    if (searchString) {
+      const lowercaseSearch = searchString.toLowerCase()
+      return elements.filter((element) =>
+        element.uri.toLowerCase().includes(lowercaseSearch)
+          // || element.title.toLowerCase().includes(lowercaseSearch)
+      )
+    } else {
+      return elements
+    }
+  }
+    const filterByUriPrefix = (elements, searchUriPrefix) => {
+    if (searchUriPrefix) {
+      return elements.filter((element) =>
+        element.uri_prefix.toLowerCase().includes(searchUriPrefix)
+          // || element.title.toLowerCase().includes(lowercaseSearch)
+      )
+    } else {
+      return elements
+    }
+  }
+
+  const filteredElements = filterByUriSearch(
+                                  filterByUriPrefix(
+                                        filterByChanged(elements, selectFilterChanged, updatedAndChangedElements),
+                                  selectedUriPrefix),
+                          searchString)
 
   return (
     <div className="panel panel-default panel-import">
@@ -32,9 +69,14 @@ const Import = ({ config, imports, configActions, importActions }) => {
                         warningsLength={importWarnings.length} errorsLength={importErrors.length}/>
 
       </div>
-      <div className="panel-body">
-        <ImportFilters config={config} elements={elements} updatedAndChanged={updatedAndChangedElements}
-                         importActions={importActions} configActions={configActions}/>
+        {
+          updatedAndChangedElements.length > 0 &&
+          <ImportFilters config={config} elements={elements}
+                         updatedAndChanged={updatedAndChangedElements}
+                         filteredElements={filteredElements}
+                         configActions={configActions}
+          />
+        }
 
         {
         importWarnings.length > 0 &&
@@ -46,7 +88,6 @@ const Import = ({ config, imports, configActions, importActions }) => {
           <ImportErrorsPanel config={config} elements={importErrors} importActions={importActions}
                                configActions={configActions}/>
         }
-      </div>
         <ul className="list-group">
           {
             filteredElements.map((element, index) => {

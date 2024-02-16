@@ -1,28 +1,30 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { isUndefined } from 'lodash'
+import {isUndefined} from 'lodash'
 
-const ImportInfo = ({ elementsLength, updatedLength, createdLength, changedLength, warningsLength, errorsLength }) => {
-  return ( !isUndefined(elementsLength) && elementsLength > 0 &&
+const renderElementLengthInfo = (label, length) => length > 0
+  && <span>{gettext(label)}: {length} </span>
+
+const ImportInfo = ({
+                      elementsLength,
+                      updatedLength,
+                      createdLength,
+                      changedLength,
+                      warningsLength,
+                      errorsLength
+                    }) => {
+  if (isUndefined(elementsLength) || elementsLength === 0) {
+    return null
+  }
+
+  return (
     <div className="pull-right">
-      {
-        elementsLength > 0 && <span>{gettext('Total')}: {elementsLength} </span>
-      }
-      {
-        updatedLength > 0 && <span>{gettext('Updated')}: {updatedLength} </span>
-      }
-      { updatedLength > 0 &&
-        <span>{' ('}{gettext('Changed')}: {changedLength}{') '}</span>
-      }
-      {
-        createdLength > 0 && <span>{gettext('Created')}: {createdLength} </span>
-      }
-       {
-        warningsLength > 0 && <span>{gettext('Warnings')}: {warningsLength} </span>
-      }
-      {
-        errorsLength > 0 && <span>{gettext('Errors')}: {errorsLength} </span>
-      }
+      {renderElementLengthInfo('Total', elementsLength)}
+      {renderElementLengthInfo('Updated', updatedLength)}
+      {updatedLength > 0 && <span>{' ('}{gettext('Changed')}{': '}{changedLength}{') '}</span>}
+      {renderElementLengthInfo('Created', createdLength)}
+      {renderElementLengthInfo('Warnings', warningsLength)}
+      {renderElementLengthInfo('Errors', errorsLength)}
     </div>
   )
 }
