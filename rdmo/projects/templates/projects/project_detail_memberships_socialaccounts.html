@@ -1,0 +1,9 @@
+{% load static %}
+
+{% for socialaccount in membership.user.socialaccount_set.all %}
+{% if socialaccount.provider == 'orcid' %}
+<a href="https://orcid.org/{{ socialaccount.uid }}">
+    <img alt="ORCID logo" src="{% static 'accounts/img/orcid_16x16.png' %}" width="16" height="16" />
+</a>
+{% endif %}
+{% endfor %}
