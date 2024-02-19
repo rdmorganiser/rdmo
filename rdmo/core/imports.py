@@ -61,11 +61,12 @@ def make_import_info_msg(verbose_name: str, created: bool, uri: Optional[str]=No
         return f"{verbose_name} created with {uri}"
     return f"{verbose_name} {uri} updated"
 
-@dataclass
+@dataclass(kw_only=True, frozen=True)
 class ElementImportHelper:
-    model: str
-    validators: Iterable[Callable]
-    serializer: Callable
+    model: models.Model | None = field(default=None)
+    model_path: str | None = field(default=None)
+    validators: Iterable[Callable] = field(default_factory=list)
+    serializer: Callable | None = field(default=None)
     common_fields: Sequence[str] = field(default=ELEMENT_COMMON_FIELDS)
     lang_fields: Sequence[str] = field(default_factory=list)
     foreign_fields: Sequence[str] = field(default_factory=list)
@@ -73,32 +74,39 @@ class ElementImportHelper:
     m2m_instance_fields: Sequence[str] = field(default_factory=list)
     m2m_through_instance_fields: Sequence[Dict[str, str]] = field(default_factory=list)
     reverse_m2m_through_instance_fields: Sequence[Dict[str, str]] = field(default_factory=list)
-    add_current_site_editors: bool = True
-    add_current_site_sites: bool = False
+    add_current_site_editors: bool = field(default=True)
+    add_current_site_sites: bool = field(default=False)
 
 
 def get_lang_field_values(field_name: str,
                         element: Optional[dict] = None,
                         instance: Optional[models.Model] = None,
-                        by_field: bool = True):
-    if (element and instance):
+                        get_by_lang_field_key: bool = True):
+    if (element is not None and instance is not None):
         raise ValueError("Please choose one of each")
 
-    ret = {}
+    ret = []
     for lang_code, lang_verbose_name, lang_field in get_languages():
         name_code = f'{field_name}_{lang_code}'
         name_field = f'{field_name}_{lang_field}'
-        get_key = name_field if by_field else name_code
-        set_key = name_code if by_field else name_field
+        # get_key = name_field if get_by_lang_field_key else name_code
+        # set_key = name_code if get_by_lang_field_key else name_field
+        row = {}
+        row['element_key'] = name_code
+        row['instance_field'] = name_field
         if element:
-            ret[set_key] = element.get(get_key, '')
+            row['value'] = element.get(name_code, '') or ''
         if instance:
-            ret[set_key] = getattr(instance, get_key, '')
+            row['value'] = getattr(instance, name_field, '') or ''
+        ret.append(row)
     return ret
 
 def set_lang_field(instance, field_name, element):
-    lang_fields = get_lang_field_values(field_name, element=element)
-    for field_lang_name, field_value in lang_fields.items():
+    languages_field_values = get_lang_field_values(field_name, element=element)
+    for lang_fields_value in languages_field_values:
+        field_lang_name = lang_fields_value['instance_field']
+        field_value = lang_fields_value['value']
+
         setattr(instance, field_lang_name, field_value)
 
 
