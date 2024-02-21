@@ -7,7 +7,7 @@ from django.urls import reverse
 
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet, Section
 
-from . import xml_error_files
+from . import delete_all_objects, xml_error_files
 
 users = (
     ('editor', 'editor'),
@@ -65,11 +65,7 @@ def test_create(db, client, username, password):
 
 @pytest.mark.parametrize('username,password', users)
 def test_create_import_create(db, client, username, password):
-    Catalog.objects.all().delete()
-    Section.objects.all().delete()
-    Page.objects.all().delete()
-    QuestionSet.objects.all().delete()
-    Question.objects.all().delete()
+    delete_all_objects([Catalog, Section, Page, QuestionSet, Question])
 
     client.login(username=username, password=password)
 

@@ -6,6 +6,8 @@ from rdmo.core.tests.constants import multisite_users as users
 from rdmo.core.tests.utils import get_obj_perms_status_code
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet, Section
 
+from . import delete_all_objects
+
 status_map = {
     'list': {
         'default': 405, 'anonymous': 401
@@ -41,11 +43,7 @@ def test_list(db, client, username, password):
 
 @pytest.mark.parametrize('username,password', users)
 def test_create_create(db, client, username, password, json_data):
-    Catalog.objects.all().delete()
-    Section.objects.all().delete()
-    Page.objects.all().delete()
-    QuestionSet.objects.all().delete()
-    Question.objects.all().delete()
+    delete_all_objects([Catalog, Section, Page, QuestionSet, Question])
 
     client.login(username=username, password=password)
 
