@@ -8,14 +8,14 @@ from rdmo.options.models import Option, OptionSet
 from . import (
     _test_helper_change_fields_elements,
     _test_helper_filter_updated_and_changed,
+    delete_all_objects,
     read_xml_and_parse_to_elements,
 )
 
 imported_update_changes = [None]
 
 def test_create_optionsets(db, settings):
-    OptionSet.objects.all().delete()
-    Option.objects.all().delete()
+    delete_all_objects([OptionSet, Option])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'optionsets.xml'
     elements, root = read_xml_and_parse_to_elements(xml_file)
@@ -41,8 +41,7 @@ def test_update_optionsets(db, settings):
 
 @pytest.mark.parametrize('update_dict', imported_update_changes)
 def test_update_optionsets_with_changed_fields(db, settings, update_dict):
-    OptionSet.objects.all().delete()
-    Option.objects.all().delete()
+    delete_all_objects([OptionSet, Option])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'optionsets.xml'
     elements, root = read_xml_and_parse_to_elements(xml_file)
@@ -88,8 +87,7 @@ def test_update_options(db, settings):
 
 @pytest.mark.parametrize('update_dict', imported_update_changes)
 def test_update_options_with_changed_fields(db, settings, update_dict):
-    OptionSet.objects.all().delete()
-    Option.objects.all().delete()
+    delete_all_objects([OptionSet, Option])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'options.xml'
     elements, root = read_xml_and_parse_to_elements(xml_file)
@@ -109,8 +107,7 @@ def test_update_options_with_changed_fields(db, settings, update_dict):
 
 
 def test_create_legacy_options(db, settings):
-    OptionSet.objects.all().delete()
-    Option.objects.all().delete()
+    delete_all_objects([OptionSet, Option])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'legacy' / 'options.xml'
 
