@@ -119,33 +119,48 @@ def set_foreign_field(instance, field_name, element, uploaded_uris=None) -> None
     if not foreign_element:
         setattr(instance, field_name, None)
         return
-    if not isinstance(foreign_element, dict):
-        raise TypeError("foreign_field must be a dictionary")
 
-    foreign_uri = foreign_element.get('uri')
+    if 'uri' not in foreign_element:
+        message = 'Foreign model can not be assigned on {instance_model}.{field_name} {instance_uri} due to missing uri.'.format( # noqa: E501
+            instance_model=instance._meta.object_name,
+            instance_uri=element.get('uri'),
+            field_name=field_name
+        )
+        logger.info(message)
+        element['errors'][element.get('uri')].append(message)
+        return
+
+    foreign_uri = foreign_element['uri']
 
     model_info = model_meta.get_field_info(instance)
     foreign_model = model_info.forward_relations[field_name].related_model
-
+    foreign_instance = None
     try:
         foreign_instance = foreign_model.objects.get(uri=foreign_uri)
-        setattr(instance, field_name, foreign_instance)
-        return
     except foreign_model.DoesNotExist:
-        # check for existence of foreign_uri in currently uploaded uris
-        uploaded_uris = uploaded_uris if uploaded_uris is not None else []
-        if foreign_uri in uploaded_uris and foreign_uri is not None:
-            setattr(instance, field_name, foreign_uri)
-            return
+        message = '{foreign_model} {foreign_uri} for {instance_model} {instance_uri} does not exist.'.format(
+            foreign_model=foreign_model._meta.object_name,
+            foreign_uri=foreign_uri,
+            instance_model=instance._meta.object_name,
+            instance_uri=element.get('uri')
+        )
+        logger.info(message)
+        element['warnings'][foreign_uri].append(message)
+    try:
+        if foreign_instance is not None:
+            setattr(instance, field_name, foreign_instance)
+    except ValueError:
+        message = '{foreign_model} {foreign_uri} can not be assigned on {instance_model}.{field_name} {instance_uri} .'.format( # noqa: E501
+            foreign_model=foreign_model._meta.object_name,
+            foreign_uri=foreign_uri,
+            instance_model=instance._meta.object_name,
+            instance_uri=element.get('uri'),
+            field_name=field_name,
+            )
+        logger.info(message)
+        element['errors'][foreign_uri].append(message)
 
-    message = '{foreign_model} {foreign_uri} for {instance_model} {instance_uri} does not exist.'.format(
-        foreign_model=foreign_model._meta.object_name,
-        foreign_uri=foreign_uri,
-        instance_model=instance._meta.object_name,
-        instance_uri=element.get('uri')
-    )
-    logger.info(message)
-    element['warnings'][foreign_uri].append(message)
+
 
 def set_extra_field(instance, field_name, element, questions_widget_types=None) -> None:
 
@@ -157,8 +172,8 @@ def set_extra_field(instance, field_name, element, questions_widget_types=None) 
             extra_value = element_value
         else:
             extra_value = default_value
-    if field_name == "path" and hasattr(instance, "build_path"):
-        if instance.key:
+    if field_name == "path":
+        if instance.key and hasattr(instance, "build_path"):
             extra_value = instance.build_path(instance.key, instance.parent)
         else:
             exception_message = _('This field may not be blank.')
