@@ -19,7 +19,7 @@ export default function importsReducer(state = initialState, action) {
   switch(action.type) {
     // upload file
     case 'import/uploadFileInit':
-      return {...state, file: action.file}
+      return {...state, ...initialState,  file: action.file}
     case 'elements/fetchElementsInit':
     case 'elements/fetchElementInit':
       return {...state, elements: [], errors: [], success: false}
