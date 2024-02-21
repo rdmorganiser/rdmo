@@ -1,10 +1,12 @@
 from rdmo.core.imports import ElementImportHelper
 
+from .models import Task
 from .serializers.v1 import TaskSerializer
 from .validators import TaskLockedValidator, TaskUniqueURIValidator
 
 import_helper_task = ElementImportHelper(
-    model="tasks.task",
+    model=Task,
+    model_path="tasks.task",
     validators=(TaskLockedValidator, TaskUniqueURIValidator),
     lang_fields=('title', 'text'),
     foreign_fields=('start_attribute', 'end_attribute'),
