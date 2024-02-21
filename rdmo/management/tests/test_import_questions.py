@@ -8,6 +8,7 @@ from rdmo.questions.models import Catalog, Page, Question, QuestionSet, Section
 from . import (
     _test_helper_change_fields_elements,
     _test_helper_filter_updated_and_changed,
+    delete_all_objects,
     read_xml_and_parse_to_elements,
 )
 
@@ -15,11 +16,7 @@ imported_update_changes = [None]
 
 
 def test_create_catalogs(db, settings):
-    Catalog.objects.all().delete()
-    Section.objects.all().delete()
-    Page.objects.all().delete()
-    QuestionSet.objects.all().delete()
-    Question.objects.all().delete()
+    delete_all_objects([Catalog, Section, Page, QuestionSet, Question])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'catalogs.xml'
 
@@ -49,11 +46,7 @@ def test_update_catalogs(db, settings):
 
 @pytest.mark.parametrize('update_dict', imported_update_changes)
 def test_update_catalogs_with_changed_fields(db, settings, update_dict):
-    Catalog.objects.all().delete()
-    Section.objects.all().delete()
-    Page.objects.all().delete()
-    QuestionSet.objects.all().delete()
-    Question.objects.all().delete()
+    delete_all_objects([Catalog, Section, Page, QuestionSet, Question])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'catalogs.xml'
     elements, root = read_xml_and_parse_to_elements(xml_file)
@@ -74,10 +67,7 @@ def test_update_catalogs_with_changed_fields(db, settings, update_dict):
 
 
 def test_create_sections(db, settings):
-    Section.objects.all().delete()
-    Page.objects.all().delete()
-    QuestionSet.objects.all().delete()
-    Question.objects.all().delete()
+    delete_all_objects([Section, Page, QuestionSet, Question])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'sections.xml'
 
@@ -106,11 +96,7 @@ def test_update_sections(db, settings):
 
 @pytest.mark.parametrize('update_dict', imported_update_changes)
 def test_update_sections_with_changed_fields(db, settings, update_dict):
-    Catalog.objects.all().delete()
-    Section.objects.all().delete()
-    Page.objects.all().delete()
-    QuestionSet.objects.all().delete()
-    Question.objects.all().delete()
+    delete_all_objects([Catalog, Section, Page, QuestionSet, Question])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'sections.xml'
     elements, root = read_xml_and_parse_to_elements(xml_file)
@@ -130,9 +116,7 @@ def test_update_sections_with_changed_fields(db, settings, update_dict):
 
 
 def test_create_pages(db, settings):
-    Page.objects.all().delete()
-    QuestionSet.objects.all().delete()
-    Question.objects.all().delete()
+    delete_all_objects([Page, QuestionSet, Question])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'pages.xml'
 
@@ -160,11 +144,7 @@ def test_update_pages(db, settings):
 
 @pytest.mark.parametrize('update_dict', imported_update_changes)
 def test_update_pages_with_changed_fields(db, settings, update_dict):
-    Catalog.objects.all().delete()
-    Section.objects.all().delete()
-    Page.objects.all().delete()
-    QuestionSet.objects.all().delete()
-    Question.objects.all().delete()
+    delete_all_objects([Catalog, Section, Page, QuestionSet, Question])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'pages.xml'
     elements, root = read_xml_and_parse_to_elements(xml_file)
@@ -184,9 +164,7 @@ def test_update_pages_with_changed_fields(db, settings, update_dict):
 
 
 def test_create_questionsets(db, settings):
-    Page.objects.all().delete()
-    QuestionSet.objects.all().delete()
-    Question.objects.all().delete()
+    delete_all_objects([Page, QuestionSet, Question])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'questionsets.xml'
 
@@ -215,11 +193,7 @@ def test_update_questionsets(db, settings):
 
 @pytest.mark.parametrize('update_dict', imported_update_changes)
 def test_update_questionsets_with_changed_fields(db, settings, update_dict):
-    Catalog.objects.all().delete()
-    Section.objects.all().delete()
-    Page.objects.all().delete()
-    QuestionSet.objects.all().delete()
-    Question.objects.all().delete()
+    delete_all_objects([Catalog, Section, Page, QuestionSet, Question])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'questionsets.xml'
     elements, root = read_xml_and_parse_to_elements(xml_file)
@@ -240,9 +214,7 @@ def test_update_questionsets_with_changed_fields(db, settings, update_dict):
 
 
 def test_create_questions(db, settings):
-    Page.objects.all().delete()
-    QuestionSet.objects.all().delete()
-    Question.objects.all().delete()
+    delete_all_objects([Page, QuestionSet, Question])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'questions.xml'
 
@@ -268,11 +240,7 @@ def test_update_questions(db, settings):
 
 @pytest.mark.parametrize('update_dict', imported_update_changes)
 def test_update_questions_with_changed_fields(db, settings, update_dict):
-    Catalog.objects.all().delete()
-    Section.objects.all().delete()
-    Page.objects.all().delete()
-    QuestionSet.objects.all().delete()
-    Question.objects.all().delete()
+    delete_all_objects([Catalog, Section, Page, QuestionSet, Question])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'questions.xml'
     elements, root = read_xml_and_parse_to_elements(xml_file)
@@ -292,11 +260,7 @@ def test_update_questions_with_changed_fields(db, settings, update_dict):
 
 
 def test_create_legacy_questions(db, settings):
-    Catalog.objects.all().delete()
-    Section.objects.all().delete()
-    Page.objects.all().delete()
-    QuestionSet.objects.all().delete()
-    Question.objects.all().delete()
+    delete_all_objects([Catalog, Section, Page, QuestionSet, Question])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'legacy' / 'questions.xml'
 

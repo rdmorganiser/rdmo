@@ -11,6 +11,10 @@ xml_error_files = [
     ('xml/elements/legacy/catalog-error-key.xml', 'Missing legacy elements'),
 ]
 
+def delete_all_objects(db_models: List):
+    for db_model in db_models:
+        db_model.objects.all().delete()
+
 def read_xml_and_parse_to_elements(xml_file):
 
     xml_parser = XmlParser(file_name=xml_file)
