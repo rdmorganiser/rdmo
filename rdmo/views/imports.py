@@ -1,10 +1,12 @@
 from rdmo.core.imports import ElementImportHelper
 
+from .models import View
 from .serializers.v1 import ViewSerializer
 from .validators import ViewLockedValidator, ViewUniqueURIValidator
 
 import_helper_view = ElementImportHelper(
-    model="views.view",
+    model=View,
+    model_path="views.view",
     validators=(ViewLockedValidator, ViewUniqueURIValidator),
     lang_fields=('help', 'title'),
     serializer=ViewSerializer,

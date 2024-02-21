@@ -2,6 +2,7 @@ from rdmo.core.imports import (
     ElementImportHelper,
 )
 
+from .models import Catalog, Page, Question, QuestionSet, Section
 from .serializers.v1 import (
     CatalogSerializer,
     PageSerializer,
@@ -23,7 +24,8 @@ from .validators import (
 )
 
 import_helper_catalog = ElementImportHelper(
-    model="questions.catalog",
+    model = Catalog,
+    model_path="questions.catalog",
     validators=(CatalogLockedValidator, CatalogUniqueURIValidator),
     lang_fields=('help', 'title'),
     serializer = CatalogSerializer,
@@ -36,7 +38,8 @@ import_helper_catalog = ElementImportHelper(
 )
 
 import_helper_section = ElementImportHelper(
-    model="questions.section",
+    model = Section,
+    model_path="questions.section",
     validators=(SectionLockedValidator, SectionUniqueURIValidator),
     lang_fields=('title',),
     serializer = SectionSerializer,
@@ -52,7 +55,8 @@ import_helper_section = ElementImportHelper(
 
 
 import_helper_page = ElementImportHelper(
-    model="questions.page",
+    model = Page,
+    model_path="questions.page",
     validators=(PageLockedValidator, PageUniqueURIValidator),
     lang_fields=('help', 'title', 'verbose_name'),
     foreign_fields=('attribute',),
@@ -73,7 +77,8 @@ import_helper_page = ElementImportHelper(
 
 
 import_helper_questionset = ElementImportHelper(
-    model="questions.questionset",
+    model = QuestionSet,
+    model_path = "questions.questionset",
     validators=(QuestionSetLockedValidator, QuestionSetUniqueURIValidator),
     lang_fields=('help', 'title', 'verbose_name'),
     foreign_fields=('attribute',),
@@ -96,7 +101,8 @@ import_helper_questionset = ElementImportHelper(
 
 
 import_helper_question = ElementImportHelper(
-    model="questions.question",
+    model = Question,
+    model_path = "questions.question",
     validators=(QuestionLockedValidator, QuestionUniqueURIValidator),
     lang_fields=('text', 'help', 'default_text', 'verbose_name'),
     foreign_fields=('attribute','default_option'),

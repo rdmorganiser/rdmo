@@ -2,6 +2,7 @@ from rdmo.core.imports import (
     ElementImportHelper,
 )
 
+from .models import Option, OptionSet
 from .serializers.v1 import OptionSerializer, OptionSetSerializer
 from .validators import (
     OptionLockedValidator,
@@ -11,7 +12,8 @@ from .validators import (
 )
 
 import_helper_option = ElementImportHelper(
-    model="options.option",
+    model = Option,
+    model_path="options.option",
     validators=(OptionLockedValidator, OptionUniqueURIValidator),
     lang_fields=('text',),
     serializer = OptionSerializer,
@@ -24,7 +26,8 @@ import_helper_option = ElementImportHelper(
 )
 
 import_helper_optionset = ElementImportHelper(
-    model="options.optionset",
+    model = OptionSet,
+    model_path="options.optionset",
     validators=(OptionSetLockedValidator, OptionSetUniqueURIValidator),
     serializer = OptionSetSerializer,
     extra_fields=('additional_input',),
