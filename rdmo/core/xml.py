@@ -7,7 +7,7 @@ from pathlib import Path
 from django.utils.translation import gettext_lazy as _
 
 import defusedxml.ElementTree as ET
-from packaging.version import parse
+from packaging.version import Version, parse
 
 from rdmo import __version__ as VERSION
 
@@ -74,15 +74,16 @@ class XmlParser:
         self.root = root
 
         # step 2.1: validate parsed xml
-        root_version = root.attrib.get('version') or DEFAULT_RDMO_XML_VERSION
-        parsed_version, rdmo_version = parse(root_version), parse(VERSION)
-        if parsed_version > rdmo_version:
-            logger.info(f'Import failed version validation ({parsed_version} > {rdmo_version})')
+        unparsed_root_version = root.attrib.get('version') or DEFAULT_RDMO_XML_VERSION
+        root_version, rdmo_version = parse(unparsed_root_version), parse(VERSION)
+        if root_version > rdmo_version:
+            logger.info(f'Import failed version validation ({root_version} > {rdmo_version})')
             self.errors.append(_('This RDMO XML file does not have a valid version number.'))
             self.errors.append(f'RDMO XML Version: {root_version}')
             return
 
         # step 3: create element dicts from xml
+        elements = OrderedDict()
         try:
             elements = flat_xml_to_elements(root)
         except KeyError as e:
@@ -99,11 +100,11 @@ class XmlParser:
 
         # step 3.1: validate elements for legacy versions
         try:
-            pre_conversion_validate_legacy_elements(elements, parsed_version)
+            pre_conversion_validate_legacy_elements(elements, root_version)
         except ValueError as e:
             logger.info('Import failed with ValueError (%s)' % e)
-            self.errors.append(_('This is not a valid RDMO XML file.'))
             self.errors.append(_('XML Parsing Error') + f': {e!s}')
+            self.errors.append(_('This is not a valid RDMO XML file.'))
         if self.errors:
             return
         # step 4: convert elements from previous versions
@@ -214,23 +215,24 @@ def strip_ns(tag, ns_map):
     return tag
 
 
-def convert_elements(elements, version):
-    parsed_version = parse('1.11.0') if version is None else parse(version)
-    pre_conversion_validate_legacy_elements(elements, parsed_version)
-    if parsed_version < parse('2.0.0'):
+def convert_elements(elements, version: Version):
+    if not isinstance(version, Version):
+        raise TypeError('Version should be a parsed version type. (parse(version))')
+    pre_conversion_validate_legacy_elements(elements, version)
+    if version < parse('2.0.0'):
         elements = convert_legacy_elements(elements)
 
-    if parsed_version < parse('2.1.0'):
+    if version < parse('2.1.0'):
         elements = convert_additional_input(elements)
 
     return elements
 
 
-def pre_conversion_validate_legacy_elements(elements, parsed_version):
-    if parsed_version < parse('2.0.0'):
+def pre_conversion_validate_legacy_elements(elements, version: Version) -> None:
+    if version < parse('2.0.0'):
         _keys_in_elements = list(filter(lambda x: 'key' in x, elements.values()))
         if not _keys_in_elements:
-            raise ValueError(f"Missing legacy elements, elements containing 'key' were expected for this XML with version {parsed_version}.")   # noqa: E501
+            raise ValueError(f"Missing legacy elements, elements containing 'key' were expected for this XML with version {version}.")   # noqa: E501
 
 
 def convert_legacy_elements(elements):
