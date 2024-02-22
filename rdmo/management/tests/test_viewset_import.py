@@ -4,7 +4,7 @@ from django.urls import reverse
 
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet, Section
 
-from . import delete_all_objects
+from .helpers_models import delete_all_objects
 
 users = (
     ('editor', 'editor'),
