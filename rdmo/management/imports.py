@@ -32,11 +32,10 @@ from rdmo.questions.utils import get_widget_types
 from rdmo.tasks.imports import import_helper_task
 from rdmo.views.imports import import_helper_view
 
-from .constants import RDMO_MODEL_PATH_MAPPER
-
 logger = logging.getLogger(__name__)
 
 
+# mapping is redundant, since each ImportHelper has a .model_path attribute
 ELEMENT_IMPORT_HELPERS = {
     "conditions.condition": import_helper_condition,
     "domain.attribute": import_helper_attribute,
@@ -95,9 +94,11 @@ def import_element(
     for _k,_val in IMPORT_ELEMENT_INIT_DICT.items():
         element[_k] = _val()
 
-    model = RDMO_MODEL_PATH_MAPPER[model_path]
     user = request.user if request is not None else None
     import_helper = ELEMENT_IMPORT_HELPERS[model_path]
+    if import_helper.model_path != model_path:
+        raise ValueError(f'Invalid import helper model path: {import_helper.model_path}. Expected {model_path}.')
+    model = import_helper.model
     validators = import_helper.validators
     common_fields = import_helper.common_fields
     lang_field_names = import_helper.lang_fields
@@ -130,13 +131,11 @@ def import_element(
     # set common field values from element on instance
     for common_field in common_fields:
         common_value = element.get(common_field) or ''
-        # handle URI Prefix ending with slash
-        if common_field == 'uri_prefix' and common_value.endswith('/'):
-            common_value = common_value.rstrip('/')
-            element[common_field] = common_value
-            if original_instance:
-                original_instance.uri_prefix = original_instance.uri_prefix.rstrip('/')
         setattr(instance, common_field, common_value)
+    strip_uri_prefix_endswith_slash(element)
+    ## strip uri_prefix slash for comparison diff
+    if original_instance:
+        original_instance.uri_prefix = original_instance.uri_prefix.rstrip('/')
     # set language fields
     for lang_field_name in lang_field_names:
         set_lang_field(instance, lang_field_name, element)
@@ -146,7 +145,6 @@ def import_element(
     # set extra fields
     for extra_field in extra_field_names:
         set_extra_field(instance, extra_field, element, questions_widget_types=questions_widget_types)
-
     # call the validators on the instance
     validate_instance(instance, element, *validators)
 
@@ -178,6 +176,14 @@ def import_element(
         if import_helper.add_current_site_sites:
             instance.sites.add(current_site)
 
+    return element
+
+def strip_uri_prefix_endswith_slash(element: dict) -> dict:
+    # handle URI Prefix ending with slash
+    if 'uri_prefix' not in element:
+        return element
+    if element['uri_prefix'].endswith('/'):
+        element['uri_prefix'] = element['uri_prefix'].rstrip('/')
     return element
 
 
