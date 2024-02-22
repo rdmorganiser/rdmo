@@ -1,6 +1,6 @@
 <div class="col-md-12" ng-hide="element.isQuestion" ng-init="questionset = element">
     <div ng-hide="valueset.hidden.questionsets[questionset.id]">
-        <strong>{$ questionset.title $}</strong>
+        <strong ng-bind-html="questionset.title"></strong>
 
         <div class="help-text" ng-bind-html="questionset.help"></div>
 

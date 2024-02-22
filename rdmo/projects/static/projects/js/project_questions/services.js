@@ -295,7 +295,7 @@ angular.module('project_questions')
 
         // mark the help text of the question set 'safe'
         page.help = $sce.trustAsHtml(page.help);
-        page.text = $sce.trustAsHtml(page.text);
+        page.title = $sce.trustAsHtml(page.title);
 
         // init questions and question sets
         page.elements.forEach(function(element) {
@@ -315,7 +315,7 @@ angular.module('project_questions')
 
         // mark the help text of the question set 'safe'
         questionset.help = $sce.trustAsHtml(questionset.help);
-        questionset.text = $sce.trustAsHtml(questionset.text);
+        questionset.title = $sce.trustAsHtml(questionset.title);
 
         // init questions and question sets
         questionset.elements.forEach(function(element) {
