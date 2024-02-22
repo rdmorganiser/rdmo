@@ -5,12 +5,12 @@ import pytest
 from rdmo.management.imports import import_elements
 from rdmo.options.models import Option, OptionSet
 
-from . import (
+from .helpers_import_elements import (
     _test_helper_change_fields_elements,
     _test_helper_filter_updated_and_changed,
-    delete_all_objects,
-    read_xml_and_parse_to_elements,
 )
+from .helpers_models import delete_all_objects
+from .helpers_xml import read_xml_and_parse_to_elements
 
 imported_update_changes = [None]
 
