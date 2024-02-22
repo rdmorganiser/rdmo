@@ -7,7 +7,8 @@ from django.urls import reverse
 
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet, Section
 
-from . import delete_all_objects, xml_error_files
+from .helpers_models import delete_all_objects
+from .helpers_xml import xml_error_files
 
 users = (
     ('editor', 'editor'),

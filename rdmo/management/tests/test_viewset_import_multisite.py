@@ -6,7 +6,7 @@ from rdmo.core.tests.constants import multisite_users as users
 from rdmo.core.tests.utils import get_obj_perms_status_code
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet, Section
 
-from . import delete_all_objects
+from .helpers_models import delete_all_objects
 
 status_map = {
     'list': {
