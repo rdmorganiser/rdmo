@@ -293,8 +293,9 @@ angular.module('project_questions')
         // store attributes in a separate array
         if (page.attribute !== null) future.attributes.push(page.attribute);
 
-        // mark the help text of the question set 'save'
+        // mark the help text of the question set 'safe'
         page.help = $sce.trustAsHtml(page.help);
+        page.text = $sce.trustAsHtml(page.text);
 
         // init questions and question sets
         page.elements.forEach(function(element) {
@@ -312,8 +313,9 @@ angular.module('project_questions')
         // store questionsets in a separate array
         future.questionsets.push(questionset);
 
-        // mark the help text of the question set 'save'
+        // mark the help text of the question set 'safe'
         questionset.help = $sce.trustAsHtml(questionset.help);
+        questionset.text = $sce.trustAsHtml(questionset.text);
 
         // init questions and question sets
         questionset.elements.forEach(function(element) {
@@ -334,6 +336,7 @@ angular.module('project_questions')
 
         // mark the help text of the question set 'save'
         question.help = $sce.trustAsHtml(question.help);
+        question.text = $sce.trustAsHtml(question.text);
 
         // this is a question!
         question.isQuestion = true;
