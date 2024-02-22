@@ -53,7 +53,7 @@ class ConditionSerializer(serializers.ModelSerializer):
 
 class QuestionSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, serializers.ModelSerializer):
 
-    markdown_fields = ('help', )
+    markdown_fields = ('help', 'text')
 
     model = serializers.SerializerMethodField()
     conditions = ConditionSerializer(default=None, many=True)
@@ -102,7 +102,7 @@ class QuestionSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, s
 
 class QuestionSetSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, serializers.ModelSerializer):
 
-    markdown_fields = ('help', )
+    markdown_fields = ('help', 'text')
 
     model = serializers.SerializerMethodField()
     elements = serializers.SerializerMethodField()
@@ -135,7 +135,7 @@ class QuestionSetSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin
 
 class PageSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
 
-    markdown_fields = ('help', )
+    markdown_fields = ('help', 'text')
 
     elements = serializers.SerializerMethodField()
     section = serializers.SerializerMethodField()
