@@ -51,9 +51,7 @@
     <div class="project-questions-form" ng-show="service.page.id" ng-cloak>
         {% include 'projects/project_questions_head.html' %}
 
-        <h2>
-            {$ service.page.title $}
-        </h2>
+        <h2 ng-bind-html="service.page.title"></h2>
 
         <div class="help-text" ng-bind-html="service.page.help"></div>
 
