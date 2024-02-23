@@ -61,7 +61,7 @@ def make_import_info_msg(verbose_name: str, created: bool, uri: Optional[str]=No
         return f"{verbose_name} created with {uri}"
     return f"{verbose_name} {uri} updated"
 
-@dataclass(kw_only=True, frozen=True)
+@dataclass(frozen=True)
 class ElementImportHelper:
     model: models.Model | None = field(default=None)
     model_path: str | None = field(default=None)
