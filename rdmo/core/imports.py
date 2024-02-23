@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from os.path import join as pj
 from pathlib import Path
 from random import randint
-from typing import Callable, Dict, Iterable, Optional, Sequence, Tuple
+from typing import Callable, Iterable, Optional, Sequence, Tuple
 
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
@@ -62,6 +62,13 @@ def make_import_info_msg(verbose_name: str, created: bool, uri: Optional[str]=No
     return f"{verbose_name} {uri} updated"
 
 @dataclass(frozen=True)
+class ThroughInstanceMapper:
+    field_name: str
+    source_name: str
+    target_name: str
+    through_name: str
+
+@dataclass(frozen=True)
 class ElementImportHelper:
     model: Optional[models.Model] = field(default=None)
     model_path: Optional[str] = field(default=None)
@@ -72,8 +79,8 @@ class ElementImportHelper:
     foreign_fields: Sequence[str] = field(default_factory=list)
     extra_fields: Sequence[str] = field(default_factory=list)
     m2m_instance_fields: Sequence[str] = field(default_factory=list)
-    m2m_through_instance_fields: Sequence[Dict[str, str]] = field(default_factory=list)
-    reverse_m2m_through_instance_fields: Sequence[Dict[str, str]] = field(default_factory=list)
+    m2m_through_instance_fields: Sequence[ThroughInstanceMapper] = field(default_factory=list)
+    reverse_m2m_through_instance_fields: Sequence[ThroughInstanceMapper] = field(default_factory=list)
     add_current_site_editors: bool = field(default=True)
     add_current_site_sites: bool = field(default=False)
 

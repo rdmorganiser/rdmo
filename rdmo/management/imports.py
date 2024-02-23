@@ -1,6 +1,7 @@
 import copy
 import logging
 from collections import defaultdict
+from dataclasses import asdict
 from typing import AbstractSet, Dict, List, Optional
 
 from django.contrib.sites.shortcuts import get_current_site
@@ -167,9 +168,9 @@ def import_element(
         for m2m_field in import_helper.m2m_instance_fields:
             set_m2m_instances(instance, element, m2m_field)
         for m2m_through_fields in import_helper.m2m_through_instance_fields:
-            set_m2m_through_instances(instance, element, **m2m_through_fields)
+            set_m2m_through_instances(instance, element, **asdict(m2m_through_fields))
         for reverse_m2m_fields in import_helper.reverse_m2m_through_instance_fields:
-            set_reverse_m2m_through_instance(instance, element, **reverse_m2m_fields)
+            set_reverse_m2m_through_instance(instance, element, **asdict(reverse_m2m_fields))
 
         if import_helper.add_current_site_editors:
             instance.editors.add(current_site)
