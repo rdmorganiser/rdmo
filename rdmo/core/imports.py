@@ -63,10 +63,10 @@ def make_import_info_msg(verbose_name: str, created: bool, uri: Optional[str]=No
 
 @dataclass(frozen=True)
 class ElementImportHelper:
-    model: models.Model | None = field(default=None)
-    model_path: str | None = field(default=None)
+    model: Optional[models.Model] = field(default=None)
+    model_path: Optional[str] = field(default=None)
     validators: Iterable[Callable] = field(default_factory=list)
-    serializer: Callable | None = field(default=None)
+    serializer: Optional[Callable] = field(default=None)
     common_fields: Sequence[str] = field(default=ELEMENT_COMMON_FIELDS)
     lang_fields: Sequence[str] = field(default_factory=list)
     foreign_fields: Sequence[str] = field(default_factory=list)
