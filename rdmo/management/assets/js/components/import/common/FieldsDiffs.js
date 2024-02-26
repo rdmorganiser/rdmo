@@ -5,7 +5,7 @@ import ReactDiffViewer from 'react-diff-viewer-continued'
 import { isUndefined } from 'lodash'
 
 const FieldsDiffs = ({ element, field }) => {
-  const newVal = element.updated_and_changed[field].uploaded ?? ''
+  const newVal = element.updated_and_changed[field].updated ?? ''
   const oldVal = element.updated_and_changed[field].current ?? ''
   return (!isUndefined(element) &&
           !isEmpty(element.updated_and_changed) &&
