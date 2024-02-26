@@ -81,7 +81,6 @@ HUMAN2BYTES_MAPPER = {
 ELEMENT_COMMON_FIELDS = (
     'uri_prefix',
     'uri_path',
-    'key',
     'comment',
 )
 
