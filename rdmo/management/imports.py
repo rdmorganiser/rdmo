@@ -4,6 +4,7 @@ from collections import defaultdict
 from dataclasses import asdict
 from typing import AbstractSet, Dict, List, Optional
 
+from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpRequest
 
@@ -18,6 +19,7 @@ from rdmo.core.imports import (
     set_m2m_instances,
     set_m2m_through_instances,
     set_reverse_m2m_through_instance,
+    track_changes_on_element,
     validate_instance,
 )
 from rdmo.domain.imports import import_helper_attribute
@@ -113,7 +115,7 @@ def import_element(
     # keep a copy of the original
     # when the element is updated
     # needs to be created here, else the changes will be overwritten
-    original_instance = copy.deepcopy(instance) if not _created else None
+    original = copy.deepcopy(instance) if not _created else None
 
     # prepare a log message
     _msg = make_import_info_msg(model._meta.verbose_name, _created, uri=uri)
@@ -125,21 +127,23 @@ def import_element(
         element["errors"].append(_perms_error_msg)
         return element
 
-    # prepare original element when updated (maybe rename into lookup)
     _updated = not _created
+    element['created'] = _created
+    element['updated'] = _updated
+    # dict element['updated_and_changed'] is filled by tracking changes
 
+    element = strip_uri_prefix_endswith_slash(element)
     # start to set values on the instance
     # set common field values from element on instance
     for common_field in common_fields:
         common_value = element.get(common_field) or ''
         setattr(instance, common_field, common_value)
-    strip_uri_prefix_endswith_slash(element)
-    ## strip uri_prefix slash for comparison diff
-    if original_instance:
-        original_instance.uri_prefix = original_instance.uri_prefix.rstrip('/')
+        if _updated and original:
+            # track changes for common fields
+            track_changes_on_element(element, common_field, common_value, original=original)
     # set language fields
     for lang_field_name in lang_field_names:
-        set_lang_field(instance, lang_field_name, element)
+        set_lang_field(instance, lang_field_name, element, original=original)
     # set foreign fields
     for foreign_field in foreign_field_names:
         set_foreign_field(instance, foreign_field, element, uploaded_uris=uploaded_uris)
@@ -151,27 +155,22 @@ def import_element(
 
     if element.get('errors'):
         return element
-
-    if _updated and not _created:
-        element['updated'] = _updated
-        # and instance is not original_instance
-        # keep only strings, make json serializable
-        serializer = import_helper.serializer
-        changes = get_updated_changes(element, instance, original_instance, serializer, request=request)
-        element['updated_and_changed'] = changes
-
     if save:
         logger.info(_msg)
-        element['created'] = _created
-        element['updated'] = _updated
         instance.save()
+    # breakpoint()
+    if save or _updated:
         for m2m_field in import_helper.m2m_instance_fields:
-            set_m2m_instances(instance, element, m2m_field)
+            set_m2m_instances(instance, element, m2m_field, original=original, save=save)
         for m2m_through_fields in import_helper.m2m_through_instance_fields:
-            set_m2m_through_instances(instance, element, **asdict(m2m_through_fields))
+            set_m2m_through_instances(instance, element, **asdict(m2m_through_fields),
+                                      original=original, save=save)
         for reverse_m2m_fields in import_helper.reverse_m2m_through_instance_fields:
-            set_reverse_m2m_through_instance(instance, element, **asdict(reverse_m2m_fields))
+            set_reverse_m2m_through_instance(instance, element, **asdict(reverse_m2m_fields),
+                                             original=original, save=save)
 
+    if save and settings.MULTISITE:
+        # could be optimized with a bulk_create of through model later
         if import_helper.add_current_site_editors:
             instance.editors.add(current_site)
         if import_helper.add_current_site_sites:
@@ -187,10 +186,10 @@ def strip_uri_prefix_endswith_slash(element: dict) -> dict:
         element['uri_prefix'] = element['uri_prefix'].rstrip('/')
     return element
 
-
+#  TODO remove get_updated_changes
 def get_updated_changes(element, new_instance,
-                        original_instance, serializer, request=None) -> Dict[str, str]:
-    original_serializer = serializer(original_instance, context={'request': request})
+                        original, serializer, request=None) -> Dict[str, str]:
+    original_serializer = serializer(original, context={'request': request})
     original_data = original_serializer.data
     original_element = {k: val for k,val in original_data.items() if k in element}
     uploaded_serializer = serializer(new_instance, context={'request': request})
