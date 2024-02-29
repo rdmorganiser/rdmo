@@ -58,6 +58,8 @@ IMPORT_ELEMENT_INIT_DICT = {
         'errors': list,
         'created': bool,
         'updated': bool,
+        'changed': bool,
+        'changed_fields': list,
         'updated_and_changed': dict,
     }
 
@@ -168,6 +170,9 @@ def import_element(
         for reverse_m2m_fields in import_helper.reverse_m2m_through_instance_fields:
             set_reverse_m2m_through_instance(instance, element, **asdict(reverse_m2m_fields),
                                              original=original, save=save)
+    # set aggregated changes potentially to True and a list of changed fields
+    if _updated and element['updated_and_changed']:
+        set_updated_and_changed_meta_info(element)
 
     if save and settings.MULTISITE:
         # could be optimized with a bulk_create of through model later
@@ -186,33 +191,7 @@ def strip_uri_prefix_endswith_slash(element: dict) -> dict:
         element['uri_prefix'] = element['uri_prefix'].rstrip('/')
     return element
 
-#  TODO remove get_updated_changes
-def get_updated_changes(element, new_instance,
-                        original, serializer, request=None) -> Dict[str, str]:
-    original_serializer = serializer(original, context={'request': request})
-    original_data = original_serializer.data
-    original_element = {k: val for k,val in original_data.items() if k in element}
-    uploaded_serializer = serializer(new_instance, context={'request': request})
-    uploaded_data = uploaded_serializer.data
-    uploaded_element = {k: val for k,val in uploaded_data.items() if k in element}
-
-    updated_and_changed = {}
-    for k, old_val in original_element.items():
-        new_val = uploaded_element[k]
-        if old_val != new_val and any([old_val,new_val]):
-            updated_and_changed[k] = {"current": old_val, "uploaded": new_val}
-    # overwrite the normal "element" name with the value from "element_uri"
-    uri_keys = {k for k in list(original_data.keys())+list(uploaded_data.keys())
-                if k.endswith('_uri') or k.endswith('_uris')}
-    for uri_key in uri_keys:
-        element_name, uri_field = uri_key.split('_')
-        if uri_key in updated_and_changed:
-            # e.g. set attribute as key instead of attribute_uri
-            uri_key_val = updated_and_changed[uri_key].pop()
-            updated_and_changed[element_name] = uri_key_val
-        if element_name in element and uri_key in original_data:
-            old_val = original_data[uri_key]
-            new_val = element[element_name].get('uri')
-            if old_val != new_val and any([old_val,new_val]):
-                updated_and_changed[element_name] = {"current": old_val, "uploaded": new_val}
-    return updated_and_changed
+def set_updated_and_changed_meta_info(element: dict) -> dict:
+    changed_fields = {k: val for k, val in element['updated_and_changed'].items() if val['changed']}
+    element['changed'] = bool(changed_fields)
+    element['changed_fields'] = list(changed_fields.keys())
