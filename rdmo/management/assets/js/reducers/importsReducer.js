@@ -43,7 +43,7 @@ export default function importsReducer(state = initialState, action) {
 
     // update element
     case 'import/updateElement':
-      index = state.elements.findIndex(element => element == action.element)
+      index = state.elements.findIndex(element => element === action.element)
       if (index > -1) {
         const elements = [...state.elements]
         elements[index] = {...elements[index], ...action.values}
