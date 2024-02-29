@@ -3,6 +3,7 @@ import re
 from collections import OrderedDict
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Optional
 
 from django.utils.translation import gettext_lazy as _
 
@@ -31,7 +32,7 @@ DEFAULT_RDMO_XML_VERSION = '1.11.0'
 
 
 @dataclass
-class XmlParser:
+class XmlToElementsParser:
 
     file_name:str = None
     # post init attributes
@@ -56,7 +57,7 @@ class XmlParser:
             raise ValueError(self.errors)
         return not bool(self.errors)
 
-    def parse_xml_to_elements(self, xml_file: Path, raise_exception:bool=False) -> None:
+    def parse_xml_to_elements(self, xml_file: Path, raise_exception:bool=False) -> Optional[OrderedDict]:
         root = None
         # step 2: parse xml
         try:
@@ -218,7 +219,7 @@ def strip_ns(tag, ns_map):
 def convert_elements(elements, version: Version):
     if not isinstance(version, Version):
         raise TypeError('Version should be a parsed version type. (parse(version))')
-    pre_conversion_validate_legacy_elements(elements, version)
+    # pre_conversion_validate_legacy_elements(elements, version)
     if version < parse('2.0.0'):
         elements = convert_legacy_elements(elements)
 
