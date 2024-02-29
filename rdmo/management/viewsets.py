@@ -12,7 +12,7 @@ from rest_framework.serializers import ValidationError
 from rdmo.core.imports import handle_uploaded_file
 from rdmo.core.permissions import CanToggleElementCurrentSite
 from rdmo.core.utils import get_model_field_meta, is_truthy
-from rdmo.core.xml import XmlParser
+from rdmo.core.xml import XmlToElementsParser
 
 from .constants import RDMO_MODEL_PATH_MAPPER
 from .imports import import_elements
@@ -42,9 +42,9 @@ class UploadViewSet(viewsets.ViewSet):
         else:
             import_tmpfile_name = handle_uploaded_file(uploaded_file)
         try:
-            # step 1.1: initialize XmlParser
+            # step 1.1: initialize XmlToElementsParser
             # step 2-6: parse xml, validate and convert to
-            xml_parser = XmlParser(import_tmpfile_name)
+            xml_parser = XmlToElementsParser(import_tmpfile_name)
         except ValidationError as e:
             logger.info('Import failed with XML parsing errors.')
             raise ValidationError({'file': e}) from e
