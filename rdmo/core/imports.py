@@ -14,6 +14,8 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework.utils import model_meta
 
+from diff_match_patch import diff_match_patch
+
 from rdmo.core.constants import ELEMENT_COMMON_FIELDS, ELEMENT_IMPORT_EXTRA_FIELDS_DEFAULTS
 from rdmo.core.utils import get_languages
 
@@ -80,11 +82,14 @@ def track_changes_on_element(element: dict,
         # cast a list of elements with uris to a string with newlines
         new_value = "\n".join(i['uri'] for i in  new_value)
         original_value = "\n".join(i['uri'] for i in  original_value)
-
-    if new_value == original_value:
-        return
+    new_value = force_str(new_value)
+    original_value = force_str(original_value)
+    dmp = diff_match_patch()
+    diff = dmp.diff_main(original_value, new_value)
+    dmp.diff_cleanupSemantic(diff)
+    changed: bool = any(i[0] != dmp.DIFF_EQUAL for i in diff)
     #  TODO maybe rename updated to new
-    changes =  {'current': original_value, 'updated': new_value}
+    changes = {'current': original_value, 'updated': new_value, 'changed': changed}
     if element['updated_and_changed'].get(element_field) is None:
         element['updated_and_changed'][element_field] = changes
     else:
@@ -386,9 +391,10 @@ def set_reverse_m2m_through_instance(instance, element, field_name=None, source_
         return
     if not all([source_name, target_name, through_name]):
         return
-
     target_elements = element.get(field_name) or []
     if isinstance(target_elements, str):
+        target_elements = [target_elements]
+    elif isinstance(target_elements, dict):
         target_elements = [target_elements]
 
     model_info = model_meta.get_field_info(instance)
