@@ -1,13 +1,14 @@
 from pathlib import Path
 
+import pytest
+
 from rdmo.domain.models import Attribute
 from rdmo.management.imports import import_elements
 
-from .helpers_import_elements import (
-    _test_helper_change_fields_elements,
-)
+from .helpers_import_elements import _test_helper_change_fields_elements, _test_helper_filter_updated_and_changed
 from .helpers_xml import read_xml_and_parse_to_elements
 
+fields_to_be_changed = (('comment',),)
 
 def test_create_domain(db, settings):
     Attribute.objects.all().delete()
@@ -33,16 +34,18 @@ def test_update_domain(db, settings):
     assert all(element['updated'] is True for element in imported_elements)
 
 
-def test_update_attributes_with_changed_fields(db, settings):
+@pytest.mark.parametrize('updated_fields', fields_to_be_changed)
+def test_update_attributes_with_changed_fields(db, settings, updated_fields):
     _change_count = Attribute.objects.count() / 2
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'attributes.xml'
     elements, root = read_xml_and_parse_to_elements(xml_file)
     # import initial elements from xml
     _el = import_elements(elements, save=True)
     # update the elements and call import again
-    updated_elements, changed_elements = _test_helper_change_fields_elements(elements, n=_change_count)
+    updated_elements = _test_helper_change_fields_elements(elements, fields_to_update=updated_fields, n=_change_count)
+    changed_elements = _test_helper_filter_updated_and_changed(updated_elements.values(), updated_fields=updated_fields)
     imported_elements = import_elements(updated_elements)
-    imported_and_changed = list(filter(lambda x: x.get('updated_and_changed'), imported_elements))
+    imported_and_changed = _test_helper_filter_updated_and_changed(imported_elements, updated_fields=updated_fields)
 
     assert len(root) == len(imported_elements) == 86
     assert all(element['created'] is False for element in imported_elements)
