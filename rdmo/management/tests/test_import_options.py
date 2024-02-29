@@ -12,7 +12,7 @@ from .helpers_import_elements import (
 from .helpers_models import delete_all_objects
 from .helpers_xml import read_xml_and_parse_to_elements
 
-imported_update_changes = [None]
+fields_to_be_changed = (('comment',),)
 
 def test_create_optionsets(db, settings):
     delete_all_objects([OptionSet, Option])
@@ -39,8 +39,8 @@ def test_update_optionsets(db, settings):
     assert all(element['updated'] is True for element in imported_elements)
 
 
-@pytest.mark.parametrize('update_dict', imported_update_changes)
-def test_update_optionsets_with_changed_fields(db, settings, update_dict):
+@pytest.mark.parametrize('updated_fields', fields_to_be_changed)
+def test_update_optionsets_with_changed_fields(db, settings, updated_fields):
     delete_all_objects([OptionSet, Option])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'optionsets.xml'
@@ -49,10 +49,11 @@ def test_update_optionsets_with_changed_fields(db, settings, update_dict):
     assert len(root) == len(imported_elements) == 13
     # start test with fresh options in db
     _n_change = int(Option.objects.count() / 2)
-    elements, changed_elements = _test_helper_change_fields_elements(elements, update_dict=update_dict, n=7)
+    elements = _test_helper_change_fields_elements(elements, fields_to_update=updated_fields, n=7)
+    changed_elements = _test_helper_filter_updated_and_changed(elements.values(), updated_fields=updated_fields)
     imported_elements = import_elements(elements)
     assert len(root) == len(imported_elements) == 13
-    imported_and_changed = _test_helper_filter_updated_and_changed(imported_elements)
+    imported_and_changed = _test_helper_filter_updated_and_changed(imported_elements, updated_fields=updated_fields)
     assert all(element['created'] is False for element in imported_elements)
     assert all(element['updated'] is True for element in imported_elements)
     assert len(imported_and_changed) == len(changed_elements)
@@ -85,8 +86,8 @@ def test_update_options(db, settings):
     assert all(element['updated'] is True for element in imported_elements)
 
 
-@pytest.mark.parametrize('update_dict', imported_update_changes)
-def test_update_options_with_changed_fields(db, settings, update_dict):
+@pytest.mark.parametrize('updated_fields', fields_to_be_changed)
+def test_update_options_with_changed_fields(db, settings, updated_fields):
     delete_all_objects([OptionSet, Option])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'options.xml'
@@ -94,9 +95,10 @@ def test_update_options_with_changed_fields(db, settings, update_dict):
     imported_elements = import_elements(elements)
     assert len(root) == len(imported_elements) == 9
     # start test with fresh options in db
-    elements, changed_elements = _test_helper_change_fields_elements(elements, update_dict=update_dict, n=4)
+    elements = _test_helper_change_fields_elements(elements, fields_to_update=updated_fields, n=4)
+    changed_elements = _test_helper_filter_updated_and_changed(elements.values(), updated_fields=updated_fields)
     imported_elements = import_elements(elements)
-    imported_and_changed = _test_helper_filter_updated_and_changed(imported_elements)
+    imported_and_changed = _test_helper_filter_updated_and_changed(imported_elements, updated_fields=updated_fields)
     assert len(root) == len(imported_elements) == 9
     assert all(element['created'] is False for element in imported_elements)
     assert all(element['updated'] is True for element in imported_elements)

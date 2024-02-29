@@ -11,13 +11,7 @@ from .helpers_import_elements import (
 )
 from .helpers_xml import read_xml_and_parse_to_elements
 
-imported_update_changes = [
-    None,
-    {
-    'target_text' : 'test target_text {}',
-    'relation': 'notempty'
-    }
-]
+fields_to_be_changed = (('comment',),)
 
 def test_create_conditions(db, settings):
     Condition.objects.all().delete()
@@ -43,14 +37,16 @@ def test_update_conditions(db, settings):
     assert all(element['updated'] is True for element in imported_elements)
 
 
-@pytest.mark.parametrize('update_dict', imported_update_changes)
-def test_update_conditions_with_changed_fields(db, settings, update_dict):
+@pytest.mark.parametrize('updated_fields', fields_to_be_changed)
+def test_update_conditions_with_changed_fields(db, settings, updated_fields):
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'conditions.xml'
 
     elements, root = read_xml_and_parse_to_elements(xml_file)
-    elements, changed_elements = _test_helper_change_fields_elements(elements, update_dict=update_dict, n=7)
+    # breakpoint()
+    elements = _test_helper_change_fields_elements(elements, fields_to_update=updated_fields, n=7)
+    changed_elements = _test_helper_filter_updated_and_changed(elements.values(), updated_fields=updated_fields)
     imported_elements = import_elements(elements)
-    imported_and_changed = _test_helper_filter_updated_and_changed(imported_elements)
+    imported_and_changed = _test_helper_filter_updated_and_changed(imported_elements, updated_fields=updated_fields)
     assert len(root) == len(imported_elements) == 15
     assert all(element['created'] is False for element in imported_elements)
     assert all(element['updated'] is True for element in imported_elements)
