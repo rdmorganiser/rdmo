@@ -21,7 +21,7 @@ const ImportElement = ({ config, element, importActions }) => {
       <div className="pull-right">
         <WarningLink show={!isEmpty(element.warnings)} onClick={updateShowField} />
         <ErrorLink show={!isEmpty(element.errors)} onClick={updateShowField} />
-        <ShowUpdatedLink show={(!isEmpty(element.updated_and_changed) && !element.created)} onClick={updateShowField} />
+        <ShowUpdatedLink show={(element.changed && !element.created)} onClick={updateShowField} />
         <ShowLink show={element.show} onClick={updateShowField} />
 
       </div>
