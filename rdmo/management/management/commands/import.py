@@ -2,7 +2,7 @@ import logging
 
 from django.core.management.base import BaseCommand, CommandError
 
-from rdmo.core.xml import XmlParser
+from rdmo.core.xml import XmlToElementsParser
 from rdmo.management.imports import import_elements
 
 logger = logging.getLogger(__name__)
@@ -16,7 +16,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         try:
-            xml_parser = XmlParser(file_name=options['xmlfile'])
+            xml_parser = XmlToElementsParser(file_name=options['xmlfile'])
         except CommandError as e:
             logger.info('Import failed with XML parsing errors.')
             raise CommandError(str(e)) from e
