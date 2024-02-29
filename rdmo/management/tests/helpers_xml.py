@@ -1,5 +1,5 @@
 
-from rdmo.core.xml import XmlParser
+from rdmo.core.xml import XmlToElementsParser
 
 xml_error_files = [
     ('file-does-not-exist.xml', 'may not be blank'),
@@ -11,7 +11,7 @@ xml_error_files = [
 
 def read_xml_and_parse_to_elements(xml_file):
 
-    xml_parser = XmlParser(file_name=xml_file)
+    xml_parser = XmlToElementsParser(file_name=xml_file)
     if xml_parser.errors:
         _msg = "\n".join(xml_parser.errors)
         raise ValueError(f"This test function should NOT raise any Exceptions. {_msg!s}")
