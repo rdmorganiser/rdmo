@@ -1,6 +1,7 @@
 import logging
 import tempfile
 import time
+from collections import defaultdict
 from dataclasses import dataclass, field
 from os.path import join as pj
 from pathlib import Path
@@ -65,23 +66,45 @@ def make_import_info_msg(verbose_name: str, created: bool, uri: Optional[str]=No
     return f"{verbose_name} {uri} updated"
 
 
+def track_messages_on_element(element: dict, element_field: str,
+                              warning: Optional[str]=None, error: Optional[str]=None):
+    if element['updated_and_changed'].get(element_field) is None:
+        element['updated_and_changed'][element_field] = {}
+        element['updated_and_changed'][element_field]['errors'] = []
+        element['updated_and_changed'][element_field]['warnings'] = defaultdict(list)
+
+    if warning is not None:
+        if 'warning' not in element['updated_and_changed'][element_field]:
+            element['updated_and_changed'][element_field]['warnings'] = defaultdict(list)
+        element['updated_and_changed'][element_field]['warnings'][element['uri']].append(warning)
+    if error is not None:
+        if 'error' not in element['updated_and_changed'][element_field]:
+            element['updated_and_changed'][element_field]['errors'] = []
+        element['updated_and_changed'][element_field]['errors'].append(error)
+
+
 def track_changes_on_element(element: dict,
                              element_field: str,
-                             new_value: Union[str,List],
-                             instance_field: Optional[str]=None,
-                             original=None,
-                             original_value: Optional[Union[str,List]]=None):
+                             new_value: Union[str,List[str]],
+                             instance_field: Optional[str] = None,
+                             original = None,
+                             original_value: Optional[Union[str, List[str]]] = None):
     if original is None and original_value is None:
         return
 
+    js_diff_viewer_props = {}
+
     _get_field = element_field if instance_field is None else instance_field
     if original_value is None:
-        original_value = force_str(getattr(original, _get_field, ''))
+        original_value = getattr(original, _get_field, '')
 
     if isinstance(new_value, list) and isinstance(original_value, list):
-        # cast a list of elements with uris to a string with newlines
-        new_value = "\n".join(i['uri'] for i in  new_value)
-        original_value = "\n".join(i['uri'] for i in  original_value)
+        # cast a list of strings with uris to a string with newlines
+        new_value = "\n".join(new_value)
+        original_value = "\n".join(original_value)
+        js_diff_viewer_props['hideLineNumbers'] = False
+        js_diff_viewer_props['splitView'] = False
+
     new_value = force_str(new_value)
     original_value = force_str(original_value)
     dmp = diff_match_patch()
@@ -89,7 +112,11 @@ def track_changes_on_element(element: dict,
     dmp.diff_cleanupSemantic(diff)
     changed: bool = any(i[0] != dmp.DIFF_EQUAL for i in diff)
     #  TODO maybe rename updated to new
-    changes = {'current': original_value, 'updated': new_value, 'changed': changed}
+    changes = {'current': original_value,
+               'updated': new_value,
+               'changed': changed
+               }
+    changes.update(js_diff_viewer_props)
     if element['updated_and_changed'].get(element_field) is None:
         element['updated_and_changed'][element_field] = changes
     else:
@@ -183,6 +210,7 @@ def set_foreign_field(instance, field_name, element, uploaded_uris=None, origina
         )
         logger.info(message)
         element['errors'][element.get('uri')].append(message)
+        track_messages_on_element(element, field_name, error=message)
         return
 
     foreign_uri = foreign_element['uri']
@@ -201,6 +229,7 @@ def set_foreign_field(instance, field_name, element, uploaded_uris=None, origina
         )
         logger.info(message)
         element['warnings'][foreign_uri].append(message)
+        track_messages_on_element(element, field_name, warning=message)
     try:
         if foreign_instance is not None:
             setattr(instance, field_name, foreign_instance)
@@ -219,6 +248,7 @@ def set_foreign_field(instance, field_name, element, uploaded_uris=None, origina
             )
         logger.info(message)
         element['errors'][foreign_uri].append(message)
+        track_messages_on_element(element, field_name, error=message)
 
 
 def set_extra_field(instance, field_name, element, questions_widget_types=None, original=None) -> None:
@@ -243,11 +273,11 @@ def set_extra_field(instance, field_name, element, questions_widget_types=None, 
             )
             logger.info(message)
             element['errors'].append(message)
+            track_messages_on_element(element, field_name, error=message)
 
     setattr(instance, field_name, extra_value)
     # track changes
-    track_changes_on_element(element, field_name,
-                                 extra_value, original=original)
+    track_changes_on_element(element, field_name, extra_value, original=original)
 
 def track_changes_m2m_instances(element, field_name,
                                 foreign_instances, original=None):
@@ -256,46 +286,10 @@ def track_changes_m2m_instances(element, field_name,
     original_m2m_instance = getattr(original, field_name)
     if original_m2m_instance is None:
         return
-    original_m2m_uris = original_m2m_instance.values_list('uri', flat=True)
+    original_m2m_uris = list(original_m2m_instance.values_list('uri', flat=True))
     foreign_uris = [i.uri for i in foreign_instances]
     track_changes_on_element(element, field_name, foreign_uris,
                              original_value=original_m2m_uris)
-
-
-def set_m2m_instances(instance, element, field_name, original=None, save=None):
-    if field_name not in element:
-        return
-
-    foreign_elements = element.get(field_name, [])
-
-    if not foreign_elements:
-        getattr(instance, field_name).clear()
-        return
-
-    foreign_instances = []
-
-    model_info = model_meta.get_field_info(instance)
-    foreign_model = model_info.forward_relations[field_name].related_model
-
-    for foreign_element in foreign_elements:
-        foreign_uri = foreign_element.get('uri')
-
-        try:
-            foreign_instance = foreign_model.objects.get(uri=foreign_uri)
-            foreign_instances.append(foreign_instance)
-        except foreign_model.DoesNotExist:
-            message = '{foreign_model} {foreign_uri} for {instance_model} {instance_uri} does not exist.'.format(
-                foreign_model=foreign_model._meta.object_name,
-                foreign_uri=foreign_uri,
-                instance_model=instance._meta.object_name,
-                instance_uri=element.get('uri')
-            )
-            logger.info(message)
-            element['warnings'][foreign_uri].append(message)
-    if save:
-        getattr(instance, field_name).set(foreign_instances)
-    track_changes_m2m_instances(element, field_name,
-                                foreign_instances, original=original)
 
 
 def set_m2m_through_instances(instance, element, field_name=None, source_name=None,
@@ -318,6 +312,8 @@ def set_m2m_through_instances(instance, element, field_name=None, source_name=No
     _track_changes = {}
     _track_changes['new_data'] = []
     _track_changes['current_data'] = []
+
+
     if original is not None:
         try:
             for _order, _through_instance in enumerate(getattr(original, field_name).all()):
@@ -370,18 +366,62 @@ def set_m2m_through_instances(instance, element, field_name=None, source_name=No
             )
             logger.info(message)
             element['warnings'][target_uri].append(message)
+            track_messages_on_element(element, field_name, warning=message)
     if save:
         # remove the remainders of the items list
         for through_instance in through_instances:
             if getattr(through_instance, target_name).uri_prefix == instance.uri_prefix:
                 through_instance.delete()
+    new_instance_data = sorted(_track_changes['new_data'], key=lambda k: k['order'])
+    original_instance_data = sorted(_track_changes['current_data'], key=lambda k: k['order'])
+    track_changes_on_m2m_through_instances(element, field_name, original_instance_data, new_instance_data)
+
+def track_changes_on_m2m_through_instances(element, field_name, original_instance_data, new_instance_data):
     # sort the tracked changes by order in-place
-    _track_changes['new'] = sorted(_track_changes['new_data'], key=lambda k: k['order'])
-    _track_changes['current'] = sorted(_track_changes['current_data'], key=lambda k: k['order'])
-    _store = {'new_data' : _track_changes['new_data'],  'current_data' : _track_changes['current_data']}
+    _store = {'new_data': new_instance_data,  'current_data': original_instance_data}
     element['updated_and_changed'][field_name] = _store
-    track_changes_on_element(element, field_name, _track_changes['new'],
-                             original_value=_track_changes['current'])
+    new_values = [i['uri'] for i in new_instance_data]
+    original_values = [i['uri'] for i in original_instance_data]
+    track_changes_on_element(element, field_name, new_values, original_value=original_values)
+
+
+def set_m2m_instances(instance, element, field_name, original=None, save=None):
+    if field_name not in element:
+        return
+
+    foreign_elements = element.get(field_name, [])
+
+    if not foreign_elements:
+        getattr(instance, field_name).clear()
+        return
+
+    foreign_instances = []
+
+    model_info = model_meta.get_field_info(instance)
+    foreign_model = model_info.forward_relations[field_name].related_model
+
+    for foreign_element in foreign_elements:
+        foreign_uri = foreign_element.get('uri')
+
+        try:
+            foreign_instance = foreign_model.objects.get(uri=foreign_uri)
+            foreign_instances.append(foreign_instance)
+        except foreign_model.DoesNotExist:
+            message = '{foreign_model} {foreign_uri} for {instance_model} {instance_uri} does not exist.'.format(
+                foreign_model=foreign_model._meta.object_name,
+                foreign_uri=foreign_uri,
+                instance_model=instance._meta.object_name,
+                instance_uri=element.get('uri')
+            )
+            logger.info(message)
+            element['warnings'][foreign_uri].append(message)
+            track_messages_on_element(element, field_name, warning=message)
+    if save:
+        getattr(instance, field_name).set(foreign_instances)
+    track_changes_m2m_instances(element, field_name,
+                                foreign_instances, original=original)
+
+
 
 
 def set_reverse_m2m_through_instance(instance, element, field_name=None, source_name=None,
@@ -429,6 +469,7 @@ def set_reverse_m2m_through_instance(instance, element, field_name=None, source_
                 )
                 logger.info(message)
                 element['errors'].append(message)
+                track_messages_on_element(element, field_name, error=message)
                 continue
             if save:
                 through_instance, created = through_model.objects.get_or_create(**{
@@ -449,36 +490,38 @@ def set_reverse_m2m_through_instance(instance, element, field_name=None, source_
             )
             logger.info(message)
             element['warnings'][target_uri].append(message)
+            track_messages_on_element(element, field_name, warning=message)
     # sort the tracked changes by order in-place
-    _track_changes['new'] = sorted(_track_changes['new_data'], key=lambda k: k['order'])
-    _track_changes['current'] = sorted(_track_changes['current_data'], key=lambda k: k['order'])
-    track_changes_on_element(element, field_name, _track_changes['new'],
-                             original_value=_track_changes['current'])
+    new_instance_data = sorted(_track_changes['new_data'], key=lambda k: k['order'])
+    original_instance_data = sorted(_track_changes['current_data'], key=lambda k: k['order'])
+    track_changes_on_m2m_through_instances(element, field_name, original_instance_data, new_instance_data)
 
 
 def validate_instance(instance, element, *validators):
     exception_message = None
-    try:
-        instance.full_clean()
-        for validator in validators:
-            validator(instance if instance.id else None)(vars(instance))
-    except ValidationError as e:
+    instance.full_clean()
+    for validator in validators:
         try:
-            exception_message = '; '.join(['{}: {}'.format(key, ', '.join(messages))
-                                           for key, messages in e.message_dict.items()])
-        except AttributeError:
-            exception_message = ''.join(e.messages)
-    except ObjectDoesNotExist as e:
-        exception_message = e
-    finally:
-        if exception_message is not None:
-            message = '{instance_model} {instance_uri} cannot be imported ({exception}).'.format(
-                instance_model=instance._meta.object_name,
-                instance_uri=element.get('uri'),
-                exception=exception_message
-            )
-            logger.info(message)
-            element['errors'].append(message)
+            validator(instance if instance.id else None)(vars(instance))
+        except ValidationError as e:
+            try:
+                exception_message = '; '.join(['{}: {}'.format(key, ', '.join(messages))
+                                               for key, messages in e.message_dict.items()])
+            except AttributeError:
+                exception_message = ''.join(e.messages)
+        except ObjectDoesNotExist as e:
+            exception_message = e
+        finally:
+            if exception_message is not None:
+                message = '{instance_model} {instance_uri} cannot be imported ({exception}).'.format(
+                    instance_model=instance._meta.object_name,
+                    instance_uri=element.get('uri'),
+                    exception=exception_message
+                )
+                logger.info(message)
+                _key = validator.__qualname__
+                element['errors'].append(message)
+                track_messages_on_element(element, _key, error=message)
 
 
 def check_permissions(instance: models.Model, element_uri: str, user: models.Model) -> Optional[str]:
