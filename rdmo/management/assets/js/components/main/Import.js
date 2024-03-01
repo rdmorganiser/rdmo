@@ -13,7 +13,7 @@ import get from 'lodash/get'
 const Import = ({ config, imports, configActions, importActions }) => {
   const { file, elements, success } = imports
 
-  const updatedAndChangedElements = elements.filter(element => element.updated && !isEmpty(element.updated_and_changed))
+  const updatedAndChangedElements = elements.filter(element => element.updated && element.changed)
 
   const updatedElements = elements.filter(element => element.updated)
   const createdElements = elements.filter(element => element.created)
