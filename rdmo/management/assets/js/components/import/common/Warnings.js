@@ -4,29 +4,30 @@ import PropTypes from 'prop-types'
 import uniqueId from 'lodash/uniqueId'
 import {codeClass} from '../../../constants/elements'
 
-const Warnings = ({element, success = false}) => {
-  const listWarningMessages = Object.entries(element.warnings).map(([uri, messages]) => {
-    return (
-      <li key={uniqueId('warning-uri-')}><code className={codeClass['domain.attribute']}>{uri}</code>
-        <ul className="list-unstyled">
-          {
-            messages.map(message => {
-              return (
-                <li className="text-warning" key={uniqueId('warning-uri-message')}>{message}</li>
-              )
-            })
-          }
-        </ul>
-      </li>
-    )
-  })
+
+const Warnings = ({element, showTitle = false, shouldShowURI = true}) => {
+  const generateWarningMessagesForUri = (messages, key) =>
+    messages.map(message => <li className="text-warning" key={key}>{message}</li>)
+
+  const prepareWarningsList = (warningsObj) =>
+    Object.entries(warningsObj).map(([uri, messages]) => (
+      <ul className="list-unstyled" key={uniqueId('warning-uri-list')}>
+        {shouldShowURI &&
+          <li key={uniqueId('warning-uri-')}>
+            <code className={codeClass['domain.attribute']}>{uri}</code>
+          </li>
+        }
+        {generateWarningMessagesForUri(messages, uniqueId('warning-uri-message'))}
+      </ul>
+    ))
+
+  const listWarningMessages = prepareWarningsList(element.warnings)
 
   return (
     <div className="row text-warning mt-10">
-      {
-        success === true && listWarningMessages.length > 0 &&
+      {showTitle === true && listWarningMessages.length > 0 &&
         <div className="col-sm-3 text-right">
-          {gettext('Warnings')}
+          {'Warnings'}
         </div>
       }
       <div className="col-sm-9">
@@ -36,9 +37,11 @@ const Warnings = ({element, success = false}) => {
   )
 }
 
-Warnings.propTypes = {
-  element: PropTypes.object.isRequired,
-  success: PropTypes.bool.isRequired
-}
 
-export default Warnings
+  Warnings.propTypes = {
+    element: PropTypes.object.isRequired,
+    showTitle: PropTypes.bool.isRequired,
+    shouldShowURI: PropTypes.bool,
+  }
+
+  export default Warnings
