@@ -6,7 +6,6 @@ import {getUriPrefixes} from '../../../utils/filter'
 import {Checkbox} from '../../common/Checkboxes'
 
 const ImportFilters = ({ config, elements, updatedAndChanged, filteredElements, configActions }) => {
-  console.log('importFilter', updatedAndChanged, elements)
   const updateFilterString = (value) => configActions.updateConfig('filter.import.elements.search', value)
   const getValueFilterString = () => get(config, 'filter.import.elements.search', '')
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.import.elements.uri_prefix', value)

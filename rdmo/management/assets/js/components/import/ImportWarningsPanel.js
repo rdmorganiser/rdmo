@@ -15,10 +15,8 @@ const ImportWarningsPanel = ({ config, elements, configActions }) => {
   }
   const showWarnings = get(config, 'filter.import.warnings.show', false)
   const listWarnings = elements.map((element, index) => {
-              return (<Warnings key={index} element={element} showWarningTitle={true} success={false} />)
+              return (<Warnings key={index} element={element} showWarningTitle={true} showTitle={false} />)
               })
-  // const toggleImport = () => importActions.updateElement(element, {import: !element.import})
-  // const updateElement = (key, value) => importActions.updateElement(element, {[key]: value})
   return (
     <div className="panel panel-warning">
       <div className="panel-heading"><strong onClick={updateShowWarnings}>{gettext('Warnings')}{' '}({elements.length}){': '}</strong>
