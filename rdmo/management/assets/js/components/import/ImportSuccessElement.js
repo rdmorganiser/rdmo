@@ -24,7 +24,7 @@ const ImportSuccessElement = ({ element }) => {
         }
         {'.'}
       </p>
-        <Warnings element={element} success={true}/>
+        <Warnings element={element} showTitle={true}/>
       {element.errors.map(message => <p key={uniqueId()} className="text-danger">{message}</p>)}
     </li>
   )

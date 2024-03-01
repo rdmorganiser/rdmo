@@ -219,7 +219,7 @@ def strip_ns(tag, ns_map):
 def convert_elements(elements, version: Version):
     if not isinstance(version, Version):
         raise TypeError('Version should be a parsed version type. (parse(version))')
-    # pre_conversion_validate_legacy_elements(elements, version)
+    pre_conversion_validate_legacy_elements(elements, version)
     if version < parse('2.0.0'):
         elements = convert_legacy_elements(elements)
 
@@ -231,7 +231,7 @@ def convert_elements(elements, version: Version):
 
 def pre_conversion_validate_legacy_elements(elements, version: Version) -> None:
     if version < parse('2.0.0'):
-        _keys_in_elements = list(filter(lambda x: 'key' in x, elements.values()))
+        _keys_in_elements = list(filter(lambda x: 'key' in x and x['model'] != 'domain.attribute', elements.values()))
         if not _keys_in_elements:
             raise ValueError(f"Missing legacy elements, elements containing 'key' were expected for this XML with version {version}.")   # noqa: E501
 
