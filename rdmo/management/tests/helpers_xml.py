@@ -13,6 +13,6 @@ def read_xml_and_parse_to_elements(xml_file):
 
     xml_parser = XmlToElementsParser(file_name=xml_file)
     if xml_parser.errors:
-        _msg = "\n".join(xml_parser.errors)
+        _msg = "\n".join(map(str, xml_parser.errors))
         raise ValueError(f"This test function should NOT raise any Exceptions. {_msg!s}")
     return xml_parser.parsed_elements, xml_parser.root
