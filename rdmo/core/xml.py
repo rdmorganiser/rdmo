@@ -29,14 +29,15 @@ models = {
 }
 
 DEFAULT_RDMO_XML_VERSION = '1.11.0'
+ELEMENTS_USING_KEY = {'domain.attribute'}
 
 
 @dataclass
 class XmlToElementsParser:
 
-    file_name:str = None
+    file_name: str = None
     # post init attributes
-    file:Path = None  # will be set from file_name
+    file: Path = None  # will be set from file_name
     root = None
     errors: list = field(default_factory=list)
     parsed_elements: OrderedDict = field(default_factory=OrderedDict)
@@ -101,7 +102,7 @@ class XmlToElementsParser:
 
         # step 3.1: validate elements for legacy versions
         try:
-            pre_conversion_validate_legacy_elements(elements, root_version)
+            pre_conversion_validate_missing_key_in_legacy_elements(elements, root_version)
         except ValueError as e:
             logger.info('Import failed with ValueError (%s)' % e)
             self.errors.append(_('XML Parsing Error') + f': {e!s}')
@@ -219,8 +220,8 @@ def strip_ns(tag, ns_map):
 def convert_elements(elements, version: Version):
     if not isinstance(version, Version):
         raise TypeError('Version should be a parsed version type. (parse(version))')
-    pre_conversion_validate_legacy_elements(elements, version)
     if version < parse('2.0.0'):
+        pre_conversion_validate_missing_key_in_legacy_elements(elements, version)
         elements = convert_legacy_elements(elements)
 
     if version < parse('2.1.0'):
@@ -229,11 +230,17 @@ def convert_elements(elements, version: Version):
     return elements
 
 
-def pre_conversion_validate_legacy_elements(elements, version: Version) -> None:
+def pre_conversion_validate_missing_key_in_legacy_elements(elements, version: Version) -> None:
     if version < parse('2.0.0'):
-        _keys_in_elements = list(filter(lambda x: 'key' in x and x['model'] != 'domain.attribute', elements.values()))
-        if not _keys_in_elements:
-            raise ValueError(f"Missing legacy elements, elements containing 'key' were expected for this XML with version {version}.")   # noqa: E501
+        models_in_elements = {i['model'] for i in elements.values()}
+        if models_in_elements <= ELEMENTS_USING_KEY:
+            # xml contains only domain.attribute or is empty
+            return
+        # inspect the elements for missing 'key' fields
+        elements_to_inspect = filter(lambda x: x['model'] not in ELEMENTS_USING_KEY, elements.values())
+        inspected_elements_containing_key = list(filter(lambda x: 'key' in x, elements_to_inspect))
+        if not inspected_elements_containing_key:
+            raise ValueError(f"Missing legacy elements, elements containing 'key' were expected for this XML with version {version} and elements {models_in_elements}.")   # noqa: E501
 
 
 def convert_legacy_elements(elements):
