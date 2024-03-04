@@ -1,13 +1,6 @@
 from rdmo.core.imports import ElementImportHelper, ThroughInstanceMapper
 
 from .models import Catalog, Page, Question, QuestionSet, Section
-from .serializers.v1 import (
-    CatalogSerializer,
-    PageSerializer,
-    QuestionSerializer,
-    QuestionSetSerializer,
-    SectionSerializer,
-)
 from .validators import (
     CatalogLockedValidator,
     CatalogUniqueURIValidator,
@@ -26,7 +19,6 @@ import_helper_catalog = ElementImportHelper(
     model_path="questions.catalog",
     validators=(CatalogLockedValidator, CatalogUniqueURIValidator),
     lang_fields=('help', 'title'),
-    serializer = CatalogSerializer,
     extra_fields = ('order', 'available'),
     m2m_through_instance_fields=[
         ThroughInstanceMapper(
@@ -42,7 +34,6 @@ import_helper_section = ElementImportHelper(
     model_path="questions.section",
     validators=(SectionLockedValidator, SectionUniqueURIValidator),
     lang_fields=('title',),
-    serializer = SectionSerializer,
     m2m_through_instance_fields=[
         ThroughInstanceMapper(
             field_name='pages', source_name='section',
@@ -63,7 +54,6 @@ import_helper_page = ElementImportHelper(
     validators=(PageLockedValidator, PageUniqueURIValidator),
     lang_fields=('help', 'title', 'verbose_name'),
     foreign_fields=('attribute',),
-    serializer = PageSerializer,
     extra_fields = ('is_collection',),
     m2m_instance_fields = ('conditions', ),
     m2m_through_instance_fields=[
@@ -90,7 +80,6 @@ import_helper_questionset = ElementImportHelper(
     validators=(QuestionSetLockedValidator, QuestionSetUniqueURIValidator),
     lang_fields=('help', 'title', 'verbose_name'),
     foreign_fields=('attribute',),
-    serializer = QuestionSetSerializer,
     extra_fields = ('is_collection',),
     m2m_instance_fields=('conditions', ),
 
@@ -122,7 +111,6 @@ import_helper_question = ElementImportHelper(
     validators=(QuestionLockedValidator, QuestionUniqueURIValidator),
     lang_fields=('text', 'help', 'default_text', 'verbose_name'),
     foreign_fields=('attribute', 'default_option'),
-    serializer=QuestionSerializer,
     extra_fields=('is_collection', 'is_optional', 'default_external_id',
                   'widget_type', 'value_type', 'maximum', 'minimum', 'step',
                   'unit', 'width'),

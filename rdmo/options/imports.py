@@ -1,7 +1,6 @@
 from rdmo.core.imports import ElementImportHelper, ThroughInstanceMapper
 
 from .models import Option, OptionSet
-from .serializers.v1 import OptionSerializer, OptionSetSerializer
 from .validators import (
     OptionLockedValidator,
     OptionSetLockedValidator,
@@ -13,7 +12,6 @@ import_helper_optionset = ElementImportHelper(
     model = OptionSet,
     model_path = "options.optionset",
     validators = (OptionSetLockedValidator, OptionSetUniqueURIValidator),
-    serializer = OptionSetSerializer,
     extra_fields = ('order', 'provider_key'),
     m2m_instance_fields = ('conditions', ),
     m2m_through_instance_fields = [
@@ -30,8 +28,7 @@ import_helper_option = ElementImportHelper(
     model = Option,
     model_path = "options.option",
     validators = (OptionLockedValidator, OptionUniqueURIValidator),
-    lang_fields = ('text','help','view_text'),
-    serializer = OptionSerializer,
+    lang_fields = ('text', 'help', 'view_text'),
     extra_fields = ('additional_input',),
     reverse_m2m_through_instance_fields = [
         ThroughInstanceMapper(
