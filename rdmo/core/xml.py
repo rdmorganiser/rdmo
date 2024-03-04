@@ -14,7 +14,7 @@ from rdmo import __version__ as VERSION
 
 logger = logging.getLogger(__name__)
 
-models = {
+RDMO_MODELS = {
   'catalog': 'questions.catalog',
   'section': 'questions.section',
   'page': 'questions.page',
@@ -29,7 +29,7 @@ models = {
 }
 
 DEFAULT_RDMO_XML_VERSION = '1.11.0'
-ELEMENTS_USING_KEY = {'domain.attribute'}
+ELEMENTS_USING_KEY = {RDMO_MODELS['attribute']}
 
 
 @dataclass
@@ -145,7 +145,7 @@ def flat_xml_to_elements(root):
 
         element = {
             'uri': get_uri(node, ns_map),
-            'model': models[node.tag]
+            'model': RDMO_MODELS[node.tag]
         }
 
         for sub_node in node:
@@ -156,8 +156,8 @@ def flat_xml_to_elements(root):
                 element[tag] = {
                     'uri': sub_node.attrib[uri_attrib]
                 }
-                if sub_node.tag in models:
-                    element[tag]['model'] = models[sub_node.tag]
+                if sub_node.tag in RDMO_MODELS:
+                    element[tag]['model'] = RDMO_MODELS[sub_node.tag]
             elif 'lang' in sub_node.attrib:
                 # this node has the lang attribute!
                 element['{}_{}'.format(tag, sub_node.attrib['lang'])] = sub_node.text
@@ -168,8 +168,8 @@ def flat_xml_to_elements(root):
                     sub_element = {
                         'uri': sub_sub_node.attrib[uri_attrib]
                     }
-                    if sub_sub_node.tag in models:
-                        sub_element['model'] = models[sub_sub_node.tag]
+                    if sub_sub_node.tag in RDMO_MODELS:
+                        sub_element['model'] = RDMO_MODELS[sub_sub_node.tag]
                     if 'order' in sub_sub_node.attrib:
                         sub_element['order'] = sub_sub_node.attrib['order']
 
