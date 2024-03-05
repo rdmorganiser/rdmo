@@ -10,6 +10,7 @@ from django.http import HttpRequest
 
 from rdmo.conditions.imports import import_helper_condition
 from rdmo.core.imports import (
+    ELEMENT_DIFF_FIELD_NAME,
     check_permissions,
     get_or_return_instance,
     make_import_info_msg,
@@ -60,7 +61,7 @@ IMPORT_ELEMENT_INIT_DICT = {
         'updated': bool,
         'changed': bool,
         'changed_fields': list,
-        'updated_and_changed': dict,
+        ELEMENT_DIFF_FIELD_NAME: dict,
     }
 
 
@@ -77,6 +78,10 @@ def import_elements(uploaded_elements: Dict, save: bool = True, request: Optiona
         imported_elements.append(element)
     return imported_elements
 
+def _initialize_import_element_dict(element: Dict) -> None:
+    # initialize element dict with default values
+    for _k,_val in IMPORT_ELEMENT_INIT_DICT.items():
+        element[_k] = _val()
 
 
 def import_element(
@@ -95,9 +100,7 @@ def import_element(
     if model_path is None:
         return element
 
-    # initialize element dict with default values
-    for _k,_val in IMPORT_ELEMENT_INIT_DICT.items():
-        element[_k] = _val()
+    _initialize_import_element_dict(element)
 
     user = request.user if request is not None else None
     import_helper = ELEMENT_IMPORT_HELPERS[model_path]
@@ -132,7 +135,7 @@ def import_element(
     _updated = not _created
     element['created'] = _created
     element['updated'] = _updated
-    # dict element['updated_and_changed'] is filled by tracking changes
+    # dict element[ELEMENT_DIFF_FIELD_NAME] is filled by tracking changes
 
     element = strip_uri_prefix_endswith_slash(element)
     # start to set values on the instance
@@ -142,7 +145,7 @@ def import_element(
         setattr(instance, common_field, common_value)
         if _updated and original:
             # track changes for common fields
-            track_changes_on_element(element, common_field, common_value, original=original)
+            track_changes_on_element(element, common_field, new_value=common_value, original=original)
     # set language fields
     for lang_field_name in lang_field_names:
         set_lang_field(instance, lang_field_name, element, original=original)
@@ -171,8 +174,8 @@ def import_element(
             set_reverse_m2m_through_instance(instance, element, **asdict(reverse_m2m_fields),
                                              original=original, save=save)
     # set aggregated changes potentially to True and a list of changed fields
-    if _updated and element['updated_and_changed']:
-        set_updated_and_changed_meta_info(element)
+    if _updated and element[ELEMENT_DIFF_FIELD_NAME]:
+        set_element_diff_field_meta_info(element)
 
     if save and settings.MULTISITE:
         # could be optimized with a bulk_create of through model later
@@ -183,6 +186,7 @@ def import_element(
 
     return element
 
+
 def strip_uri_prefix_endswith_slash(element: dict) -> dict:
     # handle URI Prefix ending with slash
     if 'uri_prefix' not in element:
@@ -191,7 +195,7 @@ def strip_uri_prefix_endswith_slash(element: dict) -> dict:
         element['uri_prefix'] = element['uri_prefix'].rstrip('/')
     return element
 
-def set_updated_and_changed_meta_info(element: dict) -> dict:
-    changed_fields = {k: val for k, val in element['updated_and_changed'].items() if val['changed']}
+def set_element_diff_field_meta_info(element: dict) -> None:
+    changed_fields = {k: val for k, val in element[ELEMENT_DIFF_FIELD_NAME].items() if val['changed']}
     element['changed'] = bool(changed_fields)
     element['changed_fields'] = list(changed_fields.keys())
