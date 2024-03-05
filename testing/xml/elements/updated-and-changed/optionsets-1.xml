@@ -31,7 +31,6 @@
 			<option dc:uri="http://example.com/terms/options/one_two_three/three" order="1"/>
 			<option dc:uri="http://example.com/terms/options/one_two_three/two" order="2"/>
 			<option dc:uri="http://example.com/terms/options/one_two_three/one" order="3"/>
-            <option dc:uri="http://example.com/terms/options/one_two_three/four" order="4"/>
 		</options>
 		<conditions/>
 	</optionset>
