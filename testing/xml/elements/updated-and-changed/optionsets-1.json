@@ -1,0 +1,933 @@
+[
+	{
+		"uri": "http://example.com/terms/options/condition/other",
+		"model": "options.option",
+		"uri_prefix": "http://example.com/terms",
+		"uri_path": "condition/other",
+		"comment": null,
+		"text_en": "Other",
+		"help_en": null,
+		"text_de": "Sonstige",
+		"help_de": null,
+		"additional_input": "",
+		"warnings": {},
+		"errors": [],
+		"created": false,
+		"updated": true,
+		"changed": false,
+		"changed_fields": [],
+		"updated_and_changed": {
+			"uri_prefix": {
+				"current": "http://example.com/terms",
+				"updated": "http://example.com/terms",
+				"changed": false
+			},
+			"uri_path": {
+				"current": "condition/other",
+				"updated": "condition/other",
+				"changed": false
+			},
+			"comment": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"text_en": {
+				"current": "Other",
+				"updated": "Other",
+				"changed": false
+			},
+			"text_de": {
+				"current": "Sonstige",
+				"updated": "Sonstige",
+				"changed": false
+			},
+			"help_en": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"help_de": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"view_text_en": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"view_text_de": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			}
+		}
+	},
+	{
+		"uri": "http://example.com/terms/options/condition",
+		"model": "options.optionset",
+		"uri_prefix": "http://example.com/terms",
+		"uri_path": "condition",
+		"comment": null,
+		"provider_key": null,
+		"options": [
+			{
+				"uri": "http://example.com/terms/options/condition/other",
+				"model": "options.option",
+				"order": "1"
+			}
+		],
+		"conditions": [
+			{
+				"uri": "http://example.com/terms/conditions/optionset_bool_is_false",
+				"model": "conditions.condition"
+			}
+		],
+		"warnings": {
+			"http://example.com/terms/conditions/optionset_bool_is_false": [
+				"Condition http://example.com/terms/conditions/optionset_bool_is_false for OptionSet http://example.com/terms/options/condition does not exist."
+			]
+		},
+		"errors": [],
+		"created": false,
+		"updated": true,
+		"changed": true,
+		"changed_fields": [
+			"conditions"
+		],
+		"updated_and_changed": {
+			"uri_prefix": {
+				"current": "http://example.com/terms",
+				"updated": "http://example.com/terms",
+				"changed": false
+			},
+			"uri_path": {
+				"current": "condition",
+				"updated": "condition",
+				"changed": false
+			},
+			"comment": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"conditions": {
+				"errors": [],
+				"warnings": {
+					"http://example.com/terms/options/condition": [
+						"Condition http://example.com/terms/conditions/optionset_bool_is_false for OptionSet http://example.com/terms/options/condition does not exist."
+					]
+				},
+				"current": "http://example.com/terms/conditions/optionset_bool_is_true",
+				"updated": "",
+				"changed": true,
+				"hideLineNumbers": false,
+				"splitView": false
+			},
+			"options": {
+				"new_data": [
+					{
+						"uri": "http://example.com/terms/options/condition/other",
+						"model": "options.option",
+						"order": "1"
+					}
+				],
+				"current_data": [
+					{
+						"uri": "http://example.com/terms/options/condition/other",
+						"order": 0,
+						"model": "option"
+					}
+				],
+				"current": "http://example.com/terms/options/condition/other",
+				"updated": "http://example.com/terms/options/condition/other",
+				"changed": false,
+				"hideLineNumbers": false,
+				"splitView": false
+			}
+		}
+	},
+	{
+		"uri": "http://example.com/terms/options/one_two_three/three",
+		"model": "options.option",
+		"uri_prefix": "http://example.com/terms",
+		"uri_path": "one_two_three/three",
+		"comment": null,
+		"text_en": "Three",
+		"help_en": null,
+		"text_de": "Drei",
+		"help_de": null,
+		"additional_input": "",
+		"warnings": {},
+		"errors": [],
+		"created": false,
+		"updated": true,
+		"changed": false,
+		"changed_fields": [],
+		"updated_and_changed": {
+			"uri_prefix": {
+				"current": "http://example.com/terms",
+				"updated": "http://example.com/terms",
+				"changed": false
+			},
+			"uri_path": {
+				"current": "one_two_three/three",
+				"updated": "one_two_three/three",
+				"changed": false
+			},
+			"comment": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"text_en": {
+				"current": "Three",
+				"updated": "Three",
+				"changed": false
+			},
+			"text_de": {
+				"current": "Drei",
+				"updated": "Drei",
+				"changed": false
+			},
+			"help_en": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"help_de": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"view_text_en": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"view_text_de": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			}
+		}
+	},
+	{
+		"uri": "http://example.com/terms/options/one_two_three/two",
+		"model": "options.option",
+		"uri_prefix": "http://example.com/terms",
+		"uri_path": "one_two_three/two",
+		"comment": null,
+		"text_en": "Two",
+		"help_en": null,
+		"text_de": "Zwei",
+		"help_de": null,
+		"additional_input": "",
+		"warnings": {},
+		"errors": [],
+		"created": false,
+		"updated": true,
+		"changed": false,
+		"changed_fields": [],
+		"updated_and_changed": {
+			"uri_prefix": {
+				"current": "http://example.com/terms",
+				"updated": "http://example.com/terms",
+				"changed": false
+			},
+			"uri_path": {
+				"current": "one_two_three/two",
+				"updated": "one_two_three/two",
+				"changed": false
+			},
+			"comment": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"text_en": {
+				"current": "Two",
+				"updated": "Two",
+				"changed": false
+			},
+			"text_de": {
+				"current": "Zwei",
+				"updated": "Zwei",
+				"changed": false
+			},
+			"help_en": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"help_de": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"view_text_en": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"view_text_de": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			}
+		}
+	},
+	{
+		"uri": "http://example.com/terms/options/one_two_three/one",
+		"model": "options.option",
+		"uri_prefix": "http://example.com/terms",
+		"uri_path": "one_two_three/one",
+		"comment": null,
+		"text_en": "One",
+		"help_en": null,
+		"text_de": "Eins",
+		"help_de": null,
+		"additional_input": "",
+		"warnings": {},
+		"errors": [],
+		"created": false,
+		"updated": true,
+		"changed": false,
+		"changed_fields": [],
+		"updated_and_changed": {
+			"uri_prefix": {
+				"current": "http://example.com/terms",
+				"updated": "http://example.com/terms",
+				"changed": false
+			},
+			"uri_path": {
+				"current": "one_two_three/one",
+				"updated": "one_two_three/one",
+				"changed": false
+			},
+			"comment": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"text_en": {
+				"current": "One",
+				"updated": "One",
+				"changed": false
+			},
+			"text_de": {
+				"current": "Eins",
+				"updated": "Eins",
+				"changed": false
+			},
+			"help_en": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"help_de": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"view_text_en": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"view_text_de": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			}
+		}
+	},
+	{
+		"uri": "http://example.com/terms/options/one_two_three",
+		"model": "options.optionset",
+		"uri_prefix": "http://example.com/terms",
+		"uri_path": "one_two_three",
+		"comment": null,
+		"provider_key": null,
+		"options": [
+			{
+				"uri": "http://example.com/terms/options/one_two_three/three",
+				"model": "options.option",
+				"order": "1"
+			},
+			{
+				"uri": "http://example.com/terms/options/one_two_three/two",
+				"model": "options.option",
+				"order": "2"
+			},
+			{
+				"uri": "http://example.com/terms/options/one_two_three/one",
+				"model": "options.option",
+				"order": "3"
+			}
+		],
+		"conditions": null,
+		"warnings": {},
+		"errors": [],
+		"created": false,
+		"updated": true,
+		"changed": true,
+		"changed_fields": [
+			"options"
+		],
+		"updated_and_changed": {
+			"uri_prefix": {
+				"current": "http://example.com/terms",
+				"updated": "http://example.com/terms",
+				"changed": false
+			},
+			"uri_path": {
+				"current": "one_two_three",
+				"updated": "one_two_three",
+				"changed": false
+			},
+			"comment": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"options": {
+				"new_data": [
+					{
+						"uri": "http://example.com/terms/options/one_two_three/three",
+						"model": "options.option",
+						"order": "1"
+					},
+					{
+						"uri": "http://example.com/terms/options/one_two_three/two",
+						"model": "options.option",
+						"order": "2"
+					},
+					{
+						"uri": "http://example.com/terms/options/one_two_three/one",
+						"model": "options.option",
+						"order": "3"
+					}
+				],
+				"current_data": [
+					{
+						"uri": "http://example.com/terms/options/one_two_three/one",
+						"order": 0,
+						"model": "option"
+					},
+					{
+						"uri": "http://example.com/terms/options/one_two_three/two",
+						"order": 1,
+						"model": "option"
+					},
+					{
+						"uri": "http://example.com/terms/options/one_two_three/three",
+						"order": 2,
+						"model": "option"
+					}
+				],
+				"current": "http://example.com/terms/options/one_two_three/one\nhttp://example.com/terms/options/one_two_three/two\nhttp://example.com/terms/options/one_two_three/three",
+				"updated": "http://example.com/terms/options/one_two_three/three\nhttp://example.com/terms/options/one_two_three/two\nhttp://example.com/terms/options/one_two_three/one",
+				"changed": true,
+				"hideLineNumbers": false,
+				"splitView": false
+			}
+		}
+	},
+	{
+		"uri": "http://example.com/terms/options/one_two_three_other/textarea",
+		"model": "options.option",
+		"uri_prefix": "http://example.com/terms",
+		"uri_path": "one_two_three_other/textarea",
+		"comment": null,
+		"text_en": "Text",
+		"help_en": null,
+		"text_de": "Text",
+		"help_de": null,
+		"additional_input": "",
+		"warnings": {},
+		"errors": [],
+		"created": false,
+		"updated": true,
+		"changed": false,
+		"changed_fields": [],
+		"updated_and_changed": {
+			"uri_prefix": {
+				"current": "http://example.com/terms",
+				"updated": "http://example.com/terms",
+				"changed": false
+			},
+			"uri_path": {
+				"current": "one_two_three_other/textarea",
+				"updated": "one_two_three_other/textarea",
+				"changed": false
+			},
+			"comment": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"text_en": {
+				"current": "Text",
+				"updated": "Text",
+				"changed": false
+			},
+			"text_de": {
+				"current": "Text",
+				"updated": "Text",
+				"changed": false
+			},
+			"help_en": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"help_de": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"view_text_en": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"view_text_de": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			}
+		}
+	},
+	{
+		"uri": "http://example.com/terms/options/one_two_three_other/text",
+		"model": "options.option",
+		"uri_prefix": "http://example.com/terms",
+		"uri_path": "one_two_three_other/text",
+		"comment": null,
+		"text_en": "Text",
+		"help_en": null,
+		"text_de": "Text",
+		"help_de": null,
+		"additional_input": "",
+		"warnings": {},
+		"errors": [],
+		"created": false,
+		"updated": true,
+		"changed": false,
+		"changed_fields": [],
+		"updated_and_changed": {
+			"uri_prefix": {
+				"current": "http://example.com/terms",
+				"updated": "http://example.com/terms",
+				"changed": false
+			},
+			"uri_path": {
+				"current": "one_two_three_other/text",
+				"updated": "one_two_three_other/text",
+				"changed": false
+			},
+			"comment": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"text_en": {
+				"current": "Text",
+				"updated": "Text",
+				"changed": false
+			},
+			"text_de": {
+				"current": "Text",
+				"updated": "Text",
+				"changed": false
+			},
+			"help_en": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"help_de": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"view_text_en": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"view_text_de": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			}
+		}
+	},
+	{
+		"uri": "http://example.com/terms/options/one_two_three_other/three",
+		"model": "options.option",
+		"uri_prefix": "http://example.com/terms",
+		"uri_path": "one_two_three_other/three",
+		"comment": null,
+		"text_en": "Three - 1",
+		"help_en": null,
+		"text_de": "Drei - 1",
+		"help_de": null,
+		"additional_input": "",
+		"warnings": {},
+		"errors": [],
+		"created": false,
+		"updated": true,
+		"changed": true,
+		"changed_fields": [
+			"text_en",
+			"text_de"
+		],
+		"updated_and_changed": {
+			"uri_prefix": {
+				"current": "http://example.com/terms",
+				"updated": "http://example.com/terms",
+				"changed": false
+			},
+			"uri_path": {
+				"current": "one_two_three_other/three",
+				"updated": "one_two_three_other/three",
+				"changed": false
+			},
+			"comment": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"text_en": {
+				"current": "Three",
+				"updated": "Three - 1",
+				"changed": true
+			},
+			"text_de": {
+				"current": "Drei",
+				"updated": "Drei - 1",
+				"changed": true
+			},
+			"help_en": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"help_de": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"view_text_en": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"view_text_de": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			}
+		}
+	},
+	{
+		"uri": "http://example.com/terms/options/one_two_three_other/two",
+		"model": "options.option",
+		"uri_prefix": "http://example.com/terms",
+		"uri_path": "one_two_three_other/two",
+		"comment": null,
+		"text_en": "Two",
+		"help_en": null,
+		"text_de": "Zwei",
+		"help_de": null,
+		"additional_input": "",
+		"warnings": {},
+		"errors": [],
+		"created": false,
+		"updated": true,
+		"changed": false,
+		"changed_fields": [],
+		"updated_and_changed": {
+			"uri_prefix": {
+				"current": "http://example.com/terms",
+				"updated": "http://example.com/terms",
+				"changed": false
+			},
+			"uri_path": {
+				"current": "one_two_three_other/two",
+				"updated": "one_two_three_other/two",
+				"changed": false
+			},
+			"comment": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"text_en": {
+				"current": "Two",
+				"updated": "Two",
+				"changed": false
+			},
+			"text_de": {
+				"current": "Zwei",
+				"updated": "Zwei",
+				"changed": false
+			},
+			"help_en": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"help_de": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"view_text_en": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"view_text_de": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			}
+		}
+	},
+	{
+		"uri": "http://example.com/terms/options/one_two_three_other/one",
+		"model": "options.option",
+		"uri_prefix": "http://example.com/terms",
+		"uri_path": "one_two_three_other/one",
+		"comment": null,
+		"text_en": "One - 3",
+		"help_en": null,
+		"text_de": "Eins - 3",
+		"help_de": null,
+		"additional_input": "",
+		"warnings": {},
+		"errors": [],
+		"created": false,
+		"updated": true,
+		"changed": true,
+		"changed_fields": [
+			"text_en",
+			"text_de"
+		],
+		"updated_and_changed": {
+			"uri_prefix": {
+				"current": "http://example.com/terms",
+				"updated": "http://example.com/terms",
+				"changed": false
+			},
+			"uri_path": {
+				"current": "one_two_three_other/one",
+				"updated": "one_two_three_other/one",
+				"changed": false
+			},
+			"comment": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"text_en": {
+				"current": "One",
+				"updated": "One - 3",
+				"changed": true
+			},
+			"text_de": {
+				"current": "Eins",
+				"updated": "Eins - 3",
+				"changed": true
+			},
+			"help_en": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"help_de": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"view_text_en": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"view_text_de": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			}
+		}
+	},
+	{
+		"uri": "http://example.com/terms/options/one_two_three_other",
+		"model": "options.optionset",
+		"uri_prefix": "http://example.com/terms",
+		"uri_path": "one_two_three_other",
+		"comment": null,
+		"provider_key": null,
+		"options": [
+			{
+				"uri": "http://example.com/terms/options/one_two_three_other/textarea",
+				"model": "options.option",
+				"order": "1"
+			},
+			{
+				"uri": "http://example.com/terms/options/one_two_three_other/text",
+				"model": "options.option",
+				"order": "2"
+			},
+			{
+				"uri": "http://example.com/terms/options/one_two_three_other/three",
+				"model": "options.option",
+				"order": "3"
+			},
+			{
+				"uri": "http://example.com/terms/options/one_two_three_other/two",
+				"model": "options.option",
+				"order": "4"
+			},
+			{
+				"uri": "http://example.com/terms/options/one_two_three_other/one",
+				"model": "options.option",
+				"order": "5"
+			}
+		],
+		"conditions": null,
+		"warnings": {},
+		"errors": [],
+		"created": false,
+		"updated": true,
+		"changed": true,
+		"changed_fields": [
+			"options"
+		],
+		"updated_and_changed": {
+			"uri_prefix": {
+				"current": "http://example.com/terms",
+				"updated": "http://example.com/terms",
+				"changed": false
+			},
+			"uri_path": {
+				"current": "one_two_three_other",
+				"updated": "one_two_three_other",
+				"changed": false
+			},
+			"comment": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"options": {
+				"new_data": [
+					{
+						"uri": "http://example.com/terms/options/one_two_three_other/textarea",
+						"model": "options.option",
+						"order": "1"
+					},
+					{
+						"uri": "http://example.com/terms/options/one_two_three_other/text",
+						"model": "options.option",
+						"order": "2"
+					},
+					{
+						"uri": "http://example.com/terms/options/one_two_three_other/three",
+						"model": "options.option",
+						"order": "3"
+					},
+					{
+						"uri": "http://example.com/terms/options/one_two_three_other/two",
+						"model": "options.option",
+						"order": "4"
+					},
+					{
+						"uri": "http://example.com/terms/options/one_two_three_other/one",
+						"model": "options.option",
+						"order": "5"
+					}
+				],
+				"current_data": [
+					{
+						"uri": "http://example.com/terms/options/one_two_three_other/one",
+						"order": 0,
+						"model": "option"
+					},
+					{
+						"uri": "http://example.com/terms/options/one_two_three_other/two",
+						"order": 1,
+						"model": "option"
+					},
+					{
+						"uri": "http://example.com/terms/options/one_two_three_other/three",
+						"order": 2,
+						"model": "option"
+					},
+					{
+						"uri": "http://example.com/terms/options/one_two_three_other/text",
+						"order": 3,
+						"model": "option"
+					},
+					{
+						"uri": "http://example.com/terms/options/one_two_three_other/textarea",
+						"order": 4,
+						"model": "option"
+					}
+				],
+				"current": "http://example.com/terms/options/one_two_three_other/one\nhttp://example.com/terms/options/one_two_three_other/two\nhttp://example.com/terms/options/one_two_three_other/three\nhttp://example.com/terms/options/one_two_three_other/text\nhttp://example.com/terms/options/one_two_three_other/textarea",
+				"updated": "http://example.com/terms/options/one_two_three_other/textarea\nhttp://example.com/terms/options/one_two_three_other/text\nhttp://example.com/terms/options/one_two_three_other/three\nhttp://example.com/terms/options/one_two_three_other/two\nhttp://example.com/terms/options/one_two_three_other/one",
+				"changed": true,
+				"hideLineNumbers": false,
+				"splitView": false
+			}
+		}
+	},
+	{
+		"uri": "http://example.com/terms/options/plugin",
+		"model": "options.optionset",
+		"uri_prefix": "http://example.com/terms",
+		"uri_path": "plugin",
+		"comment": null,
+		"provider_key": "simple",
+		"options": null,
+		"conditions": null,
+		"warnings": {},
+		"errors": [],
+		"created": false,
+		"updated": true,
+		"changed": false,
+		"changed_fields": [],
+		"updated_and_changed": {
+			"uri_prefix": {
+				"current": "http://example.com/terms",
+				"updated": "http://example.com/terms",
+				"changed": false
+			},
+			"uri_path": {
+				"current": "plugin",
+				"updated": "plugin",
+				"changed": false
+			},
+			"comment": {
+				"current": "",
+				"updated": "",
+				"changed": false
+			},
+			"options": {
+				"new_data": [],
+				"current_data": [],
+				"current": "",
+				"updated": "",
+				"changed": false,
+				"hideLineNumbers": false,
+				"splitView": false
+			}
+		}
+	}
+]
