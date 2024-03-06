@@ -1,8 +1,8 @@
-import json
 from pathlib import Path
 
 import pytest
 
+from rdmo.core.imports import ELEMENT_DIFF_FIELD_NAME
 from rdmo.management.imports import import_elements
 from rdmo.options.models import Option, OptionSet
 
@@ -76,32 +76,42 @@ def test_update_optionsets_from_changed_xml(db, settings):
     elements_1, root_1 = read_xml_and_parse_to_elements(xml_file_1)
     imported_elements_1 = import_elements(elements_1, save=False)
 
-    # Assert, compare with pre-defined json
-    json_file_1 = xml_file_1.with_suffix(".json")
-    _from_json_imported_elements_1 = json.loads(json_file_1.read_text())
-
-    # assert imported_elements_1 == from_json_imported_elements_1
+    # Assert imported_elements_1
     changed_elements = [i for i in imported_elements_1 if i['changed']]
     warnings_elements = [i for i in imported_elements_1 if i['warnings']]
     assert len(changed_elements) == 5
     assert len(warnings_elements) == 1
 
     optionset_uri = "http://example.com/terms/options/one_two_three"
+    test_original_options = [
+        'http://example.com/terms/options/one_two_three/one',
+        'http://example.com/terms/options/one_two_three/two',
+        'http://example.com/terms/options/one_two_three/three',
+    ]
+    # change the order of the options, as in the xml
+    test_changed_options = test_original_options[::-1]
+    _original_value = "\n".join(test_original_options)
+    _new_value = "\n".join(test_changed_options)
     changed_uris = {i['uri']: i for i in changed_elements}
     assert optionset_uri in changed_uris
+    changed_element = changed_uris[optionset_uri]
+    assert "options" in changed_element['changed_fields']
+    assert changed_element[ELEMENT_DIFF_FIELD_NAME]['options']['current'] == _original_value
+    assert changed_element[ELEMENT_DIFF_FIELD_NAME]['options']['updated'] == _new_value
 
     # now save the elements_1
     _imported_elements_1_save = import_elements(elements_1, save=True)
-    test_ordered_options = [
-        'http://example.com/terms/options/one_two_three/three',
-        'http://example.com/terms/options/one_two_three/two',
-        'http://example.com/terms/options/one_two_three/one',
-    ]
     # get the ordered options (via .optionset_options) for this optionset from the db
     optionset_1 = OptionSet.objects.get(uri=optionset_uri)
     optionset_1_options = optionset_1.optionset_options.order_by('order').values_list('option__uri',flat=True)
-    for _test, _db in zip(test_ordered_options, optionset_1_options):
+    for _test, _db in zip(test_changed_options, optionset_1_options):
         assert _test == _db
+
+    # Import again and test that there are no changes detected
+    imported_elements_2 = import_elements(elements_1, save=False)
+    assert len([i for i in imported_elements_2 if i['changed']]) == 0
+    assert len([i for i in imported_elements_2 if i['warnings']]) == 1
+
 
 def test_create_options(db, settings):
     Option.objects.all().delete()
