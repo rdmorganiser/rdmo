@@ -17,7 +17,7 @@ from rest_framework.utils import model_meta
 
 from diff_match_patch import diff_match_patch
 
-from rdmo.core.constants import ELEMENT_COMMON_FIELDS, ELEMENT_IMPORT_EXTRA_FIELDS_DEFAULTS
+from rdmo.core.constants import ELEMENT_COMMON_FIELDS, ELEMENT_IMPORT_EXTRA_FIELDS_DEFAULTS, RDMO_MODELS
 from rdmo.core.utils import get_languages
 
 logger = logging.getLogger(__name__)
@@ -52,13 +52,22 @@ def generate_tempfile_name():
     return fn
 
 
-def get_or_return_instance(model: Callable, uri: Optional[str]=None) -> Tuple[models.Model, bool]:
+def get_or_return_instance(model: models.Model, uri: Optional[str]=None) -> Tuple[models.Model, bool]:
     if uri is None:
         return model(), True
     try:
         return model.objects.get(uri=uri), False
     except model.DoesNotExist:
         return model(), True
+    except model.MultipleObjectsReturned:
+        return model.objects.filter(uri=uri).first(), False
+
+def get_rdmo_model_path(target_name:str, field_name: str):
+    try:
+        return RDMO_MODELS[target_name]
+    except KeyError:
+        if 'parent' in target_name and 'questionset' in field_name:
+            return RDMO_MODELS[field_name]
 
 
 def make_import_info_msg(verbose_name: str, created: bool, uri: Optional[str]=None):
@@ -339,9 +348,9 @@ def set_m2m_through_instances(instance, element, field_name=None, source_name=No
         try:
             for _order, orig_field_instance in enumerate(getattr(original, through_name).order_by()):
                 _track_changes[CURRENT_DATA_FIELD].append({
-                    'uri': orig_field_instance.uri,
-                    'order': _order,
-                    'model': target_name
+                    'uri': getattr(orig_field_instance, target_name).uri,
+                    'order': orig_field_instance.order,
+                    'model': get_rdmo_model_path(target_name, field_name)
                 })
         except AttributeError:
             pass  # legacy elements miss the field_name
@@ -463,6 +472,7 @@ def set_reverse_m2m_through_instance(instance, element, field_name=None, source_
     through_model = model_info.reverse_relations[through_name].related_model
     through_info = model_meta.get_field_info(through_model)
     target_model = through_info.forward_relations[target_name].related_model
+
     _track_changes = {}
     _track_changes[NEW_DATA_FIELD] = []
     _track_changes[CURRENT_DATA_FIELD] = []
@@ -470,9 +480,9 @@ def set_reverse_m2m_through_instance(instance, element, field_name=None, source_
         try:
             for _order, _through_instance in enumerate(getattr(original, through_name).order_by()):
                 _track_changes[CURRENT_DATA_FIELD].append({
-                    'uri': _through_instance.uri,
-                    'order': _order,
-                    'model': target_name
+                    'uri': getattr(_through_instance, source_name).uri,
+                    'order': _through_instance.order,
+                    'model': get_rdmo_model_path(target_name, field_name),
                 })
         except AttributeError:
             pass  # legacy elements miss the field_name
