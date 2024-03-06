@@ -24,8 +24,8 @@ os.environ.setdefault("DJANGO_ALLOW_ASYNC_UNSAFE", "true")
 test_users = [('editor', 'editor')]
 
 @pytest.mark.parametrize("username, password", test_users)  # consumed by fixture
-def test_import_in_management(logged_in_user: Page) -> None:
-    """Test that each content type is available through the navigation."""
+def test_import_catalogs_in_management(logged_in_user: Page) -> None:
+    """Test that the catalogs.xml can be imported correctly."""
     delete_all_objects([Catalog, Section, PageModel, QuestionSet, Question])
 
     page = logged_in_user
@@ -49,11 +49,6 @@ def test_import_in_management(logged_in_user: Page) -> None:
     page.get_by_role("link", name="Hide all").click()
     expect(rows_displayed_in_ui).to_have_count(0)
     page.screenshot(path="screenshots/management-import-pre-import.png", full_page=True)
-    ## TODO test show changed elements
-    ## TODO test for filter changed elements
-    ## TODO test select changed elements
-    ## TODO test for warnings, errors
-
     # click the import button to start saving the instances to the db
     page.get_by_role("button", name="Import 148 elements").click()
     expect(page.get_by_role("heading", name="Import successful")).to_be_visible()
