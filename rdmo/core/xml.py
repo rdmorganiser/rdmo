@@ -11,22 +11,9 @@ import defusedxml.ElementTree as ET
 from packaging.version import Version, parse
 
 from rdmo import __version__ as VERSION
+from rdmo.core.constants import RDMO_MODELS
 
 logger = logging.getLogger(__name__)
-
-RDMO_MODELS = {
-  'catalog': 'questions.catalog',
-  'section': 'questions.section',
-  'page': 'questions.page',
-  'questionset': 'questions.questionset',
-  'question': 'questions.question',
-  'attribute': 'domain.attribute',
-  'optionset': 'options.optionset',
-  'option': 'options.option',
-  'condition': 'conditions.condition',
-  'task': 'tasks.task',
-  'view': 'views.view'
-}
 
 DEFAULT_RDMO_XML_VERSION = '1.11.0'
 ELEMENTS_USING_KEY = {RDMO_MODELS['attribute']}

@@ -99,3 +99,17 @@ ELEMENT_IMPORT_EXTRA_FIELDS_DEFAULTS = {
     'unit': '',
     'widget_type': 'text',
 }
+
+RDMO_MODELS = {
+  'catalog': 'questions.catalog',
+  'section': 'questions.section',
+  'page': 'questions.page',
+  'questionset': 'questions.questionset',
+  'question': 'questions.question',
+  'attribute': 'domain.attribute',
+  'optionset': 'options.optionset',
+  'option': 'options.option',
+  'condition': 'conditions.condition',
+  'task': 'tasks.task',
+  'view': 'views.view'
+}
