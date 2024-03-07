@@ -6,7 +6,6 @@ import { CodeLink, WarningLink, ErrorLink, ShowLink, ShowUpdatedLink } from '../
 import Errors from './common/Errors'
 import Fields from './common/Fields'
 import Form from './common/Form'
-import Warnings from './common/Warnings'
 
 import { codeClass, verboseNames } from '../../constants/elements'
 import { isEmpty } from 'lodash'
@@ -36,7 +35,6 @@ const ImportElement = ({ config, element, importActions }) => {
         element.show && <>
           <Form config={config} element={element} updateElement={updateElement} />
           <Fields element={element} />
-          <Warnings element={element} showTitle={false}/>
           <Errors element={element} />
         </>
       }
