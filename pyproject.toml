@@ -42,7 +42,7 @@ dependencies = [
   # in minor version updates anytime
   "defusedcsv~=2.0",
   "defusedxml~=0.7.1",
-  "django>=4.2,<6.0",
+  "django>=4.2,<5.0",
   "django-cleanup~=8.0",
   "django-compressor~=4.4",
   "django-extensions~=3.2",
