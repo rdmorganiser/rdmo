@@ -5,7 +5,6 @@ import isString from 'lodash/isString'
 import isUndefined from 'lodash/isUndefined'
 import truncate from 'lodash/truncate'
 import uniqueId from 'lodash/uniqueId'
-import isEmpty from 'lodash/isEmpty'
 
 
 import { codeClass } from '../../../constants/elements'
@@ -57,8 +56,9 @@ const Fields = ({ element }) => {
                   }
                 </div>
                 {
-                  isEmpty(element.errors) && !isEmpty(element.updated_and_changed) && element.updated &&
-                  key in element.updated_and_changed && <FieldsDiffs element={element} field={key}/>
+                  element.updated && element.changed &&
+                  key in element.updated_and_changed &&
+                  <FieldsDiffs element={element} field={key}/>
                   }
               </div>
             )
