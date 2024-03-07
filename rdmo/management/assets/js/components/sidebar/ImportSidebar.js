@@ -8,7 +8,7 @@ import Link from 'rdmo/core/assets/js/components/Link'
 const ImportSidebar = ({ config, imports, importActions }) => {
   const { elements, success } = imports
   const count = elements.filter(e => e.import).length
-  const updatedAndChangedElements = elements.filter(element => element.updated && !isEmpty(element.updated_and_changed))
+  const updatedAndChangedElements = elements.filter(element => element.updated && element.changed)
   const [uriPrefix, setUriPrefix] = useState('')
   const disabled = isNil(uriPrefix) || isEmpty(uriPrefix)
 
