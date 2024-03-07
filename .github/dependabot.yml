@@ -12,6 +12,8 @@ updates:
   - type:maintenance
   ignore:
   - dependency-name: django-mptt # pinned, 0.15 requires Python >= 3.9
+  - dependency-name: django
+    update-types: [ "version-update:semver-major"] # ignore major for django
   groups:
     # create a single pull request containing all updates for the optional dependencies
     optional:
@@ -58,6 +60,8 @@ updates:
   - dependency-name: react-bootstrap # rdmo still uses bootstrap 3, which is not supported by react-bootstrap > 0.33.1
   - dependency-name: "*"
     update-types: ["version-update:semver-patch"] # ignore patch versions for all JavaScript dependencies
+  - dependency-name: react-redux
+    update-types: ["version-update:semver-major"] # ignore major for react-redux
   groups:
     react:
       patterns:
