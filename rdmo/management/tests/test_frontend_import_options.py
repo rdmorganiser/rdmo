@@ -7,11 +7,6 @@ from playwright.sync_api import Page, expect
 
 from rdmo.options.models import Option, OptionSet
 
-from .fixtures_frontend import (
-    base_url_page,  # noqa: F401
-    e2e_tests_django_db_setup,  # noqa: F401
-    logged_in_user,  # noqa: F401
-)
 from .helpers_models import delete_all_objects
 
 pytestmark = pytest.mark.e2e
@@ -46,9 +41,7 @@ def test_import_and_update_optionsets_in_management(logged_in_user: Page) -> Non
     page.get_by_role("link", name="Select all", exact=True).click()
     page.get_by_role("link", name="Show all", exact=True).click()
     rows_displayed_in_ui = page.locator(".list-group > .list-group-item > .row.mt-10")
-    # there are 2 rows per object displayed
-    expect(rows_displayed_in_ui).to_have_count(13 * 2)
-
+    expect(rows_displayed_in_ui).to_have_count(13)
     # click the import button to start saving the instances to the db
     page.get_by_role("button", name="Import 13 elements").click()
     expect(page.get_by_role("heading", name="Import successful")).to_be_visible()

@@ -9,11 +9,6 @@ from rdmo.questions.models import Catalog, Question, Section
 from rdmo.questions.models import Page as PageModel
 from rdmo.questions.models.questionset import QuestionSet
 
-from .fixtures_frontend import (
-    base_url_page,  # noqa: F401
-    e2e_tests_django_db_setup,  # noqa: F401
-    logged_in_user,  # noqa: F401
-)
 from .helpers_models import delete_all_objects
 
 pytestmark = pytest.mark.e2e
@@ -44,8 +39,7 @@ def test_import_catalogs_in_management(logged_in_user: Page) -> None:
     page.get_by_role("link", name="Select all", exact=True).click()
     page.get_by_role("link", name="Show all").click()
     rows_displayed_in_ui = page.locator(".list-group > .list-group-item > .row.mt-10")
-    # there are 2 rows per object displayed
-    expect(rows_displayed_in_ui).to_have_count(148 * 2)
+    expect(rows_displayed_in_ui).to_have_count(148)
     page.get_by_role("link", name="Hide all").click()
     expect(rows_displayed_in_ui).to_have_count(0)
     page.screenshot(path="screenshots/management-import-pre-import.png", full_page=True)

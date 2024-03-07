@@ -11,13 +11,6 @@ from rdmo.conditions.models import Condition
 from rdmo.domain.models import Attribute
 from rdmo.questions.models import Catalog
 
-from .fixtures_frontend import (
-    base_url_page,  # noqa: F401
-    e2e_tests_django_db_setup,  # noqa: F401
-    logged_in_user,  # noqa: F401
-)
-
-# logged_in_user,  # ruff: noqa: F811
 from .helpers_models import ModelHelper, model_helpers
 
 pytestmark = pytest.mark.e2e
