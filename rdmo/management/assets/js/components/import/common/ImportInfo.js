@@ -20,9 +20,9 @@ const ImportInfo = ({
   return (
     <div className="pull-right">
       {renderElementLengthInfo('Total', elementsLength)}
-      {renderElementLengthInfo('Updated', updatedLength)}
-      {updatedLength > 0 && <span>{' ('}{gettext('Changed')}{': '}{changedLength}{') '}</span>}
-      {renderElementLengthInfo('Created', createdLength)}
+      {renderElementLengthInfo('updated', updatedLength)}
+      {changedLength > 0 && <span>{' ('}{gettext('changed')}{': '}{changedLength}{') '}</span>}
+      {renderElementLengthInfo('created', createdLength)}
       {renderElementLengthInfo('Warnings', warningsLength)}
       {renderElementLengthInfo('Errors', errorsLength)}
     </div>
