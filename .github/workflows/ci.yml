@@ -39,7 +39,7 @@ jobs:
     - run: python -m pip install --upgrade pip
     - run: python -m pip install --editable .[dev]
     - name: Set up pre-commit cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.cache/pre-commit
         key: lint-${{ hashFiles('.pre-commit-config.yaml') }}
@@ -111,7 +111,7 @@ jobs:
       env:
         DJANGO_DEBUG: True
         GITHUB_DB_BACKEND: ${{ matrix.db-backend }}
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: screenshots
         path: screenshots/*.png
@@ -180,7 +180,7 @@ jobs:
         python -m pip show rdmo >> $GITHUB_STEP_SUMMARY
         echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
     - name: Upload wheel as artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: wheel
         path: dist/rdmo*.whl
