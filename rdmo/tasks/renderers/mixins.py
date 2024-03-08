@@ -23,13 +23,13 @@ class TasksRendererMixin:
             self.render_text_element(xml, 'days_after', {}, task['days_after'])
 
             xml.startElement('conditions', {})
-            if 'conditions' in task and task['conditions']:
+            if task.get('conditions'):
                 for condition in task['conditions']:
                     self.render_text_element(xml, 'condition', {'dc:uri': condition['uri']}, None)
             xml.endElement('conditions')
 
             xml.startElement('catalogs', {})
-            if 'catalogs' in task and task['catalogs']:
+            if task.get('catalogs'):
                 for catalog in task['catalogs']:
                     self.render_text_element(xml, 'catalog', {'dc:uri': catalog}, None)
             xml.endElement('catalogs')
