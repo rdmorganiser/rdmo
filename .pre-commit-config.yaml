@@ -33,7 +33,7 @@ repos:
         args: [--fix, --color]
         additional_dependencies:
           - eslint@8.54.0
-          - eslint-plugin-react@7.33.2
+          - eslint-plugin-react@7.34.0
           - react@18.2.0
   - repo: https://github.com/crate-ci/typos
     rev: v1.22.9
