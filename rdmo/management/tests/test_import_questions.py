@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pytest
 
+from rdmo.core.imports import ELEMENT_DIFF_FIELD_NAME
 from rdmo.management.imports import import_elements
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet, Section
 
@@ -64,7 +65,7 @@ def test_update_catalogs_with_changed_fields(db, settings, updated_fields):
     assert len(imported_and_changed) == len(changed_elements)
     # compare two ordered lists with "updated_and_changed" dicts
     for test, imported in zip(changed_elements, imported_and_changed):
-        assert test['updated_and_changed'] == imported['updated_and_changed']
+        assert test[ELEMENT_DIFF_FIELD_NAME] == imported[ELEMENT_DIFF_FIELD_NAME]
 
 
 def test_create_sections(db, settings):
@@ -114,7 +115,7 @@ def test_update_sections_with_changed_fields(db, settings, updated_fields):
     assert len(imported_and_changed) == len(changed_elements)
     # compare two ordered lists with "updated_and_changed" dicts
     for test, imported in zip(changed_elements, imported_and_changed):
-        assert test['updated_and_changed'] == imported['updated_and_changed']
+        assert test[ELEMENT_DIFF_FIELD_NAME] == imported[ELEMENT_DIFF_FIELD_NAME]
 
 
 def test_create_pages(db, settings):
@@ -163,7 +164,7 @@ def test_update_pages_with_changed_fields(db, settings, updated_fields):
     assert len(imported_and_changed) == len(changed_elements)
     # compare two ordered lists with "updated_and_changed" dicts
     for test, imported in zip(changed_elements, imported_and_changed):
-        assert test['updated_and_changed'] == imported['updated_and_changed']
+        assert test[ELEMENT_DIFF_FIELD_NAME] == imported[ELEMENT_DIFF_FIELD_NAME]
 
 
 def test_create_questionsets(db, settings):
@@ -214,7 +215,7 @@ def test_update_questionsets_with_changed_fields(db, settings, updated_fields):
     assert len(imported_and_changed) == len(changed_elements)
     # compare two ordered lists with "updated_and_changed" dicts
     for test, imported in zip(changed_elements, imported_and_changed):
-        assert test['updated_and_changed'] == imported['updated_and_changed']
+        assert test[ELEMENT_DIFF_FIELD_NAME] == imported[ELEMENT_DIFF_FIELD_NAME]
 
 
 def test_create_questions(db, settings):
@@ -261,7 +262,7 @@ def test_update_questions_with_changed_fields(db, settings, updated_fields):
     assert len(imported_and_changed) == len(changed_elements)
     # compare two ordered lists with "updated_and_changed" dicts
     for test, imported in zip(changed_elements, imported_and_changed):
-        assert test['updated_and_changed'] == imported['updated_and_changed']
+        assert test[ELEMENT_DIFF_FIELD_NAME] == imported[ELEMENT_DIFF_FIELD_NAME]
 
 
 def test_create_legacy_questions(db, settings):

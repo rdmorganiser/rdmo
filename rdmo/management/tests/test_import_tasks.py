@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pytest
 
+from rdmo.core.imports import ELEMENT_DIFF_FIELD_NAME
 from rdmo.management.imports import import_elements
 from rdmo.tasks.models import Task
 
@@ -53,7 +54,7 @@ def test_update_tasks_with_changed_fields(db, settings, updated_fields):
     assert len(imported_and_changed) == len(changed_elements)
     # compare two ordered lists with "updated_and_changed" dicts
     for test, imported in zip(changed_elements, imported_and_changed):
-        assert test['updated_and_changed'] == imported['updated_and_changed']
+        assert test[ELEMENT_DIFF_FIELD_NAME] == imported[ELEMENT_DIFF_FIELD_NAME]
 
 
 def test_create_legacy_tasks(db, settings):
