@@ -38,7 +38,7 @@ class MarkdownSerializerMixin(serializers.Serializer):
         response = super().to_representation(instance)
 
         for markdown_field in self.markdown_fields:
-            if markdown_field in response and response[markdown_field]:
+            if response.get(markdown_field):
                 response[markdown_field] = markdown2html(response[markdown_field])
 
         return response

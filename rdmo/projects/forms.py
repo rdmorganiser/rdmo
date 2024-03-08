@@ -21,9 +21,8 @@ class CatalogChoiceField(forms.ModelChoiceField):
 
     def label_from_instance(self, obj):
         if obj.available is False:
-            return mark_safe('<div class="text-muted">{}{}</br>{}</div>'.format(
-                obj.title, self._unavailable_icon, markdown2html(obj.help)
-            ))
+            return mark_safe(
+                f'<div class="text-muted">{obj.title}{self._unavailable_icon}</br>{markdown2html(obj.help)}</div>')
 
         return mark_safe(f'<b>{obj.title}</b></br>{markdown2html(obj.help)}')
 
