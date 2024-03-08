@@ -12,6 +12,6 @@ class AttributeRendererMixin:
             self.render_text_element(xml, 'parent', {'dc:uri': attribute['parent']}, None)
             xml.endElement('attribute')
 
-        if 'children' in attribute and attribute['children']:
+        if attribute.get('children'):
             for child in attribute['children']:
                 self.render_attribute(xml, child)
