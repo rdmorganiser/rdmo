@@ -8,7 +8,8 @@ import { buildUri } from '../utils/elements'
 const initialState = {
   elements: [],
   errors: [],
-  success: false
+  success: false,
+  file: null
 }
 
 export default function importsReducer(state = initialState, action) {
@@ -17,6 +18,7 @@ export default function importsReducer(state = initialState, action) {
   switch(action.type) {
     // upload file
     case 'import/uploadFileInit':
+      return {...state, ...initialState,  file: action.file}
     case 'elements/fetchElementsInit':
     case 'elements/fetchElementInit':
       return {...state, elements: [], errors: [], success: false}
@@ -40,7 +42,7 @@ export default function importsReducer(state = initialState, action) {
 
     // update element
     case 'import/updateElement':
-      index = state.elements.findIndex(element => element == action.element)
+      index = state.elements.findIndex(element => element === action.element)
       if (index > -1) {
         const elements = [...state.elements]
         elements[index] = {...elements[index], ...action.values}
@@ -51,8 +53,30 @@ export default function importsReducer(state = initialState, action) {
       }
     case 'import/selectElements':
       return {...state, elements: state.elements.map(element => {
-        return {...element, import: action.value}
+          return {...element, import: action.value}
       })}
+    case 'import/selectChangedElements':
+      return {...state, elements: state.elements.map(element => {
+        if (element.updated && element.changed && !element.created ) {
+          return {...element, import: action.value}
+        }
+        else if (action.value) {return {...element, import: !action.value}}
+          else { return element }
+      }
+      )}
+    case 'import/showElements':
+      return {...state, elements: state.elements.map(element => {
+        return {...element, show: action.value}
+      })}
+    case 'import/showChangedElements':
+      return {...state, elements: state.elements.map(element => {
+        if (element.updated && element.changed && !element.created ) {
+          return {...element, show: action.value}
+        }
+        else if (action.value) {return {...element, show: !action.value}}
+        else { return element }
+      }
+      )}
     case 'import/updateUriPrefix':
       elements = state.elements.map(element => {
         element.uri_prefix = action.uriPrefix

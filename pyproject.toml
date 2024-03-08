@@ -62,6 +62,7 @@ dependencies = [
   "pypandoc~=1.11",
   "requests-toolbelt~=1.0",
   "rules~=3.3",
+  "diff-match-patch==v20230430",
 ]
 
 [project.optional-dependencies]

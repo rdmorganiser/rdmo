@@ -5,9 +5,12 @@ import isNil from 'lodash/isNil'
 
 import Link from 'rdmo/core/assets/js/components/Link'
 
+
+
 const ImportSidebar = ({ config, imports, importActions }) => {
   const { elements, success } = imports
   const count = elements.filter(e => e.import).length
+  const updatedAndChangedElements = elements.filter(element => element.updated && element.changed)
   const [uriPrefix, setUriPrefix] = useState('')
   const disabled = isNil(uriPrefix) || isEmpty(uriPrefix)
 
@@ -33,7 +36,6 @@ const ImportSidebar = ({ config, imports, importActions }) => {
     return (
       <div className="import-sidebar">
         <h2>{gettext('Import elements')}</h2>
-
         <p className="import-buttons">
           <button className="btn btn-success" onClick={() => importActions.importElements()}>
             {interpolate(ngettext('Import one element', 'Import %s elements', count), [count])}
@@ -51,9 +53,55 @@ const ImportSidebar = ({ config, imports, importActions }) => {
               {gettext('Select all')}
             </Link>
           </li>
+            {updatedAndChangedElements.length > 0 &&
+            <li>
+              <ul className="list-unstyled" style={{paddingLeft:'20px'}}>
+                <li>
+                  <Link onClick={() => importActions.selectChangedElements(true)}>
+                    {gettext('Select changed')}
+                  </Link>
+                </li>
+                <li>
+                  <Link onClick={() => importActions.selectChangedElements(false)}>
+                    {gettext('Unselect changed')}
+                  </Link>
+                </li>
+              </ul>
+            </li>
+            }
           <li>
             <Link onClick={() => importActions.selectElements(false)}>
               {gettext('Unselect all')}
+            </Link>
+          </li>
+          </ul>
+
+          <h2>{gettext('Show')}</h2>
+          <ul className="list-unstyled">
+          <li>
+            <Link onClick={() => importActions.showElements(true)}>
+              {gettext('Show all')}
+            </Link>
+          </li>
+          {updatedAndChangedElements.length > 0 &&
+              <li>
+                <ul className="list-unstyled" style={{paddingLeft:'20px'}}>
+                  <li>
+                    <Link onClick={() => importActions.showChangedElements(true)}>
+                      {gettext('Show changes')}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link onClick={() => importActions.showChangedElements(false)}>
+                      {gettext('Hide changes')}
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+          }
+          <li>
+            <Link onClick={() => importActions.showElements(false)}>
+              {gettext('Hide all')}
             </Link>
           </li>
         </ul>

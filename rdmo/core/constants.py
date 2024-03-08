@@ -77,3 +77,39 @@ HUMAN2BYTES_MAPPER = {
     "tib": {"base": 1024, "power": 4},
     "pib": {"base": 1024, "power": 5},
 }
+
+ELEMENT_COMMON_FIELDS = (
+    'uri_prefix',
+    'uri_path',
+    'comment',
+)
+
+ELEMENT_IMPORT_EXTRA_FIELDS_DEFAULTS = {
+    'order': 0,
+    'available': True,
+    'template': '',
+    'relation': '',
+    'target_text': '',
+    'provider_key': '',
+    'additional_input': '',
+    'is_collection': False,
+    'is_optional': False,
+    'default_external_id': '',
+    'value_type': '',
+    'unit': '',
+    'widget_type': 'text',
+}
+
+RDMO_MODELS = {
+  'catalog': 'questions.catalog',
+  'section': 'questions.section',
+  'page': 'questions.page',
+  'questionset': 'questions.questionset',
+  'question': 'questions.question',
+  'attribute': 'domain.attribute',
+  'optionset': 'options.optionset',
+  'option': 'options.option',
+  'condition': 'conditions.condition',
+  'task': 'tasks.task',
+  'view': 'views.view'
+}

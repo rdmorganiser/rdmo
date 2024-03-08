@@ -25,7 +25,7 @@ const Main = ({ config, elements, imports, configActions, elementActions, import
     return null
   }
 
-  // check if an an error occurred
+  // check if an error occurred
   if (!isNil(elements.errors.api)) {
     return <MainErrors errors={elements.errors.api} />
   } else if (get(elements, 'element.errors.api')) {
@@ -35,11 +35,12 @@ const Main = ({ config, elements, imports, configActions, elementActions, import
   }
 
   if (!isEmpty(imports.elements)) {
-    return <Import config={config} imports={imports} importActions={importActions} />
+    return <Import config={config} imports={imports}
+                   configActions={configActions} importActions={importActions} />
   }
 
   // check if the nested components should be displayed
-  if (!isNil(element) && elementAction == 'nested') {
+  if (!isNil(element) && elementAction === 'nested') {
     return <Nested config={config} elements={elements}
                    configActions={configActions} elementActions={elementActions} />
   }
