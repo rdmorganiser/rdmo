@@ -18,7 +18,7 @@ class ViewsRendererMixin:
                 self.render_text_element(xml, 'help', {'lang': lang_code}, view['help_%s' % lang_code])
 
             xml.startElement('catalogs', {})
-            if 'catalogs' in view and view['catalogs']:
+            if view.get('catalogs'):
                 for catalog in view['catalogs']:
                     self.render_text_element(xml, 'catalog', {'dc:uri': catalog}, None)
             xml.endElement('catalogs')
