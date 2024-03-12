@@ -83,6 +83,11 @@ jobs:
       run: |
         cp -r testing/media testing/media_root
         mkdir testing/log
+    - name: Run package status tests first
+      run: |
+        pytest rdmo/core/tests/test_package_status.py::test_package_json_and_pre_commit_versions_match \
+        --nomigrations --verbose
+      if: matrix.python-version == '3.12' && matrix.db-backend == 'postgres'
     - name: Run Tests
       run: |
         pytest -p randomly -p no:cacheprovider --cov --reuse-db --numprocesses=auto --dist=loadscope
