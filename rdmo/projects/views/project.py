@@ -203,6 +203,22 @@ class ProjectQuestionsView(ObjectPermissionMixin, DetailView):
             return self.render_to_response(context)
 
 
+class ProjectInterviewView(ObjectPermissionMixin, DetailView):
+    model = Project
+    queryset = Project.objects.all()
+    permission_required = 'projects.view_project_object'
+    template_name = 'projects/project_interview.html'
+
+    @method_decorator(ensure_csrf_cookie)
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        if self.object.catalog is None:
+            return redirect('project_error', pk=self.object.pk)
+        else:
+            return super().get(request, *args, **kwargs)
+
+
 class ProjectErrorView(ObjectPermissionMixin, DetailView):
     model = Project
     queryset = Project.objects.all()
