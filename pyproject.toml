@@ -71,6 +71,7 @@ allauth = [
 ci = [
   "coveralls~=3.3",
   "rdmo[dev]",
+  "pytest-github-actions-annotate-failures~=0.2.0",
 ]
 dev = [
   "build~=1.0",
