@@ -1,3 +1,51 @@
-.interview {
+.interview-breadcrumb {
+    margin-top: 20px;
+    margin-bottom: 12px;
 
+    background-color: transparent;
+    border: 1px solid #ccc;
+}
+
+.interview-navigation {
+    line-height: 24px;
+
+    h4 {
+        line-height: 20px;
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+    a {
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    ul {
+        margin-left: 0;
+    }
+    li ul li {
+        margin-left: 20px;
+    }
+    li.active {
+        margin-left: 0;
+    }
+    li.active a:before {
+        float: left;
+        width: 20px;
+        text-align: right;
+        content: '\2192\0000a0'; /* right-arrow followed by a space */
+    }
+}
+
+.interview-progress {
+    .progress {
+        margin-bottom: 10px;
+    }
+
+    .interview-progress-count {
+        position: absolute;
+        left: 0;
+        right: 0;
+        text-align: center;
+    }
 }
