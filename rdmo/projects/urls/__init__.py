@@ -12,6 +12,7 @@ from ..views import (
     MembershipCreateView,
     MembershipDeleteView,
     MembershipUpdateView,
+    NewProjectsView,
     ProjectAnswersExportView,
     ProjectAnswersView,
     ProjectCancelView,
@@ -45,6 +46,8 @@ urlpatterns = [
             ProjectsView.as_view(), name='projects'),
     re_path(r'^all/$',
             SiteProjectsView.as_view(), name='site_projects'),
+    re_path(r'^new/$',
+            NewProjectsView.as_view(), name='new_projects'),
 
     re_path(r'^create/$',
             ProjectCreateView.as_view(), name='project_create'),

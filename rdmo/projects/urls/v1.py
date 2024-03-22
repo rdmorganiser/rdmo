@@ -3,6 +3,7 @@ from django.urls import include, path
 from rest_framework_extensions.routers import ExtendedDefaultRouter
 
 from ..viewsets import (
+    CatalogViewSet,
     IntegrationViewSet,
     InviteViewSet,
     IssueViewSet,
@@ -43,7 +44,7 @@ router.register(r'invites', InviteViewSet, basename='invite')
 router.register(r'issues', IssueViewSet, basename='issue')
 router.register(r'snapshots', SnapshotViewSet, basename='snapshot')
 router.register(r'values', ValueViewSet, basename='value')
-
+router.register(r'catalogs', CatalogViewSet, basename='catalog')
 
 urlpatterns = [
     path('', include(router.urls)),

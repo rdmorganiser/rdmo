@@ -8,6 +8,7 @@ from rest_framework import serializers
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.viewsets import GenericViewSet, ModelViewSet, ReadOnlyModelViewSet
@@ -19,11 +20,17 @@ from rdmo.conditions.models import Condition
 from rdmo.core.permissions import HasModelPermission
 from rdmo.core.utils import human2bytes, return_file_response
 from rdmo.options.models import OptionSet
-from rdmo.questions.models import Page, Question, QuestionSet
+from rdmo.questions.models import Catalog, Page, Question, QuestionSet
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
-from .filters import SnapshotFilterBackend, ValueFilterBackend
+from .filters import (
+    ProjectDateFilterBackend,
+    ProjectOrderingFilter,
+    ProjectSearchFilterBackend,
+    SnapshotFilterBackend,
+    ValueFilterBackend,
+)
 from .models import Continuation, Integration, Invite, Issue, Membership, Project, Snapshot, Value
 from .permissions import (
     HasProjectPagePermission,
@@ -50,7 +57,7 @@ from .serializers.v1 import (
     SnapshotSerializer,
     ValueSerializer,
 )
-from .serializers.v1.overview import ProjectOverviewSerializer
+from .serializers.v1.overview import CatalogSerializer, ProjectOverviewSerializer
 from .serializers.v1.page import PageSerializer
 from .utils import check_conditions, send_invite_email
 
@@ -59,7 +66,12 @@ class ProjectViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasProjectsPermission, )
     serializer_class = ProjectSerializer
 
-    filter_backends = (DjangoFilterBackend,)
+    filter_backends = (
+        DjangoFilterBackend,
+        ProjectDateFilterBackend,
+        ProjectOrderingFilter,
+        ProjectSearchFilterBackend,
+    )
     filterset_fields = (
         'title',
         'user',
@@ -67,9 +79,17 @@ class ProjectViewSet(ModelViewSet):
         'catalog',
         'catalog__uri'
     )
+    ordering_fields = (
+        'title',
+        'progress',
+        'role',
+        'owner',
+        'updated',
+        'created'
+    )
 
     def get_queryset(self):
-        return Project.objects.filter_user(self.request.user).select_related('catalog')
+        return Project.objects.filter_user(self.request.user).distinct().select_related('catalog')
 
     @action(detail=True, permission_classes=(HasModelPermission | HasProjectPermission, ))
     def overview(self, request, pk=None):
@@ -604,3 +624,15 @@ class ValueViewSet(ReadOnlyModelViewSet):
 
         # if it didn't work return 404
         raise NotFound()
+
+
+class CatalogViewSet(ListModelMixin, GenericViewSet):
+    permission_classes = (IsAuthenticated, )
+
+    serializer_class = CatalogSerializer
+
+    def get_queryset(self):
+        return Catalog.objects.filter_current_site() \
+                              .filter_group(self.request.user) \
+                              .filter_availability(self.request.user) \
+                              .order_by('-available', 'order')

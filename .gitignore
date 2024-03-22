@@ -36,4 +36,7 @@ dist
 
 rdmo/management/static
 
+rdmo/projects/static/projects/js/projects.js
+rdmo/projects/static/projects/fonts
+
 screenshots
