@@ -6,16 +6,16 @@ import { connect } from 'react-redux'
 import Breadcrump from '../components/Breadcrump'
 
 import * as configActions from '../actions/configActions'
-import * as pageActions from '../actions/pageActions'
+import * as interviewActions from '../actions/interviewActions'
 
 // eslint-disable-next-line no-unused-vars
-const Main = ({ config, page, configActions, pageActions }) => {
-  if (page.display) {
+const Main = ({ config, interview, configActions, interviewActions }) => {
+  if (interview.show) {
     return (
       <div>
-        <Breadcrump project={{}} page={page.page} onJump={(pageId) => pageActions.jump(pageId)} />
+        <Breadcrump overview={interview.overview} page={interview.page} onClick={interviewActions.fetchPage} />
         <h2>
-            {page.page.title}
+            {interview.page.title}
         </h2>
       </div>
     )
@@ -27,22 +27,22 @@ const Main = ({ config, page, configActions, pageActions }) => {
 
 Main.propTypes = {
   config: PropTypes.object.isRequired,
-  page: PropTypes.object.isRequired,
+  interview: PropTypes.object.isRequired,
   configActions: PropTypes.object.isRequired,
-  pageActions: PropTypes.object.isRequired
+  interviewActions: PropTypes.object.isRequired
 }
 
 function mapStateToProps(state) {
   return {
     config: state.config,
-    page: state.page
+    interview: state.interview
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     configActions: bindActionCreators(configActions, dispatch),
-    pageActions: bindActionCreators(pageActions, dispatch)
+    interviewActions: bindActionCreators(interviewActions, dispatch),
   }
 }
 

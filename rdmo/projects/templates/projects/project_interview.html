@@ -6,6 +6,10 @@
 {% block vendor %}
 {% endblock %}
 
+{% block head %}
+    <meta name='project' content="{{ project.id }}" />
+{% endblock %}
+
 {% block css %}
     <link rel="stylesheet" href="{% static 'core/dist/css/base.css' %}" />
     <link rel="stylesheet" href="{% static 'projects/dist/css/interview.css' %}" />

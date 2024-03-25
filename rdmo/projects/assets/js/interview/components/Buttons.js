@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const Buttons = ({ currentPage, onPrev, onNext }) => {
+const Buttons = ({ page, onClick }) => {
   return (
     <>
       <div className="interview-buttons">
         <div className="pull-right">
-          <button type="button" onClick={onNext} disabled={!currentPage.next_page}
+          <button type="button" onClick={() => onClick(page.next_page)} disabled={!page.next_page}
                   className="btn btn-default btn-xs">
             {gettext('Proceed')}
             {/* TODO: handle */}
@@ -15,7 +15,7 @@ const Buttons = ({ currentPage, onPrev, onNext }) => {
         </div>
 
         <div>
-          <button type="button" onClick={onPrev} disabled={!currentPage.prev_page}
+          <button type="button" onClick={() => onClick(page.prev_page)} disabled={!page.prev_page}
                   className="btn btn-default btn-xs">
             {gettext('Skip')}
           </button>
@@ -26,9 +26,8 @@ const Buttons = ({ currentPage, onPrev, onNext }) => {
 }
 
 Buttons.propTypes = {
-  currentPage: PropTypes.object.isRequired,
-  onPrev: PropTypes.func.isRequired,
-  onNext: PropTypes.func.isRequired
+  page: PropTypes.object.isRequired,
+  onClick: PropTypes.func.isRequired
 }
 
 export default Buttons
