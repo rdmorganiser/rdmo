@@ -1,19 +1,29 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const Breadcrump = ({ project, page, onJump }) => {
+import baseUrl from 'rdmo/core/assets/js/utils/baseUrl'
+
+const Breadcrump = ({ overview, page, onClick }) => {
+
+  const handleClick = (event) => {
+    event.preventDefault()
+    onClick(page.section.first)
+  }
+
   return (
     <ul className="interview-breadcrumb breadcrumb">
       <li>
-        <a href="">{gettext('My Projects')}</a>
-      </li>
-      <li>
-        <a href="">
-          {project.title}
+        <a href={`${baseUrl}/projects/`}>
+          {gettext('My Projects')}
         </a>
       </li>
       <li>
-        <a href="" onClick={() => onJump(page.section.id)}>
+        <a href={`${baseUrl}/projects/${overview.id}/`}>
+          {overview.title}
+        </a>
+      </li>
+      <li>
+        <a href={`${baseUrl}/projects/${overview.id}/interview/${page.section.first}/`} onClick={handleClick}>
           {page.section.title}
         </a>
       </li>
@@ -22,9 +32,9 @@ const Breadcrump = ({ project, page, onJump }) => {
 }
 
 Breadcrump.propTypes = {
-  project: PropTypes.object.isRequired,
+  overview: PropTypes.object.isRequired,
   page: PropTypes.object.isRequired,
-  onJump: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired
 }
 
 export default Breadcrump
