@@ -1,11 +1,8 @@
 import set from 'lodash/set'
 
-import baseUrl from 'rdmo/core/assets/js/utils/baseUrl'
-
 import { FETCH_CONFIG_SUCCESS, FETCH_CONFIG_ERROR, UPDATE_CONFIG } from '../actions/types'
 
 const initialState = {
-  baseUrl: baseUrl + '/interview/',
   settings: {}
 }
 

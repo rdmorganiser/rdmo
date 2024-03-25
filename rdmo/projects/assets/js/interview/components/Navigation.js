@@ -2,11 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
-const Navigation = ({ currentPage, navigation, onJump }) => {
+const Navigation = ({ page, navigation, onClick }) => {
 
-  const handleJump = (event, section, page) => {
+  const handleClick = (event, pageId) => {
     event.preventDefault()
-    onJump(section, page)
+    onClick(pageId)
   }
 
   return (
@@ -15,37 +15,37 @@ const Navigation = ({ currentPage, navigation, onJump }) => {
 
       <ul className="list-unstyled interview-navigation">
         {
-          navigation.map((section, sectionIndex) => (
-            <li key={sectionIndex}>
-              <a href="" onClick={event => handleJump(event, section)}>
-                {section.title}
+          navigation.map((s, sIndex) => (
+            <li key={sIndex}>
+              <a href={`/projects/12/interview/${s.first}/`} onClick={event => handleClick(event, s.first)}>
+                {s.title}
               </a>
               {
-                section.pages && (
+                s.pages && (
                   <ul className="list-unstyled">
                     {
-                      section.pages.map((page, pageIndex) => (
-                        <li key={pageIndex} className={classNames({'active': page.id == currentPage.id})}>
+                      s.pages.map((p, pIndex) => (
+                        <li key={pIndex} className={classNames({'active': p.id == page.id})}>
                           {
-                            page.show ? (
-                              <a href="" onClick={event => handleJump(event, section, page)}>
-                                <span>{page.title}</span>
+                            p.show ? (
+                              <a href={`/projects/12/interview/${page.id}/`} onClick={event => handleClick(event, p.id)}>
+                                <span>{p.title}</span>
                                 {
-                                  page.count > 0 && page.count == page.total && (
+                                  p.count > 0 && p.count == p.total && (
                                     <span>
                                       <i className="fa fa-check" aria-hidden="true"></i>
                                     </span>
                                   )
                                 }
                                 {
-                                  page.count > 0 && page.count != page.total && (
+                                  p.count > 0 && p.count != p.total && (
                                     <span dangerouslySetInnerHTML={{
-                                      __html: interpolate(gettext('(%s of %s)'), [page.count, page.total])}} />
+                                      __html: interpolate(gettext('(%s of %s)'), [p.count, p.total])}} />
                                   )
                                 }
                               </a>
                             ) : (
-                              <span className="text-muted">{page.title}</span>
+                              <span className="text-muted">{p.title}</span>
                             )
                           }
                         </li>
@@ -63,9 +63,9 @@ const Navigation = ({ currentPage, navigation, onJump }) => {
 }
 
 Navigation.propTypes = {
-  currentPage: PropTypes.object.isRequired,
+  page: PropTypes.object.isRequired,
   navigation: PropTypes.array.isRequired,
-  onJump: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired
 }
 
 export default Navigation
