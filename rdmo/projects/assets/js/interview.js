@@ -2,15 +2,15 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 
-import configureStore from './store/configureStore'
+import configureStore from './interview/store/configureStore'
 
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 
 import Pending from '../../../core/assets/js/containers/Pending'
 
-import Main from './containers/Main'
-import Sidebar from './containers/Sidebar'
+import Main from './interview/containers/Main'
+import Sidebar from './interview/containers/Sidebar'
 
 const store = configureStore()
 

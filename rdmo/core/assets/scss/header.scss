@@ -1,0 +1,89 @@
+$header-height: 400px;
+$header-height-md: 300px;
+
+header {
+    position: relative;
+
+    height: $header-height;
+    background-color: black;
+
+    .header-image {
+        position: absolute;
+        left: 0;
+        right: 0;
+
+        opacity: 0;
+        -webkit-transition: $image-transition;
+        -moz-transition: $image-transition;
+        -ms-transition: $image-transition;
+        -o-transition: $image-transition;
+        transition: $image-transition;
+
+        &.visible {
+            opacity: 1;
+        }
+        img {
+            display: block;
+            width: 100%;
+            height: $header-height;
+        }
+        p {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            z-index: 10;
+
+            padding-right: 5px;
+            margin-bottom: 5px;
+            font-size: 10px;
+            color: $footer-link-color;
+
+        }
+        a,
+        a:visited,
+        a:hover {
+            color: $footer-link-color;
+        }
+    }
+    .header-text {
+        position: relative;
+        padding-top: 100px;
+
+        h1 {
+            font-size: 60px;
+            color: white;
+        }
+        p {
+            font-size: 30px;
+            color: white;
+        }
+    }
+}
+@media (max-width: $screen-md-max) {
+    header {
+        height: $header-height-md;
+    }
+    header .header-image img {
+        height: $header-height-md;
+    }
+    header .header-text {
+        padding-top: 50px;
+    }
+}
+@media (max-width: $screen-xs-max) {
+    header {
+        background-color: inherit;
+        height: auto;
+    }
+    header .header-text {
+        padding-top: 0;
+    }
+    header .header-text h1 {
+        font-size: 40px;
+        color: $headline-color;
+    }
+    header .header-text p {
+        font-size: 20px;
+        color: $variant-color;
+    }
+}
