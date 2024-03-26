@@ -23,7 +23,7 @@ const Section = ({ config, section, configActions, elementActions, display='list
   const editUrl = buildPath(config.baseUrl, 'sections', section.id)
   const copyUrl = buildPath(config.baseUrl, 'sections', section.id, 'copy')
   const nestedUrl = buildPath(config.baseUrl, 'sections', section.id, 'nested')
-  const exportUrl = buildPath('/api/v1/', 'questions', 'sections', section.id, 'export')
+  const exportUrl = buildPath(config.apiUrl, 'questions', 'sections', section.id, 'export')
 
   const fetchEdit = () => elementActions.fetchElement('sections', section.id)
   const fetchCopy = () => elementActions.fetchElement('sections', section.id, 'copy')

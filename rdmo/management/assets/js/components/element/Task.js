@@ -15,7 +15,7 @@ const Task = ({ config, task, elementActions, filter=false, filterSites=false, f
 
   const editUrl = buildPath(config.baseUrl, 'tasks', task.id)
   const copyUrl = buildPath(config.baseUrl, 'tasks', task.id, 'copy')
-  const exportUrl = buildPath('/api/v1/', 'tasks', 'tasks', task.id, 'export')
+  const exportUrl = buildPath(config.apiUrl, 'tasks', 'tasks', task.id, 'export')
 
   const fetchEdit = () => elementActions.fetchElement('tasks', task.id)
   const fetchCopy = () => elementActions.fetchElement('tasks', task.id, 'copy')
