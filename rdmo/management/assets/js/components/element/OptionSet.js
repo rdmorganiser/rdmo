@@ -16,7 +16,7 @@ const OptionSet = ({ config, optionset, elementActions, display='list', filter=f
   const editUrl = buildPath(config.baseUrl, 'optionsets', optionset.id)
   const copyUrl = buildPath(config.baseUrl, 'optionsets', optionset.id, 'copy')
   const nestedUrl = buildPath(config.baseUrl, 'optionsets', optionset.id, 'nested')
-  const exportUrl = buildPath('/api/v1/', 'options', 'optionsets', optionset.id, 'export')
+  const exportUrl = buildPath(config.apiUrl, 'options', 'optionsets', optionset.id, 'export')
 
   const fetchEdit = () => elementActions.fetchElement('optionsets', optionset.id)
   const fetchCopy = () => elementActions.fetchElement('optionsets', optionset.id, 'copy')
