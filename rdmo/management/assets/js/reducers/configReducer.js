@@ -4,6 +4,7 @@ import baseUrl from 'rdmo/core/assets/js/utils/baseUrl'
 
 const initialState = {
   baseUrl: baseUrl + '/management/',
+  apiUrl: baseUrl + '/api/v1/',
   settings: {},
   filter: {},
   display: {}
