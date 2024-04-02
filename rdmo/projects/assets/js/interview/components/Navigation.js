@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
-const Navigation = ({ page, navigation, onClick }) => {
+const Navigation = ({ page, navigation, help, onClick }) => {
 
   const handleClick = (event, pageId) => {
     event.preventDefault()
@@ -12,6 +12,10 @@ const Navigation = ({ page, navigation, onClick }) => {
   return (
     <>
       <h2>{gettext('Navigation')}</h2>
+
+      <div className="interview-navigation-help" dangerouslySetInnerHTML={{
+        '__html': help
+      }}></div>
 
       <ul className="list-unstyled interview-navigation">
         {
@@ -33,7 +37,7 @@ const Navigation = ({ page, navigation, onClick }) => {
                                 {
                                   p.count > 0 && p.count == p.total && (
                                     <span>
-                                      <i className="fa fa-check" aria-hidden="true"></i>
+                                      {' '}<i className="fa fa-check" aria-hidden="true"></i>
                                     </span>
                                   )
                                 }
@@ -65,6 +69,7 @@ const Navigation = ({ page, navigation, onClick }) => {
 Navigation.propTypes = {
   page: PropTypes.object.isRequired,
   navigation: PropTypes.array.isRequired,
+  help: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired
 }
 
