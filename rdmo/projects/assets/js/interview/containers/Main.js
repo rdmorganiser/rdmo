@@ -4,19 +4,19 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
 import Breadcrump from '../components/Breadcrump'
+import Page from '../components/Page'
 
 import * as configActions from '../actions/configActions'
 import * as interviewActions from '../actions/interviewActions'
 
 // eslint-disable-next-line no-unused-vars
 const Main = ({ config, interview, configActions, interviewActions }) => {
+
   if (interview.show) {
     return (
       <div>
         <Breadcrump overview={interview.overview} page={interview.page} onClick={interviewActions.fetchPage} />
-        <h2>
-            {interview.page.title}
-        </h2>
+        <Page page={interview.page} />
       </div>
     )
   }
