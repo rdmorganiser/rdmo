@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const Progress = ({ progress }) => {
+const Progress = ({ progress, help }) => {
   const low = progress.ratio <= 0.25
   const width = progress.ratio * 100
   const label = interpolate(gettext('%s of %s'), [progress.count, progress.total])
@@ -9,6 +9,10 @@ const Progress = ({ progress }) => {
   return (
     <>
       <h2>{gettext('Progress')}</h2>
+
+      <div className="interview-progress-help" dangerouslySetInnerHTML={{
+        '__html': help
+      }}></div>
 
       <div className="interview-progress">
         {low && <div className="interview-progress-count" dangerouslySetInnerHTML={{ __html: label }} />}
@@ -24,7 +28,8 @@ const Progress = ({ progress }) => {
 }
 
 Progress.propTypes = {
-  progress: PropTypes.object.isRequired
+  progress: PropTypes.object.isRequired,
+  help: PropTypes.string.isRequired
 }
 
 export default Progress

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import baseUrl from 'rdmo/core/assets/js/utils/baseUrl'
 
-const Overview = ({ overview }) => {
+const Overview = ({ overview, help }) => {
 
   const projectsUrl = `${baseUrl}/projects/`
   const projectUrl = `${baseUrl}/projects/${overview.id}`
@@ -11,6 +11,10 @@ const Overview = ({ overview }) => {
   return (
     <>
       <h2>{gettext('Overview')}</h2>
+
+      <div className="interview-navigation-help" dangerouslySetInnerHTML={{
+        '__html': help
+      }}></div>
 
       <div className="interview-overview">
         <ul className="list-unstyled">
@@ -37,7 +41,8 @@ const Overview = ({ overview }) => {
 }
 
 Overview.propTypes = {
-  overview: PropTypes.object.isRequired
+  overview: PropTypes.object.isRequired,
+  help: PropTypes.string.isRequired
 }
 
 export default Overview

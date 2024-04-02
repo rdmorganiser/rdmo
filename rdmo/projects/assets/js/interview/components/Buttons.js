@@ -1,9 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const Buttons = ({ page, onClick }) => {
+const Buttons = ({ page, help, onClick }) => {
   return (
     <>
+      <div className="interview-navigation-help" dangerouslySetInnerHTML={{
+        '__html': help
+      }}></div>
+
       <div className="interview-buttons">
         <div className="pull-right">
           <button type="button" onClick={() => onClick(page.next_page)} disabled={!page.next_page}
@@ -17,7 +21,7 @@ const Buttons = ({ page, onClick }) => {
         <div>
           <button type="button" onClick={() => onClick(page.prev_page)} disabled={!page.prev_page}
                   className="btn btn-default btn-xs">
-            {gettext('Skip')}
+            {gettext('Back')}
           </button>
         </div>
       </div>
@@ -27,6 +31,7 @@ const Buttons = ({ page, onClick }) => {
 
 Buttons.propTypes = {
   page: PropTypes.object.isRequired,
+  help: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired
 }
 
