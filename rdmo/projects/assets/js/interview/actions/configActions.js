@@ -5,8 +5,9 @@ import { FETCH_CONFIG_SUCCESS, FETCH_CONFIG_ERROR, UPDATE_CONFIG } from './types
 export function fetchConfig() {
   return (dispatch) => Promise.all([
     CoreApi.fetchSettings(),
-  ]).then(([settings]) => dispatch(fetchConfigSuccess({
-    settings
+    CoreApi.fetchTemplates(),
+  ]).then(([settings, templates]) => dispatch(fetchConfigSuccess({
+    settings, templates
   })))
 }
 

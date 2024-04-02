@@ -16,10 +16,21 @@ const Sidebar = ({ config, interview, configActions, interviewActions }) => {
   if (interview.show) {
     return (
       <div>
-        <Overview overview={interview.overview} />
-        <Progress progress={interview.progress} />
-        <Buttons page={interview.page} onClick={interviewActions.fetchPage} />
-        <Navigation page={interview.page} navigation={interview.navigation} onClick={interviewActions.fetchPage} />
+        <Overview
+          overview={interview.overview}
+          help={config.templates.project_interview_overview_help}/>
+        <Progress
+          progress={interview.progress}
+          help={config.templates.project_interview_progress_help} />
+        <Buttons
+          page={interview.page}
+          help={config.templates.project_interview_buttons_help}
+          onClick={interviewActions.fetchPage} />
+        <Navigation
+          page={interview.page}
+          navigation={interview.navigation}
+          help={config.templates.project_interview_navigation_help}
+          onClick={interviewActions.fetchPage} />
       </div>
     )
   }
