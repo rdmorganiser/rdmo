@@ -4,6 +4,7 @@ updates:
   directory: /
   schedule:
     interval: monthly
+  versioning-strategy: increase-if-necessary
   open-pull-requests-limit: 10
   target-branch: dependency-updates
   labels:
