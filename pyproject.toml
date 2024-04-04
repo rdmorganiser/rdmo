@@ -79,7 +79,7 @@ dev = [
   "pre-commit~=3.4",
   "setuptools~=69.0",
   "twine~=5.0",
-  "wheel~=0.42.0",
+  "wheel>=0.42,<0.44",
   "rdmo[allauth]",
   "rdmo[pytest]",
 ]
