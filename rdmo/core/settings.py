@@ -119,6 +119,7 @@ SOCIALACCOUNT_SIGNUP = False
 SOCIALACCOUNT_GROUPS = []
 SOCIALACCOUNT_AUTO_SIGNUP = False
 SOCIALACCOUNT_ADAPTER = 'rdmo.accounts.adapter.SocialAccountAdapter'
+SOCIALACCOUNT_OPENID_CONNECT_URL_PREFIX = ""  # required since 0.60.0 else default is "oidc"
 
 SHIBBOLETH = False
 SHIBBOLETH_LOGIN_URL = '/Shibboleth.sso/Login'
