@@ -53,7 +53,7 @@ jobs:
           labels: |
             dependencies
             pre-commit
-            type: maintenance
+            type:maintenance
           delete-branch: true
       - name: Write to job summary
         run: |
