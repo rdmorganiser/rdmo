@@ -4,7 +4,6 @@ import time
 from collections import defaultdict
 from dataclasses import dataclass, field
 from os.path import join as pj
-from pathlib import Path
 from random import randint
 from typing import Callable, Iterable, List, Optional, Sequence, Tuple, Union
 
@@ -39,10 +38,6 @@ def handle_fetched_file(filedata):
     with open(tempfilename, 'wb+') as destination:
         destination.write(filedata)
     return tempfilename
-
-
-def file_path_exists(file_path):
-    return Path(file_path).exists()
 
 
 def generate_tempfile_name():
