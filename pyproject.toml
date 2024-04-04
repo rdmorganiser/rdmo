@@ -67,7 +67,7 @@ dependencies = [
 
 [project.optional-dependencies]
 allauth = [
-  "django-allauth>=0.57,<0.62",
+  "django-allauth~=0.61.1",
 ]
 ci = [
   "rdmo[dev]",
