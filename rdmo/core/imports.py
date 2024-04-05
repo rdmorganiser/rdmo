@@ -2,10 +2,9 @@ import logging
 import tempfile
 import time
 from collections import defaultdict
-from dataclasses import dataclass, field
 from os.path import join as pj
 from random import randint
-from typing import Callable, Iterable, List, Optional, Sequence, Tuple, Union
+from typing import List, Optional, Tuple, Union
 
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
@@ -16,7 +15,8 @@ from rest_framework.utils import model_meta
 
 from diff_match_patch import diff_match_patch
 
-from rdmo.core.constants import ELEMENT_COMMON_FIELDS, ELEMENT_IMPORT_EXTRA_FIELDS_DEFAULTS, RDMO_MODELS
+from rdmo.core.constants import RDMO_MODELS
+from rdmo.core.import_helpers import ExtraFieldDefaultHelper
 from rdmo.core.utils import get_languages
 
 logger = logging.getLogger(__name__)
@@ -148,28 +148,6 @@ def track_changes_on_element(element: dict,
     element[ELEMENT_DIFF_FIELD_NAME][element_field].update(js_diff_viewer_props)
 
 
-@dataclass(frozen=True)
-class ThroughInstanceMapper:
-    field_name: str
-    source_name: str
-    target_name: str
-    through_name: str
-
-@dataclass(frozen=True)
-class ElementImportHelper:
-    model: Optional[models.Model] = field(default=None)
-    model_path: Optional[str] = field(default=None)
-    validators: Iterable[Callable] = field(default_factory=list)
-    common_fields: Sequence[str] = field(default=ELEMENT_COMMON_FIELDS)
-    lang_fields: Sequence[str] = field(default_factory=list)
-    foreign_fields: Sequence[str] = field(default_factory=list)
-    extra_fields: Sequence[str] = field(default_factory=list)
-    m2m_instance_fields: Sequence[str] = field(default_factory=list)
-    m2m_through_instance_fields: Sequence[ThroughInstanceMapper] = field(default_factory=list)
-    reverse_m2m_through_instance_fields: Sequence[ThroughInstanceMapper] = field(default_factory=list)
-    add_current_site_editors: bool = field(default=True)
-    add_current_site_sites: bool = field(default=False)
-
 def get_lang_field_values(field_name: str,
                         element: Optional[dict] = None,
                         instance: Optional[models.Model] = None,
@@ -275,33 +253,23 @@ def set_foreign_field(instance, field_name, element, uploaded_uris=None, origina
         track_messages_on_element(element, field_name, error=message)
 
 
-def set_extra_field(instance, field_name, element, questions_widget_types=None, original=None) -> None:
+def set_extra_field(instance, field_name, element,
+                     extra_field_helper: Optional[ExtraFieldDefaultHelper]=None, original=None) -> None:
 
     element_value = element.get(field_name)
-    default_value = ELEMENT_IMPORT_EXTRA_FIELDS_DEFAULTS.get(field_name)
-    extra_value = element_value or default_value
-    if field_name == 'widget_type':
-        if element_value in questions_widget_types:
-            extra_value = element_value
-        else:
-            extra_value = default_value
-    if field_name == "path":
-        if instance.key and hasattr(instance, "build_path"):
-            extra_value = instance.build_path(instance.key, instance.parent)
-        else:
-            exception_message = _('This field may not be blank.')
-            message = '{instance_model} {instance_uri} cannot be imported (key: {exception}) .'.format(
-                instance_model=instance._meta.object_name,
-                instance_uri=element.get('uri'),
-                exception=exception_message
-            )
-            logger.info(message)
-            element['errors'].append(message)
-            track_messages_on_element(element, field_name, error=message)
 
-    setattr(instance, field_name, extra_value)
-    # track changes
-    track_changes_on_element(element, field_name, new_value=extra_value, original=original)
+    extra_value = None
+    if element_value is not None:
+        extra_value = element_value
+    elif extra_field_helper is not None:
+        # default_value
+        extra_value = extra_field_helper.get_default(instance=instance,
+                                                      key=field_name)
+
+    if extra_value is not None:
+        setattr(instance, field_name, extra_value)
+        # track changes
+        track_changes_on_element(element, field_name, new_value=extra_value, original=original)
 
 
 def track_changes_m2m_instances(element, field_name,

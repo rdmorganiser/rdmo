@@ -32,7 +32,6 @@ from rdmo.questions.imports import (
     import_helper_questionset,
     import_helper_section,
 )
-from rdmo.questions.utils import get_widget_types
 from rdmo.tasks.imports import import_helper_task
 from rdmo.views.imports import import_helper_view
 
@@ -69,11 +68,10 @@ def import_elements(uploaded_elements: Dict, save: bool = True, request: Optiona
     imported_elements = []
     uploaded_uris = set(uploaded_elements.keys())
     current_site = get_current_site(request)
-    questions_widget_types = get_widget_types()
     for _uri, uploaded_element in uploaded_elements.items():
-        element = import_element(element=uploaded_element, save=save, uploaded_uris=uploaded_uris,
-                                    request=request, current_site=current_site,
-                                    questions_widget_types=questions_widget_types)
+        element = import_element(element=uploaded_element, save=save,
+                                  uploaded_uris=uploaded_uris,
+                                    request=request, current_site=current_site)
         element['warnings'] = {k: val  for k, val in element['warnings'].items() if k not in uploaded_uris}
         imported_elements.append(element)
     return imported_elements
@@ -89,8 +87,7 @@ def import_element(
         save: bool = True,
         request: Optional[HttpRequest] = None,
         uploaded_uris: Optional[AbstractSet[str]] = None,
-        current_site = None,
-        questions_widget_types = None
+        current_site = None
     ) -> Dict:
 
     if element is None:
@@ -111,7 +108,7 @@ def import_element(
     common_fields = import_helper.common_fields
     lang_field_names = import_helper.lang_fields
     foreign_field_names = import_helper.foreign_fields
-    extra_field_names = import_helper.extra_fields
+    extra_field_helpers = import_helper.extra_fields
 
     uri = element.get('uri')
     # get or create instance from uri and model_path
@@ -153,8 +150,8 @@ def import_element(
     for foreign_field in foreign_field_names:
         set_foreign_field(instance, foreign_field, element, uploaded_uris=uploaded_uris)
     # set extra fields
-    for extra_field in extra_field_names:
-        set_extra_field(instance, extra_field, element, questions_widget_types=questions_widget_types)
+    for extra_field_helper in extra_field_helpers:
+        set_extra_field(instance, extra_field_helper.field_name, element, extra_field_helper=extra_field_helper)
     # call the validators on the instance
     validate_instance(instance, element, *validators)
 
