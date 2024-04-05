@@ -1,5 +1,4 @@
-from rdmo.core.imports import ElementImportHelper, ThroughInstanceMapper
-
+from ..core.import_helpers import ElementImportHelper, ExtraFieldDefaultHelper, ThroughInstanceMapper
 from .models import Option, OptionSet
 from .validators import (
     OptionLockedValidator,
@@ -12,7 +11,10 @@ import_helper_optionset = ElementImportHelper(
     model = OptionSet,
     model_path = "options.optionset",
     validators = (OptionSetLockedValidator, OptionSetUniqueURIValidator),
-    extra_fields = ('order', 'provider_key'),
+    extra_fields = (
+        ExtraFieldDefaultHelper(field_name='order'),
+        ExtraFieldDefaultHelper(field_name='provider_key', value=''),
+    ),
     m2m_instance_fields = ('conditions', ),
     m2m_through_instance_fields = [
         ThroughInstanceMapper(
@@ -29,7 +31,9 @@ import_helper_option = ElementImportHelper(
     model_path = "options.option",
     validators = (OptionLockedValidator, OptionUniqueURIValidator),
     lang_fields = ('text', 'help', 'view_text'),
-    extra_fields = ('additional_input',),
+    extra_fields = (
+        ExtraFieldDefaultHelper(field_name='additional_input'),
+        ),
     reverse_m2m_through_instance_fields = [
         ThroughInstanceMapper(
             field_name='optionset',
