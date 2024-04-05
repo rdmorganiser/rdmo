@@ -111,6 +111,33 @@ def get_set(context, attribute, set_prefix='', project=None):
     return get_sets(context, attribute, set_prefix=set_prefix, project=project)
 
 
+@register.simple_tag
+def render_custom_inline_list(values=None, sep=',', sep_last=', and'):
+    values = values or []
+
+    if not values:
+        return ''
+
+    if len(values) == 1:
+        return values[0]['value_and_unit']
+
+    if len(values) == 2:
+        if sep_last.startswith(', '):  # for english sep_last
+            sep_last = sep_last.split(', ')[-1]
+        return f"{values[0]['value_and_unit']} {sep_last} {values[1]['value_and_unit']}"
+
+    _text = ''
+    for n,value in enumerate(values):
+        if n == len(values) - 1 and _text:
+            _text += f"{sep_last} "
+        _text += value['value_and_unit']
+        if n < len(values) - 2:
+            _text += f"{sep} "
+        else:
+            _text += ' '
+    return _text
+
+
 @register.inclusion_tag('views/tags/value.html', takes_context=True)
 def render_value(context, attribute, set_prefix='', set_index=0, index=0, project=None):
     context['value'] = get_value(context, attribute, set_prefix=set_prefix, set_index=set_index,
