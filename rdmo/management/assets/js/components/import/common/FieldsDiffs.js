@@ -11,8 +11,8 @@ const FieldsDiffs = ({ element, field }) => {
       return null
   }
   const fieldDiffData = element.updated_and_changed[field]
-  const newVal = fieldDiffData.updated ?? ''
-  const oldVal = fieldDiffData.current ?? ''
+  const newVal = fieldDiffData.newValue ?? ''
+  const oldVal = fieldDiffData.oldValue ?? ''
   const changed = fieldDiffData.changed ?? false
   const hideLineNumbers = fieldDiffData.hideLineNumbers ?? true
   const splitView = fieldDiffData.splitView ?? true

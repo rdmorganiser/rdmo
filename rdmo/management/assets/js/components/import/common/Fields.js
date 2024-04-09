@@ -26,7 +26,7 @@ const excludeKeys = [
   'warnings',
   'updated_and_changed',
   'changed',
-  'changed_fields',
+  'changedFields',
 ]
 
 const Fields = ({ element }) => {

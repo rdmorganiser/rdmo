@@ -1,6 +1,7 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import isEmpty from 'lodash/isEmpty'
+import { DiffMethod } from 'react-diff-viewer-continued'
+import PropTypes from 'prop-types'
 
 import ImportElement from '../import/ImportElement'
 import ImportSuccessElement from '../import/ImportSuccessElement'
@@ -10,82 +11,160 @@ import ImportInfo from '../import/common/ImportInfo'
 import ImportFilters from '../import/common/ImportFilters'
 import get from 'lodash/get'
 
+function getDiffData( diffData ) {
+    const OriginalValue = diffData.current_data || ''
+    const NewValue = diffData.new_data || ''
+
+  let OriginalValueStr = OriginalValue
+  let NewValueStr = NewValue
+    if (Array.isArray(NewValue) && Array.isArray(OriginalValue)) {
+      // cast Array to String, joined by newline
+      OriginalValueStr = OriginalValue.join('\n')
+      NewValueStr = NewValue.join('\n')
+      console.log('isArray', NewValue, OriginalValueStr, NewValueStr)
+      diffData.hideLineNumbers = false
+      diffData.splitView = false
+      diffData.compareMethod = DiffMethod.LINES
+    }
+    else {
+      OriginalValueStr = OriginalValue.toString()
+      NewValueStr = NewValue.toString()
+    }
+    const equality = NewValueStr === OriginalValueStr
+    diffData.changed = !equality
+    diffData.newValue = NewValueStr
+    diffData.oldValue = OriginalValueStr
+    return diffData
+
+}
+
+function getDiffsForUpdatedElement( element )  {
+  let changedElement = false
+  let changedFields = []
+  Object.entries(element.updated_and_changed).sort().map(([key, diffData]) => {
+    const elementFieldDiff = getDiffData(diffData)
+    console.log('setDiffsAllFields', key, elementFieldDiff)
+    if (elementFieldDiff.changed ?? true) {
+      changedFields.push(key)
+      changedElement = true
+    }
+    element.updated_and_changed[key] = elementFieldDiff
+  })
+  element.changedFields = changedFields
+  element.changed = changedElement
+  // this.element.updated_and_changed = updatedAndChangedElement
+  return element
+}
+
+
+class ImportedElementsDiffsManager {
+  constructor( elements ) {
+    // Assign the RGB values as a property of `this`.
+    this.elementsImported = elements
+    this.elements = []
+    this.createdElements = []
+    this.updatedElements = []
+    this.changedElements = []
+    this.importWarnings = []
+    this.importErrors = []
+  }
+  setElementsDiff() {
+    this.elementsImported.forEach(elementRaw => {
+      const element = getDiffsForUpdatedElement(elementRaw)
+      this.elements.push(element)
+      if (element.updated ?? true) {
+        this.updatedElements.push(element)
+        if (element.changed ?? true) {
+          this.changedElements.push(element)
+        }
+      } else {
+        if (element.created ?? true) {
+          this.createdElements.push(element)
+          }
+        }
+      if (!isEmpty(element.warnings)) {
+        this.importWarnings.push(element)
+      }
+      if (!isEmpty(element.errors)) {
+        this.importErrors.push(element)
+      }
+      })
+    }
+}
+
+function filterElementsByChanged (elements, selectFilterChanged) {
+    if (selectFilterChanged === true) {
+      return elements.filter((element) => element.changed)
+  } else {
+    return elements
+  }}
+
+function filterElementsByUri (elements, searchString) {
+  if (searchString) {
+    const lowercaseSearch = searchString.toLowerCase()
+    return elements.filter((element) =>
+      element.uri.toLowerCase().includes(lowercaseSearch)
+    )} else {
+    return elements
+  }
+}
+
+function filterElementsByUriPrefix(elements, searchUriPrefix) {
+    if (searchUriPrefix) {
+      return elements.filter((element) =>
+        element.uri_prefix.toLowerCase().includes(searchUriPrefix)
+      )} else {
+        return elements
+      }
+    }
+
+function filterElements(elements, selectFilterChanged, selectedUriPrefix, searchString) {
+  const filteredElements = filterElementsByUri(
+    filterElementsByUriPrefix(
+      filterElementsByChanged(elements, selectFilterChanged),
+      selectedUriPrefix),
+    searchString)
+  return filteredElements
+}
+
 const Import = ({ config, imports, configActions, importActions }) => {
   const { file, elements, success } = imports
 
-  const updatedAndChangedElements = elements.filter(element => element.updated && element.changed)
-
-  const updatedElements = elements.filter(element => element.updated)
-  const createdElements = elements.filter(element => element.created)
-
-  const importWarnings = elements.filter(element => !isEmpty(element.warnings))
-  const importErrors = elements.filter(element => !isEmpty(element.errors))
+  const elementsDiff = new ImportedElementsDiffsManager(elements)
+  elementsDiff.setElementsDiff()
 
   const searchString = get(config, 'filter.import.elements.search', '')
   const selectedUriPrefix = get(config, 'filter.import.elements.uri_prefix', '')
   const selectFilterChanged = get(config, 'filter.import.elements.changed', false)
 
-  // filter func callbacks
-  const filterByChanged = (elements, selectFilterChanged, updatedAndChangedElements) => {
-    if (selectFilterChanged === true && updatedAndChangedElements.length > 0) {
-    return updatedAndChangedElements
-  } else {
-    return elements
-  }}
-  const filterByUriSearch = (elements, searchString) => {
-    if (searchString) {
-      const lowercaseSearch = searchString.toLowerCase()
-      return elements.filter((element) =>
-        element.uri.toLowerCase().includes(lowercaseSearch)
-          // || element.title.toLowerCase().includes(lowercaseSearch)
-      )
-    } else {
-      return elements
-    }
-  }
-    const filterByUriPrefix = (elements, searchUriPrefix) => {
-    if (searchUriPrefix) {
-      return elements.filter((element) =>
-        element.uri_prefix.toLowerCase().includes(searchUriPrefix)
-          // || element.title.toLowerCase().includes(lowercaseSearch)
-      )
-    } else {
-      return elements
-    }
-  }
-
-  const filteredElements = filterByUriSearch(
-                                  filterByUriPrefix(
-                                        filterByChanged(elements, selectFilterChanged, updatedAndChangedElements),
-                                  selectedUriPrefix),
-                          searchString)
+  const filteredElements = filterElements(elements, selectFilterChanged, selectedUriPrefix, searchString)
 
   return (
     <div className="panel panel-default panel-import">
       <div className="panel-heading">
         <strong>{gettext('Import')} from: {file.name}</strong>
-        <ImportInfo elementsLength={elements.length} createdLength={createdElements.length}
-                        updatedLength={updatedElements.length} changedLength={updatedAndChangedElements.length}
-                        warningsLength={importWarnings.length} errorsLength={importErrors.length}/>
+        <ImportInfo elementsLength={elementsDiff.elements.length} createdLength={elementsDiff.createdElements.length}
+                        updatedLength={elementsDiff.updatedElements.length} changedLength={elementsDiff.changedElements.length}
+                        warningsLength={elementsDiff.importWarnings.length} errorsLength={elementsDiff.importErrors.length}/>
 
       </div>
         {
-          updatedAndChangedElements.length > 0 &&
-          <ImportFilters config={config} elements={elements}
-                         updatedAndChanged={updatedAndChangedElements}
+          elementsDiff.changedElements.length > 0 &&
+          <ImportFilters config={config} elements={elementsDiff.elements}
+                         updatedAndChanged={elementsDiff.changedElements}
                          filteredElements={filteredElements}
                          configActions={configActions}
           />
         }
 
         {
-        importWarnings.length > 0 &&
-          <ImportWarningsPanel config={config} elements={importWarnings} importActions={importActions}
+        elementsDiff.importWarnings.length > 0 &&
+          <ImportWarningsPanel config={config} elements={elementsDiff.importWarnings} importActions={importActions}
                                configActions={configActions}/>
         }
         {
-        importErrors.length > 0 &&
-          <ImportErrorsPanel config={config} elements={importErrors} importActions={importActions}
+        elementsDiff.importErrors.length > 0 &&
+          <ImportErrorsPanel config={config} elements={elementsDiff.importErrors} importActions={importActions}
                                configActions={configActions}/>
         }
         <ul className="list-group">

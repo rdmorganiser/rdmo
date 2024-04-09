@@ -58,8 +58,6 @@ IMPORT_ELEMENT_INIT_DICT = {
         'errors': list,
         'created': bool,
         'updated': bool,
-        'changed': bool,
-        'changed_fields': list,
         ELEMENT_DIFF_FIELD_NAME: dict,
     }
 
@@ -171,8 +169,8 @@ def import_element(
             set_reverse_m2m_through_instance(instance, element, **asdict(reverse_m2m_fields),
                                              original=original, save=save)
     # set aggregated changes potentially to True and a list of changed fields
-    if _updated and element[ELEMENT_DIFF_FIELD_NAME]:
-        set_element_diff_field_meta_info(element)
+    # if _updated and element[ELEMENT_DIFF_FIELD_NAME]:
+    #     set_element_diff_field_meta_info(element)
 
     if save and settings.MULTISITE:
         # could be optimized with a bulk_create of through model later
@@ -192,7 +190,7 @@ def strip_uri_prefix_endswith_slash(element: dict) -> dict:
         element['uri_prefix'] = element['uri_prefix'].rstrip('/')
     return element
 
-def set_element_diff_field_meta_info(element: dict) -> None:
+def _set_element_diff_field_meta_info(element: dict) -> None:
     changed_fields = {k: val for k, val in element[ELEMENT_DIFF_FIELD_NAME].items() if val['changed']}
     element['changed'] = bool(changed_fields)
     element['changed_fields'] = list(changed_fields.keys())
