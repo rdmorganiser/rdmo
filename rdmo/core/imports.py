@@ -8,12 +8,9 @@ from typing import List, Optional, Tuple, Union
 
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
-from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework.utils import model_meta
-
-from diff_match_patch import diff_match_patch
 
 from rdmo.core.constants import RDMO_MODELS
 from rdmo.core.import_helpers import ExtraFieldDefaultHelper
@@ -24,6 +21,7 @@ logger = logging.getLogger(__name__)
 ELEMENT_DIFF_FIELD_NAME = "updated_and_changed"
 NEW_DATA_FIELD = "new_data"
 CURRENT_DATA_FIELD = "current_data"
+
 
 def handle_uploaded_file(filedata):
     tempfilename = generate_tempfile_name()
@@ -47,7 +45,7 @@ def generate_tempfile_name():
     return fn
 
 
-def get_or_return_instance(model: models.Model, uri: Optional[str]=None) -> Tuple[models.Model, bool]:
+def get_or_return_instance(model: models.Model, uri: Optional[str] = None) -> Tuple[models.Model, bool]:
     if uri is None:
         return model(), True
     try:
@@ -57,7 +55,8 @@ def get_or_return_instance(model: models.Model, uri: Optional[str]=None) -> Tupl
     except model.MultipleObjectsReturned:
         return model.objects.filter(uri=uri).first(), False
 
-def get_rdmo_model_path(target_name:str, field_name: str):
+
+def get_rdmo_model_path(target_name: str, field_name: str):
     try:
         return RDMO_MODELS[target_name]
     except KeyError:
@@ -65,7 +64,7 @@ def get_rdmo_model_path(target_name:str, field_name: str):
             return RDMO_MODELS[field_name]
 
 
-def make_import_info_msg(verbose_name: str, created: bool, uri: Optional[str]=None):
+def make_import_info_msg(verbose_name: str, created: bool, uri: Optional[str] = None):
     if uri is None:
         return "%s, no uri" % verbose_name
     if created:
@@ -98,6 +97,7 @@ def track_messages_on_element(element: dict, element_field: str, warning: Option
         _initialize_tracking_field(element, element_field)
         _append_error(element, element_field, error)
 
+
 def _initialize_track_changes_element_field(element: dict, element_field: str):
     if ELEMENT_DIFF_FIELD_NAME not in element:
         element[ELEMENT_DIFF_FIELD_NAME] = {}
@@ -105,8 +105,10 @@ def _initialize_track_changes_element_field(element: dict, element_field: str):
     if element_field and element_field not in element[ELEMENT_DIFF_FIELD_NAME]:
         element[ELEMENT_DIFF_FIELD_NAME][element_field] = {}
 
+
 def _cast_list_of_string_to_list(list_of_strings: List[str]) -> str:
     return "\n".join(map(str, list_of_strings))
+
 
 def track_changes_on_element(element: dict,
                              element_field: str,
@@ -114,45 +116,24 @@ def track_changes_on_element(element: dict,
                              instance_field: Optional[str] = None,
                              original=None,
                              original_value: Optional[Union[str, List[str]]] = None):
-    if original is None and original_value is None:
-        return
-    if new_value is None:
+    if (original is None and original_value is None) or new_value is None:
         return
 
     _initialize_track_changes_element_field(element, element_field)
 
-    # optional js prop for react-diff-viewer-continued
-    js_diff_viewer_props = {}
-
-    _get_field = element_field if instance_field is None else instance_field
     if original_value is None:
+        _get_field = element_field if instance_field is None else instance_field
         original_value = getattr(original, _get_field, '')
 
-    if isinstance(new_value, list) and isinstance(original_value, list):
-        # cast a list of strings with uris to a string with newlines
-        new_value = _cast_list_of_string_to_list(new_value)
-        original_value = _cast_list_of_string_to_list(original_value)
-        js_diff_viewer_props['hideLineNumbers'] = False
-        js_diff_viewer_props['splitView'] = False
-
-    new_value = force_str(new_value)
-    original_value = force_str(original_value)
-    dmp = diff_match_patch()
-    diff = dmp.diff_main(original_value, new_value)
-    dmp.diff_cleanupSemantic(diff)
-    changed: bool = any(i[0] != dmp.DIFF_EQUAL for i in diff)
-    #  TODO maybe rename updated to new
-    element[ELEMENT_DIFF_FIELD_NAME][element_field]['current'] = original_value
-    element[ELEMENT_DIFF_FIELD_NAME][element_field]['updated'] = new_value
-    element[ELEMENT_DIFF_FIELD_NAME][element_field]['changed'] = changed
-    element[ELEMENT_DIFF_FIELD_NAME][element_field].update(js_diff_viewer_props)
+    element[ELEMENT_DIFF_FIELD_NAME][element_field][CURRENT_DATA_FIELD] = original_value
+    element[ELEMENT_DIFF_FIELD_NAME][element_field][NEW_DATA_FIELD] = new_value
 
 
 def get_lang_field_values(field_name: str,
-                        element: Optional[dict] = None,
-                        instance: Optional[models.Model] = None,
-                        get_by_lang_field_key: bool = True):
-    if (element is not None and instance is not None):
+                          element: Optional[dict] = None,
+                          instance: Optional[models.Model] = None,
+                          get_by_lang_field_key: bool = True):
+    if element is not None and instance is not None:
         raise ValueError("Please choose one of each")
 
     ret = []
@@ -171,6 +152,7 @@ def get_lang_field_values(field_name: str,
         ret.append(row)
     return ret
 
+
 def set_lang_field(instance, field_name, element, original=None):
     languages_field_values = get_lang_field_values(field_name, element=element)
     for lang_fields_value in languages_field_values:
@@ -184,6 +166,7 @@ def set_lang_field(instance, field_name, element, original=None):
                                  original=original)
         setattr(instance, field_lang_name, field_value)
 
+
 def track_changes_on_uri_of_foreign_field(element, field_name, foreign_uri, original=None):
     if original is None:
         return
@@ -193,6 +176,7 @@ def track_changes_on_uri_of_foreign_field(element, field_name, foreign_uri, orig
     if original_foreign_instance:
         original_foreign_uri = getattr(original_foreign_instance, 'uri', '')
     track_changes_on_element(element, field_name, new_value=foreign_uri, original_value=original_foreign_uri)
+
 
 def set_foreign_field(instance, field_name, element, uploaded_uris=None, original=None) -> None:
     if field_name not in element:
@@ -205,7 +189,8 @@ def set_foreign_field(instance, field_name, element, uploaded_uris=None, origina
         return
 
     if 'uri' not in foreign_element:
-        message = 'Foreign model can not be assigned on {instance_model}.{field_name} {instance_uri} due to missing uri.'.format( # noqa: E501
+        message = 'Foreign model can not be assigned on {instance_model}.{field_name} {instance_uri} due to missing uri.'.format(
+            # noqa: E501
             instance_model=instance._meta.object_name,
             instance_uri=element.get('uri'),
             field_name=field_name
@@ -237,25 +222,25 @@ def set_foreign_field(instance, field_name, element, uploaded_uris=None, origina
             setattr(instance, field_name, foreign_instance)
         _foreign_uri = foreign_uri if foreign_instance is not None else ""
         track_changes_on_uri_of_foreign_field(element,
-                                    field_name,
-                                    _foreign_uri,
-                                    original=original)
+                                              field_name,
+                                              _foreign_uri,
+                                              original=original)
     except ValueError:
-        message = '{foreign_model} {foreign_uri} can not be assigned on {instance_model}.{field_name} {instance_uri} .'.format( # noqa: E501
+        message = '{foreign_model} {foreign_uri} can not be assigned on {instance_model}.{field_name} {instance_uri} .'.format(
+            # noqa: E501
             foreign_model=foreign_model._meta.object_name,
             foreign_uri=foreign_uri,
             instance_model=instance._meta.object_name,
             instance_uri=element.get('uri'),
             field_name=field_name,
-            )
+        )
         logger.info(message)
         element['errors'][foreign_uri].append(message)
         track_messages_on_element(element, field_name, error=message)
 
 
 def set_extra_field(instance, field_name, element,
-                     extra_field_helper: Optional[ExtraFieldDefaultHelper]=None, original=None) -> None:
-
+                    extra_field_helper: Optional[ExtraFieldDefaultHelper] = None, original=None) -> None:
     element_value = element.get(field_name)
 
     extra_value = None
@@ -264,7 +249,7 @@ def set_extra_field(instance, field_name, element,
     elif extra_field_helper is not None:
         # default_value
         extra_value = extra_field_helper.get_default(instance=instance,
-                                                      key=field_name)
+                                                     key=field_name)
 
     if extra_value is not None:
         setattr(instance, field_name, extra_value)
@@ -305,7 +290,6 @@ def set_m2m_through_instances(instance, element, field_name=None, source_name=No
     _track_changes = {}
     _track_changes[NEW_DATA_FIELD] = []
     _track_changes[CURRENT_DATA_FIELD] = []
-
 
     if original is not None:
         try:
@@ -370,6 +354,7 @@ def set_m2m_through_instances(instance, element, field_name=None, source_name=No
     original_instance_data = sorted(_track_changes[CURRENT_DATA_FIELD], key=lambda k: k['order'])
     track_changes_on_m2m_through_instances(element, field_name, original_instance_data, new_instance_data)
 
+
 def track_changes_on_m2m_through_instances(element, field_name, original_instance_data, new_instance_data):
     _initialize_track_changes_element_field(element, field_name)
     element[ELEMENT_DIFF_FIELD_NAME][field_name][NEW_DATA_FIELD] = new_instance_data
@@ -414,8 +399,6 @@ def set_m2m_instances(instance, element, field_name, original=None, save=None):
         getattr(instance, field_name).set(foreign_instances)
     track_changes_m2m_instances(element, field_name,
                                 foreign_instances, original=original)
-
-
 
 
 def set_reverse_m2m_through_instance(instance, element, field_name=None, source_name=None,
