@@ -1,9 +1,9 @@
 from collections import OrderedDict
 from functools import partial
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Union
 
-from rdmo.core.imports import track_changes_on_element
-from rdmo.management.imports import _initialize_import_element_dict, set_element_diff_field_meta_info
+from rdmo.core.imports import track_changes_on_element, ELEMENT_DIFF_FIELD_NAME, NEW_DATA_FIELD, CURRENT_DATA_FIELD
+from rdmo.management.imports import _initialize_import_element_dict
 
 UPDATE_FIELD_FUNCS = {
     'comment': lambda text: f"this is a test comment {text}",
@@ -13,9 +13,33 @@ UPDATE_FIELD_FUNCS = {
 
 
 def filter_changed_fields(element, updated_fields=None) -> bool:
+    _changed = element.get('changed', False)
     if updated_fields is None:
-        return element.get('changed', False)
-    return element.get('changed', False) and any(i in updated_fields for i in element.get('changed_fields', []))
+        return _changed
+    changes = element.get(ELEMENT_DIFF_FIELD_NAME, {})
+    for field, diff in changes.items():
+        if field not in updated_fields:
+            continue
+        _new_value = diff.get(NEW_DATA_FIELD)
+        _current_value = diff.get(CURRENT_DATA_FIELD)
+        if _new_value != _current_value:
+            return True
+    return _changed
+
+def get_changed_elements(elements: List[Dict]) -> Dict[str, Dict[str,Union[bool,str]]]:
+    changed_elements = {}
+    for element in elements:
+
+        changed_fields = []
+        for key, diff_field in element[ELEMENT_DIFF_FIELD_NAME].items():
+            if diff_field[NEW_DATA_FIELD] != diff_field[CURRENT_DATA_FIELD]:
+                changed_fields += key
+        if changed_fields:
+            changed_elements[element['uri']] = {
+                'changed': bool(changed_fields),
+                'changed_fields': changed_fields,
+            }
+    return changed_elements
 
 
 def _test_helper_filter_updated_and_changed(elements: List[Dict], updated_fields: Optional[Tuple]) -> List[Dict]:
@@ -40,6 +64,5 @@ def _test_helper_change_fields_elements(elements,
                 new_val = UPDATE_FIELD_FUNCS[field](_n)
                 track_changes_on_element(_element, field, new_val, original_value=original_value)
                 _element[field] = new_val
-            set_element_diff_field_meta_info(_element)
         _new_elements[_uri] = _element
     return _new_elements
