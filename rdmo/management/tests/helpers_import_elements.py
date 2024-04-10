@@ -2,7 +2,7 @@ from collections import OrderedDict
 from functools import partial
 from typing import Dict, List, Optional, Tuple, Union
 
-from rdmo.core.imports import track_changes_on_element, ELEMENT_DIFF_FIELD_NAME, NEW_DATA_FIELD, CURRENT_DATA_FIELD
+from rdmo.core.imports import CURRENT_DATA_FIELD, ELEMENT_DIFF_FIELD_NAME, NEW_DATA_FIELD, track_changes_on_element
 from rdmo.management.imports import _initialize_import_element_dict
 
 UPDATE_FIELD_FUNCS = {

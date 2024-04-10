@@ -189,8 +189,7 @@ def set_foreign_field(instance, field_name, element, uploaded_uris=None, origina
         return
 
     if 'uri' not in foreign_element:
-        message = 'Foreign model can not be assigned on {instance_model}.{field_name} {instance_uri} due to missing uri.'.format(
-            # noqa: E501
+        message = 'Foreign model can not be assigned on {instance_model}.{field_name} {instance_uri} due to missing uri.'.format(  # noqa: E501
             instance_model=instance._meta.object_name,
             instance_uri=element.get('uri'),
             field_name=field_name
@@ -226,8 +225,7 @@ def set_foreign_field(instance, field_name, element, uploaded_uris=None, origina
                                               _foreign_uri,
                                               original=original)
     except ValueError:
-        message = '{foreign_model} {foreign_uri} can not be assigned on {instance_model}.{field_name} {instance_uri} .'.format(
-            # noqa: E501
+        message = '{foreign_model} {foreign_uri} can not be assigned on {instance_model}.{field_name} {instance_uri} .'.format(  # noqa: E501
             foreign_model=foreign_model._meta.object_name,
             foreign_uri=foreign_uri,
             instance_model=instance._meta.object_name,
