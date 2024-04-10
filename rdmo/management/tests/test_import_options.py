@@ -98,7 +98,7 @@ def test_update_optionsets_from_changed_xml(db, settings):
     assert len([i for i in  changed_elements.values() if i]) == 5
 
     # change the order of the options, as in the xml
-    optionset_element = next([i for i in imported_elements_1 if i['uri'] == test_optionset['original']['uri']])
+    optionset_element = next(filter(lambda x: x['uri'] == test_optionset['original']['uri'], imported_elements_1))
     # the test changes are simply the reversed order of the options
     test_optionset_changed_options = test_optionset['original']['options'][::-1]
     assert optionset_element
