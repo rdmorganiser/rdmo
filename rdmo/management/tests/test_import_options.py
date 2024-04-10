@@ -2,14 +2,14 @@ from pathlib import Path
 
 import pytest
 
-from rdmo.core.imports import ELEMENT_DIFF_FIELD_NAME, NEW_DATA_FIELD, CURRENT_DATA_FIELD
+from rdmo.core.imports import CURRENT_DATA_FIELD, ELEMENT_DIFF_FIELD_NAME, NEW_DATA_FIELD
 from rdmo.management.imports import import_elements
 from rdmo.options.models import Option, OptionSet
 
 from .helpers_import_elements import (
     _test_helper_change_fields_elements,
     _test_helper_filter_updated_and_changed,
-    get_changed_elements
+    get_changed_elements,
 )
 from .helpers_models import delete_all_objects
 from .helpers_xml import read_xml_and_parse_to_elements
@@ -98,11 +98,12 @@ def test_update_optionsets_from_changed_xml(db, settings):
     assert len([i for i in  changed_elements.values() if i]) == 5
 
     # change the order of the options, as in the xml
-    optionset_element = [i for i in imported_elements_1 if i['uri'] == test_optionset['original']['uri']][0]
-    test_optionset_changed_options = test_optionset['original']['options'][::-1]  # the test changes are simply the reversed order of the options
+    optionset_element = next([i for i in imported_elements_1 if i['uri'] == test_optionset['original']['uri']])
+    # the test changes are simply the reversed order of the options
+    test_optionset_changed_options = test_optionset['original']['options'][::-1]
     assert optionset_element
     assert "options" in optionset_element[ELEMENT_DIFF_FIELD_NAME]
-    assert optionset_element[ELEMENT_DIFF_FIELD_NAME]['options'][CURRENT_DATA_FIELD] == test_optionset['original']['options']
+    assert optionset_element[ELEMENT_DIFF_FIELD_NAME]['options'][CURRENT_DATA_FIELD] == test_optionset['original']['options']  # noqa: E501
     assert optionset_element[ELEMENT_DIFF_FIELD_NAME]['options'][NEW_DATA_FIELD] == test_optionset_changed_options
 
     # now save the elements_1
