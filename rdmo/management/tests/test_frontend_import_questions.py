@@ -42,11 +42,11 @@ def test_import_catalogs_in_management(logged_in_user: Page) -> None:
     expect(rows_displayed_in_ui).to_have_count(148)
     page.get_by_role("link", name="Hide all").click()
     expect(rows_displayed_in_ui).to_have_count(0)
-    page.screenshot(path="screenshots/management-import-pre-import.png", full_page=True)
+    page.screenshot(path="screenshots/management-import-catalogs-pre.png", full_page=True)
     # click the import button to start saving the instances to the db
     page.get_by_role("button", name="Import 148 elements").click()
     expect(page.get_by_role("heading", name="Import successful")).to_be_visible()
-    page.screenshot(path="screenshots/management-import-post-import.png", full_page=True)
+    page.screenshot(path="screenshots/management-import-catalogs-post.png", full_page=True)
     page.get_by_text("Created:").click()
     # go back to management page
     page.get_by_role("button", name="Back").click()
