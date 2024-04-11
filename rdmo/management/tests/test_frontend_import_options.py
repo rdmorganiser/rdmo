@@ -46,7 +46,7 @@ def test_import_and_update_optionsets_in_management(logged_in_user: Page) -> Non
     # click the import button to start saving the instances to the db
     page.get_by_role("button", name=f"Import {OPTIONS_TOTAL_COUNT} elements").click()
     expect(page.get_by_role("heading", name="Import successful")).to_be_visible()
-    page.screenshot(path="screenshots/management-import-post-import.png", full_page=True)
+    page.screenshot(path="screenshots/management-import-optionsets-post-import.png", full_page=True)
     page.get_by_text("Created:").click()
     # go back to management page
     page.get_by_role("button", name="Back").click()
@@ -63,9 +63,9 @@ def test_import_and_update_optionsets_in_management(logged_in_user: Page) -> Non
     expect(page.get_by_text("Import from: optionsets-1.xml")).to_be_visible(timeout=40_000)
     # assert changed elements
     expect(page.get_by_text(f"Total: {OPTIONS_TOTAL_COUNT} Updated: {OPTIONS_TOTAL_COUNT} (Changed: 5) Warnings: 1")).to_be_visible(timeout=30_000)  # noqa: E501
-
     expect(page.get_by_text("Filter changed (5)")).to_be_visible()
     page.get_by_text("Filter changed (5)").click()
     page.get_by_role("link", name="Show changes").click()
     expect(page.get_by_text("http://example.com/terms/options/one_two_three/three").nth(1)).to_be_visible()
+    page.screenshot(path="screenshots/management-import-optionsets-1-changes.png", full_page=True)
     ## TODO test for warnings, errors
