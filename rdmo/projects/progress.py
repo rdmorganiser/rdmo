@@ -53,7 +53,7 @@ def compute_navigation(section, project, snapshot=None):
             'id': catalog_section.id,
             'uri': catalog_section.uri,
             'title': catalog_section.title,
-            'first': catalog_section.elements[0].id if section.elements else None
+            'first': catalog_section.elements[0].id if catalog_section.elements else None
         }
         if catalog_section.id == section.id:
             navigation_section['pages'] = []
