@@ -33,7 +33,7 @@ const Attributes = ({ config, attributes, configActions, elementActions }) => {
                           placeholder={gettext('Filter attributes')} />
           </div>
           <div className="col-sm-4">
-            <FilterUriPrefix value={get(config, 'filter.attributes.uriPrefix', '')} onChange={updateFilterUriPrefix}
+            <FilterUriPrefix value={get(config, 'filter.attributes.uri_prefix', '')} onChange={updateFilterUriPrefix}
                              options={getUriPrefixes(attributes)} />
           </div>
           {
