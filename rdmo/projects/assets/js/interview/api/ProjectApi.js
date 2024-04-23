@@ -14,6 +14,10 @@ class ProjectsApi extends BaseApi {
     return this.get(`/api/v1/projects/projects/${projectId}/progress/`)
   }
 
+  static fetchOptions(projectId, optionsetId) {
+    return this.get(`/api/v1/projects/projects/${projectId}/options/${optionsetId}`)
+  }
+
 }
 
 export default ProjectsApi

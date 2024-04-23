@@ -223,10 +223,13 @@ SETTINGS_API = [
 ]
 
 TEMPLATES_API = [
+    'projects/project_interview_add_field_help.html',
     'projects/project_interview_buttons_help.html',
     'projects/project_interview_navigation_help.html',
     'projects/project_interview_overview_help.html',
+    'projects/project_interview_page_tabs_help.html',
     'projects/project_interview_progress_help.html',
+    'projects/project_interview_multiple_values_warning.html',
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

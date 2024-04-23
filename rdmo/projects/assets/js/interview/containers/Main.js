@@ -3,20 +3,40 @@ import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
-import Breadcrump from '../components/Breadcrump'
-import Page from '../components/Page'
+import Breadcrump from '../components/main/Breadcrump'
+import Page from '../components/main/page/Page'
 
-import * as configActions from '../actions/configActions'
+import { showInterview } from '../utils/interview'
+
+import * as configActions from 'rdmo/core/assets/js/actions/configActions'
+
 import * as interviewActions from '../actions/interviewActions'
 
 // eslint-disable-next-line no-unused-vars
-const Main = ({ config, interview, configActions, interviewActions }) => {
-
-  if (interview.show) {
+const Main = ({ config, settings, templates, user, interview, configActions, interviewActions }) => {
+  if (showInterview(interview)) {
     return (
       <div>
-        <Breadcrump overview={interview.overview} page={interview.page} onClick={interviewActions.fetchPage} />
-        <Page page={interview.page} />
+        <Breadcrump
+          overview={interview.overview}
+          currentPage={interview.page}
+          fetchPage={interviewActions.fetchPage}
+        />
+        <Page
+          config={config}
+          templates={templates}
+          page={interview.page}
+          sets={interview.sets}
+          values={interview.values}
+          fetchPage={interviewActions.fetchPage}
+          createValue={interviewActions.createValue}
+          updateValue={interviewActions.updateValue}
+          deleteValue={interviewActions.deleteValue}
+          activateSet={interviewActions.activateSet}
+          createSet={interviewActions.createSet}
+          updateSet={interviewActions.updateSet}
+          deleteSet={interviewActions.deleteSet}
+        />
       </div>
     )
   }
@@ -27,6 +47,9 @@ const Main = ({ config, interview, configActions, interviewActions }) => {
 
 Main.propTypes = {
   config: PropTypes.object.isRequired,
+  settings: PropTypes.object.isRequired,
+  templates: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
   interview: PropTypes.object.isRequired,
   configActions: PropTypes.object.isRequired,
   interviewActions: PropTypes.object.isRequired
@@ -35,6 +58,9 @@ Main.propTypes = {
 function mapStateToProps(state) {
   return {
     config: state.config,
+    settings: state.settings,
+    templates: state.templates,
+    user: state.user,
     interview: state.interview
   }
 }

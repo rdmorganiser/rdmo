@@ -10,6 +10,16 @@ from rdmo.questions.models import Page, Question, QuestionSet
 from rdmo.questions.utils import get_widget_class
 
 
+class AttributeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Attribute
+        fields = (
+            'id',
+            'uri'
+        )
+
+
 class OptionSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -63,10 +73,13 @@ class QuestionSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, s
     verbose_name = serializers.SerializerMethodField()
     widget_class = serializers.SerializerMethodField()
 
+    _attribute = AttributeSerializer(source='attribute')
+
     class Meta:
         model = Question
         fields = (
             'id',
+            'uri',
             'model',
             'help',
             'text',
@@ -83,6 +96,7 @@ class QuestionSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, s
             'maximum',
             'step',
             'attribute',
+            '_attribute',
             'conditions',
             'optionsets',
             'is_collection',
@@ -109,6 +123,8 @@ class QuestionSetSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin
     elements = serializers.SerializerMethodField()
     verbose_name = serializers.SerializerMethodField()
 
+    _attribute = AttributeSerializer(source='attribute')
+
     class Meta:
         model = QuestionSet
         fields = (
@@ -118,6 +134,7 @@ class QuestionSetSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin
             'help',
             'verbose_name',
             'attribute',
+            '_attribute',
             'is_collection',
             'elements',
             'has_conditions'
@@ -144,6 +161,8 @@ class PageSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
     next_page = serializers.SerializerMethodField()
     verbose_name = serializers.SerializerMethodField()
 
+    _attribute = AttributeSerializer(source='attribute')
+
     class Meta:
         model = Page
         fields = (
@@ -152,6 +171,7 @@ class PageSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
             'help',
             'verbose_name',
             'attribute',
+            '_attribute',
             'is_collection',
             'elements',
             'section',
