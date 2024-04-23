@@ -1,27 +1,30 @@
 import { applyMiddleware, createStore, combineReducers } from 'redux'
-import Cookies from 'js-cookie'
 import thunk from 'redux-thunk'
-import isEmpty from 'lodash/isEmpty'
 
-import configReducer from '../reducers/configReducer'
+// import { checkStoreId } from 'rdmo/core/assets/js/utils/store'
+import { getConfigFromLocalStorage } from 'rdmo/core/assets/js/utils/config'
+
+import configReducer from 'rdmo/core/assets/js/reducers/configReducer'
+import settingsReducer from 'rdmo/core/assets/js/reducers/settingsReducer'
+import templateReducer from 'rdmo/core/assets/js/reducers/templateReducer'
+import userReducer from 'rdmo/core/assets/js/reducers/userReducer'
+
 import interviewReducer from '../reducers/interviewReducer'
 
-import * as configActions from '../actions/configActions'
+import * as configActions from 'rdmo/core/assets/js/actions/configActions'
+import * as settingsActions from 'rdmo/core/assets/js/actions/settingsActions'
+import * as templateActions from 'rdmo/core/assets/js/actions/templateActions'
+import * as userActions from 'rdmo/core/assets/js/actions/userActions'
+
 import * as interviewActions from '../actions/interviewActions'
 
 import { parseLocation } from '../utils/location'
 
 export default function configureStore() {
-  const middlewares = [thunk]
-
   // empty localStorage in new session
-  const currentStoreId = Cookies.get('storeid')
-  const localStoreId = localStorage.getItem('rdmo.storeid')
+  // checkStoreId()
 
-  if (isEmpty(localStoreId) || localStoreId !== currentStoreId) {
-    localStorage.clear()
-    localStorage.setItem('rdmo.storeid', currentStoreId)
-  }
+  const middlewares = [thunk]
 
   if (process.env.NODE_ENV === 'development') {
     const { logger } = require('redux-logger')
@@ -30,7 +33,10 @@ export default function configureStore() {
 
   const rootReducer = combineReducers({
     config: configReducer,
-    interview: interviewReducer
+    interview: interviewReducer,
+    settings: settingsReducer,
+    templates: templateReducer,
+    user: userReducer
   })
 
   const store = createStore(
@@ -45,8 +51,14 @@ export default function configureStore() {
 
   // this event is triggered when the page first loads
   window.addEventListener('load', () => {
+    getConfigFromLocalStorage('rdmo.interview').forEach(([path, value]) => {
+      store.dispatch(configActions.updateConfig('rdmo.interview', path, value))
+    })
+
     Promise.all([
-      store.dispatch(configActions.fetchConfig()),
+      store.dispatch(settingsActions.fetchSettings()),
+      store.dispatch(templateActions.fetchTemplates()),
+      store.dispatch(userActions.fetchCurrentUser()),
       store.dispatch(interviewActions.fetchOverview()),
       store.dispatch(interviewActions.fetchProgress())
     ]).then(() => fetchPageFromLocation())
