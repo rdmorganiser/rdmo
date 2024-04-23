@@ -49,3 +49,196 @@
         text-align: center;
     }
 }
+
+.interview-question {
+    margin-bottom: 20px;
+}
+
+.interview-collection  {
+    .interview-input {
+        margin-bottom: 10px;
+    }
+}
+
+.interview-page {
+    h2 {
+        margin-top: 0;
+    }
+
+    .radio,
+    .checkbox {
+        margin: 0;
+
+        label {
+            margin-right: 10px;
+            margin-bottom: 5px;
+            padding-left: 25px;
+            line-height: 30px;
+        }
+        &:last-child label {
+            margin-bottom: 0;
+        }
+        input[type='checkbox'],
+        input[type='radio'] {
+            margin-top: 8px;
+            margin-left: -25px;
+        }
+        input[type='text'] {
+            display: inline-block;
+            width: 200px;
+        }
+    }
+    .radio {
+        &.yesno {
+            label {
+                margin-bottom: 0;
+                line-height: 20px;
+            }
+            input[type='radio'] {
+                margin-top: 3px;
+            }
+        }
+        a.remove-link {
+            top: 2px;
+        }
+    }
+
+    .range {
+        display: flex;
+        align-items: center;
+
+        margin-bottom: 10px;
+
+        .badge {
+            margin-right: 10px;
+        }
+
+        input {
+            margin-bottom: 0;
+            accent-color: #777777;  // same as .badge
+        }
+    }
+
+    .radio-control,
+    .checkbox-control,
+    .file-control {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+
+        padding: 6px 12px;
+        margin: 0;
+    }
+
+    .radio-control,
+    .checkbox-control {
+        label {
+            width: 100%;
+        }
+        .yesno label {
+            width: auto;
+        }
+    }
+
+    .file-control {
+        display: block;
+        width: 100%;
+        padding: 6px 6px;
+        font-weight: normal;
+
+        input[type="file"] {
+            display: inline-block;
+            outline: 0;
+        }
+
+        p:last-child,
+        ul:last-child {
+            margin-bottom: 0;
+        }
+
+        .dropzone {
+            border: 2px dashed #ccc;
+            border-radius: 4px;
+            padding: 6px 12px;
+        }
+    }
+
+    .date-control {
+        width: 100%;
+    }
+
+    .react-datepicker {
+        font-size: 12px;
+        border-radius: 4px;
+    }
+
+    .react-datepicker-wrapper {
+        display: block;
+    }
+
+    .react-datepicker__current-month {
+        font-size: 12px;
+    }
+
+    .react-datepicker__day-names {
+        margin-top: 4px;
+    }
+
+    .react-datepicker__day-name,
+    .react-datepicker__day {
+        margin: 4px !important;
+    }
+
+    .interview-input {
+        position: relative;
+    }
+
+    .interview-input-options {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 5;
+
+        .btn-reset-value,
+        .btn-remove-value {
+            opacity: 0.8;
+            line-height: 20px;
+            font-size: 14px;
+            padding-left: 8px;
+            padding-right: 8px;
+        }
+
+        // .btn-remove-value {
+        //     margin-left: 2px;
+        // }
+
+        .btn-reset-value:hover,
+        .btn-remove-value:hover {
+            opacity: 1;
+        }
+
+        .btn-reset-value:focus,
+        .btn-remove-value:focus {
+            outline: 0;
+        }
+
+        .badge-default-value {
+            color: #999;
+            border: 1px solid #999;
+            background-color: white;
+            margin-top: -2px;
+        }
+    }
+}
+
+.interview-page-tabs {
+    margin-bottom: 20px;
+
+    .interview-page-tabs-buttons {
+        float: right;
+
+        button {
+            padding: 0;
+            text-decoration: none;
+        }
+    }
+}
