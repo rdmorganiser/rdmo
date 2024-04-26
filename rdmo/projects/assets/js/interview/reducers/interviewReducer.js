@@ -9,6 +9,7 @@ import {
   FETCH_PROGRESS_SUCCESS,
   FETCH_VALUES_SUCCESS,
   FETCH_VALUES_ERROR,
+  CREATE_VALUE,
   STORE_VALUE_SUCCESS,
   STORE_VALUE_ERROR,
   DELETE_VALUE_SUCCESS,
@@ -18,10 +19,10 @@ import {
   DELETE_SET_ERROR
 } from '../actions/actionTypes'
 
-import { replaceValue, removeValue } from '../utils/value'
-
 const initialState = {
-  show: false
+  show: false,
+  values: [],
+  sets: []
 }
 
 export default function interviewReducer(state = initialState, action) {
@@ -36,10 +37,18 @@ export default function interviewReducer(state = initialState, action) {
       return { ...state, page: action.page, attributes: action.attributes }
     case FETCH_VALUES_SUCCESS:
       return { ...state, values: action.values, sets: action.sets }
+    case CREATE_VALUE:
+      return { ...state, values: [...state.values, action.value] }
     case STORE_VALUE_SUCCESS:
-      return { ...state, values: replaceValue(state.values, action.value)}
+      if (action.valueIndex > -1) {
+        return { ...state, values: state.values.map(
+          (value, valueIndex) => valueIndex == action.valueIndex ? action.value : value
+        )}
+      } else {
+        return { ...state, values: [...state.values, action.value] }
+      }
     case DELETE_VALUE_SUCCESS:
-      return { ...state, values: removeValue(state.values, action.value)}
+      return { ...state, values: state.values.filter((value, valueIndex) => valueIndex != action.valueIndex)}
     case CREATE_SET:
       return { ...state, sets: [...state.sets, action.set] }
     case DELETE_SET_SUCCESS:
