@@ -4,13 +4,22 @@ import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 
 import Link from 'rdmo/core/assets/js/components/Link'
-
+import {useImportElements} from '../../hooks/useImportElements'
 
 
 const ImportSidebar = ({ config, imports, importActions }) => {
   const { elements, success } = imports
+
+   const {
+    // elementsImported,
+    // createdElements,
+    // updatedElements,
+    changedElements,
+    // importWarnings,
+    // importErrors
+  } = useImportElements(elements)
+
   const count = elements.filter(e => e.import).length
-  const updatedAndChangedElements = elements.filter(element => element.updated && element.changed)
   const [uriPrefix, setUriPrefix] = useState('')
   const disabled = isNil(uriPrefix) || isEmpty(uriPrefix)
 
@@ -53,7 +62,7 @@ const ImportSidebar = ({ config, imports, importActions }) => {
               {gettext('Select all')}
             </Link>
           </li>
-            {updatedAndChangedElements.length > 0 &&
+            {changedElements.length > 0 &&
             <li>
               <ul className="list-unstyled" style={{paddingLeft:'20px'}}>
                 <li>
@@ -83,15 +92,17 @@ const ImportSidebar = ({ config, imports, importActions }) => {
               {gettext('Show all')}
             </Link>
           </li>
-          {updatedAndChangedElements.length > 0 &&
+          {changedElements.length > 0 &&
               <li>
                 <ul className="list-unstyled" style={{paddingLeft:'20px'}}>
                   <li>
+                    {/* TODO fix action showChangedElements */}
                     <Link onClick={() => importActions.showChangedElements(true)}>
                       {gettext('Show changes')}
                     </Link>
                   </li>
                   <li>
+                    {/* TODO fix action showChangedElements */}
                     <Link onClick={() => importActions.showChangedElements(false)}>
                       {gettext('Hide changes')}
                     </Link>
