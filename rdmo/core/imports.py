@@ -195,7 +195,8 @@ def set_foreign_field(instance, field_name, element, uploaded_uris=None, origina
             field_name=field_name
         )
         logger.info(message)
-        element['errors'][element.get('uri')].append(message)
+        # [element.get('uri')]
+        element['errors'].append(message)  # errors is a list
         track_messages_on_element(element, field_name, error=message)
         return
 
@@ -216,6 +217,17 @@ def set_foreign_field(instance, field_name, element, uploaded_uris=None, origina
         logger.info(message)
         element['warnings'][foreign_uri].append(message)
         track_messages_on_element(element, field_name, warning=message)
+    except foreign_model.MultipleObjectsReturned:
+        message = 'Multiple objects for {foreign_model} {foreign_uri} for {instance_model} {instance_uri} exist.'.format(    # noqa: E501
+            foreign_model=foreign_model._meta.object_name,
+            foreign_uri=foreign_uri,
+            instance_model=instance._meta.object_name,
+            instance_uri=element.get('uri')
+        )
+        logger.info(message)
+        element['errors'].append(message)  # errors is a list
+        track_messages_on_element(element, field_name, error=message)
+
     try:
         if foreign_instance is not None:
             setattr(instance, field_name, foreign_instance)
@@ -233,7 +245,7 @@ def set_foreign_field(instance, field_name, element, uploaded_uris=None, origina
             field_name=field_name,
         )
         logger.info(message)
-        element['errors'][foreign_uri].append(message)
+        element['errors'].append(message)
         track_messages_on_element(element, field_name, error=message)
 
 
