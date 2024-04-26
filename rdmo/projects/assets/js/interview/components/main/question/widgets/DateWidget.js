@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import DatePicker from 'react-datepicker'
-import { en, de, it, es, fr } from 'date-fns/locale'
+import { enGB, de, it, es, fr } from 'date-fns/locale'
 
 import lang from 'rdmo/core/assets/js/utils/lang'
 
@@ -21,7 +21,7 @@ const DateInput = ({ value, disabled, updateValue }) => {
       case 'fr':
         return fr
       default:
-        return en
+        return enGB
     }
   }
 
