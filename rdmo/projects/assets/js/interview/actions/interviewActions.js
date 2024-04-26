@@ -24,6 +24,7 @@ import {
   FETCH_PROGRESS_SUCCESS,
   FETCH_VALUES_SUCCESS,
   FETCH_VALUES_ERROR,
+  CREATE_VALUE,
   STORE_VALUE_SUCCESS,
   STORE_VALUE_ERROR,
   DELETE_VALUE_SUCCESS,
@@ -118,36 +119,40 @@ export function fetchValuesError(errors) {
 }
 
 export function storeValue(value) {
-  return (dispatch) => {
-    if (isNil(value.file)) {
-      // obnly store the value
-      return ValueApi.storeValue(projectId, value)
-        .then((value) => dispatch(storeValueSuccess(value)))
-        .catch((errors) => dispatch(storeValueError(errors)))
-    } else {
-      // first store the file
-      return ValueApi.storeFile(projectId, value)
-        .then((value) => {
-          // then store the value
-          return ValueApi.storeValue(projectId, value)
-            .then((value) => dispatch(storeValueSuccess(value)))
+  return (dispatch, getStore) => {
+    const valueIndex = getStore().interview.values.indexOf(value)
+    const valueFile = value.file
+
+    return ValueApi.storeValue(projectId, value)
+      .then((value) => {
+        if (isNil(valueFile)) {
+          return dispatch(storeValueSuccess(value, valueIndex))
+        } else {
+          return ValueApi.storeFile(projectId, value, valueFile)
+            .then((value) => dispatch(storeValueSuccess(value, valueIndex)))
             .catch((errors) => dispatch(storeValueError(errors)))
-        })
-        .catch((errors) => dispatch(storeValueError(errors)))
-    }
+        }
+      })
+      .catch((errors) => dispatch(storeValueError(errors)))
   }
 }
 
-export function storeValueSuccess(value) {
-  return {type: STORE_VALUE_SUCCESS, value}
+export function storeValueSuccess(value, valueIndex) {
+  return {type: STORE_VALUE_SUCCESS, value, valueIndex}
 }
 
 export function storeValueError(errors) {
   return {type: STORE_VALUE_ERROR, errors}
 }
 
-export function createValue(attrs) {
-  return storeValue(ValueFactory.create(attrs))
+export function createValue(attrs, store) {
+  const value = ValueFactory.create(attrs)
+
+  if (isNil(store)) {
+    return {type: CREATE_VALUE, value}
+  } else {
+    return storeValue(value)
+  }
 }
 
 export function updateValue(value, attrs) {
@@ -155,15 +160,21 @@ export function updateValue(value, attrs) {
 }
 
 export function deleteValue(value) {
-  return (dispatch) => {
-    return ValueApi.deleteValue(projectId, value)
-      .then(() => dispatch(deleteValueSuccess(value)))
-      .catch((errors) => dispatch(deleteValueError(errors)))
+  return (dispatch, getStore) => {
+    const valueIndex = getStore().interview.values.indexOf(value)
+
+    if (isNil(value.id)) {
+      return dispatch(deleteValueSuccess(valueIndex))
+    } else {
+      return ValueApi.deleteValue(projectId, value)
+        .then(() => dispatch(deleteValueSuccess(valueIndex)))
+        .catch((errors) => dispatch(deleteValueError(errors)))
+    }
   }
 }
 
-export function deleteValueSuccess(value) {
-  return {type: DELETE_VALUE_SUCCESS, value}
+export function deleteValueSuccess(valueIndex) {
+  return {type: DELETE_VALUE_SUCCESS, valueIndex}
 }
 
 export function deleteValueError(errors) {
