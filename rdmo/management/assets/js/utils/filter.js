@@ -37,6 +37,7 @@ const filterEditor = (editor, element) => {
   return isEmpty(editor) || element.editors.includes(toNumber(editor))
 }
 
+
 const getUriPrefixes = (elements) => {
   return elements.reduce((acc, cur) => {
     if (!acc.includes(cur.uri_prefix)) {
@@ -61,4 +62,4 @@ const getExportParams = (filter) => {
   return exportParams.toString()
 }
 
-export { filterElement, getUriPrefixes, getExportParams }
+export { filterElement, getUriPrefixes, getExportParams, filterUriPrefix, filterSearch }
