@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useDebouncedCallback } from 'use-debounce'
-import { isEmpty } from 'lodash'
+import { isEmpty, isNil } from 'lodash'
 
 import AddValue from './common/AddValue'
 import RemoveValue from './common/RemoveValue'
@@ -43,6 +43,12 @@ RangeInput.propTypes = {
 }
 
 const RangeWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue }) => {
+
+  const handleCreateValue = (value) => {
+    value.text = isNil(question.minimum) ? 0 : question.minimum
+    createValue(value)
+  }
+
   return (
     <div className="interview-collection">
       {
@@ -66,7 +72,7 @@ const RangeWidget = ({ question, values, currentSet, disabled, createValue, upda
       }
       {
         question.is_collection && (
-          <AddValue question={question} values={values} currentSet={currentSet} createValue={createValue} />
+          <AddValue question={question} values={values} currentSet={currentSet} createValue={handleCreateValue} />
         )
       }
     </div>

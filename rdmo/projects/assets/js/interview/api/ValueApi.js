@@ -16,9 +16,9 @@ class ValueApi extends BaseApi {
     }
   }
 
-  static storeFile(projectId, value) {
+  static storeFile(projectId, value, file) {
     const formData = new FormData()
-    formData.append('file', value.file)
+    formData.append('file', file)
 
     return this.postFormData(`/api/v1/projects/projects/${projectId}/values/${value.id}/file/`, formData)
   }

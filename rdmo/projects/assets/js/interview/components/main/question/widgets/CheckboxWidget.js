@@ -90,7 +90,7 @@ const CheckboxWidget = ({ question, values, currentSet, disabled, createValue, u
       collection_index: collectionIndex,
       option: option.id,
       text: isNil(text) ? '' : text
-    })
+    }, true)
   }
 
   return (
