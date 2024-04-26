@@ -47,7 +47,7 @@ TextareaInput.propTypes = {
   updateValue: PropTypes.func.isRequired
 }
 
-const TextareaWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue }) => {
+const TextareaWidget = ({ question, values, currentSet, disabled, focus, createValue, updateValue, deleteValue }) => {
   return (
     <div className="interview-collection">
       {
@@ -62,7 +62,7 @@ const TextareaWidget = ({ question, values, currentSet, disabled, createValue, u
               value={value}
               disabled={disabled}
               updateValue={updateValue}
-              focus={valueIndex == values.length - 1}
+              focus={focus && valueIndex == values.length - 1}
             />
           </div>
         ))
@@ -80,6 +80,7 @@ TextareaWidget.propTypes = {
   question: PropTypes.object.isRequired,
   values: PropTypes.array.isRequired,
   disabled: PropTypes.bool,
+  focus: PropTypes.bool,
   currentSet: PropTypes.object.isRequired,
   createValue: PropTypes.func.isRequired,
   updateValue: PropTypes.func.isRequired,

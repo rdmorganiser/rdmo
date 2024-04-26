@@ -65,6 +65,7 @@ const Page = ({ config, templates, page, sets, values, fetchPage,
                   values={
                     pageValues.filter((value) => (value.attribute == element._attribute.id))
                   }
+                  focus={elementIndex == 0}
                   currentSet={currentSet}
                   createValue={createValue}
                   updateValue={updateValue}
