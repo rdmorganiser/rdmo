@@ -8,7 +8,7 @@ import QuestionManagement from './QuestionManagement'
 import QuestionText from './QuestionText'
 import QuestionWidget from './QuestionWidget'
 
-const Question = ({ templates, question, values, currentSet, createValue, updateValue, deleteValue }) => {
+const Question = ({ templates, question, values, focus, currentSet, createValue, updateValue, deleteValue }) => {
   return (
     <div className="interview-question">
       <QuestionText question={question} />
@@ -27,6 +27,7 @@ const Question = ({ templates, question, values, currentSet, createValue, update
       <QuestionWidget
         question={question}
         values={values}
+        focus={focus}
         currentSet={currentSet}
         createValue={createValue}
         updateValue={updateValue}
@@ -40,6 +41,7 @@ Question.propTypes = {
   templates: PropTypes.object.isRequired,
   question: PropTypes.object.isRequired,
   values: PropTypes.array.isRequired,
+  focus: PropTypes.bool.isRequired,
   currentSet: PropTypes.object.isRequired,
   createValue: PropTypes.func.isRequired,
   updateValue: PropTypes.func.isRequired,
