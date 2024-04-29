@@ -5,8 +5,8 @@ import { enGB, de, it, es, fr } from 'date-fns/locale'
 
 import lang from 'rdmo/core/assets/js/utils/lang'
 
-import AddValue from './common/AddValue'
-import RemoveValue from './common/RemoveValue'
+import QuestionAddValue from '../QuestionAddValue'
+import QuestionRemoveValue from '../QuestionRemoveValue'
 
 const DateInput = ({ value, disabled, updateValue }) => {
 
@@ -71,7 +71,9 @@ const DateWidget = ({ question, values, currentSet, disabled, createValue, updat
           <div key={valueIndex} className="interview-input">
             <div className="interview-input-options">
               {
-                question.is_collection && <RemoveValue value={value} deleteValue={deleteValue} />
+                (question.is_collection || values.length > 1) && (
+                  <QuestionRemoveValue value={value} deleteValue={deleteValue} />
+                )
               }
             </div>
             <DateInput
@@ -84,7 +86,7 @@ const DateWidget = ({ question, values, currentSet, disabled, createValue, updat
       }
       {
         question.is_collection && (
-          <AddValue question={question} values={values} currentSet={currentSet} createValue={createValue} />
+          <QuestionAddValue question={question} values={values} currentSet={currentSet} createValue={createValue} />
         )
       }
     </div>

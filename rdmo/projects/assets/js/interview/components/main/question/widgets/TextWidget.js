@@ -3,19 +3,17 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { useDebouncedCallback } from 'use-debounce'
 
-import AddValue from './common/AddValue'
-import RemoveValue from './common/RemoveValue'
+import useFocusEffect from '../../../../hooks/useFocusEffect'
+
+import QuestionAddValue from '../QuestionAddValue'
+import QuestionRemoveValue from '../QuestionRemoveValue'
 
 const TextInput = ({ value, disabled, focus, updateValue }) => {
   const ref = useRef(null)
   const [inputValue, setInputValue] = useState('')
 
   useEffect(() => {setInputValue(value.text)}, [value.id])
-  useEffect(() => {
-    if (focus) {
-      ref.current.focus()
-    }
-  }, [focus])
+  useFocusEffect(value, focus, ref)
 
   const handleChange = useDebouncedCallback((value, text) => {
     updateValue(value, { text })
@@ -55,7 +53,9 @@ const TextWidget = ({ question, values, currentSet, disabled, focus, createValue
           <div key={valueIndex} className="interview-input">
             <div className="interview-input-options">
               {
-                question.is_collection && <RemoveValue value={value} deleteValue={deleteValue} />
+                (question.is_collection || values.length > 1) && (
+                  <QuestionRemoveValue value={value} deleteValue={deleteValue} />
+                )
               }
             </div>
             <TextInput
@@ -69,7 +69,7 @@ const TextWidget = ({ question, values, currentSet, disabled, focus, createValue
       }
       {
         question.is_collection && (
-          <AddValue question={question} values={values} currentSet={currentSet} createValue={createValue} />
+          <QuestionAddValue question={question} values={values} currentSet={currentSet} createValue={createValue} />
         )
       }
     </div>
