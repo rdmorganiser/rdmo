@@ -554,6 +554,6 @@ def check_permissions(instance: models.Model, element_uri: str, user: models.Mod
         perms = [f'{app_label}.add_{model_name}_object']
 
     if not user.has_perms(perms, instance):
-        message = _('You have no permissions to import') + f'{instance._meta.object_name} {element_uri}.'
+        message = _('You have no permissions to import') + f' {instance._meta.object_name} {element_uri}.'
         logger.info(message)
         return message
