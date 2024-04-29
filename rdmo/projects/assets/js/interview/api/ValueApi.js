@@ -24,7 +24,9 @@ class ValueApi extends BaseApi {
   }
 
   static deleteValue(projectId, value) {
-    return this.delete(`/api/v1/projects/projects/${projectId}/values/${value.id}/`)
+    if (!isUndefined(value.id)) {
+      return this.delete(`/api/v1/projects/projects/${projectId}/values/${value.id}/`)
+    }
   }
 
   static deleteSet(projectId, value) {

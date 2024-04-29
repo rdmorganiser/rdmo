@@ -10,7 +10,7 @@ import QuestionWidget from './QuestionWidget'
 
 const Question = ({ templates, question, values, focus, currentSet, createValue, updateValue, deleteValue }) => {
   return (
-    <div className="interview-question">
+    <div className={`interview-question col-md-${question.width || '12'}`}>
       <QuestionText question={question} />
       <QuestionHelp question={question} />
       {
@@ -19,7 +19,9 @@ const Question = ({ templates, question, values, focus, currentSet, createValue,
         )
       }
       {
-        <Template template={templates.project_interview_multiple_values_warning} />
+        !question.is_collection && values.length > 1 && (
+          <Template template={templates.project_interview_multiple_values_warning} />
+        )
       }
       {
         <QuestionManagement question={question} />

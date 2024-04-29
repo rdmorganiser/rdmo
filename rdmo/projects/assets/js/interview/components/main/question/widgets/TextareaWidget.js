@@ -13,7 +13,7 @@ const TextareaInput = ({ value, disabled, focus, updateValue }) => {
   const [inputValue, setInputValue] = useState('')
 
   useEffect(() => {setInputValue(value.text)}, [value.id])
-  useFocusEffect(value, focus, ref)
+  useFocusEffect(ref, [value.text], focus)
 
   const handleChange = useDebouncedCallback((value, text) => {
     updateValue(value, { text })
