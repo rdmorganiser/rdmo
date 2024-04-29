@@ -20,6 +20,13 @@
             {% endif %}
         </strong>
     </li>
+    {% if can_change_value %}
+    <li id="project-interview">
+        <strong>
+            <a href="{% url 'project_interview' project.pk %}">{% trans 'Answer questions (new)' %}</a>
+        </strong>
+    </li>
+    {% endif %}
 </ul>
 
 <ul class="list-unstyled">
