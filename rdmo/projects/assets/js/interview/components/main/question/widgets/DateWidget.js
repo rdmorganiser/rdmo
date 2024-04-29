@@ -1,88 +1,43 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import DatePicker from 'react-datepicker'
-import { enGB, de, it, es, fr } from 'date-fns/locale'
 
-import lang from 'rdmo/core/assets/js/utils/lang'
+import { isDefaultValue } from '../../../../utils/value'
 
 import QuestionAddValue from '../QuestionAddValue'
 import QuestionRemoveValue from '../QuestionRemoveValue'
 
-const DateInput = ({ value, disabled, updateValue }) => {
+import DefaultBadge from './common/DefaultBadge'
 
-  const getLocale = () => {
-    switch (lang) {
-      case 'de':
-        return de
-      case 'it':
-        return it
-      case 'es':
-        return es
-      case 'fr':
-        return fr
-      default:
-        return enGB
-    }
-  }
-
-  const getDateFormat = () => {
-    switch (lang) {
-      case 'de':
-        return 'dd.MM.yyyy'
-      case 'it':
-        return 'dd/MM/yyyy'
-      case 'es':
-        return 'dd/MM/yyyy'
-      case 'fr':
-        return 'dd/MM/yyyy'
-      default:
-        return 'dd/MM/yyyy'
-    }
-  }
-
-  const handleChange = (date) => {
-    const text = date.toISOString().slice(0,10)
-    updateValue(value, { text })
-  }
-
-  return (
-    <DatePicker
-      className="form-control date-control"
-      selected={value.text}
-      onChange={(date) => handleChange(date)}
-      locale={getLocale()}
-      dateFormat={getDateFormat()}
-      disabled={disabled}
-    />
-  )
-}
-
-DateInput.propTypes = {
-  value: PropTypes.object.isRequired,
-  disabled: PropTypes.bool,
-  updateValue: PropTypes.func.isRequired
-}
+import DateInput from './DateInput'
 
 const DateWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue }) => {
   return (
     <div className="interview-collection">
       {
-        values.map((value, valueIndex) => (
-          <div key={valueIndex} className="interview-input">
-            <div className="interview-input-options">
-              {
-                (question.is_collection || values.length > 1) && (
-                  <QuestionRemoveValue value={value} deleteValue={deleteValue} />
-                )
-              }
+        values.map((value, valueIndex) => {
+          const isDefault = isDefaultValue(question, value)
+
+          return (
+            <div key={valueIndex} className="interview-input">
+              <div className="interview-input-options">
+                {
+                  isDefault && <DefaultBadge />
+                }
+                {
+                  (question.is_collection || values.length > 1) && (
+                    <QuestionRemoveValue value={value} deleteValue={deleteValue} />
+                  )
+                }
+              </div>
+              <DateInput
+                value={value}
+                disabled={disabled}
+                isDefault={isDefault}
+                updateValue={updateValue}
+              />
             </div>
-            <DateInput
-              value={value}
-              disabled={disabled}
-              updateValue={updateValue}
-            />
-          </div>
-        ))
+          )
+        })
       }
       {
         question.is_collection && (

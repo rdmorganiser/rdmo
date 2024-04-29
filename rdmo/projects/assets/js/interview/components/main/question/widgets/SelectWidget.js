@@ -1,72 +1,44 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import ReactSelect from 'react-select'
-import { isNil } from 'lodash'
+
+import { isDefaultValue } from '../../../../utils/value'
 
 import QuestionAddValue from '../QuestionAddValue'
 import QuestionRemoveValue from '../QuestionRemoveValue'
 
-const SelectInput = ({ value, options, disabled, updateValue }) => {
-  const selectOptions = options.map(option => ({
-    value: option.id,
-    label: option.text
-  }))
+import DefaultBadge from './common/DefaultBadge'
 
-  const [inputValue, setInputValue] = useState('')
-  useEffect(() => {
-    setInputValue(selectOptions.find((selectOption) => selectOption.value == value.option))
-  }, [value.id, value.option])
-
-  const handleChange = (selectedOption) => {
-    updateValue(value, {
-      option: isNil(selectedOption) ? null : selectedOption.value
-    })
-  }
-
-  return (
-    <ReactSelect
-      classNamePrefix="react-select"
-      className="react-select"
-      isClearable={true}
-      options={selectOptions}
-      value={inputValue}
-      onChange={(option) => {
-        setInputValue(option)
-        handleChange(option)
-      }}
-      isDisabled={disabled}
-    />
-  )
-}
-
-SelectInput.propTypes = {
-  value: PropTypes.object.isRequired,
-  options: PropTypes.array.isRequired,
-  disabled: PropTypes.bool,
-  updateValue: PropTypes.func.isRequired
-}
+import SelectInput from './SelectInput'
 
 const SelectWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue }) => {
   return (
     <div className="interview-collection">
       {
-        values.map((value, valueIndex) => (
-          <div key={valueIndex} className="interview-input">
-            <div className="interview-input-options">
-              {
-                (question.is_collection || values.length > 1) && (
-                  <QuestionRemoveValue value={value} deleteValue={deleteValue} />
-                )
-              }
+        values.map((value, valueIndex) => {
+          const isDefault = isDefaultValue(question, value)
+
+          return (
+            <div key={valueIndex} className="interview-input">
+              <div className="interview-input-options">
+                {
+                  isDefault && <DefaultBadge />
+                }
+                {
+                  (question.is_collection || values.length > 1) && (
+                    <QuestionRemoveValue value={value} deleteValue={deleteValue} />
+                  )
+                }
+              </div>
+              <SelectInput
+                value={value}
+                options={question.options}
+                disabled={disabled}
+                isDefault={isDefault}
+                updateValue={updateValue}
+              />
             </div>
-            <SelectInput
-              value={value}
-              options={question.options}
-              disabled={disabled}
-              updateValue={updateValue}
-            />
-          </div>
-        ))
+          )
+        })
       }
       {
         question.is_collection && (

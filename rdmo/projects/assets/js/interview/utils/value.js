@@ -1,8 +1,22 @@
-import { isNil } from 'lodash'
+import { isNil, toString } from 'lodash'
 
 import ValueFactory from '../factories/ValueFactory'
 
 import { getChildPrefix } from './set'
+
+const isDefaultValue = (question, value) => {
+  if (isNil(value.id)) {
+    if (question.default_text) {
+      return question.default_text == value.text
+    } else if (question.default_option) {
+      return toString(question.default_option) == value.option
+    } else if (question.default_external_id) {
+      return question.default_external_id == value.external_id
+    }
+  } else {
+    return false
+  }
+}
 
 const initValues = (sets, values, element, setPrefix) => {
   if (isNil(setPrefix)) {
@@ -19,11 +33,14 @@ const initValues = (sets, values, element, setPrefix) => {
         const value = ValueFactory.create({
           attribute: question.attribute,
           set_prefix: set.set_prefix,
-          set_index: set.set_index
+          set_index: set.set_index,
+          text: question.default_text,
+          option: question.default_option,
+          external_id: question.default_external_id
         })
 
         if (question.widget_class === 'range') {
-          initRange(value)
+          initRange(question, value)
         }
 
         values.push(value)
@@ -37,7 +54,9 @@ const initValues = (sets, values, element, setPrefix) => {
 }
 
 const initRange = (question, value) => {
-  value.text = isNil(question.minimum) ? 0 : question.minimum
+  if (isNil(value.text)) {
+    value.text = isNil(question.minimum) ? 0 : question.minimum
+  }
 }
 
-export { initValues, initRange }
+export { isDefaultValue, initValues, initRange }
