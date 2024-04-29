@@ -1,3 +1,5 @@
+@import 'rdmo/core/assets/scss/variables';
+
 .interview-breadcrumb {
     margin-top: 20px;
     margin-bottom: 12px;
@@ -47,16 +49,6 @@
         left: 0;
         right: 0;
         text-align: center;
-    }
-}
-
-.interview-question {
-    margin-bottom: 20px;
-}
-
-.interview-collection  {
-    .interview-input {
-        margin-bottom: 10px;
     }
 }
 
@@ -230,6 +222,16 @@
     }
 }
 
+.interview-question {
+    margin-bottom: 20px;
+}
+
+.interview-collection  {
+    .interview-input {
+        margin-bottom: 10px;
+    }
+}
+
 .interview-page-tabs {
     margin-bottom: 20px;
 
@@ -241,4 +243,60 @@
             text-decoration: none;
         }
     }
+
+    .nav > li > a {
+        &.add-set,
+        &.add-set:hover {
+            color: $success-color;
+        }
+        &.add-set:hover {
+            color: white;
+            background-color: $success-color !important;
+        }
+        &.add-set:focus {
+            background-color: transparent;
+        }
+    }
+}
+
+.interview-block {
+    position: relative;
+
+    border: 1px solid rgb(204, 204, 204);
+    border-radius: 4px;
+
+    padding: 20px 20px 0 20px;
+    margin-bottom: 20px;
+
+    .interview-block-options {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 5;
+
+        .btn-remove-set {
+            opacity: 0.8;
+            line-height: 20px;
+            font-size: 14px;
+
+            position: absolute;
+            z-index: 5;
+            top: 0;
+            right: 0;
+
+            padding-left: 8px;
+            padding-right: 8px;
+
+            &:hover {
+                opacity: 1;
+            }
+            &:focus {
+                outline: 0;
+            }
+        }
+    }
+}
+
+.btn-add-set {
+    margin-bottom: 20px;
 }

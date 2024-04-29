@@ -1,12 +1,13 @@
-import { isNil } from 'lodash'
+import { isEmpty, isNil } from 'lodash'
 
 import PageApi from '../api/PageApi'
 import ProjectApi from '../api/ProjectApi'
 import ValueApi from '../api/ValueApi'
 
 import { updateLocation } from '../utils/location'
-import { getAttributes, initPage } from '../utils/page'
-import { initSets } from '../utils/set'
+
+import { initPage } from '../utils/page'
+import { gatherSets, getDescendants, initSets } from '../utils/set'
 import { initValues } from '../utils/value'
 import projectId from '../utils/projectId'
 
@@ -14,6 +15,7 @@ import ValueFactory from '../factories/ValueFactory'
 import SetFactory from '../factories/SetFactory'
 
 import {
+  NOOP,
   FETCH_NAVIGATION_ERROR,
   FETCH_NAVIGATION_SUCCESS,
   FETCH_OVERVIEW_ERROR,
@@ -103,15 +105,19 @@ export function fetchValues() {
   return (dispatch, getStore) => {
     const page = getStore().interview.page
 
-    return ValueApi.fetchValues(projectId, { attribute: getAttributes(page) })
+    return ValueApi.fetchValues(projectId, { attribute: page.attributes })
       .then((values) => dispatch(fetchValuesSuccess(values, page)))
       .catch((errors) => dispatch(fetchValuesError(errors)))
   }
 }
 
 export function fetchValuesSuccess(values, page) {
-  const sets = initSets(values)
-  return {type: FETCH_VALUES_SUCCESS, values: initValues(values, sets, page), sets}
+  const sets = gatherSets(values)
+
+  initSets(sets, page)
+  initValues(sets, values, page)
+
+  return {type: FETCH_VALUES_SUCCESS, values, sets}
 }
 
 export function fetchValuesError(errors) {
@@ -160,21 +166,19 @@ export function updateValue(value, attrs) {
 }
 
 export function deleteValue(value) {
-  return (dispatch, getStore) => {
-    const valueIndex = getStore().interview.values.indexOf(value)
-
+  return (dispatch) => {
     if (isNil(value.id)) {
-      return dispatch(deleteValueSuccess(valueIndex))
+      return dispatch(deleteValueSuccess(value))
     } else {
       return ValueApi.deleteValue(projectId, value)
-        .then(() => dispatch(deleteValueSuccess(valueIndex)))
+        .then(() => dispatch(deleteValueSuccess(value)))
         .catch((errors) => dispatch(deleteValueError(errors)))
     }
   }
 }
 
-export function deleteValueSuccess(valueIndex) {
-  return {type: DELETE_VALUE_SUCCESS, valueIndex}
+export function deleteValueSuccess(value) {
+  return {type: DELETE_VALUE_SUCCESS, value}
 }
 
 export function deleteValueError(errors) {
@@ -182,25 +186,41 @@ export function deleteValueError(errors) {
 }
 
 export function activateSet(set) {
-  return updateConfig('rdmo.interview', 'page.currentSetIndex', set.set_index)
+  if (isEmpty(set.set_prefix)) {
+    return updateConfig('rdmo.interview', 'page.currentSetIndex', set.set_index)
+  } else {
+    return { type: NOOP }
+  }
 }
 
 export function createSet(attrs) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     // create a new set
     const set = SetFactory.create(attrs)
 
     // create a value for the text if the page has an attribute
     const value = isNil(attrs.attribute) ? null : ValueFactory.create(attrs)
 
-    if (isNil(value)) {
+    // create an action to be called immediately or after saving the value
+    const action = (value) => {
       dispatch(activateSet(set))
-      return dispatch({type: CREATE_SET, set})
+
+      const state = getState().interview
+
+      const page = state.page
+      const sets = [...state.sets, set]
+      const values = isNil(value) ? [...state.values] : [...state.values, value]
+
+      initSets(sets, page)
+      initValues(sets, values, page)
+
+      return dispatch({type: CREATE_SET, values, sets})
+    }
+
+    if (isNil(value)) {
+      return action()
     } else {
-      return dispatch(storeValue(value)).then(() => {
-        dispatch(activateSet(set))
-        return dispatch({type: CREATE_SET, set})
-      })
+      return dispatch(storeValue(value)).then((value) => action(value))
     }
   }
 }
@@ -211,7 +231,14 @@ export function updateSet(setValue, attrs) {
 
 export function deleteSet(set, setValue) {
   if (isNil(setValue)) {
-    // TODO: delete all values for all questions in the set
+    return (dispatch, getState) => {
+      // gather all values for this set and it's descendants
+      const values = getDescendants(getState().interview.values, set)
+
+      return Promise.all(values.map((value) => ValueApi.deleteValue(projectId, value)))
+        .then(() => dispatch(deleteSetSuccess(set)))
+        .catch((errors) => dispatch(deleteValueError(errors)))
+    }
   } else {
     return (dispatch, getState) => {
       return ValueApi.deleteSet(projectId, setValue)
@@ -235,7 +262,13 @@ export function deleteSet(set, setValue) {
 }
 
 export function deleteSetSuccess(set) {
-  return {type: DELETE_SET_SUCCESS, set}
+
+  return (dispatch, getState) => {
+    // again, gather all values for this set and it's descendants
+    const sets = [...getDescendants(getState().interview.sets, set), set]
+    const values = getDescendants(getState().interview.values, set)
+    return dispatch({type: DELETE_SET_SUCCESS, sets, values})
+  }
 }
 
 export function deleteSetError(errors) {
