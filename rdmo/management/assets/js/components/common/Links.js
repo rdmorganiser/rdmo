@@ -242,15 +242,16 @@ WarningLink.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-const ShowUpdatedLink = ({ show= false, onClick }) => {
+const ShowUpdatedLink = ({ show= false, disabled= false, onClick }) => {
   return (
     show &&
-    <Link className="element-link fa fa-pencil" onClick={onClick} />
+    <Link  className='element-link fa fa-pencil' onClick={onClick} disabled={disabled}/>
   )
 }
 
 ShowUpdatedLink.propTypes = {
   show: PropTypes.bool,
+  disabled: PropTypes.bool,
   onClick: PropTypes.func.isRequired
 }
 
