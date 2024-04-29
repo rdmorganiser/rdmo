@@ -1,9 +1,8 @@
 import { useMemo } from 'react'
 import { filterUriPrefix, filterSearch} from './filter'
 
-
 const filterChanged = (selectFilterChanged, element) => {
-  return selectFilterChanged ? element.changed : true
+  return element.changed
 }
 
 function filterElementsByChanged(elements, selectFilterChanged) {

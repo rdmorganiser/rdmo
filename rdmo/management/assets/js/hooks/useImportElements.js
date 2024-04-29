@@ -1,20 +1,17 @@
 import {useMemo} from 'react'
 import isEmpty from 'lodash/isEmpty'
-import processElementDiffs from '../utils/processElementDiffs'
-
 
 export const useImportElements = (elements) => {
   return useMemo(() => {
-    const elementsImported = elements.map(element => processElementDiffs(element))
-
-    const createdElements = elementsImported.filter(element => element.created)
-    const updatedElements = elementsImported.filter(element => element.updated)
+    // the elements are already processed by processElementDiffs in the importsReducer
+    const createdElements = elements.filter(element => element.created)
+    const updatedElements = elements.filter(element => element.updated)
+    // collects elements with updated AND changed
     const changedElements = updatedElements.filter(element => element.changed)
-    const importWarnings = elementsImported.filter(element => !isEmpty(element.warnings))
-    const importErrors = elementsImported.filter(element => !isEmpty(element.errors))
+    const importWarnings = elements.filter(element => !isEmpty(element.warnings))
+    const importErrors = elements.filter(element => !isEmpty(element.errors))
 
     return {
-      elementsImported,
       createdElements,
       updatedElements,
       changedElements,

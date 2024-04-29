@@ -96,13 +96,11 @@ const ImportSidebar = ({ config, imports, importActions }) => {
               <li>
                 <ul className="list-unstyled" style={{paddingLeft:'20px'}}>
                   <li>
-                    {/* TODO fix action showChangedElements */}
                     <Link onClick={() => importActions.showChangedElements(true)}>
                       {gettext('Show changes')}
                     </Link>
                   </li>
                   <li>
-                    {/* TODO fix action showChangedElements */}
                     <Link onClick={() => importActions.showChangedElements(false)}>
                       {gettext('Hide changes')}
                     </Link>
