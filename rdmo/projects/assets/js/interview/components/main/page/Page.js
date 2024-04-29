@@ -14,15 +14,10 @@ const Page = ({ config, templates, page, sets, values, fetchPage,
                 createValue, updateValue, deleteValue,
                 activateSet, createSet, updateSet, deleteSet }) => {
 
-  const currentSet = sets.find((set) => (
-    set.set_prefix == '' && set.set_index == (page.is_collection ? get(config, 'page.currentSetIndex', 0) : 0)
-  ))
-  const pageSets = sets.filter((set) => (
-    set.set_prefix == currentSet.set_prefix
-  ))
-  const pageValues = values.filter((value) => (
-    value.set_prefix == currentSet.set_prefix && value.set_index == currentSet.set_index
-  ))
+  const currentSetPrefix = ''
+  const currentSetIndex = page.is_collection ? get(config, 'page.currentSetIndex', 0) : 0
+  const currentSet = sets.find((set) => (set.set_prefix == currentSetPrefix && set.set_index == currentSetIndex))
+  const pageSets = sets.filter((set) => (set.set_prefix == currentSetPrefix))
 
   return (
     <div className="interview-page">
@@ -34,9 +29,7 @@ const Page = ({ config, templates, page, sets, values, fetchPage,
             page={page}
             help={templates.project_interview_page_tabs_help}
             sets={pageSets}
-            values={
-              isNil(page._attribute) ? [] : values.filter((value) => (value.attribute == page._attribute.id))
-            }
+            values={isNil(page.attribute) ? [] : values.filter((value) => (value.attribute == page.attribute))}
             currentSet={currentSet}
             activateSet={activateSet}
             createSet={createSet}
@@ -45,37 +38,51 @@ const Page = ({ config, templates, page, sets, values, fetchPage,
           />
         )
       }
-      {
-        currentSet && (
-          page.elements.map((element, elementIndex) => {
-            if (element.model == 'questions.questionset') {
-              return (
-                <QuestionSet
-                  key={elementIndex}
-                  questionset={element}
-                  values={values}
-                />
-              )
-            } else {
-              return (
-                <Question
-                  key={elementIndex}
-                  templates={templates}
-                  question={element}
-                  values={
-                    pageValues.filter((value) => (value.attribute == element._attribute.id))
-                  }
-                  focus={elementIndex == 0}
-                  currentSet={currentSet}
-                  createValue={createValue}
-                  updateValue={updateValue}
-                  deleteValue={deleteValue}
-                />
-              )
-            }
-          })
-        )
-      }
+      <div className="row">
+        {
+          currentSet && (
+            page.elements.map((element, elementIndex) => {
+              if (element.model == 'questions.questionset') {
+                return (
+                  <QuestionSet
+                    key={elementIndex}
+                    templates={templates}
+                    questionset={element}
+                    sets={sets}
+                    values={values.filter((value) => element.attributes.includes(value.attribute))}
+                    focus={elementIndex == 0}
+                    parentSet={currentSet}
+                    createSet={createSet}
+                    updateSet={updateSet}
+                    deleteSet={deleteSet}
+                    createValue={createValue}
+                    updateValue={updateValue}
+                    deleteValue={deleteValue}
+                  />
+                )
+              } else {
+                return (
+                  <Question
+                    key={elementIndex}
+                    templates={templates}
+                    question={element}
+                    values={values.filter((value) => (
+                      value.attribute == element.attribute &&
+                      value.set_prefix == currentSetPrefix &&
+                      value.set_index == currentSetIndex
+                    ))}
+                    focus={elementIndex == 0}
+                    currentSet={currentSet}
+                    createValue={createValue}
+                    updateValue={updateValue}
+                    deleteValue={deleteValue}
+                  />
+                )
+              }
+            })
+          )
+        }
+      </div>
 
       <PageButtons page={page} fetchPage={fetchPage} />
     </div>

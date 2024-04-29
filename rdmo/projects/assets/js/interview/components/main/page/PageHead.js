@@ -29,11 +29,7 @@ const PageHead = ({ page, help, sets, values, currentSet, activateSet, createSet
   }
 
   const handleCreateSet = (text) => {
-    createSet({
-      attribute: isNil(page._attribute) ? null : page._attribute.id,
-      set_index: last(sets) ? last(sets).set_index + 1 : 0,
-      text
-    })
+    createSet({ set_index: last(sets) ? last(sets).set_index + 1 : 0, text })
     closeCreateModal()
   }
 
@@ -90,7 +86,7 @@ const PageHead = ({ page, help, sets, values, currentSet, activateSet, createSet
       <PageHeadFormModal
         title={gettext(page.verbose_name)}
         show={showCreateModal}
-        initial={isNil(page._attribute) ? null : ''}
+        initial={isNil(page.attribute) ? null : ''}
         onClose={closeCreateModal}
         onSubmit={handleCreateSet}
       />

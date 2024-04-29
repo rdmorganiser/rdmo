@@ -84,7 +84,7 @@ const CheckboxWidget = ({ question, values, currentSet, disabled, createValue, u
     const collectionIndex = lastValue ? lastValue.collection_index + 1 : 0
 
     createValue({
-      attribute: question._attribute.id,
+      attribute: question.attribute,
       set_prefix: currentSet.set_prefix,
       set_index: currentSet.set_index,
       collection_index: collectionIndex,
