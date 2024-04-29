@@ -4,9 +4,8 @@ import PropTypes from 'prop-types'
 import { isDefaultValue } from '../../../../utils/value'
 
 import QuestionAddValue from '../QuestionAddValue'
+import QuestionDefault from '../QuestionDefault'
 import QuestionRemoveValue from '../QuestionRemoveValue'
-
-import DefaultBadge from './common/DefaultBadge'
 
 import AutocompleteInput from './AutocompleteInput'
 
@@ -21,7 +20,7 @@ const AutocompleteWidget = ({ question, values, currentSet, disabled, createValu
             <div key={valueIndex} className="interview-input">
               <div className="interview-input-options">
                 {
-                  isDefault && <DefaultBadge />
+                  isDefault && <QuestionDefault />
                 }
                 {
                   (question.is_collection || values.length > 1) && (

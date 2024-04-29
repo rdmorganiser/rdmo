@@ -191,7 +191,7 @@
         z-index: 5;
         margin-right: 8px;
 
-        .btn-reset-value,
+        .btn-erase-value,
         .btn-remove-value {
             opacity: 0.8;
             line-height: 20px;
@@ -205,12 +205,12 @@
         //     margin-left: 2px;
         // }
 
-        .btn-reset-value:hover,
+        .btn-erase-value:hover,
         .btn-remove-value:hover {
             opacity: 1;
         }
 
-        .btn-reset-value:focus,
+        .btn-erase-value:focus,
         .btn-remove-value:focus {
             outline: 0;
         }

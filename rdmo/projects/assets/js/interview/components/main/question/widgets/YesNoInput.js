@@ -4,7 +4,7 @@ import classNames from 'classnames'
 
 const YesNoInput = ({ value, disabled, isDefault, updateValue }) => {
   const [inputValue, setInputValue] = useState('')
-  useEffect(() => {setInputValue(value.text)}, [value.id])
+  useEffect(() => {setInputValue(value.text)}, [value.id, value.text])
 
   const handleChange = (value, text) => {
     updateValue(value, { text })

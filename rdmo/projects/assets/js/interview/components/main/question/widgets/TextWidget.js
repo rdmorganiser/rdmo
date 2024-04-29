@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 
 import { isDefaultValue } from '../../../../utils/value'
 
-import DefaultBadge from './common/DefaultBadge'
 import QuestionAddValue from '../QuestionAddValue'
+import QuestionDefault from '../QuestionDefault'
 import QuestionRemoveValue from '../QuestionRemoveValue'
 
 import TextInput from './TextInput'
@@ -20,7 +20,7 @@ const TextWidget = ({ question, values, currentSet, disabled, focus, createValue
             <div key={valueIndex} className="interview-input">
               <div className="interview-input-options">
                 {
-                  isDefault && <DefaultBadge />
+                  isDefault && <QuestionDefault />
                 }
                 {
                   (question.is_collection || values.length > 1) && (
