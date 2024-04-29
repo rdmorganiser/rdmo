@@ -64,8 +64,9 @@ def test_import_and_update_optionsets_in_management(logged_in_user: Page) -> Non
     # assert changed elements
     expect(page.get_by_text(f"Total: {OPTIONS_TOTAL_COUNT} Updated: {OPTIONS_TOTAL_COUNT} (Changed: 5) Warnings: 1")).to_be_visible(timeout=30_000)  # noqa: E501
     expect(page.get_by_text("Filter changed (5)")).to_be_visible()
-    page.get_by_text("Filter changed (5)").click()
     page.get_by_role("link", name="Show changes").click()
-    expect(page.get_by_text("http://example.com/terms/options/one_two_three/three").nth(1)).to_be_visible()
+    expect(page.locator(".col-sm-6 > .form-group").first).to_be_visible(timeout=30_000)
+    # take a screenshot of the import page
     page.screenshot(path="screenshots/management-import-optionsets-1-changes.png", full_page=True)
+    expect(page.get_by_text("http://example.com/terms/options/one_two_three/three").nth(1)).to_be_visible()
     ## TODO test for warnings, errors
