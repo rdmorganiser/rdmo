@@ -1,111 +1,45 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useDebouncedCallback } from 'use-debounce'
-import { isEmpty } from 'lodash'
+
+import { isDefaultValue } from '../../../../utils/value'
 
 import QuestionAddValue from '../QuestionAddValue'
 import QuestionRemoveValue from '../QuestionRemoveValue'
 
-import AdditionalTextInput from './common/AdditionalTextInput'
-import AdditionalTextareaInput from './common/AdditionalTextareaInput'
+import DefaultBadge from './common/DefaultBadge'
 
-const RadioInput = ({ value, options, disabled, updateValue }) => {
 
-  const handleChange = (option) => {
-    if (isEmpty(option.additional_input)) {
-      updateValue(value, { option: option.id, text: '' })
-    } else {
-      updateValue(value, { option: option.id })
-    }
-  }
-
-  const handleAdditionalValueChange = useDebouncedCallback((value, option, additionalValue) => {
-    updateValue(value, {
-      option: option.id,
-      text: additionalValue
-    })
-  }, 500)
-
-  return (
-    <div className="radio-control">
-      {
-        isEmpty(options) ? (
-          <div className="text-muted">{gettext('No options are available.')}</div>
-        ) : (
-          options.map((option, optionIndex) => (
-            <div key={optionIndex} className="radio">
-              <label>
-                <input
-                  type="radio"
-                  checked={value.option == option.id}
-                  disabled={disabled}
-                  onChange={() => handleChange(option)}
-                />
-                <span>{option.text}</span>
-                {
-                  isEmpty(option.additional_input) && (
-                    <span className="text-muted">{option.help}</span>
-                  )
-                }
-                {
-                  option.additional_input == 'text' && (
-                    <>
-                      <span>:</span>
-                      {' '}
-                      <AdditionalTextInput value={value} option={option} disabled={disabled} onChange={handleAdditionalValueChange} />
-                      {' '}
-                      <span className="text-muted">{option.help}</span>
-                    </>
-                  )
-                }
-                {
-                  option.additional_input == 'textarea' && (
-                    <>
-                      <span>:</span>
-                      {' '}
-                      <AdditionalTextareaInput value={value} option={option} disabled={disabled} onChange={handleAdditionalValueChange} />
-                      {' '}
-                      <div className="text-muted">{option.help}</div>
-                    </>
-                  )
-                }
-              </label>
-            </div>
-          ))
-        )
-      }
-    </div>
-  )
-}
-
-RadioInput.propTypes = {
-  value: PropTypes.object.isRequired,
-  options: PropTypes.array.isRequired,
-  disabled: PropTypes.bool,
-  updateValue: PropTypes.func.isRequired
-}
+import RadioInput from './RadioInput'
 
 const RadioWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue }) => {
   return (
     <div className="interview-collection">
       {
-        values.map((value, valueIndex) => (
-          <div key={valueIndex} className="interview-input">
-            <div className="interview-input-options">
-              {
-                (question.is_collection || values.length > 1) && (
-                  <QuestionRemoveValue value={value} deleteValue={deleteValue} />
-                )
-              }
+        values.map((value, valueIndex) => {
+          const isDefault = isDefaultValue(question, value)
+
+          return (
+            <div key={valueIndex} className="interview-input">
+              <div className="interview-input-options">
+                {
+                  isDefault && <DefaultBadge />
+                }
+                {
+                  (question.is_collection || values.length > 1) && (
+                    <QuestionRemoveValue value={value} deleteValue={deleteValue} />
+                  )
+                }
+              </div>
+              <RadioInput
+                value={value}
+                options={question.options}
+                disabled={disabled}
+                isDefault={isDefault}
+                updateValue={updateValue}
+              />
             </div>
-            <RadioInput
-              value={value}
-              options={question.options}
-              disabled={disabled}
-              updateValue={updateValue}
-            />
-          </div>
-        ))
+          )
+        })
       }
       {
         question.is_collection && (
