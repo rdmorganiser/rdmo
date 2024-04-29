@@ -218,15 +218,16 @@ def set_foreign_field(instance, field_name, element, uploaded_uris=None, origina
         element['warnings'][foreign_uri].append(message)
         track_messages_on_element(element, field_name, warning=message)
     except foreign_model.MultipleObjectsReturned:
-        message = 'Multiple objects for {foreign_model} {foreign_uri} for {instance_model} {instance_uri} exist.'.format(    # noqa: E501
+        message = '{foreign_model} {foreign_uri} for {instance_model} {instance_uri} returns multiple objects.'.format(
             foreign_model=foreign_model._meta.object_name,
             foreign_uri=foreign_uri,
             instance_model=instance._meta.object_name,
             instance_uri=element.get('uri')
         )
         logger.info(message)
-        element['errors'].append(message)  # errors is a list
-        track_messages_on_element(element, field_name, error=message)
+        element['warnings'][foreign_uri].append(message)
+        track_messages_on_element(element, field_name, warning=message)
+
 
     try:
         if foreign_instance is not None:
@@ -346,6 +347,16 @@ def set_m2m_through_instances(instance, element, field_name=None, source_name=No
 
         except target_model.DoesNotExist:
             message = '{target_model} {target_uri} for imported {instance_model} {instance_uri} does not exist.'.format(
+                target_model=target_model._meta.object_name,
+                target_uri=target_uri,
+                instance_model=instance._meta.object_name,
+                instance_uri=element.get('uri')
+            )
+            logger.info(message)
+            element['warnings'][target_uri].append(message)
+            track_messages_on_element(element, field_name, warning=message)
+        except target_model.MultipleObjectsReturned:
+            message = '{target_model} {target_uri} for imported {instance_model} {instance_uri} returns multiple objects.'.format(  # noqa: E501
                 target_model=target_model._meta.object_name,
                 target_uri=target_uri,
                 instance_model=instance._meta.object_name,
@@ -509,7 +520,7 @@ def validate_instance(instance, element, *validators):
 
     for validator in validators:
         try:
-            validator(instance if instance.id else None)(vars(instance))
+            validator(instance=instance if instance.id else None)(vars(instance))
         except ValidationError as e:
             try:
                 exception_message = format_message_from_validation_error(e)
