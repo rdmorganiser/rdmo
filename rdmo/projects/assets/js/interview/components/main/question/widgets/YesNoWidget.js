@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-import AddValue from './common/AddValue'
-import RemoveValue from './common/RemoveValue'
+import QuestionAddValue from '../QuestionAddValue'
+import QuestionRemoveValue from '../QuestionRemoveValue'
 
 const YesNoInput = ({ value, disabled, updateValue }) => {
   const [inputValue, setInputValue] = useState('')
@@ -58,7 +58,9 @@ const YesNoWidget = ({ question, values, currentSet, disabled, createValue, upda
           <div key={valueIndex} className="interview-input">
             <div className="interview-input-options">
               {
-                question.is_collection && <RemoveValue value={value} deleteValue={deleteValue} />
+                (question.is_collection || values.length > 1) && (
+                  <QuestionRemoveValue value={value} deleteValue={deleteValue} />
+                )
               }
             </div>
             <YesNoInput
@@ -71,7 +73,7 @@ const YesNoWidget = ({ question, values, currentSet, disabled, createValue, upda
       }
       {
         question.is_collection && (
-          <AddValue question={question} values={values} currentSet={currentSet} createValue={createValue} />
+          <QuestionAddValue question={question} values={values} currentSet={currentSet} createValue={createValue} />
         )
       }
     </div>
