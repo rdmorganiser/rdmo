@@ -1,25 +1,43 @@
-const initValues = (values, sets, page) => {
-  console.log(values, sets, page)
-  return values
-}
+import { isNil } from 'lodash'
 
+import ValueFactory from '../factories/ValueFactory'
 
-const replaceValue = (values, value) => {
-  const newValues = [...values]
-  const index = newValues.findIndex(v => {
-    return v.id == value.id
-  })
-  if (index > -1) {
-    newValues[index] = value
-  } else {
-    newValues.push(value)
+import { getChildPrefix } from './set'
+
+const initValues = (sets, values, element, setPrefix) => {
+  if (isNil(setPrefix)) {
+    setPrefix = ''
   }
 
-  return newValues
+  sets.filter((set) => set.set_prefix === setPrefix).forEach((set) => {
+    element.elements.filter((e) => (e.model === 'questions.question')).forEach((question) => {
+      if (isNil(values.find((value) => (
+        (value.attribute === question.attribute) &&
+        (value.set_prefix == set.set_prefix) &&
+        (value.set_index == set.set_index)
+      )))) {
+        const value = ValueFactory.create({
+          attribute: question.attribute,
+          set_prefix: set.set_prefix,
+          set_index: set.set_index
+        })
+
+        if (question.widget_class === 'range') {
+          initRange(value)
+        }
+
+        values.push(value)
+      }
+    })
+
+    element.elements.filter((e) => (e.model === 'questions.questionset')).forEach((questionset) => {
+      initValues(sets, values, questionset, getChildPrefix(set))
+    })
+  })
 }
 
-const removeValue = (values, value) => {
-  return values.filter((v) => (v.id != value.id))
+const initRange = (question, value) => {
+  value.text = isNil(question.minimum) ? 0 : question.minimum
 }
 
-export { initValues, replaceValue, removeValue }
+export { initValues, initRange }

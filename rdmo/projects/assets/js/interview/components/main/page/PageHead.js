@@ -1,9 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import capitalize from 'lodash/capitalize'
-import isNil from 'lodash/isNil'
-import last from 'lodash/last'
+import { capitalize, isNil, last } from 'lodash'
 
 import Template from 'rdmo/core/assets/js/components/Template'
 import useModal from 'rdmo/core/assets/js/hooks/useModal'
@@ -13,9 +11,11 @@ import PageHeadFormModal from './PageHeadFormModal'
 
 const PageHead = ({ page, help, sets, values, currentSet, activateSet, createSet, updateSet, deleteSet }) => {
 
-  const currentSetValue = values.find((value) => (
-    value.set_prefix == currentSet.set_prefix && value.set_index == currentSet.set_index
-  ))
+  const currentSetValue = isNil(currentSet) ? null : (
+    values.find((value) => (
+      value.set_prefix == currentSet.set_prefix && value.set_index == currentSet.set_index
+    ))
+  )
 
   const [showCreateModal, openCreateModal, closeCreateModal] = useModal()
   const [showUpdateModal, openUpdateModal, closeUpdateModal] = useModal()
@@ -29,7 +29,11 @@ const PageHead = ({ page, help, sets, values, currentSet, activateSet, createSet
   }
 
   const handleCreateSet = (text) => {
-    createSet({ set_index: last(sets) ? last(sets).set_index + 1 : 0, text })
+    createSet({
+      attribute: page.attribute,
+      set_index: last(sets) ? last(sets).set_index + 1 : 0,
+      text
+    })
     closeCreateModal()
   }
 
@@ -65,13 +69,17 @@ const PageHead = ({ page, help, sets, values, currentSet, activateSet, createSet
                 })
               }
               <li>
-                <a href="#" className="text-success" title={gettext('Add tab')} onClick={openCreateModal}>
+                <a href="#" title={gettext('Add tab')} className="add-set" onClick={openCreateModal}>
                   <i className="fa fa-plus fa-btn"></i> {capitalize(page.verbose_name)}
                 </a>
               </li>
             </ul>
             <div className="interview-page-tabs-buttons">
-                <button className="btn-link fa fa-pencil" title={gettext('Edit tab')} onClick={openUpdateModal} />
+                {
+                  page.attribute && (
+                    <button className="btn-link fa fa-pencil" title={gettext('Edit tab')} onClick={openUpdateModal} />
+                  )
+                }
                 <button className="btn-link fa fa-trash" title={gettext('Remove tab')} onClick={openDeleteModal} />
             </div>
           </>
@@ -82,9 +90,8 @@ const PageHead = ({ page, help, sets, values, currentSet, activateSet, createSet
         )
       }
 
-
       <PageHeadFormModal
-        title={gettext(page.verbose_name)}
+        title={capitalize(page.verbose_name)}
         show={showCreateModal}
         initial={isNil(page.attribute) ? null : ''}
         onClose={closeCreateModal}
@@ -93,7 +100,7 @@ const PageHead = ({ page, help, sets, values, currentSet, activateSet, createSet
       {
         currentSetValue && (
           <PageHeadFormModal
-            title={gettext(page.verbose_name)}
+            title={capitalize(page.verbose_name)}
             show={showUpdateModal}
             initial={currentSetValue.text}
             onClose={closeUpdateModal}
@@ -102,7 +109,7 @@ const PageHead = ({ page, help, sets, values, currentSet, activateSet, createSet
         )
       }
       <PageHeadDeleteModal
-        title={gettext(page.verbose_name)}
+        title={capitalize(page.verbose_name)}
         show={showDeleteModal}
         onClose={closeDeleteModal}
         onSubmit={handleDeleteSet}

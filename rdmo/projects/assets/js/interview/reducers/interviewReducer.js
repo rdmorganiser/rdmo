@@ -48,11 +48,15 @@ export default function interviewReducer(state = initialState, action) {
         return { ...state, values: [...state.values, action.value] }
       }
     case DELETE_VALUE_SUCCESS:
-      return { ...state, values: state.values.filter((value, valueIndex) => valueIndex != action.valueIndex)}
+      return {...state, values: state.values.filter((value) => value !== action.value)}
     case CREATE_SET:
-      return { ...state, sets: [...state.sets, action.set] }
+      return { ...state, values: action.values, sets: action.sets }
     case DELETE_SET_SUCCESS:
-      return { ...state, sets: state.sets.filter((set) => set != action.set) }
+      return {
+        ...state,
+        values: state.values.filter((value) => !action.values.includes(value)),
+        sets: state.sets.filter((set) => !action.sets.includes(set))
+      }
     case FETCH_OVERVIEW_ERROR:
     case FETCH_PROGRESS_ERROR:
     case FETCH_NAVIGATION_ERROR:

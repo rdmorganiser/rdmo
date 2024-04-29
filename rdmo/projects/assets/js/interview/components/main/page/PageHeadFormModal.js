@@ -1,27 +1,29 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import isNil from 'lodash/isNil'
-import isEmpty from 'lodash/isEmpty'
+import { isEmpty, isNil } from 'lodash'
 
 import Modal from 'rdmo/core/assets/js/components/Modal'
+import useFocusEffect from '../../../hooks/useFocusEffect'
+
 
 const PageHeadFormModal = ({ title, show, initial, onClose, onSubmit }) => {
 
+  const ref = useRef(null)
   const [inputValue, setInputValue] = useState('')
   const [hasError, setHasError] = useState(false)
-  const submitText = isNil(initial) ? gettext('Create') : gettext('Update')
-  const submitColor = isNil(initial) ? 'success' : 'primary'
+  const submitText = isEmpty(initial) ? gettext('Create') : gettext('Update')
+  const submitColor = isEmpty(initial) ? 'success' : 'primary'
 
   const handleSubmit = () => {
-    if (isEmpty(inputValue)) {
+    if (isEmpty(inputValue) && !isNil(initial)) {
       setHasError(true)
     } else {
       onSubmit(inputValue)
     }
   }
 
-  // update the inputValue when the modal ist shown
+  // update the inputValue
   useEffect(() => {
     if (show) {
       setInputValue(initial || '')
@@ -34,6 +36,9 @@ const PageHeadFormModal = ({ title, show, initial, onClose, onSubmit }) => {
       setHasError(false)
     }
   }, [inputValue])
+
+  // focus when the modal is shown
+  useFocusEffect(ref, [show])
 
   return (
     <Modal title={title} show={show} submitText={submitText} submitColor={submitColor}
@@ -49,6 +54,7 @@ const PageHeadFormModal = ({ title, show, initial, onClose, onSubmit }) => {
               {gettext('Name')}
             </label>
             <input
+              ref={ref}
               className="form-control"
               id="interview-page-tabs-modal-form-title"
               type="text"

@@ -16,8 +16,8 @@ const Page = ({ config, templates, page, sets, values, fetchPage,
 
   const currentSetPrefix = ''
   const currentSetIndex = page.is_collection ? get(config, 'page.currentSetIndex', 0) : 0
-  const currentSet = sets.find((set) => (set.set_prefix == currentSetPrefix && set.set_index == currentSetIndex))
-  const pageSets = sets.filter((set) => (set.set_prefix == currentSetPrefix))
+  const currentSet = sets.find((set) => (set.set_prefix == currentSetPrefix && set.set_index == currentSetIndex)) ||
+                     sets.find((set) => (set.set_prefix == currentSetPrefix && set.set_index == 0))  // sanity check
 
   return (
     <div className="interview-page">
@@ -28,7 +28,7 @@ const Page = ({ config, templates, page, sets, values, fetchPage,
           <PageHead
             page={page}
             help={templates.project_interview_page_tabs_help}
-            sets={pageSets}
+            sets={sets.filter((set) => (set.set_prefix == currentSetPrefix))}
             values={isNil(page.attribute) ? [] : values.filter((value) => (value.attribute == page.attribute))}
             currentSet={currentSet}
             activateSet={activateSet}

@@ -1,21 +1,7 @@
-import uniq from 'lodash/uniq'
-import isNil from 'lodash/isNil'
+import { isNil } from 'lodash'
 
-const getAttributes = (page) => {
-  if (isNil(page)) {
-    return []
-  } else {
-    // return a unique list of the page's attribute and the page's elements attributes
-    return uniq(
-      (isNil(page._attribute) ? [] : [page._attribute.id]).concat(
-        page.elements.filter(element => !isNil(element._attribute)).map(element => element._attribute.id)
-      )
-    )
-  }
-}
-
-const initPage = (page) => {
-  page.elements = page.elements.map((element) => {
+const initQuestionSet = (questionset) => {
+  questionset.elements = questionset.elements.map((element) => {
     if (element.model == 'questions.questionset') {
       return initQuestionSet(element)
     } else {
@@ -23,10 +9,16 @@ const initPage = (page) => {
     }
   })
 
-  return page
-}
+  questionset.attributes = questionset.elements.reduce((agg, cur) => {
+    if (cur.model == 'questions.questionset') {
+        return agg.concat(cur.attributes)
+      } else {
+        return [...agg, cur.attribute]
+      }
+  }, [questionset.attribute]).filter((a) => !isNil(a))
 
-const initQuestionSet = (questionset) => initPage(questionset)
+  return questionset
+}
 
 const initQuestion = (question) => {
   question.options = question.optionsets.reduce((acc, cur) => {
@@ -41,4 +33,6 @@ const initQuestion = (question) => {
   return question
 }
 
-export { getAttributes, initPage }
+const initPage = (page) => initQuestionSet(page)
+
+export { initPage }
