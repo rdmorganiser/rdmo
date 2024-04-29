@@ -67,6 +67,8 @@ def test_import_and_update_optionsets_in_management(logged_in_user: Page) -> Non
     page.get_by_role("link", name="Show changes").click()
     expect(page.locator(".col-sm-6 > .form-group").first).to_be_visible(timeout=30_000)
     # take a screenshot of the import page
-    page.screenshot(path="screenshots/management-import-optionsets-1-changes.png", full_page=True)
     expect(page.get_by_text("http://example.com/terms/options/one_two_three/three").nth(1)).to_be_visible()
+    page.locator("body").press("Home")
+    expect(page.get_by_role("link", name="Management", exact=True)).to_be_visible()
+    page.screenshot(path="screenshots/management-import-optionsets-1-changes.png", full_page=True)
     ## TODO test for warnings, errors
