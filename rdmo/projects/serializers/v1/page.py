@@ -73,7 +73,7 @@ class QuestionSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, s
     verbose_name = serializers.SerializerMethodField()
     widget_class = serializers.SerializerMethodField()
 
-    _attribute = AttributeSerializer(source='attribute')
+    attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
 
     class Meta:
         model = Question
@@ -96,7 +96,7 @@ class QuestionSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, s
             'maximum',
             'step',
             'attribute',
-            '_attribute',
+            'attribute_uri',
             'conditions',
             'optionsets',
             'is_collection',
@@ -123,7 +123,7 @@ class QuestionSetSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin
     elements = serializers.SerializerMethodField()
     verbose_name = serializers.SerializerMethodField()
 
-    _attribute = AttributeSerializer(source='attribute')
+    attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
 
     class Meta:
         model = QuestionSet
@@ -134,7 +134,7 @@ class QuestionSetSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin
             'help',
             'verbose_name',
             'attribute',
-            '_attribute',
+            'attribute_uri',
             'is_collection',
             'elements',
             'has_conditions'
@@ -161,7 +161,7 @@ class PageSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
     next_page = serializers.SerializerMethodField()
     verbose_name = serializers.SerializerMethodField()
 
-    _attribute = AttributeSerializer(source='attribute')
+    attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
 
     class Meta:
         model = Page
@@ -171,7 +171,7 @@ class PageSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
             'help',
             'verbose_name',
             'attribute',
-            '_attribute',
+            'attribute_uri',
             'is_collection',
             'elements',
             'section',
