@@ -5,7 +5,7 @@ import get from 'lodash/get'
 import {getUriPrefixes} from '../../../utils/filter'
 import {Checkbox} from '../../common/Checkboxes'
 
-const ImportFilters = ({ config, elements, updatedAndChanged, filteredElements, configActions }) => {
+const ImportFilters = ({ config, elements, changedElements, filteredElements, configActions }) => {
   const updateFilterString = (value) => configActions.updateConfig('filter.import.elements.search', value)
   const getValueFilterString = () => get(config, 'filter.import.elements.search', '')
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.import.elements.uri_prefix', value)
@@ -29,17 +29,17 @@ const ImportFilters = ({ config, elements, updatedAndChanged, filteredElements, 
       </div>
       <div className="row-checkbox">
         {
-          updatedAndChanged.length > 0 &&
+          elements.length > 0 &&
           <div className="pull-left">
             <div className="checkboxes">
               <span className="mr-10">{gettext('Changed:')}</span>
               <Checkbox label={<code
-                className="code-questions">{gettext('Filter changed')}{' ('}{updatedAndChanged.length}{') '}</code>}
+                className="code-questions">{gettext('Filter changed')}{' ('}{changedElements.length}{') '}</code>}
                         value={getValueFilterChanged()} onChange={updateFilterChanged}/>
             </div>
           </div>
         }
-        { filteredElements.length > 0 &&
+        { elements.length > 0 &&
           <div className="pull-right">
             <span>{gettext('Shown')}: {filteredElements.length} / {elements.length} </span>
           </div>
@@ -55,7 +55,7 @@ const ImportFilters = ({ config, elements, updatedAndChanged, filteredElements, 
 ImportFilters.propTypes = {
   config: PropTypes.object.isRequired,
   elements: PropTypes.array.isRequired,
-  updatedAndChanged: PropTypes.array.isRequired,
+  changedElements: PropTypes.array.isRequired,
   filteredElements: PropTypes.array.isRequired,
   configActions: PropTypes.object.isRequired,
 }

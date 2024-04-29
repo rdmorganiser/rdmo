@@ -4,7 +4,7 @@ function getDiff(currentData, updatedData) {
   let originalValueStr = currentData || ''
   let newValueStr = updatedData || ''
   let hideLineNumbers = true
-  let splitView = true
+  let splitView = false
   let compareMethod = DiffMethod.CHARS
 
   if (Array.isArray(originalValueStr) && Array.isArray(newValueStr)) {

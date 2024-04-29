@@ -14,9 +14,8 @@ import {useImportElements} from '../../hooks/useImportElements'
 
 const Import = ({ config, imports, configActions, importActions }) => {
   const { file, elements, success } = imports
-
+    // the elements are already processed by processElementDiffs in the importsReducer
    const {
-    elementsImported,
     createdElements,
     updatedElements,
     changedElements,
@@ -28,21 +27,21 @@ const Import = ({ config, imports, configActions, importActions }) => {
   const selectedUriPrefix = get(config, 'filter.import.elements.uri_prefix', '')
   const selectFilterChanged = get(config, 'filter.import.elements.changed', false)
 
-  const filteredElements = useFilteredElements(elementsImported, selectFilterChanged, selectedUriPrefix, searchString)
+  const filteredElements = useFilteredElements(elements, selectFilterChanged, selectedUriPrefix, searchString)
 
   return (
     <div className='panel panel-default panel-import'>
       <div className='panel-heading'>
         <strong>{gettext('Import')} from: {file.name}</strong>
-        <ImportInfo elementsLength={elementsImported.length} createdLength={createdElements.length}
+        <ImportInfo elementsLength={elements.length} createdLength={createdElements.length}
                         updatedLength={updatedElements.length} changedLength={changedElements.length}
                         warningsLength={importWarnings.length} errorsLength={importErrors.length}/>
 
       </div>
         {
-          changedElements.length > 0 &&
-          <ImportFilters config={config} elements={elementsImported}
-                         updatedAndChanged={changedElements}
+          elements.length > 0 &&
+          <ImportFilters config={config} elements={elements}
+                         changedElements={changedElements}
                          filteredElements={filteredElements}
                          configActions={configActions}
           />
