@@ -5,9 +5,9 @@ import {  isNil } from 'lodash'
 import { isDefaultValue } from '../../../../utils/value'
 
 import QuestionAddValue from '../QuestionAddValue'
+import QuestionDefault from '../QuestionDefault'
+import QuestionEraseValue from '../QuestionEraseValue'
 import QuestionRemoveValue from '../QuestionRemoveValue'
-
-import DefaultBadge from './common/DefaultBadge'
 
 import RangeInput from './RangeInput'
 
@@ -28,8 +28,9 @@ const RangeWidget = ({ question, values, currentSet, disabled, createValue, upda
             <div key={valueIndex} className="interview-input">
               <div className="interview-input-options">
                 {
-                  isDefault && <DefaultBadge />
+                  isDefault && <QuestionDefault />
                 }
+                <QuestionEraseValue value={value} updateValue={updateValue} />
                 {
                   (question.is_collection || values.length > 1) && (
                     <QuestionRemoveValue value={value} deleteValue={deleteValue} />

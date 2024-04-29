@@ -4,10 +4,9 @@ import PropTypes from 'prop-types'
 import { isDefaultValue } from '../../../../utils/value'
 
 import QuestionAddValue from '../QuestionAddValue'
+import QuestionDefault from '../QuestionDefault'
+import QuestionEraseValue from '../QuestionEraseValue'
 import QuestionRemoveValue from '../QuestionRemoveValue'
-
-import DefaultBadge from './common/DefaultBadge'
-
 
 import RadioInput from './RadioInput'
 
@@ -22,8 +21,9 @@ const RadioWidget = ({ question, values, currentSet, disabled, createValue, upda
             <div key={valueIndex} className="interview-input">
               <div className="interview-input-options">
                 {
-                  isDefault && <DefaultBadge />
+                  isDefault && <QuestionDefault />
                 }
+                <QuestionEraseValue value={value} updateValue={updateValue}/>
                 {
                   (question.is_collection || values.length > 1) && (
                     <QuestionRemoveValue value={value} deleteValue={deleteValue} />
