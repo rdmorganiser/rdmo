@@ -3,6 +3,7 @@ import isNil from 'lodash/isNil'
 import isUndefined from 'lodash/isUndefined'
 
 import { buildUri } from '../utils/elements'
+import processElementDiffs from '../utils/processElementDiffs'
 
 
 const initialState = {
@@ -24,6 +25,7 @@ export default function importsReducer(state = initialState, action) {
       return {...state, elements: [], errors: [], success: false}
     case 'import/uploadFileSuccess':
       return {...state, elements: action.elements.map(element => {
+        element = processElementDiffs(element)
         if (['questions.catalogs', 'tasks.task', 'views.view'].includes(element.model)) {
           element.available = true
         }
@@ -57,7 +59,7 @@ export default function importsReducer(state = initialState, action) {
       })}
     case 'import/selectChangedElements':
       return {...state, elements: state.elements.map(element => {
-        if (element.updated && element.changed && !element.created ) {
+        if (element.changed && !element.created ) {
           return {...element, import: action.value}
         }
         else if (action.value) {return {...element, import: !action.value}}
@@ -70,7 +72,7 @@ export default function importsReducer(state = initialState, action) {
       })}
     case 'import/showChangedElements':
       return {...state, elements: state.elements.map(element => {
-        if (element.updated && element.changed && !element.created ) {
+        if (element.changed && !element.created ) {
           return {...element, show: action.value}
         }
         else if (action.value) {return {...element, show: !action.value}}
