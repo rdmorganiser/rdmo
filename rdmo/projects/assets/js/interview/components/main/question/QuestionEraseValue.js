@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const QuestionEraseValue = ({ value, updateValue }) => {
+const QuestionEraseValue = ({ value, disabled, updateValue }) => {
   const handleEraseValue = () => {
     updateValue(value, {})
   }
 
-  return (
+  return !disabled && (
     <button type="button" className="btn btn-link btn-erase-value" onClick={handleEraseValue}
             title={gettext('Erase input')}>
       <i className="fa fa-eraser fa-btn"></i>
@@ -16,6 +16,7 @@ const QuestionEraseValue = ({ value, updateValue }) => {
 
 QuestionEraseValue.propTypes = {
   value: PropTypes.object.isRequired,
+  disabled: PropTypes.bool.isRequired,
   updateValue: PropTypes.func.isRequired
 }
 

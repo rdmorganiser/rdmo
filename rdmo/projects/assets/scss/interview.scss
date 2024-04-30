@@ -214,14 +214,6 @@
         .btn-remove-value:focus {
             outline: 0;
         }
-
-        .badge-default {
-            cursor: help;
-            color: #999;
-            border: 1px solid #999;
-            background-color: white;
-            margin: 7px 0 7px 0;
-        }
     }
 
     .default {
@@ -232,11 +224,6 @@
         input[type='range'] {
             opacity: 0.5;
         }
-    }
-
-    .badge-optional {
-        float: right;
-        margin-top: 1px;
     }
 }
 
@@ -317,4 +304,23 @@
 
 .btn-add-set {
     margin-bottom: 20px;
+}
+
+.badge-default {
+    cursor: help;
+    color: #999;
+    border: 1px solid #999;
+    background-color: white;
+    margin: 7px 0 7px 0;
+}
+
+.badge-optional {
+    cursor: help;
+    float: right;
+    margin-top: 1px;
+}
+
+.badge-read-only {
+    cursor: help;
+    background-color: black;
 }

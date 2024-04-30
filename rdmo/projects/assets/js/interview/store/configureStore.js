@@ -10,6 +10,7 @@ import templateReducer from 'rdmo/core/assets/js/reducers/templateReducer'
 import userReducer from 'rdmo/core/assets/js/reducers/userReducer'
 
 import interviewReducer from '../reducers/interviewReducer'
+import projectReducer from '../reducers/projectReducer'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import * as settingsActions from 'rdmo/core/assets/js/actions/settingsActions'
@@ -17,6 +18,7 @@ import * as templateActions from 'rdmo/core/assets/js/actions/templateActions'
 import * as userActions from 'rdmo/core/assets/js/actions/userActions'
 
 import * as interviewActions from '../actions/interviewActions'
+import * as projectActions from '../actions/projectActions'
 
 import { parseLocation } from '../utils/location'
 
@@ -34,9 +36,10 @@ export default function configureStore() {
   const rootReducer = combineReducers({
     config: configReducer,
     interview: interviewReducer,
+    project: projectReducer,
     settings: settingsReducer,
     templates: templateReducer,
-    user: userReducer
+    user: userReducer,
   })
 
   const store = createStore(
@@ -59,8 +62,8 @@ export default function configureStore() {
       store.dispatch(settingsActions.fetchSettings()),
       store.dispatch(templateActions.fetchTemplates()),
       store.dispatch(userActions.fetchCurrentUser()),
-      store.dispatch(interviewActions.fetchOverview()),
-      store.dispatch(interviewActions.fetchProgress())
+      store.dispatch(projectActions.fetchOverview()),
+      store.dispatch(projectActions.fetchProgress())
     ]).then(() => fetchPageFromLocation())
   })
 
