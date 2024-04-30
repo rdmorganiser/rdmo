@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { isReady } from '../utils/interview'
 
 import Breadcrump from '../components/main/Breadcrump'
+import Done from '../components/main/Done'
 import Page from '../components/main/page/Page'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
@@ -22,22 +23,31 @@ const Main = ({ config, settings, templates, user, project, interview, configAct
           page={interview.page}
           fetchPage={interviewActions.fetchPage}
         />
-        <Page
-          config={config}
-          templates={templates}
-          project={project}
-          page={interview.page}
-          sets={interview.sets}
-          values={interview.values}
-          fetchPage={interviewActions.fetchPage}
-          createValue={interviewActions.createValue}
-          updateValue={interviewActions.updateValue}
-          deleteValue={interviewActions.deleteValue}
-          activateSet={interviewActions.activateSet}
-          createSet={interviewActions.createSet}
-          updateSet={interviewActions.updateSet}
-          deleteSet={interviewActions.deleteSet}
-        />
+        {
+          interview.done && (
+            <Done templates={templates} overview={project.overview} />
+          )
+        }
+        {
+          interview.page && (
+            <Page
+              config={config}
+              templates={templates}
+              overview={project.overview}
+              page={interview.page}
+              sets={interview.sets}
+              values={interview.values}
+              fetchPage={interviewActions.fetchPage}
+              createValue={interviewActions.createValue}
+              updateValue={interviewActions.updateValue}
+              deleteValue={interviewActions.deleteValue}
+              activateSet={interviewActions.activateSet}
+              createSet={interviewActions.createSet}
+              updateSet={interviewActions.updateSet}
+              deleteSet={interviewActions.deleteSet}
+            />
+          )
+        }
       </div>
     )
   }

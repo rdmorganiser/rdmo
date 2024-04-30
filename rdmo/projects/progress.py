@@ -70,7 +70,7 @@ def compute_navigation(section, project, snapshot=None):
             'count': 0,
             'total': 0
         }
-        if catalog_section.id == section.id:
+        if section is not None and catalog_section.id == section.id:
             navigation_section['pages'] = []
 
         for page in catalog_section.elements:

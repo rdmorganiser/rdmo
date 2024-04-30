@@ -18,7 +18,7 @@ const PageButtons = ({ page, fetchPage }) => {
                 {gettext('Proceed')}
               </button>
             ) : (
-              <button type="button" onClick={() => {}}
+              <button type="button" onClick={() => fetchPage('done')}
                       className="btn btn-primary">
                 {gettext('Complete questionnaire')}
               </button>

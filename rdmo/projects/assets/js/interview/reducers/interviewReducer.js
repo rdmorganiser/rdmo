@@ -16,6 +16,7 @@ import {
 } from '../actions/actionTypes'
 
 const initialState = {
+  done: null,
   page: null,
   navigation: null,
   values: null,
@@ -27,7 +28,7 @@ const initialState = {
 export default function interviewReducer(state = initialState, action) {
   switch(action.type) {
     case FETCH_PAGE_SUCCESS:
-      return { ...state, page: action.page, attributes: action.attributes }
+      return { ...state, page: action.page, done: action.done }
     case FETCH_NAVIGATION_SUCCESS:
       return { ...state, navigation: action.navigation }
     case FETCH_VALUES_SUCCESS:
