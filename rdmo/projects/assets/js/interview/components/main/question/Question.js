@@ -7,10 +7,14 @@ import QuestionHelp from './QuestionHelp'
 import QuestionManagement from './QuestionManagement'
 import QuestionText from './QuestionText'
 import QuestionWidget from './QuestionWidget'
+import QuestionOptional from './QuestionOptional'
 
 const Question = ({ templates, question, values, focus, currentSet, createValue, updateValue, deleteValue }) => {
   return (
     <div className={`interview-question col-md-${question.width || '12'}`}>
+      {
+        question.is_optional && <QuestionOptional />
+      }
       <QuestionText question={question} />
       <QuestionHelp question={question} />
       {

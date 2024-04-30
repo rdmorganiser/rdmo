@@ -40,6 +40,7 @@ TextInput.propTypes = {
   value: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
   isDefault: PropTypes.bool,
+  isOptional: PropTypes.bool,
   focus: PropTypes.bool,
   updateValue: PropTypes.func.isRequired,
 }
