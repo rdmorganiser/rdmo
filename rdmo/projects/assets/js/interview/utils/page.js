@@ -1,26 +1,26 @@
 import { isNil } from 'lodash'
 
 const initQuestionSet = (questionset) => {
-  questionset.elements = questionset.elements.map((element) => {
+  questionset.elements.forEach((element) => {
     if (element.model == 'questions.questionset') {
-      return initQuestionSet(element)
+      initQuestionSet(element)
     } else {
-      return initQuestion(element)
+      initQuestion(element)
     }
   })
 
-  questionset.attributes = questionset.elements.reduce((agg, cur) => {
-    if (cur.model == 'questions.questionset') {
-        return agg.concat(cur.attributes)
+  // aggregate attributes from decendant questionsets and questions
+  questionset.attributes = questionset.elements.reduce((attributes, element) => {
+    if (element.model == 'questions.questionset') {
+        return attributes.concat(element.attributes)
       } else {
-        return [...agg, cur.attribute]
+        return [...attributes, element.attribute]
       }
   }, [questionset.attribute]).filter((a) => !isNil(a))
-
-  return questionset
 }
 
 const initQuestion = (question) => {
+  // aggregate options from optionsets
   question.options = question.optionsets.reduce((acc, cur) => {
     acc = acc.concat(cur.options.map((option) => {
       option.optionset = cur.id
@@ -29,8 +29,6 @@ const initQuestion = (question) => {
 
     return acc
   }, [])
-
-  return question
 }
 
 const initPage = (page) => initQuestionSet(page)

@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {  isNil } from 'lodash'
 
-import { isDefaultValue } from '../../../../utils/value'
+import { isDefaultValue, initRange } from '../../../../utils/value'
 
 import QuestionAddValue from '../QuestionAddValue'
 import QuestionDefault from '../QuestionDefault'
@@ -14,7 +13,7 @@ import RangeInput from './RangeInput'
 const RangeWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue }) => {
 
   const handleCreateValue = (value) => {
-    value.text = isNil(question.minimum) ? 0 : question.minimum
+    initRange(question, value)
     createValue(value)
   }
 
@@ -27,15 +26,15 @@ const RangeWidget = ({ question, values, currentSet, disabled, createValue, upda
           return (
             <div key={valueIndex} className="interview-input">
               <div className="interview-input-options">
-                {
-                  isDefault && <QuestionDefault />
-                }
-                <QuestionEraseValue value={value} updateValue={updateValue} />
-                {
-                  (question.is_collection || values.length > 1) && (
-                    <QuestionRemoveValue value={value} deleteValue={deleteValue} />
-                  )
-                }
+                <QuestionDefault isDefault={isDefault} />
+                <QuestionEraseValue value={value} disabled={disabled} updateValue={updateValue}/>
+                <QuestionRemoveValue
+                  question={question}
+                  values={values}
+                  value={value}
+                  disabled={disabled}
+                  deleteValue={deleteValue}
+                />
               </div>
               <RangeInput
                 value={value}
@@ -50,11 +49,13 @@ const RangeWidget = ({ question, values, currentSet, disabled, createValue, upda
           )
         })
       }
-      {
-        question.is_collection && (
-          <QuestionAddValue question={question} values={values} currentSet={currentSet} createValue={handleCreateValue} />
-        )
-      }
+      <QuestionAddValue
+        question={question}
+        values={values}
+        currentSet={currentSet}
+        disabled={disabled}
+        createValue={handleCreateValue}
+      />
     </div>
   )
 }

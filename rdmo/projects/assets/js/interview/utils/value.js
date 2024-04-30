@@ -13,9 +13,9 @@ const isDefaultValue = (question, value) => {
     } else if (question.default_external_id) {
       return question.default_external_id == value.external_id
     }
-  } else {
-    return false
   }
+
+  return false
 }
 
 const initValues = (sets, values, element, setPrefix) => {

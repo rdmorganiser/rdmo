@@ -11,7 +11,8 @@ import QuestionSetHelp from './QuestionSetHelp'
 import QuestionSetAddSet from './QuestionSetAddSet'
 import QuestionSetRemoveSet from './QuestionSetRemoveSet'
 
-const QuestionSet = ({ templates, questionset, sets, values, focus, parentSet, createSet, updateSet, deleteSet,
+const QuestionSet = ({ templates, questionset, sets, values, disabled, focus,
+                       parentSet, createSet, updateSet, deleteSet,
                        createValue, updateValue, deleteValue }) => {
 
   const setPrefix = getChildPrefix(parentSet)
@@ -52,6 +53,7 @@ const QuestionSet = ({ templates, questionset, sets, values, focus, parentSet, c
                             questionset={element}
                             sets={sets}
                             values={values.filter((value) => element.attributes.includes(value.attribute))}
+                            disabled={disabled}
                             focus={focus && (setIndex === 0 && elementIndex === 0)}
                             parentSet={set}
                             createSet={createSet}
@@ -73,6 +75,7 @@ const QuestionSet = ({ templates, questionset, sets, values, focus, parentSet, c
                               value.set_prefix == set.set_prefix &&
                               value.set_index == set.set_index
                             ))}
+                            disabled={disabled}
                             focus={focus && (setIndex === 0 && elementIndex === 0)}
                             currentSet={set}
                             createValue={createValue}
@@ -103,6 +106,7 @@ QuestionSet.propTypes = {
   questionset: PropTypes.object.isRequired,
   sets: PropTypes.array.isRequired,
   values: PropTypes.array.isRequired,
+  disabled: PropTypes.bool.isRequired,
   focus: PropTypes.bool.isRequired,
   parentSet: PropTypes.object.isRequired,
   createSet: PropTypes.func.isRequired,

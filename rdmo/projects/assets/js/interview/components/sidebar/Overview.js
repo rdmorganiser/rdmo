@@ -17,22 +17,31 @@ const Overview = ({ overview, help }) => {
 
       <div className="interview-overview">
         <ul className="list-unstyled">
-            <li>
-                {gettext('Project')}: <a href={projectUrl}>{overview.title}</a>
-            </li>
-            <li>
-                {/* TODO: get catalog title from catalog api */}
-                {gettext('Catalog')}: {overview.catalog.title}
-            </li>
+          <li>
+            {gettext('Project')}: <a href={projectUrl}>{overview.title}</a>
+          </li>
+          <li>
+            {gettext('Catalog')}: {overview.catalog.title}
+          </li>
         </ul>
 
+        {
+          overview.read_only && (
+            <p>
+              <span className="badge badge-read-only" title={gettext('You don\'t have write access to this project.')}>
+                {gettext('read only')}
+              </span>
+            </p>
+          )
+        }
+
         <ul className="list-unstyled">
-            <li>
-                <a href="#" onClick={() => window.location.reload()}>{gettext('Reload page')}</a>
-            </li>
-            <li>
-                <a href={projectsUrl}>{gettext('Back to my projects')}</a>
-            </li>
+          <li>
+            <a href="#" onClick={() => window.location.reload()}>{gettext('Reload page')}</a>
+          </li>
+          <li>
+            <a href={projectsUrl}>{gettext('Back to my projects')}</a>
+          </li>
         </ul>
       </div>
     </>

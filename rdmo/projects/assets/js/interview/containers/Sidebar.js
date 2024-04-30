@@ -3,27 +3,27 @@ import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
+import { isReady } from '../utils/interview'
+
 import Buttons from '../components/sidebar/Buttons'
 import Navigation from '../components/sidebar/Navigation'
 import Overview from '../components/sidebar/Overview'
 import Progress from '../components/sidebar/Progress'
-
-import { showInterview } from '../utils/interview'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 
 import * as interviewActions from '../actions/interviewActions'
 
 // eslint-disable-next-line no-unused-vars
-const Sidebar = ({ config, settings, templates, user, interview, configActions, interviewActions }) => {
-  if (showInterview(interview)) {
+const Sidebar = ({ config, settings, templates, user, project, interview, configActions, interviewActions }) => {
+  if (isReady(interview)) {
     return (
       <div>
         <Overview
-          overview={interview.overview}
+          overview={project.overview}
           help={templates.project_interview_overview_help}/>
         <Progress
-          progress={interview.progress}
+          progress={project.progress}
           help={templates.project_interview_progress_help} />
         <Buttons
           prev={interview.page.prev_page}
@@ -48,6 +48,7 @@ Sidebar.propTypes = {
   settings: PropTypes.object.isRequired,
   templates: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
+  project: PropTypes.object.isRequired,
   interview: PropTypes.object.isRequired,
   configActions: PropTypes.object.isRequired,
   interviewActions: PropTypes.object.isRequired
@@ -59,6 +60,7 @@ function mapStateToProps(state) {
     settings: state.settings,
     templates: state.templates,
     user: state.user,
+    project: state.project,
     interview: state.interview
   }
 }

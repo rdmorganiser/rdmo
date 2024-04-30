@@ -9,7 +9,7 @@ import QuestionText from './QuestionText'
 import QuestionWidget from './QuestionWidget'
 import QuestionOptional from './QuestionOptional'
 
-const Question = ({ templates, question, values, focus, currentSet, createValue, updateValue, deleteValue }) => {
+const Question = ({ templates, question, values, disabled, focus, currentSet, createValue, updateValue, deleteValue }) => {
   return (
     <div className={`interview-question col-md-${question.width || '12'}`}>
       {
@@ -33,6 +33,7 @@ const Question = ({ templates, question, values, focus, currentSet, createValue,
       <QuestionWidget
         question={question}
         values={values}
+        disabled={disabled}
         focus={focus}
         currentSet={currentSet}
         createValue={createValue}
@@ -47,6 +48,7 @@ Question.propTypes = {
   templates: PropTypes.object.isRequired,
   question: PropTypes.object.isRequired,
   values: PropTypes.array.isRequired,
+  disabled: PropTypes.bool.isRequired,
   focus: PropTypes.bool.isRequired,
   currentSet: PropTypes.object.isRequired,
   createValue: PropTypes.func.isRequired,

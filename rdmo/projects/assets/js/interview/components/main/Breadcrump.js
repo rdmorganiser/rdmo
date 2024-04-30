@@ -3,11 +3,11 @@ import PropTypes from 'prop-types'
 
 import baseUrl from 'rdmo/core/assets/js/utils/baseUrl'
 
-const Breadcrump = ({ overview, currentPage, fetchPage }) => {
+const Breadcrump = ({ overview, page, fetchPage }) => {
 
   const handleClick = (event) => {
     event.preventDefault()
-    fetchPage(currentPage.section.first)
+    fetchPage(page.section.first)
   }
 
   return (
@@ -23,8 +23,8 @@ const Breadcrump = ({ overview, currentPage, fetchPage }) => {
         </a>
       </li>
       <li>
-        <a href={`${baseUrl}/projects/${overview.id}/interview/${currentPage.section.first}/`} onClick={handleClick}>
-          {currentPage.section.title}
+        <a href={`${baseUrl}/projects/${overview.id}/interview/${page.section.first}/`} onClick={handleClick}>
+          {page.section.title}
         </a>
       </li>
     </ul>
@@ -33,7 +33,7 @@ const Breadcrump = ({ overview, currentPage, fetchPage }) => {
 
 Breadcrump.propTypes = {
   overview: PropTypes.object.isRequired,
-  currentPage: PropTypes.object.isRequired,
+  page: PropTypes.object.isRequired,
   fetchPage: PropTypes.func.isRequired
 }
 

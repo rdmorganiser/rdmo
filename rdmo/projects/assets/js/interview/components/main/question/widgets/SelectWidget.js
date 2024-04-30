@@ -19,14 +19,14 @@ const SelectWidget = ({ question, values, currentSet, disabled, createValue, upd
           return (
             <div key={valueIndex} className="interview-input">
               <div className="interview-input-options">
-                {
-                  isDefault && <QuestionDefault />
-                }
-                {
-                  (question.is_collection || values.length > 1) && (
-                    <QuestionRemoveValue value={value} deleteValue={deleteValue} />
-                  )
-                }
+                <QuestionDefault isDefault={isDefault} />
+                <QuestionRemoveValue
+                  question={question}
+                  values={values}
+                  value={value}
+                  disabled={disabled}
+                  deleteValue={deleteValue}
+                />
               </div>
               <SelectInput
                 value={value}
@@ -39,11 +39,13 @@ const SelectWidget = ({ question, values, currentSet, disabled, createValue, upd
           )
         })
       }
-      {
-        question.is_collection && (
-          <QuestionAddValue question={question} values={values} currentSet={currentSet} createValue={createValue} />
-        )
-      }
+      <QuestionAddValue
+        question={question}
+        values={values}
+        currentSet={currentSet}
+        disabled={disabled}
+        createValue={createValue}
+      />
     </div>
   )
 }
