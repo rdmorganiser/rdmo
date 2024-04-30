@@ -26,8 +26,8 @@ const Sidebar = ({ config, settings, templates, user, project, interview, config
           progress={project.progress}
           help={templates.project_interview_progress_help} />
         <Buttons
-          prev={interview.page.prev_page}
-          next={interview.page.next_page}
+          prev={interview.page && interview.page.prev_page}
+          next={interview.page && interview.page.next_page}
           help={templates.project_interview_buttons_help}
           fetchPage={interviewActions.fetchPage} />
         <Navigation

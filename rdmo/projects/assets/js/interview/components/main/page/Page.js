@@ -10,7 +10,7 @@ import PageButtons from './PageButtons'
 import PageHead from './PageHead'
 import PageHelp from './PageHelp'
 
-const Page = ({ config, templates, project, page, sets, values, fetchPage,
+const Page = ({ config, templates, overview, page, sets, values, fetchPage,
                 createValue, updateValue, deleteValue,
                 activateSet, createSet, updateSet, deleteSet }) => {
 
@@ -50,7 +50,7 @@ const Page = ({ config, templates, project, page, sets, values, fetchPage,
                     questionset={element}
                     sets={sets}
                     values={values.filter((value) => element.attributes.includes(value.attribute))}
-                    disabled={project.overview.read_only}
+                    disabled={overview.read_only}
                     focus={elementIndex == 0}
                     parentSet={currentSet}
                     createSet={createSet}
@@ -72,7 +72,7 @@ const Page = ({ config, templates, project, page, sets, values, fetchPage,
                       value.set_prefix == currentSetPrefix &&
                       value.set_index == currentSetIndex
                     ))}
-                    disabled={project.overview.read_only}
+                    disabled={overview.read_only}
                     focus={elementIndex == 0}
                     currentSet={currentSet}
                     createValue={createValue}
@@ -94,7 +94,7 @@ const Page = ({ config, templates, project, page, sets, values, fetchPage,
 Page.propTypes = {
   config: PropTypes.object.isRequired,
   templates: PropTypes.object.isRequired,
-  project: PropTypes.object.isRequired,
+  overview: PropTypes.object.isRequired,
   page: PropTypes.object.isRequired,
   sets: PropTypes.array.isRequired,
   values: PropTypes.array.isRequired,

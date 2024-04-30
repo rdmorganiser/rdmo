@@ -9,6 +9,11 @@ const parseLocation = () => {
     return m1.groups
   }
 
+  const m2 = pathname.match(/\/interview\/(?<pageId>(done))[/]*$/)
+  if (m2) {
+    return m2.groups
+  }
+
   return {}
 }
 
