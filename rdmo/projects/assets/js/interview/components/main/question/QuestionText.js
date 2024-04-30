@@ -11,12 +11,6 @@ const QuestionText = ({ question }) => {
   return (
     <div className={classnames}>
       {question.text}
-      {question.is_optional && (
-        <>
-          {' '}
-          <span>{gettext('(optional)')}</span>
-        </>
-      )}
     </div>
   )
 }
