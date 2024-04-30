@@ -18,12 +18,8 @@ import {
   NOOP,
   FETCH_NAVIGATION_ERROR,
   FETCH_NAVIGATION_SUCCESS,
-  FETCH_OVERVIEW_ERROR,
-  FETCH_OVERVIEW_SUCCESS,
   FETCH_PAGE_ERROR,
   FETCH_PAGE_SUCCESS,
-  FETCH_PROGRESS_ERROR,
-  FETCH_PROGRESS_SUCCESS,
   FETCH_VALUES_SUCCESS,
   FETCH_VALUES_ERROR,
   CREATE_VALUE,
@@ -38,38 +34,35 @@ import {
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 
-export function fetchOverview() {
-  return (dispatch) => ProjectApi.fetchOverview(projectId)
-    .then((overview) => dispatch(fetchOverviewSuccess(overview)))
-    .catch((errors) => dispatch(fetchOverviewError(errors)))
+export function fetchPage(pageId) {
+  return (dispatch) => {
+    const promise = isNil(pageId) ? PageApi.fetchContinue(projectId)
+                                  : PageApi.fetchPage(projectId, pageId)
+    return promise.then((page) => {
+      updateLocation(page.id)
+      initPage(page)
+      dispatch(fetchNavigation(page))
+      dispatch(fetchValues(page))
+      dispatch(fetchPageSuccess(page))
+    })
+  }
 }
 
-export function fetchOverviewSuccess(overview) {
-  return {type: FETCH_OVERVIEW_SUCCESS, overview}
+export function fetchPageSuccess(page) {
+  return {type: FETCH_PAGE_SUCCESS, page}
 }
 
-export function fetchOverviewError(errors) {
-  return {type: FETCH_OVERVIEW_ERROR, errors}
+export function fetchPageError(errors) {
+  return {type: FETCH_PAGE_ERROR, errors}
 }
 
-export function fetchProgress() {
-  return (dispatch) => ProjectApi.fetchProgress(projectId)
-    .then((progress) => dispatch(fetchProgressSuccess(progress)))
-    .catch((errors) => dispatch(fetchProgressError(errors)))
-}
+export function fetchNavigation(page) {
+  return (dispatch) => {
+    return ProjectApi.fetchNavigation(projectId, page.section.id)
+      .then((navigation) => dispatch(fetchNavigationSuccess(navigation)))
+      .catch((errors) => dispatch(fetchNavigationError(errors)))
 
-export function fetchProgressSuccess(progress) {
-  return {type: FETCH_PROGRESS_SUCCESS, progress}
-}
-
-export function fetchProgressError(errors) {
-  return {type: FETCH_PROGRESS_ERROR, errors}
-}
-
-export function fetchNavigation(sectionId) {
-  return (dispatch) => ProjectApi.fetchNavigation(projectId, sectionId)
-    .then((navigation) => dispatch(fetchNavigationSuccess(navigation)))
-    .catch((errors) => dispatch(fetchNavigationError(errors)))
+  }
 }
 
 export function fetchNavigationSuccess(navigation) {
@@ -80,31 +73,8 @@ export function fetchNavigationError(errors) {
   return {type: FETCH_NAVIGATION_ERROR, errors}
 }
 
-export function fetchPage(pageId) {
+export function fetchValues(page) {
   return (dispatch) => {
-    const promise = isNil(pageId) ? PageApi.fetchContinue(projectId)
-                                  : PageApi.fetchPage(projectId, pageId)
-    return promise.then((page) => {
-      updateLocation(page.id)
-      dispatch(fetchNavigation(page.section.id))
-      dispatch(fetchPageSuccess(page))
-      dispatch(fetchValues())
-    })
-  }
-}
-
-export function fetchPageSuccess(page) {
-  return {type: FETCH_PAGE_SUCCESS, page: initPage(page)}
-}
-
-export function fetchPageError(errors) {
-  return {type: FETCH_PAGE_ERROR, errors}
-}
-
-export function fetchValues() {
-  return (dispatch, getStore) => {
-    const page = getStore().interview.page
-
     return ValueApi.fetchValues(projectId, { attribute: page.attributes })
       .then((values) => dispatch(fetchValuesSuccess(values, page)))
       .catch((errors) => dispatch(fetchValuesError(errors)))

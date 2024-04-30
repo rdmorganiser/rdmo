@@ -1,7 +1,7 @@
-import isUndefined from 'lodash/isUndefined'
+import { isNil } from 'lodash'
 
-const showInterview = (interview) => {
-  return !isUndefined(interview.page) && !isUndefined(interview.navigation) && !isUndefined(interview.values)
+const isReady = (interview) => {
+  return !(isNil(interview.page) || isNil(interview.navigation) || isNil(interview.values))
 }
 
-export { showInterview }
+export { isReady }

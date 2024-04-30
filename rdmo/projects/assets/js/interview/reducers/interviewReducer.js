@@ -1,12 +1,8 @@
 import {
   FETCH_NAVIGATION_ERROR,
   FETCH_NAVIGATION_SUCCESS,
-  FETCH_OVERVIEW_ERROR,
-  FETCH_OVERVIEW_SUCCESS,
   FETCH_PAGE_ERROR,
   FETCH_PAGE_SUCCESS,
-  FETCH_PROGRESS_ERROR,
-  FETCH_PROGRESS_SUCCESS,
   FETCH_VALUES_SUCCESS,
   FETCH_VALUES_ERROR,
   CREATE_VALUE,
@@ -20,21 +16,20 @@ import {
 } from '../actions/actionTypes'
 
 const initialState = {
-  show: false,
-  values: [],
-  sets: []
+  page: null,
+  navigation: null,
+  values: null,
+  attributes: [],
+  sets: [],
+  errors: {}
 }
 
 export default function interviewReducer(state = initialState, action) {
   switch(action.type) {
-    case FETCH_OVERVIEW_SUCCESS:
-      return { ...state, overview: action.overview }
-    case FETCH_PROGRESS_SUCCESS:
-      return { ...state, progress: action.progress }
-    case FETCH_NAVIGATION_SUCCESS:
-      return { ...state, navigation: action.navigation }
     case FETCH_PAGE_SUCCESS:
       return { ...state, page: action.page, attributes: action.attributes }
+    case FETCH_NAVIGATION_SUCCESS:
+      return { ...state, navigation: action.navigation }
     case FETCH_VALUES_SUCCESS:
       return { ...state, values: action.values, sets: action.sets }
     case CREATE_VALUE:
@@ -57,8 +52,6 @@ export default function interviewReducer(state = initialState, action) {
         values: state.values.filter((value) => !action.values.includes(value)),
         sets: state.sets.filter((set) => !action.sets.includes(set))
       }
-    case FETCH_OVERVIEW_ERROR:
-    case FETCH_PROGRESS_ERROR:
     case FETCH_NAVIGATION_ERROR:
     case FETCH_PAGE_ERROR:
     case FETCH_VALUES_ERROR:
