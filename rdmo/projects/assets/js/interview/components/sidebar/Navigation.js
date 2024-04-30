@@ -31,10 +31,10 @@ const Navigation = ({ currentPage, navigation, help, fetchPage }) => {
                         const label = interpolate(gettext('(%s of %s)'), [page.count, page.total])
 
                         return (
-                          <li key={pageIndex} className={classNames({'active': page.id == currentPage.id})}>
+                          <li key={pageIndex} className={classNames({'active': currentPage ? page.id == currentPage.id : false})}>
                             {
                               page.show ? (
-                                <a href={`/projects/12/interview/${currentPage.id}/`} onClick={event => handleClick(event, page.id)}>
+                                <a href={`/projects/12/interview/${page.id}/`} onClick={event => handleClick(event, page.id)}>
                                   <span>{page.title}</span>
                                   {
                                     page.count > 0 && page.count == page.total && (
@@ -71,7 +71,7 @@ const Navigation = ({ currentPage, navigation, help, fetchPage }) => {
 }
 
 Navigation.propTypes = {
-  currentPage: PropTypes.object.isRequired,
+  currentPage: PropTypes.object,
   navigation: PropTypes.array.isRequired,
   help: PropTypes.string.isRequired,
   fetchPage: PropTypes.func.isRequired

@@ -35,21 +35,29 @@ import {
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 
 export function fetchPage(pageId) {
-  return (dispatch) => {
-    const promise = isNil(pageId) ? PageApi.fetchContinue(projectId)
-                                  : PageApi.fetchPage(projectId, pageId)
-    return promise.then((page) => {
-      updateLocation(page.id)
-      initPage(page)
-      dispatch(fetchNavigation(page))
-      dispatch(fetchValues(page))
-      dispatch(fetchPageSuccess(page))
-    })
+  if (pageId === 'done') {
+    return (dispatch) => {
+      updateLocation('done')
+      dispatch(fetchNavigation(null))
+      dispatch(fetchPageSuccess(null, true))
+    }
+  } else {
+    return (dispatch) => {
+      const promise = isNil(pageId) ? PageApi.fetchContinue(projectId)
+                                    : PageApi.fetchPage(projectId, pageId)
+      return promise.then((page) => {
+        updateLocation(page.id)
+        initPage(page)
+        dispatch(fetchNavigation(page))
+        dispatch(fetchValues(page))
+        dispatch(fetchPageSuccess(page, false))
+      })
+    }
   }
 }
 
-export function fetchPageSuccess(page) {
-  return {type: FETCH_PAGE_SUCCESS, page}
+export function fetchPageSuccess(page, done) {
+  return {type: FETCH_PAGE_SUCCESS, page, done}
 }
 
 export function fetchPageError(errors) {
@@ -58,7 +66,7 @@ export function fetchPageError(errors) {
 
 export function fetchNavigation(page) {
   return (dispatch) => {
-    return ProjectApi.fetchNavigation(projectId, page.section.id)
+    return ProjectApi.fetchNavigation(projectId, page && page.section.id)
       .then((navigation) => dispatch(fetchNavigationSuccess(navigation)))
       .catch((errors) => dispatch(fetchNavigationError(errors)))
 

@@ -53,9 +53,9 @@ def compute_navigation(section, project, snapshot=None):
             'id': catalog_section.id,
             'uri': catalog_section.uri,
             'title': catalog_section.title,
-            'first': catalog_section.elements[0].id if section.elements else None
+            'first': catalog_section.elements[0].id if catalog_section.elements else None
         }
-        if catalog_section.id == section.id:
+        if section is not None and catalog_section.id == section.id:
             navigation_section['pages'] = []
             for page in catalog_section.elements:
                 pages_conditions = {page.id for page in page.conditions.all()}

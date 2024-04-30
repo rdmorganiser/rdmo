@@ -22,18 +22,22 @@ const Breadcrump = ({ overview, page, fetchPage }) => {
           {overview.title}
         </a>
       </li>
-      <li>
-        <a href={`${baseUrl}/projects/${overview.id}/interview/${page.section.first}/`} onClick={handleClick}>
-          {page.section.title}
-        </a>
-      </li>
+      {
+        page && (
+          <li>
+            <a href={`${baseUrl}/projects/${overview.id}/interview/${page.section.first}/`} onClick={handleClick}>
+              {page.section.title}
+            </a>
+          </li>
+        )
+      }
     </ul>
   )
 }
 
 Breadcrump.propTypes = {
   overview: PropTypes.object.isRequired,
-  page: PropTypes.object.isRequired,
+  page: PropTypes.object,
   fetchPage: PropTypes.func.isRequired
 }
 
