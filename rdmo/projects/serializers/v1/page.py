@@ -20,7 +20,9 @@ class AttributeSerializer(serializers.ModelSerializer):
         )
 
 
-class OptionSerializer(serializers.ModelSerializer):
+class OptionSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
+
+    markdown_fields = ('text', 'help')
 
     class Meta:
         model = Option

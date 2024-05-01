@@ -5,6 +5,8 @@ import { isEmpty, isNil } from 'lodash'
 
 import AdditionalTextInput from './common/AdditionalTextInput'
 import AdditionalTextareaInput from './common/AdditionalTextareaInput'
+import OptionHelp from './common/OptionHelp'
+import OptionText from './common/OptionText'
 
 const CheckboxInput = ({ value, option, disabled, onCreate, onUpdate, onDelete }) => {
 
@@ -18,11 +20,15 @@ const CheckboxInput = ({ value, option, disabled, onCreate, onUpdate, onDelete }
     }
   }
 
-  const handleAdditionalValueChange = useDebouncedCallback((value, option, additionalValue) => {
+  const handleAdditionalValueChange = useDebouncedCallback((value, option, additionalInput) => {
     if (checked) {
-      onUpdate(value, { text: additionalValue, option: option.id })
+      if (option.has_provider) {
+        onUpdate(value, { text: option.text, external_id: option.id })
+      } else {
+        onUpdate(value, { option: option.id })
+      }
     } else {
-      onCreate(option, additionalValue)
+      onCreate(option, additionalInput)
     }
   }, 500)
 
@@ -35,20 +41,18 @@ const CheckboxInput = ({ value, option, disabled, onCreate, onUpdate, onDelete }
           disabled={disabled}
           onChange={() => handleChange()}
         />
-        <span>{option.text}</span>
+        <OptionText option={option} />
         {
           isEmpty(option.additional_input) && (
-            <span className="text-muted">{option.help}</span>
+            <OptionHelp className="ml-10" option={option} />
           )
         }
         {
           option.additional_input == 'text' && (
             <>
               <span>:</span>
-              {' '}
-              <AdditionalTextInput value={value} option={option} disabled={disabled} onChange={handleAdditionalValueChange} />
-              {' '}
-              <span className="text-muted">{option.help}</span>
+              <AdditionalTextInput className="ml-10" value={value} option={option} disabled={disabled} onChange={handleAdditionalValueChange} />
+              <OptionHelp className="ml-10" option={option} />
             </>
           )
         }
@@ -56,10 +60,10 @@ const CheckboxInput = ({ value, option, disabled, onCreate, onUpdate, onDelete }
           option.additional_input == 'textarea' && (
             <>
               <span>:</span>
-              {' '}
               <AdditionalTextareaInput value={value} option={option} disabled={disabled} onChange={handleAdditionalValueChange} />
-              {' '}
-              <div className="text-muted">{option.help}</div>
+              <div>
+                <OptionHelp option={option} />
+              </div>
             </>
           )
         }

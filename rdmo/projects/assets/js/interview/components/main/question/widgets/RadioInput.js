@@ -6,21 +6,24 @@ import { isEmpty } from 'lodash'
 
 import AdditionalTextInput from './common/AdditionalTextInput'
 import AdditionalTextareaInput from './common/AdditionalTextareaInput'
+import OptionHelp from './common/OptionHelp'
+import OptionText from './common/OptionText'
 
 const RadioInput = ({ value, options, disabled, isDefault, updateValue }) => {
+  console.log(value.text)
 
   const handleChange = (option) => {
-    if (isEmpty(option.additional_input)) {
-      updateValue(value, { option: option.id, text: '' })
+    if (option.has_provider) {
+      updateValue(value, { text: option.text, external_id: option.id })
     } else {
       updateValue(value, { option: option.id })
     }
   }
 
-  const handleAdditionalValueChange = useDebouncedCallback((value, option, additionalValue) => {
+  const handleAdditionalValueChange = useDebouncedCallback((value, option, additionalInput) => {
     updateValue(value, {
       option: option.id,
-      text: additionalValue
+      text: additionalInput
     })
   }, 500)
 
@@ -40,24 +43,28 @@ const RadioInput = ({ value, options, disabled, isDefault, updateValue }) => {
               <label>
                 <input
                   type="radio"
-                  checked={value.option == option.id}
+                  checked={option.has_provider ? (value.external_id === option.id) : (value.option === option.id)}
                   disabled={disabled}
                   onChange={() => handleChange(option)}
                 />
-                <span>{option.text}</span>
+                <OptionText option={option} />
                 {
                   isEmpty(option.additional_input) && (
-                    <span className="text-muted">{option.help}</span>
+                    <OptionHelp className="ml-10" option={option} />
                   )
                 }
                 {
                   option.additional_input == 'text' && (
                     <>
                       <span>:</span>
-                      {' '}
-                      <AdditionalTextInput value={value} option={option} disabled={disabled} onChange={handleAdditionalValueChange} />
-                      {' '}
-                      <span className="text-muted">{option.help}</span>
+                      <AdditionalTextInput
+                        className="ml-10"
+                        value={value}
+                        option={option}
+                        disabled={disabled}
+                        onChange={handleAdditionalValueChange}
+                      />
+                      <OptionHelp className="ml-10" option={option} />
                     </>
                   )
                 }
@@ -65,10 +72,15 @@ const RadioInput = ({ value, options, disabled, isDefault, updateValue }) => {
                   option.additional_input == 'textarea' && (
                     <>
                       <span>:</span>
-                      {' '}
-                      <AdditionalTextareaInput value={value} option={option} disabled={disabled} onChange={handleAdditionalValueChange} />
-                      {' '}
-                      <div className="text-muted">{option.help}</div>
+                      <AdditionalTextareaInput
+                        value={value}
+                        option={option}
+                        disabled={disabled}
+                        onChange={handleAdditionalValueChange}
+                      />
+                      <div>
+                        <OptionHelp option={option} />
+                      </div>
                     </>
                   )
                 }

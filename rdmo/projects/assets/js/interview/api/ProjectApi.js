@@ -1,5 +1,7 @@
 import { isNil } from 'lodash'
 
+import { encodeParams } from 'rdmo/core/assets/js/utils/api'
+
 import BaseApi from 'rdmo/core/assets/js/api/BaseApi'
 
 class ProjectsApi extends BaseApi {
@@ -21,7 +23,7 @@ class ProjectsApi extends BaseApi {
   }
 
   static fetchOptions(projectId, optionsetId) {
-    return this.get(`/api/v1/projects/projects/${projectId}/options/${optionsetId}`)
+    return this.get(`/api/v1/projects/projects/${projectId}/options/?${encodeParams({ optionset: optionsetId })}`)
   }
 
 }
