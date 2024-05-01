@@ -16,20 +16,27 @@ import SetFactory from '../factories/SetFactory'
 
 import {
   NOOP,
-  FETCH_NAVIGATION_ERROR,
-  FETCH_NAVIGATION_SUCCESS,
-  FETCH_PAGE_ERROR,
+  FETCH_PAGE_INIT,
   FETCH_PAGE_SUCCESS,
-  FETCH_VALUES_SUCCESS,
-  FETCH_VALUES_ERROR,
+  FETCH_PAGE_ERROR,
+  FETCH_NAVIGATION_INIT,
+  FETCH_NAVIGATION_SUCCESS,
+  FETCH_NAVIGATION_ERROR,
+  FETCH_OPTIONS_INIT,
   FETCH_OPTIONS_SUCCESS,
   FETCH_OPTIONS_ERROR,
+  FETCH_VALUES_INIT,
+  FETCH_VALUES_SUCCESS,
+  FETCH_VALUES_ERROR,
   CREATE_VALUE,
+  STORE_VALUE_INIT,
   STORE_VALUE_SUCCESS,
   STORE_VALUE_ERROR,
+  DELETE_VALUE_INIT,
   DELETE_VALUE_SUCCESS,
   DELETE_VALUE_ERROR,
   CREATE_SET,
+  DELETE_SET_INIT,
   DELETE_SET_SUCCESS,
   DELETE_SET_ERROR
 } from './actionTypes'
@@ -37,63 +44,83 @@ import {
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 
 export function fetchPage(pageId) {
+
+
   if (pageId === 'done') {
     return (dispatch) => {
+      dispatch(fetchPageInit())
       updateLocation('done')
       dispatch(fetchNavigation(null))
       dispatch(fetchPageSuccess(null, true))
     }
   } else {
     return (dispatch) => {
+      dispatch(fetchPageInit())
       const promise = isNil(pageId) ? PageApi.fetchContinue(projectId)
                                     : PageApi.fetchPage(projectId, pageId)
-      return promise.then((page) => {
-        updateLocation(page.id)
+      return promise
+        .then((page) => {
+          updateLocation(page.id)
 
-        initPage(page)
+          initPage(page)
 
-        dispatch(fetchNavigation(page))
-        dispatch(fetchValues(page))
+          dispatch(fetchNavigation(page))
+          dispatch(fetchValues(page))
 
-        page.optionsets.filter((optionset) => optionset.has_provider)
-                       .forEach((optionset) => dispatch(fetchOptions(optionset)))
+          page.optionsets.filter((optionset) => optionset.has_provider)
+                         .forEach((optionset) => dispatch(fetchOptions(optionset)))
 
-        dispatch(fetchPageSuccess(page, false))
-      })
+          dispatch(fetchPageSuccess(page, false))
+        })
+        .catch((error) => dispatch(fetchPageError(error)))
     }
   }
+}
+
+export function fetchPageInit() {
+  return {type: FETCH_PAGE_INIT}
 }
 
 export function fetchPageSuccess(page, done) {
   return {type: FETCH_PAGE_SUCCESS, page, done}
 }
 
-export function fetchPageError(errors) {
-  return {type: FETCH_PAGE_ERROR, errors}
+export function fetchPageError(error) {
+  return {type: FETCH_PAGE_ERROR, error}
 }
 
 export function fetchNavigation(page) {
   return (dispatch) => {
+    dispatch(fetchNavigationInit())
     return ProjectApi.fetchNavigation(projectId, page && page.section.id)
       .then((navigation) => dispatch(fetchNavigationSuccess(navigation)))
-      .catch((errors) => dispatch(fetchNavigationError(errors)))
+      .catch((error) => dispatch(fetchNavigationError(error)))
   }
+}
+
+export function fetchNavigationInit() {
+  return {type: FETCH_NAVIGATION_INIT}
 }
 
 export function fetchNavigationSuccess(navigation) {
   return {type: FETCH_NAVIGATION_SUCCESS, navigation}
 }
 
-export function fetchNavigationError(errors) {
-  return {type: FETCH_NAVIGATION_ERROR, errors}
+export function fetchNavigationError(error) {
+  return {type: FETCH_NAVIGATION_ERROR, error}
 }
 
 export function fetchOptions(optionset) {
   return (dispatch) => {
+    dispatch(fetchOptionsInit())
     return ProjectApi.fetchOptions(projectId, optionset.id)
       .then((options) => dispatch(fetchOptionsSuccess(optionset, options)))
-      .catch((errors) => dispatch(fetchOptionsError(errors)))
+      .catch((error) => dispatch(fetchOptionsError(error)))
   }
+}
+
+export function fetchOptionsInit() {
+  return {type: FETCH_OPTIONS_INIT}
 }
 
 export function fetchOptionsSuccess(optionset, options) {
@@ -108,16 +135,21 @@ export function fetchOptionsSuccess(optionset, options) {
   }
 }
 
-export function fetchOptionsError(errors) {
-  return {type: FETCH_OPTIONS_ERROR, errors}
+export function fetchOptionsError(error) {
+  return {type: FETCH_OPTIONS_ERROR, error}
 }
 
 export function fetchValues(page) {
   return (dispatch) => {
+    dispatch(fetchValuesInit())
     return ValueApi.fetchValues(projectId, { attribute: page.attributes })
       .then((values) => dispatch(fetchValuesSuccess(values, page)))
-      .catch((errors) => dispatch(fetchValuesError(errors)))
+      .catch((error) => dispatch(fetchValuesError(error)))
   }
+}
+
+export function fetchValuesInit() {
+  return {type: FETCH_VALUES_INIT}
 }
 
 export function fetchValuesSuccess(values, page) {
@@ -129,14 +161,16 @@ export function fetchValuesSuccess(values, page) {
   return {type: FETCH_VALUES_SUCCESS, values, sets}
 }
 
-export function fetchValuesError(errors) {
-  return {type: FETCH_VALUES_ERROR, errors}
+export function fetchValuesError(error) {
+  return {type: FETCH_VALUES_ERROR, error}
 }
 
 export function storeValue(value) {
   return (dispatch, getStore) => {
     const valueIndex = getStore().interview.values.indexOf(value)
     const valueFile = value.file
+
+    dispatch(storeValueInit(valueIndex))
 
     return ValueApi.storeValue(projectId, value)
       .then((value) => {
@@ -148,16 +182,20 @@ export function storeValue(value) {
             .catch((errors) => dispatch(storeValueError(errors)))
         }
       })
-      .catch((errors) => dispatch(storeValueError(errors)))
+      .catch((error) => dispatch(storeValueError(error, valueIndex)))
   }
+}
+
+export function storeValueInit(valueIndex) {
+  return {type: STORE_VALUE_INIT, valueIndex}
 }
 
 export function storeValueSuccess(value, valueIndex) {
   return {type: STORE_VALUE_SUCCESS, value, valueIndex}
 }
 
-export function storeValueError(errors) {
-  return {type: STORE_VALUE_ERROR, errors}
+export function storeValueError(error, valueIndex) {
+  return {type: STORE_VALUE_ERROR, error, valueIndex}
 }
 
 export function createValue(attrs, store) {
@@ -176,6 +214,8 @@ export function updateValue(value, attrs) {
 
 export function deleteValue(value) {
   return (dispatch) => {
+    dispatch(deleteValueInit())
+
     if (isNil(value.id)) {
       return dispatch(deleteValueSuccess(value))
     } else {
@@ -184,6 +224,10 @@ export function deleteValue(value) {
         .catch((errors) => dispatch(deleteValueError(errors)))
     }
   }
+}
+
+export function deleteValueInit() {
+  return {type: DELETE_VALUE_INIT}
 }
 
 export function deleteValueSuccess(value) {
@@ -244,12 +288,16 @@ export function deleteSet(set, setValue) {
       // gather all values for this set and it's descendants
       const values = getDescendants(getState().interview.values, set)
 
+      dispatch(deleteSetInit())
+
       return Promise.all(values.map((value) => ValueApi.deleteValue(projectId, value)))
         .then(() => dispatch(deleteSetSuccess(set)))
         .catch((errors) => dispatch(deleteValueError(errors)))
     }
   } else {
     return (dispatch, getState) => {
+      dispatch(deleteSetInit())
+
       return ValueApi.deleteSet(projectId, setValue)
         .then(() => {
           const sets = getState().interview.sets.filter((s) => (s.set_prefix == set.set_prefix))
@@ -268,6 +316,10 @@ export function deleteSet(set, setValue) {
         .catch((errors) => dispatch(deleteSetError(errors)))
     }
   }
+}
+
+export function deleteSetInit() {
+  return {type: DELETE_SET_INIT}
 }
 
 export function deleteSetSuccess(set) {

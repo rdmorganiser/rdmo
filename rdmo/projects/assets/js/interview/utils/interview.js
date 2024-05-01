@@ -1,4 +1,4 @@
-import { isNil } from 'lodash'
+import { isEmpty, isNil } from 'lodash'
 
 const isReady = (interview) => {
   return (
@@ -7,4 +7,8 @@ const isReady = (interview) => {
   )
 }
 
-export { isReady }
+const hasErrors = (project, interview) => {
+  return !(isEmpty(project.errors) && isEmpty(interview.errors))
+}
+
+export { isReady, hasErrors }

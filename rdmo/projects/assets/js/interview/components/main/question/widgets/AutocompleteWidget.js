@@ -6,6 +6,7 @@ import { gatherOptions } from '../../../../utils/options'
 
 import QuestionAddValue from '../QuestionAddValue'
 import QuestionDefault from '../QuestionDefault'
+import QuestionError from '../QuestionError'
 import QuestionRemoveValue from '../QuestionRemoveValue'
 
 import AutocompleteInput from './AutocompleteInput'
@@ -36,6 +37,7 @@ const AutocompleteWidget = ({ question, values, currentSet, disabled, createValu
                 isDefault={isDefault}
                 updateValue={updateValue}
               />
+              <QuestionError value={value} />
             </div>
           )
         })

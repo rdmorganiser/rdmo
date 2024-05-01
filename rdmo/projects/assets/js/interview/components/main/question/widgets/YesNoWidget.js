@@ -5,6 +5,7 @@ import { isDefaultValue } from '../../../../utils/value'
 
 import QuestionAddValue from '../QuestionAddValue'
 import QuestionDefault from '../QuestionDefault'
+import QuestionError from '../QuestionError'
 import QuestionEraseValue from '../QuestionEraseValue'
 import QuestionRemoveValue from '../QuestionRemoveValue'
 
@@ -36,6 +37,7 @@ const YesNoWidget = ({ question, values, currentSet, disabled, createValue, upda
                 isDefault={isDefault}
                 updateValue={updateValue}
               />
+              <QuestionError value={value} />
             </div>
           )
         })

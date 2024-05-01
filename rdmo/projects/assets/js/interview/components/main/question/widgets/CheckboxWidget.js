@@ -4,6 +4,8 @@ import { maxBy } from 'lodash'
 
 import { gatherOptions } from '../../../../utils/options'
 
+import QuestionError from '../QuestionError'
+
 import CheckboxInput from './CheckboxInput'
 
 const CheckboxWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue }) => {
@@ -36,19 +38,25 @@ const CheckboxWidget = ({ question, values, currentSet, disabled, createValue, u
       <div className="interview-input">
         <div className="checkbox-control">
           {
-            gatherOptions(question).map((option, optionIndex) => (
-              <CheckboxInput
-                key={optionIndex}
-                value={values.find((value) => (
-                  option.has_provider ? (value.external_id === option.id) : (value.option === option.id)
-                ))}
-                option={option}
-                disabled={disabled}
-                onCreate={handleCreateValue}
-                onUpdate={updateValue}
-                onDelete={deleteValue}
-              />
-            ))
+            gatherOptions(question).map((option, optionIndex) => {
+              const value = values.find((value) => (
+                option.has_provider ? (value.external_id === option.id) : (value.option === option.id)
+              ))
+
+              return (
+                <React.Fragment key={optionIndex}>
+                  <CheckboxInput
+                    value={value}
+                    option={option}
+                    disabled={disabled}
+                    onCreate={handleCreateValue}
+                    onUpdate={updateValue}
+                    onDelete={deleteValue}
+                  />
+                  <QuestionError value={value} />
+                </React.Fragment>
+              )
+            })
           }
         </div>
       </div>

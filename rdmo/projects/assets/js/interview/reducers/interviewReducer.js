@@ -1,18 +1,25 @@
 import {
-  FETCH_NAVIGATION_ERROR,
-  FETCH_NAVIGATION_SUCCESS,
-  FETCH_PAGE_ERROR,
+  FETCH_PAGE_INIT,
   FETCH_PAGE_SUCCESS,
-  FETCH_VALUES_SUCCESS,
-  FETCH_VALUES_ERROR,
+  FETCH_PAGE_ERROR,
+  FETCH_NAVIGATION_INIT,
+  FETCH_NAVIGATION_SUCCESS,
+  FETCH_NAVIGATION_ERROR,
+  FETCH_OPTIONS_INIT,
   FETCH_OPTIONS_SUCCESS,
   FETCH_OPTIONS_ERROR,
+  FETCH_VALUES_INIT,
+  FETCH_VALUES_SUCCESS,
+  FETCH_VALUES_ERROR,
   CREATE_VALUE,
+  STORE_VALUE_INIT,
   STORE_VALUE_SUCCESS,
   STORE_VALUE_ERROR,
+  DELETE_VALUE_INIT,
   DELETE_VALUE_SUCCESS,
   DELETE_VALUE_ERROR,
   CREATE_SET,
+  DELETE_SET_INIT,
   DELETE_SET_SUCCESS,
   DELETE_SET_ERROR
 } from '../actions/actionTypes'
@@ -24,7 +31,7 @@ const initialState = {
   values: null,
   attributes: [],
   sets: [],
-  errors: {}
+  errors: []
 }
 
 export default function interviewReducer(state = initialState, action) {
@@ -57,14 +64,35 @@ export default function interviewReducer(state = initialState, action) {
         values: state.values.filter((value) => !action.values.includes(value)),
         sets: state.sets.filter((set) => !action.sets.includes(set))
       }
-    case FETCH_NAVIGATION_ERROR:
+    case FETCH_PAGE_INIT:
+    case FETCH_NAVIGATION_INIT:
+    case FETCH_OPTIONS_INIT:
+    case FETCH_VALUES_INIT:
+      return { ...state, errors: [] }
     case FETCH_PAGE_ERROR:
-    case FETCH_VALUES_ERROR:
+    case FETCH_NAVIGATION_ERROR:
     case FETCH_OPTIONS_ERROR:
+    case FETCH_VALUES_ERROR:
+      return { ...state, errors: [...state.errors, { actionType: action.type, ...action.error }] }
+    case STORE_VALUE_INIT:
+       return {
+        ...state,
+        values: state.values.map((value, valueIndex) => (
+          valueIndex == action.valueIndex ? {...value, error: null} : value
+        ))
+      }
     case STORE_VALUE_ERROR:
+       return {
+        ...state,
+        values: state.values.map((value, valueIndex) => (
+          valueIndex == action.valueIndex ? {...value, error: action.error} : value
+        ))
+      }
+    case DELETE_VALUE_INIT:
+    case DELETE_SET_INIT:
     case DELETE_VALUE_ERROR:
     case DELETE_SET_ERROR:
-      return { errors: action.errors }
+      return state
     default:
       return state
   }
