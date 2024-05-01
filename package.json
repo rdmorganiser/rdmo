@@ -14,7 +14,7 @@
   "dependencies": {
     "@codemirror/lang-html": "^6.4.2",
     "@codemirror/lang-javascript": "^6.2.2",
-    "@uiw/react-codemirror": "^4.21.24",
+    "@uiw/react-codemirror": "^4.22.0",
     "bootstrap-sass": "^3.4.1",
     "classnames": "^2.5.1",
     "font-awesome": "4.7.0",
