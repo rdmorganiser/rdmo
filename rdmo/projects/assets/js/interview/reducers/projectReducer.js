@@ -8,7 +8,8 @@ import {
 
 const initialState = {
   overview: null,
-  progress: null
+  progress: null,
+  errors: []
 }
 
 export default function interviewReducer(state = initialState, action) {
@@ -19,7 +20,7 @@ export default function interviewReducer(state = initialState, action) {
       return { ...state, progress: action.progress }
     case FETCH_OVERVIEW_ERROR:
     case FETCH_PROGRESS_ERROR:
-      return { errors: action.errors }
+      return { ...state, errors: [...state.errors, { actionType: action.type, ...action.error }] }
     default:
       return state
   }

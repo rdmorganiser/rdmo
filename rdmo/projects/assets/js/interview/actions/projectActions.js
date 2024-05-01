@@ -12,27 +12,27 @@ import {
 export function fetchOverview() {
   return (dispatch) => ProjectApi.fetchOverview(projectId)
     .then((overview) => dispatch(fetchOverviewSuccess(overview)))
-    .catch((errors) => dispatch(fetchOverviewError(errors)))
+    .catch((error) => dispatch(fetchOverviewError(error)))
 }
 
 export function fetchOverviewSuccess(overview) {
   return {type: FETCH_OVERVIEW_SUCCESS, overview}
 }
 
-export function fetchOverviewError(errors) {
-  return {type: FETCH_OVERVIEW_ERROR, errors}
+export function fetchOverviewError(error) {
+  return {type: FETCH_OVERVIEW_ERROR, error}
 }
 
 export function fetchProgress() {
   return (dispatch) => ProjectApi.fetchProgress(projectId)
     .then((progress) => dispatch(fetchProgressSuccess(progress)))
-    .catch((errors) => dispatch(fetchProgressError(errors)))
+    .catch((error) => dispatch(fetchProgressError(error)))
 }
 
 export function fetchProgressSuccess(progress) {
   return {type: FETCH_PROGRESS_SUCCESS, progress}
 }
 
-export function fetchProgressError(errors) {
-  return {type: FETCH_PROGRESS_ERROR, errors}
+export function fetchProgressError(error) {
+  return {type: FETCH_PROGRESS_ERROR, error}
 }
