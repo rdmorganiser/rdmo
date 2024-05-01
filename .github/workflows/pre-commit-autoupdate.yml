@@ -41,7 +41,7 @@ jobs:
           echo -e "\n> [!NOTE]\n> Mark this PR as "ready for review" to trigger additional checks." >> pr-body.md
       # Ref: https://github.com/peter-evans/create-pull-request
       - name: Create pull request
-        uses: peter-evans/create-pull-request@70a41aba780001da0a30141984ae2a0c95d8704e # v6.0.2
+        uses: peter-evans/create-pull-request@6d6857d36972b65feb161a90e484f2984215f83e # v6.0.5
         with:
           branch: pre-commit-autoupdate
           base: dependency-updates
