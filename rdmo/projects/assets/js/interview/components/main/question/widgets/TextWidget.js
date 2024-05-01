@@ -5,6 +5,7 @@ import { isDefaultValue } from '../../../../utils/value'
 
 import QuestionAddValue from '../QuestionAddValue'
 import QuestionDefault from '../QuestionDefault'
+import QuestionError from '../QuestionError'
 import QuestionRemoveValue from '../QuestionRemoveValue'
 
 import TextInput from './TextInput'
@@ -35,6 +36,7 @@ const TextWidget = ({ question, values, currentSet, disabled, focus, createValue
                 updateValue={updateValue}
                 focus={focus && valueIndex == values.length - 1}
               />
+              <QuestionError value={value} />
             </div>
           )
         })

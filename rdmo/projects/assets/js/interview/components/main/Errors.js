@@ -7,7 +7,7 @@ import Template from 'rdmo/core/assets/js/components/Template'
 
 import projectId from '../../utils/projectId'
 
-const ProjectError = ({ templates, errors }) => {
+const Errors = ({ templates, errors }) => {
   const projectUrl = `${baseUrl}/projects/${projectId}/`
 
   return (
@@ -32,9 +32,9 @@ const ProjectError = ({ templates, errors }) => {
   )
 }
 
-ProjectError.propTypes = {
+Errors.propTypes = {
   templates: PropTypes.object.isRequired,
   errors: PropTypes.array.isRequired
 }
 
-export default ProjectError
+export default Errors

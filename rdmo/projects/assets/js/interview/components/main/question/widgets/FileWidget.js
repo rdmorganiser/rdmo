@@ -5,6 +5,7 @@ import { isDefaultValue } from '../../../../utils/value'
 
 import QuestionAddValue from '../QuestionAddValue'
 import QuestionDefault from '../QuestionDefault'
+import QuestionError from '../QuestionError'
 import QuestionRemoveValue from '../QuestionRemoveValue'
 
 import FileInput from './FileInput'
@@ -33,6 +34,7 @@ const FileWidget = ({ question, values, currentSet, disabled, createValue, updat
                 disabled={disabled}
                 updateValue={updateValue}
               />
+              <QuestionError value={value} />
             </div>
           )
         })

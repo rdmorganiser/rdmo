@@ -5,6 +5,7 @@ import { isDefaultValue } from '../../../../utils/value'
 
 import QuestionAddValue from '../QuestionAddValue'
 import QuestionDefault from '../QuestionDefault'
+import QuestionError from '../QuestionError'
 import QuestionRemoveValue from '../QuestionRemoveValue'
 
 import TextareaInput from './TextareaInput'
@@ -35,6 +36,7 @@ const TextareaWidget = ({ question, values, currentSet, disabled, focus, createV
                 updateValue={updateValue}
                 focus={focus && valueIndex == values.length - 1}
               />
+              <QuestionError value={value} />
             </div>
           )
         })
