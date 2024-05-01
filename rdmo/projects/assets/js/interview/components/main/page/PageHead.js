@@ -32,6 +32,7 @@ const PageHead = ({ page, help, sets, values, currentSet, activateSet, createSet
     createSet({
       attribute: page.attribute,
       set_index: last(sets) ? last(sets).set_index + 1 : 0,
+      set_collection: page.is_collection,
       text
     })
     closeCreateModal()
