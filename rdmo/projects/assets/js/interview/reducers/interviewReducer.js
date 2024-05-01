@@ -5,6 +5,8 @@ import {
   FETCH_PAGE_SUCCESS,
   FETCH_VALUES_SUCCESS,
   FETCH_VALUES_ERROR,
+  FETCH_OPTIONS_SUCCESS,
+  FETCH_OPTIONS_ERROR,
   CREATE_VALUE,
   STORE_VALUE_SUCCESS,
   STORE_VALUE_ERROR,
@@ -33,6 +35,8 @@ export default function interviewReducer(state = initialState, action) {
       return { ...state, navigation: action.navigation }
     case FETCH_VALUES_SUCCESS:
       return { ...state, values: action.values, sets: action.sets }
+    case FETCH_OPTIONS_SUCCESS:
+      return { ...state, page: action.page }
     case CREATE_VALUE:
       return { ...state, values: [...state.values, action.value] }
     case STORE_VALUE_SUCCESS:
@@ -56,6 +60,7 @@ export default function interviewReducer(state = initialState, action) {
     case FETCH_NAVIGATION_ERROR:
     case FETCH_PAGE_ERROR:
     case FETCH_VALUES_ERROR:
+    case FETCH_OPTIONS_ERROR:
     case STORE_VALUE_ERROR:
     case DELETE_VALUE_ERROR:
     case DELETE_SET_ERROR:

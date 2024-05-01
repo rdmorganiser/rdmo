@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { isDefaultValue } from '../../../../utils/value'
+import { gatherOptions } from '../../../../utils/options'
 
 import QuestionAddValue from '../QuestionAddValue'
 import QuestionDefault from '../QuestionDefault'
@@ -30,7 +31,7 @@ const SelectWidget = ({ question, values, currentSet, disabled, createValue, upd
               </div>
               <SelectInput
                 value={value}
-                options={question.options}
+                options={gatherOptions(question)}
                 disabled={disabled}
                 isDefault={isDefault}
                 updateValue={updateValue}
