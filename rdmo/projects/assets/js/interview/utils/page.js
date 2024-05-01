@@ -9,7 +9,16 @@ const initQuestionSet = (questionset) => {
     }
   })
 
-  // aggregate attributes from decendant questionsets and questions
+  // aggregate optionsets from decendants
+  questionset.optionsets = questionset.elements.reduce((optionsets, element) => {
+    if (element.model == 'questions.questionset') {
+        return optionsets.concat(element.optionsets)
+      } else {
+        return [...optionsets, ...element.optionsets]
+      }
+  }, [])
+
+  // aggregate attributes from decendants
   questionset.attributes = questionset.elements.reduce((attributes, element) => {
     if (element.model == 'questions.questionset') {
         return attributes.concat(element.attributes)
@@ -19,16 +28,10 @@ const initQuestionSet = (questionset) => {
   }, [questionset.attribute]).filter((a) => !isNil(a))
 }
 
-const initQuestion = (question) => {
-  // aggregate options from optionsets
-  question.options = question.optionsets.reduce((acc, cur) => {
-    acc = acc.concat(cur.options.map((option) => {
-      option.optionset = cur.id
-      return option
-    }))
 
-    return acc
-  }, [])
+// eslint-disable-next-line no-unused-vars
+const initQuestion = (question) => {
+  // kept for potential future use ...
 }
 
 const initPage = (page) => initQuestionSet(page)

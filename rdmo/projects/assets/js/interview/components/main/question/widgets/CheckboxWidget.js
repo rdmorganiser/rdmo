@@ -1,23 +1,33 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { isNil, maxBy } from 'lodash'
+import { maxBy } from 'lodash'
+
+import { gatherOptions } from '../../../../utils/options'
 
 import CheckboxInput from './CheckboxInput'
 
 const CheckboxWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue }) => {
 
-  const handleCreateValue = (option, text) => {
+  const handleCreateValue = (option, additionalInput) => {
     const lastValue = maxBy(values, (v) => v.collection_index)
     const collectionIndex = lastValue ? lastValue.collection_index + 1 : 0
 
-    createValue({
+    const value = {
       attribute: question.attribute,
       set_prefix: currentSet.set_prefix,
       set_index: currentSet.set_index,
       collection_index: collectionIndex,
-      option: option.id,
-      text: isNil(text) ? '' : text
-    }, true)
+    }
+
+    if (option.has_provider) {
+      value.external_id = option.id
+      value.text = option.text
+    } else {
+      value.option = option.id
+      value.text = additionalInput
+    }
+
+    createValue(value, true)
   }
 
   return (
@@ -25,10 +35,12 @@ const CheckboxWidget = ({ question, values, currentSet, disabled, createValue, u
       <div className="interview-input">
         <div className="checkbox-control">
           {
-            question.options.map((option, optionIndex) => (
+            gatherOptions(question).map((option, optionIndex) => (
               <CheckboxInput
                 key={optionIndex}
-                value={values.find((value) => value.option == option.id)}
+                value={values.find((value) => (
+                  option.has_provider ? (value.external_id === option.id) : (value.option === option.id)
+                ))}
                 option={option}
                 disabled={disabled}
                 onCreate={handleCreateValue}

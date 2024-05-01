@@ -22,6 +22,8 @@ import {
   FETCH_PAGE_SUCCESS,
   FETCH_VALUES_SUCCESS,
   FETCH_VALUES_ERROR,
+  FETCH_OPTIONS_SUCCESS,
+  FETCH_OPTIONS_ERROR,
   CREATE_VALUE,
   STORE_VALUE_SUCCESS,
   STORE_VALUE_ERROR,
@@ -47,9 +49,15 @@ export function fetchPage(pageId) {
                                     : PageApi.fetchPage(projectId, pageId)
       return promise.then((page) => {
         updateLocation(page.id)
+
         initPage(page)
+
         dispatch(fetchNavigation(page))
         dispatch(fetchValues(page))
+
+        page.optionsets.filter((optionset) => optionset.has_provider)
+                       .forEach((optionset) => dispatch(fetchOptions(optionset)))
+
         dispatch(fetchPageSuccess(page, false))
       })
     }
@@ -69,7 +77,6 @@ export function fetchNavigation(page) {
     return ProjectApi.fetchNavigation(projectId, page && page.section.id)
       .then((navigation) => dispatch(fetchNavigationSuccess(navigation)))
       .catch((errors) => dispatch(fetchNavigationError(errors)))
-
   }
 }
 
@@ -79,6 +86,30 @@ export function fetchNavigationSuccess(navigation) {
 
 export function fetchNavigationError(errors) {
   return {type: FETCH_NAVIGATION_ERROR, errors}
+}
+
+export function fetchOptions(optionset) {
+  return (dispatch) => {
+    return ProjectApi.fetchOptions(projectId, optionset.id)
+      .then((options) => dispatch(fetchOptionsSuccess(optionset, options)))
+      .catch((errors) => dispatch(fetchOptionsError(errors)))
+  }
+}
+
+export function fetchOptionsSuccess(optionset, options) {
+  return (dispatch, getStore) => {
+    const page = getStore().interview.page
+    page.optionsets.forEach((pageOptionset) => {
+      if (pageOptionset.id == optionset.id) {
+        optionset.options = options
+      }
+    })
+    return {type: FETCH_OPTIONS_SUCCESS, page}
+  }
+}
+
+export function fetchOptionsError(errors) {
+  return {type: FETCH_OPTIONS_ERROR, errors}
 }
 
 export function fetchValues(page) {

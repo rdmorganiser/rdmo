@@ -158,6 +158,13 @@
         width: 100%;
     }
 
+    .option-text,
+    .option-help {
+        p {
+            display: inline;
+        }
+    }
+
     .react-datepicker {
         font-size: 12px;
         border-radius: 4px;
