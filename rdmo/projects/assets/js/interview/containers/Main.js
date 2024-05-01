@@ -2,12 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { isEmpty } from 'lodash'
 
 import { isReady } from '../utils/interview'
 
 import Breadcrump from '../components/main/Breadcrump'
 import Done from '../components/main/Done'
 import Page from '../components/main/page/Page'
+import ProjectError from '../components/main/ProjectError'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 
@@ -15,7 +17,9 @@ import * as interviewActions from '../actions/interviewActions'
 
 // eslint-disable-next-line no-unused-vars
 const Main = ({ config, settings, templates, user, project, interview, configActions, interviewActions }) => {
-  if (isReady(interview)) {
+  if (!isEmpty(project.errors)) {
+    return <ProjectError templates={templates} errors={project.errors} />
+  } else if (isReady(interview)) {
     return (
       <div>
         <Breadcrump
@@ -25,7 +29,7 @@ const Main = ({ config, settings, templates, user, project, interview, configAct
         />
         {
           interview.done && (
-            <Done templates={templates} overview={project.overview} />
+            <Done templates={templates} />
           )
         }
         {

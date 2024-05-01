@@ -3,12 +3,14 @@ import PropTypes from 'prop-types'
 
 import baseUrl from 'rdmo/core/assets/js/utils/baseUrl'
 
+import projectId from '../../utils/projectId'
+
 import Template from 'rdmo/core/assets/js/components/Template'
 
-const Done = ({ templates, overview }) => {
+const Done = ({ templates }) => {
 
-  const projectUrl = `${baseUrl}/projects/${overview.id}/`
-  const answersUrl = `${baseUrl}/projects/${overview.id}/answers/`
+  const projectUrl = `${baseUrl}/projects/${projectId}/`
+  const answersUrl = `${baseUrl}/projects/${projectId}/answers/`
 
   return (
     <>
