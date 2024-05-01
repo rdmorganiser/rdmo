@@ -5,7 +5,7 @@ const initQuestionSet = (questionset) => {
     if (element.model == 'questions.questionset') {
       initQuestionSet(element)
     } else {
-      initQuestion(element)
+      initQuestion(element, questionset)
     }
   })
 
@@ -28,10 +28,10 @@ const initQuestionSet = (questionset) => {
   }, [questionset.attribute]).filter((a) => !isNil(a))
 }
 
-
-// eslint-disable-next-line no-unused-vars
-const initQuestion = (question) => {
-  // kept for potential future use ...
+const initQuestion = (question, questionset) => {
+  // store if this question is part of a set collection
+  // to store value.set_collection later
+  question.set_collection = questionset.is_collection
 }
 
 const initPage = (page) => initQuestionSet(page)
