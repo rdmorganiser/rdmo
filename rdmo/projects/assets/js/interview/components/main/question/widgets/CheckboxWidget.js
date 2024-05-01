@@ -17,6 +17,7 @@ const CheckboxWidget = ({ question, values, currentSet, disabled, createValue, u
       set_prefix: currentSet.set_prefix,
       set_index: currentSet.set_index,
       collection_index: collectionIndex,
+      set_collection: question.set_collection,
     }
 
     if (option.has_provider) {

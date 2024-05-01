@@ -34,6 +34,7 @@ const initValues = (sets, values, element, setPrefix) => {
           attribute: question.attribute,
           set_prefix: set.set_prefix,
           set_index: set.set_index,
+          set_collection: question.set_collection,
           text: question.default_text,
           option: question.default_option,
           external_id: question.default_external_id
