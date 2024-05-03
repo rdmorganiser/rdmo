@@ -9,14 +9,19 @@ import {
   FETCH_PROGRESS_INIT,
   FETCH_PROGRESS_SUCCESS,
   FETCH_PROGRESS_ERROR,
+  UPDATE_PROGRESS_INIT,
+  UPDATE_PROGRESS_SUCCESS,
+  UPDATE_PROGRESS_ERROR,
 } from './actionTypes'
 
 export function fetchOverview() {
+  return (dispatch) => {
+    dispatch(fetchOverviewInit())
 
-
-  return (dispatch) => ProjectApi.fetchOverview(projectId)
-    .then((overview) => dispatch(fetchOverviewSuccess(overview)))
-    .catch((error) => dispatch(fetchOverviewError(error)))
+    return ProjectApi.fetchOverview(projectId)
+      .then((overview) => dispatch(fetchOverviewSuccess(overview)))
+      .catch((error) => dispatch(fetchOverviewError(error)))
+  }
 }
 
 export function fetchOverviewInit() {
@@ -32,9 +37,13 @@ export function fetchOverviewError(error) {
 }
 
 export function fetchProgress() {
-  return (dispatch) => ProjectApi.fetchProgress(projectId)
+  return (dispatch) => {
+    dispatch(fetchProgressInit())
+
+    return ProjectApi.fetchProgress(projectId)
     .then((progress) => dispatch(fetchProgressSuccess(progress)))
     .catch((error) => dispatch(fetchProgressError(error)))
+  }
 }
 
 export function fetchProgressInit() {
@@ -47,4 +56,27 @@ export function fetchProgressSuccess(progress) {
 
 export function fetchProgressError(error) {
   return {type: FETCH_PROGRESS_ERROR, error}
+}
+
+export function updateProgress() {
+
+  return (dispatch) => {
+    dispatch(updateProgressInit())
+
+    return ProjectApi.updateProgress(projectId)
+      .then((progress) => dispatch(updateProgressSuccess(progress)))
+      .catch((error) => dispatch(updateProgressError(error)))
+  }
+}
+
+export function updateProgressInit() {
+  return {type: UPDATE_PROGRESS_INIT}
+}
+
+export function updateProgressSuccess(progress) {
+  return {type: UPDATE_PROGRESS_SUCCESS, progress}
+}
+
+export function updateProgressError(error) {
+  return {type: UPDATE_PROGRESS_ERROR, error}
 }
