@@ -13,14 +13,14 @@ import YesNoInput from './YesNoInput'
 
 const YesNoWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue }) => {
   return (
-    <div className="interview-collection">
+    <div className="interview-widgets">
       {
         values.map((value, valueIndex) => {
           const isDefault = isDefaultValue(question, value)
 
           return (
-            <div key={valueIndex} className="interview-input">
-              <div className="interview-input-options">
+            <div key={valueIndex} className="interview-widget">
+              <div className="options">
                 <QuestionDefault isDefault={isDefault} />
                 <QuestionEraseValue value={value} disabled={disabled} updateValue={updateValue}/>
                 <QuestionRemoveValue

@@ -6,7 +6,7 @@ import { isEmpty } from 'lodash'
 
 const RangeInput = ({ value, minimum, maximum, step, disabled, isDefault, updateValue }) => {
   const [inputValue, setInputValue] = useState('')
-  useEffect(() => {setInputValue(value.text)}, [value.id])
+  useEffect(() => {setInputValue(value.text)}, [value.id, value.text])
 
   const handleChange = useDebouncedCallback((value, text) => {
     updateValue(value, { text })

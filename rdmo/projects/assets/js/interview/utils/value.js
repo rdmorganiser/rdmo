@@ -1,4 +1,4 @@
-import { isNil, toString } from 'lodash'
+import { isNil, isEmpty, toString } from 'lodash'
 
 import ValueFactory from '../factories/ValueFactory'
 
@@ -55,8 +55,8 @@ const initValues = (sets, values, element, setPrefix) => {
 }
 
 const initRange = (question, value) => {
-  if (isNil(value.text)) {
-    value.text = isNil(question.minimum) ? 0 : question.minimum
+  if (isEmpty(value.text)) {
+    value.text = isNil(question.minimum) ? '0' : question.minimum
   }
 }
 
