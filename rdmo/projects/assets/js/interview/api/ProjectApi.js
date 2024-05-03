@@ -22,6 +22,10 @@ class ProjectsApi extends BaseApi {
     return this.get(`/api/v1/projects/projects/${projectId}/progress/`)
   }
 
+  static updateProgress(projectId) {
+    return this.post(`/api/v1/projects/projects/${projectId}/progress/`)
+  }
+
   static fetchOptions(projectId, optionsetId) {
     return this.get(`/api/v1/projects/projects/${projectId}/options/?${encodeParams({ optionset: optionsetId })}`)
   }

@@ -4,6 +4,8 @@ import PageApi from '../api/PageApi'
 import ProjectApi from '../api/ProjectApi'
 import ValueApi from '../api/ValueApi'
 
+import { updateProgress } from './projectActions'
+
 import { updateLocation } from '../utils/location'
 
 import { initPage } from '../utils/page'
@@ -172,6 +174,8 @@ export function storeValue(value) {
 
     return ValueApi.storeValue(projectId, value)
       .then((value) => {
+        dispatch(updateProgress())
+
         if (isNil(valueFile) && isNil(value.file_name)) {
           return dispatch(storeValueSuccess(value, valueIndex))
         } else {
@@ -218,7 +222,10 @@ export function deleteValue(value) {
       return dispatch(deleteValueSuccess(value))
     } else {
       return ValueApi.deleteValue(projectId, value)
-        .then(() => dispatch(deleteValueSuccess(value)))
+        .then(() => {
+          dispatch(updateProgress())
+          dispatch(deleteValueSuccess(value))
+        })
         .catch((errors) => dispatch(deleteValueError(errors)))
     }
   }
@@ -298,6 +305,8 @@ export function deleteSet(set, setValue) {
 
       return ValueApi.deleteSet(projectId, setValue)
         .then(() => {
+          dispatch(updateProgress())
+
           const sets = getState().interview.sets.filter((s) => (s.set_prefix == set.set_prefix))
 
           if (sets.length > 1) {
