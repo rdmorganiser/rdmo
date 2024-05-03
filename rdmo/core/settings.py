@@ -219,8 +219,8 @@ SETTINGS_API = [
 ]
 
 TEMPLATES_API = [
-    'projects/project_interview_add_field_help.html',
     'projects/project_interview_add_set_help.html',
+    'projects/project_interview_add_value_help.html',
     'projects/project_interview_buttons_help.html',
     'projects/project_interview_done.html',
     'projects/project_interview_error.html',

@@ -3,12 +3,11 @@ import PropTypes from 'prop-types'
 
 import { getChildPrefix } from '../../../utils/set'
 
-import Template from 'rdmo/core/assets/js/components/Template'
-
 import Question from '../question/Question'
 
-import QuestionSetHelp from './QuestionSetHelp'
 import QuestionSetAddSet from './QuestionSetAddSet'
+import QuestionSetAddSetHelp from './QuestionSetAddSetHelp'
+import QuestionSetHelp from './QuestionSetHelp'
 import QuestionSetRemoveSet from './QuestionSetRemoveSet'
 
 const QuestionSet = ({ templates, questionset, sets, values, disabled, isManager, focus,
@@ -25,21 +24,13 @@ const QuestionSet = ({ templates, questionset, sets, values, disabled, isManager
     <div className="interview-questionset col-md-12">
       <strong>{questionset.title}</strong>
       <QuestionSetHelp questionset={questionset} />
-      {
-        questionset.is_collection && (
-          <Template template={templates.project_interview_add_set_help} />
-        )
-      }
-      <div className="">
+      <QuestionSetAddSetHelp templates={templates} questionset={questionset} />
+      <div>
         {
           currentSets.map((set, setIndex) => (
             <div key={setIndex} className="interview-block">
               <div className="interview-block-options">
-                {
-                  questionset.is_collection && (
-                    <QuestionSetRemoveSet questionset={questionset} set={set} deleteSet={deleteSet} />
-                  )
-                }
+                <QuestionSetRemoveSet questionset={questionset} set={set} deleteSet={deleteSet} />
               </div>
               <div className="row">
                 {
@@ -94,11 +85,8 @@ const QuestionSet = ({ templates, questionset, sets, values, disabled, isManager
           ))
         }
       </div>
-      {
-        questionset.is_collection && (
-          <QuestionSetAddSet questionset={questionset} sets={currentSets} setPrefix={setPrefix} createSet={createSet} />
-        )
-      }
+
+      <QuestionSetAddSet questionset={questionset} sets={currentSets} setPrefix={setPrefix} createSet={createSet} />
     </div>
   )
 }

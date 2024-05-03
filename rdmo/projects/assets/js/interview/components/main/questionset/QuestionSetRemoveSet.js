@@ -15,7 +15,7 @@ const QuestionAddSet = ({ questionset, set, deleteSet }) => {
     closeDeleteModal()
   }
 
-  return (
+  return questionset.is_collection && (
     <>
       <button type="button" className="btn btn-link btn-remove-set" onClick={openDeleteModal}>
         <i className="fa fa-times fa-btn"></i>

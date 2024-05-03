@@ -1,36 +1,24 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Template from 'rdmo/core/assets/js/components/Template'
-
+import QuestionAddValueHelp from './QuestionAddValueHelp'
 import QuestionHelp from './QuestionHelp'
 import QuestionManagement from './QuestionManagement'
-import QuestionText from './QuestionText'
-import QuestionWidget from './QuestionWidget'
 import QuestionOptional from './QuestionOptional'
+import QuestionText from './QuestionText'
+import QuestionWarning from './QuestionWarning'
+import QuestionWidget from './QuestionWidget'
 
 const Question = ({ templates, question, values, disabled, isManager, focus,
                     currentSet, createValue, updateValue, deleteValue }) => {
   return (
     <div className={`interview-question col-md-${question.width || '12'}`}>
-      {
-        question.is_optional && <QuestionOptional />
-      }
+      <QuestionOptional question={question} />
       <QuestionText question={question} />
       <QuestionHelp question={question} />
-      {
-        question.is_collection && (
-          <Template template={templates.project_interview_add_field_help} />
-        )
-      }
-      {
-        !question.is_collection && values.length > 1 && (
-          <Template template={templates.project_interview_multiple_values_warning} />
-        )
-      }
-      {
-        <QuestionManagement question={question} isManager={isManager} />
-      }
+      <QuestionAddValueHelp templates={templates} question={question} />
+      <QuestionWarning templates={templates} question={question} values={values} />
+      <QuestionManagement question={question} isManager={isManager} />
       <QuestionWidget
         question={question}
         values={values}
