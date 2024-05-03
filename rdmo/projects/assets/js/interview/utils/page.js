@@ -12,19 +12,19 @@ const initQuestionSet = (questionset) => {
   // aggregate optionsets from decendants
   questionset.optionsets = questionset.elements.reduce((optionsets, element) => {
     if (element.model == 'questions.questionset') {
-        return optionsets.concat(element.optionsets)
-      } else {
-        return [...optionsets, ...element.optionsets]
-      }
+      return optionsets.concat(element.optionsets)
+    } else {
+      return [...optionsets, ...element.optionsets]
+    }
   }, [])
 
   // aggregate attributes from decendants
   questionset.attributes = questionset.elements.reduce((attributes, element) => {
     if (element.model == 'questions.questionset') {
-        return attributes.concat(element.attributes)
-      } else {
-        return [...attributes, element.attribute]
-      }
+      return attributes.concat(element.attributes)
+    } else {
+      return [...attributes, element.attribute]
+    }
   }, [questionset.attribute]).filter((a) => !isNil(a))
 }
 
