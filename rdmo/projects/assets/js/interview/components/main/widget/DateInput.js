@@ -57,6 +57,8 @@ const DateInput = ({ value, disabled, isDefault, updateValue }) => {
       locale={getLocale()}
       dateFormat={getDateFormat()}
       disabled={disabled}
+      popperPlacement="bottom-start"
+      showPopperArrow={false}
     />
   )
 }
