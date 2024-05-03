@@ -19,6 +19,8 @@ const Page = ({ config, templates, overview, page, sets, values, fetchPage,
   const currentSet = sets.find((set) => (set.set_prefix == currentSetPrefix && set.set_index == currentSetIndex)) ||
                      sets.find((set) => (set.set_prefix == currentSetPrefix && set.set_index == 0))  // sanity check
 
+  const isManager = (overview.is_superuser || overview.is_editor || overview.is_reviewer)
+
   return (
     <div className="interview-page">
       <h2>{page.title}</h2>
@@ -51,6 +53,7 @@ const Page = ({ config, templates, overview, page, sets, values, fetchPage,
                     sets={sets}
                     values={values.filter((value) => element.attributes.includes(value.attribute))}
                     disabled={overview.read_only}
+                    isManager={isManager}
                     focus={elementIndex == 0}
                     parentSet={currentSet}
                     createSet={createSet}
@@ -73,6 +76,7 @@ const Page = ({ config, templates, overview, page, sets, values, fetchPage,
                       value.set_index == currentSetIndex
                     ))}
                     disabled={overview.read_only}
+                    isManager={isManager}
                     focus={elementIndex == 0}
                     currentSet={currentSet}
                     createValue={createValue}
