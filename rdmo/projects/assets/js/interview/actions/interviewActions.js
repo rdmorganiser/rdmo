@@ -43,9 +43,7 @@ import {
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 
-export function fetchPage(pageId) {
-
-
+export function fetchPage(pageId, back) {
   if (pageId === 'done') {
     return (dispatch) => {
       dispatch(fetchPageInit())
@@ -57,7 +55,7 @@ export function fetchPage(pageId) {
     return (dispatch) => {
       dispatch(fetchPageInit())
       const promise = isNil(pageId) ? PageApi.fetchContinue(projectId)
-                                    : PageApi.fetchPage(projectId, pageId)
+                                    : PageApi.fetchPage(projectId, pageId, back)
       return promise
         .then((page) => {
           updateLocation(page.id)
