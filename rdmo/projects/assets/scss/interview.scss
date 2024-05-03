@@ -43,18 +43,128 @@
     .progress {
         margin-bottom: 10px;
     }
+}
 
-    .interview-progress-count {
-        position: absolute;
-        left: 0;
-        right: 0;
-        text-align: center;
-    }
+.interview-progress-count {
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
 }
 
 .interview-page {
     h2 {
         margin-top: 0;
+    }
+
+    .btn-add-set {
+        margin-bottom: 20px;
+    }
+}
+
+.interview-page-tabs {
+    margin-bottom: 20px;
+
+    .interview-page-tabs-buttons {
+        float: right;
+
+        button {
+            padding: 0;
+            text-decoration: none;
+        }
+    }
+
+    .nav > li > a {
+        &.add-set,
+        &.add-set:hover {
+            color: $success-color;
+        }
+        &.add-set:hover {
+            color: white;
+            background-color: $success-color !important;
+        }
+        &.add-set:focus {
+            background-color: transparent;
+        }
+    }
+}
+
+.interview-block {
+    position: relative;
+
+    border: 1px solid rgb(204, 204, 204);
+    border-radius: 4px;
+
+    padding: 20px 20px 0 20px;
+    margin-bottom: 20px;
+
+    .interview-block-options {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 5;
+
+        .btn-remove-set {
+            opacity: 0.8;
+            line-height: 20px;
+            font-size: 14px;
+
+            position: absolute;
+            z-index: 5;
+            top: 0;
+            right: 0;
+
+            padding-left: 8px;
+            padding-right: 8px;
+
+            &:hover {
+                opacity: 1;
+            }
+            &:focus {
+                outline: 0;
+            }
+        }
+    }
+}
+
+.interview-question {
+    margin-bottom: 20px;
+}
+
+.interview-widget {
+    position: relative;
+    margin-bottom: 10px;
+
+    .options {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 5;
+        margin-right: 8px;
+
+        .btn-erase-value,
+        .btn-remove-value {
+            opacity: 0.8;
+            line-height: 20px;
+            font-size: 14px;
+            padding-left: 0;
+            padding-right: 0;
+            margin-left: 4px;
+        }
+
+        // .btn-remove-value {
+        //     margin-left: 2px;
+        // }
+
+        .btn-erase-value:hover,
+        .btn-remove-value:hover {
+            opacity: 1;
+        }
+
+        .btn-erase-value:focus,
+        .btn-remove-value:focus {
+            outline: 0;
+        }
     }
 
     .radio,
@@ -99,7 +209,9 @@
         display: flex;
         align-items: center;
 
-        margin-bottom: 10px;
+        height: 34px;  // same as form-control
+
+        margin-right: 32px;
 
         .badge {
             margin-right: 10px;
@@ -108,6 +220,13 @@
         input {
             margin-bottom: 0;
             accent-color: #777777;  // same as .badge
+        }
+    }
+
+    // extend the left marging when also a remove button is present
+    &:has(.options .btn-remove-value) {
+        .range {
+            margin-right: 48px;
         }
     }
 
@@ -187,42 +306,6 @@
         margin: 4px !important;
     }
 
-    .interview-input {
-        position: relative;
-    }
-
-    .interview-input-options {
-        position: absolute;
-        top: 0;
-        right: 0;
-        z-index: 5;
-        margin-right: 8px;
-
-        .btn-erase-value,
-        .btn-remove-value {
-            opacity: 0.8;
-            line-height: 20px;
-            font-size: 14px;
-            padding-left: 0;
-            padding-right: 0;
-            margin-left: 4px;
-        }
-
-        // .btn-remove-value {
-        //     margin-left: 2px;
-        // }
-
-        .btn-erase-value:hover,
-        .btn-remove-value:hover {
-            opacity: 1;
-        }
-
-        .btn-erase-value:focus,
-        .btn-remove-value:focus {
-            outline: 0;
-        }
-    }
-
     .default {
         color: #999;
 
@@ -232,85 +315,6 @@
             opacity: 0.5;
         }
     }
-}
-
-.interview-question {
-    margin-bottom: 20px;
-}
-
-.interview-collection  {
-    .interview-input {
-        margin-bottom: 10px;
-    }
-}
-
-.interview-page-tabs {
-    margin-bottom: 20px;
-
-    .interview-page-tabs-buttons {
-        float: right;
-
-        button {
-            padding: 0;
-            text-decoration: none;
-        }
-    }
-
-    .nav > li > a {
-        &.add-set,
-        &.add-set:hover {
-            color: $success-color;
-        }
-        &.add-set:hover {
-            color: white;
-            background-color: $success-color !important;
-        }
-        &.add-set:focus {
-            background-color: transparent;
-        }
-    }
-}
-
-.interview-block {
-    position: relative;
-
-    border: 1px solid rgb(204, 204, 204);
-    border-radius: 4px;
-
-    padding: 20px 20px 0 20px;
-    margin-bottom: 20px;
-
-    .interview-block-options {
-        position: absolute;
-        top: 0;
-        right: 0;
-        z-index: 5;
-
-        .btn-remove-set {
-            opacity: 0.8;
-            line-height: 20px;
-            font-size: 14px;
-
-            position: absolute;
-            z-index: 5;
-            top: 0;
-            right: 0;
-
-            padding-left: 8px;
-            padding-right: 8px;
-
-            &:hover {
-                opacity: 1;
-            }
-            &:focus {
-                outline: 0;
-            }
-        }
-    }
-}
-
-.btn-add-set {
-    margin-bottom: 20px;
 }
 
 .badge-default {

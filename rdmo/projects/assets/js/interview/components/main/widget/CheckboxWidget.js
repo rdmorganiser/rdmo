@@ -34,8 +34,8 @@ const CheckboxWidget = ({ question, values, currentSet, disabled, createValue, u
   }
 
   return (
-    <div className="interview-collection">
-      <div className="interview-input">
+    <div className="interview-widgets">
+      <div className="interview-widget">
         <div className="checkbox-control">
           {
             gatherOptions(question).map((option, optionIndex) => {

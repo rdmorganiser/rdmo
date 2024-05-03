@@ -18,17 +18,22 @@ const RangeWidget = ({ question, values, currentSet, disabled, createValue, upda
     createValue(value)
   }
 
+  const handleEraseValue = (value, attrs) => {
+    initRange(question, attrs)
+    updateValue(value, attrs)
+  }
+
   return (
-    <div className="interview-collection">
+    <div className="interview-widgets">
       {
         values.map((value, valueIndex) => {
           const isDefault = isDefaultValue(question, value)
 
           return (
-            <div key={valueIndex} className="interview-input">
-              <div className="interview-input-options">
+            <div key={valueIndex} className="interview-widget">
+              <div className="options">
                 <QuestionDefault isDefault={isDefault} />
-                <QuestionEraseValue value={value} disabled={disabled} updateValue={updateValue}/>
+                <QuestionEraseValue value={value} disabled={disabled} updateValue={handleEraseValue}/>
                 <QuestionRemoveValue
                   question={question}
                   values={values}
