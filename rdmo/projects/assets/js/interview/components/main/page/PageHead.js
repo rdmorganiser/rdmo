@@ -48,7 +48,7 @@ const PageHead = ({ page, help, sets, values, currentSet, activateSet, createSet
     closeDeleteModal()
   }
 
-  return (
+  return page.is_collection && (
     <div className="interview-page-tabs">
       <Template template={help} />
       {

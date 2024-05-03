@@ -25,21 +25,17 @@ const Page = ({ config, templates, overview, page, sets, values, fetchPage,
     <div className="interview-page">
       <h2>{page.title}</h2>
       <PageHelp page={page} />
-      {
-        page.is_collection && (
-          <PageHead
-            page={page}
-            help={templates.project_interview_page_tabs_help}
-            sets={sets.filter((set) => (set.set_prefix == currentSetPrefix))}
-            values={isNil(page.attribute) ? [] : values.filter((value) => (value.attribute == page.attribute))}
-            currentSet={currentSet}
-            activateSet={activateSet}
-            createSet={createSet}
-            updateSet={updateSet}
-            deleteSet={deleteSet}
-          />
-        )
-      }
+      <PageHead
+        page={page}
+        help={templates.project_interview_page_tabs_help}
+        sets={sets.filter((set) => (set.set_prefix == currentSetPrefix))}
+        values={isNil(page.attribute) ? [] : values.filter((value) => (value.attribute == page.attribute))}
+        currentSet={currentSet}
+        activateSet={activateSet}
+        createSet={createSet}
+        updateSet={updateSet}
+        deleteSet={deleteSet}
+      />
       <div className="row">
         {
           currentSet && (
