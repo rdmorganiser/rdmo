@@ -5,6 +5,7 @@ import { isDefaultValue } from '../../../utils/value'
 
 import QuestionAddValue from '../question/QuestionAddValue'
 import QuestionDefault from '../question/QuestionDefault'
+import QuestionEraseValue from '../question/QuestionEraseValue'
 import QuestionError from '../question/QuestionError'
 import QuestionRemoveValue from '../question/QuestionRemoveValue'
 
@@ -21,6 +22,7 @@ const FileWidget = ({ question, values, currentSet, disabled, createValue, updat
             <div key={valueIndex} className="interview-widget">
               <div className="options">
                 <QuestionDefault isDefault={isDefault} />
+                <QuestionEraseValue value={value} disabled={disabled} updateValue={updateValue}/>
                 <QuestionRemoveValue
                   question={question}
                   values={values}

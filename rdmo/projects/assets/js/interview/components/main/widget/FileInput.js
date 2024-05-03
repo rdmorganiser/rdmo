@@ -18,9 +18,22 @@ const FileInput = ({ value, disabled, updateValue }) => {
 
   return (
     <div className="file-control">
+      {
+        value.file_name ? (
+          <div>
+            <span>{gettext('Current file: ')}</span>
+            <a href={value.file_url} onClick={(event) => event.stopPropagation()}>
+              {value.file_name}
+            </a>
+          </div>
+        ) : (
+          <div>{gettext('No file stored.')}</div>
+        )
+      }
+
       <div {...getRootProps({className: classnames})}>
         <input {...getInputProps()} />
-        <p className="text-muted">
+        <div className="text-muted">
           {
             isDragActive ? (
               <span>{gettext('Drop the files here ...')}</span>
@@ -28,13 +41,7 @@ const FileInput = ({ value, disabled, updateValue }) => {
               <span>{gettext('Drag \'n drop some files here, or click to select files.')}</span>
             )
           }
-        </p>
-        <p>
-          <span>{gettext('Current file: ')}</span>
-          <a href={value.file_url} onClick={(event) => event.stopPropagation()}>
-            {value.file_name}
-          </a>
-        </p>
+        </div>
       </div>
     </div>
   )
