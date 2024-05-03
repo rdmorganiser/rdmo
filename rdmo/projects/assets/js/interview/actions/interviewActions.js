@@ -124,8 +124,8 @@ export function fetchOptionsInit() {
 }
 
 export function fetchOptionsSuccess(optionset, options) {
-  return (dispatch, getStore) => {
-    const page = getStore().interview.page
+  return (dispatch, getState) => {
+    const page = getState().interview.page
     page.optionsets.forEach((pageOptionset) => {
       if (pageOptionset.id == optionset.id) {
         optionset.options = options
@@ -166,14 +166,17 @@ export function fetchValuesError(error) {
 }
 
 export function storeValue(value) {
-  return (dispatch, getStore) => {
-    const valueIndex = getStore().interview.values.indexOf(value)
+  return (dispatch, getState) => {
+    const valueIndex = getState().interview.values.indexOf(value)
     const valueFile = value.file
 
     dispatch(storeValueInit(valueIndex))
 
     return ValueApi.storeValue(projectId, value)
       .then((value) => {
+        const page = getState().interview.page
+
+        dispatch(fetchNavigation(page))
         dispatch(updateProgress())
 
         if (isNil(valueFile) && isNil(value.file_name)) {
@@ -215,7 +218,7 @@ export function updateValue(value, attrs) {
 }
 
 export function deleteValue(value) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     dispatch(deleteValueInit())
 
     if (isNil(value.id)) {
@@ -223,6 +226,9 @@ export function deleteValue(value) {
     } else {
       return ValueApi.deleteValue(projectId, value)
         .then(() => {
+          const page = getState().interview.page
+
+          dispatch(fetchNavigation(page))
           dispatch(updateProgress())
           dispatch(deleteValueSuccess(value))
         })
@@ -305,6 +311,9 @@ export function deleteSet(set, setValue) {
 
       return ValueApi.deleteSet(projectId, setValue)
         .then(() => {
+          const page = getState().interview.page
+
+          dispatch(fetchNavigation(page))
           dispatch(updateProgress())
 
           const sets = getState().interview.sets.filter((s) => (s.set_prefix == set.set_prefix))
