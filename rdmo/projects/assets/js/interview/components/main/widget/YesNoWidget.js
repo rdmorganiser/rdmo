@@ -1,13 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { isDefaultValue } from '../../../../utils/value'
+import { isDefaultValue } from '../../../utils/value'
 
-import QuestionAddValue from '../QuestionAddValue'
-import QuestionDefault from '../QuestionDefault'
-import QuestionError from '../QuestionError'
-import QuestionEraseValue from '../QuestionEraseValue'
-import QuestionRemoveValue from '../QuestionRemoveValue'
+import QuestionAddValue from '../question/QuestionAddValue'
+import QuestionDefault from '../question/QuestionDefault'
+import QuestionError from '../question/QuestionError'
+import QuestionEraseValue from '../question/QuestionEraseValue'
+import QuestionRemoveValue from '../question/QuestionRemoveValue'
 
 import YesNoInput from './YesNoInput'
 

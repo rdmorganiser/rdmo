@@ -1,16 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import AutocompleteWidget from './widgets/AutocompleteWidget'
-import CheckboxWidget from './widgets/CheckboxWidget'
-import DateWidget from './widgets/DateWidget'
-import FileWidget from './widgets/FileWidget'
-import RadioWidget from './widgets/RadioWidget'
-import RangeWidget from './widgets/RangeWidget'
-import SelectWidget from './widgets/SelectWidget'
-import TextWidget from './widgets/TextWidget'
-import TextareaWidget from './widgets/TextareaWidget'
-import YesNoWidget from './widgets/YesNoWidget'
+import AutocompleteWidget from '../widget/AutocompleteWidget'
+import CheckboxWidget from '../widget/CheckboxWidget'
+import DateWidget from '../widget/DateWidget'
+import FileWidget from '../widget/FileWidget'
+import RadioWidget from '../widget/RadioWidget'
+import RangeWidget from '../widget/RangeWidget'
+import SelectWidget from '../widget/SelectWidget'
+import TextWidget from '../widget/TextWidget'
+import TextareaWidget from '../widget/TextareaWidget'
+import YesNoWidget from '../widget/YesNoWidget'
 
 const QuestionWidget = (props) => {
   switch (props.question.widget_type) {
