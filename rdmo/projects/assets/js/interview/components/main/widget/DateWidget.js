@@ -1,16 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { isDefaultValue } from '../../../../utils/value'
+import { isDefaultValue } from '../../../utils/value'
 
-import QuestionAddValue from '../QuestionAddValue'
-import QuestionDefault from '../QuestionDefault'
-import QuestionError from '../QuestionError'
-import QuestionRemoveValue from '../QuestionRemoveValue'
+import QuestionAddValue from '../question/QuestionAddValue'
+import QuestionDefault from '../question/QuestionDefault'
+import QuestionError from '../question/QuestionError'
+import QuestionEraseValue from '../question/QuestionEraseValue'
+import QuestionRemoveValue from '../question/QuestionRemoveValue'
 
-import TextInput from './TextInput'
+import DateInput from './DateInput'
 
-const TextWidget = ({ question, values, currentSet, disabled, focus, createValue, updateValue, deleteValue }) => {
+const DateWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue }) => {
   return (
     <div className="interview-collection">
       {
@@ -21,6 +22,7 @@ const TextWidget = ({ question, values, currentSet, disabled, focus, createValue
             <div key={valueIndex} className="interview-input">
               <div className="interview-input-options">
                 <QuestionDefault isDefault={isDefault} />
+                <QuestionEraseValue value={value} disabled={disabled} updateValue={updateValue}/>
                 <QuestionRemoveValue
                   question={question}
                   values={values}
@@ -29,12 +31,11 @@ const TextWidget = ({ question, values, currentSet, disabled, focus, createValue
                   deleteValue={deleteValue}
                 />
               </div>
-              <TextInput
+              <DateInput
                 value={value}
                 disabled={disabled}
                 isDefault={isDefault}
                 updateValue={updateValue}
-                focus={focus && valueIndex == values.length - 1}
               />
               <QuestionError value={value} />
             </div>
@@ -52,15 +53,14 @@ const TextWidget = ({ question, values, currentSet, disabled, focus, createValue
   )
 }
 
-TextWidget.propTypes = {
+DateWidget.propTypes = {
   question: PropTypes.object.isRequired,
   values: PropTypes.array.isRequired,
   disabled: PropTypes.bool,
-  focus: PropTypes.bool,
   currentSet: PropTypes.object.isRequired,
   createValue: PropTypes.func.isRequired,
   updateValue: PropTypes.func.isRequired,
   deleteValue: PropTypes.func.isRequired
 }
 
-export default TextWidget
+export default DateWidget

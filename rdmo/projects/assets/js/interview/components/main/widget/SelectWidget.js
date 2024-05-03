@@ -1,17 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { isDefaultValue } from '../../../../utils/value'
-import { gatherOptions } from '../../../../utils/options'
+import { isDefaultValue } from '../../../utils/value'
+import { gatherOptions } from '../../../utils/options'
 
-import QuestionAddValue from '../QuestionAddValue'
-import QuestionDefault from '../QuestionDefault'
-import QuestionError from '../QuestionError'
-import QuestionRemoveValue from '../QuestionRemoveValue'
+import QuestionAddValue from '../question/QuestionAddValue'
+import QuestionDefault from '../question/QuestionDefault'
+import QuestionError from '../question/QuestionError'
+import QuestionRemoveValue from '../question/QuestionRemoveValue'
 
-import AutocompleteInput from './AutocompleteInput'
+import SelectInput from './SelectInput'
 
-const AutocompleteWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue }) => {
+const SelectWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue }) => {
   return (
     <div className="interview-collection">
       {
@@ -30,7 +30,7 @@ const AutocompleteWidget = ({ question, values, currentSet, disabled, createValu
                   deleteValue={deleteValue}
                 />
               </div>
-              <AutocompleteInput
+              <SelectInput
                 value={value}
                 options={gatherOptions(question)}
                 disabled={disabled}
@@ -53,7 +53,7 @@ const AutocompleteWidget = ({ question, values, currentSet, disabled, createValu
   )
 }
 
-AutocompleteWidget.propTypes = {
+SelectWidget.propTypes = {
   question: PropTypes.object.isRequired,
   values: PropTypes.array.isRequired,
   disabled: PropTypes.bool,
@@ -63,4 +63,4 @@ AutocompleteWidget.propTypes = {
   deleteValue: PropTypes.func.isRequired
 }
 
-export default AutocompleteWidget
+export default SelectWidget

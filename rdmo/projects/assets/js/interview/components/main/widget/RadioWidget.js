@@ -1,16 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { isDefaultValue } from '../../../../utils/value'
+import { isDefaultValue } from '../../../utils/value'
+import { gatherOptions } from '../../../utils/options'
 
-import QuestionAddValue from '../QuestionAddValue'
-import QuestionDefault from '../QuestionDefault'
-import QuestionError from '../QuestionError'
-import QuestionRemoveValue from '../QuestionRemoveValue'
+import QuestionAddValue from '../question/QuestionAddValue'
+import QuestionDefault from '../question/QuestionDefault'
+import QuestionError from '../question/QuestionError'
+import QuestionEraseValue from '../question/QuestionEraseValue'
+import QuestionRemoveValue from '../question/QuestionRemoveValue'
 
-import FileInput from './FileInput'
+import RadioInput from './RadioInput'
 
-const FileWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue }) => {
+const RadioWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue }) => {
   return (
     <div className="interview-collection">
       {
@@ -21,6 +23,7 @@ const FileWidget = ({ question, values, currentSet, disabled, createValue, updat
             <div key={valueIndex} className="interview-input">
               <div className="interview-input-options">
                 <QuestionDefault isDefault={isDefault} />
+                <QuestionEraseValue value={value} disabled={disabled} updateValue={updateValue}/>
                 <QuestionRemoveValue
                   question={question}
                   values={values}
@@ -29,9 +32,11 @@ const FileWidget = ({ question, values, currentSet, disabled, createValue, updat
                   deleteValue={deleteValue}
                 />
               </div>
-              <FileInput
+              <RadioInput
                 value={value}
+                options={gatherOptions(question)}
                 disabled={disabled}
+                isDefault={isDefault}
                 updateValue={updateValue}
               />
               <QuestionError value={value} />
@@ -50,7 +55,7 @@ const FileWidget = ({ question, values, currentSet, disabled, createValue, updat
   )
 }
 
-FileWidget.propTypes = {
+RadioWidget.propTypes = {
   question: PropTypes.object.isRequired,
   values: PropTypes.array.isRequired,
   disabled: PropTypes.bool,
@@ -60,4 +65,4 @@ FileWidget.propTypes = {
   deleteValue: PropTypes.func.isRequired
 }
 
-export default FileWidget
+export default RadioWidget

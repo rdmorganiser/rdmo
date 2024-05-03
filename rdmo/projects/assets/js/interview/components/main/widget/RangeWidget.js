@@ -1,17 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { isDefaultValue } from '../../../../utils/value'
-import { gatherOptions } from '../../../../utils/options'
+import { isDefaultValue, initRange } from '../../../utils/value'
 
-import QuestionAddValue from '../QuestionAddValue'
-import QuestionDefault from '../QuestionDefault'
-import QuestionError from '../QuestionError'
-import QuestionRemoveValue from '../QuestionRemoveValue'
+import QuestionAddValue from '../question/QuestionAddValue'
+import QuestionDefault from '../question/QuestionDefault'
+import QuestionError from '../question/QuestionError'
+import QuestionEraseValue from '../question/QuestionEraseValue'
+import QuestionRemoveValue from '../question/QuestionRemoveValue'
 
-import SelectInput from './SelectInput'
+import RangeInput from './RangeInput'
 
-const SelectWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue }) => {
+const RangeWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue }) => {
+
+  const handleCreateValue = (value) => {
+    initRange(question, value)
+    createValue(value)
+  }
+
   return (
     <div className="interview-collection">
       {
@@ -22,6 +28,7 @@ const SelectWidget = ({ question, values, currentSet, disabled, createValue, upd
             <div key={valueIndex} className="interview-input">
               <div className="interview-input-options">
                 <QuestionDefault isDefault={isDefault} />
+                <QuestionEraseValue value={value} disabled={disabled} updateValue={updateValue}/>
                 <QuestionRemoveValue
                   question={question}
                   values={values}
@@ -30,9 +37,11 @@ const SelectWidget = ({ question, values, currentSet, disabled, createValue, upd
                   deleteValue={deleteValue}
                 />
               </div>
-              <SelectInput
+              <RangeInput
                 value={value}
-                options={gatherOptions(question)}
+                minimum={question.minimum}
+                maximum={question.maximum}
+                step={question.step}
                 disabled={disabled}
                 isDefault={isDefault}
                 updateValue={updateValue}
@@ -47,13 +56,13 @@ const SelectWidget = ({ question, values, currentSet, disabled, createValue, upd
         values={values}
         currentSet={currentSet}
         disabled={disabled}
-        createValue={createValue}
+        createValue={handleCreateValue}
       />
     </div>
   )
 }
 
-SelectWidget.propTypes = {
+RangeWidget.propTypes = {
   question: PropTypes.object.isRequired,
   values: PropTypes.array.isRequired,
   disabled: PropTypes.bool,
@@ -63,4 +72,4 @@ SelectWidget.propTypes = {
   deleteValue: PropTypes.func.isRequired
 }
 
-export default SelectWidget
+export default RangeWidget
