@@ -1,18 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { isDefaultValue } from '../../../../utils/value'
-import { gatherOptions } from '../../../../utils/options'
+import { isDefaultValue } from '../../../utils/value'
+import { gatherOptions } from '../../../utils/options'
 
-import QuestionAddValue from '../QuestionAddValue'
-import QuestionDefault from '../QuestionDefault'
-import QuestionError from '../QuestionError'
-import QuestionEraseValue from '../QuestionEraseValue'
-import QuestionRemoveValue from '../QuestionRemoveValue'
+import QuestionAddValue from '../question/QuestionAddValue'
+import QuestionDefault from '../question/QuestionDefault'
+import QuestionError from '../question/QuestionError'
+import QuestionRemoveValue from '../question/QuestionRemoveValue'
 
-import RadioInput from './RadioInput'
+import AutocompleteInput from './AutocompleteInput'
 
-const RadioWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue }) => {
+const AutocompleteWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue }) => {
   return (
     <div className="interview-collection">
       {
@@ -23,7 +22,6 @@ const RadioWidget = ({ question, values, currentSet, disabled, createValue, upda
             <div key={valueIndex} className="interview-input">
               <div className="interview-input-options">
                 <QuestionDefault isDefault={isDefault} />
-                <QuestionEraseValue value={value} disabled={disabled} updateValue={updateValue}/>
                 <QuestionRemoveValue
                   question={question}
                   values={values}
@@ -32,7 +30,7 @@ const RadioWidget = ({ question, values, currentSet, disabled, createValue, upda
                   deleteValue={deleteValue}
                 />
               </div>
-              <RadioInput
+              <AutocompleteInput
                 value={value}
                 options={gatherOptions(question)}
                 disabled={disabled}
@@ -55,7 +53,7 @@ const RadioWidget = ({ question, values, currentSet, disabled, createValue, upda
   )
 }
 
-RadioWidget.propTypes = {
+AutocompleteWidget.propTypes = {
   question: PropTypes.object.isRequired,
   values: PropTypes.array.isRequired,
   disabled: PropTypes.bool,
@@ -65,4 +63,4 @@ RadioWidget.propTypes = {
   deleteValue: PropTypes.func.isRequired
 }
 
-export default RadioWidget
+export default AutocompleteWidget

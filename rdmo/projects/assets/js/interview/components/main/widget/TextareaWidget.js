@@ -1,23 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { isDefaultValue, initRange } from '../../../../utils/value'
+import { isDefaultValue } from '../../../utils/value'
 
-import QuestionAddValue from '../QuestionAddValue'
-import QuestionDefault from '../QuestionDefault'
-import QuestionError from '../QuestionError'
-import QuestionEraseValue from '../QuestionEraseValue'
-import QuestionRemoveValue from '../QuestionRemoveValue'
+import QuestionAddValue from '../question/QuestionAddValue'
+import QuestionDefault from '../question/QuestionDefault'
+import QuestionError from '../question/QuestionError'
+import QuestionRemoveValue from '../question/QuestionRemoveValue'
 
-import RangeInput from './RangeInput'
+import TextareaInput from './TextareaInput'
 
-const RangeWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue }) => {
-
-  const handleCreateValue = (value) => {
-    initRange(question, value)
-    createValue(value)
-  }
-
+const TextareaWidget = ({ question, values, currentSet, disabled, focus, createValue, updateValue, deleteValue }) => {
   return (
     <div className="interview-collection">
       {
@@ -28,7 +21,6 @@ const RangeWidget = ({ question, values, currentSet, disabled, createValue, upda
             <div key={valueIndex} className="interview-input">
               <div className="interview-input-options">
                 <QuestionDefault isDefault={isDefault} />
-                <QuestionEraseValue value={value} disabled={disabled} updateValue={updateValue}/>
                 <QuestionRemoveValue
                   question={question}
                   values={values}
@@ -37,14 +29,12 @@ const RangeWidget = ({ question, values, currentSet, disabled, createValue, upda
                   deleteValue={deleteValue}
                 />
               </div>
-              <RangeInput
+              <TextareaInput
                 value={value}
-                minimum={question.minimum}
-                maximum={question.maximum}
-                step={question.step}
                 disabled={disabled}
                 isDefault={isDefault}
                 updateValue={updateValue}
+                focus={focus && valueIndex == values.length - 1}
               />
               <QuestionError value={value} />
             </div>
@@ -56,20 +46,21 @@ const RangeWidget = ({ question, values, currentSet, disabled, createValue, upda
         values={values}
         currentSet={currentSet}
         disabled={disabled}
-        createValue={handleCreateValue}
+        createValue={createValue}
       />
     </div>
   )
 }
 
-RangeWidget.propTypes = {
+TextareaWidget.propTypes = {
   question: PropTypes.object.isRequired,
   values: PropTypes.array.isRequired,
   disabled: PropTypes.bool,
+  focus: PropTypes.bool,
   currentSet: PropTypes.object.isRequired,
   createValue: PropTypes.func.isRequired,
   updateValue: PropTypes.func.isRequired,
   deleteValue: PropTypes.func.isRequired
 }
 
-export default RangeWidget
+export default TextareaWidget

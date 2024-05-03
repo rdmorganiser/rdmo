@@ -1,16 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { isDefaultValue } from '../../../../utils/value'
+import { isDefaultValue } from '../../../utils/value'
 
-import QuestionAddValue from '../QuestionAddValue'
-import QuestionDefault from '../QuestionDefault'
-import QuestionError from '../QuestionError'
-import QuestionRemoveValue from '../QuestionRemoveValue'
+import QuestionAddValue from '../question/QuestionAddValue'
+import QuestionDefault from '../question/QuestionDefault'
+import QuestionError from '../question/QuestionError'
+import QuestionRemoveValue from '../question/QuestionRemoveValue'
 
-import TextareaInput from './TextareaInput'
+import FileInput from './FileInput'
 
-const TextareaWidget = ({ question, values, currentSet, disabled, focus, createValue, updateValue, deleteValue }) => {
+const FileWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue }) => {
   return (
     <div className="interview-collection">
       {
@@ -29,12 +29,10 @@ const TextareaWidget = ({ question, values, currentSet, disabled, focus, createV
                   deleteValue={deleteValue}
                 />
               </div>
-              <TextareaInput
+              <FileInput
                 value={value}
                 disabled={disabled}
-                isDefault={isDefault}
                 updateValue={updateValue}
-                focus={focus && valueIndex == values.length - 1}
               />
               <QuestionError value={value} />
             </div>
@@ -52,15 +50,14 @@ const TextareaWidget = ({ question, values, currentSet, disabled, focus, createV
   )
 }
 
-TextareaWidget.propTypes = {
+FileWidget.propTypes = {
   question: PropTypes.object.isRequired,
   values: PropTypes.array.isRequired,
   disabled: PropTypes.bool,
-  focus: PropTypes.bool,
   currentSet: PropTypes.object.isRequired,
   createValue: PropTypes.func.isRequired,
   updateValue: PropTypes.func.isRequired,
   deleteValue: PropTypes.func.isRequired
 }
 
-export default TextareaWidget
+export default FileWidget

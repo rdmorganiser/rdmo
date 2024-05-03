@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { maxBy } from 'lodash'
 
-import { gatherOptions } from '../../../../utils/options'
+import { gatherOptions } from '../../../utils/options'
 
-import QuestionError from '../QuestionError'
+import QuestionError from '../question/QuestionError'
 
 import CheckboxInput from './CheckboxInput'
 

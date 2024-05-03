@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { useDebouncedCallback } from 'use-debounce'
 
-import useFocusEffect from '../../../../hooks/useFocusEffect'
+import useFocusEffect from '../../../hooks/useFocusEffect'
 
-const TextInput = ({ value, disabled, isDefault, focus, updateValue }) => {
+const TextareaInput = ({ value, disabled, isDefault, focus, updateValue }) => {
   const ref = useRef(null)
   const [inputValue, setInputValue] = useState('')
 
@@ -22,9 +22,9 @@ const TextInput = ({ value, disabled, isDefault, focus, updateValue }) => {
   })
 
   return (
-    <input
+    <textarea
       ref={ref}
-      type="text"
+      rows={6}
       className={classnames}
       disabled={disabled}
       value={inputValue}
@@ -36,13 +36,12 @@ const TextInput = ({ value, disabled, isDefault, focus, updateValue }) => {
   )
 }
 
-TextInput.propTypes = {
+TextareaInput.propTypes = {
   value: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
   isDefault: PropTypes.bool,
-  isOptional: PropTypes.bool,
   focus: PropTypes.bool,
-  updateValue: PropTypes.func.isRequired,
+  updateValue: PropTypes.func.isRequired
 }
 
-export default TextInput
+export default TextareaInput
