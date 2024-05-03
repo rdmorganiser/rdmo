@@ -13,7 +13,7 @@ const QuestionSetAddSet = ({ questionset, sets, setPrefix, createSet }) => {
     })
   }
 
-  return (
+  return questionset.is_collection && (
     <button type="button" className="btn btn-success btn-add-set" onClick={handleClick}>
       <i className="fa fa-plus fa-btn"></i> {capitalize(questionset.verbose_name)}
     </button>
