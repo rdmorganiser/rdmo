@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 
 import baseUrl from 'rdmo/core/assets/js/utils/baseUrl'
 
-const QuestionManagement = ({ question }) => {
-  return (
+const QuestionManagement = ({ question, isManager }) => {
+  return isManager && (
     <ul className="list-unstyled">
       <li>
         <a href={`${baseUrl}/management/questions/${question.id}/`} target="_blank" rel="noreferrer">
@@ -21,7 +21,8 @@ const QuestionManagement = ({ question }) => {
 }
 
 QuestionManagement.propTypes = {
-  question: PropTypes.object.isRequired
+  question: PropTypes.object.isRequired,
+  isManager: PropTypes.bool.isRequired,
 }
 
 export default QuestionManagement
