@@ -13,13 +13,11 @@ const Buttons = ({ next, prev, help, fetchPage }) => {
           <button type="button" onClick={() => fetchPage(next)} disabled={!next}
                   className="btn btn-default btn-xs">
             {gettext('Proceed')}
-            {/* TODO: handle */}
-            {/*{gettext('Skip')}*/}
           </button>
         </div>
 
         <div>
-          <button type="button" onClick={() => fetchPage(prev)} disabled={!prev}
+          <button type="button" onClick={() => fetchPage(prev, true)} disabled={!prev}
                   className="btn btn-default btn-xs">
             {gettext('Back')}
           </button>
