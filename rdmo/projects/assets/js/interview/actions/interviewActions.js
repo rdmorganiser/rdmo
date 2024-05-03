@@ -174,7 +174,7 @@ export function storeValue(value) {
 
     return ValueApi.storeValue(projectId, value)
       .then((value) => {
-        if (isNil(valueFile)) {
+        if (isNil(valueFile) && isNil(value.file_name)) {
           return dispatch(storeValueSuccess(value, valueIndex))
         } else {
           return ValueApi.storeFile(projectId, value, valueFile)
