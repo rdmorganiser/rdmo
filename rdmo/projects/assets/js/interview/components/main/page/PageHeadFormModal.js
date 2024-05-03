@@ -60,6 +60,11 @@ const PageHeadFormModal = ({ title, show, initial, onClose, onSubmit }) => {
               type="text"
               value={inputValue}
               onChange={(event) => setInputValue(event.target.value)}
+              onKeyPress={(event) => {
+                if (event.code === 'Enter') {
+                  handleSubmit()
+                }
+              }}
             />
 
             <p className="help-block">{gettext('Please give the tab a meaningful name.')}</p>
