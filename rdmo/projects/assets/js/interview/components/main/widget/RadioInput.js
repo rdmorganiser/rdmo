@@ -10,8 +10,6 @@ import OptionHelp from './common/OptionHelp'
 import OptionText from './common/OptionText'
 
 const RadioInput = ({ value, options, disabled, isDefault, updateValue }) => {
-  console.log(value.text)
-
   const handleChange = (option) => {
     if (option.has_provider) {
       updateValue(value, { text: option.text, external_id: option.id })
