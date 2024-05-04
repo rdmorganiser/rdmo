@@ -36,28 +36,30 @@ const CheckboxWidget = ({ question, values, currentSet, disabled, createValue, u
   return (
     <div className="interview-widgets">
       <div className="interview-widget">
-        <div className="checkbox-control">
-          {
-            gatherOptions(question).map((option, optionIndex) => {
-              const value = values.find((value) => (
-                option.has_provider ? (value.external_id === option.id) : (value.option === option.id)
-              ))
+        <div className="interview-input">
+          <div className="checkbox-control">
+            {
+              gatherOptions(question).map((option, optionIndex) => {
+                const value = values.find((value) => (
+                  option.has_provider ? (value.external_id === option.id) : (value.option === option.id)
+                ))
 
-              return (
-                <React.Fragment key={optionIndex}>
-                  <CheckboxInput
-                    value={value}
-                    option={option}
-                    disabled={disabled}
-                    onCreate={handleCreateValue}
-                    onUpdate={updateValue}
-                    onDelete={deleteValue}
-                  />
-                  <QuestionError value={value} />
-                </React.Fragment>
-              )
-            })
-          }
+                return (
+                  <React.Fragment key={optionIndex}>
+                    <CheckboxInput
+                      value={value}
+                      option={option}
+                      disabled={disabled}
+                      onCreate={handleCreateValue}
+                      onUpdate={updateValue}
+                      onDelete={deleteValue}
+                    />
+                    <QuestionError value={value} />
+                  </React.Fragment>
+                )
+              })
+            }
+          </div>
         </div>
       </div>
     </div>

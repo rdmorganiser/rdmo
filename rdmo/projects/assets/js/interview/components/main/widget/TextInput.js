@@ -3,9 +3,13 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { useDebouncedCallback } from 'use-debounce'
 
+import { isDefaultValue } from '../../../utils/value'
+
 import useFocusEffect from '../../../hooks/useFocusEffect'
 
-const TextInput = ({ value, disabled, isDefault, focus, updateValue }) => {
+import Unit from './common/Unit'
+
+const TextInput = ({ question, value, disabled, focus, updateValue, buttons }) => {
   const ref = useRef(null)
   const [inputValue, setInputValue] = useState('')
 
@@ -18,31 +22,37 @@ const TextInput = ({ value, disabled, isDefault, focus, updateValue }) => {
 
   const classnames = classNames({
     'form-control': true,
-    'default': isDefault
+    'default': isDefaultValue(question, value)
   })
 
   return (
-    <input
-      ref={ref}
-      type="text"
-      className={classnames}
-      disabled={disabled}
-      value={inputValue}
-      onChange={(event) => {
-        setInputValue(event.target.value)
-        handleChange(value, event.target.value)
-      }}
-    />
+    <div className="interview-input">
+      <div className="buttons-wrapper">
+        {buttons}
+        <input
+          ref={ref}
+          type="text"
+          className={classnames}
+          disabled={disabled}
+          value={inputValue}
+          onChange={(event) => {
+            setInputValue(event.target.value)
+            handleChange(value, event.target.value)
+          }}
+        />
+      </div>
+      <Unit unit={question.unit} />
+    </div>
   )
 }
 
 TextInput.propTypes = {
+  question: PropTypes.object.isRequired,
   value: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
-  isDefault: PropTypes.bool,
-  isOptional: PropTypes.bool,
   focus: PropTypes.bool,
   updateValue: PropTypes.func.isRequired,
+  buttons: PropTypes.node.isRequired
 }
 
 export default TextInput

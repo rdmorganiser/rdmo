@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { isDefaultValue } from '../../../utils/value'
 import { gatherOptions } from '../../../utils/options'
 
 import QuestionAddValue from '../question/QuestionAddValue'
@@ -16,26 +15,26 @@ const AutocompleteWidget = ({ question, values, currentSet, disabled, createValu
     <div className="interview-widgets">
       {
         values.map((value, valueIndex) => {
-          const isDefault = isDefaultValue(question, value)
-
           return (
             <div key={valueIndex} className="interview-widget">
-              <div className="options">
-                <QuestionDefault isDefault={isDefault} />
-                <QuestionRemoveValue
-                  question={question}
-                  values={values}
-                  value={value}
-                  disabled={disabled}
-                  deleteValue={deleteValue}
-                />
-              </div>
               <AutocompleteInput
+                question={question}
                 value={value}
                 options={gatherOptions(question)}
                 disabled={disabled}
-                isDefault={isDefault}
                 updateValue={updateValue}
+                buttons={
+                  <div className="buttons">
+                    <QuestionRemoveValue
+                      question={question}
+                      values={values}
+                      value={value}
+                      disabled={disabled}
+                      deleteValue={deleteValue}
+                    />
+                    <QuestionDefault question={question} value={value} />
+                  </div>
+                }
               />
               <QuestionError value={value} />
             </div>
