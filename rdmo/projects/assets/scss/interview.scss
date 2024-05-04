@@ -9,15 +9,14 @@
 }
 
 .interview-navigation {
-    line-height: 24px;
-
     h4 {
         line-height: 20px;
         margin-top: 20px;
         margin-bottom: 10px;
     }
     a {
-        display: block;
+        display: inline-block;
+        max-width: 100%;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -337,7 +336,7 @@
     float: right;
     margin-top: 1px;
     background-color: #efefef;
-    color: #666;
+    color: #777;
 }
 
 .badge-read-only {
