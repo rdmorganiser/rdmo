@@ -4,7 +4,11 @@ import { useDebouncedCallback } from 'use-debounce'
 import classNames from 'classnames'
 import { isEmpty } from 'lodash'
 
-const RangeInput = ({ value, minimum, maximum, step, disabled, isDefault, updateValue }) => {
+import { isDefaultValue } from '../../../utils/value'
+
+import Unit from './common/Unit'
+
+const RangeInput = ({ question, value, disabled, updateValue, buttons }) => {
   const [inputValue, setInputValue] = useState('')
   useEffect(() => {setInputValue(value.text)}, [value.id, value.text])
 
@@ -13,18 +17,18 @@ const RangeInput = ({ value, minimum, maximum, step, disabled, isDefault, update
   }, 500)
 
   const classnames = classNames({
+    'interview-input': true,
     'range': true,
-    'default': isDefault
+    'default': isDefaultValue(question, value)
   })
 
   return (
     <div className={classnames}>
-      <span className="badge">{inputValue}</span>
       <input
         type="range"
-        min={isEmpty(minimum) ? '0' : minimum}
-        max={isEmpty(maximum) ? '100' : maximum}
-        step={isEmpty(step) ? '1' : step}
+        min={isEmpty(question.minimum) ? '0' : question.minimum}
+        max={isEmpty(question.maximum) ? '100' : question.maximum}
+        step={isEmpty(question.step) ? '1' : question.step}
         disabled={disabled}
         value={inputValue}
         onChange={(event) => {
@@ -32,18 +36,18 @@ const RangeInput = ({ value, minimum, maximum, step, disabled, isDefault, update
           handleChange(value, event.target.value)
         }}
       />
+      {buttons}
+      <Unit unit={question.unit} inputValue={inputValue} />
     </div>
   )
 }
 
 RangeInput.propTypes = {
+  question: PropTypes.object.isRequired,
   value: PropTypes.object.isRequired,
-  minimum: PropTypes.number,
-  maximum: PropTypes.number,
-  step: PropTypes.number,
   disabled: PropTypes.bool,
-  isDefault: PropTypes.bool,
-  updateValue: PropTypes.func.isRequired
+  updateValue: PropTypes.func.isRequired,
+  buttons: PropTypes.node.isRequired
 }
 
 export default RangeInput

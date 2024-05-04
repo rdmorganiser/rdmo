@@ -4,10 +4,12 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { isNil } from 'lodash'
 
+import { isDefaultValue } from '../../../utils/value'
+
 import OptionHelp from './common/OptionHelp'
 import OptionText from './common/OptionText'
 
-const AutocompleteInput = ({ value, options, disabled, isDefault, updateValue }) => {
+const AutocompleteInput = ({ question, value, options, disabled, updateValue, buttons }) => {
   const selectOptions = options.map(option => ({
     value: option,
     label: option.text
@@ -35,37 +37,41 @@ const AutocompleteInput = ({ value, options, disabled, isDefault, updateValue })
 
   const classnames = classNames({
     'react-select': true,
-    'default': isDefault
+    'default': isDefaultValue(question, value)
   })
 
   return (
-    <ReactSelect
-      classNamePrefix="react-select"
-      className={classnames}
-      isClearable={true}
-      options={selectOptions}
-      value={inputValue}
-      onChange={(option) => {
-        setInputValue(option)
-        handleChange(option)
-      }}
-      isDisabled={disabled}
-      formatOptionLabel={({ value }) => (
-        <span>
-          <OptionText option={value} />
-          <OptionHelp className="ml-10" option={value} />
-        </span>
-      )}
-    />
+    <div className="interview-input">
+      <ReactSelect
+        classNamePrefix="react-select"
+        className={classnames}
+        isClearable={true}
+        options={selectOptions}
+        value={inputValue}
+        onChange={(option) => {
+          setInputValue(option)
+          handleChange(option)
+        }}
+        isDisabled={disabled}
+        formatOptionLabel={({ value }) => (
+          <span>
+            <OptionText option={value} />
+            <OptionHelp className="ml-10" option={value} />
+          </span>
+        )}
+      />
+      {buttons}
+    </div>
   )
 }
 
 AutocompleteInput.propTypes = {
+  question: PropTypes.object.isRequired,
   value: PropTypes.object.isRequired,
   options: PropTypes.array.isRequired,
   disabled: PropTypes.bool,
-  isDefault: PropTypes.bool,
-  updateValue: PropTypes.func.isRequired
+  updateValue: PropTypes.func.isRequired,
+  buttons: PropTypes.node.isRequired
 }
 
 export default AutocompleteInput

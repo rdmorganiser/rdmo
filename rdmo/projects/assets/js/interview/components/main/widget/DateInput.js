@@ -6,7 +6,9 @@ import { enGB, de, it, es, fr } from 'date-fns/locale'
 
 import lang from 'rdmo/core/assets/js/utils/lang'
 
-const DateInput = ({ value, disabled, isDefault, updateValue }) => {
+import { isDefaultValue } from '../../../utils/value'
+
+const DateInput = ({ question, value, disabled, updateValue, buttons }) => {
 
   const getLocale = () => {
     switch (lang) {
@@ -46,28 +48,34 @@ const DateInput = ({ value, disabled, isDefault, updateValue }) => {
   const classnames = classNames({
     'form-control': true,
     'date-control': true,
-    'default': isDefault
+    'default': isDefaultValue(question, value)
   })
 
   return (
-    <DatePicker
-      className={classnames}
-      selected={value.text}
-      onChange={(date) => handleChange(date)}
-      locale={getLocale()}
-      dateFormat={getDateFormat()}
-      disabled={disabled}
-      popperPlacement="bottom-start"
-      showPopperArrow={false}
-    />
+    <div className="interview-input">
+      <div className="buttons-wrapper">
+        {buttons}
+        <DatePicker
+          className={classnames}
+          selected={value.text}
+          onChange={(date) => handleChange(date)}
+          locale={getLocale()}
+          dateFormat={getDateFormat()}
+          disabled={disabled}
+          popperPlacement="bottom-start"
+          showPopperArrow={false}
+        />
+      </div>
+    </div>
   )
 }
 
 DateInput.propTypes = {
+  question: PropTypes.object.isRequired,
   value: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
-  isDefault: PropTypes.bool,
-  updateValue: PropTypes.func.isRequired
+  updateValue: PropTypes.func.isRequired,
+  buttons: PropTypes.node.isRequired
 }
 
 export default DateInput

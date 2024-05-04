@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { isDefaultValue, initRange } from '../../../utils/value'
+import { initRange } from '../../../utils/value'
 
 import QuestionAddValue from '../question/QuestionAddValue'
 import QuestionDefault from '../question/QuestionDefault'
@@ -27,29 +27,26 @@ const RangeWidget = ({ question, values, currentSet, disabled, createValue, upda
     <div className="interview-widgets">
       {
         values.map((value, valueIndex) => {
-          const isDefault = isDefaultValue(question, value)
-
           return (
             <div key={valueIndex} className="interview-widget">
-              <div className="options">
-                <QuestionDefault isDefault={isDefault} />
-                <QuestionEraseValue value={value} disabled={disabled} updateValue={handleEraseValue}/>
-                <QuestionRemoveValue
-                  question={question}
-                  values={values}
-                  value={value}
-                  disabled={disabled}
-                  deleteValue={deleteValue}
-                />
-              </div>
               <RangeInput
+                question={question}
                 value={value}
-                minimum={question.minimum}
-                maximum={question.maximum}
-                step={question.step}
                 disabled={disabled}
-                isDefault={isDefault}
                 updateValue={updateValue}
+                buttons={
+                  <div className="buttons">
+                    <QuestionEraseValue value={value} disabled={disabled} updateValue={handleEraseValue}/>
+                    <QuestionRemoveValue
+                      question={question}
+                      values={values}
+                      value={value}
+                      disabled={disabled}
+                      deleteValue={deleteValue}
+                    />
+                    <QuestionDefault question={question} value={value} />
+                  </div>
+                }
               />
               <QuestionError value={value} />
             </div>
