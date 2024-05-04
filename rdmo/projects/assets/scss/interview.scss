@@ -137,15 +137,35 @@
 }
 
 .interview-widget {
-    position: relative;
     margin-bottom: 10px;
+}
 
-    .options {
-        position: absolute;
-        top: 0;
-        right: 0;
-        z-index: 5;
-        margin-right: 8px;
+.interview-input {
+    display: flex;
+    gap: 10px;
+
+    .buttons-wrapper {
+        position: relative;
+        flex-grow: 1;
+
+        .buttons {
+            position: absolute;
+            top: 0;
+            right: 13px;
+            z-index: 5;
+        }
+    }
+
+    &:has(.react-select) {
+        .buttons {
+            margin-top: 2px;
+            margin-bottom: 2px;
+        }
+    }
+
+    .buttons {
+        display: flex;
+        gap: 10px;
 
         .btn-erase-value,
         .btn-remove-value {
@@ -154,12 +174,7 @@
             font-size: 14px;
             padding-left: 0;
             padding-right: 0;
-            margin-left: 4px;
         }
-
-        // .btn-remove-value {
-        //     margin-left: 2px;
-        // }
 
         .btn-erase-value:hover,
         .btn-remove-value:hover {
@@ -170,6 +185,31 @@
         .btn-remove-value:focus {
             outline: 0;
         }
+    }
+
+    .badge-default {
+        cursor: help;
+        color: #999;
+        border: 1px solid #999;
+        background-color: white;
+        margin: 7px 0 7px 0;
+    }
+
+    .unit {
+        padding: 6px 12px;
+        width: 120px;
+        height: 34px;
+
+        text-align: center;
+
+        border: 1px solid #ccc;
+        border-radius: 4px;
+
+        cursor: help;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .radio,
@@ -195,15 +235,13 @@
             width: 200px;
         }
     }
-    .radio {
-        &.yesno {
-            label {
-                margin-bottom: 0;
-                line-height: 20px;
-            }
-            input[type='radio'] {
-                margin-top: 3px;
-            }
+    .radio-control.yesno {
+        label {
+            margin-bottom: 0;
+            line-height: 20px;
+        }
+        input[type='radio'] {
+            margin-top: 3px;
         }
         a.remove-link {
             top: 2px;
@@ -211,30 +249,12 @@
     }
 
     .range {
-        display: flex;
-        align-items: center;
-
         height: 34px;  // same as form-control
 
-        margin-right: 32px;
-
-        .badge {
-            margin-right: 10px;
-        }
-
-        input {
+        input[type='range'] {
+            width: auto;
             margin-bottom: 0;
             accent-color: #777777;  // same as .badge
-        }
-    }
-
-    // extend the left marging when also a remove button is present
-    &:has(.options .btn-remove-value) {
-        .react-select {
-            margin-right: 32px;
-        }
-        .range {
-            margin-right: 48px;
         }
     }
 
@@ -253,7 +273,7 @@
         label {
             width: 100%;
         }
-        .yesno label {
+        &.yesno label {
             width: auto;
         }
     }
@@ -312,6 +332,11 @@
         margin: 4px !important;
     }
 
+    .checkbox-control,
+    .react-select {
+        flex-grow: 1;
+    }
+
     .default {
         color: #999;
 
@@ -321,14 +346,6 @@
             opacity: 0.5;
         }
     }
-}
-
-.badge-default {
-    cursor: help;
-    color: #999;
-    border: 1px solid #999;
-    background-color: white;
-    margin: 7px 0 7px 0;
 }
 
 .badge-optional {

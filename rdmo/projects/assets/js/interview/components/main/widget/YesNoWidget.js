@@ -1,8 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { isDefaultValue } from '../../../utils/value'
-
 import QuestionAddValue from '../question/QuestionAddValue'
 import QuestionDefault from '../question/QuestionDefault'
 import QuestionError from '../question/QuestionError'
@@ -16,26 +14,26 @@ const YesNoWidget = ({ question, values, currentSet, disabled, createValue, upda
     <div className="interview-widgets">
       {
         values.map((value, valueIndex) => {
-          const isDefault = isDefaultValue(question, value)
-
           return (
             <div key={valueIndex} className="interview-widget">
-              <div className="options">
-                <QuestionDefault isDefault={isDefault} />
-                <QuestionEraseValue value={value} disabled={disabled} updateValue={updateValue}/>
-                <QuestionRemoveValue
-                  question={question}
-                  values={values}
-                  value={value}
-                  disabled={disabled}
-                  deleteValue={deleteValue}
-                />
-              </div>
               <YesNoInput
+                question={question}
                 value={value}
                 disabled={disabled}
-                isDefault={isDefault}
                 updateValue={updateValue}
+                buttons={
+                  <div className="buttons">
+                    <QuestionEraseValue value={value} disabled={disabled} updateValue={updateValue}/>
+                    <QuestionRemoveValue
+                      question={question}
+                      values={values}
+                      value={value}
+                      disabled={disabled}
+                      deleteValue={deleteValue}
+                    />
+                    <QuestionDefault question={question} value={value} />
+                  </div>
+                }
               />
               <QuestionError value={value} />
             </div>
