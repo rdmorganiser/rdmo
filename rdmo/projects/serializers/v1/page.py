@@ -35,14 +35,16 @@ class OptionSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
         )
 
 
-class OptionSetSerializer(serializers.ModelSerializer):
+class OptionSetSerializer(ElementModelSerializerMixin, serializers.ModelSerializer):
 
+    model = serializers.SerializerMethodField()
     options = OptionSerializer(source='elements', many=True)
 
     class Meta:
         model = OptionSet
         fields = (
             'id',
+            'model',
             'options',
             'has_provider',
             'has_search',
@@ -153,10 +155,11 @@ class QuestionSetSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin
         return obj.verbose_name or _('block')
 
 
-class PageSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
+class PageSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, serializers.ModelSerializer):
 
     markdown_fields = ('help', )
 
+    model = serializers.SerializerMethodField()
     elements = serializers.SerializerMethodField()
     section = serializers.SerializerMethodField()
     prev_page = serializers.SerializerMethodField()
@@ -169,6 +172,7 @@ class PageSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
         model = Page
         fields = (
             'id',
+            'model',
             'title',
             'help',
             'verbose_name',

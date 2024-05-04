@@ -34,7 +34,7 @@ const RadioWidget = ({ question, values, currentSet, disabled, createValue, upda
               </div>
               <RadioInput
                 value={value}
-                options={gatherOptions(question)}
+                options={gatherOptions(question, currentSet)}
                 disabled={disabled}
                 isDefault={isDefault}
                 updateValue={updateValue}
