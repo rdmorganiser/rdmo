@@ -11,6 +11,9 @@ import {
   FETCH_VALUES_INIT,
   FETCH_VALUES_SUCCESS,
   FETCH_VALUES_ERROR,
+  RESOLVE_CONDITION_INIT,
+  RESOLVE_CONDITION_SUCCESS,
+  RESOLVE_CONDITION_ERROR,
   CREATE_VALUE,
   STORE_VALUE_INIT,
   STORE_VALUE_SUCCESS,
@@ -44,6 +47,10 @@ export default function interviewReducer(state = initialState, action) {
       return { ...state, values: action.values, sets: action.sets }
     case FETCH_OPTIONS_SUCCESS:
       return { ...state, page: action.page }
+    case RESOLVE_CONDITION_SUCCESS:
+      return { ...state, sets: state.sets.map(
+        (set, setIndex) => setIndex == action.setIndex ? action.set : set
+      )}
     case CREATE_VALUE:
       return { ...state, values: [...state.values, action.value] }
     case STORE_VALUE_SUCCESS:
@@ -68,11 +75,13 @@ export default function interviewReducer(state = initialState, action) {
     case FETCH_NAVIGATION_INIT:
     case FETCH_OPTIONS_INIT:
     case FETCH_VALUES_INIT:
+    case RESOLVE_CONDITION_INIT:
       return { ...state, errors: [] }
     case FETCH_PAGE_ERROR:
     case FETCH_NAVIGATION_ERROR:
     case FETCH_OPTIONS_ERROR:
     case FETCH_VALUES_ERROR:
+    case RESOLVE_CONDITION_ERROR:
       return { ...state, errors: [...state.errors, { actionType: action.type, ...action.error }] }
     case STORE_VALUE_INIT:
        return {

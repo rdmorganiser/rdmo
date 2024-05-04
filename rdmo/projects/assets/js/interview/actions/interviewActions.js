@@ -4,6 +4,8 @@ import PageApi from '../api/PageApi'
 import ProjectApi from '../api/ProjectApi'
 import ValueApi from '../api/ValueApi'
 
+import { elementTypes } from 'rdmo/management/assets/js/constants/elements'
+
 import { updateProgress } from './projectActions'
 
 import { updateLocation } from '../utils/location'
@@ -30,6 +32,9 @@ import {
   FETCH_VALUES_INIT,
   FETCH_VALUES_SUCCESS,
   FETCH_VALUES_ERROR,
+  RESOLVE_CONDITION_INIT,
+  RESOLVE_CONDITION_SUCCESS,
+  RESOLVE_CONDITION_ERROR,
   CREATE_VALUE,
   STORE_VALUE_INIT,
   STORE_VALUE_SUCCESS,
@@ -66,9 +71,7 @@ export function fetchPage(pageId, back) {
 
           dispatch(fetchNavigation(page))
           dispatch(fetchValues(page))
-
-          page.optionsets.filter((optionset) => optionset.has_provider)
-                         .forEach((optionset) => dispatch(fetchOptions(optionset)))
+          dispatch(fetchOptionsets(page))
 
           dispatch(fetchPageSuccess(page, false))
         })
@@ -110,6 +113,13 @@ export function fetchNavigationError(error) {
   return {type: FETCH_NAVIGATION_ERROR, error}
 }
 
+export function fetchOptionsets(page) {
+  return (dispatch) => {
+    page.optionsets.filter((optionset) => optionset.has_provider)
+                   .forEach((optionset) => dispatch(fetchOptions(optionset)))
+  }
+}
+
 export function fetchOptions(optionset) {
   return (dispatch) => {
     dispatch(fetchOptionsInit())
@@ -143,7 +153,15 @@ export function fetchValues(page) {
   return (dispatch) => {
     dispatch(fetchValuesInit())
     return ValueApi.fetchValues(projectId, { attribute: page.attributes })
-      .then((values) => dispatch(fetchValuesSuccess(values, page)))
+      .then((values) => {
+        const sets = gatherSets(values)
+
+        initSets(sets, page)
+        initValues(sets, values, page)
+
+        dispatch(resolveConditions(page, sets))
+        dispatch(fetchValuesSuccess(values, sets))
+      })
       .catch((error) => dispatch(fetchValuesError(error)))
   }
 }
@@ -152,17 +170,56 @@ export function fetchValuesInit() {
   return {type: FETCH_VALUES_INIT}
 }
 
-export function fetchValuesSuccess(values, page) {
-  const sets = gatherSets(values)
-
-  initSets(sets, page)
-  initValues(sets, values, page)
-
+export function fetchValuesSuccess(values, sets) {
   return {type: FETCH_VALUES_SUCCESS, values, sets}
 }
 
 export function fetchValuesError(error) {
   return {type: FETCH_VALUES_ERROR, error}
+}
+
+export function resolveConditions(page, sets) {
+  return (dispatch) => {
+    // loop over set to evaluate conditions
+    sets.forEach((set) => {
+      page.questionsets.filter((questionset) => questionset.has_conditions)
+                       .forEach((questionset) => dispatch(resolveCondition(questionset, set)))
+
+      page.questions.filter((question) => question.has_conditions)
+                    .forEach((question) => dispatch(resolveCondition(question, set)))
+
+      page.optionsets.filter((optionset) => optionset.has_conditions)
+                     .forEach((optionset) => dispatch(resolveCondition(optionset, set)))
+    })
+  }
+}
+
+export function resolveCondition(element, set) {
+  return (dispatch, getState) => {
+    dispatch(resolveConditionInit())
+
+    return ProjectApi.resolveCondition(projectId, set, element)
+      .then((response) => {
+        const elementType = elementTypes[element.model]
+        const setIndex = getState().interview.sets.indexOf(set)
+        const results = { ...set[elementType], [element.id]: response.result }
+
+        dispatch(resolveConditionSuccess({ ...set, [elementType]: results }, setIndex))
+      })
+      .catch((error) => dispatch(resolveConditionError(error)))
+  }
+}
+
+export function resolveConditionInit() {
+  return {type: RESOLVE_CONDITION_INIT}
+}
+
+export function resolveConditionSuccess(set, setIndex) {
+  return {type: RESOLVE_CONDITION_SUCCESS, set, setIndex}
+}
+
+export function resolveConditionError(error) {
+  return {type: RESOLVE_CONDITION_ERROR, error}
 }
 
 export function storeValue(value) {
@@ -175,9 +232,11 @@ export function storeValue(value) {
     return ValueApi.storeValue(projectId, value)
       .then((value) => {
         const page = getState().interview.page
+        const sets = getState().interview.sets
 
         dispatch(fetchNavigation(page))
         dispatch(updateProgress())
+        dispatch(resolveConditions(page, sets))
 
         if (isNil(valueFile) && isNil(value.file_name)) {
           return dispatch(storeValueSuccess(value, valueIndex))
@@ -227,9 +286,12 @@ export function deleteValue(value) {
       return ValueApi.deleteValue(projectId, value)
         .then(() => {
           const page = getState().interview.page
+          const sets = getState().interview.sets
 
           dispatch(fetchNavigation(page))
           dispatch(updateProgress())
+          dispatch(resolveConditions(page, sets))
+
           dispatch(deleteValueSuccess(value))
         })
         .catch((errors) => dispatch(deleteValueError(errors)))

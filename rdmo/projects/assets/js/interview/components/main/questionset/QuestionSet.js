@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { checkQuestionSet } from '../../../utils/page'
 import { getChildPrefix } from '../../../utils/set'
 
 import Question from '../question/Question'
@@ -20,7 +21,7 @@ const QuestionSet = ({ templates, questionset, sets, values, disabled, isManager
     set.set_prefix == setPrefix
   ))
 
-  return (
+  return checkQuestionSet(questionset, parentSet) && (
     <div className="interview-questionset col-md-12">
       <strong>{questionset.title}</strong>
       <QuestionSetHelp questionset={questionset} />

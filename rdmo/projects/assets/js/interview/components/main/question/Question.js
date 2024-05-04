@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { checkQuestion } from '../../../utils/page'
+
 import QuestionAddValueHelp from './QuestionAddValueHelp'
 import QuestionHelp from './QuestionHelp'
 import QuestionManagement from './QuestionManagement'
@@ -11,7 +13,7 @@ import QuestionWidget from './QuestionWidget'
 
 const Question = ({ templates, question, values, disabled, isManager, focus,
                     currentSet, createValue, updateValue, deleteValue }) => {
-  return (
+  return checkQuestion(question, currentSet) && (
     <div className={`interview-question col-md-${question.width || '12'}`}>
       <QuestionOptional question={question} />
       <QuestionText question={question} />
