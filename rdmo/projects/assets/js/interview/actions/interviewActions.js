@@ -10,6 +10,7 @@ import { updateProgress } from './projectActions'
 
 import { updateLocation } from '../utils/location'
 
+import { updateOptions } from '../utils/options'
 import { initPage } from '../utils/page'
 import { gatherSets, getDescendants, initSets } from '../utils/set'
 import { initValues } from '../utils/value'
@@ -116,15 +117,18 @@ export function fetchNavigationError(error) {
 export function fetchOptionsets(page) {
   return (dispatch) => {
     page.optionsets.filter((optionset) => optionset.has_provider)
-                   .forEach((optionset) => dispatch(fetchOptions(optionset)))
+                   .forEach((optionset) => dispatch(fetchOptions(page, optionset)))
   }
 }
 
-export function fetchOptions(optionset) {
+export function fetchOptions(page, optionset) {
   return (dispatch) => {
     dispatch(fetchOptionsInit())
     return ProjectApi.fetchOptions(projectId, optionset.id)
-      .then((options) => dispatch(fetchOptionsSuccess(optionset, options)))
+      .then((options) => {
+        updateOptions(page, optionset, options)
+        dispatch(fetchOptionsSuccess(page, optionset, options))
+      })
       .catch((error) => dispatch(fetchOptionsError(error)))
   }
 }
@@ -133,16 +137,8 @@ export function fetchOptionsInit() {
   return {type: FETCH_OPTIONS_INIT}
 }
 
-export function fetchOptionsSuccess(optionset, options) {
-  return (dispatch, getState) => {
-    const page = getState().interview.page
-    page.optionsets.forEach((pageOptionset) => {
-      if (pageOptionset.id == optionset.id) {
-        optionset.options = options
-      }
-    })
-    return {type: FETCH_OPTIONS_SUCCESS, page}
-  }
+export function fetchOptionsSuccess(page) {
+  return {type: FETCH_OPTIONS_SUCCESS, page}
 }
 
 export function fetchOptionsError(error) {
