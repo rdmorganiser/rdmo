@@ -10,7 +10,8 @@ import QuestionRemoveValue from '../question/QuestionRemoveValue'
 
 import SelectInput from './SelectInput'
 
-const SelectWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue }) => {
+const SelectWidget = ({ question, values, currentSet, disabled, async,
+                        createValue, updateValue, deleteValue }) => {
   return (
     <div className="interview-widgets">
       {
@@ -22,6 +23,7 @@ const SelectWidget = ({ question, values, currentSet, disabled, createValue, upd
                 value={value}
                 options={gatherOptions(question)}
                 disabled={disabled}
+                async={async}
                 updateValue={updateValue}
                 buttons={
                   <div className="buttons">
@@ -56,6 +58,7 @@ SelectWidget.propTypes = {
   question: PropTypes.object.isRequired,
   values: PropTypes.array.isRequired,
   disabled: PropTypes.bool,
+  async: PropTypes.bool,
   currentSet: PropTypes.object.isRequired,
   createValue: PropTypes.func.isRequired,
   updateValue: PropTypes.func.isRequired,

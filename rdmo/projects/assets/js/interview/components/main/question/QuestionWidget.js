@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import AutocompleteWidget from '../widget/AutocompleteWidget'
 import CheckboxWidget from '../widget/CheckboxWidget'
 import DateWidget from '../widget/DateWidget'
 import FileWidget from '../widget/FileWidget'
@@ -15,7 +14,7 @@ import YesNoWidget from '../widget/YesNoWidget'
 const QuestionWidget = (props) => {
   switch (props.question.widget_type) {
     case 'autocomplete':
-      return <AutocompleteWidget {...props} />
+      return <SelectWidget {...props} async={true} />
     case 'checkbox':
       return <CheckboxWidget {...props} />
     case 'date':
