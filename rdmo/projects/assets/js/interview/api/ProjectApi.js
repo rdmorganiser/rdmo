@@ -26,8 +26,8 @@ class ProjectsApi extends BaseApi {
     return this.post(`/api/v1/projects/projects/${projectId}/progress/`)
   }
 
-  static fetchOptions(projectId, optionsetId) {
-    const params = { optionset: optionsetId }
+  static fetchOptions(projectId, optionsetId, searchText) {
+    const params = { optionset: optionsetId, search: searchText || '' }
     return this.get(`/api/v1/projects/projects/${projectId}/options/?${encodeParams(params)}`)
   }
 

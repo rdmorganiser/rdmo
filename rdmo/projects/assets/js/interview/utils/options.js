@@ -21,4 +21,12 @@ const gatherOptions = (question, set) => {
   }, [])
 }
 
-export { gatherOptions }
+const updateOptions = (page, optionset, options) => {
+  page.optionsets.forEach((pageOptionset) => {
+    if (pageOptionset.id == optionset.id) {
+      optionset.options = options
+    }
+  })
+}
+
+export { gatherOptions, updateOptions }
