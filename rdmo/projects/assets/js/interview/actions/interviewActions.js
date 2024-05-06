@@ -116,7 +116,7 @@ export function fetchNavigationError(error) {
 
 export function fetchOptionsets(page) {
   return (dispatch) => {
-    page.optionsets.filter((optionset) => optionset.has_provider)
+    page.optionsets.filter((optionset) => (optionset.has_provider && !optionset.has_search))
                    .forEach((optionset) => dispatch(fetchOptions(page, optionset)))
   }
 }
