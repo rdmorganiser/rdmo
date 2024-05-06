@@ -229,10 +229,19 @@ export function storeValue(value) {
       .then((value) => {
         const page = getState().interview.page
         const sets = getState().interview.sets
+        const question = page.questions.find((question) => question.attribute === value.attribute)
+        const refresh = question.optionsets.some((optionset) => optionset.has_refresh)
 
         dispatch(fetchNavigation(page))
         dispatch(updateProgress())
-        dispatch(resolveConditions(page, sets))
+
+        if (refresh) {
+          // if the refresh flag is set, reload all values for the page,
+          // resolveConditions will be called in fetchValues
+          dispatch(fetchValues(page))
+        } else {
+          dispatch(resolveConditions(page, sets))
+        }
 
         if (isNil(valueFile) && isNil(value.file_name)) {
           return dispatch(storeValueSuccess(value, valueIndex))
@@ -283,10 +292,19 @@ export function deleteValue(value) {
         .then(() => {
           const page = getState().interview.page
           const sets = getState().interview.sets
+          const question = page.questions.find((question) => question.attribute === value.attribute)
+          const refresh = question.optionsets.some((optionset) => optionset.has_refresh)
 
           dispatch(fetchNavigation(page))
           dispatch(updateProgress())
-          dispatch(resolveConditions(page, sets))
+
+          if (refresh) {
+            // if the refresh flag is set, reload all values for the page,
+            // resolveConditions will be called in fetchValues
+            dispatch(fetchValues(page))
+          } else {
+            dispatch(resolveConditions(page, sets))
+          }
 
           dispatch(deleteValueSuccess(value))
         })

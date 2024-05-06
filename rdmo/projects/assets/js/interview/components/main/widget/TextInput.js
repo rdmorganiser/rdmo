@@ -13,7 +13,7 @@ const TextInput = ({ question, value, disabled, focus, updateValue, buttons }) =
   const ref = useRef(null)
   const [inputValue, setInputValue] = useState('')
 
-  useEffect(() => {setInputValue(value.text)}, [value.id])
+  useEffect(() => {setInputValue(value.text)}, [value.text])
   useFocusEffect(ref, [value.text], focus)
 
   const handleChange = useDebouncedCallback((value, text) => {
