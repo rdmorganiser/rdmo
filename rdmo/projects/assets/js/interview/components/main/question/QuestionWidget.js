@@ -13,8 +13,6 @@ import YesNoWidget from '../widget/YesNoWidget'
 
 const QuestionWidget = (props) => {
   switch (props.question.widget_type) {
-    case 'autocomplete':
-      return <SelectWidget {...props} async={true} />
     case 'checkbox':
       return <CheckboxWidget {...props} />
     case 'date':
@@ -26,7 +24,10 @@ const QuestionWidget = (props) => {
     case 'range':
       return <RangeWidget {...props} />
     case 'select':
+    case 'autocomplete':
       return <SelectWidget {...props} />
+    case 'freeautocomplete':
+      return <SelectWidget {...props} creatable={true} />
     case 'text':
       return <TextWidget {...props} />
     case 'textarea':
