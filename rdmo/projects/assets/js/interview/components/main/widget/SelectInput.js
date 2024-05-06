@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Select from 'react-select'
 import AsyncSelect from 'react-select/async'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { isEmpty, isNil } from 'lodash'
 import { useDebouncedCallback } from 'use-debounce'
+import { convert } from 'html-to-text'
 
 import ProjectApi from '../../../api/ProjectApi'
 import projectId from '../../../utils/projectId'
@@ -16,59 +17,39 @@ import OptionText from './common/OptionText'
 
 const SelectInput = ({ question, value, options, disabled, async, updateValue, buttons }) => {
 
-  const selectOptions = options.map(option => ({
-    value: option,
-    label: option.text
-  }))
-
   const [inputValue, setInputValue] = useState('')
-  const [placeholder, setPlaceholder] = useState('')
+  const [isOpen, setIsOpen] = useState(false)
 
-  useEffect(() => {
-    const inputValue = selectOptions.find((selectOption) => (
-      selectOption.value.has_provider ? (value.external_id === selectOption.value.id)
-                                      : (value.option === selectOption.value.id)
-    ))
-
-    if (value.external_id) {
-      setPlaceholder(value.text)
-      setInputValue(inputValue)
-    } else if (value.option) {
-      setPlaceholder(gettext('Select ...'))
-      setInputValue(inputValue)
-    } else {
-      setPlaceholder(gettext('Select ...'))
-    }
-
-  }, [value.id, value.option, value.external_id, options])
-
-  const handleChange = (selectedOption) => {
-    if (isNil(selectedOption)) {
+  const handleChange = (option) => {
+    if (isNil(option)) {
+      setIsOpen(false)  // close the select input when the value is reset
+      setInputValue('')
       updateValue(value, {})
     } else {
-      if (selectedOption.value.has_provider) {
-        updateValue(value, { external_id: selectedOption.value.id, text: selectedOption.value.text })
+      if (option.has_provider) {
+        updateValue(value, { external_id: option.id, text: option.text })
       } else {
-        updateValue(value, { option: selectedOption.value.id })
+        updateValue(value, { option: option.id })
       }
     }
   }
 
   const handleLoadOptions = useDebouncedCallback((searchText, callback) => {
-    if (isEmpty(searchText)) {
+    // Updating "options" through the redux store is buggy, so we use AsyncSelect
+    // and use a asyncrounous callback to update the options in the select field.
+    // Note that the "options" array in the component remains [].
+    const search = searchText || value.text
+    if (isEmpty(search)) {
       callback([])
     } else {
       Promise.all(question.optionsets.map((optionset) => {
-        return ProjectApi.fetchOptions(projectId, optionset.id, searchText)
+        return ProjectApi.fetchOptions(projectId, optionset.id, search)
       })).then((results) => {
-        const selectOptions = results.reduce((selectOptions, options) => {
-          return [...selectOptions, ...options.map(option => ({
-            value: {...option, has_provider: true},
-            label: option.text
-          }))]
+        const options = results.reduce((selectOptions, options) => {
+          return [...selectOptions, ...options.map(option => ({...option, has_provider: true}))]
         }, [])
 
-        callback(selectOptions)
+        callback(options)
       })
     }
   }, 500)
@@ -78,31 +59,59 @@ const SelectInput = ({ question, value, options, disabled, async, updateValue, b
     'default': isDefaultValue(question, value)
   })
 
+  const selectedOption = (isEmpty(options) && !isEmpty(value.external_id)) ? (
+    // if an external id is set but no options are retrived yet, we faka an option with
+    // the stored value, so that it is displayed before the input is opened
+    {
+      id: value.external_id || value.option,
+      text: value.text
+    }
+  ) : options.find((option) => (
+    option.has_provider ? option.id === value.external_id : option.id === value.option
+  ))
+
   const selectProps = {
     classNamePrefix: 'react-select',
     className: classnames,
+    backspaceRemovesValue: false,
     isClearable: true,
-    options: selectOptions,
-    value: inputValue,
-    onChange: (option) => {
-      setInputValue(option)
-      handleChange(option)
-    },
     isDisabled: disabled,
-    formatOptionLabel: ({ value }) => (
+    placeholder: gettext('Select ...'),
+    noOptionsMessage: () => gettext('No options found'),
+    loadingMessage: () => gettext('Loading ...'),
+    options: options,
+    value: selectedOption,
+    inputValue: inputValue,
+    onInputChange: setInputValue,
+    onChange: handleChange,
+    clearValue: () => {
+      console.log('lol')
+    },
+    menuIsOpen: isOpen,
+    onMenuOpen: () => {
+      setIsOpen(true)
+
+      // replace the text shown in the select input with a plain text version
+      if (selectedOption) {
+        setInputValue(convert(selectedOption.text))
+      }
+    },
+    onMenuClose: () => setIsOpen(false),
+    getOptionValue: (option) => option.id,
+    getOptionLabel: (option) => option.text,
+    formatOptionLabel: (option) => (
       <span>
-        <OptionText option={value} />
-        <OptionHelp className="ml-10" option={value} />
+        <OptionText option={option} />
+        <OptionHelp className="ml-10" option={option} />
       </span>
-    ),
-    placeholder: placeholder
+    )
   }
 
   return (
     <div className="interview-input">
       {
         async ? (
-          <AsyncSelect {...selectProps} loadOptions={handleLoadOptions} />
+          <AsyncSelect {...selectProps} loadOptions={handleLoadOptions} defaultOptions />
         ) : (
           <Select {...selectProps} />
         )
