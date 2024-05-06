@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import Select from 'react-select'
 import AsyncSelect from 'react-select/async'
+import CreatableSelect from 'react-select/creatable'
+import CreatableAsyncSelect from 'react-select/async-creatable'
+
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { isEmpty, isNil } from 'lodash'
@@ -10,21 +13,26 @@ import { convert } from 'html-to-text'
 import ProjectApi from '../../../api/ProjectApi'
 import projectId from '../../../utils/projectId'
 import { isDefaultValue } from '../../../utils/value'
+import { getValueOption } from '../../../utils/options'
 
 import OptionHelp from './common/OptionHelp'
 import OptionText from './common/OptionText'
 
 
-const SelectInput = ({ question, value, options, disabled, async, updateValue, buttons }) => {
+const SelectInput = ({ question, value, options, disabled, creatable, updateValue, buttons }) => {
 
   const [inputValue, setInputValue] = useState('')
   const [isOpen, setIsOpen] = useState(false)
 
   const handleChange = (option) => {
     if (isNil(option)) {
-      setIsOpen(false)  // close the select input when the value is reset
+      // close the select input when the value is reset
+      setIsOpen(false)
       setInputValue('')
+
       updateValue(value, {})
+    } else if (option.__isNew__ === true) {
+      updateValue(value, { text: option.value })
     } else {
       if (option.has_provider) {
         updateValue(value, { external_id: option.id, text: option.text })
@@ -59,16 +67,9 @@ const SelectInput = ({ question, value, options, disabled, async, updateValue, b
     'default': isDefaultValue(question, value)
   })
 
-  const selectedOption = (isEmpty(options) && !isEmpty(value.external_id)) ? (
-    // if an external id is set but no options are retrived yet, we faka an option with
-    // the stored value, so that it is displayed before the input is opened
-    {
-      id: value.external_id || value.option,
-      text: value.text
-    }
-  ) : options.find((option) => (
-    option.has_provider ? option.id === value.external_id : option.id === value.option
-  ))
+  const valueOption = getValueOption(options, value)
+
+  const isAsync = question.optionsets.some((optionset) => optionset.has_search)
 
   const selectProps = {
     classNamePrefix: 'react-select',
@@ -80,20 +81,16 @@ const SelectInput = ({ question, value, options, disabled, async, updateValue, b
     noOptionsMessage: () => gettext('No options found'),
     loadingMessage: () => gettext('Loading ...'),
     options: options,
-    value: selectedOption,
+    value: valueOption,
     inputValue: inputValue,
     onInputChange: setInputValue,
     onChange: handleChange,
-    clearValue: () => {
-      console.log('lol')
-    },
     menuIsOpen: isOpen,
     onMenuOpen: () => {
       setIsOpen(true)
-
-      // replace the text shown in the select input with a plain text version
-      if (selectedOption) {
-        setInputValue(convert(selectedOption.text))
+      if (valueOption) {
+        // replace the text shown in the select input with a plain text version
+        setInputValue(convert(valueOption.text))
       }
     },
     onMenuClose: () => setIsOpen(false),
@@ -110,10 +107,18 @@ const SelectInput = ({ question, value, options, disabled, async, updateValue, b
   return (
     <div className="interview-input">
       {
-        async ? (
-          <AsyncSelect {...selectProps} loadOptions={handleLoadOptions} defaultOptions />
+        creatable ? (
+          isAsync ? (
+            <CreatableAsyncSelect {...selectProps} loadOptions={handleLoadOptions} defaultOptions />
+          ) : (
+            <CreatableSelect {...selectProps} />
+          )
         ) : (
-          <Select {...selectProps} />
+          isAsync ? (
+            <AsyncSelect {...selectProps} loadOptions={handleLoadOptions} defaultOptions />
+          ) : (
+            <Select {...selectProps} />
+          )
         )
       }
       {buttons}
@@ -126,7 +131,7 @@ SelectInput.propTypes = {
   value: PropTypes.object.isRequired,
   options: PropTypes.array.isRequired,
   disabled: PropTypes.bool,
-  async: PropTypes.bool,
+  creatable: PropTypes.bool,
   updateValue: PropTypes.func.isRequired,
   buttons: PropTypes.node.isRequired
 }
