@@ -10,7 +10,7 @@ import Unit from './common/Unit'
 
 const RangeInput = ({ question, value, disabled, updateValue, buttons }) => {
   const [inputValue, setInputValue] = useState('')
-  useEffect(() => {setInputValue(value.text)}, [value.id, value.text])
+  useEffect(() => {setInputValue(value.text)}, [value.text])
 
   const handleChange = useDebouncedCallback((value, text) => {
     updateValue(value, { text })

@@ -14,7 +14,7 @@ class ProjectsApi extends BaseApi {
     if (isNil(page_id)) {
       return this.get(`/api/v1/projects/projects/${projectId}/navigation/`)
     } else {
-      return this.get(`/api/v1/projects/projects/${projectId}/navigation/${page_id}`)
+      return this.get(`/api/v1/projects/projects/${projectId}/navigation/${page_id}/`)
     }
   }
 
