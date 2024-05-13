@@ -8,7 +8,7 @@ const FileInput = ({ value, disabled, updateValue, buttons }) => {
     if (acceptedFiles.length == 1) {
       updateValue(value, { file: acceptedFiles[0] })
     }
-  }, [])
+  }, [value.file])
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, disabled })
 
   const classnames = classNames({
