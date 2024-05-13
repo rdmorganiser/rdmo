@@ -91,11 +91,14 @@ export default function interviewReducer(state = initialState, action) {
         ))
       }
     case STORE_VALUE_ERROR:
-       return {
-        ...state,
-        values: state.values.map((value, valueIndex) => (
-          valueIndex == action.valueIndex ? {...value, error: action.error} : value
-        ))
+      if (action.valueIndex > -1) {
+         return {
+          ...state, values: state.values.map((value, valueIndex) => (
+            valueIndex == action.valueIndex ? {...value, error: action.error} : value
+          ))
+        }
+      } else {
+        return { ...state, errors: [...state.errors, { actionType: action.type, ...action.error }] }
       }
     case DELETE_VALUE_INIT:
     case DELETE_SET_INIT:
