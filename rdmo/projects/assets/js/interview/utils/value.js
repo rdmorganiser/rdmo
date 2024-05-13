@@ -18,6 +18,22 @@ const isDefaultValue = (question, value) => {
   return false
 }
 
+const gatherDefaultValues = (page, values) => {
+  const defaultValues = []
+
+  if (!isNil(page) && !isNil(values)) {
+    page.questions.forEach((question) => {
+      values.filter((value) => (isNil(value.id) && (question.attribute === value.attribute))).forEach((value) => {
+        if (isDefaultValue(question, value)) {
+          defaultValues.push(value)
+        }
+      })
+    })
+  }
+
+  return defaultValues
+}
+
 const initValues = (sets, values, element, setPrefix) => {
   if (isNil(setPrefix)) {
     setPrefix = ''
@@ -60,4 +76,4 @@ const initRange = (question, value) => {
   }
 }
 
-export { isDefaultValue, initValues, initRange }
+export { isDefaultValue, gatherDefaultValues, initValues, initRange }

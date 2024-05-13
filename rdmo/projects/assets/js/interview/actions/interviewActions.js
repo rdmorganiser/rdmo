@@ -13,7 +13,7 @@ import { updateLocation } from '../utils/location'
 import { updateOptions } from '../utils/options'
 import { initPage } from '../utils/page'
 import { gatherSets, getDescendants, initSets } from '../utils/set'
-import { initValues } from '../utils/value'
+import { gatherDefaultValues, initValues } from '../utils/value'
 import projectId from '../utils/projectId'
 
 import ValueFactory from '../factories/ValueFactory'
@@ -52,15 +52,19 @@ import {
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 
 export function fetchPage(pageId, back) {
-  if (pageId === 'done') {
-    return (dispatch) => {
+
+  return (dispatch, getState) => {
+    // store unsaved defaults on this page before loading the new page
+    gatherDefaultValues(getState().interview.page, getState().interview.values).forEach((value) => {
+      ValueApi.storeValue(projectId, value)
+    })
+
+    if (pageId === 'done') {
       dispatch(fetchPageInit())
       updateLocation('done')
       dispatch(fetchNavigation(null))
       dispatch(fetchPageSuccess(null, true))
-    }
-  } else {
-    return (dispatch) => {
+    } else {
       dispatch(fetchPageInit())
       const promise = isNil(pageId) ? PageApi.fetchContinue(projectId)
                                     : PageApi.fetchPage(projectId, pageId, back)
