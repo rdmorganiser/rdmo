@@ -243,12 +243,14 @@ export function storeValue(value) {
           dispatch(resolveConditions(page, sets))
         }
 
+        // check if there is a file or if a filename is set (when the file was just erased)
         if (isNil(valueFile) && isNil(value.file_name)) {
           return dispatch(storeValueSuccess(value, valueIndex))
         } else {
+          // upload file after the value is created
           return ValueApi.storeFile(projectId, value, valueFile)
             .then((value) => dispatch(storeValueSuccess(value, valueIndex)))
-            .catch((errors) => dispatch(storeValueError(errors)))
+            .catch((error) => dispatch(storeValueError(error, valueIndex)))
         }
       })
       .catch((error) => dispatch(storeValueError(error, valueIndex)))
