@@ -230,7 +230,7 @@ export function storeValue(value) {
         const page = getState().interview.page
         const sets = getState().interview.sets
         const question = page.questions.find((question) => question.attribute === value.attribute)
-        const refresh = question.optionsets.some((optionset) => optionset.has_refresh)
+        const refresh = question && question.optionsets.some((optionset) => optionset.has_refresh)
 
         dispatch(fetchNavigation(page))
         dispatch(updateProgress())
@@ -344,7 +344,7 @@ export function createSet(attrs) {
     const value = isNil(attrs.attribute) ? null : ValueFactory.create(attrs)
 
     // create an action to be called immediately or after saving the value
-    const action = (value) => {
+    const createSetSuccess = (value) => {
       dispatch(activateSet(set))
 
       const state = getState().interview
@@ -360,9 +360,13 @@ export function createSet(attrs) {
     }
 
     if (isNil(value)) {
-      return action()
+      return createSetSuccess()
     } else {
-      return dispatch(storeValue(value)).then((value) => action(value))
+      return dispatch(storeValue(value)).then((action) => {
+        if (action.type === STORE_VALUE_SUCCESS) {
+          createSetSuccess(action.value)
+        }
+      })
     }
   }
 }
@@ -381,7 +385,7 @@ export function deleteSet(set, setValue) {
 
       return Promise.all(values.map((value) => ValueApi.deleteValue(projectId, value)))
         .then(() => dispatch(deleteSetSuccess(set)))
-        .catch((errors) => dispatch(deleteValueError(errors)))
+        .catch((errors) => dispatch(deleteSetError(errors)))
     }
   } else {
     return (dispatch, getState) => {
