@@ -20,6 +20,8 @@ const CheckboxWidget = ({ question, values, currentSet, disabled, createValue, u
       set_index: currentSet.set_index,
       collection_index: collectionIndex,
       set_collection: question.set_collection,
+      unit: question.unit,
+      value_type: question.value_type
     }
 
     if (option.has_provider) {
@@ -47,6 +49,7 @@ const CheckboxWidget = ({ question, values, currentSet, disabled, createValue, u
                 return (
                   <React.Fragment key={optionIndex}>
                     <CheckboxInput
+                      question={question}
                       value={value}
                       option={option}
                       disabled={disabled}

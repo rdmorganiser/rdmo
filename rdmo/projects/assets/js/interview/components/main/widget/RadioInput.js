@@ -14,16 +14,27 @@ import OptionText from './common/OptionText'
 const RadioInput = ({ question, value, options, disabled, updateValue, buttons }) => {
   const handleChange = (option) => {
     if (option.has_provider) {
-      updateValue(value, { text: option.text, external_id: option.id })
+      updateValue(value, {
+        text: option.text,
+        external_id: option.id,
+        unit: question.unit,
+        value_type: question.value_type
+      })
     } else {
-      updateValue(value, { option: option.id })
+      updateValue(value, {
+        option: option.id,
+        unit: question.unit,
+        value_type: question.value_type
+      })
     }
   }
 
   const handleAdditionalValueChange = useDebouncedCallback((value, option, additionalInput) => {
     updateValue(value, {
       option: option.id,
-      text: additionalInput
+      text: additionalInput,
+      unit: question.unit,
+      value_type: question.value_type
     })
   }, 500)
 

@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { useDropzone } from 'react-dropzone'
 
-const FileInput = ({ value, disabled, updateValue, buttons }) => {
+const FileInput = ({ question, value, disabled, updateValue, buttons }) => {
   const onDrop = useCallback(acceptedFiles => {
     if (acceptedFiles.length == 1) {
-      updateValue(value, { file: acceptedFiles[0] })
+      updateValue(value, { file: acceptedFiles[0], unit: question.unit, value_type: question.value_type })
     }
   }, [value.file])
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, disabled })
@@ -53,6 +53,7 @@ const FileInput = ({ value, disabled, updateValue, buttons }) => {
 }
 
 FileInput.propTypes = {
+  question: PropTypes.object.isRequired,
   value: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
   updateValue: PropTypes.func.isRequired,

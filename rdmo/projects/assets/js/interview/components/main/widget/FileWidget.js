@@ -17,6 +17,7 @@ const FileWidget = ({ question, values, currentSet, disabled, createValue, updat
           return (
             <div key={valueIndex} className="interview-widget">
               <FileInput
+                question={question}
                 value={value}
                 disabled={disabled}
                 updateValue={updateValue}
