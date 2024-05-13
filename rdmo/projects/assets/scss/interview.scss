@@ -14,7 +14,8 @@
         margin-top: 20px;
         margin-bottom: 10px;
     }
-    a {
+    li > a,
+    li > span {
         display: inline-block;
         max-width: 100%;
         white-space: nowrap;
