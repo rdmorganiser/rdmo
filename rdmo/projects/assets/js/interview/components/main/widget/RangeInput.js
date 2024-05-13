@@ -13,7 +13,7 @@ const RangeInput = ({ question, value, disabled, updateValue, buttons }) => {
   useEffect(() => {setInputValue(value.text)}, [value.text])
 
   const handleChange = useDebouncedCallback((value, text) => {
-    updateValue(value, { text })
+    updateValue(value, { text, unit: question.unit, value_type: question.value_type })
   }, 500)
 
   const classnames = classNames({

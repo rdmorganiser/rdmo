@@ -32,12 +32,25 @@ const SelectInput = ({ question, value, options, disabled, creatable, updateValu
 
       updateValue(value, {})
     } else if (option.__isNew__ === true) {
-      updateValue(value, { text: option.value })
+      updateValue(value, {
+        text: option.value,
+        unit: question.unit,
+        value_type: question.value_type
+      })
     } else {
       if (option.has_provider) {
-        updateValue(value, { external_id: option.id, text: option.text })
+        updateValue(value, {
+          external_id: option.id,
+          text: option.text,
+          unit: question.unit,
+          value_type: question.value_type
+        })
       } else {
-        updateValue(value, { option: option.id })
+        updateValue(value, {
+          option: option.id,
+          unit: question.unit,
+          value_type: question.value_type
+        })
       }
     }
   }

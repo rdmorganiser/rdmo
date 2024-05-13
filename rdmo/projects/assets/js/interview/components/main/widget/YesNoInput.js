@@ -11,7 +11,7 @@ const YesNoInput = ({ question, value, disabled, updateValue, buttons }) => {
   useEffect(() => {setInputValue(value.text)}, [value.id, value.text])
 
   const handleChange = (value, text) => {
-    updateValue(value, { text })
+    updateValue(value, { text, unit: question.unit, value_type: question.value_type })
   }
 
   const classnames = classNames({
