@@ -8,7 +8,7 @@ import AdditionalTextareaInput from './common/AdditionalTextareaInput'
 import OptionHelp from './common/OptionHelp'
 import OptionText from './common/OptionText'
 
-const CheckboxInput = ({ value, option, disabled, onCreate, onUpdate, onDelete }) => {
+const CheckboxInput = ({ question, value, option, disabled, onCreate, onUpdate, onDelete }) => {
 
   const checked = !isNil(value)
 
@@ -23,9 +23,18 @@ const CheckboxInput = ({ value, option, disabled, onCreate, onUpdate, onDelete }
   const handleAdditionalValueChange = useDebouncedCallback((value, option, additionalInput) => {
     if (checked) {
       if (option.has_provider) {
-        onUpdate(value, { text: option.text, external_id: option.id })
+        onUpdate(value, {
+          text: option.text,
+          external_id: option.id,
+          unit: question.unit,
+          value_type: question.value_type
+        })
       } else {
-        onUpdate(value, { option: option.id })
+        onUpdate(value, {
+          option: option.id,
+          unit: question.unit,
+          value_type: question.value_type
+        })
       }
     } else {
       onCreate(option, additionalInput)
@@ -73,6 +82,7 @@ const CheckboxInput = ({ value, option, disabled, onCreate, onUpdate, onDelete }
 }
 
 CheckboxInput.propTypes = {
+  question: PropTypes.object,
   value: PropTypes.object,
   option: PropTypes.object,
   disabled: PropTypes.bool,

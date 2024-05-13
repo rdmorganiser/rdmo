@@ -17,7 +17,7 @@ const TextInput = ({ question, value, disabled, focus, updateValue, buttons }) =
   useFocusEffect(ref, [value.text], focus)
 
   const handleChange = useDebouncedCallback((value, text) => {
-    updateValue(value, { text })
+    updateValue(value, { text, unit: question.unit, value_type: question.value_type })
   }, 500)
 
   const classnames = classNames({

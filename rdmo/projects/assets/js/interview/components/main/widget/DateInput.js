@@ -42,7 +42,7 @@ const DateInput = ({ question, value, disabled, updateValue, buttons }) => {
 
   const handleChange = (date) => {
     const text = date.toISOString().slice(0,10)
-    updateValue(value, { text })
+    updateValue(value, { text, unit: question.unit, value_type: question.value_type })
   }
 
   const classnames = classNames({
