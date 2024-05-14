@@ -16,7 +16,7 @@ const Attribute = ({ config, attribute, elementActions, display='list', indent=0
   const editUrl = buildPath(config.baseUrl, 'attributes', attribute.id)
   const copyUrl = buildPath(config.baseUrl, 'attributes', attribute.id, 'copy')
   const nestedUrl = buildPath(config.baseUrl, 'attributes', attribute.id, 'nested')
-  const exportUrl = buildPath('/api/v1/', 'domain', 'attributes', attribute.id, 'export')
+  const exportUrl = buildPath(config.apiUrl, 'domain', 'attributes', attribute.id, 'export')
 
   const fetchEdit = () => elementActions.fetchElement('attributes', attribute.id)
   const fetchCopy = () => elementActions.fetchElement('attributes', attribute.id, 'copy')

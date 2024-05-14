@@ -21,7 +21,7 @@ const QuestionSet = ({ config, questionset, configActions, elementActions, displ
   const editUrl = buildPath(config.baseUrl, 'questionsets', questionset.id)
   const copyUrl = buildPath(config.baseUrl, 'questionsets', questionset.id, 'copy')
   const nestedUrl = buildPath(config.baseUrl, 'questionsets', questionset.id, 'nested')
-  const exportUrl = buildPath('/api/v1/', 'questions', 'questionsets', questionset.id, 'export')
+  const exportUrl = buildPath(config.apiUrl, 'questions', 'questionsets', questionset.id, 'export')
 
   const fetchEdit = () => elementActions.fetchElement('questionsets', questionset.id)
   const fetchCopy = () => elementActions.fetchElement('questionsets', questionset.id, 'copy')

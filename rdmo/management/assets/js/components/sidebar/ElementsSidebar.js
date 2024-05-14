@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 import isNil from 'lodash/isNil'
 import invert from 'lodash/invert'
 
-import baseUrl from 'rdmo/core/assets/js/utils/baseUrl'
-
 import { elementTypes, elementModules } from '../../constants/elements'
 
 import { buildPath } from '../../utils/location'
@@ -18,8 +16,8 @@ const ElementsSidebar = ({ config, elements, elementActions, importActions }) =>
   const { elementType, elementId } = elements
 
   const model = invert(elementTypes)[elementType]
-  const exportUrl = isNil(elementId) ? `${baseUrl}/api/v1/${elementModules[model]}/${elementType}/export/`
-                                     : `${baseUrl}/api/v1/${elementModules[model]}/${elementType}/${elementId}/export/`
+  const exportUrl = isNil(elementId) ? buildPath(config.apiUrl, elementModules[model], elementType, 'export')
+                                     : buildPath(config.apiUrl, elementModules[model], elementType, elementId, 'export')
   const exportParams = getExportParams(config.filter[elementType])
 
   return (

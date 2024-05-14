@@ -14,7 +14,7 @@ const View = ({ config, view, elementActions, filter=false, filterSites=false, f
 
   const editUrl = buildPath(config.baseUrl, 'views', view.id)
   const copyUrl = buildPath(config.baseUrl, 'views', view.id, 'copy')
-  const exportUrl = buildPath('/api/v1/', 'views', 'views', view.id, 'export')
+  const exportUrl = buildPath(config.apiUrl, 'views', 'views', view.id, 'export')
 
   const fetchEdit = () => elementActions.fetchElement('views', view.id)
   const fetchCopy = () => elementActions.fetchElement('views', view.id, 'copy')

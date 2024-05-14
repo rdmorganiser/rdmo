@@ -22,7 +22,7 @@ const Page = ({ config, page, configActions, elementActions, display='list', ind
   const editUrl = buildPath(config.baseUrl, 'pages', page.id)
   const copyUrl = buildPath(config.baseUrl, 'pages', page.id, 'copy')
   const nestedUrl = buildPath(config.baseUrl, 'pages', page.id, 'nested')
-  const exportUrl = buildPath('/api/v1/', 'questions', 'pages', page.id, 'export')
+  const exportUrl = buildPath(config.apiUrl, 'questions', 'pages', page.id, 'export')
 
   const fetchEdit = () => elementActions.fetchElement('pages', page.id)
   const fetchCopy = () => elementActions.fetchElement('pages', page.id, 'copy')

@@ -18,7 +18,7 @@ const Catalog = ({ config, catalog, elementActions, display='list',
   const editUrl = buildPath(config.baseUrl, 'catalogs', catalog.id)
   const copyUrl = buildPath(config.baseUrl, 'catalogs', catalog.id, 'copy')
   const nestedUrl = buildPath(config.baseUrl, 'catalogs', catalog.id, 'nested')
-  const exportUrl = buildPath('/api/v1/', 'questions', 'catalogs', catalog.id, 'export')
+  const exportUrl = buildPath(config.apiUrl, 'questions', 'catalogs', catalog.id, 'export')
 
   const fetchEdit = () => elementActions.fetchElement('catalogs', catalog.id)
   const fetchCopy = () => elementActions.fetchElement('catalogs', catalog.id, 'copy')

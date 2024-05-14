@@ -17,7 +17,7 @@ const Question = ({ config, question, elementActions, display='list', indent=0,
 
   const editUrl = buildPath(config.baseUrl, 'questions', question.id)
   const copyUrl = buildPath(config.baseUrl, 'questions', question.id, 'copy')
-  const exportUrl = buildPath('/api/v1/', 'questions', 'questions', question.id, 'export')
+  const exportUrl = buildPath(config.apiUrl, 'questions', 'questions', question.id, 'export')
 
   const fetchEdit = () => elementActions.fetchElement('questions', question.id)
   const fetchCopy = () => elementActions.fetchElement('questions', question.id, 'copy')
