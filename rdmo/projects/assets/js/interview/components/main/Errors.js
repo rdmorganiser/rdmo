@@ -17,7 +17,11 @@ const Errors = ({ templates, errors }) => {
       <ul className="well list-unstyled text-danger">
         {
           errors.map((error, errorIndex) => (
-            <li key={errorIndex}>{error.actionType}: {error.statusText} ({error.status})</li>
+            <li key={errorIndex}>
+              {error.actionType}
+              {error.statusText && <>: {error.statusText}</>}
+              {error.status && <>({error.status})</>}
+            </li>
           ))
         }
       </ul>

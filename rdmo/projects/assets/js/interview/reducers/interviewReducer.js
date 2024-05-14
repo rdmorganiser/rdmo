@@ -102,9 +102,10 @@ export default function interviewReducer(state = initialState, action) {
       }
     case DELETE_VALUE_INIT:
     case DELETE_SET_INIT:
+      return { ...state, errors: [] }
     case DELETE_VALUE_ERROR:
     case DELETE_SET_ERROR:
-      return state
+      return { ...state, errors: [...state.errors, { actionType: action.type, ...action.error }] }
     default:
       return state
   }
