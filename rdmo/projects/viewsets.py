@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 from django.http import Http404, HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
 
@@ -394,8 +395,15 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
             if element.attribute == value.attribute:
                 attributes.update([descendant.attribute for descendant in element.descendants])
 
-        values = self.get_queryset().filter(attribute__in=attributes, set_prefix=value.set_prefix,
-                                            set_index=value.set_index)
+        # construct the set_prefix for decendants for this set
+        decendants_set_prefix = f'{value.set_prefix}|{value.set_index}' if value.set_prefix else str(value.set_index)
+
+        # delete all values for this set and all decendants
+        values = self.get_queryset().filter(attribute__in=attributes) \
+                                    .filter(
+                                        Q(set_prefix=value.set_prefix, set_index=value.set_index) |
+                                        Q(set_prefix__startswith=decendants_set_prefix)
+                                    )
         values.delete()
 
         return Response(status=204)

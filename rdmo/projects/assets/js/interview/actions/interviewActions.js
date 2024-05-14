@@ -425,11 +425,11 @@ export function deleteSetInit() {
 }
 
 export function deleteSetSuccess(set) {
-
   return (dispatch, getState) => {
     // again, gather all values for this set and it's descendants
-    const sets = [...getDescendants(getState().interview.sets, set), set]
+    const sets = getDescendants(getState().interview.sets, set)
     const values = getDescendants(getState().interview.values, set)
+
     return dispatch({type: DELETE_SET_SUCCESS, sets, values})
   }
 }
