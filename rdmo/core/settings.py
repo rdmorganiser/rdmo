@@ -4,8 +4,6 @@ SITE_ID = 1
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', 'ip6-localhost', '127.0.0.1', '[::1]']
-
 INSTALLED_APPS = [
     # django modules
     'django.contrib.admin',
