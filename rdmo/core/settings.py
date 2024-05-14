@@ -4,8 +4,6 @@ SITE_ID = 1
 
 DEBUG = False
 
-ALLOWED_HOSTS = []
-
 INSTALLED_APPS = [
     # django modules
     'django.contrib.admin',
