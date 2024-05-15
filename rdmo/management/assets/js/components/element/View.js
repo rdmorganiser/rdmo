@@ -18,17 +18,18 @@ const View = ({ config, view, elementActions, filter=false, filterSites=false, f
 
   const fetchEdit = () => elementActions.fetchElement('views', view.id)
   const fetchCopy = () => elementActions.fetchElement('views', view.id, 'copy')
-  const toggleAvailable = () => elementActions.storeElement('views', {...view, available: !view.available })
-  const toggleLocked = () => elementActions.storeElement('views', {...view, locked: !view.locked })
-  const toggleCurrentSite = () => elementActions.storeElement('views', view, null, 'toggle-site')
-  let has_current_site =  config.settings.multisite ? view.sites.includes(config.currentSite.id) : true
+  const toggleAvailable = () => elementActions.storeElement('views', {...view, available: !view.available }, null, false)
+  const toggleLocked = () => elementActions.storeElement('views', {...view, locked: !view.locked }, null, false)
+  const toggleCurrentSite = () => elementActions.storeElement('views', view, 'toggle-site', false)
 
   return showElement && (
     <li className="list-group-item">
       <div className="element">
         <div className="pull-right">
-          <ToggleCurrentSiteLink has_current_site={has_current_site} locked={view.locked}
-                              onClick={toggleCurrentSite} show={config.settings.multisite}/>
+          <ToggleCurrentSiteLink hasCurrentSite={config.settings.multisite ? view.sites.includes(config.currentSite.id) : true}
+                                 locked={view.locked}
+                                 onClick={toggleCurrentSite}
+                                 show={config.settings.multisite}/>
           <ReadOnlyIcon title={gettext('This view is read only')} show={view.read_only} />
           <EditLink title={gettext('Edit view')} href={editUrl} onClick={fetchEdit} />
           <CopyLink title={gettext('Copy view')} href={copyUrl} onClick={fetchCopy} />
