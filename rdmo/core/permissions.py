@@ -1,7 +1,5 @@
 import logging
 
-from django.core.exceptions import FieldDoesNotExist
-
 from rest_framework.permissions import DjangoModelPermissions, DjangoObjectPermissions
 
 logger = logging.getLogger(__name__)
@@ -86,13 +84,4 @@ class CanToggleElementCurrentSite(DjangoModelPermissions):
 
     @log_result
     def has_permission(self, request, view):
-
-        try:
-            # check for existence of field sites
-            queryset = self._queryset(view)
-            model_cls = queryset.model
-            model_cls._meta.get_field('sites')
-        except FieldDoesNotExist:
-            return False
-
         return super().has_permission(request, view)
