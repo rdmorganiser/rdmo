@@ -103,20 +103,20 @@ LockedLink.propTypes = {
   disabled: PropTypes.bool
 }
 
-const ToggleCurrentSiteLink = ({ has_current_site, locked, onClick, show }) => {
+const ToggleCurrentSiteLink = ({ hasCurrentSite, locked, onClick, show }) => {
   const className = classNames({
     'element-btn-link fa': true,
-    'fa-plus-square-o': !has_current_site,
-    'fa-minus-square-o': has_current_site,
+    'fa-plus-square-o': !hasCurrentSite,
+    'fa-minus-square-o': hasCurrentSite,
   })
-  const title = has_current_site ? gettext('Remove your site'): gettext('Add your site')
+  const title = hasCurrentSite ? gettext('Remove your site'): gettext('Add your site')
 
   return  show && <LinkButton className={className} title={locked ? gettext('Locked') : title}
                      disabled={locked} onClick={onClick} />
 }
 
 ToggleCurrentSiteLink.propTypes = {
-  has_current_site: PropTypes.bool.isRequired,
+  hasCurrentSite: PropTypes.bool.isRequired,
   locked: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
   show: PropTypes.bool
