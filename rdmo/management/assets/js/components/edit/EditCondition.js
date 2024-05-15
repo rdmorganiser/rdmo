@@ -22,7 +22,7 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
   const { elementAction, parent, attributes, options } = elements
 
   const updateCondition = (key, value) => elementActions.updateElement(condition, {[key]: value})
-  const storeCondition = (back) => elementActions.storeElement('conditions', condition, back)
+  const storeCondition = (back) => elementActions.storeElement('conditions', condition, elementAction, back)
   const deleteCondition = () => elementActions.deleteElement('conditions', condition)
 
   const editAttribute = (attribute) => elementActions.fetchElement('attributes', attribute)

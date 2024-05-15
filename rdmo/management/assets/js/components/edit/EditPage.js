@@ -45,7 +45,7 @@ const EditPage = ({ config, page, elements, elementActions }) => {
       elementActions.updateElement(page, { [key]: value })
     }
   }
-  const storePage = (back) => elementActions.storeElement('pages', page, back)
+  const storePage = (back) => elementActions.storeElement('pages', page, elementAction, back)
   const deletePage = () => elementActions.deleteElement('pages', page)
 
   const editElement = (value) => {
