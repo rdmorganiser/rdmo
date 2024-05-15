@@ -25,7 +25,7 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
   const { elementAction, sections } = elements
 
   const updateCatalog = (key, value) => elementActions.updateElement(catalog, {[key]: value})
-  const storeCatalog = (back) => elementActions.storeElement('catalogs', catalog, back)
+  const storeCatalog = (back) => elementActions.storeElement('catalogs', catalog, elementAction, back)
   const deleteCatalog = () => elementActions.deleteElement('catalogs', catalog)
 
   const editSection = (value) => elementActions.fetchElement('sections', value.section)

@@ -6,7 +6,6 @@ import OptionsApi from '../api/OptionsApi'
 import QuestionsApi from '../api/QuestionsApi'
 import TasksApi from '../api/TasksApi'
 import ViewsApi from '../api/ViewsApi'
-import MultiSiteApi from '../api/MultiSiteApi'
 
 import ConditionsFactory from '../factories/ConditionsFactory'
 import DomainFactory from '../factories/DomainFactory'
@@ -343,7 +342,7 @@ export function fetchElementError(error) {
 
 // store element
 
-export function storeElement(elementType, element, back, elementAction=null) {
+export function storeElement(elementType, element, elementAction, back) {
   return function(dispatch, getState) {
 
     dispatch(storeElementInit(element, elementAction))
@@ -351,11 +350,7 @@ export function storeElement(elementType, element, back, elementAction=null) {
     let action
     switch (elementType) {
       case 'catalogs':
-        if (isNil(elementAction)) {
-          action = () => QuestionsApi.storeCatalog(element)
-        } else {
-          action = () => MultiSiteApi.UpdateElementAction(element, elementAction)
-        }
+        action = () => QuestionsApi.storeCatalog(element, elementAction)
         break
 
       case 'sections':
@@ -391,19 +386,11 @@ export function storeElement(elementType, element, back, elementAction=null) {
         break
 
       case 'tasks':
-        if (isNil(elementAction)) {
-          action = () => TasksApi.storeTask(element, elementAction)
-        } else {
-          action = () => MultiSiteApi.UpdateElementAction(element, elementAction)
-        }
+        action = () => TasksApi.storeTask(element, elementAction)
         break
 
       case 'views':
-        if (isNil(elementAction)) {
-          action = () => ViewsApi.storeView(element, elementAction)
-        } else {
-          action = () => MultiSiteApi.UpdateElementAction(element, elementAction)
-        }
+        action = () => ViewsApi.storeView(element, elementAction)
         break
     }
 
@@ -666,9 +653,9 @@ export function dropElement(dragElement, dropElement, mode) {
       const element = {...getState().elements.element}
       const { dragParent, dropParent } = moveElement(element, dragElement, dropElement, mode)
 
-      dispatch(storeElement(elementTypes[dragParent.model], dragParent))
-      if (!isNil(dropParent)) {
-        dispatch(storeElement(elementTypes[dropParent.model], dropParent))
+    dispatch(storeElement(elementTypes[dragParent.model], dragParent, null, false))
+    if (!isNil(dropParent)) {
+      dispatch(storeElement(elementTypes[dropParent.model], dropParent, null, false))
       }
     }
   }
