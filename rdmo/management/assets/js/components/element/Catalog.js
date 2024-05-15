@@ -24,17 +24,20 @@ const Catalog = ({ config, catalog, elementActions, display='list',
   const fetchCopy = () => elementActions.fetchElement('catalogs', catalog.id, 'copy')
   const fetchNested = () => elementActions.fetchElement('catalogs', catalog.id, 'nested')
 
-  const toggleAvailable = () => elementActions.storeElement('catalogs', {...catalog, available: !catalog.available })
-  const toggleLocked = () => elementActions.storeElement('catalogs', {...catalog, locked: !catalog.locked })
-  const toggleCurrentSite = () => elementActions.storeElement('catalogs', catalog, null, 'toggle-site')
-  let has_current_site =  config.settings.multisite ? catalog.sites.includes(config.currentSite.id) : true
+  const toggleAvailable = () => elementActions.storeElement('catalogs', {...catalog, available: !catalog.available }, null, false)
+  const toggleLocked = () => elementActions.storeElement('catalogs', {...catalog, locked: !catalog.locked }, null, false)
+
+  const toggleCurrentSite = () => elementActions.storeElement('catalogs', catalog, 'toggle-site', false)
+
   const createSection = () => elementActions.createElement('sections', { catalog })
 
   const elementNode = (
     <div className="element">
       <div className="pull-right">
-        <ToggleCurrentSiteLink has_current_site={has_current_site} locked={catalog.locked}
-                              onClick={toggleCurrentSite} show={config.settings.multisite}/>
+        <ToggleCurrentSiteLink hasCurrentSite={config.settings.multisite ? catalog.sites.includes(config.currentSite.id) : true}
+                               locked={catalog.locked}
+                               onClick={toggleCurrentSite}
+                               show={config.settings.multisite}/>
         <ReadOnlyIcon title={gettext('This catalog is read only')} show={catalog.read_only} />
         <NestedLink title={gettext('View catalog nested')} href={nestedUrl} onClick={fetchNested} />
         <EditLink title={gettext('Edit catalog')} href={editUrl} onClick={fetchEdit} />
