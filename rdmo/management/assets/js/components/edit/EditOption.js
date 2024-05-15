@@ -24,7 +24,7 @@ const EditOption = ({ config, option, elements, elementActions }) => {
   const { elementAction, parent } = elements
 
   const updateOption = (key, value) => elementActions.updateElement(option, {[key]: value})
-  const storeOption = (back) => elementActions.storeElement('options', option, back)
+  const storeOption = (back) => elementActions.storeElement('options', option, elementAction, back)
   const deleteOption = () => elementActions.deleteElement('options', option)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()

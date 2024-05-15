@@ -24,7 +24,7 @@ const EditSection = ({ config, section, elements, elementActions }) => {
   const { elementAction, parent, pages } = elements
 
   const updateSection = (key, value) => elementActions.updateElement(section, {[key]: value})
-  const storeSection = (back) => elementActions.storeElement('sections', section, back)
+  const storeSection = (back) => elementActions.storeElement('sections', section, elementAction, back)
   const deleteSection = () => elementActions.deleteElement('sections', section)
 
   const editPage = (value) => elementActions.fetchElement('pages', value.page)
