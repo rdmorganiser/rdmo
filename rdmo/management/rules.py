@@ -1,11 +1,7 @@
-import logging
-
 from django.conf import settings
 
 import rules
 from rules.predicates import is_authenticated, is_superuser
-
-logger = logging.getLogger(__name__)
 
 
 @rules.predicate
