@@ -45,7 +45,7 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
       elementActions.updateElement(questionset, { [key]: value })
     }
   }
-  const storeQuestionSet = (back) => elementActions.storeElement('questionsets', questionset, back)
+  const storeQuestionSet = (back) => elementActions.storeElement('questionsets', questionset, elementAction, back)
   const deleteQuestionSet = () => elementActions.deleteElement('questionsets', questionset)
 
   const editElement = (value) => {
