@@ -112,7 +112,7 @@ def get_set(context, attribute, set_prefix='', project=None):
 
 
 @register.simple_tag
-def render_custom_inline_list(values=None, sep=',', sep_last=', and'):
+def join_values_inline(values=None, separator=',', separator_last=', and', separator_two='and'):
     values = values or []
 
     if not values:
@@ -122,20 +122,11 @@ def render_custom_inline_list(values=None, sep=',', sep_last=', and'):
         return values[0]['value_and_unit']
 
     if len(values) == 2:
-        if sep_last.startswith(', '):  # for english sep_last
-            sep_last = sep_last.split(', ')[-1]
-        return f"{values[0]['value_and_unit']} {sep_last} {values[1]['value_and_unit']}"
+        return f"{values[0]['value_and_unit']} {separator_two} {values[1]['value_and_unit']}"
 
-    _text = ''
-    for n,value in enumerate(values):
-        if n == len(values) - 1 and _text:
-            _text += f"{sep_last} "
-        _text += value['value_and_unit']
-        if n < len(values) - 2:
-            _text += f"{sep} "
-        else:
-            _text += ' '
-    return _text
+    separators = [separator]*(len(values)-2) + [separator_last] + ['']
+    text = " ".join(i + j for i, j in zip(values, separators))
+    return text
 
 
 @register.inclusion_tag('views/tags/value.html', takes_context=True)
