@@ -342,7 +342,7 @@ export function fetchElementError(error) {
 
 // store element
 
-export function storeElement(elementType, element, elementAction, back) {
+export function storeElement(elementType, element, elementAction = null, back = false) {
   return function(dispatch, getState) {
 
     dispatch(storeElementInit(element, elementAction))
@@ -653,9 +653,9 @@ export function dropElement(dragElement, dropElement, mode) {
       const element = {...getState().elements.element}
       const { dragParent, dropParent } = moveElement(element, dragElement, dropElement, mode)
 
-    dispatch(storeElement(elementTypes[dragParent.model], dragParent, null, false))
+    dispatch(storeElement(elementTypes[dragParent.model], dragParent))
     if (!isNil(dropParent)) {
-      dispatch(storeElement(elementTypes[dropParent.model], dropParent, null, false))
+      dispatch(storeElement(elementTypes[dropParent.model], dropParent))
       }
     }
   }

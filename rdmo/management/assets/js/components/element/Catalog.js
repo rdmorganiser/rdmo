@@ -24,10 +24,10 @@ const Catalog = ({ config, catalog, elementActions, display='list',
   const fetchCopy = () => elementActions.fetchElement('catalogs', catalog.id, 'copy')
   const fetchNested = () => elementActions.fetchElement('catalogs', catalog.id, 'nested')
 
-  const toggleAvailable = () => elementActions.storeElement('catalogs', {...catalog, available: !catalog.available }, null, false)
-  const toggleLocked = () => elementActions.storeElement('catalogs', {...catalog, locked: !catalog.locked }, null, false)
+  const toggleAvailable = () => elementActions.storeElement('catalogs', {...catalog, available: !catalog.available })
+  const toggleLocked = () => elementActions.storeElement('catalogs', {...catalog, locked: !catalog.locked })
 
-  const toggleCurrentSite = () => elementActions.storeElement('catalogs', catalog, 'toggle-site', false)
+  const toggleCurrentSite = () => elementActions.storeElement('catalogs', catalog, 'toggle-site')
 
   const createSection = () => elementActions.createElement('sections', { catalog })
 

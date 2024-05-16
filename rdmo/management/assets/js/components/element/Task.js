@@ -19,9 +19,9 @@ const Task = ({ config, task, elementActions, filter=false, filterSites=false, f
 
   const fetchEdit = () => elementActions.fetchElement('tasks', task.id)
   const fetchCopy = () => elementActions.fetchElement('tasks', task.id, 'copy')
-  const toggleAvailable = () => elementActions.storeElement('tasks', {...task, available: !task.available }, null, false)
-  const toggleLocked = () => elementActions.storeElement('tasks', {...task, locked: !task.locked }, null, false)
-  const toggleCurrentSite = () => elementActions.storeElement('tasks', task, 'toggle-site', false)
+  const toggleAvailable = () => elementActions.storeElement('tasks', {...task, available: !task.available })
+  const toggleLocked = () => elementActions.storeElement('tasks', {...task, locked: !task.locked })
+  const toggleCurrentSite = () => elementActions.storeElement('tasks', task, 'toggle-site')
 
   const fetchCondition = (index) => elementActions.fetchElement('conditions', task.conditions[index])
 
