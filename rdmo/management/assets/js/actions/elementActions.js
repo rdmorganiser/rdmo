@@ -235,9 +235,19 @@ export function fetchElement(elementType, elementId, elementAction=null) {
             QuestionsApi.fetchQuestions('index'),
             TasksApi.fetchTasks('index'),
           ]).then(([element, attributes, conditions, pages, questionsets,
-                    questions, tasks]) => ({
+                    questions, tasks]) => {
+              if (elementAction == 'copy') {
+                delete element.conditions
+                delete element.pages
+                delete element.questionsets
+                delete element.questions
+                delete element.tasks
+              }
+
+            return {
             element, attributes, conditions, pages, questionsets, questions, tasks
-          }))
+            }
+          })
         }
         break
 
