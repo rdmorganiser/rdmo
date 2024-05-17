@@ -1,5 +1,6 @@
 import logging
 
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.db import models
@@ -137,6 +138,10 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
                                         .annotate(highest=Subquery(highest.values('project__level')[:1])) \
                                         .filter(highest=F('project__level')) \
                                         .select_related('user')
+
+        if settings.SOCIALACCOUNT:
+            # prefetch the users social account, if that relation exists
+            memberships = memberships.prefetch_related('user__socialaccount_set')
 
         integrations = Integration.objects.filter(project__in=ancestors)
         context['catalogs'] = Catalog.objects.filter_current_site() \
