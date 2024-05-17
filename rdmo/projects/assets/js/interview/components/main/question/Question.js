@@ -11,7 +11,7 @@ import QuestionText from './QuestionText'
 import QuestionWarning from './QuestionWarning'
 import QuestionWidget from './QuestionWidget'
 
-const Question = ({ templates, question, values, disabled, isManager, focus,
+const Question = ({ templates, question, values, disabled, isManager,
                     currentSet, createValue, updateValue, deleteValue }) => {
   return checkQuestion(question, currentSet) && (
     <div className={`interview-question col-md-${question.width || '12'}`}>
@@ -25,7 +25,6 @@ const Question = ({ templates, question, values, disabled, isManager, focus,
         question={question}
         values={values}
         disabled={disabled}
-        focus={focus}
         currentSet={currentSet}
         createValue={createValue}
         updateValue={updateValue}
@@ -41,7 +40,6 @@ Question.propTypes = {
   values: PropTypes.array.isRequired,
   disabled: PropTypes.bool.isRequired,
   isManager: PropTypes.bool.isRequired,
-  focus: PropTypes.bool.isRequired,
   currentSet: PropTypes.object.isRequired,
   createValue: PropTypes.func.isRequired,
   updateValue: PropTypes.func.isRequired,

@@ -2,9 +2,9 @@ import { isNil } from 'lodash'
 
 import { useEffect } from 'react'
 
-const useFocusEffect = (ref, dependencies, focus) => {
+const useFocusEffect = (ref, show) => {
   useEffect(() => {
-    if ((isNil(focus) || focus) && !isNil(ref.current)) {
+    if (show && !isNil(ref.current)) {
       const timeout = setTimeout(() => {
         ref.current.focus()
       }, 200)
@@ -14,7 +14,7 @@ const useFocusEffect = (ref, dependencies, focus) => {
         clearTimeout(timeout)
       }
     }
-  }, [...dependencies, isNil(focus) || focus])
+  }, [show])
 }
 
 export default useFocusEffect

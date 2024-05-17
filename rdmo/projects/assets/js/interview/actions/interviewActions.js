@@ -13,7 +13,7 @@ import { updateLocation } from '../utils/location'
 import { updateOptions } from '../utils/options'
 import { initPage } from '../utils/page'
 import { gatherSets, getDescendants, initSets } from '../utils/set'
-import { gatherDefaultValues, initValues } from '../utils/value'
+import { activateFirstValue, gatherDefaultValues, initValues } from '../utils/value'
 import projectId from '../utils/projectId'
 
 import ValueFactory from '../factories/ValueFactory'
@@ -159,6 +159,8 @@ export function fetchValues(page) {
         initSets(sets, page)
         initValues(sets, values, page)
 
+        activateFirstValue(page, values)
+
         dispatch(resolveConditions(page, sets))
         dispatch(fetchValuesSuccess(values, sets))
       })
@@ -275,6 +277,9 @@ export function storeValueError(error, valueIndex) {
 
 export function createValue(attrs, store) {
   const value = ValueFactory.create(attrs)
+
+  // focus the new value
+  value.focus = true
 
   if (isNil(store)) {
     return {type: CREATE_VALUE, value}

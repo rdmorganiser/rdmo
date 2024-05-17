@@ -8,7 +8,7 @@ import QuestionRemoveValue from '../question/QuestionRemoveValue'
 
 import TextareaInput from './TextareaInput'
 
-const TextareaWidget = ({ question, values, currentSet, disabled, focus, createValue, updateValue, deleteValue }) => {
+const TextareaWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue }) => {
   return (
     <div className="interview-widgets">
       {
@@ -19,7 +19,6 @@ const TextareaWidget = ({ question, values, currentSet, disabled, focus, createV
                 question={question}
                 value={value}
                 disabled={disabled}
-                focus={focus && valueIndex == values.length - 1}
                 updateValue={updateValue}
                 buttons={
                   <div className="buttons">
@@ -54,7 +53,6 @@ TextareaWidget.propTypes = {
   question: PropTypes.object.isRequired,
   values: PropTypes.array.isRequired,
   disabled: PropTypes.bool,
-  focus: PropTypes.bool,
   currentSet: PropTypes.object.isRequired,
   createValue: PropTypes.func.isRequired,
   updateValue: PropTypes.func.isRequired,
