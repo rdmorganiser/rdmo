@@ -111,6 +111,24 @@ def get_set(context, attribute, set_prefix='', project=None):
     return get_sets(context, attribute, set_prefix=set_prefix, project=project)
 
 
+@register.simple_tag
+def join_values_inline(values=None, separator=',', separator_last=', and', separator_two='and'):
+    values = values or []
+
+    if not values:
+        return ''
+
+    if len(values) == 1:
+        return values[0]['value_and_unit']
+
+    if len(values) == 2:
+        return f"{values[0]['value_and_unit']} {separator_two} {values[1]['value_and_unit']}"
+
+    separators = [separator]*(len(values)-2) + [separator_last] + ['']
+    text = " ".join(v['value_and_unit'] + s for v,s in zip(values, separators))
+    return text
+
+
 @register.inclusion_tag('views/tags/value.html', takes_context=True)
 def render_value(context, attribute, set_prefix='', set_index=0, index=0, project=None):
     context['value'] = get_value(context, attribute, set_prefix=set_prefix, set_index=set_index,
