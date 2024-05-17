@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { isEmpty, isNil } from 'lodash'
 import { useDebouncedCallback } from 'use-debounce'
-import { convert } from 'html-to-text'
+// import { convert } from 'html-to-text'
 
 import ProjectApi from '../../../api/ProjectApi'
 import projectId from '../../../utils/projectId'
@@ -22,12 +22,12 @@ import OptionText from './common/OptionText'
 const SelectInput = ({ question, value, options, disabled, creatable, updateValue, buttons }) => {
 
   const [inputValue, setInputValue] = useState('')
-  const [isOpen, setIsOpen] = useState(false)
+  // const [isOpen, setIsOpen] = useState(false)
 
   const handleChange = (option) => {
     if (isNil(option)) {
       // close the select input when the value is reset
-      setIsOpen(false)
+      // setIsOpen(false)
       setInputValue('')
 
       updateValue(value, {})
@@ -98,15 +98,15 @@ const SelectInput = ({ question, value, options, disabled, creatable, updateValu
     inputValue: inputValue,
     onInputChange: setInputValue,
     onChange: handleChange,
-    menuIsOpen: isOpen,
-    onMenuOpen: () => {
-      setIsOpen(true)
-      if (valueOption) {
-        // replace the text shown in the select input with a plain text version
-        setInputValue(convert(valueOption.text))
-      }
-    },
-    onMenuClose: () => setIsOpen(false),
+    // menuIsOpen: isOpen,
+    // onMenuOpen: () => {
+    //   setIsOpen(true)
+    //   if (valueOption) {
+    //     // replace the text shown in the select input with a plain text version
+    //     setInputValue(convert(valueOption.text))
+    //   }
+    // },
+    // onMenuClose: () => setIsOpen(false),
     getOptionValue: (option) => option.id,
     getOptionLabel: (option) => option.text,
     formatOptionLabel: (option) => (
