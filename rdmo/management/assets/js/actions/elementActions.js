@@ -398,7 +398,7 @@ export function storeElement(elementType, element, back) {
         dispatch(storeElementSuccess(element))
         if (back) {
           history.back()
-        } else if (getState().elements.elementAction == 'create') {
+        } else if (['create', 'copy'].includes(getState().elements.elementAction)) {
           dispatch(fetchElement(getState().elements.elementType, element.id))
         }
       })
