@@ -67,7 +67,7 @@ dependencies = [
 
 [project.optional-dependencies]
 allauth = [
-  "django-allauth~=0.61.1",
+  "django-allauth>=0.61.1,<0.64.0",
 ]
 ci = [
   "rdmo[dev]",
@@ -84,7 +84,7 @@ dev = [
   "rdmo[pytest]",
 ]
 gunicorn = [
-  "gunicorn~=21.2",
+  "gunicorn>=21.2,<23.0",
 ]
 ldap = [
   "django-auth-ldap~=4.5",
@@ -100,7 +100,7 @@ pytest = [
   "pytest-cov>=4.1,<6.0",
   "pytest-django~=4.5",
   "pytest-mock~=3.11",
-  "pytest-playwright~=0.4.3",
+  "pytest-playwright>=0.4.3,<0.6.0",
   "pytest-randomly~=3.15",
   "pytest-xdist~=3.3",
 ]
