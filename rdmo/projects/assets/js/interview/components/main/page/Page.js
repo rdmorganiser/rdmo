@@ -50,7 +50,6 @@ const Page = ({ config, templates, overview, page, sets, values, fetchPage,
                     values={values.filter((value) => element.attributes.includes(value.attribute))}
                     disabled={overview.read_only}
                     isManager={isManager}
-                    focus={elementIndex == 0}
                     parentSet={currentSet}
                     createSet={createSet}
                     updateSet={updateSet}
@@ -73,7 +72,6 @@ const Page = ({ config, templates, overview, page, sets, values, fetchPage,
                     ))}
                     disabled={overview.read_only}
                     isManager={isManager}
-                    focus={elementIndex == 0}
                     currentSet={currentSet}
                     createValue={createValue}
                     updateValue={updateValue}

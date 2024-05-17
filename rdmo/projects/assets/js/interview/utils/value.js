@@ -1,4 +1,4 @@
-import { isNil, isEmpty, toString } from 'lodash'
+import { get, first, isNil, isEmpty, toString, sortBy } from 'lodash'
 
 import ValueFactory from '../factories/ValueFactory'
 
@@ -76,4 +76,14 @@ const initRange = (question, value) => {
   }
 }
 
-export { isDefaultValue, gatherDefaultValues, initValues, initRange }
+const activateFirstValue = (page, values) => {
+  const attribute = get(page, 'questions.0.attribute')
+  if (!isNil(attribute)) {
+    const value = first(sortBy(values.filter((value) => value.attribute == attribute), 'collection_index'))
+    if (!isNil(value)) {
+      value.focus = true
+    }
+  }
+}
+
+export { isDefaultValue, gatherDefaultValues, initValues, initRange, activateFirstValue }
