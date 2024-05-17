@@ -8,7 +8,7 @@ from django.core.management import CommandError, call_command
 
 from rdmo.conditions.models import Condition
 from rdmo.domain.models import Attribute
-from rdmo.management.merge_attributes import ReplaceAttributeOnElements, model_helpers_with_attributes
+from rdmo.management.management.commands.merge_attributes import REPLACE_ATTRIBUTE_MODEL_HELPERS, get_queryset, main
 from rdmo.options.models import Option
 from rdmo.questions.models import Page, Question, QuestionSet, Section
 from rdmo.views.models import View
@@ -38,11 +38,11 @@ def _prepare_instance_for_copy(instance, uri_prefix=None, uri_path=None):
     return instance
 
 def _add_new_line_to_view_template(model_helper, instance: View, new_uri_prefix: str) -> View:
-    current_field_value = getattr(instance, model_helper.field_name)
+    current_field_value = getattr(instance, model_helper.lookup_field)
     new_field_value = current_field_value + "\n"
     new_uri = Attribute.build_uri(new_uri_prefix, merge_view_template_addition_uri_path)
     new_field_value += merge_view_template_addition.substitute(new_uri=new_uri)
-    setattr(instance, model_helper.field_name, new_field_value)
+    setattr(instance, model_helper.lookup_field, new_field_value)
     return instance
 
 def _create_copy_of_view_that_uses_new_attribute(model_helper, new_prefixes: List[str]):
@@ -56,7 +56,7 @@ def _create_copy_of_view_that_uses_new_attribute(model_helper, new_prefixes: Lis
         instance.save()
 
 def _create_copies_of_elements_with_new_uri_prefix(new_prefixes):
-    for model_helper in model_helpers_with_attributes:
+    for model_helper in REPLACE_ATTRIBUTE_MODEL_HELPERS:
         if model_helper.field_introspection and model_helper.model == View:
             _create_copy_of_view_that_uses_new_attribute(model_helper, new_prefixes)
             continue   # skip this model_helper
@@ -64,7 +64,7 @@ def _create_copies_of_elements_with_new_uri_prefix(new_prefixes):
             continue  # skip this model_helper
         else:
             # create new model instances from example.com objects with the new uri_prefix
-            filter_kwargs = {f"{model_helper.field_name}__uri_prefix": EXAMPLE_URI_PREFIX}
+            filter_kwargs = {f"{model_helper.lookup_field}__uri_prefix": EXAMPLE_URI_PREFIX}
             example_objects = model_helper.model.objects.filter(**filter_kwargs)
 
         for new_prefix in new_prefixes:
@@ -73,12 +73,12 @@ def _create_copies_of_elements_with_new_uri_prefix(new_prefixes):
                 continue
             for instance in example_objects:
                 instance = _prepare_instance_for_copy(instance, uri_prefix=new_prefix)
-                current_attribute = getattr(instance, model_helper.field_name)
+                current_attribute = getattr(instance, model_helper.lookup_field)
                 if not isinstance(current_attribute, Attribute):
                     continue
                 filter_kwargs = {'path': current_attribute.path, 'uri_prefix': new_prefix}
                 new_attribute = Attribute.objects.filter(**filter_kwargs).first()
-                setattr(instance, model_helper.field_name, new_attribute)
+                setattr(instance, model_helper.lookup_field, new_attribute)
                 instance.save()
 
 def _create_copies_of_attributes_with_new_uri_prefix(example_attributes, new_prefixes):
@@ -106,10 +106,10 @@ def test_that_the_freshly_created_merge_attributes_are_present(create_merge_attr
 
     for attribute in merge_attributes:
         original_attribute = Attribute.objects.get(uri_prefix=EXAMPLE_URI_PREFIX, path=attribute.path)
-        original_models_qs = [i.get_queryset(attribute=original_attribute) for i in model_helpers_with_attributes]
+        original_models_qs = [get_queryset(*i, attribute=original_attribute) for i in REPLACE_ATTRIBUTE_MODEL_HELPERS]
         if not any(len(i) > 0 for i in original_models_qs):
-            continue  # skipt this attribute
-        models_qs = [i.get_queryset(attribute=attribute) for i in model_helpers_with_attributes]
+            continue  # skip this attribute
+        models_qs = [get_queryset(*i, attribute=attribute) for i in REPLACE_ATTRIBUTE_MODEL_HELPERS]
         assert any(len(i) > 0 for i in models_qs)
 
 @pytest.mark.parametrize('source_uri_prefix', new_merge_uri_prefixes)
@@ -126,17 +126,10 @@ def test_replacement_of_attributes_on_elements(create_merge_attributes, source_u
         failed, results = False, []
         if source_attribute.get_descendants() or target_attribute.get_descendants():
             with pytest.raises(ValueError):
-                merger = ReplaceAttributeOnElements(source=source_attribute,
-                                                    target=target_attribute,
-                                                    model_helpers_with_attributes=model_helpers_with_attributes,
-                                                    save=save)
+                results = main(source_attribute, target_attribute, save=save)
             failed = True
         else:
-            merger = ReplaceAttributeOnElements(source=source_attribute,
-                                                target=target_attribute,
-                                                model_helpers_with_attributes=model_helpers_with_attributes,
-                                                save=save)
-            results = [i for i in merger.results.values() if i]
+            results = main(source_attribute, target_attribute, save=save)
         if not results:
             continue
 
