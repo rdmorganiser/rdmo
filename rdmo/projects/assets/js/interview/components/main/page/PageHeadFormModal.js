@@ -38,7 +38,7 @@ const PageHeadFormModal = ({ title, show, initial, onClose, onSubmit }) => {
   }, [inputValue])
 
   // focus when the modal is shown
-  useFocusEffect(ref, [show])
+  useFocusEffect(ref, show)
 
   return (
     <Modal title={title} show={show} submitText={submitText} submitColor={submitColor}

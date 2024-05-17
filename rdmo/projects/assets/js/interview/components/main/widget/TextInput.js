@@ -9,12 +9,12 @@ import useFocusEffect from '../../../hooks/useFocusEffect'
 
 import Unit from './common/Unit'
 
-const TextInput = ({ question, value, disabled, focus, updateValue, buttons }) => {
+const TextInput = ({ question, value, disabled, updateValue, buttons }) => {
   const ref = useRef(null)
   const [inputValue, setInputValue] = useState('')
 
   useEffect(() => {setInputValue(value.text)}, [value.text])
-  useFocusEffect(ref, [value.text], focus)
+  useFocusEffect(ref, value.focus)
 
   const handleChange = useDebouncedCallback((value, text) => {
     updateValue(value, { text, unit: question.unit, value_type: question.value_type })
@@ -50,7 +50,6 @@ TextInput.propTypes = {
   question: PropTypes.object.isRequired,
   value: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
-  focus: PropTypes.bool,
   updateValue: PropTypes.func.isRequired,
   buttons: PropTypes.node.isRequired
 }
