@@ -34,10 +34,6 @@ const Catalog = ({ config, catalog, elementActions, display='list',
   const elementNode = (
     <div className="element">
       <div className="pull-right">
-        <ToggleCurrentSiteLink hasCurrentSite={config.settings.multisite ? catalog.sites.includes(config.currentSite.id) : true}
-                               locked={catalog.locked}
-                               onClick={toggleCurrentSite}
-                               show={config.settings.multisite}/>
         <ReadOnlyIcon title={gettext('This catalog is read only')} show={catalog.read_only} />
         <NestedLink title={gettext('View catalog nested')} href={nestedUrl} onClick={fetchNested} />
         <EditLink title={gettext('Edit catalog')} href={editUrl} onClick={fetchEdit} />
@@ -47,6 +43,10 @@ const Catalog = ({ config, catalog, elementActions, display='list',
                                                 : gettext('Make catalog available')}
                        available={catalog.available} locked={catalog.locked} onClick={toggleAvailable}
                        disabled={catalog.read_only} />
+        <ToggleCurrentSiteLink hasCurrentSite={config.settings.multisite ? catalog.sites.includes(config.currentSite.id) : true}
+                       locked={catalog.locked}
+                       onClick={toggleCurrentSite}
+                       show={config.settings.multisite}/>
         <LockedLink title={catalog.locked ? gettext('Unlock catalog') : gettext('Lock catalog')}
                     locked={catalog.locked} onClick={toggleLocked} disabled={catalog.read_only} />
         <ExportLink title={gettext('Export catalog')} exportUrl={exportUrl}

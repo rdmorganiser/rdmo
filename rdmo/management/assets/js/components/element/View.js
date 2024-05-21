@@ -26,10 +26,6 @@ const View = ({ config, view, elementActions, filter=false, filterSites=false, f
     <li className="list-group-item">
       <div className="element">
         <div className="pull-right">
-          <ToggleCurrentSiteLink hasCurrentSite={config.settings.multisite ? view.sites.includes(config.currentSite.id) : true}
-                                 locked={view.locked}
-                                 onClick={toggleCurrentSite}
-                                 show={config.settings.multisite}/>
           <ReadOnlyIcon title={gettext('This view is read only')} show={view.read_only} />
           <EditLink title={gettext('Edit view')} href={editUrl} onClick={fetchEdit} />
           <CopyLink title={gettext('Copy view')} href={copyUrl} onClick={fetchCopy} />
@@ -37,6 +33,10 @@ const View = ({ config, view, elementActions, filter=false, filterSites=false, f
                                                : gettext('Make view available')}
                          available={view.available} locked={view.locked} onClick={toggleAvailable}
                          disabled={view.read_only} />
+          <ToggleCurrentSiteLink hasCurrentSite={config.settings.multisite ? view.sites.includes(config.currentSite.id) : true}
+                         locked={view.locked}
+                         onClick={toggleCurrentSite}
+                         show={config.settings.multisite}/>
           <LockedLink title={view.locked ? gettext('Unlock view') : gettext('Lock view')}
                       locked={view.locked} onClick={toggleLocked} disabled={view.read_only} />
           <ExportLink title={gettext('Export view')} exportUrl={exportUrl}
