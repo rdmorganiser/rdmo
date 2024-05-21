@@ -345,7 +345,7 @@ export function fetchElementError(error) {
 export function storeElement(elementType, element, elementAction = null, back = false) {
   return function(dispatch, getState) {
 
-    dispatch(storeElementInit(element, elementAction))
+    dispatch(storeElementInit(element))
 
     let action
     switch (elementType) {
@@ -407,8 +407,8 @@ export function storeElement(elementType, element, elementAction = null, back = 
   }
 }
 
-export function storeElementInit(element, elementAction) {
-  return {type: 'elements/storeElementInit', element, elementAction}
+export function storeElementInit(element) {
+  return {type: 'elements/storeElementInit', element}
 }
 
 export function storeElementSuccess(element) {
