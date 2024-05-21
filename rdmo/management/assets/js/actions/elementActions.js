@@ -261,9 +261,14 @@ export function fetchElement(elementType, elementId, elementAction=null) {
             ConditionsApi.fetchConditions('index'),
             OptionsApi.fetchOptions('index'),
             QuestionsApi.fetchQuestions('index')
-          ]).then(([element, conditions, options, questions]) => ({
-            element, conditions, options, questions
-          }))
+          ]).then(([element, conditions, options, questions]) => {
+            if (elementAction == 'copy') {
+              delete element.questions
+            }
+            return {
+              element, conditions, options, questions
+            }
+          })
         }
         break
 
@@ -275,6 +280,7 @@ export function fetchElement(elementType, elementId, elementAction=null) {
         ]).then(([element, optionsets, conditions]) => {
           if (elementAction == 'copy') {
             delete element.optionsets
+            delete element.conditions
           }
           return {
             element, optionsets, conditions
@@ -293,9 +299,18 @@ export function fetchElement(elementType, elementId, elementAction=null) {
           QuestionsApi.fetchQuestions('index'),
           TasksApi.fetchTasks('index'),
         ]).then(([element, attributes, optionsets, options,
-                  pages, questionsets, questions, tasks]) => ({
-          element, attributes, optionsets, options, pages, questionsets, questions, tasks
-        }))
+                  pages, questionsets, questions, tasks]) => {
+           if (elementAction == 'copy') {
+            delete element.optionsets
+            delete element.pages
+            delete element.questionsets
+            delete element.questions
+            delete element.tasks
+          }
+           return {
+             element, attributes, optionsets, options, pages, questionsets, questions, tasks
+           }
+        })
         break
 
       case 'tasks':
