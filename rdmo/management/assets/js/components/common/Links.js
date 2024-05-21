@@ -106,8 +106,8 @@ LockedLink.propTypes = {
 const ToggleCurrentSiteLink = ({ hasCurrentSite, locked, onClick, show }) => {
   const className = classNames({
     'element-btn-link fa': true,
-    'fa-plus-square-o': !hasCurrentSite,
-    'fa-minus-square-o': hasCurrentSite,
+    'fa-plus-square': !hasCurrentSite,
+    'fa-minus-square': hasCurrentSite,
   })
   const title = hasCurrentSite ? gettext('Remove your site'): gettext('Add your site')
 

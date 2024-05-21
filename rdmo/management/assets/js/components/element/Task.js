@@ -29,10 +29,6 @@ const Task = ({ config, task, elementActions, filter=false, filterSites=false, f
     <li className="list-group-item">
       <div className="element">
         <div className="pull-right">
-        <ToggleCurrentSiteLink hasCurrentSite={config.settings.multisite ? task.sites.includes(config.currentSite.id) : true}
-                               locked={task.locked}
-                               onClick={toggleCurrentSite}
-                               show={config.settings.multisite}/>
           <ReadOnlyIcon title={gettext('This task is read only')} show={task.read_only} />
           <EditLink title={gettext('Edit task')} href={editUrl} onClick={fetchEdit} />
           <CopyLink title={gettext('Copy task')} href={copyUrl} onClick={fetchCopy} />
@@ -40,6 +36,10 @@ const Task = ({ config, task, elementActions, filter=false, filterSites=false, f
                                                : gettext('Make task available')}
                          available={task.available} locked={task.locked} onClick={toggleAvailable}
                          disabled={task.read_only} />
+          <ToggleCurrentSiteLink hasCurrentSite={config.settings.multisite ? task.sites.includes(config.currentSite.id) : true}
+                         locked={task.locked}
+                         onClick={toggleCurrentSite}
+                         show={config.settings.multisite}/>
           <LockedLink title={task.locked ? gettext('Unlock task') : gettext('Lock task')}
                       locked={task.locked} onClick={toggleLocked} disabled={task.read_only} />
           <ExportLink title={gettext('Export task')} exportUrl={exportUrl}
