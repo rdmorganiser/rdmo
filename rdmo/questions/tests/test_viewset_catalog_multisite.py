@@ -5,9 +5,10 @@ import pytest
 from django.contrib.sites.models import Site
 from django.urls import reverse
 
-from ...core.tests import get_obj_perms_status_code
-from ...core.tests import multisite_status_map as status_map
-from ...core.tests import multisite_users as users
+from rdmo.core.tests.constants import multisite_status_map as status_map
+from rdmo.core.tests.constants import multisite_users as users
+from rdmo.core.tests.utils import get_obj_perms_status_code
+
 from ..models import Catalog
 from .test_viewset_catalog import export_formats, urlnames
 
