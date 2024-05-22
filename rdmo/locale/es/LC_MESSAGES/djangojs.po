@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-09 10:45+0100\n"
+"POT-Creation-Date: 2024-04-26 16:24+0200\n"
 "PO-Revision-Date: 2023-12-09 10:49+0100\n"
 "Last-Translator: DAVID MARTINEZ <dmartinezmu@cem.es>\n"
 "Language-Team: \n"
@@ -17,6 +17,30 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.4.2\n"
+
+#: core/assets/js/components/Modal.js:16
+#: management/assets/js/components/common/Modals.js:16
+msgid "Close"
+msgstr "Cerrar"
+
+#: core/assets/js/components/Modal.js:20
+#: management/assets/js/components/common/Buttons.js:19
+msgid "Save"
+msgstr "Guardar"
+
+#: core/assets/js/components/SearchAndFilter.js:42
+#: projects/assets/js/utils/translations.js:15
+msgid "Search"
+msgstr ""
+
+#: core/assets/js/components/UploadDropZone.js:18
+#, javascript-format
+msgid "%s has unsupported file type"
+msgstr ""
+
+#: core/assets/js/components/UploadDropZone.js:26
+msgid "Drag and drop a file here or click to select a file"
+msgstr ""
 
 #: management/assets/js/components/common/Buttons.js:6
 #: management/assets/js/components/sidebar/ImportSidebar.js:27
@@ -39,10 +63,6 @@ msgstr "Copiar"
 #: management/assets/js/components/common/Buttons.js:16
 msgid "Copy and continue editing"
 msgstr "Copiar y seguir editando"
-
-#: management/assets/js/components/common/Buttons.js:19
-msgid "Save"
-msgstr "Guardar"
 
 #: management/assets/js/components/common/Buttons.js:19
 msgid "Save and continue editing"
@@ -92,10 +112,6 @@ msgstr "XML"
 #: management/assets/js/components/common/Links.js:131
 msgid "XML (full)"
 msgstr "XML (completo)"
-
-#: management/assets/js/components/common/Modals.js:16
-msgid "Close"
-msgstr "Cerrar"
 
 #: management/assets/js/components/edit/EditAttribute.js:37
 #: management/assets/js/components/element/Attribute.js:31

@@ -3,7 +3,6 @@ from .invite import InviteDeleteView
 from .issue import IssueDetailView, IssueSendView, IssueUpdateView
 from .membership import MembershipCreateView, MembershipDeleteView, MembershipUpdateView
 from .project import (
-    NewProjectsView,
     ProjectCancelView,
     ProjectDeleteView,
     ProjectDetailView,
@@ -13,7 +12,6 @@ from .project import (
     ProjectLeaveView,
     ProjectQuestionsView,
     ProjectsView,
-    SiteProjectsView,
 )
 from .project_answers import ProjectAnswersExportView, ProjectAnswersView
 from .project_create import ProjectCreateImportView, ProjectCreateView

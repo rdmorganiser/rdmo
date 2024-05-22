@@ -1,11 +1,9 @@
+import hashlib
 import logging
 
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import PermissionDenied
-from django.db import models
 from django.db.models import F, OuterRef, Subquery
-from django.db.models.functions import Coalesce, Greatest
 from django.forms import Form
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
@@ -16,9 +14,6 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import DeleteView, DetailView, TemplateView
 from django.views.generic.edit import FormMixin
 
-from django_filters.views import FilterView
-
-from rdmo.accounts.utils import is_site_manager
 from rdmo.core.plugins import get_plugin, get_plugins
 from rdmo.core.views import CSRFViewMixin, ObjectPermissionMixin, RedirectViewMixin
 from rdmo.questions.models import Catalog
@@ -26,105 +21,23 @@ from rdmo.questions.utils import get_widgets
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
-from ..filters import ProjectFilter
-from ..models import Integration, Invite, Membership, Project, Value
-from ..utils import get_upload_accept, set_context_querystring_with_filter_and_page
+from ..models import Integration, Invite, Membership, Project
+from ..utils import get_upload_accept
 
 logger = logging.getLogger(__name__)
 
-# class NewProjectsView(LoginRequiredMixin, PermissionRedirectMixin, RulesPermissionRequiredMixin,
-#                      CSRFViewMixin, TemplateView):
-#     template_name = 'projects/new_projects.html'
-
-#     def has_permission(self):
-#         # Use test_rule from rules for permissions check
-#         return test_rule('projects.can_view_all_projects', self.request.user, self.request.site)
-
-class NewProjectsView(LoginRequiredMixin, CSRFViewMixin, TemplateView):
-    template_name = 'projects/new_projects.html'
+class ProjectsView(LoginRequiredMixin, CSRFViewMixin, TemplateView):
+    template_name = 'projects/projects.html'
 
     # def has_permission(self):
     #     # Use test_rule from rules for permissions check
     #     return test_rule('projects.can_view_all_projects', self.request.user, self.request.site)
+    def render_to_response(self, context, **response_kwargs):
+      storeid = hashlib.sha256(self.request.session.session_key.encode()).hexdigest()
 
-class ProjectsView(LoginRequiredMixin, FilterView):
-    template_name = 'projects/projects.html'
-    context_object_name = 'projects'
-    paginate_by = 20
-    filterset_class = ProjectFilter
-
-    def get_queryset(self):
-        # prepare projects queryset for this user
-        queryset = Project.objects.filter(user=self.request.user)
-        for instance in queryset:
-            queryset |= instance.get_descendants()
-        queryset = queryset.distinct()
-
-        # prepare subquery for role
-        membership_subquery = models.Subquery(
-            Membership.objects.filter(project=models.OuterRef('pk'), user=self.request.user).values('role')
-        )
-        queryset = queryset.annotate(role=membership_subquery)
-
-        # prepare subquery for last_changed
-        last_changed_subquery = models.Subquery(
-            Value.objects.filter(project=models.OuterRef('pk')).order_by('-updated').values('updated')[:1]
-        )
-        # the 'updated' field from a Project always returns a valid DateTime value
-        # when Greatest returns null, then Coalesce will return the value for 'updated' as a fall-back
-        # when Greatest returns a value, then Coalesce will return this value
-        queryset = queryset.annotate(last_changed=Coalesce(Greatest(last_changed_subquery, 'updated'), 'updated'))
-
-        # order by last changed
-        queryset = queryset.order_by('-last_changed')
-
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['number_of_projects'] = self.get_queryset().count()
-        context['invites'] = Invite.objects.filter(user=self.request.user)
-        context['is_site_manager'] = is_site_manager(self.request.user)
-        context['number_of_filtered_projects'] = context["filter"].qs.count()
-        context['upload_accept'] = get_upload_accept()
-        context = set_context_querystring_with_filter_and_page(context)
-        return context
-
-class SiteProjectsView(LoginRequiredMixin, FilterView):
-    template_name = 'projects/site_projects.html'
-    context_object_name = 'projects'
-    paginate_by = 20
-    filterset_class = ProjectFilter
-    model = Project
-
-    def get_queryset(self):
-        if is_site_manager(self.request.user):
-            # prepare projects queryset for the site manager
-            queryset = Project.objects.filter_current_site()
-
-            # prepare subquery for last_changed
-            last_changed_subquery = models.Subquery(
-                Value.objects.filter(project=models.OuterRef('pk')).order_by('-updated').values('updated')[:1]
-            )
-            # the 'updated' field from a Project always returns a valid DateTime value
-            # when Greatest returns null, then Coalesce will return the value for 'updated' as a fall-back
-            # when Greatest returns a value, then Coalesce will return this value
-            queryset = queryset.annotate(last_changed=Coalesce(Greatest(last_changed_subquery, 'updated'), 'updated'))
-
-            return queryset
-        else:
-            raise PermissionDenied()
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['number_of_projects'] = self.get_queryset().count()
-        context['number_of_filtered_projects'] = context["filter"].qs.count()
-        context = set_context_querystring_with_filter_and_page(context)
-        context['catalogs'] = Catalog.objects.filter_current_site() \
-                                             .filter_group(self.request.user) \
-                                             .filter_availability(self.request.user)
-        return context
-
+      response = super().render_to_response(context, **response_kwargs)
+      response.set_cookie('storeid', storeid)
+      return response
 
 class ProjectDetailView(ObjectPermissionMixin, DetailView):
     model = Project
