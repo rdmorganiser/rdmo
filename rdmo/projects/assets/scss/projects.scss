@@ -2,6 +2,7 @@ $icon-font-path: "bootstrap-sass/assets/fonts/bootstrap/";
 @import '~bootstrap-sass';
 @import '~font-awesome/css/font-awesome.css';
 @import 'rdmo/core/assets/scss/variables';
+@import 'react-datepicker/dist/react-datepicker.css';
 
 a.disabled {
     cursor: not-allowed;
@@ -13,6 +14,9 @@ a.disabled {
 
 .w-100 {
     width: 100%;
+}
+.w-25 {
+    width: 25%;
 }
 .mt-0 {
     margin-top: 0;
@@ -99,6 +103,12 @@ a.disabled {
 .pl-20 {
     padding-left: 20px;
 }
+.align-right {
+  text-align: right;
+}
+.align-left {
+  text-align: left;
+}
 
 .form-group {
     .react-select__control {
@@ -116,132 +126,6 @@ a.disabled {
     }
     .react-select__option {
         padding: 0 14px;
-    }
-}
-
-.management {
-    .panel {
-        p {
-            margin-bottom: 5px;
-        }
-        p:last-child {
-            margin-bottom: 0;
-        }
-
-
-        .panel-body {
-            > :last-child {
-                margin-bottom: 0;
-            }
-        }
-
-        .panel-border {
-            border-bottom: 1px solid #ddd;
-        }
-
-        &.panel-nested {
-            margin-bottom: 10px;
-        }
-
-        &.panel-edit {
-            .panel-heading,
-            .panel-footer {
-                min-height: 41px;
-            }
-        }
-
-        &.panel-import {
-            .checkbox {
-                position: static;
-                margin: 0;
-
-                label {
-                    font-weight: normal;
-                }
-            }
-        }
-    }
-    .pull-right {
-        .element-link,
-        .element-btn-link,
-        .element-button {
-            margin-left: 4px;
-
-            &.disabled,
-            &:disabled {
-                color: #ccc !important;
-                cursor: not-allowed !important;
-            }
-        }
-        .element-btn-link {
-            padding: 0;
-            border: 0;
-            text-decoration: none;
-        }
-        .element-button {
-            &:first-child {
-                margin-left: 8px;
-            }
-        }
-    }
-    .checkboxes {
-        .checkbox {
-            display: inline-block;
-            margin-right: 20px;
-            margin-bottom: 0;
-        }
-        code {
-            user-select: none;
-        }
-    }
-    .nav-tabs {
-        border-bottom: none;
-    }
-    .tab-content {
-        margin-bottom: 15px;
-    }
-    .tab-pane {
-        padding: 15px 15px 0 15px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-
-        &:first-child {
-            border-top-left-radius: 0;
-        }
-
-    }
-
-    .drag {
-        color: $link-color;
-        cursor: grab;
-    }
-
-    .drop {
-        display: none;
-        margin-top: -10px;
-        padding: 4px 0;
-
-        &::after {
-            content: ' ';
-            height: 2px;
-            display: block;
-            background-color: transparent;
-        }
-
-        &.over {
-            &::after {
-                background-color: $link-color;
-            }
-        }
-    }
-    .drop-in {
-        &.over .panel {
-            border: 2px solid $link-color;
-
-            .panel-heading {
-                padding: 9px 14px;
-            }
-        }
     }
 }
 
@@ -292,11 +176,201 @@ a.disabled {
     }
 }
 
-.import-buttons {
+.projects-header-container {
+    @media (min-width: $screen-sm-max) {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+
+        margin-bottom: 10px;
+    }
+
+    .projects-header-buttons {
+        @media (min-width: $screen-md-max) {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn.btn-link {
+            padding: 0;
+            padding-bottom: 15px;
+
+            @media (max-width: $screen-md-max) {
+                display: block;
+                padding-bottom: 10px;
+            }
+        }
+    }
+}
+
+.icon-container {
     display: flex;
     gap: 5px;
+    margin-bottom: 10px;
+}
 
-    .btn:first-child {
-        flex: 1;
+.projects {
+    min-height: 600px;
+}
+
+.projects-form {
+    margin-bottom: 40px;
+}
+
+.panel-filters {
+    border-color: #ccc;
+
+    .react-datepicker-wrapper {
+        width: 100%;
     }
+
+    @media (max-width: $screen-md-max) {
+        .control-label {
+            margin-bottom: 10px;
+        }
+        .react-select,
+        .react-datepicker-wrapper {
+            margin-bottom: 10px;
+        }
+
+        // remove the margin from the last datepicker
+        .panel-body > .row > div:last-child .row > div:last-child .react-datepicker-wrapper {
+            margin-bottom: 0;
+        }
+    }
+}
+
+.projects-search {
+  position: relative;
+
+  .projects-search-reset {
+      display: block;
+      position: absolute;
+      top: 7px;
+      right: 7px;
+      z-index: 1020;
+
+      opacity: 0.8;
+      line-height: 20px;
+      font-size: 14px;
+
+      margin-left: 2px;
+  }
+}
+
+.elliptic-button {
+  padding: 5px 14px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 15px;
+  display: inline-block;
+}
+
+.elliptic-button:hover,
+.elliptic-button:focus {
+  text-decoration: none;
+  background-color: #eeeeee;
+}
+
+.row-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  color: #666;
+  padding-left: 5px;
+}
+
+.row-container:not(:last-child):after { /* Add line between each container element */
+  content: '';
+  width: 100%;
+  height: 1px;
+  background-color: #ccc;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.search-container {
+  width: 100%;
+
+  .search-field {
+    width: 100%;
+  }
+}
+
+.projects-datepicker .react-datepicker {
+  font-size: 1em;
+}
+.projects-datepicker .react-datepicker__header {
+  padding-top: 0.8em;
+}
+.projects-datepicker .react-datepicker__month {
+  margin: 0.4em 1em;
+}
+.projects-datepicker .react-datepicker__day-name, .projects-datepicker .react-datepicker__day {
+  width: 1.9em;
+  line-height: 1.9em;
+  margin: 0.166em;
+}
+.projects-datepicker .react-datepicker__current-month {
+  font-size: 1em;
+}
+.projects-datepicker .react-datepicker__navigation {
+  top: 1em;
+  line-height: 1.7em;
+  border: 0.45em solid transparent;
+}
+.projects-datepicker .react-datepicker__navigation--previous {
+  left: 1em;
+}
+.projects-datepicker .react-datepicker__navigation--next {
+  right: 1em;
+}
+.projects-datepicker .react-datepicker__close-icon::after {
+  background-color: #fff;
+  color: black;
+  font-size: 1.5em;
+}
+
+.thead-dark th {
+  cursor: pointer;
+}
+
+.badge-invitations {
+  background-color: $link-color;
+  color: #fff;
+  margin-right: 5px;
+}
+
+.btn.btn-link {
+  &:focus {
+    outline:0;
+  }
+}
+
+.dropzone-container {
+  width: 100%;
+  padding: 10px;
+}
+
+.dropzone {
+  border: 2px dashed #cccccc;
+  border-radius: 5px;
+  padding: 20px;
+  text-align: center;
+  transition: border .24s ease-in-out;
+}
+
+.dropzone:focus {
+  border-color: #2196f3;
+}
+
+/* Add additional styling for when files are being dragged over the dropzone */
+.dropzone.drag-active {
+  border-color: #2196f3;
+}
+
+/* Add styles for when the dropzone is disabled */
+.dropzone.disabled {
+  opacity: 0.6;
 }

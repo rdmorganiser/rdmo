@@ -40,19 +40,21 @@ export default function configureStore() {
   const updateConfigFromLocalStorage = () => {
     const ls = {...localStorage}
     Object.entries(ls).forEach(([lsPath, lsValue]) => {
-      const path = lsPath.replace('rdmo.management.config.', '')
-      let value
-      switch(lsValue) {
-        case 'true':
-          value = true
-          break
-        case 'false':
-          value = false
-          break
-        default:
-          value = lsValue
+      if (lsPath.startsWith('rdmo.management.config.')) {
+        const path = lsPath.replace('rdmo.management.config.', '')
+        let value
+        switch(lsValue) {
+          case 'true':
+            value = true
+            break
+          case 'false':
+            value = false
+            break
+          default:
+            value = lsValue
+        }
+        store.dispatch(configActions.updateConfig(path, value))
       }
-      store.dispatch(configActions.updateConfig(path, value))
     })
   }
 
