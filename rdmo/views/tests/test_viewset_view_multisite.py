@@ -131,7 +131,8 @@ def test_detail_export(db, client, username, password, export_format):
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('add_or_remove, has_current_site_check', [('add', True), ('remove', False)])
-def test_update_view_toggle_site(db, client, username, password, add_or_remove, has_current_site_check):
+@pytest.mark.parametrize('locked', [True, False])
+def test_update_view_toggle_site(db, client, username, password, add_or_remove, has_current_site_check, locked):
     client.login(username=username, password=password)
     instances = View.objects.all()
     current_site = Site.objects.get_current()
@@ -141,6 +142,10 @@ def test_update_view_toggle_site(db, client, username, password, add_or_remove, 
             instance.sites.remove(current_site)
         elif add_or_remove == 'remove':
             instance.sites.add(current_site)
+
+        # locked state should not affect this toggle
+        instance.locked = locked
+        instance.save()
 
         before_has_current_site = instance.sites.filter(id=current_site.id).exists()
 
