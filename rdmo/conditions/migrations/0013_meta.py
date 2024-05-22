@@ -41,6 +41,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='condition',
             name='target_text',
-            field=models.CharField(blank=True, help_text='If using a regular attibute, the text value this condition is checking against.', max_length=256, null=True, verbose_name='Target (Text)'),
+            field=models.CharField(blank=True, help_text='If using a regular attribute, the text value this condition is checking against.', max_length=256, null=True, verbose_name='Target (Text)'),
         ),
     ]

@@ -1173,7 +1173,7 @@ msgid "You are logged in as: "
 msgstr "Sie sind eingeloggt als: "
 
 #: core/templates/rest_framework_swagger/index.html:43
-msgid "Viewing as an anoymous user"
+msgid "Viewing as an anonymous user"
 msgstr "Ansicht als anoymer Benutzer"
 
 #: core/templates/rest_framework_swagger/index.html:55

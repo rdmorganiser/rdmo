@@ -69,7 +69,7 @@ def delete_user(user=None, email=None, password=None):
             log.info('Deletion of user with usable password "%s" succeeded.', username)
             return True
         except Exception as e:
-            log.error('Deletion of user with usable password "%s" failed, an exception (%s) occured',
+            log.error('Deletion of user with usable password "%s" failed, an exception (%s) occurred',
                       str(e), username)
             return False
     elif not user.has_usable_password() and password is None:
@@ -78,7 +78,7 @@ def delete_user(user=None, email=None, password=None):
             log.info('Deletion of user without usable password "%s" succeeded.', username)
             return True
         except Exception as e:
-            log.error('Deletion of user without usable password "%s" failed, an exception (%s) occured',
+            log.error('Deletion of user without usable password "%s" failed, an exception (%s) occurred',
                       str(e), username)
             return False
     else:
