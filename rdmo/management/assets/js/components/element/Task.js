@@ -37,7 +37,6 @@ const Task = ({ config, task, elementActions, filter=false, filterSites=false, f
                          available={task.available} locked={task.locked} onClick={toggleAvailable}
                          disabled={task.read_only} />
           <ToggleCurrentSiteLink hasCurrentSite={config.settings.multisite ? task.sites.includes(config.currentSite.id) : true}
-                         locked={task.locked}
                          onClick={toggleCurrentSite}
                          show={config.settings.multisite}/>
           <LockedLink title={task.locked ? gettext('Unlock task') : gettext('Lock task')}
