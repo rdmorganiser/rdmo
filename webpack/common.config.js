@@ -73,7 +73,6 @@ module.exports = [
     },
     output: {
       filename: 'js/projects.js',
-      publicPath: '/static/projects/',
       path: path.resolve(__dirname, '../rdmo/projects/static/projects/'),
     }
   })

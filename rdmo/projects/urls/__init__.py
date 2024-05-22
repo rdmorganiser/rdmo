@@ -12,7 +12,6 @@ from ..views import (
     MembershipCreateView,
     MembershipDeleteView,
     MembershipUpdateView,
-    NewProjectsView,
     ProjectAnswersExportView,
     ProjectAnswersView,
     ProjectCancelView,
@@ -35,7 +34,6 @@ from ..views import (
     ProjectUpdateViewsView,
     ProjectViewExportView,
     ProjectViewView,
-    SiteProjectsView,
     SnapshotCreateView,
     SnapshotRollbackView,
     SnapshotUpdateView,
@@ -44,11 +42,6 @@ from ..views import (
 urlpatterns = [
     re_path(r'^$',
             ProjectsView.as_view(), name='projects'),
-    re_path(r'^all/$',
-            SiteProjectsView.as_view(), name='site_projects'),
-    re_path(r'^new/$',
-            NewProjectsView.as_view(), name='new_projects'),
-
     re_path(r'^create/$',
             ProjectCreateView.as_view(), name='project_create'),
     re_path(r'^join/(?P<token>.+)/$',

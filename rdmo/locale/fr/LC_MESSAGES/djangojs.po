@@ -14,6 +14,25 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.1\n"
 
+#: core/assets/js/components/Modal.js:16
+#: management/assets/js/components/common/Modals.js:16
+msgid "Close"
+msgstr "Fermer"
+
+#: core/assets/js/components/SearchAndFilter.js:42
+#: projects/assets/js/utils/translations.js:15
+msgid "Search"
+msgstr ""
+
+#: core/assets/js/components/UploadDropZone.js:18
+#, javascript-format
+msgid "%s has unsupported file type"
+msgstr ""
+
+#: core/assets/js/components/UploadDropZone.js:26
+msgid "Drag and drop a file here or click to select a file"
+msgstr ""
+
 #: management/assets/js/components/common/Buttons.js:6
 #: management/assets/js/components/sidebar/ImportSidebar.js:27
 #: management/assets/js/components/sidebar/ImportSidebar.js:42
@@ -88,10 +107,6 @@ msgstr "XML"
 #: management/assets/js/components/common/Links.js:130
 msgid "XML (full)"
 msgstr "XML (complet)"
-
-#: management/assets/js/components/common/Modals.js:16
-msgid "Close"
-msgstr "Fermer"
 
 #: management/assets/js/components/edit/EditAttribute.js:37
 #: management/assets/js/components/element/Attribute.js:31
