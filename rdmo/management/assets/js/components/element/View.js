@@ -34,7 +34,6 @@ const View = ({ config, view, elementActions, filter=false, filterSites=false, f
                          available={view.available} locked={view.locked} onClick={toggleAvailable}
                          disabled={view.read_only} />
           <ToggleCurrentSiteLink hasCurrentSite={config.settings.multisite ? view.sites.includes(config.currentSite.id) : true}
-                         locked={view.locked}
                          onClick={toggleCurrentSite}
                          show={config.settings.multisite}/>
           <LockedLink title={view.locked ? gettext('Unlock view') : gettext('Lock view')}

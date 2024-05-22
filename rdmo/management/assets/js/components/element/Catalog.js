@@ -44,7 +44,6 @@ const Catalog = ({ config, catalog, elementActions, display='list',
                        available={catalog.available} locked={catalog.locked} onClick={toggleAvailable}
                        disabled={catalog.read_only} />
         <ToggleCurrentSiteLink hasCurrentSite={config.settings.multisite ? catalog.sites.includes(config.currentSite.id) : true}
-                       locked={catalog.locked}
                        onClick={toggleCurrentSite}
                        show={config.settings.multisite}/>
         <LockedLink title={catalog.locked ? gettext('Unlock catalog') : gettext('Lock catalog')}
