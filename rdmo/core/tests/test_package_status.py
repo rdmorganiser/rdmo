@@ -12,6 +12,11 @@ def test_makemigrations_has_no_changes(db, capsys):
     captured = capsys.readouterr()
     assert "No changes detected" in captured.out
 
+
+def strip_version_prefix(version):
+    """Strip common version prefixes like ^, ~, etc."""
+    return version.lstrip("^~")
+
 @pytest.fixture(scope="session")
 def package_json():
     with open("package.json") as f:
@@ -29,7 +34,8 @@ def package_json_versions(package_json):
         "eslint-plugin-react": package_json["devDependencies"]["eslint-plugin-react"],
         "react": package_json["dependencies"]["react"],
     }
-    return {name: version.replace("^", "") for name, version in versions.items()}
+
+    return {name: strip_version_prefix(version) for name, version in versions.items()}
 
 @pytest.fixture(scope="session")
 def pre_commit_config_versions(pre_commit_config):
