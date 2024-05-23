@@ -146,6 +146,7 @@ ignore = [
   "B007",   # unused-loop-control-variable
   "B018",   # useless-expression
   "RUF012", # mutable-class-default
+  "UP031",  # printf-string-formatting`
 ]
 
 [tool.ruff.lint.isort]
