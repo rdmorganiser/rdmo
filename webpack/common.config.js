@@ -37,14 +37,13 @@ const base = {
         ]
       },
       {
-        test: /\.(svg|woff2?|ttf|eot|otf)$/,
-        type: 'javascript/auto',
-        include: /fonts/,  // This line ensures only files in the 'fonts' folder are processed
+        test: /(fonts|files)\/.*\.(svg|woff2?|ttf|eot|otf)(\?.*)?$/,
         loader: 'file-loader',
+        type: 'javascript/auto',
         options: {
           name: '[name].[ext]',
-          outputPath: 'fonts/',  // Output directory for the fonts within the output path of webpack
-          publicPath: '../fonts/',  // Sets correct public path to reference fonts in the CSS
+          outputPath: 'fonts',
+          postTransformPublicPath: (p) => `'../' + ${p}`,
           esModule: false,
         }
       }
