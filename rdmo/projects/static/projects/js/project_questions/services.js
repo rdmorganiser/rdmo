@@ -495,8 +495,8 @@ angular.module('project_questions')
 
         // loop over the page and all questionsets to check conditions
         angular.forEach([future.page].concat(future.questionsets), function(questionset) {
-            angular.forEach(future.valuesets[questionset.id], function(valuesets, set_prefix) {
-                angular.forEach(valuesets, function(valueset, set_index) {
+            angular.forEach(future.valuesets[questionset.id], function(valuesets) {
+                angular.forEach(valuesets, function(valueset) {
                     angular.forEach(questionset.elements, function(element) {
                         if (element.model == 'questions.questionset') {
                             var qs = element;
@@ -505,8 +505,8 @@ angular.module('project_questions')
                                     id: service.project.id,
                                     detail_action: 'resolve',
                                     questionset: qs.id,
-                                    set_prefix: set_prefix,
-                                    set_index: set_index
+                                    set_prefix: valueset.set_prefix,
+                                    set_index: valueset.set_index
                                 }, function(response) {
                                     valueset.hidden.questionsets[qs.id] = !response.result;
                                 }).$promise);
@@ -518,8 +518,8 @@ angular.module('project_questions')
                                     id: service.project.id,
                                     detail_action: 'resolve',
                                     question: q.id,
-                                    set_prefix: set_prefix,
-                                    set_index: set_index
+                                    set_prefix: valueset.set_prefix,
+                                    set_index: valueset.set_index
                                 }, function(response) {
                                     valueset.hidden.questions[q.id] = !response.result;
                                 }).$promise);
@@ -531,8 +531,8 @@ angular.module('project_questions')
                                         id: service.project.id,
                                         detail_action: 'resolve',
                                         optionset: optionset.id,
-                                        set_prefix: set_prefix,
-                                        set_index: set_index
+                                        set_prefix: valueset.set_prefix,
+                                        set_index: valueset.set_index
                                     }, function(response) {
                                         valueset.hidden.optionsets[optionset.id] = !response.result;
                                     }).$promise);
@@ -1003,8 +1003,8 @@ angular.module('project_questions')
                 }
                 // re-evaluate conditions
                 angular.forEach([service.page].concat(service.questionsets), function(questionset) {
-                    angular.forEach(service.valuesets[questionset.id], function(valuesets, set_prefix) {
-                        angular.forEach(valuesets, function(valueset, set_index) {
+                    angular.forEach(service.valuesets[questionset.id], function(valuesets) {
+                        angular.forEach(valuesets, function(valueset) {
                             angular.forEach(questionset.elements, function(element) {
                                 if (element.model == 'questions.questionset') {
                                     var qs = element;
@@ -1013,8 +1013,8 @@ angular.module('project_questions')
                                             id: service.project.id,
                                             detail_action: 'resolve',
                                             questionset: qs.id,
-                                            set_prefix: set_prefix,
-                                            set_index: set_index
+                                            set_prefix: valueset.set_prefix,
+                                            set_index: valueset.set_index
                                         }, function(response) {
                                             valueset.hidden.questionsets[qs.id] = !response.result;
                                         }).$promise);
@@ -1026,8 +1026,8 @@ angular.module('project_questions')
                                             id: service.project.id,
                                             detail_action: 'resolve',
                                             question: q.id,
-                                            set_prefix: set_prefix,
-                                            set_index: set_index
+                                            set_prefix: valueset.set_prefix,
+                                            set_index: valueset.set_index
                                         }, function(response) {
                                             valueset.hidden.questions[q.id] = !response.result;
                                         }).$promise);
@@ -1038,8 +1038,8 @@ angular.module('project_questions')
                                                 id: service.project.id,
                                                 detail_action: 'resolve',
                                                 optionset: optionset.id,
-                                                set_prefix: set_prefix,
-                                                set_index: set_index
+                                                set_prefix: valueset.set_prefix,
+                                                set_index: valueset.set_index
                                             }, function(response) {
                                                 valueset.hidden.optionsets[optionset.id] = !response.result;
                                             }).$promise);
