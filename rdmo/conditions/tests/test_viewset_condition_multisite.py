@@ -4,9 +4,9 @@ import pytest
 
 from django.urls import reverse
 
-from rdmo.core.tests.constants import multisite_status_map as status_map
-from rdmo.core.tests.constants import multisite_users as users
-from rdmo.core.tests.utils import get_obj_perms_status_code
+from rdmo.core.tests import get_obj_perms_status_code
+from rdmo.core.tests import multisite_status_map as status_map
+from rdmo.core.tests import multisite_users as users
 
 from ..models import Condition
 from .test_viewset_condition import export_formats, urlnames
