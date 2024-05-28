@@ -4,8 +4,11 @@ from typing import Callable, Iterable, Optional, Sequence, Union
 
 from django.db import models
 
-from rdmo.core.constants import ELEMENT_COMMON_FIELDS
-
+ELEMENT_COMMON_FIELDS = (
+    'uri_prefix',
+    'uri_path',
+    'comment',
+)
 
 @dataclass(frozen=True)
 class ThroughInstanceMapper:

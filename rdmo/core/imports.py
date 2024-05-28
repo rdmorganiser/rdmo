@@ -131,8 +131,7 @@ def track_changes_on_element(element: dict,
 
 def get_lang_field_values(field_name: str,
                           element: Optional[dict] = None,
-                          instance: Optional[models.Model] = None,
-                          get_by_lang_field_key: bool = True):
+                          instance: Optional[models.Model] = None):
     if element is not None and instance is not None:
         raise ValueError("Please choose one of each")
 
@@ -140,8 +139,6 @@ def get_lang_field_values(field_name: str,
     for lang_code, lang_verbose_name, lang_field in get_languages():
         name_code = f'{field_name}_{lang_code}'
         name_field = f'{field_name}_{lang_field}'
-        # get_key = name_field if get_by_lang_field_key else name_code
-        # set_key = name_code if get_by_lang_field_key else name_field
         row = {}
         row['element_key'] = name_code
         row['instance_field'] = name_field

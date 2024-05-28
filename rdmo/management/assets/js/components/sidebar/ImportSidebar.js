@@ -11,12 +11,7 @@ const ImportSidebar = ({ config, imports, importActions }) => {
   const { elements, success } = imports
 
    const {
-    // elementsImported,
-    // createdElements,
-    // updatedElements,
     changedElements,
-    // importWarnings,
-    // importErrors
   } = useImportElements(elements)
 
   const count = elements.filter(e => e.import).length

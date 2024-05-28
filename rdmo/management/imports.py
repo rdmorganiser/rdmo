@@ -38,7 +38,6 @@ from rdmo.views.imports import import_helper_view
 logger = logging.getLogger(__name__)
 
 
-# mapping is redundant, since each ImportHelper has a .model_path attribute
 ELEMENT_IMPORT_HELPERS = {
     "conditions.condition": import_helper_condition,
     "domain.attribute": import_helper_attribute,
@@ -51,7 +50,7 @@ ELEMENT_IMPORT_HELPERS = {
     "questions.question": import_helper_question,
     "tasks.task": import_helper_task,
     "views.view": import_helper_view
-    }
+}
 
 IMPORT_ELEMENT_INIT_DICT = {
         'warnings': lambda: defaultdict(list),
@@ -110,27 +109,27 @@ def import_element(
 
     uri = element.get('uri')
     # get or create instance from uri and model_path
-    instance, _created = get_or_return_instance(model, uri=uri)
+    instance, created = get_or_return_instance(model, uri=uri)
 
     # keep a copy of the original
     # when the element is updated
     # needs to be created here, else the changes will be overwritten
-    original = copy.deepcopy(instance) if not _created else None
+    original = copy.deepcopy(instance) if not created else None
 
     # prepare a log message
-    _msg = make_import_info_msg(model._meta.verbose_name, _created, uri=uri)
+    msg = make_import_info_msg(model._meta.verbose_name, created, uri=uri)
 
     # check the change or add permissions for the user on the instance
-    _perms_error_msg = check_permissions(instance, uri, user)
-    if _perms_error_msg:
-        # when there is an error msg, the import could be stopped and return
-        element["errors"].append(_perms_error_msg)
+    perms_error_msg = check_permissions(instance, uri, user)
+    if perms_error_msg:
+        # when there is an error msg, the import can be stopped and return
+        element["errors"].append(perms_error_msg)
         return element
 
-    _updated = not _created
-    element['created'] = _created
-    element['updated'] = _updated
-    # dict element[ELEMENT_DIFF_FIELD_NAME] is filled by tracking changes
+    updated = not created
+    element['created'] = created
+    element['updated'] = updated
+    # the dict element[ELEMENT_DIFF_FIELD_NAME] is filled by tracking changes
 
     element = strip_uri_prefix_endswith_slash(element)
     # start to set values on the instance
@@ -138,7 +137,7 @@ def import_element(
     for common_field in common_fields:
         common_value = element.get(common_field) or ''
         setattr(instance, common_field, common_value)
-        if _updated and original:
+        if updated and original:
             # track changes for common fields
             track_changes_on_element(element, common_field, new_value=common_value, original=original)
     # set language fields
@@ -154,12 +153,13 @@ def import_element(
     validate_instance(instance, element, *validators)
 
     if element.get('errors'):
+        # when there is an error msg, the import can be stopped and return
         return element
     if save:
-        logger.info(_msg)
+        logger.info(msg)
         instance.save()
-    # breakpoint()
-    if save or _updated:
+    if save or updated:
+        # this part updates the related fields of the instance
         for m2m_field in import_helper.m2m_instance_fields:
             set_m2m_instances(instance, element, m2m_field, original=original, save=save)
         for m2m_through_fields in import_helper.m2m_through_instance_fields:
@@ -168,12 +168,8 @@ def import_element(
         for reverse_m2m_fields in import_helper.reverse_m2m_through_instance_fields:
             set_reverse_m2m_through_instance(instance, element, **asdict(reverse_m2m_fields),
                                              original=original, save=save)
-    # set aggregated changes potentially to True and a list of changed fields
-    # if _updated and element[ELEMENT_DIFF_FIELD_NAME]:
-    #     set_element_diff_field_meta_info(element)
 
     if save and settings.MULTISITE:
-        # could be optimized with a bulk_create of through model later
         if import_helper.add_current_site_editors:
             instance.editors.add(current_site)
         if import_helper.add_current_site_sites:
