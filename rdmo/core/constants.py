@@ -78,12 +78,6 @@ HUMAN2BYTES_MAPPER = {
     "pib": {"base": 1024, "power": 5},
 }
 
-ELEMENT_COMMON_FIELDS = (
-    'uri_prefix',
-    'uri_path',
-    'comment',
-)
-
 RDMO_MODELS = {
   'catalog': 'questions.catalog',
   'section': 'questions.section',

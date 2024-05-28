@@ -1,4 +1,5 @@
-from ..core.import_helpers import ElementImportHelper, ExtraFieldDefaultHelper, ThroughInstanceMapper
+from rdmo.core.import_helpers import ElementImportHelper, ExtraFieldDefaultHelper, ThroughInstanceMapper
+
 from .models import Option, OptionSet
 from .validators import (
     OptionLockedValidator,

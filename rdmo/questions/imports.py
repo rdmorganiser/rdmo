@@ -1,5 +1,6 @@
+from rdmo.core.import_helpers import ElementImportHelper, ExtraFieldDefaultHelper, ThroughInstanceMapper
+
 from ..core.constants import VALUE_TYPE_TEXT
-from ..core.import_helpers import ElementImportHelper, ExtraFieldDefaultHelper, ThroughInstanceMapper
 from .models import Catalog, Page, Question, QuestionSet, Section
 from .utils import get_widget_type_or_default
 from .validators import (

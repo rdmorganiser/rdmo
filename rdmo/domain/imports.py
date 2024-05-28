@@ -1,7 +1,8 @@
 import logging
 from typing import Optional
 
-from ..core.import_helpers import ElementImportHelper, ExtraFieldDefaultHelper
+from rdmo.core.import_helpers import ElementImportHelper, ExtraFieldDefaultHelper
+
 from .models import Attribute
 from .validators import AttributeLockedValidator, AttributeParentValidator, AttributeUniqueURIValidator
 
