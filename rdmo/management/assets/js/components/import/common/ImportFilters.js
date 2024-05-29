@@ -14,8 +14,7 @@ const ImportFilters = ({ config, elements, changedElements, filteredElements, co
   const getValueFilterChanged = () => get(config, 'filter.import.elements.changed', false)
 
   return (
-    <div className="panel-body">
-    <div className="row">
+
       <div className="row">
         <div className={'col-sm-8'}>
           <FilterString value={getValueFilterString()} onChange={updateFilterString}
@@ -26,30 +25,19 @@ const ImportFilters = ({ config, elements, changedElements, filteredElements, co
                            onChange={updateFilterUriPrefix}
                            options={getUriPrefixes(elements)}/>
         </div>
-      </div>
-      <div className="row-checkbox">
-        {
-          elements.length > 0 &&
-          <div className="pull-left">
-            <div className="checkboxes">
-              <span className="mr-10">{gettext('Changed:')}</span>
-              <Checkbox label={<code
-                className="code-questions">{gettext('Filter changed')}{' ('}{changedElements.length}{') '}</code>}
-                        value={getValueFilterChanged()} onChange={updateFilterChanged}/>
-            </div>
-          </div>
-        }
-        { elements.length > 0 &&
-          <div className="pull-right">
-            <span>{gettext('Shown')}: {filteredElements.length} / {elements.length} </span>
-          </div>
-        }
 
-
-      </div>
-    </div>
-    </div>
-  )
+      {elements.length > 0 && (
+        <div className="horizontal-container">
+          <div className="checkboxes">
+            <Checkbox label={interpolate(gettext('Filter changed (%s)'), [changedElements.length])}
+                      value={getValueFilterChanged()} onChange={updateFilterChanged} />
+          </div>
+          <span className="shown-info">
+            {gettext('Shown')}: {filteredElements.length} / {elements.length}
+          </span>
+        </div>
+      )}
+  </div>)
 }
 
 ImportFilters.propTypes = {

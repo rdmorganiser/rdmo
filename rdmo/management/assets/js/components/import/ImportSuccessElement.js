@@ -6,7 +6,16 @@ import { codeClass, verboseNames } from '../../constants/elements'
 import { isEmpty } from 'lodash'
 import Warnings from './common/Warnings'
 
+const prepareErrorsList = (errors) => {
+  // Filter out duplicate errors
+  const uniqueErrors = [...new Set(errors)]
+
+  return uniqueErrors.map(message => (
+        <p key={uniqueId()} className="text-danger">{message}</p>
+  ))
+}
 const ImportSuccessElement = ({ element }) => {
+  const listErrorMessages = prepareErrorsList(element.errors)
   return (
     <li className="list-group-item">
       <p>
@@ -25,7 +34,7 @@ const ImportSuccessElement = ({ element }) => {
         {'.'}
       </p>
         <Warnings element={element} showTitle={true}/>
-      {element.errors.map(message => <p key={uniqueId()} className="text-danger">{message}</p>)}
+      {listErrorMessages}
     </li>
   )
 }
