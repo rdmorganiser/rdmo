@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import isEmpty from 'lodash/isEmpty'
 import ReactDiffViewer from 'react-diff-viewer-continued'
-import { isUndefined } from 'lodash'
 import Warnings from './Warnings'
 import Errors from './Errors'
 
@@ -11,25 +10,39 @@ const FieldsDiffs = ({ element, field }) => {
       return null
   }
   const fieldDiffData = element.updated_and_changed[field]
-  const newVal = fieldDiffData.newValue ?? ''
-  const oldVal = fieldDiffData.oldValue ?? ''
+  const newVal = fieldDiffData.newValue.toString() ?? ''
+  const oldVal = fieldDiffData.oldValue.toString() ?? ''
   const changed = fieldDiffData.changed ?? false
-  const hideLineNumbers = fieldDiffData.hideLineNumbers ?? true
-  const splitView = fieldDiffData.splitView ?? true
-  const leftTitle = fieldDiffData.leftTitle ?? gettext('Current')
-  const rightTitle = fieldDiffData.rightTitle ?? gettext('Uploaded')
+  const splitView = false
+  const hideLineNumbers = true
+  // const leftTitle = fieldDiffData.leftTitle ?? gettext('Current')
+  // const rightTitle = fieldDiffData.rightTitle ?? gettext('Uploaded')
   const warnings = fieldDiffData.warnings ?? {}
   const errors = fieldDiffData.errors ?? []
 
-  return (changed && !isUndefined(newVal) && !isUndefined(oldVal) &&
-     <div className="col-sm-12">
+  const newStyles = {
+    variables: {
+      light: {
+        diffViewerBackground: '#fff',
+        changedBackground: '#fff',
+        gutterBackground: '#fff',
+      },
+    },
+    contentText: {
+      backgroundColor: '#fff !important',
+    },
+  }
+
+  return (changed &&
+     <div className="field-diff col-sm-12 mt-10 mb-10">
       <ReactDiffViewer
-          oldValue={oldVal.toString()}
-          newValue={newVal.toString()}
+          styles={newStyles}
+          oldValue={oldVal}
+          newValue={newVal}
           splitView={splitView}
           hideLineNumbers={hideLineNumbers}
-          leftTitle={leftTitle}
-          rightTitle={rightTitle}
+          // leftTitle={leftTitle}
+          // rightTitle={rightTitle}
           >
           </ReactDiffViewer>
       {

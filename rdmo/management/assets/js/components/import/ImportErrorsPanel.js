@@ -5,18 +5,16 @@ import Errors from './common/Errors'
 import get from 'lodash/get'
 
 const ImportErrorsPanel = ({ config, elements, configActions }) => {
-
   const updateShowErrors = () => {
     const currentVal = get(config, 'filter.import.errors.show', false)
     configActions.updateConfig('filter.import.errors.show', !currentVal)
   }
 
   const showErrors = get(config, 'filter.import.errors.show', false)
-    const listErrors = elements.map((element, index) => {
-              return (<Errors key={index} element={element} />)
-              })
-  // const toggleImport = () => importActions.updateElement(element, {import: !element.import})
-  // const updateElement = (key, value) => importActions.updateElement(element, {[key]: value})
+  const listErrors = elements.map((element, index) => {
+            return (<Errors key={index} element={element} />)
+            })
+
   return (
     <div className="panel panel-danger">
       <div className="panel-heading"><strong>{gettext('Errors')}{' '}({elements.length}){' : '}</strong>
