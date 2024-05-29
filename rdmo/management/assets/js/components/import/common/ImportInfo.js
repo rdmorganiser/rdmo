@@ -2,9 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {isUndefined} from 'lodash'
 
-const renderElementLengthInfo = (label, length) => length > 0
-  && <span>{gettext(label)}: {length} </span>
-
+const renderElementLengthInfo = (label, length) => (
+  length > 0 && (
+    <span className='mr-5'>{gettext(label)}: {length} </span>
+  )
+)
 const ImportInfo = ({
                       elementsLength,
                       updatedLength,
@@ -20,9 +22,9 @@ const ImportInfo = ({
   return (
     <div className="pull-right">
       {renderElementLengthInfo('Total', elementsLength)}
-      {renderElementLengthInfo('updated', updatedLength)}
-      {changedLength > 0 && <span>{' ('}{gettext('changed')}{': '}{changedLength}{') '}</span>}
-      {renderElementLengthInfo('created', createdLength)}
+      {renderElementLengthInfo('Updated', updatedLength)}
+      {renderElementLengthInfo('Changed', changedLength)}
+      {renderElementLengthInfo('Created', createdLength)}
       {renderElementLengthInfo('Warnings', warningsLength)}
       {renderElementLengthInfo('Errors', errorsLength)}
     </div>

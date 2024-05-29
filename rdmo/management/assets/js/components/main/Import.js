@@ -38,6 +38,7 @@ const Import = ({ config, imports, configActions, importActions }) => {
                         warningsLength={importWarnings.length} errorsLength={importErrors.length}/>
 
       </div>
+      <div className="panel-body">
         {
           elements.length > 0 &&
           <ImportFilters config={config} elements={elements}
@@ -46,7 +47,6 @@ const Import = ({ config, imports, configActions, importActions }) => {
                          configActions={configActions}
           />
         }
-
         {
         importWarnings.length > 0 &&
           <ImportWarningsPanel config={config} elements={importWarnings} importActions={importActions}
@@ -69,6 +69,7 @@ const Import = ({ config, imports, configActions, importActions }) => {
           }
         </ul>
     </div>
+  </div>
   )
 }
 
