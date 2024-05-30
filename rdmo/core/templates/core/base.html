@@ -1,5 +1,5 @@
-{% load static compress core_tags %}<!DOCTYPE html>
-<html>
+{% load static compress core_tags i18n %}{% get_current_language as lang_code %}<!DOCTYPE html>
+<html lang="{{ lang_code }}">
 <head>
     {% include 'core/base_head.html' %}
 

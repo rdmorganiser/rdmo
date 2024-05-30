@@ -1,9 +1,10 @@
 {
   "name": "rdmo",
   "scripts": {
-    "build:prod": "webpack --config webpack/prod.config.js --mode production",
-    "build": "webpack --config webpack/dev.config.js --mode development",
-    "watch": "webpack --config webpack/dev.config.js --mode development --watch"
+    "build:prod": "webpack --config webpack.config.js --mode production",
+    "build": "webpack --config webpack.config.js --mode development",
+    "watch": "webpack --config webpack.config.js --mode development --watch",
+    "lint": "eslint --ext .js rdmo/"
   },
   "author": "RDMO Arbeitsgemeinschaft <rdmorganiser.github.io>",
   "license": "Apache-2.0",
@@ -17,7 +18,9 @@
     "@uiw/react-codemirror": "^4.19.9",
     "bootstrap-sass": "^3.4.1",
     "classnames": "^2.3.2",
+    "date-fns": "^3.6.0",
     "font-awesome": "4.7.0",
+    "html-to-text": "^9.0.5",
     "jquery": "^3.6.0",
     "js-cookie": "^2.2.1",
     "lodash": "^4.17.21",
@@ -25,14 +28,17 @@
     "prop-types": "^15.7.2",
     "react": "^18.2.0",
     "react-bootstrap": "0.33.1",
+    "react-datepicker": "^6.9.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.3",
     "react-redux": "^7.2.4",
     "react-select": "^5.7.0",
     "redux": "^4.1.1",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "use-debounce": "^10.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.23.4",

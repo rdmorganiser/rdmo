@@ -216,6 +216,19 @@ SETTINGS_API = [
     'EXPORT_FORMATS',
 ]
 
+TEMPLATES_API = [
+    'projects/project_interview_add_set_help.html',
+    'projects/project_interview_add_value_help.html',
+    'projects/project_interview_buttons_help.html',
+    'projects/project_interview_done.html',
+    'projects/project_interview_error.html',
+    'projects/project_interview_multiple_values_warning.html',
+    'projects/project_interview_navigation_help.html',
+    'projects/project_interview_overview_help.html',
+    'projects/project_interview_page_tabs_help.html',
+    'projects/project_interview_progress_help.html',
+]
+
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'info@example.com'
 

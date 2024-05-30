@@ -2,12 +2,13 @@ from django.urls import include, path
 
 from rest_framework import routers
 
-from ..viewsets import GroupViewSet, SettingsViewSet, SitesViewSet
+from ..viewsets import GroupViewSet, SettingsViewSet, SitesViewSet, TemplatesViewSet
 
 router = routers.DefaultRouter()
 router.register(r'settings', SettingsViewSet, basename='setting')
 router.register(r'sites', SitesViewSet, basename='site')
 router.register(r'groups', GroupViewSet, basename='group')
+router.register(r'templates', TemplatesViewSet, basename='template')
 
 urlpatterns = [
     path('accounts/', include('rdmo.accounts.urls.v1')),
