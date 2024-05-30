@@ -1174,7 +1174,7 @@ msgstr "Sie sind eingeloggt als: "
 
 #: core/templates/rest_framework_swagger/index.html:43
 msgid "Viewing as an anonymous user"
-msgstr "Ansicht als anoymer Benutzer"
+msgstr "Ansicht als anonymer Benutzer"
 
 #: core/templates/rest_framework_swagger/index.html:55
 msgid "Powered by "
