@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='task',
             name='attribute',
-            field=models.ForeignKey(blank=True, help_text='The attribute this task is refering to.', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='domain.Attribute', verbose_name='Attribute'),
+            field=models.ForeignKey(blank=True, help_text='The attribute this task is referring to.', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='domain.Attribute', verbose_name='Attribute'),
         ),
         migrations.AlterField(
             model_name='task',

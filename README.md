@@ -28,4 +28,4 @@ RDMO is a tool to support the systematic planning, organisation and implementati
   <dd>https://rdmo.aip.de</dd>
 </dl>
 
-If you encounter any problems or bugs with the RDMO Software, or if you want to request a feature, please file an issue here: <https://github.com/rdmorganiser/rdmo/issues>. For problems or suggestions with questionaires, the RDMO domain model or other content, please use the issues in the [rdmo-catalog](https://github.com/rdmorganiser/rdmo-catalog) repository: <https://github.com/rdmorganiser/rdmo-catalog/issues>. In order to file issues, you will need a GitHub account.
+If you encounter any problems or bugs with the RDMO Software, or if you want to request a feature, please file an issue here: <https://github.com/rdmorganiser/rdmo/issues>. For problems or suggestions with questionnaires, the RDMO domain model or other content, please use the issues in the [rdmo-catalog](https://github.com/rdmorganiser/rdmo-catalog) repository: <https://github.com/rdmorganiser/rdmo-catalog/issues>. In order to file issues, you will need a GitHub account.

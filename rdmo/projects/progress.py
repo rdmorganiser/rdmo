@@ -119,7 +119,7 @@ def count_questions(element, sets, conditions):
 
         # count the sets for the id attribute of the page or question
         if element.attribute is not None:
-            # nested loop over the seperate set_index lists in sets[element.attribute.id]
+            # nested loop over the separate set_index lists in sets[element.attribute.id]
             for set_index in chain.from_iterable(sets[element.attribute.id].values()):
                 counted_sets.add(set_index)
 
@@ -127,7 +127,7 @@ def count_questions(element, sets, conditions):
         for child in element.elements:
             if isinstance(child, Question):
                 if child.attribute is not None:
-                    # nested loop over the seperate set_index lists in sets[element.attribute.id]
+                    # nested loop over the separate set_index lists in sets[element.attribute.id]
                     for set_index in chain.from_iterable(sets[child.attribute.id].values()):
                         counted_sets.add(set_index)
 
@@ -149,7 +149,7 @@ def count_questions(element, sets, conditions):
                 # question should be answered in every set
                 # for optional questions add just the number of present answers, so that
                 # only answered questions count for the progress/navigation
-                # use the max function, since the same attribute could apear twice in the tree
+                # use the max function, since the same attribute could appear twice in the tree
                 if child.attribute is not None:
                     if child.is_optional:
                         child_count = sum(len(set_indexes) for set_indexes in sets[child.attribute.id].values())
@@ -157,7 +157,7 @@ def count_questions(element, sets, conditions):
                     else:
                         counts[child.attribute.id] = max(counts[child.attribute.id], set_count)
             else:
-                # for everthing else, call this function recursively
+                # for everything else, call this function recursively
                 counts.update(count_questions(child, sets, conditions))
 
     return counts
