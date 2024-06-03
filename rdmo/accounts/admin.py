@@ -30,12 +30,23 @@ class RoleAdmin(admin.ModelAdmin):
 
     list_display = ('user', 'email', 'members', 'managers', 'editors', 'reviewers')
 
+    readonly_fields = ('user', )
+
     def get_queryset(self, request):
         return Role.objects.prefetch_related(
                 'member', 'manager', 'editor', 'reviewer').annotate(
                     Count('member'), Count('manager'), Count('editor'), Count('reviewer'),
                     sites_count=Value(Site.objects.count())
                 )
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields['member'].widget.can_add_related = False
+        form.base_fields['manager'].widget.can_add_related = False
+        form.base_fields['editor'].widget.can_add_related = False
+        form.base_fields['reviewer'].widget.can_add_related = False
+
+        return form
 
     @staticmethod
     def render_all_sites_or_join(obj, field_name: str) -> str:
