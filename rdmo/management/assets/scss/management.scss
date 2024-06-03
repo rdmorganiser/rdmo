@@ -215,30 +215,29 @@ $icon-font-path: "bootstrap-sass/assets/fonts/bootstrap/";
 }
 
 .field-diff {
-  // Target elements with classes containing "react-diff-" and "marker"
-    [class*="react-diff-"][class*="marker"] {
-        margin-top: 10px !important;
-        margin-bottom: 5px !important;
-
+    [class*="react-diff-"][class*="diff-container"] {
+      margin-top: 10px !important;
+      margin-bottom: 5px !important;
+      font-size: 11px !important;
+      line-height: 12px !important;
+      // Target elements with classes containing "react-diff-", and "marker"
+      [class*="marker"] {
+        padding: 7px 8px 7px 8px !important;
         pre {
-            background-color: #fff !important;
-            font-size: 10px;
-            padding-top: 5px !important;
-            padding-bottom: 5px !important;
+          margin: 0px !important;;
+          background-color: #fff !important;
+          padding: 2px 9px 2px 9px !important;
         }
-    }
-
-    // Target elements with classes containing "react-diff-" and "content-text"
-    [class*="react-diff-"][class*="content-text"] {
-        font-size: 10px !important;
-        line-height: 12px !important;
-        margin-bottom: 5px !important;
-        margin-top: 5px !important;
-        padding-top: 10px !important;
-        padding-bottom: 10px !important;
       }
-}
 
-//.list-group-item div.mt-10 div.row div.field-diff.col-sm-12.mt-10.mb-10 table.react-diff-1n5o7vh-diff-container tbody tr.react-diff-1n7ec1i-line td.react-diff-vl0irh-content.react-diff-1fxlvce-diff-removed pre.react-diff-16bq9gd-content-text
-//<span class="react-diff-42iver-word-diff">Lorem </span><span class="react-diff-42iver-word-diff react-diff-hf3w1f-word-removed">mu</span><span class="react-diff-42iver-word-diff">ps</span><span class="react-diff-42iver-word-diff react-diff-hf3w1f-word-removed">i</span><span class="react-diff-42iver-word-diff">m</span><span class="react-diff-42iver-word-diff react-diff-hf3w1f-word-removed">de</span><span class="react-diff-42iver-word-diff"> dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est.</span>
-//<pre class="react-diff-16bq9gd-content-text"><span class="react-diff-42iver-word-diff">Lorem </span><span class="react-diff-42iver-word-diff react-diff-hf3w1f-word-removed">mu</span><span class="react-diff-42iver-word-diff">ps</span><span class="react-diff-42iver-word-diff react-diff-hf3w1f-word-removed">i</span><span class="react-diff-42iver-word-diff">m</span><span class="react-diff-42iver-word-diff react-diff-hf3w1f-word-removed">de</span><span class="react-diff-42iver-word-diff"> dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est.</span></pre>
+      // Target elements with classes containing "react-diff-", and "content"
+      [class*="content"] {
+        padding: 7px 16px 7px 8px !important;
+        white-space: normal;
+        pre {
+          margin: 0px !important;
+          padding: 0px !important;
+        }
+      }
+    }
+}
