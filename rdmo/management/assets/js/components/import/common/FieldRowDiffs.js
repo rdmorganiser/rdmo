@@ -5,7 +5,7 @@ import ReactDiffViewer from 'react-diff-viewer-continued'
 import Warnings from './Warnings'
 import Errors from './Errors'
 
-const FieldsDiffs = ({ element, field }) => {
+const FieldRowDiffs = ({ element, field }) => {
   if (isEmpty(element.updated_and_changed[field])) {
       return null
   }
@@ -59,9 +59,9 @@ const FieldsDiffs = ({ element, field }) => {
   )
 }
 
-FieldsDiffs.propTypes = {
+FieldRowDiffs.propTypes = {
   element: PropTypes.object.isRequired,
   field: PropTypes.string.isRequired,
 }
 
-export default FieldsDiffs
+export default FieldRowDiffs

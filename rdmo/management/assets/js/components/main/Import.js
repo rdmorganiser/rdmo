@@ -48,15 +48,16 @@ const Import = ({ config, imports, configActions, importActions }) => {
           />
         }
         {
-        importWarnings.length > 0 &&
+          importWarnings.length > 0 &&
           <ImportWarningsPanel config={config} elements={importWarnings} importActions={importActions}
                                configActions={configActions}/>
         }
         {
-        importErrors.length > 0 &&
+          importErrors.length > 0 &&
           <ImportErrorsPanel config={config} elements={importErrors} importActions={importActions}
-                               configActions={configActions}/>
+                             configActions={configActions}/>
         }
+      </div>
         <ul className='list-group'>
           {
             filteredElements.map((element, index) => {
@@ -68,7 +69,6 @@ const Import = ({ config, imports, configActions, importActions }) => {
             })
           }
         </ul>
-    </div>
   </div>
   )
 }
