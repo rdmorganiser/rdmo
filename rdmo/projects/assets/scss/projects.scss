@@ -186,7 +186,7 @@ a.disabled {
     }
 
     .projects-header-buttons {
-        @media (min-width: $screen-md-max) {
+        @media (min-width: $screen-sm-max) {
             display: flex;
             gap: 20px;
         }
@@ -195,7 +195,7 @@ a.disabled {
             padding: 0;
             padding-bottom: 15px;
 
-            @media (max-width: $screen-md-max) {
+            @media (max-width: $screen-sm-max) {
                 display: block;
                 padding-bottom: 10px;
             }
