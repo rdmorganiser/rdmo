@@ -1,4 +1,3 @@
-import hashlib
 import logging
 
 from django.conf import settings
@@ -15,7 +14,7 @@ from django.views.generic import DeleteView, DetailView, TemplateView
 from django.views.generic.edit import FormMixin
 
 from rdmo.core.plugins import get_plugin, get_plugins
-from rdmo.core.views import CSRFViewMixin, ObjectPermissionMixin, RedirectViewMixin
+from rdmo.core.views import CSRFViewMixin, ObjectPermissionMixin, RedirectViewMixin, StoreIdViewMixin
 from rdmo.questions.models import Catalog
 from rdmo.questions.utils import get_widgets
 from rdmo.tasks.models import Task
@@ -26,18 +25,10 @@ from ..utils import get_upload_accept
 
 logger = logging.getLogger(__name__)
 
-class ProjectsView(LoginRequiredMixin, CSRFViewMixin, TemplateView):
+
+class ProjectsView(LoginRequiredMixin, CSRFViewMixin, StoreIdViewMixin, TemplateView):
     template_name = 'projects/projects.html'
 
-    # def has_permission(self):
-    #     # Use test_rule from rules for permissions check
-    #     return test_rule('projects.can_view_all_projects', self.request.user, self.request.site)
-    def render_to_response(self, context, **response_kwargs):
-      storeid = hashlib.sha256(self.request.session.session_key.encode()).hexdigest()
-
-      response = super().render_to_response(context, **response_kwargs)
-      response.set_cookie('storeid', storeid)
-      return response
 
 class ProjectDetailView(ObjectPermissionMixin, DetailView):
     model = Project
