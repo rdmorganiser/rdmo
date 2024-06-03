@@ -213,11 +213,12 @@ class ProjectViewSet(ModelViewSet):
         project = self.get_object()
 
         if request.method == 'POST' or project.progress_count is None or project.progress_total is None:
-            # compute the progress and store
+            # compute the progress, but store it only, if it has changed
             project.catalog.prefetch_elements()
-            project.progress_count, project.progress_total = compute_progress(project)
-            project.save()
-
+            progress_count, progress_total = compute_progress(project)
+            if progress_count != project.progress_count or progress_total != project.progress_total:
+                project.progress_count, project.progress_total = progress_count, progress_total
+                project.save()
         try:
             ratio = project.progress_count / project.progress_total
         except ZeroDivisionError:
