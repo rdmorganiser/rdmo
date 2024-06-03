@@ -83,10 +83,10 @@
 		<uri_path>one_two_three_other/one</uri_path>
 		<dc:comment/>
 		<text lang="en">One - 3</text>
-		<help lang="en"/>
+		<help lang="en">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est.</help>
 		<text lang="de">Eins - 3</text>
-		<help lang="de"/>
-		<additional_input/>
+		<help lang="de">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est.</help>
+		<additional_input>text</additional_input>
 	</option>
 	<option dc:uri="http://example.com/terms/options/one_two_three_other/two">
 		<uri_prefix>http://example.com/terms</uri_prefix>
