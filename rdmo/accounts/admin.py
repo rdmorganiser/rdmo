@@ -35,7 +35,10 @@ class RoleAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         return Role.objects.prefetch_related(
                 'member', 'manager', 'editor', 'reviewer').annotate(
-                    Count('member'), Count('manager'), Count('editor'), Count('reviewer'),
+                    Count('member', distinct=True),
+                    Count('manager', distinct=True),
+                    Count('editor', distinct=True),
+                    Count('reviewer', distinct=True),
                     sites_count=Value(Site.objects.count())
                 )
 
@@ -49,7 +52,7 @@ class RoleAdmin(admin.ModelAdmin):
         return form
 
     @staticmethod
-    def render_all_sites_or_join(obj, field_name: str) -> str:
+    def get_sites_for_role(obj, field_name: str) -> str:
         if getattr(obj, f'{field_name}__count', 0) == obj.sites_count:
             return 'all Sites'
         return ', '.join([site.domain for site in getattr(obj, field_name).all()])
@@ -58,13 +61,13 @@ class RoleAdmin(admin.ModelAdmin):
         return obj.user.email
 
     def members(self, obj):
-        return self.render_all_sites_or_join(obj, 'member')
+        return self.get_sites_for_role(obj, 'member')
 
     def managers(self, obj):
-        return self.render_all_sites_or_join(obj, 'manager')
+        return self.get_sites_for_role(obj, 'manager')
 
     def editors(self, obj):
-        return self.render_all_sites_or_join(obj, 'editor')
+        return self.get_sites_for_role(obj, 'editor')
 
     def reviewers(self, obj):
-        return self.render_all_sites_or_join(obj, 'reviewer')
+        return self.get_sites_for_role(obj, 'reviewer')
