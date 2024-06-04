@@ -33,7 +33,8 @@ class RoleAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         return Role.objects.prefetch_related(
                 'member', 'manager', 'editor', 'reviewer').annotate(
-                    Count('member'), Count('manager'), Count('editor'), Count('reviewer'),
+                    Count('member', distinct=True), Count('manager', distinct=True),
+                    Count('editor', distinct=True), Count('reviewer', distinct=True),
                     sites_count=Value(Site.objects.count())
                 )
 
