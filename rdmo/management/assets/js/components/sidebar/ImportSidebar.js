@@ -57,28 +57,26 @@ const ImportSidebar = ({ config, imports, importActions }) => {
               {gettext('Select all')}
             </Link>
           </li>
-            {changedElements.length > 0 &&
+          {changedElements.length > 0 &&
             <li>
-              <ul className="list-unstyled" style={{paddingLeft:'20px'}}>
-                <li>
-                  <Link onClick={() => importActions.selectChangedElements(true)}>
-                    {gettext('Select changed')}
-                  </Link>
-                </li>
-                <li>
-                  <Link onClick={() => importActions.selectChangedElements(false)}>
-                    {gettext('Unselect changed')}
-                  </Link>
-                </li>
-              </ul>
+              <Link onClick={() => importActions.selectChangedElements(true)}>
+                {gettext('Select changed')}
+              </Link>
             </li>
-            }
+          }
           <li>
             <Link onClick={() => importActions.selectElements(false)}>
-              {gettext('Unselect all')}
+              {gettext('Deselect all')}
             </Link>
           </li>
-          </ul>
+          {changedElements.length > 0 &&
+            <li>
+              <Link onClick={() => importActions.selectChangedElements(false)}>
+                {gettext('Deselect changed')}
+              </Link>
+            </li>
+          }
+        </ul>
 
           <h2>{gettext('Show')}</h2>
           <ul className="list-unstyled">
