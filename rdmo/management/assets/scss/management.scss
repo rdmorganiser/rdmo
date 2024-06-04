@@ -216,28 +216,45 @@ $icon-font-path: "bootstrap-sass/assets/fonts/bootstrap/";
 
 .field-diff {
     [class*="react-diff-"][class*="diff-container"] {
-      margin-top: 10px !important;
-      margin-bottom: 5px !important;
-      font-size: 11px !important;
-      line-height: 12px !important;
-      // Target elements with classes containing "react-diff-", and "marker"
-      [class*="marker"] {
-        padding: 7px 8px 7px 8px !important;
-        pre {
-          margin: 0px !important;;
-          background-color: #fff !important;
-          padding: 2px 9px 2px 9px !important;
-        }
-      }
+        margin: 0;
+        border-collapse: separate;  // needed for border radius since this is a table
 
-      // Target elements with classes containing "react-diff-", and "content"
-      [class*="content"] {
-        padding: 7px 16px 7px 8px !important;
-        white-space: normal;
-        pre {
-          margin: 0px !important;
-          padding: 0px !important;
+        tr {
+            &:first-child {
+                [class*="marker"] {
+                    border-top-left-radius: 4px;
+                }
+                [class*="content"] {
+                    border-top-right-radius: 4px;
+                }
+            }
+            &:last-child {
+                [class*="marker"] {
+                    border-bottom-left-radius: 4px;
+                }
+                [class*="content"] {
+                    border-bottom-right-radius: 4px;
+                }
+            }
         }
-      }
+
+        // Target elements with classes containing "react-diff-", and "marker"
+        // Target elements with classes containing "react-diff-", and "content"
+        [class*="marker"],
+        [class*="content"] {
+            padding: 8px 12px;
+            vertical-align: top;
+            pre {
+                padding: 5px 10px;
+                border-radius: 4px;
+                font-size: 13px;
+                line-height: 18px;
+                background-color: #fff;
+            }
+        }
+
+        [class*="marker"] {
+            padding-right: 0;
+        }
     }
 }
