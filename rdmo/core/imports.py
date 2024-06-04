@@ -98,16 +98,12 @@ def track_messages_on_element(element: dict, element_field: str, warning: Option
         _append_error(element, element_field, error)
 
 
-def _initialize_track_changes_element_field(element: dict, element_field: str):
+def _initialize_track_changes_element_field(element: dict, element_field: str) -> None:
     if ELEMENT_DIFF_FIELD_NAME not in element:
         element[ELEMENT_DIFF_FIELD_NAME] = {}
 
     if element_field and element_field not in element[ELEMENT_DIFF_FIELD_NAME]:
         element[ELEMENT_DIFF_FIELD_NAME][element_field] = {}
-
-
-def _cast_list_of_string_to_list(list_of_strings: List[str]) -> str:
-    return "\n".join(map(str, list_of_strings))
 
 
 def track_changes_on_element(element: dict,
@@ -192,13 +188,11 @@ def set_foreign_field(instance, field_name, element, uploaded_uris=None, origina
             field_name=field_name
         )
         logger.info(message)
-        # [element.get('uri')]
         element['errors'].append(message)  # errors is a list
         track_messages_on_element(element, field_name, error=message)
         return
 
     foreign_uri = foreign_element['uri']
-    # breakpoint()
     model_info = model_meta.get_field_info(instance)
     foreign_model = model_info.forward_relations[field_name].related_model
     foreign_instance = None
@@ -250,15 +244,12 @@ def set_foreign_field(instance, field_name, element, uploaded_uris=None, origina
 def set_extra_field(instance, field_name, element,
                     extra_field_helper: Optional[ExtraFieldDefaultHelper] = None, original=None) -> None:
     element_value = element.get(field_name)
+    extra_value = element_value if element_value is not None else None
 
-    extra_value = None
-    if element_value is not None:
-        extra_value = element_value
-    elif extra_field_helper is not None:
+    if extra_value is None and extra_field_helper is not None:
         # default_value
         extra_value = extra_field_helper.get_default(instance=instance,
                                                      key=field_name)
-
     if extra_value is not None:
         setattr(instance, field_name, extra_value)
         # track changes

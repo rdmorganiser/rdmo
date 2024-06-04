@@ -21,17 +21,20 @@ class ThroughInstanceMapper:
 @dataclass(frozen=True)
 class ExtraFieldDefaultHelper:
     field_name: str
-    value: Optional[Union[str, bool, int]] = None
+    value: Union[str, bool, int, None] = None
     callback: Optional[Callable] = None
 
     def get_default(self, **kwargs):
         if self.callback is None:
             return self.value
-
-        sig = signature(self.callback)
-        _kwargs = {k:val for k,val in kwargs.items() if k in sig.parameters}
-        _value = self.callback(**_kwargs)
-        return _value
+        else:
+            return self.get_default_from_callback(self.callback, kwargs)
+    @staticmethod
+    def get_default_from_callback(callback, kwargs):
+        sig = signature(callback)
+        kwargs = {k: val for k, val in kwargs.items() if k in sig.parameters}
+        value = callback(**kwargs)
+        return value
 
 
 @dataclass(frozen=True)

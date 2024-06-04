@@ -33,7 +33,7 @@ import_helper_option = ElementImportHelper(
     validators = (OptionLockedValidator, OptionUniqueURIValidator),
     lang_fields = ('text', 'help', 'view_text'),
     extra_fields = (
-        ExtraFieldDefaultHelper(field_name='additional_input'),
+        ExtraFieldDefaultHelper(field_name='additional_input', value=Option.ADDITIONAL_INPUT_NONE),
         ),
     reverse_m2m_through_instance_fields = [
         ThroughInstanceMapper(
