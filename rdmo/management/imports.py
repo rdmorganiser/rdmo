@@ -69,7 +69,7 @@ def import_elements(uploaded_elements: Dict, save: bool = True, request: Optiona
         element = import_element(element=uploaded_element, save=save,
                                   uploaded_uris=uploaded_uris,
                                     request=request, current_site=current_site)
-        element['warnings'] = {k: val  for k, val in element['warnings'].items() if k not in uploaded_uris}
+        element['warnings'] = {k: val for k, val in element['warnings'].items() if k not in uploaded_uris}
         imported_elements.append(element)
     return imported_elements
 
@@ -145,10 +145,11 @@ def import_element(
         set_lang_field(instance, lang_field_name, element, original=original)
     # set foreign fields
     for foreign_field in foreign_field_names:
-        set_foreign_field(instance, foreign_field, element, uploaded_uris=uploaded_uris)
+        set_foreign_field(instance, foreign_field, element, uploaded_uris=uploaded_uris, original=original)
     # set extra fields
     for extra_field_helper in extra_field_helpers:
-        set_extra_field(instance, extra_field_helper.field_name, element, extra_field_helper=extra_field_helper)
+        set_extra_field(instance, extra_field_helper.field_name, element,
+                        extra_field_helper=extra_field_helper, original=original)
     # call the validators on the instance
     validate_instance(instance, element, *validators)
 
