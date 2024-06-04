@@ -320,7 +320,9 @@ def convert_additional_input(elements):
     for uri, element in elements.items():
         if element['model'] == 'options.option':
             additional_input = element.get('additional_input')
-            if additional_input == 'True':
+            if additional_input in ['', 'text', 'textarea']:  # from Option.ADDITIONAL_INPUT_CHOICES
+                element['additional_input'] = additional_input
+            elif additional_input == 'True':
                 element['additional_input'] = 'text'
             else:
                 element['additional_input'] = ''
