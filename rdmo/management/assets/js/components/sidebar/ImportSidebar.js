@@ -86,27 +86,25 @@ const ImportSidebar = ({ config, imports, importActions }) => {
             </Link>
           </li>
           {changedElements.length > 0 &&
-              <li>
-                <ul className="list-unstyled" style={{paddingLeft:'20px'}}>
-                  <li>
-                    <Link onClick={() => importActions.showChangedElements(true)}>
-                      {gettext('Show changes')}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link onClick={() => importActions.showChangedElements(false)}>
-                      {gettext('Hide changes')}
-                    </Link>
-                  </li>
-                </ul>
-              </li>
+            <li>
+              <Link onClick={() => importActions.showChangedElements(true)}>
+                {gettext('Show changes')}
+              </Link>
+            </li>
           }
           <li>
             <Link onClick={() => importActions.showElements(false)}>
               {gettext('Hide all')}
             </Link>
           </li>
-        </ul>
+            {changedElements.length > 0 &&
+              <li>
+                <Link onClick={() => importActions.showChangedElements(false)}>
+                  {gettext('Hide changes')}
+                </Link>
+              </li>
+            }
+          </ul>
 
         <h2>{gettext('URI prefix')}</h2>
 
