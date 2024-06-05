@@ -3,7 +3,7 @@ from functools import partial
 from typing import Dict, List, Optional, Tuple, Union
 
 from rdmo.core.imports import CURRENT_DATA_FIELD, ELEMENT_DIFF_FIELD_NAME, NEW_DATA_FIELD, track_changes_on_element
-from rdmo.management.imports import _initialize_import_element_dict
+from rdmo.management.import_utils import initialize_import_element_dict
 
 UPDATE_FIELD_FUNCS = {
     'comment': lambda text: f"this is a test comment {text}",
@@ -58,7 +58,7 @@ def _test_helper_change_fields_elements(elements,
     _new_elements = OrderedDict()
     for _n, (_uri, _element) in enumerate(elements.items()):
         if _n <= n - 1:
-            _initialize_import_element_dict(_element)
+            initialize_import_element_dict(_element)
             for field in fields_to_update:
                 original_value = _element[field] or ''
                 new_val = UPDATE_FIELD_FUNCS[field](_n)
