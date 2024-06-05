@@ -29,7 +29,7 @@ const ImportFilters = ({ config, elements, changedElements, filteredElements, co
       {elements.length > 0 && (
         <div className="horizontal-container">
           <div className="checkboxes">
-            <Checkbox label={interpolate(gettext('Filter changed (%s)'), [changedElements.length])}
+            <Checkbox label={interpolate(gettext('Show only created and changed (%s)'), [changedElements.length])}
                       value={getValueFilterChanged()} onChange={updateFilterChanged} />
           </div>
           <span className="shown-info">
