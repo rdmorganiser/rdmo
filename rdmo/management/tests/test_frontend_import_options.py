@@ -44,7 +44,7 @@ def test_import_and_update_optionsets_in_management(logged_in_user: Page) -> Non
     # test the components of the import-before-import staging page
     expect(page.get_by_text(f"Created: {OPTIONSETS_COUNTS['total']}")).to_be_visible(timeout=30_000)
     page.locator(".element-link").first.click()
-    page.get_by_role("link", name="Unselect all").click()
+    page.get_by_role("link", name="Deselect all").click()
     page.get_by_role("link", name="Select all", exact=True).click()
     page.get_by_role("link", name="Show all", exact=True).click()
     rows_displayed_in_ui = page.locator(".list-group > .list-group-item > .row.mt-10")
@@ -70,7 +70,7 @@ def test_import_and_update_optionsets_in_management(logged_in_user: Page) -> Non
     # assert changed elements
     for text in OPTIONSETS_COUNTS_HEADER_INFOS:
         expect(page.locator("#main")).to_contain_text(text)
-    expect(page.get_by_text("Filter changed (5)")).to_be_visible()
+    expect(page.get_by_text(f"Show only created and changed ({OPTIONSETS_COUNTS['changed']})")).to_be_visible()
     page.get_by_role("link", name="Show changes").click()
     expect(page.locator(".col-sm-6 > .form-group").first).to_be_visible(timeout=30_000)
     # take a screenshot of the import page
