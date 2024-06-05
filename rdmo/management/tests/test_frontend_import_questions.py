@@ -35,7 +35,7 @@ def test_import_catalogs_in_management(logged_in_user: Page) -> None:
     ## TODO test if ImportInfo numbers are correct
     # test the components of the import-before-import staging page
     page.locator(".element-link").first.click()
-    page.get_by_role("link", name="Unselect all").click()
+    page.get_by_role("link", name="Deselect all").click()
     page.get_by_role("link", name="Select all", exact=True).click()
     page.get_by_role("link", name="Show all").click()
     rows_displayed_in_ui = page.locator(".list-group > .list-group-item > .row.mt-10")
