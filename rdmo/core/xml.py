@@ -19,11 +19,11 @@ DEFAULT_RDMO_XML_VERSION = '1.11.0'
 ELEMENTS_USING_KEY = {RDMO_MODELS['attribute']}
 
 
-def resolve_file(file_name: str) -> Path:
+def resolve_file(file_name: str) -> Tuple[Optional[Path], Optional[str]]:
     file = Path(file_name).resolve()
-    if not file.exists():
-        raise ValueError(f"File does not exist: {file}")
-    return file
+    if file.exists():
+        return file, None
+    return  None, _('This file does not exists.')
 
 
 def read_xml(file: Path) -> Tuple[Optional[xmlElement], Optional[str]]:
@@ -82,11 +82,16 @@ def parse_elements(root: xmlElement) -> Tuple[Dict, Optional[str]]:
 
 def parse_xml_to_elements(xml_file=None) -> Tuple[OrderedDict, list]:
 
-    file = resolve_file(xml_file)
+    errors = []
+
+    file, file_error = resolve_file(xml_file)
+    if file_error is not None:
+        logger.error(file_error)
+        errors.append(file_error)
+        return OrderedDict(), errors
 
     root, read_error = read_xml(file)
 
-    errors = []
     if read_error:
         logger.error(read_error)
         errors.append(read_error)
