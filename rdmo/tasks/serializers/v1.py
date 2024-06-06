@@ -16,7 +16,7 @@ class TaskSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
                      ElementWarningSerializerMixin, ReadOnlyObjectPermissionSerializerMixin,
                      MarkdownSerializerMixin, serializers.ModelSerializer):
 
-    markdown_fields = ('title', 'help')
+    markdown_fields = ('title', 'text')
 
     model = serializers.SerializerMethodField()
     uri_path = serializers.CharField(required=True)
