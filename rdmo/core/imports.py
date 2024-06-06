@@ -66,7 +66,7 @@ def get_rdmo_model_path(target_name: str, field_name: str):
 
 def make_import_info_msg(verbose_name: str, created: bool, uri: Optional[str] = None):
     if uri is None:
-        return "%s, no uri" % verbose_name
+        return f"{verbose_name}, no uri"
     if created:
         return f"{verbose_name} created with {uri}"
     return f"{verbose_name} {uri} updated"
@@ -313,7 +313,7 @@ def set_m2m_through_instances(instance, element, field_name=None, source_name=No
                 through_instance = next(filter(lambda item: getattr(item, target_name).uri == target_instance.uri,
                                                through_instances))
 
-                # update order if the item if it changed
+                # update order of the item when it was changed
                 if through_instance.order != order and save:
                     through_instance.order = order
                     through_instance.save()
