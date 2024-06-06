@@ -7,7 +7,7 @@ from rdmo.domain.models import Attribute
 from rdmo.management.imports import import_elements
 
 from .helpers_import_elements import _test_helper_change_fields_elements, _test_helper_filter_updated_and_changed
-from .helpers_xml import read_xml_and_parse_to_elements
+from .helpers_xml import read_xml_and_parse_to_root_and_elements
 
 fields_to_be_changed = (('comment',),)
 
@@ -16,7 +16,7 @@ def test_create_domain(db, settings):
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'attributes.xml'
 
-    elements, root = read_xml_and_parse_to_elements(xml_file)
+    elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
     imported_elements = import_elements(elements)
 
     assert len(root) == len(imported_elements) == Attribute.objects.count() == 86
@@ -27,7 +27,7 @@ def test_create_domain(db, settings):
 def test_update_domain(db, settings):
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'attributes.xml'
 
-    elements, root = read_xml_and_parse_to_elements(xml_file)
+    elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
     imported_elements = import_elements(elements)
 
     assert len(root) == len(imported_elements)
@@ -39,7 +39,7 @@ def test_update_domain(db, settings):
 def test_update_attributes_with_changed_fields(db, settings, updated_fields):
     _change_count = Attribute.objects.count() / 2
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'attributes.xml'
-    elements, root = read_xml_and_parse_to_elements(xml_file)
+    elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
     # import initial elements from xml
     _el = import_elements(elements, save=True)
     # update the elements and call import again
@@ -62,7 +62,7 @@ def test_create_legacy_domain(db, settings):
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'legacy' / 'domain.xml'
 
-    elements, root = read_xml_and_parse_to_elements(xml_file)
+    elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
     imported_elements = import_elements(elements)
 
     assert len(root) == len(imported_elements) == 86
@@ -74,7 +74,7 @@ def test_create_legacy_domain(db, settings):
 def test_update_legacy_domain(db, settings):
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'legacy' / 'domain.xml'
 
-    elements, root = read_xml_and_parse_to_elements(xml_file)
+    elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
     imported_elements = import_elements(elements)
 
     assert len(root) == len(imported_elements) == 86

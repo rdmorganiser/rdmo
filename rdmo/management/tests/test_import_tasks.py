@@ -10,7 +10,7 @@ from .helpers_import_elements import (
     _test_helper_change_fields_elements,
     _test_helper_filter_updated_and_changed,
 )
-from .helpers_xml import read_xml_and_parse_to_elements
+from .helpers_xml import read_xml_and_parse_to_root_and_elements
 
 fields_to_be_changed = (('comment',),)
 
@@ -20,7 +20,7 @@ def test_create_tasks(db, settings):
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'tasks.xml'
 
-    elements, root = read_xml_and_parse_to_elements(xml_file)
+    elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
     imported_elements = import_elements(elements)
 
     assert len(root) == len(imported_elements) == Task.objects.count() == 2
@@ -31,7 +31,7 @@ def test_create_tasks(db, settings):
 def test_update_tasks(db, settings):
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'tasks.xml'
 
-    elements, root = read_xml_and_parse_to_elements(xml_file)
+    elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
     imported_elements = import_elements(elements)
 
     assert len(root) == len(imported_elements) == 2
@@ -43,7 +43,7 @@ def test_update_tasks(db, settings):
 def test_update_tasks_with_changed_fields(db, settings, updated_fields):
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'tasks.xml'
 
-    elements, root = read_xml_and_parse_to_elements(xml_file)
+    elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
     elements = _test_helper_change_fields_elements(elements, fields_to_update=updated_fields, n=1)
     changed_elements = _test_helper_filter_updated_and_changed(elements.values(), updated_fields=updated_fields)
     imported_elements = import_elements(elements)
@@ -62,7 +62,7 @@ def test_create_legacy_tasks(db, settings):
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'legacy' / 'tasks.xml'
 
-    elements, root = read_xml_and_parse_to_elements(xml_file)
+    elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
     imported_elements = import_elements(elements)
 
     assert len(root) == len(imported_elements) == Task.objects.count() == 2
@@ -73,7 +73,7 @@ def test_create_legacy_tasks(db, settings):
 def test_update_legacy_tasks(db, settings):
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'legacy' / 'tasks.xml'
 
-    elements, root = read_xml_and_parse_to_elements(xml_file)
+    elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
     imported_elements = import_elements(elements)
 
     assert len(root) == len(imported_elements) == 2
