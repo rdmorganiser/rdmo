@@ -372,6 +372,9 @@ def markdown2html(markdown_string):
     # adoption of the normal markdown function
     html = markdown(force_str(markdown_string)).strip()
 
+    # strip the outer paragraph
+    html = re.sub(r'^<p>(.*?)</p>$',r'\1', html)
+
     # convert `[<string>]{<title>}` to <span title="<title>"><string></span> to allow for underlined tooltips
     html = re.sub(
         r'\[(.*?)\]\{(.*?)\}',

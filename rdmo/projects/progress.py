@@ -4,6 +4,7 @@ from itertools import chain
 from django.db.models import Exists, OuterRef, Q
 
 from rdmo.conditions.models import Condition
+from rdmo.core.utils import markdown2html
 from rdmo.questions.models import Page, Question, QuestionSet
 
 
@@ -52,7 +53,7 @@ def compute_navigation(section, project, snapshot=None):
         navigation_section = {
             'id': catalog_section.id,
             'uri': catalog_section.uri,
-            'title': catalog_section.short_title or catalog_section.title,
+            'title': markdown2html(catalog_section.short_title or catalog_section.title),
             'first': catalog_section.elements[0].id if catalog_section.elements else None
         }
         if catalog_section.id == section.id:
@@ -71,7 +72,7 @@ def compute_navigation(section, project, snapshot=None):
                 navigation_section['pages'].append({
                     'id': page.id,
                     'uri': page.uri,
-                    'title': page.short_title or page.title,
+                    'title': markdown2html(page.short_title or page.title),
                     'show': show,
                     'count': count,
                     'total': total

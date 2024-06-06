@@ -3,6 +3,7 @@ from rest_framework import serializers
 from rdmo.core.serializers import (
     ElementModelSerializerMixin,
     ElementWarningSerializerMixin,
+    MarkdownSerializerMixin,
     ReadOnlyObjectPermissionSerializerMixin,
     TranslationSerializerMixin,
 )
@@ -13,7 +14,9 @@ from ..validators import TaskLockedValidator, TaskUniqueURIValidator
 
 class TaskSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
                      ElementWarningSerializerMixin, ReadOnlyObjectPermissionSerializerMixin,
-                     serializers.ModelSerializer):
+                     MarkdownSerializerMixin, serializers.ModelSerializer):
+
+    markdown_fields = ('title', 'help')
 
     model = serializers.SerializerMethodField()
     uri_path = serializers.CharField(required=True)

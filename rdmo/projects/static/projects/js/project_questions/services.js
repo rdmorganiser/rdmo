@@ -71,7 +71,7 @@ angular.module('project_questions')
 
     service.init = function(project_id) {
         service.settings = resources.settings.get();
-        service.project = resources.projects.get({id: project_id, detail_action: 'overview'});
+        service.project = resources.projects.get({id: project_id, detail_action: 'overview'})
 
         $q.all([
             service.settings.$promise,
@@ -88,6 +88,9 @@ angular.module('project_questions')
             } else {
                 service.initView(path);
             }
+
+            // mark the catalog title 'safe'
+            service.project.catalog.title = $sce.trustAsHtml(service.project.catalog.title);
 
             // enable back/forward button of browser, i.e. location changes
             $rootScope.$on('$locationChangeSuccess', function (scope, next, current) {
@@ -284,6 +287,16 @@ angular.module('project_questions')
             id: service.project.id,
             detail_id: future.page.section.id,
             detail_action: 'navigation'
+        }, function(response) {
+            response.forEach(function(section) {
+                section.title = $sce.trustAsHtml(section.title);
+
+                if (angular.isDefined(section.pages)) {
+                    section.pages.forEach(function(page) {
+                        page.title = $sce.trustAsHtml(page.title);
+                    })
+                }
+            })
         });
 
         return future.navigation.$promise
@@ -296,6 +309,7 @@ angular.module('project_questions')
         // mark the help text of the question set 'safe'
         page.help = $sce.trustAsHtml(page.help);
         page.title = $sce.trustAsHtml(page.title);
+        page.section.title = $sce.trustAsHtml(page.section.title);
 
         // init questions and question sets
         page.elements.forEach(function(element) {

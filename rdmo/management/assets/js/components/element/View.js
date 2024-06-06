@@ -44,6 +44,9 @@ const View = ({ config, view, elementActions, filter=false, filterSites=false, f
         <div>
           <p>
             <strong>{gettext('View')}{': '}</strong>
+            <span dangerouslySetInnerHTML={{ __html: view.title }}></span>
+          </p>
+          <p>
             <CodeLink className="code-views" uri={view.uri} href={editUrl} onClick={() => fetchEdit()} />
           </p>
           <ElementErrors element={view} />

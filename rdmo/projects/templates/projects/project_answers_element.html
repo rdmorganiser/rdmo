@@ -1,9 +1,10 @@
+{% load core_tags %}
 {% load view_tags %}
 
 {% if element.text %}
     {# this is a question #}
 
-    <p><strong>{{ element.text }}</strong></p>
+    <p><strong>{{ element.text|markdown }}</strong></p>
 
     {% get_set_prefixes element.attribute project=project_wrapper as set_prefixes %}
     {% for set_prefix in set_prefixes %}
