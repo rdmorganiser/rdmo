@@ -12,7 +12,7 @@ from rest_framework.serializers import ValidationError
 from rdmo.core.imports import handle_uploaded_file
 from rdmo.core.permissions import CanToggleElementCurrentSite
 from rdmo.core.utils import get_model_field_meta, is_truthy
-from rdmo.core.xml import XmlToElementsParser
+from rdmo.core.xml import parse_xml_to_elements
 
 from .constants import RDMO_MODEL_PATH_MAPPER
 from .imports import import_elements
@@ -42,20 +42,20 @@ class UploadViewSet(viewsets.ViewSet):
         else:
             import_tmpfile_name = handle_uploaded_file(uploaded_file)
         try:
-            # step 1.1: initialize XmlToElementsParser
+            # step 1.1: initialize parse_xml_to_elements
             # step 2-6: parse xml, validate and convert to
-            xml_parser = XmlToElementsParser(import_tmpfile_name)
+            xml_parsed_elements, errors = parse_xml_to_elements(xml_file=import_tmpfile_name)
         except ValidationError as e:
-            logger.info('Import failed with XML parsing errors.')
+            logger.info(f'Import failed with XML parsing errors. {", ".join(map(str, errors))}')
             raise ValidationError({'file': e}) from e
 
         # step 7: check if valid
-        if not xml_parser.is_valid():
-            logger.info('Import failed with XML validation errors.')
-            raise ValidationError({'file': xml_parser.errors})
+        if errors:
+            logger.info(f'Import failed with XML validation errors. {", ".join(map(str, errors))}')
+            raise ValidationError({'file': errors})
 
         # step 8: import the elements if save=True is set
-        imported_elements = import_elements(xml_parser.parsed_elements,
+        imported_elements = import_elements(xml_parsed_elements,
                                             save=is_truthy(request.POST.get('import')),
                                             request=request)
 
