@@ -119,8 +119,8 @@ def test_that_the_freshly_created_merge_attributes_are_present(create_merge_attr
 
 
 @pytest.mark.parametrize('source_uri_prefix', new_merge_uri_prefixes)
-@pytest.mark.parametrize('save', [False, True])
-def test_command_merge_attributes(create_merge_attributes, source_uri_prefix, save):
+@pytest.mark.parametrize('delete', [False, True])
+def test_command_merge_attributes(create_merge_attributes, source_uri_prefix, delete):
     source_attributes = Attribute.objects.filter(uri_prefix=source_uri_prefix).all()
     assert len(source_attributes) > 2
     unique_uri_prefixes = set(Attribute.objects.values_list("uri_prefix", flat=True))
@@ -134,22 +134,22 @@ def test_command_merge_attributes(create_merge_attributes, source_uri_prefix, sa
         if source_attribute.get_descendants():
             with pytest.raises(CommandError):
                 call_command('merge_attributes',
-                     source=source_attribute.uri, target=target_attribute.uri, save=save,
+                     source=source_attribute.uri, target=target_attribute.uri, delete=delete,
                      stdout=stdout, stderr=stderr)
             failed = True
         elif target_attribute.get_descendants():
             with pytest.raises(CommandError):
                 call_command('merge_attributes',
-                             source=source_attribute.uri, target=target_attribute.uri, save=save,
+                             source=source_attribute.uri, target=target_attribute.uri, delete=delete,
                              stdout=stdout, stderr=stderr)
             failed = True
         else:
             call_command('merge_attributes',
-                         source=source_attribute.uri, target=target_attribute.uri, save=save,
+                         source=source_attribute.uri, target=target_attribute.uri, delete=delete,
                          stdout=stdout, stderr=stderr)
 
 
-        if save and not failed:
+        if delete and not failed:
             # assert that the source attribut was deleted
             with pytest.raises(Attribute.DoesNotExist):
                 Attribute.objects.get(id=source_attribute.id)
