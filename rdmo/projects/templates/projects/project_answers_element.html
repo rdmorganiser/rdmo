@@ -4,7 +4,7 @@
 {% if element.text %}
     {# this is a question #}
 
-    <p><strong>{{ element.text|markdown }}</strong></p>
+    <p><strong class="question-label">{{ element.text|markdown }}</strong></p>
 
     {% get_set_prefixes element.attribute project=project_wrapper as set_prefixes %}
     {% for set_prefix in set_prefixes %}
