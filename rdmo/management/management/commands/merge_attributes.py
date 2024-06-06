@@ -26,16 +26,24 @@ class Command(BaseCommand):
             help='The URI of the target attribute that will be used to replace the source'
         )
         parser.add_argument(
-            '--save',
+            '--delete',
             action='store_true',
+            default=False,
             help='''If specified, the changes will be saved and the source attribute will be deleted.\
-                    If not specified, the command will do a dry run.'''
+                    If not specified, the command will not make any changes in the database.'''
+            )
+        parser.add_argument(
+            '--view',
+            action='store_true',
+            default=False,
+            help='If specified, the changes will be applied to the affected Views as well.'
         )
 
     def handle(self, *args, **options):
         source = options['source']
         target = options['target']
-        save = options['save']
+        delete_source = options['delete']
+        update_views = options['view']
         verbosity = options.get('verbosity', 1)
 
         source = get_valid_attribute(source, message_name='Source')
@@ -47,44 +55,50 @@ class Command(BaseCommand):
         results = {}
         related_model_fields = [i for i in Attribute._meta.get_fields() \
                           if i.is_relation and not i.many_to_many and i.related_model is not Attribute]
+
         for related_field in related_model_fields:
-            replaced_model_result = replace_attribute_on_related_model_instances(
-                related_field,
-                source=source,
-                target=target,
-                save=save
-            )
+            replaced_model_result = replace_attribute_on_related_model_instances(related_field, source=source,
+                                                                                 target=target,
+                                                                                 delete_source=delete_source)
             results[related_field.related_model._meta.verbose_name_raw] = replaced_model_result
 
-        view_template_result = replace_attribute_in_view_template(source=source, target=target, save=save)
+        view_template_result = replace_attribute_in_view_template(source=source, target=target,
+                                                                  delete_source=delete_source,
+                                                                  update_views=update_views)
         results[View._meta.verbose_name_raw] = view_template_result
 
-        if save and all(a['saved'] for i in results.values() for a in i):
+        if delete_source and all(a['saved'] for i in results.values() for a in i):
             try:
                 source.delete()
+                logger.info(f"Source attribute {source.uri} was deleted.")
             except source.DoesNotExist:
                 pass
 
         if verbosity >= 1:
-            if verbosity >= 2:
-                affected_instances_msg = make_affected_instances_message(results)
-                if affected_instances_msg:
-                    self.stdout.write(affected_instances_msg)
+
             affect_elements_msg = make_elements_message(results)
             affected_projects_msg = make_affected_projects_message(results)
-            if save:
+            affected_views_msg = make_affected_views_message(results)
+            if delete_source:
                 self.stdout.write(self.style.SUCCESS(
                     f"Successfully replaced source attribute {source.uri} with {target.uri}.\n"
                     f"Source attribute {source.uri} was deleted.\n"
                     f"{affect_elements_msg}\n"
-                    f"{affected_projects_msg}"
+                    f"{affected_projects_msg}\n"
+                    f"{affected_views_msg}"
                 ))
             else:
                 self.stdout.write(self.style.SUCCESS(
                     f"Source attribute {source.uri} can be replaced with {target.uri}.\n"
                     f"{affect_elements_msg}\n"
-                    f"{affected_projects_msg}"
+                    f"{affected_projects_msg}\n"
+                    f"{affected_views_msg}"
                 ))
+            if verbosity >= 2:
+                affected_instances_msg = make_affected_instances_message(results)
+                if affected_instances_msg:
+                    self.stdout.write()
+                    self.stdout.write(affected_instances_msg)
 
 
 def get_valid_attribute(attribute, message_name=''):
@@ -104,11 +118,7 @@ def get_valid_attribute(attribute, message_name=''):
 
     return attribute
 
-def replace_attribute_on_related_model_instances(related_field,
-                                           source=None,
-                                           target=None,
-                                           save=False
-                                           ):
+def replace_attribute_on_related_model_instances(related_field, source=None, target=None, delete_source=False):
     model = related_field.related_model
     lookup_field = related_field.remote_field.name
     qs = model.objects.filter(**{lookup_field: source})
@@ -122,19 +132,20 @@ def replace_attribute_on_related_model_instances(related_field,
 
         setattr(instance, lookup_field, target)
 
-        if save:
+        if delete_source:
             instance.save()
+            logger.info(f"Attribute {source.uri} on {model._meta.verbose_name_raw}(id={instance.id}) was replaced with {target.uri}.")  # noqa: E501
         replacement_results.append({
             'model_name': model._meta.verbose_name_raw,
             'instance': instance,
             'source': source,
             'target': target,
-            'saved': save,
+            'saved': delete_source,
         })
     return replacement_results
 
 
-def replace_attribute_in_view_template(source=None, target=None, save=False ):
+def replace_attribute_in_view_template(source=None, target=None, delete_source=False, update_views=False):
     qs = View.objects.filter(**{"template__contains": source.path})
     replacement_results = []
     for instance in qs:
@@ -142,32 +153,48 @@ def replace_attribute_in_view_template(source=None, target=None, save=False ):
         template_target = replace_uri_in_template_string(instance.template, source, target)
         instance.template = template_target
 
-        if save:
+        if delete_source and update_views:
             instance.save()
+            logger.info(f"Attribute {source.uri} in {View._meta.verbose_name_raw}(id={instance.id}) template was replaced with {target.uri}.")  # noqa: E501
         replacement_results.append({
             'model_name': View._meta.verbose_name_raw,
             'instance': instance,
             'source': source,
             'target': target,
-            'saved': save,
+            'saved': delete_source,
         })
     return replacement_results
 
+def get_affected_projects_from_results(results):
+    value_results = results.get(Value._meta.verbose_name_raw, [])
+    return list({i['instance'].project for i in value_results})
 
 def make_elements_message(results):
     element_counts = ", ".join([f"{k.capitalize()}({len(v)})" for k, v in results.items() if v])
     if not element_counts or not any(results.values()):
         return "No elements affected."
+    affected_projects = get_affected_projects_from_results(results)
+    if affected_projects:
+        element_counts += f", Project({len(affected_projects)})"
     return f"Affected elements: {element_counts}"
 
 
 def make_affected_projects_message(results):
-    value_results = results.get(Value._meta.verbose_name_raw, [])
-    if not value_results:
-        return "No projects affected."
+    affected_projects = get_affected_projects_from_results(results)
+    if not affected_projects:
+        return "No Projects are affected."
     msg = "Affected Projects:"
-    for project in {i['instance'].project for i in value_results}:
-        msg += f"\n\tproject={project} (id={project.id})"
+    for project in affected_projects:
+        msg += f"\n\t{project.id}\t{project}"
+    return msg
+
+def make_affected_views_message(results):
+    view_results = results.get(View._meta.verbose_name_raw, [])
+    if not view_results:
+        return "No Views affected."
+    msg = "Affected Views:"
+    for view in {i['instance'] for i in view_results}:
+        msg += f"\n\t{view.id}\t{view}"
     return msg
 
 
@@ -178,17 +205,19 @@ def make_affected_instances_message(results):
     for k, merger_results in results.items():
         if not merger_results:
             continue
-        msg += f"Merger results for model {k.capitalize()} ({len(merger_results)})"
+        msg += f"Merge attribute results for model {k.capitalize()} ({len(merger_results)})"
         msg += '\n'
         for result in merger_results:
             msg += dedent(f'''\
-                Model={result['model_name']}
+
+                {result['model_name']}(id={result['instance'].id})
                 instance={result['instance']}
                 source={result['source'].uri}
                 target={result['target'].uri}
                 saved={result['saved']}
             ''')
             if hasattr(result['instance'], 'project'):
-                msg += f"\nproject={result['instance'].project}"
+                msg += f"Project(id={result['instance'].project.id}) {result['instance'].project}"
+            msg += '\n'
         msg += '\n'
     return msg
