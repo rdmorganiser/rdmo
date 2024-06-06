@@ -34,7 +34,8 @@ const Option = ({ config, option, elementActions, display='list', indent=0, filt
       </div>
       <div>
         <p>
-          <strong>{gettext('Option')}{': '}</strong> {option.text}
+          <strong>{gettext('Option')}{': '}</strong>
+          <span dangerouslySetInnerHTML={{ __html: option.text }}></span>
         </p>
         {
           get(config, 'display.uri.options', true) &&

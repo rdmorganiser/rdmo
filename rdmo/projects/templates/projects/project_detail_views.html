@@ -30,7 +30,7 @@
                 {% for view in views %}
                 <tr>
                     <td>
-                        <a href="{% url 'project_view' project.pk view.pk %}">{{ view.title }}</a>
+                        <a href="{% url 'project_view' project.pk view.pk %}">{{ view.title|markdown }}</a>
                     </td>
                     <td>{{ view.help|markdown }}</td>
                     <td class="text-right">

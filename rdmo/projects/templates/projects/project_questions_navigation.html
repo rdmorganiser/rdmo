@@ -5,7 +5,7 @@
 <ul class="list-unstyled project-questions-overview">
     <li ng-repeat="section in service.navigation">
         <a href="" ng-click="service.jump(section)">
-            {$ section.title $}
+            <span ng-bind-html="section.title"></span>
         </a>
 
         <ul class="list-unstyled"
@@ -15,7 +15,7 @@
 
 
                 <a href="" ng-click="service.jump(section, page)" ng-show="page.show">
-                    <span>{$ page.title $}<span>
+                    <span ng-bind-html="page.title"></span>
                     <span ng-show="page.count > 0 && page.count == page.total">
                         <i class="fa fa-check" aria-hidden="true"></i>
                     </span>

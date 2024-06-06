@@ -1,10 +1,13 @@
 from rest_framework import serializers
 
+from rdmo.core.serializers import MarkdownSerializerMixin
 from rdmo.projects.models import Project
 from rdmo.questions.models import Catalog
 
 
-class CatalogSerializer(serializers.ModelSerializer):
+class CatalogSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
+
+    markdown_fields = ('title', )
 
     class Meta:
         model = Catalog

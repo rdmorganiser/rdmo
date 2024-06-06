@@ -3,6 +3,7 @@ from rest_framework import serializers
 from rdmo.core.serializers import (
     ElementModelSerializerMixin,
     ElementWarningSerializerMixin,
+    MarkdownSerializerMixin,
     ReadOnlyObjectPermissionSerializerMixin,
     ThroughModelSerializerMixin,
     TranslationSerializerMixin,
@@ -35,7 +36,10 @@ class QuestionSetQuestionSerializer(serializers.ModelSerializer):
 
 class QuestionSetSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
                             ElementModelSerializerMixin, ElementWarningSerializerMixin,
-                            ReadOnlyObjectPermissionSerializerMixin, serializers.ModelSerializer):
+                            ReadOnlyObjectPermissionSerializerMixin, MarkdownSerializerMixin,
+                            serializers.ModelSerializer):
+
+    markdown_fields = ('title', 'help')
 
     model = serializers.SerializerMethodField()
     uri_path = serializers.CharField(required=True)
