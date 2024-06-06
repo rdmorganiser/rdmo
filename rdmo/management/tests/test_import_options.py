@@ -12,7 +12,7 @@ from .helpers_import_elements import (
     get_changed_elements,
 )
 from .helpers_models import delete_all_objects
-from .helpers_xml import read_xml_and_parse_to_elements
+from .helpers_xml import read_xml_and_parse_to_root_and_elements
 
 fields_to_be_changed = (('comment',),)
 
@@ -31,7 +31,7 @@ def test_create_optionsets(db, settings):
     delete_all_objects([OptionSet, Option])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'optionsets.xml'
-    elements, root = read_xml_and_parse_to_elements(xml_file)
+    elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
     imported_elements = import_elements(elements)
 
     assert len(root) == len(elements) == len(imported_elements) == 13
@@ -44,7 +44,7 @@ def test_create_optionsets(db, settings):
 def test_update_optionsets(db, settings):
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'optionsets.xml'
 
-    elements, root = read_xml_and_parse_to_elements(xml_file)
+    elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
     imported_elements = import_elements(elements)
 
     assert len(root) == len(elements) == len(imported_elements) == 13
@@ -57,7 +57,7 @@ def test_update_optionsets_with_changed_fields(db, settings, updated_fields):
     delete_all_objects([OptionSet, Option])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'optionsets.xml'
-    elements, root = read_xml_and_parse_to_elements(xml_file)
+    elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
     imported_elements = import_elements(elements)
     assert len(root) == len(imported_elements) == 13
     # start test with fresh options in db
@@ -80,12 +80,12 @@ def test_update_optionsets_from_changed_xml(db, settings):
     delete_all_objects([OptionSet, Option])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'optionsets.xml'
-    elements, root = read_xml_and_parse_to_elements(xml_file)
+    elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
     imported_elements = import_elements(elements)
     assert len(root) == len(imported_elements) == 13
     # Act, import from xml that has changes
     xml_file_1 = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'updated-and-changed' / 'optionsets-1.xml'
-    elements_1, root_1 = read_xml_and_parse_to_elements(xml_file_1)
+    elements_1, root_1 = read_xml_and_parse_to_root_and_elements(xml_file_1)
     imported_elements_1 = import_elements(elements_1, save=False)
     assert imported_elements_1
     assert [i for i in imported_elements_1 if i[ELEMENT_DIFF_FIELD_NAME]]
@@ -126,7 +126,7 @@ def test_create_options(db, settings):
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'options.xml'
 
-    elements, root = read_xml_and_parse_to_elements(xml_file)
+    elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
     imported_elements = import_elements(elements)
 
     assert len(root) == len(elements) == len(imported_elements) == Option.objects.count() == 9
@@ -137,7 +137,7 @@ def test_create_options(db, settings):
 def test_update_options(db, settings):
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'options.xml'
 
-    elements, root = read_xml_and_parse_to_elements(xml_file)
+    elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
     imported_elements = import_elements(elements)
 
     assert len(root) == len(elements) == len(imported_elements) == 9
@@ -150,7 +150,7 @@ def test_update_options_with_changed_fields(db, settings, updated_fields):
     delete_all_objects([OptionSet, Option])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'options.xml'
-    elements, root = read_xml_and_parse_to_elements(xml_file)
+    elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
     imported_elements = import_elements(elements)
     assert len(root) == len(imported_elements) == 9
     # start test with fresh options in db
@@ -174,7 +174,7 @@ def test_create_legacy_options(db, settings):
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'legacy' / 'options.xml'
 
-    elements, root = read_xml_and_parse_to_elements(xml_file)
+    elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
     imported_elements = import_elements(elements)
 
     assert len(root) == len(elements) == len(imported_elements) == 12
@@ -187,7 +187,7 @@ def test_create_legacy_options(db, settings):
 def test_update_legacy_options(db, settings):
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'legacy' / 'options.xml'
 
-    elements, root = read_xml_and_parse_to_elements(xml_file)
+    elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
     imported_elements = import_elements(elements)
 
     assert len(root) == len(elements) == len(imported_elements) == 12
