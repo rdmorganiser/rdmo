@@ -101,6 +101,7 @@ class ProjectImportMixin:
             import_plugin.current_project = current_project
             import_plugin.file_name = import_file_name
             import_plugin.source_title = import_source_title
+            import_plugin.request = self.request
 
             if import_plugin.check():
                 try:
