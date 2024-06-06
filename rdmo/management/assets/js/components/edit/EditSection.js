@@ -93,6 +93,8 @@ const EditSection = ({ config, section, elements, elementActions }) => {
               <Tab key={index} eventKey={index} title={lang}>
                 <Text config={config} element={section} field={`title_${lang_code }`}
                       onChange={updateSection} />
+                <Text config={config} element={section} field={`short_title_${lang_code }`}
+                      onChange={updateSection} />
               </Tab>
             ))
           }

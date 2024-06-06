@@ -136,6 +136,8 @@ const EditPage = ({ config, page, elements, elementActions }) => {
               <Tab key={index} eventKey={index} title={lang}>
                 <Text config={config} element={page} field={`title_${lang_code }`}
                       onChange={updatePage} />
+                <Text config={config} element={page} field={`short_title_${lang_code }`}
+                      onChange={updatePage} />
                 <Textarea config={config} element={page} field={`help_${lang_code }`}
                           rows={4} onChange={updatePage} />
                 <Text config={config} element={page} field={`verbose_name_${lang_code }`}
