@@ -250,6 +250,9 @@ def set_extra_field(instance, field_name, element,
         # default_value
         extra_value = extra_field_helper.get_default(instance=instance,
                                                      key=field_name)
+        if extra_field_helper.overwrite_in_element:
+            element[field_name] = extra_value
+
     if extra_value is not None:
         setattr(instance, field_name, extra_value)
         # track changes

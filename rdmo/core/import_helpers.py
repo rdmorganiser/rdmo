@@ -23,6 +23,7 @@ class ExtraFieldDefaultHelper:
     field_name: str
     value: Union[str, bool, int, None] = None
     callback: Optional[Callable] = None
+    overwrite_in_element: bool = False
 
     def get_default(self, **kwargs):
         if self.callback is None:

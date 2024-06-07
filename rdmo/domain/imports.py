@@ -9,9 +9,14 @@ from .validators import AttributeLockedValidator, AttributeParentValidator, Attr
 logger = logging.getLogger(__name__)
 
 
-def get_default_path(instance: Optional[Attribute]=None):
+def build_attribute_path(instance: Optional[Attribute]=None):
     if instance is not None:
         return instance.build_path(instance.key, instance.parent)
+
+def build_attribute_uri(instance: Optional[Attribute]=None):
+    if instance is not None:
+        return instance.build_uri(instance.uri_prefix, instance.path)
+
 
 
 import_helper_attribute = ElementImportHelper(
@@ -20,5 +25,8 @@ import_helper_attribute = ElementImportHelper(
     common_fields=('uri_prefix', 'key', 'comment'),
     validators=(AttributeLockedValidator, AttributeParentValidator, AttributeUniqueURIValidator),
     foreign_fields=('parent',),
-    extra_fields=[ExtraFieldDefaultHelper(field_name='path', callback=get_default_path)],
+    extra_fields=[
+        ExtraFieldDefaultHelper(field_name='path', callback=build_attribute_path, overwrite_in_element=True),
+        ExtraFieldDefaultHelper(field_name='uri', callback=build_attribute_uri, overwrite_in_element=True),
+    ]
 )
