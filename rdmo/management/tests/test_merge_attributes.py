@@ -91,6 +91,16 @@ def create_copies_of_attributes_with_new_uri_prefix(example_attributes, new_pref
             attribute = _prepare_instance_for_copy(attribute, uri_prefix=new_prefix)
             attribute.save()
 
+def get_related_affected_instances(attribute) -> list:
+
+    related_qs = []
+    for related_field in ATTRIBUTE_RELATED_MODELS_FIELDS:
+        model = related_field.related_model
+        lookup_field = related_field.remote_field.name
+        qs = model.objects.filter(**{lookup_field: attribute})
+        related_qs.append(qs)
+    return related_qs
+
 
 @pytest.fixture
 def create_merge_attributes(db, settings):
@@ -119,8 +129,10 @@ def test_that_the_freshly_created_merge_attributes_are_present(create_merge_attr
 
 
 @pytest.mark.parametrize('source_uri_prefix', new_merge_uri_prefixes)
+@pytest.mark.parametrize('save', [False, True])
 @pytest.mark.parametrize('delete', [False, True])
-def test_command_merge_attributes(create_merge_attributes, source_uri_prefix, delete):
+@pytest.mark.parametrize('view', [False, True])
+def test_command_merge_attributes(create_merge_attributes, source_uri_prefix, save, delete, view):
     source_attributes = Attribute.objects.filter(uri_prefix=source_uri_prefix).all()
     assert len(source_attributes) > 2
     unique_uri_prefixes = set(Attribute.objects.values_list("uri_prefix", flat=True))
@@ -130,35 +142,60 @@ def test_command_merge_attributes(create_merge_attributes, source_uri_prefix, de
     for source_attribute in source_attributes:
         target_attribute = Attribute.objects.get(uri_prefix=EXAMPLE_URI_PREFIX, path=source_attribute.path)
         stdout, stderr = io.StringIO(), io.StringIO()
+        before_source_related_qs = get_related_affected_instances(source_attribute)
+        before_source_related_view_qs = View.objects.filter(**{"template__contains": source_attribute.path})
+        # before_target_related_qs = get_related_affected_instances(target_attribute)
+
+        command_kwargs = {'source': source_attribute.uri,
+                          'target': target_attribute.uri,
+                          'save': save, 'delete': delete, 'view': view}
         failed = False
         if source_attribute.get_descendants():
             with pytest.raises(CommandError):
                 call_command('merge_attributes',
-                     source=source_attribute.uri, target=target_attribute.uri, delete=delete,
-                     stdout=stdout, stderr=stderr)
+                             stdout=stdout, stderr=stderr, **command_kwargs)
             failed = True
         elif target_attribute.get_descendants():
             with pytest.raises(CommandError):
                 call_command('merge_attributes',
-                             source=source_attribute.uri, target=target_attribute.uri, delete=delete,
-                             stdout=stdout, stderr=stderr)
+                             stdout=stdout, stderr=stderr, **command_kwargs)
             failed = True
         else:
             call_command('merge_attributes',
-                         source=source_attribute.uri, target=target_attribute.uri, delete=delete,
-                         stdout=stdout, stderr=stderr)
+                         stdout=stdout, stderr=stderr, **command_kwargs)
 
 
         if delete and not failed:
             # assert that the source attribut was deleted
             with pytest.raises(Attribute.DoesNotExist):
                 Attribute.objects.get(id=source_attribute.id)
+        else:
+            assert Attribute.objects.get(id=source_attribute.id)
+
+        after_source_related_qs = get_related_affected_instances(source_attribute)
+        after_source_related_view_qs = View.objects.filter(**{"template__contains": source_attribute.path})
+        after_target_related_qs = get_related_affected_instances(target_attribute)
+        # after_target_related_view_qs = View.objects.filter(**{"template__contains": target_attribute.path})
+
+        if save and not failed:
+
+            if any(i.exists() for i in before_source_related_qs):
+                assert not any(i.exists() for i in after_source_related_qs)
+                assert any(i.exists() for i in after_target_related_qs)
 
             if source_attribute.path in merge_view_template_addition_uri_path:
                 # assert that the attribute in the view template was replaced as well
+                # the EXAMPLE_VIEW_URI is from the target attribute
                 # uri_prefix = source_uri_prefix, uri_path = EXAMPLE_VIEW_URI_PATH
-                for instance in View.objects.filter(**{"template__contains": EXAMPLE_VIEW_URI_PATH}):
-                    assert any(EXAMPLE_VIEW_URI in i for i in instance.template.splitlines())
-                    assert not any(source_attribute.uri in i for i in instance.template.splitlines())
+                if before_source_related_view_qs.exists():
+                    if view and source_attribute.path != target_attribute.path:
+                        assert not after_source_related_view_qs.exists()
+                        for instance in after_source_related_view_qs:
+                            assert any(target_attribute.path in i for i in instance.template.splitlines())
+                            assert not any(source_attribute.path in i for i in instance.template.splitlines())
+                    else:
+                        assert after_source_related_view_qs.exists()
+
         else:
-            assert Attribute.objects.get(id=source_attribute.id)
+            if any(i.exists() for i in before_source_related_qs):
+                assert any(i.exists() for i in after_source_related_qs)

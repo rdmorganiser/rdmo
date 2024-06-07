@@ -26,11 +26,18 @@ class Command(BaseCommand):
             help='The URI of the target attribute that will be used to replace the source'
         )
         parser.add_argument(
+            '--save',
+            action='store_true',
+            default=False,
+            help='''If specified, the changes will be saved.\
+                    If not specified, the command will not make any changes in the database.'''
+            )
+        parser.add_argument(
             '--delete',
             action='store_true',
             default=False,
-            help='''If specified, the changes will be saved and the source attribute will be deleted.\
-                    If not specified, the command will not make any changes in the database.'''
+            help='''If specified, the source attribute will be deleted.\
+                    If not specified, the command will not delete the source attribute.'''
             )
         parser.add_argument(
             '--view',
@@ -42,6 +49,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         source = options['source']
         target = options['target']
+        save_changes = options['save']
         delete_source = options['delete']
         update_views = options['view']
         verbosity = options.get('verbosity', 1)
@@ -59,46 +67,55 @@ class Command(BaseCommand):
         for related_field in related_model_fields:
             replaced_model_result = replace_attribute_on_related_model_instances(related_field, source=source,
                                                                                  target=target,
-                                                                                 delete_source=delete_source)
+                                                                                 save_changes=save_changes)
             results[related_field.related_model._meta.verbose_name_raw] = replaced_model_result
 
         view_template_result = replace_attribute_in_view_template(source=source, target=target,
-                                                                  delete_source=delete_source,
-                                                                  update_views=update_views)
+                                                                  save_changes=save_changes, update_views=update_views)
         results[View._meta.verbose_name_raw] = view_template_result
 
-        if delete_source and all(a['saved'] for i in results.values() for a in i):
+        if delete_source:
             try:
                 source.delete()
                 logger.info(f"Source attribute {source.uri} was deleted.")
             except source.DoesNotExist:
-                pass
+                logger.info(f"Source attribute {source.uri} did not exist.")
 
         if verbosity >= 1:
-
-            affect_elements_msg = make_elements_message(results)
+            all_instances_were_updated = all(a['saved'] for i in results.values() for a in i)
+            affect_elements_msg = make_affected_elements_counts_message(results)
             affected_projects_msg = make_affected_projects_message(results)
             affected_views_msg = make_affected_views_message(results)
+            if save_changes:
+                info_msg = f"Successfully replaced source attribute {source.uri} with {target.uri} on affected elements." # noqa: E501
+                if update_views:
+                    info_msg += f"\nSuccessfully replaced source attribute {source.uri} in affected View templates."
+                self.stdout.write(self.style.SUCCESS(info_msg))
+
             if delete_source:
                 self.stdout.write(self.style.SUCCESS(
-                    f"Successfully replaced source attribute {source.uri} with {target.uri}.\n"
                     f"Source attribute {source.uri} was deleted.\n"
-                    f"{affect_elements_msg}\n"
-                    f"{affected_projects_msg}\n"
-                    f"{affected_views_msg}"
                 ))
-            else:
+                if not all_instances_were_updated:
+                    self.stdout.write(
+                        self.style.NOTICE(f"Source attribute {source.uri} was deleted without moving affected elements to the target attribute.") # noqa: E501
+                    )
+            if not save_changes and not delete_source:
                 self.stdout.write(self.style.SUCCESS(
-                    f"Source attribute {source.uri} can be replaced with {target.uri}.\n"
-                    f"{affect_elements_msg}\n"
-                    f"{affected_projects_msg}\n"
-                    f"{affected_views_msg}"
+                    f"Nothing was changed. Displaying affected elements for replacement of source attribute {source.uri} with target {target.uri}." # noqa: E501
                 ))
+
+
+            self.stdout.write(self.style.SUCCESS(
+                f"{affect_elements_msg}\n"
+                f"{affected_projects_msg}\n"
+                f"{affected_views_msg}"
+            ))
+
             if verbosity >= 2:
-                affected_instances_msg = make_affected_instances_message(results)
-                if affected_instances_msg:
-                    self.stdout.write()
-                    self.stdout.write(affected_instances_msg)
+                affected_instances_msg = make_affected_instances_detail_message(results)
+                self.stdout.write()
+                self.stdout.write(affected_instances_msg)
 
 
 def get_valid_attribute(attribute, message_name=''):
@@ -118,7 +135,7 @@ def get_valid_attribute(attribute, message_name=''):
 
     return attribute
 
-def replace_attribute_on_related_model_instances(related_field, source=None, target=None, delete_source=False):
+def replace_attribute_on_related_model_instances(related_field, source=None, target=None, save_changes=False):
     model = related_field.related_model
     lookup_field = related_field.remote_field.name
     qs = model.objects.filter(**{lookup_field: source})
@@ -132,20 +149,21 @@ def replace_attribute_on_related_model_instances(related_field, source=None, tar
 
         setattr(instance, lookup_field, target)
 
-        if delete_source:
+        if save_changes:
             instance.save()
             logger.info(f"Attribute {source.uri} on {model._meta.verbose_name_raw}(id={instance.id}) was replaced with {target.uri}.")  # noqa: E501
+
         replacement_results.append({
             'model_name': model._meta.verbose_name_raw,
             'instance': instance,
             'source': source,
             'target': target,
-            'saved': delete_source,
+            'saved': save_changes,
         })
     return replacement_results
 
 
-def replace_attribute_in_view_template(source=None, target=None, delete_source=False, update_views=False):
+def replace_attribute_in_view_template(source=None, target=None, save_changes=False, update_views=False):
     qs = View.objects.filter(**{"template__contains": source.path})
     replacement_results = []
     for instance in qs:
@@ -153,15 +171,16 @@ def replace_attribute_in_view_template(source=None, target=None, delete_source=F
         template_target = replace_uri_in_template_string(instance.template, source, target)
         instance.template = template_target
 
-        if delete_source and update_views:
+        if save_changes and update_views:
             instance.save()
-            logger.info(f"Attribute {source.uri} in {View._meta.verbose_name_raw}(id={instance.id}) template was replaced with {target.uri}.")  # noqa: E501
+            logger.info(f"Attribute {source.uri} in {View._meta.verbose_name_raw}(id={instance.id}) template was replaced with target {target.uri}.")  # noqa: E501
+
         replacement_results.append({
             'model_name': View._meta.verbose_name_raw,
             'instance': instance,
             'source': source,
             'target': target,
-            'saved': delete_source,
+            'saved': save_changes,
         })
     return replacement_results
 
@@ -169,7 +188,7 @@ def get_affected_projects_from_results(results):
     value_results = results.get(Value._meta.verbose_name_raw, [])
     return list({i['instance'].project for i in value_results})
 
-def make_elements_message(results):
+def make_affected_elements_counts_message(results):
     element_counts = ", ".join([f"{k.capitalize()}({len(v)})" for k, v in results.items() if v])
     if not element_counts or not any(results.values()):
         return "No elements affected."
@@ -198,7 +217,7 @@ def make_affected_views_message(results):
     return msg
 
 
-def make_affected_instances_message(results):
+def make_affected_instances_detail_message(results):
     if not results:
         return ""
     msg = ""
