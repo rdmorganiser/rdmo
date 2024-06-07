@@ -34,7 +34,7 @@ class TasksMultipleChoiceField(forms.ModelMultipleChoiceField):
 
     def label_from_instance(self, obj):
         rendered_title = markdown2html(obj.title)
-        rendered_text = markdown2html(obj.help)
+        rendered_text = markdown2html(obj.text)
 
         return mark_safe(f'<b>{rendered_title}</b></br>{rendered_text}')
 
