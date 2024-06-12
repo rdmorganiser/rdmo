@@ -1,7 +1,7 @@
 import logging
 from typing import Optional
 
-from rdmo.core.import_helpers import ElementImportHelper, ExtraFieldDefaultHelper
+from rdmo.core.import_helpers import ElementImportHelper, ExtraFieldHelper
 
 from .models import Attribute
 from .validators import AttributeLockedValidator, AttributeParentValidator, AttributeUniqueURIValidator
@@ -26,7 +26,7 @@ import_helper_attribute = ElementImportHelper(
     validators=(AttributeLockedValidator, AttributeParentValidator, AttributeUniqueURIValidator),
     foreign_fields=('parent',),
     extra_fields=[
-        ExtraFieldDefaultHelper(field_name='path', callback=build_attribute_path, overwrite_in_element=True),
-        ExtraFieldDefaultHelper(field_name='uri', callback=build_attribute_uri, overwrite_in_element=True),
+        ExtraFieldHelper(field_name='path', callback=build_attribute_path, overwrite_in_element=True),
+        ExtraFieldHelper(field_name='uri', callback=build_attribute_uri, overwrite_in_element=True),
     ]
 )
