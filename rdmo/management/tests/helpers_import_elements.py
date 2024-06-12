@@ -2,7 +2,7 @@ from collections import OrderedDict
 from functools import partial
 from typing import Dict, List, Optional, Tuple, Union
 
-from rdmo.core.imports import CURRENT_DATA_FIELD, ELEMENT_DIFF_FIELD_NAME, NEW_DATA_FIELD, track_changes_on_element
+from rdmo.core.imports import ImportElementFields, track_changes_on_element
 from rdmo.management.import_utils import initialize_import_element_dict
 
 UPDATE_FIELD_FUNCS = {
@@ -16,12 +16,12 @@ def filter_changed_fields(element, updated_fields=None) -> bool:
     _changed = element.get('changed', False)
     if updated_fields is None:
         return _changed
-    changes = element.get(ELEMENT_DIFF_FIELD_NAME, {})
+    changes = element.get(ImportElementFields.DIFF, {})
     for field, diff in changes.items():
         if field not in updated_fields:
             continue
-        _new_value = diff.get(NEW_DATA_FIELD)
-        _current_value = diff.get(CURRENT_DATA_FIELD)
+        _new_value = diff.get(ImportElementFields.NEW)
+        _current_value = diff.get(ImportElementFields.CURRENT)
         if _new_value != _current_value:
             return True
     return _changed
@@ -31,8 +31,8 @@ def get_changed_elements(elements: List[Dict]) -> Dict[str, Dict[str,Union[bool,
     for element in elements:
 
         changed_fields = []
-        for key, diff_field in element[ELEMENT_DIFF_FIELD_NAME].items():
-            if diff_field[NEW_DATA_FIELD] != diff_field[CURRENT_DATA_FIELD]:
+        for key, diff_field in element[ImportElementFields.DIFF].items():
+            if diff_field[ImportElementFields.NEW] != diff_field[ImportElementFields.CURRENT]:
                 changed_fields += key
         if changed_fields:
             changed_elements[element['uri']] = {

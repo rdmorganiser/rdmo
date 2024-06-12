@@ -1,4 +1,4 @@
-from rdmo.core.import_helpers import ElementImportHelper, ExtraFieldDefaultHelper
+from rdmo.core.import_helpers import ElementImportHelper, ExtraFieldHelper
 
 from .models import Task
 from .validators import TaskLockedValidator, TaskUniqueURIValidator
@@ -10,10 +10,10 @@ import_helper_task = ElementImportHelper(
     lang_fields=('title', 'text'),
     foreign_fields=('start_attribute', 'end_attribute'),
     extra_fields=(
-        ExtraFieldDefaultHelper(field_name='order'),
-        ExtraFieldDefaultHelper(field_name='days_before'),
-        ExtraFieldDefaultHelper(field_name='days_after'),
-        ExtraFieldDefaultHelper(field_name='available'),
+        ExtraFieldHelper(field_name='order'),
+        ExtraFieldHelper(field_name='days_before'),
+        ExtraFieldHelper(field_name='days_after'),
+        ExtraFieldHelper(field_name='available', value=True),
     ),
     m2m_instance_fields=('catalogs', 'conditions'),
 )

@@ -29,9 +29,11 @@ def import_elements(uploaded_elements: Dict, save: bool = True, request: Optiona
     uploaded_uris = set(uploaded_elements.keys())
     current_site = get_current_site(request)
     for _uri, uploaded_element in uploaded_elements.items():
-        element = import_element(element=uploaded_element, save=save,
-                                  uploaded_uris=uploaded_uris,
-                                    request=request, current_site=current_site)
+        element = import_element(element=uploaded_element,
+                                 save=save,
+                                 uploaded_uris=uploaded_uris,
+                                 request=request,
+                                 current_site=current_site)
         element['warnings'] = {k: val for k, val in element['warnings'].items() if k not in uploaded_uris}
         imported_elements.append(element)
     return imported_elements
@@ -83,7 +85,7 @@ def import_element(
     updated = not created
     element['created'] = created
     element['updated'] = updated
-    # INFO: the dict element[ELEMENT_DIFF_FIELD_NAME] is filled by calling track_changes_on_element
+    # INFO: the dict element[FieldNames.diff.value] is filled by calling track_changes_on_element
 
     element = strip_uri_prefix_endswith_slash(element)
     # start to set values on the instance

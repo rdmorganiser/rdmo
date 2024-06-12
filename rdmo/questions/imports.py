@@ -1,4 +1,4 @@
-from rdmo.core.import_helpers import ElementImportHelper, ExtraFieldDefaultHelper, ThroughInstanceMapper
+from rdmo.core.import_helpers import ElementImportHelper, ExtraFieldHelper, ThroughInstanceMapper
 
 from ..core.constants import VALUE_TYPE_TEXT
 from .models import Catalog, Page, Question, QuestionSet, Section
@@ -22,8 +22,8 @@ import_helper_catalog = ElementImportHelper(
     validators=(CatalogLockedValidator, CatalogUniqueURIValidator),
     lang_fields=('help', 'title'),
     extra_fields = (
-        ExtraFieldDefaultHelper(field_name='order'),
-        ExtraFieldDefaultHelper(field_name='available'),
+        ExtraFieldHelper(field_name='order'),
+        ExtraFieldHelper(field_name='available', value=True),
     ),
     m2m_through_instance_fields=[
         ThroughInstanceMapper(
@@ -60,7 +60,7 @@ import_helper_page = ElementImportHelper(
     lang_fields=('help', 'title', 'verbose_name'),
     foreign_fields=('attribute',),
     extra_fields = (
-        ExtraFieldDefaultHelper(field_name='is_collection'),
+        ExtraFieldHelper(field_name='is_collection'),
     ),
     m2m_instance_fields = ('conditions', ),
     m2m_through_instance_fields=[
@@ -88,16 +88,16 @@ import_helper_question = ElementImportHelper(
     lang_fields=('text', 'help', 'default_text', 'verbose_name'),
     foreign_fields=('attribute', 'default_option'),
     extra_fields=(
-        ExtraFieldDefaultHelper(field_name='is_collection'),
-        ExtraFieldDefaultHelper(field_name='is_optional'),
-        ExtraFieldDefaultHelper(field_name='default_external_id', value=''),
-        ExtraFieldDefaultHelper(field_name='widget_type', callback=get_widget_type_or_default),
-        ExtraFieldDefaultHelper(field_name='value_type', value=VALUE_TYPE_TEXT),
-        ExtraFieldDefaultHelper(field_name='minimum'),
-        ExtraFieldDefaultHelper(field_name='maximum'),
-        ExtraFieldDefaultHelper(field_name='step'),
-        ExtraFieldDefaultHelper(field_name='unit', value=''),
-        ExtraFieldDefaultHelper(field_name='width'),
+        ExtraFieldHelper(field_name='is_collection'),
+        ExtraFieldHelper(field_name='is_optional'),
+        ExtraFieldHelper(field_name='default_external_id', value=''),
+        ExtraFieldHelper(field_name='widget_type', callback=get_widget_type_or_default),
+        ExtraFieldHelper(field_name='value_type', value=VALUE_TYPE_TEXT),
+        ExtraFieldHelper(field_name='minimum'),
+        ExtraFieldHelper(field_name='maximum'),
+        ExtraFieldHelper(field_name='step'),
+        ExtraFieldHelper(field_name='unit', value=''),
+        ExtraFieldHelper(field_name='width'),
     ),
     m2m_instance_fields=('conditions', 'optionsets'),
     reverse_m2m_through_instance_fields=[
@@ -118,7 +118,7 @@ import_helper_questionset = ElementImportHelper(
     lang_fields=('help', 'title', 'verbose_name'),
     foreign_fields=('attribute',),
     extra_fields=(
-        ExtraFieldDefaultHelper(field_name='is_collection'),
+        ExtraFieldHelper(field_name='is_collection'),
     ),
     m2m_instance_fields=('conditions', ),
 

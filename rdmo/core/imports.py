@@ -2,6 +2,7 @@ import logging
 import tempfile
 import time
 from collections import defaultdict
+from enum import Enum
 from os.path import join as pj
 from random import randint
 from typing import List, Optional, Tuple, Union
@@ -13,14 +14,21 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework.utils import model_meta
 
 from rdmo.core.constants import RDMO_MODELS
-from rdmo.core.import_helpers import ExtraFieldDefaultHelper
+from rdmo.core.import_helpers import ExtraFieldHelper
 from rdmo.core.utils import get_languages
+from rdmo.core.validators import LockedValidator
 
 logger = logging.getLogger(__name__)
 
-ELEMENT_DIFF_FIELD_NAME = "updated_and_changed"
-NEW_DATA_FIELD = "new_data"
-CURRENT_DATA_FIELD = "current_data"
+
+class ImportElementFields(str, Enum):
+    DIFF = "updated_and_changed"
+    NEW = "new_data"
+    CURRENT = "current_data"
+    WARNINGS = "warnings"
+    ERRORS = "errors"
+    UPDATED = "updated"
+    CREATED = "created"
 
 
 def handle_uploaded_file(filedata):
@@ -73,19 +81,25 @@ def make_import_info_msg(verbose_name: str, created: bool, uri: Optional[str] = 
 
 
 def _initialize_tracking_field(element: dict, element_field: str):
-    if element[ELEMENT_DIFF_FIELD_NAME].get(element_field) is None:
-        element[ELEMENT_DIFF_FIELD_NAME][element_field] = {
-            'errors': [],
-            'warnings': defaultdict(list)
+    if element[ImportElementFields.DIFF].get(element_field) is None:
+        element[ImportElementFields.DIFF][element_field] = {
+            ImportElementFields.ERRORS: [],
+            ImportElementFields.WARNINGS: defaultdict(list)
         }
+        return
+    if ImportElementFields.ERRORS not in element[ImportElementFields.DIFF][element_field]:
+        element[ImportElementFields.DIFF][element_field][ImportElementFields.ERRORS] = []
+    if ImportElementFields.WARNINGS not in element[ImportElementFields.DIFF][element_field]:
+        element[ImportElementFields.DIFF][element_field][ImportElementFields.WARNINGS] = defaultdict(list)
+
 
 
 def _append_warning(element: dict, element_field: str, warning: str):
-    element[ELEMENT_DIFF_FIELD_NAME][element_field]['warnings'][element['uri']].append(warning)
+    element[ImportElementFields.DIFF][element_field][ImportElementFields.WARNINGS][element['uri']].append(warning)
 
 
 def _append_error(element: dict, element_field: str, error: str):
-    element[ELEMENT_DIFF_FIELD_NAME][element_field]['errors'].append(error)
+    element[ImportElementFields.DIFF][element_field][ImportElementFields.ERRORS].append(error)
 
 
 def track_messages_on_element(element: dict, element_field: str, warning: Optional[str] = None,
@@ -99,11 +113,11 @@ def track_messages_on_element(element: dict, element_field: str, warning: Option
 
 
 def _initialize_track_changes_element_field(element: dict, element_field: str) -> None:
-    if ELEMENT_DIFF_FIELD_NAME not in element:
-        element[ELEMENT_DIFF_FIELD_NAME] = {}
+    if ImportElementFields.DIFF not in element:
+        element[ImportElementFields.DIFF] = {}
 
-    if element_field and element_field not in element[ELEMENT_DIFF_FIELD_NAME]:
-        element[ELEMENT_DIFF_FIELD_NAME][element_field] = {}
+    if element_field and element_field not in element[ImportElementFields.DIFF]:
+        element[ImportElementFields.DIFF][element_field] = {}
 
 
 def track_changes_on_element(element: dict,
@@ -121,8 +135,8 @@ def track_changes_on_element(element: dict,
         _get_field = element_field if instance_field is None else instance_field
         original_value = getattr(original, _get_field, '')
 
-    element[ELEMENT_DIFF_FIELD_NAME][element_field][CURRENT_DATA_FIELD] = original_value
-    element[ELEMENT_DIFF_FIELD_NAME][element_field][NEW_DATA_FIELD] = new_value
+    element[ImportElementFields.DIFF][element_field][ImportElementFields.CURRENT] = original_value
+    element[ImportElementFields.DIFF][element_field][ImportElementFields.NEW] = new_value
 
 
 def get_lang_field_values(field_name: str,
@@ -144,6 +158,13 @@ def get_lang_field_values(field_name: str,
             row['value'] = getattr(instance, name_field, '') or ''
         ret.append(row)
     return ret
+
+
+def set_common_fields(instance, field_name, element, original=None):
+    value = element.get(field_name) or ''
+    setattr(instance, field_name, value)
+    # track changes for common fields
+    track_changes_on_element(element, field_name, new_value=value, original=original)
 
 
 def set_lang_field(instance, field_name, element, original=None):
@@ -188,7 +209,7 @@ def set_foreign_field(instance, field_name, element, uploaded_uris=None, origina
             field_name=field_name
         )
         logger.info(message)
-        element['errors'].append(message)  # errors is a list
+        element[ImportElementFields.ERRORS].append(message)  # errors is a list
         track_messages_on_element(element, field_name, error=message)
         return
 
@@ -206,7 +227,7 @@ def set_foreign_field(instance, field_name, element, uploaded_uris=None, origina
             instance_uri=element.get('uri')
         )
         logger.info(message)
-        element['warnings'][foreign_uri].append(message)
+        element[ImportElementFields.WARNINGS][foreign_uri].append(message)
         track_messages_on_element(element, field_name, warning=message)
     except foreign_model.MultipleObjectsReturned:
         message = '{foreign_model} {foreign_uri} for {instance_model} {instance_uri} returns multiple objects.'.format(
@@ -216,7 +237,7 @@ def set_foreign_field(instance, field_name, element, uploaded_uris=None, origina
             instance_uri=element.get('uri')
         )
         logger.info(message)
-        element['warnings'][foreign_uri].append(message)
+        element[ImportElementFields.WARNINGS][foreign_uri].append(message)
         track_messages_on_element(element, field_name, warning=message)
 
 
@@ -237,19 +258,19 @@ def set_foreign_field(instance, field_name, element, uploaded_uris=None, origina
             field_name=field_name,
         )
         logger.info(message)
-        element['errors'].append(message)
+        element[ImportElementFields.ERRORS].append(message)
         track_messages_on_element(element, field_name, error=message)
 
 
 def set_extra_field(instance, field_name, element,
-                    extra_field_helper: Optional[ExtraFieldDefaultHelper] = None, original=None) -> None:
+                    extra_field_helper: Optional[ExtraFieldHelper] = None, original=None) -> None:
     element_value = element.get(field_name)
     extra_value = element_value if element_value is not None else None
 
     if extra_value is None and extra_field_helper is not None:
         # default_value
-        extra_value = extra_field_helper.get_default(instance=instance,
-                                                     key=field_name)
+        extra_value = extra_field_helper.get_value(instance=instance,
+                                                   key=field_name)
         if extra_field_helper.overwrite_in_element:
             element[field_name] = extra_value
 
@@ -290,13 +311,13 @@ def set_m2m_through_instances(instance, element, field_name=None, source_name=No
     through_instances = list(getattr(instance, through_name).all())
 
     _track_changes = {}
-    _track_changes[NEW_DATA_FIELD] = []
-    _track_changes[CURRENT_DATA_FIELD] = []
+    _track_changes[ImportElementFields.NEW] = []
+    _track_changes[ImportElementFields.CURRENT] = []
 
     if original is not None:
         try:
             for _order, orig_field_instance in enumerate(getattr(original, through_name).order_by()):
-                _track_changes[CURRENT_DATA_FIELD].append({
+                _track_changes[ImportElementFields.CURRENT].append({
                     'uri': getattr(orig_field_instance, target_name).uri,
                     'order': orig_field_instance.order,
                     'model': get_rdmo_model_path(target_name, field_name)
@@ -324,7 +345,7 @@ def set_m2m_through_instances(instance, element, field_name=None, source_name=No
                     # remove the through_instance from the through_instances list so that it won't get removed
                     through_instances.remove(through_instance)
                 if original is not None:
-                    _track_changes[NEW_DATA_FIELD].append(target_element)
+                    _track_changes[ImportElementFields.NEW].append(target_element)
             except StopIteration:
                 # create a new item
                 if save:
@@ -334,7 +355,7 @@ def set_m2m_through_instances(instance, element, field_name=None, source_name=No
                         'order': order
                     }).save()
                 if original is not None:
-                    _track_changes[NEW_DATA_FIELD].append(target_element)
+                    _track_changes[ImportElementFields.NEW].append(target_element)
 
         except target_model.DoesNotExist:
             message = '{target_model} {target_uri} for imported {instance_model} {instance_uri} does not exist.'.format(
@@ -344,7 +365,7 @@ def set_m2m_through_instances(instance, element, field_name=None, source_name=No
                 instance_uri=element.get('uri')
             )
             logger.info(message)
-            element['warnings'][target_uri].append(message)
+            element[ImportElementFields.WARNINGS][target_uri].append(message)
             track_messages_on_element(element, field_name, warning=message)
         except target_model.MultipleObjectsReturned:
             message = '{target_model} {target_uri} for imported {instance_model} {instance_uri} returns multiple objects.'.format(  # noqa: E501
@@ -354,7 +375,7 @@ def set_m2m_through_instances(instance, element, field_name=None, source_name=No
                 instance_uri=element.get('uri')
             )
             logger.info(message)
-            element['warnings'][target_uri].append(message)
+            element[ImportElementFields.WARNINGS][target_uri].append(message)
             track_messages_on_element(element, field_name, warning=message)
     if save:
         # remove the remainders of the items list
@@ -362,15 +383,15 @@ def set_m2m_through_instances(instance, element, field_name=None, source_name=No
             if getattr(through_instance, target_name).uri_prefix == instance.uri_prefix:
                 through_instance.delete()
     # sort the tracked changes by order in-place
-    new_instance_data = sorted(_track_changes[NEW_DATA_FIELD], key=lambda k: k['order'])
-    original_instance_data = sorted(_track_changes[CURRENT_DATA_FIELD], key=lambda k: k['order'])
+    new_instance_data = sorted(_track_changes[ImportElementFields.NEW], key=lambda k: k['order'])
+    original_instance_data = sorted(_track_changes[ImportElementFields.CURRENT], key=lambda k: k['order'])
     track_changes_on_m2m_through_instances(element, field_name, original_instance_data, new_instance_data)
 
 
 def track_changes_on_m2m_through_instances(element, field_name, original_instance_data, new_instance_data):
     _initialize_track_changes_element_field(element, field_name)
-    element[ELEMENT_DIFF_FIELD_NAME][field_name][NEW_DATA_FIELD] = new_instance_data
-    element[ELEMENT_DIFF_FIELD_NAME][field_name][CURRENT_DATA_FIELD] = original_instance_data
+    element[ImportElementFields.DIFF][field_name][ImportElementFields.NEW] = new_instance_data
+    element[ImportElementFields.DIFF][field_name][ImportElementFields.CURRENT] = original_instance_data
     new_values = [i['uri'] for i in new_instance_data]
     original_values = [i['uri'] for i in original_instance_data]
     track_changes_on_element(element, field_name, new_value=new_values, original_value=original_values)
@@ -405,7 +426,7 @@ def set_m2m_instances(instance, element, field_name, original=None, save=None):
                 instance_uri=element.get('uri')
             )
             logger.info(message)
-            element['warnings'][foreign_uri].append(message)
+            element[ImportElementFields.WARNINGS][foreign_uri].append(message)
             track_messages_on_element(element, field_name, warning=message)
     if save:
         getattr(instance, field_name).set(foreign_instances)
@@ -431,13 +452,14 @@ def set_reverse_m2m_through_instance(instance, element, field_name=None, source_
     through_info = model_meta.get_field_info(through_model)
     target_model = through_info.forward_relations[target_name].related_model
 
-    _track_changes = {}
-    _track_changes[NEW_DATA_FIELD] = []
-    _track_changes[CURRENT_DATA_FIELD] = []
+    _track_changes = {
+        ImportElementFields.NEW: [],
+        ImportElementFields.CURRENT: [],
+    }
     if original is not None:
         try:
             for _order, _through_instance in enumerate(getattr(original, through_name).order_by()):
-                _track_changes[CURRENT_DATA_FIELD].append({
+                _track_changes[ImportElementFields.CURRENT].append({
                     'uri': getattr(_through_instance, source_name).uri,
                     'order': _through_instance.order,
                     'model': get_rdmo_model_path(target_name, field_name),
@@ -458,7 +480,7 @@ def set_reverse_m2m_through_instance(instance, element, field_name=None, source_
                     instance_uri=element.get('uri')
                 )
                 logger.info(message)
-                element['errors'].append(message)
+                element[ImportElementFields.ERRORS].append(message)
                 track_messages_on_element(element, field_name, error=message)
                 continue
             if save:
@@ -469,7 +491,7 @@ def set_reverse_m2m_through_instance(instance, element, field_name=None, source_
                 through_instance.order = order
                 through_instance.save()
             if original is not None:
-                _track_changes[NEW_DATA_FIELD].append(target_element)
+                _track_changes[ImportElementFields.NEW].append(target_element)
 
         except target_model.DoesNotExist:
             message = '{target_model} {target_uri} for imported {instance_model} {instance_uri} does not exist.'.format(
@@ -479,11 +501,11 @@ def set_reverse_m2m_through_instance(instance, element, field_name=None, source_
                 instance_uri=element.get('uri')
             )
             logger.info(message)
-            element['warnings'][target_uri].append(message)
+            element[ImportElementFields.WARNINGS][target_uri].append(message)
             track_messages_on_element(element, field_name, warning=message)
     # sort the tracked changes by order in-place
-    new_instance_data = sorted(_track_changes[NEW_DATA_FIELD], key=lambda k: k['order'])
-    original_instance_data = sorted(_track_changes[CURRENT_DATA_FIELD], key=lambda k: k['order'])
+    new_instance_data = sorted(_track_changes[ImportElementFields.NEW], key=lambda k: k['order'])
+    original_instance_data = sorted(_track_changes[ImportElementFields.CURRENT], key=lambda k: k['order'])
     track_changes_on_m2m_through_instances(element, field_name, original_instance_data, new_instance_data)
 
 
@@ -505,11 +527,13 @@ def validate_instance(instance, element, *validators):
         )
         logger.info(message)
         _key = "FullClean"
-        element['errors'].append(message)
+        element[ImportElementFields.ERRORS].append(message)
         track_messages_on_element(element, _key, error=message)
         return
 
     for validator in validators:
+        if issubclass(validator, LockedValidator):
+            element['locked'] = False
         try:
             validator(instance=instance if instance.id else None)(vars(instance))
         except ValidationError as e:
@@ -528,8 +552,10 @@ def validate_instance(instance, element, *validators):
                 )
                 logger.info(message)
                 _key = validator.__qualname__
-                element['errors'].append(message)
+                element[ImportElementFields.ERRORS].append(message)
                 track_messages_on_element(element, _key, error=message)
+                if issubclass(validator, LockedValidator):
+                    element['locked'] = True
 
 
 def check_permissions(instance: models.Model, element_uri: str, user: models.Model) -> Optional[str]:

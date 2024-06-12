@@ -19,19 +19,20 @@ class ThroughInstanceMapper:
 
 
 @dataclass(frozen=True)
-class ExtraFieldDefaultHelper:
+class ExtraFieldHelper:
     field_name: str
     value: Union[str, bool, int, None] = None
     callback: Optional[Callable] = None
     overwrite_in_element: bool = False
 
-    def get_default(self, **kwargs):
-        if self.callback is None:
+    def get_value(self, **kwargs):
+        if self.value is not None:
             return self.value
-        else:
-            return self.get_default_from_callback(self.callback, kwargs)
+        elif self.callback is not None:
+            return self.get_value_from_callback(self.callback, kwargs)
+
     @staticmethod
-    def get_default_from_callback(callback, kwargs):
+    def get_value_from_callback(callback, kwargs):
         sig = signature(callback)
         kwargs = {k: val for k, val in kwargs.items() if k in sig.parameters}
         value = callback(**kwargs)
@@ -46,7 +47,7 @@ class ElementImportHelper:
     common_fields: Sequence[str] = field(default=ELEMENT_COMMON_FIELDS)
     lang_fields: Sequence[str] = field(default_factory=list)
     foreign_fields: Sequence[str] = field(default_factory=list)
-    extra_fields: Sequence[ExtraFieldDefaultHelper] = field(default_factory=list)
+    extra_fields: Sequence[ExtraFieldHelper] = field(default_factory=list)
     m2m_instance_fields: Sequence[str] = field(default_factory=list)
     m2m_through_instance_fields: Sequence[ThroughInstanceMapper] = field(default_factory=list)
     reverse_m2m_through_instance_fields: Sequence[ThroughInstanceMapper] = field(default_factory=list)

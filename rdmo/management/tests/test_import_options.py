@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from rdmo.core.imports import CURRENT_DATA_FIELD, ELEMENT_DIFF_FIELD_NAME, NEW_DATA_FIELD
+from rdmo.core.imports import ImportElementFields
 from rdmo.management.imports import import_elements
 from rdmo.options.models import Option, OptionSet
 
@@ -72,7 +72,7 @@ def test_update_optionsets_with_changed_fields(db, settings, updated_fields):
     assert len(imported_and_changed) == len(changed_elements)
     # compare two ordered lists with "updated_and_changed" dicts
     for test, imported in zip(changed_elements, imported_and_changed):
-        assert test[ELEMENT_DIFF_FIELD_NAME] == imported[ELEMENT_DIFF_FIELD_NAME]
+        assert test[ImportElementFields.DIFF] == imported[ImportElementFields.DIFF]
 
 
 def test_update_optionsets_from_changed_xml(db, settings):
@@ -88,7 +88,7 @@ def test_update_optionsets_from_changed_xml(db, settings):
     elements_1, root_1 = read_xml_and_parse_to_root_and_elements(xml_file_1)
     imported_elements_1 = import_elements(elements_1, save=False)
     assert imported_elements_1
-    assert [i for i in imported_elements_1 if i[ELEMENT_DIFF_FIELD_NAME]]
+    assert [i for i in imported_elements_1 if i[ImportElementFields.DIFF]]
     warnings_elements = [i for i in imported_elements_1 if i['warnings']]
     assert len(warnings_elements) == 1
 
@@ -102,9 +102,9 @@ def test_update_optionsets_from_changed_xml(db, settings):
     # the test changes are simply the reversed order of the options
     test_optionset_changed_options = test_optionset['original']['options'][::-1]
     assert optionset_element
-    assert "options" in optionset_element[ELEMENT_DIFF_FIELD_NAME]
-    assert optionset_element[ELEMENT_DIFF_FIELD_NAME]['options'][CURRENT_DATA_FIELD] == test_optionset['original']['options']  # noqa: E501
-    assert optionset_element[ELEMENT_DIFF_FIELD_NAME]['options'][NEW_DATA_FIELD] == test_optionset_changed_options
+    assert "options" in optionset_element[ImportElementFields.DIFF]
+    assert optionset_element[ImportElementFields.DIFF]['options'][ImportElementFields.CURRENT] == test_optionset['original']['options']  # noqa: E501
+    assert optionset_element[ImportElementFields.DIFF]['options'][ImportElementFields.NEW] == test_optionset_changed_options  # noqa: E501
 
     # now save the elements_1
     _imported_elements_1_save = import_elements(elements_1, save=True)
@@ -164,7 +164,7 @@ def test_update_options_with_changed_fields(db, settings, updated_fields):
     assert len(imported_and_changed) == len(changed_elements)
     # compare two ordered lists with "updated_and_changed" dicts
     for test, imported in zip(changed_elements, imported_and_changed):
-        assert test[ELEMENT_DIFF_FIELD_NAME] == imported[ELEMENT_DIFF_FIELD_NAME]
+        assert test[ImportElementFields.DIFF] == imported[ImportElementFields.DIFF]
 
 
 

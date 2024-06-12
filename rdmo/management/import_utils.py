@@ -4,14 +4,14 @@ from typing import Dict
 
 from rdmo.conditions.imports import import_helper_condition
 from rdmo.core.imports import (
-    ELEMENT_DIFF_FIELD_NAME,
+    ImportElementFields,
+    set_common_fields,
     set_extra_field,
     set_foreign_field,
     set_lang_field,
     set_m2m_instances,
     set_m2m_through_instances,
     set_reverse_m2m_through_instance,
-    track_changes_on_element,
 )
 from rdmo.domain.imports import import_helper_attribute
 from rdmo.options.imports import import_helper_option, import_helper_optionset
@@ -39,11 +39,11 @@ ELEMENT_IMPORT_HELPERS = {
     "views.view": import_helper_view
 }
 IMPORT_ELEMENT_INIT_DICT = {
-        'warnings': lambda: defaultdict(list),
-        'errors': list,
-        'created': bool,
-        'updated': bool,
-        ELEMENT_DIFF_FIELD_NAME: dict,
+        ImportElementFields.WARNINGS: lambda: defaultdict(list),
+        ImportElementFields.ERRORS: list,
+        ImportElementFields.CREATED: bool,
+        ImportElementFields.UPDATED: bool,
+        ImportElementFields.DIFF: dict,
     }
 
 
@@ -66,11 +66,7 @@ def apply_field_values(instance, element, import_helper, uploaded_uris, original
     # start to set values on the instance
     # set common field values from element on instance
     for field in import_helper.common_fields:
-        value = element.get(field) or ''
-        setattr(instance, field, value)
-        if element['updated']:
-            # track changes for common fields
-            track_changes_on_element(element, field, new_value=value, original=original)
+        set_common_fields(instance, field, element, original=original)
     # set language fields
     for field in import_helper.lang_fields:
         set_lang_field(instance, field, element, original=original)
