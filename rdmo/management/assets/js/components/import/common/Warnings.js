@@ -26,11 +26,11 @@ const Warnings = ({element, showTitle = false, shouldShowURI = true}) => {
   return (
     <div className="row text-warning mt-10">
       {showTitle === true && listWarningMessages.length > 0 &&
-        <div className="col-sm-3 text-right">
+        <div className="col-sm-3 mb-5 mt-5">
           {'Warnings'}
         </div>
       }
-      <div className="col-sm-9">
+      <div className="col-sm-12">
         <ul className="list-unstyled">{listWarningMessages}</ul>
       </div>
     </div>
@@ -38,7 +38,7 @@ const Warnings = ({element, showTitle = false, shouldShowURI = true}) => {
 }
 
 
-  Warnings.propTypes = {
+Warnings.propTypes = {
     element: PropTypes.object.isRequired,
     showTitle: PropTypes.bool.isRequired,
     shouldShowURI: PropTypes.bool,
