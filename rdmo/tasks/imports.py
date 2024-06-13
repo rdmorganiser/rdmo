@@ -13,7 +13,7 @@ import_helper_task = ElementImportHelper(
         ExtraFieldHelper(field_name='order'),
         ExtraFieldHelper(field_name='days_before'),
         ExtraFieldHelper(field_name='days_after'),
-        ExtraFieldHelper(field_name='available', value=True),
+        ExtraFieldHelper(field_name='available', overwrite_in_element=True),
     ),
     m2m_instance_fields=('catalogs', 'conditions'),
 )
