@@ -131,9 +131,14 @@ def track_changes_on_element(element: dict,
 
     _initialize_track_changes_element_field(element, element_field)
 
-    if original_value is None:
-        _get_field = element_field if instance_field is None else instance_field
-        original_value = getattr(original, _get_field, '')
+    if original_value is None and original is not None:
+        lookup_field = element_field if instance_field is None else instance_field
+        original_value = getattr(original, lookup_field, '')
+
+    if isinstance(new_value,str) and isinstance(original_value,int):
+        # typecasting of original value to str, for comparison '0' == 0
+        # specific edge-case, maybe generalize later
+        original_value = str(original_value)
 
     element[ImportElementFields.DIFF][element_field][ImportElementFields.CURRENT] = original_value
     element[ImportElementFields.DIFF][element_field][ImportElementFields.NEW] = new_value
@@ -161,10 +166,17 @@ def get_lang_field_values(field_name: str,
 
 
 def set_common_fields(instance, field_name, element, original=None):
-    value = element.get(field_name) or ''
-    setattr(instance, field_name, value)
+    element_value = element.get(field_name) or ''
+    if field_name == 'comment' and original is not None:
+        # prevent overwrite with an empty comment when updating an element
+        original_value = getattr(original, field_name)
+        if original_value and not element_value:
+            element_value = original_value
+            element[field_name] = element_value
+
+    setattr(instance, field_name, element_value)
     # track changes for common fields
-    track_changes_on_element(element, field_name, new_value=value, original=original)
+    track_changes_on_element(element, field_name, new_value=element_value, original=original)
 
 
 def set_lang_field(instance, field_name, element, original=None):
@@ -264,15 +276,23 @@ def set_foreign_field(instance, field_name, element, uploaded_uris=None, origina
 
 def set_extra_field(instance, field_name, element,
                     extra_field_helper: Optional[ExtraFieldHelper] = None, original=None) -> None:
-    element_value = element.get(field_name)
-    extra_value = element_value if element_value is not None else None
+
+    extra_value = None
+    if field_name in element:
+        element_value = element.get(field_name)
+        extra_value = element_value
+    else:
+        instance_value = getattr(instance, field_name)
+        element[field_name] = instance_value
+        extra_value = instance_value
 
     if extra_value is None and extra_field_helper is not None:
         # default_value
         extra_value = extra_field_helper.get_value(instance=instance,
                                                    key=field_name)
-        if extra_field_helper.overwrite_in_element:
-            element[field_name] = extra_value
+
+    if extra_field_helper.overwrite_in_element:
+        element[field_name] = extra_value
 
     if extra_value is not None:
         setattr(instance, field_name, extra_value)
