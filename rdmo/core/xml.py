@@ -367,6 +367,10 @@ def append_element(ordered_elements, unordered_elements, uri, element):
     if element is None:
         return
 
+    has_list_or_dict = any(i for i in element.values() if isinstance(i, dict) or isinstance(i, list))
+    if has_list_or_dict and uri not in ordered_elements:
+        ordered_elements[uri] = element
+
     for element_value in element.values():
         if isinstance(element_value, dict):
             sub_uri = element_value.get('uri')
