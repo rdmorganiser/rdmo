@@ -8,7 +8,7 @@ const generateErrorMessages = (messages, key) =>
   messages.map(message => <li className="text-danger" key={key}>{message}</li>)
 
 // Helper function to prepare the list of errors
-const prepareErrorsList = (errors) => {
+export const prepareErrorsList = (errors) => {
   // Filter out duplicate errors
   const uniqueErrors = [...new Set(errors)]
 
@@ -25,11 +25,11 @@ const Errors = ({ element, showTitle = false }) => {
   return !isEmpty(element.errors) && (
     <div className="row text-danger mt-10">
       {showTitle && (
-        <div className="col-sm-3 text-right">
+        <div className="col-sm-3 mb-5 mt-5">
           {gettext('Errors')}
         </div>
       )}
-      <div className={`col-sm-${showTitle ? 9 : 12}`}>
+      <div className="col-sm-12">
         <ul className="list-unstyled">
           {listErrorMessages}
         </ul>
