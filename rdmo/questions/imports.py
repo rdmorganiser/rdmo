@@ -23,7 +23,7 @@ import_helper_catalog = ElementImportHelper(
     lang_fields=('help', 'title'),
     extra_fields = (
         ExtraFieldHelper(field_name='order'),
-        ExtraFieldHelper(field_name='available', value=True),
+        ExtraFieldHelper(field_name='available', overwrite_in_element=True),
     ),
     m2m_through_instance_fields=[
         ThroughInstanceMapper(
