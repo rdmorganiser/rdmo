@@ -2,7 +2,6 @@ from collections import defaultdict
 from dataclasses import asdict
 from typing import Dict
 
-from rdmo.conditions.imports import import_helper_condition
 from rdmo.core.imports import (
     ImportElementFields,
     set_common_fields,
@@ -13,31 +12,7 @@ from rdmo.core.imports import (
     set_m2m_through_instances,
     set_reverse_m2m_through_instance,
 )
-from rdmo.domain.imports import import_helper_attribute
-from rdmo.options.imports import import_helper_option, import_helper_optionset
-from rdmo.questions.imports import (
-    import_helper_catalog,
-    import_helper_page,
-    import_helper_question,
-    import_helper_questionset,
-    import_helper_section,
-)
-from rdmo.tasks.imports import import_helper_task
-from rdmo.views.imports import import_helper_view
 
-ELEMENT_IMPORT_HELPERS = {
-    "conditions.condition": import_helper_condition,
-    "domain.attribute": import_helper_attribute,
-    "options.optionset": import_helper_optionset,
-    "options.option": import_helper_option,
-    "questions.catalog": import_helper_catalog,
-    "questions.section": import_helper_section,
-    "questions.page": import_helper_page,
-    "questions.questionset": import_helper_questionset,
-    "questions.question": import_helper_question,
-    "tasks.task": import_helper_task,
-    "views.view": import_helper_view
-}
 IMPORT_ELEMENT_INIT_DICT = {
         ImportElementFields.WARNINGS: lambda: defaultdict(list),
         ImportElementFields.ERRORS: list,

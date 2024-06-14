@@ -12,6 +12,7 @@ from packaging.version import Version, parse
 
 from rdmo import __version__ as RDMO_INSTANCE_VERSION
 from rdmo.core.constants import RDMO_MODELS
+from rdmo.core.imports import ImportElementFields
 
 logger = logging.getLogger(__name__)
 
@@ -125,11 +126,11 @@ def parse_xml_to_elements(xml_file=None) -> Tuple[OrderedDict, list]:
     elements = convert_elements(elements, parse(root.attrib.get('version', DEFAULT_RDMO_XML_VERSION)))
 
     # step 5: order the elements and return
-    ordered_elements = order_elements(elements)
+    # ordering of elements is done in the import_elements function
 
     logger.info(f'XML parsing of {file.name} success (length: {len(elements)}).')
 
-    return ordered_elements, errors
+    return elements, errors
 
 
 def read_xml_file(file_name, raise_exception=False):
@@ -355,35 +356,72 @@ def convert_additional_input(elements):
 
     return elements
 
+def get_related_elements(element, ignored_keys=None):
+    ignored_keys = ignored_keys or list(ImportElementFields)
+    related_elements = {k: val for k, val in element.items() if
+                       k not in ignored_keys and (isinstance(val, (dict, list)))}
+    return related_elements
 
-def order_elements(elements):
-    ordered_elements = OrderedDict()
+
+def sort_by_relatives(elements, descendants_first=False, ancestors_first=False):
+    ancestors, descendants = [], []
+
+    if not descendants_first and not ancestors_first:
+        return elements
+
     for uri, element in elements.items():
-        append_element(ordered_elements, elements, uri, element)
+        try:
+            has_descendants = get_related_elements(element)
+        except AttributeError:
+            has_descendants = False
+        if has_descendants:
+            ancestors.append((uri, element))
+        else:
+            descendants.append((uri, element))
+    if descendants_first:
+        sort_list = descendants + ancestors
+    elif ancestors_first:
+        sort_list = ancestors + descendants
+
+    sorted_elements = OrderedDict()
+    for uri,element in sort_list:
+        sorted_elements[uri] = element
+    return sorted_elements
+
+
+def order_elements(elements, order_sets_first=False, descendants_first=False) -> OrderedDict:
+    ordered_elements = OrderedDict()
+    if descendants_first:
+        elements = sort_by_relatives(elements, descendants_first=descendants_first)
+    for uri, element in elements.items():
+        append_element(ordered_elements, elements, uri, element, order_sets_first=order_sets_first)
     return ordered_elements
 
 
-def append_element(ordered_elements, unordered_elements, uri, element):
+def append_element(ordered_elements, unordered_elements, uri, element, order_sets_first=False) -> None:
     if element is None:
         return
 
-    has_list_or_dict = any(i for i in element.values() if isinstance(i, dict) or isinstance(i, list))
-    if has_list_or_dict and uri not in ordered_elements:
-        ordered_elements[uri] = element
+    related_elements = get_related_elements(element)
 
-    for element_value in element.values():
+    if order_sets_first:
+        if related_elements and uri not in ordered_elements:
+            ordered_elements[uri] = element
+
+    for key, element_value in related_elements.items():
         if isinstance(element_value, dict):
             sub_uri = element_value.get('uri')
             sub_element = unordered_elements.get(sub_uri)
-            if sub_uri not in ordered_elements:
+            if sub_uri not in ordered_elements and sub_uri is not None:
                 append_element(ordered_elements, unordered_elements, sub_uri, sub_element)
 
         elif isinstance(element_value, list):
             for value in element_value:
-                sub_uri = value.get('uri')
-                sub_element = unordered_elements.get(sub_uri)
-                if sub_uri not in ordered_elements:
-                    append_element(ordered_elements, unordered_elements, sub_uri, sub_element)
+                if isinstance(element_value, dict):
+                    sub_uri = value.get('uri')
+                    sub_element = unordered_elements.get(sub_uri)
+                    if sub_uri not in ordered_elements and sub_uri is not None:
+                        append_element(ordered_elements, unordered_elements, sub_uri, sub_element)
 
     if uri not in ordered_elements:
         ordered_elements[uri] = element
