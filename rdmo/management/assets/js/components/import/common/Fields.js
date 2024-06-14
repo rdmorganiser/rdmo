@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import isNil from 'lodash/isNil'
 import uniqueId from 'lodash/uniqueId'
 import FieldRow from './FieldRow'
+import isString from 'lodash/isString'
 
 const excludeKeys = [
   'import',
@@ -24,18 +24,32 @@ const excludeKeys = [
   'locked'
 ]
 
-const Fields = ({ element }) => (
-  <div className="mt-10">
-    {Object.entries(element)
-      .sort()
-      .map(([key, value]) => {
-        if ((!isNil(value) || key in element.updated_and_changed) && !excludeKeys.includes(key)) {
-          return <FieldRow key={uniqueId()} element={element} keyName={key} value={value} />
-        }
-        return null
-      })}
-  </div>
-)
+
+export const serializeValue = (value) => {
+  if (value === null) return ''
+  if (value === true) return 'true'
+  if (value === false) return 'false'
+  if (Array.isArray(value)) return value
+  if (isString(value)) return value
+  if (typeof value === 'number') return value.toString()
+  return value
+}
+
+const Fields = ({ element }) => {
+
+  return (
+    <div className="mt-10">
+      {Object.entries(element)
+        .sort()
+        .map(([key, value]) => {
+          if (!excludeKeys.includes(key)) {
+            return <FieldRow key={uniqueId()} element={element} keyName={key} value={serializeValue(value)} />
+          }
+          return null
+        })}
+    </div>
+  )
+}
 
 Fields.propTypes = {
   element: PropTypes.object.isRequired,

@@ -62,7 +62,7 @@ const Import = ({ config, imports, configActions, importActions }) => {
           {
             filteredElements.map((element, index) => {
               if (success) {
-                return <ImportSuccessElement key={index} element={element}/>
+                return <ImportSuccessElement key={index} element={element} importActions={importActions}/>
               } else {
                 return <ImportElement key={index} config={config} element={element} importActions={importActions}/>
               }

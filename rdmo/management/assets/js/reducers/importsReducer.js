@@ -59,7 +59,7 @@ export default function importsReducer(state = initialState, action) {
       })}
     case 'import/selectChangedElements':
       return {...state, elements: state.elements.map(element => {
-        if (element.changed && !element.created ) {
+        if (element.changed || element.created ) {
           return {...element, import: action.value}
         }
         else if (action.value) {return {...element, import: !action.value}}
@@ -72,7 +72,7 @@ export default function importsReducer(state = initialState, action) {
       })}
     case 'import/showChangedElements':
       return {...state, elements: state.elements.map(element => {
-        if (element.changed && !element.created ) {
+        if (element.changed || element.created ) {
           return {...element, show: action.value}
         }
         else if (action.value) {return {...element, show: !action.value}}
