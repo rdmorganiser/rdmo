@@ -15,8 +15,6 @@ const FieldRowDiffs = ({ element, field }) => {
   const changed = fieldDiffData.changed ?? false
   const splitView = false
   const hideLineNumbers = true
-  // const leftTitle = fieldDiffData.leftTitle ?? gettext('Current')
-  // const rightTitle = fieldDiffData.rightTitle ?? gettext('Uploaded')
   const warnings = fieldDiffData.warnings ?? {}
   const errors = fieldDiffData.errors ?? []
 

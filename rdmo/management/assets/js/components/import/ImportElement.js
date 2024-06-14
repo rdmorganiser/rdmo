@@ -1,41 +1,72 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { CodeLink, WarningLink, ErrorLink, ShowLink, ShowUpdatedLink } from '../common/Links'
+import {isEmpty} from 'lodash'
 
+import {
+  WarningLink,
+  ErrorLink,
+  ShowLink,
+  AvailableLink,
+  LockedLink, AddLink, EditLink
+} from '../common/Links'
+import SelectCheckbox from './common/SelectCheckbox'
 import Errors from './common/Errors'
+
+import Warnings from './common/Warnings'
 import Fields from './common/Fields'
 import Form from './common/Form'
 
-import { codeClass, verboseNames } from '../../constants/elements'
-import { isEmpty } from 'lodash'
 
 const ImportElement = ({ config, element, importActions }) => {
   const updateShowField = () => importActions.updateElement(element, {show: !element.show})
   const toggleImport = () => importActions.updateElement(element, {import: !element.import})
   const updateElement = (key, value) => importActions.updateElement(element, {[key]: value})
+  const toggleAvailable = () => importActions.updateElement(element, {available: !element.available})
 
   return (
     <li className="list-group-item">
       <div className="pull-right">
-        <WarningLink show={!isEmpty(element.warnings)} onClick={updateShowField} />
-        <ErrorLink show={!isEmpty(element.errors)} onClick={updateShowField} />
-        <ShowUpdatedLink show={(element.changed && !element.created)} disabled={true} onClick={updateShowField} />
-        <ShowLink show={element.show} onClick={updateShowField} />
+        {
+          (isEmpty(element.errors) && ('available' in element)) &&
+           <AvailableLink available={element.available}
+                          locked={element.locked} onClick={toggleAvailable}
+                          title={element.available ? gettext('Make unavailable')
+                                         : gettext('Make available')}/>
+        }
+        {
+          !isEmpty(element.warnings) &&
+          <WarningLink onClick={updateShowField} />
+        }
+        {
+          !isEmpty(element.errors) &&
+          <ErrorLink onClick={updateShowField} />
+        }
+        {
+          (element.changed && element.updated) &&
+          <EditLink href='' title={gettext('Updated and changed')} disabled={true} onClick={updateShowField} />
+        }
+        {
+          element.created &&
+          <AddLink title={gettext('Created')} disabled={true} onClick={updateShowField} />
+        }
+        {
+          (element.updated && element.locked) &&
+          <LockedLink title={gettext('Locked')}
+                      locked={element.locked} onClick={updateShowField} disabled={true} />
 
+        }
+        <ShowLink show={element.show} onClick={updateShowField} />
       </div>
-      <div className="checkbox">
-        <label className="mr-5">
-          <input type="checkbox" checked={element.import} onChange={toggleImport} />
-          <strong>{verboseNames[element.model]}{' '}</strong>
-        </label>
-        <CodeLink className={codeClass[element.model]} uri={element.uri} onClick={updateShowField} />
-      </div>
+
+      <SelectCheckbox element={element} toggleImport={toggleImport} updateShowField={updateShowField} />
+
       {
         element.show && <>
           <Form config={config} element={element} updateElement={updateElement} />
           <Fields element={element} />
-          <Errors element={element} />
+          <Errors element={element} showTitle={true}/>
+          <Warnings element={element} showTitle={true} shouldShowURI={false} />
         </>
       }
     </li>

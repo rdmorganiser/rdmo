@@ -4,22 +4,12 @@ import uniqueId from 'lodash/uniqueId'
 import isString from 'lodash/isString'
 import isUndefined from 'lodash/isUndefined'
 import truncate from 'lodash/truncate'
-import { codeClass } from '../../../constants/elements'
+import {codeClass} from '../../../constants/elements'
 import {isNull} from 'lodash'
-
-const serializeValue = (value) => {
-  if (value === null) return ''
-  if (value === true) return 'true'
-  if (value === false) return 'false'
-  if (Array.isArray(value)) return value
-  if (isString(value)) return value
-  if (typeof value === 'number') return value.toString()
-  return value
-}
 
 
 const FieldRowValue = ({ value }) => {
-  const serializedValue = serializeValue(value)
+
   return  (
     <div className="col-sm-12">
       {Array.isArray(value) && (
@@ -32,7 +22,7 @@ const FieldRowValue = ({ value }) => {
         </ul>
       )}
       {!isNull(value) && !isUndefined(value.uri) && <code className={codeClass[value.type]}>{value.uri}</code>}
-      {isString(serializedValue) && <span>{truncate(value, { length: 512 })}</span>}
+      {isString(value) && <span>{truncate(value, { length: 512 })}</span>}
     </div>
   )
 }

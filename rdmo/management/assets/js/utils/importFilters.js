@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { filterUriPrefix, filterSearch} from './filter'
 
 const filterChanged = (selectFilterChanged, element) => {
-  return element.changed
+  return element.changed || element.created
 }
 
 function filterElementsByChanged(elements, selectFilterChanged) {
