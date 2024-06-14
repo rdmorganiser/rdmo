@@ -5,7 +5,6 @@ from .validators import ConditionLockedValidator, ConditionUniqueURIValidator
 
 import_helper_condition = ElementImportHelper(
     model=Condition,
-    model_path="conditions.condition",
     validators=(ConditionLockedValidator, ConditionUniqueURIValidator),
     foreign_fields=('source', 'target_option'),
     extra_fields=(
