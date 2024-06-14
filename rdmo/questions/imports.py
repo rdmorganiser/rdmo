@@ -18,7 +18,6 @@ from .validators import (
 
 import_helper_catalog = ElementImportHelper(
     model = Catalog,
-    model_path="questions.catalog",
     validators=(CatalogLockedValidator, CatalogUniqueURIValidator),
     lang_fields=('help', 'title'),
     extra_fields = (
@@ -36,7 +35,6 @@ import_helper_catalog = ElementImportHelper(
 
 import_helper_section = ElementImportHelper(
     model = Section,
-    model_path="questions.section",
     validators=(SectionLockedValidator, SectionUniqueURIValidator),
     lang_fields=('title',),
     m2m_through_instance_fields=[
@@ -55,7 +53,6 @@ import_helper_section = ElementImportHelper(
 
 import_helper_page = ElementImportHelper(
     model = Page,
-    model_path="questions.page",
     validators=(PageLockedValidator, PageUniqueURIValidator),
     lang_fields=('help', 'title', 'verbose_name'),
     foreign_fields=('attribute',),
@@ -83,7 +80,6 @@ import_helper_page = ElementImportHelper(
 
 import_helper_question = ElementImportHelper(
     model=Question,
-    model_path="questions.question",
     validators=(QuestionLockedValidator, QuestionUniqueURIValidator),
     lang_fields=('text', 'help', 'default_text', 'verbose_name'),
     foreign_fields=('attribute', 'default_option'),
@@ -113,7 +109,6 @@ import_helper_question = ElementImportHelper(
 )
 import_helper_questionset = ElementImportHelper(
     model = QuestionSet,
-    model_path="questions.questionset",
     validators=(QuestionSetLockedValidator, QuestionSetUniqueURIValidator),
     lang_fields=('help', 'title', 'verbose_name'),
     foreign_fields=('attribute',),

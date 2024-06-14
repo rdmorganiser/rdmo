@@ -5,7 +5,6 @@ from .validators import ViewLockedValidator, ViewUniqueURIValidator
 
 import_helper_view = ElementImportHelper(
     model=View,
-    model_path="views.view",
     validators=(ViewLockedValidator, ViewUniqueURIValidator),
     lang_fields=('help', 'title'),
     extra_fields=(
