@@ -7,6 +7,7 @@ from playwright.sync_api import Page, expect
 
 from rdmo.options.models import Option, OptionSet
 
+from .helpers_import_elements import IMPORT_ELEMENT_PANELS_LOCATOR
 from .helpers_models import delete_all_objects
 
 pytestmark = pytest.mark.e2e
@@ -47,7 +48,7 @@ def test_import_and_update_optionsets_in_management(logged_in_user: Page) -> Non
     page.get_by_role("link", name="Deselect all").click()
     page.get_by_role("link", name="Select all", exact=True).click()
     page.get_by_role("link", name="Show all", exact=True).click()
-    rows_displayed_in_ui = page.locator(".list-group > .list-group-item > .row.mt-10")
+    rows_displayed_in_ui = page.locator(IMPORT_ELEMENT_PANELS_LOCATOR)
     expect(rows_displayed_in_ui).to_have_count(OPTIONSETS_COUNTS['total'])
     # click the import button to start saving the instances to the db
     page.get_by_role("button", name=f"Import {OPTIONSETS_COUNTS['total']} elements").click()

@@ -9,6 +9,7 @@ from rdmo.questions.models import Catalog, Question, Section
 from rdmo.questions.models import Page as PageModel
 from rdmo.questions.models.questionset import QuestionSet
 
+from .helpers_import_elements import IMPORT_ELEMENT_PANELS_LOCATOR_SHOWN
 from .helpers_models import delete_all_objects
 
 pytestmark = pytest.mark.e2e
@@ -38,10 +39,10 @@ def test_import_catalogs_in_management(logged_in_user: Page) -> None:
     page.get_by_role("link", name="Deselect all").click()
     page.get_by_role("link", name="Select all", exact=True).click()
     page.get_by_role("link", name="Show all").click()
-    rows_displayed_in_ui = page.locator(".list-group > .list-group-item > .row.mt-10")
-    expect(rows_displayed_in_ui).to_have_count(148)
+    rows_displayed_in_ui_show = page.locator(IMPORT_ELEMENT_PANELS_LOCATOR_SHOWN).get_by_text("URI prefix", exact=True)
+    expect(rows_displayed_in_ui_show).to_have_count(148)
     page.get_by_role("link", name="Hide all").click()
-    expect(rows_displayed_in_ui).to_have_count(0)
+    expect(rows_displayed_in_ui_show).to_have_count(0)
     page.screenshot(path="screenshots/management-import-catalogs-pre.png", full_page=True)
     # click the import button to start saving the instances to the db
     page.get_by_role("button", name="Import 148 elements").click()

@@ -10,6 +10,7 @@ from .helpers_import_elements import (
     _test_helper_change_fields_elements,
     _test_helper_filter_updated_and_changed,
     get_changed_elements,
+    parse_xml_and_import_elements,
 )
 from .helpers_models import delete_all_objects
 from .helpers_xml import read_xml_and_parse_to_root_and_elements
@@ -27,29 +28,36 @@ test_optionset = {
         },
     }
 
+
 def test_create_optionsets(db, settings):
     delete_all_objects([OptionSet, Option])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'optionsets.xml'
-    elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
-    imported_elements = import_elements(elements)
+    elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
 
     assert len(root) == len(elements) == len(imported_elements) == 13
     assert OptionSet.objects.count() == 4
     assert Option.objects.count() == 9
-    assert all(element['created'] is True for element in imported_elements)
-    assert all(element['updated'] is False for element in imported_elements)
+    assert all(element[ImportElementFields.CREATED] is True for element in imported_elements)
+    assert all(element[ImportElementFields.UPDATED] is False for element in imported_elements)
 
 
 def test_update_optionsets(db, settings):
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'optionsets.xml'
+    # Arrange, import the optionsets.xml
+    delete_all_objects([OptionSet, Option])
+    elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
+    assert OptionSet.objects.count() == 4
+    assert Option.objects.count() == 9
 
-    elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
-    imported_elements = import_elements(elements)
+    # Act, import the optionsets.xml again
+    elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
 
     assert len(root) == len(elements) == len(imported_elements) == 13
-    assert all(element['created'] is False for element in imported_elements)
-    assert all(element['updated'] is True for element in imported_elements)
+    assert all(element[ImportElementFields.CREATED] is False for element in imported_elements)
+    assert all(element[ImportElementFields.UPDATED] is True for element in imported_elements)
+    assert OptionSet.objects.count() == 4
+    assert Option.objects.count() == 9
 
 
 @pytest.mark.parametrize('updated_fields', fields_to_be_changed)
@@ -57,9 +65,9 @@ def test_update_optionsets_with_changed_fields(db, settings, updated_fields):
     delete_all_objects([OptionSet, Option])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'optionsets.xml'
-    elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
-    imported_elements = import_elements(elements)
+    elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
     assert len(root) == len(imported_elements) == 13
+    assert OptionSet.objects.count() + Option.objects.count() == 13
     # start test with fresh options in db
     _n_change = int(Option.objects.count() / 2)
     elements = _test_helper_change_fields_elements(elements, fields_to_update=updated_fields, n=7)
@@ -67,8 +75,8 @@ def test_update_optionsets_with_changed_fields(db, settings, updated_fields):
     imported_elements = import_elements(elements)
     assert len(root) == len(imported_elements) == 13
     imported_and_changed = _test_helper_filter_updated_and_changed(imported_elements, updated_fields=updated_fields)
-    assert all(element['created'] is False for element in imported_elements)
-    assert all(element['updated'] is True for element in imported_elements)
+    assert all(element[ImportElementFields.CREATED] is False for element in imported_elements)
+    assert all(element[ImportElementFields.UPDATED] is True for element in imported_elements)
     assert len(imported_and_changed) == len(changed_elements)
     # compare two ordered lists with "updated_and_changed" dicts
     for test, imported in zip(changed_elements, imported_and_changed):
@@ -77,30 +85,30 @@ def test_update_optionsets_with_changed_fields(db, settings, updated_fields):
 
 def test_update_optionsets_from_changed_xml(db, settings):
     # Arrange, start test with fresh options in db
+    # Arrange, import the optionsets.xml
     delete_all_objects([OptionSet, Option])
-
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'optionsets.xml'
-    elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
-    imported_elements = import_elements(elements)
-    assert len(root) == len(imported_elements) == 13
-    # Act, import from xml that has changes
+    parse_xml_and_import_elements(xml_file)
+    assert OptionSet.objects.count() + Option.objects.count() == 13
+    # Act, import from xml optionsets-1.xml that contains changes
     xml_file_1 = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'updated-and-changed' / 'optionsets-1.xml'
     elements_1, root_1 = read_xml_and_parse_to_root_and_elements(xml_file_1)
     imported_elements_1 = import_elements(elements_1, save=False)
     assert imported_elements_1
     assert [i for i in imported_elements_1 if i[ImportElementFields.DIFF]]
-    warnings_elements = [i for i in imported_elements_1 if i['warnings']]
+    warnings_elements = [i for i in imported_elements_1 if i[ImportElementFields.WARNINGS]]
     assert len(warnings_elements) == 1
 
     changed_elements = get_changed_elements(imported_elements_1)
 
     assert test_optionset['original']['uri'] in changed_elements
-    assert len([i for i in  changed_elements.values() if i]) == 5
+    assert len([i for i in changed_elements.values() if i]) == 5
 
     # change the order of the options, as in the xml
     optionset_element = next(filter(lambda x: x['uri'] == test_optionset['original']['uri'], imported_elements_1))
     # the test changes are simply the reversed order of the options
     test_optionset_changed_options = test_optionset['original']['options'][::-1]
+
     assert optionset_element
     assert "options" in optionset_element[ImportElementFields.DIFF]
     assert optionset_element[ImportElementFields.DIFF]['options'][ImportElementFields.CURRENT] == test_optionset['original']['options']  # noqa: E501
@@ -118,31 +126,34 @@ def test_update_optionsets_from_changed_xml(db, settings):
     imported_elements_2 = import_elements(elements_1, save=False)
     changed_elements_2 = get_changed_elements(imported_elements_2)
     assert len(changed_elements_2) == 0
-    assert len([i for i in imported_elements_2 if i['warnings']]) == 1
+    assert len([i for i in imported_elements_2 if i[ImportElementFields.WARNINGS]]) == 1
 
 
 def test_create_options(db, settings):
+    # Arrange
     Option.objects.all().delete()
-
+    # Act
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'options.xml'
-
-    elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
-    imported_elements = import_elements(elements)
+    elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
 
     assert len(root) == len(elements) == len(imported_elements) == Option.objects.count() == 9
-    assert all(element['created'] is True for element in imported_elements)
-    assert all(element['updated'] is False for element in imported_elements)
+    assert all(element[ImportElementFields.CREATED] is True for element in imported_elements)
+    assert all(element[ImportElementFields.UPDATED] is False for element in imported_elements)
 
 
 def test_update_options(db, settings):
+    # Arrange
+    Option.objects.all().delete()
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'options.xml'
+    parse_xml_and_import_elements(xml_file)
+    assert Option.objects.count() == 9
 
-    elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
-    imported_elements = import_elements(elements)
+    # Act
+    elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
 
-    assert len(root) == len(elements) == len(imported_elements) == 9
-    assert all(element['created'] is False for element in imported_elements)
-    assert all(element['updated'] is True for element in imported_elements)
+    assert len(root) == len(elements) == len(imported_elements) == Option.objects.count() == 9
+    assert all(element[ImportElementFields.CREATED] is False for element in imported_elements)
+    assert all(element[ImportElementFields.UPDATED] is True for element in imported_elements)
 
 
 @pytest.mark.parametrize('updated_fields', fields_to_be_changed)
@@ -150,8 +161,7 @@ def test_update_options_with_changed_fields(db, settings, updated_fields):
     delete_all_objects([OptionSet, Option])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'options.xml'
-    elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
-    imported_elements = import_elements(elements)
+    elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
     assert len(root) == len(imported_elements) == 9
     # start test with fresh options in db
     elements = _test_helper_change_fields_elements(elements, fields_to_update=updated_fields, n=4)
@@ -159,14 +169,12 @@ def test_update_options_with_changed_fields(db, settings, updated_fields):
     imported_elements = import_elements(elements)
     imported_and_changed = _test_helper_filter_updated_and_changed(imported_elements, updated_fields=updated_fields)
     assert len(root) == len(imported_elements) == 9
-    assert all(element['created'] is False for element in imported_elements)
-    assert all(element['updated'] is True for element in imported_elements)
+    assert all(element[ImportElementFields.CREATED] is False for element in imported_elements)
+    assert all(element[ImportElementFields.UPDATED] is True for element in imported_elements)
     assert len(imported_and_changed) == len(changed_elements)
     # compare two ordered lists with "updated_and_changed" dicts
     for test, imported in zip(changed_elements, imported_and_changed):
         assert test[ImportElementFields.DIFF] == imported[ImportElementFields.DIFF]
-
-
 
 
 def test_create_legacy_options(db, settings):
@@ -174,22 +182,26 @@ def test_create_legacy_options(db, settings):
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'legacy' / 'options.xml'
 
-    elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
-    imported_elements = import_elements(elements)
+    elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
 
     assert len(root) == len(elements) == len(imported_elements) == 12
     assert OptionSet.objects.count() == 4
     assert Option.objects.count() == 8
-    assert all(element['created'] is True for element in imported_elements)
-    assert all(element['updated'] is False for element in imported_elements)
+    assert all(element[ImportElementFields.CREATED] is True for element in imported_elements)
+    assert all(element[ImportElementFields.UPDATED] is False for element in imported_elements)
 
 
 def test_update_legacy_options(db, settings):
+    delete_all_objects([OptionSet, Option])
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'legacy' / 'options.xml'
+    parse_xml_and_import_elements(xml_file)
+    assert OptionSet.objects.count() == 4
+    assert Option.objects.count() == 8
 
-    elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
-    imported_elements = import_elements(elements)
+    elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
 
     assert len(root) == len(elements) == len(imported_elements) == 12
-    assert all(element['created'] is False for element in imported_elements)
-    assert all(element['updated'] is True for element in imported_elements)
+    assert OptionSet.objects.count() == 4
+    assert Option.objects.count() == 8
+    assert all(element[ImportElementFields.CREATED] is False for element in imported_elements)
+    assert all(element[ImportElementFields.UPDATED] is True for element in imported_elements)

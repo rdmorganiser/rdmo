@@ -44,7 +44,6 @@ def logout_user(page: Page):
 @pytest.fixture(scope="function")
 def logged_in_user(e2e_tests_django_db_setup, base_url_page, username:str, password: str) -> Page:
     """Log in as admin user through Django login UI, returns logged in page for e2e tests."""
-    # breakpoint()
     page = login_user(base_url_page, username, password)
     yield page
     logout_user(page)

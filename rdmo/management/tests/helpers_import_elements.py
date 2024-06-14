@@ -4,6 +4,11 @@ from typing import Dict, List, Optional, Tuple, Union
 
 from rdmo.core.imports import ImportElementFields, track_changes_on_element
 from rdmo.management.import_utils import initialize_import_element_dict
+from rdmo.management.imports import import_elements
+from rdmo.management.tests.helpers_xml import read_xml_and_parse_to_root_and_elements
+
+IMPORT_ELEMENT_PANELS_LOCATOR = ".list-group > .list-group-item > .checkbox"
+IMPORT_ELEMENT_PANELS_LOCATOR_SHOWN = ".list-group > .list-group-item > .row"
 
 UPDATE_FIELD_FUNCS = {
     'comment': lambda text: f"this is a test comment {text}",
@@ -31,14 +36,13 @@ def get_changed_elements(elements: List[Dict]) -> Dict[str, Dict[str,Union[bool,
     for element in elements:
 
         changed_fields = []
-        for key, diff_field in element[ImportElementFields.DIFF].items():
-            if diff_field[ImportElementFields.NEW] != diff_field[ImportElementFields.CURRENT]:
-                changed_fields += key
+        for field, diff_field in element[ImportElementFields.DIFF].items():
+            if not (diff_field[ImportElementFields.NEW] == diff_field[ImportElementFields.CURRENT]):
+                changed_fields.append(field)
         if changed_fields:
-            changed_elements[element['uri']] = {
-                'changed': bool(changed_fields),
-                'changed_fields': changed_fields,
-            }
+            changed_elements[element['uri']] = {}
+            changed_elements[element['uri']]['changed'] = bool(changed_fields)
+            changed_elements[element['uri']]['changed_fields'] = changed_fields
     return changed_elements
 
 
@@ -66,3 +70,9 @@ def _test_helper_change_fields_elements(elements,
                 _element[field] = new_val
         _new_elements[_uri] = _element
     return _new_elements
+
+
+def parse_xml_and_import_elements(xml_file):
+    elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
+    imported_elements = import_elements(elements)
+    return elements, root, imported_elements
