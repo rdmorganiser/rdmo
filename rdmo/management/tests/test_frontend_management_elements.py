@@ -24,7 +24,6 @@ test_users = [('editor', 'editor')]
 @pytest.mark.parametrize("helper", model_helpers)
 def test_management_navigation(logged_in_user: Page, helper: ModelHelper, username: str, password: str) -> None:
     """Test that each content type is available through the navigation."""
-    # breakpoint()
     page = logged_in_user
     expect(page.get_by_role("heading", name="Management")).to_be_visible()
 
