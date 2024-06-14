@@ -29,6 +29,7 @@ class ImportElementFields(str, Enum):
     ERRORS = "errors"
     UPDATED = "updated"
     CREATED = "created"
+    CHANGED_FIELDS = "changedFields"  # for ignored_keys when ordering at save
 
 
 def handle_uploaded_file(filedata):
@@ -102,7 +103,9 @@ def _append_error(element: dict, element_field: str, error: str):
     element[ImportElementFields.DIFF][element_field][ImportElementFields.ERRORS].append(error)
 
 
-def track_messages_on_element(element: dict, element_field: str, warning: Optional[str] = None,
+def track_messages_on_element(element: dict,
+                              element_field: str,
+                              warning: Optional[str] = None,
                               error: Optional[str] = None):
     if warning is not None:
         _initialize_tracking_field(element, element_field)
@@ -330,24 +333,26 @@ def set_m2m_through_instances(instance, element, field_name=None, source_name=No
     target_model = model_info.forward_relations[field_name].related_model
     through_instances = list(getattr(instance, through_name).all())
 
-    _track_changes = {}
-    _track_changes[ImportElementFields.NEW] = []
-    _track_changes[ImportElementFields.CURRENT] = []
+    new_data = []
+    current_data = []
 
+    # get the original data in correct order
     if original is not None:
         try:
-            for _order, orig_field_instance in enumerate(getattr(original, through_name).order_by()):
-                _track_changes[ImportElementFields.CURRENT].append({
+            for orig_field_instance in getattr(original, through_name).order_by():
+                current_data.append({
                     'uri': getattr(orig_field_instance, target_name).uri,
                     'order': orig_field_instance.order,
                     'model': get_rdmo_model_path(target_name, field_name)
                 })
+            current_data = sorted(current_data, key=lambda k: k['order'])
         except AttributeError:
             pass  # legacy elements miss the field_name
 
     for target_element in target_elements:
         target_uri = target_element.get('uri')
         order = target_element.get('order')
+        new_data.append(target_element)
 
         try:
             target_instance = target_model.objects.get(uri=target_uri)
@@ -364,8 +369,6 @@ def set_m2m_through_instances(instance, element, field_name=None, source_name=No
                 if save:
                     # remove the through_instance from the through_instances list so that it won't get removed
                     through_instances.remove(through_instance)
-                if original is not None:
-                    _track_changes[ImportElementFields.NEW].append(target_element)
             except StopIteration:
                 # create a new item
                 if save:
@@ -374,8 +377,6 @@ def set_m2m_through_instances(instance, element, field_name=None, source_name=No
                         target_name: target_instance,
                         'order': order
                     }).save()
-                if original is not None:
-                    _track_changes[ImportElementFields.NEW].append(target_element)
 
         except target_model.DoesNotExist:
             message = '{target_model} {target_uri} for imported {instance_model} {instance_uri} does not exist.'.format(
@@ -386,6 +387,7 @@ def set_m2m_through_instances(instance, element, field_name=None, source_name=No
             )
             logger.info(message)
             element[ImportElementFields.WARNINGS][target_uri].append(message)
+            element[ImportElementFields.WARNINGS][element.get('uri')].append(message)
             track_messages_on_element(element, field_name, warning=message)
         except target_model.MultipleObjectsReturned:
             message = '{target_model} {target_uri} for imported {instance_model} {instance_uri} returns multiple objects.'.format(  # noqa: E501
@@ -396,6 +398,7 @@ def set_m2m_through_instances(instance, element, field_name=None, source_name=No
             )
             logger.info(message)
             element[ImportElementFields.WARNINGS][target_uri].append(message)
+            element[ImportElementFields.WARNINGS][element.get('uri')].append(message)
             track_messages_on_element(element, field_name, warning=message)
     if save:
         # remove the remainders of the items list
@@ -403,17 +406,17 @@ def set_m2m_through_instances(instance, element, field_name=None, source_name=No
             if getattr(through_instance, target_name).uri_prefix == instance.uri_prefix:
                 through_instance.delete()
     # sort the tracked changes by order in-place
-    new_instance_data = sorted(_track_changes[ImportElementFields.NEW], key=lambda k: k['order'])
-    original_instance_data = sorted(_track_changes[ImportElementFields.CURRENT], key=lambda k: k['order'])
-    track_changes_on_m2m_through_instances(element, field_name, original_instance_data, new_instance_data)
+    new_data = sorted(new_data, key=lambda k: k['order'])
+
+    track_changes_on_m2m_through_instances(element, field_name, current_data, new_data)
 
 
-def track_changes_on_m2m_through_instances(element, field_name, original_instance_data, new_instance_data):
+def track_changes_on_m2m_through_instances(element, field_name, current_data, new_data):
     _initialize_track_changes_element_field(element, field_name)
-    element[ImportElementFields.DIFF][field_name][ImportElementFields.NEW] = new_instance_data
-    element[ImportElementFields.DIFF][field_name][ImportElementFields.CURRENT] = original_instance_data
-    new_values = [i['uri'] for i in new_instance_data]
-    original_values = [i['uri'] for i in original_instance_data]
+    element[ImportElementFields.DIFF][field_name][ImportElementFields.NEW] = new_data
+    element[ImportElementFields.DIFF][field_name][ImportElementFields.CURRENT] = current_data
+    new_values = [i['uri'] for i in new_data]
+    original_values = [i['uri'] for i in current_data]
     track_changes_on_element(element, field_name, new_value=new_values, original_value=original_values)
 
 
@@ -447,6 +450,7 @@ def set_m2m_instances(instance, element, field_name, original=None, save=None):
             )
             logger.info(message)
             element[ImportElementFields.WARNINGS][foreign_uri].append(message)
+            element[ImportElementFields.WARNINGS][element.get('uri')].append(message)
             track_messages_on_element(element, field_name, warning=message)
     if save:
         getattr(instance, field_name).set(foreign_instances)
@@ -472,24 +476,27 @@ def set_reverse_m2m_through_instance(instance, element, field_name=None, source_
     through_info = model_meta.get_field_info(through_model)
     target_model = through_info.forward_relations[target_name].related_model
 
-    _track_changes = {
-        ImportElementFields.NEW: [],
-        ImportElementFields.CURRENT: [],
-    }
+    new_data = []
+    current_data = []
+
     if original is not None:
         try:
-            for _order, _through_instance in enumerate(getattr(original, through_name).order_by()):
-                _track_changes[ImportElementFields.CURRENT].append({
+            current_data = []
+            for _through_instance in getattr(original, through_name).order_by():
+                current_data.append({
                     'uri': getattr(_through_instance, source_name).uri,
                     'order': _through_instance.order,
                     'model': get_rdmo_model_path(target_name, field_name),
                 })
+            current_data = sorted(current_data, key=lambda k: k['order'])
         except AttributeError:
             pass  # legacy elements miss the field_name
 
     for target_element in target_elements:
         target_uri = target_element.get('uri')
         order = target_element.get('order')
+        new_data.append(target_element)
+
         try:
             target_instance = target_model.objects.get(uri=target_uri)
             if target_instance.is_locked:
@@ -510,8 +517,6 @@ def set_reverse_m2m_through_instance(instance, element, field_name=None, source_
                 })
                 through_instance.order = order
                 through_instance.save()
-            if original is not None:
-                _track_changes[ImportElementFields.NEW].append(target_element)
 
         except target_model.DoesNotExist:
             message = '{target_model} {target_uri} for imported {instance_model} {instance_uri} does not exist.'.format(
@@ -522,11 +527,12 @@ def set_reverse_m2m_through_instance(instance, element, field_name=None, source_
             )
             logger.info(message)
             element[ImportElementFields.WARNINGS][target_uri].append(message)
+            element[ImportElementFields.WARNINGS][element.get('uri')].append(message)
             track_messages_on_element(element, field_name, warning=message)
     # sort the tracked changes by order in-place
-    new_instance_data = sorted(_track_changes[ImportElementFields.NEW], key=lambda k: k['order'])
-    original_instance_data = sorted(_track_changes[ImportElementFields.CURRENT], key=lambda k: k['order'])
-    track_changes_on_m2m_through_instances(element, field_name, original_instance_data, new_instance_data)
+    new_data = sorted(new_data, key=lambda k: k['order'])
+
+    track_changes_on_m2m_through_instances(element, field_name, current_data, new_data)
 
 
 def format_message_from_validation_error(exception: ValidationError) -> str:

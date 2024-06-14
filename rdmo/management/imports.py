@@ -6,28 +6,59 @@ from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpRequest
 
+from rdmo.conditions.imports import import_helper_condition
 from rdmo.core.imports import (
     check_permissions,
     get_or_return_instance,
     make_import_info_msg,
     validate_instance,
 )
+from rdmo.core.xml import order_elements
+from rdmo.domain.imports import import_helper_attribute
 from rdmo.management.import_utils import (
-    ELEMENT_IMPORT_HELPERS,
     add_current_site_to_sites_and_editor,
     apply_field_values,
     initialize_import_element_dict,
     strip_uri_prefix_endswith_slash,
     update_related_fields,
 )
+from rdmo.options.imports import import_helper_option, import_helper_optionset
+from rdmo.questions.imports import (
+    import_helper_catalog,
+    import_helper_page,
+    import_helper_question,
+    import_helper_questionset,
+    import_helper_section,
+)
+from rdmo.tasks.imports import import_helper_task
+from rdmo.views.imports import import_helper_view
 
 logger = logging.getLogger(__name__)
+
+ELEMENT_IMPORT_HELPERS = {
+    "conditions.condition": import_helper_condition,
+    "domain.attribute": import_helper_attribute,
+    "options.optionset": import_helper_optionset,
+    "options.option": import_helper_option,
+    "questions.catalog": import_helper_catalog,
+    "questions.section": import_helper_section,
+    "questions.page": import_helper_page,
+    "questions.questionset": import_helper_questionset,
+    "questions.question": import_helper_question,
+    "tasks.task": import_helper_task,
+    "views.view": import_helper_view
+}
 
 
 def import_elements(uploaded_elements: Dict, save: bool = True, request: Optional[HttpRequest] = None) -> List[Dict]:
     imported_elements = []
+    uploaded_elements_ordering_index = {uri: n for n, uri in enumerate(uploaded_elements.keys())}
     uploaded_uris = set(uploaded_elements.keys())
     current_site = get_current_site(request)
+    if save:
+        # when saving, the descendant elements go first
+        uploaded_elements = order_elements(uploaded_elements, descendants_first=True)
+
     for _uri, uploaded_element in uploaded_elements.items():
         element = import_element(element=uploaded_element,
                                  save=save,
@@ -36,6 +67,11 @@ def import_elements(uploaded_elements: Dict, save: bool = True, request: Optiona
                                  current_site=current_site)
         element['warnings'] = {k: val for k, val in element['warnings'].items() if k not in uploaded_uris}
         imported_elements.append(element)
+
+    # sort elements back to order of uploaded elements
+    imported_elements = sorted(imported_elements,
+                               key=lambda x: uploaded_elements_ordering_index.get(x['uri'], float('inf')))
+
     return imported_elements
 
 
@@ -47,25 +83,18 @@ def import_element(
         current_site = None
     ) -> Dict:
 
-    if element is None:
+    if element is None or not isinstance(element, dict):
         return {}
-
-    model_path = element.get('model')
-    if model_path is None:
-        return element
+    if 'model' not in element:
+        return {}
 
     initialize_import_element_dict(element)
 
-    user = request.user if request is not None else None
-    import_helper = ELEMENT_IMPORT_HELPERS[model_path]
-    if import_helper.model_path != model_path:
-        raise ValueError(f'Invalid import helper model path: {import_helper.model_path}. Expected {model_path}.')
-    model = import_helper.model
-    validators = import_helper.validators
+    import_helper = ELEMENT_IMPORT_HELPERS[element['model']]
 
     uri = element.get('uri')
-    # get or create instance from uri and model_path
-    instance, created = get_or_return_instance(model, uri=uri)
+    # get or create instance from uri and model
+    instance, created = get_or_return_instance(import_helper.model, uri=uri)
 
     # keep a copy of the original
     # when the element is updated
@@ -73,9 +102,10 @@ def import_element(
     original = copy.deepcopy(instance) if not created else None
 
     # prepare a log message
-    msg = make_import_info_msg(model._meta.verbose_name, created, uri=uri)
+    msg = make_import_info_msg(import_helper.model._meta.verbose_name, created, uri=uri)
 
     # check the change or add permissions for the user on the instance
+    user = request.user if request is not None else None
     perms_error_msg = check_permissions(instance, uri, user)
     if perms_error_msg:
         # when there is an error msg, the import can be stopped and return
@@ -92,7 +122,7 @@ def import_element(
     apply_field_values(instance, element, import_helper, uploaded_uris, original)
 
     # call the validators on the instance
-    validate_instance(instance, element, *validators)
+    validate_instance(instance, element, *import_helper.validators)
 
     if element.get('errors'):
         # when there is an error msg, the import can be stopped and return
