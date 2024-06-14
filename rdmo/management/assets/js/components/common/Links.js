@@ -18,14 +18,15 @@ NestedLink.propTypes = {
   show: PropTypes.bool
 }
 
-const EditLink = ({ href, title, onClick }) => {
-  return <Link href={href} className="element-link fa fa-pencil" title={title} onClick={onClick} />
+const EditLink = ({ href, title, onClick, disabled= false }) => {
+  return <Link href={href} className="element-link fa fa-pencil" title={title} onClick={onClick} disabled={disabled} />
 }
 
 EditLink.propTypes = {
   href: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired,
+  disabled: PropTypes.bool
 }
 
 const CopyLink = ({ href, title, onClick }) => {
@@ -217,43 +218,21 @@ CodeLink.propTypes = {
   order: PropTypes.number
 }
 
-const ErrorLink = ({ show, onClick }) => {
-  return (
-    show &&
-    <Link className="element-link fa fa-warning text-danger" onClick={onClick} />
-  )
+const ErrorLink = ({ onClick }) => {
+  return <Link className="element-link fa fa-warning text-danger" onClick={onClick} />
 }
 
 ErrorLink.propTypes = {
-  show: PropTypes.bool,
   onClick: PropTypes.func.isRequired
 }
 
-const WarningLink = ({ show= false, onClick }) => {
-  return (
-    show &&
-    <Link className="element-link fa fa-warning text-warning" onClick={onClick} />
-  )
+const WarningLink = ({ onClick }) => {
+  return <Link className="element-link fa fa-warning text-warning" onClick={onClick} />
 }
 
 WarningLink.propTypes = {
-  show: PropTypes.bool,
   onClick: PropTypes.func.isRequired
 }
-
-const ShowUpdatedLink = ({ show= false, disabled= false, onClick }) => {
-  return (
-    show &&
-    <Link  className='element-link fa fa-pencil' onClick={onClick} disabled={disabled}/>
-  )
-}
-
-ShowUpdatedLink.propTypes = {
-  show: PropTypes.bool,
-  disabled: PropTypes.bool,
-  onClick: PropTypes.func.isRequired
-}
-
 
 const ShowLink = ({ show = false, onClick }) => {
   const title = show ? gettext('Hide') : gettext('Show')
@@ -272,4 +251,4 @@ ShowLink.propTypes = {
 }
 
 export { EditLink, CopyLink, AddLink, AvailableLink, ToggleCurrentSiteLink, LockedLink, ShowElementsLink,
-         NestedLink, ExportLink, ExtendLink, CodeLink, ErrorLink, WarningLink, ShowUpdatedLink, ShowLink }
+         NestedLink, ExportLink, ExtendLink, CodeLink, ErrorLink, WarningLink, ShowLink }
