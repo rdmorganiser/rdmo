@@ -168,7 +168,7 @@ def replace_attribute_in_view_template(source=None, target=None, save_changes=Fa
     replacement_results = []
     for instance in qs:
 
-        template_target = replace_uri_in_template_string(instance.template, source, target)
+        template_target = replace_uri_in_template_string(instance.template, source.uri, target.uri)
         instance.template = template_target
 
         if save_changes and update_views:
