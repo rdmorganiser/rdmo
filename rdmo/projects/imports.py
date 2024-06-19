@@ -110,7 +110,7 @@ class RDMOXMLImport(Import):
             try:
                 self.catalog = available_catalogs.get(uri=catalog_uri)
             except Catalog.DoesNotExist:
-                log.info('Catalog not in db. Created with uri %s', catalog_uri)
+                log.info('Catalog with uri %s does not exists. Used first available catalog.', catalog_uri)
                 self.catalog = available_catalogs.first()
 
             if self.catalog is None:
