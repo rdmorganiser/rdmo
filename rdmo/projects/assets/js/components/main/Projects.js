@@ -92,15 +92,15 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
     setStartDate('created', null)
     configActions.deleteConfig('params.created_before')
     setEndDate('created', null)
-    configActions.deleteConfig('params.updated_after')
-    setStartDate('updated', null)
-    configActions.deleteConfig('params.updated_before')
-    setEndDate('updated', null)
+    configActions.deleteConfig('params.last_changed_after')
+    setStartDate('last_changed', null)
+    configActions.deleteConfig('params.last_changed_before')
+    setEndDate('last_changed', null)
     projectsActions.fetchAllProjects()
   }
 
   /* order of elements in 'visibleColumns' corresponds to order of columns in table */
-  let visibleColumns = ['title', 'progress', 'updated', 'actions']
+  let visibleColumns = ['title', 'progress', 'last_changed', 'actions']
   let columnWidths
 
   if (myProjects) {
@@ -121,7 +121,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
     owner: (_content, row) => row.owners.map(owner => `${owner.first_name} ${owner.last_name}`).join('; '),
     progress: (_content, row) => getProgressString(row),
     created: content => useFormattedDateTime(content, language),
-    updated: content => useFormattedDateTime(content, language),
+    last_changed: content => useFormattedDateTime(content, language),
     actions: (_content, row) => {
       const rowUrl = `/projects/${row.id}`
       const path = `?next=${window.location.pathname}`
