@@ -4,7 +4,7 @@ const elementTypes = {
   'questions.page': 'pages',
   'questions.questionset': 'questionsets',
   'questions.question': 'questions',
-  'domain.attribute':'attributes',
+  'domain.attribute': 'attributes',
   'options.optionset': 'optionsets',
   'options.option': 'options',
   'conditions.condition': 'conditions',
