@@ -101,20 +101,20 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
                     autoComplete="off"
                     className="form-control"
                     dateFormat={dateFormat}
-                    id="updated-start-date-picker"
+                    id="last-changed-start-date-picker"
                     isClearable
                     locale={getLocale(language)}
                     onChange={date => {
-                      setStartDate('updated', date)
+                      setStartDate('last_changed', date)
                       if (date) {
-                        configActions.updateConfig('params.updated_after', formatISO(date, { representation: 'date' }))
+                        configActions.updateConfig('params.last_changed_after', formatISO(date, { representation: 'date' }))
                       } else {
-                        configActions.deleteConfig('params.updated_after')
+                        configActions.deleteConfig('params.last_changed_after')
                       }
                       projectsActions.fetchAllProjects()
                     }}
                     placeholderText={gettext('Select start date')}
-                    selected={dateRange.updatedStart ?? get(config, 'params.updated_after', '')}
+                    selected={dateRange.lastChangedStart ?? get(config, 'params.last_changed_after', '')}
                   />
                 </div>
                 <div className="col-md-6">
@@ -122,20 +122,20 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
                     autoComplete="off"
                     className="form-control"
                     dateFormat={dateFormat}
-                    id="updated-end-date-picker"
+                    id="last-changed-end-date-picker"
                     isClearable
                     locale={getLocale(language)}
                     onChange={date => {
-                      setEndDate('updated', date)
+                      setEndDate('last_changed', date)
                       if (date) {
-                        configActions.updateConfig('params.updated_before', formatISO(date, { representation: 'date' }))
+                        configActions.updateConfig('params.last_changed_before', formatISO(date, { representation: 'date' }))
                       } else {
-                        configActions.deleteConfig('params.updated_before')
+                        configActions.deleteConfig('params.last_changed_before')
                       }
                       projectsActions.fetchAllProjects()
                     }}
                     placeholderText={gettext('Select end date')}
-                    selected={dateRange.updatedEnd ?? get(config, 'params.updated_before', '')}
+                    selected={dateRange.lastChangedEnd ?? get(config, 'params.last_changed_before', '')}
                   />
                 </div>
               </div>

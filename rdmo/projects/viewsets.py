@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import OuterRef, Subquery
+from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
 
@@ -86,11 +88,23 @@ class ProjectViewSet(ModelViewSet):
         'role',
         'owner',
         'updated',
-        'created'
+        'created',
+        'last_changed'
     )
 
     def get_queryset(self):
-        return Project.objects.filter_user(self.request.user).distinct().select_related('catalog')
+        queryset = Project.objects.filter_user(self.request.user).distinct().select_related('catalog')
+
+        # prepare subquery for last_changed
+        last_changed_subquery = Subquery(
+            Value.objects.filter(project=OuterRef('pk')).order_by('-updated').values('updated')[:1]
+        )
+        # the 'updated' field from a Project always returns a valid DateTime value
+        # when Greatest returns null, then Coalesce will return the value for 'updated' as a fall-back
+        # when Greatest returns a value, then Coalesce will return this value
+        queryset = queryset.annotate(last_changed=Coalesce(Greatest(last_changed_subquery, 'updated'), 'updated'))
+
+        return queryset
 
     @action(detail=True, permission_classes=(HasModelPermission | HasProjectPermission, ))
     def overview(self, request, pk=None):

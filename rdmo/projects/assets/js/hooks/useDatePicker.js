@@ -6,8 +6,8 @@ const useDatePicker = () => {
     const [dateRange, setDateRange] = useState({
         createdStart: null,
         createdEnd: null,
-        updatedStart: null,
-        updatedEnd: null
+        lastChangedStart: null,
+        lastChangedEnd: null
     })
 
     const dateFormat = useMemo(() => {
