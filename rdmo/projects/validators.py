@@ -1,7 +1,8 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from django.conf import settings
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
+from django.core.validators import EmailValidator, RegexValidator, URLValidator
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext_lazy as _
 
@@ -63,3 +64,57 @@ class ValueQuotaValidator:
                 raise serializers.ValidationError({
                     'quota': [_('The file quota for this project has been reached.')]
                 })
+
+
+class ValueTypeValidator:
+
+    requires_context = True
+
+    def __call__(self, data, serializer):
+        text = data.get('text')
+        value_type = data.get('value_type')
+
+        if text is not None:
+            if value_type == 'url' and settings.PROJECT_VALUES_URL_VALIDATION:
+                URLValidator()(text)
+
+            elif value_type == 'integer' and settings.PROJECT_VALUES_INTEGER_VALIDATION:
+                RegexValidator(
+                    settings.PROJECT_VALUES_INTEGER_VALIDATION_REGEX,
+                    settings.PROJECT_VALUES_INTEGER_VALIDATION_MESSAGE
+                )(text)
+
+            elif value_type == 'float' and settings.PROJECT_VALUES_FLOAT_VALIDATION:
+                RegexValidator(
+                    settings.PROJECT_VALUES_FLOAT_VALIDATION_REGEX,
+                    settings.PROJECT_VALUES_FLOAT_VALIDATION_MESSAGE
+                )(text)
+
+            if value_type == 'boolean' and settings.PROJECT_VALUES_BOOLEAN_VALIDATION:
+                RegexValidator(
+                    settings.PROJECT_VALUES_BOOLEAN_VALIDATION_REGEX,
+                    settings.PROJECT_VALUES_BOOLEAN_VALIDATION_MESSAGE
+                )(text)
+
+            elif value_type == 'date' and settings.PROJECT_VALUES_DATE_VALIDATION:
+                RegexValidator(
+                    settings.PROJECT_VALUES_DATE_VALIDATION_REGEX,
+                    settings.PROJECT_VALUES_DATE_VALIDATION_MESSAGE
+                )(text)
+
+            elif value_type == 'datetime' and settings.PROJECT_VALUES_DATETIME_VALIDATION:
+                try:
+                    datetime.fromisoformat(text)
+                except ValueError as e:
+                    raise serializers.ValidationError({
+                        'text': [_('Enter a valid datetime.')]
+                    }) from e
+
+            elif value_type == 'email' and settings.PROJECT_VALUES_EMAIL_VALIDATION:
+                EmailValidator()(text)
+
+            elif value_type == 'phone' and settings.PROJECT_VALUES_PHONE_VALIDATION:
+                RegexValidator(
+                    settings.PROJECT_VALUES_PHONE_VALIDATION_REGEX,
+                    settings.PROJECT_VALUES_PHONE_VALIDATION_MESSAGE
+                )(text)
