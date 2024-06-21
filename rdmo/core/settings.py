@@ -327,6 +327,32 @@ NESTED_PROJECTS = True
 
 OPTIONSET_PROVIDERS = []
 
+PROJECT_VALUES_URL_VALIDATION = True
+
+PROJECT_VALUES_INTEGER_VALIDATION = True
+PROJECT_VALUES_INTEGER_VALIDATION_REGEX = r'^\d+$'
+PROJECT_VALUES_INTEGER_VALIDATION_MESSAGE = _('Enter a valid integer.')
+
+PROJECT_VALUES_FLOAT_VALIDATION = True
+PROJECT_VALUES_FLOAT_VALIDATION_REGEX = r'^[+-]?(\d+(\,\d{3})*(\.\d+)?|\d+(\.\d{3})*(\,\d+)?)([eE]\+\d+)?$'
+PROJECT_VALUES_FLOAT_VALIDATION_MESSAGE = _('Enter a valid float.')
+
+PROJECT_VALUES_BOOLEAN_VALIDATION = True
+PROJECT_VALUES_BOOLEAN_VALIDATION_REGEX = r'^(?i)^(0|1|f|t|false|true)$'
+PROJECT_VALUES_BOOLEAN_VALIDATION_MESSAGE = _('Enter a valid boolean (e.g. 0, 1).')
+
+PROJECT_VALUES_DATE_VALIDATION = True
+PROJECT_VALUES_DATE_VALIDATION_REGEX = r'^\d{1,2}\.\s*\d{1,2}\.\s*\d{2,4}|\d{2}\/\d{2}\/\d{4}|\d{4}-\d{2}-\d{2}$'
+PROJECT_VALUES_DATE_VALIDATION_MESSAGE = _('Enter a valid date (e.g. "02.03.2024", "03/02/2024", "2024-02-03").')
+
+PROJECT_VALUES_DATETIME_VALIDATION = True
+
+PROJECT_VALUES_EMAIL_VALIDATION = True
+
+PROJECT_VALUES_PHONE_VALIDATION = True
+PROJECT_VALUES_PHONE_VALIDATION_REGEX = r'^([\+]\d+\s)?(\(\d+\)\s)?[\d\s]*$'
+PROJECT_VALUES_PHONE_VALIDATION_MESSAGE = _('Enter a valid phone number (e.g. "123456" or "+49 (0) 30 123456").')
+
 QUESTIONS_WIDGETS = [
     ('text', _('Text'), 'rdmo.projects.widgets.TextWidget'),
     ('textarea', _('Textarea'), 'rdmo.projects.widgets.TextareaWidget'),
