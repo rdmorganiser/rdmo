@@ -6,8 +6,8 @@ from ..serializers.v1 import ValueSerializer
 from ..validators import ValueTypeValidator
 
 data = (
-    ('url', 'https://exmaple.com'),
-    ('url', 'http://exmaple.com'),
+    ('url', 'https://example.com'),
+    ('url', 'http://example.com'),
     ('integer', '1'),
     ('integer', '-1'),
     ('integer', '+1'),
@@ -27,10 +27,11 @@ data = (
     ('boolean', '1'),
     ('boolean', 'f'),
     ('boolean', 't'),
-    ('boolean', 'TrUe'),
-    ('boolean', 'FaLsE'),
+    ('boolean', 'TrUe'),   # spellchecker:disable-line
+    ('boolean', 'FaLsE'),  # spellchecker:disable-line
     ('date', '01.02.2024'),
     ('date', '1.2.2024'),
+    ('date', '13.01.1337'),
     ('date', '2/1/2024'),
     ('date', '2024-01-02'),
     ('date', '1. 2. 2024'),
@@ -52,7 +53,7 @@ data = (
 )
 data_error = (
     ('url', 'wrong'),
-    ('url', 'exmaple.com'),
+    ('url', 'example.com'),
     ('integer', 'wrong'),
     ('integer', '1.0'),
     ('integer', '1b'),
