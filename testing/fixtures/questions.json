@@ -7643,7 +7643,7 @@
       "verbose_name_lang4": "",
       "verbose_name_lang5": "",
       "widget_type": "text",
-      "value_type": "text",
+      "value_type": "float",
       "minimum": null,
       "maximum": null,
       "step": null,
