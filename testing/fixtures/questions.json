@@ -1934,38 +1934,6 @@
   },
   {
     "model": "questions.page",
-    "pk": 102,
-    "fields": {
-      "created": "2024-06-21T08:10:26.194Z",
-      "updated": "2024-06-21T08:10:26.194Z",
-      "uri": "http://example.com/terms/questions/bool",
-      "uri_prefix": "http://example.com/terms",
-      "uri_path": "bool",
-      "comment": "",
-      "locked": false,
-      "attribute": null,
-      "is_collection": false,
-      "title_lang1": "Bool",
-      "title_lang2": "Boolsche Variable",
-      "title_lang3": "",
-      "title_lang4": "",
-      "title_lang5": "",
-      "help_lang1": "",
-      "help_lang2": "",
-      "help_lang3": "",
-      "help_lang4": "",
-      "help_lang5": "",
-      "verbose_name_lang1": "",
-      "verbose_name_lang2": "",
-      "verbose_name_lang3": "",
-      "verbose_name_lang4": "",
-      "verbose_name_lang5": "",
-      "editors": [],
-      "conditions": []
-    }
-  },
-  {
-    "model": "questions.page",
     "pk": 103,
     "fields": {
       "created": "2024-06-21T08:10:56.348Z",
