@@ -53,6 +53,7 @@ class ValueConflictValidator:
                               ' was found.')]
             })
 
+
 class ValueQuotaValidator:
 
     requires_context = True
@@ -68,73 +69,57 @@ class ValueQuotaValidator:
 
 class ValueTypeValidator:
 
-    requires_context = True
-
-    def __call__(self, data, serializer):
+    def __call__(self, data):
         text = data.get('text')
         value_type = data.get('value_type')
 
+        try:
+            self.validate(text, value_type)
+        except ValidationError as e:
+            raise serializers.ValidationError({
+                'text': [e.message]
+            }) from e
+
+    def validate(self, text, value_type):
         if text and settings.PROJECT_VALUES_VALIDATION:
             if value_type == 'url' and settings.PROJECT_VALUES_VALIDATION_URL:
-                try:
-                    URLValidator()(text)
-                except ValidationError as e:
-                    raise serializers.ValidationError({
-                        'text': [e.message]
-                    }) from e
+                URLValidator()(text)
 
             elif value_type == 'integer' and settings.PROJECT_VALUES_VALIDATION_INTEGER:
-                try:
-                    RegexValidator(settings.PROJECT_VALUES_VALIDATION_INTEGER_REGEX)(text)
-                except ValidationError as e:
-                    raise serializers.ValidationError({
-                        'text': [settings.PROJECT_VALUES_VALIDATION_INTEGER_MESSAGE]
-                    }) from e
+                RegexValidator(
+                    settings.PROJECT_VALUES_VALIDATION_INTEGER_REGEX,
+                    settings.PROJECT_VALUES_VALIDATION_INTEGER_MESSAGE
+                )(text)
 
             elif value_type == 'float' and settings.PROJECT_VALUES_VALIDATION_FLOAT:
-                try:
-                    RegexValidator(settings.PROJECT_VALUES_VALIDATION_FLOAT_REGEX)(text)
-                except ValidationError as e:
-                    raise serializers.ValidationError({
-                        'text': [settings.PROJECT_VALUES_VALIDATION_FLOAT_MESSAGE]
-                    }) from e
+                RegexValidator(
+                    settings.PROJECT_VALUES_VALIDATION_FLOAT_REGEX,
+                    settings.PROJECT_VALUES_VALIDATION_FLOAT_MESSAGE
+                )(text)
 
-            if value_type == 'boolean' and settings.PROJECT_VALUES_VALIDATION_BOOLEAN:
-                try:
-                    RegexValidator(settings.PROJECT_VALUES_VALIDATION_BOOLEAN_REGEX)(text)
-                except ValidationError as e:
-                    raise serializers.ValidationError({
-                        'text': [settings.PROJECT_VALUES_VALIDATION_BOOLEAN_MESSAGE]
-                    }) from e
+            elif value_type == 'boolean' and settings.PROJECT_VALUES_VALIDATION_BOOLEAN:
+                RegexValidator(
+                    settings.PROJECT_VALUES_VALIDATION_BOOLEAN_REGEX,
+                    settings.PROJECT_VALUES_VALIDATION_BOOLEAN_MESSAGE
+                )(text)
 
             elif value_type == 'date' and settings.PROJECT_VALUES_VALIDATION_DATE:
-                try:
-                    RegexValidator(settings.PROJECT_VALUES_VALIDATION_DATE_REGEX)(text)
-                except ValidationError as e:
-                    raise serializers.ValidationError({
-                        'text': [settings.PROJECT_VALUES_VALIDATION_DATE_MESSAGE]
-                    }) from e
+                RegexValidator(
+                    settings.PROJECT_VALUES_VALIDATION_DATE_REGEX,
+                    settings.PROJECT_VALUES_VALIDATION_DATE_MESSAGE
+                )(text)
 
             elif value_type == 'datetime' and settings.PROJECT_VALUES_VALIDATION_DATETIME:
                 try:
                     datetime.fromisoformat(text)
                 except ValueError as e:
-                    raise serializers.ValidationError({
-                        'text': [_('Enter a valid datetime.')]
-                    }) from e
+                    raise ValidationError(_('Enter a valid datetime.')) from e
 
             elif value_type == 'email' and settings.PROJECT_VALUES_VALIDATION_EMAIL:
-                try:
-                    EmailValidator()(text)
-                except ValidationError as e:
-                    raise serializers.ValidationError({
-                        'text': [e.message]
-                    }) from e
+                EmailValidator()(text)
 
             elif value_type == 'phone' and settings.PROJECT_VALUES_VALIDATION_PHONE:
-                try:
-                    RegexValidator(settings.PROJECT_VALUES_VALIDATION_PHONE_REGEX)(text)
-                except ValidationError as e:
-                    raise serializers.ValidationError({
-                        'text': [settings.PROJECT_VALUES_VALIDATION_PHONE_MESSAGE]
-                    }) from e
+                RegexValidator(
+                    settings.PROJECT_VALUES_VALIDATION_PHONE_REGEX,
+                    settings.PROJECT_VALUES_VALIDATION_PHONE_MESSAGE
+                )(text)
