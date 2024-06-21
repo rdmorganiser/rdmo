@@ -6,6 +6,14 @@
     <li ng-repeat="section in service.navigation">
         <a href="" ng-click="service.jump(section)">
             <span ng-bind-html="section.title"></span>
+            <span ng-show="section.count > 0 && section.count == section.total">
+                <i class="fa fa-check" aria-hidden="true"></i>
+            </span>
+            <span ng-show="section.count > 0 && section.count != section.total">
+                {% blocktrans with section_count='{$ section.count $}' section_total='{$ section.total $}' trimmed %}
+                ({{ section_count }} of {{ section_total }})
+                {% endblocktrans %}
+            </span>
         </a>
 
         <ul class="list-unstyled"
@@ -25,7 +33,7 @@
                         {% endblocktrans %}
                     </span>
                 </a>
-                <span class="text-muted" ng-hide="page.show">{$ page.title $}<span>
+                <span class="text-muted" ng-hide="page.show">{$ page.title $}</span>
             </li>
         </ul>
     </li>
