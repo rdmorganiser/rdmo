@@ -51,7 +51,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     authors = UserSerializer(many=True, read_only=True)
     guests = UserSerializer(many=True, read_only=True)
 
-    last_changed = serializers.DateTimeField()
+    last_changed = serializers.DateTimeField(read_only=True)
 
     class Meta:
         model = Project
