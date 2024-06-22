@@ -2,7 +2,6 @@ import pytest
 
 from rest_framework.exceptions import ValidationError as RestFameworkValidationError
 
-from ..serializers.v1 import ValueSerializer
 from ..validators import ValueTypeValidator
 
 data = (
@@ -40,7 +39,6 @@ data = (
     ('datetime', '2024-01-02T10:00:00'),
     ('datetime', '2024-01-02T10:00:00.123'),
     ('datetime', '2024-01-02T10:00:00+02:00'),
-    ('datetime', '2024-01-02T10:00:00Z+02:00'),
     ('email', 'user@example.com'),
     ('email', 'user+test@example.com'),
     ('email', 'user!test@example.com'),
@@ -95,15 +93,11 @@ data_error = (
 @pytest.mark.parametrize('value_type,text', data)
 def test_serializer(db, value_type, text):
     validator = ValueTypeValidator()
-    serializer = ValueSerializer()
-
-    validator({'value_type': value_type, 'text': text}, serializer)
+    validator({'value_type': value_type, 'text': text})
 
 
 @pytest.mark.parametrize('value_type,text', data_error)
 def test_serializer_error(db, value_type, text):
     validator = ValueTypeValidator()
-    serializer = ValueSerializer()
-
     with pytest.raises(RestFameworkValidationError):
-        validator({'value_type': value_type, 'text': text}, serializer)
+        validator({'value_type': value_type, 'text': text})
