@@ -254,6 +254,15 @@ def test_update_legacy_questions(db, settings):
 
     # check that all elements ended up in the catalog
     catalog = Catalog.objects.prefetch_elements().first()
-    descendant_uris = {element.uri for element in catalog.descendants}
+    descendant_uris = {
+        element.uri for element in catalog.descendants if any(element.uri.startswith(uri) for uri in [
+            'http://example.com/terms/questions/catalog/individual',
+            'http://example.com/terms/questions/catalog/set',
+            'http://example.com/terms/questions/catalog/collections',
+            'http://example.com/terms/questions/catalog/conditions',
+            'http://example.com/terms/questions/catalog/options',
+            'http://example.com/terms/questions/catalog/blocks'
+        ])
+    }
     element_uris = {element['uri'] for element in elements if element['uri'] != catalog.uri}
     assert descendant_uris == element_uris

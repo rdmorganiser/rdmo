@@ -860,7 +860,11 @@ angular.module('project_questions')
                     service.error = response;
                 } else if (response.status == 400) {
                     service.error = true;
-                    value.errors = Object.keys(response.data);
+                    if (angular.isDefined(response.data.text)) {
+                        value.errors = response.data.text
+                    } else {
+                        value.errors = Object.keys(response.data);
+                    }
                 } else if (response.status == 404) {
                     service.error = true;
                     value.errors = ['not_found']

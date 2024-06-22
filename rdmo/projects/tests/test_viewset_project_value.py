@@ -5,7 +5,7 @@ import pytest
 from django.conf import settings
 from django.urls import reverse
 
-from rdmo.core.constants import VALUE_TYPE_CHOICES, VALUE_TYPE_FILE, VALUE_TYPE_TEXT
+from rdmo.core.constants import VALUE_TYPE_FILE, VALUE_TYPE_TEXT
 
 from ..models import Value
 
@@ -56,6 +56,16 @@ set_values = [
 ]
 set_questionsets = [42, 43]
 
+value_texts = (
+    ('text', 'Lorem ipsum'),
+    ('url', 'https://lorem.ipsum'),
+    ('integer', '1337'),
+    ('float', '13.37'),
+    ('boolean', '1'),
+    ('datetime', '1337-01-13T13:37+13:37'),
+    ('email', 'user@lorem.ipsum'),
+    ('phone', '+49 (0) 1337 12345678')
+)
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
@@ -101,8 +111,8 @@ def test_detail(db, client, username, password, project_id, value_id):
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
-@pytest.mark.parametrize('value_type,value_type_label', VALUE_TYPE_CHOICES)
-def test_create_text(db, client, username, password, project_id, value_type, value_type_label):
+@pytest.mark.parametrize('value_type,value_text', value_texts)
+def test_create_text(db, client, username, password, project_id, value_type, value_text):
     client.login(username=username, password=password)
 
     url = reverse(urlnames['list'], args=[project_id])
@@ -110,14 +120,14 @@ def test_create_text(db, client, username, password, project_id, value_type, val
         'attribute': attribute_id,
         'set_index': 0,
         'collection_index': 0,
-        'text': 'Lorem ipsum',
+        'text': value_text,
         'value_type': value_type,
         'unit': ''
     }
     response = client.post(url, data)
 
     if project_id in add_value_permission_map.get(username, []):
-        assert response.status_code == 201
+        assert response.status_code == 201, response.content
         assert isinstance(response.json(), dict)
         assert response.json().get('id') in Value.objects.filter(project_id=project_id).values_list('id', flat=True)
     elif project_id in view_value_permission_map.get(username, []):
@@ -128,8 +138,8 @@ def test_create_text(db, client, username, password, project_id, value_type, val
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
-@pytest.mark.parametrize('value_type,value_type_label', VALUE_TYPE_CHOICES)
-def test_create_option(db, client, username, password, project_id, value_type, value_type_label):
+@pytest.mark.parametrize('value_type,value_text', value_texts)
+def test_create_option(db, client, username, password, project_id, value_type, value_text):
     client.login(username=username, password=password)
 
     url = reverse(urlnames['list'], args=[project_id])
@@ -137,6 +147,7 @@ def test_create_option(db, client, username, password, project_id, value_type, v
         'attribute': attribute_id,
         'set_index': 0,
         'collection_index': 0,
+        'text': value_text,
         'option': option_id,
         'value_type': value_type,
         'unit': ''
@@ -155,8 +166,8 @@ def test_create_option(db, client, username, password, project_id, value_type, v
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
-@pytest.mark.parametrize('value_type,value_type_label', VALUE_TYPE_CHOICES)
-def test_create_external(db, client, username, password, project_id, value_type, value_type_label):
+@pytest.mark.parametrize('value_type,value_text', value_texts)
+def test_create_external(db, client, username, password, project_id, value_type, value_text):
     client.login(username=username, password=password)
 
     url = reverse(urlnames['list'], args=[project_id])
@@ -164,7 +175,7 @@ def test_create_external(db, client, username, password, project_id, value_type,
         'attribute': attribute_id,
         'set_index': 0,
         'collection_index': 0,
-        'text': 'Lorem ipsum',
+        'text': value_text,
         'external_id': '1',
         'value_type': value_type,
         'unit': ''

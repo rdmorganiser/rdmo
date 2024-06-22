@@ -1,7 +1,8 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from django.conf import settings
-from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
+from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist, ValidationError
+from django.core.validators import EmailValidator, RegexValidator, URLValidator
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext_lazy as _
 
@@ -45,6 +46,7 @@ class ValueConflictValidator:
                               ' was found.')]
             })
 
+
 class ValueQuotaValidator:
 
     requires_context = True
@@ -56,3 +58,61 @@ class ValueQuotaValidator:
                 raise serializers.ValidationError({
                     'quota': [_('The file quota for this project has been reached.')]
                 })
+
+
+class ValueTypeValidator:
+
+    def __call__(self, data):
+        text = data.get('text')
+        value_type = data.get('value_type')
+
+        try:
+            self.validate(text, value_type)
+        except ValidationError as e:
+            raise serializers.ValidationError({
+                'text': [e.message]
+            }) from e
+
+    def validate(self, text, value_type):
+        if text and settings.PROJECT_VALUES_VALIDATION:
+            if value_type == 'url' and settings.PROJECT_VALUES_VALIDATION_URL:
+                URLValidator()(text)
+
+            elif value_type == 'integer' and settings.PROJECT_VALUES_VALIDATION_INTEGER:
+                RegexValidator(
+                    settings.PROJECT_VALUES_VALIDATION_INTEGER_REGEX,
+                    settings.PROJECT_VALUES_VALIDATION_INTEGER_MESSAGE
+                )(text)
+
+            elif value_type == 'float' and settings.PROJECT_VALUES_VALIDATION_FLOAT:
+                RegexValidator(
+                    settings.PROJECT_VALUES_VALIDATION_FLOAT_REGEX,
+                    settings.PROJECT_VALUES_VALIDATION_FLOAT_MESSAGE
+                )(text)
+
+            elif value_type == 'boolean' and settings.PROJECT_VALUES_VALIDATION_BOOLEAN:
+                RegexValidator(
+                    settings.PROJECT_VALUES_VALIDATION_BOOLEAN_REGEX,
+                    settings.PROJECT_VALUES_VALIDATION_BOOLEAN_MESSAGE
+                )(text)
+
+            elif value_type == 'date' and settings.PROJECT_VALUES_VALIDATION_DATE:
+                RegexValidator(
+                    settings.PROJECT_VALUES_VALIDATION_DATE_REGEX,
+                    settings.PROJECT_VALUES_VALIDATION_DATE_MESSAGE
+                )(text)
+
+            elif value_type == 'datetime' and settings.PROJECT_VALUES_VALIDATION_DATETIME:
+                try:
+                    datetime.fromisoformat(text)
+                except ValueError as e:
+                    raise ValidationError(_('Enter a valid datetime.')) from e
+
+            elif value_type == 'email' and settings.PROJECT_VALUES_VALIDATION_EMAIL:
+                EmailValidator()(text)
+
+            elif value_type == 'phone' and settings.PROJECT_VALUES_VALIDATION_PHONE:
+                RegexValidator(
+                    settings.PROJECT_VALUES_VALIDATION_PHONE_REGEX,
+                    settings.PROJECT_VALUES_VALIDATION_PHONE_MESSAGE
+                )(text)

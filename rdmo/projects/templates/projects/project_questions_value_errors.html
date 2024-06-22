@@ -17,5 +17,8 @@
             <span ng-show="error == 'quota'">
                 {% trans 'You reached the file quota for this project.' %}
             </span>
+            <span ng-hide="error == 'conflict' || error == 'not_found' || error == 'quota'">
+                {$ error $}
+            </span>
         </li>
     </ul>

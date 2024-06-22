@@ -1586,5 +1586,167 @@
         3
       ]
     }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 124,
+    "fields": {
+      "uri": "http://example.com/terms/domain/validation",
+      "uri_prefix": "http://example.com/terms",
+      "key": "validation",
+      "path": "validation",
+      "comment": "",
+      "locked": false,
+      "parent": null,
+      "lft": 1,
+      "rght": 16,
+      "tree_id": 9,
+      "level": 0,
+      "editors": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 125,
+    "fields": {
+      "uri": "http://example.com/terms/domain/validation/url",
+      "uri_prefix": "http://example.com/terms",
+      "key": "url",
+      "path": "validation/url",
+      "comment": "",
+      "locked": false,
+      "parent": 124,
+      "lft": 2,
+      "rght": 3,
+      "tree_id": 9,
+      "level": 1,
+      "editors": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 126,
+    "fields": {
+      "uri": "http://example.com/terms/domain/validation/float",
+      "uri_prefix": "http://example.com/terms",
+      "key": "float",
+      "path": "validation/float",
+      "comment": "",
+      "locked": false,
+      "parent": 124,
+      "lft": 4,
+      "rght": 5,
+      "tree_id": 9,
+      "level": 1,
+      "editors": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 127,
+    "fields": {
+      "uri": "http://example.com/terms/domain/validation/integer",
+      "uri_prefix": "http://example.com/terms",
+      "key": "integer",
+      "path": "validation/integer",
+      "comment": "",
+      "locked": false,
+      "parent": 124,
+      "lft": 6,
+      "rght": 7,
+      "tree_id": 9,
+      "level": 1,
+      "editors": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 128,
+    "fields": {
+      "uri": "http://example.com/terms/domain/bool",
+      "uri_prefix": "http://example.com/terms",
+      "key": "bool",
+      "path": "bool",
+      "comment": "",
+      "locked": false,
+      "parent": null,
+      "lft": 1,
+      "rght": 2,
+      "tree_id": 10,
+      "level": 0,
+      "editors": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 129,
+    "fields": {
+      "uri": "http://example.com/terms/domain/validation/datetime",
+      "uri_prefix": "http://example.com/terms",
+      "key": "datetime",
+      "path": "validation/datetime",
+      "comment": "",
+      "locked": false,
+      "parent": 124,
+      "lft": 8,
+      "rght": 9,
+      "tree_id": 9,
+      "level": 1,
+      "editors": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 130,
+    "fields": {
+      "uri": "http://example.com/terms/domain/validation/email",
+      "uri_prefix": "http://example.com/terms",
+      "key": "email",
+      "path": "validation/email",
+      "comment": "",
+      "locked": false,
+      "parent": 124,
+      "lft": 10,
+      "rght": 11,
+      "tree_id": 9,
+      "level": 1,
+      "editors": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 131,
+    "fields": {
+      "uri": "http://example.com/terms/domain/validation/phone",
+      "uri_prefix": "http://example.com/terms",
+      "key": "phone",
+      "path": "validation/phone",
+      "comment": "",
+      "locked": false,
+      "parent": 124,
+      "lft": 12,
+      "rght": 13,
+      "tree_id": 9,
+      "level": 1,
+      "editors": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 132,
+    "fields": {
+      "uri": "http://example.com/terms/domain/validation/bool",
+      "uri_prefix": "http://example.com/terms",
+      "key": "bool",
+      "path": "validation/bool",
+      "comment": "",
+      "locked": false,
+      "parent": 124,
+      "lft": 14,
+      "rght": 15,
+      "tree_id": 9,
+      "level": 1,
+      "editors": []
+    }
   }
 ]
