@@ -4,9 +4,10 @@ import {isUndefined} from 'lodash'
 
 const renderElementLengthInfo = (label, length) => (
   length > 0 && (
-    <span className='mr-5'>{gettext(label)}: {length} </span>
+    <span className='ml-5'>{gettext(label)}: {length} </span>
   )
 )
+
 const ImportInfo = ({
                       elementsLength,
                       updatedLength,
