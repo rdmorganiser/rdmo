@@ -215,24 +215,38 @@ $icon-font-path: "bootstrap-sass/assets/fonts/bootstrap/";
 }
 
 .field-diff {
-    [class*="react-diff-"][class*="diff-container"] {
+    table[class*="react-diff-"][class*="diff-container"] {
         margin: 0;
         border-collapse: separate;  // needed for border radius since this is a table
 
         tr {
+            td[class*="marker"] {
+                border-left: 1px solid #ccc;
+            }
+            td[class*="content"] {
+                border-right: 1px solid #ccc;
+            }
             &:first-child {
-                [class*="marker"] {
+                td[class*="marker"] {
+                    border-top: 1px solid #ccc;
+                    border-left: 1px solid #ccc;
                     border-top-left-radius: 4px;
                 }
-                [class*="content"] {
+                td[class*="content"] {
+                    border-top: 1px solid #ccc;
+                    border-right: 1px solid #ccc;
                     border-top-right-radius: 4px;
                 }
             }
             &:last-child {
-                [class*="marker"] {
+                td[class*="marker"] {
+                    border-bottom: 1px solid #ccc;
+                    border-left: 1px solid #ccc;
                     border-bottom-left-radius: 4px;
                 }
-                [class*="content"] {
+                td[class*="content"] {
+                    border-bottom: 1px solid #ccc;
+                    border-right: 1px solid #ccc;
                     border-bottom-right-radius: 4px;
                 }
             }
