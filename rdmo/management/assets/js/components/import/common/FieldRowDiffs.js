@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import isEmpty from 'lodash/isEmpty'
 import ReactDiffViewer from 'react-diff-viewer-continued'
+
 import Warnings from './Warnings'
 import Errors from './Errors'
 
@@ -45,12 +46,12 @@ const FieldRowDiffs = ({ element, field }) => {
           </ReactDiffViewer>
       {
         !isEmpty(warnings) && <>
-        <Warnings element={fieldDiffData} showTitle={true} shouldShowURI={false}/>
+          <Warnings element={fieldDiffData} showTitle={true} shouldShowURI={false}/>
         </>
       }
       {
         !isEmpty(errors) && <>
-        <Errors element={fieldDiffData} />
+          <Errors element={fieldDiffData} />
         </>
       }
       </div>
