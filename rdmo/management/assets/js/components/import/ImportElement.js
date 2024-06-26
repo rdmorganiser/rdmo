@@ -8,9 +8,9 @@ import {
   ErrorLink,
   ShowLink,
   AvailableLink,
-  LockedLink, AddLink, EditLink
+  LockedLink,
 } from '../common/Links'
-import SelectCheckbox from './common/SelectCheckbox'
+import ImportSelectCheckbox from './common/ImportSelectCheckbox'
 import Errors from './common/Errors'
 
 import Warnings from './common/Warnings'
@@ -26,6 +26,7 @@ const ImportElement = ({ config, element, importActions }) => {
 
   return (
     <li className="list-group-item">
+
       <div className="pull-right">
         {
           (isEmpty(element.errors) && ('available' in element)) &&
@@ -43,14 +44,6 @@ const ImportElement = ({ config, element, importActions }) => {
           <ErrorLink onClick={updateShowField} />
         }
         {
-          (element.changed && element.updated) &&
-          <EditLink href='' title={gettext('Updated and changed')} disabled={true} onClick={updateShowField} />
-        }
-        {
-          element.created &&
-          <AddLink title={gettext('Created')} disabled={true} onClick={updateShowField} />
-        }
-        {
           (element.updated && element.locked) &&
           <LockedLink title={gettext('Locked')}
                       locked={element.locked} onClick={updateShowField} disabled={true} />
@@ -59,7 +52,7 @@ const ImportElement = ({ config, element, importActions }) => {
         <ShowLink show={element.show} onClick={updateShowField} />
       </div>
 
-      <SelectCheckbox element={element} toggleImport={toggleImport} updateShowField={updateShowField} />
+      <ImportSelectCheckbox element={element} toggleImport={toggleImport} updateShowField={updateShowField} />
 
       {
         element.show && <>

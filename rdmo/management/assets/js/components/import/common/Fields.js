@@ -43,7 +43,10 @@ const Fields = ({ element }) => {
         .sort()
         .map(([key, value]) => {
           if (!excludeKeys.includes(key)) {
-            return <FieldRow key={uniqueId()} element={element} keyName={key} value={serializeValue(value)} />
+            const serializedValue = serializeValue(value)
+            if (serializedValue !== '' || (element.changedFields?.includes(key))) {
+              return <FieldRow key={uniqueId()} element={element} keyName={key} value={serializedValue} />
+            }
           }
           return null
         })}

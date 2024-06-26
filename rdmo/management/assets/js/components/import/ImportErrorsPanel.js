@@ -12,23 +12,23 @@ const ImportErrorsPanel = ({ config, elements, configActions }) => {
 
   const showErrors = get(config, 'filter.import.errors.show', false)
   const listErrors = elements.map((element, index) => {
-            return (<Errors key={index} element={element} />)
-            })
-
+    return (<Errors key={index} element={element}/>)
+  })
+  const errorsHeadingText = <strong onClick={updateShowErrors}>{gettext('Errors')}{' '}({elements.length}){' : '}</strong>
   return (
     <div className="panel panel-danger">
-      <div className="panel-heading"><strong>{gettext('Errors')}{' '}({elements.length}){' : '}</strong>
+      <div className="panel-heading">{errorsHeadingText}
         <div className="pull-right">
           <ShowLink show={showErrors} onClick={updateShowErrors}/>
         </div>
       </div>
       <div className="panel-body">
-        { showErrors &&
+        {showErrors &&
           <ul className="list-group">{listErrors}</ul>
         }
       </div>
     </div>
-   )
+  )
 }
 
 ImportErrorsPanel.propTypes = {
