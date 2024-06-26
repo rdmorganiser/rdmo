@@ -1,11 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import uniqueId from 'lodash/uniqueId'
-import isEmpty from 'lodash/isEmpty'
 
 // Helper function to generate error messages
-const generateErrorMessages = (messages, key) =>
-  messages.map(message => <li className="text-danger" key={key}>{message}</li>)
+const generateErrorMessageListItems = (messages, key) =>
+  messages.map(message => <li className="text-danger error-item pb-5" key={key}>{message}</li>)
 
 // Helper function to prepare the list of errors
 export const prepareErrorsList = (errors) => {
@@ -13,26 +12,25 @@ export const prepareErrorsList = (errors) => {
   const uniqueErrors = [...new Set(errors)]
 
   return uniqueErrors.map(message => (
-    <ul className="list-unstyled" key={uniqueId('error-list')}>
-      {generateErrorMessages([message], uniqueId('error-message'))}
+    <ul className="list-unstyled error-list" key={uniqueId('error-list')}>
+      {generateErrorMessageListItems([message], uniqueId('error-message'))}
     </ul>
   ))
 }
 
 const Errors = ({ element, showTitle = false }) => {
-  const listErrorMessages = prepareErrorsList(element.errors)
+  const errorMessagesList = prepareErrorsList(element.errors)
+  const show = element.errors.length > 0
 
-  return !isEmpty(element.errors) && (
-    <div className="row text-danger mt-10">
+  return show && (
+    <div className="row text-danger">
       {showTitle && (
-        <div className="col-sm-3 mb-5 mt-5">
+        <div className="col-sm-12 mb-5 mt-5">
           {gettext('Errors')}
         </div>
       )}
-      <div className="col-sm-12">
-        <ul className="list-unstyled">
-          {listErrorMessages}
-        </ul>
+      <div className="col-sm-12 mb-5 mt-5">
+          {errorMessagesList}
       </div>
     </div>
   )

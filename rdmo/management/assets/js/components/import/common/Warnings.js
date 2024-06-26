@@ -1,37 +1,45 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import uniqueId from 'lodash/uniqueId'
-
-import {codeClass} from '../../../constants/elements'
+import {codeClass, verboseNames} from '../../../constants/elements'
 
 
 const Warnings = ({element, showTitle = false, shouldShowURI = true}) => {
-  const generateWarningMessagesForUri = (messages, key) =>
-    messages.map(message => <li className="text-warning" key={key}>{message}</li>)
+  const warningListItems = (messages, uri) =>
+    messages.map(message => (
+      <li className="warning-item pb-5" key={uniqueId('warning-uri-message')}>
+        {shouldShowURI && (
+          <>
+            <strong>{verboseNames[element.model]}{' '}</strong>
+            <code className={codeClass[element.model]}>{uri}</code>
+            <br/>
+          </>
+        )}
+        <div className="text-warning">
+           {message}
+        </div>
+      </li>
+    ))
 
   const prepareWarningsList = (warningsObj) =>
     Object.entries(warningsObj).map(([uri, messages]) => (
-      <ul className="list-unstyled" key={uniqueId('warning-uri-list')}>
-        {shouldShowURI &&
-          <li key={uniqueId('warning-uri-')}>
-            <code className={codeClass['domain.attribute']}>{uri}</code>
-          </li>
-        }
-        {generateWarningMessagesForUri(messages, uniqueId('warning-uri-message'))}
+      <ul className="list-unstyled warning-list" key={uniqueId('warning-uri-list')}>
+        {warningListItems(messages, uri)}
       </ul>
     ))
 
-  const listWarningMessages = prepareWarningsList(element.warnings)
+  const warningsMessagesList = prepareWarningsList(element.warnings)
+  const show =  warningsMessagesList.length > 0
 
-  return (
-    <div className="row text-warning mt-10">
-      {showTitle === true && listWarningMessages.length > 0 &&
-        <div className="col-sm-3 mb-5 mt-5">
+  return show && (
+    <div className="row ">
+      {showTitle === true &&
+        <div className="col-sm-12 mb-5 mt-5 text-warning">
           {'Warnings'}
         </div>
       }
-      <div className="col-sm-12">
-        {listWarningMessages}
+      <div className="col-sm-12 mb-5 mt-5">
+        {warningsMessagesList}
       </div>
     </div>
   )
