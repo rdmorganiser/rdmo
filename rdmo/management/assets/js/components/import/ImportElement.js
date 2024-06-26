@@ -65,7 +65,7 @@ const ImportElement = ({ config, element, importActions }) => {
         element.show && <>
           <Form config={config} element={element} updateElement={updateElement} />
           <Fields element={element} />
-          <Errors element={element} showTitle={true}/>
+          <Errors element={element} showTitle={true} />
           <Warnings element={element} showTitle={true} shouldShowURI={false} />
         </>
       }

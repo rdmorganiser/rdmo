@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-// import isEmpty from 'lodash/isEmpty'
 import uniqueId from 'lodash/uniqueId'
+
 import {codeClass} from '../../../constants/elements'
 
 
@@ -31,7 +31,7 @@ const Warnings = ({element, showTitle = false, shouldShowURI = true}) => {
         </div>
       }
       <div className="col-sm-12">
-        <ul className="list-unstyled">{listWarningMessages}</ul>
+        {listWarningMessages}
       </div>
     </div>
   )
