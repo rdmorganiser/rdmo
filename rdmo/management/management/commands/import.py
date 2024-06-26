@@ -21,7 +21,7 @@ class Command(BaseCommand):
             logger.info('Import failed with XML parsing errors.')
             raise CommandError(str(e)) from e
 
-        # step 7: check if valid
+        # raise exception when xml parsing returned any errors
         if errors:
             logger.info('Import failed with XML validation errors.')
             raise CommandError(" ".join(map(str, errors)))
