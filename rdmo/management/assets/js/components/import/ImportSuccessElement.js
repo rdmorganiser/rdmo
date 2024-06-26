@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { isEmpty } from 'lodash'
 
 import { codeClass, verboseNames } from '../../constants/elements'
-import { isEmpty } from 'lodash'
 import Warnings from './common/Warnings'
-import {prepareErrorsList } from './common/Errors'
-import {EditLink} from '../common/Links'
+import { prepareErrorsList } from './common/Errors'
+import { EditLink } from '../common/Links'
 
 
 

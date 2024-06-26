@@ -26,7 +26,7 @@ const ImportWarningsPanel = ({ config, elements, configActions }) => {
       </div>
       <div className="panel-body">
         { showWarnings &&
-        <ul className="list-group">{listWarnings}</ul>
+          listWarnings
         }
       </div>
     </div>
