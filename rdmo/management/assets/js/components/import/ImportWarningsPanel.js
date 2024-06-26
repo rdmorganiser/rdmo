@@ -15,22 +15,23 @@ const ImportWarningsPanel = ({ config, elements, configActions }) => {
   }
   const showWarnings = get(config, 'filter.import.warnings.show', false)
   const listWarnings = elements.map((element, index) => {
-              return (<Warnings key={index} element={element} showWarningTitle={true} showTitle={false} />)
-              })
+    return (<Warnings key={index} element={element} showWarningTitle={true} showTitle={false}/>)
+  })
+  const warningsHeadingText = <strong onClick={updateShowWarnings}>{gettext('Warnings')}{' '}({elements.length}){': '}</strong>
   return (
     <div className="panel panel-warning">
-      <div className="panel-heading"><strong onClick={updateShowWarnings}>{gettext('Warnings')}{' '}({elements.length}){': '}</strong>
+      <div className="panel-heading">{warningsHeadingText}
         <div className="pull-right">
           <ShowLink show={showWarnings} onClick={updateShowWarnings}/>
         </div>
       </div>
       <div className="panel-body">
-        { showWarnings &&
+        {showWarnings &&
           listWarnings
         }
       </div>
     </div>
-   )
+  )
 }
 
 ImportWarningsPanel.propTypes = {
