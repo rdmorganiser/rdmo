@@ -47,7 +47,7 @@ export function toggleElements(element) {
   }
 }
 
-export function toggleDescandants(element, elementType) {
+export function toggleDescendants(element, elementType) {
   return (dispatch) => {
     findDescendants(element, elementType).forEach(e => dispatch(toggleElements(e)))
   }
