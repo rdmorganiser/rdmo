@@ -35,3 +35,17 @@ repos:
           - eslint@8.54.0
           - eslint-plugin-react@7.33.2
           - react@18.2.0
+  - repo: https://github.com/crate-ci/typos
+    rev: v1.22.9
+    hooks:
+    - id: typos
+      exclude: |
+        (?x)^(
+            rdmo/locale/.*|
+            rdmo/.*_de.html$|
+            rdmo/.*_es.html$|
+            rdmo/.*_fr.html$|
+            rdmo/.*_it.html$|
+            testing/.*.json|
+            testing/.*.xml
+        )$
