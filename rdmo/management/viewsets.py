@@ -126,6 +126,6 @@ class ElementToggleCurrentSiteViewSetMixin:
             obj.sites.remove(current_site)
         else:
             obj.sites.add(current_site)
-        # need to return obj element for ElementSucces reducer?
+        # need to return obj element for ElementSuccess reducer?
         serializer = self.serializer_class(obj, context={'request': request})
         return Response(serializer.data)
