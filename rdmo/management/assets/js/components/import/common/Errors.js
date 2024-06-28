@@ -1,44 +1,23 @@
+// Errors.js
 import React from 'react'
 import PropTypes from 'prop-types'
-import uniqueId from 'lodash/uniqueId'
+import ErrorsListGroup from './ErrorsListGroup'
+import isUndefined from 'lodash/isUndefined'
 
-// Helper function to generate error messages
-const generateErrorMessageListItems = (messages, key) =>
-  messages.map(message => <li className="text-danger error-item pb-5" key={key}>{message}</li>)
-
-// Helper function to prepare the list of errors
-export const prepareErrorsList = (errors) => {
-  // Filter out duplicate errors
-  const uniqueErrors = [...new Set(errors)]
-
-  return uniqueErrors.map(message => (
-    <ul className="list-unstyled error-list" key={uniqueId('error-list')}>
-      {generateErrorMessageListItems([message], uniqueId('error-message'))}
-    </ul>
-  ))
-}
-
-const Errors = ({ element, showTitle = false }) => {
-  const errorMessagesList = prepareErrorsList(element.errors)
-  const show = element.errors.length > 0
+const Errors = ({ elementErrors }) => {
+  const show = !isUndefined(elementErrors) &&  elementErrors.length > 0
+  const errorsHeadingText = <strong>{gettext('Errors')}</strong>
 
   return show && (
-    <div>
-      {showTitle && (
-        <div className="col-sm-12 mb-5 mt-5 text-danger">
-          {gettext('Errors')}
-        </div>
-      )}
-      <div className="mb-5 mt-5">
-          {errorMessagesList}
-      </div>
+    <div className="panel panel-danger">
+      <div className="panel-heading">{errorsHeadingText}</div>
+      <ErrorsListGroup elementErrors={elementErrors} />
     </div>
   )
 }
 
 Errors.propTypes = {
-  element: PropTypes.object.isRequired,
-  showTitle: PropTypes.bool,
+  elementErrors: PropTypes.array.isRequired,
 }
 
 export default Errors

@@ -4,19 +4,18 @@ import { isEmpty } from 'lodash'
 
 import { codeClass, verboseNames } from '../../constants/elements'
 import Warnings from './common/Warnings'
-import { prepareErrorsList } from './common/Errors'
+import Errors from './common/Errors'
 import { EditLink } from '../common/Links'
 
 
 
 const ImportSuccessElement = ({ element, importActions }) => {
-  const listErrorMessages = prepareErrorsList(element.errors)
 
   const updateShowField = () => importActions.updateElement(element, { show: !element.show })
 
   return (
     <li className="list-group-item">
-      <div>
+      <div className="mb-5">
         <strong>{verboseNames[element.model]}{' '}</strong>
         <code className={codeClass[element.model]}>{element.uri}</code>
         {element.created && (
@@ -39,8 +38,8 @@ const ImportSuccessElement = ({ element, importActions }) => {
         )}
         {'.'}
       </div>
-      <Warnings element={element} showTitle={true} shouldShowURI={false} />
-      {listErrorMessages}
+      <Errors elementErrors={element.errors} />
+      <Warnings elementWarnings={element.warnings} elementModel={element.model} showTitle={true} shouldShowURI={false} />
     </li>
   )
 }

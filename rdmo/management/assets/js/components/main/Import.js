@@ -4,8 +4,8 @@ import get from 'lodash/get'
 
 import ImportElement from '../import/ImportElement'
 import ImportSuccessElement from '../import/ImportSuccessElement'
-import ImportWarningsPanel from '../import/ImportWarningsPanel'
-import ImportErrorsPanel from '../import/ImportErrorsPanel'
+import ImportAggregatedWarningsPanel from '../import/ImportAggregatedWarningsPanel'
+import ImportAggregatedErrorsPanel from '../import/ImportAggregatedErrorsPanel'
 import ImportInfo from '../import/common/ImportInfo'
 import ImportFilters from '../import/common/ImportFilters'
 import useFilteredElements from '../../utils/importFilters'
@@ -49,22 +49,26 @@ const Import = ({ config, imports, configActions, importActions }) => {
         }
         {
           importWarnings.length > 0 &&
-          <ImportWarningsPanel config={config} elements={importWarnings} importActions={importActions}
-                               configActions={configActions}/>
+          <ImportAggregatedWarningsPanel config={config} elements={importWarnings}
+                                         importActions={importActions}
+                                         configActions={configActions}/>
         }
         {
           importErrors.length > 0 &&
-          <ImportErrorsPanel config={config} elements={importErrors} importActions={importActions}
-                             configActions={configActions}/>
+          <ImportAggregatedErrorsPanel config={config} elements={importErrors}
+                                       importActions={importActions}
+                                       configActions={configActions}/>
         }
       </div>
         <ul className='list-group'>
           {
             filteredElements.map((element, index) => {
               if (success) {
-                return <ImportSuccessElement key={index} element={element} importActions={importActions}/>
+                return <ImportSuccessElement key={index} element={element}
+                                             importActions={importActions}/>
               } else {
-                return <ImportElement key={index} config={config} element={element} importActions={importActions}/>
+                return <ImportElement key={index} element={element} config={config}
+                                      importActions={importActions}/>
               }
             })
           }
