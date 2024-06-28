@@ -32,13 +32,13 @@ const Warnings = ({element, showTitle = false, shouldShowURI = true}) => {
   const show =  warningsMessagesList.length > 0
 
   return show && (
-    <div className="row ">
+    <div>
       {showTitle === true &&
-        <div className="col-sm-12 mb-5 mt-5 text-warning">
+        <div className="mb-5 mt-5 text-warning">
           {'Warnings'}
         </div>
       }
-      <div className="col-sm-12 mb-5 mt-5">
+      <div className="mb-5 mt-5">
         {warningsMessagesList}
       </div>
     </div>
