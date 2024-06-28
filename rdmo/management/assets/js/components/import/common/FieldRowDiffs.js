@@ -46,7 +46,7 @@ const FieldRowDiffs = ({ element, field }) => {
           </ReactDiffViewer>
       {
         !isEmpty(warnings) && <>
-          <Warnings element={fieldDiffData} showTitle={true} shouldShowURI={false}/>
+          <Warnings elementWarnings={fieldDiffData.warnings} elementModel={element.model} showTitle={true} shouldShowURI={false}/>
         </>
       }
       {
