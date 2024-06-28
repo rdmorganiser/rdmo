@@ -23,13 +23,13 @@ const Errors = ({ element, showTitle = false }) => {
   const show = element.errors.length > 0
 
   return show && (
-    <div className="row text-danger">
+    <div>
       {showTitle && (
-        <div className="col-sm-12 mb-5 mt-5">
+        <div className="col-sm-12 mb-5 mt-5 text-danger">
           {gettext('Errors')}
         </div>
       )}
-      <div className="col-sm-12 mb-5 mt-5">
+      <div className="mb-5 mt-5">
           {errorMessagesList}
       </div>
     </div>
