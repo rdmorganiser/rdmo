@@ -22,7 +22,7 @@ OPTIONSETS_COUNTS = {
     "total": 13,
     "updated": 13,
     "changed": 5,
-    "warnings": 1
+    "warnings": 2
 }
 OPTIONSETS_COUNTS_HEADER_INFOS = [f"{k.capitalize()}: {v}" for k,v in OPTIONSETS_COUNTS.items()]
 

@@ -97,7 +97,7 @@ def test_update_optionsets_from_changed_xml(db, settings):
     assert imported_elements_1
     assert [i for i in imported_elements_1 if i[ImportElementFields.DIFF]]
     warnings_elements = [i for i in imported_elements_1 if i[ImportElementFields.WARNINGS]]
-    assert len(warnings_elements) == 1
+    assert len(warnings_elements) == 2
 
     changed_elements = get_changed_elements(imported_elements_1)
 
@@ -126,7 +126,7 @@ def test_update_optionsets_from_changed_xml(db, settings):
     imported_elements_2 = import_elements(elements_1, save=False)
     changed_elements_2 = get_changed_elements(imported_elements_2)
     assert len(changed_elements_2) == 0
-    assert len([i for i in imported_elements_2 if i[ImportElementFields.WARNINGS]]) == 1
+    assert len([i for i in imported_elements_2 if i[ImportElementFields.WARNINGS]]) == 2
 
 
 def test_create_options(db, settings):
