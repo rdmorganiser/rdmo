@@ -24,8 +24,8 @@ import_helper_attribute = ElementImportHelper(
     common_fields=('uri_prefix', 'key', 'comment'),
     validators=(AttributeLockedValidator, AttributeParentValidator, AttributeUniqueURIValidator),
     foreign_fields=('parent',),
-    extra_fields=[
+    extra_fields=(
         ExtraFieldHelper(field_name='path', callback=build_attribute_path, overwrite_in_element=True),
         ExtraFieldHelper(field_name='uri', callback=build_attribute_uri, overwrite_in_element=True),
-    ]
+    )
 )

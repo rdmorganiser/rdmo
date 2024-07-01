@@ -282,20 +282,23 @@ def set_extra_field(instance, field_name, element,
 
     extra_value = None
     if field_name in element:
-        element_value = element.get(field_name)
-        extra_value = element_value
+        extra_value = element.get(field_name)
     else:
+        # get the default field value from the instance
         instance_value = getattr(instance, field_name)
         element[field_name] = instance_value
         extra_value = instance_value
 
-    if extra_value is None and extra_field_helper is not None:
+    if extra_field_helper is not None:
         # default_value
-        extra_value = extra_field_helper.get_value(instance=instance,
+        extra_value_from_helper = extra_field_helper.get_value(instance=instance,
                                                    key=field_name)
+        # overwrite None or '' values by the get_value from the helper
+        if extra_value is None or extra_value == '':
+            extra_value = extra_value_from_helper
 
-    if extra_field_helper.overwrite_in_element:
-        element[field_name] = extra_value
+        if extra_field_helper.overwrite_in_element:
+            element[field_name] = extra_value
 
     if extra_value is not None:
         setattr(instance, field_name, extra_value)
