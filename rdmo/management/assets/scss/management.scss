@@ -73,6 +73,10 @@ $icon-font-path: "bootstrap-sass/assets/fonts/bootstrap/";
                 }
             }
         }
+
+        &.panel-warning {
+            cursor: pointer;
+        }
     }
     .pull-right {
         .element-link,
