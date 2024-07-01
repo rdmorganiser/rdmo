@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { CodeLink } from '../../common/Links'
 import { codeClass, verboseNames } from '../../../constants/elements'
+import {ChangedLabel, CreatedLabel} from './ImportLabels'
 
 const ImportSelectCheckbox = ({ element, toggleImport, updateShowField }) => (
   <div className="checkbox">
@@ -10,16 +11,10 @@ const ImportSelectCheckbox = ({ element, toggleImport, updateShowField }) => (
       <strong>{verboseNames[element.model]}{' '}</strong>
     </label>
     <CodeLink className={codeClass[element.model]} uri={element.uri} onClick={updateShowField} />
-   {
-      (element.changed && element.updated) &&
-        <span className="label label-info ml-5" onClick={updateShowField}>
-          {gettext('changed')}</span>
-    }
-    {
-      element.created &&
-        <span className="label label-success ml-5" onClick={updateShowField}>
-          {gettext('created')}</span>
-    }
+
+    <ChangedLabel onClick={updateShowField} show={(element.changed && element.updated)} />
+
+    <CreatedLabel onClick={updateShowField} show={element.created} />
   </div>
 )
 
