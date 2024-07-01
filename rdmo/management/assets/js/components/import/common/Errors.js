@@ -9,7 +9,7 @@ const Errors = ({ elementErrors }) => {
   const errorsHeadingText = <strong>{gettext('Errors')}</strong>
 
   return show && (
-    <div className="panel panel-danger">
+    <div className="panel panel-danger mt-10 mb-0">
       <div className="panel-heading">{errorsHeadingText}</div>
       <ErrorsListGroup elementErrors={elementErrors} />
     </div>
