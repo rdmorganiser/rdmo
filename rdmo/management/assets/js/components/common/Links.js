@@ -239,8 +239,8 @@ const ShowLink = ({ show = false, onClick }) => {
   const title = show ? gettext('Hide') : gettext('Show')
   const className = classNames({
     'element-link fa': true,
-    'fa-eye-slash': !show,
-    'fa-eye': show
+    'fa-chevron-down': !show,
+    'fa-chevron-up': show
   })
 
   return <Link className={className} title={title} onClick={onClick} />
