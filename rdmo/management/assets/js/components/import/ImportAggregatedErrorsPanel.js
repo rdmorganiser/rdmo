@@ -31,10 +31,11 @@ const ImportAggregatedErrorsPanel = ({ config, elements, configActions }) => {
   const errorsHeadingText = <strong onClick={updateShowErrors}>{gettext('Errors')} ({elements.length}) :</strong>
 
   return (
-    <div className="panel panel-danger mt-5">
-      <div className="panel-heading">{errorsHeadingText}
+    <div className="panel panel-danger panel-import-errors mt-10">
+      <div className="panel-heading" onClick={updateShowErrors}>
+        {errorsHeadingText}
         <div className="pull-right">
-          <ShowLink show={showErrors} onClick={updateShowErrors}/>
+          <ShowLink show={showErrors} onClick={() => {}}/>
         </div>
       </div>
       {showErrors && (
