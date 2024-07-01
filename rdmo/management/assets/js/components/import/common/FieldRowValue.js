@@ -9,7 +9,6 @@ import {codeClass} from '../../../constants/elements'
 
 
 const FieldRowValue = ({ value }) => {
-
   return  (
     <div className="col-sm-12">
       {
@@ -24,8 +23,8 @@ const FieldRowValue = ({ value }) => {
       )
       }
       {
-        isPlainObject(value) && !isUndefined(value.uri) && !isUndefined(value.model) &&
-        <code className={codeClass[value.model]}>{value.uri}</code>
+        isPlainObject(value) && !isUndefined(value.uri) &&
+        <code className={codeClass[value.model || 'domain.attribute']}>{value.uri}</code>
       }
       {
         isString(value) &&
