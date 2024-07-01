@@ -2,7 +2,7 @@ import isArray from 'lodash/isArray'
 import isNil from 'lodash/isNil'
 import isUndefined from 'lodash/isUndefined'
 
-import { buildUri } from '../utils/elements'
+import { buildUri, buildPath } from '../utils/elements'
 import processElementDiffs from '../utils/processElementDiffs'
 
 
@@ -48,6 +48,9 @@ export default function importsReducer(state = initialState, action) {
       if (index > -1) {
         const elements = [...state.elements]
         elements[index] = {...elements[index], ...action.values}
+        if (elements[index].model === 'domain.attribute') {
+          elements[index].path = buildPath(elements[index].key, elements[index].parent ? elements[index].parent.uri : null, elements)
+        }
         elements[index].uri = buildUri(elements[index])
         return {...state, elements}
       } else {
