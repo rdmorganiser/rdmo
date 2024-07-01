@@ -14,17 +14,16 @@ const ImportFilters = ({ config, elements, changedElements, filteredElements, co
   const getValueFilterChanged = () => get(config, 'filter.import.elements.changed', false)
 
   return (
-
-      <div className="row">
-        <div className={'col-sm-8'}>
-          <FilterString value={getValueFilterString()} onChange={updateFilterString}
-                        placeholder={gettext('Filter uri')}/>
-        </div>
-        <div className="col-sm-4">
-          <FilterUriPrefix value={getValueFilterUirPrefix()}
-                           onChange={updateFilterUriPrefix}
-                           options={getUriPrefixes(elements)}/>
-        </div>
+    <div className="row">
+      <div className={'col-sm-8'}>
+        <FilterString value={getValueFilterString()} onChange={updateFilterString}
+                      placeholder={gettext('Filter uri')}/>
+      </div>
+      <div className="col-sm-4">
+        <FilterUriPrefix value={getValueFilterUirPrefix()}
+                         onChange={updateFilterUriPrefix}
+                         options={getUriPrefixes(elements)}/>
+      </div>
 
       {elements.length > 0 && (
         <div className="horizontal-container">
@@ -37,7 +36,8 @@ const ImportFilters = ({ config, elements, changedElements, filteredElements, co
           </span>
         </div>
       )}
-  </div>)
+    </div>
+  )
 }
 
 ImportFilters.propTypes = {
