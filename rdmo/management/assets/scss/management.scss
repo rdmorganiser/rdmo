@@ -74,7 +74,8 @@ $icon-font-path: "bootstrap-sass/assets/fonts/bootstrap/";
             }
         }
 
-        &.panel-warning {
+        &.panel-import-warnings,
+        &.panel-import-errors {
             cursor: pointer;
         }
     }
