@@ -30,7 +30,7 @@ const ImportAggregatedErrorsPanel = ({ config, elements, configActions }) => {
 
   const errorsHeadingText = <strong onClick={updateShowErrors}>{gettext('Errors')} ({elements.length}) :</strong>
 
-  return (
+  return ( uniqueErrors.length > 0 &&
     <div className="panel panel-danger panel-import-errors mt-10">
       <div className="panel-heading" onClick={updateShowErrors}>
         {errorsHeadingText}

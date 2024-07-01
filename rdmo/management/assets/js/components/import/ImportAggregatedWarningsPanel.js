@@ -28,7 +28,7 @@ const ImportAggregatedWarningsPanel = ({ config, elements, configActions }) => {
 
   const warningsHeadingText = <strong onClick={updateShowWarnings}>{gettext('Warnings')} ({elements.length}):</strong>
 
-  return (
+  return ( aggregatedWarnings.length > 0 &&
     <div className="panel panel-warning panel-import-warnings mt-10">
       <div className="panel-heading" onClick={updateShowWarnings}>
         {warningsHeadingText}

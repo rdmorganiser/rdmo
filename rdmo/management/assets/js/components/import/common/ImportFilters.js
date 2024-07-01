@@ -13,7 +13,7 @@ const ImportFilters = ({ config, elements, changedElements, filteredElements, co
   const updateFilterChanged = (value) => configActions.updateConfig('filter.import.elements.changed', value)
   const getValueFilterChanged = () => get(config, 'filter.import.elements.changed', false)
 
-  return (
+  return ( elements.length > 0 &&
     <div className="row">
       <div className={'col-sm-8'}>
         <FilterString value={getValueFilterString()} onChange={updateFilterString}
@@ -36,8 +36,7 @@ const ImportFilters = ({ config, elements, changedElements, filteredElements, co
           </span>
         </div>
       )}
-    </div>
-  )
+  </div>)
 }
 
 ImportFilters.propTypes = {

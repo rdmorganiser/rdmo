@@ -40,24 +40,20 @@ const Import = ({ config, imports, configActions, importActions }) => {
       </div>
       <div className="panel-body">
         {
-          elements.length > 0 &&
           <ImportFilters config={config} elements={elements}
                          changedElements={changedElements}
                          filteredElements={filteredElements}
-                         configActions={configActions}
-          />
+                         configActions={configActions} />
         }
         {
-          importWarnings.length > 0 &&
           <ImportAggregatedWarningsPanel config={config} elements={importWarnings}
                                          importActions={importActions}
-                                         configActions={configActions}/>
+                                         configActions={configActions} />
         }
         {
-          importErrors.length > 0 &&
           <ImportAggregatedErrorsPanel config={config} elements={importErrors}
                                        importActions={importActions}
-                                       configActions={configActions}/>
+                                       configActions={configActions} />
         }
       </div>
         <ul className='list-group'>
