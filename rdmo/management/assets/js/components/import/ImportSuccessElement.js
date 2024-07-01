@@ -5,9 +5,6 @@ import { isEmpty } from 'lodash'
 import { codeClass, verboseNames } from '../../constants/elements'
 import Warnings from './common/Warnings'
 import Errors from './common/Errors'
-import { EditLink } from '../common/Links'
-
-
 
 const ImportSuccessElement = ({ element, importActions }) => {
 
@@ -18,14 +15,13 @@ const ImportSuccessElement = ({ element, importActions }) => {
       <div className="mb-5">
         <strong>{verboseNames[element.model]}{' '}</strong>
         <code className={codeClass[element.model]}>{element.uri}</code>
-        {element.created && (
-          <>
-            <span className="text-success">{' '}{gettext('created')} </span>
-            <span className="muted element-link fa fa-plus"></span>
-          </>
-        )}
         {element.updated && element.changed && (
-          <EditLink href={''} title={gettext('Updated')} disabled={true} onClick={updateShowField} />
+        <span className="label label-info ml-5" onClick={updateShowField}>
+          {gettext('changed')}</span>
+        )}
+        {element.created && (
+          <span className="label label-success ml-5" onClick={updateShowField}>
+            {gettext('created')}</span>
         )}
         {!isEmpty(element.errors) && !(element.created || element.updated) && (
           <span className="text-danger">{' '}{gettext('could not be imported')}</span>
@@ -36,7 +32,6 @@ const ImportSuccessElement = ({ element, importActions }) => {
             <span className="text-danger">{gettext('but could not be added to parent element')}</span>
           </>
         )}
-        {'.'}
       </div>
       <Errors elementErrors={element.errors} />
       <Warnings elementWarnings={element.warnings} elementModel={element.model} showTitle={true} shouldShowURI={false} />
