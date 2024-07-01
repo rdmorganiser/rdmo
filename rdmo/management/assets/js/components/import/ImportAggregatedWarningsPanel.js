@@ -29,10 +29,11 @@ const ImportAggregatedWarningsPanel = ({ config, elements, configActions }) => {
   const warningsHeadingText = <strong onClick={updateShowWarnings}>{gettext('Warnings')} ({elements.length}):</strong>
 
   return (
-    <div className="panel panel-warning mt-5">
-      <div className="panel-heading">{warningsHeadingText}
+    <div className="panel panel-warning mt-10">
+      <div className="panel-heading" onClick={updateShowWarnings}>
+        {warningsHeadingText}
         <div className="pull-right">
-          <ShowLink show={showWarnings} onClick={updateShowWarnings} />
+          <ShowLink show={showWarnings} onClick={() => {}}/>
         </div>
       </div>
       {showWarnings && (

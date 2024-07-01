@@ -8,7 +8,7 @@ const Warnings = ({elementWarnings, elementModel, shouldShowURI = true}) => {
   const warningsHeadingText = <strong>{gettext('Warnings')}</strong>
 
   return show && (
-    <div className="panel panel-warning">
+    <div className="panel panel-warning mt-10 mb-0">
       <div className="panel-heading">{warningsHeadingText}</div>
       <WarningsListGroup
         elementWarnings={elementWarnings}
