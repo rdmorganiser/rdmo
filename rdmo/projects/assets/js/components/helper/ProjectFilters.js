@@ -25,6 +25,26 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
     projectsActions.fetchAllProjects()
   }
 
+  // Abstract function to handle date change
+  const handleDateChange = (type, position, date) => {
+    if (position === 'start') {
+      setStartDate(type, date)
+      if (date) {
+        configActions.updateConfig(`params.${type}_after`, formatISO(date, { representation: 'date' }))
+      } else {
+        configActions.deleteConfig(`params.${type}_after`)
+      }
+    } else if (position === 'end') {
+      setEndDate(type, date)
+      if (date) {
+        configActions.updateConfig(`params.${type}_before`, formatISO(date, { representation: 'date' }))
+      } else {
+        configActions.deleteConfig(`params.${type}_before`)
+      }
+    }
+    projectsActions.fetchAllProjects()
+  }
+
   return (
     <div className="panel panel-default panel-filters mt-10 mb-0">
       <div className="panel-body">
@@ -54,15 +74,7 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
                       id="created-start-date-picker"
                       isClearable
                       locale={getLocale(language)}
-                      onChange={date => {
-                        setStartDate('created', date)
-                        if (date) {
-                          configActions.updateConfig('params.created_after', formatISO(date, { representation: 'date' }))
-                        } else {
-                          configActions.deleteConfig('params.created_after')
-                        }
-                        projectsActions.fetchAllProjects()
-                      }}
+                      onChange={date => handleDateChange('created', 'start', date)}
                       placeholderText={gettext('Select start date')}
                       selected={dateRange.createdStart ?? get(config, 'params.created_after', '')}
                     />
@@ -75,15 +87,7 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
                       id="created-end-date-picker"
                       isClearable
                       locale={getLocale(language)}
-                      onChange={date => {
-                        setEndDate('created', date)
-                        if (date) {
-                          configActions.updateConfig('params.created_before', formatISO(date, { representation: 'date' }))
-                        } else {
-                          configActions.deleteConfig('params.created_before')
-                        }
-                        projectsActions.fetchAllProjects()
-                      }}
+                      onChange={date => handleDateChange('created', 'end', date)}
                       placeholderText={gettext('Select end date')}
                       selected={dateRange.createdEnd ?? get(config, 'params.created_before', '')}
                     />
@@ -104,15 +108,7 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
                     id="last-changed-start-date-picker"
                     isClearable
                     locale={getLocale(language)}
-                    onChange={date => {
-                      setStartDate('last_changed', date)
-                      if (date) {
-                        configActions.updateConfig('params.last_changed_after', formatISO(date, { representation: 'date' }))
-                      } else {
-                        configActions.deleteConfig('params.last_changed_after')
-                      }
-                      projectsActions.fetchAllProjects()
-                    }}
+                    onChange={date => handleDateChange('last_changed', 'start', date)}
                     placeholderText={gettext('Select start date')}
                     selected={dateRange.lastChangedStart ?? get(config, 'params.last_changed_after', '')}
                   />
@@ -125,15 +121,7 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
                     id="last-changed-end-date-picker"
                     isClearable
                     locale={getLocale(language)}
-                    onChange={date => {
-                      setEndDate('last_changed', date)
-                      if (date) {
-                        configActions.updateConfig('params.last_changed_before', formatISO(date, { representation: 'date' }))
-                      } else {
-                        configActions.deleteConfig('params.last_changed_before')
-                      }
-                      projectsActions.fetchAllProjects()
-                    }}
+                    onChange={date => handleDateChange('last_changed', 'end', date)}
                     placeholderText={gettext('Select end date')}
                     selected={dateRange.lastChangedEnd ?? get(config, 'params.last_changed_before', '')}
                   />
