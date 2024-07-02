@@ -51,7 +51,8 @@ const Section = ({ config, section, configActions, elementActions, display='list
       </div>
       <div>
         <p>
-          <strong>{gettext('Section')}{': '}</strong> {section.title}
+          <strong>{gettext('Section')}{': '}</strong>
+          <span dangerouslySetInnerHTML={{ __html: section.title }}></span>
         </p>
         {
           get(config, 'display.uri.sections', true) &&

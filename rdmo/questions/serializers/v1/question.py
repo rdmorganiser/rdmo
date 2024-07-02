@@ -6,6 +6,7 @@ from rdmo.core.constants import VALUE_TYPE_BOOLEAN, VALUE_TYPE_DATETIME
 from rdmo.core.serializers import (
     ElementModelSerializerMixin,
     ElementWarningSerializerMixin,
+    MarkdownSerializerMixin,
     ReadOnlyObjectPermissionSerializerMixin,
     ThroughModelSerializerMixin,
     TranslationSerializerMixin,
@@ -17,7 +18,10 @@ from ...validators import QuestionLockedValidator, QuestionUniqueURIValidator
 
 class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
                          ElementModelSerializerMixin, ElementWarningSerializerMixin,
-                         ReadOnlyObjectPermissionSerializerMixin, serializers.ModelSerializer):
+                         ReadOnlyObjectPermissionSerializerMixin, MarkdownSerializerMixin,
+                         serializers.ModelSerializer):
+
+    markdown_fields = ('text', 'help')
 
     model = serializers.SerializerMethodField()
     uri_path = serializers.CharField(required=True)

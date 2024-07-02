@@ -71,7 +71,7 @@ angular.module('project_questions')
 
     service.init = function(project_id) {
         service.settings = resources.settings.get();
-        service.project = resources.projects.get({id: project_id, detail_action: 'overview'});
+        service.project = resources.projects.get({id: project_id, detail_action: 'overview'})
 
         $q.all([
             service.settings.$promise,
@@ -88,6 +88,9 @@ angular.module('project_questions')
             } else {
                 service.initView(path);
             }
+
+            // mark the catalog title 'safe'
+            service.project.catalog.title = $sce.trustAsHtml(service.project.catalog.title);
 
             // enable back/forward button of browser, i.e. location changes
             $rootScope.$on('$locationChangeSuccess', function (scope, next, current) {
@@ -284,6 +287,16 @@ angular.module('project_questions')
             id: service.project.id,
             detail_id: future.page.section.id,
             detail_action: 'navigation'
+        }, function(response) {
+            response.forEach(function(section) {
+                section.title = $sce.trustAsHtml(section.title);
+
+                if (angular.isDefined(section.pages)) {
+                    section.pages.forEach(function(page) {
+                        page.title = $sce.trustAsHtml(page.title);
+                    })
+                }
+            })
         });
 
         return future.navigation.$promise
@@ -293,8 +306,10 @@ angular.module('project_questions')
         // store attributes in a separate array
         if (page.attribute !== null) future.attributes.push(page.attribute);
 
-        // mark the help text of the question set 'save'
+        // mark the help text of the question set 'safe'
         page.help = $sce.trustAsHtml(page.help);
+        page.title = $sce.trustAsHtml(page.title);
+        page.section.title = $sce.trustAsHtml(page.section.title);
 
         // init questions and question sets
         page.elements.forEach(function(element) {
@@ -312,8 +327,9 @@ angular.module('project_questions')
         // store questionsets in a separate array
         future.questionsets.push(questionset);
 
-        // mark the help text of the question set 'save'
+        // mark the help text of the question set 'safe'
         questionset.help = $sce.trustAsHtml(questionset.help);
+        questionset.title = $sce.trustAsHtml(questionset.title);
 
         // init questions and question sets
         questionset.elements.forEach(function(element) {
@@ -334,6 +350,7 @@ angular.module('project_questions')
 
         // mark the help text of the question set 'save'
         question.help = $sce.trustAsHtml(question.help);
+        question.text = $sce.trustAsHtml(question.text);
 
         // this is a question!
         question.isQuestion = true;

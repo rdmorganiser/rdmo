@@ -5,7 +5,7 @@
         {% trans 'Project' %}: <a href="{% url 'project' project.id %}">{$ service.project.title $}</a>
     </li>
     <li>
-        {% trans 'Catalog' %}: {$ service.project.catalog.title $}
+        {% trans 'Catalog' %}: <span ng-bind-html="service.project.catalog.title"></span>
     </li>
 </ul>
 
