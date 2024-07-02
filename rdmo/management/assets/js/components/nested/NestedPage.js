@@ -21,7 +21,7 @@ const NestedPage = ({ config, page, configActions, elementActions }) => {
   const updateFilterString = (uri) => configActions.updateConfig('filter.page.search', uri)
   const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.page.uri_prefix', uriPrefix)
 
-  const toggleQuestionSets = () => configActions.toggleDescandants(page, 'questionsets')
+  const toggleQuestionSets = () => configActions.toggleDescendants(page, 'questionsets')
 
   const updateDisplayPagesURI = (value) => configActions.updateConfig('display.uri.pages', value)
   const updateDisplayQuestionSetsURI = (value) => configActions.updateConfig('display.uri.questionsets', value)

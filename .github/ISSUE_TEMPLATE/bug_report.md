@@ -24,7 +24,7 @@ A clear and concise description of what you expected to happen.
 
 ### Context / Kontext
 
-Please state your operating system, the RDMO version, and (if applicable) the browser the error occured in.
+Please state your operating system, the RDMO version, and (if applicable) the browser the error occurred in.
 
 ### References / Verweise
 

@@ -6,7 +6,7 @@
 <!--- * My code follows the code style of this project --->
 <!--- * I added tests to cover my changes --->
 <!--- * If needed, I updated the documentation --->
-<!--- * If needed, I added tranlations if they are needed --->
+<!--- * If needed, I added translations if they are needed --->
 <!--- * If needed, I added migration files and checked for potential conflicts --->
 
 <!--- This project only accepts pull requests related to open issues. --->
@@ -18,7 +18,7 @@
 ## Description
 <!--- Describe your changes in detail --->
 
-<!--- Please link to a releated issue here --->
+<!--- Please link to a related issue here --->
 Related issue: #ISSUE_NUMBER
 
 ## Motivation and Context
