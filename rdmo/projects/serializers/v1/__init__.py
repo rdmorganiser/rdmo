@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
@@ -306,6 +307,19 @@ class InviteSerializer(serializers.ModelSerializer):
             'timestamp'
         )
 
+class UserInviteSerializer(InviteSerializer):
+
+    title = serializers.CharField(source='project.title')
+    description = serializers.CharField(source='project.description')
+
+    class Meta:
+        model = Invite
+        fields = (
+            *InviteSerializer.Meta.fields,
+            'title',
+            'description',
+            'token',
+        )
 
 class IssueResourceSerializer(serializers.ModelSerializer):
 

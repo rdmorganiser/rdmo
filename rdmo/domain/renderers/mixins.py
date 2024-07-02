@@ -1,6 +1,6 @@
 class AttributeRendererMixin:
 
-    def render_attribute(self, xml, attribute):
+    def render_attribute(self, xml, attribute, include_children=True):
         if attribute['uri'] not in self.uris:
             self.uris.add(attribute['uri'])
 
@@ -12,6 +12,10 @@ class AttributeRendererMixin:
             self.render_text_element(xml, 'parent', {'dc:uri': attribute['parent']}, None)
             xml.endElement('attribute')
 
-        if 'children' in attribute and attribute['children']:
-            for child in attribute['children']:
+        if include_children:
+            for child in attribute.get('children', []):
                 self.render_attribute(xml, child)
+
+        parent_data = attribute.get('parent_data')
+        if parent_data:
+            self.render_attribute(xml, parent_data, include_children=False)

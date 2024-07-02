@@ -10,6 +10,7 @@ from rdmo.core.exports import XMLResponse
 from rdmo.core.filters import SearchFilter
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import is_truthy, render_to_format
+from rdmo.management.viewsets import ElementToggleCurrentSiteViewSetMixin
 
 from .models import Task
 from .renderers import TaskRenderer
@@ -17,7 +18,7 @@ from .serializers.export import TaskExportSerializer
 from .serializers.v1 import TaskIndexSerializer, TaskSerializer
 
 
-class TaskViewSet(ModelViewSet):
+class TaskViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = TaskSerializer
     queryset = Task.objects.select_related('start_attribute', 'end_attribute') \

@@ -64,6 +64,7 @@ class PageSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
             'attribute',
             'is_collection',
             'title',
+            'short_title',
             'help',
             'verbose_name',
             'sections',
@@ -78,6 +79,7 @@ class PageSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
         )
         trans_fields = (
             'title',
+            'short_title',
             'help',
             'verbose_name'
         )

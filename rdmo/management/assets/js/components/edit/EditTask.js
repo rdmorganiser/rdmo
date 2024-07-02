@@ -25,7 +25,7 @@ const EditTask = ({ config, task, elements, elementActions}) => {
   const { elementAction, attributes, catalogs, conditions } = elements
 
   const updateTask = (key, value) => elementActions.updateElement(task, {[key]: value})
-  const storeTask = (back) => elementActions.storeElement('tasks', task, back)
+  const storeTask = (back) => elementActions.storeElement('tasks', task, elementAction, back)
   const deleteTask = () => elementActions.deleteElement('tasks', task)
 
   const editCondition = (condition) => elementActions.fetchElement('conditions', condition)

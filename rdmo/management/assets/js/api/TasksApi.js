@@ -14,11 +14,12 @@ class TasksApi extends BaseApi {
     return this.get(`/api/v1/tasks/tasks/${id}/`)
   }
 
-  static storeTask(task) {
+  static storeTask(task, action) {
     if (isNil(task.id)) {
       return this.post('/api/v1/tasks/tasks/', task)
     } else {
-      return this.put(`/api/v1/tasks/tasks/${task.id}/`, task)
+      const actionPath = isNil(action) ? '' : `${action}/`
+      return this.put(`/api/v1/tasks/tasks/${task.id}/${actionPath}`, task)
     }
   }
 

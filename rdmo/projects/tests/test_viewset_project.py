@@ -45,6 +45,8 @@ urlnames = {
     'navigation': 'v1-projects:project-navigation',
     'options': 'v1-projects:project-options',
     'resolve': 'v1-projects:project-resolve',
+    'upload_accept': 'v1-projects:project-upload-accept',
+    'imports': 'v1-projects:project-imports'
 }
 
 projects = [1, 2, 3, 4, 5]
@@ -359,3 +361,32 @@ def test_options_text_and_help(db, client, mocker):
             'text_and_help': 'Simple answer 1'
         }
     ]
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_upload_accept(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['upload_accept'])
+    response = client.get(url)
+
+    if password:
+        assert response.status_code == 200
+        assert response.json() == '.xml'
+    else:
+        assert response.status_code == 401
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_imports(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['imports'])
+    response = client.get(url)
+
+    if password:
+        assert response.status_code == 200
+        assert len(response.json()) == 1
+        assert response.json()[0]['key'] == 'url'
+    else:
+        assert response.status_code == 401

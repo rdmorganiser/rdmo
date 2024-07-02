@@ -24,7 +24,7 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
   const { elementAction, parent, attributes, optionsets, options, conditions } = elements
 
   const updateQuestion = (key, value) => elementActions.updateElement(question, {[key]: value})
-  const storeQuestion = (back) => elementActions.storeElement('questions', question, back)
+  const storeQuestion = (back) => elementActions.storeElement('questions', question, elementAction, back)
   const deleteQuestion = () => elementActions.deleteElement('questions', question)
 
   const editOptionSet = (optionset) => elementActions.fetchElement('optionsets', optionset)

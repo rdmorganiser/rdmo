@@ -91,3 +91,45 @@ def test_progress_post(db, client, username, password, project_id):
             assert response.status_code == 404
         else:
             assert response.status_code == 401
+
+
+def test_progress_post_changed(db, client):
+    client.login(username='owner', password='owner')
+
+    project = Project.objects.get(id=1)
+    project.progress_count = progress_count = 0
+    project.progress_total = progress_total = 0
+    project.save()
+    project.refresh_from_db()
+    project_updated = project.updated
+
+    url = reverse(urlnames['progress'], args=[1])
+    response = client.post(url)
+
+    project.refresh_from_db()
+
+    assert response.status_code == 200
+    assert project.updated > project_updated
+    assert project.progress_count > progress_count
+    assert project.progress_total > progress_total
+
+
+def test_progress_post_unchanged(db, client):
+    client.login(username='owner', password='owner')
+
+    project = Project.objects.get(id=1)
+    project.progress_count = progress_count = 58  # the progres in the fixture is not up-to-date
+    project.progress_total = progress_total = 81
+    project.save()
+    project.refresh_from_db()
+    project_updated = project.updated
+
+    url = reverse(urlnames['progress'], args=[1])
+    response = client.post(url)
+
+    project.refresh_from_db()
+
+    assert response.status_code == 200
+    assert project.progress_count == progress_count
+    assert project.progress_total == progress_total
+    assert project.updated == project_updated

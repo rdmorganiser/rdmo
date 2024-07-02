@@ -1,183 +1,41 @@
-{% extends 'core/page.html' %}
-{% load i18n %}
+{% extends 'core/projects_page.html' %}
 {% load static %}
 {% load compress %}
-{% load mptt_tags %}
+{% load i18n %}
 {% load core_tags %}
-{% load accounts_tags %}
-{% load projects_tags %}
-{% load rules %}
 
-{% block head %}
+{% block vendor %}
+{% endblock %}
+
+{% block css %}
     {% compress css %}
-    <link rel="stylesheet" href="{% static 'projects/css/projects.scss' %}" type="text/x-scss" />
     <link rel="stylesheet" href="{% static 'overlays/css/overlays.scss' %}" type="text/x-scss" />
     {% endcompress %}
-    {% compress js %}
+
+    <link rel="stylesheet" href="{% static 'projects/css/projects.css' %}" />
+    {{ block.super }}
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'jquery/jquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+
+    <script src="{% url 'javascript-catalog' %}"></script>
+    <script src="{% static 'projects/js/projects.js' %}" defer></script>
+
     <script type="text/javascript" src="{% static 'overlays/js/overlays.js' %}" ></script>
-    {% endcompress %}
     <script>
-        $(document).ready(function() { initOverlays('projects'); });
+        $(document).ready(function() {
+            setTimeout(function() {initOverlays('projects')}, 500);
+        });
     </script>
 {% endblock %}
 
-{% block sidebar %}
-    {% has_perm 'projects.add_project' request.user as can_add_project %}
-    {% test_rule 'projects.can_view_all_projects' request.user request as can_view_all_projects %}
-
-    {% if can_add_project or can_view_all_projects %}
-    <h2>{% trans 'Options' %}</h2>
-
-    {% if can_add_project %}
-    <ul class="list-unstyled">
-        <li>
-            <strong>
-                <a href="{% url 'project_create' %}" id="create-project">
-                    {% trans 'Create new project' %}
-                </a>
-            </strong>
-        </li>
-    </ul>
-    {% endif %}
-
-    {% if can_view_all_projects %}
-    <ul class="list-unstyled">
-        <li>
-            <a href="{% url 'site_projects' %}">
-                {% blocktrans trimmed with site=request.site %}View all projects on {{ site }}{% endblocktrans %}
-            </a>
-        </li>
-    </ul>
-    {% endif %}
-    {% endif %}
-
-    <h2>{% trans 'Filter projects' %}</h2>
-
-    <form method="GET" class="projects-search">
-        <input type="text" class="form-control" id="search" name="title" placeholder="{% trans 'Search project title' %}"
-               value="{{request.GET.title }}" />
-        <a href="{% url 'projects' %}" class="projects-search-reset">
-            <i class="fa fa-times" aria-hidden="true"></i>
-        </a>
-        <p class="text-muted">
-            <small>
-                {% blocktrans trimmed %}
-                {{ number_of_filtered_projects }} of {{ number_of_projects }} projects shown
-                {% endblocktrans %}
-            </small>
-        </p>
-    </form>
-
-    {% if can_add_project %}
-
-    <h2>{% trans 'Import existing project' %}</h2>
-
-    <ul class="list-unstyled">
-        <li id="import-project">
-            <p>
-                <strong>{% trans 'Import from file' %}</strong>
-            </p>
-            {% url 'project_create_import' as upload_url %}
-            {% include 'core/upload_form.html' with upload_url=upload_url %}
-        </li>
-
-        {% if settings.PROJECT_IMPORTS_LIST %}
-        <li>
-            <p>
-                <strong>{% trans 'Import directly' %}</strong>
-            </p>
-        </li>
-        {% for key, label, class in settings.PROJECT_IMPORTS %}
-        {% if key in settings.PROJECT_IMPORTS_LIST %}
-        <li>
-            <a href="{% url 'project_create_import' key %}" target="_blank">
-                {{ label }}
-            </a>
-        </li>
-        {% endif %}
-        {% endfor %}
-        {% endif %}
-    </ul>
-
-    {% endif %}
-
-    {% if invites %}
-
-    <h2>{% trans 'Pending invitations' %}</h2>
-
-    <ul class="list-unstyled">
-        {% for invite in invites %}
-        <li>
-            <a class="pull-right" href="{% url 'project_cancel' invite.token %}">
-                <i class="fa fa-times" aria-hidden="true"></i>
-            </a>
-            <a href="{% url 'project_join' invite.token %}">
-                {{ invite.project.title }}
-            </a>
-        </li>
-        {% endfor %}
-    </ul>
-
-    <p class="text-muted small">
-        {% blocktrans trimmed %}
-        Click on one of the links to join the projects.
-        {% endblocktrans %}
-    </p>
-    {% endif %}
-
-{% endblock %}
-
 {% block page %}
-    <h1>{% trans 'My Projects' %}</h1>
 
-    <table class="table projects-table" id="projects-table">
-        <thead>
-            <tr>
-                <th style="width: 50%;">{% trans 'Name' %}</th>
-                <th style="width: 10%;">{% trans 'Progress' %}</th>
-                <th style="width: 10%;">{% trans 'Role' %}</th>
-                <th style="width: 23%;">{% trans 'Last changed' %}</th>
-                <th style="width: 7%;"></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for project in projects %}
-            <tr>
-                <td>
-                    <a class="" href="{% url 'project' project.pk %}">
-                    {% for ancestor in project.get_ancestors %}{{ ancestor }} / {% endfor %}
-                    <strong>{{ project.title }}</strong>
-                    </a>
-                </td>
-                <td>
-                    {% project_progress project %}
-                </td>
-                <td>
-                    {{ project.role|projects_role }}
-                </td>
-                <td>
-                    {{ project.last_changed }}
-                </td>
-                <td class="text-right">
-                    {% has_perm 'projects.change_project_object' request.user project as can_change_project_object %}
-                    {% has_perm 'projects.delete_project_object' request.user project as can_delete_project_object %}
-
-                    {% if can_change_project_object %}
-                    <a href="{% url 'project_update' project.pk %}?next={% url 'projects' %}" class="fa fa-pencil"></a>
-                    {% endif %}
-
-                    {% if can_delete_project_object %}
-                    <a href="{% url 'project_delete' project.pk %}?next={% url 'projects' %}" class="fa fa-trash"></a>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div id="main" class="projects"></div>
 
     <div id="support-info"></div>
-
-    {% include 'projects/projects_pagination.html' %}
 
     {% render_lang_template 'projects/overlays/projects_create_project' %}
     {% render_lang_template 'projects/overlays/projects_projects_table' %}

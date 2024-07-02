@@ -47,6 +47,7 @@ class SectionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
             'comment',
             'locked',
             'title',
+            'short_title',
             'catalogs',
             'pages',
             'editors',
@@ -55,6 +56,7 @@ class SectionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
         )
         trans_fields = (
             'title',
+            'short_title'
         )
         parent_fields = (
             ('catalogs', 'catalog', 'section', 'catalog_sections'),

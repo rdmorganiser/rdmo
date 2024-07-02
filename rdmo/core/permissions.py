@@ -74,3 +74,14 @@ class HasObjectPermission(DjangoObjectPermissions):
             return True
         else:
             return False
+
+
+class CanToggleElementCurrentSite(DjangoModelPermissions):
+
+    perms_map = {
+        'PUT': ['%(app_label)s.change_%(model_name)s_toggle_site'],
+    }
+
+    @log_result
+    def has_permission(self, request, view):
+        return super().has_permission(request, view)

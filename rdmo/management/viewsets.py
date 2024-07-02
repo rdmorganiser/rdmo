@@ -1,14 +1,17 @@
 import logging
 
+from django.contrib.sites.shortcuts import get_current_site
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import viewsets
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 
 from rdmo.conditions.models import Condition
 from rdmo.core.imports import handle_uploaded_file
+from rdmo.core.permissions import CanToggleElementCurrentSite
 from rdmo.core.utils import get_model_field_meta, is_truthy
 from rdmo.core.xml import convert_elements, flat_xml_to_elements, order_elements, read_xml_file
 from rdmo.domain.models import Attribute
@@ -110,3 +113,19 @@ class ImportViewSet(viewsets.ViewSet):
 
         # step 4: return the list of elements
         return Response(elements)
+
+
+class ElementToggleCurrentSiteViewSetMixin:
+
+    @action(detail=True, methods=['put'], url_path="toggle-site", permission_classes=[CanToggleElementCurrentSite])
+    def toggle_site(self, request, pk=None):
+        obj = self.get_object()
+        current_site = get_current_site(request)
+        has_current_site = obj.sites.filter(id=current_site.id).exists()
+        if has_current_site:
+            obj.sites.remove(current_site)
+        else:
+            obj.sites.add(current_site)
+        # need to return obj element for ElementSucces reducer?
+        serializer = self.serializer_class(obj, context={'request': request})
+        return Response(serializer.data)

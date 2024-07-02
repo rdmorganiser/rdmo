@@ -45,6 +45,7 @@ class SectionRendererMixin:
 
             for lang_code, lang_string, lang_field in get_languages():
                 self.render_text_element(xml, 'title', {'lang': lang_code}, section['title_%s' % lang_code])
+                self.render_text_element(xml, 'short_title', {'lang': lang_code}, section['short_title_%s' % lang_code])
 
             xml.startElement('pages', {})
             for section_page in section['section_pages']:
@@ -82,6 +83,8 @@ class PageRendererMixin:
             for lang_code, lang_string, lang_field in get_languages():
                 self.render_text_element(xml, 'title', {'lang': lang_code},
                                          page['title_%s' % lang_code])
+                self.render_text_element(xml, 'short_title', {'lang': lang_code},
+                                         page['short_title_%s' % lang_code])
                 self.render_text_element(xml, 'help', {'lang': lang_code},
                                          page['help_%s' % lang_code])
                 self.render_text_element(xml, 'verbose_name', {'lang': lang_code},

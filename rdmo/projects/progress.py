@@ -52,8 +52,8 @@ def compute_navigation(section, project, snapshot=None):
         navigation_section = {
             'id': catalog_section.id,
             'uri': catalog_section.uri,
-            'title': catalog_section.title,
-            'first': catalog_section.elements[0].id if section.elements else None
+            'title': catalog_section.short_title or catalog_section.title,
+            'first': catalog_section.elements[0].id if catalog_section.elements else None
         }
         if catalog_section.id == section.id:
             navigation_section['pages'] = []
@@ -71,7 +71,7 @@ def compute_navigation(section, project, snapshot=None):
                 navigation_section['pages'].append({
                     'id': page.id,
                     'uri': page.uri,
-                    'title': page.title,
+                    'title': page.short_title or page.title,
                     'show': show,
                     'count': count,
                     'total': total

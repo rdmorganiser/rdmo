@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 const ReadOnlyIcon = ({ title, show }) => {
   return show && (
-    <i className="fa fa-ban" title={title}></i>
+    <i className="element-button fa fa-ban" title={title}></i>
   )
 }
 

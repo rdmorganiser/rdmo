@@ -24,7 +24,7 @@ const EditSection = ({ config, section, elements, elementActions }) => {
   const { elementAction, parent, pages } = elements
 
   const updateSection = (key, value) => elementActions.updateElement(section, {[key]: value})
-  const storeSection = (back) => elementActions.storeElement('sections', section, back)
+  const storeSection = (back) => elementActions.storeElement('sections', section, elementAction, back)
   const deleteSection = () => elementActions.deleteElement('sections', section)
 
   const editPage = (value) => elementActions.fetchElement('pages', value.page)
@@ -92,6 +92,8 @@ const EditSection = ({ config, section, elements, elementActions }) => {
             config.settings && config.settings.languages.map(([lang_code, lang], index) => (
               <Tab key={index} eventKey={index} title={lang}>
                 <Text config={config} element={section} field={`title_${lang_code }`}
+                      onChange={updateSection} />
+                <Text config={config} element={section} field={`short_title_${lang_code }`}
                       onChange={updateSection} />
               </Tab>
             ))

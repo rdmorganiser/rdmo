@@ -81,3 +81,9 @@ OPTIONSET_PROVIDERS = [
 PROJECT_ISSUE_PROVIDERS = [
     ('simple', _('Simple provider'), 'rdmo.projects.providers.SimpleIssueProvider')
 ]
+
+PROJECT_IMPORTS += [
+    ('url', _('from URL'), 'rdmo.projects.imports.URLImport'),
+]
+
+PROJECT_IMPORTS_LIST = ['url']

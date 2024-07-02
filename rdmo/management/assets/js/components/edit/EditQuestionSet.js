@@ -45,7 +45,7 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
       elementActions.updateElement(questionset, { [key]: value })
     }
   }
-  const storeQuestionSet = (back) => elementActions.storeElement('questionsets', questionset, back)
+  const storeQuestionSet = (back) => elementActions.storeElement('questionsets', questionset, elementAction, back)
   const deleteQuestionSet = () => elementActions.deleteElement('questionsets', questionset)
 
   const editElement = (value) => {
@@ -70,8 +70,8 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
 
   // for reasons unknown, the strings are not picked up by makemessages from the props
   const addElementText = gettext('Add existing element')
-  const createQuestionText = gettext('Create new question set')
-  const createQuestionSetText = gettext('Create new question')
+  const createQuestionText = gettext('Create new question')
+  const createQuestionSetText = gettext('Create new question set')
 
   return (
     <div className="panel panel-default panel-edit">

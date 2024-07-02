@@ -23,7 +23,7 @@ const EditAttribute = ({ config, attribute, elements, elementActions }) => {
 
   const editAttribute = (attribute) => elementActions.fetchElement('attributes', attribute)
   const updateAttribute = (key, value) => elementActions.updateElement(attribute, {[key]: value})
-  const storeAttribute = (back) => elementActions.storeElement('attributes', attribute, back)
+  const storeAttribute = (back) => elementActions.storeElement('attributes', attribute, elementAction, back)
   const deleteAttribute = () => elementActions.deleteElement('attributes', attribute)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
