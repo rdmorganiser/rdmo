@@ -75,6 +75,7 @@ def import_section(element, save=False, user=None):
     set_common_fields(section, element)
 
     set_lang_field(section, 'title', element)
+    set_lang_field(section, 'short_title', element)
 
     validate_instance(section, element, SectionLockedValidator, SectionUniqueURIValidator)
 
@@ -108,6 +109,7 @@ def import_page(element, save=False, user=None):
     page.is_collection = element.get('is_collection') or False
 
     set_lang_field(page, 'title', element)
+    set_lang_field(page, 'short_title', element)
     set_lang_field(page, 'help', element)
     set_lang_field(page, 'verbose_name', element)
 
