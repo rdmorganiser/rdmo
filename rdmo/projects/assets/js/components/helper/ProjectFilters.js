@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { get } from 'lodash'
 import DatePicker from 'react-datepicker'
-import { formatISO } from 'date-fns'
+import { formatISO, set  } from 'date-fns'
 
 import { Select } from 'rdmo/core/assets/js/components'
 import useDatePicker from '../../hooks/useDatePicker'
@@ -30,14 +30,16 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
     if (position === 'start') {
       setStartDate(type, date)
       if (date) {
-        configActions.updateConfig(`params.${type}_after`, formatISO(date, { representation: 'date' }))
+        const startOfDayDate = set(date, { hours: 0, minutes: 0, seconds: 0, milliseconds: 0 })
+        configActions.updateConfig(`params.${type}_after`, formatISO(startOfDayDate, { representation: 'complete' }))
       } else {
         configActions.deleteConfig(`params.${type}_after`)
       }
     } else if (position === 'end') {
       setEndDate(type, date)
       if (date) {
-        configActions.updateConfig(`params.${type}_before`, formatISO(date, { representation: 'date' }))
+        const endOfDayDate = set(date, { hours: 23, minutes: 59, seconds: 59, milliseconds: 999 })
+        configActions.updateConfig(`params.${type}_before`, formatISO(endOfDayDate, { representation: 'complete' }))
       } else {
         configActions.deleteConfig(`params.${type}_before`)
       }
