@@ -39,10 +39,12 @@ const base = {
       {
         test: /(fonts|files)\/.*\.(svg|woff2?|ttf|eot|otf)(\?.*)?$/,
         loader: 'file-loader',
+        type: 'javascript/auto',
         options: {
           name: '[name].[ext]',
           outputPath: 'fonts',
-          postTransformPublicPath: (p) => `'../' + ${p}`
+          postTransformPublicPath: (p) => `'../' + ${p}`,
+          esModule: false,
         }
       }
     ]

@@ -13,25 +13,25 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'description', {}, project['description'])
         self.render_text_element(xml, 'catalog', {'dc:uri': project['catalog']}, None)
 
-        if 'tasks' in project and project['tasks']:
+        if project.get('tasks'):
             xml.startElement('tasks', {})
             for task in project['tasks']:
                 self.render_text_element(xml, 'task', {'dc:uri': task}, None)
             xml.endElement('tasks')
 
-        if 'views' in project and project['views']:
+        if project.get('views'):
             xml.startElement('views', {})
             for view in project['views']:
                 self.render_text_element(xml, 'view', {'dc:uri': view}, None)
             xml.endElement('views')
 
-        if 'snapshots' in project and project['snapshots']:
+        if project.get('snapshots'):
             xml.startElement('snapshots', {})
             for snapshot in project['snapshots']:
                 self.render_snapshot(xml, snapshot)
             xml.endElement('snapshots')
 
-        if 'values' in project and project['values']:
+        if project.get('values'):
             xml.startElement('values', {})
             for value in project['values']:
                 self.render_value(xml, value)
@@ -46,7 +46,7 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'title', {}, snapshot['title'])
         self.render_text_element(xml, 'description', {}, snapshot['description'])
 
-        if 'values' in snapshot and snapshot['values']:
+        if snapshot.get('values'):
             xml.startElement('values', {})
             for value in snapshot['values']:
                 self.render_value(xml, value)

@@ -14,6 +14,11 @@ on:
       - conftest.py
       - package.json
       - pyproject.toml
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review # this is needed to trigger checks, when an auto-generated "draft" PR is set for "ready for review".
 
 # Ref: https://docs.github.com/en/actions/using-jobs/using-concurrency
 concurrency:
@@ -32,14 +37,14 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v4
-    - uses: actions/setup-python@v4
+    - uses: actions/setup-python@v5
       with:
         python-version: "3.12"
         cache: pip
     - run: python -m pip install --upgrade pip
     - run: python -m pip install --editable .[dev]
     - name: Set up pre-commit cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.cache/pre-commit
         key: lint-${{ hashFiles('.pre-commit-config.yaml') }}
@@ -57,7 +62,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
         cache: pip
@@ -83,6 +88,11 @@ jobs:
       run: |
         cp -r testing/media testing/media_root
         mkdir testing/log
+    - name: Run package status tests first
+      run: |
+        pytest rdmo/core/tests/test_package_status.py::test_package_json_and_pre_commit_versions_match \
+        --nomigrations --verbose
+      if: matrix.python-version == '3.12' && matrix.db-backend == 'postgres'
     - name: Run Tests
       run: |
         pytest -p randomly -p no:cacheprovider --cov --reuse-db --numprocesses=auto --dist=loadscope
@@ -111,7 +121,7 @@ jobs:
       env:
         DJANGO_DEBUG: True
         GITHUB_DB_BACKEND: ${{ matrix.db-backend }}
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: screenshots
         path: screenshots/*.png
@@ -159,7 +169,7 @@ jobs:
         cache: npm
     - run: npm install
     - run: npm run build:prod
-    - uses: actions/setup-python@v4
+    - uses: actions/setup-python@v5
       with:
         python-version: '3.12'
         cache: pip
@@ -180,7 +190,7 @@ jobs:
         python -m pip show rdmo >> $GITHUB_STEP_SUMMARY
         echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
     - name: Upload wheel as artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: wheel
         path: dist/rdmo*.whl
@@ -196,7 +206,7 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: pip
@@ -208,7 +218,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: pip
