@@ -63,6 +63,14 @@ class ProjectDateFilterBackend(BaseFilterBackend):
         if updated_after:
             queryset = queryset.filter(updated__gte=updated_after)
 
+        last_changed_before = self.parse_query_datetime(request, 'last_changed_before')
+        if last_changed_before:
+            queryset = queryset.filter(last_changed__lte=last_changed_before)
+
+        last_changed_after = self.parse_query_datetime(request, 'last_changed_after')
+        if last_changed_after:
+            queryset = queryset.filter(last_changed__gte=last_changed_after)
+
         return queryset
 
     def parse_query_datetime(self, request, key):
