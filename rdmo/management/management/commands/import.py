@@ -1,9 +1,8 @@
 import logging
 
 from django.core.management.base import BaseCommand, CommandError
-from django.utils.translation import gettext_lazy as _
 
-from rdmo.core.xml import convert_elements, flat_xml_to_elements, order_elements, read_xml_file
+from rdmo.core.xml import parse_xml_to_elements
 from rdmo.management.imports import import_elements
 
 logger = logging.getLogger(__name__)
@@ -15,16 +14,16 @@ class Command(BaseCommand):
         parser.add_argument('xmlfile', action='store', default=False, help='RDMO XML export file')
 
     def handle(self, *args, **options):
-        root = read_xml_file(options['xmlfile'])
-        if root is None:
-            raise CommandError(_('The content of the xml file does not consist of well formed data or markup.'))
-        elif root.tag != 'rdmo':
-            raise CommandError(_('This XML does not contain RDMO content.'))
-        else:
-            version = root.attrib.get('version')
-            elements = flat_xml_to_elements(root)
-            elements = convert_elements(elements, version)
-            elements = order_elements(elements)
-            elements = elements.values()
 
-            import_elements(elements)
+        try:
+            xml_parsed_elements, errors = parse_xml_to_elements(xml_file=options['xmlfile'])
+        except CommandError as e:
+            logger.info('Import failed with XML parsing errors.')
+            raise CommandError(str(e)) from e
+
+        # raise exception when xml parsing returned any errors
+        if errors:
+            logger.info('Import failed with XML validation errors.')
+            raise CommandError(" ".join(map(str, errors)))
+
+        import_elements(xml_parsed_elements)

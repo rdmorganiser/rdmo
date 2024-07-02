@@ -77,3 +77,17 @@ HUMAN2BYTES_MAPPER = {
     "tib": {"base": 1024, "power": 4},
     "pib": {"base": 1024, "power": 5},
 }
+
+RDMO_MODELS = {
+  'catalog': 'questions.catalog',
+  'section': 'questions.section',
+  'page': 'questions.page',
+  'questionset': 'questions.questionset',
+  'question': 'questions.question',
+  'attribute': 'domain.attribute',
+  'optionset': 'options.optionset',
+  'option': 'options.option',
+  'condition': 'conditions.condition',
+  'task': 'tasks.task',
+  'view': 'views.view'
+}

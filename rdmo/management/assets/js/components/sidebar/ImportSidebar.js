@@ -4,9 +4,16 @@ import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 
 import Link from 'rdmo/core/assets/js/components/Link'
+import {useImportElements} from '../../hooks/useImportElements'
+
 
 const ImportSidebar = ({ config, imports, importActions }) => {
   const { elements, success } = imports
+
+   const {
+    changedElements,
+  } = useImportElements(elements)
+
   const count = elements.filter(e => e.import).length
   const [uriPrefix, setUriPrefix] = useState('')
   const disabled = isNil(uriPrefix) || isEmpty(uriPrefix)
@@ -33,7 +40,6 @@ const ImportSidebar = ({ config, imports, importActions }) => {
     return (
       <div className="import-sidebar">
         <h2>{gettext('Import elements')}</h2>
-
         <p className="import-buttons">
           <button className="btn btn-success" onClick={() => importActions.importElements()}>
             {interpolate(ngettext('Import one element', 'Import %s elements', count), [count])}
@@ -51,12 +57,54 @@ const ImportSidebar = ({ config, imports, importActions }) => {
               {gettext('Select all')}
             </Link>
           </li>
+          {changedElements.length > 0 &&
+            <li>
+              <Link onClick={() => importActions.selectChangedElements(true)}>
+                {gettext('Select changed')}
+              </Link>
+            </li>
+          }
           <li>
             <Link onClick={() => importActions.selectElements(false)}>
-              {gettext('Unselect all')}
+              {gettext('Deselect all')}
             </Link>
           </li>
+          {changedElements.length > 0 &&
+            <li>
+              <Link onClick={() => importActions.selectChangedElements(false)}>
+                {gettext('Deselect changed')}
+              </Link>
+            </li>
+          }
         </ul>
+
+          <h2>{gettext('Show')}</h2>
+          <ul className="list-unstyled">
+          <li>
+            <Link onClick={() => importActions.showElements(true)}>
+              {gettext('Show all')}
+            </Link>
+          </li>
+          {changedElements.length > 0 &&
+            <li>
+              <Link onClick={() => importActions.showChangedElements(true)}>
+                {gettext('Show changes')}
+              </Link>
+            </li>
+          }
+          <li>
+            <Link onClick={() => importActions.showElements(false)}>
+              {gettext('Hide all')}
+            </Link>
+          </li>
+            {changedElements.length > 0 &&
+              <li>
+                <Link onClick={() => importActions.showChangedElements(false)}>
+                  {gettext('Hide changes')}
+                </Link>
+              </li>
+            }
+          </ul>
 
         <h2>{gettext('URI prefix')}</h2>
 

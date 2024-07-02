@@ -8,7 +8,7 @@ import { fetchElements, fetchElement } from './elementActions'
 
 export function uploadFile(file) {
   return function(dispatch) {
-    dispatch(uploadFileInit())
+    dispatch(uploadFileInit(file))
 
     return ManagementApi.uploadFile(file)
       .then(elements => dispatch(uploadFileSuccess(elements)))
@@ -18,8 +18,8 @@ export function uploadFile(file) {
   }
 }
 
-export function uploadFileInit() {
-  return {type: 'import/uploadFileInit'}
+export function uploadFileInit(file) {
+  return {type: 'import/uploadFileInit', file: file}
 }
 
 export function uploadFileSuccess(elements) {
@@ -64,6 +64,16 @@ export function updateElement(element, values) {
 
 export function selectElements(value) {
   return {type: 'import/selectElements', value}
+}
+export function selectChangedElements(value) {
+  return {type: 'import/selectChangedElements', value}
+}
+
+export function showElements(value) {
+  return {type: 'import/showElements', value}
+}
+export function showChangedElements(value) {
+  return {type: 'import/showChangedElements', value}
 }
 
 export function updateUriPrefix(uriPrefix) {

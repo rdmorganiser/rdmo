@@ -1,66 +1,141 @@
-from collections import defaultdict
+import copy
+import logging
+from typing import AbstractSet, Dict, List, Optional
 
-from rdmo.conditions.imports import import_condition
-from rdmo.domain.imports import import_attribute
-from rdmo.options.imports import import_option, import_optionset
-from rdmo.questions.imports import import_catalog, import_page, import_question, import_questionset, import_section
-from rdmo.tasks.imports import import_task
-from rdmo.views.imports import import_view
+from django.conf import settings
+from django.contrib.sites.shortcuts import get_current_site
+from django.http import HttpRequest
 
+from rdmo.conditions.imports import import_helper_condition
+from rdmo.core.imports import (
+    check_permissions,
+    get_or_return_instance,
+    make_import_info_msg,
+    validate_instance,
+)
+from rdmo.core.xml import order_elements
+from rdmo.domain.imports import import_helper_attribute
+from rdmo.management.import_utils import (
+    add_current_site_to_sites_and_editor,
+    apply_field_values,
+    initialize_import_element_dict,
+    strip_uri_prefix_endswith_slash,
+    update_related_fields,
+)
+from rdmo.options.imports import import_helper_option, import_helper_optionset
+from rdmo.questions.imports import (
+    import_helper_catalog,
+    import_helper_page,
+    import_helper_question,
+    import_helper_questionset,
+    import_helper_section,
+)
+from rdmo.tasks.imports import import_helper_task
+from rdmo.views.imports import import_helper_view
 
-def import_elements(elements, save=True, user=None):
-    for element in elements:
-        model = element.get('model')
+logger = logging.getLogger(__name__)
 
-        element.update({
-            'warnings': defaultdict(list),
-            'errors': [],
-            'created': False,
-            'updated': False
-        })
-
-        if model == 'conditions.condition':
-            import_condition(element, save, user)
-
-        elif model == 'domain.attribute':
-            import_attribute(element, save, user)
-
-        elif model == 'options.optionset':
-            import_optionset(element, save, user)
-
-        elif model == 'options.option':
-            import_option(element, save, user)
-
-        elif model == 'questions.catalog':
-            import_catalog(element, save, user)
-
-        elif model == 'questions.section':
-            import_section(element, save, user)
-
-        elif model == 'questions.page':
-            import_page(element, save, user)
-
-        elif model == 'questions.questionset':
-            import_questionset(element, save, user)
-
-        elif model == 'questions.question':
-            import_question(element, save, user)
-
-        elif model == 'tasks.task':
-            import_task(element, save, user)
-
-        elif model == 'views.view':
-            import_view(element, save, user)
-
-        element = filter_warnings(element, elements)
+ELEMENT_IMPORT_HELPERS = {
+    "conditions.condition": import_helper_condition,
+    "domain.attribute": import_helper_attribute,
+    "options.optionset": import_helper_optionset,
+    "options.option": import_helper_option,
+    "questions.catalog": import_helper_catalog,
+    "questions.section": import_helper_section,
+    "questions.page": import_helper_page,
+    "questions.questionset": import_helper_questionset,
+    "questions.question": import_helper_question,
+    "tasks.task": import_helper_task,
+    "views.view": import_helper_view
+}
 
 
-def filter_warnings(element, elements):
-    # remove warnings regarding elements which are in the elements list
-    warnings = []
-    for uri, messages in element['warnings'].items():
-        if not next(filter(lambda e: e['uri'] == uri, elements), None):
-            warnings += messages
+def import_elements(uploaded_elements: Dict, save: bool = True, request: Optional[HttpRequest] = None) -> List[Dict]:
+    imported_elements = []
+    uploaded_elements_ordering_index = {uri: n for n, uri in enumerate(uploaded_elements.keys())}
+    uploaded_uris = set(uploaded_elements.keys())
+    current_site = get_current_site(request)
+    if save:
+        # when saving, the descendant elements go first
+        uploaded_elements = order_elements(uploaded_elements, descendants_first=True)
 
-    element['warnings'] = warnings
+    for _uri, uploaded_element in uploaded_elements.items():
+        element = import_element(element=uploaded_element,
+                                 save=save,
+                                 uploaded_uris=uploaded_uris,
+                                 request=request,
+                                 current_site=current_site)
+        element['warnings'] = {k: val for k, val in element['warnings'].items() if k not in uploaded_uris}
+        imported_elements.append(element)
+
+    # sort elements back to order of uploaded elements
+    imported_elements = sorted(imported_elements,
+                               key=lambda x: uploaded_elements_ordering_index.get(x['uri'], float('inf')))
+
+    return imported_elements
+
+
+def import_element(
+        element: Optional[Dict] = None,
+        save: bool = True,
+        request: Optional[HttpRequest] = None,
+        uploaded_uris: Optional[AbstractSet[str]] = None,
+        current_site = None
+    ) -> Dict:
+
+    if element is None or not isinstance(element, dict):
+        return {}
+    if 'model' not in element:
+        return {}
+
+    initialize_import_element_dict(element)
+
+    import_helper = ELEMENT_IMPORT_HELPERS[element['model']]
+
+    uri = element.get('uri')
+    # get or create instance from uri and model
+    instance, created = get_or_return_instance(import_helper.model, uri=uri)
+
+    # keep a copy of the original
+    # when the element is updated
+    # needs to be created here, else the changes will be overwritten
+    original = copy.deepcopy(instance) if not created else None
+
+    # prepare a log message
+    msg = make_import_info_msg(import_helper.model._meta.verbose_name, created, uri=uri)
+
+    # check the change or add permissions for the user on the instance
+    user = request.user if request is not None else None
+    perms_error_msg = check_permissions(instance, uri, user)
+    if perms_error_msg:
+        # when there is an error msg, the import can be stopped and return
+        element["errors"].append(perms_error_msg)
+        return element
+
+    updated = not created
+    element['created'] = created
+    element['updated'] = updated
+    # INFO: the dict element[FieldNames.diff.value] is filled by calling track_changes_on_element
+
+    element = strip_uri_prefix_endswith_slash(element)
+    # start to set values on the instance
+    apply_field_values(instance, element, import_helper, uploaded_uris, original)
+
+    # call the validators on the instance
+    validate_instance(instance, element, *import_helper.validators)
+
+    if element.get('errors'):
+        # when there is an error msg, the import can be stopped and return
+        return element
+
+    if save:
+        logger.info(msg)
+        instance.save()
+
+    if save or updated:
+        update_related_fields(instance, element, import_helper, original, save)
+
+    if save and settings.MULTISITE:
+        add_current_site_to_sites_and_editor(instance, current_site, import_helper)
+
     return element

@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 import isUndefined from 'lodash/isUndefined'
 
@@ -19,14 +18,15 @@ NestedLink.propTypes = {
   show: PropTypes.bool
 }
 
-const EditLink = ({ href, title, onClick }) => {
-  return <Link href={href} className="element-link fa fa-pencil" title={title} onClick={onClick} />
+const EditLink = ({ href, title, onClick, disabled= false }) => {
+  return <Link href={href} className="element-link fa fa-pencil" title={title} onClick={onClick} disabled={disabled} />
 }
 
 EditLink.propTypes = {
   href: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired,
+  disabled: PropTypes.bool
 }
 
 const CopyLink = ({ href, title, onClick }) => {
@@ -218,45 +218,35 @@ CodeLink.propTypes = {
   order: PropTypes.number
 }
 
-const ErrorLink = ({ element, onClick }) => {
-  return (
-    !isEmpty(element.errors) &&
-    <Link className="element-link fa fa-warning text-danger" onClick={onClick} />
-  )
+const ErrorLink = ({ onClick }) => {
+  return <Link className="element-link fa fa-warning text-danger" onClick={onClick} />
 }
 
 ErrorLink.propTypes = {
-  element: PropTypes.object.isRequired,
   onClick: PropTypes.func.isRequired
 }
 
-
-const WarningLink = ({ element, onClick }) => {
-  return (
-    !isEmpty(element.warnings) &&
-    <Link className="element-link fa fa-warning text-warning" onClick={onClick} />
-  )
+const WarningLink = ({ onClick }) => {
+  return <Link className="element-link fa fa-warning text-warning" onClick={onClick} />
 }
 
 WarningLink.propTypes = {
-  element: PropTypes.object.isRequired,
   onClick: PropTypes.func.isRequired
 }
 
-
-const ShowLink = ({ element, onClick }) => {
-  const title = element.show ? gettext('Hide') : gettext('Show')
+const ShowLink = ({ show = false, onClick }) => {
+  const title = show ? gettext('Hide') : gettext('Show')
   const className = classNames({
     'element-link fa': true,
-    'fa-eye-slash': element.show,
-    'fa-eye': !element.show
+    'fa-chevron-down': !show,
+    'fa-chevron-up': show
   })
 
   return <Link className={className} title={title} onClick={onClick} />
 }
 
 ShowLink.propTypes = {
-  element: PropTypes.object.isRequired,
+  show: PropTypes.bool,
   onClick: PropTypes.func.isRequired
 }
 
