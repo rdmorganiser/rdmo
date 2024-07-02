@@ -13,7 +13,7 @@ class OptionsFactory {
     return {
       model: 'options.option',
       uri_prefix: config.settings.default_uri_prefix,
-      uri_path: parent.optionset ? `${parent.optionset.uri_path}/`: '',
+      uri_path: parent.optionset ? parent.optionset.uri_path : '',
       optionsets: parent.optionset ? [parent.optionset.id] : [],
       conditions: [],
       editors: config.settings.multisite ? [config.currentSite.id] : [],

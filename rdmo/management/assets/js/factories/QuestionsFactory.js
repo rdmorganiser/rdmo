@@ -15,7 +15,7 @@ class QuestionsFactory {
     return {
       model: 'questions.section',
       uri_prefix: config.settings.default_uri_prefix,
-      uri_path: parent.catalog ? `${parent.catalog.uri_path}/`: '',
+      uri_path: parent.catalog ? parent.catalog.uri_path : '',
       catalogs: parent.catalog ? [parent.catalog.id] : [],
       pages: [],
       editors: config.settings.multisite ? [config.currentSite.id] : [],
@@ -26,7 +26,7 @@ class QuestionsFactory {
     return {
       model: 'questions.page',
       uri_prefix: config.settings.default_uri_prefix,
-      uri_path: parent.section ? `${parent.section.uri_path}/`: '',
+      uri_path: parent.section ? parent.section.uri_path : '',
       sections: parent.section ? [parent.section.id] : [],
       questionsets: [],
       questions: [],
@@ -38,8 +38,8 @@ class QuestionsFactory {
     return {
       model: 'questions.questionset',
       uri_prefix: config.settings.default_uri_prefix,
-      uri_path: parent.page ? `${parent.page.uri_path}/`: (
-        parent.questionset ? `${parent.questionset.uri_path}/`: ''
+      uri_path: parent.page ? parent.page.uri_path : (
+        parent.questionset ? parent.questionset.uri_path : ''
       ),
       pages: parent.page ? [parent.page.id] : [],
       parents: parent.questionset ? [parent.questionset.id] : [],
@@ -53,8 +53,8 @@ class QuestionsFactory {
     return {
       model: 'questions.question',
       uri_prefix: config.settings.default_uri_prefix,
-      uri_path: parent.page ? `${parent.page.uri_path}/`: (
-        parent.questionset ? `${parent.questionset.uri_path}/`: ''
+      uri_path: parent.page ? parent.page.uri_path : (
+        parent.questionset ? parent.questionset.uri_path : ''
       ),
       widget_type: 'text',
       value_type: 'text',
