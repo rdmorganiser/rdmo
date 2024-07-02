@@ -17,6 +17,8 @@ const Task = ({ config, task, elementActions, filter=false, filterSites=false, f
   const copyUrl = buildPath(config.baseUrl, 'tasks', task.id, 'copy')
   const exportUrl = buildPath(config.apiUrl, 'tasks', 'tasks', task.id, 'export')
 
+  const getConditionUrl = (index) => buildPath(config.apiUrl, 'conditions', 'conditions', task.conditions[index])
+
   const fetchEdit = () => elementActions.fetchElement('tasks', task.id)
   const fetchCopy = () => elementActions.fetchElement('tasks', task.id, 'copy')
   const toggleAvailable = () => elementActions.storeElement('tasks', {...task, available: !task.available })
@@ -51,13 +53,18 @@ const Task = ({ config, task, elementActions, filter=false, filterSites=false, f
           </p>
           {
             get(config, 'display.uri.tasks', true) && <p>
-              <CodeLink className="code-tasks" uri={task.uri} onClick={() => fetchEdit()} />
+              <CodeLink className="code-tasks" uri={task.uri} href={editUrl} onClick={() => fetchEdit()} />
             </p>
           }
           {
             get(config, 'display.uri.conditions', true) && task.condition_uris.map((uri, index) => (
               <p key={index}>
-                <CodeLink className="code-conditions" uri={uri} onClick={() => fetchCondition(index)} />
+                <CodeLink
+                  className="code-conditions"
+                  uri={uri}
+                  href={getConditionUrl(index)}
+                  onClick={() => fetchCondition(index)}
+                />
               </p>
             ))
           }

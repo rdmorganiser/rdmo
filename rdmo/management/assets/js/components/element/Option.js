@@ -38,7 +38,7 @@ const Option = ({ config, option, elementActions, display='list', indent=0, filt
         </p>
         {
           get(config, 'display.uri.options', true) &&
-          <CodeLink className="code-options" uri={option.uri} onClick={() => fetchEdit()} />
+          <CodeLink className="code-options" uri={option.uri} href={editUrl} onClick={() => fetchEdit()} />
         }
         <ElementErrors element={option} />
       </div>

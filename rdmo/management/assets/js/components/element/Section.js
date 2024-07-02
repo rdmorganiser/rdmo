@@ -55,7 +55,7 @@ const Section = ({ config, section, configActions, elementActions, display='list
         </p>
         {
           get(config, 'display.uri.sections', true) &&
-          <CodeLink className="code-questions" uri={section.uri} onClick={() => fetchEdit()} order={order} />
+          <CodeLink className="code-questions" uri={section.uri} href={editUrl} onClick={() => fetchEdit()} order={order} />
         }
         <ElementErrors element={section} />
       </div>

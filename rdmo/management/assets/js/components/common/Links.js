@@ -198,10 +198,10 @@ ExtendLink.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-const CodeLink = ({ className, uri, onClick, order }) => {
+const CodeLink = ({ className, uri, href, onClick, order }) => {
   return (
     <>
-      <Link onClick={onClick}>
+      <Link href={href} onClick={onClick}>
         <code className={className}>{uri}</code>
       </Link>
       {!isNil(order) ? (
@@ -214,6 +214,7 @@ const CodeLink = ({ className, uri, onClick, order }) => {
 CodeLink.propTypes = {
   className: PropTypes.string.isRequired,
   uri: PropTypes.string.isRequired,
+  href: PropTypes.string,
   onClick: PropTypes.func.isRequired,
   order: PropTypes.number
 }

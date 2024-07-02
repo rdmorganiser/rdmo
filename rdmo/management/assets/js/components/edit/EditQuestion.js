@@ -40,6 +40,10 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
 
   const info = <QuestionInfo question={question} elements={elements} elementActions={elementActions} />
 
+  // for reasons unknown, the strings are not picked up by makemessages from the props
+  const addOptionText = gettext('Add existing optionset')
+  const createOptionText = gettext('Create new optionset')
+
   return (
     <div className="panel panel-default panel-edit">
       <div className="panel-heading">
@@ -153,7 +157,7 @@ const EditQuestion = ({ config, question, elements, elementActions}) => {
           </Tab>
           <Tab key={1} eventKey={1} title={gettext('Option sets')}>
             <MultiSelect config={config} element={question} field="optionsets" options={optionsets}
-                         addText={gettext('Add existing optionset')} createText={gettext('Create new optionset')}
+                         addText={addOptionText} createText={createOptionText}
                          onChange={updateQuestion} onCreate={createOptionSet} onEdit={editOptionSet} />
           </Tab>
           <Tab key={2} eventKey={2} title={gettext('Range')}>

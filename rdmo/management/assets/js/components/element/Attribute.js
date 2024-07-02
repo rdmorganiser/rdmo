@@ -42,7 +42,7 @@ const Attribute = ({ config, attribute, elementActions, display='list', indent=0
       <div>
         <p>
           <strong>{gettext('Attribute')}{': '}</strong>
-          <CodeLink className="code-domain" uri={attribute.uri} onClick={() => fetchEdit()} />
+          <CodeLink className="code-domain" uri={attribute.uri} href={editUrl} onClick={() => fetchEdit()} />
         </p>
         <ElementErrors element={attribute} />
       </div>
