@@ -188,7 +188,7 @@ def test_command_merge_attributes(db, settings, create_new_merge_attributes_and_
 
 
         if delete and not failed:
-            # assert that the source attribut was deleted
+            # assert that the source attribute was deleted
             with pytest.raises(Attribute.DoesNotExist):
                 Attribute.objects.get(id=source_attribute.id)
         else:
@@ -235,7 +235,7 @@ def test_command_merge_attributes_for_views(db, settings, create_new_merge_attri
                      stdout=stdout, stderr=stderr, **command_kwargs)
 
     if delete and not failed:
-        # assert that the source attribut was deleted
+        # assert that the source attribute was deleted
         with pytest.raises(Attribute.DoesNotExist):
             Attribute.objects.get(uri=source_attribute_uri)
     else:

@@ -220,3 +220,10 @@ exclude_lines = [
     "raise Exception",
     "except ImportError:"
 ]
+
+[tool.typos] # Ref: https://github.com/crate-ci/typos/blob/master/docs/reference.md
+# add "spellchecker:disable-line" to ignore specific lines
+default.extend-ignore-re = [
+  "(?Rm)^.*(#|//)\\s*spellchecker:disable-line$", # for .py files
+  "(?Rm)^.*<!-- spellchecker:disable-line -->$", # for .html files
+]
