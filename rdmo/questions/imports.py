@@ -36,7 +36,7 @@ import_helper_catalog = ElementImportHelper(
 import_helper_section = ElementImportHelper(
     model = Section,
     validators=(SectionLockedValidator, SectionUniqueURIValidator),
-    lang_fields=('title',),
+    lang_fields=('title', 'short_title'),
     m2m_through_instance_fields=[
         ThroughInstanceMapper(
             field_name='pages', source_name='section',
@@ -54,7 +54,7 @@ import_helper_section = ElementImportHelper(
 import_helper_page = ElementImportHelper(
     model = Page,
     validators=(PageLockedValidator, PageUniqueURIValidator),
-    lang_fields=('help', 'title', 'verbose_name'),
+    lang_fields=('help', 'title', 'verbose_name', 'short_title'),
     foreign_fields=('attribute',),
     extra_fields = (
         ExtraFieldHelper(field_name='is_collection'),
