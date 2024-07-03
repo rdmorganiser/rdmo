@@ -57,7 +57,7 @@ const Catalog = ({ config, catalog, elementActions, display='list',
         </p>
         {
           get(config, 'display.uri.catalogs', true) &&
-          <CodeLink className="code-questions" uri={catalog.uri} onClick={() => fetchEdit()} />
+          <CodeLink className="code-questions" uri={catalog.uri} href={editUrl} onClick={() => fetchEdit()} />
         }
         <ElementErrors element={catalog} />
       </div>

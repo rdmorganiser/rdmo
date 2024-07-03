@@ -44,7 +44,7 @@ const View = ({ config, view, elementActions, filter=false, filterSites=false, f
         <div>
           <p>
             <strong>{gettext('View')}{': '}</strong>
-            <CodeLink className="code-views" uri={view.uri} onClick={() => fetchEdit()} />
+            <CodeLink className="code-views" uri={view.uri} href={editUrl} onClick={() => fetchEdit()} />
           </p>
           <ElementErrors element={view} />
         </div>
