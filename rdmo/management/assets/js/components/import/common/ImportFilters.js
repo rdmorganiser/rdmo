@@ -14,7 +14,7 @@ const ImportFilters = ({ config, elements, changedElements, filteredElements, co
   const getValueFilterChanged = () => get(config, 'filter.import.elements.changed', false)
 
   const filterCheckBoxText = interpolate(
-    success ? gettext('Show only created and changed (%s)') : gettext('Show only creations and changes (%s)'),
+    success ? gettext('Show only created and changed (%s)') : gettext('Show only new and changes (%s)'),
     [changedElements.length]
   )
 
