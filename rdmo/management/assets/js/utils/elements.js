@@ -174,16 +174,11 @@ const buildUri = (element) => {
   return uri
 }
 
-const buildPath = (key, parentUri, elements) => {
-
+const buildPathForAttribute = (key, parentUri) => {
   let path = key
   if (parentUri) {
-    const parentElement = elements.find(element => element.uri === parentUri)
-    if (parentElement) {
-      const parentPath = parentElement.path
-      path = parentPath ? `${parentPath}/${key}` : key
-    } else if (parentUri.includes('/domain/')) {
-      // If parentElement is not found, construct the path using parentUri directly
+     if (parentUri.includes('/domain/')) {
+      // construct the path using parentUri directly
       const parentPath = parentUri.split('/domain/')[1]
       path = parentPath ? `${parentPath}/${key}` : key
     }
@@ -194,4 +189,4 @@ const buildPath = (key, parentUri, elements) => {
 
 
 
-export { compareElements, updateElement, resetElement, canMoveElement, moveElement, findDescendants, buildUri, buildPath }
+export { compareElements, updateElement, resetElement, canMoveElement, moveElement, findDescendants, buildUri, buildPathForAttribute }
