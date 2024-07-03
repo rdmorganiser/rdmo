@@ -25,6 +25,8 @@ OPTIONSETS_COUNTS = {
     "warnings": 2
 }
 OPTIONSETS_COUNTS_HEADER_INFOS = [f"{k.capitalize()}: {v}" for k,v in OPTIONSETS_COUNTS.items()]
+# Defined in filterCheckBoxText in rdmo/management/assets/js/components/import/common/ImportFilters.js
+IMPORT_FILTER_LABEL_TEXT = "Show only new and changes"
 
 @pytest.mark.parametrize("username, password", test_users)  # consumed by fixture
 def test_import_and_update_optionsets_in_management(logged_in_user: Page) -> None:
@@ -71,7 +73,7 @@ def test_import_and_update_optionsets_in_management(logged_in_user: Page) -> Non
     # assert changed elements
     for text in OPTIONSETS_COUNTS_HEADER_INFOS:
         expect(page.locator("#main")).to_contain_text(text)
-    expect(page.get_by_text(f"Show only created and changed ({OPTIONSETS_COUNTS['changed']})")).to_be_visible()
+    expect(page.get_by_text(f"{IMPORT_FILTER_LABEL_TEXT} ({OPTIONSETS_COUNTS['changed']})")).to_be_visible()
     page.get_by_role("link", name="Show changes").click()
     expect(page.locator(".col-sm-6 > .form-group").first).to_be_visible(timeout=30_000)
     # take a screenshot of the import page

@@ -6,7 +6,7 @@ import {ChangedLabel, CreatedLabel} from './ImportLabels'
 
 const ImportSelectCheckbox = ({ element, toggleImport, updateShowField }) => {
   const changedLabelText = gettext('change')
-  const createdLabelText = gettext('create')
+  const createdLabelText = gettext('new')
   return (
     <div className="checkbox">
     <label className="mr-5">
