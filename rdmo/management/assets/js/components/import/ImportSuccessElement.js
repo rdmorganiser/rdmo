@@ -12,15 +12,18 @@ import {ChangedLabel, CreatedLabel} from './common/ImportLabels'
 const ImportSuccessElement = ({ element, importActions }) => {
 
   const updateShowField = () => importActions.updateElement(element, { show: !element.show })
+  const changedLabelText = gettext('changed')
+  const createdLabelText = gettext('created')
 
   return (
     <li className="list-group-item">
       <div className="mb-5">
         <strong>{verboseNames[element.model]}{' '}</strong>
         <code className={codeClass[element.model]}>{element.uri}</code>
-        <CreatedLabel onClick={updateShowField} show={element.created} />
 
-        <ChangedLabel onClick={updateShowField} show={(element.changed && element.updated)} />
+        <ChangedLabel text={changedLabelText} onClick={updateShowField} show={(element.changed && element.updated)} />
+
+        <CreatedLabel  text={createdLabelText} onClick={updateShowField} show={element.created} />
 
         {
           !isEmpty(element.errors) && !(element.created || element.updated) && (
@@ -28,12 +31,13 @@ const ImportSuccessElement = ({ element, importActions }) => {
         )}
         {
           !isEmpty(element.errors) && (element.created || element.updated) && (
-          <>
-            {', '}
-            <span className="text-danger">{gettext('but could not be added to parent element')}</span>
-          </>
-        )}
-        {'.'}
+            <>
+              {', '}
+              <span className="text-danger">{gettext('but could not be added to parent element')}</span>
+              {'.'}
+            </>
+          )}
+
       </div>
       <Errors elementErrors={element.errors} />
       <Warnings elementWarnings={element.warnings} elementModel={element.model} showTitle={true} shouldShowURI={false} />

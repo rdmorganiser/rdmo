@@ -43,7 +43,8 @@ const Import = ({ config, imports, configActions, importActions }) => {
           <ImportFilters config={config} elements={elements}
                          changedElements={changedElements}
                          filteredElements={filteredElements}
-                         configActions={configActions} />
+                         configActions={configActions}
+                         success={success} />
         }
         {
           <ImportAggregatedWarningsPanel config={config} elements={importWarnings}

@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Label from 'rdmo/management/assets/js/components/common/Labels'
 
-const ChangedLabel = ({ onClick, show }) => {
-  return <Label text={gettext('changed')}
+const ChangedLabel = ({ text, onClick, show }) => {
+  return <Label text={text}
                 type="info"
                 onClick={onClick}
                 className={'ml-5'}
@@ -11,12 +11,13 @@ const ChangedLabel = ({ onClick, show }) => {
 }
 
 ChangedLabel.propTypes = {
+  text: PropTypes.string.isRequired,
   onClick: PropTypes.func,
   show: PropTypes.bool,
 }
 
-const CreatedLabel = ({ onClick, show }) => {
-    return <Label text={gettext('created')}
+const CreatedLabel = ({ text, onClick, show }) => {
+    return <Label text={text}
                 type="success"
                 onClick={onClick}
                 className={'ml-5'}
@@ -24,6 +25,7 @@ const CreatedLabel = ({ onClick, show }) => {
 }
 
 CreatedLabel.propTypes = {
+  text: PropTypes.string.isRequired,
   onClick: PropTypes.func,
   show: PropTypes.bool,
 }

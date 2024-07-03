@@ -5,13 +5,18 @@ import get from 'lodash/get'
 import {getUriPrefixes} from '../../../utils/filter'
 import {Checkbox} from '../../common/Checkboxes'
 
-const ImportFilters = ({ config, elements, changedElements, filteredElements, configActions }) => {
+const ImportFilters = ({ config, elements, changedElements, filteredElements, configActions, success= false}) => {
   const updateFilterString = (value) => configActions.updateConfig('filter.import.elements.search', value)
   const getValueFilterString = () => get(config, 'filter.import.elements.search', '')
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.import.elements.uri_prefix', value)
-  const getValueFilterUirPrefix = () => get(config, 'filter.import.elements.uri_prefix', '')
+  const getValueFilterUriPrefix = () => get(config, 'filter.import.elements.uri_prefix', '')
   const updateFilterChanged = (value) => configActions.updateConfig('filter.import.elements.changed', value)
   const getValueFilterChanged = () => get(config, 'filter.import.elements.changed', false)
+
+  const filterCheckBoxText = interpolate(
+    success ? gettext('Show only created and changed (%s)') : gettext('Show only creations and changes (%s)'),
+    [changedElements.length]
+  )
 
   return ( elements.length > 0 &&
     <div className="row">
@@ -20,7 +25,7 @@ const ImportFilters = ({ config, elements, changedElements, filteredElements, co
                       placeholder={gettext('Filter uri')}/>
       </div>
       <div className="col-sm-4">
-        <FilterUriPrefix value={getValueFilterUirPrefix()}
+        <FilterUriPrefix value={getValueFilterUriPrefix()}
                          onChange={updateFilterUriPrefix}
                          options={getUriPrefixes(elements)}/>
       </div>
@@ -28,7 +33,7 @@ const ImportFilters = ({ config, elements, changedElements, filteredElements, co
       {elements.length > 0 && (
         <div className="horizontal-container">
           <div className="checkboxes">
-            <Checkbox label={interpolate(gettext('Show only created and changed (%s)'), [changedElements.length])}
+            <Checkbox label={filterCheckBoxText}
                       value={getValueFilterChanged()} onChange={updateFilterChanged} />
           </div>
           <span className="shown-info">
@@ -45,6 +50,7 @@ ImportFilters.propTypes = {
   changedElements: PropTypes.array.isRequired,
   filteredElements: PropTypes.array.isRequired,
   configActions: PropTypes.object.isRequired,
+  success: PropTypes.bool
 }
 
 export default ImportFilters
