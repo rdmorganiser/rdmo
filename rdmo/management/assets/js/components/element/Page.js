@@ -57,7 +57,8 @@ const Page = ({ config, page, configActions, elementActions, display='list', ind
       </div>
       <div>
         <p>
-          <strong>{gettext('Page')}{': '}</strong> {page.title}
+          <strong>{gettext('Page')}{': '}</strong>
+          <span dangerouslySetInnerHTML={{ __html: page.title }}></span>
         </p>
         {
           get(config, 'display.uri.pages', true) && <p>

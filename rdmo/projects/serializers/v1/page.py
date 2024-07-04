@@ -4,6 +4,7 @@ from rest_framework import serializers
 
 from rdmo.conditions.models import Condition
 from rdmo.core.serializers import ElementModelSerializerMixin, MarkdownSerializerMixin
+from rdmo.core.utils import markdown2html
 from rdmo.options.models import Option, OptionSet
 from rdmo.questions.models import Page, Question, QuestionSet
 from rdmo.questions.utils import get_widget_class
@@ -53,7 +54,7 @@ class ConditionSerializer(serializers.ModelSerializer):
 
 class QuestionSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, serializers.ModelSerializer):
 
-    markdown_fields = ('help', )
+    markdown_fields = ('help', 'text')
 
     model = serializers.SerializerMethodField()
     conditions = ConditionSerializer(default=None, many=True)
@@ -102,7 +103,7 @@ class QuestionSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, s
 
 class QuestionSetSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, serializers.ModelSerializer):
 
-    markdown_fields = ('help', )
+    markdown_fields = ('title', 'help')
 
     model = serializers.SerializerMethodField()
     elements = serializers.SerializerMethodField()
@@ -135,7 +136,7 @@ class QuestionSetSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin
 
 class PageSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
 
-    markdown_fields = ('help', )
+    markdown_fields = ('title', 'help')
 
     elements = serializers.SerializerMethodField()
     section = serializers.SerializerMethodField()
@@ -170,7 +171,7 @@ class PageSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
         section = self.context['catalog'].get_section_for_page(obj)
         return {
            'id': section.id,
-           'title': section.title,
+           'title': markdown2html(section.title),
            'first': section.elements[0].id if section.elements else None
         } if section else {}
 

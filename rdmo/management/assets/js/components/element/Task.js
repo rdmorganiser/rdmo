@@ -49,7 +49,7 @@ const Task = ({ config, task, elementActions, filter=false, filterSites=false, f
         <div>
           <p>
             <strong>{gettext('Task')}{': '}</strong>
-            {task.title}
+            <span dangerouslySetInnerHTML={{ __html: task.title }}></span>
           </p>
           {
             get(config, 'display.uri.tasks', true) && <p>

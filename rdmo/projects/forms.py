@@ -20,24 +20,32 @@ class CatalogChoiceField(forms.ModelChoiceField):
     _unavailable_icon = ' (<span class="fa fa-eye-slash" aria-hidden="true"></span>)'
 
     def label_from_instance(self, obj):
-        if obj.available is False:
-            return mark_safe('<div class="text-muted">{}{}</br>{}</div>'.format(
-                obj.title, self._unavailable_icon, markdown2html(obj.help)
-            ))
+        rendered_title = markdown2html(obj.title)
+        rendered_help = markdown2html(obj.help)
 
-        return mark_safe(f'<b>{obj.title}</b></br>{markdown2html(obj.help)}')
+        if obj.available is False:
+            return mark_safe(f'<div class="text-muted"><p>{rendered_title}{self._unavailable_icon}</p>'
+                             f'<p>{rendered_help}</p></div>')
+
+        return mark_safe(f'<p><b>{rendered_title}</b></p><p>{rendered_help}</p>')
 
 
 class TasksMultipleChoiceField(forms.ModelMultipleChoiceField):
 
     def label_from_instance(self, obj):
-        return mark_safe(f'<b>{obj.title}</b></br>{markdown2html(obj.text)}')
+        rendered_title = markdown2html(obj.title)
+        rendered_text = markdown2html(obj.text)
+
+        return mark_safe(f'<b>{rendered_title}</b></br>{rendered_text}')
 
 
 class ViewsMultipleChoiceField(forms.ModelMultipleChoiceField):
 
     def label_from_instance(self, obj):
-        return mark_safe(f'<b>{obj.title}</b></br>{markdown2html(obj.help)}')
+        rendered_title = markdown2html(obj.title)
+        rendered_help = markdown2html(obj.help)
+
+        return mark_safe(f'<b>{rendered_title}</b></br>{rendered_help}')
 
 
 class ProjectForm(forms.ModelForm):

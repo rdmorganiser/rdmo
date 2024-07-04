@@ -46,7 +46,7 @@ const Question = ({ config, question, elementActions, display='list', indent=0,
       <div>
         <p>
           <strong className={question.is_optional ? 'text-muted' : ''}>{gettext('Question')}{': '}</strong>
-          {question.text}
+          <span dangerouslySetInnerHTML={{ __html: question.text }}></span>
         </p>
         {
           get(config, 'display.uri.questions', true) && <p>

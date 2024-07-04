@@ -9,5 +9,9 @@
 </p>
 {% endif %}
 
-<strong>{{ project.catalog.title }}</strong><br/>
-{{ project.catalog.help|markdown }}
+<p>
+    <strong>{{ project.catalog.title|markdown }}</strong>
+</p>
+<p>
+    {{ project.catalog.help|markdown }}
+</p>

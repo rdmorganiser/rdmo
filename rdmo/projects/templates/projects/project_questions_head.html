@@ -9,7 +9,7 @@
     </li>
     <li>
         <a href="" ng-click="service.jump(service.page.section)">
-        <span> {$ service.page.section.title $} </span>
+            <span ng-bind-html="service.page.section.title"></span>
         </a>
     </li>
 </ul>

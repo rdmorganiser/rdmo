@@ -53,7 +53,8 @@ const Catalog = ({ config, catalog, elementActions, display='list',
       </div>
       <div>
         <p>
-          <strong>{gettext('Catalog')}{': '}</strong> {catalog.title}
+          <strong>{gettext('Catalog')}{': '}</strong>
+          <span dangerouslySetInnerHTML={{ __html: catalog.title }}></span>
         </p>
         {
           get(config, 'display.uri.catalogs', true) &&

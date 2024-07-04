@@ -56,7 +56,8 @@ const QuestionSet = ({ config, questionset, configActions, elementActions, displ
       </div>
       <div>
         <p>
-          <strong>{gettext('Question set')}{': '}</strong> {questionset.title}
+          <strong>{gettext('Question set')}{': '}</strong>
+          <span dangerouslySetInnerHTML={{ __html: questionset.title }}></span>
         </p>
         {
           get(config, 'display.uri.questionsets', true) && <p>
