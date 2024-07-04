@@ -288,19 +288,25 @@ angular.module('project_questions')
             detail_id: future.page.section.id,
             detail_action: 'navigation'
         }, function(response) {
-            response.forEach(function(section) {
-                section.title = $sce.trustAsHtml(section.title);
-
-                if (angular.isDefined(section.pages)) {
-                    section.pages.forEach(function(page) {
-                        page.title = $sce.trustAsHtml(page.title);
-                    })
-                }
-            })
+            return service.initNavigation(response)
         });
 
         return future.navigation.$promise
     };
+
+    service.initNavigation = function(navigation) {
+        navigation.forEach(function(section) {
+            section.title = $sce.trustAsHtml(section.title);
+
+            if (angular.isDefined(section.pages)) {
+                section.pages.forEach(function(page) {
+                    page.title = $sce.trustAsHtml(page.title);
+                })
+            }
+        })
+
+        return navigation;
+    }
 
     service.initPage = function(page) {
         // store attributes in a separate array
@@ -960,6 +966,8 @@ angular.module('project_questions')
                 // pass
             } else if (service.page.id == false) {
                 // pass, the interview is done
+            } else if (angular.isDefined(jump) && jump) {
+                // after the jump initView is called, so we do not need to do anything here
             } else if (angular.isDefined(proceed) && proceed) {
                 if (service.settings.project_questions_cycle_sets && service.page.is_collection) {
                     if (service.set_index === null) {
@@ -981,6 +989,20 @@ angular.module('project_questions')
                     service.next();
                 }
             } else {
+                // check if we need to refresh the site
+                angular.forEach([service.page].concat(service.questionsets), function(questionset) {
+                    angular.forEach(questionset.elements, function(element) {
+                        if (element.model == 'questions.question') {
+                            var question = element;
+                            angular.forEach(question.optionsets, function(optionset) {
+                                if (optionset.has_refresh) {
+                                    return service.initView(service.page.id, false);
+                                }
+                            });
+                        }
+                    });
+                });
+
                 // update progress
                 if (service.project.read_only !== true) {
                     resources.projects.postAction({
@@ -995,29 +1017,13 @@ angular.module('project_questions')
                 if (service.project.read_only !== true) {
                     resources.projects.query({
                         id: service.project.id,
-                        detail_id: future.page.section.id,
+                        detail_id: service.page.section.id,
                         detail_action: 'navigation'
                     }, function(response) {
-                        service.navigation = response
+                        service.navigation = service.initNavigation(response)
                     });
                 }
 
-
-                // check if we need to refresh the site
-                if (angular.isUndefined(jump) || !jump) {
-                    angular.forEach([service.page].concat(service.questionsets), function(questionset) {
-                        angular.forEach(questionset.elements, function(element) {
-                            if (element.model == 'questions.question') {
-                                var question = element;
-                                angular.forEach(question.optionsets, function(optionset) {
-                                    if (optionset.has_refresh) {
-                                        return service.initView(service.page.id, false);
-                                    }
-                                });
-                            }
-                        });
-                    });
-                }
                 // re-evaluate conditions
                 angular.forEach([service.page].concat(service.questionsets), function(questionset) {
                     angular.forEach(service.valuesets[questionset.id], function(valuesets) {
