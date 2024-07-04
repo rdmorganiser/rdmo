@@ -61,7 +61,7 @@ dependencies = [
   "packaging>=23.2,<25.0",
   "pypandoc~=1.11",
   "requests-toolbelt~=1.0",
-  "rules~=3.3",
+  "rules~=3.4",
 ]
 
 [project.optional-dependencies]
