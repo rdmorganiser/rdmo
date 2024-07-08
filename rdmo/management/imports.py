@@ -112,9 +112,8 @@ def import_element(
         element["errors"].append(perms_error_msg)
         return element
 
-    updated = not created
     element['created'] = created
-    element['updated'] = updated
+    element['updated'] = not created and original is not None
     # INFO: the dict element[FieldNames.diff.value] is filled by calling track_changes_on_element
 
     element = strip_uri_prefix_endswith_slash(element)
@@ -126,16 +125,21 @@ def import_element(
 
     if element.get('errors'):
         # when there is an error msg, the import can be stopped and return
+        if save:
+            element['created'] = False
+            element['updated'] = False
         return element
 
     if save:
         logger.info(msg)
         instance.save()
 
-    if save or updated:
         update_related_fields(instance, element, import_helper, original, save)
 
-    if save and settings.MULTISITE:
-        add_current_site_to_sites_and_editor(instance, current_site, import_helper)
+        if created and settings.MULTISITE:
+            add_current_site_to_sites_and_editor(instance, current_site, import_helper)
+
+    elif not created:  # when an element will be updated but not saved
+        update_related_fields(instance, element, import_helper, original, save)
 
     return element

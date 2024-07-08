@@ -37,7 +37,6 @@ def strip_uri_prefix_endswith_slash(element: dict) -> dict:
 
 def apply_field_values(instance, element, import_helper, uploaded_uris, original) -> None:
     """Applies the field values from the element to the instance."""
-    element = strip_uri_prefix_endswith_slash(element)
     # start to set values on the instance
     # set common field values from element on instance
     for field in import_helper.common_fields:
