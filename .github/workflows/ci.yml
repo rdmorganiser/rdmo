@@ -28,22 +28,17 @@ jobs:
 
   lint:
     name: Lint
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v4
-    - uses: actions/setup-python@v4
+    - uses: actions/setup-python@v5
       with:
         python-version: "3.12"
         cache: pip
-    - run: python -m pip install --upgrade pip
-    - run: python -m pip install --editable .[dev]
-    - name: Set up pre-commit cache
-      uses: actions/cache@v3
-      with:
-        path: ~/.cache/pre-commit
-        key: lint-${{ hashFiles('.pre-commit-config.yaml') }}
     - name: Run linters via pre-commit (ruff, eslint)
-      run: pre-commit run --all-files --color=always
+      uses: pre-commit/action@v3.0.1
+      with:
+        extra_args: --all-files --color=always
 
   test:
     runs-on: ubuntu-22.04
