@@ -46,7 +46,7 @@ jobs:
         extra_args: --all-files --color=always
 
   test:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         python-version: ['3.8', '3.12']
@@ -136,7 +136,7 @@ jobs:
   build-wheel:
     name: Build python wheel
     needs: test
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v4
     - name: Get short commit SHA
@@ -208,7 +208,7 @@ jobs:
 
   dependencies:
     name: Test installation of all dependencies
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -261,7 +261,7 @@ jobs:
       - build-wheel
       - dev-setup
       - dependencies
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: re-actors/alls-green@release/v1
         with:
