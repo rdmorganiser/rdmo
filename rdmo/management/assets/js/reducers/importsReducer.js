@@ -51,7 +51,10 @@ export default function importsReducer(state = initialState, action) {
         if (elements[index].model === 'domain.attribute') {
           elements[index].path = buildPathForAttribute(elements[index].key, elements[index].parent ? elements[index].parent.uri : null)
         }
-        elements[index].uri = buildUri(elements[index])
+        const newUri = buildUri(elements[index])
+        if (!isNil(newUri)) {
+          elements[index].uri = newUri
+        }
         return {...state, elements}
       } else {
         return state
@@ -87,7 +90,10 @@ export default function importsReducer(state = initialState, action) {
         element.uri_prefix = action.uriPrefix
 
         // compute a new uri and store it in the elementMap
-        element.uri = elementsMap[element.uri] = buildUri(element)
+        const newUri = buildUri(element)
+        if (!isNil(newUri)) {
+          element.uri = elementsMap[element.uri] = newUri
+        }
 
         return element
       })

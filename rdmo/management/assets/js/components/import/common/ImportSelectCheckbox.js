@@ -15,9 +15,9 @@ const ImportSelectCheckbox = ({ element, toggleImport, updateShowField }) => {
     </label>
     <CodeLink className={codeClass[element.model]} uri={element.uri} onClick={updateShowField} />
 
-    <ChangedLabel text={changedLabelText} onClick={updateShowField} show={(element.changed && element.updated)} />
+    <ChangedLabel text={changedLabelText} show={(element.changed && element.updated)} />
 
-    <CreatedLabel text={createdLabelText} onClick={updateShowField} show={element.created} />
+    <CreatedLabel text={createdLabelText} show={element.created} />
   </div>
 )}
 
