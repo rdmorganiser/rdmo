@@ -162,13 +162,20 @@ function findDescendants(element, elementType) {
 }
 
 const buildUri = (element) => {
-  let uri = element.uri_prefix + '/' + elementModules[element.model] + '/'
+  if (isUndefined(element.uri_prefix) || isUndefined(element.model)) {
+    return null
+  }
+
+  let uri = `${element.uri_prefix}/${elementModules[element.model]}/`
+
   if (!isUndefined(element.uri_path) && !isNil(element.uri_path)) {
     uri += element.uri_path
   } else if (!isUndefined(element.path) && !isNil(element.path)) {
     uri += element.path
-  } else {
+  } else if (!isUndefined(element.key) && !isNil(element.key)) {
     uri += element.key
+  } else {
+    return null
   }
 
   return uri
