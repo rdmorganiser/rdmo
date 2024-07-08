@@ -23,7 +23,6 @@ concurrency:
 env:
   PYTHONDONTWRITEBYTECODE: 1
   FORCE_COLOR: 1 # colored output by pytest etc.
-  CLICOLOR_FORCE: 1 # colored output by ruff
 
 jobs:
 
