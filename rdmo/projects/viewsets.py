@@ -201,7 +201,8 @@ class ProjectViewSet(ModelViewSet):
             if Question.objects.filter_by_catalog(project.catalog).filter(optionsets=optionset) and \
                     optionset.provider is not None:
                 options = []
-                for option in optionset.provider.get_options(project, search=request.GET.get('search')):
+                for option in optionset.provider.get_options(project, search=request.GET.get('search'),
+                                                             user=request.user, site=request.site):
                     if 'id' not in option:
                         raise RuntimeError(f"'id' is missing in options of '{optionset.provider.class_name}'")
                     elif 'text' not in option:
