@@ -69,7 +69,6 @@ allauth = [
   "django-allauth~=0.57.0",
 ]
 ci = [
-  "coveralls~=3.3",
   "rdmo[dev]",
 ]
 dev = [
