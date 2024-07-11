@@ -50,12 +50,13 @@ dependencies = [
   "django-libsass~=0.9",
   "django-mathfilters~=1.0",
   "django-mptt==0.14.0", # pinned, 0.15 requires Python >= 3.9
-  "django-rest-swagger~=2.2",
   "django-settings-export~=1.2",
   "django-split-settings~=1.2",
   "django-widget-tweaks~=1.5",
   "djangorestframework~=3.14",
   "drf-extensions~=0.7.1",
+  # https://drf-spectacular.readthedocs.io
+  "drf-spectacular~=0.27.2",
   "iso8601~=2.0",
   "markdown~=3.4",
   "packaging>=23.2,<25.0",

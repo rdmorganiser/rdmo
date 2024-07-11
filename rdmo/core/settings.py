@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'mptt',
     'rules',
     # openapi specification tools
-    'rest_framework_swagger'
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -164,10 +164,16 @@ CACHES = {
     }
 }
 
+# Ref: https://www.django-rest-framework.org/api-guide/settings/#settings
 REST_FRAMEWORK = {
-    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'UNICODE_JSON': False,
-    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
+    # TODO
+    # https://drf-spectacular.readthedocs.io/en/latest/faq.html#i-get-an-empty-schema-or-endpoints-are-missing
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.URLPathVersioning',
+    # 'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
+    'DEFAULT_VERSION': 'v1',
+    'ALLOWED_VERSIONS': ('v1', ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.TokenAuthentication',
@@ -176,6 +182,17 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
     )
+}
+
+# Ref: https://drf-spectacular.readthedocs.io/en/latest/settings.html#settings
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'RDMO API',
+    'VERSION': None, # this renders version as v1 from the url path in swagger ui, otherwise it would be 0.0.0 (v1)
+    'SERVE_INCLUDE_SCHEMA': False,
+    'SCHEMA_PATH_PREFIX': '/api/v[0-9]', # url path like '/api/v1/accounts' yields tag 'accounts'
+    'SWAGGER_UI_SETTINGS': {
+        'docExpansion': 'none' # collapse all tags by default
+    }
 }
 
 SETTINGS_EXPORT = [
