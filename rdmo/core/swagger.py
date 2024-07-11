@@ -11,6 +11,7 @@ from .urls.v1 import urlpatterns
 
 class SwaggerSchemaView(LoginRequiredMixin, APIView):
     renderer_classes = [
+        renderers.OpenAPIRenderer,
         renderers.SwaggerUIRenderer,
     ]
 
