@@ -54,21 +54,28 @@ def compute_navigation(section, project, snapshot=None):
             'id': catalog_section.id,
             'uri': catalog_section.uri,
             'title': markdown2html(catalog_section.short_title or catalog_section.title),
-            'first': catalog_section.elements[0].id if catalog_section.elements else None
+            'first': catalog_section.elements[0].id if catalog_section.elements else None,
+            'count': 0,
+            'total': 0
         }
         if catalog_section.id == section.id:
             navigation_section['pages'] = []
-            for page in catalog_section.elements:
-                pages_conditions = {page.id for page in page.conditions.all()}
-                show = bool(not pages_conditions or pages_conditions.intersection(conditions))
 
-                # count the total number of questions, taking sets and conditions into account
-                counts = count_questions(page, sets, conditions)
+        for page in catalog_section.elements:
+            pages_conditions = {page.id for page in page.conditions.all()}
+            show = bool(not pages_conditions or pages_conditions.intersection(conditions))
 
-                # filter the values_list for the attributes, and compute the total sum of counts
-                count = len(tuple(filter(lambda value: value[0] in counts.keys(), values_list)))
-                total = sum(counts.values())
+            # count the total number of questions, taking sets and conditions into account
+            counts = count_questions(page, sets, conditions)
 
+            # filter the values_list for the attributes, and compute the total sum of counts
+            count = len(tuple(filter(lambda value: value[0] in counts.keys(), values_list)))
+            total = sum(counts.values())
+
+            navigation_section['count'] += count
+            navigation_section['total'] += total
+
+            if 'pages' in navigation_section:
                 navigation_section['pages'].append({
                     'id': page.id,
                     'uri': page.uri,
