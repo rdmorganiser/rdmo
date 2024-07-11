@@ -25,18 +25,15 @@ const ImportSuccessElement = ({ element, importActions }) => {
 
         <CreatedLabel  text={createdLabelText} onClick={updateShowField} show={element.created} />
 
-        {
-          !isEmpty(element.errors) && !(element.created || element.updated) && (
-          <span className="text-danger">{' '}{gettext('could not be imported')}</span>
-        )}
-        {
-          !isEmpty(element.errors) && (element.created || element.updated) && (
-            <>
-              {', '}
-              <span className="text-danger">{gettext('but could not be added to parent element')}</span>
-              {'.'}
-            </>
-          )}
+       {
+        !isEmpty(element.errors) && (
+          <span className="text-danger">
+            {' '}{gettext('could not be imported')}
+            {(element.created || element.updated) && `, ${gettext('but could not be added to parent element')}`}
+            {'.'}
+          </span>
+        )
+      }
 
       </div>
       <Errors elementErrors={element.errors} />
