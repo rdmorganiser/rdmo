@@ -36,7 +36,7 @@ jobs:
         python-version: "3.12"
         cache: pip
     - name: Run linters via pre-commit (ruff, eslint)
-      uses: pre-commit/action@v3.0.1
+      uses: pre-commit/action@2c7b3805fd2a0fd8c1884dcaebf91fc102a13ecd # v3.0.1
       with:
         extra_args: --all-files --color=always
 
@@ -80,12 +80,13 @@ jobs:
     - name: Run Tests
       run: |
         pytest -p randomly -p no:cacheprovider --cov --reuse-db --numprocesses=auto --dist=loadscope
-        coveralls --service=github
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GITHUB_DB_BACKEND: ${{ matrix.db-backend }}
-        COVERALLS_FLAG_NAME: '${{ matrix.db-backend }}: ${{ matrix.python-version }}'
-        COVERALLS_PARALLEL: true
+    - name: Upload coverage data to coveralls.io
+      uses: coverallsapp/github-action@643bc377ffa44ace6394b2b5d0d3950076de9f63 # v2.3.0
+      with:
+        flag-name: '${{ matrix.db-backend }}: ${{ matrix.python-version }}'
+        parallel: true
     # end-to-end tests
     - uses: actions/setup-node@v4
       with:
@@ -114,15 +115,13 @@ jobs:
   coveralls:
     name: Indicate completion to coveralls
     needs: test
-    runs-on: ubuntu-latest
-    container: python:3-slim
+    if: ${{ always() }}
+    runs-on: ubuntu-24.04
     steps:
     - name: Run Coveralls finish
-      run: |
-        python -m pip install coveralls
-        coveralls --service=github --finish
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: coverallsapp/github-action@643bc377ffa44ace6394b2b5d0d3950076de9f63 # v2.3.0
+      with:
+        parallel-finished: true
 
   build-wheel:
     name: Build python wheel
