@@ -66,6 +66,7 @@ def import_option(element, save=False, user=None):
 
     set_lang_field(option, 'text', element)
     set_lang_field(option, 'help', element)
+    set_lang_field(option, 'default_text', element)
     set_lang_field(option, 'view_text', element)
 
     validate_instance(option, element, OptionLockedValidator, OptionUniqueURIValidator)
