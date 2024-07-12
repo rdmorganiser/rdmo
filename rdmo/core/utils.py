@@ -281,7 +281,7 @@ def render_to_format(request, export_format, title, template_src, context):
         os.remove(tmp_filename)
 
         # create the response object
-        response = HttpResponse(file_content, content_type='application/%s' % export_format)
+        response = HttpResponse(file_content, content_type=f'application/{export_format}')
         response['Content-Disposition'] = content_disposition.encode('utf-8')
 
     return response
@@ -289,7 +289,7 @@ def render_to_format(request, export_format, title, template_src, context):
 
 def render_to_csv(title, rows, delimiter=','):
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="%s.csv"' % title
+    response['Content-Disposition'] = f'attachment; filename="{title}.csv"'
 
     writer = csv.writer(response, delimiter=delimiter)
     for row in rows:
@@ -301,7 +301,7 @@ def render_to_csv(title, rows, delimiter=','):
 
 def render_to_json(title, data, delimiter=','):
     response = HttpResponse(json.dumps(data, indent=2), content_type='text/json')
-    response['Content-Disposition'] = 'attachment; filename="%s.json"' % title
+    response['Content-Disposition'] = f'attachment; filename="{title}.json"'
     return response
 
 

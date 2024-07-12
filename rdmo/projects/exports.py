@@ -157,5 +157,5 @@ class RDMOXMLExport(Export):
         serializer = ExportSerializer(self.project)
         xmldata = XMLRenderer().render(serializer.data)
         response = HttpResponse(prettify_xml(xmldata), content_type="application/xml")
-        response['Content-Disposition'] = 'filename="%s.xml"' % self.project.title
+        response['Content-Disposition'] = f'filename="{self.project.title}.xml"'
         return response

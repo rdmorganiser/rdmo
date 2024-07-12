@@ -14,8 +14,8 @@ class ViewsRendererMixin:
             self.render_text_element(xml, 'order', {}, view['order'])
 
             for lang_code, lang_string, lang_field in get_languages():
-                self.render_text_element(xml, 'title', {'lang': lang_code}, view['title_%s' % lang_code])
-                self.render_text_element(xml, 'help', {'lang': lang_code}, view['help_%s' % lang_code])
+                self.render_text_element(xml, 'title', {'lang': lang_code}, view[f'title_{lang_code}'])
+                self.render_text_element(xml, 'help', {'lang': lang_code}, view[f'help_{lang_code}'])
 
             xml.startElement('catalogs', {})
             if view.get('catalogs'):

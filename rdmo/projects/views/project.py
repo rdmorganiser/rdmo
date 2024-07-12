@@ -109,7 +109,7 @@ class ProjectJoinView(LoginRequiredMixin, RedirectViewMixin, TemplateView):
                 error = _('Sorry, your invitation has been expired.')
                 invite.delete()
             elif invite.user and invite.user != request.user:
-                error = _('Sorry, but this invitation is for the user "%s".' % invite.user)
+                error = _('Sorry, but this invitation is for the user "{}".'.format(invite.user))
             elif Membership.objects.filter(project=invite.project, user=request.user).exists():
                 invite.delete()
                 return redirect(invite.project.get_absolute_url())

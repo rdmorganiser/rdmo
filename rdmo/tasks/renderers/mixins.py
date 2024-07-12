@@ -14,8 +14,8 @@ class TasksRendererMixin:
             self.render_text_element(xml, 'order', {}, task['order'])
 
             for lang_code, lang_string, lang_field in get_languages():
-                self.render_text_element(xml, 'title', {'lang': lang_code}, task['title_%s' % lang_code])
-                self.render_text_element(xml, 'text', {'lang': lang_code}, task['text_%s' % lang_code])
+                self.render_text_element(xml, 'title', {'lang': lang_code}, task[f'title_{lang_code}'])
+                self.render_text_element(xml, 'text', {'lang': lang_code}, task[f'text_{lang_code}'])
 
             self.render_text_element(xml, 'start_attribute',  {'dc:uri': task['start_attribute']}, None)
             self.render_text_element(xml, 'end_attribute',  {'dc:uri': task['end_attribute']}, None)
