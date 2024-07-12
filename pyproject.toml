@@ -139,6 +139,7 @@ select = [
   "UP",   # pyupgrade
   "W",    # pycodestyle
   "YTT",  # flake8-2020
+  "G004", # logging-f-string
 ]
 ignore = [
   "B006",   # mutable-argument-default
