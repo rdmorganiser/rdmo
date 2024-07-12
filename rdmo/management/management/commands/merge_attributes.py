@@ -77,9 +77,9 @@ class Command(BaseCommand):
         if delete_source:
             try:
                 source.delete()
-                logger.info(f"Source attribute {source.uri} was deleted.")
+                logger.info("Source attribute %s was deleted.", source.uri)
             except source.DoesNotExist:
-                logger.info(f"Source attribute {source.uri} did not exist.")
+                logger.info("Source attribute %s did not exist.", source.uri)
 
         if verbosity >= 1:
             all_instances_were_updated = all(a['saved'] for i in results.values() for a in i)
@@ -151,7 +151,11 @@ def replace_attribute_on_related_model_instances(related_field, source=None, tar
 
         if save_changes:
             instance.save()
-            logger.info(f"Attribute {source.uri} on {model._meta.verbose_name_raw}(id={instance.id}) was replaced with {target.uri}.")  # noqa: E501
+            logger.info(
+                "Attribute %s on %s(id=%s) was replaced with %s.",
+                source.uri, model._meta.verbose_name_raw, instance.id, target.uri
+            )
+
 
         replacement_results.append({
             'model_name': model._meta.verbose_name_raw,
@@ -173,7 +177,10 @@ def replace_attribute_in_view_template(source=None, target=None, save_changes=Fa
 
         if save_changes and update_views:
             instance.save()
-            logger.info(f"Attribute {source.uri} in {View._meta.verbose_name_raw}(id={instance.id}) template was replaced with target {target.uri}.")  # noqa: E501
+            logger.info(
+                "Attribute %s in %s(id=%s) template was replaced with target %s.",
+                source.uri, View._meta.verbose_name_raw, instance.id, target.uri
+            )
 
         replacement_results.append({
             'model_name': View._meta.verbose_name_raw,
