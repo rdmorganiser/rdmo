@@ -46,12 +46,13 @@ class UploadViewSet(viewsets.ViewSet):
             # step 2-6: parse xml, validate and convert to
             xml_parsed_elements, errors = parse_xml_to_elements(xml_file=import_tmpfile_name)
         except ValidationError as e:
-            logger.info(f'Import failed with XML parsing errors. {", ".join(map(str, errors))}')
+            logger.info('Import failed with XML parsing errors.')
             raise ValidationError({'file': e}) from e
 
         # step 7: check if valid
         if errors:
-            logger.info(f'Import failed with XML validation errors. {", ".join(map(str, errors))}')
+            _str_errors = ", ".join(map(str, errors))
+            logger.info('Import failed with XML validation errors. %s' % _str_errors)
             raise ValidationError({'file': errors})
 
         # step 8: import the elements if save=True is set

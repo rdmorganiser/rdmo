@@ -48,7 +48,7 @@ def validate_and_get_xml_version_from_root(root: xmlElement) -> Tuple[Optional[V
     unparsed_root_version = root.attrib.get('version') or DEFAULT_RDMO_XML_VERSION
     root_version, rdmo_version = parse(unparsed_root_version), parse(RDMO_INSTANCE_VERSION)
     if root_version > rdmo_version:
-        logger.info(f'Import failed version validation ({root_version} > {rdmo_version})')
+        logger.info('Import failed version validation (%s > %s)', root_version, rdmo_version)
         errors = [
             _('This RDMO XML file does not have a valid version number.'),
             f'XML Version ({root_version}) is greater than RDMO instance version {rdmo_version}'
@@ -63,7 +63,7 @@ def validate_legacy_elements(elements: dict, root_version: Version) -> list:
         validate_pre_conversion_for_missing_key_in_legacy_elements(elements, root_version)
         return []
     except ValueError as e:
-        logger.info(f'Import failed with ValueError ({e})')
+        logger.info('Import failed with ValueError (%s)', str(e))
         errors = [
             _('XML Parsing Error') + f': {e!s}',
             _('This is not a valid RDMO XML file.')
@@ -77,7 +77,7 @@ def parse_elements(root: xmlElement) -> Tuple[Dict, Optional[str]]:
         elements = flat_xml_to_elements(root)
         return elements, None
     except (KeyError, TypeError, AttributeError) as e:
-        logger.info(f'Import failed with {type(e).__name__} ({e})')
+        logger.info('Import failed with %s (%s)', type(e).__name__, e)
         return {}, _('This is not a valid RDMO XML file.')
 
 
@@ -100,7 +100,7 @@ def parse_xml_to_elements(xml_file=None) -> Tuple[OrderedDict, list]:
     # step 2.1: validate the xml root
     root_validation, root_validation_error = validate_root(root)
     if root_validation is not True:
-        logger.error(f'Root element validation failed. {root_validation_error}')
+        logger.error('Root element validation failed. %s', root_validation_error)
         errors.insert(0, root_validation_error)
         return OrderedDict(), errors
 
@@ -128,7 +128,7 @@ def parse_xml_to_elements(xml_file=None) -> Tuple[OrderedDict, list]:
     # step 5: order the elements and return
     # ordering of elements is done in the import_elements function
 
-    logger.info(f'XML parsing of {file.name} success (length: {len(elements)}).')
+    logger.info('XML parsing of %s success (length: %s).', file.name, len(elements))
 
     return elements, errors
 
