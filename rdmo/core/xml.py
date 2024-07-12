@@ -226,8 +226,8 @@ def get_uri(treenode, ns_map):
 
 def strip_ns(tag, ns_map):
     for ns in ns_map.values():
-        if tag.startswith('{%s}' % ns):
-            return tag.replace('{%s}' % ns, '')
+        if tag.startswith(f'{{{ns}}}'):
+            return tag.replace(f'{{{ns}}}', '')
     return tag
 
 

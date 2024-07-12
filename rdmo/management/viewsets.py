@@ -52,7 +52,7 @@ class UploadViewSet(viewsets.ViewSet):
         # step 7: check if valid
         if errors:
             _str_errors = ", ".join(map(str, errors))
-            logger.info('Import failed with XML validation errors. %s' % _str_errors)
+            logger.info('Import failed with XML validation errors. %s', _str_errors)
             raise ValidationError({'file': errors})
 
         # step 8: import the elements if save=True is set

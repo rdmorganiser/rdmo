@@ -52,4 +52,4 @@ class Command(BaseCommand):
                             h = hashlib.new(algorithm)
                             h.update(open(file_name, 'rb').read())
                             if base64.b64encode(h.digest()).decode() != file_hash:
-                                raise Exception('Subresource Integrity (SRI) failed for %s' % file_name)
+                                raise Exception(f'Subresource Integrity (SRI) failed for {file_name}')
