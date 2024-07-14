@@ -130,7 +130,7 @@ def test_detail_export(db, client, username, password, export_format):
 
 
 @pytest.mark.parametrize('username,password', users)
-@pytest.mark.parametrize('add_or_remove, has_current_site_check', [('add', True), ('remove', False)])
+@pytest.mark.parametrize('add_or_remove,has_current_site_check', [('add', True), ('remove', False)])
 @pytest.mark.parametrize('locked', [True, False])
 def test_update_view_toggle_site(db, client, username, password, add_or_remove, has_current_site_check, locked):
     client.login(username=username, password=password)

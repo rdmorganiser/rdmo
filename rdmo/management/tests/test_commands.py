@@ -9,7 +9,7 @@ from django.core.management.base import CommandError
 from rdmo.management.tests.helpers_xml import xml_test_files
 
 
-@pytest.mark.parametrize("xml_file_path, error_message", xml_test_files.items())
+@pytest.mark.parametrize("xml_file_path,error_message", xml_test_files.items())
 def test_import(db, settings, xml_file_path, error_message):
     xml_file = Path(settings.BASE_DIR).joinpath(xml_file_path)
     stdout, stderr = io.StringIO(), io.StringIO()

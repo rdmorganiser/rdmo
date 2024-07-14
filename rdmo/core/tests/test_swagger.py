@@ -7,7 +7,7 @@ users = (
 )
 
 
-@pytest.mark.parametrize("username,password", users)
+@pytest.mark.parametrize('username,password', users)
 def test_swagger(db, client, username, password):
     client.login(username=username, password=password)
 

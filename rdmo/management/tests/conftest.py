@@ -8,8 +8,8 @@ from pytest_django.live_server_helper import LiveServer
 from rdmo.accounts.utils import set_group_permissions
 
 
-@pytest.fixture(scope="function")
-def e2e_tests_django_db_setup(django_db_setup, django_db_blocker, fixtures):
+@pytest.fixture
+def _e2e_tests_django_db_setup(django_db_setup, django_db_blocker, fixtures):
     """Set up database and populate with fixtures, that get restored for every test case."""
     with django_db_blocker.unblock():
         call_command("loaddata", *fixtures)
@@ -41,8 +41,8 @@ def logout_user(page: Page):
     expect(page).to_have_url('/')
     return page
 
-@pytest.fixture(scope="function")
-def logged_in_user(e2e_tests_django_db_setup, base_url_page, username:str, password: str) -> Page:
+@pytest.fixture
+def logged_in_user(_e2e_tests_django_db_setup, base_url_page, username:str, password: str) -> Page:
     """Log in as admin user through Django login UI, returns logged in page for e2e tests."""
     page = login_user(base_url_page, username, password)
     yield page

@@ -113,7 +113,7 @@ def get_related_affected_instances(attribute) -> list:
 
 
 @pytest.fixture
-def create_new_merge_attributes_and_views(db, settings):
+def _create_new_merge_attributes_and_views(db, settings):
     """ Creates model instances for merge attributes tests """
     example_attributes = Attribute.objects.filter(uri_prefix=EXAMPLE_URI_PREFIX).all()
     create_copies_of_attributes_with_new_uri_prefix(example_attributes, NEW_MERGE_URI_PREFIXES)
@@ -122,7 +122,8 @@ def create_new_merge_attributes_and_views(db, settings):
 
 
 @pytest.mark.parametrize('uri_prefix', NEW_MERGE_URI_PREFIXES)
-def test_that_the_freshly_created_merge_attributes_are_present(db, create_new_merge_attributes_and_views, uri_prefix):
+@pytest.mark.usefixtures("_create_new_merge_attributes_and_views")
+def test_that_the_freshly_created_merge_attributes_are_present(db, uri_prefix):
     merge_attributes = Attribute.objects.filter(uri_prefix=uri_prefix).all()
     assert len(merge_attributes) > 2
     unique_uri_prefixes = set(Attribute.objects.values_list("uri_prefix", flat=True))
@@ -154,8 +155,8 @@ def test_that_the_freshly_created_merge_attributes_are_present(db, create_new_me
 @pytest.mark.parametrize('save', [False, True])
 @pytest.mark.parametrize('delete', [False, True])
 @pytest.mark.parametrize('view', [False, True])
-def test_command_merge_attributes(db, settings, create_new_merge_attributes_and_views,
-                                  source_uri_prefix, save, delete, view):
+@pytest.mark.usefixtures("_create_new_merge_attributes_and_views")
+def test_command_merge_attributes(db, settings, source_uri_prefix, save, delete, view):
     source_attributes = Attribute.objects.filter(uri_prefix=source_uri_prefix).all()
     assert len(source_attributes) > 2
     unique_uri_prefixes = set(Attribute.objects.values_list("uri_prefix", flat=True))
@@ -212,8 +213,8 @@ def test_command_merge_attributes(db, settings, create_new_merge_attributes_and_
 @pytest.mark.parametrize('save', [False, True])
 @pytest.mark.parametrize('delete', [False, True])
 @pytest.mark.parametrize('view', [False, True])
-def test_command_merge_attributes_for_views(db, settings, create_new_merge_attributes_and_views,
-                                            source_uri_prefix, save, delete, view):
+@pytest.mark.usefixtures("_create_new_merge_attributes_and_views")
+def test_command_merge_attributes_for_views(db, settings, source_uri_prefix, save, delete, view):
     source_attributes = Attribute.objects.filter(uri_prefix=source_uri_prefix).all()
     assert len(source_attributes) > 2
     unique_uri_prefixes = set(Attribute.objects.values_list("uri_prefix", flat=True))

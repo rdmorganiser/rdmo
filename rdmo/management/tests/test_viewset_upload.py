@@ -110,7 +110,7 @@ def test_create_empty(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-@pytest.mark.parametrize('xml_file_path, error_message', xml_error_files.items())
+@pytest.mark.parametrize('xml_file_path,error_message', xml_error_files.items())
 def test_create_error(db, client, username, password, xml_file_path, error_message):
     client.login(username=username, password=password)
 

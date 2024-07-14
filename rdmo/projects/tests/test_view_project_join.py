@@ -8,8 +8,8 @@ from ..models import Invite, Membership, Project
 membership_roles = ('owner', 'manager', 'author', 'guest')
 
 
-@pytest.fixture()
-def use_project_invite_timeout(settings):
+@pytest.fixture
+def _use_project_invite_timeout(settings):
     settings.PROJECT_INVITE_TIMEOUT = -1
 
 
@@ -85,7 +85,8 @@ def test_project_join_error(db, client, membership_role):
 
 
 @pytest.mark.parametrize('membership_role', membership_roles)
-def test_project_join_timeout_error(db, client, membership_role, use_project_invite_timeout):
+@pytest.mark.usefixtures("_use_project_invite_timeout")
+def test_project_join_timeout_error(db, client, membership_role):
     client.login(username='user', password='user')
 
     project = Project.objects.get(id=1)

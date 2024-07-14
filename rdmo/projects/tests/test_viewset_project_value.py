@@ -232,7 +232,7 @@ def test_delete(db, client, username, password, project_id, value_id):
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
-@pytest.mark.parametrize('value_id, set_values_count', set_values)
+@pytest.mark.parametrize('value_id,set_values_count', set_values)
 def test_set(db, client, username, password, project_id, value_id, set_values_count):
     client.login(username=username, password=password)
     value_exists = Value.objects.filter(project_id=project_id, snapshot=None, id=value_id).exists()
