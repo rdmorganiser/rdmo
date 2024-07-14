@@ -134,6 +134,7 @@ select = [
   "F",    # pyflakes
   "I",    # isort
   "PGH",  # pygrep-hooks
+  "PT",   # flake8-pytest-style
   "RUF",  # ruff
   "UP",   # pyupgrade
   "W",    # pycodestyle
@@ -185,6 +186,10 @@ rest_framework = ["rest_framework"]
   "F405", # undefined-names
   "F821", # undefined-names
 ]
+
+[tool.ruff.lint.flake8-pytest-style]
+fixture-parentheses = false
+parametrize-names-type = "csv"
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "config.settings"
