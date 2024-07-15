@@ -35,8 +35,7 @@ class ValueConflictValidator:
                 'collection_index': data.get('collection_index')
             }
 
-            # for checkboxes, check only values with the same option
-            # get the widget_type from the put request
+            # for checkboxes, check only values with the same option. the widget_type is provided with the post request
             widget_type = serializer.context['view'].request.data.get('widget_type')
             if widget_type == 'checkbox':
                 get_kwargs['option'] = data.get('option')
