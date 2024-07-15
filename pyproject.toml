@@ -140,6 +140,7 @@ select = [
   "W",    # pycodestyle
   "YTT",  # flake8-2020
   "G",    # flake8-logging-format
+  "INT"   # flake8-gettext
 ]
 ignore = [
   "B006",   # mutable-argument-default
