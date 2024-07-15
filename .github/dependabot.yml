@@ -19,7 +19,6 @@ updates:
     # create a single pull request containing all updates for the optional dependencies
     optional:
       patterns:
-      - coveralls
       - django-allauth
       - django-auth-ldap
       - gunicorn
@@ -36,7 +35,6 @@ updates:
   directory: /
   schedule:
     interval: monthly
-  open-pull-requests-limit: 10
   target-branch: dependency-updates
   labels:
   - dependencies
