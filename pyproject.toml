@@ -188,8 +188,7 @@ rest_framework = ["rest_framework"]
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "config.settings"
-testpaths = ["rdmo"]
-python_files = "test_*.py"
+testpaths = ["rdmo/*/tests"]
 pythonpath = [".", "testing"]
 addopts = '-p no:randomly -m "not e2e"'
 markers = [
