@@ -137,7 +137,7 @@ def read_xml_file(file_name, raise_exception=False):
     try:
         return ET.parse(file_name).getroot()
     except Exception as e:
-        logger.error('Xml parsing error: ' + str(e))
+        logger.error('Xml file parsing error at getroot: %s', str(e))
         if raise_exception:
             raise e from e
 
@@ -146,7 +146,7 @@ def parse_xml_string(string):
     try:
         return ET.fromstring(string)
     except Exception as e:
-        logger.error('Xml parsing error: ' + str(e))
+        logger.error('Xml parsing from string error: %s', str(e))
 
 
 def flat_xml_to_elements(root) -> dict:
