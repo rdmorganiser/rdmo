@@ -139,7 +139,7 @@ select = [
   "UP",   # pyupgrade
   "W",    # pycodestyle
   "YTT",  # flake8-2020
-  "G004", # logging-f-string
+  "G",    # flake8-logging-format
 ]
 ignore = [
   "B006",   # mutable-argument-default
