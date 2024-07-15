@@ -28,13 +28,21 @@ class ValueConflictValidator:
                     })
         else:
             # for a new value, check if there is already a value with the same attribute and indexes
+            get_kwargs = {
+                'attribute': data.get('attribute'),
+                'set_prefix': data.get('set_prefix'),
+                'set_index': data.get('set_index'),
+                'collection_index': data.get('collection_index')
+            }
+
+            # for checkboxes, check only values with the same option
+            # get the widget_type from the put request
+            widget_type = serializer.context['view'].request.data.get('widget_type')
+            if widget_type == 'checkbox':
+                get_kwargs['option'] = data.get('option')
+
             try:
-                serializer.context['view'].project.values.filter(snapshot=None).get(
-                    attribute=data.get('attribute'),
-                    set_prefix=data.get('set_prefix'),
-                    set_index=data.get('set_index'),
-                    collection_index=data.get('collection_index')
-                )
+                serializer.context['view'].project.values.filter(snapshot=None).get(**get_kwargs)
             except ObjectDoesNotExist:
                 return
             except MultipleObjectsReturned:

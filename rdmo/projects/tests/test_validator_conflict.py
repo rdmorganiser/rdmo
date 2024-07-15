@@ -13,10 +13,14 @@ attribute_path = attribute__path='individual/single/text'
 
 
 def test_serializer_create(db):
-    class MockedView:
-        project = Project.objects.get(id=project_id)
-
     value = Value.objects.get(project_id=project_id, snapshot=None, attribute__path=attribute_path)
+
+    class MockedRequest:
+        data = {}
+
+    class MockedView:
+        request = MockedRequest()
+        project = Project.objects.get(id=project_id)
 
     validator = ValueConflictValidator()
     serializer = ValueSerializer()
@@ -31,10 +35,14 @@ def test_serializer_create(db):
 
 
 def test_serializer_create_error(db):
-    class MockedView:
-        project = Project.objects.get(id=project_id)
-
     value = Value.objects.get(project_id=project_id, snapshot=None, attribute__path=attribute_path)
+
+    class MockedRequest:
+        data = {}
+
+    class MockedView:
+        request = MockedRequest()
+        project = Project.objects.get(id=project_id)
 
     validator = ValueConflictValidator()
     serializer = ValueSerializer()
@@ -121,3 +129,100 @@ def test_serializer_update_missing_updated(db):
         'set_index': value.set_index,
         'collection_index': value.collection_index,
     }, serializer)
+
+
+def test_serializer_create_checkbox(db):
+    value = Value.objects.get(
+        project_id=project_id,
+        snapshot=None,
+        attribute__path='individual/collection/checkbox',
+        collection_index=0
+    )
+    value2 = Value.objects.get(
+        project_id=project_id,
+        snapshot=None,
+        attribute__path='individual/collection/checkbox',
+        collection_index=2
+    )
+
+    class MockedRequest:
+        data = {
+            'widget_type': 'checkbox'
+        }
+
+    class MockedView:
+        request = MockedRequest()
+        project = Project.objects.get(id=project_id)
+
+    validator = ValueConflictValidator()
+    serializer = ValueSerializer()
+    serializer.context['view'] = MockedView()
+
+    validator({
+        'attribute': value.attribute,
+        'set_prefix': value.set_prefix,
+        'set_index': value.set_index,
+        'collection_index': value.collection_index,
+        'option': value2.option
+    }, serializer)
+
+
+def test_serializer_create_checkbox_error(db):
+    value = Value.objects.get(
+        project_id=project_id,
+        snapshot=None,
+        attribute__path='individual/collection/checkbox',
+        collection_index=0
+    )
+
+    class MockedRequest:
+        data = {
+            'widget_type': 'checkbox'
+        }
+
+    class MockedView:
+        request = MockedRequest()
+        project = Project.objects.get(id=project_id)
+
+    validator = ValueConflictValidator()
+    serializer = ValueSerializer()
+    serializer.context['view'] = MockedView()
+
+    with pytest.raises(RestFameworkValidationError):
+        validator({
+            'attribute': value.attribute,
+            'set_prefix': value.set_prefix,
+            'set_index': value.set_index,
+            'collection_index': value.collection_index,
+            'option': value.option
+        }, serializer)
+
+
+def test_serializer_create_checkbox_text(db):
+    value = Value.objects.get(
+        project_id=project_id,
+        snapshot=None,
+        attribute__path='individual/collection/checkbox',
+        collection_index=0
+    )
+
+    class MockedRequest:
+        data = {
+            'widget_type': 'text'
+        }
+
+    class MockedView:
+        request = MockedRequest()
+        project = Project.objects.get(id=project_id)
+
+    validator = ValueConflictValidator()
+    serializer = ValueSerializer()
+    serializer.context['view'] = MockedView()
+
+    with pytest.raises(RestFameworkValidationError):
+        validator({
+            'attribute': value.attribute,
+            'set_prefix': value.set_prefix,
+            'set_index': value.set_index,
+            'collection_index': value.collection_index
+        }, serializer)
