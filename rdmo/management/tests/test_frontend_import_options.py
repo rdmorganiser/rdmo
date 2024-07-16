@@ -28,7 +28,7 @@ OPTIONSETS_COUNTS_HEADER_INFOS = [f"{k.capitalize()}: {v}" for k,v in OPTIONSETS
 # Defined in filterCheckBoxText in rdmo/management/assets/js/components/import/common/ImportFilters.js
 IMPORT_FILTER_LABEL_TEXT = "Show only new and changes"
 
-@pytest.mark.parametrize("username, password", test_users)  # consumed by fixture
+@pytest.mark.parametrize("username,password", test_users)  # consumed by fixture
 def test_import_and_update_optionsets_in_management(logged_in_user: Page) -> None:
     """Test that each content type is available through the navigation."""
     delete_all_objects([OptionSet, Option])

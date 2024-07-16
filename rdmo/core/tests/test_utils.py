@@ -24,7 +24,7 @@ human2bytes_test_values = (
 )
 
 
-@pytest.mark.parametrize("url,sanitized_url", urls)
+@pytest.mark.parametrize('url,sanitized_url', urls)
 def test_sanitize_url(url, sanitized_url):
     assert sanitize_url(url) == sanitized_url
 
@@ -33,6 +33,6 @@ def test_join_url():
     assert join_url('https://example.com//', '/terms', 'foo') == 'https://example.com/terms/foo'
 
 
-@pytest.mark.parametrize("human,bytes", human2bytes_test_values)
+@pytest.mark.parametrize('human,bytes', human2bytes_test_values)
 def test_human2bytes(human: Optional[str], bytes: float):
     assert human2bytes(human) == bytes

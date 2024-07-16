@@ -17,7 +17,7 @@ def test_home_anonymous(db, client):
     assert response.status_code == 200
 
 
-@pytest.mark.parametrize("username,password", users)
+@pytest.mark.parametrize('username,password', users)
 def test_home_user(db, client, username, password):
     client.login(username=username, password=password)
     response = client.get(reverse('home'))
@@ -30,7 +30,7 @@ def test_about_anonymous(db, client):
     assert response.status_code == 302
 
 
-@pytest.mark.parametrize("username,password", users)
+@pytest.mark.parametrize('username,password', users)
 def test_about_user(db, client, username, password):
     client.login(username=username, password=password)
     response = client.get(reverse('about'))
@@ -55,7 +55,7 @@ def test_i18n_switcher(db, client):
     assert 'en' in response['Content-Language']
 
 
-@pytest.mark.parametrize("username,password", users)
+@pytest.mark.parametrize('username,password', users)
 def test_can_view_management(db, client, username, password):
     client.login(username=username, password=password)
     response = client.get(reverse('management'))

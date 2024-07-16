@@ -20,7 +20,7 @@ os.environ.setdefault("DJANGO_ALLOW_ASYNC_UNSAFE", "true")
 
 test_users = [('editor', 'editor')]
 
-@pytest.mark.parametrize("username, password", test_users)
+@pytest.mark.parametrize("username,password", test_users)
 @pytest.mark.parametrize("helper", model_helpers)
 def test_management_navigation(logged_in_user: Page, helper: ModelHelper, username: str, password: str) -> None:
     """Test that each content type is available through the navigation."""
@@ -44,7 +44,7 @@ def test_management_navigation(logged_in_user: Page, helper: ModelHelper, userna
 
 
 
-@pytest.mark.parametrize("username, password", test_users)
+@pytest.mark.parametrize("username,password", test_users)
 @pytest.mark.parametrize("helper", model_helpers)
 def test_management_has_items(logged_in_user: Page, helper: ModelHelper) -> None:
     """Test all items in database are visible in management UI."""
@@ -55,7 +55,7 @@ def test_management_has_items(logged_in_user: Page, helper: ModelHelper) -> None
     expect(items_in_ui).to_have_count(num_items_in_database)
 
 
-@pytest.mark.parametrize("username, password", test_users)
+@pytest.mark.parametrize("username,password", test_users)
 @pytest.mark.parametrize("helper", model_helpers)
 def test_management_nested_view(
     logged_in_user: Page, helper: ModelHelper
@@ -70,7 +70,7 @@ def test_management_nested_view(
         expect(page.locator(".panel-default > .panel-body").first).to_be_visible()
 
 
-@pytest.mark.parametrize("username, password", test_users)
+@pytest.mark.parametrize("username,password", test_users)
 @pytest.mark.parametrize("helper", model_helpers)
 def test_management_create_model(
     logged_in_user: Page, helper: ModelHelper
@@ -107,7 +107,7 @@ def test_management_create_model(
     assert helper.model.objects.get(**query)
 
 
-@pytest.mark.parametrize("username, password", test_users)
+@pytest.mark.parametrize("username,password", test_users)
 @pytest.mark.parametrize("helper", model_helpers)
 def test_management_edit_model(logged_in_user: Page, helper: ModelHelper) -> None:
     page = logged_in_user

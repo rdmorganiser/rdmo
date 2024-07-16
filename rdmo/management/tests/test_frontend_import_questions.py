@@ -19,7 +19,7 @@ os.environ.setdefault("DJANGO_ALLOW_ASYNC_UNSAFE", "true")
 
 test_users = [('editor', 'editor')]
 
-@pytest.mark.parametrize("username, password", test_users)  # consumed by fixture
+@pytest.mark.parametrize("username,password", test_users)  # consumed by fixture
 def test_import_catalogs_in_management(logged_in_user: Page) -> None:
     """Test that the catalogs.xml can be imported correctly."""
     delete_all_objects([Catalog, Section, PageModel, QuestionSet, Question])
