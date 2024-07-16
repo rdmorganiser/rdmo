@@ -651,9 +651,13 @@ angular.module('project_questions')
             value.additional_input = {};
 
             angular.forEach(question.options, function(option) {
-                if (!option.has_provider && option.additional_input && value.option === option.id) {
-                    value.additional_input[option.id] = value.text;
+              if (!option.has_provider && option.additional_input) {
+                if (value.option === option.id) {
+                    value.additional_input[option.id] = value.text || option.default_text;
+                } else {
+                    value.additional_input[option.id] = option.default_text;
                 }
+              }
             });
         }
 
