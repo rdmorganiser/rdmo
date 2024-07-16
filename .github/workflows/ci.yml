@@ -10,6 +10,9 @@ on:
       - '.github/workflows/**'
       - 'rdmo/**'
       - 'testing/**'
+      - 'webpack/**'
+      - .eslintrc.js
+      - .nvmrc
       - .pre-commit-config.yaml
       - conftest.py
       - package.json
