@@ -19,7 +19,8 @@ class OptionSerializer(serializers.ModelSerializer):
             'text',
             'help',
             'text_and_help',
-            'additional_input'
+            'additional_input',
+            'default_text'
         )
 
 
