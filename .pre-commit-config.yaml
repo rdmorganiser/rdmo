@@ -21,6 +21,11 @@ repos:
       - id: trailing-whitespace
         exclude: \.dot$
       - id: debug-statements
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.29.0
+    hooks:
+    - id: check-dependabot
+    - id: check-github-workflows
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.4.4
     hooks:
