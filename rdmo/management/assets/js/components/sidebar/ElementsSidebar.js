@@ -127,7 +127,7 @@ const ElementsSidebar = ({ config, elements, elementActions, importActions }) =>
       <h2>Import</h2>
 
       <p className="text-muted">
-        {gettext('Import from an RDMO XML file.')}
+        {gettext('Import an RDMO XML file.')}
       </p>
 
       <UploadForm onSubmit={file => importActions.uploadFile(file)} />
