@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.db.models import Prefetch
+from django.urls import reverse
+from django.utils.safestring import mark_safe
 
 from .models import (
     Continuation,
@@ -30,7 +32,7 @@ class ProjectAdmin(admin.ModelAdmin):
         )
 
     def owners(self, obj):
-        return ', '.join([membership.user.username for membership in obj.owner_memberships])
+        return [membership.user.get_full_name() for membership in obj.owner_memberships]
 
 
 @admin.register(Membership)
@@ -80,7 +82,7 @@ class IssueResourceAdmin(admin.ModelAdmin):
 @admin.register(Snapshot)
 class SnapshotAdmin(admin.ModelAdmin):
     search_fields = ('title', 'project__title', 'project__user__username')
-    list_display = ('title', 'project', 'owners', 'updated', 'created')
+    list_display = ('title', 'project_title', 'project_owners', 'updated', 'created')
 
     def get_queryset(self, request):
         return Snapshot.objects.prefetch_related(
@@ -91,16 +93,39 @@ class SnapshotAdmin(admin.ModelAdmin):
             )
         ).select_related('project')
 
-    def owners(self, obj):
-        return ', '.join([membership.user.username for membership in obj.project.owner_memberships])
+    def project_title(self, obj):
+        url = reverse('admin:projects_project_change', args=[obj.project.id])
+        link = f'<a href="{url}">{obj.project.title}</a>'
+        return mark_safe(link)
+
+    def project_owners(self, obj):
+        return [membership.user.get_full_name() for membership in obj.project.owner_memberships]
 
 
 @admin.register(Value)
 class ValueAdmin(admin.ModelAdmin):
     search_fields = ('attribute__uri', 'project__title', 'snapshot__title', 'project__user__username')
-    list_display = ('attribute', 'set_prefix', 'set_index', 'collection_index', 'project', 'snapshot_title')
+    list_display = ('attribute', 'set_prefix', 'set_index', 'collection_index', 'value_type',
+                    'project_title', 'project_owners', 'snapshot_title', 'updated', 'created')
     list_filter = ('value_type', )
+
+    def get_queryset(self, request):
+        return Value.objects.prefetch_related(
+            Prefetch(
+                'project__memberships',
+                queryset=Membership.objects.filter(role='owner').select_related('user'),
+                to_attr='owner_memberships'
+            )
+        ).select_related('attribute', 'project', 'snapshot')
 
     def snapshot_title(self, obj):
         if obj.snapshot:
             return obj.snapshot.title
+
+    def project_title(self, obj):
+        url = reverse('admin:projects_project_change', args=[obj.project.id])
+        link = f'<a href="{url}">{obj.project.title}</a>'
+        return mark_safe(link)
+
+    def project_owners(self, obj):
+        return [membership.user.get_full_name() for membership in obj.project.owner_memberships]
