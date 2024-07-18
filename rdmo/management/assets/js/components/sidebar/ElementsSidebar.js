@@ -73,10 +73,33 @@ const ElementsSidebar = ({ config, elements, elementActions, importActions }) =>
 
       <h2>Export</h2>
 
+      <p className="text-muted">
+        {interpolate(gettext('Export all visible %s.'), [elementType])}
+      </p>
+
       <ul className="list-unstyled">
         <li>
           <a href={`${exportUrl}?${exportParams}`}>{gettext('XML')}</a>
         </li>
+        {
+          [
+            'catalogs',
+            'sections',
+            'pages',
+            'questionsets',
+            'questions',
+            'optionsets',
+            'conditions',
+            'tasks'
+          ].includes(elementType) && (
+            <li>
+              <a href={`${exportUrl}?full=true&${exportParams}`}>{gettext('XML (full)')}</a>
+            </li>
+          )
+        }
+      </ul>
+
+      <ul className="list-unstyled">
         {
           elementType == 'attributes' && <>
             <li>
@@ -102,6 +125,10 @@ const ElementsSidebar = ({ config, elements, elementActions, importActions }) =>
       </ul>
 
       <h2>Import</h2>
+
+      <p className="text-muted">
+        {gettext('Import from an RDMO XML file.')}
+      </p>
 
       <UploadForm onSubmit={file => importActions.uploadFile(file)} />
     </div>
