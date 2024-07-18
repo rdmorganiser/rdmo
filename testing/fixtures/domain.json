@@ -1683,7 +1683,7 @@
     "fields": {
       "uri": "http://example.com/terms/domain/validation/date",
       "uri_prefix": "http://example.com/terms",
-      "key": "datetime",
+      "key": "date",
       "path": "validation/date",
       "comment": "",
       "locked": false,
