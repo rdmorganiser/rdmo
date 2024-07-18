@@ -1681,6 +1681,24 @@
     "model": "domain.attribute",
     "pk": 129,
     "fields": {
+      "uri": "http://example.com/terms/domain/validation/date",
+      "uri_prefix": "http://example.com/terms",
+      "key": "datetime",
+      "path": "validation/date",
+      "comment": "",
+      "locked": false,
+      "parent": 124,
+      "lft": 8,
+      "rght": 9,
+      "tree_id": 9,
+      "level": 1,
+      "editors": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 130,
+    "fields": {
       "uri": "http://example.com/terms/domain/validation/datetime",
       "uri_prefix": "http://example.com/terms",
       "key": "datetime",
@@ -1697,7 +1715,7 @@
   },
   {
     "model": "domain.attribute",
-    "pk": 130,
+    "pk": 131,
     "fields": {
       "uri": "http://example.com/terms/domain/validation/email",
       "uri_prefix": "http://example.com/terms",
@@ -1715,7 +1733,7 @@
   },
   {
     "model": "domain.attribute",
-    "pk": 131,
+    "pk": 132,
     "fields": {
       "uri": "http://example.com/terms/domain/validation/phone",
       "uri_prefix": "http://example.com/terms",
@@ -1733,7 +1751,7 @@
   },
   {
     "model": "domain.attribute",
-    "pk": 132,
+    "pk": 133,
     "fields": {
       "uri": "http://example.com/terms/domain/validation/bool",
       "uri_prefix": "http://example.com/terms",

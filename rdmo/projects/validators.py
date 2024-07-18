@@ -8,7 +8,17 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 
-from rdmo.core.constants import VALUE_TYPE_FILE
+from rdmo.core.constants import (
+    VALUE_TYPE_BOOLEAN,
+    VALUE_TYPE_DATE,
+    VALUE_TYPE_DATETIME,
+    VALUE_TYPE_EMAIL,
+    VALUE_TYPE_FILE,
+    VALUE_TYPE_FLOAT,
+    VALUE_TYPE_INTEGER,
+    VALUE_TYPE_PHONE,
+    VALUE_TYPE_URL,
+)
 from rdmo.core.utils import human2bytes
 
 
@@ -82,43 +92,43 @@ class ValueTypeValidator:
 
     def validate(self, text, value_type):
         if text and settings.PROJECT_VALUES_VALIDATION:
-            if value_type == 'url' and settings.PROJECT_VALUES_VALIDATION_URL:
+            if value_type == VALUE_TYPE_URL and settings.PROJECT_VALUES_VALIDATION_URL:
                 URLValidator()(text)
 
-            elif value_type == 'integer' and settings.PROJECT_VALUES_VALIDATION_INTEGER:
+            elif value_type == VALUE_TYPE_INTEGER and settings.PROJECT_VALUES_VALIDATION_INTEGER:
                 RegexValidator(
                     settings.PROJECT_VALUES_VALIDATION_INTEGER_REGEX,
                     settings.PROJECT_VALUES_VALIDATION_INTEGER_MESSAGE
                 )(text)
 
-            elif value_type == 'float' and settings.PROJECT_VALUES_VALIDATION_FLOAT:
+            elif value_type == VALUE_TYPE_FLOAT and settings.PROJECT_VALUES_VALIDATION_FLOAT:
                 RegexValidator(
                     settings.PROJECT_VALUES_VALIDATION_FLOAT_REGEX,
                     settings.PROJECT_VALUES_VALIDATION_FLOAT_MESSAGE
                 )(text)
 
-            elif value_type == 'boolean' and settings.PROJECT_VALUES_VALIDATION_BOOLEAN:
+            elif value_type == VALUE_TYPE_BOOLEAN and settings.PROJECT_VALUES_VALIDATION_BOOLEAN:
                 RegexValidator(
                     settings.PROJECT_VALUES_VALIDATION_BOOLEAN_REGEX,
                     settings.PROJECT_VALUES_VALIDATION_BOOLEAN_MESSAGE
                 )(text)
 
-            elif value_type == 'date' and settings.PROJECT_VALUES_VALIDATION_DATE:
+            elif value_type == VALUE_TYPE_DATE and settings.PROJECT_VALUES_VALIDATION_DATE:
                 RegexValidator(
                     settings.PROJECT_VALUES_VALIDATION_DATE_REGEX,
                     settings.PROJECT_VALUES_VALIDATION_DATE_MESSAGE
                 )(text)
 
-            elif value_type == 'datetime' and settings.PROJECT_VALUES_VALIDATION_DATETIME:
+            elif value_type == VALUE_TYPE_DATETIME and settings.PROJECT_VALUES_VALIDATION_DATETIME:
                 try:
                     datetime.fromisoformat(text)
                 except ValueError as e:
                     raise ValidationError(_('Enter a valid datetime.')) from e
 
-            elif value_type == 'email' and settings.PROJECT_VALUES_VALIDATION_EMAIL:
+            elif value_type == VALUE_TYPE_EMAIL and settings.PROJECT_VALUES_VALIDATION_EMAIL:
                 EmailValidator()(text)
 
-            elif value_type == 'phone' and settings.PROJECT_VALUES_VALIDATION_PHONE:
+            elif value_type == VALUE_TYPE_PHONE and settings.PROJECT_VALUES_VALIDATION_PHONE:
                 RegexValidator(
                     settings.PROJECT_VALUES_VALIDATION_PHONE_REGEX,
                     settings.PROJECT_VALUES_VALIDATION_PHONE_MESSAGE
