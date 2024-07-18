@@ -796,9 +796,11 @@ angular.module('project_questions')
             if (question === null) {
                 // this is the id of a new valueset
                 value.value_type = 'text';
+                value.widget_type = 'text';
                 value.unit = '';
             } else {
                 value.value_type = question.value_type;
+                value.widget_type = question.widget_type;
                 value.unit = question.unit;
             }
 
