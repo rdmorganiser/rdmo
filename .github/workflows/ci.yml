@@ -172,13 +172,12 @@ jobs:
         python-version: '3.12'
         cache: pip
     - run: |
-        python -m pip install --upgrade pip pipx
+        python -m pip install --upgrade pip build[uv] twine
         pip --version
-        pipx --version
     - name: Build the wheel
-      run: pipx run build
-    - name: Check the metadata
-      run: pipx run twine check --strict dist/*
+      run: python -m build --installer=uv
+    - name: Check the metadata of wheel and sdist
+      run: python -m twine check --strict dist/*
     - name: Install package from built wheel
       run: python -m pip install --no-compile dist/rdmo*.whl # do not create __pycache__/*.pyc files
     - name: Write info to step summary
