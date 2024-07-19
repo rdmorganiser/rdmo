@@ -51,7 +51,7 @@ class OptionRendererMixin:
                 self.render_text_element(xml, 'text', {'lang': lang_code}, option[f'text_{lang_code}'])
                 self.render_text_element(xml, 'help', {'lang': lang_code}, option[f'help_{lang_code}'])
                 self.render_text_element(xml, 'default_text', {'lang': lang_code},
-                                         option[f'default_text_{lang_code}')
+                                         option[f'default_text_{lang_code}'])
                 self.render_text_element(xml, 'view_text', {'lang': lang_code}, option[f'view_text_{lang_code}'])
 
             self.render_text_element(xml, 'additional_input', {}, option['additional_input'])
