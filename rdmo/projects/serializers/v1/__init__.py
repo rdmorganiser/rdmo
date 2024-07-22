@@ -9,7 +9,7 @@ from rdmo.questions.models import Catalog
 from rdmo.services.validators import ProviderValidator
 
 from ...models import Integration, IntegrationOption, Invite, Issue, IssueResource, Membership, Project, Snapshot, Value
-from ...validators import ValueConflictValidator, ValueQuotaValidator
+from ...validators import ValueConflictValidator, ValueQuotaValidator, ValueTypeValidator
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -267,7 +267,8 @@ class ProjectValueSerializer(serializers.ModelSerializer):
         )
         validators = (
             ValueConflictValidator(),
-            ValueQuotaValidator()
+            ValueQuotaValidator(),
+            ValueTypeValidator()
         )
 
 
