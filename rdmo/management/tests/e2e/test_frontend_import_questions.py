@@ -1,36 +1,30 @@
 # ruff: noqa: F811
-import os
-
 import pytest
 
-from playwright.sync_api import Page, expect
+from playwright.sync_api import expect
 
+from rdmo.management.tests.helpers_import_elements import IMPORT_ELEMENT_PANELS_LOCATOR_SHOWN
+from rdmo.management.tests.helpers_models import delete_all_objects
 from rdmo.questions.models import Catalog, Question, Section
 from rdmo.questions.models import Page as PageModel
 from rdmo.questions.models.questionset import QuestionSet
 
-from .helpers_import_elements import IMPORT_ELEMENT_PANELS_LOCATOR_SHOWN
-from .helpers_models import delete_all_objects
-
 pytestmark = pytest.mark.e2e
 
-# needed for playwright to run
-os.environ.setdefault("DJANGO_ALLOW_ASYNC_UNSAFE", "true")
 
-test_users = [('editor', 'editor')]
-
-@pytest.mark.parametrize("username,password", test_users)  # consumed by fixture
-def test_import_catalogs_in_management(logged_in_user: Page) -> None:
+def test_import_catalogs_in_management(page) -> None:
     """Test that the catalogs.xml can be imported correctly."""
+
     delete_all_objects([Catalog, Section, PageModel, QuestionSet, Question])
 
-    page = logged_in_user
     expect(page.get_by_role("heading", name="Management")).to_be_visible()
     expect(page.locator("strong").filter(has_text="Catalogs")).to_be_visible()
     # choose the file to be imported
-    page.locator("input[name=\"uploaded_file\"]").set_input_files("./testing/xml/elements/catalogs.xml")
+    page.locator('input[name="uploaded_file"]').set_input_files("./testing/xml/elements/catalogs.xml")
     # click the import form submit button, this will take some time
-    page.locator('#sidebar div.elements-sidebar form.upload-form.sidebar-form div.sidebar-form-button button.btn.btn-primary').click()  # noqa: E501
+    page.locator(
+        "#sidebar div.elements-sidebar form.upload-form.sidebar-form div.sidebar-form-button button.btn.btn-primary"
+    ).click()
     # wait for import to be finished with timeout 30s
     expect(page.get_by_text("Import from: catalogs.xml")).to_be_visible(timeout=30_000)
     ## TODO test if ImportInfo numbers are correct
