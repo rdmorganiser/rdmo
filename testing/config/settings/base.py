@@ -44,7 +44,7 @@ else:
         }
     }
 
-PASSWORD_HASHERS = ("django.contrib.auth.hashers.MD5PasswordHasher",)
+PASSWORD_HASHERS = ("plaintext_password.PlaintextPasswordHasher",)
 
 FIXTURE_DIRS = (
     BASE_DIR / 'fixtures',
