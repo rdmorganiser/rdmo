@@ -1,3 +1,5 @@
+import re
+
 from django.utils.translation import gettext_lazy as _
 
 SITE_ID = 1
@@ -314,24 +316,54 @@ NESTED_PROJECTS = True
 OPTIONSET_PROVIDERS = []
 
 PROJECT_VALUES_VALIDATION = False
+
 PROJECT_VALUES_VALIDATION_URL = True
+
 PROJECT_VALUES_VALIDATION_INTEGER = True
-PROJECT_VALUES_VALIDATION_INTEGER_REGEX = r'^[+-]?\d+$'
 PROJECT_VALUES_VALIDATION_INTEGER_MESSAGE = _('Enter a valid integer.')
+PROJECT_VALUES_VALIDATION_INTEGER_REGEX = re.compile(r'^[+-]?\d+$')
+
 PROJECT_VALUES_VALIDATION_FLOAT = True
-PROJECT_VALUES_VALIDATION_FLOAT_REGEX = r'^[+-]?((\d+(\,\d{3})*(\.\d+)?|\d+(\.\d{3})*(\,\d+)?))([eE][+-]?\d+)?$'
 PROJECT_VALUES_VALIDATION_FLOAT_MESSAGE = _('Enter a valid float.')
+PROJECT_VALUES_VALIDATION_FLOAT_REGEX = re.compile(r'''
+    ^[+-]?            # Optional sign
+    (
+        \d+           # Digits before the decimal or thousands separator
+        (,\d{3})*     # Optional groups of exactly three digits preceded by a comma (thousands separator)
+        (\.\d+)?      # Optional decimal part, a dot followed by one or more digits
+        |             # OR
+        \d+           # Digits before the decimal or thousands separator
+        (\.\d{3})*    # Optional groups of exactly three digits preceded by a dot (thousands separator)
+        (,\d+)?       # Optional decimal part, a comma followed by one or more digits
+    )
+    ([eE][+-]?\d+)?$  # Optional exponent part
+''', re.VERBOSE)
+
 PROJECT_VALUES_VALIDATION_BOOLEAN = True
-PROJECT_VALUES_VALIDATION_BOOLEAN_REGEX = r'(?i)^(0|1|f|t|false|true)$'
 PROJECT_VALUES_VALIDATION_BOOLEAN_MESSAGE = _('Enter a valid boolean (e.g. 0, 1).')
+PROJECT_VALUES_VALIDATION_BOOLEAN_REGEX = r'(?i)^(0|1|f|t|false|true)$'
+
 PROJECT_VALUES_VALIDATION_DATE = True
-PROJECT_VALUES_VALIDATION_DATE_REGEX = r'^(\d{1,2}\.\s*\d{1,2}\.\s*\d{2,4}|\d{1,2}\/\d{1,2}\/\d{4}|\d{4}-\d{2}-\d{2})$'
 PROJECT_VALUES_VALIDATION_DATE_MESSAGE = _('Enter a valid date (e.g. "02.03.2024", "03/02/2024", "2024-02-03").')
+PROJECT_VALUES_VALIDATION_DATE_REGEX = re.compile(r'''
+    ^(
+        \d{1,2}\.\s*\d{1,2}\.\s*\d{2,4}  # Format dd.mm.yyyy
+        | \d{1,2}/\d{1,2}/\d{4}          # Format mm/dd/yyyy
+        | \d{4}-\d{2}-\d{2}              # Format yyyy-mm-dd
+    )$
+''', re.VERBOSE)
+
 PROJECT_VALUES_VALIDATION_DATETIME = True
+
 PROJECT_VALUES_VALIDATION_EMAIL = True
+
 PROJECT_VALUES_VALIDATION_PHONE = True
-PROJECT_VALUES_VALIDATION_PHONE_REGEX = r'^([+]\d{2,3}\s)?(\(\d+\)\s)?[\d\s]*$'
 PROJECT_VALUES_VALIDATION_PHONE_MESSAGE = _('Enter a valid phone number (e.g. "123456" or "+49 (0) 30 123456").')
+PROJECT_VALUES_VALIDATION_PHONE_REGEX = re.compile(r'''
+    ^([+]\d{2,3}\s)?  # Optional country code
+    (\(\d+\)\s)?      # Optional area code in parentheses
+    [\d\s]*$          # Main number with spaces
+''', re.VERBOSE)
 
 QUESTIONS_WIDGETS = [
     ('text', _('Text'), 'rdmo.projects.widgets.TextWidget'),
