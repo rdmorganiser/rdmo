@@ -14,7 +14,8 @@ const ImportFilters = ({ config, elements, changedElements, filteredElements, co
   const getValueFilterChanged = () => get(config, 'filter.import.elements.changed', false)
 
   const filterCheckBoxText = interpolate(
-    success ? gettext('Show only created and changed (%s)') : gettext('Show only new and changes (%s)'),
+    success ? gettext('Show only created and changed elements (%s)')
+            : gettext('Show only new and changed elements (%s)'),
     [changedElements.length]
   )
 
@@ -22,7 +23,7 @@ const ImportFilters = ({ config, elements, changedElements, filteredElements, co
     <div className="row">
       <div className={'col-sm-8'}>
         <FilterString value={getValueFilterString()} onChange={updateFilterString}
-                      placeholder={gettext('Filter uri')}/>
+                      placeholder={gettext('Filter URI')}/>
       </div>
       <div className="col-sm-4">
         <FilterUriPrefix value={getValueFilterUriPrefix()}

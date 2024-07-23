@@ -12,8 +12,8 @@ import {ChangedLabel, CreatedLabel} from './common/ImportLabels'
 const ImportSuccessElement = ({ element, importActions }) => {
 
   const updateShowField = () => importActions.updateElement(element, { show: !element.show })
-  const changedLabelText = gettext('changed')
-  const createdLabelText = gettext('created')
+  const changedLabelText = gettext('Changed')
+  const createdLabelText = gettext('Created')
 
   return (
     <li className="list-group-item">
