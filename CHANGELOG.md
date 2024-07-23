@@ -1,5 +1,37 @@
 # Changelog
 
+## [RDMO 2.2.0](https://github.com/rdmorganiser/rdmo/compare/2.1.3...2.2.0) (Jul 25, 2024)
+
+* Add new projects overview
+  * Projects are now displayed in an interactive table which can be filtered and ordered
+* Add new import interface to management
+  * Show detailed information what is new and what changed
+  * Show a summary of warnings and errors at the top of the page
+* Add validation depending on the `value_type` configured for the question
+  * Validation needs to be enabled using `PROJECT_VALUES_VALIDATION = True`
+  * Configuration can be adjusted using settings for each value_type
+* Enable markdown rendering for titles and texts of elements
+* All parent attributes are now added to the full XML export
+* Use only available catalogs for project import by users
+* Add workaround for conflict validation for checkboxes
+* Add `merge_attributes` management script to move related items from one attribute to another
+* Add `join_values_inline` tag for views
+* Add `user` and `site` to optionset provider plugins
+* Add short title field for sections and pages for the navigation
+* Add section progress to the navigation
+* Fix a bug with conditions with non-consecutive set_index (when datasets are created and deleted)
+* Fix progress action if progress did not change
+* Fix a bug with element copy in management
+* Fix a bug with the progress bar when a section has no pages
+* Fix missing translations on buttons in management interface
+* Fix link target for links in management interface
+* Fix textarea resizing
+* Fix export links in management
+* Fix typos
+* Remove local hosts from ALLOWED_HOSTS settings
+* Improve admin interface
+* Update default home page
+
 ## [RDMO 2.1.3](https://github.com/rdmorganiser/rdmo/compare/2.1.2...2.1.3) (Feb 13, 2024)
 
 * Fix the migration of options with additional_input (#912)
