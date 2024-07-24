@@ -354,6 +354,7 @@ def set_m2m_through_instances(instance, element, field_name=None, source_name=No
 
     for target_element in target_elements:
         target_uri = target_element.get('uri')
+        target_element['order'] = int(target_element['order']) # cast to int for ordering
         order = target_element.get('order')
         new_data.append(target_element)
 
@@ -497,6 +498,7 @@ def set_reverse_m2m_through_instance(instance, element, field_name=None, source_
 
     for target_element in target_elements:
         target_uri = target_element.get('uri')
+        target_element['order'] = int(target_element['order'])  # cast to int for ordering
         order = target_element.get('order')
         new_data.append(target_element)
 
