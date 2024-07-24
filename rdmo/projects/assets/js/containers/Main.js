@@ -2,14 +2,20 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { QueryClient, QueryClientProvider } from 'react-query'
+
 import * as configActions from '../actions/configActions'
 import * as projectsActions from '../actions/projectsActions'
 import * as userActions from '../actions/userActions'
 import Projects from '../components/main/Projects'
 
+// Initialize QueryClient
+const queryClient = new QueryClient()
+
 const Main = ({ config, configActions, projectsActions, projects, userActions, currentUser }) => {
   if (projects.ready) {
-      return (
+    return (
+      <QueryClientProvider client={queryClient}>
         <Projects
           config={config}
           configActions={configActions}
@@ -18,10 +24,11 @@ const Main = ({ config, configActions, projectsActions, projects, userActions, c
           projectsObject={projects}
           userActions={userActions}
         />
-      )
-    }
+      </QueryClientProvider>
+    )
+  }
 
-    return null
+  return null
 }
 
 Main.propTypes = {

@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useQuery } from 'react-query'
 import PropTypes from 'prop-types'
 
 import { get } from 'lodash'
@@ -9,7 +10,9 @@ import { Select } from 'rdmo/core/assets/js/components'
 import useDatePicker from '../../hooks/useDatePicker'
 import { language } from 'rdmo/core/assets/js/utils'
 
-const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsActions }) => {
+import ProjectsApi from '../../api/ProjectsApi'
+
+const ProjectFilters = ({ config, configActions, isManager, projectsActions }) => {
   const {
     dateRange,
     dateFormat,
@@ -18,14 +21,26 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
     setEndDate
   } = useDatePicker()
 
-  const catalogOptions = catalogs?.map(catalog => ({ value: catalog.id.toString(), label: catalog.title }))
+  const fetchCatalogs = () => ProjectsApi.fetchCatalogs()
+
+  const { data } = useQuery('catalogs', fetchCatalogs)
+  const catalogOptions = data?.map(catalog => ({ value: catalog.id.toString(), label: catalog.title }))
   const selectedCatalog = get(config, 'params.catalog', '')
+
   const updateCatalogFilter = (value) => {
     value ? configActions.updateConfig('params.catalog', value) : configActions.deleteConfig('params.catalog')
     projectsActions.fetchAllProjects()
   }
 
-  // Abstract function to handle date change
+  useEffect(() => {
+    if (selectedCatalog && catalogOptions) {
+      const existsInOptions = catalogOptions.some(option => option.value === selectedCatalog)
+      if (!existsInOptions) {
+        updateCatalogFilter()
+      }
+    }
+  }, [selectedCatalog, catalogOptions])
+
   const handleDateChange = (type, position, date) => {
     if (position === 'start') {
       setStartDate(type, date)
@@ -138,7 +153,6 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
 }
 
 ProjectFilters.propTypes = {
-  catalogs: PropTypes.arrayOf(PropTypes.object).isRequired,
   config: PropTypes.object.isRequired,
   configActions: PropTypes.object.isRequired,
   isManager: PropTypes.bool.isRequired,

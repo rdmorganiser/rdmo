@@ -195,7 +195,6 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
         {
           showFilters && (
             <ProjectFilters
-              catalogs={catalogs ?? []}
               config={config}
               configActions={configActions}
               isManager={isManager}
