@@ -17,10 +17,10 @@ from .validators import (
 )
 
 import_helper_catalog = ElementImportHelper(
-    model = Catalog,
+    model=Catalog,
     validators=(CatalogLockedValidator, CatalogUniqueURIValidator),
     lang_fields=('help', 'title'),
-    extra_fields = (
+    extra_fields=(
         ExtraFieldHelper(field_name='order'),
         ExtraFieldHelper(field_name='available', overwrite_in_element=True),
     ),
@@ -34,7 +34,7 @@ import_helper_catalog = ElementImportHelper(
 )
 
 import_helper_section = ElementImportHelper(
-    model = Section,
+    model=Section,
     validators=(SectionLockedValidator, SectionUniqueURIValidator),
     lang_fields=('title', 'short_title'),
     m2m_through_instance_fields=[
@@ -52,14 +52,14 @@ import_helper_section = ElementImportHelper(
 )
 
 import_helper_page = ElementImportHelper(
-    model = Page,
+    model=Page,
     validators=(PageLockedValidator, PageUniqueURIValidator),
     lang_fields=('help', 'title', 'verbose_name', 'short_title'),
     foreign_fields=('attribute',),
-    extra_fields = (
+    extra_fields=(
         ExtraFieldHelper(field_name='is_collection'),
     ),
-    m2m_instance_fields = ('conditions', ),
+    m2m_instance_fields=('conditions', ),
     m2m_through_instance_fields=[
         ThroughInstanceMapper(
             field_name='questionsets', source_name='page',
@@ -108,7 +108,7 @@ import_helper_question = ElementImportHelper(
     ]
 )
 import_helper_questionset = ElementImportHelper(
-    model = QuestionSet,
+    model=QuestionSet,
     validators=(QuestionSetLockedValidator, QuestionSetUniqueURIValidator),
     lang_fields=('help', 'title', 'verbose_name'),
     foreign_fields=('attribute',),
