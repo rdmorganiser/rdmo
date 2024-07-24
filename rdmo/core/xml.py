@@ -1,6 +1,6 @@
 import logging
 import re
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict, deque
 from pathlib import Path
 from typing import Dict, Optional, Tuple
 from xml.etree.ElementTree import Element as xmlElement
@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 DEFAULT_RDMO_XML_VERSION = '1.11.0'
 ELEMENTS_USING_KEY = {RDMO_MODELS['attribute']}
-
+RELATED_ELEMENT_KEYS = ('uri', 'model', 'order')
 
 def resolve_file(file_name: str) -> Tuple[Optional[Path], Optional[str]]:
     file = Path(file_name).resolve()
@@ -275,6 +275,16 @@ def convert_legacy_elements(elements):
 
         elif element['model'] == 'questions.catalog':
             element['uri_path'] = element.pop('key')
+            catalog_sections = [
+                sec for sec in elements.values()
+                if sec['model'] == 'questions.section'
+                   and sec.get('catalog')
+                   and sec['catalog']['uri'] == element['uri']
+            ]
+            element['sections'] = [
+                {k:v for k,v in sec.items() if k in RELATED_ELEMENT_KEYS}
+                for sec in catalog_sections
+            ]
 
         elif element['model'] == 'questions.section':
             del element['key']
@@ -363,36 +373,57 @@ def get_related_elements(element, ignored_keys=None):
     return related_elements
 
 
-def sort_by_relatives(elements, descendants_first=False, ancestors_first=False):
-    ancestors, descendants = [], []
+def sort_by_rdmo_models(elements):
+    # Create a mapping from model name to its order
+    model_order = {model: idx for idx, model in enumerate(RDMO_MODELS.values())}
+    # Step 1: Sort elements by model order
+    sorted_by_model = sorted(elements.values(), key=lambda x: model_order.get(x['model'], float('inf')))
 
-    if not descendants_first and not ancestors_first:
-        return elements
+    # Step 2: Topological sort for domain.attribute
+    def topological_sort(elements):
+        uri_map = {item['uri']: item for item in elements if 'uri' in item}
+        dependency_graph = defaultdict(list)
+        indegree = defaultdict(int)
 
-    for uri, element in elements.items():
-        try:
-            has_descendants = get_related_elements(element)
-        except AttributeError:
-            has_descendants = False
-        if has_descendants:
-            ancestors.append((uri, element))
-        else:
-            descendants.append((uri, element))
-    if descendants_first:
-        sort_list = descendants + ancestors
-    elif ancestors_first:
-        sort_list = ancestors + descendants
+        for item in elements:
+            if item['model'] == 'domain.attribute' and item.get('parent'):
+                parent_uri = item['parent'].get('uri')
+                if parent_uri and parent_uri in uri_map:
+                    dependency_graph[parent_uri].append(item['uri'])
+                    indegree[item['uri']] += 1
 
-    sorted_elements = OrderedDict()
-    for uri,element in sort_list:
-        sorted_elements[uri] = element
-    return sorted_elements
+        # Initialize the queue with items having no dependencies (indegree 0)
+        queue = deque([item['uri'] for item in elements if indegree[item['uri']] == 0])
+        sorted_elements = []
+
+        while queue:
+            current_uri = queue.popleft()
+            sorted_elements.append(uri_map[current_uri])
+            for dependent_uri in dependency_graph[current_uri]:
+                indegree[dependent_uri] -= 1
+                if indegree[dependent_uri] == 0:
+                    queue.append(dependent_uri)
+
+        return sorted_elements
+
+    # Separate domain.attribute elements for topological sorting
+    domain_attributes = [e for e in sorted_by_model if e['model'] == 'domain.attribute']
+    non_domain_attributes = [e for e in sorted_by_model if e['model'] != 'domain.attribute']
+
+    # Perform topological sort on domain.attribute elements
+    sorted_domain_attributes = topological_sort(domain_attributes)
+
+    # Combine the sorted lists and construct the OrderedDict
+    final_sorted_elements_list = sorted_domain_attributes + non_domain_attributes
+    final_sorted_elements = {i['uri']: i for i in final_sorted_elements_list}
+    return final_sorted_elements
 
 
-def order_elements(elements, order_sets_first=False, descendants_first=False) -> OrderedDict:
+def order_elements(elements, order_sets_first=False, order_models=False) -> OrderedDict:
     ordered_elements = OrderedDict()
-    if descendants_first:
-        elements = sort_by_relatives(elements, descendants_first=descendants_first)
+    if order_models:
+        elements = sort_by_rdmo_models(elements)
+        return elements
     for uri, element in elements.items():
         append_element(ordered_elements, elements, uri, element, order_sets_first=order_sets_first)
     return ordered_elements

@@ -36,15 +36,15 @@ from rdmo.views.imports import import_helper_view
 logger = logging.getLogger(__name__)
 
 ELEMENT_IMPORT_HELPERS = {
-    "conditions.condition": import_helper_condition,
     "domain.attribute": import_helper_attribute,
-    "options.optionset": import_helper_optionset,
+    "conditions.condition": import_helper_condition,
     "options.option": import_helper_option,
-    "questions.catalog": import_helper_catalog,
+    "options.optionset": import_helper_optionset,
+    "questions.question": import_helper_question,
+    "questions.questionset": import_helper_questionset,
     "questions.section": import_helper_section,
     "questions.page": import_helper_page,
-    "questions.questionset": import_helper_questionset,
-    "questions.question": import_helper_question,
+    "questions.catalog": import_helper_catalog,
     "tasks.task": import_helper_task,
     "views.view": import_helper_view
 }
@@ -56,8 +56,8 @@ def import_elements(uploaded_elements: Dict, save: bool = True, request: Optiona
     uploaded_uris = set(uploaded_elements.keys())
     current_site = get_current_site(request)
     if save:
-        # when saving, the descendant elements go first
-        uploaded_elements = order_elements(uploaded_elements, descendants_first=True)
+        # when saving, the elements are ordered according to the rdmo models
+        uploaded_elements = order_elements(uploaded_elements, order_models=True)
 
     for _uri, uploaded_element in uploaded_elements.items():
         element = import_element(element=uploaded_element,

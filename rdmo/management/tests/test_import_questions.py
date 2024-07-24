@@ -15,6 +15,22 @@ from .helpers_models import delete_all_objects
 
 fields_to_be_changed = (('comment',),)
 
+TEST_CATALOG_SECTIONS_URIS = {
+    "http://example.com/terms/questions/catalog/individual",
+    "http://example.com/terms/questions/catalog/collections",
+    "http://example.com/terms/questions/catalog/set",
+    "http://example.com/terms/questions/catalog/conditions",
+    "http://example.com/terms/questions/catalog/options",
+    "http://example.com/terms/questions/catalog/blocks"
+}
+
+
+def get_elements_catalog_sections_uris(elements, catalog):
+    return {
+        element['uri'] for _uri, element in elements.items()
+        if element['uri'] != catalog.uri
+           and element['model'] == 'questions.section'
+    }
 
 def test_create_catalogs(db, settings):
     delete_all_objects([Catalog, Section, Page, QuestionSet, Question])
@@ -31,6 +47,15 @@ def test_create_catalogs(db, settings):
     assert Question.objects.count() == 89
     assert all(element['created'] is True for element in imported_elements)
     assert all(element['updated'] is False for element in imported_elements)
+
+    # check that all elements ended up in the catalog
+    catalog = Catalog.objects.prefetch_elements().first()
+    catalog_descendant_uris = {
+        element.uri for element in catalog.descendants
+        if element.uri in TEST_CATALOG_SECTIONS_URIS
+    }
+    elements_catalog_sections_uris = get_elements_catalog_sections_uris(elements, catalog)
+    assert catalog_descendant_uris == elements_catalog_sections_uris == TEST_CATALOG_SECTIONS_URIS
 
 
 def test_update_catalogs(db, settings):
@@ -267,9 +292,12 @@ def test_create_legacy_questions(db, settings):
 
     # check that all elements ended up in the catalog
     catalog = Catalog.objects.prefetch_elements().first()
-    descendant_uris = {element.uri for element in catalog.descendants}
-    element_uris = {element['uri'] for _uri, element in elements.items() if element['uri'] != catalog.uri}
-    assert descendant_uris == element_uris
+    catalog_descendant_uris = {
+        element.uri for element in catalog.descendants
+        if element.uri in TEST_CATALOG_SECTIONS_URIS
+    }
+    elements_catalog_sections_uris = get_elements_catalog_sections_uris(elements, catalog)
+    assert catalog_descendant_uris == elements_catalog_sections_uris == TEST_CATALOG_SECTIONS_URIS
 
 
 def test_update_legacy_questions(db, settings):
@@ -283,15 +311,9 @@ def test_update_legacy_questions(db, settings):
 
     # check that all elements ended up in the catalog
     catalog = Catalog.objects.prefetch_elements().first()
-    descendant_uris = {
-        element.uri for element in catalog.descendants if any(element.uri.startswith(uri) for uri in [
-            'http://example.com/terms/questions/catalog/individual',
-            'http://example.com/terms/questions/catalog/set',
-            'http://example.com/terms/questions/catalog/collections',
-            'http://example.com/terms/questions/catalog/conditions',
-            'http://example.com/terms/questions/catalog/options',
-            'http://example.com/terms/questions/catalog/blocks'
-        ])
+    catalog_descendant_uris = {
+        element.uri for element in catalog.descendants
+        if element.uri in TEST_CATALOG_SECTIONS_URIS
     }
-    element_uris = {element['uri'] for _uri, element in elements.items() if element['uri'] != catalog.uri}
-    assert descendant_uris == element_uris
+    elements_catalog_sections_uris = get_elements_catalog_sections_uris(elements, catalog)
+    assert catalog_descendant_uris == elements_catalog_sections_uris == TEST_CATALOG_SECTIONS_URIS
