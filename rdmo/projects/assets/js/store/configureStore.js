@@ -50,6 +50,8 @@ export default function configureStore() {
         store.dispatch(configActions.updateConfig(path, value))
       }
     })
+
+    store.dispatch(configActions.updateConfig('params.page', '1'))
   }
 
   window.addEventListener('load', () => {

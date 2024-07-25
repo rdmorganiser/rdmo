@@ -4,7 +4,6 @@ import { FETCH_PROJECTS_ERROR, FETCH_PROJECTS_INIT, FETCH_PROJECTS_SUCCESS,
          FETCH_CATALOGS_ERROR, FETCH_CATALOGS_INIT, FETCH_CATALOGS_SUCCESS,
          FETCH_FILETYPES_ERROR, FETCH_FILETYPES_INIT, FETCH_FILETYPES_SUCCESS,
          FETCH_IMPORT_URLS_ERROR, FETCH_IMPORT_URLS_INIT, FETCH_IMPORT_URLS_SUCCESS,
-         FETCH_SETTINGS_ERROR, FETCH_SETTINGS_INIT, FETCH_SETTINGS_SUCCESS,
          UPLOAD_PROJECT_ERROR, UPLOAD_PROJECT_INIT, UPLOAD_PROJECT_SUCCESS }
          from './actionTypes'
 
@@ -16,7 +15,7 @@ export function fetchAllProjects() {
     dispatch(fetchProjectsInit())
     const action = (dispatch) => ProjectsApi.fetchProjects(params || {})
           .then(projects => {
-            dispatch(fetchProjectsSuccess(projects))})
+            dispatch(fetchProjectsSuccess(projects, params?.page))})
 
     return dispatch(action)
       .catch(error => dispatch(fetchProjectsError(error)))
@@ -27,8 +26,8 @@ export function fetchProjectsInit() {
   return {type: FETCH_PROJECTS_INIT}
 }
 
-export function fetchProjectsSuccess(projects) {
-  return {type: FETCH_PROJECTS_SUCCESS, projects}
+export function fetchProjectsSuccess(projects, page) {
+  return {type: FETCH_PROJECTS_SUCCESS, projects, page}
 }
 
 export function fetchProjectsError(error) {
@@ -136,30 +135,6 @@ export function fetchInvitationsSuccess(invites) {
 
 export function fetchInvitationsError(error) {
   return {type: FETCH_INVITATIONS_ERROR, error}
-}
-
-export function fetchSettings() {
-  return function(dispatch) {
-    dispatch(fetchSettingsInit())
-    const action = (dispatch) => ProjectsApi.fetchSettings()
-          .then(settings => {
-            dispatch(fetchSettingsSuccess({ settings }))})
-
-    return dispatch(action)
-      .catch(error => dispatch(fetchSettingsError(error)))
-  }
-}
-
-export function fetchSettingsInit() {
-  return {type: FETCH_SETTINGS_INIT}
-}
-
-export function fetchSettingsSuccess(settings) {
-  return {type: FETCH_SETTINGS_SUCCESS, settings}
-}
-
-export function fetchSettingsError(error) {
-  return {type: FETCH_SETTINGS_ERROR, error}
 }
 
 export function uploadProject(url, file) {

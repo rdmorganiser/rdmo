@@ -9,12 +9,7 @@ import { getTitlePath, getUserRoles, userIsManager, HEADER_FORMATTERS, SORTABLE_
 import { get, isEmpty } from 'lodash'
 
 const Projects = ({ config, configActions, currentUserObject, projectsActions, projectsObject }) => {
-  console.log('projectsObject', projectsObject)
-  const { allowedTypes, catalogs, importUrls, invites, projects, count: projectsCount, hasNext, prevCount, settings: { project_list_page_size: pageSize } } = projectsObject
-  console.log('projectsCount', projectsCount)
-  console.log('hasNext', hasNext)
-  console.log('prevCount', prevCount)
-  console.log('pageSize', pageSize)
+  const { allowedTypes, catalogs, importUrls, invites, projects, count: projectsCount, hasNext } = projectsObject
 
   const { currentUser } = currentUserObject
   const { myProjects } = config
@@ -38,9 +33,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
 
   const { setStartDate, setEndDate } = useDatePicker()
 
-  const displayedRows = get(config, 'tableRows', '')
-
-  const displayMessage = interpolate(gettext('%s of %s projects are displayed'), [parseInt(displayedRows) > projects.length ? projects.length : displayedRows, projects.length])
+  const displayMessage = interpolate(gettext('%s of %s projects are displayed'), [projects.length > projectsCount ? projectsCount : projects.length, projectsCount])
 
   const getProgressString = (row) => {
     return (row.progress_total ?  interpolate(gettext('%s of %s'), [row.progress_count ?? 0, row.progress_total]) : null)
@@ -55,6 +48,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
   const searchString = get(config, 'params.search', '')
   const updateSearchString = (value) => {
     value ? configActions.updateConfig('params.search', value) : configActions.deleteConfig('params.search')
+    configActions.updateConfig('params.page', '1')
   }
 
   const viewLinkText = myProjects ? gettext('View all projects') : gettext('View my projects')
@@ -63,6 +57,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
   const handleView = () => {
     configActions.updateConfig('myProjects', !myProjects)
     myProjects ? configActions.deleteConfig('params.user') : configActions.updateConfig('params.user', currentUserId)
+    configActions.updateConfig('params.page', '1')
     projectsActions.fetchAllProjects()
   }
 
@@ -231,6 +226,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
         config={config}
         configActions={configActions}
         data={projects}
+        hasNext={hasNext}
         headerFormatters={HEADER_FORMATTERS}
         projectsActions={projectsActions}
         showTopButton={showTopButton}

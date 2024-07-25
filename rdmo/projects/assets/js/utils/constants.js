@@ -1,6 +1,4 @@
 // projects table
-export const INITIAL_TABLE_ROWS = '20'
-export const ROWS_TO_LOAD = '10'
 export const SORTABLE_COLUMNS = ['created', 'owner', 'progress', 'role', 'title', 'last_changed']
 export const HEADER_FORMATTERS = {
   title: {render: () => gettext('Name')},
