@@ -107,26 +107,34 @@ class Project(MPTTModel, Model):
     def owners_str(self):
         return ', '.join(['' if x is None else str(x) for x in self.user.filter(membership__role='owner')])
 
-    @cached_property
+    @property
     def owners(self):
-        return self.user.filter(memberships__role='owner')
+        return self.get_members('owner')
 
-    @cached_property
+    @property
     def managers(self):
-        return self.user.filter(memberships__role='manager')
+        return self.get_members('manager')
 
-    @cached_property
+    @property
     def authors(self):
-        return self.user.filter(memberships__role='author')
+        return self.get_members('author')
 
-    @cached_property
+    @property
     def guests(self):
-        return self.user.filter(memberships__role='guest')
+        return self.get_members('guest')
 
     @property
     def file_size(self):
         queryset = self.values.filter(snapshot=None).exclude(models.Q(file='') | models.Q(file=None))
         return sum([value.file.size for value in queryset])
+
+    def get_members(self, role):
+        try:
+            # membership_list is created by the Prefetch call in the viewset
+            return [membership.user for membership in self.memberships_list if membership.role == role]
+        except AttributeError:
+            # membership_list does not exist
+            return self.user.filter(memberships__role=role)
 
 
 @receiver(pre_delete, sender=Project)

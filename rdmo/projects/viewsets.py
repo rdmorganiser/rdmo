@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import OuterRef, Subquery
+from django.db.models import OuterRef, Prefetch, Subquery
 from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
@@ -93,7 +93,11 @@ class ProjectViewSet(ModelViewSet):
     )
 
     def get_queryset(self):
-        queryset = Project.objects.filter_user(self.request.user).distinct().select_related('catalog')
+        queryset = Project.objects.filter_user(self.request.user).distinct().prefetch_related(
+            'snapshots',
+            'views',
+            Prefetch('memberships', queryset=Membership.objects.select_related('user'), to_attr='memberships_list')
+        ).select_related('catalog')
 
         # prepare subquery for last_changed
         last_changed_subquery = Subquery(
