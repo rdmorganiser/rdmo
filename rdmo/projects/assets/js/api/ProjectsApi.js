@@ -82,6 +82,17 @@ class ProjectsApi extends BaseApi {
       })
   }
 
+  static fetchSettings() {
+    return fetch('/api/v1/core/settings')
+      .then(response => {
+        if (response.ok) {
+          return response.json()
+        } else {
+          throw new Error(response.statusText)
+        }
+      })
+  }
+
   static uploadProject(url, file) {
     var formData = new FormData()
     formData.append('method', 'upload_file')

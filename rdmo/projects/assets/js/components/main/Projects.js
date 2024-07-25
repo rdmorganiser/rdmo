@@ -9,7 +9,12 @@ import { getTitlePath, getUserRoles, userIsManager, HEADER_FORMATTERS, SORTABLE_
 import { get, isEmpty } from 'lodash'
 
 const Projects = ({ config, configActions, currentUserObject, projectsActions, projectsObject }) => {
-  const { allowedTypes, catalogs, importUrls, invites, projects } = projectsObject
+  console.log('projectsObject', projectsObject)
+  const { allowedTypes, catalogs, importUrls, invites, projects, count: projectsCount, hasNext, prevCount, settings: { project_list_page_size: pageSize } } = projectsObject
+  console.log('projectsCount', projectsCount)
+  console.log('hasNext', hasNext)
+  console.log('prevCount', prevCount)
+  console.log('pageSize', pageSize)
 
   const { currentUser } = currentUserObject
   const { myProjects } = config

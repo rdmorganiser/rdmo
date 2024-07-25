@@ -66,6 +66,7 @@ export default function configureStore() {
       store.dispatch(projectsActions.fetchCatalogs())
       store.dispatch(projectsActions.fetchAllowedFileTypes())
       store.dispatch(projectsActions.fetchImportUrls())
+      store.dispatch(projectsActions.fetchSettings())
     })
   })
 
