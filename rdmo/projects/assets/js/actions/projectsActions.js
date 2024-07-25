@@ -7,6 +7,8 @@ import { FETCH_PROJECTS_ERROR, FETCH_PROJECTS_INIT, FETCH_PROJECTS_SUCCESS,
          UPLOAD_PROJECT_ERROR, UPLOAD_PROJECT_INIT, UPLOAD_PROJECT_SUCCESS }
          from './actionTypes'
 
+import * as configActions from './configActions'
+
 export function fetchAllProjects() {
   return function(dispatch, getState) {
     const params = getState().config.params
@@ -29,7 +31,21 @@ export function fetchProjectsSuccess(projects) {
 }
 
 export function fetchProjectsError(error) {
-  return {type: FETCH_PROJECTS_ERROR, error}
+  return function(dispatch) {
+    if (error.response && error.response.status === 400 && error.body && error.body.catalog) {
+      dispatch(configActions.deleteConfig('params.catalog'))
+      dispatch(fetchAllProjects())
+      dispatch({
+        type: FETCH_PROJECTS_ERROR,
+        error: {
+          message: 'Non-existing catalog, resetting the catalog filter',
+          originalError: error
+        }
+      })
+    } else {
+      dispatch({type: FETCH_PROJECTS_ERROR, error})
+    }
+  }
 }
 
 export function fetchCatalogs() {

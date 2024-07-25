@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { PendingInvitations, ProjectFilters, ProjectImport, Table } from '../helper'
 import { Link, Modal, SearchField } from 'rdmo/core/assets/js/components'
@@ -30,17 +30,6 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
     show: showImport,
     onClose: closeImport
   }
-
-  const selectedCatalog = get(config, 'params.catalog', '')
-  useEffect(() => {
-    if (selectedCatalog && catalogs) {
-      console.log('selectedCatalog', selectedCatalog)
-      const exists = catalogs.some(catalog => String(catalog.id) === selectedCatalog)
-      if (!exists) {
-        configActions.deleteConfig('params.catalog')
-      }
-    }
-  }, [selectedCatalog, catalogs])
 
   const { setStartDate, setEndDate } = useDatePicker()
 

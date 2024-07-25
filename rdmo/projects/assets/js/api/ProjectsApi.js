@@ -6,24 +6,19 @@ import baseUrl from 'rdmo/core/assets/js/utils/baseUrl'
 class ProjectsApi extends BaseApi {
 
   static fetchProjects(params, fetchParams = {}) {
-    return fetch('/api/v1/projects/projects/?' + encodeParams(params), fetchParams)
-      .then(response => {
-        if (response.ok) {
-          return response.json()  // If the request is successful, parse and return the JSON data.
-        } else if (response.status === 400) {
-          if (params.catalog) {
-            // Remove the 'catalog' key from params
-            // eslint-disable-next-line no-unused-vars
-            const { catalog, ...newParams } = params
-            return this.fetchProjects(newParams, fetchParams)
-          }
-          return []  // Return an empty array if 'catalog' is not present or after retrying.
-        } else {
-          throw new Error(`${response.status} ${response.statusText}`)
-        }
-      })
+    return fetch('/api/v1/projects/projects/?' + encodeParams(params), fetchParams).then(response => {
+      if (response.ok) {
+        return response.json()
+      } else {
+        return response.json().then(errorBody => {
+          const error = new Error(response.statusText)
+          error.response = response
+          error.body = errorBody
+          throw error
+        })
+      }
+    })
   }
-
 
   static fetchCatalogs() {
     return fetch('/api/v1/projects/catalogs/').then(response => {
