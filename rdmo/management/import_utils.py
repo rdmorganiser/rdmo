@@ -1,6 +1,8 @@
 from collections import defaultdict
 from dataclasses import asdict
-from typing import Dict
+from typing import Dict, Set, Tuple
+
+from django.db.models import Model
 
 from rdmo.core.imports import (
     ImportElementFields,
@@ -22,10 +24,33 @@ IMPORT_ELEMENT_INIT_DICT = {
     }
 
 
+
+def get_redundant_keys_from_element(element_keys: Set, model: Model) -> Set:
+    model_fields = {i.name for i in model._meta.get_fields()}
+    required_element_keys = {'uri', 'model'}
+    import_dict_keys = {i.value for i in IMPORT_ELEMENT_INIT_DICT.keys()}
+    redundant_keys = element_keys - model_fields - required_element_keys - import_dict_keys
+
+    lang_fields_prefix = {i.split('_lang')[0] for i in model_fields if 'lang' in i}
+    element_lang_keys = {i for i in element_keys if any(i.startswith(a) for a in lang_fields_prefix)}
+    redundant_keys = redundant_keys - element_lang_keys
+    return redundant_keys
+
 def initialize_import_element_dict(element: Dict) -> None:
     # initialize element dict with default values
     for _k,_val in IMPORT_ELEMENT_INIT_DICT.items():
         element[_k] = _val()
+    return element
+
+
+def initialize_and_clean_import_element_dict(element: Dict, model: Model) -> Tuple[Dict, Dict]:
+    redundant_keys = get_redundant_keys_from_element(set(element.keys()), model)
+    excluded_element_data = {}
+    for k in redundant_keys:
+        excluded_element_data[k] = element.pop(k)
+    # initialize element dict with default values
+    element = initialize_import_element_dict(element)
+    return element, excluded_element_data
 
 
 def strip_uri_prefix_endswith_slash(element: dict) -> dict:

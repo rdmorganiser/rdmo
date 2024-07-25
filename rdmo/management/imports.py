@@ -18,7 +18,7 @@ from rdmo.domain.imports import import_helper_attribute
 from rdmo.management.import_utils import (
     add_current_site_to_sites_and_editor,
     apply_field_values,
-    initialize_import_element_dict,
+    initialize_and_clean_import_element_dict,
     strip_uri_prefix_endswith_slash,
     update_related_fields,
 )
@@ -88,11 +88,11 @@ def import_element(
     if 'model' not in element:
         return {}
 
-    initialize_import_element_dict(element)
-
     import_helper = ELEMENT_IMPORT_HELPERS[element['model']]
-
     uri = element.get('uri')
+
+    element, _excluded_data = initialize_and_clean_import_element_dict(element, import_helper.model)
+
     # get or create instance from uri and model
     instance, created = get_or_return_instance(import_helper.model, uri=uri)
 
@@ -117,6 +117,7 @@ def import_element(
     # INFO: the dict element[FieldNames.diff.value] is filled by calling track_changes_on_element
 
     element = strip_uri_prefix_endswith_slash(element)
+    # todo: remove keys that are not in model.fields
     # start to set values on the instance
     apply_field_values(instance, element, import_helper, uploaded_uris, original)
 
