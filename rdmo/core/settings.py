@@ -215,6 +215,7 @@ SETTINGS_API = [
     'MULTISITE',
     'GROUPS',
     'EXPORT_FORMATS',
+    'PROJECT_LIST_PAGE_SIZE'
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -272,6 +273,8 @@ EXPORT_PANDOC_ARGS = {
 }
 
 EXPORT_CONTENT_DISPOSITION = 'attachment'
+
+PROJECT_LIST_PAGE_SIZE = 20
 
 PROJECT_ISSUES = True
 

@@ -10,6 +10,7 @@ from rest_framework import serializers
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -65,9 +66,14 @@ from .serializers.v1.page import PageSerializer
 from .utils import check_conditions, get_upload_accept, send_invite_email
 
 
+class ProjectPagination(PageNumberPagination):
+    page_size = settings.PROJECT_LIST_PAGE_SIZE
+
+
 class ProjectViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasProjectsPermission, )
     serializer_class = ProjectSerializer
+    pagination_class = ProjectPagination
 
     filter_backends = (
         DjangoFilterBackend,
