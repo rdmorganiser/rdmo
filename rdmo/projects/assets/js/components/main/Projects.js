@@ -81,7 +81,11 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
           ))}
           <b>{lastChild}</b>
         </a>
-        <div className='text-muted'>{catalog ? catalog.title : null}</div>
+        {
+          catalog && (
+            <div className='text-muted' dangerouslySetInnerHTML={{ __html: catalog.title }} ></div>
+          )
+        }
       </div>
     )
   }
