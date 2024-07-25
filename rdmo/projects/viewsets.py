@@ -67,7 +67,7 @@ from .utils import check_conditions, get_upload_accept, send_invite_email
 
 
 class ProjectPagination(PageNumberPagination):
-    page_size = settings.PROJECT_LIST_PAGE_SIZE
+    page_size = settings.PROJECT_TABLE_PAGE_SIZE
 
 
 class ProjectViewSet(ModelViewSet):
