@@ -35,18 +35,8 @@ env:
 jobs:
 
   lint:
-    name: Lint
-    runs-on: ubuntu-24.04
-    steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
-      with:
-        python-version: "3.12"
-        cache: pip
-    - name: Run linters via pre-commit (ruff, eslint)
-      uses: pre-commit/action@2c7b3805fd2a0fd8c1884dcaebf91fc102a13ecd # v3.0.1
-      with:
-        extra_args: --all-files --color=always
+    # Ref: https://github.com/rdmorganiser/.github/blob/main/.github/workflows/_lint.yml
+    uses: rdmorganiser/.github/.github/workflows/_lint.yml@main
 
   test:
     runs-on: ubuntu-24.04
