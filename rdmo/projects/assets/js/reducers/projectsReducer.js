@@ -20,7 +20,7 @@ export default function projectsReducer(state = initialState, action) {
           ...state,
           projects: shouldConcatenate ? [...state.projects, ...action.projects.results] : action.projects.results,
           ready: true,
-          count: action.projects.count,
+          projectsCount: action.projects.count,
           hasNext: action.projects.next !== null
       }
     }

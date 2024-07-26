@@ -9,7 +9,7 @@ import { getTitlePath, getUserRoles, userIsManager, HEADER_FORMATTERS, SORTABLE_
 import { get, isEmpty } from 'lodash'
 
 const Projects = ({ config, configActions, currentUserObject, projectsActions, projectsObject }) => {
-  const { allowedTypes, catalogs, importUrls, invites, projects, count: projectsCount, hasNext } = projectsObject
+  const { allowedTypes, catalogs, importUrls, invites, projects, projectsCount, hasNext } = projectsObject
 
   const { currentUser } = currentUserObject
   const { myProjects } = config
