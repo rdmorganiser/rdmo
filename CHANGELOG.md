@@ -4,6 +4,7 @@
 
 * Add new projects overview (#865, #355)
   * Projects are now displayed in an interactive table which can be filtered and ordered
+  * The projects API is now paginated (new setting PROJECT_TABLE_PAGE_SIZE)
 * Add new import interface to management (#469, #468, #465, )
   * Show detailed information what is new and what changed
   * Show a summary of warnings and errors at the top of the page
