@@ -61,6 +61,8 @@ optionset_id = 4
 
 project_id = 1
 
+page_size = 5
+
 @pytest.mark.parametrize('username,password', users)
 def test_list(db, client, username, password):
     client.login(username=username, password=password)
@@ -69,15 +71,19 @@ def test_list(db, client, username, password):
     response = client.get(url)
 
     if password:
+        response_data = response.json()
+
         assert response.status_code == 200
-        assert isinstance(response.json(), list)
+        assert isinstance(response_data, dict)
 
         if username == 'user':
-            assert sorted([item['id'] for item in response.json()]) == []
+            assert response_data['count'] == 0
+            assert response_data['results'] == []
         else:
             values_list = Project.objects.filter(id__in=view_project_permission_map.get(username, [])) \
-                                         .order_by('id').values_list('id', flat=True)
-            assert sorted([item['id'] for item in response.json()]) == list(values_list)
+                                         .values_list('id', flat=True)
+            assert response_data['count'] == len(values_list)
+            assert [item['id'] for item in response_data['results']] == list(values_list[:page_size])
     else:
         assert response.status_code == 401
 
