@@ -8,17 +8,12 @@ const Table = ({
   config,
   configActions,
   data,
-  hasNext,
   headerFormatters,
   projectsActions,
-  showTopButton = false,
-  scrollToTop,
   sortableColumns,
   /* order of elements in 'visibleColumns' corresponds to order of columns in table */
   visibleColumns,
 }) => {
-  const page = get(config, 'params.page') ?? 1
-
   const extractSortingParams = (params) => {
     const { ordering } = params || {}
 
@@ -34,28 +29,6 @@ const Table = ({
 
   const params = get(config, 'params', {})
   const { sortColumn, sortOrder } = extractSortingParams(params)
-
-  const loadMore = () => {
-    configActions.updateConfig('params.page', (parseInt(page) + 1).toString())
-    projectsActions.fetchProjects()
-  }
-
-  const renderLoadButtons = () => {
-    return (
-          <div className="icon-container ml-auto">
-            {data.length > 0 && showTopButton &&
-              <button className="elliptic-button" onClick={scrollToTop} title={gettext('Scroll to top')}>
-                <i className="fa fa-arrow-up" aria-hidden="true"></i>
-              </button>
-            }
-            {hasNext &&
-            <button onClick={loadMore} className="elliptic-button">
-              {gettext('Load more')}
-            </button>
-            }
-          </div>
-    )
-  }
 
   const handleHeaderClick = (column) => {
     if (sortableColumns.includes(column)) {
@@ -134,7 +107,6 @@ const Table = ({
         {renderHeaders()}
         {renderRows()}
       </table>
-      {renderLoadButtons()}
     </div>
   )
 }
@@ -145,11 +117,8 @@ Table.propTypes = {
   config: PropTypes.object,
   configActions: PropTypes.object,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  hasNext: PropTypes.bool.isRequired,
   headerFormatters: PropTypes.object,
   projectsActions: PropTypes.object,
-  showTopButton: PropTypes.bool,
-  scrollToTop: PropTypes.func,
   sortableColumns: PropTypes.arrayOf(PropTypes.string),
   visibleColumns: PropTypes.arrayOf(PropTypes.string),
 }

@@ -90,6 +90,29 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
     )
   }
 
+  const loadMore = () => {
+    const page = get(config, 'params.page') ?? 1
+    configActions.updateConfig('params.page', (parseInt(page) + 1).toString())
+    projectsActions.fetchProjects()
+  }
+
+  const renderLoadButtons = () => {
+    return (
+          <div className="icon-container ml-auto">
+            {projects.length > 0 && showTopButton &&
+              <button className="elliptic-button" onClick={scrollToTop} title={gettext('Scroll to top')}>
+                <i className="fa fa-arrow-up" aria-hidden="true"></i>
+              </button>
+            }
+            {hasNext &&
+            <button onClick={loadMore} className="elliptic-button">
+              {gettext('Load more')}
+            </button>
+            }
+          </div>
+    )
+  }
+
   const resetAllFilters = () => {
     configActions.deleteConfig('params.catalog')
     configActions.deleteConfig('params.created_after')
@@ -234,6 +257,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
         sortableColumns={SORTABLE_COLUMNS}
         visibleColumns={visibleColumns}
       />
+      {renderLoadButtons()}
       <Modal {...invitationsModalProps}>
         <PendingInvitations invitations={invites} />
       </Modal>
