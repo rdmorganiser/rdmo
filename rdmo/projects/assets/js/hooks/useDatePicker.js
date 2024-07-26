@@ -23,13 +23,21 @@ const useDatePicker = () => {
         }
     }, [])
 
-    const setStartDate = useCallback((type, date) => {
-        setDateRange(prev => ({ ...prev, [`${type}Start`]: date }))
-    }, [])
+    const convertToCamelCase = (input) => {
+      return input.replace(/_([a-z])/g, (match, letter) => letter.toUpperCase())
+  }
 
-    const setEndDate = useCallback((type, date) => {
-        setDateRange(prev => ({ ...prev, [`${type}End`]: date }))
-    }, [])
+  const setStartDate = useCallback((type, date) => {
+      const camelCaseType = convertToCamelCase(type)
+      const startKey = `${camelCaseType}Start`
+      setDateRange(prev => ({ ...prev, [startKey]: date }))
+  }, [])
+
+  const setEndDate = useCallback((type, date) => {
+      const camelCaseType = convertToCamelCase(type)
+      const endKey = `${camelCaseType}End`
+      setDateRange(prev => ({ ...prev, [endKey]: date }))
+  }, [])
 
     return {
         dateRange,
