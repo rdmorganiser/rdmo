@@ -3,12 +3,20 @@ import BaseApi from 'rdmo/core/assets/js/api/BaseApi'
 import { encodeParams } from 'rdmo/core/assets/js/utils/api'
 import baseUrl from 'rdmo/core/assets/js/utils/baseUrl'
 
+function BadRequestError(errors) {
+  this.errors = errors
+}
+
 class ProjectsApi extends BaseApi {
 
   static fetchProjects(params, fetchParams = {}) {
     return fetch('/api/v1/projects/projects/?' + encodeParams(params), fetchParams).then(response => {
       if (response.ok) {
         return response.json()
+      } else if (response.status == 400) {
+        return response.json().then(errors => {
+          throw new BadRequestError(errors)
+        })
       } else {
         throw new Error(response.statusText)
       }

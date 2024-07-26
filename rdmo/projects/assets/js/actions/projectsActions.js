@@ -7,6 +7,8 @@ import { FETCH_PROJECTS_ERROR, FETCH_PROJECTS_INIT, FETCH_PROJECTS_SUCCESS,
          UPLOAD_PROJECT_ERROR, UPLOAD_PROJECT_INIT, UPLOAD_PROJECT_SUCCESS }
          from './actionTypes'
 
+import * as configActions from './configActions'
+
 export function fetchAllProjects() {
   return function(dispatch, getState) {
     const params = getState().config.params
@@ -29,7 +31,14 @@ export function fetchProjectsSuccess(projects) {
 }
 
 export function fetchProjectsError(error) {
-  return {type: FETCH_PROJECTS_ERROR, error}
+  return function(dispatch) {
+    if (error.constructor.name === 'BadRequestError' && error.errors.catalog) {
+      dispatch(configActions.deleteConfig('params.catalog'))
+      dispatch(fetchAllProjects())
+    } else {
+      dispatch({type: FETCH_PROJECTS_ERROR, error})
+    }
+  }
 }
 
 export function fetchCatalogs() {
