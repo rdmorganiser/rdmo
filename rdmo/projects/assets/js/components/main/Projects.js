@@ -9,7 +9,7 @@ import { getTitlePath, getUserRoles, userIsManager, HEADER_FORMATTERS, SORTABLE_
 import { get, isEmpty } from 'lodash'
 
 const Projects = ({ config, configActions, currentUserObject, projectsActions, projectsObject }) => {
-  const { allowedTypes, catalogs, importUrls, invites, projects } = projectsObject
+  const { allowedTypes, catalogs, importUrls, invites, projects, projectsCount, hasNext } = projectsObject
 
   const { currentUser } = currentUserObject
   const { myProjects } = config
@@ -33,9 +33,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
 
   const { setStartDate, setEndDate } = useDatePicker()
 
-  const displayedRows = get(config, 'tableRows', '')
-
-  const displayMessage = interpolate(gettext('%s of %s projects are displayed'), [parseInt(displayedRows) > projects.length ? projects.length : displayedRows, projects.length])
+  const displayMessage = interpolate(gettext('%s of %s projects are displayed'), [projects.length > projectsCount ? projectsCount : projects.length, projectsCount])
 
   const getProgressString = (row) => {
     return (row.progress_total ?  interpolate(gettext('%s of %s'), [row.progress_count ?? 0, row.progress_total]) : null)
@@ -50,6 +48,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
   const searchString = get(config, 'params.search', '')
   const updateSearchString = (value) => {
     value ? configActions.updateConfig('params.search', value) : configActions.deleteConfig('params.search')
+    configActions.updateConfig('params.page', '1')
   }
 
   const viewLinkText = myProjects ? gettext('View all projects') : gettext('View my projects')
@@ -58,7 +57,8 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
   const handleView = () => {
     configActions.updateConfig('myProjects', !myProjects)
     myProjects ? configActions.deleteConfig('params.user') : configActions.updateConfig('params.user', currentUserId)
-    projectsActions.fetchAllProjects()
+    configActions.updateConfig('params.page', '1')
+    projectsActions.fetchProjects()
   }
 
   const handleNew = () => {
@@ -81,8 +81,35 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
           ))}
           <b>{lastChild}</b>
         </a>
-        <div className='text-muted'>{catalog ? catalog.title : null}</div>
+        {
+          catalog && (
+            <div className='text-muted' dangerouslySetInnerHTML={{ __html: catalog.title }} ></div>
+          )
+        }
       </div>
+    )
+  }
+
+  const loadMore = () => {
+    const page = get(config, 'params.page') ?? 1
+    configActions.updateConfig('params.page', (parseInt(page) + 1).toString())
+    projectsActions.fetchProjects()
+  }
+
+  const renderLoadButtons = () => {
+    return (
+          <div className="icon-container ml-auto">
+            {projects.length > 0 && showTopButton &&
+              <button className="elliptic-button" onClick={scrollToTop} title={gettext('Scroll to top')}>
+                <i className="fa fa-arrow-up" aria-hidden="true"></i>
+              </button>
+            }
+            {hasNext &&
+            <button onClick={loadMore} className="elliptic-button">
+              {gettext('Load more')}
+            </button>
+            }
+          </div>
     )
   }
 
@@ -96,7 +123,8 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
     setStartDate('last_changed', null)
     configActions.deleteConfig('params.last_changed_before')
     setEndDate('last_changed', null)
-    projectsActions.fetchAllProjects()
+    configActions.updateConfig('params.page', '1')
+    projectsActions.fetchProjects()
   }
 
   /* order of elements in 'visibleColumns' corresponds to order of columns in table */
@@ -187,7 +215,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
           <SearchField
             value={searchString}
             onChange={updateSearchString}
-            onSearch={projectsActions.fetchAllProjects}
+            onSearch={projectsActions.fetchProjects}
             placeholder={gettext('Search projects')}
             className="search-field"
           />
@@ -224,11 +252,10 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
         data={projects}
         headerFormatters={HEADER_FORMATTERS}
         projectsActions={projectsActions}
-        showTopButton={showTopButton}
-        scrollToTop={scrollToTop}
         sortableColumns={SORTABLE_COLUMNS}
         visibleColumns={visibleColumns}
       />
+      {renderLoadButtons()}
       <Modal {...invitationsModalProps}>
         <PendingInvitations invitations={invites} />
       </Modal>

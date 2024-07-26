@@ -9,13 +9,13 @@ import { FETCH_PROJECTS_ERROR, FETCH_PROJECTS_INIT, FETCH_PROJECTS_SUCCESS,
 
 import * as configActions from './configActions'
 
-export function fetchAllProjects() {
+export function fetchProjects() {
   return function(dispatch, getState) {
     const params = getState().config.params
     dispatch(fetchProjectsInit())
     const action = (dispatch) => ProjectsApi.fetchProjects(params || {})
           .then(projects => {
-            dispatch(fetchProjectsSuccess({ projects }))})
+            dispatch(fetchProjectsSuccess(projects, params?.page))})
 
     return dispatch(action)
       .catch(error => dispatch(fetchProjectsError(error)))
@@ -26,15 +26,15 @@ export function fetchProjectsInit() {
   return {type: FETCH_PROJECTS_INIT}
 }
 
-export function fetchProjectsSuccess(projects) {
-  return {type: FETCH_PROJECTS_SUCCESS, projects}
+export function fetchProjectsSuccess(projects, page) {
+  return {type: FETCH_PROJECTS_SUCCESS, projects, page}
 }
 
 export function fetchProjectsError(error) {
   return function(dispatch) {
     if (error.constructor.name === 'BadRequestError' && error.errors.catalog) {
       dispatch(configActions.deleteConfig('params.catalog'))
-      dispatch(fetchAllProjects())
+      dispatch(fetchProjects())
     } else {
       dispatch({type: FETCH_PROJECTS_ERROR, error})
     }

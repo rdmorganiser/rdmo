@@ -1,12 +1,10 @@
 import { set, unset } from 'lodash'
 import { DELETE_CONFIG, UPDATE_CONFIG } from '../actions/actionTypes'
-import { INITIAL_TABLE_ROWS } from '../utils/constants'
 
 const initialState = {
   myProjects: true,
   params: {},
   showFilters: false,
-  tableRows: INITIAL_TABLE_ROWS
 }
 
 export default function configReducer(state = initialState, action) {
