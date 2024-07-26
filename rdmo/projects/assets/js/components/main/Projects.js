@@ -249,11 +249,8 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
         config={config}
         configActions={configActions}
         data={projects}
-        hasNext={hasNext}
         headerFormatters={HEADER_FORMATTERS}
         projectsActions={projectsActions}
-        showTopButton={showTopButton}
-        scrollToTop={scrollToTop}
         sortableColumns={SORTABLE_COLUMNS}
         visibleColumns={visibleColumns}
       />
