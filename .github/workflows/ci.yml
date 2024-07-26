@@ -132,6 +132,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v4
+    # update the version
     - name: Get short commit SHA
       run: |
         if [ "${{ github.event_name }}" = "pull_request" ]; then
@@ -149,32 +150,36 @@ jobs:
     - name: Update version in rdmo/__init__.py
       run: |
         sed -i "s/__version__ = .*/__version__ = \"${{ steps.new-version.outputs.new_version }}\"/" rdmo/__init__.py
+    # build the webpack bundle
     - uses: actions/setup-node@v4
       with:
         node-version: 18
         cache: npm
-    - run: npm install
-    - run: npm run build:prod
+    - run: npm install && npm run build:prod
+    # build the wheel
     - uses: actions/setup-python@v5
       with:
         python-version: '3.12'
         cache: pip
     - run: |
-        python -m pip install --upgrade pip
-        python -m pip install .[dev]
+        python -m pip install --upgrade pip build[uv] twine
+        pip --version
     - name: Build the wheel
-      run: python -m build --wheel
-    - name: Check metadata
+      run: python -m build --installer=uv
+    - name: Check the metadata of wheel and sdist
       run: python -m twine check --strict dist/*
     - name: Install package from built wheel
-      run: python -m pip install --force-reinstall dist/rdmo*.whl
+      run: python -m pip install --no-compile dist/rdmo*.whl # do not create __pycache__/*.pyc files
     - name: Write info to step summary
       run: |
-        echo -e "# ✓ Wheel successfully built (v${{ steps.new-version.outputs.new_version }})\n\n" >> $GITHUB_STEP_SUMMARY
-        echo "\`\`\`console" >> $GITHUB_STEP_SUMMARY
-        echo "$ python -m pip show rdmo" >> $GITHUB_STEP_SUMMARY
-        python -m pip show rdmo >> $GITHUB_STEP_SUMMARY
-        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          {
+            echo -e "# ✓ Wheel successfully built (v${{ steps.new-version.outputs.new_version }})\n\n"
+            echo '<details><summary>Information about installed wheel</summary>'
+            echo -e "\n\`\`\`console"
+            echo "$ python -m pip show --files --verbose rdmo"
+            python -m pip show --files --verbose rdmo
+            echo -e "\`\`\`\n</details>"
+          } >> $GITHUB_STEP_SUMMARY
     - name: Upload wheel as artifact
       uses: actions/upload-artifact@v4
       with:
