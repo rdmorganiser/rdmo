@@ -37,7 +37,7 @@ const Table = ({
 
   const loadMore = () => {
     configActions.updateConfig('params.page', (parseInt(page) + 1).toString())
-    projectsActions.fetchAllProjects()
+    projectsActions.fetchProjects()
   }
 
   const renderLoadButtons = () => {
@@ -70,7 +70,7 @@ const Table = ({
       } else {
         configActions.updateConfig('params.ordering', column)
       }
-      projectsActions.fetchAllProjects()
+      projectsActions.fetchProjects()
     }
   }
 

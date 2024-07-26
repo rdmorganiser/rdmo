@@ -63,7 +63,7 @@ export default function configureStore() {
       if (isManager && store.getState().config.myProjects) {
         store.dispatch(configActions.updateConfig('params.user', currentUser.id))
       }
-      store.dispatch(projectsActions.fetchAllProjects())
+      store.dispatch(projectsActions.fetchProjects())
       store.dispatch(projectsActions.fetchInvitations(currentUser.id))
       store.dispatch(projectsActions.fetchCatalogs())
       store.dispatch(projectsActions.fetchAllowedFileTypes())

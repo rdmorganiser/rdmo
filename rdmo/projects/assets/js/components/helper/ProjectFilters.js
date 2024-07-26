@@ -23,7 +23,7 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
   const updateCatalogFilter = (value) => {
     value ? configActions.updateConfig('params.catalog', value) : configActions.deleteConfig('params.catalog')
     configActions.updateConfig('params.page', '1')
-    projectsActions.fetchAllProjects()
+    projectsActions.fetchProjects()
   }
 
   // Abstract function to handle date change
@@ -46,7 +46,7 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
       }
     }
     configActions.updateConfig('params.page', '1')
-    projectsActions.fetchAllProjects()
+    projectsActions.fetchProjects()
   }
 
   return (

@@ -58,7 +58,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
     configActions.updateConfig('myProjects', !myProjects)
     myProjects ? configActions.deleteConfig('params.user') : configActions.updateConfig('params.user', currentUserId)
     configActions.updateConfig('params.page', '1')
-    projectsActions.fetchAllProjects()
+    projectsActions.fetchProjects()
   }
 
   const handleNew = () => {
@@ -100,7 +100,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
     setStartDate('last_changed', null)
     configActions.deleteConfig('params.last_changed_before')
     setEndDate('last_changed', null)
-    projectsActions.fetchAllProjects()
+    projectsActions.fetchProjects()
   }
 
   /* order of elements in 'visibleColumns' corresponds to order of columns in table */
@@ -191,7 +191,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
           <SearchField
             value={searchString}
             onChange={updateSearchString}
-            onSearch={projectsActions.fetchAllProjects}
+            onSearch={projectsActions.fetchProjects}
             placeholder={gettext('Search projects')}
             className="search-field"
           />
