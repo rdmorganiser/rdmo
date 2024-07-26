@@ -123,6 +123,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
     setStartDate('last_changed', null)
     configActions.deleteConfig('params.last_changed_before')
     setEndDate('last_changed', null)
+    configActions.updateConfig('params.page', '1')
     projectsActions.fetchProjects()
   }
 
