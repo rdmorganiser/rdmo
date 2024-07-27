@@ -602,6 +602,7 @@ def test_project_delete_post(db, client, username, password, project_id):
         assert Project.objects.filter(pk=project_id).first()
 
 
+@pytest.mark.files()
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 def test_project_export_xml(db, client, files, username, password, project_id):

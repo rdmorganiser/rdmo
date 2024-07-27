@@ -57,6 +57,7 @@ def test_snapshot_create_get(db, client, username, password, project_id):
         assert response.status_code == 302
 
 
+@pytest.mark.files()
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 def test_snapshot_create_post(db, client, files, username, password, project_id):
@@ -182,6 +183,7 @@ def test_snapshot_rollback_get(db, client, username, password, project_id, snaps
         assert response.status_code == 404
 
 
+@pytest.mark.files()
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('snapshot_id', snapshots)

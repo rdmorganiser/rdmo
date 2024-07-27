@@ -266,6 +266,7 @@ def test_set(db, client, username, password, project_id, value_id, set_values_co
         assert Value.objects.count() == values_count
 
 
+@pytest.mark.files()
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('value_id', values)
@@ -285,6 +286,7 @@ def test_file_get(db, client, files, username, password, project_id, value_id):
         assert response.status_code == 404
 
 
+@pytest.mark.files()
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('value_id', values)

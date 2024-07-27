@@ -86,6 +86,7 @@ def test_detail(db, client, username, password, project_id, snapshot_id):
         assert response.status_code == 404
 
 
+@pytest.mark.files()
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 def test_create(db, client, files, username, password, project_id):

@@ -44,8 +44,8 @@ def django_db_setup(django_db_setup, django_db_blocker, fixtures): # noqa: PT004
 @pytest.fixture
 def files(settings, tmp_path):
     """Create a temporary MEDIA_ROOT directory and copy test data into it."""
-    media_path = Path(__file__).parent.joinpath("testing").joinpath("media")
-    settings.MEDIA_ROOT = tmp_path.joinpath("media")
+    media_path = Path(__file__).parent / "testing" / "media"
+    settings.MEDIA_ROOT = tmp_path / "media"
     shutil.copytree(media_path, settings.MEDIA_ROOT)
     return settings.MEDIA_ROOT
 

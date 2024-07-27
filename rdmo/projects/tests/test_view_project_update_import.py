@@ -151,6 +151,7 @@ def test_project_update_import_post_upload_file_empty(db, client, username, pass
         assert response.url.startswith('/account/login/')
 
 
+@pytest.mark.files()
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 def test_project_update_import_post_import_file(db, settings, client, files, username, password, project_id):
@@ -223,6 +224,7 @@ def test_project_update_import_post_import_file(db, settings, client, files, use
         assert response.url.startswith('/account/login/')
 
 
+@pytest.mark.files()
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 def test_project_update_import_post_import_file_cancel(db, settings, client, files, username, password, project_id):

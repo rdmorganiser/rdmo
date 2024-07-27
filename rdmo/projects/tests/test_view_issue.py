@@ -176,6 +176,7 @@ def test_issue_send_post_email(db, client, username, password, project_id, issue
         assert response.status_code == 404
 
 
+@pytest.mark.files()
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('issue_id', issues)
 @pytest.mark.parametrize('project_id', projects)

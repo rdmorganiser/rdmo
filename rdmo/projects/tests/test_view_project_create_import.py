@@ -183,6 +183,7 @@ def test_project_create_import_post_upload_file_forbidden(db, client, settings):
     assert response.status_code == 403
 
 
+@pytest.mark.files()
 @pytest.mark.parametrize('username,password', users)
 def test_project_create_import_post_import_file(db, settings, client, files, username, password):
     client.login(username=username, password=password)
@@ -238,6 +239,7 @@ def test_project_create_import_post_import_file(db, settings, client, files, use
         assert response.url.startswith('/account/login/')
 
 
+@pytest.mark.files()
 @pytest.mark.parametrize('username,password', users)
 def test_project_create_import_post_import_file_cancel(db, settings, client, files, username, password):
     client.login(username=username, password=password)

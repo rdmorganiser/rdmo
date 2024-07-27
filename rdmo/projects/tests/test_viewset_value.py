@@ -142,6 +142,7 @@ def test_delete(db, client, username, password, value_id):
         assert response.status_code == 401
 
 
+@pytest.mark.files()
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('value_id', values)
 def test_file(db, client, files, username, password, value_id):
