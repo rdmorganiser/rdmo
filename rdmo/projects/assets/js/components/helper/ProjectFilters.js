@@ -158,7 +158,7 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
         </div>
       )}
       <div className="pull-right mt-5">
-        {showFilters && !Object.keys(config.params).every(key => ['ordering', 'page', 'user'].includes(key)) && (
+        {showFilters && !Object.keys(config.params).every(key => ['ordering', 'page', 'search', 'user'].includes(key)) && (
           <Link className="element-link mr-10 mb-10" onClick={resetAllFilters}>
             {gettext('Reset all filters')}
           </Link>
