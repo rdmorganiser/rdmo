@@ -1,9 +1,9 @@
 {
   "name": "rdmo",
   "scripts": {
-    "build:prod": "webpack --config webpack/prod.config.js --mode production",
-    "build": "webpack --config webpack/dev.config.js --mode development",
-    "watch": "webpack --config webpack/dev.config.js --mode development --watch"
+    "build:prod": "webpack --config webpack.config.js --mode production",
+    "build": "webpack --config webpack.config.js --mode development",
+    "watch": "webpack --config webpack.config.js --mode development --watch"
   },
   "author": "RDMO Arbeitsgemeinschaft <rdmorganiser.github.io>",
   "license": "Apache-2.0",
