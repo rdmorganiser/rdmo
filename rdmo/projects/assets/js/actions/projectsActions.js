@@ -15,11 +15,10 @@ export function fetchProjects(pageReset = true) {
       dispatch(configActions.updateConfig('params.page', '1'))
     }
     const params = getState().config.params
-    const shouldConcatenate = params.page && params.page > 1
     dispatch(fetchProjectsInit())
     const action = (dispatch) => ProjectsApi.fetchProjects(params || {})
           .then(projects => {
-            dispatch(fetchProjectsSuccess(projects, shouldConcatenate))})
+            dispatch(fetchProjectsSuccess(projects, !pageReset))})
 
     return dispatch(action)
       .catch(error => dispatch(fetchProjectsError(error)))
