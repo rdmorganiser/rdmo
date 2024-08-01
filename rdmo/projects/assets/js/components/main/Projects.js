@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { PendingInvitations, ProjectFilters, ProjectImport, Table } from '../helper'
 import { Link, Modal, SearchField } from 'rdmo/core/assets/js/components'
 import { useFormattedDateTime, useModal, useScrollToTop }  from 'rdmo/core/assets/js/hooks'
-import useDatePicker from '../../hooks/useDatePicker'
 import { language } from 'rdmo/core/assets/js/utils'
 import { getTitlePath, getUserRoles, userIsManager, HEADER_FORMATTERS, SORTABLE_COLUMNS } from '../../utils'
 import { get, isEmpty } from 'lodash'
@@ -31,8 +30,6 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
     onClose: closeImport
   }
 
-  const { setStartDate, setEndDate } = useDatePicker()
-
   const displayMessage = interpolate(gettext('%s of %s projects are displayed'), [projects.length > projectsCount ? projectsCount : projects.length, projectsCount])
 
   const getProgressString = (row) => {
@@ -41,9 +38,6 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
 
   const currentUserId = currentUser.id
   const isManager = userIsManager(currentUser)
-
-  const showFilters = get(config, 'showFilters', false)
-  const toggleFilters = () => configActions.updateConfig('showFilters', !showFilters)
 
   const searchString = get(config, 'params.search', '')
   const updateSearchString = (value) => {
@@ -111,20 +105,6 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
             }
           </div>
     )
-  }
-
-  const resetAllFilters = () => {
-    configActions.deleteConfig('params.catalog')
-    configActions.deleteConfig('params.created_after')
-    setStartDate('created', null)
-    configActions.deleteConfig('params.created_before')
-    setEndDate('created', null)
-    configActions.deleteConfig('params.last_changed_after')
-    setStartDate('last_changed', null)
-    configActions.deleteConfig('params.last_changed_before')
-    setEndDate('last_changed', null)
-    configActions.updateConfig('params.page', '1')
-    projectsActions.fetchProjects()
   }
 
   /* order of elements in 'visibleColumns' corresponds to order of columns in table */
@@ -220,29 +200,13 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
             className="search-field"
           />
         </div>
-        {
-          showFilters && (
-            <ProjectFilters
-              catalogs={catalogs ?? []}
-              config={config}
-              configActions={configActions}
-              isManager={isManager}
-              projectsActions={projectsActions}
-            />
-          )
-        }
-        <div className="pull-right mt-5">
-          {
-            showFilters && (
-              <Link className="element-link mr-10 mb-10" onClick={resetAllFilters}>
-                {gettext('Reset all filters')}
-              </Link>
-            )
-          }
-          <Link className="element-link mb-10" onClick={toggleFilters}>
-            {showFilters ? gettext('Hide filters') : gettext('Show filters')}
-          </Link>
-        </div>
+        <ProjectFilters
+          catalogs={catalogs ?? []}
+          config={config}
+          configActions={configActions}
+          isManager={isManager}
+          projectsActions={projectsActions}
+        />
       </div>
       <Table
         cellFormatters={cellFormatters}
