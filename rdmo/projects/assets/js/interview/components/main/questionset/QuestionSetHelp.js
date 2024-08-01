@@ -3,13 +3,15 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { isEmpty } from 'lodash'
 
+import Html from 'rdmo/core/assets/js/components/Html'
+
 const QuestionSetHelp = ({ questionset }) => {
   const classnames = classNames({
     'help-text': true
   })
 
   return !isEmpty(questionset.help) && (
-    <div className={classnames} dangerouslySetInnerHTML={{ __html: questionset.help }}></div>
+    <Html className={classnames} html={questionset.help} />
   )
 }
 

@@ -5,7 +5,7 @@ import baseUrl from 'rdmo/core/assets/js/utils/baseUrl'
 
 import projectId from '../../utils/projectId'
 
-import Template from 'rdmo/core/assets/js/components/Template'
+import Html from 'rdmo/core/assets/js/components/Html'
 
 const Done = ({ templates }) => {
 
@@ -14,7 +14,7 @@ const Done = ({ templates }) => {
 
   return (
     <>
-      <Template template={templates.project_interview_done} />
+      <Html html={templates.project_interview_done} />
 
       <p>
         <a href={answersUrl}>{gettext('View answers')}</a>

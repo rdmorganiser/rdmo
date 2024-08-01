@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { isEmpty } from 'lodash'
+
+import Html from 'rdmo/core/assets/js/components/Html'
 
 const QuestionHelp = ({ question }) => {
   const classnames = classNames({
@@ -9,9 +10,7 @@ const QuestionHelp = ({ question }) => {
     'text-muted': question.is_optional
   })
 
-  return !isEmpty(question.help) && (
-    <div className={classnames} dangerouslySetInnerHTML={{ __html: question.help }}></div>
-  )
+  return <Html className={classnames} html={question.help} />
 }
 
 QuestionHelp.propTypes = {

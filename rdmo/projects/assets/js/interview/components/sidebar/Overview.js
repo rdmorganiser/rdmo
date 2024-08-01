@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import baseUrl from 'rdmo/core/assets/js/utils/baseUrl'
 
-import Template from 'rdmo/core/assets/js/components/Template'
+import Html from 'rdmo/core/assets/js/components/Html'
 
 const Overview = ({ overview, help }) => {
 
@@ -13,7 +13,7 @@ const Overview = ({ overview, help }) => {
   return (
     <>
       <h2>{gettext('Overview')}</h2>
-      <Template template={help} />
+      <Html html={help} />
 
       <div className="interview-overview">
         <ul className="list-unstyled">
