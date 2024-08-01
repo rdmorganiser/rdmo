@@ -15,10 +15,9 @@ export default function projectsReducer(state = initialState, action) {
     case FETCH_PROJECTS_INIT:
       return {...state, ...action.projects}
     case FETCH_PROJECTS_SUCCESS: {
-      const shouldConcatenate = action.page && action.page > 1
       return {
           ...state,
-          projects: shouldConcatenate ? [...state.projects, ...action.projects.results] : action.projects.results,
+          projects: action.shouldConcatenate ? [...state.projects, ...action.projects.results] : action.projects.results,
           ready: true,
           projectsCount: action.projects.count,
           hasNext: action.projects.next !== null

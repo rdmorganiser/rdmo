@@ -42,7 +42,6 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
   const searchString = get(config, 'params.search', '')
   const updateSearchString = (value) => {
     value ? configActions.updateConfig('params.search', value) : configActions.deleteConfig('params.search')
-    configActions.updateConfig('params.page', '1')
   }
 
   const viewLinkText = myProjects ? gettext('View all projects') : gettext('View my projects')
@@ -51,7 +50,6 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
   const handleView = () => {
     configActions.updateConfig('myProjects', !myProjects)
     myProjects ? configActions.deleteConfig('params.user') : configActions.updateConfig('params.user', currentUserId)
-    configActions.updateConfig('params.page', '1')
     projectsActions.fetchProjects()
   }
 
@@ -87,7 +85,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
   const loadMore = () => {
     const page = get(config, 'params.page') ?? 1
     configActions.updateConfig('params.page', (parseInt(page) + 1).toString())
-    projectsActions.fetchProjects()
+    projectsActions.fetchProjects(false)
   }
 
   const renderLoadButtons = () => {
@@ -195,7 +193,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
           <SearchField
             value={searchString}
             onChange={updateSearchString}
-            onSearch={projectsActions.fetchProjects}
+            onSearch={() => projectsActions.fetchProjects()}
             placeholder={gettext('Search projects')}
             className="search-field"
           />
