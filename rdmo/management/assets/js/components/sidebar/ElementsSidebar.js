@@ -74,7 +74,7 @@ const ElementsSidebar = ({ config, elements, elementActions, importActions }) =>
       <h2>Export</h2>
 
       <p className="text-muted">
-        {interpolate(gettext('Export all visible %s.'), [elementType])}
+        {gettext('Export all visible elements.')}
       </p>
 
       <ul className="list-unstyled">
