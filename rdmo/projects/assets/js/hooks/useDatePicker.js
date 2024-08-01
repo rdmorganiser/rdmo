@@ -26,7 +26,6 @@ const useDatePicker = () => {
 
   const setStartDate = useCallback((type, date) => {
     const camelCaseType = camelCase(type)
-    console.log(camelCaseType)
     const startKey = `${camelCaseType}Start`
     setDateRange(prev => ({ ...prev, [startKey]: date }))
   }, [])
