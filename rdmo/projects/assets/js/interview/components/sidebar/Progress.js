@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Template from 'rdmo/core/assets/js/components/Template'
+import Html from 'rdmo/core/assets/js/components/Html'
 
 const Progress = ({ progress, help }) => {
 
@@ -12,7 +12,7 @@ const Progress = ({ progress, help }) => {
   return (
     <>
       <h2>{gettext('Progress')}</h2>
-      <Template template={help} />
+      <Html html={help} />
 
       <div className="interview-progress">
         {low && <div className="interview-progress-count">{label}</div>}

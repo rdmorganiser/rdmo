@@ -9,6 +9,7 @@ import Question from '../question/Question'
 import QuestionSetAddSet from './QuestionSetAddSet'
 import QuestionSetAddSetHelp from './QuestionSetAddSetHelp'
 import QuestionSetHelp from './QuestionSetHelp'
+import QuestionSetHelpTemplate from './QuestionSetHelpTemplate'
 import QuestionSetRemoveSet from './QuestionSetRemoveSet'
 
 const QuestionSet = ({ templates, questionset, sets, values, disabled, isManager,
@@ -23,8 +24,11 @@ const QuestionSet = ({ templates, questionset, sets, values, disabled, isManager
 
   return checkQuestionSet(questionset, parentSet) && (
     <div className="interview-questionset col-md-12">
-      <strong>{questionset.title}</strong>
+      <div className="interview-questionset-label">
+        <strong>{questionset.title}</strong>
+      </div>
       <QuestionSetHelp questionset={questionset} />
+      <QuestionSetHelpTemplate templates={templates} />
       <QuestionSetAddSetHelp templates={templates} questionset={questionset} />
       <div>
         {

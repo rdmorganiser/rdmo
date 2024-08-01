@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
-import Template from 'rdmo/core/assets/js/components/Template'
+import Html from 'rdmo/core/assets/js/components/Html'
 
 import { projectId } from '../../utils/meta'
 
@@ -12,7 +12,7 @@ const Errors = ({ templates, errors }) => {
 
   return (
     <>
-      <Template template={templates.project_interview_error} />
+      <Html html={templates.project_interview_error} />
 
       <ul className="well list-unstyled text-danger">
         {

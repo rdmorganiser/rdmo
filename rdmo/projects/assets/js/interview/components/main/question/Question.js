@@ -5,6 +5,7 @@ import { checkQuestion } from '../../../utils/page'
 
 import QuestionAddValueHelp from './QuestionAddValueHelp'
 import QuestionHelp from './QuestionHelp'
+import QuestionHelpTemplate from './QuestionHelpTemplate'
 import QuestionManagement from './QuestionManagement'
 import QuestionOptional from './QuestionOptional'
 import QuestionText from './QuestionText'
@@ -18,6 +19,7 @@ const Question = ({ templates, question, values, disabled, isManager,
       <QuestionOptional question={question} />
       <QuestionText question={question} />
       <QuestionHelp question={question} />
+      <QuestionHelpTemplate templates={templates} />
       <QuestionAddValueHelp templates={templates} question={question} />
       <QuestionWarning templates={templates} question={question} values={values} />
       <QuestionManagement question={question} isManager={isManager} />

@@ -129,6 +129,16 @@
 
 .interview-question {
     margin-bottom: 20px;
+
+    p {
+        margin-bottom: 5px;
+    }
+}
+
+.interview-questionset {
+    .interview-questionset-label {
+        margin-bottom: 5px;
+    }
 }
 
 .interview-widgets {
