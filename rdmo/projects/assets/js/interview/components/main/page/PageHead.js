@@ -3,13 +3,13 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { capitalize, isNil, last } from 'lodash'
 
-import Template from 'rdmo/core/assets/js/components/Template'
+import Html from 'rdmo/core/assets/js/components/Html'
 import useModal from 'rdmo/core/assets/js/hooks/useModal'
 
 import PageHeadDeleteModal from './PageHeadDeleteModal'
 import PageHeadFormModal from './PageHeadFormModal'
 
-const PageHead = ({ page, help, sets, values, currentSet, activateSet, createSet, updateSet, deleteSet }) => {
+const PageHead = ({ templates, page, sets, values, currentSet, activateSet, createSet, updateSet, deleteSet }) => {
 
   const currentSetValue = isNil(currentSet) ? null : (
     values.find((value) => (
@@ -50,7 +50,8 @@ const PageHead = ({ page, help, sets, values, currentSet, activateSet, createSet
 
   return page.is_collection && (
     <div className="interview-page-tabs">
-      <Template template={help} />
+      <Html html={templates.project_interview_page_help} />
+      <Html html={templates.project_interview_page_tabs_help} />
       {
         currentSet ? (
           <>
@@ -120,8 +121,8 @@ const PageHead = ({ page, help, sets, values, currentSet, activateSet, createSet
 }
 
 PageHead.propTypes = {
+  templates: PropTypes.object.isRequired,
   page: PropTypes.object.isRequired,
-  help: PropTypes.string.isRequired,
   sets: PropTypes.array.isRequired,
   values: PropTypes.array.isRequired,
   currentSet: PropTypes.object,

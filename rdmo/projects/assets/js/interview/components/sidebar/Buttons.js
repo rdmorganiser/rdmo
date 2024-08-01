@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Template from 'rdmo/core/assets/js/components/Template'
+import Html from 'rdmo/core/assets/js/components/Html'
 
 const Buttons = ({ next, prev, help, fetchPage }) => {
   return (
     <>
-      <Template template={help} />
+      <Html html={help} />
 
       <div className="interview-buttons">
         <div className="pull-right">

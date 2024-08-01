@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
-import Template from 'rdmo/core/assets/js/components/Template'
+import Html from 'rdmo/core/assets/js/components/Html'
 
 const Navigation = ({ currentPage, navigation, help, fetchPage }) => {
 
@@ -14,7 +14,7 @@ const Navigation = ({ currentPage, navigation, help, fetchPage }) => {
   return (
     <>
       <h2>{gettext('Navigation')}</h2>
-      <Template template={help} />
+      <Html html={help} />
 
       <ul className="list-unstyled interview-navigation">
         {

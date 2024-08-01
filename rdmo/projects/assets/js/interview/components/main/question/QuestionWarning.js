@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Template from 'rdmo/core/assets/js/components/Template'
+import Html from 'rdmo/core/assets/js/components/Html'
 
 const QuestionWarning = ({ templates, question, values }) => {
   return !question.is_collection && values.length > 1 && (
-    <Template template={templates.project_interview_multiple_values_warning} />
+    <Html html={templates.project_interview_multiple_values_warning} />
   )
 }
 

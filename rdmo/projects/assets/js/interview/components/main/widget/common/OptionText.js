@@ -1,10 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import Html from 'rdmo/core/assets/js/components/Html'
+
 const OptionText = ({ className, option }) => {
   return (
     <span className={className}>
-      <span className="option-text" dangerouslySetInnerHTML={{ __html: option.text }}></span>
+      <Html className="option-text" html={option.text} />
     </span>
   )
 }
