@@ -40,7 +40,6 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
   const selectedCatalog = get(config, 'params.catalog', '')
   const updateCatalogFilter = (value) => {
     value ? configActions.updateConfig('params.catalog', value) : configActions.deleteConfig('params.catalog')
-    configActions.updateConfig('params.page', '1')
     projectsActions.fetchProjects()
   }
 
@@ -63,7 +62,6 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
         configActions.deleteConfig(`params.${type}_before`)
       }
     }
-    configActions.updateConfig('params.page', '1')
     projectsActions.fetchProjects()
   }
 

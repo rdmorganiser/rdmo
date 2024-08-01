@@ -9,13 +9,16 @@ import { FETCH_PROJECTS_ERROR, FETCH_PROJECTS_INIT, FETCH_PROJECTS_SUCCESS,
 
 import * as configActions from './configActions'
 
-export function fetchProjects() {
+export function fetchProjects(pageReset = true) {
   return function(dispatch, getState) {
+    if (pageReset === true) {
+      dispatch(configActions.updateConfig('params.page', '1'))
+    }
     const params = getState().config.params
     dispatch(fetchProjectsInit())
     const action = (dispatch) => ProjectsApi.fetchProjects(params || {})
           .then(projects => {
-            dispatch(fetchProjectsSuccess(projects, params?.page))})
+            dispatch(fetchProjectsSuccess(projects, !pageReset))})
 
     return dispatch(action)
       .catch(error => dispatch(fetchProjectsError(error)))
@@ -26,8 +29,8 @@ export function fetchProjectsInit() {
   return {type: FETCH_PROJECTS_INIT}
 }
 
-export function fetchProjectsSuccess(projects, page) {
-  return {type: FETCH_PROJECTS_SUCCESS, projects, page}
+export function fetchProjectsSuccess(projects, shouldConcatenate) {
+  return {type: FETCH_PROJECTS_SUCCESS, projects, shouldConcatenate}
 }
 
 export function fetchProjectsError(error) {
