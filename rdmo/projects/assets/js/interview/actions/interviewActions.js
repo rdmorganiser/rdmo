@@ -59,13 +59,13 @@ export function fetchPage(pageId, back) {
       ValueApi.storeValue(projectId, value)
     })
 
+    dispatch(fetchPageInit())
+
     if (pageId === 'done') {
-      dispatch(fetchPageInit())
       updateLocation('done')
       dispatch(fetchNavigation(null))
       dispatch(fetchPageSuccess(null, true))
     } else {
-      dispatch(fetchPageInit())
       const promise = isNil(pageId) ? PageApi.fetchContinue(projectId)
                                     : PageApi.fetchPage(projectId, pageId, back)
       return promise
@@ -338,7 +338,7 @@ export function deleteValueError(errors) {
 
 export function activateSet(set) {
   if (isEmpty(set.set_prefix)) {
-    return updateConfig('rdmo.interview', 'page.currentSetIndex', set.set_index)
+    return updateConfig('page.currentSetIndex', set.set_index, true)
   } else {
     return { type: NOOP }
   }
