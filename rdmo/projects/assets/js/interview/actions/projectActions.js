@@ -14,13 +14,22 @@ import {
   UPDATE_PROGRESS_ERROR,
 } from './actionTypes'
 
+import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
+
 export function fetchOverview() {
   return (dispatch) => {
+    dispatch(addToPending('fetchOverview'))
     dispatch(fetchOverviewInit())
 
     return ProjectApi.fetchOverview(projectId)
-      .then((overview) => dispatch(fetchOverviewSuccess(overview)))
-      .catch((error) => dispatch(fetchOverviewError(error)))
+      .then((overview) => {
+        dispatch(removeFromPending('fetchOverview'))
+        dispatch(fetchOverviewSuccess(overview))
+      })
+      .catch((error) => {
+        dispatch(removeFromPending('fetchOverview'))
+        dispatch(fetchOverviewError(error))
+      })
   }
 }
 
@@ -38,11 +47,18 @@ export function fetchOverviewError(error) {
 
 export function fetchProgress() {
   return (dispatch) => {
+    dispatch(addToPending('fetchProgress'))
     dispatch(fetchProgressInit())
 
     return ProjectApi.fetchProgress(projectId)
-    .then((progress) => dispatch(fetchProgressSuccess(progress)))
-    .catch((error) => dispatch(fetchProgressError(error)))
+    .then((progress) => {
+      dispatch(removeFromPending('fetchProgress'))
+      dispatch(fetchProgressSuccess(progress))
+    })
+    .catch((error) => {
+      dispatch(removeFromPending('fetchProgress'))
+      dispatch(fetchProgressError(error))
+    })
   }
 }
 
@@ -59,13 +75,19 @@ export function fetchProgressError(error) {
 }
 
 export function updateProgress() {
-
   return (dispatch) => {
+    dispatch(addToPending('updateProgress'))
     dispatch(updateProgressInit())
 
     return ProjectApi.updateProgress(projectId)
-      .then((progress) => dispatch(updateProgressSuccess(progress)))
-      .catch((error) => dispatch(updateProgressError(error)))
+      .then((progress) => {
+        dispatch(removeFromPending('updateProgress'))
+        dispatch(updateProgressSuccess(progress))
+      })
+      .catch((error) => {
+        dispatch(removeFromPending('updateProgress'))
+        dispatch(updateProgressError(error))
+      })
   }
 }
 

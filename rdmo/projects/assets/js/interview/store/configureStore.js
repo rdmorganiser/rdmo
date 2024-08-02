@@ -5,6 +5,7 @@ import thunk from 'redux-thunk'
 import { getConfigFromLocalStorage } from 'rdmo/core/assets/js/utils/config'
 
 import configReducer from 'rdmo/core/assets/js/reducers/configReducer'
+import pendingReducer from 'rdmo/core/assets/js/reducers/pendingReducer'
 import settingsReducer from 'rdmo/core/assets/js/reducers/settingsReducer'
 import templateReducer from 'rdmo/core/assets/js/reducers/templateReducer'
 import userReducer from 'rdmo/core/assets/js/reducers/userReducer'
@@ -36,6 +37,7 @@ export default function configureStore() {
   const rootReducer = combineReducers({
     config: configReducer,
     interview: interviewReducer,
+    pending: pendingReducer,
     project: projectReducer,
     settings: settingsReducer,
     templates: templateReducer,
