@@ -125,7 +125,7 @@ def test_create(db, client, files, username, password, project_id):
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('snapshot_id', snapshots)
-def test_update(db, client, username, password, project_id, snapshot_id):
+def test_update(db, client, files, username, password, project_id, snapshot_id):
     client.login(username=username, password=password)
     project = Project.objects.get(id=project_id)
     snapshot = Snapshot.objects.filter(project_id=project_id, id=snapshot_id).first()
@@ -159,7 +159,7 @@ def test_update(db, client, username, password, project_id, snapshot_id):
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('snapshot_id', snapshots)
-def test_delete(db, client, username, password, project_id, snapshot_id):
+def test_delete(db, client, files, username, password, project_id, snapshot_id):
     client.login(username=username, password=password)
     project = Project.objects.get(id=project_id)
 

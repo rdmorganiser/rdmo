@@ -285,7 +285,7 @@ def test_project_update_import_post_import_file_cancel(db, settings, client, fil
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
-def test_project_update_import_post_import_file_empty(db, settings, client, username, password, project_id):
+def test_project_update_import_post_import_file_empty(db, settings, files, client, username, password, project_id):
     client.login(username=username, password=password)
     projects_count = Project.objects.count()
 
@@ -368,7 +368,7 @@ def test_project_update_import_post_import_project_step1(db, settings, client, u
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('source_id', projects)
-def test_project_update_import_post_import_project_step2(db, settings, client, username, password,
+def test_project_update_import_post_import_project_step2(db, settings, files, client, username, password,
                                                          project_id, source_id):
     client.login(username=username, password=password)
     projects_count = Project.objects.count()

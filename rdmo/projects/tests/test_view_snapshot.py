@@ -97,7 +97,7 @@ def test_snapshot_create_post(db, client, files, username, password, project_id)
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('snapshot_id', snapshots)
-def test_snapshot_update_get(db, client, username, password, project_id, snapshot_id):
+def test_snapshot_update_get(db, client, files, username, password, project_id, snapshot_id):
     client.login(username=username, password=password)
     project = Project.objects.get(pk=project_id)
 
@@ -122,7 +122,7 @@ def test_snapshot_update_get(db, client, username, password, project_id, snapsho
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('snapshot_id', snapshots)
-def test_snapshot_update_post(db, client, username, password, project_id, snapshot_id):
+def test_snapshot_update_post(db, client, files, username, password, project_id, snapshot_id):
     client.login(username=username, password=password)
     project = Project.objects.get(pk=project_id)
     snapshot = Snapshot.objects.get(pk=snapshot_id)
