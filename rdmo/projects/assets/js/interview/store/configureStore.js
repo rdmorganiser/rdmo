@@ -42,8 +42,15 @@ export default function configureStore() {
     user: userReducer,
   })
 
+  const initialState = {
+    config: {
+      prefix: 'rdmo.interview'
+    }
+  }
+
   const store = createStore(
     rootReducer,
+    initialState,
     applyMiddleware(...middlewares)
   )
 
@@ -55,7 +62,7 @@ export default function configureStore() {
   // this event is triggered when the page first loads
   window.addEventListener('load', () => {
     getConfigFromLocalStorage('rdmo.interview').forEach(([path, value]) => {
-      store.dispatch(configActions.updateConfig('rdmo.interview', path, value))
+      store.dispatch(configActions.updateConfig(path, value))
     })
 
     Promise.all([
