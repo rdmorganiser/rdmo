@@ -1,22 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { isEmpty } from 'lodash'
 
-const Pending = ({ config }) => {
-  if (config.pending) {
-    return <i className="fa fa-circle-o-notch fa-spin fa-fw"></i>
-  } else {
-    return null
-  }
+const Pending = ({ pending }) => {
+  return (
+    !isEmpty(pending.items) && (
+      <i className="fa fa-circle-o-notch fa-spin fa-fw"></i>
+    )
+  )
 }
 
 Pending.propTypes = {
-  config: PropTypes.object.isRequired,
+  pending: PropTypes.object.isRequired,
 }
 
 function mapStateToProps(state) {
   return {
-    config: state.config,
+    pending: state.pending,
   }
 }
 

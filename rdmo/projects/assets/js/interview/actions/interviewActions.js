@@ -50,8 +50,10 @@ import {
 } from './actionTypes'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 
 export function fetchPage(pageId, back) {
+  const pendingId = 'fetchPage'
 
   return (dispatch, getState) => {
     // store unsaved defaults on this page before loading the new page
@@ -59,6 +61,7 @@ export function fetchPage(pageId, back) {
       ValueApi.storeValue(projectId, value)
     })
 
+    dispatch(addToPending(pendingId))
     dispatch(fetchPageInit())
 
     if (pageId === 'done') {
@@ -78,9 +81,13 @@ export function fetchPage(pageId, back) {
           dispatch(fetchValues(page))
           dispatch(fetchOptionsets(page))
 
+          dispatch(removeFromPending(pendingId))
           dispatch(fetchPageSuccess(page, false))
         })
-        .catch((error) => dispatch(fetchPageError(error)))
+        .catch((error) => {
+          dispatch(removeFromPending(pendingId))
+          dispatch(fetchPageError(error))
+        })
     }
   }
 }
@@ -98,11 +105,21 @@ export function fetchPageError(error) {
 }
 
 export function fetchNavigation(page) {
+  const pendingId = `fetchNavigation/${page.id}`
+
   return (dispatch) => {
+    dispatch(addToPending(pendingId))
     dispatch(fetchNavigationInit())
+
     return ProjectApi.fetchNavigation(projectId, page && page.section.id)
-      .then((navigation) => dispatch(fetchNavigationSuccess(navigation)))
-      .catch((error) => dispatch(fetchNavigationError(error)))
+      .then((navigation) => {
+        dispatch(removeFromPending(pendingId))
+        dispatch(fetchNavigationSuccess(navigation))
+      })
+      .catch((error) => {
+        dispatch(removeFromPending(pendingId))
+        dispatch(fetchNavigationError(error))
+      })
   }
 }
 
@@ -126,14 +143,23 @@ export function fetchOptionsets(page) {
 }
 
 export function fetchOptions(page, optionset) {
+  const pendingId = `fetchOptions/${page.id}/${optionset.id}`
+
   return (dispatch) => {
+    dispatch(addToPending(pendingId))
     dispatch(fetchOptionsInit())
+
     return ProjectApi.fetchOptions(projectId, optionset.id)
       .then((options) => {
         updateOptions(page, optionset, options)
+
+        dispatch(removeFromPending(pendingId))
         dispatch(fetchOptionsSuccess(page, optionset, options))
       })
-      .catch((error) => dispatch(fetchOptionsError(error)))
+      .catch((error) => {
+        dispatch(removeFromPending(pendingId))
+        dispatch(fetchOptionsError(error))
+      })
   }
 }
 
@@ -150,7 +176,10 @@ export function fetchOptionsError(error) {
 }
 
 export function fetchValues(page) {
+  const pendingId = `fetchValues/${page.id}`
+
   return (dispatch) => {
+    dispatch(addToPending(pendingId))
     dispatch(fetchValuesInit())
     return ValueApi.fetchValues(projectId, { attribute: page.attributes })
       .then((values) => {
@@ -161,10 +190,14 @@ export function fetchValues(page) {
 
         activateFirstValue(page, values)
 
+        dispatch(removeFromPending(pendingId))
         dispatch(resolveConditions(page, sets))
         dispatch(fetchValuesSuccess(values, sets))
       })
-      .catch((error) => dispatch(fetchValuesError(error)))
+      .catch((error) => {
+        dispatch(removeFromPending(pendingId))
+        dispatch(fetchValuesError(error))
+      })
   }
 }
 
@@ -197,7 +230,10 @@ export function resolveConditions(page, sets) {
 }
 
 export function resolveCondition(element, set) {
+  const pendingId = `resolveCondition/${element.model}/${element.id}/${set.set_prefix}/${set.set_index}`
+
   return (dispatch, getState) => {
+    dispatch(addToPending(pendingId))
     dispatch(resolveConditionInit())
 
     return ProjectApi.resolveCondition(projectId, set, element)
@@ -206,9 +242,13 @@ export function resolveCondition(element, set) {
         const setIndex = getState().interview.sets.indexOf(set)
         const results = { ...set[elementType], [element.id]: response.result }
 
+        dispatch(removeFromPending(pendingId))
         dispatch(resolveConditionSuccess({ ...set, [elementType]: results }, setIndex))
       })
-      .catch((error) => dispatch(resolveConditionError(error)))
+      .catch((error) => {
+        dispatch(removeFromPending(pendingId))
+        dispatch(resolveConditionError(error))
+      })
   }
 }
 
@@ -225,10 +265,13 @@ export function resolveConditionError(error) {
 }
 
 export function storeValue(value) {
+  const pendingId = `storeValue/${value.attribute}/${value.set_prefix}/${value.set_index}/${value.collection_index}`
+
   return (dispatch, getState) => {
     const valueIndex = getState().interview.values.indexOf(value)
     const valueFile = value.file
 
+    dispatch(addToPending(pendingId))
     dispatch(storeValueInit(valueIndex))
 
     return ValueApi.storeValue(projectId, value)
@@ -251,15 +294,25 @@ export function storeValue(value) {
 
         // check if there is a file or if a filename is set (when the file was just erased)
         if (isNil(valueFile) && isNil(value.file_name)) {
-          return dispatch(storeValueSuccess(value, valueIndex))
+          dispatch(removeFromPending(pendingId))
+          dispatch(storeValueSuccess(value, valueIndex))
         } else {
           // upload file after the value is created
           return ValueApi.storeFile(projectId, value, valueFile)
-            .then((value) => dispatch(storeValueSuccess(value, valueIndex)))
-            .catch((error) => dispatch(storeValueError(error, valueIndex)))
+            .then((value) => {
+              dispatch(removeFromPending(pendingId))
+              dispatch(storeValueSuccess(value, valueIndex))
+            })
+            .catch((error) => {
+              dispatch(removeFromPending(pendingId))
+              dispatch(storeValueError(error, valueIndex))
+            })
         }
       })
-      .catch((error) => dispatch(storeValueError(error, valueIndex)))
+      .catch((error) => {
+        dispatch(removeFromPending(pendingId))
+        dispatch(storeValueError(error, valueIndex))
+      })
   }
 }
 
@@ -293,7 +346,10 @@ export function updateValue(value, attrs) {
 }
 
 export function deleteValue(value) {
+  const pendingId = `deleteValue/${value.id}`
+
   return (dispatch, getState) => {
+    dispatch(addToPending(pendingId))
     dispatch(deleteValueInit())
 
     if (isNil(value.id)) {
@@ -317,9 +373,13 @@ export function deleteValue(value) {
             dispatch(resolveConditions(page, sets))
           }
 
+          dispatch(removeFromPending(pendingId))
           dispatch(deleteValueSuccess(value))
         })
-        .catch((errors) => dispatch(deleteValueError(errors)))
+        .catch((errors) => {
+          dispatch(removeFromPending(pendingId))
+          dispatch(deleteValueError(errors))
+        })
     }
   }
 }
@@ -385,21 +445,26 @@ export function updateSet(setValue, attrs) {
 }
 
 export function deleteSet(set, setValue) {
-  if (isNil(setValue)) {
-    return (dispatch, getState) => {
+  const pendingId = `deleteSet/${set.set_prefix}/${set.set_index}`
+
+  return (dispatch, getState) => {
+    dispatch(addToPending(pendingId))
+    dispatch(deleteSetInit())
+
+    if (isNil(setValue)) {
       // gather all values for this set and it's descendants
       const values = getDescendants(getState().interview.values, set)
 
-      dispatch(deleteSetInit())
-
       return Promise.all(values.map((value) => ValueApi.deleteValue(projectId, value)))
-        .then(() => dispatch(deleteSetSuccess(set)))
-        .catch((errors) => dispatch(deleteSetError(errors)))
-    }
-  } else {
-    return (dispatch, getState) => {
-      dispatch(deleteSetInit())
-
+        .then(() => {
+          dispatch(removeFromPending(pendingId))
+          dispatch(deleteSetSuccess(set))
+        })
+        .catch((errors) => {
+          dispatch(removeFromPending(pendingId))
+          dispatch(deleteSetError(errors))
+        })
+    } else {
       return ValueApi.deleteSet(projectId, setValue)
         .then(() => {
           const page = getState().interview.page
@@ -418,9 +483,13 @@ export function deleteSet(set, setValue) {
             }
           }
 
+          dispatch(removeFromPending(pendingId))
           dispatch(deleteSetSuccess(set))
         })
-        .catch((errors) => dispatch(deleteSetError(errors)))
+        .catch((errors) => {
+          dispatch(removeFromPending(pendingId))
+          dispatch(deleteSetError(errors))
+        })
     }
   }
 }
