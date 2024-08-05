@@ -304,12 +304,15 @@ def track_changes_m2m_instances(element, field_name,
     if original is None:
         return
     original_m2m_instance = getattr(original, field_name)
-    if original_m2m_instance is None:
-        return
-    original_m2m_uris = list(original_m2m_instance.values_list('uri', flat=True))
-    foreign_uris = [i.uri for i in foreign_instances]
-    track_changes_on_element(element, field_name, new_value=foreign_uris,
-                             original_value=original_m2m_uris)
+    original_m2m_instance = original_m2m_instance or []
+    # m2m instance fields are unordered so comparison by set
+    original_uris = set(original_m2m_instance.values_list('uri', flat=True))
+    foreign_uris = {i.uri for i in foreign_instances}
+    common_uris = list(original_uris & foreign_uris)
+    original_uris_list = common_uris + list(original_uris - foreign_uris)
+    foreign_uris_list = common_uris + list(foreign_uris - original_uris)
+    track_changes_on_element(element, field_name, new_value=foreign_uris_list,
+                             original_value=original_uris_list)
 
 
 def set_m2m_through_instances(instance, element, field_name=None, source_name=None,
