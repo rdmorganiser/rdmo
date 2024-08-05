@@ -25,19 +25,12 @@ TEST_CATALOG_SECTIONS_URIS = {
 }
 
 
-def get_elements_catalog_sections_uris(elements, catalog):
-    return {
-        element['uri'] for _uri, element in elements.items()
-        if element['uri'] != catalog.uri
-           and element['model'] == 'questions.section'
-    }
-
 def test_create_catalogs(db, settings):
     delete_all_objects([Catalog, Section, Page, QuestionSet, Question])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'catalogs.xml'
 
-    elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
+    elements, root, imported_elements = parse_xml_and_import_elements(xml_file, shuffle_elements=True)
 
     assert len(root) == len(imported_elements) == 148
     assert Catalog.objects.count() == 2
@@ -49,14 +42,17 @@ def test_create_catalogs(db, settings):
     assert all(element['updated'] is False for element in imported_elements)
 
     # check that all elements ended up in the catalog
-    catalog = Catalog.objects.prefetch_elements().first()
-    catalog_descendant_uris = {
-        element.uri for element in catalog.descendants
-        if element.uri in TEST_CATALOG_SECTIONS_URIS
-    }
-    elements_catalog_sections_uris = get_elements_catalog_sections_uris(elements, catalog)
-    assert catalog_descendant_uris == elements_catalog_sections_uris == TEST_CATALOG_SECTIONS_URIS
+    catalog = Catalog.objects.prefetch_elements().get(uri="http://example.com/terms/questions/catalog")
+    catalog_sections = catalog.sections.all()
+    catalog_sections_uris = set(catalog_sections.values_list('uri', flat=True))
+    assert catalog_sections_uris == TEST_CATALOG_SECTIONS_URIS
 
+    sections_pages = Section.objects.filter(uri__in=catalog_sections_uris).values_list('pages')
+    assert sections_pages.distinct().count() == 48
+    sections_pages_questionsets = Page.objects.filter(id__in=sections_pages).values_list('questionsets')
+    assert sections_pages_questionsets.distinct().count() == 3
+    sections_pages_questions = Page.objects.filter(id__in=sections_pages).values_list('questions')
+    assert sections_pages_questions.distinct().count() == 85
 
 def test_update_catalogs(db, settings):
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'catalogs.xml'
@@ -64,6 +60,7 @@ def test_update_catalogs(db, settings):
     elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
 
     assert len(root) == len(imported_elements) == 148
+
     assert all(element['created'] is False for element in imported_elements)
     assert all(element['updated'] is True for element in imported_elements)
 
@@ -292,18 +289,21 @@ def test_create_legacy_questions(db, settings):
 
     # check that all elements ended up in the catalog
     catalog = Catalog.objects.prefetch_elements().first()
-    catalog_descendant_uris = {
-        element.uri for element in catalog.descendants
-        if element.uri in TEST_CATALOG_SECTIONS_URIS
-    }
-    elements_catalog_sections_uris = get_elements_catalog_sections_uris(elements, catalog)
-    assert catalog_descendant_uris == elements_catalog_sections_uris == TEST_CATALOG_SECTIONS_URIS
+    catalog_sections = catalog.sections.all()
+    catalog_sections_uris = set(catalog_sections.values_list('uri', flat=True))
+    assert catalog_sections_uris == TEST_CATALOG_SECTIONS_URIS
+    sections_pages = Section.objects.filter(uri__in=catalog_sections_uris).values_list('pages')
+    assert sections_pages.distinct().count() == 48
+    sections_pages_questionsets = Page.objects.filter(id__in=sections_pages).values_list('questionsets')
+    assert sections_pages_questionsets.distinct().count() == 3
+    sections_pages_questions = Page.objects.filter(id__in=sections_pages).values_list('questions')
+    assert sections_pages_questions.distinct().count() == 85
 
 
 def test_update_legacy_questions(db, settings):
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'legacy' / 'questions.xml'
 
-    elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
+    elements, root, imported_elements = parse_xml_and_import_elements(xml_file, shuffle_elements=True)
 
     assert len(root) == len(imported_elements) == 147
     assert all(element['created'] is False for element in imported_elements)
@@ -311,9 +311,6 @@ def test_update_legacy_questions(db, settings):
 
     # check that all elements ended up in the catalog
     catalog = Catalog.objects.prefetch_elements().first()
-    catalog_descendant_uris = {
-        element.uri for element in catalog.descendants
-        if element.uri in TEST_CATALOG_SECTIONS_URIS
-    }
-    elements_catalog_sections_uris = get_elements_catalog_sections_uris(elements, catalog)
-    assert catalog_descendant_uris == elements_catalog_sections_uris == TEST_CATALOG_SECTIONS_URIS
+    catalog_sections = catalog.sections.all()
+    catalog_sections_uris = set(catalog_sections.values_list('uri', flat=True))
+    assert catalog_sections_uris == TEST_CATALOG_SECTIONS_URIS
