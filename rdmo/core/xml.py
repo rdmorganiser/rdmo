@@ -1,6 +1,6 @@
 import logging
 import re
-from collections import OrderedDict, defaultdict, deque
+from collections import OrderedDict
 from pathlib import Path
 from typing import Dict, Optional, Tuple
 from xml.etree.ElementTree import Element as xmlElement
@@ -257,6 +257,21 @@ def validate_pre_conversion_for_missing_key_in_legacy_elements(elements, version
             raise ValueError(f"Missing legacy elements, elements containing 'key' were expected for this XML with version {version} and elements {models_in_elements}.")   # noqa: E501
 
 
+def update_related_elements(elements: Dict, related_uri: str, related_model: str, related_key: str, field_name: str):
+    # search for the related elements that use the uri
+    related_elements = [
+        element for element in elements.values()
+        if element['model'] == related_model
+           and element.get(related_key)
+           and element[related_key]['uri'] == related_uri
+    ]
+    # write the related elements back into the related element
+    elements[related_uri][field_name] = [
+        {k: v for k, v in element.items() if k in RELATED_ELEMENT_KEYS}
+        for element in related_elements
+    ]
+
+
 def convert_legacy_elements(elements):
     # first pass: identify pages
     for uri, element in elements.items():
@@ -275,30 +290,30 @@ def convert_legacy_elements(elements):
 
         elif element['model'] == 'questions.catalog':
             element['uri_path'] = element.pop('key')
-            catalog_sections = [
-                sec for sec in elements.values()
-                if sec['model'] == 'questions.section'
-                   and sec.get('catalog')
-                   and sec['catalog']['uri'] == element['uri']
-            ]
-            element['sections'] = [
-                {k:v for k,v in sec.items() if k in RELATED_ELEMENT_KEYS}
-                for sec in catalog_sections
-            ]
+            # Add sections to the catalog
+            update_related_elements(elements, uri, 'questions.section', 'catalog', 'sections')
 
         elif element['model'] == 'questions.section':
             del element['key']
             element['uri_path'] = element.pop('path')
-
-            if element.get('catalog') is not None:
-                element['catalog']['order'] = element.pop('order')
+            del element['catalog']  # sections do not have catalog anymore
+            # Add section_pages to the section
+            update_related_elements(elements, uri, 'questions.page', 'section', 'pages')
 
         elif element['model'] == 'questions.page':
             del element['key']
             element['uri_path'] = element.pop('path')
+            del element['section']  # pages do not have sections anymore
 
-            if element.get('section') is not None:
-                element['section']['order'] = element.pop('order')
+            # Add page_questionsets to the page
+            # Add questionsets to the page
+            update_related_elements(elements, uri, 'questions.questionset', 'questionset', 'questionsets')
+
+            # Add page_questions to the page
+            update_related_elements(elements, uri, 'questions.question', 'question', 'questions')
+
+            # Add page_conditions to the page
+            update_related_elements(elements, uri, 'conditions.condition', 'condition', 'conditions')
 
         elif element['model'] == 'questions.questionset':
             del element['key']
@@ -308,11 +323,15 @@ def convert_legacy_elements(elements):
             if parent is not None:
                 if elements[parent].get('model') == 'questions.page':
                     # this questionset belongs to a page now
-                    del element['questionset']
-                    element['page'] = {
-                        'uri': parent,
+                    parent_questionsets = elements[parent].get('questionset')
+                    parent_questionsets = parent_questionsets or []
+                    parent_questionsets.append({
+                        'uri': element['uri'],
+                        'model': element['model'],
                         'order': element.pop('order')
-                    }
+                    })
+                    elements[parent]['questionset'] = parent_questionsets
+                    del element['questionset']
                 else:
                     # this questionset still belongs to a questionset
                     element['questionset']['order'] = element.pop('order')
@@ -323,16 +342,14 @@ def convert_legacy_elements(elements):
 
             parent = element.get('questionset').get('uri')
             if parent is not None:
-                if elements[parent].get('model') == 'questions.page':
-                    # this question belongs to a page now
-                    del element['questionset']
-                    element['page'] = {
-                        'uri': parent,
-                        'order': element.pop('order')
-                    }
-                else:
-                    # this question still belongs to a questionset
-                    element['questionset']['order'] = element.pop('order')
+                parent_questionsets = elements[parent].get('questions', [])
+                parent_questionsets.append({
+                    'uri': element['uri'],
+                    'model': element['model'],
+                    'order': element.pop('order')
+                })
+                elements[parent]['questions'] = parent_questionsets
+                del element['questionset']
 
         elif element['model'] == 'options.optionset':
             element['uri_path'] = element.pop('key')
@@ -366,80 +383,21 @@ def convert_additional_input(elements):
 
     return elements
 
-def get_related_elements(element, ignored_keys=None):
-    ignored_keys = ignored_keys or list(ImportElementFields)
-    related_elements = {k: val for k, val in element.items() if
-                       k not in ignored_keys and (isinstance(val, (dict, list)))}
-    return related_elements
 
-
-def sort_by_rdmo_models(elements):
-    # Create a mapping from model name to its order
-    model_order = {model: idx for idx, model in enumerate(RDMO_MODELS.values())}
-    # Step 1: Sort elements by model order
-    sorted_by_model = sorted(elements.values(), key=lambda x: model_order.get(x['model'], float('inf')))
-
-    # Step 2: Topological sort for domain.attribute
-    def topological_sort(elements):
-        uri_map = {item['uri']: item for item in elements if 'uri' in item}
-        dependency_graph = defaultdict(list)
-        indegree = defaultdict(int)
-
-        for item in elements:
-            if item['model'] == 'domain.attribute' and item.get('parent'):
-                parent_uri = item['parent'].get('uri')
-                if parent_uri and parent_uri in uri_map:
-                    dependency_graph[parent_uri].append(item['uri'])
-                    indegree[item['uri']] += 1
-
-        # Initialize the queue with items having no dependencies (indegree 0)
-        queue = deque([item['uri'] for item in elements if indegree[item['uri']] == 0])
-        sorted_elements = []
-
-        while queue:
-            current_uri = queue.popleft()
-            sorted_elements.append(uri_map[current_uri])
-            for dependent_uri in dependency_graph[current_uri]:
-                indegree[dependent_uri] -= 1
-                if indegree[dependent_uri] == 0:
-                    queue.append(dependent_uri)
-
-        return sorted_elements
-
-    # Separate domain.attribute elements for topological sorting
-    domain_attributes = [e for e in sorted_by_model if e['model'] == 'domain.attribute']
-    non_domain_attributes = [e for e in sorted_by_model if e['model'] != 'domain.attribute']
-
-    # Perform topological sort on domain.attribute elements
-    sorted_domain_attributes = topological_sort(domain_attributes)
-
-    # Combine the sorted lists and construct the OrderedDict
-    final_sorted_elements_list = sorted_domain_attributes + non_domain_attributes
-    final_sorted_elements = {i['uri']: i for i in final_sorted_elements_list}
-    return final_sorted_elements
-
-
-def order_elements(elements, order_sets_first=False, order_models=False) -> OrderedDict:
+def order_elements(elements: OrderedDict) -> OrderedDict:
     ordered_elements = OrderedDict()
-    if order_models:
-        elements = sort_by_rdmo_models(elements)
-        return elements
-    for uri, element in elements.items():
-        append_element(ordered_elements, elements, uri, element, order_sets_first=order_sets_first)
+    for uri, element in reversed(elements.items()):
+        append_element(ordered_elements, elements, uri, element,)
     return ordered_elements
 
 
-def append_element(ordered_elements, unordered_elements, uri, element, order_sets_first=False) -> None:
+def append_element(ordered_elements, unordered_elements, uri, element) -> None:
     if element is None:
         return
+    for key, element_value in element.items():
+        if key in list(ImportElementFields):
+            continue
 
-    related_elements = get_related_elements(element)
-
-    if order_sets_first:
-        if related_elements and uri not in ordered_elements:
-            ordered_elements[uri] = element
-
-    for key, element_value in related_elements.items():
         if isinstance(element_value, dict):
             sub_uri = element_value.get('uri')
             sub_element = unordered_elements.get(sub_uri)
@@ -448,11 +406,10 @@ def append_element(ordered_elements, unordered_elements, uri, element, order_set
 
         elif isinstance(element_value, list):
             for value in element_value:
-                if isinstance(element_value, dict):
-                    sub_uri = value.get('uri')
-                    sub_element = unordered_elements.get(sub_uri)
-                    if sub_uri not in ordered_elements and sub_uri is not None:
-                        append_element(ordered_elements, unordered_elements, sub_uri, sub_element)
+                sub_uri = value.get('uri')
+                sub_element = unordered_elements.get(sub_uri)
+                if sub_uri not in ordered_elements and sub_uri is not None:
+                    append_element(ordered_elements, unordered_elements, sub_uri, sub_element)
 
     if uri not in ordered_elements:
         ordered_elements[uri] = element
