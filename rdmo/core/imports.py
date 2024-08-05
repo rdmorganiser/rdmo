@@ -9,7 +9,6 @@ from typing import List, Optional, Tuple, Union
 
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
-from django.db.models.fields import FloatField
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework.utils import model_meta
@@ -135,19 +134,9 @@ def track_changes_on_element(element: dict,
 
     _initialize_track_changes_element_field(element, element_field)
 
-    lookup_model_field = None
     if original_value is None and original is not None:
         lookup_field = element_field if instance_field is None else instance_field
         original_value = getattr(original, lookup_field, '')
-        lookup_model_field = original._meta.get_field(lookup_field)
-
-    if isinstance(new_value,str) and isinstance(original_value,int):
-        # typecasting of original value to str, for comparison '0' == 0
-        # specific edge-case, maybe generalize later
-        original_value = str(original_value)
-
-    if isinstance(lookup_model_field, FloatField):
-        new_value = float(new_value)
 
     element[ImportElementFields.DIFF][element_field][ImportElementFields.CURRENT] = original_value
     element[ImportElementFields.DIFF][element_field][ImportElementFields.NEW] = new_value
@@ -213,7 +202,7 @@ def track_changes_on_uri_of_foreign_field(element, field_name, foreign_uri, orig
     track_changes_on_element(element, field_name, new_value=foreign_uri, original_value=original_foreign_uri)
 
 
-def set_foreign_field(instance, field_name, element, uploaded_uris=None, original=None) -> None:
+def set_foreign_field(instance, field_name, element, original=None) -> None:
     if field_name not in element:
         return
 
@@ -284,7 +273,8 @@ def set_foreign_field(instance, field_name, element, uploaded_uris=None, origina
 
 
 def set_extra_field(instance, field_name, element,
-                    extra_field_helper: Optional[ExtraFieldHelper] = None, original=None) -> None:
+                    extra_field_helper: Optional[ExtraFieldHelper] = None,
+                    ) -> None:
 
     extra_field_value = None
     if field_name in element:
@@ -308,9 +298,6 @@ def set_extra_field(instance, field_name, element,
 
     if extra_field_value is not None:
         setattr(instance, field_name, extra_field_value)
-        # track changes
-        track_changes_on_element(element, field_name, new_value=extra_field_value, original=original)
-
 
 def track_changes_m2m_instances(element, field_name,
                                 foreign_instances, original=None):

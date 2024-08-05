@@ -1,6 +1,7 @@
 import copy
 import logging
-from typing import AbstractSet, Dict, List, Optional
+from collections import OrderedDict
+from typing import Dict, List, Optional
 
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
@@ -8,6 +9,7 @@ from django.http import HttpRequest
 
 from rdmo.conditions.imports import import_helper_condition
 from rdmo.core.imports import (
+    ImportElementFields,
     check_permissions,
     get_or_return_instance,
     make_import_info_msg,
@@ -19,7 +21,10 @@ from rdmo.management.import_utils import (
     add_current_site_to_sites_and_editor,
     apply_field_values,
     initialize_and_clean_import_element_dict,
+    initialize_import_element_dict,
+    is_valid_import_element,
     strip_uri_prefix_endswith_slash,
+    update_extra_fields_from_validated_instance,
     update_related_fields,
 )
 from rdmo.options.imports import import_helper_option, import_helper_optionset
@@ -37,8 +42,8 @@ logger = logging.getLogger(__name__)
 
 ELEMENT_IMPORT_HELPERS = {
     "domain.attribute": import_helper_attribute,
-    "conditions.condition": import_helper_condition,
     "options.option": import_helper_option,
+    "conditions.condition": import_helper_condition,
     "options.optionset": import_helper_optionset,
     "questions.question": import_helper_question,
     "questions.questionset": import_helper_questionset,
@@ -50,27 +55,40 @@ ELEMENT_IMPORT_HELPERS = {
 }
 
 
-def import_elements(uploaded_elements: Dict, save: bool = True, request: Optional[HttpRequest] = None) -> List[Dict]:
+def import_elements(uploaded_elements: OrderedDict,
+                    save: bool = True,
+                    request: Optional[HttpRequest] = None) -> List[Dict]:
     imported_elements = []
-    uploaded_elements_ordering_index = {uri: n for n, uri in enumerate(uploaded_elements.keys())}
+    uploaded_elements_initial_ordering = {uri: n for n, uri in enumerate(uploaded_elements.keys())}
     uploaded_uris = set(uploaded_elements.keys())
     current_site = get_current_site(request)
     if save:
         # when saving, the elements are ordered according to the rdmo models
-        uploaded_elements = order_elements(uploaded_elements, order_models=True)
+        pass
+        uploaded_elements = order_elements(uploaded_elements)
 
     for _uri, uploaded_element in uploaded_elements.items():
-        element = import_element(element=uploaded_element,
-                                 save=save,
-                                 uploaded_uris=uploaded_uris,
-                                 request=request,
-                                 current_site=current_site)
-        element['warnings'] = {k: val for k, val in element['warnings'].items() if k not in uploaded_uris}
+        if not is_valid_import_element(uploaded_element):
+            continue
+        element = import_element(
+            element=uploaded_element,
+            save=save,
+            request=request,
+            current_site=current_site
+        )
+        element[ImportElementFields.WARNINGS] = {
+            k: val for
+            k, val in element[ImportElementFields.WARNINGS].items()
+            if k not in uploaded_uris
+        }
         imported_elements.append(element)
 
-    # sort elements back to order of uploaded elements
-    imported_elements = sorted(imported_elements,
-                               key=lambda x: uploaded_elements_ordering_index.get(x['uri'], float('inf')))
+    # sort elements back to initial order of uploaded elements
+    imported_elements = sorted(
+        imported_elements,
+        key=lambda x: uploaded_elements_initial_ordering.get(x['uri'],
+        float('inf'))
+    )
 
     return imported_elements
 
@@ -79,16 +97,13 @@ def import_element(
         element: Optional[Dict] = None,
         save: bool = True,
         request: Optional[HttpRequest] = None,
-        uploaded_uris: Optional[AbstractSet[str]] = None,
         current_site = None
     ) -> Dict:
 
-    if element is None or not isinstance(element, dict):
-        return {}
-    if 'model' not in element:
-        return {}
+    initialize_import_element_dict(element)
 
     import_helper = ELEMENT_IMPORT_HELPERS[element['model']]
+
     uri = element.get('uri')
 
     element, _excluded_data = initialize_and_clean_import_element_dict(element, import_helper.model)
@@ -109,26 +124,27 @@ def import_element(
     perms_error_msg = check_permissions(instance, uri, user)
     if perms_error_msg:
         # when there is an error msg, the import can be stopped and return
-        element["errors"].append(perms_error_msg)
+        element[ImportElementFields.ERRORS].append(perms_error_msg)
         return element
 
-    element['created'] = created
-    element['updated'] = not created and original is not None
+    element[ImportElementFields.CREATED] = created
+    element[ImportElementFields.UPDATED] = not created and original is not None
     # INFO: the dict element[FieldNames.diff.value] is filled by calling track_changes_on_element
 
     element = strip_uri_prefix_endswith_slash(element)
-    # todo: remove keys that are not in model.fields
     # start to set values on the instance
-    apply_field_values(instance, element, import_helper, uploaded_uris, original)
+    apply_field_values(instance, element, import_helper, original)
 
     # call the validators on the instance
     validate_instance(instance, element, *import_helper.validators)
 
-    if element.get('errors'):
+    update_extra_fields_from_validated_instance(instance, element, import_helper, original=original)
+
+    if element.get(ImportElementFields.ERRORS):
         # when there is an error msg, the import can be stopped and return
         if save:
-            element['created'] = False
-            element['updated'] = False
+            element[ImportElementFields.CREATED] = False
+            element[ImportElementFields.UPDATED] = False
         return element
 
     if save:

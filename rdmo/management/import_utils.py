@@ -1,8 +1,10 @@
+import logging
 from collections import defaultdict
 from dataclasses import asdict
 from typing import Dict, Set, Tuple
 
 from django.db.models import Model
+from django.forms import model_to_dict
 
 from rdmo.core.imports import (
     ImportElementFields,
@@ -13,7 +15,10 @@ from rdmo.core.imports import (
     set_m2m_instances,
     set_m2m_through_instances,
     set_reverse_m2m_through_instance,
+    track_changes_on_element,
 )
+
+logger = logging.getLogger(__name__)
 
 IMPORT_ELEMENT_INIT_DICT = {
         ImportElementFields.WARNINGS: lambda: defaultdict(list),
@@ -23,6 +28,13 @@ IMPORT_ELEMENT_INIT_DICT = {
         ImportElementFields.DIFF: dict,
     }
 
+
+def is_valid_import_element(element: dict) -> bool:
+    if element is None or not isinstance(element, dict):
+        return False
+    if not all(i in element for i in ['model', 'uri']):
+        return False
+    return True
 
 
 def get_redundant_keys_from_element(element_keys: Set, model: Model) -> Set:
@@ -60,7 +72,7 @@ def strip_uri_prefix_endswith_slash(element: dict) -> dict:
     return element
 
 
-def apply_field_values(instance, element, import_helper, uploaded_uris, original) -> None:
+def apply_field_values(instance, element, import_helper, original) -> None:
     """Applies the field values from the element to the instance."""
     # start to set values on the instance
     # set common field values from element on instance
@@ -71,10 +83,58 @@ def apply_field_values(instance, element, import_helper, uploaded_uris, original
         set_lang_field(instance, field, element, original=original)
     # set foreign fields
     for field in import_helper.foreign_fields:
-        set_foreign_field(instance, field, element, uploaded_uris=uploaded_uris, original=original)
-
+        set_foreign_field(instance, field, element, original=original)
+    # set extra fields, track changes is done after instance.full_clean
     for extra_field in import_helper.extra_fields:
-        set_extra_field(instance, extra_field.field_name, element, extra_field_helper=extra_field, original=original)
+        set_extra_field(instance, extra_field.field_name, element,
+                        extra_field_helper=extra_field)
+
+
+def update_extra_fields_from_validated_instance(instance, element, import_helper, original=None) -> None:
+    extra_field_names = [i.field_name for i in import_helper.extra_fields]
+    instance_extra_fields = model_to_dict(instance, fields=extra_field_names)
+
+    for field_name in extra_field_names:
+        element_field_value = element.get(field_name)
+        if element_field_value is None:
+            continue
+
+        instance_field_value = instance_extra_fields[field_name]
+        # Properly handle boolean comparisons
+        if isinstance(instance_field_value, bool):
+            # Convert element field value to boolean if it's a string representation of a boolean
+            if isinstance(element_field_value, str):
+                element_field_value = element_field_value.strip().lower()
+                if element_field_value in ['true', '1', 'yes']:
+                    element_field_value = True
+                elif element_field_value in ['false', '0', 'no']:
+                    element_field_value = False
+                else:
+                    logger.debug("Cannot convert %s from %s to a boolean value.", element_field_value, field_name)
+
+            # Convert other types (e.g., integers) to boolean
+            elif isinstance(element_field_value, (int, float)):
+                element_field_value = bool(element_field_value)
+
+            # Assign the converted boolean value back to the element
+            element[field_name] = element_field_value
+
+        # Handle other data types and type casting
+        elif isinstance(element_field_value, str) and instance_field_value is not None:
+            try:
+                # Type cast element value to type of instance value
+                element[field_name] = type(instance_field_value)(element_field_value)
+            except ValueError:
+                logger.debug("Cannot convert '%s' from %s to %s.",
+                             element_field_value,
+                             field_name,
+                             type(instance_field_value).__name__
+                             )
+            except TypeError:
+                pass # ignore for NoneType
+
+        # track changes
+        track_changes_on_element(element, field_name, new_value=element[field_name], original=original)
 
 
 def update_related_fields(instance, element, import_helper, original, save) -> None:
