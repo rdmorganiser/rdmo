@@ -88,7 +88,6 @@ const SelectInput = ({ question, value, options, disabled, creatable, updateValu
     classNamePrefix: 'react-select',
     className: classnames,
     backspaceRemovesValue: false,
-    isClearable: true,
     isDisabled: disabled,
     placeholder: gettext('Select ...'),
     noOptionsMessage: () => gettext('No options found'),
@@ -98,19 +97,10 @@ const SelectInput = ({ question, value, options, disabled, creatable, updateValu
     inputValue: inputValue,
     onInputChange: setInputValue,
     onChange: handleChange,
-    // menuIsOpen: isOpen,
-    // onMenuOpen: () => {
-    //   setIsOpen(true)
-    //   if (valueOption) {
-    //     // replace the text shown in the select input with a plain text version
-    //     setInputValue(convert(valueOption.text))
-    //   }
-    // },
-    // onMenuClose: () => setIsOpen(false),
     getOptionValue: (option) => option.id,
     getOptionLabel: (option) => option.text,
     formatOptionLabel: (option) => (
-      <span>
+      <span className="interview-select-option">
         <OptionText option={option} />
         <OptionHelp className="ml-10" option={option} />
       </span>

@@ -6,6 +6,7 @@ import { gatherOptions } from '../../../utils/options'
 import QuestionAddValue from '../question/QuestionAddValue'
 import QuestionDefault from '../question/QuestionDefault'
 import QuestionError from '../question/QuestionError'
+import QuestionSuccess from '../question/QuestionSuccess'
 import QuestionEraseValue from '../question/QuestionEraseValue'
 import QuestionRemoveValue from '../question/QuestionRemoveValue'
 
@@ -26,6 +27,7 @@ const RadioWidget = ({ question, values, currentSet, disabled, createValue, upda
                 updateValue={updateValue}
                 buttons={
                   <div className="buttons">
+                    <QuestionSuccess value={value}/>
                     <QuestionEraseValue value={value} disabled={disabled} updateValue={updateValue}/>
                     <QuestionRemoveValue
                       question={question}

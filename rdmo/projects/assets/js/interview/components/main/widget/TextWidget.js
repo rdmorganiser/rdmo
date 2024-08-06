@@ -5,6 +5,7 @@ import QuestionAddValue from '../question/QuestionAddValue'
 import QuestionDefault from '../question/QuestionDefault'
 import QuestionError from '../question/QuestionError'
 import QuestionRemoveValue from '../question/QuestionRemoveValue'
+import QuestionSuccess from '../question/QuestionSuccess'
 
 import TextInput from './TextInput'
 
@@ -22,6 +23,7 @@ const TextWidget = ({ question, values, currentSet, disabled, createValue, updat
                 updateValue={updateValue}
                 buttons={
                   <div className="buttons">
+                    <QuestionSuccess value={value}/>
                     <QuestionRemoveValue
                       question={question}
                       values={values}

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import QuestionAddValue from '../question/QuestionAddValue'
 import QuestionDefault from '../question/QuestionDefault'
 import QuestionEraseValue from '../question/QuestionEraseValue'
+import QuestionSuccess from '../question/QuestionSuccess'
 import QuestionError from '../question/QuestionError'
 import QuestionRemoveValue from '../question/QuestionRemoveValue'
 
@@ -23,6 +24,7 @@ const FileWidget = ({ question, values, currentSet, disabled, createValue, updat
                 updateValue={updateValue}
                 buttons={
                   <div className="buttons">
+                    <QuestionSuccess value={value}/>
                     <QuestionEraseValue value={value} disabled={disabled} updateValue={updateValue}/>
                     <QuestionRemoveValue
                       question={question}

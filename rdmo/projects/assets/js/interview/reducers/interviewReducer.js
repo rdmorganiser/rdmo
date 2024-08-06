@@ -15,6 +15,7 @@ import {
   RESOLVE_CONDITION_SUCCESS,
   RESOLVE_CONDITION_ERROR,
   CREATE_VALUE,
+  UPDATE_VALUE,
   STORE_VALUE_INIT,
   STORE_VALUE_SUCCESS,
   STORE_VALUE_ERROR,
@@ -53,6 +54,10 @@ export default function interviewReducer(state = initialState, action) {
       )}
     case CREATE_VALUE:
       return { ...state, values: [...state.values, action.value] }
+    case UPDATE_VALUE:
+        return { ...state, values: state.values.map(
+          (value) => value.id == action.value.id ? {...value, ...action.attrs} : value
+        )}
     case STORE_VALUE_SUCCESS:
       if (action.valueIndex > -1) {
         return { ...state, values: state.values.map(
