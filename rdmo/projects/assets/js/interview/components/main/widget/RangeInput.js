@@ -36,8 +36,8 @@ const RangeInput = ({ question, value, disabled, updateValue, buttons }) => {
           handleChange(value, event.target.value)
         }}
       />
-      {buttons}
       <Unit unit={question.unit} inputValue={inputValue} />
+      {buttons}
     </div>
   )
 }

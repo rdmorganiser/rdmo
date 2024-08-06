@@ -5,6 +5,7 @@ import { maxBy } from 'lodash'
 import { gatherOptions } from '../../../utils/options'
 
 import QuestionError from '../question/QuestionError'
+import QuestionSuccess from '../question/QuestionSuccess'
 
 import CheckboxInput from './CheckboxInput'
 
@@ -35,33 +36,40 @@ const CheckboxWidget = ({ question, values, currentSet, disabled, createValue, u
     createValue(value, true)
   }
 
+  const success = values.some((value) => value.success)
+
   return (
     <div className="interview-widgets">
       <div className="interview-widget">
         <div className="interview-input">
-          <div className="checkbox-control">
-            {
-              gatherOptions(question).map((option, optionIndex) => {
-                const value = values.find((value) => (
-                  option.has_provider ? (value.external_id === option.id) : (value.option === option.id)
-                ))
+          <div className="buttons-wrapper">
+            <div className="checkbox-control">
+              {
+                gatherOptions(question).map((option, optionIndex) => {
+                  const value = values.find((value) => (
+                    option.has_provider ? (value.external_id === option.id) : (value.option === option.id)
+                  ))
 
-                return (
-                  <React.Fragment key={optionIndex}>
-                    <CheckboxInput
-                      question={question}
-                      value={value}
-                      option={option}
-                      disabled={disabled}
-                      onCreate={handleCreateValue}
-                      onUpdate={updateValue}
-                      onDelete={deleteValue}
-                    />
-                    <QuestionError value={value} />
-                  </React.Fragment>
-                )
-              })
-            }
+                  return (
+                    <React.Fragment key={optionIndex}>
+                      <CheckboxInput
+                        question={question}
+                        value={value}
+                        option={option}
+                        disabled={disabled}
+                        onCreate={handleCreateValue}
+                        onUpdate={updateValue}
+                        onDelete={deleteValue}
+                      />
+                      <QuestionError value={value} />
+                    </React.Fragment>
+                  )
+                })
+              }
+            </div>
+            <div className="buttons">
+              <QuestionSuccess value={{ success }} />
+            </div>
           </div>
         </div>
       </div>

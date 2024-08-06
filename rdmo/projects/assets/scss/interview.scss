@@ -142,7 +142,7 @@
 }
 
 .interview-widgets {
-    :last-child {
+    > :last-child {
         margin-bottom: 0;
     }
 }
@@ -169,6 +169,8 @@
 
     &:has(.react-select) {
         .buttons {
+            position: absolute;
+            right: 62px;
             margin-top: 2px;
             margin-bottom: 2px;
         }
@@ -179,7 +181,8 @@
         gap: 10px;
 
         .btn-erase-value,
-        .btn-remove-value {
+        .btn-remove-value,
+        .success-indicator {
             opacity: 0.8;
             line-height: 20px;
             font-size: 14px;
@@ -196,6 +199,17 @@
         .btn-remove-value:focus {
             outline: 0;
         }
+
+        .success-indicator {
+            padding-top: 7px;
+            opacity: 0;
+            transition: opacity 0.3s linear 2s;
+
+            &.show {
+                opacity: 1;
+                transition: opacity 0.5s ease-in-out;
+            }
+        }
     }
 
     .badge-default {
@@ -210,11 +224,6 @@
         padding: 6px 12px;
         width: 120px;
         height: 34px;
-
-        text-align: center;
-
-        border: 1px solid #ccc;
-        border-radius: 4px;
 
         cursor: help;
 
@@ -355,6 +364,15 @@
         input[type='radio'],
         input[type='range'] {
             opacity: 0.5;
+        }
+    }
+
+    .radio,
+    .checkbox,
+    .interview-select-option {
+        div,
+        p {
+            display: inline;
         }
     }
 }

@@ -37,6 +37,7 @@ import {
   RESOLVE_CONDITION_SUCCESS,
   RESOLVE_CONDITION_ERROR,
   CREATE_VALUE,
+  UPDATE_VALUE,
   STORE_VALUE_INIT,
   STORE_VALUE_SUCCESS,
   STORE_VALUE_ERROR,
@@ -270,6 +271,7 @@ export function storeValue(value) {
   return (dispatch, getState) => {
     const valueIndex = getState().interview.values.indexOf(value)
     const valueFile = value.file
+    const valueSuccess = value.success
 
     dispatch(addToPending(pendingId))
     dispatch(storeValueInit(valueIndex))
@@ -291,6 +293,14 @@ export function storeValue(value) {
         } else {
           dispatch(resolveConditions(page, sets))
         }
+
+        // set the success flag and start the timeout to remove it. the flag is actually
+        // the stored timeout, so we can cancel any old timeout before starting the a new
+        // one in order to prolong the time the indicator is show with each save
+        clearTimeout(valueSuccess)
+        value.success = setTimeout(() => {
+          dispatch(updateValue(value, {success: false}, false))
+        }, 1000)
 
         // check if there is a file or if a filename is set (when the file was just erased)
         if (isNil(valueFile) && isNil(value.file_name)) {
@@ -341,8 +351,12 @@ export function createValue(attrs, store) {
   }
 }
 
-export function updateValue(value, attrs) {
-  return storeValue(ValueFactory.update(value, attrs))
+export function updateValue(value, attrs, store = true) {
+  if (store) {
+    return storeValue(ValueFactory.update(value, attrs))
+  } else {
+     return {type: UPDATE_VALUE, value, attrs}
+  }
 }
 
 export function deleteValue(value) {
