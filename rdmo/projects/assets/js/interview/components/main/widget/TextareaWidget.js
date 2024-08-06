@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import QuestionAddValue from '../question/QuestionAddValue'
 import QuestionDefault from '../question/QuestionDefault'
 import QuestionError from '../question/QuestionError'
+import QuestionSuccess from '../question/QuestionSuccess'
 import QuestionRemoveValue from '../question/QuestionRemoveValue'
 
 import TextareaInput from './TextareaInput'
@@ -22,6 +23,7 @@ const TextareaWidget = ({ question, values, currentSet, disabled, createValue, u
                 updateValue={updateValue}
                 buttons={
                   <div className="buttons">
+                    <QuestionSuccess value={value}/>
                     <QuestionRemoveValue
                       question={question}
                       values={values}

@@ -5,6 +5,7 @@ import QuestionAddValue from '../question/QuestionAddValue'
 import QuestionDefault from '../question/QuestionDefault'
 import QuestionError from '../question/QuestionError'
 import QuestionEraseValue from '../question/QuestionEraseValue'
+import QuestionSuccess from '../question/QuestionSuccess'
 import QuestionRemoveValue from '../question/QuestionRemoveValue'
 
 import YesNoInput from './YesNoInput'
@@ -23,6 +24,7 @@ const YesNoWidget = ({ question, values, currentSet, disabled, createValue, upda
                 updateValue={updateValue}
                 buttons={
                   <div className="buttons">
+                    <QuestionSuccess value={value}/>
                     <QuestionEraseValue value={value} disabled={disabled} updateValue={updateValue}/>
                     <QuestionRemoveValue
                       question={question}
