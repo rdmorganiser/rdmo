@@ -1387,6 +1387,8 @@ angular.module('project_questions')
                     service.removeValueSet(qs, sp, si);
                 });
             }
+
+            service.postSave();
         });
 
         // if this is the top level questionset,
