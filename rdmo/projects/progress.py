@@ -24,10 +24,11 @@ def resolve_conditions(project, values):
                                           .distinct().select_related('source', 'target_option')
 
     # evaluate conditions
-    conditions = set()
+    conditions = defaultdict(set)
     for condition in catalog_conditions:
         if condition.resolve(values):
-            conditions.add(condition.id)
+            resolved_value_set_indexes = {value.set_index for value in values if condition.resolve([value])}
+            conditions[condition.id].update(resolved_value_set_indexes)
 
     # return all true conditions for this project
     return conditions
@@ -141,6 +142,7 @@ def count_questions(element, sets, conditions):
 
         set_count = len(counted_sets)
     else:
+        counted_sets = set()
         set_count = 1
 
     # loop over all children of this element
@@ -149,7 +151,7 @@ def count_questions(element, sets, conditions):
         if isinstance(child, (Page, QuestionSet, Question)):
             child_conditions = {condition.id for condition in child.conditions.all()}
         else:
-            child_conditions = []
+            child_conditions = set()
 
         if not child_conditions or child_conditions.intersection(conditions):
             if isinstance(child, Question):
@@ -163,7 +165,17 @@ def count_questions(element, sets, conditions):
                         child_count = sum(len(set_indexes) for set_indexes in sets[child.attribute.id].values())
                         counts[child.attribute.id] = max(counts[child.attribute.id], child_count)
                     else:
-                        counts[child.attribute.id] = max(counts[child.attribute.id], set_count)
+                        resolved_condition_sets = set()
+                        condition_intersection = list(child_conditions.intersection(conditions))
+                        # update the set_count for the current child element
+                        # check for the sets that have conditions resolved to true
+                        for child_condition in condition_intersection:
+                            resolved_condition_sets.update(conditions[child_condition])
+                        if condition_intersection:
+                            current_set_count = len(counted_sets & resolved_condition_sets)
+                        else:
+                            current_set_count = set_count
+                        counts[child.attribute.id] = max(counts[child.attribute.id], current_set_count)
             else:
                 # for everything else, call this function recursively
                 counts.update(count_questions(child, sets, conditions))
