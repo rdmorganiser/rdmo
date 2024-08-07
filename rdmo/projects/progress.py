@@ -29,8 +29,9 @@ def resolve_conditions(catalog, values):
     # resolve conditions and return for each condition the set_indexes which resolved true
     conditions = defaultdict(set)
     for condition in get_catalog_conditions(catalog):
-        resolved_set_indexes = {value.set_index for value in values if condition.resolve([value])}
-        conditions[condition.id].update(resolved_set_indexes)
+        if condition.resolve(values):
+            resolved_value_set_indexes = {value.set_index for value in values if condition.resolve([value])}
+            conditions[condition.id].update(resolved_value_set_indexes)
     return conditions
 
 
