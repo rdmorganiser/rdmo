@@ -25,13 +25,18 @@ def get_catalog_conditions(catalog):
     ).distinct().select_related('source', 'target_option')
 
 
-def resolve_conditions(catalog, values):
-    # resolve conditions and return for each condition the set_indexes which resolved true
+def resolve_conditions(catalog, values, sets):
+    # resolve all conditions and return for each condition the set_prefix and set_index for which it resolved true
     conditions = defaultdict(set)
     for condition in get_catalog_conditions(catalog):
-        if condition.resolve(values):
-            resolved_value_set_indexes = {value.set_index for value in values if condition.resolve([value])}
-            conditions[condition.id].update(resolved_value_set_indexes)
+        conditions[condition.id] = {
+            (set_prefix, set_index)
+            for set_prefixes in sets.values()
+            for set_prefix, set_indexes in set_prefixes.items()
+            for set_index in set_indexes
+            if condition.resolve(values, set_prefix=set_prefix, set_index=set_index)
+        }
+
     return conditions
 
 
@@ -47,11 +52,11 @@ def compute_navigation(section, project, snapshot=None):
     # get all values for this project and snapshot
     values = project.values.filter(snapshot=snapshot).select_related('attribute', 'option')
 
-    # resolve all conditions to get a dict mapping conditions to set_indexes
-    conditions = resolve_conditions(project.catalog, values)
-
     # compute sets from values (including empty values)
     sets = compute_sets(values)
+
+    # resolve all conditions to get a dict mapping conditions to set_indexes
+    conditions = resolve_conditions(project.catalog, values, sets)
 
     # query distinct, non empty set values
     values_list = values.exclude_empty().distinct_list()
@@ -71,7 +76,18 @@ def compute_navigation(section, project, snapshot=None):
 
         for page in catalog_section.elements:
             pages_conditions = {page.id for page in page.conditions.all()}
-            show = bool(not pages_conditions or pages_conditions.intersection(conditions))
+
+            # show only pages with resolved conditions, but show all pages without conditions
+            if pages_conditions:
+                # check if any valuesets for set_prefix = '' resolved
+                # for non collection pages restrict further to set_index = 0
+                show = any(
+                    (set_prefix == '') and (page.is_collection or set_index == 0)
+                    for page_condition in pages_conditions
+                    for set_prefix, set_index in conditions[page_condition]
+                )
+            else:
+                show = True
 
             # count the total number of questions, taking sets and conditions into account
             counts = count_questions(page, sets, conditions)
@@ -102,15 +118,14 @@ def compute_progress(project, snapshot=None):
     # get all values for this project and snapshot
     values = project.values.filter(snapshot=snapshot).select_related('attribute', 'option')
 
-    # resolve all conditions to get a dict mapping conditions to set_indexes
-    conditions = resolve_conditions(project.catalog, values)
-
     # compute sets from values (including empty values)
     sets = compute_sets(values)
 
+    # resolve all conditions to get a dict mapping conditions to set_indexes
+    conditions = resolve_conditions(project.catalog, values, sets)
+
     # query distinct, non empty set values
     values_list = values.exclude_empty().distinct_list()
-
 
     # count the total number of questions, taking sets and conditions into account
     counts = count_questions(project.catalog, sets, conditions)
