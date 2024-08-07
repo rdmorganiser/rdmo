@@ -8,43 +8,49 @@ from rdmo.core.utils import markdown2html
 from rdmo.questions.models import Page, Question, QuestionSet
 
 
-def resolve_conditions(project, values):
-    # get all conditions for this catalog
-    pages_conditions_subquery = Page.objects.filter_by_catalog(project.catalog) \
+def get_catalog_conditions(catalog):
+    pages_conditions_subquery = Page.objects.filter_by_catalog(catalog) \
                                             .filter(conditions=OuterRef('pk'))
-    questionsets_conditions_subquery = QuestionSet.objects.filter_by_catalog(project.catalog) \
+    questionsets_conditions_subquery = QuestionSet.objects.filter_by_catalog(catalog) \
                                                           .filter(conditions=OuterRef('pk'))
-    questions_conditions_subquery = Question.objects.filter_by_catalog(project.catalog) \
+    questions_conditions_subquery = Question.objects.filter_by_catalog(catalog) \
                                                     .filter(conditions=OuterRef('pk'))
 
-    catalog_conditions = Condition.objects.annotate(has_page=Exists(pages_conditions_subquery)) \
-                                          .annotate(has_questionset=Exists(questionsets_conditions_subquery)) \
-                                          .annotate(has_question=Exists(questions_conditions_subquery)) \
-                                          .filter(Q(has_page=True) | Q(has_questionset=True) | Q(has_question=True)) \
-                                          .distinct().select_related('source', 'target_option')
+    return Condition.objects.annotate(
+        has_page=Exists(pages_conditions_subquery),
+        has_questionset=Exists(questionsets_conditions_subquery),
+        has_question=Exists(questions_conditions_subquery)
+    ).filter(
+        Q(has_page=True) | Q(has_questionset=True) | Q(has_question=True)
+    ).distinct().select_related('source', 'target_option')
 
-    # evaluate conditions
+
+def resolve_conditions(catalog, values):
+    # resolve conditions and return for each condition the set_indexes which resolved true
     conditions = defaultdict(set)
-    for condition in catalog_conditions:
-        if condition.resolve(values):
-            resolved_value_set_indexes = {value.set_index for value in values if condition.resolve([value])}
-            conditions[condition.id].update(resolved_value_set_indexes)
-
-    # return all true conditions for this project
+    for condition in get_catalog_conditions(catalog):
+        resolved_set_indexes = {value.set_index for value in values if condition.resolve([value])}
+        conditions[condition.id].update(resolved_set_indexes)
     return conditions
+
+
+def compute_sets(values):
+    # compute sets from values (including empty values)
+    sets = defaultdict(lambda: defaultdict(list))
+    for attribute, set_prefix, set_index in values.distinct_list():
+        sets[attribute][set_prefix].append(set_index)
+    return sets
 
 
 def compute_navigation(section, project, snapshot=None):
     # get all values for this project and snapshot
     values = project.values.filter(snapshot=snapshot).select_related('attribute', 'option')
 
-    # get true conditions
-    conditions = resolve_conditions(project, values)
+    # resolve all conditions to get a dict mapping conditions to set_indexes
+    conditions = resolve_conditions(project.catalog, values)
 
     # compute sets from values (including empty values)
-    sets = defaultdict(lambda: defaultdict(list))
-    for attribute, set_prefix, set_index in values.distinct_list():
-        sets[attribute][set_prefix].append(set_index)
+    sets = compute_sets(values)
 
     # query distinct, non empty set values
     values_list = values.exclude_empty().distinct_list()
@@ -95,13 +101,11 @@ def compute_progress(project, snapshot=None):
     # get all values for this project and snapshot
     values = project.values.filter(snapshot=snapshot).select_related('attribute', 'option')
 
-    # get true conditions
-    conditions = resolve_conditions(project, values)
+    # resolve all conditions to get a dict mapping conditions to set_indexes
+    conditions = resolve_conditions(project.catalog, values)
 
     # compute sets from values (including empty values)
-    sets = defaultdict(lambda: defaultdict(list))
-    for attribute, set_prefix, set_index in values.distinct_list():
-        sets[attribute][set_prefix].append(set_index)
+    sets = compute_sets(values)
 
     # query distinct, non empty set values
     values_list = values.exclude_empty().distinct_list()
@@ -153,7 +157,11 @@ def count_questions(element, sets, conditions):
         else:
             child_conditions = set()
 
-        if not child_conditions or child_conditions.intersection(conditions):
+        # compute the intersection of the condition of this child with the full set of conditions
+        condition_intersection = child_conditions.intersection(conditions)
+
+        # check if the element either has no condition or its conditions intersect with the full set of conditions
+        if not child_conditions or condition_intersection:
             if isinstance(child, Question):
                 # for regular questions add the set_count to the counts dict, since the
                 # question should be answered in every set
@@ -165,17 +173,18 @@ def count_questions(element, sets, conditions):
                         child_count = sum(len(set_indexes) for set_indexes in sets[child.attribute.id].values())
                         counts[child.attribute.id] = max(counts[child.attribute.id], child_count)
                     else:
-                        resolved_condition_sets = set()
-                        condition_intersection = list(child_conditions.intersection(conditions))
-                        # update the set_count for the current child element
-                        # check for the sets that have conditions resolved to true
-                        for child_condition in condition_intersection:
-                            resolved_condition_sets.update(conditions[child_condition])
                         if condition_intersection:
-                            current_set_count = len(counted_sets & resolved_condition_sets)
+                            # update the set_count for the current child element
+                            # count only the sets that have conditions resolved to true
+                            resolved_set_indexes = set()
+                            for condition in condition_intersection:
+                                resolved_set_indexes.update(conditions[condition])
+
+                            current_count = len(counted_sets & resolved_set_indexes)
                         else:
-                            current_set_count = set_count
-                        counts[child.attribute.id] = max(counts[child.attribute.id], current_set_count)
+                            current_count = set_count
+
+                        counts[child.attribute.id] = max(counts[child.attribute.id], current_count)
             else:
                 # for everything else, call this function recursively
                 counts.update(count_questions(child, sets, conditions))
