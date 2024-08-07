@@ -28,23 +28,22 @@ def get_catalog_conditions(catalog):
 def resolve_conditions(catalog, values, sets):
     # resolve all conditions and return for each condition the set_prefix and set_index for which it resolved true
     conditions = defaultdict(set)
-    for condition in get_catalog_conditions(catalog):
-        conditions[condition.id] = {
-            (set_prefix, set_index)
-            for set_prefixes in sets.values()
-            for set_prefix, set_indexes in set_prefixes.items()
-            for set_index in set_indexes
-            if condition.resolve(values, set_prefix=set_prefix, set_index=set_index)
-        }
+    if sets:
+        for condition in get_catalog_conditions(catalog):
+            conditions[condition.id] = {
+                (set_prefix, set_index)
+                for set_prefix, set_index in chain.from_iterable(sets.values())
+                if condition.resolve(values, set_prefix=set_prefix, set_index=set_index)
+            }
 
     return conditions
 
 
 def compute_sets(values):
     # compute sets from values (including empty values)
-    sets = defaultdict(lambda: defaultdict(list))
+    sets = defaultdict(set)
     for attribute, set_prefix, set_index in values.distinct_list():
-        sets[attribute][set_prefix].append(set_index)
+        sets[attribute].add((set_prefix, set_index))
     return sets
 
 
@@ -140,44 +139,66 @@ def compute_progress(project, snapshot=None):
 def count_questions(element, sets, conditions):
     counts = defaultdict(int)
 
-    # obtain the maximum number of set-distinct values for the questions in this page or
-    # question set this number is how often each question is displayed and we will use
-    # this number to determine how often a question needs to be counted
-    if isinstance(element, (Page, QuestionSet)) and element.is_collection:
-        counted_sets = set()
+    if isinstance(element, (Page, QuestionSet)):
+        # obtain the maximum number of set-distinct values for the questions in this page or
+        # question set. this number is how often each question is displayed and we will use
+        # this number to determine how often a question needs to be counted
+        element_sets = set()
 
         # count the sets for the id attribute of the page or question
         if element.attribute is not None:
-            # nested loop over the separate set_index lists in sets[element.attribute.id]
-            for set_index in chain.from_iterable(sets[element.attribute.id].values()):
-                counted_sets.add(set_index)
+            # nested loop over the separate set_prefix, set_index lists in sets[element.attribute.id]
+            for set_prefix, set_index in sets[element.attribute.id]:
+                element_sets.add((set_prefix, set_index))
 
         # count the sets for the questions in the page or question
         for child in element.elements:
             if isinstance(child, Question):
                 if child.attribute is not None:
-                    # nested loop over the separate set_index lists in sets[element.attribute.id]
-                    for set_index in chain.from_iterable(sets[child.attribute.id].values()):
-                        counted_sets.add(set_index)
+                    # nested loop over the separate set_prefix, set_index lists in sets[element.attribute.id]
+                    for set_prefix, set_index in sets[child.attribute.id]:
+                        element_sets.add((set_prefix, set_index))
 
-        set_count = len(counted_sets)
-    else:
-        counted_sets = set()
-        set_count = 1
+        # look for the elements conditions
+        element_conditions = {condition.id for condition in element.conditions.all()}
+
+        # if this element has conditions: check if those conditions resolve for the found sets
+        if element_conditions:
+            # compute the intersection of the conditions of this child with the full set of conditions
+            element_condition_intersection = {
+                (set_prefix, set_index)
+                for condition_id, condition in conditions.items()
+                for set_prefix, set_index in conditions[condition_id]
+                if condition_id in element_conditions
+            }
+
+            resolved_sets = element_sets.intersection(element_condition_intersection)
+            if resolved_sets:
+                set_count = len(resolved_sets) if element.is_collection else 1
+            else:
+                # return immediately and do not consider children, this page/questionset is hidden
+                return counts
+        else:
+            set_count = len(element_sets) if element.is_collection else 1
 
     # loop over all children of this element
     for child in element.elements:
-        # look for the elements conditions
+        # look for the child element's conditions
         if isinstance(child, (Page, QuestionSet, Question)):
             child_conditions = {condition.id for condition in child.conditions.all()}
         else:
             child_conditions = set()
 
-        # compute the intersection of the condition of this child with the full set of conditions
-        condition_intersection = child_conditions.intersection(conditions)
+        # compute the intersection of the conditions of this child with the full set of conditions
+        child_condition_intersection = {
+            (set_prefix, set_index)
+            for condition_id, condition in conditions.items()
+            for set_prefix, set_index in conditions[condition_id]
+            if condition_id in child_conditions
+        }
 
         # check if the element either has no condition or its conditions intersect with the full set of conditions
-        if not child_conditions or condition_intersection:
+        if not child_conditions or child_condition_intersection:
             if isinstance(child, Question):
                 # for regular questions add the set_count to the counts dict, since the
                 # question should be answered in every set
@@ -186,17 +207,13 @@ def count_questions(element, sets, conditions):
                 # use the max function, since the same attribute could appear twice in the tree
                 if child.attribute is not None:
                     if child.is_optional:
-                        child_count = sum(len(set_indexes) for set_indexes in sets[child.attribute.id].values())
+                        child_count = len(sets[child.attribute.id])
                         counts[child.attribute.id] = max(counts[child.attribute.id], child_count)
                     else:
-                        if condition_intersection:
-                            # update the set_count for the current child element
+                        if child_condition_intersection:
+                            # update the set_count for the current question (child element)
                             # count only the sets that have conditions resolved to true
-                            resolved_set_indexes = set()
-                            for condition in condition_intersection:
-                                resolved_set_indexes.update(conditions[condition])
-
-                            current_count = len(counted_sets & resolved_set_indexes)
+                            current_count = len(element_sets.intersection(child_condition_intersection))
                         else:
                             current_count = set_count
 

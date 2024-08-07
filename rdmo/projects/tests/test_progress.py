@@ -6,7 +6,7 @@ from rdmo.projects.progress import compute_progress
 projects = [1, 11]
 
 results_map = {
-    1: (58, 88),
+    1: (58, 94),
     11: (0, 36)
 }
 
