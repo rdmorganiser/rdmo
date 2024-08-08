@@ -16,9 +16,9 @@ from rdmo.core.imports import ImportElementFields
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_RDMO_XML_VERSION = '1.11.0'
+LEGACY_RDMO_XML_VERSION = '1.11.0'
 ELEMENTS_USING_KEY = {RDMO_MODELS['attribute']}
-RELATED_ELEMENT_KEYS = ('uri', 'model', 'order')
+
 
 def resolve_file(file_name: str) -> Tuple[Optional[Path], Optional[str]]:
     file = Path(file_name).resolve()
@@ -45,7 +45,7 @@ def validate_root(root: Optional[xmlElement]) -> Tuple[bool, Optional[str]]:
 
 
 def validate_and_get_xml_version_from_root(root: xmlElement) -> Tuple[Optional[Version], list]:
-    unparsed_root_version = root.attrib.get('version') or DEFAULT_RDMO_XML_VERSION
+    unparsed_root_version = root.attrib.get('version') or LEGACY_RDMO_XML_VERSION
     root_version, rdmo_version = parse(unparsed_root_version), parse(RDMO_INSTANCE_VERSION)
     if root_version > rdmo_version:
         logger.info('Import failed version validation (%s > %s)', root_version, rdmo_version)
@@ -117,13 +117,13 @@ def parse_xml_to_elements(xml_file=None) -> Tuple[OrderedDict, list]:
         return OrderedDict(), errors
 
     # step 3.1.1: validate the legacy elements
-    legacy_errors = validate_legacy_elements(elements, parse(root.attrib.get('version', DEFAULT_RDMO_XML_VERSION)))
+    legacy_errors = validate_legacy_elements(elements, parse(root.attrib.get('version', LEGACY_RDMO_XML_VERSION)))
     if legacy_errors:
         errors.extend(legacy_errors)
         return OrderedDict(), errors
 
     # step 4: convert elements from previous versions
-    elements = convert_elements(elements, parse(root.attrib.get('version', DEFAULT_RDMO_XML_VERSION)))
+    elements = convert_elements(elements, parse(root.attrib.get('version', LEGACY_RDMO_XML_VERSION)))
 
     # step 5: order the elements and return
     # ordering of elements is done in the import_elements function
@@ -257,17 +257,18 @@ def validate_pre_conversion_for_missing_key_in_legacy_elements(elements, version
             raise ValueError(f"Missing legacy elements, elements containing 'key' were expected for this XML with version {version} and elements {models_in_elements}.")   # noqa: E501
 
 
-def update_related_elements(elements: Dict, related_uri: str, related_model: str, related_key: str, field_name: str):
+def update_related_legacy_elements(elements: Dict,
+                                   target_uri: str, source_model: str,
+                                   legacy_element_field: str, element_field: str):
     # search for the related elements that use the uri
     related_elements = [
         element for element in elements.values()
-        if element['model'] == related_model
-           and element.get(related_key)
-           and element[related_key]['uri'] == related_uri
+        if element['model'] == source_model
+        and element.get(legacy_element_field, {}).get('uri') == target_uri
     ]
     # write the related elements back into the related element
-    elements[related_uri][field_name] = [
-        {k: v for k, v in element.items() if k in RELATED_ELEMENT_KEYS}
+    elements[target_uri][element_field] = [
+        {k: v for k, v in element.items() if k in ('uri', 'model', 'order')}
         for element in related_elements
     ]
 
@@ -291,14 +292,14 @@ def convert_legacy_elements(elements):
         elif element['model'] == 'questions.catalog':
             element['uri_path'] = element.pop('key')
             # Add sections to the catalog
-            update_related_elements(elements, uri, 'questions.section', 'catalog', 'sections')
+            update_related_legacy_elements(elements, uri, 'questions.section', 'catalog', 'sections')
 
         elif element['model'] == 'questions.section':
             del element['key']
             element['uri_path'] = element.pop('path')
             del element['catalog']  # sections do not have catalog anymore
             # Add section_pages to the section
-            update_related_elements(elements, uri, 'questions.page', 'section', 'pages')
+            update_related_legacy_elements(elements, uri, 'questions.page', 'section', 'pages')
 
         elif element['model'] == 'questions.page':
             del element['key']
@@ -307,13 +308,13 @@ def convert_legacy_elements(elements):
 
             # Add page_questionsets to the page
             # Add questionsets to the page
-            update_related_elements(elements, uri, 'questions.questionset', 'questionset', 'questionsets')
+            update_related_legacy_elements(elements, uri, 'questions.questionset', 'questionset', 'questionsets')
 
             # Add page_questions to the page
-            update_related_elements(elements, uri, 'questions.question', 'question', 'questions')
+            update_related_legacy_elements(elements, uri, 'questions.question', 'question', 'questions')
 
             # Add page_conditions to the page
-            update_related_elements(elements, uri, 'conditions.condition', 'condition', 'conditions')
+            update_related_legacy_elements(elements, uri, 'conditions.condition', 'condition', 'conditions')
 
         elif element['model'] == 'questions.questionset':
             del element['key']
@@ -354,12 +355,14 @@ def convert_legacy_elements(elements):
         elif element['model'] == 'options.optionset':
             element['uri_path'] = element.pop('key')
 
+            update_related_legacy_elements(elements, uri, 'options.option', 'optionset', 'options')
+
         elif element['model'] == 'options.option':
             del element['key']
             element['uri_path'] = element.pop('path')
 
-            if element.get('optionset') is not None:
-                element['optionset']['order'] = element.pop('order')
+            del element['optionset']  # options do not have optionsets anymore
+
 
         if element['model'] == 'tasks.task':
             element['uri_path'] = element.pop('key')
