@@ -92,7 +92,7 @@ def compute_navigation(section, project, snapshot=None):
             counts = count_questions(page, sets, conditions)
 
             # filter the values_list for the attributes, and compute the total sum of counts
-            count = len(tuple(filter(lambda value: value[0] in counts.keys(), values_list)))
+            count = sum(1 for value in values_list if value[0] in counts)
             total = sum(counts.values())
 
             navigation_section['count'] += count
@@ -130,7 +130,7 @@ def compute_progress(project, snapshot=None):
     counts = count_questions(project.catalog, sets, conditions)
 
     # filter the values_list for the attributes, and compute the total sum of counts
-    count = len(tuple(filter(lambda value: value[0] in counts.keys(), values_list)))
+    count = sum(1 for value in values_list if value[0] in counts)
     total = sum(counts.values())
 
     return count, total
