@@ -1,5 +1,4 @@
 # ruff: noqa: F811
-import os
 import re
 from urllib.parse import urlparse
 
@@ -9,22 +8,15 @@ from playwright.sync_api import Page, expect
 
 from rdmo.conditions.models import Condition
 from rdmo.domain.models import Attribute
+from rdmo.management.tests.helpers_models import ModelHelper, model_helpers
 from rdmo.questions.models import Catalog
-
-from .helpers_models import ModelHelper, model_helpers
 
 pytestmark = pytest.mark.e2e
 
-# needed for playwright to run
-os.environ.setdefault("DJANGO_ALLOW_ASYNC_UNSAFE", "true")
 
-test_users = [('editor', 'editor')]
-
-@pytest.mark.parametrize("username,password", test_users)
 @pytest.mark.parametrize("helper", model_helpers)
-def test_management_navigation(logged_in_user: Page, helper: ModelHelper, username: str, password: str) -> None:
+def test_management_navigation(page: Page, helper: ModelHelper) -> None:
     """Test that each content type is available through the navigation."""
-    page = logged_in_user
     expect(page.get_by_role("heading", name="Management")).to_be_visible()
 
     # click a link in the navigation
@@ -43,25 +35,18 @@ def test_management_navigation(logged_in_user: Page, helper: ModelHelper, userna
         page.screenshot(path="screenshots/management-navigation-catalog.png", full_page=True)
 
 
-
-@pytest.mark.parametrize("username,password", test_users)
 @pytest.mark.parametrize("helper", model_helpers)
-def test_management_has_items(logged_in_user: Page, helper: ModelHelper) -> None:
+def test_management_has_items(page: Page, helper: ModelHelper) -> None:
     """Test all items in database are visible in management UI."""
-    page = logged_in_user
     num_items_in_database = helper.model.objects.count()
     page.goto(f"/management/{helper.url}")
     items_in_ui = page.locator(".list-group > .list-group-item")
     expect(items_in_ui).to_have_count(num_items_in_database)
 
 
-@pytest.mark.parametrize("username,password", test_users)
 @pytest.mark.parametrize("helper", model_helpers)
-def test_management_nested_view(
-    logged_in_user: Page, helper: ModelHelper
-) -> None:
+def test_management_nested_view(page: Page, helper: ModelHelper) -> None:
     """For each element type, that has a nested view, click the first example."""
-    page = logged_in_user
     page.goto(f"/management/{helper.url}")
     # Open nested view for element type
     if helper.has_nested:
@@ -70,13 +55,9 @@ def test_management_nested_view(
         expect(page.locator(".panel-default > .panel-body").first).to_be_visible()
 
 
-@pytest.mark.parametrize("username,password", test_users)
 @pytest.mark.parametrize("helper", model_helpers)
-def test_management_create_model(
-    logged_in_user: Page, helper: ModelHelper
-) -> None:
+def test_management_create_model(page: Page, helper: ModelHelper) -> None:
     """Test management UI can create objects in the database."""
-    page = logged_in_user
     num_objects_at_start = helper.model.objects.count()
     page.goto(f"/management/{helper.url}")
     # click "New" button
@@ -86,11 +67,7 @@ def test_management_create_model(
     page.get_by_label(helper.form_field).fill(value)
     if helper.model == Condition:
         # conditions need to have a source attribute
-        source_form = (
-            page.locator(".form-group")
-            .filter(has_text="Source")
-            .locator(".select-item > .react-select")
-        )
+        source_form = page.locator(".form-group").filter(has_text="Source").locator(".select-item > .react-select")
         source_form.click()
         page.keyboard.type(Attribute.objects.first().uri)
         page.keyboard.press("Enter")
@@ -107,10 +84,8 @@ def test_management_create_model(
     assert helper.model.objects.get(**query)
 
 
-@pytest.mark.parametrize("username,password", test_users)
 @pytest.mark.parametrize("helper", model_helpers)
-def test_management_edit_model(logged_in_user: Page, helper: ModelHelper) -> None:
-    page = logged_in_user
+def test_management_edit_model(page: Page, helper: ModelHelper) -> None:
     page.goto(f"/management/{helper.url}")
     # click edit
     edit_button_title = f"Edit {helper.verbose_name}"
