@@ -28,6 +28,25 @@ test_optionset = {
         },
     }
 
+OPTIONSET_URIS = {
+    "http://example.com/terms/options/condition": [
+        "http://example.com/terms/options/condition/other"
+    ],
+    "http://example.com/terms/options/one_two_three": [
+        "http://example.com/terms/options/one_two_three/one",
+        "http://example.com/terms/options/one_two_three/two",
+        "http://example.com/terms/options/one_two_three/three",
+    ],
+    "http://example.com/terms/options/one_two_three_other": [
+        "http://example.com/terms/options/one_two_three_other/one",
+        "http://example.com/terms/options/one_two_three_other/two",
+        "http://example.com/terms/options/one_two_three_other/three",
+        "http://example.com/terms/options/one_two_three_other/text",
+        "http://example.com/terms/options/one_two_three_other/textarea"
+    ],
+    "http://example.com/terms/options/plugin": []
+}
+
 
 def test_create_optionsets(db, settings):
     delete_all_objects([OptionSet, Option])
@@ -40,6 +59,13 @@ def test_create_optionsets(db, settings):
     assert Option.objects.count() == 9
     assert all(element[ImportElementFields.CREATED] is True for element in imported_elements)
     assert all(element[ImportElementFields.UPDATED] is False for element in imported_elements)
+    for optionset_uri, options_uris in OPTIONSET_URIS.items():
+        optionset = OptionSet.objects.get(uri=optionset_uri)
+        options = Option.objects.filter(uri__in=options_uris)
+        options_uris = options.values_list('uri', flat=True)
+        assert set(options.values_list('uri', flat=True)) == set(options_uris)
+        for optionset_option, option in zip(optionset.options.all(), options):
+            assert optionset_option.uri == option.uri
 
 
 def test_update_optionsets(db, settings):
@@ -189,6 +215,14 @@ def test_create_legacy_options(db, settings):
     assert Option.objects.count() == 8
     assert all(element[ImportElementFields.CREATED] is True for element in imported_elements)
     assert all(element[ImportElementFields.UPDATED] is False for element in imported_elements)
+    for optionset_uri, options_uris in OPTIONSET_URIS.items():
+        optionset = OptionSet.objects.get(uri=optionset_uri)
+        options = Option.objects.filter(uri__in=options_uris)
+        options_uris = options.values_list('uri', flat=True)
+        assert set(options.values_list('uri', flat=True)) == set(options_uris)
+        for optionset_option, option in zip(optionset.options.all(), options):
+            # legacy has no "http://example.com/terms/options/one_two_three_other/textarea"
+            assert optionset_option.uri == option.uri
 
 
 def test_update_legacy_options(db, settings):
