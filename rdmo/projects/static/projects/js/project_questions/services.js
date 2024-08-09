@@ -884,14 +884,14 @@ angular.module('project_questions')
                 if (response.status == 500) {
                     service.error = response;
                 } else if (response.status == 400) {
-                    service.error = true;
+                    service.error = response;
                     if (angular.isDefined(response.data.text)) {
                         value.errors = response.data.text
                     } else {
                         value.errors = Object.keys(response.data);
                     }
                 } else if (response.status == 404) {
-                    service.error = true;
+                    service.error = response;
                     value.errors = ['not_found']
                 }
             })
@@ -944,8 +944,8 @@ angular.module('project_questions')
         service.error = null; // reset error before saving
         if (service.settings.project_questions_autosave) {
             service.save(false, true).then(function() {
-                if (service.error !== null) {
-                    // pass, dont jump
+                if (service.error !== null && service.error.status !== 400) {
+                    // pass, dont jump (but not on a validation error)
                 } else if (angular.isDefined(page)) {
                     service.initView(page.id);
                 } else if (angular.isDefined(section)) {
