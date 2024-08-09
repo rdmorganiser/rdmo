@@ -970,37 +970,52 @@ angular.module('project_questions')
         return service.storeValues().then(function() {
             if (service.error !== null) {
                 // pass
-            } else if (service.page.id == false) {
-                // pass, the interview is done
-            } else if (angular.isDefined(jump) && jump) {
-                // after the jump initView is called, so we do not need to do anything here
-            } else if (angular.isDefined(proceed) && proceed) {
-                if (service.settings.project_questions_cycle_sets && service.page.is_collection) {
-                    if (service.set_index === null) {
-                        service.next();
-                    } else {
-                        var valuesets = service.valuesets[service.page.id][service.set_prefix];
-                        var index = service.findIndex(valuesets, 'set_index', service.set_index);
+            } else {
+                service.updateProgress()
 
-                        if (index === valuesets.length - 1) {
-                            // this is the last valueset, go to the next page
+                if (service.page.id == false) {
+                    // pass, the interview is done
+                } else if (angular.isDefined(jump) && jump) {
+                    // after the jump initView is called, so we do not need to do anything here
+                } else if (angular.isDefined(proceed) && proceed) {
+                    if (service.settings.project_questions_cycle_sets && service.page.is_collection) {
+                        if (service.set_index === null) {
                             service.next();
                         } else {
-                            // activate the next valueset
-                            service.set_index = valuesets[index + 1].set_index;
-                            $window.scrollTo(0, 0);
+                            var valuesets = service.valuesets[service.page.id][service.set_prefix];
+                            var index = service.findIndex(valuesets, 'set_index', service.set_index);
+
+                            if (index === valuesets.length - 1) {
+                                // this is the last valueset, go to the next page
+                                service.next();
+                            } else {
+                                // activate the next valueset
+                                service.set_index = valuesets[index + 1].set_index;
+                                $window.scrollTo(0, 0);
+                            }
                         }
+                    } else {
+                        service.next();
                     }
                 } else {
-                    service.next();
+                    service.updateView();
                 }
-            } else {
-                service.postSave();
             }
         });
     };
 
-    service.postSave = function() {
+    service.updateProgress = function() {
+        if (service.project.read_only !== true) {
+            resources.projects.postAction({
+                id: service.project.id,
+                detail_action: 'progress'
+            }, function(response) {
+                service.progress = response
+            });
+        }
+    }
+
+    service.updateView = function() {
         // check if we need to refresh the site
         angular.forEach([service.page].concat(service.questionsets), function(questionset) {
             angular.forEach(questionset.elements, function(element) {
@@ -1014,16 +1029,6 @@ angular.module('project_questions')
                 }
             });
         });
-
-        // update progress
-        if (service.project.read_only !== true) {
-            resources.projects.postAction({
-                id: service.project.id,
-                detail_action: 'progress'
-            }, function(response) {
-                service.progress = response
-            });
-        }
 
         // update navigation
         if (service.project.read_only !== true) {
@@ -1296,7 +1301,8 @@ angular.module('project_questions')
                 service.values[questionset.attribute][set_prefix][set_index].push(value);
             }
             service.storeValue(value, null, set_prefix, set_index, 0).then(function(value) {
-                service.postSave();
+                service.updateProgress();
+                service.updateView();
             })
         }
 
@@ -1388,7 +1394,8 @@ angular.module('project_questions')
                 });
             }
 
-            service.postSave();
+            service.updateProgress();
+            service.updateView();
         });
 
         // if this is the top level questionset,
