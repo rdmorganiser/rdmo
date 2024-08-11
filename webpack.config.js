@@ -69,7 +69,7 @@ const baseConfig = {
         ]
       },
       {
-        test: /(fonts|files)\/.*\.(svg|woff2?|ttf|eot|otf)(\?.*)?$/,
+        test: /(fonts|files)[\\/].*\.(svg|woff2?|ttf|eot|otf)(\?.*)?$/,
         loader: 'file-loader',
         type: 'javascript/auto',
         options: {
