@@ -54,3 +54,20 @@ def files(settings, tmp_path):
 def json_data():
     json_file = Path(settings.BASE_DIR) / 'import' / 'catalogs.json'
     return {'elements': json.loads(json_file.read_text())}
+
+
+@pytest.fixture
+def mocked_convert_text(mocker):
+    """Mock the pypandoc.convert_text function.
+
+    `mocked_convert_text` can be used in tests of the export views.
+    Use it to assert pypandoc would have been called with:
+    mocked_convert_text.assert_called(), mocked_convert_text.assert_called_once() or
+    mocked_convert_text.assert_called_once_with().
+
+    See:
+    - <https://pytest-mock.readthedocs.io/en/latest/usage.html>
+    - <https://docs.python.org/3/library/unittest.mock.html#unittest.mock.MagicMock>
+    """
+    from rdmo.core.utils import pypandoc  # noqa: F401
+    return mocker.patch("pypandoc.convert_text")

@@ -690,7 +690,7 @@ def test_project_answers(db, client, username, password, project_id):
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('export_format', export_formats)
-def test_project_answers_export(db, client, username, password, project_id, export_format):
+def test_project_answers_export(db, client, username, password, project_id, export_format, mocked_convert_text):
     client.login(username=username, password=password)
 
     url = reverse('project_answers_export', args=[project_id, export_format])
