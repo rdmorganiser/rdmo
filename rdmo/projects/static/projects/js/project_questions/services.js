@@ -884,14 +884,14 @@ angular.module('project_questions')
                 if (response.status == 500) {
                     service.error = response;
                 } else if (response.status == 400) {
-                    service.error = true;
+                    service.error = response;
                     if (angular.isDefined(response.data.text)) {
                         value.errors = response.data.text
                     } else {
                         value.errors = Object.keys(response.data);
                     }
                 } else if (response.status == 404) {
-                    service.error = true;
+                    service.error = response;
                     value.errors = ['not_found']
                 }
             })
@@ -944,8 +944,8 @@ angular.module('project_questions')
         service.error = null; // reset error before saving
         if (service.settings.project_questions_autosave) {
             service.save(false, true).then(function() {
-                if (service.error !== null) {
-                    // pass, dont jump
+                if (service.error !== null && service.error.status !== 400) {
+                    // pass, dont jump (but not on a validation error)
                 } else if (angular.isDefined(page)) {
                     service.initView(page.id);
                 } else if (angular.isDefined(section)) {
@@ -970,118 +970,127 @@ angular.module('project_questions')
         return service.storeValues().then(function() {
             if (service.error !== null) {
                 // pass
-            } else if (service.page.id == false) {
-                // pass, the interview is done
-            } else if (angular.isDefined(jump) && jump) {
-                // after the jump initView is called, so we do not need to do anything here
-            } else if (angular.isDefined(proceed) && proceed) {
-                if (service.settings.project_questions_cycle_sets && service.page.is_collection) {
-                    if (service.set_index === null) {
-                        service.next();
-                    } else {
-                        var valuesets = service.valuesets[service.page.id][service.set_prefix];
-                        var index = service.findIndex(valuesets, 'set_index', service.set_index);
+            } else {
+                service.updateProgress()
 
-                        if (index === valuesets.length - 1) {
-                            // this is the last valueset, go to the next page
+                if (service.page.id == false) {
+                    // pass, the interview is done
+                } else if (angular.isDefined(jump) && jump) {
+                    // after the jump initView is called, so we do not need to do anything here
+                } else if (angular.isDefined(proceed) && proceed) {
+                    if (service.settings.project_questions_cycle_sets && service.page.is_collection) {
+                        if (service.set_index === null) {
                             service.next();
                         } else {
-                            // activate the next valueset
-                            service.set_index = valuesets[index + 1].set_index;
-                            $window.scrollTo(0, 0);
+                            var valuesets = service.valuesets[service.page.id][service.set_prefix];
+                            var index = service.findIndex(valuesets, 'set_index', service.set_index);
+
+                            if (index === valuesets.length - 1) {
+                                // this is the last valueset, go to the next page
+                                service.next();
+                            } else {
+                                // activate the next valueset
+                                service.set_index = valuesets[index + 1].set_index;
+                                $window.scrollTo(0, 0);
+                            }
                         }
+                    } else {
+                        service.next();
                     }
                 } else {
-                    service.next();
+                    service.updateView();
                 }
-            } else {
-                // check if we need to refresh the site
-                angular.forEach([service.page].concat(service.questionsets), function(questionset) {
-                    angular.forEach(questionset.elements, function(element) {
-                        if (element.model == 'questions.question') {
-                            var question = element;
-                            angular.forEach(question.optionsets, function(optionset) {
-                                if (optionset.has_refresh) {
-                                    return service.initView(service.page.id, false);
-                                }
-                            });
-                        }
-                    });
-                });
-
-                // update progress
-                if (service.project.read_only !== true) {
-                    resources.projects.postAction({
-                        id: service.project.id,
-                        detail_action: 'progress'
-                    }, function(response) {
-                        service.progress = response
-                    });
-                }
-
-                // update navigation
-                if (service.project.read_only !== true) {
-                    resources.projects.query({
-                        id: service.project.id,
-                        detail_id: service.page.section.id,
-                        detail_action: 'navigation'
-                    }, function(response) {
-                        service.navigation = service.initNavigation(response)
-                    });
-                }
-
-                // re-evaluate conditions
-                angular.forEach([service.page].concat(service.questionsets), function(questionset) {
-                    angular.forEach(service.valuesets[questionset.id], function(valuesets) {
-                        angular.forEach(valuesets, function(valueset) {
-                            angular.forEach(questionset.elements, function(element) {
-                                if (element.model == 'questions.questionset') {
-                                    var qs = element;
-                                    if (qs.has_conditions) {
-                                        promises.push(resources.projects.get({
-                                            id: service.project.id,
-                                            detail_action: 'resolve',
-                                            questionset: qs.id,
-                                            set_prefix: valueset.set_prefix,
-                                            set_index: valueset.set_index
-                                        }, function(response) {
-                                            valueset.hidden.questionsets[qs.id] = !response.result;
-                                        }).$promise);
-                                    }
-                                } else {
-                                    var q = element;
-                                    if (q.has_conditions) {
-                                        promises.push(resources.projects.get({
-                                            id: service.project.id,
-                                            detail_action: 'resolve',
-                                            question: q.id,
-                                            set_prefix: valueset.set_prefix,
-                                            set_index: valueset.set_index
-                                        }, function(response) {
-                                            valueset.hidden.questions[q.id] = !response.result;
-                                        }).$promise);
-                                    }
-                                    angular.forEach(q.optionsets, function(optionset) {
-                                        if (optionset.has_conditions) {
-                                            promises.push(resources.projects.get({
-                                                id: service.project.id,
-                                                detail_action: 'resolve',
-                                                optionset: optionset.id,
-                                                set_prefix: valueset.set_prefix,
-                                                set_index: valueset.set_index
-                                            }, function(response) {
-                                                valueset.hidden.optionsets[optionset.id] = !response.result;
-                                            }).$promise);
-                                        }
-                                    });
-                                }
-                            });
-                        });
-                    });
-                });
             }
         });
     };
+
+    service.updateProgress = function() {
+        if (service.project.read_only !== true) {
+            resources.projects.postAction({
+                id: service.project.id,
+                detail_action: 'progress'
+            }, function(response) {
+                service.progress = response
+            });
+        }
+    }
+
+    service.updateView = function() {
+        // check if we need to refresh the site
+        angular.forEach([service.page].concat(service.questionsets), function(questionset) {
+            angular.forEach(questionset.elements, function(element) {
+                if (element.model == 'questions.question') {
+                    var question = element;
+                    angular.forEach(question.optionsets, function(optionset) {
+                        if (optionset.has_refresh) {
+                            return service.initView(service.page.id, false);
+                        }
+                    });
+                }
+            });
+        });
+
+        // update navigation
+        if (service.project.read_only !== true) {
+            resources.projects.query({
+                id: service.project.id,
+                detail_id: service.page.section.id,
+                detail_action: 'navigation'
+            }, function(response) {
+                service.navigation = service.initNavigation(response)
+            });
+        }
+
+        // re-evaluate conditions
+        angular.forEach([service.page].concat(service.questionsets), function(questionset) {
+            angular.forEach(service.valuesets[questionset.id], function(valuesets) {
+                angular.forEach(valuesets, function(valueset) {
+                    angular.forEach(questionset.elements, function(element) {
+                        if (element.model == 'questions.questionset') {
+                            var qs = element;
+                            if (qs.has_conditions) {
+                                promises.push(resources.projects.get({
+                                    id: service.project.id,
+                                    detail_action: 'resolve',
+                                    questionset: qs.id,
+                                    set_prefix: valueset.set_prefix,
+                                    set_index: valueset.set_index
+                                }, function(response) {
+                                    valueset.hidden.questionsets[qs.id] = !response.result;
+                                }).$promise);
+                            }
+                        } else {
+                            var q = element;
+                            if (q.has_conditions) {
+                                promises.push(resources.projects.get({
+                                    id: service.project.id,
+                                    detail_action: 'resolve',
+                                    question: q.id,
+                                    set_prefix: valueset.set_prefix,
+                                    set_index: valueset.set_index
+                                }, function(response) {
+                                    valueset.hidden.questions[q.id] = !response.result;
+                                }).$promise);
+                            }
+                            angular.forEach(q.optionsets, function(optionset) {
+                                if (optionset.has_conditions) {
+                                    promises.push(resources.projects.get({
+                                        id: service.project.id,
+                                        detail_action: 'resolve',
+                                        optionset: optionset.id,
+                                        set_prefix: valueset.set_prefix,
+                                        set_index: valueset.set_index
+                                    }, function(response) {
+                                        valueset.hidden.optionsets[optionset.id] = !response.result;
+                                    }).$promise);
+                                }
+                            });
+                        }
+                    });
+                });
+            });
+        });
+    }
 
     service.changed = function(value, autosave=false) {
         value.changed = true;
@@ -1234,7 +1243,9 @@ angular.module('project_questions')
             var last_set_index = valuesets[0].set_index;
             set_index = last_set_index + 1;
         }
-        service.valuesets[questionset.id][set_prefix].push(factories.valuesets(set_prefix, set_index));
+
+        var valueset = factories.valuesets(set_prefix, set_index);
+        service.valuesets[questionset.id][set_prefix].push(valueset);
 
         // loop over questions to initialize them with at least one value, and init checkboxes and widgets
         angular.forEach(questionset.elements, function(element) {
@@ -1257,6 +1268,10 @@ angular.module('project_questions')
                 // for a checkbox, transform the values for the question to different checkboxes
                 if (question.widget_class === 'checkbox') {
                     service.values[question.attribute][set_prefix][set_index] = service.initCheckbox(question, service.values[question.attribute][set_prefix][set_index]);
+                }
+
+                if (question.has_conditions) {
+                    valueset.hidden.questions[question.id] = true
                 }
 
                 angular.forEach(service.values[question.attribute][set_prefix][set_index], function(value) {
@@ -1285,7 +1300,10 @@ angular.module('project_questions')
             if (angular.isUndefined(service.values[questionset.attribute][set_prefix][set_index][0])) {
                 service.values[questionset.attribute][set_prefix][set_index].push(value);
             }
-            service.storeValue(value, null, set_prefix, set_index, 0)
+            service.storeValue(value, null, set_prefix, set_index, 0).then(function(value) {
+                service.updateProgress();
+                service.updateView();
+            })
         }
 
         // recursively loop over child questionsets and sets
@@ -1375,6 +1393,9 @@ angular.module('project_questions')
                     service.removeValueSet(qs, sp, si);
                 });
             }
+
+            service.updateProgress();
+            service.updateView();
         });
 
         // if this is the top level questionset,
