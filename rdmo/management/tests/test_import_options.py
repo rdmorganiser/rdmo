@@ -46,6 +46,9 @@ OPTIONSET_URIS = {
     ],
     "http://example.com/terms/options/plugin": []
 }
+LEGACY_SKIP_URIS = [
+    "http://example.com/terms/options/one_two_three_other/textarea"
+]
 
 
 def test_create_optionsets(db, settings):
@@ -60,13 +63,13 @@ def test_create_optionsets(db, settings):
     assert all(element[ImportElementFields.CREATED] is True for element in imported_elements)
     assert all(element[ImportElementFields.UPDATED] is False for element in imported_elements)
     for optionset_uri, options_uris in OPTIONSET_URIS.items():
-        optionset = OptionSet.objects.get(uri=optionset_uri)
-        options = Option.objects.filter(uri__in=options_uris)
-        options_uris = options.values_list('uri', flat=True)
-        assert set(options.values_list('uri', flat=True)) == set(options_uris)
-        for optionset_option, option in zip(optionset.options.all(), options):
-            assert optionset_option.uri == option.uri
-
+        db_optionset = OptionSet.objects.get(uri=optionset_uri)
+        db_options = Option.objects.filter(uri__in=options_uris)
+        db_options_uris = db_options.values_list('uri', flat=True)
+        assert set(db_options_uris) == set(options_uris)
+        db_ordered_options_uris = db_optionset.options.filter(uri__in=options_uris).order_by(
+                                        'option_optionsets__order').values_list('uri',flat=True)
+        assert options_uris == list(db_ordered_options_uris)
 
 def test_update_optionsets(db, settings):
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'optionsets.xml'
@@ -215,14 +218,16 @@ def test_create_legacy_options(db, settings):
     assert Option.objects.count() == 8
     assert all(element[ImportElementFields.CREATED] is True for element in imported_elements)
     assert all(element[ImportElementFields.UPDATED] is False for element in imported_elements)
-    for optionset_uri, options_uris in OPTIONSET_URIS.items():
-        optionset = OptionSet.objects.get(uri=optionset_uri)
-        options = Option.objects.filter(uri__in=options_uris)
-        options_uris = options.values_list('uri', flat=True)
-        assert set(options.values_list('uri', flat=True)) == set(options_uris)
-        for optionset_option, option in zip(optionset.options.all(), options):
-            # legacy has no "http://example.com/terms/options/one_two_three_other/textarea"
-            assert optionset_option.uri == option.uri
+    for optionset_uri, test_options_uris in OPTIONSET_URIS.items():
+        # legacy has no "http://example.com/terms/options/one_two_three_other/textarea"
+        options_uris = [i for i in test_options_uris if i not in LEGACY_SKIP_URIS]
+        db_optionset = OptionSet.objects.get(uri=optionset_uri)
+        db_options = Option.objects.filter(uri__in=options_uris)
+        db_options_uris = db_options.values_list('uri', flat=True)
+        assert set(db_options_uris) == set(options_uris)
+        db_ordered_options_uris = db_optionset.options.filter(uri__in=options_uris).order_by(
+                                        'option_optionsets__order').values_list('uri',flat=True)
+        assert options_uris == list(db_ordered_options_uris)
 
 
 def test_update_legacy_options(db, settings):
