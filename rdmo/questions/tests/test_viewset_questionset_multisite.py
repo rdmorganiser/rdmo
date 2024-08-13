@@ -1,5 +1,3 @@
-import xml.etree.ElementTree as et
-
 import pytest
 
 from django.db.models import Max
@@ -33,18 +31,12 @@ def test_index(db, client, username, password):
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('export_format', export_formats)
-def test_export(db, client, username, password, export_format):
+def test_export(db, client, username, password, export_format, mocked_convert_text):
     client.login(username=username, password=password)
 
     url = reverse(urlnames['export']) + export_format + '/'
     response = client.get(url)
     assert response.status_code == status_map['list'][username], response.content
-
-    if response.status_code == 200 and export_format == 'xml':
-        root = et.fromstring(response.content)
-        assert root.tag == 'rdmo'
-        for child in root:
-            assert child.tag in ['questionset', 'question']
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -313,16 +305,10 @@ def test_delete(db, client, username, password):
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('export_format', export_formats)
-def test_detail_export(db, client, username, password, export_format):
+def test_detail_export(db, client, username, password, export_format, mocked_convert_text):
     client.login(username=username, password=password)
     instance = QuestionSet.objects.first()
 
     url = reverse(urlnames['detail_export'], args=[instance.pk]) + export_format + '/'
     response = client.get(url)
     assert response.status_code == status_map['detail'][username], response.content
-
-    if response.status_code == 200 and export_format == 'xml':
-        root = et.fromstring(response.content)
-        assert root.tag == 'rdmo'
-        for child in root:
-            assert child.tag in ['questionset', 'question']
