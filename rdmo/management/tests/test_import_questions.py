@@ -25,12 +25,13 @@ TEST_CATALOG_SECTIONS_URIS = {
 }
 
 
-def test_create_catalogs(db, settings):
+@pytest.mark.parametrize('shuffle', [True, False])
+def test_create_catalogs(db, settings, shuffle):
     delete_all_objects([Catalog, Section, Page, QuestionSet, Question])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'catalogs.xml'
 
-    elements, root, imported_elements = parse_xml_and_import_elements(xml_file, shuffle_elements=True)
+    elements, root, imported_elements = parse_xml_and_import_elements(xml_file, shuffle_elements=shuffle)
 
     assert len(root) == len(imported_elements) == 148
     assert Catalog.objects.count() == 2
@@ -227,12 +228,13 @@ def test_update_questionsets_with_changed_fields(db, settings, updated_fields):
        assert test[ImportElementFields.DIFF] == imported[ImportElementFields.DIFF]
 
 
-def test_create_questions(db, settings):
+@pytest.mark.parametrize('shuffle', [True, False])
+def test_create_questions(db, settings, shuffle):
     delete_all_objects([Page, QuestionSet, Question])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'questions.xml'
 
-    elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
+    elements, root, imported_elements = parse_xml_and_import_elements(xml_file, shuffle_elements=shuffle)
 
     assert len(root) == len(imported_elements) == 89
     assert Question.objects.count() == 89
@@ -271,12 +273,13 @@ def test_update_questions_with_changed_fields(db, settings, updated_fields):
        assert test[ImportElementFields.DIFF] == imported[ImportElementFields.DIFF]
 
 
-def test_create_legacy_questions(db, settings):
+@pytest.mark.parametrize('shuffle', [True, False])
+def test_create_legacy_questions(db, settings, shuffle):
     delete_all_objects([Catalog, Section, Page, QuestionSet, Question])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'legacy' / 'questions.xml'
 
-    elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
+    elements, root, imported_elements = parse_xml_and_import_elements(xml_file, shuffle_elements=shuffle)
 
     assert len(root) == len(imported_elements) == 147
     assert Catalog.objects.count() == 1
@@ -303,7 +306,7 @@ def test_create_legacy_questions(db, settings):
 def test_update_legacy_questions(db, settings):
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'legacy' / 'questions.xml'
 
-    elements, root, imported_elements = parse_xml_and_import_elements(xml_file, shuffle_elements=True)
+    elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
 
     assert len(root) == len(imported_elements) == 147
     assert all(element['created'] is False for element in imported_elements)
