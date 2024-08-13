@@ -4,7 +4,9 @@ from dataclasses import asdict
 from typing import Dict, Set, Tuple
 
 from django.db.models import Model
-from django.forms import model_to_dict
+
+from rest_framework.exceptions import ValidationError
+from rest_framework.serializers import ModelSerializer
 
 from rdmo.core.imports import (
     ImportElementFields,
@@ -91,47 +93,27 @@ def apply_field_values(instance, element, import_helper, original) -> None:
 
 
 def update_extra_fields_from_validated_instance(instance, element, import_helper, original=None) -> None:
-    extra_field_names = [i.field_name for i in import_helper.extra_fields]
-    instance_extra_fields = model_to_dict(instance, fields=extra_field_names)
 
-    for field_name in extra_field_names:
+    for extra_field in import_helper.extra_fields:
+        field_name = extra_field.field_name
+
         element_field_value = element.get(field_name)
-        if element_field_value is None:
-            continue
 
-        instance_field_value = instance_extra_fields[field_name]
-        # Properly handle boolean comparisons
-        if isinstance(instance_field_value, bool):
-            # Convert element field value to boolean if it's a string representation of a boolean
-            if isinstance(element_field_value, str):
-                element_field_value = element_field_value.strip().lower()
-                if element_field_value in ['true', '1', 'yes']:
-                    element_field_value = True
-                elif element_field_value in ['false', '0', 'no']:
-                    element_field_value = False
-                else:
-                    logger.debug("Cannot convert %s from %s to a boolean value.", element_field_value, field_name)
+        # Retrieve the model field object
+        model_field = instance._meta.get_field(field_name)
 
-            # Convert other types (e.g., integers) to boolean
-            elif isinstance(element_field_value, (int, float)):
-                element_field_value = bool(element_field_value)
+        # Use the serializer_field_mapping to get the corresponding DRF field class
+        drf_field_class = ModelSerializer.serializer_field_mapping.get(type(model_field))
 
-            # Assign the converted boolean value back to the element
-            element[field_name] = element_field_value
-
-        # Handle other data types and type casting
-        elif isinstance(element_field_value, str) and instance_field_value is not None:
+        if drf_field_class is not None:
             try:
-                # Type cast element value to type of instance value
-                element[field_name] = type(instance_field_value)(element_field_value)
-            except ValueError:
-                logger.debug("Cannot convert '%s' from %s to %s.",
-                             element_field_value,
-                             field_name,
-                             type(instance_field_value).__name__
-                             )
-            except TypeError:
-                pass # ignore for NoneType
+                # Instantiate the DRF field and use it to validate and convert the value
+                drf_field = drf_field_class()
+                element[field_name] = drf_field.to_internal_value(element_field_value)
+            except (ValidationError, TypeError, ValueError) as e:
+                logger.debug("Cannot convert '%s' from %s to %s: %s",
+                             element_field_value, field_name, drf_field_class.__name__, str(e))
+                continue  # Skip updating the element field if validation fails
 
         # track changes
         track_changes_on_element(element, field_name, new_value=element[field_name], original=original)
