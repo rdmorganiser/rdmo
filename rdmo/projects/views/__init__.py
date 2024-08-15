@@ -24,6 +24,7 @@ from .project_update import (
     ProjectUpdateTasksView,
     ProjectUpdateView,
     ProjectUpdateViewsView,
+    ProjectUpdateVisibilityView,
 )
 from .project_view import ProjectViewExportView, ProjectViewView
 from .snapshot import SnapshotCreateView, SnapshotRollbackView, SnapshotUpdateView
