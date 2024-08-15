@@ -80,6 +80,8 @@ class ProjectForm(forms.ModelForm):
         fields = ['title', 'description', 'catalog']
         if settings.NESTED_PROJECTS:
             fields += ['parent']
+        if settings.PROJECT_VISIBILITY:
+            fields += ['visibility']
 
         field_classes = {
             'catalog': CatalogChoiceField
@@ -95,7 +97,16 @@ class ProjectUpdateInformationForm(forms.ModelForm):
 
     class Meta:
         model = Project
-        fields = ('title', 'description')
+        fields = ('title', 'description', 'visibility')
+
+
+class ProjectUpdateVisibilityForm(forms.ModelForm):
+
+    use_required_attribute = False
+
+    class Meta:
+        model = Project
+        fields = ('visibility', )
 
 
 class ProjectUpdateCatalogForm(forms.ModelForm):

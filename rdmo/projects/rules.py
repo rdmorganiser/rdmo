@@ -47,6 +47,11 @@ def is_project_guest(user, project):
 
 
 @rules.predicate
+def is_internal_project(user, project):
+    return user.is_authenticated and project.is_internal
+
+
+@rules.predicate
 def is_site_manager(user, project):
     if user.is_authenticated:
         return user.role.manager.filter(pk=project.site.pk).exists()
@@ -67,7 +72,7 @@ def is_site_manager_for_current_site(user, request):
 rules.add_rule('projects.can_view_all_projects', is_site_manager_for_current_site | is_superuser)
 
 rules.add_perm('projects.add_project', can_add_project)
-rules.add_perm('projects.view_project_object', is_project_member | is_site_manager)
+rules.add_perm('projects.view_project_object', is_project_member | is_internal_project | is_site_manager)
 rules.add_perm('projects.change_project_object', is_project_manager | is_project_owner | is_site_manager)
 rules.add_perm('projects.change_project_progress_object', is_project_author | is_project_manager | is_project_owner | is_site_manager)  # noqa: E501
 rules.add_perm('projects.delete_project_object', is_project_owner | is_site_manager)
@@ -75,7 +80,7 @@ rules.add_perm('projects.leave_project_object', is_current_project_member)
 rules.add_perm('projects.export_project_object', is_project_owner | is_project_manager | is_site_manager)
 rules.add_perm('projects.import_project_object', is_project_owner | is_project_manager | is_site_manager)
 
-rules.add_perm('projects.view_membership_object', is_project_member | is_site_manager)
+rules.add_perm('projects.view_membership_object', is_project_member | is_internal_project | is_site_manager)
 rules.add_perm('projects.add_membership_object', is_project_owner | is_site_manager)
 rules.add_perm('projects.change_membership_object', is_project_owner | is_site_manager)
 rules.add_perm('projects.delete_membership_object', is_project_owner | is_site_manager)
@@ -85,28 +90,28 @@ rules.add_perm('projects.add_invite_object', is_project_owner | is_site_manager)
 rules.add_perm('projects.change_invite_object', is_project_owner | is_site_manager)
 rules.add_perm('projects.delete_invite_object', is_project_owner | is_site_manager)
 
-rules.add_perm('projects.view_integration_object', is_project_member | is_site_manager)
+rules.add_perm('projects.view_integration_object', is_project_member | is_internal_project | is_site_manager)
 rules.add_perm('projects.add_integration_object', is_project_owner | is_project_manager | is_site_manager)
 rules.add_perm('projects.change_integration_object', is_project_owner | is_project_manager | is_site_manager)
 rules.add_perm('projects.delete_integration_object', is_project_owner | is_project_manager | is_site_manager)
 
-rules.add_perm('projects.view_issue_object', is_project_member | is_site_manager)
+rules.add_perm('projects.view_issue_object', is_project_member | is_internal_project | is_site_manager)
 rules.add_perm('projects.add_issue_object', is_project_manager | is_project_owner | is_site_manager)
 rules.add_perm('projects.change_issue_object', is_project_author | is_project_manager | is_project_owner | is_site_manager)  # noqa: E501
 rules.add_perm('projects.delete_issue_object', is_project_manager | is_project_owner | is_site_manager)
 
-rules.add_perm('projects.view_snapshot_object', is_project_member | is_site_manager)
+rules.add_perm('projects.view_snapshot_object', is_project_member | is_internal_project | is_site_manager)
 rules.add_perm('projects.add_snapshot_object', is_project_manager | is_project_owner | is_site_manager)
 rules.add_perm('projects.change_snapshot_object', is_project_manager | is_project_owner | is_site_manager)
 rules.add_perm('projects.rollback_snapshot_object', is_project_manager | is_project_owner | is_site_manager)
 rules.add_perm('projects.export_snapshot_object', is_project_owner | is_project_manager | is_site_manager)
 
-rules.add_perm('projects.view_value_object', is_project_member | is_site_manager)
+rules.add_perm('projects.view_value_object', is_project_member | is_internal_project | is_site_manager)
 rules.add_perm('projects.add_value_object', is_project_author | is_project_manager | is_project_owner | is_site_manager)
 rules.add_perm('projects.change_value_object', is_project_author | is_project_manager | is_project_owner | is_site_manager)  # noqa: E501
 rules.add_perm('projects.delete_value_object', is_project_author | is_project_manager | is_project_owner | is_site_manager)  # noqa: E501
 
-rules.add_perm('projects.view_page_object', is_project_member | is_site_manager)
+rules.add_perm('projects.view_page_object', is_project_member | is_internal_project | is_site_manager)
 
 # TODO: use one of the permissions above
 rules.add_perm('projects.is_project_owner', is_project_owner)

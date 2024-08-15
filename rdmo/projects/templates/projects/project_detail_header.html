@@ -26,6 +26,16 @@
                     {% include 'projects/project_detail_header_catalog.html' %}
                 </td>
             </tr>
+            {% if settings.PROJECT_VISIBILITY %}
+            <tr id="project-visibility">
+                <td>
+                    <strong>{% trans 'Visibility' %}</strong>
+                </td>
+                <td>
+                    {% include 'projects/project_detail_header_visibility.html' %}
+                </td>
+            </tr>
+            {% endif %}
             {% if project.is_child_node or project.get_descendant_count %}
             {% drilldown_tree_for_node project as project_tree all_descendants %}
             <tr>
