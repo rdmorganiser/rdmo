@@ -15,13 +15,23 @@ from .helpers_models import delete_all_objects
 
 fields_to_be_changed = (('comment',),)
 
+TEST_CATALOG_SECTIONS_URIS = {
+    "http://example.com/terms/questions/catalog/individual",
+    "http://example.com/terms/questions/catalog/collections",
+    "http://example.com/terms/questions/catalog/set",
+    "http://example.com/terms/questions/catalog/conditions",
+    "http://example.com/terms/questions/catalog/options",
+    "http://example.com/terms/questions/catalog/blocks"
+}
 
-def test_create_catalogs(db, settings):
+
+@pytest.mark.parametrize('shuffle', [True, False])
+def test_create_catalogs(db, settings, shuffle):
     delete_all_objects([Catalog, Section, Page, QuestionSet, Question])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'catalogs.xml'
 
-    elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
+    elements, root, imported_elements = parse_xml_and_import_elements(xml_file, shuffle_elements=shuffle)
 
     assert len(root) == len(imported_elements) == 148
     assert Catalog.objects.count() == 2
@@ -32,6 +42,18 @@ def test_create_catalogs(db, settings):
     assert all(element['created'] is True for element in imported_elements)
     assert all(element['updated'] is False for element in imported_elements)
 
+    # check that all elements ended up in the catalog
+    catalog = Catalog.objects.prefetch_elements().get(uri="http://example.com/terms/questions/catalog")
+    catalog_sections = catalog.sections.all()
+    catalog_sections_uris = set(catalog_sections.values_list('uri', flat=True))
+    assert catalog_sections_uris == TEST_CATALOG_SECTIONS_URIS
+
+    sections_pages = Section.objects.filter(uri__in=catalog_sections_uris).values_list('pages')
+    assert sections_pages.distinct().count() == 48
+    sections_pages_questionsets = Page.objects.filter(id__in=sections_pages).values_list('questionsets')
+    assert sections_pages_questionsets.distinct().count() == 3
+    sections_pages_questions = Page.objects.filter(id__in=sections_pages).values_list('questions')
+    assert sections_pages_questions.distinct().count() == 85
 
 def test_update_catalogs(db, settings):
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'catalogs.xml'
@@ -39,6 +61,7 @@ def test_update_catalogs(db, settings):
     elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
 
     assert len(root) == len(imported_elements) == 148
+
     assert all(element['created'] is False for element in imported_elements)
     assert all(element['updated'] is True for element in imported_elements)
 
@@ -205,12 +228,13 @@ def test_update_questionsets_with_changed_fields(db, settings, updated_fields):
        assert test[ImportElementFields.DIFF] == imported[ImportElementFields.DIFF]
 
 
-def test_create_questions(db, settings):
+@pytest.mark.parametrize('shuffle', [True, False])
+def test_create_questions(db, settings, shuffle):
     delete_all_objects([Page, QuestionSet, Question])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'questions.xml'
 
-    elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
+    elements, root, imported_elements = parse_xml_and_import_elements(xml_file, shuffle_elements=shuffle)
 
     assert len(root) == len(imported_elements) == 89
     assert Question.objects.count() == 89
@@ -249,12 +273,13 @@ def test_update_questions_with_changed_fields(db, settings, updated_fields):
        assert test[ImportElementFields.DIFF] == imported[ImportElementFields.DIFF]
 
 
-def test_create_legacy_questions(db, settings):
+@pytest.mark.parametrize('shuffle', [True, False])
+def test_create_legacy_questions(db, settings, shuffle):
     delete_all_objects([Catalog, Section, Page, QuestionSet, Question])
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'legacy' / 'questions.xml'
 
-    elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
+    elements, root, imported_elements = parse_xml_and_import_elements(xml_file, shuffle_elements=shuffle)
 
     assert len(root) == len(imported_elements) == 147
     assert Catalog.objects.count() == 1
@@ -267,9 +292,15 @@ def test_create_legacy_questions(db, settings):
 
     # check that all elements ended up in the catalog
     catalog = Catalog.objects.prefetch_elements().first()
-    descendant_uris = {element.uri for element in catalog.descendants}
-    element_uris = {element['uri'] for _uri, element in elements.items() if element['uri'] != catalog.uri}
-    assert descendant_uris == element_uris
+    catalog_sections = catalog.sections.all()
+    catalog_sections_uris = set(catalog_sections.values_list('uri', flat=True))
+    assert catalog_sections_uris == TEST_CATALOG_SECTIONS_URIS
+    sections_pages = Section.objects.filter(uri__in=catalog_sections_uris).values_list('pages')
+    assert sections_pages.distinct().count() == 48
+    sections_pages_questionsets = Page.objects.filter(id__in=sections_pages).values_list('questionsets')
+    assert sections_pages_questionsets.distinct().count() == 3
+    sections_pages_questions = Page.objects.filter(id__in=sections_pages).values_list('questions')
+    assert sections_pages_questions.distinct().count() == 85
 
 
 def test_update_legacy_questions(db, settings):
@@ -283,15 +314,6 @@ def test_update_legacy_questions(db, settings):
 
     # check that all elements ended up in the catalog
     catalog = Catalog.objects.prefetch_elements().first()
-    descendant_uris = {
-        element.uri for element in catalog.descendants if any(element.uri.startswith(uri) for uri in [
-            'http://example.com/terms/questions/catalog/individual',
-            'http://example.com/terms/questions/catalog/set',
-            'http://example.com/terms/questions/catalog/collections',
-            'http://example.com/terms/questions/catalog/conditions',
-            'http://example.com/terms/questions/catalog/options',
-            'http://example.com/terms/questions/catalog/blocks'
-        ])
-    }
-    element_uris = {element['uri'] for _uri, element in elements.items() if element['uri'] != catalog.uri}
-    assert descendant_uris == element_uris
+    catalog_sections = catalog.sections.all()
+    catalog_sections_uris = set(catalog_sections.values_list('uri', flat=True))
+    assert catalog_sections_uris == TEST_CATALOG_SECTIONS_URIS

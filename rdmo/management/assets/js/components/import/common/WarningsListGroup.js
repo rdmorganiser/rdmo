@@ -37,8 +37,4 @@ WarningsListGroup.propTypes = {
   shouldShowURI: PropTypes.bool
 }
 
-WarningsListGroup.defaultProps = {
-  shouldShowURI: true,
-}
-
 export default WarningsListGroup

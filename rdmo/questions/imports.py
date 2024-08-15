@@ -17,10 +17,10 @@ from .validators import (
 )
 
 import_helper_catalog = ElementImportHelper(
-    model = Catalog,
+    model=Catalog,
     validators=(CatalogLockedValidator, CatalogUniqueURIValidator),
-    lang_fields=('help', 'title'),
-    extra_fields = (
+    lang_fields=('title', 'help'),
+    extra_fields=(
         ExtraFieldHelper(field_name='order'),
         ExtraFieldHelper(field_name='available', overwrite_in_element=True),
     ),
@@ -34,7 +34,7 @@ import_helper_catalog = ElementImportHelper(
 )
 
 import_helper_section = ElementImportHelper(
-    model = Section,
+    model=Section,
     validators=(SectionLockedValidator, SectionUniqueURIValidator),
     lang_fields=('title', 'short_title'),
     m2m_through_instance_fields=[
@@ -52,14 +52,14 @@ import_helper_section = ElementImportHelper(
 )
 
 import_helper_page = ElementImportHelper(
-    model = Page,
+    model=Page,
     validators=(PageLockedValidator, PageUniqueURIValidator),
     lang_fields=('help', 'title', 'verbose_name', 'short_title'),
     foreign_fields=('attribute',),
-    extra_fields = (
+    extra_fields=(
         ExtraFieldHelper(field_name='is_collection'),
     ),
-    m2m_instance_fields = ('conditions', ),
+    m2m_instance_fields=('conditions', ),
     m2m_through_instance_fields=[
         ThroughInstanceMapper(
             field_name='questionsets', source_name='page',
@@ -74,6 +74,38 @@ import_helper_page = ElementImportHelper(
         ThroughInstanceMapper(
             field_name='section', source_name='page',
             target_name='section', through_name='page_sections'
+        )
+    ]
+)
+
+import_helper_questionset = ElementImportHelper(
+    model=QuestionSet,
+    validators=(QuestionSetLockedValidator, QuestionSetUniqueURIValidator),
+    lang_fields=( 'title', 'help', 'verbose_name'),
+    foreign_fields=('attribute',),
+    extra_fields=(
+        ExtraFieldHelper(field_name='is_collection'),
+    ),
+    m2m_instance_fields=('conditions', ),
+
+    m2m_through_instance_fields=[
+        ThroughInstanceMapper(
+            field_name='questionsets', source_name='parent',
+            target_name='questionset', through_name='questionset_questionsets'
+        ),
+        ThroughInstanceMapper(
+            field_name='questions', source_name='questionset',
+            target_name='question', through_name='questionset_questions'
+        )
+    ],
+    reverse_m2m_through_instance_fields=[
+        ThroughInstanceMapper(
+            field_name='page', source_name='questionset',
+            target_name='page', through_name='questionset_pages'
+        ),
+        ThroughInstanceMapper(
+            field_name='questionset', source_name='questionset',
+            target_name='parent', through_name='questionset_parents'
         )
     ]
 )
@@ -104,37 +136,6 @@ import_helper_question = ElementImportHelper(
         ThroughInstanceMapper(
             field_name='questionset', source_name='question',
             target_name='questionset', through_name='question_questionsets'
-        )
-    ]
-)
-import_helper_questionset = ElementImportHelper(
-    model = QuestionSet,
-    validators=(QuestionSetLockedValidator, QuestionSetUniqueURIValidator),
-    lang_fields=('help', 'title', 'verbose_name'),
-    foreign_fields=('attribute',),
-    extra_fields=(
-        ExtraFieldHelper(field_name='is_collection'),
-    ),
-    m2m_instance_fields=('conditions', ),
-
-    m2m_through_instance_fields=[
-        ThroughInstanceMapper(
-            field_name='questionsets', source_name='parent',
-            target_name='questionset', through_name='questionset_questionsets'
-        ),
-        ThroughInstanceMapper(
-            field_name='questions', source_name='questionset',
-            target_name='question', through_name='questionset_questions'
-        )
-    ],
-    reverse_m2m_through_instance_fields=[
-        ThroughInstanceMapper(
-            field_name='page', source_name='questionset',
-            target_name='page', through_name='questionset_pages'
-        ),
-        ThroughInstanceMapper(
-            field_name='questionset', source_name='questionset',
-            target_name='parent', through_name='questionset_parents'
         )
     ]
 )

@@ -33,6 +33,8 @@ class ExtraFieldHelper:
 
     @staticmethod
     def get_value_from_callback(callback, kwargs):
+        if not callable(callback):
+            raise TypeError('callback must be callable')
         sig = signature(callback)
         kwargs = {k: val for k, val in kwargs.items() if k in sig.parameters}
         value = callback(**kwargs)

@@ -1,3 +1,4 @@
+import random
 from collections import OrderedDict
 from functools import partial
 from typing import Dict, List, Optional, Tuple, Union
@@ -72,7 +73,13 @@ def _test_helper_change_fields_elements(elements,
     return _new_elements
 
 
-def parse_xml_and_import_elements(xml_file):
+def parse_xml_and_import_elements(xml_file, shuffle_elements=False):
     elements, root = read_xml_and_parse_to_root_and_elements(xml_file)
+    if shuffle_elements:
+        # Extract items from the OrderedDict
+        items = list(elements.items())
+        # Shuffle the list of items
+        random.shuffle(items)
+        elements = OrderedDict(items)
     imported_elements = import_elements(elements)
     return elements, root, imported_elements

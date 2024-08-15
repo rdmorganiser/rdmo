@@ -16,7 +16,7 @@ from rdmo.core.imports import ImportElementFields
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_RDMO_XML_VERSION = '1.11.0'
+LEGACY_RDMO_XML_VERSION = '1.11.0'
 ELEMENTS_USING_KEY = {RDMO_MODELS['attribute']}
 
 
@@ -45,7 +45,7 @@ def validate_root(root: Optional[xmlElement]) -> Tuple[bool, Optional[str]]:
 
 
 def validate_and_get_xml_version_from_root(root: xmlElement) -> Tuple[Optional[Version], list]:
-    unparsed_root_version = root.attrib.get('version') or DEFAULT_RDMO_XML_VERSION
+    unparsed_root_version = root.attrib.get('version') or LEGACY_RDMO_XML_VERSION
     root_version, rdmo_version = parse(unparsed_root_version), parse(RDMO_INSTANCE_VERSION)
     if root_version > rdmo_version:
         logger.info('Import failed version validation (%s > %s)', root_version, rdmo_version)
@@ -117,13 +117,13 @@ def parse_xml_to_elements(xml_file=None) -> Tuple[OrderedDict, list]:
         return OrderedDict(), errors
 
     # step 3.1.1: validate the legacy elements
-    legacy_errors = validate_legacy_elements(elements, parse(root.attrib.get('version', DEFAULT_RDMO_XML_VERSION)))
+    legacy_errors = validate_legacy_elements(elements, parse(root.attrib.get('version', LEGACY_RDMO_XML_VERSION)))
     if legacy_errors:
         errors.extend(legacy_errors)
         return OrderedDict(), errors
 
     # step 4: convert elements from previous versions
-    elements = convert_elements(elements, parse(root.attrib.get('version', DEFAULT_RDMO_XML_VERSION)))
+    elements = convert_elements(elements, parse(root.attrib.get('version', LEGACY_RDMO_XML_VERSION)))
 
     # step 5: order the elements and return
     # ordering of elements is done in the import_elements function
@@ -257,6 +257,22 @@ def validate_pre_conversion_for_missing_key_in_legacy_elements(elements, version
             raise ValueError(f"Missing legacy elements, elements containing 'key' were expected for this XML with version {version} and elements {models_in_elements}.")   # noqa: E501
 
 
+def update_related_legacy_elements(elements: Dict,
+                                   target_uri: str, source_model: str,
+                                   legacy_element_field: str, element_field: str):
+    # search for the related elements that use the uri
+    related_elements = [
+        element for element in elements.values()
+        if element['model'] == source_model
+        and element.get(legacy_element_field, {}).get('uri') == target_uri
+    ]
+    # write the related elements back into the related element
+    elements[target_uri][element_field] = [
+        {k: v for k, v in element.items() if k in ('uri', 'model', 'order')}
+        for element in related_elements
+    ]
+
+
 def convert_legacy_elements(elements):
     # first pass: identify pages
     for uri, element in elements.items():
@@ -275,20 +291,30 @@ def convert_legacy_elements(elements):
 
         elif element['model'] == 'questions.catalog':
             element['uri_path'] = element.pop('key')
+            # Add sections to the catalog
+            update_related_legacy_elements(elements, uri, 'questions.section', 'catalog', 'sections')
 
         elif element['model'] == 'questions.section':
             del element['key']
             element['uri_path'] = element.pop('path')
-
-            if element.get('catalog') is not None:
-                element['catalog']['order'] = element.pop('order')
+            del element['catalog']  # sections do not have catalog anymore
+            # Add section_pages to the section
+            update_related_legacy_elements(elements, uri, 'questions.page', 'section', 'pages')
 
         elif element['model'] == 'questions.page':
             del element['key']
             element['uri_path'] = element.pop('path')
+            del element['section']  # pages do not have sections anymore
 
-            if element.get('section') is not None:
-                element['section']['order'] = element.pop('order')
+            # Add page_questionsets to the page
+            # Add questionsets to the page
+            update_related_legacy_elements(elements, uri, 'questions.questionset', 'questionset', 'questionsets')
+
+            # Add page_questions to the page
+            update_related_legacy_elements(elements, uri, 'questions.question', 'question', 'questions')
+
+            # Add page_conditions to the page
+            update_related_legacy_elements(elements, uri, 'conditions.condition', 'condition', 'conditions')
 
         elif element['model'] == 'questions.questionset':
             del element['key']
@@ -298,11 +324,15 @@ def convert_legacy_elements(elements):
             if parent is not None:
                 if elements[parent].get('model') == 'questions.page':
                     # this questionset belongs to a page now
-                    del element['questionset']
-                    element['page'] = {
-                        'uri': parent,
+                    parent_questionsets = elements[parent].get('questionset')
+                    parent_questionsets = parent_questionsets or []
+                    parent_questionsets.append({
+                        'uri': element['uri'],
+                        'model': element['model'],
                         'order': element.pop('order')
-                    }
+                    })
+                    elements[parent]['questionset'] = parent_questionsets
+                    del element['questionset']
                 else:
                     # this questionset still belongs to a questionset
                     element['questionset']['order'] = element.pop('order')
@@ -313,26 +343,26 @@ def convert_legacy_elements(elements):
 
             parent = element.get('questionset').get('uri')
             if parent is not None:
-                if elements[parent].get('model') == 'questions.page':
-                    # this question belongs to a page now
-                    del element['questionset']
-                    element['page'] = {
-                        'uri': parent,
-                        'order': element.pop('order')
-                    }
-                else:
-                    # this question still belongs to a questionset
-                    element['questionset']['order'] = element.pop('order')
+                parent_questionsets = elements[parent].get('questions', [])
+                parent_questionsets.append({
+                    'uri': element['uri'],
+                    'model': element['model'],
+                    'order': element.pop('order')
+                })
+                elements[parent]['questions'] = parent_questionsets
+                del element['questionset']
 
         elif element['model'] == 'options.optionset':
             element['uri_path'] = element.pop('key')
+
+            update_related_legacy_elements(elements, uri, 'options.option', 'optionset', 'options')
 
         elif element['model'] == 'options.option':
             del element['key']
             element['uri_path'] = element.pop('path')
 
-            if element.get('optionset') is not None:
-                element['optionset']['order'] = element.pop('order')
+            del element['optionset']  # options do not have optionsets anymore
+
 
         if element['model'] == 'tasks.task':
             element['uri_path'] = element.pop('key')
@@ -356,59 +386,21 @@ def convert_additional_input(elements):
 
     return elements
 
-def get_related_elements(element, ignored_keys=None):
-    ignored_keys = ignored_keys or list(ImportElementFields)
-    related_elements = {k: val for k, val in element.items() if
-                       k not in ignored_keys and (isinstance(val, (dict, list)))}
-    return related_elements
 
-
-def sort_by_relatives(elements, descendants_first=False, ancestors_first=False):
-    ancestors, descendants = [], []
-
-    if not descendants_first and not ancestors_first:
-        return elements
-
-    for uri, element in elements.items():
-        try:
-            has_descendants = get_related_elements(element)
-        except AttributeError:
-            has_descendants = False
-        if has_descendants:
-            ancestors.append((uri, element))
-        else:
-            descendants.append((uri, element))
-    if descendants_first:
-        sort_list = descendants + ancestors
-    elif ancestors_first:
-        sort_list = ancestors + descendants
-
-    sorted_elements = OrderedDict()
-    for uri,element in sort_list:
-        sorted_elements[uri] = element
-    return sorted_elements
-
-
-def order_elements(elements, order_sets_first=False, descendants_first=False) -> OrderedDict:
+def order_elements(elements: OrderedDict) -> OrderedDict:
     ordered_elements = OrderedDict()
-    if descendants_first:
-        elements = sort_by_relatives(elements, descendants_first=descendants_first)
-    for uri, element in elements.items():
-        append_element(ordered_elements, elements, uri, element, order_sets_first=order_sets_first)
+    for uri, element in reversed(elements.items()):
+        append_element(ordered_elements, elements, uri, element,)
     return ordered_elements
 
 
-def append_element(ordered_elements, unordered_elements, uri, element, order_sets_first=False) -> None:
+def append_element(ordered_elements, unordered_elements, uri, element) -> None:
     if element is None:
         return
+    for key, element_value in element.items():
+        if key in list(ImportElementFields):
+            continue
 
-    related_elements = get_related_elements(element)
-
-    if order_sets_first:
-        if related_elements and uri not in ordered_elements:
-            ordered_elements[uri] = element
-
-    for key, element_value in related_elements.items():
         if isinstance(element_value, dict):
             sub_uri = element_value.get('uri')
             sub_element = unordered_elements.get(sub_uri)
@@ -417,11 +409,10 @@ def append_element(ordered_elements, unordered_elements, uri, element, order_set
 
         elif isinstance(element_value, list):
             for value in element_value:
-                if isinstance(element_value, dict):
-                    sub_uri = value.get('uri')
-                    sub_element = unordered_elements.get(sub_uri)
-                    if sub_uri not in ordered_elements and sub_uri is not None:
-                        append_element(ordered_elements, unordered_elements, sub_uri, sub_element)
+                sub_uri = value.get('uri')
+                sub_element = unordered_elements.get(sub_uri)
+                if sub_uri not in ordered_elements and sub_uri is not None:
+                    append_element(ordered_elements, unordered_elements, sub_uri, sub_element)
 
     if uri not in ordered_elements:
         ordered_elements[uri] = element

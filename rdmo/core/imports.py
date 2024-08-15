@@ -138,11 +138,6 @@ def track_changes_on_element(element: dict,
         lookup_field = element_field if instance_field is None else instance_field
         original_value = getattr(original, lookup_field, '')
 
-    if isinstance(new_value,str) and isinstance(original_value,int):
-        # typecasting of original value to str, for comparison '0' == 0
-        # specific edge-case, maybe generalize later
-        original_value = str(original_value)
-
     element[ImportElementFields.DIFF][element_field][ImportElementFields.CURRENT] = original_value
     element[ImportElementFields.DIFF][element_field][ImportElementFields.NEW] = new_value
 
@@ -207,7 +202,7 @@ def track_changes_on_uri_of_foreign_field(element, field_name, foreign_uri, orig
     track_changes_on_element(element, field_name, new_value=foreign_uri, original_value=original_foreign_uri)
 
 
-def set_foreign_field(instance, field_name, element, uploaded_uris=None, original=None) -> None:
+def set_foreign_field(instance, field_name, element, original=None) -> None:
     if field_name not in element:
         return
 
@@ -278,45 +273,46 @@ def set_foreign_field(instance, field_name, element, uploaded_uris=None, origina
 
 
 def set_extra_field(instance, field_name, element,
-                    extra_field_helper: Optional[ExtraFieldHelper] = None, original=None) -> None:
+                    extra_field_helper: Optional[ExtraFieldHelper] = None,
+                    ) -> None:
 
-    extra_value = None
+    extra_field_value = None
     if field_name in element:
-        extra_value = element.get(field_name)
+        extra_field_value = element.get(field_name)
     else:
         # get the default field value from the instance
         instance_value = getattr(instance, field_name)
         element[field_name] = instance_value
-        extra_value = instance_value
+        extra_field_value = instance_value
 
     if extra_field_helper is not None:
         # default_value
         extra_value_from_helper = extra_field_helper.get_value(instance=instance,
                                                    key=field_name)
         # overwrite None or '' values by the get_value from the helper
-        if extra_value is None or extra_value == '':
-            extra_value = extra_value_from_helper
+        if extra_field_value is None or extra_field_value == '':
+            extra_field_value = extra_value_from_helper
 
         if extra_field_helper.overwrite_in_element:
-            element[field_name] = extra_value
+            element[field_name] = extra_field_value
 
-    if extra_value is not None:
-        setattr(instance, field_name, extra_value)
-        # track changes
-        track_changes_on_element(element, field_name, new_value=extra_value, original=original)
-
+    if extra_field_value is not None:
+        setattr(instance, field_name, extra_field_value)
 
 def track_changes_m2m_instances(element, field_name,
                                 foreign_instances, original=None):
     if original is None:
         return
     original_m2m_instance = getattr(original, field_name)
-    if original_m2m_instance is None:
-        return
-    original_m2m_uris = list(original_m2m_instance.values_list('uri', flat=True))
-    foreign_uris = [i.uri for i in foreign_instances]
-    track_changes_on_element(element, field_name, new_value=foreign_uris,
-                             original_value=original_m2m_uris)
+    original_m2m_instance = original_m2m_instance or []
+    # m2m instance fields are unordered so comparison by set
+    original_uris = set(original_m2m_instance.values_list('uri', flat=True))
+    foreign_uris = {i.uri for i in foreign_instances}
+    common_uris = list(original_uris & foreign_uris)
+    original_uris_list = common_uris + list(original_uris - foreign_uris)
+    foreign_uris_list = common_uris + list(foreign_uris - original_uris)
+    track_changes_on_element(element, field_name, new_value=foreign_uris_list,
+                             original_value=original_uris_list)
 
 
 def set_m2m_through_instances(instance, element, field_name=None, source_name=None,
@@ -354,6 +350,7 @@ def set_m2m_through_instances(instance, element, field_name=None, source_name=No
 
     for target_element in target_elements:
         target_uri = target_element.get('uri')
+        target_element['order'] = int(target_element['order']) # cast to int for ordering
         order = target_element.get('order')
         new_data.append(target_element)
 
@@ -497,6 +494,7 @@ def set_reverse_m2m_through_instance(instance, element, field_name=None, source_
 
     for target_element in target_elements:
         target_uri = target_element.get('uri')
+        target_element['order'] = int(target_element['order'])  # cast to int for ordering
         order = target_element.get('order')
         new_data.append(target_element)
 

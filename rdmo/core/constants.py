@@ -81,15 +81,15 @@ HUMAN2BYTES_MAPPER = {
 }
 
 RDMO_MODELS = {
-  'catalog': 'questions.catalog',
-  'section': 'questions.section',
-  'page': 'questions.page',
-  'questionset': 'questions.questionset',
-  'question': 'questions.question',
   'attribute': 'domain.attribute',
-  'optionset': 'options.optionset',
-  'option': 'options.option',
   'condition': 'conditions.condition',
+  'option': 'options.option',
+  'optionset': 'options.optionset',
+  'question': 'questions.question',
+  'questionset': 'questions.questionset',
+  'page': 'questions.page',
+  'section': 'questions.section',
+  'catalog': 'questions.catalog',
   'task': 'tasks.task',
   'view': 'views.view'
 }

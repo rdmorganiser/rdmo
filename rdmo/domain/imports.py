@@ -18,7 +18,6 @@ def build_attribute_uri(instance: Optional[Attribute]=None):
         return instance.build_uri(instance.uri_prefix, instance.path)
 
 
-
 import_helper_attribute = ElementImportHelper(
     model=Attribute,
     common_fields=('uri_prefix', 'key', 'comment'),

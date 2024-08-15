@@ -72,8 +72,7 @@ class ImportViewSet(viewsets.ViewSet):
         # step 1: store xml file as tmp file
         try:
             elements_data = request.data['elements']
-            _elements = filter(lambda x: 'uri' in x, elements_data)
-            elements = {i['uri']: i for i in _elements}
+            elements = {i['uri']: i for i in elements_data if 'uri' in i}
         except KeyError as e:
             raise ValidationError({'elements': [_('This field may not be blank.')]}) from e
         except TypeError as e:
