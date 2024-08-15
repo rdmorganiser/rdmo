@@ -92,6 +92,21 @@ def apply_field_values(instance, element, import_helper, original) -> None:
                         extra_field_helper=extra_field)
 
 
+def validate_with_serializer_field(instance, field_name, value):
+    """Validate and convert a value using the corresponding DRF serializer field."""
+    model_field = instance._meta.get_field(field_name)
+    drf_field_class = ModelSerializer.serializer_field_mapping.get(type(model_field))
+
+    if drf_field_class is not None:
+        try:
+            drf_field = drf_field_class()
+            return drf_field.to_internal_value(value)
+        except (ValidationError, TypeError, ValueError) as e:
+            logger.debug("Cannot convert '%s' for field '%s' using '%s': %s",
+                         value, field_name, drf_field_class.__name__, str(e))
+    return None
+
+
 def update_extra_fields_from_validated_instance(instance, element, import_helper, original=None) -> None:
 
     for extra_field in import_helper.extra_fields:
@@ -99,21 +114,11 @@ def update_extra_fields_from_validated_instance(instance, element, import_helper
 
         element_field_value = element.get(field_name)
 
-        # Retrieve the model field object
-        model_field = instance._meta.get_field(field_name)
+        # deserialize the element value by using the drf field serializer
+        validated_value = validate_with_serializer_field(instance, field_name, element_field_value)
 
-        # Use the serializer_field_mapping to get the corresponding DRF field class
-        drf_field_class = ModelSerializer.serializer_field_mapping.get(type(model_field))
-
-        if drf_field_class is not None:
-            try:
-                # Instantiate the DRF field and use it to validate and convert the value
-                drf_field = drf_field_class()
-                element[field_name] = drf_field.to_internal_value(element_field_value)
-            except (ValidationError, TypeError, ValueError) as e:
-                logger.debug("Cannot convert '%s' from %s to %s: %s",
-                             element_field_value, field_name, drf_field_class.__name__, str(e))
-                continue  # Skip updating the element field if validation fails
+        if validated_value is not None:
+            element[field_name] = validated_value
 
         # track changes
         track_changes_on_element(element, field_name, new_value=element[field_name], original=original)
