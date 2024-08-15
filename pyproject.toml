@@ -40,28 +40,28 @@ dependencies = [
   # dependencies with major version on zero are declared with
   # major.minor.patch, because they can potentially introduce breaking changes
   # in minor version updates anytime
-  "defusedcsv~=2.0",
-  "defusedxml~=0.7.1",
-  "django~=4.2",
-  "django-cleanup~=8.0",
-  "django-compressor~=4.4",
-  "django-extensions~=3.2",
+  "defusedcsv>=2.0,<3.0",
+  "defusedxml>=0.7.1,<1.0",
+  "django>=4.2,<5.0",
+  "django-cleanup>=8.0,<9.0",
+  "django-compressor>=4.4,<5.0",
+  "django-extensions>=3.2,<4.0",
   "django-filter>=23.2,<25.0",
-  "django-libsass~=0.9",
-  "django-mathfilters~=1.0",
-  "django-mptt==0.14.0", # pinned, 0.15 requires Python >= 3.9
-  "django-rest-swagger~=2.2",
-  "django-settings-export~=1.2",
-  "django-split-settings~=1.2",
-  "django-widget-tweaks~=1.5",
-  "djangorestframework~=3.15",
-  "drf-extensions~=0.7.1",
-  "iso8601~=2.0",
-  "markdown~=3.4",
+  "django-libsass>=0.9,<1.0",
+  "django-mathfilters>=1.0,<2.0",
+  "django-mptt==0.14.0",  # pinned, 0.15 requires Python >= 3.9
+  "django-rest-swagger>=2.2,<3.0",
+  "django-settings-export>=1.2,<2.0",
+  "django-split-settings>=1.2,<2.0",
+  "django-widget-tweaks>=1.5,<2.0",
+  "djangorestframework>=3.15,<4.0",
+  "drf-extensions>=0.7.1,<1.0",
+  "iso8601>=2.0,<3.0",
+  "markdown>=3.4,<4.0",
   "packaging>=23.2,<25.0",
-  "pypandoc~=1.11",
-  "requests-toolbelt~=1.0",
-  "rules~=3.4",
+  "pypandoc>=1.11,<2.0",
+  "requests-toolbelt>=1.0,<2.0",
+  "rules>=3.4,<4.0",
 ]
 
 [project.optional-dependencies]
@@ -70,14 +70,14 @@ allauth = [
 ]
 ci = [
   "rdmo[dev]",
-  "pytest-github-actions-annotate-failures~=0.2.0",
+  "pytest-github-actions-annotate-failures>=0.2.0,<0.3.0",
 ]
 dev = [
-  "build~=1.0",
-  "pipdeptree~=2.13",
-  "pre-commit~=3.4",
+  "build>=1.0,<2.0",
+  "pipdeptree>=2.13,<3.0",
+  "pre-commit>=3.4,<4.0",
   "setuptools>=73,<74",
-  "twine~=5.1.1",
+  "twine>=5.1.1,<6.0",
   "wheel>=0.42,<0.45",
   "rdmo[allauth]",
   "rdmo[pytest]",
@@ -86,22 +86,22 @@ gunicorn = [
   "gunicorn>=23.0,<24.0",
 ]
 ldap = [
-  "django-auth-ldap~=4.5",
+  "django-auth-ldap>=4.5,<5.0",
 ]
 mysql = [
-  "mysqlclient~=2.2",
+  "mysqlclient>=2.2,<3.0",
 ]
 postgres = [
-  "psycopg[binary]~=3.1",
+  "psycopg[binary]>=3.1,<4.0",
 ]
 pytest = [
-  "pytest~=8.0",
+  "pytest>=8.0,<9.0",
   "pytest-cov>=4.1,<6.0",
-  "pytest-django~=4.5",
-  "pytest-mock~=3.11",
+  "pytest-django>=4.5,<5.0",
+  "pytest-mock>=3.11,<4.0",
   "pytest-playwright>=0.4.3,<0.6.0",
-  "pytest-randomly~=3.15",
-  "pytest-xdist~=3.3",
+  "pytest-randomly>=3.15,<4.0",
+  "pytest-xdist>=3.3,<4.0",
 ]
 
 [project.urls]
