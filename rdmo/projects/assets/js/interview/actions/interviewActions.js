@@ -272,7 +272,7 @@ export function storeValue(value) {
     return {type: NOOP}
   } else {
     return (dispatch, getState) => {
-      const valueIndex = getState().interview.values.indexOf(value)
+      const valueIndex = getState().interview.values.map((v) => v.id).indexOf(value.id)
       const valueFile = value.file
       const valueSuccess = value.success
 
