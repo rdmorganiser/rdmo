@@ -268,61 +268,65 @@ export function resolveConditionError(error) {
 export function storeValue(value) {
   const pendingId = `storeValue/${value.attribute}/${value.set_prefix}/${value.set_index}/${value.collection_index}`
 
-  return (dispatch, getState) => {
-    const valueIndex = getState().interview.values.indexOf(value)
-    const valueFile = value.file
-    const valueSuccess = value.success
+  if (value.pending) {
+    return {type: NOOP}
+  } else {
+    return (dispatch, getState) => {
+      const valueIndex = getState().interview.values.indexOf(value)
+      const valueFile = value.file
+      const valueSuccess = value.success
 
-    dispatch(addToPending(pendingId))
-    dispatch(storeValueInit(valueIndex))
+      dispatch(addToPending(pendingId))
+      dispatch(storeValueInit(valueIndex))
 
-    return ValueApi.storeValue(projectId, value)
-      .then((value) => {
-        const page = getState().interview.page
-        const sets = getState().interview.sets
-        const question = page.questions.find((question) => question.attribute === value.attribute)
-        const refresh = question && question.optionsets.some((optionset) => optionset.has_refresh)
+      return ValueApi.storeValue(projectId, value)
+        .then((value) => {
+          const page = getState().interview.page
+          const sets = getState().interview.sets
+          const question = page.questions.find((question) => question.attribute === value.attribute)
+          const refresh = question && question.optionsets.some((optionset) => optionset.has_refresh)
 
-        dispatch(fetchNavigation(page))
-        dispatch(updateProgress())
+          dispatch(fetchNavigation(page))
+          dispatch(updateProgress())
 
-        if (refresh) {
-          // if the refresh flag is set, reload all values for the page,
-          // resolveConditions will be called in fetchValues
-          dispatch(fetchValues(page))
-        } else {
-          dispatch(resolveConditions(page, sets))
-        }
+          if (refresh) {
+            // if the refresh flag is set, reload all values for the page,
+            // resolveConditions will be called in fetchValues
+            dispatch(fetchValues(page))
+          } else {
+            dispatch(resolveConditions(page, sets))
+          }
 
-        // set the success flag and start the timeout to remove it. the flag is actually
-        // the stored timeout, so we can cancel any old timeout before starting the a new
-        // one in order to prolong the time the indicator is show with each save
-        clearTimeout(valueSuccess)
-        value.success = setTimeout(() => {
-          dispatch(updateValue(value, {success: false}, false))
-        }, 1000)
+          // set the success flag and start the timeout to remove it. the flag is actually
+          // the stored timeout, so we can cancel any old timeout before starting the a new
+          // one in order to prolong the time the indicator is show with each save
+          clearTimeout(valueSuccess)
+          value.success = setTimeout(() => {
+            dispatch(updateValue(value, {success: false}, false))
+          }, 1000)
 
-        // check if there is a file or if a filename is set (when the file was just erased)
-        if (isNil(valueFile) && isNil(value.file_name)) {
+          // check if there is a file or if a filename is set (when the file was just erased)
+          if (isNil(valueFile) && isNil(value.file_name)) {
+            dispatch(removeFromPending(pendingId))
+            dispatch(storeValueSuccess(value, valueIndex))
+          } else {
+            // upload file after the value is created
+            return ValueApi.storeFile(projectId, value, valueFile)
+              .then((value) => {
+                dispatch(removeFromPending(pendingId))
+                dispatch(storeValueSuccess(value, valueIndex))
+              })
+              .catch((error) => {
+                dispatch(removeFromPending(pendingId))
+                dispatch(storeValueError(error, valueIndex))
+              })
+          }
+        })
+        .catch((error) => {
           dispatch(removeFromPending(pendingId))
-          dispatch(storeValueSuccess(value, valueIndex))
-        } else {
-          // upload file after the value is created
-          return ValueApi.storeFile(projectId, value, valueFile)
-            .then((value) => {
-              dispatch(removeFromPending(pendingId))
-              dispatch(storeValueSuccess(value, valueIndex))
-            })
-            .catch((error) => {
-              dispatch(removeFromPending(pendingId))
-              dispatch(storeValueError(error, valueIndex))
-            })
-        }
-      })
-      .catch((error) => {
-        dispatch(removeFromPending(pendingId))
-        dispatch(storeValueError(error, valueIndex))
-      })
+          dispatch(storeValueError(error, valueIndex))
+        })
+    }
   }
 }
 
@@ -362,44 +366,48 @@ export function updateValue(value, attrs, store = true) {
 export function deleteValue(value) {
   const pendingId = `deleteValue/${value.id}`
 
-  return (dispatch, getState) => {
-    dispatch(addToPending(pendingId))
-    dispatch(deleteValueInit())
+  if (value.pending) {
+    return {type: NOOP}
+  } else {
+    return (dispatch, getState) => {
+      dispatch(addToPending(pendingId))
+      dispatch(deleteValueInit(value))
 
-    if (isNil(value.id)) {
-      return dispatch(deleteValueSuccess(value))
-    } else {
-      return ValueApi.deleteValue(projectId, value)
-        .then(() => {
-          const page = getState().interview.page
-          const sets = getState().interview.sets
-          const question = page.questions.find((question) => question.attribute === value.attribute)
-          const refresh = question.optionsets.some((optionset) => optionset.has_refresh)
+      if (isNil(value.id)) {
+        return dispatch(deleteValueSuccess(value))
+      } else {
+        return ValueApi.deleteValue(projectId, value)
+          .then(() => {
+            const page = getState().interview.page
+            const sets = getState().interview.sets
+            const question = page.questions.find((question) => question.attribute === value.attribute)
+            const refresh = question.optionsets.some((optionset) => optionset.has_refresh)
 
-          dispatch(fetchNavigation(page))
-          dispatch(updateProgress())
+            dispatch(fetchNavigation(page))
+            dispatch(updateProgress())
 
-          if (refresh) {
-            // if the refresh flag is set, reload all values for the page,
-            // resolveConditions will be called in fetchValues
-            dispatch(fetchValues(page))
-          } else {
-            dispatch(resolveConditions(page, sets))
-          }
+            if (refresh) {
+              // if the refresh flag is set, reload all values for the page,
+              // resolveConditions will be called in fetchValues
+              dispatch(fetchValues(page))
+            } else {
+              dispatch(resolveConditions(page, sets))
+            }
 
-          dispatch(removeFromPending(pendingId))
-          dispatch(deleteValueSuccess(value))
-        })
-        .catch((errors) => {
-          dispatch(removeFromPending(pendingId))
-          dispatch(deleteValueError(errors))
-        })
+            dispatch(removeFromPending(pendingId))
+            dispatch(deleteValueSuccess(value))
+          })
+          .catch((errors) => {
+            dispatch(removeFromPending(pendingId))
+            dispatch(deleteValueError(errors))
+          })
+      }
     }
   }
 }
 
-export function deleteValueInit() {
-  return {type: DELETE_VALUE_INIT}
+export function deleteValueInit(value) {
+  return {type: DELETE_VALUE_INIT, value}
 }
 
 export function deleteValueSuccess(value) {

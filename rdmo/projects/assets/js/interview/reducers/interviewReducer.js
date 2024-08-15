@@ -82,32 +82,38 @@ export default function interviewReducer(state = initialState, action) {
     case FETCH_VALUES_INIT:
     case RESOLVE_CONDITION_INIT:
       return { ...state, errors: [] }
+    case STORE_VALUE_INIT:
+       return {
+        ...state,
+        values: state.values.map((value, valueIndex) => (
+          valueIndex == action.valueIndex ? {...value, error: null, pending: true} : value
+        ))
+      }
+    case DELETE_VALUE_INIT:
+       return {
+        ...state,
+        values: state.values.map((value) => (
+          value == action.value ? {...value, pending: true} : value
+        ))
+      }
+    case DELETE_SET_INIT:
+      return { ...state, errors: [] }
     case FETCH_PAGE_ERROR:
     case FETCH_NAVIGATION_ERROR:
     case FETCH_OPTIONS_ERROR:
     case FETCH_VALUES_ERROR:
     case RESOLVE_CONDITION_ERROR:
       return { ...state, errors: [...state.errors, { actionType: action.type, ...action.error }] }
-    case STORE_VALUE_INIT:
-       return {
-        ...state,
-        values: state.values.map((value, valueIndex) => (
-          valueIndex == action.valueIndex ? {...value, error: null} : value
-        ))
-      }
     case STORE_VALUE_ERROR:
       if (action.valueIndex > -1) {
          return {
           ...state, values: state.values.map((value, valueIndex) => (
-            valueIndex == action.valueIndex ? {...value, error: action.error} : value
+            valueIndex == action.valueIndex ? {...value, error: action.error, pending: false} : value
           ))
         }
       } else {
         return { ...state, errors: [...state.errors, { actionType: action.type, ...action.error }] }
       }
-    case DELETE_VALUE_INIT:
-    case DELETE_SET_INIT:
-      return { ...state, errors: [] }
     case DELETE_VALUE_ERROR:
     case DELETE_SET_ERROR:
       return { ...state, errors: [...state.errors, { actionType: action.type, ...action.error }] }
