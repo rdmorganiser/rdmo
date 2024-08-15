@@ -55,9 +55,9 @@ export default function interviewReducer(state = initialState, action) {
     case CREATE_VALUE:
       return { ...state, values: [...state.values, action.value] }
     case UPDATE_VALUE:
-        return { ...state, values: state.values.map(
-          (value) => value.id == action.value.id ? {...value, ...action.attrs} : value
-        )}
+      return { ...state, values: state.values.map(
+        (value) => value.id == action.value.id ? {...value, ...action.attrs} : value
+      )}
     case STORE_VALUE_SUCCESS:
       if (action.valueIndex > -1) {
         return { ...state, values: state.values.map(
@@ -93,7 +93,7 @@ export default function interviewReducer(state = initialState, action) {
        return {
         ...state,
         values: state.values.map((value) => (
-          value == action.value ? {...value, pending: true} : value
+          value.id == action.value.id ? {...value, pending: true} : value
         ))
       }
     case DELETE_SET_INIT:
