@@ -18,19 +18,20 @@ users = (
 )
 
 view_integration_permission_map = {
-    'owner': [1, 2, 3, 4, 5],
-    'manager': [1, 3, 5],
-    'author': [1, 3, 5],
-    'guest': [1, 3, 5],
-    'api': [1, 2, 3, 4, 5],
-    'site': [1, 2, 3, 4, 5]
+    'owner': [1, 2, 3, 4, 5, 12],
+    'manager': [1, 3, 5, 12],
+    'author': [1, 3, 5, 12],
+    'guest': [1, 3, 5, 12],
+    'user': [12],
+    'api': [1, 2, 3, 4, 5, 12],
+    'site': [1, 2, 3, 4, 5, 12]
 }
 
 add_integration_permission_map = change_integration_permission_map = delete_integration_permission_map = {
-    'owner': [1, 2, 3, 4, 5],
+    'owner': [1, 2, 3, 4, 5, 12],
     'manager': [1, 3, 5],
-    'api': [1, 2, 3, 4, 5],
-    'site': [1, 2, 3, 4, 5]
+    'api': [1, 2, 3, 4, 5, 12],
+    'site': [1, 2, 3, 4, 5, 12]
 }
 
 urlnames = {
@@ -38,8 +39,9 @@ urlnames = {
     'detail': 'v1-projects:project-integration-detail'
 }
 
-projects = [1, 2, 3, 4, 5]
+projects = [1, 2, 3, 4, 5, 12]
 integrations = [1, 2]
+integrations_internal = []
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -54,7 +56,7 @@ def test_list(db, client, username, password, project_id):
         assert response.status_code == 200
 
         if username == 'user':
-            assert sorted([item['id'] for item in response.json()]) == []
+            assert sorted([item['id'] for item in response.json()]) == integrations_internal
         else:
             values_list = Integration.objects.filter(project_id=project_id) \
                                              .order_by('id').values_list('id', flat=True)

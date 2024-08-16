@@ -14,15 +14,6 @@ users = (
     ('anonymous', None),
 )
 
-view_integration_permission_map = {
-    'owner': [1, 2, 3, 4, 5],
-    'manager': [1, 3, 5],
-    'author': [1, 3, 5],
-    'guest': [1, 3, 5],
-    'api': [1, 2, 3, 4, 5],
-    'site': [1, 2, 3, 4, 5]
-}
-
 add_integration_permission_map = change_integration_permission_map = delete_integration_permission_map = {
     'owner': [1, 2, 3, 4, 5],
     'manager': [1, 3, 5],

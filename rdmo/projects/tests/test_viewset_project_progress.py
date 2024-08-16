@@ -16,27 +16,28 @@ users = (
 )
 
 view_progress_permission_map = {
-    'owner': [1, 2, 3, 4, 5, 10],
-    'manager': [1, 3, 5, 7],
-    'author': [1, 3, 5, 8],
-    'guest': [1, 3, 5, 9],
-    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    'owner': [1, 2, 3, 4, 5, 10, 12],
+    'manager': [1, 3, 5, 7, 12],
+    'author': [1, 3, 5, 8, 12],
+    'guest': [1, 3, 5, 9, 12],
+    'user': [12],
+    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 }
 
 change_progress_permission_map = {
-    'owner': [1, 2, 3, 4, 5, 10],
+    'owner': [1, 2, 3, 4, 5, 10, 12],
     'manager': [1, 3, 5, 7],
-    'author': [1, 3, 5, 8],
-    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    'author': [1, 3, 5, 7],
+    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 }
 
 urlnames = {
     'progress': 'v1-projects:project-progress'
 }
 
-projects = [1, 2, 3, 4, 5]
+projects = [1, 2, 3, 4, 5, 12]
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)

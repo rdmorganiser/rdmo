@@ -15,14 +15,15 @@ users = (
 )
 
 leave_project_permission_map = {
-    'owner': [1, 2, 3, 4, 5],
+    'owner': [1, 2, 3, 4, 5, 12],
     'manager': [1, 3],
     'author': [1, 3],
     'guest': [1, 3]
 }
 
-projects = [1, 2, 3, 4, 5]
+projects = [1, 2, 3, 4, 5, 12]
 
+internal_projects = [12]
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
