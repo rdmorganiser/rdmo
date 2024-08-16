@@ -86,4 +86,11 @@ const activateFirstValue = (page, values) => {
   }
 }
 
-export { isDefaultValue, gatherDefaultValues, initValues, initRange, activateFirstValue }
+const compareValues = (a, b) => {
+  return (a.attribute == b.attribute) &&
+         (a.set_prefix == b.set_prefix) &&
+         (a.set_index == b.set_index) &&
+         (a.collection_index == b.collection_index)
+}
+
+export { isDefaultValue, gatherDefaultValues, initValues, initRange, activateFirstValue, compareValues }

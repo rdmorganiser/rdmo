@@ -28,6 +28,11 @@ const PageHead = ({ templates, page, sets, values, currentSet, activateSet, crea
     }
   }
 
+  const handleOpenCreateModal = (event) => {
+    event.preventDefault()
+    openCreateModal()
+  }
+
   const handleCreateSet = (text) => {
     createSet({
       attribute: page.attribute,
@@ -71,7 +76,7 @@ const PageHead = ({ templates, page, sets, values, currentSet, activateSet, crea
                 })
               }
               <li>
-                <a href="#" title={gettext('Add tab')} className="add-set" onClick={openCreateModal}>
+                <a href="" title={gettext('Add tab')} className="add-set" onClick={handleOpenCreateModal}>
                   <i className="fa fa-plus fa-btn"></i> {capitalize(page.verbose_name)}
                 </a>
               </li>

@@ -13,7 +13,7 @@ import { updateLocation } from '../utils/location'
 import { updateOptions } from '../utils/options'
 import { initPage } from '../utils/page'
 import { gatherSets, getDescendants, initSets } from '../utils/set'
-import { activateFirstValue, gatherDefaultValues, initValues } from '../utils/value'
+import { activateFirstValue, gatherDefaultValues, initValues, compareValues } from '../utils/value'
 import { projectId } from '../utils/meta'
 
 import ValueFactory from '../factories/ValueFactory'
@@ -453,9 +453,10 @@ export function createSet(attrs) {
     if (isNil(value)) {
       return createSetSuccess()
     } else {
-      return dispatch(storeValue(value)).then((action) => {
-        if (action.type === STORE_VALUE_SUCCESS) {
-          createSetSuccess(action.value)
+      return dispatch(storeValue(value)).then(() => {
+        const storedValue = getState().interview.values.find((v) => compareValues(v, value))
+        if (!isNil(storedValue)) {
+          createSetSuccess(storedValue)
         }
       })
     }
