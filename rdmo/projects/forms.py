@@ -97,7 +97,7 @@ class ProjectUpdateInformationForm(forms.ModelForm):
 
     class Meta:
         model = Project
-        fields = ('title', 'description', 'visibility')
+        fields = ('title', 'description')
 
 
 class ProjectUpdateVisibilityForm(forms.ModelForm):
