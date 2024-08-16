@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { initRange } from '../../../utils/value'
 
 import QuestionAddValue from '../question/QuestionAddValue'
+import QuestionCopyValue from '../question/QuestionCopyValue'
 import QuestionDefault from '../question/QuestionDefault'
 import QuestionError from '../question/QuestionError'
 import QuestionSuccess from '../question/QuestionSuccess'
@@ -12,7 +13,7 @@ import QuestionRemoveValue from '../question/QuestionRemoveValue'
 
 import RangeInput from './RangeInput'
 
-const RangeWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue }) => {
+const RangeWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue, copyValue }) => {
 
   const handleCreateValue = (value) => {
     initRange(question, value)
@@ -46,6 +47,7 @@ const RangeWidget = ({ question, values, currentSet, disabled, createValue, upda
                       disabled={disabled}
                       deleteValue={deleteValue}
                     />
+                    <QuestionCopyValue question={question} value={value} copyValue={copyValue} />
                     <QuestionDefault question={question} value={value} />
                   </div>
                 }
@@ -61,6 +63,7 @@ const RangeWidget = ({ question, values, currentSet, disabled, createValue, upda
         currentSet={currentSet}
         disabled={disabled}
         createValue={handleCreateValue}
+        copyValue={copyValue}
       />
     </div>
   )
@@ -73,7 +76,8 @@ RangeWidget.propTypes = {
   currentSet: PropTypes.object.isRequired,
   createValue: PropTypes.func.isRequired,
   updateValue: PropTypes.func.isRequired,
-  deleteValue: PropTypes.func.isRequired
+  deleteValue: PropTypes.func.isRequired,
+  copyValue: PropTypes.func.isRequired
 }
 
 export default RangeWidget

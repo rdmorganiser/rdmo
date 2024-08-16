@@ -4,12 +4,14 @@ import { maxBy } from 'lodash'
 
 import { gatherOptions } from '../../../utils/options'
 
+import QuestionCopyValues from '../question/QuestionCopyValues'
 import QuestionError from '../question/QuestionError'
 import QuestionSuccess from '../question/QuestionSuccess'
 
 import CheckboxInput from './CheckboxInput'
 
-const CheckboxWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue }) => {
+const CheckboxWidget = ({ question, values, currentSet, disabled,
+                          createValue, updateValue, deleteValue, copyValue }) => {
 
   const handleCreateValue = (option, additionalInput) => {
     const lastValue = maxBy(values, (v) => v.collection_index)
@@ -69,6 +71,7 @@ const CheckboxWidget = ({ question, values, currentSet, disabled, createValue, u
             </div>
             <div className="buttons">
               <QuestionSuccess value={{ success }} />
+              <QuestionCopyValues question={question} values={values} copyValue={copyValue} />
             </div>
           </div>
         </div>
@@ -84,7 +87,8 @@ CheckboxWidget.propTypes = {
   currentSet: PropTypes.object.isRequired,
   createValue: PropTypes.func.isRequired,
   updateValue: PropTypes.func.isRequired,
-  deleteValue: PropTypes.func.isRequired
+  deleteValue: PropTypes.func.isRequired,
+  copyValue: PropTypes.func.isRequired
 }
 
 export default CheckboxWidget

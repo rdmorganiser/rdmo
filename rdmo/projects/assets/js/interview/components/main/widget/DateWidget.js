@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import QuestionAddValue from '../question/QuestionAddValue'
+import QuestionCopyValue from '../question/QuestionCopyValue'
 import QuestionDefault from '../question/QuestionDefault'
 import QuestionError from '../question/QuestionError'
 import QuestionEraseValue from '../question/QuestionEraseValue'
@@ -10,7 +11,7 @@ import QuestionRemoveValue from '../question/QuestionRemoveValue'
 
 import DateInput from './DateInput'
 
-const DateWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue }) => {
+const DateWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue, copyValue }) => {
   return (
     <div className="interview-widgets">
       {
@@ -33,6 +34,7 @@ const DateWidget = ({ question, values, currentSet, disabled, createValue, updat
                       disabled={disabled}
                       deleteValue={deleteValue}
                     />
+                    <QuestionCopyValue question={question} value={value} copyValue={copyValue} />
                     <QuestionDefault question={question} value={value} />
                   </div>
                 }
@@ -48,6 +50,7 @@ const DateWidget = ({ question, values, currentSet, disabled, createValue, updat
         currentSet={currentSet}
         disabled={disabled}
         createValue={createValue}
+        copyValue={copyValue}
       />
     </div>
   )
@@ -60,7 +63,8 @@ DateWidget.propTypes = {
   currentSet: PropTypes.object.isRequired,
   createValue: PropTypes.func.isRequired,
   updateValue: PropTypes.func.isRequired,
-  deleteValue: PropTypes.func.isRequired
+  deleteValue: PropTypes.func.isRequired,
+  copyValue: PropTypes.func.isRequired
 }
 
 export default DateWidget

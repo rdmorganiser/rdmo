@@ -97,4 +97,10 @@ const compareValues = (a, b) => {
   }
 }
 
-export { isDefaultValue, gatherDefaultValues, initValues, initRange, activateFirstValue, compareValues }
+const isEmptyValue = (value) => {
+  return isNil(value.id) || (
+    isEmpty(value.text) && isNil(value.option) && isEmpty(value.external_id)
+  )
+}
+
+export { isDefaultValue, gatherDefaultValues, initValues, initRange, activateFirstValue, compareValues, isEmptyValue }
