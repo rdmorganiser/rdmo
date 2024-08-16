@@ -87,10 +87,14 @@ const activateFirstValue = (page, values) => {
 }
 
 const compareValues = (a, b) => {
-  return (a.attribute == b.attribute) &&
-         (a.set_prefix == b.set_prefix) &&
-         (a.set_index == b.set_index) &&
-         (a.collection_index == b.collection_index)
+  if (isNil(a.id) || isNil(b.id)) {
+    return (a.attribute == b.attribute) &&
+           (a.set_prefix == b.set_prefix) &&
+           (a.set_index == b.set_index) &&
+           (a.collection_index == b.collection_index)
+  } else {
+    return a.id == b.id
+  }
 }
 
 export { isDefaultValue, gatherDefaultValues, initValues, initRange, activateFirstValue, compareValues }
