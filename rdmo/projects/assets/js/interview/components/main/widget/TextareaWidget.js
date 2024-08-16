@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import QuestionAddValue from '../question/QuestionAddValue'
+import QuestionCopyValue from '../question/QuestionCopyValue'
 import QuestionDefault from '../question/QuestionDefault'
 import QuestionError from '../question/QuestionError'
 import QuestionSuccess from '../question/QuestionSuccess'
@@ -9,7 +10,7 @@ import QuestionRemoveValue from '../question/QuestionRemoveValue'
 
 import TextareaInput from './TextareaInput'
 
-const TextareaWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue }) => {
+const TextareaWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue, copyValue }) => {
   return (
     <div className="interview-widgets">
       {
@@ -31,6 +32,7 @@ const TextareaWidget = ({ question, values, currentSet, disabled, createValue, u
                       disabled={disabled}
                       deleteValue={deleteValue}
                     />
+                    <QuestionCopyValue question={question} value={value} copyValue={copyValue} />
                     <QuestionDefault question={question} value={value} />
                   </div>
                 }
@@ -58,7 +60,8 @@ TextareaWidget.propTypes = {
   currentSet: PropTypes.object.isRequired,
   createValue: PropTypes.func.isRequired,
   updateValue: PropTypes.func.isRequired,
-  deleteValue: PropTypes.func.isRequired
+  deleteValue: PropTypes.func.isRequired,
+  copyValue: PropTypes.func.isRequired
 }
 
 export default TextareaWidget

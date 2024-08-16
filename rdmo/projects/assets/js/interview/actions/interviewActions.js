@@ -13,7 +13,7 @@ import { updateLocation } from '../utils/location'
 import { updateOptions } from '../utils/options'
 import { initPage } from '../utils/page'
 import { gatherSets, getDescendants, initSets } from '../utils/set'
-import { activateFirstValue, gatherDefaultValues, initValues, compareValues } from '../utils/value'
+import { activateFirstValue, gatherDefaultValues, initValues, compareValues, isEmptyValue } from '../utils/value'
 import { projectId } from '../utils/meta'
 
 import ValueFactory from '../factories/ValueFactory'
@@ -360,6 +360,31 @@ export function updateValue(value, attrs, store = true) {
     return storeValue(ValueFactory.update(value, attrs))
   } else {
      return {type: UPDATE_VALUE, value, attrs}
+  }
+}
+
+export function copyValue(value) {
+  return (dispatch, getState) => {
+    const sets = getState().interview.sets
+    const values = getState().interview.values
+
+    sets.filter((set) => (
+      (set.set_prefix == value.set_prefix) &&
+      (set.set_index != value.set_index)
+    )).forEach((set) => {
+      const sibling = values.find((v) => (
+        (v.attribute == value.attribute) &&
+        (v.set_prefix == set.set_prefix) &&
+        (v.set_index == set.set_index) &&
+        (v.collection_index == value.collection_index)
+      ))
+
+      if (isNil(sibling)) {
+        dispatch(storeValue(ValueFactory.create({ ...value, set_index: set.set_index })))
+      } else if (isEmptyValue(sibling)) {
+        dispatch(storeValue(ValueFactory.update(sibling, value)))
+      }
+    })
   }
 }
 
