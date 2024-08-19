@@ -13,12 +13,17 @@ import PageHead from './PageHead'
 
 const Page = ({ config, templates, overview, page, sets, values, fetchPage,
                 createValue, updateValue, deleteValue, copyValue,
-                activateSet, createSet, updateSet, deleteSet }) => {
+                activateSet, createSet, updateSet, deleteSet, copySet }) => {
 
   const currentSetPrefix = ''
-  const currentSetIndex = page.is_collection ? get(config, 'page.currentSetIndex', 0) : 0
-  const currentSet = sets.find((set) => (set.set_prefix == currentSetPrefix && set.set_index == currentSetIndex)) ||
-                     sets.find((set) => (set.set_prefix == currentSetPrefix && set.set_index == 0))  // sanity check
+  let currentSetIndex = page.is_collection ? get(config, 'page.currentSetIndex', 0) : 0
+  let currentSet = sets.find((set) => (set.set_prefix == currentSetPrefix && set.set_index == currentSetIndex))
+
+  // sanity check
+  if (isNil(currentSet)) {
+    currentSetIndex = 0
+    currentSet = sets.find((set) => (set.set_prefix == currentSetPrefix && set.set_index == 0))
+  }
 
   const isManager = (overview.is_superuser || overview.is_editor || overview.is_reviewer)
 
@@ -36,6 +41,7 @@ const Page = ({ config, templates, overview, page, sets, values, fetchPage,
         createSet={createSet}
         updateSet={updateSet}
         deleteSet={deleteSet}
+        copySet={copySet}
       />
       <div className="row">
         {
@@ -108,11 +114,12 @@ Page.propTypes = {
   createValue: PropTypes.func.isRequired,
   updateValue: PropTypes.func.isRequired,
   deleteValue: PropTypes.func.isRequired,
+  copyValue: PropTypes.func.isRequired,
   activateSet: PropTypes.func.isRequired,
   createSet: PropTypes.func.isRequired,
   updateSet: PropTypes.func.isRequired,
   deleteSet: PropTypes.func.isRequired,
-  copyValue: PropTypes.func.isRequired
+  copySet: PropTypes.func.isRequired
 }
 
 export default Page
