@@ -20,7 +20,7 @@
 * Add `user` and `site` to optionset provider plugins (#430)
 * Add short title field for sections and pages for the navigation (#346, #363)
 * Add section progress to the navigation
-* Add button to "leave" an element in the management interface for multi site instances (#825)
+* Add button to add/remove the current site to an element in the management interface for multi site instances (#825)
 * Fix a bug with conditions with non-consecutive set_index (when datasets are created and deleted)
 * Fix a bug with the progress bar when a section has no pages
 * Fix progress action if progress did not change
