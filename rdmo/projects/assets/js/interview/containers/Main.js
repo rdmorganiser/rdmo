@@ -54,6 +54,7 @@ const Main = ({ config, settings, templates, user, project, interview, configAct
               updateSet={interviewActions.updateSet}
               deleteSet={interviewActions.deleteSet}
               copyValue={interviewActions.copyValue}
+              copySet={interviewActions.copySet}
             />
           )
         }

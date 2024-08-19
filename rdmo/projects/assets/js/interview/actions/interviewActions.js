@@ -47,7 +47,10 @@ import {
   CREATE_SET,
   DELETE_SET_INIT,
   DELETE_SET_SUCCESS,
-  DELETE_SET_ERROR
+  DELETE_SET_ERROR,
+  COPY_SET_INIT,
+  COPY_SET_SUCCESS,
+  COPY_SET_ERROR
 } from './actionTypes'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
@@ -459,8 +462,8 @@ export function createSet(attrs) {
     // create a value for the text if the page has an attribute
     const value = isNil(attrs.attribute) ? null : ValueFactory.create(attrs)
 
-    // create an action to be called immediately or after saving the value
-    const createSetSuccess = (value) => {
+    // create a callback function to be called immediately or after saving the value
+    const createSetCallback = (value) => {
       dispatch(activateSet(set))
 
       const state = getState().interview
@@ -476,12 +479,12 @@ export function createSet(attrs) {
     }
 
     if (isNil(value)) {
-      return createSetSuccess()
+      return createSetCallback()
     } else {
       return dispatch(storeValue(value)).then(() => {
         const storedValue = getState().interview.values.find((v) => compareValues(v, value))
         if (!isNil(storedValue)) {
-          createSetSuccess(storedValue)
+          createSetCallback(storedValue)
         }
       })
     }
@@ -558,4 +561,79 @@ export function deleteSetSuccess(set) {
 
 export function deleteSetError(errors) {
   return {type: DELETE_SET_ERROR, errors}
+}
+
+export function copySet(currentSet, attrs) {
+  const pendingId = `copySet/${currentSet.set_prefix}/${currentSet.set_index}`
+
+  return (dispatch, getState) => {
+    dispatch(addToPending(pendingId))
+    dispatch(copySetInit())
+
+    // create a new set
+    const set = SetFactory.create(attrs)
+
+    // create a value for the text if the page has an attribute
+    const value = isNil(attrs.attribute) ? null : ValueFactory.create(attrs)
+
+    // create a callback function to be called immediately or after saving the value
+    const copySetCallback = (setValues) => {
+      dispatch(activateSet(set))
+
+      const state = getState().interview
+
+      const page = state.page
+      const values = [...state.values, ...setValues]
+      const sets = gatherSets(values)
+
+      initSets(sets, page)
+      initValues(sets, values, page)
+
+      return dispatch({type: COPY_SET_SUCCESS, values, sets})
+    }
+
+    if (isNil(value)) {
+      // gather all values for the currentSet and it's descendants
+      const currentValues = getDescendants(getState().interview.values, currentSet)
+
+      // store each value in currentSet with the new set_index
+      return Promise.all(
+        currentValues.filter((currentValue) => !isEmptyValue(currentValue)).map((currentValue) => {
+          const value = {...currentValue}
+          const setPrefixLength = set.set_prefix.split('|').length
+
+          if (value.set_prefix == set.set_prefix) {
+            value.set_index == set.set_index
+          } else {
+            value.set_prefix = value.set_prefix.split('|').reduce((acc, cur, idx) => {
+              return [...acc, (idx == setPrefixLength - 1) ? set.set_index : cur]
+            }, []).join('|')
+          }
+
+          delete value.id
+          return ValueApi.storeValue(projectId, value)
+        })
+      ).then((values) => {
+        dispatch(removeFromPending(pendingId))
+        dispatch(copySetCallback(values))
+      }).catch((errors) => {
+        dispatch(removeFromPending(pendingId))
+        dispatch(copySetError(errors))
+      })
+    } else {
+      console.log(value)
+    }
+  }
+}
+
+export function copySetInit() {
+  return {type: COPY_SET_INIT}
+}
+
+export function copySetSuccess(values, sets) {
+  return {type: COPY_SET_SUCCESS, values, sets}
+}
+
+export function copySetError(errors) {
+  return {type: COPY_SET_ERROR, errors}
 }
