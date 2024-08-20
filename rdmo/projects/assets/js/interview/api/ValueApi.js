@@ -29,8 +29,12 @@ class ValueApi extends BaseApi {
     }
   }
 
-  static deleteSet(projectId, value) {
-    return this.delete(`/api/v1/projects/projects/${projectId}/values/${value.id}/set/`)
+  static copySet(projectId, currentSetValue, setValue) {
+    return this.post(`/api/v1/projects/projects/${projectId}/values/${currentSetValue.id}/set/`, setValue)
+  }
+
+  static deleteSet(projectId, setValue) {
+    return this.delete(`/api/v1/projects/projects/${projectId}/values/${setValue.id}/set/`)
   }
 
 }
