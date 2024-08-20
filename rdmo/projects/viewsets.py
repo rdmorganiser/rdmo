@@ -517,7 +517,10 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
 
         # de-serialize the posted new set value and save it, use the ValueSerializer
         # instead of ProjectValueSerializer, since the latter does not include project
-        set_value_serializer = ValueSerializer(data=request.data)
+        set_value_serializer = ValueSerializer(data={
+            'project': parent_lookup_project,
+            **request.data
+        })
         set_value_serializer.is_valid(raise_exception=True)
         set_value = set_value_serializer.save()
         set_value_data = set_value_serializer.data
