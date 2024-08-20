@@ -5,6 +5,7 @@ import { gatherOptions } from '../../../utils/options'
 
 import QuestionAddValue from '../question/QuestionAddValue'
 import QuestionCopyValue from '../question/QuestionCopyValue'
+import QuestionCopyValues from '../question/QuestionCopyValues'
 import QuestionDefault from '../question/QuestionDefault'
 import QuestionError from '../question/QuestionError'
 import QuestionSuccess from '../question/QuestionSuccess'
@@ -13,7 +14,8 @@ import QuestionRemoveValue from '../question/QuestionRemoveValue'
 
 import RadioInput from './RadioInput'
 
-const RadioWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue, copyValue }) => {
+const RadioWidget = ({ question, values, siblings, currentSet, disabled,
+                       createValue, updateValue, deleteValue, copyValue }) => {
   return (
     <div className="interview-widgets">
       {
@@ -37,7 +39,7 @@ const RadioWidget = ({ question, values, currentSet, disabled, createValue, upda
                       disabled={disabled}
                       deleteValue={deleteValue}
                     />
-                    <QuestionCopyValue question={question} value={value} copyValue={copyValue} />
+                    <QuestionCopyValue question={question} value={value} siblings={siblings} copyValue={copyValue} />
                     <QuestionDefault question={question} value={value} />
                   </div>
                 }
@@ -55,6 +57,12 @@ const RadioWidget = ({ question, values, currentSet, disabled, createValue, upda
         createValue={createValue}
         copyValue={copyValue}
       />
+      <QuestionCopyValues
+        question={question}
+        values={values}
+        siblings={siblings}
+        copyValue={copyValue}
+      />
     </div>
   )
 }
@@ -62,6 +70,7 @@ const RadioWidget = ({ question, values, currentSet, disabled, createValue, upda
 RadioWidget.propTypes = {
   question: PropTypes.object.isRequired,
   values: PropTypes.array.isRequired,
+  siblings: PropTypes.array,
   disabled: PropTypes.bool,
   currentSet: PropTypes.object.isRequired,
   createValue: PropTypes.func.isRequired,

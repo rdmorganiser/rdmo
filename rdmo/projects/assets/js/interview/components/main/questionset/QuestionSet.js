@@ -72,6 +72,11 @@ const QuestionSet = ({ templates, questionset, sets, values, disabled, isManager
                               value.set_prefix == set.set_prefix &&
                               value.set_index == set.set_index
                             ))}
+                            siblings={values.filter((value) => (
+                              value.attribute == element.attribute &&
+                              value.set_prefix == set.set_prefix &&
+                              value.set_index != set.set_index
+                            ))}
                             disabled={disabled}
                             isManager={isManager}
                             currentSet={set}

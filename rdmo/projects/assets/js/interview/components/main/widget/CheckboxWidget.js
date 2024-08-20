@@ -10,7 +10,7 @@ import QuestionSuccess from '../question/QuestionSuccess'
 
 import CheckboxInput from './CheckboxInput'
 
-const CheckboxWidget = ({ question, values, currentSet, disabled,
+const CheckboxWidget = ({ question, values, siblings, currentSet, disabled,
                           createValue, updateValue, deleteValue, copyValue }) => {
 
   const handleCreateValue = (option, additionalInput) => {
@@ -71,7 +71,7 @@ const CheckboxWidget = ({ question, values, currentSet, disabled,
             </div>
             <div className="buttons">
               <QuestionSuccess value={{ success }} />
-              <QuestionCopyValues question={question} values={values} copyValue={copyValue} />
+              <QuestionCopyValues question={question} values={values} siblings={siblings} copyValue={copyValue} />
             </div>
           </div>
         </div>
@@ -83,6 +83,7 @@ const CheckboxWidget = ({ question, values, currentSet, disabled,
 CheckboxWidget.propTypes = {
   question: PropTypes.object.isRequired,
   values: PropTypes.array.isRequired,
+  siblings: PropTypes.array,
   disabled: PropTypes.bool,
   currentSet: PropTypes.object.isRequired,
   createValue: PropTypes.func.isRequired,
