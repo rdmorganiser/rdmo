@@ -14,8 +14,9 @@ from rdmo.views.models import View
 
 ElementType = Union[Section, Page, QuestionSet, Question, Option, Condition]
 
-ATTRIBUTE_RELATED_MODELS_FIELDS = [i for i in Attribute._meta.get_fields() \
-                  if i.is_relation and not i.many_to_many and i.related_model is not Attribute]
+ATTRIBUTE_RELATED_MODELS_FIELDS = [i for i in Attribute._meta.get_fields()
+                                   if i.is_relation and not i.many_to_many
+                                   and i.related_model is not Attribute]
 
 EXAMPLE_URI_PREFIX = 'http://example.com/terms'
 FOO_MERGE_URI_PREFIX = 'http://foo-merge.com/terms'
@@ -27,6 +28,7 @@ VIEW_TEMPLATE_RENDER_VALUE = Template("{% render_value '$new_uri' %}")
 EXAMPLE_VIEW_URI = Attribute.build_uri(EXAMPLE_URI_PREFIX, VIEW_TEMPLATE_URI_PATH)
 NEW_MERGE_URI_PREFIXES = [FOO_MERGE_URI_PREFIX, BAR_MERGE_URI_PREFIX]
 
+
 def _prepare_instance_for_copy(instance, uri_prefix=None, uri_path=None):
     instance.pk = None
     instance.id = None
@@ -37,12 +39,14 @@ def _prepare_instance_for_copy(instance, uri_prefix=None, uri_path=None):
         instance.uri_path = uri_path
     return instance
 
+
 def _get_queryset(related_field, attribute=None):
     model = related_field.related_model
     if model is View:
         return model.objects.filter(**{"template__contains": attribute.path})
     lookup_field = related_field.remote_field.name
     return model.objects.filter(**{lookup_field: attribute})
+
 
 def create_new_uris_with_uri_prefix_for_template(new_uri_prefix: str) -> List[str]:
     new_uris = []
@@ -52,10 +56,8 @@ def create_new_uris_with_uri_prefix_for_template(new_uri_prefix: str) -> List[st
         new_uris.append(new_uri)
     return new_uris
 
+
 def create_copy_of_view_that_uses_new_attribute(db, new_prefixes: List[str]):
-    # TODO search in View.template for the attribute uri
-    # example_uri = f"{EXAMPLE_URI_PREFIX}/{EXAMPLE_VIEW_URI_PATH}"
-    # source = Attribute.objects.get(uri=example_uri)
     qs = View.objects.filter(**{"uri__contains": EXAMPLE_VIEW_URI_PATH}).all()
     if not qs.exists():
         raise ValueError("Views for tests should exist here.")
@@ -71,6 +73,7 @@ def create_copy_of_view_that_uses_new_attribute(db, new_prefixes: List[str]):
                 new_template += VIEW_TEMPLATE_RENDER_VALUE.substitute(new_uri=uri)
             instance.template = new_template
             instance.save()
+
 
 def create_copies_of_related_models_with_new_uri_prefix(new_prefixes):
     for related_model_field in ATTRIBUTE_RELATED_MODELS_FIELDS:
@@ -101,8 +104,8 @@ def create_copies_of_attributes_with_new_uri_prefix(example_attributes, new_pref
             attribute = _prepare_instance_for_copy(attribute, uri_prefix=new_prefix)
             attribute.save()
 
-def get_related_affected_instances(attribute) -> list:
 
+def get_related_affected_instances(attribute) -> list:
     related_qs = []
     for related_field in ATTRIBUTE_RELATED_MODELS_FIELDS:
         model = related_field.related_model
@@ -121,16 +124,65 @@ def _create_new_merge_attributes_and_views(db, settings):
     create_copy_of_view_that_uses_new_attribute(db, NEW_MERGE_URI_PREFIXES)
 
 
+@pytest.mark.usefixtures("_create_new_merge_attributes_and_views")
+def test_command_merge_attributes_fails_correctly(db, settings):
+    first_parent_attribute = Attribute.objects.exclude(parent=None).first().parent
+    first_leaf_attribute = None
+    for attribute in Attribute.objects.all():
+        if not attribute.get_descendants().exists():
+            first_leaf_attribute = attribute
+            break
+
+    source_and_target_are_the_same = {
+        'source': first_parent_attribute,
+        'target': first_parent_attribute
+    }
+    stdout, stderr = io.StringIO(), io.StringIO()
+    with pytest.raises(CommandError):
+        call_command('merge_attributes',
+                     stdout=stdout, stderr=stderr, **source_and_target_are_the_same)
+
+    source_has_descendants = {
+        'source': first_parent_attribute,
+        'target': first_leaf_attribute
+    }
+    stdout, stderr = io.StringIO(), io.StringIO()
+    with pytest.raises(CommandError):
+        call_command('merge_attributes',
+                     stdout=stdout, stderr=stderr, **source_has_descendants)
+
+    source_does_not_exist = {
+        'source': 'http://uri-does-not-exist-1.com',
+        'target': first_leaf_attribute
+    }
+    stdout, stderr = io.StringIO(), io.StringIO()
+    with pytest.raises(CommandError):
+        call_command('merge_attributes',
+                     stdout=stdout, stderr=stderr, **source_does_not_exist)
+
+    target_does_not_exist = {
+        'source': first_leaf_attribute,
+        'target': 'http://uri-does-not-exist-1.com',
+    }
+    stdout, stderr = io.StringIO(), io.StringIO()
+    with pytest.raises(CommandError):
+        call_command('merge_attributes',
+                     stdout=stdout, stderr=stderr, **target_does_not_exist)
+
+
 @pytest.mark.parametrize('uri_prefix', NEW_MERGE_URI_PREFIXES)
 @pytest.mark.usefixtures("_create_new_merge_attributes_and_views")
 def test_that_the_freshly_created_merge_attributes_are_present(db, uri_prefix):
-    merge_attributes = Attribute.objects.filter(uri_prefix=uri_prefix).all()
-    assert len(merge_attributes) > 2
+    merge_attributes_uris = Attribute.objects.filter(
+        uri_prefix=uri_prefix).all().values_list(
+        'uri', flat=True).distinct()
+    assert len(merge_attributes_uris) > 2
     unique_uri_prefixes = set(Attribute.objects.values_list("uri_prefix", flat=True))
     # test that the currently selected uri_prefix is in db
     assert uri_prefix in unique_uri_prefixes
 
-    for attribute in merge_attributes:
+    for attribute_uri in merge_attributes_uris:
+        attribute = Attribute.objects.get(uri=attribute_uri)
         original_attribute = Attribute.objects.get(uri_prefix=EXAMPLE_URI_PREFIX, path=attribute.path)
         original_models_qs = [_get_queryset(i, attribute=original_attribute) for i in ATTRIBUTE_RELATED_MODELS_FIELDS]
         if not any(len(i) > 0 for i in original_models_qs):
@@ -157,15 +209,17 @@ def test_that_the_freshly_created_merge_attributes_are_present(db, uri_prefix):
 @pytest.mark.parametrize('view', [False, True])
 @pytest.mark.usefixtures("_create_new_merge_attributes_and_views")
 def test_command_merge_attributes(db, settings, source_uri_prefix, save, delete, view):
-    source_attributes = Attribute.objects.filter(uri_prefix=source_uri_prefix).all()
-    assert len(source_attributes) > 2
+    source_attribute_uris = Attribute.objects.filter(
+        uri_prefix=source_uri_prefix).all().values_list(
+        'uri', flat=True).distinct()
+    assert len(source_attribute_uris) > 2
     unique_uri_prefixes = set(Attribute.objects.values_list("uri_prefix", flat=True))
     # test that the currently selected uri_prefix is in db
     assert source_uri_prefix in unique_uri_prefixes
 
-    for source_attribute in source_attributes:
+    for source_attribute_uri in source_attribute_uris:
+        source_attribute = Attribute.objects.get(uri=source_attribute_uri)
         target_attribute = Attribute.objects.get(uri_prefix=EXAMPLE_URI_PREFIX, path=source_attribute.path)
-        stdout, stderr = io.StringIO(), io.StringIO()
         before_source_related_qs = get_related_affected_instances(source_attribute)
         # before_target_related_qs = get_related_affected_instances(target_attribute)
 
@@ -173,20 +227,17 @@ def test_command_merge_attributes(db, settings, source_uri_prefix, save, delete,
                           'target': target_attribute.uri,
                           'save': save, 'delete': delete, 'view': view}
         failed = False
+
         if source_attribute.get_descendants():
-            with pytest.raises(CommandError):
-                call_command('merge_attributes',
-                             stdout=stdout, stderr=stderr, **command_kwargs)
-            failed = True
-        elif target_attribute.get_descendants():
+            stdout, stderr = io.StringIO(), io.StringIO()
             with pytest.raises(CommandError):
                 call_command('merge_attributes',
                              stdout=stdout, stderr=stderr, **command_kwargs)
             failed = True
         else:
+            stdout, stderr = io.StringIO(), io.StringIO()
             call_command('merge_attributes',
                          stdout=stdout, stderr=stderr, **command_kwargs)
-
 
         if delete and not failed:
             # assert that the source attribute was deleted
@@ -194,7 +245,6 @@ def test_command_merge_attributes(db, settings, source_uri_prefix, save, delete,
                 Attribute.objects.get(id=source_attribute.id)
         else:
             assert Attribute.objects.get(id=source_attribute.id)
-
 
         after_source_related_qs = get_related_affected_instances(source_attribute)
         after_target_related_qs = get_related_affected_instances(target_attribute)
@@ -233,7 +283,7 @@ def test_command_merge_attributes_for_views(db, settings, source_uri_prefix, sav
                       'save': save, 'delete': delete, 'view': view}
     failed = False
     call_command('merge_attributes',
-                     stdout=stdout, stderr=stderr, **command_kwargs)
+                 stdout=stdout, stderr=stderr, **command_kwargs)
 
     if delete and not failed:
         # assert that the source attribute was deleted
@@ -252,21 +302,19 @@ def test_command_merge_attributes_for_views(db, settings, source_uri_prefix, sav
     if save and not failed:
         pass
 
-
     if (save and not failed and view
             and VIEW_TEMPLATE_URI_PATH in source_attribute_uri):
-            # assert that the attribute in the view template was replaced as well
-            # the EXAMPLE_VIEW_URI is from the target attribute
-            # uri_prefix = source_uri_prefix, uri_path = EXAMPLE_VIEW_URI_PATH
-            assert not after_source_related_view_uri_qs.exists()
-            assert after_target_related_view_uri_qs.exists()
+        # assert that the attribute in the view template was replaced as well
+        # the EXAMPLE_VIEW_URI is from the target attribute
+        # uri_prefix = source_uri_prefix, uri_path = EXAMPLE_VIEW_URI_PATH
+        assert not after_source_related_view_uri_qs.exists()
+        assert after_target_related_view_uri_qs.exists()
 
-            if (before_source_related_view_uri_templates and
-                    source_attribute_uri != target_attribute_uri):
-
-                after_occurrences = list(filter(lambda x:target_attribute_uri in x,
-                                               after_target_related_view_uri_qs.first().template.splitlines()))
-                assert len(after_occurrences) == 1
-                before_occurrences = list(filter(lambda x: target_attribute_uri in x,
-                                                before_source_related_view_uri_qs.first().template.splitlines()))
-                assert len(before_occurrences) == 0
+        if (before_source_related_view_uri_templates and
+                source_attribute_uri != target_attribute_uri):
+            after_occurrences = list(filter(lambda x: target_attribute_uri in x,
+                                            after_target_related_view_uri_qs.first().template.splitlines()))
+            assert len(after_occurrences) == 1
+            before_occurrences = list(filter(lambda x: target_attribute_uri in x,
+                                             before_source_related_view_uri_qs.first().template.splitlines()))
+            assert len(before_occurrences) == 0

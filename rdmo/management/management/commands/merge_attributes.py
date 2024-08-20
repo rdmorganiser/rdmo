@@ -55,14 +55,15 @@ class Command(BaseCommand):
         verbosity = options.get('verbosity', 1)
 
         source = get_valid_attribute(source, message_name='Source')
-        target = get_valid_attribute(target, message_name='Target')
+        target = get_valid_attribute(target, message_name='Target', allow_descendants=True)
 
         if source == target:
             raise CommandError("Source and Target attribute are the same, nothing to do.")
 
         results = {}
-        related_model_fields = [i for i in Attribute._meta.get_fields() \
-                          if i.is_relation and not i.many_to_many and i.related_model is not Attribute]
+        related_model_fields = [i for i in Attribute._meta.get_fields()
+                                if i.is_relation and not i.many_to_many
+                                and i.related_model is not Attribute]
 
         for related_field in related_model_fields:
             replaced_model_result = replace_attribute_on_related_model_instances(related_field, source=source,
@@ -87,7 +88,7 @@ class Command(BaseCommand):
             affected_projects_msg = make_affected_projects_message(results)
             affected_views_msg = make_affected_views_message(results)
             if save_changes:
-                info_msg = f"Successfully replaced source attribute {source.uri} with {target.uri} on affected elements." # noqa: E501
+                info_msg = f"Successfully replaced source attribute {source.uri} with {target.uri} on affected elements."  # noqa: E501
                 if update_views:
                     info_msg += f"\nSuccessfully replaced source attribute {source.uri} in affected View templates."
                 self.stdout.write(self.style.SUCCESS(info_msg))
@@ -98,13 +99,12 @@ class Command(BaseCommand):
                 ))
                 if not all_instances_were_updated:
                     self.stdout.write(
-                        self.style.NOTICE(f"Source attribute {source.uri} was deleted without moving affected elements to the target attribute.") # noqa: E501
+                        self.style.NOTICE(f"Source attribute {source.uri} was deleted without moving affected elements to the target attribute.")  # noqa: E501
                     )
             if not save_changes and not delete_source:
                 self.stdout.write(self.style.SUCCESS(
-                    f"Nothing was changed. Displaying affected elements for replacement of source attribute {source.uri} with target {target.uri}." # noqa: E501
+                    f"Nothing was changed. Displaying affected elements for replacement of source attribute {source.uri} with target {target.uri}."  # noqa: E501
                 ))
-
 
             self.stdout.write(self.style.SUCCESS(
                 f"{affect_elements_msg}\n"
@@ -118,22 +118,34 @@ class Command(BaseCommand):
                 self.stdout.write(affected_instances_msg)
 
 
-def get_valid_attribute(attribute, message_name=''):
-    if isinstance(attribute, str):
-        attribute_uri = attribute
-        try:
-            attribute = Attribute.objects.get(uri=attribute_uri)
-        except Attribute.DoesNotExist as e:
-            raise CommandError(f"{message_name} attribute {attribute_uri} does not exist.") from e
-        except Attribute.MultipleObjectsReturned as e:
-            raise CommandError(f"{message_name} attribute {attribute_uri} returns multiple objects.") from e
-    elif not isinstance(attribute, Attribute):
-        raise CommandError(f"{message_name} argument should be of type Attribute.")
+def get_attribute_from_uri(attribute_uri, message_name=None):
+    try:
+        attribute = Attribute.objects.get(uri=attribute_uri)
+        return attribute
+    except Attribute.DoesNotExist as e:
+        raise CommandError(f"{message_name} attribute {attribute_uri} does not exist.") from e
+    except Attribute.MultipleObjectsReturned as e:
+        raise CommandError(f"{message_name} attribute {attribute_uri} returns multiple objects.") from e
 
-    if attribute.get_descendants():
-        raise CommandError(f"{message_name} attribute '{attribute}' with descendants is not supported.")
+
+def validate_attribute(attribute, message_name=None, allow_descendants=None):
+    if not isinstance(attribute, Attribute):
+        raise CommandError(f"{message_name} attribute argument should be of type Attribute.")
+
+    if not allow_descendants:
+        if attribute.get_descendants().exists():
+            raise CommandError(f"{message_name} attribute '{attribute.uri}' with descendants is not supported.")
+
+
+def get_valid_attribute(attribute, message_name=None, allow_descendants=None):
+    message_name = message_name or ''
+    if isinstance(attribute, str):
+        attribute = get_attribute_from_uri(attribute, message_name=message_name)
+
+    validate_attribute(attribute, message_name=message_name, allow_descendants=allow_descendants)
 
     return attribute
+
 
 def replace_attribute_on_related_model_instances(related_field, source=None, target=None, save_changes=False):
     model = related_field.related_model
@@ -155,7 +167,6 @@ def replace_attribute_on_related_model_instances(related_field, source=None, tar
                 "Attribute %s on %s(id=%s) was replaced with %s.",
                 source.uri, model._meta.verbose_name_raw, instance.id, target.uri
             )
-
 
         replacement_results.append({
             'model_name': model._meta.verbose_name_raw,
@@ -191,9 +202,11 @@ def replace_attribute_in_view_template(source=None, target=None, save_changes=Fa
         })
     return replacement_results
 
+
 def get_affected_projects_from_results(results):
     value_results = results.get(Value._meta.verbose_name_raw, [])
     return list({i['instance'].project for i in value_results})
+
 
 def make_affected_elements_counts_message(results):
     element_counts = ", ".join([f"{k.capitalize()}({len(v)})" for k, v in results.items() if v])
@@ -213,6 +226,7 @@ def make_affected_projects_message(results):
     for project in affected_projects:
         msg += f"\n\t{project.id}\t{project}"
     return msg
+
 
 def make_affected_views_message(results):
     view_results = results.get(View._meta.verbose_name_raw, [])
