@@ -563,7 +563,7 @@ export function deleteSetError(errors) {
   return {type: DELETE_SET_ERROR, errors}
 }
 
-export function copySet(currentSet, attrs) {
+export function copySet(currentSet, currentSetValue, attrs) {
   const pendingId = `copySet/${currentSet.set_prefix}/${currentSet.set_index}`
 
   return (dispatch, getState) => {
@@ -592,18 +592,19 @@ export function copySet(currentSet, attrs) {
       return dispatch({type: COPY_SET_SUCCESS, values, sets})
     }
 
+    let promise
     if (isNil(value)) {
       // gather all values for the currentSet and it's descendants
       const currentValues = getDescendants(getState().interview.values, currentSet)
 
       // store each value in currentSet with the new set_index
-      return Promise.all(
+      promise = Promise.all(
         currentValues.filter((currentValue) => !isEmptyValue(currentValue)).map((currentValue) => {
           const value = {...currentValue}
           const setPrefixLength = set.set_prefix.split('|').length
 
           if (value.set_prefix == set.set_prefix) {
-            value.set_index == set.set_index
+            value.set_index = set.set_index
           } else {
             value.set_prefix = value.set_prefix.split('|').reduce((acc, cur, idx) => {
               return [...acc, (idx == setPrefixLength - 1) ? set.set_index : cur]
@@ -613,16 +614,18 @@ export function copySet(currentSet, attrs) {
           delete value.id
           return ValueApi.storeValue(projectId, value)
         })
-      ).then((values) => {
-        dispatch(removeFromPending(pendingId))
-        dispatch(copySetCallback(values))
-      }).catch((errors) => {
-        dispatch(removeFromPending(pendingId))
-        dispatch(copySetError(errors))
-      })
+      )
     } else {
-      console.log(value)
+      promise = ValueApi.copySet(projectId, currentSetValue, value)
     }
+
+    return promise.then((values) => {
+      dispatch(removeFromPending(pendingId))
+      dispatch(copySetCallback(values))
+    }).catch((errors) => {
+      dispatch(removeFromPending(pendingId))
+      dispatch(copySetError(errors))
+    })
   }
 }
 
