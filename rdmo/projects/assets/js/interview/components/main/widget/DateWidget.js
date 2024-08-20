@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import QuestionAddValue from '../question/QuestionAddValue'
 import QuestionCopyValue from '../question/QuestionCopyValue'
+import QuestionCopyValues from '../question/QuestionCopyValues'
 import QuestionDefault from '../question/QuestionDefault'
 import QuestionError from '../question/QuestionError'
 import QuestionEraseValue from '../question/QuestionEraseValue'
@@ -11,7 +12,7 @@ import QuestionRemoveValue from '../question/QuestionRemoveValue'
 
 import DateInput from './DateInput'
 
-const DateWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue, copyValue }) => {
+const DateWidget = ({ question, values, siblings, currentSet, disabled, createValue, updateValue, deleteValue, copyValue }) => {
   return (
     <div className="interview-widgets">
       {
@@ -34,7 +35,7 @@ const DateWidget = ({ question, values, currentSet, disabled, createValue, updat
                       disabled={disabled}
                       deleteValue={deleteValue}
                     />
-                    <QuestionCopyValue question={question} value={value} copyValue={copyValue} />
+                    <QuestionCopyValue question={question} value={value} siblings={siblings} copyValue={copyValue} />
                     <QuestionDefault question={question} value={value} />
                   </div>
                 }
@@ -52,6 +53,12 @@ const DateWidget = ({ question, values, currentSet, disabled, createValue, updat
         createValue={createValue}
         copyValue={copyValue}
       />
+      <QuestionCopyValues
+        question={question}
+        values={values}
+        siblings={siblings}
+        copyValue={copyValue}
+      />
     </div>
   )
 }
@@ -59,6 +66,7 @@ const DateWidget = ({ question, values, currentSet, disabled, createValue, updat
 DateWidget.propTypes = {
   question: PropTypes.object.isRequired,
   values: PropTypes.array.isRequired,
+  siblings: PropTypes.array,
   disabled: PropTypes.bool,
   currentSet: PropTypes.object.isRequired,
   createValue: PropTypes.func.isRequired,

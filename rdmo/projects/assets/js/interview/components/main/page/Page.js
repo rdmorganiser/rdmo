@@ -72,6 +72,11 @@ const Page = ({ config, templates, overview, page, sets, values, fetchPage,
                       value.set_prefix == currentSetPrefix &&
                       value.set_index == currentSetIndex
                     ))}
+                    siblings={values.filter((value) => (
+                      value.attribute == element.attribute &&
+                      value.set_prefix == currentSetPrefix &&
+                      value.set_index != currentSetIndex
+                    ))}
                     disabled={overview.read_only}
                     isManager={isManager}
                     currentSet={currentSet}

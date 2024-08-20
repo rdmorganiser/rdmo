@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import QuestionAddValue from '../question/QuestionAddValue'
 import QuestionCopyValue from '../question/QuestionCopyValue'
+import QuestionCopyValues from '../question/QuestionCopyValues'
 import QuestionDefault from '../question/QuestionDefault'
 import QuestionError from '../question/QuestionError'
 import QuestionRemoveValue from '../question/QuestionRemoveValue'
@@ -10,7 +11,7 @@ import QuestionSuccess from '../question/QuestionSuccess'
 
 import TextInput from './TextInput'
 
-const TextWidget = ({ question, values, currentSet, disabled,
+const TextWidget = ({ question, values, siblings, currentSet, disabled,
                       createValue, updateValue, deleteValue, copyValue }) => {
   return (
     <div className="interview-widgets">
@@ -33,7 +34,7 @@ const TextWidget = ({ question, values, currentSet, disabled,
                       disabled={disabled}
                       deleteValue={deleteValue}
                     />
-                    <QuestionCopyValue question={question} value={value} copyValue={copyValue} />
+                    <QuestionCopyValue question={question} value={value} siblings={siblings} copyValue={copyValue} />
                     <QuestionDefault question={question} value={value} />
                   </div>
                 }
@@ -50,6 +51,12 @@ const TextWidget = ({ question, values, currentSet, disabled,
         disabled={disabled}
         createValue={createValue}
       />
+      <QuestionCopyValues
+        question={question}
+        values={values}
+        siblings={siblings}
+        copyValue={copyValue}
+      />
     </div>
   )
 }
@@ -57,6 +64,7 @@ const TextWidget = ({ question, values, currentSet, disabled,
 TextWidget.propTypes = {
   question: PropTypes.object.isRequired,
   values: PropTypes.array.isRequired,
+  siblings: PropTypes.array,
   disabled: PropTypes.bool,
   currentSet: PropTypes.object.isRequired,
   createValue: PropTypes.func.isRequired,

@@ -3,10 +3,13 @@ import PropTypes from 'prop-types'
 
 import { isEmptyValue } from '../../../utils/value'
 
-const QuestionCopyValue = ({ question, value, copyValue }) => {
+const QuestionCopyValue = ({ question, value, siblings, copyValue }) => {
   return (
-    question.set_collection && !isEmptyValue(value) && (
-      <button className="btn btn-link btn-apply-to-all" onClick={() => copyValue(value)}
+    question.set_collection &&
+    !question.is_collection &&
+    !isEmptyValue(value) &&
+    siblings.some((value) => isEmptyValue(value)) && (
+      <button className="btn btn-link btn-apply-to-all" onClick={() => copyValue(value, siblings)}
               title={gettext('Apply this answer to all tabs where this question is empty')}>
         <i className="fa fa-arrow-circle-right fa-btn"></i>
       </button>
@@ -17,6 +20,7 @@ const QuestionCopyValue = ({ question, value, copyValue }) => {
 QuestionCopyValue.propTypes = {
   question: PropTypes.object.isRequired,
   value: PropTypes.object.isRequired,
+  siblings: PropTypes.object.isRequired,
   copyValue: PropTypes.func.isRequired
 }
 
