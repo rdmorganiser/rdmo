@@ -6,12 +6,12 @@ import useModal from 'rdmo/core/assets/js/hooks/useModal'
 
 import QuestionSetDeleteModal from './QuestionSetDeleteModal'
 
-const QuestionAddSet = ({ questionset, set, deleteSet }) => {
+const QuestionRemoveSet = ({ questionset, currentSet, deleteSet }) => {
 
   const {show: showDeleteModal, open: openDeleteModal, close: closeDeleteModal} = useModal()
 
   const handleDeleteSet = () => {
-    deleteSet(set)
+    deleteSet(currentSet)
     closeDeleteModal()
   }
 
@@ -31,10 +31,10 @@ const QuestionAddSet = ({ questionset, set, deleteSet }) => {
   )
 }
 
-QuestionAddSet.propTypes = {
+QuestionRemoveSet.propTypes = {
   questionset: PropTypes.object.isRequired,
-  set: PropTypes.object.isRequired,
+  currentSet: PropTypes.object.isRequired,
   deleteSet: PropTypes.func.isRequired
 }
 
-export default QuestionAddSet
+export default QuestionRemoveSet
