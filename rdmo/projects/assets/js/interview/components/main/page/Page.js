@@ -61,6 +61,7 @@ const Page = ({ config, templates, overview, page, sets, values, fetchPage,
                     createSet={createSet}
                     updateSet={updateSet}
                     deleteSet={deleteSet}
+                    copySet={copySet}
                     createValue={createValue}
                     updateValue={updateValue}
                     deleteValue={deleteValue}
