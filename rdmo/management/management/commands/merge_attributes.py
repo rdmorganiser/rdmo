@@ -118,7 +118,7 @@ class Command(BaseCommand):
                 self.stdout.write(affected_instances_msg)
 
 
-def get_attribute_from_uri(attribute_uri, message_name=None):
+def get_attribute_from_uri(attribute_uri, message_name=''):
     try:
         attribute = Attribute.objects.get(uri=attribute_uri)
         return attribute
@@ -128,17 +128,15 @@ def get_attribute_from_uri(attribute_uri, message_name=None):
         raise CommandError(f"{message_name} attribute {attribute_uri} returns multiple objects.") from e
 
 
-def validate_attribute(attribute, message_name=None, allow_descendants=None):
+def validate_attribute(attribute, message_name='', allow_descendants=None):
     if not isinstance(attribute, Attribute):
         raise CommandError(f"{message_name} attribute argument should be of type Attribute.")
 
-    if not allow_descendants:
-        if attribute.get_descendants().exists():
-            raise CommandError(f"{message_name} attribute '{attribute.uri}' with descendants is not supported.")
+    if not allow_descendants and attribute.get_descendants().exists():
+        raise CommandError(f"{message_name} attribute '{attribute.uri}' with descendants is not supported.")
 
 
-def get_valid_attribute(attribute, message_name=None, allow_descendants=None):
-    message_name = message_name or ''
+def get_valid_attribute(attribute, message_name='', allow_descendants=None):
     if isinstance(attribute, str):
         attribute = get_attribute_from_uri(attribute, message_name=message_name)
 
