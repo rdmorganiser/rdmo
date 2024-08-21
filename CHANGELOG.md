@@ -1,5 +1,39 @@
 # Changelog
 
+## [RDMO 2.2.0](https://github.com/rdmorganiser/rdmo/compare/2.1.3...2.2.0) (Jul 25, 2024)
+
+* Add new projects overview (#865, #355)
+  * Projects are now displayed in an interactive table which can be filtered and ordered
+  * The projects API is now paginated (new setting PROJECT_TABLE_PAGE_SIZE)
+* Add new import interface to management (#469, #468, #465, )
+  * Show detailed information what is new and what changed
+  * Show a summary of warnings and errors at the top of the page
+* Add validation depending on the `value_type` configured for the question
+  * Validation needs to be enabled using `PROJECT_VALUES_VALIDATION = True`
+  * Configuration can be adjusted using settings for each value_type
+* Enable markdown rendering for titles and texts of elements
+* All parent attributes are now added to the full XML export
+* Use only available catalogs for project import by users (#455)
+* Add workaround for conflict validation for checkboxes (#903)
+* Add `merge_attributes` management script to move related items from one attribute to another (#990)
+* Add `join_values_inline` tag for views (#964)
+* Add `user` and `site` to optionset provider plugins (#430)
+* Add short title field for sections and pages for the navigation (#346, #363)
+* Add section progress to the navigation
+* Add button to add/remove the current site to an element in the management interface for multi site instances (#825)
+* Fix a bug with conditions with non-consecutive set_index (when datasets are created and deleted)
+* Fix a bug with the progress bar when a section has no pages
+* Fix progress action if progress did not change
+* Fix bugs with element copy in management (#995, #980)
+* Fix typos and missing translations on buttons in management interface (#1020, #944)
+* Fix link target for links in management interface (#1007)
+* Fix textarea resizing (#1021)
+* Fix export links in management (#915)
+* Fix typos (#1001)
+* Remove local hosts from ALLOWED_HOSTS settings
+* Improve admin interface (#942, #918)
+* Update default home page
+
 ## [RDMO 2.1.3](https://github.com/rdmorganiser/rdmo/compare/2.1.2...2.1.3) (Feb 13, 2024)
 
 * Fix the migration of options with additional_input (#912)
