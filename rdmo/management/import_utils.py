@@ -3,6 +3,7 @@ from collections import defaultdict
 from dataclasses import asdict
 from typing import Dict, Set, Tuple
 
+from django.core.exceptions import FieldDoesNotExist
 from django.db.models import Model
 
 from rest_framework.exceptions import ValidationError
@@ -94,16 +95,35 @@ def apply_field_values(instance, element, import_helper, original) -> None:
 
 def validate_with_serializer_field(instance, field_name, value):
     """Validate and convert a value using the corresponding DRF serializer field."""
-    model_field = instance._meta.get_field(field_name)
-    drf_field_class = ModelSerializer.serializer_field_mapping.get(type(model_field))
 
-    if drf_field_class is not None:
-        try:
-            drf_field = drf_field_class()
-            return drf_field.to_internal_value(value)
-        except (ValidationError, TypeError, ValueError) as e:
-            logger.debug("Cannot convert '%s' for field '%s' using '%s': %s",
-                         value, field_name, drf_field_class.__name__, str(e))
+    # Ensure the field exists on the model
+    try:
+        model_field = instance._meta.get_field(field_name)
+    except FieldDoesNotExist:
+        logger.debug("Field '%s' does not exist on the model.", field_name)
+        return None
+
+    # Use ModelSerializer's field building logic
+    serializer = ModelSerializer(instance=instance)
+    try:
+        field_class, field_kwargs = serializer.build_standard_field(field_name, model_field)
+    except (KeyError, AttributeError):
+        logger.info("Could not build a field for '%s'.", field_name)
+        return None
+
+    # Handle None values and null fields
+    if value is None and field_kwargs.get('allow_null', False):
+        return value  # None is allowed, no need to validate further
+
+    try:
+        # Instantiate the field with the kwargs and run validation
+        drf_field = field_class(**field_kwargs)
+        return drf_field.run_validation(value)
+    except ValidationError as e:
+        # Log only if the value is truly invalid
+        if value is not None:
+            logger.info("Cannot convert '%s' for field '%s' using '%s': %s",
+                         value, field_name, field_class.__name__, str(e))
     return None
 
 
