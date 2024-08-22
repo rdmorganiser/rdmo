@@ -83,6 +83,24 @@ a {
     &.disabled {
         cursor: not-allowed;
     }
+
+    &.fa {
+        text-decoration: none !important;
+
+        &:visited,
+        &:hover,
+        &:focus {
+            text-decoration: none !important;
+        }
+    }
+}
+
+.btn-link {
+    color: $link-color;
+
+    &:hover {
+        color: $link-color-hover;
+    }
 }
 
 code {
