@@ -140,21 +140,27 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
 
       return (
         <div className="icon-container">
-          {(isProjectManager || isProjectOwner || isManager) &&
           <Link
-            href={`${rowUrl}/update/`}
-            className="element-link fa fa-pencil"
-            title={row.title}
-            onClick={() => window.location.href = `${rowUrl}/update/${params}`}
+            href={`${rowUrl}/copy/`}
+            className="fa fa-copy"
+            title={gettext('Copy project')}
+            onClick={() => window.location.href = `${rowUrl}/copy/${params}`}
           />
+          {(isProjectManager || isProjectOwner || isManager) &&
+            <Link
+              href={`${rowUrl}/update/`}
+              className="fa fa-pencil"
+              title={row.title}
+              onClick={() => window.location.href = `${rowUrl}/update/${params}`}
+            />
           }
           {(isProjectOwner || isManager) &&
-          <Link
-            href={`${rowUrl}/delete/`}
-            className="element-link fa fa-trash"
-            title={row.title}
-            onClick={() => window.location.href = `${rowUrl}/delete/${params}`}
-          />
+            <Link
+              href={`${rowUrl}/delete/`}
+              className="fa fa-trash"
+              title={row.title}
+              onClick={() => window.location.href = `${rowUrl}/delete/${params}`}
+            />
           }
         </div>
       )

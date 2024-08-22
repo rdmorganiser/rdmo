@@ -14,6 +14,7 @@ from .project import (
     ProjectsView,
 )
 from .project_answers import ProjectAnswersExportView, ProjectAnswersView
+from .project_copy import ProjectCopyView
 from .project_create import ProjectCreateImportView, ProjectCreateView
 from .project_update import (
     ProjectUpdateCatalogView,

@@ -3,7 +3,7 @@ import pytest
 from django.contrib.auth.models import Group, User
 from django.urls import reverse
 
-from ..models import Project
+from ..models import Membership, Project, Snapshot, Value
 
 users = (
     ('owner', 'owner'),
@@ -41,6 +41,7 @@ delete_project_permission_map = {
 urlnames = {
     'list': 'v1-projects:project-list',
     'detail': 'v1-projects:project-detail',
+    'copy': 'v1-projects:project-copy',
     'overview': 'v1-projects:project-overview',
     'navigation': 'v1-projects:project-navigation',
     'options': 'v1-projects:project-options',
@@ -60,6 +61,8 @@ section_id = 1
 optionset_id = 4
 
 project_id = 1
+parent_id = 3
+parent_ancestors = [2, 3]
 
 page_size = 5
 
@@ -218,6 +221,133 @@ def test_create_parent(db, client, username, password, project_id):
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
+def test_copy(db, client, username, password, project_id):
+    client.login(username=username, password=password)
+
+    project_count = Project.objects.count()
+    snapshot_count = Snapshot.objects.count()
+    value_count = Value.objects.count()
+
+    project = Project.objects.get(id=project_id)
+    project_snapshots_count = project.snapshots.count()
+    project_values_count = project.values.count()
+
+    url = reverse(urlnames['copy'], args=[project_id])
+    data = {
+        'title': 'New title',
+        'description': project.description,
+        'catalog': project.catalog.id
+    }
+    response = client.post(url, data, content_type='application/json')
+
+    if project_id in view_project_permission_map.get(username, []):
+        assert response.status_code == 201
+
+        for key, value in response.json().items():
+            if key in data:
+                assert value == data[key]
+
+        assert Project.objects.count() == project_count + 1
+        assert Snapshot.objects.count() == snapshot_count + project_snapshots_count
+        assert Value.objects.count() == value_count + project_values_count
+    else:
+        if password:
+            assert response.status_code == 404
+        else:
+            assert response.status_code == 401
+
+        assert Project.objects.count() == project_count
+        assert Value.objects.count() == value_count
+
+
+def test_copy_restricted(db, client, settings):
+    settings.PROJECT_CREATE_RESTRICTED = True
+    settings.PROJECT_CREATE_GROUPS = ['projects']
+
+    group = Group.objects.create(name='projects')
+    user = User.objects.get(username='user')
+    user.groups.add(group)
+
+    Membership.objects.create(user=user, project_id=project_id, role='guest')
+
+    client.login(username='user', password='user')
+
+    url = reverse(urlnames['copy'], args=[project_id])
+    data = {
+        'title': 'Lorem ipsum dolor sit amet',
+        'description': 'At vero eos et accusam et justo duo dolores et ea rebum.',
+        'catalog': catalog_id
+    }
+    response = client.post(url, data, content_type='application/json')
+
+    assert response.status_code == 201
+
+
+def test_copy_forbidden(db, client, settings):
+    settings.PROJECT_CREATE_RESTRICTED = True
+
+    user = User.objects.get(username='user')
+
+    Membership.objects.create(user=user, project_id=project_id, role='guest')
+
+    client.login(username='user', password='user')
+
+    url = reverse(urlnames['copy'], args=[project_id])
+    data = {
+        'title': 'Lorem ipsum dolor sit amet',
+        'description': 'At vero eos et accusam et justo duo dolores et ea rebum.',
+        'catalog': catalog_id
+    }
+    response = client.post(url, data)
+
+    assert response.status_code == 403
+
+
+def test_copy_catalog_missing(db, client):
+    client.login(username='guest', password='guest')
+
+    url = reverse(urlnames['copy'], args=[project_id])
+    data = {
+        'title': 'Lorem ipsum dolor sit amet',
+        'description': 'At vero eos et accusam et justo duo dolores et ea rebum.'
+    }
+    response = client.post(url, data)
+
+    assert response.status_code == 400
+
+
+def test_copy_catalog_not_available(db, client):
+    client.login(username='guest', password='guest')
+
+    url = reverse(urlnames['copy'], args=[project_id])
+    data = {
+        'title': 'Lorem ipsum dolor sit amet',
+        'description': 'At vero eos et accusam et justo duo dolores et ea rebum.',
+        'catalog': catalog_id_not_available
+    }
+    response = client.post(url, data)
+
+    assert response.status_code == 400
+
+@pytest.mark.parametrize('project_id', projects)
+def test_copy_parent(db, client, project_id):
+    client.login(username='owner', password='owner')
+    project = Project.objects.get(pk=project_id)
+
+    url = reverse(urlnames['copy'], args=[project_id])
+    data = {
+        'title': 'New title',
+        'description': project.description,
+        'catalog': project.catalog.id,
+        'parent': parent_id
+    }
+    response = client.post(url, data, content_type='application/json')
+
+    assert response.status_code == 201
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
 def test_update(db, client, username, password, project_id):
     client.login(username=username, password=password)
     project = Project.objects.get(pk=project_id)
@@ -244,6 +374,43 @@ def test_update(db, client, username, password, project_id):
 
         assert Project.objects.get(id=project_id).title == project.title
         assert Project.objects.get(id=project_id).description == project.description
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
+def test_update_parent(db, client, username, password, project_id):
+    client.login(username=username, password=password)
+    project = Project.objects.get(pk=project_id)
+
+    url = reverse(urlnames['detail'], args=[project_id])
+    data = {
+        'title': 'New title',
+        'description': project.description,
+        'catalog': project.catalog.id,
+        'parent': parent_id
+    }
+    response = client.put(url, data, content_type='application/json')
+
+    if project_id in change_project_permission_map.get(username, []):
+        if parent_id in view_project_permission_map.get(username, []):
+            if project_id in parent_ancestors:
+                assert response.status_code == 400
+                assert Project.objects.get(pk=project_id).parent == project.parent
+            else:
+                assert response.status_code == 200
+                assert Project.objects.get(pk=project_id).parent_id == parent_id
+        else:
+            assert response.status_code == 404
+            assert Project.objects.get(pk=project_id).parent == project.parent
+    else:
+        if project_id in view_project_permission_map.get(username, []):
+            assert response.status_code == 403
+        elif password:
+            assert response.status_code == 404
+        else:
+            assert response.status_code == 401
+
+        assert Project.objects.get(pk=project_id).parent == project.parent
 
 
 @pytest.mark.parametrize('username,password', users)

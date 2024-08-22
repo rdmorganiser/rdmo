@@ -13,6 +13,7 @@ from rdmo.core.utils import markdown2html
 
 from .constants import ROLE_CHOICES
 from .models import Integration, IntegrationOption, Invite, Membership, Project, Snapshot
+from .validators import ProjectParentValidator
 
 
 class CatalogChoiceField(forms.ModelChoiceField):
@@ -53,6 +54,8 @@ class ProjectForm(forms.ModelForm):
     use_required_attribute = False
 
     def __init__(self, *args, **kwargs):
+        self.copy = kwargs.pop('copy', False)
+
         catalogs = kwargs.pop('catalogs')
         projects = kwargs.pop('projects')
         super().__init__(*args, **kwargs)
@@ -65,6 +68,11 @@ class ProjectForm(forms.ModelForm):
 
         if settings.NESTED_PROJECTS:
             self.fields['parent'].queryset = projects
+
+    def clean(self):
+        if not self.copy:
+            ProjectParentValidator(self.instance)(self.cleaned_data)
+        super().clean()
 
     class Meta:
         model = Project
@@ -159,6 +167,10 @@ class ProjectUpdateParentForm(forms.ModelForm):
         projects = kwargs.pop('projects')
         super().__init__(*args, **kwargs)
         self.fields['parent'].queryset = projects
+
+    def clean(self):
+        ProjectParentValidator(self.instance)(self.cleaned_data)
+        super().clean()
 
     class Meta:
         model = Project

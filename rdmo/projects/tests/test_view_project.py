@@ -58,7 +58,9 @@ projects = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 export_formats = ('rtf', 'odt', 'docx', 'html', 'markdown', 'tex', 'pdf')
 
 site_id = 1
-parent_project_id = 1
+project_id = 1
+parent_id = 3
+parent_ancestors = [2, 3]
 catalog_id = 1
 
 
@@ -266,7 +268,7 @@ def test_project_create_parent_post(db, client, username, password):
         'title': 'A new project',
         'description': 'Some description',
         'catalog': catalog_id,
-        'parent': parent_project_id
+        'parent': project_id
     }
     response = client.post(url, data)
 
@@ -335,17 +337,21 @@ def test_project_update_post_parent(db, client, username, password, project_id):
         'title': project.title,
         'description': project.description,
         'catalog': project.catalog.pk,
-        'parent': parent_project_id
+        'parent': parent_id
     }
     response = client.post(url, data)
 
     if project_id in change_project_permission_map.get(username, []):
-        if project_id == parent_project_id:
+        if parent_id in view_project_permission_map.get(username, []):
+            if project_id in parent_ancestors:
+                assert response.status_code == 200
+                assert Project.objects.get(pk=project_id).parent == project.parent
+            else:
+                assert response.status_code == 302
+                assert Project.objects.get(pk=project_id).parent_id == parent_id
+        else:
             assert response.status_code == 200
             assert Project.objects.get(pk=project_id).parent == project.parent
-        else:
-            assert response.status_code == 302
-            assert Project.objects.get(pk=project_id).parent_id == parent_project_id
     else:
         if password:
             assert response.status_code == 403
@@ -545,17 +551,21 @@ def test_project_update_parent_post(db, client, username, password, project_id):
 
     url = reverse('project_update_parent', args=[project_id])
     data = {
-        'parent': parent_project_id
+        'parent': parent_id
     }
     response = client.post(url, data)
 
     if project_id in change_project_permission_map.get(username, []):
-        if project_id == parent_project_id:
+        if parent_id in view_project_permission_map.get(username, []):
+            if project_id in parent_ancestors:
+                assert response.status_code == 200
+                assert Project.objects.get(pk=project_id).parent == project.parent
+            else:
+                assert response.status_code == 302
+                assert Project.objects.get(pk=project_id).parent_id == parent_id
+        else:
             assert response.status_code == 200
             assert Project.objects.get(pk=project_id).parent == project.parent
-        else:
-            assert response.status_code == 302
-            assert Project.objects.get(pk=project_id).parent_id == parent_project_id
     else:
         if password:
             assert response.status_code == 403
