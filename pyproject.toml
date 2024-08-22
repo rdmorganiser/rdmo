@@ -83,7 +83,7 @@ dev = [
   "rdmo[pytest]",
 ]
 gunicorn = [
-  "gunicorn~=21.2",
+  "gunicorn>=22",
 ]
 ldap = [
   "django-auth-ldap~=4.5",
