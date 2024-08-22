@@ -142,6 +142,11 @@ $icon-font-path: "bootstrap-sass/assets/fonts/bootstrap/";
 
     .drag {
         color: $link-color;
+
+        &:hover {
+            color: $link-color-hover;
+        }
+
         cursor: grab;
     }
 
