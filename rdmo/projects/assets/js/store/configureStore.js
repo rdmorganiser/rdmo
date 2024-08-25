@@ -54,8 +54,11 @@ export default function configureStore() {
 
   window.addEventListener('load', () => {
     updateConfigFromLocalStorage()
-    store.dispatch(userActions.fetchCurrentUser())
-    .then(() => {
+
+    Promise.all([
+      store.dispatch(userActions.fetchCurrentUser()),
+      store.dispatch(projectsActions.fetchCatalogs())
+    ]).then(() => {
       const currentUser = store.getState().currentUser.currentUser
       const isManager = userIsManager(currentUser)
       if (isManager && store.getState().config.myProjects) {
@@ -63,7 +66,6 @@ export default function configureStore() {
       }
       store.dispatch(projectsActions.fetchProjects())
       store.dispatch(projectsActions.fetchInvitations(currentUser.id))
-      store.dispatch(projectsActions.fetchCatalogs())
       store.dispatch(projectsActions.fetchAllowedFileTypes())
       store.dispatch(projectsActions.fetchImportUrls())
     })
