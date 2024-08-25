@@ -1,51 +1,27 @@
 {% extends 'core/page.html' %}
-{% load i18n %}
 {% load static %}
-{% load compress %}
-{% load core_tags %}
 
-{% block head %}
-    {% compress css %}
-    <link rel="stylesheet" href="{% static 'projects/css/project.scss' %}" type="text/x-scss" />
-    <link rel="stylesheet" href="{% static 'overlays/css/overlays.scss' %}" type="text/x-scss" />
-    {% endcompress %}
-    {% compress js %}
-    <script type="text/javascript" src="{% static 'overlays/js/overlays.js' %}" ></script>
-    {% endcompress %}
-    <script>
-        $(document).ready(function() {
-            initOverlays('project');
-            $('[data-toggle="tooltip"]').tooltip()
-        });
-    </script>
+{% block vendor %}
 {% endblock %}
 
-{% block sidebar %}
+{% block head %}
+    <meta name='project' content="{{ project.id }}" />
+{% endblock %}
 
-    {% include 'projects/project_detail_sidebar.html' %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'core/css/base.css' %}" />
+    <link rel="stylesheet" href="{% static 'projects/css/project.css' %}" />
+    {{ block.super }}
+{% endblock %}
 
+{% block js %}
+    <script src="{% url 'javascript-catalog' %}"></script>
+    <script src="{% static 'core/js/base.js' %}" defer></script>
+    <script src="{% static 'projects/js/project.js' %}" defer></script>
 {% endblock %}
 
 {% block page %}
 
-    {% include 'projects/project_detail_header.html' %}
-    {% include 'projects/project_detail_issues.html' %}
-    {% include 'projects/project_detail_views.html' %}
-    {% include 'projects/project_detail_memberships.html' %}
-    {% include 'projects/project_detail_invites.html' %}
-    {% include 'projects/project_detail_snapshots.html' %}
-    {% include 'projects/project_detail_integrations.html' %}
-
-    <div id="support-info"></div>
-
-    {% render_lang_template 'projects/overlays/project_project_questions' %}
-    {% render_lang_template 'projects/overlays/project_project_catalog' %}
-    {% render_lang_template 'projects/overlays/project_project_issues' %}
-    {% render_lang_template 'projects/overlays/project_project_views' %}
-    {% render_lang_template 'projects/overlays/project_project_memberships' %}
-    {% render_lang_template 'projects/overlays/project_project_snapshots' %}
-    {% render_lang_template 'projects/overlays/project_export_project' %}
-    {% render_lang_template 'projects/overlays/project_import_project' %}
-    {% render_lang_template 'projects/overlays/project_support_info' %}
+    <div id="main" class="project"></div>
 
 {% endblock %}
