@@ -1,0 +1,24 @@
+{% load static compress core_tags %}<!DOCTYPE html>
+<html>
+<head>
+    {% include 'core/base_head.html' %}
+
+    {% block css %}{% endblock %}
+    {% block js %}{% endblock %}
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+<!-- content -->
+<div class="content">
+    {% block content %}{% endblock %}
+</div>
+<!-- end content -->
+
+{% if not debug %}
+<!-- analytics -->
+    {% include 'core/base_analytics.html' %}
+<!-- end analytics -->
+{% endif %}
+</body>
+</html>
