@@ -12,7 +12,15 @@ const Main = ({ config, settings, templates, user, project, configActions, proje
 
   return project && (
     <div className="container">
-      <span>👍</span>
+      <p>
+        <span>👍</span>
+      </p>
+
+      <p>
+        <button className="btn btn-primary">
+          This is a button!
+        </button>
+      </p>
     </div>
   )
 }
