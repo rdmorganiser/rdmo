@@ -13,7 +13,7 @@
 
     <h2>{% trans 'Members' %}</h2>
 
-    {% include 'projects/project_detail_memberships_help.html' %}
+    {% include 'projects/old/project_detail_memberships_help.html' %}
 
     <table class="table table-membership">
         <thead>
@@ -33,7 +33,7 @@
             <tr>
                 <td>
                     {% full_name membership.user %}
-                    {% include 'projects/project_detail_memberships_socialaccounts.html' %}
+                    {% include 'projects/old/project_detail_memberships_socialaccounts.html' %}
                 </td>
                 <td>
                     <a href="mailto:{{ membership.user.email }}">{{ membership.user.email }}</a>
