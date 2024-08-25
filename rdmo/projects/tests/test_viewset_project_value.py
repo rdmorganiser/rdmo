@@ -51,8 +51,8 @@ attribute_id = 1
 option_id = 1
 
 set_values = [
-    (84, 23),
-    (85, 20)
+    (84, 31),
+    (85, 32)
 ]
 set_questionsets = [42, 43]
 

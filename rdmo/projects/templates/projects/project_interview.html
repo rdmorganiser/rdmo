@@ -1,0 +1,34 @@
+{% extends 'core/page.html' %}
+{% load static %}
+{% load i18n %}
+{% load core_tags %}
+
+{% block vendor %}
+{% endblock %}
+
+{% block head %}
+    <meta name='project' content="{{ project.id }}" />
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'core/css/base.css' %}" />
+    <link rel="stylesheet" href="{% static 'projects/css/interview.css' %}" />
+{% endblock %}
+
+{% block js %}
+    <script src="{% url 'javascript-catalog' %}"></script>
+    <script src="{% static 'core/js/base.js' %}" defer></script>
+    <script src="{% static 'projects/js/interview.js' %}" defer></script>
+{% endblock %}
+
+{% block sidebar %}
+
+    <div id="sidebar"></div>
+
+{% endblock %}
+
+{% block page %}
+
+    <div id="main" class="interview"></div>
+
+{% endblock %}

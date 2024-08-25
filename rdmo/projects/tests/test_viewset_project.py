@@ -290,11 +290,29 @@ def test_overview(db, client, username, password, project_id, condition_id):
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
-@pytest.mark.parametrize('condition_id', conditions)
-def test_navigation(db, client, username, password, project_id, condition_id):
+def test_navigation(db, client, username, password, project_id):
     client.login(username=username, password=password)
 
-    url = reverse(urlnames['navigation'], args=[project_id, section_id])
+    url = reverse(urlnames['navigation'], args=[project_id])
+    print(url)
+    response = client.get(url)
+
+    if project_id in view_project_permission_map.get(username, []):
+        assert response.status_code == 200
+        assert isinstance(response.json(), list)
+    else:
+        if password:
+            assert response.status_code == 404
+        else:
+            assert response.status_code == 401
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
+def test_navigation_section(db, client, username, password, project_id):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['navigation'], args=[project_id]) + f'{section_id}/'
     response = client.get(url)
 
     if project_id in view_project_permission_map.get(username, []):

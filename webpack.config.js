@@ -36,6 +36,10 @@ const configList = [
       projects: [
         './rdmo/projects/assets/js/projects.js',
         './rdmo/projects/assets/scss/projects.scss'
+      ],
+      interview: [
+        './rdmo/projects/assets/js/interview.js',
+        './rdmo/projects/assets/scss/interview.scss'
       ]
     },
     output: {

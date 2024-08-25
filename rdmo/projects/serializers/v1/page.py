@@ -5,12 +5,25 @@ from rest_framework import serializers
 from rdmo.conditions.models import Condition
 from rdmo.core.serializers import ElementModelSerializerMixin, MarkdownSerializerMixin
 from rdmo.core.utils import markdown2html
+from rdmo.domain.models import Attribute
 from rdmo.options.models import Option, OptionSet
 from rdmo.questions.models import Page, Question, QuestionSet
 from rdmo.questions.utils import get_widget_class
 
 
-class OptionSerializer(serializers.ModelSerializer):
+class AttributeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Attribute
+        fields = (
+            'id',
+            'uri'
+        )
+
+
+class OptionSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
+
+    markdown_fields = ('text', 'help')
 
     class Meta:
         model = Option
@@ -23,14 +36,16 @@ class OptionSerializer(serializers.ModelSerializer):
         )
 
 
-class OptionSetSerializer(serializers.ModelSerializer):
+class OptionSetSerializer(ElementModelSerializerMixin, serializers.ModelSerializer):
 
+    model = serializers.SerializerMethodField()
     options = OptionSerializer(source='elements', many=True)
 
     class Meta:
         model = OptionSet
         fields = (
             'id',
+            'model',
             'options',
             'has_provider',
             'has_search',
@@ -63,10 +78,13 @@ class QuestionSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, s
     verbose_name = serializers.SerializerMethodField()
     widget_class = serializers.SerializerMethodField()
 
+    attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
+
     class Meta:
         model = Question
         fields = (
             'id',
+            'uri',
             'model',
             'help',
             'text',
@@ -83,6 +101,7 @@ class QuestionSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, s
             'maximum',
             'step',
             'attribute',
+            'attribute_uri',
             'conditions',
             'optionsets',
             'is_collection',
@@ -109,6 +128,8 @@ class QuestionSetSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin
     elements = serializers.SerializerMethodField()
     verbose_name = serializers.SerializerMethodField()
 
+    attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
+
     class Meta:
         model = QuestionSet
         fields = (
@@ -118,6 +139,7 @@ class QuestionSetSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin
             'help',
             'verbose_name',
             'attribute',
+            'attribute_uri',
             'is_collection',
             'elements',
             'has_conditions'
@@ -134,24 +156,29 @@ class QuestionSetSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin
         return obj.verbose_name or _('block')
 
 
-class PageSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
+class PageSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, serializers.ModelSerializer):
 
     markdown_fields = ('title', 'help')
 
+    model = serializers.SerializerMethodField()
     elements = serializers.SerializerMethodField()
     section = serializers.SerializerMethodField()
     prev_page = serializers.SerializerMethodField()
     next_page = serializers.SerializerMethodField()
     verbose_name = serializers.SerializerMethodField()
 
+    attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
+
     class Meta:
         model = Page
         fields = (
             'id',
+            'model',
             'title',
             'help',
             'verbose_name',
             'attribute',
+            'attribute_uri',
             'is_collection',
             'elements',
             'section',

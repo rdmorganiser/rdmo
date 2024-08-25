@@ -15,6 +15,8 @@ class Provider(Plugin):
 
 class SimpleProvider(Provider):
 
+    refresh = True
+
     def get_options(self, project, search=None, user=None, site=None):
         return [
             {

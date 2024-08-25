@@ -8,6 +8,7 @@ from .project import (
     ProjectDetailView,
     ProjectErrorView,
     ProjectExportView,
+    ProjectInterviewView,
     ProjectJoinView,
     ProjectLeaveView,
     ProjectQuestionsView,
