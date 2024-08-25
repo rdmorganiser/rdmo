@@ -5,7 +5,7 @@ import Modal from 'rdmo/core/assets/js/components/Modal'
 
 const QuestionSetDeleteModal = ({ title, show, onClose, onSubmit }) => {
   return (
-    <Modal title={title} show={show} submitText={gettext('Delete')} submitColor="danger"
+    <Modal title={title} show={show} submitLabel={gettext('Delete')} submitProps={{className: 'btn btn-danger'}}
            onClose={onClose} onSubmit={onSubmit}>
       <p>{gettext('You are about to permanently delete this block.')}</p>
       <p className="text-danger">{gettext('This action cannot be undone!')}</p>

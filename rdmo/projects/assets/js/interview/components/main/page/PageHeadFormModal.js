@@ -12,8 +12,13 @@ const PageHeadFormModal = ({ title, show, initial, onClose, onSubmit }) => {
   const ref = useRef(null)
   const [inputValue, setInputValue] = useState('')
   const [hasError, setHasError] = useState(false)
-  const submitText = isEmpty(initial) ? gettext('Create') : gettext('Update')
-  const submitColor = isEmpty(initial) ? 'success' : 'primary'
+  const submitLabel = isEmpty(initial) ? gettext('Create') : gettext('Update')
+  const submitProps = {
+    className: classNames('btn', {
+      'btn-success': isEmpty(initial),
+      'btn-primary': !isEmpty(initial),
+    })
+  }
 
   const handleSubmit = () => {
     if (isEmpty(inputValue) && !isNil(initial)) {
@@ -41,7 +46,7 @@ const PageHeadFormModal = ({ title, show, initial, onClose, onSubmit }) => {
   useFocusEffect(ref, show)
 
   return (
-    <Modal title={title} show={show} submitText={submitText} submitColor={submitColor}
+    <Modal title={title} show={show} submitLabel={submitLabel} submitProps={submitProps}
            onClose={onClose} onSubmit={handleSubmit} disableSubmit={hasError}>
       {
         isNil(initial) ? (
