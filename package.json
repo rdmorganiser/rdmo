@@ -16,6 +16,7 @@
     "@codemirror/lang-javascript": "^6.2.2",
     "@uiw/react-codemirror": "^4.23.0",
     "bootstrap-sass": "^3.4.1",
+    "bootstrap": "^5.3.3",
     "classnames": "^2.5.1",
     "date-fns": "^3.6.0",
     "font-awesome": "4.7.0",
