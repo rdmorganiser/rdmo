@@ -79,7 +79,7 @@ def test_list(db, client, username, password):
         assert isinstance(response_data, dict)
 
         if username == 'user':
-            assert sorted([item['id'] for item in response.json()]) == projects_internal
+            assert sorted([item['id'] for item in response.json().get('results')]) == projects_internal
         else:
             values_list = Project.objects.filter(id__in=view_project_permission_map.get(username, [])) \
                                          .values_list('id', flat=True)
