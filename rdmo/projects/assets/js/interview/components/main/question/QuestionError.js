@@ -20,7 +20,7 @@ const getMessage = (error) => {
       return error.errors.api
     }
   } else {
-    return gettext('An unknown error occured, please contact support')
+    return gettext('An unknown error occurred, please contact support')
   }
 }
 
