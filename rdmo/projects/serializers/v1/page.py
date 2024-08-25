@@ -5,6 +5,7 @@ from rest_framework import serializers
 from rdmo.conditions.models import Condition
 from rdmo.core.serializers import ElementModelSerializerMixin, MarkdownSerializerMixin
 from rdmo.core.utils import markdown2html
+from rdmo.domain.models import Attribute
 from rdmo.options.models import Option, OptionSet
 from rdmo.questions.models import Page, Question, QuestionSet
 from rdmo.questions.utils import get_widget_class
