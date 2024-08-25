@@ -15,6 +15,7 @@ from rdmo.questions.models import Catalog
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
+from ..constants import VISIBILITY_CHOICES, VISIBILITY_INTERNAL, VISIBILITY_PRIVATE
 from ..managers import ProjectManager
 
 
@@ -73,6 +74,11 @@ class Project(MPTTModel, Model):
         verbose_name=_('Progress count'),
         help_text=_('The number of values for the progress bar.')
     )
+    visibility = models.CharField(
+        max_length=8, choices=VISIBILITY_CHOICES, default=VISIBILITY_PRIVATE,
+        verbose_name=_('visibility'),
+        help_text=_('The visibility for this project.')
+    )
 
     class Meta:
         ordering = ('tree_id', 'level', 'title')
@@ -127,6 +133,21 @@ class Project(MPTTModel, Model):
     def file_size(self):
         queryset = self.values.filter(snapshot=None).exclude(models.Q(file='') | models.Q(file=None))
         return sum([value.file.size for value in queryset])
+
+    @property
+    def is_private(self):
+        return self.visibility == VISIBILITY_PRIVATE
+
+    @property
+    def is_internal(self):
+        return self.visibility == VISIBILITY_INTERNAL
+
+    @property
+    def get_visibility_help(self):
+        if self.is_private:
+            return _('Project access must be granted explicitly to each user.')
+        elif self.is_internal:
+            return _('The project can be accessed by any logged in user.')
 
     def get_members(self, role):
         try:

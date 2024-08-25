@@ -49,6 +49,11 @@
     <li>
         <a href="{% url 'project_update_information' project.pk %}">{% trans 'Update project information' %}</a>
     </li>
+    {% if settings.PROJECT_VISIBILITY %}
+    <li>
+        <a href="{% url 'project_update_visibility' project.pk %}">{% trans 'Update project visibility' %}</a>
+    </li>
+    {% endif %}
     <li>
         <a href="{% url 'project_update_catalog' project.pk %}">{% trans 'Update project catalog' %}</a>
     </li>

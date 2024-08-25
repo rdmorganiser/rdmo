@@ -16,12 +16,12 @@ users = (
 )
 
 view_issue_permission_map = {
-    'owner': [1, 2, 3, 4, 5, 10],
-    'manager': [1, 3, 5],
-    'author': [1, 3, 5],
-    'guest': [1, 3, 5],
-    'api': [1, 2, 3, 4, 5, 10],
-    'site': [1, 2, 3, 4, 5, 10]
+    'owner': [1, 2, 3, 4, 5, 10, 12],
+    'manager': [1, 3, 5, 12],
+    'author': [1, 3, 5, 12],
+    'guest': [1, 3, 5, 12],
+    'api': [1, 2, 3, 4, 5, 10, 12],
+    'site': [1, 2, 3, 4, 5, 10, 12]
 }
 
 urlnames = {
@@ -31,6 +31,7 @@ urlnames = {
 
 projects = [1, 2, 3, 4, 5, 10]
 issues = [1, 2, 3, 4]
+issues_internal = [8, 9]
 
 site_id = 1
 project_id = 1
@@ -51,7 +52,7 @@ def test_list(db, client, username, password):
         assert isinstance(response.json(), list)
 
         if username == 'user':
-            assert sorted([item['id'] for item in response.json()]) == []
+            assert sorted([item['id'] for item in response.json()]) == issues_internal
         else:
             values_list = Issue.objects.filter(project__in=view_issue_permission_map.get(username, [])) \
                                        .order_by('id').values_list('id', flat=True)

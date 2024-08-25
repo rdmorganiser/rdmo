@@ -16,12 +16,13 @@ users = (
 )
 
 view_snapshot_permission_map = {
-    'owner': [1, 2, 3, 4, 5],
-    'manager': [1, 3, 5],
-    'author': [1, 3, 5],
-    'guest': [1, 3, 5],
-    'api': [1, 2, 3, 4, 5],
-    'site': [1, 2, 3, 4, 5]
+    'owner': [1, 2, 3, 4, 5, 12],
+    'manager': [1, 3, 5, 12],
+    'author': [1, 3, 5, 12],
+    'guest': [1, 3, 5, 12],
+    'user': [12],
+    'api': [1, 2, 3, 4, 5, 12],
+    'site': [1, 2, 3, 4, 5, 12]
 }
 
 urlnames = {
@@ -29,7 +30,15 @@ urlnames = {
     'detail': 'v1-projects:snapshot-detail'
 }
 
-snapshots = [1, 3, 7, 4, 5, 6]
+snapshots = [
+    1, 7,  # from Test <1>
+    3,     # from Parent <2>
+    4,     # from Child1 <3>
+    5,     # from Child2 <4>
+    6,     # from Child11 <5>
+    8      # from Internal <12>
+]
+snapshots_internal = [8]
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -44,7 +53,7 @@ def test_list(db, client, username, password):
         assert isinstance(response.json(), list)
 
         if username == 'user':
-            assert sorted([item['id'] for item in response.json()]) == []
+            assert sorted([item['id'] for item in response.json()]) == snapshots_internal
         else:
             values_list = Snapshot.objects.filter(project__in=view_snapshot_permission_map.get(username, [])) \
                                           .order_by('id').values_list('id', flat=True)

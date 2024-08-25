@@ -8,6 +8,8 @@ from mptt.querysets import TreeQuerySet
 from rdmo.accounts.utils import is_site_manager
 from rdmo.core.managers import CurrentSiteManagerMixin
 
+from .constants import VISIBILITY_INTERNAL
+
 
 class ProjectQuerySet(TreeQuerySet):
 
@@ -21,7 +23,7 @@ class ProjectQuerySet(TreeQuerySet):
             elif is_site_manager(user):
                 return self.filter_current_site()
             else:
-                queryset = self.filter(user=user)
+                queryset = self.filter(Q(user=user) | models.Q(visibility=VISIBILITY_INTERNAL))
                 for instance in queryset:
                     queryset |= instance.get_descendants()
                 return queryset.distinct()

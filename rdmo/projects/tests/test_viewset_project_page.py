@@ -14,12 +14,13 @@ users = (
 )
 
 view_questionset_permission_map = {
-    'owner': [1, 2, 3, 4, 5],
-    'manager': [1, 3, 5],
-    'author': [1, 3, 5],
-    'guest': [1, 3, 5],
-    'api': [1, 2, 3, 4, 5],
-    'site': [1, 2, 3, 4, 5]
+    'owner': [1, 2, 3, 4, 5, 12],
+    'manager': [1, 3, 5, 12],
+    'author': [1, 3, 5, 12],
+    'guest': [1, 3, 5, 12],
+    'user': [12],
+    'api': [1, 2, 3, 4, 5, 12],
+    'site': [1, 2, 3, 4, 5, 12]
 }
 
 urlnames = {
@@ -27,7 +28,7 @@ urlnames = {
     'detail': 'v1-projects:project-page-detail'
 }
 
-projects = [1, 2, 3, 4, 5]
+projects = [1, 2, 3, 4, 5, 12]
 pages = [1]
 
 
