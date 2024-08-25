@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.contrib.sites.models import Site
-from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
@@ -88,11 +87,12 @@ class Project(MPTTModel, Model):
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.pk})
 
-    def clean(self):
+    def save(self, *args, **kwargs):
+        # ensure that the project hierarchy is not disturbed
         if self.id and self.parent in self.get_descendants(include_self=True):
-            raise ValidationError({
-                'parent': [_('A project may not be moved to be a child of itself or one of its descendants.')]
-            })
+            raise RuntimeError('A project may not be moved to be a child of itself or one of its descendants.')
+
+        super().save(*args, **kwargs)
 
     @property
     def catalog_uri(self):

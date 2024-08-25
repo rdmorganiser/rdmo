@@ -134,21 +134,27 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
       const { isProjectManager, isProjectOwner } = getUserRoles(row, currentUserId, ['managers', 'owners'])
       return (
         <div className="icon-container">
-          {(isProjectManager || isProjectOwner || isManager) &&
           <Link
-            href={`${rowUrl}/update`}
-            className="element-link fa fa-pencil"
-            title={row.title}
-            onClick={() => window.location.href = `${rowUrl}/update/${path}`}
+            href={`${rowUrl}/copy`}
+            className="fa fa-copy"
+            title={gettext('Copy project')}
+            onClick={() => window.location.href = `${rowUrl}/copy/${path}`}
           />
+          {(isProjectManager || isProjectOwner || isManager) &&
+            <Link
+              href={`${rowUrl}/update`}
+              className="fa fa-pencil"
+              title={row.title}
+              onClick={() => window.location.href = `${rowUrl}/update/${path}`}
+            />
           }
           {(isProjectOwner || isManager) &&
-          <Link
-            href={`${rowUrl}/delete`}
-            className="element-link fa fa-trash"
-            title={row.title}
-            onClick={() => window.location.href = `${rowUrl}/delete/${path}`}
-          />
+            <Link
+              href={`${rowUrl}/delete`}
+              className="fa fa-trash"
+              title={row.title}
+              onClick={() => window.location.href = `${rowUrl}/delete/${path}`}
+            />
           }
         </div>
       )

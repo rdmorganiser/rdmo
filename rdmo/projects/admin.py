@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import admin
 from django.db.models import Prefetch
 from django.urls import reverse
@@ -15,12 +16,35 @@ from .models import (
     Snapshot,
     Value,
 )
+from .validators import ProjectParentValidator
+
+
+class ProjectAdminForm(forms.ModelForm):
+
+    class Meta:
+        model = Project
+        fields = [
+            'parent',
+            'site',
+            'title',
+            'description',
+            'catalog',
+            'views'
+        ]
+
+
+    def clean(self):
+        super().clean()
+        ProjectParentValidator(self.instance)(self.cleaned_data)
 
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
+    form = ProjectAdminForm
+
     search_fields = ('title', 'user__username')
     list_display = ('title', 'owners', 'updated', 'created')
+    readonly_fields = ('progress_count', 'progress_total')
 
     def get_queryset(self, request):
         return Project.objects.prefetch_related(

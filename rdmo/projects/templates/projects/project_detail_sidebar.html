@@ -38,7 +38,6 @@
 </ul>
 {% endif %}
 
-{% if can_change_project or can_delete_project %}
 <ul class="list-unstyled">
     {% if can_change_project %}
     <li>
@@ -63,13 +62,15 @@
     </li>
     {% endif %}
     {% endif %}
+    <li>
+        <a href="{% url 'project_copy' project.pk %}">{% trans 'Copy project' %}</a>
+    </li>
     {% if can_delete_project %}
     <li>
         <a href="{% url 'project_delete' project.pk %}">{% trans 'Delete project' %}</a>
     </li>
     {% endif %}
 </ul>
-{% endif %}
 
 {% has_perm 'projects.add_membership_object' request.user project as can_add_membership %}
 {% if can_add_membership %}

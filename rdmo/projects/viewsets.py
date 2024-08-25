@@ -6,7 +6,7 @@ from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
 
-from rest_framework import serializers
+from rest_framework import serializers, status
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin
@@ -48,6 +48,7 @@ from .serializers.v1 import (
     InviteSerializer,
     IssueSerializer,
     MembershipSerializer,
+    ProjectCopySerializer,
     ProjectIntegrationSerializer,
     ProjectInviteSerializer,
     ProjectInviteUpdateSerializer,
@@ -63,7 +64,7 @@ from .serializers.v1 import (
 )
 from .serializers.v1.overview import CatalogSerializer, ProjectOverviewSerializer
 from .serializers.v1.page import PageSerializer
-from .utils import check_conditions, get_upload_accept, send_invite_email
+from .utils import check_conditions, copy_project, get_upload_accept, send_invite_email
 
 
 class ProjectPagination(PageNumberPagination):
@@ -115,6 +116,25 @@ class ProjectViewSet(ModelViewSet):
         queryset = queryset.annotate(last_changed=Coalesce(Greatest(last_changed_subquery, 'updated'), 'updated'))
 
         return queryset
+
+    @action(detail=True, methods=['POST'],
+            permission_classes=(HasModelPermission | HasProjectPermission, ))
+    def copy(self, request, pk=None):
+        instance = self.get_object()
+        serializer = ProjectCopySerializer(instance, data=request.data, context=self.get_serializer_context())
+        serializer.is_valid(raise_exception=True)
+
+        # update instance
+        for key, value in serializer.validated_data.items():
+            setattr(instance, key, value)
+
+        site = get_current_site(self.request)
+        owners = [self.request.user]
+        project_copy = copy_project(instance, site, owners)
+
+        serializer = self.get_serializer(project_copy)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     @action(detail=True, permission_classes=(HasModelPermission | HasProjectPermission, ))
     def overview(self, request, pk=None):
