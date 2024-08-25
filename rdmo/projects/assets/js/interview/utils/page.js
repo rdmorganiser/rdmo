@@ -17,7 +17,7 @@ const initQuestionSet = (questionset) => {
     }
   })
 
-  // aggregate questionsets from decendants
+  // aggregate questionsets from descendants
   questionset.questionsets = questionset.elements.reduce((questionsets, element) => {
     if (element.model == 'questions.questionset') {
       return questionsets.concat(element.questionsets)
@@ -26,7 +26,7 @@ const initQuestionSet = (questionset) => {
     }
   }, [])
 
-  // aggregate optionsets from decendants
+  // aggregate optionsets from descendants
   questionset.questions = questionset.elements.reduce((questions, element) => {
     if (element.model == 'questions.questionset') {
       return questions.concat(element.questions)
@@ -35,7 +35,7 @@ const initQuestionSet = (questionset) => {
     }
   }, [])
 
-  // aggregate optionsets from decendants
+  // aggregate optionsets from descendants
   questionset.optionsets = questionset.elements.reduce((optionsets, element) => {
     if (element.model == 'questions.questionset') {
       return optionsets.concat(element.optionsets)
@@ -44,7 +44,7 @@ const initQuestionSet = (questionset) => {
     }
   }, [])
 
-  // aggregate attributes from decendants
+  // aggregate attributes from descendants
   questionset.attributes = questionset.elements.reduce((attributes, element) => {
     if (element.model == 'questions.questionset') {
       return attributes.concat(element.attributes)

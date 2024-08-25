@@ -454,14 +454,14 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
             if element.attribute == value.attribute:
                 attributes.update([descendant.attribute for descendant in element.descendants])
 
-        # construct the set_prefix for decendants for this set
-        decendants_set_prefix = f'{value.set_prefix}|{value.set_index}' if value.set_prefix else str(value.set_index)
+        # construct the set_prefix for descendants for this set
+        descendants_set_prefix = f'{value.set_prefix}|{value.set_index}' if value.set_prefix else str(value.set_index)
 
-        # delete all values for this set and all decendants
+        # delete all values for this set and all descendants
         values = self.get_queryset().filter(attribute__in=attributes) \
                                     .filter(
                                         Q(set_prefix=value.set_prefix, set_index=value.set_index) |
-                                        Q(set_prefix__startswith=decendants_set_prefix)
+                                        Q(set_prefix__startswith=descendants_set_prefix)
                                     )
         values.delete()
 

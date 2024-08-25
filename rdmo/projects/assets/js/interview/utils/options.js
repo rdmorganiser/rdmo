@@ -36,7 +36,7 @@ const getValueOption = (options, value) => {
   } else if (!isEmpty(value.external_id)) {
     // this is a value with an external id from a provider
     if (isEmpty(options)) {
-      // if an external id is set but no options are retrived yet, we fake an option with
+      // if an external id is set but no options are retrieved yet, we fake an option with
       // the stored value, so that it is displayed before the input is opened
       return {
         id: value.external_id,
