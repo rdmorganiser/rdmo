@@ -57,7 +57,7 @@ urlpatterns = [
     re_path(r'^(?P<pk>[0-9]+)/$',
             ProjectDetailView.as_view(), name='project'),
     re_path(r'^(?P<pk>[0-9]+)/old/$',
-            OldProjectDetailView.as_view(), name='project'),
+            OldProjectDetailView.as_view(), name='project_old'),
     re_path(r'^(?P<pk>[0-9]+)/update/$',
             ProjectUpdateView.as_view(), name='project_update'),
     re_path(r'^(?P<pk>[0-9]+)/update/information/$',
