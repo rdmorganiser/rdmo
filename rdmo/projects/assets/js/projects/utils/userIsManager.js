@@ -1,4 +1,4 @@
-import siteId from 'rdmo/core/assets/js/utils/siteId'
+import { siteId } from 'rdmo/core/assets/js/utils/meta'
 
 const userIsManager = (currentUser) => {
   if (currentUser.is_superuser ||

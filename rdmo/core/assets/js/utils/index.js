@@ -1,5 +1,2 @@
 export * from './api'
-export { default as baseUrl } from './baseUrl'
-export { default as language } from './language'
-export { default as siteId } from './siteId'
-export { default as staticUrl } from './staticUrl'
+export { baseUrl, language, siteId, staticUrl } from './meta'

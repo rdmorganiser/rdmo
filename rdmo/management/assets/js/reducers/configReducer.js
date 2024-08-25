@@ -1,6 +1,6 @@
 import set from 'lodash/set'
 
-import baseUrl from 'rdmo/core/assets/js/utils/baseUrl'
+import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 const initialState = {
   baseUrl: baseUrl + '/management/',
