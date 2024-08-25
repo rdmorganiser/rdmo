@@ -221,6 +221,8 @@ SETTINGS_API = [
     'PROJECT_TABLE_PAGE_SIZE'
 ]
 
+TEMPLATES_API = []
+
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'info@example.com'
 
