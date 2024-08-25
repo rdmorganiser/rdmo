@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('projects', '0060_alter_issue_options'),
+        ('projects', '0061_alter_value_value_type'),
     ]
 
     operations = [
