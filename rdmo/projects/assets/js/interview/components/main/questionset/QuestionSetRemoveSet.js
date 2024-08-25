@@ -8,7 +8,7 @@ import QuestionSetDeleteModal from './QuestionSetDeleteModal'
 
 const QuestionAddSet = ({ questionset, set, deleteSet }) => {
 
-  const [showDeleteModal, openDeleteModal, closeDeleteModal] = useModal()
+  const {show: showDeleteModal, open: openDeleteModal, close: closeDeleteModal} = useModal()
 
   const handleDeleteSet = () => {
     deleteSet(set)
