@@ -37,8 +37,10 @@ dist
 rdmo/management/static
 
 rdmo/core/static/core/js/base.js
+rdmo/core/static/core/js/base-bs53.js
 rdmo/core/static/core/fonts
 rdmo/core/static/core/css/base.css
+rdmo/core/static/core/css/base-bs53.css
 
 rdmo/projects/static/projects/js/*.js
 rdmo/projects/static/projects/fonts
