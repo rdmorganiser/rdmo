@@ -11,7 +11,9 @@ const Main = ({ config, settings, templates, user, project, configActions, proje
   console.log(configActions, projectActions)
 
   return project && (
-    <span>👍</span>
+    <div className="container">
+      <span>👍</span>
+    </div>
   )
 }
 
