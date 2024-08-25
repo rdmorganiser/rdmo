@@ -1,6 +1,6 @@
 import ProjectApi from '../api/ProjectApi'
 
-import projectId from '../utils/projectId'
+import { projectId } from '../utils/meta'
 
 import {
   FETCH_OVERVIEW_INIT,

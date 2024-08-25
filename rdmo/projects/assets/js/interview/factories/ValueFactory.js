@@ -1,6 +1,6 @@
 import { isNil, toNumber } from 'lodash'
 
-import projectId from '../utils/projectId'
+import { projectId } from '../utils/meta'
 
 class ValueFactory {
 

@@ -1,5 +1,5 @@
-import baseUrl from 'rdmo/core/assets/js/utils/baseUrl'
-import projectId from '../utils/projectId'
+import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
+import { projectId } from '../utils/meta'
 
 const parseLocation = () => {
   const pathname = window.location.pathname

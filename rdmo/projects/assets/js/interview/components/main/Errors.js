@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import baseUrl from 'rdmo/core/assets/js/utils/baseUrl'
+import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import Template from 'rdmo/core/assets/js/components/Template'
 
-import projectId from '../../utils/projectId'
+import { projectId } from '../../utils/meta'
 
 const Errors = ({ templates, errors }) => {
   const projectUrl = `${baseUrl}/projects/${projectId}/`

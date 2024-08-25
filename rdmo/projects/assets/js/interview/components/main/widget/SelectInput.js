@@ -11,7 +11,7 @@ import { useDebouncedCallback } from 'use-debounce'
 // import { convert } from 'html-to-text'
 
 import ProjectApi from '../../../api/ProjectApi'
-import projectId from '../../../utils/projectId'
+import { projectId } from '../../../utils/meta'
 import { isDefaultValue } from '../../../utils/value'
 import { getValueOption } from '../../../utils/options'
 
