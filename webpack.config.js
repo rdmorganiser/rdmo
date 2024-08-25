@@ -7,6 +7,18 @@ const TerserPlugin = require('terser-webpack-plugin')
 // list of separate config objects for each django app and their corresponding java script applications
 const configList = [
   {
+    name: 'core',
+    entry: {
+      base: [
+        './rdmo/core/assets/js/base.js',
+        './rdmo/core/assets/scss/base.scss'
+      ]
+    },
+    output: {
+      path: path.resolve(__dirname, './rdmo/core/static/core/'),
+    }
+  },
+  {
     name: 'management',
     entry: {
       management: [
@@ -15,7 +27,6 @@ const configList = [
       ]
     },
     output: {
-      filename: 'js/management.js',
       path: path.resolve(__dirname, './rdmo/management/static/management/'),
     }
   },
@@ -28,7 +39,6 @@ const configList = [
       ]
     },
     output: {
-      filename: 'js/projects.js',
       path: path.resolve(__dirname, './rdmo/projects/static/projects/'),
     }
   }
@@ -41,6 +51,9 @@ const baseConfig = {
       rdmo: path.resolve(__dirname, './rdmo/')
     },
     extensions: ['*', '.js', '.jsx']
+  },
+  output: {
+    filename: 'js/[name].js'
   },
   plugins: [
     new MiniCssExtractPlugin({

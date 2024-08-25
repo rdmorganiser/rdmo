@@ -1,0 +1,44 @@
+@font-face {
+    font-family: "DroidSans";
+    src: url('../fonts/DroidSans.ttf');
+}
+@font-face {
+    font-family: "DroidSans";
+    src: url('../fonts/DroidSans-Bold.ttf');
+    font-weight: bold;
+}
+@font-face {
+    font-family: "DroidSans-Mono";
+    src: url('../fonts/DroidSansMono.ttf');
+}
+@font-face {
+    font-family: "DroidSerif";
+    src: url('../fonts/DroidSerif.ttf');
+}
+@font-face {
+    font-family: "DroidSerif";
+    src: url('../fonts/DroidSerif-Bold.ttf');
+    font-weight: bold;
+}
+@font-face {
+    font-family: "DroidSerif";
+    src: url('../fonts/DroidSerif-Italic.ttf');
+    font-style: italic;
+}
+@font-face {
+    font-family: "DroidSerif";
+    src: url('../fonts/DroidSerif-BoldItalic.ttf');
+    font-style: italic;
+    font-weight: bold;
+}
+
+body {
+    font-family: DroidSans, sans;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: DroidSerif, serif;
+}
+
+a.fa {
+    text-decoration: none !important;
+}
