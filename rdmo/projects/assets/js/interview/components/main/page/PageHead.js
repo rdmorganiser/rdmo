@@ -17,9 +17,9 @@ const PageHead = ({ templates, page, sets, values, currentSet, activateSet, crea
     ))
   )
 
-  const [showCreateModal, openCreateModal, closeCreateModal] = useModal()
-  const [showUpdateModal, openUpdateModal, closeUpdateModal] = useModal()
-  const [showDeleteModal, openDeleteModal, closeDeleteModal] = useModal()
+  const {show: showCreateModal, open: openCreateModal, close: closeCreateModal} = useModal()
+  const {show: showUpdateModal, open: openUpdateModal, close: closeUpdateModal} = useModal()
+  const {show: showDeleteModal, open: openDeleteModal, close: closeDeleteModal} = useModal()
 
   const handleActivateSet = (event, set) => {
     event.preventDefault()
