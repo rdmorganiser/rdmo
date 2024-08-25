@@ -25,7 +25,10 @@ import {
   CREATE_SET,
   DELETE_SET_INIT,
   DELETE_SET_SUCCESS,
-  DELETE_SET_ERROR
+  DELETE_SET_ERROR,
+  COPY_SET_INIT,
+  COPY_SET_SUCCESS,
+  COPY_SET_ERROR
 } from '../actions/actionTypes'
 
 const initialState = {
@@ -76,6 +79,8 @@ export default function interviewReducer(state = initialState, action) {
         values: state.values.filter((value) => !action.values.includes(value)),
         sets: state.sets.filter((set) => !action.sets.includes(set))
       }
+    case COPY_SET_SUCCESS:
+      return { ...state, values: action.values, sets: action.sets }
     case FETCH_PAGE_INIT:
     case FETCH_NAVIGATION_INIT:
     case FETCH_OPTIONS_INIT:
@@ -97,6 +102,7 @@ export default function interviewReducer(state = initialState, action) {
         ))
       }
     case DELETE_SET_INIT:
+    case COPY_SET_INIT:
       return { ...state, errors: [] }
     case FETCH_PAGE_ERROR:
     case FETCH_NAVIGATION_ERROR:
@@ -116,6 +122,8 @@ export default function interviewReducer(state = initialState, action) {
       }
     case DELETE_VALUE_ERROR:
     case DELETE_SET_ERROR:
+      return { ...state, errors: [...state.errors, { actionType: action.type, ...action.error }] }
+    case COPY_SET_ERROR:
       return { ...state, errors: [...state.errors, { actionType: action.type, ...action.error }] }
     default:
       return state

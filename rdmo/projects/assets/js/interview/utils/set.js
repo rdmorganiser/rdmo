@@ -1,4 +1,4 @@
-import { isEmpty, isNil, toNumber, toString, last } from 'lodash'
+import { isEmpty, isNil, toNumber, toString, last, sortBy } from 'lodash'
 
 import SetFactory from '../factories/SetFactory'
 
@@ -27,7 +27,7 @@ const getDescendants = (items, set) => {
 }
 
 const gatherSets = (values) => {
-  return values.reduce((sets, value) => {
+  const sets = values.reduce((sets, value) => {
     if (sets.find((set) => (
       (set.set_prefix === value.set_prefix) &&
       (set.set_index === value.set_index)
@@ -40,6 +40,8 @@ const gatherSets = (values) => {
       })]
     }
   }, [])
+
+  return sortBy(sets, ['set_prefix', 'set_index'])
 }
 
 const initSets = (sets, element, setPrefix) => {

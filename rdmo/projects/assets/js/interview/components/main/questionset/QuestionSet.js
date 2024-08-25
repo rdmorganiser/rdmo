@@ -8,12 +8,13 @@ import Question from '../question/Question'
 
 import QuestionSetAddSet from './QuestionSetAddSet'
 import QuestionSetAddSetHelp from './QuestionSetAddSetHelp'
+import QuestionSetCopySet from './QuestionSetCopySet'
 import QuestionSetHelp from './QuestionSetHelp'
 import QuestionSetHelpTemplate from './QuestionSetHelpTemplate'
 import QuestionSetRemoveSet from './QuestionSetRemoveSet'
 
 const QuestionSet = ({ templates, questionset, sets, values, disabled, isManager,
-                       parentSet, createSet, updateSet, deleteSet,
+                       parentSet, createSet, updateSet, deleteSet, copySet,
                        createValue, updateValue, deleteValue, copyValue }) => {
 
   const setPrefix = getChildPrefix(parentSet)
@@ -35,7 +36,8 @@ const QuestionSet = ({ templates, questionset, sets, values, disabled, isManager
           currentSets.map((set, setIndex) => (
             <div key={setIndex} className="interview-block">
               <div className="interview-block-options">
-                <QuestionSetRemoveSet questionset={questionset} set={set} deleteSet={deleteSet} />
+                <QuestionSetCopySet questionset={questionset} sets={sets} currentSet={set} copySet={copySet} />
+                <QuestionSetRemoveSet questionset={questionset} currentSet={set} deleteSet={deleteSet} />
               </div>
               <div className="row">
                 {
@@ -55,6 +57,7 @@ const QuestionSet = ({ templates, questionset, sets, values, disabled, isManager
                             createSet={createSet}
                             updateSet={updateSet}
                             deleteSet={deleteSet}
+                            copySet={copySet}
                             createValue={createValue}
                             updateValue={updateValue}
                             deleteValue={deleteValue}
@@ -112,6 +115,7 @@ QuestionSet.propTypes = {
   createSet: PropTypes.func.isRequired,
   updateSet: PropTypes.func.isRequired,
   deleteSet: PropTypes.func.isRequired,
+  copySet: PropTypes.func.isRequired,
   createValue: PropTypes.func.isRequired,
   updateValue: PropTypes.func.isRequired,
   deleteValue: PropTypes.func.isRequired,

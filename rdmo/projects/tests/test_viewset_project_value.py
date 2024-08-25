@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 import pytest
@@ -30,7 +31,7 @@ view_value_permission_map = {
     'site': [1, 2, 3, 4, 5, 12]
 }
 
-add_value_permission_map = change_value_permission_map = delete_value_permission_map = {
+add_value_permission_map = change_value_permission_map = delete_value_permission_map = copy_value_permission_map = {
     'owner': [1, 2, 3, 4, 5, 12],
     'manager': [1, 3, 5],
     'author': [1, 3, 5],
@@ -75,6 +76,7 @@ value_texts = (
     ('email', 'user@lorem.ipsum'),
     ('phone', '+49 (0) 1337 12345678')
 )
+
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
@@ -249,9 +251,49 @@ def test_delete(db, client, username, password, value_id):
 
 
 @pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('value_id, set_values_count', set_values)
+def test_copy_set(db, client, username, password, value_id, set_values_count):
+    client.login(username=username, password=password)
+    set_value = Value.objects.get(id=value_id)
+    values_count = Value.objects.count()
+
+    url = reverse(urlnames['set'], args=[set_value.project_id, value_id])
+    data = {
+        'attribute': set_value.attribute.id,
+        'set_prefix': set_value.set_prefix,
+        'set_index': 2,
+        'text': 'new'
+    }
+    response = client.post(url, data=json.dumps(data), content_type="application/json")
+
+    if set_value.project_id in copy_value_permission_map.get(username, []):
+        assert response.status_code == 201
+        assert len(response.json()) == set_values_count + 1
+        assert Value.objects.get(
+            project=set_value.project_id,
+            snapshot=None,
+            **data
+        )
+        assert Value.objects.count() == values_count + set_values_count + 1  # one is for set/id
+        for value_data in response.json():
+            if value_data['set_prefix'] == data['set_prefix']:
+                assert value_data['set_index'] == data['set_index']
+            else:
+                set_prefix_split = value_data['set_prefix'].split('|')
+                assert set_prefix_split[0] == str(data['set_index'])
+
+    elif set_value.project_id in view_value_permission_map.get(username, []):
+        assert response.status_code == 403
+        assert Value.objects.count() == values_count
+    else:
+        assert response.status_code == 404
+        assert Value.objects.count() == values_count
+
+
+@pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
-@pytest.mark.parametrize('value_id,set_values_count', set_values)
-def test_set(db, client, username, password, project_id, value_id, set_values_count):
+@pytest.mark.parametrize('value_id, set_values_count', set_values)
+def test_delete_set(db, client, username, password, project_id, value_id, set_values_count):
     client.login(username=username, password=password)
     value_exists = Value.objects.filter(project_id=project_id, snapshot=None, id=value_id).exists()
     values_count = Value.objects.count()
