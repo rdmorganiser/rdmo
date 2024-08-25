@@ -221,7 +221,7 @@ def test_create_parent(db, client, username, password, project_id):
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
-def test_copy(db, client, username, password, project_id):
+def test_copy(db, files, client, username, password, project_id):
     client.login(username=username, password=password)
 
     project_count = Project.objects.count()
@@ -260,7 +260,7 @@ def test_copy(db, client, username, password, project_id):
         assert Value.objects.count() == value_count
 
 
-def test_copy_restricted(db, client, settings):
+def test_copy_restricted(db, files, client, settings):
     settings.PROJECT_CREATE_RESTRICTED = True
     settings.PROJECT_CREATE_GROUPS = ['projects']
 

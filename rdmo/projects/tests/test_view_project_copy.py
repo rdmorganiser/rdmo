@@ -101,7 +101,7 @@ def test_project_copy_forbidden_get(db, client, settings):
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
-def test_project_copy_post(db, client, username, password, project_id):
+def test_project_copy_post(db, files, client, username, password, project_id):
     client.login(username=username, password=password)
 
     project_count = Project.objects.count()
@@ -131,7 +131,7 @@ def test_project_copy_post(db, client, username, password, project_id):
         assert Value.objects.count() == value_count
 
 
-def test_project_copy_post_restricted(db, client, settings):
+def test_project_copy_post_restricted(db, files, client, settings):
     settings.PROJECT_CREATE_RESTRICTED = True
     settings.PROJECT_CREATE_GROUPS = ['projects']
 
@@ -152,7 +152,7 @@ def test_project_copy_post_restricted(db, client, settings):
     assert response.status_code == 302
 
 
-def test_project_copy_post_forbidden(db, client, settings):
+def test_project_copy_post_forbidden(db, files, client, settings):
     settings.PROJECT_CREATE_RESTRICTED = True
 
     client.login(username='guest', password='guest')
@@ -170,7 +170,7 @@ def test_project_copy_post_forbidden(db, client, settings):
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
-def test_project_copy_parent_post(db, client, username, password, project_id):
+def test_project_copy_parent_post(db, files, client, username, password, project_id):
     client.login(username=username, password=password)
     project_count = Project.objects.count()
 

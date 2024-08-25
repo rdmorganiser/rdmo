@@ -37,7 +37,7 @@ def test_set_context_querystring_with_filter_and_page(GET_query):
         assert context.get('querystring', 'not-in-context') == 'not-in-context'
 
 
-def test_copy_project(db):
+def test_copy_project(db, files):
     project = Project.objects.get(id=1)
     site = Site.objects.get(id=2)
     user = User.objects.get(id=1)
