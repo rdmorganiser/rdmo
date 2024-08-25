@@ -52,6 +52,28 @@ class BaseApi {
     })
   }
 
+  static postFormData(url, formData) {
+    return fetch(baseUrl + url, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': Cookies.get('csrftoken')
+      },
+      body: formData
+    }).catch(error => {
+      throw new ApiError(error.message)
+    }).then(response => {
+      if (response.ok) {
+        return response.json()
+      } else if (response.status == 400) {
+        return response.json().then(errors => {
+          throw new ValidationError(errors)
+        })
+      } else {
+        throw new ApiError(response.statusText, response.status)
+      }
+    })
+  }
+
   static put(url, data) {
     return fetch(baseUrl + url, {
       method: 'PUT',
