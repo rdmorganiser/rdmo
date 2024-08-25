@@ -14,7 +14,7 @@ import { updateOptions } from '../utils/options'
 import { initPage } from '../utils/page'
 import { gatherSets, getDescendants, initSets } from '../utils/set'
 import { activateFirstValue, gatherDefaultValues, initValues } from '../utils/value'
-import projectId from '../utils/projectId'
+import { projectId } from '../utils/meta'
 
 import ValueFactory from '../factories/ValueFactory'
 import SetFactory from '../factories/SetFactory'
