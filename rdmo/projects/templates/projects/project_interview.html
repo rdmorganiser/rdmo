@@ -11,14 +11,14 @@
 {% endblock %}
 
 {% block css %}
-    <link rel="stylesheet" href="{% static 'core/dist/css/base.css' %}" />
-    <link rel="stylesheet" href="{% static 'projects/dist/css/interview.css' %}" />
+    <link rel="stylesheet" href="{% static 'core/css/base.css' %}" />
+    <link rel="stylesheet" href="{% static 'projects/css/interview.css' %}" />
 {% endblock %}
 
 {% block js %}
     <script src="{% url 'javascript-catalog' %}"></script>
-    <script src="{% static 'core/dist/js/base.js' %}" defer></script>
-    <script src="{% static 'projects/dist/js/interview.js' %}" defer></script>
+    <script src="{% static 'core/js/base.js' %}" defer></script>
+    <script src="{% static 'projects/js/interview.js' %}" defer></script>
 {% endblock %}
 
 {% block sidebar %}
