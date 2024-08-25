@@ -12,7 +12,7 @@ import PageButtons from './PageButtons'
 import PageHead from './PageHead'
 
 const Page = ({ config, templates, overview, page, sets, values, fetchPage,
-                createValue, updateValue, deleteValue,
+                createValue, updateValue, deleteValue, copyValue,
                 activateSet, createSet, updateSet, deleteSet }) => {
 
   const currentSetPrefix = ''
@@ -58,6 +58,7 @@ const Page = ({ config, templates, overview, page, sets, values, fetchPage,
                     createValue={createValue}
                     updateValue={updateValue}
                     deleteValue={deleteValue}
+                    copyValue={copyValue}
                   />
                 )
               } else {
@@ -71,12 +72,18 @@ const Page = ({ config, templates, overview, page, sets, values, fetchPage,
                       value.set_prefix == currentSetPrefix &&
                       value.set_index == currentSetIndex
                     ))}
+                    siblings={values.filter((value) => (
+                      value.attribute == element.attribute &&
+                      value.set_prefix == currentSetPrefix &&
+                      value.set_index != currentSetIndex
+                    ))}
                     disabled={overview.read_only}
                     isManager={isManager}
                     currentSet={currentSet}
                     createValue={createValue}
                     updateValue={updateValue}
                     deleteValue={deleteValue}
+                    copyValue={copyValue}
                   />
                 )
               }
@@ -104,7 +111,8 @@ Page.propTypes = {
   activateSet: PropTypes.func.isRequired,
   createSet: PropTypes.func.isRequired,
   updateSet: PropTypes.func.isRequired,
-  deleteSet: PropTypes.func.isRequired
+  deleteSet: PropTypes.func.isRequired,
+  copyValue: PropTypes.func.isRequired
 }
 
 export default Page

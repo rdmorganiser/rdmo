@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import QuestionAddValue from '../question/QuestionAddValue'
+import QuestionCopyValue from '../question/QuestionCopyValue'
+import QuestionCopyValues from '../question/QuestionCopyValues'
 import QuestionDefault from '../question/QuestionDefault'
 import QuestionError from '../question/QuestionError'
 import QuestionEraseValue from '../question/QuestionEraseValue'
@@ -10,7 +12,8 @@ import QuestionRemoveValue from '../question/QuestionRemoveValue'
 
 import YesNoInput from './YesNoInput'
 
-const YesNoWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue }) => {
+const YesNoWidget = ({ question, values, siblings, currentSet, disabled,
+                       createValue, updateValue, deleteValue, copyValue }) => {
   return (
     <div className="interview-widgets">
       {
@@ -33,6 +36,7 @@ const YesNoWidget = ({ question, values, currentSet, disabled, createValue, upda
                       disabled={disabled}
                       deleteValue={deleteValue}
                     />
+                    <QuestionCopyValue question={question} value={value} siblings={siblings} copyValue={copyValue} />
                     <QuestionDefault question={question} value={value} />
                   </div>
                 }
@@ -49,6 +53,7 @@ const YesNoWidget = ({ question, values, currentSet, disabled, createValue, upda
         disabled={disabled}
         createValue={createValue}
       />
+      <QuestionCopyValues question={question} values={values} siblings={siblings} copyValue={copyValue} />
     </div>
   )
 }
@@ -56,11 +61,13 @@ const YesNoWidget = ({ question, values, currentSet, disabled, createValue, upda
 YesNoWidget.propTypes = {
   question: PropTypes.object.isRequired,
   values: PropTypes.array.isRequired,
+  siblings: PropTypes.array,
   disabled: PropTypes.bool,
   currentSet: PropTypes.object.isRequired,
   createValue: PropTypes.func.isRequired,
   updateValue: PropTypes.func.isRequired,
-  deleteValue: PropTypes.func.isRequired
+  deleteValue: PropTypes.func.isRequired,
+  copyValue: PropTypes.func.isRequired
 }
 
 export default YesNoWidget

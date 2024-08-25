@@ -14,7 +14,7 @@ import QuestionSetRemoveSet from './QuestionSetRemoveSet'
 
 const QuestionSet = ({ templates, questionset, sets, values, disabled, isManager,
                        parentSet, createSet, updateSet, deleteSet,
-                       createValue, updateValue, deleteValue }) => {
+                       createValue, updateValue, deleteValue, copyValue }) => {
 
   const setPrefix = getChildPrefix(parentSet)
 
@@ -58,6 +58,7 @@ const QuestionSet = ({ templates, questionset, sets, values, disabled, isManager
                             createValue={createValue}
                             updateValue={updateValue}
                             deleteValue={deleteValue}
+                            copyValue={copyValue}
                           />
                         )
                       } else {
@@ -71,12 +72,18 @@ const QuestionSet = ({ templates, questionset, sets, values, disabled, isManager
                               value.set_prefix == set.set_prefix &&
                               value.set_index == set.set_index
                             ))}
+                            siblings={values.filter((value) => (
+                              value.attribute == element.attribute &&
+                              value.set_prefix == set.set_prefix &&
+                              value.set_index != set.set_index
+                            ))}
                             disabled={disabled}
                             isManager={isManager}
                             currentSet={set}
                             createValue={createValue}
                             updateValue={updateValue}
                             deleteValue={deleteValue}
+                            copyValue={copyValue}
                           />
                         )
                       }
@@ -107,7 +114,8 @@ QuestionSet.propTypes = {
   deleteSet: PropTypes.func.isRequired,
   createValue: PropTypes.func.isRequired,
   updateValue: PropTypes.func.isRequired,
-  deleteValue: PropTypes.func.isRequired
+  deleteValue: PropTypes.func.isRequired,
+  copyValue: PropTypes.func.isRequired
 }
 
 export default QuestionSet

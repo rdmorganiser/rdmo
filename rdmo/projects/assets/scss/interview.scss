@@ -180,8 +180,7 @@
         display: flex;
         gap: 10px;
 
-        .btn-erase-value,
-        .btn-remove-value,
+        .btn.btn-link,
         .success-indicator {
             opacity: 0.8;
             line-height: 20px;
@@ -190,13 +189,11 @@
             padding-right: 0;
         }
 
-        .btn-erase-value:hover,
-        .btn-remove-value:hover {
+        .btn.btn-link:hover {
             opacity: 1;
         }
 
-        .btn-erase-value:focus,
-        .btn-remove-value:focus {
+        .btn.btn-link:focus {
             outline: 0;
         }
 

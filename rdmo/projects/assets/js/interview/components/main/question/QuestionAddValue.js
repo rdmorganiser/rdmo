@@ -17,7 +17,7 @@ const AddValue = ({ question, values, currentSet, disabled, createValue }) => {
   }
 
   return !disabled && question.is_collection && (
-    <button type="button" className="btn btn-success add-value-button" onClick={handleClick}>
+    <button type="button" className="btn btn-success btn-xs add-value-button" onClick={handleClick}>
       <i className="fa fa-plus fa-btn"></i> {capitalize(question.verbose_name)}
     </button>
   )

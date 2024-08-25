@@ -86,4 +86,21 @@ const activateFirstValue = (page, values) => {
   }
 }
 
-export { isDefaultValue, gatherDefaultValues, initValues, initRange, activateFirstValue }
+const compareValues = (a, b) => {
+  if (isNil(a.id) || isNil(b.id)) {
+    return (a.attribute == b.attribute) &&
+           (a.set_prefix == b.set_prefix) &&
+           (a.set_index == b.set_index) &&
+           (a.collection_index == b.collection_index)
+  } else {
+    return a.id == b.id
+  }
+}
+
+const isEmptyValue = (value) => {
+  return isNil(value.id) || (
+    isEmpty(value.text) && isNil(value.option) && isEmpty(value.external_id)
+  )
+}
+
+export { isDefaultValue, gatherDefaultValues, initValues, initRange, activateFirstValue, compareValues, isEmptyValue }

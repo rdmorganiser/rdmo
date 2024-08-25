@@ -31,6 +31,7 @@ const CheckboxInput = ({ question, value, option, disabled, onCreate, onUpdate, 
         })
       } else {
         onUpdate(value, {
+          text: additionalInput,
           option: option.id,
           unit: question.unit,
           value_type: question.value_type
