@@ -39,7 +39,7 @@
     "react-diff-viewer-continued": "^3.4.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.24.1",
+    "@babel/cli": "^7.25.6",
     "@babel/core": "^7.24.0",
     "@babel/preset-env": "^7.25.3",
     "@babel/preset-react": "^7.24.1",
