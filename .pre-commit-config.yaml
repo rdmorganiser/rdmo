@@ -22,12 +22,12 @@ repos:
         exclude: \.dot$
       - id: debug-statements
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.5.7
+    rev: v0.6.3
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
   - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v8.56.0
+    rev: v9.9.1
     hooks:
       - id: eslint
         args: [--fix, --color]
