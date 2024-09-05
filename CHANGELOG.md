@@ -30,6 +30,7 @@
 * Fix textarea resizing (#1021)
 * Fix export links in management (#915)
 * Fix typos (#1001)
+* Use ACCOUNT_FORMS instead of ACCOUNT_SIGNUP_FORM_CLASS in settings
 * Remove local hosts from ALLOWED_HOSTS settings
 * Improve admin interface (#942, #918)
 * Update default home page
