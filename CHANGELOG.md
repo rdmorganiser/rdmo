@@ -1,6 +1,6 @@
 # Changelog
 
-## [RDMO 2.2.0](https://github.com/rdmorganiser/rdmo/compare/2.1.3...2.2.0) (Jul 25, 2024)
+## [RDMO 2.2.0](https://github.com/rdmorganiser/rdmo/compare/2.1.3...2.2.0) (Sep 05, 2024)
 
 * Add new projects overview (#865, #355)
   * Projects are now displayed in an interactive table which can be filtered and ordered
