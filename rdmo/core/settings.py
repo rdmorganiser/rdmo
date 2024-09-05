@@ -101,7 +101,10 @@ ACCOUNT_SIGNUP = False
 ACCOUNT_GROUPS = []
 ACCOUNT_TERMS_OF_USE = False
 ACCOUNT_ADAPTER = 'rdmo.accounts.adapter.AccountAdapter'
-ACCOUNT_SIGNUP_FORM_CLASS = 'rdmo.accounts.forms.SignupForm'
+ACCOUNT_FORMS = {
+    'login': 'rdmo.accounts.forms.LoginForm',
+    'signup': 'rdmo.accounts.forms.SignupForm',
+}
 ACCOUNT_USER_DISPLAY = 'rdmo.accounts.utils.get_full_name'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_ACTIVATION_DAYS = 7
