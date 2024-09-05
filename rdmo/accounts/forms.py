@@ -5,6 +5,8 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
+from allauth.account.forms import LoginForm as AllauthLoginForm
+
 from .models import AdditionalField, AdditionalFieldValue, ConsentFieldValue
 
 log = logging.getLogger(__name__)
@@ -66,6 +68,17 @@ class ProfileForm(forms.ModelForm):
 
             additional_value.value = self.cleaned_data[additional_field.key]
             additional_value.save()
+
+
+class LoginForm(AllauthLoginForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # remove forget password link introduced with allauth 0.57.0
+        password_field = self.fields.get('password')
+        if password_field:
+            password_field.help_text = None
 
 
 class SignupForm(ProfileForm):
