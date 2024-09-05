@@ -51,7 +51,7 @@ class ProfileForm(forms.ModelForm):
         # existing user is going to be updated
         if self.instance.pk is not None:
             for additional_field_value in AdditionalFieldValue.objects.filter(user=self.instance):
-                self.fields[additional_field.key].initial = additional_field_value.value
+                self.fields[additional_field_value.field.key].initial = additional_field_value.value
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
