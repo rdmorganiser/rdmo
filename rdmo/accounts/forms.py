@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
 from allauth.account.forms import LoginForm as AllauthLoginForm
+from allauth.account.forms import SignupForm as AllauthSignupForm
 
 from .models import AdditionalField, AdditionalFieldValue, ConsentFieldValue
 
@@ -81,7 +82,7 @@ class LoginForm(AllauthLoginForm):
             password_field.help_text = None
 
 
-class SignupForm(ProfileForm):
+class SignupForm(AllauthSignupForm, ProfileForm):
 
     use_required_attribute = False
 
