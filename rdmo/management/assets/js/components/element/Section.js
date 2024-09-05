@@ -23,7 +23,7 @@ const Section = ({ config, section, configActions, elementActions, display='list
   const editUrl = buildPath(config.baseUrl, 'sections', section.id)
   const copyUrl = buildPath(config.baseUrl, 'sections', section.id, 'copy')
   const nestedUrl = buildPath(config.baseUrl, 'sections', section.id, 'nested')
-  const exportUrl = buildPath('/api/v1/', 'questions', 'sections', section.id, 'export')
+  const exportUrl = buildPath(config.apiUrl, 'questions', 'sections', section.id, 'export')
 
   const fetchEdit = () => elementActions.fetchElement('sections', section.id)
   const fetchCopy = () => elementActions.fetchElement('sections', section.id, 'copy')
@@ -51,11 +51,12 @@ const Section = ({ config, section, configActions, elementActions, display='list
       </div>
       <div>
         <p>
-          <strong>{gettext('Section')}{': '}</strong> {section.title}
+          <strong>{gettext('Section')}{': '}</strong>
+          <span dangerouslySetInnerHTML={{ __html: section.title }}></span>
         </p>
         {
           get(config, 'display.uri.sections', true) &&
-          <CodeLink className="code-questions" uri={section.uri} onClick={() => fetchEdit()} order={order} />
+          <CodeLink className="code-questions" uri={section.uri} href={editUrl} onClick={() => fetchEdit()} order={order} />
         }
         <ElementErrors element={section} />
       </div>

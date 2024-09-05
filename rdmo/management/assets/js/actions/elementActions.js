@@ -235,9 +235,19 @@ export function fetchElement(elementType, elementId, elementAction=null) {
             QuestionsApi.fetchQuestions('index'),
             TasksApi.fetchTasks('index'),
           ]).then(([element, attributes, conditions, pages, questionsets,
-                    questions, tasks]) => ({
+                    questions, tasks]) => {
+              if (elementAction == 'copy') {
+                delete element.conditions
+                delete element.pages
+                delete element.questionsets
+                delete element.questions
+                delete element.tasks
+              }
+
+            return {
             element, attributes, conditions, pages, questionsets, questions, tasks
-          }))
+            }
+          })
         }
         break
 
@@ -251,9 +261,14 @@ export function fetchElement(elementType, elementId, elementAction=null) {
             ConditionsApi.fetchConditions('index'),
             OptionsApi.fetchOptions('index'),
             QuestionsApi.fetchQuestions('index')
-          ]).then(([element, conditions, options, questions]) => ({
-            element, conditions, options, questions
-          }))
+          ]).then(([element, conditions, options, questions]) => {
+            if (elementAction == 'copy') {
+              delete element.questions
+            }
+            return {
+              element, conditions, options, questions
+            }
+          })
         }
         break
 
@@ -265,6 +280,7 @@ export function fetchElement(elementType, elementId, elementAction=null) {
         ]).then(([element, optionsets, conditions]) => {
           if (elementAction == 'copy') {
             delete element.optionsets
+            delete element.conditions
           }
           return {
             element, optionsets, conditions
@@ -283,9 +299,18 @@ export function fetchElement(elementType, elementId, elementAction=null) {
           QuestionsApi.fetchQuestions('index'),
           TasksApi.fetchTasks('index'),
         ]).then(([element, attributes, optionsets, options,
-                  pages, questionsets, questions, tasks]) => ({
-          element, attributes, optionsets, options, pages, questionsets, questions, tasks
-        }))
+                  pages, questionsets, questions, tasks]) => {
+           if (elementAction == 'copy') {
+            delete element.optionsets
+            delete element.pages
+            delete element.questionsets
+            delete element.questions
+            delete element.tasks
+          }
+           return {
+             element, attributes, optionsets, options, pages, questionsets, questions, tasks
+           }
+        })
         break
 
       case 'tasks':
@@ -342,14 +367,15 @@ export function fetchElementError(error) {
 
 // store element
 
-export function storeElement(elementType, element, back) {
+export function storeElement(elementType, element, elementAction = null, back = false) {
   return function(dispatch, getState) {
+
     dispatch(storeElementInit(element))
 
     let action
     switch (elementType) {
       case 'catalogs':
-        action = () => QuestionsApi.storeCatalog(element)
+        action = () => QuestionsApi.storeCatalog(element, elementAction)
         break
 
       case 'sections':
@@ -385,11 +411,11 @@ export function storeElement(elementType, element, back) {
         break
 
       case 'tasks':
-        action = () => TasksApi.storeTask(element)
+        action = () => TasksApi.storeTask(element, elementAction)
         break
 
       case 'views':
-        action = () => ViewsApi.storeView(element)
+        action = () => ViewsApi.storeView(element, elementAction)
         break
     }
 
@@ -398,7 +424,7 @@ export function storeElement(elementType, element, back) {
         dispatch(storeElementSuccess(element))
         if (back) {
           history.back()
-        } else if (getState().elements.elementAction == 'create') {
+        } else if (['create', 'copy'].includes(getState().elements.elementAction)) {
           dispatch(fetchElement(getState().elements.elementType, element.id))
         }
       })
@@ -574,7 +600,6 @@ export function deleteElement(elementType, element) {
       case 'catalogs':
         action = () => QuestionsApi.deleteCatalog(element)
         break
-
       case 'sections':
         action = () => QuestionsApi.deleteSection(element)
         break
@@ -653,9 +678,9 @@ export function dropElement(dragElement, dropElement, mode) {
       const element = {...getState().elements.element}
       const { dragParent, dropParent } = moveElement(element, dragElement, dropElement, mode)
 
-      dispatch(storeElement(elementTypes[dragParent.model], dragParent))
-      if (!isNil(dropParent)) {
-        dispatch(storeElement(elementTypes[dropParent.model], dropParent))
+    dispatch(storeElement(elementTypes[dragParent.model], dragParent))
+    if (!isNil(dropParent)) {
+      dispatch(storeElement(elementTypes[dropParent.model], dropParent))
       }
     }
   }

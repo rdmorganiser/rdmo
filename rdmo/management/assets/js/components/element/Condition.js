@@ -14,7 +14,7 @@ const Condition = ({ config, condition, elementActions, filter=false, filterEdit
 
   const editUrl = buildPath(config.baseUrl, 'conditions', condition.id)
   const copyUrl = buildPath(config.baseUrl, 'conditions', condition.id, 'copy')
-  const exportUrl = buildPath('/api/v1/', 'conditions', 'conditions', condition.id, 'export')
+  const exportUrl = buildPath(config.apiUrl, 'conditions', 'conditions', condition.id, 'export')
 
   const fetchEdit = () => elementActions.fetchElement('conditions', condition.id)
   const fetchCopy = () => elementActions.fetchElement('conditions', condition.id, 'copy')
@@ -35,7 +35,7 @@ const Condition = ({ config, condition, elementActions, filter=false, filterEdit
         <div>
           <p>
             <strong>{gettext('Condition')}{': '}</strong>
-            <CodeLink className="code-conditions" uri={condition.uri} onClick={() => fetchEdit()} />
+            <CodeLink className="code-conditions" uri={condition.uri} href={editUrl} onClick={() => fetchEdit()} />
           </p>
           <ElementErrors element={condition} />
         </div>

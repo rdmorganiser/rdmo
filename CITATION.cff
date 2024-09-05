@@ -21,6 +21,9 @@ authors:
     given-names:  Heinz-Alexander
     orcid:        https://orcid.org/0000-0003-4397-027X
 
+  - family-names: Malzer
+    given-names:  Claudia
+
   - family-names: Lanza
     given-names:  Giacomo
     orcid:        https://orcid.org/0000-0002-2239-3955
@@ -32,8 +35,8 @@ authors:
     given-names:  Dario
     orcid:        https://orcid.org/0000-0003-4499-8573
 
-  - family-names: Harry
-    given-names:  Enke
+  - family-names: Enke
+    given-names:  Harry
     orcid:        https://orcid.org/0000-0002-2366-8316
 
 title: Research Data Management Organiser (RDMO)

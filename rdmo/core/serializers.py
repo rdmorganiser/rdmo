@@ -38,7 +38,7 @@ class MarkdownSerializerMixin(serializers.Serializer):
         response = super().to_representation(instance)
 
         for markdown_field in self.markdown_fields:
-            if markdown_field in response and response[markdown_field]:
+            if response.get(markdown_field):
                 response[markdown_field] = markdown2html(response[markdown_field])
 
         return response
@@ -216,7 +216,10 @@ class ReadOnlyObjectPermissionSerializerMixin:
         return perm
 
     def get_read_only(self, obj) -> bool:
-        user = self.context['request'].user
+        request = self.context.get('request')
+        if request is None:
+            return False
+        user = request.user
         perms = (self.construct_object_permission(self.Meta.model, action_name)
                  for action_name in self.OBJECT_PERMISSION_ACTION_NAMES)
         return not all(user.has_perm(perm, obj) for perm in perms)

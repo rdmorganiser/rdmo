@@ -13,7 +13,7 @@ class Command(BaseCommand):
             group, created = Group.objects.get_or_create(name=name)
 
             if created:
-                print('Group "%s" created' % name)
+                print(f'Group "{name}" created')
             else:
                 group.permissions.clear()
 

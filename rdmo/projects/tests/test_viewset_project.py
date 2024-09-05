@@ -45,6 +45,8 @@ urlnames = {
     'navigation': 'v1-projects:project-navigation',
     'options': 'v1-projects:project-options',
     'resolve': 'v1-projects:project-resolve',
+    'upload_accept': 'v1-projects:project-upload-accept',
+    'imports': 'v1-projects:project-imports'
 }
 
 projects = [1, 2, 3, 4, 5]
@@ -59,6 +61,8 @@ optionset_id = 4
 
 project_id = 1
 
+page_size = 5
+
 @pytest.mark.parametrize('username,password', users)
 def test_list(db, client, username, password):
     client.login(username=username, password=password)
@@ -67,15 +71,19 @@ def test_list(db, client, username, password):
     response = client.get(url)
 
     if password:
+        response_data = response.json()
+
         assert response.status_code == 200
-        assert isinstance(response.json(), list)
+        assert isinstance(response_data, dict)
 
         if username == 'user':
-            assert sorted([item['id'] for item in response.json()]) == []
+            assert response_data['count'] == 0
+            assert response_data['results'] == []
         else:
             values_list = Project.objects.filter(id__in=view_project_permission_map.get(username, [])) \
-                                         .order_by('id').values_list('id', flat=True)
-            assert sorted([item['id'] for item in response.json()]) == list(values_list)
+                                         .values_list('id', flat=True)
+            assert response_data['count'] == len(values_list)
+            assert [item['id'] for item in response_data['results']] == list(values_list[:page_size])
     else:
         assert response.status_code == 401
 
@@ -359,3 +367,32 @@ def test_options_text_and_help(db, client, mocker):
             'text_and_help': 'Simple answer 1'
         }
     ]
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_upload_accept(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['upload_accept'])
+    response = client.get(url)
+
+    if password:
+        assert response.status_code == 200
+        assert response.json() == '.xml'
+    else:
+        assert response.status_code == 401
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_imports(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['imports'])
+    response = client.get(url)
+
+    if password:
+        assert response.status_code == 200
+        assert len(response.json()) == 1
+        assert response.json()[0]['key'] == 'url'
+    else:
+        assert response.status_code == 401

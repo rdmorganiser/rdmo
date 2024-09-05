@@ -33,7 +33,7 @@
                 <tr>
                     <td>
                         <a href="{% url 'issue' project.pk issue.pk %}">
-                            {{ issue.task.title }}
+                            {{ issue.task.title|markdown }}
                         </a>
                     </td>
                     <td>{{ issue.task.text|markdown }}</td>

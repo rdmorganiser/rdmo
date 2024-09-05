@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
@@ -8,7 +9,7 @@ from rdmo.questions.models import Catalog
 from rdmo.services.validators import ProviderValidator
 
 from ...models import Integration, IntegrationOption, Invite, Issue, IssueResource, Membership, Project, Snapshot, Value
-from ...validators import ValueConflictValidator, ValueQuotaValidator
+from ...validators import ValueConflictValidator, ValueQuotaValidator, ValueTypeValidator
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -50,6 +51,8 @@ class ProjectSerializer(serializers.ModelSerializer):
     authors = UserSerializer(many=True, read_only=True)
     guests = UserSerializer(many=True, read_only=True)
 
+    last_changed = serializers.DateTimeField(read_only=True)
+
     class Meta:
         model = Project
         fields = (
@@ -66,6 +69,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             'guests',
             'created',
             'updated',
+            'last_changed',
             'site',
             'views',
             'progress_total',
@@ -263,7 +267,8 @@ class ProjectValueSerializer(serializers.ModelSerializer):
         )
         validators = (
             ValueConflictValidator(),
-            ValueQuotaValidator()
+            ValueQuotaValidator(),
+            ValueTypeValidator()
         )
 
 
@@ -306,6 +311,19 @@ class InviteSerializer(serializers.ModelSerializer):
             'timestamp'
         )
 
+class UserInviteSerializer(InviteSerializer):
+
+    title = serializers.CharField(source='project.title')
+    description = serializers.CharField(source='project.description')
+
+    class Meta:
+        model = Invite
+        fields = (
+            *InviteSerializer.Meta.fields,
+            'title',
+            'description',
+            'token',
+        )
 
 class IssueResourceSerializer(serializers.ModelSerializer):
 

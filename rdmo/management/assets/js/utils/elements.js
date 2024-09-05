@@ -162,17 +162,38 @@ function findDescendants(element, elementType) {
 }
 
 const buildUri = (element) => {
-  let uri = element.uri_prefix + '/' + elementModules[element.model] + '/'
+  if (isUndefined(element.uri_prefix) || isUndefined(element.model)) {
+    return null
+  }
 
-  if (!isUndefined(element.uri_path)) {
+  let uri = `${element.uri_prefix}/${elementModules[element.model]}/`
+
+  if (!isUndefined(element.uri_path) && !isNil(element.uri_path)) {
     uri += element.uri_path
-  } else if (!isUndefined(element.path)) {
+  } else if (!isUndefined(element.path) && !isNil(element.path)) {
     uri += element.path
-  } else {
+  } else if (!isUndefined(element.key) && !isNil(element.key)) {
     uri += element.key
+  } else {
+    return null
   }
 
   return uri
 }
 
-export { compareElements, updateElement, resetElement, canMoveElement, moveElement, findDescendants, buildUri }
+const buildPathForAttribute = (key, parentUri) => {
+  let path = key
+  if (parentUri) {
+     if (parentUri.includes('/domain/')) {
+      // construct the path using parentUri directly
+      const parentPath = parentUri.split('/domain/')[1]
+      path = parentPath ? `${parentPath}/${key}` : key
+    }
+  }
+
+  return path
+}
+
+
+
+export { compareElements, updateElement, resetElement, canMoveElement, moveElement, findDescendants, buildUri, buildPathForAttribute }

@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 import isUndefined from 'lodash/isUndefined'
 
@@ -19,14 +18,15 @@ NestedLink.propTypes = {
   show: PropTypes.bool
 }
 
-const EditLink = ({ href, title, onClick }) => {
-  return <Link href={href} className="element-link fa fa-pencil" title={title} onClick={onClick} />
+const EditLink = ({ href, title, onClick, disabled= false }) => {
+  return <Link href={href} className="element-link fa fa-pencil" title={title} onClick={onClick} disabled={disabled} />
 }
 
 EditLink.propTypes = {
   href: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired,
+  disabled: PropTypes.bool
 }
 
 const CopyLink = ({ href, title, onClick }) => {
@@ -102,6 +102,24 @@ LockedLink.propTypes = {
   onClick: PropTypes.func.isRequired,
   disabled: PropTypes.bool
 }
+
+const ToggleCurrentSiteLink = ({ hasCurrentSite, onClick, show }) => {
+  const className = classNames({
+    'element-btn-link fa': true,
+    'fa-plus-square': !hasCurrentSite,
+    'fa-minus-square': hasCurrentSite,
+  })
+  const title = hasCurrentSite ? gettext('Remove your site'): gettext('Add your site')
+
+  return  show && <LinkButton className={className} title={title} onClick={onClick} />
+}
+
+ToggleCurrentSiteLink.propTypes = {
+  hasCurrentSite: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
+  show: PropTypes.bool
+}
+
 
 const ShowElementsLink = ({ showElements, show, onClick }) => {
   const className = classNames({
@@ -180,10 +198,10 @@ ExtendLink.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-const CodeLink = ({ className, uri, onClick, order }) => {
+const CodeLink = ({ className, uri, href, onClick, order }) => {
   return (
     <>
-      <Link onClick={onClick}>
+      <Link href={href} onClick={onClick}>
         <code className={className}>{uri}</code>
       </Link>
       {!isNil(order) ? (
@@ -196,51 +214,42 @@ const CodeLink = ({ className, uri, onClick, order }) => {
 CodeLink.propTypes = {
   className: PropTypes.string.isRequired,
   uri: PropTypes.string.isRequired,
+  href: PropTypes.string,
   onClick: PropTypes.func.isRequired,
   order: PropTypes.number
 }
 
-const ErrorLink = ({ element, onClick }) => {
-  return (
-    !isEmpty(element.errors) &&
-    <Link className="element-link fa fa-warning text-danger" onClick={onClick} />
-  )
+const ErrorLink = ({ onClick }) => {
+  return <Link className="element-link fa fa-warning text-danger" onClick={onClick} />
 }
 
 ErrorLink.propTypes = {
-  element: PropTypes.object.isRequired,
   onClick: PropTypes.func.isRequired
 }
 
-
-const WarningLink = ({ element, onClick }) => {
-  return (
-    !isEmpty(element.warnings) &&
-    <Link className="element-link fa fa-warning text-warning" onClick={onClick} />
-  )
+const WarningLink = ({ onClick }) => {
+  return <Link className="element-link fa fa-warning text-warning" onClick={onClick} />
 }
 
 WarningLink.propTypes = {
-  element: PropTypes.object.isRequired,
   onClick: PropTypes.func.isRequired
 }
 
-
-const ShowLink = ({ element, onClick }) => {
-  const title = element.show ? gettext('Hide') : gettext('Show')
+const ShowLink = ({ show = false, onClick }) => {
+  const title = show ? gettext('Hide') : gettext('Show')
   const className = classNames({
     'element-link fa': true,
-    'fa-eye-slash': element.show,
-    'fa-eye': !element.show
+    'fa-chevron-down': !show,
+    'fa-chevron-up': show
   })
 
   return <Link className={className} title={title} onClick={onClick} />
 }
 
 ShowLink.propTypes = {
-  element: PropTypes.object.isRequired,
+  show: PropTypes.bool,
   onClick: PropTypes.func.isRequired
 }
 
-export { EditLink, CopyLink, AddLink, AvailableLink, LockedLink, ShowElementsLink,
+export { EditLink, CopyLink, AddLink, AvailableLink, ToggleCurrentSiteLink, LockedLink, ShowElementsLink,
          NestedLink, ExportLink, ExtendLink, CodeLink, ErrorLink, WarningLink, ShowLink }

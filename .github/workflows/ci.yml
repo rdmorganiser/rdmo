@@ -10,10 +10,18 @@ on:
       - '.github/workflows/**'
       - 'rdmo/**'
       - 'testing/**'
+      - 'webpack/**'
+      - .eslintrc.js
+      - .nvmrc
       - .pre-commit-config.yaml
       - conftest.py
       - package.json
       - pyproject.toml
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review # this is needed to trigger checks, when an auto-generated "draft" PR is set for "ready for review".
 
 # Ref: https://docs.github.com/en/actions/using-jobs/using-concurrency
 concurrency:
@@ -23,119 +31,19 @@ concurrency:
 env:
   PYTHONDONTWRITEBYTECODE: 1
   FORCE_COLOR: 1 # colored output by pytest etc.
-  CLICOLOR_FORCE: 1 # colored output by ruff
 
 jobs:
 
   lint:
-    name: Lint
-    runs-on: ubuntu-22.04
-    steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-python@v4
-      with:
-        python-version: "3.12"
-        cache: pip
-    - run: python -m pip install --upgrade pip
-    - run: python -m pip install --editable .[dev]
-    - name: Set up pre-commit cache
-      uses: actions/cache@v3
-      with:
-        path: ~/.cache/pre-commit
-        key: lint-${{ hashFiles('.pre-commit-config.yaml') }}
-    - name: Run linters via pre-commit (ruff, eslint)
-      run: pre-commit run --all-files --color=always
-
-  test:
-    runs-on: ubuntu-22.04
-    strategy:
-      matrix:
-        python-version: ['3.8', '3.12']
-        db-backend: [mysql, postgres]
-    name: "Test (Python: ${{ matrix.python-version }}, DB: ${{ matrix.db-backend }})"
-    needs: lint
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-        cache: pip
-    - name: Install Dependencies
-      run: |
-        sudo apt update
-        sudo apt install --yes pandoc texlive-xetex librsvg2-bin
-        python -m pip install --upgrade pip
-        pandoc --version
-    - name: Install rdmo[mysql] and start mysql
-      run: |
-        python -m pip install --editable .[ci,mysql]
-        sudo systemctl start mysql.service
-      if: matrix.db-backend == 'mysql'
-    - name: Install rdmo[postgres] and start postgresql
-      run: |
-        python -m pip install --editable .[ci,postgres]
-        sudo systemctl start postgresql.service
-        pg_isready
-        sudo -u postgres psql --command="CREATE USER postgres_user PASSWORD 'postgres_password' CREATEDB"
-      if: matrix.db-backend == 'postgres'
-    - name: Prepare Env
-      run: |
-        cp -r testing/media testing/media_root
-        mkdir testing/log
-    - name: Run Tests
-      run: |
-        pytest -p randomly -p no:cacheprovider --cov --reuse-db --numprocesses=auto --dist=loadscope
-        coveralls --service=github
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GITHUB_DB_BACKEND: ${{ matrix.db-backend }}
-        COVERALLS_FLAG_NAME: '${{ matrix.db-backend }}: ${{ matrix.python-version }}'
-        COVERALLS_PARALLEL: true
-    # end-to-end tests
-    - uses: actions/setup-node@v4
-      with:
-        node-version: 18
-        cache: npm
-      if: matrix.python-version == '3.12' && matrix.db-backend == 'postgres'
-    - name: Install e2e tests dependencies
-      run: |
-        npm install
-        npm run build:prod
-        playwright install chromium
-      if: matrix.python-version == '3.12' && matrix.db-backend == 'postgres'
-    - run: mkdir screenshots
-    - name: Run end-to-end tests
-      run: pytest -p randomly -p no:cacheprovider --reuse-db --numprocesses=auto --dist=loadscope -m e2e --nomigrations
-      if: matrix.python-version == '3.12' && matrix.db-backend == 'postgres'
-      env:
-        DJANGO_DEBUG: True
-        GITHUB_DB_BACKEND: ${{ matrix.db-backend }}
-    - uses: actions/upload-artifact@v3
-      with:
-        name: screenshots
-        path: screenshots/*.png
-      if: matrix.python-version == '3.12' && matrix.db-backend == 'postgres'
-
-  coveralls:
-    name: Indicate completion to coveralls
-    needs: test
-    runs-on: ubuntu-latest
-    container: python:3-slim
-    steps:
-    - name: Run Coveralls finish
-      run: |
-        python -m pip install coveralls
-        coveralls --service=github --finish
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # Ref: https://github.com/rdmorganiser/.github/blob/main/.github/workflows/_lint.yml
+    uses: rdmorganiser/.github/.github/workflows/_lint.yml@main
 
   build-wheel:
     name: Build python wheel
-    needs: test
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v4
+    # update the version
     - name: Get short commit SHA
       run: |
         if [ "${{ github.event_name }}" = "pull_request" ]; then
@@ -153,39 +61,159 @@ jobs:
     - name: Update version in rdmo/__init__.py
       run: |
         sed -i "s/__version__ = .*/__version__ = \"${{ steps.new-version.outputs.new_version }}\"/" rdmo/__init__.py
+    # build the webpack bundle
     - uses: actions/setup-node@v4
       with:
         node-version: 18
         cache: npm
-    - run: npm install
-    - run: npm run build:prod
-    - uses: actions/setup-python@v4
+    - run: npm ci && npm run build:prod
+    # build the wheel
+    - uses: actions/setup-python@v5
       with:
         python-version: '3.12'
         cache: pip
     - run: |
-        python -m pip install --upgrade pip
-        python -m pip install .[dev]
+        python -m pip install --upgrade pip build[uv] twine
+        python -m pip --version
     - name: Build the wheel
-      run: python -m build --wheel
-    - name: Check metadata
+      run: python -m build --installer=uv
+    - name: Check the metadata of wheel and sdist
       run: python -m twine check --strict dist/*
     - name: Install package from built wheel
-      run: python -m pip install --force-reinstall dist/rdmo*.whl
+      run: python -m pip install --no-compile dist/rdmo*.whl # do not create __pycache__/*.pyc files
     - name: Write info to step summary
       run: |
-        echo -e "# ✓ Wheel successfully built (v${{ steps.new-version.outputs.new_version }})\n\n" >> $GITHUB_STEP_SUMMARY
-        echo "\`\`\`console" >> $GITHUB_STEP_SUMMARY
-        echo "$ python -m pip show rdmo" >> $GITHUB_STEP_SUMMARY
-        python -m pip show rdmo >> $GITHUB_STEP_SUMMARY
-        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          {
+            echo -e "# ✓ Wheel successfully built (v${{ steps.new-version.outputs.new_version }})\n\n"
+            echo '<details><summary>Information about installed wheel</summary>'
+            echo -e "\n\`\`\`console"
+            echo "$ python -m pip show --files --verbose rdmo"
+            python -m pip show --files --verbose rdmo
+            echo -e "\`\`\`\n</details>"
+          } >> $GITHUB_STEP_SUMMARY
     - name: Upload wheel as artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: wheel
         path: dist/rdmo*.whl
         if-no-files-found: error
         retention-days: 30
+
+  test:
+    name: "Test (Python: ${{ matrix.python-version }}, DB: ${{ matrix.db-backend }})"
+    needs: build-wheel
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.12']
+        db-backend: [mysql, postgres]
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: pip
+    - name: Download wheel
+      uses: actions/download-artifact@v4
+      with:
+        name: wheel
+        path: dist
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update && sudo apt-get install --yes pandoc texlive-xetex librsvg2-bin
+        pandoc --version
+        python -m pip install --upgrade pip
+        python -m pip --version
+    - name: Install rdmo[mysql] from wheel and start mysql
+      run: |
+        python -m pip install "$(ls dist/*.whl)[ci,mysql]"
+        sudo systemctl start mysql.service
+      if: matrix.db-backend == 'mysql'
+    - name: Install rdmo[postgres] from wheel and start postgresql
+      run: |
+        python -m pip install "$(ls dist/*.whl)[ci,postgres]"
+        sudo systemctl start postgresql.service
+        pg_isready
+        sudo -u postgres psql --command="CREATE USER postgres_user PASSWORD 'postgres_password' CREATEDB"
+      if: matrix.db-backend == 'postgres'
+    - name: Prepare Env
+      run: |
+        cp -r testing/media testing/media_root && mkdir testing/log
+    - name: Run package status tests first
+      run: |
+        pytest rdmo/core/tests/test_package_status.py --nomigrations --verbose
+      if: matrix.python-version == '3.12' && matrix.db-backend == 'postgres'
+    - name: Run Tests
+      run: |
+        pytest -p randomly -p no:cacheprovider --cov --reuse-db --numprocesses=auto --dist=loadscope
+      env:
+        GITHUB_DB_BACKEND: ${{ matrix.db-backend }}
+    - name: Upload coverage data to coveralls.io
+      uses: coverallsapp/github-action@643bc377ffa44ace6394b2b5d0d3950076de9f63 # v2.3.0
+      with:
+        flag-name: '${{ matrix.db-backend }}: ${{ matrix.python-version }}'
+        parallel: true
+
+  test-e2e:
+    name: "End-to-end Test (Python: ${{ matrix.python-version }}, DB: ${{ matrix.db-backend }})"
+    needs: build-wheel
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        python-version: ['3.12']
+        db-backend: [postgres]
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: pip
+    - name: Download wheel
+      uses: actions/download-artifact@v4
+      with:
+        name: wheel
+        path: dist
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update && sudo apt install --yes pandoc texlive-xetex librsvg2-bin
+        python -m pip install --upgrade pip
+    - name: Install rdmo[postgres] from wheel and start postgresql
+      run: |
+        python -m pip install "$(ls dist/*.whl)[ci,postgres]"
+        sudo systemctl start postgresql.service
+        pg_isready
+        sudo -u postgres psql --command="CREATE USER postgres_user PASSWORD 'postgres_password' CREATEDB"
+    - name: Prepare Env
+      run: |
+        cp -r testing/media testing/media_root && mkdir testing/log
+    - name: Install e2e tests dependencies
+      run: |
+        playwright install --with-deps chromium
+    - run: mkdir screenshots
+    - name: Collect static files into static root (only required if rdmo is installed from wheel)
+      run: python testing/manage.py collectstatic --noinput
+    - name: Run end-to-end tests
+      run: pytest -p randomly -p no:cacheprovider --reuse-db --numprocesses=auto --dist=loadscope -m e2e --nomigrations
+      env:
+        DJANGO_DEBUG: True
+        GITHUB_DB_BACKEND: ${{ matrix.db-backend }}
+    - uses: actions/upload-artifact@v4
+      with:
+        name: screenshots
+        path: screenshots/*.png
+
+  coveralls:
+    name: Indicate completion to coveralls
+    needs: test
+    if: ${{ always() }}
+    runs-on: ubuntu-24.04
+    steps:
+    - name: Run Coveralls finish
+      uses: coverallsapp/github-action@643bc377ffa44ace6394b2b5d0d3950076de9f63 # v2.3.0
+      with:
+        parallel-finished: true
 
   dev-setup:
     # Ref: structlog (MIT licensed) <https://github.com/hynek/structlog/blob/main/.github/workflows/ci.yml>
@@ -196,7 +224,7 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: pip
@@ -205,19 +233,26 @@ jobs:
 
   dependencies:
     name: Test installation of all dependencies
-    runs-on: ubuntu-22.04
+    needs: build-wheel
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: pip
+      - name: Download wheel
+        uses: actions/download-artifact@v4
+        with:
+          name: wheel
+          path: dist
       - name: Install os requirements for python-ldap
-        run: |
-          sudo apt update
-          sudo apt install --yes libldap2-dev libsasl2-dev
+        run: sudo apt-get update && sudo apt-get install --yes libldap2-dev libsasl2-dev
       - run: python -m pip install --upgrade pip
-      - run: python -m pip install .[allauth,shibboleth,ci,dev,gunicorn,ldap,mysql,postgres,pytest]
+      - name: Install rdmo wheel with all optional dependency groups
+        run: python -m pip install --no-compile "$(ls dist/*.whl)[allauth,ci,dev,gunicorn,ldap,mysql,postgres,pytest]"
+      - name: Verify installed packages have compatible dependencies
+        run: python -m pip check
       - uses: actions/setup-node@v4
         with:
           node-version: 18
@@ -253,12 +288,13 @@ jobs:
     if: always()
     needs:
       - lint
+      - build-wheel
       - test
       - coveralls
-      - build-wheel
+      - test-e2e
       - dev-setup
       - dependencies
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: re-actors/alls-green@release/v1
         with:

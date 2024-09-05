@@ -6,32 +6,21 @@ import pytest
 from django.core.management import call_command
 from django.core.management.base import CommandError
 
+from rdmo.management.tests.helpers_xml import xml_test_files
 
-def test_import(db, settings):
-    xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'catalogs.xml'
+
+@pytest.mark.parametrize("xml_file_path,error_message", xml_test_files.items())
+def test_import(db, settings, xml_file_path, error_message):
+    xml_file = Path(settings.BASE_DIR).joinpath(xml_file_path)
     stdout, stderr = io.StringIO(), io.StringIO()
 
-    call_command('import', xml_file, stdout=stdout, stderr=stderr)
-
-    assert not stdout.getvalue()
-    assert not stderr.getvalue()
-
-
-def test_import_error(db, settings):
-    xml_file = Path(settings.BASE_DIR) / 'xml' / 'error.xml'
-    stdout, stderr = io.StringIO(), io.StringIO()
-
-    with pytest.raises(CommandError) as e:
+    if error_message is None:
         call_command('import', xml_file, stdout=stdout, stderr=stderr)
 
-    assert str(e.value) == 'The content of the xml file does not consist of well formed data or markup.'
+        assert not stdout.getvalue()
+        assert not stderr.getvalue()
+    else:
+        with pytest.raises(CommandError) as e:
+            call_command('import', xml_file, stdout=stdout, stderr=stderr)
 
-
-def test_import_error2(db, settings):
-    xml_file = Path(settings.BASE_DIR) / 'xml' / 'project.xml'
-    stdout, stderr = io.StringIO(), io.StringIO()
-
-    with pytest.raises(CommandError) as e:
-        call_command('import', xml_file, stdout=stdout, stderr=stderr)
-
-    assert str(e.value) == 'This XML does not contain RDMO content.'
+        assert str(e.value).startswith(error_message)

@@ -21,7 +21,10 @@ const QuestionSet = ({ config, questionset, configActions, elementActions, displ
   const editUrl = buildPath(config.baseUrl, 'questionsets', questionset.id)
   const copyUrl = buildPath(config.baseUrl, 'questionsets', questionset.id, 'copy')
   const nestedUrl = buildPath(config.baseUrl, 'questionsets', questionset.id, 'nested')
-  const exportUrl = buildPath('/api/v1/', 'questions', 'questionsets', questionset.id, 'export')
+  const exportUrl = buildPath(config.apiUrl, 'questions', 'questionsets', questionset.id, 'export')
+  const attributeUrl = buildPath(config.apiUrl, 'domain', 'attributes', questionset.attribute)
+
+  const getConditionUrl = (index) => buildPath(config.apiUrl, 'conditions', 'conditions', questionset.conditions[index])
 
   const fetchEdit = () => elementActions.fetchElement('questionsets', questionset.id)
   const fetchCopy = () => elementActions.fetchElement('questionsets', questionset.id, 'copy')
@@ -53,22 +56,39 @@ const QuestionSet = ({ config, questionset, configActions, elementActions, displ
       </div>
       <div>
         <p>
-          <strong>{gettext('Question set')}{': '}</strong> {questionset.title}
+          <strong>{gettext('Question set')}{': '}</strong>
+          <span dangerouslySetInnerHTML={{ __html: questionset.title }}></span>
         </p>
         {
           get(config, 'display.uri.questionsets', true) && <p>
-            <CodeLink className="code-questions" uri={questionset.uri} onClick={() => fetchEdit()} order={order} />
+            <CodeLink
+              className="code-questions"
+              uri={questionset.uri}
+              href={editUrl}
+              onClick={() => fetchEdit()}
+              order={order}
+            />
           </p>
         }
         {
           get(config, 'display.uri.attributes', true) && questionset.attribute_uri &&<p>
-            <CodeLink className="code-domain" uri={questionset.attribute_uri} onClick={() => fetchAttribute()} />
+            <CodeLink
+              className="code-domain"
+              uri={questionset.attribute_uri}
+              href={attributeUrl}
+              onClick={() => fetchAttribute()}
+            />
           </p>
         }
         {
           get(config, 'display.uri.conditions', true) && questionset.condition_uris.map((uri, index) => (
             <p key={index}>
-              <CodeLink className="code-conditions" uri={uri} onClick={() => fetchCondition(index)} />
+              <CodeLink
+                className="code-conditions"
+                uri={uri}
+                href={getConditionUrl(index)}
+                onClick={() => fetchCondition(index)}
+              />
             </p>
           ))
         }

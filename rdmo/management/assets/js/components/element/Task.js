@@ -6,7 +6,7 @@ import { filterElement } from '../../utils/filter'
 import { buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
-import { EditLink, CopyLink, AvailableLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
+import { EditLink, CopyLink, AvailableLink, LockedLink, ExportLink, CodeLink, ToggleCurrentSiteLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 
 const Task = ({ config, task, elementActions, filter=false, filterSites=false, filterEditors=false }) => {
@@ -15,12 +15,15 @@ const Task = ({ config, task, elementActions, filter=false, filterSites=false, f
 
   const editUrl = buildPath(config.baseUrl, 'tasks', task.id)
   const copyUrl = buildPath(config.baseUrl, 'tasks', task.id, 'copy')
-  const exportUrl = buildPath('/api/v1/', 'tasks', 'tasks', task.id, 'export')
+  const exportUrl = buildPath(config.apiUrl, 'tasks', 'tasks', task.id, 'export')
+
+  const getConditionUrl = (index) => buildPath(config.apiUrl, 'conditions', 'conditions', task.conditions[index])
 
   const fetchEdit = () => elementActions.fetchElement('tasks', task.id)
   const fetchCopy = () => elementActions.fetchElement('tasks', task.id, 'copy')
   const toggleAvailable = () => elementActions.storeElement('tasks', {...task, available: !task.available })
   const toggleLocked = () => elementActions.storeElement('tasks', {...task, locked: !task.locked })
+  const toggleCurrentSite = () => elementActions.storeElement('tasks', task, 'toggle-site')
 
   const fetchCondition = (index) => elementActions.fetchElement('conditions', task.conditions[index])
 
@@ -35,6 +38,9 @@ const Task = ({ config, task, elementActions, filter=false, filterSites=false, f
                                                : gettext('Make task available')}
                          available={task.available} locked={task.locked} onClick={toggleAvailable}
                          disabled={task.read_only} />
+          <ToggleCurrentSiteLink hasCurrentSite={config.settings.multisite ? task.sites.includes(config.currentSite.id) : true}
+                         onClick={toggleCurrentSite}
+                         show={config.settings.multisite}/>
           <LockedLink title={task.locked ? gettext('Unlock task') : gettext('Lock task')}
                       locked={task.locked} onClick={toggleLocked} disabled={task.read_only} />
           <ExportLink title={gettext('Export task')} exportUrl={exportUrl}
@@ -43,17 +49,22 @@ const Task = ({ config, task, elementActions, filter=false, filterSites=false, f
         <div>
           <p>
             <strong>{gettext('Task')}{': '}</strong>
-            {task.title}
+            <span dangerouslySetInnerHTML={{ __html: task.title }}></span>
           </p>
           {
             get(config, 'display.uri.tasks', true) && <p>
-              <CodeLink className="code-tasks" uri={task.uri} onClick={() => fetchEdit()} />
+              <CodeLink className="code-tasks" uri={task.uri} href={editUrl} onClick={() => fetchEdit()} />
             </p>
           }
           {
             get(config, 'display.uri.conditions', true) && task.condition_uris.map((uri, index) => (
               <p key={index}>
-                <CodeLink className="code-conditions" uri={uri} onClick={() => fetchCondition(index)} />
+                <CodeLink
+                  className="code-conditions"
+                  uri={uri}
+                  href={getConditionUrl(index)}
+                  onClick={() => fetchCondition(index)}
+                />
               </p>
             ))
           }

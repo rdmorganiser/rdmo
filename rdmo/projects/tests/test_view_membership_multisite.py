@@ -32,8 +32,8 @@ membership_roles = ('owner', 'manager', 'author', 'guest')
 sites_domains = ('example.com', 'foo.com', 'bar.com')
 
 
-@pytest.fixture()
-def multisite(settings):
+@pytest.fixture
+def _multisite(settings):
     settings.MULTISITE = True
 
 
@@ -41,8 +41,9 @@ def multisite(settings):
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('membership_role', membership_roles)
 @pytest.mark.parametrize('site_domain', sites_domains)
+@pytest.mark.usefixtures("_multisite")
 def test_get_invite_email_project_path_function(db, client, username, password, project_id,
-                                                membership_role, site_domain, multisite):
+                                                membership_role, site_domain):
     client.login(username=username, password=password)
 
     current_site = Site.objects.get_current()
@@ -69,8 +70,9 @@ def test_get_invite_email_project_path_function(db, client, username, password, 
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('membership_role', membership_roles)
 @pytest.mark.parametrize('site_domain', sites_domains)
+@pytest.mark.usefixtures("_multisite")
 def test_invite_email_project_path_email_body(db, client, username, password, project_id,
-                                              membership_role, site_domain, multisite):
+                                              membership_role, site_domain):
     client.login(username=username, password=password)
 
     current_site = Site.objects.get_current()

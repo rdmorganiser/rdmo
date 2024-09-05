@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 import isNil from 'lodash/isNil'
 import invert from 'lodash/invert'
 
-import baseUrl from 'rdmo/core/assets/js/utils/baseUrl'
-
 import { elementTypes, elementModules } from '../../constants/elements'
 
 import { buildPath } from '../../utils/location'
@@ -18,8 +16,8 @@ const ElementsSidebar = ({ config, elements, elementActions, importActions }) =>
   const { elementType, elementId } = elements
 
   const model = invert(elementTypes)[elementType]
-  const exportUrl = isNil(elementId) ? `${baseUrl}/api/v1/${elementModules[model]}/${elementType}/export/`
-                                     : `${baseUrl}/api/v1/${elementModules[model]}/${elementType}/${elementId}/export/`
+  const exportUrl = isNil(elementId) ? buildPath(config.apiUrl, elementModules[model], elementType, 'export')
+                                     : buildPath(config.apiUrl, elementModules[model], elementType, elementId, 'export')
   const exportParams = getExportParams(config.filter[elementType])
 
   return (
@@ -75,10 +73,33 @@ const ElementsSidebar = ({ config, elements, elementActions, importActions }) =>
 
       <h2>Export</h2>
 
+      <p className="text-muted">
+        {gettext('Export all visible elements.')}
+      </p>
+
       <ul className="list-unstyled">
         <li>
           <a href={`${exportUrl}?${exportParams}`}>{gettext('XML')}</a>
         </li>
+        {
+          [
+            'catalogs',
+            'sections',
+            'pages',
+            'questionsets',
+            'questions',
+            'optionsets',
+            'conditions',
+            'tasks'
+          ].includes(elementType) && (
+            <li>
+              <a href={`${exportUrl}?full=true&${exportParams}`}>{gettext('XML (full)')}</a>
+            </li>
+          )
+        }
+      </ul>
+
+      <ul className="list-unstyled">
         {
           elementType == 'attributes' && <>
             <li>
@@ -104,6 +125,10 @@ const ElementsSidebar = ({ config, elements, elementActions, importActions }) =>
       </ul>
 
       <h2>Import</h2>
+
+      <p className="text-muted">
+        {gettext('Import an RDMO XML file.')}
+      </p>
 
       <UploadForm onSubmit={file => importActions.uploadFile(file)} />
     </div>

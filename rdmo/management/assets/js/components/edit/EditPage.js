@@ -45,7 +45,7 @@ const EditPage = ({ config, page, elements, elementActions }) => {
       elementActions.updateElement(page, { [key]: value })
     }
   }
-  const storePage = (back) => elementActions.storeElement('pages', page, back)
+  const storePage = (back) => elementActions.storeElement('pages', page, elementAction, back)
   const deletePage = () => elementActions.deleteElement('pages', page)
 
   const editElement = (value) => {
@@ -70,8 +70,8 @@ const EditPage = ({ config, page, elements, elementActions }) => {
 
   // for reasons unknown, the strings are not picked up by makemessages from the props
   const addElementText = gettext('Add existing element')
-  const createQuestionText = gettext('Create new question set')
-  const createQuestionSetText = gettext('Create new question')
+  const createQuestionText = gettext('Create new question')
+  const createQuestionSetText = gettext('Create new question set')
 
   return (
     <div className="panel panel-default panel-edit">
@@ -135,6 +135,8 @@ const EditPage = ({ config, page, elements, elementActions }) => {
             config.settings && config.settings.languages.map(([lang_code, lang], index) => (
               <Tab key={index} eventKey={index} title={lang}>
                 <Text config={config} element={page} field={`title_${lang_code }`}
+                      onChange={updatePage} />
+                <Text config={config} element={page} field={`short_title_${lang_code }`}
                       onChange={updatePage} />
                 <Textarea config={config} element={page} field={`help_${lang_code }`}
                           rows={4} onChange={updatePage} />

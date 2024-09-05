@@ -16,7 +16,7 @@ const Attribute = ({ config, attribute, elementActions, display='list', indent=0
   const editUrl = buildPath(config.baseUrl, 'attributes', attribute.id)
   const copyUrl = buildPath(config.baseUrl, 'attributes', attribute.id, 'copy')
   const nestedUrl = buildPath(config.baseUrl, 'attributes', attribute.id, 'nested')
-  const exportUrl = buildPath('/api/v1/', 'domain', 'attributes', attribute.id, 'export')
+  const exportUrl = buildPath(config.apiUrl, 'domain', 'attributes', attribute.id, 'export')
 
   const fetchEdit = () => elementActions.fetchElement('attributes', attribute.id)
   const fetchCopy = () => elementActions.fetchElement('attributes', attribute.id, 'copy')
@@ -42,7 +42,7 @@ const Attribute = ({ config, attribute, elementActions, display='list', indent=0
       <div>
         <p>
           <strong>{gettext('Attribute')}{': '}</strong>
-          <CodeLink className="code-domain" uri={attribute.uri} onClick={() => fetchEdit()} />
+          <CodeLink className="code-domain" uri={attribute.uri} href={editUrl} onClick={() => fetchEdit()} />
         </p>
         <ElementErrors element={attribute} />
       </div>

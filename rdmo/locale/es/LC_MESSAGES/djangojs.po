@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-09 10:45+0100\n"
-"PO-Revision-Date: 2023-12-09 10:49+0100\n"
+"POT-Creation-Date: 2024-04-26 16:24+0200\n"
+"PO-Revision-Date: 2024-09-04 10:06+0200\n"
 "Last-Translator: DAVID MARTINEZ <dmartinezmu@cem.es>\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -16,7 +16,31 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.4.2\n"
+
+#: core/assets/js/components/Modal.js:16
+#: management/assets/js/components/common/Modals.js:16
+msgid "Close"
+msgstr "Cerrar"
+
+#: core/assets/js/components/Modal.js:20
+#: management/assets/js/components/common/Buttons.js:19
+msgid "Save"
+msgstr "Guardar"
+
+#: core/assets/js/components/SearchAndFilter.js:42
+#: projects/assets/js/utils/translations.js:15
+msgid "Search"
+msgstr "Búsqueda"
+
+#: core/assets/js/components/UploadDropZone.js:18
+#, javascript-format
+msgid "%s has unsupported file type"
+msgstr "%s has unsupported file type"
+
+#: core/assets/js/components/UploadDropZone.js:26
+msgid "Drag and drop a file here or click to select a file"
+msgstr "Arrastre y suelte un archivo aquí o haga clic para seleccionarlo"
 
 #: management/assets/js/components/common/Buttons.js:6
 #: management/assets/js/components/sidebar/ImportSidebar.js:27
@@ -39,10 +63,6 @@ msgstr "Copiar"
 #: management/assets/js/components/common/Buttons.js:16
 msgid "Copy and continue editing"
 msgstr "Copiar y seguir editando"
-
-#: management/assets/js/components/common/Buttons.js:19
-msgid "Save"
-msgstr "Guardar"
 
 #: management/assets/js/components/common/Buttons.js:19
 msgid "Save and continue editing"
@@ -93,10 +113,6 @@ msgstr "XML"
 msgid "XML (full)"
 msgstr "XML (completo)"
 
-#: management/assets/js/components/common/Modals.js:16
-msgid "Close"
-msgstr "Cerrar"
-
 #: management/assets/js/components/edit/EditAttribute.js:37
 #: management/assets/js/components/element/Attribute.js:31
 msgid "This attribute is read only"
@@ -117,8 +133,8 @@ msgstr "Crear atributo"
 #: management/assets/js/components/edit/EditAttribute.js:53
 #, javascript-format
 msgid ""
-"This attribute will be added to the attribute <code class=\"code-domain\">"
-"%s</code>."
+"This attribute will be added to the attribute <code class=\"code-"
+"domain\">%s</code>."
 msgstr ""
 "Este atributo se añadirá al atributo <code class=\"code-domain\">%s</code>."
 
@@ -136,8 +152,8 @@ msgstr ""
 #: management/assets/js/components/edit/EditAttribute.js:82
 #, javascript-format
 msgid ""
-"This attribute will be added to the condition <code class=\"code-conditions"
-"\">%s</code>."
+"This attribute will be added to the condition <code class=\"code-"
+"conditions\">%s</code>."
 msgstr ""
 "Este atributo se añadirá a la condición <code class=\"code-conditions\">%s</"
 "code>."
@@ -187,11 +203,11 @@ msgstr "Crear condición"
 #: management/assets/js/components/edit/EditCondition.js:57
 #, javascript-format
 msgid ""
-"This condition will be added to the option set <code class=\"code-options\">"
-"%s</code>."
+"This condition will be added to the option set <code class=\"code-"
+"options\">%s</code>."
 msgstr ""
-"Esta condición se añadirá al conjunto de opciones <code class=\"code-options"
-"\">%s</code>."
+"Esta condición se añadirá al conjunto de opciones <code class=\"code-"
+"options\">%s</code>."
 
 #: management/assets/js/components/edit/EditCondition.js:64
 #, javascript-format
@@ -205,8 +221,8 @@ msgstr ""
 #: management/assets/js/components/edit/EditCondition.js:71
 #, javascript-format
 msgid ""
-"This condition will be added to the question set <code class=\"code-questions"
-"\">%s</code>."
+"This condition will be added to the question set <code class=\"code-"
+"questions\">%s</code>."
 msgstr ""
 "Esta condición se añadirá al conjunto de preguntas <code class=\"code-"
 "questions\">%s</code>."
@@ -214,8 +230,8 @@ msgstr ""
 #: management/assets/js/components/edit/EditCondition.js:78
 #, javascript-format
 msgid ""
-"This condition will be added to the question <code class=\"code-questions\">"
-"%s</code>."
+"This condition will be added to the question <code class=\"code-"
+"questions\">%s</code>."
 msgstr ""
 "Esta condición se añadirá a la pregunta <code class=\"code-questions\">%s</"
 "code>."
@@ -255,8 +271,8 @@ msgid ""
 "This option will be added to the option set <code class=\"code-options\">%s</"
 "code>."
 msgstr ""
-"Esta opción se añadirá al conjunto de opciones <code class=\"code-options\">"
-"%s</code>."
+"Esta opción se añadirá al conjunto de opciones <code class=\"code-"
+"options\">%s</code>."
 
 #: management/assets/js/components/edit/EditOptionSet.js:45
 #: management/assets/js/components/element/OptionSet.js:31
@@ -278,8 +294,8 @@ msgstr "Crear conjunto de opciones"
 #: management/assets/js/components/edit/EditOptionSet.js:61
 #, javascript-format
 msgid ""
-"This option set will be added to the question <code class=\"code-questions\">"
-"%s</code>."
+"This option set will be added to the question <code class=\"code-"
+"questions\">%s</code>."
 msgstr ""
 "Este conjunto de opciones se añadirá a la pregunta <code class=\"code-"
 "questions\">%s</code>."
@@ -381,8 +397,8 @@ msgstr ""
 #: management/assets/js/components/edit/EditQuestion.js:70
 #, javascript-format
 msgid ""
-"This question will be added to the question set <code class=\"code-questions"
-"\">%s</code>."
+"This question will be added to the question set <code class=\"code-"
+"questions\">%s</code>."
 msgstr ""
 "Esta pregunta se añadirá al conjunto de preguntas <code class=\"code-"
 "questions\">%s</code>."
@@ -407,8 +423,8 @@ msgstr "Crear conjunto de preguntas"
 #: management/assets/js/components/edit/EditQuestionSet.js:96
 #, javascript-format
 msgid ""
-"This question set will be added to the page <code class=\"code-questions\">"
-"%s</code>."
+"This question set will be added to the page <code class=\"code-"
+"questions\">%s</code>."
 msgstr ""
 "Este conjunto de preguntas se añadirá a la página <code class=\"code-"
 "questions\">%s</code>."
@@ -419,8 +435,8 @@ msgid ""
 "This question set will be added to the question set <code class=\"code-"
 "questions\">%s</code>."
 msgstr ""
-"Este conjunto de preguntas se añadirá al conjunto de preguntas <code class="
-"\"code-questions\">%s</code>."
+"Este conjunto de preguntas se añadirá al conjunto de preguntas <code "
+"class=\"code-questions\">%s</code>."
 
 #: management/assets/js/components/edit/EditSection.js:38
 msgid "Add existing page"

@@ -32,6 +32,7 @@ export default function elementsReducer(state = initialState, action) {
         elementId: null,
         elementAction: null,
         element: null,
+        parent: null,
         errors: {}
       }
     case 'elements/fetchElementsSuccess':
@@ -46,6 +47,7 @@ export default function elementsReducer(state = initialState, action) {
         elementId: action.elementId,
         elementAction: action.elementAction,
         element: null,
+        parent: null,
         errors: {}
       }
     case 'elements/fetchElementSuccess':
@@ -89,6 +91,7 @@ export default function elementsReducer(state = initialState, action) {
         elementId: null,
         elementAction: 'create',
         element: null,
+        parent: null,
         errors: {}
       }
     case 'elements/createElementSuccess':

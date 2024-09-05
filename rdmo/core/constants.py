@@ -5,6 +5,7 @@ VALUE_TYPE_URL = 'url'
 VALUE_TYPE_INTEGER = 'integer'
 VALUE_TYPE_FLOAT = 'float'
 VALUE_TYPE_BOOLEAN = 'boolean'
+VALUE_TYPE_DATE = 'date'
 VALUE_TYPE_DATETIME = 'datetime'
 VALUE_TYPE_OPTIONS = 'option'
 VALUE_TYPE_EMAIL = 'email'
@@ -16,6 +17,7 @@ VALUE_TYPE_CHOICES = (
     (VALUE_TYPE_INTEGER, _('Integer')),
     (VALUE_TYPE_FLOAT, _('Float')),
     (VALUE_TYPE_BOOLEAN, _('Boolean')),
+    (VALUE_TYPE_DATE, _('Date')),
     (VALUE_TYPE_DATETIME, _('Datetime')),
     (VALUE_TYPE_EMAIL, _('E-mail')),
     (VALUE_TYPE_PHONE, _('Phone')),
@@ -76,4 +78,18 @@ HUMAN2BYTES_MAPPER = {
     "gib": {"base": 1024, "power": 3},
     "tib": {"base": 1024, "power": 4},
     "pib": {"base": 1024, "power": 5},
+}
+
+RDMO_MODELS = {
+  'attribute': 'domain.attribute',
+  'condition': 'conditions.condition',
+  'option': 'options.option',
+  'optionset': 'options.optionset',
+  'question': 'questions.question',
+  'questionset': 'questions.questionset',
+  'page': 'questions.page',
+  'section': 'questions.section',
+  'catalog': 'questions.catalog',
+  'task': 'tasks.task',
+  'view': 'views.view'
 }

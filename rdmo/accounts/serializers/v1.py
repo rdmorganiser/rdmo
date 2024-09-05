@@ -72,7 +72,9 @@ class UserSerializer(serializers.ModelSerializer):
             'id',
             'groups',
             'role',
-            'memberships'
+            'memberships',
+            'is_superuser',
+            'is_staff'
         ]
         if settings.USER_API:
             fields += [

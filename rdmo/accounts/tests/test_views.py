@@ -38,7 +38,7 @@ boolean_toggle = (True, False)
 
 
 @pytest.fixture(autouse=True, scope='module')
-def reload_urls_at_teardown():
+def _reload_urls_at_teardown():
     '''Clear the url cache after the test function.'''
     yield
     reload_urls('accounts')

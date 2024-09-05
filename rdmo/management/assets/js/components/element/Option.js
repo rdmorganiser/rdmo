@@ -15,7 +15,7 @@ const Option = ({ config, option, elementActions, display='list', indent=0, filt
 
   const editUrl = buildPath(config.baseUrl, 'options', option.id)
   const copyUrl = buildPath(config.baseUrl, 'options', option.id, 'copy')
-  const exportUrl = buildPath('/api/v1/', 'options', 'options', option.id, 'export')
+  const exportUrl = buildPath(config.apiUrl, 'options', 'options', option.id, 'export')
 
   const fetchEdit = () => elementActions.fetchElement('options', option.id)
   const fetchCopy = () => elementActions.fetchElement('options', option.id, 'copy')
@@ -34,11 +34,12 @@ const Option = ({ config, option, elementActions, display='list', indent=0, filt
       </div>
       <div>
         <p>
-          <strong>{gettext('Option')}{': '}</strong> {option.text}
+          <strong>{gettext('Option')}{': '}</strong>
+          <span dangerouslySetInnerHTML={{ __html: option.text }}></span>
         </p>
         {
           get(config, 'display.uri.options', true) &&
-          <CodeLink className="code-options" uri={option.uri} onClick={() => fetchEdit()} />
+          <CodeLink className="code-options" uri={option.uri} href={editUrl} onClick={() => fetchEdit()} />
         }
         <ElementErrors element={option} />
       </div>

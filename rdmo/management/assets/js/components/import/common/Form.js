@@ -7,7 +7,6 @@ import UriPath from './UriPath'
 import UriPrefix from './UriPrefix'
 
 const Form = ({ config, element, updateElement }) => {
-
   return (
     <div className="row mt-10">
       <div className="col-sm-6">

@@ -6,7 +6,7 @@ import { filterElement } from '../../utils/filter'
 import { buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
-import { EditLink, CopyLink, AddLink, AvailableLink, LockedLink, NestedLink,
+import { EditLink, CopyLink, AddLink, AvailableLink, ToggleCurrentSiteLink, LockedLink, NestedLink,
          ExportLink, CodeLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 
@@ -18,7 +18,7 @@ const Catalog = ({ config, catalog, elementActions, display='list',
   const editUrl = buildPath(config.baseUrl, 'catalogs', catalog.id)
   const copyUrl = buildPath(config.baseUrl, 'catalogs', catalog.id, 'copy')
   const nestedUrl = buildPath(config.baseUrl, 'catalogs', catalog.id, 'nested')
-  const exportUrl = buildPath('/api/v1/', 'questions', 'catalogs', catalog.id, 'export')
+  const exportUrl = buildPath(config.apiUrl, 'questions', 'catalogs', catalog.id, 'export')
 
   const fetchEdit = () => elementActions.fetchElement('catalogs', catalog.id)
   const fetchCopy = () => elementActions.fetchElement('catalogs', catalog.id, 'copy')
@@ -26,6 +26,8 @@ const Catalog = ({ config, catalog, elementActions, display='list',
 
   const toggleAvailable = () => elementActions.storeElement('catalogs', {...catalog, available: !catalog.available })
   const toggleLocked = () => elementActions.storeElement('catalogs', {...catalog, locked: !catalog.locked })
+
+  const toggleCurrentSite = () => elementActions.storeElement('catalogs', catalog, 'toggle-site')
 
   const createSection = () => elementActions.createElement('sections', { catalog })
 
@@ -41,6 +43,9 @@ const Catalog = ({ config, catalog, elementActions, display='list',
                                                 : gettext('Make catalog available')}
                        available={catalog.available} locked={catalog.locked} onClick={toggleAvailable}
                        disabled={catalog.read_only} />
+        <ToggleCurrentSiteLink hasCurrentSite={config.settings.multisite ? catalog.sites.includes(config.currentSite.id) : true}
+                       onClick={toggleCurrentSite}
+                       show={config.settings.multisite}/>
         <LockedLink title={catalog.locked ? gettext('Unlock catalog') : gettext('Lock catalog')}
                     locked={catalog.locked} onClick={toggleLocked} disabled={catalog.read_only} />
         <ExportLink title={gettext('Export catalog')} exportUrl={exportUrl}
@@ -48,11 +53,12 @@ const Catalog = ({ config, catalog, elementActions, display='list',
       </div>
       <div>
         <p>
-          <strong>{gettext('Catalog')}{': '}</strong> {catalog.title}
+          <strong>{gettext('Catalog')}{': '}</strong>
+          <span dangerouslySetInnerHTML={{ __html: catalog.title }}></span>
         </p>
         {
           get(config, 'display.uri.catalogs', true) &&
-          <CodeLink className="code-questions" uri={catalog.uri} onClick={() => fetchEdit()} />
+          <CodeLink className="code-questions" uri={catalog.uri} href={editUrl} onClick={() => fetchEdit()} />
         }
         <ElementErrors element={catalog} />
       </div>

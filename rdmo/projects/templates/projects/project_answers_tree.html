@@ -1,10 +1,12 @@
+{% load core_tags %}
+
 {% for section in project_wrapper.catalog.sections %}
 
-    <h2>{{ section.title }}</h2>
+    <h2>{{ section.title|markdown }}</h2>
 
     {% for page in section.pages %}
 
-        <h3>{{ page.title }}</h3>
+        <h3>{{ page.title|markdown }}</h3>
 
         {% for element in page.elements %}
 

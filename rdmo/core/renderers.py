@@ -1,3 +1,4 @@
+import re
 from io import StringIO
 
 from django.utils.encoding import smart_str
@@ -37,7 +38,10 @@ class BaseXMLRenderer(BaseRenderer):
 
         xml.startElement(tag, attrs)
         if text is not None:
-            xml.characters(smart_str(text))
+            smart_text = smart_str(text)
+            # remove control chars, cp. https://github.com/django/django/blob/main/django/utils/xmlutils.py#L25
+            smart_text = re.sub(r'[\x00-\x08\x0B-\x0C\x0E-\x1F]', '', smart_text)
+            xml.characters(smart_text)
         xml.endElement(tag)
 
     def render_document(self, xml, data):

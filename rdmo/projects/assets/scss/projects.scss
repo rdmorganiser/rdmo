@@ -1,0 +1,376 @@
+$icon-font-path: "bootstrap-sass/assets/fonts/bootstrap/";
+@import '~bootstrap-sass';
+@import '~font-awesome/css/font-awesome.css';
+@import 'rdmo/core/assets/scss/variables';
+@import 'react-datepicker/dist/react-datepicker.css';
+
+a.disabled {
+    cursor: not-allowed;
+}
+
+.flip {
+    transform: rotate(180deg) scaleX(-1);
+}
+
+.w-100 {
+    width: 100%;
+}
+.w-25 {
+    width: 25%;
+}
+.mt-0 {
+    margin-top: 0;
+}
+.mt-5 {
+    margin-top: 5px;
+}
+.mt-10 {
+    margin-top: 10px;
+}
+.mt-20 {
+    margin-top: 20px;
+}
+.mr-0 {
+    margin-right: 0;
+}
+.mr-5 {
+    margin-right: 5px;
+}
+.mr-10 {
+    margin-right: 10px;
+}
+.mr-20 {
+    margin-right: 20px;
+}
+.mb-0 {
+    margin-bottom: 0;
+}
+.mb-5 {
+    margin-bottom: 5px;
+}
+.mb-10 {
+    margin-bottom: 10px;
+}
+.mb-20 {
+    margin-bottom: 20px;
+}
+.ml-0 {
+    margin-left: 0;
+}
+.ml-5 {
+    margin-left: 5px;
+}
+.ml-10 {
+    margin-left: 10px;
+}
+.ml-20 {
+    margin-left: 20px;
+}
+
+.pt-0 {
+    padding-top: 0;
+}
+.pt-10 {
+    padding-top: 10px;
+}
+.pt-20 {
+    padding-top: 20px;
+}
+.pr-0 {
+    padding-right: 0;
+}
+.pr-10 {
+    padding-right: 10px;
+}
+.pr-20 {
+    padding-right: 20px;
+}
+.pb-0 {
+    padding-bottom: 0;
+}
+.pb-10 {
+    padding-bottom: 10px;
+}
+.pb-20 {
+    padding-bottom: 20px;
+}
+.pl-0 {
+    padding-left: 0;
+}
+.pl-10 {
+    padding-left: 10px;
+}
+.pl-20 {
+    padding-left: 20px;
+}
+.align-right {
+  text-align: right;
+}
+.align-left {
+  text-align: left;
+}
+
+.form-group {
+    .react-select__control {
+        min-height: 34px;
+    }
+    .react-select__value-container {
+        padding: 0 14px;
+    }
+    .react-select__input-container {
+        margin: 0;
+        padding: 0;
+    }
+    .react-select__indicator {
+        padding: 6px;
+    }
+    .react-select__option {
+        padding: 0 14px;
+    }
+}
+
+.list-group-item {
+    .indent {
+        padding-left: 20px;
+    }
+}
+
+.codemirror.form-control {
+    height: auto;
+    padding: 0;
+
+    .cm-editor {
+        border-radius: 4px;
+    }
+    .cm-gutter {
+        background-color: white;
+    }
+    .cm-focused {
+        // copy the .form-control:focus from bootstrap
+        border-color: #66afe9;
+        outline: 0;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+    }
+}
+
+.select-item-options,
+.multi-select-item-options,
+.ordered-multi-select-item-options {
+    float: right;
+    display: flex;
+    gap: 4px;
+    padding: 10px 0;
+
+    .disabled {
+        color: #ccc !important;
+        cursor: not-allowed !important;
+    }
+}
+
+.ordered-multi-select-item {
+    margin-bottom: 10px;
+
+    .ordered-multi-select-item-select {
+        height: 34px;
+    }
+}
+
+.projects-header-container {
+    @media (min-width: $screen-sm-max) {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+
+        margin-bottom: 10px;
+    }
+
+    .projects-header-buttons {
+        @media (min-width: $screen-sm-max) {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn.btn-link {
+            padding: 0;
+            padding-bottom: 15px;
+
+            @media (max-width: $screen-sm-max) {
+                display: block;
+                padding-bottom: 10px;
+            }
+        }
+    }
+}
+
+.icon-container {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.projects {
+    min-height: 600px;
+}
+
+.projects-form {
+    margin-bottom: 40px;
+}
+
+.panel-filters {
+    border-color: #ccc;
+
+    .react-datepicker-wrapper {
+        width: 100%;
+    }
+
+    @media (max-width: $screen-md-max) {
+        .control-label {
+            margin-bottom: 10px;
+        }
+        .react-select,
+        .react-datepicker-wrapper {
+            margin-bottom: 10px;
+        }
+
+        // remove the margin from the last datepicker
+        .panel-body > .row > div:last-child .row > div:last-child .react-datepicker-wrapper {
+            margin-bottom: 0;
+        }
+    }
+}
+
+.projects-search {
+  position: relative;
+
+  .projects-search-reset {
+      display: block;
+      position: absolute;
+      top: 7px;
+      right: 7px;
+      z-index: 1020;
+
+      opacity: 0.8;
+      line-height: 20px;
+      font-size: 14px;
+
+      margin-left: 2px;
+  }
+}
+
+.elliptic-button {
+  padding: 5px 14px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 15px;
+  display: inline-block;
+}
+
+.elliptic-button:hover,
+.elliptic-button:focus {
+  text-decoration: none;
+  background-color: #eeeeee;
+}
+
+.row-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  color: #666;
+  padding-left: 5px;
+}
+
+.row-container:not(:last-child):after { /* Add line between each container element */
+  content: '';
+  width: 100%;
+  height: 1px;
+  background-color: #ccc;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.search-container {
+  width: 100%;
+
+  .search-field {
+    width: 100%;
+  }
+}
+
+.projects-datepicker .react-datepicker {
+  font-size: 1em;
+}
+.projects-datepicker .react-datepicker__header {
+  padding-top: 0.8em;
+}
+.projects-datepicker .react-datepicker__month {
+  margin: 0.4em 1em;
+}
+.projects-datepicker .react-datepicker__day-name, .projects-datepicker .react-datepicker__day {
+  width: 1.9em;
+  line-height: 1.9em;
+  margin: 0.166em;
+}
+.projects-datepicker .react-datepicker__current-month {
+  font-size: 1em;
+}
+.projects-datepicker .react-datepicker__navigation {
+  top: 1em;
+  line-height: 1.7em;
+  border: 0.45em solid transparent;
+}
+.projects-datepicker .react-datepicker__navigation--previous {
+  left: 1em;
+}
+.projects-datepicker .react-datepicker__navigation--next {
+  right: 1em;
+}
+.projects-datepicker .react-datepicker__close-icon::after {
+  background-color: #fff;
+  color: black;
+  font-size: 1.5em;
+}
+
+.thead-dark th {
+  cursor: pointer;
+}
+
+.badge-invitations {
+  background-color: $link-color;
+  color: #fff;
+  margin-right: 5px;
+}
+
+.btn.btn-link {
+  &:focus {
+    outline:0;
+  }
+}
+
+.dropzone-container {
+  width: 100%;
+  padding: 10px;
+}
+
+.dropzone {
+  border: 2px dashed #cccccc;
+  border-radius: 5px;
+  padding: 20px;
+  text-align: center;
+  transition: border .24s ease-in-out;
+}
+
+.dropzone:focus {
+  border-color: #2196f3;
+}
+
+/* Add additional styling for when files are being dragged over the dropzone */
+.dropzone.drag-active {
+  border-color: #2196f3;
+}
+
+/* Add styles for when the dropzone is disabled */
+.dropzone.disabled {
+  opacity: 0.6;
+}

@@ -1,20 +1,8 @@
-import logging
+from rdmo.core.import_helpers import ElementImportHelper, ExtraFieldHelper, ThroughInstanceMapper
 
-from django.contrib.sites.models import Site
-
-from rdmo.core.imports import (
-    check_permissions,
-    set_common_fields,
-    set_foreign_field,
-    set_lang_field,
-    set_m2m_instances,
-    set_m2m_through_instances,
-    set_reverse_m2m_through_instance,
-    validate_instance,
-)
-
+from ..core.constants import VALUE_TYPE_TEXT
 from .models import Catalog, Page, Question, QuestionSet, Section
-from .utils import get_widget_types
+from .utils import get_widget_type_or_default
 from .validators import (
     CatalogLockedValidator,
     CatalogUniqueURIValidator,
@@ -28,199 +16,126 @@ from .validators import (
     SectionUniqueURIValidator,
 )
 
-logger = logging.getLogger(__name__)
+import_helper_catalog = ElementImportHelper(
+    model=Catalog,
+    validators=(CatalogLockedValidator, CatalogUniqueURIValidator),
+    lang_fields=('title', 'help'),
+    extra_fields=(
+        ExtraFieldHelper(field_name='order'),
+        ExtraFieldHelper(field_name='available', overwrite_in_element=True),
+    ),
+    m2m_through_instance_fields=[
+        ThroughInstanceMapper(
+            field_name='sections', source_name='catalog',
+            target_name='section', through_name='catalog_sections'
+        )
+    ],
+    add_current_site_sites = True,
+)
 
+import_helper_section = ElementImportHelper(
+    model=Section,
+    validators=(SectionLockedValidator, SectionUniqueURIValidator),
+    lang_fields=('title', 'short_title'),
+    m2m_through_instance_fields=[
+        ThroughInstanceMapper(
+            field_name='pages', source_name='section',
+            target_name='page', through_name='section_pages'
+        )
+    ],
+    reverse_m2m_through_instance_fields=[
+        ThroughInstanceMapper(
+            field_name='catalog', source_name='section',
+            target_name='catalog', through_name='section_catalogs'
+        )
+    ]
+)
 
-def import_catalog(element, save=False, user=None):
-    try:
-        catalog = Catalog.objects.get(uri=element.get('uri'))
-    except Catalog.DoesNotExist:
-        catalog = Catalog()
+import_helper_page = ElementImportHelper(
+    model=Page,
+    validators=(PageLockedValidator, PageUniqueURIValidator),
+    lang_fields=('help', 'title', 'verbose_name', 'short_title'),
+    foreign_fields=('attribute',),
+    extra_fields=(
+        ExtraFieldHelper(field_name='is_collection'),
+    ),
+    m2m_instance_fields=('conditions', ),
+    m2m_through_instance_fields=[
+        ThroughInstanceMapper(
+            field_name='questionsets', source_name='page',
+            target_name='questionset', through_name='page_questionsets'
+        ),
+        ThroughInstanceMapper(
+            field_name='questions', source_name='page',
+            target_name='question', through_name='page_questions'
+        )
+    ],
+    reverse_m2m_through_instance_fields=[
+        ThroughInstanceMapper(
+            field_name='section', source_name='page',
+            target_name='section', through_name='page_sections'
+        )
+    ]
+)
 
-    set_common_fields(catalog, element)
+import_helper_questionset = ElementImportHelper(
+    model=QuestionSet,
+    validators=(QuestionSetLockedValidator, QuestionSetUniqueURIValidator),
+    lang_fields=( 'title', 'help', 'verbose_name'),
+    foreign_fields=('attribute',),
+    extra_fields=(
+        ExtraFieldHelper(field_name='is_collection'),
+    ),
+    m2m_instance_fields=('conditions', ),
 
-    catalog.order = element.get('order') or 0
+    m2m_through_instance_fields=[
+        ThroughInstanceMapper(
+            field_name='questionsets', source_name='parent',
+            target_name='questionset', through_name='questionset_questionsets'
+        ),
+        ThroughInstanceMapper(
+            field_name='questions', source_name='questionset',
+            target_name='question', through_name='questionset_questions'
+        )
+    ],
+    reverse_m2m_through_instance_fields=[
+        ThroughInstanceMapper(
+            field_name='page', source_name='questionset',
+            target_name='page', through_name='questionset_pages'
+        ),
+        ThroughInstanceMapper(
+            field_name='questionset', source_name='questionset',
+            target_name='parent', through_name='questionset_parents'
+        )
+    ]
+)
 
-    set_lang_field(catalog, 'title', element)
-    set_lang_field(catalog, 'help', element)
-
-    catalog.available = element.get('available', True)
-
-    validate_instance(catalog, element, CatalogLockedValidator, CatalogUniqueURIValidator)
-
-    check_permissions(catalog, element, user)
-
-    if save and not element.get('errors'):
-        if catalog.id:
-            element['updated'] = True
-            logger.info('Catalog %s updated.', element.get('uri'))
-        else:
-            element['created'] = True
-            logger.info('Catalog created with uri %s.', element.get('uri'))
-
-        catalog.save()
-        set_m2m_through_instances(catalog, 'sections', element, 'catalog', 'section', 'catalog_sections')
-        catalog.sites.add(Site.objects.get_current())
-        catalog.editors.add(Site.objects.get_current())
-
-    return catalog
-
-
-def import_section(element, save=False, user=None):
-    try:
-        section = Section.objects.get(uri=element.get('uri'))
-    except Section.DoesNotExist:
-        section = Section()
-
-    set_common_fields(section, element)
-
-    set_lang_field(section, 'title', element)
-
-    validate_instance(section, element, SectionLockedValidator, SectionUniqueURIValidator)
-
-    check_permissions(section, element, user)
-
-    if save and not element.get('errors'):
-        if section.id:
-            element['updated'] = True
-            logger.info('Section %s updated.', element.get('uri'))
-        else:
-            element['created'] = True
-            logger.info('Section created with uri %s.', element.get('uri'))
-
-        section.save()
-        set_reverse_m2m_through_instance(section, 'catalog', element, 'section', 'catalog', 'section_catalogs')
-        set_m2m_through_instances(section, 'pages', element, 'section', 'page', 'section_pages')
-        section.editors.add(Site.objects.get_current())
-
-    return section
-
-
-def import_page(element, save=False, user=None):
-    try:
-        page = Page.objects.get(uri=element.get('uri'))
-    except Page.DoesNotExist:
-        page = Page()
-
-    set_common_fields(page, element)
-    set_foreign_field(page, 'attribute', element)
-
-    page.is_collection = element.get('is_collection') or False
-
-    set_lang_field(page, 'title', element)
-    set_lang_field(page, 'help', element)
-    set_lang_field(page, 'verbose_name', element)
-
-    validate_instance(page, element, PageLockedValidator, PageUniqueURIValidator)
-
-    check_permissions(page, element, user)
-
-    if save and not element.get('errors'):
-        if page.id:
-            element['updated'] = True
-            logger.info('QuestionSet %s updated.', element.get('uri'))
-        else:
-            element['created'] = True
-            logger.info('QuestionSet created with uri %s.', element.get('uri'))
-
-        page.save()
-        set_m2m_instances(page, 'conditions', element)
-        set_reverse_m2m_through_instance(page, 'section', element, 'page', 'section', 'page_sections')
-        set_m2m_through_instances(page, 'questionsets', element, 'page', 'questionset', 'page_questionsets')
-        set_m2m_through_instances(page, 'questions', element, 'page', 'question', 'page_questions')
-        page.editors.add(Site.objects.get_current())
-
-    return page
-
-
-def import_questionset(element, save=False, user=None):
-    try:
-        questionset = QuestionSet.objects.get(uri=element.get('uri'))
-    except QuestionSet.DoesNotExist:
-        questionset = QuestionSet()
-
-    set_common_fields(questionset, element)
-    set_foreign_field(questionset, 'attribute', element)
-
-    questionset.is_collection = element.get('is_collection') or False
-
-    set_lang_field(questionset, 'title', element)
-    set_lang_field(questionset, 'help', element)
-    set_lang_field(questionset, 'verbose_name', element)
-
-    validate_instance(questionset, element, QuestionSetLockedValidator, QuestionSetUniqueURIValidator)
-
-    check_permissions(questionset, element, user)
-
-    if save and not element.get('errors'):
-        if questionset.id:
-            element['updated'] = True
-            logger.info('QuestionSet %s updated.', element.get('uri'))
-        else:
-            element['created'] = True
-            logger.info('QuestionSet created with uri %s.', element.get('uri'))
-
-        questionset.save()
-        set_m2m_instances(questionset, 'conditions', element)
-        set_reverse_m2m_through_instance(questionset, 'page', element, 'questionset', 'page', 'questionset_pages')
-        set_reverse_m2m_through_instance(questionset, 'questionset', element, 'questionset', 'parent', 'questionset_parents')  # noqa: E501
-        set_m2m_through_instances(questionset, 'questionsets', element, 'parent', 'questionset', 'questionset_questionsets')  # noqa: E501
-        set_m2m_through_instances(questionset, 'questions', element, 'questionset', 'question', 'questionset_questions')
-        questionset.editors.add(Site.objects.get_current())
-
-    return questionset
-
-
-def import_question(element, save=False, user=None):
-    try:
-        question = Question.objects.get(uri=element.get('uri'))
-    except Question.DoesNotExist:
-        question = Question()
-
-    set_common_fields(question, element)
-    set_foreign_field(question, 'attribute', element)
-
-    question.is_collection = element.get('is_collection') or False
-    question.is_optional = element.get('is_optional') or False
-
-    set_lang_field(question, 'text', element)
-    set_lang_field(question, 'help', element)
-    set_lang_field(question, 'default_text', element)
-    set_lang_field(question, 'verbose_name', element)
-
-    set_foreign_field(question, 'default_option', element)
-
-    question.default_external_id = element.get('default_external_id') or ''
-
-    if element.get('widget_type') in get_widget_types():
-        question.widget_type = element.get('widget_type')
-    else:
-        question.widget_type = 'text'
-
-    question.value_type = element.get('value_type') or ''
-    question.maximum = element.get('maximum')
-    question.minimum = element.get('minimum')
-    question.step = element.get('step')
-    question.unit = element.get('unit') or ''
-    question.width = element.get('width')
-
-    validate_instance(question, element, QuestionLockedValidator, QuestionUniqueURIValidator)
-
-    check_permissions(question, element, user)
-
-    if save and not element.get('errors'):
-        if question.id:
-            element['updated'] = True
-            logger.info('Question %s updated.', element.get('uri'))
-        else:
-            element['created'] = True
-            logger.info('Question created with uri %s.', element.get('uri'))
-
-        question.save()
-        set_reverse_m2m_through_instance(question, 'page', element, 'question', 'page', 'question_pages')
-        set_reverse_m2m_through_instance(question, 'questionset', element, 'question', 'questionset', 'question_questionsets')  # noqa: E501
-        set_m2m_instances(question, 'conditions', element)
-        set_m2m_instances(question, 'optionsets', element)
-        question.editors.add(Site.objects.get_current())
-
-    return question
+import_helper_question = ElementImportHelper(
+    model=Question,
+    validators=(QuestionLockedValidator, QuestionUniqueURIValidator),
+    lang_fields=('text', 'help', 'default_text', 'verbose_name'),
+    foreign_fields=('attribute', 'default_option'),
+    extra_fields=(
+        ExtraFieldHelper(field_name='is_collection'),
+        ExtraFieldHelper(field_name='is_optional'),
+        ExtraFieldHelper(field_name='default_external_id', value=''),
+        ExtraFieldHelper(field_name='widget_type', callback=get_widget_type_or_default),
+        ExtraFieldHelper(field_name='value_type', value=VALUE_TYPE_TEXT),
+        ExtraFieldHelper(field_name='minimum'),
+        ExtraFieldHelper(field_name='maximum'),
+        ExtraFieldHelper(field_name='step'),
+        ExtraFieldHelper(field_name='unit', value=''),
+        ExtraFieldHelper(field_name='width'),
+    ),
+    m2m_instance_fields=('conditions', 'optionsets'),
+    reverse_m2m_through_instance_fields=[
+        ThroughInstanceMapper(
+            field_name='page', source_name='question',
+            target_name='page', through_name='question_pages'
+        ),
+        ThroughInstanceMapper(
+            field_name='questionset', source_name='question',
+            target_name='questionset', through_name='question_questionsets'
+        )
+    ]
+)

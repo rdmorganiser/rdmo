@@ -2,14 +2,17 @@ import xml.etree.ElementTree as et
 
 import pytest
 
+from django.contrib.sites.models import Site
 from django.urls import reverse
 
-from ...core.tests import get_obj_perms_status_code
-from ...core.tests import multisite_status_map as status_map
-from ...core.tests import multisite_users as users
+from rdmo.core.tests.constants import multisite_status_map as status_map
+from rdmo.core.tests.constants import multisite_users as users
+from rdmo.core.tests.utils import get_obj_perms_status_code
+
 from ..models import View
 from .test_viewset_view import export_formats, urlnames
 
+urlnames['view-toggle-site'] = 'v1-views:view-toggle-site'
 
 @pytest.mark.parametrize('username,password', users)
 def test_list(db, client, username, password):
@@ -124,3 +127,37 @@ def test_detail_export(db, client, username, password, export_format):
         assert root.tag == 'rdmo'
         for child in root:
             assert child.tag in ['view']
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('add_or_remove,has_current_site_check', [('add', True), ('remove', False)])
+@pytest.mark.parametrize('locked', [True, False])
+def test_update_view_toggle_site(db, client, username, password, add_or_remove, has_current_site_check, locked):
+    client.login(username=username, password=password)
+    instances = View.objects.all()
+    current_site = Site.objects.get_current()
+
+    for instance in instances:
+        if add_or_remove == 'add':
+            instance.sites.remove(current_site)
+        elif add_or_remove == 'remove':
+            instance.sites.add(current_site)
+
+        # locked state should not affect this toggle
+        instance.locked = locked
+        instance.save()
+
+        before_has_current_site = instance.sites.filter(id=current_site.id).exists()
+
+        url = reverse(urlnames['view-toggle-site'], kwargs={'pk': instance.pk})
+
+        response = client.put(url, {}, content_type='application/json')
+        assert response.status_code == get_obj_perms_status_code(instance, username, 'toggle-site'), response.json()
+        instance.refresh_from_db()
+        after_has_current_site = instance.sites.filter(id=current_site.id).exists()
+        if response.status_code == 200:
+            # check if instance now has the current site or not
+            assert after_has_current_site is has_current_site_check
+        else:
+            # check that the instance was not updated
+            assert after_has_current_site is before_has_current_site

@@ -10,6 +10,7 @@ from rdmo.core.exports import XMLResponse
 from rdmo.core.filters import SearchFilter
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import render_to_format
+from rdmo.management.viewsets import ElementToggleCurrentSiteViewSetMixin
 
 from .models import View
 from .renderers import ViewRenderer
@@ -17,7 +18,7 @@ from .serializers.export import ViewExportSerializer
 from .serializers.v1 import ViewIndexSerializer, ViewSerializer
 
 
-class ViewViewSet(ModelViewSet):
+class ViewViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = ViewSerializer
     queryset = View.objects.prefetch_related('catalogs', 'sites', 'editors', 'groups') \
