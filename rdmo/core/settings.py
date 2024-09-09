@@ -102,9 +102,8 @@ ACCOUNT_GROUPS = []
 ACCOUNT_TERMS_OF_USE = False
 ACCOUNT_ADAPTER = 'rdmo.accounts.adapter.AccountAdapter'
 ACCOUNT_FORMS = {
-    'login': 'rdmo.accounts.forms.LoginForm',
-    'signup': 'rdmo.accounts.forms.SignupForm'
-
+    'login': 'rdmo.accounts.adapter.LoginForm',
+    'signup': 'rdmo.accounts.adapter.SignupForm'
 }
 ACCOUNT_USER_DISPLAY = 'rdmo.accounts.utils.get_full_name'
 ACCOUNT_EMAIL_REQUIRED = True
