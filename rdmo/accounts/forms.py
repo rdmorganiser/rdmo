@@ -5,10 +5,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
-from allauth.account.forms import LoginForm as AllauthLoginForm
-from allauth.account.forms import SignupForm as AllauthSignupForm
-
-from .models import AdditionalField, AdditionalFieldValue, ConsentFieldValue
+from .models import AdditionalField, AdditionalFieldValue
 
 log = logging.getLogger(__name__)
 
@@ -69,37 +66,6 @@ class ProfileForm(forms.ModelForm):
 
             additional_value.value = self.cleaned_data[additional_field.key]
             additional_value.save()
-
-
-class LoginForm(AllauthLoginForm):
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        # remove forget password link introduced with allauth 0.57.0
-        password_field = self.fields.get('password')
-        if password_field:
-            password_field.help_text = None
-
-
-class SignupForm(AllauthSignupForm, ProfileForm):
-
-    use_required_attribute = False
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        # add a consent field, the label is added in the template
-        if settings.ACCOUNT_TERMS_OF_USE:
-            self.fields['consent'] = forms.BooleanField(required=True)
-
-    def signup(self, request, user):
-        self._save_additional_values(user)
-
-        # store the consent field
-        if settings.ACCOUNT_TERMS_OF_USE:
-            consent = ConsentFieldValue(user=user, consent=self.cleaned_data['consent'])
-            consent.save()
 
 
 class RemoveForm(forms.Form):
