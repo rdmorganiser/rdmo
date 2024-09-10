@@ -922,8 +922,10 @@ angular.module('project_questions')
         service.error = null; // reset error when moving to previous questionset
         if (service.settings.project_questions_autosave) {
             service.save(false, true).then(function() {
-                back = true;
-                service.initView(service.page.prev_page);
+                if (service.error === null) {
+                    back = true;
+                    service.initView(service.page.prev_page);
+                }
             })
         } else {
             back = true;
@@ -935,7 +937,9 @@ angular.module('project_questions')
         service.error = null; // reset error when moving to next questionset
         if (service.settings.project_questions_autosave) {
             service.save(false, true).then(function() {
-                service.initView(service.page.next_page);
+                if (service.error === null) {
+                    service.initView(service.page.next_page);
+                }
             })
         } else {
             service.initView(service.page.next_page);
@@ -946,8 +950,8 @@ angular.module('project_questions')
         service.error = null; // reset error before saving
         if (service.settings.project_questions_autosave) {
             service.save(false, true).then(function() {
-                if (service.error !== null && service.error.status !== 400) {
-                    // pass, dont jump (but not on a validation error)
+                if (service.error !== null) {
+                    // pass, dont jump
                 } else if (angular.isDefined(page)) {
                     service.initView(page.id);
                 } else if (angular.isDefined(section)) {
