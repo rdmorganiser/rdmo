@@ -1,5 +1,12 @@
 # Changelog
 
+## [RDMO 2.2.1](https://github.com/rdmorganiser/rdmo/compare/2.2.0...2.2.1) (Sep 13, 2024)
+
+* Fix import error when allauth is not used (#1145)
+* Fix a bug with collection pages when optionset refresh is true (#1147)
+* Prevent the page to change when a validation error occurs on project_questions (#1134)
+* Pin importlib_metadata to 0.8.4 due to an upstream problem
+
 ## [RDMO 2.2.0](https://github.com/rdmorganiser/rdmo/compare/2.1.3...2.2.0) (Sep 05, 2024)
 
 * Add new projects overview (#865, #355)
