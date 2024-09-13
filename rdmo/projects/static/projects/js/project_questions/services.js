@@ -162,19 +162,21 @@ angular.module('project_questions')
                     service[key] = angular.copy(future[key]);
                 });
 
-                // activate fist valueset
-                if (angular.isDefined(service.valuesets[service.page.id][service.set_prefix])) {
-                    if (angular.isDefined(past.page) &&
-                        past.page.is_collection &&
-                        past.page.attribute == service.page.attribute &&
-                        !service.settings.project_questions_cycle_sets) {
-                        // use the same set index as before
-                        service.set_index = past.set_index
+                // activate first or current valueset, but only if the page did actually change
+                if (angular.isUndefined(past.page) || past.page.id !== page_id) {
+                    if (angular.isDefined(service.valuesets[service.page.id][service.set_prefix])) {
+                        if (angular.isDefined(past.page) &&
+                            past.page.is_collection &&
+                            past.page.attribute == service.page.attribute &&
+                            !service.settings.project_questions_cycle_sets) {
+                            // use the same set index as before
+                            service.set_index = past.set_index
+                        } else {
+                            service.set_index = service.valuesets[service.page.id][service.set_prefix][0].set_index;
+                        }
                     } else {
-                        service.set_index = service.valuesets[service.page.id][service.set_prefix][0].set_index;
+                        service.set_index = null;
                     }
-                } else {
-                    service.set_index = null;
                 }
 
                 // focus the first field
@@ -920,8 +922,10 @@ angular.module('project_questions')
         service.error = null; // reset error when moving to previous questionset
         if (service.settings.project_questions_autosave) {
             service.save(false, true).then(function() {
-                back = true;
-                service.initView(service.page.prev_page);
+                if (service.error === null) {
+                    back = true;
+                    service.initView(service.page.prev_page);
+                }
             })
         } else {
             back = true;
@@ -933,7 +937,9 @@ angular.module('project_questions')
         service.error = null; // reset error when moving to next questionset
         if (service.settings.project_questions_autosave) {
             service.save(false, true).then(function() {
-                service.initView(service.page.next_page);
+                if (service.error === null) {
+                    service.initView(service.page.next_page);
+                }
             })
         } else {
             service.initView(service.page.next_page);
@@ -944,8 +950,8 @@ angular.module('project_questions')
         service.error = null; // reset error before saving
         if (service.settings.project_questions_autosave) {
             service.save(false, true).then(function() {
-                if (service.error !== null && service.error.status !== 400) {
-                    // pass, dont jump (but not on a validation error)
+                if (service.error !== null) {
+                    // pass, dont jump
                 } else if (angular.isDefined(page)) {
                     service.initView(page.id);
                 } else if (angular.isDefined(section)) {
@@ -1221,13 +1227,13 @@ angular.module('project_questions')
         });
     };
 
-    service.activateValueSet = function(set_prefix) {
+    service.activateValueSet = function(set_index) {
         if (service.settings.project_questions_autosave) {
             service.save(false).then(function() {
-                service.set_index = set_prefix;
+                service.set_index = set_index;
             });
         } else {
-            service.set_index = set_prefix;
+            service.set_index = set_index;
         }
     };
 
