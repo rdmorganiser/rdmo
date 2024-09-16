@@ -1,5 +1,6 @@
 import re
 
+from django.conf import settings
 from django.http import HttpResponse
 
 from rdmo.core.exports import prettify_xml
@@ -157,5 +158,8 @@ class RDMOXMLExport(Export):
         serializer = ExportSerializer(self.project)
         xmldata = XMLRenderer().render(serializer.data)
         response = HttpResponse(prettify_xml(xmldata), content_type="application/xml")
-        response['Content-Disposition'] = f'filename="{self.project.title}.xml"'
+
+        if settings.EXPORT_CONTENT_DISPOSITION == 'attachment':
+            response['Content-Disposition'] = f'attachment; filename="{self.project.title}.xml"'
+
         return response
