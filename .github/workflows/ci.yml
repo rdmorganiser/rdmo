@@ -107,6 +107,12 @@ jobs:
       matrix:
         python-version: ['3.8', '3.12']
         db-backend: [mysql, postgres]
+        # test Python 3.13 already
+        # release is scheduled for 2024-10-01 (https://peps.python.org/pep-0719/)
+        # when released: replace "python-version: ['3.8', '3.12']" with python-version: ['3.8', '3.13']
+        include:
+        - python-version: '3.13-dev'
+          db-backend: postgres
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
