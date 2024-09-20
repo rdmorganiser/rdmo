@@ -15,6 +15,10 @@ function ValidationError(errors) {
   this.errors = errors
 }
 
+function BadRequestError(errors) {
+  this.errors = errors
+}
+
 class BaseApi {
 
   static get(url) {
@@ -23,11 +27,16 @@ class BaseApi {
     }).then(response => {
       if (response.ok) {
         return response.json()
+      } else if (response.status === 400) {
+        return response.json().then(errors => {
+          throw new BadRequestError(errors)
+        })
       } else {
         throw new ApiError(response.statusText, response.status)
       }
     })
   }
+
 
   static post(url, data) {
     return fetch(baseUrl + url, {
