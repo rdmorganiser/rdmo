@@ -10,7 +10,7 @@ function BadRequestError(errors) {
 class ProjectsApi extends BaseApi {
 
   static fetchProjects(params, fetchParams = {}) {
-    return fetch('/api/v1/projects/projects/?' + encodeParams(params), fetchParams).then(response => {
+    return fetch(baseUrl + '/api/v1/projects/projects/?' + encodeParams(params), fetchParams).then(response => {
       if (response.ok) {
         return response.json()
       } else if (response.status == 400) {
@@ -24,7 +24,7 @@ class ProjectsApi extends BaseApi {
   }
 
   static fetchCatalogs() {
-    return fetch('/api/v1/projects/catalogs/').then(response => {
+    return fetch(baseUrl + '/api/v1/projects/catalogs/').then(response => {
       if (response.ok) {
         return response.json()
       } else {
@@ -34,7 +34,7 @@ class ProjectsApi extends BaseApi {
   }
 
   static fetchAllowedFileTypes() {
-    return fetch('/api/v1/projects/projects/upload-accept/')
+    return fetch(baseUrl + '/api/v1/projects/projects/upload-accept/')
       .then(response => {
         if (response.ok) {
           return response.text()
@@ -61,7 +61,7 @@ class ProjectsApi extends BaseApi {
   }
 
   static fetchDirectImportUrls() {
-    return fetch('/api/v1/projects/projects/imports/')
+    return fetch(baseUrl + '/api/v1/projects/projects/imports/')
       .then(response => {
         if (response.ok) {
           return response.json()
@@ -72,7 +72,7 @@ class ProjectsApi extends BaseApi {
   }
 
   static fetchInvites() {
-    return fetch('/api/v1/projects/invites/user')
+    return fetch(baseUrl + '/api/v1/projects/invites/user')
       .then(response => {
         if (response.ok) {
           return response.json()
