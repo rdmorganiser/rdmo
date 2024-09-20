@@ -3,83 +3,27 @@ import BaseApi from 'rdmo/core/assets/js/api/BaseApi'
 import { encodeParams } from 'rdmo/core/assets/js/utils/api'
 import baseUrl from 'rdmo/core/assets/js/utils/baseUrl'
 
-function BadRequestError(errors) {
-  this.errors = errors
-}
-
 class ProjectsApi extends BaseApi {
 
-  static fetchProjects(params, fetchParams = {}) {
-    return fetch(baseUrl + '/api/v1/projects/projects/?' + encodeParams(params), fetchParams).then(response => {
-      if (response.ok) {
-        return response.json()
-      } else if (response.status == 400) {
-        return response.json().then(errors => {
-          throw new BadRequestError(errors)
-        })
-      } else {
-        throw new Error(response.statusText)
-      }
-    })
+  static fetchProjects(params) {
+    const url = '/api/v1/projects/projects/?' + encodeParams(params)
+    return this.get(url)
   }
 
   static fetchCatalogs() {
-    return fetch(baseUrl + '/api/v1/projects/catalogs/').then(response => {
-      if (response.ok) {
-        return response.json()
-      } else {
-        throw new Error(response.statusText)
-      }
-    })
+    return this.get('/api/v1/projects/catalogs/')
   }
 
   static fetchAllowedFileTypes() {
-    return fetch(baseUrl + '/api/v1/projects/projects/upload-accept/')
-      .then(response => {
-        if (response.ok) {
-          return response.text()
-            .then(text => {
-              try {
-                // Attempt to parse the text as JSON
-                const jsonData = JSON.parse(text)
-                // Check if the parsed data is an array
-                if (Array.isArray(jsonData)) {
-                  return jsonData
-                }
-              } catch (error) {
-                // If JSON.parse fails, handle text as plain string below
-              }
-
-              // If it's not a JSON array, process it as a string
-              const cleanedText = text.replace(/^"|"$/g, '')
-              return cleanedText ? cleanedText.split(',') : []
-            })
-        } else {
-          throw new Error(response.statusText)
-        }
-      })
+    return this.get('/api/v1/projects/projects/upload-accept/')
   }
 
   static fetchDirectImportUrls() {
-    return fetch(baseUrl + '/api/v1/projects/projects/imports/')
-      .then(response => {
-        if (response.ok) {
-          return response.json()
-        } else {
-          throw new Error(response.statusText)
-        }
-      })
+    return this.get('/api/v1/projects/projects/imports/')
   }
 
   static fetchInvites() {
-    return fetch(baseUrl + '/api/v1/projects/invites/user')
-      .then(response => {
-        if (response.ok) {
-          return response.json()
-        } else {
-          throw new Error(response.statusText)
-        }
-      })
+    return this.get('/api/v1/projects/invites/user/')
   }
 
   static uploadProject(url, file) {
