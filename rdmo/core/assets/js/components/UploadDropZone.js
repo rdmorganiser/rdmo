@@ -14,7 +14,6 @@ const UploadDropZone = ({ acceptedTypes, onImportFile }) => {
       }
     },
     onDropRejected: rejectedFiles => {
-      console.log(rejectedFiles)
       setErrorMessage(interpolate(gettext('%s has unsupported file type'), [rejectedFiles[0].path]))
     }
   })
