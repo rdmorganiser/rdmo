@@ -88,7 +88,10 @@ class Import(Plugin):
 
 class RDMOXMLImport(Import):
 
-    accept = '.xml'
+    accept = {
+        'application/xml': ['.xml'],
+        'text/xml': ['.xml']
+    }
 
     def check(self):
         file_type, encoding = mimetypes.guess_type(self.file_name)
@@ -230,6 +233,9 @@ class RDMOXMLImport(Import):
 
 
 class URLImport(RDMOXMLImport):
+
+    accept = False
+    upload = False
 
     class Form(forms.Form):
         url = forms.URLField(label=_('Import project from this URL'), required=True)
