@@ -47,9 +47,9 @@ export function fetchProjectsError(error) {
 export function fetchCatalogs() {
   return function(dispatch) {
     dispatch(fetchCatalogsInit())
-    const action = (dispatch) => ProjectsApi.fetchCatalogs()
-          .then(catalogs => {
-            dispatch(fetchCatalogsSuccess({ catalogs }))})
+    const action = (dispatch) => ProjectsApi.fetchCatalogs().then(catalogs => {
+      dispatch(fetchCatalogsSuccess(catalogs))
+    })
 
     return dispatch(action)
       .catch(error => dispatch(fetchCatalogsError(error)))
@@ -71,9 +71,9 @@ export function fetchCatalogsError(error) {
 export function fetchAllowedFileTypes() {
   return function(dispatch) {
     dispatch(fetchAllowedFileTypesInit())
-    const action = (dispatch) => ProjectsApi.fetchAllowedFileTypes()
-          .then(allowedTypes => {
-            dispatch(fetchAllowedFileTypesSuccess({ allowedTypes }))})
+    const action = (dispatch) => ProjectsApi.fetchAllowedFileTypes().then(allowedTypes => {
+      dispatch(fetchAllowedFileTypesSuccess(allowedTypes))
+    })
 
     return dispatch(action)
       .catch(error => dispatch(fetchAllowedFileTypesError(error)))
@@ -95,9 +95,9 @@ export function fetchAllowedFileTypesError(error) {
 export function fetchImportUrls() {
   return function(dispatch) {
     dispatch(fetchImportUrlsInit())
-    const action = (dispatch) => ProjectsApi.fetchDirectImportUrls()
-          .then(importUrls => {
-            dispatch(fettchImportUrlsSuccess({ importUrls }))})
+    const action = (dispatch) => ProjectsApi.fetchDirectImportUrls().then(importUrls => {
+      dispatch(fettchImportUrlsSuccess(importUrls))
+    })
 
     return dispatch(action)
       .catch(error => dispatch(fetchImportUrlsError(error)))
@@ -109,7 +109,7 @@ export function fetchImportUrlsInit() {
 }
 
 export function fettchImportUrlsSuccess(importUrls) {
-  return {type: FETCH_IMPORT_URLS_SUCCESS, importUrls }
+  return {type: FETCH_IMPORT_URLS_SUCCESS, importUrls}
 }
 
 export function fetchImportUrlsError(error) {
@@ -119,9 +119,9 @@ export function fetchImportUrlsError(error) {
 export function fetchInvitations() {
   return function(dispatch) {
     dispatch(fetchInvitationsInit())
-    const action = (dispatch) => ProjectsApi.fetchInvites()
-          .then(invites => {
-            dispatch(fetchInvitationsSuccess({ invites }))})
+    const action = (dispatch) => ProjectsApi.fetchInvites().then(invites => {
+      dispatch(fetchInvitationsSuccess(invites))
+    })
 
     return dispatch(action)
       .catch(error => dispatch(fetchInvitationsError(error)))
