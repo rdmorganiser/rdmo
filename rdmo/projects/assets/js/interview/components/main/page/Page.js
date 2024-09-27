@@ -11,7 +11,7 @@ import QuestionSet from '../questionset/QuestionSet'
 import PageButtons from './PageButtons'
 import PageHead from './PageHead'
 
-const Page = ({ config, templates, overview, page, sets, values, fetchPage,
+const Page = ({ config, settings, templates, overview, page, sets, values, fetchPage, fetchContact,
                 createValue, updateValue, deleteValue, copyValue,
                 activateSet, createSet, updateSet, deleteSet, copySet }) => {
 
@@ -51,6 +51,7 @@ const Page = ({ config, templates, overview, page, sets, values, fetchPage,
                 return (
                   <QuestionSet
                     key={elementIndex}
+                    settings={settings}
                     templates={templates}
                     questionset={element}
                     sets={sets}
@@ -66,12 +67,14 @@ const Page = ({ config, templates, overview, page, sets, values, fetchPage,
                     updateValue={updateValue}
                     deleteValue={deleteValue}
                     copyValue={copyValue}
+                    fetchContact={fetchContact}
                   />
                 )
               } else {
                 return (
                   <Question
                     key={elementIndex}
+                    settings={settings}
                     templates={templates}
                     question={element}
                     values={values.filter((value) => (
@@ -91,6 +94,7 @@ const Page = ({ config, templates, overview, page, sets, values, fetchPage,
                     updateValue={updateValue}
                     deleteValue={deleteValue}
                     copyValue={copyValue}
+                    fetchContact={fetchContact}
                   />
                 )
               }
@@ -106,12 +110,14 @@ const Page = ({ config, templates, overview, page, sets, values, fetchPage,
 
 Page.propTypes = {
   config: PropTypes.object.isRequired,
+  settings: PropTypes.object.isRequired,
   templates: PropTypes.object.isRequired,
   overview: PropTypes.object.isRequired,
   page: PropTypes.object.isRequired,
   sets: PropTypes.array.isRequired,
   values: PropTypes.array.isRequired,
   fetchPage: PropTypes.func.isRequired,
+  fetchContact: PropTypes.func.isRequired,
   createValue: PropTypes.func.isRequired,
   updateValue: PropTypes.func.isRequired,
   deleteValue: PropTypes.func.isRequired,

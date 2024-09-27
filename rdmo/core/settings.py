@@ -216,13 +216,15 @@ SETTINGS_API = [
     'MULTISITE',
     'GROUPS',
     'EXPORT_FORMATS',
-    'PROJECT_TABLE_PAGE_SIZE'
+    'PROJECT_TABLE_PAGE_SIZE',
+    'PROJECT_CONTACT'
 ]
 
 TEMPLATES_API = [
     'projects/project_interview_add_set_help.html',
     'projects/project_interview_add_value_help.html',
     'projects/project_interview_buttons_help.html',
+    'projects/project_interview_contact_help.html',
     'projects/project_interview_done.html',
     'projects/project_interview_error.html',
     'projects/project_interview_multiple_values_warning.html',
@@ -232,7 +234,7 @@ TEMPLATES_API = [
     'projects/project_interview_page_tabs_help.html',
     'projects/project_interview_progress_help.html',
     'projects/project_interview_question_help.html',
-    'projects/project_interview_questionset_help.html',
+    'projects/project_interview_questionset_help.html'
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -300,6 +302,9 @@ PROJECT_ISSUES = True
 PROJECT_ISSUE_PROVIDERS = []
 
 PROJECT_VIEWS = True
+
+PROJECT_CONTACT = False
+PROJECT_CONTACT_RECIPIENTS = []
 
 PROJECT_EXPORTS = [
     ('xml', _('RDMO XML'), 'rdmo.projects.exports.RDMOXMLExport'),

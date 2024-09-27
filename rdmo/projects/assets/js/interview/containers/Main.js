@@ -6,16 +6,19 @@ import { connect } from 'react-redux'
 import { hasErrors, isReady } from '../utils/interview'
 
 import Breadcrump from '../components/main/Breadcrump'
+import Contact from '../components/main/Contact'
 import Done from '../components/main/Done'
 import Page from '../components/main/page/Page'
 import Errors from '../components/main/Errors'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 
+import * as contactActions from '../actions/contactActions'
 import * as interviewActions from '../actions/interviewActions'
 
-// eslint-disable-next-line no-unused-vars
-const Main = ({ config, settings, templates, user, project, interview, configActions, interviewActions }) => {
+const Main = ({ config, settings, templates, project, interview, contact,
+                interviewActions, contactActions }) => {
+
   if (hasErrors(project, interview)) {
     return (
       <Errors
@@ -40,6 +43,7 @@ const Main = ({ config, settings, templates, user, project, interview, configAct
           interview.page && (
             <Page
               config={config}
+              settings={settings}
               templates={templates}
               overview={project.overview}
               page={interview.page}
@@ -55,9 +59,16 @@ const Main = ({ config, settings, templates, user, project, interview, configAct
               deleteSet={interviewActions.deleteSet}
               copyValue={interviewActions.copyValue}
               copySet={interviewActions.copySet}
+              fetchContact={contactActions.fetchContact}
             />
           )
         }
+        <Contact
+          templates={templates}
+          contact={contact}
+          sendContact={contactActions.sendContact}
+          closeContact={contactActions.closeContact}
+        />
       </div>
     )
   }
@@ -73,8 +84,9 @@ Main.propTypes = {
   user: PropTypes.object.isRequired,
   project: PropTypes.object.isRequired,
   interview: PropTypes.object.isRequired,
-  configActions: PropTypes.object.isRequired,
-  interviewActions: PropTypes.object.isRequired
+  contact: PropTypes.object.isRequired,
+  interviewActions: PropTypes.object.isRequired,
+  contactActions: PropTypes.object.isRequired
 }
 
 function mapStateToProps(state) {
@@ -85,6 +97,7 @@ function mapStateToProps(state) {
     user: state.user,
     project: state.project,
     interview: state.interview,
+    contact: state.contact,
   }
 }
 
@@ -92,6 +105,7 @@ function mapDispatchToProps(dispatch) {
   return {
     configActions: bindActionCreators(configActions, dispatch),
     interviewActions: bindActionCreators(interviewActions, dispatch),
+    contactActions: bindActionCreators(contactActions, dispatch),
   }
 }
 

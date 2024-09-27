@@ -13,9 +13,9 @@ import QuestionSetHelp from './QuestionSetHelp'
 import QuestionSetHelpTemplate from './QuestionSetHelpTemplate'
 import QuestionSetRemoveSet from './QuestionSetRemoveSet'
 
-const QuestionSet = ({ templates, questionset, sets, values, disabled, isManager,
+const QuestionSet = ({ settings, templates, questionset, sets, values, disabled, isManager,
                        parentSet, createSet, updateSet, deleteSet, copySet,
-                       createValue, updateValue, deleteValue, copyValue }) => {
+                       createValue, updateValue, deleteValue, copyValue, fetchContact }) => {
 
   const setPrefix = getChildPrefix(parentSet)
 
@@ -47,6 +47,7 @@ const QuestionSet = ({ templates, questionset, sets, values, disabled, isManager
                         return (
                           <QuestionSet
                             key={elementIndex}
+                            settings={settings}
                             templates={templates}
                             questionset={element}
                             sets={sets}
@@ -62,12 +63,14 @@ const QuestionSet = ({ templates, questionset, sets, values, disabled, isManager
                             updateValue={updateValue}
                             deleteValue={deleteValue}
                             copyValue={copyValue}
+                            fetchContact={fetchContact}
                           />
                         )
                       } else {
                         return (
                           <Question
                             key={elementIndex}
+                            settings={settings}
                             templates={templates}
                             question={element}
                             values={values.filter((value) => (
@@ -87,6 +90,7 @@ const QuestionSet = ({ templates, questionset, sets, values, disabled, isManager
                             updateValue={updateValue}
                             deleteValue={deleteValue}
                             copyValue={copyValue}
+                            fetchContact={fetchContact}
                           />
                         )
                       }
@@ -105,6 +109,7 @@ const QuestionSet = ({ templates, questionset, sets, values, disabled, isManager
 }
 
 QuestionSet.propTypes = {
+  settings: PropTypes.object.isRequired,
   templates: PropTypes.object.isRequired,
   questionset: PropTypes.object.isRequired,
   sets: PropTypes.array.isRequired,
@@ -119,7 +124,8 @@ QuestionSet.propTypes = {
   createValue: PropTypes.func.isRequired,
   updateValue: PropTypes.func.isRequired,
   deleteValue: PropTypes.func.isRequired,
-  copyValue: PropTypes.func.isRequired
+  copyValue: PropTypes.func.isRequired,
+  fetchContact: PropTypes.func.isRequired
 }
 
 export default QuestionSet

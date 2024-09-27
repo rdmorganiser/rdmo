@@ -418,3 +418,7 @@ def save_metadata(metadata):
     f = open(tmp_metadata_file)
     log.info('Save metadata file %s %s', tmp_metadata_file, str(metadata))
     return tmp_metadata_file
+
+
+def remove_double_newlines(string):
+    return re.sub(r'[\n]{2,}', '\n\n', string)

@@ -10,6 +10,7 @@ import settingsReducer from 'rdmo/core/assets/js/reducers/settingsReducer'
 import templateReducer from 'rdmo/core/assets/js/reducers/templateReducer'
 import userReducer from 'rdmo/core/assets/js/reducers/userReducer'
 
+import contactReducer from '../reducers/contactReducer'
 import interviewReducer from '../reducers/interviewReducer'
 import projectReducer from '../reducers/projectReducer'
 
@@ -36,6 +37,7 @@ export default function configureStore() {
 
   const rootReducer = combineReducers({
     config: configReducer,
+    contact: contactReducer,
     interview: interviewReducer,
     pending: pendingReducer,
     project: projectReducer,

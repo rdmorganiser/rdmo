@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import OuterRef, Prefetch, Q, Subquery
+from django.db.models import OuterRef, Prefetch, Subquery
 from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
@@ -14,6 +14,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
+from rest_framework.serializers import ValidationError
 from rest_framework.viewsets import GenericViewSet, ModelViewSet, ReadOnlyModelViewSet
 
 from django_filters.rest_framework import DjangoFilterBackend
@@ -63,7 +64,7 @@ from .serializers.v1 import (
 )
 from .serializers.v1.overview import CatalogSerializer, ProjectOverviewSerializer
 from .serializers.v1.page import PageSerializer
-from .utils import check_conditions, get_upload_accept, send_invite_email
+from .utils import check_conditions, get_contact_message, get_upload_accept, send_contact_message, send_invite_email
 
 
 class ProjectPagination(PageNumberPagination):
@@ -256,6 +257,29 @@ class ProjectViewSet(ModelViewSet):
             'total': project.progress_total,
             'ratio': ratio
         })
+
+    @action(detail=True, methods=['get', 'post'],
+            permission_classes=(HasModelPermission | HasProjectPermission, ))
+    def contact(self, request, pk):
+        if settings.PROJECT_CONTACT:
+            project = self.get_object()
+
+            if request.method == 'POST':
+                subject = request.data.get('subject')
+                message = request.data.get('message')
+
+                if subject and message:
+                    send_contact_message(request, subject, message)
+                    return Response(status=status.HTTP_204_NO_CONTENT)
+                else:
+                    raise ValidationError({
+                        'subject': [_('This field may not be blank.')] if not subject else [],
+                        'message': [_('This field may not be blank.')] if not message else []
+                    })
+            else:
+                return Response(get_contact_message(request, project))
+        else:
+            return 404
 
     @action(detail=False, url_path='upload-accept', permission_classes=(IsAuthenticated, ))
     def upload_accept(self, request):
@@ -450,7 +474,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         # for this value and the same set_prefix and set_index
         currentValue = self.get_object()
 
-        # collect all values for this set and all decendants
+        # collect all values for this set and all descendants
         currentValues = self.get_queryset().filter_set(currentValue)
 
         # de-serialize the posted new set value and save it, use the ValueSerializer

@@ -41,7 +41,11 @@ class BaseApi {
       throw new ApiError(error.message)
     }).then(response => {
       if (response.ok) {
-        return response.json()
+        if (response.status == 204) {
+          return null
+        } else {
+          return response.json()
+        }
       } else if (response.status == 400) {
         return response.json().then(errors => {
           throw new ValidationError(errors)
