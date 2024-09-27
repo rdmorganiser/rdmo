@@ -3,14 +3,10 @@ import PropTypes from 'prop-types'
 
 const QuestionContact = ({ settings, question, values, fetchContact }) => {
   return settings.project_contact && (
-    <div className="interview-question-contact">
-      <button className="btn btn-link" title={gettext('Contact support.')}
-              onClick={() => fetchContact({ question, values })}>
-        <span className="badge badge-pill badge-primary">
-          <i className="fa fa-question" aria-hidden="true"></i>
-        </span>
-      </button>
-    </div>
+    <button className="btn btn-link badge badge-contact" title={gettext('Contact support.')}
+            onClick={() => fetchContact({ question, values })}>
+      <i className="fa fa-question" aria-hidden="true"></i>
+    </button>
   )
 }
 

@@ -376,38 +376,43 @@
     }
 }
 
-.badge-optional {
-    cursor: help;
+.badge-optional,
+.badge-contact {
     float: right;
     margin-top: 1px;
+    margin-left: 5px;
+}
+
+.badge-optional {
+    cursor: help;
     background-color: #efefef;
     color: #777;
+}
+
+.badge-contact {
+    background-color: $link-color;
+    color: white;
+
+    font-weight: normal;
+
+    &.btn.btn-link {
+        opacity: 0.8;
+        border: 0;
+
+        &:hover {
+            opacity: 1;
+            background-color: $link-color-hover;
+            color: white;
+        }
+        &:focus {
+            outline: 0;
+            background-color: $link-color-hover;
+            color: white;
+        }
+    }
 }
 
 .badge-read-only {
     cursor: help;
     background-color: black;
-}
-
-.interview-question-contact {
-    float: right;
-    margin-top: -1px;
-
-    .btn.btn-link {
-        opacity: 0.8;
-        line-height: 20px;
-        font-size: 14px;
-        padding: 0;
-
-        &:hover {
-            opacity: 1;
-        }
-        &:focus {
-            outline: 0;
-        }
-
-        i {
-            background: transparent;
-        }
-    }
 }

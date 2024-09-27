@@ -16,7 +16,7 @@ I have a question regarding the project "{{ project_title }}".
 
 {% if question %}
 {% blocktrans trimmed with page_title=page.title question_text=question.text %}
-In particular, it is about the question: {{ question_text }}
+In particular, about the question: {{ question_text }}
 {% endblocktrans %}
 {% endif %}
 
@@ -24,10 +24,11 @@ In particular, it is about the question: {{ question_text }}
 {% firstof page.verbose_name 'Set' %}: {{ set_value.value }}
 {% endif %}
 
-{% if values %}
+{% if values|length == 1 %}
+{% trans 'Answer:' %} {% for value in values %}{{ value.value }}{% endfor %}
+{% elif values %}
 {% trans 'Answers:' %}{% for value in values %}
 * {{ value.value }}{% endfor %}
-
 {% endif %}
 
 {% trans "Sincerely" %},
