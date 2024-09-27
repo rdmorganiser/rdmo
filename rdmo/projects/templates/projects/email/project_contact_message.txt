@@ -8,7 +8,7 @@ I have a question regarding the project "{{ project_title }}" on the page "{{ pa
 {{ page_url }}
 {% else %}
 {% blocktrans trimmed with project_title=project.title %}
-I have a question regarding the project "{{ project_title }}".
+I have a question regarding the project "{{ project_title }}":
 {% endblocktrans %}
 
 {{ project_url }}

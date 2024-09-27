@@ -306,7 +306,7 @@ def get_contact_message(request, project):
         values = project.values.filter(snapshot=None).filter(id__in=value_ids)
         context['values'] = values
 
-        if page and page.is_collection and page.attribute is not None:
+        if page_id and page and page.is_collection and page.attribute is not None:
             value = values.filter(set_prefix='').first()
             if value:
                 try:
