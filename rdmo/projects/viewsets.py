@@ -14,6 +14,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
+from rest_framework.serializers import ValidationError
 from rest_framework.viewsets import GenericViewSet, ModelViewSet, ReadOnlyModelViewSet
 
 from django_filters.rest_framework import DjangoFilterBackend
@@ -79,7 +80,9 @@ from .utils import (
     check_conditions,
     compute_set_prefix_from_set_value,
     copy_project,
+    get_contact_message,
     get_upload_accept,
+    send_contact_message,
     send_invite_email,
 )
 
@@ -324,6 +327,29 @@ class ProjectViewSet(ModelViewSet):
 
         # if nothing worked, raise 404
         raise Http404
+
+    @action(detail=True, methods=['get', 'post'],
+            permission_classes=(HasModelPermission | HasProjectPermission, ))
+    def contact(self, request, pk):
+        if settings.PROJECT_CONTACT:
+            project = self.get_object()
+
+            if request.method == 'POST':
+                subject = request.data.get('subject')
+                message = request.data.get('message')
+
+                if subject and message:
+                    send_contact_message(request, subject, message)
+                    return Response(status=status.HTTP_204_NO_CONTENT)
+                else:
+                    raise ValidationError({
+                        'subject': [_('This field may not be blank.')] if not subject else [],
+                        'message': [_('This field may not be blank.')] if not message else []
+                    })
+            else:
+                return Response(get_contact_message(request, project))
+        else:
+            return 404
 
     @action(detail=False, url_path='upload-accept', permission_classes=(IsAuthenticated, ))
     def upload_accept(self, request):

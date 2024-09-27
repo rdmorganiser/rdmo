@@ -1,0 +1,34 @@
+{# Warning: Double newlines will be removed #}{% load i18n accounts_tags %}{% trans "Greetings" %}!
+
+{% if page %}
+{% blocktrans trimmed with project_title=project.title page_title=page.title %}
+I have a question regarding the project "{{ project_title }}" on the page "{{ page_title }}":
+{% endblocktrans %}
+
+{{ page_url }}
+{% else %}
+{% blocktrans trimmed with project_title=project.title %}
+I have a question regarding the project "{{ project_title }}".
+{% endblocktrans %}
+
+{{ project_url }}
+{% endif %}
+
+{% if question %}
+{% blocktrans trimmed with page_title=page.title question_text=question.text %}
+In particular, it is about the question: {{ question_text }}
+{% endblocktrans %}
+{% endif %}
+
+{% if page and set_value %}
+{% firstof page.verbose_name 'Set' %}: {{ set_value.value }}
+{% endif %}
+
+{% if values %}
+{% trans 'Answers:' %}{% for value in values %}
+* {{ value.value }}{% endfor %}
+
+{% endif %}
+
+{% trans "Sincerely" %},
+    {{ user_full_name }}

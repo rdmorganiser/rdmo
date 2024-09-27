@@ -388,3 +388,26 @@
     cursor: help;
     background-color: black;
 }
+
+.interview-question-contact {
+    float: right;
+    margin-top: -1px;
+
+    .btn.btn-link {
+        opacity: 0.8;
+        line-height: 20px;
+        font-size: 14px;
+        padding: 0;
+
+        &:hover {
+            opacity: 1;
+        }
+        &:focus {
+            outline: 0;
+        }
+
+        i {
+            background: transparent;
+        }
+    }
+}
