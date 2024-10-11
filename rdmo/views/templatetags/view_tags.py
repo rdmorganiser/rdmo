@@ -188,7 +188,7 @@ def get_labels(context, element, set_prefix='', set_index=0, project=None):
         project = context['project']
 
     set_labels = []
-    for ancestor in element['ancestors']:
+    for ancestor in element.get('ancestors', []):
         if ancestor['is_collection']:
             set_label = f'#{set_index + 1}'
 
