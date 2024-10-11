@@ -13,7 +13,8 @@ class CatalogSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
         model = Catalog
         fields = (
             'id',
-            'title'
+            'title',
+            'available'
         )
 
 

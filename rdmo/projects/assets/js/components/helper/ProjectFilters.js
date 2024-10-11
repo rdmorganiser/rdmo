@@ -25,7 +25,6 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
     configActions.deleteConfig('params.catalog')
     configActions.deleteConfig('params.created_after')
     setStartDate('created', null)
-    console.log('dateRange', dateRange)
     configActions.deleteConfig('params.created_before')
     setEndDate('created', null)
     configActions.deleteConfig('params.last_changed_after')
@@ -36,7 +35,8 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
     projectsActions.fetchProjects()
   }
 
-  const catalogOptions = catalogs?.map(catalog => ({ value: catalog.id.toString(), label: catalog.title }))
+  const catalogOptions = catalogs?.filter(catalog => catalog.available)
+                                  .map(catalog => ({ value: catalog.id.toString(), label: catalog.title }))
   const selectedCatalog = get(config, 'params.catalog', '')
   const updateCatalogFilter = (value) => {
     value ? configActions.updateConfig('params.catalog', value) : configActions.deleteConfig('params.catalog')
