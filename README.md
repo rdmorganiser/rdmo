@@ -6,6 +6,7 @@ RDMO - Research Data Management Organiser
 [![Django Versions](https://img.shields.io/pypi/frameworkversions/django/rdmo)](https://pypi.python.org/pypi/rdmo/)
 [![License](https://img.shields.io/github/license/rdmorganiser/rdmo?style=flat)](https://github.com/rdmorganiser/rdmo/blob/main/LICENSE) \
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/rdmorganiser/rdmo/main.svg)](https://results.pre-commit.ci/latest/github/rdmorganiser/rdmo/main)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![CI Workflow Status](https://github.com/rdmorganiser/rdmo/actions/workflows/ci.yml/badge.svg)](https://github.com/rdmorganiser/rdmo/actions/workflows/ci.yml)
 [![Coverage Status](https://coveralls.io/repos/rdmorganiser/rdmo/badge.svg?branch=main&service=github)](https://coveralls.io/github/rdmorganiser/rdmo?branch=main)
