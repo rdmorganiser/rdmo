@@ -53,3 +53,4 @@ ci:
   autoupdate_schedule: monthly
   autofix_prs: false
   autoupdate_branch: 'dependency-updates'
+  autoupdate_commit_msg: 'build(pre-commit): pre-commit autoupdate by ci'
