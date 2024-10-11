@@ -49,3 +49,7 @@ repos:
             testing/.*.json|
             testing/.*.xml
         )$
+ci:
+  autoupdate_schedule: monthly
+  autofix_prs: false
+  autoupdate_branch: 'dependency-updates'
