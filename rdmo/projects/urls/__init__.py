@@ -35,6 +35,7 @@ from ..views import (
     ProjectViewExportView,
     ProjectViewView,
     SnapshotCreateView,
+    SnapshotExportView,
     SnapshotRollbackView,
     SnapshotUpdateView,
 )
@@ -109,6 +110,8 @@ urlpatterns = [
             SnapshotUpdateView.as_view(), name='snapshot_update'),
     re_path(r'^(?P<project_id>[0-9]+)/snapshots/(?P<pk>[0-9]+)/rollback/$',
             SnapshotRollbackView.as_view(), name='snapshot_rollback'),
+    re_path(r'^(?P<project_id>[0-9]+)/snapshots/(?P<pk>[0-9]+)/export/(?P<format>[a-z-]+)/$',
+            SnapshotExportView.as_view(), name='snapshot_export'),
 
     re_path(r'^(?P<pk>[0-9]+)/answers/$',
             ProjectAnswersView.as_view(), name='project_answers'),

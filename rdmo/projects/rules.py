@@ -99,6 +99,7 @@ rules.add_perm('projects.view_snapshot_object', is_project_member | is_site_mana
 rules.add_perm('projects.add_snapshot_object', is_project_manager | is_project_owner | is_site_manager)
 rules.add_perm('projects.change_snapshot_object', is_project_manager | is_project_owner | is_site_manager)
 rules.add_perm('projects.rollback_snapshot_object', is_project_manager | is_project_owner | is_site_manager)
+rules.add_perm('projects.export_snapshot_object', is_project_owner | is_project_manager | is_site_manager)
 
 rules.add_perm('projects.view_value_object', is_project_member | is_site_manager)
 rules.add_perm('projects.add_value_object', is_project_author | is_project_manager | is_project_owner | is_site_manager)

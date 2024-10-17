@@ -203,6 +203,7 @@ SETTINGS_EXPORT = [
     'PROJECT_ISSUES',
     'PROJECT_VIEWS',
     'PROJECT_EXPORTS',
+    'PROJECT_SNAPSHOT_EXPORTS',
     'PROJECT_IMPORTS',
     'PROJECT_IMPORTS_LIST',
     'PROJECT_SEND_ISSUE',
@@ -291,6 +292,8 @@ PROJECT_EXPORTS = [
     ('csvsemicolon', _('CSV (semicolon separated)'), 'rdmo.projects.exports.CSVSemicolonExport'),
     ('json', _('JSON'), 'rdmo.projects.exports.JSONExport'),
 ]
+
+PROJECT_SNAPSHOT_EXPORTS = []
 
 PROJECT_IMPORTS = [
     ('xml', _('RDMO XML'), 'rdmo.projects.imports.RDMOXMLImport'),
