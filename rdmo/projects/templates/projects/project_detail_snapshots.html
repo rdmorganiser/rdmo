@@ -54,6 +54,24 @@
                             title="{% trans 'Rollback to snapshot' %}">
                         </a>
                         {% endif %}
+
+                        {% has_perm 'projects.export_project_object' request.user project as can_export_project %}
+                        {% if settings.PROJECT_SNAPSHOT_EXPORTS and can_export_project %}
+                        <span class="dropdown">
+                            <button class="btn-link fa fa-download" title="{% trans 'Export snapshot' %}"
+                                    data-toggle="dropdown"></button>
+
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                {% for key, label, class in settings.PROJECT_SNAPSHOT_EXPORTS %}
+                                <li>
+                                    <a href="{% url 'snapshot_export' project.id snapshot.id key %}" target="_blank">
+                                        {{ label }}
+                                    </a>
+                                </li>
+                                {% endfor %}
+                            {% endif %}
+                            </ul>
+                        </span>
                     </td>
                 </tr>
                 {% endfor %}
