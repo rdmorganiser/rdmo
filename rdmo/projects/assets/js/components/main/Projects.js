@@ -1,11 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { PendingInvitations, ProjectFilters, ProjectImport, Table } from '../helper'
+import { get, isEmpty } from 'lodash'
+
 import { Link, Modal, SearchField } from 'rdmo/core/assets/js/components'
 import { useFormattedDateTime, useModal, useScrollToTop }  from 'rdmo/core/assets/js/hooks'
 import { language } from 'rdmo/core/assets/js/utils'
+import baseUrl from 'rdmo/core/assets/js/utils/baseUrl'
+
+import { PendingInvitations, ProjectFilters, ProjectImport, Table } from '../helper'
 import { getTitlePath, getUserRoles, userIsManager, HEADER_FORMATTERS, SORTABLE_COLUMNS } from '../../utils'
-import { get, isEmpty } from 'lodash'
 
 const Projects = ({ config, configActions, currentUserObject, projectsActions, projectsObject }) => {
   const { allowedTypes, catalogs, importUrls, invites, projects, projectsCount, hasNext } = projectsObject
@@ -54,10 +57,12 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
   }
 
   const handleNew = () => {
-    window.location.href = '/projects/create'
+    window.location.href = `${baseUrl}/projects/create/`
   }
 
-  const handleImport = (file) => { projectsActions.uploadProject('/projects/import/', file) }
+  const handleImport = (file) => {
+    projectsActions.uploadProject('/projects/import/', file)
+  }
 
   const renderTitle = (title, row) => {
     const pathArray = getTitlePath(projects, title, row).split(' / ')
@@ -67,7 +72,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
 
     return (
       <div>
-        <a href={`/projects/${row.id}`}>
+        <a href={`${baseUrl}/projects/${row.id}/`}>
           {pathArray.map((path, index) => (
             <span key={index}>{path} / </span>
           ))}
@@ -129,25 +134,26 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
     created: content => useFormattedDateTime(content, language),
     last_changed: content => useFormattedDateTime(content, language),
     actions: (_content, row) => {
-      const rowUrl = `/projects/${row.id}`
-      const path = `?next=${window.location.pathname}`
+      const rowUrl = `${baseUrl}/projects/${row.id}`
+      const params = `?next=${window.location.pathname}`
       const { isProjectManager, isProjectOwner } = getUserRoles(row, currentUserId, ['managers', 'owners'])
+
       return (
         <div className="icon-container">
           {(isProjectManager || isProjectOwner || isManager) &&
           <Link
-            href={`${rowUrl}/update`}
+            href={`${rowUrl}/update/`}
             className="element-link fa fa-pencil"
             title={row.title}
-            onClick={() => window.location.href = `${rowUrl}/update/${path}`}
+            onClick={() => window.location.href = `${rowUrl}/update/${params}`}
           />
           }
           {(isProjectOwner || isManager) &&
           <Link
-            href={`${rowUrl}/delete`}
+            href={`${rowUrl}/delete/`}
             className="element-link fa fa-trash"
             title={row.title}
-            onClick={() => window.location.href = `${rowUrl}/delete/${path}`}
+            onClick={() => window.location.href = `${rowUrl}/delete/${params}`}
           />
           }
         </div>
@@ -217,10 +223,13 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
         sortableColumns={SORTABLE_COLUMNS}
         visibleColumns={visibleColumns}
       />
+
       {renderLoadButtons()}
+
       <Modal {...invitationsModalProps}>
         <PendingInvitations invitations={invites} />
       </Modal>
+
       <Modal {...importModalProps}>
         <ProjectImport
           allowedTypes={allowedTypes}

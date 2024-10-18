@@ -1,5 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+
+import baseUrl from 'rdmo/core/assets/js/utils/baseUrl'
+
 import { ROLE_LABELS } from '../../utils'
 
 const PendingInvitations = ({ invitations }) => {
@@ -14,8 +17,14 @@ const PendingInvitations = ({ invitations }) => {
             {ROLE_LABELS[item.role]}
           </div>
           <div className="w-50 align-right">
-            <button className="btn btn-xs btn-success ml-10" onClick={() => { window.location.href = `/projects/join/${item.token}` }}>{gettext('Accept')}</button>
-            <button className="btn btn-xs btn-danger ml-10" onClick={() => { window.location.href = `/projects/cancel/${item.token}` }}>{gettext('Decline')}</button>
+            <button className="btn btn-xs btn-success ml-10"
+                    onClick={() => { window.location.href = `${baseUrl}/projects/join/${item.token}/` }}>
+              {gettext('Accept')}
+            </button>
+            <button className="btn btn-xs btn-danger ml-10"
+                    onClick={() => { window.location.href = `${baseUrl}/projects/cancel/${item.token}/` }}>
+              {gettext('Decline')}
+            </button>
           </div>
         </div>
       ))
