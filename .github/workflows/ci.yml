@@ -17,11 +17,6 @@ on:
       - conftest.py
       - package.json
       - pyproject.toml
-    types:
-      - opened
-      - synchronize
-      - reopened
-      - ready_for_review # this is needed to trigger checks, when an auto-generated "draft" PR is set for "ready for review".
 
 # Ref: https://docs.github.com/en/actions/using-jobs/using-concurrency
 concurrency:
