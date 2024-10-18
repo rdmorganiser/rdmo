@@ -9,7 +9,8 @@ from rdmo.views.templatetags import view_tags
 from rdmo.views.utils import ProjectWrapper
 
 from .renderers import XMLRenderer
-from .serializers.export import ProjectSerializer as ExportSerializer
+from .serializers.export import ProjectSerializer as ProjectExportSerializer
+from .serializers.export import SnapshotSerializer as SnapshotExportSerializer
 
 
 class Export(Plugin):
@@ -154,8 +155,15 @@ class JSONExport(AnswersExportMixin, Export):
 class RDMOXMLExport(Export):
 
     def render(self):
-        serializer = ExportSerializer(self.project)
+        if self.project:
+            content_disposition = f'filename="{self.project.title}.xml"'
+            serializer = ProjectExportSerializer(self.project)
+
+        else:
+            content_disposition = f'filename="{self.snapshot.title}.xml"'
+            serializer = SnapshotExportSerializer(self.snapshot)
+
         xmldata = XMLRenderer().render(serializer.data)
         response = HttpResponse(prettify_xml(xmldata), content_type="application/xml")
-        response['Content-Disposition'] = f'filename="{self.project.title}.xml"'
+        response['Content-Disposition'] = content_disposition
         return response

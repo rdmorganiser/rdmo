@@ -39,6 +39,40 @@ class SnapshotSerializer(serializers.ModelSerializer):
 
     values = serializers.SerializerMethodField()
 
+    catalog = serializers.CharField(source='catalog.uri', default=None, read_only=True)
+    tasks = serializers.SerializerMethodField()
+    views = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Snapshot
+        fields = (
+            'title',
+            'description',
+            'catalog',
+            'tasks',
+            'views',
+            'values',
+            'created',
+            'updated'
+        )
+
+    def get_values(self, obj):
+        values = Value.objects.filter(project=obj.project, snapshot=obj) \
+                              .select_related('attribute', 'option')
+        serializer = ValueSerializer(instance=values, many=True)
+        return serializer.data
+
+    def get_tasks(self, obj):
+        return [task.uri for task in obj.project.tasks.all()]
+
+    def get_views(self, obj):
+        return [view.uri for view in obj.project.views.all()]
+
+
+class ProjectSnapshotSerializer(serializers.ModelSerializer):
+
+    values = serializers.SerializerMethodField()
+
     class Meta:
         model = Snapshot
         fields = (
@@ -57,7 +91,7 @@ class SnapshotSerializer(serializers.ModelSerializer):
 
 class ProjectSerializer(serializers.ModelSerializer):
 
-    snapshots = SnapshotSerializer(many=True)
+    snapshots = ProjectSnapshotSerializer(many=True)
     values = serializers.SerializerMethodField()
 
     catalog = serializers.CharField(source='catalog.uri', default=None, read_only=True)

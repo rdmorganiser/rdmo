@@ -25,4 +25,4 @@ from .project_update import (
     ProjectUpdateViewsView,
 )
 from .project_view import ProjectViewExportView, ProjectViewView
-from .snapshot import SnapshotCreateView, SnapshotRollbackView, SnapshotUpdateView
+from .snapshot import SnapshotCreateView, SnapshotExportView, SnapshotRollbackView, SnapshotUpdateView

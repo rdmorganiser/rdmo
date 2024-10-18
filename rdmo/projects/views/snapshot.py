@@ -1,10 +1,11 @@
 import logging
 
-from django.http import HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.generic import CreateView, DetailView, UpdateView
 
+from rdmo.core.plugins import get_plugin
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 
 from ..forms import SnapshotCreateForm
@@ -63,3 +64,33 @@ class SnapshotRollbackView(ObjectPermissionMixin, RedirectViewMixin, DetailView)
             snapshot.rollback()
 
         return HttpResponseRedirect(reverse('project', args=[snapshot.project.id]))
+
+
+class SnapshotExportView(ObjectPermissionMixin, DetailView):
+    model = Snapshot
+    queryset = Snapshot.objects.all()
+    permission_required = 'projects.export_snapshot_object'
+
+    def get_queryset(self):
+        return Snapshot.objects.filter(project_id=self.kwargs['project_id'])
+
+    def get_permission_object(self):
+        return self.get_object().project
+
+    def get_export_plugin(self):
+        export_plugin = get_plugin('PROJECT_SNAPSHOT_EXPORTS', self.kwargs.get('format'))
+        if export_plugin is None:
+            raise Http404
+
+        export_plugin.request = self.request
+        export_plugin.snapshot = self.object
+
+        return export_plugin
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return self.get_export_plugin().render()
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return self.get_export_plugin().submit()
