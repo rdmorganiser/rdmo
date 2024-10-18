@@ -1,4 +1,5 @@
 import logging
+from collections import defaultdict
 from pathlib import Path
 
 from django.conf import settings
@@ -175,10 +176,13 @@ def set_context_querystring_with_filter_and_page(context: dict) -> dict:
 
 
 def get_upload_accept():
-    accept = set()
+    accept = defaultdict(set)
     for import_plugin in get_plugins('PROJECT_IMPORTS').values():
         if import_plugin.accept:
-            accept.add(import_plugin.accept)
-        else:
-            return None
-    return ','.join(accept)
+            for key, values in import_plugin.accept.items():
+                accept[key].update(values)
+        elif import_plugin.upload is True:
+            # if one of the plugins does not have the accept field, but is marked as upload plugin
+            # all file types are allowed
+            return {}
+    return accept
