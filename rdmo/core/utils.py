@@ -7,15 +7,14 @@ from pathlib import Path
 from tempfile import mkstemp
 from urllib.parse import urlparse
 
+import pypandoc
+from defusedcsv import csv
 from django.apps import apps
 from django.conf import settings
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.template.loader import get_template, render_to_string
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
-
-import pypandoc
-from defusedcsv import csv
 from markdown import markdown
 
 from .constants import HUMAN2BYTES_MAPPER
@@ -24,28 +23,28 @@ log = logging.getLogger(__name__)
 
 
 def get_script_alias(request):
-    return request.path[:-len(request.path_info)]
+    return request.path[: -len(request.path_info)]
 
 
 def get_referer(request, default=None):
-    return request.META.get('HTTP_REFERER', default)
+    return request.META.get("HTTP_REFERER", default)
 
 
-def get_referer_path_info(request, default=''):
-    referer = request.META.get('HTTP_REFERER', None)
+def get_referer_path_info(request, default=""):
+    referer = request.META.get("HTTP_REFERER", None)
     if not referer:
         return default
 
     script_alias = get_script_alias(request)
-    return urlparse(referer).path[len(script_alias):]
+    return urlparse(referer).path[len(script_alias) :]
 
 
 def get_next(request):
-    next = request.POST.get('next')
+    next = request.POST.get("next")
     current = request.path_info
 
     if next in (current, None):
-        return get_script_alias(request) + '/'
+        return get_script_alias(request) + "/"
     else:
         return get_script_alias(request) + next
 
@@ -54,20 +53,20 @@ def get_uri_prefix(obj):
     # needs to stay, is part of a migration
     r = settings.DEFAULT_URI_PREFIX
     if bool(obj.uri_prefix) is True:
-        r = obj.uri_prefix.rstrip('/')
+        r = obj.uri_prefix.rstrip("/")
     return r
 
 
 def get_pandoc_main_version():
     try:
-        return int(pypandoc.get_pandoc_version().split('.')[0])
+        return int(pypandoc.get_pandoc_version().split(".")[0])
     except OSError:
         return None
 
 
 def pandoc_version_at_least(required_version):
-    required = [int(x) for x in required_version.split('.')]
-    installed = [int(x) for x in pypandoc.get_pandoc_version().split('.')]
+    required = [int(x) for x in required_version.split(".")]
+    installed = [int(x) for x in pypandoc.get_pandoc_version().split(".")]
     for idx, digit in enumerate(installed):
         try:
             req = required[idx]
@@ -84,7 +83,7 @@ def pandoc_version_at_least(required_version):
 def join_url(base, *args):
     url = base
     for arg in args:
-        url = url.rstrip('/') + '/' + arg.lstrip('/')
+        url = url.rstrip("/") + "/" + arg.lstrip("/")
     return url
 
 
@@ -92,7 +91,7 @@ def get_model_field_meta(model):
     meta = {}
 
     for field in model._meta.get_fields():
-        match = re.search(r'lang(\d)$', field.name)
+        match = re.search(r"lang(\d)$", field.name)
         if match:
             lang_index = int(match.group(1))
 
@@ -101,31 +100,35 @@ def get_model_field_meta(model):
             except IndexError:
                 continue
 
-            field_name = field.name.replace(f'_lang{lang_index}', f'_{lang_code}')
+            field_name = field.name.replace(f"_lang{lang_index}", f"_{lang_code}")
 
             meta[field_name] = {}
-            if hasattr(field, 'verbose_name'):
+            if hasattr(field, "verbose_name"):
                 # remove the "(primary)" part
-                meta[field_name]['verbose_name'] = re.sub(r'\(.*\)$', f'({lang})', str(field.verbose_name))
-            if hasattr(field, 'help_text'):
+                meta[field_name]["verbose_name"] = re.sub(
+                    r"\(.*\)$", f"({lang})", str(field.verbose_name)
+                )
+            if hasattr(field, "help_text"):
                 # remove the "in the primary language" part
-                meta[field_name]['help_text'] = re.sub(r' \(.*\).', '.', str(field.help_text))
+                meta[field_name]["help_text"] = re.sub(
+                    r" \(.*\).", ".", str(field.help_text)
+                )
         else:
             meta[field.name] = {}
-            if hasattr(field, 'verbose_name'):
-                meta[field.name]['verbose_name'] = field.verbose_name
-            if hasattr(field, 'help_text'):
-                meta[field.name]['help_text'] = field.help_text
+            if hasattr(field, "verbose_name"):
+                meta[field.name]["verbose_name"] = field.verbose_name
+            if hasattr(field, "help_text"):
+                meta[field.name]["help_text"] = field.help_text
 
-    if model.__name__ == 'Page':
-        meta['elements'] = {
-            'verbose_name': _('Elements'),
-            'help_text': _('The questions and question sets for this page.')
+    if model.__name__ == "Page":
+        meta["elements"] = {
+            "verbose_name": _("Elements"),
+            "help_text": _("The questions and question sets for this page."),
         }
-    elif model.__name__ == 'QuestionSet':
-        meta['elements'] = {
-            'verbose_name': _('Elements'),
-            'help_text': _('The questions and question sets for this question set.')
+    elif model.__name__ == "QuestionSet":
+        meta["elements"] = {
+            "verbose_name": _("Elements"),
+            "help_text": _("The questions and question sets for this question set."),
         }
 
     return meta
@@ -135,8 +138,11 @@ def get_languages():
     languages = []
     for i in range(5):
         try:
-            language = settings.LANGUAGES[i][0], settings.LANGUAGES[i][1],\
-                'lang%i' % (i + 1)
+            language = (
+                settings.LANGUAGES[i][0],
+                settings.LANGUAGES[i][1],
+                "lang%i" % (i + 1),
+            )
             languages.append(language)
         except IndexError:
             pass
@@ -145,14 +151,14 @@ def get_languages():
 
 def get_language_fields(field_name):
     return [
-        field_name + '_' + lang_field for lang_code,
-        lang_string, lang_field in get_languages()
-        ]
+        field_name + "_" + lang_field
+        for lang_code, lang_string, lang_field in get_languages()
+    ]
 
 
 def get_language_warning(obj, field):
     for lang_code, lang_string, lang_field in get_languages():
-        if not getattr(obj, f'{field}_{lang_field}'):
+        if not getattr(obj, f"{field}_{lang_field}"):
             return True
     return False
 
@@ -160,14 +166,14 @@ def get_language_warning(obj, field):
 def set_export_reference_document(format, context):
     # try to get the view uri from the context
     try:
-        view = context['view']
+        view = context["view"]
         view_uri = view.uri
     except (AttributeError, KeyError, TypeError):
         view_uri = None
 
     refdocs = []
 
-    if format == 'odt':
+    if format == "odt":
         # append view specific custom refdoc
         try:
             refdocs.append(settings.EXPORT_REFERENCE_ODT_VIEWS[view_uri])
@@ -178,7 +184,7 @@ def set_export_reference_document(format, context):
         if settings.EXPORT_REFERENCE_ODT:
             refdocs.append(settings.EXPORT_REFERENCE_ODT)
 
-    elif format == 'docx':
+    elif format == "docx":
         # append view specific custom refdoc
         try:
             refdocs.append(settings.EXPORT_REFERENCE_DOCX_VIEWS[view_uri])
@@ -192,8 +198,7 @@ def set_export_reference_document(format, context):
     # append the default reference docs
     refdocs.append(
         os.path.join(
-            apps.get_app_config('rdmo').path,
-            'share', 'reference' + '.' + format
+            apps.get_app_config("rdmo").path, "share", "reference" + "." + format
         )
     )
 
@@ -205,7 +210,7 @@ def set_export_reference_document(format, context):
 
 def render_to_format(request, export_format, title, template_src, context):
     if export_format not in dict(settings.EXPORT_FORMATS):
-        return HttpResponseBadRequest(_('This format is not supported.'))
+        return HttpResponseBadRequest(_("This format is not supported."))
 
     # render the template to a html string
     template = get_template(template_src)
@@ -215,63 +220,70 @@ def render_to_format(request, export_format, title, template_src, context):
     # remove empty lines
     html = os.linesep.join([line for line in html.splitlines() if line.strip()])
 
-    if export_format == 'html':
+    if export_format == "html":
         # create the response object
         response = HttpResponse(html)
-        response['Content-Disposition'] = f'filename="{title}.{export_format}"'
+        response["Content-Disposition"] = f'filename="{title}.{export_format}"'
 
     else:
         pandoc_args = settings.EXPORT_PANDOC_ARGS.get(export_format, [])
         content_disposition = f'attachment; filename="{title}.{export_format}"'
 
-        if export_format == 'pdf':
+        if export_format == "pdf":
             # check pandoc version (the pdf arg changed to version 2)
             if get_pandoc_main_version() == 1:
-                pandoc_args = [arg.replace(
-                    '--pdf-engine=xelatex', '--latex-engine=xelatex'
-                ) for arg in pandoc_args]
+                pandoc_args = [
+                    arg.replace("--pdf-engine=xelatex", "--latex-engine=xelatex")
+                    for arg in pandoc_args
+                ]
 
             # display pdf in browser
             content_disposition = f'filename="{title}.{export_format}"'
 
         # use reference document for certain file formats
         refdoc = set_export_reference_document(export_format, context)
-        if refdoc is not None and export_format in ['docx', 'odt']:
+        if refdoc is not None and export_format in ["docx", "odt"]:
             # check pandoc version (the args changed to version 2)
             if get_pandoc_main_version() == 1:
-                pandoc_args.append(f'--reference-{export_format}={refdoc}')
+                pandoc_args.append(f"--reference-{export_format}={refdoc}")
             else:
-                pandoc_args.append(f'--reference-doc={refdoc}')
+                pandoc_args.append(f"--reference-doc={refdoc}")
 
         # add the possible resource-path
         if pandoc_version_at_least("2") is True:
-            pandoc_args.append(f'--resource-path={settings.STATIC_ROOT}')
-            if 'resource_path' in context:
-                resource_path = Path(settings.MEDIA_ROOT).joinpath(context['resource_path'])
-                pandoc_args.append(f'--resource-path={resource_path}')
+            pandoc_args.append(f"--resource-path={settings.STATIC_ROOT}")
+            if "resource_path" in context:
+                resource_path = Path(settings.MEDIA_ROOT).joinpath(
+                    context["resource_path"]
+                )
+                pandoc_args.append(f"--resource-path={resource_path}")
 
         # create a temporary file
-        (tmp_fd, tmp_filename) = mkstemp('.' + export_format)
+        (tmp_fd, tmp_filename) = mkstemp("." + export_format)
 
         # add metadata
         tmp_metadata_file = None
         if metadata is not None and pandoc_version_at_least("2.3") is True:
             tmp_metadata_file = save_metadata(metadata)
-            pandoc_args.append('--metadata-file=' + tmp_metadata_file)
+            pandoc_args.append("--metadata-file=" + tmp_metadata_file)
 
         # convert the file using pandoc
-        log.info('Export %s document using args %s.', export_format, pandoc_args)
+        log.info("Export %s document using args %s.", export_format, pandoc_args)
         html = re.sub(
-            r'(<img.+src=["\'])' + settings.STATIC_URL + r'([\w\-\@?^=%&/~\+#]+)', r'\g<1>' +
-            str(Path(settings.STATIC_ROOT)) + r'/\g<2>', html
+            r'(<img.+src=["\'])' + settings.STATIC_URL + r"([\w\-\@?^=%&/~\+#]+)",
+            r"\g<1>" + str(Path(settings.STATIC_ROOT)) + r"/\g<2>",
+            html,
         )
         pypandoc.convert_text(
-            html, export_format, format='html',
-            outputfile=tmp_filename, extra_args=pandoc_args
+            html,
+            export_format,
+            format="html",
+            outputfile=tmp_filename,
+            extra_args=pandoc_args,
         )
 
         # read the temporary file
-        file_handler = os.fdopen(tmp_fd, 'rb')
+        file_handler = os.fdopen(tmp_fd, "rb")
         file_content = file_handler.read()
         file_handler.close()
 
@@ -281,36 +293,38 @@ def render_to_format(request, export_format, title, template_src, context):
         os.remove(tmp_filename)
 
         # create the response object
-        response = HttpResponse(file_content, content_type=f'application/{export_format}')
-        response['Content-Disposition'] = content_disposition.encode('utf-8')
+        response = HttpResponse(
+            file_content, content_type=f"application/{export_format}"
+        )
+        response["Content-Disposition"] = content_disposition.encode("utf-8")
 
     return response
 
 
-def render_to_csv(title, rows, delimiter=','):
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = f'attachment; filename="{title}.csv"'
+def render_to_csv(title, rows, delimiter=","):
+    response = HttpResponse(content_type="text/csv")
+    response["Content-Disposition"] = f'attachment; filename="{title}.csv"'
 
     writer = csv.writer(response, delimiter=delimiter)
     for row in rows:
-        writer.writerow(
-            ['' if x is None else str(x) for x in row]
-        )
+        writer.writerow(["" if x is None else str(x) for x in row])
     return response
 
 
-def render_to_json(title, data, delimiter=','):
-    response = HttpResponse(json.dumps(data, indent=2), content_type='text/json')
-    response['Content-Disposition'] = f'attachment; filename="{title}.json"'
+def render_to_json(title, data, delimiter=","):
+    response = HttpResponse(json.dumps(data, indent=2), content_type="text/json")
+    response["Content-Disposition"] = f'attachment; filename="{title}.json"'
     return response
 
 
 def return_file_response(file_path, content_type):
     file_abspath = Path(settings.MEDIA_ROOT) / file_path
     if file_abspath.exists():
-        with file_abspath.open('rb') as fp:
+        with file_abspath.open("rb") as fp:
             response = HttpResponse(fp.read(), content_type=content_type)
-            response['Content-Disposition'] = 'attachment; filename=' + file_abspath.name
+            response["Content-Disposition"] = (
+                "attachment; filename=" + file_abspath.name
+            )
             return response
     else:
         raise Http404
@@ -319,19 +333,19 @@ def return_file_response(file_path, content_type):
 def sanitize_url(s):
     # is used in the rdmo-app
     try:
-        m = re.search('[a-z0-9-_]', s)
+        m = re.search("[a-z0-9-_]", s)
     except TypeError:
-        s = ''
+        s = ""
     else:
         if bool(m) is False:
-            s = ''
+            s = ""
         else:
-            s = re.sub(r'/+', '/', s)
+            s = re.sub(r"/+", "/", s)
     return s
 
 
 def import_class(string):
-    module_name, class_name = string.rsplit('.', 1)
+    module_name, class_name = string.rsplit(".", 1)
     return getattr(importlib.import_module(module_name), class_name)
 
 
@@ -339,7 +353,7 @@ def copy_model(instance, **kwargs):
     # get values from instance which are not id, ForeignKeys orde M2M relations
     data = {}
     for field in instance._meta.get_fields():
-        if not (field.name == 'id' or field.is_relation):
+        if not (field.name == "id" or field.is_relation):
             data[field.name] = getattr(instance, field.name)
 
     # update with the kwargs provided to this function
@@ -353,19 +367,19 @@ def copy_model(instance, **kwargs):
 
 
 def human2bytes(string):
-    if not string or string == '0':
+    if not string or string == "0":
         return 0
 
-    m = re.match(r'([0-9.]+)\s*([A-Za-z]+)', string)
+    m = re.match(r"([0-9.]+)\s*([A-Za-z]+)", string)
     number, unit = float(m.group(1)), m.group(2).strip().lower()
 
     conversion = HUMAN2BYTES_MAPPER[unit]
-    number = number*conversion['base']**(conversion['power'])
+    number = number * conversion["base"] ** (conversion["power"])
     return number
 
 
 def is_truthy(value):
-    return value is not None and (value is True or value.lower() in ['1', 't', 'true'])
+    return value is not None and (value is True or value.lower() in ["1", "t", "true"])
 
 
 def markdown2html(markdown_string):
@@ -373,45 +387,42 @@ def markdown2html(markdown_string):
     html = markdown(force_str(markdown_string)).strip()
 
     # strip the outer paragraph
-    html = re.sub(r'^<p>(.*?)</p>$',r'\1', html)
+    html = re.sub(r"^<p>(.*?)</p>$", r"\1", html)
 
     # convert `[<string>]{<title>}` to <span title="<title>"><string></span> to allow for underlined tooltips
     html = re.sub(
-        r'\[(.*?)\]\{(.*?)\}',
+        r"\[(.*?)\]\{(.*?)\}",
         r'<span data-toggle="tooltip" data-placement="bottom" data-html="true" title="\2">\1</span>',
-        html
+        html,
     )
 
     # convert everything after `{more}` to <span class="more"><string></span> to be shown/hidden on user input
-    show_string = _('show more')
-    hide_string = _('show less')
+    show_string = _("show more")
+    hide_string = _("show less")
     html = re.sub(
-        r'(\{more\})(.*?)</p>$',
+        r"(\{more\})(.*?)</p>$",
         f'<span class="show-more" onclick="showMore(this)">... ({show_string})</span>'
         r'<span class="more">\2</span>'
         f'<span class="show-less" onclick="showLess(this)"> ({hide_string})</span></p>',
-        html
+        html,
     )
     html = inject_textblocks(html)
     return html
 
 
 def inject_textblocks(html):
-    '''textblocks (e.g. for help texts) can be injected into free text fields as small templates via Markdown'''
-    for textblock_id in re.findall(r'{{(.*?)}}', html):      # strings between curly brackets
-        template_path:  str = settings.MARKDOWN_TEMPLATES[textblock_id]
-        html                = re.sub(   '{{' + textblock_id + '}}',
-                                        render_to_string(template_path),
-                                        html
-                                    )
+    """textblocks (e.g. for help texts) can be injected into free text fields as small templates via Markdown"""
+    for textblock_id in re.findall(
+        r"{{(.*?)}}", html
+    ):  # strings between curly brackets
+        template_path: str = settings.MARKDOWN_TEMPLATES[textblock_id]
+        html = re.sub("{{" + textblock_id + "}}", render_to_string(template_path), html)
     return html
 
 
 def parse_metadata(html):
     metadata = None
-    pattern = re.compile(
-        '(<metadata>)(.*)(</metadata>)', re.MULTILINE | re.DOTALL
-    )
+    pattern = re.compile("(<metadata>)(.*)(</metadata>)", re.MULTILINE | re.DOTALL)
     m = re.search(pattern, html)
     if bool(m) is True:
         try:
@@ -419,14 +430,14 @@ def parse_metadata(html):
         except json.JSONDecodeError:
             pass
         else:
-            html = html.replace(m.group(0), '')
+            html = html.replace(m.group(0), "")
     return metadata, html
 
 
 def save_metadata(metadata):
-    _, tmp_metadata_file = mkstemp(suffix='.json')
-    with open(tmp_metadata_file, 'w') as f:
+    _, tmp_metadata_file = mkstemp(suffix=".json")
+    with open(tmp_metadata_file, "w") as f:
         json.dump(metadata, f)
     f = open(tmp_metadata_file)
-    log.info('Save metadata file %s %s', tmp_metadata_file, str(metadata))
+    log.info("Save metadata file %s %s", tmp_metadata_file, str(metadata))
     return tmp_metadata_file
