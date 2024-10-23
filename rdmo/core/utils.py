@@ -10,7 +10,7 @@ from urllib.parse import urlparse
 from django.apps import apps
 from django.conf import settings
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
-from django.template.loader import get_template
+from django.template.loader import get_template, render_to_string
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 
@@ -392,6 +392,18 @@ def markdown2html(markdown_string):
         f'<span class="show-less" onclick="showLess(this)"> ({hide_string})</span></p>',
         html
     )
+    html = inject_textblocks(html)
+    return html
+
+
+def inject_textblocks(html):
+    '''textblocks (e.g. for help texts) can be injected into free text fields as small templates via Markdown'''
+    for textblock_id in re.findall(r'{{(.*?)}}', html):      # strings between curly brackets
+        template_path:  str = settings.MARKDOWN_TEMPLATES[textblock_id]
+        html                = re.sub(   '{{' + textblock_id + '}}',
+                                        render_to_string(template_path),
+                                        html
+                                    )
     return html
 
 
