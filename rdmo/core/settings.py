@@ -552,4 +552,6 @@ VENDOR = {
 # necessary since django 3.2, explicitly set primary key type to avoid warnings
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
-MARKDOWN_TEMPLATES = {}
+MARKDOWN_TEMPLATES: dict[str, str] = {
+    # for example: 'not_empty': 'core/text_blocks/template_for_not_empty.html',
+}
