@@ -1,6 +1,6 @@
 # Changelog
 
-## [RDMO 2.2.2](https://github.com/rdmorganiser/rdmo/compare/2.2.1...2.2.2) (Oct 18, 2024)
+## [RDMO 2.2.2](https://github.com/rdmorganiser/rdmo/compare/2.2.1...2.2.2) (Oct 24, 2024)
 
 * Fix projects interface when using RDMO with a path (#1152)
 * Fix missing (unavailable) catalogs projects interface
