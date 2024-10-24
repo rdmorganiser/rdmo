@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-13 12:34+0000\n"
+"POT-Creation-Date: 2024-10-24 15:31+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Dario Pilori <d.pilori@inrim.it>\n"
 "Language-Team: \n"
@@ -28,12 +28,16 @@ msgstr "Salva"
 msgid "Search"
 msgstr "Ricerca"
 
-#: core/assets/js/components/UploadDropZone.js:18
+#: core/assets/js/components/UploadDropZone.js:17
 #, javascript-format
 msgid "%s has unsupported file type"
 msgstr "%s ha un tipo di file non supportato"
 
-#: core/assets/js/components/UploadDropZone.js:27
+#: core/assets/js/components/UploadDropZone.js:28
+msgid "Drop the file here ..."
+msgstr "Lasciate il file qui..."
+
+#: core/assets/js/components/UploadDropZone.js:32
 msgid "Drag and drop a file here or click to select a file"
 msgstr "Trascinare e rilasciare un file qui o fare clic per selezionarlo"
 
@@ -1443,42 +1447,42 @@ msgstr "Importazione diretta"
 msgid "Import from file"
 msgstr "Importazione da file"
 
-#: projects/assets/js/components/main/Projects.js:22
+#: projects/assets/js/components/main/Projects.js:25
 #: projects/assets/js/utils/translations.js:13
 msgid "Pending invitations"
 msgstr "Inviti in sospeso"
 
-#: projects/assets/js/components/main/Projects.js:28
+#: projects/assets/js/components/main/Projects.js:31
 #: projects/assets/js/utils/translations.js:7
 msgid "Import project"
 msgstr "Importazione del progetto"
 
-#: projects/assets/js/components/main/Projects.js:33
+#: projects/assets/js/components/main/Projects.js:36
 #, javascript-format
 msgid "%s of %s projects are displayed"
 msgstr "Vengono visualizzati %s di %s progetti"
 
-#: projects/assets/js/components/main/Projects.js:36
+#: projects/assets/js/components/main/Projects.js:39
 #, javascript-format
 msgid "%s of %s"
 msgstr "%s di %s"
 
-#: projects/assets/js/components/main/Projects.js:47
+#: projects/assets/js/components/main/Projects.js:50
 #: projects/assets/js/utils/translations.js:18
 msgid "View all projects"
 msgstr "Visualizza tutti i progetti"
 
-#: projects/assets/js/components/main/Projects.js:47
+#: projects/assets/js/components/main/Projects.js:50
 #: projects/assets/js/utils/translations.js:19
 msgid "View my projects"
 msgstr "Visualizza i miei progetti"
 
-#: projects/assets/js/components/main/Projects.js:48
+#: projects/assets/js/components/main/Projects.js:51
 #: projects/assets/js/utils/translations.js:11
 msgid "My projects"
 msgstr "I miei progetti"
 
-#: projects/assets/js/components/main/Projects.js:48
+#: projects/assets/js/components/main/Projects.js:51
 #: projects/assets/js/utils/translations.js:3
 msgid "All projects"
 msgstr "Tutti i progetti"

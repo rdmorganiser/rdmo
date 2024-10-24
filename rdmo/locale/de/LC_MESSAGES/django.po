@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-23 13:28+0200\n"
-"PO-Revision-Date: 2024-07-23 09:56+0200\n"
+"POT-Creation-Date: 2024-09-13 15:37+0000\n"
+"PO-Revision-Date: 2024-10-24 16:31+0200\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -25,15 +25,15 @@ msgstr "Vorname"
 msgid "Last name"
 msgstr "Nachname"
 
-#: accounts/forms.py:101 core/constants.py:22 projects/models/invite.py:28
+#: accounts/forms.py:81 core/constants.py:22 projects/models/invite.py:28
 msgid "E-mail"
 msgstr "E-Mail"
 
-#: accounts/forms.py:105
+#: accounts/forms.py:85
 msgid "Password"
 msgstr "Passwort"
 
-#: accounts/forms.py:109
+#: accounts/forms.py:89
 msgid ""
 "I confirm that I want my profile to be completely removed. This can not be "
 "undone!"
@@ -358,11 +358,11 @@ msgstr "Bestätigen"
 #: accounts/templates/account/email_confirm.html:29
 #, python-format
 msgid ""
-"This e-mail confirmation link expired or is invalid. Please <a href="
-"\"%(email_url)s\">issue a new e-mail confirmation request</a>."
+"This e-mail confirmation link expired or is invalid. Please <a "
+"href=\"%(email_url)s\">issue a new e-mail confirmation request</a>."
 msgstr ""
-"Dieser Bestätigungs-Link ist abgelaufen oder ungültig. Bitte <a href="
-"\"%(email_url)s\">fordern sie eine neue Betätigungs-E-Mail an</a>."
+"Dieser Bestätigungs-Link ist abgelaufen oder ungültig. Bitte <a "
+"href=\"%(email_url)s\">fordern sie eine neue Betätigungs-E-Mail an</a>."
 
 #: accounts/templates/account/login.html:6
 #: accounts/templates/account/login_form.html:23
@@ -379,17 +379,17 @@ msgstr "Mit Shibboleth einloggen"
 #: accounts/templates/account/login_form_account.html:7
 #, python-format
 msgid ""
-"If you have not created an account yet, then please <a href=\"%(signup_url)s"
-"\">sign up</a> first."
+"If you have not created an account yet, then please <a "
+"href=\"%(signup_url)s\">sign up</a> first."
 msgstr ""
-"Falls Sie noch kein Benutzerkonto haben, <a href=\"%(signup_url)s"
-"\">registrieren</a> Sie sich bitte zunächst."
+"Falls Sie noch kein Benutzerkonto haben, <a "
+"href=\"%(signup_url)s\">registrieren</a> Sie sich bitte zunächst."
 
 #: accounts/templates/account/login_form_account.html:14
 #, python-format
 msgid ""
-"If you forgot your password and want to reset it, click <a href="
-"\"%(reset_url)s\">here</a>."
+"If you forgot your password and want to reset it, click <a "
+"href=\"%(reset_url)s\">here</a>."
 msgstr ""
 "Falls Sie Ihr Passwort vergessen haben und es zurücksetzen wollen, klicken "
 "Sie bitte <a href=\"%(reset_url)s\">hier</a>."
@@ -519,8 +519,8 @@ msgstr "Neues Benutzerkonto erstellen"
 msgid ""
 "Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
 msgstr ""
-"Falls Sie schon eine Benutzerkonto haben können Sie sich <a href="
-"\"%(login_url)s\">hier</a> anmelden."
+"Falls Sie schon eine Benutzerkonto haben können Sie sich <a "
+"href=\"%(login_url)s\">hier</a> anmelden."
 
 #: accounts/templates/account/signup.html:34
 #: accounts/templates/socialaccount/signup.html:33
@@ -600,8 +600,8 @@ msgid ""
 "<strong>Note:</strong> you can still <a href=\"%(email_url)s\">change your e-"
 "mail address</a>."
 msgstr ""
-"<strong>Hinweis:</strong> Sie können immer noch Ihre <a href=\"%(email_url)s"
-"\">E-Mail Adresse ändern</a>."
+"<strong>Hinweis:</strong> Sie können immer noch Ihre <a "
+"href=\"%(email_url)s\">E-Mail Adresse ändern</a>."
 
 #: accounts/templates/profile/profile_remove_closed.html:6
 #: accounts/templates/profile/profile_remove_failed.html:6
@@ -758,12 +758,12 @@ msgstr "Anmeldung abgebrochen"
 #, python-format
 msgid ""
 "You decided to cancel logging in to our site using one of your existing "
-"accounts. If this was a mistake, please proceed to <a href=\"%(login_url)s"
-"\">sign in</a>."
+"accounts. If this was a mistake, please proceed to <a "
+"href=\"%(login_url)s\">sign in</a>."
 msgstr ""
 "Sie haben sich entschieden, die Anmeldung mit einem externen Konto "
-"abzubrechen. Falls dies versehentlich geschehen ist, könne Sie <a href="
-"\"%(login_url)s\">hier</a> fortsetzen."
+"abzubrechen. Falls dies versehentlich geschehen ist, könne Sie <a "
+"href=\"%(login_url)s\">hier</a> fortsetzen."
 
 #: accounts/templates/socialaccount/signup.html:9
 #, python-format
@@ -931,7 +931,7 @@ msgstr "Bedingung"
 msgid "Target"
 msgstr "Ziel"
 
-#: core/constants.py:15 core/settings.py:369 options/models.py:155
+#: core/constants.py:15 core/settings.py:375 options/models.py:155
 #: options/templates/options/export/option.html:8 projects/models/value.py:69
 #: tasks/templates/tasks/export/tasks.html:31
 msgid "Text"
@@ -973,7 +973,7 @@ msgstr "Option"
 msgid "File"
 msgstr "Datei"
 
-#: core/imports.py:603
+#: core/imports.py:601
 msgid "You have no permissions to import"
 msgstr "Sie haben keine Berechtigung zum Importieren"
 
@@ -985,124 +985,124 @@ msgstr "erstellt"
 msgid "updated"
 msgstr "zuletzt geändert"
 
-#: core/settings.py:134
+#: core/settings.py:137
 msgid "English"
 msgstr "Englisch"
 
-#: core/settings.py:135
+#: core/settings.py:138
 msgid "German"
 msgstr "Deutsch"
 
-#: core/settings.py:254
+#: core/settings.py:258
 msgid "PDF"
 msgstr "PDF"
 
-#: core/settings.py:255
+#: core/settings.py:259
 msgid "Rich Text Format"
 msgstr "Rich Text Format"
 
-#: core/settings.py:256
+#: core/settings.py:260
 msgid "Open Office"
 msgstr "Open Office"
 
-#: core/settings.py:257
+#: core/settings.py:261
 msgid "Microsoft Office"
 msgstr "Microsoft Office"
 
-#: core/settings.py:258
+#: core/settings.py:262
 msgid "HTML"
 msgstr "HTML"
 
-#: core/settings.py:259
+#: core/settings.py:263
 msgid "Markdown"
 msgstr "Markdown"
 
-#: core/settings.py:260
+#: core/settings.py:264
 msgid "mediawiki"
 msgstr "mediawiki"
 
-#: core/settings.py:261
+#: core/settings.py:265
 msgid "LaTeX"
 msgstr "LaTeX"
 
-#: core/settings.py:283 core/settings.py:290
+#: core/settings.py:289 core/settings.py:296
 msgid "RDMO XML"
 msgstr "RDMO XML"
 
-#: core/settings.py:284
+#: core/settings.py:290
 msgid "CSV (comma separated)"
 msgstr "CSV (Komma getrennt)"
 
-#: core/settings.py:285
+#: core/settings.py:291
 msgid "CSV (semicolon separated)"
 msgstr "CSV (Semikolon getrennt)"
 
-#: core/settings.py:286
+#: core/settings.py:292
 msgid "JSON"
 msgstr "JSON"
 
-#: core/settings.py:323
+#: core/settings.py:329
 msgid "Enter a valid integer."
 msgstr "Geben Sie eine gültige Ganzzahl ein."
 
-#: core/settings.py:327
+#: core/settings.py:333
 msgid "Enter a valid float."
 msgstr "Geben Sie einen gültigen Wert ein."
 
-#: core/settings.py:343
+#: core/settings.py:349
 msgid "Enter a valid boolean (e.g. 0, 1)."
 msgstr "Geben Sie einen gültigen booleschen Wert ein (z. B. 0, 1)."
 
-#: core/settings.py:347
+#: core/settings.py:353
 msgid ""
 "Enter a valid date (e.g. \"02.03.2024\", \"03/02/2024\", \"2024-02-03\")."
 msgstr ""
 "Geben Sie ein gültiges Datum ein (z.B. \"02.03.2024\", \"03/02/2024\", "
 "\"2024-02-03\")."
 
-#: core/settings.py:361
+#: core/settings.py:367
 msgid "Enter a valid phone number (e.g. \"123456\" or \"+49 (0) 30 123456\")."
 msgstr ""
 "Geben Sie eine gültige Telefonnummer ein (z. B. \"123456\" oder \"+49 (0) 30 "
 "123456\")."
 
-#: core/settings.py:370 options/models.py:156
+#: core/settings.py:376 options/models.py:156
 msgid "Textarea"
 msgstr "Textfeld"
 
-#: core/settings.py:371
+#: core/settings.py:377
 msgid "Yes/No"
 msgstr "Ja/Nein"
 
-#: core/settings.py:372
+#: core/settings.py:378
 msgid "Checkboxes"
 msgstr "Ankreuzfelder"
 
-#: core/settings.py:373
+#: core/settings.py:379
 msgid "Radio buttons"
 msgstr "Radio Buttons"
 
-#: core/settings.py:374
+#: core/settings.py:380
 msgid "Select drop-down"
 msgstr "Select-Dropdown-Menü"
 
-#: core/settings.py:375
+#: core/settings.py:381
 msgid "Autocomplete"
 msgstr "Autocomplete"
 
-#: core/settings.py:376
+#: core/settings.py:382
 msgid "Free autocomplete"
 msgstr "Freies Autocomplete"
 
-#: core/settings.py:377
+#: core/settings.py:383
 msgid "Range slider"
 msgstr "Schieberegler"
 
-#: core/settings.py:378
+#: core/settings.py:384
 msgid "Date picker"
 msgstr "Datumspicker"
 
-#: core/settings.py:379
+#: core/settings.py:385
 msgid "File upload"
 msgstr "Dateien-Upload"
 
@@ -1413,11 +1413,11 @@ msgstr "Import"
 msgid "Import elements"
 msgstr "Elemente importieren"
 
-#: management/viewsets.py:41 management/viewsets.py:78
+#: management/viewsets.py:41 management/viewsets.py:77
 msgid "This field may not be blank."
 msgstr "Dieses Feld darf nicht leer sein."
 
-#: management/viewsets.py:80
+#: management/viewsets.py:79
 msgid "This is not a valid RDMO import JSON."
 msgstr "Dies ist keine valide RDMO-JSON-Import."
 
@@ -2458,11 +2458,11 @@ msgstr "Sehr geehrte Damen und Herren,"
 #: projects/templates/projects/issue_send_message.txt:3
 #, python-format
 msgid ""
-"The following task was identified in the project \"%(project_title)s\" <"
-"%(project_url)s>:"
+"The following task was identified in the project \"%(project_title)s\" "
+"<%(project_url)s>:"
 msgstr ""
-"Die folgende Aufgabe wurde im Projekt \"%(project_title)s\" <"
-"%(project_url)s> identifiziert:"
+"Die folgende Aufgabe wurde im Projekt \"%(project_title)s\" "
+"<%(project_url)s> identifiziert:"
 
 #: projects/templates/projects/issue_send_message.txt:13
 #, python-format
@@ -2487,8 +2487,8 @@ msgid ""
 "You are about to remove the user <strong>%(user)s</strong> from the project "
 "<strong>%(title)s</strong>."
 msgstr ""
-"Sie sind dabei den User <strong>%(user)s</strong> aus dem Projekt <strong>"
-"%(title)s</strong> zu entfernen."
+"Sie sind dabei den User <strong>%(user)s</strong> aus dem Projekt "
+"<strong>%(title)s</strong> zu entfernen."
 
 #: projects/templates/projects/membership_form.html:9
 #: projects/templates/projects/membership_form.html:11
@@ -3091,9 +3091,9 @@ msgid ""
 msgstr ""
 "Warnung: In der Datenbank sind mehrere Antworten vorhanden. Dies kann "
 "aufgrund eines technischen Problems in der Vergangenheit geschehen. Sie "
-"können unerwünschte Antworten über das Feld \"Eintrag entfernen\" (<i class="
-"\"fa fa-times\"></i>) entfernen. Bitte kontaktieren Sie den Support, wenn "
-"das Problem weiterhin besteht."
+"können unerwünschte Antworten über das Feld \"Eintrag entfernen\" (<i "
+"class=\"fa fa-times\"></i>) entfernen. Bitte kontaktieren Sie den Support, "
+"wenn das Problem weiterhin besteht."
 
 #: projects/templates/projects/project_questions_questionset_head.html:33
 msgid "Edit tab"
@@ -3163,7 +3163,7 @@ msgstr ""
 "fortzufahren, aber Ihre Eingaben gehen dabei verloren."
 
 #: projects/templates/projects/project_questions_value_errors.html:18
-#: projects/viewsets.py:469
+#: projects/viewsets.py:472
 msgid "You reached the file quota for this project."
 msgstr "Sie haben die Quota für dieses Projekt erreicht."
 
@@ -4421,11 +4421,11 @@ msgstr "Set"
 #~ msgstr "Sets"
 
 #~ msgid ""
-#~ "Entries with <i class=\"fa fa-question-circle-o small\" aria-hidden=\"true"
-#~ "\"></i> might be skipped based on your input."
+#~ "Entries with <i class=\"fa fa-question-circle-o small\" aria-"
+#~ "hidden=\"true\"></i> might be skipped based on your input."
 #~ msgstr ""
-#~ "Einträge mit <i class=\"fa fa-question-circle-o small\" aria-hidden=\"true"
-#~ "\"></i> können aufgrund Ihrer Eingabe übersprungen werden."
+#~ "Einträge mit <i class=\"fa fa-question-circle-o small\" aria-"
+#~ "hidden=\"true\"></i> können aufgrund Ihrer Eingabe übersprungen werden."
 
 #~ msgid "Plural name (primary)"
 #~ msgstr "Name (Plural, erste Sprache)"
