@@ -5,7 +5,7 @@ import { useDropzone } from 'react-dropzone'
 const UploadDropZone = ({ acceptedTypes, onImportFile }) => {
   const [errorMessage, setErrorMessage] = useState('')
 
-  const { getRootProps, getInputProps } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: acceptedTypes,
     onDropAccepted: acceptedFiles => {
       if (acceptedFiles.length > 0) {
@@ -14,7 +14,6 @@ const UploadDropZone = ({ acceptedTypes, onImportFile }) => {
       }
     },
     onDropRejected: rejectedFiles => {
-      console.log(rejectedFiles)
       setErrorMessage(interpolate(gettext('%s has unsupported file type'), [rejectedFiles[0].path]))
     }
   })
@@ -23,9 +22,17 @@ const UploadDropZone = ({ acceptedTypes, onImportFile }) => {
     <section className="dropzone-container">
       <div {...getRootProps({className: 'dropzone'})}>
         <input {...getInputProps()} />
-        <p className="mb-0">
-          {gettext('Drag and drop a file here or click to select a file')}
-        </p>
+        {
+          isDragActive ? (
+            <div>
+              {gettext('Drop the file here ...')}
+            </div>
+          ) : (
+            <div>
+              {gettext('Drag and drop a file here or click to select a file')}
+            </div>
+          )
+        }
         {errorMessage && <div className="alert alert-danger mt-2">{errorMessage}</div>}
       </div>
     </section>

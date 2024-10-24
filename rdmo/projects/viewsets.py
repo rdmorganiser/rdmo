@@ -679,5 +679,4 @@ class CatalogViewSet(ListModelMixin, GenericViewSet):
     def get_queryset(self):
         return Catalog.objects.filter_current_site() \
                               .filter_group(self.request.user) \
-                              .filter_availability(self.request.user) \
                               .order_by('-available', 'order')

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-13 12:34+0000\n"
-"PO-Revision-Date: 2024-07-23 11:18+0200\n"
+"POT-Creation-Date: 2024-10-18 15:56+0200\n"
+"PO-Revision-Date: 2024-10-18 15:56+0200\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -28,12 +28,16 @@ msgstr "Speichern"
 msgid "Search"
 msgstr "Suchen"
 
-#: core/assets/js/components/UploadDropZone.js:18
+#: core/assets/js/components/UploadDropZone.js:17
 #, javascript-format
 msgid "%s has unsupported file type"
 msgstr "%s hat einen nicht unterstützten Dateityp"
 
-#: core/assets/js/components/UploadDropZone.js:27
+#: core/assets/js/components/UploadDropZone.js:28
+msgid "Drop the file here ..."
+msgstr "Legen Sie die Datei hier ab ..."
+
+#: core/assets/js/components/UploadDropZone.js:32
 msgid "Drag and drop a file here or click to select a file"
 msgstr "Datei hierher ziehen oder klicken um Datei auszuwählen"
 
@@ -136,8 +140,8 @@ msgstr "Neues Attribut erstellen"
 #: management/assets/js/components/edit/EditAttribute.js:53
 #, javascript-format
 msgid ""
-"This attribute will be added to the attribute <code class=\"code-"
-"domain\">%s</code>."
+"This attribute will be added to the attribute <code class=\"code-domain\">"
+"%s</code>."
 msgstr ""
 "Dieses Attribut wird dem Attribut <code class=\"code-domain\">%s</code> "
 "hinzugefügt."
@@ -154,8 +158,8 @@ msgstr ""
 #: management/assets/js/components/edit/EditAttribute.js:68
 #, javascript-format
 msgid ""
-"This attribute will be added to the question set <code class=\"code-"
-"questions\">%s</code>."
+"This attribute will be added to the question set <code class=\"code-questions"
+"\">%s</code>."
 msgstr ""
 "Dieses Attribut wird dem Fragenset <code class=\"code-questions\">%s</code> "
 "hinzugefügt."
@@ -163,8 +167,8 @@ msgstr ""
 #: management/assets/js/components/edit/EditAttribute.js:75
 #, javascript-format
 msgid ""
-"This attribute will be added to the question <code class=\"code-"
-"questions\">%s</code>."
+"This attribute will be added to the question <code class=\"code-questions\">"
+"%s</code>."
 msgstr ""
 "Dieses Attribut wird der Frage <code class=\"code-questions\">%s</code> "
 "hinzugefügt."
@@ -172,8 +176,8 @@ msgstr ""
 #: management/assets/js/components/edit/EditAttribute.js:82
 #, javascript-format
 msgid ""
-"This attribute will be added to the condition <code class=\"code-"
-"conditions\">%s</code>."
+"This attribute will be added to the condition <code class=\"code-conditions"
+"\">%s</code>."
 msgstr ""
 "Dieses Attribut wird der Bedingung <code class=\"code-conditions\">%s</code> "
 "hinzugefügt."
@@ -219,8 +223,8 @@ msgstr "Neue Bedingung erstellen"
 #: management/assets/js/components/edit/EditCondition.js:57
 #, javascript-format
 msgid ""
-"This condition will be added to the option set <code class=\"code-"
-"options\">%s</code>."
+"This condition will be added to the option set <code class=\"code-options\">"
+"%s</code>."
 msgstr ""
 "Diese Bedingung wird dem Optionenset <code class=\"code-options\">%s</code> "
 "hinzugefügt."
@@ -237,8 +241,8 @@ msgstr ""
 #: management/assets/js/components/edit/EditCondition.js:71
 #, javascript-format
 msgid ""
-"This condition will be added to the question set <code class=\"code-"
-"questions\">%s</code>."
+"This condition will be added to the question set <code class=\"code-questions"
+"\">%s</code>."
 msgstr ""
 "Diese Bedingung wird dem Fragenset <code class=\"code-questions\">%s</code> "
 "hinzugefügt."
@@ -246,8 +250,8 @@ msgstr ""
 #: management/assets/js/components/edit/EditCondition.js:78
 #, javascript-format
 msgid ""
-"This condition will be added to the question <code class=\"code-"
-"questions\">%s</code>."
+"This condition will be added to the question <code class=\"code-questions\">"
+"%s</code>."
 msgstr ""
 "Diese Bedingung wird der Frage <code class=\"code-questions\">%s</code> "
 "hinzugefügt."
@@ -307,8 +311,8 @@ msgstr "Neues Optionenset erstellen"
 #: management/assets/js/components/edit/EditOptionSet.js:61
 #, javascript-format
 msgid ""
-"This option set will be added to the question <code class=\"code-"
-"questions\">%s</code>."
+"This option set will be added to the question <code class=\"code-questions\">"
+"%s</code>."
 msgstr ""
 "Dieser Optionenset wird der Frage <code class=\"code-questions\">%s</code> "
 "hinzugefügt."
@@ -415,8 +419,8 @@ msgstr ""
 #: management/assets/js/components/edit/EditQuestion.js:74
 #, javascript-format
 msgid ""
-"This question will be added to the question set <code class=\"code-"
-"questions\">%s</code>."
+"This question will be added to the question set <code class=\"code-questions"
+"\">%s</code>."
 msgstr ""
 "Diese Frage wird dem Fragenset <code class=\"code-questions\">%s</code> "
 "hinzugefügt."
@@ -439,8 +443,8 @@ msgstr "Fragenset erstellen"
 #: management/assets/js/components/edit/EditQuestionSet.js:96
 #, javascript-format
 msgid ""
-"This question set will be added to the page <code class=\"code-"
-"questions\">%s</code>."
+"This question set will be added to the page <code class=\"code-questions\">"
+"%s</code>."
 msgstr ""
 "Dieser Fragenset wird der Seite <code class=\"code-questions\">%s</code> "
 "hinzugefügt."
@@ -1444,42 +1448,42 @@ msgstr "Projekt direkt importieren"
 msgid "Import from file"
 msgstr "Importieren aus Datei"
 
-#: projects/assets/js/components/main/Projects.js:22
+#: projects/assets/js/components/main/Projects.js:25
 #: projects/assets/js/utils/translations.js:13
 msgid "Pending invitations"
 msgstr "Ausstehende Einladungen"
 
-#: projects/assets/js/components/main/Projects.js:28
+#: projects/assets/js/components/main/Projects.js:31
 #: projects/assets/js/utils/translations.js:7
 msgid "Import project"
 msgstr "Projekt importieren"
 
-#: projects/assets/js/components/main/Projects.js:33
+#: projects/assets/js/components/main/Projects.js:36
 #, javascript-format
 msgid "%s of %s projects are displayed"
 msgstr "%s von %s Projekten werden angezeigt"
 
-#: projects/assets/js/components/main/Projects.js:36
+#: projects/assets/js/components/main/Projects.js:39
 #, javascript-format
 msgid "%s of %s"
 msgstr "%s von %s"
 
-#: projects/assets/js/components/main/Projects.js:47
+#: projects/assets/js/components/main/Projects.js:50
 #: projects/assets/js/utils/translations.js:18
 msgid "View all projects"
 msgstr "Alle Projekte ansehen"
 
-#: projects/assets/js/components/main/Projects.js:47
+#: projects/assets/js/components/main/Projects.js:50
 #: projects/assets/js/utils/translations.js:19
 msgid "View my projects"
 msgstr "Meine Projekte ansehen"
 
-#: projects/assets/js/components/main/Projects.js:48
+#: projects/assets/js/components/main/Projects.js:51
 #: projects/assets/js/utils/translations.js:11
 msgid "My projects"
 msgstr "Meine Projekte"
 
-#: projects/assets/js/components/main/Projects.js:48
+#: projects/assets/js/components/main/Projects.js:51
 #: projects/assets/js/utils/translations.js:3
 msgid "All projects"
 msgstr "Alle Projekte"

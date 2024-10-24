@@ -1,5 +1,10 @@
 # Changelog
 
+## [RDMO 2.2.2](https://github.com/rdmorganiser/rdmo/compare/2.2.1...2.2.2) (Oct 18, 2024)
+
+* Fix projects interface when using RDMO with a path (#1152)
+* Fix missing (unavailable) catalogs projects interface
+
 ## [RDMO 2.2.1](https://github.com/rdmorganiser/rdmo/compare/2.2.0...2.2.1) (Sep 13, 2024)
 
 * Fix import error when allauth is not used (#1145)
