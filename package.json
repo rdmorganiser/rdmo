@@ -50,7 +50,7 @@
     "eslint-plugin-react": "^7.36.1",
     "file-loader": "^6.2.0",
     "mini-css-extract-plugin": "^2.9.0",
-    "sass": "^1.79.3",
+    "sass": "^1.80.5",
     "sass-loader": "^16.0.0",
     "webpack": "^5.95.0",
     "webpack-cli": "^5.1.4",
