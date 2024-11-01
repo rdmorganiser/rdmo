@@ -76,7 +76,7 @@ ci = [
 dev = [
   "build>=1.0,<2.0",
   "pipdeptree>=2.13,<3.0",
-  "pre-commit>=3.4,<4.0",
+  "pre-commit>=3.4,<5.0",
   "setuptools>=73,<76",
   "twine>=5.1.1,<6.0",
   "wheel>=0.42,<0.45",
@@ -87,7 +87,7 @@ gunicorn = [
   "gunicorn>=23.0,<24.0",
 ]
 ldap = [
-  "django-auth-ldap>=4.5,<5.0",
+  "django-auth-ldap>=4.5,<6.0",
 ]
 mysql = [
   "mysqlclient>=2.2,<3.0",
@@ -97,7 +97,7 @@ postgres = [
 ]
 pytest = [
   "pytest>=8.0,<9.0",
-  "pytest-cov>=4.1,<6.0",
+  "pytest-cov>=4.1,<7.0",
   "pytest-django>=4.5,<5.0",
   "pytest-mock>=3.11,<4.0",
   "pytest-playwright>=0.4.3,<0.6.0",
