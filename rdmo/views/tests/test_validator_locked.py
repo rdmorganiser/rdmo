@@ -2,7 +2,7 @@ import pytest
 
 from django.core.exceptions import ValidationError
 
-from rest_framework.exceptions import ValidationError as RestFameworkValidationError
+from rest_framework.exceptions import ValidationError as RestFrameworkValidationError
 
 from ..models import View
 from ..serializers.v1 import ViewSerializer
@@ -93,7 +93,7 @@ def test_serializer_update_error(db):
     validator = ViewLockedValidator()
     serializer = ViewSerializer(instance=view)
 
-    with pytest.raises(RestFameworkValidationError):
+    with pytest.raises(RestFrameworkValidationError):
         validator({
             'locked': True
         }, serializer)
