@@ -3,7 +3,7 @@ import pytest
 from django.conf import settings
 from django.core.exceptions import ValidationError
 
-from rest_framework.exceptions import ValidationError as RestFameworkValidationError
+from rest_framework.exceptions import ValidationError as RestFrameworkValidationError
 
 from ..models import Condition
 from ..serializers.v1 import ConditionSerializer
@@ -58,7 +58,7 @@ def test_unique_uri_validator_serializer_create_error(db):
     validator = ConditionUniqueURIValidator()
     serializer = ConditionSerializer()
 
-    with pytest.raises(RestFameworkValidationError):
+    with pytest.raises(RestFrameworkValidationError):
         validator({
             'uri_prefix': settings.DEFAULT_URI_PREFIX,
             'uri_path': Condition.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).last().uri_path
@@ -83,7 +83,7 @@ def test_unique_uri_validator_serializer_update_error(db):
     validator = ConditionUniqueURIValidator()
     serializer = ConditionSerializer(instance=condition)
 
-    with pytest.raises(RestFameworkValidationError):
+    with pytest.raises(RestFrameworkValidationError):
         validator({
             'uri_prefix': condition.uri_prefix,
             'uri_path': Condition.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).last().uri_path
