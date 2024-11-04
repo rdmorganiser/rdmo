@@ -2,7 +2,7 @@ import pytest
 
 from django.core.exceptions import ValidationError
 
-from rest_framework.exceptions import ValidationError as RestFameworkValidationError
+from rest_framework.exceptions import ValidationError as RestFrameworkValidationError
 
 from ..models import Condition
 from ..serializers.v1 import ConditionSerializer
@@ -93,7 +93,7 @@ def test_serializer_update_error(db):
     validator = ConditionLockedValidator()
     serializer = ConditionSerializer(instance=condition)
 
-    with pytest.raises(RestFameworkValidationError):
+    with pytest.raises(RestFrameworkValidationError):
         validator({
             'locked': True
         }, serializer)
