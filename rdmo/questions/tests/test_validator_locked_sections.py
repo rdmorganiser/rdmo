@@ -2,7 +2,7 @@ import pytest
 
 from django.core.exceptions import ValidationError
 
-from rest_framework.exceptions import ValidationError as RestFameworkValidationError
+from rest_framework.exceptions import ValidationError as RestFrameworkValidationError
 
 from ..models import Catalog, Section
 from ..serializers.v1 import SectionSerializer
@@ -151,7 +151,7 @@ def test_serializer_update_error(db):
     validator = SectionLockedValidator()
     serializer = SectionSerializer(instance=section)
 
-    with pytest.raises(RestFameworkValidationError):
+    with pytest.raises(RestFrameworkValidationError):
         validator({
             'locked': True
         }, serializer)
