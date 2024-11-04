@@ -2,7 +2,7 @@ import pytest
 
 from django.core.exceptions import ValidationError
 
-from rest_framework.exceptions import ValidationError as RestFameworkValidationError
+from rest_framework.exceptions import ValidationError as RestFrameworkValidationError
 
 from ..models import Option, OptionSet
 from ..serializers.v1 import OptionSerializer
@@ -141,7 +141,7 @@ def test_serializer_update_error(db):
     validator = OptionLockedValidator()
     serializer = OptionSerializer(instance=option)
 
-    with pytest.raises(RestFameworkValidationError):
+    with pytest.raises(RestFrameworkValidationError):
         validator({
             'locked': True
         }, serializer)

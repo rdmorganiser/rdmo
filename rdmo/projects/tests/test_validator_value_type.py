@@ -1,6 +1,6 @@
 import pytest
 
-from rest_framework.exceptions import ValidationError as RestFameworkValidationError
+from rest_framework.exceptions import ValidationError as RestFrameworkValidationError
 
 from ..validators import ValueTypeValidator
 
@@ -109,5 +109,5 @@ def test_serializer(db, value_type, text):
 @pytest.mark.parametrize('value_type,text', data_error)
 def test_serializer_error(db, value_type, text):
     validator = ValueTypeValidator()
-    with pytest.raises(RestFameworkValidationError):
+    with pytest.raises(RestFrameworkValidationError):
         validator({'value_type': value_type, 'text': text})
