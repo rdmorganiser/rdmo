@@ -35,13 +35,22 @@ const PageHead = ({ templates, page, sets, values, currentSet,
     openCreateModal()
   }
 
-  const handleCreateSet = (text) => {
-    createSet({
-      attribute: page.attribute,
-      set_index: last(sets) ? last(sets).set_index + 1 : 0,
-      set_collection: page.is_collection,
-      text
-    })
+  const handleCreateSet = (text, copySetValue) => {
+    if (isNil(copySetValue)) {
+      createSet({
+        attribute: page.attribute,
+        set_index: last(sets) ? last(sets).set_index + 1 : 0,
+        set_collection: page.is_collection,
+        text
+      })
+    } else {
+      copySet(currentSet, copySetValue, {
+        attribute: page.attribute,
+        set_index: last(sets) ? last(sets).set_index + 1 : 0,
+        set_collection: page.is_collection,
+        text
+      })
+    }
     closeCreateModal()
   }
 
@@ -115,7 +124,8 @@ const PageHead = ({ templates, page, sets, values, currentSet,
         submitLabel={gettext('Create')}
         submitColor="success"
         show={showCreateModal}
-        initial={isNil(page.attribute) ? null : ''}
+        attribute={page.attribute}
+        initial={{ text: '', copySetValue: '' }}
         onClose={closeCreateModal}
         onSubmit={handleCreateSet}
       />
@@ -124,7 +134,8 @@ const PageHead = ({ templates, page, sets, values, currentSet,
         submitLabel={gettext('Copy')}
         submitColor="info"
         show={showCopyModal}
-        initial={isNil(page.attribute) ? null : ''}
+        attribute={page.attribute}
+        initial={{ text: '' }}
         onClose={closeCopyModal}
         onSubmit={handleCopySet}
       />
@@ -135,7 +146,8 @@ const PageHead = ({ templates, page, sets, values, currentSet,
             submitLabel={gettext('Update')}
             submitColor="primary"
             show={showUpdateModal}
-            initial={currentSetValue.text}
+            attribute={page.attribute}
+            initial={{ text: currentSetValue.text }}
             onClose={closeUpdateModal}
             onSubmit={handleUpdateSet}
           />

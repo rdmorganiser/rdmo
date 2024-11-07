@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers, status
 from rest_framework.decorators import action
-from rest_framework.exceptions import MethodNotAllowed, NotFound
+from rest_framework.exceptions import NotFound
 from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
@@ -435,23 +435,20 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
             # this is needed for the swagger ui
             return Value.objects.none()
 
-    @action(detail=True, methods=['POST', 'DELETE'], url_path='set',
+    @action(detail=False, methods=['POST'], url_path='set',
             permission_classes=(HasModelPermission | HasProjectPermission, ))
-    def set(self, request, parent_lookup_project, pk=None):
-        if request.method == 'POST':
-            return self.copy_set(request, parent_lookup_project, pk)
-        elif request.method == 'DELETE':
-            return self.delete_set(request, parent_lookup_project, pk)
-        else:
-            raise MethodNotAllowed
-
     def copy_set(self, request, parent_lookup_project, pk=None):
         # copy all values for questions in questionset collections with the attribute
         # for this value and the same set_prefix and set_index
-        currentValue = self.get_object()
+
+        # obtain the id of the value we want to copy
+        copy_value_id = request.data.pop('copySetValue')
+
+        # look for this value in the database, using the users permissions
+        copy_value = Value.objects.filter_user(self.request.user).get(id=copy_value_id)
 
         # collect all values for this set and all descendants
-        currentValues = self.get_queryset().filter_set(currentValue)
+        copy_values = Value.objects.filter_user(self.request.user).filter_set(copy_value)
 
         # de-serialize the posted new set value and save it, use the ValueSerializer
         # instead of ProjectValueSerializer, since the latter does not include project
@@ -466,7 +463,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         # create new values for the new set
         values = []
         set_prefix_length = len(set_value.set_prefix.split('|'))
-        for value in currentValues:
+        for value in copy_values:
             value.id = None
             if value.set_prefix == set_value.set_prefix:
                 value.set_index = set_value.set_index
@@ -485,6 +482,8 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         headers = self.get_success_headers(set_value_serializer.data)
         return Response([set_value_data, *values_data], status=status.HTTP_201_CREATED, headers=headers)
 
+    @action(detail=True, methods=['DELETE'], url_path='set',
+            permission_classes=(HasModelPermission | HasProjectPermission, ))
     def delete_set(self, request, parent_lookup_project, pk=None):
         # delete all values for questions in questionset collections with the attribute
         # for this value and the same set_prefix and set_index
@@ -692,8 +691,10 @@ class ValueViewSet(ReadOnlyModelViewSet):
         # snapshot is part of SnapshotFilterBackend
         'attribute',
         'attribute__uri',
+        'attribute__path',
         'option',
         'option__uri',
+        'option__uri_path'
     )
 
     def get_queryset(self):
