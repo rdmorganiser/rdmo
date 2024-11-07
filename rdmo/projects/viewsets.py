@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import OuterRef, Prefetch, Q, Subquery
+from django.db.models import OuterRef, Prefetch, Subquery
 from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
@@ -450,7 +450,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         # for this value and the same set_prefix and set_index
         currentValue = self.get_object()
 
-        # collect all values for this set and all decendants
+        # collect all values for this set and all descendants
         currentValues = self.get_queryset().filter_set(currentValue)
 
         # de-serialize the posted new set value and save it, use the ValueSerializer
