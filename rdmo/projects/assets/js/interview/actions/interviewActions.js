@@ -612,7 +612,7 @@ export function deleteSetError(errors) {
 }
 
 export function copySet(currentSet, currentSetValue, attrs) {
-  const pendingId = `copySet/${currentSet.set_prefix}/${currentSet.set_index}`
+  const pendingId = isNil(currentSet) ? 'copySet' : `copySet/${currentSet.set_prefix}/${currentSet.set_index}`
 
   return (dispatch, getState) => {
     dispatch(addToPending(pendingId))
@@ -667,7 +667,7 @@ export function copySet(currentSet, currentSetValue, attrs) {
         })
       )
     } else {
-      promise = ValueApi.copySet(projectId, currentSetValue, value)
+      promise = ValueApi.copySet(projectId, value, currentSetValue)
     }
 
     return promise.then((values) => {
