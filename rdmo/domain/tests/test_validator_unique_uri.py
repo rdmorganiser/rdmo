@@ -3,7 +3,7 @@ import pytest
 from django.conf import settings
 from django.core.exceptions import ValidationError
 
-from rest_framework.exceptions import ValidationError as RestFameworkValidationError
+from rest_framework.exceptions import ValidationError as RestFrameworkValidationError
 
 from ..models import Attribute
 from ..serializers.v1 import AttributeSerializer
@@ -62,7 +62,7 @@ def test_validator_serializer_create_error(db):
     validator = AttributeUniqueURIValidator()
     serializer = AttributeSerializer()
 
-    with pytest.raises(RestFameworkValidationError):
+    with pytest.raises(RestFrameworkValidationError):
         validator({
             'uri_prefix': settings.DEFAULT_URI_PREFIX,
             'key': 'text',
@@ -87,7 +87,7 @@ def test_validator_serializer_update_error(db):
     validator = AttributeUniqueURIValidator()
     serializer = AttributeSerializer(instance=attribute)
 
-    with pytest.raises(RestFameworkValidationError):
+    with pytest.raises(RestFrameworkValidationError):
         validator({
             'uri_prefix': attribute.uri_prefix,
             'key': 'textarea',
