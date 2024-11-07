@@ -113,6 +113,9 @@ issues = "https://github.com/rdmorganiser/rdmo/issues"
 repository = "https://github.com/rdmorganiser/rdmo.git"
 slack = "https://rdmo.slack.com"
 
+[project.scripts]
+rdmo-admin = "rdmo.__main__:main"
+
 [tool.setuptools.packages.find]
 include = ["rdmo*"]
 exclude = ["*assets*", "*tests*"]
