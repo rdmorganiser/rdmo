@@ -9,6 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers, status
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
+from rest_framework.filters import SearchFilter
 from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
@@ -72,6 +73,7 @@ from .serializers.v1 import (
     ProjectVisibilitySerializer,
     SnapshotSerializer,
     UserInviteSerializer,
+    ValueSearchSerializer,
     ValueSerializer,
 )
 from .serializers.v1.overview import CatalogSerializer, ProjectOverviewSerializer
@@ -777,7 +779,7 @@ class ValueViewSet(ReadOnlyModelViewSet):
     permission_classes = (HasModelPermission | HasProjectsPermission, )
     serializer_class = ValueSerializer
 
-    filter_backends = (SnapshotFilterBackend, DjangoFilterBackend)
+    filter_backends = (SnapshotFilterBackend, DjangoFilterBackend, SearchFilter)
     filterset_fields = (
         'project',
         # snapshot is part of SnapshotFilterBackend
@@ -789,8 +791,16 @@ class ValueViewSet(ReadOnlyModelViewSet):
         'option__uri_path'
     )
 
+    search_fields = ['text', 'project__title', 'snapshot__title']
+
     def get_queryset(self):
         return Value.objects.filter_user(self.request.user).select_related('attribute', 'option')
+
+    @action(detail=False, permission_classes=(HasModelPermission | HasProjectsPermission, ))
+    def search(self, request):
+        queryset = self.filter_queryset(self.get_queryset()).exclude(text='').select_related('project', 'snapshot')[:5]
+        serializer = ValueSearchSerializer(queryset, many=True)
+        return Response(serializer.data)
 
     @action(detail=True, permission_classes=(HasModelPermission | HasProjectsPermission, ))
     def file(self, request, pk=None):

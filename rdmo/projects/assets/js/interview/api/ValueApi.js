@@ -1,15 +1,15 @@
 import BaseApi from 'rdmo/core/assets/js/api/BaseApi'
 import { encodeParams } from 'rdmo/core/assets/js/utils/api'
-import { isNil, isUndefined } from 'lodash'
+import { isUndefined } from 'lodash'
 
 class ValueApi extends BaseApi {
 
   static fetchValues(projectId, params) {
-    if (isNil(projectId)) {
-      return this.get(`/api/v1/projects/values/?${encodeParams(params)}`)
-    } else {
-      return this.get(`/api/v1/projects/projects/${projectId}/values/?${encodeParams(params)}`)
-    }
+    return this.get(`/api/v1/projects/projects/${projectId}/values/?${encodeParams(params)}`)
+  }
+
+  static searchValues(params) {
+    return this.get(`/api/v1/projects/values/search/?${encodeParams(params)}`)
   }
 
   static storeValue(projectId, value) {

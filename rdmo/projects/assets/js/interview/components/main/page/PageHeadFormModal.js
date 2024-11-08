@@ -1,12 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react'
+import AsyncSelect from 'react-select/async'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+import { useDebouncedCallback } from 'use-debounce'
 import { isEmpty, isNil, isUndefined } from 'lodash'
 
 import ValueApi from '../../../api/ValueApi'
 
 import Modal from 'rdmo/core/assets/js/components/Modal'
-import Select from 'rdmo/core/assets/js/components/Select'
 
 import useFocusEffect from '../../../hooks/useFocusEffect'
 
@@ -17,7 +18,12 @@ const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, i
 
   const [values, setValues] = useState(initial)
   const [errors, setErrors] = useState([])
-  const [options, setOptions] = useState([])
+
+  const handleLoadOptions = useDebouncedCallback((search, callback) => {
+    ValueApi.searchValues({ attribute, search, snapshot: values.snapshot ? 'all' : '' }).then(response => {
+      callback(response)
+    })
+  }, 500)
 
   const handleSubmit = () => {
     if (isEmpty(values.text) && !isNil(attribute)) {
@@ -31,14 +37,6 @@ const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, i
     if (show && !isNil(attribute)) {
       // update the form values
       setValues(initial)
-
-      // fetch the values for this attribute from all projects and snapshots
-      if (!isNil(initial)) {
-        ValueApi.fetchValues({ attribute }).then(response => setOptions(response.map(value => ({
-          value: value,
-          label: value.text
-        }))))
-      }
     }
   }, [show])
 
@@ -89,11 +87,44 @@ const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, i
                   <label className="control-label" htmlFor="interview-page-tabs-modal-form-import">
                     {gettext('Import answers')}
                   </label>
-                  <Select
-                    options={options}
-                    onChange={(id) => setValues({ ...values, copySetValue: id })}
+
+                  <AsyncSelect
+                    classNamePrefix="react-select"
+                    backspaceRemovesValue={false}
+                    placeholder={gettext('Select ...')}
+                    noOptionsMessage={() => gettext('No options found')}
+                    loadingMessage={() => gettext('Loading ...')}
+                    options={[]}
                     value={values.copySetValue}
-                  />
+                    onChange={(id) => setValues({ ...values, copySetValue: id })}
+                    getOptionValue={(value) => value}
+                    getOptionLabel={(value) => value.value_title}
+                    formatOptionLabel={(value) => (
+                      <div>
+                        {gettext('Project')} <strong>{value.project_title}</strong>
+                        {
+                          value.snapshot && <>
+                            <span className="mr-5 ml-5">&rarr;</span>
+                            {gettext('Snapshot')} <strong>{value.snapshot_title}</strong>
+                          </>
+                        }
+                        <span className="mr-5 ml-5">&rarr;</span>
+                        {value.value_and_unit}
+                      </div>
+                    )}
+                    loadOptions={handleLoadOptions}
+                    defaultOptions />
+
+                  <div className="checkbox">
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={values.snapshot}
+                        onChange={() => setValues({ ...values, snapshot: !values.snapshot })}
+                      />
+                      <span>{gettext('Include snapshots in the search')}</span>
+                    </label>
+                  </div>
 
                   <p className="help-block">{gettext('You can fill the tab with answers from a similar tab in this or another project.')}</p>
                 </div>
