@@ -19,8 +19,8 @@ const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, i
   const [values, setValues] = useState(initial)
   const [errors, setErrors] = useState([])
 
-  const handleLoadOptions = useDebouncedCallback((search, callback) => {
-    ValueApi.searchValues({ attribute, search, snapshot: values.snapshot ? 'all' : '' }).then(response => {
+  const handleLoadOptions = useDebouncedCallback((search, snapshot, callback) => {
+    ValueApi.searchValues({ attribute, search, snapshot }).then(response => {
       callback(response)
     })
   }, 500)
@@ -91,8 +91,10 @@ const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, i
                   <AsyncSelect
                     classNamePrefix="react-select"
                     backspaceRemovesValue={false}
-                    placeholder={gettext('Select ...')}
-                    noOptionsMessage={() => gettext('No options found')}
+                    placeholder={gettext('Search for project, snapshot or answer text ...')}
+                    noOptionsMessage={() => gettext(
+                      'No answers match your search.'
+                    )}
                     loadingMessage={() => gettext('Loading ...')}
                     options={[]}
                     value={values.copySetValue}
@@ -112,8 +114,10 @@ const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, i
                         {value.value_and_unit}
                       </div>
                     )}
-                    loadOptions={handleLoadOptions}
-                    defaultOptions />
+                    loadOptions={(search, callback) => {
+                      handleLoadOptions(search, values.snapshot ? 'all' : '', callback)
+                    }}
+                    defaultOptions={[]} />
 
                   <div className="checkbox">
                     <label>
@@ -126,7 +130,10 @@ const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, i
                     </label>
                   </div>
 
-                  <p className="help-block">{gettext('You can fill the tab with answers from a similar tab in this or another project.')}</p>
+                  <p className="help-block">
+                    {gettext('You can fill this tab with answers from a similar tab in any ' +
+                             'project you are allowed to access.')}
+                  </p>
                 </div>
               )
             }
