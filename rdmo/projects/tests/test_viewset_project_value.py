@@ -4,11 +4,12 @@ from pathlib import Path
 import pytest
 
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.urls import reverse
 
 from rdmo.core.constants import VALUE_TYPE_FILE, VALUE_TYPE_TEXT
 
-from ..models import Value
+from ..models import Membership, Value
 
 users = (
     ('owner', 'owner'),
@@ -42,7 +43,8 @@ add_value_permission_map = change_value_permission_map = delete_value_permission
 urlnames = {
     'list': 'v1-projects:project-value-list',
     'detail': 'v1-projects:project-value-detail',
-    'set': 'v1-projects:project-value-set',
+    'copy-set': 'v1-projects:project-value-copy-set',
+    'delete-set': 'v1-projects:project-value-delete-set',
     'file': 'v1-projects:project-value-file'
 }
 
@@ -56,6 +58,8 @@ values = [
     456                        # from Internal <12>
 ]
 values_internal = [456]
+
+other_project_id = 11
 
 attribute_id = 1
 option_id = 1
@@ -257,14 +261,14 @@ def test_copy_set(db, client, username, password, value_id, set_values_count):
     set_value = Value.objects.get(id=value_id)
     values_count = Value.objects.count()
 
-    url = reverse(urlnames['set'], args=[set_value.project_id, value_id])
+    url = reverse(urlnames['copy-set'], args=[set_value.project_id])
     data = {
         'attribute': set_value.attribute.id,
         'set_prefix': set_value.set_prefix,
         'set_index': 2,
         'text': 'new'
     }
-    response = client.post(url, data=json.dumps(data), content_type="application/json")
+    response = client.post(url, data=json.dumps(dict(**data, copy_set_value=value_id)), content_type="application/json")
 
     if set_value.project_id in copy_value_permission_map.get(username, []):
         assert response.status_code == 201
@@ -290,6 +294,142 @@ def test_copy_set(db, client, username, password, value_id, set_values_count):
         assert Value.objects.count() == values_count
 
 
+def test_copy_set_from_other_project(db, client):
+    '''
+    A set can be copied from a project where the user has permissions.
+    '''
+    client.login(username='user', password='user')
+
+    set_value_id, set_values_count = set_values[0]
+    set_value = Value.objects.get(id=set_value_id)
+    values_count = Value.objects.count()
+
+    # add the user to the project with the set value as well as the other project
+    Membership.objects.create(project_id=set_value.project.id, user=User.objects.get(username='user'), role='author')
+    Membership.objects.create(project_id=other_project_id, user=User.objects.get(username='user'), role='author')
+
+    url = reverse(urlnames['copy-set'], args=[other_project_id])
+    data = {
+        'attribute': set_value.attribute.id,
+        'set_prefix': set_value.set_prefix,
+        'set_index': 0,
+        'text': 'new'
+    }
+    response = client.post(url, data=json.dumps(dict(**data, copy_set_value=set_value_id)),
+                                content_type="application/json")
+    assert response.status_code == 201
+    assert Value.objects.get(
+        project=other_project_id,
+        snapshot=None,
+        **data
+    )
+    assert Value.objects.count() == values_count + set_values_count + 1  # one is for set/id
+
+
+def test_copy_set_from_other_project_forbidden(db, client):
+    '''
+    A set cannot be copied from a project where the user has no permissions.
+    '''
+    client.login(username='user', password='user')
+
+    set_value_id, set_values_count = set_values[0]
+    set_value = Value.objects.get(id=set_value_id)
+    values_count = Value.objects.count()
+
+    # add the user only to the other project
+    Membership.objects.create(project_id=other_project_id, user=User.objects.get(username='user'), role='author')
+
+    url = reverse(urlnames['copy-set'], args=[other_project_id])
+    data = {
+        'attribute': set_value.attribute.id,
+        'set_prefix': set_value.set_prefix,
+        'set_index': 0,
+        'text': 'new'
+    }
+    response = client.post(url, data=json.dumps(dict(**data, copy_set_value=set_value_id)),
+                                content_type="application/json")
+    assert response.status_code == 404
+    assert Value.objects.count() == values_count
+
+
+def test_copy_set_from_other_project_not_found(db, client):
+    '''
+    A set cannot be copied when the set values does not exist.
+    '''
+    client.login(username='user', password='user')
+
+    set_value_id, set_values_count = set_values[0]
+    set_value = Value.objects.get(id=set_value_id)
+    values_count = Value.objects.count()
+
+    # add the user only to the other project
+    Membership.objects.create(project_id=other_project_id, user=User.objects.get(username='user'), role='author')
+
+    url = reverse(urlnames['copy-set'], args=[other_project_id])
+    data = {
+        'attribute': set_value.attribute.id,
+        'set_prefix': set_value.set_prefix,
+        'set_index': 0,
+        'text': 'new'
+    }
+    response = client.post(url, data=json.dumps(dict(**data, copy_set_value=10000)),
+                                content_type="application/json")
+    assert response.status_code == 404
+    assert Value.objects.count() == values_count
+
+
+def test_copy_set_from_other_project_invalid(db, client):
+    '''
+    A set cannot be copied when the set values does not exist.
+    '''
+    client.login(username='user', password='user')
+
+    set_value_id, set_values_count = set_values[0]
+    set_value = Value.objects.get(id=set_value_id)
+    values_count = Value.objects.count()
+
+    # add the user only to the other project
+    Membership.objects.create(project_id=other_project_id, user=User.objects.get(username='user'), role='author')
+
+    url = reverse(urlnames['copy-set'], args=[other_project_id])
+    data = {
+        'attribute': set_value.attribute.id,
+        'set_prefix': set_value.set_prefix,
+        'set_index': 0,
+        'text': 'new'
+    }
+    response = client.post(url, data=json.dumps(dict(**data, copy_set_value='wrong')),
+                                content_type="application/json")
+    assert response.status_code == 404
+    assert Value.objects.count() == values_count
+
+
+def test_copy_set_from_other_project_missing(db, client):
+    '''
+    A set cannot be copied when the set values does not exist.
+    '''
+    client.login(username='user', password='user')
+
+    set_value_id, set_values_count = set_values[0]
+    set_value = Value.objects.get(id=set_value_id)
+    values_count = Value.objects.count()
+
+    # add the user only to the other project
+    Membership.objects.create(project_id=other_project_id, user=User.objects.get(username='user'), role='author')
+
+    url = reverse(urlnames['copy-set'], args=[other_project_id])
+    data = {
+        'attribute': set_value.attribute.id,
+        'set_prefix': set_value.set_prefix,
+        'set_index': 0,
+        'text': 'new'
+    }
+    response = client.post(url, data=json.dumps(data),
+                                content_type="application/json")
+    assert response.status_code == 400
+    assert Value.objects.count() == values_count
+
+
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('value_id, set_values_count', set_values)
@@ -298,7 +438,7 @@ def test_delete_set(db, client, username, password, project_id, value_id, set_va
     value_exists = Value.objects.filter(project_id=project_id, snapshot=None, id=value_id).exists()
     values_count = Value.objects.count()
 
-    url = reverse(urlnames['set'], args=[project_id, value_id])
+    url = reverse(urlnames['delete-set'], args=[project_id, value_id])
     response = client.delete(url)
 
     if value_exists and project_id in delete_value_permission_map.get(username, []):

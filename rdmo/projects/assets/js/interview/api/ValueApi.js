@@ -35,7 +35,7 @@ class ValueApi extends BaseApi {
 
   static copySet(projectId, setValue, copySetValue) {
     return this.post(`/api/v1/projects/projects/${projectId}/values/set/`, {
-      ...setValue, copySetValue: copySetValue.id
+      ...setValue, copy_set_value: copySetValue.id
     })
   }
 
