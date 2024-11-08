@@ -168,6 +168,8 @@ class ValueQuerySet(models.QuerySet):
             for descendant in element.descendants
         }
 
+        # construct the set_prefix for descendants for this set
+        descendants_set_prefix = \
             f'{set_value.set_prefix}|{set_value.set_index}' if set_value.set_prefix else str(set_value.set_index)
 
         # collect all values for this set and all descendants
