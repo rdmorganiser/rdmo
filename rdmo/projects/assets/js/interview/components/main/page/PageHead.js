@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { capitalize, isNil, last } from 'lodash'
+import { capitalize, isEmpty, isNil, last } from 'lodash'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 import useModal from 'rdmo/core/assets/js/hooks/useModal'
@@ -36,7 +36,7 @@ const PageHead = ({ templates, page, sets, values, currentSet,
   }
 
   const handleCreateSet = (text, copySetValue) => {
-    if (isNil(copySetValue)) {
+    if (isEmpty(copySetValue)) {
       createSet({
         attribute: page.attribute,
         set_index: last(sets) ? last(sets).set_index + 1 : 0,
@@ -125,7 +125,7 @@ const PageHead = ({ templates, page, sets, values, currentSet,
         submitColor="success"
         show={showCreateModal}
         attribute={page.attribute}
-        initial={{ text: '', copySetValue: '' }}
+        initial={{ text: '', copySetValue: '', snapshot: false }}
         onClose={closeCreateModal}
         onSubmit={handleCreateSet}
       />

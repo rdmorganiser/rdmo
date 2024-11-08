@@ -397,3 +397,21 @@ class ValueSerializer(serializers.ModelSerializer):
             'unit',
             'external_id'
         )
+
+
+class ValueSearchSerializer(serializers.ModelSerializer):
+
+    project_title = serializers.CharField(source='project.title', required=False)
+    snapshot_title = serializers.CharField(source='snapshot.title', required=False)
+
+    class Meta:
+        model = Value
+        fields = (
+            'id',
+            'project',
+            'project_title',
+            'snapshot',
+            'snapshot_title',
+            'value',
+            'value_and_unit'
+        )

@@ -126,7 +126,9 @@ class SnapshotFilterBackend(BaseFilterBackend):
             return queryset
 
         snapshot = request.GET.get('snapshot')
-        if snapshot:
+        if snapshot == 'all':
+            pass
+        elif snapshot:
             try:
                 snapshot_pk = int(snapshot)
             except (ValueError, TypeError):
