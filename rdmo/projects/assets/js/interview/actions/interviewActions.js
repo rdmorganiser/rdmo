@@ -611,18 +611,20 @@ export function deleteSetError(errors) {
   return {type: DELETE_SET_ERROR, errors}
 }
 
-export function copySet(currentSet, currentSetValue, attrs) {
+export function copySet(currentSet, copySetValue, attrs) {
   const pendingId = isNil(currentSet) ? 'copySet' : `copySet/${currentSet.set_prefix}/${currentSet.set_index}`
 
   return (dispatch, getState) => {
     dispatch(addToPending(pendingId))
     dispatch(copySetInit())
 
-    // create a new set
-    const set = SetFactory.create(attrs)
+    // create a new set (create) or use the current one (import)
+    const set = isNil(attrs.id) ? SetFactory.create(attrs) : currentSet
 
-    // create a value for the text if the page has an attribute
-    const value = isNil(attrs.attribute) ? null : ValueFactory.create(attrs)
+    // create a value for the text if the page has an attribute (create) or use the current one (import)
+    const value = isNil(attrs.attribute) ? null : (
+      isNil(attrs.id) ? ValueFactory.create(attrs) : attrs
+    )
 
     // create a callback function to be called immediately or after saving the value
     const copySetCallback = (setValues) => {
@@ -631,7 +633,10 @@ export function copySet(currentSet, currentSetValue, attrs) {
       const state = getState().interview
 
       const page = state.page
-      const values = [...state.values, ...setValues]
+      const values = [
+        ...state.values.filter(v => !setValues.some(sv => compareValues(v, sv))),  // remove updated values
+        ...setValues
+      ]
       const sets = gatherSets(values)
 
       initSets(sets, page)
@@ -667,7 +672,7 @@ export function copySet(currentSet, currentSetValue, attrs) {
         })
       )
     } else {
-      promise = ValueApi.copySet(projectId, value, currentSetValue)
+      promise = ValueApi.copySet(projectId, value, copySetValue)
     }
 
     return promise.then((values) => {
