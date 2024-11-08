@@ -144,6 +144,9 @@ class ValueQuerySet(models.QuerySet):
         else:
             return self.none()
 
+    def filter_empty(self):
+        return self.filter((Q(text='') | Q(text=None)) & Q(option=None) & (Q(file='') | Q(file=None)))
+
     def exclude_empty(self):
         return self.exclude((Q(text='') | Q(text=None)) & Q(option=None) & (Q(file='') | Q(file=None)))
 

@@ -443,7 +443,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         # copy all values for questions in questionset collections with the attribute
         # for this value and the same set_prefix and set_index
 
-        # obtain the id of the value we want to copy
+        # obtain the id of the set value for the set we want to copy
         try:
             copy_value_id = int(request.data.pop('copy_set_value'))
         except KeyError as e:
@@ -453,27 +453,51 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         except ValueError as e:
             raise NotFound from e
 
-        # look for this value in the database, using the users permissions
+        # look for this value in the database, using the users permissions, and
+        # collect all values for this set and all descendants
         try:
             copy_value = Value.objects.filter_user(self.request.user).get(id=copy_value_id)
+            copy_values = Value.objects.filter_user(self.request.user).filter_set(copy_value)
         except Value.DoesNotExist as e:
             raise NotFound from e
 
-        # collect all values for this set and all descendants
-        copy_values = Value.objects.filter_user(self.request.user).filter_set(copy_value)
+        # init list of values to return
+        response_values = []
 
-        # de-serialize the posted new set value and save it, use the ValueSerializer
-        # instead of ProjectValueSerializer, since the latter does not include project
-        set_value_serializer = ValueSerializer(data={
-            'project': parent_lookup_project,
-            **request.data
-        })
-        set_value_serializer.is_valid(raise_exception=True)
-        set_value = set_value_serializer.save()
-        set_value_data = set_value_serializer.data
+        set_value_id = request.data.get('id')
+        if set_value_id:
+            # if an id is given in the post request, this is an import
+            try:
+                # look for the set value for the set we want to import into
+                set_value = Value.objects.filter_user(self.request.user).get(id=set_value_id)
+
+                # collect all non-empty values for this set and all descendants and convert
+                # them to a list to compare them later to the new values
+                set_values = Value.objects.filter_user(self.request.user).filter_set(set_value)
+                set_values_list = set_values.exclude_empty().values_list('attribute', 'set_prefix', 'set_index')
+                set_empty_values_list = set_values.filter_empty().values_list(
+                    'attribute', 'set_prefix', 'set_index', 'collection_index'
+                )
+            except Value.DoesNotExist as e:
+                raise NotFound from e
+        else:
+            # otherwise, we want to create a new set and need to create a new set value
+            # de-serialize the posted new set value and save it, use the ValueSerializer
+            # instead of ProjectValueSerializer, since the latter does not include project
+            set_value_serializer = ValueSerializer(data={
+                'project': parent_lookup_project,
+                **request.data
+            })
+            set_value_serializer.is_valid(raise_exception=True)
+            set_value = set_value_serializer.save()
+            set_values_list = set_empty_values_list = []
+
+            # add the new set value to response_values
+            response_values.append(set_value_serializer.data)
 
         # create new values for the new set
-        values = []
+        new_values = []
+        updated_values = []
         set_prefix_length = len(set_value.set_prefix.split('|'))
         for value in copy_values:
             value.id = None
@@ -484,15 +508,33 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
                     str(set_value.set_index) if (index == set_prefix_length - 1) else value
                     for index, value in enumerate(value.set_prefix.split('|'))
                 ])
-            values.append(value)
+
+            # check if the value already exists, we do not consider collection_index
+            # since we do not want to import e.g. into partially filled checkboxes
+            if (value.attribute_id, value.set_prefix, value.set_index) in set_values_list:
+                # do not overwrite existing values
+                pass
+            elif (value.attribute_id, value.set_prefix,
+                  value.set_index, value.collection_index) in set_empty_values_list:
+                # update empty values
+                updated_value = set_values.get(attribute_id=value.attribute_id, set_prefix=value.set_prefix,
+                                                set_index=value.set_index, collection_index=value.collection_index)
+                updated_value.text = value.text
+                updated_value.option = value.option
+                updated_value.external_id = value.external_id
+                updated_value.save()
+
+                updated_values.append(updated_value)
+            else:
+                new_values.append(value)
 
         # bulk create the new values
-        values = Value.objects.bulk_create(values)
-        values_data = [ValueSerializer(instance=value).data for value in values]
+        created_values = Value.objects.bulk_create(new_values)
+        response_values += [ValueSerializer(instance=value).data for value in created_values]
+        response_values += [ValueSerializer(instance=value).data for value in updated_values]
 
         # return all new values
-        headers = self.get_success_headers(set_value_serializer.data)
-        return Response([set_value_data, *values_data], status=status.HTTP_201_CREATED, headers=headers)
+        return Response(response_values, status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=['DELETE'], url_path='set',
             permission_classes=(HasModelPermission | HasProjectPermission, ))

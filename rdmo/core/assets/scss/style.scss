@@ -317,6 +317,7 @@ form .yesno label {
 /* modals */
 
 .modal-body {
+    > div:last-child,
     > p:last-child,
     formgroup:last-child .form-group {
         margin-bottom: 0;
