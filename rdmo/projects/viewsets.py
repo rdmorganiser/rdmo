@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers, status
 from rest_framework.decorators import action
-from rest_framework.exceptions import NotFound
+from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.filters import SearchFilter
 from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin
 from rest_framework.pagination import PageNumberPagination
@@ -538,10 +538,20 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         # for this value and the same set_prefix and set_index
 
         # obtain the id of the value we want to copy
-        copy_value_id = request.data.pop('copySetValue')
+        try:
+            copy_value_id = int(request.data.pop('copy_set_value'))
+        except KeyError as e:
+            raise ValidationError({
+                'copy_set_value': [_('This field may not be blank.')]
+            }) from e
+        except ValueError as e:
+            raise NotFound from e
 
         # look for this value in the database, using the users permissions
-        copy_value = Value.objects.filter_user(self.request.user).get(id=copy_value_id)
+        try:
+            copy_value = Value.objects.filter_user(self.request.user).get(id=copy_value_id)
+        except Value.DoesNotExist as e:
+            raise NotFound from e
 
         # collect all values for this set and all descendants
         copy_values = Value.objects.filter_user(self.request.user).filter_set(copy_value)
