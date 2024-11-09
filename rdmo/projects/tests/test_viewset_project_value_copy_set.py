@@ -3,7 +3,7 @@ import json
 from django.contrib.auth.models import User
 from django.urls import reverse
 
-from ..models import Membership, Value
+from ..models import Membership, Project, Value
 
 urlnames = {
     'copy-set': 'v1-projects:project-value-copy-set',
@@ -156,7 +156,7 @@ def test_copy_missing(db, client):
     assert Value.objects.count() == values_count
 
 
-def test_copy_import(db, client):
+def test_copy_reuse(db, client):
     '''
     A set can be copied (imported) into an already existing set.
     '''
@@ -183,9 +183,10 @@ def test_copy_import(db, client):
                                 content_type="application/json")
     assert response.status_code == 201
     assert Value.objects.count() == values_count + set_values_count + 1  # one is the created set/id value
+    assert Project.objects.get(id=other_project_id).values.count() == set_values_count + 1
 
 
-def test_copy_import_not_found(db, client):
+def test_copy_reuse_not_found(db, client):
     '''
     A set cannot be imported when the set value does not exist.
     '''
@@ -212,9 +213,10 @@ def test_copy_import_not_found(db, client):
                                 content_type="application/json")
     assert response.status_code == 404
     assert Value.objects.count() == values_count + 1  # one is the created set/id value
+    assert Project.objects.get(id=other_project_id).values.count() == 1
 
 
-def test_copy_import_invalid(db, client):
+def test_copy_reuse_invalid(db, client):
     '''
     A set cannot be imported when copy_set_value is not an int.
     '''
@@ -241,3 +243,4 @@ def test_copy_import_invalid(db, client):
                                 content_type="application/json")
     assert response.status_code == 404
     assert Value.objects.count() == values_count + 1  # one is the created set/id value
+    assert Project.objects.get(id=other_project_id).values.count() == 1

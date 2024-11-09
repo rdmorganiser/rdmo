@@ -594,6 +594,8 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         updated_values = []
         for value in copy_values:
             value.id = None
+            value.project = set_value.project
+            value.snapshot = None
             if value.set_prefix == set_value.set_prefix:
                 value.set_index = set_value.set_index
             else:
