@@ -75,7 +75,7 @@ const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, i
               !isUndefined(values.copySetValue) && (
                 <div className={classNames({'form-group': true, 'has-error': errors.copySetValue })}>
                   <label className="control-label" htmlFor="interview-page-tabs-modal-form-import">
-                    {gettext('Copy answers')}
+                    {gettext('Reuse answers')}
                   </label>
 
                   <Search attribute={attribute} values={values} setValues={setValues} />
