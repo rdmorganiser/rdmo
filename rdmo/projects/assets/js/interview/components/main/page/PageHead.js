@@ -8,7 +8,7 @@ import useModal from 'rdmo/core/assets/js/hooks/useModal'
 
 import PageHeadDeleteModal from './PageHeadDeleteModal'
 import PageHeadFormModal from './PageHeadFormModal'
-import PageHeadImportModal from './PageHeadImportModal'
+import PageHeadReuseModal from './PageHeadReuseModal'
 
 const PageHead = ({ templates, page, sets, values, currentSet,
                     activateSet, createSet, updateSet, deleteSet, copySet }) => {
@@ -116,7 +116,7 @@ const PageHead = ({ templates, page, sets, values, currentSet,
                 )
               }
               <button className="btn-link fa fa-copy" title={gettext('Copy tab')} onClick={copyModal.open} />
-              <button className="btn-link fa fa-arrow-circle-down" title={gettext('Import from tab')} onClick={importModal.open} />
+              <button className="btn-link fa fa-arrow-circle-down" title={gettext('Reuse answers')} onClick={importModal.open} />
               <button className="btn-link fa fa-trash" title={gettext('Remove tab')} onClick={deleteModal.open} />
             </div>
           </>
@@ -163,7 +163,7 @@ const PageHead = ({ templates, page, sets, values, currentSet,
       }
       {
         currentSetValue && (
-          <PageHeadImportModal
+          <PageHeadReuseModal
             title={capitalize(page.verbose_name)}
             show={importModal.show}
             attribute={page.attribute}
