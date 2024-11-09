@@ -6,6 +6,7 @@ import QuestionCopyValue from '../question/QuestionCopyValue'
 import QuestionCopyValues from '../question/QuestionCopyValues'
 import QuestionDefault from '../question/QuestionDefault'
 import QuestionError from '../question/QuestionError'
+import QuestionReuseValue from '../question/QuestionReuseValue'
 import QuestionRemoveValue from '../question/QuestionRemoveValue'
 import QuestionSuccess from '../question/QuestionSuccess'
 
@@ -27,6 +28,7 @@ const TextWidget = ({ question, values, siblings, currentSet, disabled,
                 buttons={
                   <div className="buttons">
                     <QuestionSuccess value={value}/>
+                    <QuestionReuseValue value={value} updateValue={updateValue}/>
                     <QuestionRemoveValue
                       question={question}
                       values={values}

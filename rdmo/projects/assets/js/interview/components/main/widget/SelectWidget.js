@@ -7,10 +7,10 @@ import QuestionAddValue from '../question/QuestionAddValue'
 import QuestionCopyValue from '../question/QuestionCopyValue'
 import QuestionCopyValues from '../question/QuestionCopyValues'
 import QuestionDefault from '../question/QuestionDefault'
-import QuestionEraseValue from '../question/QuestionEraseValue'
 import QuestionError from '../question/QuestionError'
-import QuestionSuccess from '../question/QuestionSuccess'
 import QuestionRemoveValue from '../question/QuestionRemoveValue'
+import QuestionReuseValue from '../question/QuestionReuseValue'
+import QuestionSuccess from '../question/QuestionSuccess'
 
 import SelectInput from './SelectInput'
 
@@ -32,7 +32,8 @@ const SelectWidget = ({ question, values, siblings, currentSet, disabled, creata
                 buttons={
                   <div className="buttons">
                     <QuestionSuccess value={value}/>
-                    <QuestionEraseValue value={value} disabled={disabled} updateValue={updateValue}/>
+                    <QuestionReuseValue value={value} updateValue={updateValue}/>
+                    <QuestionReuseValue value={value} updateValue={updateValue}/>
                     <QuestionRemoveValue
                       question={question}
                       values={values}

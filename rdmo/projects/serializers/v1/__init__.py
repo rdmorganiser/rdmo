@@ -412,6 +412,13 @@ class ValueSearchSerializer(serializers.ModelSerializer):
             'project_title',
             'snapshot',
             'snapshot_title',
+            'set_prefix',
+            'set_index',
+            'set_collection',
+            'collection_index',
+            'text',
+            'option',
+            'external_id',
             'value',
             'value_and_unit'
         )
