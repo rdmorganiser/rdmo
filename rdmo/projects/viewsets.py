@@ -852,7 +852,7 @@ class ValueViewSet(ReadOnlyModelViewSet):
 
     @action(detail=False, permission_classes=(HasModelPermission | HasProjectsPermission, ))
     def search(self, request):
-        queryset = self.filter_queryset(self.get_queryset()).exclude(text='').select_related('project', 'snapshot')[:5]
+        queryset = self.filter_queryset(self.get_queryset()).exclude_empty().select_related('project', 'snapshot')[:5]
         serializer = ValueSearchSerializer(queryset, many=True)
         return Response(serializer.data)
 
