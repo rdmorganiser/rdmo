@@ -128,7 +128,7 @@ const PageHead = ({ templates, page, sets, values, currentSet,
       }
 
       <PageHeadFormModal
-        title={capitalize(page.verbose_name)}
+        title={gettext('Create tab')}
         submitLabel={gettext('Create')}
         submitColor="success"
         show={createModal.show}
@@ -138,7 +138,7 @@ const PageHead = ({ templates, page, sets, values, currentSet,
         onSubmit={handleCreate}
       />
       <PageHeadFormModal
-        title={capitalize(page.verbose_name)}
+        title={gettext('Copy tab')}
         submitLabel={gettext('Copy')}
         submitColor="info"
         show={copyModal.show}
@@ -149,7 +149,7 @@ const PageHead = ({ templates, page, sets, values, currentSet,
       {
         currentSetValue && (
           <PageHeadFormModal
-            title={capitalize(page.verbose_name)}
+            title={gettext('Update tab')}
             submitLabel={gettext('Update')}
             submitColor="primary"
             show={updateModal.show}
@@ -163,7 +163,6 @@ const PageHead = ({ templates, page, sets, values, currentSet,
       {
         currentSetValue && (
           <PageHeadReuseModal
-            title={capitalize(page.verbose_name)}
             show={importModal.show}
             attribute={page.attribute}
             onClose={importModal.close}
@@ -172,7 +171,6 @@ const PageHead = ({ templates, page, sets, values, currentSet,
         )
       }
       <PageHeadDeleteModal
-        title={capitalize(page.verbose_name)}
         name={currentSetValue ? currentSetValue.text : null}
         show={deleteModal.show}
         onClose={deleteModal.close}

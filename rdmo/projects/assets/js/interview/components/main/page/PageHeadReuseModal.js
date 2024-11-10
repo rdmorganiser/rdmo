@@ -9,9 +9,7 @@ import Modal from 'rdmo/core/assets/js/components/Modal'
 
 import Search from '../Search'
 
-const PageHeadReuseModal = ({ title, show, attribute, onClose, onSubmit }) => {
-
-  const label = gettext('Reuse answers')
+const PageHeadReuseModal = ({ show, attribute, onClose, onSubmit }) => {
 
   const initialValues = {
     value: ''
@@ -42,11 +40,12 @@ const PageHeadReuseModal = ({ title, show, attribute, onClose, onSubmit }) => {
   }, [values, values.value])
 
   return (
-    <Modal title={title} show={show} submitLabel={label} submitProps={{className: 'btn btn-primary'}}
+    <Modal title={gettext('Reuse answers')} show={show} submitLabel={gettext('Reuse')}
+           submitProps={{className: 'btn btn-primary'}}
            onClose={onClose} onSubmit={handleSubmit}>
       <div className={classNames({'form-group': true, 'has-error': errors.value })}>
         <label className="control-label">
-          {label}
+          {gettext('Answers')}
         </label>
 
         <Search attribute={attribute} values={values} setValues={setValues} />

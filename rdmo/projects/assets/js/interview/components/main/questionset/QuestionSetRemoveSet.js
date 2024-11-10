@@ -1,16 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { capitalize } from 'lodash'
 
 import useModal from 'rdmo/core/assets/js/hooks/useModal'
 
-import QuestionSetDeleteModal from './QuestionSetDeleteModal'
+import Modal from 'rdmo/core/assets/js/components/Modal'
 
 const QuestionRemoveSet = ({ questionset, currentSet, deleteSet }) => {
 
   const modal = useModal()
 
-  const handleDeleteSet = () => {
+  const handleRemoveSet = () => {
     deleteSet(currentSet)
     modal.close()
   }
@@ -21,12 +20,12 @@ const QuestionRemoveSet = ({ questionset, currentSet, deleteSet }) => {
         <i className="fa fa-times fa-btn"></i>
       </button>
 
-      <QuestionSetDeleteModal
-        title={capitalize(questionset.verbose_name)}
-        show={modal.show}
-        onClose={modal.close}
-        onSubmit={handleDeleteSet}
-      />
+      <Modal title={gettext('Remove block')} show={modal.show} submitLabel={gettext('Remove')}
+             submitProps={{className: 'btn btn-danger'}}
+             onClose={modal.close} onSubmit={handleRemoveSet}>
+        <p>{gettext('You are about to permanently remove this block.')}</p>
+        <p className="text-danger">{gettext('This action cannot be undone!')}</p>
+      </Modal>
     </>
   )
 }

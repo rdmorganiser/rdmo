@@ -5,7 +5,8 @@ import Modal from 'rdmo/core/assets/js/components/Modal'
 
 const PageHeadDeleteModal = ({ title, name, show, onClose, onSubmit }) => {
   return (
-    <Modal title={title} show={show} submitLabel={gettext('Delete')} submitProps={{className: 'btn btn-danger'}}
+    <Modal title={gettext('Delete tab')} show={show} submitLabel={gettext('Delete')}
+           submitProps={{className: 'btn btn-danger'}}
            onClose={onClose} onSubmit={onSubmit}>
       {
         name ? (

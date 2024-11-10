@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { capitalize, last } from 'lodash'
+import { last } from 'lodash'
+
+import Modal from 'rdmo/core/assets/js/components/Modal'
 
 import useModal from 'rdmo/core/assets/js/hooks/useModal'
-
-import QuestionSetCopyModal from './QuestionSetCopyModal'
 
 const QuestionCopySet = ({ questionset, sets, currentSet, copySet }) => {
 
@@ -24,12 +24,10 @@ const QuestionCopySet = ({ questionset, sets, currentSet, copySet }) => {
         <i className="fa fa-copy fa-btn"></i>
       </button>
 
-      <QuestionSetCopyModal
-        title={capitalize(questionset.verbose_name)}
-        show={modal.show}
-        onClose={modal.close}
-        onSubmit={handleCopySet}
-      />
+      <Modal title={gettext('Copy block')} show={modal.show} submitLabel={gettext('Copy')}
+             submitProps={{className: 'btn btn-info'}}
+             onClose={modal.close} onSubmit={handleCopySet}>
+      </Modal>
     </>
   )
 }
