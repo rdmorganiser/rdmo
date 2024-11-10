@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { isEmpty, isNil } from 'lodash'
 
-import Modal from 'rdmo/core/assets/js/components/Modal'
-
+import useLsState from 'rdmo/core/assets/js/hooks/useLsState'
 import useFocusEffect from '../../../hooks/useFocusEffect'
 
+import Modal from 'rdmo/core/assets/js/components/Modal'
 import Search from '../Search'
 
 const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, reuse, initial, onClose, onSubmit }) => {
@@ -15,12 +15,10 @@ const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, r
 
   const initialValues = {
     text: initial || '',
-    value: '',
-    project: '',
-    snapshot: false
+    value: ''
   }
 
-  const [values, setValues] = useState(initialValues)
+  const [values, setValues, initValues] = useLsState('rdmo.interview.reuse', initialValues, ['text', 'value'])
   const [errors, setErrors] = useState([])
 
   const handleSubmit = () => {
@@ -34,7 +32,7 @@ const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, r
   // init the form values
   useEffect(() => {
     if (show && !isNil(attribute)) {
-      setValues(initialValues)
+      initValues()
     }
   }, [show])
 

@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { isEmpty, isNil } from 'lodash'
 
+import useLsState from 'rdmo/core/assets/js/hooks/useLsState'
+
 import Modal from 'rdmo/core/assets/js/components/Modal'
 
 import Search from '../Search'
@@ -11,13 +13,13 @@ const QuestionReuseValues = ({ question, values, createValues, updateValue, dele
 
   const initialFormValues = {
     value: '',
-    project: '',
-    snapshot: false,
     collection: true
   }
 
   const [show, setShow] = useState(false)
-  const [formValues, setFormValues] = useState(initialFormValues)
+  const [
+    formValues, setFormValues, initFormValues
+  ] = useLsState('rdmo.interview.reuse', initialFormValues, ['value', 'collection'])
   const [formErrors, setFormErrors] = useState([])
 
   const compareValues = (a, b) => (
@@ -62,7 +64,7 @@ const QuestionReuseValues = ({ question, values, createValues, updateValue, dele
   // init the form values
   useEffect(() => {
     if (show) {
-      setFormValues(initialFormValues)
+      initFormValues()
     }
   }, [show])
 

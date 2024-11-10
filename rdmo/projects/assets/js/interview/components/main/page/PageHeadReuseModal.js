@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { isEmpty } from 'lodash'
 
+import useLsState from 'rdmo/core/assets/js/hooks/useLsState'
+
 import Modal from 'rdmo/core/assets/js/components/Modal'
 
 import Search from '../Search'
@@ -12,12 +14,10 @@ const PageHeadReuseModal = ({ title, show, attribute, onClose, onSubmit }) => {
   const label = gettext('Reuse answers')
 
   const initialValues = {
-    value: '',
-    project: '',
-    snapshot: false
+    value: ''
   }
 
-  const [values, setValues] = useState(initialValues)
+  const [values, setValues, initValues] = useLsState('rdmo.interview.reuse', initialValues, ['value'])
   const [errors, setErrors] = useState([])
 
   const handleSubmit = () => {
@@ -30,7 +30,7 @@ const PageHeadReuseModal = ({ title, show, attribute, onClose, onSubmit }) => {
 
   useEffect(() => {
     if (show) {
-      setValues(initialValues)
+      initValues()
     }
   }, [show])
 
