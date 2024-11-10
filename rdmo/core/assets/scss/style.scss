@@ -496,3 +496,7 @@ li.has-warning > a.control-label > i {
     color: $link-color;
     cursor: pointer;
 }
+
+.has-error .react-select__control {
+    border-color: #a94442;
+}
