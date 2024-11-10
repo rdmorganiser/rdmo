@@ -21,7 +21,7 @@ const Page = ({ config, templates, overview, page, sets, values, fetchPage,
 
   // sanity check
   if (isNil(currentSet)) {
-    currentSetIndex = minBy(sets, 'set_index').set_index
+    currentSetIndex = get(minBy(sets, 'set_index'), 'set_index', 0)
     currentSet = sets.find((set) => (set.set_prefix == currentSetPrefix && set.set_index == currentSetIndex))
   }
 
