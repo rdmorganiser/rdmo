@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import AsyncSelect from 'react-select/async'
 import { useDebouncedCallback } from 'use-debounce'
-import { isEmpty, isNil } from 'lodash'
+import { isEmpty, isNil, pick } from 'lodash'
 
 import ProjectApi from '../../api/ProjectApi'
 import ValueApi from '../../api/ValueApi'
@@ -47,7 +47,8 @@ const Search = ({ attribute, values, setValues, collection = false }) => {
   }, 500)
 
   const handleLoadProjects = useDebouncedCallback((search, callback) => {
-    ProjectApi.fetchProjects({ search }).then(response => callback(response.results))
+    ProjectApi.fetchProjects({ search })
+              .then(response => callback(response.results.map(project => pick(project, 'id', 'title'))))
   }, 500)
 
   return <>
@@ -96,7 +97,7 @@ const Search = ({ attribute, values, setValues, collection = false }) => {
       onChange={(project) => setValues({
         ...values,
         value: (isEmpty(project) || project == values.project) ? values.value : '',  // reset value
-        project
+        project: project
       })}
       getOptionValue={(project) => project}
       getOptionLabel={(project) => project.title}
