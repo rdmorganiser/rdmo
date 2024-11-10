@@ -9,13 +9,14 @@ import Search from '../Search'
 
 const QuestionReuseValue = ({ value, updateValue }) => {
 
-  const initial = {
+  const initialFormValues = {
     value: '',
+    project: '',
     snapshot: false
   }
 
   const [show, setShow] = useState(false)
-  const [formValues, setFormValues] = useState(initial)
+  const [formValues, setFormValues] = useState(initialFormValues)
   const [formErrors, setFormErrors] = useState([])
 
   const handleSubmit = () => {
@@ -31,7 +32,7 @@ const QuestionReuseValue = ({ value, updateValue }) => {
   // init the form values
   useEffect(() => {
     if (show) {
-      setFormValues(initial)
+      setFormValues(initialFormValues)
     }
   }, [show])
 

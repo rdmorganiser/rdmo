@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { isEmpty, isNil, isUndefined } from 'lodash'
+import { isEmpty, isNil } from 'lodash'
 
 import Modal from 'rdmo/core/assets/js/components/Modal'
 
@@ -9,25 +9,32 @@ import useFocusEffect from '../../../hooks/useFocusEffect'
 
 import Search from '../Search'
 
-const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, initial, onClose, onSubmit }) => {
+const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, reuse, initial, onClose, onSubmit }) => {
 
   const ref = useRef(null)
 
-  const [values, setValues] = useState(initial)
+  const initialValues = {
+    text: initial || '',
+    value: '',
+    project: '',
+    snapshot: false
+  }
+
+  const [values, setValues] = useState(initialValues)
   const [errors, setErrors] = useState([])
 
   const handleSubmit = () => {
     if (isEmpty(values.text)) {
       setErrors({ text: true })
     } else {
-      onSubmit(values.text, values.copySetValue)
+      onSubmit(values.text, values.value)
     }
   }
 
   // init the form values
   useEffect(() => {
     if (show && !isNil(attribute)) {
-      setValues(initial)
+      setValues(initialValues)
     }
   }, [show])
 
@@ -36,7 +43,7 @@ const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, i
     if (!isEmpty(values.text)) {
       setErrors({ text: false })
     }
-  }, [values, values.text])
+  }, [values.text])
 
   // focus when the modal is shown
   useFocusEffect(ref, show)
@@ -72,9 +79,9 @@ const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, i
               <p className="help-block mb-0">{gettext('Please give the tab a meaningful name.')}</p>
             </div>
             {
-              !isUndefined(values.copySetValue) && (
-                <div className={classNames({'form-group': true, 'has-error': errors.copySetValue })}>
-                  <label className="control-label" htmlFor="interview-page-tabs-modal-form-import">
+              reuse && (
+                <div className={classNames({'form-group': true, 'has-error': errors.value })}>
+                  <label className="control-label">
                     {gettext('Reuse answers')}
                   </label>
 
@@ -100,6 +107,7 @@ PageHeadFormModal.propTypes = {
   submitColor: PropTypes.string.isRequired,
   show: PropTypes.bool.isRequired,
   attribute: PropTypes.number,
+  reuse: PropTypes.bool,
   initial: PropTypes.object,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired

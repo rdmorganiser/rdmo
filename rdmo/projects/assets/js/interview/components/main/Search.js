@@ -2,14 +2,21 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import AsyncSelect from 'react-select/async'
 import { useDebouncedCallback } from 'use-debounce'
-import { isNil } from 'lodash'
+import { isEmpty, isNil } from 'lodash'
 
+import ProjectApi from '../../api/ProjectApi'
 import ValueApi from '../../api/ValueApi'
 
 const Search = ({ attribute, values, setValues, collection = false }) => {
 
-  const handleLoadOptions = useDebouncedCallback((search, snapshot, callback) => {
-    ValueApi.searchValues({ attribute, search, snapshot, collection }).then(response => {
+  const handleLoadValues = useDebouncedCallback((search, callback) => {
+    ValueApi.searchValues({
+      attribute,
+      search,
+      project: values.project ? values.project.id : '',
+      snapshot: values.snapshot ? 'all' : '',
+      collection
+    }).then(response => {
       if (collection) {
         // if the search component is used from QuestionReuseValues/CheckboxWidget
         // the list of values from the server needs to be reduced to show only one entry
@@ -39,10 +46,14 @@ const Search = ({ attribute, values, setValues, collection = false }) => {
     })
   }, 500)
 
+  const handleLoadProjects = useDebouncedCallback((search, callback) => {
+    ProjectApi.fetchProjects({ search }).then(response => callback(response.results))
+  }, 500)
+
   return <>
     <AsyncSelect
+      key={JSON.stringify(values.project)}
       classNamePrefix="react-select"
-      backspaceRemovesValue={false}
       placeholder={gettext('Search for project or snapshot title, or answer text ...')}
       noOptionsMessage={() => gettext(
         'No answers match your search.'
@@ -66,10 +77,33 @@ const Search = ({ attribute, values, setValues, collection = false }) => {
           {value.value_label}
         </div>
       )}
-      loadOptions={(search, callback) => {
-        handleLoadOptions(search, values.snapshot ? 'all' : '', callback)
-      }}
-      defaultOptions={[]}
+      loadOptions={handleLoadValues}
+      defaultOptions
+      isClearable
+      backspaceRemovesValue={true}
+    />
+
+    <AsyncSelect
+      classNamePrefix="react-select"
+      className="mt-10"
+      placeholder={gettext('Restrict the search to a particular project ...')}
+      noOptionsMessage={() => gettext(
+        'No projects matche your search.'
+      )}
+      loadingMessage={() => gettext('Loading ...')}
+      options={[]}
+      value={values.project}
+      onChange={(project) => setValues({
+        ...values,
+        value: (isEmpty(project) || project == values.project) ? values.value : '',  // reset value
+        project
+      })}
+      getOptionValue={(project) => project}
+      getOptionLabel={(project) => project.title}
+      loadOptions={handleLoadProjects}
+      defaultOptions
+      isClearable
+      backspaceRemovesValue={true}
     />
 
     <div className="checkbox">
