@@ -6,6 +6,7 @@ import { gatherOptions } from '../../../utils/options'
 
 import QuestionCopyValues from '../question/QuestionCopyValues'
 import QuestionError from '../question/QuestionError'
+import QuestionReuseValues from '../question/QuestionReuseValues'
 import QuestionSuccess from '../question/QuestionSuccess'
 
 import CheckboxInput from './CheckboxInput'
@@ -13,29 +14,23 @@ import CheckboxInput from './CheckboxInput'
 const CheckboxWidget = ({ question, values, siblings, currentSet, disabled,
                           createValue, updateValue, deleteValue, copyValue }) => {
 
-  const handleCreateValue = (option, additionalInput) => {
+  const handleCreateValue = (attrsList) => {
     const lastValue = maxBy(values, (v) => v.collection_index)
-    const collectionIndex = lastValue ? lastValue.collection_index + 1 : 0
 
-    const value = {
-      attribute: question.attribute,
-      set_prefix: currentSet.set_prefix,
-      set_index: currentSet.set_index,
-      collection_index: collectionIndex,
-      set_collection: question.set_collection,
-      unit: question.unit,
-      value_type: question.value_type
-    }
-
-    if (option.has_provider) {
-      value.external_id = option.id
-      value.text = option.text
-    } else {
-      value.option = option.id
-      value.text = additionalInput
-    }
-
-    createValue(value, true)
+    let collectionIndex = lastValue ? lastValue.collection_index + 1 : 0
+    attrsList.forEach(attrs => {
+      createValue({
+        attribute: question.attribute,
+        set_prefix: currentSet.set_prefix,
+        set_index: currentSet.set_index,
+        collection_index: collectionIndex,
+        set_collection: question.set_collection,
+        unit: question.unit,
+        value_type: question.value_type,
+        ...attrs
+      }, true)
+      collectionIndex += 1
+    })
   }
 
   const success = values.some((value) => value.success)
@@ -71,7 +66,19 @@ const CheckboxWidget = ({ question, values, siblings, currentSet, disabled,
             </div>
             <div className="buttons">
               <QuestionSuccess value={{ success }} />
-              <QuestionCopyValues question={question} values={values} siblings={siblings} copyValue={copyValue} />
+              <QuestionReuseValues
+                question={question}
+                values={values}
+                createValues={handleCreateValue}
+                updateValue={updateValue}
+                deleteValue={deleteValue}
+              />
+              <QuestionCopyValues
+                question={question}
+                values={values}
+                siblings={siblings}
+                copyValue={copyValue}
+              />
             </div>
           </div>
         </div>

@@ -12,11 +12,25 @@ const CheckboxInput = ({ question, value, option, disabled, onCreate, onUpdate, 
 
   const checked = !isNil(value)
 
+  const handleCreate = (option, additionalInput) => {
+  if (option.has_provider) {
+      onCreate([{
+        external_id: option.id,
+        text: option.text
+      }])
+    } else {
+      onCreate([{
+        option: option.id,
+        text: additionalInput
+      }])
+    }
+  }
+
   const handleChange = () => {
     if (checked) {
       onDelete(value)
     } else {
-      onCreate(option)
+      handleCreate(option)
     }
   }
 
@@ -38,7 +52,7 @@ const CheckboxInput = ({ question, value, option, disabled, onCreate, onUpdate, 
         })
       }
     } else {
-      onCreate(option, additionalInput)
+      handleCreate(option, additionalInput)
     }
   }, 500)
 
