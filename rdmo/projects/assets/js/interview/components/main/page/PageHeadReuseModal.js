@@ -7,44 +7,46 @@ import Modal from 'rdmo/core/assets/js/components/Modal'
 
 import Search from '../Search'
 
-const PageHeadImportModal = ({ title, show, attribute, onClose, onSubmit }) => {
+const PageHeadReuseModal = ({ title, show, attribute, onClose, onSubmit }) => {
 
-  const initial = {
-    copySetValue: '',
+  const label = gettext('Reuse answers')
+
+  const initialValues = {
+    value: '',
+    project: '',
     snapshot: false
   }
 
-  const [values, setValues] = useState(initial)
+  const [values, setValues] = useState(initialValues)
   const [errors, setErrors] = useState([])
 
   const handleSubmit = () => {
-    if (isEmpty(values.copySetValue)) {
-      setErrors({ copySetValue: true })
+    if (isEmpty(values.value)) {
+      setErrors({ value: true })
     } else {
-      onSubmit(values.copySetValue)
+      onSubmit(values.value)
     }
   }
 
-  // init the form values
   useEffect(() => {
     if (show) {
-      setValues(initial)
+      setValues(initialValues)
     }
   }, [show])
 
-  // remove the hasError flag if an inputValue is entered
   useEffect(() => {
-    if (!isEmpty(values.copySetValue)) {
-      setErrors({ copySetValue: false })
+    if (!isEmpty(values.value)) {
+      // remove the hasError flag if an inputValue is entered
+      setErrors({ value: false })
     }
-  }, [values, values.copySetValue])
+  }, [values, values.value])
 
   return (
-    <Modal title={title} show={show} submitLabel="Copy values" submitProps={{className: 'btn btn-primary'}}
+    <Modal title={title} show={show} submitLabel={label} submitProps={{className: 'btn btn-primary'}}
            onClose={onClose} onSubmit={handleSubmit}>
-      <div className={classNames({'form-group': true, 'has-error': errors.copySetValue })}>
-        <label className="control-label" htmlFor="interview-page-tabs-modal-form-import">
-          {gettext('Reuse answers')}
+      <div className={classNames({'form-group': true, 'has-error': errors.value })}>
+        <label className="control-label">
+          {label}
         </label>
 
         <Search attribute={attribute} values={values} setValues={setValues} />
@@ -59,7 +61,7 @@ const PageHeadImportModal = ({ title, show, attribute, onClose, onSubmit }) => {
   )
 }
 
-PageHeadImportModal.propTypes = {
+PageHeadReuseModal.propTypes = {
   title: PropTypes.string.isRequired,
   show: PropTypes.bool.isRequired,
   attribute: PropTypes.number,
@@ -67,4 +69,4 @@ PageHeadImportModal.propTypes = {
   onSubmit: PropTypes.func.isRequired
 }
 
-export default PageHeadImportModal
+export default PageHeadReuseModal

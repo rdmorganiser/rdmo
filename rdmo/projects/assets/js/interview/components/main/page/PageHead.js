@@ -133,7 +133,7 @@ const PageHead = ({ templates, page, sets, values, currentSet,
         submitColor="success"
         show={createModal.show}
         attribute={page.attribute}
-        initial={{ text: '', copySetValue: '', snapshot: false }}
+        reuse={true}
         onClose={createModal.close}
         onSubmit={handleCreate}
       />
@@ -143,7 +143,6 @@ const PageHead = ({ templates, page, sets, values, currentSet,
         submitColor="info"
         show={copyModal.show}
         attribute={page.attribute}
-        initial={{ text: '' }}
         onClose={copyModal.close}
         onSubmit={handleCopy}
       />
@@ -155,7 +154,7 @@ const PageHead = ({ templates, page, sets, values, currentSet,
             submitColor="primary"
             show={updateModal.show}
             attribute={page.attribute}
-            initial={{ text: currentSetValue.text }}
+            initial={currentSetValue.text}
             onClose={updateModal.close}
             onSubmit={handleUpdate}
           />
