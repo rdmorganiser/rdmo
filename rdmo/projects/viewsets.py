@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import OuterRef, Prefetch, Subquery
+from django.db.models import OuterRef, Prefetch, Q, Subquery
 from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
@@ -852,7 +852,25 @@ class ValueViewSet(ReadOnlyModelViewSet):
 
     @action(detail=False, permission_classes=(HasModelPermission | HasProjectsPermission, ))
     def search(self, request):
-        queryset = self.filter_queryset(self.get_queryset()).exclude_empty().select_related('project', 'snapshot')[:5]
+        queryset = self.filter_queryset(self.get_queryset()).exclude_empty().select_related('project', 'snapshot')
+
+        if is_truthy(request.GET.get('collection')):
+            # if collection is set (for checkboxes), we first select each distinct set and create a Q object with it
+            # by doing so we can select an undetermined number of values which belong to an exact number of sets
+            # given by settings.PROJECT_VALUES_SEARCH_LIMIT
+            values_list = queryset.order_by('project_id', 'snapshot_id', 'attribute_id', 'set_prefix', 'set_index') \
+                                  .distinct('project_id', 'snapshot_id', 'attribute_id', 'set_prefix', 'set_index') \
+                                  .values('project_id', 'snapshot_id', 'attribute_id', 'set_prefix', 'set_index') \
+                                  [:settings.PROJECT_VALUES_SEARCH_LIMIT]
+
+            q = Q()
+            for values_dict in values_list:
+                q |= Q(**values_dict)
+
+            queryset = queryset.filter(q)
+        else:
+            queryset = queryset[:settings.PROJECT_VALUES_SEARCH_LIMIT]
+
         serializer = ValueSearchSerializer(queryset, many=True)
         return Response(serializer.data)
 

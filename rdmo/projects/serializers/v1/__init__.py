@@ -437,24 +437,26 @@ class ValueSerializer(serializers.ModelSerializer):
 
 class ValueSearchSerializer(serializers.ModelSerializer):
 
-    project_title = serializers.CharField(source='project.title', required=False)
-    snapshot_title = serializers.CharField(source='snapshot.title', required=False)
+    project_label = serializers.CharField(source='project.title', required=False)
+    snapshot_label = serializers.CharField(source='snapshot.title', required=False)
+    value_label = serializers.CharField(source='label')
 
     class Meta:
         model = Value
         fields = (
             'id',
+            'attribute',
             'project',
-            'project_title',
+            'project_label',
             'snapshot',
-            'snapshot_title',
+            'snapshot_label',
+            'value',
+            'value_label',
             'set_prefix',
             'set_index',
             'set_collection',
             'collection_index',
             'text',
             'option',
-            'external_id',
-            'value',
-            'value_and_unit'
+            'external_id'
         )
