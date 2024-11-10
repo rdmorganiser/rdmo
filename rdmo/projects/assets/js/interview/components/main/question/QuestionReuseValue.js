@@ -50,12 +50,12 @@ const QuestionReuseValue = ({ value, updateValue }) => {
       <i className="fa fa-arrow-circle-down fa-btn"></i>
     </button>
 
-    <Modal title={gettext('Reuse answer')} show={show} submitLabel={gettext('Reuse answer')}
+    <Modal title={gettext('Reuse answer')} show={show} submitLabel={gettext('Reuse')}
            submitProps={{className: 'btn btn-primary'}}
            onClose={() => setShow(false)} onSubmit={handleSubmit}>
       <div className={classNames({'form-group': true, 'has-error': formErrors.value })}>
         <label className="control-label" htmlFor="interview-page-tabs-modal-form-import">
-          {gettext('Reuse answer')}
+          {gettext('Answer')}
         </label>
 
         <Search attribute={value.attribute} values={formValues} setValues={setFormValues} />
