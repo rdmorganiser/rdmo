@@ -8,6 +8,8 @@ import ProjectApi from '../../api/ProjectApi'
 import ValueApi from '../../api/ValueApi'
 
 const Search = ({ attribute, values, setValues, collection = false }) => {
+  // create a key for the first AsyncSelect, to reset the loaded values when project or snapshot changes
+  const key = (values.project ? values.project.id : '') + (values.snapshot ? '-all' : '')
 
   const handleLoadValues = useDebouncedCallback((search, callback) => {
     ValueApi.searchValues({
@@ -53,7 +55,7 @@ const Search = ({ attribute, values, setValues, collection = false }) => {
 
   return <>
     <AsyncSelect
-      key={JSON.stringify(values.project)}
+      key={key}
       classNamePrefix="react-select"
       className='react-select'
       placeholder={gettext('Search for project or snapshot title, or answer text ...')}
@@ -113,7 +115,10 @@ const Search = ({ attribute, values, setValues, collection = false }) => {
         <input
           type="checkbox"
           checked={values.snapshot}
-          onChange={() => setValues({ ...values, snapshot: !values.snapshot })}
+          onChange={() => setValues({
+            ...values,
+            value: values.snapshot ? '' : values.value,  // reset value
+            snapshot: !values.snapshot })}
         />
         <span>{gettext('Include snapshots in the search')}</span>
       </label>
