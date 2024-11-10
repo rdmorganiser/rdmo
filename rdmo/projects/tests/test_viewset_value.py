@@ -30,7 +30,8 @@ view_value_permission_map = {
 urlnames = {
     'list': 'v1-projects:value-list',
     'detail': 'v1-projects:value-detail',
-    'file': 'v1-projects:value-file'
+    'file': 'v1-projects:value-file',
+    'search': 'v1-projects:value-search'
 }
 
 values = [
@@ -171,5 +172,29 @@ def test_file(db, client, files, username, password, value_id):
         assert response.content == value.file.read()
     elif password:
         assert response.status_code == 404
+    else:
+        assert response.status_code == 401
+
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_search(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['search'])
+    response = client.get(url)
+
+    if password:
+        assert response.status_code == 200
+        assert isinstance(response.json(), list)
+
+
+        if username == 'user':
+            assert sorted([item['id'] for item in response.json()]) == values_internal
+        else:
+            values_list = Value.objects.filter(project__in=view_value_permission_map.get(username, [])) \
+                                       .filter(snapshot=None) \
+                                       .exclude_empty()[:10]
+            assert sorted([item['id'] for item in response.json()]) == sorted([item.id for item in values_list])
     else:
         assert response.status_code == 401
