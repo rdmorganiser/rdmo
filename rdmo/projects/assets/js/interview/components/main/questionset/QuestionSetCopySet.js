@@ -7,6 +7,7 @@ import useModal from 'rdmo/core/assets/js/hooks/useModal'
 import QuestionSetCopyModal from './QuestionSetCopyModal'
 
 const QuestionCopySet = ({ questionset, sets, currentSet, copySet }) => {
+
   const modal = useModal()
 
   const handleCopySet = () => {
