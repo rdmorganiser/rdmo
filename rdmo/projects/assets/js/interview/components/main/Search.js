@@ -55,6 +55,7 @@ const Search = ({ attribute, values, setValues, collection = false }) => {
     <AsyncSelect
       key={JSON.stringify(values.project)}
       classNamePrefix="react-select"
+      className='react-select'
       placeholder={gettext('Search for project or snapshot title, or answer text ...')}
       noOptionsMessage={() => gettext(
         'No answers match your search.'
@@ -85,8 +86,8 @@ const Search = ({ attribute, values, setValues, collection = false }) => {
     />
 
     <AsyncSelect
-      classNamePrefix="react-select"
-      className="mt-10"
+      classNamePrefix='react-select'
+      className='react-select mt-10'
       placeholder={gettext('Restrict the search to a particular project ...')}
       noOptionsMessage={() => gettext(
         'No projects matche your search.'
