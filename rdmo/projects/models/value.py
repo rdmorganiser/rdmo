@@ -289,3 +289,6 @@ class Value(Model):
         if self.option.additional_input and self.text:
             string += ': ' + self.text
         return string
+
+    def get_file_display(self):
+        return self.file_name
