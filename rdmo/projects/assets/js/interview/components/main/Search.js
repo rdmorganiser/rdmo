@@ -92,7 +92,7 @@ const Search = ({ attribute, values, setValues, collection = false }) => {
       className='react-select mt-10'
       placeholder={gettext('Restrict the search to a particular project ...')}
       noOptionsMessage={() => gettext(
-        'No projects matche your search.'
+        'No projects matching your search.'
       )}
       loadingMessage={() => gettext('Loading ...')}
       options={[]}
