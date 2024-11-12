@@ -12,11 +12,11 @@ class ValueApi extends BaseApi {
     return this.get(`/api/v1/projects/values/search/?${encodeParams(params)}`)
   }
 
-  static storeValue(projectId, value) {
+  static storeValue(projectId, value, params) {
     if (isUndefined(value.id)) {
-      return this.post(`/api/v1/projects/projects/${projectId}/values/`, value)
+      return this.post(`/api/v1/projects/projects/${projectId}/values/?${encodeParams(params)}`, value)
     } else {
-      return this.put(`/api/v1/projects/projects/${projectId}/values/${value.id}/`, value)
+      return this.put(`/api/v1/projects/projects/${projectId}/values/${value.id}/?${encodeParams(params)}`, value)
     }
   }
 
@@ -27,9 +27,9 @@ class ValueApi extends BaseApi {
     return this.postFormData(`/api/v1/projects/projects/${projectId}/values/${value.id}/file/`, formData)
   }
 
-  static deleteValue(projectId, value) {
+  static deleteValue(projectId, value, params) {
     if (!isUndefined(value.id)) {
-      return this.delete(`/api/v1/projects/projects/${projectId}/values/${value.id}/`)
+      return this.delete(`/api/v1/projects/projects/${projectId}/values/${value.id}/?${encodeParams(params)}`)
     }
   }
 

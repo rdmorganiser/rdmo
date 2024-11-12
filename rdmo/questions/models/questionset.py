@@ -206,6 +206,12 @@ class QuestionSet(Model, TranslationMixin):
             descendants += [element, *element.descendants]
         return descendants
 
+    @cached_property
+    def attributes(self):
+        attributes = [self.attribute] if self.attribute else []
+        attributes += [descendant.attribute for descendant in self.descendants if descendant.attribute]
+        return attributes
+
     def prefetch_elements(self):
         models.prefetch_related_objects([self], *self.prefetch_lookups)
 

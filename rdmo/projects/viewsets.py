@@ -65,6 +65,7 @@ from .serializers.v1 import (
 )
 from .serializers.v1.overview import CatalogSerializer, ProjectOverviewSerializer
 from .serializers.v1.page import PageSerializer
+from .signals import value_created, value_deleted, value_updated
 from .utils import check_conditions, get_upload_accept, send_invite_email
 
 
@@ -436,6 +437,18 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         except AttributeError:
             # this is needed for the swagger ui
             return Value.objects.none()
+
+    def perform_create(self, serializer):
+        super().perform_create(serializer)
+        value_created.send(sender=Value, request=self.request, instance=serializer.instance)
+
+    def perform_update(self, serializer):
+        super().perform_update(serializer)
+        value_updated.send(sender=Value, request=self.request, instance=serializer.instance)
+
+    def perform_destroy(self, instance):
+        super().perform_destroy(instance)
+        value_deleted.send(sender=Value, request=self.request, instance=instance)
 
     @action(detail=False, methods=['POST'], url_path='set',
             permission_classes=(HasModelPermission | HasProjectPermission, ))
