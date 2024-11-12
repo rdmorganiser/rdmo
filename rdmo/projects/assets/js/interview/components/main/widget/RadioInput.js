@@ -40,7 +40,6 @@ const RadioInput = ({ question, value, options, disabled, updateValue, buttons }
 
   const classnames = classNames({
     'radio-control': true,
-    'radio': true,
     'default': isDefaultValue(question, value)
   })
 
