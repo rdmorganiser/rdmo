@@ -1,3 +1,9 @@
+__pycache__
+*.pyc
+*~
+*.swp
+.DS_Store
+
 testing/config/settings/local.py
 testing/log/
 .pytest*/
@@ -6,18 +12,11 @@ static_root
 media_root
 components_root
 
-docs/_build*
-
-__pycache__
-*.pyc
-*~
-*.swp
-.DS_Store
-.ruff_cache
-
 env
 env2
 env3
+
+Makefile
 
 .coverage
 .coverage.*
@@ -32,6 +31,7 @@ dist
 .imdone/
 
 .pytest_cache
+.ruff_cache
 .on-save.json
 
 rdmo/management/static
@@ -40,9 +40,9 @@ rdmo/core/static/core/js/base*.js
 rdmo/core/static/core/fonts
 rdmo/core/static/core/css/base*.css
 
-rdmo/projects/static/projects/js/interview.js
-rdmo/projects/static/projects/js/projects.js
+rdmo/projects/static/projects/js/interview.js*
+rdmo/projects/static/projects/js/projects.js*
 rdmo/projects/static/projects/fonts
-rdmo/projects/static/projects/css/*.css
+rdmo/projects/static/projects/css
 
 screenshots
