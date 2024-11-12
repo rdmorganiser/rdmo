@@ -24,17 +24,16 @@ const Search = ({ attribute, values, setValues, collection = false }) => {
         // the list of values from the server needs to be reduced to show only one entry
         // for each set_prefix/set_index combination
         callback(response.reduce((collections, value) => {
-          const { project_label, snapshot_label, value_label, set_prefix, set_index } = value
-
-          // look if a value for the same set_prefix/set_index already exists in values_list
+          // look if a value for the same project/snapshot/set_prefix/set_index already exists in values_list
           const collection = isNil(collections) ? null : collections.find(v => (
-            (v.set_prefix == set_prefix) && (v.set_index == set_index)
+            (v.project == value.project) &&
+            (v.snapshot == value.snapshot) &&
+            (v.set_prefix == value.set_prefix) &&
+            (v.set_index == value.set_index)
           ))
           if (isNil(collection)) {
             // append the value
-            return [...collections, {
-              project_label, snapshot_label, value_label, set_prefix, set_index, values: [value]
-            }]
+            return [...collections, { ...value, values: [value] }]
           } else {
             // update the value_title and the values array of the existing value
             collection.value_label += '; ' + value.value_label
