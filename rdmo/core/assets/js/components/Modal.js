@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Modal as BootstrapModal } from 'react-bootstrap'
 
-const Modal = ({ title, show, modalProps, submitLabel, submitProps, onClose, onSubmit, children }) => {
+const Modal = ({ title, show, modalProps, submitLabel, submitProps, onClose, onSubmit, children, buttons }) => {
   return (
     <BootstrapModal className="element-modal" onHide={onClose} show={show} {...modalProps}>
       <BootstrapModal.Header closeButton>
@@ -19,6 +19,7 @@ const Modal = ({ title, show, modalProps, submitLabel, submitProps, onClose, onS
         <button type="button" className="btn btn-default" onClick={onClose}>
           {gettext('Close')}
         </button>
+        {buttons}
         {
           onSubmit && (
             <button type="button" className="btn btn-primary" onClick={onSubmit} {...submitProps}>
@@ -40,6 +41,7 @@ Modal.propTypes = {
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func,
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
+  buttons: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
 }
 
 export default Modal
