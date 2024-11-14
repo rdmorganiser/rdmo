@@ -33,7 +33,6 @@ const SelectWidget = ({ page, question, values, siblings, currentSet, disabled, 
                   <div className="buttons">
                     <QuestionSuccess value={value}/>
                     <QuestionReuseValue page={page} value={value} updateValue={updateValue}/>
-                    <QuestionReuseValue value={value} updateValue={updateValue}/>
                     <QuestionRemoveValue
                       question={question}
                       values={values}
