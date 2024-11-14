@@ -11,7 +11,7 @@ import QuestionSuccess from '../question/QuestionSuccess'
 
 import CheckboxInput from './CheckboxInput'
 
-const CheckboxWidget = ({ question, values, siblings, currentSet, disabled,
+const CheckboxWidget = ({ page, question, values, siblings, currentSet, disabled,
                           createValue, updateValue, deleteValue, copyValue }) => {
 
   const handleCreateValue = (attrsList) => {
@@ -67,6 +67,7 @@ const CheckboxWidget = ({ question, values, siblings, currentSet, disabled,
             <div className="buttons">
               <QuestionSuccess value={{ success }} />
               <QuestionReuseValues
+                page={page}
                 question={question}
                 values={values}
                 createValues={handleCreateValue}
@@ -88,6 +89,7 @@ const CheckboxWidget = ({ question, values, siblings, currentSet, disabled,
 }
 
 CheckboxWidget.propTypes = {
+  page: PropTypes.object.isRequired,
   question: PropTypes.object.isRequired,
   values: PropTypes.array.isRequired,
   siblings: PropTypes.array,

@@ -9,8 +9,7 @@ import Modal from 'rdmo/core/assets/js/components/Modal'
 
 import Search from '../Search'
 
-const QuestionReuseValue = ({ value, updateValue }) => {
-
+const QuestionReuseValue = ({ page, value, updateValue }) => {
   const initialFormValues = {
     value: ''
   }
@@ -58,7 +57,12 @@ const QuestionReuseValue = ({ value, updateValue }) => {
           {gettext('Answer')}
         </label>
 
-        <Search attribute={value.attribute} values={formValues} setValues={setFormValues} />
+        <Search
+          page={page}
+          attribute={value.attribute}
+          values={formValues}
+          setValues={setFormValues}
+        />
 
         <p className="help-block mb-0">
           {gettext('You can reuse an answer from a similar question in any ' +
@@ -70,6 +74,7 @@ const QuestionReuseValue = ({ value, updateValue }) => {
 }
 
 QuestionReuseValue.propTypes = {
+  page: PropTypes.object.isRequired,
   value: PropTypes.object.isRequired,
   updateValue: PropTypes.func.isRequired
 }

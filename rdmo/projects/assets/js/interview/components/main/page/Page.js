@@ -52,6 +52,7 @@ const Page = ({ config, templates, overview, page, sets, values, fetchPage,
                   <QuestionSet
                     key={elementIndex}
                     templates={templates}
+                    page={page}
                     questionset={element}
                     sets={sets}
                     values={values.filter((value) => element.attributes.includes(value.attribute))}
@@ -73,6 +74,7 @@ const Page = ({ config, templates, overview, page, sets, values, fetchPage,
                   <Question
                     key={elementIndex}
                     templates={templates}
+                    page={page}
                     question={element}
                     values={values.filter((value) => (
                       value.attribute == element.attribute &&

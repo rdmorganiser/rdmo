@@ -15,7 +15,7 @@ import QuestionSuccess from '../question/QuestionSuccess'
 
 import RadioInput from './RadioInput'
 
-const RadioWidget = ({ question, values, siblings, currentSet, disabled,
+const RadioWidget = ({ page, question, values, siblings, currentSet, disabled,
                        createValue, updateValue, deleteValue, copyValue }) => {
   return (
     <div className="interview-widgets">
@@ -32,7 +32,7 @@ const RadioWidget = ({ question, values, siblings, currentSet, disabled,
                 buttons={
                   <div className="buttons">
                     <QuestionSuccess value={value}/>
-                    <QuestionReuseValue value={value} updateValue={updateValue}/>
+                    <QuestionReuseValue page={page} value={value} updateValue={updateValue}/>
                     <QuestionEraseValue value={value} disabled={disabled} updateValue={updateValue}/>
                     <QuestionRemoveValue
                       question={question}
@@ -70,6 +70,7 @@ const RadioWidget = ({ question, values, siblings, currentSet, disabled,
 }
 
 RadioWidget.propTypes = {
+  page: PropTypes.object.isRequired,
   question: PropTypes.object.isRequired,
   values: PropTypes.array.isRequired,
   siblings: PropTypes.array,

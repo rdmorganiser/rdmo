@@ -13,7 +13,7 @@ import QuestionSuccess from '../question/QuestionSuccess'
 
 import DateInput from './DateInput'
 
-const DateWidget = ({ question, values, siblings, currentSet, disabled, createValue, updateValue, deleteValue, copyValue }) => {
+const DateWidget = ({ page, question, values, siblings, currentSet, disabled, createValue, updateValue, deleteValue, copyValue }) => {
   return (
     <div className="interview-widgets">
       {
@@ -28,7 +28,7 @@ const DateWidget = ({ question, values, siblings, currentSet, disabled, createVa
                 buttons={
                   <div className="buttons">
                     <QuestionSuccess value={value}/>
-                    <QuestionReuseValue value={value} updateValue={updateValue}/>
+                    <QuestionReuseValue page={page} value={value} updateValue={updateValue}/>
                     <QuestionEraseValue value={value} disabled={disabled} updateValue={updateValue}/>
                     <QuestionRemoveValue
                       question={question}
@@ -66,6 +66,7 @@ const DateWidget = ({ question, values, siblings, currentSet, disabled, createVa
 }
 
 DateWidget.propTypes = {
+  page: PropTypes.object.isRequired,
   question: PropTypes.object.isRequired,
   values: PropTypes.array.isRequired,
   siblings: PropTypes.array,

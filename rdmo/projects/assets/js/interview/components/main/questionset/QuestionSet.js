@@ -13,7 +13,7 @@ import QuestionSetHelp from './QuestionSetHelp'
 import QuestionSetHelpTemplate from './QuestionSetHelpTemplate'
 import QuestionSetRemoveSet from './QuestionSetRemoveSet'
 
-const QuestionSet = ({ templates, questionset, sets, values, disabled, isManager,
+const QuestionSet = ({ templates, page, questionset, sets, values, disabled, isManager,
                        parentSet, createSet, updateSet, deleteSet, copySet,
                        createValue, updateValue, deleteValue, copyValue }) => {
 
@@ -48,6 +48,7 @@ const QuestionSet = ({ templates, questionset, sets, values, disabled, isManager
                           <QuestionSet
                             key={elementIndex}
                             templates={templates}
+                            page={page}
                             questionset={element}
                             sets={sets}
                             values={values.filter((value) => element.attributes.includes(value.attribute))}
@@ -69,6 +70,7 @@ const QuestionSet = ({ templates, questionset, sets, values, disabled, isManager
                           <Question
                             key={elementIndex}
                             templates={templates}
+                            page={page}
                             question={element}
                             values={values.filter((value) => (
                               value.attribute == element.attribute &&
@@ -106,6 +108,7 @@ const QuestionSet = ({ templates, questionset, sets, values, disabled, isManager
 
 QuestionSet.propTypes = {
   templates: PropTypes.object.isRequired,
+  page: PropTypes.object.isRequired,
   questionset: PropTypes.object.isRequired,
   sets: PropTypes.array.isRequired,
   values: PropTypes.array.isRequired,
