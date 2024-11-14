@@ -9,7 +9,7 @@ import Modal from 'rdmo/core/assets/js/components/Modal'
 
 import Search from '../Search'
 
-const QuestionReuseValue = ({ page, value, updateValue }) => {
+const QuestionReuseValue = ({ page, question, value, updateValue }) => {
   const initialFormValues = {
     value: ''
   }
@@ -20,12 +20,18 @@ const QuestionReuseValue = ({ page, value, updateValue }) => {
   ] = useLsState('rdmo.interview.reuse', initialFormValues, ['value'])
   const [formErrors, setFormErrors] = useState([])
 
-  const handleSubmit = () => {
+  const handleSubmit = (mode) => {
     if (isEmpty(formValues.value)) {
       setFormErrors({ value: true })
     } else {
       const { text, option, external_id } = formValues.value
-      updateValue(value, { text, option, external_id })
+
+      if (mode == 'append') {
+        updateValue(value, { text: `${value.text} ${text}`, option, external_id })
+      } else if (mode == 'replace') {
+        updateValue(value, { text, option, external_id })
+      }
+
       setShow(false)
     }
   }
@@ -44,14 +50,26 @@ const QuestionReuseValue = ({ page, value, updateValue }) => {
     }
   }, [formValues, formValues.value])
 
+  const modalButtons = <>
+    {
+      ['text', 'textarea'].includes(question.widget_type) && (
+        <button type="button" className="btn btn-primary" onClick={() => handleSubmit('append')}>
+          {gettext('Append')}
+        </button>
+      )
+    }
+    <button type="button" className="btn btn-primary" onClick={() => handleSubmit('replace')}>
+      {gettext('Replace')}
+    </button>
+  </>
+
   return <>
     <button type="button" className="btn btn-link btn-reuse-value" onClick={() => setShow(true)}>
       <i className="fa fa-arrow-circle-down fa-btn"></i>
     </button>
 
-    <Modal title={gettext('Reuse answer')} show={show} submitLabel={gettext('Reuse')}
-           submitProps={{className: 'btn btn-primary'}}
-           onClose={() => setShow(false)} onSubmit={handleSubmit}>
+    <Modal title={gettext('Reuse answer')} show={show} buttons={modalButtons}
+           onClose={() => setShow(false)} >
       <div className={classNames({'form-group': true, 'has-error': formErrors.value })}>
         <label className="control-label" htmlFor="interview-page-tabs-modal-form-import">
           {gettext('Answer')}
@@ -75,6 +93,7 @@ const QuestionReuseValue = ({ page, value, updateValue }) => {
 
 QuestionReuseValue.propTypes = {
   page: PropTypes.object.isRequired,
+  question: PropTypes.object.isRequired,
   value: PropTypes.object.isRequired,
   updateValue: PropTypes.func.isRequired
 }

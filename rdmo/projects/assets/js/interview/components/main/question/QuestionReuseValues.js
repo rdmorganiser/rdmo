@@ -80,7 +80,7 @@ const QuestionReuseValues = ({ page, question, values, createValues, updateValue
       <i className="fa fa-arrow-circle-down fa-btn"></i>
     </button>
 
-    <Modal title={gettext('Reuse answer')} show={show} submitLabel={gettext('Reuse')}
+    <Modal title={gettext('Reuse answer')} show={show} submitLabel={gettext('Replace')}
            submitProps={{className: 'btn btn-primary'}}
            onClose={() => setShow(false)} onSubmit={handleSubmit}>
       <div className={classNames({'form-group': true, 'has-error': formErrors.value })}>
