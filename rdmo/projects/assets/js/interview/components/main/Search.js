@@ -7,14 +7,14 @@ import { isEmpty, isNil, pick, truncate } from 'lodash'
 import ProjectApi from '../../api/ProjectApi'
 import ValueApi from '../../api/ValueApi'
 
-const Search = ({ attribute, setAttribute, values, setValues, collection = false }) => {
+const Search = ({ page, attribute, values, setValues, collection = false }) => {
   // create a key for the first AsyncSelect, to reset the loaded values when project or snapshot changes
   const key = (values.project ? values.project.id : '') + (values.snapshot ? '-all' : '')
 
   const handleLoadValues = useDebouncedCallback((search, callback) => {
     ValueApi.searchValues({
       attribute,
-      set_attribute: setAttribute,
+      set_attribute: page && page.is_collection && page.attribute,
       search,
       project: values.project ? values.project.id : '',
       snapshot: values.snapshot ? 'all' : '',
@@ -136,6 +136,7 @@ const Search = ({ attribute, setAttribute, values, setValues, collection = false
 }
 
 Search.propTypes = {
+  page: PropTypes.number.isRequired,
   attribute: PropTypes.number.isRequired,
   setAttribute: PropTypes.number,
   values: PropTypes.object.isRequired,

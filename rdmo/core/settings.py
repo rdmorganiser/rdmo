@@ -238,7 +238,8 @@ TEMPLATES_API = [
     'projects/project_interview_page_tabs_help.html',
     'projects/project_interview_progress_help.html',
     'projects/project_interview_question_help.html',
-    'projects/project_interview_questionset_help.html'
+    'projects/project_interview_questionset_help.html',
+    'projects/project_interview_sidebar.html',
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

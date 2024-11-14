@@ -190,8 +190,7 @@ metadata {
 .page h2:nth-child(2) {
     margin-top: 0;
 }
-.sidebar h2:first-child,
-.sidebar .import-buttons {
+.sidebar > *:first-child {
     margin-top: 70px;
 }
 

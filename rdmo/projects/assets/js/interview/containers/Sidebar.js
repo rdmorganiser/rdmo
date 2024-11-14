@@ -5,6 +5,8 @@ import { connect } from 'react-redux'
 
 import { isReady } from '../utils/interview'
 
+import Html from 'rdmo/core/assets/js/components/Html'
+
 import Buttons from '../components/sidebar/Buttons'
 import Navigation from '../components/sidebar/Navigation'
 import Overview from '../components/sidebar/Overview'
@@ -18,7 +20,7 @@ import * as interviewActions from '../actions/interviewActions'
 const Sidebar = ({ config, settings, templates, user, project, interview, configActions, interviewActions }) => {
   if (isReady(interview)) {
     return (
-      <div>
+      <>
         <Overview
           overview={project.overview}
           help={templates.project_interview_overview_help}/>
@@ -35,7 +37,8 @@ const Sidebar = ({ config, settings, templates, user, project, interview, config
           navigation={interview.navigation}
           help={templates.project_interview_navigation_help}
           fetchPage={interviewActions.fetchPage} />
-      </div>
+        <Html html={templates.project_interview_sidebar} />
+      </>
     )
   }
 
