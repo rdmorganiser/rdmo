@@ -2,18 +2,19 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import AsyncSelect from 'react-select/async'
 import { useDebouncedCallback } from 'use-debounce'
-import { isEmpty, isNil, pick } from 'lodash'
+import { isEmpty, isNil, pick, truncate } from 'lodash'
 
 import ProjectApi from '../../api/ProjectApi'
 import ValueApi from '../../api/ValueApi'
 
-const Search = ({ attribute, values, setValues, collection = false }) => {
+const Search = ({ attribute, setAttribute, values, setValues, collection = false }) => {
   // create a key for the first AsyncSelect, to reset the loaded values when project or snapshot changes
   const key = (values.project ? values.project.id : '') + (values.snapshot ? '-all' : '')
 
   const handleLoadValues = useDebouncedCallback((search, callback) => {
     ValueApi.searchValues({
       attribute,
+      set_attribute: setAttribute,
       search,
       project: values.project ? values.project.id : '',
       snapshot: values.snapshot ? 'all' : '',
@@ -71,13 +72,22 @@ const Search = ({ attribute, values, setValues, collection = false }) => {
         <div>
           {gettext('Project')} <strong>{value.project_label}</strong>
           {
-            value.snapshot && <>
+            value.snapshot_label && <>
               <span className="mr-5 ml-5">&rarr;</span>
               {gettext('Snapshot')} <strong>{value.snapshot_label}</strong>
             </>
           }
+          {
+            value.set_label && <>
+              <span className="mr-5 ml-5">&rarr;</span>
+              <strong>{value.set_label}</strong>
+            </>
+          }
           <span className="mr-5 ml-5">&rarr;</span>
-          {value.value_label}
+          {truncate(value.value_label, {
+            'length': 256,
+            'omission': ' [...]'
+          })}
         </div>
       )}
       loadOptions={handleLoadValues}
@@ -127,6 +137,7 @@ const Search = ({ attribute, values, setValues, collection = false }) => {
 
 Search.propTypes = {
   attribute: PropTypes.number.isRequired,
+  setAttribute: PropTypes.number,
   values: PropTypes.object.isRequired,
   setValues: PropTypes.func.isRequired,
   collection: PropTypes.bool

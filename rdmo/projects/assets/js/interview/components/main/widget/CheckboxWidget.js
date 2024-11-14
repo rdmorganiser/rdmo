@@ -12,7 +12,7 @@ import QuestionSuccess from '../question/QuestionSuccess'
 
 import CheckboxInput from './CheckboxInput'
 
-const CheckboxWidget = ({ question, sets, values, siblings, currentSet, disabled,
+const CheckboxWidget = ({ page, question, sets, values, siblings, currentSet, disabled,
                           createValue, updateValue, deleteValue, copyValue }) => {
 
   const handleCreateValue = (attrsList) => {
@@ -73,6 +73,7 @@ const CheckboxWidget = ({ question, sets, values, siblings, currentSet, disabled
                 deleteValue={deleteValue}
               />
               <QuestionReuseValues
+                page={page}
                 question={question}
                 values={values}
                 createValues={handleCreateValue}
@@ -96,6 +97,7 @@ const CheckboxWidget = ({ question, sets, values, siblings, currentSet, disabled
 }
 
 CheckboxWidget.propTypes = {
+  page: PropTypes.object.isRequired,
   question: PropTypes.object.isRequired,
   sets: PropTypes.array.isRequired,
   values: PropTypes.array.isRequired,

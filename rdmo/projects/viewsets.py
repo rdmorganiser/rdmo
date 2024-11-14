@@ -854,6 +854,17 @@ class ValueViewSet(ReadOnlyModelViewSet):
     def search(self, request):
         queryset = self.filter_queryset(self.get_queryset()).exclude_empty().select_related('project', 'snapshot')
 
+        # add a subquery to get the label for the set the value is part in
+        try:
+            set_attribute = int(request.GET.get('set_attribute'))
+            set_label_subquery = Subquery(
+                Value.objects.filter(attribute=set_attribute, set_prefix='', set_index=OuterRef('set_index'))
+                             .values('text')[:1]
+            )
+            queryset = queryset.annotate(set_label=set_label_subquery)
+        except ValueError:
+            pass
+
         if is_truthy(request.GET.get('collection')):
             # if collection is set (for checkboxes), we first select each distinct set and create a Q object with it
             # by doing so we can select an undetermined number of values which belong to an exact number of sets

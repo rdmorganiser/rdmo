@@ -13,7 +13,7 @@ import QuestionSetHelp from './QuestionSetHelp'
 import QuestionSetHelpTemplate from './QuestionSetHelpTemplate'
 import QuestionSetRemoveSet from './QuestionSetRemoveSet'
 
-const QuestionSet = ({ settings, templates, questionset, sets, values, disabled, isManager,
+const QuestionSet = ({ settings, templates, page, questionset, sets, values, disabled, isManager,
                        parentSet, createSet, updateSet, deleteSet, copySet,
                        createValue, updateValue, deleteValue, copyValue, fetchContact }) => {
 
@@ -49,6 +49,7 @@ const QuestionSet = ({ settings, templates, questionset, sets, values, disabled,
                             key={elementIndex}
                             settings={settings}
                             templates={templates}
+                            page={page}
                             questionset={element}
                             sets={sets}
                             values={values.filter((value) => element.attributes.includes(value.attribute))}
@@ -72,6 +73,7 @@ const QuestionSet = ({ settings, templates, questionset, sets, values, disabled,
                             key={elementIndex}
                             settings={settings}
                             templates={templates}
+                            page={page}
                             question={element}
                             sets={sets.filter((set) => (
                               set.set_prefix == setPrefix
@@ -114,6 +116,7 @@ const QuestionSet = ({ settings, templates, questionset, sets, values, disabled,
 QuestionSet.propTypes = {
   settings: PropTypes.object.isRequired,
   templates: PropTypes.object.isRequired,
+  page: PropTypes.object.isRequired,
   questionset: PropTypes.object.isRequired,
   sets: PropTypes.array.isRequired,
   values: PropTypes.array.isRequired,

@@ -14,7 +14,7 @@ import QuestionSuccess from '../question/QuestionSuccess'
 
 import SelectInput from './SelectInput'
 
-const SelectWidget = ({ question, sets, values, siblings, currentSet, disabled, creatable,
+const SelectWidget = ({ page, question, sets, values, siblings, currentSet, disabled, creatable,
                         createValue, updateValue, deleteValue, copyValue }) => {
   return (
     <div className="interview-widgets">
@@ -32,7 +32,7 @@ const SelectWidget = ({ question, sets, values, siblings, currentSet, disabled, 
                 buttons={
                   <div className="buttons">
                     <QuestionSuccess value={value}/>
-                    <QuestionReuseValue value={value} updateValue={updateValue}/>
+                    <QuestionReuseValue page={page} value={value} updateValue={updateValue}/>
                     <QuestionReuseValue value={value} updateValue={updateValue}/>
                     <QuestionRemoveValue
                       question={question}
@@ -71,6 +71,7 @@ const SelectWidget = ({ question, sets, values, siblings, currentSet, disabled, 
 }
 
 SelectWidget.propTypes = {
+  page: PropTypes.object.isRequired,
   question: PropTypes.object.isRequired,
   sets: PropTypes.array.isRequired,
   values: PropTypes.array.isRequired,

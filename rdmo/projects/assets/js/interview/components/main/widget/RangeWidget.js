@@ -15,7 +15,7 @@ import QuestionSuccess from '../question/QuestionSuccess'
 
 import RangeInput from './RangeInput'
 
-const RangeWidget = ({ question, sets, values, siblings, currentSet, disabled,
+const RangeWidget = ({ page, question, sets, values, siblings, currentSet, disabled,
                        createValue, updateValue, deleteValue, copyValue }) => {
 
   const handleCreateValue = (value) => {
@@ -42,7 +42,7 @@ const RangeWidget = ({ question, sets, values, siblings, currentSet, disabled,
                 buttons={
                   <div className="buttons">
                     <QuestionSuccess value={value}/>
-                    <QuestionReuseValue value={value} updateValue={updateValue}/>
+                    <QuestionReuseValue page={page} value={value} updateValue={updateValue}/>
                     <QuestionEraseValue value={value} disabled={disabled} updateValue={handleEraseValue}/>
                     <QuestionRemoveValue
                       question={question}
@@ -82,6 +82,7 @@ const RangeWidget = ({ question, sets, values, siblings, currentSet, disabled,
 }
 
 RangeWidget.propTypes = {
+  page: PropTypes.object.isRequired,
   question: PropTypes.object.isRequired,
   sets: PropTypes.array.isRequired,
   values: PropTypes.array.isRequired,

@@ -53,6 +53,7 @@ const Page = ({ config, settings, templates, overview, page, sets, values, fetch
                     key={elementIndex}
                     settings={settings}
                     templates={templates}
+                    page={page}
                     questionset={element}
                     sets={sets}
                     values={values.filter((value) => element.attributes.includes(value.attribute))}
@@ -76,6 +77,7 @@ const Page = ({ config, settings, templates, overview, page, sets, values, fetch
                     key={elementIndex}
                     settings={settings}
                     templates={templates}
+                    page={page}
                     question={element}
                     sets={sets.filter((set) => (
                       set.set_prefix == currentSetPrefix

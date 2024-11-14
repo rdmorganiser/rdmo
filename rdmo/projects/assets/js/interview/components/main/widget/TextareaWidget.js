@@ -12,7 +12,7 @@ import QuestionSuccess from '../question/QuestionSuccess'
 
 import TextareaInput from './TextareaInput'
 
-const TextareaWidget = ({ question, sets, values, siblings, currentSet, disabled,
+const TextareaWidget = ({ page, question, sets, values, siblings, currentSet, disabled,
                           createValue, updateValue, deleteValue, copyValue }) => {
   return (
     <div className="interview-widgets">
@@ -28,7 +28,7 @@ const TextareaWidget = ({ question, sets, values, siblings, currentSet, disabled
                 buttons={
                   <div className="buttons">
                     <QuestionSuccess value={value}/>
-                    <QuestionReuseValue value={value} updateValue={updateValue}/>
+                    <QuestionReuseValue page={page} value={value} updateValue={updateValue}/>
                     <QuestionRemoveValue
                       question={question}
                       values={values}
@@ -66,6 +66,7 @@ const TextareaWidget = ({ question, sets, values, siblings, currentSet, disabled
 }
 
 TextareaWidget.propTypes = {
+  page: PropTypes.object.isRequired,
   question: PropTypes.object.isRequired,
   sets: PropTypes.array.isRequired,
   values: PropTypes.array.isRequired,
