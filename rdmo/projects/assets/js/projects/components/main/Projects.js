@@ -5,7 +5,7 @@ import { get, isEmpty } from 'lodash'
 import { Link, Modal, SearchField } from 'rdmo/core/assets/js/components'
 import { useFormattedDateTime, useModal, useScrollToTop }  from 'rdmo/core/assets/js/hooks'
 import { language } from 'rdmo/core/assets/js/utils'
-import baseUrl from 'rdmo/core/assets/js/utils/baseUrl'
+import baseUrl from 'rdmo/core/assets/js/utils/meta'
 
 import { PendingInvitations, ProjectFilters, ProjectImport, Table } from '../helper'
 import { getTitlePath, getUserRoles, userIsManager, HEADER_FORMATTERS, SORTABLE_COLUMNS } from '../../utils'
