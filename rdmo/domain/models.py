@@ -58,7 +58,7 @@ class Attribute(MPTTModel):
         verbose_name_plural = _('Attributes')
 
     def __str__(self):
-        return self.path
+        return self.uri
 
     def save(self, *args, **kwargs):
         self.path = self.build_path(self.key, self.parent)
