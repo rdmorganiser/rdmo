@@ -97,9 +97,12 @@ a {
 
 .btn-link {
     color: $link-color;
+    padding: 0;
+    text-decoration: none;
 
     &:hover {
         color: $link-color-hover;
+        text-decoration: none;
     }
 }
 
