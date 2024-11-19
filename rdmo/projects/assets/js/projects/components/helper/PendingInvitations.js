@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import baseUrl from 'rdmo/core/assets/js/utils/meta'
+import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import { ROLE_LABELS } from '../../utils'
 
