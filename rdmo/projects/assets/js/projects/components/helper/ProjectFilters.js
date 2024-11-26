@@ -35,7 +35,7 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
     projectsActions.fetchProjects()
   }
 
-  const catalogOptions = catalogs?.filter(catalog => catalog.available)
+  const catalogOptions = catalogs?.filter(catalog => isManager || catalog.available)
                                   .map(catalog => ({ value: catalog.id.toString(), label: catalog.title }))
   const selectedCatalog = get(config, 'params.catalog', '')
   const updateCatalogFilter = (value) => {
