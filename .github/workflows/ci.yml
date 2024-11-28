@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-      - tests
-      - '*-tests'
   pull_request:
     # run CI only if files in these whitelisted paths are changed
     paths:
@@ -143,7 +141,7 @@ jobs:
       if: matrix.python-version == '3.12' && matrix.db-backend == 'postgres'
     - name: Run Tests
       run: |
-        pytest --cov --reuse-db
+        pytest -p randomly -p no:cacheprovider --cov --reuse-db --numprocesses=auto --dist=loadscope rdmo/projects/tests/test_view_project_copy.py
       env:
         GITHUB_DB_BACKEND: ${{ matrix.db-backend }}
     - name: Upload coverage data to coveralls.io
