@@ -82,12 +82,18 @@ def test_copy_project(db, files):
         'unit',
         'external_id'
     )
+    ordering = (
+        'attribute',
+        'set_prefix',
+        'set_index',
+        'collection_index'
+    )
     for value_copy, value in zip(
-        project_copy.values.filter(snapshot=None),
-        project.values.filter(snapshot=None)
+        project_copy.values.filter(snapshot=None).order_by(*ordering),
+        project.values.filter(snapshot=None).order_by(*ordering)
     ):
         for field in value_fields:
-            assert getattr(value_copy, field) == getattr(value, field)
+            assert getattr(value_copy, field) == getattr(value, field), field
 
         if value_copy.file:
             assert value_copy.file.path == value_copy.file.path.replace(
@@ -100,8 +106,8 @@ def test_copy_project(db, files):
 
     for snapshot_copy, snapshot in zip(project_copy.snapshots.all(), project.snapshots.all()):
         for value_copy, value in zip(
-            project_copy.values.filter(snapshot=snapshot_copy),
-            project.values.filter(snapshot=snapshot)
+            project_copy.values.filter(snapshot=snapshot_copy).order_by(*ordering),
+            project.values.filter(snapshot=snapshot).order_by(*ordering)
         ):
             for field in value_fields:
                 assert getattr(value_copy, field) == getattr(value, field)
