@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+      - tests
+      - '*-tests'
   pull_request:
     # run CI only if files in these whitelisted paths are changed
     paths:
