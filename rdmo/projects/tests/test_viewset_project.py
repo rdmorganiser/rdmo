@@ -330,7 +330,7 @@ def test_copy_catalog_not_available(db, client):
     assert response.status_code == 400
 
 @pytest.mark.parametrize('project_id', projects)
-def test_copy_parent(db, client, project_id):
+def test_copy_parent(db, files, client, project_id):
     client.login(username='owner', password='owner')
     project = Project.objects.get(pk=project_id)
 
