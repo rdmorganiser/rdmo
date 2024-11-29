@@ -3,7 +3,6 @@ from pathlib import Path
 
 from django.conf import settings
 from django.contrib.sites.models import Site
-from django.db import connection
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.timezone import now
@@ -54,9 +53,6 @@ def copy_project(project, site, owners):
         for snapshot in project.snapshots.all()
     }
 
-    # create a temporary buffer for all values with files
-    file_values = []
-
     # unset the id, set current site and update timestamps
     project.id = None
     project.site = site
@@ -81,9 +77,12 @@ def copy_project(project, site, owners):
         value.created = timestamp
 
         if value.file:
-            file_values.append((value, value.file_name, value.file))
-
-        project_values.append(value)
+            # file values cannot be bulk created since we need their id and only postgres provides that (reliably)
+            # https://docs.djangoproject.com/en/4.2/ref/models/querysets/#bulk-create
+            value.save()
+            value.copy_file(value.file_name, value.file)
+        else:
+            project_values.append(value)
 
     # insert the new values using bulk_create
     Value.objects.bulk_create(project_values)
@@ -103,31 +102,13 @@ def copy_project(project, site, owners):
             value.created = timestamp
 
             if value.file:
-                file_values.append((value, value.file_name, value.file))
-
-            project_snapshot_values.append(value)
+                value.save()
+                value.copy_file(value.file_name, value.file)
+            else:
+                project_snapshot_values.append(value)
 
         # insert the new snapshot values using bulk_create
         Value.objects.bulk_create(project_snapshot_values)
-
-    for value, file_name, file_content in file_values:
-        if connection.vendor == 'postgres':
-            # bulk_create will only set the primary key on cool databases
-            # https://docs.djangoproject.com/en/4.2/ref/models/querysets/#bulk-create
-            value.copy_file(file_name, file_content)
-        else:
-            # refetch the value from the database, we use filter and first here to be more
-            # stable against weird cases, where collection_index is not unique
-            db_value = Value.objects.filter(
-                project=value.project,
-                snapshot=value.snapshot,
-                attribute=value.attribute,
-                set_prefix=value.set_prefix,
-                set_index=value.set_index,
-                collection_index=value.collection_index
-            ).first()
-            if db_value and db_value.file_name == file_name:
-                db_value.copy_file(file_name, file_content)
 
     for owner in owners:
         membership = Membership(project=project, user=owner, role='owner')

@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.http import QueryDict
 
+from rdmo.core.tests.utils import compute_checksum
+
 from ..filters import ProjectFilter
 from ..models import Project
 from ..utils import copy_project, set_context_querystring_with_filter_and_page
@@ -96,11 +98,14 @@ def test_copy_project(db, files):
             assert getattr(value_copy, field) == getattr(value, field), field
 
         if value_copy.file:
+            assert value_copy.file.path != value.file.path
             assert value_copy.file.path == value_copy.file.path.replace(
                 f'/projects/{project.id}/values/{value.id}/',
                 f'/projects/{project_copy.id}/values/{value_copy.id}/'
             )
-            assert value_copy.file.size == value_copy.file.size
+            assert value_copy.file.size == value.file.size
+            assert compute_checksum(value_copy.file.open('rb').read()) == \
+                   compute_checksum(value.file.open('rb').read())
         else:
             assert not value.file
 
@@ -113,10 +118,13 @@ def test_copy_project(db, files):
                 assert getattr(value_copy, field) == getattr(value, field)
 
             if value_copy.file:
+                assert value_copy.file.path != value.file.path
                 assert value_copy.file.path == value_copy.file.path.replace(
                     f'/projects/{project.id}/snapshot/{snapshot.id}/values/{value.id}/',
                     f'/projects/{project_copy.id}/snapshot/{snapshot.id}/values/{value_copy.id}/'
                 )
-                assert value_copy.file.open('rb').read() == value_copy.file.open('rb').read()
+                assert value_copy.file.size == value.file.size
+                assert compute_checksum(value_copy.file.open('rb').read()) == \
+                       compute_checksum(value.file.open('rb').read())
             else:
                 assert not value.file
