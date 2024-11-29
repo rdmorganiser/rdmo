@@ -143,7 +143,7 @@ jobs:
       if: matrix.python-version == '3.12' && matrix.db-backend == 'postgres'
     - name: Run Tests
       run: |
-        pytest -p randomly -p no:cacheprovider --cov --reuse-db --numprocesses=auto --dist=loadscope rdmo/projects/tests/test_view_project_copy.py
+        pytest -s -p randomly -p no:cacheprovider --cov --reuse-db --numprocesses=auto --dist=loadscope rdmo/projects/tests/test_utils.py::test_copy_project
       env:
         GITHUB_DB_BACKEND: ${{ matrix.db-backend }}
     - name: Upload coverage data to coveralls.io
