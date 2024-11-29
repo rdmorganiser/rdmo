@@ -49,27 +49,23 @@ def compute_sets(values):
 
 def compute_next_relevant_page(current_page, direction, catalog, resolved_conditions):
     # compute the next relevant page based on resolved conditions.
-    max_iterations = len(catalog.pages)
-    iterations = 0
+    # If no current_page, return None
+    if not current_page:
+        return None
 
-    while iterations < max_iterations:
-        iterations += 1
+    # Check if the current page meets the conditions
+    if compute_show_page(current_page, resolved_conditions):
+        return current_page
 
-        # Determine the next page based on the specified direction
-        next_page = (catalog.get_prev_page(current_page) if direction == 'prev'
-                     else catalog.get_next_page(current_page))
+    # Determine the next page based on the specified direction
+    next_page = (
+        catalog.get_prev_page(current_page) if direction == 'prev'
+        else catalog.get_next_page(current_page)
+    )
 
-        # If no further pages are available, return None
-        if not next_page:
-            return None
+    # Recursive step: Check the next page
+    return compute_next_relevant_page(next_page, direction, catalog, resolved_conditions)
 
-        # Use compute_show_page with precomputed resolved_conditions to check if the next page meets conditions
-        if compute_show_page(next_page, resolved_conditions):
-            return next_page  # Found the next relevant page
-
-        # Move to the next page in sequence if conditions are not met
-        current_page = next_page
-    return None
 
 def compute_show_page(page, conditions):
     """Determine if a page should be shown based on resolved conditions."""
