@@ -67,7 +67,7 @@ dependencies = [
 
 [project.optional-dependencies]
 allauth = [
-  "django-allauth[socialaccount,openid]>=64.1.0,<65.2.0",
+  "django-allauth[socialaccount,openid]>=64.1.0,<65.4.0",
 ]
 ci = [
   "rdmo[dev]",
