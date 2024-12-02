@@ -61,7 +61,7 @@ jobs:
       with:
         node-version: 18
         cache: npm
-    - run: npm ci && npm run build:prod
+    - run: npm ci && npm run build:dist
     # build the wheel
     - uses: actions/setup-python@v5
       with:

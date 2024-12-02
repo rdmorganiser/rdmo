@@ -1,6 +1,7 @@
 {
   "name": "rdmo",
   "scripts": {
+    "build:dist": "webpack --config webpack.config.js --mode production --env ignore-perf --fail-on-warnings",
     "build:prod": "webpack --config webpack.config.js --mode production",
     "build": "webpack --config webpack.config.js --mode development",
     "watch": "webpack --config webpack.config.js --mode development --watch"

@@ -108,6 +108,7 @@ const developmentConfig = {
 
 // special config for production
 const productionConfig = {
+  bail: true, // Stop the build on errors
   plugins: [
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production')
@@ -116,16 +117,39 @@ const productionConfig = {
   optimization: {
     minimize: true,
     minimizer: [new TerserPlugin()]
-  }
+  },
+}
+
+const ignorePerformanceWarnings = {
+  performance: {
+    hints: false // Suppress performance warnings in prod
+  },
+  ignoreWarnings: [ // ignore performance issues
+    { message: /performance recommendations/ },
+    { message: /asset size limit/ },
+    { message: /entrypoint size limit/ }
+  ]
 }
 
 // combine config depending on the provided --mode command line option
 module.exports = (env, argv) => {
   return configList.map(config => {
-    if (argv.mode === 'development') {
-      return merge(config, baseConfig, developmentConfig)
-    } else {
-      return merge(config, baseConfig, productionConfig)
+    switch (argv.mode) {
+
+      case 'development':
+        // used for build and watch
+        return merge(config, baseConfig, developmentConfig)
+
+      case 'production':
+        if (env && env['ignore-perf']) {
+          // build:dist will ignore performance warnings but fails on other warnings
+          return merge(config, baseConfig, productionConfig, ignorePerformanceWarnings)
+        }
+        // build:prod
+        return merge(config, baseConfig, productionConfig)
+
+      default:
+        throw new Error('Invalid mode')
     }
   })
 }
