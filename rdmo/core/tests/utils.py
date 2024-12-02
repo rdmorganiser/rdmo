@@ -1,3 +1,5 @@
+import hashlib
+
 from rdmo.core.models import Model
 from rdmo.core.tests.constants import multisite_status_map, status_map_object_permissions
 
@@ -30,3 +32,7 @@ def get_obj_perms_status_code(instance, username, method):
     except KeyError:
         # not all users are defined in the method_instance_perms_map
         return multisite_status_map[method][username]
+
+
+def compute_checksum(string):
+    return hashlib.sha1(string).hexdigest()

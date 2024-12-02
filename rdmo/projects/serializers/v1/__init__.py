@@ -9,7 +9,7 @@ from rdmo.questions.models import Catalog
 from rdmo.services.validators import ProviderValidator
 
 from ...models import Integration, IntegrationOption, Invite, Issue, IssueResource, Membership, Project, Snapshot, Value
-from ...validators import ValueConflictValidator, ValueQuotaValidator, ValueTypeValidator
+from ...validators import ProjectParentValidator, ValueConflictValidator, ValueQuotaValidator, ValueTypeValidator
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -78,6 +78,17 @@ class ProjectSerializer(serializers.ModelSerializer):
         read_only_fields = (
             'snapshots',
         )
+        validators = [
+            ProjectParentValidator()
+        ]
+
+
+class ProjectCopySerializer(ProjectSerializer):
+
+    class Meta:
+        model = Project
+        fields = ProjectSerializer.Meta.fields
+        read_only_fields = ProjectSerializer.Meta.read_only_fields
 
 
 class ProjectMembershipSerializer(serializers.ModelSerializer):

@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils.timezone import now
 
 from rdmo.core.mail import send_mail
 from rdmo.core.plugins import get_plugins
@@ -36,6 +37,84 @@ def check_conditions(conditions, values, set_prefix=None, set_index=None):
         return False
     else:
         return True
+
+
+def copy_project(project, site, owners):
+    from .models import Membership, Value  # to prevent circular inclusion
+
+    timestamp = now()
+
+    tasks = project.tasks.all()
+    views = project.views.all()
+
+    values = project.values.filter(snapshot=None)
+    snapshots = {
+        snapshot: project.values.filter(snapshot=snapshot)
+        for snapshot in project.snapshots.all()
+    }
+
+    # unset the id, set current site and update timestamps
+    project.id = None
+    project.site = site
+    project.created = timestamp
+
+    # save the new project
+    project.save()
+
+    # save project tasks
+    for task in tasks:
+        project.tasks.add(task)
+
+    # save project views
+    for view in views:
+        project.views.add(view)
+
+    # save current project values
+    project_values = []
+    for value in values:
+        value.id = None
+        value.project = project
+        value.created = timestamp
+
+        if value.file:
+            # file values cannot be bulk created since we need their id and only postgres provides that (reliably)
+            # https://docs.djangoproject.com/en/4.2/ref/models/querysets/#bulk-create
+            value.save()
+            value.copy_file(value.file_name, value.file)
+        else:
+            project_values.append(value)
+
+    # insert the new values using bulk_create
+    Value.objects.bulk_create(project_values)
+
+    # save project snapshots
+    for snapshot, snapshot_values in snapshots.items():
+        snapshot.id = None
+        snapshot.project = project
+        snapshot.created = timestamp
+        snapshot.save(copy_values=False)
+
+        project_snapshot_values = []
+        for value in snapshot_values:
+            value.id = None
+            value.project = project
+            value.snapshot = snapshot
+            value.created = timestamp
+
+            if value.file:
+                value.save()
+                value.copy_file(value.file_name, value.file)
+            else:
+                project_snapshot_values.append(value)
+
+        # insert the new snapshot values using bulk_create
+        Value.objects.bulk_create(project_snapshot_values)
+
+    for owner in owners:
+        membership = Membership(project=project, user=owner, role='owner')
+        membership.save()
+
+    return project
 
 
 def save_import_values(project, values, checked):
