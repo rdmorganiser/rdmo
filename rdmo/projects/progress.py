@@ -49,6 +49,13 @@ def compute_sets(values):
 
 def compute_next_relevant_page(current_page, direction, catalog, resolved_conditions):
     # compute the next relevant page based on resolved conditions.
+
+    # Determine the next page based on the specified direction
+    next_page = (
+        catalog.get_prev_page(current_page) if direction == 'prev'
+        else catalog.get_next_page(current_page)
+    )
+
     # If no current_page, return None
     if not current_page:
         return None
@@ -56,12 +63,6 @@ def compute_next_relevant_page(current_page, direction, catalog, resolved_condit
     # Check if the current page meets the conditions
     if compute_show_page(current_page, resolved_conditions):
         return current_page
-
-    # Determine the next page based on the specified direction
-    next_page = (
-        catalog.get_prev_page(current_page) if direction == 'prev'
-        else catalog.get_next_page(current_page)
-    )
 
     # Recursive step: Check the next page
     return compute_next_relevant_page(next_page, direction, catalog, resolved_conditions)

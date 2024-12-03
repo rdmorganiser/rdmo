@@ -112,12 +112,14 @@ def test_detail_page_resolve_next_relevant_page(db, client, direction):
     response = client.get(f'{url}{add_url}')
     assert response.status_code == 200
     assert response.json().get(f'{direction}_page') == next_page_id
+
     # get the following page, depending on direction
     url_next = reverse(urlnames['detail'], args=[project_id, next_page_id])
     response_next = client.get(f'{url_next}{add_url}')
     assert response_next.status_code == 303
+
     # this should show the redirect to the next relevant page
-    assert response_next.url.endswith(f'{end_page_id}/{add_url}')
+    assert response_next.url.endswith(f'{end_page_id}/')
 
     # a get on the redirected url as a double check
     response_next_relevant = client.get(response_next.url)

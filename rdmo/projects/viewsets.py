@@ -21,7 +21,7 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from rdmo.conditions.models import Condition
 from rdmo.core.permissions import HasModelPermission
-from rdmo.core.utils import human2bytes, return_file_response
+from rdmo.core.utils import human2bytes, is_truthy, return_file_response
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet
 from rdmo.tasks.models import Task
@@ -540,15 +540,13 @@ class ProjectPageViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericV
             return Response(serializer.data)
         else:
             # determine the direction of navigation (previous or next)
-            direction = 'prev' if request.GET.get('back') == 'true' else 'next'
+            direction = 'prev' if is_truthy(request.GET.get('back')) else 'next'
 
             # find the next relevant page with from pages and resolved conditions
-            next_page = compute_next_relevant_page(page, direction, catalog, resolved_conditions)
+            next_relevant_page = compute_next_relevant_page(page, direction, catalog, resolved_conditions)
 
-            if next_page is not None:
-                url = reverse('v1-projects:project-page-detail', args=[self.project.id, next_page.id])
-                if direction == 'prev':
-                    url += '?back=true'
+            if next_relevant_page is not None:
+                url = reverse('v1-projects:project-page-detail', args=[self.project.id, next_relevant_page.id])
                 return HttpResponseRedirect(url, status=303)
 
             # end of catalog, if no next relevant page is found
