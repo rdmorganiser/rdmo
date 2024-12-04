@@ -48,28 +48,27 @@ def compute_sets(values):
 
 
 def compute_next_relevant_page(current_page, direction, catalog, resolved_conditions):
-    # compute the next relevant page based on resolved conditions.
-
-    # Determine the next page based on the specified direction
+    # recursively compute the next relevant page based on resolved conditions.
+    # first, get the next page from the catalog based on the specified direction
     next_page = (
         catalog.get_prev_page(current_page) if direction == 'prev'
         else catalog.get_next_page(current_page)
     )
 
-    # If no current_page, return None
-    if not current_page:
+    # if there is no next page, return None
+    if not next_page:
         return None
 
-    # Check if the current page meets the conditions
-    if compute_show_page(current_page, resolved_conditions):
-        return current_page
+    # check if the next page meets the conditions
+    if compute_show_page(next_page, resolved_conditions):
+        return next_page
 
-    # Recursive step: Check the next page
+    # recursive step: check the next page
     return compute_next_relevant_page(next_page, direction, catalog, resolved_conditions)
 
 
 def compute_show_page(page, conditions):
-    """Determine if a page should be shown based on resolved conditions."""
+    # determine if a page should be shown based on resolved conditions
     # show only pages with resolved conditions, but show all pages without conditions
     pages_conditions = {page.id for page in page.conditions.all()}
 
@@ -114,6 +113,7 @@ def compute_navigation(section, project, snapshot=None):
 
         for page in catalog_section.elements:
 
+            # determine if a page should be shown or not
             show = compute_show_page(page, conditions)
 
             # count the total number of questions, taking sets and conditions into account
