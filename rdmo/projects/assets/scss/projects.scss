@@ -375,3 +375,8 @@ a.disabled {
 .dropzone.disabled {
   opacity: 0.6;
 }
+
+/* Selected style for muted select options */
+.react-select__menu .react-select__option--is-selected .text-muted {
+  color: white; /* White when selected */
+}
