@@ -47,6 +47,44 @@ def compute_sets(values):
     return sets
 
 
+def compute_next_relevant_page(current_page, direction, catalog, resolved_conditions):
+    # recursively compute the next relevant page based on resolved conditions.
+    # first, get the next page from the catalog based on the specified direction
+    next_page = (
+        catalog.get_prev_page(current_page) if direction == 'prev'
+        else catalog.get_next_page(current_page)
+    )
+
+    # if there is no next page, return None
+    if not next_page:
+        return None
+
+    # check if the next page meets the conditions
+    if compute_show_page(next_page, resolved_conditions):
+        return next_page
+
+    # recursive step: check the next page
+    return compute_next_relevant_page(next_page, direction, catalog, resolved_conditions)
+
+
+def compute_show_page(page, conditions):
+    # determine if a page should be shown based on resolved conditions
+    # show only pages with resolved conditions, but show all pages without conditions
+    pages_conditions = {page.id for page in page.conditions.all()}
+
+    if pages_conditions:
+        # check if any valuesets for set_prefix = '' resolved
+        # for non collection pages restrict further to set_index = 0
+
+        return any(
+            (set_prefix == '') and (page.is_collection or set_index == 0)
+            for page_condition in pages_conditions
+            for set_prefix, set_index in conditions[page_condition]
+        )
+    else:
+        return True
+
+
 def compute_navigation(section, project, snapshot=None):
     # get all values for this project and snapshot
     values = project.values.filter(snapshot=snapshot).select_related('attribute', 'option')
@@ -74,19 +112,9 @@ def compute_navigation(section, project, snapshot=None):
             navigation_section['pages'] = []
 
         for page in catalog_section.elements:
-            pages_conditions = {page.id for page in page.conditions.all()}
 
-            # show only pages with resolved conditions, but show all pages without conditions
-            if pages_conditions:
-                # check if any valuesets for set_prefix = '' resolved
-                # for non collection pages restrict further to set_index = 0
-                show = any(
-                    (set_prefix == '') and (page.is_collection or set_index == 0)
-                    for page_condition in pages_conditions
-                    for set_prefix, set_index in conditions[page_condition]
-                )
-            else:
-                show = True
+            # determine if a page should be shown or not
+            show = compute_show_page(page, conditions)
 
             # count the total number of questions, taking sets and conditions into account
             counts = count_questions(page, sets, conditions)

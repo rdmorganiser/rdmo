@@ -21,7 +21,7 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from rdmo.conditions.models import Condition
 from rdmo.core.permissions import HasModelPermission
-from rdmo.core.utils import human2bytes, return_file_response
+from rdmo.core.utils import human2bytes, is_truthy, return_file_response
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet
 from rdmo.tasks.models import Task
@@ -42,7 +42,14 @@ from .permissions import (
     HasProjectProgressObjectPermission,
     HasProjectsPermission,
 )
-from .progress import compute_navigation, compute_progress
+from .progress import (
+    compute_navigation,
+    compute_next_relevant_page,
+    compute_progress,
+    compute_sets,
+    compute_show_page,
+    resolve_conditions,
+)
 from .serializers.v1 import (
     IntegrationSerializer,
     InviteSerializer,
@@ -541,28 +548,30 @@ class ProjectPageViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericV
 
     def retrieve(self, request, *args, **kwargs):
         page = self.get_object()
-        conditions = page.conditions.select_related('source', 'target_option')
-
+        catalog = self.project.catalog
         values = self.project.values.filter(snapshot=None).select_related('attribute', 'option')
 
-        if check_conditions(conditions, values):
+        sets = compute_sets(values)
+        resolved_conditions = resolve_conditions(catalog, values, sets)
+
+        # check if the current page meets conditions
+        if compute_show_page(page, resolved_conditions):
             serializer = self.get_serializer(page)
             return Response(serializer.data)
         else:
-            if request.GET.get('back') == 'true':
-                prev_page = self.project.catalog.get_prev_page(page)
-                if prev_page is not None:
-                    url = reverse('v1-projects:project-page-detail',
-                                  args=[self.project.id, prev_page.id]) + '?back=true'
-                    return HttpResponseRedirect(url, status=303)
-            else:
-                next_page = self.project.catalog.get_next_page(page)
-                if next_page is not None:
-                    url = reverse('v1-projects:project-page-detail', args=[self.project.id, next_page.id])
-                    return HttpResponseRedirect(url, status=303)
+            # determine the direction of navigation (previous or next)
+            direction = 'prev' if is_truthy(request.GET.get('back')) else 'next'
 
-            # indicate end of catalog
+            # find the next relevant page with from pages and resolved conditions
+            next_relevant_page = compute_next_relevant_page(page, direction, catalog, resolved_conditions)
+
+            if next_relevant_page is not None:
+                url = reverse('v1-projects:project-page-detail', args=[self.project.id, next_relevant_page.id])
+                return HttpResponseRedirect(url, status=303)
+
+            # end of catalog, if no next relevant page is found
             return Response(status=204)
+
 
     @action(detail=False, url_path='continue', permission_classes=(HasModelPermission | HasProjectPagePermission, ))
     def get_continue(self, request, pk=None, parent_lookup_project=None):

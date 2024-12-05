@@ -88,3 +88,39 @@ def test_detail_page_with_nested_questionsets(db, client):
     assert questionsets_ids == nested_questionsets_id
     element_ids = [i['id'] for qs in questionsets for i in qs['elements']]
     assert element_ids == nested_element_ids
+
+
+@pytest.mark.parametrize('direction', ['next', 'prev'])
+def test_detail_page_resolve_next_relevant_page(db, client, direction):
+    project_id = 1
+    username = 'owner'
+    start_page_id = 64
+    end_page_id = 69
+
+    client.login(username=username, password=username)
+
+    if direction == 'next':
+        next_page_id = start_page_id + 1
+        add_url = ''
+    else:  # direction == 'prev':
+        start_page_id, end_page_id = end_page_id, start_page_id
+        next_page_id = start_page_id - 1
+        add_url = '?back=true'
+
+    # get the starting page
+    url = reverse(urlnames['detail'], args=[project_id, start_page_id])
+    response = client.get(f'{url}{add_url}')
+    assert response.status_code == 200
+    assert response.json().get(f'{direction}_page') == next_page_id
+
+    # get the following page, depending on direction
+    url_next = reverse(urlnames['detail'], args=[project_id, next_page_id])
+    response_next = client.get(f'{url_next}{add_url}')
+    assert response_next.status_code == 303
+
+    # this should show the redirect to the next relevant page
+    assert response_next.url.endswith(f'{end_page_id}/')
+
+    # a get on the redirected url as a double check
+    response_next_relevant = client.get(response_next.url)
+    assert response_next_relevant.status_code == 200
