@@ -31,6 +31,7 @@ from .filters import (
     ProjectDateFilterBackend,
     ProjectOrderingFilter,
     ProjectSearchFilterBackend,
+    ProjectUserFilterBackend,
     SnapshotFilterBackend,
     ValueFilterBackend,
 )
@@ -85,14 +86,14 @@ class ProjectViewSet(ModelViewSet):
 
     filter_backends = (
         DjangoFilterBackend,
+        ProjectUserFilterBackend,
         ProjectDateFilterBackend,
         ProjectOrderingFilter,
         ProjectSearchFilterBackend,
     )
     filterset_fields = (
         'title',
-        'user',
-        'user__username',
+        # user is part of ProjectUserFilterBackend
         'catalog',
         'catalog__uri'
     )

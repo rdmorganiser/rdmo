@@ -92,6 +92,21 @@ def test_list(db, client, username, password):
         assert response.status_code == 401
 
 
+def test_list_user(db, client):
+    client.login(username='admin', password='admin')
+
+    url = reverse(urlnames['list']) + '?user=1'
+    response = client.get(url)
+    response_data = response.json()
+
+    assert response.status_code == 200
+    assert isinstance(response_data, dict)
+
+    values_list = Project.objects.filter(id__in=projects_internal).values_list('id', flat=True)
+    assert response_data['count'] == len(values_list)
+    assert [item['id'] for item in response_data['results']] == list(values_list[:page_size])
+
+
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 def test_detail(db, client, username, password, project_id):

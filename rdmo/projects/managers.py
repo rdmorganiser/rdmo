@@ -23,12 +23,15 @@ class ProjectQuerySet(TreeQuerySet):
             elif is_site_manager(user):
                 return self.filter_current_site()
             else:
-                queryset = self.filter(Q(user=user) | models.Q(visibility=VISIBILITY_INTERNAL))
+                queryset = self.filter_visibility(user)
                 for instance in queryset:
                     queryset |= instance.get_descendants()
                 return queryset.distinct()
         else:
             return self.none()
+
+    def filter_visibility(self, user):
+        return self.filter(Q(user=user) | models.Q(visibility=VISIBILITY_INTERNAL))
 
 
 class MembershipQuerySet(models.QuerySet):
@@ -158,6 +161,9 @@ class ProjectManager(CurrentSiteManagerMixin, TreeManager):
 
     def filter_user(self, user):
         return self.get_queryset().filter_user(user)
+
+    def filter_visibility(self, user):
+        return self.get_queryset().filter_visibility(user)
 
 
 class MembershipManager(CurrentSiteManagerMixin, models.Manager):

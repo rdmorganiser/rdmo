@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db.models import F, OuterRef, Q, Subquery
 from django.db.models.functions import Concat
 from django.utils.dateparse import parse_datetime
@@ -16,6 +17,22 @@ class ProjectFilter(FilterSet):
     class Meta:
         model = Project
         fields = ('title', 'catalog')
+
+
+class ProjectUserFilterBackend(BaseFilterBackend):
+
+    def filter_queryset(self, request, queryset, view):
+        if view.detail:
+            return queryset
+
+        user_id = request.GET.get('user')
+        user_username = request.GET.get('username')
+        if user_id or user_username:
+            user = User.objects.filter(Q(id=user_id) | Q(username=user_username)).first()
+            if user:
+                queryset = queryset.filter_visibility(user)
+
+        return queryset
 
 
 class ProjectSearchFilterBackend(SearchFilter):
