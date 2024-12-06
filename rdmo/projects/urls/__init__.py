@@ -22,6 +22,7 @@ from ..views import (
     ProjectDetailView,
     ProjectErrorView,
     ProjectExportView,
+    ProjectInterviewView,
     ProjectJoinView,
     ProjectLeaveView,
     ProjectQuestionsView,
@@ -138,6 +139,8 @@ urlpatterns = [
 
     re_path(r'^(?P<pk>[0-9]+)/questions/',
             ProjectQuestionsView.as_view(), name='project_questions'),
+    re_path(r'^(?P<pk>[0-9]+)/interview/',
+            ProjectInterviewView.as_view(), name='project_interview'),
     re_path(r'^(?P<pk>[0-9]+)/error/',
             ProjectErrorView.as_view(), name='project_error'),
 ]

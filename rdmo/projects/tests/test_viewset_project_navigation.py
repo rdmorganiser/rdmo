@@ -51,7 +51,7 @@ def test_navigation_get(db, client, username, password, project_id):
     if project_id in view_progress_permission_map.get(username, []):
         catalog_elements = project.catalog.elements
         for section in sections:
-            url = reverse(urlnames['navigation'], args=[project_id, section.id])
+            url = reverse(urlnames['navigation'], args=[project_id]) + f'{section.id}/'
             response = client.get(url)
             assert response.status_code == 200
             data = response.json()
@@ -60,7 +60,8 @@ def test_navigation_get(db, client, username, password, project_id):
 
     else:
         if sections:
-            url = reverse(urlnames['navigation'], args=[project_id, sections[0].id])
+            section_id = sections[0].id
+            url = reverse(urlnames['navigation'], args=[project_id]) + f'{section_id}/'
             response = client.get(url)
             if password:
                 assert response.status_code == 404

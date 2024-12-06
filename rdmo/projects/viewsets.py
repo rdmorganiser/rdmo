@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import OuterRef, Prefetch, Subquery
+from django.db.models import OuterRef, Prefetch, Q, Subquery
 from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
@@ -149,15 +149,17 @@ class ProjectViewSet(ModelViewSet):
         serializer = ProjectOverviewSerializer(project, context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=True, url_path=r'navigation/(?P<section_id>\d+)',
+    @action(detail=True, url_path=r'navigation(/(?P<section_id>\d+))?',
             permission_classes=(HasModelPermission | HasProjectPermission, ))
     def navigation(self, request, pk=None, section_id=None):
         project = self.get_object()
 
-        try:
-            section = project.catalog.sections.get(pk=section_id)
-        except ObjectDoesNotExist as e:
-            raise NotFound() from e
+        section = None
+        if section_id is not None:
+            try:
+                section = project.catalog.sections.get(pk=section_id)
+            except ObjectDoesNotExist as e:
+                raise NotFound() from e
 
         project.catalog.prefetch_elements()
 
@@ -479,8 +481,15 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
             if element.attribute == value.attribute:
                 attributes.update([descendant.attribute for descendant in element.descendants])
 
-        values = self.get_queryset().filter(attribute__in=attributes, set_prefix=value.set_prefix,
-                                            set_index=value.set_index)
+        # construct the set_prefix for descendants for this set
+        descendants_set_prefix = f'{value.set_prefix}|{value.set_index}' if value.set_prefix else str(value.set_index)
+
+        # delete all values for this set and all descendants
+        values = self.get_queryset().filter(attribute__in=attributes) \
+                                    .filter(
+                                        Q(set_prefix=value.set_prefix, set_index=value.set_index) |
+                                        Q(set_prefix__startswith=descendants_set_prefix)
+                                    )
         values.delete()
 
         return Response(status=204)

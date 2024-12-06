@@ -4,7 +4,8 @@
     "build:dist": "webpack --config webpack.config.js --mode production --env ignore-perf --fail-on-warnings",
     "build:prod": "webpack --config webpack.config.js --mode production",
     "build": "webpack --config webpack.config.js --mode development",
-    "watch": "webpack --config webpack.config.js --mode development --watch"
+    "watch": "webpack --config webpack.config.js --mode development --watch",
+    "lint": "eslint --ext .js rdmo/"
   },
   "author": "RDMO Arbeitsgemeinschaft <rdmorganiser.github.io>",
   "license": "Apache-2.0",
@@ -20,6 +21,7 @@
     "classnames": "^2.5.1",
     "date-fns": "^3.6.0",
     "font-awesome": "4.7.0",
+    "html-to-text": "^9.0.5",
     "jquery": "^3.7.1",
     "js-cookie": "^3.0.5",
     "lodash": "^4.17.21",
@@ -28,6 +30,7 @@
     "react": "^18.3.1",
     "react-bootstrap": "0.33.1",
     "react-datepicker": "7.3.0",
+    "react-diff-viewer-continued": "^3.4.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18.3.1",
@@ -37,7 +40,7 @@
     "redux": "^4.1.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
-    "react-diff-viewer-continued": "^3.4.0"
+    "use-debounce": "^10.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.24.1",
