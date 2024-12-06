@@ -35,13 +35,15 @@ from .filters import (
     SnapshotFilterBackend,
     ValueFilterBackend,
 )
-from .models import Continuation, Integration, Invite, Issue, Membership, Project, Snapshot, Value
+from .models import Continuation, Integration, Invite, Issue, Membership, Project, Snapshot, Value, Visibility
 from .permissions import (
     HasProjectPagePermission,
     HasProjectPermission,
     HasProjectProgressModelPermission,
     HasProjectProgressObjectPermission,
     HasProjectsPermission,
+    HasProjectVisibilityModelPermission,
+    HasProjectVisibilityObjectPermission,
 )
 from .progress import (
     compute_navigation,
@@ -66,6 +68,7 @@ from .serializers.v1 import (
     ProjectSerializer,
     ProjectSnapshotSerializer,
     ProjectValueSerializer,
+    ProjectVisibilitySerializer,
     SnapshotSerializer,
     UserInviteSerializer,
     ValueSerializer,
@@ -284,6 +287,37 @@ class ProjectViewSet(ModelViewSet):
             'total': project.progress_total,
             'ratio': ratio
         })
+
+    @action(detail=True, methods=['get', 'post', 'delete'],
+            permission_classes=(HasProjectVisibilityModelPermission | HasProjectVisibilityObjectPermission, ))
+    def visibility(self, request, pk=None):
+        project = self.get_object()
+
+        try:
+            instance = project.visibility
+        except Visibility.DoesNotExist:
+            instance = None
+
+        serializer = ProjectVisibilitySerializer(instance)
+
+        if request.method == 'POST':
+            serializer = ProjectVisibilitySerializer(instance, data=dict(**request.data, project=project.id))
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
+
+        elif request.method == 'DELETE':
+            if instance is not None:
+                instance.delete()
+                return Response(status=status.HTTP_204_NO_CONTENT)
+
+        else:
+            if instance is not None:
+                serializer = ProjectVisibilitySerializer(instance)
+                return Response(serializer.data)
+
+        # if nothing worked, raise 404
+        raise Http404
 
     @action(detail=False, url_path='upload-accept', permission_classes=(IsAuthenticated, ))
     def upload_accept(self, request):

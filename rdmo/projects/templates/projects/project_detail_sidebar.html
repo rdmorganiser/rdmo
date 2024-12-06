@@ -48,11 +48,6 @@
     <li>
         <a href="{% url 'project_update_information' project.pk %}">{% trans 'Update project information' %}</a>
     </li>
-    {% if settings.PROJECT_VISIBILITY %}
-    <li>
-        <a href="{% url 'project_update_visibility' project.pk %}">{% trans 'Update project visibility' %}</a>
-    </li>
-    {% endif %}
     <li>
         <a href="{% url 'project_update_catalog' project.pk %}">{% trans 'Update project catalog' %}</a>
     </li>
@@ -81,6 +76,15 @@
     </li>
     {% endif %}
 </ul>
+
+{% has_perm 'projects.change_visibility_object' request.user project as can_change_visibility %}
+{% if settings.PROJECT_VISIBILITY and can_change_visibility %}
+<ul class="list-unstyled">
+    <li>
+        <a href="{% url 'project_update_visibility' project.pk %}">{% trans 'Update project visibility' %}</a>
+    </li>
+</ul>
+{% endif %}
 
 {% has_perm 'projects.add_membership_object' request.user project as can_add_membership %}
 {% if can_add_membership %}

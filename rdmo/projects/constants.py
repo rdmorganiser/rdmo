@@ -10,10 +10,3 @@ ROLE_CHOICES = (
     (ROLE_AUTHOR, _('Author')),
     (ROLE_GUEST, _('Guest')),
 )
-
-VISIBILITY_PRIVATE = 'private'
-VISIBILITY_INTERNAL = 'internal'
-VISIBILITY_CHOICES = (
-    (VISIBILITY_PRIVATE, _('Private')),
-    (VISIBILITY_INTERNAL, _('Internal'))
-)

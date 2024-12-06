@@ -4,6 +4,7 @@
 {% load accounts_tags %}
 
 {% has_perm 'projects.change_project_object' request.user project as can_change_project %}
+{% has_perm 'projects.change_visibility_object' request.user project as can_change_visibility %}
 
 <div class="project-header">
     <h1>{{ project.title }}</h1>
@@ -26,7 +27,7 @@
                     {% include 'projects/project_detail_header_catalog.html' %}
                 </td>
             </tr>
-            {% if settings.PROJECT_VISIBILITY %}
+            {% if settings.PROJECT_VISIBILITY and project.visibility %}
             <tr id="project-visibility">
                 <td>
                     <strong>{% trans 'Visibility' %}</strong>

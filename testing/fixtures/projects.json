@@ -348,7 +348,6 @@
       "catalog": 1,
       "progress_total": null,
       "progress_count": null,
-      "visibility": "private",
       "lft": 1,
       "rght": 2,
       "tree_id": 1,
@@ -371,7 +370,6 @@
       "catalog": 1,
       "progress_total": null,
       "progress_count": null,
-      "visibility": "private",
       "lft": 1,
       "rght": 6,
       "tree_id": 4,
@@ -394,7 +392,6 @@
       "catalog": 1,
       "progress_total": null,
       "progress_count": null,
-      "visibility": "private",
       "lft": 2,
       "rght": 5,
       "tree_id": 4,
@@ -417,7 +414,6 @@
       "catalog": 1,
       "progress_total": null,
       "progress_count": null,
-      "visibility": "private",
       "lft": 10,
       "rght": 11,
       "tree_id": 4,
@@ -440,7 +436,6 @@
       "catalog": 1,
       "progress_total": null,
       "progress_count": null,
-      "visibility": "private",
       "lft": 3,
       "rght": 4,
       "tree_id": 4,
@@ -463,7 +458,6 @@
       "catalog": 1,
       "progress_total": null,
       "progress_count": null,
-      "visibility": "private",
       "lft": 2,
       "rght": 7,
       "tree_id": 5,
@@ -486,7 +480,6 @@
       "catalog": 1,
       "progress_total": null,
       "progress_count": null,
-      "visibility": "private",
       "lft": 6,
       "rght": 8,
       "tree_id": 6,
@@ -509,7 +502,6 @@
       "catalog": 1,
       "progress_total": null,
       "progress_count": null,
-      "visibility": "private",
       "lft": 7,
       "rght": 9,
       "tree_id": 7,
@@ -532,7 +524,6 @@
       "catalog": 1,
       "progress_total": null,
       "progress_count": null,
-      "visibility": "private",
       "lft": 8,
       "rght": 12,
       "tree_id": 8,
@@ -555,7 +546,6 @@
       "catalog": 1,
       "progress_total": null,
       "progress_count": null,
-      "visibility": "private",
       "lft": 1,
       "rght": 2,
       "tree_id": 9,
@@ -580,10 +570,9 @@
       "catalog": 1,
       "progress_total": null,
       "progress_count": null,
-      "visibility": "private",
       "lft": 1,
       "rght": 2,
-      "tree_id": 4,
+      "tree_id": 10,
       "level": 0,
       "views": [
         1,
@@ -605,10 +594,9 @@
       "catalog": 1,
       "progress_total": 29,
       "progress_count": 1,
-      "visibility": "internal",
       "lft": 1,
       "rght": 2,
-      "tree_id": 3,
+      "tree_id": 11,
       "level": 0,
       "views": [
         1,
@@ -6173,6 +6161,19 @@
       "value_type": "text",
       "unit": "",
       "external_id": ""
+    }
+  },
+  {
+    "model": "projects.visibility",
+    "pk": 1,
+    "fields": {
+      "created": "2024-12-06T12:33:32.464Z",
+      "updated": "2024-12-06T12:34:35.096Z",
+      "project": 12,
+      "sites": [
+        1
+      ],
+      "groups": []
     }
   }
 ]

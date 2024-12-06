@@ -93,7 +93,7 @@ def test_list(db, client, username, password):
 
 
 def test_list_user(db, client):
-    client.login(username='admin', password='admin')
+    client.login(username='user', password='user')
 
     url = reverse(urlnames['list']) + '?user=1'
     response = client.get(url)

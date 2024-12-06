@@ -7,5 +7,8 @@
         {% include 'core/bootstrap_form_fields.html' %}
 
         <input type="submit" value="{{ submit }}" class="btn btn-primary" />
+        {% if delete %}
+        <input type="submit" name="delete" value="{{ delete }}" class="btn btn-danger" />
+        {% endif %}
         <input type="submit" name="cancel" value="{% trans 'Cancel' %}" class="btn" />
     </form>

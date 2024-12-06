@@ -8,8 +8,6 @@ from mptt.querysets import TreeQuerySet
 from rdmo.accounts.utils import is_site_manager
 from rdmo.core.managers import CurrentSiteManagerMixin
 
-from .constants import VISIBILITY_INTERNAL
-
 
 class ProjectQuerySet(TreeQuerySet):
 
@@ -31,7 +29,11 @@ class ProjectQuerySet(TreeQuerySet):
             return self.none()
 
     def filter_visibility(self, user):
-        return self.filter(Q(user=user) | models.Q(visibility=VISIBILITY_INTERNAL))
+        groups = user.groups.all()
+        sites_filter = Q(visibility__sites=None) | Q(visibility__sites=settings.SITE_ID)
+        groups_filter = Q(visibility__groups=None) | Q(visibility__groups__in=groups)
+        visibility_filter = Q(visibility__isnull=False) & sites_filter & groups_filter
+        return self.filter(Q(user=user) | visibility_filter)
 
 
 class MembershipQuerySet(models.QuerySet):

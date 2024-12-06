@@ -1,3 +1,4 @@
+{% load i18n %}
 {% load widget_tweaks %}
 {% load core_tags %}
 
@@ -60,6 +61,12 @@
     {% else %}
 
     {% render_field field class="form-control" %}
+
+    {% if type == 'selectmultiple' %}
+    <p class="help-block">
+    {% trans 'Hold down "Control", or "Command" on a Mac, to select more than one.' %}
+    </p>
+    {% endif %}
 
     {% endif %}
     {% endwith %}

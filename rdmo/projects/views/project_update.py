@@ -53,7 +53,7 @@ class ProjectUpdateVisibilityView(ObjectPermissionMixin, RedirectViewMixin, Upda
     model = Project
     queryset = Project.objects.all()
     form_class = ProjectUpdateVisibilityForm
-    permission_required = 'projects.change_project_object'
+    permission_required = 'projects.change_visibility_object'
 
 
 class ProjectUpdateCatalogView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):

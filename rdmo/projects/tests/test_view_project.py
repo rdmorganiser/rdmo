@@ -57,7 +57,6 @@ export_project_permission_map = {
 }
 
 projects = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-projects_internal = [12]
 
 export_formats = ('rtf', 'odt', 'docx', 'html', 'markdown', 'tex', 'pdf')
 
@@ -213,8 +212,7 @@ def test_project_create_post(db, client, username, password):
     data = {
         'title': 'A new project',
         'description': 'Some description',
-        'catalog': catalog_id,
-        'visibility': 'private'
+        'catalog': catalog_id
     }
     response = client.post(url, data)
 
@@ -240,8 +238,7 @@ def test_project_create_post_restricted(db, client, settings):
     data = {
         'title': 'A new project',
         'description': 'Some description',
-        'catalog': catalog_id,
-        'visibility': 'private'
+        'catalog': catalog_id
     }
     response = client.post(url, data)
 
@@ -257,8 +254,7 @@ def test_project_create_post_forbidden(db, client, settings):
     data = {
         'title': 'A new project',
         'description': 'Some description',
-        'catalog': catalog_id,
-        'visibility': 'private'
+        'catalog': catalog_id
     }
     response = client.post(url, data)
 
@@ -275,8 +271,7 @@ def test_project_create_parent_post(db, client, username, password):
         'title': 'A new project',
         'description': 'Some description',
         'catalog': catalog_id,
-        'parent': project_id,
-        'visibility': 'private'
+        'parent': project_id
     }
     response = client.post(url, data)
 
@@ -318,8 +313,7 @@ def test_project_update_post(db, client, username, password, project_id):
     data = {
         'title': 'New title',
         'description': project.description,
-        'catalog': project.catalog.pk,
-        'visibility': 'private'
+        'catalog': project.catalog.pk
     }
     response = client.post(url, data)
 
@@ -341,13 +335,14 @@ def test_project_update_post_parent(db, client, username, password, project_id):
     client.login(username=username, password=password)
     project = Project.objects.get(pk=project_id)
 
+    print(project, project_id, Project.objects.get(pk=parent_id))
+
     url = reverse('project_update', args=[project_id])
     data = {
         'title': project.title,
         'description': project.description,
         'catalog': project.catalog.pk,
-        'parent': parent_id,
-        'visibility': 'private'
+        'parent': parent_id
     }
     response = client.post(url, data)
 
@@ -411,47 +406,6 @@ def test_project_update_information_post(db, client, username, password, project
             assert response.status_code == 302
 
         assert Project.objects.get(pk=project_id).title == project.title
-
-
-@pytest.mark.parametrize('username,password', users)
-@pytest.mark.parametrize('project_id', projects)
-def test_project_update_visibility_get(db, client, username, password, project_id):
-    client.login(username=username, password=password)
-
-    url = reverse('project_update_visibility', args=[project_id])
-    response = client.get(url)
-
-    if project_id in change_project_permission_map.get(username, []):
-        assert response.status_code == 200
-    else:
-        if password:
-            assert response.status_code == 403
-        else:
-            assert response.status_code == 302
-
-
-@pytest.mark.parametrize('username,password', users)
-@pytest.mark.parametrize('project_id', projects)
-def test_project_update_visibility_post(db, client, username, password, project_id):
-    client.login(username=username, password=password)
-    project = Project.objects.get(pk=project_id)
-
-    url = reverse('project_update_visibility', args=[project_id])
-    data = {
-        'visibility': 'internal'
-    }
-    response = client.post(url, data)
-
-    if project_id in change_project_permission_map.get(username, []):
-        assert response.status_code == 302
-        assert Project.objects.get(pk=project_id).visibility == 'internal'
-    else:
-        if password:
-            assert response.status_code == 403
-        else:
-            assert response.status_code == 302
-
-        assert Project.objects.get(pk=project_id).visibility == project.visibility
 
 
 @pytest.mark.parametrize('username,password', users)
