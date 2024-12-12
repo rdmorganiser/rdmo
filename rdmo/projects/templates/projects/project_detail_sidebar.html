@@ -81,7 +81,13 @@
 {% if settings.PROJECT_VISIBILITY and can_change_visibility %}
 <ul class="list-unstyled">
     <li>
-        <a href="{% url 'project_update_visibility' project.pk %}">{% trans 'Update project visibility' %}</a>
+        <a href="{% url 'project_update_visibility' project.pk %}">
+            {% if not project.visibility %}
+            {% trans 'Make project visible to users' %}
+            {% else %}
+            {% trans 'Update project visibility' %}
+            {% endif %}
+        </a>
     </li>
 </ul>
 {% endif %}
