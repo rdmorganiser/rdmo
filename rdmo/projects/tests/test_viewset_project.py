@@ -17,25 +17,26 @@ users = (
 )
 
 view_project_permission_map = {
-    'owner': [1, 2, 3, 4, 5, 10],
-    'manager': [1, 3, 5, 7],
-    'author': [1, 3, 5, 8],
-    'guest': [1, 3, 5, 9],
-    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    'owner': [1, 2, 3, 4, 5, 10, 12],
+    'manager': [1, 3, 5, 7, 12],
+    'author': [1, 3, 5, 8, 12],
+    'guest': [1, 3, 5, 9, 12],
+    'user': [12],
+    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 }
 
 change_project_permission_map = {
-    'owner': [1, 2, 3, 4, 5, 10],
+    'owner': [1, 2, 3, 4, 5, 10, 12],
     'manager': [1, 3, 5, 7],
-    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12],
+    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12]
 }
 
 delete_project_permission_map = {
-    'owner': [1, 2, 3, 4, 5, 10],
-    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    'owner': [1, 2, 3, 4, 5, 10, 12],
+    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12],
+    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12]
 }
 
 urlnames = {
@@ -50,7 +51,8 @@ urlnames = {
     'imports': 'v1-projects:project-imports'
 }
 
-projects = [1, 2, 3, 4, 5]
+projects = [1, 2, 3, 4, 5, 12]
+projects_internal = [12]
 conditions = [1]
 
 catalog_id = 1
@@ -80,8 +82,7 @@ def test_list(db, client, username, password):
         assert isinstance(response_data, dict)
 
         if username == 'user':
-            assert response_data['count'] == 0
-            assert response_data['results'] == []
+            assert sorted([item['id'] for item in response.json().get('results')]) == projects_internal
         else:
             values_list = Project.objects.filter(id__in=view_project_permission_map.get(username, [])) \
                                          .values_list('id', flat=True)
@@ -89,6 +90,21 @@ def test_list(db, client, username, password):
             assert [item['id'] for item in response_data['results']] == list(values_list[:page_size])
     else:
         assert response.status_code == 401
+
+
+def test_list_user(db, client):
+    client.login(username='user', password='user')
+
+    url = reverse(urlnames['list']) + '?user=1'
+    response = client.get(url)
+    response_data = response.json()
+
+    assert response.status_code == 200
+    assert isinstance(response_data, dict)
+
+    values_list = Project.objects.filter(id__in=projects_internal).values_list('id', flat=True)
+    assert response_data['count'] == len(values_list)
+    assert [item['id'] for item in response_data['results']] == list(values_list[:page_size])
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -461,7 +477,6 @@ def test_navigation(db, client, username, password, project_id):
     client.login(username=username, password=password)
 
     url = reverse(urlnames['navigation'], args=[project_id])
-    print(url)
     response = client.get(url)
 
     if project_id in view_project_permission_map.get(username, []):

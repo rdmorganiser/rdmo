@@ -77,6 +77,21 @@
     {% endif %}
 </ul>
 
+{% has_perm 'projects.change_visibility_object' request.user project as can_change_visibility %}
+{% if settings.PROJECT_VISIBILITY and can_change_visibility %}
+<ul class="list-unstyled">
+    <li>
+        <a href="{% url 'project_update_visibility' project.pk %}">
+            {% if not project.visibility %}
+            {% trans 'Make project visible' %}
+            {% else %}
+            {% trans 'Update project visibility' %}
+            {% endif %}
+        </a>
+    </li>
+</ul>
+{% endif %}
+
 {% has_perm 'projects.add_membership_object' request.user project as can_add_membership %}
 {% if can_add_membership %}
 <ul class="list-unstyled">

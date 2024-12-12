@@ -90,3 +90,25 @@ class HasProjectProgressObjectPermission(HasProjectPermission):
             return ('projects.change_project_progress_object', )
         else:
             return ('projects.view_project_object', )
+
+
+class HasProjectVisibilityModelPermission(HasModelPermission):
+
+    def get_required_permissions(self, method, model_cls):
+        if method == 'POST':
+            return ('projects.change_visibility', )
+        elif method == 'DELETE':
+            return ('projects.delete_visibility', )
+        else:
+            return ('projects.view_visibility', )
+
+
+class HasProjectVisibilityObjectPermission(HasProjectPermission):
+
+    def get_required_object_permissions(self, method, model_cls):
+        if method == 'POST':
+            return ('projects.change_visibility_object', )
+        elif method == 'DELETE':
+            return ('projects.delete_visibility_object', )
+        else:
+            return ('projects.view_visibility_object', )

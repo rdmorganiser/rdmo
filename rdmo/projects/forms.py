@@ -12,7 +12,7 @@ from rdmo.core.plugins import get_plugin
 from rdmo.core.utils import markdown2html
 
 from .constants import ROLE_CHOICES
-from .models import Integration, IntegrationOption, Invite, Membership, Project, Snapshot
+from .models import Integration, IntegrationOption, Invite, Membership, Project, Snapshot, Visibility
 from .validators import ProjectParentValidator
 
 
@@ -96,6 +96,48 @@ class ProjectUpdateInformationForm(forms.ModelForm):
     class Meta:
         model = Project
         fields = ('title', 'description')
+
+
+class ProjectUpdateVisibilityForm(forms.ModelForm):
+
+    use_required_attribute = False
+
+    def __init__(self, *args, **kwargs):
+        self.project = kwargs.pop('instance')
+        try:
+            instance = self.project.visibility
+        except Visibility.DoesNotExist:
+            instance = None
+
+        super().__init__(*args, instance=instance, **kwargs)
+
+        # remove the sites or group sets if they are not needed, doing this in Meta would break tests
+        if not settings.MULTISITE:
+            self.fields.pop('sites')
+        if not settings.GROUPS:
+            self.fields.pop('groups')
+
+    class Meta:
+        model = Visibility
+        fields = ('sites', 'groups')
+
+    def save(self, *args, **kwargs):
+        if 'cancel' in self.data:
+            pass
+        elif 'delete' in self.data:
+            self.instance.delete()
+        else:
+            visibility, created = Visibility.objects.update_or_create(project=self.project)
+
+            sites = self.cleaned_data.get('sites')
+            if sites is not None:
+                visibility.sites.set(sites)
+
+            groups = self.cleaned_data.get('groups')
+            if groups is not None:
+                visibility.groups.set(groups)
+
+        return self.project
 
 
 class ProjectUpdateCatalogForm(forms.ModelForm):

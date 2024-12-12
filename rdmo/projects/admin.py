@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.db.models import Prefetch
 from django.urls import reverse
 from django.utils.safestring import mark_safe
+from django.utils.translation import gettext_lazy as _
 
 from .models import (
     Continuation,
@@ -15,6 +16,7 @@ from .models import (
     Project,
     Snapshot,
     Value,
+    Visibility,
 )
 from .validators import ProjectParentValidator
 
@@ -69,6 +71,25 @@ class MembershipAdmin(admin.ModelAdmin):
 class ContinuationAdmin(admin.ModelAdmin):
     search_fields = ('project__title', 'user__username')
     list_display = ('project', 'user', 'page')
+
+
+@admin.register(Visibility)
+class VisibilityAdmin(admin.ModelAdmin):
+    search_fields = ('project__title', 'sites', 'groups')
+    list_display = ('project', 'sites_list_display', 'groups_list_display')
+    filter_horizontal = ('sites', 'groups')
+
+    @admin.display(description=_('Sites'))
+    def sites_list_display(self, obj):
+        return _('all Sites') if obj.sites.count() == 0 else ', '.join([
+            site.domain for site in obj.sites.all()
+        ])
+
+    @admin.display(description=_('Groups'))
+    def groups_list_display(self, obj):
+        return _('all Groups') if obj.groups.count() == 0 else ', '.join([
+            group.name for group in obj.groups.all()
+        ])
 
 
 @admin.register(Integration)

@@ -14,35 +14,26 @@ users = (
     ('manager', 'manager'),
     ('author', 'author'),
     ('guest', 'guest'),
-    ('user', 'user'),
+    ('api', 'api'),
     ('site', 'site'),
     ('anonymous', None),
 )
 
-view_snapshot_permission_map = {
-    'owner': [1, 2, 3, 4, 5],
-    'manager': [1, 3, 5],
-    'author': [1, 3, 5],
-    'guest': [1, 3, 5],
-    'api': [1, 2, 3, 4, 5],
-    'site': [1, 2, 3, 4, 5]
-}
-
 add_snapshot_permission_map = change_snapshot_permission_map = rollback_snapshot_permission_map = {
-    'owner': [1, 2, 3, 4, 5],
+    'owner': [1, 2, 3, 4, 5, 12],
     'manager': [1, 3, 5],
-    'api': [1, 2, 3, 4, 5],
-    'site': [1, 2, 3, 4, 5]
+    'api': [1, 2, 3, 4, 5, 12],
+    'site': [1, 2, 3, 4, 5, 12]
 }
 
 export_snapshot_permission_map = {
-    'owner': [1, 2, 3, 4, 5],
-    'manager': [1, 3, 5],
-    'api': [1, 2, 3, 4, 5],
-    'site': [1, 2, 3, 4, 5]
+    'owner': [1, 2, 3, 4, 5, 12],
+    'manager': [1, 3, 5, 12],
+    'api': [1, 2, 3, 4, 5, 12],
+    'site': [1, 2, 3, 4, 5, 12]
 }
 
-projects = [1, 2, 3, 4, 5]
+projects = [1, 2, 3, 4, 5, 12]
 snapshots = [1, 3, 7, 4, 5, 6]
 
 snapshots_project = 1

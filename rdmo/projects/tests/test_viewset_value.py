@@ -18,12 +18,13 @@ users = (
 )
 
 view_value_permission_map = {
-    'owner': [1, 2, 3, 4, 5],
-    'manager': [1, 3, 5],
-    'author': [1, 3, 5],
-    'guest': [1, 3, 5],
-    'api': [1, 2, 3, 4, 5],
-    'site': [1, 2, 3, 4, 5]
+    'owner': [1, 2, 3, 4, 5, 12],
+    'manager': [1, 3, 5, 12],
+    'author': [1, 3, 5, 12],
+    'guest': [1, 3, 5, 12],
+    'user': [12],
+    'api': [1, 2, 3, 4, 5, 12],
+    'site': [1, 2, 3, 4, 5, 12]
 }
 
 urlnames = {
@@ -32,9 +33,18 @@ urlnames = {
     'file': 'v1-projects:value-file'
 }
 
-values = [1, 2, 3, 4, 5, 6, 7, 238, 242, 243, 244, 245]
-snapshots = [1, 3, 7, 4, 5, 6]
-
+values = [
+    1, 2, 3, 4, 5, 6, 7, 238,  # from Test <1>
+    242, 243,                  # from Parent <2>
+    247,                       # from Child1 <3>
+    248,                       # from Child2 <4>
+    249,                       # from Child11 <5>
+    456, 457                   # from Internal <12>
+]
+values_internal = [456]
+values_snapshot_internal = [457]
+snapshots = [1, 3, 7, 4, 5, 6, 8]
+snapshots_internal = [8]
 
 @pytest.mark.parametrize('username,password', users)
 def test_list(db, client, username, password):
@@ -48,7 +58,7 @@ def test_list(db, client, username, password):
         assert isinstance(response.json(), list)
 
         if username == 'user':
-            assert sorted([item['id'] for item in response.json()]) == []
+            assert sorted([item['id'] for item in response.json()]) == values_internal
         else:
             values_list = Value.objects.filter(project__in=view_value_permission_map.get(username, [])) \
                                        .filter(snapshot_id=None) \
@@ -71,7 +81,10 @@ def test_list_snapshot(db, client, username, password, snapshot_id):
         assert isinstance(response.json(), list)
 
         if username == 'user':
-            assert sorted([item['id'] for item in response.json()]) == []
+            if snapshot_id in snapshots_internal:
+                assert sorted([item['id'] for item in response.json()]) == values_snapshot_internal
+            else:
+                assert sorted([item['id'] for item in response.json()]) == []
         else:
             values_list = Value.objects.filter(project__in=view_value_permission_map.get(username, [])) \
                                        .filter(snapshot_id=snapshot_id) \

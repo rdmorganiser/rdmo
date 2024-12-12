@@ -14,6 +14,7 @@ from ..forms import (
     ProjectUpdateParentForm,
     ProjectUpdateTasksForm,
     ProjectUpdateViewsForm,
+    ProjectUpdateVisibilityForm,
 )
 from ..mixins import ProjectImportMixin
 from ..models import Project
@@ -46,6 +47,14 @@ class ProjectUpdateInformationView(ObjectPermissionMixin, RedirectViewMixin, Upd
     queryset = Project.objects.all()
     form_class = ProjectUpdateInformationForm
     permission_required = 'projects.change_project_object'
+
+
+class ProjectUpdateVisibilityView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
+    model = Project
+    queryset = Project.objects.all()
+    form_class = ProjectUpdateVisibilityForm
+    permission_required = 'projects.change_visibility_object'
+    template_name = 'projects/project_form_visibility.html'
 
 
 class ProjectUpdateCatalogView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):

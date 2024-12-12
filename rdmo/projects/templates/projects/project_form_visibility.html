@@ -1,0 +1,30 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+{% load core_tags %}
+
+{% block page %}
+
+    <h1>
+        {% if object.visibility %}
+        {% trans 'Update project visibility' %}
+        {% else %}
+        {% trans 'Make project visible' %}
+        {% endif %}
+    </h1>
+
+    <p class="mb-20">
+        {% blocktrans trimmed %}
+        Projects can be made visible to all users, for example to be used as a template.
+        When a project is made visible, users can access it as if they were in the guest role.
+        {% endblocktrans %}
+    </p>
+
+    {% if object.visibility and 'sites' in form.fields or 'groups' in form.fields %}
+    {% bootstrap_form submit=_('Update visibility') delete=_('Remove visibility') %}
+    {% elif object.visibility %}
+    {% bootstrap_form delete=_('Remove visibility') %}
+    {% else %}
+    {% bootstrap_form submit=_('Make visible') %}
+    {% endif %}
+
+{% endblock %}

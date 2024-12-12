@@ -8,7 +8,18 @@ from rest_framework import serializers
 from rdmo.questions.models import Catalog
 from rdmo.services.validators import ProviderValidator
 
-from ...models import Integration, IntegrationOption, Invite, Issue, IssueResource, Membership, Project, Snapshot, Value
+from ...models import (
+    Integration,
+    IntegrationOption,
+    Invite,
+    Issue,
+    IssueResource,
+    Membership,
+    Project,
+    Snapshot,
+    Value,
+    Visibility,
+)
 from ...validators import ProjectParentValidator, ValueConflictValidator, ValueQuotaValidator, ValueTypeValidator
 
 
@@ -89,6 +100,17 @@ class ProjectCopySerializer(ProjectSerializer):
         model = Project
         fields = ProjectSerializer.Meta.fields
         read_only_fields = ProjectSerializer.Meta.read_only_fields
+
+
+class ProjectVisibilitySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Visibility
+        fields = (
+            'project',
+            'sites',
+            'groups'
+        )
 
 
 class ProjectMembershipSerializer(serializers.ModelSerializer):

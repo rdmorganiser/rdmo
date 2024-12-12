@@ -114,6 +114,9 @@ def bootstrap_form(context, **kwargs):
     if 'submit' in kwargs:
         form_context['submit'] = kwargs['submit']
 
+    if 'delete' in kwargs:
+        form_context['delete'] = kwargs['delete']
+
     return render_to_string('core/bootstrap_form.html', form_context, request=context.request)
 
 
