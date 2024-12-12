@@ -20,7 +20,7 @@ const QuestionCopyValue = ({ question, value, siblings, copyValue }) => {
 QuestionCopyValue.propTypes = {
   question: PropTypes.object.isRequired,
   value: PropTypes.object.isRequired,
-  siblings: PropTypes.object.isRequired,
+  siblings: PropTypes.array.isRequired,
   copyValue: PropTypes.func.isRequired
 }
 
