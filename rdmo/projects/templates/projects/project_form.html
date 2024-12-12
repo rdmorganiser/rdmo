@@ -31,23 +31,6 @@
         <h1>{% trans 'Update project views' %}</h1>
         {% bootstrap_form submit=_('Save views') %}
 
-    {% elif request.resolver_match.url_name == 'project_update_visibility' %}
-
-        <h1>{% trans 'Update project visibility' %}</h1>
-
-        <p class="mb-20">
-            {% blocktrans trimmed %}
-            Projects can be made visible to all users, for example to be used as a template.
-            When a project is made visible, users can access it as if they were in the guest role.
-            {% endblocktrans %}
-        </p>
-
-        {% if object.visibility %}
-        {% bootstrap_form submit=_('Save visibility') delete=_('Remove visibility') %}
-        {% else %}
-        {% bootstrap_form submit=_('Make visible') %}
-        {% endif %}
-
     {% else %}
 
         <h1>{% trans 'Update project information' %}</h1>

@@ -83,7 +83,7 @@
     <li>
         <a href="{% url 'project_update_visibility' project.pk %}">
             {% if not project.visibility %}
-            {% trans 'Make project visible to users' %}
+            {% trans 'Make project visible' %}
             {% else %}
             {% trans 'Update project visibility' %}
             {% endif %}
