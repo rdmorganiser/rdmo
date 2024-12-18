@@ -10,7 +10,9 @@ from django.urls.exceptions import NoReverseMatch
 
 from pytest_django.asserts import assertContains, assertNotContains, assertRedirects, assertTemplateUsed, assertURLEqual
 
+from rdmo.accounts.models import ConsentFieldValue
 from rdmo.accounts.tests.utils import reload_urls
+from rdmo.accounts.utils import CONSENT_SESSION_KEY
 
 users = (
     ('editor', 'editor'),
@@ -795,3 +797,85 @@ def test_shibboleth_logout_username_pattern(db, client, settings, shibboleth, us
             assertURLEqual(response.url, reverse('account_logout') + f'?next={settings.SHIBBOLETH_LOGOUT_URL}')
         else:
             assertURLEqual(response.url, reverse('account_logout'))
+
+
+@pytest.mark.parametrize('post_consent', [True, False])
+@pytest.mark.parametrize('username,password', users)
+def test_terms_of_use_middleware_redirect_and_update(
+    db, client, settings, username, password, post_consent
+):
+    """
+    Test the behavior of TermsAndConditionsRedirectMiddleware and terms_of_use_update view:
+    - When the middleware is enabled, users are redirected to the terms update page if not consented.
+    - Valid POST saves consent to the session and database.
+    - Invalid POST does not save consent to the session or database.
+    """
+    # Arrange
+    settings.ACCOUNT_TERMS_OF_USE = True
+    reload_urls('accounts')  # needs to reload before the middleware
+    settings.MIDDLEWARE += [
+        "rdmo.accounts.middleware.TermsAndConditionsRedirectMiddleware"
+    ]
+
+    # Ensure there are no existing consent entries for the user
+    user = get_user_model().objects.get(username=username) if password else None
+    if user:
+        ConsentFieldValue.objects.filter(user=user).delete()
+
+    # Act - Access the home page
+    client.login(username=username, password=password)
+    response = client.get(reverse('projects'))
+
+    # Assert - Middleware should redirect to terms_of_use_update
+    if password is not None:
+        assert response.status_code == 302
+        assert response.url == reverse('terms_of_use_update')
+
+        # Session should not yet have consent
+        assert not client.session.get(CONSENT_SESSION_KEY, False)
+    else:
+        # Anonymous user is redirected to login
+        assert response.status_code == 302
+        assert response.url == reverse('account_login') + '?next=' + reverse('projects')
+        return  # Exit test for anonymous users
+
+    # Act - Make a POST request to terms_of_use_update
+    terms_update_url = reverse('terms_of_use_update')
+    data = {
+        'consent': post_consent,  # Set based on parameterization
+    }
+    response = client.post(terms_update_url, data)
+
+    assert response.status_code == 302
+    assert response.url == reverse('home')
+
+    # Assert POST behavior
+    if post_consent:  # accepted you
+        # Consent should be stored in the session and database
+        assert client.session[CONSENT_SESSION_KEY] is True
+        assert ConsentFieldValue.objects.filter(user=user).exists()
+
+        response = client.get(reverse('projects'))
+        assert response.status_code == 200
+
+        # also test the revoke consent
+        response = client.post(terms_update_url, {'delete': ''})
+        assert response.status_code == 302
+        assert response.url == reverse('home')
+        assert client.session.get(CONSENT_SESSION_KEY, False) is False
+        assert not ConsentFieldValue.objects.filter(user=user).exists()
+
+        response = client.get(reverse('projects'))
+        assert response.status_code == 302
+        assert response.url == reverse('terms_of_use_update')
+
+    else:  # did not accept you
+        # Invalid POST
+        # assertTemplateUsed(response, "account/terms_of_use_update_form.html")
+        # Consent should not be stored in the session or database
+        assert client.session.get(CONSENT_SESSION_KEY, False) is False
+        assert not ConsentFieldValue.objects.filter(user=user).exists()
+
+        response = client.get(reverse('projects'))
+        assert response.status_code == 302
+        assert response.url == reverse('terms_of_use_update')
