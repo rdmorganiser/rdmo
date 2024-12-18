@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import List
 
 from rdmo.conditions.models import Condition
 from rdmo.core.models import Model
@@ -54,6 +53,6 @@ model_helpers = (
 )
 
 
-def delete_all_objects(db_models: List):
+def delete_all_objects(db_models: list):
     for db_model in db_models:
         db_model.objects.all().delete()

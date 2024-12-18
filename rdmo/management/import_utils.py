@@ -1,7 +1,6 @@
 import logging
 from collections import defaultdict
 from dataclasses import asdict
-from typing import Dict, Set, Tuple
 
 from django.core.exceptions import FieldDoesNotExist
 from django.db.models import Model
@@ -40,7 +39,7 @@ def is_valid_import_element(element: dict) -> bool:
     return True
 
 
-def get_redundant_keys_from_element(element_keys: Set, model: Model) -> Set:
+def get_redundant_keys_from_element(element_keys: set, model: Model) -> set:
     model_fields = {i.name for i in model._meta.get_fields()}
     required_element_keys = {'uri', 'model'}
     import_dict_keys = {i.value for i in IMPORT_ELEMENT_INIT_DICT.keys()}
@@ -51,14 +50,14 @@ def get_redundant_keys_from_element(element_keys: Set, model: Model) -> Set:
     redundant_keys = redundant_keys - element_lang_keys
     return redundant_keys
 
-def initialize_import_element_dict(element: Dict) -> None:
+def initialize_import_element_dict(element: dict) -> None:
     # initialize element dict with default values
     for _k,_val in IMPORT_ELEMENT_INIT_DICT.items():
         element[_k] = _val()
     return element
 
 
-def initialize_and_clean_import_element_dict(element: Dict, model: Model) -> Tuple[Dict, Dict]:
+def initialize_and_clean_import_element_dict(element: dict, model: Model) -> tuple[dict, dict]:
     redundant_keys = get_redundant_keys_from_element(set(element.keys()), model)
     excluded_element_data = {}
     for k in redundant_keys:

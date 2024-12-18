@@ -5,7 +5,7 @@ from collections import defaultdict
 from enum import Enum
 from os.path import join as pj
 from random import randint
-from typing import List, Optional, Tuple, Union
+from typing import Optional, Union
 
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
@@ -54,7 +54,7 @@ def generate_tempfile_name():
     return fn
 
 
-def get_or_return_instance(model: models.Model, uri: Optional[str] = None) -> Tuple[models.Model, bool]:
+def get_or_return_instance(model: models.Model, uri: Optional[str] = None) -> tuple[models.Model, bool]:
     if uri is None:
         return model(), True
     try:
@@ -125,10 +125,10 @@ def _initialize_track_changes_element_field(element: dict, element_field: str) -
 
 def track_changes_on_element(element: dict,
                              element_field: str,
-                             new_value: Union[str, List[str], None] = None,
+                             new_value: Union[str, list[str], None] = None,
                              instance_field: Optional[str] = None,
                              original=None,
-                             original_value: Optional[Union[str, List[str]]] = None):
+                             original_value: Optional[Union[str, list[str]]] = None):
     if (original is None and original_value is None) or new_value is None:
         return
 
