@@ -2,7 +2,7 @@ import logging
 import re
 from collections import OrderedDict
 from pathlib import Path
-from typing import Dict, Optional, Tuple
+from typing import Optional
 from xml.etree.ElementTree import Element as xmlElement
 
 from django.utils.translation import gettext_lazy as _
@@ -20,14 +20,14 @@ LEGACY_RDMO_XML_VERSION = '1.11.0'
 ELEMENTS_USING_KEY = {RDMO_MODELS['attribute']}
 
 
-def resolve_file(file_name: str) -> Tuple[Optional[Path], Optional[str]]:
+def resolve_file(file_name: str) -> tuple[Optional[Path], Optional[str]]:
     file = Path(file_name).resolve()
     if file.exists():
         return file, None
     return  None, _('This file does not exists.')
 
 
-def read_xml(file: Path) -> Tuple[Optional[xmlElement], Optional[str]]:
+def read_xml(file: Path) -> tuple[Optional[xmlElement], Optional[str]]:
     # step 2: parse xml and get the root
     try:
         root = ET.parse(file).getroot()
@@ -36,7 +36,7 @@ def read_xml(file: Path) -> Tuple[Optional[xmlElement], Optional[str]]:
         return None, _('XML Parsing Error') + f': {e!s}'
 
 
-def validate_root(root: Optional[xmlElement]) -> Tuple[bool, Optional[str]]:
+def validate_root(root: Optional[xmlElement]) -> tuple[bool, Optional[str]]:
     if root is None:
         return False, _('The content of the XML file does not consist of well-formed data or markup.')
     if root.tag != 'rdmo':
@@ -44,7 +44,7 @@ def validate_root(root: Optional[xmlElement]) -> Tuple[bool, Optional[str]]:
     return True, None
 
 
-def validate_and_get_xml_version_from_root(root: xmlElement) -> Tuple[Optional[Version], list]:
+def validate_and_get_xml_version_from_root(root: xmlElement) -> tuple[Optional[Version], list]:
     unparsed_root_version = root.attrib.get('version') or LEGACY_RDMO_XML_VERSION
     root_version, rdmo_version = parse(unparsed_root_version), parse(RDMO_INSTANCE_VERSION)
     if root_version > rdmo_version:
@@ -71,7 +71,7 @@ def validate_legacy_elements(elements: dict, root_version: Version) -> list:
         return errors
 
 
-def parse_elements(root: xmlElement) -> Tuple[Dict, Optional[str]]:
+def parse_elements(root: xmlElement) -> tuple[dict, Optional[str]]:
     # step 3: create element dicts from xml
     try:
         elements = flat_xml_to_elements(root)
@@ -81,7 +81,7 @@ def parse_elements(root: xmlElement) -> Tuple[Dict, Optional[str]]:
         return {}, _('This is not a valid RDMO XML file.')
 
 
-def parse_xml_to_elements(xml_file=None) -> Tuple[OrderedDict, list]:
+def parse_xml_to_elements(xml_file=None) -> tuple[OrderedDict, list]:
 
     errors = []
 
@@ -257,7 +257,7 @@ def validate_pre_conversion_for_missing_key_in_legacy_elements(elements, version
             raise ValueError(f"Missing legacy elements, elements containing 'key' were expected for this XML with version {version} and elements {models_in_elements}.")   # noqa: E501
 
 
-def update_related_legacy_elements(elements: Dict,
+def update_related_legacy_elements(elements: dict,
                                    target_uri: str, source_model: str,
                                    legacy_element_field: str, element_field: str):
     # search for the related elements that use the uri
