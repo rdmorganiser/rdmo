@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
-from .models import AdditionalField, AdditionalFieldValue
+from .models import AdditionalField, AdditionalFieldValue, ConsentFieldValue
 
 log = logging.getLogger(__name__)
 
@@ -87,3 +87,37 @@ class RemoveForm(forms.Form):
 
     consent = forms.BooleanField(required=True)
     consent.label = _("I confirm that I want my profile to be completely removed. This can not be undone!")
+
+
+class UpdateConsentForm(forms.Form):
+
+    consent = forms.BooleanField(
+        label="I agree to the terms of use",
+        required=False,  # not required because it won't be submitted during a delete
+    )
+
+    def __init__(self, *args, user=None, **kwargs):
+        self.user = user
+        super().__init__(*args, **kwargs)
+
+        if not self.user:
+            raise ValueError("A user instance is required to initialize the form.")
+
+        # pre-fill the 'consent' field based on the user's existing consent
+        self.fields["consent"].initial = ConsentFieldValue.objects.filter(
+            user=self.user
+        ).exists()
+
+    def save(self) -> bool:
+
+        if "delete" in self.data:
+            ConsentFieldValue.objects.filter(user=self.user).delete()
+            return False  # consent was revoked
+
+        if self.cleaned_data.get("consent"):
+            ConsentFieldValue.objects.update_or_create(
+                user=self.user, defaults={"consent": True}
+            )
+            return True  # consent was accepted
+
+        return False

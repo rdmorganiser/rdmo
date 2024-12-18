@@ -2,7 +2,15 @@ from django.conf import settings
 from django.contrib.auth import views as auth_views
 from django.urls import include, re_path
 
-from ..views import profile_update, remove_user, shibboleth_login, shibboleth_logout, terms_of_use, token
+from ..views import (
+    profile_update,
+    remove_user,
+    shibboleth_login,
+    shibboleth_logout,
+    terms_of_use,
+    terms_of_use_update,
+    token,
+)
 
 urlpatterns = [
     # edit own profile
@@ -12,7 +20,8 @@ urlpatterns = [
 
 if settings.ACCOUNT_TERMS_OF_USE is True:
     urlpatterns += [
-        re_path('^terms-of-use/', terms_of_use, name='terms_of_use')
+        re_path('^terms-of-use/$', terms_of_use, name='terms_of_use'),
+        re_path('^terms-of-use/update/$', terms_of_use_update, name='terms_of_use_update'),
     ]
 
 if settings.SHIBBOLETH:

@@ -4,16 +4,17 @@ import re
 from django.conf import settings
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.http import HttpResponseNotAllowed, HttpResponseRedirect
+from django.shortcuts import redirect, render
 from django.urls import reverse
 
 from rest_framework.authtoken.models import Token
 
 from rdmo.core.utils import get_next, get_referer_path_info
 
-from .forms import ProfileForm, RemoveForm
-from .utils import delete_user
+from .forms import ProfileForm, RemoveForm, UpdateConsentForm
+from .models import ConsentFieldValue
+from .utils import CONSENT_SESSION_KEY, delete_user
 
 log = logging.getLogger(__name__)
 
@@ -109,3 +110,30 @@ def shibboleth_logout(request):
             or re.search(settings.SHIBBOLETH_USERNAME_PATTERN, request.user.username):
         logout_url += f'?next={settings.SHIBBOLETH_LOGOUT_URL}'
     return HttpResponseRedirect(logout_url)
+
+
+def terms_of_use_update(request):
+
+    if not request.user.is_authenticated:
+        return redirect("account_login")
+
+    if request.method == "POST":
+        # Use the form to handle both update and delete actions
+        form = UpdateConsentForm(request.POST, user=request.user)
+        if form.is_valid():
+            consent_status = form.save()
+            request.session[CONSENT_SESSION_KEY] = consent_status
+            # Update the session to reflect the new consent status
+            return redirect("home")
+
+    elif request.method == "GET":
+        # Render the consent update form
+        form = UpdateConsentForm(user=request.user)
+        has_consented = ConsentFieldValue.objects.filter(user=request.user).exists()
+        return render(
+            request,
+            "account/terms_of_use_update_form.html",
+            {"form": form, "has_consented": has_consented},
+        )
+
+    return HttpResponseNotAllowed(["GET", "POST"])
