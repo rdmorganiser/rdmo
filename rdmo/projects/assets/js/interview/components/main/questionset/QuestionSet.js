@@ -67,6 +67,9 @@ const QuestionSet = ({ templates, questionset, sets, values, disabled, isManager
                             key={elementIndex}
                             templates={templates}
                             question={element}
+                            sets={sets.filter((set) => (
+                              set.set_prefix == setPrefix
+                            ))}
                             values={values.filter((value) => (
                               value.attribute == element.attribute &&
                               value.set_prefix == set.set_prefix &&

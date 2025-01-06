@@ -11,7 +11,7 @@ import QuestionSuccess from '../question/QuestionSuccess'
 
 import TextInput from './TextInput'
 
-const TextWidget = ({ question, values, siblings, currentSet, disabled,
+const TextWidget = ({ question, sets, values, siblings, currentSet, disabled,
                       createValue, updateValue, deleteValue, copyValue }) => {
   return (
     <div className="interview-widgets">
@@ -53,8 +53,10 @@ const TextWidget = ({ question, values, siblings, currentSet, disabled,
       />
       <QuestionCopyValues
         question={question}
+        sets={sets}
         values={values}
         siblings={siblings}
+        currentSet={currentSet}
         copyValue={copyValue}
       />
     </div>
@@ -63,6 +65,7 @@ const TextWidget = ({ question, values, siblings, currentSet, disabled,
 
 TextWidget.propTypes = {
   question: PropTypes.object.isRequired,
+  sets: PropTypes.array.isRequired,
   values: PropTypes.array.isRequired,
   siblings: PropTypes.array,
   disabled: PropTypes.bool,

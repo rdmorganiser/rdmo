@@ -14,7 +14,7 @@ import QuestionRemoveValue from '../question/QuestionRemoveValue'
 
 import RangeInput from './RangeInput'
 
-const RangeWidget = ({ question, values, siblings, currentSet, disabled,
+const RangeWidget = ({ question, sets, values, siblings, currentSet, disabled,
                        createValue, updateValue, deleteValue, copyValue }) => {
 
   const handleCreateValue = (value) => {
@@ -69,8 +69,10 @@ const RangeWidget = ({ question, values, siblings, currentSet, disabled,
       />
       <QuestionCopyValues
         question={question}
+        sets={sets}
         values={values}
         siblings={siblings}
+        currentSet={currentSet}
         copyValue={copyValue}
       />
     </div>
@@ -79,6 +81,7 @@ const RangeWidget = ({ question, values, siblings, currentSet, disabled,
 
 RangeWidget.propTypes = {
   question: PropTypes.object.isRequired,
+  sets: PropTypes.array.isRequired,
   values: PropTypes.array.isRequired,
   siblings: PropTypes.array,
   disabled: PropTypes.bool,

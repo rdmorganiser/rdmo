@@ -14,7 +14,7 @@ import QuestionRemoveValue from '../question/QuestionRemoveValue'
 
 import SelectInput from './SelectInput'
 
-const SelectWidget = ({ question, values, siblings, currentSet, disabled, creatable,
+const SelectWidget = ({ question, sets, values, siblings, currentSet, disabled, creatable,
                         createValue, updateValue, deleteValue, copyValue }) => {
   return (
     <div className="interview-widgets">
@@ -59,8 +59,10 @@ const SelectWidget = ({ question, values, siblings, currentSet, disabled, creata
       />
       <QuestionCopyValues
         question={question}
+        sets={sets}
         values={values}
         siblings={siblings}
+        currentSet={currentSet}
         copyValue={copyValue}
       />
     </div>
@@ -69,6 +71,7 @@ const SelectWidget = ({ question, values, siblings, currentSet, disabled, creata
 
 SelectWidget.propTypes = {
   question: PropTypes.object.isRequired,
+  sets: PropTypes.array.isRequired,
   values: PropTypes.array.isRequired,
   siblings: PropTypes.array,
   disabled: PropTypes.bool,

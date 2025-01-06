@@ -14,7 +14,7 @@ import QuestionRemoveValue from '../question/QuestionRemoveValue'
 
 import RadioInput from './RadioInput'
 
-const RadioWidget = ({ question, values, siblings, currentSet, disabled,
+const RadioWidget = ({ question, sets, values, siblings, currentSet, disabled,
                        createValue, updateValue, deleteValue, copyValue }) => {
   return (
     <div className="interview-widgets">
@@ -59,8 +59,10 @@ const RadioWidget = ({ question, values, siblings, currentSet, disabled,
       />
       <QuestionCopyValues
         question={question}
+        sets={sets}
         values={values}
         siblings={siblings}
+        currentSet={currentSet}
         copyValue={copyValue}
       />
     </div>
@@ -69,6 +71,7 @@ const RadioWidget = ({ question, values, siblings, currentSet, disabled,
 
 RadioWidget.propTypes = {
   question: PropTypes.object.isRequired,
+  sets: PropTypes.array.isRequired,
   values: PropTypes.array.isRequired,
   siblings: PropTypes.array,
   disabled: PropTypes.bool,

@@ -39,28 +39,33 @@ const initValues = (sets, values, element, setPrefix) => {
     setPrefix = ''
   }
 
+  // loop over all sets of the current set prefix and over all questions
   sets.filter((set) => set.set_prefix === setPrefix).forEach((set) => {
     element.elements.filter((e) => (e.model === 'questions.question')).forEach((question) => {
+      // check if there is any value for this question and set
       if (isNil(values.find((value) => (
         (value.attribute === question.attribute) &&
         (value.set_prefix == set.set_prefix) &&
         (value.set_index == set.set_index)
       )))) {
-        const value = ValueFactory.create({
-          attribute: question.attribute,
-          set_prefix: set.set_prefix,
-          set_index: set.set_index,
-          set_collection: question.set_collection,
-          text: question.default_text,
-          option: question.default_option,
-          external_id: question.default_external_id
-        })
+        // if there is no value, create one, but not for checkboxes
+        if (question.widget_class !== 'checkbox') {
+          const value = ValueFactory.create({
+            attribute: question.attribute,
+            set_prefix: set.set_prefix,
+            set_index: set.set_index,
+            set_collection: question.set_collection,
+            text: question.default_text,
+            option: question.default_option,
+            external_id: question.default_external_id
+          })
 
-        if (question.widget_class === 'range') {
-          initRange(question, value)
+          if (question.widget_class === 'range') {
+            initRange(question, value)
+          }
+
+          values.push(value)
         }
-
-        values.push(value)
       }
     })
 

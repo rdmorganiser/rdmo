@@ -12,7 +12,7 @@ import QuestionRemoveValue from '../question/QuestionRemoveValue'
 
 import YesNoInput from './YesNoInput'
 
-const YesNoWidget = ({ question, values, siblings, currentSet, disabled,
+const YesNoWidget = ({ question, sets, values, siblings, currentSet, disabled,
                        createValue, updateValue, deleteValue, copyValue }) => {
   return (
     <div className="interview-widgets">
@@ -53,13 +53,21 @@ const YesNoWidget = ({ question, values, siblings, currentSet, disabled,
         disabled={disabled}
         createValue={createValue}
       />
-      <QuestionCopyValues question={question} values={values} siblings={siblings} copyValue={copyValue} />
+      <QuestionCopyValues
+        question={question}
+        sets={sets}
+        values={values}
+        siblings={siblings}
+        currentSet={currentSet}
+        copyValue={copyValue}
+      />
     </div>
   )
 }
 
 YesNoWidget.propTypes = {
   question: PropTypes.object.isRequired,
+  sets: PropTypes.array.isRequired,
   values: PropTypes.array.isRequired,
   siblings: PropTypes.array,
   disabled: PropTypes.bool,

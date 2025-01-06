@@ -12,7 +12,8 @@ import QuestionRemoveValue from '../question/QuestionRemoveValue'
 
 import DateInput from './DateInput'
 
-const DateWidget = ({ question, values, siblings, currentSet, disabled, createValue, updateValue, deleteValue, copyValue }) => {
+const DateWidget = ({ question, sets, values, siblings, currentSet, disabled,
+                      createValue, updateValue, deleteValue, copyValue }) => {
   return (
     <div className="interview-widgets">
       {
@@ -55,8 +56,10 @@ const DateWidget = ({ question, values, siblings, currentSet, disabled, createVa
       />
       <QuestionCopyValues
         question={question}
+        sets={sets}
         values={values}
         siblings={siblings}
+        currentSet={currentSet}
         copyValue={copyValue}
       />
     </div>
@@ -65,6 +68,7 @@ const DateWidget = ({ question, values, siblings, currentSet, disabled, createVa
 
 DateWidget.propTypes = {
   question: PropTypes.object.isRequired,
+  sets: PropTypes.array.isRequired,
   values: PropTypes.array.isRequired,
   siblings: PropTypes.array,
   disabled: PropTypes.bool,
