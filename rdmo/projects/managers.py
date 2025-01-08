@@ -35,6 +35,16 @@ class ProjectQuerySet(TreeQuerySet):
         visibility_filter = Q(visibility__isnull=False) & sites_filter & groups_filter
         return self.filter(Q(user=user) | visibility_filter)
 
+    def filter_catalogs(self, catalogs=None, exclude_catalogs=None, exclude_null=True):
+        catalogs_filter = Q()
+        if exclude_null:
+          catalogs_filter &= Q(catalog__isnull=False)
+        if catalogs:
+            catalogs_filter &= Q(catalog__in=catalogs)
+        if exclude_catalogs:
+            catalogs_filter &= ~Q(catalog__in=exclude_catalogs)
+        return self.filter(catalogs_filter)
+
 
 class MembershipQuerySet(models.QuerySet):
 
@@ -166,6 +176,10 @@ class ProjectManager(CurrentSiteManagerMixin, TreeManager):
 
     def filter_visibility(self, user):
         return self.get_queryset().filter_visibility(user)
+
+    def filter_catalogs(self, catalogs=None, exclude_catalogs=None, exclude_null=True):
+        return self.get_queryset().filter_catalogs(catalogs=catalogs, exclude_catalogs=exclude_catalogs,
+                                                   exclude_null=exclude_null)
 
 
 class MembershipManager(CurrentSiteManagerMixin, models.Manager):
