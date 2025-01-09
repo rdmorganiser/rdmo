@@ -51,8 +51,7 @@ class Issue(models.Model):
 
     def resolve(self, values):
         for condition in self.task.conditions.all():
-            if condition.resolve(values):
-                return True
+            return condition.resolve(values)
 
     @property
     def dates(self):
