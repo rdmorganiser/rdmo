@@ -5,6 +5,7 @@ import { maxBy } from 'lodash'
 import { gatherOptions } from '../../../utils/options'
 
 import QuestionCopyValues from '../question/QuestionCopyValues'
+import QuestionEraseValues from '../question/QuestionEraseValues'
 import QuestionError from '../question/QuestionError'
 import QuestionSuccess from '../question/QuestionSuccess'
 
@@ -71,6 +72,11 @@ const CheckboxWidget = ({ question, sets, values, siblings, currentSet, disabled
             </div>
             <div className="buttons">
               <QuestionSuccess value={{ success }} />
+              <QuestionEraseValues
+                values={values}
+                disabled={disabled}
+                deleteValue={deleteValue}
+              />
               <QuestionCopyValues
                 question={question}
                 sets={sets}
