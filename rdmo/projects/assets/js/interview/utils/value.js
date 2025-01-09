@@ -45,8 +45,8 @@ const initValues = (sets, values, element, setPrefix) => {
       // check if there is any value for this question and set
       if (isNil(values.find((value) => (
         (value.attribute === question.attribute) &&
-        (value.set_prefix == set.set_prefix) &&
-        (value.set_index == set.set_index)
+        (value.set_prefix === set.set_prefix) &&
+        (value.set_index === set.set_index)
       )))) {
         // if there is no value, create one, but not for checkboxes
         if (question.widget_class !== 'checkbox') {
