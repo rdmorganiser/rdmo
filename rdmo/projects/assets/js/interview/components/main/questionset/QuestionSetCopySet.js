@@ -7,27 +7,26 @@ import useModal from 'rdmo/core/assets/js/hooks/useModal'
 import QuestionSetCopyModal from './QuestionSetCopyModal'
 
 const QuestionCopySet = ({ questionset, sets, currentSet, copySet }) => {
-
-  const [showCopyModal, openCopyModal, closeCopyModal] = useModal()
+  const modal = useModal()
 
   const handleCopySet = () => {
     copySet(currentSet, null, {
       set_prefix: currentSet.set_prefix,
       set_index: last(sets) ? last(sets).set_index + 1 : 0,
     })
-    closeCopyModal()
+    modal.close()
   }
 
   return questionset.is_collection && (
     <>
-      <button type="button" className="btn btn-link btn-copy-set" onClick={openCopyModal}>
+      <button type="button" className="btn btn-link btn-copy-set" onClick={modal.open}>
         <i className="fa fa-copy fa-btn"></i>
       </button>
 
       <QuestionSetCopyModal
         title={capitalize(questionset.verbose_name)}
-        show={showCopyModal}
-        onClose={closeCopyModal}
+        show={modal.show}
+        onClose={modal.close}
         onSubmit={handleCopySet}
       />
     </>
