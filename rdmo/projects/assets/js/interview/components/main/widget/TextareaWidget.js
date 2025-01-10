@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import QuestionAddValue from '../question/QuestionAddValue'
+import QuestionCopyValue from '../question/QuestionCopyValue'
+import QuestionCopyValues from '../question/QuestionCopyValues'
 import QuestionDefault from '../question/QuestionDefault'
 import QuestionError from '../question/QuestionError'
 import QuestionSuccess from '../question/QuestionSuccess'
@@ -9,7 +11,8 @@ import QuestionRemoveValue from '../question/QuestionRemoveValue'
 
 import TextareaInput from './TextareaInput'
 
-const TextareaWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue }) => {
+const TextareaWidget = ({ question, sets, values, siblings, currentSet, disabled,
+                          createValue, updateValue, deleteValue, copyValue }) => {
   return (
     <div className="interview-widgets">
       {
@@ -31,6 +34,7 @@ const TextareaWidget = ({ question, values, currentSet, disabled, createValue, u
                       disabled={disabled}
                       deleteValue={deleteValue}
                     />
+                    <QuestionCopyValue question={question} value={value} siblings={siblings} copyValue={copyValue} />
                     <QuestionDefault question={question} value={value} />
                   </div>
                 }
@@ -47,18 +51,29 @@ const TextareaWidget = ({ question, values, currentSet, disabled, createValue, u
         disabled={disabled}
         createValue={createValue}
       />
+      <QuestionCopyValues
+        question={question}
+        sets={sets}
+        values={values}
+        siblings={siblings}
+        currentSet={currentSet}
+        copyValue={copyValue}
+      />
     </div>
   )
 }
 
 TextareaWidget.propTypes = {
   question: PropTypes.object.isRequired,
+  sets: PropTypes.array.isRequired,
   values: PropTypes.array.isRequired,
+  siblings: PropTypes.array,
   disabled: PropTypes.bool,
   currentSet: PropTypes.object.isRequired,
   createValue: PropTypes.func.isRequired,
   updateValue: PropTypes.func.isRequired,
-  deleteValue: PropTypes.func.isRequired
+  deleteValue: PropTypes.func.isRequired,
+  copyValue: PropTypes.func.isRequired
 }
 
 export default TextareaWidget

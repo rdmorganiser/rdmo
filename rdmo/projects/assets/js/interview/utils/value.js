@@ -39,28 +39,33 @@ const initValues = (sets, values, element, setPrefix) => {
     setPrefix = ''
   }
 
+  // loop over all sets of the current set prefix and over all questions
   sets.filter((set) => set.set_prefix === setPrefix).forEach((set) => {
     element.elements.filter((e) => (e.model === 'questions.question')).forEach((question) => {
+      // check if there is any value for this question and set
       if (isNil(values.find((value) => (
         (value.attribute === question.attribute) &&
-        (value.set_prefix == set.set_prefix) &&
-        (value.set_index == set.set_index)
+        (value.set_prefix === set.set_prefix) &&
+        (value.set_index === set.set_index)
       )))) {
-        const value = ValueFactory.create({
-          attribute: question.attribute,
-          set_prefix: set.set_prefix,
-          set_index: set.set_index,
-          set_collection: question.set_collection,
-          text: question.default_text,
-          option: question.default_option,
-          external_id: question.default_external_id
-        })
+        // if there is no value, create one, but not for checkboxes
+        if (question.widget_class !== 'checkbox') {
+          const value = ValueFactory.create({
+            attribute: question.attribute,
+            set_prefix: set.set_prefix,
+            set_index: set.set_index,
+            set_collection: question.set_collection,
+            text: question.default_text,
+            option: question.default_option,
+            external_id: question.default_external_id
+          })
 
-        if (question.widget_class === 'range') {
-          initRange(question, value)
+          if (question.widget_class === 'range') {
+            initRange(question, value)
+          }
+
+          values.push(value)
         }
-
-        values.push(value)
       }
     })
 
@@ -86,4 +91,21 @@ const activateFirstValue = (page, values) => {
   }
 }
 
-export { isDefaultValue, gatherDefaultValues, initValues, initRange, activateFirstValue }
+const compareValues = (a, b) => {
+  if (isNil(a.id) || isNil(b.id)) {
+    return (a.attribute == b.attribute) &&
+           (a.set_prefix == b.set_prefix) &&
+           (a.set_index == b.set_index) &&
+           (a.collection_index == b.collection_index)
+  } else {
+    return a.id == b.id
+  }
+}
+
+const isEmptyValue = (value) => {
+  return isNil(value.id) || (
+    isEmpty(value.text) && isNil(value.option) && isEmpty(value.external_id)
+  )
+}
+
+export { isDefaultValue, gatherDefaultValues, initValues, initRange, activateFirstValue, compareValues, isEmptyValue }

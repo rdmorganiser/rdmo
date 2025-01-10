@@ -20,36 +20,36 @@ const initQuestionSet = (questionset) => {
   // aggregate questionsets from descendants
   questionset.questionsets = questionset.elements.reduce((questionsets, element) => {
     if (element.model == 'questions.questionset') {
-      return questionsets.concat(element.questionsets)
+      return [...questionsets, element, ...element.questionsets] // add this questionset and all it's questionsets
     } else {
-      return questionsets
+      return questionsets  // do nothing
     }
   }, [])
 
-  // aggregate optionsets from descendants
+  // aggregate questions from descendants
   questionset.questions = questionset.elements.reduce((questions, element) => {
     if (element.model == 'questions.questionset') {
-      return questions.concat(element.questions)
+      return questions.concat(element.questions)  // add the questions of this questionset
     } else {
-      return [...questions, element]
+      return [...questions, element]  // add this question
     }
   }, [])
 
   // aggregate optionsets from descendants
   questionset.optionsets = questionset.elements.reduce((optionsets, element) => {
     if (element.model == 'questions.questionset') {
-      return optionsets.concat(element.optionsets)
+      return optionsets.concat(element.optionsets)  // add all optionsets of the questions of this questionset
     } else {
-      return [...optionsets, ...element.optionsets]
+      return [...optionsets, ...element.optionsets]  // add all optionsets of this question
     }
   }, [])
 
   // aggregate attributes from descendants
   questionset.attributes = questionset.elements.reduce((attributes, element) => {
     if (element.model == 'questions.questionset') {
-      return attributes.concat(element.attributes)
+      return attributes.concat(element.attributes)  // add all attributes of this questionset and its questions
     } else {
-      return [...attributes, element.attribute]
+      return [...attributes, element.attribute]  // add the attribute of this question
     }
   }, [questionset.attribute]).filter((a) => !isNil(a))
 }

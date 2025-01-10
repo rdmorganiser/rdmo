@@ -4,6 +4,8 @@ import PropTypes from 'prop-types'
 import { gatherOptions } from '../../../utils/options'
 
 import QuestionAddValue from '../question/QuestionAddValue'
+import QuestionCopyValue from '../question/QuestionCopyValue'
+import QuestionCopyValues from '../question/QuestionCopyValues'
 import QuestionDefault from '../question/QuestionDefault'
 import QuestionEraseValue from '../question/QuestionEraseValue'
 import QuestionError from '../question/QuestionError'
@@ -12,8 +14,8 @@ import QuestionRemoveValue from '../question/QuestionRemoveValue'
 
 import SelectInput from './SelectInput'
 
-const SelectWidget = ({ question, values, currentSet, disabled, creatable,
-                        createValue, updateValue, deleteValue }) => {
+const SelectWidget = ({ question, sets, values, siblings, currentSet, disabled, creatable,
+                        createValue, updateValue, deleteValue, copyValue }) => {
   return (
     <div className="interview-widgets">
       {
@@ -38,6 +40,7 @@ const SelectWidget = ({ question, values, currentSet, disabled, creatable,
                       disabled={disabled}
                       deleteValue={deleteValue}
                     />
+                    <QuestionCopyValue question={question} value={value} siblings={siblings} copyValue={copyValue} />
                     <QuestionDefault question={question} value={value} />
                   </div>
                 }
@@ -54,19 +57,30 @@ const SelectWidget = ({ question, values, currentSet, disabled, creatable,
         disabled={disabled}
         createValue={createValue}
       />
+      <QuestionCopyValues
+        question={question}
+        sets={sets}
+        values={values}
+        siblings={siblings}
+        currentSet={currentSet}
+        copyValue={copyValue}
+      />
     </div>
   )
 }
 
 SelectWidget.propTypes = {
   question: PropTypes.object.isRequired,
+  sets: PropTypes.array.isRequired,
   values: PropTypes.array.isRequired,
+  siblings: PropTypes.array,
   disabled: PropTypes.bool,
   creatable: PropTypes.bool,
   currentSet: PropTypes.object.isRequired,
   createValue: PropTypes.func.isRequired,
   updateValue: PropTypes.func.isRequired,
-  deleteValue: PropTypes.func.isRequired
+  deleteValue: PropTypes.func.isRequired,
+  copyValue: PropTypes.func.isRequired
 }
 
 export default SelectWidget
