@@ -527,14 +527,14 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
 
         # create new values for the new set
         values = []
-        set_prefix_length = len(set_value.set_prefix.split('|'))
+        set_prefix_length = len(set_value.set_prefix.split('|')) if set_value.set_prefix else 0
         for value in currentValues:
             value.id = None
             if value.set_prefix == set_value.set_prefix:
                 value.set_index = set_value.set_index
             else:
                 value.set_prefix = '|'.join([
-                    str(set_value.set_index) if (index == set_prefix_length - 1) else value
+                    str(set_value.set_index) if (index == set_prefix_length) else value
                     for index, value in enumerate(value.set_prefix.split('|'))
                 ])
             values.append(value)
