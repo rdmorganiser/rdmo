@@ -601,14 +601,17 @@ export function copySet(currentSet, currentSetValue, attrs) {
       promise = Promise.all(
         currentValues.filter((currentValue) => !isEmptyValue(currentValue)).map((currentValue) => {
           const value = {...currentValue}
-          const setPrefixLength = set.set_prefix.split('|').length
+          const setPrefixLength = isEmpty(set.set_prefix) ? 0 : set.set_prefix.split('|').length
 
           if (value.set_prefix == set.set_prefix) {
             value.set_index = set.set_index
           } else {
-            value.set_prefix = value.set_prefix.split('|').reduce((acc, cur, idx) => {
-              return [...acc, (idx == setPrefixLength - 1) ? set.set_index : cur]
-            }, []).join('|')
+            value.set_prefix = value.set_prefix.split('|').map((sp, idx) => {
+              // for the set_prefix of the new value, set the number at the position, which is one more
+              // than the length of the set_prefix of the new (and old) set, to the set_index of the new set.
+              // since idx counts from 0, this equals setPrefixLength
+              return (idx == setPrefixLength) ? set.set_index : sp
+            }).join('|')
           }
 
           delete value.id
