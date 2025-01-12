@@ -287,7 +287,7 @@ export function storeValue(value) {
       dispatch(addToPending(pendingId))
       dispatch(storeValueInit(valueIndex))
 
-      return ValueApi.storeValue(projectId, value, { page: page.id })
+      return ValueApi.storeValue(projectId, value, { page: page.id, question: question && question.id })
         .then((value) => {
           dispatch(fetchNavigation(page))
           dispatch(updateProgress())
@@ -409,7 +409,7 @@ export function deleteValue(value) {
       if (isNil(value.id)) {
         return dispatch(deleteValueSuccess(value))
       } else {
-        return ValueApi.deleteValue(projectId, value, { page: page.id })
+        return ValueApi.deleteValue(projectId, value, { page: page.id, question: question && question.id })
           .then(() => {
 
             dispatch(fetchNavigation(page))
