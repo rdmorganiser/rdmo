@@ -279,16 +279,16 @@ export function storeValue(value) {
       const valueFile = value.file
       const valueSuccess = value.success
 
+      const page = getState().interview.page
+      const sets = getState().interview.sets
+      const question = page.questions.find((question) => question.attribute === value.attribute)
+      const refresh = question && question.optionsets.some((optionset) => optionset.has_refresh)
+
       dispatch(addToPending(pendingId))
       dispatch(storeValueInit(valueIndex))
 
-      return ValueApi.storeValue(projectId, value)
+      return ValueApi.storeValue(projectId, value, { page: page.id, question: question && question.id })
         .then((value) => {
-          const page = getState().interview.page
-          const sets = getState().interview.sets
-          const question = page.questions.find((question) => question.attribute === value.attribute)
-          const refresh = question && question.optionsets.some((optionset) => optionset.has_refresh)
-
           dispatch(fetchNavigation(page))
           dispatch(updateProgress())
 
@@ -401,15 +401,16 @@ export function deleteValue(value) {
       dispatch(addToPending(pendingId))
       dispatch(deleteValueInit(value))
 
+      const page = getState().interview.page
+      const sets = getState().interview.sets
+      const question = page.questions.find((question) => question.attribute === value.attribute)
+      const refresh = question.optionsets.some((optionset) => optionset.has_refresh)
+
       if (isNil(value.id)) {
         return dispatch(deleteValueSuccess(value))
       } else {
-        return ValueApi.deleteValue(projectId, value)
+        return ValueApi.deleteValue(projectId, value, { page: page.id, question: question && question.id })
           .then(() => {
-            const page = getState().interview.page
-            const sets = getState().interview.sets
-            const question = page.questions.find((question) => question.attribute === value.attribute)
-            const refresh = question.optionsets.some((optionset) => optionset.has_refresh)
 
             dispatch(fetchNavigation(page))
             dispatch(updateProgress())
