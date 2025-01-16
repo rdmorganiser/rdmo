@@ -143,7 +143,7 @@ const PageHead = ({ templates, page, sets, values, currentSet,
       }
       <PageHeadDeleteModal
         title={capitalize(page.verbose_name)}
-        name={currentSetValue.text}
+        name={currentSetValue ? currentSetValue.text : null}
         show={showDeleteModal}
         onClose={closeDeleteModal}
         onSubmit={handleDeleteSet}
