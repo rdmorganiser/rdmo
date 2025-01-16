@@ -1,4 +1,4 @@
-import { isEmpty, isNil } from 'lodash'
+import { first, isEmpty, isNil } from 'lodash'
 
 import PageApi from '../api/PageApi'
 import ProjectApi from '../api/ProjectApi'
@@ -366,26 +366,73 @@ export function updateValue(value, attrs, store = true) {
   }
 }
 
-export function copyValue(value) {
+export function copyValue(...originalValues) {
+  const firstValue = first(originalValues)
+  const pendingId = `copyValue/${firstValue.attribute}/${firstValue.set_prefix}/${firstValue.set_index}`
+
   return (dispatch, getState) => {
-    const sets = getState().interview.sets
-    const values = getState().interview.values
+    dispatch(addToPending(pendingId))
 
-    sets.filter((set) => (
-      (set.set_prefix == value.set_prefix) &&
-      (set.set_index != value.set_index)
-    )).forEach((set) => {
-      const sibling = values.find((v) => (
-        (v.attribute == value.attribute) &&
-        (v.set_prefix == set.set_prefix) &&
-        (v.set_index == set.set_index) &&
-        (v.collection_index == value.collection_index)
-      ))
+    const { sets, values } = getState().interview
 
-      if (isNil(sibling)) {
-        dispatch(storeValue(ValueFactory.create({ ...value, set_index: set.set_index })))
-      } else if (isEmptyValue(sibling)) {
-        dispatch(storeValue(ValueFactory.update(sibling, value)))
+    // create copies for each value for all it's empty siblings
+    const copies = originalValues.reduce((copies, value) => {
+      return [
+        ...copies,
+        ...sets.filter((set) => (
+          (set.set_prefix == value.set_prefix) &&
+          (set.set_index != value.set_index)
+        )).map((set) => {
+          const siblingIndex = values.findIndex((v) => (
+            (v.attribute == value.attribute) &&
+            (v.set_prefix == set.set_prefix) &&
+            (v.set_index == set.set_index) &&
+            (v.collection_index == value.collection_index)
+          ))
+
+          const sibling = siblingIndex > 0 ? values[siblingIndex] : null
+
+          if (isNil(sibling)) {
+            return [ValueFactory.create({ ...value, set_index: set.set_index }), siblingIndex]
+          } else if (isEmptyValue(sibling)) {
+            // the spread operator { ...sibling } does prevent an update in place
+            return [ValueFactory.update({ ...sibling }, value), siblingIndex]
+          } else {
+            return null
+          }
+        }).filter((value) => !isNil(value))
+      ]
+    }, [])
+
+    // dispatch storeValueInit for each of the updated values,
+    // created values have valueIndex -1 and will be skipped
+    // eslint-disable-next-line no-unused-vars
+    copies.forEach(([value, valueIndex]) => dispatch(storeValueInit(valueIndex)))
+
+    // loop over all copies and store the values on the server
+    // afterwards fetchNavigation, updateProgress and check refresh once
+    return Promise.all(
+      copies.map(([value, valueIndex]) => {
+        return ValueApi.storeValue(projectId, value)
+          .then((value) => dispatch(storeValueSuccess(value, valueIndex)))
+      })
+    ).then(() => {
+      dispatch(removeFromPending(pendingId))
+
+      const page = getState().interview.page
+      const sets = getState().interview.sets
+      const question = page.questions.find((question) => question.attribute === firstValue.attribute)
+      const refresh = question && question.optionsets.some((optionset) => optionset.has_refresh)
+
+      dispatch(fetchNavigation(page))
+      dispatch(updateProgress())
+
+      if (refresh) {
+        // if the refresh flag is set, reload all values for the page,
+        // resolveConditions will be called in fetchValues
+        dispatch(fetchValues(page))
+      } else {
+        dispatch(resolveConditions(page, sets))
       }
     })
   }
