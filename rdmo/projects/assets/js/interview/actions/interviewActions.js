@@ -527,10 +527,11 @@ export function deleteSet(set, setValue) {
 
           if (sets.length > 1) {
             const index = sets.indexOf(set)
-            if (index > 0) {
+            if (index < sets.length - 1) {
+              dispatch(activateSet(sets[index + 1]))
+            } else {
+              // If it's the last set, activate the new last set
               dispatch(activateSet(sets[index - 1]))
-            } else if (index == 0) {
-              dispatch(activateSet(sets[1]))
             }
           }
 
