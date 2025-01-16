@@ -65,6 +65,8 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     last_changed = serializers.DateTimeField(read_only=True)
 
+    visibility = serializers.CharField(source='visibility.get_help_display')
+
     class Meta:
         model = Project
         fields = (
@@ -85,7 +87,8 @@ class ProjectSerializer(serializers.ModelSerializer):
             'site',
             'views',
             'progress_total',
-            'progress_count'
+            'progress_count',
+            'visibility'
         )
         read_only_fields = (
             'snapshots',
