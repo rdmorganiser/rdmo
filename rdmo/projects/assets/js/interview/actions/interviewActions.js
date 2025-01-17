@@ -109,7 +109,7 @@ export function fetchPageError(error) {
 }
 
 export function fetchNavigation(page) {
-  const pendingId = `fetchNavigation/${page.id}`
+  const pendingId = `fetchNavigation/${page ? page.id : 'done'}`
 
   return (dispatch) => {
     dispatch(addToPending(pendingId))
