@@ -9,7 +9,7 @@ const QuestionCopyValue = ({ question, value, siblings, copyValue }) => {
     !question.is_collection &&
     !isEmptyValue(value) &&
     siblings.some((value) => isEmptyValue(value)) && (
-      <button className="btn btn-link btn-apply-to-all" onClick={() => copyValue(value, siblings)}
+      <button className="btn btn-link btn-apply-to-all" onClick={() => copyValue(value)}
               title={gettext('Apply this answer to all tabs where this question is empty')}>
         <i className="fa fa-arrow-circle-right fa-btn"></i>
       </button>

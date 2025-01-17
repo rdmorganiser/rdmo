@@ -19,12 +19,12 @@
         {% endblocktrans %}
     </p>
 
-    {% if object.visibility and 'sites' in form.fields or 'groups' in form.fields %}
-    {% bootstrap_form submit=_('Update visibility') delete=_('Remove visibility') %}
-    {% elif object.visibility %}
-    {% bootstrap_form delete=_('Remove visibility') %}
-    {% else %}
+    {% if not object.visibility %}
     {% bootstrap_form submit=_('Make visible') %}
+    {% elif object.visibility and 'sites' in form.fields or 'groups' in form.fields %}
+    {% bootstrap_form submit=_('Update visibility') delete=_('Remove visibility') %}
+    {% else %}
+    {% bootstrap_form delete=_('Remove visibility') %}
     {% endif %}
 
 {% endblock %}

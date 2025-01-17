@@ -9,7 +9,8 @@ import useModal from 'rdmo/core/assets/js/hooks/useModal'
 import PageHeadDeleteModal from './PageHeadDeleteModal'
 import PageHeadFormModal from './PageHeadFormModal'
 
-const PageHead = ({ templates, page, sets, values, currentSet, activateSet, createSet, updateSet, deleteSet }) => {
+const PageHead = ({ templates, page, sets, values, currentSet,
+                    activateSet, createSet, updateSet, deleteSet, copySet }) => {
 
   const currentSetValue = isNil(currentSet) ? null : (
     values.find((value) => (
@@ -20,6 +21,7 @@ const PageHead = ({ templates, page, sets, values, currentSet, activateSet, crea
   const {show: showCreateModal, open: openCreateModal, close: closeCreateModal} = useModal()
   const {show: showUpdateModal, open: openUpdateModal, close: closeUpdateModal} = useModal()
   const {show: showDeleteModal, open: openDeleteModal, close: closeDeleteModal} = useModal()
+  const {show: showCopyModal, open: openCopyModal, close: closeCopyModal} = useModal()
 
   const handleActivateSet = (event, set) => {
     event.preventDefault()
@@ -53,6 +55,16 @@ const PageHead = ({ templates, page, sets, values, currentSet, activateSet, crea
     closeDeleteModal()
   }
 
+  const handleCopySet = (text) => {
+    copySet(currentSet, currentSetValue, {
+      attribute: page.attribute,
+      set_index: last(sets) ? last(sets).set_index + 1 : 0,
+      set_collection: page.is_collection,
+      text
+    })
+    closeCopyModal()
+  }
+
   return page.is_collection && (
     <div className="interview-page-tabs">
       <Html html={templates.project_interview_page_help} />
@@ -82,12 +94,13 @@ const PageHead = ({ templates, page, sets, values, currentSet, activateSet, crea
               </li>
             </ul>
             <div className="interview-page-tabs-buttons">
-                {
-                  page.attribute && (
-                    <button className="btn-link fa fa-pencil" title={gettext('Edit tab')} onClick={openUpdateModal} />
-                  )
-                }
-                <button className="btn-link fa fa-trash" title={gettext('Remove tab')} onClick={openDeleteModal} />
+              {
+                page.attribute && (
+                  <button className="btn-link fa fa-pencil" title={gettext('Edit tab')} onClick={openUpdateModal} />
+                )
+              }
+              <button className="btn-link fa fa-copy" title={gettext('Copy tab')} onClick={openCopyModal} />
+              <button className="btn-link fa fa-trash" title={gettext('Remove tab')} onClick={openDeleteModal} />
             </div>
           </>
         ) : (
@@ -99,15 +112,28 @@ const PageHead = ({ templates, page, sets, values, currentSet, activateSet, crea
 
       <PageHeadFormModal
         title={capitalize(page.verbose_name)}
+        submitLabel={gettext('Create')}
+        submitColor="success"
         show={showCreateModal}
         initial={isNil(page.attribute) ? null : ''}
         onClose={closeCreateModal}
         onSubmit={handleCreateSet}
       />
+      <PageHeadFormModal
+        title={capitalize(page.verbose_name)}
+        submitLabel={gettext('Copy')}
+        submitColor="info"
+        show={showCopyModal}
+        initial={isNil(page.attribute) ? null : ''}
+        onClose={closeCopyModal}
+        onSubmit={handleCopySet}
+      />
       {
         currentSetValue && (
           <PageHeadFormModal
             title={capitalize(page.verbose_name)}
+            submitLabel={gettext('Update')}
+            submitColor="primary"
             show={showUpdateModal}
             initial={currentSetValue.text}
             onClose={closeUpdateModal}
@@ -117,6 +143,7 @@ const PageHead = ({ templates, page, sets, values, currentSet, activateSet, crea
       }
       <PageHeadDeleteModal
         title={capitalize(page.verbose_name)}
+        name={currentSetValue ? currentSetValue.text : null}
         show={showDeleteModal}
         onClose={closeDeleteModal}
         onSubmit={handleDeleteSet}
@@ -134,7 +161,8 @@ PageHead.propTypes = {
   activateSet: PropTypes.func.isRequired,
   createSet: PropTypes.func.isRequired,
   updateSet: PropTypes.func.isRequired,
-  deleteSet: PropTypes.func.isRequired
+  deleteSet: PropTypes.func.isRequired,
+  copySet: PropTypes.func.isRequired
 }
 
 export default PageHead

@@ -261,3 +261,11 @@ def get_upload_accept():
         else:
             return None
     return ','.join(accept)
+
+
+def compute_set_prefix_from_set_value(set_value, value):
+    set_prefix_length = len(set_value.set_prefix.split('|')) if set_value.set_prefix else 0
+    return '|'.join([
+        str(set_value.set_index) if (index == set_prefix_length) else value
+        for index, value in enumerate(value.set_prefix.split('|'))
+    ])

@@ -116,20 +116,36 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
 
   if (myProjects) {
     visibleColumns.splice(2, 0, 'role')
-    columnWidths = ['35%', '20%', '20%', '20%', '5%']
+    columnWidths = ['40%', '18%', '18%', '18%', '6%']
   } else {
     visibleColumns.splice(2, 0, 'created')
     visibleColumns.splice(2, 0, 'owner')
-    columnWidths = ['35%', '10%', '20%', '20%', '20%', '5%']
+    columnWidths = ['30%', '10%', '18%', '18%', '18%', '6%']
   }
 
   const cellFormatters = {
     title: (content, row) => renderTitle(content, row),
     role: (_content, row) => {
       const { rolesString } = getUserRoles(row, currentUserId)
-      return rolesString
+      return <>
+        {
+          rolesString && <p>{rolesString}</p>
+        }
+        {
+          row.visibility && <p className="text-muted">{row.visibility}</p>
+        }
+      </>
     },
-    owner: (_content, row) => row.owners.map(owner => `${owner.first_name} ${owner.last_name}`).join('; '),
+    owner: (_content, row) => (
+      <>
+        <p>
+          {row.owners.map(owner => `${owner.first_name} ${owner.last_name}`).join('; ')}
+        </p>
+        {
+          row.visibility && <p className="text-muted">{row.visibility}</p>
+        }
+      </>
+    ),
     progress: (_content, row) => getProgressString(row),
     created: content => useFormattedDateTime(content, language),
     last_changed: content => useFormattedDateTime(content, language),

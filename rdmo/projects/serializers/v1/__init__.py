@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 
+from rdmo.domain.models import Attribute
 from rdmo.questions.models import Catalog
 from rdmo.services.validators import ProviderValidator
 
@@ -64,6 +65,8 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     last_changed = serializers.DateTimeField(read_only=True)
 
+    visibility = serializers.CharField(source='visibility.get_help_display', read_only=True)
+
     class Meta:
         model = Project
         fields = (
@@ -84,7 +87,8 @@ class ProjectSerializer(serializers.ModelSerializer):
             'site',
             'views',
             'progress_total',
-            'progress_count'
+            'progress_count',
+            'visibility'
         )
         read_only_fields = (
             'snapshots',
@@ -403,6 +407,8 @@ class SnapshotSerializer(serializers.ModelSerializer):
 
 
 class ValueSerializer(serializers.ModelSerializer):
+
+    attribute = serializers.PrimaryKeyRelatedField(queryset=Attribute.objects.all(), required=True)
 
     class Meta:
         model = Value

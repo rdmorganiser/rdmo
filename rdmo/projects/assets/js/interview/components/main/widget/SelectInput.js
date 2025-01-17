@@ -22,14 +22,10 @@ import OptionText from './common/OptionText'
 const SelectInput = ({ question, value, options, disabled, creatable, updateValue, buttons }) => {
 
   const [inputValue, setInputValue] = useState('')
-  // const [isOpen, setIsOpen] = useState(false)
 
   const handleChange = (option) => {
     if (isNil(option)) {
-      // close the select input when the value is reset
-      // setIsOpen(false)
       setInputValue('')
-
       updateValue(value, {})
     } else if (option.__isNew__ === true) {
       updateValue(value, {
@@ -85,6 +81,7 @@ const SelectInput = ({ question, value, options, disabled, creatable, updateValu
   const isAsync = question.optionsets.some((optionset) => optionset.has_search)
 
   const selectProps = {
+    key: value.id,
     classNamePrefix: 'react-select',
     className: classnames,
     backspaceRemovesValue: false,

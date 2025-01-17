@@ -1,4 +1,4 @@
-import { isEmpty, isNil } from 'lodash'
+import { first, isEmpty, isNil } from 'lodash'
 
 import PageApi from '../api/PageApi'
 import ProjectApi from '../api/ProjectApi'
@@ -47,7 +47,10 @@ import {
   CREATE_SET,
   DELETE_SET_INIT,
   DELETE_SET_SUCCESS,
-  DELETE_SET_ERROR
+  DELETE_SET_ERROR,
+  COPY_SET_INIT,
+  COPY_SET_SUCCESS,
+  COPY_SET_ERROR
 } from './actionTypes'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
@@ -363,26 +366,73 @@ export function updateValue(value, attrs, store = true) {
   }
 }
 
-export function copyValue(value) {
+export function copyValue(...originalValues) {
+  const firstValue = first(originalValues)
+  const pendingId = `copyValue/${firstValue.attribute}/${firstValue.set_prefix}/${firstValue.set_index}`
+
   return (dispatch, getState) => {
-    const sets = getState().interview.sets
-    const values = getState().interview.values
+    dispatch(addToPending(pendingId))
 
-    sets.filter((set) => (
-      (set.set_prefix == value.set_prefix) &&
-      (set.set_index != value.set_index)
-    )).forEach((set) => {
-      const sibling = values.find((v) => (
-        (v.attribute == value.attribute) &&
-        (v.set_prefix == set.set_prefix) &&
-        (v.set_index == set.set_index) &&
-        (v.collection_index == value.collection_index)
-      ))
+    const { sets, values } = getState().interview
 
-      if (isNil(sibling)) {
-        dispatch(storeValue(ValueFactory.create({ ...value, set_index: set.set_index })))
-      } else if (isEmptyValue(sibling)) {
-        dispatch(storeValue(ValueFactory.update(sibling, value)))
+    // create copies for each value for all it's empty siblings
+    const copies = originalValues.reduce((copies, value) => {
+      return [
+        ...copies,
+        ...sets.filter((set) => (
+          (set.set_prefix == value.set_prefix) &&
+          (set.set_index != value.set_index)
+        )).map((set) => {
+          const siblingIndex = values.findIndex((v) => (
+            (v.attribute == value.attribute) &&
+            (v.set_prefix == set.set_prefix) &&
+            (v.set_index == set.set_index) &&
+            (v.collection_index == value.collection_index)
+          ))
+
+          const sibling = siblingIndex > 0 ? values[siblingIndex] : null
+
+          if (isNil(sibling)) {
+            return [ValueFactory.create({ ...value, set_index: set.set_index }), siblingIndex]
+          } else if (isEmptyValue(sibling)) {
+            // the spread operator { ...sibling } does prevent an update in place
+            return [ValueFactory.update({ ...sibling }, value), siblingIndex]
+          } else {
+            return null
+          }
+        }).filter((value) => !isNil(value))
+      ]
+    }, [])
+
+    // dispatch storeValueInit for each of the updated values,
+    // created values have valueIndex -1 and will be skipped
+    // eslint-disable-next-line no-unused-vars
+    copies.forEach(([value, valueIndex]) => dispatch(storeValueInit(valueIndex)))
+
+    // loop over all copies and store the values on the server
+    // afterwards fetchNavigation, updateProgress and check refresh once
+    return Promise.all(
+      copies.map(([value, valueIndex]) => {
+        return ValueApi.storeValue(projectId, value)
+          .then((value) => dispatch(storeValueSuccess(value, valueIndex)))
+      })
+    ).then(() => {
+      dispatch(removeFromPending(pendingId))
+
+      const page = getState().interview.page
+      const sets = getState().interview.sets
+      const question = page.questions.find((question) => question.attribute === firstValue.attribute)
+      const refresh = question && question.optionsets.some((optionset) => optionset.has_refresh)
+
+      dispatch(fetchNavigation(page))
+      dispatch(updateProgress())
+
+      if (refresh) {
+        // if the refresh flag is set, reload all values for the page,
+        // resolveConditions will be called in fetchValues
+        dispatch(fetchValues(page))
+      } else {
+        dispatch(resolveConditions(page, sets))
       }
     })
   }
@@ -459,8 +509,8 @@ export function createSet(attrs) {
     // create a value for the text if the page has an attribute
     const value = isNil(attrs.attribute) ? null : ValueFactory.create(attrs)
 
-    // create an action to be called immediately or after saving the value
-    const createSetSuccess = (value) => {
+    // create a callback function to be called immediately or after saving the value
+    const createSetCallback = (value) => {
       dispatch(activateSet(set))
 
       const state = getState().interview
@@ -476,12 +526,12 @@ export function createSet(attrs) {
     }
 
     if (isNil(value)) {
-      return createSetSuccess()
+      return createSetCallback()
     } else {
       return dispatch(storeValue(value)).then(() => {
         const storedValue = getState().interview.values.find((v) => compareValues(v, value))
         if (!isNil(storedValue)) {
-          createSetSuccess(storedValue)
+          createSetCallback(storedValue)
         }
       })
     }
@@ -524,10 +574,11 @@ export function deleteSet(set, setValue) {
 
           if (sets.length > 1) {
             const index = sets.indexOf(set)
-            if (index > 0) {
+            if (index < sets.length - 1) {
+              dispatch(activateSet(sets[index + 1]))
+            } else {
+              // If it's the last set, activate the new last set
               dispatch(activateSet(sets[index - 1]))
-            } else if (index == 0) {
-              dispatch(activateSet(sets[1]))
             }
           }
 
@@ -558,4 +609,85 @@ export function deleteSetSuccess(set) {
 
 export function deleteSetError(errors) {
   return {type: DELETE_SET_ERROR, errors}
+}
+
+export function copySet(currentSet, currentSetValue, attrs) {
+  const pendingId = `copySet/${currentSet.set_prefix}/${currentSet.set_index}`
+
+  return (dispatch, getState) => {
+    dispatch(addToPending(pendingId))
+    dispatch(copySetInit())
+
+    // create a new set
+    const set = SetFactory.create(attrs)
+
+    // create a value for the text if the page has an attribute
+    const value = isNil(attrs.attribute) ? null : ValueFactory.create(attrs)
+
+    // create a callback function to be called immediately or after saving the value
+    const copySetCallback = (setValues) => {
+      dispatch(activateSet(set))
+
+      const state = getState().interview
+
+      const page = state.page
+      const values = [...state.values, ...setValues]
+      const sets = gatherSets(values)
+
+      initSets(sets, page)
+      initValues(sets, values, page)
+
+      return dispatch({type: COPY_SET_SUCCESS, values, sets})
+    }
+
+    let promise
+    if (isNil(value)) {
+      // gather all values for the currentSet and it's descendants
+      const currentValues = getDescendants(getState().interview.values, currentSet)
+
+      // store each value in currentSet with the new set_index
+      promise = Promise.all(
+        currentValues.filter((currentValue) => !isEmptyValue(currentValue)).map((currentValue) => {
+          const value = {...currentValue}
+          const setPrefixLength = isEmpty(set.set_prefix) ? 0 : set.set_prefix.split('|').length
+
+          if (value.set_prefix == set.set_prefix) {
+            value.set_index = set.set_index
+          } else {
+            value.set_prefix = value.set_prefix.split('|').map((sp, idx) => {
+              // for the set_prefix of the new value, set the number at the position, which is one more
+              // than the length of the set_prefix of the new (and old) set, to the set_index of the new set.
+              // since idx counts from 0, this equals setPrefixLength
+              return (idx == setPrefixLength) ? set.set_index : sp
+            }).join('|')
+          }
+
+          delete value.id
+          return ValueApi.storeValue(projectId, value)
+        })
+      )
+    } else {
+      promise = ValueApi.copySet(projectId, currentSetValue, value)
+    }
+
+    return promise.then((values) => {
+      dispatch(removeFromPending(pendingId))
+      dispatch(copySetCallback(values))
+    }).catch((errors) => {
+      dispatch(removeFromPending(pendingId))
+      dispatch(copySetError(errors))
+    })
+  }
+}
+
+export function copySetInit() {
+  return {type: COPY_SET_INIT}
+}
+
+export function copySetSuccess(values, sets) {
+  return {type: COPY_SET_SUCCESS, values, sets}
+}
+
+export function copySetError(errors) {
+  return {type: COPY_SET_ERROR, errors}
 }

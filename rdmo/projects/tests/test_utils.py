@@ -7,14 +7,26 @@ from django.http import QueryDict
 from rdmo.core.tests.utils import compute_checksum
 
 from ..filters import ProjectFilter
-from ..models import Project
-from ..utils import copy_project, set_context_querystring_with_filter_and_page
+from ..models import Project, Value
+from ..utils import compute_set_prefix_from_set_value, copy_project, set_context_querystring_with_filter_and_page
 
 GET_queries = [
     'page=2&title=project',
     'page=2',
     'title=project',
     ''
+]
+
+SET_VALUES = [
+    ({'set_prefix': ''   , 'set_index': 1}, {'set_prefix': '0'},     '1'),
+    ({'set_prefix': ''   , 'set_index': 1}, {'set_prefix': '0|0'},   '1|0'),
+    ({'set_prefix': ''   , 'set_index': 1}, {'set_prefix': '0|0|0'}, '1|0|0'),
+    ({'set_prefix': ''   , 'set_index': 2}, {'set_prefix': '0'},     '2'),
+    ({'set_prefix': ''   , 'set_index': 2}, {'set_prefix': '0|0'},   '2|0'),
+    ({'set_prefix': ''   , 'set_index': 2}, {'set_prefix': '0|0|0'}, '2|0|0'),
+    ({'set_prefix': '0'  , 'set_index': 1}, {'set_prefix': '0|0'},   '0|1'),
+    ({'set_prefix': '0'  , 'set_index': 1}, {'set_prefix': '0|0|0'}, '0|1|0'),
+    ({'set_prefix': '0|0', 'set_index': 1}, {'set_prefix': '0|0|0'}, '0|0|1'),
 ]
 
 @pytest.mark.parametrize('GET_query', GET_queries)
@@ -128,3 +140,8 @@ def test_copy_project(db, files):
                        compute_checksum(value.file.open('rb').read())
             else:
                 assert not value.file
+
+
+@pytest.mark.parametrize('set_value, value, result', SET_VALUES)
+def test_compute_set_prefix_from_set_value(set_value, value, result):
+    assert compute_set_prefix_from_set_value(Value(**set_value), Value(**value)) == result

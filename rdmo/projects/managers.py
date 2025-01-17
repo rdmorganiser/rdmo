@@ -155,6 +155,29 @@ class ValueQuerySet(models.QuerySet):
     def distinct_list(self):
         return self.order_by('attribute').values_list('attribute', 'set_prefix', 'set_index').distinct()
 
+    def filter_set(self, set_value):
+        # get the catalog and prefetch most elements of the catalog
+        catalog = set_value.project.catalog
+        catalog.prefetch_elements()
+
+        # Get all attributes from matching elements and their descendants
+        attributes = {
+            descendant.attribute
+            for element in (catalog.pages + catalog.questions)
+            if element.attribute == set_value.attribute
+            for descendant in element.descendants
+        }
+
+        # construct the set_prefix for descendants for this set
+        descendants_set_prefix = \
+            f'{set_value.set_prefix}|{set_value.set_index}' if set_value.set_prefix else str(set_value.set_index)
+
+        # collect all values for this set and all descendants
+        return self.filter(attribute__in=attributes).filter(
+            Q(set_prefix=set_value.set_prefix, set_index=set_value.set_index) |
+            Q(set_prefix__startswith=descendants_set_prefix)
+        )
+
 
 class ProjectManager(CurrentSiteManagerMixin, TreeManager):
 

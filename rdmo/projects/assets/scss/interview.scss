@@ -100,22 +100,20 @@
 
     .interview-block-options {
         position: absolute;
-        top: 0;
-        right: 0;
+        top: 6px;
+        right: 8px;
         z-index: 5;
 
+        display: flex;
+        gap: 4px;
+
+        .btn-copy-set,
         .btn-remove-set {
             opacity: 0.8;
             line-height: 20px;
             font-size: 14px;
 
-            position: absolute;
-            z-index: 5;
-            top: 0;
-            right: 0;
-
-            padding-left: 8px;
-            padding-right: 8px;
+            padding: 0;
 
             &:hover {
                 opacity: 1;
@@ -371,6 +369,10 @@
         p {
             display: inline;
         }
+    }
+
+    .react-select {
+        max-width: 100%;
     }
 }
 
