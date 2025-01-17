@@ -160,13 +160,13 @@ class ValueQuerySet(models.QuerySet):
         catalog = set_value.project.catalog
         catalog.prefetch_elements()
 
-        # collect the attributes of all questions of all pages or questionsets
-        # of this catalog, which have the attribute of this value
-        attributes = set()
-        elements = catalog.pages + catalog.questions
-        for element in elements:
-            if element.attribute == set_value.attribute:
-                attributes.update([descendant.attribute for descendant in element.descendants])
+        # Get all attributes from matching elements and their descendants
+        attributes = {
+            descendant.attribute
+            for element in (catalog.pages + catalog.questions)
+            if element.attribute == set_value.attribute
+            for descendant in element.descendants
+        }
 
         # construct the set_prefix for descendants for this set
         descendants_set_prefix = \
