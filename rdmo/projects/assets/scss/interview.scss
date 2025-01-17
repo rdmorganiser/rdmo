@@ -376,39 +376,28 @@
     }
 }
 
-.badge-optional,
-.badge-contact {
+.badge-optional {
     float: right;
     margin-top: 1px;
     margin-left: 5px;
-}
-
-.badge-optional {
     cursor: help;
     background-color: #efefef;
     color: #777;
 }
 
-.badge-contact {
-    background-color: $link-color;
-    color: white;
+.btn-contact {
+    float: right;
+    opacity: 0.8;
+    line-height: 20px;
+    font-size: 14px;
 
-    font-weight: normal;
+    padding: 0;
 
-    &.btn.btn-link {
-        opacity: 0.8;
-        border: 0;
-
-        &:hover {
-            opacity: 1;
-            background-color: $link-color-hover;
-            color: white;
-        }
-        &:focus {
-            outline: 0;
-            background-color: $link-color-hover;
-            color: white;
-        }
+    &:hover {
+        opacity: 1;
+    }
+    &:focus {
+        outline: 0;
     }
 }
 
