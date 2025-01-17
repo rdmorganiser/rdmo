@@ -121,7 +121,7 @@ class ProjectViewSet(ModelViewSet):
             'snapshots',
             'views',
             Prefetch('memberships', queryset=Membership.objects.select_related('user'), to_attr='memberships_list')
-        ).select_related('catalog')
+        ).select_related('catalog', 'visibility')
 
         # prepare subquery for last_changed
         last_changed_subquery = Subquery(
