@@ -75,7 +75,13 @@ from .serializers.v1 import (
 )
 from .serializers.v1.overview import CatalogSerializer, ProjectOverviewSerializer
 from .serializers.v1.page import PageSerializer
-from .utils import check_conditions, copy_project, get_upload_accept, send_invite_email
+from .utils import (
+    check_conditions,
+    compute_set_prefix_from_set_value,
+    copy_project,
+    get_upload_accept,
+    send_invite_email,
+)
 
 
 class ProjectPagination(PageNumberPagination):
@@ -527,16 +533,12 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
 
         # create new values for the new set
         values = []
-        set_prefix_length = len(set_value.set_prefix.split('|')) if set_value.set_prefix else 0
         for value in currentValues:
             value.id = None
             if value.set_prefix == set_value.set_prefix:
                 value.set_index = set_value.set_index
             else:
-                value.set_prefix = '|'.join([
-                    str(set_value.set_index) if (index == set_prefix_length) else value
-                    for index, value in enumerate(value.set_prefix.split('|'))
-                ])
+                value.set_prefix = compute_set_prefix_from_set_value(set_value, value)
             values.append(value)
 
         # bulk create the new values
