@@ -65,7 +65,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     last_changed = serializers.DateTimeField(read_only=True)
 
-    visibility = serializers.CharField(source='visibility.get_help_display')
+    visibility = serializers.CharField(source='visibility.get_help_display', read_only=True)
 
     class Meta:
         model = Project
