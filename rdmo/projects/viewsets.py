@@ -22,6 +22,7 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from rdmo.conditions.models import Condition
 from rdmo.core.permissions import HasModelPermission
+from rdmo.core.throttling import EmailThrottle
 from rdmo.core.utils import human2bytes, is_truthy, return_file_response
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet
@@ -329,7 +330,8 @@ class ProjectViewSet(ModelViewSet):
         raise Http404
 
     @action(detail=True, methods=['get', 'post'],
-            permission_classes=(HasModelPermission | HasProjectPermission, ))
+            permission_classes=(HasModelPermission | HasProjectPermission, ),
+            throttle_classes=[EmailThrottle])
     def contact(self, request, pk):
         if settings.PROJECT_CONTACT:
             if request.method == 'POST':

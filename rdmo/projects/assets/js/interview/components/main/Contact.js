@@ -31,7 +31,7 @@ const Contact = ({ templates, contact, sendContact, closeContact }) => {
           bsSize: 'lg'
         }}>
           <Html html={templates.project_interview_contact_help} />
-          <form onSubmit={onSubmit}>
+          <form className="mb-0" onSubmit={onSubmit}>
             <div className="form-group">
               <label htmlFor="interview-question-contact-subject">Subject</label>
               <input
@@ -66,6 +66,13 @@ const Contact = ({ templates, contact, sendContact, closeContact }) => {
                 }
               </ul>
             </div>
+            {
+              errors && errors.throttling && (
+                <ul className="help-block list-unstyled mb-0">
+                  <li className="text-danger">{errors.throttling}</li>
+                </ul>
+              )
+            }
           </form>
       </Modal>
     </>

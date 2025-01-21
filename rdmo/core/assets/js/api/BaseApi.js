@@ -19,6 +19,12 @@ function BadRequestError(errors) {
   this.errors = errors
 }
 
+function ThrottlingError(errors) {
+  this.errors = {
+    throttling: errors.detail
+  }
+}
+
 class BaseApi {
 
   static get(url) {
@@ -30,6 +36,10 @@ class BaseApi {
       } else if (response.status === 400) {
         return response.json().then(errors => {
           throw new BadRequestError(errors)
+        })
+      } else if (response.status === 429) {
+        return response.json().then(errors => {
+          throw new ThrottlingError(errors)
         })
       } else {
         throw new ApiError(response.statusText, response.status)
@@ -58,6 +68,10 @@ class BaseApi {
       } else if (response.status == 400) {
         return response.json().then(errors => {
           throw new ValidationError(errors)
+        })
+      } else if (response.status === 429) {
+        return response.json().then(errors => {
+          throw new ThrottlingError(errors)
         })
       } else {
         throw new ApiError(response.statusText, response.status)
