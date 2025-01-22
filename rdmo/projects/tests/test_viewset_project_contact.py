@@ -151,7 +151,8 @@ def test_contact_get_set(db, client):
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
-def test_contact_post(db, client, username, password, project_id):
+def test_contact_post(db, client,settings, username, password, project_id):
+    assert settings.PROJECT_CONTACT
     client.login(username=username, password=password)
 
     url = reverse(urlnames['contact'], args=[project_id])
@@ -176,7 +177,8 @@ def test_contact_post(db, client, username, password, project_id):
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
-def test_contact_post_error(db, client, username, password, project_id):
+def test_contact_post_error(db, client,settings, username, password, project_id):
+    assert settings.PROJECT_CONTACT
     client.login(username=username, password=password)
 
     url = reverse(urlnames['contact'], args=[project_id])
