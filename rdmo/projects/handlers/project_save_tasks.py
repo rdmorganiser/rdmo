@@ -8,7 +8,10 @@ DEFERRED_SYNC_TASKS_KEY = '_deferred_sync_tasks'
 
 @receiver(pre_save, sender=Project)
 def pre_save_project_sync_tasks_from_catalog(sender, instance, raw, update_fields, **kwargs):
-    if raw or (update_fields and 'catalog' not in update_fields):
+    if (raw or
+        instance.id is None or
+        (update_fields and 'catalog' not in update_fields)
+    ):
         return
 
     # Fetch the original catalog from the database
@@ -22,6 +25,8 @@ def pre_save_project_sync_tasks_from_catalog(sender, instance, raw, update_field
 
 @receiver(post_save, sender=Project)
 def post_save_project_sync_tasks_from_catalog(sender, instance, created, raw, **kwargs):
+    if not hasattr(instance, DEFERRED_SYNC_TASKS_KEY):
+        return
     if getattr(instance, DEFERRED_SYNC_TASKS_KEY, None) or (created and not raw):
         # For existing projects with catalog changes, use deferred views
         instance.views.set(Task.objects.filter_available_tasks_for_project(instance))
