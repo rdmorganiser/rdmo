@@ -334,6 +334,11 @@ class ProjectViewSet(ModelViewSet):
             throttle_classes=[EmailThrottle])
     def contact(self, request, pk):
         if settings.PROJECT_CONTACT:
+            try:
+                project = self.get_object()
+            except Http404:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+
             if request.method == 'POST':
                 subject = request.data.get('subject')
                 message = request.data.get('message')
@@ -347,11 +352,10 @@ class ProjectViewSet(ModelViewSet):
                         'message': [_('This field may not be blank.')] if not message else []
                     })
             else:
-                project = self.get_object()
                 project.catalog.prefetch_elements()
                 return Response(get_contact_message(request, project))
         else:
-            return 404
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
     @action(detail=False, url_path='upload-accept', permission_classes=(IsAuthenticated, ))
     def upload_accept(self, request):
