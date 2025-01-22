@@ -15,6 +15,16 @@ class TaskQuestionSet(CurrentSiteQuerySetMixin, GroupsQuerySetMixin, Availabilit
     def filter_catalog(self, catalog):
         return self.filter(models.Q(catalogs=None) | models.Q(catalogs=catalog))
 
+    def filter_available_views_for_project(self, project):
+        return (self
+            .filter(sites=project.site)
+            .filter(catalogs=project.catalog)
+            .filter_group(project.owners.all())
+            .filter(available=True)
+            .exclude(catalogs=None)
+        )
+
+
 
 class TaskManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityManagerMixin, models.Manager):
 
@@ -23,3 +33,6 @@ class TaskManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityManag
 
     def filter_catalog(self, catalog):
         return self.get_queryset().filter_catalog(catalog)
+
+    def filter_available_tasks_for_project(self, project):
+        return self.get_queryset().filter_available_views_for_project(project)

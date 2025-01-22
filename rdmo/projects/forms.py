@@ -160,6 +160,16 @@ class ProjectUpdateCatalogForm(forms.ModelForm):
             'catalog': forms.RadioSelect()
         }
 
+    def save(self, commit=True, *args, **kwargs):
+        if 'cancel' in self.data:
+            return self.instance
+
+        # if the catalog is the same, do nothing
+        if self.instance.catalog.id == self.cleaned_data.get('catalog'):
+            return self.instance
+
+        return super().save(commit=commit)
+
 
 class ProjectUpdateTasksForm(forms.ModelForm):
 
@@ -179,6 +189,22 @@ class ProjectUpdateTasksForm(forms.ModelForm):
         widgets = {
             'tasks': forms.CheckboxSelectMultiple()
         }
+
+    def save(self, commit=True, *args, **kwargs):
+        if 'cancel' in self.data:
+            return self.instance
+
+        # If the tasks are the same, do nothing
+        current_tasks = set(self.instance.tasks.values_list('id', flat=True))
+        new_tasks = set(self.cleaned_data.get('tasks').values_list('id', flat=True)) if self.cleaned_data.get(
+            'tasks') else set()
+
+        if current_tasks == new_tasks:
+            return self.instance
+
+        # Save the updated tasks
+        self.instance.tasks.set(self.cleaned_data.get('tasks'))
+        return super().save(commit=commit)
 
 
 class ProjectUpdateViewsForm(forms.ModelForm):
@@ -200,6 +226,22 @@ class ProjectUpdateViewsForm(forms.ModelForm):
             'views': forms.CheckboxSelectMultiple()
         }
 
+    def save(self, commit=True, *args, **kwargs):
+        if 'cancel' in self.data:
+            return self.instance
+
+        # If the views are the same, do nothing
+        current_views = set(self.instance.views.values_list('id', flat=True))
+        new_views = ( set(self.cleaned_data.get('views').values_list('id', flat=True))
+                      if self.cleaned_data.get('views') else set()
+                  )
+
+        if current_views == new_views:
+            return self.instance
+
+        # Save the updated views
+        self.instance.views.set(self.cleaned_data.get('views'))
+        return super().save(commit=commit)
 
 class ProjectUpdateParentForm(forms.ModelForm):
 

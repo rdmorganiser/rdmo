@@ -12,10 +12,9 @@ from .generic_handlers import (
 
 
 @receiver(m2m_changed, sender=Task.catalogs.through)
-def m2m_changed_task_catalog_signal(sender, instance, action, model, pk_set, **kwargs):
+def m2m_changed_task_catalog_signal(sender, instance, action, pk_set, **kwargs):
     m2m_catalogs_changed_projects_sync_signal_handler(
         action=action,
-        related_model=model,
         pk_set=pk_set,
         instance=instance,
         project_field='tasks',
@@ -23,10 +22,9 @@ def m2m_changed_task_catalog_signal(sender, instance, action, model, pk_set, **k
 
 
 @receiver(m2m_changed, sender=Task.sites.through)
-def m2m_changed_task_sites_signal(sender, instance, action, model, pk_set, **kwargs):
+def m2m_changed_task_sites_signal(sender, instance, action, pk_set, **kwargs):
     m2m_sites_changed_projects_sync_signal_handler(
         action=action,
-        model=model,
         pk_set=pk_set,
         instance=instance,
         project_field='tasks'
@@ -34,10 +32,9 @@ def m2m_changed_task_sites_signal(sender, instance, action, model, pk_set, **kwa
 
 
 @receiver(m2m_changed, sender=Task.groups.through)
-def m2m_changed_task_groups_signal(sender, instance, action, model, pk_set, **kwargs):
+def m2m_changed_task_groups_signal(sender, instance, action, pk_set, **kwargs):
     m2m_groups_changed_projects_sync_signal_handler(
         action=action,
-        model=model,
         pk_set=pk_set,
         instance=instance,
         project_field='tasks'

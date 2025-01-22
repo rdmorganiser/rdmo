@@ -11,6 +11,6 @@ class ProjectsConfig(AppConfig):
         from . import rules  # noqa: F401
 
         if settings.PROJECT_VIEWS_SYNC:
-            from .handlers import project_views  # noqa: F401
+            from .handlers import m2m_changed_views, project_save_views  # noqa: F401
         if settings.PROJECT_TASKS_SYNC:
-            from .handlers import project_tasks  # noqa: F401
+            from .handlers import m2m_changed_tasks, project_save_tasks  # noqa: F401
