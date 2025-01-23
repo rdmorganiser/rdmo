@@ -332,6 +332,7 @@ class ProjectViewSet(ModelViewSet):
             permission_classes=(HasModelPermission | HasProjectPermission, ))
     def contact(self, request, pk):
         if settings.PROJECT_CONTACT:
+            project = self.get_object()
             if request.method == 'POST':
                 subject = request.data.get('subject')
                 message = request.data.get('message')
@@ -345,11 +346,10 @@ class ProjectViewSet(ModelViewSet):
                         'message': [_('This field may not be blank.')] if not message else []
                     })
             else:
-                project = self.get_object()
                 project.catalog.prefetch_elements()
                 return Response(get_contact_message(request, project))
         else:
-            return 404
+            raise Http404
 
     @action(detail=False, url_path='upload-accept', permission_classes=(IsAuthenticated, ))
     def upload_accept(self, request):
