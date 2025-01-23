@@ -3,12 +3,14 @@ from pathlib import Path
 
 from django.conf import settings
 from django.contrib.sites.models import Site
+from django.core.exceptions import ObjectDoesNotExist
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.timezone import now
 
 from rdmo.core.mail import send_mail
 from rdmo.core.plugins import get_plugins
+from rdmo.core.utils import remove_double_newlines
 
 logger = logging.getLogger(__name__)
 
@@ -269,3 +271,64 @@ def compute_set_prefix_from_set_value(set_value, value):
         str(set_value.set_index) if (index == set_prefix_length) else value
         for index, value in enumerate(value.set_prefix.split('|'))
     ])
+
+
+def get_contact_message(request, project):
+    project_url = project.get_absolute_url()
+    project_interview_url = reverse('project_interview', args=[project.id])
+
+    context = {
+        'user': request.user,
+        'site': Site.objects.get_current(),
+        'project': project,
+        'project_url': request.build_absolute_uri(project_url)
+    }
+
+    page_id = request.GET.get('page')
+    if page_id:
+        page = project.catalog.get_page(page_id)
+        if page:
+            context.update({
+                'page': page,
+                'page_url': request.build_absolute_uri(f'{project_interview_url}{page_id}/')
+            })
+
+    questionset_id = request.GET.get('questionset')
+    if questionset_id:
+        context['questionset'] = project.catalog.get_questionset(questionset_id)
+
+    question_id = request.GET.get('question')
+    if question_id:
+        context['question'] = project.catalog.get_question(question_id)
+
+    value_ids = request.GET.getlist('values')
+    if value_ids:
+        values = project.values.filter(snapshot=None).filter(id__in=value_ids)
+        context['values'] = values
+
+        if page_id and page and page.is_collection and page.attribute is not None:
+            value = values.filter(set_prefix='').first()
+            if value:
+                try:
+                    context['set_value'] = project.values.filter(snapshot=None).get(
+                        attribute=page.attribute,
+                        set_prefix='',
+                        set_index=value.set_index,
+                        collection_index=0
+                    )
+                except ObjectDoesNotExist:
+                    pass
+
+    subject = render_to_string('projects/email/project_contact_subject.txt', context)
+    message = render_to_string('projects/email/project_contact_message.txt', context)
+
+    return {
+        'subject': subject,
+        'message': remove_double_newlines(message)
+    }
+
+
+def send_contact_message(request, subject, message):
+    send_mail(subject, message,
+              to=settings.PROJECT_CONTACT_RECIPIENTS,
+              cc=[request.user.email], reply_to=[request.user.email])

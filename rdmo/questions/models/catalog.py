@@ -223,6 +223,24 @@ class Catalog(Model, TranslationMixin):
         except (ValueError, IndexError):
             return None
 
+    def get_page(self, page_id):
+        try:
+            return next(page for page in self.pages if page.id == int(page_id))
+        except (StopIteration, ValueError):
+            return None
+
+    def get_questionset(self, questionset_id):
+        try:
+            return next(questionset for questionset in self.questionsets if questionset.id == int(questionset_id))
+        except (StopIteration, ValueError):
+            return None
+
+    def get_question(self, question_id):
+        try:
+            return next(question for question in self.questions if question.id == int(question_id))
+        except (StopIteration, ValueError):
+            return None
+
     @classmethod
     def build_uri(cls, uri_prefix, uri_path):
         if not uri_path:

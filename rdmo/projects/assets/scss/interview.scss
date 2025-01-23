@@ -377,11 +377,28 @@
 }
 
 .badge-optional {
-    cursor: help;
     float: right;
     margin-top: 1px;
+    margin-left: 5px;
+    cursor: help;
     background-color: #efefef;
     color: #777;
+}
+
+.btn-contact {
+    float: right;
+    opacity: 0.8;
+    line-height: 20px;
+    font-size: 14px;
+
+    padding: 0;
+
+    &:hover {
+        opacity: 1;
+    }
+    &:focus {
+        outline: 0;
+    }
 }
 
 .badge-read-only {
