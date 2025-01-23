@@ -5,6 +5,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
+from rdmo.core.models import Model as RDMOTimeStampedModel
 from rdmo.core.models import TranslationMixin
 
 
@@ -106,7 +107,7 @@ class AdditionalFieldValue(models.Model):
         return self.user.username + '/' + self.field.key
 
 
-class ConsentFieldValue(models.Model):
+class ConsentFieldValue(RDMOTimeStampedModel):
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     consent = models.BooleanField(
