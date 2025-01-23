@@ -36,13 +36,14 @@ dist
 
 rdmo/management/static
 
-rdmo/core/static/core/js/base*.js
+rdmo/core/static/core/js/base.js
+rdmo/core/static/core/css/base.css
 rdmo/core/static/core/fonts
-rdmo/core/static/core/css/base*.css
 
-rdmo/projects/static/projects/js/interview.js*
-rdmo/projects/static/projects/js/projects.js*
-rdmo/projects/static/projects/fonts
-rdmo/projects/static/projects/css
+rdmo/projects/static/projects/css/interview.css
+rdmo/projects/static/projects/css/projects.css
+rdmo/projects/static/projects/fonts/
+rdmo/projects/static/projects/js/interview.js
+rdmo/projects/static/projects/js/projects.js
 
 screenshots
