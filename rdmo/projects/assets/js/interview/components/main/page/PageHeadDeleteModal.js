@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import Modal from 'rdmo/core/assets/js/components/Modal'
 
-const PageHeadDeleteModal = ({ title, name, show, onClose, onSubmit }) => {
+const PageHeadDeleteModal = ({ name, show, onClose, onSubmit }) => {
   return (
     <Modal title={gettext('Delete tab')} show={show} submitLabel={gettext('Delete')}
            submitProps={{className: 'btn btn-danger'}}
@@ -24,7 +24,6 @@ const PageHeadDeleteModal = ({ title, name, show, onClose, onSubmit }) => {
 }
 
 PageHeadDeleteModal.propTypes = {
-  title: PropTypes.string.isRequired,
   name: PropTypes.string,
   show: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,

@@ -136,7 +136,7 @@ const Search = ({ page, attribute, values, setValues, collection = false }) => {
 }
 
 Search.propTypes = {
-  page: PropTypes.number.isRequired,
+  page: PropTypes.object,
   attribute: PropTypes.number.isRequired,
   setAttribute: PropTypes.number,
   values: PropTypes.object.isRequired,

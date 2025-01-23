@@ -106,7 +106,7 @@ PageHeadFormModal.propTypes = {
   show: PropTypes.bool.isRequired,
   attribute: PropTypes.number,
   reuse: PropTypes.bool,
-  initial: PropTypes.object,
+  initial: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired
 }
