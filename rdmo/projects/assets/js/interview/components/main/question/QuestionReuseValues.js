@@ -90,6 +90,7 @@ const QuestionReuseValues = ({ page, question, values, createValues, updateValue
 
         <Search
           page={page}
+          question={question}
           attribute={question.attribute}
           values={formValues}
           setValues={setFormValues}
