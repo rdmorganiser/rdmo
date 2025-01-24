@@ -873,6 +873,8 @@ class ValueViewSet(ReadOnlyModelViewSet):
         options = request.GET.getlist('options')
         if options:
             queryset = queryset.filter(option__in=options)
+        else:
+            queryset = queryset.filter(option=None)
 
         if is_truthy(request.GET.get('collection')):
             # if collection is set (for checkboxes), we first select each distinct set and create a Q object with it
