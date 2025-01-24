@@ -24,7 +24,7 @@ const Search = ({ page, question, attribute, values, setValues, collection = fal
       project: values.project ? values.project.id : '',
       snapshot: values.snapshot ? 'all' : '',
       collection,
-      options
+      option: isEmpty(options) ? 'false' : options
     }).then(response => {
       if (collection) {
         // if the search component is used from QuestionReuseValues/CheckboxWidget

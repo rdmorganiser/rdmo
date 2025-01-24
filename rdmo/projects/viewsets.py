@@ -29,12 +29,13 @@ from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
 from .filters import (
+    AttributeFilterBackend,
+    OptionFilterBackend,
     ProjectDateFilterBackend,
     ProjectOrderingFilter,
     ProjectSearchFilterBackend,
     ProjectUserFilterBackend,
     SnapshotFilterBackend,
-    ValueFilterBackend,
 )
 from .models import Continuation, Integration, Invite, Issue, Membership, Project, Snapshot, Value, Visibility
 from .permissions import (
@@ -516,9 +517,9 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     permission_classes = (HasModelPermission | HasProjectPermission, )
     serializer_class = ProjectValueSerializer
 
-    filter_backends = (ValueFilterBackend, DjangoFilterBackend)
+    filter_backends = (AttributeFilterBackend, DjangoFilterBackend)
     filterset_fields = (
-        # attribute is part of ValueFilterBackend
+        # attribute is part of AttributeFilterBackend
         'attribute__uri',
         'option',
         'option__uri',
@@ -837,16 +838,22 @@ class ValueViewSet(ReadOnlyModelViewSet):
     permission_classes = (HasModelPermission | HasProjectsPermission, )
     serializer_class = ValueSerializer
 
-    filter_backends = (SnapshotFilterBackend, DjangoFilterBackend, SearchFilter)
+    filter_backends = (
+        AttributeFilterBackend,
+        SnapshotFilterBackend,
+        OptionFilterBackend,
+        DjangoFilterBackend,
+        SearchFilter
+    )
     filterset_fields = (
         'project',
         # snapshot is part of SnapshotFilterBackend
-        'attribute',
+        # attribute is part of AttributeFilterBackend
         'attribute__uri',
         'attribute__path',
-        'option',
+        # option is part of OptionFilterBackend
         'option__uri',
-        'option__uri_path'
+        'option__uri_path',
     )
 
     search_fields = ['text', 'project__title', 'snapshot__title']
@@ -866,15 +873,8 @@ class ValueViewSet(ReadOnlyModelViewSet):
                              .values('text')[:1]
             )
             queryset = queryset.annotate(set_label=set_label_subquery)
-        except ValueError:
+        except (ValueError, TypeError):
             pass
-
-        # filter values with the provided list of possible options
-        options = request.GET.getlist('options')
-        if options:
-            queryset = queryset.filter(option__in=options)
-        else:
-            queryset = queryset.filter(option=None)
 
         if is_truthy(request.GET.get('collection')):
             # if collection is set (for checkboxes), we first select each distinct set and create a Q object with it
