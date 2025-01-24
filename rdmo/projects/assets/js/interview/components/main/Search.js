@@ -7,9 +7,14 @@ import { isEmpty, isNil, pick, truncate } from 'lodash'
 import ProjectApi from '../../api/ProjectApi'
 import ValueApi from '../../api/ValueApi'
 
-const Search = ({ page, attribute, values, setValues, collection = false }) => {
+const Search = ({ page, question, attribute, values, setValues, collection = false }) => {
   // create a key for the first AsyncSelect, to reset the loaded values when project or snapshot changes
   const key = (values.project ? values.project.id : '') + (values.snapshot ? '-all' : '')
+
+  // compile a list of possible options to restrict the search, only include optionsets without provider
+  const options = isNil(question) ? []
+                                  : question.optionsets.filter(optionset => !optionset.has_provider)
+                                                       .flatMap(optionset => optionset.options.map(option => option.id))
 
   const handleLoadValues = useDebouncedCallback((search, callback) => {
     ValueApi.searchValues({
@@ -18,7 +23,8 @@ const Search = ({ page, attribute, values, setValues, collection = false }) => {
       search,
       project: values.project ? values.project.id : '',
       snapshot: values.snapshot ? 'all' : '',
-      collection
+      collection,
+      options
     }).then(response => {
       if (collection) {
         // if the search component is used from QuestionReuseValues/CheckboxWidget
@@ -137,6 +143,7 @@ const Search = ({ page, attribute, values, setValues, collection = false }) => {
 
 Search.propTypes = {
   page: PropTypes.object,
+  question: PropTypes.object,
   attribute: PropTypes.number.isRequired,
   setAttribute: PropTypes.number,
   values: PropTypes.object.isRequired,

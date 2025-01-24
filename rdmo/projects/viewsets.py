@@ -15,7 +15,6 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
-from rest_framework.serializers import ValidationError
 from rest_framework.viewsets import GenericViewSet, ModelViewSet, ReadOnlyModelViewSet
 
 from django_filters.rest_framework import DjangoFilterBackend
@@ -864,6 +863,11 @@ class ValueViewSet(ReadOnlyModelViewSet):
             queryset = queryset.annotate(set_label=set_label_subquery)
         except ValueError:
             pass
+
+        # filter values with the provided list of possible options
+        options = request.GET.getlist('options')
+        if options:
+            queryset = queryset.filter(option__in=options)
 
         if is_truthy(request.GET.get('collection')):
             # if collection is set (for checkboxes), we first select each distinct set and create a Q object with it
