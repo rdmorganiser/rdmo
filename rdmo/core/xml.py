@@ -72,12 +72,22 @@ def validate_and_get_xml_version_from_root(root: xmlElement) -> Tuple[Optional[V
     # Fallback to validate the legacy 'version' field
     try:
         xml_version = parse(unparsed_root_version)
-        return xml_version, []
+
     except ValueError:
         logger.info('Import failed: Invalid "version" format in XML (%s)', unparsed_root_version)
         errors = [_('The "version" attribute in this RDMO XML file is not a valid version.')]
         return None, errors
 
+    # RDMO 1.x can not import XMLs from RDMO 2.x
+    if rdmo_version < parse('2.0.0') and xml_version >= parse('2.0.0'):
+        logger.info('Import failed: Backwards compatibility is not supported for RDMO versions < 2.0.0')
+        errors = [
+            _('This RDMO XML file was created with a newer version of RDMO and cannot be imported.'),
+            _('Backwards compatibility is not supported for RDMO versions lower than 2.0.0.')
+        ]
+        return None, errors
+
+    return xml_version, []
 
 def validate_legacy_elements(elements: dict, root_version: Version) -> list:
 
