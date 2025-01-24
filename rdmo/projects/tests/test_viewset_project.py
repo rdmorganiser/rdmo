@@ -429,6 +429,20 @@ def test_update_parent(db, client, username, password, project_id):
         assert Project.objects.get(pk=project_id).parent == project.parent
 
 
+def test_update_project_views_not_allowed(db, client, settings):
+    assert settings.PROJECT_VIEWS_SYNC
+    client.login(username='owner', password='owner')
+
+    url = reverse(urlnames['detail'], args=[project_id])
+    data = {
+        'views': [1]
+    }
+    response = client.put(url, data, content_type='application/json')
+
+    assert response.status_code == 400
+    assert 'Updating views is not allowed' in ' '.join(response.json()['views'])
+
+
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 def test_delete(db, client, username, password, project_id):

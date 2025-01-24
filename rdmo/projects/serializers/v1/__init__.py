@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from rdmo.domain.models import Attribute
 from rdmo.questions.models import Catalog
@@ -96,6 +97,12 @@ class ProjectSerializer(serializers.ModelSerializer):
         validators = [
             ProjectParentValidator()
         ]
+
+    def validate_views(self, value):
+        """Block updates to views if syncing is enabled."""
+        if settings.PROJECT_VIEWS_SYNC and value:
+            raise ValidationError(_('Updating views is not allowed.'))
+        return value
 
 
 class ProjectCopySerializer(ProjectSerializer):
