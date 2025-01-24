@@ -79,6 +79,7 @@ from .serializers.v1.overview import CatalogSerializer, ProjectOverviewSerialize
 from .serializers.v1.page import PageSerializer
 from .utils import (
     check_conditions,
+    check_options,
     compute_set_prefix_from_set_value,
     copy_project,
     get_contact_message,
@@ -599,6 +600,10 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
                 value.set_index = set_value.set_index
             else:
                 value.set_prefix = compute_set_prefix_from_set_value(set_value, value)
+
+            # skip this value if value.option does not match the optionsets of it's question
+            if not check_options(self.project, value):
+                continue
 
             # check if the value already exists, we do not consider collection_index
             # since we do not want to import e.g. into partially filled checkboxes
