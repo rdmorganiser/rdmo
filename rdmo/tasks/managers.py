@@ -19,7 +19,7 @@ class TaskQuestionSet(CurrentSiteQuerySetMixin, GroupsQuerySetMixin, Availabilit
         return (self
             .filter(sites=project.site)
             .filter(catalogs=project.catalog)
-            .filter_group(project.owners.all())
+            .filter_group(project.owners)
             .filter(available=True)
             .exclude(catalogs=None)
         )
