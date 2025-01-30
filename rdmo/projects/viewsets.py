@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import connection
 from django.db.models import OuterRef, Prefetch, Q, Subquery
 from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponseRedirect
@@ -876,13 +877,17 @@ class ValueViewSet(ReadOnlyModelViewSet):
         except (ValueError, TypeError):
             pass
 
-        if is_truthy(request.GET.get('collection')):
+        if is_truthy(request.GET.get('collection')) and connection.vendor not in ['sqlite']:
             # if collection is set (for checkboxes), we first select each distinct set and create a Q object with it
             # by doing so we can select an undetermined number of values which belong to an exact number of sets
             # given by settings.PROJECT_VALUES_SEARCH_LIMIT
-            values_list = queryset.order_by('project_id', 'snapshot_id', 'attribute_id', 'set_prefix', 'set_index') \
-                                  .distinct('project_id', 'snapshot_id', 'attribute_id', 'set_prefix', 'set_index') \
-                                  .values('project_id', 'snapshot_id', 'attribute_id', 'set_prefix', 'set_index') \
+            #
+            # DISTINCT ON is not available on sqlite so we just apply the limit like for all other questions, this
+            # will display the last set of checked values incomplete
+            fields = ('project_id', 'snapshot_id', 'attribute_id', 'set_prefix', 'set_index')
+            values_list = queryset.order_by(*fields) \
+                                  .distinct(*fields) \
+                                  .values(*fields) \
                                   [:settings.PROJECT_VALUES_SEARCH_LIMIT]
 
             q = Q()
