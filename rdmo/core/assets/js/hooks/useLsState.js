@@ -16,11 +16,22 @@ const useLsState = (path, initialValue, omit = []) => {
     localStorage.setItem(path, JSON.stringify(data))
   }
 
-  // get the value from the local storage
-  const lsValue = getLs(path)
+  const getInitialState = () => {
+    // get the value from the local storage
+    const lsValue = getLs(path)
 
-  // setup the state with the value from the local storage or the provided initialValue
-  const [value, setValue] = useState(isEmpty(lsValue) ? initialValue : lsValue)
+    // return the state with the value from the local storage or the provided initialValue
+    if (isPlainObject(lsValue)) {
+      return { ...initialValue, ...lsValue }
+    } else if (isEmpty(lsValue)) {
+      return initialValue
+    } else {
+      return lsValue
+    }
+  }
+
+  // setup the state
+  const [value, setValue] = useState(getInitialState())
 
   return [
     value,
@@ -28,13 +39,7 @@ const useLsState = (path, initialValue, omit = []) => {
       setLs(path, value)
       setValue(value)
     },
-    () => {
-      if (isPlainObject(initialValue)) {
-        setValue({ ...initialValue, ...getLs(path) })
-      } else {
-        setValue(initialValue)
-      }
-    }
+    () => setValue(getInitialState())
   ]
 }
 
