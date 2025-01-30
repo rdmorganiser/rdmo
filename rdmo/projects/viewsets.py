@@ -586,6 +586,8 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
             })
             set_value_serializer.is_valid(raise_exception=True)
             set_value = set_value_serializer.save()
+
+            set_values = Value.objects.none()
             set_values_list = set_empty_values_list = []
 
             # add the new set value to response_values
@@ -616,7 +618,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
                   value.set_index, value.collection_index) in set_empty_values_list:
                 # update empty values
                 updated_value = set_values.get(attribute_id=value.attribute_id, set_prefix=value.set_prefix,
-                                                set_index=value.set_index, collection_index=value.collection_index)
+                                               set_index=value.set_index, collection_index=value.collection_index)
                 updated_value.text = value.text
                 updated_value.option = value.option
                 updated_value.external_id = value.external_id
