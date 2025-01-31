@@ -6,12 +6,13 @@ import QuestionCopyValue from '../question/QuestionCopyValue'
 import QuestionCopyValues from '../question/QuestionCopyValues'
 import QuestionDefault from '../question/QuestionDefault'
 import QuestionError from '../question/QuestionError'
+import QuestionReuseValue from '../question/QuestionReuseValue'
 import QuestionRemoveValue from '../question/QuestionRemoveValue'
 import QuestionSuccess from '../question/QuestionSuccess'
 
 import TextInput from './TextInput'
 
-const TextWidget = ({ question, sets, values, siblings, currentSet, disabled,
+const TextWidget = ({ page, question, sets, values, siblings, currentSet, disabled,
                       createValue, updateValue, deleteValue, copyValue }) => {
   return (
     <div className="interview-widgets">
@@ -27,6 +28,7 @@ const TextWidget = ({ question, sets, values, siblings, currentSet, disabled,
                 buttons={
                   <div className="buttons">
                     <QuestionSuccess value={value}/>
+                    <QuestionReuseValue page={page} question={question} value={value} updateValue={updateValue}/>
                     <QuestionRemoveValue
                       question={question}
                       values={values}
@@ -64,6 +66,7 @@ const TextWidget = ({ question, sets, values, siblings, currentSet, disabled,
 }
 
 TextWidget.propTypes = {
+  page: PropTypes.object.isRequired,
   question: PropTypes.object.isRequired,
   sets: PropTypes.array.isRequired,
   values: PropTypes.array.isRequired,

@@ -143,7 +143,9 @@ class SnapshotFilterBackend(BaseFilterBackend):
             return queryset
 
         snapshot = request.GET.get('snapshot')
-        if snapshot:
+        if snapshot == 'all':
+            pass
+        elif snapshot:
             try:
                 snapshot_pk = int(snapshot)
             except (ValueError, TypeError):
@@ -156,14 +158,31 @@ class SnapshotFilterBackend(BaseFilterBackend):
         return queryset
 
 
-class ValueFilterBackend(BaseFilterBackend):
+class AttributeFilterBackend(BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
         if view.detail:
             return queryset
 
-        attributes = [int(attribute) for attribute in request.GET.getlist('attribute') if attribute.isdigit()]
-        if attributes:
-            queryset = queryset.filter(attribute__in=attributes)
+        if 'attribute' in request.GET:
+            attributes = [int(attribute) for attribute in request.GET.getlist('attribute') if attribute.isdigit()]
+            if attributes:
+                queryset = queryset.filter(attribute__in=attributes)
+
+        return queryset
+
+
+class OptionFilterBackend(BaseFilterBackend):
+
+    def filter_queryset(self, request, queryset, view):
+        if view.detail:
+            return queryset
+
+        if 'option' in request.GET:
+            options = [int(option) for option in request.GET.getlist('option') if option.isdigit()]
+            if options:
+                queryset = queryset.filter(option__in=options)
+            else:
+                queryset = queryset.filter(option=None)
 
         return queryset

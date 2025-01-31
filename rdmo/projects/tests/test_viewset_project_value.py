@@ -42,7 +42,8 @@ add_value_permission_map = change_value_permission_map = delete_value_permission
 urlnames = {
     'list': 'v1-projects:project-value-list',
     'detail': 'v1-projects:project-value-detail',
-    'set': 'v1-projects:project-value-set',
+    'copy-set': 'v1-projects:project-value-copy-set',
+    'delete-set': 'v1-projects:project-value-delete-set',
     'file': 'v1-projects:project-value-file'
 }
 
@@ -56,6 +57,8 @@ values = [
     456                        # from Internal <12>
 ]
 values_internal = [456]
+
+other_project_id = 11
 
 attribute_id = 1
 option_id = 1
@@ -257,14 +260,14 @@ def test_copy_set(db, client, username, password, value_id, set_values_count):
     set_value = Value.objects.get(id=value_id)
     values_count = Value.objects.count()
 
-    url = reverse(urlnames['set'], args=[set_value.project_id, value_id])
+    url = reverse(urlnames['copy-set'], args=[set_value.project_id])
     data = {
         'attribute': set_value.attribute.id,
         'set_prefix': set_value.set_prefix,
         'set_index': 2,
         'text': 'new'
     }
-    response = client.post(url, data=json.dumps(data), content_type="application/json")
+    response = client.post(url, data=json.dumps(dict(**data, copy_set_value=value_id)), content_type="application/json")
 
     if set_value.project_id in copy_value_permission_map.get(username, []):
         assert response.status_code == 201
@@ -298,7 +301,7 @@ def test_delete_set(db, client, username, password, project_id, value_id, set_va
     value_exists = Value.objects.filter(project_id=project_id, snapshot=None, id=value_id).exists()
     values_count = Value.objects.count()
 
-    url = reverse(urlnames['set'], args=[project_id, value_id])
+    url = reverse(urlnames['delete-set'], args=[project_id, value_id])
     response = client.delete(url)
 
     if value_exists and project_id in delete_value_permission_map.get(username, []):

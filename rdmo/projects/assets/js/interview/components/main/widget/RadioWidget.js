@@ -7,14 +7,15 @@ import QuestionAddValue from '../question/QuestionAddValue'
 import QuestionCopyValue from '../question/QuestionCopyValue'
 import QuestionCopyValues from '../question/QuestionCopyValues'
 import QuestionDefault from '../question/QuestionDefault'
-import QuestionError from '../question/QuestionError'
-import QuestionSuccess from '../question/QuestionSuccess'
 import QuestionEraseValue from '../question/QuestionEraseValue'
+import QuestionError from '../question/QuestionError'
 import QuestionRemoveValue from '../question/QuestionRemoveValue'
+import QuestionReuseValue from '../question/QuestionReuseValue'
+import QuestionSuccess from '../question/QuestionSuccess'
 
 import RadioInput from './RadioInput'
 
-const RadioWidget = ({ question, sets, values, siblings, currentSet, disabled,
+const RadioWidget = ({ page, question, sets, values, siblings, currentSet, disabled,
                        createValue, updateValue, deleteValue, copyValue }) => {
   return (
     <div className="interview-widgets">
@@ -31,6 +32,7 @@ const RadioWidget = ({ question, sets, values, siblings, currentSet, disabled,
                 buttons={
                   <div className="buttons">
                     <QuestionSuccess value={value}/>
+                    <QuestionReuseValue page={page} question={question} value={value} updateValue={updateValue}/>
                     <QuestionEraseValue value={value} disabled={disabled} updateValue={updateValue}/>
                     <QuestionRemoveValue
                       question={question}
@@ -70,6 +72,7 @@ const RadioWidget = ({ question, sets, values, siblings, currentSet, disabled,
 }
 
 RadioWidget.propTypes = {
+  page: PropTypes.object.isRequired,
   question: PropTypes.object.isRequired,
   sets: PropTypes.array.isRequired,
   values: PropTypes.array.isRequired,

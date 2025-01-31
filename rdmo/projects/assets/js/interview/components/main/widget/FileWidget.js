@@ -4,9 +4,9 @@ import PropTypes from 'prop-types'
 import QuestionAddValue from '../question/QuestionAddValue'
 import QuestionDefault from '../question/QuestionDefault'
 import QuestionEraseValue from '../question/QuestionEraseValue'
-import QuestionSuccess from '../question/QuestionSuccess'
 import QuestionError from '../question/QuestionError'
 import QuestionRemoveValue from '../question/QuestionRemoveValue'
+import QuestionSuccess from '../question/QuestionSuccess'
 
 import FileInput from './FileInput'
 

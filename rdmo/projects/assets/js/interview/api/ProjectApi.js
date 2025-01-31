@@ -6,6 +6,10 @@ import BaseApi from 'rdmo/core/assets/js/api/BaseApi'
 
 class ProjectsApi extends BaseApi {
 
+  static fetchProjects(params) {
+    return this.get(`/api/v1/projects/projects/?${encodeParams(params)}`)
+  }
+
   static fetchOverview(projectId) {
     return this.get(`/api/v1/projects/projects/${projectId}/overview/`)
   }

@@ -141,29 +141,24 @@ class Value(Model):
         return value_dict
 
     @property
+    def label(self):
+        if self.option:
+            return self.get_option_display(view=False)
+        elif self.file:
+            return self.get_file_display()
+        elif self.text:
+            return self.get_text_display()
+        else:
+            return ''
+
+    @property
     def value(self):
         if self.option:
-            value = self.option.view_text or self.option.text or ''
-            if self.option.additional_input and self.text:
-                value += ': ' + self.text
-            return value
-
+            return self.get_option_display(view=True)
         elif self.file:
-            return self.file_name
-
+            return self.get_file_display()
         elif self.text:
-            if self.value_type == VALUE_TYPE_DATETIME:
-                try:
-                    return iso8601.parse_date(self.text).date()
-                except iso8601.ParseError:
-                    return self.text
-            elif self.value_type == VALUE_TYPE_BOOLEAN:
-                if self.text == '1':
-                    return _('Yes')
-                else:
-                    return _('No')
-            else:
-                return self.text
+            return self.get_text_display()
         else:
             return ''
 
@@ -271,3 +266,29 @@ class Value(Model):
         self.file.save(file_name, file_content, save=False)
         cleanup.refresh(self)
         self.save()
+
+    def get_text_display(self):
+        if self.value_type == VALUE_TYPE_DATETIME:
+            try:
+                return iso8601.parse_date(self.text).date()
+            except iso8601.ParseError:
+                return self.text
+        elif self.value_type == VALUE_TYPE_BOOLEAN:
+            if self.text == '1':
+                return _('Yes')
+            else:
+                return _('No')
+        else:
+            return self.text
+
+    def get_option_display(self, view=True):
+        if view:
+            string = self.option.view_text or self.option.text or ''
+        else:
+            string = self.option.text or ''
+        if self.option.additional_input and self.text:
+            string += ': ' + self.text
+        return string
+
+    def get_file_display(self):
+        return self.file_name

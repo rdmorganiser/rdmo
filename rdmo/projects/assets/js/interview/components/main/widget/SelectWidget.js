@@ -7,14 +7,14 @@ import QuestionAddValue from '../question/QuestionAddValue'
 import QuestionCopyValue from '../question/QuestionCopyValue'
 import QuestionCopyValues from '../question/QuestionCopyValues'
 import QuestionDefault from '../question/QuestionDefault'
-import QuestionEraseValue from '../question/QuestionEraseValue'
 import QuestionError from '../question/QuestionError'
-import QuestionSuccess from '../question/QuestionSuccess'
 import QuestionRemoveValue from '../question/QuestionRemoveValue'
+import QuestionReuseValue from '../question/QuestionReuseValue'
+import QuestionSuccess from '../question/QuestionSuccess'
 
 import SelectInput from './SelectInput'
 
-const SelectWidget = ({ question, sets, values, siblings, currentSet, disabled, creatable,
+const SelectWidget = ({ page, question, sets, values, siblings, currentSet, disabled, creatable,
                         createValue, updateValue, deleteValue, copyValue }) => {
   return (
     <div className="interview-widgets">
@@ -32,7 +32,7 @@ const SelectWidget = ({ question, sets, values, siblings, currentSet, disabled, 
                 buttons={
                   <div className="buttons">
                     <QuestionSuccess value={value}/>
-                    <QuestionEraseValue value={value} disabled={disabled} updateValue={updateValue}/>
+                    <QuestionReuseValue page={page} question={question} value={value} updateValue={updateValue}/>
                     <QuestionRemoveValue
                       question={question}
                       values={values}
@@ -70,6 +70,7 @@ const SelectWidget = ({ question, sets, values, siblings, currentSet, disabled, 
 }
 
 SelectWidget.propTypes = {
+  page: PropTypes.object.isRequired,
   question: PropTypes.object.isRequired,
   sets: PropTypes.array.isRequired,
   values: PropTypes.array.isRequired,

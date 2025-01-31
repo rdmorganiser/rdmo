@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
-import { isNil } from 'lodash'
+import { isNil, minBy } from 'lodash'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
@@ -21,8 +21,8 @@ const Page = ({ config, settings, templates, overview, page, sets, values, fetch
 
   // sanity check
   if (isNil(currentSet)) {
-    currentSetIndex = 0
-    currentSet = sets.find((set) => (set.set_prefix == currentSetPrefix && set.set_index == 0))
+    currentSetIndex = get(minBy(sets, 'set_index'), 'set_index', 0)
+    currentSet = sets.find((set) => (set.set_prefix == currentSetPrefix && set.set_index == currentSetIndex))
   }
 
   const isManager = (overview.is_superuser || overview.is_editor || overview.is_reviewer)
@@ -53,6 +53,7 @@ const Page = ({ config, settings, templates, overview, page, sets, values, fetch
                     key={elementIndex}
                     settings={settings}
                     templates={templates}
+                    page={page}
                     questionset={element}
                     sets={sets}
                     values={values.filter((value) => element.attributes.includes(value.attribute))}
@@ -76,6 +77,7 @@ const Page = ({ config, settings, templates, overview, page, sets, values, fetch
                     key={elementIndex}
                     settings={settings}
                     templates={templates}
+                    page={page}
                     question={element}
                     sets={sets.filter((set) => (
                       set.set_prefix == currentSetPrefix

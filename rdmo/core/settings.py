@@ -238,7 +238,8 @@ TEMPLATES_API = [
     'projects/project_interview_page_tabs_help.html',
     'projects/project_interview_progress_help.html',
     'projects/project_interview_question_help.html',
-    'projects/project_interview_questionset_help.html'
+    'projects/project_interview_questionset_help.html',
+    'projects/project_interview_sidebar.html',
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -347,6 +348,8 @@ PROJECT_VALUES_CONFLICT_THRESHOLD = 0.01
 NESTED_PROJECTS = True
 
 OPTIONSET_PROVIDERS = []
+
+PROJECT_VALUES_SEARCH_LIMIT = 10
 
 PROJECT_VALUES_VALIDATION = False
 

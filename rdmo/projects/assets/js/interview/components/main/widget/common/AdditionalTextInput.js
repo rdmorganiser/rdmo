@@ -11,7 +11,7 @@ const AdditionalTextInput = ({ className, value, option, disabled, onChange }) =
     } else {
       setInputValue(value.option == option.id ? value.text : '')
     }
-  }, [get(value, 'id'), get(value, 'option'), get(value, 'external_id')])
+  }, [get(value, 'id'), get(value, 'text'), get(value, 'option'), get(value, 'external_id')])
 
   return (
     <span className={className}>

@@ -28,8 +28,7 @@ const Done = ({ templates }) => {
 }
 
 Done.propTypes = {
-  templates: PropTypes.object.isRequired,
-  overview: PropTypes.object.isRequired
+  templates: PropTypes.object.isRequired
 }
 
 export default Done

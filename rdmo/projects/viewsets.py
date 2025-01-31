@@ -1,20 +1,21 @@
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import OuterRef, Prefetch, Subquery
+from django.db import connection
+from django.db.models import OuterRef, Prefetch, Q, Subquery
 from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers, status
 from rest_framework.decorators import action
-from rest_framework.exceptions import MethodNotAllowed, NotFound
+from rest_framework.exceptions import NotFound, ValidationError
+from rest_framework.filters import SearchFilter
 from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
-from rest_framework.serializers import ValidationError
 from rest_framework.viewsets import GenericViewSet, ModelViewSet, ReadOnlyModelViewSet
 
 from django_filters.rest_framework import DjangoFilterBackend
@@ -29,12 +30,13 @@ from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
 from .filters import (
+    AttributeFilterBackend,
+    OptionFilterBackend,
     ProjectDateFilterBackend,
     ProjectOrderingFilter,
     ProjectSearchFilterBackend,
     ProjectUserFilterBackend,
     SnapshotFilterBackend,
-    ValueFilterBackend,
 )
 from .models import Continuation, Integration, Invite, Issue, Membership, Project, Snapshot, Value, Visibility
 from .permissions import (
@@ -72,12 +74,14 @@ from .serializers.v1 import (
     ProjectVisibilitySerializer,
     SnapshotSerializer,
     UserInviteSerializer,
+    ValueSearchSerializer,
     ValueSerializer,
 )
 from .serializers.v1.overview import CatalogSerializer, ProjectOverviewSerializer
 from .serializers.v1.page import PageSerializer
 from .utils import (
     check_conditions,
+    check_options,
     compute_set_prefix_from_set_value,
     copy_project,
     get_contact_message,
@@ -514,9 +518,9 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     permission_classes = (HasModelPermission | HasProjectPermission, )
     serializer_class = ProjectValueSerializer
 
-    filter_backends = (ValueFilterBackend, DjangoFilterBackend)
+    filter_backends = (AttributeFilterBackend, DjangoFilterBackend)
     filterset_fields = (
-        # attribute is part of ValueFilterBackend
+        # attribute is part of AttributeFilterBackend
         'attribute__uri',
         'option',
         'option__uri',
@@ -529,52 +533,111 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
             # this is needed for the swagger ui
             return Value.objects.none()
 
-    @action(detail=True, methods=['POST', 'DELETE'], url_path='set',
+    @action(detail=False, methods=['POST'], url_path='set',
             permission_classes=(HasModelPermission | HasProjectPermission, ))
-    def set(self, request, parent_lookup_project, pk=None):
-        if request.method == 'POST':
-            return self.copy_set(request, parent_lookup_project, pk)
-        elif request.method == 'DELETE':
-            return self.delete_set(request, parent_lookup_project, pk)
-        else:
-            raise MethodNotAllowed
-
     def copy_set(self, request, parent_lookup_project, pk=None):
         # copy all values for questions in questionset collections with the attribute
         # for this value and the same set_prefix and set_index
-        currentValue = self.get_object()
 
+        # obtain the id of the set value for the set we want to copy
+        try:
+            copy_value_id = int(request.data.pop('copy_set_value'))
+        except KeyError as e:
+            raise ValidationError({
+                'copy_set_value': [_('This field may not be blank.')]
+            }) from e
+        except ValueError as e:
+            raise NotFound from e
+
+        # look for this value in the database, using the users permissions, and
         # collect all values for this set and all descendants
-        currentValues = self.get_queryset().filter_set(currentValue)
+        try:
+            copy_value = Value.objects.filter_user(self.request.user).get(id=copy_value_id)
+            copy_values = Value.objects.filter_user(self.request.user).filter_set(copy_value)
+        except Value.DoesNotExist as e:
+            raise NotFound from e
 
-        # de-serialize the posted new set value and save it, use the ValueSerializer
-        # instead of ProjectValueSerializer, since the latter does not include project
-        set_value_serializer = ValueSerializer(data={
-            'project': parent_lookup_project,
-            **request.data
-        })
-        set_value_serializer.is_valid(raise_exception=True)
-        set_value = set_value_serializer.save()
-        set_value_data = set_value_serializer.data
+        # init list of values to return
+        response_values = []
+
+        set_value_id = request.data.get('id')
+        if set_value_id:
+            # if an id is given in the post request, this is an import
+            try:
+                # look for the set value for the set we want to import into
+                set_value = Value.objects.filter_user(self.request.user).get(id=set_value_id)
+
+                # collect all non-empty values for this set and all descendants and convert
+                # them to a list to compare them later to the new values
+                set_values = Value.objects.filter_user(self.request.user).filter_set(set_value)
+                set_values_list = set_values.exclude_empty().values_list('attribute', 'set_prefix', 'set_index')
+                set_empty_values_list = set_values.filter_empty().values_list(
+                    'attribute', 'set_prefix', 'set_index', 'collection_index'
+                )
+            except Value.DoesNotExist as e:
+                raise NotFound from e
+        else:
+            # otherwise, we want to create a new set and need to create a new set value
+            # de-serialize the posted new set value and save it, use the ValueSerializer
+            # instead of ProjectValueSerializer, since the latter does not include project
+            set_value_serializer = ValueSerializer(data={
+                'project': parent_lookup_project,
+                **request.data
+            })
+            set_value_serializer.is_valid(raise_exception=True)
+            set_value = set_value_serializer.save()
+
+            set_values = Value.objects.none()
+            set_values_list = set_empty_values_list = []
+
+            # add the new set value to response_values
+            response_values.append(set_value_serializer.data)
 
         # create new values for the new set
-        values = []
-        for value in currentValues:
+        new_values = []
+        updated_values = []
+        for value in copy_values:
             value.id = None
+            value.project = set_value.project
+            value.snapshot = None
             if value.set_prefix == set_value.set_prefix:
                 value.set_index = set_value.set_index
             else:
                 value.set_prefix = compute_set_prefix_from_set_value(set_value, value)
-            values.append(value)
+
+            # skip this value if value.option does not match the optionsets of it's question
+            if not check_options(self.project, value):
+                continue
+
+            # check if the value already exists, we do not consider collection_index
+            # since we do not want to import e.g. into partially filled checkboxes
+            if (value.attribute_id, value.set_prefix, value.set_index) in set_values_list:
+                # do not overwrite existing values
+                pass
+            elif (value.attribute_id, value.set_prefix,
+                  value.set_index, value.collection_index) in set_empty_values_list:
+                # update empty values
+                updated_value = set_values.get(attribute_id=value.attribute_id, set_prefix=value.set_prefix,
+                                               set_index=value.set_index, collection_index=value.collection_index)
+                updated_value.text = value.text
+                updated_value.option = value.option
+                updated_value.external_id = value.external_id
+                updated_value.save()
+
+                updated_values.append(updated_value)
+            else:
+                new_values.append(value)
 
         # bulk create the new values
-        values = Value.objects.bulk_create(values)
-        values_data = [ValueSerializer(instance=value).data for value in values]
+        created_values = Value.objects.bulk_create(new_values)
+        response_values += [ValueSerializer(instance=value).data for value in created_values]
+        response_values += [ValueSerializer(instance=value).data for value in updated_values]
 
         # return all new values
-        headers = self.get_success_headers(set_value_serializer.data)
-        return Response([set_value_data, *values_data], status=status.HTTP_201_CREATED, headers=headers)
+        return Response(response_values, status=status.HTTP_201_CREATED)
 
+    @action(detail=True, methods=['DELETE'], url_path='set',
+            permission_classes=(HasModelPermission | HasProjectPermission, ))
     def delete_set(self, request, parent_lookup_project, pk=None):
         # delete all values for questions in questionset collections with the attribute
         # for this value and the same set_prefix and set_index
@@ -778,18 +841,67 @@ class ValueViewSet(ReadOnlyModelViewSet):
     permission_classes = (HasModelPermission | HasProjectsPermission, )
     serializer_class = ValueSerializer
 
-    filter_backends = (SnapshotFilterBackend, DjangoFilterBackend)
+    filter_backends = (
+        AttributeFilterBackend,
+        SnapshotFilterBackend,
+        OptionFilterBackend,
+        DjangoFilterBackend,
+        SearchFilter
+    )
     filterset_fields = (
         'project',
         # snapshot is part of SnapshotFilterBackend
-        'attribute',
+        # attribute is part of AttributeFilterBackend
         'attribute__uri',
-        'option',
+        'attribute__path',
+        # option is part of OptionFilterBackend
         'option__uri',
+        'option__uri_path',
     )
+
+    search_fields = ['text', 'project__title', 'snapshot__title']
 
     def get_queryset(self):
         return Value.objects.filter_user(self.request.user).select_related('attribute', 'option')
+
+    @action(detail=False, permission_classes=(HasModelPermission | HasProjectsPermission, ))
+    def search(self, request):
+        queryset = self.filter_queryset(self.get_queryset()).exclude_empty().select_related('project', 'snapshot')
+
+        # add a subquery to get the label for the set the value is part in
+        try:
+            set_attribute = int(request.GET.get('set_attribute'))
+            set_label_subquery = Subquery(
+                Value.objects.filter(attribute=set_attribute, set_prefix='', set_index=OuterRef('set_index'))
+                             .values('text')[:1]
+            )
+            queryset = queryset.annotate(set_label=set_label_subquery)
+        except (ValueError, TypeError):
+            pass
+
+        if is_truthy(request.GET.get('collection')) and connection.vendor not in ['sqlite']:
+            # if collection is set (for checkboxes), we first select each distinct set and create a Q object with it
+            # by doing so we can select an undetermined number of values which belong to an exact number of sets
+            # given by settings.PROJECT_VALUES_SEARCH_LIMIT
+            #
+            # DISTINCT ON is not available on sqlite so we just apply the limit like for all other questions, this
+            # will display the last set of checked values incomplete
+            fields = ('project_id', 'snapshot_id', 'attribute_id', 'set_prefix', 'set_index')
+            values_list = queryset.order_by(*fields) \
+                                  .distinct(*fields) \
+                                  .values(*fields) \
+                                  [:settings.PROJECT_VALUES_SEARCH_LIMIT]
+
+            q = Q()
+            for values_dict in values_list:
+                q |= Q(**values_dict)
+
+            queryset = queryset.filter(q)
+        else:
+            queryset = queryset[:settings.PROJECT_VALUES_SEARCH_LIMIT]
+
+        serializer = ValueSearchSerializer(queryset, many=True)
+        return Response(serializer.data)
 
     @action(detail=True, permission_classes=(HasModelPermission | HasProjectsPermission, ))
     def file(self, request, pk=None):

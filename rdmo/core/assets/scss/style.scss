@@ -190,8 +190,7 @@ metadata {
 .page h2:nth-child(2) {
     margin-top: 0;
 }
-.sidebar h2:first-child,
-.sidebar .import-buttons {
+.sidebar > *:first-child {
     margin-top: 70px;
 }
 
@@ -317,6 +316,7 @@ form .yesno label {
 /* modals */
 
 .modal-body {
+    > div:last-child,
     > p:last-child,
     formgroup:last-child .form-group {
         margin-bottom: 0;
@@ -494,4 +494,8 @@ li.has-warning > a.control-label > i {
 .show-less {
     color: $link-color;
     cursor: pointer;
+}
+
+.has-error .react-select__control {
+    border-color: #a94442;
 }

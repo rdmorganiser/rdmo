@@ -1,13 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { capitalize, isNil, last } from 'lodash'
+import { capitalize, isEmpty, isNil, last } from 'lodash'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 import useModal from 'rdmo/core/assets/js/hooks/useModal'
 
 import PageHeadDeleteModal from './PageHeadDeleteModal'
 import PageHeadFormModal from './PageHeadFormModal'
+import PageHeadReuseModal from './PageHeadReuseModal'
 
 const PageHead = ({ templates, page, sets, values, currentSet,
                     activateSet, createSet, updateSet, deleteSet, copySet }) => {
@@ -18,12 +19,13 @@ const PageHead = ({ templates, page, sets, values, currentSet,
     ))
   )
 
-  const {show: showCreateModal, open: openCreateModal, close: closeCreateModal} = useModal()
-  const {show: showUpdateModal, open: openUpdateModal, close: closeUpdateModal} = useModal()
-  const {show: showDeleteModal, open: openDeleteModal, close: closeDeleteModal} = useModal()
-  const {show: showCopyModal, open: openCopyModal, close: closeCopyModal} = useModal()
+  const createModal = useModal()
+  const updateModal = useModal()
+  const copyModal = useModal()
+  const importModal = useModal()
+  const deleteModal = useModal()
 
-  const handleActivateSet = (event, set) => {
+  const handleActivate = (event, set) => {
     event.preventDefault()
     if (set.set_index != currentSet.set_index) {
       activateSet(set)
@@ -32,37 +34,51 @@ const PageHead = ({ templates, page, sets, values, currentSet,
 
   const handleOpenCreateModal = (event) => {
     event.preventDefault()
-    openCreateModal()
+    createModal.open()
   }
 
-  const handleCreateSet = (text) => {
-    createSet({
-      attribute: page.attribute,
-      set_index: last(sets) ? last(sets).set_index + 1 : 0,
-      set_collection: page.is_collection,
-      text
-    })
-    closeCreateModal()
+  const handleCreate = (text, copySetValue) => {
+    if (isEmpty(copySetValue)) {
+      createSet({
+        attribute: page.attribute,
+        set_index: last(sets) ? last(sets).set_index + 1 : 0,
+        set_collection: page.is_collection,
+        text
+      })
+    } else {
+      copySet(currentSet, copySetValue, {
+        attribute: page.attribute,
+        set_index: last(sets) ? last(sets).set_index + 1 : 0,
+        set_collection: page.is_collection,
+        text
+      })
+    }
+    createModal.close()
   }
 
-  const handleUpdateSet = (text) => {
+  const handleUpdate = (text) => {
     updateSet(currentSetValue, { text })
-    closeUpdateModal()
+    updateModal.close()
   }
 
-  const handleDeleteSet = () => {
+  const handleDelete = () => {
     deleteSet(currentSet, currentSetValue)
-    closeDeleteModal()
+    deleteModal.close()
   }
 
-  const handleCopySet = (text) => {
+  const handleCopy = (text) => {
     copySet(currentSet, currentSetValue, {
       attribute: page.attribute,
       set_index: last(sets) ? last(sets).set_index + 1 : 0,
       set_collection: page.is_collection,
       text
     })
-    closeCopyModal()
+    copyModal.close()
+  }
+
+  const handleImport = (copySetValue) => {
+    copySet(currentSet, copySetValue, currentSetValue)
+    importModal.close()
   }
 
   return page.is_collection && (
@@ -80,7 +96,7 @@ const PageHead = ({ templates, page, sets, values, currentSet,
                   ))
                   return (
                     <li key={setIndex} className={classNames({active: set.set_index == currentSet.set_index})}>
-                      <a href="#" onClick={(event) => handleActivateSet(event, set)}>
+                      <a href="#" onClick={(event) => handleActivate(event, set)}>
                         {isNil(setValue) ? `#${set.set_index + 1}` : setValue.text}
                       </a>
                     </li>
@@ -96,57 +112,69 @@ const PageHead = ({ templates, page, sets, values, currentSet,
             <div className="interview-page-tabs-buttons">
               {
                 page.attribute && (
-                  <button className="btn-link fa fa-pencil" title={gettext('Edit tab')} onClick={openUpdateModal} />
+                  <button className="btn-link fa fa-pencil" title={gettext('Edit tab')} onClick={updateModal.open} />
                 )
               }
-              <button className="btn-link fa fa-copy" title={gettext('Copy tab')} onClick={openCopyModal} />
-              <button className="btn-link fa fa-trash" title={gettext('Remove tab')} onClick={openDeleteModal} />
+              <button className="btn-link fa fa-copy" title={gettext('Copy tab')} onClick={copyModal.open} />
+              <button className="btn-link fa fa-arrow-circle-down" title={gettext('Reuse answers')} onClick={importModal.open} />
+              <button className="btn-link fa fa-trash" title={gettext('Remove tab')} onClick={deleteModal.open} />
             </div>
           </>
         ) : (
-          <button className="btn btn-success" title={gettext('Add tab')} onClick={openCreateModal}>
+          <button className="btn btn-success" title={gettext('Add tab')} onClick={createModal.open}>
             <i className="fa fa-plus fa-btn"></i> {capitalize(page.verbose_name)}
           </button>
         )
       }
 
       <PageHeadFormModal
-        title={capitalize(page.verbose_name)}
+        title={gettext('Create tab')}
         submitLabel={gettext('Create')}
         submitColor="success"
-        show={showCreateModal}
-        initial={isNil(page.attribute) ? null : ''}
-        onClose={closeCreateModal}
-        onSubmit={handleCreateSet}
+        show={createModal.show}
+        attribute={page.attribute}
+        reuse={true}
+        onClose={createModal.close}
+        onSubmit={handleCreate}
       />
       <PageHeadFormModal
-        title={capitalize(page.verbose_name)}
+        title={gettext('Copy tab')}
         submitLabel={gettext('Copy')}
         submitColor="info"
-        show={showCopyModal}
-        initial={isNil(page.attribute) ? null : ''}
-        onClose={closeCopyModal}
-        onSubmit={handleCopySet}
+        show={copyModal.show}
+        attribute={page.attribute}
+        onClose={copyModal.close}
+        onSubmit={handleCopy}
       />
       {
         currentSetValue && (
           <PageHeadFormModal
-            title={capitalize(page.verbose_name)}
+            title={gettext('Update tab')}
             submitLabel={gettext('Update')}
             submitColor="primary"
-            show={showUpdateModal}
+            show={updateModal.show}
+            attribute={page.attribute}
             initial={currentSetValue.text}
-            onClose={closeUpdateModal}
-            onSubmit={handleUpdateSet}
+            onClose={updateModal.close}
+            onSubmit={handleUpdate}
+          />
+        )
+      }
+      {
+        currentSetValue && (
+          <PageHeadReuseModal
+            show={importModal.show}
+            attribute={page.attribute}
+            onClose={importModal.close}
+            onSubmit={handleImport}
           />
         )
       }
       <PageHeadDeleteModal
-        title={capitalize(page.verbose_name)}
         name={currentSetValue ? currentSetValue.text : null}
-        show={showDeleteModal}
-        onClose={closeDeleteModal}
-        onSubmit={handleDeleteSet}
+        show={deleteModal.show}
+        onClose={deleteModal.close}
+        onSubmit={handleDelete}
       />
     </div>
   )

@@ -41,6 +41,26 @@ def check_conditions(conditions, values, set_prefix=None, set_index=None):
         return True
 
 
+def check_options(project, value):
+    # loop over all values of a question and check if value.option matches the optionsets of the question
+    for question in filter(lambda q: q.attribute == value.attribute, project.catalog.questions):
+        question_options = [
+            option.id
+            for optionset in question.optionsets.all()
+            for option in optionset.options.all()
+        ]
+
+        # fail if question requires an option but value has none
+        if question_options and value.option is None:
+            return False
+
+        # fail if the value's option is not allowed for this question
+        if value.option is not None and value.option.id not in question_options:
+            return False
+
+    return True
+
+
 def copy_project(project, site, owners):
     from .models import Membership, Value  # to prevent circular inclusion
 

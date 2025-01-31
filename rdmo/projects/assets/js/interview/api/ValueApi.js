@@ -1,11 +1,15 @@
 import BaseApi from 'rdmo/core/assets/js/api/BaseApi'
 import { encodeParams } from 'rdmo/core/assets/js/utils/api'
-import isUndefined from 'lodash/isUndefined'
+import { isUndefined } from 'lodash'
 
 class ValueApi extends BaseApi {
 
   static fetchValues(projectId, params) {
     return this.get(`/api/v1/projects/projects/${projectId}/values/?${encodeParams(params)}`)
+  }
+
+  static searchValues(params) {
+    return this.get(`/api/v1/projects/values/search/?${encodeParams(params)}`)
   }
 
   static storeValue(projectId, value) {
@@ -29,8 +33,10 @@ class ValueApi extends BaseApi {
     }
   }
 
-  static copySet(projectId, currentSetValue, setValue) {
-    return this.post(`/api/v1/projects/projects/${projectId}/values/${currentSetValue.id}/set/`, setValue)
+  static copySet(projectId, setValue, copySetValue) {
+    return this.post(`/api/v1/projects/projects/${projectId}/values/set/`, {
+      ...setValue, copy_set_value: copySetValue.id
+    })
   }
 
   static deleteSet(projectId, setValue) {
