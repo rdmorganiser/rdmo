@@ -227,6 +227,10 @@
         text-overflow: ellipsis;
     }
 
+    input[type="text"] {
+        text-overflow:ellipsis;
+    }
+
     .radio,
     .checkbox {
         margin: 0;
