@@ -165,6 +165,12 @@
         }
     }
 
+    .text-input {
+        input[type="text"] {
+            text-overflow: ellipsis;
+        }
+    }
+
     &.select-input {
         .buttons {
             // in a select widget, additional space is reserved for the dropdown icon
@@ -226,19 +232,15 @@
     }
 
     .unit {
-        padding: 6px 12px;
-        width: 120px;
+        padding: 6px 0;
         height: 34px;
 
         cursor: help;
 
+        text-align: right;
+
         white-space: nowrap;
         overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    input[type="text"] {
-        text-overflow: ellipsis;
     }
 
     .radio,
@@ -277,7 +279,7 @@
         }
     }
 
-    .range {
+    .range-input {
         height: 34px;  // same as form-control
 
         input[type='range'] {
