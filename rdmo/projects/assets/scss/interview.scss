@@ -131,6 +131,14 @@
     p {
         margin-bottom: 5px;
     }
+
+    .interview-question-text {
+        margin-bottom: 10px;
+
+        .form-label {
+            display: inline;
+        }
+    }
 }
 
 .interview-questionset {
@@ -401,13 +409,16 @@
     color: #777;
 }
 
-.btn-contact {
-    float: right;
+.btn.btn-contact {
     opacity: 0.8;
-    line-height: 20px;
-    font-size: 14px;
+    line-height: 16px;
 
     padding: 0;
+    border: none;
+    border-radius: 0;
+
+    margin-left: 10px;
+    margin-top: -3px;
 
     &:hover {
         opacity: 1;

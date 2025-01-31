@@ -17,9 +17,11 @@ const Question = ({ settings, templates, page, question, sets, values, siblings,
                     currentSet, createValue, updateValue, deleteValue, copyValue, fetchContact }) => {
   return checkQuestion(question, currentSet) && (
     <div className={`interview-question col-md-${question.width || '12'}`}>
-      <QuestionContact settings={settings} question={question} values={values} fetchContact={fetchContact} />
       <QuestionOptional question={question} />
-      <QuestionText question={question} />
+      <div className="interview-question-text">
+        <QuestionText question={question} />
+        <QuestionContact settings={settings} question={question} values={values} fetchContact={fetchContact} />
+      </div>
       <QuestionHelp question={question} />
       <QuestionHelpTemplate templates={templates} />
       <QuestionAddValueHelp templates={templates} question={question} />
