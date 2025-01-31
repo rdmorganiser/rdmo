@@ -165,12 +165,22 @@
         }
     }
 
-    &:has(.react-select) {
+    &.select-input {
         .buttons {
+            // in a select widget, additional space is reserved for the dropdown icon
             position: absolute;
             right: 62px;
             margin-top: 2px;
             margin-bottom: 2px;
+        }
+    }
+
+    &.textarea-input {
+        .buttons {
+            // in a textarea widget, the buttons are positioned at the bottom
+            top: auto;
+            height: 32px;
+            bottom: 0;
         }
     }
 
@@ -228,7 +238,7 @@
     }
 
     input[type="text"] {
-        text-overflow:ellipsis;
+        text-overflow: ellipsis;
     }
 
     .radio,

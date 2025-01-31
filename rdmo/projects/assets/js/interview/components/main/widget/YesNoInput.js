@@ -22,7 +22,7 @@ const YesNoInput = ({ question, value, disabled, updateValue, buttons }) => {
   })
 
   return (
-    <div className="interview-input">
+    <div className="interview-input yesno-input">
       <div className="buttons-wrapper">
         {buttons}
         <div className={classnames}>

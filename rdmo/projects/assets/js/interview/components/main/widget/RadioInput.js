@@ -44,7 +44,7 @@ const RadioInput = ({ question, value, options, disabled, updateValue, buttons }
   })
 
   return (
-    <div className="interview-input">
+    <div className="interview-input radio-input">
       <div className="buttons-wrapper">
         {buttons}
         <div className={classnames}>

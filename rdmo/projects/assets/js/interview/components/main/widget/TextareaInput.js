@@ -26,9 +26,8 @@ const TextareaInput = ({ question, value, disabled, updateValue, buttons }) => {
   })
 
   return (
-    <div className="interview-input">
+    <div className="interview-input textarea-input">
       <div className="buttons-wrapper">
-        {buttons}
         <textarea
           ref={ref}
           rows={6}
@@ -40,6 +39,7 @@ const TextareaInput = ({ question, value, disabled, updateValue, buttons }) => {
             handleChange(value, event.target.value)
           }}
         />
+        {buttons}
       </div>
       <Unit unit={question.unit} />
     </div>

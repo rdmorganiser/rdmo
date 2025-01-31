@@ -52,7 +52,7 @@ const DateInput = ({ question, value, disabled, updateValue, buttons }) => {
   })
 
   return (
-    <div className="interview-input">
+    <div className="interview-input date-input">
       <div className="buttons-wrapper">
         {buttons}
         <DatePicker

@@ -18,6 +18,7 @@ const RangeInput = ({ question, value, disabled, updateValue, buttons }) => {
 
   const classnames = classNames({
     'interview-input': true,
+    'range-input': true,
     'range': true,
     'default': isDefaultValue(question, value)
   })

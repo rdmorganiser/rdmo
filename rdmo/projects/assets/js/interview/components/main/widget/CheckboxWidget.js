@@ -39,7 +39,7 @@ const CheckboxWidget = ({ page, question, sets, values, siblings, currentSet, di
   return (
     <div className="interview-widgets">
       <div className="interview-widget">
-        <div className="interview-input">
+        <div className="interview-input checkbox-input">
           <div className="buttons-wrapper">
             <div className="checkbox-control">
               {

@@ -17,7 +17,7 @@ const FileInput = ({ question, value, disabled, updateValue, buttons }) => {
   })
 
   return (
-    <div className="interview-input">
+    <div className="interview-input file-input">
       <div className="buttons-wrapper">
         {buttons}
         <div className="file-control">

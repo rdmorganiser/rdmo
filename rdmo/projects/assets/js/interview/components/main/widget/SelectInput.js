@@ -105,7 +105,7 @@ const SelectInput = ({ question, value, options, disabled, creatable, updateValu
   }
 
   return (
-    <div className="interview-input">
+    <div className="interview-input select-input">
       {
         creatable ? (
           isAsync ? (

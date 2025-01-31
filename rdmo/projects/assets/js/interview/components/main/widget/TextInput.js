@@ -33,7 +33,7 @@ const TextInput = ({ question, value, disabled, updateValue, buttons }) => {
   })
 
   return (
-    <div className="interview-input">
+    <div className="interview-input text-input">
       <div className="buttons-wrapper">
         {buttons}
         <input
