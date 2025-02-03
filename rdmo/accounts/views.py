@@ -12,9 +12,9 @@ from rest_framework.authtoken.models import Token
 
 from rdmo.core.utils import get_next, get_referer_path_info
 
-from .forms import ProfileForm, RemoveForm, UpdateConsentForm
+from .forms import AcceptConsentForm, ProfileForm, RemoveForm
 from .models import ConsentFieldValue
-from .utils import CONSENT_SESSION_KEY, delete_user
+from .utils import delete_user
 
 log = logging.getLogger(__name__)
 
@@ -119,11 +119,17 @@ def terms_of_use_accept(request):
 
     if request.method == "POST":
         # Use the form to handle both update and delete actions
-        form = UpdateConsentForm(request.POST, user=request.user)
+        form = AcceptConsentForm(request.POST, user=request.user)
         if form.is_valid():
-            # update the session to reflect the new consent status
-            request.session[CONSENT_SESSION_KEY] = form.save()
-            return redirect("home")
+            consent_saved = form.save(request.session)  # saves the consent and sets the session key
+            if consent_saved:
+                return redirect("home")
+
+        # If consent was not saved, re-render the form with an error
+        return render(request,
+            "account/terms_of_use_accept_form.html",
+            {"form": form},
+        )
 
     elif request.method == "GET":
         has_consented = ConsentFieldValue.objects.filter(user=request.user).exists()

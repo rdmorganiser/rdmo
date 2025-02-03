@@ -1,4 +1,5 @@
 import re
+from datetime import datetime, timedelta
 
 import pytest
 
@@ -10,9 +11,8 @@ from django.urls.exceptions import NoReverseMatch
 
 from pytest_django.asserts import assertContains, assertNotContains, assertRedirects, assertTemplateUsed, assertURLEqual
 
-from rdmo.accounts.models import ConsentFieldValue
+from rdmo.accounts.models import CONSENT_SESSION_KEY, ConsentFieldValue
 from rdmo.accounts.tests.utils import reload_urls
-from rdmo.accounts.utils import CONSENT_SESSION_KEY
 
 users = (
     ('editor', 'editor'),
@@ -799,17 +799,10 @@ def test_shibboleth_logout_username_pattern(db, client, settings, shibboleth, us
             assertURLEqual(response.url, reverse('account_logout'))
 
 
-@pytest.mark.parametrize('post_consent', [True, False])
 @pytest.mark.parametrize('username,password', users)
-def test_terms_of_use_middleware_redirect_and_update(
-    db, client, settings, username, password, post_consent
+def test_terms_of_use_middleware_redirect_and_accept(
+    db, client, settings, username, password
 ):
-    """
-    Test the behavior of TermsAndConditionsRedirectMiddleware and terms_of_use_update view:
-    - When the middleware is enabled, users are redirected to the terms update page if not consented.
-    - Valid POST saves consent to the session and database.
-    - Invalid POST does not save consent to the session or database.
-    """
     # Arrange
     settings.ACCOUNT_TERMS_OF_USE = True
     reload_urls('accounts')  # needs to reload before the middleware
@@ -826,56 +819,81 @@ def test_terms_of_use_middleware_redirect_and_update(
     client.login(username=username, password=password)
     response = client.get(reverse('projects'))
 
-    # Assert - Middleware should redirect to terms_of_use_update
+    # Assert - Middleware should redirect to terms_of_use_accept
     if password is not None:
-        assert response.status_code == 302
-        assert response.url == reverse('terms_of_use_update')
+        assertRedirects(response, reverse('terms_of_use_accept'))
 
         # Session should not yet have consent
         assert not client.session.get(CONSENT_SESSION_KEY, False)
     else:
         # Anonymous user is redirected to login
-        assert response.status_code == 302
-        assert response.url == reverse('account_login') + '?next=' + reverse('projects')
+        assertRedirects(response, reverse('account_login') + '?next=' + reverse('projects'))
         return  # Exit test for anonymous users
 
-    # Act - Make a POST request to terms_of_use_update
-    terms_update_url = reverse('terms_of_use_update')
-    data = {
-        'consent': post_consent,  # Set based on parameterization
-    }
-    response = client.post(terms_update_url, data)
+    # Act - Make a POST request to terms_of_use_accept
+    response = client.post(reverse('terms_of_use_accept'), {'consent': True}, follow=True)
+    assertRedirects(response, reverse('projects'))
 
-    assert response.status_code == 302
-    assert response.url == reverse('home')
+    # Assert POST behavior, ToU accepted
+    # Consent should be stored in the session and database
+    assert client.session[CONSENT_SESSION_KEY] is True
+    assert ConsentFieldValue.objects.filter(user=user).exists()
 
-    # Assert POST behavior
-    if post_consent:  # accepted you
-        # Consent should be stored in the session and database
-        assert client.session[CONSENT_SESSION_KEY] is True
-        assert ConsentFieldValue.objects.filter(user=user).exists()
+    response = client.get(reverse('projects'))
+    assert response.status_code == 200
 
-        response = client.get(reverse('projects'))
-        assert response.status_code == 200
 
-        # also test the revoke consent
-        response = client.post(terms_update_url, {'delete': ''})
-        assert response.status_code == 302
-        assert response.url == reverse('home')
-        assert client.session.get(CONSENT_SESSION_KEY, False) is False
-        assert not ConsentFieldValue.objects.filter(user=user).exists()
+def test_terms_of_use_middleware_invalidate_terms_version(
+    db, client, settings
+):
+    # Arrange constants, settings and user
+    past_datetime = (datetime.now() - timedelta(days=10)).strftime(format="%Y-%m-%d")
+    future_datetime = (datetime.now() + timedelta(days=10)).strftime(format="%Y-%m-%d")
 
-        response = client.get(reverse('projects'))
-        assert response.status_code == 302
-        assert response.url == reverse('terms_of_use_update')
+    settings.ACCOUNT_TERMS_OF_USE = True
+    reload_urls('accounts')  # needs to reload before the middleware
+    settings.MIDDLEWARE += [
+        "rdmo.accounts.middleware.TermsAndConditionsRedirectMiddleware"
+    ]
+    terms_accept_url = reverse('terms_of_use_accept')
+    # Arrange user object
+    username = password = 'user'
+    user = get_user_model().objects.get(username=username)
+    _consent = ConsentFieldValue.objects.create(user=user, consent=True)
 
-    else:  # did not accept you
-        # Invalid POST
-        # assertTemplateUsed(response, "account/terms_of_use_update_form.html")
-        # Consent should not be stored in the session or database
-        assert client.session.get(CONSENT_SESSION_KEY, False) is False
-        assert not ConsentFieldValue.objects.filter(user=user).exists()
+    # Assert - Access the home page, user has a valid consent
+    # settings.TERMS_VERSION_DATE is not set
+    client.login(username=username, password=password)
+    response = client.get(reverse('projects'))
+    assert response.status_code == 200
+    client.logout()
 
-        response = client.get(reverse('projects'))
-        assert response.status_code == 302
-        assert response.url == reverse('terms_of_use_update')
+    # Act - change the version date setting to a distant future
+    settings.TERMS_VERSION_DATE = future_datetime
+    # Arrange - new login
+    client.login(username=username, password=password)
+    response = client.get(reverse('projects'))
+
+    # Assert - consent is now invalid and should redirect to terms_of_use_accept
+    assertRedirects(response, terms_accept_url)
+
+    # Act - Try to make a POST request to terms_of_use_accept
+    response = client.post(terms_accept_url, {'consent': True})
+    # Assert - consent was not saved because version date is in the future
+    assert not ConsentFieldValue.objects.filter(user=user).exists()
+    assertContains(response, 'could not be saved')
+    client.logout()
+
+    # Act - change the version date setting to a past datetime
+    settings.TERMS_VERSION_DATE = past_datetime
+    # Arrange - new login without consent
+    client.login(username=username, password=password)
+    response = client.get(reverse('projects'))
+    assertRedirects(response, terms_accept_url)
+
+    # Act - post the consent
+    response = client.post(terms_accept_url, {'consent': True}, follow=True)
+    # Assert - the consent should now be updated since the version date is valid
+    assert ConsentFieldValue.objects.filter(user=user).exists()
+    assert client.session[CONSENT_SESSION_KEY] is True
+    assertRedirects(response, reverse('projects'))

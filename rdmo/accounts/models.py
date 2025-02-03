@@ -1,12 +1,18 @@
+from datetime import datetime
+
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.dateparse import parse_date
+from django.utils.formats import get_format
 from django.utils.translation import gettext_lazy as _
 
 from rdmo.core.models import Model as RDMOTimeStampedModel
 from rdmo.core.models import TranslationMixin
+
+CONSENT_SESSION_KEY = "user_has_consented"
 
 
 class AdditionalField(models.Model, TranslationMixin):
@@ -123,6 +129,64 @@ class ConsentFieldValue(RDMOTimeStampedModel):
 
     def __str__(self):
         return self.user.username
+
+    @classmethod
+    def create_consent(cls, user, session=None) -> bool:
+        obj, _created = cls.objects.update_or_create(user=user, defaults={"consent": True})
+
+        # Validate consent before storing in session
+        if obj.is_consent_valid():
+            if session:
+                session[CONSENT_SESSION_KEY] = True
+            return True
+
+        obj.delete()  # Remove when consent is outdated
+        return False
+
+
+    @classmethod
+    def has_accepted_terms(cls, user, session) -> bool:
+        if not settings.ACCOUNT_TERMS_OF_USE:
+            return True  # If terms are disabled, assume accepted.
+
+        # Check session cache first
+        if CONSENT_SESSION_KEY in session:
+            return session[CONSENT_SESSION_KEY]
+
+        # Query the database if not cached
+        consent = cls.objects.filter(user=user).first()
+        has_valid_consent = bool(consent and consent.is_consent_valid())
+
+        session[CONSENT_SESSION_KEY] = has_valid_consent  # Cache result
+        return has_valid_consent
+
+    def is_consent_valid(self) -> bool:
+        # optionally enable terms to be outdated
+        terms_version_date = getattr(settings, 'TERMS_VERSION_DATE', None)
+
+        if terms_version_date is None:
+            return True
+
+        # First, try standard ISO format (YYYY-MM-DD)
+        latest_terms_version_date = parse_date(terms_version_date)
+
+        # If ISO parsing fails, try localized formats
+        if not latest_terms_version_date:
+            for fmt in get_format('DATE_INPUT_FORMATS'):
+                try:
+                    latest_terms_version_date = datetime.strptime(terms_version_date, fmt).date()
+                    break  # Stop if parsing succeeds
+                except ValueError:
+                    continue  # Try the next format
+
+        # If still not parsed, raise an error
+        if not latest_terms_version_date:
+            raise ValueError(
+                f"Invalid date format for TERMS_VERSION_DATE: {terms_version_date}. Valid formats {get_format('DATE_INPUT_FORMATS')}"  # noqa: E501
+            )
+
+        # Compare only dates (ignores time)
+        return self.updated and (self.updated.date() >= latest_terms_version_date)
 
 
 class Role(models.Model):

@@ -89,7 +89,7 @@ class RemoveForm(forms.Form):
     consent.label = _("I confirm that I want my profile to be completely removed. This can not be undone!")
 
 
-class UpdateConsentForm(forms.Form):
+class AcceptConsentForm(forms.Form):
 
     consent = forms.BooleanField(
         label="I agree to the terms of use",
@@ -103,20 +103,10 @@ class UpdateConsentForm(forms.Form):
         if not self.user:
             raise ValueError("A user instance is required to initialize the form.")
 
-        # pre-fill the 'consent' field based on the user's existing consent
-        # Ensure the user cannot uncheck the consent
-        has_consented = ConsentFieldValue.objects.filter(user=self.user).exists()
-        if has_consented:
-            self.fields["consent"].disabled = True  # Disable field after acceptance
-            self.fields["consent"].initial = True
-        else:
-            self.fields["consent"].initial = False
-
-    def save(self) -> bool:
-        if not ConsentFieldValue.objects.filter(user=self.user).exists():
-            if self.cleaned_data.get("consent"):
-                ConsentFieldValue.objects.create(user=self.user, consent=True)
-                # session consent is updated in the view
-                return True  # consent accepted
-
-        return False  # No changes made
+    def save(self, session) -> bool:
+        if self.cleaned_data['consent']:
+            success = ConsentFieldValue.create_consent(user=self.user, session=session)
+            if not success:
+                self.add_error(None, "Consent could not be saved. Please try again.")  # Add non-field error
+            return success
+        return False

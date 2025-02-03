@@ -33,6 +33,14 @@
                 {% trans "You have accepted the terms of use." %}
             </p>
         {% endif %}
+
+        {% if form.non_field_errors %}
+          <ul class="list-unstyled text-danger">
+            {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
     </div>
 
 {% endblock %}

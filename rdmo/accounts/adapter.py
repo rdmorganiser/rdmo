@@ -68,5 +68,5 @@ class SignupForm(AllauthSignupForm, ProfileForm):
 
         # store the consent field
         if settings.ACCOUNT_TERMS_OF_USE:
-            consent = ConsentFieldValue(user=user, consent=self.cleaned_data['consent'])
-            consent.save()
+            if self.cleaned_data['consent']:
+                ConsentFieldValue.create_consent(user=user, session=request.session)

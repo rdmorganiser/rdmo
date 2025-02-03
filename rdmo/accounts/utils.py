@@ -6,12 +6,11 @@ from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 
-from .models import ConsentFieldValue, Role
+from .models import Role
 from .settings import GROUPS
 
 log = logging.getLogger(__name__)
 
-CONSENT_SESSION_KEY = "user_has_consented"
 
 def get_full_name(user):
     if user.first_name and user.last_name:
@@ -94,17 +93,3 @@ def get_user_from_db_or_none(username: str, email: str):
     except ObjectDoesNotExist:
         log.error('Retrieval of user "%s" with email "%s" failed, user does not exist', username, email)
         return None
-
-
-def user_has_accepted_terms(user, session) -> bool:
-    if not settings.ACCOUNT_TERMS_OF_USE:
-        return True  # If terms are not enabled, consider them accepted.
-
-    # check the session for cached consent status
-    if CONSENT_SESSION_KEY in session:
-        return session[CONSENT_SESSION_KEY]
-
-    has_consented = ConsentFieldValue.objects.filter(user=user).exists()
-    session[CONSENT_SESSION_KEY] = has_consented  # cache the result in the session
-
-    return has_consented
