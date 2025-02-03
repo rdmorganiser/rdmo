@@ -22,12 +22,12 @@ repos:
         exclude: \.dot$
       - id: debug-statements
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.7.2
+    rev: v0.9.4
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
   - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v9.14.0
+    rev: v9.19.0
     hooks:
       - id: eslint
         args: [--fix, --color]
@@ -36,7 +36,7 @@ repos:
           - eslint-plugin-react@7.37.0
           - react@18.3.1
   - repo: https://github.com/crate-ci/typos
-    rev: v1.27.0
+    rev: typos-dict-v0.12.4
     hooks:
     - id: typos
       exclude: |
