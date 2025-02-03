@@ -1,6 +1,5 @@
 """Terms and Conditions Middleware"""
 # ref: https://github.com/cyface/django-termsandconditions/blob/main/termsandconditions/middleware.py
-import logging
 
 from django.conf import settings
 from django.http import HttpResponseRedirect
@@ -8,9 +7,6 @@ from django.urls import reverse
 
 from .utils import user_has_accepted_terms
 
-LOGGER = logging.getLogger(__name__)
-
-ACCEPT_TERMS_PATH = getattr(settings, "ACCEPT_TERMS_PATH", reverse("terms_of_use_update"))
 TERMS_EXCLUDE_URL_PREFIX_LIST = getattr(
     settings,
     "TERMS_EXCLUDE_URL_PREFIX_LIST",
@@ -36,12 +32,14 @@ class TermsAndConditionsRedirectMiddleware:
             return self.get_response(request)
 
         # check if the current path is protected
+        accept_terms_path = reverse("terms_of_use_accept")
         if (
             request.user.is_authenticated
+            and not request.path.startswith(accept_terms_path)
             and self.is_path_protected(request.path)
             and not user_has_accepted_terms(request.user, request.session)
         ):
-            return HttpResponseRedirect(ACCEPT_TERMS_PATH)
+            return HttpResponseRedirect(accept_terms_path)
 
         # Proceed with the response for non-protected paths or accepted terms
         return self.get_response(request)
@@ -64,9 +62,6 @@ class TermsAndConditionsRedirectMiddleware:
             return False
 
         if path in TERMS_EXCLUDE_URL_LIST:
-            return False
-
-        if path.startswith(ACCEPT_TERMS_PATH):
             return False
 
         return True

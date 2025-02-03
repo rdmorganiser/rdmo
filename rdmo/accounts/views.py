@@ -112,7 +112,7 @@ def shibboleth_logout(request):
     return HttpResponseRedirect(logout_url)
 
 
-def terms_of_use_update(request):
+def terms_of_use_accept(request):
 
     if not request.user.is_authenticated:
         return redirect("account_login")
@@ -121,19 +121,16 @@ def terms_of_use_update(request):
         # Use the form to handle both update and delete actions
         form = UpdateConsentForm(request.POST, user=request.user)
         if form.is_valid():
-            consent_status = form.save()
-            request.session[CONSENT_SESSION_KEY] = consent_status
-            # Update the session to reflect the new consent status
+            # update the session to reflect the new consent status
+            request.session[CONSENT_SESSION_KEY] = form.save()
             return redirect("home")
 
     elif request.method == "GET":
-        # Render the consent update form
-        form = UpdateConsentForm(user=request.user)
         has_consented = ConsentFieldValue.objects.filter(user=request.user).exists()
         return render(
             request,
-            "account/terms_of_use_update_form.html",
-            {"form": form, "has_consented": has_consented},
+            "account/terms_of_use_accept_form.html",
+            {"has_consented": has_consented},
         )
 
     return HttpResponseNotAllowed(["GET", "POST"])

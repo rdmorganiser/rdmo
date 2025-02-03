@@ -93,7 +93,7 @@ class UpdateConsentForm(forms.Form):
 
     consent = forms.BooleanField(
         label="I agree to the terms of use",
-        required=False,  # not required because it won't be submitted during a delete
+        required=True,
     )
 
     def __init__(self, *args, user=None, **kwargs):
@@ -104,20 +104,19 @@ class UpdateConsentForm(forms.Form):
             raise ValueError("A user instance is required to initialize the form.")
 
         # pre-fill the 'consent' field based on the user's existing consent
-        self.fields["consent"].initial = ConsentFieldValue.objects.filter(
-            user=self.user
-        ).exists()
+        # Ensure the user cannot uncheck the consent
+        has_consented = ConsentFieldValue.objects.filter(user=self.user).exists()
+        if has_consented:
+            self.fields["consent"].disabled = True  # Disable field after acceptance
+            self.fields["consent"].initial = True
+        else:
+            self.fields["consent"].initial = False
 
     def save(self) -> bool:
+        if not ConsentFieldValue.objects.filter(user=self.user).exists():
+            if self.cleaned_data.get("consent"):
+                ConsentFieldValue.objects.create(user=self.user, consent=True)
+                # session consent is updated in the view
+                return True  # consent accepted
 
-        if "delete" in self.data:
-            ConsentFieldValue.objects.filter(user=self.user).delete()
-            return False  # consent was revoked
-
-        if self.cleaned_data.get("consent"):
-            ConsentFieldValue.objects.update_or_create(
-                user=self.user, defaults={"consent": True}
-            )
-            return True  # consent was accepted
-
-        return False
+        return False  # No changes made

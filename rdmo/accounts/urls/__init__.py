@@ -8,7 +8,7 @@ from ..views import (
     shibboleth_login,
     shibboleth_logout,
     terms_of_use,
-    terms_of_use_update,
+    terms_of_use_accept,
     token,
 )
 
@@ -18,10 +18,10 @@ urlpatterns = [
     re_path('^remove', remove_user, name='profile_remove'),
 ]
 
-if settings.ACCOUNT_TERMS_OF_USE is True:
+if settings.ACCOUNT_TERMS_OF_USE:
     urlpatterns += [
+        re_path('^terms-of-use/accept/$', terms_of_use_accept, name='terms_of_use_accept'),
         re_path('^terms-of-use/$', terms_of_use, name='terms_of_use'),
-        re_path('^terms-of-use/update/$', terms_of_use_update, name='terms_of_use_update'),
     ]
 
 if settings.SHIBBOLETH:
