@@ -33,6 +33,7 @@ const Sidebar = ({ config, settings, templates, user, project, interview, config
           help={templates.project_interview_buttons_help}
           fetchPage={interviewActions.fetchPage} />
         <Navigation
+          overview={project.overview}
           currentPage={interview.page}
           navigation={interview.navigation}
           help={templates.project_interview_navigation_help}
