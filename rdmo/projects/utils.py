@@ -78,7 +78,7 @@ def copy_project(instance, site, owners):
     # a completely new project instance needs to be created in order for mptt to work
     project = Project.objects.create(
         parent=instance.parent,
-        site=instance.site,
+        site=site,
         title=instance.title,
         description=instance.description,
         catalog=instance.catalog,
