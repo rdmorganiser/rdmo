@@ -42,7 +42,13 @@ const RangeWidget = ({ page, question, sets, values, siblings, currentSet, disab
                 buttons={
                   <div className="buttons">
                     <QuestionSuccess value={value}/>
-                    <QuestionReuseValue page={page} question={question} value={value} updateValue={updateValue}/>
+                    <QuestionReuseValue
+                      page={page}
+                      question={question}
+                      value={value}
+                      disabled={disabled}
+                      updateValue={updateValue}
+                    />
                     <QuestionEraseValue value={value} disabled={disabled} updateValue={handleEraseValue}/>
                     <QuestionRemoveValue
                       question={question}

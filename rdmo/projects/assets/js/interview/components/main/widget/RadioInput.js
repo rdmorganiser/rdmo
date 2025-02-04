@@ -38,8 +38,8 @@ const RadioInput = ({ question, value, options, disabled, updateValue, buttons }
     })
   }, 500)
 
-  const classnames = classNames({
-    'radio-control': true,
+  const classnames = classNames('radio-control', {
+    'text-muted': disabled,
     'default': isDefaultValue(question, value)
   })
 

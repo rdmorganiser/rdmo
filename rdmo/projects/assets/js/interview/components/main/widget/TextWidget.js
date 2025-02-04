@@ -28,7 +28,13 @@ const TextWidget = ({ page, question, sets, values, siblings, currentSet, disabl
                 buttons={
                   <div className="buttons">
                     <QuestionSuccess value={value}/>
-                    <QuestionReuseValue page={page} question={question} value={value} updateValue={updateValue}/>
+                    <QuestionReuseValue
+                      page={page}
+                      question={question}
+                      value={value}
+                      disabled={disabled}
+                      updateValue={updateValue}
+                    />
                     <QuestionRemoveValue
                       question={question}
                       values={values}

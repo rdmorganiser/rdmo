@@ -24,7 +24,7 @@ const Question = ({ settings, templates, page, question, sets, values, siblings,
       </div>
       <QuestionHelp question={question} />
       <QuestionHelpTemplate templates={templates} />
-      <QuestionAddValueHelp templates={templates} question={question} />
+      <QuestionAddValueHelp templates={templates} question={question} disabled={disabled} />
       <QuestionWarning templates={templates} question={question} values={values} />
       <QuestionManagement question={question} isManager={isManager} />
       <QuestionWidget

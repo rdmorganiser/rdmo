@@ -14,10 +14,8 @@ const YesNoInput = ({ question, value, disabled, updateValue, buttons }) => {
     updateValue(value, { text, unit: question.unit, value_type: question.value_type })
   }
 
-  const classnames = classNames({
-    'radio-control': true,
-    'radio': true,
-    'yesno': true,
+  const classnames = classNames('radio-control radio yesno', {
+    'text-muted': disabled,
     'default': isDefaultValue(question, value)
   })
 

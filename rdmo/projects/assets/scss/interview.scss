@@ -335,6 +335,10 @@
             padding: 20px;
             margin-top: 6px;
             cursor: copy;
+
+            &.disabled {
+                cursor: not-allowed;
+            }
         }
     }
 

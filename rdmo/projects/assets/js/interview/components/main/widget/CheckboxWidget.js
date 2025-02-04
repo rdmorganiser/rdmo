@@ -71,6 +71,7 @@ const CheckboxWidget = ({ page, question, sets, values, siblings, currentSet, di
                 page={page}
                 question={question}
                 values={values}
+                disabled={disabled}
                 createValues={handleCreateValue}
                 updateValue={updateValue}
                 deleteValue={deleteValue}

@@ -6,7 +6,7 @@ import Modal from 'rdmo/core/assets/js/components/Modal'
 
 import useModal from 'rdmo/core/assets/js/hooks/useModal'
 
-const QuestionCopySet = ({ questionset, sets, currentSet, copySet }) => {
+const QuestionCopySet = ({ questionset, sets, currentSet, disabled, copySet }) => {
 
   const modal = useModal()
 
@@ -18,7 +18,7 @@ const QuestionCopySet = ({ questionset, sets, currentSet, copySet }) => {
     modal.close()
   }
 
-  return questionset.is_collection && (
+  return !disabled && questionset.is_collection && (
     <>
       <button type="button" className="btn btn-link btn-copy-set" onClick={modal.open}>
         <i className="fa fa-copy fa-btn"></i>
@@ -36,6 +36,7 @@ QuestionCopySet.propTypes = {
   questionset: PropTypes.object.isRequired,
   sets: PropTypes.array.isRequired,
   currentSet: PropTypes.object.isRequired,
+  disabled: PropTypes.bool.isRequired,
   copySet: PropTypes.func.isRequired
 }
 

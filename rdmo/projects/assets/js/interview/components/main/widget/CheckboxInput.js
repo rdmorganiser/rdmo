@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import { useDebouncedCallback } from 'use-debounce'
 import { isEmpty, isNil } from 'lodash'
 
@@ -11,6 +12,10 @@ import OptionText from './common/OptionText'
 const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreate, onUpdate, onDelete }) => {
 
   const checked = !isNil(value)
+
+  const classnames = classNames('checkbox', {
+    'text-muted': disabled
+  })
 
   const handleCreate = (option, optionIndex, additionalInput) => {
   if (option.has_provider) {
@@ -59,7 +64,7 @@ const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreat
   }, 500)
 
   return (
-    <div className="checkbox">
+    <div className={classnames}>
       <label>
         <input
           type="checkbox"
