@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
-const Breadcrump = ({ overview, page, fetchPage }) => {
+const Breadcrumb = ({ overview, page, fetchPage }) => {
 
   const handleClick = (event) => {
     event.preventDefault()
@@ -35,10 +35,10 @@ const Breadcrump = ({ overview, page, fetchPage }) => {
   )
 }
 
-Breadcrump.propTypes = {
+Breadcrumb.propTypes = {
   overview: PropTypes.object.isRequired,
   page: PropTypes.object,
   fetchPage: PropTypes.func.isRequired
 }
 
-export default Breadcrump
+export default Breadcrumb
