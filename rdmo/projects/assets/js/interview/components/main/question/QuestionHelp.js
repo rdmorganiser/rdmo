@@ -5,12 +5,13 @@ import classNames from 'classnames'
 import Html from 'rdmo/core/assets/js/components/Html'
 
 const QuestionHelp = ({ question }) => {
-  const classnames = classNames({
-    'help-text': true,
+  const classnames = classNames('interview-question-help', {
     'text-muted': question.is_optional
   })
 
-  return <Html className={classnames} html={question.help} />
+  return <div className={classnames} >
+    <Html html={question.help} />
+  </div>
 }
 
 QuestionHelp.propTypes = {

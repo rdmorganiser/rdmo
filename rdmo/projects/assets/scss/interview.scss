@@ -60,6 +60,10 @@
     .btn-add-set {
         margin-bottom: 20px;
     }
+
+    .interview-page-help {
+        margin-bottom: 10px;
+    }
 }
 
 .interview-page-tabs {
@@ -129,7 +133,7 @@
     margin-bottom: 20px;
 
     p {
-        margin-bottom: 5px;
+        margin-bottom: 10px;
     }
 
     .interview-question-text {
@@ -139,11 +143,19 @@
             display: inline;
         }
     }
+
+    .interview-question-help {
+        margin-bottom: 10px;
+    }
 }
 
 .interview-questionset {
     .interview-questionset-label {
-        margin-bottom: 5px;
+        margin-bottom: 10px;
+    }
+
+    .interview-questionset-help {
+        margin-bottom: 10px;
     }
 }
 

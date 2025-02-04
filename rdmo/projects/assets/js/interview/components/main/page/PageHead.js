@@ -3,12 +3,13 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { capitalize, isEmpty, isNil, last } from 'lodash'
 
-import Html from 'rdmo/core/assets/js/components/Html'
 import useModal from 'rdmo/core/assets/js/hooks/useModal'
 
 import PageHeadDeleteModal from './PageHeadDeleteModal'
 import PageHeadFormModal from './PageHeadFormModal'
 import PageHeadReuseModal from './PageHeadReuseModal'
+
+import PageTabsHelp from './PageTabsHelp'
 
 const PageHead = ({ templates, page, sets, values, disabled, currentSet,
                     activateSet, createSet, updateSet, deleteSet, copySet }) => {
@@ -83,8 +84,7 @@ const PageHead = ({ templates, page, sets, values, disabled, currentSet,
 
   return page.is_collection && (
     <div className="interview-page-tabs">
-      <Html html={templates.project_interview_page_help} />
-      {!disabled && <Html html={templates.project_interview_page_tabs_help} />}
+      <PageTabsHelp templates={templates} page={page} disabled={disabled} />
       {
         currentSet ? (
           <>
