@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { maxBy } from 'lodash'
 
 import { gatherOptions } from '../../../utils/options'
 
@@ -16,21 +15,16 @@ const CheckboxWidget = ({ page, question, sets, values, siblings, currentSet, di
                           createValue, updateValue, deleteValue, copyValue }) => {
 
   const handleCreateValue = (attrsList) => {
-    const lastValue = maxBy(values, (v) => v.collection_index)
-
-    let collectionIndex = lastValue ? lastValue.collection_index + 1 : 0
     attrsList.forEach(attrs => {
       createValue({
         attribute: question.attribute,
         set_prefix: currentSet.set_prefix,
         set_index: currentSet.set_index,
-        collection_index: collectionIndex,
         set_collection: question.set_collection,
         unit: question.unit,
         value_type: question.value_type,
         ...attrs
       }, true)
-      collectionIndex += 1
     })
   }
 
@@ -54,6 +48,7 @@ const CheckboxWidget = ({ page, question, sets, values, siblings, currentSet, di
                         question={question}
                         value={value}
                         option={option}
+                        optionIndex={optionIndex}
                         disabled={disabled}
                         onCreate={handleCreateValue}
                         onUpdate={updateValue}

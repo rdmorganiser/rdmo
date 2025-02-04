@@ -275,19 +275,21 @@ export function storeValue(value) {
     return {type: NOOP}
   } else {
     return (dispatch, getState) => {
-      const valueIndex = getState().interview.values.findIndex((v) => compareValues(v, value))
+      const page = getState().interview.page
+      const sets = getState().interview.sets
+      const question = page.questions.find((question) => question.attribute === value.attribute)
+      const refresh = question && question.optionsets.some((optionset) => optionset.has_refresh)
+      const widget_type = question && question.widget_type
+
+      const valueIndex = getState().interview.values.findIndex((v) => compareValues(v, value, widget_type))
       const valueFile = value.file
       const valueSuccess = value.success
 
       dispatch(addToPending(pendingId))
       dispatch(storeValueInit(valueIndex))
 
-      return ValueApi.storeValue(projectId, value)
+      return ValueApi.storeValue(projectId, { ...value, widget_type })
         .then((value) => {
-          const page = getState().interview.page
-          const sets = getState().interview.sets
-          const question = page.questions.find((question) => question.attribute === value.attribute)
-          const refresh = question && question.optionsets.some((optionset) => optionset.has_refresh)
 
           dispatch(fetchNavigation(page))
           dispatch(updateProgress())
