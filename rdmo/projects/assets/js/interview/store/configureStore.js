@@ -1,5 +1,6 @@
-import { applyMiddleware, createStore, combineReducers } from 'redux'
-import thunk from 'redux-thunk'
+import { applyMiddleware, combineReducers } from 'redux'
+import { legacy_createStore as createStore} from 'redux'
+import { thunk } from 'redux-thunk'
 
 // import { checkStoreId } from 'rdmo/core/assets/js/utils/store'
 import { getConfigFromLocalStorage } from 'rdmo/core/assets/js/utils/config'
