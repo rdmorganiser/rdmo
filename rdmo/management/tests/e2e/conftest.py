@@ -22,7 +22,7 @@ def _set_django_allow_async_unsafe():
 
 
 @pytest.fixture
-def django_db_setup(django_db_setup, django_db_blocker, fixtures): # noqa: PT004 - pytest-django requires this name "django_db_setup"
+def django_db_setup(django_db_setup, django_db_blocker, fixtures):
     """Set up database and populate with fixtures, that get restored for every test case.
 
     This fixture overrides the django_db_setup in the main conftest.py, this only applies to the e2e tests
