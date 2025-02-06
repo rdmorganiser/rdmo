@@ -8,7 +8,7 @@ const Unit = ({ unit, inputValue }) => {
       {
         !isUndefined(inputValue) && (
           <>
-            <span>{inputValue}</span>
+            <span className="unit-value">{inputValue}</span>
             {' '}
           </>
         )
@@ -18,7 +18,7 @@ const Unit = ({ unit, inputValue }) => {
       }
       {
         !isEmpty(unit) && (
-          <span title={gettext('The unit for this answer.')}>{unit}</span>
+          <span className="unit-string" title={gettext('The unit for this answer.')}>{unit}</span>
         )
       }
     </div>
@@ -27,7 +27,7 @@ const Unit = ({ unit, inputValue }) => {
 
 Unit.propTypes = {
   unit: PropTypes.string,
-  inputValue: PropTypes.string,
+  inputValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 }
 
 export default Unit

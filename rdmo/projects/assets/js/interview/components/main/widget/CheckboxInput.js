@@ -107,7 +107,7 @@ CheckboxInput.propTypes = {
   question: PropTypes.object,
   value: PropTypes.object,
   option: PropTypes.object,
-  optionIndex: PropTypes.object,
+  optionIndex: PropTypes.number,
   disabled: PropTypes.bool,
   onCreate: PropTypes.func.isRequired,
   onUpdate: PropTypes.func.isRequired,

@@ -17,9 +17,10 @@ const RangeInput = ({ question, value, disabled, updateValue, buttons }) => {
   useLayoutEffect(() => {
     if (ref.current) {
       const unitElement = ref.current.nextElementSibling
+      const unitString = unitElement.querySelector('.unit-string')
 
       const unitWidth = (
-        isNil(unitElement.lastChild) ? unitElement.lastChild.offsetWidth : 0
+        isNil(unitString) ? 0 : unitString.offsetWidth
       ) + (
         isNil(question.maximum) ? 30 : toString(question.maximum).length * 10
       )
