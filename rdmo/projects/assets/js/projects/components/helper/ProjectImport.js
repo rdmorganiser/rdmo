@@ -34,7 +34,7 @@ const ProjectImport = ({ allowedTypes, handleImport, importUrls}) => {
 }
 
 ProjectImport.propTypes = {
-  allowedTypes: PropTypes.arrayOf(PropTypes.string),
+  allowedTypes: PropTypes.object,
   handleImport: PropTypes.func.isRequired,
   importUrls: PropTypes.arrayOf(PropTypes.object).isRequired
 }
