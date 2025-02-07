@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import { useDebouncedCallback } from 'use-debounce'
 import { isEmpty, isNil } from 'lodash'
 
@@ -8,20 +9,26 @@ import AdditionalTextareaInput from './common/AdditionalTextareaInput'
 import OptionHelp from './common/OptionHelp'
 import OptionText from './common/OptionText'
 
-const CheckboxInput = ({ question, value, option, disabled, onCreate, onUpdate, onDelete }) => {
+const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreate, onUpdate, onDelete }) => {
 
   const checked = !isNil(value)
 
-  const handleCreate = (option, additionalInput) => {
+  const classnames = classNames('checkbox', {
+    'text-muted': disabled
+  })
+
+  const handleCreate = (option, optionIndex, additionalInput) => {
   if (option.has_provider) {
       onCreate([{
         external_id: option.id,
-        text: option.text
+        text: option.text,
+        collection_index: optionIndex
       }])
     } else {
       onCreate([{
         option: option.id,
-        text: additionalInput
+        text: additionalInput,
+        collection_index: optionIndex
       }])
     }
   }
@@ -30,7 +37,7 @@ const CheckboxInput = ({ question, value, option, disabled, onCreate, onUpdate, 
     if (checked) {
       onDelete(value)
     } else {
-      handleCreate(option)
+      handleCreate(option, optionIndex)
     }
   }
 
@@ -52,12 +59,12 @@ const CheckboxInput = ({ question, value, option, disabled, onCreate, onUpdate, 
         })
       }
     } else {
-      handleCreate(option, additionalInput)
+      handleCreate(option, optionIndex, additionalInput)
     }
   }, 500)
 
   return (
-    <div className="checkbox">
+    <div className={classnames}>
       <label>
         <input
           type="checkbox"
@@ -100,6 +107,7 @@ CheckboxInput.propTypes = {
   question: PropTypes.object,
   value: PropTypes.object,
   option: PropTypes.object,
+  optionIndex: PropTypes.number,
   disabled: PropTypes.bool,
   onCreate: PropTypes.func.isRequired,
   onUpdate: PropTypes.func.isRequired,

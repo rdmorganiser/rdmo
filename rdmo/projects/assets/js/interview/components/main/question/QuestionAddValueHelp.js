@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-const QuestionAddValueHelp = ({ templates, question }) => {
-  return question.is_collection && (
+const QuestionAddValueHelp = ({ templates, question, disabled }) => {
+  return !disabled && question.is_collection && (
     <Html html={templates.project_interview_add_value_help} />
   )
 }
@@ -12,6 +12,7 @@ const QuestionAddValueHelp = ({ templates, question }) => {
 QuestionAddValueHelp.propTypes = {
   templates: PropTypes.object.isRequired,
   question: PropTypes.object.isRequired,
+  disabled: PropTypes.bool.isRequired,
 }
 
 export default QuestionAddValueHelp

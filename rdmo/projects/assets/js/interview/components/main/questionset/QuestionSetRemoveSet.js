@@ -5,7 +5,7 @@ import useModal from 'rdmo/core/assets/js/hooks/useModal'
 
 import Modal from 'rdmo/core/assets/js/components/Modal'
 
-const QuestionRemoveSet = ({ questionset, currentSet, deleteSet }) => {
+const QuestionRemoveSet = ({ questionset, currentSet, disabled, deleteSet }) => {
 
   const modal = useModal()
 
@@ -14,7 +14,7 @@ const QuestionRemoveSet = ({ questionset, currentSet, deleteSet }) => {
     modal.close()
   }
 
-  return questionset.is_collection && (
+  return !disabled && questionset.is_collection && (
     <>
       <button type="button" className="btn btn-link btn-remove-set" onClick={modal.open}>
         <i className="fa fa-times fa-btn"></i>
@@ -33,6 +33,7 @@ const QuestionRemoveSet = ({ questionset, currentSet, deleteSet }) => {
 QuestionRemoveSet.propTypes = {
   questionset: PropTypes.object.isRequired,
   currentSet: PropTypes.object.isRequired,
+  disabled: PropTypes.bool.isRequired,
   deleteSet: PropTypes.func.isRequired
 }
 

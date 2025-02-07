@@ -6,7 +6,7 @@ import Html from 'rdmo/core/assets/js/components/Html'
 
 import NavigationLink from './NavigationLink'
 
-const Navigation = ({ currentPage, navigation, help, fetchPage }) => {
+const Navigation = ({ overview, currentPage, navigation, help, fetchPage }) => {
   return (
     <>
       <h2>{gettext('Navigation')}</h2>
@@ -18,7 +18,7 @@ const Navigation = ({ currentPage, navigation, help, fetchPage }) => {
               <li key={sectionIndex}>
                 <NavigationLink
                   element={section}
-                  href={`/projects/12/interview/${section.first}/`}
+                  href={`/projects/${overview.id}/interview/${section.first}/`}
                   onClick={() => fetchPage(section.first)}
                 />
                 {
@@ -33,7 +33,7 @@ const Navigation = ({ currentPage, navigation, help, fetchPage }) => {
                                 page.show ? (
                                   <NavigationLink
                                     element={page}
-                                    href={`/projects/12/interview/${page.id}/`}
+                                    href={`/projects/${overview.id}/interview/${page.id}/`}
                                     onClick={() => fetchPage(page.id)}
                                   />
                                 ) : (
@@ -57,6 +57,7 @@ const Navigation = ({ currentPage, navigation, help, fetchPage }) => {
 }
 
 Navigation.propTypes = {
+  overview: PropTypes.object.isRequired,
   currentPage: PropTypes.object,
   navigation: PropTypes.array.isRequired,
   help: PropTypes.string.isRequired,

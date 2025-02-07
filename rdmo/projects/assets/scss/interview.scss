@@ -60,6 +60,10 @@
     .btn-add-set {
         margin-bottom: 20px;
     }
+
+    .interview-page-help {
+        margin-bottom: 10px;
+    }
 }
 
 .interview-page-tabs {
@@ -129,13 +133,29 @@
     margin-bottom: 20px;
 
     p {
-        margin-bottom: 5px;
+        margin-bottom: 10px;
+    }
+
+    .interview-question-text {
+        margin-bottom: 10px;
+
+        .form-label {
+            display: inline;
+        }
+    }
+
+    .interview-question-help {
+        margin-bottom: 10px;
     }
 }
 
 .interview-questionset {
     .interview-questionset-label {
-        margin-bottom: 5px;
+        margin-bottom: 10px;
+    }
+
+    .interview-questionset-help {
+        margin-bottom: 10px;
     }
 }
 
@@ -165,12 +185,28 @@
         }
     }
 
-    &:has(.react-select) {
+    .text-input {
+        input[type="text"] {
+            text-overflow: ellipsis;
+        }
+    }
+
+    &.select-input {
         .buttons {
+            // in a select widget, additional space is reserved for the dropdown icon
             position: absolute;
             right: 62px;
             margin-top: 2px;
             margin-bottom: 2px;
+        }
+    }
+
+    &.textarea-input {
+        .buttons {
+            // in a textarea widget, the buttons are positioned at the bottom
+            top: auto;
+            height: 32px;
+            bottom: 0;
         }
     }
 
@@ -216,15 +252,15 @@
     }
 
     .unit {
-        padding: 6px 12px;
-        width: 120px;
+        padding: 6px 0;
         height: 34px;
 
         cursor: help;
 
+        text-align: right;
+
         white-space: nowrap;
         overflow: hidden;
-        text-overflow: ellipsis;
     }
 
     .radio,
@@ -263,7 +299,7 @@
         }
     }
 
-    .range {
+    .range-input {
         height: 34px;  // same as form-control
 
         input[type='range'] {
@@ -311,6 +347,10 @@
             padding: 20px;
             margin-top: 6px;
             cursor: copy;
+
+            &.disabled {
+                cursor: not-allowed;
+            }
         }
     }
 
@@ -385,13 +425,16 @@
     color: #777;
 }
 
-.btn-contact {
-    float: right;
+.btn.btn-contact {
     opacity: 0.8;
-    line-height: 20px;
-    font-size: 14px;
+    line-height: 16px;
 
     padding: 0;
+    border: none;
+    border-radius: 0;
+
+    margin-left: 10px;
+    margin-top: -3px;
 
     &:hover {
         opacity: 1;

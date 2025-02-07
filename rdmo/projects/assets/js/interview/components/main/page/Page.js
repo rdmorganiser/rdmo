@@ -3,13 +3,12 @@ import PropTypes from 'prop-types'
 import get from 'lodash/get'
 import { isNil, minBy } from 'lodash'
 
-import Html from 'rdmo/core/assets/js/components/Html'
-
 import Question from '../question/Question'
 import QuestionSet from '../questionset/QuestionSet'
 
 import PageButtons from './PageButtons'
 import PageHead from './PageHead'
+import PageHelp from './PageHelp'
 
 const Page = ({ config, settings, templates, overview, page, sets, values, fetchPage, fetchContact,
                 createValue, updateValue, deleteValue, copyValue,
@@ -30,12 +29,13 @@ const Page = ({ config, settings, templates, overview, page, sets, values, fetch
   return (
     <div className="interview-page">
       <h2>{page.title}</h2>
-      <Html html={page.help} />
+      <PageHelp page={page} />
       <PageHead
         templates={templates}
         page={page}
         sets={sets.filter((set) => (set.set_prefix == currentSetPrefix))}
         values={isNil(page.attribute) ? [] : values.filter((value) => (value.attribute == page.attribute))}
+        disabled={overview.read_only}
         currentSet={currentSet}
         activateSet={activateSet}
         createSet={createSet}

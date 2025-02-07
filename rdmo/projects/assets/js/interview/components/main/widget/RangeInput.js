@@ -1,16 +1,33 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useDebouncedCallback } from 'use-debounce'
 import classNames from 'classnames'
-import { isEmpty } from 'lodash'
+import { isNil, toString } from 'lodash'
 
 import { isDefaultValue } from '../../../utils/value'
 
 import Unit from './common/Unit'
 
 const RangeInput = ({ question, value, disabled, updateValue, buttons }) => {
+  const ref = useRef(null)
   const [inputValue, setInputValue] = useState('')
-  useEffect(() => {setInputValue(value.text)}, [value.text])
+
+  useEffect(() => setInputValue(value.text), [value.text])
+
+  useLayoutEffect(() => {
+    if (ref.current) {
+      const unitElement = ref.current.nextElementSibling
+      const unitString = unitElement.querySelector('.unit-string')
+
+      const unitWidth = (
+        isNil(unitString) ? 0 : unitString.offsetWidth
+      ) + (
+        isNil(question.maximum) ? 30 : toString(question.maximum).length * 10
+      )
+
+      unitElement.style.flex = `0 0 ${unitWidth}px`
+    }
+  }, [question])
 
   const handleChange = useDebouncedCallback((value, text) => {
     updateValue(value, { text, unit: question.unit, value_type: question.value_type })
@@ -18,17 +35,18 @@ const RangeInput = ({ question, value, disabled, updateValue, buttons }) => {
 
   const classnames = classNames({
     'interview-input': true,
-    'range': true,
+    'range-input': true,
     'default': isDefaultValue(question, value)
   })
 
   return (
     <div className={classnames}>
       <input
+        ref={ref}
         type="range"
-        min={isEmpty(question.minimum) ? '0' : question.minimum}
-        max={isEmpty(question.maximum) ? '100' : question.maximum}
-        step={isEmpty(question.step) ? '1' : question.step}
+        min={isNil(question.minimum) ? '0' : question.minimum}
+        max={isNil(question.maximum) ? '100' : question.maximum}
+        step={isNil(question.step) ? '1' : question.step}
         disabled={disabled}
         value={inputValue}
         onChange={(event) => {

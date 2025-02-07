@@ -61,27 +61,29 @@ def check_options(project, value):
     return True
 
 
-def copy_project(project, site, owners):
-    from .models import Membership, Value  # to prevent circular inclusion
+def copy_project(instance, site, owners):
+    from .models import Membership, Project, Value  # to prevent circular inclusion
 
     timestamp = now()
 
-    tasks = project.tasks.all()
-    views = project.views.all()
+    tasks = instance.tasks.all()
+    views = instance.views.all()
 
-    values = project.values.filter(snapshot=None)
+    values = instance.values.filter(snapshot=None)
     snapshots = {
-        snapshot: project.values.filter(snapshot=snapshot)
-        for snapshot in project.snapshots.all()
+        snapshot: instance.values.filter(snapshot=snapshot)
+        for snapshot in instance.snapshots.all()
     }
 
-    # unset the id, set current site and update timestamps
-    project.id = None
-    project.site = site
-    project.created = timestamp
-
-    # save the new project
-    project.save()
+    # a completely new project instance needs to be created in order for mptt to work
+    project = Project.objects.create(
+        parent=instance.parent,
+        site=site,
+        title=instance.title,
+        description=instance.description,
+        catalog=instance.catalog,
+        created=timestamp
+    )
 
     # save project tasks
     for task in tasks:

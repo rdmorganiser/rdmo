@@ -30,14 +30,14 @@ const QuestionSet = ({ settings, templates, page, questionset, sets, values, dis
       </div>
       <QuestionSetHelp questionset={questionset} />
       <QuestionSetHelpTemplate templates={templates} />
-      <QuestionSetAddSetHelp templates={templates} questionset={questionset} />
+      <QuestionSetAddSetHelp templates={templates} questionset={questionset} disabled={disabled} />
       <div>
         {
           currentSets.map((set, setIndex) => (
             <div key={setIndex} className="interview-block">
               <div className="interview-block-options">
-                <QuestionSetCopySet questionset={questionset} sets={sets} currentSet={set} copySet={copySet} />
-                <QuestionSetRemoveSet questionset={questionset} currentSet={set} deleteSet={deleteSet} />
+                <QuestionSetCopySet questionset={questionset} sets={sets} currentSet={set} disabled={disabled} copySet={copySet} />
+                <QuestionSetRemoveSet questionset={questionset} currentSet={set} disabled={disabled} deleteSet={deleteSet} />
               </div>
               <div className="row">
                 {
@@ -108,7 +108,13 @@ const QuestionSet = ({ settings, templates, page, questionset, sets, values, dis
         }
       </div>
 
-      <QuestionSetAddSet questionset={questionset} sets={currentSets} setPrefix={setPrefix} createSet={createSet} />
+      <QuestionSetAddSet
+        questionset={questionset}
+        sets={currentSets}
+        setPrefix={setPrefix}
+        disabled={disabled}
+        createSet={createSet}
+      />
     </div>
   )
 }

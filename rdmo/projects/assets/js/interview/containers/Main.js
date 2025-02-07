@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 
 import { hasErrors, isReady } from '../utils/interview'
 
-import Breadcrump from '../components/main/Breadcrump'
+import Breadcrumb from '../components/main/Breadcrumb'
 import Contact from '../components/main/Contact'
 import Done from '../components/main/Done'
 import Page from '../components/main/page/Page'
@@ -29,7 +29,7 @@ const Main = ({ config, settings, templates, project, interview, contact,
   } else if (isReady(interview)) {
     return (
       <div>
-        <Breadcrump
+        <Breadcrumb
           overview={project.overview}
           page={interview.page}
           fetchPage={interviewActions.fetchPage}

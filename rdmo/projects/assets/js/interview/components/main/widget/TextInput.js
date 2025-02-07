@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { useDebouncedCallback } from 'use-debounce'
@@ -15,6 +15,13 @@ const TextInput = ({ question, value, disabled, updateValue, buttons }) => {
 
   useEffect(() => {setInputValue(value.text)}, [value.text])
   useFocusEffect(ref, value.focus)
+  useLayoutEffect(() => {
+    if (ref.current) {
+      // add a right padding of the size of the buttons div, plus some space for the success indicator
+      const buttonsWidth = ref.current.previousElementSibling.offsetWidth + 20
+      ref.current.style.paddingRight = `${buttonsWidth}px`
+    }
+  }, [buttons])
 
   const handleChange = useDebouncedCallback((value, text) => {
     updateValue(value, { text, unit: question.unit, value_type: question.value_type })
@@ -26,7 +33,7 @@ const TextInput = ({ question, value, disabled, updateValue, buttons }) => {
   })
 
   return (
-    <div className="interview-input">
+    <div className="interview-input text-input">
       <div className="buttons-wrapper">
         {buttons}
         <input

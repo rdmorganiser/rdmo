@@ -9,7 +9,7 @@ import Modal from 'rdmo/core/assets/js/components/Modal'
 
 import Search from '../Search'
 
-const QuestionReuseValue = ({ page, question, value, updateValue }) => {
+const QuestionReuseValue = ({ page, question, value, disabled, updateValue }) => {
   const initialFormValues = {
     value: ''
   }
@@ -63,7 +63,7 @@ const QuestionReuseValue = ({ page, question, value, updateValue }) => {
     </button>
   </>
 
-  return <>
+  return !disabled && <>
     <button type="button" className="btn btn-link btn-reuse-value" onClick={() => setShow(true)}>
       <i className="fa fa-arrow-circle-down fa-btn"></i>
     </button>
@@ -96,6 +96,7 @@ QuestionReuseValue.propTypes = {
   page: PropTypes.object.isRequired,
   question: PropTypes.object.isRequired,
   value: PropTypes.object.isRequired,
+  disabled: PropTypes.bool.isRequired,
   updateValue: PropTypes.func.isRequired
 }
 
