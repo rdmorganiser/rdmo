@@ -96,7 +96,7 @@ export function fetchImportUrls() {
   return function(dispatch) {
     dispatch(fetchImportUrlsInit())
     const action = (dispatch) => ProjectsApi.fetchDirectImportUrls().then(importUrls => {
-      dispatch(fettchImportUrlsSuccess(importUrls))
+      dispatch(fetchImportUrlsSuccess(importUrls))
     })
 
     return dispatch(action)
@@ -108,7 +108,7 @@ export function fetchImportUrlsInit() {
   return {type: FETCH_IMPORT_URLS_INIT}
 }
 
-export function fettchImportUrlsSuccess(importUrls) {
+export function fetchImportUrlsSuccess(importUrls) {
   return {type: FETCH_IMPORT_URLS_SUCCESS, importUrls}
 }
 
