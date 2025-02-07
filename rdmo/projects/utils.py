@@ -290,7 +290,8 @@ def get_upload_accept():
             # legacy fallback for pre 2.3.0 RDMO, e.g. `accept = '.xml'`
             suffix = import_plugin.accept
             mime_type, encoding = mimetypes.guess_type(f'example{suffix}')
-            accept[mime_type].update([suffix])
+            if mime_type:
+                accept[mime_type].update([suffix])
 
         elif import_plugin.upload is True:
             # if one of the plugins does not have the accept field, but is marked as upload plugin
