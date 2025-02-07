@@ -1,4 +1,5 @@
 import logging
+import mimetypes
 from collections import defaultdict
 from pathlib import Path
 
@@ -281,13 +282,21 @@ def set_context_querystring_with_filter_and_page(context: dict) -> dict:
 def get_upload_accept():
     accept = defaultdict(set)
     for import_plugin in get_plugins('PROJECT_IMPORTS').values():
-        if import_plugin.accept:
-            for key, values in import_plugin.accept.items():
-                accept[key].update(values)
+        if isinstance(import_plugin.accept, dict):
+            for mime_type, suffixes in import_plugin.accept.items():
+                accept[mime_type].update(suffixes)
+
+        elif isinstance(import_plugin.accept, str):
+            # legacy fallback for pre 2.3.0 RDMO, e.g. `accept = '.xml'`
+            suffix = import_plugin.accept
+            mime_type, encoding = mimetypes.guess_type(f'example{suffix}')
+            accept[mime_type].update([suffix])
+
         elif import_plugin.upload is True:
             # if one of the plugins does not have the accept field, but is marked as upload plugin
             # all file types are allowed
             return {}
+
     return accept
 
 
