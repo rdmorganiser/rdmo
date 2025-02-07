@@ -15,6 +15,7 @@ from rdmo.core.utils import is_truthy, render_to_format
 from rdmo.core.views import ChoicesViewSet
 from rdmo.management.viewsets import ElementToggleCurrentSiteViewSetMixin
 
+from .constants import WIDGET_TYPE_CHOICES
 from .models import Catalog, Page, Question, QuestionSet, Section
 from .renderers import CatalogRenderer, PageRenderer, QuestionRenderer, QuestionSetRenderer, SectionRenderer
 from .serializers.export import (
@@ -40,7 +41,6 @@ from .serializers.v1 import (
     SectionNestedSerializer,
     SectionSerializer,
 )
-from .utils import get_widget_type_choices
 
 
 class CatalogViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
@@ -430,7 +430,7 @@ class QuestionViewSet(ModelViewSet):
 
 class WidgetTypeViewSet(ChoicesViewSet):
     permission_classes = (IsAuthenticated, )
-    queryset = get_widget_type_choices()
+    queryset = WIDGET_TYPE_CHOICES
 
 
 class ValueTypeViewSet(ChoicesViewSet):

@@ -14,15 +14,10 @@
     <li id="project-questions">
         <strong>
             {% if can_change_value %}
-            <a href="{% url 'project_questions' project.pk %}">{% trans 'Answer questions' %}</a>
+            <a href="{% url 'project_interview' project.pk %}">{% trans 'Answer questions' %}</a>
             {% else %}
-            <a href="{% url 'project_questions' project.pk %}">{% trans 'View questions' %}</a>
+            <a href="{% url 'project_interview' project.pk %}">{% trans 'View questions' %}</a>
             {% endif %}
-        </strong>
-    </li>
-    <li id="project-interview">
-        <strong>
-            <a href="{% url 'project_interview' project.pk %}">{% trans 'Interview (new)' %}</a>
         </strong>
     </li>
 </ul>

@@ -49,7 +49,7 @@ const initValues = (sets, values, element, setPrefix) => {
         (value.set_index === set.set_index)
       )))) {
         // if there is no value, create one, but not for checkboxes
-        if (question.widget_class !== 'checkbox') {
+        if (question.widget_type !== 'checkbox') {
           const value = ValueFactory.create({
             attribute: question.attribute,
             set_prefix: set.set_prefix,
@@ -60,7 +60,7 @@ const initValues = (sets, values, element, setPrefix) => {
             external_id: question.default_external_id
           })
 
-          if (question.widget_class === 'range') {
+          if (question.widget_type === 'range') {
             initRange(question, value)
           }
 

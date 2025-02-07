@@ -11,6 +11,7 @@ from rdmo.core.utils import join_url
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
 
+from ..constants import WIDGET_TYPE_CHOICES
 from ..managers import QuestionManager
 
 
@@ -177,7 +178,7 @@ class Question(Model, TranslationMixin):
         help_text=_('The name displayed for this question (in the quinary language).')
     )
     widget_type = models.CharField(
-        max_length=16,
+        max_length=16, choices=WIDGET_TYPE_CHOICES,
         verbose_name=_('Widget type'),
         help_text=_('Type of widget for this question.')
     )

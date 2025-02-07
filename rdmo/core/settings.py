@@ -208,13 +208,10 @@ SETTINGS_EXPORT = [
     'PROJECT_IMPORTS',
     'PROJECT_IMPORTS_LIST',
     'PROJECT_SEND_ISSUE',
-    'PROJECT_QUESTIONS_AUTOSAVE',
     'NESTED_PROJECTS'
 ]
 
 SETTINGS_API = [
-    'PROJECT_QUESTIONS_AUTOSAVE',
-    'PROJECT_QUESTIONS_CYCLE_SETS',
     'DEFAULT_URI_PREFIX',
     'LANGUAGES',
     'MULTISITE',
@@ -326,10 +323,6 @@ PROJECT_IMPORTS = [
 
 PROJECT_IMPORTS_LIST = []
 
-PROJECT_QUESTIONS_AUTOSAVE = True
-
-PROJECT_QUESTIONS_CYCLE_SETS = False
-
 PROJECT_FILE_QUOTA = '10Mb'
 
 PROJECT_SEND_ISSUE = False
@@ -400,20 +393,6 @@ PROJECT_VALUES_VALIDATION_PHONE_REGEX = re.compile(r'''
     (\(\d+\)\s)?      # Optional area code in parentheses
     [\d\s]*$          # Main number with spaces
 ''', re.VERBOSE)
-
-QUESTIONS_WIDGETS = [
-    ('text', _('Text'), 'rdmo.projects.widgets.TextWidget'),
-    ('textarea', _('Textarea'), 'rdmo.projects.widgets.TextareaWidget'),
-    ('yesno', _('Yes/No'), 'rdmo.projects.widgets.YesnoWidget'),
-    ('checkbox', _('Checkboxes'), 'rdmo.projects.widgets.CheckboxWidget'),
-    ('radio', _('Radio buttons'), 'rdmo.projects.widgets.RadioWidget'),
-    ('select', _('Select drop-down'), 'rdmo.projects.widgets.SelectWidget'),
-    ('autocomplete', _('Autocomplete'), 'rdmo.projects.widgets.AutocompleteWidget'),
-    ('freeautocomplete', _('Free autocomplete'), 'rdmo.projects.widgets.FreeAutocompleteWidget'),
-    ('range', _('Range slider'), 'rdmo.projects.widgets.RangeWidget'),
-    ('date', _('Date picker'), 'rdmo.projects.widgets.DateWidget'),
-    ('file', _('File upload'), 'rdmo.projects.widgets.FileWidget')
-]
 
 DEFAULT_URI_PREFIX = 'http://example.com/terms'
 
