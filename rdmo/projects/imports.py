@@ -89,8 +89,7 @@ class Import(Plugin):
 class RDMOXMLImport(Import):
 
     accept = {
-        'application/xml': ['.xml'],
-        'text/xml': ['.xml']
+        'application/xml': ['.xml']
     }
 
     def check(self):
