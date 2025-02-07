@@ -40,7 +40,7 @@ const UploadDropZone = ({ acceptedTypes, onImportFile }) => {
 }
 
 UploadDropZone.propTypes = {
-  acceptedTypes: PropTypes.arrayOf(PropTypes.string),
+  acceptedTypes: PropTypes.object,
   onImportFile: PropTypes.func.isRequired,
 }
 

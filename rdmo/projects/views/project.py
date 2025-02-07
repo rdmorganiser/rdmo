@@ -87,7 +87,9 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
         context['snapshots'] = project.snapshots.all()
         context['invites'] = project.invites.all()
         context['membership'] = Membership.objects.filter(project=project, user=self.request.user).first()
-        context['upload_accept'] = get_upload_accept()
+        context['upload_accept'] = ','.join([
+            suffix for suffixes in get_upload_accept().values() for suffix in suffixes
+        ])
         return context
 
 

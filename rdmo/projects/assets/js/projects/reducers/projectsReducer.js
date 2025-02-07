@@ -26,27 +26,27 @@ export default function projectsReducer(state = initialState, action) {
     case FETCH_PROJECTS_ERROR:
       return {...state, errors: action.error.errors}
     case FETCH_INVITATIONS_INIT:
-      return {...state, ...action.invites}
+      return {...state}
     case FETCH_INVITATIONS_SUCCESS:
-      return {...state, ...action.invites}
+      return {...state, invites: action.invites}
     case FETCH_INVITATIONS_ERROR:
       return {...state, errors: action.error.errors}
     case FETCH_CATALOGS_INIT:
-      return {...state, ...action.catalogs}
+      return {...state}
     case FETCH_CATALOGS_SUCCESS:
-      return {...state, ...action.catalogs}
+      return {...state, catalogs: action.catalogs}
     case FETCH_CATALOGS_ERROR:
       return {...state, errors: action.error.errors}
     case FETCH_FILETYPES_INIT:
-      return {...state, ...action.allowedTypes}
+      return {...state}
     case FETCH_FILETYPES_SUCCESS:
-      return {...state, ...action.allowedTypes}
+      return {...state, allowedTypes: action.allowedTypes}
     case FETCH_FILETYPES_ERROR:
       return {...state, errors: action.error.errors}
     case FETCH_IMPORT_URLS_INIT:
-      return {...state, ...action.importUrls}
+      return {...state}
     case FETCH_IMPORT_URLS_SUCCESS:
-      return {...state, ...action.importUrls}
+      return {...state, importUrls: action.importUrls}
     case FETCH_IMPORT_URLS_ERROR:
       return {...state, errors: action.error.errors}
     default:

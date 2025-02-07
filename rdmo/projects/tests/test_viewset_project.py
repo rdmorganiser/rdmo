@@ -578,7 +578,9 @@ def test_upload_accept(db, client, username, password):
 
     if password:
         assert response.status_code == 200
-        assert response.json() == '.xml'
+        assert response.json() == {
+            'application/xml': ['.xml']
+        }
     else:
         assert response.status_code == 401
 
