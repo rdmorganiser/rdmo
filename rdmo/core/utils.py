@@ -3,6 +3,7 @@ import json
 import logging
 import os
 import re
+from datetime import datetime
 from pathlib import Path
 from tempfile import mkstemp
 from urllib.parse import urlparse
@@ -11,7 +12,9 @@ from django.apps import apps
 from django.conf import settings
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.template.loader import get_template
+from django.utils.dateparse import parse_date
 from django.utils.encoding import force_str
+from django.utils.formats import get_format
 from django.utils.translation import gettext_lazy as _
 
 import pypandoc
@@ -422,3 +425,27 @@ def save_metadata(metadata):
 
 def remove_double_newlines(string):
     return re.sub(r'[\n]{2,}', '\n\n', string)
+
+
+def parse_date_from_string(date: str) -> datetime.date:
+    try:
+        # First, try standard ISO format (YYYY-MM-DD)
+        parsed_date = parse_date(settings.ACCOUNT_TERMS_OF_USE_DATE)
+    except ValueError as exc:
+        raise exc from exc
+
+    # If ISO parsing fails, try localized DATE_INPUT_FORMATS formats
+    if parsed_date is None:
+        for fmt in get_format('DATE_INPUT_FORMATS'):
+            try:
+                parsed_date = datetime.strptime(date, fmt).date()
+                break  # Stop if parsing succeeds
+            except ValueError:
+                continue  # Try the next format
+
+    # If still not parsed, raise an error
+    if not parsed_date:
+        raise ValueError(
+            f"Invalid date format for: {date}. Valid formats {get_format('DATE_INPUT_FORMATS')}"
+        )
+    return parsed_date

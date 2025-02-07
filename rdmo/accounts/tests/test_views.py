@@ -807,7 +807,7 @@ def test_terms_of_use_middleware_redirect_and_accept(
     settings.ACCOUNT_TERMS_OF_USE = True
     reload_urls('accounts')  # needs to reload before the middleware
     settings.MIDDLEWARE += [
-        "rdmo.accounts.middleware.TermsAndConditionsRedirectMiddleware"
+        settings.ACCOUNT_TERMS_OF_USE_MIDDLEWARE
     ]
 
     # Ensure there are no existing consent entries for the user
@@ -853,7 +853,7 @@ def test_terms_of_use_middleware_invalidate_terms_version(
     settings.ACCOUNT_TERMS_OF_USE = True
     reload_urls('accounts')  # needs to reload before the middleware
     settings.MIDDLEWARE += [
-        "rdmo.accounts.middleware.TermsAndConditionsRedirectMiddleware"
+        settings.ACCOUNT_TERMS_OF_USE_MIDDLEWARE
     ]
     terms_accept_url = reverse('terms_of_use_accept')
     # Arrange user object
@@ -862,14 +862,14 @@ def test_terms_of_use_middleware_invalidate_terms_version(
     _consent = ConsentFieldValue.objects.create(user=user, consent=True)
 
     # Assert - Access the home page, user has a valid consent
-    # settings.TERMS_VERSION_DATE is not set
+    # settings.ACCOUNT_TERMS_OF_USE_DATE is not set
     client.login(username=username, password=password)
     response = client.get(reverse('projects'))
     assert response.status_code == 200
     client.logout()
 
     # Act - change the version date setting to a distant future
-    settings.TERMS_VERSION_DATE = future_datetime
+    settings.ACCOUNT_TERMS_OF_USE_DATE = future_datetime
     # Arrange - new login
     client.login(username=username, password=password)
     response = client.get(reverse('projects'))
@@ -885,7 +885,7 @@ def test_terms_of_use_middleware_invalidate_terms_version(
     client.logout()
 
     # Act - change the version date setting to a past datetime
-    settings.TERMS_VERSION_DATE = past_datetime
+    settings.ACCOUNT_TERMS_OF_USE_DATE = past_datetime
     # Arrange - new login without consent
     client.login(username=username, password=password)
     response = client.get(reverse('projects'))

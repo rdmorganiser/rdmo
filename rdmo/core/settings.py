@@ -99,7 +99,14 @@ PROFILE_DELETE = True
 ACCOUNT = False
 ACCOUNT_SIGNUP = False
 ACCOUNT_GROUPS = []
+
 ACCOUNT_TERMS_OF_USE = False
+ACCOUNT_TERMS_OF_USE_MIDDLEWARE = 'rdmo.accounts.middleware.TermsAndConditionsRedirectMiddleware'
+ACCOUNT_TERMS_OF_USE_DATE = None  # None or a valid date string
+ACCOUNT_TERMS_OF_USE_EXCLUDE_URL_PREFIXES = ("/admin", "/i18n", "/static", "/account")
+ACCOUNT_TERMS_OF_USE_EXCLUDE_URLS = ("/",)  # is LOGOUT_URL needed here?
+ACCOUNT_TERMS_OF_USE_EXCLUDE_URL_CONTAINS = []
+
 ACCOUNT_ADAPTER = 'rdmo.accounts.adapter.AccountAdapter'
 ACCOUNT_FORMS = {
     'login': 'rdmo.accounts.adapter.LoginForm',

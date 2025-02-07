@@ -1,16 +1,13 @@
-from datetime import datetime
-
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.utils.dateparse import parse_date
-from django.utils.formats import get_format
 from django.utils.translation import gettext_lazy as _
 
 from rdmo.core.models import Model as RDMOTimeStampedModel
 from rdmo.core.models import TranslationMixin
+from rdmo.core.utils import parse_date_from_string
 
 CONSENT_SESSION_KEY = "user_has_consented"
 
@@ -135,14 +132,19 @@ class ConsentFieldValue(RDMOTimeStampedModel):
         obj, _created = cls.objects.update_or_create(user=user, defaults={"consent": True})
 
         # Validate consent before storing in session
-        if obj.is_consent_valid():
+        has_valid_consent = (
+            obj.is_consent_valid()
+            if settings.ACCOUNT_TERMS_OF_USE_DATE is not None
+            else True  # If terms update date is not enforced, any consent is valid
+        )
+
+        if has_valid_consent:
             if session:
                 session[CONSENT_SESSION_KEY] = True
             return True
 
         obj.delete()  # Remove when consent is outdated
         return False
-
 
     @classmethod
     def has_accepted_terms(cls, user, session) -> bool:
@@ -153,38 +155,19 @@ class ConsentFieldValue(RDMOTimeStampedModel):
         if CONSENT_SESSION_KEY in session:
             return session[CONSENT_SESSION_KEY]
 
-        # Query the database if not cached
-        consent = cls.objects.filter(user=user).first()
-        has_valid_consent = bool(consent and consent.is_consent_valid())
+        consent = cls.objects.filter(user=user).only("updated").first()
+        has_valid_consent = (
+            consent.is_consent_valid()
+            if consent and settings.ACCOUNT_TERMS_OF_USE_DATE is not None
+            else bool(consent)
+        )
 
         session[CONSENT_SESSION_KEY] = has_valid_consent  # Cache result
         return has_valid_consent
 
     def is_consent_valid(self) -> bool:
-        # optionally enable terms to be outdated
-        terms_version_date = getattr(settings, 'TERMS_VERSION_DATE', None)
-
-        if terms_version_date is None:
-            return True
-
-        # First, try standard ISO format (YYYY-MM-DD)
-        latest_terms_version_date = parse_date(terms_version_date)
-
-        # If ISO parsing fails, try localized formats
-        if not latest_terms_version_date:
-            for fmt in get_format('DATE_INPUT_FORMATS'):
-                try:
-                    latest_terms_version_date = datetime.strptime(terms_version_date, fmt).date()
-                    break  # Stop if parsing succeeds
-                except ValueError:
-                    continue  # Try the next format
-
-        # If still not parsed, raise an error
-        if not latest_terms_version_date:
-            raise ValueError(
-                f"Invalid date format for TERMS_VERSION_DATE: {terms_version_date}. Valid formats {get_format('DATE_INPUT_FORMATS')}"  # noqa: E501
-            )
-
+        # optionally check if the terms are outdated
+        latest_terms_version_date = parse_date_from_string(settings.ACCOUNT_TERMS_OF_USE_DATE)
         # Compare only dates (ignores time)
         return self.updated and (self.updated.date() >= latest_terms_version_date)
 

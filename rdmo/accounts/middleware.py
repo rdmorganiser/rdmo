@@ -7,19 +7,6 @@ from django.urls import reverse
 
 from .models import ConsentFieldValue
 
-# these exclude url settings are optional
-TERMS_EXCLUDE_URL_PREFIX_LIST = getattr(
-    settings,
-    "TERMS_EXCLUDE_URL_PREFIX_LIST",
-    ["/admin", "/i18n", "/static", "/account"],
-)
-TERMS_EXCLUDE_URL_CONTAINS_LIST = getattr(settings, "TERMS_EXCLUDE_URL_CONTAINS_LIST", [])
-TERMS_EXCLUDE_URL_LIST = getattr(
-    settings,
-    "TERMS_EXCLUDE_URL_LIST",
-    ["/", settings.LOGOUT_URL],
-)
-
 
 class TermsAndConditionsRedirectMiddleware:
     """Middleware to ensure terms and conditions have been accepted."""
@@ -31,7 +18,6 @@ class TermsAndConditionsRedirectMiddleware:
         if (
             settings.ACCOUNT_TERMS_OF_USE  # Terms enforcement enabled
             and request.user.is_authenticated
-            and request.path != reverse("terms_of_use_accept")
             and self.is_path_protected(request.path)
             and not ConsentFieldValue.has_accepted_terms(request.user, request.session)
         ):
@@ -42,8 +28,10 @@ class TermsAndConditionsRedirectMiddleware:
 
     @staticmethod
     def is_path_protected(path):
+        # all paths should be protected, except what is excluded here
         return not (
-                any(path.startswith(prefix) for prefix in TERMS_EXCLUDE_URL_PREFIX_LIST) or
-                any(substring in path for substring in TERMS_EXCLUDE_URL_CONTAINS_LIST) or
-                path in TERMS_EXCLUDE_URL_LIST
+                path == reverse("terms_of_use_accept") or
+                any(path.startswith(prefix) for prefix in settings.ACCOUNT_TERMS_OF_USE_EXCLUDE_URL_PREFIXES) or
+                any(substring in path for substring in settings.ACCOUNT_TERMS_OF_USE_EXCLUDE_URL_CONTAINS) or
+                path in settings.ACCOUNT_TERMS_OF_USE_EXCLUDE_URLS
         )
