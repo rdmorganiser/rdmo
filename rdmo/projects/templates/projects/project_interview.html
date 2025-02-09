@@ -11,13 +11,15 @@
 {% endblock %}
 
 {% block css %}
-    <link rel="stylesheet" href="{% static 'core/css/base.css' %}" />
     <link rel="stylesheet" href="{% static 'projects/css/interview.css' %}" />
+    {{ block.super }}
 {% endblock %}
 
 {% block js %}
+    <script src="{% static 'jquery/jquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+
     <script src="{% url 'javascript-catalog' %}"></script>
-    <script src="{% static 'core/js/base.js' %}" defer></script>
     <script src="{% static 'projects/js/interview.js' %}" defer></script>
 {% endblock %}
 

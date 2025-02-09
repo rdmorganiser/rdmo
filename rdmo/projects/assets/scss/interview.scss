@@ -1,4 +1,8 @@
+$icon-font-path: "bootstrap-sass/assets/fonts/bootstrap/";
+@import '~bootstrap-sass';
+@import '~font-awesome/css/font-awesome.css';
 @import 'rdmo/core/assets/scss/variables';
+@import 'react-datepicker/dist/react-datepicker.css';
 
 .interview-breadcrumb {
     margin-top: 20px;
@@ -219,8 +223,7 @@
             opacity: 0.8;
             line-height: 20px;
             font-size: 14px;
-            padding-left: 0;
-            padding-right: 0;
+            padding: 6px 0;
         }
 
         .btn.btn-link:hover {
@@ -265,7 +268,7 @@
 
     .radio,
     .checkbox {
-        margin: 0;
+        margin: 0 !important;
 
         label {
             margin-right: 10px;
