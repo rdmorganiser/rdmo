@@ -46,7 +46,7 @@ const getValueOption = (options, value) => {
       return options.find((option) => (option.id === value.external_id))
     }
   } else if (!isEmpty(value.text)) {
-    // this is a value without an option (free autocomplete), so we fake an option without an id
+    // this is a value without an option (select_creatable), so we fake an option without an id
     return {
       id: null,
       text: value.text

@@ -15,10 +15,10 @@ sections = (
 result_map = {
     'http://example.com/terms/questions/catalog/individual': (8, 9),
     'http://example.com/terms/questions/catalog/individual/*': (1, 1, True),
-    'http://example.com/terms/questions/catalog/individual/autocomplete': (0, 1, True),
+    'http://example.com/terms/questions/catalog/individual/select_creatable': (0, 1, True),
     'http://example.com/terms/questions/catalog/collections': (9, 10),
     'http://example.com/terms/questions/catalog/collections/*': (1, 1, True),
-    'http://example.com/terms/questions/catalog/collections/autocomplete': (0, 1, True),
+    'http://example.com/terms/questions/catalog/collections/select_creatable': (0, 1, True),
     'http://example.com/terms/questions/catalog/set': (47, 57),
     'http://example.com/terms/questions/catalog/set/individual-single': (8, 9, True),
     'http://example.com/terms/questions/catalog/set/individual-collection': (9, 10, True),

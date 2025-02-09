@@ -1,0 +1,24 @@
+@import 'core/css/variables';
+
+.project-header {
+    .table > tbody > tr:first-child > td {
+        border-top: none;
+    }
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.project-update {
+    .fa {
+        float: right;
+        margin-right: 8px;
+    }
+}
+
+.table {
+    .fa-sign-out {
+        width: 11px;
+    }
+}
