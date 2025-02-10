@@ -14,11 +14,6 @@ class Command(BaseCommand):
         call_command('migrate')
         print()
 
-        print('>>> python manage.py download_vendor_files')
-        print()
-        call_command('download_vendor_files')
-        print()
-
         print('>>> python manage.py collectstatic --noinput --clear')
         print()
         call_command('collectstatic', '--noinput', '--clear')

@@ -5,8 +5,10 @@
 {% compress css %}
 <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/header.scss' %}" />
 {% endcompress %}
+
 {% compress js %}
-<script type="text/javascript" src="{% static 'core/js/header.js' %}" ></script>
+{{ block.super }}
+<script type="text/javascript" src="{% static 'core/js/header.js' %}"></script>
 {% endcompress %}
 {% endblock %}
 

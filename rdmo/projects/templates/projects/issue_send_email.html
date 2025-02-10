@@ -9,7 +9,7 @@
 
 {% if mail_form.recipients_input %}
     {% with field=mail_form.recipients_input %}
-    <div class="form-group{% if field.errors %} has-error{% endif %} field-{{field.html_name}} mb-0">
+    <div class="form-group{% if field.errors %} has-error{% endif %} field-{{field.html_name}}">
         {% if not mail_form.recipients %}
         <label for="{{ field.id_for_label }}" class="control-label">{{ field.label }}</label>
         {% endif %}

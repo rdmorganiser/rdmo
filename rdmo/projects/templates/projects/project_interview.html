@@ -3,9 +3,6 @@
 {% load i18n %}
 {% load core_tags %}
 
-{% block vendor %}
-{% endblock %}
-
 {% block head %}
     <meta name='project' content="{{ project.id }}" />
 {% endblock %}
@@ -16,10 +13,7 @@
 {% endblock %}
 
 {% block js %}
-    <script src="{% static 'jquery/jquery-3.4.1.min.js' %}"></script>
-    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
-
-    <script src="{% url 'javascript-catalog' %}"></script>
+    {{ block.super }}
     <script src="{% static 'projects/js/interview.js' %}" defer></script>
 {% endblock %}
 
