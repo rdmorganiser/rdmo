@@ -128,7 +128,10 @@ SOCIALACCOUNT = False
 SOCIALACCOUNT_SIGNUP = False
 SOCIALACCOUNT_GROUPS = []
 SOCIALACCOUNT_AUTO_SIGNUP = False
-SOCIALACCOUNT_ADAPTER = 'rdmo.accounts.adapter.SocialAccountAdapter'
+SOCIALACCOUNT_ADAPTER = 'rdmo.accounts.socialaccount.SocialAccountAdapter'
+SOCIALACCOUNT_FORMS = {
+    'signup': 'rdmo.accounts.socialaccount.SocialSignupForm'
+}
 SOCIALACCOUNT_OPENID_CONNECT_URL_PREFIX = ""  # required since 0.60.0 else default is "oidc"
 
 SHIBBOLETH = False

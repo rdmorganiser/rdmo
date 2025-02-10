@@ -107,6 +107,6 @@ class AcceptConsentForm(forms.Form):
         if self.cleaned_data['consent']:
             success = ConsentFieldValue.create_consent(user=self.user, session=session)
             if not success:
-                self.add_error(None, "Consent could not be saved. Please try again.")  # Add non-field error
+                self.add_error(None, _("Consent could not be saved. Please try again."))  # Add non-field error
             return success
         return False

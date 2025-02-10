@@ -8,11 +8,13 @@ from django.core import mail
 from django.db.models import ObjectDoesNotExist
 from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
+from django.utils.http import urlencode
 
 from pytest_django.asserts import assertContains, assertNotContains, assertRedirects, assertTemplateUsed, assertURLEqual
 
 from rdmo.accounts.models import CONSENT_SESSION_KEY, ConsentFieldValue
-from rdmo.accounts.tests.utils import reload_urls
+
+from .helpers import reload_urls
 
 users = (
     ('editor', 'editor'),
@@ -603,10 +605,45 @@ def test_signup_next(db, client, settings, account_signup):
     else:
         assert response.status_code == 200
 
+@pytest.mark.django_db(transaction=True)
+def test_social_signup(db, client, settings, enable_socialaccount):
+    # Arrange socialaccount enabled by fixture enable_socialaccount
+    # Ensure migrations are applied before the test runs
+    # Step 1: Initiate Dummy Login
+    login_url = reverse("dummy_login") + "?" + urlencode({"process": "login"})
+    login_response = client.post(login_url)
+    assert login_response.status_code == 302  # Ensure login form loads correctly
+    assert reverse("dummy_authenticate") in login_response.url
+
+    # Step 2: POST request to Dummy Authenticate with test user data
+    user_data = {
+        "id": 99,
+        "email": "newuser@example.com",  # New user
+        "username": "new_user",
+        "first_name": "New",
+        "last_name": "User",
+    }
+    # The authentication state is included in the redirected URL
+    auth_response = client.post(login_response.url, user_data)
+
+    # Step 3: Ensure we are redirected to the signup form (if new user)
+    assert auth_response.status_code == 302
+    assert auth_response.url.startswith(reverse("socialaccount_signup"))  # Redirect to signup form
+
+    # step 4: post to signup
+    signup_response = client.post(auth_response.url, user_data)
+    assert signup_response.status_code == 302
+    assert signup_response.url == reverse('home')
+
+    # Assert login was successful and redirected to /projects/
+    response = client.get(signup_response.url,follow=True)
+    assert response.status_code == 200
+    assert (reverse('projects'),302) in response.redirect_chain
+
 
 @pytest.mark.parametrize('account_terms_of_use', boolean_toggle)
 @pytest.mark.parametrize('username,password', users)
-def test_terms_of_use(db, client, settings, username, password, account_terms_of_use):
+def test_view_terms_of_use(db, client, settings, username, password, account_terms_of_use):
     settings.ACCOUNT_TERMS_OF_USE = account_terms_of_use
     reload_urls('accounts')
 
@@ -801,14 +838,10 @@ def test_shibboleth_logout_username_pattern(db, client, settings, shibboleth, us
 
 @pytest.mark.parametrize('username,password', users)
 def test_terms_of_use_middleware_redirect_and_accept(
-    db, client, settings, username, password
-):
-    # Arrange
-    settings.ACCOUNT_TERMS_OF_USE = True
-    reload_urls('accounts')  # needs to reload before the middleware
-    settings.MIDDLEWARE += [
-        settings.ACCOUNT_TERMS_OF_USE_MIDDLEWARE
-    ]
+    db, client, settings, username, password,
+    enable_terms_of_use
+    ):
+    # Arrange with enable_terms_of_use
 
     # Ensure there are no existing consent entries for the user
     user = get_user_model().objects.get(username=username) if password else None
@@ -843,9 +876,50 @@ def test_terms_of_use_middleware_redirect_and_accept(
     assert response.status_code == 200
 
 
+@pytest.mark.django_db(transaction=True)
+def test_social_signup_with_terms_of_use(
+        db, client, settings,enable_socialaccount, enable_terms_of_use
+    ):
+    # Arrange with enable_socialaccount and enable_terms_of_use
+    reload_urls("accounts")
+
+    # Step 1: Initiate Dummy Login
+    login_response = client.post(reverse("dummy_login") + "?" + urlencode({"process": "login"}))
+
+    user_data = {
+        "id": 199,
+        "email": "newuser@example.com",
+        "username": "new_user",
+        "first_name": "New",
+        "last_name": "User",
+    }
+    # The authentication state is included in the redirected URL
+    auth_response = client.post(login_response.url, user_data)
+    # Assert, redirected to the signup form (if new user)
+    assert auth_response.status_code == 302
+    assert auth_response.url == reverse("socialaccount_signup")  # Redirect to signup form
+
+    # Arrange, post to signup without consent
+    failed_signup_response = client.post(auth_response.url, user_data)
+
+    # Assert: without consent, signup failed
+    content_str = failed_signup_response.content.decode()
+    expected_error = 'You need to agree to the terms of use to proceed'
+    assert expected_error in content_str, f"Expected error message not found. Response content:\n{content_str}"
+
+    # Arrange step 4 : successful post to signup with consent
+    user_data['consent'] = True
+    signup_response = client.post(auth_response.url, user_data)
+
+    # Assert login was successful and redirected to /projects/
+    response = client.get(signup_response.url,follow=True)
+    assert response.status_code == 200
+    assert (reverse('projects'),302) in response.redirect_chain
+
+
 def test_terms_of_use_middleware_invalidate_terms_version(
     db, client, settings
-):
+    ):
     # Arrange constants, settings and user
     past_datetime = (datetime.now() - timedelta(days=10)).strftime(format="%Y-%m-%d")
     future_datetime = (datetime.now() + timedelta(days=10)).strftime(format="%Y-%m-%d")
