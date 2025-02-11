@@ -1,6 +1,5 @@
 import sys
 from importlib import import_module, reload
-from typing import Optional
 
 import pytest
 
@@ -25,12 +24,10 @@ def reload_urlconf(urlconf=None, settings=None):
         import_module(urlconf)
 
 
-def reload_urls(app_name: Optional[str] = None,
-                settings=None,
-                other_apps: list[str] | None = None ) -> None:
+def reload_urls(*app_names: str, settings = None) -> None:
     # reload the urlconf of the app
-    if app_name is not None:
-        reload_urlconf(urlconf=f'rdmo.{app_name}.urls', settings=settings)
+    for _app in app_names:
+        reload_urlconf(urlconf=_app, settings=settings)
 
     # reload the core urlconf
     reload_urlconf(urlconf='rdmo.core.urls', settings=settings)
@@ -38,20 +35,16 @@ def reload_urls(app_name: Optional[str] = None,
     # reload the testcase settings urlconf
     reload_urlconf(settings=settings)
 
-    if other_apps:
-        for _app in other_apps:
-            reload_urlconf(urlconf=f"{_app}.urls", settings=settings)
-
     get_resolver()._populate()
 
 
 @pytest.fixture(autouse=False)
-def enable_terms_of_use(settings): # noqa: PT004
+def enable_terms_of_use(settings):  # noqa: PT004
     settings.ACCOUNT_TERMS_OF_USE = True
     settings.MIDDLEWARE += [
         settings.ACCOUNT_TERMS_OF_USE_MIDDLEWARE
     ]
-    reload_urls('accounts')  # Reloads URLs to apply new settings
+    reload_urls('rdmo.accounts.urls')
 
     yield
 
@@ -59,11 +52,11 @@ def enable_terms_of_use(settings): # noqa: PT004
     settings.ACCOUNT_TERMS_OF_USE = False
     settings.MIDDLEWARE.remove(settings.ACCOUNT_TERMS_OF_USE_MIDDLEWARE)
     # 🔹 Reload URLs to reflect the changes
-    reload_urls("accounts")
+    reload_urls('rdmo.accounts.urls')
 
 
 @pytest.fixture(autouse=False)
-def enable_socialaccount(db, client, settings, django_db_setup, django_db_blocker, django_db_use_migrations): # noqa: PT004
+def enable_socialaccount(db, client, settings, django_db_setup, django_db_blocker, django_db_use_migrations):  # noqa: PT004
     # Arrange: this fixture enable and initializes the allauth.sociallaccounts
     # use this fixture with the decorator @pytest.mark.django_db(transaction=True) on your tests
 
@@ -94,7 +87,7 @@ def enable_socialaccount(db, client, settings, django_db_setup, django_db_blocke
 
     # 🔹 Reload URL patterns manually
     clear_url_caches()
-    reload_urls("accounts",settings=settings, other_apps=['allauth'])
+    reload_urls('allauth.urls', 'rdmo.accounts.urls',settings=settings)
     # 🔹 Verify that the route now exists
     assert reverse("dummy_login")  # Ensure the route exists
 
@@ -123,7 +116,7 @@ def enable_socialaccount(db, client, settings, django_db_setup, django_db_blocke
     apps.clear_cache()
     django.setup()
 
-    reload_urls("accounts",settings=settings, other_apps=['allauth'])
+    reload_urls('allauth.urls', 'rdmo.accounts.urls', settings=settings)
 
     # **Teardown: Apply only for SQLite**
     if db_backend == "sqlite":
