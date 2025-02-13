@@ -1,8 +1,7 @@
 import { applyMiddleware, createStore, combineReducers } from 'redux'
-import thunk from 'redux-thunk'
 
-import { checkStoreId } from 'rdmo/core/assets/js/utils/store'
 import { getConfigFromLocalStorage } from 'rdmo/core/assets/js/utils/config'
+import { checkStoreId, configureMiddleware } from 'rdmo/core/assets/js/utils/store'
 
 import configReducer from 'rdmo/core/assets/js/reducers/configReducer'
 import pendingReducer from 'rdmo/core/assets/js/reducers/pendingReducer'
@@ -28,13 +27,6 @@ export default function configureStore() {
   // empty localStorage in new session
   checkStoreId()
 
-  const middlewares = [thunk]
-
-  if (process.env.NODE_ENV === 'development') {
-    const { logger } = require('redux-logger')
-    middlewares.push(logger)
-  }
-
   const rootReducer = combineReducers({
     config: configReducer,
     contact: contactReducer,
@@ -55,7 +47,7 @@ export default function configureStore() {
   const store = createStore(
     rootReducer,
     initialState,
-    applyMiddleware(...middlewares)
+    applyMiddleware(...configureMiddleware())
   )
 
   const fetchPageFromLocation = () => {
