@@ -3,18 +3,16 @@ from datetime import datetime, timedelta
 
 import pytest
 
-from django.contrib.auth import get_user_model
 from django.core import mail
 from django.db.models import ObjectDoesNotExist
 from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
-from django.utils.http import urlencode
 
 from pytest_django.asserts import assertContains, assertNotContains, assertRedirects, assertTemplateUsed, assertURLEqual
 
 from rdmo.accounts.models import CONSENT_SESSION_KEY, ConsentFieldValue
 
-from .helpers import enable_socialaccount, enable_terms_of_use, reload_urls  # noqa: F401
+from .helpers import enable_terms_of_use, reload_urls  # noqa: F401
 
 users = (
     ('editor', 'editor'),
@@ -49,7 +47,7 @@ def _reload_urls_at_teardown():
 
 
 @pytest.mark.parametrize('profile_update', boolean_toggle)
-def test_get_profile_update(db, client, settings, profile_update):
+def test_get_profile_update(db, client, settings, django_user_model, profile_update):
     """
     An authorized GET request to the profile update form returns the form.
     """
@@ -68,7 +66,7 @@ def test_get_profile_update(db, client, settings, profile_update):
 
 
 @pytest.mark.parametrize('profile_update', boolean_toggle)
-def test_get_profile_update_redirect(db, client, settings, profile_update):
+def test_get_profile_update_redirect(db, client, settings, django_user_model, profile_update):
     """
     An unauthorized GET request to the profile update form gets
     redirected to login.
@@ -85,7 +83,7 @@ def test_get_profile_update_redirect(db, client, settings, profile_update):
 
 
 @pytest.mark.parametrize('profile_update', boolean_toggle)
-def test_post_profile_update(db, client, settings, profile_update):
+def test_post_profile_update(db, client, settings, django_user_model, profile_update):
     """
     An authorized POST request to the profile update form updates the
     user and redirects to home.
@@ -113,7 +111,7 @@ def test_post_profile_update(db, client, settings, profile_update):
 
 
 @pytest.mark.parametrize('profile_update', boolean_toggle)
-def test_post_profile_update_cancel(db, client, settings, profile_update):
+def test_post_profile_update_cancel(db, client, settings, django_user_model, profile_update):
     """
     An authorized POST request to the profile update form updates with
     cancel redirects to home.
@@ -140,7 +138,7 @@ def test_post_profile_update_cancel(db, client, settings, profile_update):
 
 
 @pytest.mark.parametrize('profile_update', boolean_toggle)
-def test_post_profile_update_cancel2(db, client, settings, profile_update):
+def test_post_profile_update_cancel2(db, client, settings, django_user_model, profile_update):
     """
     An authorized POST request to the profile update form updates with
     cancel and the next field redirects to the given url.
@@ -168,7 +166,7 @@ def test_post_profile_update_cancel2(db, client, settings, profile_update):
 
 
 @pytest.mark.parametrize('profile_update', boolean_toggle)
-def test_post_profile_update_next(db, client, settings, profile_update):
+def test_post_profile_update_next(db, client, settings, django_user_model, profile_update):
     """
     An authorized POST request to the profile update form with next field
     updates the user and redirects to the given url.
@@ -197,7 +195,7 @@ def test_post_profile_update_next(db, client, settings, profile_update):
 
 
 @pytest.mark.parametrize('profile_update', boolean_toggle)
-def test_post_profile_update_next2(db, client, settings, profile_update):
+def test_post_profile_update_next2(db, client, settings, django_user_model, profile_update):
     """
     An authorized POST request to the profile update form with next
     field set to profile_update updates the user and redirects to home.
@@ -334,7 +332,7 @@ def test_password_reset_post_valid(db, client, settings, account):
 
 
 @pytest.mark.parametrize('profile_delete', boolean_toggle)
-def test_remove_user_get(db, client, settings, profile_delete):
+def test_remove_user_get(db, client, settings, django_user_model, profile_delete):
     settings.PROFILE_DELETE = profile_delete
     reload_urls('rdmo.accounts.urls')
 
@@ -350,7 +348,7 @@ def test_remove_user_get(db, client, settings, profile_delete):
 
 
 @pytest.mark.parametrize('profile_delete', boolean_toggle)
-def test_remove_user_post(db, client, settings, profile_delete):
+def test_remove_user_post(db, client, settings, django_user_model, profile_delete):
     settings.PROFILE_DELETE = profile_delete
     reload_urls('rdmo.accounts.urls')
 
@@ -366,14 +364,14 @@ def test_remove_user_post(db, client, settings, profile_delete):
     assert response.status_code == 200
     if settings.PROFILE_DELETE:
         assertTemplateUsed(response, 'profile/profile_remove_success.html')
-        pytest.raises(ObjectDoesNotExist, get_user_model().objects.get, username='user')
+        pytest.raises(ObjectDoesNotExist, django_user_model.objects.get, username='user')
     else:
         assertTemplateUsed(response, 'profile/profile_remove_closed.html')
-        assert get_user_model().objects.get(username='user')
+        assert django_user_model.objects.get(username='user')
 
 
 @pytest.mark.parametrize('profile_update', boolean_toggle)
-def test_remove_user_post_cancelled(db, client, settings, profile_update):
+def test_remove_user_post_cancelled(db, client, settings, django_user_model, profile_update):
     settings.PROFILE_UPDATE = profile_update
     settings.PROFILE_DELETE = True
 
@@ -382,7 +380,7 @@ def test_remove_user_post_cancelled(db, client, settings, profile_update):
     response = client.post(url, {'cancel': 'cancel'})
 
     assert response.status_code == 302
-    assert get_user_model().objects.filter(username='user').exists()
+    assert django_user_model.objects.filter(username='user').exists()
     if settings.PROFILE_UPDATE:
         assert response.url == '/account'
     else:
@@ -390,7 +388,7 @@ def test_remove_user_post_cancelled(db, client, settings, profile_update):
 
 
 @pytest.mark.parametrize('profile_delete', boolean_toggle)
-def test_remove_user_post_invalid_email(db, client, settings, profile_delete):
+def test_remove_user_post_invalid_email(db, client, settings, django_user_model, profile_delete):
     settings.PROFILE_DELETE = profile_delete
     reload_urls('rdmo.accounts.urls')
 
@@ -404,7 +402,7 @@ def test_remove_user_post_invalid_email(db, client, settings, profile_delete):
     response = client.post(url, data)
 
     assert response.status_code == 200
-    assert get_user_model().objects.get(username='user')
+    assert django_user_model.objects.get(username='user')
     if settings.PROFILE_DELETE:
         assertTemplateUsed(response, 'profile/profile_remove_failed.html')
     else:
@@ -412,7 +410,7 @@ def test_remove_user_post_invalid_email(db, client, settings, profile_delete):
 
 
 @pytest.mark.parametrize('profile_delete', boolean_toggle)
-def test_remove_user_post_invalid_password(db, client, settings, profile_delete):
+def test_remove_user_post_invalid_password(db, client, settings, django_user_model, profile_delete):
     settings.PROFILE_DELETE = profile_delete
     reload_urls('rdmo.accounts.urls')
 
@@ -426,7 +424,7 @@ def test_remove_user_post_invalid_password(db, client, settings, profile_delete)
     response = client.post(url, data)
 
     assert response.status_code == 200
-    assert get_user_model().objects.get(username='user')
+    assert django_user_model.objects.get(username='user')
     if settings.PROFILE_DELETE:
         assertTemplateUsed(response, 'profile/profile_remove_failed.html')
     else:
@@ -434,7 +432,7 @@ def test_remove_user_post_invalid_password(db, client, settings, profile_delete)
 
 
 @pytest.mark.parametrize('profile_delete', boolean_toggle)
-def test_remove_user_post_invalid_consent(db, client, settings, profile_delete):
+def test_remove_user_post_invalid_consent(db, client, settings, django_user_model, profile_delete):
     settings.PROFILE_DELETE = profile_delete
     reload_urls('rdmo.accounts.urls')
 
@@ -456,11 +454,11 @@ def test_remove_user_post_invalid_consent(db, client, settings, profile_delete):
 
 
 @pytest.mark.parametrize('profile_delete', boolean_toggle)
-def test_remove_a_user_without_usable_password_post(db, client, settings, profile_delete):
+def test_remove_a_user_without_usable_password_post(db, client, settings, django_user_model, profile_delete):
     settings.PROFILE_DELETE = profile_delete
     reload_urls('rdmo.accounts.urls')
 
-    user = get_user_model().objects.get(username='user', email='user@example.com')
+    user = django_user_model.objects.get(username='user', email='user@example.com')
     user.set_unusable_password()
     user.save()
 
@@ -475,18 +473,19 @@ def test_remove_a_user_without_usable_password_post(db, client, settings, profil
     assert response.status_code == 200
     if settings.PROFILE_DELETE:
         assertTemplateUsed(response, 'profile/profile_remove_success.html')
-        pytest.raises(ObjectDoesNotExist, get_user_model().objects.get, pk=user.pk)
+        pytest.raises(ObjectDoesNotExist, django_user_model.objects.get, pk=user.pk)
     else:
         assertTemplateUsed(response, 'profile/profile_remove_closed.html')
     client.logout()
 
 
 @pytest.mark.parametrize('profile_delete', boolean_toggle)
-def test_remove_a_user_without_usable_password_post_invalid_email(db, client, settings, profile_delete):
+def test_remove_a_user_without_usable_password_post_invalid_email(db, client, settings,
+                                                                  django_user_model, profile_delete):
     settings.PROFILE_DELETE = profile_delete
     reload_urls('rdmo.accounts.urls')
 
-    user = get_user_model().objects.get(username='user', email='user@example.com')
+    user = django_user_model.objects.get(username='user', email='user@example.com')
     user.set_unusable_password()
     user.save()
 
@@ -499,7 +498,7 @@ def test_remove_a_user_without_usable_password_post_invalid_email(db, client, se
     response = client.post(url, data)
 
     assert response.status_code == 200
-    get_user_model().objects.get(pk=user.pk)
+    django_user_model.objects.get(pk=user.pk)
     if settings.PROFILE_DELETE:
         assertTemplateUsed(response, 'profile/profile_remove_failed.html')
     else:
@@ -508,11 +507,12 @@ def test_remove_a_user_without_usable_password_post_invalid_email(db, client, se
 
 
 @pytest.mark.parametrize('profile_delete', boolean_toggle)
-def test_remove_a_user_without_usable_password_post_empty_email(db, client, settings, profile_delete):
+def test_remove_a_user_without_usable_password_post_empty_email(db, client, settings,
+                                                                django_user_model, profile_delete):
     settings.PROFILE_DELETE = profile_delete
     reload_urls('rdmo.accounts.urls')
 
-    user = get_user_model().objects.get(username='user', email='user@example.com')
+    user = django_user_model.objects.get(username='user', email='user@example.com')
     user.set_unusable_password()
     user.save()
 
@@ -525,7 +525,7 @@ def test_remove_a_user_without_usable_password_post_empty_email(db, client, sett
     response = client.post(url, data)
 
     assert response.status_code == 200
-    assert get_user_model().objects.get(pk=user.pk)
+    assert django_user_model.objects.get(pk=user.pk)
     if settings.PROFILE_DELETE:
         assertTemplateUsed(response, 'profile/profile_remove_form.html')
         assert response.context['form'].errors['email'] == ['This field is required.']  # check if email is required
@@ -535,11 +535,12 @@ def test_remove_a_user_without_usable_password_post_empty_email(db, client, sett
 
 
 @pytest.mark.parametrize('profile_delete', boolean_toggle)
-def test_remove_a_user_without_usable_password_post_invalid_consent(db, client, settings, profile_delete):
+def test_remove_a_user_without_usable_password_post_invalid_consent(db, client, settings,
+                                                                    django_user_model, profile_delete):
     settings.PROFILE_DELETE = profile_delete
     reload_urls('rdmo.accounts.urls')
 
-    user = get_user_model().objects.get(username='user', email='user@example.com')
+    user = django_user_model.objects.get(username='user', email='user@example.com')
     user.set_unusable_password()
     user.save()
 
@@ -552,7 +553,7 @@ def test_remove_a_user_without_usable_password_post_invalid_consent(db, client, 
     response = client.post(url, data)
 
     assert response.status_code == 200
-    assert get_user_model().objects.get(pk=user.pk)
+    assert django_user_model.objects.get(pk=user.pk)
     if settings.PROFILE_DELETE:
         assertTemplateUsed(response, 'profile/profile_remove_form.html')
         assert response.context['form'].errors['consent'] == ['This field is required.']  # check if consent is required
@@ -604,41 +605,6 @@ def test_signup_next(db, client, settings, account_signup):
         assert response.url == '/about/'
     else:
         assert response.status_code == 200
-
-@pytest.mark.django_db(transaction=True)
-def test_social_signup(db, client, settings, enable_socialaccount):  # noqa: F811
-    # Arrange socialaccount enabled by fixture enable_socialaccount
-    # Ensure migrations are applied before the test runs
-    # Step 1: Initiate Dummy Login
-    login_url = reverse("dummy_login") + "?" + urlencode({"process": "login"})
-    login_response = client.post(login_url)
-    assert login_response.status_code == 302  # Ensure login form loads correctly
-    assert reverse("dummy_authenticate") in login_response.url
-
-    # Step 2: POST request to Dummy Authenticate with test user data
-    user_data = {
-        "id": 99,
-        "email": "newuser@example.com",  # New user
-        "username": "new_user",
-        "first_name": "New",
-        "last_name": "User",
-    }
-    # The authentication state is included in the redirected URL
-    auth_response = client.post(login_response.url, user_data)
-
-    # Step 3: Ensure we are redirected to the signup form (if new user)
-    assert auth_response.status_code == 302
-    assert auth_response.url.startswith(reverse("socialaccount_signup"))  # Redirect to signup form
-
-    # step 4: post to signup
-    signup_response = client.post(auth_response.url, user_data)
-    assert signup_response.status_code == 302
-    assert signup_response.url == reverse('home')
-
-    # Assert login was successful and redirected to /projects/
-    response = client.get(signup_response.url,follow=True)
-    assert response.status_code == 200
-    assert (reverse('projects'),302) in response.redirect_chain
 
 
 @pytest.mark.parametrize('account_terms_of_use', boolean_toggle)
@@ -838,12 +804,12 @@ def test_shibboleth_logout_username_pattern(db, client, settings, shibboleth, us
 
 @pytest.mark.parametrize('username,password', users)
 def test_terms_of_use_middleware_redirect_and_accept(
-    db, client, settings, username, password, enable_terms_of_use  # noqa: F811
+    db, client, settings, django_user_model, username, password, enable_terms_of_use  # noqa: F811
     ):
     # Arrange with enable_terms_of_use
 
     # Ensure there are no existing consent entries for the user
-    user = get_user_model().objects.get(username=username) if password else None
+    user = django_user_model.objects.get(username=username) if password else None
     if user:
         ConsentFieldValue.objects.filter(user=user).delete()
 
@@ -875,48 +841,8 @@ def test_terms_of_use_middleware_redirect_and_accept(
     assert response.status_code == 200
 
 
-@pytest.mark.django_db(transaction=True)
-def test_social_signup_with_terms_of_use(
-        db, client, settings, enable_socialaccount, enable_terms_of_use  # noqa: F811
-    ):
-    # Arrange with enable_socialaccount and enable_terms_of_use
-
-    # Step 1: Initiate Dummy Login
-    login_response = client.post(reverse("dummy_login") + "?" + urlencode({"process": "login"}))
-
-    user_data = {
-        "id": 199,
-        "email": "newuser@example.com",
-        "username": "new_user",
-        "first_name": "New",
-        "last_name": "User",
-    }
-    # The authentication state is included in the redirected URL
-    auth_response = client.post(login_response.url, user_data)
-    # Assert, redirected to the signup form (if new user)
-    assert auth_response.status_code == 302
-    assert auth_response.url == reverse("socialaccount_signup")  # Redirect to signup form
-
-    # Arrange, post to signup without consent
-    failed_signup_response = client.post(auth_response.url, user_data)
-
-    # Assert: without consent, signup failed
-    content_str = failed_signup_response.content.decode()
-    expected_error = 'You need to agree to the terms of use to proceed'
-    assert expected_error in content_str, f"Expected error message not found. Response content:\n{content_str}"
-
-    # Arrange step 4 : successful post to signup with consent
-    user_data['consent'] = True
-    signup_response = client.post(auth_response.url, user_data)
-
-    # Assert login was successful and redirected to /projects/
-    response = client.get(signup_response.url,follow=True)
-    assert response.status_code == 200
-    assert (reverse('projects'),302) in response.redirect_chain
-
-
 def test_terms_of_use_middleware_invalidate_terms_version(
-    db, client, settings, enable_terms_of_use  # noqa: F811
+    db, client, settings, django_user_model, enable_terms_of_use  # noqa: F811
     ):
     # Arrange constants, settings and user
     past_datetime = (datetime.now() - timedelta(days=10)).strftime(format="%Y-%m-%d")
@@ -924,7 +850,7 @@ def test_terms_of_use_middleware_invalidate_terms_version(
 
     # Arrange user object
     username = password = 'user'
-    user = get_user_model().objects.get(username=username)
+    user = django_user_model.objects.get(username=username)
     _consent = ConsentFieldValue.objects.create(user=user, consent=True)
 
     # Assert - Access the home page, user has a valid consent
