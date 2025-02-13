@@ -8,7 +8,7 @@ const initialState = {
   project: null
 }
 
-export default function interviewReducer(state = initialState, action) {
+export default function projectReducer(state = initialState, action) {
   switch(action.type) {
     case FETCH_PROJECT_SUCCESS:
       return { ...state, project: action.project }
