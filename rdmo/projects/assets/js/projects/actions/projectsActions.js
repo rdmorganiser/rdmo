@@ -1,27 +1,48 @@
 import ProjectsApi from '../api/ProjectsApi'
-import { FETCH_PROJECTS_ERROR, FETCH_PROJECTS_INIT, FETCH_PROJECTS_SUCCESS,
-         FETCH_INVITATIONS_ERROR, FETCH_INVITATIONS_INIT, FETCH_INVITATIONS_SUCCESS,
-         FETCH_CATALOGS_ERROR, FETCH_CATALOGS_INIT, FETCH_CATALOGS_SUCCESS,
-         FETCH_FILETYPES_ERROR, FETCH_FILETYPES_INIT, FETCH_FILETYPES_SUCCESS,
-         FETCH_IMPORT_URLS_ERROR, FETCH_IMPORT_URLS_INIT, FETCH_IMPORT_URLS_SUCCESS,
-         UPLOAD_PROJECT_ERROR, UPLOAD_PROJECT_INIT, UPLOAD_PROJECT_SUCCESS }
-         from './actionTypes'
+import {
+  FETCH_PROJECTS_ERROR,
+  FETCH_PROJECTS_INIT,
+  FETCH_PROJECTS_SUCCESS,
+  FETCH_INVITATIONS_ERROR,
+  FETCH_INVITATIONS_INIT,
+  FETCH_INVITATIONS_SUCCESS,
+  FETCH_CATALOGS_ERROR,
+  FETCH_CATALOGS_INIT,
+  FETCH_CATALOGS_SUCCESS,
+  FETCH_FILETYPES_ERROR,
+  FETCH_FILETYPES_INIT,
+  FETCH_FILETYPES_SUCCESS,
+  FETCH_IMPORT_URLS_ERROR,
+  FETCH_IMPORT_URLS_INIT,
+  FETCH_IMPORT_URLS_SUCCESS,
+  UPLOAD_PROJECT_ERROR,
+  UPLOAD_PROJECT_INIT,
+  UPLOAD_PROJECT_SUCCESS
+} from './actionTypes'
+
+import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 
 import * as configActions from './configActions'
 
 export function fetchProjects(pageReset = true) {
+  const pendingId = 'fetchProjects'
+
   return function(dispatch, getState) {
     if (pageReset === true) {
       dispatch(configActions.updateConfig('params.page', '1'))
     }
     const params = getState().config.params
+
+    dispatch(addToPending(pendingId))
     dispatch(fetchProjectsInit())
+
     const action = (dispatch) => ProjectsApi.fetchProjects(params || {})
           .then(projects => {
             dispatch(fetchProjectsSuccess(projects, !pageReset))})
 
     return dispatch(action)
       .catch(error => dispatch(fetchProjectsError(error)))
+      .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
 
@@ -45,14 +66,19 @@ export function fetchProjectsError(error) {
 }
 
 export function fetchCatalogs() {
+  const pendingId = 'fetchCatalogs'
+
   return function(dispatch) {
+    dispatch(addToPending(pendingId))
     dispatch(fetchCatalogsInit())
+
     const action = (dispatch) => ProjectsApi.fetchCatalogs().then(catalogs => {
       dispatch(fetchCatalogsSuccess(catalogs))
     })
 
     return dispatch(action)
       .catch(error => dispatch(fetchCatalogsError(error)))
+      .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
 
@@ -69,14 +95,19 @@ export function fetchCatalogsError(error) {
 }
 
 export function fetchAllowedFileTypes() {
+  const pendingId = 'fetchAllowedFileTypes'
+
   return function(dispatch) {
+    dispatch(addToPending(pendingId))
     dispatch(fetchAllowedFileTypesInit())
+
     const action = (dispatch) => ProjectsApi.fetchAllowedFileTypes().then(allowedTypes => {
       dispatch(fetchAllowedFileTypesSuccess(allowedTypes))
     })
 
     return dispatch(action)
       .catch(error => dispatch(fetchAllowedFileTypesError(error)))
+      .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
 
@@ -93,14 +124,19 @@ export function fetchAllowedFileTypesError(error) {
 }
 
 export function fetchImportUrls() {
+  const pendingId = 'fetchImportUrls'
+
   return function(dispatch) {
+    dispatch(addToPending(pendingId))
     dispatch(fetchImportUrlsInit())
+
     const action = (dispatch) => ProjectsApi.fetchDirectImportUrls().then(importUrls => {
       dispatch(fetchImportUrlsSuccess(importUrls))
     })
 
     return dispatch(action)
       .catch(error => dispatch(fetchImportUrlsError(error)))
+      .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
 
@@ -117,14 +153,19 @@ export function fetchImportUrlsError(error) {
 }
 
 export function fetchInvitations() {
+  const pendingId = 'fetchImportUrls'
+
   return function(dispatch) {
+    dispatch(addToPending(pendingId))
     dispatch(fetchInvitationsInit())
+
     const action = (dispatch) => ProjectsApi.fetchInvites().then(invites => {
       dispatch(fetchInvitationsSuccess(invites))
     })
 
     return dispatch(action)
       .catch(error => dispatch(fetchInvitationsError(error)))
+      .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
 
@@ -141,14 +182,16 @@ export function fetchInvitationsError(error) {
 }
 
 export function uploadProject(url, file) {
+  const pendingId = 'uploadProject'
+
   return function(dispatch) {
+    dispatch(addToPending(pendingId))
     dispatch(uploadProjectInit())
 
     return ProjectsApi.uploadProject(url, file)
       .then(project => dispatch(uploadProjectSuccess(project)))
-      .catch(error => {
-        dispatch(uploadProjectError(error))
-      })
+      .catch(error => dispatch(uploadProjectError(error)))
+      .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
 

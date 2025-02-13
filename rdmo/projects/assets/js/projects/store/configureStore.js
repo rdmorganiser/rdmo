@@ -1,28 +1,37 @@
-import { createStore, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware, combineReducers } from 'redux'
 import thunk from 'redux-thunk'
-import Cookies from 'js-cookie'
-import isEmpty from 'lodash/isEmpty'
-import rootReducer from '../reducers/rootReducer'
+
+import { checkStoreId } from 'rdmo/core/assets/js/utils/store'
+
+import pendingReducer from 'rdmo/core/assets/js/reducers/pendingReducer'
+
+import configReducer from '../reducers/configReducer'
+import projectsReducer from '../reducers/projectsReducer'
+import userReducer from '../reducers/userReducer'
+
 import * as userActions from '../actions/userActions'
 import * as projectsActions from '../actions/projectsActions'
 import * as configActions from '../actions/configActions'
+
 import userIsManager from '../utils/userIsManager'
 
 export default function configureStore() {
+  // empty localStorage in new session
+  checkStoreId()
+
   const middlewares = [thunk]
-
-  const currentStoreId = Cookies.get('storeid')
-  const localStoreId = localStorage.getItem('rdmo.storeid')
-
-  if (isEmpty(localStoreId) || localStoreId !== currentStoreId) {
-    localStorage.clear()
-    localStorage.setItem('rdmo.storeid', currentStoreId)
-  }
 
   if (process.env.NODE_ENV === 'development') {
     const { logger } = require('redux-logger')
     middlewares.push(logger)
   }
+
+  const rootReducer = combineReducers({
+    config: configReducer,
+    currentUser: userReducer,
+    projects: projectsReducer,
+    pending: pendingReducer
+  })
 
   const store = createStore(
     rootReducer,

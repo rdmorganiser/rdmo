@@ -1,7 +1,7 @@
 import { applyMiddleware, createStore, combineReducers } from 'redux'
 import thunk from 'redux-thunk'
 
-// import { checkStoreId } from 'rdmo/core/assets/js/utils/store'
+import { checkStoreId } from 'rdmo/core/assets/js/utils/store'
 import { getConfigFromLocalStorage } from 'rdmo/core/assets/js/utils/config'
 
 import configReducer from 'rdmo/core/assets/js/reducers/configReducer'
@@ -26,7 +26,7 @@ import { parseLocation } from '../utils/location'
 
 export default function configureStore() {
   // empty localStorage in new session
-  // checkStoreId()
+  checkStoreId()
 
   const middlewares = [thunk]
 
