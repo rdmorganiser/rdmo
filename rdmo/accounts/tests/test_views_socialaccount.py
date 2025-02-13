@@ -2,8 +2,10 @@
 from django.urls import reverse
 from django.utils.http import urlencode
 
+from .helpers import enable_socialaccount, enable_terms_of_use  # noqa: F401
 
-def test_social_signup(db, client, enable_socialaccount):
+
+def test_social_signup(db, client, enable_socialaccount):  # noqa: F811
     # Arrange with enable_socialaccount
     login_url = reverse("dummy_login") + "?" + urlencode({"process": "login"})
     login_response = client.post(login_url)
@@ -31,7 +33,7 @@ def test_social_signup(db, client, enable_socialaccount):
 
 
 def test_social_signup_with_terms_of_use(
-        db, client, enable_terms_of_use, enable_socialaccount
+        db, client, enable_terms_of_use, enable_socialaccount  # noqa: F811
     ):
     # Arrange with enable_socialaccount and enable_terms_of_use
     # Arrange: initiate dummy Login
