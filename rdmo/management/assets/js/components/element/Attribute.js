@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { filterElement } from '../../utils/filter'
-import { buildPath } from '../../utils/location'
+import { buildApiPath, buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AddLink, LockedLink, NestedLink, ExportLink, CodeLink } from '../common/Links'
@@ -13,10 +13,10 @@ const Attribute = ({ config, attribute, elementActions, display='list', indent=0
 
   const showElement = filterElement(config, filter, false, filterEditors, attribute)
 
-  const editUrl = buildPath(config.baseUrl, 'attributes', attribute.id)
-  const copyUrl = buildPath(config.baseUrl, 'attributes', attribute.id, 'copy')
-  const nestedUrl = buildPath(config.baseUrl, 'attributes', attribute.id, 'nested')
-  const exportUrl = buildPath(config.apiUrl, 'domain', 'attributes', attribute.id, 'export')
+  const editUrl = buildPath('attributes', attribute.id)
+  const copyUrl = buildPath('attributes', attribute.id, 'copy')
+  const nestedUrl = buildPath('attributes', attribute.id, 'nested')
+  const exportUrl = buildApiPath('domain', 'attributes', attribute.id, 'export')
 
   const fetchEdit = () => elementActions.fetchElement('attributes', attribute.id)
   const fetchCopy = () => elementActions.fetchElement('attributes', attribute.id, 'copy')

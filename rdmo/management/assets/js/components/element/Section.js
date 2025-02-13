@@ -4,7 +4,7 @@ import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 
 import { filterElement } from '../../utils/filter'
-import { buildPath } from '../../utils/location'
+import { buildApiPath, buildPath } from '../../utils/location'
 
 import Page from './Page'
 import { ElementErrors } from '../common/Errors'
@@ -20,16 +20,16 @@ const Section = ({ config, section, configActions, elementActions, display='list
   const showElement = filterElement(config, filter, false, filterEditors, section)
   const showElements = get(config, `display.elements.sections.${section.id}`, true)
 
-  const editUrl = buildPath(config.baseUrl, 'sections', section.id)
-  const copyUrl = buildPath(config.baseUrl, 'sections', section.id, 'copy')
-  const nestedUrl = buildPath(config.baseUrl, 'sections', section.id, 'nested')
-  const exportUrl = buildPath(config.apiUrl, 'questions', 'sections', section.id, 'export')
+  const editUrl = buildPath('sections', section.id)
+  const copyUrl = buildPath('sections', section.id, 'copy')
+  const nestedUrl = buildPath('sections', section.id, 'nested')
+  const exportUrl = buildApiPath('questions', 'sections', section.id, 'export')
 
   const fetchEdit = () => elementActions.fetchElement('sections', section.id)
   const fetchCopy = () => elementActions.fetchElement('sections', section.id, 'copy')
   const fetchNested = () => elementActions.fetchElement('sections', section.id, 'nested')
   const toggleLocked = () => elementActions.storeElement('sections', {...section, locked: !section.locked })
-  const toggleElements = () => configActions.toggleElements(section)
+  const toggleElements = () => elementActions.toggleElements(section)
 
   const createPage = () => elementActions.createElement('pages', { section })
 

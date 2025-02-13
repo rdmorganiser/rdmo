@@ -48,7 +48,7 @@ export default function configureStore() {
 
   const initialState = {
     config: {
-      prefix: 'rdmo.interview'
+      prefix: 'rdmo.interview.config'
     }
   }
 

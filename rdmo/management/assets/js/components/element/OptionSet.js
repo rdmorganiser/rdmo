@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import get from 'lodash/get'
 
 import { filterElement } from '../../utils/filter'
-import { buildPath } from '../../utils/location'
+import { buildApiPath, buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AddLink, LockedLink, NestedLink,
@@ -14,10 +14,10 @@ const OptionSet = ({ config, optionset, elementActions, display='list', filter=f
 
   const showElement = filterElement(config, filter, false, filterEditors, optionset)
 
-  const editUrl = buildPath(config.baseUrl, 'optionsets', optionset.id)
-  const copyUrl = buildPath(config.baseUrl, 'optionsets', optionset.id, 'copy')
-  const nestedUrl = buildPath(config.baseUrl, 'optionsets', optionset.id, 'nested')
-  const exportUrl = buildPath(config.apiUrl, 'options', 'optionsets', optionset.id, 'export')
+  const editUrl = buildPath('optionsets', optionset.id)
+  const copyUrl = buildPath('optionsets', optionset.id, 'copy')
+  const nestedUrl = buildPath('optionsets', optionset.id, 'nested')
+  const exportUrl = buildApiPath('options', 'optionsets', optionset.id, 'export')
 
   const getConditionUrl = (index) => buildPath(config.apiUrl, 'conditions', 'conditions', optionset.conditions[index])
 

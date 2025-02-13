@@ -20,7 +20,7 @@ const NestedQuestionSet = ({ config, questionset, configActions, elementActions 
   const updateFilterString = (uri) => configActions.updateConfig('filter.questionset.search', uri)
   const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.questionset.uri_prefix', uriPrefix)
 
-  const toggleQuestionSets = () => configActions.toggleDescendants(questionset, 'questionsets')
+  const toggleQuestionSets = () => elementActions.toggleDescendants(questionset, 'questionsets')
 
   const updateDisplayQuestionSetsURI = (value) => configActions.updateConfig('display.uri.questionsets', value)
   const updateDisplayQuestionsURI = (value) => configActions.updateConfig('display.uri.questions', value)

@@ -6,7 +6,8 @@ import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 
-import * as configActions from '../actions/configActions'
+import * as configActions from 'rdmo/core/assets/js/actions/configActions'
+
 import * as elementActions from '../actions/elementActions'
 import * as importActions from '../actions/importActions'
 
@@ -21,7 +22,7 @@ const Main = ({ config, elements, imports, configActions, elementActions, import
   const { element, elementType, elementId, elementAction } = elements
 
   // check if anything was loaded yet
-  if (isNil(elementType)) {
+  if (isNil(config.settings) || isNil(elementType)) {
     return null
   }
 

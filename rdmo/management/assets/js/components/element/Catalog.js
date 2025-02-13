@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import get from 'lodash/get'
 
 import { filterElement } from '../../utils/filter'
-import { buildPath } from '../../utils/location'
+import { buildApiPath, buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AddLink, AvailableLink, ToggleCurrentSiteLink, LockedLink, NestedLink,
@@ -15,10 +15,10 @@ const Catalog = ({ config, catalog, elementActions, display='list',
 
   const showElement = filterElement(config, filter, filterSites, filterEditors, catalog)
 
-  const editUrl = buildPath(config.baseUrl, 'catalogs', catalog.id)
-  const copyUrl = buildPath(config.baseUrl, 'catalogs', catalog.id, 'copy')
-  const nestedUrl = buildPath(config.baseUrl, 'catalogs', catalog.id, 'nested')
-  const exportUrl = buildPath(config.apiUrl, 'questions', 'catalogs', catalog.id, 'export')
+  const editUrl = buildPath('catalogs', catalog.id)
+  const copyUrl = buildPath('catalogs', catalog.id, 'copy')
+  const nestedUrl = buildPath('catalogs', catalog.id, 'nested')
+  const exportUrl = buildApiPath('questions', 'catalogs', catalog.id, 'export')
 
   const fetchEdit = () => elementActions.fetchElement('catalogs', catalog.id)
   const fetchCopy = () => elementActions.fetchElement('catalogs', catalog.id, 'copy')

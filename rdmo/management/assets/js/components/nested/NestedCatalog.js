@@ -19,9 +19,9 @@ const NestedCatalog = ({ config, catalog, configActions, elementActions }) => {
   const updateFilterString = (value) => configActions.updateConfig('filter.catalog.search', value)
   const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.catalog.uri_prefix', value)
 
-  const toggleSections = () => configActions.toggleDescendants(catalog, 'sections')
-  const togglePages = () => configActions.toggleDescendants(catalog, 'pages')
-  const toggleQuestionSets = () => configActions.toggleDescendants(catalog, 'questionsets')
+  const toggleSections = () => elementActions.toggleDescendants(catalog, 'sections')
+  const togglePages = () => elementActions.toggleDescendants(catalog, 'pages')
+  const toggleQuestionSets = () => elementActions.toggleDescendants(catalog, 'questionsets')
 
   const updateDisplayCatalogURI = (value) => configActions.updateConfig('display.uri.catalogs', value)
   const updateDisplaySectionsURI = (value) => configActions.updateConfig('display.uri.sections', value)

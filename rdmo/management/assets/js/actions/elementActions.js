@@ -1,6 +1,7 @@
-import { isNil } from 'lodash'
+import { get, isNil } from 'lodash'
 
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
+import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 
 import ConditionsApi from '../api/ConditionsApi'
 import DomainApi from '../api/DomainApi'
@@ -18,14 +19,13 @@ import ViewsFactory from '../factories/ViewsFactory'
 
 import { elementTypes } from '../constants/elements'
 import { updateLocation } from '../utils/location'
-import { canMoveElement, moveElement } from '../utils/elements'
-
+import { canMoveElement, findDescendants, moveElement } from '../utils/elements'
 
 export function fetchElements(elementType) {
   const pendingId = `fetchElements/${elementType}`
 
-  return function(dispatch, getState) {
-    updateLocation(getState().config.baseUrl, elementType)
+  return function(dispatch) {
+    updateLocation(elementType)
 
     dispatch(addToPending(pendingId))
     dispatch(fetchElementsInit(elementType))
@@ -112,7 +112,7 @@ export function fetchElement(elementType, elementId, elementAction=null) {
   const pendingId = `fetchElement/${elementType}/${elementId}` + (isNil(elementAction) ? '' : `/${elementAction}`)
 
   return function(dispatch, getState) {
-    updateLocation(getState().config.baseUrl, elementType, elementId, elementAction)
+    updateLocation(elementType, elementId, elementAction)
 
     dispatch(addToPending(pendingId))
     dispatch(fetchElementInit(elementType, elementId, elementAction))
@@ -466,7 +466,7 @@ export function createElement(elementType, parent={}) {
   const pendingId = `createElement/${elementType}`
 
   return function(dispatch, getState) {
-    updateLocation(getState().config.baseUrl, elementType, null, 'create')
+    updateLocation(elementType, null, 'create')
 
     dispatch(addToPending(pendingId))
     dispatch(createElementInit(elementType))
@@ -707,5 +707,21 @@ export function dropElement(dragElement, dropElement, mode) {
       dispatch(storeElement(elementTypes[dropParent.model], dropParent))
       }
     }
+  }
+}
+
+// toggle elements
+
+export function toggleElements(element) {
+  return (dispatch, getState) => {
+    const path = `display.elements.${elementTypes[element.model]}.${element.id}`
+    const value = !get(getState().config, path, true)
+    dispatch(updateConfig(path, value))
+  }
+}
+
+export function toggleDescendants(element, elementType) {
+  return (dispatch) => {
+    findDescendants(element, elementType).forEach(e => dispatch(toggleElements(e)))
   }
 }
