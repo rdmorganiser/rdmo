@@ -497,7 +497,7 @@ export function deleteValueError(errors) {
 
 export function activateSet(set) {
   if (isEmpty(set.set_prefix)) {
-    return updateConfig('page.currentSetIndex', set.set_index, true)
+    return updateConfig('page.currentSetIndex', set.set_index)
   } else {
     return { type: NOOP }
   }

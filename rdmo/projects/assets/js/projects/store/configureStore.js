@@ -3,15 +3,18 @@ import thunk from 'redux-thunk'
 
 import { checkStoreId } from 'rdmo/core/assets/js/utils/store'
 
+import { getConfigFromLocalStorage } from 'rdmo/core/assets/js/utils/config'
+
+import configReducer from 'rdmo/core/assets/js/reducers/configReducer'
 import pendingReducer from 'rdmo/core/assets/js/reducers/pendingReducer'
 
-import configReducer from '../reducers/configReducer'
 import projectsReducer from '../reducers/projectsReducer'
 import userReducer from '../reducers/userReducer'
 
+import * as configActions from 'rdmo/core/assets/js/actions/configActions'
+
 import * as userActions from '../actions/userActions'
 import * as projectsActions from '../actions/projectsActions'
-import * as configActions from '../actions/configActions'
 
 import userIsManager from '../utils/userIsManager'
 
@@ -33,36 +36,22 @@ export default function configureStore() {
     pending: pendingReducer
   })
 
+  const initialState = {
+    config: {
+      prefix: 'rdmo.projects'
+    }
+  }
+
   const store = createStore(
     rootReducer,
+    initialState,
     applyMiddleware(...middlewares)
   )
 
-  // load: restore the config from the local storage
-  const updateConfigFromLocalStorage = () => {
-    const ls = {...localStorage}
-
-    Object.entries(ls).forEach(([lsPath, lsValue]) => {
-      if (lsPath.startsWith('rdmo.projects.config.')) {
-        const path = lsPath.replace('rdmo.projects.config.', '')
-        let value
-        switch(lsValue) {
-          case 'true':
-            value = true
-            break
-          case 'false':
-            value = false
-            break
-          default:
-            value = lsValue
-        }
-        store.dispatch(configActions.updateConfig(path, value))
-      }
-    })
-  }
-
   window.addEventListener('load', () => {
-    updateConfigFromLocalStorage()
+    getConfigFromLocalStorage(initialState.config.prefix).forEach(([path, value]) => {
+      store.dispatch(configActions.updateConfig(path, value, false))
+    })
 
     Promise.all([
       store.dispatch(userActions.fetchCurrentUser()),
@@ -71,7 +60,7 @@ export default function configureStore() {
       const currentUser = store.getState().currentUser.currentUser
       const isManager = userIsManager(currentUser)
       if (isManager && store.getState().config.myProjects) {
-        store.dispatch(configActions.updateConfig('params.user', currentUser.id))
+        store.dispatch(configActions.updateConfig('params.user', currentUser.id, false))
       }
       store.dispatch(projectsActions.fetchProjects())
       store.dispatch(projectsActions.fetchInvitations(currentUser.id))

@@ -1,4 +1,5 @@
 import ProjectsApi from '../api/ProjectsApi'
+
 import {
   FETCH_PROJECTS_ERROR,
   FETCH_PROJECTS_INIT,
@@ -22,7 +23,7 @@ import {
 
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 
-import * as configActions from './configActions'
+import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 
 export function fetchProjects(pageReset = true) {
   const pendingId = 'fetchProjects'
