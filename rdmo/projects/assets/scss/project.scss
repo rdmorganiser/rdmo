@@ -1,0 +1,49 @@
+$bootstrap-icons-font-dir: '~bootstrap-icons/font/fonts';
+@import '~bootstrap-icons/font/bootstrap-icons.scss';
+
+:root {
+  --page-bg: #f8f9fa; /* ✅ Current sidebar color, now used as the page background */
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: var(--page-bg); /* ✅ Now the page has the former sidebar color */
+}
+
+.project-page-container {
+  min-height: 100vh;
+  background-color: var(--page-bg); /* ✅ Ensures full-height coverage */
+  padding: 2rem;
+}
+
+.sidebar-custom {
+  background-color: #003366 !important; /* ✅ Forces dark blue */
+}
+
+.sidebar-custom h6 {
+  color: var(--bs-gray-500) !important;  /* ✅ Ensure muted color */
+  font-size: 0.875rem;  /* ✅ Slightly smaller font */
+  font-weight: 600;  /* ✅ Keep strong visibility */
+  text-transform: uppercase;  /* ✅ Matches the UI from your examples */
+  letter-spacing: 0.5px;  /* ✅ Slight spacing for readability */
+}
+
+.form-label {
+  font-size: 0.875rem; /* Smaller labels */
+}
+
+.nav-link {
+  color: var(--bs-gray-500) !important; /* Muted text */
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.nav-link:hover {
+  color: var(--bs-gray-700) !important; /* Darker on hover */
+}
+
+.nav-link.active {
+  color: white !important; /* White text for active */
+  background-color: rgba(255, 255, 255, 0.2) !important; /* Slightly transparent */
+}
