@@ -6,25 +6,14 @@ import { connect } from 'react-redux'
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import * as projectActions from '../actions/projectActions'
 
-import TestForm from '../components/TestForm'
+import ProjectNavigation from '../components/main/ProjectNavigation'
 
-// eslint-disable-next-line no-unused-vars
-const Main = ({ config, settings, templates, user, project, configActions, projectActions }) => {
-  return project && (
-    <div className="container">
-      <TestForm />
-    </div>
-  )
+const Main = ({ project }) => {
+  return project.project && <ProjectNavigation />
 }
 
 Main.propTypes = {
-    config: PropTypes.object.isRequired,
-    settings: PropTypes.object.isRequired,
-    templates: PropTypes.object.isRequired,
-    user: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
-    configActions: PropTypes.object.isRequired,
-    projectActions: PropTypes.object.isRequired
 }
 
 function mapStateToProps(state) {
