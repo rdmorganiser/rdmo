@@ -9,6 +9,7 @@ import pendingReducer from 'rdmo/core/assets/js/reducers/pendingReducer'
 import settingsReducer from 'rdmo/core/assets/js/reducers/settingsReducer'
 import templateReducer from 'rdmo/core/assets/js/reducers/templateReducer'
 import userReducer from 'rdmo/core/assets/js/reducers/userReducer'
+import catalogsReducer from 'rdmo/core/assets/js/reducers/catalogsReducer'
 
 import projectReducer from '../reducers/projectReducer'
 
@@ -16,6 +17,7 @@ import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import * as settingsActions from 'rdmo/core/assets/js/actions/settingsActions'
 import * as templateActions from 'rdmo/core/assets/js/actions/templateActions'
 import * as userActions from 'rdmo/core/assets/js/actions/userActions'
+import * as catalogsActions from 'rdmo/core/assets/js/actions/catalogsActions'
 
 import * as projectActions from '../actions/projectActions'
 
@@ -32,6 +34,7 @@ export default function configureStore() {
   }
 
   const rootReducer = combineReducers({
+    catalogs: catalogsReducer,
     config: configReducer,
     pending: pendingReducer,
     project: projectReducer,
@@ -54,13 +57,15 @@ export default function configureStore() {
 
   // this event is triggered when the page first loads
   window.addEventListener('load', () => {
-    getConfigFromLocalStorage('rdmo.interview').forEach(([path, value]) => {
+    getConfigFromLocalStorage('rdmo.project').forEach(([path, value]) => {
       store.dispatch(configActions.updateConfig(path, value))
     })
 
     store.dispatch(settingsActions.fetchSettings())
     store.dispatch(templateActions.fetchTemplates())
     store.dispatch(userActions.fetchCurrentUser())
+    store.dispatch(catalogsActions.fetchCatalogs())
+
     store.dispatch(projectActions.fetchProject())
   })
 
