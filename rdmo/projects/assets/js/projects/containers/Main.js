@@ -4,9 +4,9 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
+import * as userActions from 'rdmo/core/assets/js/actions/userActions'
 
 import * as projectsActions from '../actions/projectsActions'
-import * as userActions from '../actions/userActions'
 
 import Projects from '../components/main/Projects'
 
