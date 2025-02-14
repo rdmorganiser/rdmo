@@ -16,15 +16,12 @@ class TaskQuestionSet(CurrentSiteQuerySetMixin, GroupsQuerySetMixin, Availabilit
         return self.filter(Q(catalogs=None) | Q(catalogs=catalog))
 
     def filter_available_tasks_for_project(self, project):
-        site_filter = Q(sites=project.site)
-        catalogs_filter = Q(catalogs=project.catalog)
+        site_filter = Q(sites=project.site) | Q(sites__isnull=True)
+        catalogs_filter = Q(catalogs=project.catalog) | Q(catalogs__isnull=True)
+        groups_filter = Q(groups__in=project.groups) | Q(groups__isnull=True)
         availability_filter = Q(available=True)
-        if project.groups:
-            groups_filter = Q(groups__in=project.groups)
-        else:
-            groups_filter = Q(groups__isnull=True)
 
-        return self.filter(site_filter & catalogs_filter & availability_filter & groups_filter)
+        return self.filter(site_filter & catalogs_filter & groups_filter & availability_filter)
 
 
 
