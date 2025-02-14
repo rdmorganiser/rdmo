@@ -101,7 +101,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     def validate_views(self, value):
         """Block updates to views if syncing is enabled."""
         if settings.PROJECT_VIEWS_SYNC and value:
-            raise ValidationError(_('Updating views is not allowed.'))
+            raise ValidationError(_('Editing views is disabled.'))
         return value
 
 

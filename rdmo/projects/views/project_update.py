@@ -1,5 +1,7 @@
 import logging
 
+from django.conf import settings
+from django.http import Http404
 from django.views.generic import UpdateView
 
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
@@ -81,17 +83,22 @@ class ProjectUpdateTasksView(ObjectPermissionMixin, RedirectViewMixin, UpdateVie
     form_class = ProjectUpdateTasksForm
     permission_required = 'projects.change_project_object'
 
+    def dispatch(self, request, *args, **kwargs):
+        if settings.PROJECT_TASKS_SYNC:
+            raise Http404
+        return super().dispatch(request, *args, **kwargs)
+
     def get_form_kwargs(self):
-        tasks = Task.objects.filter_current_site() \
-                            .filter_catalog(self.object.catalog) \
-                            .filter_group(self.request.user) \
-                            .filter_availability(self.request.user)
+        tasks = Task.objects.filter_available_tasks_for_project(self.object)
 
         form_kwargs = super().get_form_kwargs()
         form_kwargs.update({
             'tasks': tasks
         })
         return form_kwargs
+
+    def get_success_url(self):
+        return self.get_object().get_absolute_url()
 
 
 class ProjectUpdateViewsView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
@@ -100,17 +107,22 @@ class ProjectUpdateViewsView(ObjectPermissionMixin, RedirectViewMixin, UpdateVie
     form_class = ProjectUpdateViewsForm
     permission_required = 'projects.change_project_object'
 
+    def dispatch(self, request, *args, **kwargs):
+        if settings.PROJECT_VIEWS_SYNC:
+            raise Http404
+        return super().dispatch(request, *args, **kwargs)
+
     def get_form_kwargs(self):
-        views = View.objects.filter_current_site() \
-                            .filter_catalog(self.object.catalog) \
-                            .filter_group(self.request.user) \
-                            .filter_availability(self.request.user)
+        views = View.objects.filter_available_views_for_project(self.object)
 
         form_kwargs = super().get_form_kwargs()
         form_kwargs.update({
             'views': views
         })
         return form_kwargs
+
+    def get_success_url(self):
+        return self.get_object().get_absolute_url()
 
 
 class ProjectUpdateParentView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
