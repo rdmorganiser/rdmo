@@ -12,12 +12,8 @@ class CurrentSiteQuerySetMixin:
 
 class GroupsQuerySetMixin:
 
-    def filter_group(self, users):
-
-        if not isinstance(users, (list, tuple, models.QuerySet)):
-            users = [users]
-
-        groups = {group for user in users for group in user.groups.all()}
+    def filter_group(self, user):
+        groups = user.groups.all()
         return self.filter(models.Q(groups=None) | models.Q(groups__in=groups))
 
 
