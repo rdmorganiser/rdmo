@@ -24,7 +24,6 @@ class TaskQuestionSet(CurrentSiteQuerySetMixin, GroupsQuerySetMixin, Availabilit
         return self.filter(site_filter & catalogs_filter & groups_filter & availability_filter)
 
 
-
 class TaskManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityManagerMixin, Manager):
 
     def get_queryset(self) -> TaskQuestionSet:

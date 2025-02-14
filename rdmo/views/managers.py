@@ -22,6 +22,7 @@ class ViewQuestionSet(CurrentSiteQuerySetMixin, GroupsQuerySetMixin, Availabilit
         availability_filter = Q(available=True)
         return self.filter(site_filter & catalogs_filter & groups_filter & availability_filter)
 
+
 class ViewManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityManagerMixin, Manager):
 
     def get_queryset(self) -> ViewQuestionSet:
