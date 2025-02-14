@@ -1,4 +1,4 @@
-from django.db import models
+from django.db.models import Manager, Q, QuerySet
 
 from rdmo.core.managers import (
     AvailabilityManagerMixin,
@@ -10,24 +10,26 @@ from rdmo.core.managers import (
 )
 
 
-class ViewQuestionSet(CurrentSiteQuerySetMixin, GroupsQuerySetMixin, AvailabilityQuerySetMixin, models.QuerySet):
+class ViewQuestionSet(CurrentSiteQuerySetMixin, GroupsQuerySetMixin, AvailabilityQuerySetMixin, QuerySet):
 
     def filter_catalog(self, catalog):
-        return self.filter(models.Q(catalogs=None) | models.Q(catalogs=catalog))
+        return self.filter(Q(catalogs=None) | Q(catalogs=catalog))
 
     def filter_available_views_for_project(self, project):
-        return (self
-            .filter(sites=project.site)
-            .filter(catalogs=project.catalog)
-            .filter_group(project.owners)
-            .filter(available=True)
-            .exclude(catalogs=None)
-        )
+        site_filter = Q(sites=project.site)
+        catalogs_filter = Q(catalogs=project.catalog)
+        availability_filter = Q(available=True)
+        if project.groups:
+            groups_filter = Q(groups__in=project.groups)
+        else:
+            groups_filter = Q(groups__isnull=True)
+
+        return self.filter(site_filter & catalogs_filter & availability_filter & groups_filter)
 
 
-class ViewManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityManagerMixin, models.Manager):
+class ViewManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityManagerMixin, Manager):
 
-    def get_queryset(self):
+    def get_queryset(self) -> ViewQuestionSet:
         return ViewQuestionSet(self.model, using=self._db)
 
     def filter_catalog(self, catalog):
