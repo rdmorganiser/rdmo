@@ -21,6 +21,7 @@ def pre_save_project_sync_views_from_catalog(sender, instance, raw, update_field
     # Defer synchronization of views
     instance._catalog_has_changed_sync_views = True
 
+
 @receiver(post_save, sender=Project)
 def post_save_project_sync_views_from_catalog(sender, instance, created, raw, update_fields, **kwargs):
     if raw or (update_fields and 'catalog' not in update_fields):

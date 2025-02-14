@@ -5,16 +5,8 @@ from rdmo.projects.models import Membership, Project
 from rdmo.questions.models import Catalog
 
 
-def m2m_catalogs_changed_projects_sync_signal_handler(action, pk_set, instance, project_field):
-    """
-    Update project relationships for m2m_changed signals.
+def m2m_catalogs_changed_projects_sync_signal_handler(instance, action, pk_set, project_field):
 
-    Args:
-        action (str): The m2m_changed action (post_add, post_remove, post_clear).
-        pk_set (set): The set of primary keys for the related model instances.
-        instance (Model): The instance being updated (e.g., View or Task).
-        project_field (str): The field on Project to update (e.g., 'views', 'tasks').
-    """
     if action == 'post_remove' and pk_set:
         related_instances = Catalog.objects.filter(pk__in=pk_set)
         projects_to_change = Project.objects.filter_catalogs(catalogs=related_instances).filter(
@@ -37,16 +29,8 @@ def m2m_catalogs_changed_projects_sync_signal_handler(action, pk_set, instance, 
             getattr(project, project_field).add(instance)
 
 
-def m2m_sites_changed_projects_sync_signal_handler(action, pk_set, instance, project_field):
-    """
-    Synchronize Project relationships for m2m_changed signals triggered by site updates.
+def m2m_sites_changed_projects_sync_signal_handler(instance, action, pk_set, project_field):
 
-    Args:
-        action (str): The m2m_changed action (post_add, post_remove, post_clear).
-        pk_set (set): The set of primary keys for the related model instances.
-        instance (Model): The instance being updated (e.g., View or Task).
-        project_field (str): The field on Project to update (e.g., 'views', 'tasks').
-    """
     if action == 'post_remove' and pk_set:
         related_sites = Site.objects.filter(pk__in=pk_set)
         catalogs = instance.catalogs.all()
@@ -74,16 +58,8 @@ def m2m_sites_changed_projects_sync_signal_handler(action, pk_set, instance, pro
             getattr(project, project_field).add(instance)
 
 
-def m2m_groups_changed_projects_sync_signal_handler(action, pk_set, instance, project_field):
-    """
-    Synchronize Project relationships for m2m_changed signals triggered by group updates.
+def m2m_groups_changed_projects_sync_signal_handler(instance, action, pk_set, project_field):
 
-    Args:
-        action (str): The m2m_changed action (post_add, post_remove, post_clear).
-        pk_set (set): The set of primary keys for the related model instances.
-        instance (Model): The instance being updated (e.g., View or Task).
-        project_field (str): The field on Project to update (e.g., 'views', 'tasks').
-    """
     if action == 'post_remove' and pk_set:
         related_groups = Group.objects.filter(pk__in=pk_set)
         users = User.objects.filter(groups__in=related_groups)
