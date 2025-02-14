@@ -123,6 +123,14 @@ class Project(MPTTModel, Model):
     def guests(self):
         return self.get_members('guest')
 
+    @cached_property
+    def groups_str(self):
+        return ', '.join(str(i) for i in self.groups if i is not None)
+
+    @property
+    def groups(self):
+        return {group for user in self.get_members('owner') for group in user.groups.all()}
+
     @property
     def file_size(self):
         queryset = self.values.filter(snapshot=None).exclude(models.Q(file='') | models.Q(file=None))

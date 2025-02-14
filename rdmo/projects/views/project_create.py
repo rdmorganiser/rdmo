@@ -1,5 +1,6 @@
 import logging
 
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse_lazy
@@ -44,25 +45,21 @@ class ProjectCreateView(ObjectPermissionMixin, LoginRequiredMixin,
         # save the project
         response = super().form_valid(form)
 
-        # add all tasks to project
-        tasks = Task.objects.filter_current_site() \
-                            .filter_catalog(self.object.catalog) \
-                            .filter_group(self.request.user) \
-                            .filter_availability(self.request.user)
-        for task in tasks:
-            form.instance.tasks.add(task)
-
-        # add all views to project
-        views = View.objects.filter_current_site() \
-                            .filter_catalog(self.object.catalog) \
-                            .filter_group(self.request.user) \
-                            .filter_availability(self.request.user)
-        for view in views:
-            form.instance.views.add(view)
-
         # add current user as owner
         membership = Membership(project=form.instance, user=self.request.user, role='owner')
         membership.save()
+
+        # add all tasks to project
+        if not settings.PROJECT_TASKS_SYNC:
+            tasks = Task.objects.filter_available_tasks_for_project(form.instance)
+            for task in tasks:
+                form.instance.tasks.add(task)
+
+        # add all views to project
+        if not settings.PROJECT_VIEWS_SYNC:
+            views = View.objects.filter_available_views_for_project(form.instance)
+            for view in views:
+                form.instance.views.add(view)
 
         return response
 

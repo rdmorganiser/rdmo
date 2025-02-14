@@ -371,26 +371,24 @@ class ProjectViewSet(ModelViewSet):
     def perform_create(self, serializer):
         project = serializer.save(site=get_current_site(self.request))
 
-        # add all tasks to project
-        tasks = Task.objects.filter_current_site() \
-                            .filter_catalog(project.catalog) \
-                            .filter_group(self.request.user) \
-                            .filter_availability(self.request.user)
-        for task in tasks:
-            project.tasks.add(task)
-
-        if self.request.data.get('views') is None:
-            # add all views to project
-            views = View.objects.filter_current_site() \
-                                .filter_catalog(project.catalog) \
-                                .filter_group(self.request.user) \
-                                .filter_availability(self.request.user)
-            for view in views:
-                project.views.add(view)
-
         # add current user as owner
         membership = Membership(project=project, user=self.request.user, role='owner')
         membership.save()
+
+
+        # add all tasks to project
+        if self.request.data.get('tasks') is None:
+            if not settings.PROJECT_TASKS_SYNC:
+                tasks = Task.objects.filter_available_tasks_for_project(project)
+                for task in tasks:
+                    project.tasks.add(task)
+
+        if self.request.data.get('views') is None:
+            # add all views to project
+            if not settings.PROJECT_VIEWS_SYNC:
+                views = View.objects.filter_available_views_for_project(project)
+                for view in views:
+                    project.views.add(view)
 
 
 class ProjectNestedViewSetMixin(NestedViewSetMixin):
