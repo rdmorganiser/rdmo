@@ -4,10 +4,11 @@ from django.dispatch import receiver
 from rdmo.projects.models import Project
 from rdmo.views.models import View
 
-DEFERRED_SYNC_VIEWS_KEY = '_deferred_sync_views'
 
 @receiver(pre_save, sender=Project)
 def pre_save_project_sync_views_from_catalog(sender, instance, raw, update_fields, **kwargs):
+    instance._catalog_has_changed_sync_views = False
+
     if raw or (update_fields and 'catalog' not in update_fields):
         return
 
@@ -18,13 +19,12 @@ def pre_save_project_sync_views_from_catalog(sender, instance, raw, update_field
             return
 
     # Defer synchronization of views
-    setattr(instance, DEFERRED_SYNC_VIEWS_KEY, True)
+    instance._catalog_has_changed_sync_views = True
 
 @receiver(post_save, sender=Project)
 def post_save_project_sync_views_from_catalog(sender, instance, created, raw, update_fields, **kwargs):
     if raw or (update_fields and 'catalog' not in update_fields):
         return
 
-    if hasattr(instance, DEFERRED_SYNC_VIEWS_KEY):
+    if instance._catalog_has_changed_sync_views or (created and not instance.views.exists):
         instance.views.set(View.objects.filter_available_views_for_project(instance).values_list('id', flat=True))
-        delattr(instance, DEFERRED_SYNC_VIEWS_KEY)

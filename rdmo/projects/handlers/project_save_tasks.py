@@ -4,10 +4,11 @@ from django.dispatch import receiver
 from rdmo.projects.models import Project
 from rdmo.tasks.models import Task
 
-DEFERRED_SYNC_TASKS_KEY = '_deferred_sync_tasks'
 
 @receiver(pre_save, sender=Project)
 def pre_save_project_sync_tasks_from_catalog(sender, instance, raw, update_fields, **kwargs):
+    instance._catalog_has_changed_sync_tasks = False
+
     if raw or (update_fields and 'catalog' not in update_fields):
         return
 
@@ -18,7 +19,7 @@ def pre_save_project_sync_tasks_from_catalog(sender, instance, raw, update_field
             return
 
     # Defer synchronization of views
-    setattr(instance, DEFERRED_SYNC_TASKS_KEY, True)
+    instance._catalog_has_changed_sync_tasks = True
 
 
 @receiver(post_save, sender=Project)
@@ -26,6 +27,5 @@ def post_save_project_sync_tasks_from_catalog(sender, instance, created, raw, up
     if raw or (update_fields and 'catalog' not in update_fields):
         return
 
-    if hasattr(instance, DEFERRED_SYNC_TASKS_KEY):
+    if instance._catalog_has_changed_sync_tasks or (created and not instance.tasks.exists) :
         instance.tasks.set(Task.objects.filter_available_tasks_for_project(instance).values_list('id', flat=True))
-        delattr(instance, DEFERRED_SYNC_TASKS_KEY)
