@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import get from 'lodash/get'
 
 import { filterElement } from '../../utils/filter'
-import { buildPath } from '../../utils/location'
+import { buildApiPath, buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
@@ -15,13 +15,13 @@ const Question = ({ config, question, elementActions, display='list', indent=0,
 
   const showElement = filterElement(config, filter, false, filterEditors, question)
 
-  const editUrl = buildPath(config.baseUrl, 'questions', question.id)
-  const copyUrl = buildPath(config.baseUrl, 'questions', question.id, 'copy')
-  const exportUrl = buildPath(config.apiUrl, 'questions', 'questions', question.id, 'export')
-  const attributeUrl = buildPath(config.apiUrl, 'domain', 'attributes', question.attribute)
+  const editUrl = buildPath('questions', question.id)
+  const copyUrl = buildPath('questions', question.id, 'copy')
+  const exportUrl = buildApiPath('questions', 'questions', question.id, 'export')
+  const attributeUrl = buildPath('attributes', question.attribute)
 
-  const getConditionUrl = (index) => buildPath(config.apiUrl, 'conditions', 'conditions', question.conditions[index])
-  const getOptionSetUrl = (index) => buildPath(config.apiUrl, 'options', 'optionsets', question.optionsets[index])
+  const getConditionUrl = (index) => buildPath('conditions', question.conditions[index])
+  const getOptionSetUrl = (index) => buildPath('optionsets', question.optionsets[index])
 
   const fetchEdit = () => elementActions.fetchElement('questions', question.id)
   const fetchCopy = () => elementActions.fetchElement('questions', question.id, 'copy')

@@ -1,74 +1,85 @@
-import { applyMiddleware, createStore } from 'redux'
-import Cookies from 'js-cookie'
-import thunk from 'redux-thunk'
+import { applyMiddleware, createStore, combineReducers } from 'redux'
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 
+import { siteId } from 'rdmo/core/assets/js/utils/meta'
+import { checkStoreId, configureMiddleware } from 'rdmo/core/assets/js/utils/store'
+
+import { getConfigFromLocalStorage } from 'rdmo/core/assets/js/utils/config'
+
+import CoreApi from 'rdmo/core/assets/js/api/CoreApi'
+
+import ManagementApi from '../api/ManagementApi'
+import ConditionsApi from '../api/ConditionsApi'
+import OptionsApi from '../api/OptionsApi'
+import QuestionsApi from '../api/QuestionsApi'
+
+import configReducer from 'rdmo/core/assets/js/reducers/configReducer'
+import pendingReducer from 'rdmo/core/assets/js/reducers/pendingReducer'
+
 import { parseLocation } from '../utils/location'
 
-import rootReducer from '../reducers/rootReducer'
+import elementsReducer from '../reducers/elementsReducer'
+import importsReducer from '../reducers/importsReducer'
 
-import * as configActions from '../actions/configActions'
+import * as configActions from 'rdmo/core/assets/js/actions/configActions'
+
 import * as elementActions from '../actions/elementActions'
 
 export default function configureStore() {
-  const middlewares = [thunk]
-
   // empty localStorage in new session
-  const currentStoreId = Cookies.get('storeid')
-  const localStoreId = localStorage.getItem('rdmo.storeid')
+  checkStoreId()
 
-  if (isEmpty(localStoreId) || localStoreId !== currentStoreId) {
-    localStorage.clear()
-    localStorage.setItem('rdmo.storeid', currentStoreId)
-  }
+  const rootReducer = combineReducers({
+    config: configReducer,
+    elements: elementsReducer,
+    imports: importsReducer,
+    pending: pendingReducer
+  })
 
-  if (process.env.NODE_ENV === 'development') {
-    const { logger } = require('redux-logger')
-    middlewares.push(logger)
+  const initialState = {
+    config: {
+      prefix: 'rdmo.management.config'
+    }
   }
 
   const store = createStore(
     rootReducer,
-    applyMiddleware(...middlewares)
+    initialState,
+    applyMiddleware(...configureMiddleware())
   )
 
   // load: fetch some of the data which does not change
-  const fetchConfig = () => store.dispatch(configActions.fetchConfig())
-
-  // load: restore the config from the local storage
-  const updateConfigFromLocalStorage = () => {
-    const ls = {...localStorage}
-    Object.entries(ls).forEach(([lsPath, lsValue]) => {
-      if (lsPath.startsWith('rdmo.management.config.')) {
-        const path = lsPath.replace('rdmo.management.config.', '')
-        let value
-        switch(lsValue) {
-          case 'true':
-            value = true
-            break
-          case 'false':
-            value = false
-            break
-          default:
-            value = lsValue
-        }
-        store.dispatch(configActions.updateConfig(path, value))
+  const fetchConfig = () => {
+    return Promise.all([
+      ConditionsApi.fetchRelations(),
+      CoreApi.fetchGroups(),
+      CoreApi.fetchSettings(),
+      CoreApi.fetchSites(),
+      ManagementApi.fetchMeta(),
+      OptionsApi.fetchAdditionalInputs(),
+      OptionsApi.fetchProviders(),
+      QuestionsApi.fetchValueTypes(),
+      QuestionsApi.fetchWidgetTypes()
+    ]).then(([
+      relations, groups, settings, sites, meta,
+      additionalInputs, providers, valueTypes, widgetTypes]) => {
+        store.dispatch(configActions.updateConfig('relations', relations, false))
+        store.dispatch(configActions.updateConfig('groups', groups, false))
+        store.dispatch(configActions.updateConfig('settings', settings, false))
+        store.dispatch(configActions.updateConfig('sites', sites, false))
+        store.dispatch(configActions.updateConfig('meta', meta, false))
+        store.dispatch(configActions.updateConfig('additionalInputs', additionalInputs, false))
+        store.dispatch(configActions.updateConfig('providers', providers, false))
+        store.dispatch(configActions.updateConfig('valueTypes', valueTypes, false))
+        store.dispatch(configActions.updateConfig('widgetTypes', widgetTypes, false))
       }
-    })
+    )
   }
 
-  let currentSiteId
   // load, popstate: fetch elements depending on the location
   const fetchElementsFromLocation = () => {
-    const baseUrl = store.getState().config.baseUrl
-    currentSiteId = store.getState().config.currentSite?.id.toString() || ''
-    const pathname = window.location.pathname
-    let { elementType, elementId, elementAction } = parseLocation(baseUrl, pathname)
-
-    if (isNil(elementType)) {
-      elementType = 'catalogs'
-    }
+    const { elementType, elementId, elementAction } = parseLocation()
     if (isNil(elementId)) {
       if (isNil(elementAction)) {
         return store.dispatch(elementActions.fetchElements(elementType))
@@ -82,14 +93,15 @@ export default function configureStore() {
 
   // this event is triggered when the page first loads
   window.addEventListener('load', () => {
-    updateConfigFromLocalStorage()
-    fetchConfig().then(() => {
-      fetchElementsFromLocation()
-      if (!isEmpty(currentSiteId) && isEmpty(store.getState().config.filter) && store.getState().config.settings.multisite) {
-        store.dispatch(configActions.updateConfig('filter.sites', currentSiteId))
-      }
+    getConfigFromLocalStorage(initialState.config.prefix).forEach(([path, value]) => {
+      store.dispatch(configActions.updateConfig(path, value, false))
     })
 
+    fetchConfig().then(() => fetchElementsFromLocation()).then(() => {
+      if (!isEmpty(siteId) && isEmpty(store.getState().config.filter) && store.getState().config.settings.multisite) {
+        store.dispatch(configActions.updateConfig('filter.sites', siteId))
+      }
+    })
   })
 
   // this event is triggered when when the forward/back buttons are used

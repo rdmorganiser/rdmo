@@ -1,8 +1,7 @@
 import { applyMiddleware, createStore, combineReducers } from 'redux'
-import thunk from 'redux-thunk'
 
-// import { checkStoreId } from 'rdmo/core/assets/js/utils/store'
 import { getConfigFromLocalStorage } from 'rdmo/core/assets/js/utils/config'
+import { checkStoreId, configureMiddleware } from 'rdmo/core/assets/js/utils/store'
 
 import configReducer from 'rdmo/core/assets/js/reducers/configReducer'
 import pendingReducer from 'rdmo/core/assets/js/reducers/pendingReducer'
@@ -26,14 +25,7 @@ import { parseLocation } from '../utils/location'
 
 export default function configureStore() {
   // empty localStorage in new session
-  // checkStoreId()
-
-  const middlewares = [thunk]
-
-  if (process.env.NODE_ENV === 'development') {
-    const { logger } = require('redux-logger')
-    middlewares.push(logger)
-  }
+  checkStoreId()
 
   const rootReducer = combineReducers({
     config: configReducer,
@@ -48,14 +40,14 @@ export default function configureStore() {
 
   const initialState = {
     config: {
-      prefix: 'rdmo.interview'
+      prefix: 'rdmo.interview.config'
     }
   }
 
   const store = createStore(
     rootReducer,
     initialState,
-    applyMiddleware(...middlewares)
+    applyMiddleware(...configureMiddleware())
   )
 
   const fetchPageFromLocation = () => {
@@ -65,8 +57,8 @@ export default function configureStore() {
 
   // this event is triggered when the page first loads
   window.addEventListener('load', () => {
-    getConfigFromLocalStorage('rdmo.interview').forEach(([path, value]) => {
-      store.dispatch(configActions.updateConfig(path, value))
+    getConfigFromLocalStorage(initialState.config.prefix).forEach(([path, value]) => {
+      store.dispatch(configActions.updateConfig(path, value, false))
     })
 
     Promise.all([

@@ -1,11 +1,13 @@
 @import 'rdmo/core/assets/scss/variables';
 
 .interview-breadcrumb {
-    margin-top: 20px;
-    margin-bottom: 12px;
+    &.breadcrumb {
+        margin-top: 20px;
+        margin-bottom: 12px;
 
-    background-color: transparent;
-    border: 1px solid #ccc;
+        background-color: transparent;
+        border: 1px solid #ccc;
+    }
 }
 
 .interview-navigation {
@@ -219,8 +221,7 @@
             opacity: 0.8;
             line-height: 20px;
             font-size: 14px;
-            padding-left: 0;
-            padding-right: 0;
+            padding: 6px 0;
         }
 
         .btn.btn-link:hover {
@@ -265,7 +266,7 @@
 
     .radio,
     .checkbox {
-        margin: 0;
+        margin: 0 !important;
 
         label {
             margin-right: 10px;

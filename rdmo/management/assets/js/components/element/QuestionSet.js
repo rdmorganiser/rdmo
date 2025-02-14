@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import get from 'lodash/get'
 
 import { filterElement } from '../../utils/filter'
-import { buildPath } from '../../utils/location'
+import { buildApiPath, buildPath } from '../../utils/location'
 
 import Question from './Question'
 import { ElementErrors } from '../common/Errors'
@@ -18,19 +18,19 @@ const QuestionSet = ({ config, questionset, configActions, elementActions, displ
   const showElement = filterElement(config, filter, false, filterEditors, questionset)
   const showElements = get(config, `display.elements.questionsets.${questionset.id}`, true)
 
-  const editUrl = buildPath(config.baseUrl, 'questionsets', questionset.id)
-  const copyUrl = buildPath(config.baseUrl, 'questionsets', questionset.id, 'copy')
-  const nestedUrl = buildPath(config.baseUrl, 'questionsets', questionset.id, 'nested')
-  const exportUrl = buildPath(config.apiUrl, 'questions', 'questionsets', questionset.id, 'export')
-  const attributeUrl = buildPath(config.apiUrl, 'domain', 'attributes', questionset.attribute)
+  const editUrl = buildPath('questionsets', questionset.id)
+  const copyUrl = buildPath('questionsets', questionset.id, 'copy')
+  const nestedUrl = buildPath('questionsets', questionset.id, 'nested')
+  const exportUrl = buildApiPath('questions', 'questionsets', questionset.id, 'export')
+  const attributeUrl = buildPath('attributes', questionset.attribute)
 
-  const getConditionUrl = (index) => buildPath(config.apiUrl, 'conditions', 'conditions', questionset.conditions[index])
+  const getConditionUrl = (index) => buildPath('conditions', questionset.conditions[index])
 
   const fetchEdit = () => elementActions.fetchElement('questionsets', questionset.id)
   const fetchCopy = () => elementActions.fetchElement('questionsets', questionset.id, 'copy')
   const fetchNested = () => elementActions.fetchElement('questionsets', questionset.id, 'nested')
   const toggleLocked = () => elementActions.storeElement('questionsets', {...questionset, locked: !questionset.locked })
-  const toggleElements = () => configActions.toggleElements(questionset)
+  const toggleElements = () => elementActions.toggleElements(questionset)
 
   const createQuestionSet = () => elementActions.createElement('questionsets', { questionset })
   const createQuestion = () => elementActions.createElement('questions', { questionset })

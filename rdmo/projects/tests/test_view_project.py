@@ -767,26 +767,10 @@ def test_project_view_export(db, client, username, password, project_id, export_
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
-def test_project_questions(db, client, username, password, project_id):
-    client.login(username=username, password=password)
-
-    url = reverse('project_questions', args=[project_id])
-    response = client.get(url)
-
-    if project_id in view_project_permission_map.get(username, []):
-        assert response.status_code == 200
-    elif password:
-        assert response.status_code == 403
-    else:
-        assert response.status_code == 302
-
-
-@pytest.mark.parametrize('username,password', users)
-@pytest.mark.parametrize('project_id', projects)
 def test_project_error(db, client, username, password, project_id):
     client.login(username=username, password=password)
 
-    url = reverse('project_questions', args=[project_id])
+    url = reverse('project_error', args=[project_id])
     response = client.get(url)
 
     if project_id in view_project_permission_map.get(username, []):

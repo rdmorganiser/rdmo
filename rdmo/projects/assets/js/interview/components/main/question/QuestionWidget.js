@@ -24,9 +24,8 @@ const QuestionWidget = (props) => {
     case 'range':
       return <RangeWidget {...props} />
     case 'select':
-    case 'autocomplete':
       return <SelectWidget {...props} />
-    case 'freeautocomplete':
+    case 'select_creatable':
       return <SelectWidget {...props} creatable={true} />
     case 'text':
       return <TextWidget {...props} />

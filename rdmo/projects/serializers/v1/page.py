@@ -8,7 +8,6 @@ from rdmo.core.utils import markdown2html
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option, OptionSet
 from rdmo.questions.models import Page, Question, QuestionSet
-from rdmo.questions.utils import get_widget_class
 
 
 class AttributeSerializer(serializers.ModelSerializer):
@@ -76,7 +75,6 @@ class QuestionSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, s
     optionsets = serializers.SerializerMethodField()
 
     verbose_name = serializers.SerializerMethodField()
-    widget_class = serializers.SerializerMethodField()
 
     attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
 
@@ -93,7 +91,6 @@ class QuestionSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, s
             'default_external_id',
             'verbose_name',
             'widget_type',
-            'widget_class',
             'value_type',
             'unit',
             'width',
@@ -115,9 +112,6 @@ class QuestionSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, s
 
     def get_verbose_name(self, obj):
         return obj.verbose_name or _('entry')
-
-    def get_widget_class(self, obj):
-        return get_widget_class(obj.widget_type)
 
 
 class QuestionSetSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, serializers.ModelSerializer):

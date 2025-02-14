@@ -16,7 +16,6 @@ from django.views.generic.edit import FormMixin
 from rdmo.core.plugins import get_plugin, get_plugins
 from rdmo.core.views import CSRFViewMixin, ObjectPermissionMixin, RedirectViewMixin, StoreIdViewMixin
 from rdmo.questions.models import Catalog
-from rdmo.questions.utils import get_widgets
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
@@ -185,24 +184,6 @@ class ProjectExportView(ObjectPermissionMixin, DetailView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         return self.get_export_plugin().submit()
-
-
-class ProjectQuestionsView(ObjectPermissionMixin, DetailView):
-    model = Project
-    queryset = Project.objects.all()
-    permission_required = 'projects.view_project_object'
-    template_name = 'projects/project_questions.html'
-
-    @method_decorator(ensure_csrf_cookie)
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-
-        if self.object.catalog is None:
-            return redirect('project_error', pk=self.object.pk)
-        else:
-            context = self.get_context_data(object=self.object)
-            context['widgets'] = {widget.template_name for widget in get_widgets() if widget.template_name}
-            return self.render_to_response(context)
 
 
 class ProjectInterviewView(ObjectPermissionMixin, DetailView):

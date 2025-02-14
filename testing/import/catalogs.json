@@ -324,14 +324,14 @@
     "conditions": null
   },
   {
-    "uri": "http://example.com/terms/questions/catalog/individual/autocomplete/autocomplete",
+    "uri": "http://example.com/terms/questions/catalog/individual/select_creatable/select_creatable",
     "type": "questions",
     "model": "questions.question",
     "uri_prefix": "http://example.com/terms",
-    "uri_path": "catalog/individual/autocomplete/autocomplete",
+    "uri_path": "catalog/individual/select_creatable/select_creatable",
     "comment": null,
     "attribute": {
-      "uri": "http://example.com/terms/domain/individual/single/autocomplete",
+      "uri": "http://example.com/terms/domain/individual/single/select_creatable",
       "type": "attributes"
     },
     "is_collection": "False",
@@ -350,7 +350,7 @@
       "uri": "http://example.com/terms/options/one_two_three/one"
     },
     "default_external_id": null,
-    "widget_type": "autocomplete",
+    "widget_type": "select_creatable",
     "value_type": "text",
     "maximum": null,
     "minimum": null,
@@ -366,11 +366,11 @@
     "conditions": null
   },
   {
-    "uri": "http://example.com/terms/questions/catalog/individual/autocomplete",
+    "uri": "http://example.com/terms/questions/catalog/individual/select_creatable",
     "type": "pages",
     "model": "questions.page",
     "uri_prefix": "http://example.com/terms",
-    "uri_path": "catalog/individual/autocomplete",
+    "uri_path": "catalog/individual/select_creatable",
     "comment": null,
     "attribute": null,
     "is_collection": "False",
@@ -385,7 +385,7 @@
     "questionsets": null,
     "questions": [
       {
-        "uri": "http://example.com/terms/questions/catalog/individual/autocomplete/autocomplete",
+        "uri": "http://example.com/terms/questions/catalog/individual/select_creatable/select_creatable",
         "type": "questions",
         "order": "0"
       }
@@ -614,7 +614,7 @@
         "order": "15"
       },
       {
-        "uri": "http://example.com/terms/questions/catalog/individual/autocomplete",
+        "uri": "http://example.com/terms/questions/catalog/individual/select_creatable",
         "type": "pages",
         "order": "16"
       },
@@ -956,14 +956,14 @@
     "conditions": null
   },
   {
-    "uri": "http://example.com/terms/questions/catalog/collections/autocomplete/autocomplete",
+    "uri": "http://example.com/terms/questions/catalog/collections/select_creatable/select_creatable",
     "type": "questions",
     "model": "questions.question",
     "uri_prefix": "http://example.com/terms",
-    "uri_path": "catalog/collections/autocomplete/autocomplete",
+    "uri_path": "catalog/collections/select_creatable/select_creatable",
     "comment": null,
     "attribute": {
-      "uri": "http://example.com/terms/domain/individual/collection/autocomplete",
+      "uri": "http://example.com/terms/domain/individual/collection/select_creatable",
       "type": "attributes"
     },
     "is_collection": "True",
@@ -980,7 +980,7 @@
     "verbose_name_plural_de": null,
     "default_option": null,
     "default_external_id": null,
-    "widget_type": "autocomplete",
+    "widget_type": "select_creatable",
     "value_type": "text",
     "maximum": null,
     "minimum": null,
@@ -996,11 +996,11 @@
     "conditions": null
   },
   {
-    "uri": "http://example.com/terms/questions/catalog/collections/autocomplete",
+    "uri": "http://example.com/terms/questions/catalog/collections/select_creatable",
     "type": "pages",
     "model": "questions.page",
     "uri_prefix": "http://example.com/terms",
-    "uri_path": "catalog/collections/autocomplete",
+    "uri_path": "catalog/collections/select_creatable",
     "comment": null,
     "attribute": null,
     "is_collection": "False",
@@ -1015,7 +1015,7 @@
     "questionsets": null,
     "questions": [
       {
-        "uri": "http://example.com/terms/questions/catalog/collections/autocomplete/autocomplete",
+        "uri": "http://example.com/terms/questions/catalog/collections/select_creatable/select_creatable",
         "type": "questions",
         "order": "0"
       }
@@ -1311,7 +1311,7 @@
         "order": "25"
       },
       {
-        "uri": "http://example.com/terms/questions/catalog/collections/autocomplete",
+        "uri": "http://example.com/terms/questions/catalog/collections/select_creatable",
         "type": "pages",
         "order": "26"
       },
@@ -1523,14 +1523,14 @@
     "conditions": null
   },
   {
-    "uri": "http://example.com/terms/questions/catalog/set/individual-single/autocomplete",
+    "uri": "http://example.com/terms/questions/catalog/set/individual-single/select_creatable",
     "type": "questions",
     "model": "questions.question",
     "uri_prefix": "http://example.com/terms",
-    "uri_path": "catalog/set/individual-single/autocomplete",
+    "uri_path": "catalog/set/individual-single/select_creatable",
     "comment": null,
     "attribute": {
-      "uri": "http://example.com/terms/domain/individual/single/autocomplete",
+      "uri": "http://example.com/terms/domain/individual/single/select_creatable",
       "type": "attributes"
     },
     "is_collection": "False",
@@ -1547,7 +1547,7 @@
     "verbose_name_plural_de": null,
     "default_option": null,
     "default_external_id": null,
-    "widget_type": "autocomplete",
+    "widget_type": "select_creatable",
     "value_type": "option",
     "maximum": null,
     "minimum": null,
@@ -1712,7 +1712,7 @@
         "order": "5"
       },
       {
-        "uri": "http://example.com/terms/questions/catalog/set/individual-single/autocomplete",
+        "uri": "http://example.com/terms/questions/catalog/set/individual-single/select_creatable",
         "type": "questions",
         "order": "6"
       },
@@ -1920,14 +1920,14 @@
     "conditions": null
   },
   {
-    "uri": "http://example.com/terms/questions/catalog/set/individual-collection/autocomplete",
+    "uri": "http://example.com/terms/questions/catalog/set/individual-collection/select_creatable",
     "type": "questions",
     "model": "questions.question",
     "uri_prefix": "http://example.com/terms",
-    "uri_path": "catalog/set/individual-collection/autocomplete",
+    "uri_path": "catalog/set/individual-collection/select_creatable",
     "comment": null,
     "attribute": {
-      "uri": "http://example.com/terms/domain/individual/collection/autocomplete",
+      "uri": "http://example.com/terms/domain/individual/collection/select_creatable",
       "type": "attributes"
     },
     "is_collection": "True",
@@ -1944,7 +1944,7 @@
     "verbose_name_plural_de": null,
     "default_option": null,
     "default_external_id": null,
-    "widget_type": "autocomplete",
+    "widget_type": "select_creatable",
     "value_type": "option",
     "maximum": null,
     "minimum": null,
@@ -2149,7 +2149,7 @@
         "order": "5"
       },
       {
-        "uri": "http://example.com/terms/questions/catalog/set/individual-collection/autocomplete",
+        "uri": "http://example.com/terms/questions/catalog/set/individual-collection/select_creatable",
         "type": "questions",
         "order": "6"
       },
@@ -2362,14 +2362,14 @@
     "conditions": null
   },
   {
-    "uri": "http://example.com/terms/questions/catalog/set/collection-single/autocomplete",
+    "uri": "http://example.com/terms/questions/catalog/set/collection-single/select_creatable",
     "type": "questions",
     "model": "questions.question",
     "uri_prefix": "http://example.com/terms",
-    "uri_path": "catalog/set/collection-single/autocomplete",
+    "uri_path": "catalog/set/collection-single/select_creatable",
     "comment": null,
     "attribute": {
-      "uri": "http://example.com/terms/domain/set/single/autocomplete",
+      "uri": "http://example.com/terms/domain/set/single/select_creatable",
       "type": "attributes"
     },
     "is_collection": "False",
@@ -2386,7 +2386,7 @@
     "verbose_name_plural_de": null,
     "default_option": null,
     "default_external_id": null,
-    "widget_type": "autocomplete",
+    "widget_type": "select_creatable",
     "value_type": "option",
     "maximum": null,
     "minimum": null,
@@ -2554,7 +2554,7 @@
         "order": "5"
       },
       {
-        "uri": "http://example.com/terms/questions/catalog/set/collection-single/autocomplete",
+        "uri": "http://example.com/terms/questions/catalog/set/collection-single/select_creatable",
         "type": "questions",
         "order": "6"
       },
@@ -2762,14 +2762,14 @@
     "conditions": null
   },
   {
-    "uri": "http://example.com/terms/questions/catalog/set/collection-collection/autocomplete",
+    "uri": "http://example.com/terms/questions/catalog/set/collection-collection/select_creatable",
     "type": "questions",
     "model": "questions.question",
     "uri_prefix": "http://example.com/terms",
-    "uri_path": "catalog/set/collection-collection/autocomplete",
+    "uri_path": "catalog/set/collection-collection/select_creatable",
     "comment": null,
     "attribute": {
-      "uri": "http://example.com/terms/domain/set/collection/autocomplete",
+      "uri": "http://example.com/terms/domain/set/collection/select_creatable",
       "type": "attributes"
     },
     "is_collection": "True",
@@ -2786,7 +2786,7 @@
     "verbose_name_plural_de": null,
     "default_option": null,
     "default_external_id": null,
-    "widget_type": "autocomplete",
+    "widget_type": "select_creatable",
     "value_type": "option",
     "maximum": null,
     "minimum": null,
@@ -2999,7 +2999,7 @@
         "order": "5"
       },
       {
-        "uri": "http://example.com/terms/questions/catalog/set/collection-collection/autocomplete",
+        "uri": "http://example.com/terms/questions/catalog/set/collection-collection/select_creatable",
         "type": "questions",
         "order": "6"
       },
@@ -4796,31 +4796,31 @@
     "conditions": null
   },
   {
-    "uri": "http://example.com/terms/questions/catalog/options/autocomplete/select",
+    "uri": "http://example.com/terms/questions/catalog/options/select_creatable/select",
     "type": "questions",
     "model": "questions.question",
     "uri_prefix": "http://example.com/terms",
-    "uri_path": "catalog/options/autocomplete/select",
+    "uri_path": "catalog/options/select_creatable/select",
     "comment": null,
     "attribute": {
-      "uri": "http://example.com/terms/domain/options/plugin/autocomplete",
+      "uri": "http://example.com/terms/domain/options/plugin/select_creatable",
       "type": "attributes"
     },
     "is_collection": "False",
     "is_optional": "False",
     "help_en": null,
-    "text_en": "autocomplete?",
+    "text_en": "select_creatable?",
     "default_text_en": null,
     "verbose_name_en": null,
     "verbose_name_plural_en": null,
     "help_de": null,
-    "text_de": "autocomplete?",
+    "text_de": "select_creatable?",
     "default_text_de": null,
     "verbose_name_de": null,
     "verbose_name_plural_de": null,
     "default_option": null,
     "default_external_id": "simple_1",
-    "widget_type": "autocomplete",
+    "widget_type": "select_creatable",
     "value_type": "text",
     "maximum": null,
     "minimum": null,
@@ -4836,11 +4836,11 @@
     "conditions": null
   },
   {
-    "uri": "http://example.com/terms/questions/catalog/options/autocomplete",
+    "uri": "http://example.com/terms/questions/catalog/options/select_creatable",
     "type": "pages",
     "model": "questions.page",
     "uri_prefix": "http://example.com/terms",
-    "uri_path": "catalog/options/autocomplete",
+    "uri_path": "catalog/options/select_creatable",
     "comment": null,
     "attribute": null,
     "is_collection": "False",
@@ -4855,7 +4855,7 @@
     "questionsets": null,
     "questions": [
       {
-        "uri": "http://example.com/terms/questions/catalog/options/autocomplete/select",
+        "uri": "http://example.com/terms/questions/catalog/options/select_creatable/select",
         "type": "questions",
         "order": "0"
       }
@@ -5026,7 +5026,7 @@
         "order": "3"
       },
       {
-        "uri": "http://example.com/terms/questions/catalog/options/autocomplete",
+        "uri": "http://example.com/terms/questions/catalog/options/select_creatable",
         "type": "pages",
         "order": "4"
       },
@@ -5069,7 +5069,7 @@
       "uri": "http://example.com/terms/options/one_two_three/three"
     },
     "default_external_id": null,
-    "widget_type": "autocomplete",
+    "widget_type": "select_creatable",
     "value_type": "text",
     "maximum": null,
     "minimum": null,

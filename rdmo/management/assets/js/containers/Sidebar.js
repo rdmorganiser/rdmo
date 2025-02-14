@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import isEmpty from 'lodash/isEmpty'
+import { isEmpty, isNil } from 'lodash'
 
 import * as elementActions from '../actions/elementActions'
 import * as importActions from '../actions/importActions'
@@ -11,6 +11,11 @@ import ElementsSidebar from '../components/sidebar/ElementsSidebar'
 import ImportSidebar from '../components/sidebar/ImportSidebar'
 
 const Sidebar = ({ config, elements, imports, elementActions, importActions }) => {
+  // check if anything was loaded yet
+  if (isNil(config.settings)) {
+    return null
+  }
+
   if (isEmpty(imports.elements)) {
     return <ElementsSidebar config={config} elements={elements}
                             elementActions={elementActions} importActions={importActions} />

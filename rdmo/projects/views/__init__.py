@@ -11,7 +11,6 @@ from .project import (
     ProjectInterviewView,
     ProjectJoinView,
     ProjectLeaveView,
-    ProjectQuestionsView,
     ProjectsView,
 )
 from .project_answers import ProjectAnswersExportView, ProjectAnswersView

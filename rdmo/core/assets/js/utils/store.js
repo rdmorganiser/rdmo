@@ -1,7 +1,19 @@
+import thunk from 'redux-thunk'
 import Cookies from 'js-cookie'
 import isEmpty from 'lodash/isEmpty'
 
-const checkStoreId = () => {
+export const configureMiddleware = () => {
+  const middlewares = [thunk]
+
+  if (process.env.NODE_ENV === 'development') {
+    const { logger } = require('redux-logger')
+    middlewares.push(logger)
+  }
+
+  return middlewares
+}
+
+export const checkStoreId = () => {
   const currentStoreId = Cookies.get('storeid')
   const localStoreId = localStorage.getItem('rdmo.storeid')
 
@@ -10,5 +22,3 @@ const checkStoreId = () => {
     localStorage.setItem('rdmo.storeid', currentStoreId)
   }
 }
-
-export { checkStoreId }

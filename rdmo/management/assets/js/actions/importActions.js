@@ -2,19 +2,24 @@ import isNil from 'lodash/isNil'
 
 import ManagementApi from '../api/ManagementApi'
 
+import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
+
 import { fetchElements, fetchElement } from './elementActions'
+
 
 // upload file
 
 export function uploadFile(file) {
+  const pendingId = 'uploadFile'
+
   return function(dispatch) {
+    dispatch(addToPending(pendingId))
     dispatch(uploadFileInit(file))
 
     return ManagementApi.uploadFile(file)
       .then(elements => dispatch(uploadFileSuccess(elements)))
-      .catch(error => {
-        dispatch(uploadFileError(error))
-      })
+      .catch(error => dispatch(uploadFileError(error)))
+      .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
 
@@ -33,14 +38,18 @@ export function uploadFileError(error) {
 // import elements
 
 export function importElements() {
+  const pendingId = 'uploadFile'
+
   return function(dispatch, getState) {
     const elements = getState().imports.elements.filter(element => element.import)
 
+    dispatch(addToPending(pendingId))
     dispatch(importElementsInit())
 
     return ManagementApi.importElements(elements)
       .then(elements => dispatch(importElementsSuccess(elements)))
       .catch(error => dispatch(importElementsError(error)))
+      .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
 

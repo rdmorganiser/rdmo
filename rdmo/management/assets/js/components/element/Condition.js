@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { filterElement } from '../../utils/filter'
-import { buildPath } from '../../utils/location'
+import { buildApiPath, buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
@@ -12,9 +12,9 @@ const Condition = ({ config, condition, elementActions, filter=false, filterEdit
 
   const showElement = filterElement(config, filter, false, filterEditors, condition)
 
-  const editUrl = buildPath(config.baseUrl, 'conditions', condition.id)
-  const copyUrl = buildPath(config.baseUrl, 'conditions', condition.id, 'copy')
-  const exportUrl = buildPath(config.apiUrl, 'conditions', 'conditions', condition.id, 'export')
+  const editUrl = buildPath('conditions', condition.id)
+  const copyUrl = buildPath('conditions', condition.id, 'copy')
+  const exportUrl = buildApiPath('conditions', 'conditions', condition.id, 'export')
 
   const fetchEdit = () => elementActions.fetchElement('conditions', condition.id)
   const fetchCopy = () => elementActions.fetchElement('conditions', condition.id, 'copy')

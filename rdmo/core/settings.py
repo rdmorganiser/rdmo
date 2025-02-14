@@ -208,13 +208,10 @@ SETTINGS_EXPORT = [
     'PROJECT_IMPORTS',
     'PROJECT_IMPORTS_LIST',
     'PROJECT_SEND_ISSUE',
-    'PROJECT_QUESTIONS_AUTOSAVE',
     'NESTED_PROJECTS'
 ]
 
 SETTINGS_API = [
-    'PROJECT_QUESTIONS_AUTOSAVE',
-    'PROJECT_QUESTIONS_CYCLE_SETS',
     'DEFAULT_URI_PREFIX',
     'LANGUAGES',
     'MULTISITE',
@@ -326,10 +323,6 @@ PROJECT_IMPORTS = [
 
 PROJECT_IMPORTS_LIST = []
 
-PROJECT_QUESTIONS_AUTOSAVE = True
-
-PROJECT_QUESTIONS_CYCLE_SETS = False
-
 PROJECT_FILE_QUOTA = '10Mb'
 
 PROJECT_SEND_ISSUE = False
@@ -401,183 +394,9 @@ PROJECT_VALUES_VALIDATION_PHONE_REGEX = re.compile(r'''
     [\d\s]*$          # Main number with spaces
 ''', re.VERBOSE)
 
-QUESTIONS_WIDGETS = [
-    ('text', _('Text'), 'rdmo.projects.widgets.TextWidget'),
-    ('textarea', _('Textarea'), 'rdmo.projects.widgets.TextareaWidget'),
-    ('yesno', _('Yes/No'), 'rdmo.projects.widgets.YesnoWidget'),
-    ('checkbox', _('Checkboxes'), 'rdmo.projects.widgets.CheckboxWidget'),
-    ('radio', _('Radio buttons'), 'rdmo.projects.widgets.RadioWidget'),
-    ('select', _('Select drop-down'), 'rdmo.projects.widgets.SelectWidget'),
-    ('autocomplete', _('Autocomplete'), 'rdmo.projects.widgets.AutocompleteWidget'),
-    ('freeautocomplete', _('Free autocomplete'), 'rdmo.projects.widgets.FreeAutocompleteWidget'),
-    ('range', _('Range slider'), 'rdmo.projects.widgets.RangeWidget'),
-    ('date', _('Date picker'), 'rdmo.projects.widgets.DateWidget'),
-    ('file', _('File upload'), 'rdmo.projects.widgets.FileWidget')
-]
-
 DEFAULT_URI_PREFIX = 'http://example.com/terms'
 
 REPLACE_MISSING_TRANSLATION = False
-
-VENDOR_CDN = True
-
-VENDOR = {
-    'jquery': {
-        'url': 'https://code.jquery.com/',
-        'js': [
-            {
-                'path': 'jquery-3.4.1.min.js',
-                'sri': 'sha384-vk5WoKIaW/vJyUAd9n/wmopsmNhiy+L2Z+SBxGYnUkunIxVxAv/UtMOhba/xskxh',
-            }
-        ]
-    },
-    'bootstrap': {
-        'url': 'https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/',
-        'js': [
-            {
-                'path': 'js/bootstrap.min.js',
-                'sri': 'sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd',
-            }
-        ],
-        'css': [
-            {
-                'path': 'css/bootstrap.min.css',
-                'sri': 'sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu',
-            }
-        ],
-        'font': [
-            {
-                'path': 'fonts/glyphicons-halflings-regular.eot'
-            },
-            {
-                'path': 'fonts/glyphicons-halflings-regular.woff'
-            },
-            {
-                'path': 'fonts/glyphicons-halflings-regular.woff2'
-            },
-            {
-                'path': 'fonts/glyphicons-halflings-regular.ttf'
-            },
-            {
-                'path': 'fonts/glyphicons-halflings-regular.svg'
-            }
-        ]
-    },
-    'bootstrap-datepicker': {
-        'url': 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/',
-        'css': [
-            {
-                'path': 'css/bootstrap-datepicker.min.css'
-            }
-        ],
-        'js': [
-            {
-                'path': 'js/bootstrap-datepicker.min.js'
-            }
-        ]
-    },
-    'font-awesome': {
-        'url': 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/',
-        'css': [
-            {
-                'path': 'css/font-awesome.min.css'
-            }
-        ],
-        'font': [
-            {
-                'path': 'fonts/fontawesome-webfont.eot'
-            },
-            {
-                'path': 'fonts/fontawesome-webfont.woff2'
-            },
-            {
-                'path': 'fonts/fontawesome-webfont.woff'
-            },
-            {
-                'path': 'fonts/fontawesome-webfont.ttf'
-            },
-            {
-                'path': 'fonts/fontawesome-webfont.svg'
-            }
-        ]
-    },
-    'angular': {
-        'url': 'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/',
-        'js': [
-            {
-                'path': 'angular.min.js'
-            },
-            {
-                'path': 'angular-resource.min.js'
-            }
-        ]
-    },
-    'select2': {
-        'url': 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/',
-        'js': [
-            {
-                'path': 'js/select2.min.js',
-                'sri': 'sha256-HNkbndPiWM5EIRgahc3hWiuGD6CtwFgMfEU0o3zeabo='
-            }
-        ],
-        'css': [
-            {
-                'path': 'css/select2.min.css',
-                'sri': 'sha256-EQA4j7+ZbrewCQvwJzNmVxiKMwGRspXMGgt7I6AAiqs='
-            }
-        ]
-    },
-    'select2-bootstrap-theme': {
-        'url': 'https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/',
-        'css': [
-            {
-                'path': 'select2-bootstrap.min.css',
-                'sri': 'sha256-nbyata2PJRjImhByQzik2ot6gSHSU4Cqdz5bNYL2zcU='
-            }
-        ]
-    },
-    'moment': {
-        'url': 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/',
-        'js': [
-            {
-                'path': 'moment.min.js',
-                'sri': 'sha256-1hjUhpc44NwiNg8OwMu2QzJXhD8kcj+sJA3aCQZoUjg='
-            }
-        ]
-    },
-    'codemirror': {
-        'url': 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/',
-        'js': [
-            {
-                'path': 'codemirror.min.js',
-                'sri': 'sha256-0LRLvWWVXwt0eH0/Bzd0PHICg/bSMDIe5sXgaDSpZaA='
-            },
-            {
-                'path': 'addon/mode/overlay.min.js',
-                'sri': 'sha256-ffWkw3Pn4ieMygm1vwdRKcMtBJ6E6kuBi8GlVVPXWEs='
-            },
-            {
-                'path': 'mode/django/django.min.js',
-                'sri': 'sha256-6hO1TjC+3W73p+kXnCqcHVjfRa4KMdG7hvWencnu0XM='
-            }
-        ],
-        'css': [
-            {
-                'path': 'codemirror.min.css',
-                'sri': 'sha256-wluO/w4cnorJpS0JmcdTSYzwdb5E6u045qa4Ervfb1k='
-            }
-        ]
-    },
-    'fuse': {
-        'url': 'https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.4.6/',
-        'js': [
-            {
-                'path': 'fuse.min.js',
-                'sri': 'sha512-FwWaT/y9ajd/+J06KL9Fko1jELonJNHMUTR4nGP9MSIq4ZdU2w9/OiLxn16p/zEOZkryHi3wKYsnWPuADD328Q=='
-            }
-        ]
-    }
-}
 
 # necessary since django 3.2, explicitly set primary key type to avoid warnings
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

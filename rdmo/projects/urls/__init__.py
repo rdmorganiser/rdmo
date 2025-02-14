@@ -25,7 +25,6 @@ from ..views import (
     ProjectInterviewView,
     ProjectJoinView,
     ProjectLeaveView,
-    ProjectQuestionsView,
     ProjectsView,
     ProjectUpdateCatalogView,
     ProjectUpdateImportView,
@@ -140,8 +139,6 @@ urlpatterns = [
     re_path(r'^(?P<pk>[0-9]+)/snapshots/(?P<snapshot_id>[0-9]+)/views/(?P<view_id>[0-9]+)/export/(?P<format>[a-z]+)/$',
             ProjectViewExportView.as_view(), name='project_view_export'),
 
-    re_path(r'^(?P<pk>[0-9]+)/questions/',
-            ProjectQuestionsView.as_view(), name='project_questions'),
     re_path(r'^(?P<pk>[0-9]+)/interview/',
             ProjectInterviewView.as_view(), name='project_interview'),
     re_path(r'^(?P<pk>[0-9]+)/error/',

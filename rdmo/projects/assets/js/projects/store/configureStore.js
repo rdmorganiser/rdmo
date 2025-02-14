@@ -1,59 +1,49 @@
-import { createStore, applyMiddleware } from 'redux'
-import thunk from 'redux-thunk'
-import Cookies from 'js-cookie'
-import isEmpty from 'lodash/isEmpty'
-import rootReducer from '../reducers/rootReducer'
-import * as userActions from '../actions/userActions'
+import { createStore, applyMiddleware, combineReducers } from 'redux'
+
+import { checkStoreId, configureMiddleware } from 'rdmo/core/assets/js/utils/store'
+
+import { getConfigFromLocalStorage } from 'rdmo/core/assets/js/utils/config'
+
+import configReducer from 'rdmo/core/assets/js/reducers/configReducer'
+import pendingReducer from 'rdmo/core/assets/js/reducers/pendingReducer'
+import userReducer from 'rdmo/core/assets/js/reducers/userReducer'
+
+import projectsReducer from '../reducers/projectsReducer'
+
+import * as configActions from 'rdmo/core/assets/js/actions/configActions'
+import * as userActions from 'rdmo/core/assets/js/actions/userActions'
+
 import * as projectsActions from '../actions/projectsActions'
-import * as configActions from '../actions/configActions'
+
 import userIsManager from '../utils/userIsManager'
 
 export default function configureStore() {
-  const middlewares = [thunk]
+  // empty localStorage in new session
+  checkStoreId()
 
-  const currentStoreId = Cookies.get('storeid')
-  const localStoreId = localStorage.getItem('rdmo.storeid')
+  const rootReducer = combineReducers({
+    config: configReducer,
+    currentUser: userReducer,
+    projects: projectsReducer,
+    pending: pendingReducer
+  })
 
-  if (isEmpty(localStoreId) || localStoreId !== currentStoreId) {
-    localStorage.clear()
-    localStorage.setItem('rdmo.storeid', currentStoreId)
-  }
-
-  if (process.env.NODE_ENV === 'development') {
-    const { logger } = require('redux-logger')
-    middlewares.push(logger)
+  const initialState = {
+    config: {
+      prefix: 'rdmo.projects.config'
+    }
   }
 
   const store = createStore(
     rootReducer,
-    applyMiddleware(...middlewares)
+    initialState,
+    applyMiddleware(...configureMiddleware())
   )
 
-  // load: restore the config from the local storage
-  const updateConfigFromLocalStorage = () => {
-    const ls = {...localStorage}
-
-    Object.entries(ls).forEach(([lsPath, lsValue]) => {
-      if (lsPath.startsWith('rdmo.projects.config.')) {
-        const path = lsPath.replace('rdmo.projects.config.', '')
-        let value
-        switch(lsValue) {
-          case 'true':
-            value = true
-            break
-          case 'false':
-            value = false
-            break
-          default:
-            value = lsValue
-        }
-        store.dispatch(configActions.updateConfig(path, value))
-      }
-    })
-  }
-
   window.addEventListener('load', () => {
-    updateConfigFromLocalStorage()
+    getConfigFromLocalStorage(initialState.config.prefix).forEach(([path, value]) => {
+      store.dispatch(configActions.updateConfig(path, value, false))
+    })
 
     Promise.all([
       store.dispatch(userActions.fetchCurrentUser()),
