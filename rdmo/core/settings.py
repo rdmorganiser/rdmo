@@ -289,7 +289,7 @@ EXPORT_REFERENCE_ODT = None
 EXPORT_REFERENCE_DOCX = None
 
 EXPORT_PANDOC_ARGS = {
-    'pdf': ['-V', 'geometry:a4paper, margin=1in', '--pdf-engine=xelatex'],
+    'pdf': ['-V', 'geometry:a4paper, margin=1in', '--pdf-engine=lualatex'],
     'rtf': ['--standalone']
 }
 
