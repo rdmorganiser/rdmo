@@ -81,21 +81,21 @@ def test_get_pandoc_args(settings, mocker, pandoc_version, export_format):
 
 
 def test_get_pandoc_reference_document(mocker):
-    mocker.patch('rdmo.core.pandoc.get_pandoc_reference_documents', return_value={
+    mocker.patch('rdmo.core.pandoc.get_pandoc_reference_documents', return_value=[
         rdmo_path / 'share' / 'missing.docx',
         rdmo_path / 'share' / 'reference.docx',
         rdmo_path / 'share' / 'reference.odt'
-    })
+    ])
 
     # return the first existing file
     assert get_pandoc_reference_document('other', {}) == rdmo_path / 'share' / 'reference.docx'
 
 
 def test_get_pandoc_reference_document_missing(mocker):
-    mocker.patch('rdmo.core.pandoc.get_pandoc_reference_documents', return_value={
+    mocker.patch('rdmo.core.pandoc.get_pandoc_reference_documents', return_value=[
         rdmo_path / 'share' / 'missing.docx',
         rdmo_path / 'share' / 'missing.odt'
-    })
+    ])
 
     assert get_pandoc_reference_document('other', {}) is None
 
