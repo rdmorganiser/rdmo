@@ -69,9 +69,6 @@ PROJECT_SEND_ISSUE = True
 
 PROJECT_SEND_INVITE = True
 
-PROJECT_VIEWS_SYNC = True
-PROJECT_TASKS_SYNC = True
-
 PROJECT_SNAPSHOT_EXPORTS = [
     ('xml', _('RDMO XML'), 'rdmo.projects.exports.RDMOXMLExport'),
 ]
