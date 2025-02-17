@@ -428,9 +428,12 @@ def remove_double_newlines(string):
 
 
 def parse_date_from_string(date: str) -> datetime.date:
+    if not isinstance(date, str):
+        raise TypeError("date must be provided as string")
+
     try:
         # First, try standard ISO format (YYYY-MM-DD)
-        parsed_date = parse_date(settings.ACCOUNT_TERMS_OF_USE_DATE)
+        parsed_date = parse_date(date)
     except ValueError as exc:
         raise exc from exc
 
