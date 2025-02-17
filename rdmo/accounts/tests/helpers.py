@@ -38,16 +38,12 @@ def reload_urls(*app_names: str, root_urlconf = None) -> None:
 @pytest.fixture
 def enable_terms_of_use(settings):  # noqa: PT004
     settings.ACCOUNT_TERMS_OF_USE = True
-    settings.MIDDLEWARE += [
-        settings.ACCOUNT_TERMS_OF_USE_MIDDLEWARE
-    ]
     reload_urls('rdmo.accounts.urls')
 
     yield
 
     # revert settings to initial state
     settings.ACCOUNT_TERMS_OF_USE = False
-    settings.MIDDLEWARE.remove(settings.ACCOUNT_TERMS_OF_USE_MIDDLEWARE)
     # 🔹 Reload URLs to reflect the changes
     reload_urls('rdmo.accounts.urls')
 

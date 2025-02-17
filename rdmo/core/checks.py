@@ -7,12 +7,12 @@ def check_account_terms_of_use_date_setting(app_configs, **kwargs):
     errors = []
 
     if settings.ACCOUNT_TERMS_OF_USE:
-        if settings.ACCOUNT_TERMS_OF_USE_MIDDLEWARE not in settings.MIDDLEWARE:
+        if 'rdmo.accounts.middleware.TermsAndConditionsRedirectMiddleware' not in settings.MIDDLEWARE:
             errors.append(
                 Error(
                     "When ACCOUNT_TERMS_OF_USE is enabled, "
-                    "ACCOUNT_TERMS_OF_USE_MIDDLEWARE needs to be added to the middlewares.",
-                    hint=f"add '{settings.ACCOUNT_TERMS_OF_USE_MIDDLEWARE}' to MIDDLEWARE",
+                    "The TermsAndConditionsRedirectMiddleware is missing from the middlewares.",
+                    hint="add rdmo.accounts.middleware.TermsAndConditionsRedirectMiddleware to MIDDLEWARE",
                     id="core.E001",
                 )
             )

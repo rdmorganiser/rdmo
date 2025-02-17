@@ -54,7 +54,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.contrib.sites.middleware.CurrentSiteMiddleware'
+    'django.contrib.sites.middleware.CurrentSiteMiddleware',
+    'rdmo.accounts.middleware.TermsAndConditionsRedirectMiddleware'
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -101,7 +102,6 @@ ACCOUNT_SIGNUP = False
 ACCOUNT_GROUPS = []
 
 ACCOUNT_TERMS_OF_USE = False
-ACCOUNT_TERMS_OF_USE_MIDDLEWARE = 'rdmo.accounts.middleware.TermsAndConditionsRedirectMiddleware'
 ACCOUNT_TERMS_OF_USE_DATE = None  # None or a valid date string
 ACCOUNT_TERMS_OF_USE_EXCLUDE_URL_PREFIXES = ("/admin", "/i18n", "/static", "/account")
 ACCOUNT_TERMS_OF_USE_EXCLUDE_URLS = ("/",)  # is LOGOUT_URL needed here?
