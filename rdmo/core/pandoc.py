@@ -66,9 +66,8 @@ def get_pandoc_content_disposition(export_format, title):
 
 
 def get_pandoc_args(export_format, context):
-    view = context.get('view')
     pandoc_version = get_pandoc_version()
-    pandoc_args = settings.EXPORT_PANDOC_ARGS.get(export_format, [])
+    pandoc_args = list(settings.EXPORT_PANDOC_ARGS.get(export_format, []))  # without list(), settings would be changed
 
     if export_format == 'pdf':
         # we used xelatex before pandoc 3
@@ -80,7 +79,7 @@ def get_pandoc_args(export_format, context):
 
     elif export_format in ['docx', 'odt']:
         # find and add a possible reference document
-        reference_document = get_pandoc_reference_document(export_format, view)
+        reference_document = get_pandoc_reference_document(export_format, context)
         if reference_document:
             if pandoc_version >= Version('2'):
                 pandoc_args.append(f'--reference-doc={reference_document}')
@@ -97,9 +96,9 @@ def get_pandoc_args(export_format, context):
     return pandoc_args
 
 
-def get_pandoc_reference_document(export_format, view):
+def get_pandoc_reference_document(export_format, context):
     # collect all configured reference documents
-    reference_documents = get_pandoc_reference_documents(export_format, view)
+    reference_documents = get_pandoc_reference_documents(export_format, context)
 
     # return the first reference document that actually exists
     for reference_document in reference_documents:
@@ -107,13 +106,20 @@ def get_pandoc_reference_document(export_format, view):
             return Path(reference_document)
 
 
-def get_pandoc_reference_documents(export_format, view):
+def get_pandoc_reference_documents(export_format, context):
+    # try to get the view and its uri from the context, if it is not set, the current url should be project_answers
+    try:
+        view = context['view']
+        view_uri = view.uri
+    except (KeyError, AttributeError):
+        view_uri = None
+
     reference_documents = []
 
     if export_format == 'odt':
         # append view specific custom reference document
-        if view is not None:
-            reference_documents.append(settings.EXPORT_REFERENCE_ODT_VIEWS.get(view.uri))
+        if view_uri and view_uri in settings.EXPORT_REFERENCE_ODT_VIEWS:
+            reference_documents.append(settings.EXPORT_REFERENCE_ODT_VIEWS[view_uri])
 
         # append generic custom reference document
         if settings.EXPORT_REFERENCE_ODT:
@@ -124,8 +130,8 @@ def get_pandoc_reference_documents(export_format, view):
 
     elif export_format == 'docx':
         # append view specific custom reference document
-        if view is not None:
-            reference_documents.append(settings.EXPORT_REFERENCE_DOCX_VIEWS.get(view.uri))
+        if view_uri and view_uri in settings.EXPORT_REFERENCE_DOCX_VIEWS:
+            reference_documents.append(settings.EXPORT_REFERENCE_DOCX_VIEWS[view_uri])
 
         # append generic custom reference document
         if settings.EXPORT_REFERENCE_DOCX:
