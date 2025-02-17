@@ -107,10 +107,10 @@ ACCOUNT_TERMS_OF_USE_EXCLUDE_URL_PREFIXES = ("/admin", "/i18n", "/static", "/acc
 ACCOUNT_TERMS_OF_USE_EXCLUDE_URLS = ("/",)  # is LOGOUT_URL needed here?
 ACCOUNT_TERMS_OF_USE_EXCLUDE_URL_CONTAINS = []
 
-ACCOUNT_ADAPTER = 'rdmo.accounts.adapter.AccountAdapter'
+ACCOUNT_ADAPTER = 'rdmo.accounts.account.AccountAdapter'
 ACCOUNT_FORMS = {
-    'login': 'rdmo.accounts.adapter.LoginForm',
-    'signup': 'rdmo.accounts.adapter.SignupForm'
+    'login': 'rdmo.accounts.account.LoginForm',
+    'signup': 'rdmo.accounts.account.SignupForm'
 }
 ACCOUNT_USER_DISPLAY = 'rdmo.accounts.utils.get_full_name'
 ACCOUNT_EMAIL_REQUIRED = True

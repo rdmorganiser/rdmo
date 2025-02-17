@@ -32,7 +32,7 @@ def home(request):
     else:
         if settings.LOGIN_FORM:
             if settings.ACCOUNT or settings.SOCIALACCOUNT:
-                from rdmo.accounts.adapter import LoginForm
+                from rdmo.accounts.account import LoginForm
                 return render(request, 'core/home.html', {
                     'form': LoginForm(),
                     'signup_url': reverse("account_signup")
