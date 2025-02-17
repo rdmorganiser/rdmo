@@ -15,13 +15,11 @@ class ViewQuestionSet(CurrentSiteQuerySetMixin, GroupsQuerySetMixin, Availabilit
     def filter_catalog(self, catalog):
         return self.filter(Q(catalogs=None) | Q(catalogs=catalog))
 
-    def filter_available_views_for_project(self, project):
-        site_filter = Q(sites=project.site) | Q(sites__isnull=True)
-        catalogs_filter = Q(catalogs=project.catalog) | Q(catalogs__isnull=True)
-        groups_filter = Q(groups__in=project.groups) | Q(groups__isnull=True)
-        availability_filter = Q(available=True)
-        return self.filter(site_filter & catalogs_filter & groups_filter & availability_filter)
+    def filter_for_project_site(self, project):
+        return self.filter(Q(sites=None) | Q(sites=project.site))
 
+    def filter_for_project_group(self, project):
+        return self.filter(Q(groups=None) | Q(groups__in=project.groups))
 
 class ViewManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityManagerMixin, Manager):
 
@@ -31,5 +29,9 @@ class ViewManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityManag
     def filter_catalog(self, catalog):
         return self.get_queryset().filter_catalog(catalog)
 
-    def filter_available_views_for_project(self, project):
-        return self.get_queryset().filter_available_views_for_project(project)
+    def filter_for_project(self, project):
+        return (self.get_queryset()
+                .filter_for_project_site(project)
+                .filter_catalog(project.catalog)
+                .filter_for_project_group(project)
+        )
