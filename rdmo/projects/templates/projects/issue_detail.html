@@ -47,12 +47,19 @@
         <p><strong>{{ question.text }}</strong></p>
         {% endfor %}
 
-        {% for value in source.values %}
-        <p>{{ value.value_and_unit }}</p>
+        {% for resolved_value in source.resolved_values %}
+        <p>
+            Value: {{ resolved_value.value }}<br>
+            Reason: {{ resolved_value.reason }}<br>
+            {% if resolved_value.trigger_question_url %}
+            Triggered by: <a href="{{ resolved_value.trigger_question_url }}">View Question</a>
+            {% endif %}
+        </p>
         {% endfor %}
     </li>
 {% endfor %}
 </ul>
+
 
 {% if issue.resources.all %}
 

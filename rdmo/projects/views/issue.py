@@ -38,10 +38,19 @@ class IssueDetailView(ObjectPermissionMixin, DetailView):
 
         sources = []
         for condition in conditions:
+            resolved_values = []
+            for value in condition.source.values.filter(project=project, snapshot=None):
+                resolution = condition.resolve([value])
+                resolved_values.append({
+                    'value': value.value_and_unit,
+                    'reason': resolution['reason'],
+                    'trigger_question_url': resolution.get('trigger_question_url')
+                })
+
             sources.append({
                 'source': condition.source,
-                'questions': filter(lambda q: q.attribute == condition.source, project.catalog.questions),
-                'values': condition.source.values.filter(project=project, snapshot=None)
+                'questions': [q for q in project.catalog.questions if q.attribute == condition.source],
+                'resolved_values': resolved_values
             })
 
         kwargs['project'] = project

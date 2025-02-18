@@ -45,32 +45,31 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        project = context['project']
+        project = self.get_object()
         ancestors = project.get_ancestors(include_self=True)
         values = project.values.filter(snapshot=None).select_related('attribute', 'option')
         highest = Membership.objects.filter(project__in=ancestors, user_id=OuterRef('user_id')) \
-                                    .order_by('-project__level')
+            .order_by('-project__level')
         memberships = Membership.objects.filter(project__in=ancestors) \
-                                        .annotate(highest=Subquery(highest.values('project__level')[:1])) \
-                                        .filter(highest=F('project__level')) \
-                                        .select_related('user')
+            .annotate(highest=Subquery(highest.values('project__level')[:1])) \
+            .filter(highest=F('project__level')) \
+            .select_related('user')
 
         if settings.SOCIALACCOUNT:
-            # prefetch the users social account, if that relation exists
             memberships = memberships.prefetch_related('user__socialaccount_set')
 
         integrations = Integration.objects.filter(project__in=ancestors)
         context['catalogs'] = Catalog.objects.filter_current_site() \
-                                             .filter_group(self.request.user) \
-                                             .filter_availability(self.request.user)
+            .filter_group(self.request.user) \
+            .filter_availability(self.request.user)
         context['tasks_available'] = Task.objects.filter_current_site() \
-                                                 .filter_catalog(self.object.catalog) \
-                                                 .filter_group(self.request.user) \
-                                                 .filter_availability(self.request.user).exists()
+            .filter_catalog(self.object.catalog) \
+            .filter_group(self.request.user) \
+            .filter_availability(self.request.user).exists()
         context['views_available'] = View.objects.filter_current_site() \
-                                                 .filter_catalog(self.object.catalog) \
-                                                 .filter_group(self.request.user) \
-                                                 .filter_availability(self.request.user).exists()
+            .filter_catalog(self.object.catalog) \
+            .filter_group(self.request.user) \
+            .filter_availability(self.request.user).exists()
         ancestors_import = []
         for instance in ancestors.exclude(id=project.id):
             if self.request.user.has_perm('projects.view_project_object', instance):
@@ -79,9 +78,26 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
         context['memberships'] = memberships.order_by('user__last_name', '-project__level')
         context['integrations'] = integrations.order_by('provider_key', '-project__level')
         context['providers'] = get_plugins('PROJECT_ISSUE_PROVIDERS')
-        context['issues'] = [
-            issue for issue in project.issues.order_by('-status', 'task__order', 'task__uri') if issue.resolve(values)
-        ]
+
+        # Resolving issues and associated conditions
+        resolved_issues = []
+        for issue in project.issues.order_by('-status', 'task__order', 'task__uri'):
+            issue_conditions = []
+            for condition in issue.task.conditions.all():
+                resolution = condition.resolve(values)
+                if resolution['result']:  # If the condition is resolved
+                    issue_conditions.append({
+                        'condition': condition,
+                        'reason': resolution['reason'],
+                        'trigger_value': resolution['trigger_value'],
+                        'trigger_question_url': resolution.get('trigger_question_url')
+                    })
+
+            if issue_conditions:  # Add only if at least one condition is resolved
+                resolved_issues.append({'issue': issue, 'conditions': issue_conditions})
+
+        context['issues'] = resolved_issues
+
         context['views'] = project.views.order_by('order', 'uri')
         context['snapshots'] = project.snapshots.all()
         context['invites'] = project.invites.all()

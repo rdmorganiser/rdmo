@@ -28,41 +28,56 @@
                 {% endif %}
                 </th>
             </thead>
-            <tbody>
-                {% for issue in issues %}
-                <tr>
-                    <td>
-                        <a href="{% url 'issue' project.pk issue.pk %}">
-                            {{ issue.task.title|markdown }}
-                        </a>
-                    </td>
-                    <td>{{ issue.task.text|markdown }}</td>
-                    <td>
-                    {% for dates in issue.dates %}
-                        {% if dates|length > 1 %}
-                        <p>{{ dates.0 | date:"DATE_FORMAT" }}<br /> - {{ dates.1 | date:"DATE_FORMAT" }}</p>
-                        {% else %}
-                        <p>{{ dates.0 | date:"DATE_FORMAT" }}</p>
-                        {% endif %}
-                    {% endfor %}
-                    </td>
-                    <td>{{ issue.get_status_display }}</td>
-                    <td class="text-right">
-                        <a href="{% url 'issue' project.pk issue.pk %}" class="fa fa-eye"
-                            title="{% trans 'Show task' %}">
-                        </a>
-                        <a href="{% url 'issue_update' project.pk issue.pk %}" class="fa fa-pencil"
-                            title="{% trans 'Update task status' %}">
-                        </a>
-                        {% if settings.PROJECT_SEND_ISSUE %}
-                        <a href="{% url 'issue_send' project.pk issue.pk %}" class="fa fa-paper-plane"
-                            title="{% trans 'Send task' %}">
-                        </a>
-                        {% endif %}
-                    </td>
-                </tr>
+           <tbody>
+    {% for resolved_issue in issues %}
+    <tr>
+        <td>
+            <a href="{% url 'issue' project.pk resolved_issue.issue.pk %}">
+                {{ resolved_issue.issue.task.title|markdown }}
+            </a>
+        </td>
+        <td>
+            {{ resolved_issue.issue.task.text|markdown }}
+            <ul>
+                {% for condition in resolved_issue.conditions %}
+                <li>
+                    <strong>Condition:</strong> {{ condition.condition.relation_label }}<br>
+                    <strong>Reason:</strong> {{ condition.reason }}<br>
+                    {% if condition.trigger_question_url %}
+                    <strong>Triggered by:</strong>
+                    <a href="{{ condition.trigger_question_url }}">View Question</a>
+                    {% endif %}
+                </li>
                 {% endfor %}
-            </tbody>
+            </ul>
+        </td>
+        <td>
+            {% for dates in resolved_issue.issue.dates %}
+                {% if dates|length > 1 %}
+                <p>{{ dates.0 | date:"DATE_FORMAT" }}<br /> - {{ dates.1 | date:"DATE_FORMAT" }}</p>
+                {% else %}
+                <p>{{ dates.0 | date:"DATE_FORMAT" }}</p>
+                {% endif %}
+            {% endfor %}
+        </td>
+        <td>{{ resolved_issue.issue.get_status_display }}</td>
+        <td class="text-right">
+            <a href="{% url 'issue' project.pk resolved_issue.issue.pk %}" class="fa fa-eye"
+                title="{% trans 'Show task' %}">
+            </a>
+            <a href="{% url 'issue_update' project.pk resolved_issue.issue.pk %}" class="fa fa-pencil"
+                title="{% trans 'Update task status' %}">
+            </a>
+            {% if settings.PROJECT_SEND_ISSUE %}
+            <a href="{% url 'issue_send' project.pk resolved_issue.issue.pk %}" class="fa fa-paper-plane"
+                title="{% trans 'Send task' %}">
+            </a>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
+
         </table>
 
     {% else %}

@@ -116,6 +116,63 @@ class Condition(models.Model):
         return self.locked
 
     def resolve(self, values, set_prefix=None, set_index=None):
+        """
+        Resolves the condition and returns a detailed result.
+
+        Returns:
+            dict: {
+                'result': bool,
+                'reason': str,
+                'trigger_value': Any,
+                'trigger_question_url': str
+            }
+        """
+        source_values = self._filter_values(values, set_prefix, set_index)
+
+        if not source_values and set_prefix:
+            set_prefix, set_index = self._get_higher_level_prefix(set_prefix)
+            return self.resolve(values, set_prefix, set_index)
+
+        resolver_map = {
+            self.RELATION_EQUAL: self._resolve_equal,
+            self.RELATION_NOT_EQUAL: self._resolve_not_equal,
+            self.RELATION_CONTAINS: self._resolve_contains,
+            self.RELATION_GREATER_THAN: self._resolve_greater_than,
+            self.RELATION_GREATER_THAN_EQUAL: self._resolve_greater_than_equal,
+            self.RELATION_LESSER_THAN: self._resolve_lesser_than,
+            self.RELATION_LESSER_THAN_EQUAL: self._resolve_lesser_than_equal,
+            self.RELATION_EMPTY: self._resolve_empty,
+            self.RELATION_NOT_EMPTY: self._resolve_not_empty,
+        }
+
+        resolver = resolver_map.get(self.relation)
+        if not resolver:
+            return {'result': False, 'reason': 'Unknown relation type', 'trigger_value': None,
+                    'trigger_question_url': None}
+
+        result = resolver(source_values)
+
+        if result['result']:
+            question_url = self._get_question_url(source_values)
+            result['trigger_question_url'] = question_url
+
+        return result
+
+    def _get_question_url(self, values):
+        """
+        Finds the question associated with the resolved value.
+        """
+        for value in values:
+            # Find the first question matching the attribute in the catalog
+            question = next(
+                (q for q in value.project.catalog.questions if q.attribute == self.source),
+                None
+            )
+            if question:
+                return question.get_absolute_url(value)  # Pass the value to `get_absolute_url`
+        return None
+
+    def _filter_values(self, values, set_prefix, set_index):
         source_values = filter(lambda value: value.attribute == self.source, values)
 
         if set_prefix is not None:
@@ -126,114 +183,125 @@ class Condition(models.Model):
                 value.set_index == int(set_index) or value.set_collection is False
             ), source_values)
 
-        source_values = list(source_values)
-        if not source_values:
-            if set_prefix:
-                # try one level higher
-                rpartition = set_prefix.rpartition('|')
-                set_prefix, set_index = rpartition[0], int(rpartition[2])
-                return self.resolve(values, set_prefix, set_index)
+        return list(source_values)
 
-        if self.relation == self.RELATION_EQUAL:
-            return self._resolve_equal(source_values)
-
-        elif self.relation == self.RELATION_NOT_EQUAL:
-            return not self._resolve_equal(source_values)
-
-        elif self.relation == self.RELATION_CONTAINS:
-            return self._resolve_contains(source_values)
-
-        elif self.relation == self.RELATION_GREATER_THAN:
-            return self._resolve_greater_than(source_values)
-
-        elif self.relation == self.RELATION_GREATER_THAN_EQUAL:
-            return self._resolve_greater_than_equal(source_values)
-
-        elif self.relation == self.RELATION_LESSER_THAN:
-            return self._resolve_lesser_than(source_values)
-
-        elif self.relation == self.RELATION_LESSER_THAN_EQUAL:
-            return self._resolve_lesser_than_equal(source_values)
-
-        elif self.relation == self.RELATION_EMPTY:
-            return not self._resolve_not_empty(source_values)
-
-        elif self.relation == self.RELATION_NOT_EMPTY:
-            return self._resolve_not_empty(source_values)
-
-        else:
-            return False
+    def _get_higher_level_prefix(self, set_prefix):
+        rpartition = set_prefix.rpartition('|')
+        return rpartition[0], int(rpartition[2])
 
     def _resolve_equal(self, values):
-        results = []
-
         for value in values:
-            if self.target_option:
-                results.append(value.option == self.target_option)
-            else:
-                results.append(value.text == self.target_text)
+            if self.target_option and value.option == self.target_option:
+                return {
+                    'result': True,
+                    'reason': f"Value matches target option {self.target_option}.",
+                    'trigger_value': value.option
+                }
+            elif not self.target_option and value.text == self.target_text:
+                return {
+                    'result': True,
+                    'reason': f"Value matches target text '{self.target_text}'.",
+                    'trigger_value': value.text
+                }
+        return {'result': False, 'reason': 'No matching value found.', 'trigger_value': None}
 
-        return True in results
+    def _resolve_not_equal(self, values):
+        for value in values:
+            if self.target_option and value.option != self.target_option:
+                return {
+                    'result': True,
+                    'reason': f"Value does not match target option {self.target_option}.",
+                    'trigger_value': value.option
+                }
+            elif not self.target_option and value.text != self.target_text:
+                return {
+                    'result': True,
+                    'reason': f"Value does not match target text '{self.target_text}'.",
+                    'trigger_value': value.text
+                }
+        return {'result': False, 'reason': 'All values match the condition.', 'trigger_value': None}
 
     def _resolve_contains(self, values):
-        results = []
-
         for value in values:
-            results.append(self.target_text in value.text)
-
-        return True in results
+            if self.target_text in value.text:
+                return {
+                    'result': True,
+                    'reason': f"Value contains target text '{self.target_text}'.",
+                    'trigger_value': value.text
+                }
+        return {'result': False, 'reason': 'No value contains the target text.', 'trigger_value': None}
 
     def _resolve_greater_than(self, values):
-
         for value in values:
             try:
                 if float(value.text) > float(self.target_text):
-                    return True
+                    return {
+                        'result': True,
+                        'reason': f"Value {value.text} is greater than target {self.target_text}.",
+                        'trigger_value': value.text
+                    }
             except ValueError:
-                pass
-
-        return False
+                continue
+        return {'result': False, 'reason': 'No value is greater than the target.', 'trigger_value': None}
 
     def _resolve_greater_than_equal(self, values):
-
         for value in values:
             try:
                 if float(value.text) >= float(self.target_text):
-                    return True
+                    return {
+                        'result': True,
+                        'reason': f"Value {value.text} is greater than or equal to target {self.target_text}.",
+                        'trigger_value': value.text
+                    }
             except ValueError:
-                pass
-
-        return False
+                continue
+        return {'result': False, 'reason': 'No value is greater than or equal to the target.', 'trigger_value': None}
 
     def _resolve_lesser_than(self, values):
-
         for value in values:
             try:
                 if float(value.text) < float(self.target_text):
-                    return True
+                    return {
+                        'result': True,
+                        'reason': f"Value {value.text} is less than target {self.target_text}.",
+                        'trigger_value': value.text
+                    }
             except ValueError:
-                pass
-
-        return False
+                continue
+        return {'result': False, 'reason': 'No value is less than the target.', 'trigger_value': None}
 
     def _resolve_lesser_than_equal(self, values):
-
         for value in values:
             try:
                 if float(value.text) <= float(self.target_text):
-                    return True
+                    return {
+                        'result': True,
+                        'reason': f"Value {value.text} is less than or equal to target {self.target_text}.",
+                        'trigger_value': value.text
+                    }
             except ValueError:
-                pass
+                continue
+        return {'result': False, 'reason': 'No value is less than or equal to the target.', 'trigger_value': None}
 
-        return False
+    def _resolve_empty(self, values):
+        for value in values:
+            if not value.text and not value.option:
+                return {
+                    'result': True,
+                    'reason': "Value is empty.",
+                    'trigger_value': None
+                }
+        return {'result': False, 'reason': 'All values are non-empty.', 'trigger_value': None}
 
     def _resolve_not_empty(self, values):
-
         for value in values:
             if bool(value.text) or bool(value.option):
-                return True
-
-        return False
+                return {
+                    'result': True,
+                    'reason': "Value is not empty.",
+                    'trigger_value': value.text or value.option
+                }
+        return {'result': False, 'reason': 'All values are empty.', 'trigger_value': None}
 
     @classmethod
     def build_uri(cls, uri_prefix, uri_path):

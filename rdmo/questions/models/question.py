@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.db import models
+from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
@@ -292,3 +293,16 @@ class Question(Model, TranslationMixin):
         if not uri_path:
             raise RuntimeError('uri_path is missing')
         return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/questions/', uri_path)
+
+    def get_absolute_url(self, value):
+        """
+        Build the URL to the page containing this question using the associated value's project.
+        """
+        project = value.project  # Access the project directly from the value
+        # Iterate over all pages in the catalog associated with the project
+        for page in project.catalog.pages:
+            # Check if the question is in the page's elements or descendants
+            if self in page.elements or self in page.descendants:
+                # Build and return the URL using the project ID and page ID
+                return reverse('v1-projects:project-page-detail', args=[project.id, page.id])
+        return None  # Return None if no relevant page is found
