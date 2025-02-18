@@ -292,3 +292,20 @@ def test_detail_export_full(db, client):
     assert 'http://example.com/terms/domain/conditions' in uris
     assert 'http://example.com/terms/options/one_two_three' in uris
     assert 'http://example.com/terms/options/one_two_three/one' in uris
+
+
+def test_update_section_field_validation_short_title(db: object, client: object) -> None:
+    username = password = 'editor'
+    client.login(username=username, password=password)
+    instance = Section.objects.first()
+    very_long_title = 'short_title, ' * 10
+
+    url = reverse(urlnames['detail'], args=[instance.pk])
+    data = {
+        'uri_prefix': instance.uri_prefix,
+        'uri_path': instance.uri_path,
+        'short_title_de': very_long_title,
+    }
+    response = client.put(url, data, content_type='application/json')
+    assert response.status_code == 400
+    assert response.json() == {'short_title_de': ['Ensure this value has at most 32 characters (it has 129).']}
