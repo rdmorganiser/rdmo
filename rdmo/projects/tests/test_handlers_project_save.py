@@ -1,13 +1,19 @@
+
 from rdmo.projects.models import Project
 from rdmo.questions.models import Catalog
 from rdmo.views.models import View
 
-from .helpers import get_catalog_view_mapping
+from .helpers import (
+    enable_project_views_sync,  # noqa: F401
+    get_catalog_view_mapping,
+)
 
 project_id = 10
 
 
-def test_project_views_sync_when_changing_the_catalog_on_a_project(db, settings):
+def test_project_views_sync_when_changing_the_catalog_on_a_project(
+        db, settings, enable_project_views_sync  # noqa:F811
+):
     assert settings.PROJECT_VIEWS_SYNC
 
     # Setup: Create a catalog, a view, and a project using the catalog
@@ -24,7 +30,8 @@ def test_project_views_sync_when_changing_the_catalog_on_a_project(db, settings)
 
         # TODO this filter_available_views_for_project method needs to tested explicitly
         available_views = set(View.objects
-                              .filter_available_views_for_project(project)
+                              .filter_for_project(project)
+                              .filter_availability(project.owners.first())
                               .values_list('id', flat=True)
                               )
         assert set(project.views.values_list('id', flat=True)) == available_views

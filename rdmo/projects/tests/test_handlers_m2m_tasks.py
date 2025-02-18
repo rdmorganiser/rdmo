@@ -4,13 +4,18 @@ from django.contrib.auth.models import Group
 from rdmo.projects.models import Project
 from rdmo.tasks.models import Task
 
-from .helpers import assert_other_projects_unchanged
+from .helpers import (
+    assert_other_projects_unchanged,
+    enable_project_tasks_sync,  # noqa: F401
+)
 
 project_id = 10
 task_id = 1
 group_name = 'view_test'
 
-def test_project_tasks_sync_when_adding_or_removing_a_catalog_to_or_from_a_task(db, settings):
+def test_project_tasks_sync_when_adding_or_removing_a_catalog_to_or_from_a_task(
+        db, settings, enable_project_tasks_sync  # noqa:F811
+    ):
     assert settings.PROJECT_TASKS_SYNC
 
     # Setup: Create a catalog, a task, and a project using the catalog
@@ -56,7 +61,9 @@ def test_project_tasks_sync_when_adding_or_removing_a_catalog_to_or_from_a_task(
     assert set(project.tasks.values_list('id', flat=True)) == set(initial_project_tasks)
 
 
-def test_project_tasks_sync_when_adding_or_removing_a_site_to_or_from_a_task(db, settings):
+def test_project_tasks_sync_when_adding_or_removing_a_site_to_or_from_a_task(
+        db, settings, enable_project_tasks_sync  # noqa:F811
+    ):
     assert settings.PROJECT_TASKS_SYNC
 
     # Setup: Get an existing project, its associated site, and create a task
@@ -103,7 +110,9 @@ def test_project_tasks_sync_when_adding_or_removing_a_site_to_or_from_a_task(db,
     assert set(project.tasks.values_list('id', flat=True)) == set(initial_project_tasks)
 
 
-def test_project_tasks_sync_when_adding_or_removing_a_group_to_or_from_a_task(db, settings):
+def test_project_tasks_sync_when_adding_or_removing_a_group_to_or_from_a_task(
+        db, settings, enable_project_tasks_sync  # noqa:F811
+    ):
     assert settings.PROJECT_TASKS_SYNC
 
     # Setup: Get an existing project, its associated group, and create a task

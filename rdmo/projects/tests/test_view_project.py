@@ -10,6 +10,7 @@ from rdmo.views.models import View
 
 from ..forms import CatalogChoiceField
 from ..models import Project
+from .helpers import enable_project_views_sync  # noqa: F401
 
 users = (
     ('owner', 'owner'),
@@ -452,7 +453,6 @@ def test_project_update_catalog_post(db, client, username, password, project_id)
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 def test_project_update_tasks_get(db, client, settings, username, password, project_id):
-    settings.PROJECT_TASKS_SYNC = False
     client.login(username=username, password=password)
 
     url = reverse('project_update_tasks', args=[project_id])
@@ -467,7 +467,7 @@ def test_project_update_tasks_get(db, client, settings, username, password, proj
             assert response.status_code == 302
 
 
-def test_project_update_tasks_get_not_allowed(db, client, settings):
+def test_project_update_tasks_get_not_allowed(db, client, settings, enable_project_tasks_sync):
     assert settings.PROJECT_TASKS_SYNC
     client.login(username='owner', password='owner')
 
@@ -482,7 +482,6 @@ def test_project_update_tasks_get_not_allowed(db, client, settings):
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 def test_project_update_tasks_post(db, client, settings, username, password, project_id):
-    settings.PROJECT_TASKS_SYNC = False
     client.login(username=username, password=password)
     project = Project.objects.get(pk=project_id)
 
@@ -504,7 +503,7 @@ def test_project_update_tasks_post(db, client, settings, username, password, pro
         assert list(Project.objects.get(pk=project_id).tasks.values('id')) == list(project.tasks.values('id'))
 
 
-def test_project_update_tasks_post_not_allowed(db, client, settings):
+def test_project_update_tasks_post_not_allowed(db, client, settings, enable_project_tasks_sync):
     assert settings.PROJECT_TASKS_SYNC
     client.login(username='owner', password='owner')
 
@@ -520,7 +519,6 @@ def test_project_update_tasks_post_not_allowed(db, client, settings):
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 def test_project_update_views_get(db, client, settings, username, password, project_id):
-    settings.PROJECT_VIEWS_SYNC = False
     client.login(username=username, password=password)
 
     url = reverse('project_update_views', args=[project_id])
@@ -535,7 +533,7 @@ def test_project_update_views_get(db, client, settings, username, password, proj
             assert response.status_code == 302
 
 
-def test_project_update_views_get_not_allowed(db, client, settings):
+def test_project_update_views_get_not_allowed(db, client, settings, enable_project_views_sync):  # noqa:F811
     assert settings.PROJECT_VIEWS_SYNC
     client.login(username='owner', password='owner')
 
@@ -551,7 +549,6 @@ def test_project_update_views_get_not_allowed(db, client, settings):
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 def test_project_update_views_post(db, client, settings, username, password, project_id):
-    settings.PROJECT_VIEWS_SYNC = False
     client.login(username=username, password=password)
     project = Project.objects.get(pk=project_id)
 
@@ -573,7 +570,7 @@ def test_project_update_views_post(db, client, settings, username, password, pro
         assert list(Project.objects.get(pk=project_id).views.values('id')) == list(project.views.values('id'))
 
 
-def test_project_update_views_post_not_allowed(db, client, settings):
+def test_project_update_views_post_not_allowed(db, client, settings, enable_project_views_sync):  # noqa:F811
     assert settings.PROJECT_VIEWS_SYNC
     client.login(username='owner', password='owner')
 

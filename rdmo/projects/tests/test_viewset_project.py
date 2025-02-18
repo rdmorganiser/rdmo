@@ -4,6 +4,7 @@ from django.contrib.auth.models import Group, User
 from django.urls import reverse
 
 from ..models import Membership, Project, Snapshot, Value
+from .helpers import enable_project_views_sync  # noqa: F401
 
 users = (
     ('owner', 'owner'),
@@ -429,7 +430,7 @@ def test_update_parent(db, client, username, password, project_id):
         assert Project.objects.get(pk=project_id).parent == project.parent
 
 
-def test_update_project_views_not_allowed(db, client, settings):
+def test_update_project_views_not_allowed(db, client, settings, enable_project_views_sync):  # noqa:F811
     assert settings.PROJECT_VIEWS_SYNC
 
     client.login(username='owner', password='owner')
