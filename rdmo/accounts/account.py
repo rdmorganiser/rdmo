@@ -5,7 +5,6 @@ from django.forms import BooleanField
 from allauth.account.adapter import DefaultAccountAdapter
 from allauth.account.forms import LoginForm as AllauthLoginForm
 from allauth.account.forms import SignupForm as AllauthSignupForm
-from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 
 from .forms import ProfileForm
 from .models import ConsentFieldValue
@@ -21,21 +20,6 @@ class AccountAdapter(DefaultAccountAdapter):
 
         if settings.ACCOUNT_GROUPS:
             groups = Group.objects.filter(name__in=settings.ACCOUNT_GROUPS)
-            user.groups.set(groups)
-
-        return user
-
-class SocialAccountAdapter(DefaultSocialAccountAdapter):
-
-    def is_open_for_signup(self, request, sociallogin):
-        return settings.SOCIALACCOUNT_SIGNUP
-
-    def save_user(self, request, sociallogin, form=None):
-        user = super().save_user(request, sociallogin, form)
-
-        if settings.SOCIALACCOUNT_GROUPS:
-            provider = str(sociallogin.account.provider)
-            groups = Group.objects.filter(name__in=settings.SOCIALACCOUNT_GROUPS.get(provider, []))
             user.groups.set(groups)
 
         return user
@@ -68,5 +52,5 @@ class SignupForm(AllauthSignupForm, ProfileForm):
 
         # store the consent field
         if settings.ACCOUNT_TERMS_OF_USE:
-            consent = ConsentFieldValue(user=user, consent=self.cleaned_data['consent'])
-            consent.save()
+            if self.cleaned_data['consent']:
+                ConsentFieldValue.create_consent(user=user, session=request.session)

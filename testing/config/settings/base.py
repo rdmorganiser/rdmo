@@ -52,7 +52,9 @@ FIXTURE_DIRS = (
 
 INSTALLED_APPS += [
     'allauth',
-    'allauth.account'
+    'allauth.account',
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.dummy",
 ]
 
 MIDDLEWARE += [

@@ -54,7 +54,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.contrib.sites.middleware.CurrentSiteMiddleware'
+    'django.contrib.sites.middleware.CurrentSiteMiddleware',
+    'rdmo.accounts.middleware.TermsAndConditionsRedirectMiddleware'
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -99,11 +100,17 @@ PROFILE_DELETE = True
 ACCOUNT = False
 ACCOUNT_SIGNUP = False
 ACCOUNT_GROUPS = []
+
 ACCOUNT_TERMS_OF_USE = False
-ACCOUNT_ADAPTER = 'rdmo.accounts.adapter.AccountAdapter'
+ACCOUNT_TERMS_OF_USE_DATE = None  # None or a valid date string
+ACCOUNT_TERMS_OF_USE_EXCLUDE_URL_PREFIXES = ("/admin", "/i18n", "/static", "/account")
+ACCOUNT_TERMS_OF_USE_EXCLUDE_URLS = ("/",)  # is LOGOUT_URL needed here?
+ACCOUNT_TERMS_OF_USE_EXCLUDE_URL_CONTAINS = []
+
+ACCOUNT_ADAPTER = 'rdmo.accounts.account.AccountAdapter'
 ACCOUNT_FORMS = {
-    'login': 'rdmo.accounts.adapter.LoginForm',
-    'signup': 'rdmo.accounts.adapter.SignupForm'
+    'login': 'rdmo.accounts.account.LoginForm',
+    'signup': 'rdmo.accounts.account.SignupForm'
 }
 ACCOUNT_USER_DISPLAY = 'rdmo.accounts.utils.get_full_name'
 ACCOUNT_EMAIL_REQUIRED = True
@@ -121,7 +128,10 @@ SOCIALACCOUNT = False
 SOCIALACCOUNT_SIGNUP = False
 SOCIALACCOUNT_GROUPS = []
 SOCIALACCOUNT_AUTO_SIGNUP = False
-SOCIALACCOUNT_ADAPTER = 'rdmo.accounts.adapter.SocialAccountAdapter'
+SOCIALACCOUNT_ADAPTER = 'rdmo.accounts.socialaccount.SocialAccountAdapter'
+SOCIALACCOUNT_FORMS = {
+    'signup': 'rdmo.accounts.socialaccount.SocialSignupForm'
+}
 SOCIALACCOUNT_OPENID_CONNECT_URL_PREFIX = ""  # required since 0.60.0 else default is "oidc"
 
 SHIBBOLETH = False
