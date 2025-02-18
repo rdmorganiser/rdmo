@@ -30,8 +30,10 @@ class TaskManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityManag
         return self.get_queryset().filter_catalog(catalog)
 
     def filter_for_project(self, project):
-        return (self.get_queryset()
-                    .filter_for_project_site(project)
-                    .filter_catalog(project.catalog)
-                    .filter_for_project_group(project)
+        return (
+            self
+                .get_queryset()
+                .filter_for_project_site(project)
+                .filter_catalog(project.catalog)
+                .filter_for_project_group(project)
         )

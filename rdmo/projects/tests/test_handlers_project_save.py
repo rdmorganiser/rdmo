@@ -29,9 +29,10 @@ def test_project_views_sync_when_changing_the_catalog_on_a_project(
         project.save()
 
         # TODO this filter_available_views_for_project method needs to tested explicitly
-        available_views = set(View.objects
-                              .filter_for_project(project)
-                              .filter_availability(project.owners.first())
-                              .values_list('id', flat=True)
-                              )
+        available_views = set(
+            View.objects
+                .filter_for_project(project)
+                .filter_availability(project.owners.first())
+                .values_list('id', flat=True)
+        )
         assert set(project.views.values_list('id', flat=True)) == available_views

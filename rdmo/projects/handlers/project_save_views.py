@@ -29,6 +29,8 @@ def post_save_project_sync_views_from_catalog(sender, instance, created, raw, up
 
     if instance._catalog_has_changed_sync_views or (created and not instance.views.exists):
         instance.views.set(
-            View.objects.filter_for_project(instance).filter(available=True)
-            .values_list('id', flat=True)
+            View.objects
+                .filter_for_project(instance)
+                .filter(available=True)
+                .values_list('id', flat=True)
         )

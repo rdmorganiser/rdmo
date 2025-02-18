@@ -29,6 +29,8 @@ def post_save_project_sync_tasks_from_catalog(sender, instance, created, raw, up
 
     if instance._catalog_has_changed_sync_tasks or (created and not instance.tasks.exists) :
         instance.tasks.set(
-            Task.objects.filter_for_project(instance).filter(available=True)
-            .values_list('id', flat=True)
+            Task.objects
+                .filter_for_project(instance)
+                .filter(available=True)
+                .values_list('id', flat=True)
         )
