@@ -10,7 +10,7 @@ from django.utils.translation import gettext_lazy as _
 import defusedxml.ElementTree as ET
 from packaging.version import Version, parse
 
-from rdmo import __version__ as RDMO_INSTANCE_VERSION
+from rdmo import __version__
 from rdmo.core.constants import RDMO_MODELS
 from rdmo.core.imports import ImportElementFields
 
@@ -45,7 +45,7 @@ def validate_root(root: Optional[xmlElement]) -> Tuple[bool, Optional[str]]:
 
 
 def validate_and_get_xml_version_from_root(root: xmlElement) -> Tuple[Optional[Version], list]:
-    rdmo_version = parse(RDMO_INSTANCE_VERSION)
+    rdmo_version = parse(__version__)
 
     # Extract version attributes from the XML root
     unparsed_required_version = root.attrib.get('required')  # New required version field
@@ -72,7 +72,6 @@ def validate_and_get_xml_version_from_root(root: xmlElement) -> Tuple[Optional[V
     # Fallback to validate the legacy 'version' field
     try:
         xml_version = parse(unparsed_root_version)
-
     except ValueError:
         logger.info('Import failed: Invalid "version" format in XML (%s)', unparsed_root_version)
         errors = [_('The "version" attribute in this RDMO XML file is not a valid version.')]
