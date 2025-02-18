@@ -68,13 +68,23 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
             # tasks should be synced, the user can not change them
             context['tasks_available'] = project.tasks.exists()
         else:
-            context['tasks_available'] = Task.objects.filter_available_tasks_for_project(project).exists()
+            context['tasks_available'] = (
+                Task.objects
+                .filter_for_project(project)
+                .filter_availability(self.request.user)
+                .exists()
+            )
 
         if settings.PROJECT_VIEWS_SYNC:
             # views should be synced, the user can not change them
             context['views_available'] = project.views.exists()
         else:
-            context['views_available'] = View.objects.filter_available_views_for_project(project).exists()
+            context['views_available'] = (
+                View.objects
+                .filter_for_project(project)
+                .filter_availability(self.request.user)
+                .exists()
+            )
 
         ancestors_import = []
         for instance in ancestors.exclude(id=project.id):

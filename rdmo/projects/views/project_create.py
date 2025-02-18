@@ -51,13 +51,13 @@ class ProjectCreateView(ObjectPermissionMixin, LoginRequiredMixin,
 
         # add all tasks to project
         if not settings.PROJECT_TASKS_SYNC:
-            tasks = Task.objects.filter_available_tasks_for_project(form.instance)
+            tasks = Task.objects.filter_for_project(form.instance).filter_availability(self.request.user)
             for task in tasks:
                 form.instance.tasks.add(task)
 
         # add all views to project
         if not settings.PROJECT_VIEWS_SYNC:
-            views = View.objects.filter_available_views_for_project(form.instance)
+            views = View.objects.filter_for_project(form.instance).filter_availability(self.request.user)
             for view in views:
                 form.instance.views.add(view)
 

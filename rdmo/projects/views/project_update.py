@@ -89,7 +89,11 @@ class ProjectUpdateTasksView(ObjectPermissionMixin, RedirectViewMixin, UpdateVie
         return super().dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):
-        tasks = Task.objects.filter_available_tasks_for_project(self.object)
+        tasks = (
+            Task.objects
+            .filter_for_project(self.object)
+            .filter_availability(self.request.user)
+        )
 
         form_kwargs = super().get_form_kwargs()
         form_kwargs.update({
@@ -113,7 +117,11 @@ class ProjectUpdateViewsView(ObjectPermissionMixin, RedirectViewMixin, UpdateVie
         return super().dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):
-        views = View.objects.filter_available_views_for_project(self.object)
+        views = (
+            View.objects
+            .filter_for_project(self.object)
+            .filter_availability(self.request.user)
+        )
 
         form_kwargs = super().get_form_kwargs()
         form_kwargs.update({

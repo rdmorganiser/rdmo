@@ -379,14 +379,22 @@ class ProjectViewSet(ModelViewSet):
         # add all tasks to project
         if self.request.data.get('tasks') is None:
             if not settings.PROJECT_TASKS_SYNC:
-                tasks = Task.objects.filter_available_tasks_for_project(project)
+                tasks = (
+                    Task.objects
+                    .filter_for_project(project)
+                    .filter_availability(self.request.user)
+                )
                 for task in tasks:
                     project.tasks.add(task)
 
         if self.request.data.get('views') is None:
             # add all views to project
             if not settings.PROJECT_VIEWS_SYNC:
-                views = View.objects.filter_available_views_for_project(project)
+                views = (
+                    View.objects
+                    .filter_for_project(project)
+                    .filter_availability(self.request.user)
+                )
                 for view in views:
                     project.views.add(view)
 
