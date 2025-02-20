@@ -23,4 +23,6 @@ def test_import(db, settings, xml_file_path, error_message):
         with pytest.raises(CommandError) as e:
             call_command('import', xml_file, stdout=stdout, stderr=stderr)
 
+        if error_message == 'This field may not be blank.':
+            error_message = 'This file does not exists'  # overwrite error message for cli import
         assert str(e.value).startswith(error_message)

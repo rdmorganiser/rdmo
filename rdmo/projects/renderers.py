@@ -7,6 +7,7 @@ class XMLRenderer(BaseXMLRenderer):
         xml.startElement('project', {
             'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
             'version': self.version,
+            'required': self.required,
             'created': self.created
         })
         self.render_text_element(xml, 'title', {}, project['title'])

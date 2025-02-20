@@ -10,7 +10,7 @@ from django.utils.translation import gettext_lazy as _
 import defusedxml.ElementTree as ET
 from packaging.version import Version, parse
 
-from rdmo import __version__ as RDMO_INSTANCE_VERSION
+from rdmo import __version__
 from rdmo.core.constants import RDMO_MODELS
 from rdmo.core.imports import ImportElementFields
 
@@ -45,16 +45,38 @@ def validate_root(root: Optional[xmlElement]) -> Tuple[bool, Optional[str]]:
 
 
 def validate_and_get_xml_version_from_root(root: xmlElement) -> Tuple[Optional[Version], list]:
-    unparsed_root_version = root.attrib.get('version') or LEGACY_RDMO_XML_VERSION
-    root_version, rdmo_version = parse(unparsed_root_version), parse(RDMO_INSTANCE_VERSION)
-    if root_version > rdmo_version:
-        logger.info('Import failed version validation (%s > %s)', root_version, rdmo_version)
-        errors = [
-            _('This RDMO XML file does not have a valid version number.'),
-            f'XML Version ({root_version}) is greater than RDMO instance version {rdmo_version}'
-        ]
+    rdmo_version = parse(__version__)
+
+    # Extract version attributes from the XML root
+    unparsed_required_version = root.attrib.get('required')  # New required version field
+    unparsed_root_version = root.attrib.get('version') or LEGACY_RDMO_XML_VERSION  # Fallback to legacy default
+
+    # Validate the 'required' attribute if it exists
+    if unparsed_required_version:
+        try:
+            required_version = parse(unparsed_required_version)
+        except ValueError:
+            logger.info('Import failed: Invalid "required" format in XML (%s)', unparsed_required_version)
+            errors = [_('The "required" attribute in this RDMO XML file is not a valid version.')]
+            return None, errors
+
+        if required_version > rdmo_version:
+            logger.info('Import failed: Required version (%s) > RDMO instance version (%s)', required_version,
+                        rdmo_version)
+            errors = [
+                _('This RDMO XML file requires a newer RDMO version to be imported.'),
+                f'Required version: {required_version}, Current version: {rdmo_version}.'
+            ]
+            return None, errors
+
+    # Fallback to validate the legacy 'version' field
+    try:
+        xml_version = parse(unparsed_root_version)
+        return xml_version, []
+    except ValueError:
+        logger.info('Import failed: Invalid "version" format in XML (%s)', unparsed_root_version)
+        errors = [_('The "version" attribute in this RDMO XML file is not a valid version.')]
         return None, errors
-    return root_version, []
 
 
 def validate_legacy_elements(elements: dict, root_version: Version) -> list:
@@ -117,13 +139,13 @@ def parse_xml_to_elements(xml_file=None) -> Tuple[OrderedDict, list]:
         return OrderedDict(), errors
 
     # step 3.1.1: validate the legacy elements
-    legacy_errors = validate_legacy_elements(elements, parse(root.attrib.get('version', LEGACY_RDMO_XML_VERSION)))
+    legacy_errors = validate_legacy_elements(elements, root_version)
     if legacy_errors:
         errors.extend(legacy_errors)
         return OrderedDict(), errors
 
     # step 4: convert elements from previous versions
-    elements = convert_elements(elements, parse(root.attrib.get('version', LEGACY_RDMO_XML_VERSION)))
+    elements = convert_elements(elements, root_version)
 
     # step 5: order the elements and return
     # ordering of elements is done in the import_elements function
@@ -232,9 +254,6 @@ def strip_ns(tag, ns_map):
 
 
 def convert_elements(elements, version: Version):
-    if not isinstance(version, Version):
-        raise TypeError('Version should be of parsed version type.')
-
     if version < parse('2.0.0'):
         validate_pre_conversion_for_missing_key_in_legacy_elements(elements, version)
         elements = convert_legacy_elements(elements)
