@@ -2,6 +2,7 @@ import logging
 
 from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
+from django.core.validators import MaxLengthValidator
 from django.db.models import Max
 
 from rest_framework import serializers
@@ -58,11 +59,17 @@ class TranslationSerializerMixin:
                 field_name = f'{field}_{lang_field}'
                 model_field = meta.model._meta.get_field(field_name)
 
+                validators = []
+                if hasattr(model_field, 'max_length') and model_field.max_length is not None:
+                    validators.append(MaxLengthValidator(model_field.max_length))
+
                 self.fields[f'{field}_{lang_code}'] = serializers.CharField(
                     source=field_name,
                     required=not model_field.blank,
                     allow_null=model_field.null,
-                    allow_blank=model_field.blank)
+                    allow_blank=model_field.blank,
+                    validators=validators
+                )
 
 
 class ThroughModelSerializerMixin:
