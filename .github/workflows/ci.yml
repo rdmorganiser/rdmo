@@ -116,7 +116,7 @@ jobs:
         path: dist
     - name: Install Dependencies
       run: |
-        sudo apt-get update && sudo apt-get install --yes pandoc texlive-xetex librsvg2-bin
+        sudo apt-get update && sudo apt-get install --yes pandoc texlive-latex-base texlive-latex-extra texlive-luatex librsvg2-bin
         pandoc --version
         python -m pip install --upgrade pip
         python -m pip --version
@@ -172,7 +172,7 @@ jobs:
         path: dist
     - name: Install Dependencies
       run: |
-        sudo apt-get update && sudo apt install --yes pandoc texlive-xetex librsvg2-bin
+        sudo apt-get update && sudo apt install --yes pandoc texlive-latex-base texlive-latex-extra texlive-luatex librsvg2-bin
         python -m pip install --upgrade pip
     - name: Install rdmo[postgres] from wheel and start postgresql
       run: |
