@@ -309,6 +309,10 @@ EXPORT_CONTENT_DISPOSITION = 'attachment'
 
 EXPORT_MIN_REQUIRED_VERSION = '2.1.0'
 
+MARKDOWN_TEMPLATES: dict[str, str] = {
+    # for example: 'not_empty': 'core/text_blocks/template_for_not_empty.html',
+}
+
 PROJECT_TABLE_PAGE_SIZE = 20
 
 PROJECT_VISIBILITY = True
