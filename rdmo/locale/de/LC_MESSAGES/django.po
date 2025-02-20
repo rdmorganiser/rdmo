@@ -347,7 +347,7 @@ msgid ""
 "Please confirm that <a href=\"mailto:%(email)s\">%(email)s</a> is an e-mail "
 "address for user <strong>%(user_display)s</strong>."
 msgstr ""
-"Bitte bestätigen sie, dass <a href=\"mailto:%(email)s\">%(email)s</a> eine "
+"Bitte bestätigen Sie, dass <a href=\"mailto:%(email)s\">%(email)s</a> eine "
 "gültige E-Mail Adresse für den Benutzer <strong>%(user_display)s</strong> "
 "ist."
 
@@ -563,7 +563,7 @@ msgstr "Schließen"
 #: accounts/templates/account/verification_sent.html:7
 #: accounts/templates/account/verified_email_required.html:6
 msgid "Verify your e-mail address"
-msgstr "Betätigen Sie Ihre E-Mail Adresse"
+msgstr "Bestätigen Sie Ihre E-Mail Adresse"
 
 #: accounts/templates/account/verification_sent.html:11
 msgid ""
@@ -743,7 +743,7 @@ msgstr "Über %(provider)s anmelden"
 #, python-format
 msgid "You are about to sign in using a third party account from %(provider)s."
 msgstr ""
-"Sie sind dabei, sich mit einem Konto eines Drittanbieters von %(provider)s. "
+"Sie sind dabei, sich mit einem Konto eines Drittanbieters von %(provider)s "
 "anzumelden."
 
 #: accounts/templates/socialaccount/login.html:19
