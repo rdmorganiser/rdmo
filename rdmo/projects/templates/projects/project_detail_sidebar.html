@@ -51,12 +51,12 @@
         <a href="{% url 'project_update_parent' project.pk %}">{% trans 'Update parent project' %}</a>
     </li>
     {% endif %}
-    {% if settings.PROJECT_ISSUES and tasks_available %}
+    {% if settings.PROJECT_ISSUES and tasks_available and not settings.PROJECT_TASKS_SYNC %}
     <li>
         <a href="{% url 'project_update_tasks' project.pk %}">{% trans 'Update project tasks' %}</a>
     </li>
     {% endif %}
-    {% if settings.PROJECT_VIEWS and views_available %}
+    {% if settings.PROJECT_VIEWS and views_available and not settings.PROJECT_VIEWS_SYNC %}
     <li>
         <a href="{% url 'project_update_views' project.pk %}">{% trans 'Update project views' %}</a>
     </li>

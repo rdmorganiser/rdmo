@@ -19,7 +19,7 @@
                 <th style="width: 20%">{% trans 'View' %}</th>
                 <th style="width: 60%">{% trans 'Description' %}</th>
                 <th style="width: 20%" class="text-right">
-                    {% if can_change_project %}
+                    {% if can_change_project and not settings.PROJECT_VIEWS_SYNC %}
                     <a href="{% url 'project_update_views' project.pk %}" title="{% trans 'Update project views' %}">
                         <i class="fa fa-pencil"></i>
                     </a>
@@ -45,7 +45,7 @@
 
     {% else %}
 
-        {% if can_change_project %}
+        {% if can_change_project and not settings.PROJECT_VIEWS_SYNC %}
             <p class="project-update">
                 <a href="{% url 'project_update_views' project.pk %}" title="{% trans 'Update project views' %}">
                     <i class="fa fa-pencil"></i>

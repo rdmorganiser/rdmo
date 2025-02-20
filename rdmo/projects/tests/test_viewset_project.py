@@ -4,6 +4,7 @@ from django.contrib.auth.models import Group, User
 from django.urls import reverse
 
 from ..models import Membership, Project, Snapshot, Value
+from .helpers import enable_project_views_sync  # noqa: F401
 
 users = (
     ('owner', 'owner'),
@@ -427,6 +428,20 @@ def test_update_parent(db, client, username, password, project_id):
             assert response.status_code == 401
 
         assert Project.objects.get(pk=project_id).parent == project.parent
+
+
+def test_update_project_views_not_allowed(db, client, settings, enable_project_views_sync):  # noqa:F811
+    assert settings.PROJECT_VIEWS_SYNC
+
+    client.login(username='owner', password='owner')
+    url = reverse(urlnames['detail'], args=[project_id])
+    data = {
+        'views': [1]
+    }
+    response = client.put(url, data, content_type='application/json')
+
+    assert response.status_code == 400
+    assert 'Editing views is disabled' in ' '.join(response.json()['views'])
 
 
 @pytest.mark.parametrize('username,password', users)

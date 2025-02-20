@@ -10,5 +10,7 @@ class ProjectsConfig(AppConfig):
     def ready(self):
         from . import rules  # noqa: F401
 
-        if settings.PROJECT_REMOVE_VIEWS:
-            from . import handlers  # noqa: F401
+        if settings.PROJECT_VIEWS_SYNC:
+            from .handlers import m2m_changed_views, project_save_views  # noqa: F401
+        if settings.PROJECT_TASKS_SYNC:
+            from .handlers import m2m_changed_tasks, project_save_tasks  # noqa: F401
