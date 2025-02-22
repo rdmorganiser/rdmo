@@ -32,7 +32,6 @@ class SectionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
     markdown_fields = ('title', 'help')
 
     model = serializers.SerializerMethodField()
-    uri_path = serializers.CharField(required=True)
 
     catalogs = serializers.PrimaryKeyRelatedField(queryset=Catalog.objects.all(), required=False, many=True)
     pages = SectionPageSerializer(source='section_pages', read_only=False, required=False, many=True)
@@ -68,6 +67,9 @@ class SectionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
         through_fields = (
             ('pages', 'section', 'page', 'section_pages'),
         )
+        extra_kwargs = {
+            'uri_path': {'required': True}
+        }
         validators = (
             SectionUniqueURIValidator(),
             SectionLockedValidator()
