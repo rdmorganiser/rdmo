@@ -357,8 +357,8 @@ class InviteSerializer(serializers.ModelSerializer):
 
 class UserInviteSerializer(InviteSerializer):
 
-    title = serializers.CharField(source='project.title')
-    description = serializers.CharField(source='project.description')
+    title = serializers.CharField(source='project.title', read_only=True)
+    description = serializers.CharField(source='project.description', read_only=True)
 
     class Meta:
         model = Invite
@@ -444,10 +444,10 @@ class ValueSerializer(serializers.ModelSerializer):
 
 class ValueSearchSerializer(serializers.ModelSerializer):
 
-    project_label = serializers.CharField(source='project.title', required=False)
-    snapshot_label = serializers.CharField(source='snapshot.title', required=False)
-    set_label = serializers.CharField(required=False)
-    value_label = serializers.CharField(source='label')
+    project_label = serializers.CharField(source='project.title', required=False, read_only=True)
+    snapshot_label = serializers.CharField(source='snapshot.title', required=False, read_only=True)
+    set_label = serializers.CharField(required=False, read_only=True)
+    value_label = serializers.CharField(source='label', read_only=True)
 
     class Meta:
         model = Value
