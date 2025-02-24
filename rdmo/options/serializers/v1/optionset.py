@@ -26,7 +26,6 @@ class OptionSetSerializer(ThroughModelSerializerMixin, ElementModelSerializerMix
                           ReadOnlyObjectPermissionSerializerMixin, serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
-    uri_path = serializers.CharField(required=True)
 
     options = OptionSetOptionSerializer(source='optionset_options', read_only=False, required=False, many=True)
     questions = serializers.PrimaryKeyRelatedField(queryset=Question.objects.all(), required=False, many=True)
@@ -58,6 +57,9 @@ class OptionSetSerializer(ThroughModelSerializerMixin, ElementModelSerializerMix
         through_fields = (
             ('options', 'optionset', 'option', 'optionset_options'),
         )
+        extra_kwargs = {
+            'uri_path': {'required': True}
+        }
         validators = (
             OptionSetUniqueURIValidator(),
             OptionSetLockedValidator()

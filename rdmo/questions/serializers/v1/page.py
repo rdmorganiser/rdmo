@@ -43,7 +43,6 @@ class PageSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
     markdown_fields = ('title', 'help')
 
     model = serializers.SerializerMethodField()
-    uri_path = serializers.CharField(required=True)
 
     sections = serializers.PrimaryKeyRelatedField(queryset=Section.objects.all(), required=False, many=True)
     questionsets = PageQuestionSetSerializer(source='page_questionsets', read_only=False, required=False, many=True)
@@ -94,6 +93,9 @@ class PageSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
             ('questionsets', 'page', 'questionset', 'page_questionsets'),
             ('questions', 'page', 'question', 'page_questions')
         )
+        extra_kwargs = {
+            'uri_path': {'required': True}
+        }
         validators = (
             PageUniqueURIValidator(),
             PageLockedValidator()

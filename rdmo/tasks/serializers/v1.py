@@ -19,7 +19,6 @@ class TaskSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
     markdown_fields = ('title', 'text')
 
     model = serializers.SerializerMethodField()
-    uri_path = serializers.CharField(required=True)
 
     warning = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()
@@ -60,6 +59,9 @@ class TaskSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
             'title',
             'text'
         )
+        extra_kwargs = {
+            'uri_path': {'required': True}
+        }
         validators = (
             TaskUniqueURIValidator(),
             TaskLockedValidator()
