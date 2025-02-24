@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-22 15:21+0100\n"
-"PO-Revision-Date: 2025-02-22 15:29+0100\n"
+"PO-Revision-Date: 2025-02-24 16:52+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -1687,7 +1687,7 @@ msgstr "Keine Optionen gefunden"
 
 #: projects/assets/js/interview/components/main/widget/YesNoInput.js:37
 msgid "Yes"
-msgstr "J"
+msgstr "Ja"
 
 #: projects/assets/js/interview/components/main/widget/YesNoInput.js:49
 msgid "No"
