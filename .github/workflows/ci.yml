@@ -100,7 +100,7 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        python-version: ['3.8', '3.12']
+        python-version: ['3.9', '3.12']
         db-backend: [mysql, postgres]
     steps:
     - uses: actions/checkout@v4
@@ -145,7 +145,7 @@ jobs:
       env:
         GITHUB_DB_BACKEND: ${{ matrix.db-backend }}
     - name: Upload coverage data to coveralls.io
-      uses: coverallsapp/github-action@643bc377ffa44ace6394b2b5d0d3950076de9f63 # v2.3.0
+      uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b # v2.3.6
       with:
         flag-name: '${{ matrix.db-backend }}: ${{ matrix.python-version }}'
         parallel: true
@@ -206,7 +206,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
     - name: Run Coveralls finish
-      uses: coverallsapp/github-action@643bc377ffa44ace6394b2b5d0d3950076de9f63 # v2.3.0
+      uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b # v2.3.6
       with:
         parallel-finished: true
 

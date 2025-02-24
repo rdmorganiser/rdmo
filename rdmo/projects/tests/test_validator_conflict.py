@@ -2,7 +2,7 @@ from datetime import timedelta
 
 import pytest
 
-from rest_framework.exceptions import ValidationError as RestFameworkValidationError
+from rest_framework.exceptions import ValidationError as RestFrameworkValidationError
 
 from rdmo.options.models import Option
 
@@ -51,7 +51,7 @@ def test_serializer_create_error(db):
     serializer = ValueSerializer()
     serializer.context['view'] = MockedView()
 
-    with pytest.raises(RestFameworkValidationError):
+    with pytest.raises(RestFrameworkValidationError):
         validator({
             'attribute': value.attribute,
             'set_prefix': value.set_prefix,
@@ -102,7 +102,7 @@ def test_serializer_update_error(db):
     serializer.instance = value
     serializer.context['view'] = MockedView()
 
-    with pytest.raises(RestFameworkValidationError):
+    with pytest.raises(RestFrameworkValidationError):
         validator({
             'attribute': value.attribute,
             'set_prefix': value.set_prefix,
@@ -186,7 +186,7 @@ def test_serializer_create_checkbox_error(db):
     serializer = ValueSerializer()
     serializer.context['view'] = MockedView()
 
-    with pytest.raises(RestFameworkValidationError):
+    with pytest.raises(RestFrameworkValidationError):
         validator({
             'attribute': value.attribute,
             'set_prefix': value.set_prefix,
@@ -217,7 +217,7 @@ def test_serializer_create_checkbox_text(db):
     serializer = ValueSerializer()
     serializer.context['view'] = MockedView()
 
-    with pytest.raises(RestFameworkValidationError):
+    with pytest.raises(RestFrameworkValidationError):
         validator({
             'attribute': value.attribute,
             'set_prefix': value.set_prefix,

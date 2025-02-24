@@ -1,6 +1,6 @@
 import io
 from string import Template
-from typing import List, Union
+from typing import Union
 
 import pytest
 
@@ -48,7 +48,7 @@ def _get_queryset(related_field, attribute=None):
     return model.objects.filter(**{lookup_field: attribute})
 
 
-def create_new_uris_with_uri_prefix_for_template(new_uri_prefix: str) -> List[str]:
+def create_new_uris_with_uri_prefix_for_template(new_uri_prefix: str) -> list[str]:
     new_uris = []
     for extra_path in VIEW_TEMPLATE_URI_PATH_ADDITIONS:
         new_uri_path = VIEW_TEMPLATE_URI_PATH + extra_path
@@ -57,7 +57,7 @@ def create_new_uris_with_uri_prefix_for_template(new_uri_prefix: str) -> List[st
     return new_uris
 
 
-def create_copy_of_view_that_uses_new_attribute(db, new_prefixes: List[str]):
+def create_copy_of_view_that_uses_new_attribute(db, new_prefixes: list[str]):
     qs = View.objects.filter(**{"uri__contains": EXAMPLE_VIEW_URI_PATH}).all()
     if not qs.exists():
         raise ValueError("Views for tests should exist here.")

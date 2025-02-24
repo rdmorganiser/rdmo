@@ -1,7 +1,7 @@
 import random
 from collections import OrderedDict
 from functools import partial
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Optional, Union
 
 from rdmo.core.imports import ImportElementFields, track_changes_on_element
 from rdmo.management.import_utils import initialize_import_element_dict
@@ -32,7 +32,7 @@ def filter_changed_fields(element, updated_fields=None) -> bool:
             return True
     return _changed
 
-def get_changed_elements(elements: List[Dict]) -> Dict[str, Dict[str,Union[bool,str]]]:
+def get_changed_elements(elements: list[dict]) -> dict[str, dict[str,Union[bool,str]]]:
     changed_elements = {}
     for element in elements:
 
@@ -47,14 +47,14 @@ def get_changed_elements(elements: List[Dict]) -> Dict[str, Dict[str,Union[bool,
     return changed_elements
 
 
-def _test_helper_filter_updated_and_changed(elements: List[Dict], updated_fields: Optional[Tuple]) -> List[Dict]:
+def _test_helper_filter_updated_and_changed(elements: list[dict], updated_fields: Optional[tuple]) -> list[dict]:
     filter_func = partial(filter_changed_fields, updated_fields=updated_fields)
     changed_elements = filter(filter_func, elements)
     return list(changed_elements)
 
 
 def _test_helper_change_fields_elements(elements,
-                                        fields_to_update: Optional[Tuple] = None,
+                                        fields_to_update: Optional[tuple] = None,
                                         n=3) -> OrderedDict:
     """ elements test preparation function """
 

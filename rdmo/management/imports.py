@@ -1,7 +1,7 @@
 import copy
 import logging
 from collections import OrderedDict
-from typing import Dict, List, Optional
+from typing import Optional
 
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
@@ -57,7 +57,7 @@ ELEMENT_IMPORT_HELPERS = {
 
 def import_elements(uploaded_elements: OrderedDict,
                     save: bool = True,
-                    request: Optional[HttpRequest] = None) -> List[Dict]:
+                    request: Optional[HttpRequest] = None) -> list[dict]:
     imported_elements = []
     uploaded_elements_initial_ordering = {uri: n for n, uri in enumerate(uploaded_elements.keys())}
     uploaded_uris = set(uploaded_elements.keys())
@@ -94,11 +94,11 @@ def import_elements(uploaded_elements: OrderedDict,
 
 
 def import_element(
-        element: Optional[Dict] = None,
+        element: Optional[dict] = None,
         save: bool = True,
         request: Optional[HttpRequest] = None,
         current_site = None
-    ) -> Dict:
+    ) -> dict:
 
     initialize_import_element_dict(element)
 

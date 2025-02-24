@@ -82,8 +82,20 @@ const baseConfig = {
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader',
-          'sass-loader'
-        ]
+          {
+            loader: 'sass-loader',
+            options: {
+              implementation: require('sass'), // Explicitly use Dart Sass
+              warnRuleAsWarning: true, // Treat `@warn` as warnings, not errors
+              sassOptions: {
+                // https://sass-lang.com/documentation/breaking-changes/import/#can-i-silence-the-warnings
+                silenceDeprecations: ['import'],
+                quietDeps: true,
+                verbose: false,
+              },
+            },
+          },
+        ],
       },
       {
         test: /(fonts|files)[\\/].*\.(svg|woff2?|ttf|eot|otf)(\?.*)?$/,
@@ -126,13 +138,10 @@ const productionConfig = {
 
 const ignorePerformanceWarnings = {
   performance: {
-    hints: false // Suppress performance warnings in prod
+    hints: false, // Suppress performance warnings in prod
+    maxAssetSize: 1024000, // 🔹 Set asset size limit (1MB per file)
+    maxEntrypointSize: 2048000, // 🔹 Set entrypoint size limit (2MB)
   },
-  ignoreWarnings: [ // ignore performance issues
-    { message: /performance recommendations/ },
-    { message: /asset size limit/ },
-    { message: /entrypoint size limit/ }
-  ]
 }
 
 // combine config depending on the provided --mode command line option
