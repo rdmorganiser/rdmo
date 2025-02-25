@@ -220,7 +220,8 @@ SETTINGS_EXPORT = [
     'PROJECT_SEND_ISSUE',
     'NESTED_PROJECTS',
     'PROJECT_VIEWS_SYNC',
-    'PROJECT_TASKS_SYNC'
+    'PROJECT_TASKS_SYNC',
+    'TEMPLATES_EXECUTE_SCRIPT_TAGS'
 ]
 
 SETTINGS_API = [
@@ -250,6 +251,8 @@ TEMPLATES_API = [
     'projects/project_interview_questionset_help.html',
     'projects/project_interview_sidebar.html',
 ]
+
+TEMPLATES_EXECUTE_SCRIPT_TAGS = False
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'info@example.com'
@@ -419,7 +422,3 @@ REPLACE_MISSING_TRANSLATION = False
 
 # necessary since django 3.2, explicitly set primary key type to avoid warnings
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-
-MARKDOWN_TEMPLATES: dict[str, str] = {
-    # for example: 'not_empty': 'core/text_blocks/template_for_not_empty.html',
-}

@@ -2,13 +2,16 @@ import React, { useRef, useLayoutEffect } from 'react'
 import PropTypes from 'prop-types'
 import { isEmpty } from 'lodash'
 
+import { executeScriptTags } from 'rdmo/core/assets/js/utils/meta'
+
+
 const Html = ({ html = '' }) => {
   const ref = useRef()
 
-  // if html contains any element with `data-execute="true"`, it will be executed
-  // using the method in https://macarthur.me/posts/script-tags-in-react/
+  // if html contains a <script> tag, and settings.TEMPLATES_EXECUTE_SCRIPT_TAGS is True,
+  // it will be executed using the method in https://macarthur.me/posts/script-tags-in-react/
   useLayoutEffect(() => {
-    if (ref.current && !isEmpty(ref.current.querySelectorAll('[data-execute="true"]'))) {
+    if (ref.current && executeScriptTags) {
       // create a range objectm, set it contain the referenced node
       // and create a new fragment with the html code within that range
       const range = document.createRange()
