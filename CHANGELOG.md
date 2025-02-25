@@ -9,7 +9,7 @@
   * Tabs (e.g. Datasets) and single values can be reused in different projects.
   * An "Apply to all" button can be used to paste information into all the tabs.
   * Remove custom widgets feature (remove `QUESTIONS_WIDGETS` from settings)
-  * Fix several issues regarding the interface (#501, #224, #1191)
+  * Fix several issues regarding the interview (#501, #224, #1191)
   * Display attributes in interview to admins, editors, reviewers (#224)
   * Improve accessibility (#514, #1199)
 * Add the possibility to copy a project including all its values.
