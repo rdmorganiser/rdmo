@@ -19,7 +19,8 @@
   * Sites and groups can be used to restrict this behaviour.
   * This feature is enabled by default via the `PROJECT_VISIBILITY` setting
 * Add a contact form modal to each question to contact support (#502)
-  * `PROJECT_CONTACT = True` and `PROJECT_CONTACT_RECIPIENTS = [list of email strings]` enable this feature
+  * `PROJECT_CONTACT = True` and `PROJECT_CONTACT_RECIPIENTS = [list of email strings]`
+    enable this feature
 * Add signal handlers to automatically sync of project views and tasks (#345, #966, #1198)
   * When `PROJECT_VIEWS_SYNC = True` or `PROJECT_TASKS_SYNC = True` is set, the views or
     tasks for a project are automatically synchronized, depending on the
@@ -32,7 +33,8 @@
 * Add `rdmo.accounts.middleware.TermsAndConditionsRedirectMiddleware'` (#141, #161)
   * The (optional) middleware checks if a user has already confirmed the Terms of use.
   * If not, users need to confirm to proceed.
-  * Optionally, when a confirmation renewal is required, the `ACCOUNT_TERMS_OF_USE_DATE = '2025-02-25'` can be set to invalidate previous confirmations.
+  * Optionally, when a confirmation renewal is required, the `ACCOUNT_TERMS_OF_USE_DATE = '2025-02-25'`
+    can be set to invalidate previous confirmations.
 * Add `rdmo-admin` script
   * `rdmo-admin npm run [build:prod|build|watch]` can be used to build the front end
   * `rdmo-admin build` can be used to build the python package
