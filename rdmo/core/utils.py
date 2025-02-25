@@ -109,12 +109,11 @@ def get_model_field_meta(model):
     return meta
 
 
-def get_languages():
+def get_languages() -> list[tuple]:
     languages = []
     for i in range(5):
         try:
-            language = settings.LANGUAGES[i][0], settings.LANGUAGES[i][1],\
-                'lang%i' % (i + 1)
+            language = (settings.LANGUAGES[i][0], settings.LANGUAGES[i][1], f"lang{i + 1}")
             languages.append(language)
         except IndexError:
             pass

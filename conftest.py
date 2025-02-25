@@ -34,7 +34,7 @@ def fixtures():
 
 
 @pytest.fixture(scope='session')
-def django_db_setup(django_db_setup, django_db_blocker, fixtures): # noqa: PT004 - pytest-django requires this name "django_db_setup"
+def django_db_setup(django_db_setup, django_db_blocker, fixtures):
     """Populate database with test data from fixtures directories."""
     with django_db_blocker.unblock():
         call_command('loaddata', *fixtures)

@@ -36,7 +36,7 @@ def reload_urls(*app_names: str, root_urlconf = None) -> None:
 
 
 @pytest.fixture
-def enable_terms_of_use(settings):  # noqa: PT004
+def enable_terms_of_use(settings):
     settings.ACCOUNT_TERMS_OF_USE = True
     reload_urls('rdmo.accounts.urls')
 
@@ -49,7 +49,7 @@ def enable_terms_of_use(settings):  # noqa: PT004
 
 
 @pytest.fixture
-def enable_socialaccount(settings):  # noqa: PT004
+def enable_socialaccount(settings):
     # Arrange: this fixture enable and initializes the allauth.sociallaccount
     # INSTALLED_APPS already has "allauth.socialaccount","allauth.socialaccount.providers.dummy"
     settings.SOCIALACCOUNT = True
