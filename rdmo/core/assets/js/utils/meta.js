@@ -7,3 +7,5 @@ export const staticUrl = document.querySelector('meta[name="staticurl"]').conten
 export const siteId = Number(document.querySelector('meta[name="site_id"]').content)
 
 export const language = document.querySelector('meta[name="language"]').content
+
+export const executeScriptTags = document.querySelector('meta[name="execute_script_tags"]')?.content === 'true'

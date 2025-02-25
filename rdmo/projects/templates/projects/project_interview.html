@@ -5,6 +5,7 @@
 
 {% block head %}
     <meta name='project' content="{{ project.id }}" />
+    <meta name='execute_script_tags' content="{{ settings.TEMPLATES_EXECUTE_SCRIPT_TAGS|lower }}" />
 {% endblock %}
 
 {% block css %}
