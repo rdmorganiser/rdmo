@@ -8,4 +8,4 @@ export const siteId = Number(document.querySelector('meta[name="site_id"]').cont
 
 export const language = document.querySelector('meta[name="language"]').content
 
-export const executeScriptTags = document.querySelector('meta[name="execute_script_tags"]').content === 'true'
+export const executeScriptTags = document.querySelector('meta[name="execute_script_tags"]')?.content === 'true'
