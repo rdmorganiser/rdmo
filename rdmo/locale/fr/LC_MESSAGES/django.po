@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-22 15:01+0100\n"
-"PO-Revision-Date: 2024-10-24 16:31+0200\n"
+"POT-Creation-Date: 2025-02-27 12:07+0000\n"
+"PO-Revision-Date: 2025-02-27 16:47+0100\n"
 "Last-Translator: Yonny CARDENAS, Gautier DEBAECKER, Nadia LAJILI, Gino "
 "MARCHETTI <dmp@cc.in2p3.fr>\n"
 "Language-Team: RDMO <dmp@cc.in2p3.fr>\n"
@@ -43,7 +43,7 @@ msgstr ""
 
 #: accounts/forms.py:110
 msgid "Consent could not be saved. Please try again."
-msgstr ""
+msgstr "Le consentement n'a pas pu être enregistré. Veuillez réessayer."
 
 #: accounts/models.py:27 options/models.py:191 questions/models/question.py:97
 #: tasks/models.py:96
@@ -577,20 +577,16 @@ msgid "Close"
 msgstr "Fermer"
 
 #: accounts/templates/account/terms_of_use_accept_form.html:24
-#, fuzzy
-#| msgid "I agree to the terms of use"
 msgid "I agree to the terms of use."
-msgstr "J'accepte les conditions d'utilisation"
+msgstr "J'accepte les conditions d'utilisation."
 
 #: accounts/templates/account/terms_of_use_accept_form.html:28
 msgid "I accept"
-msgstr ""
+msgstr "J'accepte"
 
 #: accounts/templates/account/terms_of_use_accept_form.html:33
-#, fuzzy
-#| msgid "I agree to the terms of use"
 msgid "You have accepted the terms of use."
-msgstr "J'accepte les conditions d'utilisation"
+msgstr "Vous avez accepté les conditions d'utilisation."
 
 #: accounts/templates/account/verification_sent.html:7
 #: accounts/templates/account/verified_email_required.html:6
@@ -975,7 +971,7 @@ msgstr "Cible"
 
 #: core/apps.py:7
 msgid "Core"
-msgstr ""
+msgstr "Cœur"
 
 #: core/constants.py:15 options/models.py:155
 #: options/templates/options/export/option.html:8 projects/models/value.py:69
@@ -1039,74 +1035,74 @@ msgstr "Anglais"
 msgid "German"
 msgstr "Allemand"
 
-#: core/settings.py:288
+#: core/settings.py:291
 msgid "PDF"
 msgstr "PDF"
 
-#: core/settings.py:289
+#: core/settings.py:292
 msgid "Rich Text Format"
 msgstr "Rich Text Format"
 
-#: core/settings.py:290
+#: core/settings.py:293
 msgid "Open Office"
 msgstr "Open Office"
 
-#: core/settings.py:291
+#: core/settings.py:294
 msgid "Microsoft Office"
 msgstr "Microsoft Office"
 
-#: core/settings.py:292
+#: core/settings.py:295
 msgid "HTML"
 msgstr "HTML"
 
-#: core/settings.py:293
+#: core/settings.py:296
 msgid "Markdown"
 msgstr "Markdown"
 
-#: core/settings.py:294
+#: core/settings.py:297
 msgid "mediawiki"
 msgstr "mediawiki"
 
-#: core/settings.py:295
+#: core/settings.py:298
 msgid "LaTeX"
 msgstr "LaTeX"
 
-#: core/settings.py:326 core/settings.py:335
+#: core/settings.py:333 core/settings.py:342
 msgid "RDMO XML"
 msgstr "RDMO XML"
 
-#: core/settings.py:327
+#: core/settings.py:334
 msgid "CSV (comma separated)"
 msgstr "CSV (séparé par des virgules)"
 
-#: core/settings.py:328
+#: core/settings.py:335
 msgid "CSV (semicolon separated)"
 msgstr "CSV (séparé par des points-virgules)"
 
-#: core/settings.py:329
+#: core/settings.py:336
 msgid "JSON"
 msgstr "JSON"
 
-#: core/settings.py:367
+#: core/settings.py:374
 msgid "Enter a valid integer."
 msgstr "Entrez un nombre entier valide."
 
-#: core/settings.py:371
+#: core/settings.py:378
 msgid "Enter a valid float."
 msgstr "Saisissez un flotteur valide."
 
-#: core/settings.py:387
+#: core/settings.py:394
 msgid "Enter a valid boolean (e.g. 0, 1)."
 msgstr "Entrez un booléen valide (par exemple 0, 1)."
 
-#: core/settings.py:391
+#: core/settings.py:398
 msgid ""
 "Enter a valid date (e.g. \"02.03.2024\", \"03/02/2024\", \"2024-02-03\")."
 msgstr ""
 "Saisissez une date valide (par exemple « 02.03.2024 », « 03/02/2024 », « "
 "2024-02-03 »)."
 
-#: core/settings.py:405
+#: core/settings.py:412
 msgid "Enter a valid phone number (e.g. \"123456\" or \"+49 (0) 30 123456\")."
 msgstr ""
 "Saisissez un numéro de téléphone valide (par exemple « 123456 » ou « +49 (0) "
@@ -1187,6 +1183,8 @@ msgstr "Mettre à jour l'e-mail"
 msgid ""
 "Hold down \"Control\", or \"Command\" on a Mac, to select more than one."
 msgstr ""
+"Maintenez la touche « Contrôle » enfoncée, ou « Commande » sur un Mac, pour "
+"en sélectionner plusieurs."
 
 #: core/templates/core/home.html:44
 msgid ""
@@ -1234,15 +1232,15 @@ msgid "The questions and question sets for this question set."
 msgstr ""
 "Les questions et les ensembles de questions pour cet ensemble de questions."
 
-#: core/utils.py:140
+#: core/utils.py:139
 msgid "This format is not supported."
 msgstr "Ce format n'est pas pris en charge."
 
-#: core/utils.py:261
+#: core/utils.py:260
 msgid "show more"
 msgstr "en savoir plus"
 
-#: core/utils.py:262
+#: core/utils.py:261
 msgid "show less"
 msgstr "afficher moins"
 
@@ -1292,23 +1290,21 @@ msgid "This XML does not contain RDMO content."
 msgstr "Ce XML ne contient pas de contenu RDMO."
 
 #: core/xml.py:60
-#, fuzzy
-#| msgid "This RDMO XML file does not have a valid version number."
 msgid ""
 "The \"required\" attribute in this RDMO XML file is not a valid version."
-msgstr "Ce fichier XML RDMO n'a pas de numéro de version valide."
+msgstr ""
+"L'attribut « required » de ce fichier XML RDMO n'est pas une version valide."
 
 #: core/xml.py:67
-#, fuzzy
-#| msgid "This RDMO XML file does not have a valid version number."
 msgid "This RDMO XML file requires a newer RDMO version to be imported."
-msgstr "Ce fichier XML RDMO n'a pas de numéro de version valide."
+msgstr ""
+"Ce fichier XML RDMO nécessite une version plus récente du RDMO pour être "
+"importé."
 
 #: core/xml.py:78
-#, fuzzy
-#| msgid "This RDMO XML file does not have a valid version number."
 msgid "The \"version\" attribute in this RDMO XML file is not a valid version."
-msgstr "Ce fichier XML RDMO n'a pas de numéro de version valide."
+msgstr ""
+"L'attribut « version » de ce fichier XML RDMO n'est pas une version valide."
 
 #: core/xml.py:91 core/xml.py:103
 msgid "This is not a valid RDMO XML file."
@@ -1732,22 +1728,16 @@ msgid "Sites"
 msgstr "Sites"
 
 #: projects/admin.py:84
-#, fuzzy
-#| msgid "Sites"
 msgid "all Sites"
-msgstr "Sites"
+msgstr "tous les sites"
 
 #: projects/admin.py:88
-#, fuzzy
-#| msgid "Group"
 msgid "Groups"
-msgstr "Groupe"
+msgstr "Groupes"
 
 #: projects/admin.py:90
-#, fuzzy
-#| msgid "Group"
 msgid "all Groups"
-msgstr "Groupe"
+msgstr "tous les groupes"
 
 #: projects/apps.py:8 projects/models/project.py:79
 msgid "Projects"
@@ -1767,12 +1757,12 @@ msgstr "Invité"
 
 #: projects/forms.py:176 projects/forms.py:194
 msgid "Editing tasks is disabled."
-msgstr ""
+msgstr "La modification des tâches est désactivée."
 
 #: projects/forms.py:204 projects/forms.py:222
 #: projects/serializers/v1/__init__.py:104
 msgid "Editing views is disabled."
-msgstr ""
+msgstr "La modification des vues est désactivée."
 
 #: projects/forms.py:265
 msgid "Username or e-mail"
@@ -2311,17 +2301,14 @@ msgid "No"
 msgstr "Non"
 
 #: projects/models/visibility.py:16
-#, fuzzy
-#| msgid "The project for this invite."
 msgid "The project for this visibility."
-msgstr "Le projet pour cette invitation."
+msgstr "Le projet pour cette visibilité."
 
 #: projects/models/visibility.py:21
-#, fuzzy
-#| msgid "The site this project belongs to (in a multi site setup)."
 msgid "The sites for which the project is visible (in a multi site setup)."
 msgstr ""
-"Le site auquel ce projet appartient (dans une configuration multi-sites)."
+"Les sites pour lesquels le projet est visible (dans une configuration multi-"
+"sites)."
 
 #: projects/models/visibility.py:25 questions/models/catalog.py:81
 #: tasks/models.py:66 views/models.py:68
@@ -2329,19 +2316,17 @@ msgid "Group"
 msgstr "Groupe"
 
 #: projects/models/visibility.py:26
-#, fuzzy
-#| msgid "The groups for which this view is active."
 msgid "The groups for which the project is visible."
-msgstr "Les groupes pour lesquels cette vue est active."
+msgstr "Les groupes pour lesquels le projet est visible."
 
 #: projects/models/visibility.py:31
 #: projects/templates/projects/project_detail_header.html:33
 msgid "Visibility"
-msgstr ""
+msgstr "Visibilité"
 
 #: projects/models/visibility.py:32
 msgid "Visibilities"
-msgstr ""
+msgstr "Visibilités"
 
 #: projects/models/visibility.py:50
 #, python-format
@@ -2349,23 +2334,26 @@ msgid "This project can be accessed by all users on %s or in the group %s."
 msgid_plural ""
 "This project can be accessed by all users on %s or in the groups %s."
 msgstr[0] ""
+"Ce projet est accessible à tous les utilisateurs de %s ou du groupe %s."
 msgstr[1] ""
+"Ce projet est accessible à tous les utilisateurs sur %s ou dans les groupes "
+"%s."
 
 #: projects/models/visibility.py:58
 #, python-format
 msgid "This project can be accessed by all users on %s."
-msgstr ""
+msgstr "Ce projet est accessible à tous les utilisateurs sur %s."
 
 #: projects/models/visibility.py:61
 #, python-format
 msgid "This project can be accessed by all users in the group %s."
 msgid_plural "This project can be accessed by all users in the groups %s."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ce projet est accessible à tous les utilisateurs du groupe %s."
+msgstr[1] "Ce projet est accessible à tous les utilisateurs des groupes %s."
 
 #: projects/models/visibility.py:66
 msgid "This project can be accessed by all users."
-msgstr ""
+msgstr "Ce projet est accessible à tous les utilisateurs."
 
 #: projects/providers.py:32
 msgid "Integration error"
@@ -2429,49 +2417,37 @@ msgid "Greetings"
 msgstr "Salutations"
 
 #: projects/templates/projects/email/project_contact_message.txt:4
-#, fuzzy, python-format
-#| msgid ""
-#| "The following task was identified in the project \"%(project_title)s\" "
-#| "<%(project_url)s>:"
+#, python-format
 msgid ""
 "I have a question regarding the project \"%(project_title)s\" on the page "
 "\"%(page_title)s\":"
 msgstr ""
-"La tâche suivante a été identifiée dans le projet \"%(project_title)s\" "
-"<%(project_url)s>:"
+"J'ai une question concernant le projet « %(project_title)s » sur la page « "
+"%(page_title)s » :"
 
 #: projects/templates/projects/email/project_contact_message.txt:10
-#, fuzzy, python-format
-#| msgid ""
-#| "The following task was identified in the project \"%(project_title)s\" "
-#| "<%(project_url)s>:"
+#, python-format
 msgid "I have a question regarding the project \"%(project_title)s\":"
-msgstr ""
-"La tâche suivante a été identifiée dans le projet \"%(project_title)s\" "
-"<%(project_url)s>:"
+msgstr "J'ai une question concernant le projet « %(project_title)s » :"
 
 #: projects/templates/projects/email/project_contact_message.txt:18
 #, python-format
 msgid "In particular, about the question: %(question_text)s"
-msgstr ""
+msgstr "En particulier, pour la question : %(question_text)s"
 
 #: projects/templates/projects/email/project_contact_message.txt:28
-#, fuzzy
-#| msgid "Answers"
 msgid "Answer:"
-msgstr "Afficher les réponses"
+msgstr "Réponse :"
 
 #: projects/templates/projects/email/project_contact_message.txt:30
-#, fuzzy
-#| msgid "Answers"
 msgid "Answers:"
-msgstr "Afficher les réponses"
+msgstr "Réponses :"
 
 #: projects/templates/projects/email/project_contact_subject.txt:1
-#, fuzzy, python-format
-#| msgid "%(user_full_name)s invited you to collaborate on %(project_title)s"
+#, python-format
 msgid "%(user_full_name)s contacted support regarding \"%(project_title)s\""
-msgstr "%(user_full_name)s vous a invité à collaborer sur %(project_title)s"
+msgstr ""
+"%(user_full_name)s a contacté le support concernant « %(project_title)s »"
 
 #: projects/templates/projects/email/project_invite_message.txt:3
 #, python-format
@@ -2501,10 +2477,10 @@ msgstr ""
 "Si vous n'attendiez pas cette invitation, vous pouvez ignorer ce courriel."
 
 #: projects/templates/projects/email/project_invite_subject.txt:1
-#, fuzzy, python-format
-#| msgid "%(user_full_name)s invited you to collaborate on %(project_title)s"
+#, python-format
 msgid "%(user_full_name)s invited you to collaborate on \"%(project_title)s\""
-msgstr "%(user_full_name)s vous a invité à collaborer sur %(project_title)s"
+msgstr ""
+"%(user_full_name)s vous a invité à collaborer sur « %(project_title)s »"
 
 #: projects/templates/projects/integration_confirm_delete.html:7
 #: projects/templates/projects/integration_confirm_delete.html:17
@@ -2801,10 +2777,8 @@ msgstr "Mise à jour du projet parent"
 #: projects/templates/projects/project_detail_header_visibility.html:6
 #: projects/templates/projects/project_detail_sidebar.html:83
 #: projects/templates/projects/project_form_visibility.html:9
-#, fuzzy
-#| msgid "Update project views"
 msgid "Update project visibility"
-msgstr "Mise à jour des vues du projet"
+msgstr "Mise à jour de la visibilité du projet"
 
 #: projects/templates/projects/project_detail_integrations.html:40
 msgid "from"
@@ -2907,17 +2881,13 @@ msgid "Update project views"
 msgstr "Mise à jour des vues du projet"
 
 #: projects/templates/projects/project_detail_sidebar.html:66
-#, fuzzy
-#| msgid "My Projects"
 msgid "Copy project"
-msgstr "Mes projets"
+msgstr "Copier le projet"
 
 #: projects/templates/projects/project_detail_sidebar.html:81
 #: projects/templates/projects/project_form_visibility.html:11
-#, fuzzy
-#| msgid "Update project views"
 msgid "Make project visible"
-msgstr "Mise à jour des vues du projet"
+msgstr "Rendre le projet visible"
 
 #: projects/templates/projects/project_detail_sidebar.html:103
 #: projects/templates/projects/project_detail_snapshots.html:25
@@ -2958,22 +2928,20 @@ msgstr "Créé"
 #: projects/templates/projects/snapshot_form.html:9
 #: projects/templates/projects/snapshot_form.html:11
 msgid "Update snapshot"
-msgstr "Mettre à jour le dernier snapshot"
+msgstr "Mise à jour de l'instantané"
 
 #: projects/templates/projects/project_detail_snapshots.html:54
 #: projects/templates/projects/snapshot_rollback.html:7
 msgid "Rollback to snapshot"
-msgstr "Revenir au dernier snapshot"
+msgstr "Retour à l'instantané"
 
 #: projects/templates/projects/project_detail_snapshots.html:61
-#, fuzzy
-#| msgid "Create snapshot"
 msgid "Export snapshot"
-msgstr "Créer un snapshot"
+msgstr "Exporter l'instantané"
 
 #: projects/templates/projects/project_detail_snapshots.html:91
 msgid "No snapshots found."
-msgstr "Aucun snapshot trouvé."
+msgstr "Aucun instantané n'a été trouvé."
 
 #: projects/templates/projects/project_detail_snapshots_help.html:4
 msgid ""
@@ -3060,23 +3028,22 @@ msgid ""
 "template. When a project is made visible, users can access it as if they "
 "were in the guest role."
 msgstr ""
+"Les projets peuvent être rendus visibles à tous les utilisateurs, par "
+"exemple pour servir de modèle. Lorsqu'un projet est rendu visible, les "
+"utilisateurs peuvent y accéder comme s'ils avaient le rôle d'invité."
 
 #: projects/templates/projects/project_form_visibility.html:23
 msgid "Make visible"
-msgstr ""
+msgstr "Rendre visible"
 
 #: projects/templates/projects/project_form_visibility.html:25
-#, fuzzy
-#| msgid "Update e-mail"
 msgid "Update visibility"
-msgstr "Mettre à jour l'e-mail"
+msgstr "Mise à jour de la visibilité"
 
 #: projects/templates/projects/project_form_visibility.html:25
 #: projects/templates/projects/project_form_visibility.html:27
-#, fuzzy
-#| msgid "Remove entry"
 msgid "Remove visibility"
-msgstr "Supprimer l'entrée"
+msgstr "Supprimer la visibilité"
 
 #: projects/templates/projects/project_import.html:18
 #: projects/templates/projects/project_import_form.html:9
@@ -3147,6 +3114,9 @@ msgid ""
 "If you have a question or feedback please get in touch with us, you can use "
 "this form to send an email to the %(site_name)s support\""
 msgstr ""
+"Si vous avez une question ou un commentaire, n'hésitez pas à nous contacter. "
+"Vous pouvez utiliser ce formulaire pour envoyer un courriel à l'équipe "
+"d'assistance de %(site_name)s »."
 
 #: projects/templates/projects/project_interview_done.html:5
 msgid "Done!"
@@ -3161,35 +3131,24 @@ msgid "Error!"
 msgstr "Erreur!"
 
 #: projects/templates/projects/project_interview_error.html:9
-#, fuzzy
-#| msgid ""
-#| "An error occurred while retrieving the questions. Please contact support "
-#| "if this problem persists."
 msgid ""
 "An error occurred while retrieving the questionnaire. Please contact support "
 "if this problem persists."
 msgstr ""
-"Une erreur s'est produite lors de la récupération des questions. Veuillez "
-"contacter le service d'assistance si ce problème persiste."
+"Une erreur s'est produite lors de la récupération du questionnaire. Veuillez "
+"contacter le support si ce problème persiste."
 
 #: projects/templates/projects/project_interview_multiple_values_warning.html:4
-#, fuzzy
-#| msgid ""
-#| "Warning: Multiple answers exist in the database. This can happen due some "
-#| "technical problem in the past. You can remove unwanted answers using the "
-#| "\"Remove item\" field (<i class=\"fa fa-times\"></i>). Please contact "
-#| "support if the problem persists."
 msgid ""
 "Multiple answers exist in the database. This can happen due some technical "
 "problem in the past. You can remove unwanted answers using the \"Remove "
 "item\" field' (<i class=\"fa fa-times\"></i>). Please contact support if the "
 "problem persists."
 msgstr ""
-"Attention: Plusieurs réponses existent dans la base de données. Cela peut "
-"être dû à un problème technique dans le passé. Vous pouvez supprimer les "
-"réponses non souhaitées en utilisant le champ \"Supprimer l'élément\" (<i "
-"class=\"fa fa-times\"></i>). Veuillez contacter le service d'assistance si "
-"le problème persiste."
+"Multiple answers exist in the database. This can happen due some technical "
+"problem in the past. You can remove unwanted answers using the « Remove item "
+"» field' (<i class=\"fa fa-times\"></i>). Please contact support if the "
+"problem persists."
 
 #: projects/templates/projects/project_interview_navigation_help.html:4
 msgid "Grey entries will be conditionally skipped based on your input."
@@ -3324,10 +3283,8 @@ msgid "Select drop-down"
 msgstr "Sélectionnez le menu déroulant"
 
 #: questions/constants.py:20
-#, fuzzy
-#| msgid "Select drop-down"
 msgid "Select drop-down (free)"
-msgstr "Sélectionnez le menu déroulant"
+msgstr "Sélectionner la liste déroulante (gratuit)"
 
 #: questions/constants.py:21
 msgid "Range slider"
@@ -4144,21 +4101,21 @@ msgstr ""
 msgid "Section"
 msgstr "Section"
 
-#: questions/serializers/v1/question.py:114
+#: questions/serializers/v1/question.py:116
 msgid ""
 "If the \"Checkboxes\" widget is used, \"is_collection\" must be checked."
 msgstr ""
 "Si le widget \"Checkboxes\" est utilisé, la case \"is_collection\" doit être "
 "cochée."
 
-#: questions/serializers/v1/question.py:120
+#: questions/serializers/v1/question.py:122
 msgid ""
 "If the \"Date picker\" widget is used, the value type must be \"Datetime\"."
 msgstr ""
 "Si le widget \"Date picker\" est utilisé, le type de valeur doit être "
 "\"Datetime\"."
 
-#: questions/serializers/v1/question.py:126
+#: questions/serializers/v1/question.py:128
 msgid "If the \"Yes/No\" widget is used, the value type must be \"Boolean\"."
 msgstr ""
 "Si le widget \"Oui/Non\" est utilisé, le type de valeur doit être "

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-22 15:21+0100\n"
-"PO-Revision-Date: 2024-10-24 16:32+0200\n"
+"PO-Revision-Date: 2025-02-27 16:03+0100\n"
 "Last-Translator: Yonny CARDENAS, Gautier DEBAECKER, Nadia LAJILI, Gino "
 "MARCHETTI <dmp@cc.in2p3.fr>\n"
 "Language-Team: RDMO <dmp@cc.in2p3.fr>\n"
@@ -1448,113 +1448,102 @@ msgstr "Définir le préfixe URI pour tous les éléments"
 #: projects/assets/js/interview/components/main/Contact.js:26
 #: projects/assets/js/interview/components/main/question/QuestionContact.js:6
 msgid "Contact support"
-msgstr ""
+msgstr "Contacter le support"
 
 #: projects/assets/js/interview/components/main/Contact.js:27
 msgid "Send message"
-msgstr ""
+msgstr "Envoyer un message"
 
 #: projects/assets/js/interview/components/main/Done.js:20
-#, fuzzy
-#| msgid "View page nested"
 msgid "View answers"
-msgstr "Afficher la page imbriquée"
+msgstr "Voir les réponses"
 
 #: projects/assets/js/interview/components/main/Done.js:24
 #: projects/assets/js/interview/components/main/Errors.js:33
 msgid "Back to project overview"
-msgstr ""
+msgstr "Retour à l'aperçu du projet"
 
 #: projects/assets/js/interview/components/main/Errors.js:30
 #: projects/assets/js/interview/components/sidebar/Overview.js:40
-#, fuzzy
-#| msgid "Create page"
 msgid "Reload page"
-msgstr "Créer une page"
+msgstr "Recharger la page"
 
 #: projects/assets/js/interview/components/main/Search.js:67
 msgid "Search for project or snapshot title, or answer text ..."
 msgstr ""
+"Recherchez le titre d'un projet ou d'un instantané, ou répondez au texte ..."
 
 #: projects/assets/js/interview/components/main/Search.js:69
 msgid "No answers match your search."
-msgstr ""
+msgstr "Aucune réponse ne correspond à votre recherche."
 
 #: projects/assets/js/interview/components/main/Search.js:71
 #: projects/assets/js/interview/components/main/Search.js:112
 #: projects/assets/js/interview/components/main/widget/SelectInput.js:91
 msgid "Loading ..."
-msgstr ""
+msgstr "Chargement ..."
 
 #: projects/assets/js/interview/components/main/Search.js:79
 #: projects/assets/js/interview/components/sidebar/Overview.js:21
-#, fuzzy
-#| msgid "My projects"
 msgid "Project"
-msgstr "Mes projets"
+msgstr "Projet"
 
 #: projects/assets/js/interview/components/main/Search.js:83
 msgid "Snapshot"
-msgstr ""
+msgstr "Instantané"
 
 #: projects/assets/js/interview/components/main/Search.js:108
 msgid "Restrict the search to a particular project ..."
-msgstr ""
+msgstr "Limiter la recherche à un projet particulier ..."
 
 #: projects/assets/js/interview/components/main/Search.js:110
 msgid "No projects matching your search."
-msgstr ""
+msgstr "Aucun projet ne correspond à votre recherche."
 
 #: projects/assets/js/interview/components/main/Search.js:138
 msgid "Include snapshots in the search"
-msgstr ""
+msgstr "Inclure les instantanés dans la recherche"
 
 #: projects/assets/js/interview/components/main/page/PageButtons.js:18
 #: projects/assets/js/interview/components/sidebar/Buttons.js:15
 msgid "Proceed"
-msgstr ""
+msgstr "Procéder"
 
 #: projects/assets/js/interview/components/main/page/PageButtons.js:23
-#, fuzzy
-#| msgid "Delete question"
 msgid "Complete questionnaire"
-msgstr "Supprimer la question"
+msgstr "Complete questionnaire"
 
 #: projects/assets/js/interview/components/main/page/PageHeadDeleteModal.js:8
-#, fuzzy
-#| msgid "Delete page"
 msgid "Delete tab"
-msgstr "Supprimer la page"
+msgstr "Supprimer l'onglet"
 
 #: projects/assets/js/interview/components/main/page/PageHeadDeleteModal.js:14
-#, fuzzy, javascript-format
-#| msgid "You are about to permanently delete the question set:"
+#, javascript-format
 msgid "You are about to permanently delete the tab named: <strong>%s</strong>"
-msgstr ""
-"Vous êtes sur le point de supprimer définitivement la série de questions :"
+msgstr "You are about to permanently delete the tab named: <strong>%s</strong>"
 
 #: projects/assets/js/interview/components/main/page/PageHeadDeleteModal.js:17
-#, fuzzy
-#| msgid "You are about to permanently delete the task:"
 msgid "You are about to permanently delete this tab."
-msgstr "Vous êtes sur le point de supprimer définitivement la tâche :"
+msgstr "Vous êtes sur le point de supprimer définitivement cet onglet."
 
 #: projects/assets/js/interview/components/main/page/PageHeadDeleteModal.js:20
 msgid ""
 "This includes all given answers for this tab on all pages, not just this one."
 msgstr ""
+"Cela inclut toutes les réponses données pour cet onglet sur toutes les "
+"pages, et pas seulement celle-ci."
 
 #: projects/assets/js/interview/components/main/page/PageHeadReuseModal.js:43
 msgid "Reuse tab"
-msgstr ""
+msgstr "Onglet Réutilisation"
 
 #: projects/assets/js/interview/components/main/page/PageHeadReuseModal.js:43
 msgid "Reuse"
-msgstr ""
+msgstr "Réutilisation"
 
 #: projects/assets/js/interview/components/main/page/PageHeadReuseModal.js:48
 msgid "Answers"
-msgstr ""
+msgstr "Réponses"
 
 #: projects/assets/js/interview/components/main/page/PageHeadReuseModal.js:54
 msgid ""
@@ -1562,28 +1551,31 @@ msgid ""
 "have access to. This only affects questions that don't already have an "
 "answer."
 msgstr ""
+"Vous pouvez remplir cet onglet avec des réponses provenant d'un onglet "
+"similaire dans n'importe quel projet auquel vous avez accès. Cela n'affecte "
+"que les questions qui n'ont pas encore de réponse."
 
 #: projects/assets/js/interview/components/main/question/QuestionCopyValue.js:13
 #: projects/assets/js/interview/components/main/question/QuestionCopyValues.js:10
 msgid "Apply this answer to all tabs where this question is empty"
-msgstr ""
+msgstr "Appliquer cette réponse à tous les onglets où cette question est vide"
 
 #: projects/assets/js/interview/components/main/question/QuestionCopyValues.js:15
 msgid "Apply to all"
-msgstr ""
+msgstr "Postuler à tous"
 
 #: projects/assets/js/interview/components/main/question/QuestionDefault.js:8
 msgid "This is a default answer that can be customized."
-msgstr ""
+msgstr "Il s'agit d'une réponse par défaut qui peut être personnalisée."
 
 #: projects/assets/js/interview/components/main/question/QuestionDefault.js:9
 msgid "Default"
-msgstr ""
+msgstr "Défaut"
 
 #: projects/assets/js/interview/components/main/question/QuestionEraseValue.js:11
 #: projects/assets/js/interview/components/main/question/QuestionEraseValues.js:11
 msgid "Erase input"
-msgstr ""
+msgstr "Effacer l'entrée"
 
 #: projects/assets/js/interview/components/main/question/QuestionError.js:8
 msgid ""
@@ -1591,10 +1583,13 @@ msgid ""
 "editing. You will need to reload the page to make changes, but your input "
 "will be overwritten."
 msgstr ""
+"Ce champ n'a pas pu être sauvegardé, car quelqu'un d'autre l'a fait pendant "
+"que vous étiez en train de le modifier. Vous devrez recharger la page pour "
+"apporter des modifications, mais vos données seront écrasées."
 
 #: projects/assets/js/interview/components/main/question/QuestionError.js:11
 msgid "You reached the file quota for this project."
-msgstr ""
+msgstr "Vous avez atteint le quota de fichiers pour ce projet."
 
 #: projects/assets/js/interview/components/main/question/QuestionError.js:17
 msgid ""
@@ -1602,39 +1597,40 @@ msgid ""
 "editing. You will need to reload the page to proceed, but your input will be "
 "lost."
 msgstr ""
+"Ce champ n'a pas pu être sauvegardé, car quelqu'un d'autre l'a supprimé "
+"pendant que vous le modifiez. Vous devrez recharger la page pour continuer, "
+"mais vos données seront perdues."
 
 #: projects/assets/js/interview/components/main/question/QuestionError.js:23
 msgid "An unknown error occurred, please contact support"
-msgstr ""
+msgstr "Une erreur inconnue s'est produite, veuillez contacter le support"
 
 #: projects/assets/js/interview/components/main/question/QuestionOptional.js:6
 msgid "This is an optional question."
-msgstr ""
+msgstr "Il s'agit d'une question facultative."
 
 #: projects/assets/js/interview/components/main/question/QuestionOptional.js:7
-#, fuzzy
-#| msgid "Option"
 msgid "Optional"
-msgstr "Option"
+msgstr "En option"
 
 #: projects/assets/js/interview/components/main/question/QuestionReuseValue.js:57
 msgid "Append"
-msgstr ""
+msgstr "Ajouter"
 
 #: projects/assets/js/interview/components/main/question/QuestionReuseValue.js:62
 #: projects/assets/js/interview/components/main/question/QuestionReuseValues.js:83
 msgid "Replace"
-msgstr ""
+msgstr "Remplacer"
 
 #: projects/assets/js/interview/components/main/question/QuestionReuseValue.js:71
 #: projects/assets/js/interview/components/main/question/QuestionReuseValues.js:83
 msgid "Reuse answer"
-msgstr ""
+msgstr "Réponse à la question de la réutilisation"
 
 #: projects/assets/js/interview/components/main/question/QuestionReuseValue.js:75
 #: projects/assets/js/interview/components/main/question/QuestionReuseValues.js:88
 msgid "Answer"
-msgstr ""
+msgstr "Réponse"
 
 #: projects/assets/js/interview/components/main/question/QuestionReuseValue.js:87
 #: projects/assets/js/interview/components/main/question/QuestionReuseValues.js:101
@@ -1642,102 +1638,86 @@ msgid ""
 "You can reuse an answer from a similar question in any project you have "
 "access to."
 msgstr ""
+"Vous pouvez réutiliser une réponse à une question similaire dans n'importe "
+"quel projet auquel vous avez accès."
 
 #: projects/assets/js/interview/components/main/questionset/QuestionSetCopySet.js:27
-#, fuzzy
-#| msgid "Copy catalog"
 msgid "Copy block"
-msgstr "Copier le catalogue"
+msgstr "Bloc de copies"
 
 #: projects/assets/js/interview/components/main/questionset/QuestionSetRemoveSet.js:23
-#, fuzzy
-#| msgid "Remove"
 msgid "Remove block"
-msgstr "Retirer"
+msgstr "Retirer le bloc"
 
 #: projects/assets/js/interview/components/main/questionset/QuestionSetRemoveSet.js:26
-#, fuzzy
-#| msgid "You are about to permanently delete the task:"
 msgid "You are about to permanently remove this block."
-msgstr "Vous êtes sur le point de supprimer définitivement la tâche :"
+msgstr "Vous êtes sur le point de supprimer définitivement ce bloc."
 
 #: projects/assets/js/interview/components/main/widget/FileInput.js:27
 msgid "Current file:"
-msgstr ""
+msgstr "Dossier en cours :"
 
 #: projects/assets/js/interview/components/main/widget/FileInput.js:33
 msgid "No file stored."
-msgstr ""
+msgstr "Aucun fichier n'est stocké."
 
 #: projects/assets/js/interview/components/main/widget/FileInput.js:42
-#, fuzzy
-#| msgid "Drop the file here ..."
 msgid "Drop the files here ..."
-msgstr "Déposez le fichier ici ..."
+msgstr "Déposez les fichiers ici ..."
 
 #: projects/assets/js/interview/components/main/widget/FileInput.js:44
-#, fuzzy
-#| msgid "Drag and drop a file here or click to select a file"
 msgid "Drag 'n drop some files here, or click to select files."
-msgstr "Glisser-déposer un fichier ici ou cliquer pour sélectionner un fichier"
+msgstr ""
+"Glissez-déposez des fichiers ici, ou cliquez pour sélectionner des fichiers."
 
 #: projects/assets/js/interview/components/main/widget/RadioInput.js:53
-#, fuzzy
-#| msgid "Make available"
 msgid "No options are available."
-msgstr "Mettre à disposition"
+msgstr "Aucune option n'est disponible."
 
 #: projects/assets/js/interview/components/main/widget/SelectInput.js:89
-#, fuzzy
-#| msgid "Select all"
 msgid "Select ..."
-msgstr "Tout sélectionner"
+msgstr "Sélectionner ..."
 
 #: projects/assets/js/interview/components/main/widget/SelectInput.js:90
 msgid "No options found"
-msgstr ""
+msgstr "Aucune option trouvée"
 
 #: projects/assets/js/interview/components/main/widget/YesNoInput.js:37
 msgid "Yes"
-msgstr ""
+msgstr "Oui"
 
 #: projects/assets/js/interview/components/main/widget/YesNoInput.js:49
 msgid "No"
-msgstr ""
+msgstr "Non"
 
 #: projects/assets/js/interview/components/main/widget/common/Unit.js:21
 msgid "The unit for this answer."
-msgstr ""
+msgstr "L'unité de cette réponse."
 
 #: projects/assets/js/interview/components/sidebar/Navigation.js:12
 msgid "Navigation"
-msgstr ""
+msgstr "Navigation"
 
 #: projects/assets/js/interview/components/sidebar/NavigationLink.js:6
-#, fuzzy, javascript-format
-#| msgid "%s of %s"
+#, javascript-format
 msgid "(%s of %s)"
-msgstr "%s de %s"
+msgstr "(%s de %s)"
 
 #: projects/assets/js/interview/components/sidebar/Overview.js:15
-#, fuzzy
-#| msgid "view"
 msgid "Overview"
-msgstr "vue"
+msgstr "Vue d'ensemble"
 
 #: projects/assets/js/interview/components/sidebar/Overview.js:31
 msgid "You don't have write access to this project."
-msgstr ""
+msgstr "Vous n'avez pas d'accès en écriture à ce projet."
 
 #: projects/assets/js/interview/components/sidebar/Overview.js:32
 msgid "read only"
-msgstr ""
+msgstr "en lecture seule"
 
 #: projects/assets/js/interview/components/sidebar/Overview.js:43
-#, fuzzy
-#| msgid "View my projects"
 msgid "Back to my projects"
-msgstr "Voir mes projets"
+msgstr "Retour à mes projets"
 
 #: projects/assets/js/interview/components/sidebar/Progress.js:10
 #: projects/assets/js/projects/components/main/Projects.js:39

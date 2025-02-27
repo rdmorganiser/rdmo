@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-22 15:01+0100\n"
+"POT-Creation-Date: 2025-02-27 12:07+0000\n"
 "PO-Revision-Date: 2025-02-22 15:12+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
@@ -1014,74 +1014,74 @@ msgstr "Englisch"
 msgid "German"
 msgstr "Deutsch"
 
-#: core/settings.py:288
+#: core/settings.py:291
 msgid "PDF"
 msgstr "PDF"
 
-#: core/settings.py:289
+#: core/settings.py:292
 msgid "Rich Text Format"
 msgstr "Rich Text Format"
 
-#: core/settings.py:290
+#: core/settings.py:293
 msgid "Open Office"
 msgstr "Open Office"
 
-#: core/settings.py:291
+#: core/settings.py:294
 msgid "Microsoft Office"
 msgstr "Microsoft Office"
 
-#: core/settings.py:292
+#: core/settings.py:295
 msgid "HTML"
 msgstr "HTML"
 
-#: core/settings.py:293
+#: core/settings.py:296
 msgid "Markdown"
 msgstr "Markdown"
 
-#: core/settings.py:294
+#: core/settings.py:297
 msgid "mediawiki"
 msgstr "mediawiki"
 
-#: core/settings.py:295
+#: core/settings.py:298
 msgid "LaTeX"
 msgstr "LaTeX"
 
-#: core/settings.py:326 core/settings.py:335
+#: core/settings.py:333 core/settings.py:342
 msgid "RDMO XML"
 msgstr "RDMO XML"
 
-#: core/settings.py:327
+#: core/settings.py:334
 msgid "CSV (comma separated)"
 msgstr "CSV (Komma getrennt)"
 
-#: core/settings.py:328
+#: core/settings.py:335
 msgid "CSV (semicolon separated)"
 msgstr "CSV (Semikolon getrennt)"
 
-#: core/settings.py:329
+#: core/settings.py:336
 msgid "JSON"
 msgstr "JSON"
 
-#: core/settings.py:367
+#: core/settings.py:374
 msgid "Enter a valid integer."
 msgstr "Geben Sie eine gültige Ganzzahl ein."
 
-#: core/settings.py:371
+#: core/settings.py:378
 msgid "Enter a valid float."
 msgstr "Geben Sie einen gültigen Wert ein."
 
-#: core/settings.py:387
+#: core/settings.py:394
 msgid "Enter a valid boolean (e.g. 0, 1)."
 msgstr "Geben Sie einen gültigen booleschen Wert ein (z. B. 0, 1)."
 
-#: core/settings.py:391
+#: core/settings.py:398
 msgid ""
 "Enter a valid date (e.g. \"02.03.2024\", \"03/02/2024\", \"2024-02-03\")."
 msgstr ""
 "Geben Sie ein gültiges Datum ein (z.B. \"02.03.2024\", \"03/02/2024\", "
 "\"2024-02-03\")."
 
-#: core/settings.py:405
+#: core/settings.py:412
 msgid "Enter a valid phone number (e.g. \"123456\" or \"+49 (0) 30 123456\")."
 msgstr ""
 "Geben Sie eine gültige Telefonnummer ein (z. B. \"123456\" oder \"+49 (0) 30 "
@@ -1211,15 +1211,15 @@ msgstr "The questions and question sets for this page."
 msgid "The questions and question sets for this question set."
 msgstr "Das Fragen und Fragensets für dieses Fragenset."
 
-#: core/utils.py:140
+#: core/utils.py:139
 msgid "This format is not supported."
 msgstr "Dieses Format wird nicht unterstützt."
 
-#: core/utils.py:261
+#: core/utils.py:260
 msgid "show more"
 msgstr "mehr anzeigen"
 
-#: core/utils.py:262
+#: core/utils.py:261
 msgid "show less"
 msgstr "weniger anzeigen"
 
@@ -4025,21 +4025,21 @@ msgstr "Der kurze Titel für diesen Abschnitt (fünfte Sprache)."
 msgid "Section"
 msgstr "Abschnitt"
 
-#: questions/serializers/v1/question.py:114
+#: questions/serializers/v1/question.py:116
 msgid ""
 "If the \"Checkboxes\" widget is used, \"is_collection\" must be checked."
 msgstr ""
 "Wenn das Widget \"Ankreuzfelder\" verwendet wird, muss Ist eine Sammlung\" "
 "angekreuzt werden."
 
-#: questions/serializers/v1/question.py:120
+#: questions/serializers/v1/question.py:122
 msgid ""
 "If the \"Date picker\" widget is used, the value type must be \"Datetime\"."
 msgstr ""
 "Wenn das Widget \"Datumspicker\" verwendet wird, muss der Wertetyp \"Datum "
 "und Zeit\" sein."
 
-#: questions/serializers/v1/question.py:126
+#: questions/serializers/v1/question.py:128
 msgid "If the \"Yes/No\" widget is used, the value type must be \"Boolean\"."
 msgstr ""
 "Wenn das Widget \"Ja/Nein\" verwendet wird, muss der Wertetyp \"Boolsche "
