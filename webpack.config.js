@@ -1,6 +1,7 @@
 const webpack = require('webpack')
 const { merge } = require('webpack-merge')
 const path = require('path')
+const CopyPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 
@@ -16,7 +17,18 @@ const configList = [
     },
     output: {
       path: path.resolve(__dirname, './rdmo/core/static/core/'),
-    }
+    },
+    plugins: [
+      new CopyPlugin({
+        patterns: [
+          {
+            from: '**/*',
+            to: './/fonts/',
+            context: './rdmo/core/assets/fonts/'
+          }
+        ]
+      })
+    ]
   },
   {
     name: 'management',
