@@ -19,12 +19,12 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         if options['command'] in ['all', 'dist']:
-            self.clean_dir('dist')
-            self.clean_dir('rdmo.egg-info')
+            self.remove_path('dist')
+            self.remove_path('rdmo.egg-info')
         if options['command'] in ['all', 'media']:
-            self.clean_dir(settings.MEDIA_ROOT)
+            self.remove_path(settings.MEDIA_ROOT)
         if options['command'] in ['all', 'npm']:
-            self.clean_dir('node_modules')
+            self.remove_path('node_modules')
         if options['command'] in ['all', 'static']:
             self.clean_static()
         if options['command'] in ['all', 'python']:
@@ -34,20 +34,34 @@ class Command(BaseCommand):
         for root, dirs, files in os.walk('.'):
             for dir_name in dirs:
                 if dir_name == '__pycache__':
-                    self.clean_dir(os.path.join(root, dir_name), quiet=True)
+                    self.remove_path(os.path.join(root, dir_name), quiet=True)
 
     def clean_static(self):
-        self.clean_dir(settings.STATIC_ROOT)
+        self.remove_path(settings.STATIC_ROOT)
 
+        # hint: `git clean -dfXn` can be used to show all git-ignored files
         for path in [
-            # 'rdmo/core/static',     # TODO: enable after cleanup
-            'rdmo/management/static',
-            # 'rdmo/projects/static'  # TODO: enable after cleanup
+            'rdmo/core/static/core/css/base.css',
+            'rdmo/core/static/core/fonts/',
+            'rdmo/core/static/core/js/base.js',
+            'rdmo/core/static/core/js/base.js.LICENSE.txt',
+            'rdmo/management/static/',
+            'rdmo/projects/static/projects/css/interview.css',
+            'rdmo/projects/static/projects/css/projects.css',
+            'rdmo/projects/static/projects/js/',
         ]:
-            self.clean_dir(path)
+            self.remove_path(path)
 
-    def clean_dir(self, path, quiet=False):
+    def remove_path(self, path, quiet=False):
         if path and os.path.exists(path):
-            shutil.rmtree(path)
-            if not quiet:
-                print(f'Directory "{path}" has been removed!')
+            if os.path.isdir(path):
+                shutil.rmtree(path)
+                if not quiet:
+                    print(f'Directory "{path}" has been removed!')
+            elif os.path.isfile(path):
+                os.remove(path)
+                if not quiet:
+                    print(f'File "{path}" has been removed!')
+
+
+
