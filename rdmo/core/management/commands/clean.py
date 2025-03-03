@@ -62,6 +62,3 @@ class Command(BaseCommand):
                 os.remove(path)
                 if not quiet:
                     print(f'File "{path}" has been removed!')
-
-
-
