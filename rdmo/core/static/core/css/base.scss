@@ -95,7 +95,7 @@ a {
     }
 }
 
-.btn-link {
+.btn.btn-link {
     color: $link-color;
     padding: 0;
     text-decoration: none;
@@ -103,6 +103,9 @@ a {
     &:hover {
         color: $link-color-hover;
         text-decoration: none;
+    }
+    &:active {
+        outline: none;
     }
 }
 
