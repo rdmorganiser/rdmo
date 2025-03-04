@@ -15,7 +15,7 @@ import { Drop } from '../common/DragAndDrop'
 import Section from '../element/Section'
 import Page from '../element/Page'
 
-const NestedCatalog = ({ config, section, configActions, elementActions }) => {
+const NestedSection = ({ config, section, configActions, elementActions }) => {
 
   const updateFilterString = (uri) => configActions.updateConfig('filter.section.search', uri)
   const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.section.uri_prefix', uriPrefix)
@@ -92,11 +92,11 @@ const NestedCatalog = ({ config, section, configActions, elementActions }) => {
   )
 }
 
-NestedCatalog.propTypes = {
+NestedSection.propTypes = {
   config: PropTypes.object.isRequired,
   section: PropTypes.object.isRequired,
   configActions: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired
 }
 
-export default NestedCatalog
+export default NestedSection
