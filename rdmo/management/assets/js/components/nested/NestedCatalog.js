@@ -70,7 +70,7 @@ const NestedCatalog = ({ config, catalog, configActions, elementActions }) => {
                       value={get(config, 'display.uri.pages', true)} onChange={updateDisplayPagesURI} />
             <Checkbox label={<code className="code-questions">{gettext('Question sets')}</code>}
                       value={get(config, 'display.uri.questionsets', true)} onChange={updateDisplayQuestionSetsURI} />
-            <Checkbox label={<code className="code-questions'">{gettext('Questions')}</code>}
+            <Checkbox label={<code className="code-questions">{gettext('Questions')}</code>}
                       value={get(config, 'display.uri.questions', true)} onChange={updateDisplayQuestionsURI} />
             <Checkbox label={<code className="code-domain">{gettext('Attributes')}</code>}
                       value={get(config, 'display.uri.attributes', true)} onChange={updateDisplayAttributesURI} />
