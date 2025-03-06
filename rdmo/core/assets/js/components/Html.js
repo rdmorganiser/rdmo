@@ -27,7 +27,7 @@ const Html = ({ html = '' }) => {
   }
 
   return !isEmpty(html) && (
-    <div ref={ref} dangerouslySetInnerHTML={{ __html: html }} />
+    <span ref={ref} dangerouslySetInnerHTML={{ __html: html }} />
   )
 }
 
