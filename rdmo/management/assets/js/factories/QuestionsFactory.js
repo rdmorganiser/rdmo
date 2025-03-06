@@ -1,3 +1,5 @@
+import { siteId } from 'rdmo/core/assets/js/utils/meta'
+
 class QuestionsFactory {
 
   static createCatalog(config) {
@@ -6,8 +8,8 @@ class QuestionsFactory {
       uri_prefix: config.settings.default_uri_prefix,
       available: true,
       sections: [],
-      sites: config.settings.multisite ? [config.currentSite.id] : [],
-      editors: config.settings.multisite ? [config.currentSite.id] : [],
+      sites: config.settings.multisite ? [siteId] : [],
+      editors: config.settings.multisite ? [siteId] : [],
     }
   }
 
@@ -18,7 +20,7 @@ class QuestionsFactory {
       uri_path: parent.catalog ? parent.catalog.uri_path : '',
       catalogs: parent.catalog ? [parent.catalog.id] : [],
       pages: [],
-      editors: config.settings.multisite ? [config.currentSite.id] : [],
+      editors: config.settings.multisite ? [siteId] : [],
     }
   }
 
@@ -30,7 +32,7 @@ class QuestionsFactory {
       sections: parent.section ? [parent.section.id] : [],
       questionsets: [],
       questions: [],
-      editors: config.settings.multisite ? [config.currentSite.id] : [],
+      editors: config.settings.multisite ? [siteId] : [],
     }
   }
 
@@ -45,7 +47,7 @@ class QuestionsFactory {
       parents: parent.questionset ? [parent.questionset.id] : [],
       questionsets: [],
       questions: [],
-      editors: config.settings.multisite ? [config.currentSite.id] : [],
+      editors: config.settings.multisite ? [siteId] : [],
     }
   }
 
@@ -60,7 +62,7 @@ class QuestionsFactory {
       value_type: 'text',
       pages: parent.page ? [parent.page.id] : [],
       questionsets: parent.questionset ? [parent.questionset.id] : [],
-      editors: config.settings.multisite ? [config.currentSite.id] : [],
+      editors: config.settings.multisite ? [siteId] : [],
     }
   }
 

@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
 
+import { siteId } from 'rdmo/core/assets/js/utils/meta'
+
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
 
@@ -38,7 +40,7 @@ const Task = ({ config, task, elementActions, filter=false, filterSites=false, f
                                                : gettext('Make task available')}
                          available={task.available} locked={task.locked} onClick={toggleAvailable}
                          disabled={task.read_only} />
-          <ToggleCurrentSiteLink hasCurrentSite={config.settings.multisite ? task.sites.includes(config.currentSite.id) : true}
+          <ToggleCurrentSiteLink hasCurrentSite={config.settings.multisite ? task.sites.includes(siteId) : true}
                          onClick={toggleCurrentSite}
                          show={config.settings.multisite}/>
           <LockedLink title={task.locked ? gettext('Unlock task') : gettext('Lock task')}
