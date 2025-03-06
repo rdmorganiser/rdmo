@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
+import Html from 'rdmo/core/assets/js/components/Html'
+
 const QuestionText = ({ question }) => {
   const classnames = classNames({
     'form-label': true,
@@ -10,7 +12,7 @@ const QuestionText = ({ question }) => {
 
   return (
     <div className={classnames}>
-      {question.text}
+      <Html html={question.text} />
     </div>
   )
 }
