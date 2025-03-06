@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
 
+import { siteId } from 'rdmo/core/assets/js/utils/meta'
+
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
 
@@ -43,7 +45,7 @@ const Catalog = ({ config, catalog, elementActions, display='list',
                                                 : gettext('Make catalog available')}
                        available={catalog.available} locked={catalog.locked} onClick={toggleAvailable}
                        disabled={catalog.read_only} />
-        <ToggleCurrentSiteLink hasCurrentSite={config.settings.multisite ? catalog.sites.includes(config.currentSite.id) : true}
+        <ToggleCurrentSiteLink hasCurrentSite={config.settings.multisite ? catalog.sites.includes(siteId) : true}
                        onClick={toggleCurrentSite}
                        show={config.settings.multisite}/>
         <LockedLink title={catalog.locked ? gettext('Unlock catalog') : gettext('Lock catalog')}

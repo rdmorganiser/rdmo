@@ -1,3 +1,5 @@
+import { siteId } from 'rdmo/core/assets/js/utils/meta'
+
 class OptionsFactory {
 
   static createOptionSet(config, parent) {
@@ -5,7 +7,7 @@ class OptionsFactory {
       model: 'options.optionset',
       uri_prefix: config.settings.default_uri_prefix,
       questions: parent.question ? [parent.question.id] : [],
-      editors: config.settings.multisite ? [config.currentSite.id] : [],
+      editors: config.settings.multisite ? [siteId] : [],
     }
   }
 
@@ -16,7 +18,7 @@ class OptionsFactory {
       uri_path: parent.optionset ? parent.optionset.uri_path : '',
       optionsets: parent.optionset ? [parent.optionset.id] : [],
       conditions: [],
-      editors: config.settings.multisite ? [config.currentSite.id] : [],
+      editors: config.settings.multisite ? [siteId] : [],
     }
   }
 
