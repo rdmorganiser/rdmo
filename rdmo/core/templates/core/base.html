@@ -23,7 +23,7 @@
     {% block head %}{% endblock %}
 </head>
 
-<body {% block bodyattr %}{% endblock %}>
+<body>
 
 <!-- navigation -->
 {% include 'core/base_navigation.html' %}
@@ -41,8 +41,7 @@
 
 {% if not debug %}
 <!-- analytics -->
-    {% include 'core/base_analytics.html' %}
-
+{% include 'core/base_analytics.html' %}
 <!-- end analytics -->
 {% endif %}
 
