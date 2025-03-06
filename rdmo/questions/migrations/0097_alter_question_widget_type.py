@@ -10,7 +10,7 @@ def run_data_migration(apps, schema_editor):
             question.widget_type = 'select'
             question.save()
         elif question.widget_type == 'freeautocomplete':
-            question.widget_type = 'select_createable'
+            question.widget_type = 'select_creatable'
             question.save()
 
 
