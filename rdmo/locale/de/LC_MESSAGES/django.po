@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-27 12:07+0000\n"
-"PO-Revision-Date: 2025-02-22 15:12+0100\n"
+"POT-Creation-Date: 2025-03-06 18:33+0100\n"
+"PO-Revision-Date: 2025-03-06 18:35+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -986,7 +986,7 @@ msgstr "Datum und Zeit"
 msgid "Phone"
 msgstr "Telefon"
 
-#: core/constants.py:24 options/models.py:272 projects/models/value.py:74
+#: core/constants.py:24 options/models.py:297 projects/models/value.py:74
 msgid "Option"
 msgstr "Option"
 
@@ -1420,7 +1420,7 @@ msgstr "Dieses Feld darf nicht leer sein."
 msgid "This is not a valid RDMO import JSON."
 msgstr "Dies ist keine valide RDMO-JSON-Import."
 
-#: options/apps.py:7 options/models.py:57 options/models.py:273
+#: options/apps.py:7 options/models.py:57 options/models.py:298
 #: options/templates/options/export/options.html:6
 #: options/templates/options/export/optionset.html:9
 #: projects/templates/projects/issue_detail.html:81
@@ -1569,51 +1569,111 @@ msgstr "Der Hilfetext für diese Option (vierte Sprache)."
 msgid "The help text for this option (in the quinary language)."
 msgstr "Der Hilfetext für diese Option (fünfte Sprache)."
 
-#: options/models.py:241
+#: options/models.py:241 questions/models/question.py:122
+msgid "Default text value (primary)"
+msgstr "Standardmäßige Antwort (erste Sprache)"
+
+#: options/models.py:242
+msgid ""
+"The default text value for the additional input of this option (in the "
+"primary language)."
+msgstr ""
+"Die standardmäßige Text für die zusätzliche Eingabe dieser Option (erste "
+"Sprache)."
+
+#: options/models.py:246 questions/models/question.py:127
+msgid "Default text value (secondary)"
+msgstr "Standardmäßige Antwort (zweite Sprache)"
+
+#: options/models.py:247
+msgid ""
+"The default text value for the additional input of this option (in the "
+"secondary language)."
+msgstr ""
+"Die standardmäßige Text für die zusätzliche Eingabe dieser Option (zweite "
+"Sprache)."
+
+#: options/models.py:251 questions/models/question.py:132
+msgid "Default text value (tertiary)"
+msgstr "Standardmäßige Antwort (dritte Sprache)"
+
+#: options/models.py:252
+msgid ""
+"The default text value for the additional input of this option (in the "
+"tertiary language)."
+msgstr ""
+"Die standardmäßige Text für die zusätzliche Eingabe dieser Option (dritte "
+"Sprache)."
+
+#: options/models.py:256 questions/models/question.py:137
+msgid "Default text value (quaternary)"
+msgstr "Standardmäßige Antwort (vierte Sprache)"
+
+#: options/models.py:257
+msgid ""
+"The default text value for the additional input of this option (in the "
+"quaternary language)."
+msgstr ""
+"Die standardmäßige Text für die zusätzliche Eingabe dieser Option (vierte "
+"Sprache)."
+
+#: options/models.py:261 questions/models/question.py:142
+msgid "Default text value (quinary)"
+msgstr "Standardmäßige Antwort (fünfte Sprache)"
+
+#: options/models.py:262
+msgid ""
+"The default text value for the additional input of this option (in the "
+"quinary language)."
+msgstr ""
+"Die standardmäßige Text für die zusätzliche Eingabe dieser Option (fünfte "
+"Sprache)."
+
+#: options/models.py:266
 msgid "View text (primary)"
 msgstr "Ansichtstext (erste Sprache)"
 
-#: options/models.py:242
+#: options/models.py:267
 msgid "The view text for this option (in the primary language)."
 msgstr "Der Ansichtstext für diese Option (erste Sprache)."
 
-#: options/models.py:246
+#: options/models.py:271
 msgid "View text (secondary)"
 msgstr "Ansichtstext (zweite Sprache)"
 
-#: options/models.py:247
+#: options/models.py:272
 msgid "The view text for this option (in the secondary language)."
 msgstr "Der Ansichtstext für diese Option (zweite Sprache)."
 
-#: options/models.py:251
+#: options/models.py:276
 msgid "View text (tertiary)"
 msgstr "Ansichtstext (dritte Sprache)"
 
-#: options/models.py:252
+#: options/models.py:277
 msgid "The view text for this option (in the tertiary language)."
 msgstr "Der Ansichtstext für diese Option (dritte Sprache)."
 
-#: options/models.py:256
+#: options/models.py:281
 msgid "View text (quaternary)"
 msgstr "Ansichtstext (vierte Sprache)"
 
-#: options/models.py:257
+#: options/models.py:282
 msgid "The view text for this option (in the quaternary language)."
 msgstr "Der Ansichtstext für diese Option (vierte Sprache)."
 
-#: options/models.py:261
+#: options/models.py:286
 msgid "View text (quinary)"
 msgstr "Ansichtstext (fünfte Sprache)"
 
-#: options/models.py:262
+#: options/models.py:287
 msgid "The view text for this option (in the quinary language)."
 msgstr "Der Ansichtstext für diese Option (fünfte Sprache)."
 
-#: options/models.py:266 options/templates/options/export/option.html:17
+#: options/models.py:291 options/templates/options/export/option.html:17
 msgid "Additional input"
 msgstr "Zusätzliche Eingabe"
 
-#: options/models.py:267
+#: options/models.py:292
 msgid "Designates whether an additional input is possible for this option."
 msgstr "Legt fest, ob eine zusätzliche Eingabe für diese Option möglich ist."
 
@@ -1627,6 +1687,10 @@ msgstr "Hilfe"
 #: options/templates/options/export/option.html:14
 msgid "View text"
 msgstr "Ansichtstext"
+
+#: options/templates/options/export/option.html:20
+msgid "Default text"
+msgstr "Standardtext"
 
 #: overlays/apps.py:7 overlays/models.py:33
 msgid "Overlays"
@@ -2374,15 +2438,15 @@ msgstr "Es muss entweder ein Benutzer oder eine E-Mail angegeben werden."
 msgid "User and e-mail are mutually exclusive."
 msgstr "Benutzer und E-Mail schließen einander aus."
 
-#: projects/serializers/v1/page.py:114
+#: projects/serializers/v1/page.py:115
 msgid "entry"
 msgstr "Eintrag"
 
-#: projects/serializers/v1/page.py:150
+#: projects/serializers/v1/page.py:151
 msgid "block"
 msgstr "Block"
 
-#: projects/serializers/v1/page.py:208
+#: projects/serializers/v1/page.py:209
 msgid "set"
 msgstr "Set"
 
@@ -3679,41 +3743,21 @@ msgstr "Der Text für diese Frage (vierte Sprache)."
 msgid "The text for this question (in the quinary language)."
 msgstr "Der Titel für diese Frage (fünfte Sprache)."
 
-#: questions/models/question.py:122
-msgid "Default text value (primary)"
-msgstr "Standardmäßige Antwort (erste Sprache)"
-
 #: questions/models/question.py:123
 msgid "The default text value for this question (in the primary language)."
 msgstr "Die standardmäßige Antwort für diese Frage (erste Sprache)."
-
-#: questions/models/question.py:127
-msgid "Default text value (secondary)"
-msgstr "Standardmäßige Antwort (zweite Sprache)"
 
 #: questions/models/question.py:128
 msgid "The default text value for this question (in the secondary language)."
 msgstr "Die standardmäßige Antwort für diese Frage (zweite Sprache)."
 
-#: questions/models/question.py:132
-msgid "Default text value (tertiary)"
-msgstr "Standardmäßige Antwort (dritte Sprache)"
-
 #: questions/models/question.py:133
 msgid "The default text value for this question (in the tertiary language)."
 msgstr "Die standardmäßige Antwort für diese Frage (dritte Sprache)."
 
-#: questions/models/question.py:137
-msgid "Default text value (quaternary)"
-msgstr "Standardmäßige Antwort (vierte Sprache)"
-
 #: questions/models/question.py:138
 msgid "The default text value for this question (in the quaternary language)."
 msgstr "Die standardmäßige Antwort für diese Frage (vierte Sprache)."
-
-#: questions/models/question.py:142
-msgid "Default text value (quinary)"
-msgstr "Standardmäßige Antwort (fünfte Sprache)"
 
 #: questions/models/question.py:143
 msgid "The default text value for this question (in the quinary language)."
@@ -4377,9 +4421,6 @@ msgstr "Set"
 
 #~ msgid "This is a default answer that can be customized."
 #~ msgstr "Dies ist eine Standardantwort, die angepasst werden kann."
-
-#~ msgid "Default"
-#~ msgstr "Standardwert"
 
 #~ msgid "Erase input"
 #~ msgstr "Eingabe löschen"
