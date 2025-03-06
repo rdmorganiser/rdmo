@@ -22,6 +22,7 @@ const RadioInput = ({ question, value, options, disabled, updateValue, buttons }
       })
     } else {
       updateValue(value, {
+        text: option.default_text || '',
         option: option.id,
         unit: question.unit,
         value_type: question.value_type
