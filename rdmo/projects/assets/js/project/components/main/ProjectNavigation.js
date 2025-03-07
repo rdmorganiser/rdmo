@@ -31,16 +31,16 @@ const ProjectNavigation = () => {
     {
       title: 'DATENMANAGEMENTPLAN',
       items: [
-        { id: 'questionnaire', name: 'Fragebogen', icon: 'bi-clipboard-check' },
+        { id: 'interview', name: 'Fragebogen', icon: 'bi-clipboard-check' },
         { id: 'documents', name: 'Dokumente', icon: 'bi-file-text' },
-        { id: 'intermediate-states', name: 'Zwischenstände', icon: 'bi-stack' },
+        { id: 'snapshots', name: 'Zwischenstände', icon: 'bi-stack' },
       ],
     },
     {
       title: 'EINSTELLUNGEN',
       items: [
-        { id: 'project-data', name: 'Projektdaten', icon: 'bi-info-square' },
-        { id: 'project-team', name: 'Projektteam', icon: 'bi-people' },
+        { id: 'project-information', name: 'Projektdaten', icon: 'bi-info-square' },
+        { id: 'membership', name: 'Projektteam', icon: 'bi-people' },
         { id: 'plugins', name: 'Plugins', icon: 'bi-wrench' },
       ],
     },
