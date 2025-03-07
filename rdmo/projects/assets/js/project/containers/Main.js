@@ -6,33 +6,14 @@ import { connect } from 'react-redux'
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import * as projectActions from '../actions/projectActions'
 
-const Main = ({ config, settings, templates, user, project, configActions, projectActions }) => {
-  console.log(config, settings, templates, user, project)
-  console.log(configActions, projectActions)
+import ProjectNavigation from '../components/main/ProjectNavigation'
 
-  return project && (
-    <div className="container">
-      <p>
-        <span>👍</span>
-      </p>
-
-      <p>
-        <button className="btn btn-primary">
-          This is a button!
-        </button>
-      </p>
-    </div>
-  )
+const Main = ({ project }) => {
+  return project.project && <ProjectNavigation />
 }
 
 Main.propTypes = {
-    config: PropTypes.object.isRequired,
-    settings: PropTypes.object.isRequired,
-    templates: PropTypes.object.isRequired,
-    user: PropTypes.object.isRequired,
     project: PropTypes.object.isRequired,
-    configActions: PropTypes.object.isRequired,
-    projectActions: PropTypes.object.isRequired
 }
 
 function mapStateToProps(state) {
