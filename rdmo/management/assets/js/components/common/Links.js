@@ -45,7 +45,9 @@ const AddLink = ({ title, altTitle, onClick, onAltClick, disabled }) => {
   } else {
     return (
       <span className="dropdown">
-        <button className="element-btn-link btn-link fa fa-plus" data-toggle="dropdown"></button>
+        <button type="button" className="element-btn-link btn-link fa fa-plus" data-toggle="dropdown"
+                title={`${title}/${altTitle}`} aria-label={`${title}/${altTitle}`}>
+        </button>
         <ul className="dropdown-menu">
           <li onClick={onClick}>
             <Link href="" onClick={onClick}>{title}</Link>
@@ -142,7 +144,8 @@ ShowElementsLink.propTypes = {
 const ExportLink = ({ exportUrl, title, exportFormats, csv=false, full=false }) => {
   return (
     <span className="dropdown">
-      <button className="element-btn-link btn-link fa fa-download" title={title} data-toggle="dropdown"></button>
+      <button type="button" className="element-btn-link btn-link fa fa-download" data-toggle="dropdown"
+              title={title} aria-label={title}></button>
       <ul className="dropdown-menu">
         <li><a href={exportUrl}>{gettext('XML')}</a></li>
         {

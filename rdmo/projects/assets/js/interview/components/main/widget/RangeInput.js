@@ -4,6 +4,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import classNames from 'classnames'
 import { isNil, toString } from 'lodash'
 
+import { getQuestionTextId, getQuestionHelpId } from '../../../utils/question'
 import { isDefaultValue } from '../../../utils/value'
 
 import Unit from './common/Unit'
@@ -47,6 +48,8 @@ const RangeInput = ({ question, value, disabled, updateValue, buttons }) => {
         min={isNil(question.minimum) ? '0' : question.minimum}
         max={isNil(question.maximum) ? '100' : question.maximum}
         step={isNil(question.step) ? '1' : question.step}
+        aria-labelledby={getQuestionTextId(question)}
+        aria-describedby={getQuestionHelpId(question)}
         disabled={disabled}
         value={inputValue}
         onChange={(event) => {

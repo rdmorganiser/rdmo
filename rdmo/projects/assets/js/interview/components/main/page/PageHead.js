@@ -107,7 +107,7 @@ const PageHead = ({ templates, page, sets, values, disabled, currentSet,
                 !disabled && (
                   <li>
                     <a href="" title={gettext('Add tab')} className="add-set" onClick={handleOpenCreateModal}>
-                      <i className="fa fa-plus fa-btn"></i> {capitalize(page.verbose_name)}
+                      <i className="fa fa-plus fa-btn" aria-hidden="true"></i> {capitalize(page.verbose_name)}
                     </a>
                   </li>
                 )
@@ -118,28 +118,29 @@ const PageHead = ({ templates, page, sets, values, disabled, currentSet,
                 <div className="interview-page-tabs-buttons">
                   {
                     page.attribute && (
-                      <button className="btn-link fa fa-pencil" title={gettext('Edit tab')} onClick={updateModal.open} />
+                      <button type="button" className="btn-link fa fa-pencil"
+                              title={gettext('Edit tab')} aria-label={gettext('Edit tab')}
+                              onClick={updateModal.open} />
                     )
                   }
-                  <button className="btn-link fa fa-copy"
-                    title={gettext('Copy tab')}
-                    onClick={copyModal.open}
-                  />
-                  <button className="btn-link fa fa-arrow-circle-down"
-                    title={gettext('Reuse answers')}
-                    onClick={importModal.open}
-                  />
-                  <button className="btn-link fa fa-trash"
-                    title={gettext('Remove tab')}
-                    onClick={deleteModal.open}
-                  />
+                  <button type="button" className="btn-link fa fa-copy"
+                          title={gettext('Copy tab')} aria-label={gettext('Copy tab')}
+                          onClick={copyModal.open} />
+                  <button type="button" className="btn-link fa fa-arrow-circle-down"
+                          title={gettext('Reuse answers')} aria-label={gettext('Reuse answers')}
+                          onClick={importModal.open} />
+                  <button type="button" className="btn-link fa fa-trash"
+                          title={gettext('Remove tab')} aria-label={gettext('Remove tab')}
+                          onClick={deleteModal.open} />
                 </div>
               )
             }
           </>
         ) : (
-          <button className="btn btn-success" title={gettext('Add tab')} onClick={createModal.open}>
-            <i className="fa fa-plus fa-btn"></i> {capitalize(page.verbose_name)}
+          <button type="button" className="btn btn-success"
+                  title={gettext('Add tab')} aria-label={gettext('Add tab')}
+                  onClick={createModal.open}>
+            <i className="fa fa-plus fa-btn" aria-hidden="true"></i> {capitalize(page.verbose_name)}
           </button>
         )
       }

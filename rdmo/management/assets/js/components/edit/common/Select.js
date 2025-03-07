@@ -48,7 +48,9 @@ const Select = ({ config, element, field, options, createText, isMulti, onChange
 
   return (
     <div className={className}>
-      <label className="control-label" htmlFor={id}>{label}</label>
+      <div className="mb-5">
+        <strong id={id}>{label}</strong>
+      </div>
 
       <div className="select-item">
         {
@@ -60,13 +62,13 @@ const Select = ({ config, element, field, options, createText, isMulti, onChange
 
         <ReactSelect classNamePrefix="react-select" className="react-select" isClearable={true}
                      options={selectOptions} value={selectValue} isMulti={isMulti}
-                     onChange={handleChange} styles={styles} isDisabled={element.read_only} />
+                     onChange={handleChange} styles={styles} isDisabled={element.read_only} aria-labelledby={id} />
       </div>
 
 
       {
         onCreate &&
-        <button className="btn btn-success btn-xs mt-10" onClick={onCreate} disabled={isNil(element.id)}
+        <button type="button" className="btn btn-success btn-xs mt-10" onClick={onCreate} disabled={isNil(element.id)}
                 title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
           {createText}
         </button>

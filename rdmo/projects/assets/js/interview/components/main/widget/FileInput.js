@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { useDropzone } from 'react-dropzone'
 
+import { getQuestionTextId, getQuestionHelpId } from '../../../utils/question'
+
 const FileInput = ({ question, value, disabled, updateValue, buttons }) => {
   const onDrop = useCallback(acceptedFiles => {
     if (acceptedFiles.length == 1) {
@@ -35,7 +37,11 @@ const FileInput = ({ question, value, disabled, updateValue, buttons }) => {
           }
 
           <div {...getRootProps({className: classnames})}>
-            <input {...getInputProps()} />
+            <input
+              {...getInputProps()}
+              aria-labelledby={getQuestionTextId(question)}
+              aria-describedby={getQuestionHelpId(question)}
+            />
             <div className="text-muted">
               {
                 isDragActive ? (

@@ -47,7 +47,7 @@ const NestedCatalog = ({ config, catalog, configActions, elementActions }) => {
           <div className="row">
             <div className="col-sm-8">
               <FilterString value={get(config, 'filter.catalog.search', '')} onChange={updateFilterString}
-                            placeholder={gettext('Filter catalogs')} />
+                            label={gettext('Filter catalogs')} />
             </div>
             <div className="col-sm-4">
               <FilterUriPrefix value={get(config, 'filter.catalog.uri_prefix', '')} onChange={updateFilterUriPrefix}

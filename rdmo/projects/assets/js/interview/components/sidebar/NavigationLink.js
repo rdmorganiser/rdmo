@@ -15,16 +15,16 @@ const NavigationLink = ({ element, href, onClick }) => {
       {element.title}
       {
         element.count > 0 && element.count == element.total && (
-          <span>
+          <span aria-label={gettext('Complete')}>
             {' '}<i className="fa fa-check" aria-hidden="true"></i>
           </span>
         )
       }
       {
         element.count > 0 && element.count != element.total && (
-          <>
+          <span aria-label={label}>
             {' '}<span>{label}</span>
-          </>
+          </span>
         )
       }
     </a>

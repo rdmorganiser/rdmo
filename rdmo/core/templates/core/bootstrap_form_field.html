@@ -6,9 +6,11 @@
 
     {% with field|widget_type as type %}
 
-    {% if type != 'checkboxinput' %}
-    <label for="{{ field.id_for_label }}" class="control-label">{{ field.label }}</label>
-    {% endif%}
+    {% if type == 'radio' or type == 'checkboxinput' or type == 'checkboxselectmultiple' %}
+        <strong class="mb-5">{{ field.label }}</strong>
+    {% else %}
+        <label for="{{ field.id_for_label }}" class="control-label">{{ field.label }}</label>
+    {% endif %}
 
     {% if field.help_text %}
     <div class="help-block info">

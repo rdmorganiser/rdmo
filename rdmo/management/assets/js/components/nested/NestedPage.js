@@ -45,7 +45,7 @@ const NestedPage = ({ config, page, configActions, elementActions }) => {
           <div className="row">
             <div className="col-sm-8">
               <FilterString value={get(config, 'filter.page.search', '')} onChange={updateFilterString}
-                            placeholder={gettext('Filter pages')} />
+                            label={gettext('Filter pages')} />
             </div>
             <div className="col-sm-4">
               <FilterUriPrefix value={get(config, 'filter.page.uri_prefix', '')} onChange={updateFilterUriPrefix}

@@ -6,6 +6,7 @@ import { enGB, de, it, es, fr } from 'date-fns/locale'
 
 import lang from 'rdmo/core/assets/js/utils/lang'
 
+import { getQuestionTextId, getQuestionHelpId } from '../../../utils/question'
 import { isDefaultValue } from '../../../utils/value'
 
 const DateInput = ({ question, value, disabled, updateValue, buttons }) => {
@@ -64,6 +65,8 @@ const DateInput = ({ question, value, disabled, updateValue, buttons }) => {
           disabled={disabled}
           popperPlacement="bottom-start"
           showPopperArrow={false}
+          ariaLabelledBy={getQuestionTextId(question)}
+          ariaDescribedBy={getQuestionHelpId(question)}
         />
       </div>
     </div>

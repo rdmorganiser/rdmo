@@ -18,6 +18,7 @@ const AdditionalTextareaInput = ({ value, option, disabled, onChange }) => {
       rows={4}
       className="form-control input-sm"
       disabled={disabled}
+      aria-label={gettext('Additional input')}
       value={inputValue}
       onChange={(event) => {
         setInputValue(event.target.value)

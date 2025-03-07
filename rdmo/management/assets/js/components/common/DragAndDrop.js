@@ -14,7 +14,7 @@ const Drag = ({ element, show=true }) => {
   drag(dragRef)
 
   return show && <span className="element-link drag">
-    <i className="fa fa-arrows drag" ref={dragRef}></i>
+    <i className="fa fa-arrows drag" ref={dragRef} aria-hidden="true"></i>
   </span>
 }
 

@@ -20,10 +20,10 @@
             <th style="width: 30%">{% trans 'User' %}</th>
             <th style="width: 30%">{% trans 'E-Mail' %}</th>
             <th style="width: 30%">{% trans 'Role' %}</th>
-            <th style="width: 10%" class="text-right">
+            <th style="width: 10%" class="text-right" aria-label="{% trans 'Actions' %}">
                 {% if can_add_membership %}
                     <a href="{% url 'membership_create' project.pk %}" title="{% trans 'Add member' %}">
-                        <i class="fa fa-plus"></i>
+                        <i class="fa fa-plus" aria-hidden="true"></i>
                     </a>
                 {% endif %}
             </th>

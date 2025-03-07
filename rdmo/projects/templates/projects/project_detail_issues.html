@@ -20,10 +20,10 @@
                 <th style="width: 50%">{% trans 'Description' %}</th>
                 <th style="width: 15%">{% trans 'Time frame' %}</th>
                 <th style="width: 15%">{% trans 'Status' %}</th>
-                <th style="width: 10%" class="text-right">
+                <th style="width: 10%" class="text-right" aria-label="{% trans 'Actions' %}">
                 {% if can_change_project and not settings.PROJECT_TASKS_SYNC  %}
                     <a href="{% url 'project_update_tasks' project.pk %}" title="{% trans 'Update project tasks.' %}">
-                        <i class="fa fa-pencil"></i>
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
                     </a>
                 {% endif %}
                 </th>
@@ -70,7 +70,7 @@
         {% if can_change_project and not settings.PROJECT_TASKS_SYNC %}
             <p class="project-update">
                 <a href="{% url 'project_update_tasks' project.pk %}" title="{% trans 'Update project tasks.' %}">
-                    <i class="fa fa-pencil"></i>
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
                 </a>
             </p>
         {% endif %}

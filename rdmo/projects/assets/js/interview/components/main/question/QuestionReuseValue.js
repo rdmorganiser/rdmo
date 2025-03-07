@@ -64,8 +64,10 @@ const QuestionReuseValue = ({ page, question, value, disabled, updateValue }) =>
   </>
 
   return !disabled && <>
-    <button type="button" className="btn btn-link btn-reuse-value" onClick={() => setShow(true)}>
-      <i className="fa fa-arrow-circle-down fa-btn"></i>
+    <button type="button" className="btn btn-link btn-reuse-value"
+            title={gettext('Reuse answer')} aria-label={gettext('Reuse answer')}
+            onClick={() => setShow(true)}>
+      <i className="fa fa-arrow-circle-down fa-btn" aria-hidden="true"></i>
     </button>
 
     <Modal title={gettext('Reuse answer')} show={show} buttons={modalButtons}

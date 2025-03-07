@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
+import { getQuestionTextId } from '../../../utils/question'
+
 import Html from 'rdmo/core/assets/js/components/Html'
 
 const QuestionText = ({ question }) => {
@@ -12,7 +14,7 @@ const QuestionText = ({ question }) => {
 
   return (
     <div className={classnames}>
-      <Html html={question.text} />
+      <Html id={getQuestionTextId(question)} html={question.text} />
     </div>
   )
 }

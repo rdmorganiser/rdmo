@@ -8,8 +8,8 @@ const QuestionEraseValue = ({ value, disabled, updateValue }) => {
 
   return !disabled && (
     <button type="button" className="btn btn-link btn-erase-value" onClick={handleEraseValue}
-            title={gettext('Erase input')}>
-      <i className="fa fa-eraser fa-btn"></i>
+            title={gettext('Erase input')} aria-label={gettext('Erase input')}>
+      <i className="fa fa-eraser fa-btn" aria-hidden="true"></i>
     </button>
   )
 }

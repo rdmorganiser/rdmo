@@ -30,7 +30,7 @@ const ImportSidebar = ({ config, imports, importActions }) => {
         <h2>{gettext('Import successful')}</h2>
 
         <p className="import-buttons">
-          <button className="btn btn-default" onClick={() => importActions.resetElements()}>
+          <button type="button" className="btn btn-default" onClick={() => importActions.resetElements()}>
             {gettext('Back')}
           </button>
         </p>
@@ -41,10 +41,10 @@ const ImportSidebar = ({ config, imports, importActions }) => {
       <div className="import-sidebar">
         <h2>{gettext('Import elements')}</h2>
         <p className="import-buttons">
-          <button className="btn btn-success" onClick={() => importActions.importElements()}>
+          <button type="button" className="btn btn-success" onClick={() => importActions.importElements()}>
             {interpolate(ngettext('Import one element', 'Import %s elements', count), [count])}
           </button>
-          <button className="btn btn-default" onClick={() => importActions.resetElements()}>
+          <button type="button" className="btn btn-default" onClick={() => importActions.resetElements()}>
             {gettext('Back')}
           </button>
         </p>
@@ -110,17 +110,20 @@ const ImportSidebar = ({ config, imports, importActions }) => {
 
         <div className="form-group">
           <div className="input-group">
-            <input className="form-control" type="text" placeholder={gettext('URI prefix')}
+            <input className="form-control" type="text"
+                   placeholder={gettext('URI prefix')} aria-label={gettext('URI prefix')}
                    value={uriPrefix} onChange={event => setUriPrefix(event.target.value)} />
 
             <span className="input-group-btn">
               <button type="button" className="btn btn-default"
                 title={gettext('Insert default URI Prefix')}
+                aria-label={gettext('Insert default URI Prefix')}
                 onClick={() => setUriPrefix(config.settings.default_uri_prefix)}>
                 <span className="fa fa-magic"></span>
               </button>
               <button type="button" className="btn btn-primary" disabled={disabled}
                 title={gettext('Set URI prefix for all elements')}
+                aria-label={gettext('Set URI prefix for all elements')}
                 onClick={updateUriPrefix}>
                 <span className="fa fa-arrow-right"></span>
               </button>
