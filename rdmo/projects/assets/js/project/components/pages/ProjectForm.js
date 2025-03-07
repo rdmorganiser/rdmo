@@ -17,7 +17,6 @@ const ProjectForm = () => {
 
   // State for the switch, initialized based on parent field value
   const [isParentSwitchOn, setIsParentSwitchOn] = useState(false)
-  // const [titleLength, setTitleLength] = useState(10) // Default minimum size
 
   return (
     <Form
@@ -34,15 +33,6 @@ const ProjectForm = () => {
               className="form-control"
               placeholder="Title"
             />
-            {/* <Field
-              name="title"
-              component="input"
-              type="text"
-              className="form-control"
-              placeholder="Title"
-              size={Math.max(10, titleLength)} // Dynamically adjust width
-              onChange={(e) => setTitleLength(e.target.value.length)} // Track length
-            /> */}
             <div className="form-text">Der Title für dieses Projekt.</div>
           </div>
 
