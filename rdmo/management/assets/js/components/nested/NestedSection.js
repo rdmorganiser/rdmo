@@ -46,7 +46,7 @@ const NestedSection = ({ config, section, configActions, elementActions }) => {
           <div className="row">
             <div className="col-sm-8">
               <FilterString value={get(config, 'filter.section.search', '')} onChange={updateFilterString}
-                            placeholder={gettext('Filter sections')} />
+                            label={gettext('Filter sections')} />
             </div>
             <div className="col-sm-4">
               <FilterUriPrefix value={get(config, 'filter.section.uri_prefix', '')} onChange={updateFilterUriPrefix}

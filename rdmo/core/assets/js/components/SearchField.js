@@ -32,12 +32,14 @@ const SearchField = ({ value, onChange, onSearch, placeholder }) => {
           value={value}
           onChange={(e) => handleChange(e.target.value)}
           onKeyDown={handleKeyDown}
+          aria-label={gettext('Search')}
         />
         <span className="input-group-btn">
-          <button className="btn btn-default" onClick={handleButtonClick}>
+          <button type="button" className="btn btn-default" onClick={handleButtonClick}
+                  title={gettext('Reset')} aria-label={gettext('Reset')}>
             <span className="fa fa-times"></span>
           </button>
-          <button className="btn btn-primary" onClick={handleSearch}>
+          <button type="submit" className="btn btn-primary" onClick={handleSearch}>
             {gettext('Search')}
           </button>
         </span>

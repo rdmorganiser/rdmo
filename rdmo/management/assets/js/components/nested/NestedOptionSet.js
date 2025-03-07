@@ -33,7 +33,7 @@ const NestedOptionSet = ({ config, optionset, configActions, elementActions }) =
           <div className="row">
             <div className="col-sm-8">
               <FilterString value={get(config, 'filter.optionset.search', '')} onChange={updateFilterString}
-                            placeholder={gettext('Filter option sets')} />
+                            label={gettext('Filter option sets')} />
             </div>
             <div className="col-sm-4">
               <FilterUriPrefix value={get(config, 'filter.optionset.uri_prefix', '')} onChange={updateFilterUriPrefix}

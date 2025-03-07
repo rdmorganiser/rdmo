@@ -18,10 +18,10 @@
             <thead>
                 <th style="width: 20%">{% trans 'View' %}</th>
                 <th style="width: 60%">{% trans 'Description' %}</th>
-                <th style="width: 20%" class="text-right">
+                <th style="width: 20%" class="text-right" aria-label="{% trans 'Actions' %}">
                     {% if can_change_project and not settings.PROJECT_VIEWS_SYNC %}
                     <a href="{% url 'project_update_views' project.pk %}" title="{% trans 'Update project views' %}">
-                        <i class="fa fa-pencil"></i>
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
                     </a>
                     {% endif %}
                 </th>
@@ -48,7 +48,7 @@
         {% if can_change_project and not settings.PROJECT_VIEWS_SYNC %}
             <p class="project-update">
                 <a href="{% url 'project_update_views' project.pk %}" title="{% trans 'Update project views' %}">
-                    <i class="fa fa-pencil"></i>
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
                 </a>
             </p>
         {% endif %}
