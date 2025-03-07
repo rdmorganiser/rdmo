@@ -6,7 +6,10 @@ import { projectId } from '../utils/meta'
 import {
   FETCH_PROJECT_INIT,
   FETCH_PROJECT_SUCCESS,
-  FETCH_PROJECT_ERROR
+  FETCH_PROJECT_ERROR,
+  FETCH_ALL_PROJECTS_INIT,
+  FETCH_ALL_PROJECTS_SUCCESS,
+  FETCH_ALL_PROJECTS_ERROR
 } from './actionTypes'
 
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
@@ -74,4 +77,74 @@ export function fetchProjectSuccess(project) {
 
 export function fetchProjectError(error) {
   return {type: FETCH_PROJECT_ERROR, error}
+}
+
+// export function fetchAllProjects() {
+//   return function(dispatch) {
+//     dispatch(fetchAllProjectsInit())
+//     const action = (dispatch) => ProjectApi.fetchAllProjects()
+//           .then(projects => {
+//             dispatch(fetchAllProjectsSuccess({ allProjects: projects }))})
+
+//     return dispatch(action)
+//       .catch(error => dispatch(fetchAllProjectsError(error)))
+//   }
+// }
+
+// export function fetchAllProjects() {
+//   return function(dispatch) {
+//     dispatch(fetchAllProjectsInit())
+
+//     const action = (dispatch) =>
+//       ProjectApi.fetchAllProjects()
+//         .then((data) => {
+//           dispatch(fetchAllProjectsSuccess({ allProjects: data.results }))
+//         })
+
+//     return dispatch(action)
+//       .catch((error) => dispatch(fetchAllProjectsError(error)))
+//   }
+// }
+
+// export function fetchAllProjects() {
+//   return function(dispatch) {
+//     dispatch(fetchAllProjectsInit())
+
+//     const action = (dispatch) =>
+//       ProjectApi.fetchAllProjects()
+//         .then((data) => {
+//           const allProjects = data.results // ✅ Explicitly rename inside the function
+//           dispatch(fetchAllProjectsSuccess(allProjects)) // ✅ Now `allProjects` is properly passed
+//         })
+
+//     return dispatch(action)
+//       .catch((error) => dispatch(fetchAllProjectsError(error)))
+//   }
+// }
+
+export function fetchAllProjects() {
+  return function(dispatch) {
+    dispatch(fetchAllProjectsInit())
+
+    const action = (dispatch) =>
+      ProjectApi.fetchAllProjects()
+        .then((data) => {
+          dispatch(fetchAllProjectsSuccess(data.results))
+        })
+
+    return dispatch(action)
+      .catch((error) => dispatch(fetchAllProjectsError(error)))
+  }
+}
+
+export function fetchAllProjectsInit() {
+  return {type: FETCH_ALL_PROJECTS_INIT}
+}
+
+export function fetchAllProjectsSuccess(allProjects) {
+  return {type: FETCH_ALL_PROJECTS_SUCCESS, allProjects}
+}
+
+export function fetchAllProjectsError(error) {
+  return {type: FETCH_ALL_PROJECTS_ERROR, error}
 }
