@@ -3,9 +3,10 @@ import PropTypes from 'prop-types'
 // import { useSelector, useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import Dashboard from '../pages/Dashboard'
-// import DataManagement from '../pages/DataManagement'
-// import Questionnaire from '../pages/Questionnaire'
+// import Interview from '../pages/Interview'
 // import Documents from '../pages/Documents'
+// import Snapshots from '../pages/Snapshots'
+// import Membership from '../pages/Membership'
 import ProjectData from '../pages/ProjectData'
 
 const ProjectPage = ({ activePage }) => {
@@ -32,14 +33,16 @@ const ProjectPage = ({ activePage }) => {
     switch (activePage) {
       case 'dashboard':
         return <Dashboard />
-      // case 'data-management':
-      //   return <DataManagement settings={settings} />
-      // case 'questionnaire':
-      //   return <Questionnaire />
+      // case 'interview':
+      //   return <Interview />
       // case 'documents':
       //   return <Documents />
-      case 'project-data':
+      // case 'snapshots':
+      //   return <Snapshots />
+      case 'project-information':
         return <ProjectData />
+        // case 'membership':
+        // return <Membership />
       default:
         return <h2>Page Not Found</h2>
     }
