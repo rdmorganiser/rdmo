@@ -1,3 +1,5 @@
+import pytest
+
 from django.urls import reverse
 
 from ..models import Value
@@ -75,11 +77,11 @@ def test_search_attribute_snapshot(db, client):
                                .exclude_empty()[:10]
     assert sorted([item['id'] for item in response.json()]) == sorted([item.id for item in values_list])
 
-
-def test_search_attribute_search(db, client):
+@pytest.mark.parametrize('collection', ["true", "false"])
+def test_search_attribute_search_collection(db, client, collection):
     client.login(username='owner', password='owner')
 
-    url = reverse(urlnames['search']) + f'?attribute={attribute_id}&search={search}'
+    url = reverse(urlnames['search']) + f'?attribute={attribute_id}&collection={collection}&search={search}'
     response = client.get(url)
 
     values_list = Value.objects.filter(project__in=view_value_permission_map.get('owner', [])) \
