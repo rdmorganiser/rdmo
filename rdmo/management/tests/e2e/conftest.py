@@ -70,3 +70,29 @@ def page(live_server, browser, authenticated_client) -> Page:
     page.goto("/management")
     yield page
     context.close()
+
+
+@pytest.fixture(autouse=True)
+def fail_on_js_error(page):
+    """Fail the test immediately when a JavaScript error occurs."""
+
+    # List of ignored warning substrings
+    ignored_warnings = [
+        "legacy childContextTypes API",
+        "legacy contextTypes API",
+        "Use React.createContext()",
+    ]
+
+    def log_console_msg(msg):
+        if msg.type == "error":
+            # Check if the message contains any ignored warning
+            if any(ignored in msg.text for ignored in ignored_warnings):
+                print(f"Ignoring warning: {msg.text}")  # Log it for visibility but don't fail
+                return
+            pytest.fail(f"JavaScript error detected: {msg.text}")
+
+    def log_page_error(exception):
+        pytest.exit(f"Uncaught page error detected: {exception}")
+
+    page.on("console", log_console_msg)
+    page.on("pageerror", log_page_error)
