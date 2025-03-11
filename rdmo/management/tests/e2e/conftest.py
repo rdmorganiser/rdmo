@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 from django.core.management import call_command
 from django.test import Client
 
-from playwright.sync_api import Page
+from playwright.sync_api import Browser, BrowserContext, Page
 
 from rdmo.accounts.utils import set_group_permissions
 
@@ -34,9 +34,17 @@ def django_db_setup(django_db_setup, django_db_blocker, fixtures):
 
 
 @pytest.fixture
-def authenticated_client(db) -> Client:
+def e2e_username(scope="session") -> str:
+    """Fixture to specify which user should be authenticated.
+    This can be overridden in individual test modules or fixtures.
+    """
+    return USERNAME
+
+
+@pytest.fixture
+def authenticated_client(db, e2e_username) -> Client:
     """An authenticated test client, used to bypass the login page."""
-    user = get_user_model().objects.get(username=USERNAME)
+    user = get_user_model().objects.get(username=e2e_username)
     client = Client()
     client.user = user  # attach user to client to access in other fixtures
     client.force_login(user)
@@ -44,14 +52,8 @@ def authenticated_client(db) -> Client:
 
 
 @pytest.fixture
-def page(live_server, browser, authenticated_client) -> Page:
-    """An authenticated playwright page.
-
-    The page is authenticated with session cookies from authenticated_client.
-    The page has access to the live server and starts at "/management".
-    The page has the authenticated user attached to it.
-    """
-
+def authenticated_context(live_server, browser: Browser, authenticated_client) -> BrowserContext:
+    """Creates an authenticated Playwright browser context with session cookies."""
     # retrieve the session cookie from the authenticated client
     session_cookie = authenticated_client.cookies[settings.SESSION_COOKIE_NAME]
     cookie = {
@@ -59,21 +61,39 @@ def page(live_server, browser, authenticated_client) -> Page:
         "value": session_cookie.value,
         "url": live_server.url,
     }
+
     context = browser.new_context(base_url=live_server.url)
     # the browser context is now "authenticated" with the session cookie
     context.add_cookies([cookie])
-    page = context.new_page()
-    page.set_default_timeout(PLAYWRIGHT_TIMEOUT)
-    page.set_default_navigation_timeout(PLAYWRIGHT_TIMEOUT)
-    page.user = authenticated_client.user  # attach user to page to access in tests
-    # the page starts at base_url + /management
-    page.goto("/management")
-    yield page
+    yield context
     context.close()
 
 
+@pytest.fixture
+def authenticated_page(authenticated_context: BrowserContext, authenticated_client) -> Page:
+    """Provides an authenticated Playwright page without forcing navigation.
+    The page is authenticated with session cookies from authenticated_context.
+    """
+    page = authenticated_context.new_page()
+    page.set_default_timeout(PLAYWRIGHT_TIMEOUT)
+    page.set_default_navigation_timeout(PLAYWRIGHT_TIMEOUT)
+
+    # Attach the authenticated user to the page
+    page.user = authenticated_client.user
+    yield page
+    page.close()
+
+
+@pytest.fixture
+def page(live_server, browser, authenticated_page: Page) -> Page:
+    """Navigates the authenticated page to /management."""
+    page = authenticated_page
+    page.goto("/management")
+    return page
+
+
 @pytest.fixture(autouse=True)
-def fail_on_js_error(page):
+def fail_on_js_error(page: Page):
     """Fail the test immediately when a JavaScript error occurs."""
 
     # List of ignored warning substrings
