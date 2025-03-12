@@ -205,7 +205,7 @@ const CodeLink = ({ className, uri, href, onClick, order }) => {
         <code className={className}>{uri}</code>
       </Link>
       {!isNil(order) ? (
-        <>{' '}<code className="code-order ng-binding">{order}</code></>
+        <>{' '}<code className="code-order">{order}</code></>
       ) : null}
     </>
   )

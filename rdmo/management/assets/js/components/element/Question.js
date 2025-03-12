@@ -45,9 +45,19 @@ const Question = ({ config, question, elementActions, display='list', indent=0,
       </div>
       <div>
         <p>
-          <strong className={question.is_optional ? 'text-muted' : ''}>{gettext('Question')}{': '}</strong>
+          <strong>{gettext('Question')}{': '}</strong>
           <span dangerouslySetInnerHTML={{ __html: question.text }}></span>
         </p>
+        {
+          question.is_optional && <p>
+            <code className="code-optional" title={gettext('This is an optional question.')}>{gettext('optional')}</code>
+          </p>
+        }
+        {
+          (question.default_text || question.default_option || question.default_external_id) && <p>
+            <code className="code-default" title={gettext('This question has a default answer.')}>{gettext('default')}</code>
+          </p>
+        }
         {
           get(config, 'display.uri.questions', true) && <p>
             <CodeLink
