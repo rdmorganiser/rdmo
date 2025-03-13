@@ -87,9 +87,9 @@ def authenticated_page(authenticated_context: BrowserContext, authenticated_clie
 @pytest.fixture
 def page(live_server, browser, authenticated_page: Page) -> Page:
     """Navigates the authenticated page to /management."""
-    page = authenticated_page
-    page.goto("/management")
-    return page
+    authenticated_page.goto("/management")  # Navigate to the projects section
+    authenticated_page.wait_for_load_state("networkidle")
+    return authenticated_page
 
 
 @pytest.fixture(autouse=True)

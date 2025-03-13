@@ -25,6 +25,6 @@ def e2e_username() -> str:
 @pytest.fixture
 def page(live_server, browser, authenticated_page: Page) -> Page: # noqa: F811
     """Navigates the authenticated page to /projects."""
-    page = authenticated_page
-    page.goto("/projects")  # Navigate to the projects section
-    return page
+    authenticated_page.goto("/projects")  # Navigate to the projects section
+    authenticated_page.wait_for_load_state("networkidle")
+    return authenticated_page
