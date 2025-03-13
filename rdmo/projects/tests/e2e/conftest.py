@@ -3,7 +3,7 @@ import pytest
 
 from playwright.sync_api import Page
 
-from rdmo.management.tests.e2e.conftest import (  # noqa: F401
+from rdmo.core.tests.e2e.conftest import (  # noqa: F401
     _set_django_allow_async_unsafe,
     authenticated_client,
     authenticated_context,
