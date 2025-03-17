@@ -51,6 +51,7 @@ const Page = ({ config, settings, templates, overview, page, sets, values, fetch
                 return (
                   <QuestionSet
                     key={elementIndex}
+                    config={config}
                     settings={settings}
                     templates={templates}
                     page={page}
@@ -75,6 +76,7 @@ const Page = ({ config, settings, templates, overview, page, sets, values, fetch
                 return (
                   <Question
                     key={elementIndex}
+                    config={config}
                     settings={settings}
                     templates={templates}
                     page={page}

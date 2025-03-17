@@ -5,10 +5,16 @@ import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-const Overview = ({ overview, help }) => {
+const Overview = ({ config, overview, help, configActions }) => {
+
+  const isManager = (overview.is_superuser || overview.is_editor || overview.is_reviewer)
 
   const projectsUrl = `${baseUrl}/projects/`
   const projectUrl = `${baseUrl}/projects/${overview.id}`
+
+  const toggleManagement = () => {
+    configActions.updateConfig('showManagement', !config.showManagement)
+  }
 
   return (
     <>
@@ -24,6 +30,18 @@ const Overview = ({ overview, help }) => {
             {gettext('Catalog')}: {overview.catalog.title}
           </li>
         </ul>
+
+        {
+          isManager && (
+            <ul className="list-unstyled">
+              <li>
+                <button role="button" className="btn btn-link" onClick={toggleManagement}>
+                  {config.showManagement ? gettext('Hide management panels') : gettext('Show management panels')}
+                </button>
+              </li>
+            </ul>
+          )
+        }
 
         {
           overview.read_only && (
@@ -49,8 +67,10 @@ const Overview = ({ overview, help }) => {
 }
 
 Overview.propTypes = {
+  config: PropTypes.object.isRequired,
   overview: PropTypes.object.isRequired,
-  help: PropTypes.string.isRequired
+  help: PropTypes.string.isRequired,
+  configActions: PropTypes.object.isRequired
 }
 
 export default Overview

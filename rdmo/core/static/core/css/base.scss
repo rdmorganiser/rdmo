@@ -104,7 +104,8 @@ a {
         color: $link-color-hover;
         text-decoration: none;
     }
-    &:active {
+    &:active,
+    &:focus {
         outline: none;
     }
 }

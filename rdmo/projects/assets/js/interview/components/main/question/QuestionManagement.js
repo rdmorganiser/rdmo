@@ -3,13 +3,13 @@ import PropTypes from 'prop-types'
 
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
-const QuestionManagement = ({ question, isManager }) => {
+const QuestionManagement = ({ config, question, isManager }) => {
   const help = gettext('These links take you directly to the items in the admin interface. ' +
                        ' This part of the page is visible to you because you are either an Admin, ' +
                        ' Editor, or Reviewer. It is not displayed for regular users. It can be disabled' +
                        ' in the sidebar.')
 
-  return isManager && (
+  return config.showManagement && isManager && (
     <div className="panel panel-default interview-management">
       <div className="panel-body">
         <div className="interview-management-help"
@@ -34,6 +34,7 @@ const QuestionManagement = ({ question, isManager }) => {
 }
 
 QuestionManagement.propTypes = {
+  config: PropTypes.object.isRequired,
   question: PropTypes.object.isRequired,
   isManager: PropTypes.bool.isRequired,
 }
