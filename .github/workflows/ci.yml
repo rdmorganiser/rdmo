@@ -197,7 +197,7 @@ jobs:
     - uses: actions/upload-artifact@v4
       with:
         name: screenshots
-        path: screenshots/*.png
+        path: screenshots/**/*.png
 
   coveralls:
     name: Indicate completion to coveralls
