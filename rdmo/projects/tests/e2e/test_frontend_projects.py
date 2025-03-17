@@ -10,6 +10,7 @@ pytestmark = pytest.mark.e2e
 def test_projects_page(page: Page):
     # Assert current page is correct
     expect(page).to_have_url(re.compile(r"/projects/$"))
+    page.screenshot(path="screenshots/projects/projects.png", full_page=True)
 
     # Assert projects title and search bar
     expect(page.get_by_role("heading", name="All projects")).to_be_visible()

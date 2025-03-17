@@ -44,7 +44,7 @@ def test_import_and_update_optionsets_in_management(page: Page) -> None:
     # click the import button to start saving the instances to the db
     page.get_by_role("button", name=f"Import {OPTIONSETS_COUNTS['total']} elements").click()
     expect(page.get_by_role("heading", name="Import successful")).to_be_visible()
-    page.screenshot(path="screenshots/management-import-optionsets-post-import.png", full_page=True)
+    page.screenshot(path="screenshots/management/import-optionsets-post-import.png", full_page=True)
     page.get_by_text("Created:").click()
     # go back to management page
     page.get_by_role("button", name="Back").click()
@@ -71,5 +71,5 @@ def test_import_and_update_optionsets_in_management(page: Page) -> None:
     expect(page.get_by_text("http://example.com/terms/options/one_two_three/three").nth(1)).to_be_visible()
     page.locator("body").press("Home")
     expect(page.get_by_role("link", name="Management", exact=True)).to_be_visible()
-    page.screenshot(path="screenshots/management-import-optionsets-1-changes.png", full_page=True)
+    page.screenshot(path="screenshots/management/import-optionsets-1-changes.png", full_page=True)
     ## TODO test for warnings, errors

@@ -32,7 +32,7 @@ def test_management_navigation(page: Page, helper: ModelHelper) -> None:
     if helper.model == Catalog:
         item_in_ui = page.locator(".list-group > .list-group-item").first
         expect(item_in_ui).to_be_visible()
-        page.screenshot(path="screenshots/management-navigation-catalog.png", full_page=True)
+        page.screenshot(path="screenshots/management/navigation-catalog.png", full_page=True)
 
 
 @pytest.mark.parametrize("helper", model_helpers)

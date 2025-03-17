@@ -15,6 +15,7 @@ def test_project_detail_page(page: Page):
     expect(page.get_by_role("link", name="Test", exact=True)).to_be_visible()
     page.get_by_role("link", name="Test", exact=True).click()
     expect(page).to_have_url(re.compile(r"/projects/1/?$"))
+    page.screenshot(path="screenshots/projects/project-detail.png", full_page=True)
 
     # Assert project detail page
     expect(page.get_by_role("heading", name="Test")).to_be_visible()
