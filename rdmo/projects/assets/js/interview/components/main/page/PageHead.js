@@ -26,6 +26,15 @@ const PageHead = ({ templates, page, sets, values, disabled, currentSet,
   const importModal = useModal()
   const deleteModal = useModal()
 
+  // inlining the title attributes caused problems with django's translation system
+  const labels = {
+    copy: gettext('Copy tab'),
+    add: gettext('Add tab'),
+    edit: gettext('Edit tab'),
+    reuse: gettext('Reuse answers'),
+    remove: gettext('Remove tab')
+  }
+
   const handleActivate = (event, set) => {
     event.preventDefault()
     if (set.set_index != currentSet.set_index) {
@@ -106,7 +115,7 @@ const PageHead = ({ templates, page, sets, values, disabled, currentSet,
               {
                 !disabled && (
                   <li>
-                    <a href="" title={gettext('Add tab')} className="add-set" onClick={handleOpenCreateModal}>
+                    <a href="" title={labels.add} className="add-set" onClick={handleOpenCreateModal}>
                       <i className="fa fa-plus fa-btn"></i> {capitalize(page.verbose_name)}
                     </a>
                   </li>
@@ -118,27 +127,22 @@ const PageHead = ({ templates, page, sets, values, disabled, currentSet,
                 <div className="interview-page-tabs-buttons">
                   {
                     page.attribute && (
-                      <button className="btn-link fa fa-pencil" title={gettext('Edit tab')} onClick={updateModal.open} />
+                      <button role="button" className="btn-link fa fa-pencil"
+                              title={labels.edit} onClick={updateModal.open} />
                     )
                   }
-                  <button className="btn-link fa fa-copy"
-                    title={gettext('Copy tab')}
-                    onClick={copyModal.open}
-                  />
-                  <button className="btn-link fa fa-arrow-circle-down"
-                    title={gettext('Reuse answers')}
-                    onClick={importModal.open}
-                  />
-                  <button className="btn-link fa fa-trash"
-                    title={gettext('Remove tab')}
-                    onClick={deleteModal.open}
-                  />
+                  <button role="button" className="btn-link fa fa-copy"
+                          title={labels.copy} onClick={copyModal.open} />
+                  <button role="button" className="btn-link fa fa-arrow-circle-down"
+                          title={labels.reuse} onClick={importModal.open} />
+                  <button role="button" className="btn-link fa fa-trash"
+                          title={labels.remove} onClick={deleteModal.open} />
                 </div>
               )
             }
           </>
         ) : (
-          <button className="btn btn-success" title={gettext('Add tab')} onClick={createModal.open}>
+          <button role="button" className="btn btn-success" title={labels.add} onClick={createModal.open}>
             <i className="fa fa-plus fa-btn"></i> {capitalize(page.verbose_name)}
           </button>
         )

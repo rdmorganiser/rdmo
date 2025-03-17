@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-27 12:07+0000\n"
+"POT-Creation-Date: 2025-03-17 12:31+0100\n"
 "PO-Revision-Date: 2025-02-22 15:12+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
@@ -4347,7 +4347,7 @@ msgstr "Hilfetext"
 msgid "file"
 msgstr "Datei"
 
-#: views/templatetags/view_tags.py:202
+#: views/templatetags/view_tags.py:210
 msgid "Set"
 msgstr "Set"
 
