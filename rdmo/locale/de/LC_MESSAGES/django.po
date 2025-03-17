@@ -3252,11 +3252,11 @@ msgstr "Radio Buttons"
 
 #: questions/constants.py:19
 msgid "Select drop-down"
-msgstr "Select-Dropdown-Menü"
+msgstr "Select-Dropdown"
 
 #: questions/constants.py:20
 msgid "Select drop-down (free)"
-msgstr "Select-Dropdown-Menü (frei)"
+msgstr "Select-Dropdown (frei)"
 
 #: questions/constants.py:21
 msgid "Range slider"
