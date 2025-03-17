@@ -236,6 +236,31 @@ class Option(models.Model, TranslationMixin):
         verbose_name=_('Help (quinary)'),
         help_text=_('The help text for this option (in the quinary language).')
     )
+    default_text_lang1 = models.TextField(
+        blank=True, default="",
+        verbose_name=_('Default text value (primary)'),
+        help_text=_('The default text value for the additional input of this option (in the primary language).')
+    )
+    default_text_lang2 = models.TextField(
+        blank=True, default="",
+        verbose_name=_('Default text value (secondary)'),
+        help_text=_('The default text value for the additional input of this option (in the secondary language).')
+    )
+    default_text_lang3 = models.TextField(
+        blank=True, default="",
+        verbose_name=_('Default text value (tertiary)'),
+        help_text=_('The default text value for the additional input of this option (in the tertiary language).')
+    )
+    default_text_lang4 = models.TextField(
+        blank=True, default="",
+        verbose_name=_('Default text value (quaternary)'),
+        help_text=_('The default text value for the additional input of this option (in the quaternary language).')
+    )
+    default_text_lang5 = models.TextField(
+        blank=True, default="",
+        verbose_name=_('Default text value (quinary)'),
+        help_text=_('The default text value for the additional input of this option (in the quinary language).')
+    )
     view_text_lang1 = models.TextField(
         blank=True, default="",
         verbose_name=_('View text (primary)'),
@@ -286,6 +311,10 @@ class Option(models.Model, TranslationMixin):
     @property
     def help(self):
         return self.trans('help')
+
+    @property
+    def default_text(self):
+        return self.trans('default_text')
 
     @property
     def view_text(self):

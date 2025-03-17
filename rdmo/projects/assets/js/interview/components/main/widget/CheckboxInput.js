@@ -27,7 +27,7 @@ const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreat
     } else {
       onCreate([{
         option: option.id,
-        text: additionalInput,
+        text: additionalInput || option.default_text || '',
         collection_index: optionIndex
       }])
     }
