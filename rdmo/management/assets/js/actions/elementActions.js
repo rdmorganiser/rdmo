@@ -19,7 +19,7 @@ import ViewsFactory from '../factories/ViewsFactory'
 
 import { elementTypes } from '../constants/elements'
 import { updateLocation } from '../utils/location'
-import { canMoveElement, findDescendants, moveElement } from '../utils/elements'
+import { canMoveElement, findDescendants, moveElement, updateWarning } from '../utils/elements'
 
 export function fetchElements(elementType) {
   const pendingId = `fetchElements/${elementType}`
@@ -122,7 +122,7 @@ export function fetchElement(elementType, elementId, elementAction=null) {
       case 'catalogs':
         if (elementAction == 'nested') {
           action = () => QuestionsApi.fetchCatalog(elementId, 'nested')
-            .then(element => ({ element }))
+            .then(element => ({ element: updateWarning(element) }))
         } else {
           action = () => Promise.all([
             QuestionsApi.fetchCatalog(elementId),
