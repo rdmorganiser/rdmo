@@ -7,6 +7,7 @@ import QuestionAddValue from '../question/QuestionAddValue'
 import QuestionCopyValue from '../question/QuestionCopyValue'
 import QuestionCopyValues from '../question/QuestionCopyValues'
 import QuestionDefault from '../question/QuestionDefault'
+import QuestionEraseValue from '../question/QuestionEraseValue'
 import QuestionError from '../question/QuestionError'
 import QuestionRemoveValue from '../question/QuestionRemoveValue'
 import QuestionReuseValue from '../question/QuestionReuseValue'
@@ -39,6 +40,8 @@ const SelectWidget = ({ page, question, sets, values, siblings, currentSet, disa
                       disabled={disabled}
                       updateValue={updateValue}
                     />
+                    <QuestionCopyValue question={question} value={value} siblings={siblings} copyValue={copyValue} />
+                    <QuestionEraseValue value={value} disabled={disabled} updateValue={updateValue}/>
                     <QuestionRemoveValue
                       question={question}
                       values={values}
@@ -46,7 +49,6 @@ const SelectWidget = ({ page, question, sets, values, siblings, currentSet, disa
                       disabled={disabled}
                       deleteValue={deleteValue}
                     />
-                    <QuestionCopyValue question={question} value={value} siblings={siblings} copyValue={copyValue} />
                     <QuestionDefault question={question} value={value} />
                   </div>
                 }

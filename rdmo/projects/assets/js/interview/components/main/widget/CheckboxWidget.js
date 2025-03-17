@@ -62,11 +62,6 @@ const CheckboxWidget = ({ page, question, sets, values, siblings, currentSet, di
             </div>
             <div className="buttons">
               <QuestionSuccess value={{ success }} />
-              <QuestionEraseValues
-                values={values}
-                disabled={disabled}
-                deleteValue={deleteValue}
-              />
               <QuestionReuseValues
                 page={page}
                 question={question}
@@ -83,6 +78,11 @@ const CheckboxWidget = ({ page, question, sets, values, siblings, currentSet, di
                 siblings={siblings}
                 currentSet={currentSet}
                 copyValue={copyValue}
+              />
+              <QuestionEraseValues
+                values={values}
+                disabled={disabled}
+                deleteValue={deleteValue}
               />
             </div>
           </div>

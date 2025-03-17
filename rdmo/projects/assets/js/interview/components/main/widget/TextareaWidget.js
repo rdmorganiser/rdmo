@@ -35,6 +35,7 @@ const TextareaWidget = ({ page, question, sets, values, siblings, currentSet, di
                       disabled={disabled}
                       updateValue={updateValue}
                     />
+                    <QuestionCopyValue question={question} value={value} siblings={siblings} copyValue={copyValue} />
                     <QuestionRemoveValue
                       question={question}
                       values={values}
@@ -42,7 +43,6 @@ const TextareaWidget = ({ page, question, sets, values, siblings, currentSet, di
                       disabled={disabled}
                       deleteValue={deleteValue}
                     />
-                    <QuestionCopyValue question={question} value={value} siblings={siblings} copyValue={copyValue} />
                     <QuestionDefault question={question} value={value} />
                   </div>
                 }
