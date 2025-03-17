@@ -74,28 +74,31 @@ const Search = ({ page, question, attribute, values, setValues, collection = fal
       onChange={(value) => setValues({ ...values, value })}
       getOptionValue={(value) => value}
       getOptionLabel={(value) => value.value_label}
-      formatOptionLabel={(value) => (
-        <div>
-          {gettext('Project')} <strong>{value.project_label}</strong>
-          {
-            value.snapshot_label && <>
-              <span className="mr-5 ml-5">&rarr;</span>
-              {gettext('Snapshot')} <strong>{value.snapshot_label}</strong>
-            </>
-          }
-          {
-            value.set_label && <>
-              <span className="mr-5 ml-5">&rarr;</span>
-              {gettext('Tab')} <strong>{value.set_label}</strong>
-            </>
-          }
-          <span className="mr-5 ml-5">&rarr;</span>
-          {truncate(value.value_label, {
-            'length': 256,
-            'omission': ' [...]'
-          })}
-        </div>
-      )}
+      formatOptionLabel={(value) => {
+        const truncatedLabel = truncate(value.value_label, {'length': 256, 'omission': ' [...]'})
+
+        return (
+          <div>
+            {gettext('Project')} <strong>{value.project_label}</strong>
+            {
+              value.snapshot_label && <>
+                <span className="mr-5 ml-5">&rarr;</span>
+                {gettext('Snapshot')} <strong>{value.snapshot_label}</strong>
+              </>
+            }
+            {
+              value.set_label && <>
+                <span className="mr-5 ml-5">&rarr;</span>
+                {gettext('Tab')} <strong>{value.set_label}</strong>
+              </>
+            }
+            <span className="mr-5 ml-5">&rarr;</span>
+            {
+              isNil(page) ? <>{gettext('Tab')} <strong>{truncatedLabel}</strong></> : truncatedLabel
+            }
+          </div>
+        )
+      }}
       loadOptions={handleLoadValues}
       defaultOptions
       isClearable
