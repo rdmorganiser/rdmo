@@ -86,7 +86,7 @@ const Search = ({ page, question, attribute, values, setValues, collection = fal
           {
             value.set_label && <>
               <span className="mr-5 ml-5">&rarr;</span>
-              <strong>{value.set_label}</strong>
+              {gettext('Tab')} <strong>{value.set_label}</strong>
             </>
           }
           <span className="mr-5 ml-5">&rarr;</span>
