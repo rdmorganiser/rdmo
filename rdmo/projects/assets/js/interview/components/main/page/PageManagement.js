@@ -5,7 +5,7 @@ import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import { managementHelp } from '../../../constants/management'
 
-const QuestionManagement = ({ config, question, isManager }) => {
+const PageManagement = ({ config, page, isManager }) => {
   return config.showManagement && isManager && (
     <div className="panel panel-default interview-management">
       <div className="panel-body">
@@ -14,26 +14,21 @@ const QuestionManagement = ({ config, question, isManager }) => {
         </div>
         <ul className="list-unstyled mb-0">
           <li>
-            <a href={`${baseUrl}/management/questions/${question.id}/`} target="_blank" rel="noreferrer">
-              <code className="code-questions">{question.uri}</code>
-            </a>
-          </li>
-          <li>
-            <a href={`${baseUrl}/management/attributes/${question.attribute}/`} target="_blank" rel="noreferrer">
-              <code className="code-attributes">{question.attribute_uri}</code>
+            <a href={`${baseUrl}/management/pages/${page.id}/`} target="_blank" rel="noreferrer">
+              <code className="code-questions">{page.uri}</code>
             </a>
           </li>
           {
-            question.optionsets.map((optionset, optionsetIndex) => (
-              <li key={optionsetIndex}>
-                <a href={`${baseUrl}/management/optionsets/${optionset.id}/`} target="_blank" rel="noreferrer">
-                  <code className="code-options">{optionset.uri}</code>
+            page.attribute && (
+              <li>
+                <a href={`${baseUrl}/management/attributes/${page.attribute}/`} target="_blank" rel="noreferrer">
+                  <code className="code-attributes">{page.attribute_uri}</code>
                 </a>
               </li>
-            ))
+            )
           }
           {
-            question.conditions.map((condition, conditionIndex) => (
+            page.conditions.map((condition, conditionIndex) => (
               <li key={conditionIndex}>
                 <a href={`${baseUrl}/management/conditions/${condition.id}/`} target="_blank" rel="noreferrer">
                   <code className="code-conditions">{condition.uri}</code>
@@ -47,10 +42,10 @@ const QuestionManagement = ({ config, question, isManager }) => {
   )
 }
 
-QuestionManagement.propTypes = {
+PageManagement.propTypes = {
   config: PropTypes.object.isRequired,
-  question: PropTypes.object.isRequired,
+  page: PropTypes.object.isRequired,
   isManager: PropTypes.bool.isRequired,
 }
 
-export default QuestionManagement
+export default PageManagement

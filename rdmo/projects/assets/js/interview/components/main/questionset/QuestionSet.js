@@ -11,6 +11,7 @@ import QuestionSetAddSetHelp from './QuestionSetAddSetHelp'
 import QuestionSetCopySet from './QuestionSetCopySet'
 import QuestionSetHelp from './QuestionSetHelp'
 import QuestionSetHelpTemplate from './QuestionSetHelpTemplate'
+import QuestionSetManagement from './QuestionSetManagement'
 import QuestionSetRemoveSet from './QuestionSetRemoveSet'
 
 const QuestionSet = ({ config, settings, templates, page, questionset, sets, values, disabled, isManager,
@@ -31,6 +32,7 @@ const QuestionSet = ({ config, settings, templates, page, questionset, sets, val
       <QuestionSetHelp questionset={questionset} />
       <QuestionSetHelpTemplate templates={templates} />
       <QuestionSetAddSetHelp templates={templates} questionset={questionset} disabled={disabled} />
+      <QuestionSetManagement config={config} questionset={questionset} isManager={isManager} />
       <div>
         {
           currentSets.map((set, setIndex) => (
