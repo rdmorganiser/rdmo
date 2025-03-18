@@ -11,6 +11,7 @@ from playwright.sync_api import Browser, BrowserContext, Page
 
 from rdmo.accounts.utils import set_group_permissions
 
+PLAYWRIGHT_TIMEOUT = 10_000  # timeout in ms
 
 @pytest.fixture(scope="session", autouse=True)
 def _set_django_allow_async_unsafe():
@@ -97,6 +98,3 @@ def fail_on_js_error(page: Page):
 
     page.on("console", log_console_msg)
     page.on("pageerror", log_page_error)
-
-
-PLAYWRIGHT_TIMEOUT = 10_000  # timeout in ms
