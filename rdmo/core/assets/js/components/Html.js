@@ -5,7 +5,7 @@ import { isEmpty } from 'lodash'
 import { executeScriptTags } from 'rdmo/core/assets/js/utils/meta'
 
 
-const Html = ({ html = '' }) => {
+const Html = ({ id = null, html = '' }) => {
   const ref = useRef()
 
   // if html contains a <script> tag, and settings.TEMPLATES_EXECUTE_SCRIPT_TAGS is True,
@@ -27,12 +27,12 @@ const Html = ({ html = '' }) => {
   }
 
   return !isEmpty(html) && (
-    <span ref={ref} dangerouslySetInnerHTML={{ __html: html }} />
+    <span ref={ref} id={id} dangerouslySetInnerHTML={{ __html: html }} />
   )
 }
 
 Html.propTypes = {
-  className: PropTypes.string,
+  id: PropTypes.string,
   html: PropTypes.string
 }
 

@@ -7,7 +7,7 @@ const QuestionSuccess = ({ value }) => {
     <div className={classNames('success-indicator text-success', {
       'show': value.success
     })}>
-      <i className="fa fa-check fa-btn"></i>
+      <i className="fa fa-check fa-btn" aria-hidden="true"></i>
     </div>
   )
 }

@@ -70,6 +70,7 @@ const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreat
           type="checkbox"
           checked={checked}
           disabled={disabled}
+          aria-label={option.text}
           onChange={() => handleChange()}
         />
         <OptionText option={option} />

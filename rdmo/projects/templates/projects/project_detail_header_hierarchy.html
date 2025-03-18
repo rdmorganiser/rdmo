@@ -5,7 +5,7 @@
 {% if can_change_project %}
 <p class="pull-right">
     <a href="{% url 'project_update_parent' project.pk %}" title="{% trans 'Update parent project' %}">
-        <i class="fa fa-pencil"></i>
+        <i class="fa fa-pencil" aria-hidden="true"></i>
     </a>
 </p>
 {% endif %}

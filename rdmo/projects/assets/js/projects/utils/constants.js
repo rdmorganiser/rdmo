@@ -7,7 +7,7 @@ export const HEADER_FORMATTERS = {
   progress: {render: () => gettext('Progress')},
   created: {render: () => gettext('Created')},
   last_changed: {render: () => gettext('Last changed')},
-  actions: {render: () => null},
+  actions: {render: () => null, label: () => gettext('Actions')},
 }
 // project roles
 export const ROLE_LABELS = {

@@ -116,7 +116,7 @@ const PageHead = ({ templates, page, sets, values, disabled, currentSet,
                 !disabled && (
                   <li>
                     <a href="" title={labels.add} className="add-set" onClick={handleOpenCreateModal}>
-                      <i className="fa fa-plus fa-btn"></i> {capitalize(page.verbose_name)}
+                      <i className="fa fa-plus fa-btn" aria-hidden="true"></i> {capitalize(page.verbose_name)}
                     </a>
                   </li>
                 )
@@ -132,18 +132,21 @@ const PageHead = ({ templates, page, sets, values, disabled, currentSet,
                     )
                   }
                   <button role="button" className="btn-link fa fa-copy"
-                          title={labels.copy} onClick={copyModal.open} />
+                          title={labels.copy} aria-label={labels.copy}
+                          onClick={copyModal.open} />
                   <button role="button" className="btn-link fa fa-arrow-circle-down"
-                          title={labels.reuse} onClick={importModal.open} />
+                          title={labels.reuse} aria-label={labels.reuse}
+                          onClick={importModal.open} />
                   <button role="button" className="btn-link fa fa-trash"
-                          title={labels.remove} onClick={deleteModal.open} />
+                          title={labels.remove} aria-label={labels.remove}
+                          onClick={deleteModal.open} />
                 </div>
               )
             }
           </>
         ) : (
           <button role="button" className="btn btn-success" title={labels.add} onClick={createModal.open}>
-            <i className="fa fa-plus fa-btn"></i> {capitalize(page.verbose_name)}
+            <i className="fa fa-plus fa-btn" aria-hidden="true"></i> {capitalize(page.verbose_name)}
           </button>
         )
       }

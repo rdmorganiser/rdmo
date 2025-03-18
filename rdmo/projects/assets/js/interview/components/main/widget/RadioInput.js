@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import { useDebouncedCallback } from 'use-debounce'
 import { isEmpty } from 'lodash'
 
+import { getQuestionTextId, getQuestionHelpId } from '../../../utils/question'
 import { isDefaultValue } from '../../../utils/value'
 
 import AdditionalTextInput from './common/AdditionalTextInput'
@@ -48,7 +49,9 @@ const RadioInput = ({ question, value, options, disabled, updateValue, buttons }
     <div className="interview-input radio-input">
       <div className="buttons-wrapper">
         {buttons}
-        <div className={classnames}>
+        <fieldset className={classnames}
+                  aria-labelledby={getQuestionTextId(question)}
+                  aria-describedby={getQuestionHelpId(question)}>
           {
             isEmpty(options) ? (
               <div className="text-muted">{gettext('No options are available.')}</div>
@@ -60,6 +63,7 @@ const RadioInput = ({ question, value, options, disabled, updateValue, buttons }
                       type="radio"
                       checked={option.has_provider ? (value.external_id === option.id) : (value.option === option.id)}
                       disabled={disabled}
+                      aria-label={option.text}
                       onChange={() => handleChange(option)}
                     />
                     <OptionText option={option} />
@@ -104,7 +108,7 @@ const RadioInput = ({ question, value, options, disabled, updateValue, buttons }
               ))
             )
           }
-        </div>
+        </fieldset>
       </div>
     </div>
   )

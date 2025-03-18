@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
+import { getQuestionTextId, getQuestionHelpId } from '../../../utils/question'
 import { isDefaultValue } from '../../../utils/value'
 
 import Unit from './common/Unit'
@@ -23,7 +24,9 @@ const YesNoInput = ({ question, value, disabled, updateValue, buttons }) => {
     <div className="interview-input yesno-input">
       <div className="buttons-wrapper">
         {buttons}
-        <div className={classnames}>
+        <fieldset className={classnames}
+                  aria-labelledby={getQuestionTextId(question)}
+                  aria-describedby={getQuestionHelpId(question)}>
           <label>
               <input
                 type="radio"
@@ -48,7 +51,7 @@ const YesNoInput = ({ question, value, disabled, updateValue, buttons }) => {
                 }} />
               <span>{gettext('No')}</span>
           </label>
-        </div>
+        </fieldset>
       </div>
       <Unit question={question} />
     </div>

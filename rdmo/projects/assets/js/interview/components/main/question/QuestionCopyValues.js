@@ -7,12 +7,13 @@ import { isEmptyValue } from '../../../utils/value'
 const QuestionCopyValues = ({ question, sets, values, siblings, currentSet, copyValue }) => {
   const button = question.widget_type == 'checkbox' ? (
     <button className="btn btn-link btn-apply-to-all" onClick={() => copyValue(...values)}
-            title={gettext('Apply this answer to all tabs where this question is empty')}>
-      <i className="fa fa-arrow-circle-right fa-btn"></i>
+            title={gettext('Apply this answer to all tabs where this question is empty')}
+            aria-label={gettext('Apply this answer to all tabs where this question is empty')}>
+      <i className="fa fa-arrow-circle-right fa-btn" aria-hidden="true"></i>
     </button>
   ) : (
     <button type="button" className="btn btn-primary btn-xs copy-value-button ml-10" onClick={() => copyValue(...values)}>
-      <i className="fa fa-arrow-circle-right fa-btn"></i> {gettext('Apply to all')}
+      <i className="fa fa-arrow-circle-right fa-btn" aria-hidden="true"></i> {gettext('Apply to all')}
     </button>
   )
 

@@ -53,7 +53,8 @@ const Table = ({
 
     return (
       <span className="ml-5 sort-icon">
-        <i className={`fa fa-sort${isSortColumn ? isAsc ? '-asc' : '-desc' : ''} ${isSortColumn ? '' : 'text-muted'}`} />
+        <i className={`fa fa-sort${isSortColumn ? isAsc ? '-asc' : '-desc' : ''} ${isSortColumn ? '' : 'text-muted'}`}
+           aria-hidden="true"/>
       </span>
     )
   }
@@ -65,9 +66,11 @@ const Table = ({
           {visibleColumns.map((column, index) => {
             const headerFormatter = headerFormatters[column]
             const columnHeaderContent = headerFormatter && headerFormatter.render ? headerFormatter.render(column) : column
+            const columnHeaderLabel = headerFormatter && headerFormatter.label ? headerFormatter.label(column) : columnHeaderContent
 
             return (
-              <th key={column} style={{ width: columnWidths[index] }} onClick={() => handleHeaderClick(column)}>
+              <th key={column} style={{ width: columnWidths[index] }} onClick={() => handleHeaderClick(column)}
+                  aria-label={columnHeaderLabel}>
                 {columnHeaderContent}
                 {sortableColumns.includes(column) && renderSortIcon(column)}
               </th>
@@ -93,7 +96,7 @@ const Table = ({
             {visibleColumns.map((column, index) => (
               <td key={column} style={{ width: columnWidths[index] }}>
                 {formatCellContent(row, column, row[column])}
-                </td>
+              </td>
             ))}
           </tr>
         ))}

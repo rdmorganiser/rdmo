@@ -17,11 +17,11 @@ const PendingInvitations = ({ invitations }) => {
             {ROLE_LABELS[item.role]}
           </div>
           <div className="w-50 align-right">
-            <button className="btn btn-xs btn-success ml-10"
+            <button type="button" className="btn btn-xs btn-success ml-10"
                     onClick={() => { window.location.href = `${baseUrl}/projects/join/${item.token}/` }}>
               {gettext('Accept')}
             </button>
-            <button className="btn btn-xs btn-danger ml-10"
+            <button type="button" className="btn btn-xs btn-danger ml-10"
                     onClick={() => { window.location.href = `${baseUrl}/projects/cancel/${item.token}/` }}>
               {gettext('Decline')}
             </button>

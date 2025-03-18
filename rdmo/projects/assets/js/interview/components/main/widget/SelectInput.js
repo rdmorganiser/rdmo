@@ -12,6 +12,7 @@ import { useDebouncedCallback } from 'use-debounce'
 
 import ProjectApi from '../../../api/ProjectApi'
 import { projectId } from '../../../utils/meta'
+import { getQuestionTextId, getQuestionHelpId } from '../../../utils/question'
 import { isDefaultValue } from '../../../utils/value'
 import { getValueOption } from '../../../utils/options'
 
@@ -87,6 +88,8 @@ const SelectInput = ({ question, value, options, disabled, creatable, updateValu
     backspaceRemovesValue: false,
     isDisabled: disabled,
     placeholder: gettext('Select ...'),
+    'aria-label': getQuestionTextId(question),
+    'aria-description': getQuestionHelpId(question),
     noOptionsMessage: () => gettext('No options found'),
     loadingMessage: () => gettext('Loading ...'),
     options: options,

@@ -23,7 +23,7 @@ const ImportFilters = ({ config, elements, changedElements, filteredElements, co
     <div className="row">
       <div className={'col-sm-8'}>
         <FilterString value={getValueFilterString()} onChange={updateFilterString}
-                      placeholder={gettext('Filter URI')}/>
+                      label={gettext('Filter URI')}/>
       </div>
       <div className="col-sm-4">
         <FilterUriPrefix value={getValueFilterUriPrefix()}
