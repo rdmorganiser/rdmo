@@ -99,6 +99,33 @@ const Question = ({ config, question, elementActions, display='list', indent=0,
             </p>
           ))
         }
+        {
+          question.warning && (
+            <ul className="list-unstyled mb-0">
+            {
+              question.warning.no_attribute && (
+                <li className="text-danger">
+                  {gettext('Error: No attribute is set for this question!')}
+                </li>
+              )
+            }
+            {
+              question.warning.double_attribute && (
+                <li className="text-danger">
+                  {gettext('Error: The attribute for this question is used several times (in this catalog).')}
+                </li>
+              )
+            }
+            {
+              question.warning.missing_languages && (
+                <li className="text-warning">
+                  {gettext('Warning: Some of the language specific fields are not set properly.')}
+                </li>
+              )
+            }
+            </ul>
+          )
+        }
         <ElementErrors element={question} />
       </div>
     </div>

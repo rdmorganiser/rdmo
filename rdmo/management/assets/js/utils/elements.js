@@ -161,6 +161,18 @@ function findDescendants(element, elementType) {
   }
 }
 
+function updateWarning(element) {
+  const questions = findDescendants(element, 'questions')
+  questions.forEach(question => {
+    if (isNil(question.attribute)) {
+      question.warning.no_attribute = true
+    } else if (questions.filter(q => q.attribute == question.attribute).length > 1) {
+      question.warning.double_attribute = true
+    }
+  })
+  return element
+}
+
 const buildUri = (element) => {
   if (isUndefined(element.uri_prefix) || isUndefined(element.model)) {
     return null
@@ -196,4 +208,5 @@ const buildPathForAttribute = (key, parentUri) => {
 
 
 
-export { compareElements, updateElement, resetElement, canMoveElement, moveElement, findDescendants, buildUri, buildPathForAttribute }
+export { compareElements, updateElement, resetElement, canMoveElement, moveElement, findDescendants,
+         updateWarning, buildUri, buildPathForAttribute }
