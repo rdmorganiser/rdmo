@@ -1,3 +1,4 @@
+
 import pytest
 
 from playwright.sync_api import Page
@@ -10,11 +11,11 @@ from rdmo.core.tests.e2e.conftest import (  # noqa: F401
     django_db_setup,
 )
 
-USERNAME = "editor"  # the user needs exist in the database
+USERNAME = "owner"
 
 
 @pytest.fixture
-def e2e_username(scope="session") -> str:
+def e2e_username() -> str:
     """Fixture to specify which user should be authenticated.
     This can be overridden in individual test modules or fixtures.
     """
@@ -22,8 +23,8 @@ def e2e_username(scope="session") -> str:
 
 
 @pytest.fixture
-def page(live_server, browser, authenticated_page: Page) -> Page:  # noqa: F811
-    """Navigates the authenticated page to /management."""
-    authenticated_page.goto("/management")  # Navigate to the projects section
+def page(live_server, browser, authenticated_page: Page) -> Page: # noqa: F811
+    """Navigates the authenticated page to /projects."""
+    authenticated_page.goto("/projects")  # Navigate to the projects section
     authenticated_page.wait_for_load_state("networkidle")
     return authenticated_page
