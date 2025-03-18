@@ -194,7 +194,9 @@ class ElementModelSerializerMixin(serializers.ModelSerializer):
 class ElementWarningSerializerMixin(serializers.ModelSerializer):
 
     def get_warning(self, obj):
-        return any(get_language_warning(obj, field_name) for field_name in self.Meta.warning_fields)
+        return {
+            'missing_languages': any(get_language_warning(obj, field_name) for field_name in self.Meta.warning_fields)
+        }
 
 
 class ReadOnlyObjectPermissionSerializerMixin:

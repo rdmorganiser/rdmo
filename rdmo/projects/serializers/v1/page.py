@@ -45,6 +45,7 @@ class OptionSetSerializer(ElementModelSerializerMixin, serializers.ModelSerializ
         model = OptionSet
         fields = (
             'id',
+            'uri',
             'model',
             'options',
             'has_provider',
@@ -60,6 +61,7 @@ class ConditionSerializer(serializers.ModelSerializer):
         model = Condition
         fields = (
             'id',
+            'uri',
             'source',
             'relation',
             'target_text',
@@ -120,6 +122,7 @@ class QuestionSetSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin
     markdown_fields = ('title', 'help')
 
     model = serializers.SerializerMethodField()
+    conditions = ConditionSerializer(default=None, many=True)
     elements = serializers.SerializerMethodField()
     verbose_name = serializers.SerializerMethodField()
 
@@ -129,6 +132,7 @@ class QuestionSetSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin
         model = QuestionSet
         fields = (
             'id',
+            'uri',
             'model',
             'title',
             'help',
@@ -136,6 +140,7 @@ class QuestionSetSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin
             'attribute',
             'attribute_uri',
             'is_collection',
+            'conditions',
             'elements',
             'has_conditions'
         )
@@ -156,6 +161,7 @@ class PageSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, seria
     markdown_fields = ('title', 'help')
 
     model = serializers.SerializerMethodField()
+    conditions = ConditionSerializer(default=None, many=True)
     elements = serializers.SerializerMethodField()
     section = serializers.SerializerMethodField()
     prev_page = serializers.SerializerMethodField()
@@ -168,6 +174,7 @@ class PageSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, seria
         model = Page
         fields = (
             'id',
+            'uri',
             'model',
             'title',
             'help',
@@ -175,6 +182,7 @@ class PageSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, seria
             'attribute',
             'attribute_uri',
             'is_collection',
+            'conditions',
             'elements',
             'section',
             'prev_page',

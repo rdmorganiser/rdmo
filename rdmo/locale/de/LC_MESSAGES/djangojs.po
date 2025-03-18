@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-22 15:21+0100\n"
-"PO-Revision-Date: 2025-02-24 16:52+0100\n"
+"POT-Creation-Date: 2025-03-17 12:37+0100\n"
+"PO-Revision-Date: 2025-03-17 12:42+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -195,14 +195,14 @@ msgid "Create new section"
 msgstr "Neuen Abschnitt erstellen"
 
 #: management/assets/js/components/edit/EditCatalog.js:46
-#: management/assets/js/components/element/Catalog.js:37
+#: management/assets/js/components/element/Catalog.js:39
 msgid "This catalog is read only"
 msgstr "Dieser Katalog ist schreibgeschützt"
 
 #: management/assets/js/components/edit/EditCatalog.js:53
-#: management/assets/js/components/element/Catalog.js:56
+#: management/assets/js/components/element/Catalog.js:58
 #: management/assets/js/constants/elements.js:44
-#: projects/assets/js/interview/components/sidebar/Overview.js:24
+#: projects/assets/js/interview/components/sidebar/Overview.js:30
 msgid "Catalog"
 msgstr "Katalog"
 
@@ -496,12 +496,12 @@ msgstr ""
 "hinzugefügt."
 
 #: management/assets/js/components/edit/EditTask.js:44
-#: management/assets/js/components/element/Task.js:34
+#: management/assets/js/components/element/Task.js:36
 msgid "This task is read only"
 msgstr "Diese Aufgabe ist schreibgeschützt"
 
 #: management/assets/js/components/edit/EditTask.js:51
-#: management/assets/js/components/element/Task.js:51
+#: management/assets/js/components/element/Task.js:53
 #: management/assets/js/constants/elements.js:53
 msgid "Task"
 msgstr "Aufgabe"
@@ -511,12 +511,12 @@ msgid "Create task"
 msgstr "Neue Aufgabe erstellen"
 
 #: management/assets/js/components/edit/EditView.js:39
-#: management/assets/js/components/element/View.js:29
+#: management/assets/js/components/element/View.js:31
 msgid "This view is read only"
 msgstr "Diese Ansicht ist schreibgeschützt"
 
 #: management/assets/js/components/edit/EditView.js:46
-#: management/assets/js/components/element/View.js:46
+#: management/assets/js/components/element/View.js:48
 #: management/assets/js/constants/elements.js:54
 msgid "View"
 msgstr "Ansicht"
@@ -576,39 +576,39 @@ msgstr "Attribut sperren"
 msgid "Export attribute"
 msgstr "Attribut exportieren"
 
-#: management/assets/js/components/element/Catalog.js:38
+#: management/assets/js/components/element/Catalog.js:40
 msgid "View catalog nested"
 msgstr "Katalog verschachtelt anzeigen"
 
-#: management/assets/js/components/element/Catalog.js:39
+#: management/assets/js/components/element/Catalog.js:41
 msgid "Edit catalog"
 msgstr "Katalog bearbeiten"
 
-#: management/assets/js/components/element/Catalog.js:40
+#: management/assets/js/components/element/Catalog.js:42
 msgid "Copy catalog"
 msgstr "Katalog kopieren"
 
-#: management/assets/js/components/element/Catalog.js:41
+#: management/assets/js/components/element/Catalog.js:43
 msgid "Add section"
 msgstr "Abschnitt hinzufügen"
 
-#: management/assets/js/components/element/Catalog.js:42
+#: management/assets/js/components/element/Catalog.js:44
 msgid "Make catalog unavailable"
 msgstr "Katalog unverfügbar machen"
 
-#: management/assets/js/components/element/Catalog.js:43
+#: management/assets/js/components/element/Catalog.js:45
 msgid "Make catalog available"
 msgstr "Katalog verfügbar machen"
 
-#: management/assets/js/components/element/Catalog.js:49
+#: management/assets/js/components/element/Catalog.js:51
 msgid "Unlock catalog"
 msgstr "Katalog entsperren"
 
-#: management/assets/js/components/element/Catalog.js:49
+#: management/assets/js/components/element/Catalog.js:51
 msgid "Lock catalog"
 msgstr "Katalog sperren"
 
-#: management/assets/js/components/element/Catalog.js:51
+#: management/assets/js/components/element/Catalog.js:53
 msgid "Export catalog"
 msgstr "Katalog exportieren"
 
@@ -734,6 +734,23 @@ msgstr "Frage sperren"
 msgid "Export question"
 msgstr "Frage exportieren"
 
+#: management/assets/js/components/element/Question.js:53
+#: projects/assets/js/interview/components/main/question/QuestionOptional.js:6
+msgid "This is an optional question."
+msgstr "Diese Frage ist optional."
+
+#: management/assets/js/components/element/Question.js:53
+msgid "optional"
+msgstr "Optional"
+
+#: management/assets/js/components/element/Question.js:58
+msgid "This question has a default answer."
+msgstr "Für diese Frage gibt es eine Standardantwort."
+
+#: management/assets/js/components/element/Question.js:58
+msgid "default"
+msgstr "Standardantwort"
+
 #: management/assets/js/components/element/QuestionSet.js:45
 msgid "View question set nested"
 msgstr "Fragenset verschachtelt anzeigen"
@@ -786,59 +803,59 @@ msgstr "Abschnitt sperren"
 msgid "Export section"
 msgstr "Abschnitt exportieren"
 
-#: management/assets/js/components/element/Task.js:35
+#: management/assets/js/components/element/Task.js:37
 msgid "Edit task"
 msgstr "Aufgabe bearbeiten"
 
-#: management/assets/js/components/element/Task.js:36
+#: management/assets/js/components/element/Task.js:38
 msgid "Copy task"
 msgstr "Aufgabe kopieren"
 
-#: management/assets/js/components/element/Task.js:37
+#: management/assets/js/components/element/Task.js:39
 msgid "Make task unavailable"
 msgstr "Aufgabe unverfügbar machen"
 
-#: management/assets/js/components/element/Task.js:38
+#: management/assets/js/components/element/Task.js:40
 msgid "Make task available"
 msgstr "Aufgabe verfügbar machen"
 
-#: management/assets/js/components/element/Task.js:44
+#: management/assets/js/components/element/Task.js:46
 msgid "Unlock task"
 msgstr "Aufgabe entsperren"
 
-#: management/assets/js/components/element/Task.js:44
+#: management/assets/js/components/element/Task.js:46
 msgid "Lock task"
 msgstr "Aufgabe sperren"
 
-#: management/assets/js/components/element/Task.js:46
+#: management/assets/js/components/element/Task.js:48
 msgid "Export task"
 msgstr "Aufgabe exportieren"
 
-#: management/assets/js/components/element/View.js:30
+#: management/assets/js/components/element/View.js:32
 msgid "Edit view"
 msgstr "Ansicht bearbeiten"
 
-#: management/assets/js/components/element/View.js:31
+#: management/assets/js/components/element/View.js:33
 msgid "Copy view"
 msgstr "Ansicht kopieren"
 
-#: management/assets/js/components/element/View.js:32
+#: management/assets/js/components/element/View.js:34
 msgid "Make view unavailable"
 msgstr "Ansicht unverfügbar machen"
 
-#: management/assets/js/components/element/View.js:33
+#: management/assets/js/components/element/View.js:35
 msgid "Make view available"
 msgstr "Ansicht verfügbar machen"
 
-#: management/assets/js/components/element/View.js:39
+#: management/assets/js/components/element/View.js:41
 msgid "Unlock view"
 msgstr "Ansicht entsperren"
 
-#: management/assets/js/components/element/View.js:39
+#: management/assets/js/components/element/View.js:41
 msgid "Lock view"
 msgstr "Ansicht sperren"
 
-#: management/assets/js/components/element/View.js:41
+#: management/assets/js/components/element/View.js:43
 msgid "Export view"
 msgstr "Ansicht exportieren"
 
@@ -1466,7 +1483,7 @@ msgid "Back to project overview"
 msgstr "Zurück zur Projektübersicht"
 
 #: projects/assets/js/interview/components/main/Errors.js:30
-#: projects/assets/js/interview/components/sidebar/Overview.js:40
+#: projects/assets/js/interview/components/sidebar/Overview.js:58
 msgid "Reload page"
 msgstr "Seite neu laden"
 
@@ -1485,7 +1502,7 @@ msgid "Loading ..."
 msgstr "Laden ..."
 
 #: projects/assets/js/interview/components/main/Search.js:79
-#: projects/assets/js/interview/components/sidebar/Overview.js:21
+#: projects/assets/js/interview/components/sidebar/Overview.js:27
 msgid "Project"
 msgstr "Projekt"
 
@@ -1513,6 +1530,26 @@ msgstr "Fortfahren"
 #: projects/assets/js/interview/components/main/page/PageButtons.js:23
 msgid "Complete questionnaire"
 msgstr "Fragebogen abschließen"
+
+#: projects/assets/js/interview/components/main/page/PageHead.js:31
+msgid "Copy tab"
+msgstr "Tab kopieren"
+
+#: projects/assets/js/interview/components/main/page/PageHead.js:32
+msgid "Add tab"
+msgstr "Tab hinzufügen"
+
+#: projects/assets/js/interview/components/main/page/PageHead.js:33
+msgid "Edit tab"
+msgstr "Tab bearbeiten"
+
+#: projects/assets/js/interview/components/main/page/PageHead.js:34
+msgid "Reuse answers"
+msgstr "Antworten wiederverwenden"
+
+#: projects/assets/js/interview/components/main/page/PageHead.js:35
+msgid "Remove tab"
+msgstr "Tab entfernen"
 
 #: projects/assets/js/interview/components/main/page/PageHeadDeleteModal.js:8
 msgid "Delete tab"
@@ -1608,9 +1645,17 @@ msgid "An unknown error occurred, please contact support"
 msgstr ""
 "Ein unbekannter Fehler ist aufgetreten, bitte kontaktieren Sie den Support"
 
-#: projects/assets/js/interview/components/main/question/QuestionOptional.js:6
-msgid "This is an optional question."
-msgstr "Diese Frage ist optional."
+#: projects/assets/js/interview/components/main/question/QuestionManagement.js:7
+msgid ""
+"These links take you directly to the items in the admin interface.  This "
+"part of the page is visible to you because you are either an Admin,  Editor, "
+"or Reviewer. It is not displayed for regular users. It can be disabled in "
+"the sidebar."
+msgstr ""
+"Diese Links führen Sie direkt zu den Elementen im Management-Interface.  "
+"Dieser Teil der Seite ist für Sie sichtbar, weil Sie entweder Administrator, "
+"Editor oder Reviewer sind. Für normale Nutzende wird er nicht angezeigt. Er "
+"kann in der Seitenleiste deaktiviert werden."
 
 #: projects/assets/js/interview/components/main/question/QuestionOptional.js:7
 msgid "Optional"
@@ -1706,19 +1751,27 @@ msgstr "Navigation"
 msgid "(%s of %s)"
 msgstr "(%s von %s)"
 
-#: projects/assets/js/interview/components/sidebar/Overview.js:15
+#: projects/assets/js/interview/components/sidebar/Overview.js:21
 msgid "Overview"
 msgstr "Übersicht"
 
-#: projects/assets/js/interview/components/sidebar/Overview.js:31
+#: projects/assets/js/interview/components/sidebar/Overview.js:39
+msgid "Hide management panels"
+msgstr "Management-Panels ausblenden"
+
+#: projects/assets/js/interview/components/sidebar/Overview.js:39
+msgid "Show management panels"
+msgstr "Management-Panels anzeigen"
+
+#: projects/assets/js/interview/components/sidebar/Overview.js:49
 msgid "You don't have write access to this project."
 msgstr "Sie haben keinen Schreibzugriff auf dieses Projekt."
 
-#: projects/assets/js/interview/components/sidebar/Overview.js:32
+#: projects/assets/js/interview/components/sidebar/Overview.js:50
 msgid "read only"
 msgstr "nur lesen"
 
-#: projects/assets/js/interview/components/sidebar/Overview.js:43
+#: projects/assets/js/interview/components/sidebar/Overview.js:61
 msgid "Back to my projects"
 msgstr "Zurück zu meinen Projekten"
 

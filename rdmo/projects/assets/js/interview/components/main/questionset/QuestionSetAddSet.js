@@ -14,8 +14,10 @@ const QuestionSetAddSet = ({ questionset, sets, setPrefix, disabled, createSet }
   }
 
   return !disabled && questionset.is_collection && (
-    <button type="button" className="btn btn-success btn-add-set" onClick={handleClick}>
-      <i className="fa fa-plus fa-btn"></i> {capitalize(questionset.verbose_name)}
+    <button type="button" className="btn btn-success btn-add-set"
+            title={'Add block'} aria-label={'Add block'}
+            onClick={handleClick}>
+      <i className="fa fa-plus fa-btn" aria-hidden="true"></i> {capitalize(questionset.verbose_name)}
     </button>
   )
 }

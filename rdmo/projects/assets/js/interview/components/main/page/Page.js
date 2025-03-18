@@ -9,6 +9,7 @@ import QuestionSet from '../questionset/QuestionSet'
 import PageButtons from './PageButtons'
 import PageHead from './PageHead'
 import PageHelp from './PageHelp'
+import PageManagement from './PageManagement'
 
 const Page = ({ config, settings, templates, overview, page, sets, values, fetchPage, fetchContact,
                 createValue, updateValue, deleteValue, copyValue,
@@ -30,6 +31,7 @@ const Page = ({ config, settings, templates, overview, page, sets, values, fetch
     <div className="interview-page">
       <h2>{page.title}</h2>
       <PageHelp page={page} />
+      <PageManagement config={config} page={page} isManager={isManager} />
       <PageHead
         templates={templates}
         page={page}
@@ -51,6 +53,7 @@ const Page = ({ config, settings, templates, overview, page, sets, values, fetch
                 return (
                   <QuestionSet
                     key={elementIndex}
+                    config={config}
                     settings={settings}
                     templates={templates}
                     page={page}
@@ -75,6 +78,7 @@ const Page = ({ config, settings, templates, overview, page, sets, values, fetch
                 return (
                   <Question
                     key={elementIndex}
+                    config={config}
                     settings={settings}
                     templates={templates}
                     page={page}

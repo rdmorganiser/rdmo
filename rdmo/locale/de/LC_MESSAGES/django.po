@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-06 18:33+0100\n"
+"POT-Creation-Date: 2025-03-17 12:31+0100\n"
 "PO-Revision-Date: 2025-03-06 18:35+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
@@ -3316,11 +3316,11 @@ msgstr "Radio Buttons"
 
 #: questions/constants.py:19
 msgid "Select drop-down"
-msgstr "Select-Dropdown-Menü"
+msgstr "Select-Dropdown"
 
 #: questions/constants.py:20
 msgid "Select drop-down (free)"
-msgstr "Select-Dropdown-Menü (frei)"
+msgstr "Select-Dropdown (frei)"
 
 #: questions/constants.py:21
 msgid "Range slider"
@@ -4391,7 +4391,7 @@ msgstr "Hilfetext"
 msgid "file"
 msgstr "Datei"
 
-#: views/templatetags/view_tags.py:202
+#: views/templatetags/view_tags.py:210
 msgid "Set"
 msgstr "Set"
 

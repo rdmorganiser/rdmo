@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
+import { getQuestionHelpId } from '../../../utils/question'
+
 import Html from 'rdmo/core/assets/js/components/Html'
 
 const QuestionHelp = ({ question }) => {
@@ -10,7 +12,7 @@ const QuestionHelp = ({ question }) => {
   })
 
   return <div className={classnames} >
-    <Html html={question.help} />
+    <Html id={getQuestionHelpId(question)} html={question.help} />
   </div>
 }
 

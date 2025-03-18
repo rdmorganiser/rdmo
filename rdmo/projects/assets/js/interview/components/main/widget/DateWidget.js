@@ -36,6 +36,7 @@ const DateWidget = ({ page, question, sets, values, siblings, currentSet, disabl
                       disabled={disabled}
                       updateValue={updateValue}
                     />
+                    <QuestionCopyValue question={question} value={value} siblings={siblings} copyValue={copyValue} />
                     <QuestionEraseValue value={value} disabled={disabled} updateValue={updateValue}/>
                     <QuestionRemoveValue
                       question={question}
@@ -44,7 +45,6 @@ const DateWidget = ({ page, question, sets, values, siblings, currentSet, disabl
                       disabled={disabled}
                       deleteValue={deleteValue}
                     />
-                    <QuestionCopyValue question={question} value={value} siblings={siblings} copyValue={copyValue} />
                     <QuestionDefault question={question} value={value} />
                   </div>
                 }

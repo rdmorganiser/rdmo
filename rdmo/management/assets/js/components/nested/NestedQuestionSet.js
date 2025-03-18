@@ -43,7 +43,7 @@ const NestedQuestionSet = ({ config, questionset, configActions, elementActions 
           <div className="row">
             <div className="col-sm-8">
               <FilterString value={get(config, 'filter.questionset.search', '')} onChange={updateFilterString}
-                            placeholder={gettext('Filter question sets')} />
+                            label={gettext('Filter question sets')} />
             </div>
             <div className="col-sm-4">
               <FilterUriPrefix value={get(config, 'filter.questionset.uri_prefix', '')} onChange={updateFilterUriPrefix}

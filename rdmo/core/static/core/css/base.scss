@@ -95,14 +95,19 @@ a {
     }
 }
 
-.btn-link {
+.btn.btn-link {
     color: $link-color;
     padding: 0;
+    border: 0;
     text-decoration: none;
 
     &:hover {
         color: $link-color-hover;
         text-decoration: none;
+    }
+    &:active,
+    &:focus {
+        outline: none;
     }
 }
 

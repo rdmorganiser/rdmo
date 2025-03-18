@@ -8,10 +8,11 @@
   * Show the unit of a question next to the answer field (#499)
   * Tabs (e.g. Datasets) and single values can be reused in different projects.
   * An "Apply to all" button can be used to paste information into all the tabs.
-  * Remove custom widgets feature (remove `QUESTIONS_WIDGETS` from settings)
   * Fix several issues regarding the interview (#501, #224, #1191)
   * Display attributes in interview to admins, editors, reviewers (#224)
   * Improve accessibility (#514, #1199)
+  * Remove custom widgets feature (remove `QUESTIONS_WIDGETS` from settings)
+  * Remove `PROJECT_QUESTIONS_AUTOSAVE` and `PROJECT_QUESTIONS_CYCLE_SETS` from settings.
 * Add the possibility to copy a project including all its values.
 * Add the option to make a project "visible" to all users (#152).
   * Users interact with visible projects as if they would have the Guest role.

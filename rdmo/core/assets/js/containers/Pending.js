@@ -6,7 +6,7 @@ import { isEmpty } from 'lodash'
 const Pending = ({ pending }) => {
   return (
     !isEmpty(pending.items) && (
-      <i className="fa fa-circle-o-notch fa-spin fa-fw"></i>
+      <i className="fa fa-circle-o-notch fa-spin fa-fw" aria-hidden="true"></i>
     )
   )
 }

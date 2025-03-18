@@ -32,7 +32,7 @@ const Views = ({ config, views, configActions, elementActions }) => {
         <div className="row">
           <div className={config.settings.multisite ? 'col-sm-4' : 'col-sm-8'}>
             <FilterString value={get(config, 'filter.views.search', '')} onChange={updateFilterString}
-                          placeholder={gettext('Filter views')} />
+                          label={gettext('Filter views')} />
           </div>
           <div className="col-sm-4">
             <FilterUriPrefix value={get(config, 'filter.views.uri_prefix', '')} onChange={updateFilterUriPrefix}
@@ -46,7 +46,7 @@ const Views = ({ config, views, configActions, elementActions }) => {
               </div>
               <div className="col-sm-2">
                 <FilterSite value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
-                            options={config.sites} allLabel={gettext('All editors')} />
+                            options={config.sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
               </div>
             </>
           }

@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+
+import { getQuestionTextId, getQuestionHelpId } from '../../../utils/question'
 import { gatherOptions } from '../../../utils/options'
 
 import QuestionCopyValues from '../question/QuestionCopyValues'
@@ -35,7 +37,9 @@ const CheckboxWidget = ({ page, question, sets, values, siblings, currentSet, di
       <div className="interview-widget">
         <div className="interview-input checkbox-input">
           <div className="buttons-wrapper">
-            <div className="checkbox-control">
+            <fieldset className="checkbox-control"
+                      aria-labelledby={getQuestionTextId(question)}
+                      aria-describedby={getQuestionHelpId(question)}>
               {
                 gatherOptions(question).map((option, optionIndex) => {
                   const value = values.find((value) => (
@@ -59,14 +63,9 @@ const CheckboxWidget = ({ page, question, sets, values, siblings, currentSet, di
                   )
                 })
               }
-            </div>
+            </fieldset>
             <div className="buttons">
               <QuestionSuccess value={{ success }} />
-              <QuestionEraseValues
-                values={values}
-                disabled={disabled}
-                deleteValue={deleteValue}
-              />
               <QuestionReuseValues
                 page={page}
                 question={question}
@@ -83,6 +82,11 @@ const CheckboxWidget = ({ page, question, sets, values, siblings, currentSet, di
                 siblings={siblings}
                 currentSet={currentSet}
                 copyValue={copyValue}
+              />
+              <QuestionEraseValues
+                values={values}
+                disabled={disabled}
+                deleteValue={deleteValue}
               />
             </div>
           </div>

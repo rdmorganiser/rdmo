@@ -22,8 +22,10 @@ const Sidebar = ({ config, settings, templates, user, project, interview, config
     return (
       <>
         <Overview
+          config={config}
           overview={project.overview}
-          help={templates.project_interview_overview_help}/>
+          help={templates.project_interview_overview_help}
+          configActions={configActions} />
         <Progress
           progress={project.progress}
           help={templates.project_interview_progress_help} />

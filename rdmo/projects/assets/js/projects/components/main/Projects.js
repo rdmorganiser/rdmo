@@ -97,12 +97,13 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
     return (
           <div className="icon-container ml-auto">
             {projects.length > 0 && showTopButton &&
-              <button className="elliptic-button" onClick={scrollToTop} title={gettext('Scroll to top')}>
+              <button type="button" className="elliptic-button" onClick={scrollToTop}
+                      title={gettext('Scroll to top')} aria-label={gettext('Scroll to top')}>
                 <i className="fa fa-arrow-up" aria-hidden="true"></i>
               </button>
             }
             {hasNext &&
-            <button onClick={loadMore} className="elliptic-button">
+            <button type="button" onClick={loadMore} className="elliptic-button">
               {gettext('Load more')}
             </button>
             }
@@ -190,7 +191,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
         <div className="projects-header-buttons">
           {
             !isEmpty(invites) && myProjects && (
-              <button className="btn btn-link" onClick={openInvitations}>
+              <button type="button" className="btn btn-link" onClick={openInvitations}>
                 <span className="badge badge-primary badge-invitations">
                   {invites.length}
                 </span>
@@ -200,15 +201,15 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
           }
           {
             isManager && (
-              <button className="btn btn-link" onClick={handleView}>
+              <button type="button" className="btn btn-link" onClick={handleView}>
                 {viewLinkText}
               </button>
             )
           }
-          <button id="import-project" className="btn btn-link" onClick={openImport}>
+          <button type="button" id="import-project" className="btn btn-link" onClick={openImport}>
             <i className="fa fa-download" aria-hidden="true"></i> {gettext('Import project')}
           </button>
-          <button id="create-project" className="btn btn-link" onClick={handleNew}>
+          <button type="button" id="create-project" className="btn btn-link" onClick={handleNew}>
             <i className="fa fa-plus" aria-hidden="true"></i> {gettext('New project')}
           </button>
         </div>

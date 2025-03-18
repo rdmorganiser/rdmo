@@ -1,5 +1,8 @@
 @import 'rdmo/core/assets/scss/variables';
 
+// add default value for backwards compatibility
+$variant-background-color: #f5f5f5 !default;
+
 .interview-breadcrumb {
     &.breadcrumb {
         margin-top: 20px;
@@ -165,6 +168,17 @@
     > :last-child {
         margin-bottom: 0;
     }
+}
+
+.interview-management {
+    &.panel {
+        background-color: $variant-background-color;
+    }
+}
+
+.interview-management-help {
+    float: right;
+    cursor: help;
 }
 
 .interview-widget {
