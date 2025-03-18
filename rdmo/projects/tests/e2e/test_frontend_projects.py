@@ -16,7 +16,7 @@ def test_projects_page(page: Page):
     expect(page.get_by_role("heading", name="All projects")).to_be_visible()
     expect(page.get_by_role("button", name="Import project")).to_be_visible()
     expect(page.get_by_role("button", name="New project")).to_be_visible()
-    expect(page.get_by_role("textbox", name="Search projects")).to_be_visible(timeout=20_000)
+    expect(page.get_by_role("textbox", name="Search")).to_be_visible(timeout=20_000)
 
     # Assert projects table
     expect(page.locator("thead")).to_contain_text("Name")
