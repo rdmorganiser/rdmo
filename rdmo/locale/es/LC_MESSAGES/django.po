@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-17 12:31+0100\n"
-"PO-Revision-Date: 2025-02-27 13:29+0100\n"
+"POT-Creation-Date: 2025-03-20 11:12+0000\n"
+"PO-Revision-Date: 2025-03-20 12:28+0100\n"
 "Last-Translator: DAVID MARTINEZ <dmartinezmu@cem.es>\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -667,7 +667,7 @@ msgstr ""
 #: core/templates/core/bootstrap_delete_form.html:8
 #: core/templates/core/bootstrap_form.html:15
 #: management/templates/management/upload.html:88
-#: projects/templates/projects/project_import.html:162
+#: projects/templates/projects/project_import.html:164
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -999,7 +999,7 @@ msgstr "Datetime"
 msgid "Phone"
 msgstr "Teléfono"
 
-#: core/constants.py:24 options/models.py:272 projects/models/value.py:74
+#: core/constants.py:24 options/models.py:297 projects/models/value.py:74
 msgid "Option"
 msgstr "Opción"
 
@@ -1145,6 +1145,10 @@ msgstr "Logo RDMO"
 msgid "Back to project"
 msgstr "Volver al proyecto"
 
+#: core/templates/core/base_navigation.html:10
+msgid "Toggle navigation"
+msgstr "Alternar navegación"
+
 #: core/templates/core/base_navigation.html:26 management/apps.py:7
 #: management/templates/management/management.html:24
 msgid "Management"
@@ -1171,7 +1175,7 @@ msgstr "Restablecer superposiciones de tutoriales"
 msgid "Update e-mail"
 msgstr "Actualizar e-mail"
 
-#: core/templates/core/bootstrap_form_field.html:67
+#: core/templates/core/bootstrap_form_field.html:69
 msgid ""
 "Hold down \"Control\", or \"Command\" on a Mac, to select more than one."
 msgstr ""
@@ -1186,12 +1190,16 @@ msgstr ""
 "Herramienta para soportar la planficiación, implementación y organización de "
 "la gestión de datos de investicación."
 
-#: core/templates/core/upload_form.html:13
-#: core/templates/core/upload_form.html:29
+#: core/templates/core/upload_form.html:12
+msgid "Upload file"
+msgstr "Cargar archivo"
+
+#: core/templates/core/upload_form.html:14
+#: core/templates/core/upload_form.html:30
 msgid "Select file"
 msgstr "Seleccionar fichero"
 
-#: core/templates/core/upload_form.html:17
+#: core/templates/core/upload_form.html:18
 msgid "Upload"
 msgstr "Subir"
 
@@ -1414,7 +1422,7 @@ msgid "Back"
 msgstr "Atrás"
 
 #: management/templates/management/upload.html:21
-#: projects/templates/projects/project_detail_sidebar_parent_import.html:15
+#: projects/templates/projects/project_detail_sidebar_parent_import.html:16
 msgid "Import"
 msgstr "Importar"
 
@@ -1422,8 +1430,8 @@ msgstr "Importar"
 msgid "Import elements"
 msgstr "Importar elementos"
 
-#: management/viewsets.py:41 management/viewsets.py:77 projects/viewsets.py:349
-#: projects/viewsets.py:350 projects/viewsets.py:545
+#: management/viewsets.py:41 management/viewsets.py:77 projects/viewsets.py:348
+#: projects/viewsets.py:349 projects/viewsets.py:544
 msgid "This field may not be blank."
 msgstr "Este campo no puede estar vacío."
 
@@ -1431,7 +1439,7 @@ msgstr "Este campo no puede estar vacío."
 msgid "This is not a valid RDMO import JSON."
 msgstr "Esto no es un JSON de importación RDMO válido."
 
-#: options/apps.py:7 options/models.py:57 options/models.py:273
+#: options/apps.py:7 options/models.py:57 options/models.py:298
 #: options/templates/options/export/options.html:6
 #: options/templates/options/export/optionset.html:9
 #: projects/templates/projects/issue_detail.html:81
@@ -1584,51 +1592,111 @@ msgstr "El texto de ayuda para esta opción (en el idioma cuaternario)."
 msgid "The help text for this option (in the quinary language)."
 msgstr "El texto de ayuda para esta opción (en el idioma quinario)."
 
-#: options/models.py:241
+#: options/models.py:241 questions/models/question.py:122
+msgid "Default text value (primary)"
+msgstr "Valor del texto por defecto (primario)"
+
+#: options/models.py:242
+msgid ""
+"The default text value for the additional input of this option (in the "
+"primary language)."
+msgstr ""
+"El valor de texto por defecto para la entrada adicional de esta opción (en "
+"el idioma principal)."
+
+#: options/models.py:246 questions/models/question.py:127
+msgid "Default text value (secondary)"
+msgstr "Valor de texto por defecto (secundario)"
+
+#: options/models.py:247
+msgid ""
+"The default text value for the additional input of this option (in the "
+"secondary language)."
+msgstr ""
+"El valor de texto por defecto para la entrada adicional de esta opción (en "
+"el idioma secundario)."
+
+#: options/models.py:251 questions/models/question.py:132
+msgid "Default text value (tertiary)"
+msgstr "Valor de texto por defecto (terciario)"
+
+#: options/models.py:252
+msgid ""
+"The default text value for the additional input of this option (in the "
+"tertiary language)."
+msgstr ""
+"El valor de texto por defecto para la entrada adicional de esta opción (en "
+"el idioma terciario)."
+
+#: options/models.py:256 questions/models/question.py:137
+msgid "Default text value (quaternary)"
+msgstr "Valor de texto por defecto (cuaternario)"
+
+#: options/models.py:257
+msgid ""
+"The default text value for the additional input of this option (in the "
+"quaternary language)."
+msgstr ""
+"El valor de texto por defecto para la entrada adicional de esta opción (en "
+"el idioma cuaternario)."
+
+#: options/models.py:261 questions/models/question.py:142
+msgid "Default text value (quinary)"
+msgstr "Valor por defecto de texto (quinario)"
+
+#: options/models.py:262
+msgid ""
+"The default text value for the additional input of this option (in the "
+"quinary language)."
+msgstr ""
+"El valor de texto por defecto para la entrada adicional de esta opción (en "
+"el lenguaje quinario)."
+
+#: options/models.py:266
 msgid "View text (primary)"
 msgstr "Ver texto (primario)"
 
-#: options/models.py:242
+#: options/models.py:267
 msgid "The view text for this option (in the primary language)."
 msgstr "El texto de la vista para esta opción (en el idioma principal)."
 
-#: options/models.py:246
+#: options/models.py:271
 msgid "View text (secondary)"
 msgstr "Ver texto (secundario)"
 
-#: options/models.py:247
+#: options/models.py:272
 msgid "The view text for this option (in the secondary language)."
 msgstr "El texto de la vista para esta opción (en el idioma secundario)."
 
-#: options/models.py:251
+#: options/models.py:276
 msgid "View text (tertiary)"
 msgstr "Ver texto (terciario)"
 
-#: options/models.py:252
+#: options/models.py:277
 msgid "The view text for this option (in the tertiary language)."
 msgstr "El texto de la vista para esta opción (en la lengua terciaria)."
 
-#: options/models.py:256
+#: options/models.py:281
 msgid "View text (quaternary)"
 msgstr "Ver texto (cuaternario)"
 
-#: options/models.py:257
+#: options/models.py:282
 msgid "The view text for this option (in the quaternary language)."
 msgstr "El texto de la vista para esta opción (en el idioma cuaternario)."
 
-#: options/models.py:261
+#: options/models.py:286
 msgid "View text (quinary)"
 msgstr "Ver texto (quinario)"
 
-#: options/models.py:262
+#: options/models.py:287
 msgid "The view text for this option (in the quinary language)."
 msgstr "El texto de la vista para esta opción (en el idioma quinario)."
 
-#: options/models.py:266 options/templates/options/export/option.html:17
+#: options/models.py:291 options/templates/options/export/option.html:17
 msgid "Additional input"
 msgstr "Input adicional"
 
-#: options/models.py:267
+#: options/models.py:292
 msgid "Designates whether an additional input is possible for this option."
 msgstr "Establece si es posible input adicional para esta opción."
 
@@ -1642,6 +1710,10 @@ msgstr "Ayuda"
 #: options/templates/options/export/option.html:14
 msgid "View text"
 msgstr "Ver texto"
+
+#: options/templates/options/export/option.html:20
+msgid "Default text"
+msgstr "Texto por defecto"
 
 #: overlays/apps.py:7 overlays/models.py:33
 msgid "Overlays"
@@ -1823,7 +1895,7 @@ msgstr "Archivos"
 #: projects/forms.py:420 projects/models/snapshot.py:33
 #: projects/models/value.py:38
 #: projects/templates/projects/project_detail_snapshots.html:20
-#: projects/templates/projects/project_import.html:93
+#: projects/templates/projects/project_import.html:94
 msgid "Snapshot"
 msgstr "Instantátanea"
 
@@ -1839,7 +1911,7 @@ msgstr "Destinatarios"
 msgid "Enter recipients line by line"
 msgstr "Introducir destinatarios línea por línea"
 
-#: projects/imports.py:240
+#: projects/imports.py:242
 msgid "Import project from this URL"
 msgstr "Importar proyecto desde este URL"
 
@@ -2093,7 +2165,7 @@ msgstr "Sitio al que pertenece el sitio (en una configuración multi sitio)"
 
 #: projects/models/project.py:42 projects/models/snapshot.py:22
 #: projects/templates/projects/project_import.html:25
-#: projects/templates/projects/project_import.html:98
+#: projects/templates/projects/project_import.html:99
 #: tasks/templates/tasks/export/tasks.html:27
 #: views/templates/views/export/views.html:27
 msgid "Title"
@@ -2111,7 +2183,7 @@ msgstr "El título de este proyecto."
 #: projects/templates/projects/project_detail_snapshots.html:21
 #: projects/templates/projects/project_detail_views.html:20
 #: projects/templates/projects/project_import.html:28
-#: projects/templates/projects/project_import.html:101
+#: projects/templates/projects/project_import.html:102
 msgid "Description"
 msgstr "Descripción"
 
@@ -2386,15 +2458,15 @@ msgstr "Es necesario indicar el usuario o el correo electrónico."
 msgid "User and e-mail are mutually exclusive."
 msgstr "Usuario y correo electrónico se excluyen mutuamente."
 
-#: projects/serializers/v1/page.py:114
+#: projects/serializers/v1/page.py:117
 msgid "entry"
 msgstr "entrada"
 
-#: projects/serializers/v1/page.py:150
+#: projects/serializers/v1/page.py:156
 msgid "block"
 msgstr "bloque"
 
-#: projects/serializers/v1/page.py:208
+#: projects/serializers/v1/page.py:217
 msgid "set"
 msgstr "conjunto"
 
@@ -2556,13 +2628,23 @@ msgid "Sending a task will set the status to \"in progress\"."
 msgstr "Enviar una tarea establecerá su estado a \"en proceso\"."
 
 #: projects/templates/projects/issue_send_email.html:4
-#: projects/templates/projects/issue_send_email.html:28
+#: projects/templates/projects/issue_send_email.html:30
 msgid "Send by mail"
 msgstr "Enviar por e-mail"
 
 #: projects/templates/projects/issue_send_integrations.html:3
 msgid "Send via integration"
 msgstr "Enviar vía integración"
+
+#: projects/templates/projects/issue_send_integrations.html:10
+#: projects/templates/projects/project_detail_integrations.html:20
+#: projects/templates/projects/project_detail_invites.html:17
+#: projects/templates/projects/project_detail_issues.html:23
+#: projects/templates/projects/project_detail_memberships.html:23
+#: projects/templates/projects/project_detail_snapshots.html:23
+#: projects/templates/projects/project_detail_views.html:21
+msgid "Actions"
+msgstr "Acciones"
 
 #: projects/templates/projects/issue_send_integrations.html:26
 msgid "This task has already been send using this integration."
@@ -2876,7 +2958,7 @@ msgstr "Hacer visible el proyecto"
 
 #: projects/templates/projects/project_detail_sidebar.html:103
 #: projects/templates/projects/project_detail_snapshots.html:25
-#: projects/templates/projects/project_detail_snapshots.html:85
+#: projects/templates/projects/project_detail_snapshots.html:86
 #: projects/templates/projects/snapshot_form.html:17
 msgid "Create snapshot"
 msgstr "Crear instantánea"
@@ -2886,7 +2968,7 @@ msgid "Back to projects overview"
 msgstr "Volver al resumen de proyectos"
 
 #: projects/templates/projects/project_detail_sidebar.html:142
-#: projects/templates/projects/project_import.html:158
+#: projects/templates/projects/project_import.html:160
 #: projects/templates/projects/project_import_form.html:18
 msgid "Import values"
 msgstr "Importar valores"
@@ -2905,7 +2987,7 @@ msgstr "Importar directamente"
 
 #: projects/templates/projects/project_detail_snapshots.html:22
 #: projects/templates/projects/project_import.html:34
-#: projects/templates/projects/project_import.html:104
+#: projects/templates/projects/project_import.html:105
 msgid "Created"
 msgstr "Creado"
 
@@ -2920,11 +3002,11 @@ msgstr "Actualizar instantánea"
 msgid "Rollback to snapshot"
 msgstr "Retroceder a la instantánea"
 
-#: projects/templates/projects/project_detail_snapshots.html:61
+#: projects/templates/projects/project_detail_snapshots.html:62
 msgid "Export snapshot"
 msgstr "Exportar instantánea"
 
-#: projects/templates/projects/project_detail_snapshots.html:91
+#: projects/templates/projects/project_detail_snapshots.html:92
 msgid "No snapshots found."
 msgstr "No se han encontrado instantáneas."
 
@@ -3049,31 +3131,31 @@ msgid "Question"
 msgstr "Pregunta"
 
 #: projects/templates/projects/project_import.html:52
-#: projects/templates/projects/project_import.html:115
+#: projects/templates/projects/project_import.html:116
 msgid "Current answer"
 msgstr "Respuesta actual"
 
 #: projects/templates/projects/project_import.html:54
-#: projects/templates/projects/project_import.html:117
+#: projects/templates/projects/project_import.html:118
 msgid "Imported answer"
 msgstr "Respuesta importada"
 
 #: projects/templates/projects/project_import.html:65
-#: projects/templates/projects/project_import.html:128
+#: projects/templates/projects/project_import.html:129
 msgid "Title of a set."
 msgstr "Título del conjunto."
 
 #: projects/templates/projects/project_import.html:67
-#: projects/templates/projects/project_import.html:130
+#: projects/templates/projects/project_import.html:131
 msgid "Not available in this catalog."
 msgstr "No está disponible en este catálogo."
 
 #: projects/templates/projects/project_import.html:81
-#: projects/templates/projects/project_import.html:144
+#: projects/templates/projects/project_import.html:145
 msgid "This Answer cannot be imported."
 msgstr "Esta respuesta no puede ser importada."
 
-#: projects/templates/projects/project_import.html:160
+#: projects/templates/projects/project_import.html:162
 msgid "Import project"
 msgstr "Importar proyecto"
 
@@ -3127,13 +3209,13 @@ msgstr ""
 msgid ""
 "Multiple answers exist in the database. This can happen due some technical "
 "problem in the past. You can remove unwanted answers using the \"Remove "
-"item\" field' (<i class=\"fa fa-times\"></i>). Please contact support if the "
-"problem persists."
+"item\" field' (<i class=\"fa fa-times\" aria-hidden=\"true\"></i>). Please "
+"contact support if the problem persists."
 msgstr ""
 "Multiple answers exist in the database. This can happen due some technical "
 "problem in the past. You can remove unwanted answers using the «Remove item» "
-"field' (<i class=\"fa fa-times\"></i>). Please contact support if the "
-"problem persists."
+"field' (<i class=\"fa fa-times\" aria-hidden=\"true\"></i>). Please contact "
+"support if the problem persists."
 
 #: projects/templates/projects/project_interview_navigation_help.html:4
 msgid "Grey entries will be conditionally skipped based on your input."
@@ -3243,7 +3325,7 @@ msgstr "Lo sentimos, pero esta invitación es para el usuario \"%s\"."
 msgid "Sorry, the invitation link is not valid."
 msgstr "Lo sentimos, la invitación no es válida."
 
-#: projects/viewsets.py:662
+#: projects/viewsets.py:661
 msgid "You reached the file quota for this project."
 msgstr "Usted ha alcanzado la quota de archivado para este proyecto."
 
@@ -3702,45 +3784,25 @@ msgstr "El texto de esta pregunta (en lengua cuaternaria)."
 msgid "The text for this question (in the quinary language)."
 msgstr "El texto de esta pregunta (en lengua quinaria)."
 
-#: questions/models/question.py:122
-msgid "Default text value (primary)"
-msgstr "Valor del texto por defecto (primario)"
-
 #: questions/models/question.py:123
 msgid "The default text value for this question (in the primary language)."
 msgstr ""
 "El valor de texto por defecto para esta pregunta (en el idioma principal)."
-
-#: questions/models/question.py:127
-msgid "Default text value (secondary)"
-msgstr "Valor de texto por defecto (secundario)"
 
 #: questions/models/question.py:128
 msgid "The default text value for this question (in the secondary language)."
 msgstr ""
 "El valor de texto por defecto para esta pregunta (en el idioma secundario)."
 
-#: questions/models/question.py:132
-msgid "Default text value (tertiary)"
-msgstr "Valor de texto por defecto (terciario)"
-
 #: questions/models/question.py:133
 msgid "The default text value for this question (in the tertiary language)."
 msgstr ""
 "El valor de texto por defecto para esta pregunta (en la lengua terciaria)."
 
-#: questions/models/question.py:137
-msgid "Default text value (quaternary)"
-msgstr "Valor de texto por defecto (cuaternario)"
-
 #: questions/models/question.py:138
 msgid "The default text value for this question (in the quaternary language)."
 msgstr ""
 "El valor de texto por defecto para esta pregunta (en el idioma cuaternario)."
-
-#: questions/models/question.py:142
-msgid "Default text value (quinary)"
-msgstr "Valor por defecto de texto (quinario)"
 
 #: questions/models/question.py:143
 msgid "The default text value for this question (in the quinary language)."
@@ -4436,9 +4498,6 @@ msgstr "Establecer"
 #~ msgid "This is a default answer that can be customized."
 #~ msgstr "Esta es una respuesta por defecto que puede ser adaptada."
 
-#~ msgid "Default"
-#~ msgstr "Valor por defecto"
-
 #~ msgid "Erase input"
 #~ msgstr "Borrar entrada"
 
@@ -4520,9 +4579,6 @@ msgstr "Establecer"
 
 #~ msgid "Progress"
 #~ msgstr "Progreso"
-
-#~ msgid "Navigation"
-#~ msgstr "Navegación"
 
 #~ msgid ""
 #~ "This field could not be saved, since somebody else did so while you were "

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-17 12:37+0100\n"
-"PO-Revision-Date: 2025-02-27 13:45+0100\n"
+"POT-Creation-Date: 2025-03-20 11:12+0000\n"
+"PO-Revision-Date: 2025-03-20 12:33+0100\n"
 "Last-Translator: DAVID MARTINEZ <dmartinezmu@cem.es>\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -28,10 +28,16 @@ msgstr "Cerrar"
 msgid "Save"
 msgstr "Guardar"
 
-#: core/assets/js/components/SearchField.js:41
+#: core/assets/js/components/SearchField.js:35
+#: core/assets/js/components/SearchField.js:43
 #: projects/assets/js/projects/utils/translations.js:15
 msgid "Search"
 msgstr "Búsqueda"
+
+#: core/assets/js/components/SearchField.js:39
+#: management/assets/js/components/common/Filter.js:12
+msgid "Reset"
+msgstr "Restablecer"
 
 #: core/assets/js/components/UploadDropZone.js:17
 #, javascript-format
@@ -63,7 +69,7 @@ msgid "Create and continue editing"
 msgstr "Crear y seguir editando"
 
 #: management/assets/js/components/common/Buttons.js:16
-#: projects/assets/js/interview/components/main/questionset/QuestionSetCopySet.js:27
+#: projects/assets/js/interview/components/main/questionset/QuestionSetCopySet.js:29
 msgid "Copy"
 msgstr "Copiar"
 
@@ -91,45 +97,24 @@ msgid "One or more errors occurred:"
 msgstr "Se han producido uno o más errores:"
 
 #: management/assets/js/components/common/Filter.js:30
+msgid "Filter URI prefix"
+msgstr "Prefijo URI del filtro"
+
+#: management/assets/js/components/common/Filter.js:32
 msgid "All URI prefixes"
 msgstr "Todos los prefijos del URI"
 
-#: management/assets/js/components/common/Forms.js:17
+#: management/assets/js/components/common/Forms.js:16
+msgid "Upload file"
+msgstr "Cargar archivo"
+
+#: management/assets/js/components/common/Forms.js:18
 msgid "Select file"
 msgstr "Seleccionar fichero"
 
-#: management/assets/js/components/common/Forms.js:22
+#: management/assets/js/components/common/Forms.js:23
 msgid "Upload"
 msgstr "Subir"
-
-#: management/assets/js/components/common/Links.js:77
-#: management/assets/js/components/import/ImportElement.js:48
-msgid "Locked"
-msgstr "Bloqueado"
-
-#: management/assets/js/components/common/Links.js:112
-msgid "Remove your site"
-msgstr "Elimine su sitio"
-
-#: management/assets/js/components/common/Links.js:112
-msgid "Add your site"
-msgstr "Añada su sitio"
-
-#: management/assets/js/components/common/Links.js:131
-msgid "Hide elements"
-msgstr "Ocultar elementos"
-
-#: management/assets/js/components/common/Links.js:131
-msgid "Show elements"
-msgstr "Mostrar elementos"
-
-#: management/assets/js/components/common/Links.js:147
-msgid "XML"
-msgstr "XML"
-
-#: management/assets/js/components/common/Links.js:149
-msgid "XML (full)"
-msgstr "XML (completo)"
 
 #: management/assets/js/components/edit/EditAttribute.js:37
 #: management/assets/js/components/element/Attribute.js:31
@@ -526,26 +511,27 @@ msgstr "Vista"
 msgid "Create view"
 msgstr "Crear vista"
 
-#: management/assets/js/components/edit/common/MultiSelect.js:69
+#: management/assets/js/components/edit/common/MultiSelect.js:71
 #: management/assets/js/components/edit/common/OrderedMultiSelect.js:63
-#: management/assets/js/components/edit/common/Select.js:56
+#: management/assets/js/components/edit/common/Select.js:58
 msgid "Edit"
 msgstr "Editar"
 
-#: management/assets/js/components/edit/common/MultiSelect.js:70
+#: management/assets/js/components/edit/common/MultiSelect.js:72
 #: management/assets/js/components/edit/common/OrderedMultiSelect.js:65
-#: projects/assets/js/interview/components/main/questionset/QuestionSetRemoveSet.js:23
+#: projects/assets/js/interview/components/main/questionset/QuestionSetRemoveSet.js:25
 msgid "Remove"
 msgstr "Eliminar"
 
-#: management/assets/js/components/edit/common/MultiSelect.js:92
-#: management/assets/js/components/edit/common/Select.js:70
+#: management/assets/js/components/edit/common/MultiSelect.js:94
+#: management/assets/js/components/edit/common/Select.js:72
 msgid "For this action, the element must first be created."
 msgstr "Para esta acción, primero debe crearse el elemento."
 
 #: management/assets/js/components/edit/common/UriPrefix.js:35
 #: management/assets/js/components/import/common/UriPrefix.js:21
-#: management/assets/js/components/sidebar/ImportSidebar.js:118
+#: management/assets/js/components/sidebar/ImportSidebar.js:119
+#: management/assets/js/components/sidebar/ImportSidebar.js:120
 msgid "Insert default URI Prefix"
 msgstr "Inserte el prefijo URI por defecto"
 
@@ -741,22 +727,34 @@ msgid "This is an optional question."
 msgstr "Esta pregunta es opcional."
 
 #: management/assets/js/components/element/Question.js:53
-#, fuzzy
-#| msgid "Optional"
 msgid "optional"
-msgstr "Opcional"
+msgstr "opcional"
 
 #: management/assets/js/components/element/Question.js:58
-#, fuzzy
-#| msgid "This question is read only"
 msgid "This question has a default answer."
-msgstr "Esta pregunta es de sólo lectura"
+msgstr "Esta pregunta tiene una respuesta por defecto."
 
 #: management/assets/js/components/element/Question.js:58
-#, fuzzy
-#| msgid "Default"
 msgid "default"
-msgstr "Por defecto"
+msgstr "por defecto"
+
+#: management/assets/js/components/element/Question.js:108
+msgid "Error: No attribute is set for this question!"
+msgstr "Error: No se ha establecido ningún atributo para esta pregunta!"
+
+#: management/assets/js/components/element/Question.js:115
+msgid ""
+"Error: The attribute for this question is used several times (in this "
+"catalog)."
+msgstr ""
+"Error: El atributo de esta pregunta se utiliza varias veces (en este "
+"catálogo)."
+
+#: management/assets/js/components/element/Question.js:122
+msgid "Warning: Some of the language specific fields are not set properly."
+msgstr ""
+"Advertencia: Algunos de los campos específicos del idioma no están "
+"configurados correctamente."
 
 #: management/assets/js/components/element/QuestionSet.js:45
 msgid "View question set nested"
@@ -882,6 +880,20 @@ msgstr "Atributos"
 #: management/assets/js/components/nested/NestedAttribute.js:32
 msgid "Filter attributes"
 msgstr "Filtrar atributos"
+
+#: management/assets/js/components/elements/Attributes.js:42
+#: management/assets/js/components/elements/Catalogs.js:51
+#: management/assets/js/components/elements/Conditions.js:43
+#: management/assets/js/components/elements/OptionSets.js:43
+#: management/assets/js/components/elements/Options.js:46
+#: management/assets/js/components/elements/Pages.js:48
+#: management/assets/js/components/elements/QuestionSets.js:48
+#: management/assets/js/components/elements/Questions.js:49
+#: management/assets/js/components/elements/Sections.js:46
+#: management/assets/js/components/elements/Tasks.js:53
+#: management/assets/js/components/elements/Views.js:49
+msgid "Filter editors"
+msgstr "Editores de filtros"
 
 #: management/assets/js/components/elements/Attributes.js:42
 #: management/assets/js/components/elements/Catalogs.js:51
@@ -1067,6 +1079,10 @@ msgstr "Hacer no disponible"
 msgid "Make available"
 msgstr "Poner a disposición"
 
+#: management/assets/js/components/import/ImportElement.js:48
+msgid "Locked"
+msgstr "Bloqueado"
+
 #: management/assets/js/components/import/ImportSuccessElement.js:15
 #: management/assets/js/components/import/common/ImportSelectCheckbox.js:8
 msgid "Changed"
@@ -1113,7 +1129,7 @@ msgstr "Ruta URI"
 
 #: management/assets/js/components/import/common/UriPrefix.js:12
 #: management/assets/js/components/sidebar/ImportSidebar.js:109
-#: management/assets/js/components/sidebar/ImportSidebar.js:113
+#: management/assets/js/components/sidebar/ImportSidebar.js:114
 msgid "URI prefix"
 msgstr "Prefijo URI"
 
@@ -1308,7 +1324,7 @@ msgstr "Está a punto de eliminar definitivamente el atributo:"
 #: management/assets/js/components/modals/DeleteTaskModal.js:16
 #: management/assets/js/components/modals/DeleteViewModal.js:16
 #: projects/assets/js/interview/components/main/page/PageHeadDeleteModal.js:21
-#: projects/assets/js/interview/components/main/questionset/QuestionSetRemoveSet.js:27
+#: projects/assets/js/interview/components/main/questionset/QuestionSetRemoveSet.js:29
 msgid "This action cannot be undone!"
 msgstr "¡Esta operación no tiene vuelta atrás!"
 
@@ -1467,12 +1483,13 @@ msgstr "Ocultar todo"
 msgid "Hide changes"
 msgstr "Ocultar cambios"
 
-#: management/assets/js/components/sidebar/ImportSidebar.js:123
+#: management/assets/js/components/sidebar/ImportSidebar.js:125
+#: management/assets/js/components/sidebar/ImportSidebar.js:126
 msgid "Set URI prefix for all elements"
 msgstr "Establecer prefijo URI para todos los elementos"
 
 #: projects/assets/js/interview/components/main/Contact.js:26
-#: projects/assets/js/interview/components/main/question/QuestionContact.js:6
+#: projects/assets/js/interview/components/main/question/QuestionContact.js:7
 msgid "Contact support"
 msgstr "Contactar con el servicio de asistencia"
 
@@ -1503,29 +1520,34 @@ msgid "No answers match your search."
 msgstr "Ninguna respuesta coincide con su búsqueda."
 
 #: projects/assets/js/interview/components/main/Search.js:71
-#: projects/assets/js/interview/components/main/Search.js:112
-#: projects/assets/js/interview/components/main/widget/SelectInput.js:91
+#: projects/assets/js/interview/components/main/Search.js:115
+#: projects/assets/js/interview/components/main/widget/SelectInput.js:94
 msgid "Loading ..."
 msgstr "Cargando ..."
 
-#: projects/assets/js/interview/components/main/Search.js:79
+#: projects/assets/js/interview/components/main/Search.js:82
 #: projects/assets/js/interview/components/sidebar/Overview.js:27
 msgid "Project"
 msgstr "Proyecto"
 
-#: projects/assets/js/interview/components/main/Search.js:83
+#: projects/assets/js/interview/components/main/Search.js:86
 msgid "Snapshot"
 msgstr "Instantánea"
 
-#: projects/assets/js/interview/components/main/Search.js:108
+#: projects/assets/js/interview/components/main/Search.js:92
+#: projects/assets/js/interview/components/main/Search.js:97
+msgid "Tab"
+msgstr "Ficha"
+
+#: projects/assets/js/interview/components/main/Search.js:111
 msgid "Restrict the search to a particular project ..."
 msgstr "Restringir la búsqueda a un proyecto concreto ..."
 
-#: projects/assets/js/interview/components/main/Search.js:110
+#: projects/assets/js/interview/components/main/Search.js:113
 msgid "No projects matching your search."
 msgstr "No hay proyectos que coincidan con su búsqueda."
 
-#: projects/assets/js/interview/components/main/Search.js:138
+#: projects/assets/js/interview/components/main/Search.js:141
 msgid "Include snapshots in the search"
 msgstr "Incluir instantáneas en la búsqueda"
 
@@ -1539,34 +1561,25 @@ msgid "Complete questionnaire"
 msgstr "Cuestionario completo"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:31
-#, fuzzy
-#| msgid "Copy task"
 msgid "Copy tab"
-msgstr "Copiar tarea"
+msgstr "Ficha Copiar"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:32
-#, fuzzy
-#| msgid "Add page"
 msgid "Add tab"
-msgstr "Añadir página"
+msgstr "Añadir ficha"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:33
-#, fuzzy
-#| msgid "Edit task"
 msgid "Edit tab"
-msgstr "Editar tarea"
+msgstr "Editar ficha"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:34
-#, fuzzy
-#| msgid "Reuse answer"
+#: projects/assets/js/interview/components/main/question/QuestionReuseValues.js:80
 msgid "Reuse answers"
-msgstr "Reutilizar respuesta"
+msgstr "Reutilizar respuestas"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:35
-#, fuzzy
-#| msgid "Remove"
 msgid "Remove tab"
-msgstr "Eliminar"
+msgstr "Eliminar pestaña"
 
 #: projects/assets/js/interview/components/main/page/PageHeadDeleteModal.js:8
 msgid "Delete tab"
@@ -1611,14 +1624,20 @@ msgstr ""
 "cualquier proyecto al que tenga acceso. Esto solo afecta a las preguntas que "
 "aún no tienen respuesta."
 
+#: projects/assets/js/interview/components/main/question/QuestionAddValue.js:21
+msgid "Add answer"
+msgstr "Añadir respuesta"
+
 #: projects/assets/js/interview/components/main/question/QuestionCopyValue.js:13
+#: projects/assets/js/interview/components/main/question/QuestionCopyValue.js:14
 #: projects/assets/js/interview/components/main/question/QuestionCopyValues.js:10
+#: projects/assets/js/interview/components/main/question/QuestionCopyValues.js:11
 msgid "Apply this answer to all tabs where this question is empty"
 msgstr ""
 "Aplique esta respuesta a todas las pestañas en las que esta pregunta esté "
 "vacía"
 
-#: projects/assets/js/interview/components/main/question/QuestionCopyValues.js:15
+#: projects/assets/js/interview/components/main/question/QuestionCopyValues.js:16
 msgid "Apply to all"
 msgstr "Aplicable a todos"
 
@@ -1665,39 +1684,36 @@ msgstr ""
 "Se ha producido un error desconocido, póngase en contacto con el servicio de "
 "asistencia"
 
-#: projects/assets/js/interview/components/main/question/QuestionManagement.js:7
-msgid ""
-"These links take you directly to the items in the admin interface.  This "
-"part of the page is visible to you because you are either an Admin,  Editor, "
-"or Reviewer. It is not displayed for regular users. It can be disabled in "
-"the sidebar."
-msgstr ""
-
 #: projects/assets/js/interview/components/main/question/QuestionOptional.js:7
 msgid "Optional"
 msgstr "Opcional"
+
+#: projects/assets/js/interview/components/main/question/QuestionRemoveValue.js:7
+msgid "Remove answer"
+msgstr "Eliminar respuesta"
 
 #: projects/assets/js/interview/components/main/question/QuestionReuseValue.js:57
 msgid "Append"
 msgstr "Añada"
 
 #: projects/assets/js/interview/components/main/question/QuestionReuseValue.js:62
-#: projects/assets/js/interview/components/main/question/QuestionReuseValues.js:83
+#: projects/assets/js/interview/components/main/question/QuestionReuseValues.js:85
 msgid "Replace"
 msgstr "Sustituir"
 
-#: projects/assets/js/interview/components/main/question/QuestionReuseValue.js:71
-#: projects/assets/js/interview/components/main/question/QuestionReuseValues.js:83
+#: projects/assets/js/interview/components/main/question/QuestionReuseValue.js:68
+#: projects/assets/js/interview/components/main/question/QuestionReuseValue.js:72
+#: projects/assets/js/interview/components/main/question/QuestionReuseValues.js:85
 msgid "Reuse answer"
 msgstr "Reutilizar respuesta"
 
-#: projects/assets/js/interview/components/main/question/QuestionReuseValue.js:75
-#: projects/assets/js/interview/components/main/question/QuestionReuseValues.js:88
+#: projects/assets/js/interview/components/main/question/QuestionReuseValue.js:76
+#: projects/assets/js/interview/components/main/question/QuestionReuseValues.js:90
 msgid "Answer"
 msgstr "Respuesta"
 
-#: projects/assets/js/interview/components/main/question/QuestionReuseValue.js:87
-#: projects/assets/js/interview/components/main/question/QuestionReuseValues.js:101
+#: projects/assets/js/interview/components/main/question/QuestionReuseValue.js:88
+#: projects/assets/js/interview/components/main/question/QuestionReuseValues.js:103
 msgid ""
 "You can reuse an answer from a similar question in any project you have "
 "access to."
@@ -1705,55 +1721,60 @@ msgstr ""
 "Puedes reutilizar una respuesta de una pregunta similar en cualquier "
 "proyecto al que tengas acceso."
 
-#: projects/assets/js/interview/components/main/questionset/QuestionSetCopySet.js:27
+#: projects/assets/js/interview/components/main/questionset/QuestionSetCopySet.js:29
 msgid "Copy block"
 msgstr "Bloque de copia"
 
-#: projects/assets/js/interview/components/main/questionset/QuestionSetRemoveSet.js:23
+#: projects/assets/js/interview/components/main/questionset/QuestionSetRemoveSet.js:25
 msgid "Remove block"
 msgstr "Quitar bloque"
 
-#: projects/assets/js/interview/components/main/questionset/QuestionSetRemoveSet.js:26
+#: projects/assets/js/interview/components/main/questionset/QuestionSetRemoveSet.js:28
 msgid "You are about to permanently remove this block."
 msgstr "Está a punto de eliminar permanentemente este bloque."
 
-#: projects/assets/js/interview/components/main/widget/FileInput.js:27
+#: projects/assets/js/interview/components/main/widget/FileInput.js:29
 msgid "Current file:"
 msgstr "Archivo actual:"
 
-#: projects/assets/js/interview/components/main/widget/FileInput.js:33
+#: projects/assets/js/interview/components/main/widget/FileInput.js:35
 msgid "No file stored."
 msgstr "No hay ningún archivo almacenado."
 
-#: projects/assets/js/interview/components/main/widget/FileInput.js:42
+#: projects/assets/js/interview/components/main/widget/FileInput.js:48
 msgid "Drop the files here ..."
 msgstr "Suelta los archivos aquí ..."
 
-#: projects/assets/js/interview/components/main/widget/FileInput.js:44
+#: projects/assets/js/interview/components/main/widget/FileInput.js:50
 msgid "Drag 'n drop some files here, or click to select files."
 msgstr ""
 "Arrastre y suelte algunos archivos aquí, o haga clic para seleccionar "
 "archivos."
 
-#: projects/assets/js/interview/components/main/widget/RadioInput.js:53
+#: projects/assets/js/interview/components/main/widget/RadioInput.js:57
 msgid "No options are available."
 msgstr "No hay opciones disponibles."
 
-#: projects/assets/js/interview/components/main/widget/SelectInput.js:89
+#: projects/assets/js/interview/components/main/widget/SelectInput.js:90
 msgid "Select ..."
 msgstr "Seleccione ..."
 
-#: projects/assets/js/interview/components/main/widget/SelectInput.js:90
+#: projects/assets/js/interview/components/main/widget/SelectInput.js:93
 msgid "No options found"
 msgstr "No se han encontrado opciones"
 
-#: projects/assets/js/interview/components/main/widget/YesNoInput.js:37
+#: projects/assets/js/interview/components/main/widget/YesNoInput.js:40
 msgid "Yes"
 msgstr "Sí"
 
-#: projects/assets/js/interview/components/main/widget/YesNoInput.js:49
+#: projects/assets/js/interview/components/main/widget/YesNoInput.js:52
 msgid "No"
 msgstr "No"
+
+#: projects/assets/js/interview/components/main/widget/common/AdditionalTextInput.js:22
+#: projects/assets/js/interview/components/main/widget/common/AdditionalTextareaInput.js:21
+msgid "Additional input"
+msgstr "Información adicional"
 
 #: projects/assets/js/interview/components/main/widget/common/Unit.js:21
 msgid "The unit for this answer."
@@ -1768,21 +1789,21 @@ msgstr "Navegación"
 msgid "(%s of %s)"
 msgstr "(%s de %s)"
 
+#: projects/assets/js/interview/components/sidebar/NavigationLink.js:18
+msgid "Complete"
+msgstr "Complete"
+
 #: projects/assets/js/interview/components/sidebar/Overview.js:21
 msgid "Overview"
 msgstr "Visión general"
 
 #: projects/assets/js/interview/components/sidebar/Overview.js:39
-#, fuzzy
-#| msgid "Hide elements"
 msgid "Hide management panels"
-msgstr "Ocultar elementos"
+msgstr "Ocultar paneles de gestión"
 
 #: projects/assets/js/interview/components/sidebar/Overview.js:39
-#, fuzzy
-#| msgid "Show elements"
 msgid "Show management panels"
-msgstr "Mostrar elementos"
+msgstr "Mostrar paneles de gestión"
 
 #: projects/assets/js/interview/components/sidebar/Overview.js:49
 msgid "You don't have write access to this project."
@@ -1806,6 +1827,18 @@ msgstr "%s de %s"
 #: projects/assets/js/projects/utils/constants.js:7
 msgid "Progress"
 msgstr "Progreso"
+
+#: projects/assets/js/interview/constants/management.js:2
+msgid ""
+"These links take you directly to the elements in the management interface.  "
+"This part of the page is visible to you, because you are either an Admin,  "
+"Editor, or Reviewer. It is not displayed for regular users. It can be "
+"disabled in the sidebar."
+msgstr ""
+"Estos enlaces le llevan directamente a los elementos de la interfaz de "
+"gestión.  Esta parte de la página es visible para usted, porque es "
+"Administrador, Editor o Revisor. No se muestra a los usuarios normales. "
+"Puede desactivarse en la barra lateral."
 
 #: projects/assets/js/projects/components/helper/ProjectImport.js:11
 msgid "Import directly"
@@ -1868,6 +1901,10 @@ msgstr "Propietario"
 msgid "Last changed"
 msgstr "Última modificación"
 
+#: projects/assets/js/projects/utils/constants.js:10
+msgid "Actions"
+msgstr "Acciones"
+
 #: projects/assets/js/projects/utils/constants.js:14
 msgid "Author"
 msgstr "Autor"
@@ -1919,6 +1956,24 @@ msgstr "Buscar proyectos"
 #: projects/assets/js/projects/utils/translations.js:17
 msgid "Show filters"
 msgstr "Mostrar filtros"
+
+#~ msgid "Remove your site"
+#~ msgstr "Elimine su sitio"
+
+#~ msgid "Add your site"
+#~ msgstr "Añada su sitio"
+
+#~ msgid "Hide elements"
+#~ msgstr "Ocultar elementos"
+
+#~ msgid "Show elements"
+#~ msgstr "Mostrar elementos"
+
+#~ msgid "XML"
+#~ msgstr "XML"
+
+#~ msgid "XML (full)"
+#~ msgstr "XML (completo)"
 
 #~ msgid "catalog"
 #~ msgstr "catálogo"
