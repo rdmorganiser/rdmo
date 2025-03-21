@@ -1,15 +1,5 @@
 from django.urls import include, path
 
-from rest_framework import routers
-
-from ..viewsets import GroupViewSet, SettingsViewSet, SitesViewSet, TemplatesViewSet
-
-router = routers.DefaultRouter()
-router.register(r'settings', SettingsViewSet, basename='setting')
-router.register(r'sites', SitesViewSet, basename='site')
-router.register(r'groups', GroupViewSet, basename='group')
-router.register(r'templates', TemplatesViewSet, basename='template')
-
 urlpatterns = [
     path('accounts/', include('rdmo.accounts.urls.v1')),
     path('conditions/', include('rdmo.conditions.urls.v1')),
@@ -22,5 +12,5 @@ urlpatterns = [
     path('tasks/', include('rdmo.tasks.urls.v1')),
     path('views/', include('rdmo.views.urls.v1')),
 
-    path('core/', include(router.urls)),
+    path('core/', include('rdmo.core.urls.v1.core')),
 ]
