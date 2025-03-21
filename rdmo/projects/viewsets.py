@@ -165,7 +165,7 @@ class ProjectViewSet(ModelViewSet):
         serializer = ProjectOverviewSerializer(project, context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=True, url_path=r'navigation(/(?P<section_id>\d+))?',
+    @action(detail=True, url_path=r'navigation(?:/(?P<section_id>\d+))?',
             permission_classes=(HasModelPermission | HasProjectPermission, ))
     def navigation(self, request, pk=None, section_id=None):
         project = self.get_object()

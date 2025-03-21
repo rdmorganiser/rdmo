@@ -54,7 +54,7 @@ class AttributeViewSet(ModelViewSet):
         serializer = AttributeNestedSerializer(self.get_object(), context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?')
+    @action(detail=False, url_path='export(?:/(?P<export_format>[a-z]+))?')
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -70,7 +70,7 @@ class AttributeViewSet(ModelViewSet):
                 'attributes': queryset
             })
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?')
+    @action(detail=True, url_path='export(?:/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
         attributes = self.get_object().get_descendants(include_self=True)
         if export_format == 'xml':
