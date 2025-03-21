@@ -201,7 +201,10 @@ SPECTACULAR_SETTINGS = {
     'SCHEMA_PATH_PREFIX': '/api/v[0-9]', # url path like '/api/v1/accounts' yields tag 'accounts'
     'SWAGGER_UI_SETTINGS': {
         'docExpansion': 'none' # collapse all tags by default
-    }
+    },
+    'PREPROCESSING_HOOKS': [
+        'rdmo.core.schema.filter_endpoints'
+    ]
 }
 
 SETTINGS_EXPORT = [
