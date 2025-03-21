@@ -261,6 +261,9 @@ def convert_elements(elements, version: Version):
     if version < parse('2.1.0'):
         elements = convert_additional_input(elements)
 
+    if version < parse('2.3.0'):
+        elements = convert_autocomplete(elements)
+
     return elements
 
 
@@ -402,6 +405,17 @@ def convert_additional_input(elements):
                 element['additional_input'] = 'text'
             else:
                 element['additional_input'] = ''
+
+    return elements
+
+
+def convert_autocomplete(elements):
+    for uri, element in elements.items():
+        if element['model'] == 'questions.question':
+            if element['widget_type'] == 'autocomplete':
+                element['widget_type'] = 'select'
+            elif element['widget_type'] == 'freeautocomplete':
+                element['widget_type'] = 'select_creatable'
 
     return elements
 
