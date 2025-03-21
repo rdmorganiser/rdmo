@@ -58,6 +58,8 @@ class OptionSetSerializer(ElementModelSerializerMixin, serializers.ModelSerializ
 class ConditionSerializer(serializers.ModelSerializer):
 
     class Meta:
+        ref_name = 'ProjectConditionSerializer'
+
         model = Condition
         fields = (
             'id',
@@ -171,6 +173,8 @@ class PageSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, seria
     attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
 
     class Meta:
+        ref_name = 'ProjectPageSerializer'
+
         model = Page
         fields = (
             'id',

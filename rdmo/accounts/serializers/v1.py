@@ -10,7 +10,7 @@ from rdmo.projects.models import Membership
 from ..models import Role
 
 
-class SiteSerializer(serializers.ModelSerializer):
+class UserSiteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Site
@@ -21,7 +21,7 @@ class SiteSerializer(serializers.ModelSerializer):
         )
 
 
-class GroupSerializer(serializers.ModelSerializer):
+class UserGroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Group
@@ -31,12 +31,12 @@ class GroupSerializer(serializers.ModelSerializer):
         )
 
 
-class RoleSerializer(serializers.ModelSerializer):
+class UserRoleSerializer(serializers.ModelSerializer):
 
-    member = SiteSerializer(many=True)
-    manager = SiteSerializer(many=True)
-    editor = SiteSerializer(many=True)
-    reviewer = SiteSerializer(many=True)
+    member = UserSiteSerializer(many=True)
+    manager = UserSiteSerializer(many=True)
+    editor = UserSiteSerializer(many=True)
+    reviewer = UserSiteSerializer(many=True)
 
     class Meta:
         model = Role
@@ -49,7 +49,7 @@ class RoleSerializer(serializers.ModelSerializer):
         )
 
 
-class MembershipSerializer(serializers.ModelSerializer):
+class UserMembershipSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Membership
@@ -62,9 +62,9 @@ class MembershipSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
 
-    groups = GroupSerializer(many=True)
-    role = RoleSerializer()
-    memberships = MembershipSerializer(many=True)
+    groups = UserGroupSerializer(many=True)
+    role = UserRoleSerializer()
+    memberships = UserMembershipSerializer(many=True)
 
     class Meta:
         model = get_user_model()
