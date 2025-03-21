@@ -150,24 +150,24 @@ class Catalog(Model, TranslationMixin):
         super().save(*args, **kwargs)
 
     @property
-    def title(self):
+    def title(self) -> str:
         return self.trans('title')
 
     @property
-    def help(self):
+    def help(self) -> str:
         return self.trans('help')
 
     @cached_property
-    def is_locked(self):
+    def is_locked(self) -> bool:
         return self.locked
 
     @cached_property
-    def elements(self):
+    def elements(self) -> list:
         # order "in python" to not destroy prefetch
         return [element.section for element in sorted(self.catalog_sections.all(), key=lambda e: e.order)]
 
     @cached_property
-    def descendants(self):
+    def descendants(self) -> list:
         descendants = []
         for element in self.elements:
             descendants += [element, *element.descendants]

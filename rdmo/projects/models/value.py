@@ -219,38 +219,38 @@ class Value(Model):
                 return val
 
     @property
-    def file_name(self):
+    def file_name(self) -> str:
         if self.file:
             return Path(self.file.name).name
 
     @property
-    def file_url(self):
+    def file_url(self) -> str:
         if self.file:
             return reverse('v1-projects:value-file', args=[self.id])
 
     @property
-    def file_type(self):
+    def file_type(self) -> str:
         if self.file:
             return mimetypes.guess_type(self.file.name)[0]
 
     @property
-    def file_path(self):
+    def file_path(self) -> Path:
         if self.file:
             resource_path = get_value_path(self.project, self.snapshot)
             return Path(self.file.name).relative_to(resource_path).as_posix()
 
     @property
-    def attribute_uri(self):
+    def attribute_uri(self) -> str:
         if self.attribute is not None:
             return self.attribute.uri
 
     @property
-    def option_uri(self):
+    def option_uri(self) -> str:
         if self.option is not None:
             return self.option.uri
 
     @property
-    def option_text(self):
+    def option_text(self) -> str:
         if self.option is not None:
             return self.option.text
 

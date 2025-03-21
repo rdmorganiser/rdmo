@@ -163,11 +163,11 @@ class Task(TranslationMixin, models.Model):
         super().save(*args, **kwargs)
 
     @property
-    def title(self):
+    def title(self) -> str:
         return self.trans('title')
 
     @property
-    def text(self):
+    def text(self) -> str:
         return self.trans('text')
 
     @property

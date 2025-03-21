@@ -238,33 +238,33 @@ class Question(Model, TranslationMixin):
         super().save(*args, **kwargs)
 
     @property
-    def text(self):
+    def text(self) -> str:
         return self.trans('text')
 
     @property
-    def help(self):
+    def help(self) -> str:
         return self.trans('help')
 
     @property
-    def default_text(self):
+    def default_text(self) -> str:
         return self.trans('default_text')
 
     @property
-    def verbose_name(self):
+    def verbose_name(self) -> str:
         return self.trans('verbose_name')
 
     @cached_property
-    def is_locked(self):
+    def is_locked(self) -> bool:
         return self.locked or \
             any(page.is_locked for page in self.pages.all()) or \
             any(questionset.is_locked for questionset in self.questionsets.all())
 
     @cached_property
-    def has_conditions(self):
+    def has_conditions(self) -> bool:
         return self.conditions.exists()
 
     @cached_property
-    def descendants(self):
+    def descendants(self) -> list:
         return []
 
     def prefetch_elements(self):

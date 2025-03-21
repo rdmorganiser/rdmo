@@ -101,10 +101,10 @@ class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin
 
         return super().to_internal_value(data)
 
-    def get_condition_uris(self, obj):
+    def get_condition_uris(self, obj) -> list:
         return [condition.uri for condition in obj.conditions.all()]
 
-    def get_optionset_uris(self, obj):
+    def get_optionset_uris(self, obj) -> list:
         return [optionset.uri for optionset in obj.optionsets.all()]
 
     def validate(self, data):
