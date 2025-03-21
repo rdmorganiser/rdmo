@@ -40,9 +40,7 @@ INSTALLED_APPS = [
     'django_filters',
     'mathfilters',
     'mptt',
-    'rules',
-    # openapi specification tools
-    'drf_spectacular',
+    'rules'
 ]
 
 MIDDLEWARE = [
@@ -179,14 +177,10 @@ CACHES = {
     }
 }
 
-# Ref: https://www.django-rest-framework.org/api-guide/settings/#settings
 REST_FRAMEWORK = {
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
     'UNICODE_JSON': False,
-    # TODO
-    # https://drf-spectacular.readthedocs.io/en/latest/faq.html#i-get-an-empty-schema-or-endpoints-are-missing
-    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.URLPathVersioning',
-    # 'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
     'DEFAULT_VERSION': 'v1',
     'ALLOWED_VERSIONS': ('v1', ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
