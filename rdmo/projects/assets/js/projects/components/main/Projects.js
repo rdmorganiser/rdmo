@@ -140,7 +140,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
     owner: (_content, row) => (
       <>
         <p>
-          {row.owners.map(owner => `${owner.first_name} ${owner.last_name}`).join('; ')}
+          {row.owners.map(owner => owner.full_name).join('; ')}
         </p>
         {
           row.visibility && <p className="text-muted">{row.visibility}</p>
