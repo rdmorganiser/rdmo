@@ -19,7 +19,7 @@ status_map = {
 }
 
 urlnames = {
-    'list': 'template-list',
+    'list': 'v1-core:template-list',
 }
 
 
