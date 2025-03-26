@@ -1,6 +1,3 @@
-import ast
-import inspect
-import textwrap
 
 from django.db.models.query import QuerySet
 
@@ -17,14 +14,15 @@ def filter_endpoints(endpoints):
             yield (path, path_regex, method, callback)
 
 
+
 class ViewExtension(OpenApiViewExtension):
 
     def view_replacement(self):
         # create the replaced class using type to assign the name dynamically (for errors/warnings)
         replaced_class = self._create_replacement_class()
 
-        if self._should_patch_get_queryset():
-            self._patch_get_queryset(replaced_class)
+        # optionally, patch the get_queryset method
+        self._patch_get_queryset_with_try_except(replaced_class)
 
         # apply the decorator and return
         extend_schema_view(**self.get_extend_schema_view_args())(replaced_class)
@@ -43,13 +41,16 @@ class ViewExtension(OpenApiViewExtension):
         replaced_class_name = f'Fixed{self.target_class.__name__}'
         return type(replaced_class_name, (self.target_class,), {})
 
-    def _should_patch_get_queryset(self):
-        return hasattr(self.target_class, 'get_queryset') and self._uses_request_user(self.target_class)
+    def _patch_get_queryset_with_try_except(self, cls):
+        def get_queryset(self):
+            try:
+                return super(cls, self).get_queryset()
+            except Exception:
+                return self.get_fallback_queryset()
 
-    def _patch_get_queryset(self, cls):
         def get_fallback_queryset(self):
             try:
-                serializer_class = getattr(self, 'serializer_class', None)
+                serializer_class = self.get_serializer_class()
                 model = getattr(getattr(serializer_class, 'Meta', None), 'model', None)
                 if model and hasattr(model, 'objects'):
                     return model.objects.none()
@@ -57,39 +58,8 @@ class ViewExtension(OpenApiViewExtension):
                 pass
             return QuerySet().none()
 
-        def patched_get_queryset(self):
-            return self.get_fallback_queryset()
-
+        cls.get_queryset = get_queryset
         cls.get_fallback_queryset = get_fallback_queryset
-        cls.get_queryset = patched_get_queryset
-
-    def _uses_request_user(self, cls):
-        try:
-            source = inspect.getsource(cls.get_queryset)
-            source = textwrap.dedent(source)
-            parsed = ast.parse(source)
-
-            class RequestUserVisitor(ast.NodeVisitor):
-                def __init__(self):
-                    self.found = False
-
-                def visit_Attribute(self, node):
-                    if (
-                        isinstance(node.value, ast.Attribute) and
-                        isinstance(node.value.value, ast.Name) and
-                        node.value.value.id == 'self' and
-                        node.value.attr == 'request' and
-                        node.attr == 'user'
-                    ):
-                        self.found = True
-                    self.generic_visit(node)
-
-            visitor = RequestUserVisitor()
-            visitor.visit(parsed)
-            return visitor.found
-
-        except Exception:
-            return False
 
 
 class ModelViewSetMixin:
