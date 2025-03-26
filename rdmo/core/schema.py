@@ -1,3 +1,9 @@
+import ast
+import inspect
+import textwrap
+
+from django.db.models.query import QuerySet
+
 from drf_spectacular.extensions import OpenApiViewExtension
 from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
 
@@ -15,8 +21,10 @@ class ViewExtension(OpenApiViewExtension):
 
     def view_replacement(self):
         # create the replaced class using type to assign the name dynamically (for errors/warnings)
-        replaced_class_name = f'Fixed{self.target_class.__name__}'
-        replaced_class = type(replaced_class_name, (self.target_class,), {})
+        replaced_class = self._create_replacement_class()
+
+        if self._should_patch_get_queryset():
+            self._patch_get_queryset(replaced_class)
 
         # apply the decorator and return
         extend_schema_view(**self.get_extend_schema_view_args())(replaced_class)
@@ -31,6 +39,58 @@ class ViewExtension(OpenApiViewExtension):
     def get_extend_schema_args(self, action):
         return {}
 
+    def _create_replacement_class(self):
+        replaced_class_name = f'Fixed{self.target_class.__name__}'
+        return type(replaced_class_name, (self.target_class,), {})
+
+    def _should_patch_get_queryset(self):
+        return hasattr(self.target_class, 'get_queryset') and self._uses_request_user(self.target_class)
+
+    def _patch_get_queryset(self, cls):
+        def get_fallback_queryset(self):
+            try:
+                serializer_class = getattr(self, 'serializer_class', None)
+                model = getattr(getattr(serializer_class, 'Meta', None), 'model', None)
+                if model and hasattr(model, 'objects'):
+                    return model.objects.none()
+            except Exception:
+                pass
+            return QuerySet().none()
+
+        def patched_get_queryset(self):
+            return self.get_fallback_queryset()
+
+        cls.get_fallback_queryset = get_fallback_queryset
+        cls.get_queryset = patched_get_queryset
+
+    def _uses_request_user(self, cls):
+        try:
+            source = inspect.getsource(cls.get_queryset)
+            source = textwrap.dedent(source)
+            parsed = ast.parse(source)
+
+            class RequestUserVisitor(ast.NodeVisitor):
+                def __init__(self):
+                    self.found = False
+
+                def visit_Attribute(self, node):
+                    if (
+                        isinstance(node.value, ast.Attribute) and
+                        isinstance(node.value.value, ast.Name) and
+                        node.value.value.id == 'self' and
+                        node.value.attr == 'request' and
+                        node.attr == 'user'
+                    ):
+                        self.found = True
+                    self.generic_visit(node)
+
+            visitor = RequestUserVisitor()
+            visitor.visit(parsed)
+            return visitor.found
+
+        except Exception:
+            return False
+
 
 class ModelViewSetMixin:
 
@@ -41,6 +101,14 @@ class ModelViewSetMixin:
         'update',
         'partial_update',
         'destroy'
+    ]
+
+
+class ReadOnlyModelViewSetMixin:
+
+    actions = [
+        'list',
+        'retrieve',
     ]
 
 
@@ -145,6 +213,11 @@ class ProjectSnapshotViewSetExtension(ParentLookupIdMixin, ViewExtension):
 class ProjectValueViewSetExtension(ParentLookupIdMixin, ModelViewSetMixin, ViewExtension):
     target_class = 'rdmo.projects.viewsets.ProjectValueViewSet'
     actions = [*ModelViewSetMixin.actions, 'copy_set', 'delete_set', 'file']
+
+
+class MembershipViewSetExtension(ReadOnlyModelViewSetMixin, ViewExtension):
+    target_class = 'rdmo.projects.viewsets.MembershipViewSet'
+    operation_id_template = 'projects_membership_{}'
 
 
 class CatalogViewSetExtension(OperationIdMixin, ExportViewSetMixin, ViewExtension):
