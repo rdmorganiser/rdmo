@@ -25,7 +25,9 @@ view_questionset_permission_map = {
 
 urlnames = {
     'list': 'v1-projects:project-page-list',
-    'detail': 'v1-projects:project-page-detail'
+    'detail': 'v1-projects:project-page-detail',
+    'continue': 'v1-projects:project-page-get-continue',
+
 }
 
 projects = [1, 2, 3, 4, 5, 12]
@@ -125,3 +127,34 @@ def test_detail_page_resolve_next_relevant_page(db, client, direction):
     # a get on the redirected url as a double check
     response_next_relevant = client.get(response_next.url)
     assert response_next_relevant.status_code == 200
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
+def test_continue(db, client, username, password, project_id):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['continue'], args=[project_id])
+    response = client.get(url)
+
+    if project_id in view_questionset_permission_map.get(username, []):
+        assert response.status_code == 200
+        assert response.json().get('id') == 1  # == catalog_id
+        assert response.json().get('prev_page') is None  # at start
+    else:
+        assert response.status_code == 404
+
+
+def test_continue_catalog_without_pages(db, client):
+    from rdmo.questions.models.page import Page
+    project_id = 1
+    username = 'owner'
+    Page.objects.all().delete()
+
+    client.login(username=username, password=username)
+
+    url = reverse(urlnames['continue'], args=[project_id])
+    response = client.get(url)
+
+    if project_id in view_questionset_permission_map.get(username, []):
+        assert response.status_code == 204

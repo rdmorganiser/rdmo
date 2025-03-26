@@ -737,6 +737,9 @@ class ProjectPageViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericV
 
     @action(detail=False, url_path='continue', permission_classes=(HasModelPermission | HasProjectPagePermission, ))
     def get_continue(self, request, pk=None, parent_lookup_project=None):
+        if not self.project.catalog.pages:
+            return Response(status=204)
+
         try:
             continuation = Continuation.objects.get(project=self.project, user=self.request.user)
 
