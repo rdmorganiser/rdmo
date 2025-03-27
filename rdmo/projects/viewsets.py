@@ -645,7 +645,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         values = self.get_queryset().filter_set(set_value)
         values.delete()
 
-        return Response(status=204)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(detail=True, methods=['GET', 'POST'],
             permission_classes=(HasModelPermission | HasProjectPermission, ))
@@ -732,11 +732,20 @@ class ProjectPageViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericV
                 return HttpResponseRedirect(url, status=303)
 
             # end of catalog, if no next relevant page is found
-            return Response(status=204)
+            return Response({
+                'detail': 'No Page matches the given query.',
+                'done': True
+            }, status=status.HTTP_404_NOT_FOUND)
 
 
     @action(detail=False, url_path='continue', permission_classes=(HasModelPermission | HasProjectPagePermission, ))
     def get_continue(self, request, pk=None, parent_lookup_project=None):
+        if not self.project.catalog.pages:
+            return Response({
+                'detail': 'No Page matches the given query.',
+                'done': True
+            }, status=status.HTTP_404_NOT_FOUND)
+
         try:
             continuation = Continuation.objects.get(project=self.project, user=self.request.user)
 
