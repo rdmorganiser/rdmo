@@ -59,7 +59,10 @@ class HasProjectPermission(HasObjectPermission):
             return False
 
         # get the project object from the view (or the take the obj) and check its permissions
-        return super().has_object_permission(request, view, view.project)
+        try:
+            return super().has_object_permission(request, view, view.project)
+        except AttributeError:
+            return super().has_object_permission(request, view, obj)
 
 
 class HasProjectPagePermission(HasProjectPermission):
