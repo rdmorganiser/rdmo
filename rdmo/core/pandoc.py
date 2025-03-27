@@ -3,7 +3,7 @@ import logging
 import os
 import re
 from pathlib import Path
-from tempfile import mkstemp
+from tempfile import NamedTemporaryFile
 
 from django.apps import apps
 from django.conf import settings
@@ -19,13 +19,18 @@ def get_pandoc_version():
     return parse_version(pypandoc.get_pandoc_version())
 
 
+def create_tmp_file(suffix):
+    # create a temporary file, return the file path, and close it immediately
+    with NamedTemporaryFile('wb+', suffix=suffix, delete=False) as fp:
+        return Path(fp.name)
+
+
 def get_pandoc_content(html, metadata, export_format, context):
     pandoc_args = get_pandoc_args(export_format, context)
 
     if metadata:
         # create a temporary file for the metadata and close it immediately
-        (metadata_tmp_fd, metadata_tmp_file_name) = mkstemp(suffix='.json')
-        os.close(metadata_tmp_fd)
+        metadata_tmp_file_name = create_tmp_file('.json')
 
         # save metadata
         log.info('Save metadata file %s %s', metadata_tmp_file_name, str(metadata))
@@ -36,8 +41,7 @@ def get_pandoc_content(html, metadata, export_format, context):
         pandoc_args.append('--metadata-file=' + metadata_tmp_file_name)
 
     # create a temporary file and close it immediately
-    (tmp_fd, tmp_file_name) = mkstemp(f'.{export_format}')
-    os.close(tmp_fd)
+    tmp_file_name = create_tmp_file(f'.{export_format}')
 
     # convert the file using pandoc
     log.info('Export %s document using args %s.', export_format, pandoc_args)
