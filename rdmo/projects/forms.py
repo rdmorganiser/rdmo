@@ -1,6 +1,7 @@
 from django import forms
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
 from django.db.models import Q
@@ -104,6 +105,9 @@ class ProjectUpdateVisibilityForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.project = kwargs.pop('instance')
+        self.user = kwargs.pop('user')
+        self.site = kwargs.pop('site')
+
         try:
             instance = self.project.visibility
         except Visibility.DoesNotExist:
@@ -112,7 +116,7 @@ class ProjectUpdateVisibilityForm(forms.ModelForm):
         super().__init__(*args, instance=instance, **kwargs)
 
         # remove the sites or group sets if they are not needed, doing this in Meta would break tests
-        if not settings.MULTISITE:
+        if not (settings.MULTISITE and self.user.is_superuser):
             self.fields.pop('sites')
         if not settings.GROUPS:
             self.fields.pop('groups')
@@ -125,17 +129,29 @@ class ProjectUpdateVisibilityForm(forms.ModelForm):
         if 'cancel' in self.data:
             pass
         elif 'delete' in self.data:
-            self.instance.delete()
+            if settings.MULTISITE and not self.user.is_superuser:
+                if not self.instance.sites.exists():
+                    # if no sites are set, add all sites but the current site
+                    self.instance.sites.set(Site.objects.exclude(id=self.site.id))
+                elif not self.instance.sites.exclude(id=self.site.id).exists():
+                    # if no sites, but the current site are set, remove the visibility
+                    self.instance.delete()
+                else:
+                    # otherwise, just remove the current site
+                    self.instance.sites.remove(self.site)
+            else:
+                self.instance.delete()
         else:
             visibility, created = Visibility.objects.update_or_create(project=self.project)
 
-            sites = self.cleaned_data.get('sites')
-            if sites is not None:
-                visibility.sites.set(sites)
+            if settings.MULTISITE:
+                if self.user.is_superuser:
+                    visibility.sites.set(self.cleaned_data.get('sites'))
+                else:
+                    visibility.sites.add(self.site)
 
-            groups = self.cleaned_data.get('groups')
-            if groups is not None:
-                visibility.groups.set(groups)
+            if settings.GROUPS:
+                visibility.groups.set(self.cleaned_data.get('groups'))
 
         return self.project
 

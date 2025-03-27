@@ -12,19 +12,37 @@
         {% endif %}
     </h1>
 
-    <p class="mb-20">
+    <p class="mb-10 text-muted">
         {% blocktrans trimmed %}
         Projects can be made visible to all users, for example to be used as a template.
         When a project is made visible, users can access it as if they were in the guest role.
         {% endblocktrans %}
     </p>
 
-    {% if not object.visibility %}
-    {% bootstrap_form submit=_('Make visible') %}
-    {% elif object.visibility and 'sites' in form.fields or 'groups' in form.fields %}
-    {% bootstrap_form submit=_('Update visibility') delete=_('Remove visibility') %}
-    {% else %}
-    {% bootstrap_form delete=_('Remove visibility') %}
+    {% if settings.MULTISITE and object.visibility %}
+    <p class="mb-10">
+        {% if object.visibility.sites.all %}
+
+        {% blocktrans trimmed with object.visibility.sites.all|join:', ' as site_names %}
+        Currently, the project is available to users on {{ site_names }}.
+        {% endblocktrans %}
+
+        {% else %}
+
+        {% blocktrans trimmed %}
+        Currently, the project is accessible to users on all sites.
+        {% endblocktrans %}
+
+        {% endif %}
+    </p>
+    {% endif %}
+
+    {% if submit_label and delete_label %}
+    {% bootstrap_form submit=submit_label delete=delete_label %}
+    {% elif submit_label %}
+    {% bootstrap_form submit=submit_label %}
+    {% elif delete_label %}
+    {% bootstrap_form delete=delete_label %}
     {% endif %}
 
 {% endblock %}
