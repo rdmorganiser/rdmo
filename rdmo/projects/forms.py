@@ -130,15 +130,8 @@ class ProjectUpdateVisibilityForm(forms.ModelForm):
             pass
         elif 'delete' in self.data:
             if settings.MULTISITE and not self.user.is_superuser:
-                if not self.instance.sites.exists():
-                    # if no sites are set, add all sites but the current site
-                    self.instance.sites.set(Site.objects.exclude(id=self.site.id))
-                elif not self.instance.sites.exclude(id=self.site.id).exists():
-                    # if no sites, but the current site are set, remove the visibility
-                    self.instance.delete()
-                else:
-                    # otherwise, just remove the current site
-                    self.instance.sites.remove(self.site)
+                current_site = Site.objects.exclude(id=self.site.id)
+                self.instance.remove_site(current_site)
             else:
                 self.instance.delete()
         else:

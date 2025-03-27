@@ -47,8 +47,8 @@ class Visibility(Model):
 
         if sites and groups:
             return ngettext_lazy(
-                'This project can be accessed by all users on %s or in the group %s.',
-                'This project can be accessed by all users on %s or in the groups %s.',
+                'This project can be accessed by all users on %s and in the group %s.',
+                'This project can be accessed by all users on %s and in the groups %s.',
                 len(groups)
             ) % (
                 ', '.join(sites),
@@ -64,3 +64,14 @@ class Visibility(Model):
             ) % ', '.join(groups)
         else:
             return _('This project can be accessed by all users.')
+
+    def remove_site(self, site):
+        if not self.sites.exists():
+            # if no sites are set, add all sites but the current site
+            self.sites.set(Site.objects.exclude(id=site.id))
+        elif not self.sites.exclude(id=site.id).exists():
+            # if no sites but the current site are set, remove the visibility
+            self.delete()
+        else:
+            # otherwise, just remove the current site
+            self.sites.remove(site)
