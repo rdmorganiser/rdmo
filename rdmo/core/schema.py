@@ -1,5 +1,4 @@
 
-from django.db.models.query import QuerySet
 
 from drf_spectacular.extensions import OpenApiViewExtension
 from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
@@ -19,10 +18,11 @@ class ViewExtension(OpenApiViewExtension):
 
     def view_replacement(self):
         # create the replaced class using type to assign the name dynamically (for errors/warnings)
-        replaced_class = self._create_replacement_class()
+        replaced_class_name = f'Fixed{self.target_class.__name__}'
+        replaced_class = type(replaced_class_name, (self.target_class,), {})
 
         # optionally, patch the get_queryset method
-        self._patch_get_queryset_with_try_except(replaced_class)
+        self.patch_get_queryset_with_try_except(replaced_class)
 
         # apply the decorator and return
         extend_schema_view(**self.get_extend_schema_view_args())(replaced_class)
@@ -37,29 +37,20 @@ class ViewExtension(OpenApiViewExtension):
     def get_extend_schema_args(self, action):
         return {}
 
-    def _create_replacement_class(self):
-        replaced_class_name = f'Fixed{self.target_class.__name__}'
-        return type(replaced_class_name, (self.target_class,), {})
-
-    def _patch_get_queryset_with_try_except(self, cls):
+    def patch_get_queryset_with_try_except(self, cls):
         def get_queryset(self):
             try:
                 return super(cls, self).get_queryset()
-            except Exception:
-                return self.get_fallback_queryset()
-
-        def get_fallback_queryset(self):
-            try:
+            except AttributeError as e:
+                # fallback for drf-spectacular (e.g., self.project or self.request.user not set)
                 serializer_class = self.get_serializer_class()
                 model = getattr(getattr(serializer_class, 'Meta', None), 'model', None)
                 if model and hasattr(model, 'objects'):
                     return model.objects.none()
-            except Exception:
-                pass
-            return QuerySet().none()
+                # unexpected error
+                raise e from e
 
         cls.get_queryset = get_queryset
-        cls.get_fallback_queryset = get_fallback_queryset
 
 
 class ModelViewSetMixin:
