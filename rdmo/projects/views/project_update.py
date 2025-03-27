@@ -89,6 +89,7 @@ class ProjectUpdateVisibilityView(ObjectPermissionMixin, RedirectViewMixin, Upda
                     context['delete_label'] = _('Remove visibility')
             elif settings.GROUPS:
                 context['submit_label'] = _('Update visibility')
+                context['delete_label'] = _('Remove visibility')
             else:
                 context['delete_label'] = _('Remove visibility')
 
