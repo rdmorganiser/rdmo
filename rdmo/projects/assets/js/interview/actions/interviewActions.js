@@ -72,6 +72,7 @@ export function fetchPage(pageId, back) {
       updateLocation('done')
       dispatch(fetchNavigation(null))
       dispatch(fetchPageSuccess(null, true))
+      dispatch(removeFromPending(pendingId))
     } else {
       const promise = isNil(pageId) ? PageApi.fetchContinue(projectId)
                                     : PageApi.fetchPage(projectId, pageId, back)
@@ -90,7 +91,11 @@ export function fetchPage(pageId, back) {
         })
         .catch((error) => {
           dispatch(removeFromPending(pendingId))
-          dispatch(fetchPageError(error))
+          if (error.errors.done) {
+            dispatch(fetchPage('done'))
+          } else {
+            dispatch(fetchPageError(error))
+          }
         })
     }
   }
