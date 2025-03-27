@@ -428,6 +428,10 @@ $variant-background-color: #f5f5f5 !default;
 
     .react-select {
         max-width: 100%;
+
+        .react-select__menu {
+            z-index: 10;
+        }
     }
 }
 
