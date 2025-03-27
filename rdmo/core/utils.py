@@ -59,7 +59,7 @@ def get_uri_prefix(obj):
     return r
 
 
-def join_url(base, *args):
+def join_url(base, *args) -> str:
     url = base
     for arg in args:
         url = url.rstrip('/') + '/' + arg.lstrip('/')
@@ -210,7 +210,7 @@ def import_class(string):
 
 
 def copy_model(instance, **kwargs):
-    # get values from instance which are not id, ForeignKeys orde M2M relations
+    # get values from instance which are not id, ForeignKeys or M2M relations
     data = {}
     for field in instance._meta.get_fields():
         if not (field.name == 'id' or field.is_relation):

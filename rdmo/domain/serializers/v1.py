@@ -69,10 +69,10 @@ class AttributeSerializer(BaseAttributeSerializer):
             AttributeLockedValidator()
         )
 
-    def get_tasks(self, obj) -> list:
+    def get_tasks(self, obj) -> list[int]:
         return [task.id for task in obj.tasks_as_start.all()] + [task.id for task in obj.tasks_as_end.all()]
 
-    def get_attributes(self, obj) -> list:
+    def get_attributes(self, obj) -> list[int]:
         return [attribute.id for attribute in obj.get_descendants()]
 
 

@@ -79,7 +79,7 @@ def validate_and_get_xml_version_from_root(root: xmlElement) -> tuple[Optional[V
         return None, errors
 
 
-def validate_legacy_elements(elements: dict, root_version: Version) -> list:
+def validate_legacy_elements(elements: dict, root_version: Version) -> list[str]:
 
     try:
         validate_pre_conversion_for_missing_key_in_legacy_elements(elements, root_version)

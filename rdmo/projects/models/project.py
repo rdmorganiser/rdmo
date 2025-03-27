@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.db import models
@@ -95,7 +97,7 @@ class Project(MPTTModel, Model):
         super().save(*args, **kwargs)
 
     @property
-    def catalog_uri(self) -> str:
+    def catalog_uri(self) -> Optional[str]:
         if self.catalog is not None:
             return self.catalog.uri
 
