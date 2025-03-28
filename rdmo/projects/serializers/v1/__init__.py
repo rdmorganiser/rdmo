@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+from rdmo.accounts.utils import get_full_name
 from rdmo.domain.models import Attribute
 from rdmo.questions.models import Catalog
 from rdmo.services.validators import ProviderValidator
@@ -27,6 +28,8 @@ from ...validators import ProjectParentValidator, ValueConflictValidator, ValueQ
 
 class UserSerializer(serializers.ModelSerializer):
 
+    full_name = serializers.SerializerMethodField()
+
     class Meta:
         model = get_user_model()
         fields = [
@@ -37,8 +40,12 @@ class UserSerializer(serializers.ModelSerializer):
                 'username',
                 'first_name',
                 'last_name',
+                'full_name',
                 'email'
             ]
+
+    def get_full_name(self, obj):
+        return get_full_name(obj)
 
 
 class ProjectSerializer(serializers.ModelSerializer):

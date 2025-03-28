@@ -33,7 +33,8 @@ class ProjectUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     def get_form_kwargs(self):
         catalogs = Catalog.objects.filter_current_site() \
                                   .filter_group(self.request.user) \
-                                  .filter_availability(self.request.user)
+                                  .filter_availability(self.request.user) \
+                                  .order_by('order')
         projects = Project.objects.filter_user(self.request.user)
 
         form_kwargs = super().get_form_kwargs()
@@ -68,7 +69,8 @@ class ProjectUpdateCatalogView(ObjectPermissionMixin, RedirectViewMixin, UpdateV
     def get_form_kwargs(self):
         catalogs = Catalog.objects.filter_current_site() \
                                   .filter_group(self.request.user) \
-                                  .filter_availability(self.request.user)
+                                  .filter_availability(self.request.user) \
+                                  .order_by('order')
 
         form_kwargs = super().get_form_kwargs()
         form_kwargs.update({

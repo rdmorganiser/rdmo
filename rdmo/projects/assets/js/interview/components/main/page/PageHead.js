@@ -145,9 +145,11 @@ const PageHead = ({ templates, page, sets, values, disabled, currentSet,
             }
           </>
         ) : (
-          <button role="button" className="btn btn-success" title={labels.add} onClick={createModal.open}>
-            <i className="fa fa-plus fa-btn" aria-hidden="true"></i> {capitalize(page.verbose_name)}
-          </button>
+          !disabled && (
+            <button role="button" className="btn btn-success" title={labels.add} onClick={createModal.open}>
+              <i className="fa fa-plus fa-btn" aria-hidden="true"></i> {capitalize(page.verbose_name)}
+            </button>
+          )
         )
       }
 

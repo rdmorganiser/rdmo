@@ -326,7 +326,7 @@
 		<verbose_name_plural lang="de"/>
 		<default_option dc:uri="http://example.com/terms/options/one_two_three/one"/>
 		<default_external_id/>
-		<widget_type>select_creatable</widget_type>
+		<widget_type>autocomplete</widget_type>
 		<value_type>text</value_type>
 		<maximum/>
 		<minimum/>
@@ -810,7 +810,7 @@
 		<verbose_name_plural lang="de"/>
 		<default_option/>
 		<default_external_id/>
-		<widget_type>select_creatable</widget_type>
+		<widget_type>autocomplete</widget_type>
 		<value_type>text</value_type>
 		<maximum/>
 		<minimum/>
@@ -1248,7 +1248,7 @@
 		<verbose_name_plural lang="de"/>
 		<default_option/>
 		<default_external_id/>
-		<widget_type>select_creatable</widget_type>
+		<widget_type>autocomplete</widget_type>
 		<value_type>option</value_type>
 		<maximum/>
 		<minimum/>
@@ -1562,7 +1562,7 @@
 		<verbose_name_plural lang="de"/>
 		<default_option/>
 		<default_external_id/>
-		<widget_type>select_creatable</widget_type>
+		<widget_type>autocomplete</widget_type>
 		<value_type>option</value_type>
 		<maximum/>
 		<minimum/>
@@ -1910,7 +1910,7 @@
 		<verbose_name_plural lang="de"/>
 		<default_option/>
 		<default_external_id/>
-		<widget_type>select_creatable</widget_type>
+		<widget_type>autocomplete</widget_type>
 		<value_type>option</value_type>
 		<maximum/>
 		<minimum/>
@@ -2224,7 +2224,7 @@
 		<verbose_name_plural lang="de"/>
 		<default_option/>
 		<default_external_id/>
-		<widget_type>select_creatable</widget_type>
+		<widget_type>autocomplete</widget_type>
 		<value_type>option</value_type>
 		<maximum/>
 		<minimum/>
@@ -3722,7 +3722,7 @@
 		<verbose_name_plural lang="de"/>
 		<default_option/>
 		<default_external_id>simple_1</default_external_id>
-		<widget_type>select_creatable</widget_type>
+		<widget_type>autocomplete</widget_type>
 		<value_type>text</value_type>
 		<maximum/>
 		<minimum/>
@@ -3935,7 +3935,7 @@
 		<verbose_name_plural lang="de"/>
 		<default_option dc:uri="http://example.com/terms/options/one_two_three/three"/>
 		<default_external_id/>
-		<widget_type>select_creatable</widget_type>
+		<widget_type>autocomplete</widget_type>
 		<value_type>text</value_type>
 		<maximum/>
 		<minimum/>

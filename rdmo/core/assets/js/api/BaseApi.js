@@ -15,7 +15,15 @@ function ValidationError(errors) {
   this.errors = errors
 }
 
-function BadRequestError(errors) {
+function BadRequestError(statusText, status, errors) {
+  this.status = status
+  this.statusText = statusText
+  this.errors = errors
+}
+
+function NotFoundError(statusText, status, errors) {
+  this.status = status
+  this.statusText = statusText
   this.errors = errors
 }
 
@@ -29,14 +37,17 @@ class BaseApi {
         return response.json()
       } else if (response.status === 400) {
         return response.json().then(errors => {
-          throw new BadRequestError(errors)
+          throw new BadRequestError(response.statusText, response.status, errors)
+        })
+      } else if (response.status === 404) {
+        return response.json().then(errors => {
+          throw new NotFoundError(response.statusText, response.status, errors)
         })
       } else {
         throw new ApiError(response.statusText, response.status)
       }
     })
   }
-
 
   static post(url, data) {
     return fetch(baseUrl + url, {
