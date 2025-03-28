@@ -327,10 +327,10 @@ def test_project_update_visibility_site_post_error(db, client, settings):
     assert not project.visibility.groups.exists()
 
 
-def test_project_update_visibility_site_post_admin(db, client, settings):
+def test_project_update_visibility_site_post_api(db, client, settings):
     settings.MULTISITE = True
 
-    client.login(username='admin', password='admin')
+    client.login(username='api', password='api')
 
     url = reverse('project_update_visibility', args=[project_id])
     data = {
@@ -367,11 +367,11 @@ def test_project_update_visibility_group_post(db, client, settings):
     assert [group.id for group in project.visibility.groups.all()] == [2]
 
 
-def test_project_update_visibility_site_group_post_admin(db, client, settings):
+def test_project_update_visibility_site_group_post_api(db, client, settings):
     settings.MULTISITE = True
     settings.GROUPS = True
 
-    client.login(username='admin', password='admin')
+    client.login(username='api', password='api')
 
     url = reverse('project_update_visibility', args=[project_id])
     data = {

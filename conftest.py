@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 
 from django.conf import settings
+from django.contrib.auth.models import Group, User
 from django.core.management import call_command
 
 from rdmo.accounts.utils import set_group_permissions
@@ -39,6 +40,11 @@ def django_db_setup(django_db_setup, django_db_blocker, fixtures):
     with django_db_blocker.unblock():
         call_command('loaddata', *fixtures)
         set_group_permissions()
+
+        # add the api user to the api group
+        api_group = Group.objects.get(name='api')
+        api_user = User.objects.get(username='api')
+        api_user.groups.add(api_group)
 
 
 @pytest.fixture

@@ -314,7 +314,7 @@ class ProjectViewSet(ModelViewSet):
             data = {'project': project.id}
 
             if settings.MULTISITE:
-                if request.user.is_superuser:
+                if request.user.has_perm('projects.change_visibility'):
                     data['sites'] = request.data.getlist('sites', [])
                 else:
                     data['sites'] = list({
@@ -332,7 +332,7 @@ class ProjectViewSet(ModelViewSet):
 
         elif request.method == 'DELETE':
             if instance is not None:
-                if settings.MULTISITE and not self.request.user.is_superuser:
+                if settings.MULTISITE and not request.user.has_perm('projects.delete_visibility'):
                     instance.remove_site(get_current_site(self.request))
                 else:
                     instance.delete()

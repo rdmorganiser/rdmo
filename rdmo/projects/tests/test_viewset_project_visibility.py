@@ -152,11 +152,11 @@ def test_project_visibility_post_update_site(db, client, settings, username, pas
 
     project = Project.objects.get(pk=project_id)
 
-    if username in ['admin']:
+    if username in ['admin', 'api']:
         assert response.status_code == 200
         assert project.visibility
         assert [site.id for site in project.visibility.sites.all()] == [2]
-    elif username in ['site', 'api']:
+    elif username in ['site']:
         assert response.status_code == 200
         assert project.visibility
         assert {site.id for site in project.visibility.sites.all()} == {1, 3}
@@ -209,11 +209,11 @@ def test_project_visibility_post_delete_site(db, client, settings, username, pas
 
     project.refresh_from_db()
 
-    if username in ['admin']:
+    if username in ['admin', 'api']:
         assert response.status_code == 204
         with pytest.raises(Visibility.DoesNotExist):
             assert project.visibility
-    elif username in ['site', 'api']:
+    elif username in ['site']:
         assert response.status_code == 204
         assert project.visibility
         assert {site.id for site in project.visibility.sites.all()} == {2, 3}
@@ -266,11 +266,11 @@ def test_project_visibility_post_delete_site_empty(db, client, settings, usernam
 
     project.refresh_from_db()
 
-    if username in ['admin']:
+    if username in ['admin', 'api']:
         assert response.status_code == 204
         with pytest.raises(Visibility.DoesNotExist):
             assert project.visibility
-    elif username in ['site', 'api']:
+    elif username in ['site']:
         assert response.status_code == 204
         assert project.visibility
         assert {site.id for site in project.visibility.sites.all()} == {2, 3}

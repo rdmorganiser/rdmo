@@ -116,7 +116,7 @@ class ProjectUpdateVisibilityForm(forms.ModelForm):
         super().__init__(*args, instance=instance, **kwargs)
 
         # remove the sites or group sets if they are not needed, doing this in Meta would break tests
-        if not (settings.MULTISITE and self.user.is_superuser):
+        if not (settings.MULTISITE and self.user.has_perm('projects.change_visibility')):
             self.fields.pop('sites')
         if not settings.GROUPS:
             self.fields.pop('groups')
@@ -129,8 +129,8 @@ class ProjectUpdateVisibilityForm(forms.ModelForm):
         if 'cancel' in self.data:
             pass
         elif 'delete' in self.data:
-            if settings.MULTISITE and not self.user.is_superuser:
-                current_site = Site.objects.exclude(id=self.site.id)
+            if settings.MULTISITE and not self.user.has_perm('projects.delete_visibility'):
+                current_site = Site.objects.get(id=self.site.id)
                 self.instance.remove_site(current_site)
             else:
                 self.instance.delete()
@@ -138,7 +138,7 @@ class ProjectUpdateVisibilityForm(forms.ModelForm):
             visibility, created = Visibility.objects.update_or_create(project=self.project)
 
             if settings.MULTISITE:
-                if self.user.is_superuser:
+                if self.user.has_perm('projects.change_visibility'):
                     visibility.sites.set(self.cleaned_data.get('sites'))
                 else:
                     visibility.sites.add(self.site)

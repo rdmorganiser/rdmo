@@ -77,7 +77,7 @@ class ProjectUpdateVisibilityView(ObjectPermissionMixin, RedirectViewMixin, Upda
             visibility = self.get_object().visibility
 
             if settings.MULTISITE:
-                if self.request.user.is_superuser:
+                if self.request.user.has_perm('projects.change_visibility'):
                     context['submit_label'] = _('Update visibility')
                     context['delete_label'] = _('Remove visibility')
                 elif visibility.sites.all() and current_site not in visibility.sites.all():
