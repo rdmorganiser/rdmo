@@ -65,7 +65,7 @@ jobs:
     # build the wheel
     - uses: actions/setup-python@v5
       with:
-        python-version: '3.12'
+        python-version: '3.13'
         cache: pip
     - run: |
         python -m pip install --upgrade pip build[uv] twine
@@ -100,7 +100,7 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        python-version: ['3.9', '3.12']
+        python-version: ['3.9', '3.13']
         db-backend: [mysql, postgres]
     steps:
     - uses: actions/checkout@v4
@@ -138,7 +138,7 @@ jobs:
     - name: Run package status tests first
       run: |
         pytest rdmo/core/tests/test_package_status.py --nomigrations --verbose
-      if: matrix.python-version == '3.12' && matrix.db-backend == 'postgres'
+      if: matrix.python-version == '3.13' && matrix.db-backend == 'postgres'
     - name: Run Tests
       run: |
         pytest -p randomly -p no:cacheprovider --cov --reuse-db --numprocesses=auto --dist=loadscope
@@ -156,7 +156,7 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        python-version: ['3.12']
+        python-version: ['3.13']
         db-backend: [postgres]
     steps:
     - uses: actions/checkout@v4
@@ -221,7 +221,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.13"
           cache: pip
       - run: python -Im pip install --editable .[dev]
       - run: python -Ic 'import rdmo; print(rdmo.__version__)'
@@ -234,7 +234,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.13"
           cache: pip
       - name: Download wheel
         uses: actions/download-artifact@v4
