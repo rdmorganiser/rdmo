@@ -8,8 +8,8 @@ from django.db.models import Model
 from rest_framework.exceptions import ValidationError
 from rest_framework.serializers import ModelSerializer
 
-from rdmo.core.imports import (
-    ImportElementFields,
+from rdmo.core.imports.element_changes import ImportElementFields, track_changes_on_element
+from rdmo.core.imports.setters import (
     set_common_fields,
     set_extra_field,
     set_foreign_field,
@@ -17,7 +17,6 @@ from rdmo.core.imports import (
     set_m2m_instances,
     set_m2m_through_instances,
     set_reverse_m2m_through_instance,
-    track_changes_on_element,
 )
 
 logger = logging.getLogger(__name__)
