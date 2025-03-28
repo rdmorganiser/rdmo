@@ -1,6 +1,6 @@
 import pytest
 
-from ..models import Integration, Issue, Membership, Project, Snapshot, Value
+from ..models import Integration, Issue, Membership, Project, Snapshot, Value, Visibility
 
 projects = [1, 2, 3, 4, 5]
 
@@ -37,6 +37,12 @@ def test_snapshot_str(db):
 
 def test_value_str(db):
     instances = Value.objects.all()
+    for instance in instances:
+        assert str(instance)
+
+
+def test_visibility_str(db):
+    instances = Visibility.objects.all()
     for instance in instances:
         assert str(instance)
 
