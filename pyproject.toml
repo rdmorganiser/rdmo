@@ -210,15 +210,8 @@ filterwarnings = [
   # fail on RemovedInDjango50Warning exception
   "error::django.utils.deprecation.RemovedInDjango50Warning",
 
-  # ignore warnings raised from within coreapi 2.3.3
-  "ignore:'cgi' is deprecated and slated for removal in Python 3.13:DeprecationWarning",
-  "ignore:pkg_resources is deprecated as an API:DeprecationWarning",
-
   # ignore warning from rest_framework about coreapi
   "ignore:CoreAPI compatibility is deprecated and will be removed in DRF 3.17:rest_framework.RemovedInDRF317Warning",
-
-  # ignore warning from django_filters
-  "ignore:Built-in schema generation is deprecated. Use drf-spectacular.:django_filters.RemovedInDjangoFilter25Warning",
 
   # ignore warnings raised from within django itself
   # django/core/files/storage/__init__.py
