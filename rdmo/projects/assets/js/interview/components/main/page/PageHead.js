@@ -27,12 +27,13 @@ const PageHead = ({ templates, page, sets, values, disabled, currentSet,
   const deleteModal = useModal()
 
   // inlining the title attributes caused problems with django's translation system
-  const labels = {
-    copy: gettext('Copy tab'),
-    add: gettext('Add tab'),
-    edit: gettext('Edit tab'),
-    reuse: gettext('Reuse answers'),
-    remove: gettext('Remove tab')
+  const trans = {
+    createButton: gettext('Create tab'),
+    copyButton: gettext('Copy tab'),
+    addButton: gettext('Add tab'),
+    editButton: gettext('Edit tab'),
+    reuseButton: gettext('Reuse answers'),
+    removeButton: gettext('Remove tab')
   }
 
   const handleActivate = (event, set) => {
@@ -115,7 +116,9 @@ const PageHead = ({ templates, page, sets, values, disabled, currentSet,
               {
                 !disabled && (
                   <li>
-                    <a href="" title={labels.add} className="add-set" onClick={handleOpenCreateModal}>
+                    <a href="" role="button" className="add-set"
+                       title={trans.addButton} aria-label={trans.addButton}
+                       onClick={handleOpenCreateModal}>
                       <i className="fa fa-plus fa-btn" aria-hidden="true"></i> {capitalize(page.verbose_name)}
                     </a>
                   </li>
@@ -128,24 +131,27 @@ const PageHead = ({ templates, page, sets, values, disabled, currentSet,
                   {
                     page.attribute && (
                       <button role="button" className="btn-link fa fa-pencil"
-                              title={labels.edit} onClick={updateModal.open} />
+                              title={trans.editButton} aria-label={trans.editButton}
+                              onClick={updateModal.open} />
                     )
                   }
                   <button role="button" className="btn-link fa fa-copy"
-                          title={labels.copy} aria-label={labels.copy}
+                          title={trans.copyButton} aria-label={trans.copyButton}
                           onClick={copyModal.open} />
                   <button role="button" className="btn-link fa fa-arrow-circle-down"
-                          title={labels.reuse} aria-label={labels.reuse}
+                          title={trans.reuseButton} aria-label={trans.reuseButton}
                           onClick={importModal.open} />
                   <button role="button" className="btn-link fa fa-trash"
-                          title={labels.remove} aria-label={labels.remove}
+                          title={trans.removeButton} aria-label={trans.removeButton}
                           onClick={deleteModal.open} />
                 </div>
               )
             }
           </>
         ) : (
-          <button role="button" className="btn btn-success" title={labels.add} onClick={createModal.open}>
+          <button role="button" className="btn btn-success"
+                  title={trans.addButton} aria-label={trans.addButton}
+                  onClick={createModal.open}>
             <i className="fa fa-plus fa-btn" aria-hidden="true"></i> {capitalize(page.verbose_name)}
           </button>
         )

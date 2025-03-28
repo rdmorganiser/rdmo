@@ -46,19 +46,29 @@ const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, r
   // focus when the modal is shown
   useFocusEffect(ref, show)
 
+  // inlining caused problems with django's translation system
+  const trans = {
+    createButton: gettext('You can add a new tab using the create button.'),
+    nameLabel: gettext('Name'),
+    nameHelp: gettext('Please give the tab a meaningful name.'),
+    reuseLabel: gettext('Reuse answers'),
+    reuseHelp: gettext('You can populate this tab with answers from a similar tab in any ' +
+                       'project you are allowed to access.')
+  }
+
   return (
     <Modal title={title} show={show} submitLabel={submitLabel} submitProps={{className: `btn btn-${submitColor}`}}
            onClose={onClose} onSubmit={handleSubmit} disableSubmit={errors}>
       {
         isNil(attribute) ? (
           <div>
-            {gettext('You can add a new tab using the create button.')}
+            {trans.createButton}
           </div>
         ) : (
           <>
             <div className={classNames({'form-group': true, 'has-error': errors.text })}>
               <label className="control-label" htmlFor="interview-page-tabs-modal-form-title">
-                {gettext('Name')}
+                {trans.name}
               </label>
               <input
                 ref={ref}
@@ -74,20 +84,19 @@ const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, r
                 }}
               />
 
-              <p className="help-block mb-0">{gettext('Please give the tab a meaningful name.')}</p>
+              <p className="help-block mb-0">{trans.nameHelp}</p>
             </div>
             {
               reuse && (
                 <div className={classNames({'form-group': true, 'has-error': errors.value })}>
                   <label className="control-label">
-                    {gettext('Reuse answers')}
+                    {trans.reuseLabel}
                   </label>
 
                   <Search attribute={attribute} values={values} setValues={setValues} />
 
                   <p className="help-block mb-0">
-                    {gettext('You can populate this tab with answers from a similar tab in any ' +
-                             'project you are allowed to access.')}
+                    {trans.reuseHelp}
                   </p>
                 </div>
               )

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 09:38+0100\n"
-"PO-Revision-Date: 2025-03-20 09:44+0100\n"
+"POT-Creation-Date: 2025-03-28 10:48+0100\n"
+"PO-Revision-Date: 2025-03-28 10:49+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -1559,23 +1559,28 @@ msgid "Complete questionnaire"
 msgstr "Fragebogen abschließen"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:31
+msgid "Create tab"
+msgstr "Tab hinzufügen"
+
+#: projects/assets/js/interview/components/main/page/PageHead.js:32
 msgid "Copy tab"
 msgstr "Tab kopieren"
 
-#: projects/assets/js/interview/components/main/page/PageHead.js:32
+#: projects/assets/js/interview/components/main/page/PageHead.js:33
 msgid "Add tab"
 msgstr "Tab hinzufügen"
 
-#: projects/assets/js/interview/components/main/page/PageHead.js:33
+#: projects/assets/js/interview/components/main/page/PageHead.js:34
 msgid "Edit tab"
 msgstr "Tab bearbeiten"
 
-#: projects/assets/js/interview/components/main/page/PageHead.js:34
+#: projects/assets/js/interview/components/main/page/PageHead.js:35
+#: projects/assets/js/interview/components/main/page/PageHeadFormModal.js:53
 #: projects/assets/js/interview/components/main/question/QuestionReuseValues.js:80
 msgid "Reuse answers"
 msgstr "Antworten wiederverwenden"
 
-#: projects/assets/js/interview/components/main/page/PageHead.js:35
+#: projects/assets/js/interview/components/main/page/PageHead.js:36
 msgid "Remove tab"
 msgstr "Tab entfernen"
 
@@ -1598,6 +1603,28 @@ msgid ""
 msgstr ""
 "Dies gilt für alle Antworten, die für dieses Tab auf allen Seiten gegeben "
 "werden, nicht nur auf dieser Seite."
+
+#: projects/assets/js/interview/components/main/page/PageHeadFormModal.js:50
+msgid "You can add a new tab using the create button."
+msgstr ""
+"Sie können eine neues Tab über die Schaltfläche „Erstellen“ hinzufügen."
+
+#: projects/assets/js/interview/components/main/page/PageHeadFormModal.js:51
+#: projects/assets/js/projects/utils/constants.js:4
+msgid "Name"
+msgstr "Name"
+
+#: projects/assets/js/interview/components/main/page/PageHeadFormModal.js:52
+msgid "Please give the tab a meaningful name."
+msgstr "Bitte geben Sie dem Tab einen aussagekräftigen Namen."
+
+#: projects/assets/js/interview/components/main/page/PageHeadFormModal.js:54
+msgid ""
+"You can populate this tab with answers from a similar tab in any project you "
+"are allowed to access."
+msgstr ""
+"Sie können dieses Tab mit Antworten aus einem ähnlichen Tab aus einem "
+"beliebigen Projekt füllen, auf das Sie Zugriff haben."
 
 #: projects/assets/js/interview/components/main/page/PageHeadReuseModal.js:43
 msgid "Reuse tab"
@@ -1877,10 +1904,6 @@ msgstr "Meine Projekte"
 #: projects/assets/js/projects/utils/translations.js:3
 msgid "All projects"
 msgstr "Alle Projekte"
-
-#: projects/assets/js/projects/utils/constants.js:4
-msgid "Name"
-msgstr "Name"
 
 #: projects/assets/js/projects/utils/constants.js:5
 msgid "Role"
