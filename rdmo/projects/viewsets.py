@@ -165,7 +165,7 @@ class ProjectViewSet(ModelViewSet):
         serializer = ProjectOverviewSerializer(project, context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=True, url_path=r'navigation(/(?P<section_id>\d+))?',
+    @action(detail=True, url_path=r'navigation(?:/(?P<section_id>\d+))?',
             permission_classes=(HasModelPermission | HasProjectPermission, ))
     def navigation(self, request, pk=None, section_id=None):
         project = self.get_object()
@@ -418,11 +418,7 @@ class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     )
 
     def get_queryset(self):
-        try:
-            return Membership.objects.filter(project=self.project)
-        except AttributeError:
-            # this is needed for the swagger ui
-            return Membership.objects.none()
+        return Membership.objects.filter(project=self.project)
 
     def get_serializer_class(self):
         if self.action == 'update':
@@ -441,11 +437,7 @@ class ProjectIntegrationViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     )
 
     def get_queryset(self):
-        try:
-            return Integration.objects.filter(project=self.project)
-        except AttributeError:
-            # this is needed for the swagger ui
-            return Integration.objects.none()
+        return Integration.objects.filter(project=self.project)
 
 
 class ProjectInviteViewSet(ProjectNestedViewSetMixin, ModelViewSet):
@@ -460,11 +452,7 @@ class ProjectInviteViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     )
 
     def get_queryset(self):
-        try:
-            return Invite.objects.filter(project=self.project)
-        except AttributeError:
-            # this is needed for the swagger ui
-            return Invite.objects.none()
+        return Invite.objects.filter(project=self.project)
 
     def get_serializer_class(self):
         if self.action == 'update':
@@ -491,11 +479,7 @@ class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveMod
     )
 
     def get_queryset(self):
-        try:
-            return Issue.objects.filter(project=self.project).prefetch_related('resources')
-        except AttributeError:
-            # this is needed for the swagger ui
-            return Issue.objects.none()
+        return Issue.objects.filter(project=self.project).prefetch_related('resources')
 
 
 class ProjectSnapshotViewSet(ProjectNestedViewSetMixin, CreateModelMixin, RetrieveModelMixin,
@@ -504,11 +488,7 @@ class ProjectSnapshotViewSet(ProjectNestedViewSetMixin, CreateModelMixin, Retrie
     serializer_class = ProjectSnapshotSerializer
 
     def get_queryset(self):
-        try:
-            return self.project.snapshots.all()
-        except AttributeError:
-            # this is needed for the swagger ui
-            return Snapshot.objects.none()
+        return self.project.snapshots.all()
 
 
 class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
@@ -524,11 +504,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     )
 
     def get_queryset(self):
-        try:
-            return self.project.values.filter(snapshot=None).select_related('attribute', 'option')
-        except AttributeError:
-            # this is needed for the swagger ui
-            return Value.objects.none()
+        return self.project.values.filter(snapshot=None).select_related('attribute', 'option')
 
     @action(detail=False, methods=['POST'], url_path='set',
             permission_classes=(HasModelPermission | HasProjectPermission, ))
@@ -678,17 +654,13 @@ class ProjectPageViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericV
     serializer_class = PageSerializer
 
     def get_queryset(self):
-        try:
-            self.project.catalog.prefetch_elements()
-            page = Page.objects.filter_by_catalog(self.project.catalog).prefetch_related(
-                *Page.prefetch_lookups,
-                'page_questions__question__optionsets__optionset_options__option',
-                'page_questionsets__questionset__questionset_questions__question__optionsets__optionset_options__option',
-            )
-            return page
-        except AttributeError:
-            # this is needed for the swagger ui
-            return Page.objects.none()
+        self.project.catalog.prefetch_elements()
+        page = Page.objects.filter_by_catalog(self.project.catalog).prefetch_related(
+            *Page.prefetch_lookups,
+            'page_questions__question__optionsets__optionset_options__option',
+            'page_questionsets__questionset__questionset_questions__question__optionsets__optionset_options__option',
+        )
+        return page
 
     def get_serializer_context(self):
         context = super().get_serializer_context()

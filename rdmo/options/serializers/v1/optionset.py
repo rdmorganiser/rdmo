@@ -65,7 +65,7 @@ class OptionSetSerializer(ThroughModelSerializerMixin, ElementModelSerializerMix
             OptionSetLockedValidator()
         )
 
-    def get_condition_uris(self, obj):
+    def get_condition_uris(self, obj) -> list[str]:
         return [condition.uri for condition in obj.conditions.all()]
 
 
@@ -79,7 +79,7 @@ class OptionSetNestedSerializer(OptionSetSerializer):
             'elements'
         )
 
-    def get_elements(self, obj):
+    def get_elements(self, obj) -> list[dict]:
         for element in obj.elements:
             yield OptionSerializer(element, context=self.context).data
 

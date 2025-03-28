@@ -24,10 +24,10 @@ class ChoicesSerializer(serializers.Serializer):
     id = serializers.SerializerMethodField()
     text = serializers.SerializerMethodField()
 
-    def get_id(self, obj):
+    def get_id(self, obj) -> str:
         return obj[0]
 
-    def get_text(self, obj):
+    def get_text(self, obj) -> str:
         return obj[1]
 
 
@@ -186,14 +186,14 @@ class ThroughModelSerializerMixin:
 
 class ElementModelSerializerMixin(serializers.ModelSerializer):
 
-    def get_model(self, obj):
+    def get_model(self, obj) -> str:
         # return the model name in the form "domain.attribute"
         return str(self.Meta.model._meta)
 
 
 class ElementWarningSerializerMixin(serializers.ModelSerializer):
 
-    def get_warning(self, obj):
+    def get_warning(self, obj) -> str:
         return {
             'missing_languages': any(get_language_warning(obj, field_name) for field_name in self.Meta.warning_fields)
         }
@@ -247,7 +247,7 @@ class SiteSerializer(serializers.ModelSerializer):
             'current'
         )
 
-    def get_current(self, obj):
+    def get_current(self, obj) -> int:
         return obj == Site.objects.get_current()
 
 

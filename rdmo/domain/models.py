@@ -70,8 +70,12 @@ class Attribute(MPTTModel):
             child.save()
 
     @property
-    def is_locked(self):
+    def is_locked(self) -> bool:
         return self.get_ancestors(include_self=True).filter(locked=True).exists()
+
+    @property
+    def is_leaf_node(self) -> bool:
+        return super().is_leaf_node
 
     @classmethod
     def build_path(cls, key, parent):

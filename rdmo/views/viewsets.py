@@ -42,7 +42,7 @@ class ViewViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
         serializer = ViewIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?')
+    @action(detail=False, url_path='export(?:/(?P<export_format>[a-z]+))?')
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -54,7 +54,7 @@ class ViewViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
                 'views': queryset
             })
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?')
+    @action(detail=True, url_path=r'export(?:/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = ViewExportSerializer(self.get_object())

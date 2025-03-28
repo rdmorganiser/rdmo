@@ -11,6 +11,8 @@ class CatalogSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
     markdown_fields = ('title', )
 
     class Meta:
+        ref_name = 'ProjectCatalogSerializer'
+
         model = Catalog
         fields = (
             'id',

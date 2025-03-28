@@ -40,9 +40,7 @@ INSTALLED_APPS = [
     'django_filters',
     'mathfilters',
     'mptt',
-    'rules',
-    # openapi specification tools
-    'rest_framework_swagger'
+    'rules'
 ]
 
 MIDDLEWARE = [
@@ -191,6 +189,20 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
     )
+}
+
+# Ref: https://drf-spectacular.readthedocs.io/en/latest/settings.html#settings
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'RDMO API',
+    'VERSION': None, # this renders version as v1 from the url path in swagger ui, otherwise it would be 0.0.0 (v1)
+    'SERVE_INCLUDE_SCHEMA': False,
+    'SCHEMA_PATH_PREFIX': '/api/v[0-9]', # url path like '/api/v1/accounts' yields tag 'accounts'
+    'SWAGGER_UI_SETTINGS': {
+        'docExpansion': 'none' # collapse all tags by default
+    },
+    'PREPROCESSING_HOOKS': [
+        'rdmo.core.schema.filter_endpoints'
+    ]
 }
 
 SETTINGS_EXPORT = [

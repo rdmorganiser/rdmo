@@ -19,7 +19,7 @@ status_map = {
 }
 
 urlnames = {
-    'list': 'setting-list',
+    'list': 'v1-core:setting-list',
 }
 
 

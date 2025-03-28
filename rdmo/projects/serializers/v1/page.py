@@ -1,3 +1,5 @@
+from typing import Optional, Union
+
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
@@ -58,6 +60,8 @@ class OptionSetSerializer(ElementModelSerializerMixin, serializers.ModelSerializ
 class ConditionSerializer(serializers.ModelSerializer):
 
     class Meta:
+        ref_name = 'ProjectConditionSerializer'
+
         model = Condition
         fields = (
             'id',
@@ -109,11 +113,11 @@ class QuestionSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, s
             'has_conditions'
         )
 
-    def get_optionsets(self, obj):
+    def get_optionsets(self, obj) -> dict:
         ordered_optionsets = sorted(obj.optionsets.all(), key=lambda optionset: optionset.order)
         return OptionSetSerializer(ordered_optionsets, many=True).data
 
-    def get_verbose_name(self, obj):
+    def get_verbose_name(self, obj) -> str:
         return obj.verbose_name or _('entry')
 
 
@@ -145,14 +149,14 @@ class QuestionSetSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin
             'has_conditions'
         )
 
-    def get_elements(self, obj):
+    def get_elements(self, obj) -> list[dict]:
         for element in obj.elements:
             if isinstance(element, QuestionSet):
                 yield QuestionSetSerializer(element, context=self.context).data
             else:
                 yield QuestionSerializer(element, context=self.context).data
 
-    def get_verbose_name(self, obj):
+    def get_verbose_name(self, obj) -> str:
         return obj.verbose_name or _('block')
 
 
@@ -171,6 +175,8 @@ class PageSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, seria
     attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
 
     class Meta:
+        ref_name = 'ProjectPageSerializer'
+
         model = Page
         fields = (
             'id',
@@ -190,14 +196,14 @@ class PageSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, seria
             'has_conditions'
         )
 
-    def get_elements(self, obj):
+    def get_elements(self, obj) -> list[dict]:
         for element in obj.elements:
             if isinstance(element, QuestionSet):
                 yield QuestionSetSerializer(element, context=self.context).data
             else:
                 yield QuestionSerializer(element, context=self.context).data
 
-    def get_section(self, obj):
+    def get_section(self, obj) -> dict[str, Union[int, str, None]]:
         section = self.context['catalog'].get_section_for_page(obj)
         return {
            'id': section.id,
@@ -205,13 +211,13 @@ class PageSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, seria
            'first': section.elements[0].id if section.elements else None
         } if section else {}
 
-    def get_prev_page(self, obj):
+    def get_prev_page(self, obj) -> Optional[int]:
         page = self.context['catalog'].get_prev_page(obj)
         return page.id if page else None
 
-    def get_next_page(self, obj):
+    def get_next_page(self, obj) -> Optional[int]:
         page = self.context['catalog'].get_next_page(obj)
         return page.id if page else None
 
-    def get_verbose_name(self, obj):
+    def get_verbose_name(self, obj) -> str:
         return obj.verbose_name or _('set')

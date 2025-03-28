@@ -26,7 +26,7 @@ from ...models import (
 from ...validators import ProjectParentValidator, ValueConflictValidator, ValueQuotaValidator, ValueTypeValidator
 
 
-class UserSerializer(serializers.ModelSerializer):
+class ProjectUserSerializer(serializers.ModelSerializer):
 
     full_name = serializers.SerializerMethodField()
 
@@ -66,10 +66,10 @@ class ProjectSerializer(serializers.ModelSerializer):
     catalog = CatalogField(required=True)
     parent = ParentField(required=False)
 
-    owners = UserSerializer(many=True, read_only=True)
-    managers = UserSerializer(many=True, read_only=True)
-    authors = UserSerializer(many=True, read_only=True)
-    guests = UserSerializer(many=True, read_only=True)
+    owners = ProjectUserSerializer(many=True, read_only=True)
+    managers = ProjectUserSerializer(many=True, read_only=True)
+    authors = ProjectUserSerializer(many=True, read_only=True)
+    guests = ProjectUserSerializer(many=True, read_only=True)
 
     last_changed = serializers.DateTimeField(read_only=True)
 

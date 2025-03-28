@@ -128,24 +128,24 @@ class Section(Model, TranslationMixin):
         super().save(*args, **kwargs)
 
     @property
-    def title(self):
+    def title(self) -> str:
         return self.trans('title')
 
     @property
-    def short_title(self):
+    def short_title(self) -> str:
         return self.trans('short_title')
 
     @cached_property
-    def is_locked(self):
+    def is_locked(self) -> bool:
         return self.locked or any(catalog.is_locked for catalog in self.catalogs.all())
 
     @cached_property
-    def elements(self):
+    def elements(self) -> list:
         # order "in python" to not destroy prefetch
         return [element.page for element in sorted(self.section_pages.all(), key=lambda e: e.order)]
 
     @cached_property
-    def descendants(self):
+    def descendants(self) -> list:
         descendants = []
         for element in self.elements:
             descendants += [element, *element.descendants]

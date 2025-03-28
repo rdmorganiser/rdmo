@@ -144,11 +144,11 @@ class View(models.Model, TranslationMixin):
         super().save(*args, **kwargs)
 
     @property
-    def title(self):
+    def title(self) -> str:
         return self.trans('title')
 
     @property
-    def help(self):
+    def help(self) -> str:
         return self.trans('help')
 
     @property

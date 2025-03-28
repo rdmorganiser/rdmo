@@ -70,7 +70,7 @@ class TaskSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
             'title',
         )
 
-    def get_condition_uris(self, obj):
+    def get_condition_uris(self, obj) -> list[str]:
         return [condition.uri for condition in obj.conditions.all()]
 
 

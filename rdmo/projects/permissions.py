@@ -51,10 +51,7 @@ class HasProjectPermission(HasObjectPermission):
         else:
             # for list or create we need to get the project from the view
             # and check that the user has the correct permission
-            try:
-                return super().has_object_permission(request, view, view.project)
-            except AttributeError:  # needed for swagger /api/v1
-                return super().has_permission(request, view)
+            return super().has_object_permission(request, view, view.project)
 
     @log_result
     def has_object_permission(self, request, view, obj):
