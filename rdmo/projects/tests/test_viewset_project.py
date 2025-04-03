@@ -111,7 +111,6 @@ def test_list_user(db, client):
 
 def test_list_multisite(db, client, settings):
     settings.MULTISITE = True
-    settings.PROJECT_TABLE_PAGE_SIZE = 100
     client.login(username='example-manager', password='example-manager')
 
     # create a project on site 2, which is visible on site 1
@@ -120,7 +119,7 @@ def test_list_multisite(db, client, settings):
     visibility.sites.add(Site.objects.get(id=1))
 
     url = reverse(urlnames['list'])
-    response = client.get(url)
+    response = client.get(url + '?page=3')
     response_data = response.json()
 
     assert response.status_code == 200
