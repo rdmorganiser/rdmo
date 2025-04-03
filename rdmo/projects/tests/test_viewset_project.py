@@ -1,9 +1,10 @@
 import pytest
 
 from django.contrib.auth.models import Group, User
+from django.contrib.sites.models import Site
 from django.urls import reverse
 
-from ..models import Membership, Project, Snapshot, Value
+from ..models import Membership, Project, Snapshot, Value, Visibility
 from .helpers import enable_project_views_sync  # noqa: F401
 
 users = (
@@ -106,6 +107,25 @@ def test_list_user(db, client):
     values_list = Project.objects.filter(id__in=projects_internal).values_list('id', flat=True)
     assert response_data['count'] == len(values_list)
     assert [item['id'] for item in response_data['results']] == list(values_list[:page_size])
+
+
+def test_list_multisite(db, client, settings):
+    settings.MULTISITE = True
+    settings.PROJECT_TABLE_PAGE_SIZE = 100
+    client.login(username='example-manager', password='example-manager')
+
+    # create a project on site 2, which is visible on site 1
+    project = Project.objects.create(title='foo.com project', site=Site.objects.get(id=2))
+    visibility = Visibility.objects.create(project=project)
+    visibility.sites.add(Site.objects.get(id=1))
+
+    url = reverse(urlnames['list'])
+    response = client.get(url)
+    response_data = response.json()
+
+    assert response.status_code == 200
+    assert project.id in [i['id'] for i in response_data['results']]
+    assert response_data['count'] == len(view_project_permission_map['site']) + 1
 
 
 @pytest.mark.parametrize('username,password', users)
