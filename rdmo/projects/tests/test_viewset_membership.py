@@ -31,7 +31,7 @@ urlnames = {
 
 projects = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 memberships = [1, 2, 3, 4]
-memberships_internal = [16]
+memberships_visible = [16]
 membership_roles = ('owner', 'manager', 'author', 'guest')
 
 
@@ -47,7 +47,7 @@ def test_list(db, client, username, password):
         assert isinstance(response.json(), list)
 
         if username == 'user':
-            assert sorted([item['id'] for item in response.json()]) == memberships_internal
+            assert sorted([item['id'] for item in response.json()]) == memberships_visible
         else:
             values_list = Membership.objects.filter(project__in=view_membership_permission_map.get(username, [])) \
                                             .order_by('id').values_list('id', flat=True)

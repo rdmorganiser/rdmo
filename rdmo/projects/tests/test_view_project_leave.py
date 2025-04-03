@@ -23,8 +23,6 @@ leave_project_permission_map = {
 
 projects = [1, 2, 3, 4, 5, 12]
 
-internal_projects = [12]
-
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 def test_project_leave_get(db, client, username, password, project_id):

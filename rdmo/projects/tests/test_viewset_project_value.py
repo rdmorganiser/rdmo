@@ -56,7 +56,7 @@ values = [
     249,                       # from Child11 <5>
     456                        # from Internal <12>
 ]
-values_internal = [456]
+values_visible = [456]
 
 other_project_id = 11
 
@@ -94,7 +94,7 @@ def test_list(db, client, username, password, project_id):
         assert isinstance(response.json(), list)
 
         if username == 'user':
-            assert sorted([item['id'] for item in response.json()]) == values_internal
+            assert sorted([item['id'] for item in response.json()]) == values_visible
         else:
             values_list = Value.objects.filter(project_id=project_id) \
                                        .filter(snapshot_id=None) \

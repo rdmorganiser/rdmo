@@ -41,7 +41,7 @@ urlnames = {
 
 projects = [1, 2, 3, 4, 5, 12]
 integrations = [1, 2]
-integrations_internal = []
+integrations_visible = []
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -56,7 +56,7 @@ def test_list(db, client, username, password, project_id):
         assert response.status_code == 200
 
         if username == 'user':
-            assert sorted([item['id'] for item in response.json()]) == integrations_internal
+            assert sorted([item['id'] for item in response.json()]) == integrations_visible
         else:
             values_list = Integration.objects.filter(project_id=project_id) \
                                              .order_by('id').values_list('id', flat=True)
