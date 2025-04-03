@@ -160,11 +160,7 @@
       "member": [
         1
       ],
-      "manager": [
-        1,
-        2,
-        3
-      ],
+      "manager": [],
       "editor": [],
       "reviewer": []
     }
