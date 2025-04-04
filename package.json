@@ -4,8 +4,7 @@
     "build:dist": "webpack --config webpack.config.js --mode production --env ignore-perf --fail-on-warnings",
     "build:prod": "webpack --config webpack.config.js --mode production",
     "build": "webpack --config webpack.config.js --mode development",
-    "watch": "webpack --config webpack.config.js --mode development --watch",
-    "lint": "eslint --ext .js rdmo/"
+    "watch": "webpack --config webpack.config.js --mode development --watch"
   },
   "author": "RDMO Arbeitsgemeinschaft <rdmorganiser.github.io>",
   "license": "Apache-2.0",
@@ -17,12 +16,11 @@
     "@codemirror/lang-html": "^6.4.2",
     "@codemirror/lang-javascript": "^6.2.2",
     "@uiw/react-codemirror": "^4.23.0",
-    "bootstrap-sass": "^3.4.1",
     "bootstrap": "^5.3.3",
+    "bootstrap-sass": "^3.4.1",
     "classnames": "^2.5.1",
-    "date-fns": "^4.1.0",
+    "date-fns": "^3.6.0",
     "font-awesome": "4.7.0",
-    "html-to-text": "^9.0.5",
     "jquery": "^3.7.1",
     "js-cookie": "^3.0.5",
     "lodash": "^4.17.21",
@@ -30,7 +28,7 @@
     "prop-types": "^15.7.2",
     "react": "^18.3.1",
     "react-bootstrap": "0.33.1",
-    "react-datepicker": "7.5.0",
+    "react-datepicker": "7.3.0",
     "react-diff-viewer-continued": "^3.4.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
@@ -41,7 +39,7 @@
     "redux": "^4.1.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
-    "use-debounce": "^10.0.0"
+    "use-debounce": "^10.0.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.27.0",
@@ -52,7 +50,7 @@
     "copy-webpack-plugin": "^13.0.0",
     "css-loader": "^7.1.1",
     "eslint": "~8.56.0",
-    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react": "^7.35.0",
     "file-loader": "^6.2.0",
     "mini-css-extract-plugin": "^2.9.0",
     "sass": "^1.87.0",
