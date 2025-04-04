@@ -46,7 +46,7 @@ dependencies = [
   "django-cleanup>=8.0,<10.0",
   "django-compressor>=4.4,<5.0",
   "django-extensions>=3.2,<4.0",
-  "django-filter>=23.2,<25.0",
+  "django-filter>=23.2,<26.0",
   "django-libsass>=0.9,<1.0",
   "django-mathfilters>=1.0,<2.0",
   "django-mptt>=0.16.0,<1.0.0",
@@ -66,7 +66,7 @@ dependencies = [
 
 [project.optional-dependencies]
 allauth = [
-  "django-allauth[socialaccount,openid]>=64.1.0,<65.4.0",
+  "django-allauth[socialaccount,openid]>=64.1.0,<65.8.0",
 ]
 ci = [
   "rdmo[dev]",
@@ -76,7 +76,7 @@ dev = [
   "build>=1.0,<2.0",
   "pipdeptree>=2.13,<3.0",
   "pre-commit>=3.4,<5.0",
-  "setuptools>=73,<76",
+  "setuptools>=73,<79",
   "twine>=5.1.1,<7.0",
   "wheel>=0.42,<0.46",
   "rdmo[allauth]",
