@@ -18,8 +18,6 @@ class ProjectQuerySet(TreeQuerySet):
         if user.is_authenticated:
             if user.has_perm('projects.view_project'):
                 return self.all()
-            elif is_site_manager(user):
-                return self.filter_current_site()
             else:
                 queryset = self.filter_visibility(user)
                 for instance in queryset:
@@ -33,7 +31,9 @@ class ProjectQuerySet(TreeQuerySet):
         sites_filter = Q(visibility__sites=None) | Q(visibility__sites=settings.SITE_ID)
         groups_filter = Q(visibility__groups=None) | Q(visibility__groups__in=groups)
         visibility_filter = Q(visibility__isnull=False) & sites_filter & groups_filter
-        return self.filter(Q(user=user) | visibility_filter)
+        current_site_filter = Q(site=settings.SITE_ID) if is_site_manager(user) else Q()
+
+        return self.filter(Q(user=user) | visibility_filter | current_site_filter)
 
     def filter_catalogs(self, catalogs=None, exclude_catalogs=None, exclude_null=True):
         catalogs_filter = Q()

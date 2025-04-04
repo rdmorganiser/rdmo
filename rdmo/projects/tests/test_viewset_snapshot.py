@@ -38,7 +38,7 @@ snapshots = [
     6,     # from Child11 <5>
     8      # from Internal <12>
 ]
-snapshots_internal = [8]
+snapshots_visible = [8]
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -53,7 +53,7 @@ def test_list(db, client, username, password):
         assert isinstance(response.json(), list)
 
         if username == 'user':
-            assert sorted([item['id'] for item in response.json()]) == snapshots_internal
+            assert sorted([item['id'] for item in response.json()]) == snapshots_visible
         else:
             values_list = Snapshot.objects.filter(project__in=view_snapshot_permission_map.get(username, [])) \
                                           .order_by('id').values_list('id', flat=True)

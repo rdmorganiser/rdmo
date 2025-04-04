@@ -45,7 +45,6 @@ urlnames = {
 }
 
 projects = [1, 2, 3, 4, 5, 12]
-projects_internal = [12]
 conditions = [1]
 
 @pytest.mark.parametrize('username,password', users)

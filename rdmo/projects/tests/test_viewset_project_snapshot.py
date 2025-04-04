@@ -44,7 +44,7 @@ urlnames = {
 
 projects = [1, 2, 3, 4, 5, 12]
 snapshots = [1, 3, 7, 4, 5, 6]
-snapshots_internal = [8]
+snapshots_visible = [8]
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
@@ -59,7 +59,7 @@ def test_list(db, client, username, password, project_id):
         assert isinstance(response.json(), list)
 
         if username == 'user':
-            assert sorted([item['id'] for item in response.json()]) == snapshots_internal
+            assert sorted([item['id'] for item in response.json()]) == snapshots_visible
         else:
             values_list = Snapshot.objects.filter(project_id=project_id) \
                                           .order_by('id').values_list('id', flat=True)

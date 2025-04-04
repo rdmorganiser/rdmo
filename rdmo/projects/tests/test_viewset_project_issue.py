@@ -47,7 +47,7 @@ urlnames = {
 
 projects = [1, 2, 3, 4, 5, 12]
 issues = [1, 2, 3, 4, 9]
-issues_internal = [8, 9]
+issues_visible = [8, 9]
 
 issue_status = ('open', 'in_progress', 'closed')
 
@@ -64,7 +64,7 @@ def test_list(db, client, username, password, project_id):
         assert response.status_code == 200
 
         if username == 'user':
-            assert sorted([item['id'] for item in response.json()]) == issues_internal
+            assert sorted([item['id'] for item in response.json()]) == issues_visible
         else:
             values_list = Issue.objects.filter(project_id=project_id) \
                                        .order_by('id').values_list('id', flat=True)

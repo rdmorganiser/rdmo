@@ -42,10 +42,10 @@ values = [
     249,                       # from Child11 <5>
     456, 457                   # from Internal <12>
 ]
-values_internal = [456]
-values_snapshot_internal = [457]
+values_visible = [456]
+values_snapshot_visible = [457]
 snapshots = [1, 3, 7, 4, 5, 6, 8]
-snapshots_internal = [8]
+snapshots_visible = [8]
 
 @pytest.mark.parametrize('username,password', users)
 def test_list(db, client, username, password):
@@ -59,7 +59,7 @@ def test_list(db, client, username, password):
         assert isinstance(response.json(), list)
 
         if username == 'user':
-            assert sorted([item['id'] for item in response.json()]) == values_internal
+            assert sorted([item['id'] for item in response.json()]) == values_visible
         else:
             values_list = Value.objects.filter(project__in=view_value_permission_map.get(username, [])) \
                                        .filter(snapshot_id=None) \
@@ -82,8 +82,8 @@ def test_list_snapshot(db, client, username, password, snapshot_id):
         assert isinstance(response.json(), list)
 
         if username == 'user':
-            if snapshot_id in snapshots_internal:
-                assert sorted([item['id'] for item in response.json()]) == values_snapshot_internal
+            if snapshot_id in snapshots_visible:
+                assert sorted([item['id'] for item in response.json()]) == values_snapshot_visible
             else:
                 assert sorted([item['id'] for item in response.json()]) == []
         else:
@@ -190,7 +190,7 @@ def test_search(db, client, username, password):
 
 
         if username == 'user':
-            assert sorted([item['id'] for item in response.json()]) == values_internal
+            assert sorted([item['id'] for item in response.json()]) == values_visible
         else:
             values_list = Value.objects.filter(project__in=view_value_permission_map.get(username, [])) \
                                        .filter(snapshot=None) \

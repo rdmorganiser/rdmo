@@ -31,7 +31,7 @@ urlnames = {
 
 projects = [1, 2, 3, 4, 5, 10]
 issues = [1, 2, 3, 4]
-issues_internal = [8, 9]
+issues_visible = [8, 9]
 
 site_id = 1
 project_id = 1
@@ -52,7 +52,7 @@ def test_list(db, client, username, password):
         assert isinstance(response.json(), list)
 
         if username == 'user':
-            assert sorted([item['id'] for item in response.json()]) == issues_internal
+            assert sorted([item['id'] for item in response.json()]) == issues_visible
         else:
             values_list = Issue.objects.filter(project__in=view_issue_permission_map.get(username, [])) \
                                        .order_by('id').values_list('id', flat=True)

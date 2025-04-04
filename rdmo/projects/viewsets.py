@@ -310,19 +310,34 @@ class ProjectViewSet(ModelViewSet):
         except Visibility.DoesNotExist:
             instance = None
 
-        serializer = ProjectVisibilitySerializer(instance)
-
         if request.method == 'POST':
-            serializer = ProjectVisibilitySerializer(instance, data=dict(**request.data, project=project.id))
+            data = {'project': project.id}
+
+            if settings.MULTISITE:
+                if request.user.has_perm('projects.change_visibility'):
+                    data['sites'] = request.data.getlist('sites', [])
+                else:
+                    data['sites'] = list({
+                        *[site.id for site in instance.sites.all()],
+                        get_current_site(self.request).id
+                    })
+
+            if settings.GROUPS:
+                data['groups'] = request.data.getlist('groups', [])
+
+            serializer = ProjectVisibilitySerializer(instance, data=data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data)
 
         elif request.method == 'DELETE':
             if instance is not None:
-                instance.delete()
-                return Response(status=status.HTTP_204_NO_CONTENT)
+                if settings.MULTISITE and not request.user.has_perm('projects.delete_visibility'):
+                    instance.remove_site(get_current_site(self.request))
+                else:
+                    instance.delete()
 
+                return Response(status=status.HTTP_204_NO_CONTENT)
         else:
             if instance is not None:
                 serializer = ProjectVisibilitySerializer(instance)

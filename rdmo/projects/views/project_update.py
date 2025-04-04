@@ -1,7 +1,9 @@
 import logging
 
 from django.conf import settings
+from django.contrib.sites.models import Site
 from django.http import Http404
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import UpdateView
 
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
@@ -19,7 +21,7 @@ from ..forms import (
     ProjectUpdateVisibilityForm,
 )
 from ..mixins import ProjectImportMixin
-from ..models import Project
+from ..models import Project, Visibility
 
 logger = logging.getLogger(__name__)
 
@@ -58,6 +60,43 @@ class ProjectUpdateVisibilityView(ObjectPermissionMixin, RedirectViewMixin, Upda
     form_class = ProjectUpdateVisibilityForm
     permission_required = 'projects.change_visibility_object'
     template_name = 'projects/project_form_visibility.html'
+
+    def get_form_kwargs(self):
+        form_kwargs = super().get_form_kwargs()
+        form_kwargs.update({
+            'user': self.request.user,
+            'site': Site.objects.get_current()
+        })
+        return form_kwargs
+
+    def get_context_data(self):
+        current_site = Site.objects.get_current()
+        context = super().get_context_data()
+
+        try:
+            visibility = self.get_object().visibility
+
+            if settings.MULTISITE:
+                if self.request.user.has_perm('projects.change_visibility'):
+                    context['submit_label'] = _('Update visibility')
+                    context['delete_label'] = _('Remove visibility')
+                elif visibility.sites.all() and current_site not in visibility.sites.all():
+                    context['submit_label'] = _('Make visible for this site')
+                elif settings.GROUPS:
+                    context['submit_label'] = _('Update visibility')
+                    context['delete_label'] = _('Remove visibility')
+                else:
+                    context['delete_label'] = _('Remove visibility')
+            elif settings.GROUPS:
+                context['submit_label'] = _('Update visibility')
+                context['delete_label'] = _('Remove visibility')
+            else:
+                context['delete_label'] = _('Remove visibility')
+
+        except Visibility.DoesNotExist:
+            context['submit_label'] = _('Make visible')
+
+        return context
 
 
 class ProjectUpdateCatalogView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):

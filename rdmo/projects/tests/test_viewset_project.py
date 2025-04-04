@@ -1,9 +1,10 @@
 import pytest
 
 from django.contrib.auth.models import Group, User
+from django.contrib.sites.models import Site
 from django.urls import reverse
 
-from ..models import Membership, Project, Snapshot, Value
+from ..models import Membership, Project, Snapshot, Value, Visibility
 from .helpers import enable_project_views_sync  # noqa: F401
 
 users = (
@@ -53,7 +54,7 @@ urlnames = {
 }
 
 projects = [1, 2, 3, 4, 5, 12]
-projects_internal = [12]
+projects_visible = [12]
 conditions = [1]
 
 catalog_id = 1
@@ -83,7 +84,7 @@ def test_list(db, client, username, password):
         assert isinstance(response_data, dict)
 
         if username == 'user':
-            assert sorted([item['id'] for item in response.json().get('results')]) == projects_internal
+            assert sorted([item['id'] for item in response.json().get('results')]) == projects_visible
         else:
             values_list = Project.objects.filter(id__in=view_project_permission_map.get(username, [])) \
                                          .values_list('id', flat=True)
@@ -103,9 +104,27 @@ def test_list_user(db, client):
     assert response.status_code == 200
     assert isinstance(response_data, dict)
 
-    values_list = Project.objects.filter(id__in=projects_internal).values_list('id', flat=True)
+    values_list = Project.objects.filter(id__in=projects_visible).values_list('id', flat=True)
     assert response_data['count'] == len(values_list)
     assert [item['id'] for item in response_data['results']] == list(values_list[:page_size])
+
+
+def test_list_multisite(db, client, settings):
+    settings.MULTISITE = True
+    client.login(username='example-manager', password='example-manager')
+
+    # create a project on site 2, which is visible on site 1
+    project = Project.objects.create(title='foo.com project', site=Site.objects.get(id=2))
+    visibility = Visibility.objects.create(project=project)
+    visibility.sites.add(Site.objects.get(id=1))
+
+    url = reverse(urlnames['list'])
+    response = client.get(url + '?page=3')
+    response_data = response.json()
+
+    assert response.status_code == 200
+    assert project.id in [i['id'] for i in response_data['results']]
+    assert response_data['count'] == len(view_project_permission_map['site']) + 1
 
 
 @pytest.mark.parametrize('username,password', users)

@@ -1,6 +1,7 @@
 from django import forms
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
 from django.db.models import Q
@@ -104,6 +105,9 @@ class ProjectUpdateVisibilityForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.project = kwargs.pop('instance')
+        self.user = kwargs.pop('user')
+        self.site = kwargs.pop('site')
+
         try:
             instance = self.project.visibility
         except Visibility.DoesNotExist:
@@ -112,7 +116,7 @@ class ProjectUpdateVisibilityForm(forms.ModelForm):
         super().__init__(*args, instance=instance, **kwargs)
 
         # remove the sites or group sets if they are not needed, doing this in Meta would break tests
-        if not settings.MULTISITE:
+        if not (settings.MULTISITE and self.user.has_perm('projects.change_visibility')):
             self.fields.pop('sites')
         if not settings.GROUPS:
             self.fields.pop('groups')
@@ -125,17 +129,22 @@ class ProjectUpdateVisibilityForm(forms.ModelForm):
         if 'cancel' in self.data:
             pass
         elif 'delete' in self.data:
-            self.instance.delete()
+            if settings.MULTISITE and not self.user.has_perm('projects.delete_visibility'):
+                current_site = Site.objects.get(id=self.site.id)
+                self.instance.remove_site(current_site)
+            else:
+                self.instance.delete()
         else:
             visibility, created = Visibility.objects.update_or_create(project=self.project)
 
-            sites = self.cleaned_data.get('sites')
-            if sites is not None:
-                visibility.sites.set(sites)
+            if settings.MULTISITE:
+                if self.user.has_perm('projects.change_visibility'):
+                    visibility.sites.set(self.cleaned_data.get('sites'))
+                else:
+                    visibility.sites.add(self.site)
 
-            groups = self.cleaned_data.get('groups')
-            if groups is not None:
-                visibility.groups.set(groups)
+            if settings.GROUPS:
+                visibility.groups.set(self.cleaned_data.get('groups'))
 
         return self.project
 
