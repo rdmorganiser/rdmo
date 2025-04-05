@@ -10,7 +10,7 @@ urlpatterns = [
 
     path('', include('rdmo.core.urls')),
     path('api/v1/', include('rdmo.core.urls.v1')),
-    # path('api/v1/', include('rdmo.core.urls.v1.openapi', namespace='v1')),
+    path('api/v1/', include('rdmo.core.urls.v1.openapi', namespace='v1')),
 
     path('admin/', admin.site.urls),
 ]
