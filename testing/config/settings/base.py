@@ -66,7 +66,8 @@ ACCOUNT_SIGNUP = True
 SOCIALACCOUNT = False
 
 INSTALLED_APPS += [
-    'drf_spectacular'
+    'drf_spectacular',
+    'drf_spectacular_sidecar'
 ]
 
 REST_FRAMEWORK.update({
