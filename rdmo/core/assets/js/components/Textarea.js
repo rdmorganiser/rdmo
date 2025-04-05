@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import { isEmpty, uniqueId } from 'lodash'
 
 const Textarea = ({ rows, className, label, placeholder, help, disabled, errors, value, onChange }) => {
-  const id = uniqueId('input-')
+  const id = uniqueId('textarea-')
 
   return (
     <div className={classNames('form-group', className)}>
