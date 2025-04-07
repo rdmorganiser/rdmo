@@ -18,6 +18,10 @@ def _set_django_allow_async_unsafe():
     """pytest-playwright needs this setting to be enabled."""
     os.environ.setdefault("DJANGO_ALLOW_ASYNC_UNSAFE", "true")
 
+@pytest.fixture
+def enable_multisite(settings):
+    settings.MULTISITE = True
+
 
 @pytest.fixture
 def django_db_setup(django_db_setup, django_db_blocker, fixtures):
@@ -29,6 +33,14 @@ def django_db_setup(django_db_setup, django_db_blocker, fixtures):
     with django_db_blocker.unblock():
         call_command("loaddata", *fixtures, verbosity=0)
         set_group_permissions()
+
+    yield
+
+    with django_db_blocker.unblock():
+        try:
+            call_command("flush", verbosity=0, interactive=False)
+        except Exception as e:
+            print(f"[Teardown flush error] {e}")
 
 
 @pytest.fixture
