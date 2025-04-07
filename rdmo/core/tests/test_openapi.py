@@ -1,48 +1,51 @@
-#import pytest
+import pytest
 
-# from django.contrib.auth.models import User
+import yaml
 
-# from rest_framework.status import HTTP_200_OK, HTTP_302_FOUND
+pytestmark = pytest.mark.django_db
 
-# pytestmark = pytest.mark.django_db
-
-# users = (
-#     ("admin", HTTP_200_OK),
-#     ("user", HTTP_200_OK),
-#     ("anonymous", HTTP_302_FOUND),
-# )
+users = (
+    'admin',
+    'user',
+    'anonymous'
+)
 
 
-# @pytest.mark.parametrize("username,status_code", users)
-# def test_openapi_schema(client, settings, username, status_code):
-#     if username != "anonymous":
-#         user = User.objects.get(username=username)
-#         client.force_login(user)
-#     response = client.get("/api/v1/")
-#     assert response.status_code == status_code
-#     # TODO check yaml response
-#     # TODO check json response
+@pytest.mark.parametrize('username', users)
+def test_openapi_schema(db, client, login, settings, username):
+    login(username)
+
+    response = client.get('/api/v1/schema/')
+
+    if username in ['admin', 'user']:
+        assert response.status_code == 200
+        schema = yaml.safe_load(response.content)
+        assert schema['openapi'] == '3.0.3'
+        assert len(schema['paths']) == 123
+    else:
+        assert response.status_code == 302
 
 
-# @pytest.mark.parametrize("username,status_code", users)
-# def test_openapi_swagger_ui(client, username, status_code):
-#     if username != "anonymous":
-#         user = User.objects.get(username=username)
-#         client.force_login(user)
-#     response = client.get("/api/v1/swagger/")
-#     assert response.status_code == status_code
-#     if username != "anonymous":
-#         # logged in user can access the swagger ui
-#         assert '<div id="swagger-ui"></div>' in str(response.content)
+@pytest.mark.parametrize('username', users)
+def test_openapi_swagger_ui(client, login, username):
+    login(username)
 
+    response = client.get('/api/v1/swagger/')
 
-# @pytest.mark.parametrize("username,status_code", users)
-# def test_openapi_redoc_ui(client, username, status_code):
-#     if username != "anonymous":
-#         user = User.objects.get(username=username)
-#         client.force_login(user)
-#     response = client.get("/api/v1/redoc/")
-#     assert response.status_code == status_code
-#     if username != "anonymous":
-#         # logged in user can access the redoc ui
-#         assert '<redoc spec-url="/api/v1/"></redoc>' in str(response.content)
+    if username in ['admin', 'user']:
+        assert response.status_code == 200
+        assert '<div id="swagger-ui"></div>' in str(response.content)
+    else:
+        assert response.status_code == 302
+
+@pytest.mark.parametrize('username', users)
+def test_openapi_redoc_ui(client, login, username):
+    login(username)
+
+    response = client.get('/api/v1/redoc/')
+
+    if username in ['admin', 'user']:
+        assert response.status_code == 200
+        assert '<redoc spec-url="/api/v1/schema/"></redoc>' in str(response.content)
+    else:
+        assert response.status_code == 302

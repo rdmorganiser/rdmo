@@ -80,6 +80,7 @@ dev = [
   "twine>=5.1.1,<7.0",
   "wheel>=0.42,<0.46",
   "rdmo[allauth]",
+  "rdmo[openapi]",
   "rdmo[pytest]",
 ]
 gunicorn = [
@@ -104,7 +105,7 @@ pytest = [
   "pytest-xdist>=3.3,<4.0",
 ]
 openapi = [
-  "drf-spectacular>=0.28.0,<1.0.0"
+  "drf-spectacular[sidecar]>=0.28.0,<1.0.0"
 ]
 
 [project.urls]

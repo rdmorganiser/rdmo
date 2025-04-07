@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.core.management import call_command
 
 from rdmo.accounts.utils import set_group_permissions
@@ -54,3 +55,15 @@ def files(settings, tmp_path):
 def json_data():
     json_file = Path(settings.BASE_DIR) / 'import' / 'catalogs.json'
     return {'elements': json.loads(json_file.read_text())}
+
+
+@pytest.fixture
+def login(client):
+    def force_login_user(username):
+        try:
+            user = User.objects.get(username=username)
+            client.force_login(user)
+        except User.DoesNotExist:
+            pass
+
+    return force_login_user

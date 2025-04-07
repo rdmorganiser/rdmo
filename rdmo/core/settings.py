@@ -202,7 +202,10 @@ SPECTACULAR_SETTINGS = {
     },
     'PREPROCESSING_HOOKS': [
         'rdmo.core.schema.filter_endpoints'
-    ]
+    ],
+    'SWAGGER_UI_DIST': 'SIDECAR',
+    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+    'REDOC_DIST': 'SIDECAR',
 }
 
 SETTINGS_EXPORT = [

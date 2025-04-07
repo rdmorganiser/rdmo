@@ -65,6 +65,18 @@ ACCOUNT = True
 ACCOUNT_SIGNUP = True
 SOCIALACCOUNT = False
 
+INSTALLED_APPS += [
+    'drf_spectacular',
+    'drf_spectacular_sidecar'
+]
+
+REST_FRAMEWORK.update({
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.URLPathVersioning',
+    'DEFAULT_VERSION': 'v1',
+    'ALLOWED_VERSIONS': ('v1', ),
+})
+
 PROJECT_TABLE_PAGE_SIZE = 5
 
 PROJECT_SEND_ISSUE = True
