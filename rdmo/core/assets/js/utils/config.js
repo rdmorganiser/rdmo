@@ -1,4 +1,4 @@
-import { set, unset, toNumber, isNaN } from 'lodash'
+import { set, unset } from 'lodash'
 
 const updateConfig = (config, path, value) => {
   const newConfig = {...config}
@@ -26,15 +26,10 @@ const getConfigFromLocalStorage = (prefix) => {
           return [path, true]
         } else if (lsValue === 'false') {
           return [path, false]
+        } else {
+          return [path, lsValue]
         }
 
-        // check if the value is number or a string
-        const numberValue = toNumber(lsValue)
-        if (isNaN(numberValue)) {
-          return [path, lsValue]
-        } else {
-          return [path, numberValue]
-        }
       } else {
         return null
       }
