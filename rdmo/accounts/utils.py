@@ -12,7 +12,7 @@ from .settings import GROUPS
 log = logging.getLogger(__name__)
 
 
-def get_full_name(user):
+def get_full_name(user) -> str:
     if user.first_name and user.last_name:
         return f'{user.first_name} {user.last_name}'
     else:

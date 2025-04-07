@@ -44,7 +44,7 @@ class ProjectUserSerializer(serializers.ModelSerializer):
                 'email'
             ]
 
-    def get_full_name(self, obj):
+    def get_full_name(self, obj) -> str:
         return get_full_name(obj)
 
 
