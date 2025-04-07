@@ -17,23 +17,9 @@ const getConfigFromLocalStorage = (prefix) => {
 
   return Object.entries(ls)
     .filter(([lsPath,]) => lsPath.startsWith(prefix))
-    .map(([lsPath, lsValue]) => {
-      if (lsPath.startsWith(prefix)) {
-        const path = lsPath.replace(`${prefix}.`, '')
-
-        // check if it is literal 'true' or 'false'
-        if (lsValue === 'true') {
-          return [path, true]
-        } else if (lsValue === 'false') {
-          return [path, false]
-        } else {
-          return [path, lsValue]
-        }
-
-      } else {
-        return null
-      }
-    })
+    .map(([lsPath, lsValue]) => (
+      lsPath.startsWith(prefix) ? [lsPath.replace(`${prefix}.`, ''), lsValue] : null
+    ))
 }
 
 const setConfigInLocalStorage = (prefix, path, value) => {
