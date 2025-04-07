@@ -4,7 +4,6 @@ import pytest
 from playwright.sync_api import Page, expect
 
 from rdmo.management.tests.helpers_import_elements import IMPORT_ELEMENT_PANELS_LOCATOR
-from rdmo.management.tests.helpers_models import delete_all_objects
 from rdmo.options.models import Option, OptionSet
 
 pytestmark = pytest.mark.e2e
@@ -17,9 +16,9 @@ OPTIONSETS_COUNTS_HEADER_INFOS = [f"{k.capitalize()}: {v}" for k, v in OPTIONSET
 IMPORT_FILTER_LABEL_TEXT = 'Show only new and changed elements (%s)'
 
 
-def test_import_and_update_optionsets_in_management(page: Page) -> None:
+def test_import_and_update_optionsets_in_management(db, delete_option_objects, page: Page) -> None:
     """Test that each content type is available through the navigation."""
-    delete_all_objects([OptionSet, Option])
+    # the OptionSet, Option objects are deleted
 
     expect(page.get_by_role("heading", name="Management")).to_be_visible()
     expect(page.locator("strong").filter(has_text="Catalogs")).to_be_visible()
