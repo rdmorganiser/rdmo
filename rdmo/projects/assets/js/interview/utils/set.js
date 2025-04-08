@@ -2,7 +2,7 @@ import { isEmpty, isNil, toNumber, toString, last, sortBy } from 'lodash'
 
 import SetFactory from '../factories/SetFactory'
 
-const getParentSet = (set) => {
+export const getParentSet = (set) => {
   const split = set.set_prefix.split('|')
 
   return {
@@ -11,11 +11,11 @@ const getParentSet = (set) => {
   }
 }
 
-const getChildPrefix = (set) => {
+export const getChildPrefix = (set) => {
   return isEmpty(set.set_prefix) ? toString(set.set_index) : `${set.set_prefix}|${set.set_index}`
 }
 
-const getDescendants = (items, set) => {
+export const getDescendants = (items, set) => {
   return items.filter((item) => (
     (
       (item.set_prefix === set.set_prefix) &&
@@ -26,7 +26,7 @@ const getDescendants = (items, set) => {
   ))
 }
 
-const gatherSets = (values) => {
+export const gatherSets = (values) => {
   const sets = values.reduce((sets, value) => {
     if (sets.find((set) => (
       (set.set_prefix === value.set_prefix) &&
@@ -44,7 +44,7 @@ const gatherSets = (values) => {
   return sortBy(sets, ['set_prefix', 'set_index'])
 }
 
-const initSets = (sets, element, setPrefix) => {
+export const initSets = (sets, element, setPrefix) => {
   if (isNil(setPrefix)) {
     setPrefix = ''
   }
@@ -81,4 +81,18 @@ const initSets = (sets, element, setPrefix) => {
   })
 }
 
-export { getParentSet, getChildPrefix, getDescendants, gatherSets, initSets }
+export const copyResolvedConditions = (originalSets, sets) => {
+  sets.forEach((set) => {
+    const originalSet = originalSets.find(originalSet => (
+      originalSet.set_prefix == set.set_prefix) && (originalSet.set_index == set.set_index)
+    )
+
+    if (!isNil(originalSet)) {
+      ['questionsets', 'questions', 'optionsets'].forEach(elementType => {
+        if (!isNil(originalSet[elementType])) {
+          set[elementType] = originalSet[elementType]
+        }
+      })
+    }
+  })
+}

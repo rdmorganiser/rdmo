@@ -12,7 +12,7 @@ import { updateLocation } from '../utils/location'
 
 import { updateOptions } from '../utils/options'
 import { initPage } from '../utils/page'
-import { gatherSets, getDescendants, initSets } from '../utils/set'
+import { copyResolvedConditions, gatherSets, getDescendants, initSets } from '../utils/set'
 import { activateFirstValue, gatherDefaultValues, initValues, compareValues, isEmptyValue } from '../utils/value'
 import { projectId } from '../utils/meta'
 
@@ -634,7 +634,7 @@ export function copySet(currentSet, copySetValue, attrs) {
     )
 
     // create a callback function to be called immediately or after saving the value
-    const copySetCallback = (setValues) => {
+    const copySetCallbackAction = (setValues) => {
       dispatch(activateSet(set))
 
       const state = getState().interview
@@ -649,7 +649,11 @@ export function copySet(currentSet, copySetValue, attrs) {
       initSets(sets, page)
       initValues(sets, values, page)
 
-      return dispatch({type: COPY_SET_SUCCESS, values, sets})
+      // copy already resolved conditions to prevent short hiding of questions
+      copyResolvedConditions(state.sets, sets)
+
+      dispatch(resolveConditions(page, sets))
+      dispatch({type: COPY_SET_SUCCESS, values, sets})
     }
 
     let promise
@@ -684,7 +688,7 @@ export function copySet(currentSet, copySetValue, attrs) {
 
     return promise.then((values) => {
       dispatch(removeFromPending(pendingId))
-      dispatch(copySetCallback(values))
+      copySetCallbackAction(values)
     }).catch((errors) => {
       dispatch(removeFromPending(pendingId))
       dispatch(copySetError(errors))
