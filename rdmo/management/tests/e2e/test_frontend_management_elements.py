@@ -105,3 +105,37 @@ def test_management_edit_model(page: Page, helper: ModelHelper) -> None:
     url_id = int(urlparse(page.url).path.rstrip("/").split("/")[-1])
     model_obj = helper.model.objects.get(id=url_id)
     assert model_obj.comment == comment
+
+
+def test_management_navigation_filters(page_multisite: Page) -> None:
+    """Test that each content type is available through the navigation."""
+    page = page_multisite
+
+    expect(page.get_by_role("heading", name="Management")).to_be_visible()
+
+    # add search to filter
+    page.get_by_role("textbox", name="Filter catalogs").click()
+    page.get_by_role("textbox", name="Filter catalogs").fill("bar")
+
+    # filter URI prefix
+    page.get_by_label("Filter URI prefix").select_option("https://bar.com/terms")
+
+    # filter sites and editors, requires MULTISITE to be enabled
+    page.get_by_label("Filter sites").select_option("3")
+    page.get_by_label("Filter editors").select_option("3")
+
+    # assert bar-catalog
+    expect(page.get_by_text("bar-catalog", exact=True)).to_be_visible()
+
+    # reload
+    page.reload()
+
+    # reset all filters
+    page.get_by_label("Filter URI prefix").select_option("")
+    page.get_by_label("Filter sites").select_option("")
+    page.get_by_label("Filter editors").select_option("")
+    page.get_by_role("button", name="Reset").click()
+
+    # reload
+    page.reload()
+    expect(page.get_by_role("link", name="http://example.com/terms/questions/catalog", exact=True)).to_be_visible()

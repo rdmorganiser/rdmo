@@ -67,3 +67,11 @@ def login(client):
             pass
 
     return force_login_user
+
+
+@pytest.fixture
+def delete_all_objects():
+    def delete_all(*models):
+        for model in models:
+            model.objects.all().delete()
+    return delete_all
