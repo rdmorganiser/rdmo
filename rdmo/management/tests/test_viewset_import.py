@@ -39,8 +39,8 @@ def test_list(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_create_create(db, client, username, password, json_data, delete_all):
-    delete_all(Catalog, Section, Page, QuestionSet, Question)
+def test_create_create(db, client, username, password, json_data, delete_all_objects):
+    delete_all_objects(Catalog, Section, Page, QuestionSet, Question)
 
     client.login(username=username, password=password)
 

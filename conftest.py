@@ -70,8 +70,8 @@ def login(client):
 
 
 @pytest.fixture
-def delete_all():
-    def delete_all_objects(*models):
+def delete_all_objects():
+    def delete_all(*models):
         for model in models:
             model.objects.all().delete()
-    return delete_all_objects
+    return delete_all

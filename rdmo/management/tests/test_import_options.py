@@ -50,8 +50,8 @@ LEGACY_SKIP_URIS = [
 ]
 
 
-def test_create_optionsets(db, settings, delete_all):
-    delete_all(OptionSet, Option)
+def test_create_optionsets(db, settings, delete_all_objects):
+    delete_all_objects(OptionSet, Option)
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'optionsets.xml'
     elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
@@ -70,10 +70,11 @@ def test_create_optionsets(db, settings, delete_all):
                                         'option_optionsets__order').values_list('uri',flat=True)
         assert options_uris == list(db_ordered_options_uris)
 
-def test_update_optionsets(db, settings, delete_all):
+def test_update_optionsets(db, settings, delete_all_objects):
+    delete_all_objects(OptionSet, Option)
+
+    # Arrange, import the optionsets.xml
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'optionsets.xml'
-    # Arrange, import the optionsets.x, delete_allml
-    delete_all(OptionSet, Option)
     elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
     assert OptionSet.objects.count() == 4
     assert Option.objects.count() == 9
@@ -89,8 +90,8 @@ def test_update_optionsets(db, settings, delete_all):
 
 
 @pytest.mark.parametrize('updated_fields', fields_to_be_changed)
-def test_update_optionsets_with_changed_fields(db, settings, updated_fields, delete_all):
-    delete_all(OptionSet, Option)
+def test_update_optionsets_with_changed_fields(db, settings, updated_fields, delete_all_objects):
+    delete_all_objects(OptionSet, Option)
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'optionsets.xml'
     elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
@@ -111,10 +112,11 @@ def test_update_optionsets_with_changed_fields(db, settings, updated_fields, del
         assert test[ImportElementFields.DIFF] == imported[ImportElementFields.DIFF]
 
 
-def test_update_optionsets_from_changed_xml(db, settings, delete_all):
+def test_update_optionsets_from_changed_xml(db, settings, delete_all_objects):
     # Arrange, start test with fresh options in db
-    # Arrange, import the optionsets.x, delete_allml
-    delete_all(OptionSet, Option)
+    delete_all_objects(OptionSet, Option)
+
+    # Arrange, import the optionsets.xml
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'optionsets.xml'
     parse_xml_and_import_elements(xml_file)
     assert OptionSet.objects.count() + Option.objects.count() == 13
@@ -157,9 +159,9 @@ def test_update_optionsets_from_changed_xml(db, settings, delete_all):
     assert len([i for i in imported_elements_2 if i[ImportElementFields.WARNINGS]]) == 2
 
 
-def test_create_options(db, settings, delete_all):
-    delete_all(Option)
-    # Arrange
+def test_create_options(db, settings, delete_all_objects):
+    delete_all_objects(Option)
+
     # Act
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'options.xml'
     elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
@@ -169,9 +171,9 @@ def test_create_options(db, settings, delete_all):
     assert all(element[ImportElementFields.UPDATED] is False for element in imported_elements)
 
 
-def test_update_options(db, settings, delete_all):
-    delete_all(Option)
-    # Arrange
+def test_update_options(db, settings, delete_all_objects):
+    delete_all_objects(Option)
+
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'options.xml'
     parse_xml_and_import_elements(xml_file)
     assert Option.objects.count() == 9
@@ -185,8 +187,8 @@ def test_update_options(db, settings, delete_all):
 
 
 @pytest.mark.parametrize('updated_fields', fields_to_be_changed)
-def test_update_options_with_changed_fields(db, settings, updated_fields, delete_all):
-    delete_all(OptionSet, Option)
+def test_update_options_with_changed_fields(db, settings, updated_fields, delete_all_objects):
+    delete_all_objects(OptionSet, Option)
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'options.xml'
     elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
@@ -205,8 +207,8 @@ def test_update_options_with_changed_fields(db, settings, updated_fields, delete
         assert test[ImportElementFields.DIFF] == imported[ImportElementFields.DIFF]
 
 
-def test_create_legacy_options(db, settings, delete_all):
-    delete_all(OptionSet, Option)
+def test_create_legacy_options(db, settings, delete_all_objects):
+    delete_all_objects(OptionSet, Option)
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'legacy' / 'options.xml'
 
@@ -229,8 +231,9 @@ def test_create_legacy_options(db, settings, delete_all):
         assert options_uris == list(db_ordered_options_uris)
 
 
-def test_update_legacy_options(db, settings, delete_all):
-    delete_all(OptionSet, Option)
+def test_update_legacy_options(db, settings, delete_all_objects):
+    delete_all_objects(OptionSet, Option)
+
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'legacy' / 'options.xml'
     parse_xml_and_import_elements(xml_file)
     assert OptionSet.objects.count() == 4

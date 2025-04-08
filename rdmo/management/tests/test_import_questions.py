@@ -25,8 +25,8 @@ TEST_CATALOG_SECTIONS_URIS = {
 
 
 @pytest.mark.parametrize('shuffle', [True, False])
-def test_create_catalogs(db, settings, shuffle, delete_all):
-    delete_all(Catalog, Section, Page, QuestionSet, Question)
+def test_create_catalogs(db, settings, shuffle, delete_all_objects):
+    delete_all_objects(Catalog, Section, Page, QuestionSet, Question)
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'catalogs.xml'
 
@@ -66,8 +66,8 @@ def test_update_catalogs(db, settings):
 
 
 @pytest.mark.parametrize('updated_fields', fields_to_be_changed)
-def test_update_catalogs_with_changed_fields(db, settings, updated_fields, delete_all):
-    delete_all(Catalog, Section, Page, QuestionSet, Question)
+def test_update_catalogs_with_changed_fields(db, settings, updated_fields, delete_all_objects):
+    delete_all_objects(Catalog, Section, Page, QuestionSet, Question)
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'catalogs.xml'
     elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
@@ -86,8 +86,8 @@ def test_update_catalogs_with_changed_fields(db, settings, updated_fields, delet
        assert test[ImportElementFields.DIFF] == imported[ImportElementFields.DIFF]
 
 
-def test_create_sections(db, settings, delete_all):
-    delete_all(Section, Page, QuestionSet, Question)
+def test_create_sections(db, settings, delete_all_objects):
+    delete_all_objects(Section, Page, QuestionSet, Question)
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'sections.xml'
 
@@ -113,8 +113,8 @@ def test_update_sections(db, settings):
 
 
 @pytest.mark.parametrize('updated_fields', fields_to_be_changed)
-def test_update_sections_with_changed_fields(db, settings, updated_fields, delete_all):
-    delete_all(Catalog, Section, Page, QuestionSet, Question)
+def test_update_sections_with_changed_fields(db, settings, updated_fields, delete_all_objects):
+    delete_all_objects(Catalog, Section, Page, QuestionSet, Question)
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'sections.xml'
     elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
@@ -133,8 +133,8 @@ def test_update_sections_with_changed_fields(db, settings, updated_fields, delet
        assert test[ImportElementFields.DIFF] == imported[ImportElementFields.DIFF]
 
 
-def test_create_pages(db, settings, delete_all):
-    delete_all(Page, QuestionSet, Question)
+def test_create_pages(db, settings, delete_all_objects):
+    delete_all_objects(Page, QuestionSet, Question)
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'pages.xml'
 
@@ -159,8 +159,8 @@ def test_update_pages(db, settings):
 
 
 @pytest.mark.parametrize('updated_fields', fields_to_be_changed)
-def test_update_pages_with_changed_fields(db, settings, updated_fields, delete_all):
-    delete_all(Catalog, Section, Page, QuestionSet, Question)
+def test_update_pages_with_changed_fields(db, settings, updated_fields, delete_all_objects):
+    delete_all_objects(Catalog, Section, Page, QuestionSet, Question)
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'pages.xml'
     elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
@@ -179,8 +179,8 @@ def test_update_pages_with_changed_fields(db, settings, updated_fields, delete_a
        assert test[ImportElementFields.DIFF] == imported[ImportElementFields.DIFF]
 
 
-def test_create_questionsets(db, settings, delete_all):
-    delete_all(Page, QuestionSet, Question)
+def test_create_questionsets(db, settings, delete_all_objects):
+    delete_all_objects(Page, QuestionSet, Question)
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'questionsets.xml'
 
@@ -206,8 +206,8 @@ def test_update_questionsets(db, settings):
 
 
 @pytest.mark.parametrize('updated_fields', fields_to_be_changed)
-def test_update_questionsets_with_changed_fields(db, settings, updated_fields, delete_all):
-    delete_all(Catalog, Section, Page, QuestionSet, Question)
+def test_update_questionsets_with_changed_fields(db, settings, updated_fields, delete_all_objects):
+    delete_all_objects(Catalog, Section, Page, QuestionSet, Question)
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'questionsets.xml'
     elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
@@ -228,8 +228,8 @@ def test_update_questionsets_with_changed_fields(db, settings, updated_fields, d
 
 
 @pytest.mark.parametrize('shuffle', [True, False])
-def test_create_questions(db, settings, shuffle, delete_all):
-    delete_all(Page, QuestionSet, Question)
+def test_create_questions(db, settings, shuffle, delete_all_objects):
+    delete_all_objects(Page, QuestionSet, Question)
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'questions.xml'
 
@@ -252,8 +252,8 @@ def test_update_questions(db, settings):
 
 
 @pytest.mark.parametrize('updated_fields', fields_to_be_changed)
-def test_update_questions_with_changed_fields(db, settings, updated_fields, delete_all):
-    delete_all(Catalog, Section, Page, QuestionSet, Question)
+def test_update_questions_with_changed_fields(db, settings, updated_fields, delete_all_objects):
+    delete_all_objects(Catalog, Section, Page, QuestionSet, Question)
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'questions.xml'
     elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
@@ -273,8 +273,8 @@ def test_update_questions_with_changed_fields(db, settings, updated_fields, dele
 
 
 @pytest.mark.parametrize('shuffle', [True, False])
-def test_create_legacy_questions(db, settings, shuffle, delete_all):
-    delete_all(Catalog, Section, Page, QuestionSet, Question)
+def test_create_legacy_questions(db, settings, shuffle, delete_all_objects):
+    delete_all_objects(Catalog, Section, Page, QuestionSet, Question)
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'legacy' / 'questions.xml'
 
