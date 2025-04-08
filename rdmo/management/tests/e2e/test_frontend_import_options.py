@@ -16,12 +16,14 @@ OPTIONSETS_COUNTS_HEADER_INFOS = [f"{k.capitalize()}: {v}" for k, v in OPTIONSET
 IMPORT_FILTER_LABEL_TEXT = 'Show only new and changed elements (%s)'
 
 
-def test_import_and_update_optionsets_in_management(db, delete_option_objects, page: Page) -> None:
+def test_import_and_update_optionsets_in_management(db, page: Page, delete_all) -> None:
     """Test that each content type is available through the navigation."""
-    # the OptionSet, Option objects are deleted
 
     expect(page.get_by_role("heading", name="Management")).to_be_visible()
     expect(page.locator("strong").filter(has_text="Catalogs")).to_be_visible()
+    # delete the OptionSet, Option objects
+    delete_all(OptionSet, Option)
+
     ## 1. Import fresh optionset.xml
     # choose the file to be imported
     page.locator('input[name="uploaded_file"]').set_input_files(import_xml)

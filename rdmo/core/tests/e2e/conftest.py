@@ -3,9 +3,7 @@ import os
 import pytest
 
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.core.management import call_command
-from django.test import Client
 
 from playwright.sync_api import Browser, BrowserContext, Page
 
@@ -17,10 +15,6 @@ PLAYWRIGHT_TIMEOUT = 10_000  # timeout in ms
 def _set_django_allow_async_unsafe():
     """pytest-playwright needs this setting to be enabled."""
     os.environ.setdefault("DJANGO_ALLOW_ASYNC_UNSAFE", "true")
-
-@pytest.fixture
-def enable_multisite(settings):
-    settings.MULTISITE = True
 
 
 @pytest.fixture
@@ -34,30 +28,13 @@ def django_db_setup(django_db_setup, django_db_blocker, fixtures):
         call_command("loaddata", *fixtures, verbosity=0)
         set_group_permissions()
 
-    yield
-
-    with django_db_blocker.unblock():
-        try:
-            call_command("flush", verbosity=0, interactive=False)
-        except Exception as e:
-            print(f"[Teardown flush error] {e}")
-
 
 @pytest.fixture
-def authenticated_client(db, e2e_username) -> Client:
-    """An authenticated test client, used to bypass the login page."""
-    user = get_user_model().objects.get(username=e2e_username)
-    client = Client()
-    client.user = user  # attach user to client to access in other fixtures
-    client.force_login(user)
-    return client
-
-
-@pytest.fixture
-def authenticated_context(live_server, browser: Browser, authenticated_client) -> BrowserContext:
+def authenticated_context(client, login, live_server, browser: Browser, e2e_username) -> BrowserContext:
     """Creates an authenticated Playwright browser context with session cookies."""
     # retrieve the session cookie from the authenticated client
-    session_cookie = authenticated_client.cookies[settings.SESSION_COOKIE_NAME]
+    login(e2e_username)
+    session_cookie = client.cookies[settings.SESSION_COOKIE_NAME]
     cookie = {
         "name": session_cookie.key,
         "value": session_cookie.value,
@@ -72,16 +49,13 @@ def authenticated_context(live_server, browser: Browser, authenticated_client) -
 
 
 @pytest.fixture
-def authenticated_page(authenticated_context: BrowserContext, authenticated_client) -> Page:
+def authenticated_page(authenticated_context: BrowserContext) -> Page:
     """Provides an authenticated Playwright page without forcing navigation.
     The page is authenticated with session cookies from authenticated_context.
     """
     page = authenticated_context.new_page()
     page.set_default_timeout(PLAYWRIGHT_TIMEOUT)
     page.set_default_navigation_timeout(PLAYWRIGHT_TIMEOUT)
-
-    # Attach the authenticated user to the page
-    page.user = authenticated_client.user
     yield page
     page.close()
 
