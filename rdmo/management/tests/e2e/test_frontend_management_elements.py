@@ -107,8 +107,9 @@ def test_management_edit_model(page: Page, helper: ModelHelper) -> None:
     assert model_obj.comment == comment
 
 
-def test_management_navigation_filters(page: Page) -> None:
+def test_management_navigation_filters(page_multisite: Page) -> None:
     """Test that each content type is available through the navigation."""
+    page = page_multisite
 
     expect(page.get_by_role("heading", name="Management")).to_be_visible()
 
