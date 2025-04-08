@@ -18,7 +18,7 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
     setEndDate
   } = useDatePicker()
 
-  const showFilters = get(config, 'showFilters', false)
+  const showFilters = [true, 'true'].includes(get(config, 'showFilters', false))
   const toggleFilters = () => configActions.updateConfig('showFilters', !showFilters)
 
   const resetAllFilters = () => {
