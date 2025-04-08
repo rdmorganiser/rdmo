@@ -51,8 +51,3 @@ model_helpers = (
     ModelHelper(Task),
     ModelHelper(View),
 )
-
-
-def delete_all_objects(db_models: list):
-    for db_model in db_models:
-        db_model.objects.all().delete()
