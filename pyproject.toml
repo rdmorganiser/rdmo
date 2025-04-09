@@ -78,9 +78,7 @@ dev = [
   "setuptools>=73,<79",
   "twine>=5.1.1,<7.0",
   "wheel>=0.42,<0.46",
-  "rdmo[allauth]",
-  "rdmo[openapi]",
-  "rdmo[pytest]",
+  "rdmo[allauth,openapi,pytest]",
 ]
 gunicorn = [
   "gunicorn>=23.0,<24.0",
