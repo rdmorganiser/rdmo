@@ -369,7 +369,7 @@ msgid ""
 "href=\"%(email_url)s\">issue a new e-mail confirmation request</a>."
 msgstr ""
 "Dieser Bestätigungs-Link ist abgelaufen oder ungültig. Bitte <a "
-"href=\"%(email_url)s\">fordern sie eine neue Betätigungs-E-Mail an</a>."
+"href=\"%(email_url)s\">fordern sie eine neue Bestätigungs-E-Mail an</a>."
 
 #: accounts/templates/account/login.html:6
 #: accounts/templates/account/login_form.html:23
@@ -971,7 +971,7 @@ msgstr "Kommazahl"
 
 #: core/constants.py:19
 msgid "Boolean"
-msgstr "Boolsche Variable"
+msgstr "Boolesche Variable"
 
 #: core/constants.py:20
 msgid "Date"
@@ -2198,7 +2198,7 @@ msgstr "Die Ansichten, die für dieses Projekt verwendet werden."
 
 #: projects/models/project.py:69
 msgid "Progress total"
-msgstr "Fortschritt Gesammtzahl"
+msgstr "Fortschritt Gesamtzahl"
 
 #: projects/models/project.py:70
 msgid "The total number of expected values for the progress bar."
@@ -4114,7 +4114,7 @@ msgstr ""
 #: questions/serializers/v1/question.py:128
 msgid "If the \"Yes/No\" widget is used, the value type must be \"Boolean\"."
 msgstr ""
-"Wenn das Widget \"Ja/Nein\" verwendet wird, muss der Wertetyp \"Boolsche "
+"Wenn das Widget \"Ja/Nein\" verwendet wird, muss der Wertetyp \"Boolesche "
 "Variable\" sein."
 
 #: questions/templates/questions/export/page.html:28
