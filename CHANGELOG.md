@@ -1,6 +1,6 @@
 # Changelog
 
-## [RDMO 2.3.0](https://github.com/rdmorganiser/rdmo/compare/2.2.2...2.3.0)
+## [RDMO 2.3.0](https://github.com/rdmorganiser/rdmo/compare/2.2.2...2.3.0) (Apr 10, 2025)
 
 * Add new interview interface based on React and Redux (#518)
   * Text and Textarea widgets are now saved automatically
@@ -50,6 +50,8 @@
 * Use `lualatex` when using `Pandoc >= 3.0`.
 * Remove the `download_vendor_files` step of the setup
   * Remove `VENDOR` and `VENDOR_CDN` from settings.
+* Remove `django-rest-swagger` dependency and add `drf-spectacular` as an optional dependency.
+  * Can be installed with `pip install rdmo[openapi]`.
 * Update Python and JavaScript dependencies.
 * Drop support for Python 3.8.
 
