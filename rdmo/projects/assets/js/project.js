@@ -11,8 +11,6 @@ import Main from './project/containers/Main'
 
 const store = configureStore()
 
-console.log(document.getElementById('main'))
-
 createRoot(document.getElementById('main')).render(
   <DndProvider backend={HTML5Backend}>
     <Provider store={store}>
