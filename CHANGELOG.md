@@ -1,6 +1,6 @@
 # Changelog
 
-## [RDMO 2.3.0](https://github.com/rdmorganiser/rdmo/compare/2.2.2...2.3.0) (Apr 10, 2025)
+## [RDMO 2.3.0](https://github.com/rdmorganiser/rdmo/compare/2.2.2...2.3.0) (Apr 11, 2025)
 
 * Add new interview interface based on React and Redux (#518)
   * Text and Textarea widgets are now saved automatically
