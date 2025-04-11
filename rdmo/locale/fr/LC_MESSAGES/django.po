@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 11:12+0000\n"
-"PO-Revision-Date: 2025-03-20 12:20+0100\n"
+"POT-Creation-Date: 2025-04-11 12:23+0000\n"
+"PO-Revision-Date: 2025-04-11 14:27+0200\n"
 "Last-Translator: Yonny CARDENAS, Gautier DEBAECKER, Nadia LAJILI, Gino "
 "MARCHETTI <dmp@cc.in2p3.fr>\n"
 "Language-Team: RDMO <dmp@cc.in2p3.fr>\n"
@@ -45,7 +45,7 @@ msgstr ""
 msgid "Consent could not be saved. Please try again."
 msgstr "Le consentement n'a pas pu être enregistré. Veuillez réessayer."
 
-#: accounts/models.py:27 options/models.py:191 questions/models/question.py:97
+#: accounts/models.py:27 options/models.py:193 questions/models/question.py:97
 #: tasks/models.py:96
 msgid "Text (primary)"
 msgstr "Texte (primaire)"
@@ -54,7 +54,7 @@ msgstr "Texte (primaire)"
 msgid "The text for this additional field (in the primary language)."
 msgstr "Le texte de ce champ supplémentaire (dans la langue principale)."
 
-#: accounts/models.py:32 options/models.py:196 questions/models/question.py:102
+#: accounts/models.py:32 options/models.py:198 questions/models/question.py:102
 #: tasks/models.py:101
 msgid "Text (secondary)"
 msgstr "Texte (secondaire)"
@@ -63,7 +63,7 @@ msgstr "Texte (secondaire)"
 msgid "The text for this additional field (in the secondary language)."
 msgstr "Le texte de ce champ supplémentaire (dans la langue secondaire)."
 
-#: accounts/models.py:37 options/models.py:201 questions/models/question.py:107
+#: accounts/models.py:37 options/models.py:203 questions/models/question.py:107
 #: tasks/models.py:106
 msgid "Text (tertiary)"
 msgstr "Texte (tertiaire)"
@@ -72,7 +72,7 @@ msgstr "Texte (tertiaire)"
 msgid "The text for this additional field (in the tertiary language)."
 msgstr "Le texte de ce champ supplémentaire (dans la langue tertiaire)."
 
-#: accounts/models.py:42 options/models.py:206 questions/models/question.py:112
+#: accounts/models.py:42 options/models.py:208 questions/models/question.py:112
 #: tasks/models.py:111
 msgid "Text (quaternary)"
 msgstr "Texte (quaternaire)"
@@ -81,7 +81,7 @@ msgstr "Texte (quaternaire)"
 msgid "The text for this additional field (in the quaternary language)."
 msgstr "Le texte de ce champ supplémentaire (dans la langue quaternaire)."
 
-#: accounts/models.py:47 options/models.py:211 questions/models/question.py:117
+#: accounts/models.py:47 options/models.py:213 questions/models/question.py:117
 #: tasks/models.py:116
 msgid "Text (quinary)"
 msgstr "Texte (quinaire)"
@@ -90,7 +90,7 @@ msgstr "Texte (quinaire)"
 msgid "The text for this additional field (in the quinary language)."
 msgstr "Le texte de ce champ supplémentaire (en langage quinaire)."
 
-#: accounts/models.py:52 options/models.py:216 questions/models/catalog.py:111
+#: accounts/models.py:52 options/models.py:218 questions/models/catalog.py:111
 #: questions/models/page.py:136 questions/models/question.py:72
 #: questions/models/questionset.py:106 views/models.py:103
 msgid "Help (primary)"
@@ -104,7 +104,7 @@ msgstr ""
 "Le texte d'aide à afficher à côté de l'élément de saisie (dans la langue "
 "principale)."
 
-#: accounts/models.py:57 options/models.py:221 questions/models/catalog.py:116
+#: accounts/models.py:57 options/models.py:223 questions/models/catalog.py:116
 #: questions/models/page.py:141 questions/models/question.py:77
 #: questions/models/questionset.py:111 views/models.py:108
 msgid "Help (secondary)"
@@ -118,7 +118,7 @@ msgstr ""
 "Le texte d'aide à afficher à côté de l'élément de saisie (dans la langue "
 "secondaire)."
 
-#: accounts/models.py:62 options/models.py:226 questions/models/catalog.py:121
+#: accounts/models.py:62 options/models.py:228 questions/models/catalog.py:121
 #: questions/models/page.py:146 questions/models/question.py:82
 #: questions/models/questionset.py:116 views/models.py:113
 msgid "Help (tertiary)"
@@ -132,7 +132,7 @@ msgstr ""
 "Le texte d'aide à afficher à côté de l'élément de saisie (dans la langue "
 "tertiaire)."
 
-#: accounts/models.py:67 options/models.py:231 questions/models/catalog.py:126
+#: accounts/models.py:67 options/models.py:233 questions/models/catalog.py:126
 #: questions/models/page.py:151 questions/models/question.py:87
 #: questions/models/questionset.py:121 views/models.py:118
 msgid "Help (quaternary)"
@@ -146,7 +146,7 @@ msgstr ""
 "Le texte d'aide à afficher à côté de l'élément de saisie (dans la langue "
 "quaternaire)."
 
-#: accounts/models.py:72 options/models.py:236 questions/models/catalog.py:131
+#: accounts/models.py:72 options/models.py:238 questions/models/catalog.py:131
 #: questions/models/page.py:156 questions/models/question.py:92
 #: questions/models/questionset.py:126 views/models.py:123
 msgid "Help (quinary)"
@@ -417,7 +417,6 @@ msgstr ""
 #: accounts/templates/account/logout.html:19
 #: accounts/templates/account/logout_form.html:6
 #: core/templates/core/base_navigation.html:113
-#: core/templates/rest_framework_swagger/index.html:28
 msgid "Logout"
 msgstr "Se déconnecter"
 
@@ -816,7 +815,7 @@ msgstr "Nom"
 
 #: conditions/apps.py:7 conditions/models.py:90
 #: conditions/templates/conditions/export/conditions.html:6
-#: options/models.py:62 options/templates/options/export/optionset.html:29
+#: options/models.py:64 options/templates/options/export/optionset.html:29
 #: questions/models/page.py:186 questions/models/question.py:222
 #: questions/models/questionset.py:156 tasks/models.py:142
 #: tasks/templates/tasks/export/tasks.html:48
@@ -826,7 +825,7 @@ msgstr "Conditions"
 #: conditions/models.py:35
 #: conditions/templates/conditions/export/conditions.html:15
 #: domain/models.py:15 domain/templates/domain/export/attributes.html:14
-#: options/models.py:17 options/models.py:161
+#: options/models.py:19 options/models.py:163
 #: options/templates/options/export/option.html:5
 #: options/templates/options/export/optionset.html:5
 #: questions/models/catalog.py:36 questions/models/page.py:35
@@ -848,8 +847,8 @@ msgstr ""
 "Identificateur de ressource uniforme (URI) de cette condition (généré "
 "automatiquement)."
 
-#: conditions/models.py:40 domain/models.py:20 options/models.py:22
-#: options/models.py:166 questions/models/catalog.py:41
+#: conditions/models.py:40 domain/models.py:20 options/models.py:24
+#: options/models.py:168 questions/models/catalog.py:41
 #: questions/models/page.py:40 questions/models/question.py:32
 #: questions/models/questionset.py:35 questions/models/section.py:39
 #: tasks/models.py:25 views/models.py:27
@@ -860,7 +859,7 @@ msgstr "Préfixe URI"
 msgid "The prefix for the URI of this condition."
 msgstr "Préfixe de l'URI de cette condition."
 
-#: conditions/models.py:45 options/models.py:27 options/models.py:171
+#: conditions/models.py:45 options/models.py:29 options/models.py:173
 #: questions/models/catalog.py:46 questions/models/page.py:45
 #: questions/models/question.py:37 questions/models/questionset.py:40
 #: questions/models/section.py:44 tasks/models.py:30 views/models.py:32
@@ -873,7 +872,7 @@ msgstr "Le chemin d'accès à l'URI de cette condition."
 
 #: conditions/models.py:50
 #: conditions/templates/conditions/export/conditions.html:21
-#: domain/models.py:35 options/models.py:32 options/models.py:176
+#: domain/models.py:35 options/models.py:34 options/models.py:178
 #: questions/models/catalog.py:51 questions/models/page.py:50
 #: questions/models/question.py:42 questions/models/questionset.py:45
 #: questions/models/section.py:49
@@ -892,8 +891,8 @@ msgstr "Commentaire"
 msgid "Additional internal information about this condition."
 msgstr "Informations internes complémentaires sur cette condition."
 
-#: conditions/models.py:55 domain/models.py:40 options/models.py:37
-#: options/models.py:181 questions/models/catalog.py:56
+#: conditions/models.py:55 domain/models.py:40 options/models.py:39
+#: options/models.py:183 questions/models/catalog.py:56
 #: questions/models/page.py:55 questions/models/question.py:47
 #: questions/models/questionset.py:50 questions/models/section.py:54
 #: tasks/models.py:40 views/models.py:42
@@ -904,8 +903,8 @@ msgstr "Verrouillé"
 msgid "Designates whether this condition can be changed."
 msgstr "Désigne si cette condition peut être modifiée."
 
-#: conditions/models.py:60 domain/models.py:45 options/models.py:47
-#: options/models.py:186 questions/models/catalog.py:76
+#: conditions/models.py:60 domain/models.py:45 options/models.py:49
+#: options/models.py:188 questions/models/catalog.py:76
 #: questions/models/page.py:81 questions/models/question.py:67
 #: questions/models/questionset.py:76 questions/models/section.py:64
 #: tasks/models.py:61 views/models.py:63
@@ -973,7 +972,7 @@ msgstr "Cible"
 msgid "Core"
 msgstr "Cœur"
 
-#: core/constants.py:15 options/models.py:155
+#: core/constants.py:15 options/models.py:157
 #: options/templates/options/export/option.html:8 projects/models/value.py:69
 #: questions/constants.py:14 tasks/templates/tasks/export/tasks.html:31
 msgid "Text"
@@ -1007,7 +1006,7 @@ msgstr "Date et heure"
 msgid "Phone"
 msgstr "Telephone"
 
-#: core/constants.py:24 options/models.py:297 projects/models/value.py:74
+#: core/constants.py:24 options/models.py:299 projects/models/value.py:74
 msgid "Option"
 msgstr "Option"
 
@@ -1027,82 +1026,82 @@ msgstr "créé"
 msgid "updated"
 msgstr "mise à jour"
 
-#: core/settings.py:147
+#: core/settings.py:145
 msgid "English"
 msgstr "Anglais"
 
-#: core/settings.py:148
+#: core/settings.py:146
 msgid "German"
 msgstr "Allemand"
 
-#: core/settings.py:291
+#: core/settings.py:306
 msgid "PDF"
 msgstr "PDF"
 
-#: core/settings.py:292
+#: core/settings.py:307
 msgid "Rich Text Format"
 msgstr "Rich Text Format"
 
-#: core/settings.py:293
+#: core/settings.py:308
 msgid "Open Office"
 msgstr "Open Office"
 
-#: core/settings.py:294
+#: core/settings.py:309
 msgid "Microsoft Office"
 msgstr "Microsoft Office"
 
-#: core/settings.py:295
+#: core/settings.py:310
 msgid "HTML"
 msgstr "HTML"
 
-#: core/settings.py:296
+#: core/settings.py:311
 msgid "Markdown"
 msgstr "Markdown"
 
-#: core/settings.py:297
+#: core/settings.py:312
 msgid "mediawiki"
 msgstr "mediawiki"
 
-#: core/settings.py:298
+#: core/settings.py:313
 msgid "LaTeX"
 msgstr "LaTeX"
 
-#: core/settings.py:333 core/settings.py:342
+#: core/settings.py:348 core/settings.py:357
 msgid "RDMO XML"
 msgstr "RDMO XML"
 
-#: core/settings.py:334
+#: core/settings.py:349
 msgid "CSV (comma separated)"
 msgstr "CSV (séparé par des virgules)"
 
-#: core/settings.py:335
+#: core/settings.py:350
 msgid "CSV (semicolon separated)"
 msgstr "CSV (séparé par des points-virgules)"
 
-#: core/settings.py:336
+#: core/settings.py:351
 msgid "JSON"
 msgstr "JSON"
 
-#: core/settings.py:374
+#: core/settings.py:389
 msgid "Enter a valid integer."
 msgstr "Entrez un nombre entier valide."
 
-#: core/settings.py:378
+#: core/settings.py:393
 msgid "Enter a valid float."
 msgstr "Saisissez un flotteur valide."
 
-#: core/settings.py:394
+#: core/settings.py:409
 msgid "Enter a valid boolean (e.g. 0, 1)."
 msgstr "Entrez un booléen valide (par exemple 0, 1)."
 
-#: core/settings.py:398
+#: core/settings.py:413
 msgid ""
 "Enter a valid date (e.g. \"02.03.2024\", \"03/02/2024\", \"2024-02-03\")."
 msgstr ""
 "Saisissez une date valide (par exemple « 02.03.2024 », « 03/02/2024 », « "
 "2024-02-03 »)."
 
-#: core/settings.py:412
+#: core/settings.py:427
 msgid "Enter a valid phone number (e.g. \"123456\" or \"+49 (0) 30 123456\")."
 msgstr ""
 "Saisissez un numéro de téléphone valide (par exemple « 123456 » ou « +49 (0) "
@@ -1147,6 +1146,19 @@ msgstr "Désolé, mais il y a eu une erreur avec l'URL demandée."
 #: core/templates/core/about_text_it.html:6
 msgid "RDMO Logo"
 msgstr "Logo RDMO"
+
+#: core/templates/core/api.html:12
+msgid ""
+"The RDMO API allows you to interact with the service programmatically using "
+"scripts or other tools. We provide several sets of endpoints:"
+msgstr ""
+"L'API RDMO vous permet d'interagir avec le service de manière programmatique "
+"à l'aide de scripts ou d'autres outils. Nous fournissons plusieurs ensembles "
+"de points d'extrémité :"
+
+#: core/templates/core/api.html:45
+msgid "The different modules of RDMO have separate endpoints:"
+msgstr "Les différents modules de RDMO ont des points d'arrivée distincts:"
 
 #: core/templates/core/back_to_project_link.html:4
 #: projects/templates/projects/project_view.html:15
@@ -1211,22 +1223,6 @@ msgstr "Sélectionnez le fichier xml"
 msgid "Upload"
 msgstr "Téléverser"
 
-#: core/templates/rest_framework_swagger/index.html:30
-msgid "Session Login"
-msgstr "Connexion à la session"
-
-#: core/templates/rest_framework_swagger/index.html:41
-msgid "You are logged in as: "
-msgstr "Vous êtes connecté en tant que: "
-
-#: core/templates/rest_framework_swagger/index.html:43
-msgid "Viewing as an anonymous user"
-msgstr "Visualisation en tant qu'utilisateur anonyme"
-
-#: core/templates/rest_framework_swagger/index.html:55
-msgid "Powered by "
-msgstr "Propulsé par "
-
 #: core/utils.py:100 core/utils.py:105
 msgid "Elements"
 msgstr "Éléments"
@@ -1257,8 +1253,8 @@ msgstr "afficher moins"
 msgid "%(model)s with the uri \"%(uri)s\" already exists."
 msgstr "%(model)s avec le chemin \"%(uri)s\" existe déjà."
 
-#: core/validators.py:80 domain/validators.py:14 projects/forms.py:433
-#: projects/forms.py:454
+#: core/validators.py:80 domain/validators.py:14 projects/forms.py:442
+#: projects/forms.py:463
 msgid "This field is required."
 msgstr "Ce champ est obligatoire."
 
@@ -1440,8 +1436,8 @@ msgstr "Importer"
 msgid "Import elements"
 msgstr "Importer des éléments"
 
-#: management/viewsets.py:41 management/viewsets.py:77 projects/viewsets.py:348
-#: projects/viewsets.py:349 projects/viewsets.py:544
+#: management/viewsets.py:41 management/viewsets.py:77 projects/viewsets.py:363
+#: projects/viewsets.py:364 projects/viewsets.py:535
 msgid "This field may not be blank."
 msgstr "Ce champ ne doit pas être vide."
 
@@ -1449,7 +1445,7 @@ msgstr "Ce champ ne doit pas être vide."
 msgid "This is not a valid RDMO import JSON."
 msgstr "Il ne s'agit pas d'un JSON d'importation RDMO valide."
 
-#: options/apps.py:7 options/models.py:57 options/models.py:298
+#: options/apps.py:7 options/models.py:59 options/models.py:300
 #: options/templates/options/export/options.html:6
 #: options/templates/options/export/optionset.html:9
 #: projects/templates/projects/issue_detail.html:81
@@ -1462,50 +1458,50 @@ msgstr "Il ne s'agit pas d'un JSON d'importation RDMO valide."
 msgid "Options"
 msgstr "Options"
 
-#: options/models.py:18
+#: options/models.py:20
 msgid "The Uniform Resource Identifier of this option set (auto-generated)."
 msgstr ""
 "Identificateur de ressource uniforme (URI) de ce jeu d'options (généré "
 "automatiquement)."
 
-#: options/models.py:23
+#: options/models.py:25
 msgid "The prefix for the URI of this option set."
 msgstr "Préfixe de l'URI de ce jeu d'options."
 
-#: options/models.py:28
+#: options/models.py:30
 msgid "The path for the URI of this option set."
 msgstr "Le chemin d'accès à l'URI de cet ensemble d'options."
 
-#: options/models.py:33
+#: options/models.py:35
 msgid "Additional internal information about this option set."
 msgstr "Informations internes complémentaires sur cet ensemble d'options."
 
-#: options/models.py:38
+#: options/models.py:40
 msgid "Designates whether this option set (and its options) can be changed."
 msgstr "Désigne si cet ensemble d'options (et ses options) peut être modifié."
 
-#: options/models.py:42 questions/models/catalog.py:61 tasks/models.py:45
+#: options/models.py:44 questions/models/catalog.py:61 tasks/models.py:45
 #: views/models.py:47
 msgid "Order"
 msgstr "Ordre"
 
-#: options/models.py:43
+#: options/models.py:45
 msgid "The position of this option set in lists."
 msgstr "La position de cette option définie dans les listes."
 
-#: options/models.py:48
+#: options/models.py:50
 msgid "The sites that can edit this option set (in a multi site setup)."
 msgstr ""
 "Les sites qui peuvent modifier ce jeu d'options (dans une configuration "
 "multi-sites)."
 
-#: options/models.py:52 options/templates/options/export/optionset.html:21
+#: options/models.py:54 options/templates/options/export/optionset.html:21
 #: projects/templates/projects/issue_send_integrations.html:7
 #: projects/templates/projects/project_detail_integrations.html:17
 msgid "Provider"
 msgstr "Fournisseur"
 
-#: options/models.py:53
+#: options/models.py:55
 msgid ""
 "The provider for this optionset. If set, it will create dynamic options for "
 "this optionset."
@@ -1513,100 +1509,100 @@ msgstr ""
 "Le fournisseur de cet ensemble d'options. S'il est défini, il créera des "
 "options dynamiques pour cet ensemble d'options."
 
-#: options/models.py:58
+#: options/models.py:60
 msgid "The list of options for this option set."
 msgstr "La liste des options pour cet ensemble d'options."
 
-#: options/models.py:63
+#: options/models.py:65
 msgid "The list of conditions evaluated for this option set."
 msgstr "Liste des conditions évaluées pour cet ensemble d'options."
 
-#: options/models.py:68
+#: options/models.py:70
 msgid "Option set"
 msgstr "Jeu d'options"
 
-#: options/models.py:69 options/templates/options/export/optionsets.html:6
+#: options/models.py:71 options/templates/options/export/optionsets.html:6
 #: questions/models/question.py:217
 msgid "Option sets"
 msgstr "Ensembles d'options"
 
-#: options/models.py:156 questions/constants.py:15
+#: options/models.py:158 questions/constants.py:15
 msgid "Textarea"
 msgstr "Zone de texte"
 
-#: options/models.py:162
+#: options/models.py:164
 msgid "The Uniform Resource Identifier of this option (auto-generated)."
 msgstr ""
 "Identificateur de ressource uniforme de cette option (généré "
 "automatiquement)."
 
-#: options/models.py:167
+#: options/models.py:169
 msgid "The prefix for the URI of this option."
 msgstr "Préfixe de l'URI de cette option."
 
-#: options/models.py:172
+#: options/models.py:174
 msgid "The path for the URI of this option."
 msgstr "Le chemin d'accès à l'URI de cette option."
 
-#: options/models.py:177
+#: options/models.py:179
 msgid "Additional internal information about this option."
 msgstr "Informations internes complémentaires sur cette option."
 
-#: options/models.py:182
+#: options/models.py:184
 msgid "Designates whether this option can be changed."
 msgstr "Désigne si cette option peut être modifiée."
 
-#: options/models.py:187
+#: options/models.py:189
 msgid "The sites that can edit this option (in a multi site setup)."
 msgstr ""
 "Les sites qui peuvent modifier cette option (dans une configuration multi-"
 "sites)."
 
-#: options/models.py:192
+#: options/models.py:194
 msgid "The text for this option (in the primary language)."
 msgstr "Le texte de cette option (dans la langue principale)."
 
-#: options/models.py:197
+#: options/models.py:199
 msgid "The text for this option (in the secondary language)."
 msgstr "Le texte de cette option (dans la langue secondaire)."
 
-#: options/models.py:202
+#: options/models.py:204
 msgid "The text for this option (in the tertiary language)."
 msgstr "Le texte de cette option (dans la langue tertiaire)."
 
-#: options/models.py:207
+#: options/models.py:209
 msgid "The text for this option (in the quaternary language)."
 msgstr "Le texte de cette option (dans la langue quaternaire)."
 
-#: options/models.py:212
+#: options/models.py:214
 msgid "The text for this option (in the quinary language)."
 msgstr "Le texte de cette option (en langage quinaire)."
 
-#: options/models.py:217
+#: options/models.py:219
 msgid "The help text for this option (in the primary language)."
 msgstr "Le texte d'aide pour cette option (dans la langue principale)."
 
-#: options/models.py:222
+#: options/models.py:224
 msgid "The help text for this option (in the secondary language)."
 msgstr "Le texte d'aide pour cette option (dans la langue secondaire)."
 
-#: options/models.py:227
+#: options/models.py:229
 msgid "The help text for this option (in the tertiary language)."
 msgstr "Le texte d'aide pour cette option (dans la langue tertiaire)."
 
-#: options/models.py:232
+#: options/models.py:234
 msgid "The help text for this option (in the quaternary language)."
 msgstr "Le texte d'aide pour cette option (dans la langue quaternaire)."
 
-#: options/models.py:237
+#: options/models.py:239
 msgid "The help text for this option (in the quinary language)."
 msgstr "Le texte d'aide pour cette option (en langage quinaire)."
 
-#: options/models.py:241 questions/models/question.py:122
+#: options/models.py:243 questions/models/question.py:122
 msgid "Default text value (primary)"
 msgstr "Valeur du texte par défaut (primaire)"
 
-#: options/models.py:242
+#: options/models.py:244
 msgid ""
 "The default text value for the additional input of this option (in the "
 "primary language)."
@@ -1614,11 +1610,11 @@ msgstr ""
 "Valeur textuelle par défaut pour la saisie supplémentaire de cette option "
 "(dans la langue principale)."
 
-#: options/models.py:246 questions/models/question.py:127
+#: options/models.py:248 questions/models/question.py:127
 msgid "Default text value (secondary)"
 msgstr "Valeur du texte par défaut (secondaire)"
 
-#: options/models.py:247
+#: options/models.py:249
 msgid ""
 "The default text value for the additional input of this option (in the "
 "secondary language)."
@@ -1626,11 +1622,11 @@ msgstr ""
 "Valeur textuelle par défaut pour la saisie supplémentaire de cette option "
 "(dans la langue secondaire)."
 
-#: options/models.py:251 questions/models/question.py:132
+#: options/models.py:253 questions/models/question.py:132
 msgid "Default text value (tertiary)"
 msgstr "Valeur du texte par défaut (tertiaire)"
 
-#: options/models.py:252
+#: options/models.py:254
 msgid ""
 "The default text value for the additional input of this option (in the "
 "tertiary language)."
@@ -1638,11 +1634,11 @@ msgstr ""
 "Valeur textuelle par défaut pour la saisie supplémentaire de cette option "
 "(dans la langue tertiaire)."
 
-#: options/models.py:256 questions/models/question.py:137
+#: options/models.py:258 questions/models/question.py:137
 msgid "Default text value (quaternary)"
 msgstr "Valeur du texte par défaut (quaternaire)"
 
-#: options/models.py:257
+#: options/models.py:259
 msgid ""
 "The default text value for the additional input of this option (in the "
 "quaternary language)."
@@ -1650,11 +1646,11 @@ msgstr ""
 "Valeur textuelle par défaut pour l'entrée supplémentaire de cette option "
 "(dans la langue quaternaire)."
 
-#: options/models.py:261 questions/models/question.py:142
+#: options/models.py:263 questions/models/question.py:142
 msgid "Default text value (quinary)"
 msgstr "Valeur du texte par défaut (quinaire)"
 
-#: options/models.py:262
+#: options/models.py:264
 msgid ""
 "The default text value for the additional input of this option (in the "
 "quinary language)."
@@ -1662,51 +1658,51 @@ msgstr ""
 "Valeur textuelle par défaut pour l'entrée supplémentaire de cette option "
 "(dans la  langage quinaire)."
 
-#: options/models.py:266
+#: options/models.py:268
 msgid "View text (primary)"
 msgstr "Voir le texte (primaire)"
 
-#: options/models.py:267
+#: options/models.py:269
 msgid "The view text for this option (in the primary language)."
 msgstr "Le texte d'affichage de cette option (dans la langue principale)."
 
-#: options/models.py:271
+#: options/models.py:273
 msgid "View text (secondary)"
 msgstr "Voir le texte (secondaire)"
 
-#: options/models.py:272
+#: options/models.py:274
 msgid "The view text for this option (in the secondary language)."
 msgstr "Le texte d'affichage de cette option (dans la langue secondaire)."
 
-#: options/models.py:276
+#: options/models.py:278
 msgid "View text (tertiary)"
 msgstr "Voir le texte (tertiaire)"
 
-#: options/models.py:277
+#: options/models.py:279
 msgid "The view text for this option (in the tertiary language)."
 msgstr "Le texte de la vue pour cette option (dans la langue tertiaire)."
 
-#: options/models.py:281
+#: options/models.py:283
 msgid "View text (quaternary)"
 msgstr "Voir le texte (quaternaire)"
 
-#: options/models.py:282
+#: options/models.py:284
 msgid "The view text for this option (in the quaternary language)."
 msgstr "Le texte de la vue pour cette option (dans la langue quaternaire)."
 
-#: options/models.py:286
+#: options/models.py:288
 msgid "View text (quinary)"
 msgstr "Voir le texte (quinaire)"
 
-#: options/models.py:287
+#: options/models.py:289
 msgid "The view text for this option (in the quinary language)."
 msgstr "Le texte d'affichage de cette option (en langage quinaire)."
 
-#: options/models.py:291 options/templates/options/export/option.html:17
+#: options/models.py:293 options/templates/options/export/option.html:17
 msgid "Additional input"
 msgstr "Entrée supplémentaire"
 
-#: options/models.py:292
+#: options/models.py:294
 msgid "Designates whether an additional input is possible for this option."
 msgstr "Désigne si une entrée supplémentaire est possible pour cette option."
 
@@ -1729,9 +1725,9 @@ msgstr "Texte par défaut"
 msgid "Overlays"
 msgstr "Superpositions"
 
-#: overlays/models.py:11 projects/forms.py:266
+#: overlays/models.py:11 projects/forms.py:275
 #: projects/models/continuation.py:18 projects/models/invite.py:23
-#: projects/models/membership.py:25 projects/models/project.py:32
+#: projects/models/membership.py:25 projects/models/project.py:34
 #: projects/templates/projects/project_detail_invites.html:14
 #: projects/templates/projects/project_detail_memberships.html:20
 msgid "User"
@@ -1741,7 +1737,7 @@ msgstr "Utilisateur"
 msgid "The user for this overlay."
 msgstr "L'utilisateur de cette superposition."
 
-#: overlays/models.py:16 projects/models/project.py:37
+#: overlays/models.py:16 projects/models/project.py:39
 msgid "Site"
 msgstr "Site"
 
@@ -1757,7 +1753,7 @@ msgstr "Nom de l'URL"
 msgid "The url_name for this overlay."
 msgstr "Le nom de l'url pour cette superposition."
 
-#: overlays/models.py:26 projects/forms.py:421
+#: overlays/models.py:26 projects/forms.py:430
 #: projects/templates/projects/project_answers.html:13
 #: projects/templates/projects/project_view.html:28
 msgid "Current"
@@ -1811,7 +1807,7 @@ msgstr "Groupes"
 msgid "all Groups"
 msgstr "tous les groupes"
 
-#: projects/apps.py:8 projects/models/project.py:79
+#: projects/apps.py:8 projects/models/project.py:81
 msgid "Projects"
 msgstr "Projets"
 
@@ -1827,28 +1823,28 @@ msgstr "Auteur"
 msgid "Guest"
 msgstr "Invité"
 
-#: projects/forms.py:176 projects/forms.py:194
+#: projects/forms.py:185 projects/forms.py:203
 msgid "Editing tasks is disabled."
 msgstr "La modification des tâches est désactivée."
 
-#: projects/forms.py:204 projects/forms.py:222
-#: projects/serializers/v1/__init__.py:104
+#: projects/forms.py:213 projects/forms.py:231
+#: projects/serializers/v1/__init__.py:111
 msgid "Editing views is disabled."
 msgstr "La modification des vues est désactivée."
 
-#: projects/forms.py:265
+#: projects/forms.py:274
 msgid "Username or e-mail"
 msgstr "Nom d'utilisateur ou e-mail"
 
-#: projects/forms.py:267
+#: projects/forms.py:276
 msgid "The username or e-mail of the new user."
 msgstr "Le nom d'utilisateur ou l'adresse électronique du nouvel utilisateur."
 
-#: projects/forms.py:279
+#: projects/forms.py:288
 msgid "Add member silently"
 msgstr "Ajouter un membre en silence"
 
-#: projects/forms.py:280
+#: projects/forms.py:289
 msgid ""
 "As site manager or admin, you can directly add users without notifying them "
 "via e-mail, when you check the following checkbox."
@@ -1857,11 +1853,11 @@ msgstr ""
 "directement des utilisateurs sans les avertir par courrier électronique, "
 "lorsque vous cochez la case suivante."
 
-#: projects/forms.py:295 projects/serializers/v1/__init__.py:207
+#: projects/forms.py:304 projects/serializers/v1/__init__.py:214
 msgid "The user is already a member of the project."
 msgstr "L'utilisateur est déjà membre du projet."
 
-#: projects/forms.py:307
+#: projects/forms.py:316
 msgid ""
 "A user with this username or e-mail was not found. Only registered users can "
 "be invited."
@@ -1869,57 +1865,57 @@ msgstr ""
 "Un utilisateur avec ce nom d'utilisateur ou ce courriel n'a pas été trouvé. "
 "Seuls les utilisateurs enregistrés peuvent être invités."
 
-#: projects/forms.py:312
+#: projects/forms.py:321
 msgid "Only existing users can be added silently."
 msgstr "Seuls les utilisateurs existants peuvent être ajoutés en silence."
 
-#: projects/forms.py:387 projects/forms.py:391
+#: projects/forms.py:396 projects/forms.py:400
 #, python-format
 msgid "Attach %s"
 msgstr "Joindre le %s"
 
-#: projects/forms.py:397
+#: projects/forms.py:406
 msgid "Subject"
 msgstr "Sujet"
 
-#: projects/forms.py:398
+#: projects/forms.py:407
 msgid "Message"
 msgstr "Message"
 
-#: projects/forms.py:405
+#: projects/forms.py:414
 msgid "Answers"
 msgstr "Afficher les réponses"
 
-#: projects/forms.py:406
+#: projects/forms.py:415
 msgid "Attach the output of \"View answers\"."
 msgstr "Joignez la sortie de \"Voir les réponses\"."
 
-#: projects/forms.py:409 projects/models/project.py:62
+#: projects/forms.py:418 projects/models/project.py:64
 #: projects/templates/projects/project_detail_views.html:11 views/apps.py:7
 #: views/models.py:137 views/templates/views/export/views.html:6
 msgid "Views"
 msgstr "Vues"
 
-#: projects/forms.py:413
+#: projects/forms.py:422
 msgid "Files"
 msgstr "Fichiers"
 
-#: projects/forms.py:420 projects/models/snapshot.py:33
+#: projects/forms.py:429 projects/models/snapshot.py:33
 #: projects/models/value.py:38
 #: projects/templates/projects/project_detail_snapshots.html:20
 #: projects/templates/projects/project_import.html:94
 msgid "Snapshot"
 msgstr "Snapshot"
 
-#: projects/forms.py:424
+#: projects/forms.py:433
 msgid "Format"
 msgstr "Format"
 
-#: projects/forms.py:439 projects/forms.py:444
+#: projects/forms.py:448 projects/forms.py:453
 msgid "Recipients"
 msgstr "Recipients"
 
-#: projects/forms.py:445
+#: projects/forms.py:454
 msgid "Enter recipients line by line"
 msgstr "Indiquer les destinataires ligne par ligne"
 
@@ -1951,7 +1947,7 @@ msgstr "Les fichiers de ce type ne peuvent pas être importés."
 
 #: projects/models/continuation.py:13 projects/models/integration.py:14
 #: projects/models/invite.py:18 projects/models/issue.py:26
-#: projects/models/membership.py:20 projects/models/project.py:78
+#: projects/models/membership.py:20 projects/models/project.py:80
 #: projects/models/snapshot.py:17 projects/models/value.py:32
 #: projects/models/visibility.py:15
 msgid "Project"
@@ -2158,24 +2154,24 @@ msgstr "Adhésion"
 msgid "Memberships"
 msgstr "Adhésion"
 
-#: projects/models/project.py:27
+#: projects/models/project.py:29
 msgid "Parent project"
 msgstr "Projet parental"
 
-#: projects/models/project.py:28
+#: projects/models/project.py:30
 msgid "The parent project of this project."
 msgstr "Le projet parent de ce projet."
 
-#: projects/models/project.py:33
+#: projects/models/project.py:35
 msgid "The list of users for this project."
 msgstr "La liste des utilisateurs de ce projet."
 
-#: projects/models/project.py:38
+#: projects/models/project.py:40
 msgid "The site this project belongs to (in a multi site setup)."
 msgstr ""
 "Le site auquel ce projet appartient (dans une configuration multi-sites)."
 
-#: projects/models/project.py:42 projects/models/snapshot.py:22
+#: projects/models/project.py:44 projects/models/snapshot.py:22
 #: projects/templates/projects/project_import.html:25
 #: projects/templates/projects/project_import.html:99
 #: tasks/templates/tasks/export/tasks.html:27
@@ -2183,11 +2179,11 @@ msgstr ""
 msgid "Title"
 msgstr "Titre"
 
-#: projects/models/project.py:43
+#: projects/models/project.py:45
 msgid "The title for this project."
 msgstr "Le titre de ce projet."
 
-#: projects/models/project.py:47 projects/models/snapshot.py:27
+#: projects/models/project.py:49 projects/models/snapshot.py:27
 #: projects/templates/projects/issue_send_integrations.html:8
 #: projects/templates/projects/project_detail_header.html:16
 #: projects/templates/projects/project_detail_integrations.html:18
@@ -2199,11 +2195,11 @@ msgstr "Le titre de ce projet."
 msgid "Description"
 msgstr "Description"
 
-#: projects/models/project.py:48
+#: projects/models/project.py:50
 msgid "A description for this project (optional)."
 msgstr "Une description de ce projet (facultatif)."
 
-#: projects/models/project.py:52
+#: projects/models/project.py:54
 #: projects/templates/projects/project_detail_header.html:24
 #: projects/templates/projects/project_import.html:31
 #: questions/models/catalog.py:142
@@ -2211,37 +2207,37 @@ msgstr "Une description de ce projet (facultatif)."
 msgid "Catalog"
 msgstr "Catalogue"
 
-#: projects/models/project.py:53
+#: projects/models/project.py:55
 msgid "The catalog which will be used for this project."
 msgstr "Le catalogue qui sera utilisé pour ce projet."
 
-#: projects/models/project.py:57
+#: projects/models/project.py:59
 #: projects/templates/projects/project_detail_issues.html:11 tasks/apps.py:7
 #: tasks/models.py:156 tasks/templates/tasks/export/tasks.html:6
 msgid "Tasks"
 msgstr "Tâches"
 
-#: projects/models/project.py:58
+#: projects/models/project.py:60
 msgid "The tasks that will be used for this project."
 msgstr "Les tâches qui seront utilisées pour ce projet."
 
-#: projects/models/project.py:63
+#: projects/models/project.py:65
 msgid "The views that will be used for this project."
 msgstr "Les vues qui seront utilisées pour ce projet."
 
-#: projects/models/project.py:67
+#: projects/models/project.py:69
 msgid "Progress total"
 msgstr "Progrès total"
 
-#: projects/models/project.py:68
+#: projects/models/project.py:70
 msgid "The total number of expected values for the progress bar."
 msgstr "Le nombre total de valeurs attendues pour la barre de progression."
 
-#: projects/models/project.py:72
+#: projects/models/project.py:74
 msgid "Progress count"
 msgstr "Compte d'avancement"
 
-#: projects/models/project.py:73
+#: projects/models/project.py:75
 msgid "The number of values for the progress bar."
 msgstr "Le nombre de valeurs pour la barre de progression."
 
@@ -2402,13 +2398,13 @@ msgstr "Visibilités"
 
 #: projects/models/visibility.py:50
 #, python-format
-msgid "This project can be accessed by all users on %s or in the group %s."
+msgid "This project can be accessed by all users on %s and in the group %s."
 msgid_plural ""
-"This project can be accessed by all users on %s or in the groups %s."
+"This project can be accessed by all users on %s and in the groups %s."
 msgstr[0] ""
-"Ce projet est accessible à tous les utilisateurs de %s ou du groupe %s."
+"Ce projet est accessible à tous les utilisateurs de %s et du groupe %s."
 msgstr[1] ""
-"Ce projet est accessible à tous les utilisateurs sur %s ou dans les groupes "
+"Ce projet est accessible à tous les utilisateurs sur %s et dans les groupes "
 "%s."
 
 #: projects/models/visibility.py:58
@@ -2459,27 +2455,27 @@ msgstr "L'URL du projet auquel les tâches doivent être envoyées."
 msgid "The secret for a webhook to close a task (optional)."
 msgstr "Le secret d'un webhook pour fermer une tâche (facultatif)."
 
-#: projects/serializers/v1/__init__.py:212
+#: projects/serializers/v1/__init__.py:219
 msgid "A user with that e-mail is already a member of the project."
 msgstr "Un utilisateur avec cet e-mail est déjà membre du projet."
 
-#: projects/serializers/v1/__init__.py:220
+#: projects/serializers/v1/__init__.py:227
 msgid "Either user or e-mail needs to be provided."
 msgstr "L'utilisateur ou l'e-mail doit être indiqué."
 
-#: projects/serializers/v1/__init__.py:222
+#: projects/serializers/v1/__init__.py:229
 msgid "User and e-mail are mutually exclusive."
 msgstr "L'utilisateur et le courrier électronique s'excluent mutuellement."
 
-#: projects/serializers/v1/page.py:117
+#: projects/serializers/v1/page.py:121
 msgid "entry"
 msgstr "entrée"
 
-#: projects/serializers/v1/page.py:156
+#: projects/serializers/v1/page.py:160
 msgid "block"
 msgstr "bloc"
 
-#: projects/serializers/v1/page.py:217
+#: projects/serializers/v1/page.py:223
 msgid "set"
 msgstr "set"
 
@@ -3114,18 +3110,17 @@ msgstr ""
 "exemple pour servir de modèle. Lorsqu'un projet est rendu visible, les "
 "utilisateurs peuvent y accéder comme s'ils avaient le rôle d'invité."
 
-#: projects/templates/projects/project_form_visibility.html:23
-msgid "Make visible"
-msgstr "Rendre visible"
+#: projects/templates/projects/project_form_visibility.html:26
+#, python-format
+msgid "Currently, the project is available to users on %(site_names)s."
+msgstr ""
+"Actuellement, le projet est disponible pour les utilisateurs sur les sites "
+"%(site_names)s."
 
-#: projects/templates/projects/project_form_visibility.html:25
-msgid "Update visibility"
-msgstr "Mise à jour de la visibilité"
-
-#: projects/templates/projects/project_form_visibility.html:25
-#: projects/templates/projects/project_form_visibility.html:27
-msgid "Remove visibility"
-msgstr "Supprimer la visibilité"
+#: projects/templates/projects/project_form_visibility.html:32
+msgid "Currently, the project is accessible to users on all sites."
+msgstr ""
+"Actuellement, le projet est accessible aux utilisateurs sur tous les sites."
 
 #: projects/templates/projects/project_import.html:18
 #: projects/templates/projects/project_import_form.html:9
@@ -3343,7 +3338,26 @@ msgstr "Désolé, mais cette invitation est pour l'utilisateur \"%s\"."
 msgid "Sorry, the invitation link is not valid."
 msgstr "Désolé, le lien d'invitation n'est pas valide."
 
-#: projects/viewsets.py:661
+#: projects/views/project_update.py:81 projects/views/project_update.py:86
+#: projects/views/project_update.py:91
+msgid "Update visibility"
+msgstr "Mise à jour de la visibilité"
+
+#: projects/views/project_update.py:82 projects/views/project_update.py:87
+#: projects/views/project_update.py:89 projects/views/project_update.py:92
+#: projects/views/project_update.py:94
+msgid "Remove visibility"
+msgstr "Supprimer la visibilité"
+
+#: projects/views/project_update.py:84
+msgid "Make visible for this site"
+msgstr "Rendre visible ce site"
+
+#: projects/views/project_update.py:97
+msgid "Make visible"
+msgstr "Rendre visible"
+
+#: projects/viewsets.py:652
 msgid "You reached the file quota for this project."
 msgstr ""
 "Le titre de ce projet.Vous avez atteint le quota de dossiers pour ce projet."
@@ -4496,6 +4510,18 @@ msgstr "fichier"
 #: views/templatetags/view_tags.py:210
 msgid "Set"
 msgstr "Ensemble"
+
+#~ msgid "Session Login"
+#~ msgstr "Connexion à la session"
+
+#~ msgid "You are logged in as: "
+#~ msgstr "Vous êtes connecté en tant que: "
+
+#~ msgid "Viewing as an anonymous user"
+#~ msgstr "Visualisation en tant qu'utilisateur anonyme"
+
+#~ msgid "Powered by "
+#~ msgstr "Propulsé par "
 
 #~ msgid "Autocomplete"
 #~ msgstr "Autocomplétion"
