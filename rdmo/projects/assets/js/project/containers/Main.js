@@ -6,21 +6,13 @@ import { connect } from 'react-redux'
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import * as projectActions from '../actions/projectActions'
 
-const Main = ({ config, settings, templates, user, project, configActions, projectActions }) => {
-  console.log(config, settings, templates, user, project)
-  console.log(configActions, projectActions)
+import TestForm from '../components/TestForm'
 
+// eslint-disable-next-line no-unused-vars
+const Main = ({ config, settings, templates, user, project, configActions, projectActions }) => {
   return project && (
     <div className="container">
-      <p>
-        <span>👍</span>
-      </p>
-
-      <p>
-        <button className="btn btn-primary">
-          This is a button!
-        </button>
-      </p>
+      <TestForm />
     </div>
   )
 }
