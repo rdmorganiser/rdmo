@@ -55,7 +55,9 @@ const MultiSelect = ({ config, element, field, options, addText, createText, onC
 
   return (
     <div className={className}>
-      <label className="control-label" htmlFor={id}>{label}</label>
+      <div className="mb-5">
+        <strong id={id}>{label}</strong>
+      </div>
 
       <div>
       {
@@ -74,20 +76,20 @@ const MultiSelect = ({ config, element, field, options, addText, createText, onC
 
               <ReactSelect classNamePrefix="react-select" className="react-select" styles={styles}
                            options={selectOptions} value={selectValue} isDisabled={element.read_only}
-                           onChange={option => handleChange(option, index)} />
+                           aria-labelledby={id} onChange={option => handleChange(option, index)} />
             </div>
           )
         })
       }
       </div>
 
-      <button className="btn btn-primary btn-xs" onClick={() => handleAdd()} disabled={element.read_only}>
+      <button type="button" className="btn btn-primary btn-xs" onClick={() => handleAdd()} disabled={element.read_only}>
         {addText}
       </button>
 
       {
         onCreate &&
-        <button className="btn btn-success btn-xs ml-10" onClick={onCreate}
+        <button type="button" className="btn btn-success btn-xs ml-10" onClick={onCreate}
                 disabled={element.read_only || isNil(element.id)}
                 title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
           {createText}

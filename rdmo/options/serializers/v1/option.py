@@ -21,7 +21,6 @@ class OptionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
     markdown_fields = ('text', 'help')
 
     model = serializers.SerializerMethodField()
-    uri_path = serializers.CharField(required=True)
 
     optionsets = serializers.PrimaryKeyRelatedField(queryset=OptionSet.objects.all(), required=False, many=True)
     conditions = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
@@ -44,6 +43,7 @@ class OptionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
             'locked',
             'text',
             'help',
+            'default_text',
             'view_text',
             'label',
             'additional_input',
@@ -58,11 +58,15 @@ class OptionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
         trans_fields = (
             'text',
             'help',
+            'default_text',
             'view_text'
         )
         parent_fields = (
             ('optionsets', 'optionset', 'option', 'optionset_options'),
         )
+        extra_kwargs = {
+            'uri_path': {'required': True}
+        }
         validators = (
             OptionUniqueURIValidator(),
             OptionLockedValidator()

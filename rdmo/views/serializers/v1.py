@@ -21,7 +21,6 @@ class ViewSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
     markdown_fields = ('title', 'help')
 
     model = serializers.SerializerMethodField()
-    uri_path = serializers.CharField(required=True)
 
     warning = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()
@@ -66,6 +65,9 @@ class ViewSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
             'title',
             'help'
         )
+        extra_kwargs = {
+            'uri_path': {'required': True}
+        }
         validators = (
             ViewUniqueURIValidator(),
             ViewLockedValidator()

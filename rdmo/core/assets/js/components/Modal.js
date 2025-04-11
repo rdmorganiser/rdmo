@@ -2,24 +2,30 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Modal as BootstrapModal } from 'react-bootstrap'
 
-const Modal = ({ bsSize, buttonLabel, buttonProps, title, show, onClose, onSave, children }) => {
+const Modal = ({ title, show, modalProps, submitLabel, submitProps, onClose, onSubmit, children, buttons }) => {
   return (
-    <BootstrapModal bsSize={bsSize} className="element-modal" onHide={onClose} show={show}>
+    <BootstrapModal className="element-modal" onHide={onClose} show={show} {...modalProps}>
       <BootstrapModal.Header closeButton>
         <h2 className="modal-title">{title}</h2>
       </BootstrapModal.Header>
-      <BootstrapModal.Body>
-        { children }
-      </BootstrapModal.Body>
+      {
+        children && (
+          <BootstrapModal.Body>
+            { children }
+          </BootstrapModal.Body>
+        )
+      }
       <BootstrapModal.Footer>
         <button type="button" className="btn btn-default" onClick={onClose}>
           {gettext('Close')}
         </button>
-        { onSave ?
-          <button type="button" className="btn btn-primary" onClick={onSave} {...buttonProps}>
-            {buttonLabel ?? gettext('Save')}
-          </button>
-          : null
+        {buttons}
+        {
+          onSubmit && (
+            <button type="button" className="btn btn-primary" onClick={onSubmit} {...submitProps}>
+              {submitLabel ?? gettext('Save')}
+            </button>
+          )
         }
       </BootstrapModal.Footer>
     </BootstrapModal>
@@ -27,14 +33,15 @@ const Modal = ({ bsSize, buttonLabel, buttonProps, title, show, onClose, onSave,
 }
 
 Modal.propTypes = {
-  bsSize: PropTypes.oneOf(['lg', 'large', 'sm', 'small']),
-  buttonLabel: PropTypes.string,
-  buttonProps: PropTypes.object,
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
-  onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func,
-  show: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
+  show: PropTypes.bool.isRequired,
+  modalProps: PropTypes.object,
+  submitLabel: PropTypes.string,
+  submitProps: PropTypes.object,
+  onClose: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func,
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  buttons: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
 }
 
 export default Modal

@@ -1,8 +1,8 @@
+from rdmo.core.constants import VALUE_TYPE_TEXT
 from rdmo.core.import_helpers import ElementImportHelper, ExtraFieldHelper, ThroughInstanceMapper
 
-from ..core.constants import VALUE_TYPE_TEXT
+from .constants import WIDGET_TYPE_TEXT
 from .models import Catalog, Page, Question, QuestionSet, Section
-from .utils import get_widget_type_or_default
 from .validators import (
     CatalogLockedValidator,
     CatalogUniqueURIValidator,
@@ -119,7 +119,7 @@ import_helper_question = ElementImportHelper(
         ExtraFieldHelper(field_name='is_collection'),
         ExtraFieldHelper(field_name='is_optional'),
         ExtraFieldHelper(field_name='default_external_id', value=''),
-        ExtraFieldHelper(field_name='widget_type', callback=get_widget_type_or_default),
+        ExtraFieldHelper(field_name='widget_type', value=WIDGET_TYPE_TEXT),
         ExtraFieldHelper(field_name='value_type', value=VALUE_TYPE_TEXT),
         ExtraFieldHelper(field_name='minimum'),
         ExtraFieldHelper(field_name='maximum'),

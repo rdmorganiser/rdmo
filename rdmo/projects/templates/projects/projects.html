@@ -4,9 +4,6 @@
 {% load i18n %}
 {% load core_tags %}
 
-{% block vendor %}
-{% endblock %}
-
 {% block css %}
     {% compress css %}
     <link rel="stylesheet" href="{% static 'overlays/css/overlays.scss' %}" type="text/x-scss" />
@@ -17,18 +14,14 @@
 {% endblock %}
 
 {% block js %}
-    <script src="{% static 'jquery/jquery-3.4.1.min.js' %}"></script>
-    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
-
-    <script src="{% url 'javascript-catalog' %}"></script>
-    <script src="{% static 'projects/js/projects.js' %}" defer></script>
-
-    <script type="text/javascript" src="{% static 'overlays/js/overlays.js' %}" ></script>
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'overlays/js/overlays.js' %}"></script>
     <script>
         $(document).ready(function() {
             setTimeout(function() {initOverlays('projects')}, 500);
         });
     </script>
+    <script src="{% static 'projects/js/projects.js' %}" defer></script>
 {% endblock %}
 
 {% block page %}

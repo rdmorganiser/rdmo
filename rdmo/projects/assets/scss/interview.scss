@@ -1,0 +1,469 @@
+@import 'rdmo/core/assets/scss/variables';
+
+// add default value for backwards compatibility
+$variant-background-color: #f5f5f5 !default;
+
+.interview-breadcrumb {
+    &.breadcrumb {
+        margin-top: 20px;
+        margin-bottom: 12px;
+
+        background-color: transparent;
+        border: 1px solid #ccc;
+    }
+}
+
+.interview-navigation {
+    h4 {
+        line-height: 20px;
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+    li > a,
+    li > span {
+        display: inline-block;
+        max-width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    ul {
+        margin-left: 0;
+    }
+    li ul li {
+        margin-left: 20px;
+    }
+    li.active {
+        margin-left: 0;
+    }
+    li.active a:before {
+        float: left;
+        width: 20px;
+        text-align: right;
+        content: '\2192\0000a0'; /* right-arrow followed by a space */
+    }
+}
+
+.interview-progress {
+    .progress {
+        margin-bottom: 10px;
+    }
+}
+
+.interview-progress-count {
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
+.interview-page {
+    h2 {
+        margin-top: 0;
+    }
+
+    .btn-add-set {
+        margin-bottom: 20px;
+    }
+
+    .interview-page-help {
+        margin-bottom: 10px;
+    }
+}
+
+.interview-page-tabs {
+    margin-bottom: 20px;
+
+    .interview-page-tabs-buttons {
+        float: right;
+
+        button {
+            padding: 0;
+            text-decoration: none;
+        }
+    }
+
+    .nav > li > a {
+        &.add-set,
+        &.add-set:hover {
+            color: $success-color;
+        }
+        &.add-set:hover {
+            color: white;
+            background-color: $success-color !important;
+        }
+        &.add-set:focus {
+            background-color: transparent;
+        }
+    }
+}
+
+.interview-block {
+    position: relative;
+
+    border: 1px solid rgb(204, 204, 204);
+    border-radius: 4px;
+
+    padding: 20px 20px 0 20px;
+    margin-bottom: 20px;
+
+    .interview-block-options {
+        position: absolute;
+        top: 6px;
+        right: 8px;
+        z-index: 5;
+
+        display: flex;
+        gap: 4px;
+
+        .btn-copy-set,
+        .btn-remove-set {
+            opacity: 0.8;
+            line-height: 20px;
+            font-size: 14px;
+
+            padding: 0;
+
+            &:hover {
+                opacity: 1;
+            }
+            &:focus {
+                outline: 0;
+            }
+        }
+    }
+}
+
+.interview-question {
+    margin-bottom: 20px;
+
+    p {
+        margin-bottom: 10px;
+    }
+
+    .interview-question-text {
+        margin-bottom: 10px;
+
+        .form-label {
+            display: inline;
+        }
+    }
+
+    .interview-question-help {
+        margin-bottom: 10px;
+    }
+}
+
+.interview-questionset {
+    .interview-questionset-label {
+        margin-bottom: 10px;
+    }
+
+    .interview-questionset-help {
+        margin-bottom: 10px;
+    }
+}
+
+.interview-widgets {
+    > :last-child {
+        margin-bottom: 0;
+    }
+}
+
+.interview-management {
+    &.panel {
+        background-color: $variant-background-color;
+    }
+}
+
+.interview-management-help {
+    float: right;
+    cursor: help;
+}
+
+.interview-widget {
+    margin-bottom: 10px;
+}
+
+.interview-input {
+    display: flex;
+    gap: 10px;
+
+    .buttons-wrapper {
+        position: relative;
+        flex-grow: 1;
+
+        .buttons {
+            position: absolute;
+            top: 0;
+            right: 13px;
+            z-index: 5;
+        }
+    }
+
+    .text-input {
+        input[type="text"] {
+            text-overflow: ellipsis;
+        }
+    }
+
+    &.select-input {
+        .buttons {
+            // in a select widget, additional space is reserved for the dropdown icon
+            position: absolute;
+            right: 62px;
+            margin-top: 2px;
+            margin-bottom: 2px;
+        }
+    }
+
+    &.textarea-input {
+        .buttons {
+            // in a textarea widget, the buttons are positioned at the bottom
+            top: auto;
+            height: 32px;
+            bottom: 0;
+        }
+    }
+
+    .buttons {
+        display: flex;
+        gap: 10px;
+
+        .btn.btn-link,
+        .success-indicator {
+            opacity: 0.8;
+            line-height: 20px;
+            font-size: 14px;
+            padding: 6px 0;
+        }
+
+        .btn.btn-link:hover {
+            opacity: 1;
+        }
+
+        .btn.btn-link:focus {
+            outline: 0;
+        }
+
+        .success-indicator {
+            padding-top: 7px;
+            opacity: 0;
+            transition: opacity 0.3s linear 2s;
+
+            &.show {
+                opacity: 1;
+                transition: opacity 0.5s ease-in-out;
+            }
+        }
+    }
+
+    .badge-default {
+        cursor: help;
+        color: #999;
+        border: 1px solid #999;
+        background-color: white;
+        margin: 7px 0 7px 0;
+    }
+
+    .unit {
+        padding: 6px 0;
+        height: 34px;
+
+        cursor: help;
+
+        text-align: right;
+
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .radio,
+    .checkbox {
+        margin: 0 !important;
+
+        label {
+            margin-right: 10px;
+            margin-bottom: 5px;
+            padding-left: 25px;
+            line-height: 30px;
+        }
+        &:last-child label {
+            margin-bottom: 0;
+        }
+        input[type='checkbox'],
+        input[type='radio'] {
+            margin-top: 8px;
+            margin-left: -25px;
+        }
+        input[type='text'] {
+            display: inline-block;
+            width: 200px;
+        }
+    }
+    .radio-control.yesno {
+        label {
+            margin-bottom: 0;
+            line-height: 20px;
+        }
+        input[type='radio'] {
+            margin-top: 3px;
+        }
+        a.remove-link {
+            top: 2px;
+        }
+    }
+
+    .range-input {
+        height: 34px;  // same as form-control
+
+        input[type='range'] {
+            width: auto;
+            margin-bottom: 0;
+            accent-color: #777777;  // same as .badge
+        }
+    }
+
+    .radio-control,
+    .checkbox-control,
+    .file-control {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+
+        padding: 6px 12px;
+        margin: 0;
+    }
+
+    .radio-control,
+    .checkbox-control {
+        label {
+            width: 100%;
+        }
+        &.yesno label {
+            width: auto;
+        }
+    }
+
+    .file-control {
+        display: block;
+        width: 100%;
+        font-weight: normal;
+        padding-bottom: 12px;
+
+        input[type="file"] {
+            display: inline-block;
+            width: 100%;
+            outline: 0;
+        }
+
+        .dropzone {
+            border: 1px dashed #ccc;
+            border-radius: 4px;
+            padding: 20px;
+            margin-top: 6px;
+            cursor: copy;
+
+            &.disabled {
+                cursor: not-allowed;
+            }
+        }
+    }
+
+    .date-control {
+        width: 100%;
+    }
+
+    .option-text,
+    .option-help {
+        p {
+            display: inline;
+        }
+    }
+
+    .react-datepicker {
+        font-size: 12px;
+        border-radius: 4px;
+    }
+
+    .react-datepicker-wrapper {
+        display: block;
+    }
+
+    .react-datepicker__current-month {
+        font-size: 12px;
+    }
+
+    .react-datepicker__day-names {
+        margin-top: 4px;
+    }
+
+    .react-datepicker__day-name,
+    .react-datepicker__day {
+        margin: 4px !important;
+    }
+
+    .checkbox-control,
+    .react-select {
+        flex-grow: 1;
+    }
+
+    .default {
+        color: #999;
+
+        .badge,
+        input[type='radio'],
+        input[type='range'] {
+            opacity: 0.5;
+        }
+    }
+
+    .radio,
+    .checkbox,
+    .interview-select-option {
+        div,
+        p {
+            display: inline;
+        }
+    }
+
+    .react-select {
+        max-width: 100%;
+
+        .react-select__menu {
+            z-index: 10;
+        }
+    }
+}
+
+.badge-optional {
+    float: right;
+    margin-top: 1px;
+    margin-left: 5px;
+    cursor: help;
+    background-color: #efefef;
+    color: #777;
+}
+
+.btn.btn-contact {
+    opacity: 0.8;
+    line-height: 16px;
+
+    padding: 0;
+    border: none;
+    border-radius: 0;
+
+    margin-left: 10px;
+    margin-top: -3px;
+
+    &:hover {
+        opacity: 1;
+    }
+    &:focus {
+        outline: 0;
+    }
+}
+
+.badge-read-only {
+    cursor: help;
+    background-color: black;
+}

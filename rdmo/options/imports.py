@@ -29,7 +29,7 @@ import_helper_optionset = ElementImportHelper(
 import_helper_option = ElementImportHelper(
     model=Option,
     validators=(OptionLockedValidator, OptionUniqueURIValidator),
-    lang_fields=('text', 'help', 'view_text'),
+    lang_fields=('text', 'help', 'view_text', 'default_text'),
     extra_fields=(
         ExtraFieldHelper(field_name='additional_input', value=Option.ADDITIONAL_INPUT_NONE),
         ),

@@ -2,8 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
 
+import { siteId } from 'rdmo/core/assets/js/utils/meta'
+
 import { filterElement } from '../../utils/filter'
-import { buildPath } from '../../utils/location'
+import { buildApiPath, buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AvailableLink, LockedLink, ExportLink, CodeLink, ToggleCurrentSiteLink } from '../common/Links'
@@ -13,11 +15,11 @@ const Task = ({ config, task, elementActions, filter=false, filterSites=false, f
 
   const showElement = filterElement(config, filter, filterSites, filterEditors, task)
 
-  const editUrl = buildPath(config.baseUrl, 'tasks', task.id)
-  const copyUrl = buildPath(config.baseUrl, 'tasks', task.id, 'copy')
-  const exportUrl = buildPath(config.apiUrl, 'tasks', 'tasks', task.id, 'export')
+  const editUrl = buildPath('tasks', task.id)
+  const copyUrl = buildPath('tasks', task.id, 'copy')
+  const exportUrl = buildApiPath('tasks', 'tasks', task.id, 'export')
 
-  const getConditionUrl = (index) => buildPath(config.apiUrl, 'conditions', 'conditions', task.conditions[index])
+  const getConditionUrl = (index) => buildPath('conditions', task.conditions[index])
 
   const fetchEdit = () => elementActions.fetchElement('tasks', task.id)
   const fetchCopy = () => elementActions.fetchElement('tasks', task.id, 'copy')
@@ -38,7 +40,7 @@ const Task = ({ config, task, elementActions, filter=false, filterSites=false, f
                                                : gettext('Make task available')}
                          available={task.available} locked={task.locked} onClick={toggleAvailable}
                          disabled={task.read_only} />
-          <ToggleCurrentSiteLink hasCurrentSite={config.settings.multisite ? task.sites.includes(config.currentSite.id) : true}
+          <ToggleCurrentSiteLink hasCurrentSite={config.settings.multisite ? task.sites.includes(siteId) : true}
                          onClick={toggleCurrentSite}
                          show={config.settings.multisite}/>
           <LockedLink title={task.locked ? gettext('Unlock task') : gettext('Lock task')}

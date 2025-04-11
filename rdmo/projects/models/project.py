@@ -1,6 +1,7 @@
+from typing import Optional
+
 from django.conf import settings
 from django.contrib.sites.models import Site
-from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
@@ -88,43 +89,52 @@ class Project(MPTTModel, Model):
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.pk})
 
-    def clean(self):
+    def save(self, *args, **kwargs):
+        # ensure that the project hierarchy is not disturbed
         if self.id and self.parent in self.get_descendants(include_self=True):
-            raise ValidationError({
-                'parent': [_('A project may not be moved to be a child of itself or one of its descendants.')]
-            })
+            raise RuntimeError('A project may not be moved to be a child of itself or one of its descendants.')
+
+        super().save(*args, **kwargs)
 
     @property
-    def catalog_uri(self):
+    def catalog_uri(self) -> Optional[str]:
         if self.catalog is not None:
             return self.catalog.uri
 
     @cached_property
-    def member(self):
+    def member(self) -> list:
         return self.user.all()
 
     @cached_property
-    def owners_str(self):
+    def owners_str(self) -> str:
         return ', '.join(['' if x is None else str(x) for x in self.user.filter(membership__role='owner')])
 
     @property
-    def owners(self):
+    def owners(self) -> list:
         return self.get_members('owner')
 
     @property
-    def managers(self):
+    def managers(self) -> list:
         return self.get_members('manager')
 
     @property
-    def authors(self):
+    def authors(self) -> list:
         return self.get_members('author')
 
     @property
-    def guests(self):
+    def guests(self) -> list:
         return self.get_members('guest')
 
+    @cached_property
+    def groups_str(self) -> str:
+        return ', '.join(str(i) for i in self.groups if i is not None)
+
     @property
-    def file_size(self):
+    def groups(self) -> list:
+        return {group for user in self.get_members('owner') for group in user.groups.all()}
+
+    @property
+    def file_size(self) -> int:
         queryset = self.values.filter(snapshot=None).exclude(models.Q(file='') | models.Q(file=None))
         return sum([value.file.size for value in queryset])
 

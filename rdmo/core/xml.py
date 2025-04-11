@@ -2,7 +2,7 @@ import logging
 import re
 from collections import OrderedDict
 from pathlib import Path
-from typing import Dict, Optional, Tuple
+from typing import Optional
 from xml.etree.ElementTree import Element as xmlElement
 
 from django.utils.translation import gettext_lazy as _
@@ -10,7 +10,7 @@ from django.utils.translation import gettext_lazy as _
 import defusedxml.ElementTree as ET
 from packaging.version import Version, parse
 
-from rdmo import __version__ as RDMO_INSTANCE_VERSION
+from rdmo import __version__
 from rdmo.core.constants import RDMO_MODELS
 from rdmo.core.imports import ImportElementFields
 
@@ -20,14 +20,14 @@ LEGACY_RDMO_XML_VERSION = '1.11.0'
 ELEMENTS_USING_KEY = {RDMO_MODELS['attribute']}
 
 
-def resolve_file(file_name: str) -> Tuple[Optional[Path], Optional[str]]:
+def resolve_file(file_name: str) -> tuple[Optional[Path], Optional[str]]:
     file = Path(file_name).resolve()
     if file.exists():
         return file, None
     return  None, _('This file does not exists.')
 
 
-def read_xml(file: Path) -> Tuple[Optional[xmlElement], Optional[str]]:
+def read_xml(file: Path) -> tuple[Optional[xmlElement], Optional[str]]:
     # step 2: parse xml and get the root
     try:
         root = ET.parse(file).getroot()
@@ -36,7 +36,7 @@ def read_xml(file: Path) -> Tuple[Optional[xmlElement], Optional[str]]:
         return None, _('XML Parsing Error') + f': {e!s}'
 
 
-def validate_root(root: Optional[xmlElement]) -> Tuple[bool, Optional[str]]:
+def validate_root(root: Optional[xmlElement]) -> tuple[bool, Optional[str]]:
     if root is None:
         return False, _('The content of the XML file does not consist of well-formed data or markup.')
     if root.tag != 'rdmo':
@@ -44,20 +44,42 @@ def validate_root(root: Optional[xmlElement]) -> Tuple[bool, Optional[str]]:
     return True, None
 
 
-def validate_and_get_xml_version_from_root(root: xmlElement) -> Tuple[Optional[Version], list]:
-    unparsed_root_version = root.attrib.get('version') or LEGACY_RDMO_XML_VERSION
-    root_version, rdmo_version = parse(unparsed_root_version), parse(RDMO_INSTANCE_VERSION)
-    if root_version > rdmo_version:
-        logger.info('Import failed version validation (%s > %s)', root_version, rdmo_version)
-        errors = [
-            _('This RDMO XML file does not have a valid version number.'),
-            f'XML Version ({root_version}) is greater than RDMO instance version {rdmo_version}'
-        ]
+def validate_and_get_xml_version_from_root(root: xmlElement) -> tuple[Optional[Version], list]:
+    rdmo_version = parse(__version__)
+
+    # Extract version attributes from the XML root
+    unparsed_required_version = root.attrib.get('required')  # New required version field
+    unparsed_root_version = root.attrib.get('version') or LEGACY_RDMO_XML_VERSION  # Fallback to legacy default
+
+    # Validate the 'required' attribute if it exists
+    if unparsed_required_version:
+        try:
+            required_version = parse(unparsed_required_version)
+        except ValueError:
+            logger.info('Import failed: Invalid "required" format in XML (%s)', unparsed_required_version)
+            errors = [_('The "required" attribute in this RDMO XML file is not a valid version.')]
+            return None, errors
+
+        if required_version > rdmo_version:
+            logger.info('Import failed: Required version (%s) > RDMO instance version (%s)', required_version,
+                        rdmo_version)
+            errors = [
+                _('This RDMO XML file requires a newer RDMO version to be imported.'),
+                f'Required version: {required_version}, Current version: {rdmo_version}.'
+            ]
+            return None, errors
+
+    # Fallback to validate the legacy 'version' field
+    try:
+        xml_version = parse(unparsed_root_version)
+        return xml_version, []
+    except ValueError:
+        logger.info('Import failed: Invalid "version" format in XML (%s)', unparsed_root_version)
+        errors = [_('The "version" attribute in this RDMO XML file is not a valid version.')]
         return None, errors
-    return root_version, []
 
 
-def validate_legacy_elements(elements: dict, root_version: Version) -> list:
+def validate_legacy_elements(elements: dict, root_version: Version) -> list[str]:
 
     try:
         validate_pre_conversion_for_missing_key_in_legacy_elements(elements, root_version)
@@ -71,7 +93,7 @@ def validate_legacy_elements(elements: dict, root_version: Version) -> list:
         return errors
 
 
-def parse_elements(root: xmlElement) -> Tuple[Dict, Optional[str]]:
+def parse_elements(root: xmlElement) -> tuple[dict, Optional[str]]:
     # step 3: create element dicts from xml
     try:
         elements = flat_xml_to_elements(root)
@@ -81,7 +103,7 @@ def parse_elements(root: xmlElement) -> Tuple[Dict, Optional[str]]:
         return {}, _('This is not a valid RDMO XML file.')
 
 
-def parse_xml_to_elements(xml_file=None) -> Tuple[OrderedDict, list]:
+def parse_xml_to_elements(xml_file=None) -> tuple[OrderedDict, list]:
 
     errors = []
 
@@ -117,13 +139,13 @@ def parse_xml_to_elements(xml_file=None) -> Tuple[OrderedDict, list]:
         return OrderedDict(), errors
 
     # step 3.1.1: validate the legacy elements
-    legacy_errors = validate_legacy_elements(elements, parse(root.attrib.get('version', LEGACY_RDMO_XML_VERSION)))
+    legacy_errors = validate_legacy_elements(elements, root_version)
     if legacy_errors:
         errors.extend(legacy_errors)
         return OrderedDict(), errors
 
     # step 4: convert elements from previous versions
-    elements = convert_elements(elements, parse(root.attrib.get('version', LEGACY_RDMO_XML_VERSION)))
+    elements = convert_elements(elements, root_version)
 
     # step 5: order the elements and return
     # ordering of elements is done in the import_elements function
@@ -232,15 +254,15 @@ def strip_ns(tag, ns_map):
 
 
 def convert_elements(elements, version: Version):
-    if not isinstance(version, Version):
-        raise TypeError('Version should be of parsed version type.')
-
     if version < parse('2.0.0'):
         validate_pre_conversion_for_missing_key_in_legacy_elements(elements, version)
         elements = convert_legacy_elements(elements)
 
     if version < parse('2.1.0'):
         elements = convert_additional_input(elements)
+
+    if version < parse('2.3.0'):
+        elements = convert_autocomplete(elements)
 
     return elements
 
@@ -257,7 +279,7 @@ def validate_pre_conversion_for_missing_key_in_legacy_elements(elements, version
             raise ValueError(f"Missing legacy elements, elements containing 'key' were expected for this XML with version {version} and elements {models_in_elements}.")   # noqa: E501
 
 
-def update_related_legacy_elements(elements: Dict,
+def update_related_legacy_elements(elements: dict,
                                    target_uri: str, source_model: str,
                                    legacy_element_field: str, element_field: str):
     # search for the related elements that use the uri
@@ -383,6 +405,17 @@ def convert_additional_input(elements):
                 element['additional_input'] = 'text'
             else:
                 element['additional_input'] = ''
+
+    return elements
+
+
+def convert_autocomplete(elements):
+    for uri, element in elements.items():
+        if element['model'] == 'questions.question':
+            if element['widget_type'] == 'autocomplete':
+                element['widget_type'] = 'select'
+            elif element['widget_type'] == 'freeautocomplete':
+                element['widget_type'] = 'select_creatable'
 
     return elements
 

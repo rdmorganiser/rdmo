@@ -150,24 +150,24 @@ class Catalog(Model, TranslationMixin):
         super().save(*args, **kwargs)
 
     @property
-    def title(self):
+    def title(self) -> str:
         return self.trans('title')
 
     @property
-    def help(self):
+    def help(self) -> str:
         return self.trans('help')
 
     @cached_property
-    def is_locked(self):
+    def is_locked(self) -> bool:
         return self.locked
 
     @cached_property
-    def elements(self):
+    def elements(self) -> list:
         # order "in python" to not destroy prefetch
         return [element.section for element in sorted(self.catalog_sections.all(), key=lambda e: e.order)]
 
     @cached_property
-    def descendants(self):
+    def descendants(self) -> list:
         descendants = []
         for element in self.elements:
             descendants += [element, *element.descendants]
@@ -221,6 +221,24 @@ class Catalog(Model, TranslationMixin):
             index = self.pages.index(page)
             return None if index == len(self.pages) - 1 else self.pages[index + 1]
         except (ValueError, IndexError):
+            return None
+
+    def get_page(self, page_id):
+        try:
+            return next(page for page in self.pages if page.id == int(page_id))
+        except (StopIteration, ValueError):
+            return None
+
+    def get_questionset(self, questionset_id):
+        try:
+            return next(questionset for questionset in self.questionsets if questionset.id == int(questionset_id))
+        except (StopIteration, ValueError):
+            return None
+
+    def get_question(self, question_id):
+        try:
+            return next(question for question in self.questions if question.id == int(question_id))
+        except (StopIteration, ValueError):
             return None
 
     @classmethod

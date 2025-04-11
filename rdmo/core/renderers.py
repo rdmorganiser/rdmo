@@ -1,6 +1,7 @@
 import re
 from io import StringIO
 
+from django.conf import settings
 from django.utils.encoding import smart_str
 from django.utils.timezone import get_current_timezone, now
 from django.utils.xmlutils import SimplerXMLGenerator
@@ -50,6 +51,10 @@ class BaseXMLRenderer(BaseRenderer):
     @property
     def version(self):
         return __version__
+
+    @property
+    def required(self):
+        return settings.EXPORT_MIN_REQUIRED_VERSION
 
     @property
     def created(self):

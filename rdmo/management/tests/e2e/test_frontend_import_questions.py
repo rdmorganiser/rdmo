@@ -4,7 +4,6 @@ import pytest
 from playwright.sync_api import expect
 
 from rdmo.management.tests.helpers_import_elements import IMPORT_ELEMENT_PANELS_LOCATOR_SHOWN
-from rdmo.management.tests.helpers_models import delete_all_objects
 from rdmo.questions.models import Catalog, Question, Section
 from rdmo.questions.models import Page as PageModel
 from rdmo.questions.models.questionset import QuestionSet
@@ -12,13 +11,13 @@ from rdmo.questions.models.questionset import QuestionSet
 pytestmark = pytest.mark.e2e
 
 
-def test_import_catalogs_in_management(page) -> None:
+def test_import_catalogs_in_management(db, page, delete_all_objects) -> None:
     """Test that the catalogs.xml can be imported correctly."""
-
-    delete_all_objects([Catalog, Section, PageModel, QuestionSet, Question])
 
     expect(page.get_by_role("heading", name="Management")).to_be_visible()
     expect(page.locator("strong").filter(has_text="Catalogs")).to_be_visible()
+    # all Catalog related objects are deleted
+    delete_all_objects(Catalog, Section, PageModel, QuestionSet, Question)
     # choose the file to be imported
     page.locator('input[name="uploaded_file"]').set_input_files("./testing/xml/elements/catalogs.xml")
     # click the import form submit button, this will take some time
@@ -37,11 +36,11 @@ def test_import_catalogs_in_management(page) -> None:
     expect(rows_displayed_in_ui_show).to_have_count(148)
     page.get_by_role("link", name="Hide all").click()
     expect(rows_displayed_in_ui_show).to_have_count(0)
-    page.screenshot(path="screenshots/management-import-catalogs-pre.png", full_page=True)
+    page.screenshot(path="screenshots/management/import-catalogs-pre.png", full_page=True)
     # click the import button to start saving the instances to the db
     page.get_by_role("button", name="Import 148 elements").click()
-    expect(page.get_by_role("heading", name="Import successful")).to_be_visible()
-    page.screenshot(path="screenshots/management-import-catalogs-post.png", full_page=True)
+    expect(page.get_by_role("heading", name="Import successful")).to_be_visible(timeout=20_000)
+    page.screenshot(path="screenshots/management/import-catalogs-post.png", full_page=True)
     page.get_by_text("Created:").click()
     # go back to management page
     page.get_by_role("button", name="Back").click()

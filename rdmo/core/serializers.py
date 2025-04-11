@@ -2,6 +2,7 @@ import logging
 
 from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
+from django.core.validators import MaxLengthValidator
 from django.db.models import Max
 
 from rest_framework import serializers
@@ -23,10 +24,10 @@ class ChoicesSerializer(serializers.Serializer):
     id = serializers.SerializerMethodField()
     text = serializers.SerializerMethodField()
 
-    def get_id(self, obj):
+    def get_id(self, obj) -> str:
         return obj[0]
 
-    def get_text(self, obj):
+    def get_text(self, obj) -> str:
         return obj[1]
 
 
@@ -58,11 +59,17 @@ class TranslationSerializerMixin:
                 field_name = f'{field}_{lang_field}'
                 model_field = meta.model._meta.get_field(field_name)
 
+                validators = []
+                if hasattr(model_field, 'max_length') and model_field.max_length is not None:
+                    validators.append(MaxLengthValidator(model_field.max_length))
+
                 self.fields[f'{field}_{lang_code}'] = serializers.CharField(
                     source=field_name,
                     required=not model_field.blank,
                     allow_null=model_field.null,
-                    allow_blank=model_field.blank)
+                    allow_blank=model_field.blank,
+                    validators=validators
+                )
 
 
 class ThroughModelSerializerMixin:
@@ -179,15 +186,17 @@ class ThroughModelSerializerMixin:
 
 class ElementModelSerializerMixin(serializers.ModelSerializer):
 
-    def get_model(self, obj):
+    def get_model(self, obj) -> str:
         # return the model name in the form "domain.attribute"
         return str(self.Meta.model._meta)
 
 
 class ElementWarningSerializerMixin(serializers.ModelSerializer):
 
-    def get_warning(self, obj):
-        return any(get_language_warning(obj, field_name) for field_name in self.Meta.warning_fields)
+    def get_warning(self, obj) -> str:
+        return {
+            'missing_languages': any(get_language_warning(obj, field_name) for field_name in self.Meta.warning_fields)
+        }
 
 
 class ReadOnlyObjectPermissionSerializerMixin:
@@ -238,7 +247,7 @@ class SiteSerializer(serializers.ModelSerializer):
             'current'
         )
 
-    def get_current(self, obj):
+    def get_current(self, obj) -> int:
         return obj == Site.objects.get_current()
 
 

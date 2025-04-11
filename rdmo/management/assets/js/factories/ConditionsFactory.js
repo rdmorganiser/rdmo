@@ -1,3 +1,5 @@
+import { siteId } from 'rdmo/core/assets/js/utils/meta'
+
 class ConditionsFactory {
 
   static createCondition(config, parent) {
@@ -10,7 +12,7 @@ class ConditionsFactory {
       questionsets: parent.questionset ? [parent.questionset.id] : [],
       questions: parent.question ? [parent.question.id] : [],
       tasks: parent.task ? [parent.task.id] : [],
-      editors: config.settings.multisite ? [config.currentSite.id] : [],
+      editors: config.settings.multisite ? [siteId] : [],
     }
   }
 

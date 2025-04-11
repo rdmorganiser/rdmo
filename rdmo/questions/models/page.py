@@ -200,36 +200,36 @@ class Page(Model, TranslationMixin):
         super().save(*args, **kwargs)
 
     @property
-    def title(self):
+    def title(self) -> str:
         return self.trans('title')
 
     @property
-    def short_title(self):
+    def short_title(self) -> str:
         return self.trans('short_title')
 
     @property
-    def help(self):
+    def help(self) -> str:
         return self.trans('help')
 
     @property
-    def verbose_name(self):
+    def verbose_name(self) -> str:
         return self.trans('verbose_name')
 
     @cached_property
-    def is_locked(self):
+    def is_locked(self) -> bool:
         return self.locked or any(section.is_locked for section in self.sections.all())
 
     @cached_property
-    def has_conditions(self):
+    def has_conditions(self) -> bool:
         return self.conditions.exists()
 
     @cached_property
-    def elements(self):
+    def elements(self) -> list:
         page_elements = list(self.page_questionsets.all()) + list(self.page_questions.all())
         return [page_element.element for page_element in sorted(page_elements, key=lambda e: e.order)]
 
     @cached_property
-    def descendants(self):
+    def descendants(self) -> list:
         descendants = []
         for element in self.elements:
             descendants += [element, *element.descendants]

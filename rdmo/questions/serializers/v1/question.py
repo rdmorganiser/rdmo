@@ -24,7 +24,6 @@ class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin
     markdown_fields = ('text', 'help')
 
     model = serializers.SerializerMethodField()
-    uri_path = serializers.CharField(required=True)
 
     pages = serializers.PrimaryKeyRelatedField(queryset=Page.objects.all(), required=False, many=True)
     questionsets = serializers.PrimaryKeyRelatedField(queryset=QuestionSet.objects.all(), required=False, many=True)
@@ -83,6 +82,9 @@ class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin
             ('pages', 'page', 'question', 'page_questions'),
             ('questionsets', 'questionset', 'question', 'questionset_questions')
         )
+        extra_kwargs = {
+            'uri_path': {'required': True}
+        }
         validators = (
             QuestionUniqueURIValidator(),
             QuestionLockedValidator()
@@ -99,10 +101,10 @@ class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin
 
         return super().to_internal_value(data)
 
-    def get_condition_uris(self, obj):
+    def get_condition_uris(self, obj) -> list:
         return [condition.uri for condition in obj.conditions.all()]
 
-    def get_optionset_uris(self, obj):
+    def get_optionset_uris(self, obj) -> list:
         return [optionset.uri for optionset in obj.optionsets.all()]
 
     def validate(self, data):

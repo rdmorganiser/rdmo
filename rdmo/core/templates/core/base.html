@@ -1,34 +1,29 @@
-{% load static compress core_tags %}<!DOCTYPE html>
-<html>
+{% load static compress core_tags i18n %}{% get_current_language as lang_code %}<!DOCTYPE html>
+<html lang="{{ lang_code }}">
 <head>
     {% include 'core/base_head.html' %}
 
-    {% block vendor %}
-    {% vendor 'jquery' %}
-    {% vendor 'bootstrap' %}
-    {% vendor 'font-awesome' %}
-    {% endblock %}
-
     {% block css %}
+    <link rel="stylesheet" href="{% static 'core/css/base.css' %}" />
+
     {% compress css %}
     <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/base.scss' %}" />
     <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/fonts.scss' %}" />
     <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/footer.scss' %}" />
-    <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/utils.scss' %}" />
     <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/style.scss' %}" />
     {% endcompress %}
+
     {% endblock %}
 
     {% block js %}
-    {% compress js %}
-    <script type="text/javascript" src="{% static 'core/js/utils.js' %}" ></script>
-    {% endcompress %}
+    <script src="{% url 'javascript-catalog' %}"></script>
+    <script src="{% static 'core/js/base.js' %}"></script>
     {% endblock %}
 
     {% block head %}{% endblock %}
 </head>
 
-<body {% block bodyattr %}{% endblock %}>
+<body>
 
 <!-- navigation -->
 {% include 'core/base_navigation.html' %}
@@ -46,8 +41,7 @@
 
 {% if not debug %}
 <!-- analytics -->
-    {% include 'core/base_analytics.html' %}
-
+{% include 'core/base_analytics.html' %}
 <!-- end analytics -->
 {% endif %}
 

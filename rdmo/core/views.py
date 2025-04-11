@@ -9,7 +9,7 @@ from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse
+from django.urls import NoReverseMatch, reverse
 from django.utils import translation
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -32,7 +32,7 @@ def home(request):
     else:
         if settings.LOGIN_FORM:
             if settings.ACCOUNT or settings.SOCIALACCOUNT:
-                from rdmo.accounts.adapter import LoginForm
+                from rdmo.accounts.account import LoginForm
                 return render(request, 'core/home.html', {
                     'form': LoginForm(),
                     'signup_url': reverse("account_signup")
@@ -47,6 +47,35 @@ def home(request):
 @login_required
 def about(request):
     return render(request, 'core/about.html')
+
+
+@login_required
+def api(request):
+    context = {}
+
+    for name in ['schema', 'swagger', 'redoc']:
+        try:
+            context[f'{name}_url'] = request.build_absolute_uri(reverse(f'v1-openapi:{name}'))
+        except NoReverseMatch:
+            context[f'{name}_url'] = None
+
+    context['module_urls'] = [
+        request.build_absolute_uri(reverse(f'v1-{name}:api-root'))
+            for name in [
+                'accounts',
+                'conditions',
+                'core',
+                'domain',
+                'management',
+                'overlays',
+                'projects',
+                'questions',
+                'tasks',
+                'views'
+            ]
+    ]
+
+    return render(request, 'core/api.html', context)
 
 
 def i18n_switcher(request, language):

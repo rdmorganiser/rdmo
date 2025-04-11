@@ -14,20 +14,23 @@ users = (
 )
 
 view_questionset_permission_map = {
-    'owner': [1, 2, 3, 4, 5],
-    'manager': [1, 3, 5],
-    'author': [1, 3, 5],
-    'guest': [1, 3, 5],
-    'api': [1, 2, 3, 4, 5],
-    'site': [1, 2, 3, 4, 5]
+    'owner': [1, 2, 3, 4, 5, 12],
+    'manager': [1, 3, 5, 12],
+    'author': [1, 3, 5, 12],
+    'guest': [1, 3, 5, 12],
+    'user': [12],
+    'api': [1, 2, 3, 4, 5, 12],
+    'site': [1, 2, 3, 4, 5, 12]
 }
 
 urlnames = {
     'list': 'v1-projects:project-page-list',
-    'detail': 'v1-projects:project-page-detail'
+    'detail': 'v1-projects:project-page-detail',
+    'continue': 'v1-projects:project-page-get-continue',
+
 }
 
-projects = [1, 2, 3, 4, 5]
+projects = [1, 2, 3, 4, 5, 12]
 pages = [1]
 
 
@@ -88,3 +91,70 @@ def test_detail_page_with_nested_questionsets(db, client):
     assert questionsets_ids == nested_questionsets_id
     element_ids = [i['id'] for qs in questionsets for i in qs['elements']]
     assert element_ids == nested_element_ids
+
+
+@pytest.mark.parametrize('direction', ['next', 'prev'])
+def test_detail_page_resolve_next_relevant_page(db, client, direction):
+    project_id = 1
+    username = 'owner'
+    start_page_id = 64
+    end_page_id = 69
+
+    client.login(username=username, password=username)
+
+    if direction == 'next':
+        next_page_id = start_page_id + 1
+        add_url = ''
+    else:  # direction == 'prev':
+        start_page_id, end_page_id = end_page_id, start_page_id
+        next_page_id = start_page_id - 1
+        add_url = '?back=true'
+
+    # get the starting page
+    url = reverse(urlnames['detail'], args=[project_id, start_page_id])
+    response = client.get(f'{url}{add_url}')
+    assert response.status_code == 200
+    assert response.json().get(f'{direction}_page') == next_page_id
+
+    # get the following page, depending on direction
+    url_next = reverse(urlnames['detail'], args=[project_id, next_page_id])
+    response_next = client.get(f'{url_next}{add_url}')
+    assert response_next.status_code == 303
+
+    # this should show the redirect to the next relevant page
+    assert response_next.url.endswith(f'{end_page_id}/')
+
+    # a get on the redirected url as a double check
+    response_next_relevant = client.get(response_next.url)
+    assert response_next_relevant.status_code == 200
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
+def test_continue(db, client, username, password, project_id):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['continue'], args=[project_id])
+    response = client.get(url)
+
+    if project_id in view_questionset_permission_map.get(username, []):
+        assert response.status_code == 200
+        assert response.json().get('id') == 1  # == catalog_id
+        assert response.json().get('prev_page') is None  # at start
+    else:
+        assert response.status_code == 404
+
+
+def test_continue_catalog_without_pages(db, client):
+    from rdmo.questions.models.page import Page
+    project_id = 1
+    username = 'owner'
+    Page.objects.all().delete()
+
+    client.login(username=username, password=username)
+
+    url = reverse(urlnames['continue'], args=[project_id])
+    response = client.get(url)
+
+    if project_id in view_questionset_permission_map.get(username, []):
+        assert response.status_code == 404

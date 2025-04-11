@@ -21,7 +21,7 @@ const NestedPage = ({ config, page, configActions, elementActions }) => {
   const updateFilterString = (uri) => configActions.updateConfig('filter.page.search', uri)
   const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.page.uri_prefix', uriPrefix)
 
-  const toggleQuestionSets = () => configActions.toggleDescendants(page, 'questionsets')
+  const toggleQuestionSets = () => elementActions.toggleDescendants(page, 'questionsets')
 
   const updateDisplayPagesURI = (value) => configActions.updateConfig('display.uri.pages', value)
   const updateDisplayQuestionSetsURI = (value) => configActions.updateConfig('display.uri.questionsets', value)
@@ -45,7 +45,7 @@ const NestedPage = ({ config, page, configActions, elementActions }) => {
           <div className="row">
             <div className="col-sm-8">
               <FilterString value={get(config, 'filter.page.search', '')} onChange={updateFilterString}
-                            placeholder={gettext('Filter pages')} />
+                            label={gettext('Filter pages')} />
             </div>
             <div className="col-sm-4">
               <FilterUriPrefix value={get(config, 'filter.page.uri_prefix', '')} onChange={updateFilterUriPrefix}

@@ -16,7 +16,6 @@ from django.views.generic.edit import FormMixin
 from rdmo.core.plugins import get_plugin, get_plugins
 from rdmo.core.views import CSRFViewMixin, ObjectPermissionMixin, RedirectViewMixin, StoreIdViewMixin
 from rdmo.questions.models import Catalog
-from rdmo.questions.utils import get_widgets
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
@@ -64,14 +63,29 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
         context['catalogs'] = Catalog.objects.filter_current_site() \
                                              .filter_group(self.request.user) \
                                              .filter_availability(self.request.user)
-        context['tasks_available'] = Task.objects.filter_current_site() \
-                                                 .filter_catalog(self.object.catalog) \
-                                                 .filter_group(self.request.user) \
-                                                 .filter_availability(self.request.user).exists()
-        context['views_available'] = View.objects.filter_current_site() \
-                                                 .filter_catalog(self.object.catalog) \
-                                                 .filter_group(self.request.user) \
-                                                 .filter_availability(self.request.user).exists()
+
+        if settings.PROJECT_TASKS_SYNC:
+            # tasks should be synced, the user can not change them
+            context['tasks_available'] = project.tasks.exists()
+        else:
+            context['tasks_available'] = (
+                Task.objects
+                    .filter_for_project(project)
+                    .filter_availability(self.request.user)
+                    .exists()
+            )
+
+        if settings.PROJECT_VIEWS_SYNC:
+            # views should be synced, the user can not change them
+            context['views_available'] = project.views.exists()
+        else:
+            context['views_available'] = (
+                View.objects
+                    .filter_for_project(project)
+                    .filter_availability(self.request.user)
+                    .exists()
+            )
+
         ancestors_import = []
         for instance in ancestors.exclude(id=project.id):
             if self.request.user.has_perm('projects.view_project_object', instance):
@@ -87,7 +101,9 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
         context['snapshots'] = project.snapshots.all()
         context['invites'] = project.invites.all()
         context['membership'] = Membership.objects.filter(project=project, user=self.request.user).first()
-        context['upload_accept'] = get_upload_accept()
+        context['upload_accept'] = ','.join([
+            suffix for suffixes in get_upload_accept().values() for suffix in suffixes
+        ])
         return context
 
 
@@ -185,11 +201,11 @@ class ProjectExportView(ObjectPermissionMixin, DetailView):
         return self.get_export_plugin().submit()
 
 
-class ProjectQuestionsView(ObjectPermissionMixin, DetailView):
+class ProjectInterviewView(ObjectPermissionMixin, DetailView):
     model = Project
     queryset = Project.objects.all()
     permission_required = 'projects.view_project_object'
-    template_name = 'projects/project_questions.html'
+    template_name = 'projects/project_interview.html'
 
     @method_decorator(ensure_csrf_cookie)
     def get(self, request, *args, **kwargs):
@@ -198,9 +214,7 @@ class ProjectQuestionsView(ObjectPermissionMixin, DetailView):
         if self.object.catalog is None:
             return redirect('project_error', pk=self.object.pk)
         else:
-            context = self.get_context_data(object=self.object)
-            context['widgets'] = {widget.template_name for widget in get_widgets() if widget.template_name}
-            return self.render_to_response(context)
+            return super().get(request, *args, **kwargs)
 
 
 class ProjectErrorView(ObjectPermissionMixin, DetailView):

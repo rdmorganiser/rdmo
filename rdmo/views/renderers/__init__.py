@@ -9,6 +9,7 @@ class ViewRenderer(ViewsRendererMixin, BaseXMLRenderer):
         xml.startElement('rdmo', {
             'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
             'version': self.version,
+            'required': self.required,
             'created': self.created
         })
         for view in views:

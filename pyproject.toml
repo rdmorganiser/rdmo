@@ -17,7 +17,7 @@ license = {text = "Apache-2.0"}
 authors = [
   {name = "RDMO Arbeitsgemeinschaft", email = "rdmo-team@listserv.dfn.de"},
 ]
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Environment :: Web Environment",
@@ -27,11 +27,11 @@ classifiers = [
   "Operating System :: OS Independent",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
 ]
 dynamic = [
   "version",
@@ -43,20 +43,18 @@ dependencies = [
   "defusedcsv>=2.0,<3.0",
   "defusedxml>=0.7.1,<1.0",
   "django>=4.2,<5.0",
-  "django-cleanup>=8.0,<9.0",
+  "django-cleanup>=8.0,<10.0",
   "django-compressor>=4.4,<5.0",
   "django-extensions>=3.2,<4.0",
-  "django-filter>=23.2,<25.0",
+  "django-filter>=23.2,<26.0",
   "django-libsass>=0.9,<1.0",
   "django-mathfilters>=1.0,<2.0",
-  "django-mptt==0.14.0",  # pinned, 0.15 requires Python >= 3.9
-  "django-rest-swagger>=2.2,<3.0",
+  "django-mptt>=0.16.0,<1.0.0",
   "django-settings-export>=1.2,<2.0",
   "django-split-settings>=1.2,<2.0",
   "django-widget-tweaks>=1.5,<2.0",
   "djangorestframework>=3.15,<4.0",
   "drf-extensions>=0.7.1,<1.0",
-  "importlib_metadata<8.5.0",  # upstrem problem, see https://github.com/python/importlib_metadata/issues/506
   "iso8601>=2.0,<3.0",
   "markdown>=3.4,<4.0",
   "packaging>=23.2,<25.0",
@@ -67,27 +65,26 @@ dependencies = [
 
 [project.optional-dependencies]
 allauth = [
-  "django-allauth[socialaccount,openid]>=64.1.0,<64.2.0",
+  "django-allauth[socialaccount,openid]>=64.1.0,<65.8.0",
 ]
 ci = [
   "rdmo[dev]",
-  "pytest-github-actions-annotate-failures>=0.2.0,<0.3.0",
+  "pytest-github-actions-annotate-failures>=0.2.0,<0.4.0",
 ]
 dev = [
   "build>=1.0,<2.0",
   "pipdeptree>=2.13,<3.0",
-  "pre-commit>=3.4,<4.0",
-  "setuptools>=73,<74",
-  "twine>=5.1.1,<6.0",
-  "wheel>=0.42,<0.45",
-  "rdmo[allauth]",
-  "rdmo[pytest]",
+  "pre-commit>=3.4,<5.0",
+  "setuptools>=73,<79",
+  "twine>=5.1.1,<7.0",
+  "wheel>=0.42,<0.46",
+  "rdmo[allauth,openapi,pytest]",
 ]
 gunicorn = [
   "gunicorn>=23.0,<24.0",
 ]
 ldap = [
-  "django-auth-ldap>=4.5,<5.0",
+  "django-auth-ldap>=4.5,<6.0",
 ]
 mysql = [
   "mysqlclient>=2.2,<3.0",
@@ -97,12 +94,15 @@ postgres = [
 ]
 pytest = [
   "pytest>=8.0,<9.0",
-  "pytest-cov>=4.1,<6.0",
+  "pytest-cov>=4.1,<7.0",
   "pytest-django>=4.5,<5.0",
   "pytest-mock>=3.11,<4.0",
-  "pytest-playwright>=0.4.3,<0.6.0",
+  "pytest-playwright>=0.4.3,<0.8.0",
   "pytest-randomly>=3.15,<4.0",
   "pytest-xdist>=3.3,<4.0",
+]
+openapi = [
+  "drf-spectacular[sidecar]>=0.28.0,<1.0.0"
 ]
 
 [project.urls]
@@ -112,6 +112,9 @@ homepage = "https://rdmorganiser.github.io"
 issues = "https://github.com/rdmorganiser/rdmo/issues"
 repository = "https://github.com/rdmorganiser/rdmo.git"
 slack = "https://rdmo.slack.com"
+
+[project.scripts]
+rdmo-admin = "rdmo.__main__:main"
 
 [tool.setuptools.packages.find]
 include = ["rdmo*"]
@@ -206,14 +209,13 @@ filterwarnings = [
   "error::django.utils.deprecation.RemovedInDjango50Warning",
 
   # ignore warnings raised from within coreapi 2.3.3
-  "ignore:'cgi' is deprecated and slated for removal in Python 3.13:DeprecationWarning",
   "ignore:pkg_resources is deprecated as an API:DeprecationWarning",
 
   # ignore warning from rest_framework about coreapi
   "ignore:CoreAPI compatibility is deprecated and will be removed in DRF 3.17:rest_framework.RemovedInDRF317Warning",
 
-  # ignore warning from django_filters
-  "ignore:Built-in schema generation is deprecated. Use drf-spectacular.:django_filters.RemovedInDjangoFilter25Warning",
+  # ignore warnings raised by widget_tweaks.py
+  "ignore:'maxsplit' is passed as positional argument",
 
   # ignore warnings raised from within django itself
   # django/core/files/storage/__init__.py

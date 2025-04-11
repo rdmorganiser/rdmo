@@ -52,7 +52,9 @@ FIXTURE_DIRS = (
 
 INSTALLED_APPS += [
     'allauth',
-    'allauth.account'
+    'allauth.account',
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.dummy",
 ]
 
 MIDDLEWARE += [
@@ -63,13 +65,27 @@ ACCOUNT = True
 ACCOUNT_SIGNUP = True
 SOCIALACCOUNT = False
 
+INSTALLED_APPS += [
+    'drf_spectacular',
+    'drf_spectacular_sidecar'
+]
+
+REST_FRAMEWORK.update({
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.URLPathVersioning',
+    'DEFAULT_VERSION': 'v1',
+    'ALLOWED_VERSIONS': ('v1', ),
+})
+
 PROJECT_TABLE_PAGE_SIZE = 5
 
 PROJECT_SEND_ISSUE = True
 
 PROJECT_SEND_INVITE = True
 
-PROJECT_REMOVE_VIEWS = True
+PROJECT_SNAPSHOT_EXPORTS = [
+    ('xml', _('RDMO XML'), 'rdmo.projects.exports.RDMOXMLExport'),
+]
 
 EMAIL_RECIPIENTS_CHOICES = [
     ('email@example.com', 'Emmi Email <email@example.com>'),
@@ -91,3 +107,6 @@ PROJECT_IMPORTS += [
 PROJECT_IMPORTS_LIST = ['url']
 
 PROJECT_VALUES_VALIDATION = True
+
+PROJECT_CONTACT = True
+PROJECT_CONTACT_RECIPIENTS = ['email@example.com']

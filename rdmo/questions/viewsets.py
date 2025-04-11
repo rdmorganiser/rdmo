@@ -15,6 +15,7 @@ from rdmo.core.utils import is_truthy, render_to_format
 from rdmo.core.views import ChoicesViewSet
 from rdmo.management.viewsets import ElementToggleCurrentSiteViewSetMixin
 
+from .constants import WIDGET_TYPE_CHOICES
 from .models import Catalog, Page, Question, QuestionSet, Section
 from .renderers import CatalogRenderer, PageRenderer, QuestionRenderer, QuestionSetRenderer, SectionRenderer
 from .serializers.export import (
@@ -40,7 +41,6 @@ from .serializers.v1 import (
     SectionNestedSerializer,
     SectionSerializer,
 )
-from .utils import get_widget_type_choices
 
 
 class CatalogViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
@@ -77,7 +77,7 @@ class CatalogViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
         serializer = CatalogIndexSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?')
+    @action(detail=False, url_path='export(?:/(?P<export_format>[a-z]+))?')
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -91,7 +91,7 @@ class CatalogViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
                 }
             )
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?')
+    @action(detail=True, url_path='export(?:/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = CatalogExportSerializer(self.get_object())
@@ -151,7 +151,7 @@ class SectionViewSet(ModelViewSet):
         serializer = SectionIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?')
+    @action(detail=False, url_path='export(?:/(?P<export_format>[a-z]+))?')
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -165,7 +165,7 @@ class SectionViewSet(ModelViewSet):
                 }
             )
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?')
+    @action(detail=True, url_path='export(?:/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = SectionExportSerializer(self.get_object())
@@ -232,7 +232,7 @@ class PageViewSet(ModelViewSet):
         serializer = PageIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?')
+    @action(detail=False, url_path='export(?:/(?P<export_format>[a-z]+))?')
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -246,7 +246,7 @@ class PageViewSet(ModelViewSet):
                 }
             )
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?')
+    @action(detail=True, url_path='export(?:/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = PageExportSerializer(self.get_object())
@@ -313,7 +313,7 @@ class QuestionSetViewSet(ModelViewSet):
         serializer = QuestionSetIndexSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?')
+    @action(detail=False, url_path='export(?:/(?P<export_format>[a-z]+))?')
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -327,7 +327,7 @@ class QuestionSetViewSet(ModelViewSet):
                 }
             )
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?')
+    @action(detail=True, url_path='export(?:/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = QuestionSetExportSerializer(self.get_object())
@@ -391,7 +391,7 @@ class QuestionViewSet(ModelViewSet):
         serializer = QuestionIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?')
+    @action(detail=False, url_path='export(?:/(?P<export_format>[a-z]+))?')
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -405,7 +405,7 @@ class QuestionViewSet(ModelViewSet):
                 }
             )
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?')
+    @action(detail=True, url_path='export(?:/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = QuestionExportSerializer(self.get_object())
@@ -430,7 +430,7 @@ class QuestionViewSet(ModelViewSet):
 
 class WidgetTypeViewSet(ChoicesViewSet):
     permission_classes = (IsAuthenticated, )
-    queryset = get_widget_type_choices()
+    queryset = WIDGET_TYPE_CHOICES
 
 
 class ValueTypeViewSet(ChoicesViewSet):

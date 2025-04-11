@@ -37,6 +37,18 @@ def test_about_user(db, client, username, password):
     assert response.status_code == 200
 
 
+def test_api_anonymous(db, client):
+    response = client.get(reverse('api'))
+    assert response.status_code == 302
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_api_user(db, client, username, password):
+    client.login(username=username, password=password)
+    response = client.get(reverse('api'))
+    assert response.status_code == 200
+
+
 def test_i18n_switcher(db, client):
     # get the url to switch to german
     url = reverse('i18n_switcher', args=['de'])

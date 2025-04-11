@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie'
 import isUndefined from 'lodash/isUndefined'
 
-import baseUrl from '../utils/baseUrl'
+import { baseUrl } from '../utils/meta'
 
 function ApiError(statusText, status) {
   this.status = status
@@ -15,7 +15,15 @@ function ValidationError(errors) {
   this.errors = errors
 }
 
-function BadRequestError(errors) {
+function BadRequestError(statusText, status, errors) {
+  this.status = status
+  this.statusText = statusText
+  this.errors = errors
+}
+
+function NotFoundError(statusText, status, errors) {
+  this.status = status
+  this.statusText = statusText
   this.errors = errors
 }
 
@@ -29,14 +37,17 @@ class BaseApi {
         return response.json()
       } else if (response.status === 400) {
         return response.json().then(errors => {
-          throw new BadRequestError(errors)
+          throw new BadRequestError(response.statusText, response.status, errors)
+        })
+      } else if (response.status === 404) {
+        return response.json().then(errors => {
+          throw new NotFoundError(response.statusText, response.status, errors)
         })
       } else {
         throw new ApiError(response.statusText, response.status)
       }
     })
   }
-
 
   static post(url, data) {
     return fetch(baseUrl + url, {
@@ -46,6 +57,32 @@ class BaseApi {
         'X-CSRFToken': Cookies.get('csrftoken')
       },
       body: JSON.stringify(data)
+    }).catch(error => {
+      throw new ApiError(error.message)
+    }).then(response => {
+      if (response.ok) {
+        if (response.status == 204) {
+          return null
+        } else {
+          return response.json()
+        }
+      } else if (response.status == 400) {
+        return response.json().then(errors => {
+          throw new ValidationError(errors)
+        })
+      } else {
+        throw new ApiError(response.statusText, response.status)
+      }
+    })
+  }
+
+  static postFormData(url, formData) {
+    return fetch(baseUrl + url, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': Cookies.get('csrftoken')
+      },
+      body: formData
     }).catch(error => {
       throw new ApiError(error.message)
     }).then(response => {

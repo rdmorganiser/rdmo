@@ -3,22 +3,23 @@ import json
 import logging
 import os
 import re
+from datetime import datetime
 from pathlib import Path
-from tempfile import mkstemp
 from urllib.parse import urlparse
 
-from django.apps import apps
 from django.conf import settings
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
-from django.template.loader import get_template
+from django.template.loader import get_template, render_to_string
+from django.utils.dateparse import parse_date
 from django.utils.encoding import force_str
+from django.utils.formats import get_format
 from django.utils.translation import gettext_lazy as _
 
-import pypandoc
 from defusedcsv import csv
 from markdown import markdown
 
 from .constants import HUMAN2BYTES_MAPPER
+from .pandoc import get_pandoc_content, get_pandoc_content_disposition
 
 log = logging.getLogger(__name__)
 
@@ -58,30 +59,7 @@ def get_uri_prefix(obj):
     return r
 
 
-def get_pandoc_main_version():
-    try:
-        return int(pypandoc.get_pandoc_version().split('.')[0])
-    except OSError:
-        return None
-
-
-def pandoc_version_at_least(required_version):
-    required = [int(x) for x in required_version.split('.')]
-    installed = [int(x) for x in pypandoc.get_pandoc_version().split('.')]
-    for idx, digit in enumerate(installed):
-        try:
-            req = required[idx]
-        except IndexError:
-            return True
-        else:
-            if digit < req:
-                return False
-            if digit > req:
-                return True
-    return True
-
-
-def join_url(base, *args):
+def join_url(base, *args) -> str:
     url = base
     for arg in args:
         url = url.rstrip('/') + '/' + arg.lstrip('/')
@@ -131,12 +109,11 @@ def get_model_field_meta(model):
     return meta
 
 
-def get_languages():
+def get_languages() -> list[tuple]:
     languages = []
     for i in range(5):
         try:
-            language = settings.LANGUAGES[i][0], settings.LANGUAGES[i][1],\
-                'lang%i' % (i + 1)
+            language = (settings.LANGUAGES[i][0], settings.LANGUAGES[i][1], f"lang{i + 1}")
             languages.append(language)
         except IndexError:
             pass
@@ -157,52 +134,6 @@ def get_language_warning(obj, field):
     return False
 
 
-def set_export_reference_document(format, context):
-    # try to get the view uri from the context
-    try:
-        view = context['view']
-        view_uri = view.uri
-    except (AttributeError, KeyError, TypeError):
-        view_uri = None
-
-    refdocs = []
-
-    if format == 'odt':
-        # append view specific custom refdoc
-        try:
-            refdocs.append(settings.EXPORT_REFERENCE_ODT_VIEWS[view_uri])
-        except KeyError:
-            pass
-
-        # append custom refdoc
-        if settings.EXPORT_REFERENCE_ODT:
-            refdocs.append(settings.EXPORT_REFERENCE_ODT)
-
-    elif format == 'docx':
-        # append view specific custom refdoc
-        try:
-            refdocs.append(settings.EXPORT_REFERENCE_DOCX_VIEWS[view_uri])
-        except KeyError:
-            pass
-
-        # append custom refdoc
-        if settings.EXPORT_REFERENCE_DOCX:
-            refdocs.append(settings.EXPORT_REFERENCE_DOCX)
-
-    # append the default reference docs
-    refdocs.append(
-        os.path.join(
-            apps.get_app_config('rdmo').path,
-            'share', 'reference' + '.' + format
-        )
-    )
-
-    # return the first file in refdocs that actually exists
-    for refdoc in refdocs:
-        if os.path.isfile(refdoc):
-            return refdoc
-
-
 def render_to_format(request, export_format, title, template_src, context):
     if export_format not in dict(settings.EXPORT_FORMATS):
         return HttpResponseBadRequest(_('This format is not supported.'))
@@ -221,68 +152,11 @@ def render_to_format(request, export_format, title, template_src, context):
         response['Content-Disposition'] = f'filename="{title}.{export_format}"'
 
     else:
-        pandoc_args = settings.EXPORT_PANDOC_ARGS.get(export_format, [])
-        content_disposition = f'attachment; filename="{title}.{export_format}"'
+        pandoc_content = get_pandoc_content(html, metadata, export_format, context)
+        pandoc_content_disposition = get_pandoc_content_disposition(export_format, title)
 
-        if export_format == 'pdf':
-            # check pandoc version (the pdf arg changed to version 2)
-            if get_pandoc_main_version() == 1:
-                pandoc_args = [arg.replace(
-                    '--pdf-engine=xelatex', '--latex-engine=xelatex'
-                ) for arg in pandoc_args]
-
-            # display pdf in browser
-            content_disposition = f'filename="{title}.{export_format}"'
-
-        # use reference document for certain file formats
-        refdoc = set_export_reference_document(export_format, context)
-        if refdoc is not None and export_format in ['docx', 'odt']:
-            # check pandoc version (the args changed to version 2)
-            if get_pandoc_main_version() == 1:
-                pandoc_args.append(f'--reference-{export_format}={refdoc}')
-            else:
-                pandoc_args.append(f'--reference-doc={refdoc}')
-
-        # add the possible resource-path
-        if pandoc_version_at_least("2") is True:
-            pandoc_args.append(f'--resource-path={settings.STATIC_ROOT}')
-            if 'resource_path' in context:
-                resource_path = Path(settings.MEDIA_ROOT).joinpath(context['resource_path'])
-                pandoc_args.append(f'--resource-path={resource_path}')
-
-        # create a temporary file
-        (tmp_fd, tmp_filename) = mkstemp('.' + export_format)
-
-        # add metadata
-        tmp_metadata_file = None
-        if metadata is not None and pandoc_version_at_least("2.3") is True:
-            tmp_metadata_file = save_metadata(metadata)
-            pandoc_args.append('--metadata-file=' + tmp_metadata_file)
-
-        # convert the file using pandoc
-        log.info('Export %s document using args %s.', export_format, pandoc_args)
-        html = re.sub(
-            r'(<img.+src=["\'])' + settings.STATIC_URL + r'([\w\-\@?^=%&/~\+#]+)', r'\g<1>' +
-            str(Path(settings.STATIC_ROOT)) + r'/\g<2>', html
-        )
-        pypandoc.convert_text(
-            html, export_format, format='html',
-            outputfile=tmp_filename, extra_args=pandoc_args
-        )
-
-        # read the temporary file
-        file_handler = os.fdopen(tmp_fd, 'rb')
-        file_content = file_handler.read()
-        file_handler.close()
-
-        # delete temporary files
-        if tmp_metadata_file is not None:
-            os.remove(tmp_metadata_file)
-        os.remove(tmp_filename)
-
-        # create the response object
-        response = HttpResponse(file_content, content_type=f'application/{export_format}')
-        response['Content-Disposition'] = content_disposition.encode('utf-8')
+        response = HttpResponse(pandoc_content, content_type=f'application/{export_format}')
+        response['Content-Disposition'] = pandoc_content_disposition.encode('utf-8')
 
     return response
 
@@ -336,7 +210,7 @@ def import_class(string):
 
 
 def copy_model(instance, **kwargs):
-    # get values from instance which are not id, ForeignKeys orde M2M relations
+    # get values from instance which are not id, ForeignKeys or M2M relations
     data = {}
     for field in instance._meta.get_fields():
         if not (field.name == 'id' or field.is_relation):
@@ -392,6 +266,19 @@ def markdown2html(markdown_string):
         f'<span class="show-less" onclick="showLess(this)"> ({hide_string})</span></p>',
         html
     )
+
+    # textblocks (e.g. for help texts) can be injected into free text fields as small templates via Markdown
+    html = inject_textblocks(html)
+
+    return html
+
+
+def inject_textblocks(html):
+    # loop over all strings between curly brackets, e.g. {{ test }}
+    for template_code in re.findall(r'{{(.*?)}}', html):
+        template_name = settings.MARKDOWN_TEMPLATES.get(template_code.strip())
+        if template_name:
+            html = re.sub('{{' + template_code + '}}', render_to_string(template_name), html)
     return html
 
 
@@ -411,10 +298,32 @@ def parse_metadata(html):
     return metadata, html
 
 
-def save_metadata(metadata):
-    _, tmp_metadata_file = mkstemp(suffix='.json')
-    with open(tmp_metadata_file, 'w') as f:
-        json.dump(metadata, f)
-    f = open(tmp_metadata_file)
-    log.info('Save metadata file %s %s', tmp_metadata_file, str(metadata))
-    return tmp_metadata_file
+def remove_double_newlines(string):
+    return re.sub(r'[\n]{2,}', '\n\n', string)
+
+
+def parse_date_from_string(date: str) -> datetime.date:
+    if not isinstance(date, str):
+        raise TypeError("date must be provided as string")
+
+    try:
+        # First, try standard ISO format (YYYY-MM-DD)
+        parsed_date = parse_date(date)
+    except ValueError as exc:
+        raise exc from exc
+
+    # If ISO parsing fails, try localized DATE_INPUT_FORMATS formats
+    if parsed_date is None:
+        for fmt in get_format('DATE_INPUT_FORMATS'):
+            try:
+                parsed_date = datetime.strptime(date, fmt).date()
+                break  # Stop if parsing succeeds
+            except ValueError:
+                continue  # Try the next format
+
+    # If still not parsed, raise an error
+    if not parsed_date:
+        raise ValueError(
+            f"Invalid date format for: {date}. Valid formats {get_format('DATE_INPUT_FORMATS')}"
+        )
+    return parsed_date

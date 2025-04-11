@@ -4,7 +4,6 @@ import pytest
 from playwright.sync_api import Page, expect
 
 from rdmo.management.tests.helpers_import_elements import IMPORT_ELEMENT_PANELS_LOCATOR
-from rdmo.management.tests.helpers_models import delete_all_objects
 from rdmo.options.models import Option, OptionSet
 
 pytestmark = pytest.mark.e2e
@@ -17,12 +16,14 @@ OPTIONSETS_COUNTS_HEADER_INFOS = [f"{k.capitalize()}: {v}" for k, v in OPTIONSET
 IMPORT_FILTER_LABEL_TEXT = 'Show only new and changed elements (%s)'
 
 
-def test_import_and_update_optionsets_in_management(page: Page) -> None:
+def test_import_and_update_optionsets_in_management(db, page: Page, delete_all_objects) -> None:
     """Test that each content type is available through the navigation."""
-    delete_all_objects([OptionSet, Option])
 
     expect(page.get_by_role("heading", name="Management")).to_be_visible()
     expect(page.locator("strong").filter(has_text="Catalogs")).to_be_visible()
+    # delete the OptionSet, Option objects
+    delete_all_objects(OptionSet, Option)
+
     ## 1. Import fresh optionset.xml
     # choose the file to be imported
     page.locator('input[name="uploaded_file"]').set_input_files(import_xml)
@@ -44,7 +45,7 @@ def test_import_and_update_optionsets_in_management(page: Page) -> None:
     # click the import button to start saving the instances to the db
     page.get_by_role("button", name=f"Import {OPTIONSETS_COUNTS['total']} elements").click()
     expect(page.get_by_role("heading", name="Import successful")).to_be_visible()
-    page.screenshot(path="screenshots/management-import-optionsets-post-import.png", full_page=True)
+    page.screenshot(path="screenshots/management/import-optionsets-post-import.png", full_page=True)
     page.get_by_text("Created:").click()
     # go back to management page
     page.get_by_role("button", name="Back").click()
@@ -71,5 +72,5 @@ def test_import_and_update_optionsets_in_management(page: Page) -> None:
     expect(page.get_by_text("http://example.com/terms/options/one_two_three/three").nth(1)).to_be_visible()
     page.locator("body").press("Home")
     expect(page.get_by_role("link", name="Management", exact=True)).to_be_visible()
-    page.screenshot(path="screenshots/management-import-optionsets-1-changes.png", full_page=True)
+    page.screenshot(path="screenshots/management/import-optionsets-1-changes.png", full_page=True)
     ## TODO test for warnings, errors

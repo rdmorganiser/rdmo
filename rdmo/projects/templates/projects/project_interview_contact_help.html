@@ -1,0 +1,7 @@
+{% load i18n %}
+
+    <p>
+        {% blocktrans trimmed with site_name=request.site.name %}
+        If you have a question or feedback please get in touch with us, you can use this form to send an email to the {{ site_name }} support"
+        {% endblocktrans %}
+    </p>

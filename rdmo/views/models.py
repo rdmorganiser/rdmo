@@ -7,7 +7,8 @@ from django.utils.translation import gettext_lazy as _
 
 from rdmo import __version__
 from rdmo.core.models import TranslationMixin
-from rdmo.core.utils import get_pandoc_main_version, join_url
+from rdmo.core.pandoc import get_pandoc_version
+from rdmo.core.utils import join_url
 from rdmo.questions.models import Catalog
 
 from .managers import ViewManager
@@ -143,11 +144,11 @@ class View(models.Model, TranslationMixin):
         super().save(*args, **kwargs)
 
     @property
-    def title(self):
+    def title(self) -> str:
         return self.trans('title')
 
     @property
-    def help(self):
+    def help(self) -> str:
         return self.trans('help')
 
     @property
@@ -168,7 +169,7 @@ class View(models.Model, TranslationMixin):
                 'name': site.name,
                 'domain': site.domain
             },
-            'pandoc_version': get_pandoc_main_version()
+            'pandoc_version': get_pandoc_version().major
         }))
 
     @classmethod

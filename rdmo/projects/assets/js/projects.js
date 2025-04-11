@@ -2,12 +2,14 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 
-import configureStore from './store/configureStore'
+import configureStore from './projects/store/configureStore'
 
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 
-import Main from './containers/Main'
+import Pending from '../../../core/assets/js/containers/Pending'
+
+import Main from './projects/containers/Main'
 
 const store = configureStore()
 
@@ -17,4 +19,10 @@ createRoot(document.getElementById('main')).render(
       <Main />
     </Provider>
   </DndProvider>
+)
+
+createRoot(document.getElementById('pending')).render(
+  <Provider store={store}>
+    <Pending />
+  </Provider>
 )

@@ -10,6 +10,7 @@ from rdmo.views.models import View
 
 from ..forms import CatalogChoiceField
 from ..models import Project
+from .helpers import enable_project_tasks_sync, enable_project_views_sync  # noqa: F401
 
 users = (
     ('owner', 'owner'),
@@ -17,48 +18,53 @@ users = (
     ('author', 'author'),
     ('guest', 'guest'),
     ('user', 'user'),
-    ('site', 'site'),
-    ('anonymous', None),
     ('editor', 'editor'),
     ('reviewer', 'reviewer'),
     ('api', 'api'),
+    ('site', 'site'),
+    ('anonymous', None)
 )
 
 view_project_permission_map = {
-    'owner': [1, 2, 3, 4, 5, 10],
-    'manager': [1, 3, 5, 7],
-    'author': [1, 3, 5, 8],
-    'guest': [1, 3, 5, 9],
-    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    'owner': [1, 2, 3, 4, 5, 10, 12],
+    'manager': [1, 3, 5, 7, 12],
+    'author': [1, 3, 5, 8, 12],
+    'guest': [1, 3, 5, 9, 12],
+    'user': [12],
+    'editor': [12],
+    'reviewer': [12],
+    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 }
 
 change_project_permission_map = {
-    'owner': [1, 2, 3, 4, 5, 10],
+    'owner': [1, 2, 3, 4, 5, 10, 12],
     'manager': [1, 3, 5, 7],
-    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 }
 
 delete_project_permission_map = {
-    'owner': [1, 2, 3, 4, 5, 10],
-    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+    'owner': [1, 2, 3, 4, 5, 10, 12],
+    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
 }
 
 export_project_permission_map = {
-    'owner': [1, 2, 3, 4, 5, 10],
+    'owner': [1, 2, 3, 4, 5, 10, 12],
     'manager': [1, 3, 5, 7],
-    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
 }
 
-projects = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+projects = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
 export_formats = ('rtf', 'odt', 'docx', 'html', 'markdown', 'tex', 'pdf')
 
 site_id = 1
-parent_project_id = 1
+project_id = 1
+parent_id = 3
+parent_ancestors = [2, 3]
 catalog_id = 1
 
 
@@ -266,7 +272,7 @@ def test_project_create_parent_post(db, client, username, password):
         'title': 'A new project',
         'description': 'Some description',
         'catalog': catalog_id,
-        'parent': parent_project_id
+        'parent': project_id
     }
     response = client.post(url, data)
 
@@ -330,22 +336,28 @@ def test_project_update_post_parent(db, client, username, password, project_id):
     client.login(username=username, password=password)
     project = Project.objects.get(pk=project_id)
 
+    print(project, project_id, Project.objects.get(pk=parent_id))
+
     url = reverse('project_update', args=[project_id])
     data = {
         'title': project.title,
         'description': project.description,
         'catalog': project.catalog.pk,
-        'parent': parent_project_id
+        'parent': parent_id
     }
     response = client.post(url, data)
 
     if project_id in change_project_permission_map.get(username, []):
-        if project_id == parent_project_id:
+        if parent_id in view_project_permission_map.get(username, []):
+            if project_id in parent_ancestors:
+                assert response.status_code == 200
+                assert Project.objects.get(pk=project_id).parent == project.parent
+            else:
+                assert response.status_code == 302
+                assert Project.objects.get(pk=project_id).parent_id == parent_id
+        else:
             assert response.status_code == 200
             assert Project.objects.get(pk=project_id).parent == project.parent
-        else:
-            assert response.status_code == 302
-            assert Project.objects.get(pk=project_id).parent_id == parent_project_id
     else:
         if password:
             assert response.status_code == 403
@@ -440,7 +452,7 @@ def test_project_update_catalog_post(db, client, username, password, project_id)
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
-def test_project_update_tasks_get(db, client, username, password, project_id):
+def test_project_update_tasks_get(db, client, settings, username, password, project_id):
     client.login(username=username, password=password)
 
     url = reverse('project_update_tasks', args=[project_id])
@@ -455,9 +467,21 @@ def test_project_update_tasks_get(db, client, username, password, project_id):
             assert response.status_code == 302
 
 
+def test_project_update_tasks_get_not_allowed(db, client, settings, enable_project_tasks_sync):  # noqa:F811
+    assert settings.PROJECT_TASKS_SYNC
+    client.login(username='owner', password='owner')
+
+    url = reverse('project_update_tasks', args=[project_id])
+    data = {
+        'tasks': [1]
+    }
+    response = client.get(url, data)
+
+    assert response.status_code == 404
+
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
-def test_project_update_tasks_post(db, client, username, password, project_id):
+def test_project_update_tasks_post(db, client, settings, username, password, project_id):
     client.login(username=username, password=password)
     project = Project.objects.get(pk=project_id)
 
@@ -479,9 +503,22 @@ def test_project_update_tasks_post(db, client, username, password, project_id):
         assert list(Project.objects.get(pk=project_id).tasks.values('id')) == list(project.tasks.values('id'))
 
 
+def test_project_update_tasks_post_not_allowed(db, client, settings, enable_project_tasks_sync):  # noqa:F811
+    assert settings.PROJECT_TASKS_SYNC
+    client.login(username='owner', password='owner')
+
+    url = reverse('project_update_tasks', args=[project_id])
+    data = {
+        'tasks': [1]
+    }
+    response = client.post(url, data)
+
+    assert response.status_code == 404
+
+
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
-def test_project_update_views_get(db, client, username, password, project_id):
+def test_project_update_views_get(db, client, settings, username, password, project_id):
     client.login(username=username, password=password)
 
     url = reverse('project_update_views', args=[project_id])
@@ -496,9 +533,22 @@ def test_project_update_views_get(db, client, username, password, project_id):
             assert response.status_code == 302
 
 
+def test_project_update_views_get_not_allowed(db, client, settings, enable_project_views_sync):  # noqa:F811
+    assert settings.PROJECT_VIEWS_SYNC
+    client.login(username='owner', password='owner')
+
+    url = reverse('project_update_views', args=[project_id])
+    data = {
+        'tasks': [1]
+    }
+    response = client.get(url, data)
+
+    assert response.status_code == 404
+
+
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
-def test_project_update_views_post(db, client, username, password, project_id):
+def test_project_update_views_post(db, client, settings, username, password, project_id):
     client.login(username=username, password=password)
     project = Project.objects.get(pk=project_id)
 
@@ -519,6 +569,18 @@ def test_project_update_views_post(db, client, username, password, project_id):
 
         assert list(Project.objects.get(pk=project_id).views.values('id')) == list(project.views.values('id'))
 
+
+def test_project_update_views_post_not_allowed(db, client, settings, enable_project_views_sync):  # noqa:F811
+    assert settings.PROJECT_VIEWS_SYNC
+    client.login(username='owner', password='owner')
+
+    url = reverse('project_update_views', args=[project_id])
+    data = {
+        'tasks': [1]
+    }
+    response = client.post(url, data)
+
+    assert response.status_code == 404
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
@@ -545,17 +607,21 @@ def test_project_update_parent_post(db, client, username, password, project_id):
 
     url = reverse('project_update_parent', args=[project_id])
     data = {
-        'parent': parent_project_id
+        'parent': parent_id
     }
     response = client.post(url, data)
 
     if project_id in change_project_permission_map.get(username, []):
-        if project_id == parent_project_id:
+        if parent_id in view_project_permission_map.get(username, []):
+            if project_id in parent_ancestors:
+                assert response.status_code == 200
+                assert Project.objects.get(pk=project_id).parent == project.parent
+            else:
+                assert response.status_code == 302
+                assert Project.objects.get(pk=project_id).parent_id == parent_id
+        else:
             assert response.status_code == 200
             assert Project.objects.get(pk=project_id).parent == project.parent
-        else:
-            assert response.status_code == 302
-            assert Project.objects.get(pk=project_id).parent_id == parent_project_id
     else:
         if password:
             assert response.status_code == 403
@@ -752,26 +818,10 @@ def test_project_view_export(db, client, username, password, project_id, export_
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
-def test_project_questions(db, client, username, password, project_id):
-    client.login(username=username, password=password)
-
-    url = reverse('project_questions', args=[project_id])
-    response = client.get(url)
-
-    if project_id in view_project_permission_map.get(username, []):
-        assert response.status_code == 200
-    elif password:
-        assert response.status_code == 403
-    else:
-        assert response.status_code == 302
-
-
-@pytest.mark.parametrize('username,password', users)
-@pytest.mark.parametrize('project_id', projects)
 def test_project_error(db, client, username, password, project_id):
     client.login(username=username, password=password)
 
-    url = reverse('project_questions', args=[project_id])
+    url = reverse('project_error', args=[project_id])
     response = client.get(url)
 
     if project_id in view_project_permission_map.get(username, []):

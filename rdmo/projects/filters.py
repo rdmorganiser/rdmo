@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db.models import F, OuterRef, Q, Subquery
 from django.db.models.functions import Concat
 from django.utils.dateparse import parse_datetime
@@ -16,6 +17,22 @@ class ProjectFilter(FilterSet):
     class Meta:
         model = Project
         fields = ('title', 'catalog')
+
+
+class ProjectUserFilterBackend(BaseFilterBackend):
+
+    def filter_queryset(self, request, queryset, view):
+        if view.detail:
+            return queryset
+
+        user_id = request.GET.get('user')
+        user_username = request.GET.get('username')
+        if user_id or user_username:
+            user = User.objects.filter(Q(id=user_id) | Q(username=user_username)).first()
+            if user:
+                queryset = queryset.filter_visibility(user)
+
+        return queryset
 
 
 class ProjectSearchFilterBackend(SearchFilter):
@@ -126,7 +143,9 @@ class SnapshotFilterBackend(BaseFilterBackend):
             return queryset
 
         snapshot = request.GET.get('snapshot')
-        if snapshot:
+        if snapshot == 'all':
+            pass
+        elif snapshot:
             try:
                 snapshot_pk = int(snapshot)
             except (ValueError, TypeError):
@@ -139,14 +158,31 @@ class SnapshotFilterBackend(BaseFilterBackend):
         return queryset
 
 
-class ValueFilterBackend(BaseFilterBackend):
+class AttributeFilterBackend(BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
         if view.detail:
             return queryset
 
-        attributes = [int(attribute) for attribute in request.GET.getlist('attribute') if attribute.isdigit()]
-        if attributes:
-            queryset = queryset.filter(attribute__in=attributes)
+        if 'attribute' in request.GET:
+            attributes = [int(attribute) for attribute in request.GET.getlist('attribute') if attribute.isdigit()]
+            if attributes:
+                queryset = queryset.filter(attribute__in=attributes)
+
+        return queryset
+
+
+class OptionFilterBackend(BaseFilterBackend):
+
+    def filter_queryset(self, request, queryset, view):
+        if view.detail:
+            return queryset
+
+        if 'option' in request.GET:
+            options = [int(option) for option in request.GET.getlist('option') if option.isdigit()]
+            if options:
+                queryset = queryset.filter(option__in=options)
+            else:
+                queryset = queryset.filter(option=None)
 
         return queryset

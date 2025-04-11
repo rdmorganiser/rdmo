@@ -88,15 +88,19 @@ class Import(Plugin):
 
 class RDMOXMLImport(Import):
 
-    accept = '.xml'
+    accept = {
+        'application/xml': ['.xml']
+    }
 
-    def check(self):
+    def check(self) -> bool:
         file_type, encoding = mimetypes.guess_type(self.file_name)
-        if file_type == 'application/xml' or file_type == 'text/xml':
+        if file_type in ('application/xml', 'text/xml'):
             self.root = read_xml_file(self.file_name)
-            if self.root and self.root.tag == 'project':
+            if self.root is not None and self.root.tag == 'project':
                 self.ns_map = get_ns_map(self.root)
                 return True
+        return False
+
 
     def process(self):
         if self.current_project is None:
@@ -230,6 +234,9 @@ class RDMOXMLImport(Import):
 
 
 class URLImport(RDMOXMLImport):
+
+    accept = False
+    upload = False
 
     class Form(forms.Form):
         url = forms.URLField(label=_('Import project from this URL'), required=True)

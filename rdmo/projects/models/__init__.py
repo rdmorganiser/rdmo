@@ -6,3 +6,4 @@ from .membership import Membership
 from .project import Project
 from .snapshot import Snapshot
 from .value import Value
+from .visibility import Visibility

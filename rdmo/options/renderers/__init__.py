@@ -12,6 +12,7 @@ class OptionSetRenderer(OptionSetRendererMixin, OptionRendererMixin, ConditionRe
         xml.startElement('rdmo', {
             'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
             'version': self.version,
+            'required': self.required,
             'created': self.created
         })
         for optionset in optionsets:
@@ -25,6 +26,7 @@ class OptionRenderer(OptionRendererMixin, BaseXMLRenderer):
         xml.startElement('rdmo', {
             'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
             'version': self.version,
+            'required': self.required,
             'created': self.created
         })
         for option in options:

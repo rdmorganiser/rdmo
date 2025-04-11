@@ -1,6 +1,7 @@
 from django import forms
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
 from django.db.models import Q
@@ -12,7 +13,8 @@ from rdmo.core.plugins import get_plugin
 from rdmo.core.utils import markdown2html
 
 from .constants import ROLE_CHOICES
-from .models import Integration, IntegrationOption, Invite, Membership, Project, Snapshot
+from .models import Integration, IntegrationOption, Invite, Membership, Project, Snapshot, Visibility
+from .validators import ProjectParentValidator
 
 
 class CatalogChoiceField(forms.ModelChoiceField):
@@ -53,6 +55,8 @@ class ProjectForm(forms.ModelForm):
     use_required_attribute = False
 
     def __init__(self, *args, **kwargs):
+        self.copy = kwargs.pop('copy', False)
+
         catalogs = kwargs.pop('catalogs')
         projects = kwargs.pop('projects')
         super().__init__(*args, **kwargs)
@@ -65,6 +69,11 @@ class ProjectForm(forms.ModelForm):
 
         if settings.NESTED_PROJECTS:
             self.fields['parent'].queryset = projects
+
+    def clean(self):
+        if not self.copy:
+            ProjectParentValidator(self.instance)(self.cleaned_data)
+        super().clean()
 
     class Meta:
         model = Project
@@ -90,6 +99,56 @@ class ProjectUpdateInformationForm(forms.ModelForm):
         fields = ('title', 'description')
 
 
+class ProjectUpdateVisibilityForm(forms.ModelForm):
+
+    use_required_attribute = False
+
+    def __init__(self, *args, **kwargs):
+        self.project = kwargs.pop('instance')
+        self.user = kwargs.pop('user')
+        self.site = kwargs.pop('site')
+
+        try:
+            instance = self.project.visibility
+        except Visibility.DoesNotExist:
+            instance = None
+
+        super().__init__(*args, instance=instance, **kwargs)
+
+        # remove the sites or group sets if they are not needed, doing this in Meta would break tests
+        if not (settings.MULTISITE and self.user.has_perm('projects.change_visibility')):
+            self.fields.pop('sites')
+        if not settings.GROUPS:
+            self.fields.pop('groups')
+
+    class Meta:
+        model = Visibility
+        fields = ('sites', 'groups')
+
+    def save(self, *args, **kwargs):
+        if 'cancel' in self.data:
+            pass
+        elif 'delete' in self.data:
+            if settings.MULTISITE and not self.user.has_perm('projects.delete_visibility'):
+                current_site = Site.objects.get(id=self.site.id)
+                self.instance.remove_site(current_site)
+            else:
+                self.instance.delete()
+        else:
+            visibility, created = Visibility.objects.update_or_create(project=self.project)
+
+            if settings.MULTISITE:
+                if self.user.has_perm('projects.change_visibility'):
+                    visibility.sites.set(self.cleaned_data.get('sites'))
+                else:
+                    visibility.sites.add(self.site)
+
+            if settings.GROUPS:
+                visibility.groups.set(self.cleaned_data.get('groups'))
+
+        return self.project
+
+
 class ProjectUpdateCatalogForm(forms.ModelForm):
 
     use_required_attribute = False
@@ -110,12 +169,21 @@ class ProjectUpdateCatalogForm(forms.ModelForm):
             'catalog': forms.RadioSelect()
         }
 
+    def save(self, *args, **kwargs):
+        # if the catalog is the same, do nothing
+        if self.instance.catalog.id == self.cleaned_data.get('catalog'):
+            return self.instance
+        return super().save(*args, **kwargs)
+
 
 class ProjectUpdateTasksForm(forms.ModelForm):
 
     use_required_attribute = False
 
     def __init__(self, *args, **kwargs):
+        if settings.PROJECT_TASKS_SYNC:
+            raise ValidationError(_("Editing tasks is disabled."))
+
         tasks = kwargs.pop('tasks')
         super().__init__(*args, **kwargs)
         self.fields['tasks'].queryset = tasks
@@ -130,12 +198,20 @@ class ProjectUpdateTasksForm(forms.ModelForm):
             'tasks': forms.CheckboxSelectMultiple()
         }
 
+    def save(self, *args, **kwargs):
+        if settings.PROJECT_TASKS_SYNC:
+            raise ValidationError(_("Editing tasks is disabled."))
+        super().save(*args, **kwargs)
+
 
 class ProjectUpdateViewsForm(forms.ModelForm):
 
     use_required_attribute = False
 
     def __init__(self, *args, **kwargs):
+        if settings.PROJECT_VIEWS_SYNC:
+            raise ValidationError(_("Editing views is disabled."))
+
         views = kwargs.pop('views')
         super().__init__(*args, **kwargs)
         self.fields['views'].queryset = views
@@ -150,6 +226,11 @@ class ProjectUpdateViewsForm(forms.ModelForm):
             'views': forms.CheckboxSelectMultiple()
         }
 
+    def save(self, *args, **kwargs):
+        if settings.PROJECT_VIEWS_SYNC:
+            raise ValidationError(_("Editing views is disabled."))
+        super().save(*args, **kwargs)
+
 
 class ProjectUpdateParentForm(forms.ModelForm):
 
@@ -159,6 +240,10 @@ class ProjectUpdateParentForm(forms.ModelForm):
         projects = kwargs.pop('projects')
         super().__init__(*args, **kwargs)
         self.fields['parent'].queryset = projects
+
+    def clean(self):
+        ProjectParentValidator(self.instance)(self.cleaned_data)
+        super().clean()
 
     class Meta:
         model = Project

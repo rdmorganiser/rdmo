@@ -1,6 +1,7 @@
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass, field
 from inspect import signature
-from typing import Callable, Iterable, Optional, Sequence, Union
+from typing import Callable, Optional, Union
 
 from django.db import models
 

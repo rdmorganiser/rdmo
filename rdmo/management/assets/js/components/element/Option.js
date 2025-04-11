@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import get from 'lodash/get'
 
 import { filterElement } from '../../utils/filter'
-import { buildPath } from '../../utils/location'
+import { buildApiPath, buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
@@ -13,9 +13,9 @@ const Option = ({ config, option, elementActions, display='list', indent=0, filt
 
   const showElement = filterElement(config, filter, false, filterEditors, option)
 
-  const editUrl = buildPath(config.baseUrl, 'options', option.id)
-  const copyUrl = buildPath(config.baseUrl, 'options', option.id, 'copy')
-  const exportUrl = buildPath(config.apiUrl, 'options', 'options', option.id, 'export')
+  const editUrl = buildPath('options', option.id)
+  const copyUrl = buildPath('options', option.id, 'copy')
+  const exportUrl = buildApiPath('options', 'options', option.id, 'export')
 
   const fetchEdit = () => elementActions.fetchElement('options', option.id)
   const fetchCopy = () => elementActions.fetchElement('options', option.id, 'copy')

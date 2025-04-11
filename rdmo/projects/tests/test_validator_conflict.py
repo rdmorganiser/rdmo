@@ -2,7 +2,9 @@ from datetime import timedelta
 
 import pytest
 
-from rest_framework.exceptions import ValidationError as RestFameworkValidationError
+from rest_framework.exceptions import ValidationError as RestFrameworkValidationError
+
+from rdmo.options.models import Option
 
 from ..models import Project, Value
 from ..serializers.v1 import ValueSerializer
@@ -10,6 +12,7 @@ from ..validators import ValueConflictValidator
 
 project_id = 1
 attribute_path = attribute__path='individual/single/text'
+option_path = 'one_two_three/one'
 
 
 def test_serializer_create(db):
@@ -48,7 +51,7 @@ def test_serializer_create_error(db):
     serializer = ValueSerializer()
     serializer.context['view'] = MockedView()
 
-    with pytest.raises(RestFameworkValidationError):
+    with pytest.raises(RestFrameworkValidationError):
         validator({
             'attribute': value.attribute,
             'set_prefix': value.set_prefix,
@@ -99,7 +102,7 @@ def test_serializer_update_error(db):
     serializer.instance = value
     serializer.context['view'] = MockedView()
 
-    with pytest.raises(RestFameworkValidationError):
+    with pytest.raises(RestFrameworkValidationError):
         validator({
             'attribute': value.attribute,
             'set_prefix': value.set_prefix,
@@ -138,12 +141,7 @@ def test_serializer_create_checkbox(db):
         attribute__path='individual/collection/checkbox',
         collection_index=0
     )
-    value2 = Value.objects.get(
-        project_id=project_id,
-        snapshot=None,
-        attribute__path='individual/collection/checkbox',
-        collection_index=2
-    )
+    option = Option.objects.get(uri_path=option_path)
 
     class MockedRequest:
         data = {
@@ -163,7 +161,7 @@ def test_serializer_create_checkbox(db):
         'set_prefix': value.set_prefix,
         'set_index': value.set_index,
         'collection_index': value.collection_index,
-        'option': value2.option
+        'option': option.id
     }, serializer)
 
 
@@ -188,7 +186,7 @@ def test_serializer_create_checkbox_error(db):
     serializer = ValueSerializer()
     serializer.context['view'] = MockedView()
 
-    with pytest.raises(RestFameworkValidationError):
+    with pytest.raises(RestFrameworkValidationError):
         validator({
             'attribute': value.attribute,
             'set_prefix': value.set_prefix,
@@ -219,7 +217,7 @@ def test_serializer_create_checkbox_text(db):
     serializer = ValueSerializer()
     serializer.context['view'] = MockedView()
 
-    with pytest.raises(RestFameworkValidationError):
+    with pytest.raises(RestFrameworkValidationError):
         validator({
             'attribute': value.attribute,
             'set_prefix': value.set_prefix,

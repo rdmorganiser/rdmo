@@ -1,5 +1,60 @@
 # Changelog
 
+## [RDMO 2.3.0](https://github.com/rdmorganiser/rdmo/compare/2.2.2...2.3.0) (Apr 11, 2025)
+
+* Add new interview interface based on React and Redux (#518)
+  * Text and Textarea widgets are now saved automatically
+  * Select dropdown widgets are now always searchable
+  * Show the unit of a question next to the answer field (#499)
+  * Tabs (e.g. Datasets) and single values can be reused in different projects.
+  * An "Apply to all" button can be used to paste information into all the tabs.
+  * Fix several issues regarding the interview (#501, #224, #1191)
+  * Display attributes in interview to admins, editors, reviewers (#224)
+  * Improve accessibility (#514, #1199)
+  * Remove custom widgets feature (remove `QUESTIONS_WIDGETS` from settings)
+  * Remove `PROJECT_QUESTIONS_AUTOSAVE` and `PROJECT_QUESTIONS_CYCLE_SETS` from settings.
+* Add the possibility to copy a project including all its values.
+* Add the option to make a project "visible" to all users (#152).
+  * Users interact with visible projects as if they would have the Guest role.
+  * With the new review feature, this can be used for templates for projects and datasets.
+  * Sites and groups can be used to restrict this behaviour.
+  * This feature is enabled by default via the `PROJECT_VISIBILITY` setting
+* Add a contact form modal to each question to contact support (#502)
+  * `PROJECT_CONTACT = True` and `PROJECT_CONTACT_RECIPIENTS = [list of email strings]`
+    enable this feature
+* Add signal handlers to automatically sync of project views and tasks (#345, #966, #1198)
+  * When `PROJECT_VIEWS_SYNC = True` or `PROJECT_TASKS_SYNC = True` is set, the views or
+    tasks for a project are automatically synchronized, depending on the
+    catalogs configured for them.
+* Add snapshot export plugins (which work like project export plugins)
+  * Add `PROJECT_SNAPSHOT_EXPORTS` to settings to register snapshot export plugins
+* Refactor the `accept` field for project import plugins
+  * The field is now a dict of the form `{'content_type': ['suffix']}`
+  * The old form should still work
+* Add `rdmo.accounts.middleware.TermsAndConditionsRedirectMiddleware'` (#141, #161)
+  * The (optional) middleware checks if a user has already confirmed the Terms of use.
+  * If not, users need to confirm to proceed.
+  * Optionally, when a confirmation renewal is required, the `ACCOUNT_TERMS_OF_USE_DATE = '2025-02-25'`
+    can be set to invalidate previous confirmations.
+* Add `rdmo-admin` script
+  * `rdmo-admin npm run [build:prod|build|watch]` can be used to build the front end
+  * `rdmo-admin build` can be used to build the python package
+  * `rdmo-admin messages [make|compile]` can be used create and compile the translations
+  * `rdmo-admin clean` can be used remove most files which are not version controlled
+* Add the support for custom markdown templates injected into help texts
+  * The code `{{ code }}` is replaced by a template specified in the `MARKDOWN_TEMPLATES` setting
+  * The `TEMPLATES_EXECUTE_SCRIPT_TAGS' setting controls whether Java script code can be executed.
+* Add minimum required version to RDMO XML exports (#1205).
+* Use the `uri` instead of `path` for attributes in the Django admin interface.
+* Fix a set of bugs where the maximum length of a field was not correctly validated by the API.
+* Use `lualatex` when using `Pandoc >= 3.0`.
+* Remove the `download_vendor_files` step of the setup
+  * Remove `VENDOR` and `VENDOR_CDN` from settings.
+* Remove `django-rest-swagger` dependency and add `drf-spectacular` as an optional dependency.
+  * Can be installed with `pip install rdmo[openapi]`.
+* Update Python and JavaScript dependencies.
+* Drop support for Python 3.8.
+
 ## [RDMO 2.2.2](https://github.com/rdmorganiser/rdmo/compare/2.2.1...2.2.2) (Oct 24, 2024)
 
 * Fix projects interface when using RDMO with a path (#1152)

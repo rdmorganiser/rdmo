@@ -20,6 +20,19 @@ from rdmo.core.constants import (
     VALUE_TYPE_URL,
 )
 from rdmo.core.utils import human2bytes
+from rdmo.core.validators import InstanceValidator
+
+
+class ProjectParentValidator(InstanceValidator):
+
+    def __call__(self, data, serializer=None):
+        super().__call__(data, serializer)
+
+        if self.instance and self.instance.id \
+                and data.get('parent') in self.instance.get_descendants(include_self=True):
+            raise self.raise_validation_error({
+                'parent': [_('A project may not be moved to be a child of itself or one of its descendants.')]
+            })
 
 
 class ValueConflictValidator:
@@ -42,14 +55,17 @@ class ValueConflictValidator:
             get_kwargs = {
                 'attribute': data.get('attribute'),
                 'set_prefix': data.get('set_prefix'),
-                'set_index': data.get('set_index'),
-                'collection_index': data.get('collection_index')
+                'set_index': data.get('set_index')
             }
 
-            # for checkboxes, check only values with the same option. the widget_type is provided with the post request
+            # check the widget type, which is provided with the post request
             widget_type = serializer.context['view'].request.data.get('widget_type')
             if widget_type == 'checkbox':
+                # for checkboxes, fail if a value with the same option exist
                 get_kwargs['option'] = data.get('option')
+            else:
+                # for all other widget_types, fail if a value with the same collection_index exist
+                get_kwargs['collection_index'] = data.get('collection_index')
 
             try:
                 serializer.context['view'].project.values.filter(snapshot=None).get(**get_kwargs)

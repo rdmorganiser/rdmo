@@ -1,8 +1,0 @@
-{% load i18n %}
-
-    <div class="add-field-button" ng-hide="service.project.read_only">
-        <button type="button" class="btn btn-success"
-                ng-click="service.addValue(question, valueset.set_prefix, valueset.set_index)">
-            <i class="fa fa-plus fa-btn"></i> {$ question.verbose_name|capitalize $}
-        </button>
-    </div>

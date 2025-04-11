@@ -15,13 +15,13 @@ import { Drop } from '../common/DragAndDrop'
 import Section from '../element/Section'
 import Page from '../element/Page'
 
-const NestedCatalog = ({ config, section, configActions, elementActions }) => {
+const NestedSection = ({ config, section, configActions, elementActions }) => {
 
   const updateFilterString = (uri) => configActions.updateConfig('filter.section.search', uri)
   const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.section.uri_prefix', uriPrefix)
 
-  const togglePages = () => configActions.toggleDescendants(section, 'pages')
-  const toggleQuestionSets = () => configActions.toggleDescendants(section, 'questionsets')
+  const togglePages = () => elementActions.toggleDescendants(section, 'pages')
+  const toggleQuestionSets = () => elementActions.toggleDescendants(section, 'questionsets')
 
   const updateDisplaySectionURI = (value) => configActions.updateConfig('display.uri.sections', value)
   const updateDisplayPagesURI = (value) => configActions.updateConfig('display.uri.pages', value)
@@ -46,7 +46,7 @@ const NestedCatalog = ({ config, section, configActions, elementActions }) => {
           <div className="row">
             <div className="col-sm-8">
               <FilterString value={get(config, 'filter.section.search', '')} onChange={updateFilterString}
-                            placeholder={gettext('Filter sections')} />
+                            label={gettext('Filter sections')} />
             </div>
             <div className="col-sm-4">
               <FilterUriPrefix value={get(config, 'filter.section.uri_prefix', '')} onChange={updateFilterUriPrefix}
@@ -92,11 +92,11 @@ const NestedCatalog = ({ config, section, configActions, elementActions }) => {
   )
 }
 
-NestedCatalog.propTypes = {
+NestedSection.propTypes = {
   config: PropTypes.object.isRequired,
   section: PropTypes.object.isRequired,
   configActions: PropTypes.object.isRequired,
   elementActions: PropTypes.object.isRequired
 }
 
-export default NestedCatalog
+export default NestedSection

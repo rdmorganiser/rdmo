@@ -170,35 +170,35 @@ class QuestionSet(Model, TranslationMixin):
         super().save(*args, **kwargs)
 
     @property
-    def title(self):
+    def title(self) -> str:
         return self.trans('title')
 
     @property
-    def help(self):
+    def help(self) -> str:
         return self.trans('help')
 
     @property
-    def verbose_name(self):
+    def verbose_name(self) -> str:
         return self.trans('verbose_name')
 
     @cached_property
-    def is_locked(self):
+    def is_locked(self) -> bool:
         return self.locked or \
             any(page.is_locked for page in self.pages.all()) or \
             any(questionset.is_locked for questionset in self.questionsets.all())
 
     @cached_property
-    def has_conditions(self):
+    def has_conditions(self) -> bool:
         return self.conditions.exists()
 
     @cached_property
-    def elements(self):
+    def elements(self) -> list:
         questionset_elements = list(self.questionset_questionsets.all()) + list(self.questionset_questions.all())
         return [questionset_element.element
                 for questionset_element in sorted(questionset_elements, key=lambda e: e.order)]
 
     @cached_property
-    def descendants(self):
+    def descendants(self) -> list:
         descendants = []
         for element in self.elements:
             if element == self:

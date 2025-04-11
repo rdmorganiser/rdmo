@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import get from 'lodash/get'
 
 import { filterElement } from '../../utils/filter'
-import { buildPath } from '../../utils/location'
+import { buildApiPath, buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
@@ -15,13 +15,13 @@ const Question = ({ config, question, elementActions, display='list', indent=0,
 
   const showElement = filterElement(config, filter, false, filterEditors, question)
 
-  const editUrl = buildPath(config.baseUrl, 'questions', question.id)
-  const copyUrl = buildPath(config.baseUrl, 'questions', question.id, 'copy')
-  const exportUrl = buildPath(config.apiUrl, 'questions', 'questions', question.id, 'export')
-  const attributeUrl = buildPath(config.apiUrl, 'domain', 'attributes', question.attribute)
+  const editUrl = buildPath('questions', question.id)
+  const copyUrl = buildPath('questions', question.id, 'copy')
+  const exportUrl = buildApiPath('questions', 'questions', question.id, 'export')
+  const attributeUrl = buildPath('attributes', question.attribute)
 
-  const getConditionUrl = (index) => buildPath(config.apiUrl, 'conditions', 'conditions', question.conditions[index])
-  const getOptionSetUrl = (index) => buildPath(config.apiUrl, 'options', 'optionsets', question.optionsets[index])
+  const getConditionUrl = (index) => buildPath('conditions', question.conditions[index])
+  const getOptionSetUrl = (index) => buildPath('optionsets', question.optionsets[index])
 
   const fetchEdit = () => elementActions.fetchElement('questions', question.id)
   const fetchCopy = () => elementActions.fetchElement('questions', question.id, 'copy')
@@ -45,9 +45,19 @@ const Question = ({ config, question, elementActions, display='list', indent=0,
       </div>
       <div>
         <p>
-          <strong className={question.is_optional ? 'text-muted' : ''}>{gettext('Question')}{': '}</strong>
+          <strong>{gettext('Question')}{': '}</strong>
           <span dangerouslySetInnerHTML={{ __html: question.text }}></span>
         </p>
+        {
+          question.is_optional && <p>
+            <code className="code-optional" title={gettext('This is an optional question.')}>{gettext('optional')}</code>
+          </p>
+        }
+        {
+          (question.default_text || question.default_option || question.default_external_id) && <p>
+            <code className="code-default" title={gettext('This question has a default answer.')}>{gettext('default')}</code>
+          </p>
+        }
         {
           get(config, 'display.uri.questions', true) && <p>
             <CodeLink
@@ -88,6 +98,33 @@ const Question = ({ config, question, elementActions, display='list', indent=0,
                 onClick={() => fetchOptionSet(index)} />
             </p>
           ))
+        }
+        {
+          question.warning && (
+            <ul className="list-unstyled mb-0">
+            {
+              question.warning.no_attribute && (
+                <li className="text-danger">
+                  {gettext('Error: No attribute is set for this question!')}
+                </li>
+              )
+            }
+            {
+              question.warning.double_attribute && (
+                <li className="text-danger">
+                  {gettext('Error: The attribute for this question is used several times (in this catalog).')}
+                </li>
+              )
+            }
+            {
+              question.warning.missing_languages && (
+                <li className="text-warning">
+                  {gettext('Warning: Some of the language specific fields are not set properly.')}
+                </li>
+              )
+            }
+            </ul>
+          )
         }
         <ElementErrors element={question} />
       </div>

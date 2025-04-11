@@ -1,9 +1,11 @@
 import pytest
 
 from django.contrib.auth.models import Group, User
+from django.contrib.sites.models import Site
 from django.urls import reverse
 
-from ..models import Project
+from ..models import Membership, Project, Snapshot, Value, Visibility
+from .helpers import enable_project_views_sync  # noqa: F401
 
 users = (
     ('owner', 'owner'),
@@ -17,30 +19,32 @@ users = (
 )
 
 view_project_permission_map = {
-    'owner': [1, 2, 3, 4, 5, 10],
-    'manager': [1, 3, 5, 7],
-    'author': [1, 3, 5, 8],
-    'guest': [1, 3, 5, 9],
-    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    'owner': [1, 2, 3, 4, 5, 10, 12],
+    'manager': [1, 3, 5, 7, 12],
+    'author': [1, 3, 5, 8, 12],
+    'guest': [1, 3, 5, 9, 12],
+    'user': [12],
+    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 }
 
 change_project_permission_map = {
-    'owner': [1, 2, 3, 4, 5, 10],
+    'owner': [1, 2, 3, 4, 5, 10, 12],
     'manager': [1, 3, 5, 7],
-    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12],
+    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12]
 }
 
 delete_project_permission_map = {
-    'owner': [1, 2, 3, 4, 5, 10],
-    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    'owner': [1, 2, 3, 4, 5, 10, 12],
+    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12],
+    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12]
 }
 
 urlnames = {
     'list': 'v1-projects:project-list',
     'detail': 'v1-projects:project-detail',
+    'copy': 'v1-projects:project-copy',
     'overview': 'v1-projects:project-overview',
     'navigation': 'v1-projects:project-navigation',
     'options': 'v1-projects:project-options',
@@ -49,7 +53,8 @@ urlnames = {
     'imports': 'v1-projects:project-imports'
 }
 
-projects = [1, 2, 3, 4, 5]
+projects = [1, 2, 3, 4, 5, 12]
+projects_visible = [12]
 conditions = [1]
 
 catalog_id = 1
@@ -60,6 +65,8 @@ section_id = 1
 optionset_id = 4
 
 project_id = 1
+parent_id = 3
+parent_ancestors = [2, 3]
 
 page_size = 5
 
@@ -77,8 +84,7 @@ def test_list(db, client, username, password):
         assert isinstance(response_data, dict)
 
         if username == 'user':
-            assert response_data['count'] == 0
-            assert response_data['results'] == []
+            assert sorted([item['id'] for item in response.json().get('results')]) == projects_visible
         else:
             values_list = Project.objects.filter(id__in=view_project_permission_map.get(username, [])) \
                                          .values_list('id', flat=True)
@@ -86,6 +92,39 @@ def test_list(db, client, username, password):
             assert [item['id'] for item in response_data['results']] == list(values_list[:page_size])
     else:
         assert response.status_code == 401
+
+
+def test_list_user(db, client):
+    client.login(username='user', password='user')
+
+    url = reverse(urlnames['list']) + '?user=1'
+    response = client.get(url)
+    response_data = response.json()
+
+    assert response.status_code == 200
+    assert isinstance(response_data, dict)
+
+    values_list = Project.objects.filter(id__in=projects_visible).values_list('id', flat=True)
+    assert response_data['count'] == len(values_list)
+    assert [item['id'] for item in response_data['results']] == list(values_list[:page_size])
+
+
+def test_list_multisite(db, client, settings):
+    settings.MULTISITE = True
+    client.login(username='example-manager', password='example-manager')
+
+    # create a project on site 2, which is visible on site 1
+    project = Project.objects.create(title='foo.com project', site=Site.objects.get(id=2))
+    visibility = Visibility.objects.create(project=project)
+    visibility.sites.add(Site.objects.get(id=1))
+
+    url = reverse(urlnames['list'])
+    response = client.get(url + '?page=3')
+    response_data = response.json()
+
+    assert response.status_code == 200
+    assert project.id in [i['id'] for i in response_data['results']]
+    assert response_data['count'] == len(view_project_permission_map['site']) + 1
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -218,6 +257,133 @@ def test_create_parent(db, client, username, password, project_id):
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
+def test_copy(db, files, client, username, password, project_id):
+    client.login(username=username, password=password)
+
+    project_count = Project.objects.count()
+    snapshot_count = Snapshot.objects.count()
+    value_count = Value.objects.count()
+
+    project = Project.objects.get(id=project_id)
+    project_snapshots_count = project.snapshots.count()
+    project_values_count = project.values.count()
+
+    url = reverse(urlnames['copy'], args=[project_id])
+    data = {
+        'title': 'New title',
+        'description': project.description,
+        'catalog': project.catalog.id
+    }
+    response = client.post(url, data, content_type='application/json')
+
+    if project_id in view_project_permission_map.get(username, []):
+        assert response.status_code == 201
+
+        for key, value in response.json().items():
+            if key in data:
+                assert value == data[key]
+
+        assert Project.objects.count() == project_count + 1
+        assert Snapshot.objects.count() == snapshot_count + project_snapshots_count
+        assert Value.objects.count() == value_count + project_values_count
+    else:
+        if password:
+            assert response.status_code == 404
+        else:
+            assert response.status_code == 401
+
+        assert Project.objects.count() == project_count
+        assert Value.objects.count() == value_count
+
+
+def test_copy_restricted(db, files, client, settings):
+    settings.PROJECT_CREATE_RESTRICTED = True
+    settings.PROJECT_CREATE_GROUPS = ['projects']
+
+    group = Group.objects.create(name='projects')
+    user = User.objects.get(username='user')
+    user.groups.add(group)
+
+    Membership.objects.create(user=user, project_id=project_id, role='guest')
+
+    client.login(username='user', password='user')
+
+    url = reverse(urlnames['copy'], args=[project_id])
+    data = {
+        'title': 'Lorem ipsum dolor sit amet',
+        'description': 'At vero eos et accusam et justo duo dolores et ea rebum.',
+        'catalog': catalog_id
+    }
+    response = client.post(url, data, content_type='application/json')
+
+    assert response.status_code == 201
+
+
+def test_copy_forbidden(db, client, settings):
+    settings.PROJECT_CREATE_RESTRICTED = True
+
+    user = User.objects.get(username='user')
+
+    Membership.objects.create(user=user, project_id=project_id, role='guest')
+
+    client.login(username='user', password='user')
+
+    url = reverse(urlnames['copy'], args=[project_id])
+    data = {
+        'title': 'Lorem ipsum dolor sit amet',
+        'description': 'At vero eos et accusam et justo duo dolores et ea rebum.',
+        'catalog': catalog_id
+    }
+    response = client.post(url, data)
+
+    assert response.status_code == 403
+
+
+def test_copy_catalog_missing(db, client):
+    client.login(username='guest', password='guest')
+
+    url = reverse(urlnames['copy'], args=[project_id])
+    data = {
+        'title': 'Lorem ipsum dolor sit amet',
+        'description': 'At vero eos et accusam et justo duo dolores et ea rebum.'
+    }
+    response = client.post(url, data)
+
+    assert response.status_code == 400
+
+
+def test_copy_catalog_not_available(db, client):
+    client.login(username='guest', password='guest')
+
+    url = reverse(urlnames['copy'], args=[project_id])
+    data = {
+        'title': 'Lorem ipsum dolor sit amet',
+        'description': 'At vero eos et accusam et justo duo dolores et ea rebum.',
+        'catalog': catalog_id_not_available
+    }
+    response = client.post(url, data)
+
+    assert response.status_code == 400
+
+@pytest.mark.parametrize('project_id', projects)
+def test_copy_parent(db, files, client, project_id):
+    client.login(username='owner', password='owner')
+    project = Project.objects.get(pk=project_id)
+
+    url = reverse(urlnames['copy'], args=[project_id])
+    data = {
+        'title': 'New title',
+        'description': project.description,
+        'catalog': project.catalog.id,
+        'parent': parent_id
+    }
+    response = client.post(url, data, content_type='application/json')
+
+    assert response.status_code == 201
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
 def test_update(db, client, username, password, project_id):
     client.login(username=username, password=password)
     project = Project.objects.get(pk=project_id)
@@ -244,6 +410,57 @@ def test_update(db, client, username, password, project_id):
 
         assert Project.objects.get(id=project_id).title == project.title
         assert Project.objects.get(id=project_id).description == project.description
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
+def test_update_parent(db, client, username, password, project_id):
+    client.login(username=username, password=password)
+    project = Project.objects.get(pk=project_id)
+
+    url = reverse(urlnames['detail'], args=[project_id])
+    data = {
+        'title': 'New title',
+        'description': project.description,
+        'catalog': project.catalog.id,
+        'parent': parent_id
+    }
+    response = client.put(url, data, content_type='application/json')
+
+    if project_id in change_project_permission_map.get(username, []):
+        if parent_id in view_project_permission_map.get(username, []):
+            if project_id in parent_ancestors:
+                assert response.status_code == 400
+                assert Project.objects.get(pk=project_id).parent == project.parent
+            else:
+                assert response.status_code == 200
+                assert Project.objects.get(pk=project_id).parent_id == parent_id
+        else:
+            assert response.status_code == 404
+            assert Project.objects.get(pk=project_id).parent == project.parent
+    else:
+        if project_id in view_project_permission_map.get(username, []):
+            assert response.status_code == 403
+        elif password:
+            assert response.status_code == 404
+        else:
+            assert response.status_code == 401
+
+        assert Project.objects.get(pk=project_id).parent == project.parent
+
+
+def test_update_project_views_not_allowed(db, client, settings, enable_project_views_sync):  # noqa:F811
+    assert settings.PROJECT_VIEWS_SYNC
+
+    client.login(username='owner', password='owner')
+    url = reverse(urlnames['detail'], args=[project_id])
+    data = {
+        'views': [1]
+    }
+    response = client.put(url, data, content_type='application/json')
+
+    assert response.status_code == 400
+    assert 'Editing views is disabled' in ' '.join(response.json()['views'])
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -290,11 +507,28 @@ def test_overview(db, client, username, password, project_id, condition_id):
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
-@pytest.mark.parametrize('condition_id', conditions)
-def test_navigation(db, client, username, password, project_id, condition_id):
+def test_navigation(db, client, username, password, project_id):
     client.login(username=username, password=password)
 
-    url = reverse(urlnames['navigation'], args=[project_id, section_id])
+    url = reverse(urlnames['navigation'], args=[project_id])
+    response = client.get(url)
+
+    if project_id in view_project_permission_map.get(username, []):
+        assert response.status_code == 200
+        assert isinstance(response.json(), list)
+    else:
+        if password:
+            assert response.status_code == 404
+        else:
+            assert response.status_code == 401
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
+def test_navigation_section(db, client, username, password, project_id):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['navigation'], args=[project_id]) + f'{section_id}/'
     response = client.get(url)
 
     if project_id in view_project_permission_map.get(username, []):
@@ -378,7 +612,9 @@ def test_upload_accept(db, client, username, password):
 
     if password:
         assert response.status_code == 200
-        assert response.json() == '.xml'
+        assert response.json() == {
+            'application/xml': ['.xml']
+        }
     else:
         assert response.status_code == 401
 

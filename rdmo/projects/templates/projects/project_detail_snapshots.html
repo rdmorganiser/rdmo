@@ -20,10 +20,10 @@
                 <th style="width: 20%">{% trans 'Snapshot' %}</th>
                 <th style="width: 30%">{% trans 'Description' %}</th>
                 <th style="width: 30%">{% trans 'Created' %}</th>
-                <th style="width: 20%" class="text-right">
+                <th style="width: 20%" class="text-right" aria-label="{% trans 'Actions' %}">
                 {% if can_add_snapshot %}
                     <a href="{% url 'snapshot_create' project.pk %}" title="{% trans 'Create snapshot' %}">
-                        <i class="fa fa-plus"></i>
+                        <i class="fa fa-plus" aria-hidden="true"></i>
                     </a>
                 {% endif %}
                 </th>
@@ -54,6 +54,25 @@
                             title="{% trans 'Rollback to snapshot' %}">
                         </a>
                         {% endif %}
+
+                        {% has_perm 'projects.export_project_object' request.user project as can_export_project %}
+                        {% if settings.PROJECT_SNAPSHOT_EXPORTS and can_export_project %}
+                        <span class="dropdown">
+                            <button type="submit" class="btn-link fa fa-download"
+                                    title="{% trans 'Export snapshot' %}" aria-label="{% trans 'Export snapshot' %}"
+                                    data-toggle="dropdown"></button>
+
+                            <ul class="dropdown-menu">
+                                {% for key, label, class in settings.PROJECT_SNAPSHOT_EXPORTS %}
+                                <li>
+                                    <a href="{% url 'snapshot_export' project.id snapshot.id key %}" target="_blank">
+                                        {{ label }}
+                                    </a>
+                                </li>
+                                {% endfor %}
+                            {% endif %}
+                            </ul>
+                        </span>
                     </td>
                 </tr>
                 {% endfor %}
@@ -65,7 +84,7 @@
         {% if can_add_snapshot %}
             <p class="project-update">
                 <a href="{% url 'snapshot_create' project.pk %}" title="{% trans 'Create snapshot' %}">
-                    <i class="fa fa-plus"></i>
+                    <i class="fa fa-plus" aria-hidden="true"></i>
                 </a>
             </p>
         {% endif %}

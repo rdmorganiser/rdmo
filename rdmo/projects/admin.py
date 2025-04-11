@@ -1,7 +1,9 @@
+from django import forms
 from django.contrib import admin
 from django.db.models import Prefetch
 from django.urls import reverse
 from django.utils.safestring import mark_safe
+from django.utils.translation import gettext_lazy as _
 
 from .models import (
     Continuation,
@@ -14,13 +16,37 @@ from .models import (
     Project,
     Snapshot,
     Value,
+    Visibility,
 )
+from .validators import ProjectParentValidator
+
+
+class ProjectAdminForm(forms.ModelForm):
+
+    class Meta:
+        model = Project
+        fields = [
+            'parent',
+            'site',
+            'title',
+            'description',
+            'catalog',
+            'views'
+        ]
+
+
+    def clean(self):
+        super().clean()
+        ProjectParentValidator(self.instance)(self.cleaned_data)
 
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
+    form = ProjectAdminForm
+
     search_fields = ('title', 'user__username')
     list_display = ('title', 'owners', 'updated', 'created')
+    readonly_fields = ('progress_count', 'progress_total')
 
     def get_queryset(self, request):
         return Project.objects.prefetch_related(
@@ -45,6 +71,25 @@ class MembershipAdmin(admin.ModelAdmin):
 class ContinuationAdmin(admin.ModelAdmin):
     search_fields = ('project__title', 'user__username')
     list_display = ('project', 'user', 'page')
+
+
+@admin.register(Visibility)
+class VisibilityAdmin(admin.ModelAdmin):
+    search_fields = ('project__title', 'sites', 'groups')
+    list_display = ('project', 'sites_list_display', 'groups_list_display')
+    filter_horizontal = ('sites', 'groups')
+
+    @admin.display(description=_('Sites'))
+    def sites_list_display(self, obj):
+        return _('all Sites') if obj.sites.count() == 0 else ', '.join([
+            site.domain for site in obj.sites.all()
+        ])
+
+    @admin.display(description=_('Groups'))
+    def groups_list_display(self, obj):
+        return _('all Groups') if obj.groups.count() == 0 else ', '.join([
+            group.name for group in obj.groups.all()
+        ])
 
 
 @admin.register(Integration)
@@ -105,7 +150,7 @@ class SnapshotAdmin(admin.ModelAdmin):
 @admin.register(Value)
 class ValueAdmin(admin.ModelAdmin):
     search_fields = ('attribute__uri', 'project__title', 'snapshot__title', 'project__user__username')
-    list_display = ('attribute', 'set_prefix', 'set_index', 'collection_index', 'value_type',
+    list_display = ('attribute', 'set_prefix', 'set_index', 'collection_index', 'set_collection', 'value_type',
                     'project_title', 'project_owners', 'snapshot_title', 'updated', 'created')
     list_filter = ('value_type', )
 

@@ -62,14 +62,22 @@ def get_number(context, attribute, set_prefix='', set_index=0, index=0, project=
 
 @register.simple_tag(takes_context=True)
 def get_set_values(context, set, attribute, set_prefix='', project=None):
-    set_index = set.get('set_index')
+    try:
+        set_index = set['set_index']
+    except (KeyError, AttributeError, TypeError):
+        return None
+
     return get_values(context, attribute, set_prefix=set_prefix, set_index=set_index, project=project)
 
 
 @register.simple_tag(takes_context=True)
 def get_set_value(context, set, attribute, set_prefix='', index=0, project=None):
     try:
-        set_index = set.get('set_index')
+        set_index = set['set_index']
+    except (KeyError, AttributeError, TypeError):
+        return None
+
+    try:
         return get_values(context, attribute, set_prefix=set_prefix, set_index=set_index,
                           index=index, project=project)[0]
     except IndexError:

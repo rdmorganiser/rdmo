@@ -40,9 +40,7 @@ INSTALLED_APPS = [
     'django_filters',
     'mathfilters',
     'mptt',
-    'rules',
-    # openapi specification tools
-    'rest_framework_swagger'
+    'rules'
 ]
 
 MIDDLEWARE = [
@@ -54,7 +52,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.contrib.sites.middleware.CurrentSiteMiddleware'
+    'django.contrib.sites.middleware.CurrentSiteMiddleware',
+    'rdmo.accounts.middleware.TermsAndConditionsRedirectMiddleware'
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -99,11 +98,17 @@ PROFILE_DELETE = True
 ACCOUNT = False
 ACCOUNT_SIGNUP = False
 ACCOUNT_GROUPS = []
+
 ACCOUNT_TERMS_OF_USE = False
-ACCOUNT_ADAPTER = 'rdmo.accounts.adapter.AccountAdapter'
+ACCOUNT_TERMS_OF_USE_DATE = None  # None or a valid date string
+ACCOUNT_TERMS_OF_USE_EXCLUDE_URL_PREFIXES = ("/admin", "/i18n", "/static", "/account")
+ACCOUNT_TERMS_OF_USE_EXCLUDE_URLS = ("/",)  # is LOGOUT_URL needed here?
+ACCOUNT_TERMS_OF_USE_EXCLUDE_URL_CONTAINS = []
+
+ACCOUNT_ADAPTER = 'rdmo.accounts.account.AccountAdapter'
 ACCOUNT_FORMS = {
-    'login': 'rdmo.accounts.adapter.LoginForm',
-    'signup': 'rdmo.accounts.adapter.SignupForm'
+    'login': 'rdmo.accounts.account.LoginForm',
+    'signup': 'rdmo.accounts.account.SignupForm'
 }
 ACCOUNT_USER_DISPLAY = 'rdmo.accounts.utils.get_full_name'
 ACCOUNT_EMAIL_REQUIRED = True
@@ -121,7 +126,10 @@ SOCIALACCOUNT = False
 SOCIALACCOUNT_SIGNUP = False
 SOCIALACCOUNT_GROUPS = []
 SOCIALACCOUNT_AUTO_SIGNUP = False
-SOCIALACCOUNT_ADAPTER = 'rdmo.accounts.adapter.SocialAccountAdapter'
+SOCIALACCOUNT_ADAPTER = 'rdmo.accounts.socialaccount.SocialAccountAdapter'
+SOCIALACCOUNT_FORMS = {
+    'signup': 'rdmo.accounts.socialaccount.SocialSignupForm'
+}
 SOCIALACCOUNT_OPENID_CONNECT_URL_PREFIX = ""  # required since 0.60.0 else default is "oidc"
 
 SHIBBOLETH = False
@@ -183,6 +191,23 @@ REST_FRAMEWORK = {
     )
 }
 
+# Ref: https://drf-spectacular.readthedocs.io/en/latest/settings.html#settings
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'RDMO API',
+    'VERSION': None, # this renders version as v1 from the url path in swagger ui, otherwise it would be 0.0.0 (v1)
+    'SERVE_INCLUDE_SCHEMA': False,
+    'SCHEMA_PATH_PREFIX': '/api/v[0-9]', # url path like '/api/v1/accounts' yields tag 'accounts'
+    'SWAGGER_UI_SETTINGS': {
+        'docExpansion': 'none' # collapse all tags by default
+    },
+    'PREPROCESSING_HOOKS': [
+        'rdmo.core.schema.filter_endpoints'
+    ],
+    'SWAGGER_UI_DIST': 'SIDECAR',
+    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+    'REDOC_DIST': 'SIDECAR',
+}
+
 SETTINGS_EXPORT = [
     'SITE_ID',
     'LOGIN_URL',
@@ -200,26 +225,49 @@ SETTINGS_EXPORT = [
     'MULTISITE',
     'GROUPS',
     'EXPORT_FORMATS',
+    'PROJECT_VISIBILITY',
     'PROJECT_ISSUES',
     'PROJECT_VIEWS',
     'PROJECT_EXPORTS',
+    'PROJECT_SNAPSHOT_EXPORTS',
     'PROJECT_IMPORTS',
     'PROJECT_IMPORTS_LIST',
     'PROJECT_SEND_ISSUE',
-    'PROJECT_QUESTIONS_AUTOSAVE',
-    'NESTED_PROJECTS'
+    'NESTED_PROJECTS',
+    'PROJECT_VIEWS_SYNC',
+    'PROJECT_TASKS_SYNC',
+    'TEMPLATES_EXECUTE_SCRIPT_TAGS'
 ]
 
 SETTINGS_API = [
-    'PROJECT_QUESTIONS_AUTOSAVE',
-    'PROJECT_QUESTIONS_CYCLE_SETS',
     'DEFAULT_URI_PREFIX',
     'LANGUAGES',
     'MULTISITE',
     'GROUPS',
     'EXPORT_FORMATS',
-    'PROJECT_TABLE_PAGE_SIZE'
+    'PROJECT_TABLE_PAGE_SIZE',
+    'PROJECT_CONTACT'
 ]
+
+TEMPLATES_API = [
+    'projects/project_interview_add_set_help.html',
+    'projects/project_interview_add_value_help.html',
+    'projects/project_interview_buttons_help.html',
+    'projects/project_interview_contact_help.html',
+    'projects/project_interview_done.html',
+    'projects/project_interview_error.html',
+    'projects/project_interview_multiple_values_warning.html',
+    'projects/project_interview_navigation_help.html',
+    'projects/project_interview_overview_help.html',
+    'projects/project_interview_page_help.html',
+    'projects/project_interview_page_tabs_help.html',
+    'projects/project_interview_progress_help.html',
+    'projects/project_interview_question_help.html',
+    'projects/project_interview_questionset_help.html',
+    'projects/project_interview_sidebar.html',
+]
+
+TEMPLATES_EXECUTE_SCRIPT_TAGS = False
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'info@example.com'
@@ -271,19 +319,30 @@ EXPORT_REFERENCE_ODT = None
 EXPORT_REFERENCE_DOCX = None
 
 EXPORT_PANDOC_ARGS = {
-    'pdf': ['-V', 'geometry:a4paper, margin=1in', '--pdf-engine=xelatex'],
+    'pdf': ['-V', 'geometry:a4paper, margin=1in', '--pdf-engine=lualatex'],
     'rtf': ['--standalone']
 }
 
 EXPORT_CONTENT_DISPOSITION = 'attachment'
 
+EXPORT_MIN_REQUIRED_VERSION = '2.1.0'
+
+MARKDOWN_TEMPLATES: dict[str, str] = {
+    # for example: 'not_empty': 'core/text_blocks/template_for_not_empty.html',
+}
+
 PROJECT_TABLE_PAGE_SIZE = 20
+
+PROJECT_VISIBILITY = True
 
 PROJECT_ISSUES = True
 
 PROJECT_ISSUE_PROVIDERS = []
 
 PROJECT_VIEWS = True
+
+PROJECT_CONTACT = False
+PROJECT_CONTACT_RECIPIENTS = []
 
 PROJECT_EXPORTS = [
     ('xml', _('RDMO XML'), 'rdmo.projects.exports.RDMOXMLExport'),
@@ -292,15 +351,13 @@ PROJECT_EXPORTS = [
     ('json', _('JSON'), 'rdmo.projects.exports.JSONExport'),
 ]
 
+PROJECT_SNAPSHOT_EXPORTS = []
+
 PROJECT_IMPORTS = [
     ('xml', _('RDMO XML'), 'rdmo.projects.imports.RDMOXMLImport'),
 ]
 
 PROJECT_IMPORTS_LIST = []
-
-PROJECT_QUESTIONS_AUTOSAVE = True
-
-PROJECT_QUESTIONS_CYCLE_SETS = False
 
 PROJECT_FILE_QUOTA = '10Mb'
 
@@ -310,7 +367,8 @@ PROJECT_INVITE_TIMEOUT = None
 
 PROJECT_SEND_INVITE = True
 
-PROJECT_REMOVE_VIEWS = True
+PROJECT_VIEWS_SYNC = False
+PROJECT_TASKS_SYNC = False
 
 PROJECT_CREATE_RESTRICTED = False
 PROJECT_CREATE_GROUPS = []
@@ -320,6 +378,8 @@ PROJECT_VALUES_CONFLICT_THRESHOLD = 0.01
 NESTED_PROJECTS = True
 
 OPTIONSET_PROVIDERS = []
+
+PROJECT_VALUES_SEARCH_LIMIT = 10
 
 PROJECT_VALUES_VALIDATION = False
 
@@ -371,183 +431,9 @@ PROJECT_VALUES_VALIDATION_PHONE_REGEX = re.compile(r'''
     [\d\s]*$          # Main number with spaces
 ''', re.VERBOSE)
 
-QUESTIONS_WIDGETS = [
-    ('text', _('Text'), 'rdmo.projects.widgets.TextWidget'),
-    ('textarea', _('Textarea'), 'rdmo.projects.widgets.TextareaWidget'),
-    ('yesno', _('Yes/No'), 'rdmo.projects.widgets.YesnoWidget'),
-    ('checkbox', _('Checkboxes'), 'rdmo.projects.widgets.CheckboxWidget'),
-    ('radio', _('Radio buttons'), 'rdmo.projects.widgets.RadioWidget'),
-    ('select', _('Select drop-down'), 'rdmo.projects.widgets.SelectWidget'),
-    ('autocomplete', _('Autocomplete'), 'rdmo.projects.widgets.AutocompleteWidget'),
-    ('freeautocomplete', _('Free autocomplete'), 'rdmo.projects.widgets.FreeAutocompleteWidget'),
-    ('range', _('Range slider'), 'rdmo.projects.widgets.RangeWidget'),
-    ('date', _('Date picker'), 'rdmo.projects.widgets.DateWidget'),
-    ('file', _('File upload'), 'rdmo.projects.widgets.FileWidget')
-]
-
 DEFAULT_URI_PREFIX = 'http://example.com/terms'
 
 REPLACE_MISSING_TRANSLATION = False
-
-VENDOR_CDN = True
-
-VENDOR = {
-    'jquery': {
-        'url': 'https://code.jquery.com/',
-        'js': [
-            {
-                'path': 'jquery-3.4.1.min.js',
-                'sri': 'sha384-vk5WoKIaW/vJyUAd9n/wmopsmNhiy+L2Z+SBxGYnUkunIxVxAv/UtMOhba/xskxh',
-            }
-        ]
-    },
-    'bootstrap': {
-        'url': 'https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/',
-        'js': [
-            {
-                'path': 'js/bootstrap.min.js',
-                'sri': 'sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd',
-            }
-        ],
-        'css': [
-            {
-                'path': 'css/bootstrap.min.css',
-                'sri': 'sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu',
-            }
-        ],
-        'font': [
-            {
-                'path': 'fonts/glyphicons-halflings-regular.eot'
-            },
-            {
-                'path': 'fonts/glyphicons-halflings-regular.woff'
-            },
-            {
-                'path': 'fonts/glyphicons-halflings-regular.woff2'
-            },
-            {
-                'path': 'fonts/glyphicons-halflings-regular.ttf'
-            },
-            {
-                'path': 'fonts/glyphicons-halflings-regular.svg'
-            }
-        ]
-    },
-    'bootstrap-datepicker': {
-        'url': 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/',
-        'css': [
-            {
-                'path': 'css/bootstrap-datepicker.min.css'
-            }
-        ],
-        'js': [
-            {
-                'path': 'js/bootstrap-datepicker.min.js'
-            }
-        ]
-    },
-    'font-awesome': {
-        'url': 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/',
-        'css': [
-            {
-                'path': 'css/font-awesome.min.css'
-            }
-        ],
-        'font': [
-            {
-                'path': 'fonts/fontawesome-webfont.eot'
-            },
-            {
-                'path': 'fonts/fontawesome-webfont.woff2'
-            },
-            {
-                'path': 'fonts/fontawesome-webfont.woff'
-            },
-            {
-                'path': 'fonts/fontawesome-webfont.ttf'
-            },
-            {
-                'path': 'fonts/fontawesome-webfont.svg'
-            }
-        ]
-    },
-    'angular': {
-        'url': 'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/',
-        'js': [
-            {
-                'path': 'angular.min.js'
-            },
-            {
-                'path': 'angular-resource.min.js'
-            }
-        ]
-    },
-    'select2': {
-        'url': 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/',
-        'js': [
-            {
-                'path': 'js/select2.min.js',
-                'sri': 'sha256-HNkbndPiWM5EIRgahc3hWiuGD6CtwFgMfEU0o3zeabo='
-            }
-        ],
-        'css': [
-            {
-                'path': 'css/select2.min.css',
-                'sri': 'sha256-EQA4j7+ZbrewCQvwJzNmVxiKMwGRspXMGgt7I6AAiqs='
-            }
-        ]
-    },
-    'select2-bootstrap-theme': {
-        'url': 'https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/',
-        'css': [
-            {
-                'path': 'select2-bootstrap.min.css',
-                'sri': 'sha256-nbyata2PJRjImhByQzik2ot6gSHSU4Cqdz5bNYL2zcU='
-            }
-        ]
-    },
-    'moment': {
-        'url': 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/',
-        'js': [
-            {
-                'path': 'moment.min.js',
-                'sri': 'sha256-1hjUhpc44NwiNg8OwMu2QzJXhD8kcj+sJA3aCQZoUjg='
-            }
-        ]
-    },
-    'codemirror': {
-        'url': 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/',
-        'js': [
-            {
-                'path': 'codemirror.min.js',
-                'sri': 'sha256-0LRLvWWVXwt0eH0/Bzd0PHICg/bSMDIe5sXgaDSpZaA='
-            },
-            {
-                'path': 'addon/mode/overlay.min.js',
-                'sri': 'sha256-ffWkw3Pn4ieMygm1vwdRKcMtBJ6E6kuBi8GlVVPXWEs='
-            },
-            {
-                'path': 'mode/django/django.min.js',
-                'sri': 'sha256-6hO1TjC+3W73p+kXnCqcHVjfRa4KMdG7hvWencnu0XM='
-            }
-        ],
-        'css': [
-            {
-                'path': 'codemirror.min.css',
-                'sri': 'sha256-wluO/w4cnorJpS0JmcdTSYzwdb5E6u045qa4Ervfb1k='
-            }
-        ]
-    },
-    'fuse': {
-        'url': 'https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.4.6/',
-        'js': [
-            {
-                'path': 'fuse.min.js',
-                'sri': 'sha512-FwWaT/y9ajd/+J06KL9Fko1jELonJNHMUTR4nGP9MSIq4ZdU2w9/OiLxn16p/zEOZkryHi3wKYsnWPuADD328Q=='
-            }
-        ]
-    }
-}
 
 # necessary since django 3.2, explicitly set primary key type to avoid warnings
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
