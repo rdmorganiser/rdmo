@@ -1,19 +1,25 @@
-var _current_image = 0;
-var _max_image = 2;
-var _timeout = 5000;
+document.addEventListener("DOMContentLoaded", function () {
+    const images = document.querySelectorAll(".header-image"); // Get all header images
 
-function swap_image() {
-    $('.header-image-' + _current_image).removeClass('visible');
-    if (_current_image >= _max_image) {
-        _current_image = 0;
-    } else {
-        _current_image += 1;
+    if (images.length === 0) return; // Exit if no images exist
+
+    const maxImage = images.length - 1;
+    const timeout = 5000;
+    let currentImage = 0;
+
+    function swapImage() {
+        if (images.length === 0) return; // Safety check
+
+        images.forEach(image => image.classList.remove("visible"));
+
+        currentImage = (currentImage + 1) % (maxImage + 1);
+
+        images[currentImage].classList.add("visible");
     }
-    $('.header-image-' + _current_image).addClass('visible');
 
-    setTimeout(swap_image, _timeout);
-}
+    // Ensure the first image is visible on load
+    images[currentImage].classList.add("visible");
 
-$(document).ready(function() {
-    setTimeout(swap_image, _timeout);
+    // Start the image swap loop
+    setInterval(swapImage, timeout);
 });
