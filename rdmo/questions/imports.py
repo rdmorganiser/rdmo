@@ -1,5 +1,5 @@
 from rdmo.core.constants import VALUE_TYPE_TEXT
-from rdmo.core.import_helpers import ElementImportHelper, ExtraFieldHelper, ThroughInstanceMapper
+from rdmo.core.imports.helpers import ElementImportHelper, ExtraFieldHelper, ThroughInstanceMapper
 
 from .constants import WIDGET_TYPE_TEXT
 from .models import Catalog, Page, Question, QuestionSet, Section

@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from rdmo.core.imports import ImportElementFields
+from rdmo.core.imports.element_changes import ImportElementFields
 from rdmo.domain.models import Attribute
 from rdmo.management.imports import import_elements
 

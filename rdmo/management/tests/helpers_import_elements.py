@@ -3,7 +3,7 @@ from collections import OrderedDict
 from functools import partial
 from typing import Optional, Union
 
-from rdmo.core.imports import ImportElementFields, track_changes_on_element
+from rdmo.core.imports.element_changes import ImportElementFields, track_changes_on_element
 from rdmo.management.import_utils import initialize_import_element_dict
 from rdmo.management.imports import import_elements
 from rdmo.management.tests.helpers_xml import read_xml_and_parse_to_root_and_elements

@@ -11,7 +11,7 @@ from django.utils.translation import gettext_lazy as _
 
 import requests
 
-from rdmo.core.imports import handle_fetched_file
+from rdmo.core.imports.utils import handle_fetched_file
 from rdmo.core.plugins import Plugin
 from rdmo.core.xml import get_ns_map, get_uri, read_xml_file
 from rdmo.domain.models import Attribute

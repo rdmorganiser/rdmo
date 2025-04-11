@@ -7,7 +7,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.core.imports import handle_uploaded_file
+from rdmo.core.imports.utils import handle_uploaded_file
 from rdmo.core.plugins import get_plugin, get_plugins
 from rdmo.questions.models import Question
 

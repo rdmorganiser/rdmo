@@ -8,13 +8,13 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpRequest
 
 from rdmo.conditions.imports import import_helper_condition
-from rdmo.core.imports import (
-    ImportElementFields,
-    check_permissions,
+from rdmo.core.imports.checks import check_permissions
+from rdmo.core.imports.element_changes import ImportElementFields
+from rdmo.core.imports.element_messages import make_import_info_msg
+from rdmo.core.imports.getters import (
     get_or_return_instance,
-    make_import_info_msg,
-    validate_instance,
 )
+from rdmo.core.imports.validators import validate_instance
 from rdmo.core.xml import order_elements
 from rdmo.domain.imports import import_helper_attribute
 from rdmo.management.import_utils import (
