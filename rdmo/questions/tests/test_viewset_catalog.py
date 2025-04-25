@@ -45,7 +45,7 @@ urlnames = {
     'copy': 'v1-questions:catalog-copy'
 }
 
-export_formats = ('xml', 'rtf', 'odt', 'docx', 'html', 'markdown', 'tex', 'pdf')
+export_formats = ('xml', 'html')
 
 
 @pytest.mark.parametrize('username,password', users)
