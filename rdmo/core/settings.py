@@ -111,7 +111,7 @@ ACCOUNT_FORMS = {
     'signup': 'rdmo.accounts.account.SignupForm'
 }
 ACCOUNT_USER_DISPLAY = 'rdmo.accounts.utils.get_full_name'
-ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_SIGNUP_FIELDS = ['username*', 'email*', 'password1*', 'password2*']
 ACCOUNT_ACTIVATION_DAYS = 7
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
 ACCOUNT_EMAIL_VERIFICATION = 'optional'
