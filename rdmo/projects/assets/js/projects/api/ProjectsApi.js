@@ -10,6 +10,11 @@ class ProjectsApi extends BaseApi {
     return this.get(url)
   }
 
+  static fetchUserProjects(params) {
+    const url = '/api/v1/projects/projects/user/?' + encodeParams(params)
+    return this.get(url)
+  }
+
   static fetchCatalogs() {
     return this.get('/api/v1/projects/catalogs/')
   }
