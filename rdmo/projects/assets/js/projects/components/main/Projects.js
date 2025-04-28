@@ -59,7 +59,6 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
 
   const handleView = () => {
     configActions.updateConfig('myProjects', !myProjects)
-    myProjects ? configActions.deleteConfig('params.user') : configActions.updateConfig('params.user', currentUserId)
     projectsActions.fetchProjects()
   }
 

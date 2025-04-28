@@ -12,9 +12,10 @@ users = (
     ('manager', 'manager'),
     ('author', 'author'),
     ('guest', 'guest'),
+    ('admin', 'admin'),
     ('api', 'api'),
-    ('user', 'user'),
     ('site', 'site'),
+    ('user', 'user'),
     ('anonymous', None),
 )
 
@@ -23,26 +24,30 @@ view_project_permission_map = {
     'manager': [1, 3, 5, 7, 12],
     'author': [1, 3, 5, 8, 12],
     'guest': [1, 3, 5, 9, 12],
-    'user': [12],
+    'admin': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    'user': [12]
 }
 
 change_project_permission_map = {
     'owner': [1, 2, 3, 4, 5, 10, 12],
     'manager': [1, 3, 5, 7],
+    'admin': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12],
     'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12],
     'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12]
 }
 
 delete_project_permission_map = {
     'owner': [1, 2, 3, 4, 5, 10, 12],
+    'admin': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12],
     'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12],
     'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12]
 }
 
 urlnames = {
     'list': 'v1-projects:project-list',
+    'user': 'v1-projects:project-user',
     'detail': 'v1-projects:project-detail',
     'copy': 'v1-projects:project-copy',
     'overview': 'v1-projects:project-overview',
@@ -67,6 +72,9 @@ optionset_id = 4
 project_id = 1
 parent_id = 3
 parent_ancestors = [2, 3]
+
+owner_id = 5
+owner_projects = [1, 2, 3, 4, 5, 10, 12]
 
 page_size = 5
 
@@ -94,19 +102,29 @@ def test_list(db, client, username, password):
         assert response.status_code == 401
 
 
-def test_list_user(db, client):
-    client.login(username='user', password='user')
+@pytest.mark.parametrize('username,password', users)
+def test_list_user(db, client, username, password):
+    client.login(username=username, password=password)
 
-    url = reverse(urlnames['list']) + '?user=1'
+    url = reverse(urlnames['list']) + f'?user={owner_id}'
     response = client.get(url)
     response_data = response.json()
 
-    assert response.status_code == 200
-    assert isinstance(response_data, dict)
+    if password:
+        assert response.status_code == 200
+        assert isinstance(response_data, dict)
 
-    values_list = Project.objects.filter(id__in=projects_visible).values_list('id', flat=True)
-    assert response_data['count'] == len(values_list)
-    assert [item['id'] for item in response_data['results']] == list(values_list[:page_size])
+        if username == 'user':
+            # only the visible project
+            assert [item['id'] for item in response_data['results']] == [12]
+        elif username in ['manager', 'author', 'guest']:
+            # only memberships and visible
+            assert [item['id'] for item in response_data['results']] == [1, 3, 5, 12]
+        else:
+            assert response_data['count'] == len(owner_projects)
+            assert [item['id'] for item in response_data['results']] == list(owner_projects[:page_size])
+    else:
+        assert response.status_code == 401
 
 
 def test_list_multisite(db, client, settings):
@@ -125,6 +143,30 @@ def test_list_multisite(db, client, settings):
     assert response.status_code == 200
     assert project.id in [i['id'] for i in response_data['results']]
     assert response_data['count'] == len(view_project_permission_map['site']) + 1
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_user(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['user'])
+    response = client.get(url)
+
+    if password:
+        response_data = response.json()
+
+        assert response.status_code == 200
+        assert isinstance(response_data, dict)
+
+        if username in ['admin', 'site', 'api', 'user']:
+            assert sorted([item['id'] for item in response.json().get('results')]) == projects_visible
+        else:
+            values_list = Project.objects.filter(id__in=view_project_permission_map.get(username, [])) \
+                                         .values_list('id', flat=True)
+            assert response_data['count'] == len(values_list)
+            assert [item['id'] for item in response_data['results']] == list(values_list[:page_size])
+    else:
+        assert response.status_code == 401
 
 
 @pytest.mark.parametrize('username,password', users)

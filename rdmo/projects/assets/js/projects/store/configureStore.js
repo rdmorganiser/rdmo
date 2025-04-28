@@ -2,7 +2,7 @@ import { createStore, applyMiddleware, combineReducers } from 'redux'
 
 import { checkStoreId, configureMiddleware } from 'rdmo/core/assets/js/utils/store'
 
-import { getConfigFromLocalStorage } from 'rdmo/core/assets/js/utils/config'
+import { getConfigFromLocalStorage, isTruthy } from 'rdmo/core/assets/js/utils/config'
 
 import configReducer from 'rdmo/core/assets/js/reducers/configReducer'
 import pendingReducer from 'rdmo/core/assets/js/reducers/pendingReducer'
@@ -14,8 +14,6 @@ import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import * as userActions from 'rdmo/core/assets/js/actions/userActions'
 
 import * as projectsActions from '../actions/projectsActions'
-
-import userIsManager from '../utils/userIsManager'
 
 export default function configureStore() {
   // empty localStorage in new session
@@ -41,21 +39,20 @@ export default function configureStore() {
   )
 
   window.addEventListener('load', () => {
-    getConfigFromLocalStorage(initialState.config.prefix).forEach(([path, value]) => {
-      store.dispatch(configActions.updateConfig(path, value, false))
-    })
+    getConfigFromLocalStorage(initialState.config.prefix)
+      .map(([path, value]) => (
+        [path, (path == 'myProjects') ? isTruthy(value) : value]  // cast myProjects to bool
+      ))
+      .forEach(([path, value]) => {
+        store.dispatch(configActions.updateConfig(path, value, false))
+      })
 
     Promise.all([
       store.dispatch(userActions.fetchCurrentUser()),
       store.dispatch(projectsActions.fetchCatalogs())
     ]).then(() => {
-      const currentUser = store.getState().currentUser.currentUser
-      const isManager = userIsManager(currentUser)
-      if (isManager && store.getState().config.myProjects) {
-        store.dispatch(configActions.updateConfig('params.user', currentUser.id))
-      }
       store.dispatch(projectsActions.fetchProjects())
-      store.dispatch(projectsActions.fetchInvitations(currentUser.id))
+      store.dispatch(projectsActions.fetchInvitations())
       store.dispatch(projectsActions.fetchAllowedFileTypes())
       store.dispatch(projectsActions.fetchImportUrls())
     })

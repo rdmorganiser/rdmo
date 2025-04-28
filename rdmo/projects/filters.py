@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models import F, OuterRef, Q, Subquery
 from django.db.models.functions import Concat
@@ -26,11 +27,10 @@ class ProjectUserFilterBackend(BaseFilterBackend):
             return queryset
 
         user_id = request.GET.get('user')
-        user_username = request.GET.get('username')
+        user_username = request.GET.get('username') if settings.USER_API else None
         if user_id or user_username:
             user = User.objects.filter(Q(id=user_id) | Q(username=user_username)).first()
-            if user:
-                queryset = queryset.filter_visibility(user)
+            queryset = queryset.filter(user=user)
 
         return queryset
 
