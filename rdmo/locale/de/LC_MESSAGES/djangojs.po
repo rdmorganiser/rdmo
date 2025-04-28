@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 09:38+0100\n"
-"PO-Revision-Date: 2025-03-20 09:44+0100\n"
+"POT-Creation-Date: 2025-04-28 13:42+0200\n"
+"PO-Revision-Date: 2025-04-28 13:43+0200\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -1877,6 +1877,18 @@ msgstr "Meine Projekte"
 #: projects/assets/js/projects/utils/translations.js:3
 msgid "All projects"
 msgstr "Alle Projekte"
+
+#: projects/assets/js/projects/components/main/Projects.js:55
+msgid "Copy project"
+msgstr "Projekt kopieren"
+
+#: projects/assets/js/projects/components/main/Projects.js:56
+msgid "Update project"
+msgstr "Projekt bearbeiten"
+
+#: projects/assets/js/projects/components/main/Projects.js:57
+msgid "Delete project"
+msgstr "Projekt entfernen"
 
 #: projects/assets/js/projects/utils/constants.js:4
 msgid "Name"
