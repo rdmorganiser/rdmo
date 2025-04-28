@@ -25,8 +25,8 @@ class Task(TranslationMixin, models.Model):
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this task.')
     )
-    uri_path = models.SlugField(
-        max_length=512, blank=True,
+    uri_path = models.CharField(
+        max_length=512, blank=True, default="",
         verbose_name=_('URI Path'),
         help_text=_('The path for the URI of this task.')
     )
