@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { isEmpty } from 'lodash'
 
 import { checkQuestionSet } from '../../../utils/page'
 import { getChildPrefix } from '../../../utils/set'
@@ -33,84 +34,88 @@ const QuestionSet = ({ config, settings, templates, page, questionset, sets, val
       <QuestionSetHelpTemplate templates={templates} />
       <QuestionSetAddSetHelp templates={templates} questionset={questionset} disabled={disabled} />
       <QuestionSetManagement config={config} questionset={questionset} isManager={isManager} />
-      <div>
-        {
-          currentSets.map((set, setIndex) => (
-            <div key={setIndex} className="interview-block">
-              <div className="interview-block-options">
-                <QuestionSetCopySet questionset={questionset} sets={sets} currentSet={set} disabled={disabled} copySet={copySet} />
-                <QuestionSetRemoveSet questionset={questionset} currentSet={set} disabled={disabled} deleteSet={deleteSet} />
-              </div>
-              <div className="row">
-                {
-                  currentSets && (
-                    questionset.elements.map((element, elementIndex) => {
-                      if (element.model == 'questions.questionset') {
-                        return (
-                          <QuestionSet
-                            key={elementIndex}
-                            config={config}
-                            settings={settings}
-                            templates={templates}
-                            page={page}
-                            questionset={element}
-                            sets={sets}
-                            values={values.filter((value) => element.attributes.includes(value.attribute))}
-                            disabled={disabled}
-                            isManager={isManager}
-                            parentSet={set}
-                            createSet={createSet}
-                            updateSet={updateSet}
-                            deleteSet={deleteSet}
-                            copySet={copySet}
-                            createValue={createValue}
-                            updateValue={updateValue}
-                            deleteValue={deleteValue}
-                            copyValue={copyValue}
-                            fetchContact={fetchContact}
-                          />
-                        )
-                      } else {
-                        return (
-                          <Question
-                            key={elementIndex}
-                            config={config}
-                            settings={settings}
-                            templates={templates}
-                            page={page}
-                            question={element}
-                            sets={sets.filter((set) => (
-                              set.set_prefix == setPrefix
-                            ))}
-                            values={values.filter((value) => (
-                              value.attribute == element.attribute &&
-                              value.set_prefix == set.set_prefix &&
-                              value.set_index == set.set_index
-                            ))}
-                            siblings={values.filter((value) => (
-                              value.attribute == element.attribute &&
-                              value.set_prefix == set.set_prefix &&
-                              value.set_index != set.set_index
-                            ))}
-                            disabled={disabled}
-                            isManager={isManager}
-                            currentSet={set}
-                            createValue={createValue}
-                            updateValue={updateValue}
-                            deleteValue={deleteValue}
-                            copyValue={copyValue}
-                            fetchContact={fetchContact}
-                          />
-                        )
-                      }
-                    })
-                  )
-                }
-              </div>
-            </div>
-          ))
-        }
-      </div>
+      {
+        !isEmpty(questionset.elements) && (
+          <div>
+            {
+              currentSets.map((set, setIndex) => (
+                <div key={setIndex} className="interview-block">
+                  <div className="interview-block-options">
+                    <QuestionSetCopySet questionset={questionset} sets={sets} currentSet={set} disabled={disabled} copySet={copySet} />
+                    <QuestionSetRemoveSet questionset={questionset} currentSet={set} disabled={disabled} deleteSet={deleteSet} />
+                  </div>
+                  <div className="row">
+                    {
+                      currentSets && (
+                        questionset.elements.map((element, elementIndex) => {
+                          if (element.model == 'questions.questionset') {
+                            return (
+                              <QuestionSet
+                                key={elementIndex}
+                                config={config}
+                                settings={settings}
+                                templates={templates}
+                                page={page}
+                                questionset={element}
+                                sets={sets}
+                                values={values.filter((value) => element.attributes.includes(value.attribute))}
+                                disabled={disabled}
+                                isManager={isManager}
+                                parentSet={set}
+                                createSet={createSet}
+                                updateSet={updateSet}
+                                deleteSet={deleteSet}
+                                copySet={copySet}
+                                createValue={createValue}
+                                updateValue={updateValue}
+                                deleteValue={deleteValue}
+                                copyValue={copyValue}
+                                fetchContact={fetchContact}
+                              />
+                            )
+                          } else {
+                            return (
+                              <Question
+                                key={elementIndex}
+                                config={config}
+                                settings={settings}
+                                templates={templates}
+                                page={page}
+                                question={element}
+                                sets={sets.filter((set) => (
+                                  set.set_prefix == setPrefix
+                                ))}
+                                values={values.filter((value) => (
+                                  value.attribute == element.attribute &&
+                                  value.set_prefix == set.set_prefix &&
+                                  value.set_index == set.set_index
+                                ))}
+                                siblings={values.filter((value) => (
+                                  value.attribute == element.attribute &&
+                                  value.set_prefix == set.set_prefix &&
+                                  value.set_index != set.set_index
+                                ))}
+                                disabled={disabled}
+                                isManager={isManager}
+                                currentSet={set}
+                                createValue={createValue}
+                                updateValue={updateValue}
+                                deleteValue={deleteValue}
+                                copyValue={copyValue}
+                                fetchContact={fetchContact}
+                              />
+                            )
+                          }
+                        })
+                      )
+                    }
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+        )
+      }
 
       <QuestionSetAddSet
         questionset={questionset}
