@@ -95,7 +95,7 @@ def test_get_pandoc_args_resource_path(settings, mocker, pandoc_version, export_
     pandoc_args = pandoc_args_map[pandoc_version].get(export_format, pandoc_args_map[pandoc_version]['other']).copy()
 
     if Version(pandoc_version) >= Version('2'):
-        pandoc_args.append('--resource-path=/Users/jochen/code/rdmorganiser/rdmo/testing/media_root/test')
+        pandoc_args.append(f'--resource-path={testing_path}/media_root/test')
 
     assert get_pandoc_args(export_format, {'resource_path': 'test'}) == pandoc_args
 
