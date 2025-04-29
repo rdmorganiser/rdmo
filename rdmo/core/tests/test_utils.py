@@ -7,7 +7,6 @@ from django.utils.translation import activate
 
 from rdmo.core.utils import (
     human2bytes,
-    inject_textblocks,
     join_url,
     parse_date_from_string,
     parse_metadata,
@@ -109,4 +108,3 @@ def test_parse_metadata(input_html, metadata, output_html):
 @pytest.mark.parametrize('input_string, output_string', double_newline_strings)
 def test_remove_double_newlines(input_string, output_string):
     assert remove_double_newlines(input_string) == output_string
-
