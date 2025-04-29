@@ -21,7 +21,7 @@ def test_openapi_schema(db, client, login, settings, username):
         assert response.status_code == 200
         schema = yaml.safe_load(response.content)
         assert schema['openapi'] == '3.0.3'
-        assert len(schema['paths']) == 123
+        assert len(schema['paths']) == 124
     else:
         assert response.status_code == 302
 
