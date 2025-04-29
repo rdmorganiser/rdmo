@@ -1,12 +1,23 @@
 import React, { useState } from 'react'
 import { Form, Field } from 'react-final-form'
 import { useSelector } from 'react-redux'
+// import { useDebouncedCallback } from 'use-debounce'
+// import { pick } from 'lodash'
+
+// import { AsyncAPISelect } from 'rdmo/core/assets/js/components'
+import { Select } from 'rdmo/core/assets/js/components'
+// import ProjectApi from '../../api/ProjectApi'
 
 const ProjectForm = () => {
+  // const handleLoadProjects = useDebouncedCallback((search, callback) => {
+  //   ProjectApi.fetchProjects({ search })
+  //             .then(response => callback(response.results.map(project => pick(project, 'id', 'title'))))
+  // }, 500)
+
   const projectData = useSelector((state) => state.project.project)
   console.log('Project Data:', projectData)
-  const { project } = projectData
-  const catalogs = useSelector((state) => state.catalogs?.catalogs || [])
+  const { catalogs, project } = projectData
+  // const catalogs = useSelector((state) => state.catalogs?.catalogs || [])
   // const allProjects = useSelector((state) => state.project.allProjects || [])
   const allProjects = useSelector(state => state.project.allProjects, (prev, next) => prev === next)
 
@@ -49,10 +60,24 @@ const ProjectForm = () => {
 
           <div className="mb-2">
             <label className="form-label fw-bold">Projektphase</label>
-            <Field name="phase" component="select" className="form-select">
+            {/* <Field name="phase" component="select" className="form-select">
               <option value="antragstellung">Antragstellung</option>
               <option value="durchführung">Durchführung</option>
               <option value="abschluss">Abschluss</option>
+            </Field> */}
+            <Field name="phase">
+              {({ input }) => (
+                <Select
+                  options={[
+                    { value: 'antragstellung', label: 'Antragstellung' },
+                    { value: 'durchführung', label: 'Durchführung' },
+                    { value: 'abschluss', label: 'Abschluss' }
+                  ]}
+                  value={input.value}
+                  onChange={input.onChange}
+                  placeholder="Select a phase"
+                />
+              )}
             </Field>
             <div className="form-text">
               Die Phase, in der sich Ihr Projekt zum aktuellen Zeitpunkt befindet.
@@ -102,7 +127,7 @@ const ProjectForm = () => {
               Durch die Verknüpfung mit einem übergeordneten Projekt, können ...
             </div>
 
-            <Field
+            {/* <Field
               name="parent"
               component="select"
               className={`form-select ${!isParentSwitchOn ? 'bg-light text-muted' : ''}`}
@@ -117,6 +142,26 @@ const ProjectForm = () => {
                     {p.title}
                   </option>
                 ))}
+            </Field> */}
+
+            <Field name="parent" initialValue={project.parent}>
+              {({ input }) => {
+                const projects = Array.isArray(allProjects) ? allProjects : []
+
+                const options = projects
+                  .filter((p) => p.id !== project.id)
+                  .map((p) => ({ value: p.id, label: p.title }))
+
+                return (
+                  <Select
+                    options={options}
+                    value={input.value}
+                    onChange={input.onChange}
+                    isDisabled={!isParentSwitchOn}
+                    placeholder="Übergeordnetes Projekt auswählen"
+                  />
+                )
+              }}
             </Field>
 
             <div className="form-check mt-2">
