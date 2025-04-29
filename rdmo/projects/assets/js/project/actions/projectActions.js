@@ -1,5 +1,5 @@
 import ProjectApi from '../api/ProjectApi'
-import CatalogsApi from '/rdmo/core/assets/js/api/CatalogsApi'
+import CatalogsApi from '/rdmo/projects/assets/js/common/api/CatalogsApi'
 
 import { projectId } from '../utils/meta'
 
