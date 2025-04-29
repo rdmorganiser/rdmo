@@ -1,3 +1,5 @@
+import { encodeParams } from 'rdmo/core/assets/js/utils/api'
+
 import BaseApi from 'rdmo/core/assets/js/api/BaseApi'
 
 export default class ProjectApi extends BaseApi {
@@ -45,5 +47,9 @@ export default class ProjectApi extends BaseApi {
         throw new Error(response.statusText)
       }
     })
+  }
+
+  static fetchProjects(params) {
+    return this.get(`/api/v1/projects/projects/?${encodeParams(params)}`)
   }
 }
