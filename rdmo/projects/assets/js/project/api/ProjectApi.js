@@ -39,17 +39,11 @@ export default class ProjectApi extends BaseApi {
     return this.get('/api/v1/projects/views/views/')
   }
 
-  static fetchAllProjects() {
-    return fetch('/api/v1/projects/projects/').then(response => {
-      if (response.ok) {
-        return response.json()
-      } else {
-        throw new Error(response.statusText)
-      }
-    })
-  }
-
   static fetchProjects(params) {
     return this.get(`/api/v1/projects/projects/?${encodeParams(params)}`)
+  }
+
+  static updateProject(projectId, data) {
+    return this.put(`/api/v1/projects/projects/${projectId}/`, data)
   }
 }
