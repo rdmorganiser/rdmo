@@ -2,6 +2,7 @@ import React from 'react'
 
 import { Tile } from 'rdmo/core/assets/js/components'
 import ProjectForm from './ProjectForm'
+import ProjectDelete from './ProjectDelete'
 
 const ProjectData = () => {
   return (
@@ -23,8 +24,8 @@ const ProjectData = () => {
     </div>
 
     <div className="row g-3">
-      <Tile size="fullWidth">
-        Delete project
+      <Tile size="fullWidth" style="warning">
+        <ProjectDelete />
       </Tile>
     </div>
   </div>

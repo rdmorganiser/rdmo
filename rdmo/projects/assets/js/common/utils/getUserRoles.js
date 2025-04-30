@@ -1,9 +1,11 @@
 import { ROLE_LABELS } from './constants'
 
-export const getUserRoles = (row, currentUserId, arraysToSearch) => {
+export const getUserRoles = (project, currentUserId, arraysToSearch) => {
   if (!arraysToSearch || !arraysToSearch.length) {
     arraysToSearch = ['authors', 'guests', 'managers', 'owners']
   }
+
+  console.log('getUserRoles', project, currentUserId, arraysToSearch)
 
   const roleDefinitions = {
     authors: { roleLabel: ROLE_LABELS.author, roleBoolean: 'isProjectAuthor' },
@@ -21,7 +23,7 @@ export const getUserRoles = (row, currentUserId, arraysToSearch) => {
   }
 
   arraysToSearch.forEach(arrayName => {
-    if (row[arrayName].some(item => item.id === currentUserId)) {
+    if (project[arrayName].some(item => item.id === currentUserId)) {
       const { roleLabel, roleBoolean } = roleDefinitions[arrayName]
       rolesFound.push(roleLabel)
       roleBooleans[roleBoolean] = true
