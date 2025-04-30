@@ -8,7 +8,8 @@ import { language } from 'rdmo/core/assets/js/utils'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import { PendingInvitations, ProjectFilters, ProjectImport, Table } from '../helper'
-import { getTitlePath, getUserRoles, userIsManager, HEADER_FORMATTERS, SORTABLE_COLUMNS } from '../../utils'
+import { getTitlePath, userIsManager, HEADER_FORMATTERS, SORTABLE_COLUMNS } from '../../utils'
+import { getUserRoles } from 'rdmo/projects/assets/js/common/utils'
 
 const Projects = ({ config, configActions, currentUserObject, projectsActions, projectsObject }) => {
   const { allowedTypes, catalogs, importUrls, invites, projects, projectsCount, hasNext } = projectsObject
