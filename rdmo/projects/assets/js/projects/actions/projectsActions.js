@@ -1,4 +1,5 @@
 import ProjectsApi from '../api/ProjectsApi'
+import CatalogsApi from '/rdmo/projects/assets/js/common/api/CatalogsApi'
 
 import {
   FETCH_PROJECTS_ERROR,
@@ -73,8 +74,8 @@ export function fetchCatalogs() {
     dispatch(addToPending(pendingId))
     dispatch(fetchCatalogsInit())
 
-    const action = (dispatch) => ProjectsApi.fetchCatalogs().then(catalogs => {
-      dispatch(fetchCatalogsSuccess(catalogs))
+    const action = (dispatch) => CatalogsApi.fetchCatalogs().then(catalogs => {
+      dispatch(fetchCatalogsSuccess({ catalogs }))
     })
 
     return dispatch(action)
