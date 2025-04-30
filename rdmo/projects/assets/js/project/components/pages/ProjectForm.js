@@ -178,7 +178,7 @@ const ProjectForm = () => {
         </div> */}
       </div>
 
-      <button type="submit" className="btn btn-primary" onClick={handleSubmit}>{gettext('Submit')}</button>
+      {/* <button type="submit" className="btn btn-primary" onClick={handleSubmit}>{gettext('Submit')}</button> */}
     </form>
   )
 }
