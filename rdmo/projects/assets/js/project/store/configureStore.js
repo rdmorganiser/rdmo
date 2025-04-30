@@ -61,7 +61,6 @@ export default function configureStore() {
     store.dispatch(settingsActions.fetchSettings())
     store.dispatch(templateActions.fetchTemplates())
     store.dispatch(userActions.fetchCurrentUser())
-    store.dispatch(projectActions.fetchAllProjects())
 
     store.dispatch(projectActions.fetchProject())
   })
