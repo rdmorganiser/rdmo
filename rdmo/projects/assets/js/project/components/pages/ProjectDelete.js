@@ -6,7 +6,8 @@ import { getUserRoles } from 'rdmo/projects/assets/js/common/utils'
 const ProjectDelete = () => {
   const currentUser = useSelector((state) => state.user.currentUser)
   const { project } = useSelector((state) => state.project.project)
-
+console.log('owner: ', getUserRoles(project, currentUser.id, ['owners']).isProjectOwner)
+console.log('superuser: ', currentUser.is_superuser)
   const handleDelete = () => {
     // Insert deletion logic here
     console.log('Deleting project:', project.title)

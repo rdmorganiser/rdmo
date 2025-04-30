@@ -15,10 +15,6 @@ class ProjectsApi extends BaseApi {
     return this.get(url)
   }
 
-  static fetchCatalogs() {
-    return this.get('/api/v1/projects/catalogs/')
-  }
-
   static fetchAllowedFileTypes() {
     return this.get('/api/v1/projects/projects/upload-accept/')
   }
