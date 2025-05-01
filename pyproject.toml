@@ -75,7 +75,7 @@ dev = [
   "build>=1.0,<2.0",
   "pipdeptree>=2.13,<3.0",
   "pre-commit>=3.4,<5.0",
-  "setuptools>=73,<79",
+  "setuptools>=73,<81",
   "twine>=5.1.1,<7.0",
   "wheel>=0.42,<0.46",
   "rdmo[allauth]",
