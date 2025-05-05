@@ -39,10 +39,10 @@ def resolve_conditions(catalog, values, sets):
     return conditions
 
 
-def compute_sets(values):
+def compute_sets(values_list):
     # compute sets from values (including empty values)
     sets = defaultdict(set)
-    for attribute, set_prefix, set_index in values.distinct_list():
+    for attribute, set_prefix, set_index in values_list:
         sets[attribute].add((set_prefix, set_index))
     return sets
 
@@ -90,7 +90,7 @@ def compute_navigation(section, project, snapshot=None):
     values = project.values.filter(snapshot=snapshot).select_related('attribute', 'option')
 
     # compute sets from values (including empty values)
-    sets = compute_sets(values)
+    sets = compute_sets(values.distinct_list())
 
     # resolve all conditions to get a dict mapping conditions to set_indexes
     conditions = resolve_conditions(project.catalog, values, sets)
@@ -146,19 +146,21 @@ def compute_progress(project, snapshot=None):
     values = project.values.filter(snapshot=snapshot).select_related('attribute', 'option')
 
     # compute sets from values (including empty values)
-    sets = compute_sets(values)
+    sets = compute_sets(values.distinct_list())
 
     # resolve all conditions to get a dict mapping conditions to set_indexes
     conditions = resolve_conditions(project.catalog, values, sets)
 
-    # query distinct, non empty set values
-    values_list = values.exclude_empty().distinct_list()
+    # query distinct, non empty set values and compute sets again
+    non_empty_values = values.exclude_empty()
+    non_empty_values_list = non_empty_values.distinct_list()
+    non_empty_sets = compute_sets(non_empty_values_list)
 
     # count the total number of questions, taking sets and conditions into account
-    counts = count_questions(project.catalog, sets, conditions)
+    counts = count_questions(project.catalog, non_empty_sets, conditions)
 
     # filter the values_list for the attributes, and compute the total sum of counts
-    count = sum(1 for value in values_list if value[0] in counts)
+    count = sum(1 for value in non_empty_values_list if value[0] in counts)
     total = sum(counts.values())
 
     return count, total
