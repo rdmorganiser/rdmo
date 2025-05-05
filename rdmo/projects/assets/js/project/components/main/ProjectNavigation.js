@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react'
-// import Sidebar from './Sidebar'
 import ReactiveSidebar from './ReactiveSidebar'
-// import OffcanvasSidebar from './OffcanvasSidebar'
 import ProjectPage from './ProjectPage'
 
 const ProjectNavigation = () => {
@@ -26,39 +24,25 @@ const ProjectNavigation = () => {
   const menuItems = [
     {
       title: '',
-      items: [{ id: 'dashboard', name: 'Dashboard', icon: 'bi-grid' }],
+      items: [{ id: 'dashboard', name: gettext('Dashboard'), icon: 'bi-grid' }],
     },
     {
-      title: 'DATENMANAGEMENTPLAN',
+      title: gettext('DATA MANAGEMENT PLAN'),
       items: [
-        { id: 'interview', name: 'Fragebogen', icon: 'bi-clipboard-check' },
-        { id: 'documents', name: 'Dokumente', icon: 'bi-file-text' },
-        { id: 'snapshots', name: 'Zwischenstände', icon: 'bi-stack' },
+        { id: 'interview', name: gettext('Interview'), icon: 'bi-clipboard-check' },
+        { id: 'documents', name: gettext('Documents'), icon: 'bi-file-text' },
+        { id: 'snapshots', name: gettext('Snapshots'), icon: 'bi-stack' },
       ],
     },
     {
-      title: 'EINSTELLUNGEN',
+      title: gettext('PROJECT MANAGEMENT'),
       items: [
-        { id: 'project-information', name: 'Projektdaten', icon: 'bi-info-square' },
-        { id: 'membership', name: 'Projektteam', icon: 'bi-people' },
-        { id: 'plugins', name: 'Plugins', icon: 'bi-wrench' },
+        { id: 'project-information', name: gettext('Project data'), icon: 'bi-info-square' },
+        { id: 'membership', name: gettext('Membership'), icon: 'bi-people' },
+        { id: 'plugins', name: gettext('Plugins'), icon: 'bi-wrench' },
       ],
     },
   ]
-
-  // return (
-  //   <div className="d-flex" style={{ height: '100vh' }}>
-  //     <div style={{ width: '250px', overflow: 'hidden' }}>
-  //       <ReactiveSidebar onNavigate={handleNavigation} menuItems={menuItems} activePage={activePage} />
-  //       {/* <Sidebar onNavigate={handleNavigation} menuItems={menuItems} activePage={activePage} /> */}
-  //       {/* <OffcanvasSidebar onNavigate={handleNavigation} menuItems={menuItems} activePage={activePage} /> */}
-  //     </div>
-
-  //     <div className="flex-grow-1 p-4" style={{ overflowY: 'auto', height: '100vh' }}>
-  //       <ProjectPage activePage={activePage} />
-  //     </div>
-  //   </div>
-  // )
 
   return (
     <div className="d-flex vh-100">
