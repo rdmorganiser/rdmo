@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import ProjectBadge from './ProjectBadge'
 
 const ReactiveSidebar = ({ menuItems, onNavigate, activePage }) => {
   return (
@@ -29,6 +30,7 @@ const ReactiveSidebar = ({ menuItems, onNavigate, activePage }) => {
         </div>
 
         <div className="offcanvas-body d-flex flex-column p-3 flex-grow-1">
+          <ProjectBadge />
           <ul className="nav nav-pills flex-column mb-auto">
             {menuItems.map((section) => (
               <div key={section.title}>
