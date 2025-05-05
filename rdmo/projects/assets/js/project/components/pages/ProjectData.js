@@ -6,19 +6,10 @@ import ProjectDelete from './ProjectDelete'
 
 const ProjectData = () => {
   return (
-    // <>
-    //   <Tile title="Projektdaten" size="fullWidth">
-    //     <ProjectForm />
-    //   </Tile>
-    //   <div className="d-flex flex-wrap gap-3">
-    //   <Tile size="compact">
-    //     {'Delete project'}
-    //   </Tile>
-    // </>
 
     <div className="container-fluid px-3">
     <div className="row g-3">
-      <Tile title="Projektdaten" size="fullWidth">
+      <Tile title={gettext('Project data')} size="fullWidth">
         <ProjectForm />
       </Tile>
     </div>
