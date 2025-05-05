@@ -15,6 +15,16 @@ class ProjectsApi extends BaseApi {
     return this.get(url)
   }
 
+  static fetchCatalogs() {
+    return fetch('/api/v1/projects/catalogs/').then(response => {
+      if (response.ok) {
+        return response.json()
+      } else {
+        throw new Error(response.statusText)
+      }
+    })
+  }
+
   static fetchAllowedFileTypes() {
     return this.get('/api/v1/projects/projects/upload-accept/')
   }
