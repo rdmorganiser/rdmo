@@ -1,5 +1,4 @@
 import ProjectsApi from '../api/ProjectsApi'
-import CatalogsApi from '/rdmo/projects/assets/js/common/api/CatalogsApi'
 import { FETCH_PROJECTS_ERROR, FETCH_PROJECTS_INIT, FETCH_PROJECTS_SUCCESS,
          FETCH_INVITATIONS_ERROR, FETCH_INVITATIONS_INIT, FETCH_INVITATIONS_SUCCESS,
          FETCH_CATALOGS_ERROR, FETCH_CATALOGS_INIT, FETCH_CATALOGS_SUCCESS,
@@ -48,7 +47,7 @@ export function fetchProjectsError(error) {
 export function fetchCatalogs() {
   return function(dispatch) {
     dispatch(fetchCatalogsInit())
-    const action = (dispatch) => CatalogsApi.fetchCatalogs()
+    const action = (dispatch) => ProjectsApi.fetchCatalogs()
           .then(catalogs => {
             dispatch(fetchCatalogsSuccess({ catalogs }))})
 

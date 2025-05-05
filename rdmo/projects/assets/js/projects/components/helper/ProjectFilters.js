@@ -25,7 +25,6 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
     configActions.deleteConfig('params.catalog')
     configActions.deleteConfig('params.created_after')
     setStartDate('created', null)
-    console.log('dateRange', dateRange)
     configActions.deleteConfig('params.created_before')
     setEndDate('created', null)
     configActions.deleteConfig('params.last_changed_after')

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { ROLE_LABELS } from 'rdmo/projects/assets/js/common/utils'
+import { ROLE_LABELS } from '../../utils'
 
 const PendingInvitations = ({ invitations }) => {
 

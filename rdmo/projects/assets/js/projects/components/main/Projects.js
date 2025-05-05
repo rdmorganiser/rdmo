@@ -4,8 +4,7 @@ import { PendingInvitations, ProjectFilters, ProjectImport, Table } from '../hel
 import { Link, Modal, SearchField } from 'rdmo/core/assets/js/components'
 import { useFormattedDateTime, useModal, useScrollToTop }  from 'rdmo/core/assets/js/hooks'
 import { language } from 'rdmo/core/assets/js/utils'
-import { getTitlePath, userIsManager, HEADER_FORMATTERS, SORTABLE_COLUMNS } from '../../utils'
-import { getUserRoles } from 'rdmo/projects/assets/js/common/utils'
+import { getTitlePath, getUserRoles, userIsManager, HEADER_FORMATTERS, SORTABLE_COLUMNS } from '../../utils'
 import { get, isEmpty } from 'lodash'
 
 const Projects = ({ config, configActions, currentUserObject, projectsActions, projectsObject }) => {

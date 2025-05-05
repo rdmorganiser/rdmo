@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import AsyncSelect from 'react-select/async'
 import { useDebouncedCallback } from 'use-debounce'
 
@@ -7,17 +7,24 @@ import Input from 'rdmo/core/assets/js/components/forms/Input'
 import Select from 'rdmo/core/assets/js/components/forms/Select'
 import Textarea from 'rdmo/core/assets/js/components/forms/Textarea'
 import ProjectApi from '../../api/ProjectApi'
+import { updateProject } from '../../actions/projectActions'
 
 const ProjectForm = () => {
   const { project, catalogs } = useSelector((state) => state.project.project)
+  console.log ('project %o', project)
+  const dispatch = useDispatch()
+
   const [formData, setFormData] = useState(project || {})
   // const [errors, setErrors] = useState({})
   const errors = useSelector((state) => state.project.errors)
   const [isParentSwitchOn, setIsParentSwitchOn] = useState(!!project.parent)
   const [parentOptions, setParentOptions] = useState([])
 
+  // const saveProject = (newFormData) => {
+  //   ProjectApi.updateProject(project.id, newFormData)
+  // }
   const saveProject = (newFormData) => {
-    ProjectApi.updateProject(project.id, newFormData)
+    dispatch(updateProject(newFormData))
   }
 
   const debouncedSaveShort = useDebouncedCallback(saveProject, 500)
@@ -33,7 +40,6 @@ const ProjectForm = () => {
       debouncedSaveShort(updatedFormData)
     }
   }
-  console.log('parentOptions %o', parentOptions)
 
   const handleLoadProjects = useDebouncedCallback((search, callback) => {
     ProjectApi.fetchProjects({ search })
@@ -58,18 +64,19 @@ const ProjectForm = () => {
     }
   }, [formData.parent, parentOptions.length])
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log('Form Data:', formData)
-    console.log('submit!')
-  }
+  // const handleSubmit = (e) => {
+  //   e.preventDefault()
+  //   console.log('Form Data:', formData)
+  //   console.log('submit!')
+  // }
 
   return (
-    <form onSubmit={handleSubmit} className="container mt-3">
+    // <form onSubmit={handleSubmit} className="container mt-3">
+    <form className="container mt-3">
 
       <Input
-        className="mb-3"
-        label="Title"
+        className="mb-3 form-label fw-bold"
+        label={gettext('Title')}
         help="Der Title für dieses Projekt."
         value={formData.title || ''}
         onChange={(value) => handleChange('title', value)}
@@ -77,8 +84,8 @@ const ProjectForm = () => {
       />
 
       <Textarea
-        className="mb-3"
-        label="Beschreibung"
+        className="mb-3 form-label fw-bold"
+        label={gettext('Description')}
         help="Eine Beschreibung für dieses Projekt (optional)."
         rows={4}
         value={formData.description || ''}
@@ -87,8 +94,8 @@ const ProjectForm = () => {
       />
 
       <Select
-        className="mb-3"
-        label="Projektphase"
+        className="mb-3 form-label fw-bold"
+        label={gettext('Project phase')}
         help="Die Phase, in der sich Ihr Projekt zum aktuellen Zeitpunkt befindet."
         isClearable={true}
         options={[
@@ -99,11 +106,11 @@ const ProjectForm = () => {
         value={formData.phase || ''}
         onChange={(value) => handleChange('phase', value)}
         errors={errors.phase}
-        placeholder="Projektphase auswählen"
+        placeholder={gettext('Select project phase')}
       />
 
       <div className="mb-3">
-        <label className="form-label fw-bold">Katalog</label>
+        <label className="form-label fw-bold">{gettext('Catalog')}</label>
         <div className="form-text">Der Fragenkatalog, der für dieses Projekt verwendet wird.</div>
         {catalogs?.map((catalog) => (
           <div key={catalog.id} className="form-check">
@@ -133,7 +140,7 @@ const ProjectForm = () => {
             onChange={(e) => setIsParentSwitchOn(e.target.checked)}
           />
           <label className="form-label fw-bold m-0" htmlFor="parentToggle">
-            Übergeordnetes Projekt auswählen
+            {gettext('Select parent project')}
           </label>
         </div>
         <div className="form-text">
