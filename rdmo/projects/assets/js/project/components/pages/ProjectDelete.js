@@ -1,31 +1,38 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { DeleteButton } from 'rdmo/management/assets/js/components/common/Buttons.js'
+import { useDispatch, useSelector } from 'react-redux'
 import { getUserRoles } from 'rdmo/projects/assets/js/common/utils'
+import { deleteProject } from '../../actions/projectActions'
 
 const ProjectDelete = () => {
+  const dispatch = useDispatch()
   const currentUser = useSelector((state) => state.user.currentUser)
   const { project } = useSelector((state) => state.project.project)
-console.log('owner: ', getUserRoles(project, currentUser.id, ['owners']).isProjectOwner)
-console.log('superuser: ', currentUser.is_superuser)
+
   const handleDelete = () => {
-    // Insert deletion logic here
-    console.log('Deleting project:', project.title)
+    if (project?.id) {
+      dispatch(deleteProject(project.id))
+        .then(() => {
+          window.location.href = '/projects/'
+        })
+        .catch((error) => {
+          console.error('Failed to delete project:', error)
+        })
+    }
   }
 
   return (
     <div className="p-4 pb-3">
         <div className="mb-4">
-          <div className="fw-bold mb-2">Projekt löschen</div>
-          <div>Diese Aktion kann nicht rückgängig gemacht werden, das Projekt wird permanent entfernt!</div>
+          <div className="fw-bold mb-2">{gettext('Delete project')}</div>
+          <div>{gettext('This action cannot be undone. The project will be permanently removed!')}</div>
         </div>
         <div className="text-end mt-2">
-          <DeleteButton
-              disabled={!currentUser.is_superuser && !getUserRoles(project, currentUser.id, ['owners']).isProjectOwner}
-              onClick={handleDelete}
+          <button className="element-button btn btn-xs btn-danger"
+            disabled={!currentUser.is_superuser && !getUserRoles(project, currentUser.id, ['owners']).isProjectOwner}
+            onClick={handleDelete}
           >
-            Entfernen
-          </DeleteButton>
+             {gettext('Delete project')}
+          </button>
         </div>
       </div>
   )

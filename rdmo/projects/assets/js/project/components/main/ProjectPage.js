@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-// import { useSelector, useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import Dashboard from '../pages/Dashboard'
 // import Interview from '../pages/Interview'

@@ -46,4 +46,8 @@ export default class ProjectApi extends BaseApi {
   static updateProject(projectId, data) {
     return this.put(`/api/v1/projects/projects/${projectId}/`, data)
   }
+
+  static deleteProject(projectId) {
+    return this.delete(`/api/v1/projects/projects/${projectId}/`)
+  }
 }
