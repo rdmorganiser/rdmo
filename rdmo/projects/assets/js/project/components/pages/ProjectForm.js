@@ -15,11 +15,17 @@ const ProjectForm = () => {
   const dispatch = useDispatch()
 
   const [formData, setFormData] = useState(project || {})
+  console.log ('formData %o', formData)
   // const [errors, setErrors] = useState({})
   const errors = useSelector((state) => state.project.errors)
   const [isParentSwitchOn, setIsParentSwitchOn] = useState(!!project.parent)
   const [parentOptions, setParentOptions] = useState([])
 
+  useEffect(() => {
+    if (errors?.length > 0) {
+      console.error('[Project Errors]', errors)
+    }
+  }, [errors])
   // const saveProject = (newFormData) => {
   //   ProjectApi.updateProject(project.id, newFormData)
   // }
