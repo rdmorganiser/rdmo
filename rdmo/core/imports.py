@@ -48,7 +48,7 @@ def handle_fetched_file(filedata):
 
 
 def generate_tempfile_name():
-    t = int(round(time.time() * 1000))
+    t = round(time.time() * 1000)
     r = randint(10000, 99999)
     fn = pj(tempfile.gettempdir(), 'upload_' + str(t) + '_' + str(r) + '.xml')
     return fn
