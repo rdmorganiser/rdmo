@@ -66,6 +66,7 @@ export function fetchProject() {
     .catch(error => {
       dispatch(removeFromPending('fetchProject'))
       dispatch(fetchProjectError(error))
+      throw error
     })
   }
 }
@@ -115,6 +116,7 @@ export function updateProject(data) {
       .catch((error) => {
         dispatch(removeFromPending('updateProject'))
         dispatch(updateProjectError(error))
+        throw error
       })
   }
 }
@@ -145,6 +147,7 @@ export function deleteProject(projectId) {
       .catch((error) => {
         dispatch(removeFromPending('deleteProject'))
         dispatch(deleteProjectError(error))
+        throw error
       })
   }
 }
