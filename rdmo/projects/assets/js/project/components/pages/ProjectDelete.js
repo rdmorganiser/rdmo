@@ -1,12 +1,14 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getUserRoles } from 'rdmo/projects/assets/js/common/utils'
+import { getUserRoles, userIsManager } from 'rdmo/projects/assets/js/common/utils'
 import { deleteProject } from '../../actions/projectActions'
 
 const ProjectDelete = () => {
   const dispatch = useDispatch()
   const currentUser = useSelector((state) => state.user.currentUser)
   const { project } = useSelector((state) => state.project.project)
+
+  const disabled = !userIsManager(currentUser) && !getUserRoles(project, currentUser.id, ['owners']).isProjectOwner
 
   const handleDelete = () => {
     if (project?.id) {
@@ -28,7 +30,7 @@ const ProjectDelete = () => {
         </div>
         <div className="text-end mt-2">
           <button className="element-button btn btn-xs btn-danger"
-            disabled={!currentUser.is_superuser && !getUserRoles(project, currentUser.id, ['owners']).isProjectOwner}
+            disabled={disabled}
             onClick={handleDelete}
           >
              {gettext('Delete project')}
