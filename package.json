@@ -44,9 +44,9 @@
   },
   "devDependencies": {
     "@babel/cli": "^7.27.0",
-    "@babel/core": "^7.26.0",
-    "@babel/preset-env": "^7.26.0",
-    "@babel/preset-react": "^7.26.3",
+    "@babel/core": "^7.27.1",
+    "@babel/preset-env": "^7.27.1",
+    "@babel/preset-react": "^7.27.1",
     "babel-loader": "^10.0.0",
     "copy-webpack-plugin": "^13.0.0",
     "css-loader": "^7.1.1",
@@ -54,9 +54,9 @@
     "eslint-plugin-react": "^7.37.2",
     "file-loader": "^6.2.0",
     "mini-css-extract-plugin": "^2.9.0",
-    "sass": "^1.86.2",
+    "sass": "^1.87.0",
     "sass-loader": "^16.0.0",
-    "webpack": "^5.98.0",
+    "webpack": "^5.99.7",
     "webpack-cli": "^6.0.1",
     "webpack-merge": "6.0.1"
   }
