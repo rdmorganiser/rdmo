@@ -14,6 +14,7 @@ from rdmo.questions.models import Catalog
 pytestmark = pytest.mark.e2e
 
 
+@pytest.mark.parametrize("page", ["page_single", "page_multisite"], indirect=True)
 @pytest.mark.parametrize("helper", model_helpers)
 def test_management_navigation(page: Page, helper: ModelHelper) -> None:
     """Test that each content type is available through the navigation."""
@@ -35,6 +36,7 @@ def test_management_navigation(page: Page, helper: ModelHelper) -> None:
         page.screenshot(path="screenshots/management/navigation-catalog.png", full_page=True)
 
 
+@pytest.mark.parametrize("page", ["page_single", "page_multisite"], indirect=True)
 @pytest.mark.parametrize("helper", model_helpers)
 def test_management_has_items(page: Page, helper: ModelHelper) -> None:
     """Test all items in database are visible in management UI."""
@@ -44,6 +46,7 @@ def test_management_has_items(page: Page, helper: ModelHelper) -> None:
     expect(items_in_ui).to_have_count(num_items_in_database)
 
 
+@pytest.mark.parametrize("page", ["page_single", "page_multisite"], indirect=True)
 @pytest.mark.parametrize("helper", model_helpers)
 def test_management_nested_view(page: Page, helper: ModelHelper) -> None:
     """For each element type, that has a nested view, click the first example."""
@@ -55,6 +58,7 @@ def test_management_nested_view(page: Page, helper: ModelHelper) -> None:
         expect(page.locator(".panel-default > .panel-body").first).to_be_visible()
 
 
+@pytest.mark.parametrize("page", ["page_single", "page_multisite"], indirect=True)
 @pytest.mark.parametrize("helper", model_helpers)
 def test_management_create_model(page: Page, helper: ModelHelper) -> None:
     """Test management UI can create objects in the database."""
@@ -83,7 +87,7 @@ def test_management_create_model(page: Page, helper: ModelHelper) -> None:
     query = {helper.db_field: value}
     assert helper.model.objects.get(**query)
 
-
+@pytest.mark.parametrize("page", ["page_single", "page_multisite"], indirect=True)
 @pytest.mark.parametrize("helper", model_helpers)
 def test_management_edit_model(page: Page, helper: ModelHelper) -> None:
     page.goto(f"/management/{helper.url}")
