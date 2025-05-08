@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { ShowLink } from '../common/Links'
 import { generateErrorMessageListItems } from './common/ErrorsListGroup'
 import get from 'lodash/get'
+import {isTruthy} from 'rdmo/core/assets/js/utils/config'
 
 // Function to aggregate unique errors from elements
 const aggregateUniqueErrors = (elements) => {
@@ -19,11 +20,11 @@ const aggregateUniqueErrors = (elements) => {
 
 const ImportAggregatedErrorsPanel = ({ config, elements, configActions }) => {
   const updateShowErrors = () => {
-    const currentVal = get(config, 'filter.import.errors.show', false)
+    const currentVal = isTruthy(get(config, 'filter.import.errors.show', false))
     configActions.updateConfig('filter.import.errors.show', !currentVal)
   }
 
-  const showErrors = get(config, 'filter.import.errors.show', false)
+  const showErrors = isTruthy(get(config, 'filter.import.errors.show', false))
 
   // Aggregate all unique errors into a single flat array
   const uniqueErrors = aggregateUniqueErrors(elements)

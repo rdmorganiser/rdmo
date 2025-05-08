@@ -5,14 +5,14 @@ import uniqueId from 'lodash/uniqueId'
 import { codeClass, verboseNames } from '../../../constants/elements'
 
 // Helper function to generate warning messages
-export const generateWarningListItems = (elementWarnings, elementModel, shouldShowURI = true) =>
-  Object.entries(elementWarnings).flatMap(([uri, messages]) =>
+export const generateWarningListItems = (elementWarnings, elementModel, elementURI, shouldShowURI = true) =>
+  Object.values(elementWarnings).flatMap((messages) =>
     messages.map(message => (
       <li className="list-group-item" key={uniqueId('warning-uri-message')}>
-        {shouldShowURI && (
+        {shouldShowURI && elementModel && elementURI && (
           <>
             <strong>{verboseNames[elementModel]}{' '}</strong>
-            <code className={codeClass[elementModel]}>{uri}</code>
+            <code className={codeClass[elementModel]}>{elementURI}</code>
             <br />
           </>
         )}
@@ -23,10 +23,10 @@ export const generateWarningListItems = (elementWarnings, elementModel, shouldSh
     ))
   )
 
-const WarningsListGroup = ({ elementWarnings, elementModel, shouldShowURI }) => {
+const WarningsListGroup = ({ elementWarnings, elementModel, elementURI, shouldShowURI }) => {
   return (
     <ul className="list-group">
-      {generateWarningListItems(elementWarnings, elementModel, shouldShowURI)}
+      {generateWarningListItems(elementWarnings, elementModel, elementURI, shouldShowURI)}
     </ul>
   )
 }
@@ -34,6 +34,7 @@ const WarningsListGroup = ({ elementWarnings, elementModel, shouldShowURI }) => 
 WarningsListGroup.propTypes = {
   elementWarnings: PropTypes.object.isRequired,
   elementModel: PropTypes.string.isRequired,
+  elementURI: PropTypes.string.isRequired,
   shouldShowURI: PropTypes.bool
 }
 
