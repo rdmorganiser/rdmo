@@ -4,7 +4,6 @@ import os
 import re
 from pathlib import Path
 from tempfile import NamedTemporaryFile
-from typing import Optional
 
 from django.apps import apps
 from django.conf import settings
@@ -103,7 +102,7 @@ def get_pandoc_args(export_format, context):
     return pandoc_args
 
 
-def get_pandoc_reference_document(export_format, context) -> Optional[Path]:
+def get_pandoc_reference_document(export_format, context):
     # collect all configured reference documents
     reference_documents = get_pandoc_reference_documents(export_format, context)
 
