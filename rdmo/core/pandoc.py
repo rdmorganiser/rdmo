@@ -102,14 +102,16 @@ def get_pandoc_args(export_format, context):
     return pandoc_args
 
 
-def get_pandoc_reference_document(export_format, context):
+def get_pandoc_reference_document(export_format, context) -> Path | None:
     # collect all configured reference documents
     reference_documents = get_pandoc_reference_documents(export_format, context)
 
     # return the first reference document that actually exists
     for reference_document in reference_documents:
-        if reference_document and reference_document.exists():
-            return Path(reference_document)
+        if reference_document:
+            reference_document = Path(reference_document).resolve()
+            if reference_document.exists():
+                return reference_document
 
 
 def get_pandoc_reference_documents(export_format, context):
