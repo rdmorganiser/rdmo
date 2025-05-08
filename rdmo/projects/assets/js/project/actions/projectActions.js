@@ -97,14 +97,7 @@ export function updateProject(data) {
     dispatch(addToPending('updateProject'))
     dispatch(updateProjectInit())
 
-    /* TODO fix project.parent in API (not able to save empty parent) */
-    const cleanedData = { ...data }
-    if (cleanedData.parent === null) {
-      delete cleanedData.parent
-    }
-
-    return ProjectApi.updateProject(id, cleanedData)
-    // return ProjectApi.updateProject(id, data)
+    return ProjectApi.updateProject(id, data)
       .then((updatedProject) => {
         const updatedBundle = {
           ...currentBundle,
