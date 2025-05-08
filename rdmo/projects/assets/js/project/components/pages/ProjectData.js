@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Tile } from 'rdmo/core/assets/js/components'
+import { Tile } from '../helper'
 import ProjectForm from './ProjectForm'
 import ProjectDelete from './ProjectDelete'
 
