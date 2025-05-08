@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from rdmo.conditions.models import Condition
 from rdmo.core.models import TranslationMixin
 from rdmo.core.plugins import get_plugin
-from rdmo.core.utils import copy_model, join_url
+from rdmo.core.utils import join_url
 
 
 class OptionSet(models.Model):
@@ -76,18 +76,6 @@ class OptionSet(models.Model):
     def save(self, *args, **kwargs):
         self.uri = self.build_uri(self.uri_prefix, self.uri_path)
         super().save(*args, **kwargs)
-
-    def copy(self, uri_prefix, uri_path):
-        optionset = copy_model(self, uri_prefix=uri_prefix, uri_path=uri_path)
-
-        # set m2m fields for copy
-        optionset.conditions.set(self.conditions.all())
-
-        # add copy to children
-        for option in self.options.all():
-            option.optionsets.add(optionset)
-
-        return optionset
 
     @property
     def label(self) -> str:

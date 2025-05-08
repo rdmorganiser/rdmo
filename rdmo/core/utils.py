@@ -209,23 +209,6 @@ def import_class(string):
     return getattr(importlib.import_module(module_name), class_name)
 
 
-def copy_model(instance, **kwargs):
-    # get values from instance which are not id, ForeignKeys or M2M relations
-    data = {}
-    for field in instance._meta.get_fields():
-        if not (field.name == 'id' or field.is_relation):
-            data[field.name] = getattr(instance, field.name)
-
-    # update with the kwargs provided to this function
-    data.update(kwargs)
-
-    # create and save new instance
-    instance_copy = instance._meta.model(**data)
-    instance_copy.save()
-
-    return instance_copy
-
-
 def human2bytes(string):
     if not string or string == '0':
         return 0
