@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from rdmo.accounts.utils import get_full_name
+from rdmo.accounts.utils import get_full_name, is_site_manager
 from rdmo.domain.models import Attribute
 from rdmo.questions.models import Catalog
 from rdmo.services.validators import ProviderValidator
@@ -23,6 +23,7 @@ from ...models import (
     Value,
     Visibility,
 )
+from ...utils import get_project_role
 from ...validators import ProjectParentValidator, ValueConflictValidator, ValueQuotaValidator, ValueTypeValidator
 
 
@@ -63,8 +64,8 @@ class ProjectSerializer(serializers.ModelSerializer):
         def get_queryset(self):
             return Project.objects.filter_user(self.context['request'].user)
 
-    catalog = CatalogField(required=True)
-    parent = ParentField(required=False)
+    catalog = CatalogField()
+    parent = ParentField(required=False, allow_null=True)
 
     owners = ProjectUserSerializer(many=True, read_only=True)
     managers = ProjectUserSerializer(many=True, read_only=True)
@@ -74,6 +75,9 @@ class ProjectSerializer(serializers.ModelSerializer):
     last_changed = serializers.DateTimeField(read_only=True)
 
     visibility = serializers.CharField(source='visibility.get_help_display', read_only=True)
+
+    current_role = serializers.SerializerMethodField()
+    is_site_manager = serializers.SerializerMethodField()
 
     class Meta:
         model = Project
@@ -96,7 +100,9 @@ class ProjectSerializer(serializers.ModelSerializer):
             'views',
             'progress_total',
             'progress_count',
-            'visibility'
+            'visibility',
+            'current_role',
+            'is_site_manager'
         )
         read_only_fields = (
             'snapshots',
@@ -110,6 +116,12 @@ class ProjectSerializer(serializers.ModelSerializer):
         if settings.PROJECT_VIEWS_SYNC and value:
             raise ValidationError(_('Editing views is disabled.'))
         return value
+
+    def get_current_role(self, obj) -> str:
+        return get_project_role(obj, self.context.get('request').user)
+
+    def get_is_site_manager(self, obj) -> bool:
+        return is_site_manager(self.context.get('request').user)
 
 
 class ProjectCopySerializer(ProjectSerializer):

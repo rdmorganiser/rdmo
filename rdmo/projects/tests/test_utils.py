@@ -8,7 +8,12 @@ from rdmo.core.tests.utils import compute_checksum
 
 from ..filters import ProjectFilter
 from ..models import Project, Value
-from ..utils import compute_set_prefix_from_set_value, copy_project, set_context_querystring_with_filter_and_page
+from ..utils import (
+    compute_set_prefix_from_set_value,
+    copy_project,
+    get_project_role,
+    set_context_querystring_with_filter_and_page,
+)
 
 GET_queries = [
     'page=2&title=project',
@@ -28,6 +33,23 @@ SET_VALUES = [
     ({'set_prefix': '0'  , 'set_index': 1}, {'set_prefix': '0|0|0'}, '0|1|0'),
     ({'set_prefix': '0|0', 'set_index': 1}, {'set_prefix': '0|0|0'}, '0|0|1'),
 ]
+
+@pytest.mark.parametrize('username,project_id,role', [
+    ('owner', 1, 'owner'),
+    ('manager', 1, 'manager'),
+    ('author', 1, 'author'),
+    ('guest', 1, 'guest'),
+    ('admin', 1, None),
+    ('user', 1, None),
+    ('site', 1, None),
+    ('api', 1, None),
+])
+def test_get_project_role(db, project_id, username, role):
+    project = Project.objects.get(id=project_id)
+    user = User.objects.get(username=username)
+
+    assert get_project_role(project, user) == role
+
 
 @pytest.mark.parametrize('GET_query', GET_queries)
 def test_set_context_querystring_with_filter_and_page(GET_query):
