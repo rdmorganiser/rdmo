@@ -64,7 +64,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             return Project.objects.filter_user(self.context['request'].user)
 
     catalog = CatalogField(required=True)
-    parent = ParentField(required=False)
+    parent = ParentField(required=False, allow_null=True)
 
     owners = ProjectUserSerializer(many=True, read_only=True)
     managers = ProjectUserSerializer(many=True, read_only=True)

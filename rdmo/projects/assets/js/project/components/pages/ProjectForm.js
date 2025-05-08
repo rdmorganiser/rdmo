@@ -58,13 +58,13 @@ const ProjectForm = () => {
   }, 500)
 
   useEffect(() => {
-    if (formData.parent && parentOptions.length === 0) {
-      ProjectApi.fetchProject(formData.parent).then(project => {
+    if (formData.parent && !parentOptions.some(p => p.value === formData.parent)) {
+      ProjectApi.fetchProject(formData.parent).then((project) => {
         const option = { value: project.id, label: project.title }
-        setParentOptions([option])
+        setParentOptions((prev) => [...prev, option])
       })
     }
-  }, [formData.parent, parentOptions.length])
+  }, [formData.parent, parentOptions])
 
   // const handleSubmit = (e) => {
   //   e.preventDefault()
@@ -96,7 +96,8 @@ const ProjectForm = () => {
       />
 
       {/* TODO feature project phase */}
-{/*       <Select
+      {/*
+      <Select
         className="mb-3 form-label fw-bold"
         label={gettext('Project phase')}
         help="Die Phase, in der sich Ihr Projekt zum aktuellen Zeitpunkt befindet."
@@ -110,7 +111,8 @@ const ProjectForm = () => {
         onChange={(value) => handleChange('phase', value)}
         errors={getFieldErrors('phase')}
         placeholder={gettext('Select project phase')}
-      /> */}
+      />
+      */}
 
       {/* TODO show only active catalogs */}
       <div className="mb-3">
@@ -169,7 +171,6 @@ const ProjectForm = () => {
               getOptionLabel={(project) => project.label}
               isDisabled={!isParentSwitchOn}
               loadOptions={handleLoadProjects}
-              defaultOptions
               isClearable
               backspaceRemovesValue={true}
         />
