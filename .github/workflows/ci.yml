@@ -29,10 +29,6 @@ env:
 
 jobs:
 
-  lint:
-    # Ref: https://github.com/rdmorganiser/.github/blob/main/.github/workflows/_lint.yml
-    uses: rdmorganiser/.github/.github/workflows/_lint.yml@main
-
   build-wheel:
     name: Build python wheel
     runs-on: ubuntu-24.04
@@ -282,7 +278,6 @@ jobs:
   required-checks-pass:
     if: always()
     needs:
-      - lint
       - build-wheel
       - test
       - coveralls

@@ -47,13 +47,13 @@ class Visibility(Model):
 
         if sites and groups:
             return ngettext_lazy(
-                'This project can be accessed by all users on %s and in the group %s.',
-                'This project can be accessed by all users on %s and in the groups %s.',
+                'This project can be accessed by all users on %(sites)s and in the group %(groups)s.',
+                'This project can be accessed by all users on %(sites)s and in the groups %(groups)s.',
                 len(groups)
-            ) % (
-                ', '.join(sites),
-                ', '.join(groups)
-            )
+            ) % {
+                'sites': ', '.join(sites),
+                'groups': ', '.join(groups)
+            }
         elif sites:
             return _('This project can be accessed by all users on %s.') % ', '.join(sites)
         elif groups:

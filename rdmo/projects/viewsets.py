@@ -122,8 +122,10 @@ class ProjectViewSet(ModelViewSet):
         'last_changed'
     )
 
+    filter_for_user = False  # flag for get_queryset to return only projects like for a regular user
+
     def get_queryset(self):
-        queryset = Project.objects.filter_user(self.request.user).distinct().prefetch_related(
+        queryset = Project.objects.filter_user(self.request.user, self.filter_for_user).distinct().prefetch_related(
             'snapshots',
             'views',
             Prefetch('memberships', queryset=Membership.objects.select_related('user'), to_attr='memberships_list')
@@ -139,6 +141,11 @@ class ProjectViewSet(ModelViewSet):
         queryset = queryset.annotate(last_changed=Coalesce(Greatest(last_changed_subquery, 'updated'), 'updated'))
 
         return queryset
+
+    @action(detail=False, methods=['GET'], permission_classes=(HasModelPermission | HasProjectsPermission, ))
+    def user(self, request, *args, **kwargs):
+        self.filter_for_user = True
+        return self.list(request, *args, **kwargs)
 
     @action(detail=True, methods=['POST'],
             permission_classes=(HasModelPermission | HasProjectPermission, ))
