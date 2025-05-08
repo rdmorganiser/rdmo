@@ -4,7 +4,7 @@ import AsyncSelect from 'react-select/async'
 import { useDebouncedCallback } from 'use-debounce'
 
 import Input from 'rdmo/core/assets/js/components/forms/Input'
-import Select from 'rdmo/core/assets/js/components/forms/Select'
+// import Select from 'rdmo/core/assets/js/components/forms/Select'
 import Textarea from 'rdmo/core/assets/js/components/forms/Textarea'
 import ProjectApi from '../../api/ProjectApi'
 import { updateProject } from '../../actions/projectActions'
@@ -16,19 +16,15 @@ const ProjectForm = () => {
 
   const [formData, setFormData] = useState(project || {})
   console.log ('formData %o', formData)
-  // const [errors, setErrors] = useState({})
   const errors = useSelector((state) => state.project.errors)
   const [isParentSwitchOn, setIsParentSwitchOn] = useState(!!project.parent)
   const [parentOptions, setParentOptions] = useState([])
 
-  useEffect(() => {
-    if (errors?.length > 0) {
-      console.error('[Project Errors]', errors)
-    }
-  }, [errors])
-  // const saveProject = (newFormData) => {
-  //   ProjectApi.updateProject(project.id, newFormData)
-  // }
+  const getFieldErrors = (field) => {
+    const errorList = errors?.[0]?.errors?.[field]
+    return Array.isArray(errorList) ? errorList : errorList != null ? [errorList] : []
+  }
+
   const saveProject = (newFormData) => {
     dispatch(updateProject(newFormData))
   }
@@ -86,7 +82,7 @@ const ProjectForm = () => {
         help="Der Title für dieses Projekt."
         value={formData.title || ''}
         onChange={(value) => handleChange('title', value)}
-        errors={errors.title}
+        errors={getFieldErrors('title')}
       />
 
       <Textarea
@@ -96,10 +92,11 @@ const ProjectForm = () => {
         rows={4}
         value={formData.description || ''}
         onChange={(value) => handleChange('description', value)}
-        errors={errors.description}
+        errors={getFieldErrors('description')}
       />
 
-      <Select
+      {/* TODO feature project phase */}
+{/*       <Select
         className="mb-3 form-label fw-bold"
         label={gettext('Project phase')}
         help="Die Phase, in der sich Ihr Projekt zum aktuellen Zeitpunkt befindet."
@@ -111,9 +108,9 @@ const ProjectForm = () => {
         ]}
         value={formData.phase || ''}
         onChange={(value) => handleChange('phase', value)}
-        errors={errors.phase}
+        errors={getFieldErrors('phase')}
         placeholder={gettext('Select project phase')}
-      />
+      /> */}
 
       <div className="mb-3">
         <label className="form-label fw-bold">{gettext('Catalog')}</label>
@@ -134,6 +131,9 @@ const ProjectForm = () => {
             </label>
           </div>
         ))}
+        {getFieldErrors('catalog').map((err, i) => (
+          <div key={i} className="text-danger mt-1">{err}</div>
+      ))}
       </div>
 
       <div className="mb-3">
@@ -172,6 +172,10 @@ const ProjectForm = () => {
               isClearable
               backspaceRemovesValue={true}
         />
+
+        {getFieldErrors('parent').map((err, i) => (
+          <div key={i} className="text-danger mt-1">{err}</div>
+        ))}
 
         {/* <div className="form-check mt-2">
           <input
