@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { TileGrid } from 'rdmo/core/assets/js/components'
+import { TileGrid } from '../helper'
 
 const Dashboard = () => {
   const [tileSize, setTileSize] = useState('normal')
