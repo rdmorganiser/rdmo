@@ -112,6 +112,7 @@ const ProjectForm = () => {
         placeholder={gettext('Select project phase')}
       /> */}
 
+      {/* TODO show only active catalogs */}
       <div className="mb-3">
         <label className="form-label fw-bold">{gettext('Catalog')}</label>
         <div className="form-text">Der Fragenkatalog, der für dieses Projekt verwendet wird.</div>
