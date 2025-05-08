@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from rdmo.accounts.serializers.v1 import UserLookupSerializer
-from rdmo.accounts.utils import get_full_name
+from rdmo.accounts.utils import get_full_name, is_site_manager
 from rdmo.domain.models import Attribute
 from rdmo.questions.models import Catalog
 from rdmo.services.validators import ProviderValidator
@@ -25,6 +25,7 @@ from ...models import (
     Value,
     Visibility,
 )
+from ...utils import get_project_role
 from ...validators import ProjectParentValidator, ValueConflictValidator, ValueQuotaValidator, ValueTypeValidator
 
 
@@ -113,6 +114,9 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     visibility = serializers.CharField(source='visibility.get_help_display', read_only=True)
 
+    current_role = serializers.SerializerMethodField()
+    is_site_manager = serializers.SerializerMethodField()
+
     class Meta:
         model = Project
         fields = (
@@ -136,7 +140,9 @@ class ProjectSerializer(serializers.ModelSerializer):
             'progress_count',
             'visibility',
             'permissions',
-            'ancestors'
+            'ancestors',
+            'current_role',
+            'is_site_manager'
         )
         read_only_fields = (
             'snapshots',
@@ -215,6 +221,12 @@ class ProjectSerializer(serializers.ModelSerializer):
     def get_ancestors(self, obj) -> list[dict[str, Any]]:
         ancestors = self._prefetched_ancestors.get(obj.id, obj.get_ancestors())
         return ProjectAncestorSerializer(ancestors, many=True, context=self.context).data
+
+    def get_current_role(self, obj) -> str:
+        return get_project_role(obj, self.context.get('request').user)
+
+    def get_is_site_manager(self, obj) -> bool:
+        return is_site_manager(self.context.get('request').user)
 
 
 class ProjectCopySerializer(ProjectSerializer):
