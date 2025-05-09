@@ -28,6 +28,7 @@ export default function configureStore() {
 
   const initialState = {
     config: {
+      myProjects: true,
       prefix: 'rdmo.projects.config'
     }
   }
