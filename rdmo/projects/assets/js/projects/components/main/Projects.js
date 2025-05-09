@@ -14,7 +14,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
   const { allowedTypes, catalogs, importUrls, invites, projects, projectsCount, hasNext } = projectsObject
 
   const { currentUser } = currentUserObject
-  const { myProjects = true } = config
+  const { myProjects } = config
 
   const { showTopButton, scrollToTop } = useScrollToTop()
 
