@@ -2,6 +2,7 @@ import { get, isNil } from 'lodash'
 
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import { siteId } from 'rdmo/core/assets/js/utils/meta'
 
 import ConditionsApi from '../api/ConditionsApi'
 import DomainApi from '../api/DomainApi'
@@ -347,14 +348,14 @@ export function fetchElement(elementType, elementId, elementAction=null) {
     return dispatch(action)
       .then(elements => {
         if (elementAction == 'copy') {
-          const { settings, currentSite } = getState().config
+          const { settings } = getState().config
 
           elements.element.id = null
           elements.element.read_only = false
 
           if (settings.multisite) {
-            elements.element.sites = [currentSite.id]
-            elements.element.editors = [currentSite.id]
+            elements.element.sites = [siteId]
+            elements.element.editors = [siteId]
           }
         }
         return dispatch(fetchElementSuccess({ ...elements }))

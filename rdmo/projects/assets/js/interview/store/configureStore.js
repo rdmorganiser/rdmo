@@ -1,6 +1,6 @@
 import { applyMiddleware, createStore, combineReducers } from 'redux'
 
-import { getConfigFromLocalStorage } from 'rdmo/core/assets/js/utils/config'
+import { getConfigFromLocalStorage, isTruthy } from 'rdmo/core/assets/js/utils/config'
 import { checkStoreId, configureMiddleware } from 'rdmo/core/assets/js/utils/store'
 
 import configReducer from 'rdmo/core/assets/js/reducers/configReducer'
@@ -58,9 +58,14 @@ export default function configureStore() {
 
   // this event is triggered when the page first loads
   window.addEventListener('load', () => {
-    getConfigFromLocalStorage(initialState.config.prefix).forEach(([path, value]) => {
-      store.dispatch(configActions.updateConfig(path, value, false))
-    })
+    getConfigFromLocalStorage(initialState.config.prefix)
+      .map(([path, value]) => (
+        // cast showManagement to bool
+        [path, (path == 'showManagement') ? isTruthy(value) : value]
+      ))
+      .forEach(([path, value]) => {
+        store.dispatch(configActions.updateConfig(path, value, false))
+      })
 
     Promise.all([
       store.dispatch(settingsActions.fetchSettings()),

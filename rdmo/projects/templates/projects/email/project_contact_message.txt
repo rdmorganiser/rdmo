@@ -1,13 +1,13 @@
-{# Warning: Double newlines will be removed #}{% load i18n accounts_tags %}{% trans "Greetings" %}!
+{# Warning: Double newlines will be removed #}{% load i18n core_tags accounts_tags %}{% trans "Greetings" %}!
 
 {% if page %}
-{% blocktrans trimmed with project_title=project.title page_title=page.title %}
+{% blocktrans trimmed with project_title=project.title|clean page_title=page.title|markdown|striptags|clean %}
 I have a question regarding the project "{{ project_title }}" on the page "{{ page_title }}":
 {% endblocktrans %}
 
 {{ page_url }}
 {% else %}
-{% blocktrans trimmed with project_title=project.title %}
+{% blocktrans trimmed with project_title=project.title|clean %}
 I have a question regarding the project "{{ project_title }}":
 {% endblocktrans %}
 
@@ -15,7 +15,7 @@ I have a question regarding the project "{{ project_title }}":
 {% endif %}
 
 {% if question %}
-{% blocktrans trimmed with page_title=page.title question_text=question.text %}
+{% blocktrans trimmed with page_title=page.title|markdown|striptags|clean question_text=question.text|markdown|striptags|clean %}
 In particular, about the question: {{ question_text }}
 {% endblocktrans %}
 {% endif %}

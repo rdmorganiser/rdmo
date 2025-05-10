@@ -109,8 +109,8 @@ $variant-background-color: #f5f5f5 !default;
 
     .interview-block-options {
         position: absolute;
-        top: 6px;
-        right: 8px;
+        top: 0;
+        right: 4px;
         z-index: 5;
 
         display: flex;
@@ -256,14 +256,6 @@ $variant-background-color: #f5f5f5 !default;
                 transition: opacity 0.5s ease-in-out;
             }
         }
-    }
-
-    .badge-default {
-        cursor: help;
-        color: #999;
-        border: 1px solid #999;
-        background-color: white;
-        margin: 7px 0 7px 0;
     }
 
     .unit {
@@ -435,13 +427,28 @@ $variant-background-color: #f5f5f5 !default;
     }
 }
 
-.badge-optional {
-    float: right;
-    margin-top: 1px;
-    margin-left: 5px;
-    cursor: help;
-    background-color: #efefef;
-    color: #777;
+.badge {
+    &.badge-optional {
+        float: right;
+        margin-top: 1px;
+        margin-left: 5px;
+        cursor: help;
+        background-color: #efefef;
+        color: #777;
+    }
+
+    &.badge-default {
+        cursor: help;
+        color: #999;
+        border: 1px solid #999;
+        background-color: white;
+        margin: 7px 0 7px 0;
+    }
+
+    &.badge-read-only {
+        cursor: help;
+        background-color: black;
+    }
 }
 
 .btn.btn-contact {
@@ -461,9 +468,4 @@ $variant-background-color: #f5f5f5 !default;
     &:focus {
         outline: 0;
     }
-}
-
-.badge-read-only {
-    cursor: help;
-    background-color: black;
 }

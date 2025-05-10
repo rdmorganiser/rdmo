@@ -302,6 +302,10 @@ def remove_double_newlines(string):
     return re.sub(r'[\n]{2,}', '\n\n', string)
 
 
+def remove_html_special_characters(string):
+    return re.sub(r'[<>&"\']', '', string)
+
+
 def parse_date_from_string(date: str) -> datetime.date:
     if not isinstance(date, str):
         raise TypeError("date must be provided as string")

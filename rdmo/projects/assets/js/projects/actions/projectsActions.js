@@ -32,16 +32,16 @@ export function fetchProjects(pageReset = true) {
     if (pageReset === true) {
       dispatch(configActions.updateConfig('params.page', '1'))
     }
-    const params = getState().config.params
+    const { params, myProjects } = getState().config
 
     dispatch(addToPending(pendingId))
     dispatch(fetchProjectsInit())
 
-    const action = (dispatch) => ProjectsApi.fetchProjects(params || {})
-          .then(projects => {
-            dispatch(fetchProjectsSuccess(projects, !pageReset))})
+    const action = () => myProjects ? ProjectsApi.fetchUserProjects(params || {})
+                                    : ProjectsApi.fetchProjects(params || {})
 
     return dispatch(action)
+      .then(projects => dispatch(fetchProjectsSuccess(projects, !pageReset)))
       .catch(error => dispatch(fetchProjectsError(error)))
       .finally(() => dispatch(removeFromPending(pendingId)))
   }
@@ -73,11 +73,7 @@ export function fetchCatalogs() {
     dispatch(addToPending(pendingId))
     dispatch(fetchCatalogsInit())
 
-    const action = (dispatch) => ProjectsApi.fetchCatalogs().then(catalogs => {
-      dispatch(fetchCatalogsSuccess(catalogs))
-    })
-
-    return dispatch(action)
+    return ProjectsApi.fetchCatalogs().then(catalogs => dispatch(fetchCatalogsSuccess(catalogs)))
       .catch(error => dispatch(fetchCatalogsError(error)))
       .finally(() => dispatch(removeFromPending(pendingId)))
   }
