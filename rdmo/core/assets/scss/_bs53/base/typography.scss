@@ -1,0 +1,27 @@
+a,
+button.link {
+    text-decoration: none;
+
+    color: var(--isimip-color-blue);
+    cursor: pointer;
+
+    &:hover {
+        color: var(--isimip-color-dark-blue);
+    }
+}
+
+button.link,
+button.unstyled {
+    background: none;
+    border: none;
+    padding: 0;
+
+    font-family: inherit;
+    font-size: inherit;
+    vertical-align: inherit;
+    text-align: left;
+
+    &.nav-link {
+        padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
+    }
+}

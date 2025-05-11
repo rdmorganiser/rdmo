@@ -1,0 +1,32 @@
+{% extends 'core/bs53/base.html' %}
+{% load i18n compress static core_tags %}
+
+{% block content %}
+
+<header class="mt-5 mb-5">
+    <div class="container">
+        <h1>RDMO</h1>
+
+        <div class="row">
+            <div class="col-md-9">
+                <p>{% trans "A tool to support the planning, implementation, and organisation of research data management." %}</p>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            {% render_lang_template "core/home_text" %}
+        </div>
+
+        <div class="col-md-3">
+            <h3>{% trans 'Login' %}</h3>
+
+            {% include 'account/login_form.html' %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

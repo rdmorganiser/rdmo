@@ -3,22 +3,30 @@
 <head>
     {% include 'core/bs53/base_head.html' %}
 
-    {% block css %}{% endblock %}
-    {% block js %}{% endblock %}
-    {% block head %}{% endblock %}
+    {% block css %}
+    <link rel="stylesheet" href="{% static 'core/css/base-bs53.css' %}" />
+    {% endblock %}
+
+    {% block js %}
+    <script src="{% url 'javascript-catalog' %}"></script>
+    <script src="{% static 'core/js/base-bs53.js' %}"></script>
+    {% endblock %}
+
+    {% block head %}
+    {% endblock %}
 </head>
 
 <body>
-<!-- content -->
+
+{% include 'core/bs53/base_navigation.html' %}
+
 <div class="content">
     {% block content %}{% endblock %}
 </div>
-<!-- end content -->
 
 {% if not debug %}
-<!-- analytics -->
     {% include 'core/base_analytics.html' %}
-<!-- end analytics -->
 {% endif %}
+
 </body>
 </html>
