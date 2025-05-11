@@ -33,15 +33,15 @@ def home(request):
         if settings.LOGIN_FORM:
             if settings.ACCOUNT or settings.SOCIALACCOUNT:
                 from rdmo.accounts.account import LoginForm
-                return render(request, 'core/home.html', {
+                return render(request, 'core/bs53/home.html', {
                     'form': LoginForm(),
                     'signup_url': reverse("account_signup")
                 })
             else:
                 from django.contrib.auth.forms import AuthenticationForm
-                return render(request, 'core/home.html', {'form': AuthenticationForm()})
+                return render(request, 'core/bs53/home.html', {'form': AuthenticationForm()})
         else:
-            return render(request, 'core/home.html')
+            return render(request, 'core/bs53/home.html')
 
 
 @login_required
