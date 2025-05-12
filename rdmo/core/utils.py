@@ -260,10 +260,10 @@ def markdown2html(markdown_string):
     show_string = _('show more')
     hide_string = _('show less')
     html = re.sub(
-        r'(\{more\})(.*?)</p>$',
+        r'(\{more\})(.*?)$',
         f'<span class="show-more" onclick="showMore(this)">... ({show_string})</span>'
         r'<span class="more">\2</span>'
-        f'<span class="show-less" onclick="showLess(this)"> ({hide_string})</span></p>',
+        f'<span class="show-less" onclick="showLess(this)"> ({hide_string})</span>',
         html
     )
 
