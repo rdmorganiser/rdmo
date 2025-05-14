@@ -18,15 +18,28 @@ const RangeInput = ({ question, value, disabled, updateValue, buttons }) => {
   useLayoutEffect(() => {
     if (ref.current) {
       const unitElement = ref.current.nextElementSibling
-      const unitString = unitElement.querySelector('.unit-string')
 
-      const unitWidth = (
-        isNil(unitString) ? 0 : unitString.offsetWidth
-      ) + (
-        isNil(question.maximum) ? 30 : toString(question.maximum).length * 10
-      )
+      // Setup canvas for text measurement
+      const canvas = document.createElement('canvas')
+      const ctx = canvas.getContext('2d')
+      const font = window.getComputedStyle(ref.current).font || '14px Arial'
+      ctx.font = font
 
-      unitElement.style.flex = `0 0 ${unitWidth}px`
+      let numberWidth
+
+      if (isNil(question.maximum)) {
+        numberWidth = 30 // fallback width for unknown max
+      } else {
+        const step = isNil(question.step) ? 1 : question.step
+        const decimals = toString(step).split('.')[1]?.length || 0
+        const maxString = toString(question.maximum.toFixed(decimals))
+        numberWidth = ctx.measureText(maxString).width
+      }
+
+      const unitWidth = ctx.measureText(question.unit ?? '').width
+      const totalWidth = Math.ceil(numberWidth + unitWidth + 8) // buffer
+
+      unitElement.style.flex = `0 0 ${totalWidth}px`
     }
   }, [question])
 
