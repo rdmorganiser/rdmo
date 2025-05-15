@@ -53,7 +53,12 @@ export default function interviewReducer(state = initialState, action) {
       return { ...state, page: action.page }
     case RESOLVE_CONDITION_SUCCESS:
       return { ...state, sets: state.sets.map(
-        (set, setIndex) => setIndex == action.setIndex ? action.set : set
+        (set) => (
+          (set.set_prefix == action.set.set_prefix) &&
+          (set.set_index == action.set.set_index)
+        ) ? {
+          ...set, [action.elementType]: {...set[action.elementType], [action.elementId]: action.result}
+        } : set
       )}
     case CREATE_VALUE:
       return { ...state, values: [...state.values, action.value] }
