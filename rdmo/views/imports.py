@@ -1,4 +1,4 @@
-from rdmo.core.import_helpers import ElementImportHelper, ExtraFieldHelper
+from rdmo.core.imports.helpers import ElementImportHelper, ExtraFieldHelper
 
 from .models import View
 from .validators import ViewLockedValidator, ViewUniqueURIValidator

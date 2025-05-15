@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 
-from rdmo.core.imports import handle_uploaded_file
+from rdmo.core.imports.utils import handle_uploaded_file
 from rdmo.core.permissions import CanToggleElementCurrentSite
 from rdmo.core.utils import get_model_field_meta, is_truthy
 from rdmo.core.xml import parse_xml_to_elements

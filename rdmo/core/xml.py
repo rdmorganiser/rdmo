@@ -12,7 +12,7 @@ from packaging.version import Version, parse
 
 from rdmo import __version__
 from rdmo.core.constants import RDMO_MODELS
-from rdmo.core.imports import ImportElementFields
+from rdmo.core.imports.element_changes import ImportElementFields
 
 logger = logging.getLogger(__name__)
 

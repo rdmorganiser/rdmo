@@ -3,9 +3,9 @@ from pathlib import Path
 import pytest
 
 from rdmo.conditions.models import Condition
-from rdmo.core.imports import ImportElementFields
 from rdmo.management.imports import import_elements
 
+from ...core.imports.element_changes import ImportElementFields
 from .helpers_import_elements import (
     _test_helper_change_fields_elements,
     _test_helper_filter_updated_and_changed,
