@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
 import { isNil, minBy } from 'lodash'
@@ -14,6 +14,9 @@ import PageManagement from './PageManagement'
 const Page = ({ config, settings, templates, overview, page, sets, values, fetchPage, fetchContact,
                 createValue, updateValue, deleteValue, copyValue,
                 activateSet, createSet, updateSet, deleteSet, copySet }) => {
+
+  // scroll to top whenever the page changes
+  useEffect(() => window.scrollTo(0, 0), [page.id])
 
   const currentSetPrefix = ''
   let currentSetIndex = page.is_collection ? get(config, 'page.currentSetIndex', 0) : 0
