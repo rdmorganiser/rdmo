@@ -13,7 +13,7 @@ import { updateLocation } from '../utils/location'
 import { updateOptions } from '../utils/options'
 import { initPage } from '../utils/page'
 import { copyResolvedConditions, gatherSets, getDescendants, initSets } from '../utils/set'
-import { activateFirstValue, gatherDefaultValues, initValues, compareValues, isEmptyValue } from '../utils/value'
+import { gatherDefaultValues, initValues, compareValues, isEmptyValue } from '../utils/value'
 import { projectId } from '../utils/meta'
 
 import ValueFactory from '../factories/ValueFactory'
@@ -196,8 +196,6 @@ export function fetchValues(page) {
 
         initSets(sets, page)
         initValues(sets, values, page)
-
-        activateFirstValue(page, values)
 
         dispatch(removeFromPending(pendingId))
         dispatch(resolveConditions(page, sets))

@@ -15,9 +15,6 @@ const Page = ({ config, settings, templates, overview, page, sets, values, fetch
                 createValue, updateValue, deleteValue, copyValue,
                 activateSet, createSet, updateSet, deleteSet, copySet }) => {
 
-  // scroll to top whenever the page changes
-  useEffect(() => window.scrollTo(0, 0), [page.id])
-
   const currentSetPrefix = ''
   let currentSetIndex = page.is_collection ? get(config, 'page.currentSetIndex', 0) : 0
   let currentSet = sets.find((set) => (set.set_prefix == currentSetPrefix && set.set_index == currentSetIndex))
@@ -27,6 +24,21 @@ const Page = ({ config, settings, templates, overview, page, sets, values, fetch
     currentSetIndex = get(minBy(sets, 'set_index'), 'set_index', 0)
     currentSet = sets.find((set) => (set.set_prefix == currentSetPrefix && set.set_index == currentSetIndex))
   }
+
+  // whenever the page or the currentSet changes
+  useEffect(() => {
+    // scroll to top
+    window.scrollTo(0, 0)
+
+    // focus the first text or textarea widget
+    const firstWidget = document.querySelector('.interview-widget')
+    if (firstWidget) {
+      const focusInput = firstWidget.querySelector('.text-input input[type="text"], .textarea-input textarea')
+      if (focusInput) {
+        focusInput.focus()
+      }
+    }
+  }, [page.id, currentSet])
 
   const isManager = (overview.is_superuser || overview.is_editor || overview.is_reviewer)
 
