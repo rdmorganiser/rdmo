@@ -285,6 +285,7 @@ export function storeValue(value) {
       const widget_type = question && question.widget_type
 
       const valueIndex = getState().interview.values.findIndex((v) => compareValues(v, value, widget_type))
+      const valueText = value.text
       const valueFile = value.file
       const valueSuccess = value.success
 
@@ -312,6 +313,12 @@ export function storeValue(value) {
           value.success = setTimeout(() => {
             dispatch(updateValue(value, {success: false}, false))
           }, 1000)
+
+          // replace the text with the old text if it was trimmed by the backend
+          // (but not if a new text was inserted, e.g. by an optionset provider)
+          if (valueText.trim() == value.text) {
+            value.text = valueText
+          }
 
           // check if there is a file or if a filename is set (when the file was just erased)
           if (isNil(valueFile) && isNil(value.file_name)) {
