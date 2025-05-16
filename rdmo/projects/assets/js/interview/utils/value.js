@@ -1,4 +1,4 @@
-import { get, first, isNil, isEmpty, toString, sortBy } from 'lodash'
+import { isNil, isEmpty, toString } from 'lodash'
 
 import ValueFactory from '../factories/ValueFactory'
 
@@ -81,16 +81,6 @@ const initRange = (question, value) => {
   }
 }
 
-const activateFirstValue = (page, values) => {
-  const attribute = get(page, 'questions.0.attribute')
-  if (!isNil(attribute)) {
-    const value = first(sortBy(values.filter((value) => value.attribute == attribute), 'collection_index'))
-    if (!isNil(value)) {
-      value.focus = true
-    }
-  }
-}
-
 const compareValues = (a, b, widget_type = null) => {
   if (isNil(a.id) || isNil(b.id)) {
     if (widget_type === 'checkbox') {
@@ -115,4 +105,4 @@ const isEmptyValue = (value) => {
   )
 }
 
-export { isDefaultValue, gatherDefaultValues, initValues, initRange, activateFirstValue, compareValues, isEmptyValue }
+export { isDefaultValue, gatherDefaultValues, initValues, initRange, compareValues, isEmptyValue }

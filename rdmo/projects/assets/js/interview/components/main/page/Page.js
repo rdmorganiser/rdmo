@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
 import { isNil, minBy } from 'lodash'
@@ -24,6 +24,21 @@ const Page = ({ config, settings, templates, overview, page, sets, values, fetch
     currentSetIndex = get(minBy(sets, 'set_index'), 'set_index', 0)
     currentSet = sets.find((set) => (set.set_prefix == currentSetPrefix && set.set_index == currentSetIndex))
   }
+
+  // whenever the page or the currentSet changes
+  useEffect(() => {
+    // scroll to top
+    window.scrollTo(0, 0)
+
+    // focus the first text or textarea widget
+    const firstWidget = document.querySelector('.interview-widget')
+    if (firstWidget) {
+      const focusInput = firstWidget.querySelector('.text-input input[type="text"], .textarea-input textarea')
+      if (focusInput) {
+        focusInput.focus()
+      }
+    }
+  }, [page.id, currentSet])
 
   const isManager = (overview.is_superuser || overview.is_editor || overview.is_reviewer)
 
