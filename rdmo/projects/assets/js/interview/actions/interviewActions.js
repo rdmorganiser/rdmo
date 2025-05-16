@@ -239,18 +239,15 @@ export function resolveConditions(page, sets) {
 export function resolveCondition(element, set) {
   const pendingId = `resolveCondition/${element.model}/${element.id}/${set.set_prefix}/${set.set_index}`
 
-  return (dispatch, getState) => {
+  return (dispatch) => {
     dispatch(addToPending(pendingId))
     dispatch(resolveConditionInit())
 
     return ProjectApi.resolveCondition(projectId, set, element)
       .then((response) => {
         const elementType = elementTypes[element.model]
-        const setIndex = getState().interview.sets.indexOf(set)
-        const results = { ...set[elementType], [element.id]: response.result }
-
         dispatch(removeFromPending(pendingId))
-        dispatch(resolveConditionSuccess({ ...set, [elementType]: results }, setIndex))
+        dispatch(resolveConditionSuccess(set, elementType, element.id, response.result))
       })
       .catch((error) => {
         dispatch(removeFromPending(pendingId))
@@ -263,8 +260,8 @@ export function resolveConditionInit() {
   return {type: RESOLVE_CONDITION_INIT}
 }
 
-export function resolveConditionSuccess(set, setIndex) {
-  return {type: RESOLVE_CONDITION_SUCCESS, set, setIndex}
+export function resolveConditionSuccess(set, elementType, elementId, result) {
+  return {type: RESOLVE_CONDITION_SUCCESS, set, elementType, elementId, result}
 }
 
 export function resolveConditionError(error) {
