@@ -33,6 +33,14 @@ def is_last_owner(project, user):
         return False
 
 
+def get_project_role(project, user):
+    try:
+        membership = project.memberships.get(user=user)
+        return membership.role
+    except ObjectDoesNotExist:
+        return None
+
+
 def check_conditions(conditions, values, set_prefix=None, set_index=None):
     if conditions:
         for condition in conditions:
