@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-11 12:23+0000\n"
-"PO-Revision-Date: 2025-04-11 14:27+0200\n"
+"POT-Creation-Date: 2025-05-16 14:45+0000\n"
+"PO-Revision-Date: 2025-05-16 16:50+0200\n"
 "Last-Translator: Yonny CARDENAS, Gautier DEBAECKER, Nadia LAJILI, Gino "
 "MARCHETTI <dmp@cc.in2p3.fr>\n"
 "Language-Team: RDMO <dmp@cc.in2p3.fr>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.6\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -1098,8 +1098,8 @@ msgstr "Entrez un booléen valide (par exemple 0, 1)."
 msgid ""
 "Enter a valid date (e.g. \"02.03.2024\", \"03/02/2024\", \"2024-02-03\")."
 msgstr ""
-"Saisissez une date valide (par exemple « 02.03.2024 », « 03/02/2024 », « "
-"2024-02-03 »)."
+"Saisissez une date valide (par exemple « 02.03.2024 », « 03/02/2024 », "
+"« 2024-02-03 »)."
 
 #: core/settings.py:427
 msgid "Enter a valid phone number (e.g. \"123456\" or \"+49 (0) 30 123456\")."
@@ -1436,8 +1436,8 @@ msgstr "Importer"
 msgid "Import elements"
 msgstr "Importer des éléments"
 
-#: management/viewsets.py:41 management/viewsets.py:77 projects/viewsets.py:363
-#: projects/viewsets.py:364 projects/viewsets.py:535
+#: management/viewsets.py:41 management/viewsets.py:77 projects/viewsets.py:370
+#: projects/viewsets.py:371 projects/viewsets.py:542
 msgid "This field may not be blank."
 msgstr "Ce champ ne doit pas être vide."
 
@@ -2398,14 +2398,18 @@ msgstr "Visibilités"
 
 #: projects/models/visibility.py:50
 #, python-format
-msgid "This project can be accessed by all users on %s and in the group %s."
+msgid ""
+"This project can be accessed by all users on %(sites)s and in the group "
+"%(groups)s."
 msgid_plural ""
-"This project can be accessed by all users on %s and in the groups %s."
+"This project can be accessed by all users on %(sites)s and in the groups "
+"%(groups)s."
 msgstr[0] ""
-"Ce projet est accessible à tous les utilisateurs de %s et du groupe %s."
+"Ce projet est accessible à tous les utilisateurs de %(sites)s et du groupe "
+"%(groups)s."
 msgstr[1] ""
-"Ce projet est accessible à tous les utilisateurs sur %s et dans les groupes "
-"%s."
+"Ce projet est accessible à tous les utilisateurs des %(sites)s et des "
+"groupes %(groups)s."
 
 #: projects/models/visibility.py:58
 #, python-format
@@ -2490,8 +2494,8 @@ msgid ""
 "I have a question regarding the project \"%(project_title)s\" on the page "
 "\"%(page_title)s\":"
 msgstr ""
-"J'ai une question concernant le projet « %(project_title)s » sur la page « "
-"%(page_title)s » :"
+"J'ai une question concernant le projet « %(project_title)s » sur la page "
+"« %(page_title)s » :"
 
 #: projects/templates/projects/email/project_contact_message.txt:10
 #, python-format
@@ -3223,8 +3227,8 @@ msgid ""
 "contact support if the problem persists."
 msgstr ""
 "Multiple answers exist in the database. This can happen due some technical "
-"problem in the past. You can remove unwanted answers using the « Remove item "
-"» field' (<i class=\"fa fa-times\" aria-hidden=\"true\"></i>). Please "
+"problem in the past. You can remove unwanted answers using the « Remove "
+"item » field' (<i class=\"fa fa-times\" aria-hidden=\"true\"></i>). Please "
 "contact support if the problem persists."
 
 #: projects/templates/projects/project_interview_navigation_help.html:4
@@ -3357,7 +3361,7 @@ msgstr "Rendre visible ce site"
 msgid "Make visible"
 msgstr "Rendre visible"
 
-#: projects/viewsets.py:652
+#: projects/viewsets.py:659
 msgid "You reached the file quota for this project."
 msgstr ""
 "Le titre de ce projet.Vous avez atteint le quota de dossiers pour ce projet."

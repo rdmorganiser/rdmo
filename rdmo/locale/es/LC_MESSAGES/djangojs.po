@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 11:12+0000\n"
-"PO-Revision-Date: 2025-03-20 12:33+0100\n"
+"POT-Creation-Date: 2025-05-16 14:45+0000\n"
+"PO-Revision-Date: 2025-05-16 16:53+0200\n"
 "Last-Translator: DAVID MARTINEZ <dmartinezmu@cem.es>\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.6\n"
 
 #: core/assets/js/components/Modal.js:20
 #: management/assets/js/components/common/Modals.js:16
@@ -1061,12 +1061,12 @@ msgstr "Vistas"
 msgid "Filter views"
 msgstr "Filtrar vistas"
 
-#: management/assets/js/components/import/ImportAggregatedErrorsPanel.js:31
+#: management/assets/js/components/import/ImportAggregatedErrorsPanel.js:32
 #: management/assets/js/components/import/common/Errors.js:9
 msgid "Errors"
 msgstr "Errores"
 
-#: management/assets/js/components/import/ImportAggregatedWarningsPanel.js:29
+#: management/assets/js/components/import/ImportAggregatedWarningsPanel.js:30
 #: management/assets/js/components/import/common/Warnings.js:8
 msgid "Warnings"
 msgstr "Advertencias"
@@ -1883,6 +1883,18 @@ msgstr "Mis proyectos"
 #: projects/assets/js/projects/utils/translations.js:3
 msgid "All projects"
 msgstr "Todos los proyectos"
+
+#: projects/assets/js/projects/components/main/Projects.js:55
+msgid "Copy project"
+msgstr "Copiar proyecto"
+
+#: projects/assets/js/projects/components/main/Projects.js:56
+msgid "Update project"
+msgstr "Actualizar proyecto"
+
+#: projects/assets/js/projects/components/main/Projects.js:57
+msgid "Delete project"
+msgstr "Suprimir proyecto"
 
 #: projects/assets/js/projects/utils/constants.js:4
 msgid "Name"

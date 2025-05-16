@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-11 12:23+0000\n"
+"POT-Creation-Date: 2025-05-16 14:45+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Dario Pilori <d.pilori@inrim.it>\n"
 "Language-Team: \n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.6\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -1401,8 +1401,8 @@ msgstr "Importa"
 msgid "Import elements"
 msgstr "Importa elementi"
 
-#: management/viewsets.py:41 management/viewsets.py:77 projects/viewsets.py:363
-#: projects/viewsets.py:364 projects/viewsets.py:535
+#: management/viewsets.py:41 management/viewsets.py:77 projects/viewsets.py:370
+#: projects/viewsets.py:371 projects/viewsets.py:542
 msgid "This field may not be blank."
 msgstr "Questo campo non può essere vuoto."
 
@@ -2364,13 +2364,18 @@ msgstr "Visibilità"
 
 #: projects/models/visibility.py:50
 #, python-format
-msgid "This project can be accessed by all users on %s and in the group %s."
+msgid ""
+"This project can be accessed by all users on %(sites)s and in the group "
+"%(groups)s."
 msgid_plural ""
-"This project can be accessed by all users on %s and in the groups %s."
+"This project can be accessed by all users on %(sites)s and in the groups "
+"%(groups)s."
 msgstr[0] ""
-"Questo progetto è accessibile a tutti gli utenti di %s e del gruppo %s."
+"A questo progetto possono accedere a tutti gli utenti di %(sites)s e del "
+"gruppo %(groups)s."
 msgstr[1] ""
-"Questo progetto è accessibile a tutti gli utenti di %s e dei gruppi di %s."
+"A questo progetto possono accedere a tutti gli utenti dei %(sites)s e dei "
+"gruppi %(groups)s."
 
 #: projects/models/visibility.py:58
 #, python-format
@@ -3304,7 +3309,7 @@ msgstr "Rendere visibile questo sito"
 msgid "Make visible"
 msgstr "Rendere visibile"
 
-#: projects/viewsets.py:652
+#: projects/viewsets.py:659
 msgid "You reached the file quota for this project."
 msgstr "Hai raggiunto la quota di file per questo progetto."
 
