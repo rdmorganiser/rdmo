@@ -3,6 +3,7 @@ import pytest
 
 from playwright.sync_api import Page, expect
 
+from rdmo.management.tests.e2e.frontend_helpers import assert_warning_items
 from rdmo.management.tests.helpers_import_elements import IMPORT_ELEMENT_PANELS_LOCATOR
 from rdmo.options.models import Option, OptionSet
 
@@ -70,7 +71,24 @@ def test_import_and_update_optionsets_in_management(db, page: Page, delete_all_o
     expect(page.locator(".col-sm-6 > .form-group").first).to_be_visible(timeout=30_000)
     # take a screenshot of the import page
     expect(page.get_by_text("http://example.com/terms/options/one_two_three/three").nth(1)).to_be_visible()
+
+    # test for Warnings
+    expected_warnings = [
+        (
+            "Option set ",
+            "http://example.com/terms/options/condition",
+            "Condition http://example.com/terms/conditions/optionset_bool_is_false for OptionSet http://example.com/terms/options/condition does not exist.",  # noqa: E501
+        ),
+        (
+            "Option set ",
+            "http://example.com/terms/options/one_two_three",
+            "Condition http://example.com/terms/conditions/does_not_exist for OptionSet http://example.com/terms/options/one_two_three does not exist.",  # noqa: E501
+        ),
+    ]
+    assert_warning_items(page, expected_warnings)
+
+    ## TODO add test for errors
+
     page.locator("body").press("Home")
     expect(page.get_by_role("link", name="Management", exact=True)).to_be_visible()
     page.screenshot(path="screenshots/management/import-optionsets-1-changes.png", full_page=True)
-    ## TODO test for warnings, errors

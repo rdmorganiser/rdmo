@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-10 10:54+0200\n"
-"PO-Revision-Date: 2025-04-10 10:59+0200\n"
+"POT-Creation-Date: 2025-05-16 14:45+0000\n"
+"PO-Revision-Date: 2025-04-28 13:46+0200\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -1414,8 +1414,8 @@ msgstr "Import"
 msgid "Import elements"
 msgstr "Elemente importieren"
 
-#: management/viewsets.py:41 management/viewsets.py:77 projects/viewsets.py:363
-#: projects/viewsets.py:364 projects/viewsets.py:535
+#: management/viewsets.py:41 management/viewsets.py:77 projects/viewsets.py:370
+#: projects/viewsets.py:371 projects/viewsets.py:542
 msgid "This field may not be blank."
 msgstr "Dieses Feld darf nicht leer sein."
 
@@ -2369,15 +2369,18 @@ msgstr "Sichtbarkeiten"
 
 #: projects/models/visibility.py:50
 #, python-format
-msgid "This project can be accessed by all users on %s and in the group %s."
+msgid ""
+"This project can be accessed by all users on %(sites)s and in the group "
+"%(groups)s."
 msgid_plural ""
-"This project can be accessed by all users on %s and in the groups %s."
+"This project can be accessed by all users on %(sites)s and in the groups "
+"%(groups)s."
 msgstr[0] ""
-"Auf dieses Projekt können alle Nutzenden auf %s oder in der Gruppe %s "
-"zugreifen."
+"Auf dieses Projekt können alle Nutzenden auf %(sites)s oder in der Gruppe "
+"%(groups)s zugreifen."
 msgstr[1] ""
-"Dieses Projekt kann von allen Nutzenden auf %s oder in den Gruppen %s "
-"aufgerufen werden."
+"Dieses Projekt kann von allen Nutzenden auf %(sites)s oder in den Gruppen "
+"%(groups)s aufgerufen werden."
 
 #: projects/models/visibility.py:58
 #, python-format
@@ -3326,7 +3329,7 @@ msgstr "Für diese Seite sichtbar machen"
 msgid "Make visible"
 msgstr "Sichtbar machen"
 
-#: projects/viewsets.py:652
+#: projects/viewsets.py:659
 msgid "You reached the file quota for this project."
 msgstr "Sie haben die Quota für dieses Projekt erreicht."
 

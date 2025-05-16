@@ -6,7 +6,7 @@ const PageButtons = ({ page, fetchPage }) => {
     <>
       <div className="interview-buttons">
         <div className="pull-right">
-          <button type="button" onClick={() => fetchPage(page.prev_page)} disabled={!page.prev_page}
+          <button type="button" onClick={() => fetchPage(page.prev_page, true)} disabled={!page.prev_page}
                   className="btn btn-default">
             {gettext('Back')}
           </button>

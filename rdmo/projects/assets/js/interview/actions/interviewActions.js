@@ -13,7 +13,7 @@ import { updateLocation } from '../utils/location'
 import { updateOptions } from '../utils/options'
 import { initPage } from '../utils/page'
 import { copyResolvedConditions, gatherSets, getDescendants, initSets } from '../utils/set'
-import { activateFirstValue, gatherDefaultValues, initValues, compareValues, isEmptyValue } from '../utils/value'
+import { gatherDefaultValues, initValues, compareValues, isEmptyValue } from '../utils/value'
 import { projectId } from '../utils/meta'
 
 import ValueFactory from '../factories/ValueFactory'
@@ -197,8 +197,6 @@ export function fetchValues(page) {
         initSets(sets, page)
         initValues(sets, values, page)
 
-        activateFirstValue(page, values)
-
         dispatch(removeFromPending(pendingId))
         dispatch(resolveConditions(page, sets))
         dispatch(fetchValuesSuccess(values, sets))
@@ -241,18 +239,15 @@ export function resolveConditions(page, sets) {
 export function resolveCondition(element, set) {
   const pendingId = `resolveCondition/${element.model}/${element.id}/${set.set_prefix}/${set.set_index}`
 
-  return (dispatch, getState) => {
+  return (dispatch) => {
     dispatch(addToPending(pendingId))
     dispatch(resolveConditionInit())
 
     return ProjectApi.resolveCondition(projectId, set, element)
       .then((response) => {
         const elementType = elementTypes[element.model]
-        const setIndex = getState().interview.sets.indexOf(set)
-        const results = { ...set[elementType], [element.id]: response.result }
-
         dispatch(removeFromPending(pendingId))
-        dispatch(resolveConditionSuccess({ ...set, [elementType]: results }, setIndex))
+        dispatch(resolveConditionSuccess(set, elementType, element.id, response.result))
       })
       .catch((error) => {
         dispatch(removeFromPending(pendingId))
@@ -265,8 +260,8 @@ export function resolveConditionInit() {
   return {type: RESOLVE_CONDITION_INIT}
 }
 
-export function resolveConditionSuccess(set, setIndex) {
-  return {type: RESOLVE_CONDITION_SUCCESS, set, setIndex}
+export function resolveConditionSuccess(set, elementType, elementId, result) {
+  return {type: RESOLVE_CONDITION_SUCCESS, set, elementType, elementId, result}
 }
 
 export function resolveConditionError(error) {
@@ -287,6 +282,7 @@ export function storeValue(value) {
       const widget_type = question && question.widget_type
 
       const valueIndex = getState().interview.values.findIndex((v) => compareValues(v, value, widget_type))
+      const valueText = value.text
       const valueFile = value.file
       const valueSuccess = value.success
 
@@ -314,6 +310,12 @@ export function storeValue(value) {
           value.success = setTimeout(() => {
             dispatch(updateValue(value, {success: false}, false))
           }, 1000)
+
+          // replace the text with the old text if it was trimmed by the backend
+          // (but not if a new text was inserted, e.g. by an optionset provider)
+          if (valueText.trim() == value.text) {
+            value.text = valueText
+          }
 
           // check if there is a file or if a filename is set (when the file was just erased)
           if (isNil(valueFile) && isNil(value.file_name)) {

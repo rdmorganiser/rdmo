@@ -11,29 +11,36 @@ from rdmo.core.managers import CurrentSiteManagerMixin
 
 class ProjectQuerySet(TreeQuerySet):
 
-    def filter_current_site(self):
-        return self.filter(site=settings.SITE_ID)
-
-    def filter_user(self, user):
+    def filter_user(self, user, filter_for_user=False):
         if user.is_authenticated:
-            if user.has_perm('projects.view_project'):
+            if user.has_perm('projects.view_project') and not filter_for_user:
+                # return all projects for admins or users with model permissions (unless filter_for_user is set)
                 return self.all()
             else:
-                queryset = self.filter_visibility(user)
+                # create a filter for all project where this user is a member
+                user_filter = Q(user=user)
+
+                # create a filter for all projects which are visible for this user
+                groups = user.groups.all()
+                sites_filter = Q(visibility__sites=None) | Q(visibility__sites=settings.SITE_ID)
+                groups_filter = Q(visibility__groups=None) | Q(visibility__groups__in=groups)
+                visibility_filter = Q(visibility__isnull=False) & sites_filter & groups_filter
+
+                # create a filter for all projects of this site (unless filter_for_user is set)
+                if (user.has_perm('projects.view_project') or is_site_manager(user)) and not filter_for_user:
+                    current_site_filter = Q(site=settings.SITE_ID)
+                else:
+                    current_site_filter = Q()
+
+                # create queryset by combining all three filters
+                queryset = self.filter(user_filter | visibility_filter | current_site_filter)
+
+                # add descendant projects
                 for instance in queryset:
                     queryset |= instance.get_descendants()
                 return queryset.distinct()
         else:
             return self.none()
-
-    def filter_visibility(self, user):
-        groups = user.groups.all()
-        sites_filter = Q(visibility__sites=None) | Q(visibility__sites=settings.SITE_ID)
-        groups_filter = Q(visibility__groups=None) | Q(visibility__groups__in=groups)
-        visibility_filter = Q(visibility__isnull=False) & sites_filter & groups_filter
-        current_site_filter = Q(site=settings.SITE_ID) if is_site_manager(user) else Q()
-
-        return self.filter(Q(user=user) | visibility_filter | current_site_filter)
 
     def filter_catalogs(self, catalogs=None, exclude_catalogs=None, exclude_null=True):
         catalogs_filter = Q()
@@ -197,11 +204,8 @@ class ProjectManager(CurrentSiteManagerMixin, TreeManager):
     def get_queryset(self):
         return ProjectQuerySet(self.model, using=self._db)
 
-    def filter_user(self, user):
-        return self.get_queryset().filter_user(user)
-
-    def filter_visibility(self, user):
-        return self.get_queryset().filter_visibility(user)
+    def filter_user(self, user, filter_for_user=False):
+        return self.get_queryset().filter_user(user, filter_for_user)
 
     def filter_catalogs(self, catalogs=None, exclude_catalogs=None, exclude_null=True):
         return self.get_queryset().filter_catalogs(catalogs=catalogs, exclude_catalogs=exclude_catalogs,

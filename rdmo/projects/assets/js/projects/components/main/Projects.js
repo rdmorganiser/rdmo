@@ -50,9 +50,15 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
   const viewLinkText = myProjects ? gettext('View all projects') : gettext('View my projects')
   const headline = myProjects ? gettext('My projects') : gettext('All projects')
 
+  // inlining the title attributes caused problems with django's translation system
+  const labels = {
+    copy: gettext('Copy project'),
+    update: gettext('Update project'),
+    delete: gettext('Delete project')
+  }
+
   const handleView = () => {
     configActions.updateConfig('myProjects', !myProjects)
-    myProjects ? configActions.deleteConfig('params.user') : configActions.updateConfig('params.user', currentUserId)
     projectsActions.fetchProjects()
   }
 
@@ -160,14 +166,14 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
           <Link
             href={`${rowUrl}/copy/`}
             className="fa fa-copy"
-            title={gettext('Copy project')}
+            title={labels.copy}
             onClick={() => window.location.href = `${rowUrl}/copy/${params}`}
           />
           {(isProjectManager || isProjectOwner || isManager) &&
             <Link
               href={`${rowUrl}/update/`}
               className="fa fa-pencil"
-              title={row.title}
+              title={labels.update}
               onClick={() => window.location.href = `${rowUrl}/update/${params}`}
             />
           }
@@ -175,7 +181,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
             <Link
               href={`${rowUrl}/delete/`}
               className="fa fa-trash"
-              title={row.title}
+              title={labels.delete}
               onClick={() => window.location.href = `${rowUrl}/delete/${params}`}
             />
           }

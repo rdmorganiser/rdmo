@@ -1,5 +1,28 @@
 # Changelog
 
+## [RDMO 2.3.1](https://github.com/rdmorganiser/rdmo/compare/2.3.0...2.3.1) (May 16, 2025)
+
+* Allow / in the URI path of conditions, tasks, and views (#1316)
+* Add /api/v1/projects/projects/user/ endpoint and refactor/fix projects table (#1318)
+* Add options endpoint to API list (#1313)
+* Use ACCOUNT_SIGNUP_FIELDS instead of ACCOUNT_EMAIL_REQUIRED (#1322)
+* Use SESSION_COOKIE_* settings for store_id cookie (#1321)
+* Fix translations (#1317)
+* Fix badge-optional and move interview-block-options
+* Improve styling for empty question sets (without questions)
+* Clean tags and special html characters in contact message
+* Fix interview management panels by fixing `configureStore` (#1314)
+* Fix copy of elements in management interface for multisite (#1339)
+* Fix bug when reference documents are configured as strings (#1341)
+* Fix bug in display of warnings at import of catalog elements (#1340)
+* Fix bug in display of value and unit in range slider (#1353)
+* Fix the resolving of multiple conditional questions in interview
+* Fix bug with the back button and conditions
+* Fix jumping of cursor when values are stored in the interview
+* Fix `{more}` functionality (#1351)
+* Fix focus in interview and scroll to top when changing pages
+* Update dependencies
+
 ## [RDMO 2.3.0](https://github.com/rdmorganiser/rdmo/compare/2.2.2...2.3.0) (Apr 11, 2025)
 
 * Add new interview interface based on React and Redux (#518)

@@ -59,7 +59,9 @@ const ImportElement = ({ config, element, importActions }) => {
           <Form config={config} element={element} updateElement={updateElement} />
           <Fields element={element} />
           <Errors elementErrors={element.errors} />
-          <Warnings elementWarnings={element.warnings} elementModel={element.model} showTitle={true} shouldShowURI={false} />
+          <Warnings elementWarnings={element.warnings}
+                    elementModel={element.model} elementURI={element.uri}
+                    showTitle={true} shouldShowURI={false} />
         </>
       }
     </li>
