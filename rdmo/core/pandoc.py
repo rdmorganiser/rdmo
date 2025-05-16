@@ -30,18 +30,18 @@ def get_pandoc_content(html, metadata, export_format, context):
 
     if metadata:
         # create a temporary file for the metadata and close it immediately
-        metadata_tmp_file_name = create_tmp_file('.json')
+        metadata_tmp_file_path = create_tmp_file('.json')
 
         # save metadata
-        log.info('Save metadata file %s %s', metadata_tmp_file_name, str(metadata))
-        with open(metadata_tmp_file_name, 'w') as fp:
+        log.info('Save metadata file %s %s', str(metadata_tmp_file_path), str(metadata))
+        with open(metadata_tmp_file_path, 'w') as fp:
             json.dump(metadata, fp)
 
         # add metadata file to pandoc args
-        pandoc_args.append('--metadata-file=' + metadata_tmp_file_name)
+        pandoc_args.append(f'--metadata-file={metadata_tmp_file_path}')
 
     # create a temporary file and close it immediately
-    tmp_file_name = create_tmp_file(f'.{export_format}')
+    tmp_file_path = create_tmp_file(f'.{export_format}')
 
     # convert the file using pandoc
     log.info('Export %s document using args %s.', export_format, pandoc_args)
@@ -49,16 +49,16 @@ def get_pandoc_content(html, metadata, export_format, context):
         r'(<img.+src=["\'])' + settings.STATIC_URL + r'([\w\-\@?^=%&/~\+#]+)', r'\g<1>' +
         str(Path(settings.STATIC_ROOT)) + r'/\g<2>', html
     )
-    pypandoc.convert_text(html, export_format, format='html', outputfile=tmp_file_name, extra_args=pandoc_args)
+    pypandoc.convert_text(html, export_format, format='html', outputfile=tmp_file_path, extra_args=pandoc_args)
 
     # read the created temporary file
-    with open(tmp_file_name, 'rb') as fp:
+    with open(tmp_file_path, 'rb') as fp:
         pandoc_content = fp.read()
 
     # delete temporary files
     if metadata:
-        os.remove(metadata_tmp_file_name)
-    os.remove(tmp_file_name)
+        os.remove(metadata_tmp_file_path)
+    os.remove(tmp_file_path)
 
     return pandoc_content
 

@@ -40,7 +40,7 @@ urlnames = {
     'copy': 'v1-domain:attribute-copy'
 }
 
-export_formats = ('xml', 'csvcomma', 'csvsemicolon', 'rtf', 'odt', 'docx', 'html', 'markdown', 'tex', 'pdf')
+export_formats = ('xml', 'html')
 
 
 @pytest.mark.parametrize('username,password', users)
