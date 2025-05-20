@@ -73,11 +73,7 @@ export function fetchCatalogs() {
     dispatch(addToPending(pendingId))
     dispatch(fetchCatalogsInit())
 
-    const action = (dispatch) => ProjectsApi.fetchCatalogs().then(catalogs => {
-      dispatch(fetchCatalogsSuccess(catalogs))
-    })
-
-    return dispatch(action)
+    return ProjectsApi.fetchCatalogs().then(catalogs => dispatch(fetchCatalogsSuccess(catalogs)))
       .catch(error => dispatch(fetchCatalogsError(error)))
       .finally(() => dispatch(removeFromPending(pendingId)))
   }

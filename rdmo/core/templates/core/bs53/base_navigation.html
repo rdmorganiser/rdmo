@@ -1,0 +1,130 @@
+{% load i18n %}
+{% load core_tags %}
+{% load accounts_tags %}
+{% load rules %}
+
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'home' %}">{{ request.site.name }}</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-collapse"
+                aria-controls="navbar-collapse" aria-expanded="false" aria-label="{% trans 'Toggle navigation' %}">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                {% back_to_project_link %}
+
+                {% test_rule 'management.can_view_management' request.user request.site as can_view_management %}
+
+                {% if can_view_management %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'management' %}">{% trans 'Management' %}</a>
+                </li>
+                {% endif %}
+                {% if user.is_superuser %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'admin:index' %}">{% trans 'Admin' %}</a>
+                </li>
+                {% endif %}
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <span id="pending" class="navbar-text"></span>
+
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {% trans 'Language' %} <span class="caret">
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        {% i18n_switcher %}
+                    </ul>
+                </li>
+
+                {% if user.is_authenticated %}
+
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {% full_name user %}<span class="caret"></span>
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end">
+
+                        {% url 'about' as about_url %}
+                        {% if about_url %}
+                        <li class="nav-item">
+                            <a href="{{ about_url }}" class="nav-link">
+                                {% trans 'About RDMO' %}
+                            </a>
+                        </li>
+                        <li role="separator" class="divider"></li>
+                        {% endif %}
+
+                        {% if settings.PROFILE_UPDATE %}
+                        <li class="nav-item">
+                            <a href="{% url 'profile_update' %}" class="nav-link">
+                                {% trans 'Update profile' %}
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if settings.ACCOUNT %}
+                            {% include 'core/base_navigation_account.html' %}
+                        {% endif %}
+
+                        {% if settings.SOCIALACCOUNT %}
+                            {% include 'core/base_navigation_socialaccount.html' %}
+                        {% endif %}
+
+                        {% if settings.ACCOUNT_ALLOW_USER_TOKEN %}
+                        <li class="nav-item">
+                            <a href="{% url 'account_token' %}" class="nav-link">
+                                {% trans 'API token' %}
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if settings.PROFILE_DELETE %}
+                        <li class="nav-item">
+                            <a href="{% url 'profile_remove' %}" class="nav-link">
+                                {% trans 'Delete profile' %}
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        <li class="nav-item">
+                            <a href="{% url 'reset_overlays' %}" class="nav-link">
+                                {% trans 'Reset tutorial overlays' %}
+                            </a>
+                        </li>
+
+                        <li role="separator" class="divider"></li>
+
+                        {% if settings.ACCOUNT or settings.SOCIALACCOUNT %}
+                        <li class="nav-item">
+                            {% include 'account/logout_form.html' %}
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a href="{{ settings.LOGOUT_URL }}" class="nav-link">
+                                {% trans 'Logout' %}
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </li>
+
+                {% else %}
+
+                <li class="nav-item">
+                    <a href="{{ settings.LOGIN_URL }}" class="nav-link">
+                        {% trans 'Login' %}
+                    </a>
+                </li>
+
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

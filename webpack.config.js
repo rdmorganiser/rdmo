@@ -13,6 +13,10 @@ const configList = [
       base: [
         './rdmo/core/assets/js/base.js',
         './rdmo/core/assets/scss/base.scss'
+      ],
+      'base-bs53': [
+        './rdmo/core/assets/js/_bs53/base.js',
+        './rdmo/core/assets/scss/_bs53/base.scss'
       ]
     },
     output: {
@@ -48,6 +52,10 @@ const configList = [
       projects: [
         './rdmo/projects/assets/js/projects.js',
         './rdmo/projects/assets/scss/projects.scss'
+      ],
+      project: [
+        './rdmo/projects/assets/js/project.js',
+        './rdmo/projects/assets/scss/project.scss'
       ],
       interview: [
         './rdmo/projects/assets/js/interview.js',

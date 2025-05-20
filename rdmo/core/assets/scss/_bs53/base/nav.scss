@@ -1,0 +1,24 @@
+nav.navbar {
+    --bs-navbar-color: #9d9d9d;
+    --bs-navbar-hover-color: white;
+    --bs-navbar-active-color: white;
+
+    --bs-nav-link-color: var(--bs-navbar-color);
+    --bs-nav-link-hover-color: var(--bs-navbar-hover-color);
+
+    --bs-navbar-brand-color: var(--bs-navbar-color);
+    --bs-navbar-brand-hover-color: var(--bs-navbar-hover-color);
+
+    .dropdown-menu {
+        --bs-dropdown-color: var(--rdmo-color);
+        --bs-nav-link-color: var(--rdmo-color);
+        --bs-nav-link-hover-color: var(--rdmo-color);
+        --bs-nav-link-active-color: var(--rdmo-color);
+
+        .nav-item:hover {
+            background-color: var(--rdmo-color-bg);
+        }
+    }
+
+    background-color: var(--rdmo-color-primary);
+}
