@@ -22,9 +22,9 @@ def i18n_switcher():
     for language, language_string in settings.LANGUAGES:
         url = reverse('i18n_switcher', args=[language])
         if language == translation.get_language():
-            string += f"<li><a href=\"{url}\"><u>{language_string}</u></a></li>"
+            string += f"<li><a class=\"dropdown-item\" href=\"{url}\"><u>{language_string}</u></a></li>"
         else:
-            string += f"<li><a href=\"{url}\">{language_string}</a></li>"
+            string += f"<li><a class=\"dropdown-item\" href=\"{url}\">{language_string}</a></li>"
     return mark_safe(string)
 
 

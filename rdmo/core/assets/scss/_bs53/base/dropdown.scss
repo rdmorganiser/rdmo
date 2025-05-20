@@ -1,0 +1,17 @@
+.dropdown-menu {
+    --bs-dropdown-border-radius: 0;
+    --bs-dropdown-font-size: 11pt;
+
+    .dropdown-header {
+        font-size: var(--bs-dropdown-font-size);
+    }
+
+    .dropdown-item {
+        &button {
+            cursor: pointer;
+        }
+        p {
+            margin: 0;
+        }
+    }
+}
