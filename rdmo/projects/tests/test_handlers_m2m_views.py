@@ -1,6 +1,7 @@
 from django.contrib.auth.models import Group
 
 from rdmo.projects.models import Project
+from rdmo.questions.models import Catalog
 from rdmo.views.models import View
 
 from .helpers import enable_project_views_sync  # noqa: F401
@@ -120,3 +121,25 @@ def test_project_views_sync_when_adding_or_removing_a_group_to_or_from_a_view(
 
     # Assert that the initial project views are unchanged
     assert set(project.views.values_list('id', flat=True)) == set(initial_project_views)
+
+
+
+def test_project_view_removed_when_view_catalog_set_to_other(db, settings, enable_project_views_sync):  # noqa:F811
+    assert settings.PROJECT_VIEWS_SYNC
+
+    project = Project.objects.get(id=project_id)
+    project_catalog = project.catalog
+    view = View.objects.get(id=view_id)
+
+    # Step 1: Project has a view (simulate by adding it manually)
+    project.views.add(view)
+    assert view in project.views.all()
+
+    # Step 2: The view did NOT have the catalog of the project assigned, but we set another catalog
+    other_catalog = Catalog.objects.exclude(id=project_catalog.id).first()
+    assert other_catalog is not None
+    view.catalogs.set([other_catalog])  # view now only for other_catalog
+
+    # Step 3: The project should NOT have the view anymore (if sync logic is correct)
+    project.refresh_from_db()
+    assert view not in project.views.all()

@@ -6,28 +6,34 @@ from rdmo.questions.models import Catalog
 
 
 def m2m_catalogs_changed_projects_sync_signal_handler(instance, action, pk_set, project_field):
+    """Sync project M2M relations (views or tasks) when catalogs change."""
 
+    # post_remove: remove instance from projects with removed catalogs
     if action == 'post_remove' and pk_set:
-        projects_to_change = (
+        projects_to_be_removed_from = (
             Project.objects
                 .filter_catalogs(catalogs=Catalog.objects.filter(pk__in=pk_set))
                 .filter(**{project_field: instance})
         )
-        for project in projects_to_change:  # remove instance from project
+        for project in projects_to_be_removed_from:
             getattr(project, project_field).remove(instance)
 
+    # post_clear: remove instance from all projects
     elif action == 'post_clear':
-        projects_to_change = Project.objects.filter(**{project_field: instance})
-        for project in projects_to_change:  # remove instance from project
+        projects_to_be_removed_from = Project.objects.filter(**{project_field: instance})
+        for project in projects_to_be_removed_from:
             getattr(project, project_field).remove(instance)
 
+    # post_add: after .set(), always resync all projects for the instance
     elif action == 'post_add' and pk_set:
-        projects_to_change = (
-            Project.objects
-                .filter_catalogs(catalogs=Catalog.objects.filter(pk__in=pk_set))
-                .exclude(**{project_field: instance})
-        )
-        for project in projects_to_change:  # add instance to project
+        # remove from projects whose catalog is not in pk_set
+        projects_with_instance = Project.objects.filter(**{project_field: instance})
+        projects_to_be_removed_from = projects_with_instance.exclude(catalog__in=pk_set)
+        for project in projects_to_be_removed_from:
+            getattr(project, project_field).remove(instance)
+        # add to projects whose catalog is in pk_set and do not have the instance
+        projects_to_be_added_to = Project.objects.filter(catalog__in=pk_set).exclude(**{project_field: instance})
+        for project in projects_to_be_added_to:
             getattr(project, project_field).add(instance)
 
 
