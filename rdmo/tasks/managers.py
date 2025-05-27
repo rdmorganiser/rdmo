@@ -10,7 +10,7 @@ from rdmo.core.managers import (
 )
 
 
-class TaskQuestionSet(CurrentSiteQuerySetMixin, GroupsQuerySetMixin, AvailabilityQuerySetMixin, QuerySet):
+class TaskQuerySet(CurrentSiteQuerySetMixin, GroupsQuerySetMixin, AvailabilityQuerySetMixin, QuerySet):
 
     def filter_catalog(self, catalog):
         return self.filter(Q(catalogs=None) | Q(catalogs=catalog))
@@ -23,8 +23,8 @@ class TaskQuestionSet(CurrentSiteQuerySetMixin, GroupsQuerySetMixin, Availabilit
 
 class TaskManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityManagerMixin, Manager):
 
-    def get_queryset(self) -> TaskQuestionSet:
-        return TaskQuestionSet(self.model, using=self._db)
+    def get_queryset(self) -> TaskQuerySet:
+        return TaskQuerySet(self.model, using=self._db)
 
     def filter_catalog(self, catalog):
         return self.get_queryset().filter_catalog(catalog)

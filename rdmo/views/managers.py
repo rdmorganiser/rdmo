@@ -10,7 +10,7 @@ from rdmo.core.managers import (
 )
 
 
-class ViewQuestionSet(CurrentSiteQuerySetMixin, GroupsQuerySetMixin, AvailabilityQuerySetMixin, QuerySet):
+class ViewQuerySet(CurrentSiteQuerySetMixin, GroupsQuerySetMixin, AvailabilityQuerySetMixin, QuerySet):
 
     def filter_catalog(self, catalog):
         return self.filter(Q(catalogs=None) | Q(catalogs=catalog))
@@ -23,8 +23,8 @@ class ViewQuestionSet(CurrentSiteQuerySetMixin, GroupsQuerySetMixin, Availabilit
 
 class ViewManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityManagerMixin, Manager):
 
-    def get_queryset(self) -> ViewQuestionSet:
-        return ViewQuestionSet(self.model, using=self._db)
+    def get_queryset(self) -> ViewQuerySet:
+        return ViewQuerySet(self.model, using=self._db)
 
     def filter_catalog(self, catalog):
         return self.get_queryset().filter_catalog(catalog)
