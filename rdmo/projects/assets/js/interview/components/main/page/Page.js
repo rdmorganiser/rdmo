@@ -16,8 +16,14 @@ const Page = ({ config, settings, templates, overview, page, sets, values, fetch
                 activateSet, createSet, updateSet, deleteSet, copySet }) => {
 
   const currentSetPrefix = ''
+
   let currentSetIndex = page.is_collection ? get(config, 'page.currentSetIndex', 0) : 0
-  let currentSet = sets.find((set) => (set.set_prefix == currentSetPrefix && set.set_index == currentSetIndex))
+
+  let currentSet = sets.find((set) => (
+    (set.set_prefix == currentSetPrefix) &&
+    (set.set_index == currentSetIndex) &&
+    (set.questionset == null)
+  ))
 
   // sanity check
   if (isNil(currentSet)) {

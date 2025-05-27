@@ -22,7 +22,8 @@ const QuestionSet = ({ config, settings, templates, page, questionset, sets, val
   const setPrefix = getChildPrefix(parentSet)
 
   const currentSets = sets.filter((set) => (
-    set.set_prefix == setPrefix
+    (set.set_prefix == setPrefix) &&
+    (set.questionset == questionset.id)
   ))
 
   return checkQuestionSet(questionset, parentSet) && (
