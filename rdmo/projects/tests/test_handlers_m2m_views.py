@@ -52,7 +52,7 @@ def test_project_views_sync_when_adding_or_removing_a_catalog_to_or_from_a_view(
     # assert that the initial project views are unchanged
     assert set(project.views.values_list('id', flat=True)) == set(initial_project_views)
 
-def test_project_views_sync_when_adding_or_removing_a_site_to_or_from_a_view(
+def test_project_views_sync_for_view_sites(
         db, settings, enable_project_views_sync  # noqa:F811
     ):
     assert settings.PROJECT_VIEWS_SYNC
@@ -73,12 +73,10 @@ def test_project_views_sync_when_adding_or_removing_a_site_to_or_from_a_view(
     view.sites.add(site)
     assert view in project.views.all()
 
-    # Remove the site from the view and assert that the project should no longer include the view
+    # Remove the site from the view, now the view has no sites so it is available to all
     view.sites.remove(site)
-    if view.sites.exists():
-        assert view in project.views.all()
-    else:
-        assert view not in project.views.all()
+    assert not view.sites.exists()
+    assert view in project.views.all()
 
     ## Tests for .set and .clear
     # Add the site to the view and assert that the project now includes the view
@@ -100,7 +98,6 @@ def test_project_views_sync_when_adding_or_removing_a_group_to_or_from_a_view(
 
     # Setup: Get an existing project, its associated group, and create a view
     project = Project.objects.get(id=project_id)
-    # breakpoint()
     user = project.owners.first()  # Get the first user associated with the project
     group = Group.objects.filter(name=group_name).first() # Get the first group the user belongs to
     user.groups.add(group)

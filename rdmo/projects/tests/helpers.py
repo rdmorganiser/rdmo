@@ -56,41 +56,74 @@ def get_catalog_view_mapping():
     return dict(catalog_views_mapping)
 
 
-def assert_all_projects_are_synced_with_instance_catalogs(instance: Union[Task, View]) -> None:
-    catalog_ids = set(instance.catalogs.values_list('id', flat=True))
-    m2m_field = get_related_field_name_for_instance(Project, instance)  # tasks or views
+def assert_all_projects_are_synced_with_instance_m2m_field(instance: Union[Task, View], field: str) -> None:
+    # View/Task .catalogs, .sites or .groups
+    instance_ids = set(getattr(instance, field).values_list('id', flat=True))
+    # Project .catalog, .site or .groups
+    instance_project_field = get_related_field_name_for_instance(Project, getattr(instance, field).model)
+    # Project tasks or views
+    m2m_field = get_related_field_name_for_instance(Project, instance)
+
 
     for project in Project.objects.all():
-        related_instances = getattr(project, m2m_field).all()
+        # Project tasks or views
+        project_instances = getattr(project, m2m_field).all()
 
-        if not catalog_ids:
-            if instance not in related_instances:
+        if not instance_ids:
+            if instance not in project_instances:
                 logger.debug(
-                    '%s missing in %s when no catalogs are set [%s]',
+                    '%s missing in %s when no %s are set [%s]',
                     instance,
+                    instance_project_field,
                     project,
                     m2m_field
                 )
-            assert instance in related_instances, f"{instance} missing in {project} with matching catalog"
+            assert instance in project_instances, f"{instance} missing in {project} with matching {instance_project_field}"  # noqa: E501
         else:
-            if project.catalog.id in catalog_ids:
-                if instance not in related_instances:
-                    logger.debug(
-                        '%s missing in %s with catalog match [%s]',
-                        instance,
-                        project,
-                        m2m_field
-                    )
-                assert instance in related_instances, f"{instance} missing in {project} with matching catalog"
-            else:
-                if instance in related_instances:
-                    logger.debug(
-                        '%s wrongly assigned to %s with catalog mismatch [%s]',
-                        instance,
-                        project,
-                        m2m_field
-                    )
-                assert instance not in related_instances, f"{instance} wrongly assigned to {project} with mismatched catalog"  # noqa: E501
+            if instance_project_field in ['site', 'catalog']:
+                if getattr(project, instance_project_field).id in instance_ids:
+                    if instance not in project_instances:
+                        logger.debug(
+                            '%s missing in %s with %s match [%s]',
+                            instance,
+                            instance_project_field,
+                            project,
+                            m2m_field
+                        )
+                    assert instance in project_instances, f"{instance} missing in {project} with matching {instance_project_field}"  # noqa: E501
+                else:
+                    if instance in project_instances:
+                        logger.debug(
+                            '%s wrongly assigned to %s with %s mismatch [%s]',
+                            instance,
+                            instance_project_field,
+                            project,
+                            m2m_field
+                        )
+                    assert instance not in project_instances, f"{instance} wrongly assigned to {project} with mismatched {instance_project_field}"  # noqa: E501
+            elif instance_project_field in ['groups']:
+                if {i.id for i in getattr(project, instance_project_field)} <= instance_ids:
+                    if instance not in project_instances:
+                        logger.debug(
+                            '%s missing in %s with %s match [%s]',
+                            instance,
+                            instance_project_field,
+                            project,
+                            m2m_field
+                        )
+                        assert instance in project_instances, f"{instance} missing in {project} with matching {instance_project_field}"  # noqa: E501
+                else:
+                    if instance in project_instances:
+                        logger.debug(
+                            '%s wrongly assigned to %s with %s mismatch [%s]',
+                            instance,
+                            instance_project_field,
+                            project,
+                            m2m_field
+                        )
+                        assert instance not in project_instances, f"{instance} wrongly assigned to {project} with mismatched {instance_project_field}"  # noqa: E501
+
+
 
 
 def _get_projects_views_state():
