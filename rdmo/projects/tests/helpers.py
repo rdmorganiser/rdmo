@@ -1,12 +1,18 @@
+import logging
 from collections import defaultdict
+from typing import Union
 
 import pytest
 
 from django.apps import apps
 
+from rdmo.projects.handlers.utils import get_related_field_name_for_instance
+from rdmo.projects.models import Project
 from rdmo.questions.models import Catalog
+from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
+logger = logging.getLogger(__name__)
 
 @pytest.fixture
 def enable_project_views_sync(settings):
@@ -48,3 +54,61 @@ def get_catalog_view_mapping():
 
     # Convert defaultdict to a regular dictionary
     return dict(catalog_views_mapping)
+
+
+def assert_all_projects_are_synced_with_instance_catalogs(instance: Union[Task, View]) -> None:
+    catalog_ids = set(instance.catalogs.values_list('id', flat=True))
+    m2m_field = get_related_field_name_for_instance(Project, instance)  # tasks or views
+
+    for project in Project.objects.all():
+        related_instances = getattr(project, m2m_field).all()
+
+        if not catalog_ids:
+            if instance not in related_instances:
+                logger.debug(
+                    '%s missing in %s when no catalogs are set [%s]',
+                    instance,
+                    project,
+                    m2m_field
+                )
+            assert instance in related_instances, f"{instance} missing in {project} with matching catalog"
+        else:
+            if project.catalog.id in catalog_ids:
+                if instance not in related_instances:
+                    logger.debug(
+                        '%s missing in %s with catalog match [%s]',
+                        instance,
+                        project,
+                        m2m_field
+                    )
+                assert instance in related_instances, f"{instance} missing in {project} with matching catalog"
+            else:
+                if instance in related_instances:
+                    logger.debug(
+                        '%s wrongly assigned to %s with catalog mismatch [%s]',
+                        instance,
+                        project,
+                        m2m_field
+                    )
+                assert instance not in related_instances, f"{instance} wrongly assigned to {project} with mismatched catalog"  # noqa: E501
+
+
+def _get_projects_views_state():
+    """ currently not used """
+    ret = {}
+    one_two_three = (1, 2, 3)
+    P_TITLE = "Sync P{}"
+    for n in one_two_three:
+        project = Project.objects.filter(title=P_TITLE.format(n)).first()
+        p_state = {"C": project.catalog.id, "V": project.views.all().values_list('id', flat=True)}
+        ret['P'][n] = p_state
+
+        view = View.objects.get(id=n)
+        v_state = {"C": view.catalogs.all().values_list('id', flat=True)}
+        ret['V'][n] = v_state
+
+        task = Task.objects.get(id=n)
+        t_state = {"C": task.catalogs.all().values_list('id', flat=True)}
+        ret['T'][n] = t_state
+
+    return ret
