@@ -52,6 +52,20 @@ class ProjectQuerySet(TreeQuerySet):
             catalogs_filter &= ~Q(catalog__in=exclude_catalogs)
         return self.filter(catalogs_filter)
 
+    def filter_groups(self, groups):
+        if not groups:
+            return self
+        from django.contrib.auth import get_user_model
+
+        from rdmo.projects.models import Membership  # Adjust import if needed
+
+        # users in the given groups
+        users = get_user_model().objects.filter(groups__in=groups)
+        # memberships for those users with role 'owner'
+        memberships = Membership.objects.filter(role='owner', user__in=users)
+
+        # projects that have those memberships
+        return self.filter(memberships__in=memberships).distinct()
 
 class MembershipQuerySet(models.QuerySet):
 
@@ -210,6 +224,8 @@ class ProjectManager(CurrentSiteManagerMixin, TreeManager):
     def filter_catalogs(self, catalogs=None, exclude_catalogs=None, exclude_null=True):
         return self.get_queryset().filter_catalogs(catalogs=catalogs, exclude_catalogs=exclude_catalogs,
                                                    exclude_null=exclude_null)
+    def filter_groups(self, groups):
+        return self.get_queryset().filter_groups(groups)
 
 
 class MembershipManager(CurrentSiteManagerMixin, models.Manager):
