@@ -1307,7 +1307,7 @@
       "locked": false,
       "parent": null,
       "lft": 1,
-      "rght": 12,
+      "rght": 16,
       "tree_id": 6,
       "level": 0,
       "editors": []
@@ -1765,6 +1765,46 @@
       "tree_id": 9,
       "level": 1,
       "editors": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 134,
+    "fields": {
+      "uri": "https://rdmorganiser.github.io/terms/domain/blocks/second",
+      "uri_prefix": "https://rdmorganiser.github.io/terms",
+      "key": "second",
+      "path": "blocks/second",
+      "comment": "",
+      "locked": false,
+      "parent": 107,
+      "lft": 12,
+      "rght": 13,
+      "tree_id": 6,
+      "level": 1,
+      "editors": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 135,
+    "fields": {
+      "uri": "https://rdmorganiser.github.io/terms/domain/blocks/first",
+      "uri_prefix": "https://rdmorganiser.github.io/terms",
+      "key": "first",
+      "path": "blocks/first",
+      "comment": "",
+      "locked": false,
+      "parent": 107,
+      "lft": 14,
+      "rght": 15,
+      "tree_id": 6,
+      "level": 1,
+      "editors": [
+        1
+      ]
     }
   }
 ]
