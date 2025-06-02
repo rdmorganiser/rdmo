@@ -16,15 +16,31 @@ export const getChildPrefix = (set) => {
   return isEmpty(set.set_prefix) ? toString(set.set_index) : `${set.set_prefix}|${set.set_index}`
 }
 
-export const getDescendants = (items, set) => {
-  return items.filter((item) => (
+export const getDescendants = (values, sets, set) => {
+  // get all sets for this element, this includes descendant sets
+  const descendantSets = sets.filter((s) => (
     (
-      (item.set_prefix === set.set_prefix) &&
-      (item.set_index === set.set_index)
-    ) || (
-      (item.set_prefix.startsWith(getChildPrefix(set)))
-    )
+      (
+        (s.set_prefix === set.set_prefix) &&
+        (s.set_index === set.set_index)
+      ) || (
+        (s.set_prefix.startsWith(getChildPrefix(set)))
+      )
+    ) && (s.element === set.element)
   ))
+
+  // get all values for this set, including it's descendant sets
+  const descendantValues = values.reduce((descendantValues, value) => {
+    // append values for which a descendant set with matching set_prefix and set_index exists,
+    // whose element also has a question with the same attribute as the the value
+    return descendantSets.find(set => (
+      (set.set_prefix == value.set_prefix) &&
+      (set.set_index == value.set_index) &&
+      (set.attributes.includes(value.attribute))
+    )) ? [...descendantValues, value] : descendantValues
+  }, [])
+
+  return { sets: descendantSets, values: descendantValues }
 }
 
 export const gatherSets = (values, element) => {

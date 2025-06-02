@@ -558,7 +558,7 @@ export function deleteSet(set, setValue) {
 
     if (isNil(setValue)) {
       // gather all values for this set and it's descendants
-      const values = getDescendants(getState().interview.values, set)
+      const { values } = getDescendants(getState().interview.values, getState().interview.sets, set)
 
       return Promise.all(values.map((value) => ValueApi.deleteValue(projectId, value)))
         .then(() => {
@@ -607,8 +607,7 @@ export function deleteSetInit() {
 export function deleteSetSuccess(set) {
   return (dispatch, getState) => {
     // again, gather all values for this set and it's descendants
-    const sets = getDescendants(getState().interview.sets, set)
-    const values = getDescendants(getState().interview.values, set)
+    const { sets, values } = getDescendants(getState().interview.values, getState().interview.sets, set)
 
     return dispatch({type: DELETE_SET_SUCCESS, sets, values})
   }
@@ -658,7 +657,8 @@ export function copySet(currentSet, copySetValue, attrs) {
     let promise
     if (isNil(value)) {
       // gather all values for the currentSet and it's descendants
-      const currentValues = getDescendants(getState().interview.values, currentSet)
+      const { values: currentValues } = getDescendants(getState().interview.values,
+                                                       getState().interview.sets, currentSet)
 
       // store each value in currentSet with the new set_index
       promise = Promise.all(
