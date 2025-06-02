@@ -10,7 +10,7 @@ const QuestionSetAddSet = ({ questionset, sets, setPrefix, disabled, createSet }
     createSet({
       set_prefix: setPrefix,
       set_index: setIndex,
-      questionset: questionset.id
+      element: questionset
     })
   }
 

@@ -1,7 +1,5 @@
 import { isEmpty, isNil, toNumber, toString, last, sortBy } from 'lodash'
 
-import { isQuestionset } from './page'
-
 import SetFactory from '../factories/SetFactory'
 
 export const getParentSet = (set, element) => {
@@ -10,7 +8,7 @@ export const getParentSet = (set, element) => {
   return {
     set_prefix: (split.length > 1) ? split.slice(0, -1).join('|') : '',
     set_index: toNumber(last(split)),
-    questionset: isQuestionset(element) ? element.id : null
+    element
   }
 }
 
@@ -40,7 +38,7 @@ export const gatherSets = (values, element) => {
       return [...sets, SetFactory.create({
         set_prefix: value.set_prefix,
         set_index: value.set_index,
-        questionset: isQuestionset(element) ? element.id : null
+        element
       })]
     }
   }, [])
@@ -73,7 +71,7 @@ export const initSets = (values, element, setPrefix) => {
     )))) {
       currentSets.push(SetFactory.create({
         set_prefix: setPrefix,
-        questionset: isQuestionset(element) ? element.id : null
+        element
       }))
     }
   }
@@ -89,7 +87,7 @@ export const initSets = (values, element, setPrefix) => {
     ...childSets,
     ...childSets.map(set => SetFactory.create({
       ...set,
-      questionset: isQuestionset(element) ? element.id : null
+      element
     }))
   ]
 

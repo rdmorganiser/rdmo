@@ -53,6 +53,7 @@ const PageHead = ({ templates, page, sets, values, disabled, currentSet,
         attribute: page.attribute,
         set_index: last(sets) ? last(sets).set_index + 1 : 0,
         set_collection: page.is_collection,
+        element: page,
         text
       })
     } else {

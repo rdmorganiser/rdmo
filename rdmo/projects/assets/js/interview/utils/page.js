@@ -1,7 +1,5 @@
 import { get, isNil } from 'lodash'
 
-const isQuestionset = (element) => (element.model === 'questions.questionset')
-
 const checkQuestionSet = (questionset, set) => {
   return !questionset.has_conditions || get(set, `questionsets.${questionset.id}`)
 }
@@ -64,4 +62,4 @@ const initQuestion = (question, questionset) => {
 
 const initPage = (page) => initQuestionSet(page)
 
-export { isQuestionset, checkQuestionSet, checkQuestion, initPage }
+export { checkQuestionSet, checkQuestion, initPage }

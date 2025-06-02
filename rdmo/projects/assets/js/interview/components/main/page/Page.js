@@ -22,7 +22,7 @@ const Page = ({ config, settings, templates, overview, page, sets, values, fetch
   let currentSet = sets.find((set) => (
     (set.set_prefix == currentSetPrefix) &&
     (set.set_index == currentSetIndex) &&
-    (set.questionset == null)
+    (set.element == page)
   ))
 
   // sanity check
