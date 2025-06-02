@@ -12,7 +12,7 @@ import { updateLocation } from '../utils/location'
 
 import { updateOptions } from '../utils/options'
 import { initPage } from '../utils/page'
-import { copyResolvedConditions, getDescendants, initSets } from '../utils/set'
+import { addSet, copyResolvedConditions, getDescendants, initSets } from '../utils/set'
 import { gatherDefaultValues, initValues, compareValues, isEmptyValue } from '../utils/value'
 import { projectId } from '../utils/meta'
 
@@ -522,9 +522,8 @@ export function createSet(attrs) {
       dispatch(activateSet(set))
 
       const state = getState().interview
-
       const page = state.page
-      const sets = [...state.sets, set]
+      const sets = addSet(state.sets, set)
       const values = isNil(value) ? [...state.values] : [...state.values, value]
 
       initValues(sets, values, page)

@@ -36,7 +36,7 @@ export const getDescendants = (values, sets, set) => {
     return descendantSets.find(set => (
       (set.set_prefix == value.set_prefix) &&
       (set.set_index == value.set_index) &&
-      (set.attributes.includes(value.attribute))
+      (set.element.attributes.includes(value.attribute))
     )) ? [...descendantValues, value] : descendantValues
   }, [])
 
@@ -98,13 +98,11 @@ export const initSets = (values, element, setPrefix) => {
   ), [])
 
   // create a list of all currentSets, childSets and a copy of childSets, but for this element
+  // those sets are marked as "isCopy", so that they are not copied by the next level of recursion
   let sets = [
     ...currentSets,
     ...childSets,
-    ...childSets.map(set => SetFactory.create({
-      ...set,
-      element
-    }))
+    ...childSets.filter(set => !set.isCopy).map(set => SetFactory.create({ ...set, element, isCopy: true }))
   ]
 
   // ensure that there is a set for the current setPrefix for each child set
@@ -121,6 +119,14 @@ export const initSets = (values, element, setPrefix) => {
 
   // return the sorted sets
   return sortBy(sets, ['questionset', 'set_prefix', 'set_index'])
+}
+
+export const addSet = (sets, set) => {
+  if (set.element.parent) {
+    return addSet([...sets, set], SetFactory.create({ ...set, element: set.element.parent }))
+  } else {
+    return [...sets, set]
+  }
 }
 
 export const copyResolvedConditions = (originalSets, sets) => {

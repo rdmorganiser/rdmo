@@ -14,6 +14,7 @@ const QuestionCopySet = ({ questionset, sets, currentSet, disabled, copySet }) =
     copySet(currentSet, null, {
       set_prefix: currentSet.set_prefix,
       set_index: last(sets) ? last(sets).set_index + 1 : 0,
+      element: questionset
     })
     modal.close()
   }

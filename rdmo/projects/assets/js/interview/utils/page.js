@@ -10,6 +10,8 @@ const checkQuestion = (question, set) => {
 
 const initQuestionSet = (questionset) => {
   questionset.elements.forEach((element) => {
+    element.parent = questionset
+
     if (element.model == 'questions.questionset') {
       initQuestionSet(element)
     } else {
