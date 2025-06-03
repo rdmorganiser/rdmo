@@ -172,6 +172,10 @@ class ValueQuerySet(models.QuerySet):
     def exclude_empty(self):
         return self.exclude((Q(text='') | Q(text=None)) & Q(option=None) & (Q(file='') | Q(file=None)))
 
+    def exclude_empty_optional(self, catalog):
+        optional_values = self.filter(attribute__in=[q.attribute for q in catalog.optional_questions])
+        return self.exclude(id__in=optional_values.filter_empty().values_list('id', flat=True))
+
     def distinct_list(self):
         return self.order_by('attribute').values_list('attribute', 'set_prefix', 'set_index').distinct()
 
