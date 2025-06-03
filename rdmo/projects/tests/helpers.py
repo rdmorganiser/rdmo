@@ -79,50 +79,34 @@ def assert_all_projects_are_synced_with_instance_m2m_field(instance: Union[Task,
                     m2m_field
                 )
             assert instance in project_instances, f"{instance} missing in {project} with matching {instance_project_field}"  # noqa: E501
-        else:
-            if instance_project_field in ['site', 'catalog']:
-                if getattr(project, instance_project_field).id in instance_ids:
-                    if instance not in project_instances:
-                        logger.debug(
-                            '%s missing in %s with %s match [%s]',
-                            instance,
-                            instance_project_field,
-                            project,
-                            m2m_field
-                        )
-                    assert instance in project_instances, f"{instance} missing in {project} with matching {instance_project_field}"  # noqa: E501
-                else:
-                    if instance in project_instances:
-                        logger.debug(
-                            '%s wrongly assigned to %s with %s mismatch [%s]',
-                            instance,
-                            instance_project_field,
-                            project,
-                            m2m_field
-                        )
-                    assert instance not in project_instances, f"{instance} wrongly assigned to {project} with mismatched {instance_project_field}"  # noqa: E501
-            elif instance_project_field in ['groups']:
-                if {i.id for i in getattr(project, instance_project_field)} <= instance_ids:
-                    if instance not in project_instances:
-                        logger.debug(
-                            '%s missing in %s with %s match [%s]',
-                            instance,
-                            instance_project_field,
-                            project,
-                            m2m_field
-                        )
-                        assert instance in project_instances, f"{instance} missing in {project} with matching {instance_project_field}"  # noqa: E501
-                else:
-                    if instance in project_instances:
-                        logger.debug(
-                            '%s wrongly assigned to %s with %s mismatch [%s]',
-                            instance,
-                            instance_project_field,
-                            project,
-                            m2m_field
-                        )
-                        assert instance not in project_instances, f"{instance} wrongly assigned to {project} with mismatched {instance_project_field}"  # noqa: E501
+            return
 
+        if instance_project_field in ['site', 'catalog']:
+            project_has_instance = getattr(project, instance_project_field).id in instance_ids
+        elif instance_project_field in ['groups']:
+            project_groups_ids = {i.id for i in getattr(project, instance_project_field)}
+            project_has_instance = bool((project_groups_ids <= instance_ids) and project_groups_ids)
+
+        if project_has_instance:
+            if instance not in project_instances:
+                logger.debug(
+                    '%s missing in %s with %s match [%s]',
+                    instance,
+                    instance_project_field,
+                    project,
+                    m2m_field
+                )
+            assert instance in project_instances, f"{instance} missing in {project} with matching {instance_project_field}"  # noqa: E501
+        else:
+            if instance in project_instances:
+                logger.debug(
+                    '%s wrongly assigned to %s with %s mismatch [%s]',
+                    instance,
+                    instance_project_field,
+                    project,
+                    m2m_field
+                )
+            assert instance not in project_instances, f"{instance} wrongly assigned to {project} with mismatched {instance_project_field}"  # noqa: E501
 
 
 

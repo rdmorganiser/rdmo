@@ -23,22 +23,21 @@ def test_project_views_sync_when_updating_view_sites(settings, enable_project_vi
     S = {n: Site.objects.get(id=1) for n in one_two_three}  # S1, S2, S3
     C = {n: Catalog.objects.get(id=1) for n in one_two_three}  # C1, C2, C3
     V = {n: View.objects.get(id=n) for n in one_two_three}  # V1, V2, V3
-    G = {n: Group.objects.create(name=f"Sync G{n}") for n in one_two_three}
-    U = {n: User.objects.create(username=f"Sync U{n}") for n in one_two_three}
-    for n in one_two_three:
-        U[n].groups.set([G[n]])
     P = {
         n: Project.objects.create(
             title=P_TITLE.format(n),
             catalog=C[n],
             site=S[n],
-            # TODO add a user as an owner that is in group G[n]
         )
         for n in one_two_three
     }
+    # Create groups, users and project memberships
+    G = {n: Group.objects.create(name=f"Sync G{n}") for n in one_two_three}
     for n in one_two_three:
+        _user = User.objects.create(username=f"Sync U{n}")
+        _user.groups.set([G[n]])
         # this sets P[1].groups -> U[n].groups
-        Membership.objects.create(user_id=U[n].id, project_id=P[n].id, role='owner')
+        Membership.objects.create(user_id=_user.id, project_id=P[n].id, role='owner')
 
     # Arrange the catalogs
     for catalog in C.values():
