@@ -17,7 +17,7 @@ export const getChildPrefix = (set) => {
 }
 
 export const getDescendants = (values, sets, set) => {
-  // get all sets for this element, this includes descendant sets
+  // get all descendant sets for this set and this element and all its descendant questionsets
   const descendantSets = sets.filter((s) => (
     (
       (
@@ -26,7 +26,7 @@ export const getDescendants = (values, sets, set) => {
       ) || (
         (s.set_prefix.startsWith(getChildPrefix(set)))
       )
-    ) && (s.element === set.element)
+    ) && [set.element, ...set.element.questionsets].includes(s.element)
   ))
 
   // get all values for this set, including it's descendant sets
@@ -92,18 +92,13 @@ export const initSets = (values, element, setPrefix) => {
     }
   }
 
-  // recursively reduce over child questionsets, start with current sets
+  // recursively reduce over child questionsets
   const childSets = questionsets.reduce((sets, questionset) => (
     [...sets, ...initSets(values, questionset)]
   ), [])
 
-  // create a list of all currentSets, childSets and a copy of childSets, but for this element
-  // those sets are marked as "isCopy", so that they are not copied by the next level of recursion
-  let sets = [
-    ...currentSets,
-    ...childSets,
-    ...childSets.filter(set => !set.isCopy).map(set => SetFactory.create({ ...set, element, isCopy: true }))
-  ]
+  // create a list of all currentSets and childSets
+  let sets = [...currentSets, ...childSets]
 
   // ensure that there is a set for the current setPrefix for each child set
   childSets.forEach((set) => {
@@ -119,14 +114,6 @@ export const initSets = (values, element, setPrefix) => {
 
   // return the sorted sets
   return sortBy(sets, ['questionset', 'set_prefix', 'set_index'])
-}
-
-export const addSet = (sets, set) => {
-  if (set.element.parent) {
-    return addSet([...sets, set], SetFactory.create({ ...set, element: set.element.parent }))
-  } else {
-    return [...sets, set]
-  }
 }
 
 export const copyResolvedConditions = (originalSets, sets) => {
