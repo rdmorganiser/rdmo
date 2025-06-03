@@ -38,7 +38,7 @@ const Page = ({ config, settings, templates, overview, page, sets, values, fetch
         focusInput.focus()
       }
     }
-  }, [page.id, currentSet])
+  }, [page.id])
 
   const isManager = (overview.is_superuser || overview.is_editor || overview.is_reviewer)
 
