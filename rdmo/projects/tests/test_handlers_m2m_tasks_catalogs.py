@@ -1,60 +1,24 @@
 import pytest
 
-from django.contrib.sites.models import Site
-
 from rdmo.projects.models import Project
-from rdmo.questions.models import Catalog
-from rdmo.tasks.models import Task
 
-from .helpers import assert_all_projects_are_synced_with_instance_m2m_field, enable_project_tasks_sync  # noqa: F401
+from .helpers.arrange_project_views_or_tasks import arrange_projects_groups_and_views_or_tasks
+from .helpers.assert_project_views_or_tasks import assert_all_projects_are_synced_with_instance_m2m_field
 
 P_TITLE = "Sync P{}"
 one_two_three = (1, 2, 3)
 
 @pytest.mark.django_db
-def test_project_tasks_sync_when_updating_task_catalogs(settings, enable_project_tasks_sync):  # noqa:F811
+def test_project_tasks_sync_when_updating_task_catalogs(settings, enable_project_tasks_sync):
     assert settings.PROJECT_TASKS_SYNC
-    site_1 = Site.objects.get(id=1)
 
-    # Arrange: the project, catalog and task objects
-    # all catalogs and tasks should have available=True
-    # P1, P2, P3
-    P = {
-        n: Project.objects.create(
-            title=P_TITLE.format(n),
-            catalog=Catalog.objects.get(id=n), site=site_1)
-        for n in one_two_three
-    }
-    C = {n: P[n].catalog for n in one_two_three}  # C1, C2, C3
-    T = {n: Task.objects.get(id=n) for n in one_two_three}  # T1, T2, T3
-
-    # Arrange the catalogs
-    for catalog in C.values():
-        catalog.available = True
-        catalog.sites.clear()
-        catalog.groups.clear()
-        catalog.save()
-
-    # Set a certain initial state for the project.tasks
-    # this is a sort of random state
-    P[1].tasks.set([T[1], T[2], T[3]])
-    P[2].tasks.clear()
-    P[3].tasks.set([T[3]])
-
-    # Clear everything to reset state for the tasks.catalogs
-    # which will also affect the project.tasks
-    for n, task in T.items():
-        task.available = True
-        task.sites.clear()
-        task.groups.clear()
-        task.catalogs.set([C[n]])
-        task.save()
+    P, C, T = arrange_projects_groups_and_views_or_tasks()
 
     # === Initial state ===
     # P1 (with C1) has T1, etc..
     assert set(P[1].tasks.all()) == {T[1]}
     assert set(P[2].tasks.all()) == {T[2]}
-    assert set(P[3].tasks.all()) == {T[3],'catalogs'}
+    assert set(P[3].tasks.all()) == {T[3]}
 
     # === Update: T1 has no catalogs → it should appear in all projects ===
     T[1].catalogs.clear()

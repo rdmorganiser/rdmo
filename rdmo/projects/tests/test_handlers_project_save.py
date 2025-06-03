@@ -3,8 +3,7 @@ from rdmo.projects.models import Project
 from rdmo.questions.models import Catalog
 from rdmo.views.models import View
 
-from .helpers import (
-    enable_project_views_sync,  # noqa: F401
+from .helpers.catalog_views import (
     get_catalog_view_mapping,
 )
 
@@ -12,7 +11,7 @@ project_id = 10
 
 
 def test_project_views_sync_when_changing_the_catalog_on_a_project(
-        db, settings, enable_project_views_sync  # noqa:F811
+        db, settings, enable_project_views_sync
 ):
     assert settings.PROJECT_VIEWS_SYNC
 

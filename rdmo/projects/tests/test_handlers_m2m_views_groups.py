@@ -1,66 +1,16 @@
 import pytest
 
-from django.contrib.auth.models import Group, User
-from django.contrib.sites.models import Site
+from rdmo.projects.models import Project
 
-from rdmo.projects.models import Membership, Project
-from rdmo.questions.models import Catalog
-from rdmo.views.models import View
-
-from .helpers import assert_all_projects_are_synced_with_instance_m2m_field, enable_project_views_sync  # noqa: F401
-
-P_TITLE = "Sync P{}"  # title of newly created test projects
-one_two_three = (1, 2, 3)  # will be used for creating P1, V1, C1, P2, ..etc.
+from .helpers.arrange_project_views_or_tasks import arrange_projects_groups_and_views_or_tasks
+from .helpers.assert_project_views_or_tasks import assert_all_projects_are_synced_with_instance_m2m_field
 
 
 @pytest.mark.django_db
-def test_project_views_sync_when_updating_view_sites(settings, enable_project_views_sync):  # noqa:F811
+def test_project_views_sync_when_updating_view_groups(settings, enable_project_views_sync):
     assert settings.PROJECT_VIEWS_SYNC
 
-    # Arrange: the project, catalog and view objects
-    # all catalogs and views should have available=True
-    # P1, P2, P3
-    S = {n: Site.objects.get(id=1) for n in one_two_three}  # S1, S2, S3
-    C = {n: Catalog.objects.get(id=1) for n in one_two_three}  # C1, C2, C3
-    V = {n: View.objects.get(id=n) for n in one_two_three}  # V1, V2, V3
-    P = {
-        n: Project.objects.create(
-            title=P_TITLE.format(n),
-            catalog=C[n],
-            site=S[n],
-        )
-        for n in one_two_three
-    }
-    # Create groups, users and project memberships
-    G = {n: Group.objects.create(name=f"Sync G{n}") for n in one_two_three}
-    for n in one_two_three:
-        _user = User.objects.create(username=f"Sync U{n}")
-        _user.groups.set([G[n]])
-        # this sets P[1].groups -> U[n].groups
-        Membership.objects.create(user_id=_user.id, project_id=P[n].id, role='owner')
-
-    # Arrange the catalogs
-    for catalog in C.values():
-        catalog.available = True
-        catalog.sites.clear()
-        catalog.groups.clear()
-        catalog.save()
-
-    # Set a certain initial state for the project.views
-    # this is a sort of random state
-    P[1].views.set([V[1],V[2],V[3]])
-    P[2].views.clear()
-    P[3].views.set([V[3]])
-
-    # Clear everything to reset state for the views.groups
-    # -> this will also affect the project.views
-    for n, view in V.items():
-        view.available = True
-        view.save()
-        view.catalogs.clear()
-        view.sites.clear()
-        view.groups.set([G[n]]) # set groups as last so that will be state
-
+    P, V, G = arrange_projects_groups_and_views_or_tasks()
     # === Initial state ===
     # P1 (with C1) has V1, etc...
     assert set(P[1].views.all()) == {V[1]}

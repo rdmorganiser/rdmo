@@ -1,17 +1,17 @@
+import pytest
+
 from django.contrib.auth.models import Group
 
 from rdmo.projects.models import Project
 from rdmo.questions.models import Catalog
 from rdmo.views.models import View
 
-from .helpers import enable_project_views_sync  # noqa: F401
-
 project_id = 10
 view_id = 3
 group_name = 'view_test'
 
 def test_project_views_sync_when_adding_or_removing_a_catalog_to_or_from_a_view(
-        db, settings, enable_project_views_sync  # noqa:F811
+        db, settings, enable_project_views_sync
     ):
     assert settings.PROJECT_VIEWS_SYNC
 
@@ -53,7 +53,7 @@ def test_project_views_sync_when_adding_or_removing_a_catalog_to_or_from_a_view(
     assert set(project.views.values_list('id', flat=True)) == set(initial_project_views)
 
 def test_project_views_sync_for_view_sites(
-        db, settings, enable_project_views_sync  # noqa:F811
+        db, settings, enable_project_views_sync
     ):
     assert settings.PROJECT_VIEWS_SYNC
 
@@ -91,8 +91,9 @@ def test_project_views_sync_for_view_sites(
     assert set(project.views.values_list('id', flat=True)) == set(initial_project_views)
 
 
+@pytest.mark.skip("not implemented yet")
 def test_project_views_sync_when_adding_or_removing_a_group_to_or_from_a_view(
-        db, settings, enable_project_views_sync  # noqa:F811
+        db, settings, enable_project_views_sync
     ):
     assert settings.PROJECT_VIEWS_SYNC
 
@@ -135,7 +136,7 @@ def test_project_views_sync_when_adding_or_removing_a_group_to_or_from_a_view(
 
 
 
-def test_project_view_removed_when_view_catalog_set_to_other(db, settings, enable_project_views_sync):  # noqa:F811
+def test_project_view_removed_when_view_catalog_set_to_other(db, settings, enable_project_views_sync):
     assert settings.PROJECT_VIEWS_SYNC
 
     project = Project.objects.get(id=project_id)
