@@ -47,18 +47,20 @@ def sync_instance_to_projects(instance):
 
     for project in to_remove:
         logger.debug(
-            'Removing %s from %s (%s) [sync_instance_to_projects]',
+            'Removing %s from %s(id=%s).%s [sync_instance_to_projects]',
             instance,
             project,
+            project.id,
             project_m2m_field
         )
         getattr(project, project_m2m_field).remove(instance)
 
     for project in to_add:
         logger.debug(
-            'Adding %s to %s (%s) [sync_instance_to_projects]',
+            'Adding %s to %s(id=%s).%s [sync_instance_to_projects]',
             instance,
             project,
+            project.id,
             project_m2m_field
         )
         getattr(project, project_m2m_field).add(instance)
@@ -74,9 +76,10 @@ def sync_project_instances(project, model):
     to_remove = current_instances.exclude(pk__in=desired_instances)
     for instance in to_remove:
         logger.debug(
-            'Removing %s from %s (%s) [sync_project_instances]',
+            'Removing %s from %s(id=%s).%s [sync_project_instances]',
             instance,
             project,
+            project.id,
             project_m2m_field
         )
         getattr(project, project_m2m_field).remove(instance)
@@ -84,9 +87,10 @@ def sync_project_instances(project, model):
     to_add = desired_instances.exclude(pk__in=current_instances)
     for instance in to_add:
         logger.debug(
-            'Adding %s to %s (%s) [sync_project_instances]',
+            'Adding %s to %s(id=%s).%s [sync_project_instances]',
             instance,
             project,
+            project.id,
             project_m2m_field
         )
         getattr(project, project_m2m_field).add(instance)
