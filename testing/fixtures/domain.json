@@ -1307,7 +1307,7 @@
       "locked": false,
       "parent": null,
       "lft": 1,
-      "rght": 24,
+      "rght": 26,
       "tree_id": 6,
       "level": 0,
       "editors": []
@@ -1852,7 +1852,7 @@
     "pk": 138,
     "fields": {
       "uri": "http://example.com/domain/blocks/single",
-      "uri_prefix": "https://rdmorganiser.github.io/terms",
+      "uri_prefix": "http://example.com",
       "key": "single",
       "path": "blocks/single",
       "comment": "",
@@ -1872,7 +1872,7 @@
     "pk": 139,
     "fields": {
       "uri": "http://example.com/domain/blocks/collection",
-      "uri_prefix": "https://rdmorganiser.github.io/terms",
+      "uri_prefix": "http://example.com",
       "key": "collection",
       "path": "blocks/collection",
       "comment": "",
@@ -1880,6 +1880,26 @@
       "parent": 107,
       "lft": 22,
       "rght": 23,
+      "tree_id": 6,
+      "level": 1,
+      "editors": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 140,
+    "fields": {
+      "uri": "http://example.com/terms/domain/blocks/z",
+      "uri_prefix": "http://example.com/terms",
+      "key": "z",
+      "path": "blocks/z",
+      "comment": "",
+      "locked": false,
+      "parent": 107,
+      "lft": 24,
+      "rght": 25,
       "tree_id": 6,
       "level": 1,
       "editors": [
