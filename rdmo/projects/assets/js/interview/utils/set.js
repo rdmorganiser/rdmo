@@ -2,19 +2,23 @@ import { isEmpty, isNil, toNumber, toString, last, sortBy } from 'lodash'
 
 import SetFactory from '../factories/SetFactory'
 
-export const getParentSet = (set, element) => {
+export const getParentSet = (set) => {
   const split = set.set_prefix.split('|')
 
   return {
     set_prefix: (split.length > 1) ? split.slice(0, -1).join('|') : '',
     set_index: toNumber(last(split)),
-    element
+    element: set.element.parent
   }
 }
 
 export const getChildPrefix = (set) => {
   return isEmpty(set.set_prefix) ? toString(set.set_index) : `${set.set_prefix}|${set.set_index}`
 }
+
+export const getLevel = (value) => (
+  isEmpty(value.set_prefix) ? 0 : value.set_prefix.split('|').length
+)
 
 export const getDescendants = (values, sets, set) => {
   // get all descendant sets for this set and this element and all its descendant questionsets
@@ -43,77 +47,89 @@ export const getDescendants = (values, sets, set) => {
   return { sets: descendantSets, values: descendantValues }
 }
 
-export const gatherSets = (values, element) => {
-  const sets = values.reduce((sets, value) => {
-    if (sets.find((set) => (
-      (set.set_prefix === value.set_prefix) &&
-      (set.set_index === value.set_index)
-    ))) {
-      return sets
-    } else {
-      return [...sets, SetFactory.create({
-        set_prefix: value.set_prefix,
-        set_index: value.set_index,
-        element
-      })]
-    }
-  }, [])
-
-  return sets
+export const findSetsForElement = (values, element) => {
+  return values
+    .filter((value) => (
+      (element.attributes.includes(value.attribute)) &&
+      (getLevel(value) == element.level)
+    ))
+    .reduce((sets, value) => {
+      if (sets.find((set) => (
+        (set.set_prefix === value.set_prefix) &&
+        (set.set_index === value.set_index)
+      ))) {
+        return sets
+      } else {
+        return [...sets, SetFactory.create({
+          set_prefix: value.set_prefix,
+          set_index: value.set_index,
+          element
+        })]
+      }
+    }, [])
 }
 
-export const initSets = (values, element, setPrefix) => {
-  if (isNil(setPrefix)) {
-    setPrefix = ''
-  }
-
-  // gather the (direct) questionsets, questions, and attributes of this element
-  const questionsets = element.elements.filter((e) => (e.model === 'questions.questionset'))
-  const questions = element.elements.filter((e) => (e.model === 'questions.question'))
-  const attributes = [
-    ...(isNil(element.attribute) ? [] : [element.attribute]),
-    ...questions.map((question) => question.attribute)
-  ]
-
+export const gatherSets = (values, element) => {
   // get the values for the questions of this page/questionset
-  const currentValues = values.filter((value) => attributes.includes(value.attribute))
-  const currentSets = gatherSets(currentValues, element)
-
-  // for non collection questionsets create at least one valueset (for this set_prefix)
-  if (!element.is_collection) {
-    if (!currentSets.find((set) => (
-      (set.set_prefix === setPrefix) && (
-      (set.set_index === 0)
-    )))) {
-      currentSets.push(SetFactory.create({
-        set_prefix: setPrefix,
-        element
-      }))
-    }
-  }
+  const currentQuestionsets = element.elements.filter((e) => (e.model === 'questions.questionset'))
+  const currentSets = findSetsForElement(values, element)
 
   // recursively reduce over child questionsets
-  const childSets = questionsets.reduce((sets, questionset) => (
-    [...sets, ...initSets(values, questionset)]
+  const childSets = currentQuestionsets.reduce((sets, questionset) => (
+    [...sets, ...gatherSets(values, questionset)]
   ), [])
 
   // create a list of all currentSets and childSets
   let sets = [...currentSets, ...childSets]
 
-  // ensure that there is a set for the current setPrefix for each child set
+  // ensure that every child set has a parent
   childSets.forEach((set) => {
-    const parentSet = getParentSet(set, element)
-
-    if (!sets.find((set) => ((
-      (set.set_prefix === parentSet.set_prefix) &&
-      (set.set_index === parentSet.set_index)
-    )))) {
-      sets.push(SetFactory.create(parentSet))
-    }
+    createSetIfNotExisting(sets, getParentSet(set))
   })
 
   // return the sorted sets
-  return sortBy(sets, ['questionset', 'set_prefix', 'set_index'])
+  return sortBy(sets, ['element.id', 'set_prefix', 'set_index'])
+}
+
+export const initSets = (sets, element, set_prefix) => {
+  if (isNil(set_prefix)) {
+    set_prefix = ''
+  }
+
+  // if this element is not a collection, create at least one valueset
+  if (!element.is_collection) {
+    createSetIfNotExisting(sets, {
+      set_prefix,
+      set_index: 0,
+      element
+    })
+  }
+
+  // get the sets of the element
+  const currentSets = sets.filter((set) => (
+    (set.set_prefix === set_prefix) &&
+    (set.element === element)
+  ))
+
+  // get the (direct) questionsets of the element
+  const currentQuestionsets = element.elements.filter((e) => (e.model === 'questions.questionset'))
+
+  // recursively loop over the current sets the current questionsets
+  currentSets.forEach((set) => {
+    currentQuestionsets.forEach((questionset) => {
+        initSets(sets, questionset, getChildPrefix(set))
+      })
+  })
+}
+
+export const createSetIfNotExisting = (sets, set) => {
+    if (!sets.find((s) => ((
+      (s.set_prefix === set.set_prefix) &&
+      (s.set_index === set.set_index) &&
+      (s.element === set.element)
+    )))) {
+      sets.push(SetFactory.create(set))
+    }
 }
 
 export const copyResolvedConditions = (originalSets, sets) => {

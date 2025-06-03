@@ -12,7 +12,7 @@ import { updateLocation } from '../utils/location'
 
 import { updateOptions } from '../utils/options'
 import { initPage } from '../utils/page'
-import { copyResolvedConditions, getDescendants, initSets } from '../utils/set'
+import { copyResolvedConditions, getDescendants, gatherSets, initSets } from '../utils/set'
 import { gatherDefaultValues, initValues, compareValues, isEmptyValue } from '../utils/value'
 import { projectId } from '../utils/meta'
 
@@ -192,8 +192,9 @@ export function fetchValues(page) {
     dispatch(fetchValuesInit())
     return ValueApi.fetchValues(projectId, { attribute: page.attributes })
       .then((values) => {
-        const sets = initSets(values, page)
+        const sets = gatherSets(values, page)
 
+        initSets(sets, page)
         initValues(sets, values, page)
 
         dispatch(removeFromPending(pendingId))
@@ -526,6 +527,7 @@ export function createSet(attrs) {
       const sets = [...state.sets, set]
       const values = isNil(value) ? [...state.values] : [...state.values, value]
 
+      initSets(sets, page)
       initValues(sets, values, page)
 
       return dispatch({type: CREATE_SET, values, sets})
@@ -642,8 +644,9 @@ export function copySet(currentSet, copySetValue, attrs) {
         ...state.values.filter(v => !setValues.some(sv => compareValues(v, sv))),  // remove updated values
         ...setValues
       ]
-      const sets = initSets(values, page)
+      const sets = gatherSets(values, page)
 
+      initSets(sets, page)
       initValues(sets, values, page)
 
       // copy already resolved conditions to prevent short hiding of questions
