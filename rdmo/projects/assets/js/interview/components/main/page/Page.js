@@ -56,7 +56,7 @@ const Page = ({ config, settings, templates, overview, page, sets, values, fetch
       <PageHead
         templates={templates}
         page={page}
-        sets={sets.filter((set) => (set.set_prefix == currentSetPrefix))}
+        sets={sets.filter((set) => (set.set_prefix == currentSetPrefix) && (set.element == page))}
         values={isNil(page.attribute) ? [] : values.filter((value) => (value.attribute == page.attribute))}
         disabled={overview.read_only}
         currentSet={currentSet}
