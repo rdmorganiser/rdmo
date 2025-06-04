@@ -32,6 +32,33 @@ def get_catalog_view_mapping():
     return dict(catalog_views_mapping)
 
 
+def get_catalog_task_mapping():
+    """
+    Generate a mapping of catalogs to their associated tasks.
+    Includes all catalogs, even those with no tasks, and adds `sites` and `groups` for each task.
+    """
+    # Initialize an empty dictionary for the catalog-to-tasks mapping
+    catalog_tasks_mapping = defaultdict(list)
+
+    # Populate the mapping for all catalogs
+    for catalog in Catalog.objects.all():
+        catalog_tasks_mapping[catalog.id] = []
+
+    # Iterate through all tasks and enrich the mapping
+    for task in Task.objects.prefetch_related('sites', 'groups'):
+        if task.catalogs.exists():  # Only include tasks with valid catalogs
+            for catalog in task.catalogs.all():
+                catalog_tasks_mapping[catalog.id].append({
+                    'id': task.id,
+                    'sites': list(task.sites.values_list('id', flat=True)),
+                    'groups': list(task.groups.values_list('id', flat=True))
+                })
+
+    # Convert defaultdict to a regular dictionary
+    return dict(catalog_tasks_mapping)
+
+
+
 def _get_projects_views_state():
     """ currently not used """
     ret = {}
