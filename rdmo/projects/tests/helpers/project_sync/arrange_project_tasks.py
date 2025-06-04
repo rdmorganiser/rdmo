@@ -25,9 +25,9 @@ def arrange_projects_catalogs_and_tasks():
     # Arrange the catalogs
     for catalog in C.values():
         catalog.available = True
+        catalog.save()
         catalog.sites.clear()
         catalog.groups.clear()
-        catalog.save()
 
     # Set a certain initial state for the project.tasks
     # this is a sort of random state
@@ -39,10 +39,10 @@ def arrange_projects_catalogs_and_tasks():
     # which will also affect the project.tasks
     for n, task in T.items():
         task.available = True
+        task.save()
         task.sites.clear()
         task.groups.clear()
         task.catalogs.set([C[n]])
-        task.save()
 
     return P, C, T
 
@@ -65,9 +65,9 @@ def arrange_projects_sites_and_tasks():
     # Arrange the catalogs
     for catalog in C.values():
         catalog.available = True
+        catalog.save()
         catalog.sites.clear()
         catalog.groups.clear()
-        catalog.save()
 
     # Set a certain initial state for the project.tasks
     # this is a sort of random state
@@ -79,10 +79,10 @@ def arrange_projects_sites_and_tasks():
     # which will also affect the project.tasks
     for n, task in T.items():
         task.available = True
+        task.save()
         task.catalogs.clear()
         task.groups.clear()
         task.sites.set([S[n]])
-        task.save()
 
     return P, T, S
 
@@ -111,9 +111,9 @@ def arrange_projects_groups_and_tasks():
     # Arrange the catalogs
     for catalog in C.values():
         catalog.available = True
+        catalog.save()
         catalog.sites.clear()
         catalog.groups.clear()
-        catalog.save()
 
     # Set a certain initial state for the project.tasks
     # this is a sort of random state

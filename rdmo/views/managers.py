@@ -29,11 +29,11 @@ class ViewManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityManag
     def filter_catalog(self, catalog):
         return self.get_queryset().filter_catalog(catalog)
 
-    def filter_for_project(self, project):
+    def filter_for_project(self, project, user=None):
         return (
             self
                 .get_queryset()
-                .filter_availability(None)  # to re-use AvailabilityManagerMixin
+                .filter_availability(user)  # to re-use AvailabilityManagerMixin
                 .filter_for_project_site(project)
                 .filter_catalog(project.catalog)
                 .filter_for_project_group(project)

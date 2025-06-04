@@ -1,63 +1,46 @@
+import pytest
 
-from rdmo.projects.models import Project
-from rdmo.projects.tests.helpers.project_sync.catalog_views import get_catalog_task_mapping, get_catalog_view_mapping
-from rdmo.questions.models import Catalog
-from rdmo.tasks.models import Task
-from rdmo.views.models import View
-
-project_id = 10
+from rdmo.projects.tests.helpers.project_sync.arrange_project_tasks import arrange_projects_catalogs_and_tasks
+from rdmo.projects.tests.helpers.project_sync.arrange_project_views import arrange_projects_catalogs_and_views
 
 
-def test_project_views_sync_when_changing_the_catalog_on_a_project(
-        db, settings, enable_project_views_sync
-):
-    assert settings.PROJECT_VIEWS_SYNC
-
-    # Setup: Create a catalog, a view, and a project using the catalog
-    project = Project.objects.get(id=project_id)
-    initial_project_views = set(project.views.values_list('id', flat=True))
-    assert initial_project_views == {1,2,3}  # from the fixture
-
-    catalog_view_mapping = get_catalog_view_mapping()
-    for catalog_id, view_ids in catalog_view_mapping.items():
-        if project.catalog_id == catalog_id:
-            continue  # catalog will not change
-        project.catalog = Catalog.objects.get(id=catalog_id)
-        project.save()
-
-        # TODO this filter_available_views_for_project method needs to tested explicitly
-        available_views = set(
-            View.objects
-                .filter_for_project(project)
-                .filter_availability(project.owners.first())
-                .values_list('id', flat=True)
-        )
-        assert set(project.views.values_list('id', flat=True)) == available_views
-
-
-
-def test_project_tasks_sync_when_changing_the_catalog_on_a_project(
-        db, settings, enable_project_tasks_sync
-):
+@pytest.mark.django_db
+def test_project_tasks_sync_when_changing_a_catalog_on_a_project(settings, enable_project_tasks_sync):
     assert settings.PROJECT_TASKS_SYNC
 
-    # Setup: Create a catalog, a task, and a project using the catalog
-    project = Project.objects.get(id=project_id)
-    initial_project_tasks = set(project.tasks.values_list('id', flat=True))
-    assert initial_project_tasks == {1,2}  # from the fixture
+    P, C, T = arrange_projects_catalogs_and_tasks()
+    # === Initial state ===
+    # P1 (with C1) has V1, etc..
+    assert set(P[1].tasks.all()) == {T[1]}
+    assert set(P[2].tasks.all()) == {T[2]}
+    assert set(P[3].tasks.all()) == {T[3]}
+    # Act: change catalog on P1 and P2
+    P[1].catalog = C[2]
+    P[1].save()
+    P[2].catalog = C[1]
+    P[2].save()
+    # Assert: T1 and T2 were swapped
+    assert set(P[1].tasks.all()) == {T[2]}
+    assert set(P[2].tasks.all()) == {T[1]}
+    assert set(P[3].tasks.all()) == {T[3]}
 
-    catalog_task_mapping = get_catalog_task_mapping()
-    for catalog_id, task_ids in catalog_task_mapping.items():
-        if project.catalog_id == catalog_id:
-            continue  # catalog will not change
-        project.catalog = Catalog.objects.get(id=catalog_id)
-        project.save()
 
-        # TODO this filter_available_tasks_for_project method needs to tested explicitly
-        available_tasks = set(
-            Task.objects
-                .filter_for_project(project)
-                .filter_availability(project.owners.first())
-                .values_list('id', flat=True)
-        )
-        assert set(project.tasks.values_list('id', flat=True)) == available_tasks
+@pytest.mark.django_db
+def test_project_views_sync_when_changing_a_catalog_on_a_project(settings, enable_project_views_sync):
+    assert settings.PROJECT_VIEWS_SYNC
+
+    P, C, V = arrange_projects_catalogs_and_views()
+    # === Initial state ===
+    # P1 (with C1) has V1, etc..
+    assert set(P[1].views.all()) == {V[1]}
+    assert set(P[2].views.all()) == {V[2]}
+    assert set(P[3].views.all()) == {V[3]}
+    # Act: change catalog on P1 and P2
+    P[1].catalog = C[2]
+    P[1].save()
+    P[2].catalog = C[1]
+    P[2].save()
+    # Assert: T1 and T2 were swapped
+    assert set(P[1].views.all()) == {V[2]}
+    assert set(P[2].views.all()) == {V[1]}
+    assert set(P[3].views.all()) == {V[3]}

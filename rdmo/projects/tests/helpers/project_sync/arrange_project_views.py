@@ -25,9 +25,9 @@ def arrange_projects_catalogs_and_views():
     # Arrange the catalogs
     for catalog in C.values():
         catalog.available = True
+        catalog.save()
         catalog.sites.clear()
         catalog.groups.clear()
-        catalog.save()
 
     # Set a certain initial state for the project.views
     # this is a sort of random state
@@ -39,10 +39,10 @@ def arrange_projects_catalogs_and_views():
     # which will also affect the project.views
     for n, view in V.items():
         view.available = True
+        view.save()
         view.sites.clear()
         view.groups.clear()
         view.catalogs.set([C[n]])
-        view.save()
 
     return P, C, V
 
@@ -66,9 +66,9 @@ def arrange_projects_sites_and_views():
     # Arrange the catalogs
     for catalog in C.values():
         catalog.available = True
+        catalog.save()
         catalog.sites.clear()
         catalog.groups.clear()
-        catalog.save()
 
     # Set a certain initial state for the project.views
     # this is a sort of random state
@@ -80,10 +80,10 @@ def arrange_projects_sites_and_views():
     # which will also affect the project.views
     for n, view in V.items():
         view.available = True
+        view.save()
         view.catalogs.clear()
         view.groups.clear()
         view.sites.set([S[n]])
-        view.save()
 
     return P, V, S
 
@@ -113,9 +113,9 @@ def arrange_projects_groups_and_views():
     # Arrange the catalogs
     for catalog in C.values():
         catalog.available = True
+        catalog.save()
         catalog.sites.clear()
         catalog.groups.clear()
-        catalog.save()
 
     # Set a certain initial state for the project.views
     # this is a sort of random state

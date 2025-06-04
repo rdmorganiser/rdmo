@@ -70,8 +70,7 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
         else:
             context['tasks_available'] = (
                 Task.objects
-                    .filter_for_project(project)
-                    .filter_availability(self.request.user)
+                    .filter_for_project(project, user=self.request.user)
                     .exists()
             )
 
@@ -81,8 +80,7 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
         else:
             context['views_available'] = (
                 View.objects
-                    .filter_for_project(project)
-                    .filter_availability(self.request.user)
+                    .filter_for_project(project, user=self.request.user)
                     .exists()
             )
 
