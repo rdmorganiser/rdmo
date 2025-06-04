@@ -1,4 +1,3 @@
-import pytest
 
 from django.contrib.auth.models import Group
 
@@ -12,7 +11,7 @@ project_id = 10
 task_id = 1
 group_name = 'view_test'
 
-@pytest.mark.skip("not implemented yet")
+# @pytest.mark.skip("not implemented yet")
 def test_project_tasks_sync_when_adding_or_removing_a_catalog_to_or_from_a_task(
         db, settings, enable_project_tasks_sync
     ):
@@ -60,7 +59,7 @@ def test_project_tasks_sync_when_adding_or_removing_a_catalog_to_or_from_a_task(
     # Assert that the initial project tasks are unchanged
     assert set(project.tasks.values_list('id', flat=True)) == set(initial_project_tasks)
 
-@pytest.mark.skip("not implemented yet")
+# @pytest.mark.skip("not implemented yet")
 def test_project_tasks_sync_when_adding_or_removing_a_site_to_or_from_a_task(
         db, settings, enable_project_tasks_sync
     ):
@@ -109,7 +108,7 @@ def test_project_tasks_sync_when_adding_or_removing_a_site_to_or_from_a_task(
     # Assert that the initial project tasks are unchanged
     assert set(project.tasks.values_list('id', flat=True)) == set(initial_project_tasks)
 
-@pytest.mark.skip("not implemented yet")
+# @pytest.mark.skip("not implemented yet")
 def test_project_tasks_sync_when_adding_or_removing_a_group_to_or_from_a_task(
         db, settings, enable_project_tasks_sync
     ):

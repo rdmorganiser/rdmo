@@ -1,4 +1,3 @@
-import pytest
 
 from django.contrib.auth.models import Group
 
@@ -91,7 +90,7 @@ def test_project_views_sync_for_view_sites(
     assert set(project.views.values_list('id', flat=True)) == set(initial_project_views)
 
 
-@pytest.mark.skip("not implemented yet")
+# @pytest.mark.skip("not implemented yet")
 def test_project_views_sync_when_adding_or_removing_a_group_to_or_from_a_view(
         db, settings, enable_project_views_sync
     ):
@@ -117,10 +116,7 @@ def test_project_views_sync_when_adding_or_removing_a_group_to_or_from_a_view(
 
     # Remove the group from the view and assert that the project should no longer include the view
     view.groups.remove(group)
-    if view.groups.exists():
-        assert view in project.views.all()
-    else:
-        assert view not in project.views.all()
+    assert view in project.views.all()
 
     ## Tests for .set and .clear
     # Add the group to the view and assert that the project now includes the view

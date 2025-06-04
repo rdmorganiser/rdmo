@@ -6,8 +6,6 @@ from rdmo.projects.tests.helpers.project_sync.assert_project_views_or_tasks impo
     assert_all_projects_are_synced_with_instance_m2m_field,
 )
 
-P_TITLE = "Sync P{}"
-one_two_three = (1, 2, 3)
 
 @pytest.mark.django_db
 def test_project_tasks_sync_when_updating_task_catalogs(settings, enable_project_tasks_sync):

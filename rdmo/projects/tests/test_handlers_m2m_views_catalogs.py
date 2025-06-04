@@ -12,7 +12,6 @@ def test_project_views_sync_when_updating_view_catalogs(settings, enable_project
     assert settings.PROJECT_VIEWS_SYNC
 
     P, C, V = arrange_projects_catalogs_and_views()
-
     # === Initial state ===
     # P1 (with C1) has V1, etc..
     assert set(P[1].views.all()) == {V[1]}

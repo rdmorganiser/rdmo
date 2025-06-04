@@ -1,7 +1,7 @@
 import pytest
 
 from rdmo.projects.models import Project
-from rdmo.projects.tests.helpers.project_sync.arrange_project_tasks import arrange_projects_groups_and_tasks
+from rdmo.projects.tests.helpers.project_sync.arrange_project_views import arrange_projects_groups_and_views
 from rdmo.projects.tests.helpers.project_sync.assert_project_views_or_tasks import (
     assert_all_projects_are_synced_with_instance_m2m_field,
 )
@@ -11,7 +11,7 @@ from rdmo.projects.tests.helpers.project_sync.assert_project_views_or_tasks impo
 def test_project_views_sync_when_updating_view_groups(settings, enable_project_views_sync):
     assert settings.PROJECT_VIEWS_SYNC
 
-    P, V, G = arrange_projects_groups_and_tasks()
+    P, V, G = arrange_projects_groups_and_views()
     # === Initial state ===
     # P1 (with C1) has V1, etc...
     assert set(P[1].views.all()) == {V[1]}
@@ -34,7 +34,7 @@ def test_project_views_sync_when_updating_view_groups(settings, enable_project_v
     assert set(P[2].views.all()) == {V[2]}
     assert set(P[3].views.all()) == {V[3]}
     # TODO check or fix test
-    # assert_all_projects_are_synced_with_instance_m2m_field(V[1], 'groups')
+    assert_all_projects_are_synced_with_instance_m2m_field(V[1], 'groups')
 
     # === Update: set [C1, C2] to V1 → it should appear in P1, P2 ===
     V[1].groups.set([G[1], G[2]])  # V1 → [C1, C2]

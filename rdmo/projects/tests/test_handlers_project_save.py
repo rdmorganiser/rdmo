@@ -1,11 +1,10 @@
 
 from rdmo.projects.models import Project
-from rdmo.questions.models import Catalog
-from rdmo.views.models import View
-
-from .helpers.catalog_views import (
+from rdmo.projects.tests.helpers.project_sync.catalog_views import (
     get_catalog_view_mapping,
 )
+from rdmo.questions.models import Catalog
+from rdmo.views.models import View
 
 project_id = 10
 
