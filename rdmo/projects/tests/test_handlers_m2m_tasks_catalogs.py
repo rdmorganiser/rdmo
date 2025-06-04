@@ -1,9 +1,10 @@
 import pytest
 
 from rdmo.projects.models import Project
-
-from .helpers.arrange_project_views_or_tasks import arrange_projects_groups_and_views_or_tasks
-from .helpers.assert_project_views_or_tasks import assert_all_projects_are_synced_with_instance_m2m_field
+from rdmo.projects.tests.helpers.project_sync.arrange_project_tasks import arrange_projects_catalogs_and_tasks
+from rdmo.projects.tests.helpers.project_sync.assert_project_views_or_tasks import (
+    assert_all_projects_are_synced_with_instance_m2m_field,
+)
 
 P_TITLE = "Sync P{}"
 one_two_three = (1, 2, 3)
@@ -12,7 +13,7 @@ one_two_three = (1, 2, 3)
 def test_project_tasks_sync_when_updating_task_catalogs(settings, enable_project_tasks_sync):
     assert settings.PROJECT_TASKS_SYNC
 
-    P, C, T = arrange_projects_groups_and_views_or_tasks()
+    P, C, T = arrange_projects_catalogs_and_tasks()
 
     # === Initial state ===
     # P1 (with C1) has T1, etc..

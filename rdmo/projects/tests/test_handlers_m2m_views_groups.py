@@ -1,16 +1,17 @@
 import pytest
 
 from rdmo.projects.models import Project
-
-from .helpers.arrange_project_views_or_tasks import arrange_projects_groups_and_views_or_tasks
-from .helpers.assert_project_views_or_tasks import assert_all_projects_are_synced_with_instance_m2m_field
+from rdmo.projects.tests.helpers.project_sync.arrange_project_tasks import arrange_projects_groups_and_tasks
+from rdmo.projects.tests.helpers.project_sync.assert_project_views_or_tasks import (
+    assert_all_projects_are_synced_with_instance_m2m_field,
+)
 
 
 @pytest.mark.django_db
 def test_project_views_sync_when_updating_view_groups(settings, enable_project_views_sync):
     assert settings.PROJECT_VIEWS_SYNC
 
-    P, V, G = arrange_projects_groups_and_views_or_tasks()
+    P, V, G = arrange_projects_groups_and_tasks()
     # === Initial state ===
     # P1 (with C1) has V1, etc...
     assert set(P[1].views.all()) == {V[1]}

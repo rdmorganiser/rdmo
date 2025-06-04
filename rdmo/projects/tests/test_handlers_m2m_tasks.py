@@ -3,11 +3,10 @@ import pytest
 from django.contrib.auth.models import Group
 
 from rdmo.projects.models import Project
-from rdmo.tasks.models import Task
-
-from .helpers.assert_project_views_or_tasks import (
+from rdmo.projects.tests.helpers.project_sync.assert_project_views_or_tasks import (
     assert_other_projects_unchanged,
 )
+from rdmo.tasks.models import Task
 
 project_id = 10
 task_id = 1

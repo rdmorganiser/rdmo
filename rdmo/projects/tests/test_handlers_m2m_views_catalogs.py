@@ -1,9 +1,10 @@
 import pytest
 
 from rdmo.projects.models import Project
-
-from .helpers.arrange_project_views_or_tasks import arrange_projects_catalogs_and_views
-from .helpers.assert_project_views_or_tasks import assert_all_projects_are_synced_with_instance_m2m_field
+from rdmo.projects.tests.helpers.project_sync.arrange_project_views import arrange_projects_catalogs_and_views
+from rdmo.projects.tests.helpers.project_sync.assert_project_views_or_tasks import (
+    assert_all_projects_are_synced_with_instance_m2m_field,
+)
 
 
 @pytest.mark.django_db
