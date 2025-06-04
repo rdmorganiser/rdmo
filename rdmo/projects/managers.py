@@ -55,15 +55,17 @@ class ProjectQuerySet(TreeQuerySet):
     def filter_groups(self, groups):
         if not groups:
             return self
+
+        # need to import here to prevent circular import
+        # queryset methods need to be refactored in modules otherwise
         from django.contrib.auth import get_user_model
 
-        from rdmo.projects.models import Membership  # Adjust import if needed
+        from rdmo.projects.models import Membership
 
         # users in the given groups
         users = get_user_model().objects.filter(groups__in=groups)
         # memberships for those users with role 'owner'
         memberships = Membership.objects.filter(role='owner', user__in=users)
-
         # projects that have those memberships
         return self.filter(memberships__in=memberships).distinct()
 

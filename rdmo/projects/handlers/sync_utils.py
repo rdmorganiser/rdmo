@@ -70,7 +70,7 @@ def sync_project_instances(project, model):
     """Ensure the project is linked to exactly the correct instances of a model (View/Task)."""
     project_m2m_field = get_related_field_name_for_instance(Project, model)
 
-    desired_instances = model.objects.filter_for_project(project).filter(available=True)
+    desired_instances = model.objects.filter_for_project(project)
     current_instances = getattr(project, project_m2m_field).all()
 
     to_remove = current_instances.exclude(pk__in=desired_instances)

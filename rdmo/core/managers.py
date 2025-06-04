@@ -23,6 +23,9 @@ class AvailabilityQuerySetMixin:
         model = str(self.model._meta)
         permissions = PERMISSIONS[model]
 
+        if user is None:
+            return self.filter(available=True)
+
         if user.has_perms(permissions):
             return self
         else:

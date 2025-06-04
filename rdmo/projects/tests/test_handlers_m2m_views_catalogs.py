@@ -8,7 +8,7 @@ from rdmo.projects.tests.helpers.project_sync.assert_project_views_or_tasks impo
 
 
 @pytest.mark.django_db
-def test_project_views_sync_when_updating_view_catalogs(settings, enable_project_views_sync):
+def test_project_views_sync_when_updating_catalogs_on_a_view(settings, enable_project_views_sync):
     assert settings.PROJECT_VIEWS_SYNC
 
     P, C, V = arrange_projects_catalogs_and_views()

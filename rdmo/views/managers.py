@@ -33,6 +33,7 @@ class ViewManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityManag
         return (
             self
                 .get_queryset()
+                .filter_availability(None)  # to re-use AvailabilityManagerMixin
                 .filter_for_project_site(project)
                 .filter_catalog(project.catalog)
                 .filter_for_project_group(project)
