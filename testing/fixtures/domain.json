@@ -1771,8 +1771,8 @@
     "model": "domain.attribute",
     "pk": 134,
     "fields": {
-      "uri": "http://example.com/domain/blocks/second",
-      "uri_prefix": "http://example.com",
+      "uri": "http://example.com/terms/domain/blocks/second",
+      "uri_prefix": "http://example.com/terms",
       "key": "second",
       "path": "blocks/second",
       "comment": "",
@@ -1782,17 +1782,15 @@
       "rght": 13,
       "tree_id": 6,
       "level": 1,
-      "editors": [
-        1
-      ]
+      "editors": []
     }
   },
   {
     "model": "domain.attribute",
     "pk": 135,
     "fields": {
-      "uri": "http://example.com/domain/blocks/first",
-      "uri_prefix": "http://example.com",
+      "uri": "http://example.com/terms/domain/blocks/first",
+      "uri_prefix": "http://example.com/terms",
       "key": "first",
       "path": "blocks/first",
       "comment": "",
@@ -1802,17 +1800,15 @@
       "rght": 15,
       "tree_id": 6,
       "level": 1,
-      "editors": [
-        1
-      ]
+      "editors": []
     }
   },
   {
     "model": "domain.attribute",
     "pk": 136,
     "fields": {
-      "uri": "http://example.com/domain/blocks/optional",
-      "uri_prefix": "http://example.com",
+      "uri": "http://example.com/terms/domain/blocks/optional",
+      "uri_prefix": "http://example.com/terms",
       "key": "optional",
       "path": "blocks/optional",
       "comment": "",
@@ -1822,17 +1818,15 @@
       "rght": 17,
       "tree_id": 6,
       "level": 1,
-      "editors": [
-        1
-      ]
+      "editors": []
     }
   },
   {
     "model": "domain.attribute",
     "pk": 137,
     "fields": {
-      "uri": "http://example.com/domain/blocks/mandatory",
-      "uri_prefix": "http://example.com",
+      "uri": "http://example.com/terms/domain/blocks/mandatory",
+      "uri_prefix": "http://example.com/terms",
       "key": "mandatory",
       "path": "blocks/mandatory",
       "comment": "",
@@ -1842,17 +1836,15 @@
       "rght": 19,
       "tree_id": 6,
       "level": 1,
-      "editors": [
-        1
-      ]
+      "editors": []
     }
   },
   {
     "model": "domain.attribute",
     "pk": 138,
     "fields": {
-      "uri": "http://example.com/domain/blocks/single",
-      "uri_prefix": "http://example.com",
+      "uri": "http://example.com/terms/domain/blocks/single",
+      "uri_prefix": "http://example.com/terms",
       "key": "single",
       "path": "blocks/single",
       "comment": "",
@@ -1862,17 +1854,15 @@
       "rght": 21,
       "tree_id": 6,
       "level": 1,
-      "editors": [
-        1
-      ]
+      "editors": []
     }
   },
   {
     "model": "domain.attribute",
     "pk": 139,
     "fields": {
-      "uri": "http://example.com/domain/blocks/collection",
-      "uri_prefix": "http://example.com",
+      "uri": "http://example.com/terms/domain/blocks/collection",
+      "uri_prefix": "http://example.com/terms",
       "key": "collection",
       "path": "blocks/collection",
       "comment": "",
@@ -1882,9 +1872,7 @@
       "rght": 23,
       "tree_id": 6,
       "level": 1,
-      "editors": [
-        1
-      ]
+      "editors": []
     }
   },
   {
@@ -1902,9 +1890,7 @@
       "rght": 25,
       "tree_id": 6,
       "level": 1,
-      "editors": [
-        1
-      ]
+      "editors": []
     }
   }
 ]

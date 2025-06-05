@@ -43,8 +43,12 @@ result_map = {
     'http://example.com/terms/questions/catalog/conditions/set_set': (0, 2, True),
     'http://example.com/terms/questions/catalog/conditions/optionset': (0, 2, True),
     'http://example.com/terms/questions/catalog/conditions/text_set': (0, 2, True),
-    'http://example.com/terms/questions/catalog/blocks': (9, 18),
-    'http://example.com/terms/questions/catalog/blocks/set': (9, 18, True),
+    'http://example.com/terms/questions/catalog/blocks': (9, 21),
+    'http://example.com/terms/questions/catalog/blocks/single': (0, 1, True),
+    'http://example.com/terms/questions/catalog/blocks/collection': (0, 0, True),
+    'http://example.com/terms/questions/catalog/blocks/two-collections': (0, 0, True),
+    'http://example.com/terms/questions/catalog/blocks/set': (9, 19, True),
+    'http://example.com/terms/questions/catalog/blocks/optional': (0, 1, True),
 }
 
 

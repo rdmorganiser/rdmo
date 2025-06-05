@@ -2388,8 +2388,8 @@
     "fields": {
       "created": "2025-06-02T18:10:42.661Z",
       "updated": "2025-06-03T11:41:30.298Z",
-      "uri": "http://example.com/questions/catalog/blocks/two-collections",
-      "uri_prefix": "http://example.com",
+      "uri": "http://example.com/terms/questions/catalog/blocks/two-collections",
+      "uri_prefix": "http://example.com/terms",
       "uri_path": "catalog/blocks/two-collections",
       "comment": "",
       "locked": false,
@@ -2415,9 +2415,7 @@
       "verbose_name_lang3": "",
       "verbose_name_lang4": "",
       "verbose_name_lang5": "",
-      "editors": [
-        1
-      ],
+      "editors": [],
       "conditions": []
     }
   },
@@ -2427,8 +2425,8 @@
     "fields": {
       "created": "2025-06-03T11:32:14.007Z",
       "updated": "2025-06-03T11:36:40.981Z",
-      "uri": "http://example.com/questions/catalog/blocks/optional",
-      "uri_prefix": "http://example.com",
+      "uri": "http://example.com/terms/questions/catalog/blocks/optional",
+      "uri_prefix": "http://example.com/terms",
       "uri_path": "catalog/blocks/optional",
       "comment": "",
       "locked": false,
@@ -2454,9 +2452,7 @@
       "verbose_name_lang3": "",
       "verbose_name_lang4": "",
       "verbose_name_lang5": "",
-      "editors": [
-        1
-      ],
+      "editors": [],
       "conditions": []
     }
   },
@@ -2466,8 +2462,8 @@
     "fields": {
       "created": "2025-06-03T11:39:08.478Z",
       "updated": "2025-06-03T11:39:08.478Z",
-      "uri": "http://example.com/questions/catalog/blocks/single",
-      "uri_prefix": "http://example.com",
+      "uri": "http://example.com/terms/questions/catalog/blocks/single",
+      "uri_prefix": "http://example.com/terms",
       "uri_path": "catalog/blocks/single",
       "comment": "",
       "locked": false,
@@ -2493,9 +2489,7 @@
       "verbose_name_lang3": "",
       "verbose_name_lang4": "",
       "verbose_name_lang5": "",
-      "editors": [
-        1
-      ],
+      "editors": [],
       "conditions": []
     }
   },
@@ -2505,8 +2499,8 @@
     "fields": {
       "created": "2025-06-03T11:40:30.929Z",
       "updated": "2025-06-03T11:40:30.929Z",
-      "uri": "http://example.com/questions/catalog/blocks/collection",
-      "uri_prefix": "http://example.com",
+      "uri": "http://example.com/terms/questions/catalog/blocks/collection",
+      "uri_prefix": "http://example.com/terms",
       "uri_path": "catalog/blocks/collection",
       "comment": "",
       "locked": false,
@@ -2532,9 +2526,7 @@
       "verbose_name_lang3": "",
       "verbose_name_lang4": "",
       "verbose_name_lang5": "",
-      "editors": [
-        1
-      ],
+      "editors": [],
       "conditions": []
     }
   },
@@ -8288,8 +8280,8 @@
     "fields": {
       "created": "2025-06-02T18:10:42.582Z",
       "updated": "2025-06-02T18:10:42.582Z",
-      "uri": "http://example.com/questions/catalog/blocks/double/second/question",
-      "uri_prefix": "http://example.com",
+      "uri": "http://example.com/terms/questions/catalog/blocks/double/second/question",
+      "uri_prefix": "http://example.com/terms",
       "uri_path": "catalog/blocks/double/second/question",
       "comment": "",
       "locked": false,
@@ -8325,9 +8317,7 @@
       "step": null,
       "unit": "",
       "width": null,
-      "editors": [
-        1
-      ],
+      "editors": [],
       "optionsets": [],
       "conditions": []
     }
@@ -8338,8 +8328,8 @@
     "fields": {
       "created": "2025-06-02T18:10:42.632Z",
       "updated": "2025-06-02T18:10:42.632Z",
-      "uri": "http://example.com/questions/catalog/blocks/double/first/question",
-      "uri_prefix": "http://example.com",
+      "uri": "http://example.com/terms/questions/catalog/blocks/double/first/question",
+      "uri_prefix": "http://example.com/terms",
       "uri_path": "catalog/blocks/double/first/question",
       "comment": "",
       "locked": false,
@@ -8375,9 +8365,7 @@
       "step": null,
       "unit": "",
       "width": null,
-      "editors": [
-        1
-      ],
+      "editors": [],
       "optionsets": [],
       "conditions": []
     }
@@ -8388,8 +8376,8 @@
     "fields": {
       "created": "2025-06-03T11:33:28.557Z",
       "updated": "2025-06-03T11:35:21.468Z",
-      "uri": "http://example.com/questions/catalog/blocks/optional/block/mandatory",
-      "uri_prefix": "http://example.com",
+      "uri": "http://example.com/terms/questions/catalog/blocks/optional/block/mandatory",
+      "uri_prefix": "http://example.com/terms",
       "uri_path": "catalog/blocks/optional/block/mandatory",
       "comment": "",
       "locked": false,
@@ -8425,9 +8413,7 @@
       "step": null,
       "unit": "",
       "width": null,
-      "editors": [
-        1
-      ],
+      "editors": [],
       "optionsets": [],
       "conditions": []
     }
@@ -8438,8 +8424,8 @@
     "fields": {
       "created": "2025-06-03T11:33:42.520Z",
       "updated": "2025-06-03T11:35:29.574Z",
-      "uri": "http://example.com/questions/catalog/blocks/optional/block/optional",
-      "uri_prefix": "http://example.com",
+      "uri": "http://example.com/terms/questions/catalog/blocks/optional/block/optional",
+      "uri_prefix": "http://example.com/terms",
       "uri_path": "catalog/blocks/optional/block/optional",
       "comment": "",
       "locked": false,
@@ -8475,9 +8461,7 @@
       "step": null,
       "unit": "",
       "width": null,
-      "editors": [
-        1
-      ],
+      "editors": [],
       "optionsets": [],
       "conditions": []
     }
@@ -8488,8 +8472,8 @@
     "fields": {
       "created": "2025-06-03T11:42:16.604Z",
       "updated": "2025-06-03T11:44:06.735Z",
-      "uri": "http://example.com/questions/catalog/blocks/single/block/question",
-      "uri_prefix": "http://example.com",
+      "uri": "http://example.com/terms/questions/catalog/blocks/single/block/question",
+      "uri_prefix": "http://example.com/terms",
       "uri_path": "catalog/blocks/single/block/question",
       "comment": "",
       "locked": false,
@@ -8525,9 +8509,7 @@
       "step": null,
       "unit": "",
       "width": null,
-      "editors": [
-        1
-      ],
+      "editors": [],
       "optionsets": [],
       "conditions": []
     }
@@ -8538,8 +8520,8 @@
     "fields": {
       "created": "2025-06-03T11:43:04.829Z",
       "updated": "2025-06-03T11:44:15.743Z",
-      "uri": "http://example.com/questions/catalog/blocks/collection/block/question",
-      "uri_prefix": "http://example.com",
+      "uri": "http://example.com/terms/questions/catalog/blocks/collection/block/question",
+      "uri_prefix": "http://example.com/terms",
       "uri_path": "catalog/blocks/collection/block/question",
       "comment": "",
       "locked": false,
@@ -8575,9 +8557,7 @@
       "step": null,
       "unit": "",
       "width": null,
-      "editors": [
-        1
-      ],
+      "editors": [],
       "optionsets": [],
       "conditions": []
     }
@@ -8625,9 +8605,7 @@
       "step": null,
       "unit": "",
       "width": null,
-      "editors": [
-        1
-      ],
+      "editors": [],
       "optionsets": [],
       "conditions": []
     }
@@ -8804,8 +8782,8 @@
     "fields": {
       "created": "2025-06-02T18:10:42.597Z",
       "updated": "2025-06-02T18:10:42.597Z",
-      "uri": "http://example.com/questions/catalog/blocks/double/second",
-      "uri_prefix": "http://example.com",
+      "uri": "http://example.com/terms/questions/catalog/blocks/double/second",
+      "uri_prefix": "http://example.com/terms",
       "uri_path": "catalog/blocks/double/second",
       "comment": "",
       "locked": false,
@@ -8826,9 +8804,7 @@
       "verbose_name_lang3": "",
       "verbose_name_lang4": "",
       "verbose_name_lang5": "",
-      "editors": [
-        1
-      ],
+      "editors": [],
       "conditions": []
     }
   },
@@ -8838,8 +8814,8 @@
     "fields": {
       "created": "2025-06-02T18:10:42.645Z",
       "updated": "2025-06-02T18:10:42.645Z",
-      "uri": "http://example.com/questions/catalog/blocks/double/first",
-      "uri_prefix": "http://example.com",
+      "uri": "http://example.com/terms/questions/catalog/blocks/double/first",
+      "uri_prefix": "http://example.com/terms",
       "uri_path": "catalog/blocks/double/first",
       "comment": "",
       "locked": false,
@@ -8860,9 +8836,7 @@
       "verbose_name_lang3": "",
       "verbose_name_lang4": "",
       "verbose_name_lang5": "",
-      "editors": [
-        1
-      ],
+      "editors": [],
       "conditions": []
     }
   },
@@ -8872,8 +8846,8 @@
     "fields": {
       "created": "2025-06-03T11:32:42.411Z",
       "updated": "2025-06-03T11:37:33.784Z",
-      "uri": "http://example.com/questions/catalog/blocks/optional/block",
-      "uri_prefix": "http://example.com",
+      "uri": "http://example.com/terms/questions/catalog/blocks/optional/block",
+      "uri_prefix": "http://example.com/terms",
       "uri_path": "catalog/blocks/optional/block",
       "comment": "",
       "locked": false,
@@ -8894,9 +8868,7 @@
       "verbose_name_lang3": "",
       "verbose_name_lang4": "",
       "verbose_name_lang5": "",
-      "editors": [
-        1
-      ],
+      "editors": [],
       "conditions": []
     }
   },
@@ -8906,8 +8878,8 @@
     "fields": {
       "created": "2025-06-03T11:41:53.748Z",
       "updated": "2025-06-03T11:41:53.748Z",
-      "uri": "http://example.com/questions/catalog/blocks/single/block",
-      "uri_prefix": "http://example.com",
+      "uri": "http://example.com/terms/questions/catalog/blocks/single/block",
+      "uri_prefix": "http://example.com/terms",
       "uri_path": "catalog/blocks/single/block",
       "comment": "",
       "locked": false,
@@ -8928,9 +8900,7 @@
       "verbose_name_lang3": "",
       "verbose_name_lang4": "",
       "verbose_name_lang5": "",
-      "editors": [
-        1
-      ],
+      "editors": [],
       "conditions": []
     }
   },
@@ -8940,8 +8910,8 @@
     "fields": {
       "created": "2025-06-03T11:42:37.944Z",
       "updated": "2025-06-03T11:42:37.944Z",
-      "uri": "http://example.com/questions/catalog/blocks/collection/block",
-      "uri_prefix": "http://example.com",
+      "uri": "http://example.com/terms/questions/catalog/blocks/collection/block",
+      "uri_prefix": "http://example.com/terms",
       "uri_path": "catalog/blocks/collection/block",
       "comment": "",
       "locked": false,
@@ -8962,9 +8932,7 @@
       "verbose_name_lang3": "",
       "verbose_name_lang4": "",
       "verbose_name_lang5": "",
-      "editors": [
-        1
-      ],
+      "editors": [],
       "conditions": []
     }
   },
@@ -8996,9 +8964,7 @@
       "verbose_name_lang3": "",
       "verbose_name_lang4": "",
       "verbose_name_lang5": "",
-      "editors": [
-        1
-      ],
+      "editors": [],
       "conditions": []
     }
   },
