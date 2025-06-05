@@ -30,8 +30,15 @@
 
             <label for="id_account_{{ base_account.id }}">
                 <input id="id_account_{{ base_account.id }}" type="radio" name="account" value="{{ base_account.id }}"/>
+
+                {% if base_account.provider == 'orcid' %}
+                <a href="https://orcid.org/{{ base_account.uid }}" target="_blank">
+                    <img alt="ORCID logo" src="{% static 'accounts/img/orcid_16x16.png' %}" width="16" height="16" />
+                    https://orcid.org/{{ base_account.uid }}
+                </a>
+                {% else %}
                 <span>{{account.get_brand.name}}</span>
-                <span>({{ account }})</span>
+                {% endif %}
             </label>
 
             {% endwith %}
