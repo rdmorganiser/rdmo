@@ -1,5 +1,7 @@
 {% extends 'core/page.html' %}
 {% load i18n %}
+{% load static %}
+{% load accounts_tags %}
 
 {% block page %}
 
@@ -55,11 +57,14 @@
 
     {% endif %}
 
+    {% get_inactive_providers as inactive_providers %}
+    {% if inactive_providers %}
     <h2>{% trans 'Add an additional account' %}</h2>
 
     <ul class="socialaccount_providers">
-    {% include "socialaccount/snippets/provider_list.html" with process="connect" %}
+    {% include "socialaccount/snippets/provider_list.html" with process="connect" socialaccount_providers=inactive_providers %}
     </ul>
+    {% endif %}
 
     {% include "socialaccount/snippets/login_extra.html" %}
 

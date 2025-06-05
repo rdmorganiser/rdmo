@@ -1,7 +1,9 @@
 {% load socialaccount %}
 {% load static %}
 
+{% if not socialaccount_providers %}
 {% get_providers as socialaccount_providers %}
+{% endif %}
 
 {% for provider in socialaccount_providers %}
 
@@ -49,4 +51,5 @@
     </a>
 </li>
 {% endif %}
+
 {% endfor %}
