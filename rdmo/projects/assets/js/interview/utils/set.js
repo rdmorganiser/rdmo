@@ -16,7 +16,7 @@ export const getChildPrefix = (set) => {
   return isEmpty(set.set_prefix) ? toString(set.set_index) : `${set.set_prefix}|${set.set_index}`
 }
 
-export const getLevel = (value) => (
+export const getSetPrefixLength = (value) => (
   isEmpty(value.set_prefix) ? 0 : value.set_prefix.split('|').length
 )
 
@@ -60,7 +60,7 @@ export const findSetsForElement = (values, element) => {
   return values
     .filter((value) => (
       (element.attributes.includes(value.attribute)) &&
-      (getLevel(value) == element.level)
+      (getSetPrefixLength(value) == element.level)
     ))
     .reduce((sets, value) => {
       if (sets.find((set) => (
