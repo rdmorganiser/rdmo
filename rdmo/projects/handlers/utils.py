@@ -6,7 +6,7 @@ from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
 
-def get_related_field_name_for_instance(model, instance_or_model) -> str:
+def get_related_field_name_on_model_for_instance(model, instance_or_model) -> str:
 
     # Normalize to model class if an instance is passed
     instance_model = instance_or_model.__class__ if isinstance(instance_or_model, Model) else instance_or_model

@@ -1,7 +1,7 @@
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
-from rdmo.projects.handlers.sync_utils import sync_project_instances
+from rdmo.projects.handlers.sync_utils import sync_tasks_or_views_on_a_project
 from rdmo.projects.models import Project
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
@@ -30,7 +30,7 @@ def post_save_project_sync_tasks_when_catalog_was_changed(sender, instance, crea
         return
 
     if instance._catalog_was_changed or created:
-        sync_project_instances(instance, Task)
+        sync_tasks_or_views_on_a_project(instance, Task)
 
 
 @receiver(post_save, sender=Project)
@@ -39,4 +39,4 @@ def post_save_project_sync_views_when_catalog_was_changed(sender, instance, crea
         return
 
     if instance._catalog_was_changed or created:
-        sync_project_instances(instance, View)
+        sync_tasks_or_views_on_a_project(instance, View)

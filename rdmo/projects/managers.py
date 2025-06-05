@@ -69,6 +69,30 @@ class ProjectQuerySet(TreeQuerySet):
         # projects that have those memberships
         return self.filter(memberships__in=memberships).distinct()
 
+    def filter_projects_for_task_or_view(self, instance):
+
+        # if View/Task is not available it should not show for any project
+        if not instance.available:
+            return self.none()
+
+        # projects that have an unavailable catalog should be disregarded
+        qs = self.filter(catalog__available=True)
+
+        # when instance.catalogs is empty it applies to all
+        if instance.catalogs.exists():
+            qs = qs.filter(catalog__in=instance.catalogs.all())
+
+        # when instance.sites is empty it applies to all
+        if instance.sites.exists():
+            qs = qs.filter(site__in=instance.sites.all())
+
+        # when instance.groups is empty it applies to all
+        if instance.groups.exists():
+            qs = qs.filter_groups(instance.groups.all())
+
+        return qs
+
+
 class MembershipQuerySet(models.QuerySet):
 
     def filter_current_site(self):
@@ -228,6 +252,9 @@ class ProjectManager(CurrentSiteManagerMixin, TreeManager):
                                                    exclude_null=exclude_null)
     def filter_groups(self, groups):
         return self.get_queryset().filter_groups(groups)
+
+    def filter_projects_for_task_or_view(self, instance):
+        return self.get_queryset().filter_projects_for_task_or_view(instance)
 
 
 class MembershipManager(CurrentSiteManagerMixin, models.Manager):
