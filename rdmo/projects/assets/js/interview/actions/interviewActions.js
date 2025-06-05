@@ -530,6 +530,8 @@ export function createSet(attrs) {
       initSets(sets, page)
       initValues(sets, values, page)
 
+      dispatch(resolveConditions(page, sets))
+
       return dispatch({type: CREATE_SET, values, sets})
     }
 
