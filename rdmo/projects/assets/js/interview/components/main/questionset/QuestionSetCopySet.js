@@ -1,10 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { last } from 'lodash'
 
 import Modal from 'rdmo/core/assets/js/components/Modal'
 
 import useModal from 'rdmo/core/assets/js/hooks/useModal'
+
+import { generateSetIndex } from '../../../utils/set'
 
 const QuestionCopySet = ({ questionset, sets, currentSet, disabled, copySet }) => {
 
@@ -13,7 +14,7 @@ const QuestionCopySet = ({ questionset, sets, currentSet, disabled, copySet }) =
   const handleCopySet = () => {
     copySet(currentSet, null, {
       set_prefix: currentSet.set_prefix,
-      set_index: last(sets) ? last(sets).set_index + 1 : 0,
+      set_index: generateSetIndex(sets, currentSet),
       element: questionset
     })
     modal.close()

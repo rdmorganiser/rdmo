@@ -20,6 +20,15 @@ export const getLevel = (value) => (
   isEmpty(value.set_prefix) ? 0 : value.set_prefix.split('|').length
 )
 
+export const generateSetIndex = (sets, set) => {
+  const lastSet = last(sortBy(sets.filter(s => (
+    (s.set_prefix == set.set_prefix) &&
+    (s.element == set.element)
+  )), ['set_index']))
+
+  return lastSet ? lastSet.set_index + 1 : 0
+}
+
 export const getDescendants = (values, sets, set) => {
   // get all descendant sets for this set and this element and all its descendant questionsets
   const descendantSets = sets.filter((s) => (
