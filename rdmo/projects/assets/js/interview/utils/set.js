@@ -135,8 +135,10 @@ export const createSetIfNotExisting = (sets, set) => {
 export const copyResolvedConditions = (originalSets, sets) => {
   sets.forEach((set) => {
     const originalSet = originalSets.find(originalSet => (
-      originalSet.set_prefix == set.set_prefix) && (originalSet.set_index == set.set_index)
-    )
+      (originalSet.set_prefix == set.set_prefix) &&
+      (originalSet.set_index == set.set_index) &&
+      (originalSet.element === set.element)
+    ))
 
     if (!isNil(originalSet)) {
       ['questionsets', 'questions', 'optionsets'].forEach(elementType => {
