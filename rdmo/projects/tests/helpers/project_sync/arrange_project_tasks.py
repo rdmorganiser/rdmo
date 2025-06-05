@@ -7,6 +7,7 @@ from rdmo.tasks.models import Task
 
 from .constants import P_TITLE, one_two_three
 
+T_uri = "http://example.com/test/tasks/sync{}"
 
 def arrange_projects_catalogs_and_tasks():
     # Arrange: the project, catalog and task objects
@@ -39,6 +40,7 @@ def arrange_projects_catalogs_and_tasks():
     # which will also affect the project.tasks
     for n, task in T.items():
         task.available = True
+        task.uri = T_uri.format(n)
         task.save()
         task.sites.clear()
         task.groups.clear()
