@@ -13,8 +13,8 @@ logger = logging.getLogger(__name__)
 def sync_task_or_view_to_projects(instance):
     """Ensure the instance is linked to exactly the correct set of projects."""
     project_m2m_field = get_related_field_name_on_model_for_instance(Project, instance)
-    target_projects = Project.objects.filter_projects_for_task_or_view(instance)
 
+    target_projects = Project.objects.filter_projects_for_task_or_view(instance)
     current_projects = Project.objects.filter(**{project_m2m_field: instance})
 
     to_remove = current_projects.exclude(pk__in=target_projects)
@@ -27,22 +27,20 @@ def sync_task_or_view_to_projects(instance):
         )
         return
 
-    for project in to_remove:
+    if to_remove:
         logger.debug(
-            'Removing %s from %s(id=%s).%s [sync_instance_to_projects]',
+            'Removing %s from Projects(%s) .%s [sync_instance_to_projects]',
             instance,
-            project,
-            project.id,
+            ','.join(map(str,to_remove.values_list('id',flat=True))),
             project_m2m_field
         )
         instance.projects.remove(*to_remove)
 
-    for project in to_add:
+    if to_add:
         logger.debug(
-            'Adding %s to %s(id=%s).%s [sync_instance_to_projects]',
+            'Adding %s to Projects(%s) .%s [sync_instance_to_projects]',
             instance,
-            project,
-            project.id,
+            ','.join(map(str,to_add.values_list('id',flat=True))),
             project_m2m_field
         )
         instance.projects.add(*to_add)
