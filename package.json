@@ -13,6 +13,10 @@
     "type": "git",
     "url": "https://github.com/rdmorganiser/rdmo"
   },
+  "engines": {
+    "node": "22.16.x",
+    "npm": "10.x"
+  },
   "dependencies": {
     "@codemirror/lang-html": "^6.4.2",
     "@codemirror/lang-javascript": "^6.2.2",
