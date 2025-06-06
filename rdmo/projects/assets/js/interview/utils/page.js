@@ -8,10 +8,14 @@ const checkQuestion = (question, set) => {
   return !question.has_conditions || get(set, `questions.${question.id}`)
 }
 
-const initQuestionSet = (questionset) => {
+const initQuestionSet = (questionset, level = 0) => {
+  questionset.level = level
+
   questionset.elements.forEach((element) => {
+    element.parent = questionset
+
     if (element.model == 'questions.questionset') {
-      initQuestionSet(element)
+      initQuestionSet(element, level + 1)
     } else {
       initQuestion(element, questionset)
     }
