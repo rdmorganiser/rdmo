@@ -64,25 +64,23 @@ def sync_tasks_or_views_on_a_project(project, model):
         )
         return
 
-    for instance in to_remove:
+    if to_remove:
         logger.debug(
-            'Removing %s from %s(id=%s).%s [sync_tasks_or_views_on_a_project]',
-            instance,
-            project,
+               'Removing %s[%s] from Project(id=%s)  [sync_tasks_or_views_on_a_project]',
+            project_m2m_field,
+            ','.join(map(str, to_add.values_list('id',flat=True))),
             project.id,
-            project_m2m_field
         )
-        getattr(project, project_m2m_field).remove(instance)
+        getattr(project, project_m2m_field).remove(*to_remove)
 
-    for instance in to_add:
+    if to_add:
         logger.debug(
-            'Adding %s to %s(id=%s).%s [sync_tasks_or_views_on_a_project]',
-            instance,
-            project,
+            'Adding %s[%s] to Project(id=%s)  [sync_tasks_or_views_on_a_project]',
+            project_m2m_field,
+            ','.join(map(str, to_add.values_list('id',flat=True))),
             project.id,
-            project_m2m_field
         )
-        getattr(project, project_m2m_field).add(instance)
+        getattr(project, project_m2m_field).add(*to_add)
 
 
 def get_related_field_name_on_model_for_instance(model, instance_or_model) -> str:
