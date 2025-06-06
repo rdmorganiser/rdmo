@@ -35,7 +35,7 @@ def sync_task_or_view_to_projects(instance):
             project.id,
             project_m2m_field
         )
-        getattr(project, project_m2m_field).remove(instance)
+        instance.projects.remove(*to_remove)
 
     for project in to_add:
         logger.debug(
@@ -45,7 +45,7 @@ def sync_task_or_view_to_projects(instance):
             project.id,
             project_m2m_field
         )
-        getattr(project, project_m2m_field).add(instance)
+        instance.projects.add(*to_add)
 
 
 def sync_tasks_or_views_on_a_project(project, model):

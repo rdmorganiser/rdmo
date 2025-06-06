@@ -70,7 +70,6 @@ class ProjectQuerySet(TreeQuerySet):
         return self.filter(memberships__in=memberships).distinct()
 
     def filter_projects_for_task_or_view(self, instance):
-
         # if View/Task is not available it should not show for any project
         if not instance.available:
             return self.none()

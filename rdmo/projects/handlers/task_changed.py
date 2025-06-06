@@ -12,6 +12,7 @@ def task_changed_availability_handler(sender, instance, created, raw, update_fie
         return
     sync_task_or_view_to_projects(instance)
 
+
 @receiver(m2m_changed, sender=Task.catalogs.through)
 def m2m_changed_task_catalog_signal(sender, instance, action, **kwargs):
     if action in ['post_add', 'post_remove', 'post_clear']:
