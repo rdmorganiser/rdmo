@@ -1,7 +1,7 @@
 import logging
 from typing import Union
 
-from rdmo.projects.handlers.utils import get_related_field_name_on_model_for_instance
+from rdmo.projects.handlers.sync_utils import get_related_field_name_on_model_for_instance
 from rdmo.projects.models import Project
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
