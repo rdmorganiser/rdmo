@@ -188,6 +188,10 @@ class Catalog(Model, TranslationMixin):
         from . import Question
         return [descendant for descendant in self.descendants if isinstance(descendant, Question)]
 
+    @cached_property
+    def optional_questions(self):
+        return list(filter(lambda q: q.is_optional, self.questions))
+
     def prefetch_elements(self):
         models.prefetch_related_objects([self], *self.prefetch_lookups)
 
