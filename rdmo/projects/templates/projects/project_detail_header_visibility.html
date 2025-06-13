@@ -1,6 +1,8 @@
 {% load i18n %}
+{% load rules %}
 {% load core_tags %}
 
+{% has_perm 'projects.change_visibility_object' request.user project as can_change_visibility %}
 {% if can_change_visibility  %}
 <p class="pull-right">
     <a href="{% url 'project_update_visibility' project.pk %}" title="{% trans 'Update project visibility' %}">
