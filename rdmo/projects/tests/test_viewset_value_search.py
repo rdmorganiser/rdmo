@@ -24,7 +24,7 @@ def test_search(db, client):
 
     values_list = Value.objects.filter(project__in=view_value_permission_map.get('owner', [])) \
                                .filter(snapshot=None) \
-                               .exclude_empty()[:10]
+                               .exclude_empty().order_by(*Value._meta.ordering)[:10]
     assert sorted([item['id'] for item in response.json()]) == sorted([item.id for item in values_list])
 
 
