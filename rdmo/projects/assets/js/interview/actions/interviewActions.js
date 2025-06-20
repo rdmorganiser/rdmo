@@ -375,7 +375,7 @@ export function updateValue(value, attrs, store = true) {
   }
 }
 
-export function copyValue(...originalValues) {
+export function copyValue(question, ...originalValues) {
   const firstValue = first(originalValues)
   const pendingId = `copyValue/${firstValue.attribute}/${firstValue.set_prefix}/${firstValue.set_index}`
 
@@ -390,22 +390,33 @@ export function copyValue(...originalValues) {
         ...copies,
         ...sets.filter((set) => (
           (set.set_prefix == value.set_prefix) &&
-          (set.set_index != value.set_index)
+          (set.set_index != value.set_index) &&
+          (set.element == question.parent)
         )).map((set) => {
-          const siblingIndex = values.findIndex((v) => (
+          // check if every sibling is empty
+          if (values.filter((v) => (
             (v.attribute == value.attribute) &&
             (v.set_prefix == set.set_prefix) &&
-            (v.set_index == set.set_index) &&
-            (v.collection_index == value.collection_index)
-          ))
+            (v.set_index == set.set_index)
+          )).every(v => isEmptyValue(v))) {
+            // find the corresponding sibling to this original value
+            const siblingIndex = values.findIndex((v) => (
+              (v.attribute == value.attribute) &&
+              (v.set_prefix == set.set_prefix) &&
+              (v.set_index == set.set_index) &&
+              (v.collection_index == value.collection_index)
+            ))
 
-          const sibling = siblingIndex > 0 ? values[siblingIndex] : null
+            const sibling = siblingIndex > 0 ? values[siblingIndex] : null
 
-          if (isNil(sibling)) {
-            return [ValueFactory.create({ ...value, set_index: set.set_index }), siblingIndex]
-          } else if (isEmptyValue(sibling)) {
-            // the spread operator { ...sibling } does prevent an update in place
-            return [ValueFactory.update({ ...sibling }, value), siblingIndex]
+            if (isNil(sibling)) {
+              return [ValueFactory.create({ ...value, set_index: set.set_index }), siblingIndex]
+            } else if (isEmptyValue(sibling)) {
+              // the spread operator { ...sibling } does prevent an update in place
+              return [ValueFactory.update({ ...sibling }, value), siblingIndex]
+            } else {
+              return null
+            }
           } else {
             return null
           }
