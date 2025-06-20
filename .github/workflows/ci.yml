@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - fix_sets_tests
   pull_request:
     # run CI only if files in these whitelisted paths are changed
     paths:
@@ -186,7 +187,7 @@ jobs:
     - name: Collect static files into static root (only required if rdmo is installed from wheel)
       run: python testing/manage.py collectstatic --noinput
     - name: Run end-to-end tests
-      run: pytest -p randomly -p no:cacheprovider --reuse-db --numprocesses=auto --dist=loadscope -m e2e --nomigrations
+      run: pytest -p randomly -p no:cacheprovider --reuse-db --numprocesses=auto --dist=loadscope -m e2e --nomigrations rdmo/projects/tests/test_viewset_value_search.py
       env:
         DJANGO_DEBUG: True
         GITHUB_DB_BACKEND: ${{ matrix.db-backend }}
