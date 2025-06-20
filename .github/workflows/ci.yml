@@ -138,7 +138,7 @@ jobs:
       if: matrix.python-version == '3.13' && matrix.db-backend == 'postgres'
     - name: Run Tests
       run: |
-        pytest -p randomly -p no:cacheprovider --cov --reuse-db --numprocesses=auto --dist=loadscope
+        pytest -p randomly -p no:cacheprovider --cov --reuse-db --numprocesses=auto --dist=loadscope rdmo/projects/tests/test_viewset_value_search.py
       env:
         GITHUB_DB_BACKEND: ${{ matrix.db-backend }}
     - name: Upload coverage data to coveralls.io
@@ -187,7 +187,7 @@ jobs:
     - name: Collect static files into static root (only required if rdmo is installed from wheel)
       run: python testing/manage.py collectstatic --noinput
     - name: Run end-to-end tests
-      run: pytest -p randomly -p no:cacheprovider --reuse-db --numprocesses=auto --dist=loadscope -m e2e --nomigrations rdmo/projects/tests/test_viewset_value_search.py
+      run: pytest -p randomly -p no:cacheprovider --reuse-db --numprocesses=auto --dist=loadscope -m e2e --nomigrations
       env:
         DJANGO_DEBUG: True
         GITHUB_DB_BACKEND: ${{ matrix.db-backend }}
