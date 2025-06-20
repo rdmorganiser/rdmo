@@ -899,9 +899,9 @@ class ValueViewSet(ReadOnlyModelViewSet):
             for values_dict in values_list:
                 q |= Q(**values_dict)
 
-            queryset = queryset.filter(q)
+            queryset = queryset.filter(q).order_by(*Value._meta.ordering)
         else:
-            queryset = queryset[:settings.PROJECT_VALUES_SEARCH_LIMIT]
+            queryset = queryset.order_by(*Value._meta.ordering)[:settings.PROJECT_VALUES_SEARCH_LIMIT]
 
         serializer = ValueSearchSerializer(queryset, many=True)
         return Response(serializer.data)

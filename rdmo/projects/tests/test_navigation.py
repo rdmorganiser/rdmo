@@ -24,7 +24,7 @@ result_map = {
     'http://example.com/terms/questions/catalog/set/individual-collection': (9, 10, True),
     'http://example.com/terms/questions/catalog/set/collection-single': (14, 18, True),
     'http://example.com/terms/questions/catalog/set/collection-collection': (16, 20, True),
-    'http://example.com/terms/questions/catalog/conditions': (7, 15),
+    'http://example.com/terms/questions/catalog/conditions': (7, 17),
     'http://example.com/terms/questions/catalog/conditions/input': (2, 2, True),
     'http://example.com/terms/questions/catalog/conditions/text_contains': (1, 1, True),
     'http://example.com/terms/questions/catalog/conditions/text_empty': (0, 0, False),
@@ -41,10 +41,15 @@ result_map = {
     'http://example.com/terms/questions/catalog/conditions/option_not_equal': (0, 0, False),
     'http://example.com/terms/questions/catalog/conditions/set': (0, 2, True),
     'http://example.com/terms/questions/catalog/conditions/set_set': (0, 2, True),
+    'http://example.com/terms/questions/catalog/conditions/set_set_question': (0, 2, True),
     'http://example.com/terms/questions/catalog/conditions/optionset': (0, 2, True),
     'http://example.com/terms/questions/catalog/conditions/text_set': (0, 2, True),
-    'http://example.com/terms/questions/catalog/blocks': (9, 18),
-    'http://example.com/terms/questions/catalog/blocks/set': (9, 18, True),
+    'http://example.com/terms/questions/catalog/blocks': (13, 25),
+    'http://example.com/terms/questions/catalog/blocks/single': (0, 1, True),
+    'http://example.com/terms/questions/catalog/blocks/collection': (0, 0, True),
+    'http://example.com/terms/questions/catalog/blocks/two-collections': (0, 0, True),
+    'http://example.com/terms/questions/catalog/blocks/set': (13, 23, True),
+    'http://example.com/terms/questions/catalog/blocks/optional': (0, 1, True),
 }
 
 
