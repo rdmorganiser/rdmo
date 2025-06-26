@@ -12,6 +12,8 @@ import userReducer from 'rdmo/core/assets/js/reducers/userReducer'
 
 import projectReducer from '../reducers/projectReducer'
 
+import { parseLocation } from '../utils/location'
+
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import * as settingsActions from 'rdmo/core/assets/js/actions/settingsActions'
 import * as templateActions from 'rdmo/core/assets/js/actions/templateActions'
@@ -52,11 +54,21 @@ export default function configureStore() {
     applyMiddleware(...middlewares)
   )
 
+  const getConfigFromLocation = () => {
+    const { page, itemId, itemAction } = parseLocation()
+
+    store.dispatch(configActions.updateConfig('page', page, false))
+    store.dispatch(configActions.updateConfig('itemId', itemId, false))
+    store.dispatch(configActions.updateConfig('itemAction', itemAction, false))
+  }
+
   // this event is triggered when the page first loads
   window.addEventListener('load', () => {
     getConfigFromLocalStorage('rdmo.project').forEach(([path, value]) => {
       store.dispatch(configActions.updateConfig(path, value))
     })
+
+    getConfigFromLocation()
 
     store.dispatch(settingsActions.fetchSettings())
     store.dispatch(templateActions.fetchTemplates())
@@ -67,7 +79,7 @@ export default function configureStore() {
 
   // this event is triggered when when the forward/back buttons are used
   window.addEventListener('popstate', () => {
-
+    getConfigFromLocation()
   })
 
   return store

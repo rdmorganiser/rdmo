@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 
 import Dashboard from './pages/Dashboard'
@@ -9,11 +8,11 @@ import Dashboard from './pages/Dashboard'
 // import Membership from '../pages/Membership'
 import ProjectData from './pages/ProjectData'
 
-const ProjectPage = ({ activePage }) => {
+const ProjectPage = () => {
   // Get Redux state
   // const config = useSelector((state) => state.config)
   // const settings = useSelector((state) => state.settings)
-  const templates = useSelector((state) => state.templates)
+  // const templates = useSelector((state) => state.templates)
   // const currentUser = useSelector((state) => state.user.currentUser)
   // const project = useSelector((state) => state.project.project)
   // const catalogs = useSelector((state) => state.catalogs)
@@ -24,13 +23,15 @@ const ProjectPage = ({ activePage }) => {
   // console.log('Config:', config)
   // console.log('Catalogs:', catalogs)
   // console.log('settings', settings)
-  console.log('templates', templates)
+  // console.log('templates', templates)
   // console.log('currentUser', currentUser)
 
   // const dispatch = useDispatch()
 
-  switch (activePage) {
-    case 'dashboard':
+  const page = useSelector((state) => state.config.page)
+
+  switch (page) {
+    case '':
       return <Dashboard />
     // case 'interview':
     //   return <Interview />
@@ -45,10 +46,6 @@ const ProjectPage = ({ activePage }) => {
     default:
       return <h2>Page Not Found</h2>
   }
-}
-
-ProjectPage.propTypes = {
-  activePage: PropTypes.string.isRequired
 }
 
 export default ProjectPage
