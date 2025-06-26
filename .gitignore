@@ -38,14 +38,20 @@ rdmo/management/static
 
 rdmo/core/static/core/js/base.js
 rdmo/core/static/core/js/base.js.LICENSE.txt
+rdmo/core/static/core/js/base-bs53.js
+rdmo/core/static/core/js/base-bs53.js.LICENSE.txt
 rdmo/core/static/core/css/base.css
+rdmo/core/static/core/css/base-bs53.css
 rdmo/core/static/core/fonts
 
 rdmo/projects/static/projects/css/interview.css
 rdmo/projects/static/projects/css/projects.css
+rdmo/projects/static/projects/css/project.css
 rdmo/projects/static/projects/fonts/
 rdmo/projects/static/projects/js/interview.js
 rdmo/projects/static/projects/js/interview.js.LICENSE.txt
 rdmo/projects/static/projects/js/projects.js
 rdmo/projects/static/projects/js/projects.js.LICENSE.txt
+rdmo/projects/static/projects/js/project.js
+rdmo/projects/static/projects/js/project.js.LICENSE.txt
 screenshots
