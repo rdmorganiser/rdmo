@@ -1,12 +1,12 @@
-// .project-page-container {
-//   min-height: 100vh;
-//   background-color: var(--page-bg); /* ✅ Ensures full-height coverage */
-//   padding: 2rem;
-// }
+.project,
+.project-sidebar {
+    min-height: calc(100vh - 56px);
+}
 
-// .sidebar-custom {
-//   background-color: #003366 !important; /* ✅ Forces dark blue */
-// }
+.project-sidebar {
+    width: 300px;
+    background-color: var(--rdmo-color-light-gray);
+}
 
 // .sidebar-custom h6 {
 //   color: var(--bs-gray-500) !important;  /* ✅ Ensure muted color */

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import ReactiveSidebar from './ReactiveSidebar'
+import ProjectSidebar from './ProjectSidebar'
 import ProjectPage from './ProjectPage'
 
-const ProjectNavigation = () => {
+const Project = () => {
   const getActivePageFromHash = () => (window.location.hash ? window.location.hash.substring(1) : 'dashboard')
 
   const [activePage, setActivePage] = useState(getActivePageFromHash())
@@ -45,18 +45,15 @@ const ProjectNavigation = () => {
   ]
 
   return (
-    <div className="d-flex vh-100">
-      {/* Sidebar */}
-      <div className="d-flex flex-column" style={{ width: '250px', height: '100vh' }}>
-        <ReactiveSidebar onNavigate={handleNavigation} menuItems={menuItems} activePage={activePage} />
-      </div>
-
-      {/* Content Area */}
-      <div className="flex-grow-1 overflow-auto bg-light-grey p-4">
-        <ProjectPage activePage={activePage} />
+    <div className="d-flex">
+      <ProjectSidebar onNavigate={handleNavigation} menuItems={menuItems} activePage={activePage} />
+      <div className="flex-grow-1 pt-4">
+        <div className="container">
+          <ProjectPage activePage={activePage} />
+        </div>
       </div>
     </div>
   )
 }
 
-export default ProjectNavigation
+export default Project
