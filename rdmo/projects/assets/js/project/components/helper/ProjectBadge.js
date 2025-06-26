@@ -7,15 +7,7 @@ const ProjectBadge = () => {
   if (!project?.title) return null
 
   return (
-    <div
-      className="mb-3 px-3 py-2 rounded"
-      style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.08)',
-        fontSize: '0.875rem',
-        lineHeight: '1.2',
-        color: 'white',
-      }}
-    >
+    <div className="mb-3 px-3 py-2 rounded">
       <strong>{project.title}</strong>
       {project?.phase && (
         <div style={{ fontSize: '0.75rem', color: 'var(--bs-gray-500)' }}>
