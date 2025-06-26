@@ -16,6 +16,9 @@ import {
 } from './actionTypes'
 
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
+import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+
+import { updateLocation } from '../utils/location'
 
 // export function fetchProject() {
 //   return function(dispatch) {
@@ -38,6 +41,14 @@ import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pen
 //     })
 //   }
 // }
+
+
+export function setPage(page) {
+  return function(dispatch) {
+    dispatch(updateConfig('page', page))
+    updateLocation(page)
+  }
+}
 
 export function fetchProject() {
   return function(dispatch) {
