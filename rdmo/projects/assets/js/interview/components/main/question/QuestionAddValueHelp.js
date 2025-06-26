@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import Html from 'rdmo/core/assets/js/components/Html'
 
 const QuestionAddValueHelp = ({ templates, question, disabled }) => {
-  return !disabled && question.is_collection && (
+  return !disabled && question.is_collection && question.widget_type != 'checkbox' && (
     <Html html={templates.project_interview_add_value_help} />
   )
 }
