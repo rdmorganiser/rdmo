@@ -566,6 +566,7 @@ export function deleteSet(set, setValue) {
       return Promise.all(values.map((value) => ValueApi.deleteValue(projectId, value)))
         .then(() => {
           dispatch(removeFromPending(pendingId))
+          dispatch(updateProgress())
           dispatch(deleteSetSuccess(set))
         })
         .catch((errors) => {
