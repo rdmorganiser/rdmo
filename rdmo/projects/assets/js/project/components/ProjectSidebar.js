@@ -1,11 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
+import { useDispatch, useSelector } from 'react-redux'
 
+import { setPage } from '../actions/projectActions'
 
 import ProjectBadge from './helper/ProjectBadge'
 
-const ProjectSidebar = ({ menuItems, onNavigate, activePage }) => {
+const ProjectSidebar = ({ menuItems }) => {
+  const page = useSelector((state) => state.config.page)
+  const dispatch = useDispatch()
+
   return (
     <div className="project-sidebar p-2">
       <ProjectBadge />
@@ -19,11 +24,9 @@ const ProjectSidebar = ({ menuItems, onNavigate, activePage }) => {
               <li key={item.id} className="nav-item">
                 <button
                   className={classnames('nav-link w-100 text-start d-flex align-items-center gap-2', {
-                    active: activePage === item.id
+                    active: page === item.id
                   })}
-                  onClick={() => {
-                    onNavigate(item.id)
-                  }}
+                  onClick={() => dispatch(setPage(item.id))}
                 >
                   <i className={`bi ${item.icon}`}></i>
                   {item.name}
@@ -57,9 +60,7 @@ ProjectSidebar.propTypes = {
         })
       ).isRequired,
     })
-  ).isRequired,
-  onNavigate: PropTypes.func.isRequired,
-  activePage: PropTypes.string.isRequired,
+  ).isRequired
 }
 
 export default ProjectSidebar

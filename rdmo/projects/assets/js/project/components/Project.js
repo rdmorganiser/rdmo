@@ -1,30 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import ProjectSidebar from './ProjectSidebar'
 import ProjectPage from './ProjectPage'
 
 const Project = () => {
-  const getActivePageFromHash = () => (window.location.hash ? window.location.hash.substring(1) : 'dashboard')
-
-  const [activePage, setActivePage] = useState(getActivePageFromHash())
-
-  useEffect(() => {
-    const handleHashChange = () => {
-      setActivePage(getActivePageFromHash())
-    }
-
-    window.addEventListener('hashchange', handleHashChange)
-    return () => window.removeEventListener('hashchange', handleHashChange)
-  }, [])
-
-  const handleNavigation = (id) => {
-    window.location.hash = id ? `#${id}` : ''
-    setActivePage(id)
-  }
-
   const menuItems = [
     {
       title: '',
-      items: [{ id: 'dashboard', name: gettext('Dashboard'), icon: 'bi-grid' }],
+      items: [{ id: '', name: gettext('Dashboard'), icon: 'bi-grid' }],
     },
     {
       title: gettext('DATA MANAGEMENT PLAN'),
@@ -46,10 +28,10 @@ const Project = () => {
 
   return (
     <div className="d-flex">
-      <ProjectSidebar onNavigate={handleNavigation} menuItems={menuItems} activePage={activePage} />
+      <ProjectSidebar menuItems={menuItems} />
       <div className="flex-grow-1 pt-4">
         <div className="container">
-          <ProjectPage activePage={activePage} />
+          <ProjectPage />
         </div>
       </div>
     </div>

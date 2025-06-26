@@ -57,8 +57,6 @@ urlpatterns = [
     re_path(r'^import/(?P<format>[a-z-]+)/$',
             ProjectCreateImportView.as_view(), name='project_create_import'),
 
-    re_path(r'^(?P<pk>[0-9]+)/$',
-            ProjectDetailView.as_view(), name='project'),
     re_path(r'^(?P<pk>[0-9]+)/old/$',
             OldProjectDetailView.as_view(), name='project_old'),
     re_path(r'^(?P<pk>[0-9]+)/copy/$',
@@ -146,4 +144,7 @@ urlpatterns = [
             ProjectInterviewView.as_view(), name='project_interview'),
     re_path(r'^(?P<pk>[0-9]+)/error/',
             ProjectErrorView.as_view(), name='project_error'),
+
+    re_path(r'^(?P<pk>[0-9]+)/',
+            ProjectDetailView.as_view(), name='project'),
 ]
