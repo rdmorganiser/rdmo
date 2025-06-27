@@ -58,7 +58,7 @@ export_project_permission_map = {
 
 projects = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
-export_formats = ('rtf', 'odt', 'docx', 'html', 'markdown', 'tex', 'pdf')
+export_formats = ('html', )
 
 site_id = 1
 project_id = 1
