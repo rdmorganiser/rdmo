@@ -21,7 +21,7 @@ class Command(BaseCommand):
             if show:
                 self.show_project_tasks_and_views()
             else:
-                raise CommandError('You must specify at least one of --tasks or --views')
+                raise CommandError('You must specify at least one of --tasks, --views or --show')
 
         if options['tasks']:
             if not settings.PROJECT_TASKS_SYNC:
@@ -56,11 +56,22 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS('Displaying tasks and views for each project...'))
 
         for project in Project.objects.all():
-            task_ids = sorted(project.tasks.values_list('id', flat=True))
-            view_ids = sorted(project.views.values_list('id', flat=True))
+            task_uris = sorted(project.tasks.values_list("uri", flat=True))
+            view_uris = sorted(project.views.values_list("uri", flat=True))
 
-            self.stdout.write(f'Project(id={project.id}) {project.title}:')
-            self.stdout.write(f'  - tasks: [{", ".join(map(str, task_ids)) if task_ids else ""}]')
-            self.stdout.write(f'  - views: [{", ".join(map(str, view_ids)) if view_ids else ""}]')
+            self.stdout.write(f'Project "{project.title}" [id={project.id}]:')
+            self.stdout.write(f'- Catalog: {project.catalog.uri}')
+
+            if task_uris:
+                self.stdout.write("- Tasks:")
+                for task_uri in task_uris:
+                    self.stdout.write(f"  - {task_uri}")
+
+            if view_uris:
+                self.stdout.write("- Views:")
+                for view_uri in view_uris:
+                    self.stdout.write(f"  - {view_uri}")
+
+            self.stdout.write()  # add an empty line for spacing between projects
 
         self.stdout.write('')

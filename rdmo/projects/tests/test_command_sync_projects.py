@@ -4,10 +4,12 @@ from django.core.management import call_command
 
 from rdmo.projects.tests.helpers.project_sync.arrange_project_tasks import arrange_projects_catalogs_and_tasks
 from rdmo.projects.tests.helpers.project_sync.arrange_project_views import arrange_projects_catalogs_and_views
+from rdmo.projects.tests.helpers.project_sync.assert_cli_output import assert_sync_projects_show_has_output
 from rdmo.projects.tests.helpers.project_sync.assert_project_views_or_tasks import (
     assert_all_projects_are_synced_with_instance_m2m_field,
 )
 
+PROJECT_SHOW_TEMPLATE = 'Project "{}" [id={}]:'
 
 @pytest.mark.django_db
 def test_command_sync_projects_for_tasks(settings, enable_project_tasks_sync):
@@ -62,21 +64,19 @@ def test_command_sync_projects_for_views(settings, enable_project_views_sync):
 def test_command_sync_projects_show_and_tasks_displays_output(settings, enable_project_tasks_sync, capsys):
 
     call_command('sync_projects', '--tasks', '--show')
-    out = capsys.readouterr().out
 
-    assert 'Project(id=1)' in out
-    assert 'tasks:' in out
-    assert 'views:' in out
+    out_lines = capsys.readouterr().out.splitlines()
+    assert_sync_projects_show_has_output(out_lines)
+
+
 
 @pytest.mark.django_db
 def test_command_sync_projects_show_and_views_displays_output(settings, enable_project_views_sync, capsys):
 
     call_command('sync_projects', '--views', '--show')
-    out = capsys.readouterr().out
 
-    assert 'Project(id=1)' in out
-    assert 'tasks:' in out
-    assert 'views:' in out
+    out_lines = capsys.readouterr().out.splitlines()
+    assert_sync_projects_show_has_output(out_lines)
 
 
 
@@ -104,7 +104,6 @@ def test_command_sync_projects_for_tasks_and_views_with_show(
 
     # === Act: run sync with both flags and show output ===
     call_command('sync_projects', '--tasks', '--views', '--show')
-    out = capsys.readouterr().out
 
     # === Assert: state is fully synced
     assert set(P1[1].tasks.all()) == {T[1]}
@@ -121,7 +120,6 @@ def test_command_sync_projects_for_tasks_and_views_with_show(
     for view in V.values():
         assert_all_projects_are_synced_with_instance_m2m_field(view, 'catalogs')
 
-    # === Assert: show output includes all project/task/view markers
-    assert 'Project(id=1)' in out
-    assert 'tasks:' in out
-    assert 'views:' in out
+    # === Assert: show output includes all project/task/view
+    out_lines = capsys.readouterr().out.splitlines()
+    assert_sync_projects_show_has_output(out_lines)
