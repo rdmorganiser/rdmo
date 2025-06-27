@@ -76,7 +76,7 @@ class Export(Plugin):
         value = self.get_value(path, set_prefix=set_prefix, set_index=set_index, collection_index=collection_index)
         if value and value.option:
             # lookup option dict in class
-            return options.get(value.option.path, default)
+            return options.get(value.option.uri_path, default)
         else:
             return default
 

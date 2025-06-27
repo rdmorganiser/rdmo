@@ -77,7 +77,7 @@ def test_detail_page_with_nested_questionsets(db, client):
     username = 'owner'
     page_id = 87
     nested_questionsets_id = [90]
-    nested_element_ids = [95, 96, 94, 89]
+    nested_element_ids = [95, 96, 94, 89, 102]
 
     client.login(username=username, password=username)
 

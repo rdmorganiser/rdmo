@@ -52,6 +52,45 @@ class ProjectQuerySet(TreeQuerySet):
             catalogs_filter &= ~Q(catalog__in=exclude_catalogs)
         return self.filter(catalogs_filter)
 
+    def filter_groups(self, groups):
+        if not groups:
+            return self
+
+        # need to import here to prevent circular import
+        # queryset methods need to be refactored in modules otherwise
+        from django.contrib.auth import get_user_model
+
+        from rdmo.projects.models import Membership
+
+        # users in the given groups
+        users = get_user_model().objects.filter(groups__in=groups)
+        # memberships for those users with role 'owner'
+        memberships = Membership.objects.filter(role='owner', user__in=users)
+        # projects that have those memberships
+        return self.filter(memberships__in=memberships).distinct()
+
+    def filter_projects_for_task_or_view(self, instance):
+        # if View/Task is not available it should not show for any project
+        if not instance.available:
+            return self.none()
+
+        # projects that have an unavailable catalog should be disregarded
+        qs = self.filter(catalog__available=True)
+
+        # when instance.catalogs is empty it applies to all
+        if instance.catalogs.exists():
+            qs = qs.filter(catalog__in=instance.catalogs.all())
+
+        # when instance.sites is empty it applies to all
+        if instance.sites.exists():
+            qs = qs.filter(site__in=instance.sites.all())
+
+        # when instance.groups is empty it applies to all
+        if instance.groups.exists():
+            qs = qs.filter_groups(instance.groups.all())
+
+        return qs
+
 
 class MembershipQuerySet(models.QuerySet):
 
@@ -172,6 +211,10 @@ class ValueQuerySet(models.QuerySet):
     def exclude_empty(self):
         return self.exclude((Q(text='') | Q(text=None)) & Q(option=None) & (Q(file='') | Q(file=None)))
 
+    def exclude_empty_optional(self, catalog):
+        optional_values = self.filter(attribute__in=[q.attribute for q in catalog.optional_questions])
+        return self.exclude(id__in=optional_values.filter_empty().values_list('id', flat=True))
+
     def distinct_list(self):
         return self.order_by('attribute').values_list('attribute', 'set_prefix', 'set_index').distinct()
 
@@ -210,6 +253,11 @@ class ProjectManager(CurrentSiteManagerMixin, TreeManager):
     def filter_catalogs(self, catalogs=None, exclude_catalogs=None, exclude_null=True):
         return self.get_queryset().filter_catalogs(catalogs=catalogs, exclude_catalogs=exclude_catalogs,
                                                    exclude_null=exclude_null)
+    def filter_groups(self, groups):
+        return self.get_queryset().filter_groups(groups)
+
+    def filter_projects_for_task_or_view(self, instance):
+        return self.get_queryset().filter_projects_for_task_or_view(instance)
 
 
 class MembershipManager(CurrentSiteManagerMixin, models.Manager):

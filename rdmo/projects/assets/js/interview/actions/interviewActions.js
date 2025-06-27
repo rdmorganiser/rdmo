@@ -12,7 +12,7 @@ import { updateLocation } from '../utils/location'
 
 import { updateOptions } from '../utils/options'
 import { initPage } from '../utils/page'
-import { copyResolvedConditions, gatherSets, getDescendants, initSets } from '../utils/set'
+import { copyResolvedConditions, getDescendants, gatherSets, initSets } from '../utils/set'
 import { gatherDefaultValues, initValues, compareValues, isEmptyValue } from '../utils/value'
 import { projectId } from '../utils/meta'
 
@@ -192,7 +192,7 @@ export function fetchValues(page) {
     dispatch(fetchValuesInit())
     return ValueApi.fetchValues(projectId, { attribute: page.attributes })
       .then((values) => {
-        const sets = gatherSets(values)
+        const sets = gatherSets(values, page)
 
         initSets(sets, page)
         initValues(sets, values, page)
@@ -375,7 +375,7 @@ export function updateValue(value, attrs, store = true) {
   }
 }
 
-export function copyValue(...originalValues) {
+export function copyValue(question, ...originalValues) {
   const firstValue = first(originalValues)
   const pendingId = `copyValue/${firstValue.attribute}/${firstValue.set_prefix}/${firstValue.set_index}`
 
@@ -390,22 +390,33 @@ export function copyValue(...originalValues) {
         ...copies,
         ...sets.filter((set) => (
           (set.set_prefix == value.set_prefix) &&
-          (set.set_index != value.set_index)
+          (set.set_index != value.set_index) &&
+          (set.element == question.parent)
         )).map((set) => {
-          const siblingIndex = values.findIndex((v) => (
+          // check if every sibling is empty
+          if (values.filter((v) => (
             (v.attribute == value.attribute) &&
             (v.set_prefix == set.set_prefix) &&
-            (v.set_index == set.set_index) &&
-            (v.collection_index == value.collection_index)
-          ))
+            (v.set_index == set.set_index)
+          )).every(v => isEmptyValue(v))) {
+            // find the corresponding sibling to this original value
+            const siblingIndex = values.findIndex((v) => (
+              (v.attribute == value.attribute) &&
+              (v.set_prefix == set.set_prefix) &&
+              (v.set_index == set.set_index) &&
+              (v.collection_index == value.collection_index)
+            ))
 
-          const sibling = siblingIndex > 0 ? values[siblingIndex] : null
+            const sibling = siblingIndex > 0 ? values[siblingIndex] : null
 
-          if (isNil(sibling)) {
-            return [ValueFactory.create({ ...value, set_index: set.set_index }), siblingIndex]
-          } else if (isEmptyValue(sibling)) {
-            // the spread operator { ...sibling } does prevent an update in place
-            return [ValueFactory.update({ ...sibling }, value), siblingIndex]
+            if (isNil(sibling)) {
+              return [ValueFactory.create({ ...value, set_index: set.set_index }), siblingIndex]
+            } else if (isEmptyValue(sibling)) {
+              // the spread operator { ...sibling } does prevent an update in place
+              return [ValueFactory.update({ ...sibling }, value), siblingIndex]
+            } else {
+              return null
+            }
           } else {
             return null
           }
@@ -523,13 +534,14 @@ export function createSet(attrs) {
       dispatch(activateSet(set))
 
       const state = getState().interview
-
       const page = state.page
       const sets = [...state.sets, set]
       const values = isNil(value) ? [...state.values] : [...state.values, value]
 
       initSets(sets, page)
       initValues(sets, values, page)
+
+      dispatch(resolveConditions(page, sets))
 
       return dispatch({type: CREATE_SET, values, sets})
     }
@@ -560,11 +572,12 @@ export function deleteSet(set, setValue) {
 
     if (isNil(setValue)) {
       // gather all values for this set and it's descendants
-      const values = getDescendants(getState().interview.values, set)
+      const { values } = getDescendants(getState().interview.values, getState().interview.sets, set)
 
       return Promise.all(values.map((value) => ValueApi.deleteValue(projectId, value)))
         .then(() => {
           dispatch(removeFromPending(pendingId))
+          dispatch(updateProgress())
           dispatch(deleteSetSuccess(set))
         })
         .catch((errors) => {
@@ -609,8 +622,7 @@ export function deleteSetInit() {
 export function deleteSetSuccess(set) {
   return (dispatch, getState) => {
     // again, gather all values for this set and it's descendants
-    const sets = getDescendants(getState().interview.sets, set)
-    const values = getDescendants(getState().interview.values, set)
+    const { sets, values } = getDescendants(getState().interview.values, getState().interview.sets, set)
 
     return dispatch({type: DELETE_SET_SUCCESS, sets, values})
   }
@@ -646,7 +658,7 @@ export function copySet(currentSet, copySetValue, attrs) {
         ...state.values.filter(v => !setValues.some(sv => compareValues(v, sv))),  // remove updated values
         ...setValues
       ]
-      const sets = gatherSets(values)
+      const sets = gatherSets(values, page)
 
       initSets(sets, page)
       initValues(sets, values, page)
@@ -661,7 +673,8 @@ export function copySet(currentSet, copySetValue, attrs) {
     let promise
     if (isNil(value)) {
       // gather all values for the currentSet and it's descendants
-      const currentValues = getDescendants(getState().interview.values, currentSet)
+      const { values: currentValues } = getDescendants(getState().interview.values,
+                                                       getState().interview.sets, currentSet)
 
       // store each value in currentSet with the new set_index
       promise = Promise.all(

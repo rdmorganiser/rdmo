@@ -95,6 +95,9 @@ def compute_navigation(section, project, snapshot=None):
     # resolve all conditions to get a dict mapping conditions to set_indexes
     conditions = resolve_conditions(project.catalog, values, sets)
 
+    # compute sets anew, but without empty optional values
+    sets = compute_sets(values.exclude_empty_optional(project.catalog))
+
     # query distinct, non empty set values
     values_list = values.exclude_empty().distinct_list()
 
@@ -153,6 +156,9 @@ def compute_progress(project, snapshot=None):
 
     # query distinct, non empty set values
     values_list = values.exclude_empty().distinct_list()
+
+    # compute sets anew, but without empty optional values
+    sets = compute_sets(values.exclude_empty_optional(project.catalog))
 
     # count the total number of questions, taking sets and conditions into account
     counts = count_questions(project.catalog, sets, conditions)

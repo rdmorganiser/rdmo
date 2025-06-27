@@ -16,8 +16,14 @@ const Page = ({ config, settings, templates, overview, page, sets, values, fetch
                 activateSet, createSet, updateSet, deleteSet, copySet }) => {
 
   const currentSetPrefix = ''
+
   let currentSetIndex = page.is_collection ? get(config, 'page.currentSetIndex', 0) : 0
-  let currentSet = sets.find((set) => (set.set_prefix == currentSetPrefix && set.set_index == currentSetIndex))
+
+  let currentSet = sets.find((set) => (
+    (set.set_prefix == currentSetPrefix) &&
+    (set.set_index == currentSetIndex) &&
+    (set.element == page)
+  ))
 
   // sanity check
   if (isNil(currentSet)) {
@@ -38,7 +44,7 @@ const Page = ({ config, settings, templates, overview, page, sets, values, fetch
         focusInput.focus()
       }
     }
-  }, [page.id, currentSet])
+  }, [page.id])
 
   const isManager = (overview.is_superuser || overview.is_editor || overview.is_reviewer)
 
@@ -50,7 +56,7 @@ const Page = ({ config, settings, templates, overview, page, sets, values, fetch
       <PageHead
         templates={templates}
         page={page}
-        sets={sets.filter((set) => (set.set_prefix == currentSetPrefix))}
+        sets={sets.filter((set) => (set.set_prefix == currentSetPrefix) && (set.element == page))}
         values={isNil(page.attribute) ? [] : values.filter((value) => (value.attribute == page.attribute))}
         disabled={overview.read_only}
         currentSet={currentSet}
