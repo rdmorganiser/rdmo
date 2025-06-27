@@ -119,8 +119,8 @@ def test_progress_post_unchanged(db, client):
     client.login(username='owner', password='owner')
 
     project = Project.objects.get(id=1)
-    project.progress_count = progress_count = 58  # the progress in the fixture is not up-to-date
-    project.progress_total = progress_total = 94
+    project.progress_count = progress_count = 62  # the progress in the fixture is not up-to-date
+    project.progress_total = progress_total = 101
     project.save()
     project.refresh_from_db()
     project_updated = project.updated

@@ -96,7 +96,7 @@ class Value(Model):
     )
 
     class Meta:
-        ordering = ('attribute', 'set_index', 'collection_index')
+        ordering = ('project', 'snapshot', 'attribute', 'set_prefix', 'set_index', 'collection_index')
         verbose_name = _('Value')
         verbose_name_plural = _('Values')
 

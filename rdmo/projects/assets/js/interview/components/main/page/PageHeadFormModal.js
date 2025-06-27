@@ -22,10 +22,14 @@ const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, r
   const [errors, setErrors] = useState([])
 
   const handleSubmit = () => {
-    if (isEmpty(values.text)) {
-      setErrors({ text: true })
+    if (isNil(attribute)) {
+      onSubmit()
     } else {
-      onSubmit(values.text, values.value)
+      if (isEmpty(values.text)) {
+        setErrors({ text: true })
+      } else {
+        onSubmit(values.text, values.value)
+      }
     }
   }
 

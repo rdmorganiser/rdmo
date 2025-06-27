@@ -39,8 +39,11 @@ const initValues = (sets, values, element, setPrefix) => {
     setPrefix = ''
   }
 
-  // loop over all sets of the current set prefix and over all questions
-  sets.filter((set) => set.set_prefix === setPrefix).forEach((set) => {
+  // loop over all sets of the current set prefix and the current element and over all questions
+  sets.filter((set) => (
+    (set.set_prefix === setPrefix) &&
+    (set.element === element)
+  )).forEach((set) => {
     element.elements.filter((e) => (e.model === 'questions.question')).forEach((question) => {
       // check if there is any value for this question and set
       if (isNil(values.find((value) => (

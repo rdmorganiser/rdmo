@@ -24,7 +24,7 @@ def test_search(db, client):
 
     values_list = Value.objects.filter(project__in=view_value_permission_map.get('owner', [])) \
                                .filter(snapshot=None) \
-                               .exclude_empty()[:10]
+                               .exclude_empty().order_by(*Value._meta.ordering)[:10]
     assert sorted([item['id'] for item in response.json()]) == sorted([item.id for item in values_list])
 
 
@@ -36,7 +36,7 @@ def test_search_options(db, client):
 
     values_list = Value.objects.filter(project__in=view_value_permission_map.get('owner', [])) \
                                .filter(snapshot=None, option__in=options) \
-                               .exclude_empty()[:10]
+                               .exclude_empty().order_by(*Value._meta.ordering)[:10]
 
     assert sorted([item['id'] for item in response.json()]) == sorted([item.id for item in values_list])
 
@@ -49,7 +49,7 @@ def test_search_no_options(db, client):
 
     values_list = Value.objects.filter(project__in=view_value_permission_map.get('owner', [])) \
                                .filter(snapshot=None, option=None) \
-                               .exclude_empty()[:10]
+                               .exclude_empty().order_by(*Value._meta.ordering)[:10]
 
     assert sorted([item['id'] for item in response.json()]) == sorted([item.id for item in values_list])
 
@@ -62,7 +62,7 @@ def test_search_attribute(db, client):
 
     values_list = Value.objects.filter(project__in=view_value_permission_map.get('owner', [])) \
                                .filter(attribute_id=attribute_id, snapshot=None) \
-                               .exclude_empty()[:10]
+                               .exclude_empty().order_by(*Value._meta.ordering)[:10]
     assert sorted([item['id'] for item in response.json()]) == sorted([item.id for item in values_list])
 
 
@@ -74,7 +74,7 @@ def test_search_attribute_snapshot(db, client):
 
     values_list = Value.objects.filter(project__in=view_value_permission_map.get('owner', [])) \
                                .filter(attribute_id=attribute_id) \
-                               .exclude_empty()[:10]
+                               .exclude_empty().order_by(*Value._meta.ordering)[:10]
     assert sorted([item['id'] for item in response.json()]) == sorted([item.id for item in values_list])
 
 @pytest.mark.parametrize('collection', ["true", "false"])
@@ -86,5 +86,5 @@ def test_search_attribute_search_collection(db, client, collection):
 
     values_list = Value.objects.filter(project__in=view_value_permission_map.get('owner', [])) \
                                .filter(attribute_id=attribute_id, text__contains=search) \
-                               .exclude_empty()[:10]
+                               .exclude_empty().order_by(*Value._meta.ordering)[:10]
     assert sorted([item['id'] for item in response.json()]) == sorted([item.id for item in values_list])
