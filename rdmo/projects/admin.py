@@ -75,7 +75,7 @@ class ContinuationAdmin(admin.ModelAdmin):
 
 @admin.register(Visibility)
 class VisibilityAdmin(admin.ModelAdmin):
-    search_fields = ('project__title', 'sites', 'groups')
+    search_fields = ('project__title', 'sites__domain', 'sites__name', 'groups__name')
     list_display = ('project', 'sites_list_display', 'groups_list_display')
     filter_horizontal = ('sites', 'groups')
 
@@ -113,7 +113,7 @@ class InviteAdmin(admin.ModelAdmin):
 
 @admin.register(Issue)
 class IssueAdmin(admin.ModelAdmin):
-    search_fields = ('project__title', 'task', 'status')
+    search_fields = ('project__title', 'task__uri', 'status')
     list_display = ('project', 'task', 'status')
     list_filter = ('status', )
 
