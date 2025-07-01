@@ -35,7 +35,8 @@
 
                 <li class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        {% trans 'Language' %} <span class="caret">
+                        {% get_current_language as LANGUAGE_CODE %}
+                        {{ LANGUAGE_CODE|upper }} <span class="caret">
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         {% i18n_switcher %}
@@ -113,14 +114,6 @@
                         </li>
                         {% endif %}
                     </ul>
-                </li>
-
-                {% else %}
-
-                <li class="nav-item">
-                    <a href="{{ settings.LOGIN_URL }}" class="nav-link">
-                        {% trans 'Login' %}
-                    </a>
                 </li>
 
                 {% endif %}
