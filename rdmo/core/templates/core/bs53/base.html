@@ -4,11 +4,13 @@
     {% include 'core/bs53/base_head.html' %}
 
     {% block css %}
+    <link rel="stylesheet" href="{% static 'core/css/bootstrap-bs53.css' %}" />
     <link rel="stylesheet" href="{% static 'core/css/base-bs53.css' %}" />
     {% endblock %}
 
     {% block js %}
     <script src="{% url 'javascript-catalog' %}"></script>
+    <script src="{% static 'core/js/bootstrap-bs53.js' %}"></script>
     <script src="{% static 'core/js/base-bs53.js' %}"></script>
     {% endblock %}
 

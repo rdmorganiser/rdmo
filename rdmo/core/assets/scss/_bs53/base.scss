@@ -1,12 +1,7 @@
-@import '~bootstrap/scss/bootstrap';
-
-$bootstrap-icons-font-dir: '~bootstrap-icons/font/fonts';
-@import '~bootstrap-icons/font/bootstrap-icons.scss';
-
+@import 'base/content';
 @import 'base/dropdown';
 @import 'base/fonts';
 @import 'base/forms';
-@import 'base/layout';
 @import 'base/nav';
 @import 'base/typography';
 @import 'base/variables';
