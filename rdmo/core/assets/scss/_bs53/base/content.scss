@@ -1,0 +1,78 @@
+$image-transition: opacity 2s ease-in-out;
+
+.content {
+    display: flex;
+    flex-direction: column;
+
+    padding-top: 56px;
+    height: 100vh;
+}
+
+header {
+    color: var(--rdmo-color-header);
+    background-color: var(--rdmo-color-header-bg);
+
+    position: relative;
+    flex-shrink: 0;
+    overflow: hidden;
+
+    .header-image {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+
+        opacity: 0;
+        &.header-image-visible {
+            opacity: 1;
+        }
+
+        -webkit-transition: $image-transition;
+        -moz-transition: $image-transition;
+        -ms-transition: $image-transition;
+        -o-transition: $image-transition;
+        transition: $image-transition;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        p.attribution {
+            position: absolute;
+            bottom: 0.25rem;
+            right: 0.5rem;
+            z-index: 1;
+            margin: 0;
+
+            font-size: small;
+        }
+    }
+
+    .container {
+        position: relative;
+        z-index: 1;
+        color: white;
+    }
+}
+
+main {
+    flex-grow: 1;
+}
+
+section {
+    &:nth-child(even) {
+        background-color: var(--rdmo-color-alt-bg);
+    }
+}
+
+footer {
+    color: var(--rdmo-color-footer);
+    background-color: var(--rdmo-color-footer-bg);
+
+    .logo {
+        max-height: 6rem;
+    }
+}
