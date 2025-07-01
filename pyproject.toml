@@ -244,3 +244,4 @@ default.extend-ignore-re = [
   "(?Rm)^.*(#|//)\\s*spellchecker:disable-line$", # for .py files
   "(?Rm)^.*<!-- spellchecker:disable-line -->$", # for .html files
 ]
+files.extend-exclude = ["rdmo/core/templates/core/bs53/home.html"]

@@ -1,3 +1,5 @@
+@import '../breakpoints';
+
 nav.navbar {
     --bs-navbar-color: #9d9d9d;
     --bs-navbar-hover-color: white;
@@ -8,6 +10,13 @@ nav.navbar {
 
     --bs-navbar-brand-color: var(--bs-navbar-color);
     --bs-navbar-brand-hover-color: var(--bs-navbar-hover-color);
+
+    .container-fluid {
+        @media only screen and (min-width: $grid-breakpoint-md) {
+            padding-left: 3rem;
+            padding-right: 3rem;
+        }
+    }
 
     .dropdown-menu {
         --bs-dropdown-color: var(--rdmo-color);
