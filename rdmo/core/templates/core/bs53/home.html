@@ -1,32 +1,116 @@
 {% extends 'core/bs53/base.html' %}
-{% load i18n compress static core_tags %}
+{% load i18n %}
+{% load static %}
+{% load core_tags %}
 
 {% block content %}
 
-<header class="mt-5 mb-5">
-    <div class="container">
-        <h1>RDMO</h1>
+<header id="header">
+    {% for image in settings.HOME_IMAGES %}
+    <div class="header-image {% if forloop.first %}header-image-visible{% endif %}">
+        <img src="{% static image.src %}" alt="{{ image.alt }}">
+        <p class="attribution">{{ image.attribution|markdown }}</p>
+    </div>
+    {% endfor %}
 
-        <div class="row">
-            <div class="col-md-9">
-                <p>{% trans "A tool to support the planning, implementation, and organisation of research data management." %}</p>
+    <div class="container py-5">
+        <div class="row justify-content-center text-center">
+            <div class="col-6">
+                <h1>RDMO</h1>
+                <h2>Forschungsdatenmanagement an einem Ort planen und umsetzen</h2>
+                <p>
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est.
+                </p>
+                <button type="button" class="btn btn-outline-light mt-5">
+                    Anmeldung über ORCID
+                </button>
             </div>
         </div>
     </div>
 </header>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-9">
-            {% render_lang_template "core/home_text" %}
+<main>
+    <section>
+        <div class="container-md py-5">
+            <div class="row justify-content-center">
+                <div class="col-10">
+                    <h2>Mit dem Datenmanagement starten</h2>
+
+                    <p>
+                        Nachdem Sie sich angemeldet haben steht Ihnen eine Auswahl verschiedener DMP-Vorlagen zur Verfügung, die Sie an Ihr Projekt anpassen können.
+                    </p>
+
+                    <p>
+                        Videos zur Einführung in RDMO:
+                    <p>
+
+                    <ul>
+                        <li>Erste Schritte mit RDMO</li>
+                        <li>Was kann man mit RDMO machen?</li>
+                        <li>RDMO Funktionen im Überblick</li>
+                    </ul>
+                </div>
+            </div>
         </div>
+    </section>
 
-        <div class="col-md-3">
-            <h3>{% trans 'Login' %}</h3>
+    <section>
+        <div class="container py-5">
+            <div class="row justify-content-center text-center">
+                <div class="col-6">
+                    <h2>Haben Sie weitere Fragen, Feedback oder brauchen Hilfe?</h2>
 
-            {% include 'account/login_form.html' %}
+                    <p>
+                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
+                    </p>
+
+                    <a href="">
+                        Kontakt aufnehmen
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container py-5">
+            <div class="row justify-content-center text-center">
+                <div class="col-6">
+                    <p>
+                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="container py-5 text-center">
+        <p>
+            Wartungsfenster: Dienstags 6:30 – 8:30 Uhr
+        </p>
+
+        <p>
+            <a href="">Impressum</a>
+            <a href="">Nutzungsbedingungen</a>
+            <a href="">Datenschutzerklärung</a>
+        </p>
+
+        <p>
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.
+        </p>
+
+        <div class="mt-5">
+            <a href="">
+                <img class="logo" src="{% static 'core/img/rdmo-logo.svg' %}" alt="RDMO logo"/>
+            </a>
         </div>
     </div>
-</div>
+</footer>
+
+<script>
+    window.loopHeaderBackgroundImage({{ settings.HOME_IMAGES_TIMEOUT }})
+</script>
 
 {% endblock %}
