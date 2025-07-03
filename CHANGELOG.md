@@ -1,4 +1,24 @@
-# Changelog
+# Changelog 📔
+
+## [RDMO 2.3.2](https://github.com/rdmorganiser/rdmo/compare/2.3.1...2.3.2) (July 4, 2025)
+
+* Improve ORCID branding display and social connections page (#1376)
+* Hide management panels by default (#1377)
+* Fix sets in the interview (#1367)
+* Fix copy value and apply only to empty sets (#1384)
+* Fix compute progress for non-empty values (#1374)
+* Fix bugs in sync of project tasks and views (#1362)
+  * Added management command `./manage.py sync_projects`, with flags `--tasks`, `--views` or `--show`
+* Fix scroll focus (#1372)
+* Fix options in project export (use `uri_path`)
+* Fix historical typo in naming of `QuerySet` classes
+* [Add a PNG version of the logo](https://github.com/rdmorganiser/rdmo/pull/1361/commits/c21b7bafcf284ec7ac3b40b5c425fee207ddf461)
+
+### Maintenance and Dependencies 🔧
+
+* Removed dependency on `pytz` from management commands (#1382)
+* Refactor export tests and include tests code in coverage (#1319)
+* Update NodeJS version to 22 LTS (#1371)
 
 ## [RDMO 2.3.1](https://github.com/rdmorganiser/rdmo/compare/2.3.0...2.3.1) (May 16, 2025)
 
