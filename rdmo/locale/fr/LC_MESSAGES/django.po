@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-16 14:45+0000\n"
+"POT-Creation-Date: 2025-07-04 11:19+0000\n"
 "PO-Revision-Date: 2025-05-16 16:50+0200\n"
 "Last-Translator: Yonny CARDENAS, Gautier DEBAECKER, Nadia LAJILI, Gino "
 "MARCHETTI <dmp@cc.in2p3.fr>\n"
@@ -45,7 +45,7 @@ msgstr ""
 msgid "Consent could not be saved. Please try again."
 msgstr "Le consentement n'a pas pu être enregistré. Veuillez réessayer."
 
-#: accounts/models.py:27 options/models.py:193 questions/models/question.py:97
+#: accounts/models.py:27 options/models.py:181 questions/models/question.py:97
 #: tasks/models.py:96
 msgid "Text (primary)"
 msgstr "Texte (primaire)"
@@ -54,7 +54,7 @@ msgstr "Texte (primaire)"
 msgid "The text for this additional field (in the primary language)."
 msgstr "Le texte de ce champ supplémentaire (dans la langue principale)."
 
-#: accounts/models.py:32 options/models.py:198 questions/models/question.py:102
+#: accounts/models.py:32 options/models.py:186 questions/models/question.py:102
 #: tasks/models.py:101
 msgid "Text (secondary)"
 msgstr "Texte (secondaire)"
@@ -63,7 +63,7 @@ msgstr "Texte (secondaire)"
 msgid "The text for this additional field (in the secondary language)."
 msgstr "Le texte de ce champ supplémentaire (dans la langue secondaire)."
 
-#: accounts/models.py:37 options/models.py:203 questions/models/question.py:107
+#: accounts/models.py:37 options/models.py:191 questions/models/question.py:107
 #: tasks/models.py:106
 msgid "Text (tertiary)"
 msgstr "Texte (tertiaire)"
@@ -72,7 +72,7 @@ msgstr "Texte (tertiaire)"
 msgid "The text for this additional field (in the tertiary language)."
 msgstr "Le texte de ce champ supplémentaire (dans la langue tertiaire)."
 
-#: accounts/models.py:42 options/models.py:208 questions/models/question.py:112
+#: accounts/models.py:42 options/models.py:196 questions/models/question.py:112
 #: tasks/models.py:111
 msgid "Text (quaternary)"
 msgstr "Texte (quaternaire)"
@@ -81,7 +81,7 @@ msgstr "Texte (quaternaire)"
 msgid "The text for this additional field (in the quaternary language)."
 msgstr "Le texte de ce champ supplémentaire (dans la langue quaternaire)."
 
-#: accounts/models.py:47 options/models.py:213 questions/models/question.py:117
+#: accounts/models.py:47 options/models.py:201 questions/models/question.py:117
 #: tasks/models.py:116
 msgid "Text (quinary)"
 msgstr "Texte (quinaire)"
@@ -90,7 +90,7 @@ msgstr "Texte (quinaire)"
 msgid "The text for this additional field (in the quinary language)."
 msgstr "Le texte de ce champ supplémentaire (en langage quinaire)."
 
-#: accounts/models.py:52 options/models.py:218 questions/models/catalog.py:111
+#: accounts/models.py:52 options/models.py:206 questions/models/catalog.py:111
 #: questions/models/page.py:136 questions/models/question.py:72
 #: questions/models/questionset.py:106 views/models.py:103
 msgid "Help (primary)"
@@ -104,7 +104,7 @@ msgstr ""
 "Le texte d'aide à afficher à côté de l'élément de saisie (dans la langue "
 "principale)."
 
-#: accounts/models.py:57 options/models.py:223 questions/models/catalog.py:116
+#: accounts/models.py:57 options/models.py:211 questions/models/catalog.py:116
 #: questions/models/page.py:141 questions/models/question.py:77
 #: questions/models/questionset.py:111 views/models.py:108
 msgid "Help (secondary)"
@@ -118,7 +118,7 @@ msgstr ""
 "Le texte d'aide à afficher à côté de l'élément de saisie (dans la langue "
 "secondaire)."
 
-#: accounts/models.py:62 options/models.py:228 questions/models/catalog.py:121
+#: accounts/models.py:62 options/models.py:216 questions/models/catalog.py:121
 #: questions/models/page.py:146 questions/models/question.py:82
 #: questions/models/questionset.py:116 views/models.py:113
 msgid "Help (tertiary)"
@@ -132,7 +132,7 @@ msgstr ""
 "Le texte d'aide à afficher à côté de l'élément de saisie (dans la langue "
 "tertiaire)."
 
-#: accounts/models.py:67 options/models.py:233 questions/models/catalog.py:126
+#: accounts/models.py:67 options/models.py:221 questions/models/catalog.py:126
 #: questions/models/page.py:151 questions/models/question.py:87
 #: questions/models/questionset.py:121 views/models.py:118
 msgid "Help (quaternary)"
@@ -146,7 +146,7 @@ msgstr ""
 "Le texte d'aide à afficher à côté de l'élément de saisie (dans la langue "
 "quaternaire)."
 
-#: accounts/models.py:72 options/models.py:238 questions/models/catalog.py:131
+#: accounts/models.py:72 options/models.py:226 questions/models/catalog.py:131
 #: questions/models/page.py:156 questions/models/question.py:92
 #: questions/models/questionset.py:126 views/models.py:123
 msgid "Help (quinary)"
@@ -722,16 +722,16 @@ msgstr ""
 "Une erreur s'est produite lors de la tentative de connexion via votre compte "
 "de réseau social."
 
-#: accounts/templates/socialaccount/connections.html:6
+#: accounts/templates/socialaccount/connections.html:8
 #: core/templates/core/base_navigation_socialaccount.html:4
 msgid "Account connections"
 msgstr "Connexions de compte"
 
-#: accounts/templates/socialaccount/connections.html:8
+#: accounts/templates/socialaccount/connections.html:10
 msgid "Current connections"
 msgstr "Connexions actuelles"
 
-#: accounts/templates/socialaccount/connections.html:13
+#: accounts/templates/socialaccount/connections.html:15
 msgid ""
 "You can sign in to your account using any of the following third party "
 "accounts:"
@@ -739,17 +739,17 @@ msgstr ""
 "Vous pouvez vous connecter à votre compte en utilisant l'un des tiers "
 "suivants comptes:"
 
-#: accounts/templates/socialaccount/connections.html:39
+#: accounts/templates/socialaccount/connections.html:48
 msgid "Remove selected account"
 msgstr "Supprimer le compte sélectionné"
 
-#: accounts/templates/socialaccount/connections.html:53
+#: accounts/templates/socialaccount/connections.html:62
 msgid ""
 "You currently have no social network accounts connected to this account."
 msgstr ""
 "Vous n'avez actuellement aucun compte de réseau social connecté à ce compte."
 
-#: accounts/templates/socialaccount/connections.html:58
+#: accounts/templates/socialaccount/connections.html:69
 msgid "Add an additional account"
 msgstr "Ajouter un compte supplémentaire"
 
@@ -825,7 +825,7 @@ msgstr "Conditions"
 #: conditions/models.py:35
 #: conditions/templates/conditions/export/conditions.html:15
 #: domain/models.py:15 domain/templates/domain/export/attributes.html:14
-#: options/models.py:19 options/models.py:163
+#: options/models.py:19 options/models.py:151
 #: options/templates/options/export/option.html:5
 #: options/templates/options/export/optionset.html:5
 #: questions/models/catalog.py:36 questions/models/page.py:35
@@ -848,7 +848,7 @@ msgstr ""
 "automatiquement)."
 
 #: conditions/models.py:40 domain/models.py:20 options/models.py:24
-#: options/models.py:168 questions/models/catalog.py:41
+#: options/models.py:156 questions/models/catalog.py:41
 #: questions/models/page.py:40 questions/models/question.py:32
 #: questions/models/questionset.py:35 questions/models/section.py:39
 #: tasks/models.py:25 views/models.py:27
@@ -859,7 +859,7 @@ msgstr "Préfixe URI"
 msgid "The prefix for the URI of this condition."
 msgstr "Préfixe de l'URI de cette condition."
 
-#: conditions/models.py:45 options/models.py:29 options/models.py:173
+#: conditions/models.py:45 options/models.py:29 options/models.py:161
 #: questions/models/catalog.py:46 questions/models/page.py:45
 #: questions/models/question.py:37 questions/models/questionset.py:40
 #: questions/models/section.py:44 tasks/models.py:30 views/models.py:32
@@ -872,7 +872,7 @@ msgstr "Le chemin d'accès à l'URI de cette condition."
 
 #: conditions/models.py:50
 #: conditions/templates/conditions/export/conditions.html:21
-#: domain/models.py:35 options/models.py:34 options/models.py:178
+#: domain/models.py:35 options/models.py:34 options/models.py:166
 #: questions/models/catalog.py:51 questions/models/page.py:50
 #: questions/models/question.py:42 questions/models/questionset.py:45
 #: questions/models/section.py:49
@@ -892,7 +892,7 @@ msgid "Additional internal information about this condition."
 msgstr "Informations internes complémentaires sur cette condition."
 
 #: conditions/models.py:55 domain/models.py:40 options/models.py:39
-#: options/models.py:183 questions/models/catalog.py:56
+#: options/models.py:171 questions/models/catalog.py:56
 #: questions/models/page.py:55 questions/models/question.py:47
 #: questions/models/questionset.py:50 questions/models/section.py:54
 #: tasks/models.py:40 views/models.py:42
@@ -904,7 +904,7 @@ msgid "Designates whether this condition can be changed."
 msgstr "Désigne si cette condition peut être modifiée."
 
 #: conditions/models.py:60 domain/models.py:45 options/models.py:49
-#: options/models.py:188 questions/models/catalog.py:76
+#: options/models.py:176 questions/models/catalog.py:76
 #: questions/models/page.py:81 questions/models/question.py:67
 #: questions/models/questionset.py:76 questions/models/section.py:64
 #: tasks/models.py:61 views/models.py:63
@@ -972,7 +972,7 @@ msgstr "Cible"
 msgid "Core"
 msgstr "Cœur"
 
-#: core/constants.py:15 options/models.py:157
+#: core/constants.py:15 options/models.py:145
 #: options/templates/options/export/option.html:8 projects/models/value.py:69
 #: questions/constants.py:14 tasks/templates/tasks/export/tasks.html:31
 msgid "Text"
@@ -1006,7 +1006,7 @@ msgstr "Date et heure"
 msgid "Phone"
 msgstr "Telephone"
 
-#: core/constants.py:24 options/models.py:299 projects/models/value.py:74
+#: core/constants.py:24 options/models.py:287 projects/models/value.py:74
 msgid "Option"
 msgstr "Option"
 
@@ -1240,11 +1240,11 @@ msgstr ""
 msgid "This format is not supported."
 msgstr "Ce format n'est pas pris en charge."
 
-#: core/utils.py:260
+#: core/utils.py:243
 msgid "show more"
 msgstr "en savoir plus"
 
-#: core/utils.py:261
+#: core/utils.py:244
 msgid "show less"
 msgstr "afficher moins"
 
@@ -1445,7 +1445,7 @@ msgstr "Ce champ ne doit pas être vide."
 msgid "This is not a valid RDMO import JSON."
 msgstr "Il ne s'agit pas d'un JSON d'importation RDMO valide."
 
-#: options/apps.py:7 options/models.py:59 options/models.py:300
+#: options/apps.py:7 options/models.py:59 options/models.py:288
 #: options/templates/options/export/options.html:6
 #: options/templates/options/export/optionset.html:9
 #: projects/templates/projects/issue_detail.html:81
@@ -1526,83 +1526,83 @@ msgstr "Jeu d'options"
 msgid "Option sets"
 msgstr "Ensembles d'options"
 
-#: options/models.py:158 questions/constants.py:15
+#: options/models.py:146 questions/constants.py:15
 msgid "Textarea"
 msgstr "Zone de texte"
 
-#: options/models.py:164
+#: options/models.py:152
 msgid "The Uniform Resource Identifier of this option (auto-generated)."
 msgstr ""
 "Identificateur de ressource uniforme de cette option (généré "
 "automatiquement)."
 
-#: options/models.py:169
+#: options/models.py:157
 msgid "The prefix for the URI of this option."
 msgstr "Préfixe de l'URI de cette option."
 
-#: options/models.py:174
+#: options/models.py:162
 msgid "The path for the URI of this option."
 msgstr "Le chemin d'accès à l'URI de cette option."
 
-#: options/models.py:179
+#: options/models.py:167
 msgid "Additional internal information about this option."
 msgstr "Informations internes complémentaires sur cette option."
 
-#: options/models.py:184
+#: options/models.py:172
 msgid "Designates whether this option can be changed."
 msgstr "Désigne si cette option peut être modifiée."
 
-#: options/models.py:189
+#: options/models.py:177
 msgid "The sites that can edit this option (in a multi site setup)."
 msgstr ""
 "Les sites qui peuvent modifier cette option (dans une configuration multi-"
 "sites)."
 
-#: options/models.py:194
+#: options/models.py:182
 msgid "The text for this option (in the primary language)."
 msgstr "Le texte de cette option (dans la langue principale)."
 
-#: options/models.py:199
+#: options/models.py:187
 msgid "The text for this option (in the secondary language)."
 msgstr "Le texte de cette option (dans la langue secondaire)."
 
-#: options/models.py:204
+#: options/models.py:192
 msgid "The text for this option (in the tertiary language)."
 msgstr "Le texte de cette option (dans la langue tertiaire)."
 
-#: options/models.py:209
+#: options/models.py:197
 msgid "The text for this option (in the quaternary language)."
 msgstr "Le texte de cette option (dans la langue quaternaire)."
 
-#: options/models.py:214
+#: options/models.py:202
 msgid "The text for this option (in the quinary language)."
 msgstr "Le texte de cette option (en langage quinaire)."
 
-#: options/models.py:219
+#: options/models.py:207
 msgid "The help text for this option (in the primary language)."
 msgstr "Le texte d'aide pour cette option (dans la langue principale)."
 
-#: options/models.py:224
+#: options/models.py:212
 msgid "The help text for this option (in the secondary language)."
 msgstr "Le texte d'aide pour cette option (dans la langue secondaire)."
 
-#: options/models.py:229
+#: options/models.py:217
 msgid "The help text for this option (in the tertiary language)."
 msgstr "Le texte d'aide pour cette option (dans la langue tertiaire)."
 
-#: options/models.py:234
+#: options/models.py:222
 msgid "The help text for this option (in the quaternary language)."
 msgstr "Le texte d'aide pour cette option (dans la langue quaternaire)."
 
-#: options/models.py:239
+#: options/models.py:227
 msgid "The help text for this option (in the quinary language)."
 msgstr "Le texte d'aide pour cette option (en langage quinaire)."
 
-#: options/models.py:243 questions/models/question.py:122
+#: options/models.py:231 questions/models/question.py:122
 msgid "Default text value (primary)"
 msgstr "Valeur du texte par défaut (primaire)"
 
-#: options/models.py:244
+#: options/models.py:232
 msgid ""
 "The default text value for the additional input of this option (in the "
 "primary language)."
@@ -1610,11 +1610,11 @@ msgstr ""
 "Valeur textuelle par défaut pour la saisie supplémentaire de cette option "
 "(dans la langue principale)."
 
-#: options/models.py:248 questions/models/question.py:127
+#: options/models.py:236 questions/models/question.py:127
 msgid "Default text value (secondary)"
 msgstr "Valeur du texte par défaut (secondaire)"
 
-#: options/models.py:249
+#: options/models.py:237
 msgid ""
 "The default text value for the additional input of this option (in the "
 "secondary language)."
@@ -1622,11 +1622,11 @@ msgstr ""
 "Valeur textuelle par défaut pour la saisie supplémentaire de cette option "
 "(dans la langue secondaire)."
 
-#: options/models.py:253 questions/models/question.py:132
+#: options/models.py:241 questions/models/question.py:132
 msgid "Default text value (tertiary)"
 msgstr "Valeur du texte par défaut (tertiaire)"
 
-#: options/models.py:254
+#: options/models.py:242
 msgid ""
 "The default text value for the additional input of this option (in the "
 "tertiary language)."
@@ -1634,11 +1634,11 @@ msgstr ""
 "Valeur textuelle par défaut pour la saisie supplémentaire de cette option "
 "(dans la langue tertiaire)."
 
-#: options/models.py:258 questions/models/question.py:137
+#: options/models.py:246 questions/models/question.py:137
 msgid "Default text value (quaternary)"
 msgstr "Valeur du texte par défaut (quaternaire)"
 
-#: options/models.py:259
+#: options/models.py:247
 msgid ""
 "The default text value for the additional input of this option (in the "
 "quaternary language)."
@@ -1646,11 +1646,11 @@ msgstr ""
 "Valeur textuelle par défaut pour l'entrée supplémentaire de cette option "
 "(dans la langue quaternaire)."
 
-#: options/models.py:263 questions/models/question.py:142
+#: options/models.py:251 questions/models/question.py:142
 msgid "Default text value (quinary)"
 msgstr "Valeur du texte par défaut (quinaire)"
 
-#: options/models.py:264
+#: options/models.py:252
 msgid ""
 "The default text value for the additional input of this option (in the "
 "quinary language)."
@@ -1658,51 +1658,51 @@ msgstr ""
 "Valeur textuelle par défaut pour l'entrée supplémentaire de cette option "
 "(dans la  langage quinaire)."
 
-#: options/models.py:268
+#: options/models.py:256
 msgid "View text (primary)"
 msgstr "Voir le texte (primaire)"
 
-#: options/models.py:269
+#: options/models.py:257
 msgid "The view text for this option (in the primary language)."
 msgstr "Le texte d'affichage de cette option (dans la langue principale)."
 
-#: options/models.py:273
+#: options/models.py:261
 msgid "View text (secondary)"
 msgstr "Voir le texte (secondaire)"
 
-#: options/models.py:274
+#: options/models.py:262
 msgid "The view text for this option (in the secondary language)."
 msgstr "Le texte d'affichage de cette option (dans la langue secondaire)."
 
-#: options/models.py:278
+#: options/models.py:266
 msgid "View text (tertiary)"
 msgstr "Voir le texte (tertiaire)"
 
-#: options/models.py:279
+#: options/models.py:267
 msgid "The view text for this option (in the tertiary language)."
 msgstr "Le texte de la vue pour cette option (dans la langue tertiaire)."
 
-#: options/models.py:283
+#: options/models.py:271
 msgid "View text (quaternary)"
 msgstr "Voir le texte (quaternaire)"
 
-#: options/models.py:284
+#: options/models.py:272
 msgid "The view text for this option (in the quaternary language)."
 msgstr "Le texte de la vue pour cette option (dans la langue quaternaire)."
 
-#: options/models.py:288
+#: options/models.py:276
 msgid "View text (quinary)"
 msgstr "Voir le texte (quinaire)"
 
-#: options/models.py:289
+#: options/models.py:277
 msgid "The view text for this option (in the quinary language)."
 msgstr "Le texte d'affichage de cette option (en langage quinaire)."
 
-#: options/models.py:293 options/templates/options/export/option.html:17
+#: options/models.py:281 options/templates/options/export/option.html:17
 msgid "Additional input"
 msgstr "Entrée supplémentaire"
 
-#: options/models.py:294
+#: options/models.py:282
 msgid "Designates whether an additional input is possible for this option."
 msgstr "Désigne si une entrée supplémentaire est possible pour cette option."
 
