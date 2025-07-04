@@ -1,9 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { capitalize, isEmpty, isNil, last } from 'lodash'
+import { capitalize, isEmpty, isNil } from 'lodash'
 
 import useModal from 'rdmo/core/assets/js/hooks/useModal'
+
+import { generateSetIndex } from '../../../utils/set'
 
 import PageHeadDeleteModal from './PageHeadDeleteModal'
 import PageHeadFormModal from './PageHeadFormModal'
@@ -51,15 +53,18 @@ const PageHead = ({ templates, page, sets, values, disabled, currentSet,
     if (isEmpty(copySetValue)) {
       createSet({
         attribute: page.attribute,
-        set_index: last(sets) ? last(sets).set_index + 1 : 0,
+        set_index: generateSetIndex(sets, currentSet),
         set_collection: page.is_collection,
+        element: page,
         text
       })
     } else {
+      // TODO: check if this code is ever executed
       copySet(currentSet, copySetValue, {
         attribute: page.attribute,
-        set_index: last(sets) ? last(sets).set_index + 1 : 0,
+        set_index: generateSetIndex(sets, currentSet),
         set_collection: page.is_collection,
+        element: page,
         text
       })
     }
@@ -79,8 +84,9 @@ const PageHead = ({ templates, page, sets, values, disabled, currentSet,
   const handleCopy = (text) => {
     copySet(currentSet, currentSetValue, {
       attribute: page.attribute,
-      set_index: last(sets) ? last(sets).set_index + 1 : 0,
+      set_index: generateSetIndex(sets, currentSet),
       set_collection: page.is_collection,
+      element: page,
       text
     })
     copyModal.close()

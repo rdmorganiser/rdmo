@@ -11,6 +11,14 @@ class ProjectsConfig(AppConfig):
         from . import rules  # noqa: F401
 
         if settings.PROJECT_VIEWS_SYNC:
-            from .handlers import m2m_changed_views, project_save_views  # noqa: F401
+            from .handlers import view_changed  # noqa: F401
+            from .handlers.project_changed_catalog import (  # noqa: F401
+                post_save_project_sync_views_when_catalog_was_changed,
+                pre_save_check_if_catalog_was_changed,
+            )
         if settings.PROJECT_TASKS_SYNC:
-            from .handlers import m2m_changed_tasks, project_save_tasks  # noqa: F401
+            from .handlers import task_changed  # noqa: F401
+            from .handlers.project_changed_catalog import (  # noqa: F401
+                post_save_project_sync_tasks_when_catalog_was_changed,
+                pre_save_check_if_catalog_was_changed,
+            )

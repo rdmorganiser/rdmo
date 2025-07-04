@@ -5,8 +5,7 @@ from datetime import datetime
 from django.core.management.base import BaseCommand
 from django.db import models
 from django.db.models.functions import Greatest
-
-import pytz
+from django.utils import timezone
 
 from rdmo.projects.models import Project, Value
 
@@ -17,7 +16,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('since',
-                            type=lambda s: pytz.utc.localize(datetime.strptime(s, '%Y-%m-%d')),
+                            type=lambda s: timezone.make_aware(datetime.strptime(s, '%Y-%m-%d')),
                             help='Date since the projects have been inactive (format: 2022-12-31).')
         parser.add_argument('-o|--output-file', dest='output_file', default=None,
                             help='Store the output in a csv file.')
