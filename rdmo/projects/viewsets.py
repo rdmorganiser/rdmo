@@ -28,6 +28,7 @@ from rdmo.questions.models import Catalog, Page, Question, QuestionSet
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
+from ..accounts.utils import is_site_manager
 from .filters import (
     AttributeFilterBackend,
     OptionFilterBackend,
@@ -65,6 +66,7 @@ from .serializers.v1 import (
     ProjectInviteSerializer,
     ProjectInviteUpdateSerializer,
     ProjectIssueSerializer,
+    ProjectMembershipCreateSerializer,
     ProjectMembershipSerializer,
     ProjectMembershipUpdateSerializer,
     ProjectSerializer,
@@ -443,11 +445,40 @@ class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         return Membership.objects.filter(project=self.project)
 
     def get_serializer_class(self):
-        if self.action == 'update':
+        if self.action == "create":
+            return ProjectMembershipCreateSerializer
+        if self.action in ("update", "partial_update"):
             return ProjectMembershipUpdateSerializer
-        else:
-            return ProjectMembershipSerializer
+        return ProjectMembershipSerializer
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['project'] = self.project
+        context['is_site_manager'] = is_site_manager(self.request.user)
+        return context
+
+    def create(self, request, *args, **kwargs):
+        """
+        POST /projects/{pk}/memberships/
+        Uses ProjectMembershipCreateSerializer → returns either
+        a Membership or an Invite
+        """
+        in_set = self.get_serializer(data=request.data)
+        in_set.is_valid(raise_exception=True)
+        obj = in_set.save()
+
+        # pick the right *output* serializer
+        if isinstance(obj, Membership):
+            out_set = ProjectMembershipSerializer(obj, context=self.get_serializer_context())
+        else:
+            # we have an Invite
+            if settings.PROJECT_SEND_INVITE:
+                # reuse your existing invite mailer
+                from .utils import send_invite_email
+                send_invite_email(request, obj)
+            out_set = ProjectInviteSerializer(obj, context=self.get_serializer_context())
+
+        return Response(out_set.data, status=status.HTTP_201_CREATED)
 
 class ProjectIntegrationViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     permission_classes = (HasModelPermission | HasProjectPermission, )
@@ -807,6 +838,7 @@ class InviteViewSet(ReadOnlyModelViewSet):
         invites = Invite.objects.filter(user=self.request.user)
         serializer = UserInviteSerializer(invites, many=True)
         return Response(serializer.data)
+
 
 class IssueViewSet(ReadOnlyModelViewSet):
     permission_classes = (HasModelPermission | HasProjectsPermission, )

@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
@@ -8,6 +7,8 @@ from rest_framework.exceptions import ValidationError
 
 from rdmo.accounts.utils import get_full_name
 from rdmo.domain.models import Attribute
+from rdmo.projects.constants import ROLE_CHOICES
+from rdmo.projects.membership_utils import add_or_invite_user
 from rdmo.questions.models import Catalog
 from rdmo.services.validators import ProviderValidator
 
@@ -140,6 +141,49 @@ class ProjectMembershipSerializer(serializers.ModelSerializer):
             'user',
             'role'
         )
+
+
+class ProjectMembershipCreateSerializer(serializers.Serializer):
+    username_or_email = serializers.CharField(
+        help_text=_("The username or e-mail of the new user.")
+    )
+    role = serializers.ChoiceField(choices=ROLE_CHOICES)
+    silent = serializers.BooleanField(
+        default=False,
+        help_text=_("Only site-managers may add silently without notification.")
+    )
+
+    def create(self, validated_data):
+        project = self.context['project']
+        is_site_manager = self.context['is_site_manager']
+
+        try:
+            return add_or_invite_user(
+                project=project,
+                username_or_email=validated_data['username_or_email'],
+                role=validated_data['role'],
+                silent=validated_data['silent'],
+                is_site_manager=is_site_manager
+            )
+        except ValueError as e:
+            code = str(e)
+            if code == "already_member":
+                raise serializers.ValidationError({
+                    "username_or_email": _("That user is already a member.")
+                }) from e
+            if code == "user_not_found":
+                raise serializers.ValidationError({
+                    "username_or_email": _("No such user; only registered users can be invited.")
+                }) from e
+            if code == "invalid_email":
+                raise serializers.ValidationError({
+                    "username_or_email": _("Enter a valid e-mail address.")
+                }) from e
+            if code == "silent_invalid":
+                raise serializers.ValidationError({
+                    "silent": _("Only existing users may be added silently by site managers.")
+                }) from e
+            raise e from e
 
 
 class ProjectMembershipUpdateSerializer(serializers.ModelSerializer):
