@@ -1,6 +1,7 @@
 import pytest
 
 from django.contrib.auth import get_user_model
+from django.core.validators import EmailValidator
 from django.urls import reverse
 
 from ..models import Invite
@@ -33,7 +34,8 @@ add_invite_permission_map = change_invite_permission_map = delete_invite_permiss
 
 urlnames = {
     'list': 'v1-projects:project-invite-list',
-    'detail': 'v1-projects:project-invite-detail'
+    'detail': 'v1-projects:project-invite-detail',
+    'lookup': 'v1-projects:project-invite-lookup'
 }
 
 projects = [1, 11]
@@ -197,3 +199,87 @@ def test_delete(db, client, username, password, project_id, invite_id):
         assert response.status_code == 403
     else:
         assert response.status_code == 404
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
+def test_lookup(db, client, username, password, project_id):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['lookup'], args=[project_id])
+    data = {
+        'username_or_email': 'user',  # this test user always exists
+        'role': 'guest'
+    }
+    response = client.post(url, data)
+
+    if project_id in add_invite_permission_map.get(username, []):
+        assert response.status_code == 201, (
+            f"{username=} should be allowed to lookup/invite on project {project_id}, "
+            f"got {response.status_code}"
+        )
+        body = response.json()
+        # basic sanity of the returned invite
+        assert 'id' in body
+        assert body['role'] == 'guest'
+        # either user field or email field is present
+        assert 'user' in body or 'email' in body
+
+        # The new invite should actually exist in the DB
+        assert Invite.objects.filter(id=body['id'],
+                                     project_id=project_id).exists()
+
+    elif project_id in view_invite_permission_map.get(username, []):
+        # they can view invites but not create them
+        assert response.status_code == 403, (
+            f"{username=} ought to be forbidden (403) but got {response.status_code}"
+        )
+    else:
+        # no view perms at all → should be a 404
+        assert response.status_code == 404, (
+            f"{username=} ought to be not-found (404) but got {response.status_code}"
+        )
+
+
+def test_lookup_error_missing_field(db, client):
+    client.login(username='owner', password='owner')
+    url = reverse(urlnames['lookup'], args=[1])
+
+    response = client.post(url, {'role': 'guest'})
+    assert response.status_code == 400
+    err = response.json()
+    assert 'username_or_email' in err
+    assert err['username_or_email'][0] == 'This field is required.'
+
+
+def test_lookup_error_invalid_email_format(db, client):
+    client.login(username='owner', password='owner')
+    url = reverse(urlnames['lookup'], args=[1])
+
+    response = client.post(url, {
+        'username_or_email': 'not-an-email@',
+        'role': 'guest'
+    })
+    assert response.status_code == 400
+    err = response.json()
+    # our lookup serializer first runs validate_username_or_email
+    # and should raise "Enter a valid e-mail address."
+    expected = EmailValidator().message  # "Enter a valid email address."
+    assert err['username_or_email'][0] == expected
+
+
+def test_lookup_fallback_to_email_invite(db, client, settings):
+    assert settings.PROJECT_SEND_INVITE
+    client.login(username='owner', password='owner')
+    url = reverse(urlnames['lookup'], args=[1])
+
+    # assume 'newperson@example.com' is not in the test user table
+    response = client.post(url, {
+        'username_or_email': 'newperson@example.com',
+        'role': 'guest'
+    })
+    assert response.status_code == 201
+    body = response.json()
+    assert body['email'] == 'newperson@example.com'
+    assert body['role'] == 'guest'
+    assert Invite.objects.filter(email='newperson@example.com').exists()

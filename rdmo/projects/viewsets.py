@@ -62,6 +62,7 @@ from .serializers.v1 import (
     MembershipSerializer,
     ProjectCopySerializer,
     ProjectIntegrationSerializer,
+    ProjectInviteLookupSerializer,
     ProjectInviteSerializer,
     ProjectInviteUpdateSerializer,
     ProjectIssueSerializer,
@@ -477,15 +478,35 @@ class ProjectInviteViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         return Invite.objects.filter(project=self.project)
 
     def get_serializer_class(self):
-        if self.action == 'update':
+        if self.action == "lookup":
+            return ProjectInviteLookupSerializer
+        elif self.action == "update":
             return ProjectInviteUpdateSerializer
         else:
             return ProjectInviteSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['project'] = self.project
+        return context
 
     def perform_create(self, serializer):
         super().perform_create(serializer)
         if settings.PROJECT_SEND_INVITE:
             send_invite_email(self.request, serializer.instance)
+
+    @action(detail=False, methods=['POST'])
+    def lookup(self, request, *args, **kwargs):
+        lookup_set = self.get_serializer(data=request.data)
+        lookup_set.is_valid(raise_exception=True)
+
+        invite = lookup_set.save()
+
+        if settings.PROJECT_SEND_INVITE:
+            send_invite_email(request, invite)
+
+        serializer = ProjectInviteSerializer(invite, context=self.get_serializer_context())
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveModelMixin,
@@ -807,6 +828,7 @@ class InviteViewSet(ReadOnlyModelViewSet):
         invites = Invite.objects.filter(user=self.request.user)
         serializer = UserInviteSerializer(invites, many=True)
         return Response(serializer.data)
+
 
 class IssueViewSet(ReadOnlyModelViewSet):
     permission_classes = (HasModelPermission | HasProjectsPermission, )
