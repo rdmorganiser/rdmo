@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.urls import reverse
+from django.core.exceptions import ValidationError as DjangoValidationError
+from django.core.validators import EmailValidator
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
@@ -8,6 +9,7 @@ from rest_framework.exceptions import ValidationError
 
 from rdmo.accounts.utils import get_full_name
 from rdmo.domain.models import Attribute
+from rdmo.projects.invite_utils import lookup_or_create_invite
 from rdmo.questions.models import Catalog
 from rdmo.services.validators import ProviderValidator
 
@@ -243,6 +245,45 @@ class ProjectInviteSerializer(serializers.ModelSerializer):
         invite.make_token()
         invite.save()
         return invite
+
+
+class ProjectInviteLookupSerializer(serializers.Serializer):
+    username_or_email = serializers.CharField(
+        help_text=_("The username or e-mail of the new user.")
+    )
+    role = serializers.ChoiceField(choices=Invite._meta.get_field('role').choices)
+
+    def validate_username_or_email(self, value: str) -> str:
+        if "@" in value:
+            validator = EmailValidator()
+            try:
+                validator(value)
+            except DjangoValidationError as e:
+                raise serializers.ValidationError(validator.message) from e
+        return value
+
+    def create(self, validated_data):
+        try:
+            return lookup_or_create_invite(
+                project=self.context["project"],
+                username_or_email=validated_data["username_or_email"],
+                role=validated_data["role"],
+            )
+        except ValueError as e:
+            code = str(e)
+            invalid_email_msg = EmailValidator().message
+            mapping = {
+                "already_member": _("That user is already a member."),
+                "email_invites_disabled": _("Inviting by e-mail is currently disabled."),
+                "user_not_found": _("No such user; only registered users can be invited."),
+                "invalid_email": invalid_email_msg,
+                "ambiguous_username": _("Multiple users match this identifier; please be more specific."),
+            }
+            message = mapping.get(code)
+            if message:
+                raise serializers.ValidationError({"username_or_email": message}) from e
+            # unexpected—re-raise
+            raise e from e
 
 
 class ProjectInviteUpdateSerializer(serializers.ModelSerializer):
