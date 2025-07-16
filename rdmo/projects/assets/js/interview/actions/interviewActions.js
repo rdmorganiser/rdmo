@@ -222,8 +222,24 @@ export function fetchValuesError(error) {
 
 export function resolveConditions(page, sets) {
   return (dispatch) => {
+     /* ---- root context (empty prefix) handled once ---- */
+    const rootSet = { set_prefix: '', set_index: 0 }
+
+    page.questions
+      .filter(q => q.has_conditions)                // page‑level questions only
+      .forEach(q => dispatch(resolveCondition(q, rootSet)))
+
+    page.questionsets
+      .filter(qs => qs.has_conditions)
+      .forEach(qs => dispatch(resolveCondition(qs, rootSet)))
+
+    page.optionsets
+      .filter(os => os.has_conditions)
+      .forEach(os => dispatch(resolveCondition(os, rootSet)))
     // loop over set to evaluate conditions
-    sets.forEach((set) => {
+    sets
+        .filter(s => s.set_prefix)
+        .forEach((set) => {
       page.questionsets.filter((questionset) => questionset.has_conditions)
                        .forEach((questionset) => dispatch(resolveCondition(questionset, set)))
 
@@ -239,15 +255,42 @@ export function resolveConditions(page, sets) {
 export function resolveCondition(element, set) {
   const pendingId = `resolveCondition/${element.model}/${element.id}/${set.set_prefix}/${set.set_index}`
 
-  return (dispatch) => {
+  return (dispatch, getState) => {
     dispatch(addToPending(pendingId))
     dispatch(resolveConditionInit())
 
     return ProjectApi.resolveCondition(projectId, set, element)
-      .then((response) => {
-        const elementType = elementTypes[element.model]
+      .then(({ result }) => {
         dispatch(removeFromPending(pendingId))
-        dispatch(resolveConditionSuccess(set, elementType, element.id, response.result))
+
+        const elementType = elementTypes[element.model]
+
+         // * 1.  Persist the result that we just received for the *current* set
+        dispatch(resolveConditionSuccess(set, elementType, element.id, result))
+
+         // * 2.  Re‑compute the *page‑level* (“root context”) truth value
+         // *     as the logical OR over *all* sets (root + every nested block).
+         // *     This guarantees that a later response from a nested block can
+         // *     never overwrite the already‑true root result.
+        const { sets } = getState().interview        // ← already includes the
+                                                     //   line we just wrote
+        const aggregateTrue = sets.some(
+          s => s[elementType] && s[elementType][element.id] === true
+        )
+
+         // * 3.  Persist the aggregate on the synthetic root set ("",0).
+         // *     We only dispatch when the value actually changed to avoid
+         // *     needless re‑renders.
+        const rootSet       = { set_prefix: '', set_index: 0 }
+        const rootPrevValue = sets.find(
+          s => s.set_prefix === '' && s.set_index === 0
+        )?.[elementType]?.[element.id]
+
+        if (rootPrevValue !== aggregateTrue) {
+          dispatch(
+            resolveConditionSuccess(rootSet, elementType, element.id, aggregateTrue)
+          )
+        }
       })
       .catch((error) => {
         dispatch(removeFromPending(pendingId))
@@ -624,7 +667,11 @@ export function deleteSetSuccess(set) {
     // again, gather all values for this set and it's descendants
     const { sets, values } = getDescendants(getState().interview.values, getState().interview.sets, set)
 
-    return dispatch({type: DELETE_SET_SUCCESS, sets, values})
+    dispatch({type: DELETE_SET_SUCCESS, sets, values})
+    /* 👉 immediately re‑evaluate conditions with the remaining sets */
+    const page = getState().interview.page
+    const remainingSets = getState().interview.sets
+    dispatch(resolveConditions(page, remainingSets))
   }
 }
 
