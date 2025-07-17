@@ -21,13 +21,15 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from rdmo.conditions.models import Condition
+from rdmo.core.exports import XMLResponse
 from rdmo.core.permissions import HasModelPermission
-from rdmo.core.utils import human2bytes, is_truthy, return_file_response
+from rdmo.core.utils import human2bytes, is_truthy, render_to_format, return_file_response
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
+from ..views.utils import ProjectWrapper
 from .filters import (
     AttributeFilterBackend,
     OptionFilterBackend,
@@ -55,6 +57,8 @@ from .progress import (
     compute_show_page,
     resolve_conditions,
 )
+from .renderers import XMLRenderer
+from .serializers.export import ProjectSerializer as ProjectExportSerializer
 from .serializers.v1 import (
     IntegrationSerializer,
     InviteSerializer,
@@ -85,6 +89,7 @@ from .utils import (
     copy_project,
     get_contact_message,
     get_upload_accept,
+    get_value_path,
     send_contact_message,
     send_invite_email,
 )
@@ -388,6 +393,44 @@ class ProjectViewSet(ModelViewSet):
             'class_name': class_name,
             'href': reverse('project_create_import', args=[key])
         } for key, label, class_name in settings.PROJECT_IMPORTS if key in settings.PROJECT_IMPORTS_LIST] )
+
+    @action(detail=True, methods=['get'],
+            permission_classes=(HasModelPermission | HasProjectPermission, ),
+            url_path='export(?:/(?P<export_format>[a-z]+))?')
+    def export(self, request, pk=None, export_format='xml'):
+        if export_format == 'xml':
+            serializer = ProjectExportSerializer(self.get_object())
+            xml = XMLRenderer().render(serializer.data, context=self.get_export_renderer_context(request))
+            return XMLResponse(xml, name=self.get_object().title)
+        else:
+            context = self.get_export_renderer_context(request)
+            context["project"] = self.get_object()
+            # prefetch most elements of the catalog
+            context["project"].catalog.prefetch_elements()
+
+            try:
+                context["current_snapshot"] = context["project"].snapshots.get(pk=self.kwargs.get("snapshot_id"))
+            except Snapshot.DoesNotExist:
+                context["current_snapshot"] = None
+
+            context.update(
+                {
+                    "project_wrapper": ProjectWrapper(context["project"], context["current_snapshot"]),
+                    "title": context["project"].title,
+                    "format": self.kwargs.get("format"),
+                    "resource_path": get_value_path(context["project"], context["current_snapshot"]),
+                }
+            )
+            return render_to_format(
+                self.request, export_format, self.get_object().title, 'projects/project_answers_export.html', context
+            )
+
+    def get_export_renderer_context(self, request):
+        full = is_truthy(request.GET.get('full'))
+        return {
+            'snapshots': full or is_truthy(request.GET.get('snapshots', True)),
+        }
+
 
     def perform_create(self, serializer):
         project = serializer.save(site=get_current_site(self.request))
