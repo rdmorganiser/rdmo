@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import logging
-from collections.abc import Iterable
 from pathlib import Path
 
 from django.conf import settings
@@ -50,14 +49,14 @@ class Command(BaseCommand):
         self.with_members: bool = options['with_members']
         project_ids = options.get('projects') or None
         site_id: int = options['site_id']
-        catalog_uri: str | None = options.get('catalog_uri') or None
+        catalog_uri= options.get('catalog_uri') or None
 
         # upfront validations ------------------------------------------------
         if export_mode in ('answers', 'view'):
             if self.format not in dict(settings.EXPORT_FORMATS):
                 raise CommandError(f'Format "{self.format}" is not configured in settings.EXPORT_FORMATS.')
 
-        view_obj: View | None = None
+        view_obj= None
         if export_mode == 'view':
             try:
                 view_obj = View.objects.get(uri=options['view'])
@@ -89,9 +88,9 @@ class Command(BaseCommand):
 
     def _get_queryset(
         self,
-        ids: Iterable[int] | None,
-        site_id: int | None,
-        catalog_uri: str | None,
+        ids,
+        site_id,
+        catalog_uri,
     ) -> QuerySet[Project]:
         """
         Build a base queryset filtered by site_id and optional catalog_uri,
@@ -123,7 +122,7 @@ class Command(BaseCommand):
         project: Project,
         *,
         mode: str,
-        view: View | None = None,
+        view= None,
     ) -> None:
         """
         Orchestrate the chosen export *mode* for one project and write the file

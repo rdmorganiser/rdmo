@@ -112,7 +112,7 @@ class Command(BaseCommand):
             if not base_path.is_dir():
                 raise CommandError(f'Dir "{base_path}" does not exist or is not a directory.')
 
-            project_filter: set[int] | None = (
+            project_filter = (
                 set(options["projects"]) if options.get("projects") else None
             )
 

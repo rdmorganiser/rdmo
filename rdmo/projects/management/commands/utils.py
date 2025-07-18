@@ -21,7 +21,7 @@ def replace_uri_in_template_string(
     return template
 
 
-def get_cli_user(spec: str | None = None) -> AbstractBaseUser | AnonymousUser:
+def get_cli_user(spec=None):
     """
     Resolve *spec* to a real User instance (or AnonymousUser if nothing fits).
 
