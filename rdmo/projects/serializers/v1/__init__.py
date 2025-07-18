@@ -7,6 +7,9 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
+
 from rdmo.accounts.serializers.v1 import UserLookupSerializer
 from rdmo.accounts.utils import get_full_name
 from rdmo.core.serializers import TranslationSerializerMixin
@@ -269,6 +272,57 @@ class ProjectCopySerializer(ProjectSerializer):
         model = Project
         fields = ProjectSerializer.Meta.fields
         read_only_fields = ProjectSerializer.Meta.read_only_fields
+
+
+class ProjectImportPreviewSerializer(serializers.Serializer):
+    file = serializers.FileField(
+        help_text="The file to inspect before import."
+    )
+    format = serializers.CharField(
+        default="xml",
+        help_text="Import plugin key (e.g. 'xml' or custom)."
+    )
+
+
+class ProjectImportPreviewResponseSerializer(serializers.Serializer):
+    """
+    Mirrors the dict returned by plugin.prepare_import():
+      { values: […], snapshots: […], tasks: […], views: […] }
+    """
+    values = serializers.ListField(
+        child=serializers.DictField(),
+        help_text="List of all candidate values (with their 'key', 'text', etc.)"
+    )
+    snapshots = serializers.ListField(
+        child=serializers.DictField(),
+        help_text="List of snapshot groups (each with index, title and values)"
+    )
+    tasks = serializers.ListField(
+        child=serializers.DictField(),
+        help_text="List of available tasks (each dict with 'uri'/'title')"
+    )
+    views = serializers.ListField(
+        child=serializers.DictField(),
+        help_text="List of available views (each dict with 'uri'/'title')"
+    )
+
+
+class ProjectImportConfirmSerializer(serializers.Serializer):
+    file = serializers.FileField(
+        help_text="The same file (must match preview step)."
+    )
+    format = serializers.CharField(
+        default="xml",
+        help_text="Import plugin key (same as preview)."
+    )
+    checked_values = serializers.ListField(
+        child=serializers.CharField(),
+        help_text="List of value keys the user wants to import."
+    )
+    checked_snapshots = serializers.ListField(
+        child=serializers.CharField(),
+        help_text="List of snapshot keys the user wants to import."
+    )
 
 
 class ProjectVisibilitySerializer(serializers.ModelSerializer):
