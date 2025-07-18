@@ -5,8 +5,6 @@ from typing import Any
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractBaseUser, AnonymousUser
-from django.utils.crypto import get_random_string
-from django.utils.text import slugify
 
 User = get_user_model()
 
@@ -50,26 +48,3 @@ class FakeRequest:
 
     user: AbstractBaseUser | AnonymousUser
     session: dict[str, Any] = dataclasses.field(default_factory=dict)
-
-
-def make_unique_username(seed: str) -> str:
-    """
-    Return a DB-unique username derived from *seed*.
-
-    * seed -> "markus"      → "markus" (if free)
-    *                ...    → "markus_1", "markus_2", …
-    * after 99 tries        → "markus_<8-random-chars>"
-    """
-    base = slugify(seed) or "user"
-    candidate = base
-    suffix = 0
-
-    while User.objects.filter(username=candidate).exists():
-        suffix += 1
-        if suffix <= 99:
-            candidate = f"{base}_{suffix}"
-        else:  # extreme edge case
-            candidate = f"{base}_{get_random_string(8)}"
-            break
-
-    return candidate

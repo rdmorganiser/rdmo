@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 
 from django.conf import settings
@@ -5,7 +7,10 @@ from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.crypto import get_random_string
+from django.utils.text import slugify
 
+from ..projects.management.commands.utils import User
 from .models import Role
 from .settings import GROUPS
 
@@ -93,3 +98,26 @@ def get_user_from_db_or_none(username: str, email: str):
     except ObjectDoesNotExist:
         log.error('Retrieval of user "%s" with email "%s" failed, user does not exist', username, email)
         return None
+
+
+def make_unique_username(seed: str) -> str:
+    """
+    Return a DB-unique username derived from *seed*.
+
+    * seed -> "markus"      → "markus" (if free)
+    *                ...    → "markus_1", "markus_2", …
+    * after 99 tries        → "markus_<8-random-chars>"
+    """
+    base = slugify(seed) or "user"
+    candidate = base
+    suffix = 0
+
+    while User.objects.filter(username=candidate).exists():
+        suffix += 1
+        if suffix <= 99:
+            candidate = f"{base}_{suffix}"
+        else:  # extreme edge case
+            candidate = f"{base}_{get_random_string(8)}"
+            break
+
+    return candidate
