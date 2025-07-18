@@ -1,5 +1,7 @@
+import csv
 import json
 import xml.etree.ElementTree as et
+from io import StringIO
 
 import pytest
 
@@ -707,22 +709,19 @@ def test_export(db, client, username, password, export_format):
         elif export_format == "json":
             data = json.loads(response.content.decode())
             assert len(data) > 1
-            assert all(
-                all(
-                    a in ['question','set', 'values']
-                    for a in i.keys()
-                )
-               for i in data
-            )
+            for item in data:
+                # each item should have exactly these keys
+                assert set(item) == {"question", "set", "values"}
 
         # HTML (or any other plugin-provided format)
         elif export_format == "csvcomma":
-            data = response.content.decode().splitlines()
+            f = StringIO(response.content.decode())
+            reader = csv.reader(f)
+            data = list(reader)
             assert len(data) > 1
-            assert any("Lorem" in i for i in data)
+            assert any("Lorem" in cell for row in data for cell in row)
     else:
         if password:
-            # you have permission to see detail but not export
-            assert response.status_code in (403, 404)
+            assert response.status_code == 404
         else:
             assert response.status_code == 401
