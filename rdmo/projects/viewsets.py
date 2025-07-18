@@ -23,13 +23,13 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 from rdmo.conditions.models import Condition
 from rdmo.core.exports import XMLResponse
 from rdmo.core.permissions import HasModelPermission
+from rdmo.core.plugins import get_plugin
 from rdmo.core.utils import human2bytes, is_truthy, return_file_response
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
-from ..core.plugins import get_plugin
 from .filters import (
     AttributeFilterBackend,
     OptionFilterBackend,
