@@ -1,3 +1,8 @@
+import csv
+import json
+import xml.etree.ElementTree as et
+from io import StringIO
+
 import pytest
 
 from django.contrib.auth.models import Group, User
@@ -45,16 +50,17 @@ delete_project_permission_map = {
 }
 
 urlnames = {
-    'list': 'v1-projects:project-list',
-    'user': 'v1-projects:project-user',
-    'detail': 'v1-projects:project-detail',
-    'copy': 'v1-projects:project-copy',
-    'overview': 'v1-projects:project-overview',
-    'navigation': 'v1-projects:project-navigation',
-    'options': 'v1-projects:project-options',
-    'resolve': 'v1-projects:project-resolve',
-    'upload_accept': 'v1-projects:project-upload-accept',
-    'imports': 'v1-projects:project-imports'
+    "list": "v1-projects:project-list",
+    "user": "v1-projects:project-user",
+    "detail": "v1-projects:project-detail",
+    "copy": "v1-projects:project-copy",
+    "overview": "v1-projects:project-overview",
+    "navigation": "v1-projects:project-navigation",
+    "options": "v1-projects:project-options",
+    "resolve": "v1-projects:project-resolve",
+    "upload_accept": "v1-projects:project-upload-accept",
+    "imports": "v1-projects:project-imports",
+    "export": "v1-projects:project-export",
 }
 
 projects = [1, 2, 3, 4, 5, 12]
@@ -76,6 +82,7 @@ owner_id = 5
 owner_projects = [1, 2, 3, 4, 5, 10, 12]
 
 page_size = 5
+export_formats = [None, 'xml','csvcomma', 'json']
 
 @pytest.mark.parametrize('username,password', users)
 def test_list(db, client, username, password):
@@ -673,3 +680,48 @@ def test_imports(db, client, username, password):
         assert response.json()[0]['key'] == 'url'
     else:
         assert response.status_code == 401
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('export_format', export_formats)
+def test_export(db, client, username, password, export_format):
+    client.login(username=username, password=password)
+
+    if export_format:
+        url = reverse(urlnames["export"], kwargs={"pk": project_id, "export_format": export_format})
+    else:
+        url = reverse(urlnames["export"], kwargs={"pk": project_id})
+
+    response = client.get(url)
+
+    if project_id in view_project_permission_map.get(username, []):
+        assert response.status_code == 200
+        assert response.content
+
+        # XML (default or explicit)
+        if export_format in (None, "xml"):
+            root = et.fromstring(response.content)
+            assert root.tag == "project"
+            for child in root:
+                assert child.tag in ['title', 'description', 'catalog', 'tasks', 'views',
+                                     'snapshots', 'values', 'created', 'updated']
+
+        # JSON
+        elif export_format == "json":
+            data = json.loads(response.content.decode())
+            assert len(data) > 1
+            for item in data:
+                # each item should have exactly these keys
+                assert set(item) == {"question", "set", "values"}
+
+        # HTML (or any other plugin-provided format)
+        elif export_format == "csvcomma":
+            f = StringIO(response.content.decode())
+            reader = csv.reader(f)
+            data = list(reader)
+            assert len(data) > 1
+            assert any("Lorem" in cell for row in data for cell in row)
+    else:
+        if password:
+            assert response.status_code == 404
+        else:
+            assert response.status_code == 401
