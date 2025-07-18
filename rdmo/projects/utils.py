@@ -1,7 +1,6 @@
 import logging
 import mimetypes
 from collections import defaultdict
-from collections.abc import Iterable
 from pathlib import Path
 
 from django.conf import settings
@@ -17,7 +16,7 @@ from rdmo.accounts.utils import make_unique_username
 from rdmo.core.mail import send_mail
 from rdmo.core.plugins import get_plugins
 from rdmo.core.utils import remove_double_newlines
-from rdmo.projects.models import Membership, Project
+from rdmo.projects.models import Membership
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
@@ -375,7 +374,7 @@ def send_contact_message(request, subject, message):
               cc=[request.user.email], reply_to=[request.user.email])
 
 
-def import_memberships(project: Project, records: Iterable[dict], create_users: bool = True) -> tuple[int, int]:
+def import_memberships(project, records, create_users = True):
     """
     Assigns Memberships on `project` based on `records`.
 

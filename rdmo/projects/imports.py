@@ -177,7 +177,7 @@ class Import(Plugin):
         return preview
 
     def import_to_project(
-        self, checked_values: set[str] | None = None, checked_snapshots: set[str] | None = None
+        self, checked_values = None, checked_snapshots = None
     ) -> Project:
         """
         1) If we have not yet run check()/process(), do so now (so self.project
