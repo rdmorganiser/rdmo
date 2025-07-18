@@ -12,16 +12,19 @@ from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.filters import SearchFilter
 from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.viewsets import GenericViewSet, ModelViewSet, ReadOnlyModelViewSet
 
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.utils import extend_schema
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from rdmo.conditions.models import Condition
 from rdmo.core.exports import XMLResponse
+from rdmo.core.imports import handle_uploaded_file
 from rdmo.core.permissions import HasModelPermission
 from rdmo.core.plugins import get_plugin
 from rdmo.core.utils import human2bytes, is_truthy, return_file_response
@@ -65,6 +68,9 @@ from .serializers.v1 import (
     IssueSerializer,
     MembershipSerializer,
     ProjectCopySerializer,
+    ProjectImportConfirmSerializer,
+    ProjectImportPreviewResponseSerializer,
+    ProjectImportPreviewSerializer,
     ProjectIntegrationSerializer,
     ProjectInviteSerializer,
     ProjectInviteUpdateSerializer,
@@ -392,6 +398,80 @@ class ProjectViewSet(ModelViewSet):
             'class_name': class_name,
             'href': reverse('project_create_import', args=[key])
         } for key, label, class_name in settings.PROJECT_IMPORTS if key in settings.PROJECT_IMPORTS_LIST] )
+
+    @extend_schema(
+        request=ProjectImportPreviewSerializer,
+        responses={200: ProjectImportPreviewResponseSerializer},
+    )
+    @action(
+        detail=False,
+        methods=["post"],
+        url_path="import-preview",
+        parser_classes=[MultiPartParser, FormParser],
+        permission_classes=[IsAuthenticated],
+    )
+    def import_preview(self, request):
+        upload = request.FILES.get("file")
+        fmt = request.data.get("format", "xml")
+
+        if not upload:
+            return Response({"detail": "No file uploaded."}, status=status.HTTP_400_BAD_REQUEST)
+
+        tmp_path = handle_uploaded_file(upload)
+
+        plugin = get_plugin("PROJECT_IMPORTS", fmt)
+        if plugin is None:
+            return Response({"detail": f'Format "{fmt}" not configured.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        plugin.file_name = tmp_path
+        plugin.request = request
+        plugin.current_project = None
+
+        try:
+            preview = plugin.prepare_import()
+        except ValidationError as exc:
+            return Response({"detail": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(preview, status=status.HTTP_200_OK)
+
+    @extend_schema(
+        request=ProjectImportConfirmSerializer,
+        responses={201: ProjectSerializer},
+    )
+    @action(
+        detail=False,
+        methods=["post"],
+        url_path="import-confirm",
+        parser_classes=[MultiPartParser, FormParser],
+        permission_classes=[IsAuthenticated],
+    )
+    def import_confirm(self, request):
+        upload = request.FILES.get("file")
+        fmt = request.data.get("format", "xml")
+        cvs = set(request.data.get("checked_values", []))
+        css = set(request.data.get("checked_snapshots", []))
+
+        if not upload:
+            return Response({"detail": "No file uploaded."}, status=status.HTTP_400_BAD_REQUEST)
+
+        tmp_path = handle_uploaded_file(upload)
+
+        plugin = get_plugin("PROJECT_IMPORTS", fmt)
+        if plugin is None:
+            return Response({"detail": f'Format "{fmt}" not configured.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        plugin.file_name = tmp_path
+        plugin.request = request
+        plugin.current_project = None
+
+        try:
+            project = plugin.import_to_project(checked_values=cvs, checked_snapshots=css)
+        except ValidationError as exc:
+            return Response({"detail": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = ProjectSerializer(project, context={"request": request})
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 
     @action(detail=True, methods=['get'],
             permission_classes=(HasModelPermission | HasProjectPermission, ),
