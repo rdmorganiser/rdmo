@@ -4,6 +4,7 @@ import logging
 import mimetypes
 
 from django import forms
+from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.shortcuts import redirect, render
@@ -21,6 +22,12 @@ from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
 from .models import Project, Snapshot, Value
+from .utils import (
+    save_import_snapshot_values,
+    save_import_tasks,
+    save_import_values,
+    save_import_views,
+)
 
 log = logging.getLogger(__name__)
 
@@ -84,6 +91,133 @@ class Import(Plugin):
             return self._views.get(view_uri)
         except KeyError:
             log.info('View %s not in db. Skipping.', view_uri)
+
+    def _clear_currents(self) -> None:
+        for value in self.values:
+            value.current = None
+        for snapshot in self.snapshots:
+            for val in snapshot.snapshot_values:
+                val.current = None
+
+    def _gather_checked_keys(self) -> tuple[set[str], set[str]]:
+        checked_values = {
+            f'{v.attribute.uri}[{v.set_prefix}][{v.set_index}][{v.collection_index}]'
+            for v in self.values
+            if v.attribute
+        }
+
+        checked_snapshots: set[str] = set()
+        for snapshot in self.snapshots:
+            for v in snapshot.snapshot_values:
+                if v.attribute:
+                    checked_snapshots.add(
+                        f'{v.attribute.uri}'
+                        f'[{snapshot.snapshot_index}]'
+                        f'[{v.set_prefix}][{v.set_index}][{v.collection_index}]'
+                    )
+
+        return checked_values, checked_snapshots
+
+    def prepare_import(self) -> dict:
+        """
+        Step 1: run check()/process(), clear currents, gather keys,
+        and return a JSON-serializable preview dict:
+        {
+          "values":   [{ "key": "...", "text": "...", "attribute": "...", "option": "..." }, …],
+          "snapshots":[ { "index": 0, "title": "...", "values": […] }, … ],
+          "tasks":    [{ "uri": "...", "title": "..." }, …],
+          "views":    [{ "uri": "...", "title": "..." }, …]
+        }
+        """
+        # run the standard plugin steps
+        if not self.check():
+            raise ValidationError(f'Import plugin rejected file "{self.file_name}".')
+        self.process()
+
+        # clear any .current so we treat everything as new
+        self._clear_currents()
+
+        # build raw keys (we'll use them client-side to POST back selections)
+        checked_values, checked_snapshots = self._gather_checked_keys()
+
+        # build a minimal preview payload
+        preview = {"values": [], "snapshots": [], "tasks": [], "views": []}
+
+        for v in self.values:
+            key = f"{v.attribute.uri}[{v.set_prefix}][{v.set_index}][{v.collection_index}]"
+            preview["values"].append(
+                {
+                    "key": key,
+                    "text": v.text,
+                    "attribute": v.attribute.uri,
+                    "option": v.option.uri if v.option else None,
+                }
+            )
+
+        for snap in self.snapshots:
+            vals = []
+            for v in snap.snapshot_values:
+                key = f"{v.attribute.uri}[{snap.snapshot_index}][{v.set_prefix}][{v.set_index}][{v.collection_index}]"
+                vals.append(
+                    {
+                        "key": key,
+                        "text": v.text,
+                        "attribute": v.attribute.uri,
+                        "option": v.option.uri if v.option else None,
+                    }
+                )
+            preview["snapshots"].append({"index": snap.snapshot_index, "title": snap.title, "values": vals})
+
+        for task in self.tasks:
+            preview["tasks"].append({"uri": task.uri, "title": task.title})
+
+        for view in self.views:
+            preview["views"].append({"uri": view.uri, "title": view.title})
+
+        return preview
+
+    def import_to_project(
+        self, checked_values: set[str] | None = None, checked_snapshots: set[str] | None = None
+    ) -> Project:
+        """
+        1) If we have not yet run check()/process(), do so now (so self.project
+           is created).
+        2) Clear any .current references.
+        3) Build or accept the passed key-sets.
+        4) Save the project (assigning Site if new).
+        5) Call save_import_values, snapshot_values, tasks, views.
+
+        Returns the saved Project.
+        """
+        # 1) Ensure the plugin has been run
+        if self.project is None:
+            if not self.check():
+                raise ValidationError(f'Plugin rejected file "{self.file_name}".')
+            self.process()
+
+        # 2) Clear any stale .current pointers
+        self._clear_currents()
+
+        # 3) Decide which keys to import
+        all_values, all_snapshots = self._gather_checked_keys()
+        cvs = checked_values if checked_values is not None else all_values
+        css = checked_snapshots if checked_snapshots is not None else all_snapshots
+
+        # 4) Persist the Project object
+        proj = self.project
+        if proj is None:
+            raise ValidationError("Import plugin did not set a Project.")
+        if proj.pk is None:
+            proj.site = Site.objects.get_current()
+            proj.save()
+
+        # 5) Write out values, snapshots, tasks, views
+        save_import_values(proj, self.values, cvs)
+        save_import_snapshot_values(proj, self.snapshots, css)
+        save_import_tasks(proj, self.tasks)
+        save_import_views(proj, self.views)
+
+        return proj
 
 
 class RDMOXMLImport(Import):
