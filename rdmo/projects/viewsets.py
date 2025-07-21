@@ -26,7 +26,7 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 from rdmo.conditions.models import Condition
 from rdmo.core.constants import VALUE_TYPE_FILE
 from rdmo.core.exports import XMLResponse
-from rdmo.core.imports import handle_uploaded_file
+from rdmo.core.imports import store_temp_file
 from rdmo.core.permissions import HasModelPermission
 from rdmo.core.plugins import get_plugin
 from rdmo.core.utils import human2bytes, is_truthy, return_file_response
@@ -106,6 +106,7 @@ from .utils import (
     compute_set_prefix_from_set_value,
     copy_project,
     get_contact_message,
+    get_plugin_types_for_mimetype,
     get_upload_accept,
     send_contact_message,
     send_invite_email,
@@ -582,22 +583,34 @@ class ProjectViewSet(ModelViewSet):
     @action(
         detail=False,
         methods=["post"],
-        url_path="import-preview",
+        url_path="import-create-preview",
         parser_classes=[MultiPartParser, FormParser],
         permission_classes=[IsAuthenticated],
     )
-    def import_preview(self, request):
+    def import_create_preview(self, request):
+        # validate upload, content_type and declared format
         upload = request.FILES.get("file")
-        fmt = request.data.get("format", "xml")
+        declared_format = request.data.get("format")
 
         if not upload:
             return Response({"detail": "No file uploaded."}, status=status.HTTP_400_BAD_REQUEST)
 
-        tmp_path = handle_uploaded_file(upload)
+        accepted_formats = get_plugin_types_for_mimetype(upload.content_type)
+        if (
+            declared_format is None
+            or not accepted_formats
+            or declared_format not in accepted_formats
+        ):
+            return Response({"detail": "File format not accepted."}, status=status.HTTP_400_BAD_REQUEST)
 
-        plugin = get_plugin("PROJECT_IMPORTS", fmt)
+        tmp_path = store_temp_file(upload)
+
+        plugin = get_plugin("PROJECT_IMPORTS", declared_format)
         if plugin is None:
-            return Response({"detail": f'Format "{fmt}" not configured.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": f'Format "{declared_format}" not configured.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         plugin.file_name = tmp_path
         plugin.request = request
@@ -617,11 +630,11 @@ class ProjectViewSet(ModelViewSet):
     @action(
         detail=False,
         methods=["post"],
-        url_path="import-confirm",
+        url_path="import-create-confirm",
         parser_classes=[MultiPartParser, FormParser],
         permission_classes=[IsAuthenticated],
     )
-    def import_confirm(self, request):
+    def import_create_confirm(self, request):
         upload = request.FILES.get("file")
         fmt = request.data.get("format", "xml")
         cvs = set(request.data.get("checked_values", []))
@@ -630,7 +643,7 @@ class ProjectViewSet(ModelViewSet):
         if not upload:
             return Response({"detail": "No file uploaded."}, status=status.HTTP_400_BAD_REQUEST)
 
-        tmp_path = handle_uploaded_file(upload)
+        tmp_path = store_temp_file(upload)
 
         plugin = get_plugin("PROJECT_IMPORTS", fmt)
         if plugin is None:

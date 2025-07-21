@@ -305,6 +305,16 @@ def get_upload_accept():
     return accept
 
 
+def get_plugin_types_for_mimetype(mimetype: str) -> set[str]:
+    accept = get_upload_accept()
+    suffixes = accept.get(mimetype)
+
+    if not suffixes:
+        return set()
+
+    return {suffix.lstrip('.') for suffix in suffixes}
+
+
 def compute_set_prefix_from_set_value(set_value, value):
     set_prefix_length = len(set_value.set_prefix.split('|')) if set_value.set_prefix else 0
     return '|'.join([
