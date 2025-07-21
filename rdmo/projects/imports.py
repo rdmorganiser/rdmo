@@ -12,7 +12,7 @@ from django.utils.translation import gettext_lazy as _
 
 import requests
 
-from rdmo.core.imports import handle_fetched_file
+from rdmo.core.imports import store_temp_file
 from rdmo.core.plugins import Plugin
 from rdmo.core.xml import get_ns_map, get_uri, read_xml_file
 from rdmo.domain.models import Attribute
@@ -400,7 +400,7 @@ class URLImport(RDMOXMLImport):
             self.source_title = form.cleaned_data['url']
 
             response = requests.get(form.cleaned_data['url'])
-            self.request.session['import_file_name'] = handle_fetched_file(response.content)
+            self.request.session['import_file_name'] = store_temp_file(response.content)
 
             if self.current_project:
                 return redirect('project_update_import', self.current_project.id)

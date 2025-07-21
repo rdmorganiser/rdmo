@@ -1,13 +1,15 @@
 import logging
 import tempfile
-import time
 from collections import defaultdict
 from enum import Enum
-from os.path import join as pj
-from random import randint
+from pathlib import Path
 from typing import Optional, Union
 
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist, SuspiciousOperation, ValidationError
+from django.core.files.base import ContentFile
+from django.core.files.storage import FileSystemStorage
+from django.core.files.uploadedfile import UploadedFile
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -20,6 +22,7 @@ from rdmo.core.validators import LockedValidator
 
 logger = logging.getLogger(__name__)
 
+_temp_storage = FileSystemStorage(location=tempfile.gettempdir())
 
 class ImportElementFields(str, Enum):
     DIFF = "updated_and_changed"
@@ -32,26 +35,26 @@ class ImportElementFields(str, Enum):
     CHANGED_FIELDS = "changedFields"  # for ignored_keys when ordering at save
 
 
-def handle_uploaded_file(filedata):
-    tempfilename = generate_tempfile_name()
-    with open(tempfilename, 'wb+') as destination:
-        for chunk in filedata.chunks():
-            destination.write(chunk)
-    return tempfilename
+def store_temp_file(filedata, *, suffix=".xml") -> str:
+    max_size = getattr(settings, "MAX_UPLOAD_SIZE", None)
 
+    if isinstance(filedata, bytes):
+        if max_size is not None and len(filedata) > max_size:
+            raise SuspiciousOperation("File too large.")
+        content = ContentFile(filedata)
+        filename = _temp_storage.get_available_name(f"upload{suffix}")
+    elif isinstance(filedata, UploadedFile):
+        if max_size is not None and filedata.size > max_size:
+            raise SuspiciousOperation("Uploaded file too large.")
+        content = filedata
+        filename = _temp_storage.get_available_name(
+            f"upload{Path(filedata.name).suffix or suffix}"
+        )
+    else:
+        raise TypeError(f"Unsupported filedata type: {type(filedata)}")
 
-def handle_fetched_file(filedata):
-    tempfilename = generate_tempfile_name()
-    with open(tempfilename, 'wb+') as destination:
-        destination.write(filedata)
-    return tempfilename
-
-
-def generate_tempfile_name():
-    t = round(time.time() * 1000)
-    r = randint(10000, 99999)
-    fn = pj(tempfile.gettempdir(), 'upload_' + str(t) + '_' + str(r) + '.xml')
-    return fn
+    saved_path = _temp_storage.save(filename, content)
+    return _temp_storage.path(saved_path)
 
 
 def get_or_return_instance(model: models.Model, uri: Optional[str] = None) -> tuple[models.Model, bool]:
