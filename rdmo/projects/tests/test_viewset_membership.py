@@ -16,12 +16,12 @@ users = (
 )
 
 view_membership_permission_map = {
-    'owner': [1, 2, 3, 4, 5, 10],
-    'manager': [1, 3, 5, 7],
-    'author': [1, 3, 5, 8],
-    'guest': [1, 3, 5, 9],
-    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    'owner': [1, 2, 3, 4, 5, 10, 12],
+    'manager': [1, 3, 5, 7, 12],
+    'author': [1, 3, 5, 8, 12],
+    'guest': [1, 3, 5, 9, 12],
+    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12],
+    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12]
 }
 
 urlnames = {
@@ -31,6 +31,7 @@ urlnames = {
 
 projects = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 memberships = [1, 2, 3, 4]
+memberships_visible = [16]
 membership_roles = ('owner', 'manager', 'author', 'guest')
 
 
@@ -46,7 +47,7 @@ def test_list(db, client, username, password):
         assert isinstance(response.json(), list)
 
         if username == 'user':
-            assert sorted([item['id'] for item in response.json()]) == []
+            assert sorted([item['id'] for item in response.json()]) == memberships_visible
         else:
             values_list = Membership.objects.filter(project__in=view_membership_permission_map.get(username, [])) \
                                             .order_by('id').values_list('id', flat=True)

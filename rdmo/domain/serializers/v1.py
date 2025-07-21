@@ -36,7 +36,6 @@ class BaseAttributeSerializer(ElementModelSerializerMixin, ReadOnlyObjectPermiss
 
 class AttributeSerializer(BaseAttributeSerializer):
 
-    key = serializers.SlugField(required=True)
     parent = serializers.PrimaryKeyRelatedField(queryset=Attribute.objects.all(), default=None, allow_null=True)
 
     conditions = serializers.PrimaryKeyRelatedField(queryset=Condition.objects.all(), required=False, many=True)
@@ -61,16 +60,19 @@ class AttributeSerializer(BaseAttributeSerializer):
             'values_count',
             'projects_count'
         )
+        extra_kwargs = {
+            'key': {'required': True}
+        }
         validators = (
             AttributeUniqueURIValidator(),
             AttributeParentValidator(),
             AttributeLockedValidator()
         )
 
-    def get_tasks(self, obj):
+    def get_tasks(self, obj) -> list[int]:
         return [task.id for task in obj.tasks_as_start.all()] + [task.id for task in obj.tasks_as_end.all()]
 
-    def get_attributes(self, obj):
+    def get_attributes(self, obj) -> list[int]:
         return [attribute.id for attribute in obj.get_descendants()]
 
 

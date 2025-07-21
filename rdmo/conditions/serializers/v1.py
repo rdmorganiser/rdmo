@@ -14,7 +14,6 @@ class ConditionSerializer(ElementModelSerializerMixin, ReadOnlyObjectPermissionS
                           serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
-    uri_path = serializers.CharField(required=True)
 
     source = serializers.PrimaryKeyRelatedField(queryset=Attribute.objects.all(), required=True)
     optionsets = serializers.PrimaryKeyRelatedField(queryset=OptionSet.objects.all(), required=False, many=True)
@@ -47,6 +46,9 @@ class ConditionSerializer(ElementModelSerializerMixin, ReadOnlyObjectPermissionS
             'tasks',
             'read_only'
         )
+        extra_kwargs = {
+            'key': {'required': True}
+        }
         validators = (
             ConditionUniqueURIValidator(),
             ConditionLockedValidator()

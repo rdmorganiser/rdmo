@@ -133,10 +133,10 @@
 		<dc:comment/>
 		<parent dc:uri="http://example.com/terms/domain/individual"/>
 	</attribute>
-	<attribute dc:uri="http://example.com/terms/domain/individual/collection/autocomplete">
+	<attribute dc:uri="http://example.com/terms/domain/individual/collection/select_creatable">
 		<uri_prefix>http://example.com/terms</uri_prefix>
-		<key>autocomplete</key>
-		<path>individual/collection/autocomplete</path>
+		<key>select_creatable</key>
+		<path>individual/collection/select_creatable</path>
 		<dc:comment/>
 		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
 	</attribute>
@@ -231,10 +231,10 @@
 		<dc:comment/>
 		<parent dc:uri="http://example.com/terms/domain/individual"/>
 	</attribute>
-	<attribute dc:uri="http://example.com/terms/domain/individual/single/autocomplete">
+	<attribute dc:uri="http://example.com/terms/domain/individual/single/select_creatable">
 		<uri_prefix>http://example.com/terms</uri_prefix>
-		<key>autocomplete</key>
-		<path>individual/single/autocomplete</path>
+		<key>select_creatable</key>
+		<path>individual/single/select_creatable</path>
 		<dc:comment/>
 		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
 	</attribute>
@@ -336,10 +336,10 @@
 		<dc:comment/>
 		<parent dc:uri="http://example.com/terms/domain/options"/>
 	</attribute>
-	<attribute dc:uri="http://example.com/terms/domain/options/plugin/autocomplete">
+	<attribute dc:uri="http://example.com/terms/domain/options/plugin/select_creatable">
 		<uri_prefix>http://example.com/terms</uri_prefix>
-		<key>autocomplete</key>
-		<path>options/plugin/autocomplete</path>
+		<key>select_creatable</key>
+		<path>options/plugin/select_creatable</path>
 		<dc:comment/>
 		<parent dc:uri="http://example.com/terms/domain/options/plugin"/>
 	</attribute>
@@ -385,10 +385,10 @@
 		<dc:comment/>
 		<parent dc:uri="http://example.com/terms/domain/set"/>
 	</attribute>
-	<attribute dc:uri="http://example.com/terms/domain/set/collection/autocomplete">
+	<attribute dc:uri="http://example.com/terms/domain/set/collection/select_creatable">
 		<uri_prefix>http://example.com/terms</uri_prefix>
-		<key>autocomplete</key>
-		<path>set/collection/autocomplete</path>
+		<key>select_creatable</key>
+		<path>set/collection/select_creatable</path>
 		<dc:comment/>
 		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
 	</attribute>
@@ -490,10 +490,10 @@
 		<dc:comment/>
 		<parent dc:uri="http://example.com/terms/domain/set"/>
 	</attribute>
-	<attribute dc:uri="http://example.com/terms/domain/set/single/autocomplete">
+	<attribute dc:uri="http://example.com/terms/domain/set/single/select_creatable">
 		<uri_prefix>http://example.com/terms</uri_prefix>
-		<key>autocomplete</key>
-		<path>set/single/autocomplete</path>
+		<key>select_creatable</key>
+		<path>set/single/select_creatable</path>
 		<dc:comment/>
 		<parent dc:uri="http://example.com/terms/domain/set/single"/>
 	</attribute>

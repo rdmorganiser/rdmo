@@ -1,5 +1,7 @@
+import re
 from io import StringIO
 
+from django.conf import settings
 from django.utils.encoding import smart_str
 from django.utils.timezone import get_current_timezone, now
 from django.utils.xmlutils import SimplerXMLGenerator
@@ -37,7 +39,10 @@ class BaseXMLRenderer(BaseRenderer):
 
         xml.startElement(tag, attrs)
         if text is not None:
-            xml.characters(smart_str(text))
+            smart_text = smart_str(text)
+            # remove control chars, cp. https://github.com/django/django/blob/main/django/utils/xmlutils.py#L25
+            smart_text = re.sub(r'[\x00-\x08\x0B-\x0C\x0E-\x1F]', '', smart_text)
+            xml.characters(smart_text)
         xml.endElement(tag)
 
     def render_document(self, xml, data):
@@ -46,6 +51,10 @@ class BaseXMLRenderer(BaseRenderer):
     @property
     def version(self):
         return __version__
+
+    @property
+    def required(self):
+        return settings.EXPORT_MIN_REQUIRED_VERSION
 
     @property
     def created(self):

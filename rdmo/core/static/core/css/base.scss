@@ -35,6 +35,10 @@ h4 {
 form {
     margin-bottom: 20px;
 }
+textarea {
+    resize: vertical;
+}
+
 .extend {
     width: 100%;
 }
@@ -79,6 +83,32 @@ a {
     &.disabled {
         cursor: not-allowed;
     }
+
+    &.fa {
+        text-decoration: none !important;
+
+        &:visited,
+        &:hover,
+        &:focus {
+            text-decoration: none !important;
+        }
+    }
+}
+
+.btn.btn-link {
+    color: $link-color;
+    padding: 0;
+    border: 0;
+    text-decoration: none;
+
+    &:hover {
+        color: $link-color-hover;
+        text-decoration: none;
+    }
+    &:active,
+    &:focus {
+        outline: none;
+    }
 }
 
 code {
@@ -111,6 +141,14 @@ code {
     &.code-order {
         color: rgb(96, 96, 96);
         background-color: rgba(96, 96, 96, 0.1);
+    }
+    &.code-default {
+        color: rgb(96, 96, 96);
+        background-color: rgba(96, 96, 96, 0.1);
+    }
+    &.code-optional {
+        color: white;
+        background-color: rgb(119.085, 119.085, 119.085);
     }
     &.code-import {
         color: black;
@@ -193,7 +231,7 @@ metadata {
     margin-top: 0;
 }
 .sidebar h2:first-child,
-.sidebar .import-buttons {
+.sidebar-mt {
     margin-top: 70px;
 }
 

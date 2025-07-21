@@ -7,7 +7,7 @@ def run_data_migration(apps, schema_editor):
     Option = apps.get_model('options', 'Option')
 
     for option in Option.objects.all():
-        option.additional_input = 'text' if option.additional_input == 'True' else ''
+        option.additional_input_string = 'text' if option.additional_input else ''
         option.save()
 
 
@@ -18,10 +18,19 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
+        migrations.AddField(
             model_name='option',
-            name='additional_input',
-            field=models.CharField(blank=True, choices=[('', '---------'), ('text', 'Text'), ('textarea', 'Textarea')], default=False, help_text='Designates whether an additional input is possible for this option.', max_length=256, verbose_name='Additional input'),
+            name='additional_input_string',
+            field=models.CharField(blank=True, choices=[('', '---------'), ('text', 'Text'), ('textarea', 'Textarea')], default='', help_text='Designates whether an additional input is possible for this option.', max_length=256, verbose_name='Additional input'),
         ),
         migrations.RunPython(run_data_migration),
+        migrations.RemoveField(
+            model_name='option',
+            name='additional_input',
+        ),
+        migrations.RenameField(
+            model_name='option',
+            old_name='additional_input_string',
+            new_name='additional_input',
+        ),
     ]

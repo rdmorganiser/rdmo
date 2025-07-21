@@ -26,7 +26,8 @@ view_issue_permission_map = {
 
 urlnames = {
     'list': 'v1-projects:invite-list',
-    'detail': 'v1-projects:invite-detail'
+    'detail': 'v1-projects:invite-detail',
+    'user': 'v1-projects:invite-user'
 }
 
 invites = [1, 2]
@@ -110,5 +111,24 @@ def test_delete(db, client, username, password, invite_id):
 
     if password:
         assert response.status_code == 405
+    else:
+        assert response.status_code == 401
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_user(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['user'])
+    response = client.get(url)
+
+    if password:
+        assert response.status_code == 200
+        assert isinstance(response.json(), list)
+
+        if username == 'user':
+            assert sorted([item['id'] for item in response.json()]) == [2]
+        else:
+            assert sorted([item['id'] for item in response.json()]) == []
     else:
         assert response.status_code == 401

@@ -3,7 +3,7 @@ import pytest
 from django.conf import settings
 from django.core.exceptions import ValidationError
 
-from rest_framework.exceptions import ValidationError as RestFameworkValidationError
+from rest_framework.exceptions import ValidationError as RestFrameworkValidationError
 
 from ..models import Catalog, Page, Question, QuestionSet, Section
 from ..serializers.v1 import QuestionSetSerializer
@@ -130,7 +130,7 @@ def test_unique_uri_validator_serializer_create_error(db):
     validator = QuestionSetUniqueURIValidator()
     serializer = QuestionSetSerializer()
 
-    with pytest.raises(RestFameworkValidationError):
+    with pytest.raises(RestFrameworkValidationError):
         validator({
             'uri_prefix': settings.DEFAULT_URI_PREFIX,
             'uri_path': QuestionSet.objects.first().uri_path
@@ -155,7 +155,7 @@ def test_unique_uri_validator_serializer_update_error(db):
     validator = QuestionSetUniqueURIValidator()
     serializer = QuestionSetSerializer(instance=instance)
 
-    with pytest.raises(RestFameworkValidationError):
+    with pytest.raises(RestFrameworkValidationError):
         validator({
             'uri_prefix': instance.uri_prefix,
             'uri_path': QuestionSet.objects.exclude(id=instance.id).first().uri_path

@@ -10,6 +10,7 @@ from rdmo.core.exports import XMLResponse
 from rdmo.core.filters import SearchFilter
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import render_to_format
+from rdmo.management.viewsets import ElementToggleCurrentSiteViewSetMixin
 
 from .models import View
 from .renderers import ViewRenderer
@@ -17,7 +18,7 @@ from .serializers.export import ViewExportSerializer
 from .serializers.v1 import ViewIndexSerializer, ViewSerializer
 
 
-class ViewViewSet(ModelViewSet):
+class ViewViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = ViewSerializer
     queryset = View.objects.prefetch_related('catalogs', 'sites', 'editors', 'groups') \
@@ -41,7 +42,7 @@ class ViewViewSet(ModelViewSet):
         serializer = ViewIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?')
+    @action(detail=False, url_path='export(?:/(?P<export_format>[a-z]+))?')
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -53,7 +54,7 @@ class ViewViewSet(ModelViewSet):
                 'views': queryset
             })
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?')
+    @action(detail=True, url_path=r'export(?:/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = ViewExportSerializer(self.get_object())

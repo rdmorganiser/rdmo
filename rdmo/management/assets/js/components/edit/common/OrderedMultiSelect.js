@@ -15,7 +15,7 @@ import Link from 'rdmo/core/assets/js/components/Link'
 
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
-const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, errors, disabled,
+const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, errors, disabled, ariaLabelledBy,
                                   handleChange, handleEdit, handleRemove, handleDrag }) => {
   const dragRef = useRef(null)
   const dropRef = useRef(null)
@@ -64,13 +64,14 @@ const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, erro
                 onClick={() => handleEdit(index)} />
           <Link className="fa fa-times" title={gettext('Remove')} disabled={disabled}
                 onClick={() => !disabled && handleRemove(index)} />
-          <i className={dragClassName} ref={dragRef}></i>
+          <i className={dragClassName} ref={dragRef} aria-hidden="true"></i>
         </div>
         <div className="ordered-multi-select-item-select">
           <ReactSelect classNamePrefix="react-select" className="react-select"
                        options={selectOptions} value={selectValue}
                        onChange={option => handleChange(option, index)}
-                       menuPortalTarget={document.body} styles={styles} isDisabled={disabled} />
+                       menuPortalTarget={document.body} styles={styles} isDisabled={disabled}
+                       aria-labelledby={ariaLabelledBy} />
         </div>
         {
           errors && errors[index] &&
@@ -219,7 +220,9 @@ class OrderedMultiSelect extends Component {
 
     return (
       <div className={className}>
-        <label className="control-label" htmlFor={id}>{label}</label>
+        <div className="mb-5">
+          <strong id={id}>{label}</strong>
+        </div>
 
         <div>
         {
@@ -231,19 +234,19 @@ class OrderedMultiSelect extends Component {
                                       selectValue={selectValue} selectOptions={selectOptions}
                                       errors={errors} handleChange={this.handleChange}
                                       handleEdit={this.handleEdit} handleRemove={this.handleRemove}
-                                      handleDrag={this.handleDrag} disabled={element.read_only} />
+                                      handleDrag={this.handleDrag} ariaLabelledBy={id} disabled={element.read_only} />
             )
           })
         }
         </div>
 
-        <button className="btn btn-primary btn-xs" onClick={() => this.handleAdd()}
+        <button type="button" className="btn btn-primary btn-xs" onClick={() => this.handleAdd()}
                 disabled={element.read_only}>
           {addText}
         </button>
         {
           onCreate &&
-          <button className="btn btn-success btn-xs ml-10" onClick={onCreate}
+          <button type="button" className="btn btn-success btn-xs ml-10" onClick={onCreate}
                   disabled={element.read_only || isNil(element.id)}
                   title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
             {createText}
@@ -251,7 +254,7 @@ class OrderedMultiSelect extends Component {
         }
         {
           onAltCreate &&
-          <button className="btn btn-success btn-xs ml-10" onClick={onAltCreate}
+          <button type="button" className="btn btn-success btn-xs ml-10" onClick={onAltCreate}
                   disabled={element.read_only || isNil(element.id)}
                   title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
             {altCreateText}
@@ -270,6 +273,7 @@ OrderedMultiSelectItem.propTypes = {
   selectValue: PropTypes.object,
   selectOptions: PropTypes.array,
   errors: PropTypes.object,
+  ariaLabelledBy: PropTypes.string,
   disabled: PropTypes.bool,
   handleChange: PropTypes.func,
   handleEdit: PropTypes.func,

@@ -1,25 +1,28 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { siteId } from 'rdmo/core/assets/js/utils/meta'
+
 import { filterElement } from '../../utils/filter'
-import { buildPath } from '../../utils/location'
+import { buildApiPath, buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
-import { EditLink, CopyLink, AvailableLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
+import { EditLink, CopyLink, AvailableLink, LockedLink, ExportLink, CodeLink, ToggleCurrentSiteLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 
 const View = ({ config, view, elementActions, filter=false, filterSites=false, filterEditors=false }) => {
 
   const showElement = filterElement(config, filter, filterSites, filterEditors, view)
 
-  const editUrl = buildPath(config.baseUrl, 'views', view.id)
-  const copyUrl = buildPath(config.baseUrl, 'views', view.id, 'copy')
-  const exportUrl = buildPath('/api/v1/', 'views', 'views', view.id, 'export')
+  const editUrl = buildPath('views', view.id)
+  const copyUrl = buildPath('views', view.id, 'copy')
+  const exportUrl = buildApiPath('views', 'views', view.id, 'export')
 
   const fetchEdit = () => elementActions.fetchElement('views', view.id)
   const fetchCopy = () => elementActions.fetchElement('views', view.id, 'copy')
   const toggleAvailable = () => elementActions.storeElement('views', {...view, available: !view.available })
   const toggleLocked = () => elementActions.storeElement('views', {...view, locked: !view.locked })
+  const toggleCurrentSite = () => elementActions.storeElement('views', view, 'toggle-site')
 
   return showElement && (
     <li className="list-group-item">
@@ -32,6 +35,9 @@ const View = ({ config, view, elementActions, filter=false, filterSites=false, f
                                                : gettext('Make view available')}
                          available={view.available} locked={view.locked} onClick={toggleAvailable}
                          disabled={view.read_only} />
+          <ToggleCurrentSiteLink hasCurrentSite={config.settings.multisite ? view.sites.includes(siteId) : true}
+                         onClick={toggleCurrentSite}
+                         show={config.settings.multisite}/>
           <LockedLink title={view.locked ? gettext('Unlock view') : gettext('Lock view')}
                       locked={view.locked} onClick={toggleLocked} disabled={view.read_only} />
           <ExportLink title={gettext('Export view')} exportUrl={exportUrl}
@@ -40,7 +46,10 @@ const View = ({ config, view, elementActions, filter=false, filterSites=false, f
         <div>
           <p>
             <strong>{gettext('View')}{': '}</strong>
-            <CodeLink className="code-views" uri={view.uri} onClick={() => fetchEdit()} />
+            <span dangerouslySetInnerHTML={{ __html: view.title }}></span>
+          </p>
+          <p>
+            <CodeLink className="code-views" uri={view.uri} href={editUrl} onClick={() => fetchEdit()} />
           </p>
           <ElementErrors element={view} />
         </div>

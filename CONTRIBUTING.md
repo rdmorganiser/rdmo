@@ -31,7 +31,7 @@ If you decide to work on the issue yourself, please wait until you received some
 
 ## How to set up your development environment
 
-You need [Python 3.8+](https://www.python.org/downloads).
+You need [Python 3.9+](https://www.python.org/downloads).
 
 Install the package with development requirements:
 

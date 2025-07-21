@@ -46,7 +46,7 @@ urlnames = {
     'copy': 'v1-questions:section-copy'
 }
 
-export_formats = ('xml', 'rtf', 'odt', 'docx', 'html', 'markdown', 'tex', 'pdf')
+export_formats = ('xml', 'html')
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -275,3 +275,37 @@ def test_detail_export(db, client, username, password, export_format):
         assert root.tag == 'rdmo'
         for child in root:
             assert child.tag in ['section', 'page', 'questionset', 'question']
+
+
+def test_detail_export_full(db, client):
+    client.login(username='editor', password='editor')
+
+    url = reverse(urlnames['detail_export'], args=[5]) + 'xml/?full=true'
+    response = client.get(url)
+    assert response.status_code == status_map['detail']['editor'], response.content
+
+    root = et.fromstring(response.content)
+    assert root.tag == 'rdmo'
+
+    uris = [child.attrib[r'{http://purl.org/dc/elements/1.1/}uri'] for child in root]
+    assert 'http://example.com/terms/conditions/options_empty' in uris
+    assert 'http://example.com/terms/domain/conditions' in uris
+    assert 'http://example.com/terms/options/one_two_three' in uris
+    assert 'http://example.com/terms/options/one_two_three/one' in uris
+
+
+def test_update_section_field_validation_short_title(db: object, client: object) -> None:
+    username = password = 'editor'
+    client.login(username=username, password=password)
+    instance = Section.objects.first()
+    very_long_title = 'short_title, ' * 10
+
+    url = reverse(urlnames['detail'], args=[instance.pk])
+    data = {
+        'uri_prefix': instance.uri_prefix,
+        'uri_path': instance.uri_path,
+        'short_title_de': very_long_title,
+    }
+    response = client.put(url, data, content_type='application/json')
+    assert response.status_code == 400
+    assert response.json() == {'short_title_de': ['Ensure this value has at most 32 characters (it has 129).']}

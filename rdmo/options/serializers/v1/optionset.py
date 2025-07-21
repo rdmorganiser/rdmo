@@ -26,12 +26,13 @@ class OptionSetSerializer(ThroughModelSerializerMixin, ElementModelSerializerMix
                           ReadOnlyObjectPermissionSerializerMixin, serializers.ModelSerializer):
 
     model = serializers.SerializerMethodField()
-    uri_path = serializers.CharField(required=True)
 
     options = OptionSetOptionSerializer(source='optionset_options', read_only=False, required=False, many=True)
     questions = serializers.PrimaryKeyRelatedField(queryset=Question.objects.all(), required=False, many=True)
 
     read_only = serializers.SerializerMethodField()
+
+    condition_uris = serializers.SerializerMethodField()
 
     class Meta:
         model = OptionSet
@@ -51,14 +52,21 @@ class OptionSetSerializer(ThroughModelSerializerMixin, ElementModelSerializerMix
             'questions',
             'editors',
             'read_only',
+            'condition_uris',
         )
         through_fields = (
             ('options', 'optionset', 'option', 'optionset_options'),
         )
+        extra_kwargs = {
+            'uri_path': {'required': True}
+        }
         validators = (
             OptionSetUniqueURIValidator(),
             OptionSetLockedValidator()
         )
+
+    def get_condition_uris(self, obj) -> list[str]:
+        return [condition.uri for condition in obj.conditions.all()]
 
 
 class OptionSetNestedSerializer(OptionSetSerializer):
@@ -71,7 +79,7 @@ class OptionSetNestedSerializer(OptionSetSerializer):
             'elements'
         )
 
-    def get_elements(self, obj):
+    def get_elements(self, obj) -> list[dict]:
         for element in obj.elements:
             yield OptionSerializer(element, context=self.context).data
 

@@ -13,14 +13,16 @@ const UploadForm = ({ onSubmit }) => {
   return (
     <form className="upload-form sidebar-form" onSubmit={handleSubmit}>
       <div className="upload-form-field">
-        <input type="file" name="uploaded_file" onChange={event => setFile(event.target.files[0])} accept=".xml"/>
+        <input type="file" name="uploaded_file" aria-label={gettext('Upload file')}
+               onChange={event => setFile(event.target.files[0])} accept=".xml" />
         <p>{file ? file.name : gettext('Select file')}</p>
       </div>
 
       <div className="sidebar-form-button">
         <button type="submit" className="btn btn-primary" disabled={isNil(file)}
-          title={gettext('Upload')} onClick={handleSubmit}>
-          <i className="fa fa-arrow-right"></i>
+                title={gettext('Upload')} aria-label={gettext('Upload')}
+                onClick={handleSubmit}>
+          <i className="fa fa-arrow-right" aria-hidden="true"></i>
         </button>
       </div>
     </form>

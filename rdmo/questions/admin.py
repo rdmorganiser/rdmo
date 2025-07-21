@@ -1,4 +1,3 @@
-from django import forms
 from django.contrib import admin
 from django.db import models
 
@@ -18,7 +17,6 @@ from .models import (
     Section,
     SectionPage,
 )
-from .utils import get_widget_type_choices
 from .validators import (
     CatalogLockedValidator,
     CatalogUniqueURIValidator,
@@ -80,8 +78,6 @@ class QuestionSetAdminForm(ElementAdminForm):
 
 
 class QuestionAdminForm(ElementAdminForm):
-    widget_type = forms.ChoiceField(choices=get_widget_type_choices())
-
     class Meta:
         model = Question
         fields = '__all__'

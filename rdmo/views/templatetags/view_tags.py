@@ -81,14 +81,22 @@ def get_number(context, attribute, set_prefix='', set_index=0, index=0, project=
 
 @register.simple_tag(takes_context=True)
 def get_set_values(context, set, attribute, set_prefix='', project=None):
-    set_index = set.get('set_index')
+    try:
+        set_index = set['set_index']
+    except (KeyError, AttributeError, TypeError):
+        return None
+
     return get_values(context, attribute, set_prefix=set_prefix, set_index=set_index, project=project)
 
 
 @register.simple_tag(takes_context=True)
 def get_set_value(context, set, attribute, set_prefix='', index=0, project=None):
     try:
-        set_index = set.get('set_index')
+        set_index = set['set_index']
+    except (KeyError, AttributeError, TypeError):
+        return None
+
+    try:
         return get_values(context, attribute, set_prefix=set_prefix, set_index=set_index,
                           index=index, project=project)[0]
     except IndexError:
@@ -128,6 +136,24 @@ def get_sets(context, attribute, set_prefix='', project=None):
 def get_set(context, attribute, set_prefix='', project=None):
     # for backwards compatibility, identical to get_sets
     return get_sets(context, attribute, set_prefix=set_prefix, project=project)
+
+
+@register.simple_tag
+def join_values_inline(values=None, separator=',', separator_last=', and', separator_two='and'):
+    values = values or []
+
+    if not values:
+        return ''
+
+    if len(values) == 1:
+        return values[0]['value_and_unit']
+
+    if len(values) == 2:
+        return f"{values[0]['value_and_unit']} {separator_two} {values[1]['value_and_unit']}"
+
+    separators = [separator]*(len(values)-2) + [separator_last] + ['']
+    text = " ".join(v['value_and_unit'] + s for v,s in zip(values, separators))
+    return text
 
 
 @register.inclusion_tag('views/tags/value.html', takes_context=True)

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import get from 'lodash/get'
 
 import { filterElement } from '../../utils/filter'
-import { buildPath } from '../../utils/location'
+import { buildApiPath, buildPath } from '../../utils/location'
 
 import QuestionSet from './QuestionSet'
 import Question from './Question'
@@ -19,16 +19,19 @@ const Page = ({ config, page, configActions, elementActions, display='list', ind
   const showElement = filterElement(config, filter, false, filterEditors, page)
   const showElements = get(config, `display.elements.pages.${page.id}`, true)
 
-  const editUrl = buildPath(config.baseUrl, 'pages', page.id)
-  const copyUrl = buildPath(config.baseUrl, 'pages', page.id, 'copy')
-  const nestedUrl = buildPath(config.baseUrl, 'pages', page.id, 'nested')
-  const exportUrl = buildPath('/api/v1/', 'questions', 'pages', page.id, 'export')
+  const editUrl = buildPath('pages', page.id)
+  const copyUrl = buildPath('pages', page.id, 'copy')
+  const nestedUrl = buildPath('pages', page.id, 'nested')
+  const exportUrl = buildApiPath('questions', 'pages', page.id, 'export')
+  const attributeUrl = buildPath('attributes', page.attribute)
+
+  const getConditionUrl = (index) => buildPath('conditions', page.conditions[index])
 
   const fetchEdit = () => elementActions.fetchElement('pages', page.id)
   const fetchCopy = () => elementActions.fetchElement('pages', page.id, 'copy')
   const fetchNested = () => elementActions.fetchElement('pages', page.id, 'nested')
   const toggleLocked = () => elementActions.storeElement('pages', {...page, locked: !page.locked })
-  const toggleElements = () => configActions.toggleElements(page)
+  const toggleElements = () => elementActions.toggleElements(page)
 
   const createQuestionSet = () => elementActions.createElement('questionsets', { page })
   const createQuestion = () => elementActions.createElement('questions', { page })
@@ -54,22 +57,39 @@ const Page = ({ config, page, configActions, elementActions, display='list', ind
       </div>
       <div>
         <p>
-          <strong>{gettext('Page')}{': '}</strong> {page.title}
+          <strong>{gettext('Page')}{': '}</strong>
+          <span dangerouslySetInnerHTML={{ __html: page.title }}></span>
         </p>
         {
           get(config, 'display.uri.pages', true) && <p>
-            <CodeLink className="code-questions" uri={page.uri} onClick={() => fetchEdit()} order={order} />
+            <CodeLink
+              className="code-questions"
+              uri={page.uri}
+              href={editUrl}
+              onClick={() => fetchEdit()}
+              order={order}
+            />
           </p>
         }
         {
           get(config, 'display.uri.attributes', true) && page.attribute_uri && <p>
-            <CodeLink className="code-domain" uri={page.attribute_uri} onClick={() => fetchAttribute()} />
+            <CodeLink
+              className="code-domain"
+              uri={page.attribute_uri}
+              href={attributeUrl}
+              onClick={() => fetchAttribute()}
+            />
           </p>
         }
         {
           get(config, 'display.uri.conditions', true) && page.condition_uris.map((uri, index) => (
             <p key={index}>
-              <CodeLink className="code-conditions" uri={uri} onClick={() => fetchCondition(index)} />
+              <CodeLink
+                className="code-conditions"
+                uri={uri}
+                href={getConditionUrl(index)}
+                onClick={() => fetchCondition(index)}
+              />
             </p>
           ))
         }

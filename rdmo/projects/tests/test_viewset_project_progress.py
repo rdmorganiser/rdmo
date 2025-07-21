@@ -16,27 +16,28 @@ users = (
 )
 
 view_progress_permission_map = {
-    'owner': [1, 2, 3, 4, 5, 10],
-    'manager': [1, 3, 5, 7],
-    'author': [1, 3, 5, 8],
-    'guest': [1, 3, 5, 9],
-    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    'owner': [1, 2, 3, 4, 5, 10, 12],
+    'manager': [1, 3, 5, 7, 12],
+    'author': [1, 3, 5, 8, 12],
+    'guest': [1, 3, 5, 9, 12],
+    'user': [12],
+    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 }
 
 change_progress_permission_map = {
-    'owner': [1, 2, 3, 4, 5, 10],
+    'owner': [1, 2, 3, 4, 5, 10, 12],
     'manager': [1, 3, 5, 7],
-    'author': [1, 3, 5, 8],
-    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    'author': [1, 3, 5, 7],
+    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 }
 
 urlnames = {
     'progress': 'v1-projects:project-progress'
 }
 
-projects = [1, 2, 3, 4, 5]
+projects = [1, 2, 3, 4, 5, 12]
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
@@ -91,3 +92,45 @@ def test_progress_post(db, client, username, password, project_id):
             assert response.status_code == 404
         else:
             assert response.status_code == 401
+
+
+def test_progress_post_changed(db, client):
+    client.login(username='owner', password='owner')
+
+    project = Project.objects.get(id=1)
+    project.progress_count = progress_count = 0
+    project.progress_total = progress_total = 0
+    project.save()
+    project.refresh_from_db()
+    project_updated = project.updated
+
+    url = reverse(urlnames['progress'], args=[1])
+    response = client.post(url)
+
+    project.refresh_from_db()
+
+    assert response.status_code == 200
+    assert project.updated > project_updated
+    assert project.progress_count > progress_count
+    assert project.progress_total > progress_total
+
+
+def test_progress_post_unchanged(db, client):
+    client.login(username='owner', password='owner')
+
+    project = Project.objects.get(id=1)
+    project.progress_count = progress_count = 62  # the progress in the fixture is not up-to-date
+    project.progress_total = progress_total = 101
+    project.save()
+    project.refresh_from_db()
+    project_updated = project.updated
+
+    url = reverse(urlnames['progress'], args=[1])
+    response = client.post(url)
+
+    project.refresh_from_db()
+
+    assert response.status_code == 200
+    assert project.progress_count == progress_count
+    assert project.progress_total == progress_total
+    assert project.updated == project_updated

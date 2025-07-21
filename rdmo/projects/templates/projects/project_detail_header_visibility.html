@@ -1,0 +1,14 @@
+{% load i18n %}
+{% load core_tags %}
+
+{% if can_change_visibility  %}
+<p class="pull-right">
+    <a href="{% url 'project_update_visibility' project.pk %}" title="{% trans 'Update project visibility' %}">
+        <i class="fa fa-pencil" aria-hidden="true"></i>
+    </a>
+</p>
+{% endif %}
+
+<span class="text-muted">
+{{ project.visibility.get_help_display }}
+</span>

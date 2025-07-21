@@ -3,6 +3,7 @@ from rest_framework import serializers
 from rdmo.core.serializers import (
     ElementModelSerializerMixin,
     ElementWarningSerializerMixin,
+    MarkdownSerializerMixin,
     ReadOnlyObjectPermissionSerializerMixin,
     ThroughModelSerializerMixin,
     TranslationSerializerMixin,
@@ -35,10 +36,12 @@ class QuestionSetQuestionSerializer(serializers.ModelSerializer):
 
 class QuestionSetSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
                             ElementModelSerializerMixin, ElementWarningSerializerMixin,
-                            ReadOnlyObjectPermissionSerializerMixin, serializers.ModelSerializer):
+                            ReadOnlyObjectPermissionSerializerMixin, MarkdownSerializerMixin,
+                            serializers.ModelSerializer):
+
+    markdown_fields = ('title', 'help')
 
     model = serializers.SerializerMethodField()
-    uri_path = serializers.CharField(required=True)
 
     pages = serializers.PrimaryKeyRelatedField(queryset=Page.objects.all(), required=False, many=True)
     parents = serializers.PrimaryKeyRelatedField(queryset=QuestionSet.objects.all(), required=False, many=True)
@@ -92,6 +95,9 @@ class QuestionSetSerializer(ThroughModelSerializerMixin, TranslationSerializerMi
             ('questionsets', 'parent', 'questionset', 'questionset_questionsets'),
             ('questions', 'questionset', 'question', 'questionset_questions')
         )
+        extra_kwargs = {
+            'uri_path': {'required': True}
+        }
         validators = (
             QuestionSetUniqueURIValidator(),
             QuestionSetQuestionSetValidator(),
@@ -101,7 +107,7 @@ class QuestionSetSerializer(ThroughModelSerializerMixin, TranslationSerializerMi
             'title',
         )
 
-    def get_condition_uris(self, obj):
+    def get_condition_uris(self, obj) -> list:
         return [condition.uri for condition in obj.conditions.all()]
 
 

@@ -23,7 +23,7 @@ const EditAttribute = ({ config, attribute, elements, elementActions }) => {
 
   const editAttribute = (attribute) => elementActions.fetchElement('attributes', attribute)
   const updateAttribute = (key, value) => elementActions.updateElement(attribute, {[key]: value})
-  const storeAttribute = (back) => elementActions.storeElement('attributes', attribute, back)
+  const storeAttribute = (back) => elementActions.storeElement('attributes', attribute, elementAction, back)
   const deleteAttribute = () => elementActions.deleteElement('attributes', attribute)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
@@ -65,14 +65,14 @@ const EditAttribute = ({ config, attribute, elements, elementActions }) => {
       {
         parent && parent.questionset && <div className="panel-body panel-border">
           <p dangerouslySetInnerHTML={{
-            __html:interpolate(gettext('This attribute will be added to the page <code class="code-questions">%s</code>.'), [parent.questionset.uri])
+            __html:interpolate(gettext('This attribute will be added to the question set <code class="code-questions">%s</code>.'), [parent.questionset.uri])
           }} />
         </div>
       }
       {
         parent && parent.question && <div className="panel-body panel-border">
           <p dangerouslySetInnerHTML={{
-            __html:interpolate(gettext('This attribute will be added to the page <code class="code-questions">%s</code>.'), [parent.question.uri])
+            __html:interpolate(gettext('This attribute will be added to the question <code class="code-questions">%s</code>.'), [parent.question.uri])
           }} />
         </div>
       }

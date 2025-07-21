@@ -3,6 +3,7 @@ from rest_framework import serializers
 from rdmo.core.serializers import (
     ElementModelSerializerMixin,
     ElementWarningSerializerMixin,
+    MarkdownSerializerMixin,
     ReadOnlyObjectPermissionSerializerMixin,
     ThroughModelSerializerMixin,
     TranslationSerializerMixin,
@@ -36,10 +37,12 @@ class PageQuestionSerializer(serializers.ModelSerializer):
 
 class PageSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
                      ElementModelSerializerMixin, ElementWarningSerializerMixin,
-                     ReadOnlyObjectPermissionSerializerMixin, serializers.ModelSerializer):
+                     ReadOnlyObjectPermissionSerializerMixin, MarkdownSerializerMixin,
+                     serializers.ModelSerializer):
+
+    markdown_fields = ('title', 'help')
 
     model = serializers.SerializerMethodField()
-    uri_path = serializers.CharField(required=True)
 
     sections = serializers.PrimaryKeyRelatedField(queryset=Section.objects.all(), required=False, many=True)
     questionsets = PageQuestionSetSerializer(source='page_questionsets', read_only=False, required=False, many=True)
@@ -64,6 +67,7 @@ class PageSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
             'attribute',
             'is_collection',
             'title',
+            'short_title',
             'help',
             'verbose_name',
             'sections',
@@ -78,6 +82,7 @@ class PageSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
         )
         trans_fields = (
             'title',
+            'short_title',
             'help',
             'verbose_name'
         )
@@ -88,6 +93,9 @@ class PageSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
             ('questionsets', 'page', 'questionset', 'page_questionsets'),
             ('questions', 'page', 'question', 'page_questions')
         )
+        extra_kwargs = {
+            'uri_path': {'required': True}
+        }
         validators = (
             PageUniqueURIValidator(),
             PageLockedValidator()
@@ -96,7 +104,7 @@ class PageSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
             'title',
         )
 
-    def get_condition_uris(self, obj):
+    def get_condition_uris(self, obj) -> list:
         return [condition.uri for condition in obj.conditions.all()]
 
 

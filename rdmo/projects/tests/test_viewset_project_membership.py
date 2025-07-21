@@ -17,18 +17,19 @@ users = (
 )
 
 view_membership_permission_map = {
-    'owner': [1, 2, 3, 4, 5],
-    'manager': [1, 3, 5],
-    'author': [1, 3, 5],
-    'guest': [1, 3, 5],
-    'api': [1, 2, 3, 4, 5],
-    'site': [1, 2, 3, 4, 5]
+    'owner': [1, 2, 3, 4, 5, 12],
+    'manager': [1, 3, 5, 12],
+    'author': [1, 3, 5, 12],
+    'guest': [1, 3, 5, 12],
+    'user': [12],
+    'api': [1, 2, 3, 4, 5, 12],
+    'site': [1, 2, 3, 4, 5, 12]
 }
 
 add_membership_permission_map = change_membership_permission_map = delete_membership_permission_map = {
-    'owner': [1, 2, 3, 4, 5],
-    'api': [1, 2, 3, 4, 5],
-    'site': [1, 2, 3, 4, 5]
+    'owner': [1, 2, 3, 4, 5, 12],
+    'api': [1, 2, 3, 4, 5, 12],
+    'site': [1, 2, 3, 4, 5, 12]
 }
 
 urlnames = {
@@ -36,8 +37,9 @@ urlnames = {
     'detail': 'v1-projects:project-membership-detail'
 }
 
-projects = [1, 2, 3, 4, 5]
+projects = [1, 2, 3, 4, 5, 12]
 memberships = [1, 2, 3, 4]
+memberships_visible = [16]
 membership_roles = ('owner', 'manager', 'author', 'guest')
 
 
@@ -53,7 +55,7 @@ def test_list(db, client, username, password, project_id):
         assert response.status_code == 200
 
         if username == 'user':
-            assert sorted([item['id'] for item in response.json()]) == []
+            assert sorted([item['id'] for item in response.json()]) == memberships_visible
         else:
             values_list = Membership.objects.filter(project_id=project_id) \
                                             .order_by('id').values_list('id', flat=True)
@@ -63,16 +65,15 @@ def test_list(db, client, username, password, project_id):
 
 
 @pytest.mark.parametrize('username,password', users)
-@pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('membership_id', memberships)
-def test_detail(db, client, username, password, project_id, membership_id):
+def test_detail(db, client, username, password, membership_id):
     client.login(username=username, password=password)
-    membership = Membership.objects.filter(project_id=project_id, id=membership_id).first()
+    membership = Membership.objects.get(id=membership_id)
 
-    url = reverse(urlnames['detail'], args=[project_id, membership_id])
+    url = reverse(urlnames['detail'], args=[membership.project_id, membership_id])
     response = client.get(url)
 
-    if membership and project_id in view_membership_permission_map.get(username, []):
+    if membership.project_id in view_membership_permission_map.get(username, []):
         assert response.status_code == 200
         assert isinstance(response.json(), dict)
         assert response.json().get('id') == membership_id
@@ -104,40 +105,38 @@ def test_create(db, client, username, password, project_id, membership_role):
 
 
 @pytest.mark.parametrize('username,password', users)
-@pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('membership_id', memberships)
 @pytest.mark.parametrize('membership_role', membership_roles)
-def test_update(db, client, username, password, project_id, membership_id, membership_role):
+def test_update(db, client, username, password, membership_id, membership_role):
     client.login(username=username, password=password)
-    membership = Membership.objects.filter(project_id=project_id, id=membership_id).first()
+    membership = Membership.objects.get(id=membership_id)
 
-    url = reverse(urlnames['detail'], args=[project_id, membership_id])
+    url = reverse(urlnames['detail'], args=[membership.project_id, membership_id])
     data = {
         'role': membership_role
     }
     response = client.put(url, data, content_type='application/json')
 
-    if membership and project_id in change_membership_permission_map.get(username, []):
+    if membership.project_id in change_membership_permission_map.get(username, []):
         assert response.status_code == 200
-    elif membership and project_id in view_membership_permission_map.get(username, []):
+    elif membership.project_id in view_membership_permission_map.get(username, []):
         assert response.status_code == 403
     else:
         assert response.status_code == 404
 
 
 @pytest.mark.parametrize('username,password', users)
-@pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('membership_id', memberships)
-def test_delete(db, client, username, password, project_id, membership_id):
+def test_delete(db, client, username, password, membership_id):
     client.login(username=username, password=password)
-    membership = Membership.objects.filter(project_id=project_id, id=membership_id).first()
+    membership = Membership.objects.get(id=membership_id)
 
-    url = reverse(urlnames['detail'], args=[project_id, membership_id])
+    url = reverse(urlnames['detail'], args=[membership.project_id, membership_id])
     response = client.delete(url)
 
-    if membership and project_id in delete_membership_permission_map.get(username, []):
+    if membership.project_id in change_membership_permission_map.get(username, []):
         assert response.status_code == 204
-    elif membership and project_id in view_membership_permission_map.get(username, []):
+    elif membership.project_id in view_membership_permission_map.get(username, []):
         assert response.status_code == 403
     else:
         assert response.status_code == 404

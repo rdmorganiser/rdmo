@@ -3,7 +3,7 @@
 {% if can_change_project %}
 <p class="pull-right">
     <a href="{% url 'project_update_information' project.pk %}" title="{% trans 'Update project information' %}">
-        <i class="fa fa-pencil"></i>
+        <i class="fa fa-pencil" aria-hidden="true"></i>
     </a>
 </p>
 {% endif %}

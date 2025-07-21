@@ -47,7 +47,7 @@ class OauthProviderMixin:
         access_token = self.get_from_session(request, 'access_token')
         if access_token:
             # if the access_token is available post to the upstream service
-            logger.debug('post: %s %s', url, json, files)
+            logger.debug('post: %s %s %s', url, json, files)
 
             if multipart is not None:
                 multipart_encoder = MultipartEncoder(fields=multipart)

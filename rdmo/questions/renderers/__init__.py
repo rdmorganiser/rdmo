@@ -20,6 +20,7 @@ class CatalogRenderer(CatalogRendererMixin, SectionRendererMixin, PageRendererMi
         xml.startElement('rdmo', {
             'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
             'version': self.version,
+            'required': self.required,
             'created': self.created
         })
         for catalog in catalogs:
@@ -35,6 +36,7 @@ class SectionRenderer(SectionRendererMixin, PageRendererMixin, QuestionSetRender
         xml.startElement('rdmo', {
             'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
             'version': self.version,
+            'required': self.required,
             'created': self.created
         })
         for section in sections:
@@ -49,6 +51,7 @@ class PageRenderer(PageRendererMixin, QuestionSetRendererMixin, QuestionRenderer
         xml.startElement('rdmo', {
             'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
             'version': self.version,
+            'required': self.required,
             'created': self.created
         })
         for page in pages:
@@ -63,6 +66,7 @@ class QuestionSetRenderer(QuestionSetRendererMixin, QuestionRendererMixin, Condi
         xml.startElement('rdmo', {
             'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
             'version': self.version,
+            'required': self.required,
             'created': self.created
         })
         for questionset in questionsets:
@@ -77,6 +81,7 @@ class QuestionRenderer(QuestionRendererMixin, ConditionRendererMixin, AttributeR
         xml.startElement('rdmo', {
             'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
             'version': self.version,
+            'required': self.required,
             'created': self.created
         })
         for question in questions:

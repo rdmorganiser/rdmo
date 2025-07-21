@@ -1,45 +1,39 @@
-import trim from 'lodash/trim'
-import isUndefined from 'lodash/isUndefined'
 import isNil from 'lodash/isNil'
+
+import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import { elementTypes } from '../constants/elements'
 
-const parseLocation = (basePath, pathname) => {
-  const path = pathname.replace(basePath, '')
-  const tokens = trim(path, '/').split('/')
+const parseLocation = () => {
+  const pathname = window.location.pathname
 
-  let elementType = null,
-      elementId = null,
-      elementAction = null
+  const regex = /\/management\/(?<elementType>[a-z]+)[/]*((?<elementId>\d+)[/]*)?((?<elementAction>[a-z]+)[/]*)?$/
+  const match = pathname.match(regex)
 
-  if (!isUndefined(tokens[0]) && Object.values(elementTypes).includes(tokens[0])) {
-    elementType = tokens[0]
-
-    if (!isUndefined(tokens[1])) {
-      if (/^\d+$/.test(tokens[1])) {
-        elementId = tokens[1]
-
-        if (!isUndefined(tokens[2]) && /^[a-z]+$/.test(tokens[2])) {
-          elementAction = tokens[2]
-        }
-
-      } else if (/^[a-z]+$/.test(tokens[1])) {
-        elementAction = tokens[1]
-      }
-    }
+  if (match && Object.values(elementTypes).includes(match.groups.elementType)) {
+    return match.groups
+  } else {
+    // if the regex did not match, load the catalogs
+    return { elementType: 'catalogs' }
   }
-
-  return { elementType , elementId, elementAction }
 }
 
-const updateLocation = (basePath, elementType, elementId, elementAction) => {
-  const pathname = buildPath(basePath, elementType, elementId, elementAction)
+const updateLocation = (elementType, elementId, elementAction) => {
+  const pathname = buildPath(elementType, elementId, elementAction)
   if (pathname != window.location.pathname) {
     history.pushState(null, null, pathname)
   }
 }
 
-const buildPath = (basePath, ...args) => {
+const buildPath = (...args) => {
+  return generatePath(`${baseUrl}/management/`, ...args)
+}
+
+const buildApiPath = (...args) => {
+  return generatePath(`${baseUrl}/api/v1/`, ...args)
+}
+
+const generatePath = (basePath, ...args) => {
   let path = basePath
 
   args.forEach(arg => {
@@ -51,4 +45,4 @@ const buildPath = (basePath, ...args) => {
   return path
 }
 
-export { parseLocation, updateLocation, buildPath }
+export { parseLocation, updateLocation, buildPath, buildApiPath }

@@ -18,23 +18,34 @@ users = (
 )
 
 view_value_permission_map = {
-    'owner': [1, 2, 3, 4, 5],
-    'manager': [1, 3, 5],
-    'author': [1, 3, 5],
-    'guest': [1, 3, 5],
-    'api': [1, 2, 3, 4, 5],
-    'site': [1, 2, 3, 4, 5]
+    'owner': [1, 2, 3, 4, 5, 12],
+    'manager': [1, 3, 5, 12],
+    'author': [1, 3, 5, 12],
+    'guest': [1, 3, 5, 12],
+    'user': [12],
+    'api': [1, 2, 3, 4, 5, 12],
+    'site': [1, 2, 3, 4, 5, 12]
 }
 
 urlnames = {
     'list': 'v1-projects:value-list',
     'detail': 'v1-projects:value-detail',
-    'file': 'v1-projects:value-file'
+    'file': 'v1-projects:value-file',
+    'search': 'v1-projects:value-search'
 }
 
-values = [1, 2, 3, 4, 5, 6, 7, 238, 242, 243, 244, 245]
-snapshots = [1, 3, 7, 4, 5, 6]
-
+values = [
+    1, 2, 3, 4, 5, 6, 7, 238,  # from Test <1>
+    242, 243,                  # from Parent <2>
+    247,                       # from Child1 <3>
+    248,                       # from Child2 <4>
+    249,                       # from Child11 <5>
+    456, 457                   # from Internal <12>
+]
+values_visible = [456]
+values_snapshot_visible = [457]
+snapshots = [1, 3, 7, 4, 5, 6, 8]
+snapshots_visible = [8]
 
 @pytest.mark.parametrize('username,password', users)
 def test_list(db, client, username, password):
@@ -48,7 +59,7 @@ def test_list(db, client, username, password):
         assert isinstance(response.json(), list)
 
         if username == 'user':
-            assert sorted([item['id'] for item in response.json()]) == []
+            assert sorted([item['id'] for item in response.json()]) == values_visible
         else:
             values_list = Value.objects.filter(project__in=view_value_permission_map.get(username, [])) \
                                        .filter(snapshot_id=None) \
@@ -71,7 +82,10 @@ def test_list_snapshot(db, client, username, password, snapshot_id):
         assert isinstance(response.json(), list)
 
         if username == 'user':
-            assert sorted([item['id'] for item in response.json()]) == []
+            if snapshot_id in snapshots_visible:
+                assert sorted([item['id'] for item in response.json()]) == values_snapshot_visible
+            else:
+                assert sorted([item['id'] for item in response.json()]) == []
         else:
             values_list = Value.objects.filter(project__in=view_value_permission_map.get(username, [])) \
                                        .filter(snapshot_id=snapshot_id) \
@@ -158,5 +172,29 @@ def test_file(db, client, files, username, password, value_id):
         assert response.content == value.file.read()
     elif password:
         assert response.status_code == 404
+    else:
+        assert response.status_code == 401
+
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_search(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['search'])
+    response = client.get(url)
+
+    if password:
+        assert response.status_code == 200
+        assert isinstance(response.json(), list)
+
+
+        if username == 'user':
+            assert sorted([item['id'] for item in response.json()]) == values_visible
+        else:
+            values_list = Value.objects.filter(project__in=view_value_permission_map.get(username, [])) \
+                                       .filter(snapshot=None) \
+                                       .exclude_empty()[:10]
+            assert sorted([item['id'] for item in response.json()]) == sorted([item.id for item in values_list])
     else:
         assert response.status_code == 401

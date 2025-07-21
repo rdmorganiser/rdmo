@@ -292,7 +292,7 @@ def test_project_create_import_post_import_file_cancel(db, settings, client, fil
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_project_create_import_post_import_empty(db, settings, client, username, password):
+def test_project_create_import_post_import_empty(db, settings, files, client, username, password):
     client.login(username=username, password=password)
     projects_count = Project.objects.count()
 

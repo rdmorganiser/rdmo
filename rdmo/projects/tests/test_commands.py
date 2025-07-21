@@ -53,7 +53,7 @@ def test_prune_projects_output2(db, settings):
     call_command('prune_projects', stdout=stdout, stderr=stderr)
 
     assert stdout.getvalue() == \
-        "Found projects without ['owner']:\n%s" % (get_prune_output(instances))
+        f"Found projects without ['owner']:\n{get_prune_output(instances)}"
     assert not stderr.getvalue()
 
 
@@ -65,7 +65,7 @@ def test_prune_projects_remove(db, settings):
     call_command('prune_projects', '--remove', stdout=stdout, stderr=stderr)
 
     std_output = stdout.getvalue()
-    prune_output = "Found projects without ['owner']:\n%s" % (get_prune_output(instances, True))
+    prune_output = f"Found projects without ['owner']:\n{get_prune_output(instances, True)}"
 
     assert std_output == prune_output
     assert not stderr.getvalue()

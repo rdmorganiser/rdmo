@@ -6,7 +6,8 @@ import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 
-import * as configActions from '../actions/configActions'
+import * as configActions from 'rdmo/core/assets/js/actions/configActions'
+
 import * as elementActions from '../actions/elementActions'
 import * as importActions from '../actions/importActions'
 
@@ -21,11 +22,11 @@ const Main = ({ config, elements, imports, configActions, elementActions, import
   const { element, elementType, elementId, elementAction } = elements
 
   // check if anything was loaded yet
-  if (isNil(elementType)) {
+  if (isNil(config.settings) || isNil(elementType)) {
     return null
   }
 
-  // check if an an error occurred
+  // check if an error occurred
   if (!isNil(elements.errors.api)) {
     return <MainErrors errors={elements.errors.api} />
   } else if (get(elements, 'element.errors.api')) {
@@ -35,11 +36,12 @@ const Main = ({ config, elements, imports, configActions, elementActions, import
   }
 
   if (!isEmpty(imports.elements)) {
-    return <Import config={config} imports={imports} importActions={importActions} />
+    return <Import config={config} imports={imports}
+                   configActions={configActions} importActions={importActions} />
   }
 
   // check if the nested components should be displayed
-  if (!isNil(element) && elementAction == 'nested') {
+  if (!isNil(element) && elementAction === 'nested') {
     return <Nested config={config} elements={elements}
                    configActions={configActions} elementActions={elementActions} />
   }

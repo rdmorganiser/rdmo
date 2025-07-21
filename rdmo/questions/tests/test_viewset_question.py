@@ -46,7 +46,7 @@ urlnames = {
     'copy': 'v1-questions:question-copy'
 }
 
-export_formats = ('xml', 'rtf', 'odt', 'docx', 'html', 'markdown', 'tex', 'pdf')
+export_formats = ('xml', 'html')
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -365,3 +365,18 @@ def test_detail_export(db, client, username, password, export_format):
         assert root.tag == 'rdmo'
         for child in root:
             assert child.tag in ['question']
+
+
+def test_detail_export_full(db, client):
+    client.login(username='editor', password='editor')
+
+    url = reverse(urlnames['detail_export'], args=[104]) + 'xml/?full=true'
+    response = client.get(url)
+    assert response.status_code == status_map['detail']['editor'], response.content
+
+    root = et.fromstring(response.content)
+    assert root.tag == 'rdmo'
+
+    uris = [child.attrib[r'{http://purl.org/dc/elements/1.1/}uri'] for child in root]
+    assert 'http://example.com/terms/conditions/set_bool_is_true' in uris
+    assert 'http://example.com/terms/domain/conditions' in uris

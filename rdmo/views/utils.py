@@ -79,10 +79,10 @@ class ProjectWrapper:
         def walk(elements):
             questions = []
             for element in elements:
-                if element.get('elements'):
-                    questions += walk(element.get('elements'))
-                else:
+                if element.get('elements') is None:
                     questions.append(element)
+                else:
+                    questions += walk(element.get('elements'))
             return questions
 
         return walk(self.catalog['elements'])

@@ -9,11 +9,13 @@
 
 {% if mail_form.recipients_input %}
     {% with field=mail_form.recipients_input %}
-    <div class="form-group{% if field.errors %} has-error{% endif %} field-{{field.html_name}} mb-0">
+    <div class="form-group{% if field.errors %} has-error{% endif %} field-{{field.html_name}}">
         {% if not mail_form.recipients %}
-        <label for="{{ field.id_for_label }}" class="control-label">{{ field.label }}</label>
+        {# only show the label no label is shown for the recipients field above #}
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
         {% endif %}
-        {% render_field field class="form-control" rows=2 %}
+
+        {% render_field field class="form-control" rows=2 aria-label=field.label %}
         {% if field.errors %}
             <div class="help-block error">
                 <p class="text-danger">{{ field.errors.as_text}}</p>
@@ -24,7 +26,7 @@
 {% endif %}
 
 <div class="text-right">
-    <button class="btn btn-primary btn-xs" name="integration" value="{{ integration.id }}">
+    <button type="submit" class="btn btn-primary btn-xs" name="integration" value="{{ integration.id }}">
         {% trans 'Send by mail' %}
     </button>
 </div>

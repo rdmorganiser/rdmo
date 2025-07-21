@@ -32,7 +32,7 @@ const UriPrefix = ({ config, element, field, onChange }) => {
 
         <span className="input-group-btn">
           <button type="button" className="btn btn-default" disabled={element.read_only}
-            title={gettext('Insert default URI Prefix')}
+            title={gettext('Insert default URI Prefix')} aria-label={gettext('Insert default URI Prefix')}
             onClick={() => onChange(field, config.settings.default_uri_prefix)}>
             <span className="fa fa-magic"></span>
           </button>

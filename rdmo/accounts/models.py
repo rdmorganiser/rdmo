@@ -5,7 +5,11 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
+from rdmo.core.models import Model as RDMOTimeStampedModel
 from rdmo.core.models import TranslationMixin
+from rdmo.core.utils import parse_date_from_string
+
+CONSENT_SESSION_KEY = "user_has_consented"
 
 
 class AdditionalField(models.Model, TranslationMixin):
@@ -106,7 +110,7 @@ class AdditionalFieldValue(models.Model):
         return self.user.username + '/' + self.field.key
 
 
-class ConsentFieldValue(models.Model):
+class ConsentFieldValue(RDMOTimeStampedModel):
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     consent = models.BooleanField(
@@ -122,6 +126,50 @@ class ConsentFieldValue(models.Model):
 
     def __str__(self):
         return self.user.username
+
+    @classmethod
+    def create_consent(cls, user, session=None) -> bool:
+        obj, _created = cls.objects.update_or_create(user=user, defaults={"consent": True})
+
+        # Validate consent before storing in session
+        has_valid_consent = (
+            obj.is_consent_valid()
+            if settings.ACCOUNT_TERMS_OF_USE_DATE is not None
+            else True  # If terms update date is not enforced, any consent is valid
+        )
+
+        if has_valid_consent:
+            if session:
+                session[CONSENT_SESSION_KEY] = True
+            return True
+
+        obj.delete()  # Remove when consent is outdated
+        return False
+
+    @classmethod
+    def has_accepted_terms(cls, user, session) -> bool:
+        if not settings.ACCOUNT_TERMS_OF_USE:
+            return True  # If terms are disabled, assume accepted.
+
+        # Check session cache first
+        if CONSENT_SESSION_KEY in session:
+            return session[CONSENT_SESSION_KEY]
+
+        consent = cls.objects.filter(user=user).only("updated").first()
+        has_valid_consent = (
+            consent.is_consent_valid()
+            if consent and settings.ACCOUNT_TERMS_OF_USE_DATE is not None
+            else bool(consent)
+        )
+
+        session[CONSENT_SESSION_KEY] = has_valid_consent  # Cache result
+        return has_valid_consent
+
+    def is_consent_valid(self) -> bool:
+        # optionally check if the terms are outdated
+        latest_terms_version_date = parse_date_from_string(settings.ACCOUNT_TERMS_OF_USE_DATE)
+        # Compare only dates (ignores time)
+        return self.updated and (self.updated.date() >= latest_terms_version_date)
 
 
 class Role(models.Model):

@@ -9,13 +9,14 @@
     <input type="hidden" name="method" value="upload_file" />
 
     <div class="upload-form-field">
-        <input type="file" name="uploaded_file" {% if upload_accept %}accept="{{ upload_accept }}"{% endif %}/>
+        <input type="file" name="uploaded_file" aria-label="{% trans 'Upload file' %}"
+               {% if upload_accept %}accept="{{ upload_accept }}"{% endif %} />
         <p>{% trans "Select file" %}</p>
     </div>
 
     <div class="sidebar-form-button">
-        <button type="submit" class="btn btn-primary" title="{% trans 'Upload' %}">
-            <i class="fa fa-arrow-right"></i>
+        <button type="submit" class="btn btn-primary" title="{% trans 'Upload' %}" aria-label="{% trans 'Upload' %}">
+            <i class="fa fa-arrow-right" aria-hidden="true"></i>
         </button>
     </div>
 </form>

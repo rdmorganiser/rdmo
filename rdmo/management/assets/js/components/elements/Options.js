@@ -34,7 +34,7 @@ const Options = ({ config, options, configActions, elementActions }) => {
         <div className="row">
           <div className={config.settings.multisite ? 'col-sm-6' : 'col-sm-8'}>
             <FilterString value={get(config, 'filter.options.search', '')} onChange={updateFilterString}
-                          placeholder={gettext('Filter options')} />
+                          label={gettext('Filter options')} />
           </div>
           <div className="col-sm-4">
             <FilterUriPrefix value={get(config, 'filter.options.uri_prefix', '')} onChange={updateFilterUriPrefix}
@@ -43,7 +43,7 @@ const Options = ({ config, options, configActions, elementActions }) => {
           {
             config.settings.multisite && <div className="col-sm-2">
               <FilterSite value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
-                          options={config.sites} allLabel={gettext('All editors')} />
+                          options={config.sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
             </div>
           }
         </div>

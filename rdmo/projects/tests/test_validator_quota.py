@@ -1,6 +1,6 @@
 import pytest
 
-from rest_framework.exceptions import ValidationError as RestFameworkValidationError
+from rest_framework.exceptions import ValidationError as RestFrameworkValidationError
 
 from ..serializers.v1 import ValueSerializer
 from ..validators import ValueQuotaValidator
@@ -42,7 +42,7 @@ def test_serializer_create_file_error(db, settings):
     serializer = ValueSerializer()
     serializer.context['view'] = MockedView()
 
-    with pytest.raises(RestFameworkValidationError):
+    with pytest.raises(RestFrameworkValidationError):
         validator({
             'value_type': 'file'
         }, serializer)

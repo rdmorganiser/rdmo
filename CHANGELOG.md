@@ -1,4 +1,154 @@
-# Changelog
+# Changelog 📔
+
+## [RDMO 2.3.2](https://github.com/rdmorganiser/rdmo/compare/2.3.1...2.3.2) (July 4, 2025)
+
+* Improve ORCID branding display and social connections page (#1376)
+* Hide management panels by default (#1377)
+* Fix sets in the interview (#1367)
+* Fix copy value and apply only to empty sets (#1384)
+* Fix compute progress for non-empty values (#1374)
+* Fix bugs in sync of project tasks and views (#1362)
+  * Added management command `./manage.py sync_projects`, with flags `--tasks`, `--views` or `--show`
+* Fix scroll focus (#1372)
+* Fix options in project export (use `uri_path`)
+* Fix historical typo in naming of `QuerySet` classes
+* [Add a PNG version of the logo](https://github.com/rdmorganiser/rdmo/pull/1361/commits/c21b7bafcf284ec7ac3b40b5c425fee207ddf461)
+
+### Maintenance and Dependencies 🔧
+
+* Removed dependency on `pytz` from management commands (#1382)
+* Refactor export tests and include tests code in coverage (#1319)
+* Update NodeJS version to 22 LTS (#1371)
+
+## [RDMO 2.3.1](https://github.com/rdmorganiser/rdmo/compare/2.3.0...2.3.1) (May 16, 2025)
+
+* Allow / in the URI path of conditions, tasks, and views (#1316)
+* Add /api/v1/projects/projects/user/ endpoint and refactor/fix projects table (#1318)
+* Add options endpoint to API list (#1313)
+* Use ACCOUNT_SIGNUP_FIELDS instead of ACCOUNT_EMAIL_REQUIRED (#1322)
+* Use SESSION_COOKIE_* settings for store_id cookie (#1321)
+* Fix translations (#1317)
+* Fix badge-optional and move interview-block-options
+* Improve styling for empty question sets (without questions)
+* Clean tags and special html characters in contact message
+* Fix interview management panels by fixing `configureStore` (#1314)
+* Fix copy of elements in management interface for multisite (#1339)
+* Fix bug when reference documents are configured as strings (#1341)
+* Fix bug in display of warnings at import of catalog elements (#1340)
+* Fix bug in display of value and unit in range slider (#1353)
+* Fix the resolving of multiple conditional questions in interview
+* Fix bug with the back button and conditions
+* Fix jumping of cursor when values are stored in the interview
+* Fix `{more}` functionality (#1351)
+* Fix focus in interview and scroll to top when changing pages
+* Update dependencies
+
+## [RDMO 2.3.0](https://github.com/rdmorganiser/rdmo/compare/2.2.2...2.3.0) (Apr 11, 2025)
+
+* Add new interview interface based on React and Redux (#518)
+  * Text and Textarea widgets are now saved automatically
+  * Select dropdown widgets are now always searchable
+  * Show the unit of a question next to the answer field (#499)
+  * Tabs (e.g. Datasets) and single values can be reused in different projects.
+  * An "Apply to all" button can be used to paste information into all the tabs.
+  * Fix several issues regarding the interview (#501, #224, #1191)
+  * Display attributes in interview to admins, editors, reviewers (#224)
+  * Improve accessibility (#514, #1199)
+  * Remove custom widgets feature (remove `QUESTIONS_WIDGETS` from settings)
+  * Remove `PROJECT_QUESTIONS_AUTOSAVE` and `PROJECT_QUESTIONS_CYCLE_SETS` from settings.
+* Add the possibility to copy a project including all its values.
+* Add the option to make a project "visible" to all users (#152).
+  * Users interact with visible projects as if they would have the Guest role.
+  * With the new review feature, this can be used for templates for projects and datasets.
+  * Sites and groups can be used to restrict this behaviour.
+  * This feature is enabled by default via the `PROJECT_VISIBILITY` setting
+* Add a contact form modal to each question to contact support (#502)
+  * `PROJECT_CONTACT = True` and `PROJECT_CONTACT_RECIPIENTS = [list of email strings]`
+    enable this feature
+* Add signal handlers to automatically sync of project views and tasks (#345, #966, #1198)
+  * When `PROJECT_VIEWS_SYNC = True` or `PROJECT_TASKS_SYNC = True` is set, the views or
+    tasks for a project are automatically synchronized, depending on the
+    catalogs configured for them.
+* Add snapshot export plugins (which work like project export plugins)
+  * Add `PROJECT_SNAPSHOT_EXPORTS` to settings to register snapshot export plugins
+* Refactor the `accept` field for project import plugins
+  * The field is now a dict of the form `{'content_type': ['suffix']}`
+  * The old form should still work
+* Add `rdmo.accounts.middleware.TermsAndConditionsRedirectMiddleware'` (#141, #161)
+  * The (optional) middleware checks if a user has already confirmed the Terms of use.
+  * If not, users need to confirm to proceed.
+  * Optionally, when a confirmation renewal is required, the `ACCOUNT_TERMS_OF_USE_DATE = '2025-02-25'`
+    can be set to invalidate previous confirmations.
+* Add `rdmo-admin` script
+  * `rdmo-admin npm run [build:prod|build|watch]` can be used to build the front end
+  * `rdmo-admin build` can be used to build the python package
+  * `rdmo-admin messages [make|compile]` can be used create and compile the translations
+  * `rdmo-admin clean` can be used remove most files which are not version controlled
+* Add the support for custom markdown templates injected into help texts
+  * The code `{{ code }}` is replaced by a template specified in the `MARKDOWN_TEMPLATES` setting
+  * The `TEMPLATES_EXECUTE_SCRIPT_TAGS' setting controls whether Java script code can be executed.
+* Add minimum required version to RDMO XML exports (#1205).
+* Use the `uri` instead of `path` for attributes in the Django admin interface.
+* Fix a set of bugs where the maximum length of a field was not correctly validated by the API.
+* Use `lualatex` when using `Pandoc >= 3.0`.
+* Remove the `download_vendor_files` step of the setup
+  * Remove `VENDOR` and `VENDOR_CDN` from settings.
+* Remove `django-rest-swagger` dependency and add `drf-spectacular` as an optional dependency.
+  * Can be installed with `pip install rdmo[openapi]`.
+* Update Python and JavaScript dependencies.
+* Drop support for Python 3.8.
+
+## [RDMO 2.2.2](https://github.com/rdmorganiser/rdmo/compare/2.2.1...2.2.2) (Oct 24, 2024)
+
+* Fix projects interface when using RDMO with a path (#1152)
+* Fix missing (unavailable) catalogs projects interface
+
+## [RDMO 2.2.1](https://github.com/rdmorganiser/rdmo/compare/2.2.0...2.2.1) (Sep 13, 2024)
+
+* Fix import error when allauth is not used (#1145)
+* Fix a bug with collection pages when optionset refresh is true (#1147)
+* Prevent the page to change when a validation error occurs on project_questions (#1134)
+* Pin importlib_metadata to 0.8.4 due to an upstream problem
+
+## [RDMO 2.2.0](https://github.com/rdmorganiser/rdmo/compare/2.1.3...2.2.0) (Sep 05, 2024)
+
+* Add new projects overview (#865, #355)
+  * Projects are now displayed in an interactive table which can be filtered and ordered
+  * The projects API is now paginated (new setting PROJECT_TABLE_PAGE_SIZE)
+* Add new import interface to management (#469, #468, #465, )
+  * Show detailed information what is new and what changed
+  * Show a summary of warnings and errors at the top of the page
+* Add validation depending on the `value_type` configured for the question
+  * Validation needs to be enabled using `PROJECT_VALUES_VALIDATION = True`
+  * Configuration can be adjusted using settings for each value_type
+* Enable markdown rendering for titles and texts of elements
+* All parent attributes are now added to the full XML export
+* Use only available catalogs for project import by users (#455)
+* Add workaround for conflict validation for checkboxes (#903)
+* Add `merge_attributes` management script to move related items from one attribute to another (#990)
+* Add `join_values_inline` tag for views (#964)
+* Add `user` and `site` to optionset provider plugins (#430)
+* Add short title field for sections and pages for the navigation (#346, #363)
+* Add section progress to the navigation
+* Add button to add/remove the current site to an element in the management interface for multi site instances (#825)
+* Fix a bug with conditions with non-consecutive set_index (when datasets are created and deleted)
+* Fix a bug with the progress bar when a section has no pages
+* Fix progress action if progress did not change
+* Fix bugs with element copy in management (#995, #980)
+* Fix typos and missing translations on buttons in management interface (#1020, #944)
+* Fix link target for links in management interface (#1007)
+* Fix textarea resizing (#1021)
+* Fix export links in management (#915)
+* Fix typos (#1001)
+* Use ACCOUNT_FORMS instead of ACCOUNT_SIGNUP_FORM_CLASS in settings
+* Remove local hosts from ALLOWED_HOSTS settings
+* Improve admin interface (#942, #918)
+* Update default home page
+
+## [RDMO 2.1.3](https://github.com/rdmorganiser/rdmo/compare/2.1.2...2.1.3) (Feb 13, 2024)
+
+* Fix the migration of options with additional_input (#912)
+* Fix export urls in management when using BASE_PATH (#915)
 
 ## [RDMO 2.1.2](https://github.com/rdmorganiser/rdmo/compare/2.1.1...2.1.2) (Jan 15, 2024)
 

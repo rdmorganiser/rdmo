@@ -14,6 +14,10 @@ class CoreApi extends BaseApi {
     return this.get('/api/v1/core/groups/')
   }
 
+  static fetchTemplates() {
+    return this.get('/api/v1/core/templates/')
+  }
+
 }
 
 export default CoreApi

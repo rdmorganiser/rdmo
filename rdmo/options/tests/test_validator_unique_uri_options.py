@@ -3,7 +3,7 @@ import pytest
 from django.conf import settings
 from django.core.exceptions import ValidationError
 
-from rest_framework.exceptions import ValidationError as RestFameworkValidationError
+from rest_framework.exceptions import ValidationError as RestFrameworkValidationError
 
 from ..models import Option, OptionSet
 from ..serializers.v1 import OptionSerializer
@@ -76,7 +76,7 @@ def test_unique_uri_validator_serializer_create_error(db):
     validator = OptionUniqueURIValidator()
     serializer = OptionSerializer()
 
-    with pytest.raises(RestFameworkValidationError):
+    with pytest.raises(RestFrameworkValidationError):
         validator({
             'uri_prefix': settings.DEFAULT_URI_PREFIX,
             'uri_path': Option.objects.first().uri_path
@@ -101,7 +101,7 @@ def test_unique_uri_validator_serializer_update_error(db):
     validator = OptionUniqueURIValidator()
     serializer = OptionSerializer(instance=instance)
 
-    with pytest.raises(RestFameworkValidationError):
+    with pytest.raises(RestFrameworkValidationError):
         validator({
             'uri_prefix': instance.uri_prefix,
             'uri_path': Option.objects.exclude(id=instance.id).first().uri_path

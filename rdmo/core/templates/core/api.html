@@ -1,0 +1,57 @@
+{% extends 'core/base.html' %}
+{% load i18n %}
+{% load core_tags %}
+
+{% block content %}
+
+<div class="container page">
+
+    <h1>API</h1>
+
+    <p>
+        {% blocktrans trimmed %}
+        The RDMO API allows you to interact with the service programmatically using scripts or other tools.
+        We provide several sets of endpoints:
+        {% endblocktrans %}
+    </p>
+
+    {% if schema_url %}
+    <h2>OpenAPI specification</h2>
+    <p>
+        The <a href="https://www.openapis.org/">OpenAPI</a>  specification is available at:
+        <a href="{{ schema_url }}">{{ schema_url }}</a>.
+    </p>
+    {% endif %}
+
+    {% if swagger_url %}
+    <h2>Swagger interface</h2>
+    <p>
+        The <a href="https://swagger.io">Swagger</a> interface is available at:
+        <a href="{{ swagger_url }}">{{ swagger_url }}</a>.
+    </p>
+    {% endif %}
+
+    {% if redoc_url %}
+    <h2>Redoc interface</h2>
+    <p>
+        The <a href="https://redocly.com">Redoc</a> interface is available at:
+        <a href="{{ redoc_url }}">{{ redoc_url }}</a>.
+    </p>
+    {% endif %}
+
+    <h2>Module endpoints</h2>
+
+    <p>
+        {% blocktrans trimmed %}
+        The different modules of RDMO have separate endpoints:
+        {% endblocktrans %}
+    </p>
+
+    <ul>
+        {% for module_url in module_urls %}
+        <li><a href="{{ module_url }}">{{ module_url }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}

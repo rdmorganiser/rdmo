@@ -48,7 +48,7 @@ class ProfileForm(forms.ModelForm):
         # existing user is going to be updated
         if self.instance.pk is not None:
             for additional_field_value in AdditionalFieldValue.objects.filter(user=self.instance):
-                self.fields[additional_field.key].initial = additional_field_value.value
+                self.fields[additional_field_value.field.key].initial = additional_field_value.value
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -66,26 +66,6 @@ class ProfileForm(forms.ModelForm):
 
             additional_value.value = self.cleaned_data[additional_field.key]
             additional_value.save()
-
-
-class SignupForm(ProfileForm):
-
-    use_required_attribute = False
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        # add a consent field, the label is added in the template
-        if settings.ACCOUNT_TERMS_OF_USE:
-            self.fields['consent'] = forms.BooleanField(required=True)
-
-    def signup(self, request, user):
-        self._save_additional_values(user)
-
-        # store the consent field
-        if settings.ACCOUNT_TERMS_OF_USE:
-            consent = ConsentFieldValue(user=user, consent=self.cleaned_data['consent'])
-            consent.save()
 
 
 class RemoveForm(forms.Form):
@@ -107,3 +87,26 @@ class RemoveForm(forms.Form):
 
     consent = forms.BooleanField(required=True)
     consent.label = _("I confirm that I want my profile to be completely removed. This can not be undone!")
+
+
+class AcceptConsentForm(forms.Form):
+
+    consent = forms.BooleanField(
+        label="I agree to the terms of use",
+        required=True,
+    )
+
+    def __init__(self, *args, user=None, **kwargs):
+        self.user = user
+        super().__init__(*args, **kwargs)
+
+        if not self.user:
+            raise ValueError("A user instance is required to initialize the form.")
+
+    def save(self, session) -> bool:
+        if self.cleaned_data['consent']:
+            success = ConsentFieldValue.create_consent(user=self.user, session=session)
+            if not success:
+                self.add_error(None, _("Consent could not be saved. Please try again."))  # Add non-field error
+            return success
+        return False

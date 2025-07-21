@@ -89,6 +89,31 @@ class Section(Model, TranslationMixin):
         verbose_name=_('Title (quinary)'),
         help_text=_('The title for this section (in the quinary language).')
     )
+    short_title_lang1 = models.CharField(
+        max_length=32, blank=True,
+        verbose_name=_('Short title (primary)'),
+        help_text=_('The short title for this section (in the primary language), used in the navigation.')
+    )
+    short_title_lang2 = models.CharField(
+        max_length=32, blank=True,
+        verbose_name=_('Short title (secondary)'),
+        help_text=_('The short title for this section (in the secondary language), used in the navigation.')
+    )
+    short_title_lang3 = models.CharField(
+        max_length=32, blank=True,
+        verbose_name=_('Short title (tertiary)'),
+        help_text=_('The short title for this section (in the tertiary language), used in the navigation.')
+    )
+    short_title_lang4 = models.CharField(
+        max_length=32, blank=True,
+        verbose_name=_('Short title (quaternary)'),
+        help_text=_('The short title for this section (in the quaternary language), used in the navigation.')
+    )
+    short_title_lang5 = models.CharField(
+        max_length=32, blank=True,
+        verbose_name=_('Short title (quinary)'),
+        help_text=_('The short title for this section (in the quinary language), used in the navigation.')
+    )
 
     class Meta:
         ordering = ('uri', )
@@ -103,20 +128,24 @@ class Section(Model, TranslationMixin):
         super().save(*args, **kwargs)
 
     @property
-    def title(self):
+    def title(self) -> str:
         return self.trans('title')
 
+    @property
+    def short_title(self) -> str:
+        return self.trans('short_title')
+
     @cached_property
-    def is_locked(self):
+    def is_locked(self) -> bool:
         return self.locked or any(catalog.is_locked for catalog in self.catalogs.all())
 
     @cached_property
-    def elements(self):
+    def elements(self) -> list:
         # order "in python" to not destroy prefetch
         return [element.page for element in sorted(self.section_pages.all(), key=lambda e: e.order)]
 
     @cached_property
-    def descendants(self):
+    def descendants(self) -> list:
         descendants = []
         for element in self.elements:
             descendants += [element, *element.descendants]
@@ -131,6 +160,7 @@ class Section(Model, TranslationMixin):
             'id': self.id,
             'uri': self.uri,
             'title': self.title,
+            'short_title': self.short_title,
             'elements': elements,
             'pages': elements
         }

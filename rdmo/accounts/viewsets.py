@@ -1,5 +1,8 @@
 from django.contrib.auth import get_user_model
 
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from django_filters.rest_framework import DjangoFilterBackend
@@ -40,3 +43,8 @@ class UserViewSet(UserViewSetMixin, ReadOnlyModelViewSet):
                                      'role__member', 'role__manager',
                                      'role__editor', 'role__reviewer',
                                      'memberships')
+
+    @action(detail=False, permission_classes=(IsAuthenticated, ))
+    def current(self, request):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)

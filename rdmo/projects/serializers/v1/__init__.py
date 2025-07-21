@@ -1,17 +1,34 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
+from rdmo.accounts.utils import get_full_name
+from rdmo.domain.models import Attribute
 from rdmo.questions.models import Catalog
 from rdmo.services.validators import ProviderValidator
 
-from ...models import Integration, IntegrationOption, Invite, Issue, IssueResource, Membership, Project, Snapshot, Value
-from ...validators import ValueConflictValidator, ValueQuotaValidator
+from ...models import (
+    Integration,
+    IntegrationOption,
+    Invite,
+    Issue,
+    IssueResource,
+    Membership,
+    Project,
+    Snapshot,
+    Value,
+    Visibility,
+)
+from ...validators import ProjectParentValidator, ValueConflictValidator, ValueQuotaValidator, ValueTypeValidator
 
 
-class UserSerializer(serializers.ModelSerializer):
+class ProjectUserSerializer(serializers.ModelSerializer):
+
+    full_name = serializers.SerializerMethodField()
 
     class Meta:
         model = get_user_model()
@@ -23,8 +40,12 @@ class UserSerializer(serializers.ModelSerializer):
                 'username',
                 'first_name',
                 'last_name',
+                'full_name',
                 'email'
             ]
+
+    def get_full_name(self, obj) -> str:
+        return get_full_name(obj)
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -45,10 +66,14 @@ class ProjectSerializer(serializers.ModelSerializer):
     catalog = CatalogField(required=True)
     parent = ParentField(required=False)
 
-    owners = UserSerializer(many=True, read_only=True)
-    managers = UserSerializer(many=True, read_only=True)
-    authors = UserSerializer(many=True, read_only=True)
-    guests = UserSerializer(many=True, read_only=True)
+    owners = ProjectUserSerializer(many=True, read_only=True)
+    managers = ProjectUserSerializer(many=True, read_only=True)
+    authors = ProjectUserSerializer(many=True, read_only=True)
+    guests = ProjectUserSerializer(many=True, read_only=True)
+
+    last_changed = serializers.DateTimeField(read_only=True)
+
+    visibility = serializers.CharField(source='visibility.get_help_display', read_only=True)
 
     class Meta:
         model = Project
@@ -66,13 +91,43 @@ class ProjectSerializer(serializers.ModelSerializer):
             'guests',
             'created',
             'updated',
+            'last_changed',
             'site',
             'views',
             'progress_total',
-            'progress_count'
+            'progress_count',
+            'visibility'
         )
         read_only_fields = (
             'snapshots',
+        )
+        validators = [
+            ProjectParentValidator()
+        ]
+
+    def validate_views(self, value):
+        """Block updates to views if syncing is enabled."""
+        if settings.PROJECT_VIEWS_SYNC and value:
+            raise ValidationError(_('Editing views is disabled.'))
+        return value
+
+
+class ProjectCopySerializer(ProjectSerializer):
+
+    class Meta:
+        model = Project
+        fields = ProjectSerializer.Meta.fields
+        read_only_fields = ProjectSerializer.Meta.read_only_fields
+
+
+class ProjectVisibilitySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Visibility
+        fields = (
+            'project',
+            'sites',
+            'groups'
         )
 
 
@@ -263,7 +318,8 @@ class ProjectValueSerializer(serializers.ModelSerializer):
         )
         validators = (
             ValueConflictValidator(),
-            ValueQuotaValidator()
+            ValueQuotaValidator(),
+            ValueTypeValidator()
         )
 
 
@@ -306,6 +362,19 @@ class InviteSerializer(serializers.ModelSerializer):
             'timestamp'
         )
 
+class UserInviteSerializer(InviteSerializer):
+
+    title = serializers.CharField(source='project.title', read_only=True)
+    description = serializers.CharField(source='project.description', read_only=True)
+
+    class Meta:
+        model = Invite
+        fields = (
+            *InviteSerializer.Meta.fields,
+            'title',
+            'description',
+            'token',
+        )
 
 class IssueResourceSerializer(serializers.ModelSerializer):
 
@@ -353,6 +422,8 @@ class SnapshotSerializer(serializers.ModelSerializer):
 
 class ValueSerializer(serializers.ModelSerializer):
 
+    attribute = serializers.PrimaryKeyRelatedField(queryset=Attribute.objects.all(), required=True)
+
     class Meta:
         model = Value
         fields = (
@@ -374,5 +445,31 @@ class ValueSerializer(serializers.ModelSerializer):
             'file_url',
             'value_type',
             'unit',
+            'external_id'
+        )
+
+
+class ValueSearchSerializer(serializers.ModelSerializer):
+
+    project_label = serializers.CharField(source='project.title', required=False, read_only=True)
+    snapshot_label = serializers.CharField(source='snapshot.title', required=False, read_only=True)
+    set_label = serializers.CharField(required=False, read_only=True)
+    value_label = serializers.CharField(source='label', read_only=True)
+
+    class Meta:
+        model = Value
+        fields = (
+            'id',
+            'attribute',
+            'project_label',
+            'snapshot_label',
+            'set_label',
+            'value_label',
+            'set_prefix',
+            'set_index',
+            'set_collection',
+            'collection_index',
+            'text',
+            'option',
             'external_id'
         )

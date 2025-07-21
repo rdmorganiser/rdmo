@@ -29,7 +29,7 @@ const NestedAttribute = ({ config, attribute, configActions, elementActions }) =
           <div className="row">
             <div className="col-sm-8">
               <FilterString value={get(config, 'filter.attribute.search', '')} onChange={updateFilterString}
-                            placeholder={gettext('Filter attributes')} />
+                            label={gettext('Filter attributes')} />
             </div>
             <div className="col-sm-4">
               <FilterUriPrefix value={get(config, 'filter.attribute.uri_prefix', '')} onChange={updateFilterUriPrefix}

@@ -7,7 +7,7 @@
         <th style="width: 10%">{% trans 'Provider' %}</th>
         <th style="width: 40%">{% trans 'Description' %}</th>
         <th style="width: 40%">{% trans 'Options' %}</th>
-        <th style="width: 10%"></th>
+        <th style="width: 10%" aria-label="{% trans 'Actions' %}"></th>
     </thead>
     <tbody>
         {% for integration in integrations %}
@@ -27,7 +27,7 @@
                 {% endif %}
             </td>
             <td class="text-right">
-                <button class="btn btn-primary btn-xs" name="integration" value="{{ integration.id }}">
+                <button type="submit" class="btn btn-primary btn-xs" name="integration" value="{{ integration.id }}">
                     {{ integration.provider.send_label }}
                 </button>
             </td>

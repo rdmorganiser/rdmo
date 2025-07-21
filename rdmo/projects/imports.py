@@ -4,6 +4,7 @@ import logging
 import mimetypes
 
 from django import forms
+from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
@@ -87,24 +88,38 @@ class Import(Plugin):
 
 class RDMOXMLImport(Import):
 
-    accept = '.xml'
+    accept = {
+        'application/xml': ['.xml']
+    }
 
-    def check(self):
+    def check(self) -> bool:
         file_type, encoding = mimetypes.guess_type(self.file_name)
-        if file_type == 'application/xml' or file_type == 'text/xml':
+        if file_type in ('application/xml', 'text/xml'):
             self.root = read_xml_file(self.file_name)
-            if self.root and self.root.tag == 'project':
+            if self.root is not None and self.root.tag == 'project':
                 self.ns_map = get_ns_map(self.root)
                 return True
+        return False
+
 
     def process(self):
         if self.current_project is None:
             catalog_uri = get_uri(self.root.find('catalog'), self.ns_map)
+
+            available_catalogs = Catalog.objects.filter_current_site() \
+                                                .filter_group(self.request.user) \
+                                                .filter_availability(self.request.user) \
+                                                .order_by('order')
+
             try:
-                self.catalog = Catalog.objects.all().get(uri=catalog_uri)
+                self.catalog = available_catalogs.get(uri=catalog_uri)
             except Catalog.DoesNotExist:
-                log.info('Catalog not in db. Created with uri %s', catalog_uri)
-                self.catalog = Catalog.objects.all().first()
+                log.info('Catalog with uri %s does not exists. Used first available catalog.', catalog_uri)
+                self.catalog = available_catalogs.first()
+
+            if self.catalog is None:
+                log.info('No catalog is available.')
+                raise ValidationError('No catalog is available.')
 
             self.project = Project()
             self.project.title = self.root.find('title').text or ''
@@ -219,6 +234,9 @@ class RDMOXMLImport(Import):
 
 
 class URLImport(RDMOXMLImport):
+
+    accept = False
+    upload = False
 
     class Form(forms.Form):
         url = forms.URLField(label=_('Import project from this URL'), required=True)

@@ -5,6 +5,7 @@ from rest_framework import exceptions, serializers
 from rdmo.core.serializers import (
     ElementModelSerializerMixin,
     ElementWarningSerializerMixin,
+    MarkdownSerializerMixin,
     ReadOnlyObjectPermissionSerializerMixin,
     TranslationSerializerMixin,
 )
@@ -15,10 +16,11 @@ from ..validators import ViewLockedValidator, ViewUniqueURIValidator
 
 class ViewSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
                      ElementWarningSerializerMixin, ReadOnlyObjectPermissionSerializerMixin,
-                     serializers.ModelSerializer):
+                     MarkdownSerializerMixin, serializers.ModelSerializer):
+
+    markdown_fields = ('title', 'help')
 
     model = serializers.SerializerMethodField()
-    uri_path = serializers.CharField(required=True)
 
     warning = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()
@@ -63,6 +65,9 @@ class ViewSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
             'title',
             'help'
         )
+        extra_kwargs = {
+            'uri_path': {'required': True}
+        }
         validators = (
             ViewUniqueURIValidator(),
             ViewLockedValidator()

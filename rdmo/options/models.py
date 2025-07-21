@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.db import models
@@ -7,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from rdmo.conditions.models import Condition
 from rdmo.core.models import TranslationMixin
 from rdmo.core.plugins import get_plugin
-from rdmo.core.utils import copy_model, join_url
+from rdmo.core.utils import join_url
 
 
 class OptionSet(models.Model):
@@ -75,48 +77,36 @@ class OptionSet(models.Model):
         self.uri = self.build_uri(self.uri_prefix, self.uri_path)
         super().save(*args, **kwargs)
 
-    def copy(self, uri_prefix, uri_path):
-        optionset = copy_model(self, uri_prefix=uri_prefix, uri_path=uri_path)
-
-        # set m2m fields for copy
-        optionset.conditions.set(self.conditions.all())
-
-        # add copy to children
-        for option in self.options.all():
-            option.optionsets.add(optionset)
-
-        return optionset
-
     @property
-    def label(self):
+    def label(self) -> str:
         return self.uri
 
     @property
-    def provider(self):
+    def provider(self) -> list:
         return get_plugin('OPTIONSET_PROVIDERS', self.provider_key)
 
     @property
-    def has_provider(self):
+    def has_provider(self) -> bool:
         return self.provider is not None
 
     @property
-    def has_search(self):
+    def has_search(self) -> bool:
         return self.has_provider and self.provider.search
 
     @property
-    def has_refresh(self):
+    def has_refresh(self) -> bool:
         return self.has_provider and self.provider.refresh
 
     @property
-    def has_conditions(self):
+    def has_conditions(self) -> bool:
         return self.conditions.exists()
 
     @property
-    def is_locked(self):
+    def is_locked(self) -> bool:
         return self.locked
 
     @cached_property
-    def elements(self):
+    def elements(self) -> list[Option]:
         return [element.option for element in sorted(self.optionset_options.all(), key=lambda e: e.order)]
 
     @classmethod
@@ -236,6 +226,31 @@ class Option(models.Model, TranslationMixin):
         verbose_name=_('Help (quinary)'),
         help_text=_('The help text for this option (in the quinary language).')
     )
+    default_text_lang1 = models.TextField(
+        blank=True, default="",
+        verbose_name=_('Default text value (primary)'),
+        help_text=_('The default text value for the additional input of this option (in the primary language).')
+    )
+    default_text_lang2 = models.TextField(
+        blank=True, default="",
+        verbose_name=_('Default text value (secondary)'),
+        help_text=_('The default text value for the additional input of this option (in the secondary language).')
+    )
+    default_text_lang3 = models.TextField(
+        blank=True, default="",
+        verbose_name=_('Default text value (tertiary)'),
+        help_text=_('The default text value for the additional input of this option (in the tertiary language).')
+    )
+    default_text_lang4 = models.TextField(
+        blank=True, default="",
+        verbose_name=_('Default text value (quaternary)'),
+        help_text=_('The default text value for the additional input of this option (in the quaternary language).')
+    )
+    default_text_lang5 = models.TextField(
+        blank=True, default="",
+        verbose_name=_('Default text value (quinary)'),
+        help_text=_('The default text value for the additional input of this option (in the quinary language).')
+    )
     view_text_lang1 = models.TextField(
         blank=True, default="",
         verbose_name=_('View text (primary)'),
@@ -262,7 +277,7 @@ class Option(models.Model, TranslationMixin):
         help_text=_('The view text for this option (in the quinary language).')
     )
     additional_input = models.CharField(
-        max_length=256, blank=True, default=False, choices=ADDITIONAL_INPUT_CHOICES,
+        max_length=256, blank=True, default=ADDITIONAL_INPUT_NONE, choices=ADDITIONAL_INPUT_CHOICES,
         verbose_name=_('Additional input'),
         help_text=_('Designates whether an additional input is possible for this option.')
     )
@@ -280,27 +295,31 @@ class Option(models.Model, TranslationMixin):
         super().save(*args, **kwargs)
 
     @property
-    def text(self):
+    def text(self) -> str:
         return self.trans('text')
 
     @property
-    def help(self):
+    def help(self) -> str:
         return self.trans('help')
 
     @property
-    def view_text(self):
+    def default_text(self) -> str:
+        return self.trans('default_text')
+
+    @property
+    def view_text(self) -> str:
         return self.trans('view_text')
 
     @property
-    def text_and_help(self):
+    def text_and_help(self) -> str:
         return f'{self.text} [{self.help}]' if self.help else self.text
 
     @property
-    def label(self):
+    def label(self) -> str:
         return f'{self.uri} ("{self.text}")'
 
     @property
-    def is_locked(self):
+    def is_locked(self) -> bool:
         return self.locked or self.optionsets.filter(locked=True).exists()
 
     @classmethod

@@ -1,25 +1,23 @@
+// Errors.js
 import React from 'react'
 import PropTypes from 'prop-types'
-import isEmpty from 'lodash/isEmpty'
-import uniqueId from 'lodash/uniqueId'
+import ErrorsListGroup from './ErrorsListGroup'
+import isUndefined from 'lodash/isUndefined'
 
-const Errors = ({ element }) => {
-  return !isEmpty(element.errors) && <div className="row text-danger mt-10">
-    <div className="col-sm-3 text-right">
-      {gettext('Errors')}
+const Errors = ({ elementErrors }) => {
+  const show = !isUndefined(elementErrors) &&  elementErrors.length > 0
+  const errorsHeadingText = <strong>{gettext('Errors')}</strong>
+
+  return show && (
+    <div className="panel panel-danger mt-10 mb-0">
+      <div className="panel-heading">{errorsHeadingText}</div>
+      <ErrorsListGroup elementErrors={elementErrors} />
     </div>
-    <div className="col-sm-9">
-      <ul className="list-unstyled">
-        {
-          element.errors.map(message => <li key={uniqueId('error-')}>{message}</li>)
-        }
-      </ul>
-    </div>
-  </div>
+  )
 }
 
 Errors.propTypes = {
-  element: PropTypes.object.isRequired
+  elementErrors: PropTypes.array.isRequired,
 }
 
 export default Errors

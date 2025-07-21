@@ -106,6 +106,31 @@ class Page(Model, TranslationMixin):
         verbose_name=_('Title (quinary)'),
         help_text=_('The title for this page (in the quinary language).')
     )
+    short_title_lang1 = models.CharField(
+        max_length=32, blank=True,
+        verbose_name=_('Short title (primary)'),
+        help_text=_('The short title for this page (in the primary language), used in the navigation.')
+    )
+    short_title_lang2 = models.CharField(
+        max_length=32, blank=True,
+        verbose_name=_('Short title (secondary)'),
+        help_text=_('The short title for this page (in the secondary language), used in the navigation.')
+    )
+    short_title_lang3 = models.CharField(
+        max_length=32, blank=True,
+        verbose_name=_('Short title (tertiary)'),
+        help_text=_('The short title for this page (in the tertiary language), used in the navigation.')
+    )
+    short_title_lang4 = models.CharField(
+        max_length=32, blank=True,
+        verbose_name=_('Short title (quaternary)'),
+        help_text=_('The short title for this page (in the quaternary language), used in the navigation.')
+    )
+    short_title_lang5 = models.CharField(
+        max_length=32, blank=True,
+        verbose_name=_('Short title (quinary)'),
+        help_text=_('The short title for this page (in the quinary language), used in the navigation.')
+    )
     help_lang1 = models.TextField(
         blank=True,
         verbose_name=_('Help (primary)'),
@@ -175,32 +200,36 @@ class Page(Model, TranslationMixin):
         super().save(*args, **kwargs)
 
     @property
-    def title(self):
+    def title(self) -> str:
         return self.trans('title')
 
     @property
-    def help(self):
+    def short_title(self) -> str:
+        return self.trans('short_title')
+
+    @property
+    def help(self) -> str:
         return self.trans('help')
 
     @property
-    def verbose_name(self):
+    def verbose_name(self) -> str:
         return self.trans('verbose_name')
 
     @cached_property
-    def is_locked(self):
+    def is_locked(self) -> bool:
         return self.locked or any(section.is_locked for section in self.sections.all())
 
     @cached_property
-    def has_conditions(self):
+    def has_conditions(self) -> bool:
         return self.conditions.exists()
 
     @cached_property
-    def elements(self):
+    def elements(self) -> list:
         page_elements = list(self.page_questionsets.all()) + list(self.page_questions.all())
         return [page_element.element for page_element in sorted(page_elements, key=lambda e: e.order)]
 
     @cached_property
-    def descendants(self):
+    def descendants(self) -> list:
         descendants = []
         for element in self.elements:
             descendants += [element, *element.descendants]
@@ -214,6 +243,7 @@ class Page(Model, TranslationMixin):
             'id': self.id,
             'uri': self.uri,
             'title': self.title,
+            'short_title': self.short_title,
             'is_collection': self.is_collection,
             'attribute': self.attribute.uri if self.attribute else None,
             'conditions': [condition.uri for condition in self.conditions.all()],

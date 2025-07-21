@@ -24,7 +24,7 @@ const EditOption = ({ config, option, elements, elementActions }) => {
   const { elementAction, parent } = elements
 
   const updateOption = (key, value) => elementActions.updateElement(option, {[key]: value})
-  const storeOption = (back) => elementActions.storeElement('options', option, back)
+  const storeOption = (back) => elementActions.storeElement('options', option, elementAction, back)
   const deleteOption = () => elementActions.deleteElement('options', option)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
@@ -105,6 +105,19 @@ const EditOption = ({ config, option, elements, elementActions }) => {
 
         <Radio config={config} element={option} field="additional_input"
                options={additionalInputs} onChange={updateOption} />
+        {
+          (option.additional_input === 'text' || option.additional_input === 'textarea') &&
+          config.settings &&
+          <Tabs id="#option-tabs2" defaultActiveKey={0} animation={false}>
+            {config.settings.languages.map(([lang_code, lang], index) => (
+            <Tab key={index} eventKey={index} title={lang}>
+              <Textarea key={index} config={config} element={option} field={`default_text_${lang_code}`}
+                      rows={1} onChange={updateOption} />
+            </Tab>
+
+          ))}
+          </Tabs>
+        }
 
         {get(config, 'settings.multisite') && <Select config={config} element={option} field="editors"
                                                       options={sites} onChange={updateOption} isMulti />}

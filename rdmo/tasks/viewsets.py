@@ -10,6 +10,7 @@ from rdmo.core.exports import XMLResponse
 from rdmo.core.filters import SearchFilter
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import is_truthy, render_to_format
+from rdmo.management.viewsets import ElementToggleCurrentSiteViewSetMixin
 
 from .models import Task
 from .renderers import TaskRenderer
@@ -17,7 +18,7 @@ from .serializers.export import TaskExportSerializer
 from .serializers.v1 import TaskIndexSerializer, TaskSerializer
 
 
-class TaskViewSet(ModelViewSet):
+class TaskViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = TaskSerializer
     queryset = Task.objects.select_related('start_attribute', 'end_attribute') \
@@ -42,7 +43,7 @@ class TaskViewSet(ModelViewSet):
         serializer = TaskIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?')
+    @action(detail=False, url_path='export(?:/(?P<export_format>[a-z]+))?')
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -54,7 +55,7 @@ class TaskViewSet(ModelViewSet):
                 'tasks': queryset
             })
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?')
+    @action(detail=True, url_path='export(?:/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = TaskExportSerializer(self.get_object())

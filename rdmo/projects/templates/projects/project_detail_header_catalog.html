@@ -4,10 +4,14 @@
 {% if can_change_project  %}
 <p class="pull-right">
     <a href="{% url 'project_update_catalog' project.pk %}" title="{% trans 'Update project catalog' %}">
-        <i class="fa fa-pencil"></i>
+        <i class="fa fa-pencil" aria-hidden="true"></i>
     </a>
 </p>
 {% endif %}
 
-<strong>{{ project.catalog.title }}</strong><br/>
-{{ project.catalog.help|markdown }}
+<p>
+    <strong>{{ project.catalog.title|markdown }}</strong>
+</p>
+<p>
+    {{ project.catalog.help|markdown }}
+</p>

@@ -25,7 +25,7 @@ const EditView = ({ config, view, elements, elementActions }) => {
   const { elementAction, catalogs } = elements
 
   const updateView = (key, value) => elementActions.updateElement(view, {[key]: value})
-  const storeView = (back) => elementActions.storeElement('views', view, back)
+  const storeView = (back) => elementActions.storeElement('views', view, elementAction, back)
   const deleteView = () => elementActions.deleteElement('views', view)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()

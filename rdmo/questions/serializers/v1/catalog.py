@@ -3,6 +3,7 @@ from rest_framework import serializers
 from rdmo.core.serializers import (
     ElementModelSerializerMixin,
     ElementWarningSerializerMixin,
+    MarkdownSerializerMixin,
     ReadOnlyObjectPermissionSerializerMixin,
     ThroughModelSerializerMixin,
     TranslationSerializerMixin,
@@ -25,10 +26,12 @@ class CatalogSectionSerializer(serializers.ModelSerializer):
 
 class CatalogSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
                         ElementModelSerializerMixin, ElementWarningSerializerMixin,
-                        ReadOnlyObjectPermissionSerializerMixin, serializers.ModelSerializer):
+                        ReadOnlyObjectPermissionSerializerMixin, MarkdownSerializerMixin,
+                        serializers.ModelSerializer):
+
+    markdown_fields = ('title', 'help')
 
     model = serializers.SerializerMethodField()
-    uri_path = serializers.CharField(required=True)
 
     sections = CatalogSectionSerializer(source='catalog_sections', read_only=False, required=False, many=True)
 
@@ -66,6 +69,9 @@ class CatalogSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
         through_fields = (
             ('sections', 'catalog', 'section', 'catalog_sections'),
         )
+        extra_kwargs = {
+            'uri_path': {'required': True}
+        }
         validators = (
             CatalogUniqueURIValidator(),
             CatalogLockedValidator(),

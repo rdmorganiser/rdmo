@@ -25,7 +25,7 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
   const { elementAction, parent, conditions, options } = elements
 
   const updateOptionSet = (key, value) => elementActions.updateElement(optionset, {[key]: value})
-  const storeOptionSet = (back) => elementActions.storeElement('optionsets', optionset, back)
+  const storeOptionSet = (back) => elementActions.storeElement('optionsets', optionset, elementAction, back)
   const deleteOptionSet = () => elementActions.deleteElement('optionsets', optionset)
 
   const editOption = (value) => elementActions.fetchElement('options', value.option)

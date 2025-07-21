@@ -1,3 +1,5 @@
+import { siteId } from 'rdmo/core/assets/js/utils/meta'
+
 class DomainFactory {
 
   static createAttribute(config, parent) {
@@ -9,7 +11,7 @@ class DomainFactory {
       pages: parent.page ? [parent.page.id] : [],
       questionsets: parent.questionset ? [parent.questionset.id] : [],
       questions: parent.question ? [parent.question.id] : [],
-      editors: config.settings.multisite ? [config.currentSite.id] : [],
+      editors: config.settings.multisite ? [siteId] : [],
     }
   }
 

@@ -159,6 +159,7 @@ class PageExportSerializer(TranslationSerializerMixin, serializers.ModelSerializ
         )
         trans_fields = (
             'title',
+            'short_title',
             'help',
             'verbose_name'
         )
@@ -191,6 +192,7 @@ class SectionExportSerializer(TranslationSerializerMixin, serializers.ModelSeria
         )
         trans_fields = (
             'title',
+            'short_title'
         )
 
 

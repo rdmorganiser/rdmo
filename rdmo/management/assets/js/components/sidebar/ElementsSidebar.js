@@ -5,7 +5,7 @@ import invert from 'lodash/invert'
 
 import { elementTypes, elementModules } from '../../constants/elements'
 
-import { buildPath } from '../../utils/location'
+import { buildApiPath, buildPath } from '../../utils/location'
 import { getExportParams } from '../../utils/filter'
 
 import Link from 'rdmo/core/assets/js/components/Link'
@@ -16,9 +16,9 @@ const ElementsSidebar = ({ config, elements, elementActions, importActions }) =>
   const { elementType, elementId } = elements
 
   const model = invert(elementTypes)[elementType]
-  const exportUrl = isNil(elementId) ? `/api/v1/${elementModules[model]}/${elementType}/export/`
-                                     : `/api/v1/${elementModules[model]}/${elementType}/${elementId}/export/`
-  const exportParams = getExportParams(config.filter[elementType])
+  const exportUrl = isNil(elementId) ? buildApiPath(elementModules[model], elementType, 'export')
+                                     : buildApiPath(elementModules[model], elementType, elementId, 'export')
+  const exportParams = isNil(config.filter) ? '' : getExportParams(config.filter[elementType])
 
   return (
     <div className="elements-sidebar">
@@ -26,57 +26,80 @@ const ElementsSidebar = ({ config, elements, elementActions, importActions }) =>
 
       <ul className="list-unstyled">
         <li>
-          <Link href={buildPath(config.baseUrl, 'catalogs')}
+          <Link href={buildPath('catalogs')}
                 onClick={() => elementActions.fetchElements('catalogs')}>{gettext('Catalogs')}</Link>
         </li>
         <li>
-          <Link href={buildPath(config.baseUrl, 'sections')}
+          <Link href={buildPath('sections')}
                 onClick={() => elementActions.fetchElements('sections')}>{gettext('Sections')}</Link>
         </li>
         <li>
-          <Link href={buildPath(config.baseUrl, 'pages')}
+          <Link href={buildPath('pages')}
                 onClick={() => elementActions.fetchElements('pages')}>{gettext('Pages')}</Link>
         </li>
         <li>
-          <Link href={buildPath(config.baseUrl, 'questionsets')}
+          <Link href={buildPath('questionsets')}
                 onClick={() => elementActions.fetchElements('questionsets')}>{gettext('Question sets')}</Link>
         </li>
         <li>
-          <Link href={buildPath(config.baseUrl, 'questions')}
+          <Link href={buildPath('questions')}
                 onClick={() => elementActions.fetchElements('questions')}>{gettext('Questions')}</Link>
         </li>
         <li>
-          <Link href={buildPath(config.baseUrl, 'attributes')}
+          <Link href={buildPath('attributes')}
                 onClick={() => elementActions.fetchElements('attributes')}>{gettext('Attributes')}</Link>
         </li>
         <li>
-          <Link href={buildPath(config.baseUrl, 'optionsets')}
+          <Link href={buildPath('optionsets')}
                 onClick={() => elementActions.fetchElements('optionsets')}>{gettext('Option sets')}</Link>
         </li>
         <li>
-          <Link href={buildPath(config.baseUrl, 'options')}
+          <Link href={buildPath('options')}
                 onClick={() => elementActions.fetchElements('options')}>{gettext('Options')}</Link>
         </li>
         <li>
-          <Link href={buildPath(config.baseUrl, 'conditions')}
+          <Link href={buildPath('conditions')}
                 onClick={() => elementActions.fetchElements('conditions')}>{gettext('Conditions')}</Link>
         </li>
         <li>
-          <Link href={buildPath(config.baseUrl, 'tasks')}
+          <Link href={buildPath('tasks')}
                 onClick={() => elementActions.fetchElements('tasks')}>{gettext('Tasks')}</Link>
         </li>
         <li>
-          <Link href={buildPath(config.baseUrl, 'views')}
+          <Link href={buildPath('views')}
                 onClick={() => elementActions.fetchElements('views')}>{gettext('Views')}</Link>
         </li>
       </ul>
 
       <h2>Export</h2>
 
+      <p className="text-muted">
+        {gettext('Export all visible elements.')}
+      </p>
+
       <ul className="list-unstyled">
         <li>
           <a href={`${exportUrl}?${exportParams}`}>{gettext('XML')}</a>
         </li>
+        {
+          [
+            'catalogs',
+            'sections',
+            'pages',
+            'questionsets',
+            'questions',
+            'optionsets',
+            'conditions',
+            'tasks'
+          ].includes(elementType) && (
+            <li>
+              <a href={`${exportUrl}?full=true&${exportParams}`}>{gettext('XML (full)')}</a>
+            </li>
+          )
+        }
+      </ul>
+
+      <ul className="list-unstyled">
         {
           elementType == 'attributes' && <>
             <li>
@@ -102,6 +125,10 @@ const ElementsSidebar = ({ config, elements, elementActions, importActions }) =>
       </ul>
 
       <h2>Import</h2>
+
+      <p className="text-muted">
+        {gettext('Import an RDMO XML file.')}
+      </p>
 
       <UploadForm onSubmit={file => importActions.uploadFile(file)} />
     </div>

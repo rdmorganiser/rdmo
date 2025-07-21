@@ -1,7 +1,9 @@
 {% load socialaccount %}
 {% load static %}
 
+{% if not socialaccount_providers %}
 {% get_providers as socialaccount_providers %}
+{% endif %}
 
 {% for provider in socialaccount_providers %}
 
@@ -18,35 +20,46 @@
 {% endif %}
 
 {% if provider.id == 'orcid' %}
+
 <li class="socialaccount_provider_break">
     <a title="{{provider.name}}" class="socialaccount_provider {{provider.id}}"
         href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
         <img src="{% static 'accounts/img/orcid-signin.png' %}" alt="ORCID sign in" />
     </a>
 </li>
-{% elif provider.id == 'openid_connect' %}
-    {% if provider.app.provider_id == 'keycloak' %}
-    <li class="socialaccount_provider_break">
-        <a title="{{ provider.name }}" class="socialaccount_provider {{ provider.id }}"
-            href="{% provider_login_url provider process=process scope=scope auth_params=auth_params %}">
-            <img src="{% static 'accounts/img/keycloak_logo_200px.svg' %}" alt="Keycloak sign in" />
-        </a>
-    </li>
-    {% else %}
-    <li>
-        <a title="{{provider.name}}" class="socialaccount_provider {{provider.id}}"
-            href="{% provider_login_url provider process=process scope=scope auth_params=auth_params %}">
-            {{ provider.name }}
-        </a>
-    </li>
-{% endif %}
 
+{% elif provider.id == 'openid_connect' %}
+
+{% if provider.app.provider_id == 'keycloak' %}
+<li class="socialaccount_provider_break">
+    <a title="{{ provider.name }}" class="socialaccount_provider {{ provider.app.provider_id }}"
+        href="{% provider_login_url provider process=process scope=scope auth_params=auth_params %}">
+        <img src="{% static 'accounts/img/keycloak_logo_200px.svg' %}" alt="Keycloak sign in" />
+    </a>
+</li>
 {% else %}
 <li>
-    <a title="{{provider.name}}" class="socialaccount_provider {{provider.id}}"
-        href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
-        <span class="fa fa-{{provider.id}} fa-2x"></span>
+    <a title="{{ provider.name }}" class="socialaccount_provider {{ provider.app.provider_id }}"
+        href="{% provider_login_url provider process=process scope=scope auth_params=auth_params %}">
+        {{ provider.name }}
     </a>
 </li>
 {% endif %}
+
+
+{% else %}
+
+<li>
+    <a title="{{provider.name}}" class="socialaccount_provider {{provider.id}}"
+        href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+        {% if provider.id == 'dummy' %}
+        <span class="fa fa-meh-o fa-2x"></span>
+        {% else %}
+        <span class="fa fa-{{provider.id}} fa-2x"></span>
+        {% endif %}
+    </a>
+</li>
+
+{% endif %}
+
 {% endfor %}

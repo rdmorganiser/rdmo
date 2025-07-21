@@ -146,5 +146,9 @@ GROUPS = (
       ('projects', 'invite', 'change_invite'),
       ('projects', 'invite', 'delete_invite'),
       ('projects', 'invite', 'view_invite'),
+      ('projects', 'visibility', 'add_visibility'),
+      ('projects', 'visibility', 'change_visibility'),
+      ('projects', 'visibility', 'delete_visibility'),
+      ('projects', 'visibility', 'view_visibility'),
   ))
 )

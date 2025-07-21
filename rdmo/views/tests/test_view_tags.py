@@ -8,6 +8,7 @@ from rdmo.views.utils import ProjectWrapper
 
 project_pk = 1
 
+empty_sets = ['', {}, []]
 
 def assertListEqual(value_list, queryset):
     assert [value['id'] for value in value_list] == list(queryset.values_list('id', flat=True))
@@ -92,3 +93,13 @@ def test_get_set_value(context, values):
     for value_set in get_sets(context, 'set'):
         assert get_set_value(context, value_set, path)['id'] == \
                values.filter(attribute__path=path, set_index=value_set['set_index']).first().id
+
+
+@pytest.mark.parametrize('empty_set', empty_sets)
+def test_get_set_values_empty(context, empty_set):
+    assert get_set_values(context, empty_set, 'set/single/text') is None
+
+
+@pytest.mark.parametrize('empty_set', empty_sets)
+def test_get_set_value_empty(context, empty_set):
+    assert get_set_value(context, empty_set, 'set/single/text') is None

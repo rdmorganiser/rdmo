@@ -2,8 +2,8 @@ import pytest
 
 from django.urls import reverse
 
-from rdmo.core.tests import get_obj_perms_status_code
-from rdmo.core.tests import multisite_users as users
+from rdmo.core.tests.constants import multisite_users as users
+from rdmo.core.tests.utils import get_obj_perms_status_code
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet, Section
 
 status_map = {
@@ -40,12 +40,8 @@ def test_list(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_create_create(db, client, username, password, json_data):
-    Catalog.objects.all().delete()
-    Section.objects.all().delete()
-    Page.objects.all().delete()
-    QuestionSet.objects.all().delete()
-    Question.objects.all().delete()
+def test_create_create(db, client, username, password, json_data, delete_all_objects):
+    delete_all_objects(Catalog, Section, Page, QuestionSet, Question)
 
     client.login(username=username, password=password)
 

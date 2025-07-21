@@ -1,0 +1,48 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+{% load core_tags %}
+
+{% block page %}
+
+    <h1>
+        {% if object.visibility %}
+        {% trans 'Update project visibility' %}
+        {% else %}
+        {% trans 'Make project visible' %}
+        {% endif %}
+    </h1>
+
+    <p class="mb-10 text-muted">
+        {% blocktrans trimmed %}
+        Projects can be made visible to all users, for example to be used as a template.
+        When a project is made visible, users can access it as if they were in the guest role.
+        {% endblocktrans %}
+    </p>
+
+    {% if settings.MULTISITE and object.visibility %}
+    <p class="mb-10">
+        {% if object.visibility.sites.all %}
+
+        {% blocktrans trimmed with object.visibility.sites.all|join:', ' as site_names %}
+        Currently, the project is available to users on {{ site_names }}.
+        {% endblocktrans %}
+
+        {% else %}
+
+        {% blocktrans trimmed %}
+        Currently, the project is accessible to users on all sites.
+        {% endblocktrans %}
+
+        {% endif %}
+    </p>
+    {% endif %}
+
+    {% if submit_label and delete_label %}
+    {% bootstrap_form submit=submit_label delete=delete_label %}
+    {% elif submit_label %}
+    {% bootstrap_form submit=submit_label %}
+    {% elif delete_label %}
+    {% bootstrap_form delete=delete_label %}
+    {% endif %}
+
+{% endblock %}

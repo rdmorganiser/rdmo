@@ -83,7 +83,7 @@
 		<verbose_name_plural lang="de"/>
 		<default_option dc:uri="http://example.com/terms/options/one_two_three/three"/>
 		<default_external_id/>
-		<widget_type>autocomplete</widget_type>
+		<widget_type>select_creatable</widget_type>
 		<value_type>text</value_type>
 		<maximum/>
 		<minimum/>
@@ -182,46 +182,46 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<page dc:uri="http://example.com/terms/questions/catalog/collections/autocomplete">
+	<page dc:uri="http://example.com/terms/questions/catalog/collections/select_creatable">
 		<uri_prefix>http://example.com/terms</uri_prefix>
-		<uri_path>catalog/collections/autocomplete</uri_path>
+		<uri_path>catalog/collections/select_creatable</uri_path>
 		<dc:comment/>
 		<attribute/>
 		<is_collection>False</is_collection>
-		<title lang="en">Autocomplete</title>
+		<title lang="en">Select drop-down (free)</title>
 		<help lang="en"/>
 		<verbose_name lang="en"/>
 		<verbose_name_plural lang="en"/>
-		<title lang="de">Autocomplete</title>
+		<title lang="de">Select drop-down (free)</title>
 		<help lang="de"/>
 		<verbose_name lang="de"/>
 		<verbose_name_plural lang="de"/>
 		<questionsets/>
 		<questions>
-			<question dc:uri="http://example.com/terms/questions/catalog/collections/autocomplete/autocomplete" order="0"/>
+			<question dc:uri="http://example.com/terms/questions/catalog/collections/select_creatable/select_creatable" order="0"/>
 		</questions>
 		<conditions/>
 	</page>
-	<question dc:uri="http://example.com/terms/questions/catalog/collections/autocomplete/autocomplete">
+	<question dc:uri="http://example.com/terms/questions/catalog/collections/select_creatable/select_creatable">
 		<uri_prefix>http://example.com/terms</uri_prefix>
-		<uri_path>catalog/collections/autocomplete/autocomplete</uri_path>
+		<uri_path>catalog/collections/select_creatable/select_creatable</uri_path>
 		<dc:comment/>
-		<attribute dc:uri="http://example.com/terms/domain/individual/collection/autocomplete"/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/collection/select_creatable"/>
 		<is_collection>True</is_collection>
 		<is_optional>False</is_optional>
 		<help lang="en"/>
-		<text lang="en">Autocomplete?</text>
+		<text lang="en">Select drop-down (free)?</text>
 		<default_text lang="en"/>
 		<verbose_name lang="en"/>
 		<verbose_name_plural lang="en"/>
 		<help lang="de"/>
-		<text lang="de">Autocomplete?</text>
+		<text lang="de">Select drop-down (free)?</text>
 		<default_text lang="de"/>
 		<verbose_name lang="de"/>
 		<verbose_name_plural lang="de"/>
 		<default_option/>
 		<default_external_id/>
-		<widget_type>autocomplete</widget_type>
+		<widget_type>select_creatable</widget_type>
 		<value_type>text</value_type>
 		<maximum/>
 		<minimum/>
@@ -1748,46 +1748,46 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<page dc:uri="http://example.com/terms/questions/catalog/individual/autocomplete">
+	<page dc:uri="http://example.com/terms/questions/catalog/individual/select_creatable">
 		<uri_prefix>http://example.com/terms</uri_prefix>
-		<uri_path>catalog/individual/autocomplete</uri_path>
+		<uri_path>catalog/individual/select_creatable</uri_path>
 		<dc:comment/>
 		<attribute/>
 		<is_collection>False</is_collection>
-		<title lang="en">Autocomplete</title>
+		<title lang="en">Select drop-down (free)</title>
 		<help lang="en"/>
 		<verbose_name lang="en"/>
 		<verbose_name_plural lang="en"/>
-		<title lang="de">Autocomplete</title>
+		<title lang="de">Select drop-down (free)</title>
 		<help lang="de"/>
 		<verbose_name lang="de"/>
 		<verbose_name_plural lang="de"/>
 		<questionsets/>
 		<questions>
-			<question dc:uri="http://example.com/terms/questions/catalog/individual/autocomplete/autocomplete" order="0"/>
+			<question dc:uri="http://example.com/terms/questions/catalog/individual/select_creatable/select_creatable" order="0"/>
 		</questions>
 		<conditions/>
 	</page>
-	<question dc:uri="http://example.com/terms/questions/catalog/individual/autocomplete/autocomplete">
+	<question dc:uri="http://example.com/terms/questions/catalog/individual/select_creatable/select_creatable">
 		<uri_prefix>http://example.com/terms</uri_prefix>
-		<uri_path>catalog/individual/autocomplete/autocomplete</uri_path>
+		<uri_path>catalog/individual/select_creatable/select_creatable</uri_path>
 		<dc:comment/>
-		<attribute dc:uri="http://example.com/terms/domain/individual/single/autocomplete"/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/single/select_creatable"/>
 		<is_collection>False</is_collection>
 		<is_optional>False</is_optional>
 		<help lang="en"/>
-		<text lang="en">Autocomplete?</text>
+		<text lang="en">Select drop-down (free)?</text>
 		<default_text lang="en"/>
 		<verbose_name lang="en"/>
 		<verbose_name_plural lang="en"/>
 		<help lang="de"/>
-		<text lang="de">Autocomplete?</text>
+		<text lang="de">Select drop-down (free)?</text>
 		<default_text lang="de"/>
 		<verbose_name lang="de"/>
 		<verbose_name_plural lang="de"/>
 		<default_option dc:uri="http://example.com/terms/options/one_two_three/one"/>
 		<default_external_id/>
-		<widget_type>autocomplete</widget_type>
+		<widget_type>select_creatable</widget_type>
 		<value_type>text</value_type>
 		<maximum/>
 		<minimum/>
@@ -2195,46 +2195,46 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<page dc:uri="http://example.com/terms/questions/catalog/options/autocomplete">
+	<page dc:uri="http://example.com/terms/questions/catalog/options/select_creatable">
 		<uri_prefix>http://example.com/terms</uri_prefix>
-		<uri_path>catalog/options/autocomplete</uri_path>
+		<uri_path>catalog/options/select_creatable</uri_path>
 		<dc:comment/>
 		<attribute/>
 		<is_collection>False</is_collection>
-		<title lang="en">Autocomplete</title>
+		<title lang="en">Select drop-down (free)</title>
 		<help lang="en"/>
 		<verbose_name lang="en"/>
 		<verbose_name_plural lang="en"/>
-		<title lang="de">Autocomplete</title>
+		<title lang="de">Select drop-down (free)</title>
 		<help lang="de"/>
 		<verbose_name lang="de"/>
 		<verbose_name_plural lang="de"/>
 		<questionsets/>
 		<questions>
-			<question dc:uri="http://example.com/terms/questions/catalog/options/autocomplete/select" order="0"/>
+			<question dc:uri="http://example.com/terms/questions/catalog/options/select_creatable/select" order="0"/>
 		</questions>
 		<conditions/>
 	</page>
-	<question dc:uri="http://example.com/terms/questions/catalog/options/autocomplete/select">
+	<question dc:uri="http://example.com/terms/questions/catalog/options/select_creatable/select">
 		<uri_prefix>http://example.com/terms</uri_prefix>
-		<uri_path>catalog/options/autocomplete/select</uri_path>
+		<uri_path>catalog/options/select_creatable/select</uri_path>
 		<dc:comment/>
-		<attribute dc:uri="http://example.com/terms/domain/options/plugin/autocomplete"/>
+		<attribute dc:uri="http://example.com/terms/domain/options/plugin/select_creatable"/>
 		<is_collection>False</is_collection>
 		<is_optional>False</is_optional>
 		<help lang="en"/>
-		<text lang="en">autocomplete?</text>
+		<text lang="en">select_creatable?</text>
 		<default_text lang="en"/>
 		<verbose_name lang="en"/>
 		<verbose_name_plural lang="en"/>
 		<help lang="de"/>
-		<text lang="de">autocomplete?</text>
+		<text lang="de">select_creatable?</text>
 		<default_text lang="de"/>
 		<verbose_name lang="de"/>
 		<verbose_name_plural lang="de"/>
 		<default_option/>
 		<default_external_id>simple_1</default_external_id>
-		<widget_type>autocomplete</widget_type>
+		<widget_type>select_creatable</widget_type>
 		<value_type>text</value_type>
 		<maximum/>
 		<minimum/>
@@ -2524,7 +2524,7 @@
 			<question dc:uri="http://example.com/terms/questions/catalog/set/collection-collection/bool" order="3"/>
 			<question dc:uri="http://example.com/terms/questions/catalog/set/collection-collection/radio" order="4"/>
 			<question dc:uri="http://example.com/terms/questions/catalog/set/collection-collection/select" order="5"/>
-			<question dc:uri="http://example.com/terms/questions/catalog/set/collection-collection/autocomplete" order="6"/>
+			<question dc:uri="http://example.com/terms/questions/catalog/set/collection-collection/select_creatable" order="6"/>
 			<question dc:uri="http://example.com/terms/questions/catalog/set/collection-collection/range" order="7"/>
 			<question dc:uri="http://example.com/terms/questions/catalog/set/collection-collection/datetime" order="8"/>
 			<question dc:uri="http://example.com/terms/questions/catalog/set/collection-collection/file" order="9"/>
@@ -2681,26 +2681,26 @@
 		</optionsets>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-collection/autocomplete">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-collection/select_creatable">
 		<uri_prefix>http://example.com/terms</uri_prefix>
-		<uri_path>catalog/set/collection-collection/autocomplete</uri_path>
+		<uri_path>catalog/set/collection-collection/select_creatable</uri_path>
 		<dc:comment/>
-		<attribute dc:uri="http://example.com/terms/domain/set/collection/autocomplete"/>
+		<attribute dc:uri="http://example.com/terms/domain/set/collection/select_creatable"/>
 		<is_collection>True</is_collection>
 		<is_optional>False</is_optional>
 		<help lang="en"/>
-		<text lang="en">Autocomplete?</text>
+		<text lang="en">Select drop-down (free)?</text>
 		<default_text lang="en"/>
 		<verbose_name lang="en"/>
 		<verbose_name_plural lang="en"/>
 		<help lang="de"/>
-		<text lang="de">Autocomplete?</text>
+		<text lang="de">Select drop-down (free)?</text>
 		<default_text lang="de"/>
 		<verbose_name lang="de"/>
 		<verbose_name_plural lang="de"/>
 		<default_option/>
 		<default_external_id/>
-		<widget_type>autocomplete</widget_type>
+		<widget_type>select_creatable</widget_type>
 		<value_type>option</value_type>
 		<maximum/>
 		<minimum/>
@@ -2853,7 +2853,7 @@
 			<question dc:uri="http://example.com/terms/questions/catalog/set/collection-single/bool" order="3"/>
 			<question dc:uri="http://example.com/terms/questions/catalog/set/collection-single/radio" order="4"/>
 			<question dc:uri="http://example.com/terms/questions/catalog/set/collection-single/select" order="5"/>
-			<question dc:uri="http://example.com/terms/questions/catalog/set/collection-single/autocomplete" order="6"/>
+			<question dc:uri="http://example.com/terms/questions/catalog/set/collection-single/select_creatable" order="6"/>
 			<question dc:uri="http://example.com/terms/questions/catalog/set/collection-single/range" order="7"/>
 			<question dc:uri="http://example.com/terms/questions/catalog/set/collection-single/datetime" order="8"/>
 			<question dc:uri="http://example.com/terms/questions/catalog/set/collection-single/file" order="9"/>
@@ -3009,26 +3009,26 @@
 		</optionsets>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-single/autocomplete">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-single/select_creatable">
 		<uri_prefix>http://example.com/terms</uri_prefix>
-		<uri_path>catalog/set/collection-single/autocomplete</uri_path>
+		<uri_path>catalog/set/collection-single/select_creatable</uri_path>
 		<dc:comment/>
-		<attribute dc:uri="http://example.com/terms/domain/set/single/autocomplete"/>
+		<attribute dc:uri="http://example.com/terms/domain/set/single/select_creatable"/>
 		<is_collection>False</is_collection>
 		<is_optional>False</is_optional>
 		<help lang="en"/>
-		<text lang="en">Autocomplete?</text>
+		<text lang="en">Select drop-down (free)?</text>
 		<default_text lang="en"/>
 		<verbose_name lang="en"/>
 		<verbose_name_plural lang="en"/>
 		<help lang="de"/>
-		<text lang="de">Autocomplete?</text>
+		<text lang="de">Select drop-down (free)?</text>
 		<default_text lang="de"/>
 		<verbose_name lang="de"/>
 		<verbose_name_plural lang="de"/>
 		<default_option/>
 		<default_external_id/>
-		<widget_type>autocomplete</widget_type>
+		<widget_type>select_creatable</widget_type>
 		<value_type>option</value_type>
 		<maximum/>
 		<minimum/>
@@ -3148,7 +3148,7 @@
 			<question dc:uri="http://example.com/terms/questions/catalog/set/individual-collection/bool" order="3"/>
 			<question dc:uri="http://example.com/terms/questions/catalog/set/individual-collection/radio" order="4"/>
 			<question dc:uri="http://example.com/terms/questions/catalog/set/individual-collection/select" order="5"/>
-			<question dc:uri="http://example.com/terms/questions/catalog/set/individual-collection/autocomplete" order="6"/>
+			<question dc:uri="http://example.com/terms/questions/catalog/set/individual-collection/select_creatable" order="6"/>
 			<question dc:uri="http://example.com/terms/questions/catalog/set/individual-collection/range" order="7"/>
 			<question dc:uri="http://example.com/terms/questions/catalog/set/individual-collection/datetime" order="8"/>
 			<question dc:uri="http://example.com/terms/questions/catalog/set/individual-collection/file" order="9"/>
@@ -3305,26 +3305,26 @@
 		</optionsets>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-collection/autocomplete">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-collection/select_creatable">
 		<uri_prefix>http://example.com/terms</uri_prefix>
-		<uri_path>catalog/set/individual-collection/autocomplete</uri_path>
+		<uri_path>catalog/set/individual-collection/select_creatable</uri_path>
 		<dc:comment/>
-		<attribute dc:uri="http://example.com/terms/domain/individual/collection/autocomplete"/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/collection/select_creatable"/>
 		<is_collection>True</is_collection>
 		<is_optional>False</is_optional>
 		<help lang="en"/>
-		<text lang="en">Autocomplete?</text>
+		<text lang="en">Select drop-down (free)?</text>
 		<default_text lang="en"/>
 		<verbose_name lang="en"/>
 		<verbose_name_plural lang="en"/>
 		<help lang="de"/>
-		<text lang="de">Autocomplete?</text>
+		<text lang="de">Select drop-down (free)?</text>
 		<default_text lang="de"/>
 		<verbose_name lang="de"/>
 		<verbose_name_plural lang="de"/>
 		<default_option/>
 		<default_external_id/>
-		<widget_type>autocomplete</widget_type>
+		<widget_type>select_creatable</widget_type>
 		<value_type>option</value_type>
 		<maximum/>
 		<minimum/>
@@ -3475,7 +3475,7 @@
 			<question dc:uri="http://example.com/terms/questions/catalog/set/individual-single/bool" order="3"/>
 			<question dc:uri="http://example.com/terms/questions/catalog/set/individual-single/radio" order="4"/>
 			<question dc:uri="http://example.com/terms/questions/catalog/set/individual-single/select" order="5"/>
-			<question dc:uri="http://example.com/terms/questions/catalog/set/individual-single/autocomplete" order="6"/>
+			<question dc:uri="http://example.com/terms/questions/catalog/set/individual-single/select_creatable" order="6"/>
 			<question dc:uri="http://example.com/terms/questions/catalog/set/individual-single/range" order="7"/>
 			<question dc:uri="http://example.com/terms/questions/catalog/set/individual-single/datetime" order="8"/>
 			<question dc:uri="http://example.com/terms/questions/catalog/set/individual-single/file" order="9"/>
@@ -3631,26 +3631,26 @@
 		</optionsets>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-single/autocomplete">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-single/select_creatable">
 		<uri_prefix>http://example.com/terms</uri_prefix>
-		<uri_path>catalog/set/individual-single/autocomplete</uri_path>
+		<uri_path>catalog/set/individual-single/select_creatable</uri_path>
 		<dc:comment/>
-		<attribute dc:uri="http://example.com/terms/domain/individual/single/autocomplete"/>
+		<attribute dc:uri="http://example.com/terms/domain/individual/single/select_creatable"/>
 		<is_collection>False</is_collection>
 		<is_optional>False</is_optional>
 		<help lang="en"/>
-		<text lang="en">Autocomplete?</text>
+		<text lang="en">Select drop-down (free)?</text>
 		<default_text lang="en"/>
 		<verbose_name lang="en"/>
 		<verbose_name_plural lang="en"/>
 		<help lang="de"/>
-		<text lang="de">Autocomplete?</text>
+		<text lang="de">Select drop-down (free)?</text>
 		<default_text lang="de"/>
 		<verbose_name lang="de"/>
 		<verbose_name_plural lang="de"/>
 		<default_option/>
 		<default_external_id/>
-		<widget_type>autocomplete</widget_type>
+		<widget_type>select_creatable</widget_type>
 		<value_type>option</value_type>
 		<maximum/>
 		<minimum/>
