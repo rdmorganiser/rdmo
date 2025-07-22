@@ -1,3 +1,12 @@
+:root {
+    --bs-font-sans-serif: var(--rdmo-font);
+    --bs-body-font-size: 1rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--rdmo-font-headline);
+}
+
 a,
 button.link {
     text-decoration: none;
