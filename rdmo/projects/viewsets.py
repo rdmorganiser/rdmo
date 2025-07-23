@@ -732,7 +732,13 @@ class ProjectViewSet(ModelViewSet):
             )
             plugin_result = plugin_call(plugin, serializer.validated_data)
         except ValidationError as exc:
-            raise serializers.ValidationError(exc) from exc
+            # exc.message_dict is a dict of field-names → list of messages, if available
+            if hasattr(exc, 'message_dict'):
+                detail = exc.message_dict
+            else:
+                # exc.messages is always a list of strings
+                detail = {'non_field_errors': exc.messages}
+            raise serializers.ValidationError(detail) from exc
         else:
             return plugin_result
 
