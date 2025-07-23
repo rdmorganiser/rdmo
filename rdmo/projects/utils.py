@@ -13,8 +13,9 @@ from django.urls import reverse
 from django.utils.timezone import now
 
 from rdmo.accounts.utils import make_unique_username
+from rdmo.core.imports import store_temp_file
 from rdmo.core.mail import send_mail
-from rdmo.core.plugins import get_plugins
+from rdmo.core.plugins import get_plugin, get_plugins
 from rdmo.core.utils import remove_double_newlines
 from rdmo.projects.models import Membership
 
@@ -306,8 +307,7 @@ def get_upload_accept():
 
 
 def get_plugin_types_for_mimetype(mimetype: str) -> set[str]:
-    accept = get_upload_accept()
-    suffixes = accept.get(mimetype)
+    suffixes = get_upload_accept().get(mimetype)
 
     if not suffixes:
         return set()
@@ -447,3 +447,18 @@ def import_memberships(project, records, create_users = True):
             created += 1
 
     return created, skipped
+
+
+def validate_and_prepare_import_plugin(request, file=None, file_format=None, current_project=None):
+    tmp_path = store_temp_file(file)
+
+    plugin = get_plugin("PROJECT_IMPORTS", file_format)
+    if plugin is None:
+        raise ValidationError({"detail": f'Format "{file_format}" not configured.'})
+
+    plugin.file_name = tmp_path
+    plugin.request = request
+    plugin.current_project = current_project
+    plugin.raise_exception = True
+
+    return plugin

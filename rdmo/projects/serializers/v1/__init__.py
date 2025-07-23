@@ -12,7 +12,7 @@ from drf_spectacular.utils import extend_schema_field
 
 from rdmo.accounts.serializers.v1 import UserLookupSerializer
 from rdmo.accounts.utils import get_full_name
-from rdmo.core.serializers import TranslationSerializerMixin
+from rdmo.core.serializers import FileUploadSerializer, TranslationSerializerMixin
 from rdmo.domain.models import Attribute
 from rdmo.questions.models import Catalog
 from rdmo.services.validators import ProviderValidator
@@ -30,6 +30,7 @@ from ...models import (
     Value,
     Visibility,
 )
+from ...utils import get_plugin_types_for_mimetype
 from ...validators import ProjectParentValidator, ValueConflictValidator, ValueQuotaValidator, ValueTypeValidator
 
 
@@ -273,16 +274,17 @@ class ProjectCopySerializer(ProjectSerializer):
         fields = ProjectSerializer.Meta.fields
         read_only_fields = ProjectSerializer.Meta.read_only_fields
 
+class ProjectFileUploadSerializer(FileUploadSerializer):
 
-class ProjectImportPreviewSerializer(serializers.Serializer):
-    file = serializers.FileField(
-        help_text="The file to inspect before import."
-    )
-    format = serializers.CharField(
-        default="xml",
-        help_text="Import plugin key (e.g. 'xml' or custom)."
-    )
+    def validate(self, data):
+        file = data["file"]
+        _format = data["format"]
 
+        accepted_formats = get_plugin_types_for_mimetype(file.content_type)
+        if not accepted_formats or _format not in accepted_formats:
+            raise serializers.ValidationError(f"File format not accepted for this MIME type: {file.content_type}.")
+
+        return data
 
 class ProjectImportPreviewResponseSerializer(serializers.Serializer):
     """
@@ -307,21 +309,14 @@ class ProjectImportPreviewResponseSerializer(serializers.Serializer):
     )
 
 
-class ProjectImportConfirmSerializer(serializers.Serializer):
-    file = serializers.FileField(
-        help_text="The same file (must match preview step)."
-    )
-    format = serializers.CharField(
-        default="xml",
-        help_text="Import plugin key (same as preview)."
-    )
+class ProjectImportConfirmSerializer(ProjectFileUploadSerializer):
     checked_values = serializers.ListField(
         child=serializers.CharField(),
+        allow_empty=True,
         help_text="List of value keys the user wants to import."
     )
     checked_snapshots = serializers.ListField(
-        child=serializers.CharField(),
-        help_text="List of snapshot keys the user wants to import."
+        child=serializers.CharField(), allow_empty=True, help_text="List of snapshot keys the user wants to import."
     )
 
 

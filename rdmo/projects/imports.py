@@ -2,6 +2,7 @@ import base64
 import io
 import logging
 import mimetypes
+import xml.etree.ElementTree as et
 
 from django import forms
 from django.contrib.sites.models import Site
@@ -36,6 +37,7 @@ class Import(Plugin):
 
     accept = None
     upload = True
+    raise_exception = False
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -131,7 +133,7 @@ class Import(Plugin):
         """
         # run the standard plugin steps
         if not self.check():
-            raise ValidationError(f'Import plugin rejected file "{self.file_name}".')
+            raise ValidationError({'file': ['Import plugin rejected the file.']})
         self.process()
 
         # clear any .current so we treat everything as new
@@ -190,10 +192,9 @@ class Import(Plugin):
         Returns the saved Project.
         """
         # 1) Ensure the plugin has been run
-        if self.project is None:
-            if not self.check():
-                raise ValidationError(f'Plugin rejected file "{self.file_name}".')
-            self.process()
+        if not self.check():
+            raise ValidationError({'file': ['Import plugin rejected the file.']})
+        self.process()
 
         # 2) Clear any stale .current pointers
         self._clear_currents()
@@ -204,32 +205,36 @@ class Import(Plugin):
         css = checked_snapshots if checked_snapshots is not None else all_snapshots
 
         # 4) Persist the Project object
-        proj = self.project
-        if proj is None:
-            raise ValidationError("Import plugin did not set a Project.")
-        if proj.pk is None:
-            proj.site = Site.objects.get_current()
-            proj.save()
+        if self.current_project is None:
+            if self.project.pk is None:
+                self.project.site = Site.objects.get_current()
+                self.project.save()
+        else:
+            self.project = self.current_project
 
         # 5) Write out values, snapshots, tasks, views
-        save_import_values(proj, self.values, cvs)
-        save_import_snapshot_values(proj, self.snapshots, css)
-        save_import_tasks(proj, self.tasks)
-        save_import_views(proj, self.views)
+        save_import_values(self.project, self.values, cvs)
+        save_import_snapshot_values(self.project, self.snapshots, css)
+        save_import_tasks(self.project, self.tasks)
+        save_import_views(self.project, self.views)
 
-        return proj
+        return self.project
 
 
 class RDMOXMLImport(Import):
 
     accept = {
-        'application/xml': ['.xml']
+        'application/xml': ['.xml'],
+        'text/xml': ['.xml'],
     }
 
     def check(self) -> bool:
         file_type, encoding = mimetypes.guess_type(self.file_name)
-        if file_type in ('application/xml', 'text/xml'):
-            self.root = read_xml_file(self.file_name)
+        if self.accept and file_type in self.accept:
+            try:
+                self.root = read_xml_file(self.file_name, raise_exception=self.raise_exception)
+            except et.ParseError as exc:
+                raise ValidationError({'file': [f'Parsing error: {exc}']}) from exc
             if self.root is not None and self.root.tag == 'project':
                 self.ns_map = get_ns_map(self.root)
                 return True

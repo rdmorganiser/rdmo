@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import F, OuterRef, Prefetch, Q, Subquery
 from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponseRedirect
@@ -26,7 +26,6 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 from rdmo.conditions.models import Condition
 from rdmo.core.constants import VALUE_TYPE_FILE
 from rdmo.core.exports import XMLResponse
-from rdmo.core.imports import store_temp_file
 from rdmo.core.permissions import HasModelPermission
 from rdmo.core.plugins import get_plugin
 from rdmo.core.utils import human2bytes, is_truthy, return_file_response
@@ -47,11 +46,13 @@ from .filters import (
 )
 from .models import Continuation, Integration, Invite, Issue, Membership, Project, Snapshot, Value, Visibility
 from .permissions import (
+    HasProjectImportUpdatePermission,
     HasProjectLeavePermission,
     HasProjectPagePermission,
     HasProjectPermission,
     HasProjectProgressModelPermission,
     HasProjectProgressObjectPermission,
+    HasProjectsImportCreatePermission,
     HasProjectsPermission,
     HasProjectVisibilityModelPermission,
     HasProjectVisibilityObjectPermission,
@@ -74,9 +75,9 @@ from .serializers.v1 import (
     ProjectAnswersSerializer,
     ProjectCopySerializer,
     ProjectHierarchySerializer,
+    ProjectFileUploadSerializer,
     ProjectImportConfirmSerializer,
     ProjectImportPreviewResponseSerializer,
-    ProjectImportPreviewSerializer,
     ProjectIntegrationSerializer,
     ProjectInviteCreateSerializer,
     ProjectInviteSerializer,
@@ -106,10 +107,10 @@ from .utils import (
     compute_set_prefix_from_set_value,
     copy_project,
     get_contact_message,
-    get_plugin_types_for_mimetype,
     get_upload_accept,
     send_contact_message,
     send_invite_email,
+    validate_and_prepare_import_plugin,
 )
 
 
@@ -412,7 +413,7 @@ class ProjectViewSet(ModelViewSet):
                     send_contact_message(request, subject, message)
                     return Response(status=status.HTTP_204_NO_CONTENT)
                 else:
-                    raise ValidationError({
+                    raise serializers.ValidationError({
                         'subject': [_('This field may not be blank.')] if not subject else [],
                         'message': [_('This field may not be blank.')] if not message else []
                     })
@@ -577,7 +578,7 @@ class ProjectViewSet(ModelViewSet):
         } for key, label, class_name in settings.PROJECT_IMPORTS if key in settings.PROJECT_IMPORTS_LIST] )
 
     @extend_schema(
-        request=ProjectImportPreviewSerializer,
+        # request=ProjectFileUploadSerializer,
         responses={200: ProjectImportPreviewResponseSerializer},
     )
     @action(
@@ -585,42 +586,13 @@ class ProjectViewSet(ModelViewSet):
         methods=["post"],
         url_path="import-create-preview",
         parser_classes=[MultiPartParser, FormParser],
-        permission_classes=[IsAuthenticated],
+        permission_classes=[HasModelPermission | HasProjectsImportCreatePermission],
+        serializer_class=ProjectFileUploadSerializer
     )
     def import_create_preview(self, request):
-        # validate upload, content_type and declared format
-        upload = request.FILES.get("file")
-        declared_format = request.data.get("format")
-
-        if not upload:
-            return Response({"detail": "No file uploaded."}, status=status.HTTP_400_BAD_REQUEST)
-
-        accepted_formats = get_plugin_types_for_mimetype(upload.content_type)
-        if (
-            declared_format is None
-            or not accepted_formats
-            or declared_format not in accepted_formats
-        ):
-            return Response({"detail": "File format not accepted."}, status=status.HTTP_400_BAD_REQUEST)
-
-        tmp_path = store_temp_file(upload)
-
-        plugin = get_plugin("PROJECT_IMPORTS", declared_format)
-        if plugin is None:
-            return Response(
-                {"detail": f'Format "{declared_format}" not configured.'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        plugin.file_name = tmp_path
-        plugin.request = request
-        plugin.current_project = None
-
-        try:
-            preview = plugin.prepare_import()
-        except ValidationError as exc:
-            return Response({"detail": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
-
+        preview = self.handle_import_plugin_action(
+            plugin_call=lambda plugin, _: plugin.prepare_import(),
+        )
         return Response(preview, status=status.HTTP_200_OK)
 
     @extend_schema(
@@ -632,39 +604,72 @@ class ProjectViewSet(ModelViewSet):
         methods=["post"],
         url_path="import-create-confirm",
         parser_classes=[MultiPartParser, FormParser],
-        permission_classes=[IsAuthenticated],
+        permission_classes=[HasModelPermission | HasProjectsImportCreatePermission],
+        serializer_class=ProjectImportConfirmSerializer
     )
     def import_create_confirm(self, request):
-        upload = request.FILES.get("file")
-        fmt = request.data.get("format", "xml")
-        cvs = set(request.data.get("checked_values", []))
-        css = set(request.data.get("checked_snapshots", []))
-
-        if not upload:
-            return Response({"detail": "No file uploaded."}, status=status.HTTP_400_BAD_REQUEST)
-
-        tmp_path = store_temp_file(upload)
-
-        plugin = get_plugin("PROJECT_IMPORTS", fmt)
-        if plugin is None:
-            return Response({"detail": f'Format "{fmt}" not configured.'}, status=status.HTTP_400_BAD_REQUEST)
-
-        plugin.file_name = tmp_path
-        plugin.request = request
-        plugin.current_project = None
-
-        try:
-            project = plugin.import_to_project(checked_values=cvs, checked_snapshots=css)
-        except ValidationError as exc:
-            return Response({"detail": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
-
+        project = self.handle_import_plugin_action(
+            plugin_call=lambda plugin, data: plugin.import_to_project(
+                checked_values=set(data["checked_values"]),
+                checked_snapshots=set(data["checked_snapshots"])
+            ),
+        )
         serializer = ProjectSerializer(project, context={"request": request})
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+    @extend_schema(
+        # request=ProjectFileUploadSerializer,
+        responses={200: ProjectImportPreviewResponseSerializer},
+    )
+    @action(
+        detail=True,
+        methods=["post"],
+        url_path="import-update-preview",
+        parser_classes=[MultiPartParser, FormParser],
+        permission_classes=(HasModelPermission | HasProjectImportUpdatePermission,),
+        serializer_class=ProjectFileUploadSerializer,
+    )
+    def import_update_preview(self, request, pk=None):
+        project = self.get_object()
 
-    @action(detail=True, methods=['get'],
-            permission_classes=(HasModelPermission | HasProjectPermission, ),
-            url_path='export(?:/(?P<export_format>[a-z]+))?')
+        preview = self.handle_import_plugin_action(
+            plugin_kwargs={"current_project": project},
+            plugin_call=lambda plugin, _: plugin.prepare_import(),
+        )
+        return Response(preview, status=status.HTTP_200_OK)
+
+    @extend_schema(
+        # request=ProjectImportConfirmSerializer,
+        responses={201: ProjectSerializer},
+    )
+    @action(
+        detail=True,
+        methods=["post"],
+        url_path="import-update-confirm",
+        parser_classes=[MultiPartParser, FormParser],
+        permission_classes=(HasModelPermission | HasProjectImportUpdatePermission,),
+        serializer_class=ProjectImportConfirmSerializer,
+
+    )
+    def import_update_confirm(self, request, pk=None):
+        project = self.get_object()
+
+        updated_project = self.handle_import_plugin_action(
+            plugin_kwargs={"current_project": project},
+            plugin_call=lambda plugin, data: plugin.import_to_project(
+                checked_values=set(data["checked_values"]),
+                checked_snapshots=set(data["checked_snapshots"])
+            ),
+        )
+        serializer = ProjectSerializer(updated_project, context={"request": request})
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    @action(
+        detail=True,
+        methods=["get"],
+        permission_classes=(HasModelPermission | HasProjectImportUpdatePermission,),
+        url_path="export(?:/(?P<export_format>[a-z]+))?",
+    )
     def export(self, request, pk=None, export_format='xml'):
         project = self.get_object()
         project.catalog.prefetch_elements()
@@ -688,14 +693,12 @@ class ProjectViewSet(ModelViewSet):
             'snapshots': full or is_truthy(request.GET.get('snapshots', True)),
         }
 
-
     def perform_create(self, serializer):
         project = serializer.save(site=get_current_site(self.request))
 
         # add current user as owner
         membership = Membership(project=project, user=self.request.user, role='owner')
         membership.save()
-
 
         # add all tasks to project
         if self.request.data.get('tasks') is None:
@@ -710,6 +713,28 @@ class ProjectViewSet(ModelViewSet):
                 views = View.objects.filter_for_project(project).filter_availability(self.request.user)
                 for view in views:
                     project.views.add(view)
+
+    def handle_import_plugin_action(
+        self,
+        plugin_kwargs=None,
+        plugin_call=None,
+    ):
+        serializer = self.get_serializer(data=self.request.data)
+        serializer.is_valid(raise_exception=True)
+
+        plugin_kwargs = plugin_kwargs or {}
+        try:
+            plugin = validate_and_prepare_import_plugin(
+                self.request,
+                file=serializer.validated_data["file"],
+                file_format=serializer.validated_data["format"],
+                **plugin_kwargs,
+            )
+            plugin_result = plugin_call(plugin, serializer.validated_data)
+        except ValidationError as exc:
+            raise serializers.ValidationError(exc) from exc
+        else:
+            return plugin_result
 
 
 class ProjectNestedViewSetMixin(NestedViewSetMixin):
@@ -914,7 +939,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         try:
             copy_value_id = int(request.data.pop('copy_set_value'))
         except KeyError as e:
-            raise ValidationError({
+            raise serializers.ValidationError({
                 'copy_set_value': [_('This field may not be blank.')]
             }) from e
         except ValueError as e:
