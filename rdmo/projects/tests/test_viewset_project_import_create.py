@@ -17,6 +17,14 @@ urlnames = {
     "import-update-confirm": "v1-projects:project-import-update-confirm",
 }
 
+def test_import_create_preview_get_not_allowed(db, client):
+    username = password = 'user'
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames["import-create-preview"])
+    response = client.get(url)
+    assert response.status_code == 403
+
 
 @pytest.mark.parametrize('username,password', users)
 def test_project_import_create_preview(db, client, settings, username, password):
@@ -42,6 +50,28 @@ def test_project_import_create_preview(db, client, settings, username, password)
     else:
         # Anonymous user -> 401 Unauthorized
         assert response.status_code == 401
+
+
+def test_import_create_preview_missing_file(db, client):
+    username = password = 'user'
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames["import-create-preview"])
+    resp = client.post(url, {'format': 'xml'})  # no 'file' key
+    assert resp.status_code == 400
+
+
+def test_import_create_preview_invalid_xml(db, client, settings):
+    username = password = 'user'
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames["import-create-preview"])
+    bad_xml = os.path.join(settings.BASE_DIR, "xml", "error.xml")
+    with open(bad_xml, "rb") as f:
+        resp = client.post(url, {"file": f, "format": "xml"})
+    assert resp.status_code == 400
+    assert 'Parsing error' in ' '.join(resp.json()['file'])
+
 
 @pytest.mark.parametrize('username,password', users)
 def test_project_import_create_confirm(db, client, settings, username, password):
@@ -80,8 +110,15 @@ def test_project_import_create_confirm(db, client, settings, username, password)
         assert confirm_response.status_code == 401
 
 
+def test_import_create_confirm_get_not_allowed(db, client):
+    username = password = "user"
+    client.login(username=username, password=password)
 
-# @pytest.mark.parametrize('username,password', users)
+    url = reverse(urlnames["import-create-confirm"])
+    response = client.get(url)
+    assert response.status_code == 403
+
+
 def test_import_create_confirm_restricted(db, client, settings):
     """
     When PROJECT_CREATE_RESTRICTED=True, only users in PROJECT_CREATE_GROUPS
@@ -119,7 +156,6 @@ def test_import_create_confirm_restricted(db, client, settings):
     result = confirm_resp.json()
     assert 'id' in result
     assert 'title' in result
-
 
 
 def test_import_create_confirm_forbidden(db, client, settings):
@@ -173,6 +209,19 @@ def test_project_import_update_preview(db, client, settings, username, password,
         assert response.status_code == 404
     else:
         assert response.status_code == 401
+
+
+def test_import_update_preview_invalid_xml(db, client, settings):
+    username = password = 'owner'
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames["import-update-preview"], args=[1])
+    bad_xml = os.path.join(settings.BASE_DIR, "xml", "error.xml")
+    with open(bad_xml, "rb") as f:
+        resp = client.post(url, {"file": f, "format": "xml"})
+    assert resp.status_code == 400
+    assert 'Parsing error' in ' '.join(resp.json()['file'])
+
 
 
 @pytest.mark.parametrize('username,password', users)
