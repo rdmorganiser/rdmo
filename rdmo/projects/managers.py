@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.db import models
 from django.db.models import Q
-from django.utils.timezone import now
 
 from mptt.models import TreeManager
 from mptt.querysets import TreeQuerySet
@@ -251,27 +250,6 @@ class InviteManager(CurrentSiteManagerMixin, models.Manager):
     def filter_user(self, user):
         return self.get_queryset().filter_user(user)
 
-    def get_or_refresh_invite(self, *, project, user, email, role):
-        invite = (
-            self.filter(project=project, user=user, email=email)
-            .order_by('-timestamp')
-            .first()
-        )
-
-        if invite:
-            invite.role = role
-            if invite.is_expired:
-                invite.timestamp = now()
-                invite.make_token()
-            invite.save()
-            created = False
-        else:
-            invite = self.model(project=project, user=user, email=email, role=role)
-            invite.make_token()
-            invite.save()
-            created = True
-
-        return invite, created
 
 
 class SnapshotManager(CurrentSiteManagerMixin, models.Manager):
