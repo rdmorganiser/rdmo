@@ -6,9 +6,9 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 
+from rdmo.accounts.serializers.v1 import UserLookupSerializer
 from rdmo.accounts.utils import get_full_name
 from rdmo.domain.models import Attribute
-from rdmo.projects.invite_utils import lookup_or_create_fresh_invite
 from rdmo.questions.models import Catalog
 from rdmo.services.validators import ProviderValidator
 
@@ -193,7 +193,7 @@ class ProjectIntegrationSerializer(serializers.ModelSerializer):
         return integration
 
 
-class ProjectInviteSerializer(serializers.ModelSerializer):
+class ProjectInviteSerializer(UserLookupSerializer, serializers.ModelSerializer):
 
     timestamp = serializers.DateTimeField(read_only=True)
 
@@ -204,8 +204,14 @@ class ProjectInviteSerializer(serializers.ModelSerializer):
             'user',
             'email',
             'role',
+            'lookup',
             'timestamp'
         )
+        extra_kwargs = {
+            # they must be optional because *lookup* can supply them
+            "user": {"required": False, "allow_null": True},
+            "email": {"required": False, "allow_null": True},
+        }
 
     def validate_user(self, value):
         if self.context['view'].project.memberships.filter(user=value).exists():
@@ -217,22 +223,60 @@ class ProjectInviteSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(_('A user with that e-mail is already a member of the project.'))
         return value
 
+    def resolve_lookup(self, value):
+        User = get_user_model()
+        if '@' in value:
+            # ``UserLookupSerializer.validate_lookup`` already validated the format
+            try:
+                user = User.objects.get(email__iexact=value)
+            except User.DoesNotExist:
+                user = None
+            except User.MultipleObjectsReturned as e:
+                raise serializers.ValidationError({'lookup': _('Multiple users found with that email.')}) from e
+            return user, value.lower()
+
+        try:
+            user = User.objects.get(username=value)
+        except User.DoesNotExist as e:
+            raise serializers.ValidationError({'lookup': _('No user with that username.')}) from e
+        except User.MultipleObjectsReturned as e:
+            raise serializers.ValidationError({'lookup': _('Multiple users found with that username.')}) from e
+        return user, user.email
+
+
+
     def validate(self, data):
-        user = data.get('user')
-        email = data.get('email')
+        User = get_user_model()
+
+        lookup = data.pop('lookup', None)
+
+        if lookup:
+            if data.get('user') or data.get('email'):
+                raise serializers.ValidationError(
+                    _('`lookup` must not be combined with `user` or `email`.'),
+                )
+            user, email = self.resolve_lookup(lookup)
+            data['user'],data['email'] = user, email
+
+        user = data.get("user")
+        email = data.get("email")
 
         if not user and not email:
-            raise serializers.ValidationError(_('Either user or e-mail needs to be provided.'))
-        elif user and email:
+            raise serializers.ValidationError(_('Either user, e-mail or lookup needs to be provided.'))
+        elif user and email and not lookup:
             raise serializers.ValidationError(_('User and e-mail are mutually exclusive.'))
-        elif user:
+
+        if user:
             data['email'] = user.email
-        elif email:
-            usermodel = get_user_model()
+            if lookup:
+                self.validate_user(user)
+        if email:
             try:
-                data['user'] = usermodel.objects.get(email=email)
-            except usermodel.DoesNotExist:
+                data['user'] = User.objects.get(email=email)
+            except User.DoesNotExist:
                 data['user'] = None
+            if lookup:
+                self.validate_email(email)
 
         return data
 
@@ -241,43 +285,6 @@ class ProjectInviteSerializer(serializers.ModelSerializer):
         invite.make_token()
         invite.save()
         return invite
-
-
-class ProjectInviteLookupSerializer(serializers.Serializer):
-    username_or_email = serializers.CharField(
-        help_text=_("The username or e-mail of the new user.")
-    )
-    role = serializers.ChoiceField(choices=Invite._meta.get_field('role').choices)
-
-    def validate_username_or_email(self, value: str) -> str:
-        if "@" in value:
-            validator = EmailValidator()
-            try:
-                validator(value)
-            except ValidationError as e:
-                raise serializers.ValidationError(validator.message) from e
-        return value
-
-    def create(self, validated_data):
-        try:
-            return lookup_or_create_fresh_invite(
-                project=self.context["project"],
-                username_or_email=validated_data["username_or_email"],
-                role=validated_data["role"],
-            )
-        except ValueError as e:
-            mapping = {
-                "already_member": _("That user is already a member."),
-                "email_invites_disabled": _("Inviting by e-mail is currently disabled."),
-                "user_not_found": _("No such user; only registered users can be invited."),
-                "invalid_email": EmailValidator().message,
-                "ambiguous_username": _("Multiple users match this identifier; please be more specific."),
-            }
-            message = mapping.get(str(e))
-            if message:
-                raise serializers.ValidationError({"username_or_email": message}) from e
-            # unexpected—re-raise
-            raise e from e
 
 
 class ProjectInviteUpdateSerializer(serializers.ModelSerializer):
@@ -358,7 +365,7 @@ class ProjectValueSerializer(serializers.ModelSerializer):
         )
 
 
-class MembershipSerializer(serializers.ModelSerializer):
+class MembershipSerializer(UserLookupSerializer, serializers.ModelSerializer):
 
     class Meta:
         model = Membership
@@ -368,6 +375,7 @@ class MembershipSerializer(serializers.ModelSerializer):
             'user',
             'role'
         )
+
 
 
 class IntegrationSerializer(serializers.ModelSerializer):
