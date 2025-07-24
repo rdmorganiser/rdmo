@@ -63,6 +63,10 @@ main {
 }
 
 section {
+    &.page {
+
+    }
+
     &:nth-child(even) {
         background-color: var(--rdmo-color-alt-bg);
     }

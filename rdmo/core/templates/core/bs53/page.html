@@ -1,0 +1,16 @@
+{% extends 'core/bs53/base.html' %}
+
+{% block content %}
+
+<main class="container">
+    <div class="row">
+        <section class="page col-md-9 py-5">
+            {% block page %}{% endblock %}
+        </section>
+        <aside class="sidebar col-md-3 py-5">
+            {% block sidebar %}{% endblock %}
+        </aside>
+    </div>
+</main>
+
+{% endblock %}

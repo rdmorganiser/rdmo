@@ -51,6 +51,12 @@ def render_lang_template(template_name, escape_html=False):
 
 
 @register.simple_tag(takes_context=True)
+def bootstrap_form_field(context, field, **kwargs):
+    field_type = field.field.__class__.__name__.lower()
+    return render_to_string(f'core/bs53/forms/bootstrap_{field_type}.html', {})
+
+
+@register.simple_tag(takes_context=True)
 def bootstrap_form(context, **kwargs):
     form_context = {}
 
