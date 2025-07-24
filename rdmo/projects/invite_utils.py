@@ -1,16 +1,15 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError as DjangoValidationError
+from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
 from django.db import transaction
-from django.utils.timezone import now
 
 from .models import Invite, Project
 
 User = get_user_model()
 
 
-def lookup_or_create_invite(
+def lookup_or_create_fresh_invite(
     project: Project,
     username_or_email: str,
     role: str,
@@ -43,26 +42,26 @@ def lookup_or_create_invite(
             # Validate it's a real-looking email
             try:
                 EmailValidator()(username_or_email)
-            except DjangoValidationError as ve:
-                raise ValueError("invalid_email") from ve
+            except ValidationError as e:
+                raise ValueError("invalid_email") from e
 
             user = None
             email = username_or_email
 
-        except User.MultipleObjectsReturned as me:
+        except User.MultipleObjectsReturned as e:
             # ambiguous email match—fall back the same way
             if not settings.PROJECT_SEND_INVITE:
-                raise ValueError("email_invites_disabled") from me
+                raise ValueError("email_invites_disabled") from e
             try:
                 EmailValidator()(username_or_email)
-            except DjangoValidationError as ve:
-                raise ValueError("invalid_email") from ve
+            except ValidationError as e:
+                raise ValueError("invalid_email") from e
             user = None
             email = username_or_email
 
-    except User.MultipleObjectsReturned as um:
+    except User.MultipleObjectsReturned as e:
         # ambiguous username match—treat as error
-        raise ValueError("ambiguous_username") from um
+        raise ValueError("ambiguous_username") from e
 
     # 4) if we found a user, make sure they're not already a member
     if user is not None and project.memberships.filter(user=user).exists():
@@ -70,17 +69,5 @@ def lookup_or_create_invite(
 
     # 5) create or refresh the invite
     with transaction.atomic():
-        qs = Invite.objects.filter(project=project, user=user, email=email)
-        if qs.exists():
-            invite = qs.latest('timestamp')
-            invite.role = role
-            if invite.is_expired:
-                invite.timestamp = now()
-                invite.make_token()
-            invite.save()
-            return invite
-
-        invite = Invite(project=project, user=user, email=email, role=role)
-        invite.make_token()
-        invite.save()
+        invite, _ = Invite.objects.get_or_refresh_invite(project=project, user=user, email=email, role=role)
         return invite
