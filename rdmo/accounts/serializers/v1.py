@@ -2,6 +2,9 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
+from django.core.exceptions import ValidationError
+from django.core.validators import EmailValidator
+from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 
@@ -85,3 +88,17 @@ class UserSerializer(serializers.ModelSerializer):
                 'last_login',
                 'date_joined',
             ]
+
+class UserLookupSerializer(serializers.Serializer):
+    lookup = serializers.CharField(
+        required=False, write_only=True, help_text=_("The username or e-mail of the user.")
+    )
+
+    def validate_lookup(self, value: str) -> str:
+        if "@" in value:
+            validator = EmailValidator()
+            try:
+                validator(value)
+            except ValidationError as e:
+                raise serializers.ValidationError(validator.message) from e
+        return value
