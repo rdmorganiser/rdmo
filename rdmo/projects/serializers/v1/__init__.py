@@ -1,15 +1,14 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError as DjangoValidationError
+from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
 
 from rdmo.accounts.utils import get_full_name
 from rdmo.domain.models import Attribute
-from rdmo.projects.invite_utils import lookup_or_create_invite
+from rdmo.projects.invite_utils import lookup_or_create_fresh_invite
 from rdmo.questions.models import Catalog
 from rdmo.services.validators import ProviderValidator
 
@@ -110,7 +109,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     def validate_views(self, value):
         """Block updates to views if syncing is enabled."""
         if settings.PROJECT_VIEWS_SYNC and value:
-            raise ValidationError(_('Editing views is disabled.'))
+            raise serializers.ValidationError(_('Editing views is disabled.'))
         return value
 
 
@@ -258,28 +257,26 @@ class ProjectInviteLookupSerializer(serializers.Serializer):
             validator = EmailValidator()
             try:
                 validator(value)
-            except DjangoValidationError as e:
+            except ValidationError as e:
                 raise serializers.ValidationError(validator.message) from e
         return value
 
     def create(self, validated_data):
         try:
-            return lookup_or_create_invite(
+            return lookup_or_create_fresh_invite(
                 project=self.context["project"],
                 username_or_email=validated_data["username_or_email"],
                 role=validated_data["role"],
             )
         except ValueError as e:
-            code = str(e)
-            invalid_email_msg = EmailValidator().message
             mapping = {
                 "already_member": _("That user is already a member."),
                 "email_invites_disabled": _("Inviting by e-mail is currently disabled."),
                 "user_not_found": _("No such user; only registered users can be invited."),
-                "invalid_email": invalid_email_msg,
+                "invalid_email": EmailValidator().message,
                 "ambiguous_username": _("Multiple users match this identifier; please be more specific."),
             }
-            message = mapping.get(code)
+            message = mapping.get(str(e))
             if message:
                 raise serializers.ValidationError({"username_or_email": message}) from e
             # unexpected—re-raise
