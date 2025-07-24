@@ -20,7 +20,6 @@ from rest_framework.reverse import reverse
 from rest_framework.viewsets import GenericViewSet, ModelViewSet, ReadOnlyModelViewSet
 
 from django_filters.rest_framework import DjangoFilterBackend
-from drf_spectacular.utils import extend_schema
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from rdmo.conditions.models import Condition
@@ -77,7 +76,6 @@ from .serializers.v1 import (
     ProjectHierarchySerializer,
     ProjectFileUploadSerializer,
     ProjectImportConfirmSerializer,
-    ProjectImportPreviewResponseSerializer,
     ProjectIntegrationSerializer,
     ProjectInviteCreateSerializer,
     ProjectInviteSerializer,
@@ -577,10 +575,6 @@ class ProjectViewSet(ModelViewSet):
             'href': reverse('project_create_import', args=[key])
         } for key, label, class_name in settings.PROJECT_IMPORTS if key in settings.PROJECT_IMPORTS_LIST] )
 
-    @extend_schema(
-        # request=ProjectFileUploadSerializer,
-        responses={200: ProjectImportPreviewResponseSerializer},
-    )
     @action(
         detail=False,
         methods=["post"],
@@ -595,10 +589,6 @@ class ProjectViewSet(ModelViewSet):
         )
         return Response(preview, status=status.HTTP_200_OK)
 
-    @extend_schema(
-        request=ProjectImportConfirmSerializer,
-        responses={201: ProjectSerializer},
-    )
     @action(
         detail=False,
         methods=["post"],
@@ -617,10 +607,6 @@ class ProjectViewSet(ModelViewSet):
         serializer = ProjectSerializer(project, context={"request": request})
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    @extend_schema(
-        # request=ProjectFileUploadSerializer,
-        responses={200: ProjectImportPreviewResponseSerializer},
-    )
     @action(
         detail=True,
         methods=["post"],
@@ -638,10 +624,6 @@ class ProjectViewSet(ModelViewSet):
         )
         return Response(preview, status=status.HTTP_200_OK)
 
-    @extend_schema(
-        # request=ProjectImportConfirmSerializer,
-        responses={201: ProjectSerializer},
-    )
     @action(
         detail=True,
         methods=["post"],
@@ -667,7 +649,7 @@ class ProjectViewSet(ModelViewSet):
     @action(
         detail=True,
         methods=["get"],
-        permission_classes=(HasModelPermission | HasProjectImportUpdatePermission,),
+        permission_classes=(HasModelPermission | HasProjectPermission,),
         url_path="export(?:/(?P<export_format>[a-z]+))?",
     )
     def export(self, request, pk=None, export_format='xml'):
