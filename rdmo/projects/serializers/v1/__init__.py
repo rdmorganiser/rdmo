@@ -1,7 +1,5 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
-from django.core.validators import EmailValidator
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
@@ -129,15 +127,41 @@ class ProjectVisibilitySerializer(serializers.ModelSerializer):
         )
 
 
-class ProjectMembershipSerializer(serializers.ModelSerializer):
+class ProjectMembershipSerializer(UserLookupSerializer, serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(
+        queryset=get_user_model().objects.all(), allow_null=True, required=False
+    )
 
     class Meta:
         model = Membership
         fields = (
             'id',
             'user',
-            'role'
+            'role',
+            'lookup',  # write-only
+            'first_name',  # read-only
+            'last_name',  # read-only
         )
+
+    def validate_user(self, value):
+        if self.context["view"].project.memberships.filter(user=value).exists():
+            raise serializers.ValidationError(_("The user is already a member of the project."))
+        return value
+
+    def validate(self, data):
+        lookup = data.pop("lookup", None)
+        if lookup:
+            if data.get("user"):
+                raise serializers.ValidationError(_("Cannot combine `lookup` and `user`."))
+            user, _email = self.resolve_lookup(lookup)
+            self.validate_user(user)
+            data["user"] = user
+
+        user = data.get("user")
+        if not user:
+            raise serializers.ValidationError(_("User must be provided via `user` or `lookup`."))
+
+        return data
 
 
 class ProjectMembershipUpdateSerializer(serializers.ModelSerializer):
@@ -194,8 +218,11 @@ class ProjectIntegrationSerializer(serializers.ModelSerializer):
 
 
 class ProjectInviteSerializer(UserLookupSerializer, serializers.ModelSerializer):
-
     timestamp = serializers.DateTimeField(read_only=True)
+    user = serializers.PrimaryKeyRelatedField(
+        queryset=get_user_model().objects.all(), allow_null=True, required=False
+    )
+    email = serializers.EmailField(required=False, allow_null=True)
 
     class Meta:
         model = Invite
@@ -203,15 +230,12 @@ class ProjectInviteSerializer(UserLookupSerializer, serializers.ModelSerializer)
             'id',
             'user',
             'email',
+            'first_name',  # read-only
+            'last_name',  # read-only
             'role',
-            'lookup',
+            'lookup',  # write-only
             'timestamp'
         )
-        extra_kwargs = {
-            # they must be optional because *lookup* can supply them
-            "user": {"required": False, "allow_null": True},
-            "email": {"required": False, "allow_null": True},
-        }
 
     def validate_user(self, value):
         if self.context['view'].project.memberships.filter(user=value).exists():
@@ -223,28 +247,6 @@ class ProjectInviteSerializer(UserLookupSerializer, serializers.ModelSerializer)
             raise serializers.ValidationError(_('A user with that e-mail is already a member of the project.'))
         return value
 
-    def resolve_lookup(self, value):
-        User = get_user_model()
-        if '@' in value:
-            # ``UserLookupSerializer.validate_lookup`` already validated the format
-            try:
-                user = User.objects.get(email__iexact=value)
-            except User.DoesNotExist:
-                user = None
-            except User.MultipleObjectsReturned as e:
-                raise serializers.ValidationError({'lookup': _('Multiple users found with that email.')}) from e
-            return user, value.lower()
-
-        try:
-            user = User.objects.get(username=value)
-        except User.DoesNotExist as e:
-            raise serializers.ValidationError({'lookup': _('No user with that username.')}) from e
-        except User.MultipleObjectsReturned as e:
-            raise serializers.ValidationError({'lookup': _('Multiple users found with that username.')}) from e
-        return user, user.email
-
-
-
     def validate(self, data):
         User = get_user_model()
 
@@ -253,10 +255,14 @@ class ProjectInviteSerializer(UserLookupSerializer, serializers.ModelSerializer)
         if lookup:
             if data.get('user') or data.get('email'):
                 raise serializers.ValidationError(
-                    _('`lookup` must not be combined with `user` or `email`.'),
+                    _('lookup must not be combined with user or email.'),
                 )
             user, email = self.resolve_lookup(lookup)
-            data['user'],data['email'] = user, email
+            if user:
+                self.validate_user(user)
+            if email:
+                self.validate_email(email)
+            data["user"], data["email"] = user, email
 
         user = data.get("user")
         email = data.get("email")
@@ -268,15 +274,12 @@ class ProjectInviteSerializer(UserLookupSerializer, serializers.ModelSerializer)
 
         if user:
             data['email'] = user.email
-            if lookup:
-                self.validate_user(user)
+
         if email:
             try:
                 data['user'] = User.objects.get(email=email)
             except User.DoesNotExist:
                 data['user'] = None
-            if lookup:
-                self.validate_email(email)
 
         return data
 
@@ -365,7 +368,7 @@ class ProjectValueSerializer(serializers.ModelSerializer):
         )
 
 
-class MembershipSerializer(UserLookupSerializer, serializers.ModelSerializer):
+class MembershipSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Membership
