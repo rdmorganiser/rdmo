@@ -76,6 +76,8 @@ def test_detail(db, client, username, password, project_id, invite_id):
         assert response.status_code == 200
         assert isinstance(response.json(), dict)
         assert response.json().get('id') == invite_id
+        assert 'first_name' in response.json()
+        assert 'last_name' in response.json()
     else:
         assert response.status_code == 404
 
@@ -136,6 +138,8 @@ def test_create_lookup(db, client, username, password, project_id):
 
     if project_id in add_invite_permission_map.get(username, []):
         assert response.status_code == 201
+        assert response.json()["first_name"]
+        assert response.json()["last_name"]
     elif project_id in view_invite_permission_map.get(username, []):
         assert response.status_code == 403
     else:
@@ -182,7 +186,7 @@ def test_create_error_user_and_email(db, client):
 
 
 @pytest.mark.parametrize('lookup,expected_error', [
-    ('nosuchuser', 'No user with that username.'),
+    ('nosuchuser', 'No user found.'),
     ('bad@mail', 'Enter a valid email address.'),
 ])
 def test_create_lookup_error_invalid(db, client, lookup, expected_error):
