@@ -90,6 +90,8 @@ class UserSerializer(serializers.ModelSerializer):
             ]
 
 class UserLookupSerializer(serializers.Serializer):
+    first_name = serializers.CharField(source='user.first_name', read_only=True)
+    last_name = serializers.CharField(source='user.last_name', read_only=True)
     lookup = serializers.CharField(
         required=False, write_only=True, help_text=_("The username or e-mail of the user.")
     )
@@ -102,3 +104,24 @@ class UserLookupSerializer(serializers.Serializer):
             except ValidationError as e:
                 raise serializers.ValidationError(validator.message) from e
         return value
+
+    def resolve_lookup(self, value):
+        User = get_user_model()
+
+        # 1) Try exact username match first — even if it contains '@'
+        try:
+            user = User.objects.get(username=value)
+        except User.DoesNotExist:
+            # 2) Try case-insensitive email match
+            try:
+                user = User.objects.get(email__iexact=value)
+            except User.DoesNotExist as e:
+                raise serializers.ValidationError({"lookup": _("No user found.")}) from e
+            except User.MultipleObjectsReturned as e:
+                raise serializers.ValidationError({"lookup": _("Multiple users found with that e-mail.")}) from e
+            else:
+                return user, user.email
+        except User.MultipleObjectsReturned as e:
+            raise serializers.ValidationError({'lookup': _('Multiple users found with that username.')}) from e
+        else:
+            return user, user.email
