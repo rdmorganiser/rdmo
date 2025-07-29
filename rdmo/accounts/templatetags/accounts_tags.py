@@ -23,3 +23,8 @@ def user_data_as_dl(user):
         html += f'<dt>{additional_value.field.text}</dt><dd>{additional_value.value}</dd>'
     html += '</dl>'
     return mark_safe(html)
+
+
+@register.simple_tag()
+def sign_in_text(provider_name):
+    return _('Sign in with %s') % provider_name
