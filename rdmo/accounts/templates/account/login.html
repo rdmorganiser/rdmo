@@ -1,49 +1,24 @@
 {% extends 'core/bs53/page.html' %}
 {% load i18n %}
-{% load core_tags %}
 
 {% block page %}
 
     <h1>{% trans "Login" %}</h1>
 
-    {% if settings.SHIBBOLETH %}
-    <p style="margin-bottom: 20px;">
-        <a class="btn btn-success extend" href="{% url 'shibboleth_login' %}">
-            {% trans 'Login with Shibboleth' %}
-        </a>
-    </p>
-    {% endif %}
-
-    {% if settings.LOGIN_FORM %}
-    <form method="post" action="{% url 'account_login' %}" class="mb-5">
-        {% csrf_token %}
-
-        {% if redirect_field_value %}
-        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-        {% elif next %}
-        <input type="hidden" name="next" value="{{ next }}" />
+    <div class="d-flex flex-column gap-4">
+        {% if settings.LOGIN_FORM %}
+        {% include 'account/login_form.html' %}
         {% endif %}
 
-        {% for field in form.visible_fields %}
-            {% bootstrap_form_field field %}
-        {% endfor %}
+        {% if settings.SHIBBOLETH %}
+        {% include 'account/login_shibboleth.html' %}
+        {% endif %}
 
-        <input type="submit" class="btn btn-primary mb-2" value="{% trans 'Login' %}" />
-
-        {% for error in form.non_field_errors %}
-        <ul class="text-danger list-unstyled form-errors">
-            <li>{{ error }}</li>
-        </ul>
-        {% endfor %}
-    </form>
-    {% endif %}
-
-    {% if settings.ACCOUNT %}
-    {% include 'account/login_form_account.html' %}
-    {% endif %}
-
-    {% if settings.SOCIALACCOUNT %}
-    {% include 'account/login_form_socialaccount.html' %}
-    {% endif %}
+        {% if settings.SOCIALACCOUNT %}
+        <div class="d-flex flex-wrap align-items-start gap-2">
+            {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+        </div>
+        {% endif %}
+    </div>
 
 {% endblock %}

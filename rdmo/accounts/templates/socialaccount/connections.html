@@ -1,78 +1,76 @@
-{% extends 'core/page.html' %}
+{% extends 'core/bs53/page.html' %}
 {% load i18n %}
-{% load static %}
-{% load accounts_tags %}
 
 {% block page %}
 
     <h1>{% trans "Account connections" %}</h1>
 
-    <h2>{% trans 'Current connections' %}</h2>
+    <div class="mb-4">
 
-    {% if form.accounts %}
+        <h2>{% trans 'Current connections' %}</h2>
 
-    <p>
-        {% blocktrans trimmed %}
-        You can sign in to your account using any of the following third party accounts:
-        {% endblocktrans %}
-    </p>
+        {% if form.accounts %}
 
-    <form class="connections-form" method="post" action="{% url 'socialaccount_connections' %}">
-        {% csrf_token %}
+        <p>
+            {% blocktrans trimmed %}
+            You can sign in to your account using any of the following third party accounts:
+            {% endblocktrans %}
+        </p>
 
-        <fieldset>
-            {% if form.non_field_errors %}
-            <div id="errorMsg">{{ form.non_field_errors }}</div>
-            {% endif %}
+        <form method="post" action="{% url 'socialaccount_connections' %}">
+            {% csrf_token %}
 
             {% for base_account in form.accounts %}
             {% with base_account.get_provider_account as account %}
 
-            <label for="id_account_{{ base_account.id }}">
-                <input id="id_account_{{ base_account.id }}" type="radio" name="account" value="{{ base_account.id }}"/>
+            {% if forloop.first %}
+            <hr />
+            {% endif%}
 
-                {% if base_account.provider == 'orcid' %}
-                <a href="https://orcid.org/{{ base_account.uid }}" target="_blank">
-                    <img alt="ORCID logo" src="{% static 'accounts/img/orcid_16x16.png' %}" width="16" height="16" />
-                    https://orcid.org/{{ base_account.uid }}
-                </a>
-                {% else %}
-                <span>{{account.get_brand.name}}</span>
-                {% endif %}
-            </label>
+            <div class="form-check mb-2">
+                <input type="radio" name="account" value="{{ base_account.id }}" id="remove-{{ base_account.id }}"
+                       class="form-check-input {% if field.errors %}is-invalid{% endif %}"
+                       aria-describedby="{{ field.id_for_label }}-help">
+
+                <label class="form-check-label" for="remove-{{ base_account.id }}">
+                    {{account.get_brand.name}} ({{ account }})
+                </label>
+
+                {% for error in field.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <hr />
 
             {% endwith %}
             {% endfor %}
 
-            <div class="connections-form-buttons">
-                <input type="submit" class="btn btn-danger" value="{% trans 'Remove selected account' %}" />
-            </div>
-        </fieldset>
-    </form>
+            <button type="submit" class="btn btn-sm btn-danger" name="action_primary">
+                {% trans 'Remove selected' %}
+            </button>
+        </form>
 
-    <ul class="list-unstyled text-danger">
-    {% for error in form.non_field_errors %}
-        <li>{{ error }}</li>
-    {% endfor %}
-    </ul>
+        {% else %}
 
-    {% else %}
+        <p>
+            {% trans 'You currently have no social network accounts connected to this account.' %}
+        </p>
 
-    <p>
-        {% trans 'You currently have no social network accounts connected to this account.' %}
-    </p>
+        {% endif %}
 
-    {% endif %}
+    </div>
 
-    {% get_inactive_providers as inactive_providers %}
-    {% if inactive_providers %}
-    <h2>{% trans 'Add an additional account' %}</h2>
+    <div class="mb-4">
 
-    <ul class="socialaccount_providers">
-    {% include "socialaccount/snippets/provider_list.html" with process="connect" socialaccount_providers=inactive_providers %}
-    </ul>
-    {% endif %}
+        <h2>{% trans 'Add an additional account' %}</h2>
 
-    {% include "socialaccount/snippets/login_extra.html" %}
+        <div class="d-flex flex-wrap align-items-start gap-2">
+            {% include "socialaccount/snippets/provider_list.html" with process="connect" %}
+        </div>
+
+        {% include "socialaccount/snippets/login_extra.html" %}
+
+    </div>
 
 {% endblock %}

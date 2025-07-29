@@ -1,0 +1,28 @@
+{% extends 'account/terms_of_use.html' %}
+{% load i18n %}
+
+{% block page %}
+
+    {{ block.super }}
+
+    <div>
+        {% if not has_consented %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            {% include 'account/terms_of_use_consent.html' %}
+
+            <button type="submit" class="btn btn-primary">
+                {% trans 'Submit' %}
+            </button>
+        </form>
+
+        {% else %}
+        <p>
+            {% trans "You have already accepted the terms of use." %}
+        </p>
+        {% endif %}
+    </div>
+
+{% endblock %}
