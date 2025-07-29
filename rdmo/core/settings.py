@@ -265,6 +265,13 @@ TEMPLATES_API = [
     'projects/project_interview_question_help.html',
     'projects/project_interview_questionset_help.html',
     'projects/project_interview_sidebar.html',
+    'projects/project_view_invite_member.html',
+    'projects/project_view_invite_member_user_help.html',
+    'projects/project_view_invite_member_silently_help.html',
+    'projects/project_view_manager_info.html',
+    'projects/project_view_guest_info.html',
+    'projects/project_view_author_info.html',
+    'projects/project_view_owner_info.html',
 ]
 
 TEMPLATES_EXECUTE_SCRIPT_TAGS = False
