@@ -15,7 +15,7 @@ from ..views import (
 urlpatterns = [
     # edit own profile
     re_path(r'^$', profile_update, name='profile_update'),
-    re_path('^remove', remove_user, name='profile_remove'),
+    re_path('^remove/', remove_user, name='profile_remove'),
 ]
 
 if settings.ACCOUNT_TERMS_OF_USE:

@@ -1,5 +1,9 @@
 $image-transition: opacity 2s ease-in-out;
 
+html, body {
+  background-color: var(--rdmo-color-bg);
+}
+
 .content {
     display: flex;
     flex-direction: column;
@@ -15,6 +19,20 @@ header {
     position: relative;
     flex-shrink: 0;
     overflow: hidden;
+
+    a:not(.btn) ,
+    button.link {
+        color: var(--rdmo-color-header);
+        &:hover {
+            color: var(--rdmo-color-header);
+            text-decoration: underline;
+        }
+    }
+
+    .container {
+        padding-top: 6rem;
+        padding-bottom: 6rem;
+    }
 
     .header-image {
         position: absolute;
@@ -63,10 +81,6 @@ main {
 }
 
 section {
-    &.page {
-
-    }
-
     &:nth-child(even) {
         background-color: var(--rdmo-color-alt-bg);
     }

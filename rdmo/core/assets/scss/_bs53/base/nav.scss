@@ -11,6 +11,8 @@ nav.navbar {
     --bs-navbar-brand-color: var(--bs-navbar-color);
     --bs-navbar-brand-hover-color: var(--bs-navbar-hover-color);
 
+    background-color: var(--rdmo-color);
+
     .container-fluid {
         @media only screen and (min-width: $grid-breakpoint-md) {
             padding-left: 3rem;
@@ -19,15 +21,12 @@ nav.navbar {
     }
 
     .dropdown-menu {
-        --bs-dropdown-color: var(--rdmo-color);
-        --bs-nav-link-color: var(--rdmo-color);
-        --bs-nav-link-hover-color: var(--rdmo-color);
-        --bs-nav-link-active-color: var(--rdmo-color);
+        --bs-nav-link-color: var(--rdmo-color-link);
+        --bs-nav-link-hover-color: var(--rdmo-color-link-hover);
+        --bs-nav-link-active-color: var(--rdmo-color-link);
 
         .nav-item:hover {
             background-color: var(--rdmo-color-bg);
         }
     }
-
-    background-color: var(--rdmo-color-primary);
 }
