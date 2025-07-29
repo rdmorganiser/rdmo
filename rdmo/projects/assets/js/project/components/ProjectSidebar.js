@@ -38,8 +38,8 @@ const ProjectSidebar = ({ menuItems }) => {
       </ul>
 
       <div className="p-3 mt-auto">
-        {/* <a href="/projects" className="nav-link text-dark w-100 text-start d-flex align-items-center gap-2"> */}
-        <a href="/projects" className="nav-link text-light w-100 text-start d-flex align-items-center gap-2">
+        <a href="/projects" className="nav-link text-dark w-100 text-start d-flex align-items-center gap-2">
+        {/* <a href="/projects" className="nav-link text-light w-100 text-start d-flex align-items-center gap-2"> */}
 
           <i className="bi bi-arrow-left"></i> {gettext('Back to projects overview')}
         </a>
