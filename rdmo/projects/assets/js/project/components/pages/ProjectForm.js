@@ -12,6 +12,8 @@ import { updateProject } from '../../actions/projectActions'
 const ProjectForm = () => {
   const { project, catalogs } = useSelector((state) => state.project.project)
   console.log ('project %o', project)
+  // const templates = useSelector((state) => state.templates)
+  // console.log('templates %o', templates)
   const dispatch = useDispatch()
 
   const [formData, setFormData] = useState(project || {})
@@ -114,11 +116,10 @@ const ProjectForm = () => {
       />
       */}
 
-      {/* TODO show only active catalogs */}
       <div className="mb-3">
         <label className="form-label fw-bold">{gettext('Catalog')}</label>
         <div className="form-text">Der Fragenkatalog, der für dieses Projekt verwendet wird.</div>
-        {catalogs?.map((catalog) => (
+        {catalogs?.filter(catalog => catalog.available).map((catalog) => (
           <div key={catalog.id} className="form-check">
             <input
               type="radio"
