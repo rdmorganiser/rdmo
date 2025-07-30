@@ -134,6 +134,7 @@ class ProjectMembershipSerializer(UserLookupSerializer, serializers.ModelSeriali
     user = serializers.PrimaryKeyRelatedField(
         queryset=get_user_model().objects.all(), allow_null=True, required=False
     )
+    email = serializers.EmailField(source='user.email', read_only=True)
 
     class Meta:
         model = Membership
@@ -144,6 +145,7 @@ class ProjectMembershipSerializer(UserLookupSerializer, serializers.ModelSeriali
             'lookup',  # write-only
             'first_name',  # read-only
             'last_name',  # read-only
+            'email',  # read-only
         )
 
     def validate_user(self, value):

@@ -56,10 +56,12 @@ def test_list(db, client, username, password, project_id):
 
         if username == 'user':
             assert sorted([item['id'] for item in response.json()]) == memberships_visible
+            assert all('email' in i for i in response.json())
         else:
             values_list = Membership.objects.filter(project_id=project_id) \
                                             .order_by('id').values_list('id', flat=True)
             assert sorted([item['id'] for item in response.json()]) == list(values_list)
+            assert all("email" in i for i in response.json())
     else:
         assert response.status_code == 404
 
@@ -77,6 +79,7 @@ def test_detail(db, client, username, password, membership_id):
         assert response.status_code == 200
         assert isinstance(response.json(), dict)
         assert response.json().get('id') == membership_id
+        assert response.json().get("email") == membership.user.email  # new field
     else:
         assert response.status_code == 404
 
