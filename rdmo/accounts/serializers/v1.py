@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 
-from rdmo.projects.models import Membership
+from rdmo.projects.models import Invite, Membership
 
 from ..models import Role
 
@@ -116,6 +116,13 @@ class UserLookupSerializer(serializers.Serializer):
             try:
                 user = User.objects.get(email__iexact=value)
             except User.DoesNotExist as e:
+                if (
+                    "@" in value and
+                    self.Meta.model is Invite and
+                    settings.PROJECT_SEND_INVITE
+                ):
+                    # return an email when invite send is allowed
+                    return None, value
                 raise serializers.ValidationError({"lookup": _("No user found.")}) from e
             except User.MultipleObjectsReturned as e:
                 raise serializers.ValidationError({"lookup": _("Multiple users found with that e-mail.")}) from e
