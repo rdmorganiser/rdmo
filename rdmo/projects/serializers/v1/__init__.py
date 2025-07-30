@@ -269,7 +269,7 @@ class ProjectInviteSerializer(UserLookupSerializer, serializers.ModelSerializer)
         user = data.get("user")
         email = data.get("email")
 
-        if not user and not email:
+        if not user and not email and not lookup:
             raise serializers.ValidationError(_('Either user, e-mail or lookup needs to be provided.'))
         elif user and email and not lookup:
             raise serializers.ValidationError(_('User and e-mail are mutually exclusive.'))
