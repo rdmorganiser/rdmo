@@ -47,6 +47,37 @@ def compute_sets(values):
     return sets
 
 
+def _visible_sets(element, conditions):
+    """
+    Return the set of (set_prefix, set_index) tuples for which *element*
+    is visible according to its own conditions.
+
+    Elements without a ``conditions`` manager (e.g. Catalog) are always
+    visible in the root set ('', 0).
+    """
+    manager = getattr(element, 'conditions', None)
+    if manager is None:
+        return {('', 0)}
+
+    element_conditions = {c.id for c in manager.all()}
+
+    # no conditions → always visible
+    if not element_conditions:
+        return {('', 0)}
+
+    is_collection = getattr(element, 'is_collection', False)
+    visible = set()
+
+    for condition_id in element_conditions:
+        for set_prefix, set_index in conditions[condition_id]:
+            if set_prefix == '':
+                if is_collection:
+                    visible.add(('', set_index))
+                else:
+                    visible.add(('', 0))
+    return visible
+
+
 def compute_next_relevant_page(current_page, direction, catalog, resolved_conditions):
     # recursively compute the next relevant page based on resolved conditions.
     # first, get the next page from the catalog based on the specified direction
@@ -69,20 +100,8 @@ def compute_next_relevant_page(current_page, direction, catalog, resolved_condit
 
 def compute_show_page(page, conditions):
     # determine if a page should be shown based on resolved conditions
-    # show only pages with resolved conditions, but show all pages without conditions
-    pages_conditions = {page.id for page in page.conditions.all()}
-
-    if pages_conditions:
-        # check if any valuesets for set_prefix = '' resolved
-        # for non collection pages restrict further to set_index = 0
-
-        return any(
-            (set_prefix == '') and (page.is_collection or set_index == 0)
-            for page_condition in pages_conditions
-            for set_prefix, set_index in conditions[page_condition]
-        )
-    else:
-        return True
+    # (show only pages with resolved conditions, but show all pages without conditions)
+    return bool(_visible_sets(page, conditions))
 
 
 def compute_navigation(section, project, snapshot=None):
@@ -90,16 +109,16 @@ def compute_navigation(section, project, snapshot=None):
     values = project.values.filter(snapshot=snapshot).select_related('attribute', 'option')
 
     # compute sets from values (including empty values)
-    sets = compute_sets(values)
+    raw_sets = compute_sets(values)
 
     # resolve all conditions to get a dict mapping conditions to set_indexes
-    conditions = resolve_conditions(project.catalog, values, sets)
+    conditions = resolve_conditions(project.catalog, values, raw_sets)
 
     # compute sets anew, but without empty optional values
-    sets = compute_sets(values.exclude_empty_optional(project.catalog))
+    answered_sets = compute_sets(values.exclude_empty_optional(project.catalog))
 
     # query distinct, non empty set values
-    values_list = values.exclude_empty().distinct_list()
+    answered_values = values.exclude_empty().distinct_list()
 
     navigation = []
     for catalog_section in project.catalog.elements:
@@ -109,21 +128,21 @@ def compute_navigation(section, project, snapshot=None):
             'title': markdown2html(catalog_section.short_title or catalog_section.title),
             'first': catalog_section.elements[0].id if catalog_section.elements else None,
             'count': 0,
-            'total': 0
+            'total': 0,
+            'show': True  # will be adjusted later
         }
         if section is not None and catalog_section.id == section.id:
             navigation_section['pages'] = []
 
         for page in catalog_section.elements:
-
             # determine if a page should be shown or not
             show = compute_show_page(page, conditions)
 
             # count the total number of questions, taking sets and conditions into account
-            counts = count_questions(page, sets, conditions)
+            counts = count_questions(page, answered_sets, conditions)
 
-            # filter the values_list for the attributes, and compute the total sum of counts
-            count = sum(1 for value in values_list if value[0] in counts)
+            # filter the answered_values for the attributes, and compute the total sum of counts
+            count = sum(1 for value in answered_values if value[0] in counts)
             total = sum(counts.values())
 
             navigation_section['count'] += count
@@ -139,6 +158,10 @@ def compute_navigation(section, project, snapshot=None):
                     'total': total
                 })
 
+        # Hide or grey-out sections that contain no questions at all
+        if navigation_section['total'] == 0:
+            navigation_section['show'] = False
+
         navigation.append(navigation_section)
 
     return navigation
@@ -148,30 +171,43 @@ def compute_progress(project, snapshot=None):
     # get all values for this project and snapshot
     values = project.values.filter(snapshot=snapshot).select_related('attribute', 'option')
 
-    # compute sets from values (including empty values)
-    sets = compute_sets(values)
+    # compute sets from values (including empty values), necessary for condition resolution
+    raw_sets = compute_sets(values)
 
-    # resolve all conditions to get a dict mapping conditions to set_indexes
-    conditions = resolve_conditions(project.catalog, values, sets)
+    # resolve all conditions
+    conditions = resolve_conditions(project.catalog, values, raw_sets)
 
     # query distinct, non empty set values
-    values_list = values.exclude_empty().distinct_list()
+    answered_values = values.exclude_empty().distinct_list()
 
     # compute sets anew, but without empty optional values
-    sets = compute_sets(values.exclude_empty_optional(project.catalog))
+    answered_sets = compute_sets(values.exclude_empty_optional(project.catalog))
 
     # count the total number of questions, taking sets and conditions into account
-    counts = count_questions(project.catalog, sets, conditions)
+    counts = count_questions(project.catalog, answered_sets, conditions)
 
-    # filter the values_list for the attributes, and compute the total sum of counts
-    count = sum(1 for value in values_list if value[0] in counts)
+    # filter the answered_values for the attributes, and compute the total sum of counts
+    count = sum(1 for value in answered_values if value[0] in counts)
     total = sum(counts.values())
 
     return count, total
 
 
 def count_questions(element, sets, conditions):
+    """
+    Recursively collect a mapping {attribute_id: required_answer_count}.
+
+    * Pages / QuestionSets are considered only when *they themselves* are
+      visible (their own conditions resolve).
+    * Questions are counted only for the sets where *both* the parent element
+      and the question are visible.
+    """
     counts = defaultdict(int)
+
+    # Skip elements that are completely hidden
+    visible_sets = _visible_sets(element, conditions)
+    if not visible_sets:
+        return counts
 
     if isinstance(element, (Page, QuestionSet)):
         # obtain the maximum number of set-distinct values for the questions in this page or
@@ -179,81 +215,46 @@ def count_questions(element, sets, conditions):
         # this number to determine how often a question needs to be counted
         element_sets = set()
 
-        # count the sets for the id attribute of the page or question
+        # a) own attribute values
         if element.attribute is not None:
-            # nested loop over the separate set_prefix, set_index lists in sets[element.attribute.id]
-            for set_prefix, set_index in sets[element.attribute.id]:
-                element_sets.add((set_prefix, set_index))
+            element_sets.update(sets[element.attribute.id])
 
-        # count the sets for the questions in the page or question
+        # b) direct child questions' attribute values
         for child in element.elements:
-            if isinstance(child, Question):
-                if child.attribute is not None:
-                    # nested loop over the separate set_prefix, set_index lists in sets[element.attribute.id]
-                    for set_prefix, set_index in sets[child.attribute.id]:
-                        element_sets.add((set_prefix, set_index))
+            if isinstance(child, Question) and child.attribute is not None:
+                element_sets.update(sets[child.attribute.id])
 
-        # look for the elements conditions
-        element_conditions = {condition.id for condition in element.conditions.all()}
-
-        # if this element has conditions: check if those conditions resolve for the found sets
-        if element_conditions:
-            # compute the intersection of the conditions of this child with the full set of conditions
-            element_condition_intersection = {
-                (set_prefix, set_index)
-                for condition_id, condition in conditions.items()
-                for set_prefix, set_index in conditions[condition_id]
-                if condition_id in element_conditions
-            }
-
-            resolved_sets = element_sets.intersection(element_condition_intersection)
-            if resolved_sets:
-                set_count = len(resolved_sets) if element.is_collection else 1
-            else:
-                # return immediately and do not consider children, this page/questionset is hidden
+        if element.is_collection:
+            # count only those instances that are both answered and visible
+            answered_visible_sets = element_sets & visible_sets
+            set_count = len(answered_visible_sets)
+            if set_count == 0:
                 return counts
         else:
-            set_count = len(element_sets) if element.is_collection else 1
+            set_count = 1
+    else:
+        # plain Question handled below
+        set_count = 0
 
-    # loop over all children of this element
+
     for child in element.elements:
-        # look for the child element's conditions
-        if isinstance(child, (Page, QuestionSet, Question)):
-            child_conditions = {condition.id for condition in child.conditions.all()}
-        else:
-            child_conditions = set()
+        if isinstance(child, Question):
+            # honour the question's own conditions
+            child_visible_sets = _visible_sets(child, conditions) & visible_sets
+            if not child_visible_sets:
+                continue
 
-        # compute the intersection of the conditions of this child with the full set of conditions
-        child_condition_intersection = {
-            (set_prefix, set_index)
-            for condition_id, condition in conditions.items()
-            for set_prefix, set_index in conditions[condition_id]
-            if condition_id in child_conditions
-        }
+            if child.attribute is None:
+                continue
 
-        # check if the element either has no condition or its conditions intersect with the full set of conditions
-        if not child_conditions or child_condition_intersection:
-            if isinstance(child, Question):
-                # for regular questions add the set_count to the counts dict, since the
-                # question should be answered in every set
-                # for optional questions add just the number of present answers, so that
-                # only answered questions count for the progress/navigation
-                # use the max function, since the same attribute could appear twice in the tree
-                if child.attribute is not None:
-                    if child.is_optional:
-                        child_count = len(sets[child.attribute.id])
-                        counts[child.attribute.id] = max(counts[child.attribute.id], child_count)
-                    else:
-                        if child_condition_intersection:
-                            # update the set_count for the current question (child element)
-                            # count only the sets that have conditions resolved to true
-                            current_count = len(element_sets.intersection(child_condition_intersection))
-                        else:
-                            current_count = set_count
-
-                        counts[child.attribute.id] = max(counts[child.attribute.id], current_count)
+            if child.is_optional:
+                answered = len(sets[child.attribute.id] & child_visible_sets)
+                counts[child.attribute.id] = max(counts[child.attribute.id], answered)
             else:
-                # for everything else, call this function recursively
-                counts.update(count_questions(child, sets, conditions))
+                counts[child.attribute.id] = max(counts[child.attribute.id],
+                                                 len(child_visible_sets))
+        else:
+            # recurse into nested pages / questionsets
+            counts.update(count_questions(child, sets, conditions))
 
     return counts
