@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { useDebouncedCallback } from 'use-debounce'
@@ -7,12 +7,19 @@ import { isEmpty } from 'lodash'
 import { getQuestionTextId, getQuestionHelpId } from '../../../utils/question'
 import { isDefaultValue } from '../../../utils/value'
 
+import useAdjustLabel from '../../../hooks/useAdjustLabel'
+
 import AdditionalTextInput from './common/AdditionalTextInput'
 import AdditionalTextareaInput from './common/AdditionalTextareaInput'
 import OptionHelp from './common/OptionHelp'
 import OptionText from './common/OptionText'
 
 const RadioInput = ({ question, value, options, disabled, updateValue, buttons }) => {
+
+  const ref = useRef(null)
+
+  useAdjustLabel(ref)
+
   const handleChange = (option) => {
     if (option.has_provider) {
       updateValue(value, {
@@ -46,7 +53,7 @@ const RadioInput = ({ question, value, options, disabled, updateValue, buttons }
   })
 
   return (
-    <div className="interview-input radio-input">
+    <div ref={ref} className="interview-input radio-input">
       <div className="buttons-wrapper">
         {buttons}
         <fieldset className={classnames}
