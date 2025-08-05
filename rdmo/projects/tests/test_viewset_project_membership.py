@@ -3,7 +3,7 @@ import pytest
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
-from ..models import Membership
+from ..models import Membership, Project
 
 users = (
     ('owner', 'owner'),
@@ -56,10 +56,12 @@ def test_list(db, client, username, password, project_id):
 
         if username == 'user':
             assert sorted([item['id'] for item in response.json()]) == memberships_visible
+            assert all('email' in i for i in response.json())
         else:
             values_list = Membership.objects.filter(project_id=project_id) \
                                             .order_by('id').values_list('id', flat=True)
             assert sorted([item['id'] for item in response.json()]) == list(values_list)
+            assert all("email" in i for i in response.json())
     else:
         assert response.status_code == 404
 
@@ -77,6 +79,7 @@ def test_detail(db, client, username, password, membership_id):
         assert response.status_code == 200
         assert isinstance(response.json(), dict)
         assert response.json().get('id') == membership_id
+        assert response.json().get("email") == membership.user.email  # new field
     else:
         assert response.status_code == 404
 
@@ -102,6 +105,58 @@ def test_create(db, client, username, password, project_id, membership_role):
         assert response.status_code == 403
     else:
         assert response.status_code == 404
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('membership_role', membership_roles)
+def test_create_lookup(db, client, username, password, project_id, membership_role):
+    if password:
+        client.login(username=username, password=password)
+        user = get_user_model().objects.get(username=username)
+        already_a_member = Project.objects.get(id=project_id).memberships.filter(user=user).exists()
+
+    url = reverse(urlnames['list'], args=[project_id])
+    data = {
+        'lookup': username,  # valid test username
+        'role': membership_role
+    }
+    response = client.post(url, data)
+
+    if project_id in add_membership_permission_map.get(username, []):
+        if already_a_member:
+            assert response.status_code == 400
+            assert 'already a member' in response.json()['non_field_errors'][0]
+        else:
+            assert response.status_code == 201
+            body = response.json()
+            assert 'id' in body
+            assert body['role'] == membership_role
+            assert body['first_name']
+            assert body['last_name']
+    elif project_id in view_membership_permission_map.get(username, []):
+        assert response.status_code == 403
+    else:
+        assert response.status_code == 404
+
+
+@pytest.mark.parametrize('lookup,expected_error', [
+    ('nosuchuser', 'No user found.'),
+    ('bad@mail', 'Enter a valid email address.'),
+])
+def test_create_lookup_error_invalid(db, client, lookup, expected_error):
+    client.login(username='owner', password='owner')
+    url = reverse(urlnames['list'], args=[1])
+
+    data = {
+        'lookup': lookup,
+        'role': 'guest'
+    }
+    response = client.post(url, data)
+    assert response.status_code == 400
+    err = response.json()
+    assert 'lookup' in err
+    assert err['lookup'][0] == expected_error
 
 
 @pytest.mark.parametrize('username,password', users)

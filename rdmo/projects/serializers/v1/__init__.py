@@ -1,11 +1,10 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
 
+from rdmo.accounts.serializers.v1 import UserLookupSerializer
 from rdmo.accounts.utils import get_full_name
 from rdmo.domain.models import Attribute
 from rdmo.questions.models import Catalog
@@ -108,7 +107,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     def validate_views(self, value):
         """Block updates to views if syncing is enabled."""
         if settings.PROJECT_VIEWS_SYNC and value:
-            raise ValidationError(_('Editing views is disabled.'))
+            raise serializers.ValidationError(_('Editing views is disabled.'))
         return value
 
 
@@ -131,15 +130,43 @@ class ProjectVisibilitySerializer(serializers.ModelSerializer):
         )
 
 
-class ProjectMembershipSerializer(serializers.ModelSerializer):
+class ProjectMembershipSerializer(UserLookupSerializer, serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(
+        queryset=get_user_model().objects.all(), allow_null=True, required=False
+    )
+    email = serializers.EmailField(source='user.email', read_only=True)
 
     class Meta:
         model = Membership
         fields = (
             'id',
             'user',
-            'role'
+            'role',
+            'lookup',  # write-only
+            'first_name',  # read-only
+            'last_name',  # read-only
+            'email',  # read-only
         )
+
+    def validate_user(self, value):
+        if self.context["view"].project.memberships.filter(user=value).exists():
+            raise serializers.ValidationError(_("The user is already a member of the project."))
+        return value
+
+    def validate(self, data):
+        lookup = data.pop("lookup", None)
+        if lookup:
+            if data.get("user"):
+                raise serializers.ValidationError(_("Cannot combine `lookup` and `user`."))
+            user, _email = self.resolve_lookup(lookup)
+            self.validate_user(user)
+            data["user"] = user
+
+        user = data.get("user")
+        if not user:
+            raise serializers.ValidationError(_("User must be provided via `user` or `lookup`."))
+
+        return data
 
 
 class ProjectMembershipUpdateSerializer(serializers.ModelSerializer):
@@ -195,9 +222,12 @@ class ProjectIntegrationSerializer(serializers.ModelSerializer):
         return integration
 
 
-class ProjectInviteSerializer(serializers.ModelSerializer):
-
+class ProjectInviteSerializer(UserLookupSerializer, serializers.ModelSerializer):
     timestamp = serializers.DateTimeField(read_only=True)
+    user = serializers.PrimaryKeyRelatedField(
+        queryset=get_user_model().objects.all(), allow_null=True, required=False
+    )
+    email = serializers.EmailField(required=False, allow_null=True)
 
     class Meta:
         model = Invite
@@ -205,7 +235,10 @@ class ProjectInviteSerializer(serializers.ModelSerializer):
             'id',
             'user',
             'email',
+            'first_name',  # read-only
+            'last_name',  # read-only
             'role',
+            'lookup',  # write-only
             'timestamp'
         )
 
@@ -220,20 +253,37 @@ class ProjectInviteSerializer(serializers.ModelSerializer):
         return value
 
     def validate(self, data):
-        user = data.get('user')
-        email = data.get('email')
+        User = get_user_model()
 
-        if not user and not email:
-            raise serializers.ValidationError(_('Either user or e-mail needs to be provided.'))
-        elif user and email:
+        lookup = data.pop('lookup', None)
+
+        if lookup:
+            if data.get('user') or data.get('email'):
+                raise serializers.ValidationError(
+                    _('lookup must not be combined with user or email.'),
+                )
+            user, email = self.resolve_lookup(lookup)
+            if user:
+                self.validate_user(user)
+            if email:
+                self.validate_email(email)
+            data["user"], data["email"] = user, email
+
+        user = data.get("user")
+        email = data.get("email")
+
+        if not user and not email and not lookup:
+            raise serializers.ValidationError(_('Either user, e-mail or lookup needs to be provided.'))
+        elif user and email and not lookup:
             raise serializers.ValidationError(_('User and e-mail are mutually exclusive.'))
-        elif user:
+
+        if user:
             data['email'] = user.email
-        elif email:
-            usermodel = get_user_model()
+
+        if email:
             try:
-                data['user'] = usermodel.objects.get(email=email)
-            except usermodel.DoesNotExist:
+                data['user'] = User.objects.get(email=email)
+            except User.DoesNotExist:
                 data['user'] = None
 
         return data
@@ -333,6 +383,7 @@ class MembershipSerializer(serializers.ModelSerializer):
             'user',
             'role'
         )
+
 
 
 class IntegrationSerializer(serializers.ModelSerializer):

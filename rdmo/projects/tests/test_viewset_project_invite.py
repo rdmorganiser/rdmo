@@ -33,7 +33,8 @@ add_invite_permission_map = change_invite_permission_map = delete_invite_permiss
 
 urlnames = {
     'list': 'v1-projects:project-invite-list',
-    'detail': 'v1-projects:project-invite-detail'
+    'detail': 'v1-projects:project-invite-detail',
+    'lookup': 'v1-projects:project-invite-lookup'
 }
 
 projects = [1, 11]
@@ -75,6 +76,8 @@ def test_detail(db, client, username, password, project_id, invite_id):
         assert response.status_code == 200
         assert isinstance(response.json(), dict)
         assert response.json().get('id') == invite_id
+        assert 'first_name' in response.json()
+        assert 'last_name' in response.json()
     else:
         assert response.status_code == 404
 
@@ -121,6 +124,84 @@ def test_create_email(db, client, username, password, project_id):
         assert response.status_code == 404
 
 
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
+def test_create_with_lookup_as_username(db, client, username, password, project_id):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['list'], args=[project_id])
+    data = {
+        'lookup': 'user',
+        'role': 'guest'
+    }
+    response = client.post(url, data)
+
+    if project_id in add_invite_permission_map.get(username, []):
+        assert response.status_code == 201
+        assert response.json()["first_name"]
+        assert response.json()["last_name"]
+    elif project_id in view_invite_permission_map.get(username, []):
+        assert response.status_code == 403
+    else:
+        assert response.status_code == 404
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
+def test_create_with_lookup_as_email_on_existing_user(db, client, username, password, project_id):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['list'], args=[project_id])
+    data = {
+        'lookup': 'user@example.com',
+        'role': 'guest'
+    }
+    response = client.post(url, data)
+
+    if project_id in add_invite_permission_map.get(username, []):
+        assert response.status_code == 201
+        assert response.json()["first_name"]
+        assert response.json()["last_name"]
+        assert response.json()["email"]
+    elif project_id in view_invite_permission_map.get(username, []):
+        assert response.status_code == 403
+    else:
+        assert response.status_code == 404
+
+
+@pytest.mark.parametrize('project_send_invite', [True, False])
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
+def test_create_with_lookup_as_email_on_non_existing_user(
+        db, client, settings, username, password, project_id, project_send_invite
+    ):
+    settings.PROJECT_SEND_INVITE = project_send_invite
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['list'], args=[project_id])
+    data = {
+        'lookup': 'nosuchuser@example.com',
+        'role': 'guest'
+    }
+    response = client.post(url, data)
+
+    if project_id in add_invite_permission_map.get(username, []):
+        if settings.PROJECT_SEND_INVITE:
+            assert response.status_code == 201
+            assert 'id' in response.json()
+            assert 'timestamp' in response.json()
+            assert response.json()['user'] is None
+            assert response.json()['email'] == data['lookup']
+            assert response.json()['role'] == data['role']
+        else:
+            assert response.status_code == 400
+            assert response.json()['lookup'][0] == 'No user found.'
+    elif project_id in view_invite_permission_map.get(username, []):
+        assert response.status_code == 403
+    else:
+        assert response.status_code == 404
+
+
 def test_create_error(db, client):
     client.login(username='owner', password='owner')
 
@@ -130,7 +211,7 @@ def test_create_error(db, client):
     }
     response = client.post(url, data)
     assert response.status_code == 400
-    assert response.json()['non_field_errors'][0] == 'Either user or e-mail needs to be provided.'
+    assert response.json()['non_field_errors'][0] == 'Either user, e-mail or lookup needs to be provided.'
 
 
 def test_create_error_user(db, client):
@@ -158,6 +239,26 @@ def test_create_error_user_and_email(db, client):
     response = client.post(url, data)
     assert response.status_code == 400
     assert response.json()['non_field_errors'][0] == 'User and e-mail are mutually exclusive.'
+
+@pytest.mark.parametrize('project_send_invite', [True, False])
+@pytest.mark.parametrize('lookup,expected_error', [
+    ('nosuchuser', 'No user found.'),
+    ('bad@mail', 'Enter a valid email address.'),
+])
+def test_create_lookup_error_invalid(db, client, settings, lookup, expected_error, project_send_invite):
+    settings.PROJECT_SEND_INVITE = project_send_invite
+    client.login(username='owner', password='owner')
+    url = reverse(urlnames['list'], args=[1])
+
+    data = {
+        'lookup': lookup,
+        'role': 'guest'
+    }
+    response = client.post(url, data)
+    assert response.status_code == 400
+    err = response.json()
+    assert 'lookup' in err
+    assert err['lookup'][0] == expected_error
 
 
 @pytest.mark.parametrize('username,password', users)

@@ -477,10 +477,15 @@ class ProjectInviteViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         return Invite.objects.filter(project=self.project)
 
     def get_serializer_class(self):
-        if self.action == 'update':
+        if self.action == "update":
             return ProjectInviteUpdateSerializer
         else:
             return ProjectInviteSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['project'] = self.project
+        return context
 
     def perform_create(self, serializer):
         super().perform_create(serializer)
@@ -807,6 +812,7 @@ class InviteViewSet(ReadOnlyModelViewSet):
         invites = Invite.objects.filter(user=self.request.user)
         serializer = UserInviteSerializer(invites, many=True)
         return Response(serializer.data)
+
 
 class IssueViewSet(ReadOnlyModelViewSet):
     permission_classes = (HasModelPermission | HasProjectsPermission, )
