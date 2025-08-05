@@ -251,7 +251,6 @@ class InviteManager(CurrentSiteManagerMixin, models.Manager):
         return self.get_queryset().filter_user(user)
 
 
-
 class SnapshotManager(CurrentSiteManagerMixin, models.Manager):
 
     def get_queryset(self):
