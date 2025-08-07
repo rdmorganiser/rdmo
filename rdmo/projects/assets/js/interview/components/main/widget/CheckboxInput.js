@@ -40,6 +40,8 @@ const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreat
   }
 
   const handleChange = () => {
+    handleAdditionalValueChange.cancel()
+
     if (checked) {
       onDelete(value)
     } else {

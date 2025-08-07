@@ -21,6 +21,8 @@ const RadioInput = ({ question, value, options, disabled, updateValue, buttons }
   useAdjustLabel(ref)
 
   const handleChange = (option) => {
+    handleAdditionalValueChange.cancel()
+
     if (option.has_provider) {
       updateValue(value, {
         text: option.text,
