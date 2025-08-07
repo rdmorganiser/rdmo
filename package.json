@@ -21,6 +21,7 @@
     "@codemirror/lang-html": "^6.4.2",
     "@codemirror/lang-javascript": "^6.2.2",
     "@fontsource/open-sans": "^5.2.6",
+    "@fontsource/roboto-slab": "^5.2.6",
     "@uiw/react-codemirror": "^4.23.0",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
