@@ -16,12 +16,21 @@ h1, .h1 {
     margin-bottom: 1rem;
 }
 h2, .h2 {
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
-}
-h2, .h2 {
     font-size: 1.6rem;
     margin-bottom: 1rem;
+}
+h3, .h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.home {
+    h1 {
+        font-size: 2.6rem;
+    }
+    h2 {
+        font-size: 2rem;
+    }
 }
 
 a,
