@@ -210,9 +210,8 @@ def count_questions(element, sets, conditions):
             # compute the intersection of the conditions of this child with the full set of conditions
             element_condition_intersection = {
                 (set_prefix, set_index)
-                for condition_id, condition in conditions.items()
+                for condition_id in element_conditions
                 for set_prefix, set_index in conditions[condition_id]
-                if condition_id in element_conditions
             }
 
             resolved_sets = element_sets.intersection(element_condition_intersection)
@@ -239,9 +238,8 @@ def count_questions(element, sets, conditions):
         # compute the intersection of the conditions of this child with the full set of conditions
         child_condition_intersection = {
             (set_prefix, set_index)
-            for condition_id, condition in conditions.items()
+            for condition_id in child_conditions
             for set_prefix, set_index in conditions[condition_id]
-            if condition_id in child_conditions
         }
 
         # check if the element either has no condition or its conditions intersect with the full set of conditions
