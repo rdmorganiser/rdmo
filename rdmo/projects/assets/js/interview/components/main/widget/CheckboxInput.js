@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, {useRef, useState} from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { useDebouncedCallback } from 'use-debounce'
@@ -14,6 +14,7 @@ import OptionText from './common/OptionText'
 const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreate, onUpdate, onDelete }) => {
 
   const ref = useRef(null)
+  const [additionalInputValue, setAdditionalInputValue] = useState('')
 
   useAdjustLabel(ref)
 
@@ -44,12 +45,15 @@ const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreat
 
     if (checked) {
       onDelete(value)
+      setAdditionalInputValue('')
     } else {
-      handleCreate(option, optionIndex)
+      handleCreate(option, optionIndex, additionalInputValue)
     }
   }
 
   const handleAdditionalValueChange = useDebouncedCallback((value, option, additionalInput) => {
+   setAdditionalInputValue(additionalInput)
+
     if (checked) {
       if (option.has_provider) {
         onUpdate(value, {
@@ -91,7 +95,12 @@ const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreat
           option.additional_input == 'text' && (
             <>
               <span>:</span>
-              <AdditionalTextInput className="ml-10" value={value} option={option} disabled={disabled} onChange={handleAdditionalValueChange} />
+              <AdditionalTextInput className="ml-10" value={value} option={option} disabled={disabled}
+                onChange={(v, o, input) => {
+                  setAdditionalInputValue(input)
+                  handleAdditionalValueChange(v, o, input)
+                }}
+              />
               <OptionHelp className="ml-10" option={option} />
             </>
           )
@@ -100,7 +109,12 @@ const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreat
           option.additional_input == 'textarea' && (
             <>
               <span>:</span>
-              <AdditionalTextareaInput value={value} option={option} disabled={disabled} onChange={handleAdditionalValueChange} />
+              <AdditionalTextareaInput value={value} option={option} disabled={disabled}
+                  onChange={(v, o, input) => {
+                    setAdditionalInputValue(input)
+                    handleAdditionalValueChange(v, o, input)
+                }}
+              />
               <div>
                 <OptionHelp option={option} />
               </div>
