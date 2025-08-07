@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { useDebouncedCallback } from 'use-debounce'
 import { isEmpty, isNil } from 'lodash'
+
+import useAdjustLabel from '../../../hooks/useAdjustLabel'
 
 import AdditionalTextInput from './common/AdditionalTextInput'
 import AdditionalTextareaInput from './common/AdditionalTextareaInput'
@@ -10,6 +12,10 @@ import OptionHelp from './common/OptionHelp'
 import OptionText from './common/OptionText'
 
 const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreate, onUpdate, onDelete }) => {
+
+  const ref = useRef(null)
+
+  useAdjustLabel(ref)
 
   const checked = !isNil(value)
 
@@ -64,7 +70,7 @@ const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreat
   }, 500)
 
   return (
-    <div className={classnames}>
+    <div ref={ref} className={classnames}>
       <label>
         <input
           type="checkbox"

@@ -1,10 +1,8 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
 import { getQuestionTextId, getQuestionHelpId } from '../../../utils/question'
 import { gatherOptions } from '../../../utils/options'
-
-import useAdjustLabel from '../../../hooks/useAdjustLabel'
 
 import QuestionCopyValues from '../question/QuestionCopyValues'
 import QuestionEraseValues from '../question/QuestionEraseValues'
@@ -16,10 +14,6 @@ import CheckboxInput from './CheckboxInput'
 
 const CheckboxWidget = ({ page, question, sets, values, siblings, currentSet, disabled,
                           createValue, updateValue, deleteValue, copyValue }) => {
-
-  const ref = useRef(null)
-
-  useAdjustLabel(ref)
 
   const handleCreateValue = (attrsList) => {
     attrsList.forEach(attrs => {
@@ -40,7 +34,7 @@ const CheckboxWidget = ({ page, question, sets, values, siblings, currentSet, di
   return (
     <div className="interview-widgets">
       <div className="interview-widget">
-        <div ref={ref} className="interview-input checkbox-input">
+        <div className="interview-input checkbox-input">
           <div className="buttons-wrapper">
             <fieldset className="checkbox-control"
                       aria-labelledby={getQuestionTextId(question)}
