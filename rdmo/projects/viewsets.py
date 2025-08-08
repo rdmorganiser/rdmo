@@ -48,10 +48,10 @@ from .permissions import (
     HasProjectVisibilityObjectPermission,
 )
 from .progress import (
+    compute_condition_candidates,
     compute_navigation,
     compute_next_relevant_page,
     compute_progress,
-    compute_sets,
     compute_show_page,
     resolve_conditions,
 )
@@ -707,8 +707,8 @@ class ProjectPageViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericV
         catalog = self.project.catalog
         values = self.project.values.filter(snapshot=None).select_related('attribute', 'option')
 
-        sets = compute_sets(values)
-        resolved_conditions = resolve_conditions(catalog, values, sets)
+        condition_candidates = compute_condition_candidates(values)
+        resolved_conditions = resolve_conditions(catalog, values, condition_candidates)
 
         # check if the current page meets conditions
         if compute_show_page(page, resolved_conditions):
