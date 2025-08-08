@@ -193,12 +193,15 @@ def compute_navigation(section, project, snapshot=None):
             'uri': catalog_section.uri,
             'title': markdown2html(catalog_section.short_title or catalog_section.title),
             'first': catalog_section.elements[0].id if catalog_section.elements else None,
-            'count': 0,
-            'total': 0,
+            'count': 0,   # will be recomputed below
+            'total': 0,   # will be recomputed below
             'show': True  # hide/grey-out when the section has no questions at all
         }
         if section is not None and catalog_section.id == section.id:
             navigation_section['pages'] = []
+
+        # aggregate per-section using max per attribute (mirrors compute_progress)
+        section_counts = defaultdict(int)
 
         for page in catalog_section.elements:
 
@@ -206,14 +209,11 @@ def compute_navigation(section, project, snapshot=None):
             show = compute_show_page(page, conditions)
 
             # count the total number of questions, taking sets and conditions into account
-            counts = count_questions(page, sets, conditions)
+            page_counts = count_questions(page, sets, conditions)
 
-            # filter the values_list for the attributes, and compute the total sum of counts
-            count = sum(1 for value in values_list if value[0] in counts)
-            total = sum(counts.values())
-
-            navigation_section['count'] += count
-            navigation_section['total'] += total
+            # keep page-level numbers unchanged for the UI
+            page_count = sum(1 for value in values_list if value[0] in page_counts)
+            page_total = sum(page_counts.values())
 
             if 'pages' in navigation_section:
                 navigation_section['pages'].append({
@@ -221,9 +221,18 @@ def compute_navigation(section, project, snapshot=None):
                     'uri': page.uri,
                     'title': markdown2html(page.short_title or page.title),
                     'show': show,
-                    'count': count,
-                    'total': total
+                    'count': page_count,
+                    'total': page_total
                 })
+
+            # merge page_counts into section_counts using max per attribute
+            for attr_id, needed in page_counts.items():
+                if needed > section_counts[attr_id]:
+                    section_counts[attr_id] = needed
+
+        # compute section totals from the aggregated dict (prevents double-counting)
+        navigation_section['total'] = sum(section_counts.values())
+        navigation_section['count'] = sum(1 for attr_id, _, _ in values_list if attr_id in section_counts)
 
         # hide / grey-out sections which contain no questions at all
         if navigation_section['total'] == 0:
@@ -232,6 +241,7 @@ def compute_navigation(section, project, snapshot=None):
         navigation.append(navigation_section)
 
     return navigation
+
 
 
 def compute_progress(project, snapshot=None):

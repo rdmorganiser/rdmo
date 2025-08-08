@@ -24,7 +24,7 @@ result_map = {
     'http://example.com/terms/questions/catalog/set/individual-collection': (9, 10, True),
     'http://example.com/terms/questions/catalog/set/collection-single': (14, 18, True),
     'http://example.com/terms/questions/catalog/set/collection-collection': (16, 20, True),
-    'http://example.com/terms/questions/catalog/conditions': (7, 17),
+    'http://example.com/terms/questions/catalog/conditions': (2, 6),  # deduplicated for unique attributes
     'http://example.com/terms/questions/catalog/conditions/input': (2, 2, True),
     'http://example.com/terms/questions/catalog/conditions/text_contains': (1, 1, True),
     'http://example.com/terms/questions/catalog/conditions/text_empty': (0, 0, False),
@@ -50,6 +50,8 @@ result_map = {
     'http://example.com/terms/questions/catalog/blocks/two-collections': (0, 0, True),
     'http://example.com/terms/questions/catalog/blocks/set': (13, 23, True),
     'http://example.com/terms/questions/catalog/blocks/optional': (0, 1, True),
+    'http://example.com/terms/questions/catalog/options': (0, 6),
+    'http://example.com/terms/questions/validation': (0, 7),
 }
 
 
