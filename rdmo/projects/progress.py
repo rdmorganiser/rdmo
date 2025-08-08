@@ -25,19 +25,59 @@ def get_catalog_conditions(catalog):
     ).distinct().select_related('source', 'target_option')
 
 
-def compute_condition_candidates(values):
+def compute_condition_candidates(catalog, values):
     """
     Build the universe of (set_prefix, set_index) tuples that conditions may
-    evaluate against.
+    evaluate against by combining:
 
-    Always include the root ('', 0) so non-collection elements can become
-    visible before any answers exist, and include all set tuples that already
-    exist in answers.
+    1) Structure-first: always include the root ('', 0) so non-collection
+       elements can become visible before any answers exist, and walk the
+       catalog to add indices that are relevant for collection elements.
+    2) Answers-second: include all set tuples that already exist in answers.
     """
-    candidates = {('', 0)}
-    base_sets = compute_sets(values)
+    candidates = {('', 0)}  # root must always exist for visibility of non-collections
+
+    # Answer-derived sets (for all attributes)
+    base_sets = compute_sets(values)  # {attribute_id -> {(set_prefix, set_index), ...}}
     if base_sets:
         candidates |= set(chain.from_iterable(base_sets.values()))
+
+    # Walk the catalog to add collection-relevant indices derived from *existing* answers
+    # (this mirrors the frontend's "structure knows where sets could exist", while not
+    # inventing artificial indices which would over-count).
+    def _collect_element_sets(element, element_sets):
+        # element_sets: union of set tuples for element.attribute and immediate child questions
+        union_sets = set()
+
+        # a) own attribute
+        if getattr(element, 'attribute', None) is not None:
+            union_sets |= base_sets[element.attribute.id]
+
+        # b) immediate child questions' attributes
+        for child in getattr(element, 'elements', []):
+            if isinstance(child, Question) and child.attribute is not None:
+                union_sets |= base_sets[child.attribute.id]
+
+        return union_sets
+
+    def _walk(e):
+        # Only Page / QuestionSet can influence local "instances"
+        if isinstance(e, (Page, QuestionSet)):
+            if e.is_collection:
+                # Add indices that *exist in answers* for this element scope, so conditions
+                # can resolve per-instance even when some children have no answers yet.
+                e_sets = _collect_element_sets(e, base_sets)
+                candidates.update(e_sets)
+
+        # Recurse into children
+        for ch in getattr(e, 'elements', []):
+            _walk(ch)
+
+    # Start from the catalog root
+    for section in catalog.elements:
+        for page in section.elements:
+            _walk(page)
+
     return candidates
 
 
@@ -50,6 +90,7 @@ def resolve_conditions(catalog, values, condition_candidates):
             for (set_prefix, set_index) in condition_candidates
             if condition.resolve(values, set_prefix=set_prefix, set_index=set_index)
         }
+
     return conditions
 
 
@@ -133,8 +174,8 @@ def compute_navigation(section, project, snapshot=None):
     # get all values for this project and snapshot
     values = project.values.filter(snapshot=snapshot).select_related('attribute', 'option')
 
-    # build condition candidates (root + answered instances)
-    condition_candidates = compute_condition_candidates(values)
+    # structure-first candidates (root + answer-derived indices + catalog walk)
+    condition_candidates = compute_condition_candidates(project.catalog, values)
 
     # resolve all conditions to get a dict mapping conditions to set_indexes
     conditions = resolve_conditions(project.catalog, values, condition_candidates)
@@ -197,8 +238,8 @@ def compute_progress(project, snapshot=None):
     # get all values for this project and snapshot
     values = project.values.filter(snapshot=snapshot).select_related('attribute', 'option')
 
-    # build condition candidates (root + answered instances)
-    condition_candidates = compute_condition_candidates(values)
+    # structure-first candidates (root + answer-derived indices + catalog walk)
+    condition_candidates = compute_condition_candidates(project.catalog, values)
 
     # resolve all conditions to get a dict mapping conditions to set_indexes
     conditions = resolve_conditions(project.catalog, values, condition_candidates)
@@ -315,7 +356,8 @@ def count_questions(element, sets, conditions):
                             parent_visible_sets = (
                                 {('', 0)} if (
                                         not child_conditions or any(sp == '' for sp, _ in child_condition_intersection)
-                                ) else set())
+                                ) else set()
+                            )
 
                         child_count = len(sets[child.attribute.id].intersection(parent_visible_sets))
                         counts[child.attribute.id] = max(counts[child.attribute.id], child_count)

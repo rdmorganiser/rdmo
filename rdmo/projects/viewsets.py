@@ -707,7 +707,7 @@ class ProjectPageViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericV
         catalog = self.project.catalog
         values = self.project.values.filter(snapshot=None).select_related('attribute', 'option')
 
-        condition_candidates = compute_condition_candidates(values)
+        condition_candidates = compute_condition_candidates(catalog, values)
         resolved_conditions = resolve_conditions(catalog, values, condition_candidates)
 
         # check if the current page meets conditions
