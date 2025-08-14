@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-import json
 import logging
 from pathlib import Path
 
 from django.conf import settings
+from django.contrib.sites.models import Site
 from django.core.management.base import BaseCommand, CommandError
 from django.db.models import Prefetch, QuerySet
 
@@ -21,8 +21,12 @@ logger = logging.getLogger(__name__)
 class Command(BaseCommand):
 
     def add_arguments(self, parser):
-        parser.add_argument('--answers', action='store_true', help='Export answers instead of the full project.')
-        parser.add_argument('--view', metavar='URI', help='Export the given view instead of the full project.')
+        parser.add_argument(
+            '--answers', action='store_true', help='Export answers instead of the full project.'
+        )
+        parser.add_argument(
+            '--view', metavar='URI', help='Export the given view instead of the full project.'
+        )
         parser.add_argument(
             '--projects', nargs='*', type=int, metavar='ID', help='Limit the export to specific project IDs.'
         )
@@ -36,9 +40,12 @@ class Command(BaseCommand):
         parser.add_argument(
             '--format', default='xml', help='Export format (answers/view honour settings.EXPORT_FORMATS).'
         )
-        parser.add_argument('--path', default='exports', metavar='DIR', help='Target directory [default: exports/].')
         parser.add_argument(
-            '--with-members', action='store_true', help='Write a members.json file with user/role info.'
+            '--path', default='exports', metavar='DIR', help='Target directory [default: exports/].'
+        )
+        parser.add_argument(
+            '--with-members', action='store_true',
+            help='Write project memberships (user, role, email) to export.'
         )
 
     def handle(self, *args, **options):
@@ -50,57 +57,41 @@ class Command(BaseCommand):
         project_ids = options.get('projects') or None
         site_id: int = options['site_id']
         catalog_uri= options.get('catalog_uri') or None
-
-        # upfront validations ------------------------------------------------
+        # validations first
         if export_mode in ('answers', 'view'):
-            if self.format not in dict(settings.EXPORT_FORMATS):
-                raise CommandError(f'Format "{self.format}" is not configured in settings.EXPORT_FORMATS.')
-
-        view_obj= None
+            if self.format not in dict((*settings.EXPORT_FORMATS,('xml',None))):
+                raise CommandError(
+                    f'Format "{self.format}" is not configured in settings.EXPORT_FORMATS for export mode {export_mode}.'  # noqa: E501
+                )
         if export_mode == 'view':
             try:
                 view_obj = View.objects.get(uri=options['view'])
             except View.DoesNotExist as exc:
-                raise CommandError(f'View with key "{options["view"]}" does not exist.') from exc
+                raise CommandError(f'View with uri "{options["view"]}" does not exist.') from exc
+        else:
+            view_obj = None
+
+        if site_id != settings.SITE_ID and not Site.objects.filter(id=site_id).exists():
+            raise CommandError(f'No matching site for id={site_id} found.')
 
         projects = self._get_queryset(project_ids, site_id, catalog_uri)
+        if self.with_members:
+            projects = self._prefetch_memberships(projects)
+
         if not projects.exists():
+            self.stdout.write(self.style.WARNING('No projects found.'))
             if catalog_uri:
-                project_catalogs = sorted(
-                    set(self._get_queryset(project_ids, site_id, None).values_list('catalog__uri', flat=True))
-                )
-                project_catalogs_str = [f"\t- {i} \n" for i in project_catalogs]
-                self.stdout.write(self.style.WARNING(f'Choose a catalog from:\n {"".join(project_catalogs_str)}'))
-
-            if site_id != settings.SITE_ID:
-                project_sites = sorted(
-                    set(self._get_queryset(project_ids, None, None).values_list('site__id', 'site__domain'))
-                )
-                project_sites_str = [f"\t- {id} {domain} \n" for id, domain in project_sites]
-                self.stdout.write(self.style.WARNING(f'Choose a site from:\n {"".join(project_sites_str)}'))
-
-            raise CommandError('No matching projects found.')
+                raise CommandError(f'No matching projects found for catalog(uri={catalog_uri}).')
 
         for project in projects:
-            self._export_project(project, mode=export_mode, view=view_obj)
+            self.export_project(project, mode=export_mode, view=view_obj, include_memberships=self.with_members)
 
         self.stdout.write(self.style.SUCCESS(f'Exported {projects.count()} project(s) to {self.path}'))
 
-    def _get_queryset(
-        self,
-        ids,
-        site_id,
-        catalog_uri,
-    ) -> QuerySet[Project]:
-        """
-        Build a base queryset filtered by site_id and optional catalog_uri,
-        then by explicit project IDs if given.
-        """
-        # start from the current site
-        if site_id is not None:
-            qs = Project.objects.filter(site_id=site_id)
-        else:
-            qs = Project.objects.all()
+    def _get_queryset(self,ids,site_id,catalog_uri,) -> QuerySet[Project]:
+
+        # start from the selected site
+        qs = Project.objects.filter(site_id=site_id)
 
         # optional catalog URI filter
         if catalog_uri:
@@ -110,43 +101,34 @@ class Command(BaseCommand):
         if ids:
             qs = qs.filter(id__in=set(ids))
 
-        return qs.select_related('catalog', 'site').prefetch_related(
+        return qs.select_related('catalog', 'site')
+
+    @staticmethod
+    def _prefetch_memberships(qs):
+        return  qs.prefetch_related(
             Prefetch(
                 'memberships',
                 queryset=Membership.objects.select_related('user'),
             )
         )
 
-    def _export_project(
-        self,
-        project: Project,
-        *,
-        mode: str,
-        view= None,
-    ) -> None:
-        """
-        Orchestrate the chosen export *mode* for one project and write the file
-        to disk.
-        """
+    def export_project(self, project, *, mode: str, view=None, include_memberships=False) -> None:
         if mode == 'answers':
-            response = self._render_answers(project)
+            response = self.render_answers(project)
             subdir = 'answers'
 
         elif mode == 'view':
-            assert view is not None  # guarded in `handle`
-            response = self._render_view(project, view)
+            response = self.render_view(project, view)
             subdir = view.uri_path
 
         else:  # full project
-            response = self._render_full_project(project)
+            response = self.render_full_project(project, include_memberships=include_memberships)
             subdir = ''
 
-        self._write_response(project, subdir, response)
+        target_dir = self.path / str(project.id) / subdir
+        self.write_response_to_file(target_dir, response)
 
-        if self.with_members:
-            self._write_members_json(project)
-
-    def _render_answers(self, project: Project):
+    def render_answers(self, project):
         snapshot = None
         context = {
             'project': project,
@@ -156,9 +138,11 @@ class Command(BaseCommand):
             'format': self.format,
             'resource_path': get_value_path(project, snapshot),
         }
-        return render_to_format(None, self.format, context['title'], 'projects/project_answers_export.html', context)
+        return render_to_format(
+            None, self.format, context['title'], 'projects/project_answers_export.html', context
+        )
 
-    def _render_view(self, project: Project, view: View):
+    def render_view(self, project, view: View):
         snapshot = None
         context = {
             'project': project,
@@ -170,57 +154,26 @@ class Command(BaseCommand):
             'format': self.format,
             'resource_path': get_value_path(project, snapshot),
         }
-        return render_to_format(None, self.format, context['title'], 'projects/project_view_export.html', context)
+        return render_to_format(
+            None, self.format, context['title'], 'projects/project_view_export.html', context
+        )
 
-    def _render_full_project(self, project: Project):
+    def render_full_project(self, project, include_memberships: bool=False) -> dict:
         plugin_cls = get_plugin('PROJECT_EXPORTS', self.format)
         if plugin_cls is None:
             raise CommandError(f'Format "{self.format}" is not supported.')
         plugin = plugin_cls
         plugin.project = project
         plugin.snapshot = None
+        plugin.include_memberships = include_memberships
         return plugin.render()
 
-    def _write_members_json(self, project: Project) -> None:
-        """
-        Dump a `members.json` file with `[{"user_id": …, "username": …, "role": …}, …]`.
-        """
-        payload = [
-            {
-                'user_id': m.user_id,
-                'username': m.user.get_username(),
-                'first_name': m.user.first_name,
-                'last_name': m.user.last_name,
-                'email': m.user.email,
-                'role': m.role,
-                'project_title': project.title,
-                'project_site_domain': project.site.domain,
-            }
-            for m in project.memberships.all()
-        ]
-
-        if not payload:  # skip empty projects
-            return
-
-        target_dir = self.path / str(project.id)
-        target_dir.mkdir(parents=True, exist_ok=True)
-        file_path = target_dir / 'members.json'
-
-        logger.info('Writing %s', file_path)
-        with file_path.open('w', encoding='utf-8') as fp:
-            json.dump(payload, fp, ensure_ascii=False, indent=2)
-
-    def _write_response(
-        self,
-        project: Project,
-        subdir: str,
-        response,
-    ) -> None:
+    @staticmethod
+    def write_response_to_file(target_dir: Path, response,) -> None:
         filename = response.headers.get('Content-Disposition', '').split('filename=')[-1].strip('"')
         if not filename:
             raise CommandError('Export response did not include a filename header.')
 
-        target_dir = self.path / str(project.id) / subdir
         target_dir.mkdir(parents=True, exist_ok=True)
 
         file_path = target_dir / filename
