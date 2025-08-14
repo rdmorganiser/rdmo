@@ -85,23 +85,11 @@ def get_user_from_db_or_none(username: str, email: str):
 
 
 def make_unique_username(seed: str) -> str:
-    """
-    Return a DB-unique username derived from *seed*.
-
-    * seed -> "markus"      → "markus" (if free)
-    *                ...    → "markus_1", "markus_2", …
-    * after 99 tries        → "markus_<8-random-chars>"
-    """
     base = slugify(seed) or "user"
-    candidate = base
-    suffix = 0
-
-    while User.objects.filter(username=candidate).exists():
-        suffix += 1
-        if suffix <= 99:
-            candidate = f"{base}_{suffix}"
-        else:  # extreme edge case
-            candidate = f"{base}_{get_random_string(8)}"
-            break
-
-    return candidate
+    user_model = get_user_model()
+    for suffix in range(0, 8):
+        candidate = base if suffix == 0 else f"{base}_{suffix}"
+        if not user_model.objects.filter(username=candidate).exists():
+            return candidate
+    # fallback
+    return f"{base}_{get_random_string(8)}"
