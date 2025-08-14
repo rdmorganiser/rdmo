@@ -22,7 +22,9 @@ from rdmo.core.validators import LockedValidator
 
 logger = logging.getLogger(__name__)
 
-_temp_storage = FileSystemStorage(location=tempfile.gettempdir())
+_TEMP_DIR = Path(tempfile.gettempdir()) / "rdmo_uploads"
+_TEMP_DIR.mkdir(exist_ok=True)
+_temp_storage = FileSystemStorage(location=_TEMP_DIR)
 
 class ImportElementFields(str, Enum):
     DIFF = "updated_and_changed"
