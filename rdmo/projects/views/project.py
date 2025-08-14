@@ -195,6 +195,7 @@ class ProjectExportView(ObjectPermissionMixin, DetailView):
 
         export_plugin.request = self.request
         export_plugin.project = self.object
+        export_plugin.include_memberships = False
 
         return export_plugin
 

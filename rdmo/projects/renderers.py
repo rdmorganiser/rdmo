@@ -14,6 +14,12 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'description', {}, project['description'])
         self.render_text_element(xml, 'catalog', {'dc:uri': project['catalog']}, None)
 
+        if project.get('memberships'):
+            xml.startElement('memberships', {})
+            for member in project['memberships']:
+                self.render_member(xml, member)
+            xml.endElement('memberships')
+
         if project.get('tasks'):
             xml.startElement('tasks', {})
             for task in project['tasks']:
@@ -73,3 +79,27 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'created', {}, value['created'])
         self.render_text_element(xml, 'updated', {}, value['updated'])
         xml.endElement('value')
+
+    def render_member(self, xml, member):
+        # member node with role as attribute; rest as child nodes
+        xml.startElement('member', {})
+
+        role = member.get('role')
+        if role:
+            self.render_text_element(xml, 'role', {}, role)
+
+        user = member.get('user') or {}
+        if isinstance(user, dict) and user:
+            self.render_member_user(xml, user)
+
+        xml.endElement('member')
+
+    def render_member_user(self, xml, user: dict):
+        field_order = [
+            'id', 'username', 'first_name', 'last_name', 'full_name', 'email'
+        ]  # the presence of fields should be determined by the serializer
+        for key in field_order:
+            if key in user:
+                val = user.get(key)
+                if val not in (None, '', []):
+                    self.render_text_element(xml, key, {}, val)

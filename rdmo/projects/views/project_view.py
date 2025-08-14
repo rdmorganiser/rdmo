@@ -93,6 +93,8 @@ class ProjectViewExportView(ObjectPermissionMixin, DetailView):
             'resource_path': get_value_path(context['project'], context['current_snapshot'])
         })
 
+        context['include_memberships'] = False
+
         return context
 
     def render_to_response(self, context, **response_kwargs):

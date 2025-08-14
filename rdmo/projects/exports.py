@@ -21,6 +21,7 @@ class Export(Plugin):
 
         self.project = None
         self.snapshot = None
+        self.include_memberships = False
 
     def render(self):
         raise NotImplementedError
@@ -158,7 +159,9 @@ class RDMOXMLExport(Export):
     def render(self):
         if self.project:
             content_disposition = f'attachment; filename="{self.project.title}.xml"'
-            serializer = ProjectExportSerializer(self.project)
+            serializer = ProjectExportSerializer(self.project, context={
+                'include_memberships': self.include_memberships
+            })
 
         else:
             content_disposition = f'attachment; filename="{self.snapshot.title}.xml"'
