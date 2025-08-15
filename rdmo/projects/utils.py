@@ -12,12 +12,13 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.timezone import now
 
-from rdmo.accounts.utils import make_unique_username
+from rdmo.accounts.utils import create_user_from_fields, find_user
 from rdmo.core.imports import store_temp_file
 from rdmo.core.mail import send_mail
 from rdmo.core.plugins import get_plugin, get_plugins
 from rdmo.core.utils import remove_double_newlines
 from rdmo.projects.models import Membership
+from rdmo.projects.progress import compute_progress
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
@@ -242,6 +243,12 @@ def save_import_views(project, views):
     for view in views:
         project.views.add(view)
 
+def save_project_progress(project):
+    progress_count, progress_total = compute_progress(project)
+    project.progress_count = progress_count
+    project.progress_total = progress_total
+    project.save()
+
 
 def get_invite_email_project_path(invite) -> str:
     project_invite_path = reverse('project_join', args=[invite.token])
@@ -384,59 +391,29 @@ def send_contact_message(request, subject, message):
               cc=[request.user.email], reply_to=[request.user.email])
 
 
-def import_memberships(project, records, create_users = True):
-    """
-    Assigns Memberships on `project` based on `records`.
-
-    Each record may include 'user_id', 'email', 'username',
-    'first_name', 'last_name', 'role', etc.
-
-    If create_users=False, any record for which no existing User
-    can be found will raise ValidationError.  Otherwise, missing
-    users will be auto-created (with unusable password).
-
-    Returns: (created_count, skipped_count)
-    """
+def import_memberships(project, records, create_users = False):
     created = skipped = 0
 
     for rec in records:
-        # 1) find or (optionally) create user
-        user = None
 
-        # a) by PK
-        user_id = rec.get("user_id")
-        if user_id is not None:
-            user = User.objects.filter(pk=user_id).first()
+        user_id = rec.get("id")
+        username = (rec.get("username") or "").strip()
+        email = (rec.get("email") or "").strip().lower()
 
-        # b) by email
-        email = (rec.get("email") or "").lower()
-        if not user and email:
-            user = User.objects.filter(email__iexact=email).first()
+        # 1) resolve user
+        user = find_user(user_id=user_id, username=username, email=email)
 
-        # c) by username
-        username = rec.get("username")
-        if not user and username:
-            user = User.objects.filter(username=username).first()
-
+        # 2) optionally create
         if not user:
             if not create_users:
-                raise ValidationError(f"No existing user for record {rec!r}")
-            # auto-create
-            desired = username or (email.split("@")[0] if email else "")
-            username = make_unique_username(desired)
-            user = User.objects.create_user(
-                username=username,
-                email=email,
-                first_name=rec.get("first_name", ""),
-                last_name=rec.get("last_name", ""),
-                is_active=True,
-            )
-            user.set_unusable_password()
-            user.save(update_fields=["password"])
-            if username != desired:
-                logger.info("Username '%s' taken, created unique name '%s'.", desired, username)
+                raise ValidationError(
+                    f"No existing user for user_id={user_id!r}, username={username!r}, email={email!r}"
+                )
+            first_name = (rec.get("first_name") or "").strip()
+            last_name = (rec.get("last_name") or "").strip()
+            user = create_user_from_fields(username, email, first_name, last_name)
 
-        # 2) assign Membership
+        # 3) assign/update membership
         role = rec.get("role") or "guest"
         try:
             Membership.objects.update_or_create(project=project, user=user, defaults={"role": role})

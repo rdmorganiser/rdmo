@@ -24,10 +24,12 @@ from rdmo.views.models import View
 
 from .models import Project, Snapshot, Value
 from .utils import (
+    import_memberships,
     save_import_snapshot_values,
     save_import_tasks,
     save_import_values,
     save_import_views,
+    save_project_progress,
 )
 
 log = logging.getLogger(__name__)
@@ -57,6 +59,7 @@ class Import(Plugin):
         self.snapshots = []
         self.tasks = []
         self.views = []
+        self.memberships = []
 
     def render(self):
         raise NotImplementedError
@@ -179,7 +182,8 @@ class Import(Plugin):
         return preview
 
     def import_to_project(
-        self, checked_values = None, checked_snapshots = None
+        self, checked_values = None, checked_snapshots = None,
+            include_memberships = False, allow_creation_of_new_users = False
     ) -> Project:
         """
         1) If we have not yet run check()/process(), do so now (so self.project
@@ -188,6 +192,7 @@ class Import(Plugin):
         3) Build or accept the passed key-sets.
         4) Save the project (assigning Site if new).
         5) Call save_import_values, snapshot_values, tasks, views.
+        6) optionally, import memberships to the project
 
         Returns the saved Project.
         """
@@ -217,6 +222,15 @@ class Import(Plugin):
         save_import_snapshot_values(self.project, self.snapshots, css)
         save_import_tasks(self.project, self.tasks)
         save_import_views(self.project, self.views)
+        save_project_progress(self.project)
+
+        # 6) Optionally import memberships
+        if include_memberships and self.memberships:
+            created, skipped = import_memberships(
+                self.project, self.memberships, create_users=allow_creation_of_new_users
+            )
+            log.info('Imported memberships for project %s: %s created, %s skipped.',
+                     self.project.pk, created, skipped)
 
         return self.project
 
@@ -310,6 +324,26 @@ class RDMOXMLImport(Import):
                     snapshot.snapshot_values = snapshot_values
 
                     self.snapshots.append(snapshot)
+
+        memberships_node = self.root.find('memberships')
+        if memberships_node is not None:
+            for member_node in memberships_node.findall('member'):
+                role = (member_node.findtext('role') or '').strip() or 'guest'
+
+                user_node = member_node.find('user')
+                if user_node is None:
+                    continue
+
+                membership = {
+                    'role': role,
+                    'id': (user_node.findtext('id') or '').strip(),
+                    'username': (user_node.findtext('username') or '').strip(),
+                    'email': (user_node.findtext('email') or '').strip().lower(),
+                    'first_name': (user_node.findtext('first_name') or '').strip(),
+                    'last_name': (user_node.findtext('last_name') or '').strip(),
+                }
+                self.memberships.append(membership)
+
 
     def get_value(self, value_node):
         value = Value()

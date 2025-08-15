@@ -81,25 +81,22 @@ class XMLRenderer(BaseXMLRenderer):
         xml.endElement('value')
 
     def render_member(self, xml, member):
-        # member node with role as attribute; rest as child nodes
         xml.startElement('member', {})
 
-        role = member.get('role')
-        if role:
-            self.render_text_element(xml, 'role', {}, role)
-
-        user = member.get('user') or {}
-        if isinstance(user, dict) and user:
-            self.render_member_user(xml, user)
+        self.render_text_element(xml, 'role', {}, member['role'])
+        self.render_member_user(xml, member['user'])
 
         xml.endElement('member')
 
     def render_member_user(self, xml, user: dict):
+        xml.startElement('user', {})
+
         field_order = [
             'id', 'username', 'first_name', 'last_name', 'full_name', 'email'
-        ]  # the presence of fields should be determined by the serializer
+        ]  # the presence of fields should be determined by the serialized project
         for key in field_order:
             if key in user:
-                val = user.get(key)
-                if val not in (None, '', []):
-                    self.render_text_element(xml, key, {}, val)
+                if user[key]:
+                    self.render_text_element(xml, key, {}, user[key])
+
+        xml.endElement('user')
