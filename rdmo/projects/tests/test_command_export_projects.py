@@ -24,9 +24,10 @@ def test_export_projects_full_project_xml_and_json(tmp_path, capsys, export_form
         "--projects", str(project.id),
         "--format", export_format,
         "--path", str(tmp_path),
+        "--export-mode", "project"  # is the default
     ]
     if include_memberships:
-        args.append("--with-members")
+        args.append("--include-memberships")
 
     call_command(*args)
 
@@ -45,6 +46,8 @@ def test_export_projects_full_project_xml_and_json(tmp_path, capsys, export_form
         assert  {"title", "description", "catalog", "values"}.issubset(child_tags)
         if include_memberships:
             assert "memberships" in child_tags
+        else:
+            assert "memberships" not in child_tags
 
     else:  # json
         # Basic shape check (existing expectation in your suite)
@@ -75,7 +78,7 @@ def test_export_projects_answers_html(tmp_path, capsys):
 
     call_command(
         "export_projects",
-        "--answers",
+        "--export-mode", "answers",
         "--format", export_format,
         "--projects", str(project.id),
         "--path", str(tmp_path),
@@ -113,14 +116,15 @@ def test_export_projects_view_html_creates_file(tmp_path, capsys):
 
     call_command(
         "export_projects",
-        "--view", view.uri,
+        "--export-mode", "view",
+        "--view-uri", view.uri,
         "--format", export_format,
         "--projects", str(project.id),
         "--path", str(tmp_path),
     )
 
     # View exports use subdir of the view's uri_path; files named via Content-Disposition header
-    view_dir = tmp_path / str(project.id) / view.uri_path
+    view_dir = tmp_path / str(project.id) / 'views' / view.uri_path
     assert view_dir.exists()
 
     exported = (view_dir / project.title).with_suffix(f'.{export_format}')
