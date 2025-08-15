@@ -424,6 +424,12 @@ $variant-background-color: #f5f5f5 !default;
         .react-select__menu {
             z-index: 10;
         }
+
+        .react-select__option--is-selected {
+          a {
+            color: white;
+          }
+        }
     }
 }
 
