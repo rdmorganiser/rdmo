@@ -96,7 +96,7 @@ class Command(BaseCommand):
         create_new_users = options["create_new_users"]
         as_user_id = options.get("as_user_id")
         as_username = options.get("as_username")
-        project_ids = sorted(set(options.get("projects")))
+        project_ids = sorted(set(options.get("projects") or []))
 
         # sanity-check plugin key
         if get_plugin("PROJECT_IMPORTS", import_format) is None:
