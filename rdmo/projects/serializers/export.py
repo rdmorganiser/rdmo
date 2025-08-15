@@ -32,8 +32,14 @@ class ValueSerializer(serializers.ModelSerializer):
         )
 
     def get_file_content(self, obj):
-        if obj.file:
+        if not obj.file:
+            return None
+
+        try:
             return base64.b64encode(obj.file.read())
+        except FileNotFoundError:
+            # file was saved but no longer exists
+            return None
 
 
 class SnapshotSerializer(serializers.ModelSerializer):
