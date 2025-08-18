@@ -77,7 +77,7 @@ class RemoveForm(forms.Form):
         if not self.user.has_usable_password():
             self.fields.pop('password')
 
-    email = forms.CharField(widget=forms.TextInput(attrs={'required': 'false'}))
+    email = forms.CharField(required=False, widget=forms.TextInput())
     email.label = _('E-mail')
 
     password = forms.CharField(widget=forms.PasswordInput)
