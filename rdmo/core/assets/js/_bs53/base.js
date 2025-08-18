@@ -1,5 +1,6 @@
 window.loopHeaderBackgroundImage = (timeout) => {
     const images = document.querySelectorAll('#header .header-image')
+    if (!images || images.length === 0) return
 
     let index = 0
 
