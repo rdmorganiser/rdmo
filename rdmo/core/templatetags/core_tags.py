@@ -51,15 +51,14 @@ def render_lang_template(template_name, escape_html=False):
 
 
 @register.simple_tag()
-def bootstrap_form_field(field, **kwargs):
-    context = {
-        'field': field
+def bootstrap_form_field(field, template_name = None, **kwargs) -> str:
+    widget = field.widget_type  # e.g. "text", "textarea", "checkbox", "select", "radioselect", "clearablefile"
+    mapping = {
+        'checkbox': 'core/bs53/forms/bootstrap_checkbox.html',
+        'textarea': 'core/bs53/forms/bootstrap_textarea.html',
     }
-
-    if field.widget_type in ['text', 'password']:
-        return render_to_string('core/bs53/forms/bootstrap_input.html', context)
-    else:
-        return render_to_string(f'core/bs53/forms/bootstrap_{field.widget_type}.html', context)
+    tpl = template_name or mapping.get(widget, 'core/bs53/forms/bootstrap_input.html')
+    return render_to_string(tpl, {'field': field, **kwargs})
 
 
 @register.simple_tag(takes_context=True)
