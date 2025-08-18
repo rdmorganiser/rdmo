@@ -338,23 +338,29 @@ HOME_IMAGES = [
     {
         'src': 'core/img/header/library.jpg',
         'alt': 'Stockholm Public Library',
-        'attribution': '[Stockholm Public Library (Samantha Marx)](https://www.flickr.com/photos/spam/5086168739) / '
-                       '[CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)'
+        'attribution': (
+            '[Stockholm Public Library (Samantha Marx)](https://www.flickr.com/photos/spam/5086168739) / '
+            '[CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)'
+        )
 
     },
     {
         'src': 'core/img/header/supercomputer.jpg',
         'alt': 'Discover Supercomputer 3',
-        'attribution': '[Discover Supercomputer 3 (NASA Goddard Space Flight Center)]'
-                       '(https://www.flickr.com/photos/nasa_goddard/6559334541) / '
-                       '[CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)'
+        'attribution': (
+            '[Discover Supercomputer 3 (NASA Goddard Space Flight Center)]'
+            '(https://www.flickr.com/photos/nasa_goddard/6559334541) / '
+            '[CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)'
+         )
     },
     {
         'src': 'core/img/header/collection.jpg',
         'alt': 'Nasssammlung',
-        'attribution': '[Nasssammlung (Christopher Bulle)]' # spellchecker:disable-line
-                       '(https://www.flickr.com/photos/bulle_de/9221247815) / '
-                       '[CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)'
+        'attribution': (
+            '[Nasssammlung (Christopher Bulle)]' # spellchecker:disable-line
+            '(https://www.flickr.com/photos/bulle_de/9221247815) / '
+            '[CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)'
+        )
     }
 ]
 
