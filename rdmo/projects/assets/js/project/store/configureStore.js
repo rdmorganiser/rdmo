@@ -20,6 +20,7 @@ import * as templateActions from 'rdmo/core/assets/js/actions/templateActions'
 import * as userActions from 'rdmo/core/assets/js/actions/userActions'
 
 import * as projectActions from '../actions/projectActions'
+import { projectId } from '../utils/meta'
 
 
 export default function configureStore() {
@@ -73,7 +74,8 @@ export default function configureStore() {
     store.dispatch(settingsActions.fetchSettings())
     store.dispatch(templateActions.fetchTemplates())
     store.dispatch(userActions.fetchCurrentUser())
-
+    // TODO: add permission logic
+    store.dispatch(projectActions.fetchProjectInvites(projectId))
     store.dispatch(projectActions.fetchProject())
   })
 
