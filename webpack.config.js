@@ -29,6 +29,10 @@ const configList = [
       'base-bs53': [
         './rdmo/core/assets/js/_bs53/base.js',
         './rdmo/core/assets/scss/_bs53/base.scss'
+      ],
+      'app-bs53': [
+        './rdmo/core/assets/js/_bs53/app.js',
+        './rdmo/core/assets/scss/_bs53/app.scss'
       ]
     },
     output: {
