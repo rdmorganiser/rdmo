@@ -3,21 +3,18 @@ import { useDispatch, useSelector } from 'react-redux'
 import AsyncSelect from 'react-select/async'
 import { useDebouncedCallback } from 'use-debounce'
 
+import Html from 'rdmo/core/assets/js/components/Html'
 import Input from 'rdmo/core/assets/js/components/forms/Input'
-// import Select from 'rdmo/core/assets/js/components/forms/Select'
 import Textarea from 'rdmo/core/assets/js/components/forms/Textarea'
 import ProjectApi from '../../api/ProjectApi'
 import { updateProject } from '../../actions/projectActions'
 
 const ProjectForm = () => {
   const { project, catalogs } = useSelector((state) => state.project.project)
-  console.log ('project %o', project)
-  // const templates = useSelector((state) => state.templates)
-  // console.log('templates %o', templates)
+  const templates = useSelector((state) => state.templates)
   const dispatch = useDispatch()
 
   const [formData, setFormData] = useState(project || {})
-  console.log ('formData %o', formData)
   const errors = useSelector((state) => state.project.errors)
   const [isParentSwitchOn, setIsParentSwitchOn] = useState(!!project.parent)
   const [parentOptions, setParentOptions] = useState([])
@@ -68,12 +65,6 @@ const ProjectForm = () => {
     }
   }, [formData.parent, parentOptions])
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault()
-  //   console.log('Form Data:', formData)
-  //   console.log('submit!')
-  // }
-
   return (
     // <form onSubmit={handleSubmit} className="container mt-3">
     <form className="container mt-3">
@@ -81,7 +72,7 @@ const ProjectForm = () => {
       <Input
         className="mb-3 form-label fw-bold"
         label={gettext('Title')}
-        help="Der Title für dieses Projekt."
+        help={gettext('The title for this project.')}
         value={formData.title || ''}
         onChange={(value) => handleChange('title', value)}
         errors={getFieldErrors('title')}
@@ -90,7 +81,7 @@ const ProjectForm = () => {
       <Textarea
         className="mb-3 form-label fw-bold"
         label={gettext('Description')}
-        help="Eine Beschreibung für dieses Projekt (optional)."
+        help={gettext('A description of the project (optional).')}
         rows={4}
         value={formData.description || ''}
         onChange={(value) => handleChange('description', value)}
@@ -102,7 +93,8 @@ const ProjectForm = () => {
       <Select
         className="mb-3 form-label fw-bold"
         label={gettext('Project phase')}
-        help="Die Phase, in der sich Ihr Projekt zum aktuellen Zeitpunkt befindet."
+        help={gettext('The phase of the project at this time.')}
+        // "Die Phase, in der sich Ihr Projekt zum aktuellen Zeitpunkt befindet."
         isClearable={true}
         options={[
           { value: 'antragstellung', label: 'Antragstellung' },
@@ -118,7 +110,7 @@ const ProjectForm = () => {
 
       <div className="mb-3">
         <label className="form-label fw-bold">{gettext('Catalog')}</label>
-        <div className="form-text">Der Fragenkatalog, der für dieses Projekt verwendet wird.</div>
+        <div className="form-text">{gettext('The catalog used for this project.')}</div>
         {catalogs?.filter(catalog => catalog.available).map((catalog) => (
           <div key={catalog.id} className="form-check">
             <input
@@ -154,16 +146,14 @@ const ProjectForm = () => {
           </label>
         </div>
         <div className="form-text">
-          Durch die Verknüpfung mit einem übergeordneten Projekt, können ...
+          <Html html={templates.project_view_parent_help} />
         </div>
 
         <AsyncSelect
               classNamePrefix='react-select'
               className='react-select mt-10'
               placeholder={gettext('Search projects ...')}
-              noOptionsMessage={() => gettext(
-                'No projects matching your search.'
-              )}
+              noOptionsMessage={() => gettext('No projects matching your search.')}
               loadingMessage={() => gettext('Loading ...')}
               options={parentOptions}
               value={parentOptions.find(p => p.value === formData.parent) || null}
