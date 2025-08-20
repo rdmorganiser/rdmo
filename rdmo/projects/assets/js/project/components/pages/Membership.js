@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Modal } from '../helper'
 import { useModal }  from 'rdmo/core/assets/js/hooks'
 import InviteMember from './InviteMember'
-import { addProjectMember, sendProjectInvite } from '../../actions/projectActions'
+import { addProjectMember, sendProjectInvite, deleteProjectMember, deleteProjectInvite } from '../../actions/projectActions'
 
 const Membership = () => {
   const { project, memberships } = useSelector((state) => state.project.project) ?? {}
@@ -16,9 +16,6 @@ const Membership = () => {
 
   const { show, open, close } = useModal()
   const dispatch = useDispatch()
-
-  // const submitWithMail = (payload) => dispatch(sendProjectInvite(payload))
-  // const submitSilently = (payload) => dispatch(addProjectMember(payload))
 
   const handleInviteSubmit = (e) => {
     e.preventDefault()
@@ -37,6 +34,14 @@ const Membership = () => {
     }
 
     close()
+  }
+
+  const handleDeleteMember = (member) => {
+  dispatch(deleteProjectMember(member.id))
+  }
+
+  const handleDeleteInvite = (invite) => {
+    dispatch(deleteProjectInvite(invite.id))
   }
 
   const modalProps = {
@@ -63,14 +68,14 @@ const Membership = () => {
     </div>
   )
 
-  const renderTable = (people) => (
+  const renderTable = (people, onDelete) => (
     <table className="table border align-middle">
       <thead className="table-light">
         <tr>
-          <th scope="col">{gettext('Name').toUpperCase()}</th>
-          <th scope="col">{gettext('Email').toUpperCase()}</th>
-          <th scope="col">{gettext('Role').toUpperCase()}</th>
-          <th scope="col"></th>
+          <th style={{ width: '35%' }}>{gettext('Name').toUpperCase()}</th>
+          <th style={{ width: '45%' }}>{gettext('Email').toUpperCase()}</th>
+          <th style={{ width: '15%' }}>{gettext('Role').toUpperCase()}</th>
+          <th style={{ width: '5%' }}></th>
         </tr>
       </thead>
       <tbody>
@@ -81,19 +86,46 @@ const Membership = () => {
               {person.email && <a href={`mailto:${person.email}`} className="link-success text-decoration-underline">{person.email}</a>}
             </td>
             <td>{person.role.charAt(0).toUpperCase() + person.role.slice(1)}</td>
+            {/* TODO: add permission based logic for dropdown actions */}
             <td className="text-end">
-              <div className="dropdown">
-                <button
-                  className="btn btn-sm btn-link"
-                  type="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <i className="bi bi-three-dots"></i>
+              {/* <div className="dropdown project-dropdown" tabIndex={-1}> */}
+              <div
+                className="dropdown project-dropdown dropstart"
+                tabIndex={-1}
+                onMouseLeave={(e) => {
+                  const focused = e.currentTarget.querySelector(':focus')
+                  focused?.blur()
+                }}
+              >
+                <button className="btn btn-sm btn-link" type="button" aria-expanded="false">
+                  <i className="bi bi-three-dots" />
                 </button>
-                <ul className="dropdown-menu dropdown-menu-end">
-                  <li><a className="dropdown-item" href="#">Edit</a></li>
-                  <li><a className="dropdown-item" href="#">Remove</a></li>
+                {/* <ul className="dropdown-menu dropdown-menu-end"> */}
+                <ul className="dropdown-menu">
+                  <li><a className="dropdown-item" href="#">{gettext('Edit')}</a></li>
+                  <li>
+                    {/* <a className="dropdown-item" href="#">{gettext('Remove')}</a> */}
+                    <button
+                      type="button"
+                      className="dropdown-item"
+                      onClick={(e) => {
+                        onDelete?.(person)
+                        e.currentTarget.closest('.project-dropdown')?.querySelector(':focus')?.blur()
+                      }}
+                    >
+                      {gettext('Remove')}
+                    </button>
+                    {/* <a
+                      className="dropdown-item"
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        onDelete?.(person)
+                      }}
+                    >
+                      {gettext('Remove')}
+                    </a> */}
+                  </li>
                 </ul>
               </div>
             </td>
@@ -106,13 +138,13 @@ const Membership = () => {
   return (
     <div>
       {renderHeader()}
-      {memberships && renderTable(memberships)}
+      {memberships && renderTable(memberships, handleDeleteMember)}
       {invites?.length > 0 && (
       <>
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h5 className="mb-0">{gettext('Invites')}</h5>
         </div>
-        {invites && renderTable(invites)}
+        {invites && renderTable(invites, handleDeleteInvite)}
       </>
       )}
       <Modal {...modalProps} size="modal-lg">
