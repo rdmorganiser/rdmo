@@ -2,7 +2,7 @@ from django import template
 from django.conf import settings
 from django.template import TemplateDoesNotExist
 from django.template.defaultfilters import stringfilter
-from django.template.loader import get_template, render_to_string
+from django.template.loader import render_to_string, select_template
 from django.urls import resolve, reverse
 from django.urls.resolvers import Resolver404
 from django.utils import translation
@@ -30,24 +30,23 @@ def i18n_switcher():
 
 @register.simple_tag()
 def render_lang_template(template_name, escape_html=False):
-    loc = to_locale(get_language())
-    lst = [
-        template_name + '_' + loc + '.html',
-        template_name + '_' + settings.LANGUAGES[0][0] + '.html',
-        template_name + '_en.html',
-        template_name + '.html'
+    locale = to_locale(get_language() or settings.LANGUAGE_CODE())
+    lang, _, country = locale.partition("_")
+
+    candidates = [
+        f'{template_name}_{locale}.html',
+        f'{template_name}_{lang}.html',
+        f'{template_name}_{settings.LANGUAGES[0][0]}.html',
+        f'{template_name}_en.html',
+        f'{template_name}.html'
     ]
-    for el in lst:
-        try:
-            template = get_template(el)
-            html = template.render()
-            if escape_html:
-                return escape(html)
-            else:
-                return html
-        except TemplateDoesNotExist:
-            pass
-    return ''
+    try:
+        tmpl = select_template(candidates)
+    except TemplateDoesNotExist:
+        return '' # fails silently
+
+    html = tmpl.render()
+    return escape(html) if escape_html else html
 
 
 @register.simple_tag()
