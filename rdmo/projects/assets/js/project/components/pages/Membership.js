@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { Modal } from '../helper'
 import { useModal }  from 'rdmo/core/assets/js/hooks'
 import InviteMember from './InviteMember'
-import { addProjectMember, sendProjectInvite, deleteProjectMember, deleteProjectInvite } from '../../actions/projectActions'
+import EditRole from './EditRole'
+import { addProjectMember, sendProjectInvite, deleteProjectMember, deleteProjectInvite, editProjectMember, editProjectInvite } from '../../actions/projectActions'
 
 const Membership = () => {
   const { project, memberships } = useSelector((state) => state.project.project) ?? {}
@@ -15,6 +16,11 @@ const Membership = () => {
   console.log('Memberships:', memberships)
 
   const { show, open, close } = useModal()
+  const { show: showEdit, open: openEdit, close: closeEdit } = useModal()
+
+  const editRowRef = useRef(null)
+  const editSubmitRef = useRef(null)
+
   const dispatch = useDispatch()
 
   const handleInviteSubmit = (e) => {
@@ -36,12 +42,30 @@ const Membership = () => {
     close()
   }
 
+  const handleRoleEdit = (e) => {
+    e.preventDefault()
+    const fd = new FormData(e.currentTarget)
+    const role = fd.get('role') // || editRowRef.current?.role
+    if (editSubmitRef.current) {
+      editSubmitRef.current(role)
+    }
+    closeEdit()
+  }
+
   const handleDeleteMember = (member) => {
   dispatch(deleteProjectMember(member.id))
   }
 
   const handleDeleteInvite = (invite) => {
     dispatch(deleteProjectInvite(invite.id))
+  }
+
+  const handleEditMember = (member) => {
+    dispatch(editProjectMember(member.id, { role: member.role }))
+  }
+
+  const handleEditInvite = (invite) => {
+    dispatch(editProjectInvite(invite.id, { role: invite.role }))
   }
 
   const modalProps = {
@@ -51,6 +75,15 @@ const Membership = () => {
     onSubmit: () => {},
     submitLabel: gettext('Invite member'),
     submitProps: { type: 'submit', form: 'invite-member-form' }
+  }
+
+    const editModalProps = {
+    title: gettext('Invite member to project'),
+    show: showEdit,
+    onClose: closeEdit,
+    onSubmit: () => {},
+    submitLabel: gettext('Change role'),
+    submitProps: { type: 'submit', form: 'change-role-form' }
   }
 
   const renderHeader = () => (
@@ -68,7 +101,7 @@ const Membership = () => {
     </div>
   )
 
-  const renderTable = (people, onDelete) => (
+  const renderTable = (people, onDelete, isMember) => (
     <table className="table border align-middle">
       <thead className="table-light">
         <tr>
@@ -102,7 +135,26 @@ const Membership = () => {
                 </button>
                 {/* <ul className="dropdown-menu dropdown-menu-end"> */}
                 <ul className="dropdown-menu">
-                  <li><a className="dropdown-item" href="#">{gettext('Edit')}</a></li>
+                  <li>
+                    {/* <a className="dropdown-item" href="#">{gettext('Edit')}</a> */}
+                    <a
+                      className="dropdown-item"
+                      href="#"
+                      onClick={() => {
+                        editRowRef.current = person
+                        editSubmitRef.current = (newRole) => {
+                          if (isMember) {
+                            handleEditMember({ id: person.id, role: newRole })
+                          } else {
+                            handleEditInvite({ id: person.id, role: newRole })
+                          }
+                        }
+                        openEdit()
+                      }}
+                    >
+                      {gettext('Edit')}
+                    </a>
+                  </li>
                   <li>
                     {/* <a className="dropdown-item" href="#">{gettext('Remove')}</a> */}
                     <button
@@ -138,18 +190,23 @@ const Membership = () => {
   return (
     <div>
       {renderHeader()}
-      {memberships && renderTable(memberships, handleDeleteMember)}
+      {memberships && renderTable(memberships, handleDeleteMember, true)}
       {invites?.length > 0 && (
       <>
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h5 className="mb-0">{gettext('Invites')}</h5>
         </div>
-        {invites && renderTable(invites, handleDeleteInvite)}
+        {invites && renderTable(invites, handleDeleteInvite, false)}
       </>
       )}
       <Modal {...modalProps} size="modal-lg">
         <form id="invite-member-form" key={show ? 'open' : 'closed'} onSubmit={handleInviteSubmit}>
           <InviteMember />
+        </form>
+      </Modal>
+      <Modal {...editModalProps} size="modal-lg">
+        <form id="change-role-form" key={showEdit ? 'open' : 'closed'} onSubmit={handleRoleEdit}>
+          <EditRole row={editRowRef.current} />
         </form>
       </Modal>
     </div>
