@@ -6,7 +6,7 @@ from django.template.loader import render_to_string, select_template
 from django.urls import resolve, reverse
 from django.urls.resolvers import Resolver404
 from django.utils import translation
-from django.utils.html import escape
+from django.utils.html import escape, format_html, format_html_join  # new
 from django.utils.safestring import mark_safe
 from django.utils.translation import get_language, to_locale
 
@@ -17,15 +17,21 @@ register = template.Library()
 
 
 @register.simple_tag()
-def i18n_switcher():
-    string = ''
-    for language, language_string in settings.LANGUAGES:
-        url = reverse('i18n_switcher', args=[language])
-        if language == translation.get_language():
-            string += f"<li><a class=\"dropdown-item\" href=\"{url}\"><u>{language_string}</u></a></li>"
-        else:
-            string += f"<li><a class=\"dropdown-item\" href=\"{url}\">{language_string}</a></li>"
-    return mark_safe(string)
+def i18n_switcher() -> str:
+    current = (translation.get_language() or '').lower()
+    current_base = current.split('-', 1)[0]
+
+    def item(code: str, label: str) -> str:
+        url = reverse('i18n_switcher', args=[code])
+        is_current = code.lower().split('-', 1)[0] == current_base
+        aria = ' aria-current="true"' if is_current else ''
+        text = format_html('<u>{}</u>', label) if is_current else label
+        return format_html(
+            '<li><a class="dropdown-item" href="{}"{}>{}</a></li>',
+            url, mark_safe(aria), text  # aria snippet is safe
+        )
+
+    return format_html_join('', '{}', ((item(code, label),) for code, label in settings.LANGUAGES))
 
 
 @register.simple_tag()
