@@ -274,6 +274,7 @@ TEMPLATES_API = [
     'projects/project_view_guest_info.html',
     'projects/project_view_author_info.html',
     'projects/project_view_owner_info.html',
+    'projects/project_view_parent_help.html',
 ]
 
 TEMPLATES_EXECUTE_SCRIPT_TAGS = False
