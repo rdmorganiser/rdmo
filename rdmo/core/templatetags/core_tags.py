@@ -144,10 +144,8 @@ def version():
 
 @register.filter('startswith')
 @stringfilter
-def startswith(text, starts):
-    if isinstance(text, str):
-        return text.startswith(starts)
-    return False
+def startswith(text, prefix):
+    return text.startswith(prefix)
 
 
 @register.filter()
