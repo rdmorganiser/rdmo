@@ -1,9 +1,12 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 
 import Html from 'rdmo/core/assets/js/components/Html'
+import { defaultRoleOptions as roleOptions } from '../../utils/defaultRoleOptions'
+import { getFieldErrors } from '../../utils/getFieldErrors'
 
-const InviteMember = () => {
+const InviteMember = ({ isManager = false }) => {
   const templates = useSelector((state) => state.templates)
 
   return (
@@ -20,32 +23,37 @@ const InviteMember = () => {
             placeholder={gettext('Username or e-mail')}
             required
           />
+          {getFieldErrors('lookup').map((err, i) => (
+            <div key={i} className="text-danger mt-1">{err}</div>
+          ))}
         </div>
 
         {/* Role */}
         <div className="mb-3">
           <label className="form-label fw-bold">{gettext('Role')}</label>
 
-          <div className="form-check">
-            <input className="form-check-input" type="radio" id="role-owner" name="role" value="owner" />
-            <label className="form-check-label" htmlFor="role-owner">{gettext('Owner')}</label>
-          </div>
-          <div className="form-check">
-            <input className="form-check-input" type="radio" id="role-manager" name="role" value="manager" />
-            <label className="form-check-label" htmlFor="role-manager">{gettext('Manager')}</label>
-          </div>
-          <div className="form-check">
-            <input className="form-check-input" type="radio" id="role-author" name="role" value="author" defaultChecked />
-            <label className="form-check-label" htmlFor="role-author">{gettext('Author')}</label>
-          </div>
-          <div className="form-check">
-            <input className="form-check-input" type="radio" id="role-guest" name="role" value="guest" />
-            <label className="form-check-label" htmlFor="role-guest">{gettext('Guest')}</label>
-          </div>
+          {roleOptions.map(({ value, label }) => (
+            <div className="form-check" key={value}>
+              <input
+                className="form-check-input"
+                type="radio"
+                id={`role-${value}`}
+                name="role"
+                value={value}
+                defaultChecked={value === 'author'}
+              />
+              <label className="form-check-label" htmlFor={`role-${value}`}>
+                {label}
+              </label>
+            </div>
+          ))}
+        {getFieldErrors('role').map((err, i) => (
+          <div key={i} className="text-danger mt-1">{err}</div>
+        ))}
         </div>
 
         {/* Add member silently */}
-        {/* TODO: conditional rendering based on user role */}
+        { isManager && (
         <div className="mb-3">
           <label className="form-label fw-bold">{gettext('Add member silently')}</label>
           <Html html={templates.project_view_invite_member_silently_help}
@@ -57,8 +65,16 @@ const InviteMember = () => {
             </label>
           </div>
         </div>
+        )}
+        {getFieldErrors('non_field_errors').map((err, i) => (
+          <div key={i} className="text-danger mt-1">{err}</div>
+        ))}
     </>
   )
+}
+
+InviteMember.propTypes = {
+  isManager: PropTypes.bool
 }
 
 export default InviteMember
