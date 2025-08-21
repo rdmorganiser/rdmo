@@ -8,6 +8,7 @@ import Input from 'rdmo/core/assets/js/components/forms/Input'
 import Textarea from 'rdmo/core/assets/js/components/forms/Textarea'
 import ProjectApi from '../../api/ProjectApi'
 import { updateProject } from '../../actions/projectActions'
+import { getFieldErrors } from '../../utils/getFieldErrors'
 
 const ProjectForm = () => {
   const { project, catalogs } = useSelector((state) => state.project.project)
@@ -15,14 +16,8 @@ const ProjectForm = () => {
   const dispatch = useDispatch()
 
   const [formData, setFormData] = useState(project || {})
-  const errors = useSelector((state) => state.project.errors)
   const [isParentSwitchOn, setIsParentSwitchOn] = useState(!!project.parent)
   const [parentOptions, setParentOptions] = useState([])
-
-  const getFieldErrors = (field) => {
-    const errorList = errors?.[0]?.errors?.[field]
-    return Array.isArray(errorList) ? errorList : errorList != null ? [errorList] : []
-  }
 
   const saveProject = (newFormData) => {
     dispatch(updateProject(newFormData))
@@ -129,7 +124,7 @@ const ProjectForm = () => {
         ))}
         {getFieldErrors('catalog').map((err, i) => (
           <div key={i} className="text-danger mt-1">{err}</div>
-      ))}
+        ))}
       </div>
 
       <div className="mb-3">
