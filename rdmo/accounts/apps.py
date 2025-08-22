@@ -7,4 +7,4 @@ class AccountsConfig(AppConfig):
     verbose_name = _('Accounts')
 
     def ready(self) -> None:
-        from .checks import shibboleth  # noqa: F401
+        from . import checks  # noqa: F401
