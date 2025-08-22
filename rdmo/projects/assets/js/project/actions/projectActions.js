@@ -223,7 +223,7 @@ export function editProjectMemberError(error) {
   return { type: actionTypes.EDIT_PROJECT_MEMBER_ERROR, error }
 }
 
-export function deleteProjectMember(membershipId, { skipRefresh = false } = {}) {
+export function deleteProjectMember(membershipId, { redirect = false } = {}) {
   return function(dispatch) {
     dispatch(addToPending('deleteProjectMember'))
     dispatch(deleteProjectMemberInit())
@@ -232,7 +232,7 @@ export function deleteProjectMember(membershipId, { skipRefresh = false } = {}) 
       .then(() => {
         dispatch(removeFromPending('deleteProjectMember'))
         dispatch(deleteProjectMemberSuccess(membershipId))
-        if (skipRefresh) {
+        if (redirect) {
           window.location.href = '/projects/'
           return
         }
