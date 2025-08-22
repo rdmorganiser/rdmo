@@ -24,7 +24,7 @@ const Membership = () => {
   const { show, open, close } = useModal()
   const { show: showConfirm, open: openConfirm, close: closeConfirm } = useModal()
 
-  const { memberships } = useSelector((state) => state.project.project) ?? {}
+  const { project, memberships } = useSelector((state) => state.project.project) ?? {}
   const invites = useSelector((state) => state.project.invites)
   const currentUser = useSelector((state) => state.user.currentUser)
 
@@ -72,14 +72,23 @@ const Membership = () => {
     const name =
       [person.first_name, person.last_name].filter(Boolean).join(' ').trim() ||
       person.email || ''
+    const text = !isMember ? gettext('Delete invite') : isCurrentUser ? gettext('Leave project') : gettext('Delete membership')
 
     setConfirm({
-      title: isCurrentUser ? gettext('Leave project') : gettext('Remove person'),
-      label: isCurrentUser ? gettext('Confirm leave') : gettext('Confirm delete'),
+      title: text,
+      label: text,
       body:  isCurrentUser
-        ? gettext('Do you really want to leave this project?')
-        : isMember ? interpolate(gettext('Do you really want to remove %s?'), [name])
-        : interpolate(gettext('Do you really want to delete the invite for %s?'), [name]),
+        ? <p dangerouslySetInnerHTML={{
+            __html:interpolate(gettext('You are about to leave the project <b>%s</b>.<br><br>If you want to access this project again, somebody will need to invite you!'), [project.title])
+          }} />
+        : isMember ?
+        <p dangerouslySetInnerHTML={{
+            __html:interpolate(gettext('You are about to remove the user <b>%s</b> from the project <b>%s</b>.'), [name, project.title])
+        }} />
+        :
+        <p dangerouslySetInnerHTML={{
+            __html:interpolate(gettext('You are about to remove the invite of <b>%s</b> from the project <b>%s</b>.'), [name, project.title])
+        }} />,
       onSubmit: () =>
         isMember
           ? dispatch(
@@ -216,8 +225,8 @@ const Membership = () => {
           <InviteMember isManager={isManager} />
         </form>
       </Modal>
-      <Modal {...confirmModalProps} size="modal-sm">
-        <p className="mb-0">{confirm?.body || gettext('Are you sure?')}</p>
+      <Modal {...confirmModalProps} size="modal-md">
+        {confirm?.body}
         {getFieldErrors('non_field_errors').map((err, i) => (
           <div key={i} className="text-danger mt-2">{err}</div>
         ))}
