@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import AsyncSelect from 'react-select/async'
 import { useDebouncedCallback } from 'use-debounce'
@@ -10,7 +11,7 @@ import ProjectApi from '../../api/ProjectApi'
 import { updateProject } from '../../actions/projectActions'
 import { getFieldErrors } from '../../utils/getFieldErrors'
 
-const ProjectForm = () => {
+const ProjectForm = ({ allowed }) => {
   const { project, catalogs } = useSelector((state) => state.project.project)
   const templates = useSelector((state) => state.templates)
   const dispatch = useDispatch()
@@ -71,6 +72,7 @@ const ProjectForm = () => {
         value={formData.title || ''}
         onChange={(value) => handleChange('title', value)}
         errors={getFieldErrors('title')}
+        isDisabled={!allowed}
       />
 
       <Textarea
@@ -81,6 +83,7 @@ const ProjectForm = () => {
         value={formData.description || ''}
         onChange={(value) => handleChange('description', value)}
         errors={getFieldErrors('description')}
+        isDisabled={!allowed}
       />
 
       {/* TODO feature project phase */}
@@ -116,6 +119,7 @@ const ProjectForm = () => {
               value={catalog.id}
               checked={formData.catalog == catalog.id}
               onChange={(e) => handleChange('catalog', e.target.value)}
+              disabled={!allowed}
             />
             <label className="form-check-label" htmlFor={`catalog-${catalog.id}`}>
               {catalog.title}
@@ -134,6 +138,7 @@ const ProjectForm = () => {
             className="form-check-input"
             id="parentToggle"
             checked={isParentSwitchOn}
+            disabled={!allowed}
             onChange={(e) => setIsParentSwitchOn(e.target.checked)}
           />
           <label className="form-label fw-bold m-0" htmlFor="parentToggle">
@@ -155,7 +160,7 @@ const ProjectForm = () => {
               onChange={(option) => handleChange('parent', option ? option.value : null)}
               getOptionValue={(project) => project.value}
               getOptionLabel={(project) => project.label}
-              isDisabled={!isParentSwitchOn}
+              isDisabled={!isParentSwitchOn || !allowed}
               loadOptions={handleLoadProjects}
               isClearable
               backspaceRemovesValue={true}
@@ -186,6 +191,10 @@ const ProjectForm = () => {
       {/* <button type="submit" className="btn btn-primary" onClick={handleSubmit}>{gettext('Submit')}</button> */}
     </form>
   )
+}
+
+ProjectForm.propTypes = {
+  allowed: PropTypes.bool
 }
 
 export default ProjectForm
