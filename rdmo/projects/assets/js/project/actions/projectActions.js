@@ -172,7 +172,6 @@ export function addProjectMember(data) {
       .then(member => {
         dispatch(removeFromPending('addProjectMember'))
         dispatch(addProjectMemberSuccess(member))
-        return dispatch(refreshProjectCore())
       })
       .catch(error => {
         dispatch(removeFromPending('addProjectMember'))
@@ -202,8 +201,7 @@ export function editProjectMember(membershipId, data) {
     return ProjectApi.editMember(projectId, membershipId, data)
       .then(member => {
         dispatch(removeFromPending('editProjectMember'))
-        dispatch(editProjectMemberSuccess(member))
-        return dispatch(refreshProjectCore())
+        dispatch(editProjectMemberSuccess({ ...member, id: membershipId }))
       })
       .catch(error => {
         dispatch(removeFromPending('editProjectMember'))
@@ -238,7 +236,6 @@ export function deleteProjectMember(membershipId, { skipRefresh = false } = {}) 
           window.location.href = '/projects/'
           return
         }
-        return dispatch(refreshProjectCore())
       })
       .catch(error => {
         dispatch(removeFromPending('deleteProjectMember'))
@@ -269,7 +266,6 @@ export function sendProjectInvite(data) {
       .then(invite => {
         dispatch(removeFromPending('sendInvite'))
         dispatch(sendProjectInviteSuccess(invite))
-        return dispatch(fetchProjectInvites())
       })
       .catch(error => {
         dispatch(removeFromPending('sendInvite'))
@@ -299,8 +295,7 @@ export function editProjectInvite(inviteId, data) {
     return ProjectApi.editInvite(projectId, inviteId, data)
       .then(invite => {
         dispatch(removeFromPending('editProjectInvite'))
-        dispatch(editProjectInviteSuccess(invite))
-        return dispatch(fetchProjectInvites())
+        dispatch(editProjectInviteSuccess({...invite, id: inviteId}))
       })
       .catch(error => {
         dispatch(removeFromPending('editProjectInvite'))
@@ -331,7 +326,6 @@ export function deleteProjectInvite(inviteId) {
       .then(() => {
         dispatch(removeFromPending('deleteProjectInvite'))
         dispatch(deleteProjectInviteSuccess(inviteId))
-        return dispatch(fetchProjectInvites())
       })
       .catch(error => {
         dispatch(removeFromPending('deleteProjectInvite'))
@@ -351,29 +345,4 @@ export function deleteProjectInviteSuccess(inviteId) {
 
 export function deleteProjectInviteError(error) {
   return { type: actionTypes.DELETE_PROJECT_INVITE_ERROR, error }
-}
-
-export function refreshProjectCore() {
-  return function(dispatch) {
-    dispatch(addToPending('refreshProjectCore'))
-    dispatch({ type: actionTypes.REFRESH_PROJECT_CORE_INIT })
-
-    return Promise.all([
-      ProjectApi.fetchProject(projectId),
-      ProjectApi.fetchProjectMemberships(projectId)
-    ])
-    .then(([projectEntity, memberships]) => {
-      dispatch(removeFromPending('refreshProjectCore'))
-      dispatch({
-        type: actionTypes.REFRESH_PROJECT_CORE_SUCCESS,
-        project: projectEntity,
-        memberships
-      })
-    })
-    .catch((error) => {
-      dispatch(removeFromPending('refreshProjectCore'))
-      dispatch({ type: actionTypes.REFRESH_PROJECT_CORE_ERROR, error })
-      throw error
-    })
-  }
 }
