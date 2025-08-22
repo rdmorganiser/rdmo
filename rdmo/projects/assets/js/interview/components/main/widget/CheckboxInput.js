@@ -72,7 +72,7 @@ const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreat
     } else {
       handleCreate(option, optionIndex, additionalInput)
     }
-  }, 2000)
+  }, 500)
 
   return (
     <div ref={ref} className={classnames}>
