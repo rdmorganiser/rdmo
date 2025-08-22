@@ -7,6 +7,7 @@ import { isEmpty } from 'lodash'
 import { getQuestionTextId, getQuestionHelpId } from '../../../utils/question'
 import { isDefaultValue } from '../../../utils/value'
 
+import useAdditionalInputs from '../../../hooks/useAdditionalInputs'
 import useAdjustLabel from '../../../hooks/useAdjustLabel'
 
 import AdditionalTextInput from './common/AdditionalTextInput'
@@ -17,11 +18,12 @@ import OptionText from './common/OptionText'
 const RadioInput = ({ question, value, options, disabled, updateValue, buttons }) => {
 
   const ref = useRef(null)
+  const [getAdditionalInput, setAdditionalInput] = useAdditionalInputs(value, options)
 
   useAdjustLabel(ref)
 
   const handleChange = (option) => {
-    handleAdditionalValueChange.cancel()
+    handleAdditionalInputChange.cancel()
 
     if (option.has_provider) {
       updateValue(value, {
@@ -32,7 +34,7 @@ const RadioInput = ({ question, value, options, disabled, updateValue, buttons }
       })
     } else {
       updateValue(value, {
-        text: option.default_text || '',
+        text: getAdditionalInput(option) || option.default_text || '',
         option: option.id,
         unit: question.unit,
         value_type: question.value_type
@@ -40,7 +42,7 @@ const RadioInput = ({ question, value, options, disabled, updateValue, buttons }
     }
   }
 
-  const handleAdditionalValueChange = useDebouncedCallback((value, option, additionalInput) => {
+  const handleAdditionalInputChange = useDebouncedCallback((value, option, additionalInput) => {
     updateValue(value, {
       option: option.id,
       text: additionalInput,
@@ -87,10 +89,12 @@ const RadioInput = ({ question, value, options, disabled, updateValue, buttons }
                           <span>:</span>
                           <AdditionalTextInput
                             className="ml-10"
-                            value={value}
-                            option={option}
+                            inputValue={getAdditionalInput(option)}
                             disabled={disabled}
-                            onChange={handleAdditionalValueChange}
+                            onChange={(additionalInput) => {
+                              setAdditionalInput(option, additionalInput)
+                              handleAdditionalInputChange(value, option, additionalInput)
+                            }}
                           />
                           <OptionHelp className="ml-10" option={option} />
                         </>
@@ -101,10 +105,12 @@ const RadioInput = ({ question, value, options, disabled, updateValue, buttons }
                         <>
                           <span>:</span>
                           <AdditionalTextareaInput
-                            value={value}
-                            option={option}
+                            inputValue={getAdditionalInput(option)}
                             disabled={disabled}
-                            onChange={handleAdditionalValueChange}
+                            onChange={(additionalInput) => {
+                              setAdditionalInput(option, additionalInput)
+                              handleAdditionalInputChange(value, option, additionalInput)
+                            }}
                           />
                           <div>
                             <OptionHelp option={option} />

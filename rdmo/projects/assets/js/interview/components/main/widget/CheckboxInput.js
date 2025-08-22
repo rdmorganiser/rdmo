@@ -1,9 +1,10 @@
-import React, {useRef, useState} from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { useDebouncedCallback } from 'use-debounce'
 import { isEmpty, isNil } from 'lodash'
 
+import useAdditionalInputs from '../../../hooks/useAdditionalInputs'
 import useAdjustLabel from '../../../hooks/useAdjustLabel'
 
 import AdditionalTextInput from './common/AdditionalTextInput'
@@ -14,7 +15,7 @@ import OptionText from './common/OptionText'
 const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreate, onUpdate, onDelete }) => {
 
   const ref = useRef(null)
-  const [additionalInputValue, setAdditionalInputValue] = useState('')
+  const [getAdditionalInput, setAdditionalInput] = useAdditionalInputs(value, [option])
 
   useAdjustLabel(ref)
 
@@ -41,19 +42,17 @@ const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreat
   }
 
   const handleChange = () => {
-    handleAdditionalValueChange.cancel()
+    handleAdditionalInputChange.cancel()
 
     if (checked) {
       onDelete(value)
-      setAdditionalInputValue('')
+      setAdditionalInput(option, '')
     } else {
-      handleCreate(option, optionIndex, additionalInputValue)
+      handleCreate(option, optionIndex, getAdditionalInput(option))
     }
   }
 
-  const handleAdditionalValueChange = useDebouncedCallback((value, option, additionalInput) => {
-   setAdditionalInputValue(additionalInput)
-
+  const handleAdditionalInputChange = useDebouncedCallback((value, option, additionalInput) => {
     if (checked) {
       if (option.has_provider) {
         onUpdate(value, {
@@ -73,7 +72,7 @@ const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreat
     } else {
       handleCreate(option, optionIndex, additionalInput)
     }
-  }, 500)
+  }, 2000)
 
   return (
     <div ref={ref} className={classnames}>
@@ -95,10 +94,13 @@ const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreat
           option.additional_input == 'text' && (
             <>
               <span>:</span>
-              <AdditionalTextInput className="ml-10" value={value} option={option} disabled={disabled}
-                onChange={(v, o, input) => {
-                  setAdditionalInputValue(input)
-                  handleAdditionalValueChange(v, o, input)
+              <AdditionalTextInput
+                className="ml-10"
+                inputValue={getAdditionalInput(option)}
+                disabled={disabled}
+                onChange={(additionalInput) => {
+                  setAdditionalInput(option, additionalInput)
+                  handleAdditionalInputChange(value, option, additionalInput)
                 }}
               />
               <OptionHelp className="ml-10" option={option} />
@@ -109,10 +111,12 @@ const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreat
           option.additional_input == 'textarea' && (
             <>
               <span>:</span>
-              <AdditionalTextareaInput value={value} option={option} disabled={disabled}
-                  onChange={(v, o, input) => {
-                    setAdditionalInputValue(input)
-                    handleAdditionalValueChange(v, o, input)
+              <AdditionalTextareaInput
+                inputValue={getAdditionalInput(option)}
+                disabled={disabled}
+                onChange={(additionalInput) => {
+                  setAdditionalInput(option, additionalInput)
+                  handleAdditionalInputChange(value, option, additionalInput)
                 }}
               />
               <div>
