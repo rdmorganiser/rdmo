@@ -5,6 +5,7 @@ import { Modal } from '../helper'
 import { useModal }  from 'rdmo/core/assets/js/hooks'
 import Select from 'rdmo/core/assets/js/components/Select'
 import { userIsManager } from 'rdmo/projects/assets/js/common/utils'
+import { getFieldErrors } from '../../utils/getFieldErrors'
 import InviteMember from './InviteMember'
 import {
   addProjectMember,
@@ -73,7 +74,7 @@ const Membership = () => {
       person.email || ''
 
     setConfirm({
-      title: isCurrentUser ? gettext('Leave project?') : gettext('Remove person?'),
+      title: isCurrentUser ? gettext('Leave project') : gettext('Remove person'),
       label: isCurrentUser ? gettext('Confirm leave') : gettext('Confirm delete'),
       body:  isCurrentUser
         ? gettext('Do you really want to leave this project?')
@@ -104,19 +105,20 @@ const Membership = () => {
   }
 
   const confirmModalProps = {
-  title: confirm?.title || gettext('Confirm'),
-  show: showConfirm,
-  onClose: closeConfirm,
-  onSubmit: async () => {
-    try {
-      await confirm?.onSubmit?.()
-      closeConfirm()
-    } catch {
-      // keep Modal open on errors
-    }
-  },
-  submitLabel: confirm?.label || gettext('Confirm'),
-}
+    title: confirm?.title || gettext('Confirm'),
+    show: showConfirm,
+    onClose: closeConfirm,
+    onSubmit: async () => {
+      try {
+        await confirm?.onSubmit?.()
+        closeConfirm()
+      } catch {
+        // keep Modal open on errors
+      }
+    },
+    submitLabel: confirm?.label || gettext('Confirm'),
+    submitProps: { className: 'btn btn-danger' }
+  }
 
   const renderHeader = () => (
     <div className="d-flex justify-content-between align-items-center mb-3">
@@ -216,6 +218,9 @@ const Membership = () => {
       </Modal>
       <Modal {...confirmModalProps} size="modal-sm">
         <p className="mb-0">{confirm?.body || gettext('Are you sure?')}</p>
+        {getFieldErrors('non_field_errors').map((err, i) => (
+          <div key={i} className="text-danger mt-2">{err}</div>
+        ))}
       </Modal>
     </div>
 )}
