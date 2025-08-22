@@ -6,6 +6,7 @@ import { isEmpty, isNil } from 'lodash'
 
 import useAdditionalInputs from '../../../hooks/useAdditionalInputs'
 import useAdjustLabel from '../../../hooks/useAdjustLabel'
+import useIdle from '../../../hooks/useIdle'
 
 import AdditionalTextInput from './common/AdditionalTextInput'
 import AdditionalTextareaInput from './common/AdditionalTextareaInput'
@@ -16,6 +17,7 @@ const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreat
 
   const ref = useRef(null)
   const [getAdditionalInput, setAdditionalInput] = useAdditionalInputs(value, [option])
+  const [idle, setIdle] = useIdle([value])
 
   useAdjustLabel(ref)
 
@@ -42,13 +44,16 @@ const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreat
   }
 
   const handleChange = () => {
-    handleAdditionalInputChange.cancel()
+    if (idle) {
+      setIdle(false)
+      handleAdditionalInputChange.cancel()
 
-    if (checked) {
-      onDelete(value)
-      setAdditionalInput(option, '')
-    } else {
-      handleCreate(option, optionIndex, getAdditionalInput(option))
+      if (checked) {
+        onDelete(value)
+        setAdditionalInput(option, '')
+      } else {
+        handleCreate(option, optionIndex, getAdditionalInput(option))
+      }
     }
   }
 
