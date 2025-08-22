@@ -5,7 +5,9 @@ const useAdditionalInputs = (value, options) => {
   const [additionalInputs, setAdditionalInputs] = useState({})
 
   useEffect(() => {
-    if (!isNil(value)) {
+    if (isNil(value)) {
+      setAdditionalInputs({})
+    } else {
       setAdditionalInputs(options.reduce((additionalInputs, option) => {
         if (value.option == option.id) {
           additionalInputs[option.id] = value.text
