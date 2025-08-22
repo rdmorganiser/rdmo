@@ -86,7 +86,7 @@ const Membership = () => {
               deleteProjectMember(
                 person.id,
                 isCurrentUser && !isManager
-                  ? { skipRefresh: true } // self-leave, no refresh, redirect
+                  ? { redirect: true } // self-leave, redirect to projects list
                   : {}
               )
             )
