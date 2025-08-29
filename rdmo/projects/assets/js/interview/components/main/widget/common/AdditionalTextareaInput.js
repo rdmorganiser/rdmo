@@ -1,36 +1,23 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { get, isNil } from 'lodash'
+import classNames from 'classnames'
 
-const AdditionalTextareaInput = ({ value, option, disabled, onChange }) => {
-  const [inputValue, setInputValue] = useState('')
-
-  useEffect(() => {
-    if (isNil(value)) {
-      setInputValue('')
-    } else {
-      setInputValue(value.option == option.id ? value.text : '')
-    }
-  }, [get(value, 'id'), get(value, 'text'), get(value, 'option'), get(value, 'external_id')])
-
+const AdditionalTextareaInput = ({ className, inputValue, disabled, onChange }) => {
   return (
     <textarea
       rows={4}
-      className="form-control input-sm"
+      className={classNames('form-control input-sm', className)}
       disabled={disabled}
       aria-label={gettext('Additional input')}
       value={inputValue}
-      onChange={(event) => {
-        setInputValue(event.target.value)
-        onChange(value, option, event.target.value)
-      }}
+      onChange={(event) => onChange(event.target.value)}
     />
   )
 }
 
 AdditionalTextareaInput.propTypes = {
-  value: PropTypes.object,
-  option: PropTypes.object.isRequired,
+  className: PropTypes.string,
+  inputValue: PropTypes.string,
   disabled: PropTypes.bool,
   onChange: PropTypes.func.isRequired
 }
