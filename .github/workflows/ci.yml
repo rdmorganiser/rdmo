@@ -33,7 +33,7 @@ jobs:
     name: Build python wheel
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     # update the version
     - name: Get short commit SHA
       run: |
@@ -99,14 +99,14 @@ jobs:
         python-version: ['3.9', '3.13']
         db-backend: [mysql, postgres]
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
         cache: pip
     - name: Download wheel
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v5
       with:
         name: wheel
         path: dist
@@ -157,14 +157,14 @@ jobs:
         python-version: ['3.13']
         db-backend: [postgres]
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
         cache: pip
     - name: Download wheel
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v5
       with:
         name: wheel
         path: dist
@@ -217,7 +217,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
@@ -230,13 +230,13 @@ jobs:
     needs: build-wheel
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
           cache: pip
       - name: Download wheel
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: wheel
           path: dist
