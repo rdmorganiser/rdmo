@@ -28,12 +28,14 @@ import {
   EDIT_PROJECT_INVITE_ERROR,
   DELETE_PROJECT_INVITE_INIT,
   DELETE_PROJECT_INVITE_SUCCESS,
-  DELETE_PROJECT_INVITE_ERROR
+  DELETE_PROJECT_INVITE_ERROR,
+  CLEAR_PROJECT_ERRORS
 } from '../actions/actionTypes'
 
 const initialState = {
   project: null,
-  invites: null
+  invites: null,
+  errors: []
 }
 
 export default function projectReducer(state = initialState, action) {
@@ -139,6 +141,8 @@ export default function projectReducer(state = initialState, action) {
         ...state,
         errors: [...state.errors, { actionType: action.type, ...action.error }]
       }
+    case CLEAR_PROJECT_ERRORS:
+      return { ...state, errors: [] }
     default:
       return state
   }
