@@ -22,7 +22,7 @@ const ProjectData = () => {
     <div className="container-fluid px-3">
     <div className="row g-3">
       <Tile title={gettext('Project data')} size="fullWidth">
-        <ProjectForm allowed={allowed} />
+        <ProjectForm disabled={!allowed} />
       </Tile>
     </div>
 

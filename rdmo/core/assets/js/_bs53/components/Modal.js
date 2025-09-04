@@ -14,27 +14,20 @@ const Modal = ({
   size = ''
 }) => {
   const modalRef = useRef(null)
-  const modalInstanceRef = useRef(null)
 
   useEffect(() => {
-    const modalEl = modalRef.current
-    if (!modalEl) return
+    const modalElement = modalRef.current
+    if (!modalElement) return
 
-    modalInstanceRef.current = BootstrapModal.getOrCreateInstance(modalEl, {
+    const modal = BootstrapModal.getOrCreateInstance(modalElement, {
       backdrop: 'static',
       keyboard: true,
       ...modalProps
     })
-
     if (show) {
-      modalInstanceRef.current.show()
-    } else {
-      modalInstanceRef.current.hide()
+      modal.show()
     }
-
-    return () => {
-      modalInstanceRef.current?.hide()
-    }
+    return () => modal.hide()
   }, [show])
 
   return (
