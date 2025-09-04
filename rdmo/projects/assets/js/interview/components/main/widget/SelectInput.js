@@ -8,7 +8,6 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { isEmpty, isNil } from 'lodash'
 import { useDebouncedCallback } from 'use-debounce'
-// import { convert } from 'html-to-text'
 
 import ProjectApi from '../../../api/ProjectApi'
 import { projectId } from '../../../utils/meta'
@@ -19,6 +18,7 @@ import { getValueOption } from '../../../utils/options'
 import OptionHelp from './common/OptionHelp'
 import OptionText from './common/OptionText'
 
+import SelectValueContainer from './SelectValueContainer'
 
 const SelectInput = ({ question, value, options, disabled, creatable, updateValue, buttons }) => {
 
@@ -104,7 +104,8 @@ const SelectInput = ({ question, value, options, disabled, creatable, updateValu
         <OptionText option={option} />
         <OptionHelp className="ml-10" option={option} />
       </span>
-    )
+    ),
+    components: { ValueContainer: SelectValueContainer }
   }
 
   return (
