@@ -9,15 +9,16 @@ import Input from 'rdmo/core/assets/js/components/forms/Input'
 import Textarea from 'rdmo/core/assets/js/components/forms/Textarea'
 import ProjectApi from '../../api/ProjectApi'
 import { updateProject } from '../../actions/projectActions'
-import { getFieldErrors } from '../../utils/getFieldErrors'
+import { useFieldErrors } from '../../hooks/useFieldErrors'
 
-const ProjectForm = ({ allowed }) => {
+const ProjectForm = ({ disabled }) => {
   const { project, catalogs } = useSelector((state) => state.project.project)
   const templates = useSelector((state) => state.templates)
   const dispatch = useDispatch()
+  const errors = useFieldErrors()
 
   const [formData, setFormData] = useState(project || {})
-  const [isParentSwitchOn, setIsParentSwitchOn] = useState(!!project.parent)
+  const [enableParent, setEnableParent] = useState(!!project.parent)
   const [parentOptions, setParentOptions] = useState([])
 
   const saveProject = (newFormData) => {
@@ -52,6 +53,19 @@ const ProjectForm = ({ allowed }) => {
       })
   }, 500)
 
+  // Fetch a first page only when the menu is opened and nothing is selected/loaded yet
+  const handleMenuOpen = () => {
+    if (enableParent) {
+      ProjectApi.fetchProjects({ search: '' }).then(({ results }) => {
+        const options = results
+          .filter(p => !project?.id || p.id !== project.id)
+          .map(p => ({ value: p.id, label: p.title }))
+          console.log('fetched projects for parent select', options)
+        setParentOptions(options)
+      })
+    }
+  }
+
   useEffect(() => {
     if (formData.parent && !parentOptions.some(p => p.value === formData.parent)) {
       ProjectApi.fetchProject(formData.parent).then((project) => {
@@ -71,8 +85,8 @@ const ProjectForm = ({ allowed }) => {
         help={gettext('The title for this project.')}
         value={formData.title || ''}
         onChange={(value) => handleChange('title', value)}
-        errors={getFieldErrors('title')}
-        isDisabled={!allowed}
+        errors={errors.title}
+        isDisabled={disabled}
       />
 
       <Textarea
@@ -82,8 +96,8 @@ const ProjectForm = ({ allowed }) => {
         rows={4}
         value={formData.description || ''}
         onChange={(value) => handleChange('description', value)}
-        errors={getFieldErrors('description')}
-        isDisabled={!allowed}
+        errors={errors.description}
+        isDisabled={disabled}
       />
 
       {/* TODO feature project phase */}
@@ -101,7 +115,7 @@ const ProjectForm = ({ allowed }) => {
         ]}
         value={formData.phase || ''}
         onChange={(value) => handleChange('phase', value)}
-        errors={getFieldErrors('phase')}
+        errors={errors.phase}
         placeholder={gettext('Select project phase')}
       />
       */}
@@ -119,14 +133,14 @@ const ProjectForm = ({ allowed }) => {
               value={catalog.id}
               checked={formData.catalog == catalog.id}
               onChange={(e) => handleChange('catalog', e.target.value)}
-              disabled={!allowed}
+              disabled={disabled}
             />
             <label className="form-check-label" htmlFor={`catalog-${catalog.id}`}>
               {catalog.title}
             </label>
           </div>
         ))}
-        {getFieldErrors('catalog').map((err, i) => (
+        {errors.catalog?.map((err, i) => (
           <div key={i} className="text-danger mt-1">{err}</div>
         ))}
       </div>
@@ -137,9 +151,9 @@ const ProjectForm = ({ allowed }) => {
             type="checkbox"
             className="form-check-input"
             id="parentToggle"
-            checked={isParentSwitchOn}
-            disabled={!allowed}
-            onChange={(e) => setIsParentSwitchOn(e.target.checked)}
+            checked={enableParent}
+            disabled={disabled}
+            onChange={(e) => setEnableParent(e.target.checked)}
           />
           <label className="form-label fw-bold m-0" htmlFor="parentToggle">
             {gettext('Select parent project')}
@@ -155,18 +169,19 @@ const ProjectForm = ({ allowed }) => {
               placeholder={gettext('Search projects ...')}
               noOptionsMessage={() => gettext('No projects matching your search.')}
               loadingMessage={() => gettext('Loading ...')}
-              options={parentOptions}
+              defaultOptions={parentOptions}
               value={parentOptions.find(p => p.value === formData.parent) || null}
               onChange={(option) => handleChange('parent', option ? option.value : null)}
               getOptionValue={(project) => project.value}
               getOptionLabel={(project) => project.label}
-              isDisabled={!isParentSwitchOn || !allowed}
+              isDisabled={!enableParent || disabled}
               loadOptions={handleLoadProjects}
+              onMenuOpen={handleMenuOpen}
               isClearable
               backspaceRemovesValue={true}
         />
 
-        {getFieldErrors('parent').map((err, i) => (
+        {errors.parent?.map((err, i) => (
           <div key={i} className="text-danger mt-1">{err}</div>
         ))}
 
@@ -177,10 +192,10 @@ const ProjectForm = ({ allowed }) => {
             id="inheritDefaults"
             checked={!!formData.inheritDefaults}
             onChange={(e) => handleChange('inheritDefaults', e.target.checked)}
-            disabled={!isParentSwitchOn}
+            disabled={!enableParent}
           />
           <label
-            className={`form-check-label ${!isParentSwitchOn ? 'text-muted' : ''}`}
+            className={`form-check-label ${!enableParent ? 'text-muted' : ''}`}
             htmlFor="inheritDefaults"
           >
             Default-Werte aus übergeordnetem Projekt übernehmen
@@ -194,7 +209,7 @@ const ProjectForm = ({ allowed }) => {
 }
 
 ProjectForm.propTypes = {
-  allowed: PropTypes.bool
+  disabled: PropTypes.bool
 }
 
 export default ProjectForm
