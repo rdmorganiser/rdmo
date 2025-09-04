@@ -346,3 +346,7 @@ export function deleteProjectInviteSuccess(inviteId) {
 export function deleteProjectInviteError(error) {
   return { type: actionTypes.DELETE_PROJECT_INVITE_ERROR, error }
 }
+
+export function clearProjectErrors() {
+  return { type: actionTypes.CLEAR_PROJECT_ERRORS }
+}
