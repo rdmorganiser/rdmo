@@ -67,6 +67,8 @@ class ProjectSerializer(serializers.ModelSerializer):
     authors = ProjectUserSerializer(many=True, read_only=True)
     guests = ProjectUserSerializer(many=True, read_only=True)
 
+    permissions = serializers.SerializerMethodField()
+
     last_changed = serializers.DateTimeField(read_only=True)
 
     visibility = serializers.CharField(source='visibility.get_help_display', read_only=True)
@@ -92,7 +94,8 @@ class ProjectSerializer(serializers.ModelSerializer):
             'views',
             'progress_total',
             'progress_count',
-            'visibility'
+            'visibility',
+            'permissions'
         )
         read_only_fields = (
             'snapshots',
@@ -106,6 +109,55 @@ class ProjectSerializer(serializers.ModelSerializer):
         if settings.PROJECT_VIEWS_SYNC and value:
             raise serializers.ValidationError(_('Editing views is disabled.'))
         return value
+
+    def get_permissions(self, obj):
+        request = self.context.get('request')
+        view = self.context.get('view')
+
+        if view.action == 'list':
+            return {
+                'can_view_project': request.user.has_perm('projects.view_project_object', obj),
+                'can_change_project': request.user.has_perm('projects.change_project_object', obj),
+                'can_delete_project': request.user.has_perm('projects.delete_project_object', obj)
+            }
+        else:
+            return {
+                'can_view_project': request.user.has_perm('projects.view_project_object', obj),
+                'can_change_project': request.user.has_perm('projects.change_project_object', obj),
+                'can_delete_project': request.user.has_perm('projects.delete_project_object', obj),
+                'can_leave_project': request.user.has_perm('projects.leave_project_object', obj),
+                'can_export_project': request.user.has_perm('projects.export_project_object', obj),
+                'can_import_project': request.user.has_perm('projects.import_project_object', obj),
+                'can_view_visibility': request.user.has_perm('projects.view_visibility_object', obj),
+                'can_add_visibility': request.user.has_perm('projects.add_visibility_object', obj),
+                'can_change_visibility': request.user.has_perm('projects.change_visibility_object', obj),
+                'can_delete_visibility': request.user.has_perm('projects.delete_visibility_object', obj),
+                'can_view_membership': request.user.has_perm('projects.view_membership_object', obj),
+                'can_add_membership': request.user.has_perm('projects.add_membership_object', obj),
+                'can_change_membership': request.user.has_perm('projects.change_membership_object', obj),
+                'can_delete_membership': request.user.has_perm('projects.delete_membership_object', obj),
+                'can_view_invite': request.user.has_perm('projects.view_invite_object', obj),
+                'can_add_invite': request.user.has_perm('projects.add_invite_object', obj),
+                'can_change_invite': request.user.has_perm('projects.change_invite_object', obj),
+                'can_delete_invite': request.user.has_perm('projects.delete_invite_object', obj),
+                'can_view_integration': request.user.has_perm('projects.view_integration_object', obj),
+                'can_add_integration': request.user.has_perm('projects.add_integration_object', obj),
+                'can_change_integration': request.user.has_perm('projects.change_integration_object', obj),
+                'can_delete_integration': request.user.has_perm('projects.delete_integration_object', obj),
+                'can_view_issue': request.user.has_perm('projects.view_issue_object', obj),
+                'can_add_issue': request.user.has_perm('projects.add_issue_object', obj),
+                'can_change_issue': request.user.has_perm('projects.change_issue_object', obj),
+                'can_delete_issue': request.user.has_perm('projects.delete_issue_object', obj),
+                'can_view_snapshot': request.user.has_perm('projects.view_snapshot_object', obj),
+                'can_add_snapshot': request.user.has_perm('projects.add_snapshot_object', obj),
+                'can_change_snapshot': request.user.has_perm('projects.change_snapshot_object', obj),
+                'can_rollback_snapshot': request.user.has_perm('projects.rollback_snapshot_object', obj),
+                'can_export_snapshot': request.user.has_perm('projects.export_snapshot_object', obj),
+                'can_view_value': request.user.has_perm('projects.view_value_object', obj),
+                'can_add_value': request.user.has_perm('projects.add_value_object', obj),
+                'can_change_value': request.user.has_perm('projects.change_value_object', obj),
+                'can_delete_value': request.user.has_perm('projects.delete_value_object', obj)
+            }
 
 
 class ProjectCopySerializer(ProjectSerializer):
