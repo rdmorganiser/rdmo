@@ -76,7 +76,6 @@ const MembershipTable = ({ persons, isMember = false }) => {
                     className="btn btn-link btn-sm p-0"
                     aria-label={isCurrentUser ? gettext('Leave') : gettext('Remove')}
                     title={isCurrentUser ? gettext('Leave') : gettext('Remove')}
-                    // onClick={() => openDeleteConfirm(person, isMember, isCurrentUser)}
                     onClick={() => handleOpenConfirm(person, isCurrentUser)}
                   >
                     <i
