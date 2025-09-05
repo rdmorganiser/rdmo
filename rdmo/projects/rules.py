@@ -61,7 +61,7 @@ def is_visible(user, project):
 @rules.predicate
 def is_site_manager(user, project):
     if user.is_authenticated:
-        return user.role.manager.filter(pk=project.site.pk).exists()
+        return user.role.is_site_manager(project.site.id)
     else:
         return False
 
@@ -70,7 +70,7 @@ def is_site_manager(user, project):
 def is_site_manager_for_current_site(user, request):
     if user.is_authenticated:
         current_site = get_current_site(request)
-        return user.role.manager.filter(pk=current_site.pk).exists()
+        return user.role.is_site_manager(current_site.id)
     else:
         return False
 
