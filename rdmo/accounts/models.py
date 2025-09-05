@@ -214,6 +214,17 @@ class Role(models.Model):
     def is_reviewer(self):
         return self.reviewer.filter(id=settings.SITE_ID).exists()
 
+    def is_site_manager(self, site_id):
+        # checks if the user is manager for the given site and caches the result in the
+        # role instance, since the check is performed most project permissions
+        if not hasattr(self, '_site_manager_cache'):
+            self._site_manager_cache = {}
+
+        if site_id not in self._site_manager_cache:
+            self._site_manager_cache[site_id] = self.manager.filter(id=site_id).exists()
+
+        return self._site_manager_cache[site_id]
+
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def post_save_user(sender, **kwargs):

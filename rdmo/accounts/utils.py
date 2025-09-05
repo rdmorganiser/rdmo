@@ -25,7 +25,7 @@ def is_site_manager(user):
             return True
         else:
             try:
-                return user.role.manager.filter(pk=settings.SITE_ID).exists()
+                return user.role.is_site_manager(settings.SITE_ID)
             except Role.DoesNotExist:
                 return False
     else:
