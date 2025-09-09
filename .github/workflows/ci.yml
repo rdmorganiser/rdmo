@@ -67,7 +67,7 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        python-version: ['3.9', '3.13']
+        python-version: ['3.10', '3.13']
         db-backend: [mysql, postgres]
     steps:
     - uses: actions/checkout@v5
