@@ -49,12 +49,27 @@ class ProjectUserSerializer(serializers.ModelSerializer):
 
 class ProjectAncestorSerializer(serializers.ModelSerializer):
 
+    permissions = serializers.SerializerMethodField()
+
     class Meta:
         model = Project
         fields = (
             'id',
-            'title'
+            'title',
+            'permissions'
         )
+
+    def get_permissions(self, obj):
+        request = self.context.get('request')
+        view = self.context.get('view')
+        if view.action == 'list':
+            return {}
+        else:
+            return {
+                'can_view_project': request.user.has_perm('projects.view_project_object', obj),
+                'can_change_project': request.user.has_perm('projects.change_project_object', obj),
+                'can_delete_project': request.user.has_perm('projects.delete_project_object', obj)
+            }
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -185,7 +200,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     def get_ancestors(self, obj):
         ancestors = self._prefetched_ancestors.get(obj.id, obj.get_ancestors())
-        return ProjectAncestorSerializer(ancestors, many=True).data
+        return ProjectAncestorSerializer(ancestors, many=True, context=self.context).data
 
 
 class ProjectCopySerializer(ProjectSerializer):
