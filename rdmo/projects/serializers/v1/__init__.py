@@ -47,6 +47,16 @@ class ProjectUserSerializer(serializers.ModelSerializer):
         return get_full_name(obj)
 
 
+class ProjectAncestorSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Project
+        fields = (
+            'id',
+            'title'
+        )
+
+
 class ProjectSerializer(serializers.ModelSerializer):
 
     class CatalogField(serializers.PrimaryKeyRelatedField):
@@ -71,6 +81,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     guests = ProjectUserSerializer(many=True, read_only=True)
 
     permissions = serializers.SerializerMethodField()
+    ancestors = serializers.SerializerMethodField()
 
     last_changed = serializers.DateTimeField(read_only=True)
 
@@ -98,7 +109,8 @@ class ProjectSerializer(serializers.ModelSerializer):
             'progress_total',
             'progress_count',
             'visibility',
-            'permissions'
+            'permissions',
+            'ancestors'
         )
         read_only_fields = (
             'snapshots',
@@ -161,6 +173,9 @@ class ProjectSerializer(serializers.ModelSerializer):
                 'can_change_value': request.user.has_perm('projects.change_value_object', obj),
                 'can_delete_value': request.user.has_perm('projects.delete_value_object', obj)
             }
+
+    def get_ancestors(self, obj):
+        return ProjectAncestorSerializer(obj.get_ancestors(include_self=True), many=True).data
 
 
 class ProjectCopySerializer(ProjectSerializer):
