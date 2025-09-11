@@ -243,6 +243,34 @@ class ProjectMembershipUpdateSerializer(serializers.ModelSerializer):
         )
 
 
+class ProjectMembershipListSerializer(serializers.ModelSerializer):
+
+    user = ProjectUserSerializer(read_only=True)
+
+    class Meta:
+        model = Membership
+        fields = (
+            'id',
+            'user',
+            'role'
+        )
+
+
+class ProjectMembershipHierarchySerializer(serializers.ModelSerializer):
+
+    user = ProjectUserSerializer(read_only=True)
+    project = ProjectAncestorSerializer(read_only=True)
+
+    class Meta:
+        model = Membership
+        fields = (
+            'id',
+            'user',
+            'role',
+            'project'
+        )
+
+
 class ProjectIntegrationOptionSerializer(serializers.ModelSerializer):
 
     class Meta:
