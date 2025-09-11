@@ -9,7 +9,8 @@ import Select from 'rdmo/core/assets/js/components/Select'
 
 import { updateProjectMember, updateProjectInvite } from '../../actions/projectActions'
 import { defaultRoleOptions as roleOptions } from '../../constants/defaultRoleOptions'
-import ConfirmDeleteModal  from './ConfirmDeleteModal'
+
+import MembershipDeleteModal  from './MembershipDeleteModal'
 
 const MembershipTable = ({ persons, isMember = false }) => {
   const dispatch = useDispatch()
@@ -93,7 +94,7 @@ const MembershipTable = ({ persons, isMember = false }) => {
         </tbody>
       </table>
       {selected && (
-        <ConfirmDeleteModal
+        <MembershipDeleteModal
           show={showConfirm}
           onClose={handleCloseConfirm}
           isManager={isManager}
