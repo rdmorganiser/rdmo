@@ -269,6 +269,30 @@ class ProjectManager(CurrentSiteManagerMixin, TreeManager):
     def filter_projects_for_task_or_view(self, instance):
         return self.get_queryset().filter_projects_for_task_or_view(instance)
 
+    def prefetch_ancestors(self, projects):
+        # collect the constraints for all projects
+        filters = Q()
+        for project in projects:
+            filters |= (Q(tree_id=project.tree_id) & Q(lft__lt=project.lft) & Q(rght__gt=project.rght))
+
+        # Fetch all ancestors in one query
+        ancestors = self.filter(filters).order_by('tree_id', 'lft')
+
+        # Index by descendant id
+        prefetched_ancestors = {
+            project.id: [] for project in projects
+        }
+        for ancestor in ancestors:
+            for project in projects:
+                if ancestor.tree_id == project.tree_id and ancestor.lft < project.lft and ancestor.rght > project.rght:
+                    prefetched_ancestors[project.id].append(ancestor)
+
+        # add the project as last ancestor
+        for project in projects:
+            prefetched_ancestors[project.id].append(project)
+
+        return prefetched_ancestors
+
 
 class MembershipManager(CurrentSiteManagerMixin, models.Manager):
 
