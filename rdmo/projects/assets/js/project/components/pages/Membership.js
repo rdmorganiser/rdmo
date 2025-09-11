@@ -3,7 +3,8 @@ import { useSelector } from 'react-redux'
 
 import { useModal }  from 'rdmo/core/assets/js/hooks'
 import { userIsManager } from 'rdmo/projects/assets/js/common/utils'
-import InviteMemberModal from './InviteMemberModal'
+
+import MembershipInviteModal from './MembershipInviteModal'
 import MembershipTable from './MembershipTable'
 
 const Membership = () => {
@@ -45,7 +46,7 @@ const Membership = () => {
         </>
       )}
 
-      <InviteMemberModal show={showInvite} onClose={closeInvite} isManager={isManager} />
+      <MembershipInviteModal show={showInvite} onClose={closeInvite} isManager={isManager} />
     </>
   )
 }
