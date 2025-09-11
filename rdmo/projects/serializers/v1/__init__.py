@@ -119,6 +119,15 @@ class ProjectSerializer(serializers.ModelSerializer):
             ProjectParentValidator()
         ]
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if self.instance:
+            # this prefetches the ancestors of all instances for the serializer in one
+            # query and caches them in the instance
+            projects = self.instance if isinstance(self.instance, list) else [self.instance]
+            self._prefetched_ancestors = Project.objects.prefetch_ancestors(projects)
+
     def validate_views(self, value):
         """Block updates to views if syncing is enabled."""
         if settings.PROJECT_VIEWS_SYNC and value:
@@ -175,7 +184,8 @@ class ProjectSerializer(serializers.ModelSerializer):
             }
 
     def get_ancestors(self, obj):
-        return ProjectAncestorSerializer(obj.get_ancestors(include_self=True), many=True).data
+        ancestors = self._prefetched_ancestors.get(obj.id, obj.get_ancestors())
+        return ProjectAncestorSerializer(ancestors, many=True).data
 
 
 class ProjectCopySerializer(ProjectSerializer):
