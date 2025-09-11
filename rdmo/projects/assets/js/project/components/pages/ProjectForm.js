@@ -7,9 +7,11 @@ import { useDebouncedCallback } from 'use-debounce'
 import Html from 'rdmo/core/assets/js/components/Html'
 import Input from 'rdmo/core/assets/js/components/forms/Input'
 import Textarea from 'rdmo/core/assets/js/components/forms/Textarea'
-import ProjectApi from '../../api/ProjectApi'
+
 import { updateProject } from '../../actions/projectActions'
 import { useFieldErrors } from '../../hooks/useFieldErrors'
+
+import ProjectApi from '../../api/ProjectApi'
 
 const ProjectForm = ({ disabled }) => {
   const { project, catalogs } = useSelector((state) => state.project.project)

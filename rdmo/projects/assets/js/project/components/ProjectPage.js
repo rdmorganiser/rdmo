@@ -29,7 +29,7 @@ const ProjectPage = () => {
   // const dispatch = useDispatch()
 
   const page = useSelector((state) => state.config.page)
-console.log('State page:', page)
+
   switch (page) {
     case '':
       return <Dashboard />
