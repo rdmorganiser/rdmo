@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import OuterRef, Prefetch, Q, Subquery
+from django.db.models import F, OuterRef, Prefetch, Q, Subquery
 from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
@@ -62,6 +62,8 @@ from .serializers.v1 import (
     ProjectInviteSerializer,
     ProjectInviteUpdateSerializer,
     ProjectIssueSerializer,
+    ProjectMembershipHierarchySerializer,
+    ProjectMembershipListSerializer,
     ProjectMembershipSerializer,
     ProjectMembershipUpdateSerializer,
     ProjectSerializer,
@@ -450,10 +452,37 @@ class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         return Membership.objects.filter(project=self.project)
 
     def get_serializer_class(self):
-        if self.action == 'update':
+        if self.action == 'list':
+            return ProjectMembershipListSerializer
+        elif self.action == 'update':
             return ProjectMembershipUpdateSerializer
         else:
             return ProjectMembershipSerializer
+
+    @action(detail=False, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ))
+    def hierarchy(self, request, parent_lookup_project=None):
+        # get the ancestors of this project
+        ancestors = self.project.get_ancestors()
+
+        # add a subquery to find the highest occurrence of a user in the project hierarchy
+        highest_project = Membership.objects.filter(
+            project__in=ancestors, user_id=OuterRef('user_id')
+        ).order_by('-project__level')
+
+        # query memberships for all ancestors, but only the highest level
+        memberships = Membership.objects.filter(project__in=ancestors) \
+                                        .annotate(highest=Subquery(highest_project.values('project__level')[:1])) \
+                                        .filter(highest=F('project__level')) \
+                                        .select_related('project', 'user')
+
+        if settings.SOCIALACCOUNT:
+            # prefetch the users social account, if that relation exists
+            memberships = memberships.prefetch_related('user__socialaccount_set')
+
+        serializer = ProjectMembershipHierarchySerializer(memberships, many=True, context={
+            'request': request, 'view': self
+        })
+        return Response(serializer.data)
 
 
 class ProjectIntegrationViewSet(ProjectNestedViewSetMixin, ModelViewSet):
