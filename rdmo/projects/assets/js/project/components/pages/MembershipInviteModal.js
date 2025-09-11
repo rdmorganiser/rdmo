@@ -2,15 +2,16 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Modal } from 'rdmo/core/assets/js/_bs53/components'
 import Html from 'rdmo/core/assets/js/components/Html'
+import Modal from 'rdmo/core/assets/js/_bs53/components/Modal'
+
+import { createProjectMember, sendProjectInvite, clearProjectErrors } from '../../actions/projectActions'
 import { useFieldErrors } from '../../hooks/useFieldErrors'
-import { addProjectMember, sendProjectInvite, clearProjectErrors } from '../../actions/projectActions'
 import { defaultRoleOptions as roleOptions } from '../../constants/defaultRoleOptions'
 
 const initialForm = { lookup: '', role: 'author' }
 
-const InviteMemberModal = ({ show, onClose, isManager = false }) => {
+const MembershipInviteModal = ({ show, onClose, isManager = false }) => {
   const dispatch = useDispatch()
   const templates = useSelector((state) => state.templates)
   const errors = useFieldErrors()
@@ -33,7 +34,7 @@ const InviteMemberModal = ({ show, onClose, isManager = false }) => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      await dispatch(silently ? addProjectMember(formData) : sendProjectInvite(formData))
+      await dispatch(silently ? createProjectMember(formData) : sendProjectInvite(formData))
       onClose()
     } catch {
       // keep modal open; errors are shown via useFieldErrors
@@ -122,10 +123,10 @@ const InviteMemberModal = ({ show, onClose, isManager = false }) => {
   )
 }
 
-InviteMemberModal.propTypes = {
+MembershipInviteModal.propTypes = {
   show: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   isManager: PropTypes.bool
 }
 
-export default InviteMemberModal
+export default MembershipInviteModal
