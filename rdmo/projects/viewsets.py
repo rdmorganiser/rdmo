@@ -125,10 +125,15 @@ class ProjectViewSet(ModelViewSet):
     filter_for_user = False  # flag for get_queryset to return only projects like for a regular user
 
     def get_queryset(self):
+        if hasattr(self, '_cached_queryset'):
+            return self._cached_queryset
+
         queryset = Project.objects.filter_user(self.request.user, self.filter_for_user).distinct().prefetch_related(
             'snapshots',
             'views',
-            Prefetch('memberships', queryset=Membership.objects.select_related('user'), to_attr='memberships_list')
+            Prefetch('memberships', queryset=Membership.objects.prefetch_related(
+                'user__socialaccount_set'
+            ).select_related('user'), to_attr='memberships_list')
         ).select_related('catalog', 'visibility')
 
         # prepare subquery for last_changed
@@ -140,7 +145,9 @@ class ProjectViewSet(ModelViewSet):
         # when Greatest returns a value, then Coalesce will return this value
         queryset = queryset.annotate(last_changed=Coalesce(Greatest(last_changed_subquery, 'updated'), 'updated'))
 
-        return queryset
+        # cache queryset and return
+        self._cached_queryset = queryset
+        return self._cached_queryset
 
     @action(detail=False, methods=['GET'], permission_classes=(HasModelPermission | HasProjectsPermission, ))
     def user(self, request, *args, **kwargs):
