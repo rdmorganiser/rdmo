@@ -3,9 +3,11 @@ import PropTypes from 'prop-types'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { useModal } from 'rdmo/core/assets/js/hooks'
-import Select from 'rdmo/core/assets/js/components/Select'
 import { userIsManager } from 'rdmo/projects/assets/js/common/utils'
-import { editProjectMember, editProjectInvite } from '../../actions/projectActions'
+
+import Select from 'rdmo/core/assets/js/components/Select'
+
+import { updateProjectMember, updateProjectInvite } from '../../actions/projectActions'
 import { defaultRoleOptions as roleOptions } from '../../constants/defaultRoleOptions'
 import ConfirmDeleteModal  from './ConfirmDeleteModal'
 
@@ -60,9 +62,9 @@ const MembershipTable = ({ persons, isMember = false }) => {
                     onChange={(newRole) => {
                       if (!newRole) return
                       if (isMember) {
-                        dispatch(editProjectMember(person.id, { role: newRole }))
+                        dispatch(updateProjectMember(person.id, { role: newRole }))
                       } else {
-                        dispatch(editProjectInvite(person.id, { role: newRole }))
+                        dispatch(updateProjectInvite(person.id, { role: newRole }))
                       }
                     }}
                     isClearable={false}

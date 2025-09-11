@@ -163,64 +163,64 @@ export function fetchProjectInvitesError(error) {
   return { type: actionTypes.FETCH_PROJECT_INVITES_ERROR, error }
 }
 
-export function addProjectMember(data) {
+export function createProjectMember(data) {
   return function(dispatch) {
-    dispatch(addToPending('addProjectMember'))
-    dispatch(addProjectMemberInit())
+    dispatch(addToPending('createProjectMember'))
+    dispatch(createProjectMemberInit())
 
-    return ProjectApi.addMember(projectId, data)
+    return ProjectApi.createMember(projectId, data)
       .then(member => {
-        dispatch(removeFromPending('addProjectMember'))
-        dispatch(addProjectMemberSuccess(member))
+        dispatch(removeFromPending('createProjectMember'))
+        dispatch(createProjectMemberSuccess(member))
       })
       .catch(error => {
-        dispatch(removeFromPending('addProjectMember'))
-        dispatch(addProjectMemberError(error))
+        dispatch(removeFromPending('createProjectMember'))
+        dispatch(createProjectMemberError(error))
         throw error
       })
   }
 }
 
-export function addProjectMemberInit() {
-  return { type: actionTypes.ADD_PROJECT_MEMBER_INIT }
+export function createProjectMemberInit() {
+  return { type: actionTypes.CREATE_PROJECT_MEMBER_INIT }
 }
 
-export function addProjectMemberSuccess(member) {
-  return { type: actionTypes.ADD_PROJECT_MEMBER_SUCCESS, member }
+export function createProjectMemberSuccess(member) {
+  return { type: actionTypes.CREATE_PROJECT_MEMBER_SUCCESS, member }
 }
 
-export function addProjectMemberError(error) {
-  return { type: actionTypes.ADD_PROJECT_MEMBER_ERROR, error }
+export function createProjectMemberError(error) {
+  return { type: actionTypes.CREATE_PROJECT_MEMBER_ERROR, error }
 }
 
-export function editProjectMember(membershipId, data) {
+export function updateProjectMember(membershipId, data) {
   return function(dispatch) {
-    dispatch(addToPending('editProjectMember'))
-    dispatch(editProjectMemberInit())
+    dispatch(addToPending('updateProjectMember'))
+    dispatch(updateProjectMemberInit())
 
-    return ProjectApi.editMember(projectId, membershipId, data)
+    return ProjectApi.updateMember(projectId, membershipId, data)
       .then(member => {
-        dispatch(removeFromPending('editProjectMember'))
-        dispatch(editProjectMemberSuccess({ ...member, id: membershipId }))
+        dispatch(removeFromPending('updateProjectMember'))
+        dispatch(updateProjectMemberSuccess({ ...member, id: membershipId }))
       })
       .catch(error => {
-        dispatch(removeFromPending('editProjectMember'))
-        dispatch(editProjectMemberError(error))
+        dispatch(removeFromPending('updateProjectMember'))
+        dispatch(updateProjectMemberError(error))
         throw error
       })
   }
 }
 
-export function editProjectMemberInit() {
-  return { type: actionTypes.EDIT_PROJECT_MEMBER_INIT }
+export function updateProjectMemberInit() {
+  return { type: actionTypes.UPDATE_PROJECT_MEMBER_INIT }
 }
 
-export function editProjectMemberSuccess(member) {
-  return { type: actionTypes.EDIT_PROJECT_MEMBER_SUCCESS, member }
+export function updateProjectMemberSuccess(member) {
+  return { type: actionTypes.UPDATE_PROJECT_MEMBER_SUCCESS, member }
 }
 
-export function editProjectMemberError(error) {
-  return { type: actionTypes.EDIT_PROJECT_MEMBER_ERROR, error }
+export function updateProjectMemberError(error) {
+  return { type: actionTypes.UPDATE_PROJECT_MEMBER_ERROR, error }
 }
 
 export function deleteProjectMember(membershipId, { redirect = false } = {}) {
@@ -287,34 +287,34 @@ export function sendProjectInviteError(error) {
   return { type: actionTypes.SEND_INVITE_ERROR, error }
 }
 
-export function editProjectInvite(inviteId, data) {
+export function updateProjectInvite(inviteId, data) {
   return function(dispatch) {
-    dispatch(addToPending('editProjectInvite'))
-    dispatch(editProjectInviteInit())
+    dispatch(addToPending('updateProjectInvite'))
+    dispatch(updateProjectInviteInit())
 
-    return ProjectApi.editInvite(projectId, inviteId, data)
+    return ProjectApi.updateInvite(projectId, inviteId, data)
       .then(invite => {
-        dispatch(removeFromPending('editProjectInvite'))
-        dispatch(editProjectInviteSuccess({...invite, id: inviteId}))
+        dispatch(removeFromPending('updateProjectInvite'))
+        dispatch(updateProjectInviteSuccess({...invite, id: inviteId}))
       })
       .catch(error => {
-        dispatch(removeFromPending('editProjectInvite'))
-        dispatch(editProjectInviteError(error))
+        dispatch(removeFromPending('updateProjectInvite'))
+        dispatch(updateProjectInviteError(error))
         throw error
       })
   }
 }
 
-export function editProjectInviteInit() {
-  return { type: actionTypes.EDIT_PROJECT_INVITE_INIT }
+export function updateProjectInviteInit() {
+  return { type: actionTypes.UPDATE_PROJECT_INVITE_INIT }
 }
 
-export function editProjectInviteSuccess(invite) {
-  return { type: actionTypes.EDIT_PROJECT_INVITE_SUCCESS, invite }
+export function updateProjectInviteSuccess(invite) {
+  return { type: actionTypes.UPDATE_PROJECT_INVITE_SUCCESS, invite }
 }
 
-export function editProjectInviteError(error) {
-  return { type: actionTypes.EDIT_PROJECT_INVITE_ERROR, error }
+export function updateProjectInviteError(error) {
+  return { type: actionTypes.UPDATE_PROJECT_INVITE_ERROR, error }
 }
 
 export function deleteProjectInvite(inviteId) {
