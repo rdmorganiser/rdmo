@@ -17,7 +17,7 @@ const MembershipTable = ({ persons, isMember = false }) => {
 
   const currentUserId = currentUser?.id
   const isManager = userIsManager(currentUser)
-  const isOwner = persons?.some(m => m.role === 'owner' && m.user === currentUserId)
+  const isOwner = isMember && persons?.some(m => m.role === 'owner' && m.user === currentUserId)
   const isLastOwner = isOwner && persons?.filter(m => m.role === 'owner').length === 1
 
   const handleOpenConfirm = (person, isCurrentUser) => {
