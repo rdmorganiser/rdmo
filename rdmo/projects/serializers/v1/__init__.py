@@ -28,6 +28,7 @@ from ...validators import ProjectParentValidator, ValueConflictValidator, ValueQ
 class ProjectUserSerializer(serializers.ModelSerializer):
 
     full_name = serializers.SerializerMethodField()
+    socialaccounts = serializers.SerializerMethodField()
 
     class Meta:
         model = get_user_model()
@@ -40,11 +41,18 @@ class ProjectUserSerializer(serializers.ModelSerializer):
                 'first_name',
                 'last_name',
                 'full_name',
-                'email'
+                'email',
+                'socialaccounts'
             ]
 
-    def get_full_name(self, obj) -> str:
+    def get_full_name(self, obj):
         return get_full_name(obj)
+
+    def get_socialaccounts(self, obj):
+        return [{
+            'provider': socialaccount.provider,
+            'uid': socialaccount.uid
+        } for socialaccount in obj.socialaccount_set.all()]
 
 
 class ProjectAncestorSerializer(serializers.ModelSerializer):
