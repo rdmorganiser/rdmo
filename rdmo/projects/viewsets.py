@@ -39,6 +39,7 @@ from .filters import (
 )
 from .models import Continuation, Integration, Invite, Issue, Membership, Project, Snapshot, Value, Visibility
 from .permissions import (
+    HasProjectLeavePermission,
     HasProjectPagePermission,
     HasProjectPermission,
     HasProjectProgressModelPermission,
@@ -490,6 +491,15 @@ class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ModelViewSet):
             'request': request, 'view': self
         })
         return Response(serializer.data)
+
+    @action(detail=False, methods=['delete'], permission_classes=(HasProjectLeavePermission, ))
+    def leave(self, request, parent_lookup_project=None):
+        membership = Membership.objects.filter(project=self.project).get(user=request.user)
+        if membership.is_last_owner:
+            raise ValidationError(_('The last owner is not allowed to leave the project.'))
+        else:
+            membership.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ProjectIntegrationViewSet(ProjectNestedViewSetMixin, ModelViewSet):
