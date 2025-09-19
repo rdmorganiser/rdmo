@@ -145,6 +145,8 @@ jobs:
       with:
         flag-name: '${{ matrix.db-backend }}: ${{ matrix.python-version }}'
         parallel: true
+        fail-on-error: false
+        allow-empty: true
 
   test-e2e:
     name: "End-to-end Test (Python: ${{ matrix.python-version }}, DB: ${{ matrix.db-backend }})"
@@ -205,6 +207,7 @@ jobs:
       uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b # v2.3.6
       with:
         parallel-finished: true
+        fail-on-error: false
 
   dev-setup:
     # Ref: structlog (MIT licensed) <https://github.com/hynek/structlog/blob/main/.github/workflows/ci.yml>
