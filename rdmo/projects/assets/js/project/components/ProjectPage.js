@@ -5,7 +5,7 @@ import Dashboard from './pages/Dashboard'
 // import Interview from '../pages/Interview'
 // import Documents from '../pages/Documents'
 // import Snapshots from '../pages/Snapshots'
-// import Membership from '../pages/Membership'
+import Membership from './pages/Membership'
 import ProjectData from './pages/ProjectData'
 
 const ProjectPage = () => {
@@ -41,8 +41,8 @@ const ProjectPage = () => {
     //   return <Snapshots />
     case 'project-information':
       return <ProjectData />
-      // case 'membership':
-      // return <Membership />
+    case 'membership':
+      return <Membership />
     default:
       return <h2>Page Not Found</h2>
   }

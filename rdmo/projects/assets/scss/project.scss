@@ -8,6 +8,19 @@
     background-color: var(--rdmo-color-light-gray);
 }
 
+.project-dropdown:focus-within .dropdown-menu {
+  display: block;
+}
+
+/* force the menu to open to the LEFT */
+// .project-dropdown.dropstart .dropdown-menu {
+//   left: auto !important;
+//   right: 100% !important;
+//   top: 0 !important;
+//   transform: none !important;
+//   margin-right: .25rem;
+// }
+
 // .sidebar-custom h6 {
 //   color: var(--bs-gray-500) !important;  /* ✅ Ensure muted color */
 //   font-size: 0.875rem;  /* ✅ Slightly smaller font */
