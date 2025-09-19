@@ -23,7 +23,7 @@ def test_openapi_schema(db, client, login, settings, username):
         assert schema['openapi'] == '3.0.3'
         schema_paths = dict(schema['paths'])
         schema_paths.pop('/api/v1/schema/', None)  # ignore self-inclusion for stability
-        assert len(schema_paths) == 125
+        assert len(schema_paths) == 126
     else:
         assert response.status_code == 302
 
