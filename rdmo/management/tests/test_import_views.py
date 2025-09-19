@@ -52,7 +52,7 @@ def test_update_views_with_changed_fields(db, settings, updated_fields):
     assert all(element['updated'] is True for element in imported_elements)
     assert len(imported_and_changed) == len(changed_elements)
     # compare two ordered lists with "updated_and_changed" dicts
-    for test, imported in zip(changed_elements, imported_and_changed):
+    for test, imported in zip(changed_elements, imported_and_changed, strict=False):
        assert test[ImportElementFields.DIFF] == imported[ImportElementFields.DIFF]
 
 

@@ -1,5 +1,4 @@
 import logging
-from typing import Union
 
 from rdmo.projects.handlers.sync_utils import get_related_field_name_on_model_for_instance
 from rdmo.projects.models import Project
@@ -14,7 +13,7 @@ def assert_other_projects_unchanged(other_projects, initial_tasks_state):
         assert set(other_project.tasks.values_list('id', flat=True)) == set(initial_tasks_state[other_project.id])
 
 
-def assert_all_projects_are_synced_with_instance_m2m_field(instance: Union[Task, View], field: str) -> None:
+def assert_all_projects_are_synced_with_instance_m2m_field(instance: Task | View, field: str) -> None:
     # View/Task .catalogs, .sites or .groups
     instance_field = getattr(instance, field)
     instance_ids = set(instance_field.values_list('id', flat=True))

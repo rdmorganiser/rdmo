@@ -133,7 +133,7 @@ def join_values_inline(values=None, separator=',', separator_last=', and', separ
         return f"{values[0]['value_and_unit']} {separator_two} {values[1]['value_and_unit']}"
 
     separators = [separator]*(len(values)-2) + [separator_last] + ['']
-    text = " ".join(v['value_and_unit'] + s for v,s in zip(values, separators))
+    text = " ".join(v['value_and_unit'] + s for v,s in zip(values, separators, strict=False))
     return text
 
 

@@ -1,7 +1,6 @@
-from collections.abc import Iterable, Sequence
+from collections.abc import Callable, Iterable, Sequence
 from dataclasses import dataclass, field
 from inspect import signature
-from typing import Callable, Optional, Union
 
 from django.db import models
 
@@ -22,8 +21,8 @@ class ThroughInstanceMapper:
 @dataclass(frozen=True)
 class ExtraFieldHelper:
     field_name: str
-    value: Union[str, bool, int, None] = None
-    callback: Optional[Callable] = None
+    value: str | bool | int | None = None
+    callback: Callable | None = None
     overwrite_in_element: bool = False
 
     def get_value(self, **kwargs):
@@ -44,8 +43,8 @@ class ExtraFieldHelper:
 
 @dataclass(frozen=True)
 class ElementImportHelper:
-    model: Optional[models.Model] = field(default=None)
-    model_path: Optional[str] = field(default=None)
+    model: models.Model | None = field(default=None)
+    model_path: str | None = field(default=None)
     validators: Iterable[Callable] = field(default_factory=list)
     common_fields: Sequence[str] = field(default=ELEMENT_COMMON_FIELDS)
     lang_fields: Sequence[str] = field(default_factory=list)
