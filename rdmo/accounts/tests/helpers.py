@@ -1,4 +1,5 @@
 import sys
+import types
 from importlib import import_module, reload
 
 import pytest
@@ -21,7 +22,7 @@ def reload_urlconf(urlconf=None, root_urlconf=None):
         import_module(urlconf)
 
 
-def reload_urls(*app_names: str, root_urlconf = None) -> None:
+def reload_urls(*app_names: str, root_urlconf=None) -> None:
     # reload the urlconf of the app
     for _app in app_names:
         reload_urlconf(urlconf=_app)
@@ -62,3 +63,37 @@ def enable_socialaccount(settings):
     # 🔹 Cleanup: reset settings
     settings.SOCIALACCOUNT = False
     settings.SOCIALACCOUNT_SIGNUP = False
+
+
+@pytest.fixture
+def enable_shibboleth(settings):
+    """Mark the instance as using Shibboleth without touching INSTALLED_APPS."""
+    settings.SHIBBOLETH = True
+    try:
+        yield
+    finally:
+        settings.SHIBBOLETH = False
+
+
+@pytest.fixture
+def fake_shibboleth(monkeypatch):
+    """Factory fixture: returns a function to (re)create a fake 'shibboleth'
+    package with a configurable app_settings object. Cleans up automatically.
+    """
+    created = []
+
+    def _make(*, has_unquote: bool) -> None:
+        mod = types.ModuleType('shibboleth')
+        app_settings = types.SimpleNamespace()
+        if has_unquote:
+            # Mimic the RDMO/unquoted-aware builds
+            app_settings.UNQUOTE_ATTRIBUTES = False
+        mod.app_settings = app_settings
+        monkeypatch.setitem(sys.modules, 'shibboleth', mod)
+        created.append('shibboleth')
+
+    yield _make
+
+    # 🔹 Cleanup injected modules
+    for name in created:
+        sys.modules.pop(name, None)
