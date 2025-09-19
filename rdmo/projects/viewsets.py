@@ -4,6 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import F, OuterRef, Prefetch, Q, Subquery
 from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponseRedirect
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers, status
@@ -124,36 +125,49 @@ class ProjectViewSet(ModelViewSet):
         'last_changed'
     )
 
-    filter_for_user = False  # flag for get_queryset to return only projects like for a regular user
+    # set of actions for get_queryset to return only projects like for a regular user
+    filter_for_user_actions = {'user'}
 
-    def get_queryset(self):
-        if hasattr(self, '_cached_queryset'):
-            return self._cached_queryset
+    def _is_for_user_action(self) -> bool:
+        # robust to preflight/schema calls where action may be unset
+        return getattr(self, "action", None) in self.filter_for_user_actions
 
-        queryset = Project.objects.filter_user(self.request.user, self.filter_for_user).distinct().prefetch_related(
+    @cached_property
+    def _base_qs(self):
+        qs = Project.objects.prefetch_related(
             'snapshots',
             'views',
-            Prefetch('memberships', queryset=Membership.objects.prefetch_related(
-                'user__socialaccount_set'
-            ).select_related('user'), to_attr='memberships_list')
+            Prefetch(
+                'memberships',
+                queryset=Membership.objects.prefetch_related('user__socialaccount_set')
+                                           .select_related('user'),
+                to_attr='memberships_list',
+            ),
         ).select_related('catalog', 'visibility')
 
         # prepare subquery for last_changed
         last_changed_subquery = Subquery(
-            Value.objects.filter(project=OuterRef('pk')).order_by('-updated').values('updated')[:1]
+            Value.objects.filter(project=OuterRef('pk'))
+                         .order_by('-updated')
+                         .values('updated')[:1]
         )
         # the 'updated' field from a Project always returns a valid DateTime value
         # when Greatest returns null, then Coalesce will return the value for 'updated' as a fall-back
         # when Greatest returns a value, then Coalesce will return this value
-        queryset = queryset.annotate(last_changed=Coalesce(Greatest(last_changed_subquery, 'updated'), 'updated'))
+        return qs.annotate(
+            last_changed=Coalesce(Greatest(last_changed_subquery, 'updated'), 'updated')
+        )
 
-        # cache queryset and return
-        self._cached_queryset = queryset
-        return self._cached_queryset
+    def get_queryset(self):
+        # applies the filter for user filter depending on the action
+        qs = self._base_qs
+        qs = qs.filter_user(self.request.user, self._is_for_user_action())
+        # do DISTINCT as last operation
+        return qs.distinct()
 
-    @action(detail=False, methods=['GET'], permission_classes=(HasModelPermission | HasProjectsPermission, ))
+    @action(detail=False, methods=['GET'], permission_classes=(HasProjectsPermission, ))
     def user(self, request, *args, **kwargs):
-        self.filter_for_user = True
+        # user is in the self.filter_for_user_actions
         return self.list(request, *args, **kwargs)
 
     @action(detail=True, methods=['POST'],
