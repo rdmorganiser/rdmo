@@ -208,12 +208,6 @@ filterwarnings = [
   # fail on RemovedInDjango50Warning exception
   "error::django.utils.deprecation.RemovedInDjango50Warning",
 
-  # ignore warnings raised from within coreapi 2.3.3
-  "ignore:pkg_resources is deprecated as an API:DeprecationWarning",
-
-  # ignore warning from rest_framework about coreapi
-  "ignore:CoreAPI compatibility is deprecated and will be removed in DRF 3.17:rest_framework.RemovedInDRF317Warning",
-
   # ignore warnings raised by widget_tweaks.py
   "ignore:'maxsplit' is passed as positional argument",
 
