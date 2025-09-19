@@ -1,3 +1,6 @@
+from collections.abc import Mapping
+from typing import Any
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.urls import reverse
@@ -46,10 +49,10 @@ class ProjectUserSerializer(serializers.ModelSerializer):
                 'socialaccounts'
             ]
 
-    def get_full_name(self, obj):
+    def get_full_name(self, obj) -> str:
         return get_full_name(obj)
 
-    def get_socialaccounts(self, obj):
+    def get_socialaccounts(self, obj) -> list[dict[str, str]]:
         return [{
             'provider': socialaccount.provider,
             'uid': socialaccount.uid
@@ -68,7 +71,7 @@ class ProjectAncestorSerializer(serializers.ModelSerializer):
             'permissions'
         )
 
-    def get_permissions(self, obj):
+    def get_permissions(self, obj) -> Mapping[str, bool]:
         request = self.context.get('request')
         view = self.context.get('view')
         if view.action == 'list':
@@ -151,6 +154,9 @@ class ProjectSerializer(serializers.ModelSerializer):
             # query and caches them in the instance
             projects = self.instance if isinstance(self.instance, list) else [self.instance]
             self._prefetched_ancestors = Project.objects.prefetch_ancestors(projects)
+        else:
+            # prevent AttributeError for create
+            self._prefetched_ancestors = {}
 
     def validate_views(self, value):
         """Block updates to views if syncing is enabled."""
@@ -158,7 +164,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             raise ValidationError(_('Editing views is disabled.'))
         return value
 
-    def get_permissions(self, obj):
+    def get_permissions(self, obj) -> dict[str, bool]:
         request = self.context.get('request')
         view = self.context.get('view')
 
@@ -207,7 +213,7 @@ class ProjectSerializer(serializers.ModelSerializer):
                 'can_delete_value': request.user.has_perm('projects.delete_value_object', obj)
             }
 
-    def get_ancestors(self, obj):
+    def get_ancestors(self, obj) -> list[dict[str, Any]]:
         ancestors = self._prefetched_ancestors.get(obj.id, obj.get_ancestors())
         return ProjectAncestorSerializer(ancestors, many=True, context=self.context).data
 
