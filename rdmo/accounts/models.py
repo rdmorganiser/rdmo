@@ -3,6 +3,7 @@ from django.contrib.sites.models import Site
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from rdmo.core.models import Model as RDMOTimeStampedModel
@@ -205,16 +206,9 @@ class Role(models.Model):
     def __str__(self):
         return self.user.username
 
-    def is_site_manager(self, site_id):
-        # checks if the user is manager for the given site and caches the result in the
-        # role instance, since the check is performed most project permissions
-        if not hasattr(self, '_site_manager_cache'):
-            self._site_manager_cache = {}
-
-        if site_id not in self._site_manager_cache:
-            self._site_manager_cache[site_id] = self.manager.filter(id=site_id).exists()
-
-        return self._site_manager_cache[site_id]
+    @cached_property
+    def is_site_manager(self):
+        return self.manager.filter(id=settings.SITE_ID).exists()
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
