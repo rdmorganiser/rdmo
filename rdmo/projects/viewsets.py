@@ -125,13 +125,15 @@ class ProjectViewSet(ModelViewSet):
         'last_changed'
     )
 
-    filter_for_user = False  # flag for get_queryset to return only projects like for a regular user
-
     def get_queryset(self):
         if hasattr(self, '_cached_queryset'):
             return self._cached_queryset
 
-        queryset = Project.objects.filter_user(self.request.user, self.filter_for_user).distinct().prefetch_related(
+        # for the user action (below), we need to set filter_for_user to s to filter the
+        # projects for the current user regardless of their permissions, e.g. for admins
+        filter_for_user = (self.action == 'user')
+
+        queryset = Project.objects.filter_user(self.request.user, filter_for_user).distinct().prefetch_related(
             'snapshots',
             'views',
             Prefetch('memberships', queryset=Membership.objects.prefetch_related(
@@ -154,7 +156,6 @@ class ProjectViewSet(ModelViewSet):
 
     @action(detail=False, methods=['GET'], permission_classes=(HasModelPermission | HasProjectsPermission, ))
     def user(self, request, *args, **kwargs):
-        self.filter_for_user = True
         return self.list(request, *args, **kwargs)
 
     @action(detail=True, methods=['POST'],
