@@ -7,7 +7,6 @@ from django.urls import reverse
 from django.views.generic import DeleteView, UpdateView
 from django.views.generic.edit import FormView
 
-from rdmo.accounts.utils import is_site_manager
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 
 from ..forms import MembershipCreateForm
@@ -36,7 +35,7 @@ class MembershipCreateView(ObjectPermissionMixin, RedirectViewMixin, FormView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['project'] = self.project
-        kwargs['is_site_manager'] = is_site_manager(self.request.user)
+        kwargs['is_site_manager'] = self.request.user.role.is_site_manager
         return kwargs
 
     def get_success_url(self):
@@ -69,7 +68,7 @@ class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView)
     def form_valid(self, form):
         self.obj = self.get_object()
 
-        if (self.request.user in self.obj.project.owners) or is_site_manager(self.request.user):
+        if (self.request.user in self.obj.project.owners) or self.request.user.is_site_manager:
             # user is owner or site manager
             if is_last_owner(self.obj.project, self.obj.user):
                 logger.info('User "%s" not allowed to remove last user "%s"',
