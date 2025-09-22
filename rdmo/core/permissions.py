@@ -1,6 +1,6 @@
 import logging
 
-from rest_framework.permissions import DjangoModelPermissions, DjangoObjectPermissions
+from rest_framework.permissions import BasePermission, DjangoModelPermissions, DjangoObjectPermissions
 
 logger = logging.getLogger(__name__)
 
@@ -85,3 +85,20 @@ class CanToggleElementCurrentSite(DjangoModelPermissions):
     @log_result
     def has_permission(self, request, view):
         return super().has_permission(request, view)
+
+
+class HasRulesPermission(BasePermission):
+
+    @log_result
+    def has_permission(self, request, view) -> bool:
+        if not (request.user and request.user.is_authenticated):
+            return False
+
+        # prefer a view-level override when present
+        perm = getattr(view, 'permission_required', None)
+        if not perm:
+            # Fail closed if misconfigured
+            logger.error('%s missing view.permission_required', self.__class__.__name__)
+            return False
+
+        return request.user.has_perm(perm)
