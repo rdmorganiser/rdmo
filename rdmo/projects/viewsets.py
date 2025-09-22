@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import OuterRef, Prefetch, Q, Subquery
+from django.db.models import F, OuterRef, Prefetch, Q, Subquery
 from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
@@ -39,6 +39,7 @@ from .filters import (
 )
 from .models import Continuation, Integration, Invite, Issue, Membership, Project, Snapshot, Value, Visibility
 from .permissions import (
+    HasProjectLeavePermission,
     HasProjectPagePermission,
     HasProjectPermission,
     HasProjectProgressModelPermission,
@@ -65,6 +66,8 @@ from .serializers.v1 import (
     ProjectInviteSerializer,
     ProjectInviteUpdateSerializer,
     ProjectIssueSerializer,
+    ProjectMembershipHierarchySerializer,
+    ProjectMembershipListSerializer,
     ProjectMembershipSerializer,
     ProjectMembershipUpdateSerializer,
     ProjectSerializer,
@@ -122,13 +125,20 @@ class ProjectViewSet(ModelViewSet):
         'last_changed'
     )
 
-    filter_for_user = False  # flag for get_queryset to return only projects like for a regular user
-
     def get_queryset(self):
-        queryset = Project.objects.filter_user(self.request.user, self.filter_for_user).distinct().prefetch_related(
+        if hasattr(self, '_cached_queryset'):
+            return self._cached_queryset
+
+        # for the user action (below), we need to set filter_for_user to s to filter the
+        # projects for the current user regardless of their permissions, e.g. for admins
+        filter_for_user = (self.action == 'user')
+
+        queryset = Project.objects.filter_user(self.request.user, filter_for_user).distinct().prefetch_related(
             'snapshots',
             'views',
-            Prefetch('memberships', queryset=Membership.objects.select_related('user'), to_attr='memberships_list')
+            Prefetch('memberships', queryset=Membership.objects.prefetch_related(
+                'user__socialaccount_set'
+            ).select_related('user'), to_attr='memberships_list')
         ).select_related('catalog', 'visibility')
 
         # prepare subquery for last_changed
@@ -140,11 +150,12 @@ class ProjectViewSet(ModelViewSet):
         # when Greatest returns a value, then Coalesce will return this value
         queryset = queryset.annotate(last_changed=Coalesce(Greatest(last_changed_subquery, 'updated'), 'updated'))
 
-        return queryset
+        # cache queryset and return
+        self._cached_queryset = queryset
+        return self._cached_queryset
 
     @action(detail=False, methods=['GET'], permission_classes=(HasModelPermission | HasProjectsPermission, ))
     def user(self, request, *args, **kwargs):
-        self.filter_for_user = True
         return self.list(request, *args, **kwargs)
 
     @action(detail=True, methods=['POST'],
@@ -443,10 +454,46 @@ class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         return Membership.objects.filter(project=self.project)
 
     def get_serializer_class(self):
-        if self.action == 'update':
+        if self.action == 'list':
+            return ProjectMembershipListSerializer
+        elif self.action == 'update':
             return ProjectMembershipUpdateSerializer
         else:
             return ProjectMembershipSerializer
+
+    @action(detail=False, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ))
+    def hierarchy(self, request, parent_lookup_project=None):
+        # get the ancestors of this project
+        ancestors = self.project.get_ancestors()
+
+        # add a subquery to find the highest occurrence of a user in the project hierarchy
+        highest_project = Membership.objects.filter(
+            project__in=ancestors, user_id=OuterRef('user_id')
+        ).order_by('-project__level')
+
+        # query memberships for all ancestors, but only the highest level
+        memberships = Membership.objects.filter(project__in=ancestors) \
+                                        .annotate(highest=Subquery(highest_project.values('project__level')[:1])) \
+                                        .filter(highest=F('project__level')) \
+                                        .select_related('project', 'user')
+
+        if settings.SOCIALACCOUNT:
+            # prefetch the users social account, if that relation exists
+            memberships = memberships.prefetch_related('user__socialaccount_set')
+
+        serializer = ProjectMembershipHierarchySerializer(memberships, many=True, context={
+            'request': request, 'view': self
+        })
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['delete'], permission_classes=(HasProjectLeavePermission, ))
+    def leave(self, request, parent_lookup_project=None):
+        membership = Membership.objects.filter(project=self.project).get(user=request.user)
+        if membership.is_last_owner:
+            raise ValidationError(_('The last owner is not allowed to leave the project.'))
+        else:
+            membership.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ProjectIntegrationViewSet(ProjectNestedViewSetMixin, ModelViewSet):

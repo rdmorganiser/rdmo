@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 
 import rules
@@ -60,23 +59,11 @@ def is_visible(user, project):
 
 @rules.predicate
 def is_site_manager(user, project):
-    if user.is_authenticated:
-        return user.role.manager.filter(pk=project.site.pk).exists()
-    else:
-        return False
-
-
-@rules.predicate
-def is_site_manager_for_current_site(user, request):
-    if user.is_authenticated:
-        current_site = get_current_site(request)
-        return user.role.manager.filter(pk=current_site.pk).exists()
-    else:
-        return False
+    return user.is_authenticated and user.role.is_site_manager
 
 
 # Add rule for check in template
-rules.add_rule('projects.can_view_all_projects', is_site_manager_for_current_site | is_superuser)
+rules.add_rule('projects.can_view_all_projects', is_site_manager | is_superuser)
 
 rules.add_perm('projects.add_project', can_add_project)
 rules.add_perm('projects.view_project_object', is_project_member | is_visible | is_site_manager)

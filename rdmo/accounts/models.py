@@ -3,6 +3,7 @@ from django.contrib.sites.models import Site
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from rdmo.core.models import Model as RDMOTimeStampedModel
@@ -204,6 +205,10 @@ class Role(models.Model):
 
     def __str__(self):
         return self.user.username
+
+    @cached_property
+    def is_site_manager(self):
+        return self.manager.filter(id=settings.SITE_ID).exists()
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
