@@ -54,14 +54,18 @@ def test_list(db, client, username, password, project_id):
     if project_id in view_membership_permission_map.get(username, []):
         assert response.status_code == 200
 
+        response_data = response.json()
+
         if username == 'user':
-            assert sorted([item['id'] for item in response.json()]) == memberships_visible
-            assert all('email' in i for i in response.json())
+            assert sorted([item['id'] for item in response_data]) == memberships_visible
+            assert all('user' in item for item in response_data)
+            assert all('email' in item['user'] for item in response_data)
         else:
             values_list = Membership.objects.filter(project_id=project_id) \
                                             .order_by('id').values_list('id', flat=True)
-            assert sorted([item['id'] for item in response.json()]) == list(values_list)
-            assert all("email" in i for i in response.json())
+            assert sorted([item['id'] for item in response_data]) == list(values_list)
+            assert all('user' in item for item in response_data)
+            assert all('email' in item['user'] for item in response_data)
     else:
         assert response.status_code == 404
 
