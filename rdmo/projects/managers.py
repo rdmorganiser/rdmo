@@ -5,7 +5,6 @@ from django.db.models import Q
 from mptt.models import TreeManager
 from mptt.querysets import TreeQuerySet
 
-from rdmo.accounts.utils import is_site_manager
 from rdmo.core.managers import CurrentSiteManagerMixin
 
 
@@ -27,7 +26,7 @@ class ProjectQuerySet(TreeQuerySet):
                 visibility_filter = Q(visibility__isnull=False) & sites_filter & groups_filter
 
                 # create a filter for all projects of this site (unless filter_for_user is set)
-                if (user.has_perm('projects.view_project') or is_site_manager(user)) and not filter_for_user:
+                if (user.has_perm('projects.view_project') or user.role.is_site_manager) and not filter_for_user:
                     current_site_filter = Q(site=settings.SITE_ID)
                 else:
                     current_site_filter = Q()
@@ -62,7 +61,7 @@ class MembershipQuerySet(models.QuerySet):
         if user.is_authenticated:
             if user.has_perm('projects.view_membership'):
                 return self.all()
-            elif is_site_manager(user):
+            elif user.role.is_site_manager:
                 return self.filter_current_site()
             else:
                 from .models import Project
@@ -81,7 +80,7 @@ class IssueQuerySet(models.QuerySet):
         if user.is_authenticated:
             if user.has_perm('projects.view_integration'):
                 return self.all()
-            elif is_site_manager(user):
+            elif user.role.is_site_manager:
                 return self.filter_current_site()
             else:
                 from .models import Project
@@ -100,7 +99,7 @@ class IntegrationQuerySet(models.QuerySet):
         if user.is_authenticated:
             if user.has_perm('projects.view_issue'):
                 return self.all()
-            elif is_site_manager(user):
+            elif user.role.is_site_manager:
                 return self.filter_current_site()
             else:
                 from .models import Project
@@ -119,7 +118,7 @@ class InviteQuerySet(models.QuerySet):
         if user.is_authenticated:
             if user.has_perm('projects.view_invite'):
                 return self.all()
-            elif is_site_manager(user):
+            elif user.role.is_site_manager:
                 return self.filter_current_site()
             else:
                 from .models import Project
@@ -138,7 +137,7 @@ class SnapshotQuerySet(models.QuerySet):
         if user.is_authenticated:
             if user.has_perm('projects.view_snapshot'):
                 return self.all()
-            elif is_site_manager(user):
+            elif user.role.is_site_manager:
                 return self.filter_current_site()
             else:
                 from .models import Project
@@ -157,7 +156,7 @@ class ValueQuerySet(models.QuerySet):
         if user.is_authenticated:
             if user.has_perm('projects.view_value'):
                 return self.all()
-            elif is_site_manager(user):
+            elif user.role.is_site_manager:
                 return self.filter_current_site()
             else:
                 from .models import Project
