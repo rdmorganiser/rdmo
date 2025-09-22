@@ -19,7 +19,7 @@
             <ul class="nav navbar-nav">
                 {% back_to_project_link %}
 
-                {% test_rule 'management.can_view_management' request.user request.site as can_view_management %}
+                {% has_perm 'management.can_view_management' request.user as can_view_management %}
 
                 {% if can_view_management %}
                 <li>
