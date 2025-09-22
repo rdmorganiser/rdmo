@@ -50,6 +50,19 @@ multisite_status_map = {
         'user': 403, 'example-reviewer': 403, 'example-editor': 200,
         'anonymous': 401, 'reviewer': 403, 'editor': 200,
     },
+    'management': { # access to the ui for example.com
+        'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 403,
+        'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 403,
+        'user': 403, 'example-reviewer': 200, 'example-editor': 200,
+        'anonymous': 302, 'reviewer': 200, 'editor': 200,
+    },
+    'upload-import': {  # access to the ui for example.com
+        'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 403,
+        'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 403,
+        'user': 403, 'example-reviewer': 403, 'example-editor': 200,
+        'anonymous': 401, 'reviewer': 403, 'editor': 200,
+    },
+
 }
 status_map_object_permissions = {
     'copy': {
