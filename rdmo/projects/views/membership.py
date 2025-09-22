@@ -68,7 +68,7 @@ class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView)
     def form_valid(self, form):
         self.obj = self.get_object()
 
-        if (self.request.user in self.obj.project.owners) or self.request.user.is_site_manager:
+        if (self.request.user in self.obj.project.owners) or self.request.user.role.is_site_manager:
             # user is owner or site manager
             if is_last_owner(self.obj.project, self.obj.user):
                 logger.info('User "%s" not allowed to remove last user "%s"',
