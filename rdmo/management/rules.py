@@ -6,16 +6,8 @@ from rules.predicates import is_authenticated, is_superuser
 
 @rules.predicate
 def is_editor(user) -> bool:
-    ''' Checks if any editor role exists for the user '''
-    return user.role.editor.exists()
-
-
-@rules.predicate
-def is_editor_for_current_site(user) -> bool:
-    ''' Checks if any editor role exists for the user '''
-    if not is_editor(user):
-        return False  # if the user is not an editor, return False
-    return user.role.editor.filter(id=settings.SITE_ID).exists()
+    ''' Checks if any editor role exists for the user on the current site '''
+    return user.role.is_editor
 
 
 @rules.predicate
@@ -26,11 +18,11 @@ def is_element_editor(user, obj) -> bool:
 
     if obj.id is None:  # for _add_object permissions
         # if the element does not exist yet, it can be created by all users with an editor role
-        return is_editor(user)
+        return user.role.is_editor
 
     if not obj.editors.exists():
         # if the element has no editors, it is editable by all users with an editor role
-        return is_editor(user)
+        return user.role.is_editor
 
     # else, return whether the user is an editor for the object
     return user.role.editor.filter(id__in=obj.editors.all()).exists()
@@ -38,16 +30,8 @@ def is_element_editor(user, obj) -> bool:
 
 @rules.predicate
 def is_reviewer(user) -> bool:
-    ''' Checks if any reviewer role exists for the user '''
-    return user.role.reviewer.exists()
-
-
-@rules.predicate
-def is_reviewer_for_current_site(user) -> bool:
-    ''' Checks if any reviewer role exists for the user '''
-    if not is_reviewer(user):
-        return False  # if the user is not an reviewer, return False
-    return user.role.reviewer.filter(id=settings.SITE_ID).exists()
+    ''' Checks if any reviewer role exists for the user on the current site '''
+    return user.role.is_reviewer
 
 
 @rules.predicate
@@ -58,7 +42,7 @@ def is_element_reviewer(user, obj) -> bool:
 
     # if the element has no editors, it is reviewable by all reviewers
     if not obj.editors.exists():
-        return is_reviewer(user)
+        return user.role.is_reviewer
 
     # else, return whether the user is a reviewer for of the object
     return user.role.reviewer.filter(id__in=obj.editors.all()).exists()
@@ -67,6 +51,9 @@ def is_element_reviewer(user, obj) -> bool:
 @rules.predicate
 def is_legacy_reviewer(user) -> bool:
     ''' Checks if the user has all the view permissions an editor or reviewer needs '''
+    if settings.MULTISITE:
+        return False
+
     return user.has_perms((
       'auth.view_group',
       'conditions.view_condition',
@@ -85,11 +72,15 @@ def is_legacy_reviewer(user) -> bool:
 
 
 # Add rules
-rules.add_rule('management.can_view_management',
+rules.add_perm('management.can_view_management',
                is_authenticated & (is_superuser |
-                                   is_editor_for_current_site |
-                                   is_reviewer_for_current_site |
+                                   is_editor |
+                                   is_reviewer |
                                    is_legacy_reviewer))
+
+# Add permissions for upload and import
+rules.add_perm('management.can_upload_files', is_authenticated & (is_superuser | is_editor))
+rules.add_perm('management.can_import_elements', is_authenticated & (is_superuser | is_editor))
 
 
 # Model Permissions for sites and group
@@ -147,7 +138,7 @@ rules.add_perm('tasks.add_task_object', is_element_editor)
 rules.add_perm('tasks.change_task_object', is_element_editor)
 rules.add_perm('tasks.delete_task_object', is_element_editor)
 # toggle current site field perm
-rules.add_perm('tasks.change_task_toggle_site', is_editor_for_current_site)
+rules.add_perm('tasks.change_task_toggle_site', is_editor)
 
 # Model Permissions for views
 rules.add_perm('views.view_view', is_editor | is_reviewer)
@@ -159,7 +150,7 @@ rules.add_perm('views.add_view_object', is_element_editor)
 rules.add_perm('views.change_view_object', is_element_editor)
 rules.add_perm('views.delete_view_object', is_element_editor)
 # toggle current site field perm
-rules.add_perm('views.change_view_toggle_site', is_editor_for_current_site)
+rules.add_perm('views.change_view_toggle_site', is_editor)
 
 # Model permissions for catalogs
 rules.add_perm('questions.view_catalog', is_editor | is_reviewer)
@@ -171,7 +162,7 @@ rules.add_perm('questions.add_catalog_object', is_element_editor)
 rules.add_perm('questions.change_catalog_object', is_element_editor)
 rules.add_perm('questions.delete_catalog_object', is_element_editor)
 # toggle current site field perm
-rules.add_perm('questions.change_catalog_toggle_site', is_editor_for_current_site)
+rules.add_perm('questions.change_catalog_toggle_site', is_editor)
 
 # Model permissions for sections
 rules.add_perm('questions.view_section', is_editor | is_reviewer)
