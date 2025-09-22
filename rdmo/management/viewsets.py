@@ -5,12 +5,11 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 
 from rdmo.core.imports import handle_uploaded_file
-from rdmo.core.permissions import CanToggleElementCurrentSite
+from rdmo.core.permissions import CanToggleElementCurrentSite, HasRulesPermission
 from rdmo.core.utils import get_model_field_meta, is_truthy
 from rdmo.core.xml import parse_xml_to_elements
 
@@ -22,16 +21,16 @@ logger = logging.getLogger(__name__)
 
 
 class MetaViewSet(viewsets.ViewSet):
-
-    permission_classes = (IsAuthenticated, )
+    permission_classes = [HasRulesPermission]
+    permission_required = 'management.can_view_management'
 
     def list(self, request, *args, **kwargs):
         return Response({k: get_model_field_meta(val) for k, val in RDMO_MODEL_PATH_MAPPER.items()})
 
 
 class UploadViewSet(viewsets.ViewSet):
-
-    permission_classes = (IsAuthenticated, )
+    permission_classes = [HasRulesPermission]
+    permission_required = 'management.can_upload_files'
 
     def create(self, request, *args, **kwargs):
         # step 1: store xml file as tmp file
@@ -65,8 +64,8 @@ class UploadViewSet(viewsets.ViewSet):
 
 
 class ImportViewSet(viewsets.ViewSet):
-
-    permission_classes = (IsAuthenticated, )
+    permission_classes = [HasRulesPermission]
+    permission_required = 'management.can_import_elements'
 
     def create(self, request, *args, **kwargs):
         # step 1: store xml file as tmp file
