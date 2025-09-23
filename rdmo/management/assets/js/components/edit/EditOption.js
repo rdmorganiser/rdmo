@@ -1,7 +1,9 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap'
-import get from 'lodash/get'
+
+import { storeElement, deleteElement, updateElement } from '../../actions/elementActions'
 
 import Checkbox from './common/Checkbox'
 import Radio from './common/Radio'
@@ -18,18 +20,19 @@ import DeleteOptionModal from '../modals/DeleteOptionModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
 
-const EditOption = ({ config, option, elements, elementActions }) => {
+const EditOption = ({ option }) => {
+  const dispatch = useDispatch()
 
-  const { additionalInputs, sites } = config
-  const { elementAction, parent } = elements
+  const { additionalInputs, sites, settings } = useSelector((state) => state.config)
+  const { elementAction, parent } = useSelector((state) => state.elements)
 
-  const updateOption = (key, value) => elementActions.updateElement(option, {[key]: value})
-  const storeOption = (back) => elementActions.storeElement('options', option, elementAction, back)
-  const deleteOption = () => elementActions.deleteElement('options', option)
+  const updateOption = (key, value) => dispatch(updateElement(option, {[key]: value}))
+  const storeOption = (back) => dispatch(storeElement('options', option, elementAction, back))
+  const deleteOption = () => dispatch(deleteElement('options', option))
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
-  const info = <OptionInfo option={option} elements={elements} elementActions={elementActions} />
+  const info = <OptionInfo option={option} />
 
   return (
     <div className="panel panel-default panel-edit">
@@ -65,37 +68,30 @@ const EditOption = ({ config, option, elements, elementActions }) => {
       <div className="panel-body">
         <div className="row">
           <div className="col-sm-6">
-            <UriPrefix config={config} element={option} field="uri_prefix"
-                       onChange={updateOption} />
+            <UriPrefix element={option} field="uri_prefix" onChange={updateOption} />
           </div>
           <div className="col-sm-6">
-            <Text config={config} element={option} field="uri_path"
-                  onChange={updateOption} />
+            <Text element={option} field="uri_path" onChange={updateOption} />
           </div>
         </div>
 
-        <Textarea config={config} element={option} field="comment"
-                  rows={4} onChange={updateOption} />
+        <Textarea element={option} field="comment" rows={4} onChange={updateOption} />
 
         <div className="row">
           <div className="col-sm-6">
-            <Checkbox config={config} element={option} field="locked"
-                      onChange={updateOption} />
+            <Checkbox element={option} field="locked" onChange={updateOption} />
           </div>
         </div>
 
         <Tabs id="#option-tabs" defaultActiveKey={0} animation={false}>
           {
-            config.settings && config.settings.languages.map(([lang_code, lang], index) => (
+            settings.languages.map(([lang_code, lang], index) => (
               <Tab key={index} eventKey={index} title={lang}>
                 <div className="row">
                   <div className="col-sm-12">
-                    <Text config={config} element={option} field={`text_${lang_code }`}
-                          onChange={updateOption} />
-                    <Textarea config={config} element={option} field={`help_${lang_code }`}
-                              onChange={updateOption} />
-                    <Textarea config={config} element={option} field={`view_text_${lang_code }`}
-                              onChange={updateOption} />
+                    <Text element={option} field={`text_${lang_code }`} onChange={updateOption} />
+                    <Textarea element={option} field={`help_${lang_code }`} onChange={updateOption} />
+                    <Textarea element={option} field={`view_text_${lang_code }`} onChange={updateOption} />
                   </div>
                 </div>
               </Tab>
@@ -103,24 +99,28 @@ const EditOption = ({ config, option, elements, elementActions }) => {
           }
         </Tabs>
 
-        <Radio config={config} element={option} field="additional_input"
-               options={additionalInputs} onChange={updateOption} />
+        <Radio element={option} field="additional_input" options={additionalInputs} onChange={updateOption} />
         {
           (option.additional_input === 'text' || option.additional_input === 'textarea') &&
-          config.settings &&
-          <Tabs id="#option-tabs2" defaultActiveKey={0} animation={false}>
-            {config.settings.languages.map(([lang_code, lang], index) => (
-            <Tab key={index} eventKey={index} title={lang}>
-              <Textarea key={index} config={config} element={option} field={`default_text_${lang_code}`}
-                      rows={1} onChange={updateOption} />
-            </Tab>
+          settings && (
+            <Tabs id="#option-tabs2" defaultActiveKey={0} animation={false}>
+              {settings.languages.map(([lang_code, lang], index) => (
+              <Tab key={index} eventKey={index} title={lang}>
+                <Textarea key={index} element={option} field={`default_text_${lang_code}`}
+                          rows={1} onChange={updateOption} />
+              </Tab>
 
-          ))}
-          </Tabs>
+            ))}
+            </Tabs>
+          )
         }
 
-        {get(config, 'settings.multisite') && <Select config={config} element={option} field="editors"
-                                                      options={sites} onChange={updateOption} isMulti />}
+        {
+          settings.multisite && (
+            <Select element={option} field="editors" options={sites} onChange={updateOption} isMulti />
+          )
+        }
+
       </div>
 
       <div className="panel-footer">
@@ -139,10 +139,7 @@ const EditOption = ({ config, option, elements, elementActions }) => {
 }
 
 EditOption.propTypes = {
-  config: PropTypes.object.isRequired,
-  option: PropTypes.object.isRequired,
-  elements: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
+  option: PropTypes.object.isRequired
 }
 
 export default EditOption

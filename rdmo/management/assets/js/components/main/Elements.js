@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 
 import Attributes from '../elements/Attributes'
 import Catalogs from '../elements/Catalogs'
@@ -15,53 +15,35 @@ import Views from '../elements/Views'
 
 import useScrollEffect from '../../hooks/useScrollEffect'
 
-const Elements = ({ config, elements, configActions, elementActions }) => {
-  const { elementType } = elements
+const Elements = () => {
+  const { elementType } = useSelector((state) => state.elements)
 
   useScrollEffect(elementType)
 
   switch (elementType) {
     case 'catalogs':
-      return <Catalogs config={config} catalogs={elements.catalogs}
-                       configActions={configActions} elementActions={elementActions} />
+      return <Catalogs  />
     case 'sections':
-      return <Sections config={config} sections={elements.sections}
-                       configActions={configActions} elementActions={elementActions} />
+      return <Sections  />
     case 'pages':
-      return <Pages config={config} pages={elements.pages}
-                    configActions={configActions} elementActions={elementActions} />
+      return <Pages  />
     case 'questionsets':
-      return <QuestionSets config={config} questionsets={elements.questionsets}
-                           configActions={configActions} elementActions={elementActions} />
+      return <QuestionSets  />
     case 'questions':
-      return <Questions config={config} questions={elements.questions}
-                        configActions={configActions} elementActions={elementActions} />
+      return <Questions  />
     case 'attributes':
-      return <Attributes config={config} attributes={elements.attributes}
-                         configActions={configActions} elementActions={elementActions} />
+      return <Attributes  />
     case 'optionsets':
-      return <OptionSets config={config} optionsets={elements.optionsets}
-                         configActions={configActions} elementActions={elementActions} />
+      return <OptionSets  />
     case 'options':
-      return <Options config={config} options={elements.options}
-                      configActions={configActions} elementActions={elementActions} />
+      return <Options  />
     case 'conditions':
-      return <Conditions config={config} conditions={elements.conditions}
-                         configActions={configActions} elementActions={elementActions} />
+      return <Conditions  />
     case 'tasks':
-      return <Tasks config={config} tasks={elements.tasks}
-                    configActions={configActions} elementActions={elementActions} />
+      return <Tasks  />
     case 'views':
-      return <Views config={config} views={elements.views}
-                    configActions={configActions} elementActions={elementActions} />
+      return <Views  />
   }
-}
-
-Elements.propTypes = {
-  config: PropTypes.object.isRequired,
-  elements: PropTypes.object.isRequired,
-  configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
 }
 
 export default Elements

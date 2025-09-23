@@ -1,7 +1,9 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap'
-import get from 'lodash/get'
+
+import { fetchElement, storeElement, createElement, deleteElement, updateElement } from '../../actions/elementActions'
 
 import Checkbox from './common/Checkbox'
 import OrderedMultiSelect from './common/OrderedMultiSelect'
@@ -18,21 +20,22 @@ import DeleteSectionModal from '../modals/DeleteSectionModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
 
-const EditSection = ({ config, section, elements, elementActions }) => {
+const EditSection = ({ section }) => {
+  const dispatch = useDispatch()
 
-  const { sites } = config
-  const { elementAction, parent, pages } = elements
+  const { sites, settings } = useSelector((state) => state.config)
+  const { elementAction, parent, pages } = useSelector((state) => state.elements)
 
-  const updateSection = (key, value) => elementActions.updateElement(section, {[key]: value})
-  const storeSection = (back) => elementActions.storeElement('sections', section, elementAction, back)
-  const deleteSection = () => elementActions.deleteElement('sections', section)
+  const updateSection = (key, value) => dispatch(updateElement(section, {[key]: value}))
+  const storeSection = (back) => dispatch(storeElement('sections', section, elementAction, back))
+  const deleteSection = () => dispatch(deleteElement('sections', section))
 
-  const editPage = (value) => elementActions.fetchElement('pages', value.page)
-  const createPage = () => elementActions.createElement('pages', { section })
+  const editPage = (value) => dispatch(fetchElement('pages', value.page))
+  const createPage = () => dispatch(createElement('pages', { section }))
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
-  const info = <SectionInfo section={section} elements={elements} elementActions={elementActions} />
+  const info = <SectionInfo section={section} />
 
   // for reasons unknown, the strings are not picked up by makemessages from the props
   const addPageText = gettext('Add existing page')
@@ -72,40 +75,37 @@ const EditSection = ({ config, section, elements, elementActions }) => {
       <div className="panel-body">
         <div className="row">
           <div className="col-sm-6">
-            <UriPrefix config={config} element={section} field="uri_prefix"
-                       onChange={updateSection} />
+            <UriPrefix element={section} field="uri_prefix" onChange={updateSection} />
           </div>
           <div className="col-sm-6">
-            <Text config={config} element={section} field="uri_path"
-                  onChange={updateSection} />
+            <Text element={section} field="uri_path" onChange={updateSection} />
           </div>
         </div>
 
-        <Textarea config={config} element={section} field="comment"
-                  rows={4} onChange={updateSection} />
+        <Textarea element={section} field="comment" rows={4} onChange={updateSection} />
 
-        <Checkbox config={config} element={section} field="locked"
-                  onChange={updateSection} />
+        <Checkbox element={section} field="locked" onChange={updateSection} />
 
         <Tabs id="#section-tabs" defaultActiveKey={0} animation={false}>
           {
-            config.settings && config.settings.languages.map(([lang_code, lang], index) => (
+            settings && settings.languages.map(([lang_code, lang], index) => (
               <Tab key={index} eventKey={index} title={lang}>
-                <Text config={config} element={section} field={`title_${lang_code }`}
-                      onChange={updateSection} />
-                <Text config={config} element={section} field={`short_title_${lang_code }`}
-                      onChange={updateSection} />
+                <Text element={section} field={`title_${lang_code }`} onChange={updateSection} />
+                <Text element={section} field={`short_title_${lang_code }`} onChange={updateSection} />
               </Tab>
             ))
           }
         </Tabs>
 
-        <OrderedMultiSelect config={config} element={section} field="pages" options={pages}
+        <OrderedMultiSelect element={section} field="pages" options={pages}
                             addText={addPageText} createText={createPageText}
                             onChange={updateSection} onCreate={createPage} onEdit={editPage} />
 
-        {get(config, 'settings.multisite') && <Select config={config} element={section} field="editors"
-                                                      options={sites} onChange={updateSection} isMulti />}
+        {
+          settings.multisite && (
+            <Select element={section} field="editors" options={sites} onChange={updateSection} isMulti />
+          )
+        }
       </div>
 
       <div className="panel-footer">
@@ -124,10 +124,7 @@ const EditSection = ({ config, section, elements, elementActions }) => {
 }
 
 EditSection.propTypes = {
-  config: PropTypes.object.isRequired,
-  section: PropTypes.object.isRequired,
-  elements: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
+  section: PropTypes.object.isRequired
 }
 
 export default EditSection

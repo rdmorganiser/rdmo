@@ -1,7 +1,10 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import get from 'lodash/get'
 
+import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+
+import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
 
 import { FilterString, FilterUriPrefix, FilterSite} from '../common/Filter'
@@ -9,13 +12,17 @@ import { BackButton, NewButton } from '../common/Buttons'
 
 import Condition from '../element/Condition'
 
-const Conditions = ({ config, conditions, configActions, elementActions}) => {
+const Conditions = () => {
+  const dispatch = useDispatch()
 
-  const updateFilterString = (value) => configActions.updateConfig('filter.conditions.search', value)
-  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.conditions.uri_prefix', value)
-  const updateFilterEditor = (value) => configActions.updateConfig('filter.editors', value)
+  const config = useSelector((state) => state.config)
+  const conditions = useSelector((state) => state.elements.conditions)
 
-  const createCondition = () => elementActions.createElement('conditions')
+  const updateFilterString = (value) => dispatch(updateConfig('filter.conditions.search', value))
+  const updateFilterUriPrefix = (value) => dispatch(updateConfig('filter.conditions.uri_prefix', value))
+  const updateFilterEditor = (value) => dispatch(updateConfig('filter.editors', value))
+
+  const createCondition = () => dispatch(createElement('conditions'))
 
   return (
     <div className="panel panel-default">
@@ -50,20 +57,12 @@ const Conditions = ({ config, conditions, configActions, elementActions}) => {
       {
         conditions.map((condition, index) => (
           <Condition key={index} config={config} condition={condition}
-                     configActions={configActions} elementActions={elementActions}
                      filter="conditions" filterEditors={true} />
         ))
       }
       </ul>
     </div>
   )
-}
-
-Conditions.propTypes = {
-  config: PropTypes.object.isRequired,
-  conditions: PropTypes.array.isRequired,
-  configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
 }
 
 export default Conditions

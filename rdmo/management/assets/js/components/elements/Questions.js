@@ -1,7 +1,10 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import get from 'lodash/get'
 
+import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+
+import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
 
 import { FilterString, FilterUriPrefix, FilterSite } from '../common/Filter'
@@ -10,18 +13,22 @@ import { BackButton, NewButton } from '../common/Buttons'
 
 import Question from '../element/Question'
 
-const Questions = ({ config, questions, configActions, elementActions }) => {
+const Questions = () => {
+  const dispatch = useDispatch()
 
-  const updateFilterString = (value) => configActions.updateConfig('filter.questions.search', value)
-  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.questions.uri_prefix', value)
-  const updateFilterEditor = (value) => configActions.updateConfig('filter.editors', value)
+  const config = useSelector((state) => state.config)
+  const questions = useSelector((state) => state.elements.questions)
 
-  const updateDisplayQuestionsURI = (value) => configActions.updateConfig('display.uri.questions', value)
-  const updateDisplayAttributesURI = (value) => configActions.updateConfig('display.uri.attributes', value)
-  const updateDisplayConditionsURI = (value) => configActions.updateConfig('display.uri.conditions', value)
-  const updateDisplayOptionSetURI = (value) => configActions.updateConfig('display.uri.optionsets', value)
+  const updateFilterString = (value) => dispatch(updateConfig('filter.questions.search', value))
+  const updateFilterUriPrefix = (value) => dispatch(updateConfig('filter.questions.uri_prefix', value))
+  const updateFilterEditor = (value) => dispatch(updateConfig('filter.editors', value))
 
-  const createQuestion = () => elementActions.createElement('questions')
+  const updateDisplayQuestionsURI = (value) => dispatch(updateConfig('display.uri.questions', value))
+  const updateDisplayAttributesURI = (value) => dispatch(updateConfig('display.uri.attributes', value))
+  const updateDisplayConditionsURI = (value) => dispatch(updateConfig('display.uri.conditions', value))
+  const updateDisplayOptionSetURI = (value) => dispatch(updateConfig('display.uri.optionsets', value))
+
+  const createQuestion = () => dispatch(createElement('questions'))
 
   return (
     <div className="panel panel-default">
@@ -67,20 +74,12 @@ const Questions = ({ config, questions, configActions, elementActions }) => {
       {
         questions.map((question, index) => (
           <Question key={index} config={config} question={question}
-                    configActions={configActions} elementActions={elementActions}
                     filter="questions" filterEditors={true} />
         ))
       }
       </ul>
     </div>
   )
-}
-
-Questions.propTypes = {
-  config: PropTypes.object.isRequired,
-  questions: PropTypes.array.isRequired,
-  configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
 }
 
 export default Questions

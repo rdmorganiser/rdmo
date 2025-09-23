@@ -1,8 +1,11 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
 
 import { siteId } from 'rdmo/core/assets/js/utils/meta'
+
+import { fetchElement, storeElement, createElement } from '../../actions/elementActions'
 
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
@@ -12,8 +15,10 @@ import { EditLink, CopyLink, AddLink, AvailableLink, ToggleCurrentSiteLink, Lock
          ExportLink, CodeLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 
-const Catalog = ({ config, catalog, elementActions, display='list',
-                   filter=false, filterSites=false, filterEditors=false }) => {
+const Catalog = ({ catalog, display='list', filter=false, filterSites=false, filterEditors=false }) => {
+  const dispatch = useDispatch()
+
+  const config = useSelector((state) => state.config)
 
   const showElement = filterElement(config, filter, filterSites, filterEditors, catalog)
 
@@ -22,16 +27,16 @@ const Catalog = ({ config, catalog, elementActions, display='list',
   const nestedUrl = buildPath('catalogs', catalog.id, 'nested')
   const exportUrl = buildApiPath('questions', 'catalogs', catalog.id, 'export')
 
-  const fetchEdit = () => elementActions.fetchElement('catalogs', catalog.id)
-  const fetchCopy = () => elementActions.fetchElement('catalogs', catalog.id, 'copy')
-  const fetchNested = () => elementActions.fetchElement('catalogs', catalog.id, 'nested')
+  const fetchEdit = () => dispatch(fetchElement('catalogs', catalog.id))
+  const fetchCopy = () => dispatch(fetchElement('catalogs', catalog.id, 'copy'))
+  const fetchNested = () => dispatch(fetchElement('catalogs', catalog.id, 'nested'))
 
-  const toggleAvailable = () => elementActions.storeElement('catalogs', {...catalog, available: !catalog.available })
-  const toggleLocked = () => elementActions.storeElement('catalogs', {...catalog, locked: !catalog.locked })
+  const toggleAvailable = () => dispatch(storeElement('catalogs', {...catalog, available: !catalog.available }))
+  const toggleLocked = () => dispatch(storeElement('catalogs', {...catalog, locked: !catalog.locked }))
 
-  const toggleCurrentSite = () => elementActions.storeElement('catalogs', catalog, 'toggle-site')
+  const toggleCurrentSite = () => dispatch(storeElement('catalogs', catalog, 'toggle-site'))
 
-  const createSection = () => elementActions.createElement('sections', { catalog })
+  const createSection = () => dispatch(createElement('sections', { catalog }))
 
   const elementNode = (
     <div className="element">
@@ -80,9 +85,7 @@ const Catalog = ({ config, catalog, elementActions, display='list',
 }
 
 Catalog.propTypes = {
-  config: PropTypes.object.isRequired,
   catalog: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired,
   display: PropTypes.string,
   filter: PropTypes.string,
   filterSites: PropTypes.bool,

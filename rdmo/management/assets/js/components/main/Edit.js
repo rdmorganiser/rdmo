@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 
 import EditAttribute from '../edit/EditAttribute'
 import EditCatalog from '../edit/EditCatalog'
@@ -15,41 +15,35 @@ import EditView from '../edit/EditView'
 
 import useScrollEffect from '../../hooks/useScrollEffect'
 
-const Edit = ({ config, elements, elementActions }) => {
-  const { element, elementType } = elements
+const Edit = () => {
+  const { element, elementType } = useSelector((state) => state.elements)
 
   useScrollEffect(elementType, element.id)
 
   switch (elementType) {
     case 'catalogs':
-      return <EditCatalog config={config} catalog={element} elements={elements} elementActions={elementActions} />
+      return <EditCatalog catalog={element} />
     case 'sections':
-      return <EditSection config={config} section={element} elements={elements} elementActions={elementActions} />
+      return <EditSection section={element} />
     case 'pages':
-      return <EditPage config={config} page={element} elements={elements} elementActions={elementActions} />
+      return <EditPage page={element} />
     case 'questionsets':
-      return <EditQuestionSet config={config} questionset={element} elements={elements} elementActions={elementActions} />
+      return <EditQuestionSet questionset={element}  />
     case 'questions':
-      return <EditQuestion config={config} question={element} elements={elements} elementActions={elementActions} />
+      return <EditQuestion question={element} />
     case 'attributes':
-      return <EditAttribute config={config} attribute={element} elements={elements} elementActions={elementActions} />
+      return <EditAttribute attribute={element}  />
     case 'optionsets':
-      return <EditOptionSet config={config} optionset={element} elements={elements} elementActions={elementActions} />
+      return <EditOptionSet optionset={element} />
     case 'options':
-      return <EditOption config={config} option={element} elements={elements} elementActions={elementActions} />
+      return <EditOption option={element} />
     case 'conditions':
-      return <EditCondition config={config} condition={element} elements={elements} elementActions={elementActions} />
+      return <EditCondition condition={element} />
     case 'tasks':
-      return <EditTask config={config} task={element} elements={elements} elementActions={elementActions} />
+      return <EditTask task={element} />
     case 'views':
-      return <EditView config={config} view={element} elements={elements} elementActions={elementActions} />
+      return <EditView view={element} />
   }
-}
-
-Edit.propTypes = {
-  config: PropTypes.object.isRequired,
-  elements: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
 }
 
 export default Edit

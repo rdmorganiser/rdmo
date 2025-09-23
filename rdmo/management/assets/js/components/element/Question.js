@@ -1,6 +1,9 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
+
+import { fetchElement, storeElement } from '../../actions/elementActions'
 
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
@@ -10,8 +13,10 @@ import { EditLink, CopyLink, LockedLink, ExportLink, CodeLink } from '../common/
 import { ReadOnlyIcon } from '../common/Icons'
 import { Drag, Drop } from '../common/DragAndDrop'
 
-const Question = ({ config, question, elementActions, display='list', indent=0,
-                    filter=false, filterEditors=false, order }) => {
+const Question = ({ question, display='list', indent=0, filter=false, filterEditors=false, order }) => {
+  const dispatch = useDispatch()
+
+  const config = useSelector((state) => state.config)
 
   const showElement = filterElement(config, filter, false, filterEditors, question)
 
@@ -23,13 +28,13 @@ const Question = ({ config, question, elementActions, display='list', indent=0,
   const getConditionUrl = (index) => buildPath('conditions', question.conditions[index])
   const getOptionSetUrl = (index) => buildPath('optionsets', question.optionsets[index])
 
-  const fetchEdit = () => elementActions.fetchElement('questions', question.id)
-  const fetchCopy = () => elementActions.fetchElement('questions', question.id, 'copy')
-  const toggleLocked = () => elementActions.storeElement('questions', {...question, locked: !question.locked })
+  const fetchEdit = () => dispatch(fetchElement('questions', question.id))
+  const fetchCopy = () => dispatch(fetchElement('questions', question.id, 'copy'))
+  const toggleLocked = () => dispatch(storeElement('questions', {...question, locked: !question.locked }))
 
-  const fetchAttribute = () => elementActions.fetchElement('attributes', question.attribute)
-  const fetchCondition = (index) => elementActions.fetchElement('conditions', question.conditions[index])
-  const fetchOptionSet = (index) => elementActions.fetchElement('optionsets', question.optionsets[index])
+  const fetchAttribute = () => dispatch(fetchElement('attributes', question.attribute))
+  const fetchCondition = (index) => dispatch(fetchElement('conditions', question.conditions[index]))
+  const fetchOptionSet = (index) => dispatch(fetchElement('optionsets', question.optionsets[index]))
 
   const elementNode = (
     <div className="element">
@@ -150,17 +155,14 @@ const Question = ({ config, question, elementActions, display='list', indent=0,
               </div>
             )
           }
-          <Drop element={question} elementActions={elementActions} indent={indent} mode="after" />
+          <Drop element={question} indent={indent} mode="after" />
         </>
       )
   }
 }
 
 Question.propTypes = {
-  config: PropTypes.object.isRequired,
   question: PropTypes.object.isRequired,
-  configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired,
   display: PropTypes.string,
   indent: PropTypes.number,
   filter: PropTypes.string,
