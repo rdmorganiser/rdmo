@@ -1,9 +1,13 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import get from 'lodash/get'
-import isEmpty from 'lodash/isEmpty'
+import { get, isEmpty } from 'lodash'
+
+import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 
 import Link from 'rdmo/core/assets/js/components/Link'
+
+import { toggleDescendants } from '../../actions/elementActions'
 
 import { getUriPrefixes } from '../../utils/filter'
 
@@ -16,19 +20,22 @@ import Page from '../element/Page'
 import QuestionSet from '../element/QuestionSet'
 import Question from '../element/Question'
 
-const NestedPage = ({ config, page, configActions, elementActions }) => {
+const NestedPage = ({ page }) => {
+  const dispatch = useDispatch()
 
-  const updateFilterString = (uri) => configActions.updateConfig('filter.page.search', uri)
-  const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.page.uri_prefix', uriPrefix)
+  const config = useSelector((state) => state.config)
 
-  const toggleQuestionSets = () => elementActions.toggleDescendants(page, 'questionsets')
+  const updateFilterString = (uri) => dispatch(updateConfig('filter.page.search', uri))
+  const updateFilterUriPrefix = (uriPrefix) => dispatch(updateConfig('filter.page.uri_prefix', uriPrefix))
 
-  const updateDisplayPagesURI = (value) => configActions.updateConfig('display.uri.pages', value)
-  const updateDisplayQuestionSetsURI = (value) => configActions.updateConfig('display.uri.questionsets', value)
-  const updateDisplayQuestionsURI = (value) => configActions.updateConfig('display.uri.questions', value)
-  const updateDisplayAttributesURI = (value) => configActions.updateConfig('display.uri.attributes', value)
-  const updateDisplayConditionsURI = (value) => configActions.updateConfig('display.uri.conditions', value)
-  const updateDisplayOptionSetURI = (value) => configActions.updateConfig('display.uri.optionsets', value)
+  const toggleQuestionSets = () => dispatch(toggleDescendants(page, 'questionsets'))
+
+  const updateDisplayPagesURI = (value) => dispatch(updateConfig('display.uri.pages', value))
+  const updateDisplayQuestionSetsURI = (value) => dispatch(updateConfig('display.uri.questionsets', value))
+  const updateDisplayQuestionsURI = (value) => dispatch(updateConfig('display.uri.questions', value))
+  const updateDisplayAttributesURI = (value) => dispatch(updateConfig('display.uri.attributes', value))
+  const updateDisplayConditionsURI = (value) => dispatch(updateConfig('display.uri.conditions', value))
+  const updateDisplayOptionSetURI = (value) => dispatch(updateConfig('display.uri.optionsets', value))
 
   return (
     <>
@@ -37,8 +44,7 @@ const NestedPage = ({ config, page, configActions, elementActions }) => {
           <div className="pull-right">
             <BackButton />
           </div>
-          <Page config={config} page={page}
-                configActions={configActions} elementActions={elementActions} display="plain" />
+          <Page page={page} display="plain" />
         </div>
 
         <div className="panel-body">
@@ -75,18 +81,14 @@ const NestedPage = ({ config, page, configActions, elementActions }) => {
       </div>
       {
         !isEmpty(page.elements) &&
-        <Drop element={page.elements[0]} elementActions={elementActions} indent={1} mode="before" />
+        <Drop element={page.elements[0]} indent={1} mode="before" />
       }
       {
         page.elements.map((element, index) => {
           if (element.model == 'questions.questionset') {
-            return <QuestionSet key={index} config={config} questionset={element}
-                                configActions={configActions} elementActions={elementActions}
-                                display="nested" filter="page" indent={1} />
+            return <QuestionSet key={index} questionset={element} display="nested" filter="page" indent={1} />
           } else {
-            return <Question key={index} config={config} question={element}
-                             configActions={configActions} elementActions={elementActions}
-                             display="nested" filter="page" indent={1} />
+            return <Question key={index} question={element} display="nested" filter="page" indent={1} />
           }
         })
       }
@@ -95,10 +97,7 @@ const NestedPage = ({ config, page, configActions, elementActions }) => {
 }
 
 NestedPage.propTypes = {
-  config: PropTypes.object.isRequired,
-  page: PropTypes.object.isRequired,
-  configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
+  page: PropTypes.object.isRequired
 }
 
 export default NestedPage

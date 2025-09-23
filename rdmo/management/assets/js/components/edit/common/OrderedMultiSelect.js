@@ -1,4 +1,5 @@
-import React, { Component, useRef } from 'react'
+import React, { useRef } from 'react'
+import { useSelector } from 'react-redux'
 import ReactSelect from 'react-select'
 import { useDrag, useDrop } from 'react-dnd'
 import PropTypes from 'prop-types'
@@ -89,20 +90,25 @@ const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, erro
   )
 }
 
-class OrderedMultiSelect extends Component {
 
-  constructor(props) {
-    super(props)
+const OrderedMultiSelect = ({ element, field, options, values,
+                              addText, createText, altCreateText, onChange, onCreate, onAltCreate, onEdit }) => {
 
-    this.handleChange = this.handleChange.bind(this)
-    this.handleEdit = this.handleEdit.bind(this)
-    this.handleRemove = this.handleRemove.bind(this)
-    this.handleDrag = this.handleDrag.bind(this)
-  }
+  const { meta } = useSelector((state) => state.config)
 
-  getValues() {
-    const { field, values, element } = this.props
+  const id = getId(element, field),
+        label = getLabel(element, field, meta),
+        help = getHelp(element, field, meta),
+        warnings = get(element, ['warnings', field]),
+        errors = get(element, ['errors', field])
 
+  const className = classNames({
+    'form-group': true,
+    'has-warning': !isEmpty(warnings),
+    'has-error': !isEmpty(errors)
+  })
+
+  const getValues = () => {
     if (isUndefined(values)) {
       return isUndefined(element[field]) ? [] : [...element[field]]
     } else {
@@ -110,18 +116,14 @@ class OrderedMultiSelect extends Component {
     }
   }
 
-  getSelectOptions() {
-    const { options } = this.props
-
+  const getSelectOptions = () => {
     return options.map(option => ({
       value: option.value || option.id,
       label: option.label || option.uri || option.text || option.name
     }))
   }
 
-  parseValue(option) {
-    const { field } = this.props
-
+  const parseValue = (option) => {
     if (isNumber(option.value)) {
       return [field.slice(0, -1), option.value]
     } else {
@@ -130,7 +132,7 @@ class OrderedMultiSelect extends Component {
     }
   }
 
-  compareValue(option, value) {
+  const compareValue = (option, value) => {
     const valueField = Object.keys(value).filter(k => k != 'order')[0]
     if (isNumber(option.value)) {
       return option.value == value[valueField]
@@ -139,12 +141,11 @@ class OrderedMultiSelect extends Component {
     }
   }
 
-  handleAdd() {
-    const { field, onChange } = this.props
-    const values = this.getValues()
+  const handleAdd = () => {
+    const values = getValues()
 
     const maxValue = maxBy(values, 'order')
-    const [valueField, value] = this.parseValue(this.getSelectOptions()[0])
+    const [valueField, value] = parseValue(getSelectOptions()[0])
     values.push({
       [valueField]: value,
       order: maxValue ? maxValue.order + 1 : 0
@@ -153,14 +154,13 @@ class OrderedMultiSelect extends Component {
     onChange(field, values)
   }
 
-  handleChange(option, index) {
-    const { field, onChange } = this.props
-    const values = this.getValues()
+  const handleChange = (option, index) => {
+    const values = getValues()
 
     if (isNil(option)) {
       values[index] = null
     } else {
-      const [valueField, value] = this.parseValue(option)
+      const [valueField, value] = parseValue(option)
       values[index] = {
         [valueField]: value,
         order: values[index].order
@@ -170,25 +170,22 @@ class OrderedMultiSelect extends Component {
     onChange(field, values)
   }
 
-  handleEdit(index) {
-    const { onEdit } = this.props
-    const values = this.getValues()
+  const handleEdit = (index) => {
+    const values = getValues()
 
     onEdit(values[index])
   }
 
-  handleRemove(index) {
-    const { field, onChange } = this.props
-    const values = this.getValues()
+  const handleRemove = (index) => {
+    const values = getValues()
 
     values.splice(index, 1)
 
     onChange(field, values)
   }
 
-  handleDrag(dragIndex, dropIndex) {
-    const { field, onChange } = this.props
-    const values = this.getValues()
+  const handleDrag = (dragIndex, dropIndex) => {
+    const values = getValues()
 
     const dragValue = values[dragIndex]
     values.splice(dragIndex, 1)
@@ -202,69 +199,52 @@ class OrderedMultiSelect extends Component {
     onChange(field, values)
   }
 
-  render() {
-    const { config, element, field, addText, createText, altCreateText,
-            onCreate, onAltCreate } = this.props
-
-    const id = getId(element, field),
-          label = getLabel(config, element, field),
-          help = getHelp(config, element, field),
-          warnings = get(element, ['warnings', field]),
-          errors = get(element, ['errors', field])
-
-    const className = classNames({
-      'form-group': true,
-      'has-warning': !isEmpty(warnings),
-      'has-error': !isEmpty(errors)
-    })
-
-    return (
-      <div className={className}>
-        <div className="mb-5">
-          <strong id={id}>{label}</strong>
-        </div>
-
-        <div>
-        {
-          this.getValues().map((value, index) => {
-            const selectOptions = this.getSelectOptions()
-            const selectValue = selectOptions.find(option => this.compareValue(option, value))
-            return (
-              <OrderedMultiSelectItem key={index} index={index} field={field}
-                                      selectValue={selectValue} selectOptions={selectOptions}
-                                      errors={errors} handleChange={this.handleChange}
-                                      handleEdit={this.handleEdit} handleRemove={this.handleRemove}
-                                      handleDrag={this.handleDrag} ariaLabelledBy={id} disabled={element.read_only} />
-            )
-          })
-        }
-        </div>
-
-        <button type="button" className="btn btn-primary btn-xs" onClick={() => this.handleAdd()}
-                disabled={element.read_only}>
-          {addText}
-        </button>
-        {
-          onCreate &&
-          <button type="button" className="btn btn-success btn-xs ml-10" onClick={onCreate}
-                  disabled={element.read_only || isNil(element.id)}
-                  title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
-            {createText}
-          </button>
-        }
-        {
-          onAltCreate &&
-          <button type="button" className="btn btn-success btn-xs ml-10" onClick={onAltCreate}
-                  disabled={element.read_only || isNil(element.id)}
-                  title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
-            {altCreateText}
-          </button>
-        }
-
-        {help && <p className="help-block">{help}</p>}
+  return (
+    <div className={className}>
+      <div className="mb-5">
+        <strong id={id}>{label}</strong>
       </div>
-    )
-  }
+
+      <div>
+      {
+        getValues().map((value, index) => {
+          const selectOptions = getSelectOptions()
+          const selectValue = selectOptions.find(option => compareValue(option, value))
+          return (
+            <OrderedMultiSelectItem key={index} index={index} field={field}
+                                    selectValue={selectValue} selectOptions={selectOptions}
+                                    errors={errors} handleChange={handleChange}
+                                    handleEdit={handleEdit} handleRemove={handleRemove}
+                                    handleDrag={handleDrag} ariaLabelledBy={id} disabled={element.read_only} />
+          )
+        })
+      }
+      </div>
+
+      <button type="button" className="btn btn-primary btn-xs" onClick={handleAdd}
+              disabled={element.read_only}>
+        {addText}
+      </button>
+      {
+        onCreate &&
+        <button type="button" className="btn btn-success btn-xs ml-10" onClick={onCreate}
+                disabled={element.read_only || isNil(element.id)}
+                title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
+          {createText}
+        </button>
+      }
+      {
+        onAltCreate &&
+        <button type="button" className="btn btn-success btn-xs ml-10" onClick={onAltCreate}
+                disabled={element.read_only || isNil(element.id)}
+                title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
+          {altCreateText}
+        </button>
+      }
+
+      {help && <p className="help-block">{help}</p>}
+    </div>
+  )
 }
 
 OrderedMultiSelectItem.propTypes = {
@@ -282,10 +262,8 @@ OrderedMultiSelectItem.propTypes = {
 }
 
 OrderedMultiSelect.propTypes = {
-  config: PropTypes.object.isRequired,
   element: PropTypes.object.isRequired,
   field: PropTypes.string.isRequired,
-  fields: PropTypes.array,
   options: PropTypes.array.isRequired,
   values: PropTypes.array,
   addText: PropTypes.string.isRequired,

@@ -1,4 +1,5 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import isEmpty from 'lodash/isEmpty'
@@ -9,10 +10,12 @@ import { html } from '@codemirror/lang-html'
 
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
-const CodeMirror = ({ config, element, field, onChange }) => {
+const CodeMirror = ({ element, field, onChange }) => {
+  const { meta } = useSelector((state) => state.config)
+
   const id = getId(element, field),
-        label = getLabel(config, element, field),
-        help = getHelp(config, element, field),
+        label = getLabel(element, field, meta),
+        help = getHelp(element, field, meta),
         warnings = get(element, ['warnings', field]),
         errors = get(element, ['errors', field])
 
@@ -41,7 +44,6 @@ const CodeMirror = ({ config, element, field, onChange }) => {
 }
 
 CodeMirror.propTypes = {
-  config: PropTypes.object,
   element: PropTypes.object,
   field: PropTypes.string,
   onChange: PropTypes.func

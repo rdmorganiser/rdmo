@@ -1,4 +1,5 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import isEmpty from 'lodash/isEmpty'
@@ -7,10 +8,12 @@ import get from 'lodash/get'
 
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
-const UriPrefix = ({ config, element, field, onChange }) => {
+const UriPrefix = ({ element, field, onChange }) => {
+  const { meta, settings } = useSelector((state) => state.config)
+
   const id = getId(element, field),
-        label = getLabel(config, element, field),
-        help = getHelp(config, element, field),
+        label = getLabel(element, field, meta),
+        help = getHelp(element, field, meta),
         warnings = get(element, ['warnings', field]),
         errors = get(element, ['errors', field])
 
@@ -33,7 +36,7 @@ const UriPrefix = ({ config, element, field, onChange }) => {
         <span className="input-group-btn">
           <button type="button" className="btn btn-default" disabled={element.read_only}
             title={gettext('Insert default URI Prefix')} aria-label={gettext('Insert default URI Prefix')}
-            onClick={() => onChange(field, config.settings.default_uri_prefix)}>
+            onClick={() => onChange(field, settings.default_uri_prefix)}>
             <span className="fa fa-magic"></span>
           </button>
         </span>
@@ -49,7 +52,6 @@ const UriPrefix = ({ config, element, field, onChange }) => {
 }
 
 UriPrefix.propTypes = {
-  config: PropTypes.object,
   element: PropTypes.object,
   field: PropTypes.string,
   onChange: PropTypes.func

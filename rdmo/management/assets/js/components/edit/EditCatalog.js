@@ -1,7 +1,9 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap'
-import get from 'lodash/get'
+
+import { fetchElement, storeElement, createElement, deleteElement, updateElement } from '../../actions/elementActions'
 
 import Checkbox from './common/Checkbox'
 import Number from './common/Number'
@@ -19,21 +21,22 @@ import DeleteCatalogModal from '../modals/DeleteCatalogModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
 
-const EditCatalog = ({ config, catalog, elements, elementActions }) => {
+const EditCatalog = ({ catalog }) => {
+  const dispatch = useDispatch()
 
-  const { sites, groups } = config
-  const { elementAction, sections } = elements
+  const { groups, sites, settings } = useSelector((state) => state.config)
+  const { elementAction, sections } = useSelector((state) => state.elements)
 
-  const updateCatalog = (key, value) => elementActions.updateElement(catalog, {[key]: value})
-  const storeCatalog = (back) => elementActions.storeElement('catalogs', catalog, elementAction, back)
-  const deleteCatalog = () => elementActions.deleteElement('catalogs', catalog)
+  const updateCatalog = (key, value) => dispatch(updateElement(catalog, {[key]: value}))
+  const storeCatalog = (back) => dispatch(storeElement('catalogs', catalog, elementAction, back))
+  const deleteCatalog = () => dispatch(deleteElement('catalogs', catalog))
 
-  const editSection = (value) => elementActions.fetchElement('sections', value.section)
-  const createSection = () => elementActions.createElement('sections', { catalog } )
+  const editSection = (value) => dispatch(fetchElement('sections', value.section))
+  const createSection = () => dispatch(createElement('sections', { catalog } ))
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
-  const info = <CatalogInfo catalog={catalog} elements={elements} />
+  const info = <CatalogInfo catalog={catalog} />
 
   // for reasons unknown, the strings are not picked up by makemessages from the props
   const addSectionText = gettext('Add existing section')
@@ -65,52 +68,56 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
       <div className="panel-body">
         <div className="row">
           <div className="col-sm-6">
-            <UriPrefix config={config} element={catalog} field="uri_prefix" onChange={updateCatalog} />
+            <UriPrefix element={catalog} field="uri_prefix" onChange={updateCatalog} />
           </div>
           <div className="col-sm-6">
-            <Text config={config} element={catalog} field="uri_path" onChange={updateCatalog} />
+            <Text element={catalog} field="uri_path" onChange={updateCatalog} />
           </div>
         </div>
 
-        <Textarea config={config} element={catalog} field="comment" rows={4} onChange={updateCatalog} />
+        <Textarea element={catalog} field="comment" rows={4} onChange={updateCatalog} />
 
         <div className="row">
           <div className="col-sm-4">
-            <Checkbox config={config} element={catalog} field="locked" onChange={updateCatalog} />
+            <Checkbox element={catalog} field="locked" onChange={updateCatalog} />
           </div>
           <div className="col-sm-4">
-            <Checkbox config={config} element={catalog} field="available" onChange={updateCatalog} />
+            <Checkbox element={catalog} field="available" onChange={updateCatalog} />
           </div>
           <div className="col-sm-4">
-            <Number config={config} element={catalog} field="order" onChange={updateCatalog} />
+            <Number element={catalog} field="order" onChange={updateCatalog} />
           </div>
         </div>
 
         <Tabs id="#catalog-tabs" defaultActiveKey={0} animation={false}>
           {
-            config.settings && config.settings.languages.map(([lang_code, lang], index) => (
+            settings.languages.map(([lang_code, lang], index) => (
               <Tab key={index} eventKey={index} title={lang}>
-                <Text config={config} element={catalog} field={`title_${lang_code }`}
-                      onChange={updateCatalog} />
-                <Textarea config={config} element={catalog} field={`help_${lang_code }`}
+                <Text element={catalog} field={`title_${lang_code }`} onChange={updateCatalog} />
+                <Textarea element={catalog} field={`help_${lang_code }`}
                           rows={4} onChange={updateCatalog} />
               </Tab>
             ))
           }
         </Tabs>
 
-        <OrderedMultiSelect config={config} element={catalog} field="sections" options={sections}
+        <OrderedMultiSelect element={catalog} field="sections" options={sections}
                             addText={addSectionText} createText={createSectionText}
                             onChange={updateCatalog} onCreate={createSection} onEdit={editSection} />
 
-        {get(config, 'settings.groups') && <Select config={config} element={catalog} field="groups"
-                                                   options={groups} onChange={updateCatalog} isMulti />}
-
-        {get(config, 'settings.multisite') && <Select config={config} element={catalog} field="sites"
-                                                      options={sites} onChange={updateCatalog} isMulti />}
-
-        {get(config, 'settings.multisite') && <Select config={config} element={catalog} field="editors"
-                                                      options={sites} onChange={updateCatalog} isMulti />}
+        {
+          settings.groups && (
+            <Select element={catalog} field="groups" options={groups} onChange={updateCatalog} isMulti />
+          )
+        }
+        {
+          settings.multisite && (
+            <>
+              <Select element={catalog} field="sites" options={sites} onChange={updateCatalog} isMulti />
+              <Select element={catalog} field="editors" options={sites} onChange={updateCatalog} isMulti />
+            </>
+          )
+        }
       </div>
 
       <div className="panel-footer">
@@ -129,10 +136,7 @@ const EditCatalog = ({ config, catalog, elements, elementActions }) => {
 }
 
 EditCatalog.propTypes = {
-  config: PropTypes.object.isRequired,
-  catalog: PropTypes.object.isRequired,
-  elements: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
+  catalog: PropTypes.object.isRequired
 }
 
 export default EditCatalog

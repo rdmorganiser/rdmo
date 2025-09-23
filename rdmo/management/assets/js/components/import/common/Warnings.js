@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import WarningsListGroup from './WarningsListGroup'
 import isUndefined from 'lodash/isUndefined'
 
-const Warnings = ({elementWarnings, elementModel, elementURI, shouldShowURI = true}) => {
+const Warnings = ({ elementWarnings, elementModel, elementURI, shouldShowURI = true }) => {
   const show = !isUndefined(elementWarnings) && Object.keys(elementWarnings).length > 0
   const warningsHeadingText = <strong>{gettext('Warnings')}</strong>
 

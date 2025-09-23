@@ -1,6 +1,8 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import get from 'lodash/get'
+
+import { fetchElement, storeElement, deleteElement, updateElement } from '../../actions/elementActions'
 
 import Checkbox from './common/Checkbox'
 import Select from './common/Select'
@@ -16,19 +18,20 @@ import DeleteAttributeModal from '../modals/DeleteAttributeModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
 
-const EditAttribute = ({ config, attribute, elements, elementActions }) => {
+const EditAttribute = ({ attribute }) => {
+  const dispatch = useDispatch()
 
-  const { sites } = config
-  const { elementAction, parent, attributes } = elements
+  const { sites, settings } = useSelector((state) => state.config)
+  const { elementAction, parent, attributes } = useSelector((state) => state.elements)
 
-  const editAttribute = (attribute) => elementActions.fetchElement('attributes', attribute)
-  const updateAttribute = (key, value) => elementActions.updateElement(attribute, {[key]: value})
-  const storeAttribute = (back) => elementActions.storeElement('attributes', attribute, elementAction, back)
-  const deleteAttribute = () => elementActions.deleteElement('attributes', attribute)
+  const editAttribute = (attribute) => dispatch(fetchElement('attributes', attribute))
+  const updateAttribute = (key, value) => dispatch(updateElement(attribute, {[key]: value}))
+  const storeAttribute = (back) => dispatch(storeElement('attributes', attribute, elementAction, back))
+  const deleteAttribute = () => dispatch(deleteElement('attributes', attribute))
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
-  const info = <AttributeInfo attribute={attribute} elements={elements} elementActions={elementActions} />
+  const info = <AttributeInfo attribute={attribute} />
 
   return (
     <div className="panel panel-default panel-edit">
@@ -93,26 +96,25 @@ const EditAttribute = ({ config, attribute, elements, elementActions }) => {
       <div className="panel-body">
         <div className="row">
           <div className="col-sm-6">
-            <UriPrefix config={config} element={attribute} field="uri_prefix"
-                       onChange={updateAttribute} />
+            <UriPrefix element={attribute} field="uri_prefix" onChange={updateAttribute} />
           </div>
           <div className="col-sm-6">
-            <Text config={config} element={attribute} field="key"
-                  onChange={updateAttribute} />
+            <Text element={attribute} field="key" onChange={updateAttribute} />
           </div>
         </div>
 
-        <Textarea config={config} element={attribute} field="comment"
-                  rows={4} onChange={updateAttribute} />
+        <Textarea element={attribute} field="comment" rows={4} onChange={updateAttribute} />
 
-        <Checkbox config={config} element={attribute} field="locked"
-                  onChange={updateAttribute} />
+        <Checkbox element={attribute} field="locked" onChange={updateAttribute} />
 
-        <Select config={config} element={attribute} field="parent"
-                options={attributes} onChange={updateAttribute} onEdit={editAttribute} />
+        <Select element={attribute} field="parent" options={attributes}
+                onChange={updateAttribute} onEdit={editAttribute} />
 
-        {get(config, 'settings.multisite') && <Select config={config} element={attribute} field="editors"
-                                                      options={sites} onChange={updateAttribute} isMulti />}
+        {
+          settings.multisite && (
+            <Select element={attribute} field="editors" options={sites} onChange={updateAttribute} isMulti />
+          )
+        }
       </div>
 
       <div className="panel-footer">
@@ -131,10 +133,7 @@ const EditAttribute = ({ config, attribute, elements, elementActions }) => {
 }
 
 EditAttribute.propTypes = {
-  config: PropTypes.object.isRequired,
-  attribute: PropTypes.object.isRequired,
-  elements: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
+  attribute: PropTypes.object.isRequired
 }
 
 export default EditAttribute

@@ -1,9 +1,10 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap'
-import get from 'lodash/get'
-import isUndefined from 'lodash/isUndefined'
-import orderBy from 'lodash/orderBy'
+import { isUndefined, orderBy } from 'lodash'
+
+import { fetchElement, storeElement, createElement, deleteElement, updateElement } from '../../actions/elementActions'
 
 import Checkbox from './common/Checkbox'
 import OrderedMultiSelect from './common/OrderedMultiSelect'
@@ -21,52 +22,54 @@ import DeleteQuestionSetModal from '../modals/DeleteQuestionSetModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
 
-const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
+const EditQuestionSet = ({ questionset }) => {
+  const dispatch = useDispatch()
 
-  const { sites } = config
-  const { elementAction, parent, attributes, conditions } = elements
+  const { sites, settings } = useSelector((state) => state.config)
+  const { elementAction, parent, attributes,
+          conditions, questions, questionsets } = useSelector((state) => state.elements)
 
   const elementValues = orderBy(questionset.questions.concat(questionset.questionsets), ['order', 'uri'])
-  const elementOptions = elements.questions.map(question => ({
+  const elementOptions = questions.map(question => ({
     value: 'question-' + question.id,
     label: interpolate(gettext('Question: %s'), [question.uri])
-  })).concat(elements.questionsets.map(questionset => ({
+  })).concat(questionsets.map(questionset => ({
     value: 'questionset-' + questionset.id,
     label: interpolate(gettext('Question set: %s'), [questionset.uri])
   })))
 
   const updateQuestionSet = (key, value) => {
     if (key == 'elements') {
-      elementActions.updateElement(questionset, {
+      dispatch(updateElement(questionset, {
         questions: value.filter(e => !isUndefined(e.question)),
         questionsets: value.filter(e => !isUndefined(e.questionset))
-      })
+      }))
     } else {
-      elementActions.updateElement(questionset, { [key]: value })
+      dispatch(updateElement(questionset, { [key]: value }))
     }
   }
-  const storeQuestionSet = (back) => elementActions.storeElement('questionsets', questionset, elementAction, back)
-  const deleteQuestionSet = () => elementActions.deleteElement('questionsets', questionset)
+  const storeQuestionSet = (back) => dispatch(storeElement('questionsets', questionset, elementAction, back))
+  const deleteQuestionSet = () => dispatch(deleteElement('questionsets', questionset))
 
   const editElement = (value) => {
     if (value.questionset) {
-      elementActions.fetchElement('questionsets', value.questionset)
+      dispatch(fetchElement('questionsets', value.questionset))
     } else if (value.question) {
-      elementActions.fetchElement('questions', value.question)
+      dispatch(fetchElement('questions', value.question))
     }
   }
-  const createQuestionSet = () => elementActions.createElement('questionsets', { questionset })
-  const createQuestion = () => elementActions.createElement('questions', { questionset })
+  const createQuestionSet = () => dispatch(createElement('questionsets', { questionset }))
+  const createQuestion = () => dispatch(createElement('questions', { questionset }))
 
-  const editCondition = (condition) => elementActions.fetchElement('conditions', condition)
-  const createCondition = () => elementActions.createElement('conditions', { questionset })
+  const editCondition = (condition) => dispatch(fetchElement('conditions', condition))
+  const createCondition = () => dispatch(createElement('conditions', { questionset }))
 
-  const editAttribute = (attribute) => elementActions.fetchElement('attributes', attribute)
-  const createAttribute = () => elementActions.createElement('attributes', { questionset })
+  const editAttribute = (attribute) => dispatch(fetchElement('attributes', attribute))
+  const createAttribute = () => dispatch(createElement('attributes', { questionset }))
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
-  const info = <QuestionSetInfo questionset={questionset} elements={elements} elementActions={elementActions} />
+  const info = <QuestionSetInfo questionset={questionset} />
 
   // for reasons unknown, the strings are not picked up by makemessages from the props
   const addElementText = gettext('Add existing element')
@@ -114,60 +117,55 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
       <div className="panel-body">
         <div className="row">
           <div className="col-sm-6">
-            <UriPrefix config={config} element={questionset} field="uri_prefix"
-                  onChange={updateQuestionSet} />
+            <UriPrefix element={questionset} field="uri_prefix" onChange={updateQuestionSet} />
           </div>
           <div className="col-sm-6">
-            <Text config={config} element={questionset} field="uri_path"
-                  onChange={updateQuestionSet} />
+            <Text element={questionset} field="uri_path" onChange={updateQuestionSet} />
           </div>
         </div>
 
-        <Textarea config={config} element={questionset} field="comment"
-                  rows={4} onChange={updateQuestionSet} />
+        <Textarea element={questionset} field="comment" rows={4} onChange={updateQuestionSet} />
 
         <div className="row">
           <div className="col-sm-6">
-            <Checkbox config={config} element={questionset} field="locked"
-                      onChange={updateQuestionSet} />
+            <Checkbox element={questionset} field="locked" onChange={updateQuestionSet} />
           </div>
           <div className="col-sm-6">
-            <Checkbox config={config} element={questionset} field="is_collection"
-                      onChange={updateQuestionSet} />
+            <Checkbox element={questionset} field="is_collection" onChange={updateQuestionSet} />
           </div>
         </div>
 
         <Tabs id="#catalog-tabs" defaultActiveKey={0} animation={false}>
           {
-            config.settings && config.settings.languages.map(([lang_code, lang], index) => (
+            settings.languages.map(([lang_code, lang], index) => (
               <Tab className="pt-10" key={index} eventKey={index} title={lang}>
-                <Text config={config} element={questionset} field={`title_${lang_code }`}
-                      onChange={updateQuestionSet} />
-                <Textarea config={config} element={questionset} field={`help_${lang_code }`}
-                          rows={4} onChange={updateQuestionSet} />
-                <Text config={config} element={questionset} field={`verbose_name_${lang_code }`}
-                      onChange={updateQuestionSet} />
+                <Text element={questionset} field={`title_${lang_code }`} onChange={updateQuestionSet} />
+                <Textarea element={questionset} field={`help_${lang_code }`} rows={4} onChange={updateQuestionSet} />
+                <Text element={questionset} field={`verbose_name_${lang_code }`} onChange={updateQuestionSet} />
               </Tab>
             ))
           }
         </Tabs>
 
-        <Select config={config} element={questionset} field="attribute" createText={gettext('Create new attribute')}
+        <Select element={questionset} field="attribute" createText={gettext('Create new attribute')}
                 options={attributes} onChange={updateQuestionSet} onCreate={createAttribute} onEdit={editAttribute} />
 
-        <OrderedMultiSelect config={config} element={questionset} field="elements"
+        <OrderedMultiSelect element={questionset} field="elements"
                             values={elementValues} options={elementOptions}
                             addText={addElementText} createText={createQuestionText}
                             altCreateText={createQuestionSetText}
                             onChange={updateQuestionSet} onCreate={createQuestion} onAltCreate={createQuestionSet}
                             onEdit={editElement}/>
 
-        <MultiSelect config={config} element={questionset} field="conditions" options={conditions}
+        <MultiSelect element={questionset} field="conditions" options={conditions}
                      addText={gettext('Add existing condition')} createText={gettext('Create new condition')}
                      onChange={updateQuestionSet} onCreate={createCondition} onEdit={editCondition} />
 
-        {get(config, 'settings.multisite') && <Select config={config} element={questionset} field="editors"
-                                                      options={sites} onChange={updateQuestionSet} isMulti />}
+        {
+          settings.multisite && (
+            <Select element={questionset} field="editors" options={sites} onChange={updateQuestionSet} isMulti />
+            )
+        }
       </div>
 
       <div className="panel-footer">
@@ -186,10 +184,7 @@ const EditQuestionSet = ({ config, questionset, elements, elementActions }) => {
 }
 
 EditQuestionSet.propTypes = {
-  config: PropTypes.object.isRequired,
-  questionset: PropTypes.object.isRequired,
-  elements: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
+  questionset: PropTypes.object.isRequired
 }
 
 export default EditQuestionSet

@@ -1,7 +1,10 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import get from 'lodash/get'
 
+import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+
+import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
 
 import { FilterString, FilterUriPrefix, FilterSite } from '../common/Filter'
@@ -10,15 +13,19 @@ import { BackButton, NewButton } from '../common/Buttons'
 
 import Option from '../element/Option'
 
-const Options = ({ config, options, configActions, elementActions }) => {
+const Options = () => {
+  const dispatch = useDispatch()
 
-  const updateFilterString = (value) => configActions.updateConfig('filter.options.search', value)
-  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.options.uri_prefix', value)
-  const updateFilterEditor = (value) => configActions.updateConfig('filter.editors', value)
+  const config = useSelector((state) => state.config)
+  const options = useSelector((state) => state.elements.options)
 
-  const updateDisplayURI = (value) => configActions.updateConfig('display.uri.options', value)
+  const updateFilterString = (value) => dispatch(updateConfig('filter.options.search', value))
+  const updateFilterUriPrefix = (value) => dispatch(updateConfig('filter.options.uri_prefix', value))
+  const updateFilterEditor = (value) => dispatch(updateConfig('filter.editors', value))
 
-  const createOption = () => elementActions.createElement('options')
+  const updateDisplayURI = (value) => dispatch(updateConfig('display.uri.options', value))
+
+  const createOption = () => dispatch(createElement('options'))
 
   return (
     <div className="panel panel-default">
@@ -58,20 +65,12 @@ const Options = ({ config, options, configActions, elementActions }) => {
       {
         options.map((option, index) => (
           <Option key={index} config={config} option={option}
-                  configActions={configActions} elementActions={elementActions}
                   filter="options" filterEditors={true} />
         ))
       }
       </ul>
     </div>
   )
-}
-
-Options.propTypes = {
-  config: PropTypes.object.isRequired,
-  options: PropTypes.array.isRequired,
-  configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
 }
 
 export default Options
