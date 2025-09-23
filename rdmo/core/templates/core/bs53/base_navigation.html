@@ -35,7 +35,8 @@
 
                 <li class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        {% trans 'Language' %} <span class="caret">
+                        {% get_current_language as LANGUAGE_CODE %}
+                        {{ LANGUAGE_CODE|upper }} <span class="caret">
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         {% i18n_switcher %}
@@ -103,7 +104,12 @@
 
                         {% if settings.ACCOUNT or settings.SOCIALACCOUNT %}
                         <li class="nav-item">
-                            {% include 'account/logout_form.html' %}
+                            <form action="{{ settings.LOGOUT_URL }}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="nav-link link">
+                                    {% trans 'Logout' %}
+                                </button>
+                            </form>
                         </li>
                         {% else %}
                         <li class="nav-item">
@@ -113,14 +119,6 @@
                         </li>
                         {% endif %}
                     </ul>
-                </li>
-
-                {% else %}
-
-                <li class="nav-item">
-                    <a href="{{ settings.LOGIN_URL }}" class="nav-link">
-                        {% trans 'Login' %}
-                    </a>
                 </li>
 
                 {% endif %}

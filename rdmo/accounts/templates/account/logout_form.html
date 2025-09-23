@@ -1,8 +1,0 @@
-{% load i18n %}
-
-    <form action="{{ settings.LOGOUT_URL }}" method="POST">
-        {% csrf_token %}
-        <button type="submit" class="nav-link link">
-            {% trans 'Logout' %}
-        </button>
-    </form>
