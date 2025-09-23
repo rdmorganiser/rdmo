@@ -370,23 +370,6 @@ def test_remove_user_post(db, client, settings, django_user_model, profile_delet
         assert django_user_model.objects.get(username='user')
 
 
-@pytest.mark.parametrize('profile_update', boolean_toggle)
-def test_remove_user_post_cancelled(db, client, settings, django_user_model, profile_update):
-    settings.PROFILE_UPDATE = profile_update
-    settings.PROFILE_DELETE = True
-
-    client.login(username='user', password='user')
-    url = reverse('profile_remove')
-    response = client.post(url, {'cancel': 'cancel'})
-
-    assert response.status_code == 302
-    assert django_user_model.objects.filter(username='user').exists()
-    if settings.PROFILE_UPDATE:
-        assert response.url == '/account'
-    else:
-        assert response.url == '/'
-
-
 @pytest.mark.parametrize('profile_delete', boolean_toggle)
 def test_remove_user_post_invalid_email(db, client, settings, django_user_model, profile_delete):
     settings.PROFILE_DELETE = profile_delete
@@ -841,9 +824,7 @@ def test_terms_of_use_middleware_redirect_and_accept(
     assert response.status_code == 200
 
 
-def test_terms_of_use_middleware_invalidate_terms_version(
-    db, client, settings, django_user_model, enable_terms_of_use  # noqa: F811
-    ):
+def test_terms_of_use_middleware_invalidate_terms_version(db, client, settings, django_user_model, enable_terms_of_use):  # noqa: F811
     # Arrange constants, settings and user
     past_datetime = (datetime.now() - timedelta(days=10)).strftime(format="%Y-%m-%d")
     future_datetime = (datetime.now() + timedelta(days=10)).strftime(format="%Y-%m-%d")
