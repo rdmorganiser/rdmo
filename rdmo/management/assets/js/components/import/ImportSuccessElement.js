@@ -1,17 +1,21 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 import { isEmpty } from 'lodash'
+
+import { updateElement } from '../../actions/importActions'
 
 import { codeClass, verboseNames } from '../../constants/elements'
 import Warnings from './common/Warnings'
 import Errors from './common/Errors'
-import {ChangedLabel, CreatedLabel} from './common/ImportLabels'
+import { ChangedLabel, CreatedLabel } from './common/ImportLabels'
 
 
+const ImportSuccessElement = ({ element }) => {
+  const dispatch = useDispatch()
 
-const ImportSuccessElement = ({ element, importActions }) => {
+  const updateShowField = () => dispatch(updateElement(element, { show: !element.show }))
 
-  const updateShowField = () => importActions.updateElement(element, { show: !element.show })
   const changedLabelText = gettext('Changed')
   const createdLabelText = gettext('Created')
 
@@ -45,8 +49,7 @@ const ImportSuccessElement = ({ element, importActions }) => {
 }
 
 ImportSuccessElement.propTypes = {
-  element: PropTypes.object.isRequired,
-  importActions: PropTypes.object.isRequired
+  element: PropTypes.object.isRequired
 }
 
 export default ImportSuccessElement

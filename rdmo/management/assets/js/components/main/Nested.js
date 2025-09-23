@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 
 import NestedAttribute from '../nested/NestedAttribute'
 import NestedCatalog from '../nested/NestedCatalog'
@@ -10,38 +10,25 @@ import NestedSection from '../nested/NestedSection'
 
 import useScrollEffect from '../../hooks/useScrollEffect'
 
-const Nested = ({ config, elements, configActions, elementActions }) => {
-  const { element, elementType } = elements
+const Nested = () => {
+  const { element, elementType } = useSelector((state) => state.elements)
 
   useScrollEffect(elementType, element.id, 'nested')
 
   switch (elementType) {
     case 'catalogs':
-      return <NestedCatalog config={config} catalog={element}
-                            configActions={configActions} elementActions={elementActions} />
+      return <NestedCatalog catalog={element} />
     case 'sections':
-      return <NestedSection config={config} section={element}
-                            configActions={configActions} elementActions={elementActions} />
+      return <NestedSection section={element} />
     case 'pages':
-      return <NestedPage config={config} page={element}
-                         configActions={configActions} elementActions={elementActions} />
+      return <NestedPage page={element} />
     case 'questionsets':
-      return <NestedQuestionSet config={config} questionset={element}
-                                configActions={configActions} elementActions={elementActions} />
+      return <NestedQuestionSet questionset={element} />
     case 'attributes':
-      return <NestedAttribute config={config} attribute={element}
-                              configActions={configActions} elementActions={elementActions} />
+      return <NestedAttribute attribute={element} />
     case 'optionsets':
-      return <NestedOptionSet config={config} optionset={element}
-                              configActions={configActions} elementActions={elementActions} />
+      return <NestedOptionSet optionset={element} />
   }
-}
-
-Nested.propTypes = {
-  config: PropTypes.object.isRequired,
-  elements: PropTypes.object.isRequired,
-  configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
 }
 
 export default Nested

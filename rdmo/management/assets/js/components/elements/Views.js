@@ -1,7 +1,10 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import get from 'lodash/get'
 
+import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+
+import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
 
 import { FilterString, FilterUriPrefix, FilterSite} from '../common/Filter'
@@ -9,14 +12,18 @@ import { BackButton, NewButton } from '../common/Buttons'
 
 import View from '../element/View'
 
-const Views = ({ config, views, configActions, elementActions }) => {
+const Views = () => {
+  const dispatch = useDispatch()
 
-  const updateFilterString = (value) => configActions.updateConfig('filter.views.search', value)
-  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.views.uri_prefix', value)
-  const updateFilterSite = (value) => configActions.updateConfig('filter.sites', value)
-  const updateFilterEditor = (value) => configActions.updateConfig('filter.editors', value)
+  const config = useSelector((state) => state.config)
+  const views = useSelector((state) => state.elements.views)
 
-  const createView = () => elementActions.createElement('views')
+  const updateFilterString = (value) => dispatch(updateConfig('filter.views.search', value))
+  const updateFilterUriPrefix = (value) => dispatch(updateConfig('filter.views.uri_prefix', value))
+  const updateFilterSite = (value) => dispatch(updateConfig('filter.sites', value))
+  const updateFilterEditor = (value) => dispatch(updateConfig('filter.editors', value))
+
+  const createView = () => dispatch(createElement('views'))
 
   return (
     <div className="panel panel-default">
@@ -57,20 +64,12 @@ const Views = ({ config, views, configActions, elementActions }) => {
       {
         views.map((view, index) => (
           <View key={index} config={config} view={view}
-                configActions={configActions} elementActions={elementActions}
                 filter="views" filterSites={true} filterEditors={true} />
         ))
       }
       </ul>
     </div>
   )
-}
-
-Views.propTypes = {
-  config: PropTypes.object.isRequired,
-  views: PropTypes.array.isRequired,
-  configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
 }
 
 export default Views

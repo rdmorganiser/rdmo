@@ -1,6 +1,9 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import get from 'lodash/get'
+import { get } from 'lodash'
+
+import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 
 import { getUriPrefixes } from '../../utils/filter'
 
@@ -9,10 +12,13 @@ import { BackButton } from '../common/Buttons'
 
 import Attribute from '../element/Attribute'
 
-const NestedAttribute = ({ config, attribute, configActions, elementActions }) => {
+const NestedAttribute = ({ attribute }) => {
+  const dispatch = useDispatch()
 
-  const updateFilterString = (uri) => configActions.updateConfig('filter.attribute.search', uri)
-  const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.attribute.uri_prefix', uriPrefix)
+  const config = useSelector((state) => state.config)
+
+  const updateFilterString = (uri) => dispatch(updateConfig('filter.attribute.search', uri))
+  const updateFilterUriPrefix = (uriPrefix) => dispatch(updateConfig('filter.attribute.uri_prefix', uriPrefix))
 
   return (
     <>
@@ -21,8 +27,7 @@ const NestedAttribute = ({ config, attribute, configActions, elementActions }) =
           <div className="pull-right">
             <BackButton />
           </div>
-          <Attribute config={config} attribute={attribute}
-                     configActions={configActions} elementActions={elementActions} display="plain" />
+          <Attribute attribute={attribute} display="plain" />
         </div>
 
         <div className="panel-body">
@@ -41,9 +46,7 @@ const NestedAttribute = ({ config, attribute, configActions, elementActions }) =
 
       {
         attribute.elements.map((attribute, index) => (
-          <Attribute key={index} config={config} attribute={attribute}
-                     configActions={configActions} elementActions={elementActions}
-                     display="nested" filter="attribute" indent={1} />
+          <Attribute key={index} attribute={attribute} display="nested" filter="attribute" indent={1} />
         ))
       }
     </>
@@ -51,10 +54,7 @@ const NestedAttribute = ({ config, attribute, configActions, elementActions }) =
 }
 
 NestedAttribute.propTypes = {
-  config: PropTypes.object.isRequired,
-  attribute: PropTypes.object.isRequired,
-  configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
+  attribute: PropTypes.object.isRequired
 }
 
 export default NestedAttribute

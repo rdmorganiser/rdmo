@@ -1,6 +1,9 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
+
+import { fetchElement, storeElement, createElement } from '../../actions/elementActions'
 
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
@@ -13,8 +16,10 @@ import { EditLink, CopyLink, AddLink, LockedLink, NestedLink,
 import { ReadOnlyIcon } from '../common/Icons'
 import { Drag, Drop } from '../common/DragAndDrop'
 
-const Page = ({ config, page, configActions, elementActions, display='list', indent=0,
-                filter=false, filterEditors=false, order }) => {
+const Page = ({ page, display='list', indent=0, filter=false, filterEditors=false, order }) => {
+  const dispatch = useDispatch()
+
+  const config = useSelector((state) => state.config)
 
   const showElement = filterElement(config, filter, false, filterEditors, page)
   const showElements = get(config, `display.elements.pages.${page.id}`, true)
@@ -27,17 +32,17 @@ const Page = ({ config, page, configActions, elementActions, display='list', ind
 
   const getConditionUrl = (index) => buildPath('conditions', page.conditions[index])
 
-  const fetchEdit = () => elementActions.fetchElement('pages', page.id)
-  const fetchCopy = () => elementActions.fetchElement('pages', page.id, 'copy')
-  const fetchNested = () => elementActions.fetchElement('pages', page.id, 'nested')
-  const toggleLocked = () => elementActions.storeElement('pages', {...page, locked: !page.locked })
-  const toggleElements = () => elementActions.toggleElements(page)
+  const fetchEdit = () => dispatch(fetchElement('pages', page.id))
+  const fetchCopy = () => dispatch(fetchElement('pages', page.id, 'copy'))
+  const fetchNested = () => dispatch(fetchElement('pages', page.id, 'nested'))
+  const toggleLocked = () => dispatch(storeElement('pages', {...page, locked: !page.locked }))
+  const toggleElements = () => dispatch(toggleElements(page))
 
-  const createQuestionSet = () => elementActions.createElement('questionsets', { page })
-  const createQuestion = () => elementActions.createElement('questions', { page })
+  const createQuestionSet = () => dispatch(createElement('questionsets', { page }))
+  const createQuestion = () => dispatch(createElement('questions', { page }))
 
-  const fetchAttribute = () => elementActions.fetchElement('attributes', page.attribute)
-  const fetchCondition = (index) => elementActions.fetchElement('conditions', page.conditions[index])
+  const fetchAttribute = () => dispatch(fetchElement('attributes', page.attribute))
+  const fetchCondition = (index) => dispatch(fetchElement('conditions', page.conditions[index]))
 
   const elementNode = (
     <div className="element">
@@ -110,7 +115,7 @@ const Page = ({ config, page, configActions, elementActions, display='list', ind
         <>
           {
             showElement && (
-              <Drop element={page} elementActions={elementActions}>
+              <Drop element={page}>
                 <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
                   <div className="panel-heading">
                     { elementNode }
@@ -125,18 +130,16 @@ const Page = ({ config, page, configActions, elementActions, display='list', ind
                 const questionSetInfo = page.questionsets.find(info => info.questionset === element.id)
                 const questionSetOrder = questionSetInfo ? questionSetInfo.order : undefined
                 return <QuestionSet key={index} config={config} questionset={element}
-                                    configActions={configActions} elementActions={elementActions}
                                     display="nested" filter={filter} indent={indent + 1} order={questionSetOrder} />
               } else {
                 const questionInfo = page.questions.find(info => info.question === element.id)
                 const questionOrder = questionInfo ? questionInfo.order : undefined
                 return <Question key={index} config={config} question={element}
-                                 configActions={configActions} elementActions={elementActions}
                                  display="nested" filter={filter} indent={indent + 1} order={questionOrder} />
               }
             })
           }
-          <Drop element={page} elementActions={elementActions} indent={indent} mode="after" />
+          <Drop element={page} indent={indent} mode="after" />
         </>
       )
     case 'plain':
@@ -145,10 +148,7 @@ const Page = ({ config, page, configActions, elementActions, display='list', ind
 }
 
 Page.propTypes = {
-  config: PropTypes.object.isRequired,
   page: PropTypes.object.isRequired,
-  configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired,
   display: PropTypes.string,
   indent: PropTypes.number,
   filter: PropTypes.string,

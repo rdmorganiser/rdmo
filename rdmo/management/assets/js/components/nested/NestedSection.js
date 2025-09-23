@@ -1,9 +1,13 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import get from 'lodash/get'
-import isEmpty from 'lodash/isEmpty'
+import { get, isEmpty } from 'lodash'
+
+import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 
 import Link from 'rdmo/core/assets/js/components/Link'
+
+import { toggleDescendants } from '../../actions/elementActions'
 
 import { getUriPrefixes } from '../../utils/filter'
 
@@ -15,21 +19,24 @@ import { Drop } from '../common/DragAndDrop'
 import Section from '../element/Section'
 import Page from '../element/Page'
 
-const NestedSection = ({ config, section, configActions, elementActions }) => {
+const NestedSection = ({ section }) => {
+  const dispatch = useDispatch()
 
-  const updateFilterString = (uri) => configActions.updateConfig('filter.section.search', uri)
-  const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.section.uri_prefix', uriPrefix)
+  const config = useSelector((state) => state.config)
 
-  const togglePages = () => elementActions.toggleDescendants(section, 'pages')
-  const toggleQuestionSets = () => elementActions.toggleDescendants(section, 'questionsets')
+  const updateFilterString = (uri) => dispatch(updateConfig('filter.section.search', uri))
+  const updateFilterUriPrefix = (uriPrefix) => dispatch(updateConfig('filter.section.uri_prefix', uriPrefix))
 
-  const updateDisplaySectionURI = (value) => configActions.updateConfig('display.uri.sections', value)
-  const updateDisplayPagesURI = (value) => configActions.updateConfig('display.uri.pages', value)
-  const updateDisplayQuestionSetsURI = (value) => configActions.updateConfig('display.uri.questionsets', value)
-  const updateDisplayQuestionsURI = (value) => configActions.updateConfig('display.uri.questions', value)
-  const updateDisplayAttributesURI = (value) => configActions.updateConfig('display.uri.attributes', value)
-  const updateDisplayConditionsURI = (value) => configActions.updateConfig('display.uri.conditions', value)
-  const updateDisplayOptionSetURI = (value) => configActions.updateConfig('display.uri.optionsets', value)
+  const togglePages = () => dispatch(toggleDescendants(section, 'pages'))
+  const toggleQuestionSets = () => dispatch(toggleDescendants(section, 'questionsets'))
+
+  const updateDisplaySectionURI = (value) => dispatch(updateConfig('display.uri.sections', value))
+  const updateDisplayPagesURI = (value) => dispatch(updateConfig('display.uri.pages', value))
+  const updateDisplayQuestionSetsURI = (value) => dispatch(updateConfig('display.uri.questionsets', value))
+  const updateDisplayQuestionsURI = (value) => dispatch(updateConfig('display.uri.questions', value))
+  const updateDisplayAttributesURI = (value) => dispatch(updateConfig('display.uri.attributes', value))
+  const updateDisplayConditionsURI = (value) => dispatch(updateConfig('display.uri.conditions', value))
+  const updateDisplayOptionSetURI = (value) => dispatch(updateConfig('display.uri.optionsets', value))
 
   return (
     <>
@@ -38,8 +45,7 @@ const NestedSection = ({ config, section, configActions, elementActions }) => {
           <div className="pull-right">
             <BackButton />
           </div>
-          <Section config={config} section={section}
-                   configActions={configActions} elementActions={elementActions} display="plain" />
+          <Section section={section} display="plain" />
         </div>
 
         <div className="panel-body">
@@ -79,12 +85,11 @@ const NestedSection = ({ config, section, configActions, elementActions }) => {
       </div>
       {
         !isEmpty(section.elements) &&
-        <Drop element={section.elements[0]} elementActions={elementActions} indent={1} mode="before" />
+        <Drop element={section.elements[0]} indent={1} mode="before" />
       }
       {
         section.elements.map((page, index) => (
           <Page key={index} config={config} page={page}
-                configActions={configActions} elementActions={elementActions}
                 display="nested" filter="section" indent={1} />
         ))
       }
@@ -93,10 +98,7 @@ const NestedSection = ({ config, section, configActions, elementActions }) => {
 }
 
 NestedSection.propTypes = {
-  config: PropTypes.object.isRequired,
-  section: PropTypes.object.isRequired,
-  configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
+  section: PropTypes.object.isRequired
 }
 
 export default NestedSection

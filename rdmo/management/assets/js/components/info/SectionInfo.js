@@ -1,17 +1,23 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+
+import { fetchElement } from '../../actions/elementActions'
 
 import { ExtendLink, CodeLink } from '../common/Links'
 
 import useBool from '../../hooks/useBool'
 
-const SectionInfo = ({ section, elements, elementActions }) => {
+const SectionInfo = ({ section }) => {
+  const dispatch = useDispatch()
+
+  const elements = useSelector((state) => state.elements)
 
   const [showCatalogs, toggleCatalogs] = useBool(false)
 
   const catalogs = elements.catalogs.filter(e => section.catalogs.includes(e.id))
 
-  const fetchCatalog = (catalog) => elementActions.fetchElement('catalogs', catalog.id)
+  const fetchCatalog = (catalog) => dispatch(fetchElement('catalogs', catalog.id))
 
   return (
     <div className="element-info">
@@ -35,9 +41,7 @@ const SectionInfo = ({ section, elements, elementActions }) => {
 }
 
 SectionInfo.propTypes = {
-  section: PropTypes.object.isRequired,
-  elements: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
+  section: PropTypes.object.isRequired
 }
 
 export default SectionInfo

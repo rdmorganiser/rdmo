@@ -1,4 +1,5 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import isEmpty from 'lodash/isEmpty'
@@ -7,10 +8,12 @@ import get from 'lodash/get'
 
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
-const Radio = ({ config, element, field, options, onChange }) => {
+const Radio = ({ element, field, options, onChange }) => {
+  const { meta } = useSelector((state) => state.config)
+
   const id = getId(element, field),
-        label = getLabel(config, element, field),
-        help = getHelp(config, element, field),
+        label = getLabel(element, field, meta),
+        help = getHelp(element, field, meta),
         warnings = get(element, ['warnings', field]),
         errors = get(element, ['errors', field])
 
@@ -49,7 +52,6 @@ const Radio = ({ config, element, field, options, onChange }) => {
 }
 
 Radio.propTypes = {
-  config: PropTypes.object,
   element: PropTypes.object,
   field: PropTypes.string,
   options: PropTypes.array,

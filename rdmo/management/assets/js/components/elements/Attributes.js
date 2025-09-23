@@ -1,7 +1,10 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import get from 'lodash/get'
 
+import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+
+import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
 
 import { FilterString, FilterUriPrefix, FilterSite } from '../common/Filter'
@@ -9,12 +12,16 @@ import { BackButton, NewButton } from '../common/Buttons'
 
 import Attribute from '../element/Attribute'
 
-const Attributes = ({ config, attributes, configActions, elementActions }) => {
+const Attributes = () => {
+  const dispatch = useDispatch()
 
-  const updateFilterString = (value) => configActions.updateConfig('filter.attributes.search', value)
-  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.attributes.uri_prefix', value)
-  const updateFilterEditor = (value) => configActions.updateConfig('filter.editors', value)
-  const createAttribute = () => elementActions.createElement('attributes')
+  const config = useSelector((state) => state.config)
+  const attributes = useSelector((state) => state.elements.attributes)
+
+  const updateFilterString = (value) => dispatch(updateConfig('filter.attributes.search', value))
+  const updateFilterUriPrefix = (value) => dispatch(updateConfig('filter.attributes.uri_prefix', value))
+  const updateFilterEditor = (value) => dispatch(updateConfig('filter.editors', value))
+  const createAttribute = () => dispatch(createElement('attributes'))
 
   return (
     <div className="panel panel-default">
@@ -49,20 +56,12 @@ const Attributes = ({ config, attributes, configActions, elementActions }) => {
       {
         attributes.map((attribute, index) => (
           <Attribute key={index} config={config} attribute={attribute}
-                     configActions={configActions} elementActions={elementActions}
                      filter="attributes" filterEditors={true} />
         ))
       }
       </ul>
     </div>
   )
-}
-
-Attributes.propTypes = {
-  config: PropTypes.object.isRequired,
-  attributes: PropTypes.array.isRequired,
-  configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
 }
 
 export default Attributes

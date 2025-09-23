@@ -9,8 +9,8 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 
 import Pending from '../../../core/assets/js/containers/Pending'
 
-import Main from './containers/Main'
-import Sidebar from './containers/Sidebar'
+import Main from './components/Main'
+import Sidebar from './components/Sidebar'
 
 const store = configureStore()
 

@@ -1,11 +1,17 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+
+import { fetchElement } from '../../actions/elementActions'
 
 import { ExtendLink, CodeLink } from '../common/Links'
 
 import useBool from '../../hooks/useBool'
 
-const AttributeInfo = ({ attribute, elements, elementActions }) => {
+const AttributeInfo = ({ attribute }) => {
+  const dispatch = useDispatch()
+
+  const elements = useSelector((state) => state.elements)
 
   const [extendAttributes, toggleAttributes] = useBool(false)
   const [extendConditions, toggleConditions] = useBool(false)
@@ -21,12 +27,12 @@ const AttributeInfo = ({ attribute, elements, elementActions }) => {
   const questions = elements.questions.filter(e => attribute.questions.includes(e.id))
   const tasks = elements.tasks.filter(e => attribute.tasks.includes(e.id))
 
-  const fetchAttribute = (attribute) => elementActions.fetchElement('attributes', attribute.id)
-  const fetchCondition = (condition) => elementActions.fetchElement('conditions', condition.id)
-  const fetchPage = (page) => elementActions.fetchElement('pages', page.id)
-  const fetchQuestionSet = (questionset) => elementActions.fetchElement('questionsets', questionset.id)
-  const fetchQuestion = (question) => elementActions.fetchElement('questions', question.id)
-  const fetchTask = (task) => elementActions.fetchElement('tasks', task.id)
+  const fetchAttribute = (attribute) => dispatch(fetchElement('attributes', attribute.id))
+  const fetchCondition = (condition) => dispatch(fetchElement('conditions', condition.id))
+  const fetchPage = (page) => dispatch(fetchElement('pages', page.id))
+  const fetchQuestionSet = (questionset) => dispatch(fetchElement('questionsets', questionset.id))
+  const fetchQuestion = (question) => dispatch(fetchElement('questions', question.id))
+  const fetchTask = (task) => dispatch(fetchElement('tasks', task.id))
 
   return (
     <div className="element-info">
@@ -133,9 +139,7 @@ const AttributeInfo = ({ attribute, elements, elementActions }) => {
 }
 
 AttributeInfo.propTypes = {
-  attribute: PropTypes.object.isRequired,
-  elements: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
+  attribute: PropTypes.object.isRequired
 }
 
 export default AttributeInfo
