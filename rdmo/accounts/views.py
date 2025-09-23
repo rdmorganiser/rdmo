@@ -44,7 +44,6 @@ def remove_user(request):
         log.debug('Remove user %s', request.user.username)
 
         form = RemoveForm(request.POST or None, user=request.user)
-        print(request.POST)
 
         if request.method == 'POST' and form.is_valid():
             user_is_deleted = delete_user(user=request.user,
@@ -108,9 +107,7 @@ def terms_of_use_accept(request):
     form = AcceptConsentForm(request.POST or None, user=request.user)
 
     if request.method == "POST":
-        print(request.POST)
         if form.is_valid():
-            print(2)
             consent_saved = form.save(request.session)  # saves the consent and sets the session key
             if consent_saved:
                 return redirect("home")

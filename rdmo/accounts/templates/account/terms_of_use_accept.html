@@ -16,6 +16,10 @@
             <button type="submit" class="btn btn-primary">
                 {% trans 'Submit' %}
             </button>
+
+            {% for error in form.non_field_errors %}
+            <div class="text-danger mt-3">{{ error }}</div>
+            {% endfor %}
         </form>
 
         {% else %}
