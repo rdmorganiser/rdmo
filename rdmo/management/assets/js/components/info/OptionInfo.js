@@ -1,17 +1,23 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+
+import { fetchElement } from '../../actions/elementActions'
 
 import { ExtendLink, CodeLink } from '../common/Links'
 
 import useBool from '../../hooks/useBool'
 
-const OptionInfo = ({ option, elements, elementActions }) => {
+const OptionInfo = ({ option }) => {
+  const dispatch = useDispatch()
+
+  const elements = useSelector((state) => state.elements)
 
   const [extendConditions, toggleConditions] = useBool(false)
 
   const conditions = elements.conditions.filter(e => option.conditions.includes(e.id))
 
-  const fetchCondition = (condition) => elementActions.fetchElement('conditions', condition.id)
+  const fetchCondition = (condition) => dispatch(fetchElement('conditions', condition.id))
 
   return (
     <div className="element-info">
@@ -41,9 +47,7 @@ const OptionInfo = ({ option, elements, elementActions }) => {
 }
 
 OptionInfo.propTypes = {
-  option: PropTypes.object.isRequired,
-  elements: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
+  option: PropTypes.object.isRequired
 }
 
 export default OptionInfo

@@ -1,9 +1,10 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap'
-import get from 'lodash/get'
-import isUndefined from 'lodash/isUndefined'
-import orderBy from 'lodash/orderBy'
+import { isUndefined, orderBy } from 'lodash'
+
+import { fetchElement, storeElement, createElement, deleteElement, updateElement } from '../../actions/elementActions'
 
 import Checkbox from './common/Checkbox'
 import MultiSelect from './common/MultiSelect'
@@ -21,52 +22,54 @@ import DeletePageModal from '../modals/DeletePageModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
 
-const EditPage = ({ config, page, elements, elementActions }) => {
+const EditPage = ({ page }) => {
+  const dispatch = useDispatch()
 
-  const { sites } = config
-  const { elementAction, parent, attributes, conditions } = elements
+  const { sites, settings } = useSelector((state) => state.config)
+  const { elementAction, parent, attributes,
+          conditions, questions, questionsets } = useSelector((state) => state.elements)
 
   const elementValues = orderBy(page.questions.concat(page.questionsets), ['order', 'uri'])
-  const elementOptions = elements.questions.map(question => ({
+  const elementOptions = questions.map(question => ({
     value: 'question-' + question.id,
     label: interpolate(gettext('Question: %s'), [question.uri])
-  })).concat(elements.questionsets.map(questionset => ({
+  })).concat(questionsets.map(questionset => ({
     value: 'questionset-' + questionset.id,
     label: interpolate(gettext('Question set: %s'), [questionset.uri])
   })))
 
   const updatePage = (key, value) => {
     if (key == 'elements') {
-      elementActions.updateElement(page, {
+      dispatch(updateElement(page, {
         questions: value.filter(e => !isUndefined(e.question)),
         questionsets: value.filter(e => !isUndefined(e.questionset))
-      })
+      }))
     } else {
-      elementActions.updateElement(page, { [key]: value })
+      dispatch(updateElement(page, { [key]: value }))
     }
   }
-  const storePage = (back) => elementActions.storeElement('pages', page, elementAction, back)
-  const deletePage = () => elementActions.deleteElement('pages', page)
+  const storePage = (back) => dispatch(storeElement('pages', page, elementAction, back))
+  const deletePage = () => dispatch(deleteElement('pages', page))
 
   const editElement = (value) => {
     if (value.questionset) {
-      elementActions.fetchElement('questionsets', value.questionset)
+      dispatch(fetchElement('questionsets', value.questionset))
     } else if (value.question) {
-      elementActions.fetchElement('questions', value.question)
+      dispatch(fetchElement('questions', value.question))
     }
   }
-  const createQuestionSet = () => elementActions.createElement('questionsets', { page })
-  const createQuestion = () => elementActions.createElement('questions', { page })
+  const createQuestionSet = () => dispatch(createElement('questionsets', { page }))
+  const createQuestion = () => dispatch(createElement('questions', { page }))
 
-  const editCondition = (condition) => elementActions.fetchElement('conditions', condition)
-  const createCondition = () => elementActions.createElement('conditions', { page })
+  const editCondition = (condition) => dispatch(fetchElement('conditions', condition))
+  const createCondition = () => dispatch(createElement('conditions', { page }))
 
-  const editAttribute = (attribute) => elementActions.fetchElement('attributes', attribute)
-  const createAttribute = () => elementActions.createElement('attributes', { page })
+  const editAttribute = (attribute) => dispatch(fetchElement('attributes', attribute))
+  const createAttribute = () => dispatch(createElement('attributes', { page }))
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
-  const info = <PageInfo page={page} elements={elements} elementActions={elementActions} />
+  const info = <PageInfo page={page} />
 
   // for reasons unknown, the strings are not picked up by makemessages from the props
   const addElementText = gettext('Add existing element')
@@ -107,41 +110,32 @@ const EditPage = ({ config, page, elements, elementActions }) => {
       <div className="panel-body">
         <div className="row">
           <div className="col-sm-6">
-            <UriPrefix config={config} element={page} field="uri_prefix"
-                  onChange={updatePage} />
+            <UriPrefix element={page} field="uri_prefix" onChange={updatePage} />
           </div>
           <div className="col-sm-6">
-            <Text config={config} element={page} field="uri_path"
-                  onChange={updatePage} />
+            <Text element={page} field="uri_path" onChange={updatePage} />
           </div>
         </div>
 
-        <Textarea config={config} element={page} field="comment"
-                  rows={4} onChange={updatePage} />
+        <Textarea element={page} field="comment" rows={4} onChange={updatePage} />
 
         <div className="row">
           <div className="col-sm-6">
-            <Checkbox config={config} element={page} field="locked"
-                      onChange={updatePage} />
+            <Checkbox element={page} field="locked" onChange={updatePage} />
           </div>
           <div className="col-sm-6">
-            <Checkbox config={config} element={page} field="is_collection"
-                      onChange={updatePage} />
+            <Checkbox element={page} field="is_collection" onChange={updatePage} />
           </div>
         </div>
 
         <Tabs id="#page-tabs" defaultActiveKey={0} animation={false}>
           {
-            config.settings && config.settings.languages.map(([lang_code, lang], index) => (
+            settings.languages.map(([lang_code, lang], index) => (
               <Tab key={index} eventKey={index} title={lang}>
-                <Text config={config} element={page} field={`title_${lang_code }`}
-                      onChange={updatePage} />
-                <Text config={config} element={page} field={`short_title_${lang_code }`}
-                      onChange={updatePage} />
-                <Textarea config={config} element={page} field={`help_${lang_code }`}
-                          rows={4} onChange={updatePage} />
-                <Text config={config} element={page} field={`verbose_name_${lang_code }`}
-                      onChange={updatePage} />
+                <Text element={page} field={`title_${lang_code }`} onChange={updatePage} />
+                <Text element={page} field={`short_title_${lang_code }`} onChange={updatePage} />
+                <Textarea element={page} field={`help_${lang_code }`} rows={4} onChange={updatePage} />
+                <Text element={page} field={`verbose_name_${lang_code }`} onChange={updatePage} />
               </Tab>
             ))
           }
@@ -149,22 +143,25 @@ const EditPage = ({ config, page, elements, elementActions }) => {
 
 
 
-        <Select config={config} element={page} field="attribute" createText={gettext('Create new attribute')}
+        <Select element={page} field="attribute" createText={gettext('Create new attribute')}
                 options={attributes} onChange={updatePage} onCreate={createAttribute} onEdit={editAttribute} />
 
-        <OrderedMultiSelect config={config} element={page} field="elements"
+        <OrderedMultiSelect element={page} field="elements"
                             values={elementValues} options={elementOptions}
                             addText={addElementText} createText={createQuestionText}
                             altCreateText={createQuestionSetText}
                             onChange={updatePage} onCreate={createQuestion} onAltCreate={createQuestionSet}
                             onEdit={editElement} />
 
-        <MultiSelect config={config} element={page} field="conditions" options={conditions}
+        <MultiSelect element={page} field="conditions" options={conditions}
                      addText={gettext('Add existing condition')} createText={gettext('Create new condition')}
                      onChange={updatePage} onCreate={createCondition} onEdit={editCondition} />
 
-        {get(config, 'settings.multisite') && <Select config={config} element={page} field="editors"
-                                                      options={sites} onChange={updatePage} isMulti />}
+        {
+          settings.multisite && (
+            <Select element={page} field="editors" options={sites} onChange={updatePage} isMulti />
+          )
+        }
       </div>
 
       <div className="panel-footer">
@@ -183,10 +180,7 @@ const EditPage = ({ config, page, elements, elementActions }) => {
 }
 
 EditPage.propTypes = {
-  config: PropTypes.object.isRequired,
-  page: PropTypes.object.isRequired,
-  elements: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
+  page: PropTypes.object.isRequired
 }
 
 export default EditPage

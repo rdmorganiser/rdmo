@@ -1,6 +1,9 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import get from 'lodash/get'
+import { get } from 'lodash'
+
+import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 
 import { getUriPrefixes } from '../../utils/filter'
 
@@ -11,12 +14,15 @@ import { BackButton } from '../common/Buttons'
 import Option from '../element/Option'
 import OptionSet from '../element/OptionSet'
 
-const NestedOptionSet = ({ config, optionset, configActions, elementActions }) => {
+const NestedOptionSet = ({ optionset }) => {
+  const dispatch = useDispatch()
 
-  const updateFilterString = (uri) => configActions.updateConfig('filter.optionset.search', uri)
-  const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.optionset.uri_prefix', uriPrefix)
+  const config = useSelector((state) => state.config)
 
-  const updateDisplayURI = (value) => configActions.updateConfig('display.uri.options', value)
+  const updateFilterString = (uri) => dispatch(updateConfig('filter.optionset.search', uri))
+  const updateFilterUriPrefix = (uriPrefix) => dispatch(updateConfig('filter.optionset.uri_prefix', uriPrefix))
+
+  const updateDisplayURI = (value) => dispatch(updateConfig('display.uri.options', value))
 
   return (
     <>
@@ -25,8 +31,7 @@ const NestedOptionSet = ({ config, optionset, configActions, elementActions }) =
           <div className="pull-right">
             <BackButton />
           </div>
-          <OptionSet config={config} optionset={optionset}
-                     configActions={configActions} elementActions={elementActions} display="plain" />
+          <OptionSet optionset={optionset} display="plain" />
         </div>
 
         <div className="panel-body">
@@ -50,9 +55,7 @@ const NestedOptionSet = ({ config, optionset, configActions, elementActions }) =
 
       {
         optionset.elements.map((option, index) => (
-          <Option key={index} config={config} option={option}
-                  configActions={configActions} elementActions={elementActions}
-                  display="nested" filter="optionset" indent={1} />
+          <Option key={index} option={option} display="nested" filter="optionset" indent={1} />
         ))
       }
     </>
@@ -60,10 +63,7 @@ const NestedOptionSet = ({ config, optionset, configActions, elementActions }) =
 }
 
 NestedOptionSet.propTypes = {
-  config: PropTypes.object.isRequired,
-  optionset: PropTypes.object.isRequired,
-  configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
+  optionset: PropTypes.object.isRequired
 }
 
 export default NestedOptionSet

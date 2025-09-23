@@ -1,7 +1,10 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import get from 'lodash/get'
 
+import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+
+import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
 
 import { FilterString, FilterUriPrefix, FilterSite} from '../common/Filter'
@@ -10,17 +13,21 @@ import { Checkbox } from '../common/Checkboxes'
 
 import Task from '../element/Task'
 
-const Tasks = ({ config, tasks, configActions, elementActions }) => {
+const Tasks = () => {
+  const dispatch = useDispatch()
 
-  const updateFilterString = (value) => configActions.updateConfig('filter.tasks.search', value)
-  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.tasks.uri_prefix', value)
-  const updateFilterSite = (value) => configActions.updateConfig('filter.sites', value)
-  const updateFilterEditor = (value) => configActions.updateConfig('filter.editors', value)
+  const config = useSelector((state) => state.config)
+  const tasks = useSelector((state) => state.elements.tasks)
 
-  const updateDisplayTasksURI = (value) => configActions.updateConfig('display.uri.tasks', value)
-  const updateDisplayConditionsURI = (value) => configActions.updateConfig('display.uri.conditions', value)
+  const updateFilterString = (value) => dispatch(updateConfig('filter.tasks.search', value))
+  const updateFilterUriPrefix = (value) => dispatch(updateConfig('filter.tasks.uri_prefix', value))
+  const updateFilterSite = (value) => dispatch(updateConfig('filter.sites', value))
+  const updateFilterEditor = (value) => dispatch(updateConfig('filter.editors', value))
 
-  const createTask = () => elementActions.createElement('tasks')
+  const updateDisplayTasksURI = (value) => dispatch(updateConfig('display.uri.tasks', value))
+  const updateDisplayConditionsURI = (value) => dispatch(updateConfig('display.uri.conditions', value))
+
+  const createTask = () => dispatch(createElement('tasks'))
 
   return (
     <div className="panel panel-default">
@@ -69,20 +76,12 @@ const Tasks = ({ config, tasks, configActions, elementActions }) => {
       {
         tasks.map((task, index) => (
           <Task key={index} config={config} task={task}
-                configActions={configActions} elementActions={elementActions}
                 filter="tasks" filterSites={true} filterEditors={true} />
         ))
       }
       </ul>
     </div>
   )
-}
-
-Tasks.propTypes = {
-  config: PropTypes.object.isRequired,
-  tasks: PropTypes.array.isRequired,
-  configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
 }
 
 export default Tasks

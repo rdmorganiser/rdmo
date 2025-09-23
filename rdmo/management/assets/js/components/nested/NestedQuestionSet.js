@@ -1,9 +1,13 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import get from 'lodash/get'
-import isEmpty from 'lodash/isEmpty'
+import { get, isEmpty } from 'lodash'
+
+import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 
 import Link from 'rdmo/core/assets/js/components/Link'
+
+import { toggleDescendants } from '../../actions/elementActions'
 
 import { getUriPrefixes } from '../../utils/filter'
 
@@ -15,18 +19,21 @@ import { Drop } from '../common/DragAndDrop'
 import QuestionSet from '../element/QuestionSet'
 import Question from '../element/Question'
 
-const NestedQuestionSet = ({ config, questionset, configActions, elementActions }) => {
+const NestedQuestionSet = ({ questionset }) => {
+  const dispatch = useDispatch()
 
-  const updateFilterString = (uri) => configActions.updateConfig('filter.questionset.search', uri)
-  const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.questionset.uri_prefix', uriPrefix)
+  const config = useSelector((state) => state.config)
 
-  const toggleQuestionSets = () => elementActions.toggleDescendants(questionset, 'questionsets')
+  const updateFilterString = (uri) => dispatch(updateConfig('filter.questionset.search', uri))
+  const updateFilterUriPrefix = (uriPrefix) => dispatch(updateConfig('filter.questionset.uri_prefix', uriPrefix))
 
-  const updateDisplayQuestionSetsURI = (value) => configActions.updateConfig('display.uri.questionsets', value)
-  const updateDisplayQuestionsURI = (value) => configActions.updateConfig('display.uri.questions', value)
-  const updateDisplayAttributesURI = (value) => configActions.updateConfig('display.uri.attributes', value)
-  const updateDisplayConditionsURI = (value) => configActions.updateConfig('display.uri.conditions', value)
-  const updateDisplayOptionSetURI = (value) => configActions.updateConfig('display.uri.optionsets', value)
+  const toggleQuestionSets = () => dispatch(toggleDescendants(questionset, 'questionsets'))
+
+  const updateDisplayQuestionSetsURI = (value) => dispatch(updateConfig('display.uri.questionsets', value))
+  const updateDisplayQuestionsURI = (value) => dispatch(updateConfig('display.uri.questions', value))
+  const updateDisplayAttributesURI = (value) => dispatch(updateConfig('display.uri.attributes', value))
+  const updateDisplayConditionsURI = (value) => dispatch(updateConfig('display.uri.conditions', value))
+  const updateDisplayOptionSetURI = (value) => dispatch(updateConfig('display.uri.optionsets', value))
 
   return (
     <>
@@ -35,8 +42,7 @@ const NestedQuestionSet = ({ config, questionset, configActions, elementActions 
           <div className="pull-right">
             <BackButton />
           </div>
-          <QuestionSet config={config} questionset={questionset}
-                       configActions={configActions} elementActions={elementActions} display="plain" />
+          <QuestionSet questionset={questionset} display="plain" />
         </div>
 
         <div className="panel-body">
@@ -71,18 +77,14 @@ const NestedQuestionSet = ({ config, questionset, configActions, elementActions 
       </div>
       {
         !isEmpty(questionset.elements) &&
-        <Drop element={questionset.elements[0]} elementActions={elementActions} indent={1} mode="before" />
+        <Drop element={questionset.elements[0]} indent={1} mode="before" />
       }
       {
         questionset.elements.map((element, index) => {
           if (element.model == 'questions.questionset') {
-            return <QuestionSet key={index} config={config} questionset={element}
-                                configActions={configActions} elementActions={elementActions}
-                                display="nested" filter="questionset" indent={1} />
+            return <QuestionSet key={index} questionset={element} display="nested" filter="questionset" indent={1} />
           } else {
-            return <Question key={index} config={config} question={element}
-                             configActions={configActions} elementActions={elementActions}
-                             display="nested" filter="questionset" indent={1} />
+            return <Question key={index} question={element} display="nested" filter="questionset" indent={1} />
           }
         })
       }
@@ -91,10 +93,7 @@ const NestedQuestionSet = ({ config, questionset, configActions, elementActions 
 }
 
 NestedQuestionSet.propTypes = {
-  config: PropTypes.object.isRequired,
   questionset: PropTypes.object.isRequired,
-  configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
 }
 
 export default NestedQuestionSet

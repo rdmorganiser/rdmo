@@ -1,5 +1,8 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+
+import { fetchElement, storeElement, createElement } from '../../actions/elementActions'
 
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
@@ -8,8 +11,10 @@ import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AddLink, LockedLink, NestedLink, ExportLink, CodeLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 
-const Attribute = ({ config, attribute, elementActions, display='list', indent=0,
-                     filter=null, filterEditors=false }) => {
+const Attribute = ({ attribute, display='list', indent=0, filter=null, filterEditors=false }) => {
+  const dispatch = useDispatch()
+
+  const config = useSelector((state) => state.config)
 
   const showElement = filterElement(config, filter, false, filterEditors, attribute)
 
@@ -18,12 +23,12 @@ const Attribute = ({ config, attribute, elementActions, display='list', indent=0
   const nestedUrl = buildPath('attributes', attribute.id, 'nested')
   const exportUrl = buildApiPath('domain', 'attributes', attribute.id, 'export')
 
-  const fetchEdit = () => elementActions.fetchElement('attributes', attribute.id)
-  const fetchCopy = () => elementActions.fetchElement('attributes', attribute.id, 'copy')
-  const fetchNested = () => elementActions.fetchElement('attributes', attribute.id, 'nested')
-  const toggleLocked = () => elementActions.storeElement('attributes', {...attribute, locked: !attribute.locked })
+  const fetchEdit = () => dispatch(fetchElement('attributes', attribute.id))
+  const fetchCopy = () => dispatch(fetchElement('attributes', attribute.id, 'copy'))
+  const fetchNested = () => dispatch(fetchElement('attributes', attribute.id, 'nested'))
+  const toggleLocked = () => dispatch(storeElement('attributes', {...attribute, locked: !attribute.locked }))
 
-  const createAttribute = () => elementActions.createElement('attributes', { attribute })
+  const createAttribute = () => dispatch(createElement('attributes', { attribute }))
 
   const elementNode = (
     <div className="element">
@@ -68,8 +73,7 @@ const Attribute = ({ config, attribute, elementActions, display='list', indent=0
           }
           {
             attribute.elements.map((attribute, index) => (
-              <Attribute key={index} config={config} attribute={attribute} elementActions={elementActions}
-                         display="nested" filter={filter} indent={indent + 1} />
+              <Attribute key={index} attribute={attribute} display="nested" filter={filter} indent={indent + 1} />
             ))
           }
         </>
@@ -80,9 +84,7 @@ const Attribute = ({ config, attribute, elementActions, display='list', indent=0
 }
 
 Attribute.propTypes = {
-  config: PropTypes.object.isRequired,
   attribute: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired,
   display: PropTypes.string,
   indent: PropTypes.number,
   filter: PropTypes.string,

@@ -1,7 +1,10 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import get from 'lodash/get'
 
+import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+
+import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
 
 import { FilterString, FilterUriPrefix, FilterSite} from '../common/Filter'
@@ -10,15 +13,19 @@ import { BackButton, NewButton } from '../common/Buttons'
 
 import Catalog from '../element/Catalog'
 
-const Catalogs = ({ config, catalogs, configActions, elementActions }) => {
+const Catalogs = () => {
+  const dispatch = useDispatch()
 
-  const updateFilterString = (value) => configActions.updateConfig('filter.catalogs.search', value)
-  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.catalogs.uri_prefix', value)
-  const updateFilterSite = (value) => configActions.updateConfig('filter.sites', value)
-  const updateFilterEditor = (value) => configActions.updateConfig('filter.editors', value)
-  const updateDisplayCatalogURI = (value) => configActions.updateConfig('display.uri.catalogs', value)
+  const config = useSelector((state) => state.config)
+  const catalogs = useSelector((state) => state.elements.catalogs)
 
-  const createCatalog = () => elementActions.createElement('catalogs')
+  const updateFilterString = (value) => dispatch(updateConfig('filter.catalogs.search', value))
+  const updateFilterUriPrefix = (value) => dispatch(updateConfig('filter.catalogs.uri_prefix', value))
+  const updateFilterSite = (value) => dispatch(updateConfig('filter.sites', value))
+  const updateFilterEditor = (value) => dispatch(updateConfig('filter.editors', value))
+  const updateDisplayCatalogURI = (value) => dispatch(updateConfig('display.uri.catalogs', value))
+
+  const createCatalog = () => dispatch(createElement('catalogs'))
 
   return (
     <div className="panel panel-default">
@@ -64,20 +71,12 @@ const Catalogs = ({ config, catalogs, configActions, elementActions }) => {
       {
         catalogs.map((catalog, index) => (
           <Catalog key={index} config={config} catalog={catalog}
-                   configActions={configActions} elementActions={elementActions}
                    filter="catalogs" filterSites={true} filterEditors={true} />
         ))
       }
       </ul>
     </div>
   )
-}
-
-Catalogs.propTypes = {
-  config: PropTypes.object.isRequired,
-  catalogs: PropTypes.array.isRequired,
-  configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
 }
 
 export default Catalogs

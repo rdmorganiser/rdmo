@@ -1,11 +1,17 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+
+import { fetchElement } from '../../actions/elementActions'
 
 import { ExtendLink, CodeLink } from '../common/Links'
 
 import useBool from '../../hooks/useBool'
 
-const ConditionInfo = ({ condition, elements, elementActions }) => {
+const ConditionInfo = ({ condition }) => {
+  const dispatch = useDispatch()
+
+  const elements = useSelector((state) => state.elements)
 
   const [extendOptionSets, toggleOptionSets] = useBool(false)
   const [extendPages, togglePages] = useBool(false)
@@ -19,11 +25,11 @@ const ConditionInfo = ({ condition, elements, elementActions }) => {
   const questions = elements.questions.filter(e => condition.questions.includes(e.id))
   const tasks = elements.tasks.filter(e => condition.tasks.includes(e.id))
 
-  const fetchOptionSet = (optionset) => elementActions.fetchElement('optionsets', optionset.id)
-  const fetchPage = (page) => elementActions.fetchElement('pages', page.id)
-  const fetchQuestionSet = (questionset) => elementActions.fetchElement('questionsets', questionset.id)
-  const fetchQuestion = (question) => elementActions.fetchElement('questions', question.id)
-  const fetchTask = (task) => elementActions.fetchElement('tasks', task.id)
+  const fetchOptionSet = (optionset) => dispatch(fetchElement('optionsets', optionset.id))
+  const fetchPage = (page) => dispatch(fetchElement('pages', page.id))
+  const fetchQuestionSet = (questionset) => dispatch(fetchElement('questionsets', questionset.id))
+  const fetchQuestion = (question) => dispatch(fetchElement('questions', question.id))
+  const fetchTask = (task) => dispatch(fetchElement('tasks', task.id))
 
   return (
     <div className="element-info">
@@ -107,9 +113,7 @@ const ConditionInfo = ({ condition, elements, elementActions }) => {
 }
 
 ConditionInfo.propTypes = {
-  condition: PropTypes.object.isRequired,
-  elements: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
+  condition: PropTypes.object.isRequired
 }
 
 export default ConditionInfo

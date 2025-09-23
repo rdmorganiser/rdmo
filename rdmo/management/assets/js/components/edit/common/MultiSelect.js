@@ -1,4 +1,5 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import ReactSelect from 'react-select'
 import classNames from 'classnames'
@@ -10,10 +11,12 @@ import Link from 'rdmo/core/assets/js/components/Link'
 
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
-const MultiSelect = ({ config, element, field, options, addText, createText, onChange, onCreate, onEdit }) => {
+const MultiSelect = ({ element, field, options, addText, createText, onChange, onCreate, onEdit }) => {
+  const { meta } = useSelector((state) => state.config)
+
   const id = getId(element, field),
-        label = getLabel(config, element, field),
-        help = getHelp(config, element, field),
+        label = getLabel(element, field, meta),
+        help = getHelp(element, field, meta),
         warnings = get(element, ['warnings', field]),
         errors = get(element, ['errors', field])
 
@@ -102,7 +105,6 @@ const MultiSelect = ({ config, element, field, options, addText, createText, onC
 }
 
 MultiSelect.propTypes = {
-  config: PropTypes.object,
   element: PropTypes.object,
   field: PropTypes.string,
   options: PropTypes.array,

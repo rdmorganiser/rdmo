@@ -1,11 +1,17 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+
+import { fetchElement } from '../../actions/elementActions'
 
 import { ExtendLink, CodeLink } from '../common/Links'
 
 import useBool from '../../hooks/useBool'
 
-const QuestionInfo = ({ question, elements, elementActions }) => {
+const QuestionInfo = ({ question }) => {
+  const dispatch = useDispatch()
+
+  const elements = useSelector((state) => state.elements)
 
   const [extendPages, togglePages] = useBool(false)
   const [extendQuestionSet, toggleQuestionSets] = useBool(false)
@@ -13,8 +19,8 @@ const QuestionInfo = ({ question, elements, elementActions }) => {
   const pages = elements.pages.filter(e => question.pages.includes(e.id))
   const questionsets = elements.questionsets.filter(e => question.questionsets.includes(e.id))
 
-  const fetchPage = (page) => elementActions.fetchElement('pages', page.id)
-  const fetchQuestionSet = (questionset) => elementActions.fetchElement('questionsets', questionset.id)
+  const fetchPage = (page) => dispatch(fetchElement('pages', page.id))
+  const fetchQuestionSet = (questionset) => dispatch(fetchElement('questionsets', questionset.id))
 
   return (
     <div className="element-info">
@@ -53,9 +59,7 @@ const QuestionInfo = ({ question, elements, elementActions }) => {
 }
 
 QuestionInfo.propTypes = {
-  question: PropTypes.object.isRequired,
-  elements: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
+  question: PropTypes.object.isRequired
 }
 
 export default QuestionInfo

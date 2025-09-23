@@ -1,6 +1,9 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
+
+import { fetchElement, storeElement, createElement } from '../../actions/elementActions'
 
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
@@ -12,8 +15,10 @@ import { EditLink, CopyLink, AddLink, LockedLink,
 import { ReadOnlyIcon } from '../common/Icons'
 import { Drag, Drop } from '../common/DragAndDrop'
 
-const QuestionSet = ({ config, questionset, configActions, elementActions, display='list', indent=0,
-                       filter=false, filterEditors=false, order }) => {
+const QuestionSet = ({ questionset, display='list', indent=0, filter=false, filterEditors=false, order }) => {
+  const dispatch = useDispatch()
+
+  const config = useSelector((state) => state.config)
 
   const showElement = filterElement(config, filter, false, filterEditors, questionset)
   const showElements = get(config, `display.elements.questionsets.${questionset.id}`, true)
@@ -26,17 +31,17 @@ const QuestionSet = ({ config, questionset, configActions, elementActions, displ
 
   const getConditionUrl = (index) => buildPath('conditions', questionset.conditions[index])
 
-  const fetchEdit = () => elementActions.fetchElement('questionsets', questionset.id)
-  const fetchCopy = () => elementActions.fetchElement('questionsets', questionset.id, 'copy')
-  const fetchNested = () => elementActions.fetchElement('questionsets', questionset.id, 'nested')
-  const toggleLocked = () => elementActions.storeElement('questionsets', {...questionset, locked: !questionset.locked })
-  const toggleElements = () => elementActions.toggleElements(questionset)
+  const fetchEdit = () => dispatch(fetchElement('questionsets', questionset.id))
+  const fetchCopy = () => dispatch(fetchElement('questionsets', questionset.id, 'copy'))
+  const fetchNested = () => dispatch(fetchElement('questionsets', questionset.id, 'nested'))
+  const toggleLocked = () => dispatch(storeElement('questionsets', {...questionset, locked: !questionset.locked }))
+  const toggleElements = () => dispatch(toggleElements(questionset))
 
-  const createQuestionSet = () => elementActions.createElement('questionsets', { questionset })
-  const createQuestion = () => elementActions.createElement('questions', { questionset })
+  const createQuestionSet = () => dispatch(createElement('questionsets', { questionset }))
+  const createQuestion = () => dispatch(createElement('questions', { questionset }))
 
-  const fetchAttribute = () => elementActions.fetchElement('attributes', questionset.attribute)
-  const fetchCondition = (index) => elementActions.fetchElement('conditions', questionset.conditions[index])
+  const fetchAttribute = () => dispatch(fetchElement('attributes', questionset.attribute))
+  const fetchCondition = (index) => dispatch(fetchElement('conditions', questionset.conditions[index]))
 
   const elementNode = (
     <div className="element">
@@ -109,7 +114,7 @@ const QuestionSet = ({ config, questionset, configActions, elementActions, displ
         <>
           {
             showElement && (
-              <Drop element={questionset} elementActions={elementActions}>
+              <Drop element={questionset}>
                 <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
                   <div className="panel-heading">
                     { elementNode }
@@ -124,18 +129,16 @@ const QuestionSet = ({ config, questionset, configActions, elementActions, displ
                 const questionSetInfo = questionset.questionsets.find(info => info.questionset === element.id)
                 const questionSetOrder = questionSetInfo ? questionSetInfo.order : undefined
                 return <QuestionSet key={index} config={config} questionset={element}
-                                    configActions={configActions} elementActions={elementActions}
                                     display="nested" filter={filter} indent={indent + 1} order={questionSetOrder}  />
               } else {
                 const questionInfo = questionset.questions.find(info => info.question === element.id)
                 const questionOrder = questionInfo ? questionInfo.order : undefined
                 return <Question key={index} config={config} question={element}
-                                 configActions={configActions} elementActions={elementActions}
                                  display="nested" filter={filter} indent={indent + 1} order={questionOrder} />
               }
             })
           }
-          <Drop element={questionset} elementActions={elementActions} indent={indent} mode="after" />
+          <Drop element={questionset} indent={indent} mode="after" />
         </>
       )
     case 'plain':
@@ -144,10 +147,7 @@ const QuestionSet = ({ config, questionset, configActions, elementActions, displ
 }
 
 QuestionSet.propTypes = {
-  config: PropTypes.object.isRequired,
   questionset: PropTypes.object.isRequired,
-  configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired,
   display: PropTypes.string,
   indent: PropTypes.number,
   filter: PropTypes.string,

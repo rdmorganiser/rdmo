@@ -1,7 +1,10 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import get from 'lodash/get'
 
+import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+
+import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
 
 import { FilterString, FilterUriPrefix, FilterSite } from '../common/Filter'
@@ -10,15 +13,19 @@ import { BackButton, NewButton } from '../common/Buttons'
 
 import Section from '../element/Section'
 
-const Sections = ({ config, sections, configActions, elementActions }) => {
+const Sections = () => {
+  const dispatch = useDispatch()
 
-  const updateFilterString = (value) => configActions.updateConfig('filter.sections.search', value)
-  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.sections.uri_prefix', value)
-  const updateFilterEditor = (value) => configActions.updateConfig('filter.editors', value)
+  const config = useSelector((state) => state.config)
+  const sections = useSelector((state) => state.elements.sections)
 
-  const updateDisplaySectionURI = (value) => configActions.updateConfig('display.uri.sections', value)
+  const updateFilterString = (value) => dispatch(updateConfig('filter.sections.search', value))
+  const updateFilterUriPrefix = (value) => dispatch(updateConfig('filter.sections.uri_prefix', value))
+  const updateFilterEditor = (value) => dispatch(updateConfig('filter.editors', value))
 
-  const createSection = () => elementActions.createElement('sections')
+  const updateDisplaySectionURI = (value) => dispatch(updateConfig('display.uri.sections', value))
+
+  const createSection = () => dispatch(createElement('sections'))
 
   return (
     <div className="panel panel-default">
@@ -58,20 +65,12 @@ const Sections = ({ config, sections, configActions, elementActions }) => {
       {
         sections.map((section, index) => (
           <Section key={index} config={config} section={section}
-                   configActions={configActions} elementActions={elementActions}
                    filter="sections" filterEditors={true} />
         ))
       }
       </ul>
     </div>
   )
-}
-
-Sections.propTypes = {
-  config: PropTypes.object.isRequired,
-  sections: PropTypes.array.isRequired,
-  configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
 }
 
 export default Sections

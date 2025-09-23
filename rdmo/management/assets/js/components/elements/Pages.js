@@ -1,7 +1,10 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import get from 'lodash/get'
 
+import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+
+import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
 
 import { FilterString, FilterUriPrefix, FilterSite } from '../common/Filter'
@@ -10,17 +13,21 @@ import { BackButton, NewButton } from '../common/Buttons'
 
 import Page from '../element/Page'
 
-const Pages = ({ config, pages, configActions, elementActions }) => {
+const Pages = () => {
+  const dispatch = useDispatch()
 
-  const updateFilterString = (value) => configActions.updateConfig('filter.pages.search', value)
-  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.pages.uri_prefix', value)
-  const updateFilterEditor = (value) => configActions.updateConfig('filter.editors', value)
+  const config = useSelector((state) => state.config)
+  const pages = useSelector((state) => state.elements.pages)
 
-  const updateDisplayPagesURI = (value) => configActions.updateConfig('display.uri.pages', value)
-  const updateDisplayAttributesURI = (value) => configActions.updateConfig('display.uri.attributes', value)
-  const updateDisplayConditionsURI = (value) => configActions.updateConfig('display.uri.conditions', value)
+  const updateFilterString = (value) => dispatch(updateConfig('filter.pages.search', value))
+  const updateFilterUriPrefix = (value) => dispatch(updateConfig('filter.pages.uri_prefix', value))
+  const updateFilterEditor = (value) => dispatch(updateConfig('filter.editors', value))
 
-  const createPage = () => elementActions.createElement('pages')
+  const updateDisplayPagesURI = (value) => dispatch(updateConfig('display.uri.pages', value))
+  const updateDisplayAttributesURI = (value) => dispatch(updateConfig('display.uri.attributes', value))
+  const updateDisplayConditionsURI = (value) => dispatch(updateConfig('display.uri.conditions', value))
+
+  const createPage = () => dispatch(createElement('pages'))
 
   return (
     <div className="panel panel-default">
@@ -64,20 +71,12 @@ const Pages = ({ config, pages, configActions, elementActions }) => {
       {
         pages.map((page, index) => (
           <Page key={index} config={config} page={page}
-                configActions={configActions} elementActions={elementActions}
                 filter="pages" filterEditors={true} />
         ))
       }
       </ul>
     </div>
   )
-}
-
-Pages.propTypes = {
-  config: PropTypes.object.isRequired,
-  pages: PropTypes.array.isRequired,
-  configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
 }
 
 export default Pages

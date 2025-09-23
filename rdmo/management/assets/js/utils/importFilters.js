@@ -22,7 +22,8 @@ function filterElementsByUriPrefix(elements, searchUriPrefix) {
 
 const useFilteredElements = (elements, selectFilterChanged, selectedUriPrefix, searchString) => {
   return useMemo(() => {
-    let filteredElements = filterElementsByChanged(elements, selectFilterChanged)
+    let filteredElements = elements
+    filteredElements = filterElementsByChanged(filteredElements, selectFilterChanged)
     filteredElements = filterElementsByUriPrefix(filteredElements, selectedUriPrefix)
     filteredElements = filterElementsByUri(filteredElements, searchString)
     return filteredElements

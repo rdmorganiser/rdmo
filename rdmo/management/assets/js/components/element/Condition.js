@@ -1,5 +1,8 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+
+import { fetchElement, storeElement } from '../../actions/elementActions'
 
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
@@ -8,7 +11,10 @@ import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 
-const Condition = ({ config, condition, elementActions, filter=false, filterEditors=false }) => {
+const Condition = ({ condition, filter=false, filterEditors=false }) => {
+  const dispatch = useDispatch()
+
+  const config = useSelector((state) => state.config)
 
   const showElement = filterElement(config, filter, false, filterEditors, condition)
 
@@ -16,9 +22,9 @@ const Condition = ({ config, condition, elementActions, filter=false, filterEdit
   const copyUrl = buildPath('conditions', condition.id, 'copy')
   const exportUrl = buildApiPath('conditions', 'conditions', condition.id, 'export')
 
-  const fetchEdit = () => elementActions.fetchElement('conditions', condition.id)
-  const fetchCopy = () => elementActions.fetchElement('conditions', condition.id, 'copy')
-  const toggleLocked = () => elementActions.storeElement('conditions', {...condition, locked: !condition.locked })
+  const fetchEdit = () => dispatch(fetchElement('conditions', condition.id))
+  const fetchCopy = () => dispatch(fetchElement('conditions', condition.id, 'copy'))
+  const toggleLocked = () => dispatch(storeElement('conditions', {...condition, locked: !condition.locked }))
 
   return showElement && (
     <li className="list-group-item">
@@ -45,9 +51,7 @@ const Condition = ({ config, condition, elementActions, filter=false, filterEdit
 }
 
 Condition.propTypes = {
-  config: PropTypes.object.isRequired,
   condition: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired,
   filter: PropTypes.string,
   filterEditors: PropTypes.bool
 }

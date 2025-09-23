@@ -1,6 +1,9 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
+
+import { fetchElement, storeElement, createElement } from '../../actions/elementActions'
 
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
@@ -10,7 +13,10 @@ import { EditLink, CopyLink, AddLink, LockedLink, NestedLink,
          ExportLink, CodeLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 
-const OptionSet = ({ config, optionset, elementActions, display='list', filter=false, filterEditors=false }) => {
+const OptionSet = ({ optionset, display='list', filter=false, filterEditors=false }) => {
+  const dispatch = useDispatch()
+
+  const config = useSelector((state) => state.config)
 
   const showElement = filterElement(config, filter, false, filterEditors, optionset)
 
@@ -21,13 +27,13 @@ const OptionSet = ({ config, optionset, elementActions, display='list', filter=f
 
   const getConditionUrl = (index) => buildPath(config.apiUrl, 'conditions', 'conditions', optionset.conditions[index])
 
-  const fetchEdit = () => elementActions.fetchElement('optionsets', optionset.id)
-  const fetchCopy = () => elementActions.fetchElement('optionsets', optionset.id, 'copy')
-  const fetchNested = () => elementActions.fetchElement('optionsets', optionset.id, 'nested')
-  const toggleLocked = () => elementActions.storeElement('optionsets', {...optionset, locked: !optionset.locked })
+  const fetchEdit = () => dispatch(fetchElement('optionsets', optionset.id))
+  const fetchCopy = () => dispatch(fetchElement('optionsets', optionset.id, 'copy'))
+  const fetchNested = () => dispatch(fetchElement('optionsets', optionset.id, 'nested'))
+  const toggleLocked = () => dispatch(storeElement('optionsets', {...optionset, locked: !optionset.locked }))
 
-  const createOption = () => elementActions.createElement('options', { optionset })
-  const fetchCondition = (index) => elementActions.fetchElement('conditions', optionset.conditions[index])
+  const createOption = () => dispatch(createElement('options', { optionset }))
+  const fetchCondition = (index) => dispatch(fetchElement('conditions', optionset.conditions[index]))
 
   const elementNode = (
     <div className="element">
@@ -77,9 +83,7 @@ const OptionSet = ({ config, optionset, elementActions, display='list', filter=f
 }
 
 OptionSet.propTypes = {
-  config: PropTypes.object.isRequired,
   optionset: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired,
   display: PropTypes.string,
   filter: PropTypes.string,
   filterEditors: PropTypes.bool

@@ -1,8 +1,11 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import uniqueId from 'lodash/uniqueId'
 
-const UriPrefix = ({ config, element, onChange }) => {
+const UriPrefix = ({ element, onChange }) => {
+  const config = useSelector((state) => state.config)
+
   const id = uniqueId('uriPrefix-'),
         value = element.uri_prefix
 
@@ -29,7 +32,6 @@ const UriPrefix = ({ config, element, onChange }) => {
 }
 
 UriPrefix.propTypes = {
-  config: PropTypes.object.isRequired,
   element: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired
 }

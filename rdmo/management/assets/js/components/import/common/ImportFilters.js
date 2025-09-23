@@ -1,16 +1,25 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import {FilterString, FilterUriPrefix} from '../../common/Filter'
-import get from 'lodash/get'
-import {getUriPrefixes} from '../../../utils/filter'
-import {Checkbox} from '../../common/Checkboxes'
+import { get } from 'lodash'
 
-const ImportFilters = ({ config, elements, changedElements, filteredElements, configActions, success= false}) => {
-  const updateFilterString = (value) => configActions.updateConfig('filter.import.elements.search', value)
+import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+
+import { FilterString, FilterUriPrefix } from '../../common/Filter'
+import { getUriPrefixes } from '../../../utils/filter'
+
+import { Checkbox } from '../../common/Checkboxes'
+
+const ImportFilters = ({ elements, changedElements, filteredElements, success = false}) => {
+  const dispatch = useDispatch()
+
+  const config = useSelector((state) => state.config)
+
+  const updateFilterString = (value) => dispatch(updateConfig('filter.import.elements.search', value))
   const getValueFilterString = () => get(config, 'filter.import.elements.search', '')
-  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.import.elements.uri_prefix', value)
+  const updateFilterUriPrefix = (value) => dispatch(updateConfig('filter.import.elements.uri_prefix', value))
   const getValueFilterUriPrefix = () => get(config, 'filter.import.elements.uri_prefix', '')
-  const updateFilterChanged = (value) => configActions.updateConfig('filter.import.elements.changed', value)
+  const updateFilterChanged = (value) => dispatch(updateConfig('filter.import.elements.changed', value))
   const getValueFilterChanged = () => get(config, 'filter.import.elements.changed', false)
 
   const filterCheckBoxText = interpolate(
@@ -46,11 +55,9 @@ const ImportFilters = ({ config, elements, changedElements, filteredElements, co
 }
 
 ImportFilters.propTypes = {
-  config: PropTypes.object.isRequired,
   elements: PropTypes.array.isRequired,
   changedElements: PropTypes.array.isRequired,
   filteredElements: PropTypes.array.isRequired,
-  configActions: PropTypes.object.isRequired,
   success: PropTypes.bool
 }
 

@@ -1,17 +1,23 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+
+import { fetchElement } from '../../actions/elementActions'
 
 import { ExtendLink, CodeLink } from '../common/Links'
 
 import useBool from '../../hooks/useBool'
 
-const PageInfo = ({ page, elements, elementActions }) => {
+const PageInfo = ({ page }) => {
+  const dispatch = useDispatch()
+
+  const elements = useSelector((state) => state.elements)
 
   const [extendSections, toggleSections] = useBool(false)
 
   const sections = elements.sections.filter(e => page.sections.includes(e.id))
 
-  const fetchSection = (section) => elementActions.fetchElement('sections', section.id)
+  const fetchSection = (section) => dispatch(fetchElement('sections', section.id))
 
   return (
     <div className="element-info">
@@ -35,9 +41,7 @@ const PageInfo = ({ page, elements, elementActions }) => {
 }
 
 PageInfo.propTypes = {
-  page: PropTypes.object.isRequired,
-  elements: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
+  page: PropTypes.object.isRequired
 }
 
 export default PageInfo

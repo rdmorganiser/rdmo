@@ -1,7 +1,10 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { siteId } from 'rdmo/core/assets/js/utils/meta'
+
+import { fetchElement, storeElement } from '../../actions/elementActions'
 
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
@@ -10,7 +13,10 @@ import { ElementErrors } from '../common/Errors'
 import { EditLink, CopyLink, AvailableLink, LockedLink, ExportLink, CodeLink, ToggleCurrentSiteLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 
-const View = ({ config, view, elementActions, filter=false, filterSites=false, filterEditors=false }) => {
+const View = ({ view, filter=false, filterSites=false, filterEditors=false }) => {
+  const dispatch = useDispatch()
+
+  const config = useSelector((state) => state.config)
 
   const showElement = filterElement(config, filter, filterSites, filterEditors, view)
 
@@ -18,11 +24,11 @@ const View = ({ config, view, elementActions, filter=false, filterSites=false, f
   const copyUrl = buildPath('views', view.id, 'copy')
   const exportUrl = buildApiPath('views', 'views', view.id, 'export')
 
-  const fetchEdit = () => elementActions.fetchElement('views', view.id)
-  const fetchCopy = () => elementActions.fetchElement('views', view.id, 'copy')
-  const toggleAvailable = () => elementActions.storeElement('views', {...view, available: !view.available })
-  const toggleLocked = () => elementActions.storeElement('views', {...view, locked: !view.locked })
-  const toggleCurrentSite = () => elementActions.storeElement('views', view, 'toggle-site')
+  const fetchEdit = () => dispatch(fetchElement('views', view.id))
+  const fetchCopy = () => dispatch(fetchElement('views', view.id, 'copy'))
+  const toggleAvailable = () => dispatch(storeElement('views', {...view, available: !view.available }))
+  const toggleLocked = () => dispatch(storeElement('views', {...view, locked: !view.locked }))
+  const toggleCurrentSite = () => dispatch(storeElement('views', view, 'toggle-site'))
 
   return showElement && (
     <li className="list-group-item">
@@ -59,10 +65,7 @@ const View = ({ config, view, elementActions, filter=false, filterSites=false, f
 }
 
 View.propTypes = {
-  config: PropTypes.object.isRequired,
   view: PropTypes.object.isRequired,
-  configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired,
   filter: PropTypes.string,
   filterSites: PropTypes.bool,
   filterEditors: PropTypes.bool

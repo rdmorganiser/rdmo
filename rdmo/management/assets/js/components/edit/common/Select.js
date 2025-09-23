@@ -1,4 +1,5 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import ReactSelect from 'react-select'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
@@ -11,10 +12,12 @@ import Link from 'rdmo/core/assets/js/components/Link'
 
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
-const Select = ({ config, element, field, options, createText, isMulti, onChange, onCreate, onEdit }) => {
+const Select = ({ element, field, options, createText, isMulti, onChange, onCreate, onEdit }) => {
+  const { meta } = useSelector((state) => state.config)
+
   const id = getId(element, field),
-        label = getLabel(config, element, field),
-        help = getHelp(config, element, field),
+        label = getLabel(element, field, meta),
+        help = getHelp(element, field, meta),
         warnings = get(element, ['warnings', field]),
         errors = get(element, ['errors', field])
 
@@ -84,7 +87,6 @@ const Select = ({ config, element, field, options, createText, isMulti, onChange
 }
 
 Select.propTypes = {
-  config: PropTypes.object,
   element: PropTypes.object,
   field: PropTypes.string,
   options: PropTypes.array,

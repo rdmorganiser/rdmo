@@ -1,10 +1,14 @@
-// ImportAggregatedWarningsPanel.js
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import { ShowLink } from '../common/Links'
+import { get } from 'lodash'
+
+import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import { isTruthy } from 'rdmo/core/assets/js/utils/config'
+
 import { generateWarningListItems } from './common/WarningsListGroup'
-import {isTruthy} from 'rdmo/core/assets/js/utils/config'
-import get from 'lodash/get'
+
+import { ShowLink } from '../common/Links'
 
 // Function to aggregate warnings from elements
 const aggregateWarnings = (elements) => {
@@ -16,10 +20,14 @@ const aggregateWarnings = (elements) => {
   }, [])
 }
 
-const ImportAggregatedWarningsPanel = ({ config, elements, configActions }) => {
+const ImportAggregatedWarningsPanel = ({ elements }) => {
+  const dispatch = useDispatch()
+
+  const config = useSelector((state) => state.config)
+
   const updateShowWarnings = () => {
     const currentVal = isTruthy(get(config, 'filter.import.warnings.show', false))
-    configActions.updateConfig('filter.import.warnings.show', !currentVal)
+    dispatch(updateConfig('filter.import.warnings.show', !currentVal))
   }
 
   const showWarnings = isTruthy(get(config, 'filter.import.warnings.show', false))
@@ -49,9 +57,7 @@ const ImportAggregatedWarningsPanel = ({ config, elements, configActions }) => {
 }
 
 ImportAggregatedWarningsPanel.propTypes = {
-  config: PropTypes.object.isRequired,
-  elements: PropTypes.array.isRequired,
-  configActions: PropTypes.object.isRequired
+  elements: PropTypes.array.isRequired
 }
 
 export default ImportAggregatedWarningsPanel

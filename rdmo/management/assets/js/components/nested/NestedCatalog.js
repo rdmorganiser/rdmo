@@ -1,9 +1,13 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import get from 'lodash/get'
-import isEmpty from 'lodash/isEmpty'
+import { get, isEmpty } from 'lodash'
+
+import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 
 import Link from 'rdmo/core/assets/js/components/Link'
+
+import { toggleDescendants } from '../../actions/elementActions'
 
 import { getUriPrefixes } from '../../utils/filter'
 import { FilterString, FilterUriPrefix } from '../common/Filter'
@@ -14,23 +18,26 @@ import { Drop } from '../common/DragAndDrop'
 import Catalog from '../element/Catalog'
 import Section from '../element/Section'
 
-const NestedCatalog = ({ config, catalog, configActions, elementActions }) => {
+const NestedCatalog = ({ catalog }) => {
+  const dispatch = useDispatch()
 
-  const updateFilterString = (value) => configActions.updateConfig('filter.catalog.search', value)
-  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.catalog.uri_prefix', value)
+  const config = useSelector((state) => state.config)
 
-  const toggleSections = () => elementActions.toggleDescendants(catalog, 'sections')
-  const togglePages = () => elementActions.toggleDescendants(catalog, 'pages')
-  const toggleQuestionSets = () => elementActions.toggleDescendants(catalog, 'questionsets')
+  const updateFilterString = (value) => dispatch(updateConfig('filter.catalog.search', value))
+  const updateFilterUriPrefix = (value) => dispatch(updateConfig('filter.catalog.uri_prefix', value))
 
-  const updateDisplayCatalogURI = (value) => configActions.updateConfig('display.uri.catalogs', value)
-  const updateDisplaySectionsURI = (value) => configActions.updateConfig('display.uri.sections', value)
-  const updateDisplayPagesURI = (value) => configActions.updateConfig('display.uri.pages', value)
-  const updateDisplayQuestionSetsURI = (value) => configActions.updateConfig('display.uri.questionsets', value)
-  const updateDisplayQuestionsURI = (value) => configActions.updateConfig('display.uri.questions', value)
-  const updateDisplayAttributesURI = (value) => configActions.updateConfig('display.uri.attributes', value)
-  const updateDisplayConditionsURI = (value) => configActions.updateConfig('display.uri.conditions', value)
-  const updateDisplayOptionSetURI = (value) => configActions.updateConfig('display.uri.optionsets', value)
+  const toggleSections = () => dispatch(toggleDescendants(catalog, 'sections'))
+  const togglePages = () => dispatch(toggleDescendants(catalog, 'pages'))
+  const toggleQuestionSets = () => dispatch(toggleDescendants(catalog, 'questionsets'))
+
+  const updateDisplayCatalogURI = (value) => dispatch(updateConfig('display.uri.catalogs', value))
+  const updateDisplaySectionsURI = (value) => dispatch(updateConfig('display.uri.sections', value))
+  const updateDisplayPagesURI = (value) => dispatch(updateConfig('display.uri.pages', value))
+  const updateDisplayQuestionSetsURI = (value) => dispatch(updateConfig('display.uri.questionsets', value))
+  const updateDisplayQuestionsURI = (value) => dispatch(updateConfig('display.uri.questions', value))
+  const updateDisplayAttributesURI = (value) => dispatch(updateConfig('display.uri.attributes', value))
+  const updateDisplayConditionsURI = (value) => dispatch(updateConfig('display.uri.conditions', value))
+  const updateDisplayOptionSetURI = (value) => dispatch(updateConfig('display.uri.optionsets', value))
 
   return (
     <>
@@ -39,8 +46,7 @@ const NestedCatalog = ({ config, catalog, configActions, elementActions }) => {
           <div className="pull-right">
             <BackButton />
           </div>
-          <Catalog config={config} catalog={catalog}
-                   configActions={configActions} elementActions={elementActions} display="plain" />
+          <Catalog catalog={catalog} display="plain" />
         </div>
 
         <div className="panel-body">
@@ -83,7 +89,7 @@ const NestedCatalog = ({ config, catalog, configActions, elementActions }) => {
       </div>
       {
         !isEmpty(catalog.elements) &&
-        <Drop element={catalog.elements[0]} elementActions={elementActions} indent={0} mode="before" />
+        <Drop element={catalog.elements[0]} indent={0} mode="before" />
       }
       {
         catalog.elements.map((section, index) => {
@@ -91,16 +97,7 @@ const NestedCatalog = ({ config, catalog, configActions, elementActions }) => {
           const sectionOrder = sectionInfo ? sectionInfo.order : undefined
 
           return (
-            <Section key={index}
-              config={config}
-              section={section}
-              configActions={configActions}
-              elementActions={elementActions}
-              display="nested"
-              filter="catalog"
-              indent={0}
-              order={sectionOrder}
-            />
+            <Section key={index} section={section} display="nested" filter="catalog" indent={0} order={sectionOrder} />
           )
         })
       }
@@ -110,10 +107,7 @@ const NestedCatalog = ({ config, catalog, configActions, elementActions }) => {
 }
 
 NestedCatalog.propTypes = {
-  config: PropTypes.object.isRequired,
-  catalog: PropTypes.object.isRequired,
-  configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
+  catalog: PropTypes.object.isRequired
 }
 
 export default NestedCatalog

@@ -1,7 +1,10 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import get from 'lodash/get'
 
+import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+
+import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
 
 import { FilterString, FilterUriPrefix, FilterSite } from '../common/Filter'
@@ -9,13 +12,17 @@ import { BackButton, NewButton } from '../common/Buttons'
 
 import OptionSet from '../element/OptionSet'
 
-const OptionSets = ({ config, optionsets, configActions, elementActions}) => {
+const OptionSets = () => {
+  const dispatch = useDispatch()
 
-  const updateFilterString = (value) => configActions.updateConfig('filter.optionsets.search', value)
-  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.optionsets.uri_prefix', value)
-  const updateFilterEditor = (value) => configActions.updateConfig('filter.editors', value)
+  const config = useSelector((state) => state.config)
+  const optionsets = useSelector((state) => state.elements.optionsets)
 
-  const createOptionSet = () => elementActions.createElement('optionsets')
+  const updateFilterString = (value) => dispatch(updateConfig('filter.optionsets.search', value))
+  const updateFilterUriPrefix = (value) => dispatch(updateConfig('filter.optionsets.uri_prefix', value))
+  const updateFilterEditor = (value) => dispatch(updateConfig('filter.editors', value))
+
+  const createOptionSet = () => dispatch(createElement('optionsets'))
 
   return (
     <div className="panel panel-default">
@@ -50,20 +57,12 @@ const OptionSets = ({ config, optionsets, configActions, elementActions}) => {
       {
         optionsets.map((optionset, index) => (
           <OptionSet key={index} config={config} optionset={optionset}
-                     configActions={configActions} elementActions={elementActions}
                      filter="optionsets" filterEditors={true} />
         ))
       }
       </ul>
     </div>
   )
-}
-
-OptionSets.propTypes = {
-  config: PropTypes.object.isRequired,
-  optionsets: PropTypes.array.isRequired,
-  configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
 }
 
 export default OptionSets

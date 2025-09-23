@@ -1,7 +1,10 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
+
+import { fetchElement, storeElement, createElement, dropElement } from '../../actions/elementActions'
 
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
@@ -14,8 +17,10 @@ import { ReadOnlyIcon } from '../common/Icons'
 import { Drag, Drop } from '../common/DragAndDrop'
 
 
-const Section = ({ config, section, configActions, elementActions, display='list', indent=0,
-                   filter=false, filterEditors=false, order }) => {
+const Section = ({ section, display='list', indent=0, filter=false, filterEditors=false, order }) => {
+  const dispatch = useDispatch()
+
+  const config = useSelector((state) => state.config)
 
   const showElement = filterElement(config, filter, false, filterEditors, section)
   const showElements = get(config, `display.elements.sections.${section.id}`, true)
@@ -25,13 +30,13 @@ const Section = ({ config, section, configActions, elementActions, display='list
   const nestedUrl = buildPath('sections', section.id, 'nested')
   const exportUrl = buildApiPath('questions', 'sections', section.id, 'export')
 
-  const fetchEdit = () => elementActions.fetchElement('sections', section.id)
-  const fetchCopy = () => elementActions.fetchElement('sections', section.id, 'copy')
-  const fetchNested = () => elementActions.fetchElement('sections', section.id, 'nested')
-  const toggleLocked = () => elementActions.storeElement('sections', {...section, locked: !section.locked })
-  const toggleElements = () => elementActions.toggleElements(section)
+  const fetchEdit = () => dispatch(fetchElement('sections', section.id))
+  const fetchCopy = () => dispatch(fetchElement('sections', section.id, 'copy'))
+  const fetchNested = () => dispatch(fetchElement('sections', section.id, 'nested'))
+  const toggleLocked = () => dispatch(storeElement('sections', {...section, locked: !section.locked }))
+  const toggleElements = () => dispatch(toggleElements(section))
 
-  const createPage = () => elementActions.createElement('pages', { section })
+  const createPage = () => dispatch(createElement('pages', { section }))
 
   const elementNode = (
     <div className="element">
@@ -75,7 +80,7 @@ const Section = ({ config, section, configActions, elementActions, display='list
         <>
           {
             showElement && (
-              <Drop element={section} elementActions={elementActions}>
+              <Drop element={section}>
                 <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
                   <div className="panel-heading">
                     { elementNode }
@@ -86,7 +91,8 @@ const Section = ({ config, section, configActions, elementActions, display='list
           }
           {
             !isEmpty(section.elements) &&
-            <Drop element={section.elements[0]} elementActions={elementActions} indent={indent + 1} mode="before" />
+            <Drop element={section.elements[0]} indent={indent + 1} mode="before"
+                  dropElement={(...args) => dispatch(dropElement(...args))} />
           }
           {
             showElements && section.elements.map((page, index) => {
@@ -98,8 +104,6 @@ const Section = ({ config, section, configActions, elementActions, display='list
                   key={index}
                   config={config}
                   page={page}
-                  configActions={configActions}
-                  elementActions={elementActions}
                   display="nested"
                   filter={filter}
                   indent={indent + 1}
@@ -108,7 +112,7 @@ const Section = ({ config, section, configActions, elementActions, display='list
               )
             })
           }
-          <Drop element={section} elementActions={elementActions} indent={indent} mode="after" />
+          <Drop element={section} indent={indent} mode="after" />
         </>
       )
     case 'plain':
@@ -117,10 +121,7 @@ const Section = ({ config, section, configActions, elementActions, display='list
 }
 
 Section.propTypes = {
-  config: PropTypes.object.isRequired,
   section: PropTypes.object.isRequired,
-  configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired,
   display: PropTypes.string,
   indent: PropTypes.number,
   filter: PropTypes.string,

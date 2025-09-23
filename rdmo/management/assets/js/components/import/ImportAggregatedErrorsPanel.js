@@ -1,10 +1,14 @@
-// ImportAggregatedErrorsPanel.js
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import { ShowLink } from '../common/Links'
+import { get } from 'lodash'
+
+import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import { isTruthy } from 'rdmo/core/assets/js/utils/config'
+
 import { generateErrorMessageListItems } from './common/ErrorsListGroup'
-import get from 'lodash/get'
-import {isTruthy} from 'rdmo/core/assets/js/utils/config'
+
+import { ShowLink } from '../common/Links'
 
 // Function to aggregate unique errors from elements
 const aggregateUniqueErrors = (elements) => {
@@ -18,10 +22,14 @@ const aggregateUniqueErrors = (elements) => {
   return uniqueErrors
 }
 
-const ImportAggregatedErrorsPanel = ({ config, elements, configActions }) => {
+const ImportAggregatedErrorsPanel = ({ elements }) => {
+  const dispatch = useDispatch()
+
+  const config = useSelector((state) => state.config)
+
   const updateShowErrors = () => {
     const currentVal = isTruthy(get(config, 'filter.import.errors.show', false))
-    configActions.updateConfig('filter.import.errors.show', !currentVal)
+    dispatch(updateConfig('filter.import.errors.show', !currentVal))
   }
 
   const showErrors = isTruthy(get(config, 'filter.import.errors.show', false))
@@ -49,9 +57,7 @@ const ImportAggregatedErrorsPanel = ({ config, elements, configActions }) => {
 }
 
 ImportAggregatedErrorsPanel.propTypes = {
-  config: PropTypes.object.isRequired,
-  elements: PropTypes.array.isRequired,
-  configActions: PropTypes.object.isRequired
+  elements: PropTypes.array.isRequired
 }
 
 export default ImportAggregatedErrorsPanel
