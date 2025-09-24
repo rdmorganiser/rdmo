@@ -63,7 +63,7 @@ def test_create_update(db, client, username, password, json_data):
     if response.status_code == 200:
         for element in response.json():
             assert element.get('created') is False
-            obj_perm_status_code = get_obj_perms_status_code(element.get('uri_path'), username, 'update')
+            obj_perm_status_code = get_obj_perms_status_code(element.get('uri_path'), username, 'upload-import')
             if obj_perm_status_code == 200:
                 assert element.get('updated') is True
             else:
@@ -85,7 +85,7 @@ def test_create_update_certain_catalog(db, client, username, password, catalog_u
 
     assert response.status_code == status_map['upload-import'].get(username), response.json()
     if response.status_code == 200:
-        obj_perm_status_code = get_obj_perms_status_code(catalog_uri_path, username, 'update')
+        obj_perm_status_code = get_obj_perms_status_code(catalog_uri_path, username, 'upload-import')
         for element in response.json():
             assert element.get('created') is False
             if obj_perm_status_code == 200:

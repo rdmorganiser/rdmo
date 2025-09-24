@@ -37,7 +37,10 @@ def get_obj_perms_status_code(instance, username, method, editors=None):
         assert_editors = ['foo.com', 'bar.com', 'example.com']
 
     if not instance_editors and instance_obj_perms_key != 'all-element':
-        raise ValueError(f"instance_editors should be specified on {instance_uri}")
+        if 'import' in method:  # override for import when only uri is passed
+            instance_editors = assert_editors
+        else:
+            raise ValueError(f"instance_editors should be specified on {instance_uri}")
     elif instance_editors:
         assert all(
             i in instance_editors for i in assert_editors

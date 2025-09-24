@@ -128,6 +128,23 @@ status_map_object_permissions = {
             'example-reviewer': 404, 'example-editor': 404,
         }
     },
+    'upload-import': {
+        'all-element': {
+            'foo-reviewer': 404, 'foo-editor': 404,
+            'bar-reviewer': 404, 'bar-editor': 404,
+            'example-reviewer': 403, 'example-editor': 200,
+        },
+        'foo-element': {
+            'foo-reviewer': 403, 'foo-editor': 200,
+            'bar-reviewer': 404, 'bar-editor': 404,
+            'example-reviewer': 404, 'example-editor': 404,
+        },
+        'bar-element': {
+            'foo-reviewer': 404, 'foo-editor': 404,
+            'bar-reviewer': 403, 'bar-editor': 200,
+            'example-reviewer': 404, 'example-editor': 404,
+        }
+    },
     'delete': {
         'all-element': {
             'foo-reviewer': 403, 'foo-editor': 204,
