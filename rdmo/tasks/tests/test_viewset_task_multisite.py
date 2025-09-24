@@ -119,10 +119,9 @@ def test_delete(db, client, username, password):
         editors = list(instance.editors.values_list('domain', flat=True))
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.delete(url)
-        assert response.status_code == (
-            get_obj_perms_status_code(instance, username, 'delete',editors=editors),
-            response.json()
-        )
+        assert response.status_code == get_obj_perms_status_code(
+            instance, username, 'delete',editors=editors
+        ),response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
