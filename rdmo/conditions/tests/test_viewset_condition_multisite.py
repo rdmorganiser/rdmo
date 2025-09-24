@@ -54,7 +54,10 @@ def test_detail(db, client, username, password):
     for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.get(url)
-        assert response.status_code == status_map['detail'][username], response.json()
+        assert response.status_code == (
+            get_obj_perms_status_code(instance, username, 'detail'),
+            (response.json(), instance.editors.all())
+        )
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -229,7 +232,10 @@ def test_update(db, client, username, password):
             'target_option': instance.target_option.pk if instance.target_option else None
         }
         response = client.put(url, data, content_type='application/json')
-        assert response.status_code == get_obj_perms_status_code(instance, username, 'update'), response.json()
+        assert response.status_code == (
+            get_obj_perms_status_code(instance, username, 'update'),
+            (response.json(), instance.editors.all())
+        )
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -238,9 +244,10 @@ def test_delete(db, client, username, password):
     instances = Condition.objects.all()
 
     for instance in instances:
+        editors = list(instance.editors.values_list('domain', flat=True))
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.delete(url)
-        assert response.status_code == get_obj_perms_status_code(instance, username, 'delete'), response.json()
+        assert response.status_code == get_obj_perms_status_code(instance, username, 'delete', editors=editors)
 
 
 @pytest.mark.parametrize('username,password', users)
