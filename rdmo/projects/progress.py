@@ -1,13 +1,14 @@
 from collections import defaultdict
 from itertools import chain
 
-from django.db.models import Exists, OuterRef, Q, prefetch_related_objects
+from django.db.models import Exists, OuterRef, Q
 
 from rdmo.conditions.models import Condition
 from rdmo.core.utils import markdown2html
 from rdmo.questions.models import Page, Question, QuestionSet
 
-ROOT = ('', 0)
+# root set prefix/index used for condition evaluation
+ROOT_SET = ('', 0)
 
 
 def get_catalog_conditions(catalog):
@@ -27,27 +28,19 @@ def get_catalog_conditions(catalog):
     ).distinct().select_related('source', 'target_option')
 
 
-def _prefetch_tree_conditions(catalog):
-    """
-    Prefetch the M2M 'conditions' for all Page / QuestionSet / Question
-    instances present in the in-memory catalog tree, so later calls to
-    element.conditions.values_list(...) hit memory instead of the DB.
-    """
-    buckets = {Page: [], QuestionSet: [], Question: []}
+def collect_element_sets(element, base_sets):
+    union_sets = set()
 
-    def walk(node):
-        if isinstance(node, (Page, QuestionSet, Question)):
-            buckets[type(node)].append(node)
-        for ch in getattr(node, 'elements', []):
-            walk(ch)
+    # a) own attribute
+    if getattr(element, 'attribute', None) is not None:
+        union_sets |= base_sets[element.attribute.id]
 
-    for section in getattr(catalog, 'elements', []):
-        for page in getattr(section, 'elements', []):
-            walk(page)
+    # b) immediate child questions' attributes
+    for child in getattr(element, 'elements', []):
+        if isinstance(child, Question) and child.attribute is not None:
+            union_sets |= base_sets[child.attribute.id]
 
-    for model_cls, instances in buckets.items():
-        if instances:
-            prefetch_related_objects(instances, 'conditions')
+    return union_sets
 
 
 def compute_condition_candidates(catalog, values):
@@ -60,35 +53,19 @@ def compute_condition_candidates(catalog, values):
        catalog to add indices that are relevant for collection elements.
     2) Answers-second: include all set tuples that already exist in answers.
     """
-    candidates = {ROOT}  # root must always exist for visibility of non-collections
+    candidates = {ROOT_SET}  # root must always exist for visibility of non-collections
 
     # Answer-derived sets (for all attributes)
     base_sets = compute_sets(values)  # {attribute_id -> {(set_prefix, set_index), ...}}
     candidates |= set(chain.from_iterable(base_sets.values()))
 
-    # Walk the catalog to add collection-relevant indices derived from *existing* answers
-    # (mirrors the frontend's structure-first mindset without inventing indices).
-    def _collect_element_sets(element):
-        # union of set tuples for element.attribute and immediate child questions
-        union_sets = set()
-
-        # a) own attribute
-        if getattr(element, 'attribute', None) is not None:
-            union_sets |= base_sets[element.attribute.id]
-
-        # b) immediate child questions' attributes
-        for child in getattr(element, 'elements', []):
-            if isinstance(child, Question) and child.attribute is not None:
-                union_sets |= base_sets[child.attribute.id]
-
-        return union_sets
-
-    def _walk(e):
-        if isinstance(e, (Page, QuestionSet)) and e.is_collection:
+    # Walk the catalog to add collection-relevant indices derived from existing answers.
+    def _walk(element):
+        if isinstance(element, (Page, QuestionSet)) and element.is_collection:
             # add indices that *exist in answers* for this element scope
-            candidates.update(_collect_element_sets(e))
-        for ch in getattr(e, 'elements', []):
-            _walk(ch)
+            candidates.update(collect_element_sets(element, base_sets))
+        for child_element in getattr(element, 'elements', []):
+            _walk(child_element)
 
     for section in catalog.elements:
         for page in section.elements:
@@ -153,41 +130,34 @@ def compute_show_page(page, conditions):
         return True
 
 
-def _visible_sets(element, conditions):
-    """
-    Return the set of (set_prefix, set_index) tuples for which *element*
-    is visible according to its own conditions.
-
-    Only Page, QuestionSet, and Question have conditions; all other types
-    are treated as visible in the root set ('', 0).
-    """
+def is_element_visible(element, conditions):
+    # Only Page, QuestionSet, and Question have conditions; all other types
+    # are treated as visible in the root set ('', 0).
     if not isinstance(element, (Page, QuestionSet, Question)):
-        return {ROOT}
+        return True
 
     # no conditions → visible at the root
     element_condition_ids = set(element.conditions.values_list('id', flat=True))
     if not element_condition_ids:
-        return {ROOT}
-
-    is_collection = getattr(element, 'is_collection', False)
-    visible = set()
+        return True
 
     for cond_id in element_condition_ids:
         for set_prefix, set_index in conditions[cond_id]:
             if set_prefix == '':
-                if is_collection:
-                    visible.add(('', set_index))
-                else:
-                    visible.add(ROOT)
-    return visible
+                if element.is_collection:
+                    return True
+                if set_index == 0:
+                    return True
+
+    return False
 
 
 def compute_navigation(section, project, snapshot=None):
     # get all values for this project and snapshot
     values = project.values.filter(snapshot=snapshot).select_related('attribute', 'option')
 
-    # prefetch 'conditions' for the whole tree to avoid per-node queries
-    _prefetch_tree_conditions(project.catalog)
+    # prefetch elements on catalog
+    project.catalog.prefetch_elements()
 
     # structure-first candidates (root + answer-derived indices + catalog walk)
     condition_candidates = compute_condition_candidates(project.catalog, values)
@@ -270,7 +240,7 @@ def compute_progress(project, snapshot=None):
     values = project.values.filter(snapshot=snapshot).select_related('attribute', 'option')
 
     # prefetch 'conditions' for the whole tree to avoid per-node queries
-    _prefetch_tree_conditions(project.catalog)
+    project.catalog.prefetch_elements()
 
     # structure-first candidates (root + answer-derived indices + catalog walk)
     condition_candidates = compute_condition_candidates(project.catalog, values)
@@ -336,7 +306,7 @@ def count_questions(element, sets, conditions):
                     return counts
             else:
                 # non-collection elements: visibility is enough to count once
-                is_visible = bool(_visible_sets(element, conditions))  # root ('', 0)
+                is_visible = is_element_visible(element, conditions)
                 if not is_visible:
                     return counts
                 set_count = 1
@@ -378,7 +348,7 @@ def count_questions(element, sets, conditions):
                             )
                         else:
                             parent_visible_sets = (
-                                {ROOT} if (
+                                {ROOT_SET} if (
                                         not child_condition_ids or
                                         any(sp == '' for sp, _ in child_condition_intersection)
                                 ) else set()
