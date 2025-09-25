@@ -13,10 +13,7 @@ import { useFieldErrors } from '../../hooks/useFieldErrors'
 const MembershipDeleteModal = ({ show, onClose, person, isMember = false, isCurrentUser = false }) => {
   const dispatch = useDispatch()
   const { project } = useSelector((state) => state.project.project) ?? {}
-  const { perms } = useSelector((state) => state.project)
-  console.log('perms', perms)
-  console.log('project', project)
-  console.log('person', person )
+  // const { perms } = useSelector((state) => state.project)
   const errors = useFieldErrors()
 
   const isManager = userIsManager(useSelector((state) => state.user.currentUser))
