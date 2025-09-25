@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { useModal } from 'rdmo/core/assets/js/hooks'
-import { userIsManager } from 'rdmo/projects/assets/js/common/utils'
 
 import Select from 'rdmo/core/assets/js/components/Select'
 
@@ -15,13 +14,12 @@ import MembershipDeleteModal  from './MembershipDeleteModal'
 const MembershipTable = ({ persons, isMember = false }) => {
   const dispatch = useDispatch()
   const currentUser = useSelector((state) => state.user.currentUser)
+  const { perms } = useSelector((state) => state.project)
+
   const { show: showConfirm, open: openConfirm, close: closeConfirm } = useModal()
   const [selected, setSelected] = useState(null)
 
   const currentUserId = currentUser?.id
-  const isManager = userIsManager(currentUser)
-  const isOwner = isMember && persons?.some(m => m.role === 'owner' && m.user === currentUserId)
-  const isLastOwner = isOwner && persons?.filter(m => m.role === 'owner').length === 1
 
   const handleOpenConfirm = (person, isCurrentUser) => {
     setSelected({ person, isCurrentUser })
@@ -46,15 +44,17 @@ const MembershipTable = ({ persons, isMember = false }) => {
         </thead>
         <tbody>
           {persons?.map((person, index) => {
-            const isCurrentUser = person.user === currentUserId
-            const isUserOwner = isMember && isCurrentUser && person.role === 'owner'
-            const showAction = ((!isOwner && isCurrentUser) || (isUserOwner && !isLastOwner) || (isOwner && !isUserOwner) || isManager)
+            const isCurrentUser = person.user.id === currentUserId
+            const isOwner = isCurrentUser && person.role == 'owner'
+            const showMemberAction = isMember && ((!isCurrentUser && perms.can_delete_membership) || (isCurrentUser && perms.can_leave_project))
+            const showInviteAction = !isMember && perms.can_delete_invite
+            const showAction = showMemberAction || showInviteAction
 
             return (
               <tr key={index}>
-                <td><strong>{person?.first_name} {person?.last_name}</strong></td>
+                <td><strong>{person?.user?.first_name} {person?.user?.last_name}</strong></td>
                 <td>
-                  {person.email && <a href={`mailto:${person.email}`} className="link-success text-decoration-underline">{person.email}</a>}
+                  {person.user.email && <a href={`mailto:${person.user.email}`} className="link-success text-decoration-underline">{person.user.email}</a>}
                 </td>
                 <td>
                   <Select
@@ -69,24 +69,24 @@ const MembershipTable = ({ persons, isMember = false }) => {
                       }
                     }}
                     isClearable={false}
-                    isDisabled={(!isOwner || isUserOwner) && !isManager}
+                    isDisabled={(isMember && (!perms.can_change_membership || isOwner) || (!isMember && !perms.can_change_invite))}
                   />
                 </td>
                 <td className="text-end">
                   {showAction && (
-                  <button
-                    type="button"
-                    className="btn btn-link btn-sm p-0"
-                    aria-label={isCurrentUser ? gettext('Leave') : gettext('Remove')}
-                    title={isCurrentUser ? gettext('Leave') : gettext('Remove')}
-                    onClick={() => handleOpenConfirm(person, isCurrentUser)}
-                  >
-                    <i
-                      className={`bi ${isCurrentUser ? 'bi-box-arrow-right' : 'bi-x'}`}
-                      aria-hidden="true"
-                    />
-                  </button>
-                )}
+                    <button
+                      type="button"
+                      className="btn btn-link btn-sm p-0"
+                      aria-label={isCurrentUser ? gettext('Leave') : gettext('Remove')}
+                      title={isCurrentUser ? gettext('Leave') : gettext('Remove')}
+                      onClick={() => handleOpenConfirm(person, isCurrentUser)}
+                    >
+                      <i
+                        className={`bi ${isCurrentUser ? 'bi-box-arrow-right' : 'bi-x'}`}
+                        aria-hidden="true"
+                      />
+                    </button>
+                  )}
                 </td>
             </tr>
             )
@@ -97,7 +97,6 @@ const MembershipTable = ({ persons, isMember = false }) => {
         <MembershipDeleteModal
           show={showConfirm}
           onClose={handleCloseConfirm}
-          isManager={isManager}
           isMember={isMember}
           isCurrentUser={selected.isCurrentUser}
           person={selected.person}

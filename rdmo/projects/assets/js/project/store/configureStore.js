@@ -73,9 +73,15 @@ export default function configureStore() {
     store.dispatch(settingsActions.fetchSettings())
     store.dispatch(templateActions.fetchTemplates())
     store.dispatch(userActions.fetchCurrentUser())
-    // TODO: add permission logic
-    store.dispatch(projectActions.fetchProjectInvites(projectId))
-    store.dispatch(projectActions.fetchProject())
+
+    store.dispatch(projectActions.fetchProject()).then(() => {
+      const { project: projectObj } = store.getState()
+      const permissions = projectObj.perms || {}
+
+      if (permissions.can_view_invite) {
+        store.dispatch(projectActions.fetchProjectInvites(projectId))
+      }
+    })
   })
 
   // this event is triggered when when the forward/back buttons are used

@@ -104,7 +104,7 @@ export function updateProjectError(error) {
   return { type: actionTypes.UPDATE_PROJECT_ERROR, error }
 }
 
-export function deleteProject(projectId) {
+export function deleteProject() {
   return function(dispatch) {
     dispatch(addToPending('deleteProject'))
     dispatch(deleteProjectInit())
@@ -223,7 +223,7 @@ export function updateProjectMemberError(error) {
   return { type: actionTypes.UPDATE_PROJECT_MEMBER_ERROR, error }
 }
 
-export function deleteProjectMember(membershipId, { redirect = false } = {}) {
+export function deleteProjectMember(membershipId) {
   return function(dispatch) {
     dispatch(addToPending('deleteProjectMember'))
     dispatch(deleteProjectMemberInit())
@@ -232,16 +232,12 @@ export function deleteProjectMember(membershipId, { redirect = false } = {}) {
       .then(() => {
         dispatch(removeFromPending('deleteProjectMember'))
         dispatch(deleteProjectMemberSuccess(membershipId))
-        if (redirect) {
-          window.location.href = '/projects/'
-          return
-        }
       })
       .catch(error => {
         dispatch(removeFromPending('deleteProjectMember'))
         dispatch(deleteProjectMemberError(error))
         throw error
-      })
+    })
   }
 }
 
@@ -345,6 +341,40 @@ export function deleteProjectInviteSuccess(inviteId) {
 
 export function deleteProjectInviteError(error) {
   return { type: actionTypes.DELETE_PROJECT_INVITE_ERROR, error }
+}
+
+export function leaveProject(membershipId, { redirect = false } = {}) {
+  return function(dispatch) {
+    dispatch(addToPending('leaveProject'))
+    dispatch(leaveProjectInit())
+
+    return ProjectApi.leaveProject(projectId)
+    .then(() => {
+      dispatch(removeFromPending('leaveProject'))
+      dispatch(leaveProjectSuccess(membershipId))
+      if (redirect) {
+        window.location.href = '/projects/'
+        return
+      }
+    })
+    .catch(error => {
+      dispatch(removeFromPending('leaveProject'))
+      dispatch(leaveProjectError(error))
+      throw error
+    })
+  }
+}
+
+export function leaveProjectInit() {
+  return { type: actionTypes.LEAVE_PROJECT_INIT }
+}
+
+export function leaveProjectSuccess(membershipId) {
+  return { type: actionTypes.LEAVE_PROJECT_SUCCESS, membershipId }
+}
+
+export function leaveProjectError(error) {
+  return { type: actionTypes.LEAVE_PROJECT_ERROR, error }
 }
 
 export function clearProjectErrors() {

@@ -2,6 +2,7 @@ import * as actionTypes from '../actions/actionTypes'
 
 const initialState = {
   project: null,
+  perms: {},
   invites: null,
   errors: []
 }
@@ -9,7 +10,7 @@ const initialState = {
 export default function projectReducer(state = initialState, action) {
   switch(action.type) {
     case actionTypes.FETCH_PROJECT_SUCCESS:
-      return { ...state, project: action.project }
+      return { ...state, project: action.project, perms: action.project.project.permissions }
     case actionTypes.FETCH_PROJECT_INIT:
       return { ...state, errors: [] }
     case actionTypes.FETCH_PROJECT_ERROR:
@@ -108,7 +109,23 @@ export default function projectReducer(state = initialState, action) {
       return {
         ...state,
         errors: [...state.errors, { actionType: action.type, ...action.error }]
+    }
+    case actionTypes.LEAVE_PROJECT_INIT:
+      return { ...state, errors: [] }
+    case actionTypes.LEAVE_PROJECT_SUCCESS: {
+      return {
+        ...state,
+        project: {
+          ...state.project,
+          memberships: state.project.memberships?.filter(m => m.id !== action.membershipId)
+        }
       }
+    }
+    case actionTypes.LEAVE_PROJECT_ERROR:
+      return {
+        ...state,
+        errors: [...state.errors, { actionType: action.type, ...action.error }]
+    }
     case actionTypes.CLEAR_PROJECT_ERRORS:
       return { ...state, errors: [] }
     default:

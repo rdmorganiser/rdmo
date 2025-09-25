@@ -10,6 +10,7 @@ const ProjectDelete = () => {
 
   const handleDelete = () => {
     if (project?.id) {
+      // TODO: add a confirmation modal / dialog
       dispatch(deleteProject(project.id))
         .then(() => {
           window.location.href = '/projects/'
