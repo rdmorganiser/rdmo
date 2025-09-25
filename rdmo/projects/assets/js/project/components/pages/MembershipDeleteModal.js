@@ -5,18 +5,25 @@ import { useDispatch, useSelector } from 'react-redux'
 import Html from 'rdmo/core/assets/js/components/Html'
 import Modal from 'rdmo/core/assets/js/_bs53/components/Modal'
 
-import { deleteProjectMember, deleteProjectInvite } from '../../actions/projectActions'
+import { userIsManager } from 'rdmo/projects/assets/js/common/utils'
+
+import { deleteProjectMember, deleteProjectInvite, leaveProject } from '../../actions/projectActions'
 import { useFieldErrors } from '../../hooks/useFieldErrors'
 
-const MembershipDeleteModal = ({ show, onClose, person, isManager = false,
-                                 isMember = false, isCurrentUser = false }) => {
+const MembershipDeleteModal = ({ show, onClose, person, isMember = false, isCurrentUser = false }) => {
   const dispatch = useDispatch()
   const { project } = useSelector((state) => state.project.project) ?? {}
+  const { perms } = useSelector((state) => state.project)
+  console.log('perms', perms)
+  console.log('project', project)
+  console.log('person', person )
   const errors = useFieldErrors()
 
+  const isManager = userIsManager(useSelector((state) => state.user.currentUser))
+
   const name =
-    [person.first_name, person.last_name].filter(Boolean).join(' ').trim() ||
-    person.email || ''
+    [person.user.first_name, person.user.last_name].filter(Boolean).join(' ').trim() ||
+    person.user.email || ''
 
   const text = !isMember ? gettext('Delete invite') : (
     isCurrentUser ? gettext('Leave project') : gettext('Delete membership')
@@ -30,12 +37,11 @@ const MembershipDeleteModal = ({ show, onClose, person, isManager = false,
       onSubmit={async () => {
         try {
           if (isMember) {
-            await dispatch(
-              deleteProjectMember(
-                person.id,
-                isCurrentUser && !isManager ? { redirect: true } : {}
-              )
-            )
+            isCurrentUser ?
+            await dispatch(leaveProject(
+              person.id,
+              !isManager && { redirect: true })) :
+            await dispatch(deleteProjectMember(person.id))
           } else {
             await dispatch(deleteProjectInvite(person.id))
           }
@@ -76,14 +82,15 @@ const MembershipDeleteModal = ({ show, onClose, person, isManager = false,
 MembershipDeleteModal.propTypes = {
   show: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  isManager: PropTypes.bool,
   isMember: PropTypes.bool,
   isCurrentUser: PropTypes.bool,
   person: PropTypes.shape({
     id: PropTypes.number.isRequired,
-    first_name: PropTypes.string,
-    last_name: PropTypes.string,
-    email: PropTypes.string,
+    user: PropTypes.shape({
+      first_name: PropTypes.string,
+      last_name: PropTypes.string,
+      email: PropTypes.string,
+    })
   })
 }
 

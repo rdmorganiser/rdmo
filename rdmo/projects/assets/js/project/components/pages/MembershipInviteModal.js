@@ -11,9 +11,10 @@ import { defaultRoleOptions as roleOptions } from '../../constants/defaultRoleOp
 
 const initialForm = { lookup: '', role: 'author' }
 
-const MembershipInviteModal = ({ show, onClose, isManager = false }) => {
+const MembershipInviteModal = ({ show, onClose }) => {
   const dispatch = useDispatch()
   const templates = useSelector((state) => state.templates)
+  const perms = useSelector((state) => state.project.perms)
   const errors = useFieldErrors()
 
   const [formData, setFormData] = useState(initialForm)
@@ -95,8 +96,8 @@ const MembershipInviteModal = ({ show, onClose, isManager = false }) => {
             <div key={i} className="text-danger mt-1">{err}</div>
           ))}
         </div>
-        {/* Add member silently (decides the action only) */}
-        {isManager && (
+        {/* Add member silently */}
+        {perms.can_add_membership && (
           <div className="mb-3">
             <label className="form-label fw-bold">{gettext('Add member silently')}</label>
             <Html html={templates.project_view_invite_member_silently_help} />
@@ -126,7 +127,6 @@ const MembershipInviteModal = ({ show, onClose, isManager = false }) => {
 MembershipInviteModal.propTypes = {
   show: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  isManager: PropTypes.bool
 }
 
 export default MembershipInviteModal
