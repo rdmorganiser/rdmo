@@ -52,6 +52,10 @@ export default class ProjectApi extends BaseApi {
     return this.delete(`/api/v1/projects/projects/${projectId}/memberships/${membershipId}/`)
   }
 
+  static leaveProject(projectId) {
+    return this.delete(`/api/v1/projects/projects/${projectId}/memberships/leave/`)
+  }
+
   static sendInvite(projectId, data) {
     return this.post(`/api/v1/projects/projects/${projectId}/invites/`, data)
   }
