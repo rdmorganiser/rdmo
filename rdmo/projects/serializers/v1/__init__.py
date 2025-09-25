@@ -52,10 +52,13 @@ class ProjectUserSerializer(serializers.ModelSerializer):
         return get_full_name(obj)
 
     def get_socialaccounts(self, obj) -> list[dict[str, str]]:
-        return [{
-            'provider': socialaccount.provider,
-            'uid': socialaccount.uid
-        } for socialaccount in obj.socialaccount_set.all()]
+        if settings.SOCIALACCOUNT:
+            return [{
+                'provider': socialaccount.provider,
+                'uid': socialaccount.uid
+            } for socialaccount in obj.socialaccount_set.all()]
+        else:
+            return []
 
 
 class ProjectAncestorSerializer(serializers.ModelSerializer):

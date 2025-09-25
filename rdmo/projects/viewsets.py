@@ -131,12 +131,14 @@ class ProjectViewSet(ModelViewSet):
         # projects for the current user regardless of their permissions, e.g. for admins
         filter_for_user = (self.action == 'user')
 
+        membership_queryset = Membership.objects.select_related('user')
+        if settings.SOCIALACCOUNT:
+            membership_queryset = membership_queryset.prefetch_related('user__socialaccount_set')
+
         queryset = Project.objects.filter_user(self.request.user, filter_for_user).distinct().prefetch_related(
             'snapshots',
             'views',
-            Prefetch('memberships', queryset=Membership.objects.prefetch_related(
-                'user__socialaccount_set'
-            ).select_related('user'), to_attr='memberships_list')
+            Prefetch('memberships', queryset=membership_queryset, to_attr='memberships_list')
         ).select_related('catalog', 'visibility')
 
         # prepare subquery for last_changed
