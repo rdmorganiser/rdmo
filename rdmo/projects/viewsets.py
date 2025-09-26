@@ -60,11 +60,12 @@ from .serializers.v1 import (
     MembershipSerializer,
     ProjectCopySerializer,
     ProjectIntegrationSerializer,
+    ProjectInviteCreateSerializer,
     ProjectInviteSerializer,
     ProjectInviteUpdateSerializer,
     ProjectIssueSerializer,
+    ProjectMembershipCreateSerializer,
     ProjectMembershipHierarchySerializer,
-    ProjectMembershipListSerializer,
     ProjectMembershipSerializer,
     ProjectMembershipUpdateSerializer,
     ProjectSerializer,
@@ -449,8 +450,46 @@ class ProjectNestedViewSetMixin(NestedViewSetMixin):
         serializer.save(project=self.project)
 
 
-class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ModelViewSet):
+class ProjectUserViewSetMixin:
+
+    def create(self, request, *args, **kwargs):
+        # use serializer_class_create to create the user
+        serializer_create = self.serializer_class_create(
+            data=request.data,
+            context=self.get_serializer_context()
+        )
+        serializer_create.is_valid(raise_exception=True)
+        instance = serializer_create.save()
+
+        # but serializer_class to return it
+        serializer = self.serializer_class(instance, context=self.get_serializer_context())
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+
+        # use serializer_class_update to create the user
+        serializer_update = self.serializer_class_update(
+            instance,
+            data=request.data,
+            partial=partial,
+            context=self.get_serializer_context()
+        )
+        serializer_update.is_valid(raise_exception=True)
+        instance = serializer_update.save()
+
+        # but serializer_class to return it
+        serializer = self.serializer_class(instance, context=self.get_serializer_context())
+        return Response(serializer.data)
+
+
+class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ProjectUserViewSetMixin, ModelViewSet):
     permission_classes = (HasModelPermission | HasProjectPermission, )
+
+    serializer_class = ProjectMembershipSerializer
+    serializer_class_create = ProjectMembershipCreateSerializer
+    serializer_class_update = ProjectMembershipUpdateSerializer
 
     filter_backends = (DjangoFilterBackend, )
     filterset_fields = (
@@ -461,14 +500,6 @@ class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ModelViewSet):
 
     def get_queryset(self):
         return Membership.objects.filter(project=self.project)
-
-    def get_serializer_class(self):
-        if self.action == 'list':
-            return ProjectMembershipListSerializer
-        elif self.action == 'update':
-            return ProjectMembershipUpdateSerializer
-        else:
-            return ProjectMembershipSerializer
 
     @action(detail=False, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ))
     def hierarchy(self, request, parent_lookup_project=None):
@@ -518,8 +549,12 @@ class ProjectIntegrationViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         return Integration.objects.filter(project=self.project)
 
 
-class ProjectInviteViewSet(ProjectNestedViewSetMixin, ModelViewSet):
+class ProjectInviteViewSet(ProjectNestedViewSetMixin, ProjectUserViewSetMixin, ModelViewSet):
     permission_classes = (HasModelPermission | HasProjectPermission, )
+
+    serializer_class = ProjectInviteSerializer
+    serializer_class_create = ProjectInviteCreateSerializer
+    serializer_class_update = ProjectInviteUpdateSerializer
 
     filter_backends = (DjangoFilterBackend, )
     filterset_fields = (
@@ -531,12 +566,6 @@ class ProjectInviteViewSet(ProjectNestedViewSetMixin, ModelViewSet):
 
     def get_queryset(self):
         return Invite.objects.filter(project=self.project)
-
-    def get_serializer_class(self):
-        if self.action == "update":
-            return ProjectInviteUpdateSerializer
-        else:
-            return ProjectInviteSerializer
 
     def get_serializer_context(self):
         context = super().get_serializer_context()

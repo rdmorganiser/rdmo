@@ -236,7 +236,20 @@ class ProjectVisibilitySerializer(serializers.ModelSerializer):
         )
 
 
-class ProjectMembershipSerializer(UserLookupSerializer, serializers.ModelSerializer):
+class ProjectMembershipSerializer(serializers.ModelSerializer):
+
+    user = ProjectUserSerializer(read_only=True)
+
+    class Meta:
+        model = Membership
+        fields = (
+            'id',
+            'user',
+            'role'
+        )
+
+
+class ProjectMembershipCreateSerializer(UserLookupSerializer, serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(
         queryset=get_user_model().objects.all(), allow_null=True, required=False
     )
@@ -281,19 +294,6 @@ class ProjectMembershipUpdateSerializer(serializers.ModelSerializer):
         model = Membership
         fields = (
             'role',
-        )
-
-
-class ProjectMembershipListSerializer(serializers.ModelSerializer):
-
-    user = ProjectUserSerializer(read_only=True)
-
-    class Meta:
-        model = Membership
-        fields = (
-            'id',
-            'user',
-            'role'
         )
 
 
@@ -356,7 +356,22 @@ class ProjectIntegrationSerializer(serializers.ModelSerializer):
         return integration
 
 
-class ProjectInviteSerializer(UserLookupSerializer, serializers.ModelSerializer):
+class ProjectInviteSerializer(serializers.ModelSerializer):
+
+    user = ProjectUserSerializer(read_only=True)
+
+    class Meta:
+        model = Invite
+        fields = (
+            'id',
+            'user',
+            'email',
+            'role',
+            'timestamp'
+        )
+
+
+class ProjectInviteCreateSerializer(UserLookupSerializer, serializers.ModelSerializer):
     timestamp = serializers.DateTimeField(read_only=True)
     user = serializers.PrimaryKeyRelatedField(
         queryset=get_user_model().objects.all(), allow_null=True, required=False
@@ -369,10 +384,8 @@ class ProjectInviteSerializer(UserLookupSerializer, serializers.ModelSerializer)
             'id',
             'user',
             'email',
-            'first_name',  # read-only
-            'last_name',  # read-only
             'role',
-            'lookup',  # write-only
+            'lookup',
             'timestamp'
         )
 
