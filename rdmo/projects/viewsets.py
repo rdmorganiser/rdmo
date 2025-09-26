@@ -499,7 +499,10 @@ class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ProjectUserViewSetMixi
     )
 
     def get_queryset(self):
-        return Membership.objects.filter(project=self.project)
+        queryset = Membership.objects.filter(project=self.project).select_related('user')
+        if settings.SOCIALACCOUNT:
+            queryset = queryset.prefetch_related('user__socialaccount_set')
+        return queryset
 
     @action(detail=False, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ))
     def hierarchy(self, request, parent_lookup_project=None):
