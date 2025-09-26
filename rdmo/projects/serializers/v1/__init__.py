@@ -30,25 +30,22 @@ from ...validators import ProjectParentValidator, ValueConflictValidator, ValueQ
 
 class ProjectUserSerializer(serializers.ModelSerializer):
 
+    current = serializers.SerializerMethodField()
     full_name = serializers.SerializerMethodField()
     socialaccounts = serializers.SerializerMethodField()
-    current_user = serializers.SerializerMethodField()
 
     class Meta:
         model = get_user_model()
         fields = [
             'id',
+            'current',
+            'username',
+            'first_name',
+            'last_name',
+            'full_name',
+            'email',
+            'socialaccounts'
         ]
-        if settings.USER_API:
-            fields += [
-                'username',
-                'first_name',
-                'last_name',
-                'full_name',
-                'email',
-                'socialaccounts',
-                'current_user'
-            ]
 
     def get_full_name(self, obj) -> str:
         return get_full_name(obj)
@@ -62,7 +59,7 @@ class ProjectUserSerializer(serializers.ModelSerializer):
         else:
             return []
 
-    def get_current_user(self, obj) -> bool:
+    def get_current(self, obj) -> bool:
         request = self.context.get('request')
         if request:
             return obj == request.user
