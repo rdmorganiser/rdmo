@@ -48,7 +48,7 @@ def is_project_guest(user, project):
 
 @rules.predicate
 def is_last_owner(user, project):
-    return project.owners == [user]
+    return user in project.owners and len(project.owners) == 1
 
 
 @rules.predicate

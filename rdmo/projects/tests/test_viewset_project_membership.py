@@ -81,9 +81,14 @@ def test_detail(db, client, username, password, membership_id):
 
     if membership.project_id in view_membership_permission_map.get(username, []):
         assert response.status_code == 200
-        assert isinstance(response.json(), dict)
-        assert response.json().get('id') == membership_id
-        assert response.json().get("email") == membership.user.email  # new field
+
+        response_data = response.json()
+
+        assert isinstance(response_data, dict)
+        assert response_data['id'] == membership_id
+        assert response_data['user']['id'] == membership.user.id
+        assert response_data['user']['email'] == membership.user.email
+
     else:
         assert response.status_code == 404
 
@@ -133,11 +138,13 @@ def test_create_lookup(db, client, username, password, project_id, membership_ro
             assert 'already a member' in response.json()['non_field_errors'][0]
         else:
             assert response.status_code == 201
-            body = response.json()
-            assert 'id' in body
-            assert body['role'] == membership_role
-            assert body['first_name']
-            assert body['last_name']
+
+            response_data = response.json()
+
+            assert response_data['id']
+            assert response_data['role'] == membership_role
+            assert response_data['user']['first_name']
+            assert response_data['user']['last_name']
     elif project_id in view_membership_permission_map.get(username, []):
         assert response.status_code == 403
     else:

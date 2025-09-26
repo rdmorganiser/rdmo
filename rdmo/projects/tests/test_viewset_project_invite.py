@@ -74,10 +74,13 @@ def test_detail(db, client, username, password, project_id, invite_id):
 
     if invite and project_id in view_invite_permission_map.get(username, []):
         assert response.status_code == 200
-        assert isinstance(response.json(), dict)
-        assert response.json().get('id') == invite_id
-        assert 'first_name' in response.json()
-        assert 'last_name' in response.json()
+
+        response_data = response.json()
+
+        assert response_data['id'] == invite_id
+        assert response_data['user']['first_name']
+        assert response_data['user']['last_name']
+
     else:
         assert response.status_code == 404
 
@@ -138,8 +141,13 @@ def test_create_with_lookup_as_username(db, client, username, password, project_
 
     if project_id in add_invite_permission_map.get(username, []):
         assert response.status_code == 201
-        assert response.json()["first_name"]
-        assert response.json()["last_name"]
+
+        response_data = response.json()
+
+        assert response_data['user']['first_name']
+        assert response_data['user']['last_name']
+        assert response_data['user']['email']
+
     elif project_id in view_invite_permission_map.get(username, []):
         assert response.status_code == 403
     else:
@@ -160,9 +168,13 @@ def test_create_with_lookup_as_email_on_existing_user(db, client, username, pass
 
     if project_id in add_invite_permission_map.get(username, []):
         assert response.status_code == 201
-        assert response.json()["first_name"]
-        assert response.json()["last_name"]
-        assert response.json()["email"]
+
+        response_data = response.json()
+
+        assert response_data['user']['first_name']
+        assert response_data['user']['last_name']
+        assert response_data['user']['email']
+
     elif project_id in view_invite_permission_map.get(username, []):
         assert response.status_code == 403
     else:
