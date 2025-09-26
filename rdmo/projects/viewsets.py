@@ -59,11 +59,13 @@ from .serializers.v1 import (
     IssueSerializer,
     MembershipSerializer,
     ProjectCopySerializer,
+    ProjectHierarchySerializer,
     ProjectIntegrationSerializer,
     ProjectInviteCreateSerializer,
     ProjectInviteSerializer,
     ProjectInviteUpdateSerializer,
     ProjectIssueSerializer,
+    ProjectListSerializer,
     ProjectMembershipCreateSerializer,
     ProjectMembershipHierarchySerializer,
     ProjectMembershipSerializer,
@@ -98,7 +100,6 @@ class ProjectPagination(PageNumberPagination):
 
 class ProjectViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasProjectsPermission, )
-    serializer_class = ProjectSerializer
     pagination_class = ProjectPagination
 
     filter_backends = (
@@ -154,6 +155,12 @@ class ProjectViewSet(ModelViewSet):
         # cache queryset and return
         self._cached_queryset = queryset
         return self._cached_queryset
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return ProjectListSerializer
+        else:
+            return ProjectSerializer
 
     @action(detail=False, methods=['GET'], permission_classes=(HasModelPermission | HasProjectsPermission, ))
     def user(self, request, *args, **kwargs):
@@ -398,6 +405,16 @@ class ProjectViewSet(ModelViewSet):
                 return Response(get_contact_message(request, project))
         else:
             raise Http404
+
+    @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ))
+    def hierarchy(self, request, pk):
+        # get the cached family of this project
+        project = self.get_object()
+        cached_trees = project.get_family().get_cached_trees()
+        serializer_context = self.get_serializer_context()
+        serializer_context['project'] = self.get_object()
+        serializer = ProjectHierarchySerializer(cached_trees[0], context=serializer_context)
+        return Response(serializer.data)
 
     @action(detail=False, url_path='upload-accept', permission_classes=(IsAuthenticated, ))
     def upload_accept(self, request):
