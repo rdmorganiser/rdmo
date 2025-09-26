@@ -47,6 +47,11 @@ def is_project_guest(user, project):
 
 
 @rules.predicate
+def is_last_owner(user, project):
+    return project.owners == [user]
+
+
+@rules.predicate
 def is_visible(user, project):
     if user.is_authenticated:
         try:
@@ -70,7 +75,7 @@ rules.add_perm('projects.view_project_object', is_project_member | is_visible | 
 rules.add_perm('projects.change_project_object', is_project_manager | is_project_owner | is_site_manager)
 rules.add_perm('projects.change_project_progress_object', is_project_author | is_project_manager | is_project_owner | is_site_manager)  # noqa: E501
 rules.add_perm('projects.delete_project_object', is_project_owner | is_site_manager)
-rules.add_perm('projects.leave_project_object', is_current_project_member)
+rules.add_perm('projects.leave_project_object', is_current_project_member & ~is_last_owner)
 rules.add_perm('projects.export_project_object', is_project_owner | is_project_manager | is_site_manager)
 rules.add_perm('projects.import_project_object', is_project_owner | is_project_manager | is_site_manager)
 
