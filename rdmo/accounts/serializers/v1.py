@@ -69,6 +69,8 @@ class UserSerializer(serializers.ModelSerializer):
     role = UserRoleSerializer()
     memberships = UserMembershipSerializer(many=True)
 
+    is_site_manager = serializers.BooleanField(source='role.is_site_manager')
+
     class Meta:
         model = get_user_model()
         fields = [
@@ -77,7 +79,8 @@ class UserSerializer(serializers.ModelSerializer):
             'role',
             'memberships',
             'is_superuser',
-            'is_staff'
+            'is_staff',
+            'is_site_manager'
         ]
         if settings.USER_API:
             fields += [
