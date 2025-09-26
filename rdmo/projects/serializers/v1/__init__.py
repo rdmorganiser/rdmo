@@ -32,6 +32,7 @@ class ProjectUserSerializer(serializers.ModelSerializer):
 
     full_name = serializers.SerializerMethodField()
     socialaccounts = serializers.SerializerMethodField()
+    current_user = serializers.SerializerMethodField()
 
     class Meta:
         model = get_user_model()
@@ -45,7 +46,8 @@ class ProjectUserSerializer(serializers.ModelSerializer):
                 'last_name',
                 'full_name',
                 'email',
-                'socialaccounts'
+                'socialaccounts',
+                'current_user'
             ]
 
     def get_full_name(self, obj) -> str:
@@ -59,6 +61,11 @@ class ProjectUserSerializer(serializers.ModelSerializer):
             } for socialaccount in obj.socialaccount_set.all()]
         else:
             return []
+
+    def get_current_user(self, obj) -> bool:
+        request = self.context.get('request')
+        if request:
+            return obj == request.user
 
 
 class ProjectAncestorSerializer(serializers.ModelSerializer):
