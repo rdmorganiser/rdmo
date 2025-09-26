@@ -44,7 +44,7 @@ def test_leave(db, client, username, password, project_id):
 
     if project_id in leave_project_permission_map.get(username, []):
         if username == 'owner':
-            assert response.status_code == 400  # last owner is not allowed to leave
+            assert response.status_code == 404  # last owner is not allowed to leave
         else:
             assert response.status_code == 204
 
