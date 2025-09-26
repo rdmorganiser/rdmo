@@ -452,10 +452,10 @@ class ProjectUserViewSetMixin:
             context=self.get_serializer_context()
         )
         serializer_create.is_valid(raise_exception=True)
-        instance = serializer_create.save()
+        self.perform_create(serializer_create)
 
         # but serializer_class to return it
-        serializer = self.serializer_class(instance, context=self.get_serializer_context())
+        serializer = self.serializer_class(serializer_create.instance, context=self.get_serializer_context())
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def update(self, request, *args, **kwargs):
@@ -470,10 +470,10 @@ class ProjectUserViewSetMixin:
             context=self.get_serializer_context()
         )
         serializer_update.is_valid(raise_exception=True)
-        instance = serializer_update.save()
+        self.perform_update(serializer_update)
 
         # but serializer_class to return it
-        serializer = self.serializer_class(instance, context=self.get_serializer_context())
+        serializer = self.serializer_class(serializer_update.instance, context=self.get_serializer_context())
         return Response(serializer.data)
 
 
@@ -525,11 +525,8 @@ class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ProjectUserViewSetMixi
     @action(detail=False, methods=['delete'], permission_classes=(HasProjectLeavePermission, ))
     def leave(self, request, parent_lookup_project=None):
         membership = Membership.objects.filter(project=self.project).get(user=request.user)
-        if membership.is_last_owner:
-            raise ValidationError(_('The last owner is not allowed to leave the project.'))
-        else:
-            membership.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+        membership.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ProjectIntegrationViewSet(ProjectNestedViewSetMixin, ModelViewSet):
