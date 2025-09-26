@@ -5,18 +5,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import Html from 'rdmo/core/assets/js/components/Html'
 import Modal from 'rdmo/core/assets/js/_bs53/components/Modal'
 
-import { userIsManager } from 'rdmo/projects/assets/js/common/utils'
-
 import { deleteProjectMember, deleteProjectInvite, leaveProject } from '../../actions/projectActions'
 import { useFieldErrors } from '../../hooks/useFieldErrors'
 
-const MembershipDeleteModal = ({ show, onClose, person, isMember = false, isCurrentUser = false }) => {
+const MembershipDeleteModal = ({ show, onClose, person, isManager = false, isMember = false, isCurrentUser = false }) => {
   const dispatch = useDispatch()
   const { project } = useSelector((state) => state.project.project) ?? {}
-  // const { perms } = useSelector((state) => state.project)
   const errors = useFieldErrors()
-
-  const isManager = userIsManager(useSelector((state) => state.user.currentUser))
 
   const name =
     [person.user.first_name, person.user.last_name].filter(Boolean).join(' ').trim() ||
@@ -79,6 +74,7 @@ const MembershipDeleteModal = ({ show, onClose, person, isMember = false, isCurr
 MembershipDeleteModal.propTypes = {
   show: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  isManager: PropTypes.bool,
   isMember: PropTypes.bool,
   isCurrentUser: PropTypes.bool,
   person: PropTypes.shape({
