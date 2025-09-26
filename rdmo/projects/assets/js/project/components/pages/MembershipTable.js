@@ -20,6 +20,7 @@ const MembershipTable = ({ persons, isMember = false }) => {
   const [selected, setSelected] = useState(null)
 
   const currentUserId = currentUser?.id
+  const isManager = currentUser?.is_superuser || currentUser?.is_site_manager
 
   const handleOpenConfirm = (person, isCurrentUser) => {
     setSelected({ person, isCurrentUser })
@@ -48,7 +49,7 @@ const MembershipTable = ({ persons, isMember = false }) => {
             const isOwner = isCurrentUser && person.role == 'owner'
             const showMemberAction = isMember && ((!isCurrentUser && perms.can_delete_membership) || (isCurrentUser && perms.can_leave_project))
             const showInviteAction = !isMember && perms.can_delete_invite
-            const showAction = showMemberAction || showInviteAction
+            const showAction = showMemberAction || showInviteAction || isManager
 
             return (
               <tr key={index}>
@@ -69,7 +70,7 @@ const MembershipTable = ({ persons, isMember = false }) => {
                       }
                     }}
                     isClearable={false}
-                    isDisabled={(isMember && (!perms.can_change_membership || isOwner) || (!isMember && !perms.can_change_invite))}
+                    isDisabled={(isMember && (!perms.can_change_membership || (isOwner && !isManager)) || (!isMember && !perms.can_change_invite))}
                   />
                 </td>
                 <td className="text-end">
@@ -97,6 +98,7 @@ const MembershipTable = ({ persons, isMember = false }) => {
         <MembershipDeleteModal
           show={showConfirm}
           onClose={handleCloseConfirm}
+          isManager={isManager}
           isMember={isMember}
           isCurrentUser={selected.isCurrentUser}
           person={selected.person}
