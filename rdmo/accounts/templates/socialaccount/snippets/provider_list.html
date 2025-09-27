@@ -1,24 +1,30 @@
 {% load socialaccount %}
+{% load accounts_tags %}
 
 {% get_providers as socialaccount_providers %}
+{% get_current_provider_ids as current_providers %}
 
 {% for provider in socialaccount_providers %}
 
-{% if provider.id == "openid" %}
+{% if provider.id not in current_providers %}
 
-    {% include 'socialaccount/snippets/provider_button_openid.html' %}
+    {% if provider.id == "openid" %}
 
-{% elif provider.id == 'openid_connect' %}
+        {% include 'socialaccount/snippets/provider_button_openid.html' %}
 
-    {% include 'socialaccount/snippets/provider_button_openid_connect.html' %}
+    {% elif provider.id == 'openid_connect' %}
 
-{% elif provider.id == 'orcid' %}
+        {% include 'socialaccount/snippets/provider_button_openid_connect.html' %}
 
-    {% include 'socialaccount/snippets/provider_button_orcid.html' %}
+    {% elif provider.id == 'orcid' %}
 
-{% else %}
+        {% include 'socialaccount/snippets/provider_button_orcid.html' %}
 
-    {% include 'socialaccount/snippets/provider_button_generic.html' %}
+    {% else %}
+
+        {% include 'socialaccount/snippets/provider_button_generic.html' %}
+
+    {% endif %}
 
 {% endif %}
 

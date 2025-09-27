@@ -2,7 +2,7 @@
 {% load core_tags %}
 
 <div class="signup-form">
-    <form method="post" action="{% url 'account_signup' %}">
+    <form method="post">
         {% csrf_token %}
 
         {% if redirect_field_value %}
