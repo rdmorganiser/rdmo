@@ -26,16 +26,11 @@ def user_data_as_dl(user):
 
 
 @register.simple_tag(takes_context=True)
-def get_inactive_providers(context={}):
-    from allauth.socialaccount.templatetags.socialaccount import get_providers
-    if 'form' in context:
-        accounts = context['form'].accounts
-        providers = [account.provider for account in accounts]
-        return [
-            provider
-            for provider in get_providers(context)
-            if provider.id not in providers
-        ]
+def get_current_provider_ids(context={}):
+    try:
+        return [account.provider for account in context['form'].accounts]
+    except (KeyError, AttributeError):
+        return []
 
 
 @register.simple_tag()
