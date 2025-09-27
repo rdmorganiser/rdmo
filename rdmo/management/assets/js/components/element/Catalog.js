@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
 
+import Html from 'rdmo/core/assets/js/components/Html'
+
 import { siteId } from 'rdmo/core/assets/js/utils/meta'
 
 import { fetchElement, storeElement, createElement } from '../../actions/elementActions'
@@ -60,8 +62,7 @@ const Catalog = ({ catalog, display='list', filter=false, filterSites=false, fil
       </div>
       <div>
         <p>
-          <strong>{gettext('Catalog')}{': '}</strong>
-          <span dangerouslySetInnerHTML={{ __html: catalog.title }}></span>
+          <strong>{gettext('Catalog')}{':'}</strong> <Html html={catalog.title} />
         </p>
         {
           get(config, 'display.uri.catalogs', true) &&
