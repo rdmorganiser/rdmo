@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
 
+import Html from 'rdmo/core/assets/js/components/Html'
+
 import { fetchElement, storeElement, createElement } from '../../actions/elementActions'
 
 import { filterElement } from '../../utils/filter'
@@ -61,8 +63,7 @@ const QuestionSet = ({ questionset, display='list', indent=0, filter=false, filt
       </div>
       <div>
         <p>
-          <strong>{gettext('Question set')}{': '}</strong>
-          <span dangerouslySetInnerHTML={{ __html: questionset.title }}></span>
+          <strong>{gettext('Question set')}{':'}</strong> <Html html={questionset.title} />
         </p>
         {
           get(config, 'display.uri.questionsets', true) && <p>

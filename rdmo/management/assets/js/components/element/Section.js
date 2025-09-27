@@ -4,6 +4,8 @@ import PropTypes from 'prop-types'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 
+import Html from 'rdmo/core/assets/js/components/Html'
+
 import { fetchElement, storeElement, createElement, dropElement } from '../../actions/elementActions'
 
 import { filterElement } from '../../utils/filter'
@@ -56,8 +58,7 @@ const Section = ({ section, display='list', indent=0, filter=false, filterEditor
       </div>
       <div>
         <p>
-          <strong>{gettext('Section')}{': '}</strong>
-          <span dangerouslySetInnerHTML={{ __html: section.title }}></span>
+          <strong>{gettext('Section')}{':'}</strong> <Html html={section.title} />
         </p>
         {
           get(config, 'display.uri.sections', true) &&

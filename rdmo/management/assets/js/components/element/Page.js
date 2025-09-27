@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
 
+import Html from 'rdmo/core/assets/js/components/Html'
+
 import { fetchElement, storeElement, createElement } from '../../actions/elementActions'
 
 import { filterElement } from '../../utils/filter'
@@ -62,8 +64,7 @@ const Page = ({ page, display='list', indent=0, filter=false, filterEditors=fals
       </div>
       <div>
         <p>
-          <strong>{gettext('Page')}{': '}</strong>
-          <span dangerouslySetInnerHTML={{ __html: page.title }}></span>
+          <strong>{gettext('Page')}{':'}</strong> <Html html={page.title} />
         </p>
         {
           get(config, 'display.uri.pages', true) && <p>

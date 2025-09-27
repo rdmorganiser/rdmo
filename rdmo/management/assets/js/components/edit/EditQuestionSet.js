@@ -4,6 +4,8 @@ import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap'
 import { isUndefined, orderBy } from 'lodash'
 
+import Html from 'rdmo/core/assets/js/components/Html'
+
 import { fetchElement, storeElement, createElement, deleteElement, updateElement } from '../../actions/elementActions'
 
 import Checkbox from './common/Checkbox'
@@ -95,16 +97,16 @@ const EditQuestionSet = ({ questionset }) => {
 
       {
         parent && parent.page && <div className="panel-body panel-border">
-          <p dangerouslySetInnerHTML={{
-            __html:interpolate(gettext('This question set will be added to the page <code class="code-questions">%s</code>.'), [parent.page.uri])
-          }} />
+        <Html html={interpolate(gettext(
+          'This question set will be added to the page <code class="code-questions">%s</code>.'),
+          [parent.page.uri])} />
         </div>
       }
       {
         parent && parent.questionset && <div className="panel-body panel-border">
-          <p dangerouslySetInnerHTML={{
-            __html:interpolate(gettext('This question set will be added to the question set <code class="code-questions">%s</code>.'), [parent.questionset.uri])
-          }} />
+        <Html html={interpolate(gettext(
+          'This question set will be added to the question set <code class="code-questions">%s</code>.'),
+          [parent.questionset.uri])} />
         </div>
       }
 

@@ -50,7 +50,7 @@ const OptionSet = ({ optionset, display='list', filter=false, filterEditors=fals
       </div>
       <div>
         <p>
-          <strong>{gettext('Option set')}{': '}</strong>
+          <strong>{gettext('Option set')}{':'}</strong>
           <CodeLink className="code-options" uri={optionset.uri} href={editUrl} onClick={() => fetchEdit()} />
         </p>
         {

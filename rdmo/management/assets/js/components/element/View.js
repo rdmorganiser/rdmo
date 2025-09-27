@@ -2,6 +2,8 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
+import Html from 'rdmo/core/assets/js/components/Html'
+
 import { siteId } from 'rdmo/core/assets/js/utils/meta'
 
 import { fetchElement, storeElement } from '../../actions/elementActions'
@@ -51,8 +53,7 @@ const View = ({ view, filter=false, filterSites=false, filterEditors=false }) =>
         </div>
         <div>
           <p>
-            <strong>{gettext('View')}{': '}</strong>
-            <span dangerouslySetInnerHTML={{ __html: view.title }}></span>
+            <strong>{gettext('View')}{':'}</strong> <Html html={view.title} />
           </p>
           <p>
             <CodeLink className="code-views" uri={view.uri} href={editUrl} onClick={() => fetchEdit()} />
