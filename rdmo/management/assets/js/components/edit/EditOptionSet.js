@@ -2,6 +2,8 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
+import Html from 'rdmo/core/assets/js/components/Html'
+
 import { fetchElement, storeElement, createElement, deleteElement, updateElement } from '../../actions/elementActions'
 
 import Checkbox from './common/Checkbox'
@@ -60,9 +62,9 @@ const EditOptionSet = ({ optionset }) => {
 
       {
         parent && parent.question && <div className="panel-body panel-border">
-          <p dangerouslySetInnerHTML={{
-            __html:interpolate(gettext('This option set will be added to the question <code class="code-questions">%s</code>.'), [parent.question.uri])
-          }} />
+        <Html html={interpolate(gettext(
+          'This option set will be added to the question <code class="code-questions">%s</code>.'),
+          [parent.question.uri])} />
         </div>
       }
 

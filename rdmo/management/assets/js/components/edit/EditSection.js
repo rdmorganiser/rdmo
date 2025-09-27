@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap'
 
+import Html from 'rdmo/core/assets/js/components/Html'
+
 import { fetchElement, storeElement, createElement, deleteElement, updateElement } from '../../actions/elementActions'
 
 import Checkbox from './common/Checkbox'
@@ -60,9 +62,9 @@ const EditSection = ({ section }) => {
 
       {
         parent && parent.catalog && <div className="panel-body panel-border">
-          <p dangerouslySetInnerHTML={{
-            __html:interpolate(gettext('This section will be added to the catalog <code class="code-questions">%s</code>.'), [parent.catalog.uri])
-          }} />
+        <Html html={interpolate(gettext(
+          'This section will be added to the catalog <code class="code-questions">%s</code>.'),
+          [parent.catalog.uri])} />
         </div>
       }
 

@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap'
 
+import Html from 'rdmo/core/assets/js/components/Html'
+
 import { storeElement, deleteElement, updateElement } from '../../actions/elementActions'
 
 import Checkbox from './common/Checkbox'
@@ -53,9 +55,9 @@ const EditOption = ({ option }) => {
 
       {
         parent && parent.optionset && <div className="panel-body panel-border">
-          <p dangerouslySetInnerHTML={{
-            __html:interpolate(gettext('This option will be added to the option set <code class="code-options">%s</code>.'), [parent.optionset.uri])
-          }} />
+          <Html html={interpolate(gettext(
+            'This option will be added to the option set <code class="code-options">%s</code>.'),
+            [parent.optionset.uri])} />
         </div>
       }
 
