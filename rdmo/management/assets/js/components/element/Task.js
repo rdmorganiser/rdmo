@@ -5,6 +5,8 @@ import get from 'lodash/get'
 
 import { siteId } from 'rdmo/core/assets/js/utils/meta'
 
+import Html from 'rdmo/core/assets/js/components/Html'
+
 import { fetchElement, storeElement } from '../../actions/elementActions'
 
 import { filterElement } from '../../utils/filter'
@@ -56,8 +58,7 @@ const Task = ({ task, filter=false, filterSites=false, filterEditors=false }) =>
         </div>
         <div>
           <p>
-            <strong>{gettext('Task')}{': '}</strong>
-            <span dangerouslySetInnerHTML={{ __html: task.title }}></span>
+            <strong>{gettext('Task')}{':'}</strong> <Html html={task.title} />
           </p>
           {
             get(config, 'display.uri.tasks', true) && <p>

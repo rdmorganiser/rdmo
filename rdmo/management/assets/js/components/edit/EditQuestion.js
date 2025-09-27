@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap'
 
+import Html from 'rdmo/core/assets/js/components/Html'
+
 import { fetchElement, storeElement, createElement, deleteElement, updateElement } from '../../actions/elementActions'
 
 import Checkbox from './common/Checkbox'
@@ -66,16 +68,16 @@ const EditQuestion = ({ question }) => {
 
       {
         parent && parent.page && <div className="panel-body panel-border">
-          <p dangerouslySetInnerHTML={{
-            __html:interpolate(gettext('This question will be added to the page <code class="code-questions">%s</code>.'), [parent.page.uri])
-          }} />
+        <Html html={interpolate(gettext(
+          'This question will be added to the page <code class="code-questions">%s</code>.'),
+          [parent.page.uri])} />
         </div>
       }
       {
         parent && parent.questionset && <div className="panel-body panel-border">
-          <p dangerouslySetInnerHTML={{
-            __html:interpolate(gettext('This question will be added to the question set <code class="code-questions">%s</code>.'), [parent.questionset.uri])
-          }} />
+        <Html html={interpolate(gettext(
+          'This question will be added to the question set <code class="code-questions">%s</code>.'),
+          [parent.questionset.uri])} />
         </div>
       }
 

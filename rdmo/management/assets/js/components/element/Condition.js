@@ -40,7 +40,7 @@ const Condition = ({ condition, filter=false, filterEditors=false }) => {
         </div>
         <div>
           <p>
-            <strong>{gettext('Condition')}{': '}</strong>
+            <strong>{gettext('Condition')}{':'}</strong>
             <CodeLink className="code-conditions" uri={condition.uri} href={editUrl} onClick={() => fetchEdit()} />
           </p>
           <ElementErrors element={condition} />

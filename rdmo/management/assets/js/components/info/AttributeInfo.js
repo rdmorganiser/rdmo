@@ -2,6 +2,8 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
+import Html from 'rdmo/core/assets/js/components/Html'
+
 import { fetchElement } from '../../actions/elementActions'
 
 import { ExtendLink, CodeLink } from '../common/Links'
@@ -37,19 +39,17 @@ const AttributeInfo = ({ attribute }) => {
   return (
     <div className="element-info">
       <p>
-        <span dangerouslySetInnerHTML={{
-          __html: interpolate(ngettext(
-            'This attribute is used for <b>%s values</b> in <b>one project</b>.',
-            'This attribute is used for <b>%s values</b> in <b>%s projects</b>.',
-            attribute.projects_count), [attribute.values_count, attribute.projects_count])}} />
+        <Html html={interpolate(ngettext(
+          'This attribute is used for <b>%s values</b> in <b>one project</b>.',
+          'This attribute is used for <b>%s values</b> in <b>%s projects</b>.',
+          attribute.projects_count), [attribute.values_count, attribute.projects_count])} />
       </p>
       <p>
-        <span dangerouslySetInnerHTML={{
-          __html: interpolate(ngettext(
-            'This attribute has <b>one descendant</b>.',
-            'This attribute has <b>%s descendants</b>.',
-            attributes.length
-          ), [attributes.length])}} />
+        <Html html={interpolate(ngettext(
+          'This attribute has <b>one descendant</b>.',
+          'This attribute has <b>%s descendants</b>.',
+          attributes.length
+        ), [attributes.length])} />
         {attributes.length > 0 && <ExtendLink extend={extendAttributes} onClick={toggleAttributes} />}
       </p>
       {
@@ -60,11 +60,10 @@ const AttributeInfo = ({ attribute }) => {
         ))
       }
       <p>
-        <span dangerouslySetInnerHTML={{
-          __html: interpolate(ngettext(
-            'This attribute is used in <b>one condition</b>.',
-            'This attribute is used in <b>%s conditions</b>.',
-            conditions.length), [conditions.length])}} />
+        <Html html={interpolate(ngettext(
+          'This attribute is used in <b>one condition</b>.',
+          'This attribute is used in <b>%s conditions</b>.',
+          conditions.length), [conditions.length])} />
         {conditions.length > 0 && <ExtendLink extend={extendConditions} onClick={toggleConditions} />}
       </p>
       {
@@ -75,11 +74,10 @@ const AttributeInfo = ({ attribute }) => {
         ))
       }
       <p>
-        <span dangerouslySetInnerHTML={{
-          __html: interpolate(ngettext(
-            'This attribute is used in <b>one page</b>.',
-            'This attribute is used in <b>%s pages</b>.',
-            pages.length), [pages.length])}} />
+        <Html html={interpolate(ngettext(
+          'This attribute is used in <b>one page</b>.',
+          'This attribute is used in <b>%s pages</b>.',
+          pages.length), [pages.length])} />
         {pages.length > 0 && <ExtendLink extend={extendPages} onClick={togglePages} />}
       </p>
       {
@@ -90,11 +88,10 @@ const AttributeInfo = ({ attribute }) => {
         ))
       }
       <p>
-        <span dangerouslySetInnerHTML={{
-          __html: interpolate(ngettext(
-            'This attribute is used in <b>one questionset</b>.',
-            'This attribute is used in <b>%s questionsets</b>.',
-            questionsets.length), [questionsets.length])}} />
+        <Html html={interpolate(ngettext(
+          'This attribute is used in <b>one questionset</b>.',
+          'This attribute is used in <b>%s questionsets</b>.',
+          questionsets.length), [questionsets.length])} />
         {questionsets.length > 0 && <ExtendLink extend={extendQuestionSets} onClick={toggleQuestionSets} />}
       </p>
       {
@@ -105,11 +102,10 @@ const AttributeInfo = ({ attribute }) => {
         ))
       }
       <p>
-        <span dangerouslySetInnerHTML={{
-          __html: interpolate(ngettext(
-            'This attribute is used in <b>one question</b>.',
-            'This attribute is used in <b>%s questions</b>.',
-            questions.length), [questions.length])}} />
+        <Html html={interpolate(ngettext(
+          'This attribute is used in <b>one question</b>.',
+          'This attribute is used in <b>%s questions</b>.',
+          questions.length), [questions.length])} />
         {questions.length > 0 && <ExtendLink extend={extendQuestions} onClick={toggleQuestions} />}
       </p>
       {
@@ -120,11 +116,10 @@ const AttributeInfo = ({ attribute }) => {
         ))
       }
       <p>
-        <span dangerouslySetInnerHTML={{
-          __html: interpolate(ngettext(
-            'This attribute is used in <b>one task</b>.',
-            'This attribute is used in <b>%s tasks</b>.',
-            tasks.length), [tasks.length])}} />
+        <Html html={interpolate(ngettext(
+          'This attribute is used in <b>one task</b>.',
+          'This attribute is used in <b>%s tasks</b>.',
+          tasks.length), [tasks.length])} />
         {tasks.length > 0 && <ExtendLink extend={extendTasks} onClick={toggleTasks} />}
       </p>
       {

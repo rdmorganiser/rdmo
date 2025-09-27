@@ -2,6 +2,8 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
+import Html from 'rdmo/core/assets/js/components/Html'
+
 import { fetchElement, storeElement, createElement, deleteElement, updateElement } from '../../actions/elementActions'
 
 import Checkbox from './common/Checkbox'
@@ -56,37 +58,37 @@ const EditCondition = ({ condition }) => {
 
       {
         parent && parent.optionset && <div className="panel-body panel-border">
-          <p dangerouslySetInnerHTML={{
-            __html:interpolate(gettext('This condition will be added to the option set <code class="code-options">%s</code>.'), [parent.optionset.uri])
-          }} />
+          <Html html={interpolate(gettext(
+            'This condition will be added to the option set <code class="code-options">%s</code>.'),
+            [parent.optionset.uri])} />
         </div>
       }
       {
         parent && parent.page && <div className="panel-body panel-border">
-          <p dangerouslySetInnerHTML={{
-            __html:interpolate(gettext('This condition will be added to the page <code class="code-questions">%s</code>.'), [parent.page.uri])
-          }} />
+          <Html html={interpolate(gettext(
+            'This condition will be added to the page <code class="code-questions">%s</code>.'),
+            [parent.page.uri])} />
         </div>
       }
       {
         parent && parent.questionset && <div className="panel-body panel-border">
-          <p dangerouslySetInnerHTML={{
-            __html:interpolate(gettext('This condition will be added to the question set <code class="code-questions">%s</code>.'), [parent.questionset.uri])
-          }} />
+          <Html html={interpolate(gettext(
+            'This condition will be added to the question set <code class="code-questions">%s</code>.'),
+            [parent.questionset.uri])} />
         </div>
       }
       {
         parent && parent.question && <div className="panel-body panel-border">
-          <p dangerouslySetInnerHTML={{
-            __html:interpolate(gettext('This condition will be added to the question <code class="code-questions">%s</code>.'), [parent.question.uri])
-          }} />
+          <Html html={interpolate(gettext(
+            'This condition will be added to the question <code class="code-questions">%s</code>.'),
+            [parent.question.uri])} />
         </div>
       }
       {
         parent && parent.task && <div className="panel-body panel-border">
-          <p dangerouslySetInnerHTML={{
-            __html:interpolate(gettext('This condition will be added to the task <code class="code-tasks">%s</code>.'), [parent.task.uri])
-          }} />
+          <Html html={interpolate(gettext(
+            'This condition will be added to the task <code class="code-tasks">%s</code>.'),
+          [parent.task.uri])} />
         </div>
       }
 

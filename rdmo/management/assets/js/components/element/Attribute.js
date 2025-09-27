@@ -46,7 +46,7 @@ const Attribute = ({ attribute, display='list', indent=0, filter=null, filterEdi
       </div>
       <div>
         <p>
-          <strong>{gettext('Attribute')}{': '}</strong>
+          <strong>{gettext('Attribute')}{':'}</strong>
           <CodeLink className="code-domain" uri={attribute.uri} href={editUrl} onClick={() => fetchEdit()} />
         </p>
         <ElementErrors element={attribute} />

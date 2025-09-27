@@ -4,6 +4,8 @@ import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap'
 import { isUndefined, orderBy } from 'lodash'
 
+import Html from 'rdmo/core/assets/js/components/Html'
+
 import { fetchElement, storeElement, createElement, deleteElement, updateElement } from '../../actions/elementActions'
 
 import Checkbox from './common/Checkbox'
@@ -95,9 +97,9 @@ const EditPage = ({ page }) => {
 
       {
         parent && parent.section && <div className="panel-body panel-border">
-          <p dangerouslySetInnerHTML={{
-            __html:interpolate(gettext('This page will be added to the section <code class="code-questions">%s</code>.'), [parent.section.uri])
-          }} />
+        <Html html={interpolate(gettext(
+          'This page will be added to the section <code class="code-questions">%s</code>.'),
+          [parent.section.uri])} />
         </div>
       }
 

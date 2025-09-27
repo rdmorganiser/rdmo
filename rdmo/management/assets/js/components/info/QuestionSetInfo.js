@@ -2,6 +2,8 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
+import Html from 'rdmo/core/assets/js/components/Html'
+
 import { fetchElement } from '../../actions/elementActions'
 
 import { ExtendLink, CodeLink } from '../common/Links'
@@ -25,11 +27,10 @@ const QuestionSetInfo = ({ questionset }) => {
   return (
     <div className="element-info">
       <p>
-        <span dangerouslySetInnerHTML={{
-          __html: interpolate(ngettext(
-            'This question set is used in <b>one page</b>.',
-            'This question set is used in <b>%s pages</b>.',
-            pages.length), [pages.length])}} />
+        <Html html={interpolate(ngettext(
+          'This question set is used in <b>one page</b>.',
+          'This question set is used in <b>%s pages</b>.',
+          pages.length), [pages.length])} />
         {pages.length > 0 && <ExtendLink extend={extendPages} onClick={togglePages} />}
       </p>
       {
@@ -40,11 +41,10 @@ const QuestionSetInfo = ({ questionset }) => {
         ))
       }
       <p>
-        <span dangerouslySetInnerHTML={{
-          __html: interpolate(ngettext(
-            'This question set is used in <b>one question set</b>.',
-            'This question set is used in <b>%s question sets</b>.',
-            questionsets.length), [questionsets.length])}} />
+        <Html html={interpolate(ngettext(
+          'This question set is used in <b>one question set</b>.',
+          'This question set is used in <b>%s question sets</b>.',
+          questionsets.length), [questionsets.length])} />
         {questionsets.length > 0 && <ExtendLink extend={extendQuestionSet} onClick={toggleQuestionSets} />}
       </p>
       {

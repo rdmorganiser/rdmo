@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
 
+import Html from 'rdmo/core/assets/js/components/Html'
+
 import { fetchElement, storeElement } from '../../actions/elementActions'
 
 import { filterElement } from '../../utils/filter'
@@ -50,8 +52,7 @@ const Question = ({ question, display='list', indent=0, filter=false, filterEdit
       </div>
       <div>
         <p>
-          <strong>{gettext('Question')}{': '}</strong>
-          <span dangerouslySetInnerHTML={{ __html: question.text }}></span>
+          <strong>{gettext('Question')}{':'}</strong> <Html html={question.text} />
         </p>
         {
           question.is_optional && <p>
