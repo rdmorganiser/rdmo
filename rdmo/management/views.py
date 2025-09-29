@@ -13,4 +13,4 @@ logger = logging.getLogger(__name__)
 class ManagementView(LoginRequiredMixin, PermissionRedirectMixin, RulesPermissionRequiredMixin,
                      CSRFViewMixin, StoreIdViewMixin, TemplateView):
     template_name = 'management/management.html'
-    permission_required = 'management.can_view_management'
+    permission_required = 'management.view_management'

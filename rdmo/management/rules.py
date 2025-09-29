@@ -85,9 +85,9 @@ rules.add_perm('management.view_management',
                                    is_reviewer |
                                    is_legacy_reviewer))
 
-# Add permissions for upload and import
-rules.add_perm('management.can_upload_files', is_authenticated & (is_superuser | is_editor))
-rules.add_perm('management.can_import_elements', is_authenticated & (is_superuser | is_editor))
+# Add permissions for the upload and import viewsets
+rules.add_perm('management.upload_files', is_authenticated & is_editor)
+rules.add_perm('management.import_elements', is_authenticated & is_editor)
 
 
 # Model Permissions for sites and group

@@ -68,7 +68,7 @@ def test_i18n_switcher(db, client):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_can_view_management(db, client, username, password):
+def test_view_management(db, client, username, password):
     client.login(username=username, password=password)
     response = client.get(reverse('management'))
     if username in ('editor', 'reviewer', 'api', 'example-editor', 'example-reviewer'):

@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 
 from rdmo.core.imports import handle_uploaded_file
-from rdmo.core.permissions import CanToggleElementCurrentSite, HasRulesPermission
+from rdmo.core.permissions import CanToggleElementCurrentSite, HasPermission
 from rdmo.core.utils import get_model_field_meta, is_truthy
 from rdmo.core.xml import parse_xml_to_elements
 
@@ -29,8 +29,8 @@ class MetaViewSet(viewsets.ViewSet):
 
 
 class UploadViewSet(viewsets.ViewSet):
-    permission_classes = [HasRulesPermission]
-    permission_required = 'management.can_upload_files'
+    permission_classes = [HasPermission]
+    permission_required = 'management.upload_files'
 
     def create(self, request, *args, **kwargs):
         # step 1: store xml file as tmp file
@@ -64,8 +64,8 @@ class UploadViewSet(viewsets.ViewSet):
 
 
 class ImportViewSet(viewsets.ViewSet):
-    permission_classes = [HasRulesPermission]
-    permission_required = 'management.can_import_elements'
+    permission_classes = [HasPermission]
+    permission_required = 'management.import_elements'
 
     def create(self, request, *args, **kwargs):
         # step 1: store xml file as tmp file
