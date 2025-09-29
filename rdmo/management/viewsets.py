@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 
@@ -21,8 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 class MetaViewSet(viewsets.ViewSet):
-    permission_classes = [HasRulesPermission]
-    permission_required = 'management.can_view_management'
+    permission_classes = (IsAuthenticated, )
 
     def list(self, request, *args, **kwargs):
         return Response({k: get_model_field_meta(val) for k, val in RDMO_MODEL_PATH_MAPPER.items()})
