@@ -72,7 +72,14 @@ def is_legacy_reviewer(user) -> bool:
 
 
 # Add rules
-rules.add_perm('management.can_view_management',
+# this rule will be removed in RDMO 3.0
+rules.add_rule('management.can_view_management',
+               is_authenticated & (is_superuser |
+                                   is_editor |
+                                   is_reviewer |
+                                   is_legacy_reviewer))
+# this perm is checked in the ManagementView
+rules.add_perm('management.view_management',
                is_authenticated & (is_superuser |
                                    is_editor |
                                    is_reviewer |
