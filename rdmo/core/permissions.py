@@ -96,7 +96,3 @@ class HasPermission(BasePermission):
 
         # the viewset needs to set permission_required
         return request.user.has_perm(view.permission_required)
-
-
-
-
