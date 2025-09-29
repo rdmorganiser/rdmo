@@ -87,18 +87,16 @@ class CanToggleElementCurrentSite(DjangoModelPermissions):
         return super().has_permission(request, view)
 
 
-class HasRulesPermission(BasePermission):
+class HasPermission(BasePermission):
 
     @log_result
     def has_permission(self, request, view) -> bool:
         if not (request.user and request.user.is_authenticated):
             return False
 
-        # prefer a view-level override when present
-        perm = getattr(view, 'permission_required', None)
-        if not perm:
-            # Fail closed if misconfigured
-            logger.error('%s missing view.permission_required', self.__class__.__name__)
-            return False
+        # the viewset needs to set permission_required
+        return request.user.has_perm(view.permission_required)
 
-        return request.user.has_perm(perm)
+
+
+
