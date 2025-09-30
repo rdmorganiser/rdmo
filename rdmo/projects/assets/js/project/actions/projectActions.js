@@ -23,15 +23,17 @@ export function fetchProject() {
 
     return Promise.all([
       ProjectApi.fetchProject(projectId),
+      ProjectApi.fetchProjectHierarchy(projectId),
       ProjectApi.fetchProjectSnapshots(projectId),
       ProjectApi.fetchProjectTasks(projectId),
       ProjectApi.fetchProjectMemberships(projectId),
       ProjectApi.fetchProjectMembershipHierarchy(projectId),
       CatalogsApi.fetchCatalogs()
     ])
-    .then(([project, snapshots, tasks, memberships,membershipHierarchy, catalogs]) => {
+    .then(([project, hierarchy, snapshots, tasks, memberships,membershipHierarchy, catalogs]) => {
       const projectData = {
         project: project,
+        hierarchy: hierarchy,
         snapshots: snapshots,
         tasks: tasks,
         memberships: [...memberships, ...membershipHierarchy],
@@ -76,10 +78,23 @@ export function updateProject(data) {
     dispatch(updateProjectInit())
 
     return ProjectApi.updateProject(id, data)
-      .then((updatedProject) => {
+      .then(() =>
+        Promise.all([
+          ProjectApi.fetchProject(id),
+          ProjectApi.fetchProjectHierarchy(id),
+        ])
+      )
+      .then(([project, hierarchy]) => {
         const updatedBundle = {
           ...currentBundle,
-          project: updatedProject
+          // only these two are refreshed from server:
+          project,
+          hierarchy,
+          // everything else stays untouched:
+          // snapshots: currentBundle.snapshots,
+          // tasks: currentBundle.tasks,
+          // memberships: currentBundle.memberships,
+          // catalogs: currentBundle.catalogs,
         }
 
         dispatch(removeFromPending('updateProject'))

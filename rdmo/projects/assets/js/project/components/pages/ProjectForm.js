@@ -10,11 +10,12 @@ import Textarea from 'rdmo/core/assets/js/components/forms/Textarea'
 
 import { updateProject } from '../../actions/projectActions'
 import { useFieldErrors } from '../../hooks/useFieldErrors'
+import { findById } from '../../utils/findById'
 
 import ProjectApi from '../../api/ProjectApi'
 
 const ProjectForm = ({ disabled }) => {
-  const { project, catalogs } = useSelector((state) => state.project.project)
+  const { project, hierarchy, catalogs } = useSelector((state) => state.project.project)
   const templates = useSelector((state) => state.templates)
   const dispatch = useDispatch()
   const errors = useFieldErrors()
@@ -22,6 +23,8 @@ const ProjectForm = ({ disabled }) => {
   const [formData, setFormData] = useState(project || {})
   const [enableParent, setEnableParent] = useState(!!project.parent)
   const [parentOptions, setParentOptions] = useState([])
+
+  const parentProject = project?.parent ? findById(hierarchy, project.parent) : null
 
   const saveProject = (newFormData) => {
     dispatch(updateProject(newFormData))
@@ -70,10 +73,10 @@ const ProjectForm = ({ disabled }) => {
 
   useEffect(() => {
     if (formData.parent && !parentOptions.some(p => p.value === formData.parent)) {
-      ProjectApi.fetchProject(formData.parent).then((project) => {
-        const option = { value: project.id, label: project.title }
+      if (parentProject) {
+        const option = { value: parentProject.id, label: parentProject.title }
         setParentOptions((prev) => [...prev, option])
-      })
+      }
     }
   }, [formData.parent, parentOptions])
 

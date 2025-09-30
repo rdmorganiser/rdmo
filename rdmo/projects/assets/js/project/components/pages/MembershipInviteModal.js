@@ -90,6 +90,7 @@ const MembershipInviteModal = ({ show, onClose }) => {
               <label className="form-check-label" htmlFor={`role-${value}`}>
                 {label}
               </label>
+              {/* TODO: add Tooltip for roles */}
             </div>
           ))}
           {errors.role?.map((err, i) => (
