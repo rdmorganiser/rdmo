@@ -26,14 +26,15 @@ export function fetchProject() {
       ProjectApi.fetchProjectSnapshots(projectId),
       ProjectApi.fetchProjectTasks(projectId),
       ProjectApi.fetchProjectMemberships(projectId),
+      ProjectApi.fetchProjectMembershipHierarchy(projectId),
       CatalogsApi.fetchCatalogs()
     ])
-    .then(([project, snapshots, tasks, memberships, catalogs]) => {
+    .then(([project, snapshots, tasks, memberships,membershipHierarchy, catalogs]) => {
       const projectData = {
         project: project,
         snapshots: snapshots,
         tasks: tasks,
-        memberships: memberships,
+        memberships: [...memberships, ...membershipHierarchy],
         catalogs: catalogs
       }
 
