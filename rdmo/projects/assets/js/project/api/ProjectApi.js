@@ -8,6 +8,10 @@ export default class ProjectApi extends BaseApi {
     return this.get(`/api/v1/projects/projects/${projectId}/`)
   }
 
+  static fetchProjectHierarchy(projectId) {
+    return this.get(`/api/v1/projects/projects/${projectId}/hierarchy/`)
+  }
+
   static fetchProjectSnapshots(projectId) {
     return this.get(`/api/v1/projects/projects/${projectId}/snapshots/`)
   }
@@ -21,7 +25,7 @@ export default class ProjectApi extends BaseApi {
   }
 
   static fetchProjectMembershipHierarchy(projectId) {
-    return this.get(`/api/v1/projects/projects/${projectId}/memberships/hierarchy`)
+    return this.get(`/api/v1/projects/projects/${projectId}/memberships/hierarchy/`)
   }
 
   static fetchProjectInvites(projectId) {
