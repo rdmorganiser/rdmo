@@ -28,6 +28,7 @@ from rdmo.questions.models import Catalog, Page, Question, QuestionSet
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
+from .answers import AnswerTree
 from .filters import (
     AttributeFilterBackend,
     OptionFilterBackend,
@@ -283,6 +284,15 @@ class ProjectViewSet(ModelViewSet):
 
         # if it didn't work return 404
         raise NotFound()
+
+    @action(detail=True, permission_classes=(HasModelPermission | HasProjectPermission, ))
+    def answers(self, request, pk=None):
+        project = self.get_object()
+        project.catalog.prefetch_elements()
+
+        answer_tree = AnswerTree(project).compute()
+
+        return Response(answer_tree)
 
     @action(detail=True, methods=['get', 'post'],
             permission_classes=(HasProjectProgressModelPermission | HasProjectProgressObjectPermission, ))
