@@ -32,6 +32,12 @@ const MembershipTable = ({ persons, isMember = false }) => {
     closeConfirm()
   }
 
+  const uniquePersons = isMember
+  ? persons.filter(
+      (p, i, arr) => arr.findIndex(x => x.user?.id === p.user?.id) === i
+    )
+  : persons
+
   return (
     <div>
       <table className="table border align-middle">
@@ -44,34 +50,43 @@ const MembershipTable = ({ persons, isMember = false }) => {
           </tr>
         </thead>
         <tbody>
-          {persons?.map((person, index) => {
-            const isCurrentUser = person.user.id === currentUserId
+          {uniquePersons?.map((person, index) => {
+            const isCurrentUser = person.user?.id === currentUserId
             const isOwner = isCurrentUser && person.role == 'owner'
             const showMemberAction = isMember && ((!isCurrentUser && perms.can_delete_membership) || (isCurrentUser && perms.can_leave_project))
             const showInviteAction = !isMember && perms.can_delete_invite
-            const showAction = showMemberAction || showInviteAction || isManager
+            const showAction = (showMemberAction || showInviteAction || isManager) && !person.project // do not show action buttons for hierarchy roles
+
+            const emailAddress = person.user?.email || person?.email
+            const hierarchyRole = person?.project
+                      ? `${roleOptions.find(opt => opt.value === person.role).label} ${gettext('of')} ${person.project.title}`
+                      : null
 
             return (
               <tr key={index}>
                 <td><strong>{person?.user?.first_name} {person?.user?.last_name}</strong></td>
                 <td>
-                  {person.user.email && <a href={`mailto:${person.user.email}`} className="link-success text-decoration-underline">{person.user.email}</a>}
+                  {emailAddress && <a href={`mailto:${emailAddress}`} className="link-success text-decoration-underline">{emailAddress}</a>}
                 </td>
                 <td>
-                  <Select
-                    options={roleOptions}
-                    value={person.role}
-                    onChange={(newRole) => {
-                      if (!newRole) return
-                      if (isMember) {
-                        dispatch(updateProjectMember(person.id, { role: newRole }))
-                      } else {
-                        dispatch(updateProjectInvite(person.id, { role: newRole }))
-                      }
-                    }}
-                    isClearable={false}
-                    isDisabled={(isMember && (!perms.can_change_membership || (isOwner && !isManager)) || (!isMember && !perms.can_change_invite))}
-                  />
+                  {hierarchyRole ?
+                    <div className="mb-1">{hierarchyRole}</div>
+                    :
+                    <Select
+                      options={roleOptions}
+                      value={person.role}
+                      onChange={(newRole) => {
+                        if (!newRole) return
+                        if (isMember) {
+                          dispatch(updateProjectMember(person.id, { role: newRole }))
+                        } else {
+                          dispatch(updateProjectInvite(person.id, { role: newRole }))
+                        }
+                      }}
+                      isClearable={false}
+                      isDisabled={(isMember && (!perms.can_change_membership || (isOwner && !isManager)) || (!isMember && !perms.can_change_invite))}
+                    />
+                }
                 </td>
                 <td className="text-end">
                   {showAction && (
