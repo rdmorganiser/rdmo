@@ -40,7 +40,7 @@ dependencies = [
   # dependencies with major version on zero are declared with
   # major.minor.patch, because they can potentially introduce breaking changes
   # in minor version updates anytime
-  "defusedcsv>=2.0,<3.0",
+  "defusedcsv>=2.0,<4.0",
   "defusedxml>=0.7.1,<1.0",
   "django>=4.2,<5.0",
   "django-cleanup>=8.0,<10.0",
