@@ -94,11 +94,11 @@ postgres = [
 ]
 pytest = [
   "pytest>=8.0,<9.0",
-  "pytest-cov>=4.1,<7.0",
+  "pytest-cov>=4.1,<8.0",
   "pytest-django>=4.5,<5.0",
   "pytest-mock>=3.11,<4.0",
   "pytest-playwright>=0.4.3,<0.8.0",
-  "pytest-randomly>=3.15,<4.0",
+  "pytest-randomly>=3.15,<5.0",
   "pytest-xdist>=3.3,<4.0",
 ]
 openapi = [
