@@ -14,11 +14,13 @@ const initialForm = { lookup: '', role: 'author' }
 const MembershipInviteModal = ({ show, onClose }) => {
   const dispatch = useDispatch()
   const templates = useSelector((state) => state.templates)
-  const perms = useSelector((state) => state.project.perms)
   const errors = useFieldErrors()
+  const currentUser = useSelector((state) => state.user.currentUser)
 
   const [formData, setFormData] = useState(initialForm)
   const [silently, setSilently] = useState(false)
+
+  const isManager = currentUser?.is_superuser || currentUser?.is_site_manager
 
   useEffect(() => {
     if (show) {
@@ -113,7 +115,7 @@ const MembershipInviteModal = ({ show, onClose }) => {
           ))}
         </div>
         {/* Add member silently */}
-        {perms.can_add_membership && (
+        {isManager && (
           <div className="mb-3">
             <label className="form-label fw-bold">{gettext('Add member silently')}</label>
             <Html html={templates.project_view_invite_member_silently_help} />
