@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Html from 'rdmo/core/assets/js/components/Html'
-import Modal from 'rdmo/core/assets/js/_bs53/components/Modal'
+import { Modal, Tooltip } from 'rdmo/core/assets/js/_bs53/components'
 
 import { createProjectMember, sendProjectInvite, clearProjectErrors } from '../../actions/projectActions'
 import { useFieldErrors } from '../../hooks/useFieldErrors'
@@ -77,7 +77,7 @@ const MembershipInviteModal = ({ show, onClose }) => {
         <div className="mb-3">
           <label className="form-label fw-bold">{gettext('Role')}</label>
           {roleOptions.map(({ value, label }) => (
-            <div className="form-check" key={value}>
+            <div className="form-check d-flex align-items-center" key={value}>
               <input
                 className="form-check-input"
                 type="radio"
@@ -87,10 +87,25 @@ const MembershipInviteModal = ({ show, onClose }) => {
                 checked={formData.role === value}
                 onChange={() => setField('role', value)}
               />
-              <label className="form-check-label" htmlFor={`role-${value}`}>
+              <label className="form-check-label ms-2" htmlFor={`role-${value}`}>
                 {label}
               </label>
-              {/* TODO: add Tooltip for roles */}
+              <Tooltip
+                title={
+                  <Html
+                    html={templates[`project_view_${value}_info`]}
+                  />
+                }
+                placement="right"
+              >
+                <i
+                  className="bi bi-info-circle ms-2"
+                  tabIndex={0}
+                  role="img"
+                  aria-label={gettext('Role information')}
+                  style={{ cursor: 'pointer' }}
+                />
+              </Tooltip>
             </div>
           ))}
           {errors.role?.map((err, i) => (

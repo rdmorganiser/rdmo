@@ -8,7 +8,7 @@ const Tooltip = ({ title, children, placement = 'bottom', tooltipProps = {} }) =
 
   useEffect(() => {
     if (title) {
-      console.log(renderToString(title))
+      // console.log(renderToString(title))
       const t = new BootstrapTooltip(ref.current, {
         title: renderToString(title),
         placement,
