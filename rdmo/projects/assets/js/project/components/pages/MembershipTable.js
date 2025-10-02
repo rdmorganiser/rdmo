@@ -20,7 +20,7 @@ const MembershipTable = ({ persons, isMember = false }) => {
   const [selected, setSelected] = useState(null)
 
   const currentUserId = currentUser?.id
-  const isManager = currentUser?.is_superuser || currentUser?.is_site_manager
+  const isAdmin = currentUser?.is_superuser || currentUser?.is_site_manager
 
   const handleOpenConfirm = (person, isCurrentUser) => {
     setSelected({ person, isCurrentUser })
@@ -55,7 +55,7 @@ const MembershipTable = ({ persons, isMember = false }) => {
             const isOwner = isCurrentUser && person.role == 'owner'
             const showMemberAction = isMember && ((!isCurrentUser && perms.can_delete_membership) || (isCurrentUser && perms.can_leave_project))
             const showInviteAction = !isMember && perms.can_delete_invite
-            const showAction = (showMemberAction || showInviteAction || isManager) && !person.project // do not show action buttons for hierarchy roles
+            const showAction = (showMemberAction || showInviteAction || isAdmin) && !person.project // do not show action buttons for hierarchy roles
 
             const emailAddress = person.user?.email || person?.email
             const hierarchyRole = person?.project
@@ -84,7 +84,7 @@ const MembershipTable = ({ persons, isMember = false }) => {
                         }
                       }}
                       isClearable={false}
-                      isDisabled={(isMember && (!perms.can_change_membership || (isOwner && !isManager)) || (!isMember && !perms.can_change_invite))}
+                      isDisabled={(isMember && (!perms.can_change_membership || (isOwner && !isAdmin)) || (!isMember && !perms.can_change_invite))}
                     />
                 }
                 </td>
@@ -113,7 +113,7 @@ const MembershipTable = ({ persons, isMember = false }) => {
         <MembershipDeleteModal
           show={showConfirm}
           onClose={handleCloseConfirm}
-          isManager={isManager}
+          isAdmin={isAdmin}
           isMember={isMember}
           isCurrentUser={selected.isCurrentUser}
           person={selected.person}
