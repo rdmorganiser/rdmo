@@ -8,7 +8,7 @@ import Modal from 'rdmo/core/assets/js/_bs53/components/Modal'
 import { deleteProjectMember, deleteProjectInvite, leaveProject } from '../../actions/projectActions'
 import { useFieldErrors } from '../../hooks/useFieldErrors'
 
-const MembershipDeleteModal = ({ show, onClose, person, isManager = false, isMember = false, isCurrentUser = false }) => {
+const MembershipDeleteModal = ({ show, onClose, person, isAdmin = false, isMember = false, isCurrentUser = false }) => {
   const dispatch = useDispatch()
   const { project } = useSelector((state) => state.project.project) ?? {}
   const errors = useFieldErrors()
@@ -32,7 +32,7 @@ const MembershipDeleteModal = ({ show, onClose, person, isManager = false, isMem
             isCurrentUser ?
             await dispatch(leaveProject(
               person.id,
-              !isManager && { redirect: true })) :
+              !isAdmin && { redirect: true })) :
             await dispatch(deleteProjectMember(person.id))
           } else {
             await dispatch(deleteProjectInvite(person.id))
@@ -74,7 +74,7 @@ const MembershipDeleteModal = ({ show, onClose, person, isManager = false, isMem
 MembershipDeleteModal.propTypes = {
   show: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  isManager: PropTypes.bool,
+  isAdmin: PropTypes.bool,
   isMember: PropTypes.bool,
   isCurrentUser: PropTypes.bool,
   person: PropTypes.shape({
