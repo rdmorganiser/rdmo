@@ -157,7 +157,7 @@ class ProjectViewSet(ModelViewSet):
         return self._cached_queryset
 
     def get_serializer_class(self):
-        if self.action == 'list':
+        if self.action in ['list', 'user']:
             return ProjectListSerializer
         else:
             return ProjectSerializer
