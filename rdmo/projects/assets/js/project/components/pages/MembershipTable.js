@@ -7,7 +7,7 @@ import { useModal } from 'rdmo/core/assets/js/hooks'
 import Select from 'rdmo/core/assets/js/components/Select'
 
 import { updateProjectMember, updateProjectInvite } from '../../actions/projectActions'
-import { defaultRoleOptions as roleOptions } from '../../constants/defaultRoleOptions'
+import { defaultRoleOptions as roleOptions } from '../../../common/constants/defaultRoleOptions'
 
 import MembershipDeleteModal  from './MembershipDeleteModal'
 
