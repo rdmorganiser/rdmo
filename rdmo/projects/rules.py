@@ -85,7 +85,7 @@ rules.add_perm('projects.change_visibility_object', is_site_manager)
 rules.add_perm('projects.delete_visibility_object', is_site_manager)
 
 rules.add_perm('projects.view_membership_object', is_project_member | is_visible | is_site_manager)
-rules.add_perm('projects.add_membership_object', is_project_owner | is_site_manager)
+rules.add_perm('projects.add_membership_object', is_site_manager)
 rules.add_perm('projects.change_membership_object', is_project_owner | is_site_manager)
 rules.add_perm('projects.delete_membership_object', is_project_owner | is_site_manager)
 
