@@ -4,3 +4,5 @@
     { value: 'author',  label: gettext('Author') },
     { value: 'guest',   label: gettext('Guest') }
   ]
+
+  export const defaultRoleArrays = ['authors', 'guests', 'managers', 'owners']
