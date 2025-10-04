@@ -13,6 +13,8 @@ class AnswerTree:
         self.project = project
         self.snapshot = snapshot
 
+        self.resolved_conditions = defaultdict(lambda: defaultdict(dict))
+
     @cached_property
     def conditions(self):
         pages_conditions_subquery = Page.objects.filter_by_catalog(self.project.catalog) \
@@ -74,6 +76,9 @@ class AnswerTree:
             element_node['text'] = element.text
             element_node['values'] = self.compute_element_values(element, parent_set)
 
+        if isinstance(element, (Page, QuestionSet, Question)) and element.has_conditions:
+            element_node['hide'] = not self.resolve_conditions(element, parent_set)
+
         return element_node
 
     def compute_set_node(self, element, element_set):
@@ -108,7 +113,7 @@ class AnswerTree:
         # needed to "reach" the descendant set
         for descendant in element.descendants:
             if descendant.attribute and descendant.attribute.id in self.sets:
-                descendant_sets = self.sets[descendant.attribute.id]
+                descendant_sets = self.filter_descendant_sets(descendant, parent_set)
 
                 if descendant in element.elements:
                     # for the direct children (i.e. questions), we add just the sets
@@ -168,3 +173,37 @@ class AnswerTree:
             ]
         else:
             return []
+
+    def resolve_conditions(self, element, parent_set):
+        if self.resolved_conditions.get(element, {}).get(parent_set) is None:
+            if parent_set:
+                set_prefix, set_index = parent_set
+                self.resolved_conditions[element][parent_set] = any(
+                    condition.resolve(self.values, set_prefix, set_index)
+                    for condition in element.conditions.all()
+                )
+            else:
+                self.resolved_conditions[element][parent_set] = any(
+                    condition.resolve(self.values)
+                    for condition in element.conditions.all()
+                )
+
+        return self.resolved_conditions[element][parent_set]
+
+    def filter_descendant_sets(self, descendant, parent_set):
+        # find descendant sets and only include sets which are below the provided parent set
+        descendant_sets = self.sets[descendant.attribute.id]
+
+        if parent_set:
+            parent_set_prefix, parent_set_index = parent_set
+            if parent_set_prefix:
+                descendant_set_prefix = f'{parent_set_prefix}|{parent_set_index}'
+            else:
+                descendant_set_prefix = str(parent_set_index)
+
+            return set(filter(
+                lambda s: (s[0] == descendant_set_prefix) or s[0].startswith(f'{descendant_set_prefix}|'),
+                descendant_sets
+            ))
+        else:
+            return descendant_sets
