@@ -44,10 +44,15 @@ class AnswerTree:
         return sets
 
     def compute(self):
+        # Main function of this class, which Computes the answer tree recursively.
+        # First, it computes the catalog, section, and page nodes.
+        # Then, it alternates between (value)set and questionset nodes until it reaches
+        # the question nodes, which include the corresponding values as well as how much
+        # this question counts to the count and total values for the progress.
         return self.compute_element_node(self.project.catalog)
 
     def compute_element_node(self, element, parent_set=None):
-        # main recursive function of this class, which will be called for each element and for each set
+        # recursive function, which will be called for each element
         element_node = {
             'id': element.id,
             'uri': element.uri,
@@ -55,29 +60,59 @@ class AnswerTree:
         }
 
         if isinstance(element, (Catalog, Section)):
-            # for catalogs and sections we just compute the next level of nodes
+            # for catalogs and sections we recurse to the next level of elements (sections, pages)
             element_node['elements'] = [
                 self.compute_element_node(child_element)
                 for child_element in element.elements
             ]
 
+            # find the first element
+            element_node['first'] = element_node['elements'][0]['id']
+
+            # aggregate count and total from the child elements
+            element_node['count'] = sum(child_node['count'] for child_node in element_node['elements'])
+            element_node['total'] = sum(child_node['total'] for child_node in element_node['elements'])
+
         elif isinstance(element, (Page, QuestionSet)):
             # for pages and questionsets we first compute the sets for the element ...
             element_sets = self.compute_element_sets(element, parent_set)
 
-            # ... and then create a set node for each set
+            # ... and then create a set node for each set (the recursion continues in compute_set_node)
             element_node['sets'] = [
                 self.compute_set_node(element, element_set)
                 for element_set in element_sets
             ]
 
+            # aggregate count and total from the set nodes
+            element_node['count'] = sum(set_node['count'] for set_node in element_node['sets'])
+            element_node['total'] = sum(set_node['total'] for set_node in element_node['sets'])
+
         elif isinstance(element, Question):
-            # for questions we just add the text and the values (for the parent set)
+            # for questions we add the text and the values and compute if this question
+            # can be considered empty, meaning it has no or only empty values
             element_node['text'] = element.text
             element_node['values'] = self.compute_element_values(element, parent_set)
+            element_node['is_empty'] = all(value['is_empty'] for value in element_node['values'])
+
+            # the question only counts for the progress if is not considered empty
+            element_node['count'] = 1 if not element_node['is_empty'] else 0
+
+            # whether the question counts for the total number depends on if it is optional
+            if element.is_optional:
+                # optional questions only count if they are not empty
+                element_node['total'] = 1 if not element_node['is_empty'] else 0
+            else:
+                # regular questions count if they have any values
+                element_node['total'] = 1 if element_node['values'] else 0
 
         if isinstance(element, (Page, QuestionSet, Question)) and element.has_conditions:
+            # for pages, questionsets and questions evaluate conditions
             element_node['hide'] = not self.resolve_conditions(element, parent_set)
+
+            # if the element is hidden, do not it or its descendants
+            if element_node['hide']:
+                element_node['count'] = 0
+                element_node['total'] = 0
 
         return element_node
 
@@ -95,6 +130,10 @@ class AnswerTree:
             self.compute_element_node(child_element, element_set)
             for child_element in element.elements
         ]
+
+        # aggregate count and total from the element nodes
+        set_node['count'] = sum(element_node['count'] for element_node in set_node['elements'])
+        set_node['total'] = sum(element_node['total'] for element_node in set_node['elements'])
 
         return set_node
 
@@ -143,11 +182,12 @@ class AnswerTree:
                 set_prefix = f'{parent_set_prefix}|{parent_set_index}' if parent_set_prefix else str(parent_set_index)
                 element_sets.add((set_prefix, 0))
 
-        return element_sets
+        return sorted(element_sets)
 
     def compute_element_values(self, element, parent_set):
         set_prefix, set_index = parent_set
 
+        # filter the values for this element and set
         element_values = list(filter(lambda v: all((
             v.attribute == element.attribute,
             v.set_prefix == set_prefix,
@@ -155,6 +195,7 @@ class AnswerTree:
         )), self.values))
 
         if element_values:
+            # if there are values, return them
             return [
                 {
                     'id': value.id,
@@ -163,18 +204,17 @@ class AnswerTree:
                 }
                 for value in element_values
             ]
-        elif not element.is_collection:
-            # create one empty set for non-collection questions
+        else:
+            # if no value is present, create one empty empty value
             return [
                 {
                     'is_empty': True,
                     'collection_index': 0
                 }
             ]
-        else:
-            return []
 
     def resolve_conditions(self, element, parent_set):
+        # cache each resolved condition in self.resolved_conditions
         if self.resolved_conditions.get(element, {}).get(parent_set) is None:
             if parent_set:
                 set_prefix, set_index = parent_set
