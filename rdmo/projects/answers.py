@@ -47,6 +47,18 @@ class AnswerTree:
             'model': str(element._meta)
         }
 
+        if isinstance(element, (Page, QuestionSet, Question)):
+            if element.has_conditions:
+                # for pages, questionsets and questions evaluate conditions
+                result = self.resolve_conditions(element, parent_set)
+
+                # if the element is not shown, break the recursion
+                if not result:
+                    element_node['count'] = 0
+                    element_node['total'] = 0
+
+                    return element_node
+
         if isinstance(element, (Catalog, Section)):
             # for catalogs and sections we recurse to the next level of elements (sections, pages)
             element_node['elements'] = [
@@ -92,15 +104,6 @@ class AnswerTree:
             else:
                 # regular questions count if they have any values
                 element_node['total'] = 1 if element_node['values'] else 0
-
-        if isinstance(element, (Page, QuestionSet, Question)) and element.has_conditions:
-            # for pages, questionsets and questions evaluate conditions
-            element_node['hide'] = not self.resolve_conditions(element, parent_set)
-
-            # if the element is hidden, do not it or its descendants
-            if element_node['hide']:
-                element_node['count'] = 0
-                element_node['total'] = 0
 
         return element_node
 
