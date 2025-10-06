@@ -10,9 +10,10 @@ import ProjectDelete from './ProjectDelete'
 
 const ProjectData = () => {
   const config = useSelector((state) => state.config)
-  const { perms, project } = useSelector((state) => state.project)
+  const { hierarchy, project } = useSelector((state) => state.project.project) ?? {}
   const user = useSelector((state) => state.user)
   const dispatch = useDispatch()
+  const perms = project?.permissions ?? {}
 
   const showHierarchy = String(get(config, 'showHierarchy', false)) === 'true'
   const toggleHierarchy = () => dispatch(updateConfig('showHierarchy', !showHierarchy))
@@ -29,7 +30,7 @@ const ProjectData = () => {
           </Link>
           { showHierarchy &&
           <Tile title={gettext('Project hierarchy')} size="fullWidth">
-            <HierarchyTree hierarchy={project.hierarchy} />
+            <HierarchyTree hierarchy={hierarchy} />
           </Tile>
           }
           <Tile title={gettext('Project data')} size="fullWidth">

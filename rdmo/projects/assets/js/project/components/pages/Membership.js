@@ -9,8 +9,9 @@ import MembershipTable from './MembershipTable'
 const Membership = () => {
   const { show: showInvite, open: openInvite, close: closeInvite } = useModal()
 
-  const { memberships } = useSelector((state) => state.project.project) ?? {}
-  const { invites, perms } = useSelector((state) => state.project)
+  const { memberships, project } = useSelector((state) => state.project.project) ?? {}
+  const { invites } = useSelector((state) => state.project)
+  const perms = project?.permissions ?? {}
 
   return (
     <>

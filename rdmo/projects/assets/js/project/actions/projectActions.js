@@ -210,14 +210,28 @@ export function createProjectMemberError(error) {
 }
 
 export function updateProjectMember(membershipId, data) {
-  return function(dispatch) {
+  return function(dispatch, getState) {
     dispatch(addToPending('updateProjectMember'))
     dispatch(updateProjectMemberInit())
 
     return ProjectApi.updateMember(projectId, membershipId, data)
       .then(member => {
-        dispatch(removeFromPending('updateProjectMember'))
         dispatch(updateProjectMemberSuccess({ ...member, id: membershipId }))
+
+        // membership updates can lead to a permission change for owner <-> last owner cases
+        // project with permissions needs to be fetched
+        const state = getState()
+        const currentBundle = state.project.project
+        return ProjectApi.fetchProject(projectId).then(project => ({ project, currentBundle }))
+      })
+      .then(({ project, currentBundle }) => {
+        const updatedBundle = {
+          ...currentBundle,
+          project
+        }
+
+        dispatch(removeFromPending('updateProjectMember'))
+        dispatch(updateProjectSuccess(updatedBundle))
       })
       .catch(error => {
         dispatch(removeFromPending('updateProjectMember'))

@@ -76,8 +76,7 @@ export default function configureStore() {
 
     store.dispatch(projectActions.fetchProject()).then(() => {
       const { project: projectObj } = store.getState()
-      const permissions = projectObj.perms || {}
-
+      const permissions = projectObj.project.project.permissions || {}
       if (permissions.can_view_invite) {
         store.dispatch(projectActions.fetchProjectInvites(projectId))
       }

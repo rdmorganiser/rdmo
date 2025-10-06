@@ -2,7 +2,6 @@ import * as actionTypes from '../actions/actionTypes'
 
 const initialState = {
   project: null,
-  perms: {},
   invites: null,
   errors: []
 }
@@ -10,7 +9,7 @@ const initialState = {
 export default function projectReducer(state = initialState, action) {
   switch(action.type) {
     case actionTypes.FETCH_PROJECT_SUCCESS:
-      return { ...state, project: action.project, perms: action.project.project.permissions }
+      return { ...state, project: action.project}
     case actionTypes.FETCH_PROJECT_INIT:
       return { ...state, errors: [] }
     case actionTypes.FETCH_PROJECT_ERROR:
