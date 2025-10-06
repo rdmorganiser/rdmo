@@ -14,7 +14,8 @@ import MembershipDeleteModal  from './MembershipDeleteModal'
 const MembershipTable = ({ persons, isMember = false }) => {
   const dispatch = useDispatch()
   const currentUser = useSelector((state) => state.user.currentUser)
-  const { perms } = useSelector((state) => state.project)
+  const { project } = useSelector((state) => state.project.project) || {}
+  const perms = project?.permissions || {}
 
   const { show: showConfirm, open: openConfirm, close: closeConfirm } = useModal()
   const [selected, setSelected] = useState(null)
