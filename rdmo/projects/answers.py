@@ -135,9 +135,13 @@ class AnswerTree:
         # compute the level in the page/questionsets hierarchy
         level = 0 if not parent_set else parent_set[0].count('|') + 1
 
-        # if the element has an attribute (e.g. a page), add the sets for this attribute
-        if element.attribute and element.attribute.id in self.sets:
-            element_sets.update(self.sets[element.attribute.id])
+        # for pages, add the sets for the attribute of the page
+        if parent_set is None and element.attribute:
+            element_sets.update(
+                (set_prefix, set_index)
+                for set_prefix, set_index in self.sets[element.attribute.id]
+                if set_prefix == ''  # only include sets for pages
+            )
 
         # for each descendant find the sets and add the set for this element, which is
         # needed to "reach" the descendant set
@@ -152,17 +156,20 @@ class AnswerTree:
                     # for the other descendants (i.e. questions in questionsets), we need
                     # to split the set_prefix according to the level we are in
                     for descendant_set_prefix, _ in descendant_sets:
-                        descendant_set_prefix_split = descendant_set_prefix.split('|')
+                        # exclude sets with an empty set_prefix, this can happen in wrongly configured
+                        # catalogs, when a page and one of the descendant have the same attribute
+                        if descendant_set_prefix:
+                            descendant_set_prefix_split = descendant_set_prefix.split('|')
 
-                        if level:
-                            element_set = (
-                                '|'.join(descendant_set_prefix_split[:level]),
-                                int(descendant_set_prefix_split[level])
-                            )
-                        else:
-                            element_set = ('', int(descendant_set_prefix_split[0]))
+                            if level:
+                                element_set = (
+                                    '|'.join(descendant_set_prefix_split[:level]),
+                                    int(descendant_set_prefix_split[level])
+                                )
+                            else:
+                                element_set = ('', int(descendant_set_prefix_split[0]))
 
-                        element_sets.add(element_set)
+                            element_sets.add(element_set)
 
         # create one empty set for non-collection pages/questionsets
         if not element.is_collection:
