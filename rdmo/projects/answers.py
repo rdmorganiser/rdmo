@@ -1,9 +1,7 @@
 from collections import defaultdict
 
-from django.db.models import Exists, OuterRef, Q
 from django.utils.functional import cached_property
 
-from rdmo.conditions.models import Condition
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet, Section
 
 
@@ -13,24 +11,14 @@ class AnswerTree:
         self.project = project
         self.snapshot = snapshot
 
+        # buffer for the resolved conditions: self.resolved_conditions[element][parent_set]
         self.resolved_conditions = defaultdict(lambda: defaultdict(dict))
 
     @cached_property
     def conditions(self):
-        pages_conditions_subquery = Page.objects.filter_by_catalog(self.project.catalog) \
-                                                .filter(conditions=OuterRef('pk'))
-        questionsets_conditions_subquery = QuestionSet.objects.filter_by_catalog(self.project.catalog) \
-                                                              .filter(conditions=OuterRef('pk'))
-        questions_conditions_subquery = Question.objects.filter_by_catalog(self.project.catalog) \
-                                                        .filter(conditions=OuterRef('pk'))
-
-        return Condition.objects.annotate(
-            has_page=Exists(pages_conditions_subquery),
-            has_questionset=Exists(questionsets_conditions_subquery),
-            has_question=Exists(questions_conditions_subquery)
-        ).filter(
-            Q(has_page=True) | Q(has_questionset=True) | Q(has_question=True)
-        ).distinct().select_related('source', 'target_option')
+        return {
+            condition.id: condition for condition in self.project.catalog.conditions
+        }
 
     @cached_property
     def values(self):
@@ -219,12 +207,12 @@ class AnswerTree:
             if parent_set:
                 set_prefix, set_index = parent_set
                 self.resolved_conditions[element][parent_set] = any(
-                    condition.resolve(self.values, set_prefix, set_index)
+                    self.conditions[condition.id].resolve(self.values, set_prefix, set_index)
                     for condition in element.conditions.all()
                 )
             else:
                 self.resolved_conditions[element][parent_set] = any(
-                    condition.resolve(self.values)
+                    self.conditions[condition.id].resolve(self.values)
                     for condition in element.conditions.all()
                 )
 
