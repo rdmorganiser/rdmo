@@ -14,8 +14,9 @@ const initialForm = { lookup: '', role: 'author' }
 const MembershipInviteModal = ({ show, onClose }) => {
   const dispatch = useDispatch()
   const templates = useSelector((state) => state.templates)
-  const perms = useSelector((state) => state.project.perms)
+  const { project } = useSelector((state) => state.project.project) || {}
   const errors = useFieldErrors()
+  const perms = project?.permissions || {}
 
   const [formData, setFormData] = useState(initialForm)
   const [silently, setSilently] = useState(false)
