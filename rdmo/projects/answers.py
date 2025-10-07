@@ -2,6 +2,7 @@ from collections import defaultdict
 
 from django.utils.functional import cached_property
 
+from rdmo.core.utils import markdown2html
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet, Section
 
 
@@ -44,7 +45,8 @@ class AnswerTree:
         element_node = {
             'id': element.id,
             'uri': element.uri,
-            'model': str(element._meta)
+            'model': str(element._meta),
+            'show': True
         }
 
         if isinstance(element, (Page, QuestionSet, Question)):
@@ -54,12 +56,16 @@ class AnswerTree:
 
                 # if the element is not shown, break the recursion
                 if not result:
+                    element_node['show'] = False
                     element_node['count'] = 0
                     element_node['total'] = 0
 
                     return element_node
 
         if isinstance(element, (Catalog, Section)):
+            if isinstance(element, Section):
+                element_node['title'] = markdown2html(element.short_title or element.title)
+
             # for catalogs and sections we recurse to the next level of elements (sections, pages)
             element_node['elements'] = [
                 self.compute_element_node(child_element)
