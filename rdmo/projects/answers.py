@@ -49,6 +49,9 @@ class AnswerTree:
             'show': True
         }
 
+        if isinstance(element, (Section, Page)):
+            element_node['title'] = markdown2html(element.short_title or element.title)
+
         if isinstance(element, (Page, QuestionSet, Question)):
             if element.has_conditions:
                 # for pages, questionsets and questions evaluate conditions
@@ -63,9 +66,6 @@ class AnswerTree:
                     return element_node
 
         if isinstance(element, (Catalog, Section)):
-            if isinstance(element, Section):
-                element_node['title'] = markdown2html(element.short_title or element.title)
-
             # for catalogs and sections we recurse to the next level of elements (sections, pages)
             element_node['elements'] = [
                 self.compute_element_node(child_element)
@@ -80,6 +80,8 @@ class AnswerTree:
             element_node['total'] = sum(child_node['total'] for child_node in element_node['elements'])
 
         elif isinstance(element, (Page, QuestionSet)):
+
+
             # for pages and questionsets we first compute the sets for the element ...
             element_sets = self.compute_element_sets(element, parent_set)
 

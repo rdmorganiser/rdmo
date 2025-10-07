@@ -28,7 +28,6 @@ from rdmo.questions.models import Catalog, Page, Question, QuestionSet
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
-from .answers import AnswerTree
 from .filters import (
     AttributeFilterBackend,
     OptionFilterBackend,
@@ -50,11 +49,8 @@ from .permissions import (
 )
 from .progress import (
     compute_navigation,
-    compute_next_relevant_page,
+    compute_page,
     compute_progress,
-    compute_sets,
-    compute_show_page,
-    resolve_conditions,
 )
 from .serializers.v1 import (
     IntegrationSerializer,
@@ -178,16 +174,18 @@ class ProjectViewSet(ModelViewSet):
     def navigation(self, request, pk=None, section_id=None):
         project = self.get_object()
 
-        section = None
-        if section_id is not None:
+        # if a section is provided, check if it actually exists in the catalog
+        if section_id is None:
+            section = None
+        else:
             try:
                 section = project.catalog.sections.get(pk=section_id)
             except ObjectDoesNotExist as e:
                 raise NotFound() from e
 
-        project.catalog.prefetch_elements()
+        # compute navigation from the answer tree
+        navigation = compute_navigation(project, section)
 
-        navigation = compute_navigation(section, project)
         return Response(navigation)
 
     @action(detail=True, permission_classes=(HasModelPermission | HasProjectPermission, ))
@@ -289,10 +287,7 @@ class ProjectViewSet(ModelViewSet):
     def answers(self, request, pk=None):
         project = self.get_object()
         project.catalog.prefetch_elements()
-
-        answer_tree = AnswerTree(project).compute()
-
-        return Response(answer_tree)
+        return Response(project.get_answer_tree())
 
     @action(detail=True, methods=['get', 'post'],
             permission_classes=(HasProjectProgressModelPermission | HasProjectProgressObjectPermission, ))
@@ -301,7 +296,6 @@ class ProjectViewSet(ModelViewSet):
 
         if request.method == 'POST' or project.progress_count is None or project.progress_total is None:
             # compute the progress, but store it only, if it has changed
-            project.catalog.prefetch_elements()
             progress_count, progress_total = compute_progress(project)
             if progress_count != project.progress_count or progress_total != project.progress_total:
                 project.progress_count, project.progress_total = progress_count, progress_total
@@ -714,28 +708,18 @@ class ProjectPageViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericV
 
     def retrieve(self, request, *args, **kwargs):
         page = self.get_object()
-        catalog = self.project.catalog
-        values = self.project.values.filter(snapshot=None).select_related('attribute', 'option')
+        direction = 'prev' if is_truthy(request.GET.get('back')) else 'next'
+        computed_page_id = compute_page(self.project, page, direction)
 
-        sets = compute_sets(values)
-        resolved_conditions = resolve_conditions(catalog, values, sets)
-
-        # check if the current page meets conditions
-        if compute_show_page(page, resolved_conditions):
+        if computed_page_id == page.id:
             serializer = self.get_serializer(page)
             return Response(serializer.data)
+        elif computed_page_id is not None:
+            print(computed_page_id)
+            url = reverse('v1-projects:project-page-detail', args=[self.project.id, computed_page_id])
+            return HttpResponseRedirect(url, status=303)
         else:
-            # determine the direction of navigation (previous or next)
-            direction = 'prev' if is_truthy(request.GET.get('back')) else 'next'
-
-            # find the next relevant page with from pages and resolved conditions
-            next_relevant_page = compute_next_relevant_page(page, direction, catalog, resolved_conditions)
-
-            if next_relevant_page is not None:
-                url = reverse('v1-projects:project-page-detail', args=[self.project.id, next_relevant_page.id])
-                return HttpResponseRedirect(url, status=303)
-
-            # end of catalog, if no next relevant page is found
+            # if no page was found, we are probably at the end of the catalog
             return Response({
                 'detail': 'No Page matches the given query.',
                 'done': True

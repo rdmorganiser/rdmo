@@ -44,11 +44,11 @@ result_map = {
     'http://example.com/terms/questions/catalog/conditions/set_set_question': (0, 2, True),
     'http://example.com/terms/questions/catalog/conditions/optionset': (0, 2, True),
     'http://example.com/terms/questions/catalog/conditions/text_set': (0, 2, True),
-    'http://example.com/terms/questions/catalog/blocks': (13, 25),
+    'http://example.com/terms/questions/catalog/blocks': (13, 29),
     'http://example.com/terms/questions/catalog/blocks/single': (0, 1, True),
     'http://example.com/terms/questions/catalog/blocks/collection': (0, 0, True),
     'http://example.com/terms/questions/catalog/blocks/two-collections': (0, 0, True),
-    'http://example.com/terms/questions/catalog/blocks/set': (13, 23, True),
+    'http://example.com/terms/questions/catalog/blocks/set': (13, 27, True),
     'http://example.com/terms/questions/catalog/blocks/optional': (0, 1, True),
 }
 
@@ -60,7 +60,7 @@ def test_compute_navigation(db, section_uri):
 
     section = project.catalog.sections.get(uri=section_uri)
 
-    navigation = compute_navigation(section, project)
+    navigation = compute_navigation(project, section)
     assert [item['id'] for item in navigation] == [element.id for element in project.catalog.elements]
 
     for section in navigation:
