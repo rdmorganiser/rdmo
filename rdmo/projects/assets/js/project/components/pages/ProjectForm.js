@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import AsyncSelect from 'react-select/async'
 import { useDebouncedCallback } from 'use-debounce'
+import { isEmpty } from 'lodash'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 import Input from 'rdmo/core/assets/js/components/forms/Input'
@@ -10,12 +11,11 @@ import Textarea from 'rdmo/core/assets/js/components/forms/Textarea'
 
 import { updateProject } from '../../actions/projectActions'
 import { useFieldErrors } from '../../hooks/useFieldErrors'
-import { findById } from '../../utils/findById'
 
 import ProjectApi from '../../api/ProjectApi'
 
 const ProjectForm = ({ disabled }) => {
-  const { project, hierarchy, catalogs } = useSelector((state) => state.project.project)
+  const { project, catalogs } = useSelector((state) => state.project.project)
   const templates = useSelector((state) => state.templates)
   const dispatch = useDispatch()
   const errors = useFieldErrors()
@@ -23,8 +23,6 @@ const ProjectForm = ({ disabled }) => {
   const [formData, setFormData] = useState(project || {})
   const [enableParent, setEnableParent] = useState(!!project.parent)
   const [parentOptions, setParentOptions] = useState([])
-
-  const parentProject = project?.parent ? findById(hierarchy, project.parent) : null
 
   const saveProject = (newFormData) => {
     dispatch(updateProject(newFormData))
@@ -71,17 +69,7 @@ const ProjectForm = ({ disabled }) => {
     }
   }
 
-  useEffect(() => {
-    if (formData.parent && !parentOptions.some(p => p.value === formData.parent)) {
-      if (parentProject) {
-        const option = { value: parentProject.id, label: parentProject.title }
-        setParentOptions((prev) => [...prev, option])
-      }
-    }
-  }, [formData.parent, parentOptions])
-
   return (
-    // <form onSubmit={handleSubmit} className="container mt-3">
     <form className="container mt-3">
 
       <Input
@@ -175,7 +163,10 @@ const ProjectForm = ({ disabled }) => {
               noOptionsMessage={() => gettext('No projects matching your search.')}
               loadingMessage={() => gettext('Loading ...')}
               defaultOptions={parentOptions}
-              value={parentOptions.find(p => p.value === formData.parent) || null}
+              value={isEmpty(parentOptions) ? {
+                value: project.parent,
+                label: project.parent_title
+              } : parentOptions.find(p => p.value === formData.parent)}
               onChange={(option) => handleChange('parent', option ? option.value : null)}
               getOptionValue={(project) => project.value}
               getOptionLabel={(project) => project.label}
