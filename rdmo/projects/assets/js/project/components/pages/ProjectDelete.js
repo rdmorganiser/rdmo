@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { deleteProject } from '../../actions/projectActions'
 import Modal from 'rdmo/core/assets/js/_bs53/components/Modal'
+import Html from 'rdmo/core/assets/js/components/Html'
+
+import { deleteProject } from '../../actions/projectActions'
 
 const ProjectDelete = () => {
   const dispatch = useDispatch()
@@ -14,17 +16,7 @@ const ProjectDelete = () => {
   const closeConfirm = () => setShowConfirm(false)
 
   const handleDelete = () => {
-    if (!project?.id) return
     dispatch(deleteProject(project.id))
-      .then(() => {
-        window.location.href = '/projects/'
-      })
-      .catch((error) => {
-        console.error('Failed to delete project:', error)
-      })
-      .finally(() => {
-        setShowConfirm(false)
-      })
   }
 
   return (
@@ -49,15 +41,13 @@ const ProjectDelete = () => {
         onClose={closeConfirm}
         onSubmit={handleDelete}
         submitLabel={gettext('Delete')}
-        submitProps={{
-          className: 'btn btn-danger',
-          'data-testid': 'confirm-delete-button'
-        }}
+        submitProps={{className: 'btn btn-danger'}}
         size=""
       >
-        <p className="mb-0">
-          {interpolate(gettext('Are you sure you want to delete the project "%s"?'), [project?.title ?? ''])}
-          <br />
+        <Html html={interpolate(gettext(
+          'Are you sure you want to delete the project <b>%s</b>?'), [project.title ?? '']
+        )} />
+        <p>
           {gettext('This action cannot be undone.')}
         </p>
       </Modal>

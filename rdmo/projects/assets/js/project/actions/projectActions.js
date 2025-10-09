@@ -132,6 +132,8 @@ export function deleteProject() {
       .then(() => {
         dispatch(removeFromPending('deleteProject'))
         dispatch(deleteProjectSuccess(projectId))
+
+        window.location.href = `${baseUrl}/projects/`
       })
       .catch((error) => {
         dispatch(removeFromPending('deleteProject'))
