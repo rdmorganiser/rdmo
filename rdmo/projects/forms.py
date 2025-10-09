@@ -275,7 +275,7 @@ class MembershipCreateForm(forms.Form):
                                         label=_('User'),
                                         help_text=_('The username or e-mail of the new user.'))
     role = forms.CharField(widget=forms.RadioSelect(choices=ROLE_CHOICES),
-                           initial='author')
+                           initial='author', label=_('Role'))
 
     def __init__(self, *args, **kwargs):
         self.project = kwargs.pop('project')
