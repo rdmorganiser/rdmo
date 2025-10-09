@@ -57,7 +57,7 @@ const MembershipTable = ({ persons, type }) => {
             )
             const showInviteAction = (type === 'invites') && perms.can_delete_invite
             const showActions = (
-              showMemberAction || showInviteAction || currentUser?.is_superuser_or_site_manager
+              showMemberAction || showInviteAction || isAdminOrSiteManager
             ) && !person.project // do not show action buttons for hierarchy roles
 
             const emailAddress = person.user?.email || person?.email
