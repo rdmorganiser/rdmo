@@ -870,7 +870,7 @@ msgstr "Kommentar"
 
 #: conditions/models.py:51
 msgid "Additional internal information about this condition."
-msgstr "Zusätzliche interne Informationen über diese Bedingung."
+msgstr "Zusätzliche interne Informationen zur Bedingung."
 
 #: conditions/models.py:55 domain/models.py:40 options/models.py:39
 #: options/models.py:171 questions/models/catalog.py:56
@@ -1311,7 +1311,7 @@ msgstr "Schlüssel"
 
 #: domain/models.py:26
 msgid "The internal identifier of this attribute."
-msgstr "Der interne Bezeichner diese Attributs."
+msgstr "Der interne Bezeichner dieses Attributs."
 
 #: domain/models.py:30
 msgid "Path"
@@ -1319,11 +1319,11 @@ msgstr "Pfad"
 
 #: domain/models.py:31
 msgid "The path part of the URI of this attribute (auto-generated)."
-msgstr "Der Pfad-Teil der URI für dieses Attribut (automatisch erstellt)."
+msgstr "Der Pfad-Teil der URI dieses Attributs (automatisch erstellt)."
 
 #: domain/models.py:36
 msgid "Additional information about this attribute."
-msgstr "Zusätzliche Informationen über dieses Attribut."
+msgstr "Zusätzliche Informationen zum Attribut."
 
 #: domain/models.py:41
 msgid "Designates whether this attribute (and its descendants) can be changed."
@@ -1451,7 +1451,7 @@ msgstr "Der Pfad für die URI dieses Optionenset."
 
 #: options/models.py:35
 msgid "Additional internal information about this option set."
-msgstr "Zusätzliche interne Informationen über dieses Optionenset."
+msgstr "Zusätzliche interne Informationen zum Optionenset."
 
 #: options/models.py:40
 msgid "Designates whether this option set (and its options) can be changed."
@@ -1522,7 +1522,7 @@ msgstr "Der Pfad für die URI dieser Option."
 
 #: options/models.py:167
 msgid "Additional internal information about this option."
-msgstr "Zusätzliche interne Informationen über diese Option."
+msgstr "Zusätzliche interne Informationen zum Option."
 
 #: options/models.py:172
 msgid "Designates whether this option can be changed."
@@ -2132,7 +2132,7 @@ msgstr "Übergeordnetes Projekt"
 
 #: projects/models/project.py:30
 msgid "The parent project of this project."
-msgstr "Das übergeordnete Projekt zu diesem Projekt."
+msgstr "Das übergeordnete Projekt zum Projekt."
 
 #: projects/models/project.py:35
 msgid "The list of users for this project."
@@ -2467,18 +2467,18 @@ msgid ""
 "I have a question regarding the project \"%(project_title)s\" on the page "
 "\"%(page_title)s\":"
 msgstr ""
-"Ich habe eine Frage zu dem Projekt „%(project_title)s“ auf der Seite "
+"Ich habe eine Frage zum Projekt „%(project_title)s“ auf der Seite "
 "„%(page_title)s“:"
 
 #: projects/templates/projects/email/project_contact_message.txt:10
 #, python-format
 msgid "I have a question regarding the project \"%(project_title)s\":"
-msgstr "Ich habe eine Frage zu dem Projekt „%(project_title)s“:"
+msgstr "Ich habe eine Frage zum Projekt „%(project_title)s“:"
 
 #: projects/templates/projects/email/project_contact_message.txt:18
 #, python-format
 msgid "In particular, about the question: %(question_text)s"
-msgstr "Insbesondere über die Frage: %(question_text)s"
+msgstr "Insbesondere zur Frage: %(question_text)s"
 
 #: projects/templates/projects/email/project_contact_message.txt:28
 msgid "Answer:"
@@ -3380,7 +3380,7 @@ msgstr "Der Pfad für die URI dieses Katalogs."
 
 #: questions/models/catalog.py:52
 msgid "Additional internal information about this catalog."
-msgstr "Zusätzliche interne Informationen über diesen Katalog."
+msgstr "Zusätzliche interne Informationen zum Katalog."
 
 #: questions/models/catalog.py:57
 msgid ""
@@ -3511,7 +3511,7 @@ msgstr "Der Pfad für die URI dieser Aufgabe."
 
 #: questions/models/page.py:51
 msgid "Additional internal information about this page."
-msgstr "Zusätzliche interne Informationen über diese Seite."
+msgstr "Zusätzliche interne Informationen zu dieser Seite."
 
 #: questions/models/page.py:56
 msgid ""
@@ -3708,7 +3708,7 @@ msgstr "Der Pfad für die URI dieser Frage."
 
 #: questions/models/question.py:43
 msgid "Additional internal information about this question."
-msgstr "Zusätzliche interne Informationen über diesen Abschnitt."
+msgstr "Zusätzliche interne Informationen zu dieser Frage."
 
 #: questions/models/question.py:48
 msgid "Designates whether this question can be changed."
@@ -3913,7 +3913,7 @@ msgstr "Der Pfad für die URI dieses Fragensets."
 
 #: questions/models/questionset.py:46
 msgid "Additional internal information about this question set."
-msgstr "Zusätzliche interne Informationen über diese Fragenset."
+msgstr "Zusätzliche interne Informationen zum Fragenset."
 
 #: questions/models/questionset.py:51
 msgid ""
@@ -4018,15 +4018,15 @@ msgstr ""
 
 #: questions/models/section.py:40
 msgid "The prefix for the URI of this section."
-msgstr "Das Präfix für die URI die dieses Abschnitts."
+msgstr "Das Präfix für die URI dieses Abschnitts."
 
 #: questions/models/section.py:45
 msgid "The path for the URI of this section."
-msgstr "Der Pfad für die URI die dieses Abschnitts."
+msgstr "Der Pfad für die URI dieses Abschnitts."
 
 #: questions/models/section.py:50
 msgid "Additional internal information about this section."
-msgstr "Zusätzliche interne Informationen über diesen Abschnitt."
+msgstr "Zusätzliche interne Informationen zum Abschnitt."
 
 #: questions/models/section.py:55
 msgid ""
@@ -4038,7 +4038,7 @@ msgstr ""
 
 #: questions/models/section.py:60
 msgid "The pages of this section."
-msgstr "Der Seiten für diesen Abschnitt."
+msgstr "Die Seiten dieses Abschnitts."
 
 #: questions/models/section.py:65
 msgid "The sites that can edit this section (in a multi site setup)."
@@ -4199,7 +4199,7 @@ msgstr "Der Pfad für die URI dieser Aufgabe."
 
 #: tasks/models.py:36
 msgid "Additional internal information about this task."
-msgstr "Zusätzliche interne Informationen über diese Aufgabe."
+msgstr "Zusätzliche interne Informationen zu dieser Aufgabe."
 
 #: tasks/models.py:41
 msgid "Designates whether this task can be changed."
@@ -4329,7 +4329,7 @@ msgstr "Der Pfad für die URI dieser Ansicht."
 
 #: views/models.py:38
 msgid "Additional internal information about this view."
-msgstr "Zusätzliche interne Informationen über diese Ansicht."
+msgstr "Zusätzliche interne Informationen zu dieser Ansicht."
 
 #: views/models.py:43
 msgid "Designates whether this view can be changed."
