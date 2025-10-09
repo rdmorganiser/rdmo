@@ -40,7 +40,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
   }
 
   const currentUserId = currentUser.id
-  const isManager = currentUser.is_superuser || currentUser.is_site_manager
+  const isAdminOrSiteManager = currentUser.is_superuser || currentUser.is_site_manager
 
   const searchString = get(config, 'params.search', '')
   const updateSearchString = (value) => {
@@ -220,7 +220,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
             )
           }
           {
-            isManager && (
+            isAdminOrSiteManager && (
               <button type="button" className="btn btn-link" onClick={handleView}>
                 {viewLinkText}
               </button>
@@ -251,7 +251,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
           catalogs={catalogs ?? []}
           config={config}
           configActions={configActions}
-          isManager={isManager}
+          isAdminOrSiteManager={isAdminOrSiteManager}
           projectsActions={projectsActions}
         />
       </div>
