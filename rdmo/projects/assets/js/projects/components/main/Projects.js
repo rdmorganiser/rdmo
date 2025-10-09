@@ -8,7 +8,9 @@ import { language } from 'rdmo/core/assets/js/utils'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import { PendingInvitations, ProjectFilters, ProjectImport, Table } from '../helper'
-import { getUserRole, HEADER_FORMATTERS, SORTABLE_COLUMNS } from '../../utils'
+import { HEADER_FORMATTERS, SORTABLE_COLUMNS } from '../../utils'
+import { roleOptions } from '../../../common/constants/roles'
+
 
 const Projects = ({ config, configActions, currentUserObject, projectsActions, projectsObject }) => {
   const { allowedTypes, catalogs, importUrls, invites, projects, projectsCount, hasNext } = projectsObject
@@ -39,7 +41,6 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
     return (row.progress_total ?  interpolate(gettext('%s of %s'), [row.progress_count ?? 0, row.progress_total]) : null)
   }
 
-  const currentUserId = currentUser.id
   const isAdminOrSiteManager = currentUser.is_superuser || currentUser.is_site_manager
 
   const searchString = get(config, 'params.search', '')
@@ -76,15 +77,14 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
     const current = ancestors[ancestors.length - 1]
     const href = `${baseUrl}/projects/${current.id}`
 
-    const parts = ancestors.map((a, idx) => {
-      const isLast = idx === ancestors.length - 1
-      const content = isLast
-        ? <span className="fw-bold font-weight-bold" style={{ fontWeight: 700 }}>{a.title}</span>
-        : a.title
+    const parts = ancestors.map((ancestor, ancestorIndex) => {
+      const content = ancestors === current
+        ? <span className="fw-bold font-weight-bold">{ancestor.title}</span>
+        : ancestor.title
 
       return (
-        <React.Fragment key={a.id ?? idx}>
-          {idx > 0 && ' / '}
+        <React.Fragment key={ancestorIndex}>
+          {ancestorIndex > 0 && ' / '}
           {content}
         </React.Fragment>
       )
@@ -148,7 +148,8 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
   const cellFormatters = {
     title: (_content, row) => renderTitle(row),
     role: (_content, row) => {
-      const rolesString  = getUserRole(row, currentUserId)
+      const rolesString  = roleOptions.find(option => option.value == row.current_role)?.label || ''
+
       return <>
         {
           rolesString && <p>{rolesString}</p>
