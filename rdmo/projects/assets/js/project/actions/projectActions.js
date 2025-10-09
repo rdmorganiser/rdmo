@@ -1,7 +1,7 @@
 import ProjectApi from '../api/ProjectApi'
 import CatalogsApi from '/rdmo/projects/assets/js/common/api/CatalogsApi'
 
-import { projectId } from '../utils/meta'
+import { baseUrl, projectId } from '../utils/meta'
 import * as actionTypes from './actionTypes'
 
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
@@ -383,7 +383,7 @@ export function leaveProject(membershipId, { redirect = false } = {}) {
       dispatch(removeFromPending('leaveProject'))
       dispatch(leaveProjectSuccess(membershipId))
       if (redirect) {
-        window.location.href = '/projects/'
+        window.location.href = `${baseUrl}/projects/`
         return
       }
     })
