@@ -7,7 +7,7 @@ import { Modal, Tooltip } from 'rdmo/core/assets/js/_bs53/components'
 
 import { createProjectMember, sendProjectInvite, clearProjectErrors } from '../../actions/projectActions'
 import { useFieldErrors } from '../../hooks/useFieldErrors'
-import { defaultRoleOptions as roleOptions } from '../../../common/constants/defaultRoleOptions'
+import { roleOptions } from '../../../common/constants/roles'
 
 const initialForm = { lookup: '', role: 'author' }
 
