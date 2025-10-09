@@ -134,6 +134,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     permissions = serializers.SerializerMethodField()
 
+    current_role = serializers.CharField(read_only=True)
     last_changed = serializers.DateTimeField(read_only=True)
 
     visibility = serializers.CharField(source='visibility.get_help_display', read_only=True)
@@ -155,13 +156,14 @@ class ProjectSerializer(serializers.ModelSerializer):
             'guests',
             'created',
             'updated',
+            'current_role',
             'last_changed',
             'site',
             'views',
             'progress_total',
             'progress_count',
             'visibility',
-            'permissions'
+            'permissions',
         )
         read_only_fields = (
             'snapshots',
