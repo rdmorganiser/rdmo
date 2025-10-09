@@ -126,7 +126,9 @@ class ProjectSerializer(serializers.ModelSerializer):
             return Project.objects.filter_user(self.context['request'].user)
 
     catalog = CatalogField(required=True)
+
     parent = ParentField(required=False, allow_null=True)
+    parent_title = serializers.CharField(source='parent.title', read_only=True)
 
     owners = ProjectUserSerializer(many=True, read_only=True)
     managers = ProjectUserSerializer(many=True, read_only=True)
@@ -149,6 +151,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             'catalog_uri',
             'snapshots',
             'parent',
+            'parent_title',
             'owners',
             'managers',
             'authors',
