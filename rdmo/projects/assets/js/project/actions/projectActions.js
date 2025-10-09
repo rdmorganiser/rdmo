@@ -1,13 +1,16 @@
-import ProjectApi from '../api/ProjectApi'
-import CatalogsApi from '/rdmo/projects/assets/js/common/api/CatalogsApi'
-
-import { baseUrl, projectId } from '../utils/meta'
-import * as actionTypes from './actionTypes'
+import CatalogsApi from 'rdmo/projects/assets/js/common/api/CatalogsApi'
 
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
+import { projectId } from '../utils/meta'
 import { updateLocation } from '../utils/location'
+
+import ProjectApi from '../api/ProjectApi'
+
+import * as actionTypes from './actionTypes'
+
 
 export function setPage(page) {
   return function(dispatch) {
