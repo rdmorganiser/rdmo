@@ -1,5 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { isEmpty } from 'lodash'
 
 import { useModal }  from 'rdmo/core/assets/js/hooks'
 
@@ -28,17 +29,21 @@ const Membership = () => {
           </button>
         )}
       </header>
-      {memberships?.length > 0 && (
-        <MembershipTable persons={memberships} isMember />
-      )}
-      {invites?.length > 0 && (
-        <>
-          <header className="d-flex justify-content-between align-items-center mb-3">
-            <h5 className="mb-0">{gettext('Invites')}</h5>
-          </header>
-          <MembershipTable persons={invites} />
-        </>
-      )}
+      {
+        !isEmpty(memberships) && (
+          <MembershipTable persons={memberships} type="memberships" />
+        )
+      }
+      {
+        !isEmpty(invites) && (
+          <>
+            <header className="d-flex justify-content-between align-items-center mb-3">
+              <h5 className="mb-0">{gettext('Invites')}</h5>
+            </header>
+            <MembershipTable persons={invites} type="invites" />
+          </>
+        )
+      }
 
       <MembershipInviteModal show={showInvite} onClose={closeInvite} />
     </>

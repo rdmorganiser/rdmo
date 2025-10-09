@@ -11,33 +11,30 @@ import { defaultRoleOptions as roleOptions } from '../../../common/constants/def
 
 import MembershipDeleteModal  from './MembershipDeleteModal'
 
-const MembershipTable = ({ persons, isMember = false }) => {
+const MembershipTable = ({ persons, type }) => {
   const dispatch = useDispatch()
   const currentUser = useSelector((state) => state.user.currentUser)
   const { project } = useSelector((state) => state.project.project) || {}
   const perms = project?.permissions || {}
 
   const { show: showConfirm, open: openConfirm, close: closeConfirm } = useModal()
-  const [selected, setSelected] = useState(null)
+  const [modalState, setModalState] = useState(null)
 
-  const currentUserId = currentUser?.id
-  const isAdmin = currentUser?.is_superuser || currentUser?.is_site_manager
+  const isAdminOrSiteManager = currentUser?.is_superuser || currentUser?.is_site_manager
 
-  const handleOpenConfirm = (person, isCurrentUser) => {
-    setSelected({ person, isCurrentUser })
+  const openDeleteModal = (person, isCurrentUser) => {
+    setModalState({ person, isCurrentUser })
     openConfirm()
   }
 
-  const handleCloseConfirm = () => {
-    setSelected(null)
+  const closeDeleteModal = () => {
+    setModalState(null)
     closeConfirm()
   }
 
-  const uniquePersons = isMember
-  ? persons.filter(
-      (p, i, arr) => arr.findIndex(x => x.user?.id === p.user?.id) === i
-    )
-  : persons
+  const uniquePersons = (type === 'memberships') ? persons.filter(
+    (p, i, arr) => arr.findIndex(x => x.user?.id === p.user?.id) === i
+  ) : persons
 
   return (
     <div>
@@ -52,22 +49,33 @@ const MembershipTable = ({ persons, isMember = false }) => {
         </thead>
         <tbody>
           {uniquePersons?.map((person, index) => {
-            const isCurrentUser = person.user?.id === currentUserId
+            const isCurrentUser = person.user?.id === currentUser?.id
             const isOwner = isCurrentUser && person.role == 'owner'
-            const showMemberAction = isMember && ((!isCurrentUser && perms.can_delete_membership) || (isCurrentUser && perms.can_leave_project))
-            const showInviteAction = !isMember && perms.can_delete_invite
-            const showAction = (showMemberAction || showInviteAction || isAdmin) && !person.project // do not show action buttons for hierarchy roles
+
+            const showMemberAction = (type === 'memberships') && (
+              isCurrentUser ? perms.can_leave_project : perms.can_delete_membership
+            )
+            const showInviteAction = (type === 'invites') && perms.can_delete_invite
+            const showActions = (
+              showMemberAction || showInviteAction || currentUser?.is_superuser_or_site_manager
+            ) && !person.project // do not show action buttons for hierarchy roles
 
             const emailAddress = person.user?.email || person?.email
             const hierarchyRole = person?.project
-                      ? `${roleOptions.find(opt => opt.value === person.role).label} ${gettext('of')} ${person.project.title}`
-                      : null
+              ? `${roleOptions.find(opt => opt.value === person.role).label} ${gettext('of')} ${person.project.title}`
+              : null
 
             return (
               <tr key={index}>
                 <td><strong>{person?.user?.first_name} {person?.user?.last_name}</strong></td>
                 <td>
-                  {emailAddress && <a href={`mailto:${emailAddress}`} className="link-success text-decoration-underline">{emailAddress}</a>}
+                  {
+                    emailAddress && (
+                      <a href={`mailto:${emailAddress}`} className="link-success text-decoration-underline">
+                        {emailAddress}
+                      </a>
+                    )
+                  }
                 </td>
                 <td>
                   {hierarchyRole ?
@@ -78,25 +86,26 @@ const MembershipTable = ({ persons, isMember = false }) => {
                       value={person.role}
                       onChange={(newRole) => {
                         if (!newRole) return
-                        if (isMember) {
-                          dispatch(updateProjectMember(person.id, { role: newRole }))
-                        } else {
-                          dispatch(updateProjectInvite(person.id, { role: newRole }))
-                        }
+                        (type === 'memberships') ? dispatch(updateProjectMember(person.id, { role: newRole }))
+                                                 : dispatch(updateProjectInvite(person.id, { role: newRole }))
                       }}
                       isClearable={false}
-                      isDisabled={(isMember && (!perms.can_change_membership || (isOwner && !isAdmin)) || (!isMember && !perms.can_change_invite))}
+                      isDisabled={(
+                        (type === 'memberships') ? (
+                          !perms.can_change_membership || (isOwner && !isAdminOrSiteManager)
+                        ) : !perms.can_change_invite
+                      )}
                     />
                 }
                 </td>
                 <td className="text-end">
-                  {showAction && (
+                  {showActions && (
                     <button
                       type="button"
                       className="btn btn-link btn-sm p-0"
                       aria-label={isCurrentUser ? gettext('Leave') : gettext('Remove')}
                       title={isCurrentUser ? gettext('Leave') : gettext('Remove')}
-                      onClick={() => handleOpenConfirm(person, isCurrentUser)}
+                      onClick={() => openDeleteModal(person, isCurrentUser)}
                     >
                       <i
                         className={`bi ${isCurrentUser ? 'bi-box-arrow-right' : 'bi-x'}`}
@@ -110,23 +119,25 @@ const MembershipTable = ({ persons, isMember = false }) => {
         })}
         </tbody>
       </table>
-      {selected && (
-        <MembershipDeleteModal
-          show={showConfirm}
-          onClose={handleCloseConfirm}
-          isAdmin={isAdmin}
-          isMember={isMember}
-          isCurrentUser={selected.isCurrentUser}
-          person={selected.person}
-        />
-      )}
+      {
+        modalState && (
+          <MembershipDeleteModal
+            type={type}
+            show={showConfirm}
+            person={modalState.person}
+            onClose={closeDeleteModal}
+            isAdminOrSiteManager={isAdminOrSiteManager}
+            isCurrentUser={modalState.isCurrentUser}
+          />
+        )
+      }
     </div>
   )
 }
 
 MembershipTable.propTypes = {
   persons: PropTypes.array.isRequired,
-  isMember: PropTypes.bool
+  type: PropTypes.oneOf(['memberships', 'invites'])
 }
 
 export default MembershipTable
