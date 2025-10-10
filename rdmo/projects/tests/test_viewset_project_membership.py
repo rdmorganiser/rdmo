@@ -26,9 +26,15 @@ view_membership_permission_map = {
     'site': [1, 2, 3, 4, 5, 12]
 }
 
-add_membership_permission_map = change_membership_permission_map = delete_membership_permission_map = {
-    'api': [1, 2, 3, 4, 5, 12],
-    'site': [1, 2, 3, 4, 5, 12]
+add_membership_permission_map = {
+    'api': [1, 2, 3, 4, 5],
+    'site': [1, 2, 3, 4, 5]
+}
+
+change_membership_permission_map = delete_membership_permission_map = {
+    'owner': [1, 2, 3, 4, 5],
+    'api': [1, 2, 3, 4, 5],
+    'site': [1, 2, 3, 4, 5]
 }
 
 urlnames = {
