@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.7\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -101,8 +101,8 @@ msgid ""
 "The help text to be displayed next to the input element (in the primary "
 "language)."
 msgstr ""
-"Il testo di aiuto da visualizzare accanto all'elemento di input (nella "
-"lingua principale)."
+"Il testo di aiuto da visualizzare accanto all'elemento di input (nella lingua "
+"principale)."
 
 #: accounts/models.py:57 options/models.py:211 questions/models/catalog.py:116
 #: questions/models/page.py:141 questions/models/question.py:77
@@ -115,8 +115,8 @@ msgid ""
 "The help text to be displayed next to the input element (in the secondary "
 "language)."
 msgstr ""
-"Il testo di aiuto da visualizzare accanto all'elemento di input (nella "
-"lingua secondaria)."
+"Il testo di aiuto da visualizzare accanto all'elemento di input (nella lingua "
+"secondaria)."
 
 #: accounts/models.py:62 options/models.py:216 questions/models/catalog.py:121
 #: questions/models/page.py:146 questions/models/question.py:82
@@ -129,8 +129,8 @@ msgid ""
 "The help text to be displayed next to the input element (in the tertiary "
 "language)."
 msgstr ""
-"Il testo di aiuto da visualizzare accanto all'elemento di input (nella "
-"lingua terziaria)."
+"Il testo di aiuto da visualizzare accanto all'elemento di input (nella lingua "
+"terziaria)."
 
 #: accounts/models.py:67 options/models.py:221 questions/models/catalog.py:126
 #: questions/models/page.py:151 questions/models/question.py:87
@@ -143,8 +143,8 @@ msgid ""
 "The help text to be displayed next to the input element (in the quaternary "
 "language)."
 msgstr ""
-"Il testo di aiuto da visualizzare accanto all'elemento di input (nella "
-"lingua quaternaria)."
+"Il testo di aiuto da visualizzare accanto all'elemento di input (nella lingua "
+"quaternaria)."
 
 #: accounts/models.py:72 options/models.py:226 questions/models/catalog.py:131
 #: questions/models/page.py:156 questions/models/question.py:92
@@ -295,8 +295,8 @@ msgstr "Attenzione:"
 
 #: accounts/templates/account/email.html:51
 msgid ""
-"You currently do not have any e-mail address set up. You should really add "
-"an e-mail address so you can receive notifications, reset your password, etc."
+"You currently do not have any e-mail address set up. You should really add an "
+"e-mail address so you can receive notifications, reset your password, etc."
 msgstr ""
 "Al momento non è stato configurato alcun indirizzo e-mail. Un indirizzo e-"
 "mail è importante per ricevere notifiche, reimpostare la password, ..."
@@ -369,14 +369,13 @@ msgid ""
 "This e-mail confirmation link expired or is invalid. Please <a "
 "href=\"%(email_url)s\">issue a new e-mail confirmation request</a>."
 msgstr ""
-"Il link di conferma è scaduto. È possibile <a "
-"href=\"%(email_url)s\">chiedere una nuova e-mail di conferma</a>."
+"Il link di conferma è scaduto. È possibile <a href=\"%(email_url)s\">chiedere "
+"una nuova e-mail di conferma</a>."
 
 #: accounts/templates/account/login.html:6
 #: accounts/templates/account/login_form.html:23
 #: accounts/templates/account/password_reset_from_key_done.html:14
-#: core/templates/core/base_navigation.html:124
-#: core/templates/core/home.html:57
+#: core/templates/core/base_navigation.html:124 core/templates/core/home.html:57
 msgid "Login"
 msgstr "Accesso"
 
@@ -428,8 +427,7 @@ msgstr "Cambio password"
 msgid ""
 "Please enter your old password, and then enter your new password twice so we "
 "can verify you typed it in correctly."
-msgstr ""
-"Inserire la vecchia password, poi digitare due volte la nuova password."
+msgstr "Inserire la vecchia password, poi digitare due volte la nuova password."
 
 #: accounts/templates/account/password_reset.html:13
 msgid ""
@@ -449,8 +447,8 @@ msgstr "E-mail di reimpostazione password inviata"
 
 #: accounts/templates/account/password_reset_done.html:13
 msgid ""
-"We have sent you an e-mail. Please contact us if you do not receive it "
-"within a few minutes."
+"We have sent you an e-mail. Please contact us if you do not receive it within "
+"a few minutes."
 msgstr ""
 "E-mail inviata. Contattare l'amministratore nel caso non venga ricevuta dopo "
 "qualche minuto."
@@ -475,8 +473,8 @@ msgid ""
 "a>."
 msgstr ""
 "Il link di reimpostazione password è errato, probabilmente perché già "
-"utilizzato. È possibile richiedere una <a "
-"href=\"%(passwd_reset_url)s\">nuova reimpostazione</a>."
+"utilizzato. È possibile richiedere una <a href=\"%(passwd_reset_url)s\">nuova "
+"reimpostazione</a>."
 
 #: accounts/templates/account/password_reset_from_key.html:18
 msgid "Enter new password"
@@ -589,12 +587,11 @@ msgstr ""
 
 #: accounts/templates/account/verified_email_required.html:11
 msgid ""
-"This part of the site requires us to verify that you are who you claim to "
-"be. For this purpose, we require that you verify ownership of your e-mail "
-"address."
+"This part of the site requires us to verify that you are who you claim to be. "
+"For this purpose, we require that you verify ownership of your e-mail address."
 msgstr ""
-"Questa parte del sito richiede una verifica dell'identità. Per questo "
-"motivo, è necessario verificare il proprio indirizzo e-mail."
+"Questa parte del sito richiede una verifica dell'identità. Per questo motivo, "
+"è necessario verificare il proprio indirizzo e-mail."
 
 #: accounts/templates/account/verified_email_required.html:15
 msgid ""
@@ -685,8 +682,8 @@ msgstr ""
 
 #: accounts/templates/profile/profile_update_form.html:33
 msgid ""
-"If you want to remove all your account information please proceed by "
-"clicking the button below."
+"If you want to remove all your account information please proceed by clicking "
+"the button below."
 msgstr ""
 "Per eliminare completamente il proprio account cliccare sul bottone seguente."
 
@@ -719,8 +716,7 @@ msgid "Remove selected account"
 msgstr "Rimozione dell'account selezionato"
 
 #: accounts/templates/socialaccount/connections.html:62
-msgid ""
-"You currently have no social network accounts connected to this account."
+msgid "You currently have no social network accounts connected to this account."
 msgstr "Al momento nessun account social network è collegato."
 
 #: accounts/templates/socialaccount/connections.html:69
@@ -774,8 +770,8 @@ msgstr ""
 #: accounts/templates/socialaccount/signup.html:9
 #, python-format
 msgid ""
-"You are about to use your <strong>%(provider_name)s</strong> account to "
-"login to %(site_name)s. As a final step, please complete the following form:"
+"You are about to use your <strong>%(provider_name)s</strong> account to login "
+"to %(site_name)s. As a final step, please complete the following form:"
 msgstr ""
 "Verrà utilizzato <strong>%(provider_name)s</strong> per accedere a "
 "%(site_name)s. Per completare la connessione, compilare il seguente modulo:"
@@ -785,8 +781,8 @@ msgid "Name"
 msgstr "Nome"
 
 #: conditions/apps.py:7 conditions/models.py:90
-#: conditions/templates/conditions/export/conditions.html:6
-#: options/models.py:64 options/templates/options/export/optionset.html:29
+#: conditions/templates/conditions/export/conditions.html:6 options/models.py:64
+#: options/templates/options/export/optionset.html:29
 #: questions/models/page.py:186 questions/models/question.py:222
 #: questions/models/questionset.py:156 tasks/models.py:142
 #: tasks/templates/tasks/export/tasks.html:48
@@ -794,10 +790,9 @@ msgid "Conditions"
 msgstr "Condizioni"
 
 #: conditions/models.py:35
-#: conditions/templates/conditions/export/conditions.html:15
-#: domain/models.py:15 domain/templates/domain/export/attributes.html:14
-#: options/models.py:19 options/models.py:151
-#: options/templates/options/export/option.html:5
+#: conditions/templates/conditions/export/conditions.html:15 domain/models.py:15
+#: domain/templates/domain/export/attributes.html:14 options/models.py:19
+#: options/models.py:151 options/templates/options/export/option.html:5
 #: options/templates/options/export/optionset.html:5
 #: questions/models/catalog.py:36 questions/models/page.py:35
 #: questions/models/question.py:27 questions/models/questionset.py:30
@@ -815,8 +810,7 @@ msgstr "URI"
 #: conditions/models.py:36
 msgid "The Uniform Resource Identifier of this condition (auto-generated)."
 msgstr ""
-"L'Uniform Resource Identifier di questa condizione (generato "
-"automaticamente)."
+"L'Uniform Resource Identifier di questa condizione (generato automaticamente)."
 
 #: conditions/models.py:40 domain/models.py:20 options/models.py:24
 #: options/models.py:156 questions/models/catalog.py:41
@@ -842,11 +836,10 @@ msgid "The path for the URI of this condition."
 msgstr "Il percorso dell'URI di questa condizione."
 
 #: conditions/models.py:50
-#: conditions/templates/conditions/export/conditions.html:21
-#: domain/models.py:35 options/models.py:34 options/models.py:166
-#: questions/models/catalog.py:51 questions/models/page.py:50
-#: questions/models/question.py:42 questions/models/questionset.py:45
-#: questions/models/section.py:49
+#: conditions/templates/conditions/export/conditions.html:21 domain/models.py:35
+#: options/models.py:34 options/models.py:166 questions/models/catalog.py:51
+#: questions/models/page.py:50 questions/models/question.py:42
+#: questions/models/questionset.py:45 questions/models/section.py:49
 #: questions/templates/questions/export/catalog.html:12
 #: questions/templates/questions/export/page.html:12
 #: questions/templates/questions/export/question.html:14
@@ -915,8 +908,8 @@ msgid ""
 "If using a regular value, the text value this condition is checking against "
 "(for boolean values use 1 and 0)."
 msgstr ""
-"Se viene usato un valore regolare, il testo sul quale questa condizione "
-"verrà eseguita (per valori booleani utilizzare 1 e 0)."
+"Se viene usato un valore regolare, il testo sul quale questa condizione verrà "
+"eseguita (per valori booleani utilizzare 1 e 0)."
 
 #: conditions/models.py:83
 msgid "Target (Option)"
@@ -924,11 +917,11 @@ msgstr "Obiettivo (Opzione)"
 
 #: conditions/models.py:84
 msgid ""
-"If using a value pointing to an option, the option this condition is "
-"checking against."
+"If using a value pointing to an option, the option this condition is checking "
+"against."
 msgstr ""
-"Se viene usato un valore che punta ad un'opzione, l'opzione sulla quale "
-"viene validata questa condizione."
+"Se viene usato un valore che punta ad un'opzione, l'opzione sulla quale viene "
+"validata questa condizione."
 
 #: conditions/models.py:89
 msgid "Condition"
@@ -1165,8 +1158,7 @@ msgid "Update e-mail"
 msgstr "Aggiorna e-mail"
 
 #: core/templates/core/bootstrap_form_field.html:69
-msgid ""
-"Hold down \"Control\", or \"Command\" on a Mac, to select more than one."
+msgid "Hold down \"Control\", or \"Command\" on a Mac, to select more than one."
 msgstr ""
 "Tenere premuto “Control”, o “Command” su Mac, per selezionarne più di uno."
 
@@ -1260,8 +1252,7 @@ msgid "This XML does not contain RDMO content."
 msgstr "Questo XML non contiene dati RDMO."
 
 #: core/xml.py:60
-msgid ""
-"The \"required\" attribute in this RDMO XML file is not a valid version."
+msgid "The \"required\" attribute in this RDMO XML file is not a valid version."
 msgstr ""
 "L'attributo “required” in questo file XML RDMO non è una versione valida."
 
@@ -1647,8 +1638,7 @@ msgstr "Visualizza il testo (terziario)"
 
 #: options/models.py:267
 msgid "The view text for this option (in the tertiary language)."
-msgstr ""
-"Il testo di visualizzazione di questa opzione (nella lingua terziaria)."
+msgstr "Il testo di visualizzazione di questa opzione (nella lingua terziaria)."
 
 #: options/models.py:271
 msgid "View text (quaternary)"
@@ -1750,9 +1740,9 @@ msgid ""
 "these overlays will no longer be displayed. Please click the button below if "
 "you want to go through the tutorials again."
 msgstr ""
-"RDMO usa gli overlay per introdurre le sue funzionalità ai nuovi utenti. "
-"Dopo di che, questi overlay non saranno più visualizzati. Per favore clicca "
-"il pulsante qui sotto se vuoi rivedere i tutorial."
+"RDMO usa gli overlay per introdurre le sue funzionalità ai nuovi utenti. Dopo "
+"di che, questi overlay non saranno più visualizzati. Per favore clicca il "
+"pulsante qui sotto se vuoi rivedere i tutorial."
 
 #: overlays/templates/overlays/reset_overlays.html:15
 msgid "Reset overlays"
@@ -1903,8 +1893,8 @@ msgstr "C'è stato un errore nell'importazione."
 
 #: projects/mixins.py:97
 msgid ""
-"There has been an error with your import. No uploaded or retrieved file "
-"could be found."
+"There has been an error with your import. No uploaded or retrieved file could "
+"be found."
 msgstr ""
 "C'è stato un errore con la tua importazione. Nessun file caricato o "
 "recuperato è stato trovato."
@@ -1989,10 +1979,8 @@ msgid "Secret"
 msgstr "Segreto"
 
 #: projects/models/integration.py:76
-msgid ""
-"Designates whether this integration option is hidden from regular users."
-msgstr ""
-"Indica se questa opzione di integrazione è nascosta gli utenti normali."
+msgid "Designates whether this integration option is hidden from regular users."
+msgstr "Indica se questa opzione di integrazione è nascosta gli utenti normali."
 
 #: projects/models/integration.py:81
 msgid "Integration option"
@@ -2060,8 +2048,7 @@ msgid "The project for this issue."
 msgstr "Il progetto per questa discussione."
 
 #: projects/models/issue.py:31 projects/templates/projects/issue_detail.html:15
-#: projects/templates/projects/project_detail_issues.html:19
-#: tasks/models.py:155
+#: projects/templates/projects/project_detail_issues.html:19 tasks/models.py:155
 msgid "Task"
 msgstr "Attività"
 
@@ -2272,8 +2259,8 @@ msgid ""
 "Indicates if this value was entered as part of a set (important for "
 "conditions)."
 msgstr ""
-"Indica se questo valore è stato inserito come parte di un insieme "
-"(importante per le condizioni)."
+"Indica se questo valore è stato inserito come parte di un insieme (importante "
+"per le condizioni)."
 
 #: projects/models/value.py:64
 msgid "Collection index"
@@ -2489,8 +2476,8 @@ msgstr "%(user_full_name)s ha contattato l'assistenza per “%(project_title)s�
 #: projects/templates/projects/email/project_invite_message.txt:3
 #, python-format
 msgid ""
-"You are receiving this e-mail because you have been invited to collaborate "
-"on the project \"%(project_title)s\" by %(user_full_name)s."
+"You are receiving this e-mail because you have been invited to collaborate on "
+"the project \"%(project_title)s\" by %(user_full_name)s."
 msgstr ""
 "Stai ricevendo questa e-mail perché sei stato invitato a collaborare al "
 "progetto \"%(project_title)s\" da %(user_full_name)s."
@@ -2640,8 +2627,7 @@ msgstr ""
 #: projects/templates/projects/issue_send_message.txt:13
 #, python-format
 msgid "This message was generated using %(site_name)s at %(site_url)s."
-msgstr ""
-"Questo messaggio è stato generato tramite %(site_name)s a %(site_url)s."
+msgstr "Questo messaggio è stato generato tramite %(site_name)s a %(site_url)s."
 
 #: projects/templates/projects/issue_send_sidebar.html:3
 #: projects/templates/projects/project_answers.html:54
@@ -2678,8 +2664,8 @@ msgstr "Invitare un membro al progetto"
 msgid ""
 "You can invite a new member to this project and assign one of the following "
 "roles: <b>Guest</b> (who can only read), <b>Author</b> (who can answer "
-"questions), <b>Manager</b> (who can additionally create snapshots, export "
-"the project, import values, and update the project settings) or <b>Owner</b> "
+"questions), <b>Manager</b> (who can additionally create snapshots, export the "
+"project, import values, and update the project settings) or <b>Owner</b> "
 "(like you)."
 msgstr ""
 "Puoi invitare un nuovo membro a questo progetto e assegnargli uno dei "
@@ -2883,9 +2869,9 @@ msgstr "di"
 #: projects/templates/projects/project_detail_memberships_help.html:4
 msgid ""
 "Here you can see who can access the project and invite additional members. "
-"You can use the user roles to manage which rights the users have. Unless "
-"you are the last owner, you can leave the project with the button next to "
-"your name."
+"You can use the user roles to manage which rights the users have. Unless you "
+"are the last owner, you can leave the project with the button next to your "
+"name."
 msgstr ""
 "Qui puoi vedere chi può accedere al progetto e invitare altri membri. Puoi "
 "usare i ruoli utente per gestire quali privilegi hanno gli utenti. A meno che "
@@ -3060,8 +3046,8 @@ msgstr "Crea progetto"
 #: projects/templates/projects/project_form_visibility.html:16
 msgid ""
 "Projects can be made visible to all users, for example to be used as a "
-"template. When a project is made visible, users can access it as if they "
-"were in the guest role."
+"template. When a project is made visible, users can access it as if they were "
+"in the guest role."
 msgstr ""
 "I progetti possono essere resi visibili a tutti gli utenti, ad esempio per "
 "essere utilizzati come modello. Quando un progetto viene reso visibile, gli "
@@ -3129,8 +3115,7 @@ msgid ""
 "button and remove them using the blue cross (&times;)."
 msgstr ""
 "Inserire le voci blocco per blocco. È possibile aggiungere blocchi "
-"utilizzando il pulsante verde e rimuoverli utilizzando la croce blu "
-"(&times;)."
+"utilizzando il pulsante verde e rimuoverli utilizzando la croce blu (&times;)."
 
 #: projects/templates/projects/project_interview_add_value_help.html:4
 msgid ""
@@ -3230,8 +3215,8 @@ msgstr "Crea nuova istantanea"
 #: projects/templates/projects/snapshot_rollback.html:10
 #, python-format
 msgid ""
-"You are about to reset all values to the snapshot <strong>%(title)s</"
-"strong>. All newer values will be deleted."
+"You are about to reset all values to the snapshot <strong>%(title)s</strong>. "
+"All newer values will be deleted."
 msgstr ""
 "Tutti i valori dell'istantanea <strong>%(title)s</strong> stanno per essere "
 "resettati. Tutti i nuovi valori verranno cancellati."
@@ -3266,8 +3251,8 @@ msgid ""
 "An existing value for this attribute/set_prefix/set_index/collection_index "
 "was found."
 msgstr ""
-"È stato trovato un valore esistente per questo attributo/set_prefix/"
-"set_index/collection_index."
+"È stato trovato un valore esistente per questo attributo/set_prefix/set_index/"
+"collection_index."
 
 #: projects/validators.py:92
 msgid "The file quota for this project has been reached."
@@ -3814,8 +3799,7 @@ msgstr "ID esterno predefinito"
 
 #: questions/models/question.py:153
 msgid ""
-"The default external id for this question. To be used with dynamic "
-"optionsets."
+"The default external id for this question. To be used with dynamic optionsets."
 msgstr ""
 "L'id esterno predefinito per questa domanda. Da usare con i set di opzioni "
 "dinamiche."
@@ -3920,11 +3904,9 @@ msgid "Additional internal information about this question set."
 msgstr "Ulteriori informazioni interne su questo set di domande."
 
 #: questions/models/questionset.py:51
-msgid ""
-"Designates whether this question set (and its questions) can be changed."
+msgid "Designates whether this question set (and its questions) can be changed."
 msgstr ""
-"Indica se questo set di domande (e le relative domande) può essere "
-"modificato."
+"Indica se questo set di domande (e le relative domande) può essere modificato."
 
 #: questions/models/questionset.py:57
 msgid "The attribute this question set belongs to."
@@ -4082,16 +4064,16 @@ msgid ""
 "The short title for this section (in the primary language), used in the "
 "navigation."
 msgstr ""
-"Il titolo breve di questa sezione (nella lingua principale), utilizzato "
-"nella navigazione."
+"Il titolo breve di questa sezione (nella lingua principale), utilizzato nella "
+"navigazione."
 
 #: questions/models/section.py:100
 msgid ""
 "The short title for this section (in the secondary language), used in the "
 "navigation."
 msgstr ""
-"Il titolo breve di questa sezione (nella lingua secondaria), utilizzato "
-"nella navigazione."
+"Il titolo breve di questa sezione (nella lingua secondaria), utilizzato nella "
+"navigazione."
 
 #: questions/models/section.py:105
 msgid ""
@@ -4114,8 +4096,8 @@ msgid ""
 "The short title for this section (in the quinary language), used in the "
 "navigation."
 msgstr ""
-"Il titolo breve di questa sezione (nel linguaggio quinario), utilizzato "
-"nella navigazione."
+"Il titolo breve di questa sezione (nel linguaggio quinario), utilizzato nella "
+"navigazione."
 
 #: questions/models/section.py:120
 #: questions/templates/questions/export/section.html:3
@@ -4123,8 +4105,7 @@ msgid "Section"
 msgstr "Sezione"
 
 #: questions/serializers/v1/question.py:116
-msgid ""
-"If the \"Checkboxes\" widget is used, \"is_collection\" must be checked."
+msgid "If the \"Checkboxes\" widget is used, \"is_collection\" must be checked."
 msgstr ""
 "Se si utilizza il widget \"Caselle di controllo\", \"is_collection\" deve "
 "essere selezionato."
@@ -4234,8 +4215,8 @@ msgstr "La posizione di questo compito negli elenchi."
 
 #: tasks/models.py:51
 msgid ""
-"The catalogs this task can be used with. An empty list implies that this "
-"task can be used with every catalog."
+"The catalogs this task can be used with. An empty list implies that this task "
+"can be used with every catalog."
 msgstr ""
 "I cataloghi per i quali questa attività può essere utilizzata. Una lista "
 "vuota significa che questa attività può essere usata con tutti i cataloghi."
@@ -4308,9 +4289,8 @@ msgstr "Attributo data di fine"
 
 #: tasks/models.py:127
 msgid ""
-"The attribute that is setting the end date for this task (optional, if no "
-"end date attribute is given, the start date attribute sets also the end "
-"date)."
+"The attribute that is setting the end date for this task (optional, if no end "
+"date attribute is given, the start date attribute sets also the end date)."
 msgstr ""
 "L'attributo che imposta la data di fine per questa attività (opzionale; se "
 "non impostato, la data di inizio imposta anche la data di fine)."
@@ -4366,8 +4346,8 @@ msgstr "La posizione di questa vista negli elenchi."
 
 #: views/models.py:53
 msgid ""
-"The catalogs this view can be used with. An empty list implies that this "
-"view can be used with every catalog."
+"The catalogs this view can be used with. An empty list implies that this view "
+"can be used with every catalog."
 msgstr ""
 "I cataloghi per i quali questa vista può essere utilizzata. Una lista vuota "
 "significa che questa vista può essere usata con tutti i cataloghi."
@@ -4379,8 +4359,7 @@ msgstr "Il sito a cui appartiene questa vista (per setup multi sito)."
 #: views/models.py:64
 msgid "The sites that can edit this view (in a multi site setup)."
 msgstr ""
-"I siti che possono modificare questa vista (in una configurazione multi-"
-"sito)."
+"I siti che possono modificare questa vista (in una configurazione multi-sito)."
 
 #: views/models.py:69
 msgid "The groups for which this view is active."
@@ -4536,8 +4515,7 @@ msgstr "Raccolta"
 #~ msgid "Using the navigation will save your input."
 #~ msgstr "L'uso della navigazione salverà il tuo input."
 
-#~ msgid ""
-#~ "Please note that using the navigation will discard any unsaved input."
+#~ msgid "Please note that using the navigation will discard any unsaved input."
 #~ msgstr ""
 #~ "Si prega di notare che l'utilizzo della navigazione eliminerà qualsiasi "
 #~ "input non salvato."
@@ -4605,8 +4583,7 @@ msgstr "Raccolta"
 #~ msgid ""
 #~ "%(number_of_filtered_projects)s of %(number_of_projects)s projects shown"
 #~ msgstr ""
-#~ "%(number_of_filtered_projects)s di %(number_of_projects)s progetti "
-#~ "mostrati"
+#~ "%(number_of_filtered_projects)s di %(number_of_projects)s progetti mostrati"
 
 #~ msgid "Import existing project"
 #~ msgstr "Importazione di un progetto esistente"
@@ -4658,9 +4635,8 @@ msgstr "Raccolta"
 
 #, python-brace-format
 #~ msgid ""
-#~ "This integration allow the creation of issues in arbitrary repositories "
-#~ "on {self.gitlab_url}. The upload of attachments is not supported by "
-#~ "GitLab."
+#~ "This integration allow the creation of issues in arbitrary repositories on "
+#~ "{self.gitlab_url}. The upload of attachments is not supported by GitLab."
 #~ msgstr ""
 #~ "Questa integrazione consente la creazione di problemi in repository "
 #~ "arbitrari su {self.gitlab_url}. Il caricamento di allegati non è "
@@ -4694,8 +4670,8 @@ msgstr "Raccolta"
 #~ "Entries with <i class=\"fa fa-question-circle-o small\" aria-"
 #~ "hidden=\"true\"></i> might be skipped based on your input."
 #~ msgstr ""
-#~ "Le voci con <i class=\"fa-question-circle-o small\" aria-"
-#~ "hidden=\"true\"></i> potrebbero essere saltate in base al tuo input."
+#~ "Le voci con <i class=\"fa-question-circle-o small\" aria-hidden=\"true\"></"
+#~ "i> potrebbero essere saltate in base al tuo input."
 
 #, python-format
 #~ msgid "Update %(name)s"
@@ -4749,18 +4725,15 @@ msgstr "Raccolta"
 #~ msgstr ""
 #~ "Il nome plurale visualizzato per questa domanda nella seconda lingua."
 
-#~ msgid ""
-#~ "The plural name displayed for this question in the tertiary language."
+#~ msgid "The plural name displayed for this question in the tertiary language."
 #~ msgstr "Il nome plurale visualizzato per questa domanda nella terza lingua."
 
 #~ msgid ""
 #~ "The plural name displayed for this question in the quaternary language."
-#~ msgstr ""
-#~ "Il nome plurale visualizzato per questa domanda nella quarta lingua."
+#~ msgstr "Il nome plurale visualizzato per questa domanda nella quarta lingua."
 
 #~ msgid "The plural name displayed for this question in the quinary language."
-#~ msgstr ""
-#~ "Il nome plurale visualizzato per questa domanda nella quinta lingua."
+#~ msgstr "Il nome plurale visualizzato per questa domanda nella quinta lingua."
 
 #~ msgid ""
 #~ "The plural name displayed for this question set in the primary language."
@@ -4781,8 +4754,7 @@ msgstr "Raccolta"
 #~ "terziaria."
 
 #~ msgid ""
-#~ "The plural name displayed for this question set in the quaternary "
-#~ "language."
+#~ "The plural name displayed for this question set in the quaternary language."
 #~ msgstr ""
 #~ "Il nome plurale visualizzato per questo set di domande nella lingua "
 #~ "quaternaria."
