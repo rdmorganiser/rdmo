@@ -27,14 +27,14 @@ view_membership_permission_map = {
 }
 
 add_membership_permission_map = {
-    'api': [1, 2, 3, 4, 5],
-    'site': [1, 2, 3, 4, 5]
+    'api': [1, 2, 3, 4, 5, 12],
+    'site': [1, 2, 3, 4, 5, 12]
 }
 
 change_membership_permission_map = delete_membership_permission_map = {
     'owner': [1, 2, 3, 4, 5],
-    'api': [1, 2, 3, 4, 5],
-    'site': [1, 2, 3, 4, 5]
+    'api': [1, 2, 3, 4, 5, 12],
+    'site': [1, 2, 3, 4, 5, 12]
 }
 
 urlnames = {
@@ -161,7 +161,7 @@ def test_create_lookup(db, client, username, password, project_id, membership_ro
     ('bad@mail', 'Enter a valid email address.'),
 ])
 def test_create_lookup_error_invalid(db, client, lookup, expected_error):
-    client.login(username='owner', password='owner')
+    client.login(username='site', password='site')
     url = reverse(urlnames['list'], args=[1])
 
     data = {
