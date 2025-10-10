@@ -61,9 +61,10 @@ const MembershipTable = ({ persons, type }) => {
             ) && !person.project // do not show action buttons for hierarchy roles
 
             const emailAddress = person.user?.email || person?.email
-            const hierarchyRole = person?.project
-              ? `${roleOptions.find(opt => opt.value === person.role).label} ${gettext('of')} ${person.project.title}`
-              : null
+            const hierarchyRole = person?.project ? interpolate(gettext('%s of %s'), [
+              roleOptions.find(opt => opt.value === person.role)?.label || '',
+              person.project.title
+            ]) : null
 
             return (
               <tr key={index}>
