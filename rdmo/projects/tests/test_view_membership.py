@@ -16,7 +16,6 @@ users = (
 )
 
 add_membership_permission_map = change_membership_permission_map = delete_membership_permission_map = {
-    'owner': [1, 2, 3, 4, 5],
     'api': [1, 2, 3, 4, 5],
     'site': [1, 2, 3, 4, 5]
 }
