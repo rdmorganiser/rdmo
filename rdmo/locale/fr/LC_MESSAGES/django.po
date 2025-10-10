@@ -2928,13 +2928,13 @@ msgstr "de"
 #: projects/templates/projects/project_detail_memberships_help.html:4
 msgid ""
 "Here you can see who can access the project and invite additional members. "
-"You can use the user roles to manage which rights the benefits have. Unless "
+"You can use the user roles to manage which rights the users have. Unless "
 "you are the last owner, you can leave the project with the button next to "
 "your name."
 msgstr ""
 "Ici, vous pouvez voir qui peut accéder au projet et inviter des membres "
 "complémentaires. Vous pouvez utiliser les rôles d'utilisateur pour gérer les "
-"droits des bénéficiaires. À moins que vous ne soyez le dernier propriétaire, "
+"droits des utilisateurs. À moins que vous ne soyez le dernier propriétaire, "
 "vous pouvez quitter le projet en cliquant sur le bouton à côté de votre nom."
 
 #: projects/templates/projects/project_detail_sidebar.html:17
