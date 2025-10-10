@@ -19,7 +19,6 @@ users = (
 )
 
 add_membership_permission_map = {
-    'owner': [1, 2, 3, 4, 5],
     'api': [1, 2, 3, 4, 5],
     'site': [1, 2, 3, 4, 5]
 }
