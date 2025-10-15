@@ -117,20 +117,17 @@ class Plugin(Model, TranslationMixin):
         verbose_name=_('Available'),
         help_text=_('Designates whether this plugin is generally available for projects.')
     )
-
-    class PluginType(models.TextChoices):
-        EXPORT = "export", _("Project export")
-        SNAPSHOT_EXPORT = "snapshot_export", _("Snapshot export")
-        IMPORT = "import", _("Project import")
-        OPTIONSET_PROVIDER = "optionset_provider", _("Optionset provider")
-        ISSUE_PROVIDER = "issue_provider", _("Issue provider")
-
     python_path = models.CharField(
         max_length=512,
-        help_text=_("Python dotted path to the plugin class, e.g. 'rdmo_specific_plugin.module.PluginClass'"),
         verbose_name=_("Python path"),
+        help_text=_("Python dotted path to the plugin class, e.g. 'rdmo_specific_plugin.module.PluginClass'"),
+
     )
-    plugin_type = models.CharField(max_length=32, choices=PluginType.choices)
+    plugin_settings = models.JSONField(
+        blank=True, default=dict,
+        verbose_name=_("Plugin settings"),
+        help_text=_("Contains the settings for this plugin in JSON format."),
+    )
 
     class Meta:
         ordering = ('uri', )
