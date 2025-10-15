@@ -76,7 +76,6 @@ dev = [
   "pipdeptree>=2.13,<3.0",
   "pre-commit>=3.4,<5.0",
   "setuptools>=73,<81",
-  "twine>=5.1.1,<7.0",
   "wheel>=0.42,<0.46",
   "rdmo[allauth,openapi,pytest]",
 ]
@@ -235,4 +234,10 @@ exclude_lines = [
 default.extend-ignore-re = [
   "(?Rm)^.*(#|//)\\s*spellchecker:disable-line$", # for .py files
   "(?Rm)^.*<!-- spellchecker:disable-line -->$", # for .html files
+]
+
+[tool.check-wheel-contents] # Ref: https://github.com/jwodder/check-wheel-contents
+ignore = [
+  "W002", # wheel contains duplicate files
+  "W004", # module is not located at importable path
 ]

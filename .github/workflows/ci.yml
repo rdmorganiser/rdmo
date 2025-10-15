@@ -58,37 +58,8 @@ jobs:
         node-version: 22
         cache: npm
     - run: npm ci && npm run build:dist
-    # build the wheel
-    - uses: actions/setup-python@v6
-      with:
-        python-version: '3.13'
-        cache: pip
-    - run: |
-        python -m pip install --upgrade pip build[uv] twine
-        python -m pip --version
-    - name: Build the wheel
-      run: python -m build --installer=uv
-    - name: Check the metadata of wheel and sdist
-      run: python -m twine check --strict dist/*
-    - name: Install package from built wheel
-      run: python -m pip install --no-compile dist/rdmo*.whl # do not create __pycache__/*.pyc files
-    - name: Write info to step summary
-      run: |
-          {
-            echo -e "# ✓ Wheel successfully built (v${{ steps.new-version.outputs.new_version }})\n\n"
-            echo '<details><summary>Information about installed wheel</summary>'
-            echo -e "\n\`\`\`console"
-            echo "$ python -m pip show --files --verbose rdmo"
-            python -m pip show --files --verbose rdmo
-            echo -e "\`\`\`\n</details>"
-          } >> $GITHUB_STEP_SUMMARY
-    - name: Upload wheel as artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: wheel
-        path: dist/rdmo*.whl
-        if-no-files-found: error
-        retention-days: 30
+    - name: Build and inspect package
+      uses: hynek/build-and-inspect-python-package@v2
 
   test:
     name: "Test (Python: ${{ matrix.python-version }}, DB: ${{ matrix.db-backend }})"
@@ -108,7 +79,7 @@ jobs:
     - name: Download wheel
       uses: actions/download-artifact@v5
       with:
-        name: wheel
+        name: Packages
         path: dist
     - name: Install Dependencies
       run: |
@@ -166,7 +137,7 @@ jobs:
     - name: Download wheel
       uses: actions/download-artifact@v5
       with:
-        name: wheel
+        name: Packages
         path: dist
     - name: Install Dependencies
       run: |
@@ -238,7 +209,7 @@ jobs:
       - name: Download wheel
         uses: actions/download-artifact@v5
         with:
-          name: wheel
+          name: Packages
           path: dist
       - name: Install os requirements for python-ldap
         run: sudo apt-get update && sudo apt-get install --yes libldap2-dev libsasl2-dev
