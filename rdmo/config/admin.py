@@ -1,53 +1,30 @@
-from django import forms
 from django.contrib import admin
 
 from rdmo.core.utils import get_language_fields
 
 from .models import Plugin
 from .validators import PluginLockedValidator, PluginUniqueURIValidator
+from rdmo.core.admin import ElementAdminForm
 
 
-class PluginAdminForm(forms.ModelForm):
-    uri_path = forms.SlugField(required=True)
+class PluginAdminForm(ElementAdminForm):
 
     class Meta:
         model = Plugin
-        fields = [
-            "python_path",
-            "plugin_type",
-            "uri",
-            "uri_prefix",
-            "uri_path",
-            "comment",
-            "locked",
-            "catalogs",
-            "sites",
-            "editors",
-            "groups",
-            "title_lang1",
-            "title_lang2",
-            "title_lang3",
-            "title_lang4",
-            "title_lang5",
-            "help_lang1",
-            "help_lang2",
-            "help_lang3",
-            "help_lang4",
-            "help_lang5",
-            "available",
-        ]
+        fields = '__all__'
 
     def clean(self):
         PluginUniqueURIValidator(self.instance)(self.cleaned_data)
         PluginLockedValidator(self.instance)(self.cleaned_data)
 
 
+
 @admin.register(Plugin)
 class PluginAdmin(admin.ModelAdmin):
     form = PluginAdminForm
 
-    search_fields = ['uri', *get_language_fields('title'), *get_language_fields('help')]
-    list_display = ('uri', 'title', 'help', 'available')
+    search_fields = ['uri', 'python_path', *get_language_fields('title'), *get_language_fields('help')]
+    list_display = ('uri', 'python_path', 'title', 'available')
     readonly_fields = ('uri', )
-    list_filter = ('available', )
+    list_filter = ('available', 'python_path')
     filter_horizontal = ('catalogs', 'sites', 'editors', 'groups')
