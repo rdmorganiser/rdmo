@@ -1,40 +1,51 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { isNil } from 'lodash'
+import { useDispatch, useSelector } from 'react-redux'
+import { get, isNil } from 'lodash'
 
-import { Tile } from '../helper'
+import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import { Link } from 'rdmo/core/assets/js/components'
+import { HierarchyTree, Tile } from '../helper'
 import ProjectForm from './ProjectForm'
 import ProjectDelete from './ProjectDelete'
-import { getUserRoles, userIsManager } from 'rdmo/projects/assets/js/common/utils'
 
 const ProjectData = () => {
-  const project = useSelector((state) => state.project)
+  const config = useSelector((state) => state.config)
+  const { hierarchy, project } = useSelector((state) => state.project.project) ?? {}
   const user = useSelector((state) => state.user)
+  const dispatch = useDispatch()
+  const perms = project?.permissions ?? {}
 
-  if (isNil(project.project) || isNil(user.currentUser)) {
+  const showHierarchy = String(get(config, 'showHierarchy', false)) === 'true'
+  const toggleHierarchy = () => dispatch(updateConfig('showHierarchy', !showHierarchy))
+
+  if (isNil(project) || isNil(user.currentUser)) {
     return
   }
 
-  const allowed = userIsManager(user.currentUser) ||
-                  getUserRoles(project.project.project, user.currentUser.id, ['owners']).isProjectOwner
-
   return (
-    <div className="container-fluid px-3">
-    <div className="row g-3">
-      <Tile title={gettext('Project data')} size="fullWidth">
-        <ProjectForm disabled={!allowed} />
-      </Tile>
-    </div>
-
-    {allowed && (
+      <div className="container-fluid px-3">
         <div className="row g-3">
-          <Tile size="fullWidth" style="warning">
-            <ProjectDelete />
+          <Link className="element-link mb-10" onClick={toggleHierarchy}>
+            {showHierarchy ? gettext('Hide project hierarchy') : gettext('Show project hierarchy')}
+          </Link>
+          { showHierarchy &&
+          <Tile title={gettext('Project hierarchy')} size="fullWidth">
+            <HierarchyTree hierarchy={hierarchy} />
+          </Tile>
+          }
+          <Tile title={gettext('Project data')} size="fullWidth">
+            <ProjectForm disabled={!perms.can_change_project} />
           </Tile>
         </div>
-    )}
-  </div>
 
+        {perms.can_delete_project && (
+          <div className="row g-3">
+            <Tile size="fullWidth" style="warning">
+              <ProjectDelete />
+            </Tile>
+          </div>
+        )}
+      </div>
   )
 }
 

@@ -145,6 +145,11 @@ class ProjectViewSet(ModelViewSet):
             Prefetch('memberships', queryset=membership_queryset, to_attr='memberships_list')
         ).select_related('catalog', 'visibility')
 
+        # prepare subquery for the role of the current user
+        membership_subquery = Subquery(
+            Membership.objects.filter(project=OuterRef('pk'), user=self.request.user).values('role')
+        )
+
         # prepare subquery for last_changed
         last_changed_subquery = Subquery(
             Value.objects.filter(project=OuterRef('pk')).order_by('-updated').values('updated')[:1]
@@ -152,14 +157,17 @@ class ProjectViewSet(ModelViewSet):
         # the 'updated' field from a Project always returns a valid DateTime value
         # when Greatest returns null, then Coalesce will return the value for 'updated' as a fall-back
         # when Greatest returns a value, then Coalesce will return this value
-        queryset = queryset.annotate(last_changed=Coalesce(Greatest(last_changed_subquery, 'updated'), 'updated'))
+        queryset = queryset.annotate(
+            current_role=membership_subquery,
+            last_changed=Coalesce(Greatest(last_changed_subquery, 'updated'), 'updated')
+        )
 
         # cache queryset and return
         self._cached_queryset = queryset
         return self._cached_queryset
 
     def get_serializer_class(self):
-        if self.action == 'list':
+        if self.action in ['list', 'user']:
             return ProjectListSerializer
         else:
             return ProjectSerializer

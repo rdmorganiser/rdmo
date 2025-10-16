@@ -9,7 +9,7 @@ import { Link, Select } from 'rdmo/core/assets/js/components'
 import useDatePicker from '../../hooks/useDatePicker'
 import { language } from 'rdmo/core/assets/js/utils'
 
-const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsActions }) => {
+const ProjectFilters = ({ catalogs, config, configActions, isAdminOrSiteManager, projectsActions }) => {
   const {
     dateRange,
     dateFormat,
@@ -35,7 +35,7 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
     projectsActions.fetchProjects()
   }
 
-  const catalogOptions = catalogs?.filter(catalog => isManager || catalog.available)
+  const catalogOptions = catalogs?.filter(catalog => isAdminOrSiteManager || catalog.available)
                                   .map(catalog => ({
                                     value: catalog.id.toString(),
                                     label: (
@@ -78,7 +78,7 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
         <div className="panel panel-default panel-filters mt-10 mb-0">
           <div className="panel-body">
             <div className="row">
-              <div className={`col-md-${isManager ? 4 : 8}`}>
+              <div className={`col-md-${isAdminOrSiteManager ? 4 : 8}`}>
                 <label className="control-label text-muted">{gettext('Filter by catalog')}</label>
                 <div className="search-container">
                   <Select
@@ -90,7 +90,7 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
                   />
                 </div>
               </div>
-              {isManager && (
+              {isAdminOrSiteManager && (
                 <div className="col-md-4">
                   <label className="control-label text-muted">{gettext('Filter by created date')}</label>
                   <div className="projects-datepicker">
@@ -180,7 +180,7 @@ ProjectFilters.propTypes = {
   catalogs: PropTypes.arrayOf(PropTypes.object).isRequired,
   config: PropTypes.object.isRequired,
   configActions: PropTypes.object.isRequired,
-  isManager: PropTypes.bool.isRequired,
+  isAdminOrSiteManager: PropTypes.bool.isRequired,
   projectsActions: PropTypes.object.isRequired,
 }
 

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import AsyncSelect from 'react-select/async'
 import { useDebouncedCallback } from 'use-debounce'
+import { isEmpty } from 'lodash'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 import Input from 'rdmo/core/assets/js/components/forms/Input'
@@ -68,17 +69,7 @@ const ProjectForm = ({ disabled }) => {
     }
   }
 
-  useEffect(() => {
-    if (formData.parent && !parentOptions.some(p => p.value === formData.parent)) {
-      ProjectApi.fetchProject(formData.parent).then((project) => {
-        const option = { value: project.id, label: project.title }
-        setParentOptions((prev) => [...prev, option])
-      })
-    }
-  }, [formData.parent, parentOptions])
-
   return (
-    // <form onSubmit={handleSubmit} className="container mt-3">
     <form className="container mt-3">
 
       <Input
@@ -172,7 +163,10 @@ const ProjectForm = ({ disabled }) => {
               noOptionsMessage={() => gettext('No projects matching your search.')}
               loadingMessage={() => gettext('Loading ...')}
               defaultOptions={parentOptions}
-              value={parentOptions.find(p => p.value === formData.parent) || null}
+              value={isEmpty(parentOptions) ? {
+                value: project.parent,
+                label: project.parent_title
+              } : parentOptions.find(p => p.value === formData.parent)}
               onChange={(option) => handleChange('parent', option ? option.value : null)}
               getOptionValue={(project) => project.value}
               getOptionLabel={(project) => project.label}

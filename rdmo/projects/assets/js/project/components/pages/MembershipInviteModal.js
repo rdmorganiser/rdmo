@@ -3,18 +3,20 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Html from 'rdmo/core/assets/js/components/Html'
-import Modal from 'rdmo/core/assets/js/_bs53/components/Modal'
+import { Modal, Tooltip } from 'rdmo/core/assets/js/_bs53/components'
 
 import { createProjectMember, sendProjectInvite, clearProjectErrors } from '../../actions/projectActions'
 import { useFieldErrors } from '../../hooks/useFieldErrors'
-import { defaultRoleOptions as roleOptions } from '../../constants/defaultRoleOptions'
+import { roleOptions } from '../../../common/constants/roles'
 
 const initialForm = { lookup: '', role: 'author' }
 
-const MembershipInviteModal = ({ show, onClose, isManager = false }) => {
+const MembershipInviteModal = ({ show, onClose }) => {
   const dispatch = useDispatch()
   const templates = useSelector((state) => state.templates)
+  const { project } = useSelector((state) => state.project.project) || {}
   const errors = useFieldErrors()
+  const perms = project?.permissions || {}
 
   const [formData, setFormData] = useState(initialForm)
   const [silently, setSilently] = useState(false)
@@ -76,7 +78,7 @@ const MembershipInviteModal = ({ show, onClose, isManager = false }) => {
         <div className="mb-3">
           <label className="form-label fw-bold">{gettext('Role')}</label>
           {roleOptions.map(({ value, label }) => (
-            <div className="form-check" key={value}>
+            <div className="form-check d-flex align-items-center" key={value}>
               <input
                 className="form-check-input"
                 type="radio"
@@ -86,17 +88,33 @@ const MembershipInviteModal = ({ show, onClose, isManager = false }) => {
                 checked={formData.role === value}
                 onChange={() => setField('role', value)}
               />
-              <label className="form-check-label" htmlFor={`role-${value}`}>
+              <label className="form-check-label ms-2" htmlFor={`role-${value}`}>
                 {label}
               </label>
+              <Tooltip
+                title={
+                  <Html
+                    html={templates[`project_view_${value}_info`]}
+                  />
+                }
+                placement="right"
+              >
+                <i
+                  className="bi bi-info-circle ms-2"
+                  tabIndex={0}
+                  role="img"
+                  aria-label={gettext('Role information')}
+                  style={{ cursor: 'pointer' }}
+                />
+              </Tooltip>
             </div>
           ))}
           {errors.role?.map((err, i) => (
             <div key={i} className="text-danger mt-1">{err}</div>
           ))}
         </div>
-        {/* Add member silently (decides the action only) */}
-        {isManager && (
+        {/* Add member silently */}
+        {perms.can_add_membership && (
           <div className="mb-3">
             <label className="form-label fw-bold">{gettext('Add member silently')}</label>
             <Html html={templates.project_view_invite_member_silently_help} />
@@ -126,7 +144,6 @@ const MembershipInviteModal = ({ show, onClose, isManager = false }) => {
 MembershipInviteModal.propTypes = {
   show: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  isManager: PropTypes.bool
 }
 
 export default MembershipInviteModal

@@ -1,13 +1,16 @@
-import ProjectApi from '../api/ProjectApi'
-import CatalogsApi from '/rdmo/projects/assets/js/common/api/CatalogsApi'
-
-import { projectId } from '../utils/meta'
-import * as actionTypes from './actionTypes'
+import CatalogsApi from 'rdmo/projects/assets/js/common/api/CatalogsApi'
 
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
+import { projectId } from '../utils/meta'
 import { updateLocation } from '../utils/location'
+
+import ProjectApi from '../api/ProjectApi'
+
+import * as actionTypes from './actionTypes'
+
 
 export function setPage(page) {
   return function(dispatch) {
@@ -23,17 +26,20 @@ export function fetchProject() {
 
     return Promise.all([
       ProjectApi.fetchProject(projectId),
+      ProjectApi.fetchProjectHierarchy(projectId),
       ProjectApi.fetchProjectSnapshots(projectId),
       ProjectApi.fetchProjectTasks(projectId),
       ProjectApi.fetchProjectMemberships(projectId),
+      ProjectApi.fetchProjectMembershipHierarchy(projectId),
       CatalogsApi.fetchCatalogs()
     ])
-    .then(([project, snapshots, tasks, memberships, catalogs]) => {
+    .then(([project, hierarchy, snapshots, tasks, memberships, membershipHierarchy, catalogs]) => {
       const projectData = {
         project: project,
+        hierarchy: hierarchy,
         snapshots: snapshots,
         tasks: tasks,
-        memberships: memberships,
+        memberships: [...memberships, ...membershipHierarchy],
         catalogs: catalogs
       }
 
@@ -75,10 +81,23 @@ export function updateProject(data) {
     dispatch(updateProjectInit())
 
     return ProjectApi.updateProject(id, data)
-      .then((updatedProject) => {
+      .then(() =>
+        Promise.all([
+          ProjectApi.fetchProject(id),
+          ProjectApi.fetchProjectHierarchy(id),
+        ])
+      )
+      .then(([project, hierarchy]) => {
         const updatedBundle = {
           ...currentBundle,
-          project: updatedProject
+          // only these two are refreshed from server:
+          project,
+          hierarchy,
+          // everything else stays untouched:
+          // snapshots: currentBundle.snapshots,
+          // tasks: currentBundle.tasks,
+          // memberships: currentBundle.memberships,
+          // catalogs: currentBundle.catalogs,
         }
 
         dispatch(removeFromPending('updateProject'))
@@ -104,7 +123,7 @@ export function updateProjectError(error) {
   return { type: actionTypes.UPDATE_PROJECT_ERROR, error }
 }
 
-export function deleteProject(projectId) {
+export function deleteProject() {
   return function(dispatch) {
     dispatch(addToPending('deleteProject'))
     dispatch(deleteProjectInit())
@@ -113,6 +132,8 @@ export function deleteProject(projectId) {
       .then(() => {
         dispatch(removeFromPending('deleteProject'))
         dispatch(deleteProjectSuccess(projectId))
+
+        window.location.href = `${baseUrl}/projects/`
       })
       .catch((error) => {
         dispatch(removeFromPending('deleteProject'))
@@ -194,14 +215,28 @@ export function createProjectMemberError(error) {
 }
 
 export function updateProjectMember(membershipId, data) {
-  return function(dispatch) {
+  return function(dispatch, getState) {
     dispatch(addToPending('updateProjectMember'))
     dispatch(updateProjectMemberInit())
 
     return ProjectApi.updateMember(projectId, membershipId, data)
       .then(member => {
-        dispatch(removeFromPending('updateProjectMember'))
         dispatch(updateProjectMemberSuccess({ ...member, id: membershipId }))
+
+        // membership updates can lead to a permission change for owner <-> last owner cases
+        // project with permissions needs to be fetched
+        const state = getState()
+        const currentBundle = state.project.project
+        return ProjectApi.fetchProject(projectId).then(project => ({ project, currentBundle }))
+      })
+      .then(({ project, currentBundle }) => {
+        const updatedBundle = {
+          ...currentBundle,
+          project
+        }
+
+        dispatch(removeFromPending('updateProjectMember'))
+        dispatch(updateProjectSuccess(updatedBundle))
       })
       .catch(error => {
         dispatch(removeFromPending('updateProjectMember'))
@@ -223,7 +258,7 @@ export function updateProjectMemberError(error) {
   return { type: actionTypes.UPDATE_PROJECT_MEMBER_ERROR, error }
 }
 
-export function deleteProjectMember(membershipId, { redirect = false } = {}) {
+export function deleteProjectMember(membershipId) {
   return function(dispatch) {
     dispatch(addToPending('deleteProjectMember'))
     dispatch(deleteProjectMemberInit())
@@ -232,16 +267,12 @@ export function deleteProjectMember(membershipId, { redirect = false } = {}) {
       .then(() => {
         dispatch(removeFromPending('deleteProjectMember'))
         dispatch(deleteProjectMemberSuccess(membershipId))
-        if (redirect) {
-          window.location.href = '/projects/'
-          return
-        }
       })
       .catch(error => {
         dispatch(removeFromPending('deleteProjectMember'))
         dispatch(deleteProjectMemberError(error))
         throw error
-      })
+    })
   }
 }
 
@@ -345,6 +376,40 @@ export function deleteProjectInviteSuccess(inviteId) {
 
 export function deleteProjectInviteError(error) {
   return { type: actionTypes.DELETE_PROJECT_INVITE_ERROR, error }
+}
+
+export function leaveProject(membershipId, { redirect = false } = {}) {
+  return function(dispatch) {
+    dispatch(addToPending('leaveProject'))
+    dispatch(leaveProjectInit())
+
+    return ProjectApi.leaveProject(projectId)
+    .then(() => {
+      dispatch(removeFromPending('leaveProject'))
+      dispatch(leaveProjectSuccess(membershipId))
+      if (redirect) {
+        window.location.href = `${baseUrl}/projects/`
+        return
+      }
+    })
+    .catch(error => {
+      dispatch(removeFromPending('leaveProject'))
+      dispatch(leaveProjectError(error))
+      throw error
+    })
+  }
+}
+
+export function leaveProjectInit() {
+  return { type: actionTypes.LEAVE_PROJECT_INIT }
+}
+
+export function leaveProjectSuccess(membershipId) {
+  return { type: actionTypes.LEAVE_PROJECT_SUCCESS, membershipId }
+}
+
+export function leaveProjectError(error) {
+  return { type: actionTypes.LEAVE_PROJECT_ERROR, error }
 }
 
 export function clearProjectErrors() {

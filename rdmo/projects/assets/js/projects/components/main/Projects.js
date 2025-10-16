@@ -8,7 +8,9 @@ import { language } from 'rdmo/core/assets/js/utils'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import { PendingInvitations, ProjectFilters, ProjectImport, Table } from '../helper'
-import { getTitlePath, getUserRoles, userIsManager, HEADER_FORMATTERS, SORTABLE_COLUMNS } from '../../utils'
+import { HEADER_FORMATTERS, SORTABLE_COLUMNS } from '../../utils'
+import { roleOptions } from '../../../common/constants/roles'
+
 
 const Projects = ({ config, configActions, currentUserObject, projectsActions, projectsObject }) => {
   const { allowedTypes, catalogs, importUrls, invites, projects, projectsCount, hasNext } = projectsObject
@@ -39,8 +41,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
     return (row.progress_total ?  interpolate(gettext('%s of %s'), [row.progress_count ?? 0, row.progress_total]) : null)
   }
 
-  const currentUserId = currentUser.id
-  const isManager = userIsManager(currentUser)
+  const isAdminOrSiteManager = currentUser.is_superuser || currentUser.is_site_manager
 
   const searchString = get(config, 'params.search', '')
   const updateSearchString = (value) => {
@@ -70,20 +71,34 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
     projectsActions.uploadProject('/projects/import/', file)
   }
 
-  const renderTitle = (title, row) => {
-    const pathArray = getTitlePath(projects, title, row).split(' / ')
-    const lastChild = pathArray.pop()
+  const buildAncestorLink = (ancestors) => {
+    if (!Array.isArray(ancestors) || ancestors.length === 0) return null
 
+    const current = ancestors[ancestors.length - 1]
+    const href = `${baseUrl}/projects/${current.id}`
+
+    const parts = ancestors.map((ancestor, ancestorIndex) => {
+      const content = ancestors === current
+        ? <span className="fw-bold font-weight-bold">{ancestor.title}</span>
+        : ancestor.title
+
+      return (
+        <React.Fragment key={ancestorIndex}>
+          {ancestorIndex > 0 && ' / '}
+          {content}
+        </React.Fragment>
+      )
+    })
+
+    return <a href={href}>{parts}</a>
+  }
+
+  const renderTitle = (row) => {
     const catalog = catalogs.find(c => c.id === row.catalog)
 
     return (
       <div>
-        <a href={`${baseUrl}/projects/${row.id}/`}>
-          {pathArray.map((path, index) => (
-            <span key={index}>{path} / </span>
-          ))}
-          <b>{lastChild}</b>
-        </a>
+        {buildAncestorLink(row.ancestors)}
         {
           catalog && (
             <div className='text-muted' dangerouslySetInnerHTML={{ __html: catalog.title }} ></div>
@@ -131,9 +146,10 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
   }
 
   const cellFormatters = {
-    title: (content, row) => renderTitle(content, row),
+    title: (_content, row) => renderTitle(row),
     role: (_content, row) => {
-      const { rolesString } = getUserRoles(row, currentUserId)
+      const rolesString  = roleOptions.find(option => option.value == row.current_role)?.label || ''
+
       return <>
         {
           rolesString && <p>{rolesString}</p>
@@ -159,8 +175,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
     actions: (_content, row) => {
       const rowUrl = `${baseUrl}/projects/${row.id}`
       const params = `?next=${window.location.pathname}`
-      const { isProjectManager, isProjectOwner } = getUserRoles(row, currentUserId, ['managers', 'owners'])
-
+      const perms = row.permissions || {}
       return (
         <div className="icon-container">
           <Link
@@ -169,7 +184,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
             title={labels.copy}
             onClick={() => window.location.href = `${rowUrl}/copy/${params}`}
           />
-          {(isProjectManager || isProjectOwner || isManager) &&
+          {perms.can_change_project &&
             <Link
               href={`${rowUrl}/update/`}
               className="fa fa-pencil"
@@ -177,7 +192,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
               onClick={() => window.location.href = `${rowUrl}/update/${params}`}
             />
           }
-          {(isProjectOwner || isManager) &&
+          {perms.can_delete_project &&
             <Link
               href={`${rowUrl}/delete/`}
               className="fa fa-trash"
@@ -206,7 +221,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
             )
           }
           {
-            isManager && (
+            isAdminOrSiteManager && (
               <button type="button" className="btn btn-link" onClick={handleView}>
                 {viewLinkText}
               </button>
@@ -237,7 +252,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
           catalogs={catalogs ?? []}
           config={config}
           configActions={configActions}
-          isManager={isManager}
+          isAdminOrSiteManager={isAdminOrSiteManager}
           projectsActions={projectsActions}
         />
       </div>
