@@ -16,7 +16,7 @@ from rdmo.questions.models import Catalog
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
-from ..answers import AnswerTree
+from ..answers.tree import AnswerTree
 from ..managers import ProjectManager
 
 
@@ -149,7 +149,8 @@ class Project(MPTTModel, Model):
 
     def get_answer_tree(self, snapshot=None):
         self.catalog.prefetch_elements()
-        return AnswerTree(self, snapshot).compute()
+        values = self.values.filter(snapshot=snapshot).select_related('attribute', 'option')
+        return AnswerTree(self.catalog, values).compute()
 
 
 @receiver(pre_delete, sender=Project)
