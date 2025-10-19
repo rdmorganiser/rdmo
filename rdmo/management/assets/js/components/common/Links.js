@@ -8,7 +8,7 @@ import Link from 'rdmo/core/assets/js/components/Link'
 import LinkButton from 'rdmo/core/assets/js/components/LinkButton'
 
 const NestedLink = ({ href, title, onClick, show=true }) => {
-  return show && <Link href={href} className="element-link fa fa-align-right flip" title={title} onClick={onClick} />
+  return show && <Link href={href} className="element-link bi bi-list-nested" title={title} onClick={onClick} />
 }
 
 NestedLink.propTypes = {
@@ -19,7 +19,7 @@ NestedLink.propTypes = {
 }
 
 const EditLink = ({ href, title, onClick, disabled= false }) => {
-  return <Link href={href} className="element-link fa fa-pencil" title={title} onClick={onClick} disabled={disabled} />
+  return <Link href={href} className="element-link bi bi-pencil" title={title} onClick={onClick} disabled={disabled} />
 }
 
 EditLink.propTypes = {
@@ -30,7 +30,7 @@ EditLink.propTypes = {
 }
 
 const CopyLink = ({ href, title, onClick }) => {
-  return <Link href={href} className="element-link fa fa-copy" title={title} onClick={onClick} />
+  return <Link href={href} className="element-link bi bi-copy" title={title} onClick={onClick} />
 }
 
 CopyLink.propTypes = {
@@ -41,11 +41,11 @@ CopyLink.propTypes = {
 
 const AddLink = ({ title, altTitle, onClick, onAltClick, disabled }) => {
   if (isUndefined(onAltClick)) {
-    return <LinkButton className="element-btn-link fa fa-plus" title={title} onClick={onClick} disabled={disabled} />
+    return <LinkButton className="link bi bi-plus-lg" title={title} onClick={onClick} disabled={disabled} />
   } else {
     return (
       <span className="dropdown">
-        <button type="button" className="element-btn-link btn-link fa fa-plus" data-toggle="dropdown"
+        <button type="button" className="link btn-link bi bi-plus-lg" data-toggle="dropdown"
                 title={`${title}/${altTitle}`} aria-label={`${title}/${altTitle}`}>
         </button>
         <ul className="dropdown-menu">
@@ -71,9 +71,9 @@ AddLink.propTypes = {
 
 const AvailableLink = ({ available, locked, title, onClick, disabled }) => {
   const className = classNames({
-    'element-btn-link fa': true,
-    'fa-toggle-on': available,
-    'fa-toggle-off': !available
+    'link bi': true,
+    'bi-toggle-on': available,
+    'bi-toggle-off': !available
   })
 
   return <LinkButton className={className} title={locked ? gettext('Locked') : title}
@@ -90,9 +90,9 @@ AvailableLink.propTypes = {
 
 const LockedLink = ({ locked, title, onClick, disabled }) => {
   const className = classNames({
-    'element-btn-link fa': true,
-    'fa-lock text-danger': locked,
-    'fa-unlock-alt': !locked
+    'link bi': true,
+    'bi-lock text-danger': locked,
+    'bi-unlock': !locked
   })
 
   return <LinkButton className={className} title={title} onClick={onClick} disabled={disabled} />
@@ -107,9 +107,9 @@ LockedLink.propTypes = {
 
 const ToggleCurrentSiteLink = ({ hasCurrentSite, onClick, show }) => {
   const className = classNames({
-    'element-btn-link fa': true,
-    'fa-plus-square': !hasCurrentSite,
-    'fa-minus-square': hasCurrentSite,
+    'link bi': true,
+    'bi-plus-square': !hasCurrentSite,
+    'bi-dash-square': hasCurrentSite,
   })
   const title = hasCurrentSite ? gettext('Remove your site'): gettext('Add your site')
 
@@ -125,9 +125,9 @@ ToggleCurrentSiteLink.propTypes = {
 
 const ShowElementsLink = ({ showElements, show, onClick }) => {
   const className = classNames({
-    'element-btn-link fa': true,
-    'fa-chevron-down': showElements,
-    'fa-chevron-up': !showElements
+    'link bi': true,
+    'bi-chevron-down': showElements,
+    'bi-chevron-up': !showElements
   })
 
   const title = showElements ? gettext('Hide elements') : gettext('Show elements')
@@ -144,7 +144,7 @@ ShowElementsLink.propTypes = {
 const ExportLink = ({ exportUrl, title, exportFormats, csv=false, full=false }) => {
   return (
     <span className="dropdown">
-      <button type="button" className="element-btn-link btn-link fa fa-download" data-toggle="dropdown"
+      <button type="button" className="link link bi bi-download" data-toggle="dropdown"
               title={title} aria-label={title}></button>
       <ul className="dropdown-menu">
         <li><a href={exportUrl}>{gettext('XML')}</a></li>
@@ -184,10 +184,9 @@ ExportLink.propTypes = {
 }
 
 const ExtendLink = ({ extend, onClick }) => {
-  const className = classNames({
-    'element-link fa': true,
-    'fa-chevron-up': extend,
-    'fa-chevron-down': !extend
+  const className = classNames('element-link bi ms-1', {
+    'bi-chevron-up': extend,
+    'bi-chevron-down': !extend
   })
 
   const title = extend ? gettext('Show less')
@@ -201,21 +200,24 @@ ExtendLink.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-const CodeLink = ({ className, uri, href, onClick, order }) => {
+const CodeLink = ({ className, type, uri, href, onClick, order }) => {
   return (
-    <>
+    <span className={classNames('d-flex gap-2', className)}>
       <Link href={href} onClick={onClick}>
-        <code className={className}>{uri}</code>
+        <code className={`code-${type}`}>{uri}</code>
       </Link>
-      {!isNil(order) ? (
-        <>{' '}<code className="code-order">{order}</code></>
-      ) : null}
-    </>
+      {
+        !isNil(order) && <span>
+          <code className="code-order">{order}</code>
+        </span>
+      }
+    </span>
   )
 }
 
 CodeLink.propTypes = {
-  className: PropTypes.string.isRequired,
+  className: PropTypes.string,
+  type: PropTypes.string.isRequired,
   uri: PropTypes.string.isRequired,
   href: PropTypes.string,
   onClick: PropTypes.func.isRequired,
@@ -223,7 +225,7 @@ CodeLink.propTypes = {
 }
 
 const ErrorLink = ({ onClick }) => {
-  return <Link className="element-link fa fa-warning text-danger" onClick={onClick} />
+  return <Link className="element-link bi bi-exclamation-triangle text-danger" onClick={onClick} />
 }
 
 ErrorLink.propTypes = {
@@ -231,7 +233,7 @@ ErrorLink.propTypes = {
 }
 
 const WarningLink = ({ onClick }) => {
-  return <Link className="element-link fa fa-warning text-warning" onClick={onClick} />
+  return <Link className="element-link bi bi-exclamation-triangle text-warning" onClick={onClick} />
 }
 
 WarningLink.propTypes = {
@@ -241,9 +243,9 @@ WarningLink.propTypes = {
 const ShowLink = ({ show = false, onClick }) => {
   const title = show ? gettext('Hide') : gettext('Show')
   const className = classNames({
-    'element-link fa': true,
-    'fa-chevron-down': !show,
-    'fa-chevron-up': show
+    'element-link bi': true,
+    'bi-chevron-down': !show,
+    'bi-chevron-up': show
   })
 
   return <Link className={className} title={title} onClick={onClick} />

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import get from 'lodash/get'
+import { get, isEmpty } from 'lodash'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 
@@ -25,16 +25,16 @@ const Conditions = () => {
   const createCondition = () => dispatch(createElement('conditions'))
 
   return (
-    <div className="panel panel-default">
-      <div className="panel-heading">
-        <div className="pull-right">
+    <div className="card">
+      <div className="card-header">
+        <div className="d-flex align-items-center gap-2">
+          <strong className="me-auto">{gettext('Conditions')}</strong>
           <BackButton />
           <NewButton onClick={createCondition} />
         </div>
-        <strong>{gettext('Conditions')}</strong>
       </div>
 
-      <div className="panel-body">
+      <div className="card-body">
         <div className="row">
           <div className={config.settings.multisite ? 'col-sm-6' : 'col-sm-8'}>
             <FilterString value={get(config, 'filter.conditions.search', '')} onChange={updateFilterString}
@@ -53,14 +53,18 @@ const Conditions = () => {
         </div>
       </div>
 
-      <ul className="list-group">
       {
-        conditions.map((condition, index) => (
-          <Condition key={index} config={config} condition={condition}
-                     filter="conditions" filterEditors={true} />
-        ))
+        !isEmpty(conditions) && (
+          <ul className="list-group list-group-flush">
+          {
+            conditions.map((condition, index) => (
+              <Condition key={index} config={config} condition={condition}
+                         filter="conditions" filterEditors={true} />
+            ))
+          }
+          </ul>
+        )
       }
-      </ul>
     </div>
   )
 }

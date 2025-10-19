@@ -7,8 +7,8 @@ const Key = ({ element, onChange }) => {
         value = element.key ?? ''
 
   return (
-    <div className="form-group mb-0">
-      <label className="control-label" htmlFor={id}>
+    <div className="mb-2">
+      <label className="form-label" htmlFor={id}>
         <small>{gettext('Key')}</small>
       </label>
 

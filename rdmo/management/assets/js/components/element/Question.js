@@ -1,7 +1,9 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import get from 'lodash/get'
+import { get, isEmpty } from 'lodash'
+
+import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
@@ -38,102 +40,111 @@ const Question = ({ question, display='list', indent=0, filter=false, filterEdit
   const fetchCondition = (index) => dispatch(fetchElement('conditions', question.conditions[index]))
   const fetchOptionSet = (index) => dispatch(fetchElement('optionsets', question.optionsets[index]))
 
+  const displayUriQuestions = isTruthy(get(config, 'display.uri.questions', true))
+  const displayUriAttributes = isTruthy(get(config, 'display.uri.attributes', true))
+  const displayUriConditions = isTruthy(get(config, 'display.uri.conditions', true))
+  const displayUriOptionSets = isTruthy(get(config, 'display.uri.optionsets', true))
+
+
   const elementNode = (
-    <div className="element">
-      <div className="pull-right">
-        <ReadOnlyIcon title={gettext('This question is read only')} show={question.read_only} />
-        <EditLink title={gettext('Edit question')} href={editUrl} onClick={fetchEdit} />
-        <CopyLink title={gettext('Copy question')} href={copyUrl} onClick={fetchCopy} />
-        <LockedLink title={question.locked ? gettext('Unlock question') : gettext('Lock question')}
-                    locked={question.locked} onClick={toggleLocked} disabled={question.read_only} />
-        <ExportLink title={gettext('Export question')} exportUrl={exportUrl}
-                    exportFormats={config.settings.export_formats} full={true} />
-        <Drag element={question} show={display == 'nested'} />
+    <div className="d-flex flex-column gap-2">
+      <div className="d-flex align-items-center gap-2">
+        <strong>{gettext('Question')}{':'}</strong>
+        <div className="flex-grow-1">
+          <Html html={question.text} />
+        </div>
+        {
+          question.is_optional && <div className="me-1">
+            <code className="code-optional" title={gettext('This is an optional question.')}>
+              {gettext('optional')}
+            </code>
+          </div>
+        }
+        {
+          (question.default_text || question.default_option || question.default_external_id) && <div className="me-1">
+            <code className="code-default" title={gettext('This question has a default answer.')}>
+              {gettext('default')}
+            </code>
+          </div>
+        }
+        <div className="d-flex align-items-center gap-1">
+          <ReadOnlyIcon title={gettext('This question is read only')} show={question.read_only} />
+          <EditLink title={gettext('Edit question')} href={editUrl} onClick={fetchEdit} />
+          <CopyLink title={gettext('Copy question')} href={copyUrl} onClick={fetchCopy} />
+          <LockedLink title={question.locked ? gettext('Unlock question') : gettext('Lock question')}
+                      locked={question.locked} onClick={toggleLocked} disabled={question.read_only} />
+          <ExportLink title={gettext('Export question')} exportUrl={exportUrl}
+                      exportFormats={config.settings.export_formats} full={true} />
+          <Drag element={question} show={display == 'nested'} />
+        </div>
       </div>
-      <div>
-        <p>
-          <strong>{gettext('Question')}{':'}</strong> <Html html={question.text} />
-        </p>
-        {
-          question.is_optional && <p>
-            <code className="code-optional" title={gettext('This is an optional question.')}>{gettext('optional')}</code>
-          </p>
-        }
-        {
-          (question.default_text || question.default_option || question.default_external_id) && <p>
-            <code className="code-default" title={gettext('This question has a default answer.')}>{gettext('default')}</code>
-          </p>
-        }
-        {
-          get(config, 'display.uri.questions', true) && <p>
-            <CodeLink
-              className="code-questions"
-              uri={question.uri}
-              href={editUrl}
-              onClick={() => fetchEdit()}
-              order={order} />
-          </p>
-        }
-        {
-          get(config, 'display.uri.attributes', true) && question.attribute_uri && <p>
-            <CodeLink
-              className="code-domain"
-              uri={question.attribute_uri}
-              href={attributeUrl}
-              onClick={() => fetchAttribute()} />
-          </p>
-        }
-        {
-          get(config, 'display.uri.conditions', true) && question.condition_uris.map((uri, index) => (
-            <p key={index}>
-              <CodeLink
-                className="code-conditions"
-                uri={uri}
-                href={getConditionUrl(index)}
-                onClick={() => fetchCondition(index)} />
-            </p>
-          ))
-        }
-        {
-          get(config, 'display.uri.optionsets', true) && question.optionset_uris.map((uri, index) => (
-            <p key={index}>
-              <CodeLink
-                className="code-options"
-                uri={uri}
-                href={getOptionSetUrl(index)}
-                onClick={() => fetchOptionSet(index)} />
-            </p>
-          ))
-        }
-        {
-          question.warning && (
-            <ul className="list-unstyled mb-0">
-            {
-              question.warning.no_attribute && (
-                <li className="text-danger">
-                  {gettext('Error: No attribute is set for this question!')}
-                </li>
-              )
-            }
-            {
-              question.warning.double_attribute && (
-                <li className="text-danger">
-                  {gettext('Error: The attribute for this question is used several times (in this catalog).')}
-                </li>
-              )
-            }
-            {
-              question.warning.missing_languages && (
-                <li className="text-warning">
-                  {gettext('Warning: Some of the language specific fields are not set properly.')}
-                </li>
-              )
-            }
-            </ul>
-          )
-        }
-        <ElementErrors element={question} />
-      </div>
+      {
+        displayUriQuestions && (
+          <CodeLink
+            type="questions"
+            uri={question.uri}
+            href={editUrl}
+            onClick={() => fetchEdit()}
+            order={order} />
+        )
+      }
+      {
+        displayUriAttributes && question.attribute_uri && (
+          <CodeLink
+            type="domain"
+            uri={question.attribute_uri}
+            href={attributeUrl}
+            onClick={() => fetchAttribute()} />
+        )
+      }
+      {
+        displayUriConditions && question.condition_uris.map((uri, index) => (
+          <CodeLink
+            key={index}
+            type="conditions"
+            uri={uri}
+            href={getConditionUrl(index)}
+            onClick={() => fetchCondition(index)} />
+        ))
+      }
+      {
+        displayUriOptionSets && question.optionset_uris.map((uri, index) => (
+          <CodeLink
+            key={index}
+            type="options"
+            uri={uri}
+            href={getOptionSetUrl(index)}
+            onClick={() => fetchOptionSet(index)} />
+        ))
+      }
+      {
+        !isEmpty(question.warning) && (
+          <ul className="list-unstyled mb-0">
+          {
+            question.warning.no_attribute && (
+              <li className="text-danger">
+                {gettext('Error: No attribute is set for this question!')}
+              </li>
+            )
+          }
+          {
+            question.warning.double_attribute && (
+              <li className="text-danger">
+                {gettext('Error: The attribute for this question is used several times (in this catalog).')}
+              </li>
+            )
+          }
+          {
+            question.warning.missing_languages && (
+              <li className="text-warning">
+                {gettext('Warning: Some of the language specific fields are not set properly.')}
+              </li>
+            )
+          }
+          </ul>
+        )
+      }
+      <ElementErrors element={question} />
     </div>
   )
 
@@ -146,18 +157,18 @@ const Question = ({ question, display='list', indent=0, filter=false, filterEdit
       )
     case 'nested':
       return (
-        <>
+        <div className="position-relative">
           {
             showElement && (
-              <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
-                <div className="panel-body">
+              <div className="card mt-2" style={{ marginLeft: `${indent}rem` }}>
+                <div className="card-body">
                   { elementNode }
                 </div>
               </div>
             )
           }
           <Drop element={question} indent={indent} mode="after" />
-        </>
+        </div>
       )
   }
 }

@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
 
+import { isTruthy } from 'rdmo/core/assets/js/utils/config'
+
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { fetchElement, storeElement, createElement } from '../../actions/elementActions'
@@ -23,7 +25,7 @@ const QuestionSet = ({ questionset, display='list', indent=0, filter=false, filt
   const config = useSelector((state) => state.config)
 
   const showElement = filterElement(config, filter, false, filterEditors, questionset)
-  const showElements = get(config, `display.elements.questionsets.${questionset.id}`, true)
+  const showElements = isTruthy(get(config, `display.elements.questionsets.${questionset.id}`, true))
 
   const editUrl = buildPath('questionsets', questionset.id)
   const copyUrl = buildPath('questionsets', questionset.id, 'copy')
@@ -45,61 +47,66 @@ const QuestionSet = ({ questionset, display='list', indent=0, filter=false, filt
   const fetchAttribute = () => dispatch(fetchElement('attributes', questionset.attribute))
   const fetchCondition = (index) => dispatch(fetchElement('conditions', questionset.conditions[index]))
 
+  const displayUriQuestionSets = isTruthy(get(config, 'display.uri.questionsets', true))
+  const displayUriAttributes = isTruthy(get(config, 'display.uri.attributes', true))
+  const displayUriConditions = isTruthy(get(config, 'display.uri.conditions', true))
+
   const elementNode = (
-    <div className="element">
-      <div className="pull-right">
-        <ReadOnlyIcon title={gettext('This question set is read only')} show={questionset.read_only} />
-        <NestedLink title={gettext('View question set nested')} href={nestedUrl} onClick={fetchNested} show={display != 'nested'} />
-        <ShowElementsLink showElements={showElements} show={display == 'nested'} onClick={toggleElements} />
-        <EditLink title={gettext('Edit question set')} href={editUrl} onClick={fetchEdit} />
-        <CopyLink title={gettext('Copy question set')} href={copyUrl} onClick={fetchCopy} />
-        <AddLink title={gettext('Add question')} altTitle={gettext('Add question set')}
-                 onClick={createQuestion} onAltClick={createQuestionSet} disabled={questionset.read_only} />
-        <LockedLink title={questionset.locked ? gettext('Unlock question set') : gettext('Lock question set')}
-                    locked={questionset.locked} onClick={toggleLocked} disabled={questionset.read_only} />
-        <ExportLink title={gettext('Export question set')} exportUrl={exportUrl}
-                    exportFormats={config.settings.export_formats} full={true} />
-        <Drag element={questionset} show={display == 'nested'} />
+    <div className="d-flex flex-column gap-2">
+      <div className="d-flex align-items-center gap-2">
+        <strong>{gettext('Question set')}{':'}</strong>
+        <div className="flex-grow-1">
+          <Html html={questionset.title} />
+        </div>
+
+        <div className="d-flex align-items-center gap-1">
+          <ReadOnlyIcon title={gettext('This question set is read only')} show={questionset.read_only} />
+          <NestedLink title={gettext('View question set nested')} href={nestedUrl} onClick={fetchNested} show={display != 'nested'} />
+          <ShowElementsLink showElements={showElements} show={display == 'nested'} onClick={toggleElements} />
+          <EditLink title={gettext('Edit question set')} href={editUrl} onClick={fetchEdit} />
+          <CopyLink title={gettext('Copy question set')} href={copyUrl} onClick={fetchCopy} />
+          <AddLink title={gettext('Add question')} altTitle={gettext('Add question set')}
+                   onClick={createQuestion} onAltClick={createQuestionSet} disabled={questionset.read_only} />
+          <LockedLink title={questionset.locked ? gettext('Unlock question set') : gettext('Lock question set')}
+                      locked={questionset.locked} onClick={toggleLocked} disabled={questionset.read_only} />
+          <ExportLink title={gettext('Export question set')} exportUrl={exportUrl}
+                      exportFormats={config.settings.export_formats} full={true} />
+          <Drag element={questionset} show={display == 'nested'} />
+        </div>
       </div>
-      <div>
-        <p>
-          <strong>{gettext('Question set')}{':'}</strong> <Html html={questionset.title} />
-        </p>
-        {
-          get(config, 'display.uri.questionsets', true) && <p>
-            <CodeLink
-              className="code-questions"
-              uri={questionset.uri}
-              href={editUrl}
-              onClick={() => fetchEdit()}
-              order={order}
-            />
-          </p>
-        }
-        {
-          get(config, 'display.uri.attributes', true) && questionset.attribute_uri &&<p>
-            <CodeLink
-              className="code-domain"
-              uri={questionset.attribute_uri}
-              href={attributeUrl}
-              onClick={() => fetchAttribute()}
-            />
-          </p>
-        }
-        {
-          get(config, 'display.uri.conditions', true) && questionset.condition_uris.map((uri, index) => (
-            <p key={index}>
-              <CodeLink
-                className="code-conditions"
-                uri={uri}
-                href={getConditionUrl(index)}
-                onClick={() => fetchCondition(index)}
-              />
-            </p>
-          ))
-        }
-        <ElementErrors element={questionset} />
-      </div>
+      {
+        displayUriQuestionSets && <span>
+          <CodeLink
+            type="questions"
+            uri={questionset.uri}
+            href={editUrl}
+            onClick={() => fetchEdit()}
+            order={order}
+          />
+        </span>
+      }
+      {
+        displayUriAttributes && questionset.attribute_uri && <span>
+          <CodeLink
+            type="domain"
+            uri={questionset.attribute_uri}
+            href={attributeUrl}
+            onClick={() => fetchAttribute()}
+          />
+        </span>
+      }
+      {
+        displayUriConditions && questionset.condition_uris.map((uri, index) => (
+          <CodeLink
+            key={index}
+            type="conditions"
+            uri={uri}
+            href={getConditionUrl(index)}
+            onClick={() => fetchCondition(index)}
+          />
+        ))
+      }
+      <ElementErrors element={questionset} />
     </div>
   )
 
@@ -112,12 +119,12 @@ const QuestionSet = ({ questionset, display='list', indent=0, filter=false, filt
       )
     case 'nested':
       return (
-        <>
+        <div className="position-relative">
           {
             showElement && (
               <Drop element={questionset}>
-                <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
-                  <div className="panel-heading">
+                <div className="card mt-2" style={{ marginLeft: `${indent}rem` }}>
+                  <div className="card-header">
                     { elementNode }
                   </div>
                 </div>
@@ -140,7 +147,7 @@ const QuestionSet = ({ questionset, display='list', indent=0, filter=false, filt
             })
           }
           <Drop element={questionset} indent={indent} mode="after" />
-        </>
+        </div>
       )
     case 'plain':
       return elementNode

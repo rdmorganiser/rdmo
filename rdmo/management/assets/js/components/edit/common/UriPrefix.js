@@ -8,45 +8,40 @@ import get from 'lodash/get'
 
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
+import ErrorList from './ErrorList'
+import HelpText from './HelpText'
+
 const UriPrefix = ({ element, field, onChange }) => {
   const { meta, settings } = useSelector((state) => state.config)
 
   const id = getId(element, field),
         label = getLabel(element, field, meta),
         help = getHelp(element, field, meta),
-        warnings = get(element, ['warnings', field]),
         errors = get(element, ['errors', field])
 
-  const className = classNames({
-    'form-group': true,
-    'has-warning': !isEmpty(warnings),
-    'has-error': !isEmpty(errors)
+  const className = classNames('form-control', {
+    'is-invalid': !isEmpty(errors)
   })
 
   const value = isNil(element[field]) ? '' : element[field]
 
   return (
-    <div className={className}>
-      <label className="control-label" htmlFor={id}>{label}</label>
+    <div className="mb-3">
+      <label className="form-label" htmlFor={id}>{label}</label>
 
       <div className="input-group">
-        <input className="form-control" id={id} type="text" disabled={element.read_only}
+        <input type="text" id={id} className={className} disabled={element.read_only}
                value={value} onChange={event => onChange(field, event.target.value)} />
 
-        <span className="input-group-btn">
-          <button type="button" className="btn btn-default" disabled={element.read_only}
-            title={gettext('Insert default URI Prefix')} aria-label={gettext('Insert default URI Prefix')}
-            onClick={() => onChange(field, settings.default_uri_prefix)}>
-            <span className="fa fa-magic"></span>
-          </button>
-        </span>
+        <button type="button" className="btn btn-light border" disabled={element.read_only}
+          title={gettext('Insert default URI Prefix')} aria-label={gettext('Insert default URI Prefix')}
+          onClick={() => onChange(field, settings.default_uri_prefix)}>
+          <span className="bi bi-magic"></span>
+        </button>
       </div>
 
-      {help && <p className="help-block">{help}</p>}
-
-      {errors && <ul className="help-block list-unstyled">
-        {errors.map((error, index) => <li key={index}>{error}</li>)}
-      </ul>}
+      <ErrorList errors={errors} />
+      <HelpText help={help} />
     </div>
   )
 }

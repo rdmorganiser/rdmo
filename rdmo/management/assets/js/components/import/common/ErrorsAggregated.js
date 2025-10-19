@@ -1,14 +1,13 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import { get } from 'lodash'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
-import { generateErrorMessageListItems } from './common/ErrorsListGroup'
-
-import { ShowLink } from '../common/Links'
+import { generateErrorMessageListItems } from './ErrorsListGroup'
 
 // Function to aggregate unique errors from elements
 const aggregateUniqueErrors = (elements) => {
@@ -22,7 +21,7 @@ const aggregateUniqueErrors = (elements) => {
   return uniqueErrors
 }
 
-const ImportAggregatedErrorsPanel = ({ elements }) => {
+const ErrorsAggregated = ({ elements }) => {
   const dispatch = useDispatch()
 
   const config = useSelector((state) => state.config)
@@ -40,15 +39,17 @@ const ImportAggregatedErrorsPanel = ({ elements }) => {
   const errorsHeadingText = <strong onClick={updateShowErrors}>{gettext('Errors')} ({elements.length}) :</strong>
 
   return ( uniqueErrors.length > 0 &&
-    <div className="panel panel-danger panel-import-errors mt-10">
-      <div className="panel-heading" onClick={updateShowErrors}>
-        {errorsHeadingText}
-        <div className="pull-right">
-          <ShowLink show={showErrors} onClick={() => {}}/>
+    <div className="card text-bg-danger mt-2">
+      <div className="card-header cursor-pointer" onClick={updateShowErrors}>
+        <div className="d-flex align-items-center">
+          <div className="flex-grow-1">
+            {errorsHeadingText}
+          </div>
+          <span className={classNames('bi', {'bi-chevron-down': !showErrors, 'bi-chevron-up': showErrors})}></span>
         </div>
       </div>
       {showErrors && (
-        <ul className="list-group mb-5 pb-5 pt-5 pl-5 pr-5">
+        <ul className="list-group list-group-flush">
           {generateErrorMessageListItems(uniqueErrors)}
         </ul>
       )}
@@ -56,8 +57,8 @@ const ImportAggregatedErrorsPanel = ({ elements }) => {
   )
 }
 
-ImportAggregatedErrorsPanel.propTypes = {
+ErrorsAggregated.propTypes = {
   elements: PropTypes.array.isRequired
 }
 
-export default ImportAggregatedErrorsPanel
+export default ErrorsAggregated
