@@ -1,13 +1,13 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import { Tabs, Tab } from 'react-bootstrap'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { fetchElement, storeElement, createElement, deleteElement, updateElement } from '../../actions/elementActions'
 
 import Checkbox from './common/Checkbox'
+import LanguageTabs from './common/LanguageTabs'
 import OrderedMultiSelect from './common/OrderedMultiSelect'
 import Select from './common/Select'
 import Text from './common/Text'
@@ -44,24 +44,21 @@ const EditSection = ({ section }) => {
   const createPageText = gettext('Create new page')
 
   return (
-    <div className="panel panel-default panel-edit">
-      <div className="panel-heading">
-        <div className="pull-right">
+    <div className="card">
+      <div className="card-header">
+        <div className="d-flex flex-wrap align-items-center gap-2">
+          <strong className="flex-grow-1">
+            {section.id ? gettext('Edit section') : gettext('Create section')}
+          </strong>
           <ReadOnlyIcon title={gettext('This section is read only')} show={section.read_only} />
           <BackButton />
           <SaveButton elementAction={elementAction} onClick={storeSection} disabled={section.read_only} />
           <SaveButton elementAction={elementAction} onClick={storeSection} disabled={section.read_only} back={true}/>
         </div>
-        {
-          section.id ? <>
-            <strong>{gettext('Section')}{': '}</strong>
-            <code className="code-questions">{section.uri}</code>
-          </> : <strong>{gettext('Create section')}</strong>
-        }
       </div>
 
       {
-        parent && parent.catalog && <div className="panel-body panel-border">
+        parent && parent.catalog && <div className="card-body border-bottom">
         <Html html={interpolate(gettext(
           'This section will be added to the catalog <code class="code-questions">%s</code>.'),
           [parent.catalog.uri])} />
@@ -69,12 +66,12 @@ const EditSection = ({ section }) => {
       }
 
       {
-        section.id && <div className="panel-body panel-border">
+        section.id && <div className="card-body border-bottom">
           { info }
         </div>
       }
 
-      <div className="panel-body">
+      <div className="card-body pb-0">
         <div className="row">
           <div className="col-sm-6">
             <UriPrefix element={section} field="uri_prefix" onChange={updateSection} />
@@ -88,16 +85,12 @@ const EditSection = ({ section }) => {
 
         <Checkbox element={section} field="locked" onChange={updateSection} />
 
-        <Tabs id="#section-tabs" defaultActiveKey={0} animation={false}>
-          {
-            settings && settings.languages.map(([lang_code, lang], index) => (
-              <Tab key={index} eventKey={index} title={lang}>
-                <Text element={section} field={`title_${lang_code }`} onChange={updateSection} />
-                <Text element={section} field={`short_title_${lang_code }`} onChange={updateSection} />
-              </Tab>
-            ))
-          }
-        </Tabs>
+        <LanguageTabs render={(langCode) => (
+          <div>
+            <Text element={section} field={`title_${langCode}`} onChange={updateSection} />
+            <Text element={section} field={`short_title_${langCode}`} onChange={updateSection} />
+          </div>
+        )} />
 
         <OrderedMultiSelect element={section} field="pages" options={pages}
                             addText={addPageText} createText={createPageText}
@@ -110,13 +103,13 @@ const EditSection = ({ section }) => {
         }
       </div>
 
-      <div className="panel-footer">
-        <div className="pull-right">
-          <BackButton />
+      <div className="card-footer">
+        <div className="d-flex align-items-center gap-2">
+          {section.id && <DeleteButton onClick={openDeleteModal} disabled={section.read_only} />}
+          <BackButton className="ms-auto" />
           <SaveButton elementAction={elementAction} onClick={storeSection} disabled={section.read_only}  />
           <SaveButton elementAction={elementAction} onClick={storeSection} disabled={section.read_only} back={true}/>
         </div>
-          {section.id && <DeleteButton onClick={openDeleteModal} disabled={section.read_only} />}
       </div>
 
       <DeleteSectionModal section={section} info={info} show={showDeleteModal}

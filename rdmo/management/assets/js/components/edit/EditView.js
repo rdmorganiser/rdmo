@@ -1,12 +1,12 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import { Tabs, Tab } from 'react-bootstrap'
 
 import { storeElement, deleteElement, updateElement } from '../../actions/elementActions'
 
 import CodeMirror from './common/CodeMirror'
 import Checkbox from './common/Checkbox'
+import LanguageTabs from './common/LanguageTabs'
 import Number from './common/Number'
 import Select from './common/Select'
 import Text from './common/Text'
@@ -36,29 +36,26 @@ const EditView = ({ view }) => {
   const info = <ViewInfo view={view} />
 
   return (
-    <div className="panel panel-default panel-edit">
-      <div className="panel-heading">
-        <div className="pull-right">
+    <div className="card">
+      <div className="card-header">
+        <div className="d-flex flex-wrap align-items-center gap-2">
+          <strong className="flex-grow-1">
+            {view.id ? gettext('Edit view') : gettext('Create view')}
+          </strong>
           <ReadOnlyIcon title={gettext('This view is read only')} show={view.read_only} />
           <BackButton />
           <SaveButton elementAction={elementAction} onClick={storeView} disabled={view.read_only} />
           <SaveButton elementAction={elementAction} onClick={storeView} disabled={view.read_only} back={true}/>
         </div>
-        {
-          view.id ? <>
-            <strong>{gettext('View')}{': '}</strong>
-            <code className="code-views">{view.uri}</code>
-          </> : <strong>{gettext('Create view')}</strong>
-        }
       </div>
 
       {
-        view.id && <div className="panel-body panel-border">
+        view.id && <div className="card-body border-bottom">
           { info }
         </div>
       }
 
-      <div className="panel-body">
+      <div className="card-body pb-0">
         <div className="row">
           <div className="col-sm-6">
             <UriPrefix element={view} field="uri_prefix" onChange={updateView} />
@@ -82,16 +79,12 @@ const EditView = ({ view }) => {
           </div>
         </div>
 
-        <Tabs id="#view-tabs" defaultActiveKey={0} animation={false}>
-          {
-            settings.languages.map(([lang_code, lang], index) => (
-              <Tab className="pt-10" key={index} eventKey={index} title={lang}>
-                <Text element={view} field={`title_${lang_code }`} onChange={updateView} />
-                <Textarea element={view} field={`help_${lang_code }`} rows={8} onChange={updateView} />
-              </Tab>
-            ))
-          }
-        </Tabs>
+        <LanguageTabs render={(langCode) => (
+          <>
+            <Text element={view} field={`title_${langCode}`} onChange={updateView} />
+            <Textarea element={view} field={`help_${langCode}`} rows={8} onChange={updateView} className="mb-0"/>
+          </>
+        )} />
 
         <Select element={view} field="catalogs" options={catalogs} onChange={updateView} isMulti />
 
@@ -112,13 +105,13 @@ const EditView = ({ view }) => {
         <CodeMirror element={view} field="template" onChange={updateView} />
       </div>
 
-      <div className="panel-footer">
-        <div className="pull-right">
-          <BackButton />
+      <div className="card-footer">
+        <div className="d-flex align-items-center gap-2">
+          {view.id && <DeleteButton onClick={openDeleteModal} disabled={view.read_only} />}
+          <BackButton className="ms-auto" />
           <SaveButton elementAction={elementAction} onClick={storeView} disabled={view.read_only} />
           <SaveButton elementAction={elementAction} onClick={storeView} disabled={view.read_only} back={true}/>
         </div>
-        {view.id && <DeleteButton onClick={openDeleteModal} disabled={view.read_only} />}
       </div>
 
       <DeleteViewModal view={view} info={info} show={showDeleteModal}

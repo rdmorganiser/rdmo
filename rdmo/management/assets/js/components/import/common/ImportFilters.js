@@ -1,26 +1,26 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import { get } from 'lodash'
+import { get, isEmpty } from 'lodash'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
 import { FilterString, FilterUriPrefix } from '../../common/Filter'
 import { getUriPrefixes } from '../../../utils/filter'
-
-import { Checkbox } from '../../common/Checkboxes'
 
 const ImportFilters = ({ elements, changedElements, filteredElements, success = false}) => {
   const dispatch = useDispatch()
 
   const config = useSelector((state) => state.config)
 
+  const filterString = get(config, 'filter.import.elements.search', '')
+  const filterUriPrefix = get(config, 'filter.import.elements.uri_prefix', '')
+  const filterChanged = isTruthy(get(config, 'filter.import.elements.changed', false))
+
   const updateFilterString = (value) => dispatch(updateConfig('filter.import.elements.search', value))
-  const getValueFilterString = () => get(config, 'filter.import.elements.search', '')
   const updateFilterUriPrefix = (value) => dispatch(updateConfig('filter.import.elements.uri_prefix', value))
-  const getValueFilterUriPrefix = () => get(config, 'filter.import.elements.uri_prefix', '')
-  const updateFilterChanged = (value) => dispatch(updateConfig('filter.import.elements.changed', value))
-  const getValueFilterChanged = () => get(config, 'filter.import.elements.changed', false)
+  const updateFilterChanged = () => dispatch(updateConfig('filter.import.elements.changed', !filterChanged))
 
   const filterCheckBoxText = interpolate(
     success ? gettext('Show only created and changed elements (%s)')
@@ -28,30 +28,37 @@ const ImportFilters = ({ elements, changedElements, filteredElements, success = 
     [changedElements.length]
   )
 
-  return ( elements.length > 0 &&
-    <div className="row">
-      <div className={'col-sm-8'}>
-        <FilterString value={getValueFilterString()} onChange={updateFilterString}
-                      label={gettext('Filter URI')}/>
-      </div>
-      <div className="col-sm-4">
-        <FilterUriPrefix value={getValueFilterUriPrefix()}
-                         onChange={updateFilterUriPrefix}
-                         options={getUriPrefixes(elements)}/>
-      </div>
-
-      {elements.length > 0 && (
-        <div className="horizontal-container">
-          <div className="checkboxes">
-            <Checkbox label={filterCheckBoxText}
-                      value={getValueFilterChanged()} onChange={updateFilterChanged} />
-          </div>
-          <span className="shown-info">
-            {gettext('Shown')}: {filteredElements.length} / {elements.length}
-          </span>
+  return !isEmpty(elements) && (
+    <>
+      <div className="row">
+        <div className={'col-sm-8'}>
+          <FilterString value={filterString} onChange={updateFilterString}
+                        label={gettext('Filter URI')}/>
         </div>
-      )}
-  </div>)
+        <div className="col-sm-4">
+          <FilterUriPrefix value={filterUriPrefix}
+                           onChange={updateFilterUriPrefix}
+                           options={getUriPrefixes(elements)}/>
+        </div>
+      </div>
+      {
+        elements.length > 0 && (
+          <>
+            <div className="form-check mb-2">
+              <input className="form-check-input" type="checkbox" id="import-filter-changed"
+                     checked={filterChanged} onChange={updateFilterChanged}/>
+              <label className="form-check-label" htmlFor="import-filter-changed">
+                { filterCheckBoxText }
+              </label>
+            </div>
+            <div>
+              {gettext('Shown')}: {filteredElements.length} / {elements.length}
+            </div>
+          </>
+        )
+      }
+    </>
+  )
 }
 
 ImportFilters.propTypes = {

@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
 
+import { isTruthy } from 'rdmo/core/assets/js/utils/config'
+
 import { fetchElement, storeElement, createElement } from '../../actions/elementActions'
 
 import { filterElement } from '../../utils/filter'
@@ -35,38 +37,39 @@ const OptionSet = ({ optionset, display='list', filter=false, filterEditors=fals
   const createOption = () => dispatch(createElement('options', { optionset }))
   const fetchCondition = (index) => dispatch(fetchElement('conditions', optionset.conditions[index]))
 
+  const displayUriConditions = isTruthy(get(config, 'display.uri.conditions', true))
+
   const elementNode = (
-    <div className="element">
-      <div className="pull-right">
-        <ReadOnlyIcon title={gettext('This option set is read only')} show={optionset.read_only} />
-        <NestedLink title={gettext('View option set nested')} href={nestedUrl} onClick={fetchNested} />
-        <EditLink title={gettext('Edit option set')} href={editUrl} onClick={fetchEdit} />
-        <CopyLink title={gettext('Copy option set')} href={copyUrl} onClick={fetchCopy} />
-        <AddLink title={gettext('Add option')} onClick={createOption} disabled={optionset.read_only} />
-        <LockedLink title={optionset.locked ? gettext('Unlock option set') : gettext('Lock option set')}
-                    locked={optionset.locked} onClick={toggleLocked} disabled={optionset.read_only} />
-        <ExportLink title={gettext('Export option set')} exportUrl={exportUrl}
-                    exportFormats={config.settings.export_formats} full={true} />
+    <div className="d-flex flex-column gap-2">
+      <div className="d-flex align-items-center gap-2">
+        <strong>{gettext('Option set')}{':'}</strong>
+        <CodeLink className="flex-grow-1" type="options" uri={optionset.uri} href={editUrl}
+                  onClick={() => fetchEdit()} />
+
+        <div className="d-flex align-items-center gap-1">
+          <ReadOnlyIcon title={gettext('This option set is read only')} show={optionset.read_only} />
+          <NestedLink title={gettext('View option set nested')} href={nestedUrl} onClick={fetchNested} />
+          <EditLink title={gettext('Edit option set')} href={editUrl} onClick={fetchEdit} />
+          <CopyLink title={gettext('Copy option set')} href={copyUrl} onClick={fetchCopy} />
+          <AddLink title={gettext('Add option')} onClick={createOption} disabled={optionset.read_only} />
+          <LockedLink title={optionset.locked ? gettext('Unlock option set') : gettext('Lock option set')}
+                      locked={optionset.locked} onClick={toggleLocked} disabled={optionset.read_only} />
+          <ExportLink title={gettext('Export option set')} exportUrl={exportUrl}
+                      exportFormats={config.settings.export_formats} full={true} />
+        </div>
       </div>
-      <div>
-        <p>
-          <strong>{gettext('Option set')}{':'}</strong>
-          <CodeLink className="code-options" uri={optionset.uri} href={editUrl} onClick={() => fetchEdit()} />
-        </p>
-        {
-          get(config, 'display.uri.conditions', true) && optionset.condition_uris.map((uri, index) => (
-            <p key={index}>
-              <CodeLink
-                className="code-conditions"
-                uri={uri}
-                href={getConditionUrl(index)}
-                onClick={() => fetchCondition(index)}
-              />
-            </p>
-          ))
-        }
-        <ElementErrors element={optionset} />
-      </div>
+      {
+        displayUriConditions && optionset.condition_uris.map((uri, index) => (
+          <CodeLink
+            key={index}
+            type="conditions"
+            uri={uri}
+            href={getConditionUrl(index)}
+            onClick={() => fetchCondition(index)}
+          />
+        ))
+      }
+      <ElementErrors element={optionset} />
     </div>
   )
 

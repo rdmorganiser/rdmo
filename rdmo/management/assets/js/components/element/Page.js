@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
 
+import { isTruthy } from 'rdmo/core/assets/js/utils/config'
+
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { fetchElement, storeElement, createElement } from '../../actions/elementActions'
@@ -24,7 +26,7 @@ const Page = ({ page, display='list', indent=0, filter=false, filterEditors=fals
   const config = useSelector((state) => state.config)
 
   const showElement = filterElement(config, filter, false, filterEditors, page)
-  const showElements = get(config, `display.elements.pages.${page.id}`, true)
+  const showElements = isTruthy(get(config, `display.elements.pages.${page.id}`, true))
 
   const editUrl = buildPath('pages', page.id)
   const copyUrl = buildPath('pages', page.id, 'copy')
@@ -46,61 +48,66 @@ const Page = ({ page, display='list', indent=0, filter=false, filterEditors=fals
   const fetchAttribute = () => dispatch(fetchElement('attributes', page.attribute))
   const fetchCondition = (index) => dispatch(fetchElement('conditions', page.conditions[index]))
 
+  const displayUriPages = isTruthy(get(config, 'display.uri.pages', true))
+  const displayUriAttributes = isTruthy(get(config, 'display.uri.attributes', true))
+  const displayUriConditions = isTruthy(get(config, 'display.uri.conditions', true))
+
   const elementNode = (
-    <div className="element">
-      <div className="pull-right">
-        <ReadOnlyIcon title={gettext('This page is read only')} show={page.read_only} />
-        <NestedLink title={gettext('View page nested')} href={nestedUrl} onClick={fetchNested} show={display != 'nested'} />
-        <ShowElementsLink showElements={showElements} show={display == 'nested'} onClick={toggleElements} />
-        <EditLink title={gettext('Edit page')} href={editUrl} onClick={fetchEdit} />
-        <CopyLink title={gettext('Copy page')} href={copyUrl} onClick={fetchCopy} />
-        <AddLink title={gettext('Add question')} altTitle={gettext('Add question set')}
-                 onClick={createQuestion} onAltClick={createQuestionSet} disabled={page.read_only} />
-        <LockedLink title={page.locked ? gettext('Unlock page') : gettext('Lock page')}
-                    locked={page.locked} onClick={toggleLocked} disabled={page.read_only} />
-        <ExportLink title={gettext('Export page')} exportUrl={exportUrl}
-                    exportFormats={config.settings.export_formats} full={true} />
-        <Drag element={page} show={display == 'nested'} />
+    <div className="d-flex flex-column gap-2">
+      <div className="d-flex align-items-center gap-2">
+        <strong>{gettext('Page')}{':'}</strong>
+        <div className="flex-grow-1">
+          <Html html={page.title} />
+        </div>
+
+        <div className="d-flex align-items-center gap-1">
+          <ReadOnlyIcon title={gettext('This page is read only')} show={page.read_only} />
+          <NestedLink title={gettext('View page nested')} href={nestedUrl} onClick={fetchNested} show={display != 'nested'} />
+          <ShowElementsLink showElements={showElements} show={display == 'nested'} onClick={toggleElements} />
+          <EditLink title={gettext('Edit page')} href={editUrl} onClick={fetchEdit} />
+          <CopyLink title={gettext('Copy page')} href={copyUrl} onClick={fetchCopy} />
+          <AddLink title={gettext('Add question')} altTitle={gettext('Add question set')}
+                   onClick={createQuestion} onAltClick={createQuestionSet} disabled={page.read_only} />
+          <LockedLink title={page.locked ? gettext('Unlock page') : gettext('Lock page')}
+                      locked={page.locked} onClick={toggleLocked} disabled={page.read_only} />
+          <ExportLink title={gettext('Export page')} exportUrl={exportUrl}
+                      exportFormats={config.settings.export_formats} full={true} />
+          <Drag element={page} show={display == 'nested'} />
+        </div>
       </div>
-      <div>
-        <p>
-          <strong>{gettext('Page')}{':'}</strong> <Html html={page.title} />
-        </p>
-        {
-          get(config, 'display.uri.pages', true) && <p>
-            <CodeLink
-              className="code-questions"
-              uri={page.uri}
-              href={editUrl}
-              onClick={() => fetchEdit()}
-              order={order}
-            />
-          </p>
-        }
-        {
-          get(config, 'display.uri.attributes', true) && page.attribute_uri && <p>
-            <CodeLink
-              className="code-domain"
-              uri={page.attribute_uri}
-              href={attributeUrl}
-              onClick={() => fetchAttribute()}
-            />
-          </p>
-        }
-        {
-          get(config, 'display.uri.conditions', true) && page.condition_uris.map((uri, index) => (
-            <p key={index}>
-              <CodeLink
-                className="code-conditions"
-                uri={uri}
-                href={getConditionUrl(index)}
-                onClick={() => fetchCondition(index)}
-              />
-            </p>
-          ))
-        }
-        <ElementErrors element={page} />
-      </div>
+      {
+        displayUriPages && (
+          <CodeLink
+            type="questions"
+            uri={page.uri}
+            href={editUrl}
+            onClick={() => fetchEdit()}
+            order={order}
+          />
+        )
+      }
+      {
+        displayUriAttributes && page.attribute_uri && (
+          <CodeLink
+            type="domain"
+            uri={page.attribute_uri}
+            href={attributeUrl}
+            onClick={() => fetchAttribute()}
+          />
+        )
+      }
+      {
+        displayUriConditions && page.condition_uris.map((uri, index) => (
+          <CodeLink
+            key={index}
+            type="conditions"
+            uri={uri}
+            href={getConditionUrl(index)}
+            onClick={() => fetchCondition(index)}
+          />
+        ))
+      }
+      <ElementErrors element={page} />
     </div>
   )
 
@@ -113,12 +120,12 @@ const Page = ({ page, display='list', indent=0, filter=false, filterEditors=fals
       )
     case 'nested':
       return (
-        <>
+        <div className="position-relative">
           {
             showElement && (
               <Drop element={page}>
-                <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
-                  <div className="panel-heading">
+                <div className="card mt-2" style={{ marginLeft: `${indent}rem` }}>
+                  <div className="card-header">
                     { elementNode }
                   </div>
                 </div>
@@ -141,7 +148,7 @@ const Page = ({ page, display='list', indent=0, filter=false, filterEditors=fals
             })
           }
           <Drop element={page} indent={indent} mode="after" />
-        </>
+        </div>
       )
     case 'plain':
       return elementNode

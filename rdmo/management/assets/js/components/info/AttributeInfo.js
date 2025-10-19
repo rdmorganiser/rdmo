@@ -37,14 +37,14 @@ const AttributeInfo = ({ attribute }) => {
   const fetchTask = (task) => dispatch(fetchElement('tasks', task.id))
 
   return (
-    <div className="element-info">
-      <p>
+    <div className="mb-2">
+      <p className="mb-1">
         <Html html={interpolate(ngettext(
           'This attribute is used for <b>%s values</b> in <b>one project</b>.',
           'This attribute is used for <b>%s values</b> in <b>%s projects</b>.',
           attribute.projects_count), [attribute.values_count, attribute.projects_count])} />
       </p>
-      <p>
+      <p className="mb-1">
         <Html html={interpolate(ngettext(
           'This attribute has <b>one descendant</b>.',
           'This attribute has <b>%s descendants</b>.',
@@ -54,12 +54,12 @@ const AttributeInfo = ({ attribute }) => {
       </p>
       {
         extendAttributes && attributes.map((attribute, index) => (
-          <p key={index}>
+          <p className="mb-1" key={index}>
             <CodeLink className="code-domain" uri={attribute.uri} onClick={() => fetchAttribute(attribute)} />
           </p>
         ))
       }
-      <p>
+      <p className="mb-1">
         <Html html={interpolate(ngettext(
           'This attribute is used in <b>one condition</b>.',
           'This attribute is used in <b>%s conditions</b>.',
@@ -73,7 +73,7 @@ const AttributeInfo = ({ attribute }) => {
           </p>
         ))
       }
-      <p>
+      <p className="mb-1">
         <Html html={interpolate(ngettext(
           'This attribute is used in <b>one page</b>.',
           'This attribute is used in <b>%s pages</b>.',
@@ -82,12 +82,12 @@ const AttributeInfo = ({ attribute }) => {
       </p>
       {
         extendPages && pages.map((page, index) => (
-          <p key={index}>
+          <p className="mb-1" key={index}>
             <CodeLink className="code-questions" uri={page.uri} onClick={() => fetchPage(page)} />
           </p>
         ))
       }
-      <p>
+      <p className="mb-1">
         <Html html={interpolate(ngettext(
           'This attribute is used in <b>one questionset</b>.',
           'This attribute is used in <b>%s questionsets</b>.',
@@ -96,12 +96,12 @@ const AttributeInfo = ({ attribute }) => {
       </p>
       {
         extendQuestionSets && questionsets.map((questionset, index) => (
-          <p key={index}>
+          <p className="mb-1" key={index}>
             <CodeLink className="code-questions" uri={questionset.uri} onClick={() => fetchQuestionSet(questionset)} />
           </p>
         ))
       }
-      <p>
+      <p className="mb-1">
         <Html html={interpolate(ngettext(
           'This attribute is used in <b>one question</b>.',
           'This attribute is used in <b>%s questions</b>.',
@@ -110,12 +110,12 @@ const AttributeInfo = ({ attribute }) => {
       </p>
       {
         extendQuestions && questions.map((question, index) => (
-          <p key={index}>
+          <p className="mb-1" key={index}>
             <CodeLink className="code-questions" uri={question.uri} onClick={() => fetchQuestion(question)} />
           </p>
         ))
       }
-      <p>
+      <p className="mb-1">
         <Html html={interpolate(ngettext(
           'This attribute is used in <b>one task</b>.',
           'This attribute is used in <b>%s tasks</b>.',
@@ -124,7 +124,7 @@ const AttributeInfo = ({ attribute }) => {
       </p>
       {
         extendTasks && tasks.map((task, index) => (
-          <p key={index}>
+          <p className="mb-1" key={index}>
             <CodeLink className="code-tasks" uri={task.uri} onClick={() => fetchTask(task)} />
           </p>
         ))

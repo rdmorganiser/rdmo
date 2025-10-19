@@ -1,15 +1,16 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import { Tabs, Tab } from 'react-bootstrap'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { fetchElement, storeElement, createElement, deleteElement, updateElement } from '../../actions/elementActions'
 
 import Checkbox from './common/Checkbox'
+import LanguageTabs from './common/LanguageTabs'
 import MultiSelect from './common/MultiSelect'
 import Select from './common/Select'
+import Tabs from './common/Tabs'
 import Text from './common/Text'
 import Textarea from './common/Textarea'
 import UriPrefix from './common/UriPrefix'
@@ -50,31 +51,28 @@ const EditQuestion = ({ question }) => {
   const createOptionText = gettext('Create new optionset')
 
   return (
-    <div className="panel panel-default panel-edit">
-      <div className="panel-heading">
-        <div className="pull-right">
+    <div className="card">
+      <div className="card-header">
+        <div className="d-flex align-items-center gap-2">
+          <strong className="flex-grow-1">
+            {question.id ? gettext('Edit question') : gettext('Create question')}
+          </strong>
           <ReadOnlyIcon title={gettext('This question is read only')} show={question.read_only} />
           <BackButton />
           <SaveButton elementAction={elementAction} onClick={storeQuestion} disabled={question.read_only} />
           <SaveButton elementAction={elementAction} onClick={storeQuestion} disabled={question.read_only} back={true}/>
         </div>
-        {
-          question.id ? <>
-            <strong>{gettext('Question')}{': '}</strong>
-            <code className="code-questions">{question.uri}</code>
-          </> : <strong>{gettext('Create question')}</strong>
-        }
       </div>
 
       {
-        parent && parent.page && <div className="panel-body panel-border">
+        parent && parent.page && <div className="card-body border-bottom">
         <Html html={interpolate(gettext(
           'This question will be added to the page <code class="code-questions">%s</code>.'),
           [parent.page.uri])} />
         </div>
       }
       {
-        parent && parent.questionset && <div className="panel-body panel-border">
+        parent && parent.questionset && <div className="card-body border-bottom">
         <Html html={interpolate(gettext(
           'This question will be added to the question set <code class="code-questions">%s</code>.'),
           [parent.questionset.uri])} />
@@ -82,12 +80,12 @@ const EditQuestion = ({ question }) => {
       }
 
       {
-        question.id && <div className="panel-body panel-border">
+        question.id && <div className="card-body border-bottom">
           { info }
         </div>
       }
 
-      <div className="panel-body">
+      <div className="card-body pb-0">
         <div className="row">
           <div className="col-sm-6">
             <UriPrefix element={question} field="uri_prefix" onChange={updateQuestion} />
@@ -111,17 +109,13 @@ const EditQuestion = ({ question }) => {
           </div>
         </div>
 
-        <Tabs id="#question-tabs" defaultActiveKey={0} animation={false}>
-          {
-            settings.languages.map(([lang_code, lang], index) => (
-              <Tab key={index} eventKey={index} title={lang}>
-                <Text element={question} field={`text_${lang_code }`} onChange={updateQuestion} />
-                <Textarea element={question} field={`help_${lang_code }`} rows={8} onChange={updateQuestion} />
-                <Text element={question} field={`verbose_name_${lang_code }`} onChange={updateQuestion} />
-              </Tab>
-            ))
-          }
-        </Tabs>
+        <LanguageTabs render={(langCode) => (
+          <>
+            <Text element={question} field={`text_${langCode}`} onChange={updateQuestion} />
+            <Textarea element={question} field={`help_${langCode}`} rows={8} onChange={updateQuestion} />
+            <Text element={question} field={`verbose_name_${langCode}`} onChange={updateQuestion} />
+          </>
+        )} />
 
         <Select element={question} field="attribute" createText={gettext('Create new attribute')}
                 options={attributes} onChange={updateQuestion} onCreate={createAttribute} onEdit={editAttribute} />
@@ -141,63 +135,70 @@ const EditQuestion = ({ question }) => {
           </div>
         </div>
 
-        <Tabs id="#question-tabs2" defaultActiveKey={0} animation={false}>
-          <Tab key={0} eventKey={0} title={gettext('Conditions')}>
-            <MultiSelect element={question} field="conditions" options={conditions}
-                         addText={gettext('Add existing condition')} createText={gettext('Create new condition')}
-                         onChange={updateQuestion} onCreate={createCondition} onEdit={editCondition} />
-          </Tab>
-          <Tab key={1} eventKey={1} title={gettext('Option sets')}>
-            <MultiSelect element={question} field="optionsets" options={optionsets}
-                         addText={addOptionText} createText={createOptionText}
-                         onChange={updateQuestion} onCreate={createOptionSet} onEdit={editOptionSet} />
-          </Tab>
-          <Tab key={2} eventKey={2} title={gettext('Range')}>
-            <div className="row">
-              <div className="col-sm-4">
-                <Text element={question} field="minimum" onChange={updateQuestion} />
+        <Tabs
+          labels={[
+            gettext('Conditions'),
+            gettext('Option sets'),
+            gettext('Range'),
+            gettext('Default'),
+            ...(settings.multisite ? [gettext('Editors')] : [])
+          ]}
+          tabs={[
+            (
+              <MultiSelect key="conditions" element={question} field="conditions" options={conditions}
+                           addText={gettext('Add existing condition')} createText={gettext('Create new condition')}
+                           onChange={updateQuestion} onCreate={createCondition} onEdit={editCondition} />
+            ),
+            (
+              <MultiSelect key="optionsets" element={question} field="optionsets" options={optionsets}
+                           addText={addOptionText} createText={createOptionText}
+                           onChange={updateQuestion} onCreate={createOptionSet} onEdit={editOptionSet} />
+            ),
+            (
+              <div key="range" className="row">
+                <div className="col-sm-4">
+                  <Text element={question} field="minimum" onChange={updateQuestion} />
+                </div>
+                <div className="col-sm-4">
+                  <Text element={question} field="maximum" onChange={updateQuestion} />
+                </div>
+                <div className="col-sm-4">
+                  <Text element={question} field="step" onChange={updateQuestion} />
+                </div>
               </div>
-              <div className="col-sm-4">
-                <Text element={question} field="maximum" onChange={updateQuestion} />
+            ),
+            (
+              <div key="default">
+                {
+                  settings.languages.map((language, index) => (
+                    <Textarea key={index} element={question} field={`default_text_${language[0]}`}
+                              rows={1} onChange={updateQuestion} />
+                  ))
+                }
+                <div className="row">
+                  <div className="col-sm-6">
+                    <Select element={question} field="default_option" options={options} onChange={updateQuestion} />
+                  </div>
+                  <div className="col-sm-6">
+                    <Text element={question} field="default_external_id" onChange={updateQuestion} />
+                  </div>
+                </div>
               </div>
-              <div className="col-sm-4">
-                <Text element={question} field="step" onChange={updateQuestion} />
-              </div>
-            </div>
-          </Tab>
-          <Tab key={3} eventKey={3} title={gettext('Default')}>
-            {
-              settings.languages.map((language, index) => (
-                <Textarea key={index} element={question} field={`default_text_${language[0]}`}
-                          rows={1} onChange={updateQuestion} />
-              ))
-            }
-            <div className="row">
-              <div className="col-sm-6">
-                <Select element={question} field="default_option" options={options} onChange={updateQuestion} />
-              </div>
-              <div className="col-sm-6">
-                <Text element={question} field="default_external_id" onChange={updateQuestion} />
-              </div>
-            </div>
-          </Tab>
-          {
-            settings.multisite && (
-              <Tab key={4} eventKey={4} title={gettext('Editors')}>
-                <Select element={question} field="editors" options={sites} onChange={updateQuestion} isMulti />
-              </Tab>
+            ),
+            (
+              <Select key="editors" element={question} field="editors" options={sites} onChange={updateQuestion} isMulti />
             )
-          }
-        </Tabs>
+          ]}
+        />
       </div>
 
-      <div className="panel-footer">
-        <div className="pull-right">
-          <BackButton />
+      <div className="card-footer">
+        <div className="d-flex align-items-center gap-2">
+          {question.id && <DeleteButton onClick={openDeleteModal} disabled={question.read_only} />}
+          <BackButton className="ms-auto" />
           <SaveButton elementAction={elementAction} onClick={storeQuestion} disabled={question.read_only} />
           <SaveButton elementAction={elementAction} onClick={storeQuestion} disabled={question.read_only} back={true}/>
         </div>
-        {question.id && <DeleteButton onClick={openDeleteModal} disabled={question.read_only} />}
       </div>
 
       <DeleteQuestionModal question={question} info={info} show={showDeleteModal}

@@ -1,11 +1,11 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import { Tabs, Tab } from 'react-bootstrap'
 
 import { fetchElement, storeElement, createElement, deleteElement, updateElement } from '../../actions/elementActions'
 
 import Checkbox from './common/Checkbox'
+import LanguageTabs from './common/LanguageTabs'
 import Number from './common/Number'
 import OrderedMultiSelect from './common/OrderedMultiSelect'
 import Select from './common/Select'
@@ -43,29 +43,26 @@ const EditCatalog = ({ catalog }) => {
   const createSectionText = gettext('Create new section')
 
   return (
-    <div className="panel panel-default panel-edit">
-      <div className="panel-heading">
-        <div className="pull-right">
+    <div className="card">
+      <div className="card-header">
+        <div className="d-flex align-items-center gap-2">
+          <strong className="flex-grow-1">
+            {catalog.id ? gettext('Edit catalog') : gettext('Create catalog')}
+          </strong>
           <ReadOnlyIcon title={gettext('This catalog is read only')} show={catalog.read_only} />
           <BackButton />
           <SaveButton elementAction={elementAction} onClick={storeCatalog} disabled={catalog.read_only} />
           <SaveButton elementAction={elementAction} onClick={storeCatalog} disabled={catalog.read_only} back={true}/>
         </div>
-        {
-          catalog.id ? <>
-            <strong>{gettext('Catalog')}{': '}</strong>
-            <code className="code-questions">{catalog.uri}</code>
-          </> : <strong>{gettext('Create catalog')}</strong>
-        }
       </div>
 
       {
-        catalog.id && <div className="panel-body panel-border">
+        catalog.id && <div className="card-body border-bottom">
           { info }
         </div>
       }
 
-      <div className="panel-body">
+      <div className="card-body pb-0">
         <div className="row">
           <div className="col-sm-6">
             <UriPrefix element={catalog} field="uri_prefix" onChange={updateCatalog} />
@@ -89,17 +86,13 @@ const EditCatalog = ({ catalog }) => {
           </div>
         </div>
 
-        <Tabs id="#catalog-tabs" defaultActiveKey={0} animation={false}>
-          {
-            settings.languages.map(([lang_code, lang], index) => (
-              <Tab key={index} eventKey={index} title={lang}>
-                <Text element={catalog} field={`title_${lang_code }`} onChange={updateCatalog} />
-                <Textarea element={catalog} field={`help_${lang_code }`}
-                          rows={4} onChange={updateCatalog} />
-              </Tab>
-            ))
-          }
-        </Tabs>
+        <LanguageTabs render={(langCode) => (
+          <div>
+            <Text element={catalog} field={`title_${langCode }`} onChange={updateCatalog} />
+            <Textarea element={catalog} field={`help_${langCode }`}
+                      rows={4} onChange={updateCatalog} />
+          </div>
+        )} />
 
         <OrderedMultiSelect element={catalog} field="sections" options={sections}
                             addText={addSectionText} createText={createSectionText}
@@ -120,13 +113,13 @@ const EditCatalog = ({ catalog }) => {
         }
       </div>
 
-      <div className="panel-footer">
-        <div className="pull-right">
-          <BackButton />
+      <div className="card-footer">
+        <div className="d-flex align-items-center gap-2">
+          {catalog.id && <DeleteButton onClick={openDeleteModal} disabled={catalog.read_only} />}
+          <BackButton className="ms-auto" />
           <SaveButton elementAction={elementAction} onClick={storeCatalog} disabled={catalog.read_only} />
           <SaveButton elementAction={elementAction} onClick={storeCatalog} disabled={catalog.read_only} back={true} />
         </div>
-        {catalog.id && <DeleteButton onClick={openDeleteModal} disabled={catalog.read_only} />}
       </div>
 
       <DeleteCatalogModal catalog={catalog} info={info} show={showDeleteModal}

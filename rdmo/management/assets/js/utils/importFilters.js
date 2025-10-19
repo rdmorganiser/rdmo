@@ -1,13 +1,8 @@
-import { useMemo } from 'react'
 import { filterUriPrefix, filterSearch} from './filter'
-
-const filterChanged = (selectFilterChanged, element) => {
-  return element.changed || element.created
-}
 
 function filterElementsByChanged(elements, selectFilterChanged) {
   if (!selectFilterChanged) return elements
-  return elements.filter((element) => filterChanged(selectFilterChanged, element))
+  return elements.filter((element) => (element.changed || element.created))
 }
 
 function filterElementsByUri(elements, searchString) {
@@ -20,14 +15,12 @@ function filterElementsByUriPrefix(elements, searchUriPrefix) {
   return elements.filter((element) => filterUriPrefix(searchUriPrefix, element))
 }
 
-const useFilteredElements = (elements, selectFilterChanged, selectedUriPrefix, searchString) => {
-  return useMemo(() => {
-    let filteredElements = elements
-    filteredElements = filterElementsByChanged(filteredElements, selectFilterChanged)
-    filteredElements = filterElementsByUriPrefix(filteredElements, selectedUriPrefix)
-    filteredElements = filterElementsByUri(filteredElements, searchString)
-    return filteredElements
-  }, [elements, selectFilterChanged, selectedUriPrefix, searchString])
+function filterImportElements(elements, selectFilterChanged, selectedUriPrefix, searchString) {
+  let filteredElements = elements
+  filteredElements = filterElementsByChanged(filteredElements, selectFilterChanged)
+  filteredElements = filterElementsByUriPrefix(filteredElements, selectedUriPrefix)
+  filteredElements = filterElementsByUri(filteredElements, searchString)
+  return filteredElements
 }
 
-export default useFilteredElements
+export default filterImportElements

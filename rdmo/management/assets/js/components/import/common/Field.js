@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+
 import FieldRowValue from './FieldRowValue'
 import FieldRowDiffs from './FieldRowDiffs'
 
@@ -8,20 +9,22 @@ const FieldRow = ({ element, keyName, value }) => {
   const showDiff = element.updated && element.changed && fieldDiffData?.changed
 
   return (
-    <div>
-      <div className="row">
-        <div className="col-sm-3 mb-5 mt-5">
-          <code className="code-import">{keyName}</code>
+    <div className="import-card card mb-2">
+      <div className="card-body">
+        <div className="row">
+          <div className="col-sm-3 mb-5 mt-5">
+            <code className="code-import">{keyName}</code>
+          </div>
         </div>
-      </div>
-      <div className="row">
-        {
-          showDiff ? (
-            <FieldRowDiffs element={element} field={keyName} />
-          ) : (
-            <FieldRowValue value={value} />
-          )
-        }
+        <div className="row">
+          {
+            showDiff ? (
+              <FieldRowDiffs element={element} field={keyName} />
+            ) : (
+              <FieldRowValue value={value} />
+            )
+          }
+        </div>
       </div>
     </div>
   )

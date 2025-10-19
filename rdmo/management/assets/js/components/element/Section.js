@@ -4,6 +4,8 @@ import PropTypes from 'prop-types'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 
+import { isTruthy } from 'rdmo/core/assets/js/utils/config'
+
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { fetchElement, storeElement, createElement, dropElement } from '../../actions/elementActions'
@@ -25,7 +27,7 @@ const Section = ({ section, display='list', indent=0, filter=false, filterEditor
   const config = useSelector((state) => state.config)
 
   const showElement = filterElement(config, filter, false, filterEditors, section)
-  const showElements = get(config, `display.elements.sections.${section.id}`, true)
+  const showElements = isTruthy(get(config, `display.elements.sections.${section.id}`, true))
 
   const editUrl = buildPath('sections', section.id)
   const copyUrl = buildPath('sections', section.id, 'copy')
@@ -40,32 +42,36 @@ const Section = ({ section, display='list', indent=0, filter=false, filterEditor
 
   const createPage = () => dispatch(createElement('pages', { section }))
 
+  const displayUriSections = isTruthy(get(config, 'display.uri.sections', true))
+
   const elementNode = (
-    <div className="element">
-      <div className="pull-right">
-        <ReadOnlyIcon title={gettext('This section is read only')} show={section.read_only} />
-        <NestedLink title={gettext('View section nested')} href={nestedUrl} onClick={fetchNested} show={display != 'nested'} />
-        <ShowElementsLink showElements={showElements} show={display == 'nested'} onClick={toggleElements} />
-        <EditLink title={gettext('Edit section')} href={editUrl} onClick={fetchEdit} />
-        <CopyLink title={gettext('Copy section')} href={copyUrl} onClick={fetchCopy} />
-        <AddLink title={gettext('Add page')} onClick={createPage} disabled={section.read_only} />
-        <LockedLink title={section.locked ? gettext('Unlock section')
-                                          : gettext('Lock section')}
-                    locked={section.locked} onClick={toggleLocked} disabled={section.read_only} />
-        <ExportLink title={gettext('Export section')} exportUrl={exportUrl}
-                    exportFormats={config.settings.export_formats} full={true} />
-        <Drag element={section} show={display == 'nested'} />
+    <div className="d-flex flex-column gap-2">
+      <div className="d-flex align-items-center gap-2">
+        <strong>{gettext('Section')}{':'}</strong>
+        <div className="flex-grow-1">
+          <Html html={section.title} />
+        </div>
+
+        <div className="d-flex align-items-center gap-1">
+          <ReadOnlyIcon title={gettext('This section is read only')} show={section.read_only} />
+          <NestedLink title={gettext('View section nested')} href={nestedUrl} onClick={fetchNested} show={display != 'nested'} />
+          <ShowElementsLink showElements={showElements} show={display == 'nested'} onClick={toggleElements} />
+          <EditLink title={gettext('Edit section')} href={editUrl} onClick={fetchEdit} />
+          <CopyLink title={gettext('Copy section')} href={copyUrl} onClick={fetchCopy} />
+          <AddLink title={gettext('Add page')} onClick={createPage} disabled={section.read_only} />
+          <LockedLink title={section.locked ? gettext('Unlock section')
+                                            : gettext('Lock section')}
+                      locked={section.locked} onClick={toggleLocked} disabled={section.read_only} />
+          <ExportLink title={gettext('Export section')} exportUrl={exportUrl}
+                      exportFormats={config.settings.export_formats} full={true} />
+          <Drag element={section} show={display == 'nested'} />
+        </div>
       </div>
-      <div>
-        <p>
-          <strong>{gettext('Section')}{':'}</strong> <Html html={section.title} />
-        </p>
-        {
-          get(config, 'display.uri.sections', true) &&
-          <CodeLink className="code-questions" uri={section.uri} href={editUrl} onClick={() => fetchEdit()} order={order} />
-        }
-        <ElementErrors element={section} />
-      </div>
+      {
+        displayUriSections &&
+        <CodeLink type="questions" uri={section.uri} href={editUrl} onClick={() => fetchEdit()} order={order} />
+      }
+      <ElementErrors element={section} />
     </div>
   )
 
@@ -78,12 +84,12 @@ const Section = ({ section, display='list', indent=0, filter=false, filterEditor
       )
     case 'nested':
       return (
-        <>
+        <div className="position-relative">
           {
             showElement && (
               <Drop element={section}>
-                <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
-                  <div className="panel-heading">
+                <div className="card mt-2" style={{ marginLeft: `${indent}rem` }}>
+                  <div className="card-header">
                     { elementNode }
                   </div>
                 </div>
@@ -114,7 +120,7 @@ const Section = ({ section, display='list', indent=0, filter=false, filterEditor
             })
           }
           <Drop element={section} indent={indent} mode="after" />
-        </>
+        </div>
       )
     case 'plain':
       return elementNode

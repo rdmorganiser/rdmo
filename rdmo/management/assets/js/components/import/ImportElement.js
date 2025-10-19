@@ -30,14 +30,14 @@ const ImportElement = ({ element }) => {
 
   return (
     <li className="list-group-item">
+      <div className="d-flex align-items-center gap-2">
+        <ImportSelectCheckbox element={element} toggleImport={toggleImport} updateShowField={updateShowField} />
 
-      <div className="pull-right">
         {
           (isEmpty(element.errors) && ('available' in element)) &&
            <AvailableLink available={element.available}
                           locked={element.locked} onClick={toggleAvailable}
-                          title={element.available ? gettext('Make unavailable')
-                                         : gettext('Make available')}/>
+                          title={element.available ? gettext('Make unavailable') : gettext('Make available')} />
         }
         {
           !isEmpty(element.warnings) &&
@@ -56,17 +56,15 @@ const ImportElement = ({ element }) => {
         <ShowLink show={element.show} onClick={updateShowField} />
       </div>
 
-      <ImportSelectCheckbox element={element} toggleImport={toggleImport} updateShowField={updateShowField} />
-
       {
-        element.show && <>
-          <Form element={element} />
-          <Fields element={element} />
+        element.show && <div className="mt-2">
           <Errors elementErrors={element.errors} />
           <Warnings elementWarnings={element.warnings}
                     elementModel={element.model} elementURI={element.uri}
                     showTitle={true} shouldShowURI={false} />
-        </>
+          <Form element={element} />
+          <Fields element={element} />
+        </div>
       }
     </li>
   )

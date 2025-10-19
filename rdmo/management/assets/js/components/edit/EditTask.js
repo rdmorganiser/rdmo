@@ -1,12 +1,12 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import { Tabs, Tab } from 'react-bootstrap'
 
 import { fetchElement, storeElement, createElement, deleteElement, updateElement } from '../../actions/elementActions'
 
 import Checkbox from './common/Checkbox'
 import MultiSelect from './common/MultiSelect'
+import LanguageTabs from './common/LanguageTabs'
 import Number from './common/Number'
 import Select from './common/Select'
 import Text from './common/Text'
@@ -41,29 +41,26 @@ const EditTask = ({ task }) => {
   const info = <TaskInfo task={task} />
 
   return (
-    <div className="panel panel-default panel-edit">
-      <div className="panel-heading">
-        <div className="pull-right">
+    <div className="card">
+      <div className="card-header">
+        <div className="d-flex flex-wrap align-items-center gap-2">
+          <strong className="flex-grow-1">
+            {task.id ? gettext('Edit task') : gettext('Create task')}
+          </strong>
           <ReadOnlyIcon title={gettext('This task is read only')} show={task.read_only} />
           <BackButton />
           <SaveButton elementAction={elementAction} onClick={storeTask} disabled={task.read_only} />
           <SaveButton elementAction={elementAction} onClick={storeTask} disabled={task.read_only} back={true}/>
         </div>
-        {
-          task.id ? <>
-            <strong>{gettext('Task')}{': '}</strong>
-            <code className="code-tasks">{task.uri}</code>
-          </> : <strong>{gettext('Create task')}</strong>
-        }
       </div>
 
       {
-        task.id && <div className="panel-body panel-border">
+        task.id && <div className="card-body border-bottom">
           { info }
         </div>
       }
 
-      <div className="panel-body">
+      <div className="card-body pb-0">
         <div className="row">
           <div className="col-sm-6">
             <UriPrefix element={task} field="uri_prefix" onChange={updateTask} />
@@ -87,16 +84,12 @@ const EditTask = ({ task }) => {
           </div>
         </div>
 
-        <Tabs id="#task-tabs" defaultActiveKey={0} animation={false}>
-          {
-            settings.languages.map(([lang_code, lang], index) => (
-              <Tab key={index} eventKey={index} title={lang}>
-                <Text element={task} field={`title_${lang_code }`} onChange={updateTask} />
-                <Textarea element={task} field={`text_${lang_code }`} rows={8} onChange={updateTask} />
-              </Tab>
-            ))
-          }
-        </Tabs>
+        <LanguageTabs render={(langCode) => (
+          <>
+            <Text element={task} field={`title_${langCode}`} onChange={updateTask} />
+            <Textarea element={task} field={`text_${langCode}`} rows={8} onChange={updateTask} />
+          </>
+        )} />
 
         <MultiSelect element={task} field="conditions" options={conditions}
                      addText={gettext('Add existing condition')} createText={gettext('Create new condition')}
@@ -134,13 +127,13 @@ const EditTask = ({ task }) => {
         }
       </div>
 
-      <div className="panel-footer">
-        <div className="pull-right">
-          <BackButton />
+      <div className="card-footer">
+        <div className="d-flex align-items-center gap-2">
+          {task.id && <DeleteButton onClick={openDeleteModal} disabled={task.read_only} />}
+          <BackButton className="ms-auto" />
           <SaveButton elementAction={elementAction} onClick={storeTask} disabled={task.read_only} />
           <SaveButton elementAction={elementAction} onClick={storeTask} disabled={task.read_only} back={true}/>
         </div>
-        {task.id && <DeleteButton onClick={openDeleteModal} disabled={task.read_only} />}
       </div>
 
       <DeleteTaskModal task={task} info={info} show={showDeleteModal}

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
 
+import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 import { siteId } from 'rdmo/core/assets/js/utils/meta'
 
 import Html from 'rdmo/core/assets/js/components/Html'
@@ -37,48 +38,52 @@ const Task = ({ task, filter=false, filterSites=false, filterEditors=false }) =>
 
   const fetchCondition = (index) => dispatch(fetchElement('conditions', task.conditions[index]))
 
+  const displayUriTasks = isTruthy(get(config, 'display.uri.tasks', true))
+  const displayUriConditions = isTruthy(get(config, 'display.uri.conditions', true))
+
   return showElement && (
     <li className="list-group-item">
-      <div className="element">
-        <div className="pull-right">
-          <ReadOnlyIcon title={gettext('This task is read only')} show={task.read_only} />
-          <EditLink title={gettext('Edit task')} href={editUrl} onClick={fetchEdit} />
-          <CopyLink title={gettext('Copy task')} href={copyUrl} onClick={fetchCopy} />
-          <AvailableLink title={task.available ? gettext('Make task unavailable')
-                                               : gettext('Make task available')}
-                         available={task.available} locked={task.locked} onClick={toggleAvailable}
-                         disabled={task.read_only} />
-          <ToggleCurrentSiteLink hasCurrentSite={config.settings.multisite ? task.sites.includes(siteId) : true}
-                         onClick={toggleCurrentSite}
-                         show={config.settings.multisite}/>
-          <LockedLink title={task.locked ? gettext('Unlock task') : gettext('Lock task')}
-                      locked={task.locked} onClick={toggleLocked} disabled={task.read_only} />
-          <ExportLink title={gettext('Export task')} exportUrl={exportUrl}
-                      exportFormats={config.settings.export_formats} full={true} />
+      <div className="d-flex flex-column gap-2">
+        <div className="d-flex align-items-center gap-2">
+          <strong>{gettext('Task')}{':'}</strong>
+          <div className="flex-grow-1">
+            <Html html={task.title} />
+          </div>
+
+          <div className="d-flex align-items-center gap-1">
+            <ReadOnlyIcon title={gettext('This task is read only')} show={task.read_only} />
+            <EditLink title={gettext('Edit task')} href={editUrl} onClick={fetchEdit} />
+            <CopyLink title={gettext('Copy task')} href={copyUrl} onClick={fetchCopy} />
+            <AvailableLink title={task.available ? gettext('Make task unavailable')
+                                                 : gettext('Make task available')}
+                           available={task.available} locked={task.locked} onClick={toggleAvailable}
+                           disabled={task.read_only} />
+            <ToggleCurrentSiteLink hasCurrentSite={config.settings.multisite ? task.sites.includes(siteId) : true}
+                           onClick={toggleCurrentSite}
+                           show={config.settings.multisite}/>
+            <LockedLink title={task.locked ? gettext('Unlock task') : gettext('Lock task')}
+                        locked={task.locked} onClick={toggleLocked} disabled={task.read_only} />
+            <ExportLink title={gettext('Export task')} exportUrl={exportUrl}
+                        exportFormats={config.settings.export_formats} full={true} />
+          </div>
         </div>
-        <div>
-          <p>
-            <strong>{gettext('Task')}{':'}</strong> <Html html={task.title} />
-          </p>
-          {
-            get(config, 'display.uri.tasks', true) && <p>
-              <CodeLink className="code-tasks" uri={task.uri} href={editUrl} onClick={() => fetchEdit()} />
-            </p>
-          }
-          {
-            get(config, 'display.uri.conditions', true) && task.condition_uris.map((uri, index) => (
-              <p key={index}>
-                <CodeLink
-                  className="code-conditions"
-                  uri={uri}
-                  href={getConditionUrl(index)}
-                  onClick={() => fetchCondition(index)}
-                />
-              </p>
-            ))
-          }
-          <ElementErrors element={task} />
-        </div>
+        {
+          displayUriTasks && (
+            <CodeLink type="tasks" uri={task.uri} href={editUrl} onClick={() => fetchEdit()} />
+          )
+        }
+        {
+          displayUriConditions && task.condition_uris.map((uri, index) => (
+            <CodeLink
+              key={index}
+              type="conditions"
+              uri={uri}
+              href={getConditionUrl(index)}
+              onClick={() => fetchCondition(index)}
+            />
+          ))
+        }
+        <ElementErrors element={task} />
       </div>
     </li>
   )

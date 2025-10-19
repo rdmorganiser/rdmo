@@ -13,8 +13,10 @@ import get from 'lodash/get'
 import maxBy from 'lodash/maxBy'
 
 import Link from 'rdmo/core/assets/js/components/Link'
-
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
+
+import ErrorList from './ErrorList'
+import HelpText from './HelpText'
 
 const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, errors, disabled, ariaLabelledBy,
                                   handleChange, handleEdit, handleRemove, handleDrag }) => {
@@ -37,14 +39,12 @@ const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, erro
     },
   }))
 
-  const dropClassName = classNames({
-    'drop': true,
+  const dropClassName = classNames('drop', {
     'show': isDragging,
     'over': isOver
   })
 
-  const dragClassName = classNames({
-    'fa fa-arrows drag': true,
+  const dragClassName = classNames('bi bi-arrows-move drag', {
     disabled: disabled
   })
 
@@ -53,40 +53,41 @@ const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, erro
     drop(dropRef)
   }
 
-  const styles = {
-    container: provided => ({...provided, marginRight: 8 + 12 + 4 + 11 + 4 + 14})
+  const itemErrors = isEmpty(errors) || isEmpty(errors[index]) ? [] : (
+    Object.values(errors[index]).reduce((itemErrors, values) => [...itemErrors, ...values]
+  ))
+
+  const className = classNames('d-flex align-items-center gap-2', {
+    'is-invalid': !isEmpty(itemErrors)
+  })
+
+  const selectClassNames = {
+    control: () => classNames('form-control', {
+      'is-invalid': !isEmpty(itemErrors)
+    })
   }
 
   return (
-    <>
-      <div className="ordered-multi-select-item">
-        <div className="ordered-multi-select-item-options">
-          <Link className="fa fa-pencil" title={gettext('Edit')}
-                onClick={() => handleEdit(index)} />
-          <Link className="fa fa-times" title={gettext('Remove')} disabled={disabled}
-                onClick={() => !disabled && handleRemove(index)} />
-          <i className={dragClassName} ref={dragRef} aria-hidden="true"></i>
-        </div>
-        <div className="ordered-multi-select-item-select">
-          <ReactSelect classNamePrefix="react-select" className="react-select"
+    <div className="position-relative mb-2">
+      <div className={className}>
+        <div className="flex-grow-1">
+          <ReactSelect classNamePrefix="react-select" className="react-select" classNames={selectClassNames}
                        options={selectOptions} value={selectValue}
                        onChange={option => handleChange(option, index)}
-                       menuPortalTarget={document.body} styles={styles} isDisabled={disabled}
+                       menuPortalTarget={document.body} isDisabled={disabled}
                        aria-labelledby={ariaLabelledBy} />
         </div>
-        {
-          errors && errors[index] &&
-          <ul className="help-block list-unstyled">
-            {
-              Object.keys(errors[index]).map((key, i1) => {
-                return errors[index][key].map((error, i2) => <li key={`${i1}-${i2}`}>{error}</li>)
-              })
-            }
-          </ul>
-        }
+        <Link className="bi bi-pencil" title={gettext('Edit')}
+              onClick={() => handleEdit(index)} />
+        <Link className="bi bi-x-lg" title={gettext('Remove')} disabled={disabled}
+              onClick={() => !disabled && handleRemove(index)} />
+        <i className={dragClassName} ref={dragRef} aria-hidden="true"></i>
       </div>
+
+      <ErrorList errors={itemErrors} />
+
       <div ref={dropRef} className={dropClassName}></div>
-    </>
+    </div>
   )
 }
 
@@ -99,14 +100,7 @@ const OrderedMultiSelect = ({ element, field, options, values,
   const id = getId(element, field),
         label = getLabel(element, field, meta),
         help = getHelp(element, field, meta),
-        warnings = get(element, ['warnings', field]),
         errors = get(element, ['errors', field])
-
-  const className = classNames({
-    'form-group': true,
-    'has-warning': !isEmpty(warnings),
-    'has-error': !isEmpty(errors)
-  })
 
   const getValues = () => {
     if (isUndefined(values)) {
@@ -200,8 +194,8 @@ const OrderedMultiSelect = ({ element, field, options, values,
   }
 
   return (
-    <div className={className}>
-      <div className="mb-5">
+    <div className="mb-3">
+      <div className="mb-2">
         <strong id={id}>{label}</strong>
       </div>
 
@@ -221,28 +215,30 @@ const OrderedMultiSelect = ({ element, field, options, values,
       }
       </div>
 
-      <button type="button" className="btn btn-primary btn-xs" onClick={handleAdd}
-              disabled={element.read_only}>
-        {addText}
-      </button>
-      {
-        onCreate &&
-        <button type="button" className="btn btn-success btn-xs ml-10" onClick={onCreate}
-                disabled={element.read_only || isNil(element.id)}
-                title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
-          {createText}
+      <div className="d-flex align-items-center gap-2">
+        <button type="button" className="btn btn-primary btn-sm" onClick={handleAdd}
+                disabled={element.read_only}>
+          {addText}
         </button>
-      }
-      {
-        onAltCreate &&
-        <button type="button" className="btn btn-success btn-xs ml-10" onClick={onAltCreate}
-                disabled={element.read_only || isNil(element.id)}
-                title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
-          {altCreateText}
-        </button>
-      }
+        {
+          onCreate &&
+          <button type="button" className="btn btn-success btn-sm" onClick={onCreate}
+                  disabled={element.read_only || isNil(element.id)}
+                  title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
+            {createText}
+          </button>
+        }
+        {
+          onAltCreate &&
+          <button type="button" className="btn btn-success btn-sm" onClick={onAltCreate}
+                  disabled={element.read_only || isNil(element.id)}
+                  title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
+            {altCreateText}
+          </button>
+        }
+      </div>
 
-      {help && <p className="help-block">{help}</p>}
+      <HelpText help={help} />
     </div>
   )
 }

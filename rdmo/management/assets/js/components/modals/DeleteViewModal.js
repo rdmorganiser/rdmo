@@ -1,10 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { DeleteModal } from '../common/Modals'
+import Modal from 'rdmo/core/assets/js/_bs53/components/Modal'
 
 const DeleteViewModal = ({ view, info, show, onClose, onDelete }) => (
-  <DeleteModal title={gettext('Delete catalog')} show={show} onClose={onClose} onDelete={onDelete}>
+  <Modal
+    title={gettext('Delete view')}
+    show={show}
+    onClose={onClose}
+    onSubmit={onDelete}
+    submitLabel={gettext('Delete')}
+    submitProps={{ className: 'btn btn-danger' }}
+    size="modal-lg"
+  >
     <p>
       {gettext('You are about to permanently delete the view:')}
     </p>
@@ -15,7 +23,7 @@ const DeleteViewModal = ({ view, info, show, onClose, onDelete }) => (
     <p className="text-danger">
       {gettext('The view will be removed from these projects.')} {gettext('This action cannot be undone!')}
     </p>
-  </DeleteModal>
+  </Modal>
 )
 
 DeleteViewModal.propTypes = {

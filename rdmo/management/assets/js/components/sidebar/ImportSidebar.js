@@ -8,7 +8,7 @@ import Link from 'rdmo/core/assets/js/components/Link'
 import { resetElements, importElements, selectElements, selectChangedElements,
          showElements, showChangedElements } from '../../actions/importActions'
 
-import {useImportElements} from '../../hooks/useImportElements'
+import { useImportElements } from '../../hooks/useImportElements'
 
 
 const ImportSidebar = () => {
@@ -37,7 +37,7 @@ const ImportSidebar = () => {
         <h2>{gettext('Import successful')}</h2>
 
         <p className="import-buttons">
-          <button type="button" className="btn btn-default" onClick={() => dispatch(resetElements())}>
+          <button type="button" className="btn btn-light border" onClick={() => dispatch(resetElements())}>
             {gettext('Back')}
           </button>
         </p>
@@ -47,11 +47,11 @@ const ImportSidebar = () => {
     return (
       <div className="import-sidebar">
         <h2>{gettext('Import elements')}</h2>
-        <p className="import-buttons">
+        <p className="d-flex align-items-center gap-2">
           <button type="button" className="btn btn-success" onClick={() => dispatch(importElements())}>
             {interpolate(ngettext('Import one element', 'Import %s elements', count), [count])}
           </button>
-          <button type="button" className="btn btn-default" onClick={() => dispatch(resetElements())}>
+          <button type="button" className="btn btn-light border" onClick={() => dispatch(resetElements())}>
             {gettext('Back')}
           </button>
         </p>
@@ -115,27 +115,24 @@ const ImportSidebar = () => {
 
         <h2>{gettext('URI prefix')}</h2>
 
-        <div className="form-group">
-          <div className="input-group">
-            <input className="form-control" type="text"
-                   placeholder={gettext('URI prefix')} aria-label={gettext('URI prefix')}
-                   value={uriPrefix} onChange={event => setUriPrefix(event.target.value)} />
+        <div className="input-group">
+          <input type="text" className="form-control"
+                 placeholder={gettext('URI prefix')} aria-label={gettext('URI prefix')}
+                 value={uriPrefix} onChange={event => setUriPrefix(event.target.value)} />
 
-            <span className="input-group-btn">
-              <button type="button" className="btn btn-default"
-                title={gettext('Insert default URI Prefix')}
-                aria-label={gettext('Insert default URI Prefix')}
-                onClick={() => setUriPrefix(settings.default_uri_prefix)}>
-                <span className="fa fa-magic"></span>
-              </button>
-              <button type="button" className="btn btn-primary" disabled={disabled}
-                title={gettext('Set URI prefix for all elements')}
-                aria-label={gettext('Set URI prefix for all elements')}
-                onClick={updateUriPrefix}>
-                <span className="fa fa-arrow-right"></span>
-              </button>
-            </span>
-          </div>
+          <button type="button" className="btn btn-light border"
+                  title={gettext('Insert default URI Prefix')}
+                  aria-label={gettext('Insert default URI Prefix')}
+                  onClick={() => setUriPrefix(settings.default_uri_prefix)}>
+            <span className="bi bi-magic"></span>
+          </button>
+
+          <button type="button" className="btn btn-primary" disabled={disabled}
+                  title={gettext('Set URI prefix for all elements')}
+                  aria-label={gettext('Set URI prefix for all elements')}
+                  onClick={updateUriPrefix}>
+            <span className="bi bi-arrow-right"></span>
+          </button>
         </div>
       </div>
     )

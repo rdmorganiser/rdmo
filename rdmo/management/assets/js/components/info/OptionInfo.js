@@ -22,14 +22,14 @@ const OptionInfo = ({ option }) => {
   const fetchCondition = (condition) => dispatch(fetchElement('conditions', condition.id))
 
   return (
-    <div className="element-info">
-      <p>
+    <div className="mb-2">
+      <p className="mb-1">
         <Html html={interpolate(ngettext(
           'This option is used for <b>%s values</b> in <b>one project</b>.',
           'This option is used for <b>%s values</b> in <b>%s projects</b>.',
           option.projects_count), [option.values_count, option.projects_count])} />
       </p>
-      <p>
+      <p className="mb-1">
         <Html html={interpolate(ngettext(
           'This option is used in <b>one condition</b>.',
           'This option is used in <b>%s conditions</b>.',
@@ -39,7 +39,7 @@ const OptionInfo = ({ option }) => {
       </p>
       {
         extendConditions && conditions.map((condition, index) => (
-          <p key={index}>
+          <p className="mb-1" key={index}>
             <CodeLink className="code-conditions" uri={condition.uri} onClick={() => fetchCondition(condition)} />
           </p>
         ))

@@ -36,24 +36,21 @@ const EditAttribute = ({ attribute }) => {
   const info = <AttributeInfo attribute={attribute} />
 
   return (
-    <div className="panel panel-default panel-edit">
-      <div className="panel-heading">
-        <div className="pull-right">
+    <div className="card">
+      <div className="card-header">
+        <div className="d-flex flex-wrap align-items-center gap-2">
+          <strong className="flex-grow-1">
+            {attribute.id ? gettext('Edit attribute') : gettext('Create attribute')}
+          </strong>
           <ReadOnlyIcon title={gettext('This attribute is read only')} show={attribute.read_only} />
           <BackButton />
           <SaveButton elementAction={elementAction} onClick={storeAttribute} disabled={attribute.read_only} />
           <SaveButton elementAction={elementAction} onClick={storeAttribute} disabled={attribute.read_only} back={true}/>
         </div>
-        {
-          attribute.id ? <>
-            <strong>{gettext('Attribute')}{': '}</strong>
-            <code className="code-domain">{attribute.uri}</code>
-          </> : <strong>{gettext('Create attribute')}</strong>
-        }
       </div>
 
       {
-        parent && parent.attribute && <div className="panel-body panel-border">
+        parent && parent.attribute && <div className="card-body border-bottom">
         <Html html={interpolate(gettext(
           'This attribute will be added to the attribute <code class="code-domain">%s</code>.'),
           [parent.attribute.uri])} />
@@ -61,28 +58,28 @@ const EditAttribute = ({ attribute }) => {
       }
 
       {
-        parent && parent.page && <div className="panel-body panel-border">
+        parent && parent.page && <div className="card-body border-bottom">
         <Html html={interpolate(gettext(
           'This attribute will be added to the page <code class="code-questions">%s</code>.'),
           [parent.page.uri])} />
         </div>
       }
       {
-        parent && parent.questionset && <div className="panel-body panel-border">
+        parent && parent.questionset && <div className="card-body border-bottom">
         <Html html={interpolate(gettext(
           'This attribute will be added to the question set <code class="code-questions">%s</code>.'),
           [parent.questionset.uri])} />
         </div>
       }
       {
-        parent && parent.question && <div className="panel-body panel-border">
+        parent && parent.question && <div className="card-body border-bottom">
         <Html html={interpolate(gettext(
           'This attribute will be added to the question <code class="code-questions">%s</code>.'),
           [parent.question.uri])} />
         </div>
       }
       {
-        parent && parent.condition && <div className="panel-body panel-border">
+        parent && parent.condition && <div className="card-body border-bottom">
         <Html html={interpolate(gettext(
           'This attribute will be added to the condition <code class="code-conditions">%s</code>.'),
           [parent.condition.uri])} />
@@ -90,12 +87,12 @@ const EditAttribute = ({ attribute }) => {
       }
 
       {
-        attribute.id && <div className="panel-body panel-border">
+        attribute.id && <div className="card-body border-bottom">
           { info }
         </div>
       }
 
-      <div className="panel-body">
+      <div className="card-body pb-0">
         <div className="row">
           <div className="col-sm-6">
             <UriPrefix element={attribute} field="uri_prefix" onChange={updateAttribute} />
@@ -119,13 +116,13 @@ const EditAttribute = ({ attribute }) => {
         }
       </div>
 
-      <div className="panel-footer">
-        <div className="pull-right">
-          <BackButton />
+      <div className="card-footer">
+        <div className="d-flex align-items-center gap-2">
+          {attribute.id && <DeleteButton onClick={openDeleteModal} disabled={attribute.read_only} />}
+          <BackButton className="ms-auto" />
           <SaveButton elementAction={elementAction} onClick={storeAttribute} disabled={attribute.read_only} />
           <SaveButton elementAction={elementAction} onClick={storeAttribute} disabled={attribute.read_only} back={true}/>
         </div>
-        {attribute.id && <DeleteButton onClick={openDeleteModal} disabled={attribute.read_only} />}
       </div>
 
       <DeleteAttributeModal attribute={attribute} info={info} show={showDeleteModal}

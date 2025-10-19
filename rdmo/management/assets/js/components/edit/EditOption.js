@@ -1,13 +1,13 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import { Tabs, Tab } from 'react-bootstrap'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { storeElement, deleteElement, updateElement } from '../../actions/elementActions'
 
 import Checkbox from './common/Checkbox'
+import LanguageTabs from './common/LanguageTabs'
 import Radio from './common/Radio'
 import Select from './common/Select'
 import Text from './common/Text'
@@ -37,24 +37,21 @@ const EditOption = ({ option }) => {
   const info = <OptionInfo option={option} />
 
   return (
-    <div className="panel panel-default panel-edit">
-      <div className="panel-heading">
-        <div className="pull-right">
+    <div className="card">
+      <div className="card-header">
+        <div className="d-flex flex-wrap align-items-center gap-2">
+          <strong className="flex-grow-1">
+            {option.id ? gettext('Edit option') : gettext('Create option')}
+          </strong>
           <ReadOnlyIcon title={gettext('This option is read only')} show={option.read_only} />
           <BackButton />
           <SaveButton elementAction={elementAction} onClick={storeOption} disabled={option.read_only} />
           <SaveButton elementAction={elementAction} onClick={storeOption} disabled={option.read_only} back={true}/>
         </div>
-        {
-          option.id ? <>
-            <strong>{gettext('Option')}{': '}</strong>
-            <code className="code-options">{option.uri}</code>
-          </> : <strong>{gettext('Create option')}</strong>
-        }
       </div>
 
       {
-        parent && parent.optionset && <div className="panel-body panel-border">
+        parent && parent.optionset && <div className="card-body border-bottom">
           <Html html={interpolate(gettext(
             'This option will be added to the option set <code class="code-options">%s</code>.'),
             [parent.optionset.uri])} />
@@ -62,12 +59,12 @@ const EditOption = ({ option }) => {
       }
 
       {
-        option.id && <div className="panel-body panel-border">
+        option.id && <div className="card-body border-bottom">
           { info }
         </div>
       }
 
-      <div className="panel-body">
+      <div className="card-body pb-0">
         <div className="row">
           <div className="col-sm-6">
             <UriPrefix element={option} field="uri_prefix" onChange={updateOption} />
@@ -85,35 +82,21 @@ const EditOption = ({ option }) => {
           </div>
         </div>
 
-        <Tabs id="#option-tabs" defaultActiveKey={0} animation={false}>
-          {
-            settings.languages.map(([lang_code, lang], index) => (
-              <Tab key={index} eventKey={index} title={lang}>
-                <div className="row">
-                  <div className="col-sm-12">
-                    <Text element={option} field={`text_${lang_code }`} onChange={updateOption} />
-                    <Textarea element={option} field={`help_${lang_code }`} onChange={updateOption} />
-                    <Textarea element={option} field={`view_text_${lang_code }`} onChange={updateOption} />
-                  </div>
-                </div>
-              </Tab>
-            ))
-          }
-        </Tabs>
+        <LanguageTabs render={(langCode) => (
+          <>
+            <Text element={option} field={`text_${langCode}`} onChange={updateOption} />
+            <Textarea element={option} field={`help_${langCode }`} onChange={updateOption} />
+            <Textarea element={option} field={`view_text_${langCode}`} onChange={updateOption} />
+          </>
+        )} />
 
         <Radio element={option} field="additional_input" options={additionalInputs} onChange={updateOption} />
         {
           (option.additional_input === 'text' || option.additional_input === 'textarea') &&
           settings && (
-            <Tabs id="#option-tabs2" defaultActiveKey={0} animation={false}>
-              {settings.languages.map(([lang_code, lang], index) => (
-              <Tab key={index} eventKey={index} title={lang}>
-                <Textarea key={index} element={option} field={`default_text_${lang_code}`}
-                          rows={1} onChange={updateOption} />
-              </Tab>
-
-            ))}
-            </Tabs>
+            <LanguageTabs render={(langCode) => (
+              <Textarea element={option} field={`default_text_${langCode}`} rows={1} onChange={updateOption} />
+            )} />
           )
         }
 
@@ -125,13 +108,13 @@ const EditOption = ({ option }) => {
 
       </div>
 
-      <div className="panel-footer">
-        <div className="pull-right">
-          <BackButton />
+      <div className="card-footer">
+        <div className="d-flex align-items-center gap-2">
+          {option.id && <DeleteButton onClick={openDeleteModal} disabled={option.read_only} />}
+          <BackButton className="ms-auto" />
           <SaveButton elementAction={elementAction} onClick={storeOption} disabled={option.read_only} />
           <SaveButton elementAction={elementAction} onClick={storeOption} disabled={option.read_only} back={true}/>
         </div>
-        {option.id && <DeleteButton onClick={openDeleteModal} disabled={option.read_only} />}
       </div>
 
       <DeleteOptionModal option={option} info={info} show={showDeleteModal}

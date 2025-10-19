@@ -8,35 +8,30 @@ import get from 'lodash/get'
 
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
+import ErrorList from './ErrorList'
+import HelpText from './HelpText'
+
 const Textarea = ({ element, field, rows, onChange }) => {
   const { meta } = useSelector((state) => state.config)
 
   const id = getId(element, field),
         label = getLabel(element, field, meta),
         help = getHelp(element, field, meta),
-        warnings = get(element, ['warnings', field]),
         errors = get(element, ['errors', field])
 
-  const className = classNames({
-    'form-group': true,
-    'has-warning': !isEmpty(warnings),
-    'has-error': !isEmpty(errors)
+  const className = classNames('form-control', {
+    'is-invalid': !isEmpty(errors)
   })
 
   const value = isNil(element[field]) ? '' : element[field]
 
   return (
-    <div className={className}>
-      <label className="control-label" htmlFor={id}>{label}</label>
-
-      <textarea className="form-control" id={id} rows={rows} type="text" disabled={element.read_only}
+    <div className="mb-3">
+      <label className="form-label" htmlFor={id}>{label}</label>
+      <textarea id={id} className={className} rows={rows} disabled={element.read_only}
                 value={value} onChange={event => onChange(field, event.target.value)}  />
-
-      {help && <p className="help-block">{help}</p>}
-
-      {errors && <ul className="help-block list-unstyled">
-        {errors.map((error, index) => <li key={index}>{error}</li>)}
-      </ul>}
+      <ErrorList errors={errors} />
+      <HelpText help={help} />
     </div>
   )
 }

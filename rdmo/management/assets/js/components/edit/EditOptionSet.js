@@ -44,24 +44,21 @@ const EditOptionSet = ({ optionset }) => {
   const info = <OptionSetInfo optionset={optionset} />
 
   return (
-    <div className="panel panel-default panel-edit">
-      <div className="panel-heading">
-        <div className="pull-right">
+    <div className="card">
+      <div className="card-header">
+        <div className="d-flex flex-wrap align-items-center gap-2">
+          <strong className="flex-grow-1">
+            {optionset.id ? gettext('Edit optionset') : gettext('Create optionset')}
+          </strong>
           <ReadOnlyIcon title={gettext('This option set is read only')} show={optionset.read_only} />
           <BackButton />
           <SaveButton elementAction={elementAction} onClick={storeOptionSet} disabled={optionset.read_only} />
           <SaveButton elementAction={elementAction} onClick={storeOptionSet} disabled={optionset.read_only} back={true}/>
         </div>
-        {
-          optionset.id ? <>
-            <strong>{gettext('Option set')}{': '}</strong>
-            <code className="code-options">{optionset.uri}</code>
-          </> : <strong>{gettext('Create option set')}</strong>
-        }
       </div>
 
       {
-        parent && parent.question && <div className="panel-body panel-border">
+        parent && parent.question && <div className="card-body border-bottom">
         <Html html={interpolate(gettext(
           'This option set will be added to the question <code class="code-questions">%s</code>.'),
           [parent.question.uri])} />
@@ -69,12 +66,12 @@ const EditOptionSet = ({ optionset }) => {
       }
 
       {
-        optionset.id && <div className="panel-body panel-border">
+        optionset.id && <div className="card-body border-bottom">
           { info }
         </div>
       }
 
-      <div className="panel-body">
+      <div className="card-body pb-0">
         <div className="row">
           <div className="col-sm-6">
             <UriPrefix element={optionset} field="uri_prefix" onChange={updateOptionSet} />
@@ -113,13 +110,13 @@ const EditOptionSet = ({ optionset }) => {
         }
       </div>
 
-      <div className="panel-footer">
-        <div className="pull-right">
-          <BackButton />
+      <div className="card-footer">
+        <div className="d-flex align-items-center gap-2">
+          {optionset.id && <DeleteButton onClick={openDeleteModal} disabled={optionset.read_only} />}
+          <BackButton className="ms-auto" />
           <SaveButton elementAction={elementAction} onClick={storeOptionSet} disabled={optionset.read_only} />
           <SaveButton elementAction={elementAction} onClick={storeOptionSet} disabled={optionset.read_only} back={true}/>
         </div>
-        {optionset.id && <DeleteButton onClick={openDeleteModal} disabled={optionset.read_only} />}
       </div>
 
       <DeleteOptionSetModal optionset={optionset} info={info} show={showDeleteModal}

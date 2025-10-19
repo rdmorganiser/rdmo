@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import get from 'lodash/get'
+import { get, isEmpty } from 'lodash'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 
@@ -25,16 +25,16 @@ const OptionSets = () => {
   const createOptionSet = () => dispatch(createElement('optionsets'))
 
   return (
-    <div className="panel panel-default">
-      <div className="panel-heading">
-        <div className="pull-right">
+    <div className="card">
+      <div className="card-header">
+        <div className="d-flex align-items-center gap-2">
+          <strong className="me-auto">{gettext('Option sets')}</strong>
           <BackButton />
           <NewButton onClick={createOptionSet} />
         </div>
-        <strong>{gettext('Option sets')}</strong>
       </div>
 
-      <div className="panel-body">
+      <div className="card-body">
         <div className="row">
           <div className={config.settings.multisite ? 'col-sm-6' : 'col-sm-8'}>
             <FilterString value={get(config, 'filter.optionsets.search', '')} onChange={updateFilterString}
@@ -53,14 +53,18 @@ const OptionSets = () => {
         </div>
       </div>
 
-      <ul className="list-group">
       {
-        optionsets.map((optionset, index) => (
-          <OptionSet key={index} config={config} optionset={optionset}
-                     filter="optionsets" filterEditors={true} />
-        ))
+        !isEmpty(optionsets) && (
+          <ul className="list-group list-group-flush">
+          {
+            optionsets.map((optionset, index) => (
+              <OptionSet key={index} config={config} optionset={optionset}
+                         filter="optionsets" filterEditors={true} />
+            ))
+          }
+          </ul>
+        )
       }
-      </ul>
     </div>
   )
 }

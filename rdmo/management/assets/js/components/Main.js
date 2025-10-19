@@ -4,10 +4,10 @@ import { get, isEmpty, isNil } from 'lodash'
 
 import { MainErrors } from '../components/common/Errors'
 
-import Edit from '../components/main/Edit'
-import Elements from '../components/main/Elements'
-import Import from '../components/main/Import'
-import Nested from '../components/main/Nested'
+import Edit from '../components/edit/Edit'
+import Elements from '../components/elements/Elements'
+import Import from '../components/import/Import'
+import Nested from '../components/nested/Nested'
 
 const Main = () => {
   const config = useSelector((state) => state.config)

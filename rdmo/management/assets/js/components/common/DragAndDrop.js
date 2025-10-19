@@ -16,8 +16,8 @@ const Drag = ({ element, show=true }) => {
 
   drag(dragRef)
 
-  return show && <span className="element-link drag">
-    <i className="fa fa-arrows drag" ref={dragRef} aria-hidden="true"></i>
+  return show && <span className="drag">
+    <i className="bi bi-arrows-move drag" ref={dragRef} aria-hidden="true"></i>
   </span>
 }
 
@@ -70,7 +70,7 @@ const Drop = ({ element, indent=0, mode='in', children=null }) => {
   if (mode == 'in') {
     return <div className={dropClassName} ref={dropRef}>{children}</div>
   } else {
-    return <div className={dropClassName} ref={dropRef} style={{ marginLeft: 30 * indent }}></div>
+    return <div className={dropClassName} ref={dropRef} style={{ marginLeft: `${indent}rem` }}></div>
   }
 }
 

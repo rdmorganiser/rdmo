@@ -8,38 +8,30 @@ import get from 'lodash/get'
 
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
+import ErrorList from './ErrorList'
+import HelpText from './HelpText'
+
 const Checkbox = ({ element, field, onChange }) => {
   const { meta } = useSelector((state) => state.config)
 
   const id = getId(element, field),
         label = getLabel(element, field, meta),
         help = getHelp(element, field, meta),
-        warnings = get(element, ['warnings', field]),
         errors = get(element, ['errors', field])
-
-  const className = classNames({
-    'form-group': true,
-    'has-warning': !isEmpty(warnings),
-    'has-error': !isEmpty(errors)
-  })
 
   const checked = isNil(element[field]) ? '' : element[field]
 
   return (
-    <div className={className}>
-      <div className="checkbox">
-          <label>
-              <input id={id} type="checkbox" checked={checked} disabled={element.read_only}
-                     onChange={() => onChange(field, !checked)} />
-              <span>{label}</span>
-          </label>
+    <div className="mb-3">
+      <div className="form-check">
+        <input type="checkbox"  id={id} disabled={element.read_only}
+               className={classNames('form-check-input', {'is-invalid': !isEmpty(errors)})}
+               checked={checked} onChange={() => onChange(field, !checked)} />
+        <label className="form-check-label" htmlFor={id}>{label}</label>
+
+        <ErrorList errors={errors} />
+        <HelpText help={help} />
       </div>
-
-      {help && <p className="help-block">{help}</p>}
-
-      {errors && <ul className="help-block list-unstyled">
-        {errors.map((error, index) => <li key={index}>{error}</li>)}
-      </ul>}
     </div>
   )
 }

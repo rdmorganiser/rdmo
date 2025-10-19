@@ -1,15 +1,15 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import { get } from 'lodash'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
 import { getUriPrefixes } from '../../utils/filter'
 
 import { FilterString, FilterUriPrefix } from '../common/Filter'
-import { Checkbox } from '../common/Checkboxes'
-import { BackButton } from '../common/Buttons'
 
 import Option from '../element/Option'
 import OptionSet from '../element/OptionSet'
@@ -22,19 +22,20 @@ const NestedOptionSet = ({ optionset }) => {
   const updateFilterString = (uri) => dispatch(updateConfig('filter.optionset.search', uri))
   const updateFilterUriPrefix = (uriPrefix) => dispatch(updateConfig('filter.optionset.uri_prefix', uriPrefix))
 
-  const updateDisplayURI = (value) => dispatch(updateConfig('display.uri.options', value))
+  const displayUriOptions = isTruthy(get(config, 'display.uri.options', true))
+
+  const toggleDisplayUriOptions = () => dispatch(updateConfig('display.uri.options', !displayUriOptions))
+
+  const btnClass = (value) => classNames('btn border', value ? 'btn-light' : '')
 
   return (
     <>
-      <div className="panel panel-default panel-nested">
-        <div className="panel-heading">
-          <div className="pull-right">
-            <BackButton />
-          </div>
-          <OptionSet optionset={optionset} display="plain" />
+      <div className="card">
+        <div className="card-header">
+          <OptionSet optionset={optionset} display="plain" backButton={true} />
         </div>
 
-        <div className="panel-body">
+        <div className="card-body">
           <div className="row">
             <div className="col-sm-8">
               <FilterString value={get(config, 'filter.optionset.search', '')} onChange={updateFilterString}
@@ -45,10 +46,11 @@ const NestedOptionSet = ({ optionset }) => {
                                options={getUriPrefixes(optionset.elements)} />
             </div>
           </div>
-          <div className="checkboxes">
-            <span className="mr-10">{gettext('Show URIs:')}</span>
-            <Checkbox label={<code className="code-options">{gettext('Options')}</code>}
-                      value={get(config, 'display.uri.options', true)} onChange={updateDisplayURI} />
+          <div className="input-group input-group-sm">
+            <label className="input-group-text">{gettext('Show URIs')}</label>
+            <button type="button" onClick={toggleDisplayUriOptions} className={btnClass(displayUriOptions)}>
+              {gettext('Options')}
+            </button>
           </div>
         </div>
       </div>

@@ -1,7 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import { Tabs, Tab } from 'react-bootstrap'
 import { isUndefined, orderBy } from 'lodash'
 
 import Html from 'rdmo/core/assets/js/components/Html'
@@ -9,8 +8,9 @@ import Html from 'rdmo/core/assets/js/components/Html'
 import { fetchElement, storeElement, createElement, deleteElement, updateElement } from '../../actions/elementActions'
 
 import Checkbox from './common/Checkbox'
-import OrderedMultiSelect from './common/OrderedMultiSelect'
+import LanguageTabs from './common/LanguageTabs'
 import MultiSelect from './common/MultiSelect'
+import OrderedMultiSelect from './common/OrderedMultiSelect'
 import Select from './common/Select'
 import Text from './common/Text'
 import Textarea from './common/Textarea'
@@ -79,31 +79,28 @@ const EditQuestionSet = ({ questionset }) => {
   const createQuestionSetText = gettext('Create new question set')
 
   return (
-    <div className="panel panel-default panel-edit">
-      <div className="panel-heading">
-        <div className="pull-right">
+    <div className="card">
+      <div className="card-header">
+        <div className="d-flex flex-wrap align-items-center gap-2">
+          <strong className="flex-grow-1">
+            {questionset.id ? gettext('Edit questionset') : gettext('Create questionset')}
+          </strong>
           <ReadOnlyIcon title={gettext('This question set is read only')} show={questionset.read_only} />
           <BackButton />
           <SaveButton elementAction={elementAction} onClick={storeQuestionSet} disabled={questionset.read_only} />
           <SaveButton elementAction={elementAction} onClick={storeQuestionSet} disabled={questionset.read_only} back={true}/>
         </div>
-        {
-          questionset.id ? <>
-            <strong>{gettext('Question set')}{': '}</strong>
-            <code className="code-questions">{questionset.uri}</code>
-          </> : <strong>{gettext('Create question set')}</strong>
-        }
       </div>
 
       {
-        parent && parent.page && <div className="panel-body panel-border">
+        parent && parent.page && <div className="card-body border-bottom">
         <Html html={interpolate(gettext(
           'This question set will be added to the page <code class="code-questions">%s</code>.'),
           [parent.page.uri])} />
         </div>
       }
       {
-        parent && parent.questionset && <div className="panel-body panel-border">
+        parent && parent.questionset && <div className="card-body border-bottom">
         <Html html={interpolate(gettext(
           'This question set will be added to the question set <code class="code-questions">%s</code>.'),
           [parent.questionset.uri])} />
@@ -111,12 +108,12 @@ const EditQuestionSet = ({ questionset }) => {
       }
 
       {
-        questionset.id && <div className="panel-body panel-border">
+        questionset.id && <div className="card-body border-bottom">
           { info }
         </div>
       }
 
-      <div className="panel-body">
+      <div className="card-body pb-0">
         <div className="row">
           <div className="col-sm-6">
             <UriPrefix element={questionset} field="uri_prefix" onChange={updateQuestionSet} />
@@ -137,17 +134,13 @@ const EditQuestionSet = ({ questionset }) => {
           </div>
         </div>
 
-        <Tabs id="#catalog-tabs" defaultActiveKey={0} animation={false}>
-          {
-            settings.languages.map(([lang_code, lang], index) => (
-              <Tab className="pt-10" key={index} eventKey={index} title={lang}>
-                <Text element={questionset} field={`title_${lang_code }`} onChange={updateQuestionSet} />
-                <Textarea element={questionset} field={`help_${lang_code }`} rows={4} onChange={updateQuestionSet} />
-                <Text element={questionset} field={`verbose_name_${lang_code }`} onChange={updateQuestionSet} />
-              </Tab>
-            ))
-          }
-        </Tabs>
+        <LanguageTabs render={(langCode) => (
+          <>
+            <Text element={questionset} field={`title_${langCode}`} onChange={updateQuestionSet} />
+            <Textarea element={questionset} field={`help_${langCode}`} rows={4} onChange={updateQuestionSet} />
+            <Text element={questionset} field={`verbose_name_${langCode}`} onChange={updateQuestionSet} />
+          </>
+        )} />
 
         <Select element={questionset} field="attribute" createText={gettext('Create new attribute')}
                 options={attributes} onChange={updateQuestionSet} onCreate={createAttribute} onEdit={editAttribute} />
@@ -170,13 +163,13 @@ const EditQuestionSet = ({ questionset }) => {
         }
       </div>
 
-      <div className="panel-footer">
-        <div className="pull-right">
-          <BackButton />
+      <div className="card-footer">
+        <div className="d-flex align-items-center gap-2">
+          {questionset.id && <DeleteButton onClick={openDeleteModal} disabled={questionset.read_only} />}
+          <BackButton className="ms-auto" />
           <SaveButton elementAction={elementAction} onClick={storeQuestionSet} disabled={questionset.read_only} />
           <SaveButton elementAction={elementAction} onClick={storeQuestionSet} disabled={questionset.read_only} back={true}/>
         </div>
-        {questionset.id && <DeleteButton onClick={openDeleteModal} disabled={questionset.read_only} />}
       </div>
 
       <DeleteQuestionSetModal questionset={questionset} info={info} show={showDeleteModal}

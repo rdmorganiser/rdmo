@@ -5,15 +5,15 @@ import isString from 'lodash/isString'
 import isPlainObject from 'lodash/isPlainObject'
 import isUndefined from 'lodash/isUndefined'
 import truncate from 'lodash/truncate'
-import {codeClass} from '../../../constants/elements'
+import { codeClass } from '../../../constants/elements'
 
 
 const FieldRowValue = ({ value }) => {
   return  (
-    <div className="col-sm-12">
+    <div className="mt-1">
       {
         Array.isArray(value) && (
-        <ul className="list-unstyled mb-0">
+        <ul className="list-unstyled">
           {value.map((el) => (
             <li key={uniqueId()}>
               <code className={codeClass[el.model]}>{el.uri}</code>

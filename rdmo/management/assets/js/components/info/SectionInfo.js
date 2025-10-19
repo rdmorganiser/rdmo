@@ -22,8 +22,8 @@ const SectionInfo = ({ section }) => {
   const fetchCatalog = (catalog) => dispatch(fetchElement('catalogs', catalog.id))
 
   return (
-    <div className="element-info">
-      <p>
+    <div className="mb-2">
+      <p className="mb-1">
         <Html html={interpolate(ngettext(
           'This section is used in <b>one catalog</b>.',
           'This section is used in <b>%s catalogs</b>.',
@@ -32,7 +32,7 @@ const SectionInfo = ({ section }) => {
       </p>
       {
         showCatalogs && catalogs.map((catalog, index) => (
-          <p key={index}>
+          <p className="mb-1" key={index}>
             <CodeLink className="code-questions" uri={catalog.uri} onClick={() => fetchCatalog(catalog)} />
           </p>
         ))

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { isNil, invert } from 'lodash'
+import { isNil, isEmpty, invert } from 'lodash'
 
 import { fetchElements } from '../../actions/elementActions'
 import { uploadFile } from '../../actions/importActions'
@@ -11,8 +11,6 @@ import { buildApiPath, buildPath } from '../../utils/location'
 import { getExportParams } from '../../utils/filter'
 
 import Link from 'rdmo/core/assets/js/components/Link'
-
-import { UploadForm } from '../common/Forms'
 
 const ElementsSidebar = () => {
   const dispatch = useDispatch()
@@ -26,6 +24,12 @@ const ElementsSidebar = () => {
   const exportParams = (isNil(elementId) && elementAction != 'nested' && !isNil(config.filter))
     ? getExportParams(config.filter[elementType])
     : ''
+
+  const handleFileUpload = (event) => {
+    if (!isEmpty(event.target.files)) {
+      dispatch(uploadFile(event.target.files[0]))
+    }
+  }
 
   return (
     <div className="elements-sidebar">
@@ -139,7 +143,7 @@ const ElementsSidebar = () => {
         {gettext('Import an RDMO XML file.')}
       </p>
 
-      <UploadForm onSubmit={file => dispatch(uploadFile(file))} />
+      <input className="form-control" type="file" id="fileUpload" name="uploaded_file" onChange={handleFileUpload} />
     </div>
   )
 }

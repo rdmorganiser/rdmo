@@ -31,26 +31,26 @@ const Attribute = ({ attribute, display='list', indent=0, filter=null, filterEdi
   const createAttribute = () => dispatch(createElement('attributes', { attribute }))
 
   const elementNode = (
-    <div className="element">
-      <div className="pull-right">
-        <ReadOnlyIcon title={gettext('This attribute is read only')} show={attribute.read_only} />
-        <NestedLink title={gettext('View attribute nested')} href={nestedUrl} onClick={fetchNested}
-                    show={!attribute.is_leaf_node} />
-        <EditLink title={gettext('Edit attribute')} href={editUrl} onClick={fetchEdit} />
-        <CopyLink title={gettext('Copy attribute')} href={copyUrl} onClick={fetchCopy} />
-        <AddLink title={gettext('Add attribute')} onClick={createAttribute} disabled={attribute.read_only} />
-        <LockedLink title={attribute.locked ? gettext('Unlock attribute') : gettext('Lock attribute')}
-                    locked={attribute.locked} onClick={toggleLocked} disabled={attribute.read_only} />
-        <ExportLink title={gettext('Export attribute')} exportUrl={exportUrl}
-                    exportFormats={config.settings.export_formats} csv={true} />
+    <div className="d-flex flex-column gap-2">
+      <div className="d-flex align-items-center gap-2">
+        <strong>{gettext('Attribute')}{':'}</strong>
+        <CodeLink className="flex-grow-1" type="domain" uri={attribute.uri} href={editUrl}
+                  onClick={() => fetchEdit()} />
+
+        <div className="d-flex align-items-center gap-1">
+          <ReadOnlyIcon title={gettext('This attribute is read only')} show={attribute.read_only} />
+          <NestedLink title={gettext('View attribute nested')} href={nestedUrl} onClick={fetchNested}
+                      show={!attribute.is_leaf_node} />
+          <EditLink title={gettext('Edit attribute')} href={editUrl} onClick={fetchEdit} />
+          <CopyLink title={gettext('Copy attribute')} href={copyUrl} onClick={fetchCopy} />
+          <AddLink title={gettext('Add attribute')} onClick={createAttribute} disabled={attribute.read_only} />
+          <LockedLink title={attribute.locked ? gettext('Unlock attribute') : gettext('Lock attribute')}
+                      locked={attribute.locked} onClick={toggleLocked} disabled={attribute.read_only} />
+          <ExportLink title={gettext('Export attribute')} exportUrl={exportUrl}
+                      exportFormats={config.settings.export_formats} csv={true} />
+        </div>
       </div>
-      <div>
-        <p>
-          <strong>{gettext('Attribute')}{':'}</strong>
-          <CodeLink className="code-domain" uri={attribute.uri} href={editUrl} onClick={() => fetchEdit()} />
-        </p>
-        <ElementErrors element={attribute} />
-      </div>
+      <ElementErrors element={attribute} />
     </div>
   )
 
@@ -65,8 +65,8 @@ const Attribute = ({ attribute, display='list', indent=0, filter=null, filterEdi
       return (
         <>
           {
-            showElement && <div className="panel panel-default" style={{ marginLeft: 30 * indent }}>
-              <div className="panel-body">
+            <div className="card mt-2" style={{ marginLeft: `${indent}rem` }}>
+              <div className="card-body">
                 { elementNode }
               </div>
             </div>

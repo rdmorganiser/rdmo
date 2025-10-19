@@ -34,8 +34,8 @@ const ConditionInfo = ({ condition }) => {
   const fetchTask = (task) => dispatch(fetchElement('tasks', task.id))
 
   return (
-    <div className="element-info">
-      <p>
+    <div className="mb-2">
+      <p className="mb-1">
         <Html html={interpolate(ngettext(
           'This condition is used for <b>one optionset</b>.',
           'This condition is used for <b>%s optionsets</b>.',
@@ -44,12 +44,12 @@ const ConditionInfo = ({ condition }) => {
       </p>
       {
         extendOptionSets && optionsets.map((optionset, index) => (
-          <p key={index}>
+          <p className="mb-1" key={index}>
             <CodeLink className="code-options" uri={optionset.uri} onClick={() => fetchOptionSet(optionset)} />
           </p>
         ))
       }
-      <p>
+      <p className="mb-1">
         <Html html={interpolate(ngettext(
           'This condition is used for <b>one page</b>.',
           'This condition is used for <b>%s pages</b>.',
@@ -58,12 +58,12 @@ const ConditionInfo = ({ condition }) => {
       </p>
       {
         extendPages && pages.map((page, index) => (
-          <p key={index}>
+          <p className="mb-1" key={index}>
             <CodeLink className="code-questions" uri={page.uri} onClick={() => fetchPage(page)} />
           </p>
         ))
       }
-      <p>
+      <p className="mb-1">
         <Html html={interpolate(ngettext(
           'This condition is used for <b>one questionset</b>.',
           'This condition is used for <b>%s questionsets</b>.',
@@ -72,12 +72,12 @@ const ConditionInfo = ({ condition }) => {
       </p>
       {
         extendQuestionSets && questionsets.map((questionset, index) => (
-          <p key={index}>
+          <p className="mb-1" key={index}>
             <CodeLink className="code-questions" uri={questionset.uri} onClick={() => fetchQuestionSet(questionset)} />
           </p>
         ))
       }
-      <p>
+      <p className="mb-1">
         <Html html={interpolate(ngettext(
           'This condition is used for <b>one question</b>.',
           'This condition is used for <b>%s questions</b>.',
@@ -86,12 +86,12 @@ const ConditionInfo = ({ condition }) => {
       </p>
       {
         extendQuestions && questions.map((question, index) => (
-          <p key={index}>
+          <p className="mb-1" key={index}>
             <CodeLink className="code-questions" uri={question.uri} onClick={() => fetchQuestion(question)} />
           </p>
         ))
       }
-      <p>
+      <p className="mb-1">
         <Html html={interpolate(ngettext(
           'This condition is used for <b>one task</b>.',
           'This condition is used for <b>%s tasks</b>.',
@@ -100,7 +100,7 @@ const ConditionInfo = ({ condition }) => {
       </p>
       {
         extendTasks && tasks.map((task, index) => (
-          <p key={index}>
+          <p className="mb-1" key={index}>
             <CodeLink className="code-tasks" uri={task.uri} onClick={() => fetchTask(task)} />
           </p>
         ))
