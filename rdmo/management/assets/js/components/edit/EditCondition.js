@@ -40,52 +40,49 @@ const EditCondition = ({ condition }) => {
   const info = <ConditionInfo condition={condition} />
 
   return (
-    <div className="panel panel-default panel-edit">
-      <div className="panel-heading">
-        <div className="pull-right">
+    <div className="card">
+      <div className="card-header">
+        <div className="d-flex flex-wrap align-items-center gap-2">
+          <strong className="flex-grow-1">
+            {condition.id ? gettext('Edit condition') : gettext('Create condition')}
+          </strong>
           <ReadOnlyIcon title={gettext('This condition is read only')} show={condition.read_only} />
           <BackButton />
           <SaveButton elementAction={elementAction} onClick={storeCondition} disabled={condition.read_only} />
           <SaveButton elementAction={elementAction} onClick={storeCondition} disabled={condition.read_only} back={true}/>
         </div>
-        {
-          condition.id ? <>
-            <strong>{gettext('Condition')}{': '}</strong>
-            <code className="code-conditions">{condition.uri}</code>
-          </> : <strong>{gettext('Create condition')}</strong>
-        }
       </div>
 
       {
-        parent && parent.optionset && <div className="panel-body panel-border">
+        parent && parent.optionset && <div className="card-body border-bottom">
           <Html html={interpolate(gettext(
             'This condition will be added to the option set <code class="code-options">%s</code>.'),
             [parent.optionset.uri])} />
         </div>
       }
       {
-        parent && parent.page && <div className="panel-body panel-border">
+        parent && parent.page && <div className="card-body border-bottom">
           <Html html={interpolate(gettext(
             'This condition will be added to the page <code class="code-questions">%s</code>.'),
             [parent.page.uri])} />
         </div>
       }
       {
-        parent && parent.questionset && <div className="panel-body panel-border">
+        parent && parent.questionset && <div className="card-body border-bottom">
           <Html html={interpolate(gettext(
             'This condition will be added to the question set <code class="code-questions">%s</code>.'),
             [parent.questionset.uri])} />
         </div>
       }
       {
-        parent && parent.question && <div className="panel-body panel-border">
+        parent && parent.question && <div className="card-body border-bottom">
           <Html html={interpolate(gettext(
             'This condition will be added to the question <code class="code-questions">%s</code>.'),
             [parent.question.uri])} />
         </div>
       }
       {
-        parent && parent.task && <div className="panel-body panel-border">
+        parent && parent.task && <div className="card-body border-bottom">
           <Html html={interpolate(gettext(
             'This condition will be added to the task <code class="code-tasks">%s</code>.'),
           [parent.task.uri])} />
@@ -93,12 +90,12 @@ const EditCondition = ({ condition }) => {
       }
 
       {
-        condition.id && <div className="panel-body panel-border">
+        condition.id && <div className="card-body border-bottom">
           { info }
         </div>
       }
 
-      <div className="panel-body">
+      <div className="card-body pb-0">
         <div className="row">
           <div className="col-sm-6">
             <UriPrefix element={condition} field="uri_prefix" onChange={updateCondition} />
@@ -128,13 +125,13 @@ const EditCondition = ({ condition }) => {
         }
       </div>
 
-      <div className="panel-footer">
-        <div className="pull-right">
-          <BackButton />
+      <div className="card-footer">
+        <div className="d-flex align-items-center gap-2">
+          {condition.id && <DeleteButton onClick={openDeleteModal} disabled={condition.read_only} />}
+          <BackButton className="ms-auto" />
           <SaveButton elementAction={elementAction} onClick={storeCondition} disabled={condition.read_only} />
           <SaveButton elementAction={elementAction} onClick={storeCondition} disabled={condition.read_only} back={true}/>
         </div>
-        {condition.id && <DeleteButton onClick={openDeleteModal} disabled={condition.read_only} />}
       </div>
 
       <DeleteConditionModal condition={condition} info={info} show={showDeleteModal}

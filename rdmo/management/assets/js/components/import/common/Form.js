@@ -15,7 +15,7 @@ const Form = ({ element }) => {
   const handleChange = (key, value) => dispatch(updateElement(element, {[key]: value}))
 
   return (
-    <div className="row mt-10">
+    <div className="row">
       <div className="col-sm-6">
         <UriPrefix element={element} onChange={handleChange} />
       </div>

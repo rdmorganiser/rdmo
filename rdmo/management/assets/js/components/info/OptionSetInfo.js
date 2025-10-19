@@ -22,8 +22,8 @@ const OptionSetInfo = ({ optionset }) => {
   const fetchQuestion = (question) => dispatch(fetchElement('questions', question.id))
 
   return (
-    <div className="element-info">
-      <p>
+    <div className="mb-2">
+      <p className="mb-1">
         <Html html={interpolate(ngettext(
           'This option set is used in <b>one question</b>.',
           'This option set is used in <b>%s questions</b>.',
@@ -32,7 +32,7 @@ const OptionSetInfo = ({ optionset }) => {
       </p>
       {
         extendQuestions && questions.map((question, index) => (
-          <p key={index}>
+          <p className="mb-1" key={index}>
             <CodeLink className="code-questions" uri={question.uri} onClick={() => fetchQuestion(question)} />
           </p>
         ))

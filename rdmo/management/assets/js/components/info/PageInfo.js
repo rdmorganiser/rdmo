@@ -22,8 +22,8 @@ const PageInfo = ({ page }) => {
   const fetchSection = (section) => dispatch(fetchElement('sections', section.id))
 
   return (
-    <div className="element-info">
-      <p>
+    <div className="mb-2">
+      <p className="mb-1">
         <Html html={interpolate(ngettext(
           'This page is used in <b>one section</b>.',
           'This page is used in <b>%s sections</b>.',
@@ -32,7 +32,7 @@ const PageInfo = ({ page }) => {
       </p>
       {
         extendSections && sections.map((section, index) => (
-          <p key={index}>
+          <p className="mb-1" key={index}>
             <CodeLink className="code-questions" uri={section.uri} onClick={() => fetchSection(section)} />
           </p>
         ))

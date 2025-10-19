@@ -8,8 +8,8 @@ const Warnings = ({ elementWarnings, elementModel, elementURI, shouldShowURI = t
   const warningsHeadingText = <strong>{gettext('Warnings')}</strong>
 
   return show && (
-    <div className="panel panel-warning mt-10 mb-0">
-      <div className="panel-heading">{warningsHeadingText}</div>
+    <div className="card text-bg-warning my-2">
+      <div className="card-header">{warningsHeadingText}</div>
       <WarningsListGroup
         elementWarnings={elementWarnings}
         elementModel={elementModel}

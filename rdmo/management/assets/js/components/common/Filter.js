@@ -3,17 +3,13 @@ import PropTypes from 'prop-types'
 
 const FilterString = ({ value, onChange, label }) => {
   return (
-    <div className="form-group mb-0">
-      <div className="input-group">
-        <input type="text" className="form-control" placeholder={label} aria-label={label}
-               value={ value } onChange={e => onChange(e.target.value)}></input>
-        <span className="input-group-btn">
-          <button className="btn btn-default" onClick={() => onChange('')}
-                  title={gettext('Reset')} aria-label={gettext('Reset')}>
-            <span className="fa fa-times"></span>
-          </button>
-        </span>
-      </div>
+    <div className="input-group mb-2">
+      <input type="text" className="form-control" placeholder={label} aria-label={label}
+             value={ value } onChange={e => onChange(e.target.value)}></input>
+      <button className="btn btn-light border" onClick={() => onChange('')}
+              title={gettext('Reset')} aria-label={gettext('Reset')}>
+        <strong className="bi bi-x-lg"></strong>
+      </button>
     </div>
   )
 }
@@ -26,8 +22,8 @@ FilterString.propTypes = {
 
 const FilterUriPrefix = ({ value, options, onChange }) => {
   return (
-    <div className="form-group mb-0">
-      <select className="form-control" value={value} aria-label={gettext('Filter URI prefix')}
+    <div className="form-group mb-2">
+      <select className="form-select" value={value} aria-label={gettext('Filter URI prefix')}
               onChange={event => onChange(event.target.value)}>
         <option value="">{gettext('All URI prefixes')}</option>
         {
@@ -46,8 +42,8 @@ FilterUriPrefix.propTypes = {
 
 const FilterSite = ({ value, options, onChange, label = 'Filter sites', allLabel = 'All sites' }) => {
   return (
-    <div className="form-group mb-0">
-      <select className="form-control" value={value} aria-label={label}
+    <div className="form-group mb-2">
+      <select className="form-select" value={value} aria-label={label}
               onChange={event => onChange(event.target.value)}>
        <option value="">{gettext(allLabel)}</option>
         {

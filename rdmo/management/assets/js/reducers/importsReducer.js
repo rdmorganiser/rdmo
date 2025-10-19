@@ -5,7 +5,7 @@ import isUndefined from 'lodash/isUndefined'
 import * as actionTypes from '../actions/actionTypes'
 
 import { buildUri, buildPathForAttribute } from '../utils/elements'
-import processElementDiffs from '../utils/processElementDiffs'
+import { processElementDiffs } from '../utils/diff'
 
 
 const initialState = {
@@ -41,7 +41,7 @@ export default function importsReducer(state = initialState, action) {
 
     // import elements
     case actionTypes.IMPORT_ELEMENTS_SUCCESS:
-      return {...state, elements: action.elements, success: true}
+      return {...state, elements: action.elements.map(element => processElementDiffs(element)), success: true}
     case actionTypes.IMPORT_ELEMENTS_ERROR:
       return {...state, errors: action.error.errors}
 

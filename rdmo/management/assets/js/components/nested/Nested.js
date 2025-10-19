@@ -1,12 +1,12 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 
-import NestedAttribute from '../nested/NestedAttribute'
-import NestedCatalog from '../nested/NestedCatalog'
-import NestedOptionSet from '../nested/NestedOptionSet'
-import NestedPage from '../nested/NestedPage'
-import NestedQuestionSet from '../nested/NestedQuestionSet'
-import NestedSection from '../nested/NestedSection'
+import NestedAttribute from './NestedAttribute'
+import NestedCatalog from './NestedCatalog'
+import NestedOptionSet from './NestedOptionSet'
+import NestedPage from './NestedPage'
+import NestedQuestionSet from './NestedQuestionSet'
+import NestedSection from './NestedSection'
 
 import useScrollEffect from '../../hooks/useScrollEffect'
 

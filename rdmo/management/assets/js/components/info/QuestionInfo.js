@@ -25,8 +25,8 @@ const QuestionInfo = ({ question }) => {
   const fetchQuestionSet = (questionset) => dispatch(fetchElement('questionsets', questionset.id))
 
   return (
-    <div className="element-info">
-      <p>
+    <div className="mb-2">
+      <p className="mb-1">
         <Html html={interpolate(ngettext(
           'This question is used in <b>one page</b>.',
           'This question is used in <b>%s pages</b>.',
@@ -35,12 +35,12 @@ const QuestionInfo = ({ question }) => {
       </p>
       {
         extendPages && pages.map((page, index) => (
-          <p key={index}>
+          <p className="mb-1" key={index}>
             <CodeLink className="code-questions" uri={page.uri} onClick={() => fetchPage(page)} />
           </p>
         ))
       }
-      <p>
+      <p className="mb-1">
         <Html html={interpolate(ngettext(
             'This question set is used in <b>one question set</b>.',
             'This question set is used in <b>%s question sets</b>.',
@@ -49,8 +49,8 @@ const QuestionInfo = ({ question }) => {
       </p>
       {
         extendQuestionSet && questionsets.map((questionset, index) => (
-          <p key={index}>
-            <CodeLink className="code-questions" uri={questionset.uri} onClick={() => fetchQuestionSet(questionset)} />
+          <p className="mb-1" key={index}>
+            <CodeLink type="questions" uri={questionset.uri} onClick={() => fetchQuestionSet(questionset)} />
           </p>
         ))
       }

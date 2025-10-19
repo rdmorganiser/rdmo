@@ -97,3 +97,21 @@ button.unstyled {
     --bs-btn-hover-bg: var(--rdmo-link-hover-color);
     --bs-btn-hover-border-color: var(--rdmo-link-hover-color);
 }
+
+.btn-outline-primary {
+    --bs-btn-color: var(--rdmo-color-link);
+    --bs-btn-border-color: var(--rdmo-color-link);
+    --bs-btn-hover-bg: var(--rdmo-color-link-hover);
+    --bs-btn-hover-border-color: var(--rdmo-color-link-hover);
+    --bs-btn-active-bg: var(--rdmo-color-link-hover);
+    --bs-btn-active-border-color: var(--rdmo-color-link-hover);
+}
+
+.bi {
+  font-weight: bold;
+  -webkit-text-stroke: 0.5px currentColor;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}

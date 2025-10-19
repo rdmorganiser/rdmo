@@ -10,35 +10,32 @@ import { html } from '@codemirror/lang-html'
 
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
+import ErrorList from './ErrorList'
+import HelpText from './HelpText'
+
 const CodeMirror = ({ element, field, onChange }) => {
   const { meta } = useSelector((state) => state.config)
 
   const id = getId(element, field),
         label = getLabel(element, field, meta),
         help = getHelp(element, field, meta),
-        warnings = get(element, ['warnings', field]),
         errors = get(element, ['errors', field])
 
-  const className = classNames({
-    'form-group': true,
-    'has-warning': !isEmpty(warnings),
-    'has-error': !isEmpty(errors)
+  const className = classNames('codemirror form-control', {
+    'is-invalid': !isEmpty(errors)
   })
 
   const value = isNil(element[field]) ? '' : element[field]
 
   return (
-    <div className={className}>
+    <div className="mb-3">
       <label className="control-label" htmlFor={id}>{label}</label>
 
-      <ReactCodeMirror className="codemirror form-control" id={id} value={value} extensions={[html()]}
+      <ReactCodeMirror className={className} id={id} value={value} extensions={[html()]}
                        onChange={(value) => onChange(field, value)} disabled={element.read_only} />
 
-      {help && <p className="help-block">{help}</p>}
-
-      {errors && <ul className="help-block list-unstyled">
-        {errors.map((error, index) => <li key={index}>{error}</li>)}
-      </ul>}
+      <ErrorList errors={errors} />
+      <HelpText help={help} />
     </div>
   )
 }

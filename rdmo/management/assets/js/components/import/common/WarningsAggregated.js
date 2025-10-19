@@ -1,14 +1,13 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import { get } from 'lodash'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
-import { generateWarningListItems } from './common/WarningsListGroup'
-
-import { ShowLink } from '../common/Links'
+import { generateWarningListItems } from './WarningsListGroup'
 
 // Function to aggregate warnings from elements
 const aggregateWarnings = (elements) => {
@@ -20,7 +19,7 @@ const aggregateWarnings = (elements) => {
   }, [])
 }
 
-const ImportAggregatedWarningsPanel = ({ elements }) => {
+const WarningsAggregated = ({ elements }) => {
   const dispatch = useDispatch()
 
   const config = useSelector((state) => state.config)
@@ -38,15 +37,17 @@ const ImportAggregatedWarningsPanel = ({ elements }) => {
   const warningsHeadingText = <strong onClick={updateShowWarnings}>{gettext('Warnings')} ({elements.length}):</strong>
 
   return ( aggregatedWarnings.length > 0 &&
-    <div className="panel panel-warning panel-import-warnings mt-10">
-      <div className="panel-heading" onClick={updateShowWarnings}>
-        {warningsHeadingText}
-        <div className="pull-right">
-          <ShowLink show={showWarnings} onClick={() => {}}/>
+    <div className="card text-bg-warning mt-2">
+      <div className="card-header cursor-pointer" onClick={updateShowWarnings}>
+        <div className="d-flex align-items-center">
+          <div className="flex-grow-1">
+            {warningsHeadingText}
+          </div>
+          <span className={classNames('bi', {'bi-chevron-down': !showWarnings, 'bi-chevron-up': showWarnings})}></span>
         </div>
       </div>
       {showWarnings && (
-        <ul className="list-group mb-5 pb-5 pt-5 pl-5 pr-5">
+        <ul className="list-group list-group-flush">
           {aggregatedWarnings.map(({ elementWarnings, elementModel, elementURI }) =>
             generateWarningListItems(elementWarnings, elementModel, elementURI)
           )}
@@ -56,8 +57,8 @@ const ImportAggregatedWarningsPanel = ({ elements }) => {
   )
 }
 
-ImportAggregatedWarningsPanel.propTypes = {
+WarningsAggregated.propTypes = {
   elements: PropTypes.array.isRequired
 }
 
-export default ImportAggregatedWarningsPanel
+export default WarningsAggregated

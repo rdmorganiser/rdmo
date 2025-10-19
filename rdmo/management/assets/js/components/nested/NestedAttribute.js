@@ -8,7 +8,6 @@ import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 import { getUriPrefixes } from '../../utils/filter'
 
 import { FilterString, FilterUriPrefix } from '../common/Filter'
-import { BackButton } from '../common/Buttons'
 
 import Attribute from '../element/Attribute'
 
@@ -22,15 +21,12 @@ const NestedAttribute = ({ attribute }) => {
 
   return (
     <>
-      <div className="panel panel-default panel-nested">
-        <div className="panel-heading">
-          <div className="pull-right">
-            <BackButton />
-          </div>
-          <Attribute attribute={attribute} display="plain" />
+      <div className="card">
+        <div className="card-header">
+          <Attribute attribute={attribute} display="plain" backButton={true} />
         </div>
 
-        <div className="panel-body">
+        <div className="card-body pb-0">
           <div className="row">
             <div className="col-sm-8">
               <FilterString value={get(config, 'filter.attribute.search', '')} onChange={updateFilterString}

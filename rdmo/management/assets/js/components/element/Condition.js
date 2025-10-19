@@ -28,23 +28,23 @@ const Condition = ({ condition, filter=false, filterEditors=false }) => {
 
   return showElement && (
     <li className="list-group-item">
-      <div className="element">
-        <div className="pull-right">
-          <ReadOnlyIcon title={gettext('This condition is read only')} show={condition.read_only} />
-          <EditLink title={gettext('Edit condition')} href={editUrl} onClick={fetchEdit} />
-          <CopyLink title={gettext('Copy condition')} href={copyUrl} onClick={fetchCopy} />
-          <LockedLink title={condition.locked ? gettext('Unlock condition') : gettext('Lock condition')}
-                      locked={condition.locked} onClick={toggleLocked} disabled={condition.read_only} />
-          <ExportLink title={gettext('Export condition')} exportUrl={exportUrl}
-                      exportFormats={config.settings.export_formats} full={true} />
+      <div className="d-flex flex-column gap-2">
+        <div className="d-flex align-items-center gap-2">
+          <strong>{gettext('Condition')}{':'}</strong>
+          <CodeLink className="flex-grow-1" type="conditions" uri={condition.uri} href={editUrl}
+                    onClick={() => fetchEdit()} />
+
+          <div className="d-flex align-items-center gap-1">
+            <ReadOnlyIcon title={gettext('This condition is read only')} show={condition.read_only} />
+            <EditLink title={gettext('Edit condition')} href={editUrl} onClick={fetchEdit} />
+            <CopyLink title={gettext('Copy condition')} href={copyUrl} onClick={fetchCopy} />
+            <LockedLink title={condition.locked ? gettext('Unlock condition') : gettext('Lock condition')}
+                        locked={condition.locked} onClick={toggleLocked} disabled={condition.read_only} />
+            <ExportLink title={gettext('Export condition')} exportUrl={exportUrl}
+                        exportFormats={config.settings.export_formats} full={true} />
+          </div>
         </div>
-        <div>
-          <p>
-            <strong>{gettext('Condition')}{':'}</strong>
-            <CodeLink className="code-conditions" uri={condition.uri} href={editUrl} onClick={() => fetchEdit()} />
-          </p>
-          <ElementErrors element={condition} />
-        </div>
+        <ElementErrors element={condition} />
       </div>
     </li>
   )
