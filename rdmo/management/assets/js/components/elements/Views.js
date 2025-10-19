@@ -1,8 +1,10 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import get from 'lodash/get'
+import classNames from 'classnames'
+import { get, isEmpty } from 'lodash'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
 import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
@@ -23,19 +25,25 @@ const Views = () => {
   const updateFilterSite = (value) => dispatch(updateConfig('filter.sites', value))
   const updateFilterEditor = (value) => dispatch(updateConfig('filter.editors', value))
 
+  const displayUriViews = isTruthy(get(config, 'display.uri.views', true))
+
+  const updateDisplayUriViews = () => dispatch(updateConfig('display.uri.views', !displayUriViews))
+
   const createView = () => dispatch(createElement('views'))
 
+  const btnClass = (value) => classNames('btn border', value ? 'btn-light' : '')
+
   return (
-    <div className="panel panel-default">
-      <div className="panel-heading">
-        <div className="pull-right">
+    <div className="card">
+      <div className="card-header">
+        <div className="d-flex align-items-center gap-2">
+          <strong className="me-auto">{gettext('Views')}</strong>
           <BackButton />
           <NewButton onClick={createView} />
         </div>
-        <strong>{gettext('Views')}</strong>
       </div>
 
-      <div className="panel-body">
+      <div className="card-body">
         <div className="row">
           <div className={config.settings.multisite ? 'col-sm-4' : 'col-sm-8'}>
             <FilterString value={get(config, 'filter.views.search', '')} onChange={updateFilterString}
@@ -58,16 +66,26 @@ const Views = () => {
             </>
           }
         </div>
+        <div className="input-group input-group-sm">
+          <label className="input-group-text">{gettext('Show URIs')}</label>
+          <button type="button" onClick={updateDisplayUriViews} className={btnClass(displayUriViews)}>
+            {gettext('Views')}
+          </button>
+        </div>
       </div>
 
-      <ul className="list-group">
       {
-        views.map((view, index) => (
-          <View key={index} config={config} view={view}
-                filter="views" filterSites={true} filterEditors={true} />
-        ))
+        !isEmpty(views) && (
+          <ul className="list-group list-group-flush">
+          {
+            views.map((view, index) => (
+              <View key={index} config={config} view={view}
+                    filter="views" filterSites={true} filterEditors={true} />
+            ))
+          }
+          </ul>
+        )
       }
-      </ul>
     </div>
   )
 }

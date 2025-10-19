@@ -1,7 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import { Tabs, Tab } from 'react-bootstrap'
 import { isUndefined, orderBy } from 'lodash'
 
 import Html from 'rdmo/core/assets/js/components/Html'
@@ -9,6 +8,7 @@ import Html from 'rdmo/core/assets/js/components/Html'
 import { fetchElement, storeElement, createElement, deleteElement, updateElement } from '../../actions/elementActions'
 
 import Checkbox from './common/Checkbox'
+import LanguageTabs from './common/LanguageTabs'
 import MultiSelect from './common/MultiSelect'
 import OrderedMultiSelect from './common/OrderedMultiSelect'
 import Select from './common/Select'
@@ -79,24 +79,21 @@ const EditPage = ({ page }) => {
   const createQuestionSetText = gettext('Create new question set')
 
   return (
-    <div className="panel panel-default panel-edit">
-      <div className="panel-heading">
-        <div className="pull-right">
+    <div className="card">
+      <div className="card-header">
+        <div className="d-flex flex-wrap align-items-center gap-2">
+          <strong className="flex-grow-1">
+            {page.id ? gettext('Edit page') : gettext('Create page')}
+          </strong>
           <ReadOnlyIcon title={gettext('This page is read only')} show={page.read_only} />
           <BackButton />
           <SaveButton elementAction={elementAction} onClick={storePage} disabled={page.read_only} />
           <SaveButton elementAction={elementAction} onClick={storePage} disabled={page.read_only} back={true}/>
         </div>
-        {
-          page.id ? <>
-            <strong>{gettext('Page')}{': '}</strong>
-            <code className="code-questions">{page.uri}</code>
-          </> : <strong>{gettext('Create page')}</strong>
-        }
       </div>
 
       {
-        parent && parent.section && <div className="panel-body panel-border">
+        parent && parent.section && <div className="card-body border-bottom">
         <Html html={interpolate(gettext(
           'This page will be added to the section <code class="code-questions">%s</code>.'),
           [parent.section.uri])} />
@@ -104,12 +101,12 @@ const EditPage = ({ page }) => {
       }
 
       {
-        page.id && <div className="panel-body panel-border">
+        page.id && <div className="card-body border-bottom">
           { info }
         </div>
       }
 
-      <div className="panel-body">
+      <div className="card-body pb-0">
         <div className="row">
           <div className="col-sm-6">
             <UriPrefix element={page} field="uri_prefix" onChange={updatePage} />
@@ -130,20 +127,14 @@ const EditPage = ({ page }) => {
           </div>
         </div>
 
-        <Tabs id="#page-tabs" defaultActiveKey={0} animation={false}>
-          {
-            settings.languages.map(([lang_code, lang], index) => (
-              <Tab key={index} eventKey={index} title={lang}>
-                <Text element={page} field={`title_${lang_code }`} onChange={updatePage} />
-                <Text element={page} field={`short_title_${lang_code }`} onChange={updatePage} />
-                <Textarea element={page} field={`help_${lang_code }`} rows={4} onChange={updatePage} />
-                <Text element={page} field={`verbose_name_${lang_code }`} onChange={updatePage} />
-              </Tab>
-            ))
-          }
-        </Tabs>
-
-
+        <LanguageTabs render={(langCode) => (
+          <>
+            <Text element={page} field={`title_${langCode}`} onChange={updatePage} />
+            <Text element={page} field={`short_title_${langCode}`} onChange={updatePage} />
+            <Textarea element={page} field={`help_${langCode}`} rows={4} onChange={updatePage} />
+            <Text element={page} field={`verbose_name_${langCode}`} onChange={updatePage} />
+          </>
+        )} />
 
         <Select element={page} field="attribute" createText={gettext('Create new attribute')}
                 options={attributes} onChange={updatePage} onCreate={createAttribute} onEdit={editAttribute} />
@@ -166,13 +157,13 @@ const EditPage = ({ page }) => {
         }
       </div>
 
-      <div className="panel-footer">
-        <div className="pull-right">
-          <BackButton />
+      <div className="card-footer">
+        <div className="d-flex align-items-center gap-2">
+          {page.id && <DeleteButton onClick={openDeleteModal} disabled={page.read_only} />}
+          <BackButton className="ms-auto" />
           <SaveButton elementAction={elementAction} onClick={storePage} disabled={page.read_only} />
           <SaveButton elementAction={elementAction} onClick={storePage} disabled={page.read_only} back={true}/>
         </div>
-        {page.id && <DeleteButton onClick={openDeleteModal} disabled={page.read_only} />}
       </div>
 
       <DeletePageModal page={page} info={info} show={showDeleteModal}

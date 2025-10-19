@@ -1,4 +1,3 @@
-// Errors.js
 import React from 'react'
 import PropTypes from 'prop-types'
 import ErrorsListGroup from './ErrorsListGroup'
@@ -9,8 +8,8 @@ const Errors = ({ elementErrors }) => {
   const errorsHeadingText = <strong>{gettext('Errors')}</strong>
 
   return show && (
-    <div className="panel panel-danger mt-10 mb-0">
-      <div className="panel-heading">{errorsHeadingText}</div>
+    <div className="card text-bg-danger my-2">
+      <div className="card-header">{errorsHeadingText}</div>
       <ErrorsListGroup elementErrors={elementErrors} />
     </div>
   )
