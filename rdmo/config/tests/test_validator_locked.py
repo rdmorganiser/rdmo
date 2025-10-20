@@ -4,63 +4,63 @@ from django.core.exceptions import ValidationError
 
 from rest_framework.exceptions import ValidationError as RestFrameworkValidationError
 
-from ..models import View
-from ..serializers.v1 import ViewSerializer
-from ..validators import ViewLockedValidator
+from ..models import Plugin
+from ..serializers.v1 import PluginSerializer
+from ..validators import PluginLockedValidator
 
 
 def test_create(db):
-    ViewLockedValidator()({
+    PluginLockedValidator()({
         'locked': False
     })
 
 
 def test_create_locked(db):
-    ViewLockedValidator()({
+    PluginLockedValidator()({
         'locked': True
     })
 
 
 def test_update(db):
-    view = View.objects.first()
+    plugin = Plugin.objects.first()
 
-    ViewLockedValidator(view)({
+    PluginLockedValidator(plugin)({
         'locked': False
     })
 
 
 def test_update_error(db):
-    view = View.objects.first()
-    view.locked = True
-    view.save()
+    plugin = Plugin.objects.first()
+    plugin.locked = True
+    plugin.save()
 
     with pytest.raises(ValidationError):
-        ViewLockedValidator(view)({
+        PluginLockedValidator(plugin)({
             'locked': True
         })
 
 
 def test_update_lock(db):
-    view = View.objects.first()
+    plugin = Plugin.objects.first()
 
-    ViewLockedValidator(view)({
+    PluginLockedValidator(plugin)({
         'locked': True
     })
 
 
 def test_update_unlock(db):
-    view = View.objects.first()
-    view.locked = True
-    view.save()
+    plugin = Plugin.objects.first()
+    plugin.locked = True
+    plugin.save()
 
-    ViewLockedValidator(view)({
+    PluginLockedValidator(plugin)({
         'locked': False
     })
 
 
 def test_serializer_create(db):
-    validator = ViewLockedValidator()
-    serializer = ViewSerializer()
+    validator = PluginLockedValidator()
+    serializer = PluginSerializer()
 
     validator({
         'locked': False
@@ -68,8 +68,8 @@ def test_serializer_create(db):
 
 
 def test_serializer_create_locked(db):
-    validator = ViewLockedValidator()
-    serializer = ViewSerializer()
+    validator = PluginLockedValidator()
+    serializer = PluginSerializer()
 
     validator({
         'locked': True
@@ -77,21 +77,21 @@ def test_serializer_create_locked(db):
 
 
 def test_serializer_update(db):
-    view = View.objects.first()
+    plugin = Plugin.objects.first()
 
-    validator = ViewLockedValidator()
-    serializer = ViewSerializer(instance=view)
+    validator = PluginLockedValidator()
+    serializer = PluginSerializer(instance=plugin)
 
     validator({}, serializer)
 
 
 def test_serializer_update_error(db):
-    view = View.objects.first()
-    view.locked = True
-    view.save()
+    plugin = Plugin.objects.first()
+    plugin.locked = True
+    plugin.save()
 
-    validator = ViewLockedValidator()
-    serializer = ViewSerializer(instance=view)
+    validator = PluginLockedValidator()
+    serializer = PluginSerializer(instance=plugin)
 
     with pytest.raises(RestFrameworkValidationError):
         validator({
@@ -100,10 +100,10 @@ def test_serializer_update_error(db):
 
 
 def test_serializer_update_lock(db):
-    view = View.objects.first()
+    plugin = Plugin.objects.first()
 
-    validator = ViewLockedValidator()
-    serializer = ViewSerializer(instance=view)
+    validator = PluginLockedValidator()
+    serializer = PluginSerializer(instance=plugin)
 
     validator({
         'locked': True
@@ -111,12 +111,12 @@ def test_serializer_update_lock(db):
 
 
 def test_serializer_update_unlock(db):
-    view = View.objects.first()
-    view.locked = True
-    view.save()
+    plugin = Plugin.objects.first()
+    plugin.locked = True
+    plugin.save()
 
-    validator = ViewLockedValidator()
-    serializer = ViewSerializer(instance=view)
+    validator = PluginLockedValidator()
+    serializer = PluginSerializer(instance=plugin)
 
     validator({
         'locked': False
