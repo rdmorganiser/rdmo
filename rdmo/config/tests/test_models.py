@@ -1,13 +1,13 @@
-from ..models import View
+from ..models import Plugin
 
 
-def test_view_str(db):
-    instances = View.objects.all()
+def test_plugin_str(db):
+    instances = Plugin.objects.all()
     for instance in instances:
         assert str(instance)
 
 
-def test_view_clean(db):
-    instances = View.objects.all()
+def test_plugin_clean(db):
+    instances = Plugin.objects.all()
     for instance in instances:
         instance.clean()

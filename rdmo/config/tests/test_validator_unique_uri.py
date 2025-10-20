@@ -5,13 +5,13 @@ from django.core.exceptions import ValidationError
 
 from rest_framework.exceptions import ValidationError as RestFrameworkValidationError
 
-from ..models import View
-from ..serializers.v1 import ViewSerializer
-from ..validators import ViewUniqueURIValidator
+from ..models import Plugin
+from ..serializers.v1 import PluginSerializer
+from ..validators import PluginUniqueURIValidator
 
 
 def test_unique_uri_validator_create(db):
-    ViewUniqueURIValidator()({
+    PluginUniqueURIValidator()({
         'uri_prefix': settings.DEFAULT_URI_PREFIX,
         'uri_path': 'test'
     })
@@ -19,34 +19,34 @@ def test_unique_uri_validator_create(db):
 
 def test_unique_uri_validator_create_error(db):
     with pytest.raises(ValidationError):
-        ViewUniqueURIValidator()({
+        PluginUniqueURIValidator()({
             'uri_prefix': settings.DEFAULT_URI_PREFIX,
-            'uri_path': View.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).last().uri_path
+            'uri_path': Plugin.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).last().uri_path
         })
 
 
 def test_unique_uri_validator_update(db):
-    view = View.objects.first()
+    plugin = Plugin.objects.first()
 
-    ViewUniqueURIValidator(view)({
-        'uri_prefix': view.uri_prefix,
-        'uri_path': view.uri_path
+    PluginUniqueURIValidator(plugin)({
+        'uri_prefix': plugin.uri_prefix,
+        'uri_path': plugin.uri_path
     })
 
 
 def test_unique_uri_validator_update_error(db):
-    view = View.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).first()
+    plugin = Plugin.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).first()
 
     with pytest.raises(ValidationError):
-        ViewUniqueURIValidator(view)({
-            'uri_prefix': view.uri_prefix,
-            'uri_path': View.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).last().uri_path
+        PluginUniqueURIValidator(plugin)({
+            'uri_prefix': plugin.uri_prefix,
+            'uri_path': Plugin.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).last().uri_path
         })
 
 
 def test_unique_uri_validator_serializer_create(db):
-    validator = ViewUniqueURIValidator()
-    serializer = ViewSerializer()
+    validator = PluginUniqueURIValidator()
+    serializer = PluginSerializer()
 
     validator({
         'uri_prefix': settings.DEFAULT_URI_PREFIX,
@@ -55,36 +55,36 @@ def test_unique_uri_validator_serializer_create(db):
 
 
 def test_unique_uri_validator_serializer_create_error(db):
-    validator = ViewUniqueURIValidator()
-    serializer = ViewSerializer()
+    validator = PluginUniqueURIValidator()
+    serializer = PluginSerializer()
 
     with pytest.raises(RestFrameworkValidationError):
         validator({
             'uri_prefix': settings.DEFAULT_URI_PREFIX,
-            'uri_path': View.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).last().uri_path
+            'uri_path': Plugin.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).last().uri_path
         }, serializer)
 
 
 def test_unique_uri_validator_serializer_update(db):
-    view = View.objects.first()
+    plugin = Plugin.objects.first()
 
-    validator = ViewUniqueURIValidator()
-    serializer = ViewSerializer(instance=view)
+    validator = PluginUniqueURIValidator()
+    serializer = PluginSerializer(instance=plugin)
 
     validator({
-        'uri_prefix': view.uri_prefix,
-        'uri_path': view.uri_path
+        'uri_prefix': plugin.uri_prefix,
+        'uri_path': plugin.uri_path
     }, serializer)
 
 
 def test_unique_uri_validator_serializer_update_error(db):
-    view = View.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).first()
+    plugin = Plugin.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).first()
 
-    validator = ViewUniqueURIValidator()
-    serializer = ViewSerializer(instance=view)
+    validator = PluginUniqueURIValidator()
+    serializer = PluginSerializer(instance=plugin)
 
     with pytest.raises(RestFrameworkValidationError):
         validator({
-            'uri_prefix': view.uri_prefix,
-            'uri_path': View.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).last().uri_path
+            'uri_prefix': plugin.uri_prefix,
+            'uri_path': Plugin.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).last().uri_path
         }, serializer)
