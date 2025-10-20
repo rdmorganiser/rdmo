@@ -1,9 +1,12 @@
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 
+from rdmo.config.utils import detect_plugin_type
 from rdmo.core.models import Model, TranslationMixin
 from rdmo.core.utils import join_url
 from rdmo.questions.models import Catalog
@@ -153,8 +156,33 @@ class Plugin(Model, TranslationMixin):
     def is_locked(self):
         return self.locked
 
+    @property
+    def plugin_type(self) -> str:
+        try:
+            plugin_class = self.get_class()
+        except Exception as e:
+            return e.__class__.__qualname__.lower()
+        return detect_plugin_type(plugin_class)
+
     @classmethod
     def build_uri(cls, uri_prefix, uri_path):
         if not uri_path:
             raise RuntimeError('uri_path is missing')
         return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/plugins/', uri_path)
+
+    def get_class(self):
+        # TODO: return None here instead of raising exc?
+        try:
+            return import_string(self.python_path)
+        except ModuleNotFoundError as e:
+            raise e from e
+        except ImportError as e:
+            raise e from e
+
+    def clean(self):
+        super().clean()
+        if self.available:  # check only available?
+            try:
+                self.get_class()
+            except Exception as e:
+                raise ValidationError({'python_path': f"Could not import class: {e}"}) from e
