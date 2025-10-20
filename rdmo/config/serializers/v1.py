@@ -1,0 +1,68 @@
+from rest_framework import serializers
+
+from rdmo.core.serializers import (
+    ElementModelSerializerMixin,
+    ElementWarningSerializerMixin,
+    MarkdownSerializerMixin,
+    ReadOnlyObjectPermissionSerializerMixin,
+    TranslationSerializerMixin,
+)
+
+from ..models import Plugin
+from ..validators import PluginLockedValidator, PluginUniqueURIValidator
+
+
+class PluginSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
+                     ElementWarningSerializerMixin, ReadOnlyObjectPermissionSerializerMixin,
+                     MarkdownSerializerMixin, serializers.ModelSerializer):
+
+    markdown_fields = ('title', 'text')
+
+    model = serializers.SerializerMethodField()
+
+    warning = serializers.SerializerMethodField()
+    read_only = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Plugin
+        fields = (
+            'id',
+            'model',
+            'uri',
+            'uri_prefix',
+            'uri_path',
+            'comment',
+            'locked',
+            'order',
+            'available',
+            'catalogs',
+            'sites',
+            'editors',
+            'groups',
+            'title',
+            'warning',
+            'read_only',
+        )
+        trans_fields = (
+            'title',
+        )
+        extra_kwargs = {
+            'uri_path': {'required': True}
+        }
+        validators = (
+            PluginUniqueURIValidator(),
+            PluginLockedValidator()
+        )
+        warning_fields = (
+            'title',
+        )
+
+
+class PluginIndexSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Plugin
+        fields = (
+            'id',
+            'uri'
+        )
