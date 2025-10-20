@@ -1,10 +1,10 @@
 from django.contrib import admin
 
+from rdmo.core.admin import ElementAdminForm
 from rdmo.core.utils import get_language_fields
 
 from .models import Plugin
 from .validators import PluginLockedValidator, PluginUniqueURIValidator
-from rdmo.core.admin import ElementAdminForm
 
 
 class PluginAdminForm(ElementAdminForm):
@@ -24,7 +24,8 @@ class PluginAdmin(admin.ModelAdmin):
     form = PluginAdminForm
 
     search_fields = ['uri', 'python_path', *get_language_fields('title'), *get_language_fields('help')]
-    list_display = ('uri', 'python_path', 'title', 'available')
-    readonly_fields = ('uri', )
-    list_filter = ('available', 'python_path')
+    list_display = ('uri', 'python_path', 'plugin_type', 'available')
+    readonly_fields = ('uri', 'plugin_type')
+    list_filter = ('available', 'python_path', 'sites' , 'groups', 'catalogs')
     filter_horizontal = ('catalogs', 'sites', 'editors', 'groups')
+    ordering = ('python_path','order')
