@@ -142,6 +142,12 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     visibility = serializers.CharField(source='visibility.get_help_display', read_only=True)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in settings.PROJECT_FIELDS:
+            self.fields[field] = serializers.CharField(read_only=True)
+
     class Meta:
         model = Project
         fields = (
@@ -166,7 +172,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             'progress_total',
             'progress_count',
             'visibility',
-            'permissions',
+            'permissions'
         )
         read_only_fields = (
             'snapshots',
