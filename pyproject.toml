@@ -1,6 +1,6 @@
 [build-system]
 build-backend = "setuptools.build_meta"
-requires = ["setuptools", "wheel"]
+requires = ["setuptools"]
 
 [project]
 name = "rdmo"
@@ -72,11 +72,9 @@ ci = [
   "pytest-github-actions-annotate-failures>=0.2.0,<0.4.0",
 ]
 dev = [
-  "build>=1.0,<2.0",
   "pipdeptree>=2.13,<3.0",
   "pre-commit>=3.4,<5.0",
   "setuptools>=73,<81",
-  "wheel>=0.42,<0.46",
   "rdmo[allauth,openapi,pytest]",
 ]
 gunicorn = [
