@@ -173,6 +173,7 @@ class ProjectViewSet(ModelViewSet):
             permission_classes=(HasModelPermission | HasProjectPermission, ))
     def navigation(self, request, pk=None, section_id=None):
         project = self.get_object()
+        project.catalog.prefetch_elements()
 
         # if a section is provided, check if it actually exists in the catalog
         if section_id is None:
@@ -295,11 +296,14 @@ class ProjectViewSet(ModelViewSet):
         project = self.get_object()
 
         if request.method == 'POST' or project.progress_count is None or project.progress_total is None:
+            project.catalog.prefetch_elements()
+
             # compute the progress, but store it only, if it has changed
             progress_count, progress_total = compute_progress(project)
             if progress_count != project.progress_count or progress_total != project.progress_total:
                 project.progress_count, project.progress_total = progress_count, progress_total
                 project.save()
+
         try:
             ratio = project.progress_count / project.progress_total
         except ZeroDivisionError:
@@ -715,7 +719,6 @@ class ProjectPageViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericV
             serializer = self.get_serializer(page)
             return Response(serializer.data)
         elif computed_page_id is not None:
-            print(computed_page_id)
             url = reverse('v1-projects:project-page-detail', args=[self.project.id, computed_page_id])
             return HttpResponseRedirect(url, status=303)
         else:

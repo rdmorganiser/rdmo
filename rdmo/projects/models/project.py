@@ -148,8 +148,10 @@ class Project(MPTTModel, Model):
             return self.user.filter(memberships__role=role)
 
     def get_answer_tree(self, snapshot=None):
-        self.catalog.prefetch_elements()
-        return AnswerTree(self, snapshot).compute()
+        return AnswerTree(
+            self.catalog,
+            self.values.filter(snapshot=snapshot).select_related('attribute', 'option')
+        ).compute()
 
 
 @receiver(pre_delete, sender=Project)

@@ -1,36 +1,20 @@
 from collections import defaultdict
 
-from django.utils.functional import cached_property
-
 from rdmo.core.utils import markdown2html
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet, Section
 
 
 class AnswerTree:
 
-    def __init__(self, project, snapshot=None):
-        self.project = project
-        self.snapshot = snapshot
+    def __init__(self, catalog, values):
+        self.catalog = catalog
+        self.values = values
+
+        self.sets = values.compute_sets()
+        self.conditions = catalog.conditions.in_bulk()
 
         # buffer for the resolved conditions: self.resolved_conditions[element][parent_set]
         self.resolved_conditions = defaultdict(lambda: defaultdict(dict))
-
-    @cached_property
-    def conditions(self):
-        return {
-            condition.id: condition for condition in self.project.catalog.conditions
-        }
-
-    @cached_property
-    def values(self):
-        return self.project.values.filter(snapshot=self.snapshot).select_related('attribute', 'option')
-
-    @cached_property
-    def sets(self):
-        sets = defaultdict(set)
-        for attribute, set_prefix, set_index in self.values.distinct_list():
-            sets[attribute].add((set_prefix, set_index))
-        return sets
 
     def compute(self):
         # Main function of this class, which Computes the answer tree recursively.
@@ -38,7 +22,7 @@ class AnswerTree:
         # Then, it alternates between (value)set and questionset nodes until it reaches
         # the question nodes, which include the corresponding values as well as how much
         # this question counts to the count and total values for the progress.
-        return self.compute_element_node(self.project.catalog)
+        return self.compute_element_node(self.catalog)
 
     def compute_element_node(self, element, parent_set=None):
         # recursive function, which will be called for each element
