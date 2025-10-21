@@ -10,6 +10,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('questions', '0031_rename_attribute_entity_to_attribute'),
+        ('domain', '0038_rename_attributeentity_to_attribute'),  # post hoc fix for mysql/sqlite
     ]
 
     operations = [
