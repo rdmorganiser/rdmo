@@ -4,6 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import F, OuterRef, Prefetch, Q, Subquery
 from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponseRedirect
+from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers, status
@@ -22,11 +23,12 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from rdmo.conditions.models import Condition
 from rdmo.core.permissions import HasModelPermission
-from rdmo.core.utils import human2bytes, is_truthy, return_file_response
+from rdmo.core.utils import human2bytes, is_truthy, render_to_format, return_file_response
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
+from rdmo.views.utils import ProjectWrapper
 
 from .filters import (
     AttributeFilterBackend,
@@ -90,6 +92,7 @@ from .utils import (
     copy_project,
     get_contact_message,
     get_upload_accept,
+    get_value_path,
     send_contact_message,
     send_invite_email,
 )
@@ -424,6 +427,90 @@ class ProjectViewSet(ModelViewSet):
         serializer_context['project'] = self.get_object()
         serializer = ProjectHierarchySerializer(cached_trees[0], context=serializer_context)
         return Response(serializer.data)
+
+    @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ),
+            url_path=r'(snapshots/(?P<snapshot_id>\d+)/)?answers')
+    def answers(self, request, pk, snapshot_id=None):
+        project = self.get_object()
+        project.catalog.prefetch_elements()
+
+        try:
+            snapshot = project.snapshots.get(pk=snapshot_id) if snapshot_id else None
+        except Snapshot.DoesNotExist:
+            snapshot = None
+
+        return Response({
+            'project': pk,
+            'snapshot': snapshot_id,
+            'html': render_to_string('projects/project_answers.html', {
+                'project': project,
+                'snapshot': snapshot,
+                'project_wrapper': ProjectWrapper(project, snapshot),
+                'export_formats': settings.EXPORT_FORMATS
+            })
+        })
+
+    @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ),
+            url_path=r'(snapshots/(?P<snapshot_id>\d+)/)?answers/export/(?P<export_format>[a-z]+)')
+    def answers_export(self, request, pk, export_format, snapshot_id=None):
+        project = self.get_object()
+        project.catalog.prefetch_elements()
+
+        try:
+            snapshot = project.snapshots.get(pk=snapshot_id) if snapshot_id else None
+        except Snapshot.DoesNotExist:
+            snapshot = None
+
+        return render_to_format(self.request, export_format, project.title, 'projects/project_answers_export.html', {
+            'project': project,
+            'snapshot': snapshot,
+            'project_wrapper': ProjectWrapper(project, snapshot)
+        })
+
+    @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ),
+            url_path=r'(snapshots/(?P<snapshot_id>\d+)/)?views/(?P<view_id>\d+)')
+    def views(self, request, pk, view_id, snapshot_id=None):
+        project = self.get_object()
+        project.catalog.prefetch_elements()
+
+        try:
+            view = project.views.get(pk=view_id)
+        except View.DoesNotExist as e:
+            raise Http404 from e
+
+        try:
+            snapshot = project.snapshots.get(pk=snapshot_id) if snapshot_id else None
+        except Snapshot.DoesNotExist:
+            snapshot = None
+
+        return Response({
+            'project': pk,
+            'snapshot': snapshot_id,
+            'html': view.render(project, snapshot)
+        })
+
+    @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ),
+            url_path=r'(snapshots/(?P<snapshot_id>\d+)/)?views/(?P<view_id>\d+)/export/(?P<export_format>[a-z]+)')
+    def views_export(self, request, pk, view_id, export_format, snapshot_id=None):
+        project = self.get_object()
+        project.catalog.prefetch_elements()
+
+        try:
+            view = project.views.get(pk=view_id)
+        except View.DoesNotExist as e:
+            raise Http404 from e
+
+        try:
+            snapshot = project.snapshots.get(pk=snapshot_id) if snapshot_id else None
+        except Snapshot.DoesNotExist:
+            snapshot = None
+
+        return render_to_format(self.request, export_format, project.title, 'projects/project_view_export.html', {
+            'project': project,
+            'snapshot': snapshot,
+            'html': view.render(project, snapshot),
+            'resource_path': get_value_path(project, snapshot)
+        })
 
     @action(detail=False, url_path='upload-accept', permission_classes=(IsAuthenticated, ))
     def upload_accept(self, request):
