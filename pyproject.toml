@@ -13,7 +13,8 @@ keywords = [
   "research data",
   "research data management",
 ]
-license = {text = "Apache-2.0"}
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE", "AUTHORS"]
 authors = [
   {name = "RDMO Arbeitsgemeinschaft", email = "rdmo-team@listserv.dfn.de"},
 ]
@@ -23,7 +24,6 @@ classifiers = [
   "Environment :: Web Environment",
   "Framework :: Django :: 4.2",
   "Intended Audience :: Science/Research",
-  "License :: OSI Approved :: Apache Software License",
   "Operating System :: OS Independent",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3 :: Only",
