@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { capitalize, maxBy } from 'lodash'
+import { maxBy, upperFirst } from 'lodash'
 
 const QuestionSetAddSet = ({ questionset, sets, setPrefix, disabled, createSet }) => {
   const handleClick = () => {
@@ -18,7 +18,7 @@ const QuestionSetAddSet = ({ questionset, sets, setPrefix, disabled, createSet }
     <button type="button" className="btn btn-success btn-add-set"
             title={'Add block'} aria-label={'Add block'}
             onClick={handleClick}>
-      <i className="fa fa-plus fa-btn" aria-hidden="true"></i> {capitalize(questionset.verbose_name)}
+      <i className="fa fa-plus fa-btn" aria-hidden="true"></i> {upperFirst(questionset.verbose_name)}
     </button>
   )
 }
