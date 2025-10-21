@@ -471,6 +471,9 @@ PROJECT_VALUES_VALIDATION_PHONE_REGEX = re.compile(r'''
     [\d\s]*$          # Main number with spaces
 ''', re.VERBOSE)
 
+
+PROJECT_FIELDS = {}
+
 DEFAULT_URI_PREFIX = 'http://example.com/terms'
 
 REPLACE_MISSING_TRANSLATION = False

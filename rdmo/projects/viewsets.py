@@ -159,12 +159,28 @@ class ProjectViewSet(ModelViewSet):
         last_changed_subquery = Subquery(
             Value.objects.filter(project=OuterRef('pk')).order_by('-updated').values('updated')[:1]
         )
+
+        extra_subqueries = {}
+        if settings.PROJECT_FIELDS:
+            questions = {
+                question.uri: question
+                for question in Question.objects.filter(uri__in=settings.PROJECT_FIELDS.values())
+            }
+            extra_subqueries.update({
+                field: Subquery(
+                    Value.objects.filter(project=OuterRef('pk'), snapshot=None, attribute=questions[uri].attribute)
+                                 .values('text')[:1]
+                )
+                for field, uri in settings.PROJECT_FIELDS.items()
+            })
+
         # the 'updated' field from a Project always returns a valid DateTime value
         # when Greatest returns null, then Coalesce will return the value for 'updated' as a fall-back
         # when Greatest returns a value, then Coalesce will return this value
         queryset = queryset.annotate(
             current_role=membership_subquery,
-            last_changed=Coalesce(Greatest(last_changed_subquery, 'updated'), 'updated')
+            last_changed=Coalesce(Greatest(last_changed_subquery, 'updated'), 'updated'),
+            **extra_subqueries
         )
 
         # cache queryset and return
