@@ -7,7 +7,12 @@ import Html from 'rdmo/core/assets/js/components/Html'
 
 const Overview = ({ config, overview, help, configActions }) => {
 
-  const isManager = (overview.is_superuser || overview.is_editor || overview.is_reviewer)
+  const isManager = overview.permissions?.can_view_management
+  const readOnly = (
+    !overview.permissions?.can_add_value ||
+    !overview.permissions?.can_change_value ||
+    !overview.permissions?.can_delete_value
+  )
 
   const projectsUrl = `${baseUrl}/projects/`
   const projectUrl = `${baseUrl}/projects/${overview.id}`
@@ -44,7 +49,7 @@ const Overview = ({ config, overview, help, configActions }) => {
         }
 
         {
-          overview.read_only && (
+          readOnly && (
             <p>
               <span className="badge badge-read-only" title={gettext('You don\'t have write access to this project.')}>
                 {gettext('read only')}
