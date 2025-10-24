@@ -167,21 +167,21 @@ def test_rollback(db, client, files, username, password, snapshot_id):
     snapshot_count = snapshot.project.snapshots.count()
     values_count = snapshot.project.values.count()
 
-    snapshots_kept = list(
+    snapshots_kept = sorted(
         snapshot.project.snapshots.filter(created__lt=snapshot.created).values_list('id', flat=True)
     )
-    values_kept = list(
+    values_kept = sorted(
         snapshot.project.values.filter(
             snapshot__in=snapshot.project.snapshots.filter(created__lte=snapshot.created)
         ).values_list('id', flat=True)
     )
-    files_kept = list(
+    files_kept = sorted(
         snapshot.project.values.filter(
             snapshot__in=snapshot.project.snapshots.filter(created__lt=snapshot.created),
             value_type=VALUE_TYPE_FILE
         ).values_list('file', flat=True)
     )
-    files_removed = list(
+    files_removed = sorted(
         snapshot.project.values.filter(
             snapshot__in=snapshot.project.snapshots.filter(created__gt=snapshot.created),
             value_type=VALUE_TYPE_FILE
@@ -195,10 +195,10 @@ def test_rollback(db, client, files, username, password, snapshot_id):
         assert response.status_code == 204
 
         # check that we still have all the snapshots before the rolled back snapshot
-        assert list(snapshot.project.snapshots.values_list('id', flat=True)) == snapshots_kept
+        assert sorted(snapshot.project.snapshots.values_list('id', flat=True)) == snapshots_kept
 
         # check that we still have all the values
-        assert list(snapshot.project.values.values_list('id', flat=True)) == values_kept
+        assert sorted(snapshot.project.values.values_list('id', flat=True)) == values_kept
 
         for file_path in files_kept:
             assert Path(settings.MEDIA_ROOT).joinpath(file_path).exists()
