@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from rdmo.core.constants import VALUE_TYPE_FILE
 from rdmo.core.models import Model
 
 from ..managers import SnapshotManager
@@ -71,4 +72,8 @@ class Snapshot(Model):
         # remove all snapshot created later and the current_snapshot
         # this also removes the values of these snapshots
         for snapshot in self.project.snapshots.filter(created__gte=self.created):
+            # remove the files for this snapshot
+            for value in snapshot.values.filter(value_type=VALUE_TYPE_FILE):
+                value.file.delete(save=False)
+
             snapshot.delete()
