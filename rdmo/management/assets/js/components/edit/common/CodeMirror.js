@@ -5,6 +5,7 @@ import classNames from 'classnames'
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 import get from 'lodash/get'
+import { EditorView } from '@codemirror/view'
 import ReactCodeMirror from '@uiw/react-codemirror'
 import { html } from '@codemirror/lang-html'
 
@@ -22,16 +23,23 @@ const CodeMirror = ({ element, field, onChange }) => {
         errors = get(element, ['errors', field])
 
   const className = classNames('codemirror form-control', {
-    'is-invalid': !isEmpty(errors)
+    'is-invalid': !isEmpty(errors),
+    'disabled': element.read_only
   })
 
   const value = isNil(element[field]) ? '' : element[field]
+
+  const extensions = [html()]
+
+  if (element.read_only) {
+    extensions.push(EditorView.editable.of(false))
+  }
 
   return (
     <div className="mb-3">
       <label className="control-label" htmlFor={id}>{label}</label>
 
-      <ReactCodeMirror className={className} id={id} value={value} extensions={[html()]}
+      <ReactCodeMirror className={className} id={id} value={value} extensions={extensions}
                        onChange={(value) => onChange(field, value)} disabled={element.read_only} />
 
       <ErrorList errors={errors} />
