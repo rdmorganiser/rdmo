@@ -564,6 +564,27 @@ class ProjectValueSerializer(serializers.ModelSerializer):
         )
 
 
+class ProjectAttachmentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Value
+        fields = (
+            'id',
+            'created',
+            'updated',
+            'file_name',
+            'file_url'
+        )
+
+
+class ProjectViewSerializer(serializers.Serializer):
+
+    project = serializers.PrimaryKeyRelatedField(read_only=True)
+    snapshot = serializers.PrimaryKeyRelatedField(read_only=True)
+    html = serializers.CharField(read_only=True)
+    attachments = ProjectAttachmentSerializer(many=True, read_only=True)
+
+
 class MembershipSerializer(serializers.ModelSerializer):
 
     class Meta:
