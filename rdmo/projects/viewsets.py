@@ -429,8 +429,7 @@ class ProjectViewSet(ModelViewSet):
         serializer = ProjectHierarchySerializer(cached_trees[0], context=serializer_context)
         return Response(serializer.data)
 
-    @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ),
-            url_path=r'(snapshots/(?P<snapshot_id>\d+)/)?answers')
+    @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ))
     def answers(self, request, pk, snapshot_id=None):
         project = self.get_object()
         project.catalog.prefetch_elements()
@@ -453,9 +452,14 @@ class ProjectViewSet(ModelViewSet):
         })
         return Response(serializer.data)
 
+    @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ),
+            url_path=r'snapshots/(?P<snapshot_id>\d+)/answers')
+    def answers_snapshot(self, request, pk, snapshot_id=None):
+        # extra method since DRF does not officially support optional named parameters inside url_path
+        return self.answers(request, pk, snapshot_id)
 
     @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ),
-            url_path=r'(snapshots/(?P<snapshot_id>\d+)/)?answers/export/(?P<export_format>[a-z]+)')
+            url_path=r'answers/export/(?P<export_format>[a-z]+)')
     def answers_export(self, request, pk, export_format, snapshot_id=None):
         project = self.get_object()
         project.catalog.prefetch_elements()
@@ -472,7 +476,13 @@ class ProjectViewSet(ModelViewSet):
         })
 
     @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ),
-            url_path=r'(snapshots/(?P<snapshot_id>\d+)/)?views/(?P<view_id>\d+)')
+            url_path=r'snapshots/(?P<snapshot_id>\d+)/answers/export/(?P<export_format>[a-z]+)')
+    def answers_export_snapshot(self, request, pk, export_format, snapshot_id=None):
+        # extra method since DRF does not officially support optional named parameters inside url_path
+        return self.answers_export(request, pk, export_format, snapshot_id)
+
+    @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ),
+            url_path=r'views/(?P<view_id>\d+)')
     def views(self, request, pk, view_id, snapshot_id=None):
         project = self.get_object()
         project.catalog.prefetch_elements()
@@ -497,7 +507,14 @@ class ProjectViewSet(ModelViewSet):
 
 
     @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ),
-            url_path=r'(snapshots/(?P<snapshot_id>\d+)/)?views/(?P<view_id>\d+)/export/(?P<export_format>[a-z]+)')
+            url_path=r'snapshots/(?P<snapshot_id>\d+)/views/(?P<view_id>\d+)')
+    def views_snapshot(self, request, pk, view_id, snapshot_id):
+        # extra method since DRF does not officially support optional named parameters inside url_path
+        return self.views(request, pk, view_id, snapshot_id)
+
+
+    @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ),
+            url_path=r'views/(?P<view_id>\d+)/export/(?P<export_format>[a-z]+)')
     def views_export(self, request, pk, view_id, export_format, snapshot_id=None):
         project = self.get_object()
         project.catalog.prefetch_elements()
@@ -518,6 +535,12 @@ class ProjectViewSet(ModelViewSet):
             'html': view.render(project, snapshot),
             'resource_path': get_value_path(project, snapshot)
         })
+
+    @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ),
+            url_path=r'snapshots/(?P<snapshot_id>\d+)/views/(?P<view_id>\d+)/export/(?P<export_format>[a-z]+)')
+    def views_export_snapshot(self, request, pk, view_id, export_format, snapshot_id):
+        # extra method since DRF does not officially support optional named parameters inside url_path
+        return self.views_export(request, pk, view_id, export_format, snapshot_id)
 
     @action(detail=False, url_path='upload-accept', permission_classes=(IsAuthenticated, ))
     def upload_accept(self, request):
