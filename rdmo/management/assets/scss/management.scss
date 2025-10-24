@@ -18,20 +18,6 @@
         padding: 0.3rem 0.75rem;
     }
 
-//     .pull-right {
-//         .element-link,
-//         .element-btn-link,
-//         .element-button {
-//             margin-left: 4px;
-
-//             &.disabled,
-//             &:disabled {
-//                 color: #ccc !important;
-//                 cursor: not-allowed !important;
-//             }
-//         }
-//     }
-
     .drag {
         color: var(--rdmo-color-link);
 
@@ -117,6 +103,12 @@
         border-color: rgb(134, 182.5, 254);
         outline: 0;
         box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+
+    &.disabled {
+        .cm-scroller {
+            background-color: var(--bs-secondary-bg);
+        }
     }
 }
 
