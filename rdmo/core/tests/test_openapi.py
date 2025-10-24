@@ -10,7 +10,7 @@ users = (
     'anonymous'
 )
 
-n_path = 128
+n_path = 136
 
 @pytest.mark.parametrize('username', users)
 def test_openapi_schema(db, client, login, settings, username):
