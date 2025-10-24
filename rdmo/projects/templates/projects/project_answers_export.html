@@ -1,5 +1,10 @@
+{% extends 'core/export.html' %}
 {% load i18n %}
 
-<h1>{% blocktrans with title=project.title %}Answers for <em>{{ title }}</em>{% endblocktrans%}</h1>
+{% block body %}
 
-{% include 'projects/project_answers_tree.html' %}
+    <h1>{% blocktrans with title=project.title %}Answers for <em>{{ title }}</em>{% endblocktrans%}</h1>
+
+    {% include 'projects/project_answers_tree.html' %}
+
+{% endblock %}
