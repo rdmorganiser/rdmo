@@ -22,6 +22,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from rdmo.conditions.models import Condition
+from rdmo.core.constants import VALUE_TYPE_FILE
 from rdmo.core.permissions import HasModelPermission
 from rdmo.core.utils import human2bytes, is_truthy, render_to_format, return_file_response
 from rdmo.options.models import OptionSet
@@ -75,6 +76,7 @@ from .serializers.v1 import (
     ProjectSerializer,
     ProjectSnapshotSerializer,
     ProjectValueSerializer,
+    ProjectViewSerializer,
     ProjectVisibilitySerializer,
     SnapshotSerializer,
     UserInviteSerializer,
@@ -438,16 +440,19 @@ class ProjectViewSet(ModelViewSet):
         except Snapshot.DoesNotExist:
             snapshot = None
 
-        return Response({
-            'project': pk,
-            'snapshot': snapshot_id,
+        serializer = ProjectViewSerializer({
+            'project': project,
+            'snapshot': snapshot,
             'html': render_to_string('projects/project_answers.html', {
                 'project': project,
                 'snapshot': snapshot,
                 'project_wrapper': ProjectWrapper(project, snapshot),
                 'export_formats': settings.EXPORT_FORMATS
-            })
+            }),
+            'attachments': project.values.filter(snapshot=snapshot).filter(value_type=VALUE_TYPE_FILE).order_by('file')
         })
+        return Response(serializer.data)
+
 
     @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ),
             url_path=r'(snapshots/(?P<snapshot_id>\d+)/)?answers/export/(?P<export_format>[a-z]+)')
@@ -482,11 +487,14 @@ class ProjectViewSet(ModelViewSet):
         except Snapshot.DoesNotExist:
             snapshot = None
 
-        return Response({
-            'project': pk,
-            'snapshot': snapshot_id,
-            'html': view.render(project, snapshot)
+        serializer = ProjectViewSerializer({
+            'project': project,
+            'snapshot': snapshot,
+            'html': view.render(project, snapshot),
+            'attachments': project.values.filter(snapshot=snapshot).filter(value_type=VALUE_TYPE_FILE).order_by('file')
         })
+        return Response(serializer.data)
+
 
     @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ),
             url_path=r'(snapshots/(?P<snapshot_id>\d+)/)?views/(?P<view_id>\d+)/export/(?P<export_format>[a-z]+)')
