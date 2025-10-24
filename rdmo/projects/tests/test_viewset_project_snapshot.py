@@ -30,7 +30,10 @@ view_snapshot_permission_map = {
     'site': [1, 2, 3, 4, 5, 12]
 }
 
-add_snapshot_permission_map = change_snapshot_permission_map = delete_snapshot_permission_map = {
+add_snapshot_permission_map = \
+change_snapshot_permission_map = \
+rollback_snapshot_permission_map = \
+delete_snapshot_permission_map = {
     'owner': [1, 2, 3, 4, 5, 12],
     'manager': [1, 3, 5],
     'api': [1, 2, 3, 4, 5, 12],
@@ -39,7 +42,8 @@ add_snapshot_permission_map = change_snapshot_permission_map = delete_snapshot_p
 
 urlnames = {
     'list': 'v1-projects:project-snapshot-list',
-    'detail': 'v1-projects:project-snapshot-detail'
+    'detail': 'v1-projects:project-snapshot-detail',
+    'rollback': 'v1-projects:project-snapshot-rollback',
 }
 
 projects = [1, 2, 3, 4, 5, 12]
@@ -152,6 +156,66 @@ def test_update(db, client, files, username, password, snapshot_id):
     assert snapshot.project.values.count() == values_count
     for file_value in values_files:
         assert Path(settings.MEDIA_ROOT).joinpath(file_value).exists()
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('snapshot_id', snapshots)
+def test_rollback(db, client, files, username, password, snapshot_id):
+    client.login(username=username, password=password)
+    snapshot = Snapshot.objects.get(id=snapshot_id)
+
+    snapshot_count = snapshot.project.snapshots.count()
+    values_count = snapshot.project.values.count()
+
+    snapshots_kept = list(
+        snapshot.project.snapshots.filter(created__lt=snapshot.created).values_list('id', flat=True)
+    )
+    values_kept = list(
+        snapshot.project.values.filter(
+            snapshot__in=snapshot.project.snapshots.filter(created__lte=snapshot.created)
+        ).values_list('id', flat=True)
+    )
+    files_kept = list(
+        snapshot.project.values.filter(
+            snapshot__in=snapshot.project.snapshots.filter(created__lt=snapshot.created),
+            value_type=VALUE_TYPE_FILE
+        ).values_list('file', flat=True)
+    )
+    files_removed = list(
+        snapshot.project.values.filter(
+            snapshot__in=snapshot.project.snapshots.filter(created__gt=snapshot.created),
+            value_type=VALUE_TYPE_FILE
+        ).values_list('file', flat=True)
+    )
+
+    url = reverse(urlnames['rollback'], args=[snapshot.project_id, snapshot_id])
+    response = client.post(url)
+
+    if snapshot.project_id in rollback_snapshot_permission_map.get(username, []):
+        assert response.status_code == 204
+
+        # check that we still have all the snapshots before the rolled back snapshot
+        assert list(snapshot.project.snapshots.values_list('id', flat=True)) == snapshots_kept
+
+        # check that we still have all the values
+        assert list(snapshot.project.values.values_list('id', flat=True)) == values_kept
+
+        for file_path in files_kept:
+            assert Path(settings.MEDIA_ROOT).joinpath(file_path).exists()
+
+        for file_path in files_removed:
+            assert not Path(settings.MEDIA_ROOT).joinpath(file_path).exists()
+
+    elif snapshot.project_id in view_snapshot_permission_map.get(username, []):
+        assert response.status_code == 403
+    else:
+        assert response.status_code == 404
+
+        assert snapshot.project.snapshots.count() == snapshot_count
+        assert snapshot.project.values.count() == values_count
+
+        for file_path in files_kept + files_removed:
+            assert Path(settings.MEDIA_ROOT).joinpath(file_path).exists()
 
 
 @pytest.mark.parametrize('username,password', users)

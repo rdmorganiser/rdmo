@@ -627,6 +627,13 @@ class ProjectSnapshotViewSet(ProjectNestedViewSetMixin, CreateModelMixin, Retrie
     def get_queryset(self):
         return self.project.snapshots.all()
 
+    @action(detail=True, methods=['POST'],
+            permission_classes=(HasModelPermission | HasProjectPermission, ))
+    def rollback(self, request, parent_lookup_project, pk=None):
+        snapshot = self.get_object()
+        snapshot.rollback()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     permission_classes = (HasModelPermission | HasProjectPermission, )
