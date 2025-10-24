@@ -55,7 +55,7 @@ const AttributeInfo = ({ attribute }) => {
       {
         extendAttributes && attributes.map((attribute, index) => (
           <p className="mb-1" key={index}>
-            <CodeLink className="code-domain" uri={attribute.uri} onClick={() => fetchAttribute(attribute)} />
+            <CodeLink type="domain" uri={attribute.uri} onClick={() => fetchAttribute(attribute)} />
           </p>
         ))
       }
@@ -69,7 +69,7 @@ const AttributeInfo = ({ attribute }) => {
       {
         extendConditions && conditions.map((condition, index) => (
           <p key={index}>
-            <CodeLink className="code-conditions" uri={condition.uri} onClick={() => fetchCondition(condition)} />
+            <CodeLink type="conditions" uri={condition.uri} onClick={() => fetchCondition(condition)} />
           </p>
         ))
       }
@@ -83,7 +83,7 @@ const AttributeInfo = ({ attribute }) => {
       {
         extendPages && pages.map((page, index) => (
           <p className="mb-1" key={index}>
-            <CodeLink className="code-questions" uri={page.uri} onClick={() => fetchPage(page)} />
+            <CodeLink type="questions" uri={page.uri} onClick={() => fetchPage(page)} />
           </p>
         ))
       }
@@ -97,7 +97,7 @@ const AttributeInfo = ({ attribute }) => {
       {
         extendQuestionSets && questionsets.map((questionset, index) => (
           <p className="mb-1" key={index}>
-            <CodeLink className="code-questions" uri={questionset.uri} onClick={() => fetchQuestionSet(questionset)} />
+            <CodeLink type="questions" uri={questionset.uri} onClick={() => fetchQuestionSet(questionset)} />
           </p>
         ))
       }
@@ -111,7 +111,7 @@ const AttributeInfo = ({ attribute }) => {
       {
         extendQuestions && questions.map((question, index) => (
           <p className="mb-1" key={index}>
-            <CodeLink className="code-questions" uri={question.uri} onClick={() => fetchQuestion(question)} />
+            <CodeLink type="questions" uri={question.uri} onClick={() => fetchQuestion(question)} />
           </p>
         ))
       }
@@ -125,7 +125,7 @@ const AttributeInfo = ({ attribute }) => {
       {
         extendTasks && tasks.map((task, index) => (
           <p className="mb-1" key={index}>
-            <CodeLink className="code-tasks" uri={task.uri} onClick={() => fetchTask(task)} />
+            <CodeLink type="tasks" uri={task.uri} onClick={() => fetchTask(task)} />
           </p>
         ))
       }

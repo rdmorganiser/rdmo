@@ -36,7 +36,7 @@ const QuestionInfo = ({ question }) => {
       {
         extendPages && pages.map((page, index) => (
           <p className="mb-1" key={index}>
-            <CodeLink className="code-questions" uri={page.uri} onClick={() => fetchPage(page)} />
+            <CodeLink type="questions" uri={page.uri} onClick={() => fetchPage(page)} />
           </p>
         ))
       }

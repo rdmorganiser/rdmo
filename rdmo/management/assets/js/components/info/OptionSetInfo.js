@@ -33,7 +33,7 @@ const OptionSetInfo = ({ optionset }) => {
       {
         extendQuestions && questions.map((question, index) => (
           <p className="mb-1" key={index}>
-            <CodeLink className="code-questions" uri={question.uri} onClick={() => fetchQuestion(question)} />
+            <CodeLink type="questions" uri={question.uri} onClick={() => fetchQuestion(question)} />
           </p>
         ))
       }

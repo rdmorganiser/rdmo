@@ -33,7 +33,7 @@ const PageInfo = ({ page }) => {
       {
         extendSections && sections.map((section, index) => (
           <p className="mb-1" key={index}>
-            <CodeLink className="code-questions" uri={section.uri} onClick={() => fetchSection(section)} />
+            <CodeLink type="questions" uri={section.uri} onClick={() => fetchSection(section)} />
           </p>
         ))
       }

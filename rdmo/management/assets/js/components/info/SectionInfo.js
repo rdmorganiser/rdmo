@@ -33,7 +33,7 @@ const SectionInfo = ({ section }) => {
       {
         showCatalogs && catalogs.map((catalog, index) => (
           <p className="mb-1" key={index}>
-            <CodeLink className="code-questions" uri={catalog.uri} onClick={() => fetchCatalog(catalog)} />
+            <CodeLink type="questions" uri={catalog.uri} onClick={() => fetchCatalog(catalog)} />
           </p>
         ))
       }
