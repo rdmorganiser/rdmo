@@ -144,31 +144,43 @@ ShowElementsLink.propTypes = {
 const ExportLink = ({ exportUrl, title, exportFormats, csv=false, full=false }) => {
   return (
     <span className="dropdown">
-      <button type="button" className="link link bi bi-download" data-toggle="dropdown"
+      <button type="button" className="link link bi bi-download" data-bs-toggle="dropdown"
               title={title} aria-label={title}></button>
-      <ul className="dropdown-menu">
-        <li><a href={exportUrl}>{gettext('XML')}</a></li>
+      <ul className="dropdown-menu dropdown-menu-end">
+        <li className="dropdown-item">
+          <a href={exportUrl}>{gettext('XML')}</a>
+        </li>
         {
-          full && <li><a href={exportUrl + '?full=true'}>{gettext('XML (full)')}</a></li>
+          full && (
+            <li className="dropdown-item">
+              <a href={exportUrl + '?full=true'}>{gettext('XML (full)')}</a>
+            </li>
+          )
         }
-        <li role="separator" className="divider"></li>
+        <li><hr className="dropdown-divider" /></li>
         {
           csv && <>
-            <li><a href={`${exportUrl}csvcomma/`}>
-              {gettext('CSV comma separated')}
-            </a></li>
-            <li><a href={`${exportUrl}csvsemicolon/`}>
-              {gettext('CSV semicolon separated')}
-            </a></li>
-            <li role="separator" className="divider"></li>
+            <li className="dropdown-item">
+              <a href={`${exportUrl}csvcomma/`}>
+                {gettext('CSV comma separated')}
+              </a>
+            </li>
+            <li className="dropdown-item">
+              <a href={`${exportUrl}csvsemicolon/`}>
+                {gettext('CSV semicolon separated')}
+              </a>
+            </li>
+            <li><hr className="dropdown-divider" /></li>
           </>
         }
         {
-          exportFormats.map(([key, label], index) => <li key={index}>
-            <a href={`${exportUrl}${key}/`}
-               target={['pdf', 'html'].includes(key) ? '_blank' : '_self'}
-               rel="noreferrer">{label}</a>
-          </li>)
+          exportFormats.map(([key, label], index) => (
+            <li className="dropdown-item" key={index}>
+              <a href={`${exportUrl}${key}/`}
+                 target={['pdf', 'html'].includes(key) ? '_blank' : '_self'}
+                 rel="noreferrer">{label}</a>
+            </li>
+          ))
         }
       </ul>
     </span>
