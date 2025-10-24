@@ -36,7 +36,7 @@ const QuestionSetInfo = ({ questionset }) => {
       {
         extendPages && pages.map((page, index) => (
           <p className="mb-1" key={index}>
-            <CodeLink className="code-questions" uri={page.uri} onClick={() => fetchPage(page)} />
+            <CodeLink type="questions" uri={page.uri} onClick={() => fetchPage(page)} />
           </p>
         ))
       }
@@ -50,7 +50,7 @@ const QuestionSetInfo = ({ questionset }) => {
       {
         extendQuestionSet && questionsets.map((questionset, index) => (
           <p className="mb-1" key={index}>
-            <CodeLink className="code-questions" uri={questionset.uri} onClick={() => fetchQuestionSet(questionset)} />
+            <CodeLink type="questions" uri={questionset.uri} onClick={() => fetchQuestionSet(questionset)} />
           </p>
         ))
       }

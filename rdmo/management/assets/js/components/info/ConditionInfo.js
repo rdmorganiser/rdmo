@@ -45,7 +45,7 @@ const ConditionInfo = ({ condition }) => {
       {
         extendOptionSets && optionsets.map((optionset, index) => (
           <p className="mb-1" key={index}>
-            <CodeLink className="code-options" uri={optionset.uri} onClick={() => fetchOptionSet(optionset)} />
+            <CodeLink type="options" uri={optionset.uri} onClick={() => fetchOptionSet(optionset)} />
           </p>
         ))
       }
@@ -59,7 +59,7 @@ const ConditionInfo = ({ condition }) => {
       {
         extendPages && pages.map((page, index) => (
           <p className="mb-1" key={index}>
-            <CodeLink className="code-questions" uri={page.uri} onClick={() => fetchPage(page)} />
+            <CodeLink type="questions" uri={page.uri} onClick={() => fetchPage(page)} />
           </p>
         ))
       }
@@ -73,7 +73,7 @@ const ConditionInfo = ({ condition }) => {
       {
         extendQuestionSets && questionsets.map((questionset, index) => (
           <p className="mb-1" key={index}>
-            <CodeLink className="code-questions" uri={questionset.uri} onClick={() => fetchQuestionSet(questionset)} />
+            <CodeLink type="questions" uri={questionset.uri} onClick={() => fetchQuestionSet(questionset)} />
           </p>
         ))
       }
@@ -87,7 +87,7 @@ const ConditionInfo = ({ condition }) => {
       {
         extendQuestions && questions.map((question, index) => (
           <p className="mb-1" key={index}>
-            <CodeLink className="code-questions" uri={question.uri} onClick={() => fetchQuestion(question)} />
+            <CodeLink type="questions" uri={question.uri} onClick={() => fetchQuestion(question)} />
           </p>
         ))
       }
@@ -101,7 +101,7 @@ const ConditionInfo = ({ condition }) => {
       {
         extendTasks && tasks.map((task, index) => (
           <p className="mb-1" key={index}>
-            <CodeLink className="code-tasks" uri={task.uri} onClick={() => fetchTask(task)} />
+            <CodeLink type="tasks" uri={task.uri} onClick={() => fetchTask(task)} />
           </p>
         ))
       }

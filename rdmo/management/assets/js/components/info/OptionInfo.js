@@ -40,7 +40,7 @@ const OptionInfo = ({ option }) => {
       {
         extendConditions && conditions.map((condition, index) => (
           <p className="mb-1" key={index}>
-            <CodeLink className="code-conditions" uri={condition.uri} onClick={() => fetchCondition(condition)} />
+            <CodeLink type="conditions" uri={condition.uri} onClick={() => fetchCondition(condition)} />
           </p>
         ))
       }
