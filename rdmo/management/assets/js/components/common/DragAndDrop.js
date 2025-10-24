@@ -16,8 +16,12 @@ const Drag = ({ element, show=true }) => {
 
   drag(dragRef)
 
+  const className = classNames('bi bi-arrows-move drag', {
+    'disabled': element.read_only
+  })
+
   return show && <span className="drag">
-    <i className="bi bi-arrows-move drag" ref={dragRef} aria-hidden="true"></i>
+    <i className={className} ref={dragRef} aria-hidden="true"></i>
   </span>
 }
 

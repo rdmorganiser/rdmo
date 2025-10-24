@@ -108,8 +108,14 @@ button.unstyled {
 }
 
 .bi {
-  font-weight: bold;
-  -webkit-text-stroke: 0.5px currentColor;
+    font-weight: bold;
+    -webkit-text-stroke: 0.5px currentColor;
+
+    &.disabled,
+    &:disabled {
+        color: var(--bs-secondary-color) !important;
+        cursor: not-allowed !important;
+    }
 }
 
 .cursor-pointer {
