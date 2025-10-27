@@ -210,3 +210,15 @@ rules.add_perm('questions.view_question_object', is_element_editor | is_element_
 rules.add_perm('questions.add_question_object', is_element_editor)
 rules.add_perm('questions.change_question_object', is_element_editor)
 rules.add_perm('questions.delete_question_object', is_element_editor)
+
+# Model permissions for config.plugin
+rules.add_perm('config.view_plugin', is_editor | is_reviewer)
+rules.add_perm('config.add_plugin', is_editor)
+
+# Object permissions for config.plugin
+rules.add_perm('config.view_plugin_object', is_element_editor | is_element_reviewer)
+rules.add_perm('config.add_plugin_object', is_element_editor)
+rules.add_perm('config.change_plugin_object', is_element_editor)
+rules.add_perm('config.delete_plugin_object', is_element_editor)
+# toggle current site field perm
+rules.add_perm('config.change_plugin_toggle_site', is_editor_for_current_site)
