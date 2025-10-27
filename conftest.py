@@ -27,7 +27,8 @@ def fixtures():
         'sites',
         'tasks',
         'users',
-        'views'
+        'views',
+        'config'
     }
     fixtures = []
     for fixture_dir in settings.FIXTURE_DIRS:
