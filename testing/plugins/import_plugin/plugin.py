@@ -1,6 +1,7 @@
 from rdmo.projects.imports import Import
 from rdmo.projects.models import Project
 
+
 class TestImportPlugin(Import):
     accept = {"text/plain": [".txt"]}
 
