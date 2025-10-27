@@ -1,5 +1,6 @@
 from rdmo.options.providers import Provider
 
+
 class TestOptionSetProvider(Provider):
     search = False
     refresh = False
