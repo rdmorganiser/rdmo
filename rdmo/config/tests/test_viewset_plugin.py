@@ -1,4 +1,3 @@
-import xml.etree.ElementTree as et
 
 import pytest
 
@@ -36,6 +35,7 @@ urlnames = {
     'list': 'v1-config:plugin-list',
     'index': 'v1-config:plugin-index',
     'detail': 'v1-config:plugin-detail',
+    'export': 'v1-config:plugin-export',
 }
 
 export_formats = ('xml', 'html')
@@ -60,22 +60,6 @@ def test_index(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-@pytest.mark.parametrize('export_format', export_formats)
-def test_export(db, client, username, password, export_format):
-    client.login(username=username, password=password)
-
-    url = reverse(urlnames['export']) + export_format + '/'
-    response = client.get(url)
-    assert response.status_code == status_map['list'][username], response.content
-
-    if response.status_code == 200 and export_format == 'xml':
-        root = et.fromstring(response.content)
-        assert root.tag == 'rdmo'
-        for child in root:
-            assert child.tag in ['view']
-
-
-@pytest.mark.parametrize('username,password', users)
 def test_detail(db, client, username, password):
     client.login(username=username, password=password)
     instances = Plugin.objects.all()
@@ -97,7 +81,6 @@ def test_create(db, client, username, password):
             'uri_prefix': instance.uri_prefix,
             'uri_path': f'{instance.uri_path}_new_{username}',
             'comment': instance.comment,
-            'template': instance.template,
             'title_en': instance.title_lang1,
             'title_de': instance.title_lang2,
             'help_en': instance.help_lang1,
@@ -118,7 +101,6 @@ def test_update(db, client, username, password):
             'uri_prefix': instance.uri_prefix,
             'uri_path': instance.uri_path,
             'comment': instance.comment,
-            'template': instance.template,
             'title_en': instance.title_lang1,
             'title_de': instance.title_lang2,
             'help_en': instance.help_lang1,
@@ -137,20 +119,3 @@ def test_delete(db, client, username, password):
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.delete(url)
         assert response.status_code == status_map['delete'][username], response.json()
-
-
-@pytest.mark.parametrize('username,password', users)
-@pytest.mark.parametrize('export_format', export_formats)
-def test_detail_export(db, client, username, password, export_format):
-    client.login(username=username, password=password)
-    instance = Plugin.objects.first()
-
-    url = reverse(urlnames['detail_export'], args=[instance.pk]) + export_format + '/'
-    response = client.get(url)
-    assert response.status_code == status_map['detail'][username], response.content
-
-    if response.status_code == 200 and export_format == 'xml':
-        root = et.fromstring(response.content)
-        assert root.tag == 'rdmo'
-        for child in root:
-            assert child.tag in ['view']
