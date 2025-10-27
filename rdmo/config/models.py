@@ -138,7 +138,7 @@ class Plugin(Model, TranslationMixin):
         verbose_name_plural = _('Plugins')
 
     def __str__(self):
-        return self.uri
+        return f"({self.python_path}) {self.uri}"
 
     def save(self, *args, **kwargs):
         self.uri = self.build_uri(self.uri_prefix, self.uri_path)
@@ -178,6 +178,9 @@ class Plugin(Model, TranslationMixin):
             raise e from e
         except ImportError as e:
             raise e from e
+
+    def initialize_class(self):
+        return self.get_class()(self.uri_path, self.title, self.python_path)
 
     def clean(self):
         super().clean()
