@@ -1,4 +1,5 @@
 import os
+from warnings import filterwarnings
 
 from django.utils.translation import gettext_lazy as _
 
@@ -105,3 +106,13 @@ PROJECT_VALUES_VALIDATION = True
 
 PROJECT_CONTACT = True
 PROJECT_CONTACT_RECIPIENTS = ['email@example.com']
+
+# Ref: https://adamj.eu/tech/2023/12/07/django-fix-urlfield-assume-scheme-warnings
+filterwarnings(
+    "ignore", "The FORMS_URLFIELD_ASSUME_HTTPS transitional setting is deprecated."
+)
+# This value will change from False to True in Django 6.0
+# Refs:
+# - https://docs.djangoproject.com/en/5.2/ref/settings/#forms-urlfield-assume-https
+# - https://docs.djangoproject.com/en/5.2/ref/forms/fields/#django.forms.URLField.assume_scheme
+FORMS_URLFIELD_ASSUME_HTTPS = True
