@@ -30,15 +30,16 @@ view_snapshot_permission_map = {
     'site': [1, 2, 3, 4, 5, 12]
 }
 
-add_snapshot_permission_map = \
-change_snapshot_permission_map = \
-rollback_snapshot_permission_map = \
-delete_snapshot_permission_map = {
+snapshot_permission_map = {
     'owner': [1, 2, 3, 4, 5, 12],
     'manager': [1, 3, 5],
     'api': [1, 2, 3, 4, 5, 12],
-    'site': [1, 2, 3, 4, 5, 12]
+    'site': [1, 2, 3, 4, 5, 12],
 }
+add_snapshot_permission_map = snapshot_permission_map
+change_snapshot_permission_map = snapshot_permission_map
+rollback_snapshot_permission_map = snapshot_permission_map
+delete_snapshot_permission_map = snapshot_permission_map
 
 urlnames = {
     'list': 'v1-projects:project-snapshot-list',
