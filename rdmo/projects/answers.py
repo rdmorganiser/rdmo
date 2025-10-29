@@ -65,7 +65,6 @@ class AnswerTree:
 
         elif isinstance(element, (Page, QuestionSet)):
 
-
             # for pages and questionsets we first compute the sets for the element ...
             element_sets = self.compute_element_sets(element, parent_set)
 
@@ -125,7 +124,7 @@ class AnswerTree:
         element_sets = set()
 
         # compute the level in the page/questionsets hierarchy
-        level = 0 if not parent_set else parent_set[0].count('|') + 1
+        level = self.set_level(parent_set)
 
         # for pages, add the sets for the attribute of the page
         if parent_set is None and element.attribute:
@@ -151,17 +150,9 @@ class AnswerTree:
                         # exclude sets with an empty set_prefix, this can happen in wrongly configured
                         # catalogs, when a page and one of the descendant have the same attribute
                         if descendant_set_prefix:
-                            descendant_set_prefix_split = descendant_set_prefix.split('|')
-
-                            if level:
-                                element_set = (
-                                    '|'.join(descendant_set_prefix_split[:level]),
-                                    int(descendant_set_prefix_split[level])
-                                )
-                            else:
-                                element_set = ('', int(descendant_set_prefix_split[0]))
-
-                            element_sets.add(element_set)
+                            split = self.split_for_level(descendant_set_prefix, level)
+                            if split is not None:
+                                element_sets.add(split)
 
         # create one empty set for non-collection pages/questionsets
         if not element.is_collection:
@@ -169,7 +160,7 @@ class AnswerTree:
                 element_sets.add(('', 0))
             else:
                 parent_set_prefix, parent_set_index = parent_set
-                set_prefix = f'{parent_set_prefix}|{parent_set_index}' if parent_set_prefix else str(parent_set_index)
+                set_prefix = self.prefix_child(parent_set_prefix, parent_set_index)
                 element_sets.add((set_prefix, 0))
 
         return sorted(element_sets)
@@ -195,7 +186,7 @@ class AnswerTree:
                 for value in element_values
             ]
         else:
-            # if no value is present, create one empty empty value
+            # if no value is present, create one empty value
             return [
                 {
                     'is_empty': True,
@@ -226,14 +217,41 @@ class AnswerTree:
 
         if parent_set:
             parent_set_prefix, parent_set_index = parent_set
-            if parent_set_prefix:
-                descendant_set_prefix = f'{parent_set_prefix}|{parent_set_index}'
-            else:
-                descendant_set_prefix = str(parent_set_index)
+            ancestor = self.prefix_child(parent_set_prefix, parent_set_index)
 
-            return set(filter(
-                lambda s: (s[0] == descendant_set_prefix) or s[0].startswith(f'{descendant_set_prefix}|'),
-                descendant_sets
-            ))
+            return {
+                s for s in descendant_sets
+                if self.is_under_or_self(s[0], ancestor)
+            }
         else:
             return descendant_sets
+
+    @staticmethod
+    def set_level(parent_set):
+        # compute the level in the page/questionsets hierarchy
+        if parent_set is None:
+            return 0
+        return 0 if not parent_set[0] else parent_set[0].count('|') + 1
+
+    @staticmethod
+    def prefix_level(prefix):
+        return 0 if not prefix else prefix.count('|') + 1
+
+    @staticmethod
+    def prefix_child(prefix, index):
+        return f'{prefix}|{index}' if prefix else str(index)
+
+    @staticmethod
+    def split_for_level(descendant_prefix, level):
+        if not descendant_prefix:
+            return None
+        parts = descendant_prefix.split('|')
+        if level >= len(parts):
+            return None
+        head = '|'.join(parts[:level]) if level else ''
+        return head, int(parts[level])
+
+    @staticmethod
+    def is_under_or_self(prefix, ancestor):
+        # equals ancestor or starts-with ancestor + delimiter
+        return prefix == ancestor or prefix.startswith(f'{ancestor}|')
