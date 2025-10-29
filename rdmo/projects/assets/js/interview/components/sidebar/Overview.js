@@ -7,7 +7,7 @@ import Html from 'rdmo/core/assets/js/components/Html'
 
 const Overview = ({ config, overview, help, configActions }) => {
 
-  const isManager = overview.permissions?.can_view_management
+  const isManager = overview.permissions?.view_management
   const readOnly = (
     !overview.permissions?.can_add_value ||
     !overview.permissions?.can_change_value ||
