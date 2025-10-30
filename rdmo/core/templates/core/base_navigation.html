@@ -19,11 +19,9 @@
             <ul class="nav navbar-nav">
                 {% back_to_project_link %}
 
-                {% comment %}the test_rule will be removed in RDMO 3.0{% endcomment %}
-                {% test_rule 'management.can_view_management' request.user as can_view_management %}
-                {% has_perm 'management.view_management' request.user as has_perm_view_management %}
+                {% has_perm 'management.view_management' request.user as can_view_management %}
 
-                {% if can_view_management or has_perm_view_management %}
+                {% if can_view_management %}
                 <li>
                     <a href="{% url 'management' %}">{% trans 'Management' %}</a>
                 </li>
