@@ -153,11 +153,8 @@ class AnswerTree:
 
         # create one empty set for non-collection pages/questionsets
         if not element.is_collection:
-            if parent_set is None:
-                element_sets.add(('', 0))
-            else:
-                set_prefix = self.compute_child_set_prefix(parent_set)
-                element_sets.add((set_prefix, 0))
+            set_prefix = self.compute_child_set_prefix(parent_set)
+            element_sets.add((set_prefix, 0))
 
         return sorted(element_sets)
 
