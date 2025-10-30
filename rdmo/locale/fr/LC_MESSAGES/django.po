@@ -4616,7 +4616,7 @@ msgstr "Ensemble"
 #~ msgstr "(facultatif)"
 
 #~ msgid "Edit tab"
-#~ msgstr "Onglet Modifier"
+#~ msgstr "Modifier l'onglet"
 
 #~ msgid "Remove tab"
 #~ msgstr "Supprimer l'onglet"
