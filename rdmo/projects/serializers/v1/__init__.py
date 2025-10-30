@@ -581,6 +581,7 @@ class ProjectViewSerializer(serializers.Serializer):
 
     project = serializers.PrimaryKeyRelatedField(read_only=True)
     snapshot = serializers.PrimaryKeyRelatedField(read_only=True)
+    view = serializers.PrimaryKeyRelatedField(read_only=True)
     html = serializers.CharField(read_only=True)
     attachments = ProjectAttachmentSerializer(many=True, read_only=True)
 
