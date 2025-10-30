@@ -464,7 +464,7 @@ class ProjectViewSet(ModelViewSet):
         url_path=r'snapshots/(?P<snapshot_id>\d+)/answers',
         permission_classes=(HasModelPermission | HasProjectPermission, )
     )
-    def answers_snapshot(self, request, pk, snapshot_id=None):
+    def answers_snapshot(self, request, pk, snapshot_id):
         # extra method since DRF does not officially support optional named parameters inside url_path
         return self.answers(request, pk, snapshot_id)
 
@@ -495,7 +495,7 @@ class ProjectViewSet(ModelViewSet):
         url_path=r'snapshots/(?P<snapshot_id>\d+)/answers/export/(?P<export_format>[a-z]+)',
         permission_classes=(HasModelPermission | HasProjectPermission, )
     )
-    def answers_export_snapshot(self, request, pk, export_format, snapshot_id=None):
+    def answers_export_snapshot(self, request, pk, export_format, snapshot_id):
         # extra method since DRF does not officially support optional named parameters inside url_path
         return self.answers_export(request, pk, export_format, snapshot_id)
 
@@ -518,6 +518,7 @@ class ProjectViewSet(ModelViewSet):
         serializer = ProjectViewSerializer({
             'project': project,
             'snapshot': snapshot,
+            'view': view,
             'html': view.render(project, snapshot),
             'attachments': project.values.filter(snapshot=snapshot).filter(value_type=VALUE_TYPE_FILE).order_by('file')
         })
