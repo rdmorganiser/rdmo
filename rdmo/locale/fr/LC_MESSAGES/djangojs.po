@@ -3,31 +3,28 @@ msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-04 11:19+0000\n"
-"PO-Revision-Date: 2025-07-04 13:26+0200\n"
-"Last-Translator: Yonny CARDENAS, Gautier DEBAECKER, Nadia LAJILI, Gino "
-"MARCHETTI <dmp@cc.in2p3.fr>\n"
+"PO-Revision-Date: 2025-10-30 07:22+0100\n"
+"Last-Translator: Yonny CARDENAS, Gautier DEBAECKER, Nadia LAJILI, Gino MARCHETTI "
+"<dmp@cc.in2p3.fr>\n"
 "Language-Team: RDMO <dmp@cc.in2p3.fr>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.8\n"
 
-#: core/assets/js/components/Modal.js:20
-#: management/assets/js/components/common/Modals.js:16
+#: core/assets/js/components/Modal.js:20 management/assets/js/components/common/Modals.js:16
 #: management/static/management/js/management.js:2
 msgid "Close"
 msgstr "Fermer"
 
-#: core/assets/js/components/Modal.js:26
-#: management/assets/js/components/common/Buttons.js:19
+#: core/assets/js/components/Modal.js:26 management/assets/js/components/common/Buttons.js:19
 #: management/static/management/js/management.js:2
 msgid "Save"
 msgstr "Sauvegarder"
 
-#: core/assets/js/components/SearchField.js:35
-#: core/assets/js/components/SearchField.js:43
+#: core/assets/js/components/SearchField.js:35 core/assets/js/components/SearchField.js:43
 #: projects/assets/js/projects/utils/translations.js:15
 msgid "Search"
 msgstr "Recherche"
@@ -210,8 +207,7 @@ msgstr "Cet attribut est en lecture seule"
 
 #: management/assets/js/components/edit/EditAttribute.js:44
 #: management/assets/js/components/element/Attribute.js:44
-#: management/assets/js/constants/elements.js:49
-#: management/static/management/js/management.js:2
+#: management/assets/js/constants/elements.js:49 management/static/management/js/management.js:2
 msgid "Attribute"
 msgstr "Attribut"
 
@@ -223,50 +219,34 @@ msgstr "Créer un attribut"
 #: management/assets/js/components/edit/EditAttribute.js:53
 #: management/static/management/js/management.js:2
 #, javascript-format
-msgid ""
-"This attribute will be added to the attribute <code class=\"code-"
-"domain\">%s</code>."
-msgstr ""
-"Cet attribut sera ajouté à l'attribut <code class=\"code-domain\">%s</code>."
+msgid "This attribute will be added to the attribute <code class=\"code-domain\">%s</code>."
+msgstr "Cet attribut sera ajouté à l'attribut <code class=\"code-domain\">%s</code>."
 
 #: management/assets/js/components/edit/EditAttribute.js:61
 #: management/static/management/js/management.js:2
 #, javascript-format
-msgid ""
-"This attribute will be added to the page <code class=\"code-questions\">%s</"
-"code>."
-msgstr ""
-"Cet attribut sera ajouté à la page <code class=\"code-questions\">%s</code>."
+msgid "This attribute will be added to the page <code class=\"code-questions\">%s</code>."
+msgstr "Cet attribut sera ajouté à la page <code class=\"code-questions\">%s</code>."
 
 #: management/assets/js/components/edit/EditAttribute.js:68
 #: management/static/management/js/management.js:2
 #, javascript-format
 msgid ""
-"This attribute will be added to the question set <code class=\"code-"
-"questions\">%s</code>."
+"This attribute will be added to the question set <code class=\"code-questions\">%s</code>."
 msgstr ""
-"Cet attribut sera ajouté à l'ensemble de questions <code class=\"code-"
-"questions\">%s</code>."
+"Cet attribut sera ajouté à l'ensemble de questions <code class=\"code-questions\">%s</code>."
 
 #: management/assets/js/components/edit/EditAttribute.js:75
 #: management/static/management/js/management.js:2
 #, javascript-format
-msgid ""
-"This attribute will be added to the question <code class=\"code-"
-"questions\">%s</code>."
-msgstr ""
-"Cet attribut sera ajouté à la question  <code class=\"code-questions\">%s</"
-"code>."
+msgid "This attribute will be added to the question <code class=\"code-questions\">%s</code>."
+msgstr "Cet attribut sera ajouté à la question  <code class=\"code-questions\">%s</code>."
 
 #: management/assets/js/components/edit/EditAttribute.js:82
 #: management/static/management/js/management.js:2
 #, javascript-format
-msgid ""
-"This attribute will be added to the condition <code class=\"code-"
-"conditions\">%s</code>."
-msgstr ""
-"Cet attribut sera ajouté à la condition <code class=\"code-conditions\">%s</"
-"code>."
+msgid "This attribute will be added to the condition <code class=\"code-conditions\">%s</code>."
+msgstr "Cet attribut sera ajouté à la condition <code class=\"code-conditions\">%s</code>."
 
 #: management/assets/js/components/edit/EditCatalog.js:39
 #: management/static/management/js/management.js:2
@@ -286,8 +266,7 @@ msgstr "Ce catalogue est en lecture seule"
 
 #: management/assets/js/components/edit/EditCatalog.js:53
 #: management/assets/js/components/element/Catalog.js:58
-#: management/assets/js/constants/elements.js:44
-#: management/static/management/js/management.js:2
+#: management/assets/js/constants/elements.js:44 management/static/management/js/management.js:2
 #: projects/assets/js/interview/components/sidebar/Overview.js:30
 msgid "Catalog"
 msgstr "Catalogue"
@@ -305,8 +284,7 @@ msgstr "Cette condition est en lecture seule"
 
 #: management/assets/js/components/edit/EditCondition.js:48
 #: management/assets/js/components/element/Condition.js:37
-#: management/assets/js/constants/elements.js:52
-#: management/static/management/js/management.js:2
+#: management/assets/js/constants/elements.js:52 management/static/management/js/management.js:2
 msgid "Condition"
 msgstr "Condition"
 
@@ -318,51 +296,35 @@ msgstr "Créer une condition"
 #: management/assets/js/components/edit/EditCondition.js:57
 #: management/static/management/js/management.js:2
 #, javascript-format
-msgid ""
-"This condition will be added to the option set <code class=\"code-"
-"options\">%s</code>."
-msgstr ""
-"Cette condition sera ajoutée au jeu d'options <code class=\"code-"
-"options\">%s</code>."
+msgid "This condition will be added to the option set <code class=\"code-options\">%s</code>."
+msgstr "Cette condition sera ajoutée au jeu d'options <code class=\"code-options\">%s</code>."
 
 #: management/assets/js/components/edit/EditCondition.js:64
 #: management/static/management/js/management.js:2
 #, javascript-format
-msgid ""
-"This condition will be added to the page <code class=\"code-questions\">%s</"
-"code>."
-msgstr ""
-"Cette condition sera ajoutée à la page <code class=\"code-questions\">%s</"
-"code>."
+msgid "This condition will be added to the page <code class=\"code-questions\">%s</code>."
+msgstr "Cette condition sera ajoutée à la page <code class=\"code-questions\">%s</code>."
 
 #: management/assets/js/components/edit/EditCondition.js:71
 #: management/static/management/js/management.js:2
 #, javascript-format
 msgid ""
-"This condition will be added to the question set <code class=\"code-"
-"questions\">%s</code>."
+"This condition will be added to the question set <code class=\"code-questions\">%s</code>."
 msgstr ""
-"Cette condition sera ajoutée à l'ensemble de questions <code class=\"code-"
-"questions\">%s</code>."
+"Cette condition sera ajoutée à l'ensemble de questions <code class=\"code-questions\">%s</"
+"code>."
 
 #: management/assets/js/components/edit/EditCondition.js:78
 #: management/static/management/js/management.js:2
 #, javascript-format
-msgid ""
-"This condition will be added to the question <code class=\"code-"
-"questions\">%s</code>."
-msgstr ""
-"Cette condition sera ajoutée à la question <code class=\"code-"
-"questions\">%s</code>."
+msgid "This condition will be added to the question <code class=\"code-questions\">%s</code>."
+msgstr "Cette condition sera ajoutée à la question <code class=\"code-questions\">%s</code>."
 
 #: management/assets/js/components/edit/EditCondition.js:85
 #: management/static/management/js/management.js:2
 #, javascript-format
-msgid ""
-"This condition will be added to the task <code class=\"code-tasks\">%s</"
-"code>."
-msgstr ""
-"Cette condition sera ajoutée à la tâche <code class=\"code-tasks\">%s</code>."
+msgid "This condition will be added to the task <code class=\"code-tasks\">%s</code>."
+msgstr "Cette condition sera ajoutée à la tâche <code class=\"code-tasks\">%s</code>."
 
 #: management/assets/js/components/edit/EditCondition.js:114
 #: management/assets/js/components/edit/EditPage.js:152
@@ -380,8 +342,7 @@ msgstr "Cette option est en lecture seule"
 
 #: management/assets/js/components/edit/EditOption.js:45
 #: management/assets/js/components/element/Option.js:37
-#: management/assets/js/constants/elements.js:51
-#: management/static/management/js/management.js:2
+#: management/assets/js/constants/elements.js:51 management/static/management/js/management.js:2
 msgid "Option"
 msgstr "Option"
 
@@ -393,12 +354,8 @@ msgstr "Créer une option"
 #: management/assets/js/components/edit/EditOption.js:54
 #: management/static/management/js/management.js:2
 #, javascript-format
-msgid ""
-"This option will be added to the option set <code class=\"code-options\">%s</"
-"code>."
-msgstr ""
-"Cette option sera ajoutée au jeu d'options <code class=\"code-options\">%s</"
-"code>."
+msgid "This option will be added to the option set <code class=\"code-options\">%s</code>."
+msgstr "Cette option sera ajoutée au jeu d'options <code class=\"code-options\">%s</code>."
 
 #: management/assets/js/components/edit/EditOptionSet.js:45
 #: management/assets/js/components/element/OptionSet.js:35
@@ -408,8 +365,7 @@ msgstr "Ce jeu d'options est en lecture seule"
 
 #: management/assets/js/components/edit/EditOptionSet.js:52
 #: management/assets/js/components/element/OptionSet.js:47
-#: management/assets/js/constants/elements.js:50
-#: management/static/management/js/management.js:2
+#: management/assets/js/constants/elements.js:50 management/static/management/js/management.js:2
 msgid "Option set"
 msgstr "Jeu d'options"
 
@@ -421,12 +377,8 @@ msgstr "Créer un jeu d'options"
 #: management/assets/js/components/edit/EditOptionSet.js:61
 #: management/static/management/js/management.js:2
 #, javascript-format
-msgid ""
-"This option set will be added to the question <code class=\"code-"
-"questions\">%s</code>."
-msgstr ""
-"Ce jeu d'options sera ajouté à la question <code class=\"code-"
-"questions\">%s</code>."
+msgid "This option set will be added to the question <code class=\"code-questions\">%s</code>."
+msgstr "Ce jeu d'options sera ajouté à la question <code class=\"code-questions\">%s</code>."
 
 #: management/assets/js/components/edit/EditOptionSet.js:99
 #: management/static/management/js/management.js:2
@@ -496,8 +448,7 @@ msgstr "Cette page est en lecture seule"
 
 #: management/assets/js/components/edit/EditPage.js:87
 #: management/assets/js/components/element/Page.js:60
-#: management/assets/js/constants/elements.js:46
-#: management/static/management/js/management.js:2
+#: management/assets/js/constants/elements.js:46 management/static/management/js/management.js:2
 msgid "Page"
 msgstr "Page"
 
@@ -509,12 +460,8 @@ msgstr "Créer une page"
 #: management/assets/js/components/edit/EditPage.js:96
 #: management/static/management/js/management.js:2
 #, javascript-format
-msgid ""
-"This page will be added to the section <code class=\"code-questions\">%s</"
-"code>."
-msgstr ""
-"Cette page sera ajoutée à la section <code class=\"code-questions\">%s</"
-"code>."
+msgid "This page will be added to the section <code class=\"code-questions\">%s</code>."
+msgstr "Cette page sera ajoutée à la section <code class=\"code-questions\">%s</code>."
 
 #: management/assets/js/components/edit/EditQuestion.js:44
 #: management/static/management/js/management.js:2
@@ -534,8 +481,7 @@ msgstr "Cette question est en lecture seule"
 
 #: management/assets/js/components/edit/EditQuestion.js:58
 #: management/assets/js/components/element/Question.js:48
-#: management/assets/js/constants/elements.js:48
-#: management/static/management/js/management.js:2
+#: management/assets/js/constants/elements.js:48 management/static/management/js/management.js:2
 msgid "Question"
 msgstr "Question"
 
@@ -547,22 +493,17 @@ msgstr "Créer une question"
 #: management/assets/js/components/edit/EditQuestion.js:67
 #: management/static/management/js/management.js:2
 #, javascript-format
-msgid ""
-"This question will be added to the page <code class=\"code-questions\">%s</"
-"code>."
-msgstr ""
-"Cette question sera ajoutée à la page <code class=\"code-questions\">%s</"
-"code>."
+msgid "This question will be added to the page <code class=\"code-questions\">%s</code>."
+msgstr "Cette question sera ajoutée à la page <code class=\"code-questions\">%s</code>."
 
 #: management/assets/js/components/edit/EditQuestion.js:74
 #: management/static/management/js/management.js:2
 #, javascript-format
 msgid ""
-"This question will be added to the question set <code class=\"code-"
-"questions\">%s</code>."
+"This question will be added to the question set <code class=\"code-questions\">%s</code>."
 msgstr ""
-"Cette question sera ajoutée à l'ensemble de questions <code class=\"code-"
-"questions\">%s</code>."
+"Cette question sera ajoutée à l'ensemble de questions <code class=\"code-questions\">%s</"
+"code>."
 
 #: management/assets/js/components/edit/EditQuestion.js:153
 #: management/assets/js/components/elements/Conditions.js:27
@@ -615,8 +556,7 @@ msgstr "Cet ensemble de questions est en lecture seule"
 
 #: management/assets/js/components/edit/EditQuestionSet.js:87
 #: management/assets/js/components/element/QuestionSet.js:59
-#: management/assets/js/constants/elements.js:47
-#: management/static/management/js/management.js:2
+#: management/assets/js/constants/elements.js:47 management/static/management/js/management.js:2
 msgid "Question set"
 msgstr "Ensemble de questions"
 
@@ -628,22 +568,18 @@ msgstr "Créer un ensemble de questions"
 #: management/assets/js/components/edit/EditQuestionSet.js:96
 #: management/static/management/js/management.js:2
 #, javascript-format
-msgid ""
-"This question set will be added to the page <code class=\"code-"
-"questions\">%s</code>."
+msgid "This question set will be added to the page <code class=\"code-questions\">%s</code>."
 msgstr ""
-"Cet ensemble de questions sera ajouté à la page <code class=\"code-"
-"questions\">%s</code>."
+"Cet ensemble de questions sera ajouté à la page <code class=\"code-questions\">%s</code>."
 
 #: management/assets/js/components/edit/EditQuestionSet.js:103
 #: management/static/management/js/management.js:2
 #, javascript-format
 msgid ""
-"This question set will be added to the question set <code class=\"code-"
-"questions\">%s</code>."
+"This question set will be added to the question set <code class=\"code-questions\">%s</code>."
 msgstr ""
-"Cet ensemble de questions sera ajouté à l'ensemble de questions <code "
-"class=\"code-questions\">%s</code>."
+"Cet ensemble de questions sera ajouté à l'ensemble de questions <code class=\"code-"
+"questions\">%s</code>."
 
 #: management/assets/js/components/edit/EditSection.js:38
 #: management/static/management/js/management.js:2
@@ -663,8 +599,7 @@ msgstr "Cette section est en lecture seule"
 
 #: management/assets/js/components/edit/EditSection.js:52
 #: management/assets/js/components/element/Section.js:54
-#: management/assets/js/constants/elements.js:45
-#: management/static/management/js/management.js:2
+#: management/assets/js/constants/elements.js:45 management/static/management/js/management.js:2
 msgid "Section"
 msgstr "Section"
 
@@ -676,12 +611,8 @@ msgstr "Créer une section"
 #: management/assets/js/components/edit/EditSection.js:61
 #: management/static/management/js/management.js:2
 #, javascript-format
-msgid ""
-"This section will be added to the catalog <code class=\"code-questions\">%s</"
-"code>."
-msgstr ""
-"Cette section sera ajoutée au catalogue <code class=\"code-questions\">%s</"
-"code>."
+msgid "This section will be added to the catalog <code class=\"code-questions\">%s</code>."
+msgstr "Cette section sera ajoutée au catalogue <code class=\"code-questions\">%s</code>."
 
 #: management/assets/js/components/edit/EditTask.js:44
 #: management/assets/js/components/element/Task.js:36
@@ -691,8 +622,7 @@ msgstr "Cette tâche est en lecture seule"
 
 #: management/assets/js/components/edit/EditTask.js:51
 #: management/assets/js/components/element/Task.js:53
-#: management/assets/js/constants/elements.js:53
-#: management/static/management/js/management.js:2
+#: management/assets/js/constants/elements.js:53 management/static/management/js/management.js:2
 msgid "Task"
 msgstr "Tâche"
 
@@ -709,8 +639,7 @@ msgstr "Cette vue est en lecture seule"
 
 #: management/assets/js/components/edit/EditView.js:46
 #: management/assets/js/components/element/View.js:48
-#: management/assets/js/constants/elements.js:54
-#: management/static/management/js/management.js:2
+#: management/assets/js/constants/elements.js:54 management/static/management/js/management.js:2
 msgid "View"
 msgstr "Vue"
 
@@ -1009,19 +938,14 @@ msgstr "Erreur : Aucun attribut n'est défini pour cette question!"
 
 #: management/assets/js/components/element/Question.js:115
 #: management/static/management/js/management.js:2
-msgid ""
-"Error: The attribute for this question is used several times (in this "
-"catalog)."
-msgstr ""
-"Erreur : L'attribut de cette question est utilisé plusieurs fois (dans ce "
-"catalogue)."
+msgid "Error: The attribute for this question is used several times (in this catalog)."
+msgstr "Erreur : L'attribut de cette question est utilisé plusieurs fois (dans ce catalogue)."
 
 #: management/assets/js/components/element/Question.js:122
 #: management/static/management/js/management.js:2
 msgid "Warning: Some of the language specific fields are not set properly."
 msgstr ""
-"Avertissement : Certains champs spécifiques à la langue ne sont pas "
-"correctement définis."
+"Avertissement : Certains champs spécifiques à la langue ne sont pas correctement définis."
 
 #: management/assets/js/components/element/QuestionSet.js:45
 #: management/static/management/js/management.js:2
@@ -1442,11 +1366,9 @@ msgstr "Préfixe URI"
 #: management/static/management/js/management.js:2
 #, javascript-format
 msgid "This attribute is used for <b>%s values</b> in <b>one project</b>."
-msgid_plural ""
-"This attribute is used for <b>%s values</b> in <b>%s projects</b>."
+msgid_plural "This attribute is used for <b>%s values</b> in <b>%s projects</b>."
 msgstr[0] "Cet attribut est utilisé pour <b>%s valeurs d'un projet</b>."
-msgstr[1] ""
-"Cet attribut est utilisé pour <b>%s valeurs</b> des <b>%s projets</b>."
+msgstr[1] "Cet attribut est utilisé pour <b>%s valeurs</b> des <b>%s projets</b>."
 
 #: management/assets/js/components/info/AttributeInfo.js:43
 #: management/static/management/js/management.js:2
@@ -1590,10 +1512,8 @@ msgstr[1] "Cette question est utilisée dans <b>%s pages</b>."
 #, javascript-format
 msgid "This question set is used in <b>one question set</b>."
 msgid_plural "This question set is used in <b>%s question sets</b>."
-msgstr[0] ""
-"Cet ensemble de questions est utilisé dans <b>un ensemble de questions</b>."
-msgstr[1] ""
-"Cet ensemble de questions est utilisé dans <b>%s ensembles de questions</b>."
+msgstr[0] "Cet ensemble de questions est utilisé dans <b>un ensemble de questions</b>."
+msgstr[1] "Cet ensemble de questions est utilisé dans <b>%s ensembles de questions</b>."
 
 #: management/assets/js/components/info/QuestionSetInfo.js:24
 #: management/static/management/js/management.js:2
@@ -1734,8 +1654,7 @@ msgstr "Supprimer l'ensemble de questions"
 #: management/assets/js/components/modals/DeleteQuestionSetModal.js:9
 #: management/static/management/js/management.js:2
 msgid "You are about to permanently delete the question set:"
-msgstr ""
-"Vous êtes sur le point de supprimer définitivement la série de questions :"
+msgstr "Vous êtes sur le point de supprimer définitivement la série de questions :"
 
 #: management/assets/js/components/modals/DeleteSectionModal.js:7
 #: management/static/management/js/management.js:2
@@ -1887,8 +1806,7 @@ msgstr "Recharger la page"
 
 #: projects/assets/js/interview/components/main/Search.js:67
 msgid "Search for project or snapshot title, or answer text ..."
-msgstr ""
-"Recherchez le titre d'un projet ou d'un instantané, ou répondez au texte ..."
+msgstr "Recherchez le titre d'un projet ou d'un instantané, ou répondez au texte ..."
 
 #: projects/assets/js/interview/components/main/Search.js:69
 msgid "No answers match your search."
@@ -1938,7 +1856,7 @@ msgstr "Complete questionnaire"
 #: projects/assets/js/interview/components/main/page/PageHead.js:33
 #: projects/assets/js/interview/components/main/page/PageHead.js:175
 msgid "Copy tab"
-msgstr "Onglet Copier"
+msgstr "Copier l'onglet"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:34
 msgid "Add tab"
@@ -1946,7 +1864,7 @@ msgstr "Ajouter un onglet"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:35
 msgid "Edit tab"
-msgstr "Onglet Modifier"
+msgstr "Modifier l'onglet"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:36
 #: projects/assets/js/interview/components/main/page/PageHeadFormModal.js:87
@@ -1964,7 +1882,7 @@ msgstr "Onglet Créer"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:186
 msgid "Update tab"
-msgstr "Onglet de mise à jour"
+msgstr "Mettre à jour l'onglet"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:187
 msgid "Update"
@@ -1977,18 +1895,17 @@ msgstr "Supprimer l'onglet"
 #: projects/assets/js/interview/components/main/page/PageHeadDeleteModal.js:14
 #, javascript-format
 msgid "You are about to permanently delete the tab named: <strong>%s</strong>"
-msgstr "You are about to permanently delete the tab named: <strong>%s</strong>"
+msgstr "Vous êtes sur le point de supprimer définitivement l'onglet nommé : <strong>%s</strong>"
 
 #: projects/assets/js/interview/components/main/page/PageHeadDeleteModal.js:17
 msgid "You are about to permanently delete this tab."
 msgstr "Vous êtes sur le point de supprimer définitivement cet onglet."
 
 #: projects/assets/js/interview/components/main/page/PageHeadDeleteModal.js:20
-msgid ""
-"This includes all given answers for this tab on all pages, not just this one."
+msgid "This includes all given answers for this tab on all pages, not just this one."
 msgstr ""
-"Cela inclut toutes les réponses données pour cet onglet sur toutes les "
-"pages, et pas seulement celle-ci."
+"Cela inclut toutes les réponses données pour cet onglet sur toutes les pages, et pas "
+"seulement celle-ci."
 
 #: projects/assets/js/interview/components/main/page/PageHeadFormModal.js:59
 msgid "You can add a new tab using the create button."
@@ -2005,15 +1922,15 @@ msgstr "Veuillez donner un nom significatif à l'onglet."
 
 #: projects/assets/js/interview/components/main/page/PageHeadFormModal.js:93
 msgid ""
-"You can populate this tab with answers from a similar tab in any project you "
-"are allowed to access."
+"You can populate this tab with answers from a similar tab in any project you are allowed to "
+"access."
 msgstr ""
-"Vous pouvez remplir cet onglet avec des réponses provenant d'un onglet "
-"similaire dans n'importe quel projet auquel vous êtes autorisé à accéder."
+"Vous pouvez remplir cet onglet avec des réponses provenant d'un onglet similaire dans "
+"n'importe quel projet auquel vous êtes autorisé à accéder."
 
 #: projects/assets/js/interview/components/main/page/PageHeadReuseModal.js:43
 msgid "Reuse tab"
-msgstr "Onglet Réutilisation"
+msgstr "Réutiliser l'onglet"
 
 #: projects/assets/js/interview/components/main/page/PageHeadReuseModal.js:43
 msgid "Reuse"
@@ -2025,13 +1942,12 @@ msgstr "Réponses"
 
 #: projects/assets/js/interview/components/main/page/PageHeadReuseModal.js:54
 msgid ""
-"You can populate this tab with answers from a similar tab in any project you "
-"have access to. This only affects questions that don't already have an "
-"answer."
+"You can populate this tab with answers from a similar tab in any project you have access to. "
+"This only affects questions that don't already have an answer."
 msgstr ""
-"Vous pouvez remplir cet onglet avec des réponses provenant d'un onglet "
-"similaire dans n'importe quel projet auquel vous avez accès. Cela n'affecte "
-"que les questions qui n'ont pas encore de réponse."
+"Vous pouvez remplir cet onglet avec des réponses provenant d'un onglet similaire dans "
+"n'importe quel projet auquel vous avez accès. Cela n'affecte que les questions qui n'ont pas "
+"encore de réponse."
 
 #: projects/assets/js/interview/components/main/question/QuestionAddValue.js:21
 msgid "Add answer"
@@ -2059,13 +1975,12 @@ msgstr "Effacer l'entrée"
 
 #: projects/assets/js/interview/components/main/question/QuestionError.js:8
 msgid ""
-"This field could not be saved, since somebody else did so while you were "
-"editing. You will need to reload the page to make changes, but your input "
-"will be overwritten."
+"This field could not be saved, since somebody else did so while you were editing. You will "
+"need to reload the page to make changes, but your input will be overwritten."
 msgstr ""
-"Ce champ n'a pas pu être sauvegardé, car quelqu'un d'autre l'a fait pendant "
-"que vous étiez en train de le modifier. Vous devrez recharger la page pour "
-"apporter des modifications, mais vos données seront écrasées."
+"Ce champ n'a pas pu être sauvegardé, car quelqu'un d'autre l'a fait pendant que vous étiez en "
+"train de le modifier. Vous devrez recharger la page pour apporter des modifications, mais vos "
+"données seront écrasées."
 
 #: projects/assets/js/interview/components/main/question/QuestionError.js:11
 msgid "You reached the file quota for this project."
@@ -2073,13 +1988,11 @@ msgstr "Vous avez atteint le quota de fichiers pour ce projet."
 
 #: projects/assets/js/interview/components/main/question/QuestionError.js:17
 msgid ""
-"This field could not be saved, since somebody else removed it while you were "
-"editing. You will need to reload the page to proceed, but your input will be "
-"lost."
+"This field could not be saved, since somebody else removed it while you were editing. You "
+"will need to reload the page to proceed, but your input will be lost."
 msgstr ""
-"Ce champ n'a pas pu être sauvegardé, car quelqu'un d'autre l'a supprimé "
-"pendant que vous le modifiez. Vous devrez recharger la page pour continuer, "
-"mais vos données seront perdues."
+"Ce champ n'a pas pu être sauvegardé, car quelqu'un d'autre l'a supprimé pendant que vous le "
+"modifiez. Vous devrez recharger la page pour continuer, mais vos données seront perdues."
 
 #: projects/assets/js/interview/components/main/question/QuestionError.js:23
 msgid "An unknown error occurred, please contact support"
@@ -2115,12 +2028,10 @@ msgstr "Réponse"
 
 #: projects/assets/js/interview/components/main/question/QuestionReuseValue.js:88
 #: projects/assets/js/interview/components/main/question/QuestionReuseValues.js:103
-msgid ""
-"You can reuse an answer from a similar question in any project you have "
-"access to."
+msgid "You can reuse an answer from a similar question in any project you have access to."
 msgstr ""
-"Vous pouvez réutiliser une réponse à une question similaire dans n'importe "
-"quel projet auquel vous avez accès."
+"Vous pouvez réutiliser une réponse à une question similaire dans n'importe quel projet auquel "
+"vous avez accès."
 
 #: projects/assets/js/interview/components/main/questionset/QuestionSetCopySet.js:31
 msgid "Copy block"
@@ -2148,8 +2059,7 @@ msgstr "Déposez les fichiers ici ..."
 
 #: projects/assets/js/interview/components/main/widget/FileInput.js:50
 msgid "Drag 'n drop some files here, or click to select files."
-msgstr ""
-"Glissez-déposez des fichiers ici, ou cliquez pour sélectionner des fichiers."
+msgstr "Glissez-déposez des fichiers ici, ou cliquez pour sélectionner des fichiers."
 
 #: projects/assets/js/interview/components/main/widget/RadioInput.js:57
 msgid "No options are available."
@@ -2230,15 +2140,14 @@ msgstr "Progrès"
 
 #: projects/assets/js/interview/constants/management.js:2
 msgid ""
-"These links take you directly to the elements in the management interface.  "
-"This part of the page is visible to you, because you are either an Admin,  "
-"Editor, or Reviewer. It is not displayed for regular users. It can be "
-"disabled in the sidebar."
+"These links take you directly to the elements in the management interface.  This part of the "
+"page is visible to you, because you are either an Admin,  Editor, or Reviewer. It is not "
+"displayed for regular users. It can be disabled in the sidebar."
 msgstr ""
-"Ces liens vous permettent d'accéder directement aux éléments de l'interface "
-"de gestion.  Cette partie de la page vous est visible parce que vous êtes "
-"administrateur, éditeur ou réviseur. Elle n'est pas affichée pour les "
-"utilisateurs ordinaires. Elle peut être désactivée dans la barre latérale."
+"Ces liens vous permettent d'accéder directement aux éléments de l'interface de gestion.  "
+"Cette partie de la page vous est visible parce que vous êtes administrateur, éditeur ou "
+"réviseur. Elle n'est pas affichée pour les utilisateurs ordinaires. Elle peut être désactivée "
+"dans la barre latérale."
 
 #: projects/assets/js/projects/components/helper/PendingInvitations.js:22
 #: projects/assets/js/projects/utils/translations.js:2

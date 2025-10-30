@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.7\n"
+"X-Generator: Poedit 3.8\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -4530,13 +4530,13 @@ msgstr "Raccolta"
 #~ msgstr "(opzionale)"
 
 #~ msgid "Edit tab"
-#~ msgstr "Scheda Modifica"
+#~ msgstr "Modifica scheda"
 
 #~ msgid "Remove tab"
-#~ msgstr "Rimuovere la scheda"
+#~ msgstr "Rimuovi scheda"
 
 #~ msgid "Remove block"
-#~ msgstr "Rimuovere il blocco"
+#~ msgstr "Rimuovi blocco"
 
 #~ msgid ""
 #~ "An error occurred while saving the answer. Please contact support if this "
