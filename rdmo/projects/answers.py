@@ -227,15 +227,10 @@ class AnswerTree:
             return descendant_sets
 
     @staticmethod
-    def set_level(parent_set):
-        # compute the level in the page/questionsets hierarchy
-        if parent_set is None:
+    def set_level(element_set):
+        if element_set is None:
             return 0
-        return 0 if not parent_set[0] else parent_set[0].count('|') + 1
-
-    @staticmethod
-    def prefix_level(prefix):
-        return 0 if not prefix else prefix.count('|') + 1
+        return element_set[0].count('|') + 1
 
     @staticmethod
     def prefix_child(prefix, index):
@@ -253,5 +248,4 @@ class AnswerTree:
 
     @staticmethod
     def is_under_or_self(prefix, ancestor):
-        # equals ancestor or starts-with ancestor + delimiter
         return prefix == ancestor or prefix.startswith(f'{ancestor}|')
