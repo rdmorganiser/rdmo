@@ -46,7 +46,7 @@ const Page = ({ config, settings, templates, overview, page, sets, values, fetch
     }
   }, [page.id])
 
-  const isManager = overview.permissions?.view_management
+  const isManager = overview.permissions?.can_view_management
   const disabled = (
     !overview.permissions?.can_add_value ||
     !overview.permissions?.can_change_value ||

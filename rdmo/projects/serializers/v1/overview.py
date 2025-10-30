@@ -44,5 +44,5 @@ class ProjectOverviewSerializer(serializers.ModelSerializer):
                 'can_add_value': request.user.has_perm('projects.add_value_object', obj),
                 'can_change_value': request.user.has_perm('projects.change_value_object', obj),
                 'can_delete_value': request.user.has_perm('projects.delete_value_object', obj),
-                'view_management': request.user.has_perm('management.view_management', obj)
+                'can_view_management': request.user.has_perm('management.view_management', obj)
             }
