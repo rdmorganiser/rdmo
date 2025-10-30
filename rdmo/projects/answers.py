@@ -65,7 +65,6 @@ class AnswerTree:
 
         elif isinstance(element, (Page, QuestionSet)):
 
-
             # for pages and questionsets we first compute the sets for the element ...
             element_sets = self.compute_element_sets(element, parent_set)
 
@@ -125,7 +124,7 @@ class AnswerTree:
         element_sets = set()
 
         # compute the level in the page/questionsets hierarchy
-        level = 0 if not parent_set else parent_set[0].count('|') + 1
+        level = self.compute_set_level(parent_set)
 
         # for pages, add the sets for the attribute of the page
         if parent_set is None and element.attribute:
@@ -148,19 +147,8 @@ class AnswerTree:
                     # for the other descendants (i.e. questions in questionsets), we need
                     # to split the set_prefix according to the level we are in
                     for descendant_set_prefix, _ in descendant_sets:
-                        # exclude sets with an empty set_prefix, this can happen in wrongly configured
-                        # catalogs, when a page and one of the descendant have the same attribute
-                        if descendant_set_prefix:
-                            descendant_set_prefix_split = descendant_set_prefix.split('|')
-
-                            if level:
-                                element_set = (
-                                    '|'.join(descendant_set_prefix_split[:level]),
-                                    int(descendant_set_prefix_split[level])
-                                )
-                            else:
-                                element_set = ('', int(descendant_set_prefix_split[0]))
-
+                        element_set = self.compute_ancestor_set(descendant_set_prefix, level)
+                        if element_set is not None:
                             element_sets.add(element_set)
 
         # create one empty set for non-collection pages/questionsets
@@ -168,8 +156,7 @@ class AnswerTree:
             if parent_set is None:
                 element_sets.add(('', 0))
             else:
-                parent_set_prefix, parent_set_index = parent_set
-                set_prefix = f'{parent_set_prefix}|{parent_set_index}' if parent_set_prefix else str(parent_set_index)
+                set_prefix = self.compute_child_set_prefix(parent_set)
                 element_sets.add((set_prefix, 0))
 
         return sorted(element_sets)
@@ -195,7 +182,7 @@ class AnswerTree:
                 for value in element_values
             ]
         else:
-            # if no value is present, create one empty empty value
+            # if no value is present, create one empty value
             return [
                 {
                     'is_empty': True,
@@ -225,15 +212,44 @@ class AnswerTree:
         descendant_sets = self.sets[descendant.attribute.id]
 
         if parent_set:
-            parent_set_prefix, parent_set_index = parent_set
-            if parent_set_prefix:
-                descendant_set_prefix = f'{parent_set_prefix}|{parent_set_index}'
-            else:
-                descendant_set_prefix = str(parent_set_index)
+            child_set_prefix = self.compute_child_set_prefix(parent_set)
 
-            return set(filter(
-                lambda s: (s[0] == descendant_set_prefix) or s[0].startswith(f'{descendant_set_prefix}|'),
-                descendant_sets
-            ))
+            return {
+                (set_prefix, set_index)
+                for set_prefix, set_index in descendant_sets
+                if set_prefix == child_set_prefix or set_prefix.startswith(f'{child_set_prefix}|')
+            }
         else:
             return descendant_sets
+
+    @staticmethod
+    def compute_set_level(parent_set):
+        # compute the level in the page/questionsets hierarchy from a parent set
+        # if no parent set is provided the level is 0
+        if parent_set:
+            set_prefix, _ = parent_set
+            return set_prefix.count('|') + 1
+        else:
+            return 0
+
+    @staticmethod
+    def compute_child_set_prefix(parent_set):
+        # compute the set_prefix for child sets from a parent set
+        if parent_set:
+            set_prefix, set_index = parent_set
+            if set_prefix:
+                return f'{set_prefix}|{set_index}'
+            else:
+                return str(set_index)
+        else:
+            return ''
+
+    @staticmethod
+    def compute_ancestor_set(descendant_set_prefix, level):
+        # compute the ancestor set of a given level for a descendant set
+        # exclude sets with an empty set_prefix, this can happen in wrongly configured
+        # catalogs, when a page and one of the descendant have the same attribute
+        if descendant_set_prefix:
+            parts = descendant_set_prefix.split('|')
+            if level < len(parts):
+                return ('|'.join(parts[:level]) if level else '', int(parts[level]))
