@@ -430,7 +430,12 @@ class ProjectViewSet(ModelViewSet):
         serializer = ProjectHierarchySerializer(cached_trees[0], context=serializer_context)
         return Response(serializer.data)
 
-    @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ))
+    @action(
+        detail=True,
+        methods=['get'],
+        url_path=r'answers',
+        permission_classes=(HasModelPermission | HasProjectPermission, )
+    )
     def answers(self, request, pk, snapshot_id=None):
         project = self.get_object()
         project.catalog.prefetch_elements()
@@ -453,14 +458,22 @@ class ProjectViewSet(ModelViewSet):
         })
         return Response(serializer.data)
 
-    @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ),
-            url_path=r'snapshots/(?P<snapshot_id>\d+)/answers')
+    @action(
+        detail=True,
+        methods=['get'],
+        url_path=r'snapshots/(?P<snapshot_id>\d+)/answers',
+        permission_classes=(HasModelPermission | HasProjectPermission, )
+    )
     def answers_snapshot(self, request, pk, snapshot_id=None):
         # extra method since DRF does not officially support optional named parameters inside url_path
         return self.answers(request, pk, snapshot_id)
 
-    @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ),
-            url_path=r'answers/export/(?P<export_format>[a-z]+)')
+    @action(
+        detail=True,
+        methods=['get'],
+        url_path=r'answers/export/(?P<export_format>[a-z]+)',
+        permission_classes=(HasModelPermission | HasProjectPermission, )
+    )
     def answers_export(self, request, pk, export_format, snapshot_id=None):
         project = self.get_object()
         project.catalog.prefetch_elements()
@@ -476,8 +489,12 @@ class ProjectViewSet(ModelViewSet):
             'project_wrapper': ProjectWrapper(project, snapshot)
         })
 
-    @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ),
-            url_path=r'snapshots/(?P<snapshot_id>\d+)/answers/export/(?P<export_format>[a-z]+)')
+    @action(
+        detail=True,
+        methods=['get'],
+        url_path=r'snapshots/(?P<snapshot_id>\d+)/answers/export/(?P<export_format>[a-z]+)',
+        permission_classes=(HasModelPermission | HasProjectPermission, )
+    )
     def answers_export_snapshot(self, request, pk, export_format, snapshot_id=None):
         # extra method since DRF does not officially support optional named parameters inside url_path
         return self.answers_export(request, pk, export_format, snapshot_id)
