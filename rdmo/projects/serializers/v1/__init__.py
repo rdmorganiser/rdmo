@@ -532,7 +532,9 @@ class ProjectSnapshotSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'title',
-            'description'
+            'description',
+            'created',
+            'updated'
         )
 
 
