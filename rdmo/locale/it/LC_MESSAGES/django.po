@@ -15,7 +15,7 @@ msgstr ""
 
 #: accounts/apps.py:7
 msgid "Accounts"
-msgstr "Account"
+msgstr "Accounts"
 
 #: accounts/forms.py:27
 msgid "First name"
@@ -369,13 +369,14 @@ msgid ""
 "This e-mail confirmation link expired or is invalid. Please <a "
 "href=\"%(email_url)s\">issue a new e-mail confirmation request</a>."
 msgstr ""
-"Il link di conferma è scaduto. È possibile <a href=\"%(email_url)s\">chiedere "
-"una nuova e-mail di conferma</a>."
+"Il link di conferma è scaduto. È possibile <a "
+"href=\"%(email_url)s\">chiedere una nuova e-mail di conferma</a>."
 
 #: accounts/templates/account/login.html:6
 #: accounts/templates/account/login_form.html:23
 #: accounts/templates/account/password_reset_from_key_done.html:14
-#: core/templates/core/base_navigation.html:124 core/templates/core/home.html:57
+#: core/templates/core/base_navigation.html:124
+#: core/templates/core/home.html:57
 msgid "Login"
 msgstr "Accesso"
 
@@ -473,8 +474,8 @@ msgid ""
 "a>."
 msgstr ""
 "Il link di reimpostazione password è errato, probabilmente perché già "
-"utilizzato. È possibile richiedere una <a href=\"%(passwd_reset_url)s\">nuova "
-"reimpostazione</a>."
+"utilizzato. È possibile richiedere una <a "
+"href=\"%(passwd_reset_url)s\">nuova reimpostazione</a>."
 
 #: accounts/templates/account/password_reset_from_key.html:18
 msgid "Enter new password"
@@ -2547,8 +2548,8 @@ msgid ""
 "You are about to remove the invite of <strong>%(user)s</strong> from the "
 "project <strong>%(title)s</strong>."
 msgstr ""
-"Stai per rimuovere l'invito di <strong>%(user)s</strong> dal progetto "
-"<strong>%(title)s</strong>."
+"Stai per rimuovere l'invito di <strong>%(user)s</strong> dal progetto <strong>"
+"%(title)s</strong>."
 
 #: projects/templates/projects/issue_detail.html:25
 msgid "Dates"
@@ -2618,11 +2619,11 @@ msgstr "A chi possa interessare,"
 #: projects/templates/projects/issue_send_message.txt:3
 #, python-format
 msgid ""
-"The following task was identified in the project \"%(project_title)s\" "
-"<%(project_url)s>:"
+"The following task was identified in the project \"%(project_title)s\" <"
+"%(project_url)s>:"
 msgstr ""
-"La seguente attività è stata identificata nel progetto \"%(project_title)s\" "
-"<%(project_url)s>:"
+"La seguente attività è stata identificata nel progetto \"%(project_title)s\" <"
+"%(project_url)s>:"
 
 #: projects/templates/projects/issue_send_message.txt:13
 #, python-format
@@ -3157,8 +3158,8 @@ msgstr ""
 #: projects/templates/projects/project_interview_multiple_values_warning.html:4
 msgid ""
 "Multiple answers exist in the database. This can happen due some technical "
-"problem in the past. You can remove unwanted answers using the \"Remove "
-"item\" field' (<i class=\"fa fa-times\" aria-hidden=\"true\"></i>). Please "
+"problem in the past. You can remove unwanted answers using the \"Remove item"
+"\" field' (<i class=\"fa fa-times\" aria-hidden=\"true\"></i>). Please "
 "contact support if the problem persists."
 msgstr ""
 "Multiple answers exist in the database. This can happen due some technical "
