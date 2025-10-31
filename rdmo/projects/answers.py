@@ -29,7 +29,7 @@ class AnswerTree:
         element_node = {
             'id': element.id,
             'uri': element.uri,
-            'model': str(element._meta),
+            'model': element._meta.label_lower,
             'show': True
         }
 
