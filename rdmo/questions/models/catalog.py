@@ -5,6 +5,7 @@ from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
+from rdmo.conditions.models import Condition
 from rdmo.core.models import Model, TranslationMixin
 from rdmo.core.utils import join_url
 
@@ -187,6 +188,25 @@ class Catalog(Model, TranslationMixin):
     def questions(self):
         from . import Question
         return [descendant for descendant in self.descendants if isinstance(descendant, Question)]
+
+    @cached_property
+    def conditions(self):
+        from . import Page, Question, QuestionSet
+
+        pages_conditions_subquery = Page.objects.filter_by_catalog(self) \
+                                                .filter(conditions=models.OuterRef('pk'))
+        questionsets_conditions_subquery = QuestionSet.objects.filter_by_catalog(self) \
+                                                              .filter(conditions=models.OuterRef('pk'))
+        questions_conditions_subquery = Question.objects.filter_by_catalog(self) \
+                                                        .filter(conditions=models.OuterRef('pk'))
+
+        return Condition.objects.annotate(
+            has_page=models.Exists(pages_conditions_subquery),
+            has_questionset=models.Exists(questionsets_conditions_subquery),
+            has_question=models.Exists(questions_conditions_subquery)
+        ).filter(
+            models.Q(has_page=True) | models.Q(has_questionset=True) | models.Q(has_question=True)
+        ).distinct().select_related('source', 'target_option')
 
     @cached_property
     def optional_questions(self):

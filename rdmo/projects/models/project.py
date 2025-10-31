@@ -16,6 +16,7 @@ from rdmo.questions.models import Catalog
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
+from ..answers import AnswerTree
 from ..managers import ProjectManager
 
 
@@ -145,6 +146,12 @@ class Project(MPTTModel, Model):
         except AttributeError:
             # membership_list does not exist
             return self.user.filter(memberships__role=role)
+
+    def get_answer_tree(self, snapshot=None):
+        return AnswerTree(
+            self.catalog,
+            self.values.filter(snapshot=snapshot).select_related('attribute', 'option')
+        ).compute()
 
 
 @receiver(pre_delete, sender=Project)
