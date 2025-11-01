@@ -53,7 +53,7 @@ jobs:
       run: |
         sed -i "s/__version__ = .*/__version__ = \"${{ steps.new-version.outputs.new_version }}\"/" rdmo/__init__.py
     # build the webpack bundle
-    - uses: actions/setup-node@v5
+    - uses: actions/setup-node@v6
       with:
         node-version: 22
         cache: npm
@@ -77,7 +77,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
         cache: pip
     - name: Download wheel
-      uses: actions/download-artifact@v5
+      uses: actions/download-artifact@v6
       with:
         name: Packages
         path: dist
@@ -135,7 +135,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
         cache: pip
     - name: Download wheel
-      uses: actions/download-artifact@v5
+      uses: actions/download-artifact@v6
       with:
         name: Packages
         path: dist
@@ -163,7 +163,7 @@ jobs:
       env:
         DJANGO_DEBUG: True
         GITHUB_DB_BACKEND: ${{ matrix.db-backend }}
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v5
       with:
         name: screenshots
         path: screenshots/**/*.png
@@ -207,7 +207,7 @@ jobs:
           python-version: "3.13"
           cache: pip
       - name: Download wheel
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: Packages
           path: dist
@@ -218,7 +218,7 @@ jobs:
         run: python -m pip install --no-compile "$(ls dist/*.whl)[allauth,ci,dev,gunicorn,ldap,mysql,postgres,pytest]"
       - name: Verify installed packages have compatible dependencies
         run: python -m pip check
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: npm
