@@ -13,7 +13,8 @@ keywords = [
   "research data",
   "research data management",
 ]
-license = {text = "Apache-2.0"}
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE", "AUTHORS"]
 authors = [
   {name = "RDMO Arbeitsgemeinschaft", email = "rdmo-team@listserv.dfn.de"},
 ]
@@ -23,7 +24,6 @@ classifiers = [
   "Environment :: Web Environment",
   "Framework :: Django :: 4.2",
   "Intended Audience :: Science/Research",
-  "License :: OSI Approved :: Apache Software License",
   "Operating System :: OS Independent",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3 :: Only",
@@ -207,12 +207,6 @@ markers = [
 filterwarnings = [
   # fail on RemovedInDjango50Warning exception
   "error::django.utils.deprecation.RemovedInDjango50Warning",
-
-  # ignore warnings raised from within coreapi 2.3.3
-  "ignore:pkg_resources is deprecated as an API:DeprecationWarning",
-
-  # ignore warning from rest_framework about coreapi
-  "ignore:CoreAPI compatibility is deprecated and will be removed in DRF 3.17:rest_framework.RemovedInDRF317Warning",
 
   # ignore warnings raised by widget_tweaks.py
   "ignore:'maxsplit' is passed as positional argument",

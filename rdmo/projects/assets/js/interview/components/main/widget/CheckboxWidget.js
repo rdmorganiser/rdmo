@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-
 import { getQuestionTextId, getQuestionHelpId } from '../../../utils/question'
 import { gatherOptions } from '../../../utils/options'
 
