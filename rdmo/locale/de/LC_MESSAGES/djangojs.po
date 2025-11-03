@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-04 11:19+0000\n"
-"PO-Revision-Date: 2025-10-30 07:03+0100\n"
+"PO-Revision-Date: 2025-11-03 19:48+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -611,7 +611,7 @@ msgstr "Fragenset erstellen"
 msgid ""
 "This question set will be added to the page <code class=\"code-questions\">%s</code>."
 msgstr ""
-"Dieser Fragenset wird der Seite <code class=\"code-questions\">%s</code> hinzugefügt."
+"Dieses Fragenset wird der Seite <code class=\"code-questions\">%s</code> hinzugefügt."
 
 #: management/assets/js/components/edit/EditQuestionSet.js:103
 #: management/static/management/js/management.js:2
@@ -620,7 +620,7 @@ msgid ""
 "This question set will be added to the question set <code class=\"code-"
 "questions\">%s</code>."
 msgstr ""
-"Dieser Fragensatz wird dem Fragenset <code class=\"code-questions\">%s</code> "
+"Dieses Fragenset wird dem Fragenset <code class=\"code-questions\">%s</code> "
 "hinzugefügt."
 
 #: management/assets/js/components/edit/EditSection.js:38
@@ -1560,8 +1560,8 @@ msgstr[1] "Diese Frage wird auf <b>%s Seiten</b> verwendet."
 #, javascript-format
 msgid "This question set is used in <b>one question set</b>."
 msgid_plural "This question set is used in <b>%s question sets</b>."
-msgstr[0] "Dieser Fragensatz wird in <b>einem Fragenset</b> verwendet."
-msgstr[1] "Dieser Fragensatz wird in <b>%s Fragensets</b> verwendet."
+msgstr[0] "Dieses Fragenset wird in <b>einem Fragenset</b> verwendet."
+msgstr[1] "Dieses Fragenset wird in <b>%s Fragensets</b> verwendet."
 
 #: management/assets/js/components/info/QuestionSetInfo.js:24
 #: management/static/management/js/management.js:2
