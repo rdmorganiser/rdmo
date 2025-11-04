@@ -5,6 +5,7 @@ import classNames from 'classnames'
 import { enGB, de, it, es, fr } from 'date-fns/locale'
 
 import lang from 'rdmo/core/assets/js/utils/lang'
+import { getDateFromDatetime } from 'rdmo/core/assets/js/utils/date'
 
 import { getQuestionTextId, getQuestionHelpId } from '../../../utils/question'
 import { isDefaultValue } from '../../../utils/value'
@@ -42,7 +43,7 @@ const DateInput = ({ question, value, disabled, updateValue, buttons }) => {
   }
 
   const handleChange = (date) => {
-    const text = date.toISOString().slice(0,10)
+    const text = getDateFromDatetime(date)
     updateValue(value, { text, unit: question.unit, value_type: question.value_type })
   }
 
