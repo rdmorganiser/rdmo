@@ -381,7 +381,7 @@ msgstr "Anmelden"
 
 #: accounts/templates/account/login_form.html:6
 msgid "Login with Shibboleth"
-msgstr "Mit Shibboleth einloggen"
+msgstr "Mit Shibboleth anmelden"
 
 #: accounts/templates/account/login_form_account.html:7
 #, python-format
@@ -525,7 +525,7 @@ msgstr "Neues Benutzerkonto erstellen"
 msgid ""
 "Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
 msgstr ""
-"Falls Sie schon eine Benutzerkonto haben können Sie sich <a href="
+"Falls Sie schon ein Benutzerkonto haben können Sie sich <a href="
 "\"%(login_url)s\">hier</a> anmelden."
 
 #: accounts/templates/account/signup.html:34
@@ -1416,7 +1416,7 @@ msgstr "Elemente importieren"
 
 #: management/viewsets.py:41 management/viewsets.py:77 projects/viewsets.py:370
 #: projects/viewsets.py:371 projects/viewsets.py:542
-msgid "This field may not be blank."
+msgid "This field must not be left blank."
 msgstr "Dieses Feld darf nicht leer sein."
 
 #: management/viewsets.py:79
@@ -1581,7 +1581,7 @@ msgid ""
 "The default text value for the additional input of this option (in the "
 "primary language)."
 msgstr ""
-"Die standardmäßige Text für die zusätzliche Eingabe dieser Option (erste "
+"Der standardmäßige Text für die zusätzliche Eingabe dieser Option (erste "
 "Sprache)."
 
 #: options/models.py:236 questions/models/question.py:127
@@ -1593,7 +1593,7 @@ msgid ""
 "The default text value for the additional input of this option (in the "
 "secondary language)."
 msgstr ""
-"Die standardmäßige Text für die zusätzliche Eingabe dieser Option (zweite "
+"Der standardmäßige Text für die zusätzliche Eingabe dieser Option (zweite "
 "Sprache)."
 
 #: options/models.py:241 questions/models/question.py:132
@@ -1605,7 +1605,7 @@ msgid ""
 "The default text value for the additional input of this option (in the "
 "tertiary language)."
 msgstr ""
-"Die standardmäßige Text für die zusätzliche Eingabe dieser Option (dritte "
+"Der standardmäßige Text für die zusätzliche Eingabe dieser Option (dritte "
 "Sprache)."
 
 #: options/models.py:246 questions/models/question.py:137
@@ -1617,7 +1617,7 @@ msgid ""
 "The default text value for the additional input of this option (in the "
 "quaternary language)."
 msgstr ""
-"Die standardmäßige Text für die zusätzliche Eingabe dieser Option (vierte "
+"Der standardmäßige Text für die zusätzliche Eingabe dieser Option (vierte "
 "Sprache)."
 
 #: options/models.py:251 questions/models/question.py:142
@@ -1629,7 +1629,7 @@ msgid ""
 "The default text value for the additional input of this option (in the "
 "quinary language)."
 msgstr ""
-"Die standardmäßige Text für die zusätzliche Eingabe dieser Option (fünfte "
+"Der standardmäßige Text für die zusätzliche Eingabe dieser Option (fünfte "
 "Sprache)."
 
 #: options/models.py:256
