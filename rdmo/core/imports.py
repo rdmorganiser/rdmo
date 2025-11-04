@@ -512,7 +512,7 @@ def set_reverse_m2m_through_instance(instance, element, field_name=None, source_
                 track_messages_on_element(element, field_name, error=message)
                 continue
             if save:
-                through_instance, created = through_model.objects.get_or_create(**{
+                through_instance, _x = through_model.objects.get_or_create(**{
                     source_name: instance,
                     target_name: target_instance
                 })

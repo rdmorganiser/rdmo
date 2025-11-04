@@ -90,7 +90,7 @@ def token(request):
         except Token.DoesNotExist:
             pass
 
-    token, created = Token.objects.get_or_create(user=request.user)
+    token, _x = Token.objects.get_or_create(user=request.user)
     return render(request, 'account/account_token.html', {
         'token': token
     })

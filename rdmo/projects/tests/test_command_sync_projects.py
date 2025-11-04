@@ -16,7 +16,7 @@ def test_command_sync_projects_for_tasks(settings, enable_project_tasks_sync):
     assert settings.PROJECT_TASKS_SYNC
 
     # Arrange: pre-linked projects and catalog-based task relationships
-    P, C, T = arrange_projects_catalogs_and_tasks()
+    P, _x, T = arrange_projects_catalogs_and_tasks()
 
     # Arrange: project.tasks are in a random initial state
     P[1].tasks.set([T[1], T[2], T[3]])
@@ -41,7 +41,7 @@ def test_command_sync_projects_for_views(settings, enable_project_views_sync):
     assert settings.PROJECT_VIEWS_SYNC
 
     # Arrange: pre-linked projects and catalog-based view relationships
-    P, C, V = arrange_projects_catalogs_and_views()
+    P, _x, V = arrange_projects_catalogs_and_views()
 
     # Arrange: project.views are in a random initial state
     P[1].views.set([V[1], V[2]])
@@ -90,8 +90,8 @@ def test_command_sync_projects_for_tasks_and_views_with_show(
     assert settings.PROJECT_VIEWS_SYNC
 
     # Arrange task and view state
-    P1, C1, T = arrange_projects_catalogs_and_tasks()
-    P2, C2, V = arrange_projects_catalogs_and_views()
+    P1, _C1, T = arrange_projects_catalogs_and_tasks()
+    P2, _C2, V = arrange_projects_catalogs_and_views()
 
     # Arrange random desynced state
     P1[1].tasks.set([T[1], T[2], T[3]])

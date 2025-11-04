@@ -122,7 +122,7 @@ def test_update_optionsets_from_changed_xml(db, settings, delete_all_objects):
     assert OptionSet.objects.count() + Option.objects.count() == 13
     # Act, import from xml optionsets-1.xml that contains changes
     xml_file_1 = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'updated-and-changed' / 'optionsets-1.xml'
-    elements_1, root_1 = read_xml_and_parse_to_root_and_elements(xml_file_1)
+    elements_1, _root_1 = read_xml_and_parse_to_root_and_elements(xml_file_1)
     imported_elements_1 = import_elements(elements_1, save=False)
     assert imported_elements_1
     assert [i for i in imported_elements_1 if i[ImportElementFields.DIFF]]

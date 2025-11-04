@@ -20,7 +20,7 @@ def test_create_domain(db, settings):
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'attributes.xml'
 
-    elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
+    _x, root, imported_elements = parse_xml_and_import_elements(xml_file)
 
     assert len(root) == len(imported_elements) == Attribute.objects.count() == 86
     assert all(element['created'] is True for element in imported_elements)
@@ -30,7 +30,7 @@ def test_create_domain(db, settings):
 def test_update_domain(db, settings):
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'attributes.xml'
 
-    elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
+    _x, root, imported_elements = parse_xml_and_import_elements(xml_file)
 
     assert len(root) == len(imported_elements)
     assert all(element['created'] is False for element in imported_elements)
@@ -64,7 +64,7 @@ def test_create_legacy_domain(db, settings):
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'legacy' / 'domain.xml'
 
-    elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
+    _x, root, imported_elements = parse_xml_and_import_elements(xml_file)
 
     assert len(root) == len(imported_elements) == 86
     assert Attribute.objects.count() == 86
@@ -75,7 +75,7 @@ def test_create_legacy_domain(db, settings):
 def test_update_legacy_domain(db, settings):
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'legacy' / 'domain.xml'
 
-    elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
+    _x, root, imported_elements = parse_xml_and_import_elements(xml_file)
 
     assert len(root) == len(imported_elements) == 86
     assert all(element['created'] is False for element in imported_elements)
