@@ -2108,7 +2108,7 @@ msgstr "Issue-Ressource"
 
 #: projects/models/issue.py:117
 msgid "Issue resources"
-msgstr "Issue Ressource"
+msgstr "Issue-Ressourcen"
 
 #: projects/models/membership.py:21
 msgid "The project for this membership."
@@ -2206,7 +2206,7 @@ msgstr "Die Gesamtzahl der erwarteten Werte für den Fortschrittsbalken."
 
 #: projects/models/project.py:74
 msgid "Progress count"
-msgstr "Fortschritt Zahl"
+msgstr "Fortschrittszähler"
 
 #: projects/models/project.py:75
 msgid "The number of values for the progress bar."
@@ -3212,10 +3212,10 @@ msgid ""
 "other pages. You can add a new tab using the green button. Once created, you "
 "can edit or delete tabs using the buttons in the top right corner."
 msgstr ""
-"Bitte füllen Sie das Formular für jede Registerkarte aus. Die verschiedenen "
-"Registerkarten werden eventuell in späteren Fragen wieder verwendet. Sie "
-"können eine neue Registerkarte mit dem grünen Button hinzufügen. Bereits "
-"angelegte Registerkarten können mit den Buttons oben rechts bearbeitet oder "
+"Bitte füllen Sie das Formular für jeden Tab aus. Die verschiedenen "
+"Tabs werden eventuell in späteren Fragen wieder verwendet. Sie "
+"können eine neuen Tab mit dem grünen Button hinzufügen. Bereits "
+"angelegte Tabs können mit den Buttons oben rechts bearbeitet oder "
 "wieder entfernt werden."
 
 #: projects/templates/projects/project_view.html:90
@@ -3388,7 +3388,7 @@ msgid ""
 "Designates whether this catalog (and its sections, question sets and "
 "questions) can be changed."
 msgstr ""
-"Bezeichnet, ob dieser Katalog (und seine Abschnitte, Fragensets und Fragen) "
+"Legt fest, ob dieser Katalog (und seine Abschnitte, Fragensets und Fragen) "
 "geändert werden kann."
 
 #: questions/models/catalog.py:62
@@ -3519,7 +3519,7 @@ msgid ""
 "Designates whether this page (and its questionsets and questions) can be "
 "changed."
 msgstr ""
-"Bezeichnet, ob diese Seite (und seine Fragensets und Fragen) geändert werden "
+"Legt fest, ob diese Seite (und seine Fragensets und Fragen) geändert werden "
 "kann."
 
 #: questions/models/page.py:62
@@ -4034,7 +4034,7 @@ msgid ""
 "Designates whether this section (and its question sets and questions) can be "
 "changed."
 msgstr ""
-"Bezeichnet, ob dieser Abschnitt (und seine Fragensets und Fragen) geändert "
+"Legt fest, ob dieser Abschnitt (und seine Fragensets und Fragen) geändert "
 "werden kann."
 
 #: questions/models/section.py:60
@@ -4334,7 +4334,7 @@ msgstr "Zusätzliche interne Informationen zu dieser Ansicht."
 
 #: views/models.py:43
 msgid "Designates whether this view can be changed."
-msgstr "Bezeichnet, ob diese Ansicht geändert werden kann."
+msgstr "Gibt an, ob diese Ansicht geändert werden kann."
 
 #: views/models.py:48
 msgid "The position of this view in lists."
