@@ -8,6 +8,9 @@ class Command(BaseCommand):
     help = "Check that all configured plugins can be imported"
 
     def handle(self, *args, **options):
+        if not Plugin.objects.exists():
+            self.stdout.write(self.style.SUCCESS("No plugins found."))
+
         for plugin in Plugin.objects.all():
             try:
                 import_string(plugin.python_path)
