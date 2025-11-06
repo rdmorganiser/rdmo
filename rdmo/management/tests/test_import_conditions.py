@@ -20,7 +20,7 @@ def test_create_conditions(db, settings):
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'conditions.xml'
 
-    elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
+    _, root, imported_elements = parse_xml_and_import_elements(xml_file)
 
     assert len(root) == len(imported_elements) == Condition.objects.count() == 15
     assert all(element['created'] is True for element in imported_elements)
@@ -30,7 +30,7 @@ def test_create_conditions(db, settings):
 def test_update_conditions(db, settings):
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'conditions.xml'
 
-    elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
+    _, root, imported_elements = parse_xml_and_import_elements(xml_file)
 
     assert len(root) == len(imported_elements) == 15
     assert all(element['created'] is False for element in imported_elements)
@@ -59,7 +59,7 @@ def test_create_legacy_conditions(db, settings):
     Condition.objects.all().delete()
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'legacy' / 'conditions.xml'
-    elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
+    _, root, imported_elements = parse_xml_and_import_elements(xml_file)
 
     assert len(root) == len(imported_elements) == Condition.objects.count() == 15
     assert all(element['created'] is True for element in imported_elements)
@@ -69,7 +69,7 @@ def test_create_legacy_conditions(db, settings):
 def test_update_legacy_conditions(db, settings):
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'legacy' / 'conditions.xml'
 
-    elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
+    _, root, imported_elements = parse_xml_and_import_elements(xml_file)
 
     assert len(root) == len(imported_elements) == 15
     assert all(element['created'] is False for element in imported_elements)

@@ -47,10 +47,10 @@ def test_get_invite_email_project_path_function(db, client, username, password, 
     client.login(username=username, password=password)
 
     current_site = Site.objects.get_current()
-    foo_site, _created = Site.objects.get_or_create(domain=site_domain, name=site_domain)
+    foo_site, _ = Site.objects.get_or_create(domain=site_domain, name=site_domain)
     foo_username = f'{site_domain}-test-user'
     foo_email = f'{foo_username}@{site_domain}'
-    foo_user, _created = get_user_model().objects.get_or_create(username=foo_username, email=foo_email,
+    foo_user, _ = get_user_model().objects.get_or_create(username=foo_username, email=foo_email,
                                                                 password=foo_username)
     foo_user.role.member.set([foo_site])
     project = Project.objects.get(pk=project_id)
@@ -76,10 +76,10 @@ def test_invite_email_project_path_email_body(db, client, username, password, pr
     client.login(username=username, password=password)
 
     current_site = Site.objects.get_current()
-    foo_site, _created = Site.objects.get_or_create(domain=site_domain, name=site_domain)
+    foo_site, _ = Site.objects.get_or_create(domain=site_domain, name=site_domain)
     foo_username = f'{site_domain}-user'
     foo_email = f'{foo_username}@{site_domain}'
-    foo_user, _created = get_user_model().objects.get_or_create(username=f'{site_domain}-user', email=foo_email,
+    foo_user, _ = get_user_model().objects.get_or_create(username=f'{site_domain}-user', email=foo_email,
                                                                 password=foo_username)
     foo_user.role.member.set([foo_site])
     project = Project.objects.get(pk=project_id)

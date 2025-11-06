@@ -289,7 +289,7 @@ def get_upload_accept():
         elif isinstance(import_plugin.accept, str):
             # legacy fallback for pre 2.3.0 RDMO, e.g. `accept = '.xml'`
             suffix = import_plugin.accept
-            mime_type, encoding = mimetypes.guess_type(f'example{suffix}')
+            mime_type, _encoding = mimetypes.guess_type(f'example{suffix}')
             if mime_type:
                 accept[mime_type].update([suffix])
 
