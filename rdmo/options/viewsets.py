@@ -148,4 +148,6 @@ class AdditionalInputsViewSet(ChoicesViewSet):
 
 class ProviderViewSet(ChoicesViewSet):
     permission_classes = (IsAuthenticated, )
-    queryset = settings.OPTIONSET_PROVIDERS
+
+    def get_queryset(self):
+        return getattr(settings, 'OPTIONSET_PROVIDERS', [])
