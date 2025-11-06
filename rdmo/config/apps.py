@@ -5,3 +5,6 @@ from django.utils.translation import gettext_lazy as _
 class ConfigConfig(AppConfig):
     name = 'rdmo.config'
     verbose_name = _('Config')
+
+    def ready(self):
+        from . import checks  # noqa: F401
