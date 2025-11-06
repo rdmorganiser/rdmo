@@ -21,7 +21,7 @@ def test_create_tasks(db, settings):
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'views.xml'
 
-    elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
+    _, root, imported_elements = parse_xml_and_import_elements(xml_file)
 
     assert len(root) == len(imported_elements) == View.objects.count() == 3
     assert all(element['created'] is True for element in imported_elements)
@@ -31,7 +31,7 @@ def test_create_tasks(db, settings):
 def test_update_tasks(db, settings):
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'views.xml'
 
-    elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
+    _, root, imported_elements = parse_xml_and_import_elements(xml_file)
 
     assert len(root) == len(imported_elements) == 3
     assert all(element['created'] is False for element in imported_elements)
@@ -61,7 +61,7 @@ def test_create_legacy_tasks(db, settings):
 
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'legacy' / 'views.xml'
 
-    elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
+    _, root, imported_elements = parse_xml_and_import_elements(xml_file)
 
     assert len(root) == len(imported_elements) == View.objects.count() == 3
     assert all(element['created'] is True for element in imported_elements)
@@ -71,7 +71,7 @@ def test_create_legacy_tasks(db, settings):
 def test_update_legacy_tasks(db, settings):
     xml_file = Path(settings.BASE_DIR) / 'xml' / 'elements' / 'legacy' / 'views.xml'
 
-    elements, root, imported_elements = parse_xml_and_import_elements(xml_file)
+    _, root, imported_elements = parse_xml_and_import_elements(xml_file)
 
     assert len(root) == len(imported_elements) == 3
     assert all(element['created'] is False for element in imported_elements)

@@ -1,6 +1,6 @@
 [build-system]
 build-backend = "setuptools.build_meta"
-requires = ["setuptools", "wheel"]
+requires = ["setuptools"]
 
 [project]
 name = "rdmo"
@@ -40,7 +40,7 @@ dependencies = [
   # dependencies with major version on zero are declared with
   # major.minor.patch, because they can potentially introduce breaking changes
   # in minor version updates anytime
-  "defusedcsv>=2.0,<3.0",
+  "defusedcsv>=2.0,<4.0",
   "defusedxml>=0.7.1,<1.0",
   "django>=4.2,<5.0",
   "django-cleanup>=8.0,<10.0",
@@ -65,19 +65,16 @@ dependencies = [
 
 [project.optional-dependencies]
 allauth = [
-  "django-allauth[socialaccount,openid]>=64.1.0,<65.10.0",
+  "django-allauth[socialaccount,openid]>=64.1.0,<65.14.0",
 ]
 ci = [
   "rdmo[dev]",
   "pytest-github-actions-annotate-failures>=0.2.0,<0.4.0",
 ]
 dev = [
-  "build>=1.0,<2.0",
   "pipdeptree>=2.13,<3.0",
   "pre-commit>=3.4,<5.0",
   "setuptools>=73,<81",
-  "twine>=5.1.1,<7.0",
-  "wheel>=0.42,<0.46",
   "rdmo[allauth,openapi,pytest]",
 ]
 gunicorn = [
@@ -94,11 +91,11 @@ postgres = [
 ]
 pytest = [
   "pytest>=8.0,<9.0",
-  "pytest-cov>=4.1,<7.0",
+  "pytest-cov>=4.1,<8.0",
   "pytest-django>=4.5,<5.0",
   "pytest-mock>=3.11,<4.0",
   "pytest-playwright>=0.4.3,<0.8.0",
-  "pytest-randomly>=3.15,<4.0",
+  "pytest-randomly>=3.15,<5.0",
   "pytest-xdist>=3.3,<4.0",
 ]
 openapi = [
@@ -235,4 +232,10 @@ exclude_lines = [
 default.extend-ignore-re = [
   "(?Rm)^.*(#|//)\\s*spellchecker:disable-line$", # for .py files
   "(?Rm)^.*<!-- spellchecker:disable-line -->$", # for .html files
+]
+
+[tool.check-wheel-contents] # Ref: https://github.com/jwodder/check-wheel-contents
+ignore = [
+  "W002", # wheel contains duplicate files
+  "W004", # module is not located at importable path
 ]
