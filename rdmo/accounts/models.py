@@ -129,7 +129,7 @@ class ConsentFieldValue(RDMOTimeStampedModel):
 
     @classmethod
     def create_consent(cls, user, session=None) -> bool:
-        obj, _created = cls.objects.update_or_create(user=user, defaults={"consent": True})
+        obj, _x = cls.objects.update_or_create(user=user, defaults={"consent": True})
 
         # Validate consent before storing in session
         has_valid_consent = (

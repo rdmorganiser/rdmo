@@ -328,7 +328,7 @@ class MembershipCreateForm(forms.Form):
                 role=self.cleaned_data.get('role')
             )
         else:
-            invite, _created = Invite.objects.get_or_create(
+            invite, _x = Invite.objects.get_or_create(
                 project=self.project,
                 user=self.cleaned_data.get('user'),
                 email=self.cleaned_data.get('email')

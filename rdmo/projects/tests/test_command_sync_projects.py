@@ -90,8 +90,8 @@ def test_command_sync_projects_for_tasks_and_views_with_show(
     assert settings.PROJECT_VIEWS_SYNC
 
     # Arrange task and view state
-    P1, _C1, T = arrange_projects_catalogs_and_tasks()
-    P2, _C2, V = arrange_projects_catalogs_and_views()
+    P1, _x, T = arrange_projects_catalogs_and_tasks()
+    P2, _x, V = arrange_projects_catalogs_and_views()
 
     # Arrange random desynced state
     P1[1].tasks.set([T[1], T[2], T[3]])
