@@ -34,7 +34,7 @@ other_site_users = (
     'bar-reviewer',
 )
 
-users += tuple(zip(other_site_users, other_site_users, strict=False))  # add (other site users and passwords)
+users += tuple(zip(other_site_users, other_site_users, strict=True))  # add (other site users and passwords)
 
 boolean_toggle = (True, False)
 

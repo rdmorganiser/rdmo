@@ -108,7 +108,7 @@ def test_update_optionsets_with_changed_fields(db, settings, updated_fields, del
     assert all(element[ImportElementFields.UPDATED] is True for element in imported_elements)
     assert len(imported_and_changed) == len(changed_elements)
     # compare two ordered lists with "updated_and_changed" dicts
-    for test, imported in zip(changed_elements, imported_and_changed, strict=False):
+    for test, imported in zip(changed_elements, imported_and_changed, strict=True):
         assert test[ImportElementFields.DIFF] == imported[ImportElementFields.DIFF]
 
 
@@ -149,7 +149,7 @@ def test_update_optionsets_from_changed_xml(db, settings, delete_all_objects):
     # get the ordered options (via .optionset_options) for this optionset from the db
     optionset_1 = OptionSet.objects.get(uri=test_optionset['original']['uri'])
     optionset_1_options = optionset_1.optionset_options.order_by('order').values_list('option__uri',flat=True)
-    for _test, _db in zip(test_optionset_changed_options, optionset_1_options, strict=False):
+    for _test, _db in zip(test_optionset_changed_options, optionset_1_options, strict=True):
         assert _test == _db
 
     # Import again and test that there are no changes detected
@@ -203,7 +203,7 @@ def test_update_options_with_changed_fields(db, settings, updated_fields, delete
     assert all(element[ImportElementFields.UPDATED] is True for element in imported_elements)
     assert len(imported_and_changed) == len(changed_elements)
     # compare two ordered lists with "updated_and_changed" dicts
-    for test, imported in zip(changed_elements, imported_and_changed, strict=False):
+    for test, imported in zip(changed_elements, imported_and_changed, strict=True):
         assert test[ImportElementFields.DIFF] == imported[ImportElementFields.DIFF]
 
 

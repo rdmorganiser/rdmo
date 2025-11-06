@@ -79,7 +79,7 @@ def test_copy_project(db, files):
     )
     for snapshot_copy, snapshot in zip(
         project_copy.snapshots.values(*snapshot_fields),
-        project.snapshots.values(*snapshot_fields), strict=False
+        project.snapshots.values(*snapshot_fields), strict=True
     ):
         assert snapshot_copy == snapshot
 
@@ -104,7 +104,7 @@ def test_copy_project(db, files):
     )
     for value_copy, value in zip(
         project_copy.values.filter(snapshot=None).order_by(*ordering),
-        project.values.filter(snapshot=None).order_by(*ordering), strict=False
+        project.values.filter(snapshot=None).order_by(*ordering), strict=True
     ):
         for field in value_fields:
             assert getattr(value_copy, field) == getattr(value, field), field
@@ -121,10 +121,10 @@ def test_copy_project(db, files):
         else:
             assert not value.file
 
-    for snapshot_copy, snapshot in zip(project_copy.snapshots.all(), project.snapshots.all(), strict=False):
+    for snapshot_copy, snapshot in zip(project_copy.snapshots.all(), project.snapshots.all(), strict=True):
         for value_copy, value in zip(
             project_copy.values.filter(snapshot=snapshot_copy).order_by(*ordering),
-            project.values.filter(snapshot=snapshot).order_by(*ordering), strict=False
+            project.values.filter(snapshot=snapshot).order_by(*ordering), strict=True
         ):
             for field in value_fields:
                 assert getattr(value_copy, field) == getattr(value, field)
