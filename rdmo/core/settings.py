@@ -233,10 +233,6 @@ SETTINGS_EXPORT = [
     'PROJECT_VISIBILITY',
     'PROJECT_ISSUES',
     'PROJECT_VIEWS',
-    'PROJECT_EXPORTS',
-    'PROJECT_SNAPSHOT_EXPORTS',
-    'PROJECT_IMPORTS',
-    'PROJECT_IMPORTS_LIST',
     'PROJECT_SEND_ISSUE',
     'NESTED_PROJECTS',
     'PROJECT_VIEWS_SYNC',
@@ -339,7 +335,7 @@ MARKDOWN_TEMPLATES: dict[str, str] = {
 MARKDOWN_CLEAN = False
 MARKDOWN_CLEAN_KWARGS = {}  # see https://nh3.readthedocs.io for available kwargs
 
-PLUGINS = [
+PLUGINS = [  # introduced in 2.5
     'rdmo.projects.exports.RDMOXMLExport',
     'rdmo.projects.exports.CSVCommaExport',
     'rdmo.projects.exports.CSVSemicolonExport',
@@ -353,12 +349,18 @@ PROJECT_VISIBILITY = True
 
 PROJECT_ISSUES = True
 
+# PROJECT_ISSUE_PROVIDERS  # deprecated in 2.5
+
 PROJECT_VIEWS = True
 
 PROJECT_CONTACT = False
 PROJECT_CONTACT_RECIPIENTS = []
 
-PROJECT_IMPORTS_LIST = []
+# PROJECT_EXPORTS  # deprecated in 2.5
+# PROJECT_SNAPSHOT_EXPORTS  # deprecated in 2.5
+# PROJECT_IMPORTS  # deprecated in 2.5
+
+# PROJECT_IMPORTS_LIST  # deprecated in 2.5
 
 PROJECT_FILE_QUOTA = '10Mb'
 
@@ -378,6 +380,8 @@ PROJECT_CREATE_GROUPS = []
 PROJECT_VALUES_CONFLICT_THRESHOLD = 0.01
 
 NESTED_PROJECTS = True
+
+# OPTIONSET_PROVIDERS  # deprecated in 2.5
 
 PROJECT_VALUES_SEARCH_LIMIT = 10
 
