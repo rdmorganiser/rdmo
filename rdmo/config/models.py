@@ -6,7 +6,7 @@ from django.db import models
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.config.utils import detect_plugin_type
+from rdmo.config.plugins import detect_plugin_type
 from rdmo.core.models import Model, TranslationMixin
 from rdmo.core.utils import join_url
 from rdmo.questions.models import Catalog
