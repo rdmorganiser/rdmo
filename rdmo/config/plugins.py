@@ -1,6 +1,6 @@
 from django.utils.module_loading import import_string
 
-from rdmo.config.plugin_base import PluginBase
+from rdmo.core.plugins import Plugin as PluginBase
 
 PLUGIN_BASES = (
     ("project_export", "rdmo.projects.exports.Export"),
