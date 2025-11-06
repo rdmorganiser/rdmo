@@ -2,7 +2,7 @@ from rdmo.projects.imports import Import
 from rdmo.projects.models import Project
 
 
-class TestImportPlugin(Import):
+class SimpleImportPlugin(Import):
     accept = {"text/plain": [".txt"]}
 
     def check(self) -> bool:

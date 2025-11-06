@@ -83,8 +83,12 @@ PROJECT_SEND_ISSUE = True
 
 PROJECT_SEND_INVITE = True
 
+INSTALLED_APPS += [
+    'plugins',
+]
+
 PROJECT_SNAPSHOT_EXPORTS = [
-    ('xml', _('RDMO XML'), 'rdmo.projects.exports.RDMOXMLExport'),
+    ('xml', _('RDMO XML'), 'plugins.project_exports.exports.SimpleSnapshotExportPlugin'),
 ]
 
 EMAIL_RECIPIENTS_CHOICES = [
@@ -93,18 +97,26 @@ EMAIL_RECIPIENTS_CHOICES = [
 EMAIL_RECIPIENTS_INPUT = True
 
 OPTIONSET_PROVIDERS = [
-    ('simple', _('Simple provider'), 'rdmo.options.providers.SimpleProvider')
+    ('simple', _('Simple provider'), 'plugins.optionset_providers.providers.SimpleProvider')
 ]
 
 PROJECT_ISSUE_PROVIDERS = [
-    ('simple', _('Simple provider'), 'rdmo.projects.providers.SimpleIssueProvider')
+    ('simple', _('Simple provider'), 'plugins.project_issue_providers.providers.SimpleIssueProvider')
 ]
 
-PROJECT_IMPORTS += [
-    ('url', _('from URL'), 'rdmo.projects.imports.URLImport'),
+PROJECT_IMPORTS = [
+    ('url', _('from URL'), 'plugins.project_imports.imports.SimpleImportPlugin'),
 ]
 
 PROJECT_IMPORTS_LIST = ['url']
+
+PLUGINS = [
+    'plugins.optionset_providers.providers.SimpleProvider',
+    'plugins.project_exports.exports.SimpleSnapshotExportPlugin',
+    'plugins.project_issue_providers.providers.SimpleIssueProvider',
+    'plugins.project_imports.imports.SimpleImportPlugin',
+]
+
 
 PROJECT_VALUES_VALIDATION = True
 
