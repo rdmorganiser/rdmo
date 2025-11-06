@@ -93,7 +93,7 @@ class RDMOXMLImport(Import):
     }
 
     def check(self) -> bool:
-        file_type, _x = mimetypes.guess_type(self.file_name)
+        file_type, _encoding = mimetypes.guess_type(self.file_name)
         if file_type in ('application/xml', 'text/xml'):
             self.root = read_xml_file(self.file_name)
             if self.root is not None and self.root.tag == 'project':
