@@ -1,5 +1,5 @@
 from rdmo.projects.exports import JSONExport
 
 
-class TestExportPlugin(JSONExport):
+class SimpleExportPlugin(JSONExport):
     pass
