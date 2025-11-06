@@ -1,21 +1,27 @@
-from rdmo.core.plugins import Plugin
-from rdmo.options.providers import Provider as OptionsetProvider
-from rdmo.projects.exports import Export
-from rdmo.projects.imports import Import
-from rdmo.projects.providers import IssueProvider
+from django.utils.module_loading import import_string
 
-PLUGIN_BASES = {
-    'OPTIONSET_PROVIDER': OptionsetProvider,
-    'PROJECT_EXPORT': Export,
-    'PROJECT_IMPORT': Import,
-    'PROJECT_ISSUE_PROVIDER': IssueProvider,
-}
+from rdmo.config.plugin_base import PluginBase
 
-def detect_plugin_type(plugin_class):
-    if not issubclass(plugin_class, Plugin):
+PLUGIN_BASES = (
+    ("project_export", "rdmo.projects.exports.Export"),
+    ("project_import", "rdmo.projects.imports.Import"),
+    ("project_issue_provider", "rdmo.projects.providers.IssueProvider"),
+    ("optionset_provider", "rdmo.options.providers.Provider"),
+)
+
+
+PLUGIN_TYPES = {key: import_string(dotted) for key, dotted in PLUGIN_BASES}
+
+
+def detect_plugin_type(cls_or_instance) -> str:
+    is_instance = not isinstance(cls_or_instance, type)
+    cls = cls_or_instance.__class__ if is_instance else cls_or_instance
+
+    if not issubclass(cls, PluginBase):
         return "not_an_rdmo_plugin"
 
-    for type_name, base_cls in PLUGIN_BASES.items():
-        if issubclass(plugin_class, base_cls):
-            return type_name
-    return 'rdmo_plugin_unknown_type'
+    for plugin_type, plugin_base_cls in PLUGIN_TYPES.items():
+        if issubclass(cls, plugin_base_cls):
+            return plugin_type
+
+    return "unknown_plugin_type"
