@@ -88,7 +88,11 @@ INSTALLED_APPS += [
 ]
 
 PROJECT_SNAPSHOT_EXPORTS = [
-    ('xml', _('RDMO XML'), 'plugins.project_exports.exports.SimpleSnapshotExportPlugin'),
+    ('xml', _('RDMO XML'), 'plugins.project_export.exports.SimpleExportPlugin'),
+]
+
+PROJECT_SNAPSHOT_EXPORTS = [
+    ('xml', _('RDMO XML'), 'plugins.project_snapshot_export.exports.SimpleSnapshotExportPlugin'),
 ]
 
 EMAIL_RECIPIENTS_CHOICES = [
@@ -105,16 +109,17 @@ PROJECT_ISSUE_PROVIDERS = [
 ]
 
 PROJECT_IMPORTS = [
-    ('url', _('from URL'), 'plugins.project_imports.imports.SimpleImportPlugin'),
+    ('url', _('from URL'), 'plugins.project_import.imports.SimpleImportPlugin'),
 ]
 
 PROJECT_IMPORTS_LIST = ['url']
 
 PLUGINS = [
     'plugins.optionset_providers.providers.SimpleProvider',
-    'plugins.project_exports.exports.SimpleSnapshotExportPlugin',
     'plugins.project_issue_providers.providers.SimpleIssueProvider',
-    'plugins.project_imports.imports.SimpleImportPlugin',
+    'plugins.project_export.exports.SimpleExportPlugin',
+    'plugins.project_snapshot_export.exports.SimpleSnapshotExportPlugin',
+    'plugins.project_import.imports.SimpleImportPlugin',
 ]
 
 

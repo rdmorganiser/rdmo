@@ -1,9 +1,6 @@
-# rdmo/config/management/commands/setup_plugins.py
 from __future__ import annotations
 
-import json
 import re
-import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from typing import Any
 
@@ -36,10 +33,10 @@ class DeclaredPlugin:
 
 LEGACY_SETTING_NAMES = (
     "PROJECT_EXPORTS",
-    "PROJECT_IMPORTS",
     "PROJECT_SNAPSHOT_EXPORTS",
-    "OPTIONSET_PROVIDERS",
+    "PROJECT_IMPORTS",
     "PROJECT_ISSUE_PROVIDERS",
+    "OPTIONSET_PROVIDERS",
 )
 
 def _iter_legacy_settings() -> list[DeclaredPlugin]:
@@ -70,7 +67,7 @@ def _iter_legacy_settings() -> list[DeclaredPlugin]:
                     plugin_settings=_read_per_plugin_settings_from_settings(str(key)),
                 )
             )
-    return declared
+    return _dedupe_preserve_order(declared)  # normalize within legacy list
 
 
 # ---------------------------------------------------------------------------#
@@ -112,7 +109,7 @@ def _iter_new_setting_plugins() -> list[DeclaredPlugin]:
             )
         )
 
-    return declared
+    return _dedupe_preserve_order(declared)  # normalize within PLUGINS list
 
 
 def _derive_key_from_class(class_name: str) -> str:
@@ -123,62 +120,6 @@ def _derive_key_from_class(class_name: str) -> str:
     words = re.findall(r"[A-Z]+(?![a-z])|[A-Z][a-z0-9]*|[a-z0-9]+", class_name)
     snake = "_".join(w.lower() for w in words if w)
     return slugify(snake, allow_unicode=True).replace("-", "_")
-
-
-# ---------------------------------------------------------------------------#
-# XML source (simple and explicit)
-# ---------------------------------------------------------------------------#
-
-def _read_xml(path: str) -> list[DeclaredPlugin]:
-    """
-    Minimal XML format:
-
-    <plugins uri-prefix="https://example.org/rdmo">
-      <plugin key="example" title="Example" python-path="pkg.mod.Plugin"
-              uri-path="exports/example">
-        <settings>{"token": "abc", "sandbox": true}</settings>
-      </plugin>
-    </plugins>
-    """
-    root = ET.parse(path).getroot()
-    if root.tag != "plugins":
-        raise CommandError(f"{path}: root element must be <plugins> (got <{root.tag}>)")
-    uri_prefix = root.attrib.get("uri-prefix")
-
-    declared: list[DeclaredPlugin] = []
-    for node in root.findall("./plugin"):
-        key = _req_attr(node, "key")
-        title = _req_attr(node, "title")
-        python_path = _req_attr(node, "python-path")
-        uri_path = node.attrib.get("uri-path") or f"plugins/{key}"
-
-        # Optional <settings> JSON blob
-        settings_node = node.find("./settings")
-        plugin_settings: dict[str, Any] = {}
-        if settings_node is not None and settings_node.text:
-            try:
-                plugin_settings = json.loads(settings_node.text)
-            except json.JSONDecodeError as exc:
-                raise CommandError(f"{path}: <settings> for key={key} is not valid JSON: {exc}") from exc
-
-        declared.append(
-            DeclaredPlugin(
-                key=key,
-                title=title,
-                python_path=python_path,
-                uri_prefix=uri_prefix or getattr(settings, "DEFAULT_URI_PREFIX", None),
-                uri_path=uri_path,
-                plugin_settings=plugin_settings,
-            )
-        )
-    return declared
-
-
-def _req_attr(node: ET.Element, name: str) -> str:
-    value = node.attrib.get(name)
-    if not value:
-        raise CommandError(f"<{node.tag}> is missing required attribute '{name}'")
-    return value
 
 
 # ---------------------------------------------------------------------------#
@@ -325,7 +266,7 @@ def _clear_plugins(*, dry_run: bool, stdout, style, force: bool) -> None:
 def _upsert_plugin(declared: DeclaredPlugin, *, replace: bool, dry_run: bool) -> tuple[Plugin | None, str]:
     uri_prefix = declared.uri_prefix or getattr(settings, "DEFAULT_URI_PREFIX", None)
     if not uri_prefix:
-        raise CommandError("No uri_prefix available (neither in XML nor DEFAULT_URI_PREFIX).")
+        raise CommandError("No uri_prefix available (neither provided nor DEFAULT_URI_PREFIX).")
 
     uri_path = declared.uri_path or f"plugins/{declared.key}"
 
@@ -360,24 +301,46 @@ def _upsert_plugin(declared: DeclaredPlugin, *, replace: bool, dry_run: bool) ->
     return plugin, f"{action}: {plugin.python_path} -> {plugin.uri}"
 
 
-# ---------------------------------------------------------------------------#
-# Command
-# ---------------------------------------------------------------------------#
+def _dedupe_preserve_order(items: list[DeclaredPlugin]) -> list[DeclaredPlugin]:
+    """De-duplicate within a single list by (python_path, key). First win keeps order."""
+    seen_paths: set[str] = set()
+    seen_keys: set[str] = set()
+    out: list[DeclaredPlugin] = []
+    for d in items:
+        if d.python_path in seen_paths or d.key in seen_keys:
+            continue
+        seen_paths.add(d.python_path)
+        seen_keys.add(d.key)
+        out.append(d)
+    return out
+
+
+def _merge_legacy_then_plugins(legacy: list[DeclaredPlugin], modern: list[DeclaredPlugin]) -> list[DeclaredPlugin]:
+    """
+    Prioritize legacy declarations for compatibility; skip same plugin from PLUGINS
+    if key OR python_path clashes.
+    """
+    legacy = _dedupe_preserve_order(legacy)
+    modern = _dedupe_preserve_order(modern)
+
+    legacy_keys = {d.key for d in legacy}
+    legacy_paths = {d.python_path for d in legacy}
+
+    filtered_modern = [
+        d for d in modern
+        if d.key not in legacy_keys and d.python_path not in legacy_paths
+    ]
+    return legacy + filtered_modern
+
 
 class Command(BaseCommand):
-    help = _("Create or update Plugin objects from PLUGINS, legacy settings, or XML. Can also clear all plugins.")
+    help = _("Create or update Plugin objects from PLUGINS, legacy settings. Can also clear all plugins.")
 
     def add_arguments(self, parser):
         parser.add_argument(
             "--from-settings",
             action="store_true",
             help=_("Load plugin declarations from deprecated Django settings."),
-        )
-        parser.add_argument(
-            "--from-xml",
-            metavar="PATH",
-            action="append",
-            help=_("Load plugin declarations from XML file(s). May be given multiple times."),
         )
         parser.add_argument(
             "--replace",
@@ -388,11 +351,6 @@ class Command(BaseCommand):
             "--dry-run",
             action="store_true",
             help=_("Do not write to the database, only print intended actions."),
-        )
-        parser.add_argument(
-            "--no-validate",
-            action="store_true",
-            help=_("Skip strict preflight import checks (not recommended)."),
         )
         parser.add_argument(
             "--clear",
@@ -408,10 +366,8 @@ class Command(BaseCommand):
     @transaction.atomic
     def handle(self, *args, **options):
         from_settings_flag: bool = options["from_settings"]
-        xml_paths: list[str] | None = options["from_xml"]
         replace: bool = options["replace"]
         dry_run: bool = options["dry_run"]
-        no_validate: bool = options["no_validate"]
         do_clear: bool = options["clear"]
         force: bool = options["force"]
 
@@ -424,22 +380,20 @@ class Command(BaseCommand):
 
         # Collect declarations
         if from_settings_flag:
-            declared.extend(_iter_legacy_settings())
-            declared.extend(_iter_new_setting_plugins())
-        if xml_paths:
-            for path in xml_paths:
-                declared.extend(_read_xml(path))
+            legacy = _iter_legacy_settings()
+            modern = _iter_new_setting_plugins()
+            declared.extend(_merge_legacy_then_plugins(legacy, modern))  # prioritize legacy, skip duplicates
 
         # If no import source and only --clear, we are done.
         if not declared:
             if do_clear:
-                if dry_run:
-                    # Make it explicit that nothing changed.
-                    raise CommandError("Dry-run complete; no changes committed.")
-                self.stdout.write(self.style.SUCCESS("✔ clear completed."))
+                # never raise on dry-run; just say we are done.
+                msg = "✔ clear completed (dry-run; no changes committed)." if dry_run else "✔ clear completed."
+                self.stdout.write(self.style.SUCCESS(msg))
                 return
+            # friendly no-op message instead of broken/partial code
             raise CommandError(
-                "Nothing to do. Use --clear and/or one of --from-plugins/--from-settings/--from-xml PATH."
+                "Nothing to do. Use --clear and/or one of --from-settings PATH."
             )
 
         if from_settings_flag:
@@ -448,23 +402,23 @@ class Command(BaseCommand):
             ))
 
         # Deterministic order for output
+        declared = _dedupe_preserve_order(declared)  # final pass safety
         declared.sort(key=lambda d: (d.uri_path or "", d.python_path))
 
         # -------------------- Preflight validation --------------------------
-        if not no_validate:
-            errors: list[tuple[DeclaredPlugin, Exception]] = []
-            for d in declared:
-                try:
-                    _validate_import(d.python_path)
-                    self.stdout.write(self.style.SUCCESS(f"✔ import OK: {d.python_path}"))
-                except Exception as exc:
-                    errors.append((d, exc))
-                    self.stdout.write(self.style.ERROR(f"✖ import FAILED: {d.python_path} ({exc})"))
+        errors: list[tuple[DeclaredPlugin, Exception]] = []
+        for d in declared:
+            try:
+                _validate_import(d.python_path)
+                self.stdout.write(self.style.SUCCESS(f"✔ import OK: {d.python_path}"))
+            except Exception as exc:
+                errors.append((d, exc))
+                self.stdout.write(self.style.ERROR(f"✖ import FAILED: {d.python_path} ({exc})"))
 
-            if errors:
-                raise CommandError(
-                    f"{len(errors)} plugin(s) failed preflight import; aborting before database changes."
-                )
+        if errors:
+            raise CommandError(
+                f"{len(errors)} plugin(s) failed preflight import; aborting before database changes."
+            )
 
         # -------------------- Upsert phase ---------------------------------
         results: list[str] = []
@@ -479,5 +433,5 @@ class Command(BaseCommand):
             self.stdout.write(line)
 
         if dry_run:
-            # Roll back on purpose in dry-run mode
-            raise CommandError("Dry-run complete; no changes committed.")
+            self.stdout.write(self.style.SUCCESS("✔ dry-run complete; no changes committed."))
+            return
