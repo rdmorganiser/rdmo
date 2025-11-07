@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdmo xmlns:dc="http://purl.org/dc/elements/1.1/" created="2025-11-07T10:00:00+00:00" version="2.5.0">
+  <plugin dc:uri="https://example.com/terms/plugins/simple-export-plugin">
+    <uri_prefix>https://example.com/terms</uri_prefix>
+    <uri_path>simple-export-plugin</uri_path>
+    <dc:comment>Example export plugin imported via XML</dc:comment>
+    <title lang="en">Example Export Plugin</title>
+    <title lang="de">Beispiel Export Plugin</title>
+    <python_path>plugins.project_export.exports.SimpleExportPlugin</python_path>
+    <plugin_settings>{"token": "abc123", "sandbox": true, "format": "csv"}</plugin_settings>
+    <order>0</order>
+  </plugin>
+  <plugin dc:uri="https://example.com/terms/plugins/simple-import-plugin">
+    <uri_prefix>https://example.com/terms</uri_prefix>
+    <uri_path>simple-import-plugin</uri_path>
+    <dc:comment>Simple import plugin for testing</dc:comment>
+    <title lang="en">Simple Import Plugin</title>
+    <title lang="de">Einfaches Import Plugin</title>
+    <python_path>plugins.project_import.imports.SimpleImportPlugin</python_path>
+    <plugin_settings>{"filetypes": ["xml", "json"], "enabled": false}</plugin_settings>
+    <order>1</order>
+  </plugin>
+</rdmo>
