@@ -1,5 +1,4 @@
 import logging
-from typing import Optional
 
 from rdmo.core.import_helpers import ElementImportHelper, ExtraFieldHelper
 
@@ -9,11 +8,11 @@ from .validators import AttributeLockedValidator, AttributeParentValidator, Attr
 logger = logging.getLogger(__name__)
 
 
-def build_attribute_path(instance: Optional[Attribute]=None):
+def build_attribute_path(instance: Attribute | None=None):
     if instance is not None:
         return instance.build_path(instance.key, instance.parent)
 
-def build_attribute_uri(instance: Optional[Attribute]=None):
+def build_attribute_uri(instance: Attribute | None=None):
     if instance is not None:
         return instance.build_uri(instance.uri_prefix, instance.path)
 

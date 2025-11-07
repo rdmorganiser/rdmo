@@ -2,7 +2,6 @@ import logging
 import re
 from collections import OrderedDict
 from pathlib import Path
-from typing import Optional
 from xml.etree.ElementTree import Element as xmlElement
 
 from django.utils.translation import gettext_lazy as _
@@ -20,14 +19,14 @@ LEGACY_RDMO_XML_VERSION = '1.11.0'
 ELEMENTS_USING_KEY = {RDMO_MODELS['attribute']}
 
 
-def resolve_file(file_name: str) -> tuple[Optional[Path], Optional[str]]:
+def resolve_file(file_name: str) -> tuple[Path | None, str | None]:
     file = Path(file_name).resolve()
     if file.exists():
         return file, None
     return  None, _('This file does not exists.')
 
 
-def read_xml(file: Path) -> tuple[Optional[xmlElement], Optional[str]]:
+def read_xml(file: Path) -> tuple[xmlElement | None, str | None]:
     # step 2: parse xml and get the root
     try:
         root = ET.parse(file).getroot()
@@ -36,7 +35,7 @@ def read_xml(file: Path) -> tuple[Optional[xmlElement], Optional[str]]:
         return None, _('XML Parsing Error') + f': {e!s}'
 
 
-def validate_root(root: Optional[xmlElement]) -> tuple[bool, Optional[str]]:
+def validate_root(root: xmlElement | None) -> tuple[bool, str | None]:
     if root is None:
         return False, _('The content of the XML file does not consist of well-formed data or markup.')
     if root.tag != 'rdmo':
@@ -44,7 +43,7 @@ def validate_root(root: Optional[xmlElement]) -> tuple[bool, Optional[str]]:
     return True, None
 
 
-def validate_and_get_xml_version_from_root(root: xmlElement) -> tuple[Optional[Version], list]:
+def validate_and_get_xml_version_from_root(root: xmlElement) -> tuple[Version | None, list]:
     rdmo_version = parse(__version__)
 
     # Extract version attributes from the XML root
@@ -93,7 +92,7 @@ def validate_legacy_elements(elements: dict, root_version: Version) -> list[str]
         return errors
 
 
-def parse_elements(root: xmlElement) -> tuple[dict, Optional[str]]:
+def parse_elements(root: xmlElement) -> tuple[dict, str | None]:
     # step 3: create element dicts from xml
     try:
         elements = flat_xml_to_elements(root)

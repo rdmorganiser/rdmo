@@ -18,7 +18,7 @@ license-files = ["LICENSE", "NOTICE", "AUTHORS"]
 authors = [
   {name = "RDMO Arbeitsgemeinschaft", email = "rdmo-team@listserv.dfn.de"},
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Environment :: Web Environment",
@@ -27,7 +27,6 @@ classifiers = [
   "Operating System :: OS Independent",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
