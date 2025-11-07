@@ -91,5 +91,6 @@ RDMO_MODELS = {
   'section': 'questions.section',
   'catalog': 'questions.catalog',
   'task': 'tasks.task',
-  'view': 'views.view'
+  'view': 'views.view',
+  'plugin': 'config.plugin'
 }
