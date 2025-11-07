@@ -221,4 +221,4 @@ rules.add_perm('config.add_plugin_object', is_element_editor)
 rules.add_perm('config.change_plugin_object', is_element_editor)
 rules.add_perm('config.delete_plugin_object', is_element_editor)
 # toggle current site field perm
-rules.add_perm('config.change_plugin_toggle_site', is_editor_for_current_site)
+rules.add_perm('config.change_plugin_toggle_site', is_editor)
