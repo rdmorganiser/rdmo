@@ -63,18 +63,23 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-allauth = [
-  "django-allauth[socialaccount,openid]>=64.1.0,<65.14.0",
+all = [
+  "rdmo[allauth,dev,gunicorn,ldap,mysql,openapi,postgres,pytest]"
+]
+recomended = [
+  "rdmo[allauth,gunicorn,postgres,openapi]"
 ]
 ci = [
-  "rdmo[dev]",
+  "rdmo[allauth,dev,openapi,pytest]",
   "pytest-github-actions-annotate-failures>=0.2.0,<0.4.0",
+]
+allauth = [
+  "django-allauth[socialaccount,openid]>=64.1.0,<65.14.0",
 ]
 dev = [
   "pipdeptree>=2.13,<3.0",
   "pre-commit>=3.4,<5.0",
   "setuptools>=73,<81",
-  "rdmo[allauth,openapi,pytest]",
 ]
 gunicorn = [
   "gunicorn>=23.0,<24.0",
@@ -84,6 +89,9 @@ ldap = [
 ]
 mysql = [
   "mysqlclient>=2.2,<3.0",
+]
+openapi = [
+  "drf-spectacular[sidecar]>=0.28.0,<1.0.0"
 ]
 postgres = [
   "psycopg[binary]>=3.1,<4.0",
@@ -96,9 +104,6 @@ pytest = [
   "pytest-playwright>=0.4.3,<0.8.0",
   "pytest-randomly>=3.15,<5.0",
   "pytest-xdist>=3.3,<4.0",
-]
-openapi = [
-  "drf-spectacular[sidecar]>=0.28.0,<1.0.0"
 ]
 
 [project.urls]
