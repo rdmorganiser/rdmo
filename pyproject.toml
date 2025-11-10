@@ -66,18 +66,18 @@ dependencies = [
 all = [
   "rdmo[allauth,dev,gunicorn,ldap,mysql,openapi,postgres,pytest]"
 ]
-recomended = [
+recommended = [
   "rdmo[allauth,gunicorn,postgres,openapi]"
 ]
 ci = [
   "rdmo[allauth,dev,openapi,pytest]",
+  "pipdeptree>=2.13,<3.0",
   "pytest-github-actions-annotate-failures>=0.2.0,<0.4.0",
 ]
 allauth = [
   "django-allauth[socialaccount,openid]>=64.1.0,<65.14.0",
 ]
 dev = [
-  "pipdeptree>=2.13,<3.0",
   "pre-commit>=3.4,<5.0",
   "setuptools>=73,<81",
 ]
