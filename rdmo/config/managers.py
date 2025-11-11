@@ -1,34 +1,36 @@
 from django.db import models
-from django.db.models import Q
 
 from rdmo.core.managers import (
     AvailabilityManagerMixin,
     AvailabilityQuerySetMixin,
     CurrentSiteManagerMixin,
     CurrentSiteQuerySetMixin,
+    ForCatalogQuerySetMixin,
+    ForGroupQuerySetMixin,
+    ForSiteQuerySetMixin,
     GroupsManagerMixin,
     GroupsQuerySetMixin,
 )
 
 
-class PluginQuerySet(CurrentSiteQuerySetMixin, GroupsQuerySetMixin, AvailabilityQuerySetMixin, models.QuerySet):
-
-    def filter_catalog(self, catalog):
-        return self.filter(models.Q(catalogs=None) | models.Q(catalogs=catalog))
-
-    def filter_for_site(self, site):
-        return self.filter(Q(sites=None) | Q(sites=site))
-
-    def filter_for_group(self, groups):
-        return self.filter(Q(groups=None) | Q(groups__in=groups))
+class PluginQuerySet(
+    ForSiteQuerySetMixin, ForGroupQuerySetMixin, ForCatalogQuerySetMixin,
+    CurrentSiteQuerySetMixin, GroupsQuerySetMixin, AvailabilityQuerySetMixin,
+    models.QuerySet):
 
     def filter_for_project(self, project):
         return (
             self
                 .filter(available=True)
                 .filter_for_site(project.site)
-                .filter_catalog(project.catalog)
-                .filter_for_group(project.groups)
+                .filter_for_catalog(project.catalog)
+                .filter_for_groups(project.groups)
+        )
+    def filter_current_available(self, user):
+        return (
+            self
+            .filter_current_site()
+            .filter_availability(user)
         )
 
 class PluginManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityManagerMixin, models.Manager):
@@ -36,8 +38,11 @@ class PluginManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityMan
     def get_queryset(self) -> PluginQuerySet:
         return PluginQuerySet(self.model, using=self._db)
 
-    def filter_catalog(self, catalog):
-        return self.get_queryset().filter_catalog(catalog)
+    def filter_current_site(self):
+        return self.get_queryset().filter_current_site()
 
     def filter_for_project(self, project):
         return self.get_queryset().filter_for_project(project)
+
+    def filter_current_available(self, user):
+        return self.get_queryset().filter_current_available(user)
