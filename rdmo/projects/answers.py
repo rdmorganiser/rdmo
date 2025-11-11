@@ -80,7 +80,7 @@ class AnswerTree:
             ]
 
             # find the first element
-            if element_type == 'section' and 'section' in self.verbose:
+            if element_type in self.verbose:
                 element_node['first'] = element_node['elements'][0]['id']
 
             # aggregate count and total from the child elements
