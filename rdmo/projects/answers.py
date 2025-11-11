@@ -7,10 +7,10 @@ from .models.value import Value
 
 class AnswerTree:
 
-    def __init__(self, catalog, values, verbose=[]):
+    def __init__(self, catalog, values, verbose=None):
         self.catalog = catalog
         self.values = values
-        self.verbose = verbose
+        self.verbose = verbose if verbose is not None else []
 
         self.sets = values.compute_sets()
         self.conditions = catalog.conditions.in_bulk()
