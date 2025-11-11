@@ -11,11 +11,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.7\n"
+"X-Generator: Poedit 3.1\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
-msgstr "Account"
+msgstr "Accounts"
 
 #: accounts/forms.py:27
 msgid "First name"
@@ -366,8 +366,8 @@ msgstr "Conferma"
 #: accounts/templates/account/email_confirm.html:29
 #, python-format
 msgid ""
-"This e-mail confirmation link expired or is invalid. Please <a "
-"href=\"%(email_url)s\">issue a new e-mail confirmation request</a>."
+"This e-mail confirmation link expired or is invalid. Please <a href="
+"\"%(email_url)s\">issue a new e-mail confirmation request</a>."
 msgstr ""
 "Il link di conferma è scaduto. È possibile <a href=\"%(email_url)s\">chiedere "
 "una nuova e-mail di conferma</a>."
@@ -386,20 +386,20 @@ msgstr "Accesso con Shibboleth"
 #: accounts/templates/account/login_form_account.html:7
 #, python-format
 msgid ""
-"If you have not created an account yet, then please <a "
-"href=\"%(signup_url)s\">sign up</a> first."
+"If you have not created an account yet, then please <a href=\"%(signup_url)s"
+"\">sign up</a> first."
 msgstr ""
-"Se non hai ancora creato un account, devi prima <a "
-"href=\"%(signup_url)s\">registrarti</a>."
+"Se non hai ancora creato un account, devi prima <a href=\"%(signup_url)s"
+"\">registrarti</a>."
 
 #: accounts/templates/account/login_form_account.html:14
 #, python-format
 msgid ""
-"If you forgot your password and want to reset it, click <a "
-"href=\"%(reset_url)s\">here</a>."
+"If you forgot your password and want to reset it, click <a href="
+"\"%(reset_url)s\">here</a>."
 msgstr ""
-"Password dimenticata? Per reimpostarla, cliccare <a "
-"href=\"%(reset_url)s\">qui</a>."
+"Password dimenticata? Per reimpostarla, cliccare <a href=\"%(reset_url)s"
+"\">qui</a>."
 
 #: accounts/templates/account/login_form_socialaccount.html:9
 msgid ""
@@ -609,8 +609,8 @@ msgid ""
 "<strong>Note:</strong> you can still <a href=\"%(email_url)s\">change your e-"
 "mail address</a>."
 msgstr ""
-"<strong>Attenzione:</strong> è ancora possibile <a "
-"href=\"%(email_url)s\">cambiare il proprio indirizzo e-mail</a>."
+"<strong>Attenzione:</strong> è ancora possibile <a href=\"%(email_url)s"
+"\">cambiare il proprio indirizzo e-mail</a>."
 
 #: accounts/templates/profile/profile_remove_closed.html:6
 #: accounts/templates/profile/profile_remove_failed.html:6
@@ -677,8 +677,8 @@ msgid ""
 msgstr ""
 "Inserire le informazioni aggiornate del proprio account. La password può "
 "essere cambiata con l'apposito <a href=\"%(password_url)s\">modulo</a>. Per "
-"modificare il proprio indirizzo e-mail, visitare <a "
-"href=\"%(email_url)s\">questa pagina</a>."
+"modificare il proprio indirizzo e-mail, visitare <a href=\"%(email_url)s"
+"\">questa pagina</a>."
 
 #: accounts/templates/profile/profile_update_form.html:33
 msgid ""
@@ -760,8 +760,8 @@ msgstr "Accesso annullato"
 #, python-format
 msgid ""
 "You decided to cancel logging in to our site using one of your existing "
-"accounts. If this was a mistake, please proceed to <a "
-"href=\"%(login_url)s\">sign in</a>."
+"accounts. If this was a mistake, please proceed to <a href=\"%(login_url)s"
+"\">sign in</a>."
 msgstr ""
 "L'accesso a questo sito mediante un altro account esistente è stato "
 "interrotto. In caso di errore, è possibile <a href=\"%(login_url)s\">entrare "
@@ -2547,8 +2547,8 @@ msgid ""
 "You are about to remove the invite of <strong>%(user)s</strong> from the "
 "project <strong>%(title)s</strong>."
 msgstr ""
-"Stai per rimuovere l'invito di <strong>%(user)s</strong> dal progetto "
-"<strong>%(title)s</strong>."
+"Stai per rimuovere l'invito di <strong>%(user)s</strong> dal progetto <strong>"
+"%(title)s</strong>."
 
 #: projects/templates/projects/issue_detail.html:25
 msgid "Dates"
@@ -2618,11 +2618,11 @@ msgstr "A chi possa interessare,"
 #: projects/templates/projects/issue_send_message.txt:3
 #, python-format
 msgid ""
-"The following task was identified in the project \"%(project_title)s\" "
-"<%(project_url)s>:"
+"The following task was identified in the project \"%(project_title)s\" <"
+"%(project_url)s>:"
 msgstr ""
-"La seguente attività è stata identificata nel progetto \"%(project_title)s\" "
-"<%(project_url)s>:"
+"La seguente attività è stata identificata nel progetto \"%(project_title)s\" <"
+"%(project_url)s>:"
 
 #: projects/templates/projects/issue_send_message.txt:13
 #, python-format
@@ -3157,8 +3157,8 @@ msgstr ""
 #: projects/templates/projects/project_interview_multiple_values_warning.html:4
 msgid ""
 "Multiple answers exist in the database. This can happen due some technical "
-"problem in the past. You can remove unwanted answers using the \"Remove "
-"item\" field' (<i class=\"fa fa-times\" aria-hidden=\"true\"></i>). Please "
+"problem in the past. You can remove unwanted answers using the \"Remove item"
+"\" field' (<i class=\"fa fa-times\" aria-hidden=\"true\"></i>). Please "
 "contact support if the problem persists."
 msgstr ""
 "Multiple answers exist in the database. This can happen due some technical "
@@ -4120,8 +4120,8 @@ msgstr ""
 #: questions/serializers/v1/question.py:128
 msgid "If the \"Yes/No\" widget is used, the value type must be \"Boolean\"."
 msgstr ""
-"Se si utilizza il widget \"Sì/No\", il tipo di valore deve essere "
-"\"booleano\"."
+"Se si utilizza il widget \"Sì/No\", il tipo di valore deve essere \"booleano"
+"\"."
 
 #: questions/templates/questions/export/page.html:28
 #: questions/templates/questions/export/question.html:48
@@ -4530,13 +4530,13 @@ msgstr "Raccolta"
 #~ msgstr "(opzionale)"
 
 #~ msgid "Edit tab"
-#~ msgstr "Scheda Modifica"
+#~ msgstr "Modifica scheda"
 
 #~ msgid "Remove tab"
-#~ msgstr "Rimuovere la scheda"
+#~ msgstr "Rimuovi scheda"
 
 #~ msgid "Remove block"
-#~ msgstr "Rimuovere il blocco"
+#~ msgstr "Rimuovi blocco"
 
 #~ msgid ""
 #~ "An error occurred while saving the answer. Please contact support if this "
@@ -4667,8 +4667,8 @@ msgstr "Raccolta"
 #~ "permanentemente."
 
 #~ msgid ""
-#~ "Entries with <i class=\"fa fa-question-circle-o small\" aria-"
-#~ "hidden=\"true\"></i> might be skipped based on your input."
+#~ "Entries with <i class=\"fa fa-question-circle-o small\" aria-hidden=\"true"
+#~ "\"></i> might be skipped based on your input."
 #~ msgstr ""
 #~ "Le voci con <i class=\"fa-question-circle-o small\" aria-hidden=\"true\"></"
 #~ "i> potrebbero essere saltate in base al tuo input."
