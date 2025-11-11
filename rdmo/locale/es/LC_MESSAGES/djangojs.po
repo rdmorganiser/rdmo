@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-04 11:19+0000\n"
-"PO-Revision-Date: 2025-07-04 13:29+0200\n"
-"Last-Translator: DAVID MARTINEZ <dmartinezmu@cem.es>\n"
+"PO-Revision-Date: 2025-11-11 13:42+0100\n"
+"Last-Translator: Jochen Klar <mail@jochenklar.de>\n"
 "Language-Team: \n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.8\n"
 
 #: core/assets/js/components/Modal.js:20
 #: management/assets/js/components/common/Modals.js:16
@@ -1914,7 +1914,7 @@ msgstr "Instantánea"
 #: projects/assets/js/interview/components/main/Search.js:92
 #: projects/assets/js/interview/components/main/Search.js:97
 msgid "Tab"
-msgstr "Ficha"
+msgstr "Pestaña"
 
 #: projects/assets/js/interview/components/main/Search.js:111
 msgid "Restrict the search to a particular project ..."
@@ -1940,15 +1940,15 @@ msgstr "Cuestionario completo"
 #: projects/assets/js/interview/components/main/page/PageHead.js:33
 #: projects/assets/js/interview/components/main/page/PageHead.js:175
 msgid "Copy tab"
-msgstr "Ficha Copiar"
+msgstr "Copiar pestaña"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:34
 msgid "Add tab"
-msgstr "Añadir ficha"
+msgstr "Añadir pestaña"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:35
 msgid "Edit tab"
-msgstr "Editar ficha"
+msgstr "Editar pestaña"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:36
 #: projects/assets/js/interview/components/main/page/PageHeadFormModal.js:87
@@ -1962,25 +1962,25 @@ msgstr "Eliminar pestaña"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:165
 msgid "Create tab"
-msgstr "Ficha Crear"
+msgstr "Crear pestaña"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:186
 msgid "Update tab"
-msgstr "Ficha Actualizar"
+msgstr "Actualizar pestaña"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:187
 msgid "Update"
-msgstr "Actualización"
+msgstr "Actualizar"
 
 #: projects/assets/js/interview/components/main/page/PageHeadDeleteModal.js:8
 msgid "Delete tab"
-msgstr "Eliminar ficha"
+msgstr "Eliminar pestaña"
 
 #: projects/assets/js/interview/components/main/page/PageHeadDeleteModal.js:14
 #, javascript-format
 msgid "You are about to permanently delete the tab named: <strong>%s</strong>"
 msgstr ""
-"Está a punto de eliminar definitivamente el pestaña: <strong>%s</strong>"
+"Está a punto de eliminar definitivamente la pestaña: <strong>%s</strong>"
 
 #: projects/assets/js/interview/components/main/page/PageHeadDeleteModal.js:17
 msgid "You are about to permanently delete this tab."
@@ -2016,7 +2016,7 @@ msgstr ""
 
 #: projects/assets/js/interview/components/main/page/PageHeadReuseModal.js:43
 msgid "Reuse tab"
-msgstr "Ficha Reutilización"
+msgstr "Reutilizar pestaña"
 
 #: projects/assets/js/interview/components/main/page/PageHeadReuseModal.js:43
 msgid "Reuse"
@@ -2051,11 +2051,11 @@ msgstr ""
 
 #: projects/assets/js/interview/components/main/question/QuestionCopyValues.js:16
 msgid "Apply to all"
-msgstr "Aplicable a todos"
+msgstr "Aplicar a todos"
 
 #: projects/assets/js/interview/components/main/question/QuestionDefault.js:8
 msgid "This is a default answer that can be customized."
-msgstr "Esta es una respuesta por defecto que se puede personalizar."
+msgstr "Esta es una respuesta predeterminada que se puede personalizar."
 
 #: projects/assets/js/interview/components/main/question/QuestionEraseValue.js:11
 #: projects/assets/js/interview/components/main/question/QuestionEraseValues.js:11

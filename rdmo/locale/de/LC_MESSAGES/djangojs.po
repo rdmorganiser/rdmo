@@ -3,15 +3,15 @@ msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-04 11:19+0000\n"
-"PO-Revision-Date: 2025-07-04 13:33+0200\n"
-"Last-Translator: Jochen Klar <jklar@aip.de>\n"
+"PO-Revision-Date: 2025-11-11 13:42+0100\n"
+"Last-Translator: Jochen Klar <mail@jochenklar.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.8\n"
 
 #: core/assets/js/components/Modal.js:20
 #: management/assets/js/components/common/Modals.js:16
@@ -634,7 +634,7 @@ msgid ""
 "This question set will be added to the page <code class=\"code-"
 "questions\">%s</code>."
 msgstr ""
-"Dieser Fragenset wird der Seite <code class=\"code-questions\">%s</code> "
+"Dieses Fragenset wird der Seite <code class=\"code-questions\">%s</code> "
 "hinzugefügt."
 
 #: management/assets/js/components/edit/EditQuestionSet.js:103
@@ -644,8 +644,8 @@ msgid ""
 "This question set will be added to the question set <code class=\"code-"
 "questions\">%s</code>."
 msgstr ""
-"Dieser Fragensatz wird dem Fragenset <code class=\"code-questions\">%s</"
-"code> hinzugefügt."
+"Dieses Fragenset wird dem Fragenset <code class=\"code-questions\">%s</code> "
+"hinzugefügt."
 
 #: management/assets/js/components/edit/EditSection.js:38
 #: management/static/management/js/management.js:2
@@ -1594,8 +1594,8 @@ msgstr[1] "Diese Frage wird auf <b>%s Seiten</b> verwendet."
 #, javascript-format
 msgid "This question set is used in <b>one question set</b>."
 msgid_plural "This question set is used in <b>%s question sets</b>."
-msgstr[0] "Dieser Fragensatz wird in <b>einem Fragenset</b> verwendet."
-msgstr[1] "Dieser Fragensatz wird in <b>%s Fragensets</b> verwendet."
+msgstr[0] "Dieses Fragenset wird in <b>einem Fragenset</b> verwendet."
+msgstr[1] "Dieses Fragenset wird in <b>%s Fragensets</b> verwendet."
 
 #: management/assets/js/components/info/QuestionSetInfo.js:24
 #: management/static/management/js/management.js:2
@@ -1912,7 +1912,7 @@ msgstr "Snapshot"
 #: projects/assets/js/interview/components/main/Search.js:92
 #: projects/assets/js/interview/components/main/Search.js:97
 msgid "Tab"
-msgstr "Tab"
+msgstr "Registerkarte"
 
 #: projects/assets/js/interview/components/main/Search.js:111
 msgid "Restrict the search to a particular project ..."
@@ -1938,15 +1938,15 @@ msgstr "Fragebogen abschließen"
 #: projects/assets/js/interview/components/main/page/PageHead.js:33
 #: projects/assets/js/interview/components/main/page/PageHead.js:175
 msgid "Copy tab"
-msgstr "Tab kopieren"
+msgstr "Registerkarte kopieren"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:34
 msgid "Add tab"
-msgstr "Tab hinzufügen"
+msgstr "Registerkarte hinzufügen"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:35
 msgid "Edit tab"
-msgstr "Tab bearbeiten"
+msgstr "Registerkarte bearbeiten"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:36
 #: projects/assets/js/interview/components/main/page/PageHeadFormModal.js:87
@@ -1956,15 +1956,15 @@ msgstr "Antworten wiederverwenden"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:37
 msgid "Remove tab"
-msgstr "Tab entfernen"
+msgstr "Registerkarte entfernen"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:165
 msgid "Create tab"
-msgstr "Tab erstellen"
+msgstr "Registerkarte erstellen"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:186
 msgid "Update tab"
-msgstr "Tab aktualisieren"
+msgstr "Registerkarte aktualisieren"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:187
 msgid "Update"
@@ -1972,28 +1972,31 @@ msgstr "Aktualisieren"
 
 #: projects/assets/js/interview/components/main/page/PageHeadDeleteModal.js:8
 msgid "Delete tab"
-msgstr "Tab entfernen"
+msgstr "Registerkarte entfernen"
 
 #: projects/assets/js/interview/components/main/page/PageHeadDeleteModal.js:14
 #, javascript-format
 msgid "You are about to permanently delete the tab named: <strong>%s</strong>"
-msgstr "Sie sind im Begriff, den Tab <strong>%s</strong> dauerhaft zu löschen"
+msgstr ""
+"Sie sind im Begriff, die Registerkarte <strong>%s</strong> dauerhaft zu "
+"löschen"
 
 #: projects/assets/js/interview/components/main/page/PageHeadDeleteModal.js:17
 msgid "You are about to permanently delete this tab."
-msgstr "Sie sind dabei diesen Tab permanent zu entfernen."
+msgstr "Sie sind dabei diese Registerkarte permanent zu entfernen."
 
 #: projects/assets/js/interview/components/main/page/PageHeadDeleteModal.js:20
 msgid ""
 "This includes all given answers for this tab on all pages, not just this one."
 msgstr ""
-"Dies gilt für alle Antworten, die für dieses Tab auf allen Seiten gegeben "
-"werden, nicht nur auf dieser Seite."
+"Dies gilt für alle Antworten, die für diese Registerkarte auf allen Seiten "
+"gegeben werden, nicht nur auf dieser Seite."
 
 #: projects/assets/js/interview/components/main/page/PageHeadFormModal.js:59
 msgid "You can add a new tab using the create button."
 msgstr ""
-"Sie können einen neue Tab über die Schaltfläche „Erstellen“ hinzufügen."
+"Sie können eine neue Registerkarte über die Schaltfläche „Erstellen“ "
+"hinzufügen."
 
 #: projects/assets/js/interview/components/main/page/PageHeadFormModal.js:65
 #: projects/assets/js/projects/utils/constants.js:4
@@ -2015,7 +2018,7 @@ msgstr ""
 
 #: projects/assets/js/interview/components/main/page/PageHeadReuseModal.js:43
 msgid "Reuse tab"
-msgstr "Tab wiederverwenden"
+msgstr "Registerkarte wiederverwenden"
 
 #: projects/assets/js/interview/components/main/page/PageHeadReuseModal.js:43
 msgid "Reuse"
@@ -2031,9 +2034,9 @@ msgid ""
 "have access to. This only affects questions that don't already have an "
 "answer."
 msgstr ""
-"Sie können diese Registerkarte mit Antworten aus einem ähnlichen Tab in "
-"einem beliebigen Projekt, auf das Sie Zugriff haben, auffüllen. Dies "
-"betrifft nur Fragen, für die es noch keine Antwort gibt."
+"Sie können diese Registerkarte mit Antworten aus einer ähnlichen "
+"Registerkarte in einem beliebigen Projekt, auf das Sie Zugriff haben, "
+"auffüllen. Dies betrifft nur Fragen, für die es noch keine Antwort gibt."
 
 #: projects/assets/js/interview/components/main/question/QuestionAddValue.js:21
 msgid "Add answer"

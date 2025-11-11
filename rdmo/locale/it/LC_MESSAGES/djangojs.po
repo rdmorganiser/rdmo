@@ -4,14 +4,14 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-04 11:19+0000\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Dario Pilori <d.pilori@inrim.it>\n"
+"Last-Translator: Jochen Klar <mail@jochenklar.de>\n"
 "Language-Team: \n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.8\n"
 
 #: core/assets/js/components/Modal.js:20
 #: management/assets/js/components/common/Modals.js:16
@@ -1940,7 +1940,7 @@ msgstr "Completare il questionario"
 #: projects/assets/js/interview/components/main/page/PageHead.js:33
 #: projects/assets/js/interview/components/main/page/PageHead.js:175
 msgid "Copy tab"
-msgstr "Scheda Copia"
+msgstr "Copia scheda"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:34
 msgid "Add tab"
@@ -1948,25 +1948,25 @@ msgstr "Aggiungi scheda"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:35
 msgid "Edit tab"
-msgstr "Scheda Modifica"
+msgstr "Modifica scheda"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:36
 #: projects/assets/js/interview/components/main/page/PageHeadFormModal.js:87
 #: projects/assets/js/interview/components/main/question/QuestionReuseValues.js:80
 msgid "Reuse answers"
-msgstr "Riutilizzare le risposte"
+msgstr "Riutilizza le risposte"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:37
 msgid "Remove tab"
-msgstr "Rimuovere la scheda"
+msgstr "Rimuovi scheda"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:165
 msgid "Create tab"
-msgstr "Scheda Crea"
+msgstr "Crea scheda"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:186
 msgid "Update tab"
-msgstr "Scheda di aggiornamento"
+msgstr "Aggiornare scheda"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:187
 msgid "Update"
@@ -1974,12 +1974,13 @@ msgstr "Aggiornamento"
 
 #: projects/assets/js/interview/components/main/page/PageHeadDeleteModal.js:8
 msgid "Delete tab"
-msgstr "Scheda Elimina"
+msgstr "Elimina scheda"
 
 #: projects/assets/js/interview/components/main/page/PageHeadDeleteModal.js:14
 #, javascript-format
 msgid "You are about to permanently delete the tab named: <strong>%s</strong>"
-msgstr "You are about to permanently delete the tab named: <strong>%s</strong>"
+msgstr ""
+"Si sta per eliminare definitivamente la seguente scheda: <strong>%s</strong>"
 
 #: projects/assets/js/interview/components/main/page/PageHeadDeleteModal.js:17
 msgid "You are about to permanently delete this tab."
@@ -2015,7 +2016,7 @@ msgstr ""
 
 #: projects/assets/js/interview/components/main/page/PageHeadReuseModal.js:43
 msgid "Reuse tab"
-msgstr "Scheda Riutilizzo"
+msgstr "Riutilizzare scheda"
 
 #: projects/assets/js/interview/components/main/page/PageHeadReuseModal.js:43
 msgid "Reuse"

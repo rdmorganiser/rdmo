@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-04 11:19+0000\n"
-"PO-Revision-Date: 2025-10-10 14:09+0200\n"
+"PO-Revision-Date: 2025-11-03 18:16+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.7\n"
+"X-Generator: Poedit 3.1\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -365,11 +365,11 @@ msgstr "Bestätigen"
 #: accounts/templates/account/email_confirm.html:29
 #, python-format
 msgid ""
-"This e-mail confirmation link expired or is invalid. Please <a "
-"href=\"%(email_url)s\">issue a new e-mail confirmation request</a>."
+"This e-mail confirmation link expired or is invalid. Please <a href="
+"\"%(email_url)s\">issue a new e-mail confirmation request</a>."
 msgstr ""
-"Dieser Bestätigungs-Link ist abgelaufen oder ungültig. Bitte <a "
-"href=\"%(email_url)s\">fordern sie eine neue Bestätigungs-E-Mail an</a>."
+"Dieser Bestätigungs-Link ist abgelaufen oder ungültig. Bitte <a href="
+"\"%(email_url)s\">fordern sie eine neue Bestätigungs-E-Mail an</a>."
 
 #: accounts/templates/account/login.html:6
 #: accounts/templates/account/login_form.html:23
@@ -381,22 +381,22 @@ msgstr "Anmelden"
 
 #: accounts/templates/account/login_form.html:6
 msgid "Login with Shibboleth"
-msgstr "Mit Shibboleth einloggen"
+msgstr "Mit Shibboleth anmelden"
 
 #: accounts/templates/account/login_form_account.html:7
 #, python-format
 msgid ""
-"If you have not created an account yet, then please <a "
-"href=\"%(signup_url)s\">sign up</a> first."
+"If you have not created an account yet, then please <a href=\"%(signup_url)s"
+"\">sign up</a> first."
 msgstr ""
-"Falls Sie noch kein Benutzerkonto haben, <a "
-"href=\"%(signup_url)s\">registrieren</a> Sie sich bitte zunächst."
+"Falls Sie noch kein Benutzerkonto haben, <a href=\"%(signup_url)s"
+"\">registrieren</a> Sie sich bitte zunächst."
 
 #: accounts/templates/account/login_form_account.html:14
 #, python-format
 msgid ""
-"If you forgot your password and want to reset it, click <a "
-"href=\"%(reset_url)s\">here</a>."
+"If you forgot your password and want to reset it, click <a href="
+"\"%(reset_url)s\">here</a>."
 msgstr ""
 "Falls Sie Ihr Passwort vergessen haben und es zurücksetzen wollen, klicken "
 "Sie bitte <a href=\"%(reset_url)s\">hier</a>."
@@ -525,8 +525,8 @@ msgstr "Neues Benutzerkonto erstellen"
 msgid ""
 "Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
 msgstr ""
-"Falls Sie schon eine Benutzerkonto haben können Sie sich <a "
-"href=\"%(login_url)s\">hier</a> anmelden."
+"Falls Sie schon ein Benutzerkonto haben können Sie sich <a href="
+"\"%(login_url)s\">hier</a> anmelden."
 
 #: accounts/templates/account/signup.html:34
 #: accounts/templates/socialaccount/signup.html:33
@@ -617,8 +617,8 @@ msgid ""
 "<strong>Note:</strong> you can still <a href=\"%(email_url)s\">change your e-"
 "mail address</a>."
 msgstr ""
-"<strong>Hinweis:</strong> Sie können immer noch Ihre <a "
-"href=\"%(email_url)s\">E-Mail Adresse ändern</a>."
+"<strong>Hinweis:</strong> Sie können immer noch Ihre <a href=\"%(email_url)s"
+"\">E-Mail Adresse ändern</a>."
 
 #: accounts/templates/profile/profile_remove_closed.html:6
 #: accounts/templates/profile/profile_remove_failed.html:6
@@ -775,12 +775,12 @@ msgstr "Anmeldung abgebrochen"
 #, python-format
 msgid ""
 "You decided to cancel logging in to our site using one of your existing "
-"accounts. If this was a mistake, please proceed to <a "
-"href=\"%(login_url)s\">sign in</a>."
+"accounts. If this was a mistake, please proceed to <a href=\"%(login_url)s"
+"\">sign in</a>."
 msgstr ""
 "Sie haben sich entschieden, die Anmeldung mit einem externen Konto "
-"abzubrechen. Falls dies versehentlich geschehen ist, könne Sie <a "
-"href=\"%(login_url)s\">hier</a> fortsetzen."
+"abzubrechen. Falls dies versehentlich geschehen ist, könne Sie <a href="
+"\"%(login_url)s\">hier</a> fortsetzen."
 
 #: accounts/templates/socialaccount/signup.html:9
 #, python-format
@@ -1416,7 +1416,7 @@ msgstr "Elemente importieren"
 
 #: management/viewsets.py:41 management/viewsets.py:77 projects/viewsets.py:370
 #: projects/viewsets.py:371 projects/viewsets.py:542
-msgid "This field may not be blank."
+msgid "This field must not be left blank."
 msgstr "Dieses Feld darf nicht leer sein."
 
 #: management/viewsets.py:79
@@ -1522,7 +1522,7 @@ msgstr "Der Pfad für die URI dieser Option."
 
 #: options/models.py:167
 msgid "Additional internal information about this option."
-msgstr "Zusätzliche interne Informationen zum Option."
+msgstr "Zusätzliche interne Informationen zur Option."
 
 #: options/models.py:172
 msgid "Designates whether this option can be changed."
@@ -1581,7 +1581,7 @@ msgid ""
 "The default text value for the additional input of this option (in the "
 "primary language)."
 msgstr ""
-"Die standardmäßige Text für die zusätzliche Eingabe dieser Option (erste "
+"Der standardmäßige Text für die zusätzliche Eingabe dieser Option (erste "
 "Sprache)."
 
 #: options/models.py:236 questions/models/question.py:127
@@ -1593,7 +1593,7 @@ msgid ""
 "The default text value for the additional input of this option (in the "
 "secondary language)."
 msgstr ""
-"Die standardmäßige Text für die zusätzliche Eingabe dieser Option (zweite "
+"Der standardmäßige Text für die zusätzliche Eingabe dieser Option (zweite "
 "Sprache)."
 
 #: options/models.py:241 questions/models/question.py:132
@@ -1605,7 +1605,7 @@ msgid ""
 "The default text value for the additional input of this option (in the "
 "tertiary language)."
 msgstr ""
-"Die standardmäßige Text für die zusätzliche Eingabe dieser Option (dritte "
+"Der standardmäßige Text für die zusätzliche Eingabe dieser Option (dritte "
 "Sprache)."
 
 #: options/models.py:246 questions/models/question.py:137
@@ -1617,7 +1617,7 @@ msgid ""
 "The default text value for the additional input of this option (in the "
 "quaternary language)."
 msgstr ""
-"Die standardmäßige Text für die zusätzliche Eingabe dieser Option (vierte "
+"Der standardmäßige Text für die zusätzliche Eingabe dieser Option (vierte "
 "Sprache)."
 
 #: options/models.py:251 questions/models/question.py:142
@@ -1629,7 +1629,7 @@ msgid ""
 "The default text value for the additional input of this option (in the "
 "quinary language)."
 msgstr ""
-"Die standardmäßige Text für die zusätzliche Eingabe dieser Option (fünfte "
+"Der standardmäßige Text für die zusätzliche Eingabe dieser Option (fünfte "
 "Sprache)."
 
 #: options/models.py:256
@@ -2108,7 +2108,7 @@ msgstr "Issue-Ressource"
 
 #: projects/models/issue.py:117
 msgid "Issue resources"
-msgstr "Issue Ressource"
+msgstr "Issue-Ressourcen"
 
 #: projects/models/membership.py:21
 msgid "The project for this membership."
@@ -2206,7 +2206,7 @@ msgstr "Die Gesamtzahl der erwarteten Werte für den Fortschrittsbalken."
 
 #: projects/models/project.py:74
 msgid "Progress count"
-msgstr "Fortschritt Zahl"
+msgstr "Fortschrittszähler"
 
 #: projects/models/project.py:75
 msgid "The number of values for the progress bar."
@@ -2646,11 +2646,11 @@ msgstr "Sehr geehrte Damen und Herren,"
 #: projects/templates/projects/issue_send_message.txt:3
 #, python-format
 msgid ""
-"The following task was identified in the project \"%(project_title)s\" "
-"<%(project_url)s>:"
+"The following task was identified in the project \"%(project_title)s\" <"
+"%(project_url)s>:"
 msgstr ""
-"Die folgende Aufgabe wurde im Projekt \"%(project_title)s\" "
-"<%(project_url)s> identifiziert:"
+"Die folgende Aufgabe wurde im Projekt \"%(project_title)s\" <"
+"%(project_url)s> identifiziert:"
 
 #: projects/templates/projects/issue_send_message.txt:13
 #, python-format
@@ -2675,8 +2675,8 @@ msgid ""
 "You are about to remove the user <strong>%(user)s</strong> from the project "
 "<strong>%(title)s</strong>."
 msgstr ""
-"Sie sind dabei den User <strong>%(user)s</strong> aus dem Projekt "
-"<strong>%(title)s</strong> zu entfernen."
+"Sie sind dabei den User <strong>%(user)s</strong> aus dem Projekt <strong>"
+"%(title)s</strong> zu entfernen."
 
 #: projects/templates/projects/membership_form.html:9
 #: projects/templates/projects/membership_form.html:11
@@ -3192,8 +3192,8 @@ msgstr ""
 #: projects/templates/projects/project_interview_multiple_values_warning.html:4
 msgid ""
 "Multiple answers exist in the database. This can happen due some technical "
-"problem in the past. You can remove unwanted answers using the \"Remove "
-"item\" field' (<i class=\"fa fa-times\" aria-hidden=\"true\"></i>). Please "
+"problem in the past. You can remove unwanted answers using the \"Remove item"
+"\" field' (<i class=\"fa fa-times\" aria-hidden=\"true\"></i>). Please "
 "contact support if the problem persists."
 msgstr ""
 "In der Datenbank sind mehrere Antworten vorhanden. Dies kann aufgrund eines "
@@ -3212,10 +3212,11 @@ msgid ""
 "other pages. You can add a new tab using the green button. Once created, you "
 "can edit or delete tabs using the buttons in the top right corner."
 msgstr ""
-"Bitte füllen Sie das Formular für jeden Tab aus. Die verschiedenen Tabs "
-"werden eventuell in späteren Fragen wieder verwendet. Sie können einen neuen "
-"Tab mit dem grünen Button hinzufügen. Bereits angelegte Tabs können mit den "
-"Buttons oben rechts bearbeitet oder wieder entfernt werden."
+"Bitte füllen Sie das Formular für jeden Tab aus. Die verschiedenen "
+"Tabs werden eventuell in späteren Fragen wieder verwendet. Sie "
+"können eine neuen Tab mit dem grünen Button hinzufügen. Bereits "
+"angelegte Tabs können mit den Buttons oben rechts bearbeitet oder "
+"wieder entfernt werden."
 
 #: projects/templates/projects/project_view.html:90
 #: projects/views/project.py:145
@@ -3387,7 +3388,7 @@ msgid ""
 "Designates whether this catalog (and its sections, question sets and "
 "questions) can be changed."
 msgstr ""
-"Bezeichnet, ob dieser Katalog (und seine Abschnitte, Fragensets und Fragen) "
+"Legt fest, ob dieser Katalog (und seine Abschnitte, Fragensets und Fragen) "
 "geändert werden kann."
 
 #: questions/models/catalog.py:62
@@ -3518,7 +3519,7 @@ msgid ""
 "Designates whether this page (and its questionsets and questions) can be "
 "changed."
 msgstr ""
-"Bezeichnet, ob diese Seite (und seine Fragensets und Fragen) geändert werden "
+"Legt fest, ob diese Seite (und seine Fragensets und Fragen) geändert werden "
 "kann."
 
 #: questions/models/page.py:62
@@ -4033,7 +4034,7 @@ msgid ""
 "Designates whether this section (and its question sets and questions) can be "
 "changed."
 msgstr ""
-"Bezeichnet, ob dieser Abschnitt (und seine Fragensets und Fragen) geändert "
+"Legt fest, ob dieser Abschnitt (und seine Fragensets und Fragen) geändert "
 "werden kann."
 
 #: questions/models/section.py:60
@@ -4333,7 +4334,7 @@ msgstr "Zusätzliche interne Informationen zu dieser Ansicht."
 
 #: views/models.py:43
 msgid "Designates whether this view can be changed."
-msgstr "Bezeichnet, ob diese Ansicht geändert werden kann."
+msgstr "Gibt an, ob diese Ansicht geändert werden kann."
 
 #: views/models.py:48
 msgid "The position of this view in lists."
@@ -4636,9 +4637,8 @@ msgstr "Set"
 #~ "on {self.gitlab_url}. The upload of attachments is not supported by "
 #~ "GitLab."
 #~ msgstr ""
-#~ "Diese Integration ermöglicht die Erstellung von Aufgaben auf "
-#~ "{self.gitlab_url}. Das Hochladen von Anhängen wird von GitLab nicht "
-#~ "unterstützt."
+#~ "Diese Integration ermöglicht die Erstellung von Aufgaben auf {self."
+#~ "gitlab_url}. Das Hochladen von Anhängen wird von GitLab nicht unterstützt."
 
 #~ msgid "The secret for a GitLab webhook to close a task."
 #~ msgstr "Das Geheimnis für einen GitLab-Webhook zum Schließen einer Aufgabe."
@@ -4650,11 +4650,11 @@ msgstr "Set"
 #~ msgstr "Sets"
 
 #~ msgid ""
-#~ "Entries with <i class=\"fa fa-question-circle-o small\" aria-"
-#~ "hidden=\"true\"></i> might be skipped based on your input."
+#~ "Entries with <i class=\"fa fa-question-circle-o small\" aria-hidden=\"true"
+#~ "\"></i> might be skipped based on your input."
 #~ msgstr ""
-#~ "Einträge mit <i class=\"fa fa-question-circle-o small\" aria-"
-#~ "hidden=\"true\"></i> können aufgrund Ihrer Eingabe übersprungen werden."
+#~ "Einträge mit <i class=\"fa fa-question-circle-o small\" aria-hidden=\"true"
+#~ "\"></i> können aufgrund Ihrer Eingabe übersprungen werden."
 
 #~ msgid "Plural name (primary)"
 #~ msgstr "Name (Plural, erste Sprache)"
