@@ -27,6 +27,8 @@ env:
   PYTHONDONTWRITEBYTECODE: 1
   FORCE_COLOR: 1 # colored output by pytest etc.
 
+permissions: {}
+
 jobs:
 
   build-wheel:
@@ -34,6 +36,8 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v5
+      with:
+        persist-credentials: false
     # update the version
     - name: Get short commit SHA
       run: |
@@ -48,10 +52,14 @@ jobs:
       run: echo "current_version=$(grep -Po '(?<=__version__ = ")[\d\w.]+(?=")' rdmo/__init__.py)" >> $GITHUB_OUTPUT
     - name: Generate new version (current version + SHA)
       id: new-version
-      run: echo "new_version=${{ steps.current-version.outputs.current_version }}+$SHA" >> $GITHUB_OUTPUT
+      run: echo "new_version=${CURRENT_VERSION}+$SHA" >> $GITHUB_OUTPUT
+      env:
+        CURRENT_VERSION: ${{ steps.current-version.outputs.current_version }}
     - name: Update version in rdmo/__init__.py
       run: |
-        sed -i "s/__version__ = .*/__version__ = \"${{ steps.new-version.outputs.new_version }}\"/" rdmo/__init__.py
+        sed -i "s/__version__ = .*/__version__ = \"${NEW_VERSION}\"/" rdmo/__init__.py
+      env:
+        NEW_VERSION: ${{ steps.new-version.outputs.new_version }}
     # build the webpack bundle
     - uses: actions/setup-node@v6
       with:
@@ -71,6 +79,8 @@ jobs:
         db-backend: [mysql, postgres]
     steps:
     - uses: actions/checkout@v5
+      with:
+        persist-credentials: false
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v6
       with:
@@ -129,6 +139,8 @@ jobs:
         db-backend: [postgres]
     steps:
     - uses: actions/checkout@v5
+      with:
+        persist-credentials: false
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v6
       with:
@@ -189,6 +201,8 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@v6
         with:
           python-version: "3.13"
@@ -202,6 +216,8 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@v6
         with:
           python-version: "3.13"
@@ -260,6 +276,6 @@ jobs:
       - dependencies
     runs-on: ubuntu-24.04
     steps:
-      - uses: re-actors/alls-green@release/v1
+      - uses: re-actors/alls-green@05ac9388f0aebcb5727afa17fcccfecd6f8ec5fe # v1.2.2
         with:
           jobs: ${{ toJSON(needs) }}
