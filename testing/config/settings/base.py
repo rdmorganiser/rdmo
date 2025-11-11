@@ -115,6 +115,12 @@ PROJECT_IMPORTS = [
 PROJECT_IMPORTS_LIST = ['url']
 
 PLUGINS = [
+    # rdmo plugins
+    'rdmo.projects.exports.RDMOXMLExport',
+    'rdmo.projects.exports.CSVCommaExport',
+    'rdmo.projects.exports.CSVSemicolonExport',
+    'rdmo.projects.exports.JSONExport',
+    # testing plugins
     'plugins.optionset_providers.providers.SimpleProvider',
     'plugins.project_issue_providers.providers.SimpleIssueProvider',
     'plugins.project_export.exports.SimpleExportPlugin',
