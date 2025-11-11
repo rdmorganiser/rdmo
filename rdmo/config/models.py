@@ -6,13 +6,15 @@ from django.db import models
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.config.plugins import detect_plugin_type
+from rdmo.config.managers import PluginManager
 from rdmo.core.models import Model, TranslationMixin
 from rdmo.core.utils import join_url
 from rdmo.questions.models import Catalog
 
 
 class Plugin(Model, TranslationMixin):
+
+    objects = PluginManager()
 
     uri = models.URLField(
         max_length=800, blank=True, default="",
@@ -162,6 +164,7 @@ class Plugin(Model, TranslationMixin):
             plugin_class = self.get_class()
         except Exception as e:
             return e.__class__.__qualname__.lower()
+        from rdmo.config.plugins import detect_plugin_type
         return detect_plugin_type(plugin_class)
 
     @classmethod
