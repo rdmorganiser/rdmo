@@ -23,6 +23,8 @@ class PluginSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
     warning = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()
 
+    plugin_type = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = Plugin
         fields = (
@@ -35,6 +37,8 @@ class PluginSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
             'locked',
             'order',
             'available',
+            'python_path',
+            'plugin_type',
             'catalogs',
             'sites',
             'editors',
@@ -57,6 +61,8 @@ class PluginSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
             'title',
         )
 
+    def get_plugin_type(self, obj):
+        return obj.plugin_type
 
 class PluginIndexSerializer(serializers.ModelSerializer):
 

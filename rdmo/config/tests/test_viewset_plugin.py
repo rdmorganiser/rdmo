@@ -84,7 +84,8 @@ def test_create(db, client, username, password):
             'title_en': instance.title_lang1,
             'title_de': instance.title_lang2,
             'help_en': instance.help_lang1,
-            'help_de': instance.help_lang2
+            'help_de': instance.help_lang2,
+            'python_path': instance.python_path,
         }
         response = client.post(url, data)
         assert response.status_code == status_map['create'][username], response.json()
@@ -104,7 +105,8 @@ def test_update(db, client, username, password):
             'title_en': instance.title_lang1,
             'title_de': instance.title_lang2,
             'help_en': instance.help_lang1,
-            'help_de': instance.help_lang2
+            'help_de': instance.help_lang2,
+            'python_path': instance.python_path,
         }
         response = client.put(url, data, content_type='application/json')
         assert response.status_code == status_map['update'][username], response.json()
