@@ -83,44 +83,42 @@ PROJECT_SEND_ISSUE = True
 
 PROJECT_SEND_INVITE = True
 
-INSTALLED_APPS += [
-    'plugins',
-]
-
-PROJECT_SNAPSHOT_EXPORTS = [
-    ('xml', _('RDMO XML'), 'plugins.project_export.exports.SimpleExportPlugin'),
-]
-
-PROJECT_SNAPSHOT_EXPORTS = [
-    ('xml', _('RDMO XML'), 'plugins.project_snapshot_export.exports.SimpleSnapshotExportPlugin'),
-]
-
 EMAIL_RECIPIENTS_CHOICES = [
     ('email@example.com', 'Emmi Email <email@example.com>'),
 ]
 EMAIL_RECIPIENTS_INPUT = True
 
-OPTIONSET_PROVIDERS = [
+OPTIONSET_PROVIDERS = [  # deprecated in 2.5
     ('simple', _('Simple provider'), 'plugins.optionset_providers.providers.SimpleProvider')
 ]
 
-PROJECT_ISSUE_PROVIDERS = [
+PROJECT_SNAPSHOT_EXPORTS = [  # deprecated in 2.5
+    ('xml', _('RDMO XML'), 'rdmo.projects.exports.RDMOXMLExport'),
+]
+
+PROJECT_ISSUE_PROVIDERS = [  # deprecated in 2.5
     ('simple', _('Simple provider'), 'plugins.project_issue_providers.providers.SimpleIssueProvider')
 ]
 
-PROJECT_IMPORTS = [
-    ('url', _('from URL'), 'plugins.project_import.imports.SimpleImportPlugin'),
+PROJECT_IMPORTS = [  # deprecated in 2.5
+    ('xml', _('RDMO XML'), 'rdmo.projects.imports.RDMOXMLImport'),
+    ('url', _('from URL'), 'rdmo.projects.imports.URLImport'),
 ]
 
-PROJECT_IMPORTS_LIST = ['url']
+PROJECT_IMPORTS_LIST = ['url']  # deprecated in 2.5
 
-PLUGINS = [
-    # rdmo plugins
+INSTALLED_APPS += [
+    'plugins',
+]
+
+PLUGINS = [  # introduced in 2.5
+    # internal rdmo plugins
     'rdmo.projects.exports.RDMOXMLExport',
     'rdmo.projects.exports.CSVCommaExport',
     'rdmo.projects.exports.CSVSemicolonExport',
     'rdmo.projects.exports.JSONExport',
-    # testing plugins
+    'rdmo.projects.imports.RDMOXMLImport',
+    # external rdmo/testing/plugins
     'plugins.optionset_providers.providers.SimpleProvider',
     'plugins.project_issue_providers.providers.SimpleIssueProvider',
     'plugins.project_export.exports.SimpleExportPlugin',
