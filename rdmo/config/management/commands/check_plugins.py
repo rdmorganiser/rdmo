@@ -11,10 +11,11 @@ class Command(BaseCommand):
         if not Plugin.objects.exists():
             self.stdout.write(self.style.SUCCESS("No plugins found."))
 
-        for plugin in Plugin.objects.all():
+        for plugin in Plugin.objects.order_by('python_path').all():
             try:
                 import_string(plugin.python_path)
-                self.stdout.write(self.style.SUCCESS(f"✔ {plugin.python_path}, type={plugin.plugin_type}. OK"))
+                url_name = f" url_name='{plugin.url_name}'" if plugin.url_name else ""
+                self.stdout.write(self.style.SUCCESS(f"✔ {plugin.python_path}, type={plugin.plugin_type}{url_name}."))
             except Exception as e:
                 if plugin.available:
                     self.stdout.write(self.style.ERROR(
