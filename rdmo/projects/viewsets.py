@@ -21,6 +21,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from rdmo.conditions.models import Condition
+from rdmo.config.plugin_resolver import list_and_filter_plugins
 from rdmo.core.permissions import HasModelPermission
 from rdmo.core.utils import human2bytes, is_truthy, return_file_response
 from rdmo.options.models import OptionSet
@@ -391,12 +392,13 @@ class ProjectViewSet(ModelViewSet):
 
     @action(detail=False, permission_classes=(IsAuthenticated, ))
     def imports(self, request):
+        plugins = list_and_filter_plugins(plugin_type="project_import", user=request.user)
         return Response([{
-            'key': key,
-            'label': label,
-            'class_name': class_name,
-            'href': reverse('project_create_import', args=[key])
-        } for key, label, class_name in settings.PROJECT_IMPORTS if key in settings.PROJECT_IMPORTS_LIST] )
+            "key": plugin.uri_path,
+            "label": plugin.title,
+            "class_name": plugin.python_path,
+            "href": reverse('project_create_import', args=[plugin.url_name]),
+        } for plugin in plugins])
 
     def perform_create(self, serializer):
         project = serializer.save(site=get_current_site(self.request))
