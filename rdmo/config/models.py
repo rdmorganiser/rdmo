@@ -134,8 +134,7 @@ class Plugin(Model, TranslationMixin):
         help_text=_("Contains the settings for this plugin in JSON format."),
     )
     url_name = models.SlugField(
-        blank=True,
-        max_length=128,
+        max_length=128, blank=True, default="",
         verbose_name=_('URL name'),
         help_text=_('The url_name for this plugin.')
     )
