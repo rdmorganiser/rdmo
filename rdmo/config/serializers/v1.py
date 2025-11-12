@@ -33,12 +33,14 @@ class PluginSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
             'uri',
             'uri_prefix',
             'uri_path',
+            'url_name',
             'comment',
             'locked',
             'order',
             'available',
             'python_path',
             'plugin_type',
+            'plugin_settings',
             'catalogs',
             'sites',
             'editors',
@@ -61,7 +63,7 @@ class PluginSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
             'title',
         )
 
-    def get_plugin_type(self, obj):
+    def get_plugin_type(self, obj) -> str:
         return obj.plugin_type
 
 class PluginIndexSerializer(serializers.ModelSerializer):
