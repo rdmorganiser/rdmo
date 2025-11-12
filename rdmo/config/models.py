@@ -133,9 +133,15 @@ class Plugin(Model, TranslationMixin):
         verbose_name=_("Plugin settings"),
         help_text=_("Contains the settings for this plugin in JSON format."),
     )
+    url_name = models.SlugField(
+        blank=True,
+        max_length=128,
+        verbose_name=_('URL name'),
+        help_text=_('The url_name for this plugin.')
+    )
 
     class Meta:
-        ordering = ('uri', )
+        ordering = ('uri', 'order')
         verbose_name = _('Plugin')
         verbose_name_plural = _('Plugins')
 
