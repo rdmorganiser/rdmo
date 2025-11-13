@@ -288,7 +288,7 @@ class ProjectViewSet(ModelViewSet):
     def answers(self, request, pk=None):
         project = self.get_object()
         project.catalog.prefetch_elements()
-        return Response(project.get_answer_tree())
+        return Response(project.get_answer_tree(verbose=request.GET.getlist('verbose')))
 
     @action(detail=True, methods=['get', 'post'],
             permission_classes=(HasProjectProgressModelPermission | HasProjectProgressObjectPermission, ))

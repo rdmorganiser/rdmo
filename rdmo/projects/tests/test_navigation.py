@@ -68,6 +68,7 @@ def test_compute_navigation(db, section_uri):
             count, total = result_map[section['uri']]
             assert section['count'] == count, section['uri']
             assert section['total'] == total, section['uri']
+            assert 'title' in section  # test for verbose
 
         if 'pages' in section:
             for page in section['pages']:
@@ -84,3 +85,4 @@ def test_compute_navigation(db, section_uri):
                 assert page['count'] == count, page['uri']
                 assert page['total'] == total, page['uri']
                 assert page['show'] == show, page['uri']
+                assert 'title' in  page  # test for verbose, help is filtered out

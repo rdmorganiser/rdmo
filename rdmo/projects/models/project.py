@@ -146,10 +146,11 @@ class Project(MPTTModel, Model):
             # membership_list does not exist
             return self.user.filter(memberships__role=role)
 
-    def get_answer_tree(self, snapshot=None):
+    def get_answer_tree(self, snapshot=None, verbose=None):
         return AnswerTree(
             self.catalog,
-            self.values.filter(snapshot=snapshot).select_related('attribute', 'option')
+            self.values.filter(snapshot=snapshot).select_related('attribute', 'option'),
+            verbose=verbose
         ).compute()
 
 

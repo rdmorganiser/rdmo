@@ -1,7 +1,8 @@
 def compute_navigation(project, section):
     # compute navigation from answer tree
     navigation = []
-    answer_tree = project.get_answer_tree()
+    answer_tree = project.get_answer_tree(verbose=('section', 'page'))
+
     for section_node in answer_tree['elements']:
         navigation_section = {
             key: section_node.get(key)

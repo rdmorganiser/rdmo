@@ -1,14 +1,16 @@
 from collections import defaultdict
 
 from rdmo.core.utils import markdown2html
-from rdmo.questions.models import Catalog, Page, Question, QuestionSet, Section
+
+from .models.value import Value
 
 
 class AnswerTree:
 
-    def __init__(self, catalog, values):
+    def __init__(self, catalog, values, verbose=None):
         self.catalog = catalog
         self.values = values
+        self.verbose = tuple(verbose or ())
 
         self.sets = values.compute_sets()
         self.conditions = catalog.conditions.in_bulk()
@@ -26,19 +28,38 @@ class AnswerTree:
 
     def compute_element_node(self, element, parent_set=None):
         # recursive function, which will be called for each element
+        element_type = element._meta.model_name
+
         element_node = {
             'id': element.id,
-            'uri': element.uri,
             'model': element._meta.label_lower,
-            'show': True
+            'show': True,  # init show flag
         }
 
-        if isinstance(element, (Section, Page)):
-            element_node['title'] = markdown2html(element.short_title or element.title)
+        if element_type in self.verbose:
+            # optionally, add the rendered title, help and texts
+            element_node.update({
+                'uri': element.uri
+            })
 
-        if isinstance(element, (Page, QuestionSet, Question)):
+            if element_type in ['catalog', 'page', 'questionset']:
+                element_node.update({
+                    'title': markdown2html(element.title),
+                    'help': markdown2html(element.help)
+                })
+            elif element_type == 'section':
+                element_node.update({
+                    'title': markdown2html(element.title)
+                })
+            elif element_type == 'question':
+                element_node.update({
+                    'text': markdown2html(element.text),
+                    'help': markdown2html(element.help)
+                })
+
+        if element_type in ('page', 'questionset', 'question'):
+            # for pages, questionsets and questions evaluate conditions
             if element.has_conditions:
-                # for pages, questionsets and questions evaluate conditions
                 result = self.resolve_conditions(element, parent_set)
 
                 # if the element is not shown, break the recursion
@@ -49,7 +70,7 @@ class AnswerTree:
 
                     return element_node
 
-        if isinstance(element, (Catalog, Section)):
+        if element_type in ('catalog', 'section'):
             # for catalogs and sections we recurse to the next level of elements (sections, pages)
             element_node['elements'] = [
                 self.compute_element_node(child_element)
@@ -57,14 +78,14 @@ class AnswerTree:
             ]
 
             # find the first element
-            element_node['first'] = element_node['elements'][0]['id']
+            if element_type in self.verbose:
+                element_node['first'] = element_node['elements'][0]['id']
 
             # aggregate count and total from the child elements
             element_node['count'] = sum(child_node['count'] for child_node in element_node['elements'])
             element_node['total'] = sum(child_node['total'] for child_node in element_node['elements'])
 
-        elif isinstance(element, (Page, QuestionSet)):
-
+        elif element_type in ('page', 'questionset'):
             # for pages and questionsets we first compute the sets for the element ...
             element_sets = self.compute_element_sets(element, parent_set)
 
@@ -78,10 +99,9 @@ class AnswerTree:
             element_node['count'] = sum(set_node['count'] for set_node in element_node['sets'])
             element_node['total'] = sum(set_node['total'] for set_node in element_node['sets'])
 
-        elif isinstance(element, Question):
+        elif element_type == 'question':
             # for questions we add the text and the values and compute if this question
             # can be considered empty, meaning it has no or only empty values
-            element_node['text'] = element.text
             element_node['values'] = self.compute_element_values(element, parent_set)
             element_node['is_empty'] = all(value['is_empty'] for value in element_node['values'])
 
@@ -171,21 +191,23 @@ class AnswerTree:
         if element_values:
             # if there are values, return them
             return [
-                {
-                    'id': value.id,
-                    'is_empty': value.is_empty,
-                    'collection_index': value.collection_index
-                }
+                self.compute_value_node(value)
                 for value in element_values
             ]
         else:
             # if no value is present, create one empty value
             return [
-                {
-                    'is_empty': True,
-                    'collection_index': 0
-                }
+                self.compute_value_node(Value())
             ]
+
+    def compute_value_node(self, value=None):
+        if 'value' in self.verbose:
+            return value.as_dict
+        else:
+            return {
+                'collection_index': value.collection_index,
+                'is_empty': value.is_empty
+            }
 
     def resolve_conditions(self, element, parent_set):
         # cache each resolved condition in self.resolved_conditions
