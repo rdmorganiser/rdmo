@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 
 import Dashboard from './pages/Dashboard'
 // import Interview from '../pages/Interview'
-// import Documents from '../pages/Documents'
+import Documents from './pages/Documents'
 import Snapshots from './pages/Snapshots'
 import Membership from './pages/Membership'
 import ProjectData from './pages/ProjectData'
@@ -35,8 +35,8 @@ const ProjectPage = () => {
       return <Dashboard />
     // case 'interview':
     //   return <Interview />
-    // case 'documents':
-    //   return <Documents />
+    case 'documents':
+      return <Documents />
     case 'snapshots':
       return <Snapshots />
     case 'project-information':

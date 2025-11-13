@@ -80,6 +80,10 @@ export default function configureStore() {
       if (permissions.can_view_invite) {
         store.dispatch(projectActions.fetchProjectInvites(projectId))
       }
+      const views = projectObj.project.project.views || []
+      if (views && views.length > 0) {
+        store.dispatch(projectActions.fetchProjectViews(views))
+      }
     })
   })
 
