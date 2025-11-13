@@ -32,10 +32,6 @@ export default class ProjectApi extends BaseApi {
     return this.get(`/api/v1/projects/projects/${projectId}/invites/`)
   }
 
-  static fetchViews() {
-    return this.get('/api/v1/projects/views/views/')
-  }
-
   static fetchProjects(params) {
     return this.get(`/api/v1/projects/projects/?${encodeParams(params)}`)
   }
@@ -74,5 +70,17 @@ export default class ProjectApi extends BaseApi {
 
   static deleteInvite(projectId, inviteId) {
     return this.delete(`/api/v1/projects/projects/${projectId}/invites/${inviteId}/`)
+  }
+
+  static createSnapshot(projectId, data) {
+    return this.post(`/api/v1/projects/projects/${projectId}/snapshots/`, data)
+  }
+
+  static updateSnapshot(projectId, snapshotId, data) {
+    return this.put(`/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/`, data)
+  }
+
+  static rollbackSnapshot(projectId, snapshotId, data) {
+    return this.post(`/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/rollback`, data)
   }
 }
