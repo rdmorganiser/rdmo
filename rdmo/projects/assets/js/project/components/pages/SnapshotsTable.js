@@ -1,39 +1,30 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import { useFormattedDateTime } from 'rdmo/core/assets/js/hooks'
 import { language } from 'rdmo/core/assets/js/utils'
 
+import { useModal } from 'rdmo/core/assets/js/hooks'
 
-// import { useModal } from 'rdmo/core/assets/js/hooks'
-
-// import Select from 'rdmo/core/assets/js/components/Select'
-
-// import { updateProjectMember, updateProjectInvite } from '../../actions/projectActions'
-
-// import MembershipDeleteModal from './MembershipDeleteModal'
+import SnapshotModal from './SnapshotModal'
 
 const SnapshotsTable = ({ snapshots }) => {
-  // const dispatch = useDispatch()
-  // const currentUser = useSelector((state) => state.user.currentUser)
   const { project } = useSelector((state) => state.project.project) || {}
   const perms = project?.permissions || {}
-  console.log('perms', perms)
 
-  // const { show: showConfirm, open: openConfirm, close: closeConfirm } = useModal()
-  // const [modalState, setModalState] = useState(null)
+  const { show: showUpdate, open: openUpdate, close: closeUpdate } = useModal()
+  // const { show: showRollback, open: openRollback, close: closeRollback } = useModal()
+  const [selectedSnapshot, setSelectedSnapshot] = useState(null)
 
-  // const isAdminOrSiteManager = currentUser?.is_superuser || currentUser?.is_site_manager
+  const openUpdateModal = (snapshot) => {
+    setSelectedSnapshot(snapshot)
+    openUpdate()
+  }
 
-  // const openDeleteModal = (person, isCurrentUser) => {
-  //   setModalState({ person, isCurrentUser })
-  //   openConfirm()
-  // }
-
-  // const closeDeleteModal = () => {
-  //   setModalState(null)
-  //   closeConfirm()
-  // }
+  const closeUpdateModal = () => {
+    setSelectedSnapshot(null)
+    closeUpdate()
+  }
 
   return (
     <div>
@@ -47,10 +38,9 @@ const SnapshotsTable = ({ snapshots }) => {
           </tr>
         </thead>
         <tbody>
-          {snapshots?.map((snapshot, index) => {
-
+          {snapshots?.map((snapshot) => {
             return (
-              <tr key={index}>
+              <tr key={snapshot.id}>
                 <td>{snapshot.title}</td>
                 <td>
                   {snapshot.description}
@@ -65,12 +55,10 @@ const SnapshotsTable = ({ snapshots }) => {
                       className="btn btn-link p-0"
                       aria-label={gettext('View answers')}
                       title={gettext('View answers')}
-                    // onClick={() => openDeleteModal(person, isCurrentUser)}
                     >
                       <i
                         className={'bi bi-eye'}
-                        aria-hidden="true"
-                      />
+                        aria-hidden="true" />
                     </button>
                   )}
                   {perms.can_change_snapshot && (
@@ -79,12 +67,11 @@ const SnapshotsTable = ({ snapshots }) => {
                       className="btn btn-link p-0"
                       aria-label={gettext('Update snapshot')}
                       title={gettext('Update snapshot')}
-                    // onClick={() => openDeleteModal(person, isCurrentUser)}
+                      onClick={() => openUpdateModal(snapshot)}
                     >
                       <i
                         className={'bi bi-pencil'}
-                        aria-hidden="true"
-                      />
+                        aria-hidden="true" />
                     </button>
                   )}
                   {perms.can_rollback_snapshot && (
@@ -93,12 +80,11 @@ const SnapshotsTable = ({ snapshots }) => {
                       className="btn btn-link p-0"
                       aria-label={gettext('Rollback to snapshot')}
                       title={gettext('Rollback to snapshot')}
-                    // onClick={() => openDeleteModal(person, isCurrentUser)}
+                    // onClick={() => openRollback()}
                     >
                       <i
                         className={'bi bi-reply-fill'}
-                        aria-hidden="true"
-                      />
+                        aria-hidden="true" />
                     </button>
                   )}
                 </td>
@@ -107,6 +93,11 @@ const SnapshotsTable = ({ snapshots }) => {
           })}
         </tbody>
       </table>
+      {
+        selectedSnapshot && (
+          <SnapshotModal show={showUpdate} onClose={closeUpdateModal} snapshot={selectedSnapshot} />
+        )
+      }
     </div>
   )
 }
