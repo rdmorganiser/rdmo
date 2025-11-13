@@ -10,7 +10,7 @@ class AnswerTree:
     def __init__(self, catalog, values, verbose=None):
         self.catalog = catalog
         self.values = values
-        self.verbose = verbose if verbose is not None else []
+        self.verbose = set(verbose or [])
 
         self.sets = values.compute_sets()
         self.conditions = catalog.conditions.in_bulk()
@@ -28,38 +28,18 @@ class AnswerTree:
 
     def compute_element_node(self, element, parent_set=None):
         # recursive function, which will be called for each element
-        element_model = element._meta.label_lower
-        _, element_type = element_model.split('.')
+        element_type = element._meta.model_name
 
         element_node = {
             'id': element.id,
-            'model': element_model
+            'model': element._meta.label_lower,
+            'show': True,  # init show flag
         }
 
-        if element_type in self.verbose:
-            element_node.update({
-                'uri': element.uri
-            })
+        if element_type in self.verbose:  # optionally, add the rendered title, help and texts
+            self.add_verbose_fields(element_type, element, element_node)
 
-            if element_type in ['catalog', 'page', 'questionset']:
-                element_node.update({
-                    'title': markdown2html(element.title),
-                    'help': markdown2html(element.help)
-                })
-            elif element_type == 'section':
-                element_node.update({
-                    'title': markdown2html(element.title)
-                })
-            elif element_type == 'question':
-                element_node.update({
-                    'text': markdown2html(element.text),
-                    'help': markdown2html(element.help)
-                })
-
-        # init show flag
-        element_node['show'] = True
-
-        if element_type in ['page', 'questionset', 'question']:
+        if element_type in {'page', 'questionset', 'question'}:
             if element.has_conditions:
                 # for pages, questionsets and questions evaluate conditions
                 result = self.resolve_conditions(element, parent_set)
@@ -72,7 +52,7 @@ class AnswerTree:
 
                     return element_node
 
-        if element_type in ['catalog', 'section']:
+        if element_type in {'catalog', 'section'}:
             # for catalogs and sections we recurse to the next level of elements (sections, pages)
             element_node['elements'] = [
                 self.compute_element_node(child_element)
@@ -87,7 +67,7 @@ class AnswerTree:
             element_node['count'] = sum(child_node['count'] for child_node in element_node['elements'])
             element_node['total'] = sum(child_node['total'] for child_node in element_node['elements'])
 
-        elif element_type in ['page', 'questionset']:
+        elif element_type in {'page', 'questionset'}:
             # for pages and questionsets we first compute the sets for the element ...
             element_sets = self.compute_element_sets(element, parent_set)
 
@@ -119,6 +99,25 @@ class AnswerTree:
                 element_node['total'] = 1 if element_node['values'] else 0
 
         return element_node
+
+    def add_verbose_fields(self, element_type, element, element_node):
+        element_node.update({
+            'ui': element.uri
+        })
+        if element_type in {'catalog', 'page', 'questionset'}:
+            element_node.update({
+                'title': markdown2html(element.title),
+                'help': markdown2html(element.help)
+            })
+        elif element_type == 'section':
+            element_node.update({
+                'title': markdown2html(element.title)
+            })
+        elif element_type == 'question':
+            element_node.update({
+                'text': markdown2html(element.text),
+                'help': markdown2html(element.help)
+            })
 
     def compute_set_node(self, element, element_set):
         # recursive function, which will be called for each set in pages and questionsets
