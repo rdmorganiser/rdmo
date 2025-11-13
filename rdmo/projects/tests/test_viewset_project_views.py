@@ -37,10 +37,33 @@ export_formats = ['html']
 
 urlnames = {
     'views': 'v1-projects:project-views',
-    'views-snapshot': 'v1-projects:project-views-snapshot',
-    'views-export': 'v1-projects:project-views-export',
-    'views-export-snapshot': 'v1-projects:project-views-export-snapshot',
+    'view': 'v1-projects:project-view',
+    'view-snapshot': 'v1-projects:project-view-snapshot',
+    'view-export': 'v1-projects:project-view-export',
+    'view-export-snapshot': 'v1-projects:project-view-export-snapshot',
 }
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
+def test_views(db, client, username, password, project_id):
+    client.login(username=username, password=password)
+    project = Project.objects.get(pk=project_id)
+    project_views = list(project.views.values_list('id', flat=True))
+
+    url = reverse(urlnames['views'], args=[project_id])
+    response = client.get(url)
+
+    if project_id in view_project_permission_map.get(username, []):
+        assert response.status_code == 200
+        assert isinstance(response.json(), list)
+        assert [item['id'] for item in response.json()] == project_views
+    else:
+        if password:
+            assert response.status_code == 404
+        else:
+            assert response.status_code == 401
+
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
@@ -50,7 +73,7 @@ def test_view(db, client, username, password, project_id, view_id):
     project = Project.objects.get(pk=project_id)
     project_views = list(project.views.values_list('id', flat=True))
 
-    url = reverse(urlnames['views'], args=[project_id, view_id])
+    url = reverse(urlnames['view'], args=[project_id, view_id])
     response = client.get(url)
 
     if project_id in view_project_permission_map.get(username, []) and view_id in project_views:
@@ -71,7 +94,7 @@ def test_view_snapshot(db, client, username, password, snapshot_id, view_id):
     snapshot = Snapshot.objects.get(pk=snapshot_id)
     project_views = list(snapshot.project.views.values_list('id', flat=True))
 
-    url = reverse(urlnames['views-snapshot'], args=[snapshot.project.id, snapshot_id, view_id])
+    url = reverse(urlnames['view-snapshot'], args=[snapshot.project.id, snapshot_id, view_id])
     response = client.get(url)
 
     if snapshot.project.id in view_project_permission_map.get(username, []) and view_id in project_views:
@@ -93,7 +116,7 @@ def test_view_export(db, client, username, password, project_id, view_id, export
     project = Project.objects.get(pk=project_id)
     project_views = list(project.views.values_list('id', flat=True))
 
-    url = reverse(urlnames['views-export'], args=[project_id, view_id, export_format])
+    url = reverse(urlnames['view-export'], args=[project_id, view_id, export_format])
     response = client.get(url)
 
     if project_id in view_project_permission_map.get(username, []) and view_id in project_views:
@@ -114,7 +137,7 @@ def test_view_snapshot_export(db, client, username, password, snapshot_id, view_
     snapshot = Snapshot.objects.get(pk=snapshot_id)
     project_views = list(snapshot.project.views.values_list('id', flat=True))
 
-    url = reverse(urlnames['views-export-snapshot'], args=[snapshot.project.id, snapshot_id, view_id, export_format])
+    url = reverse(urlnames['view-export-snapshot'], args=[snapshot.project.id, snapshot_id, view_id, export_format])
     response = client.get(url)
 
     if snapshot.project.id in view_project_permission_map.get(username, []) and view_id in project_views:

@@ -9,9 +9,11 @@ from rest_framework import serializers
 
 from rdmo.accounts.serializers.v1 import UserLookupSerializer
 from rdmo.accounts.utils import get_full_name
+from rdmo.core.serializers import TranslationSerializerMixin
 from rdmo.domain.models import Attribute
 from rdmo.questions.models import Catalog
 from rdmo.services.validators import ProviderValidator
+from rdmo.views.models import View
 
 from ...models import (
     Integration,
@@ -561,6 +563,17 @@ class ProjectValueSerializer(serializers.ModelSerializer):
         )
 
 
+class ProjectViewsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = View
+        fields = (
+            'id',
+            'title',
+            'help'
+        )
+
+
 class ProjectAttachmentSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -574,13 +587,34 @@ class ProjectAttachmentSerializer(serializers.ModelSerializer):
         )
 
 
-class ProjectViewSerializer(serializers.Serializer):
+class ProjectAnswersSerializer(serializers.Serializer):
 
-    project = serializers.PrimaryKeyRelatedField(read_only=True)
-    snapshot = serializers.PrimaryKeyRelatedField(read_only=True)
-    view = serializers.PrimaryKeyRelatedField(read_only=True)
     html = serializers.CharField(read_only=True)
     attachments = ProjectAttachmentSerializer(many=True, read_only=True)
+
+
+class ProjectViewSerializer(serializers.ModelSerializer):
+
+    html = serializers.SerializerMethodField()
+    attachments = serializers.SerializerMethodField()
+
+    class Meta:
+        model = View
+        fields = (
+            'id',
+            'title',
+            'help',
+            'html',
+            'attachments'
+        )
+
+    def get_html(self, obj):
+        return self.context.get('html', '')
+
+    def get_attachments(self, obj):
+        attachments = self.context.get('attachments', [])
+        serializer = ProjectAttachmentSerializer(attachments, many=True, read_only=True)
+        return serializer.data
 
 
 class MembershipSerializer(serializers.ModelSerializer):
