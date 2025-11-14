@@ -93,16 +93,19 @@ const Documents = () => {
           </span>
         )}
       </header>
-      <div className="container-fluid">
-        <div className="row">
-          {projectViews.map((view, index) => (
-            // <Tile key={index} size={projectViews.length <= 8 ? 'normal' : 'compact'}>
-            <Tile key={index} size={'normal'}>
-              {renderView(view)}
-            </Tile>
-          ))}
-        </div>
-      </div >
+      {projectViews.length > 0 && (
+        <div className="container-fluid">
+          <h6 className="mb-3">{gettext('Data management plans')}</h6>
+          <div className="row">
+            {projectViews.map((view, index) => (
+              // <Tile key={index} size={projectViews.length <= 8 ? 'normal' : 'compact'}>
+              <Tile key={index} size={'normal'}>
+                {renderView(view)}
+              </Tile>
+            ))}
+          </div>
+        </div >
+      )}
       {'Work in progress: Documents Page '}
     </>
   )
