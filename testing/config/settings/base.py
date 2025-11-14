@@ -88,27 +88,8 @@ EMAIL_RECIPIENTS_CHOICES = [
 ]
 EMAIL_RECIPIENTS_INPUT = True
 
-OPTIONSET_PROVIDERS = [  # deprecated in 2.5
-    ('simple', _('Simple provider'), 'plugins.optionset_providers.providers.SimpleProvider')
-]
-
-PROJECT_SNAPSHOT_EXPORTS = [  # deprecated in 2.5
-    ('xml', _('RDMO XML'), 'rdmo.projects.exports.RDMOXMLExport'),
-]
-
-PROJECT_ISSUE_PROVIDERS = [  # deprecated in 2.5
-    ('simple', _('Simple provider'), 'plugins.project_issue_providers.providers.SimpleIssueProvider')
-]
-
-PROJECT_IMPORTS = [  # deprecated in 2.5
-    ('xml', _('RDMO XML'), 'rdmo.projects.imports.RDMOXMLImport'),
-    ('url', _('from URL'), 'rdmo.projects.imports.URLImport'),
-]
-
-PROJECT_IMPORTS_LIST = ['url']  # deprecated in 2.5
-
 INSTALLED_APPS += [
-    'plugins',
+    'plugins',  # introduced in 2.5, rdmo/testing/plugins
 ]
 
 PLUGINS = [  # introduced in 2.5
@@ -118,14 +99,13 @@ PLUGINS = [  # introduced in 2.5
     'rdmo.projects.exports.CSVSemicolonExport',
     'rdmo.projects.exports.JSONExport',
     'rdmo.projects.imports.RDMOXMLImport',
-    # external rdmo/testing/plugins
-    'plugins.optionset_providers.providers.SimpleProvider',
+    # rdmo/testing/plugins
+    'plugins.optionset_providers.providers.SimpleProvider',  # here or in app/test
     'plugins.project_issue_providers.providers.SimpleIssueProvider',
     'plugins.project_export.exports.SimpleExportPlugin',
     'plugins.project_snapshot_export.exports.SimpleSnapshotExportPlugin',
     'plugins.project_import.imports.SimpleImportPlugin',
 ]
-
 
 PROJECT_VALUES_VALIDATION = True
 
