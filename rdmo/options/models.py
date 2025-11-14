@@ -64,6 +64,11 @@ class OptionSet(models.Model):
         verbose_name=_('Conditions'),
         help_text=_('The list of conditions evaluated for this option set.')
     )
+    plugins = models.ManyToManyField(  # can not import Plugin due to circular import
+        'config.Plugin', blank=True, related_name='optionsets',
+        verbose_name=_('Plugins'),
+        help_text=_('The list of plugins evaluated for this option set.')
+    )
 
     class Meta:
         ordering = ('uri', )
