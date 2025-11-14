@@ -27,12 +27,11 @@ log = logging.getLogger(__name__)
 
 class Import(Plugin):
 
+    plugin_type = 'project_import'
     accept = None
     upload = True
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
         self.file_name = None
         self.source_title = None
         self.current_project = None
