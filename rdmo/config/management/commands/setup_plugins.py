@@ -6,11 +6,11 @@ from django.db import transaction
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 
+from rdmo.config.helpers import DeclaredPlugin
+from rdmo.config.legacy import get_plugins_from_legacy_settings
 from rdmo.config.models import Plugin
 from rdmo.config.plugin_resolver import (
-    DeclaredPlugin,
     get_plugins_from_current_setting,
-    get_plugins_from_legacy_settings,
 )
 
 
@@ -65,10 +65,14 @@ def save_declared_plugin(declared: DeclaredPlugin, *, replace: bool, dry_run: bo
 
     uri_path = declared.uri_path or declared.url_name
 
-    plugin, created = Plugin.objects.get_or_create(uri_prefix=uri_prefix, uri_path=uri_path)
-
-    if not created and not replace:
-        return plugin, f"skipped(exists): {plugin.python_path} -> {plugin.uri}"
+    try:
+        plugin = Plugin.objects.get(uri_prefix=uri_prefix, uri_path=uri_path)
+        exists = True
+        if not replace:
+            return plugin, f"skipped(exists): {plugin.python_path} -> {plugin.uri}"
+    except Plugin.DoesNotExist:
+        plugin = Plugin(uri_prefix=uri_prefix, uri_path=uri_path)
+        exists = False
 
     plugin.title_lang1 = declared.title
     plugin.python_path = declared.python_path
@@ -76,7 +80,7 @@ def save_declared_plugin(declared: DeclaredPlugin, *, replace: bool, dry_run: bo
         plugin.url_name = declared.url_name
     plugin.available = True
 
-    action = "replaced" if (not created and replace) else ("created" if created else "updated")
+    action = "replaced" if (exists and replace) else ("created" if not exists else "updated")
     if dry_run:
         return None, f"{action} (dry-run): {declared.python_path} -> {uri_path}"
 
