@@ -2,7 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.core.plugins import get_plugin
+from rdmo.config.models import Plugin
 
 from ..managers import IntegrationManager
 
@@ -34,7 +34,13 @@ class Integration(models.Model):
 
     @property
     def provider(self):
-        return get_plugin('PROJECT_ISSUE_PROVIDERS', self.provider_key)
+        plugins = (
+            Plugin.objects
+            .for_context(plugin_type="issue_provider", project=self.project)
+            .filter(uri_path__contains=self.provider_key)
+        )
+        provider = plugins.first().initialize_class() if plugins else None
+        return provider
 
     def get_option_value(self, key):
         try:
