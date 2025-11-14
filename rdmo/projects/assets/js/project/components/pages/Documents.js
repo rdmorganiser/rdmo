@@ -30,9 +30,9 @@ const Documents = () => {
         <div className="flex-grow-1 d-flex flex-column">
           <div className="fw-bold mb-1">{view.title}</div>
 
-          {view.description && (
+          {view.help && (
             <div className="text-muted small mb-2">
-              {view.description}
+              {view.help}
             </div>
           )}
 
