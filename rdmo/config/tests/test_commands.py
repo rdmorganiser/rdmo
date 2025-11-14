@@ -1,6 +1,3 @@
-# tests/test_commands.py
-from __future__ import annotations
-
 import io
 import sys
 import types
@@ -75,8 +72,10 @@ def _install_dummy_plugin(monkeypatch, dotted: str = "dummy_mod.DummyPlugin", **
 
 
 def test_setup_plugins_dry_run_never_raises(db, settings, monkeypatch):
-    dotted = _install_dummy_plugin(monkeypatch, "dummy_mod.ExamplePlugin", key="example", label="Example")
-    settings.PLUGINS = [dotted]
+    dotted = _install_dummy_plugin(
+        monkeypatch, "dummy_mod.ExamplePlugin", key="monkeypatch_plugin", label="MonkeyPatchPlugin"
+    )
+    settings.PLUGINS += [dotted]
     count_before = Plugin.objects.count()
 
     stdout, stderr = io.StringIO(), io.StringIO()
@@ -107,9 +106,6 @@ def test_setup_plugins_merge_legacy_prioritizes_legacy_and_dedupes(db, settings,
 
 
 def test_setup_plugins_clear_with_dry_run_keeps_rows(db, settings, monkeypatch):
-    # create one row
-    call_command("setup_plugins", "--from-settings", stdout=io.StringIO(), stderr=io.StringIO())
-
     count_before = Plugin.objects.count()
     assert count_before >= 1
 
