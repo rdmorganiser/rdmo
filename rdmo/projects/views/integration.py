@@ -6,9 +6,9 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, DeleteView, UpdateView, View
 
-from rdmo.core.plugins import get_plugin
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 
+from ...config.models import Plugin
 from ..forms import IntegrationForm
 from ..models import Integration, Project
 
@@ -35,7 +35,12 @@ class IntegrationCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView
         return kwargs
 
     def get_context_data(self, **kwargs):
-        kwargs['provider'] = get_plugin('PROJECT_ISSUE_PROVIDERS', self.provider_key)
+        plugins = (
+            Plugin.objects
+                .for_context(plugin_type="issue_provider", project=self.project, user=self.request.user)
+                .filter(uri_path__contains=self.provider_key)
+       )
+        kwargs['provider'] = plugins.first().initialize_class() if plugins else None
         return super().get_context_data(**kwargs)
 
     def get_success_url(self):
