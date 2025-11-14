@@ -1,3 +1,5 @@
+from inspect import signature
+
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
@@ -186,7 +188,19 @@ class Plugin(Model, TranslationMixin):
             raise e from e
 
     def initialize_class(self):
-        return self.get_class()(self.uri_path, self.title, self.python_path)
+        cls = self.get_class()
+        if cls is None:
+            return None
+        sig = signature(cls)
+        if len(sig.parameters) == 0:
+            return cls()
+        if len(sig.parameters) == 2:
+            if sig.parameters['args'].name == 'args' and sig.parameters['kwargs'].name == 'kwargs':
+                return cls()
+        if len(sig.parameters) == 3:  # the legacy signature, should not be called anymore
+            key = self.url_name if self.url_name else self.uri_path
+            return cls(key, self.title, self.python_path)
+        raise ValueError(f'Could not initialize class {self.python_path} for {sig}')
 
     def clean(self):
         super().clean()
