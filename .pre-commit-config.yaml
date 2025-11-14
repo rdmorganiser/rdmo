@@ -49,6 +49,11 @@ repos:
             testing/.*.json|
             testing/.*.xml
         )$
+  - repo: https://github.com/zizmorcore/zizmor-pre-commit
+    rev: v1.16.3
+    hooks:
+    - id: zizmor
+      args: [--fix, --offline]
 ci:
   autoupdate_schedule: monthly
   autofix_prs: false

@@ -30,6 +30,8 @@ updates:
       patterns:
       - django*
       - drf*
+  cooldown:
+    default-days: 7
 - package-ecosystem: github-actions
   directory: /
   schedule:
@@ -44,6 +46,8 @@ updates:
     github-actions:
       patterns:
       - '*'
+  cooldown:
+    default-days: 7
 - package-ecosystem: npm
   directory: /
   schedule:
@@ -82,3 +86,5 @@ updates:
       dependency-type: production
     dev-dependencies:
       dependency-type: development
+  cooldown:
+    default-days: 7
