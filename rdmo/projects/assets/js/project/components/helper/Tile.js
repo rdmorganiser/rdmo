@@ -12,7 +12,7 @@ const Tile = ({ title, children, className = '', size = 'normal', style = 'norma
 
   return (
     <div className={`mb-4 ${sizeClasses[size]} ${className}`}>
-      {title && <h5 className="fw-bold mb-2">{title}</h5>}
+      {title && <h2 className="fw-bold mb-2">{title}</h2>}
 
       <div className={`card border-0 bg-white rounded-3 shadow-sm p-0 ${tileStyleClass}`}>
         <div className="card-body">{children}</div>
