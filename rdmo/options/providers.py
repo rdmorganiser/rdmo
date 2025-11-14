@@ -3,6 +3,8 @@ from rdmo.core.plugins import Plugin
 
 class Provider(Plugin):
 
+    plugin_type = 'optionset_provider'
+
     # determines if the provider supports "live searching" via autocomplete
     search = False
 

@@ -29,7 +29,10 @@ def detect_plugin_type(python_path) -> str:
         return "import_value_error"
 
     if hasattr(cls, "plugin_type"):
-        return cls.plugin_type
+        if cls.plugin_type:
+            return cls.plugin_type
+        else:
+            return "plugin_type_set_but_empty"
 
     if not issubclass(cls, LegacyPluginBase):
         return "not_an_rdmo_plugin"

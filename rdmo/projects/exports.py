@@ -16,9 +16,9 @@ from .serializers.export import SnapshotSerializer as SnapshotExportSerializer
 
 class Export(Plugin):
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    plugin_type = 'project_export'
 
+    def __init__(self, *args, **kwargs):
         self.project = None
         self.snapshot = None
 

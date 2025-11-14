@@ -9,6 +9,8 @@ from rdmo.services.providers import OauthProviderMixin
 
 class IssueProvider(Plugin):
 
+    plugin_type = 'issue_provider'
+
     def send_issue(self, request, issue, integration, subject, message, attachments):
         raise NotImplementedError
 
