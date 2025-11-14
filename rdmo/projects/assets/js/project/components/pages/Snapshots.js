@@ -15,8 +15,8 @@ const Snapshots = () => {
 
   return (
     <>
-      <header className="d-flex justify-content-between align-items-center mb-3">
-        <h5 className="mb-0">{gettext('Snapshots')}</h5>
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h2 className="mb-0">{gettext('Snapshots')}</h2>
         {perms.can_add_snapshot && (
           <>
             <button
@@ -29,7 +29,7 @@ const Snapshots = () => {
             </button>
           </>
         )}
-      </header>
+      </div>
       {
         !isEmpty(snapshots) && perms.can_view_snapshot && (
           <SnapshotsTable snapshots={snapshots} />

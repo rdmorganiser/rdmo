@@ -5,7 +5,7 @@ import { Tile } from '../helper'
 
 const Documents = () => {
   const { projectViews } = useSelector((state) => state.project) ?? {}
-  const { project } = useSelector((state) => state.project.project) ?? {}
+  const { project, snapshots } = useSelector((state) => state.project.project) ?? {}
   const perms = project?.permissions ?? {}
 
   // const renderView = (view) => {
@@ -56,46 +56,31 @@ const Documents = () => {
 
   return (
     <>
-      <header className="d-flex justify-content-between align-items-center mb-3">
-        <h5 className="mb-0">{gettext('Documents')}</h5>
-        {/* <button
-          type="button"
-          id="snapshot-select"
-          className="btn btn-link text-decoration-none"
-        // onClick={openSnapshotDropdown}
-        >
-          <i className="bi bi-plus" aria-hidden="true"></i> {gettext('Snapshots')}
-        </button> */}
-        {/* <span className="dropdown">
-              <button type="button" className="element-btn-link btn-link fa fa-plus" data-toggle="dropdown"
-                title={gettext('Create snapshot')} aria-label={gettext('Create snapshot')}>
-              </button>
-              <ul className="dropdown-menu">
-                <li onClick={() => null}>
-                  <Link href="" onClick={() => null}>{'dummy1'}</Link>
-                </li>
-                <li onClick={() => null}>
-                  <Link href="" onClick={() => null}>{'dummy2'}</Link>
-                </li>
-              </ul>
-            </span> */}
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h2 className="mb-0">{gettext('Documents')}</h2>
         {perms.can_view_snapshot && (
           <span className="dropdown">
-            <button
-              type="button"
-              id="snapshot-select"
-              className="btn btn-link text-decoration-none"
-              data-toggle="dropdown"
-            // onClick={openSnapshot}
-            >
-              {gettext('Snapshots')}
-            </button>
+            <button type="button" className="link link bi" data-bs-toggle="dropdown"
+              title={gettext('Snapshots')} aria-label={gettext('Snapshots')}>  {gettext('Snapshots')}</button>
+            <ul className="dropdown-menu dropdown-menu-end">
+              {snapshots.map((snapshot) => (
+                <li key={snapshot.id}>
+                  <a
+                    href="#"
+                    rel="noreferrer"
+                    className="dropdown-item"
+                  >
+                    {snapshot.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </span>
         )}
-      </header>
+      </div>
       {projectViews.length > 0 && (
         <div className="container-fluid">
-          <h6 className="mb-3">{gettext('Data management plans')}</h6>
+          <h3 className="mb-3">{gettext('Data management plans')}</h3>
           <div className="row">
             {projectViews.map((view, index) => (
               // <Tile key={index} size={projectViews.length <= 8 ? 'normal' : 'compact'}>

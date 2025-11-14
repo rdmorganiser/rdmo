@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { isEmpty } from 'lodash'
 
-import { useModal }  from 'rdmo/core/assets/js/hooks'
+import { useModal } from 'rdmo/core/assets/js/hooks'
 
 import MembershipInviteModal from './MembershipInviteModal'
 import MembershipTable from './MembershipTable'
@@ -16,8 +16,8 @@ const Membership = () => {
 
   return (
     <>
-      <header className="d-flex justify-content-between align-items-center mb-3">
-        <h5 className="mb-0">{gettext('Memberships')}</h5>
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h2 className="mb-0">{gettext('Memberships')}</h2>
         {perms.can_add_invite && (
           <button
             type="button"
@@ -28,7 +28,7 @@ const Membership = () => {
             <i className="bi bi-plus" aria-hidden="true"></i> {gettext('Add member')}
           </button>
         )}
-      </header>
+      </div>
       {
         !isEmpty(memberships) && (
           <MembershipTable persons={memberships} type="memberships" />
@@ -37,9 +37,9 @@ const Membership = () => {
       {
         !isEmpty(invites) && (
           <>
-            <header className="d-flex justify-content-between align-items-center mb-3">
-              <h5 className="mb-0">{gettext('Invites')}</h5>
-            </header>
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <h2 className="mb-0">{gettext('Invites')}</h2>
+            </div>
             <MembershipTable persons={invites} type="invites" />
           </>
         )
