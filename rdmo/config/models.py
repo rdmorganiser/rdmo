@@ -7,6 +7,7 @@ from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 
 from rdmo.config.managers import PluginManager
+from rdmo.config.plugin_types import detect_plugin_type
 from rdmo.core.models import Model, TranslationMixin
 from rdmo.core.utils import join_url
 from rdmo.questions.models import Catalog
@@ -124,14 +125,19 @@ class Plugin(Model, TranslationMixin):
     )
     python_path = models.CharField(
         max_length=512,
-        verbose_name=_("Python path"),
-        help_text=_("Python dotted path to the plugin class, e.g. 'rdmo_specific_plugin.module.PluginClass'"),
+        verbose_name=_('Python path'),
+        help_text=_('Python dotted path to the plugin class, e.g. "rdmo_plugins_provider.module.PluginClass"'),
 
     )
     plugin_settings = models.JSONField(
         blank=True, default=dict,
-        verbose_name=_("Plugin settings"),
-        help_text=_("Contains the settings for this plugin in JSON format."),
+        verbose_name=_('Plugin settings'),
+        help_text=_('Contains the settings for this plugin in JSON format.'),
+    )
+    plugin_type = models.SlugField(
+        max_length=128, blank=True, default="", editable=False,
+        verbose_name=_('Plugin type'),
+        help_text=_('The type of plugin this is, e.g. "project_export".')
     )
     url_name = models.SlugField(
         max_length=128, blank=True, default="",
@@ -145,10 +151,11 @@ class Plugin(Model, TranslationMixin):
         verbose_name_plural = _('Plugins')
 
     def __str__(self):
-        return f"({self.python_path}) {self.uri}"
+        return f"({self.python_path}, {self.plugin_type}) {self.uri}"
 
     def save(self, *args, **kwargs):
         self.uri = self.build_uri(self.uri_prefix, self.uri_path)
+        self.plugin_type = detect_plugin_type(self.python_path)
         super().save(*args, **kwargs)
 
     @property
@@ -162,15 +169,6 @@ class Plugin(Model, TranslationMixin):
     @property
     def is_locked(self):
         return self.locked
-
-    @property
-    def plugin_type(self) -> str:
-        try:
-            plugin_class = self.get_class()
-        except Exception as e:
-            return e.__class__.__qualname__.lower()
-        from rdmo.config.plugins import detect_plugin_type
-        return detect_plugin_type(plugin_class)
 
     @classmethod
     def build_uri(cls, uri_prefix, uri_path):
@@ -194,6 +192,6 @@ class Plugin(Model, TranslationMixin):
         super().clean()
         if self.available:  # check only available?
             try:
-                self.get_class()
+                import_string(self.python_path)
             except Exception as e:
                 raise ValidationError({'python_path': f"Could not import class: {e}"}) from e
