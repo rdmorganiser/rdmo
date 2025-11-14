@@ -1,25 +1,46 @@
-from django.utils.module_loading import import_string
+from __future__ import annotations
 
-from rdmo.core.plugins import Plugin as PluginBase
+from django.conf import settings
 
-PLUGIN_TYPES = {
-    "project_export": "rdmo.projects.exports.Export",
-    "project_import": "rdmo.projects.imports.Import",
-    "project_issue_provider": "rdmo.projects.providers.IssueProvider",
-    "optionset_provider": "rdmo.options.providers.Provider",
-}
+from rdmo.config.helpers import DeclaredPlugin
+from rdmo.config.models import Plugin
 
 
-def detect_plugin_type(cls_or_instance) -> str:
-    is_instance = not isinstance(cls_or_instance, type)
-    cls = cls_or_instance.__class__ if is_instance else cls_or_instance
+def get_plugins_from_db(project=None, plugin_type: str | None=None, user=None) -> list[DeclaredPlugin]:
+    """
+    Pull available plugins for the given project, then keep only rows whose class
+    inherits the correct base (e.g. Import/Export/Provider).
+    """
+    if not settings.PLUGINS:
+        return []
 
-    if not issubclass(cls, PluginBase):
-        return "not_an_rdmo_plugin"
+    qs = Plugin.objects.for_context(
+        project=project,
+        plugin_type=plugin_type,
+        user=user,
+    ).order_by("order", "uri")
 
-    for plugin_type, python_path  in PLUGIN_TYPES.items():
-        plugin_base_class = import_string(python_path)
-        if issubclass(cls, plugin_base_class):
-            return plugin_type
+    results: list[DeclaredPlugin] = []
+    for instance in qs:
 
-    return "unknown_plugin_type"
+        try:
+            _ = instance.clean()  # raises if import_string fails;
+        except Exception:
+            continue
+
+        if instance.python_path not in settings.PLUGINS:
+            continue
+
+        if instance.plugin_type != plugin_type:
+            continue
+
+        results.append(DeclaredPlugin(
+            uri_prefix=instance.uri_prefix,
+            uri_path=instance.uri_path,
+            python_path=instance.python_path,
+            title=instance.title or instance.uri_path,
+            plugin_type=instance.plugin_type,
+            url_name=instance.url_name,
+            source=f"Plugin(id={instance.id})",
+        ))
+    return results
