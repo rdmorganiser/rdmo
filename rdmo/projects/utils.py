@@ -11,7 +11,6 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.timezone import now
 
-from rdmo.config.plugin_resolver import list_and_filter_plugins
 from rdmo.core.mail import send_mail
 from rdmo.core.utils import remove_double_newlines
 from rdmo.tasks.managers import TaskQuerySet
@@ -283,6 +282,8 @@ def set_context_querystring_with_filter_and_page(context: dict) -> dict:
 
 
 def get_upload_accept(project=None):
+    from rdmo.config.plugin_resolver import list_and_filter_plugins
+
     accept = defaultdict(set)
     plugins = list_and_filter_plugins(plugin_type="project_import", project=project)
     for plugin in plugins:

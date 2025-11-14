@@ -13,7 +13,8 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import DeleteView, DetailView, TemplateView
 from django.views.generic.edit import FormMixin
 
-from rdmo.core.plugins import get_plugin, get_plugins
+from rdmo.config.models import Plugin
+from rdmo.core.plugins import get_plugin
 from rdmo.core.views import CSRFViewMixin, ObjectPermissionMixin, RedirectViewMixin, StoreIdViewMixin
 from rdmo.questions.models import Catalog
 
@@ -85,7 +86,10 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
         context['ancestors_import'] = ancestors_import
         context['memberships'] = memberships.order_by('user__last_name', '-project__level')
         context['integrations'] = integrations.order_by('provider_key', '-project__level')
-        context['providers'] = get_plugins('PROJECT_ISSUE_PROVIDERS')
+        if settings.PLUGINS:
+            plugins = Plugin.objects.for_context(plugin_type='issue_provider', project=project, user=self.request.user)
+            providers = {i.url_name: i.initialize_class() for i in plugins}
+            context['providers'] = providers
         context['issues'] = [
             issue for issue in project.issues.order_by('-status', 'task__order', 'task__uri') if issue.resolve(values)
         ]
