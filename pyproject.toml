@@ -143,7 +143,6 @@ select = [
   "INT"   # flake8-gettext
 ]
 ignore = [
-  "B006",   # mutable-argument-default
   "B018",   # useless-expression
   "RUF012", # mutable-class-default
 ]

@@ -36,7 +36,8 @@ class ProjectImportMixin:
                 questions[question.attribute.uri] = question
         return questions
 
-    def update_values(self, current_project, catalog, values, snapshots=[]):
+    def update_values(self, current_project, catalog, values, snapshots=None):
+        snapshots = snapshots or []
         questions = self.get_questions(catalog)
         current_values = self.get_current_values(current_project) if current_project else {}
 
