@@ -54,7 +54,7 @@ class TranslationSerializerMixin:
         if meta is None:
             return
 
-        for lang_code, lang_string, lang_field in get_languages():
+        for lang_code, _, lang_field in get_languages():
             for field in meta.trans_fields:
                 field_name = f'{field}_{lang_field}'
                 model_field = meta.model._meta.get_field(field_name)
@@ -98,7 +98,7 @@ class ThroughModelSerializerMixin:
         model_info = model_meta.get_field_info(self.Meta.model)
 
         through_fields = {}
-        for field_name, source_name, target_name, through_name in self.Meta.through_fields:
+        for field_name, _source_name, _target_name, through_name in self.Meta.through_fields:
             through_model = model_info.reverse_relations[through_name].related_model
             through_fields[field_name] = (through_model, validated_data.pop(through_name, None))
 
@@ -151,7 +151,7 @@ class ThroughModelSerializerMixin:
         model_info = model_meta.get_field_info(self.Meta.model)
 
         parent_fields = {}
-        for field_name, source_name, target_name, through_name in self.Meta.parent_fields:
+        for field_name, _source_name, _target_name, through_name in self.Meta.parent_fields:
             parent_model = model_info.reverse_relations[field_name].related_model
             parent_model_info = model_meta.get_field_info(parent_model)
 

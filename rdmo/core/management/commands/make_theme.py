@@ -65,7 +65,7 @@ class Command(BaseCommand):
 
             self.copy(Path('core') / 'static' / 'core' / 'css' / 'variables.scss')
 
-            for language, language_string in settings.LANGUAGES:
+            for language, _ in settings.LANGUAGES:
                 self.copy(Path('core') / 'templates' / 'core' / f'home_text_{language}.html')
                 self.copy(Path('core') / 'templates' / 'core' / f'about_text_{language}.html')
                 self.copy(Path('core') / 'templates' / 'core' / f'footer_text_{language}.html')

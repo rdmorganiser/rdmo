@@ -144,7 +144,6 @@ select = [
 ]
 ignore = [
   "B006",   # mutable-argument-default
-  "B007",   # unused-loop-control-variable
   "B018",   # useless-expression
   "RUF012", # mutable-class-default
 ]
