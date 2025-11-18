@@ -91,7 +91,7 @@ class ThroughModelSerializerMixin:
 
     def get_through_fields(self, validated_data):
         try:
-            self.Meta.through_fields
+            self.Meta.through_fields  # noqa: B018
         except AttributeError:
             return None
 
@@ -106,7 +106,7 @@ class ThroughModelSerializerMixin:
 
     def set_through_fields(self, instance, through_fields):
         try:
-            self.Meta.through_fields
+            self.Meta.through_fields  # noqa: B018
         except AttributeError:
             return instance
 
@@ -144,7 +144,7 @@ class ThroughModelSerializerMixin:
 
     def get_parent_fields(self, validated_data):
         try:
-            self.Meta.parent_fields
+            self.Meta.parent_fields  # noqa: B018
         except AttributeError:
             return None
 
@@ -163,7 +163,7 @@ class ThroughModelSerializerMixin:
 
     def set_parent_fields(self, instance, parent_fields):
         try:
-            self.Meta.parent_fields
+            self.Meta.parent_fields  # noqa: B018
         except AttributeError:
             return instance
 

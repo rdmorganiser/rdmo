@@ -281,7 +281,7 @@ def test_project_update_visibility_site_post_remove_last(db, client, settings):
     project = Project.objects.get(id=project_id)
 
     with pytest.raises(Visibility.DoesNotExist):
-        project.visibility
+        project.visibility  # noqa: B018
 
 
 def test_project_update_visibility_site_post_remove_empty(db, client, settings):
