@@ -5,7 +5,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.db.models import Prefetch
 
-from rdmo.core.plugins import get_plugin
+from rdmo.config.plugins import get_plugin
 from rdmo.core.utils import render_to_format
 from rdmo.projects.models import Project
 from rdmo.projects.utils import get_value_path

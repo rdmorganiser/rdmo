@@ -8,8 +8,8 @@ from django.db.models import Q
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
+from rdmo.config.plugins import get_plugin
 from rdmo.core.constants import VALUE_TYPE_FILE
-from rdmo.core.plugins import get_plugin
 from rdmo.core.utils import markdown2html
 
 from .constants import ROLE_CHOICES
