@@ -14,7 +14,7 @@ from django.views.generic import DeleteView, DetailView, TemplateView
 from django.views.generic.edit import FormMixin
 
 from rdmo.config.models import Plugin
-from rdmo.core.plugins import get_plugin
+from rdmo.config.plugins import get_plugin
 from rdmo.core.views import CSRFViewMixin, ObjectPermissionMixin, RedirectViewMixin, StoreIdViewMixin
 from rdmo.questions.models import Catalog
 

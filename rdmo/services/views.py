@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.core.plugins import get_plugin
+from rdmo.config.plugins import get_plugin
 
 PROVIDER_TYPES = [
     'PROJECT_ISSUE_PROVIDERS',

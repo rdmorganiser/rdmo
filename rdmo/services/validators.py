@@ -1,6 +1,6 @@
 from rest_framework.serializers import ValidationError
 
-from rdmo.core.plugins import get_plugin
+from rdmo.config.plugins import get_plugin
 
 
 class ProviderValidator:
