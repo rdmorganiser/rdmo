@@ -12,7 +12,6 @@ from rdmo.config.managers import PluginManager
 from rdmo.config.plugin_types import detect_plugin_type
 from rdmo.core.models import Model, TranslationMixin
 from rdmo.core.utils import join_url
-from rdmo.questions.models import Catalog
 
 
 class Plugin(Model, TranslationMixin):
@@ -65,7 +64,7 @@ class Plugin(Model, TranslationMixin):
         help_text=_('The groups for which this plugin is active.')
     )
     catalogs = models.ManyToManyField(
-        Catalog, blank=True,
+        'questions.Catalog', blank=True,  # config app should stay below elements in hierarchy of imports
         verbose_name=_('Catalogs'),
         help_text=_('The catalogs this plugin can be used with. '
                     'An empty list implies that this plugin can be used with every catalog.')
@@ -178,6 +177,14 @@ class Plugin(Model, TranslationMixin):
             raise RuntimeError('uri_path is missing')
         return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/plugins/', uri_path)
 
+    @property
+    def has_search(self):
+        return getattr(self.get_class(), 'search', False)
+
+    @property
+    def has_refresh(self):
+        return getattr(self.get_class(), 'refresh', False)
+
     def get_class(self):
         # TODO: return None here instead of raising exc?
         try:
@@ -187,7 +194,7 @@ class Plugin(Model, TranslationMixin):
         except ImportError as e:
             raise e from e
 
-    def initialize_class(self):
+    def initialize_class(self, raise_on_error=False):
         cls = self.get_class()
         if cls is None:
             return None
@@ -200,7 +207,9 @@ class Plugin(Model, TranslationMixin):
         if len(sig.parameters) == 3:  # the legacy signature, should not be called anymore
             key = self.url_name if self.url_name else self.uri_path
             return cls(key, self.title, self.python_path)
-        raise ValueError(f'Could not initialize class {self.python_path} for {sig}')
+        if raise_on_error:
+            raise ValueError(f'Could not initialize class {self.python_path} for {sig}')
+        return None
 
     def clean(self):
         super().clean()
