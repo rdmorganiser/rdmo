@@ -262,21 +262,28 @@ class ProjectViewSet(ModelViewSet):
 
             # check if the optionset belongs to this catalog and if it has a provider
             project.catalog.prefetch_elements()
-            if Question.objects.filter_by_catalog(project.catalog).filter(optionsets=optionset) and \
-                    optionset.provider is not None:
+            if (
+                Question.objects.filter_by_catalog(project.catalog).filter(optionsets=optionset)
+                and optionset.has_plugins
+            ):
                 options = []
-                for option in optionset.provider.get_options(project, search=request.GET.get('search'),
-                                                             user=request.user, site=request.site):
-                    if 'id' not in option:
-                        raise RuntimeError(f"'id' is missing in options of '{optionset.provider.class_name}'")
-                    elif 'text' not in option:
-                        raise RuntimeError(f"'text' is missing in options of '{optionset.provider.class_name}'")
-                    if 'text_and_help' not in option:
-                        if 'help' in option:
-                            option['text_and_help'] = '{text} [{help}]'.format(**option)
-                        else:
-                            option['text_and_help'] = '{text}'.format(**option)
-                    options.append(option)
+                for plugin in optionset.plugins.all():
+                    provider = plugin.initialize_class()
+                    if provider is None:
+                        continue  # skip when plugin class initialization fails
+
+                    for option in provider.get_options(project, search=request.GET.get('search'),
+                                         user=request.user, site=request.site):
+                        if 'id' not in option:
+                            raise RuntimeError(f"'id' is missing in options of '{provider.class_name}'")
+                        elif 'text' not in option:
+                            raise RuntimeError(f"'text' is missing in options of '{provider.class_name}'")
+                        if 'text_and_help' not in option:
+                            if 'help' in option:
+                                option['text_and_help'] = '{text} [{help}]'.format(**option)
+                            else:
+                                option['text_and_help'] = '{text}'.format(**option)
+                        options.append(option)
 
                 return Response(options)
 
