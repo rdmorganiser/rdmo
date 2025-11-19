@@ -13,7 +13,7 @@ class CatalogRendererMixin:
             self.render_text_element(xml, 'dc:comment', {}, catalog['comment'])
             self.render_text_element(xml, 'order', {}, catalog['order'])
 
-            for lang_code, lang_string, lang_field in get_languages():
+            for lang_code, _lang_string, _lang_field in get_languages():
                 self.render_text_element(xml, 'title', {'lang': lang_code}, catalog[f'title_{lang_code}'])
                 self.render_text_element(xml, 'help', {'lang': lang_code}, catalog[f'help_{lang_code}'])
 
@@ -43,7 +43,7 @@ class SectionRendererMixin:
             self.render_text_element(xml, 'uri_path', {}, section['uri_path'])
             self.render_text_element(xml, 'dc:comment', {}, section['comment'])
 
-            for lang_code, lang_string, lang_field in get_languages():
+            for lang_code, _lang_string, _lang_field in get_languages():
                 self.render_text_element(xml, 'title', {'lang': lang_code}, section[f'title_{lang_code}'])
                 self.render_text_element(xml, 'short_title', {'lang': lang_code}, section[f'short_title_{lang_code}'])
 
@@ -80,7 +80,7 @@ class PageRendererMixin:
 
             self.render_text_element(xml, 'is_collection', {}, page['is_collection'])
 
-            for lang_code, lang_string, lang_field in get_languages():
+            for lang_code, _lang_string, _lang_field in get_languages():
                 self.render_text_element(xml, 'title', {'lang': lang_code},
                                          page[f'title_{lang_code}'])
                 self.render_text_element(xml, 'short_title', {'lang': lang_code},
@@ -148,7 +148,7 @@ class QuestionSetRendererMixin:
 
             self.render_text_element(xml, 'is_collection', {}, questionset['is_collection'])
 
-            for lang_code, lang_string, lang_field in get_languages():
+            for lang_code, _lang_string, _lang_field in get_languages():
                 self.render_text_element(xml, 'title', {'lang': lang_code},
                                          questionset[f'title_{lang_code}'])
                 self.render_text_element(xml, 'help', {'lang': lang_code},
@@ -215,7 +215,7 @@ class QuestionRendererMixin:
             self.render_text_element(xml, 'is_collection', {}, question['is_collection'])
             self.render_text_element(xml, 'is_optional', {}, question['is_optional'])
 
-            for lang_code, lang_string, lang_field in get_languages():
+            for lang_code, _lang_string, _lang_field in get_languages():
                 self.render_text_element(xml, 'help', {'lang': lang_code},
                                          question[f'help_{lang_code}'])
                 self.render_text_element(xml, 'text', {'lang': lang_code},

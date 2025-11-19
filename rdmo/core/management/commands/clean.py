@@ -31,7 +31,7 @@ class Command(BaseCommand):
             self.clean_python()
 
     def clean_python(self):
-        for root, dirs, files in os.walk('.'):
+        for root, dirs, _ in os.walk('.'):
             for dir_name in dirs:
                 if dir_name == '__pycache__':
                     self.remove_path(os.path.join(root, dir_name), quiet=True)

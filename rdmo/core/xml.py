@@ -296,7 +296,7 @@ def update_related_legacy_elements(elements: dict,
 
 def convert_legacy_elements(elements):
     # first pass: identify pages
-    for uri, element in elements.items():
+    for _uri, element in elements.items():
         if element['model'] == 'questions.questionset':
             if element.get('questionset') is None:
                 # this is now a page
@@ -395,7 +395,7 @@ def convert_legacy_elements(elements):
 
 
 def convert_additional_input(elements):
-    for uri, element in elements.items():
+    for _uri, element in elements.items():
         if element['model'] == 'options.option':
             additional_input = element.get('additional_input')
             if additional_input in ['', 'text', 'textarea']:  # from Option.ADDITIONAL_INPUT_CHOICES
@@ -409,7 +409,7 @@ def convert_additional_input(elements):
 
 
 def convert_autocomplete(elements):
-    for uri, element in elements.items():
+    for _uri, element in elements.items():
         if element['model'] == 'questions.question':
             if element['widget_type'] == 'autocomplete':
                 element['widget_type'] = 'select'

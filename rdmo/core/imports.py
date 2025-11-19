@@ -148,7 +148,7 @@ def get_lang_field_values(field_name: str,
         raise ValueError("Please choose one of each")
 
     ret = []
-    for lang_code, lang_verbose_name, lang_field in get_languages():
+    for lang_code, _lang_verbose_name, lang_field in get_languages():
         name_code = f'{field_name}_{lang_code}'
         name_field = f'{field_name}_{lang_field}'
         row = {}
