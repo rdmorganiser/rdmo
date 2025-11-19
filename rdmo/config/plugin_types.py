@@ -6,6 +6,7 @@ from rdmo.core.plugins import Plugin as LegacyPluginBase
 
 
 def get_plugin_type_mapping():
+    # imports at run-time only
     from rdmo.options.providers import Provider
     from rdmo.projects.exports import Export
     from rdmo.projects.imports import Import
@@ -32,7 +33,7 @@ def detect_plugin_type(python_path) -> str:
         if cls.plugin_type:
             return cls.plugin_type
         else:
-            return "plugin_type_set_but_empty"
+            return "has_plugin_type_but_empty"
 
     if not issubclass(cls, LegacyPluginBase):
         return "not_an_rdmo_plugin"
@@ -40,5 +41,8 @@ def detect_plugin_type(python_path) -> str:
     for plugin_type, plugin_class  in get_plugin_type_mapping().items():
         if issubclass(cls, plugin_class):
             return plugin_type
+
+    if hasattr(cls, "get_options"):
+        return "optionset_provider"
 
     return "unknown_plugin_type"
