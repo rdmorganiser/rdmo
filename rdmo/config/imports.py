@@ -13,6 +13,8 @@ import_helper_plugin = ElementImportHelper(
         ExtraFieldHelper(field_name='available', overwrite_in_element=True),
         ExtraFieldHelper(field_name='locked'),
         ExtraFieldHelper(field_name='order'),
+        ExtraFieldHelper(field_name='url_name'),
+
     ),
     add_current_site_sites = True,
 )
