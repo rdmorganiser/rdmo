@@ -39,8 +39,10 @@ class Integration(models.Model):
             .for_context(plugin_type="issue_provider", project=self.project)
             .filter(uri_path__contains=self.provider_key)
         )
-        provider = plugins.first().initialize_class() if plugins else None
-        return provider
+        if plugins.exists():
+            return plugins.first().initialize_class()
+        else:
+            return None
 
     def get_option_value(self, key):
         try:

@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
+from django.utils.module_loading import import_string
+
 
 @dataclass(frozen=True)
 class DeclaredPlugin:
@@ -17,7 +19,6 @@ class DeclaredPlugin:
 
     def get_plugin_instance(self):
         try:
-            from django.utils.module_loading import import_string
             return import_string(self.python_path)(self.uri_path, self.title, self.python_path)
         except Exception:
             return None

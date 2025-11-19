@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.generic import CreateView, DetailView, UpdateView
 
-from rdmo.core.plugins import get_plugin
+from rdmo.config.plugins import get_plugin
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 
 from ..forms import SnapshotCreateForm

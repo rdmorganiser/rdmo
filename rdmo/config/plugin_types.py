@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from django.utils.module_loading import import_string
 
-from rdmo.core.plugins import Plugin as LegacyPluginBase
-
 
 def get_plugin_type_mapping():
     # imports at run-time only
@@ -35,6 +33,7 @@ def detect_plugin_type(python_path) -> str:
         else:
             return "has_plugin_type_but_empty"
 
+    from rdmo.config.plugins import PluginBase as LegacyPluginBase
     if not issubclass(cls, LegacyPluginBase):
         return "not_an_rdmo_plugin"
 
