@@ -8,7 +8,26 @@ from django.core.management import CommandError, call_command
 
 from rdmo.config.models import Plugin
 
-# ---------------- existing tests (cleaned up) ----------------
+
+@pytest.mark.parametrize('use_new_setting', [True, False])
+def test_checks(settings, enable_legacy_plugins, use_new_setting):
+    # arrange
+    if use_new_setting:
+        settings.PLUGINS = ['rdmo.projects.exports.RDMOXMLExport']
+
+    stdout, stderr = io.StringIO(), io.StringIO()
+
+    # will trigger all registered system checks, including ours
+    call_command("check", stdout=stdout, stderr=stderr)
+
+    output = stdout.getvalue() + stderr.getvalue()
+    assert "deprecated as of RDMO 2.5.0" in output
+    assert "rdmo.config.W001" in output
+    if use_new_setting:
+        assert "rdmo.config.W002" in output
+    else:
+        assert "rdmo.config.W002" not in output
+
 
 @pytest.mark.parametrize('clear_first', [True, False])
 def test_command_check_plugins(db, settings, clear_first):
