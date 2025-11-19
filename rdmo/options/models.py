@@ -8,7 +8,6 @@ from django.utils.translation import gettext_lazy as _
 
 from rdmo.conditions.models import Condition
 from rdmo.core.models import TranslationMixin
-from rdmo.core.plugins import get_plugin
 from rdmo.core.utils import join_url
 
 
@@ -87,20 +86,16 @@ class OptionSet(models.Model):
         return self.uri
 
     @property
-    def provider(self) -> list:
-        return get_plugin('OPTIONSET_PROVIDERS', self.provider_key)
-
-    @property
-    def has_provider(self) -> bool:
-        return self.provider is not None
+    def has_plugins(self) -> bool:
+        return self.plugins.exists()
 
     @property
     def has_search(self) -> bool:
-        return self.has_provider and self.provider.search
+        return self.has_plugins and any(i.has_search for i in self.plugins.all())
 
     @property
     def has_refresh(self) -> bool:
-        return self.has_provider and self.provider.refresh
+        return self.has_plugins and any(i.has_refresh for i in self.plugins.all())
 
     @property
     def has_conditions(self) -> bool:

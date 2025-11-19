@@ -49,7 +49,7 @@ class OptionSetSerializer(ElementModelSerializerMixin, serializers.ModelSerializ
             'uri',
             'model',
             'options',
-            'has_provider',
+            'has_plugins',
             'has_search',
             'has_refresh',
             'has_conditions'
