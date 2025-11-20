@@ -64,6 +64,7 @@ from .serializers.v1 import (
     InviteSerializer,
     IssueSerializer,
     MembershipSerializer,
+    ProjectAnswersSerializer,
     ProjectCopySerializer,
     ProjectHierarchySerializer,
     ProjectIntegrationSerializer,
@@ -80,6 +81,7 @@ from .serializers.v1 import (
     ProjectSnapshotSerializer,
     ProjectValueSerializer,
     ProjectViewSerializer,
+    ProjectViewsSerializer,
     ProjectVisibilitySerializer,
     SnapshotSerializer,
     UserInviteSerializer,
@@ -435,9 +437,7 @@ class ProjectViewSet(ModelViewSet):
         except Snapshot.DoesNotExist:
             snapshot = None
 
-        serializer = ProjectViewSerializer({
-            'project': project,
-            'snapshot': snapshot,
+        serializer = ProjectAnswersSerializer({
             'html': render_to_string('projects/project_answers.html', {
                 'project': project,
                 'snapshot': snapshot,
@@ -490,8 +490,15 @@ class ProjectViewSet(ModelViewSet):
         return self.answers_export(request, pk, export_format, snapshot_id)
 
     @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ),
+            url_path=r'views')
+    def views(self, request, pk):
+        project = self.get_object()
+        serializer = ProjectViewsSerializer(project.views, many=True)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ),
             url_path=r'views/(?P<view_id>\d+)')
-    def views(self, request, pk, view_id, snapshot_id=None):
+    def view(self, request, pk, view_id, snapshot_id=None):
         project = self.get_object()
         project.catalog.prefetch_elements()
 
@@ -505,26 +512,21 @@ class ProjectViewSet(ModelViewSet):
         except Snapshot.DoesNotExist:
             snapshot = None
 
-        serializer = ProjectViewSerializer({
-            'project': project,
-            'snapshot': snapshot,
-            'view': view,
+        serializer = ProjectViewSerializer(view, context={
             'html': view.render(project, snapshot),
             'attachments': project.values.filter(snapshot=snapshot).filter(value_type=VALUE_TYPE_FILE).order_by('file')
         })
         return Response(serializer.data)
 
-
     @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ),
             url_path=r'snapshots/(?P<snapshot_id>\d+)/views/(?P<view_id>\d+)')
-    def views_snapshot(self, request, pk, view_id, snapshot_id):
+    def view_snapshot(self, request, pk, view_id, snapshot_id):
         # extra method since DRF does not officially support optional named parameters inside url_path
-        return self.views(request, pk, view_id, snapshot_id)
-
+        return self.view(request, pk, view_id, snapshot_id)
 
     @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ),
             url_path=r'views/(?P<view_id>\d+)/export/(?P<export_format>[a-z]+)')
-    def views_export(self, request, pk, view_id, export_format, snapshot_id=None):
+    def view_export(self, request, pk, view_id, export_format, snapshot_id=None):
         project = self.get_object()
         project.catalog.prefetch_elements()
 
@@ -547,9 +549,9 @@ class ProjectViewSet(ModelViewSet):
 
     @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ),
             url_path=r'snapshots/(?P<snapshot_id>\d+)/views/(?P<view_id>\d+)/export/(?P<export_format>[a-z]+)')
-    def views_export_snapshot(self, request, pk, view_id, export_format, snapshot_id):
+    def view_export_snapshot(self, request, pk, view_id, export_format, snapshot_id):
         # extra method since DRF does not officially support optional named parameters inside url_path
-        return self.views_export(request, pk, view_id, export_format, snapshot_id)
+        return self.view_export(request, pk, view_id, export_format, snapshot_id)
 
     @action(detail=False, url_path='upload-accept', permission_classes=(IsAuthenticated, ))
     def upload_accept(self, request):
