@@ -2,6 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 
 // import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
+import Html from 'rdmo/core/assets/js/components/Html'
 import { Tile } from '../helper'
 
 const Documents = () => {
@@ -32,7 +33,7 @@ const Documents = () => {
 
           {view.help && (
             <div className="text-muted small mb-2">
-              {view.help}
+              <Html html={view.help} />
             </div>
           )}
 
