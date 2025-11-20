@@ -7,7 +7,10 @@ from .constants import PERMISSIONS
 class CurrentSiteQuerySetMixin:
 
     def filter_current_site(self):
-        return self.filter(models.Q(sites=None) | models.Q(sites=settings.SITE_ID))
+        if settings.MULTISITE:
+            return self.filter(sites=settings.SITE_ID)
+        else:
+            return self.filter(models.Q(sites=None) | models.Q(sites=settings.SITE_ID))
 
 
 class GroupsQuerySetMixin:
