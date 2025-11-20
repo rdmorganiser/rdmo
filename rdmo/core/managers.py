@@ -23,10 +23,7 @@ class GroupsQuerySetMixin:
 class AvailabilityQuerySetMixin:
 
     def filter_availability(self, user):
-        model = str(self.model._meta)
-        permissions = PERMISSIONS[model]
-
-        if user.has_perms(permissions):
+        if user.has_perms(PERMISSIONS[self.model._meta.label_lower]):
             return self
         else:
             return self.filter(available=True)
