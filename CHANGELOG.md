@@ -1,5 +1,40 @@
 # Changelog 📔
 
+## [RDMO 2.4.0](https://github.com/rdmorganiser/rdmo/releases/tag/2.4.0) (Nov, 2025)
+
+### Important changes ⭐
+
+* Rewrite progress bar and navigation using a new `AnswerTree` class (#1346)
+
+### Bug fixes 🐛
+
+* Fix a bug with the autosave of checkboxes, radio buttons and additional input (#1406)
+* Fix a bug where text and icons overlap in the interview (#1398)
+* Fix datepicker date conversion in interview (#1465)
+* Fix a bug with legacy management permissions and disable the latter in a multisite setup (#1425)
+* Fix a bug with verbose name that contain a space (#1453)
+
+### Translations 🌍
+
+* Consistent naming of "Tabs" in every language (#1459)
+* Language improvements in the French localisation (#1397)
+* Several minor fixes
+
+### Maintenance and Dependencies 🔧
+
+* Drop support for Python 3.9
+* Add `all` and `recommended` dependency groups
+* Ignore fewer `ruff` rules (B007, B006, B018)
+* Use [zismor](https://github.com/zizmorcore/zizmor) to harden CI setup
+* Update `poedit` management script to work on macOS
+
+**Milestones**:
+[2.3.3](https://github.com/rdmorganiser/rdmo/milestone/24?closed=1),
+[2.4.0](https://github.com/rdmorganiser/rdmo/milestone/21?closed=1)
+
+**Commit history**: [2.3.2...2.4.0](https://github.com/rdmorganiser/rdmo/compare/2.3.2...2.4.0)
+
+
 ## [RDMO 2.3.2](https://github.com/rdmorganiser/rdmo/compare/2.3.1...2.3.2) (July 4, 2025)
 
 * Improve ORCID branding display and social connections page (#1376)
