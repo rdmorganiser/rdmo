@@ -40,7 +40,7 @@ const CheckboxWidget = ({ page, question, sets, values, siblings, currentSet, di
                       aria-labelledby={getQuestionTextId(question)}
                       aria-describedby={getQuestionHelpId(question)}>
               {
-                gatherOptions(question).map((option, optionIndex) => {
+                gatherOptions(question, currentSet).map((option, optionIndex) => {
                   const value = values.find((value) => (
                     option.has_provider ? (value.external_id === option.id) : (value.option === option.id)
                   ))
