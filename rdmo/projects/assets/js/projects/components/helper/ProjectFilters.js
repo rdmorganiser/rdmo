@@ -3,11 +3,10 @@ import PropTypes from 'prop-types'
 
 import { get } from 'lodash'
 import DatePicker from 'react-datepicker'
-import { formatISO, set  } from 'date-fns'
+import { formatISO, set } from 'date-fns'
 
 import { Link, Select } from 'rdmo/core/assets/js/components'
 import useDatePicker from '../../hooks/useDatePicker'
-import { language } from 'rdmo/core/assets/js/utils'
 
 const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsActions }) => {
   const {
@@ -36,14 +35,14 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
   }
 
   const catalogOptions = catalogs?.filter(catalog => isManager || catalog.available)
-                                  .map(catalog => ({
-                                    value: catalog.id.toString(),
-                                    label: (
-                                      <span className={catalog.available ? '' : 'text-muted'}>
-                                        {catalog.title}
-                                      </span>
-                                    ),
-                                  }))
+    .map(catalog => ({
+      value: catalog.id.toString(),
+      label: (
+        <span className={catalog.available ? '' : 'text-muted'}>
+          {catalog.title}
+        </span>
+      ),
+    }))
   const selectedCatalog = get(config, 'params.catalog', '')
   const updateCatalogFilter = (value) => {
     value ? configActions.updateConfig('params.catalog', value) : configActions.deleteConfig('params.catalog')
@@ -102,7 +101,7 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
                           dateFormat={dateFormat}
                           id="created-start-date-picker"
                           isClearable
-                          locale={getLocale(language)}
+                          locale={getLocale()}
                           onChange={date => handleDateChange('created', 'start', date)}
                           placeholderText={gettext('Select start date')}
                           selected={dateRange.createdStart ?? get(config, 'params.created_after', '')}
@@ -115,7 +114,7 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
                           dateFormat={dateFormat}
                           id="created-end-date-picker"
                           isClearable
-                          locale={getLocale(language)}
+                          locale={getLocale()}
                           onChange={date => handleDateChange('created', 'end', date)}
                           placeholderText={gettext('Select end date')}
                           selected={dateRange.createdEnd ?? get(config, 'params.created_before', '')}
@@ -136,7 +135,7 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
                         dateFormat={dateFormat}
                         id="last-changed-start-date-picker"
                         isClearable
-                        locale={getLocale(language)}
+                        locale={getLocale()}
                         onChange={date => handleDateChange('last_changed', 'start', date)}
                         placeholderText={gettext('Select start date')}
                         selected={dateRange.lastChangedStart ?? get(config, 'params.last_changed_after', '')}
@@ -149,7 +148,7 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
                         dateFormat={dateFormat}
                         id="last-changed-end-date-picker"
                         isClearable
-                        locale={getLocale(language)}
+                        locale={getLocale()}
                         onChange={date => handleDateChange('last_changed', 'end', date)}
                         placeholderText={gettext('Select end date')}
                         selected={dateRange.lastChangedEnd ?? get(config, 'params.last_changed_before', '')}
