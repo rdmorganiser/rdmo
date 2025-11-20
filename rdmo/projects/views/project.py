@@ -60,9 +60,7 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
             memberships = memberships.prefetch_related('user__socialaccount_set')
 
         integrations = Integration.objects.filter(project__in=ancestors)
-        context['catalogs'] = Catalog.objects.filter_current_site() \
-                                             .filter_group(self.request.user) \
-                                             .filter_availability(self.request.user)
+        context['catalogs'] = Catalog.objects.filter_for_user(self.request.user)
 
         if settings.PROJECT_TASKS_SYNC:
             # tasks should be synced, the user can not change them

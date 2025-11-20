@@ -53,10 +53,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     class CatalogField(serializers.PrimaryKeyRelatedField):
 
         def get_queryset(self):
-            return Catalog.objects.filter_current_site() \
-                                  .filter_group(self.context['request'].user) \
-                                  .filter_availability(self.context['request'].user) \
-                                  .order_by('-available', 'order')
+            return Catalog.objects.filter_for_user(self.request.user)
 
     class ParentField(serializers.PrimaryKeyRelatedField):
 
