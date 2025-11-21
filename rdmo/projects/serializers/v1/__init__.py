@@ -53,7 +53,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     class CatalogField(serializers.PrimaryKeyRelatedField):
 
         def get_queryset(self):
-            return Catalog.objects.filter_for_user(self.request.user)
+            return Catalog.objects.filter_for_user(self.context['request'].user)
 
     class ParentField(serializers.PrimaryKeyRelatedField):
 
