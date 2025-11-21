@@ -920,4 +920,4 @@ class CatalogViewSet(ListModelMixin, GenericViewSet):
     serializer_class = CatalogSerializer
 
     def get_queryset(self):
-        return Catalog.objects.filter_for_user(self.request.user)
+        return Catalog.objects.for_projects_view(self.request.user)

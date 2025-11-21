@@ -27,6 +27,25 @@ class CatalogQuerySet(CurrentSiteQuerySetMixin, GroupsQuerySetMixin, Availabilit
                 .order_by('-available', 'order')
         )
 
+    def for_projects_view(self, user):
+        qs = self.filter_current_site().filter_group(user)
+
+        available_ids = (
+            qs
+            .filter_availability(user)
+            .values('pk')
+        )
+
+        return (
+            qs
+            .filter(
+                models.Q(pk__in=available_ids) |
+                models.Q(projects__user=user)
+            )
+            .order_by('-available', 'order')
+            .distinct()
+        )
+
 
 class CatalogManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityManagerMixin, models.Manager):
 
@@ -41,6 +60,9 @@ class CatalogManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityMa
 
     def filter_for_user(self, user):
         return self.get_queryset().filter_for_user(user)
+
+    def for_projects_view(self, user):
+        return self.get_queryset().for_projects_view(user)
 
 
 class SectionQuerySet(models.QuerySet):

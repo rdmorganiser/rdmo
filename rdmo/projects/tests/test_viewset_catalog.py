@@ -1,6 +1,6 @@
 import pytest
 
-from django.contrib.sites.models import Site
+from django.contrib.auth import get_user_model
 from django.urls import reverse
 
 from rdmo.questions.models import Catalog
@@ -18,7 +18,7 @@ users = (
 
 urlnames = {
     'list': 'v1-projects:catalog-list',
-    'user': 'v1-projects:catalog-user'
+    'user': 'v1-projects:catalog-user'  # does not exist
 }
 
 catalog_id = 1
@@ -36,10 +36,10 @@ def test_list(db, client, username, password):
         assert isinstance(response.json(), list)
 
         data = response.json()
-        site = Site.objects.get_current()
-        catalogs = Catalog.objects.filter(sites=site)
+        user = get_user_model().objects.get(username=username)
+        catalogs = Catalog.objects.for_projects_view(user)
+        assert {c['id'] for c in data} == set(catalogs.values_list('id', flat=True))
+        assert {c['available'] for c in data} == set(catalogs.values_list('available', flat=True))
 
-        assert {c['id'] for c in data} == {c.id for c in catalogs}
-        assert {c['available'] for c in data} == {c.available for c in catalogs}
     else:
         assert response.status_code == 401
