@@ -17,7 +17,7 @@ class Command(BaseCommand):
         try:
             import twine  # noqa: F401
         except ImportError as e:
-            raise CommandError('build is not installed.') from e
+            raise CommandError('twine is not installed.') from e
 
         self.check_git_tag()
         self.check_github_release()
