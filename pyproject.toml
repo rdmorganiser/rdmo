@@ -126,6 +126,7 @@ exclude = ["*assets*", "*tests*"]
 
 [tool.setuptools_scm]
 version_file = "rdmo/_version.py"
+version_scheme = "release-branch-semver"
 
 [tool.ruff]
 line-length = 120
