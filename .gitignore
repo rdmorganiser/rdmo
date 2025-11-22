@@ -27,7 +27,6 @@ node_modules
 build
 dist
 *.egg-info
-_version.py
 
 .imdone/
 
