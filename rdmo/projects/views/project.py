@@ -14,7 +14,6 @@ from django.views.generic import DeleteView, DetailView, TemplateView
 from django.views.generic.edit import FormMixin
 
 from rdmo.config.models import Plugin
-from rdmo.config.plugins import get_plugin
 from rdmo.core.views import CSRFViewMixin, ObjectPermissionMixin, RedirectViewMixin, StoreIdViewMixin
 from rdmo.questions.models import Catalog
 
@@ -179,10 +178,14 @@ class ProjectExportView(ObjectPermissionMixin, DetailView):
     permission_required = 'projects.export_project_object'
 
     def get_export_plugin(self):
-        export_plugin = get_plugin('PROJECT_EXPORTS', self.kwargs.get('format'))
-        if export_plugin is None:
+        export_plugins = Plugin.objects.for_context(
+            project=self.object, plugin_type='project_export', user=self.request.user, format=self.kwargs.get('format')
+        )
+        export_plugin_instance = export_plugins.first() if export_plugins else None
+        if export_plugin_instance is None:
             raise Http404
 
+        export_plugin = export_plugin_instance.initialize_class()
         export_plugin.request = self.request
         export_plugin.project = self.object
 
