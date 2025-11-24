@@ -54,7 +54,7 @@ const SelectInput = ({ question, value, options, disabled, creatable, updateValu
 
   const handleLoadOptions = useDebouncedCallback((searchText, callback) => {
     // Updating "options" through the redux store is buggy, so we use AsyncSelect
-    // and use a asyncrounous callback to update the options in the select field.
+    // and use a asynchronous callback to update the options in the select field.
     // Note that the "options" array in the component remains [].
     const search = searchText || value.text
     if (isEmpty(search)) {
