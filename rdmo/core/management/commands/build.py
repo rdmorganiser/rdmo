@@ -14,5 +14,5 @@ class Command(BaseCommand):
             raise CommandError('build is not installed.') from e
 
         call_command('npm', 'ci')
-        call_command('npm', 'run', 'build:prod')
+        call_command('npm', 'run', 'build:dist')
         subprocess.call(['/bin/bash', '-c', f'{sys.executable} -m build'])
