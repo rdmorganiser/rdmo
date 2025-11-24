@@ -57,6 +57,7 @@
       "locked": false,
       "order": 4,
       "provider_key": "simple",
+      "plugins": [3],
       "editors": [],
       "conditions": []
     }
