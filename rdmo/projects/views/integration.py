@@ -37,8 +37,10 @@ class IntegrationCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView
     def get_context_data(self, **kwargs):
         plugins = (
             Plugin.objects
-                .for_context(plugin_type="issue_provider", project=self.project, user=self.request.user)
-                .filter(uri_path__contains=self.provider_key)
+                .for_context(
+                plugin_type="project_issue_provider", project=self.project,
+                user=self.request.user,format=self.provider_key
+            )
        )
         kwargs['provider'] = plugins.first().initialize_class() if plugins else None
         return super().get_context_data(**kwargs)
