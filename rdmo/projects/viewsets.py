@@ -21,7 +21,6 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from rdmo.conditions.models import Condition
-from rdmo.config.plugin_resolver import list_and_filter_plugins
 from rdmo.core.permissions import HasModelPermission
 from rdmo.core.utils import human2bytes, is_truthy, return_file_response
 from rdmo.options.models import OptionSet
@@ -29,6 +28,7 @@ from rdmo.questions.models import Catalog, Page, Question, QuestionSet
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
+from ..config.models import Plugin
 from .filters import (
     AttributeFilterBackend,
     OptionFilterBackend,
@@ -263,7 +263,7 @@ class ProjectViewSet(ModelViewSet):
             # check if the optionset belongs to this catalog and if it has a provider
             project.catalog.prefetch_elements()
             if (
-                Question.objects.filter_by_catalog(project.catalog).filter(optionsets=optionset)
+                Question.objects.filter_by_catalog(project.catalog).filter(optionsets=optionset).exists()
                 and optionset.has_plugins
             ):
                 options = []
@@ -399,9 +399,9 @@ class ProjectViewSet(ModelViewSet):
 
     @action(detail=False, permission_classes=(IsAuthenticated, ))
     def imports(self, request):
-        plugins = list_and_filter_plugins(plugin_type="project_import", user=request.user)
+        plugins = Plugin.objects.for_context(plugin_type="project_import", user=request.user)
         return Response([{
-            "key": plugin.uri_path,
+            "key": plugin.url_name,  # url_name or uri_path?
             "label": plugin.title,
             "class_name": plugin.python_path,
             "href": reverse('project_create_import', args=[plugin.url_name]),
