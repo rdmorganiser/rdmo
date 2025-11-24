@@ -16,7 +16,7 @@ PLUGIN_TYPE_LEGACY_SETTING_MAP = {
 def get_plugins_from_legacy_settings(select_plugin_type=None) -> list[DeclaredPlugin]:
     """Read 3-tuples (key, label, python-path) from legacy settings."""
     declared: list[DeclaredPlugin] = []
-    for plugin_type, (setting_name, allowlist_name) in PLUGIN_TYPE_LEGACY_SETTING_MAP.items():
+    for plugin_type, (setting_name, _) in PLUGIN_TYPE_LEGACY_SETTING_MAP.items():
         if not hasattr(settings, setting_name):
             continue
         if select_plugin_type is not None and select_plugin_type != plugin_type:
