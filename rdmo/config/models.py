@@ -3,7 +3,6 @@ from inspect import signature
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
-from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
@@ -210,11 +209,3 @@ class Plugin(Model, TranslationMixin):
         if raise_on_error:
             raise ValueError(f'Could not initialize class {self.python_path} for {sig}')
         return None
-
-    def clean(self):
-        super().clean()
-        if self.available:  # check only available?
-            try:
-                import_string(self.python_path)
-            except Exception as e:
-                raise ValidationError({'python_path': f"Could not import class: {e}"}) from e
