@@ -4,6 +4,10 @@ from django.apps import apps
 
 
 @pytest.fixture
+def enable_multisite(settings):
+    settings.MULTISITE = True
+
+@pytest.fixture
 def enable_project_views_sync(settings):
     settings.PROJECT_VIEWS_SYNC = True
     apps.get_app_config('projects').ready()
