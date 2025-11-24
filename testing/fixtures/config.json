@@ -262,5 +262,38 @@
     "groups": [],
     "catalogs": []
   }
+},
+{
+  "model": "config.plugin",
+  "pk": 9,
+  "fields": {
+    "created": "2025-11-24T11:11:11:11Z",
+    "updated": "2025-11-24T11:11:11:11Z",
+    "uri": "http://example.com/terms/plugins/project/import/url",
+    "uri_prefix": "http://example.com/terms",
+    "uri_path": "project/import/url",
+    "url_name": "url",
+    "comment": "",
+    "locked": false,
+    "order": 0,
+    "title_lang1": "URL Import",
+    "title_lang2": "",
+    "title_lang3": "",
+    "title_lang4": "",
+    "title_lang5": "",
+    "help_lang1": "",
+    "help_lang2": "",
+    "help_lang3": "",
+    "help_lang4": "",
+    "help_lang5": "",
+    "available": true,
+    "python_path": "rdmo.projects.imports.URLImport",
+    "plugin_type": "project_import",
+    "plugin_settings": {},
+    "sites": [],
+    "editors": [],
+    "groups": [],
+    "catalogs": []
+  }
 }
 ]
