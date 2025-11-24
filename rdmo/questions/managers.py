@@ -42,8 +42,8 @@ class CatalogQuerySet(CurrentSiteQuerySetMixin, GroupsQuerySetMixin, Availabilit
                 models.Q(pk__in=available_ids) |
                 models.Q(projects__user=user)
             )
-            .order_by('-available', 'order')
             .distinct()
+            .order_by('-available', 'order', 'id')
         )
 
 
