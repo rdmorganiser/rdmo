@@ -67,7 +67,7 @@ class Command(BaseCommand):
             # check tarball modification time
             asset_modification_time = os.path.getmtime(asset_path)
             if asset_modification_time < last_commit_time:
-                raise CommandError(f"timestamp mismatch: {asset_path} is older that the last commit.")
+                raise CommandError(f"timestamp mismatch: {asset_path} is older than the last commit.")
 
     def check_twine(self):
         subprocess.check_call(["twine", "check", "dist/*"])
