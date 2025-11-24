@@ -35,9 +35,8 @@ class Integration(models.Model):
     @property
     def provider(self):
         plugins = (
-            Plugin.objects
-            .for_context(plugin_type="issue_provider", project=self.project)
-            .filter(uri_path__contains=self.provider_key)
+            Plugin.objects.for_context(
+                plugin_type="issue_provider", project=self.project, format=self.provider_key)
         )
         if plugins.exists():
             return plugins.first().initialize_class()
@@ -51,6 +50,8 @@ class Integration(models.Model):
             return None
 
     def save_options(self, options):
+        if self.provider is None:
+            raise ValueError(_('The provider key is required.'))
         for field in self.provider.fields:
             try:
                 integration_option = IntegrationOption.objects.get(integration=self, key=field.get('key'))
