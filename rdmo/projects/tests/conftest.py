@@ -2,6 +2,8 @@ import pytest
 
 from django.apps import apps
 
+from .helpers.project_catalog import clear_sites_from_other_catalogs  # noqa: F401
+
 
 @pytest.fixture
 def enable_multisite(settings):
