@@ -25,7 +25,7 @@
 * Drop support for Python 3.9
 * Add `all` and `recommended` dependency groups
 * Ignore fewer `ruff` rules (B007, B006, B018)
-* Use [zismor](https://github.com/zizmorcore/zizmor) to harden CI setup
+* Use [zizmor](https://github.com/zizmorcore/zizmor) to harden CI setup
 * Update `poedit` management script to work on macOS
 
 **Milestones**:
