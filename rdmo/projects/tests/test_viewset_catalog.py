@@ -1,9 +1,6 @@
 import pytest
 
-from django.contrib.auth import get_user_model
 from django.urls import reverse
-
-from rdmo.questions.models import Catalog
 
 users = (
     ('owner', 'owner'),
@@ -16,12 +13,21 @@ users = (
     ('anonymous', None),
 )
 
-urlnames = {
-    'list': 'v1-projects:catalog-list',
-    'user': 'v1-projects:catalog-user'  # does not exist
+view_project_catalog_permission_map = {  # id, available
+    'owner': [(1, True)],
+    'manager': [(1, True)],
+    'author': [(1, True)],
+    'guest': [(1, True)],
+    'user': [(1, True)],
+    'editor': [(1, True)],
+    'reviewer': [(1, True)],
+    'api': [(1, True),(2, False)],
+    'site': [(1, True)]
 }
 
-catalog_id = 1
+urlnames = {
+    'list': 'v1-projects:catalog-list',
+}
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -33,13 +39,8 @@ def test_list(db, client, username, password):
 
     if password:
         assert response.status_code == 200
-        assert isinstance(response.json(), list)
-
         data = response.json()
-        user = get_user_model().objects.get(username=username)
-        catalogs = Catalog.objects.for_projects_view(user)
-        assert {c['id'] for c in data} == set(catalogs.values_list('id', flat=True))
-        assert {c['available'] for c in data} == set(catalogs.values_list('available', flat=True))
-
+        assert isinstance(data, list)
+        assert view_project_catalog_permission_map[username] == [(i['id'],i['available']) for i in data]
     else:
         assert response.status_code == 401
