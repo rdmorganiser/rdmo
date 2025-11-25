@@ -38,28 +38,7 @@ jobs:
     - uses: actions/checkout@v5
       with:
         persist-credentials: false
-    # update the version
-    - name: Get short commit SHA
-      run: |
-        if [ "${{ github.event_name }}" = "pull_request" ]; then
-          SHA="${{ github.event.pull_request.head.sha }}"
-        else
-          SHA="${{ github.sha }}"
-        fi
-        echo "SHA=$(git rev-parse --short $SHA)" >> $GITHUB_ENV
-    - name: Get current version (MAJOR.MINOR.PATCH)
-      id: current-version
-      run: echo "current_version=$(grep -Po '(?<=__version__ = ")[\d\w.]+(?=")' rdmo/__init__.py)" >> $GITHUB_OUTPUT
-    - name: Generate new version (current version + SHA)
-      id: new-version
-      run: echo "new_version=${CURRENT_VERSION}+$SHA" >> $GITHUB_OUTPUT
-      env:
-        CURRENT_VERSION: ${{ steps.current-version.outputs.current_version }}
-    - name: Update version in rdmo/__init__.py
-      run: |
-        sed -i "s/__version__ = .*/__version__ = \"${NEW_VERSION}\"/" rdmo/__init__.py
-      env:
-        NEW_VERSION: ${{ steps.new-version.outputs.new_version }}
+        fetch-depth: 0  # important for setuptools_scm
     # build the webpack bundle
     - uses: actions/setup-node@v6
       with:

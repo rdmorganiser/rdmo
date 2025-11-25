@@ -1,6 +1,6 @@
 [build-system]
 build-backend = "setuptools.build_meta"
-requires = ["setuptools"]
+requires = ["setuptools", "setuptools_scm"]
 
 [project]
 name = "rdmo"
@@ -124,8 +124,8 @@ exclude = ["*assets*", "*tests*"]
 [tool.setuptools.package-data]
 "*" = ["*"]
 
-[tool.setuptools.dynamic]
-version = {attr = "rdmo.__version__"}
+[tool.setuptools_scm]
+version_scheme = "release-branch-semver"
 
 [tool.ruff]
 line-length = 120
