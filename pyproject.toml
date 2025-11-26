@@ -191,7 +191,6 @@ rest_framework = ["rest_framework"]
 ]
 
 [tool.ruff.lint.flake8-pytest-style]
-fixture-parentheses = false
 parametrize-names-type = "csv"
 
 [tool.pytest.ini_options]
