@@ -193,11 +193,12 @@ rest_framework = ["rest_framework"]
 [tool.ruff.lint.flake8-pytest-style]
 parametrize-names-type = "csv"
 
-[tool.pytest.ini_options]
+[tool.pytest]
+strict = true
 DJANGO_SETTINGS_MODULE = "config.settings"
 testpaths = ["rdmo/*/tests"]
 pythonpath = [".", "testing"]
-addopts = '-p no:randomly -m "not e2e"'
+addopts = ["-ra", "-p no:randomly", "-m", "not e2e"]
 markers = [
   "e2e: marks tests as end-to-end tests using playwright (deselect with '-m \"not e2e\"')",
 ]
