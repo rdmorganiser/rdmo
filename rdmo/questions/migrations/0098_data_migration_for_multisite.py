@@ -9,8 +9,8 @@ def set_sites_for_catalogs_without_sites(apps, schema_editor):
     Catalog = apps.get_model('questions', 'Catalog')
     Site = apps.get_model('sites', 'Site')
 
-    all_sites = list(Site.objects.all())
-    if not all_sites:
+    all_sites = Site.objects.all()
+    if not all_sites.exists():
         return
 
     catalogs_without_sites = (
