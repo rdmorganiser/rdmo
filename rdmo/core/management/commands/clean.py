@@ -11,33 +11,29 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('command', choices=[
             'all',
-            'dist',
+            'build',
+            'git',
             'media',
             'npm',
-            'python',
             'static',
         ])
 
     def handle(self, *args, **options):
-        if options['command'] in ['all', 'dist']:
+        if options['command'] in ['all', 'build']:
             self.remove_path('dist')
             self.remove_path('rdmo.egg-info')
-        if options['command'] in ['all', 'static']:
-            self.remove_path(settings.STATIC_ROOT)
+
+        if options['command'] in ['all', 'git']:
+            subprocess.call(['git', 'clean', '-dfX'], cwd='rdmo')
+
         if options['command'] in ['all', 'media']:
             self.remove_path(settings.MEDIA_ROOT)
+
         if options['command'] in ['all', 'npm']:
             self.remove_path('node_modules')
-        if options['command'] in ['all', 'python']:
-            self.clean_python()
-        if options['command'] in ['all', 'git']:
-            subprocess.call(['git', 'clean', '-fd'])
 
-    def clean_python(self):
-        for root, dirs, _ in os.walk('.'):
-            for dir_name in dirs:
-                if dir_name == '__pycache__':
-                    self.remove_path(os.path.join(root, dir_name), quiet=True)
+        if options['command'] in ['all', 'static']:
+            self.remove_path(settings.STATIC_ROOT)
 
     def remove_path(self, path, quiet=False):
         if path and os.path.exists(path):
