@@ -13,6 +13,15 @@ class Command(BaseCommand):
         except ImportError as e:
             raise CommandError('build is not installed.') from e
 
+        # delete dist and rdmo.egg-info
+        call_command('clean', 'build')
+
+        # delete already build static files and __pycache__ dirs
+        call_command('clean', 'git')
+
+        # build the front end
         call_command('npm', 'ci')
         call_command('npm', 'run', 'build:dist')
+
+        # build the python package
         subprocess.call(['/bin/bash', '-c', f'{sys.executable} -m build'])
