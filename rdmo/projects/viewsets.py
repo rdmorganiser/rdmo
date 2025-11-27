@@ -920,4 +920,13 @@ class CatalogViewSet(ListModelMixin, GenericViewSet):
     serializer_class = CatalogSerializer
 
     def get_queryset(self):
-        return Catalog.objects.for_projects_view(self.request.user)
+        queryset = (
+            Catalog.objects.filter_current_site().filter_group(self.request.user)
+        )
+        availability_subquery = Subquery(
+            queryset.filter_availability(self.request.user).values('pk')
+        )
+        return (
+            queryset.filter(Q(pk__in=availability_subquery) | Q(projects__user=self.request.user))
+            .order_by('-available', 'order', 'id').distinct()
+        )
