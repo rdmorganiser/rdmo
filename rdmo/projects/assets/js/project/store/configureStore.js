@@ -55,11 +55,12 @@ export default function configureStore() {
   )
 
   const getConfigFromLocation = () => {
-    const { page, itemId, itemAction } = parseLocation()
+    const { page, pageId, action, actionId } = parseLocation()
 
     store.dispatch(configActions.updateConfig('page', page, false))
-    store.dispatch(configActions.updateConfig('itemId', itemId, false))
-    store.dispatch(configActions.updateConfig('itemAction', itemAction, false))
+    store.dispatch(configActions.updateConfig('pageId', pageId, false))
+    store.dispatch(configActions.updateConfig('action', action, false))
+    store.dispatch(configActions.updateConfig('actionId', actionId, false))
   }
 
   // this event is triggered when the page first loads

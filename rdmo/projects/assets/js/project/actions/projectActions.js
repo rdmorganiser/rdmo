@@ -15,7 +15,7 @@ import * as actionTypes from './actionTypes'
 export function setPage(page) {
   return function(dispatch) {
     dispatch(updateConfig('page', page))
-    updateLocation(page)
+    updateLocation({ page })
   }
 }
 
