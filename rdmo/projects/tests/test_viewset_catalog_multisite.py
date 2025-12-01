@@ -37,9 +37,10 @@ urlnames = {
     'list': 'v1-projects:catalog-list',
 }
 
+pytestmark = pytest.mark.usefixtures("enable_multisite")
 
 @pytest.mark.parametrize('username,password', users)
-def test_list(db, settings, enable_multisite, client, username, password):
+def test_list(db, settings, client, username, password):
     client.login(username=username, password=password)
 
     url = reverse(urlnames['list'])
@@ -55,7 +56,7 @@ def test_list(db, settings, enable_multisite, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_list_with_cleared_sites(db, settings, enable_multisite, clear_sites_from_other_catalogs,
+def test_list_with_cleared_sites(db, settings, clear_sites_from_other_catalogs,
                                  client, username, password):
     client.login(username=username, password=password)
 

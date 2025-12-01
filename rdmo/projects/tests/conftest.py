@@ -7,6 +7,7 @@ from .helpers.project_catalog import clear_sites_from_other_catalogs  # noqa: F4
 
 @pytest.fixture
 def enable_multisite(settings):
+    assert not settings.MULTISITE  # assert that the default is False first
     settings.MULTISITE = True
 
 @pytest.fixture
