@@ -79,13 +79,12 @@ class ProjectQuerySet(TreeQuerySet):
         # projects that have an unavailable catalog should be disregarded
         qs = self.filter(catalog__available=True)
 
-        # when instance.catalogs is empty it applies to all
-        if instance.catalogs.exists():
-            qs = qs.filter(catalog__in=instance.catalogs.all())
-
-        # when instance.sites is empty it applies to all
+        # when instance.sites exists it can be filtered
         if instance.sites.exists():
             qs = qs.filter(site__in=instance.sites.all())
+        elif settings.MULTISITE:
+            # when instance.sites is empty in a multi-site it should not appear at all
+            return self.none()
 
         # when instance.groups is empty it applies to all
         if instance.groups.exists():
