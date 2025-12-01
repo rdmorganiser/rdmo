@@ -16,11 +16,11 @@ from django.views.generic.edit import FormMixin
 from rdmo.core.plugins import get_plugin, get_plugins
 from rdmo.core.views import CSRFViewMixin, ObjectPermissionMixin, RedirectViewMixin, StoreIdViewMixin
 from rdmo.questions.models import Catalog
-from rdmo.tasks.models import Task
-from rdmo.views.models import View
 
+from ...tasks.models import Task
+from ...views.models import View
 from ..models import Integration, Invite, Membership, Project
-from ..utils import get_upload_accept
+from ..utils import filter_tasks_or_views_for_project, get_upload_accept
 
 logger = logging.getLogger(__name__)
 
@@ -66,13 +66,17 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
             # tasks should be synced, the user can not change them
             context['tasks_available'] = project.tasks.exists()
         else:
-            context['tasks_available'] = Task.objects.filter_for_project(project, user=self.request.user).exists()
+            context['tasks_available'] = (
+                filter_tasks_or_views_for_project(Task, project).filter_availability(self.request.user).exists()
+            )
 
         if settings.PROJECT_VIEWS_SYNC:
             # views should be synced, the user can not change them
             context['views_available'] = project.views.exists()
         else:
-            context['views_available'] = View.objects.filter_for_project(project, user=self.request.user).exists()
+            context['views_available'] = (
+                filter_tasks_or_views_for_project(View, project).filter_availability(self.request.user).exists()
+            )
 
         ancestors_import = []
         for instance in ancestors.exclude(id=project.id):

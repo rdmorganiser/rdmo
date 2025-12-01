@@ -14,6 +14,7 @@ from rdmo.views.models import View
 from ..forms import ProjectForm
 from ..mixins import ProjectImportMixin
 from ..models import Membership, Project
+from ..utils import filter_tasks_or_views_for_project
 
 logger = logging.getLogger(__name__)
 
@@ -48,13 +49,13 @@ class ProjectCreateView(ObjectPermissionMixin, LoginRequiredMixin,
 
         # add all tasks to project
         if not settings.PROJECT_TASKS_SYNC:
-            tasks = Task.objects.filter_for_project(form.instance, user=self.request.user)
+            tasks = filter_tasks_or_views_for_project(Task, form.instance).filter_availability(self.request.user)
             for task in tasks:
                 form.instance.tasks.add(task)
 
         # add all views to project
         if not settings.PROJECT_VIEWS_SYNC:
-            views = View.objects.filter_for_project(form.instance, user=self.request.user)
+            views = filter_tasks_or_views_for_project(View, form.instance).filter_availability(self.request.user)
             for view in views:
                 form.instance.views.add(view)
 

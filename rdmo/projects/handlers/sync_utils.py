@@ -4,6 +4,7 @@ from django.contrib.auth.models import Group
 from django.db.models import ForeignKey, ManyToManyField, Model
 
 from rdmo.projects.models import Project
+from rdmo.projects.utils import filter_tasks_or_views_for_project
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
@@ -46,11 +47,11 @@ def sync_task_or_view_to_projects(instance):
         instance.projects.add(*to_add)
 
 
-def sync_tasks_or_views_on_a_project(project, model):
+def sync_tasks_or_views_on_a_project(project, task_or_view):
     """Ensure the project is linked to exactly the correct instances of a model (View/Task)."""
-    project_m2m_field = get_related_field_name_on_model_for_instance(Project, model)
+    project_m2m_field = get_related_field_name_on_model_for_instance(Project, task_or_view)
 
-    desired_instances = model.objects.filter_for_project(project)
+    desired_instances = filter_tasks_or_views_for_project(task_or_view, project)
     current_instances = getattr(project, project_m2m_field).all()
 
     to_remove = current_instances.exclude(pk__in=desired_instances)

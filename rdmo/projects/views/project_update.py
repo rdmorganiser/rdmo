@@ -22,6 +22,7 @@ from ..forms import (
 )
 from ..mixins import ProjectImportMixin
 from ..models import Project, Visibility
+from ..utils import filter_tasks_or_views_for_project
 
 logger = logging.getLogger(__name__)
 
@@ -124,10 +125,9 @@ class ProjectUpdateTasksView(ObjectPermissionMixin, RedirectViewMixin, UpdateVie
         return super().dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):
-        tasks = Task.objects.filter_for_project(self.object, user=self.request.user)
         form_kwargs = super().get_form_kwargs()
         form_kwargs.update({
-            'tasks': tasks
+            'tasks': filter_tasks_or_views_for_project(Task, self.object).filter_availability(self.request.user)
         })
         return form_kwargs
 
@@ -147,10 +147,9 @@ class ProjectUpdateViewsView(ObjectPermissionMixin, RedirectViewMixin, UpdateVie
         return super().dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):
-        views = View.objects.filter_for_project(self.object, user=self.request.user)
         form_kwargs = super().get_form_kwargs()
         form_kwargs.update({
-            'views': views
+            'views': filter_tasks_or_views_for_project(View, self.object).filter_availability(self.request.user)
         })
         return form_kwargs
 
