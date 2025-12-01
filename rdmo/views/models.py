@@ -165,6 +165,11 @@ class View(models.Model, TranslationMixin):
             'conditions': project_wrapper.conditions,
             'format': export_format,
             'rdmo_version': __version__,
+            'view': {
+                'id': self.id,
+                'title': self.title,
+                'help': self.help
+            },
             'site': {
                 'name': site.name,
                 'domain': site.domain
