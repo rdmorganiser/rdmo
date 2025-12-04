@@ -80,6 +80,7 @@ from .utils import (
     check_options,
     compute_set_prefix_from_set_value,
     copy_project,
+    filter_tasks_or_views_for_project,
     get_contact_message,
     get_upload_accept,
     send_contact_message,
@@ -408,15 +409,13 @@ class ProjectViewSet(ModelViewSet):
         # add all tasks to project
         if self.request.data.get('tasks') is None:
             if not settings.PROJECT_TASKS_SYNC:
-                tasks = Task.objects.filter_for_project(project).filter_availability(self.request.user)
-                for task in tasks:
+                for task in filter_tasks_or_views_for_project(Task, project).filter_availability(self.request.user):
                     project.tasks.add(task)
 
         if self.request.data.get('views') is None:
             # add all views to project
             if not settings.PROJECT_VIEWS_SYNC:
-                views = View.objects.filter_for_project(project).filter_availability(self.request.user)
-                for view in views:
+                for view in filter_tasks_or_views_for_project(View, project).filter_availability(self.request.user):
                     project.views.add(view)
 
 
@@ -920,6 +919,13 @@ class CatalogViewSet(ListModelMixin, GenericViewSet):
     serializer_class = CatalogSerializer
 
     def get_queryset(self):
-        return Catalog.objects.filter_current_site() \
-                              .filter_group(self.request.user) \
-                              .order_by('-available', 'order')
+        queryset = (
+            Catalog.objects.filter_current_site().filter_group(self.request.user)
+        )
+        availability_subquery = Subquery(
+            queryset.filter_availability(self.request.user).values('pk')
+        )
+        return (
+            queryset.filter(Q(pk__in=availability_subquery) | Q(projects__user=self.request.user))
+            .order_by('-available', 'order', 'id').distinct()
+        )

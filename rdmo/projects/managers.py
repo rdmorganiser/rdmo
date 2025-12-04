@@ -72,22 +72,25 @@ class ProjectQuerySet(TreeQuerySet):
         return self.filter(memberships__in=memberships).distinct()
 
     def filter_projects_for_task_or_view(self, instance):
-        # if View/Task is not available it should not show for any project
-        if not instance.available:
-            return self.none()
-
         # projects that have an unavailable catalog should be disregarded
         qs = self.filter(catalog__available=True)
 
-        # when instance.catalogs is empty it applies to all
+        # when View/Task is not available it should not show for any project
+        if not instance.available:
+            return self.none()
+
+        # when View/Task has any catalogs it can be filtered for those
         if instance.catalogs.exists():
             qs = qs.filter(catalog__in=instance.catalogs.all())
 
-        # when instance.sites is empty it applies to all
+        # when View/Task has any sites it can be filtered for those
         if instance.sites.exists():
             qs = qs.filter(site__in=instance.sites.all())
+        elif settings.MULTISITE:
+            # when View/Task has no sites in a multi-site, it should not appear at all
+            return self.none()
 
-        # when instance.groups is empty it applies to all
+        # when  has any groups it can be filtered for those
         if instance.groups.exists():
             qs = qs.filter_groups(instance.groups.all())
 
