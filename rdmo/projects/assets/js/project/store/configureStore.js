@@ -55,11 +55,12 @@ export default function configureStore() {
   )
 
   const getConfigFromLocation = () => {
-    const { page, itemId, itemAction } = parseLocation()
+    const { page, pageId, action, actionId } = parseLocation()
 
     store.dispatch(configActions.updateConfig('page', page, false))
-    store.dispatch(configActions.updateConfig('itemId', itemId, false))
-    store.dispatch(configActions.updateConfig('itemAction', itemAction, false))
+    store.dispatch(configActions.updateConfig('pageId', pageId, false))
+    store.dispatch(configActions.updateConfig('action', action, false))
+    store.dispatch(configActions.updateConfig('actionId', actionId, false))
   }
 
   // this event is triggered when the page first loads
@@ -79,10 +80,6 @@ export default function configureStore() {
       const permissions = projectObj.project.project.permissions || {}
       if (permissions.can_view_invite) {
         store.dispatch(projectActions.fetchProjectInvites(projectId))
-      }
-      const views = projectObj.project.project.views || []
-      if (views && views.length > 0) {
-        store.dispatch(projectActions.fetchProjectViews(views))
       }
     })
   })

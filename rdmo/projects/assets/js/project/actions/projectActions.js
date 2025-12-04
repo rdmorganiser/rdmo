@@ -8,14 +8,80 @@ import { projectId } from '../utils/meta'
 import { updateLocation } from '../utils/location'
 
 import ProjectApi from '../api/ProjectApi'
-import ViewsApi from '../api/ViewsApi'
 
 import * as actionTypes from './actionTypes'
 
-export function setPage(page) {
+export function setLocation({ page, pageId, action, actionId, origin }) {
   return function (dispatch) {
     dispatch(updateConfig('page', page))
-    updateLocation(page)
+    dispatch(updateConfig('pageId', pageId))
+    dispatch(updateConfig('action', action))
+    dispatch(updateConfig('actionId', actionId))
+
+    if (origin !== undefined) {
+      dispatch(updateConfig('origin', origin))
+    }
+
+    updateLocation({ page, pageId, action, actionId })
+  }
+}
+
+export function setPage(page) {
+  return setLocation({
+    page,
+    pageId: undefined,
+    action: undefined,
+    actionId: undefined,
+    origin: page
+  })
+}
+
+export function clearCurrentView() {
+  return { type: actionTypes.CLEAR_CURRENT_VIEW }
+}
+
+export function setProjectAnswers(view) {
+  return function (dispatch) {
+    dispatch({ type: actionTypes.SET_PROJECT_ANSWERS, view })
+  }
+}
+
+export function openViewInContext({ viewId, snapshotId = null, projectAnswers = null }) {
+  return function (dispatch) {
+    if (viewId === 'answers') {
+      if (snapshotId == null) {
+        if (projectAnswers) {
+          return dispatch(setProjectAnswers(projectAnswers))
+        }
+        return
+      }
+
+      return dispatch(getSnapshotAnswers(snapshotId))
+    }
+
+    if (snapshotId == null) {
+      return dispatch(getProjectView(viewId))
+    }
+
+    return dispatch(getSnapshotView(snapshotId, viewId))
+  }
+}
+
+export function downloadDocument(urlPath, format) {
+  return function (dispatch) {
+    dispatch(addToPending('downloadDocument'))
+    dispatch({ type: actionTypes.DOWNLOAD_DOCUMENT_INIT })
+
+    return ProjectApi.downloadDocument(urlPath, format)
+      .then(() => {
+        dispatch(removeFromPending('downloadDocument'))
+        dispatch({ type: actionTypes.DOWNLOAD_DOCUMENT_SUCCESS })
+      })
+      .catch(error => {
+        dispatch(removeFromPending('downloadDocument'))
+        dispatch({ type: actionTypes.DOWNLOAD_DOCUMENT_ERROR, error })
+        throw error
+      })
   }
 }
 
@@ -28,16 +94,20 @@ export function fetchProject() {
       ProjectApi.fetchProject(projectId),
       ProjectApi.fetchProjectHierarchy(projectId),
       ProjectApi.fetchProjectSnapshots(projectId),
+      ProjectApi.fetchProjectViews(projectId),
+      ProjectApi.fetchProjectAnswers(projectId),
       ProjectApi.fetchProjectTasks(projectId),
       ProjectApi.fetchProjectMemberships(projectId),
       ProjectApi.fetchProjectMembershipHierarchy(projectId),
       CatalogsApi.fetchCatalogs()
     ])
-      .then(([project, hierarchy, snapshots, tasks, memberships, membershipHierarchy, catalogs]) => {
+      .then(([project, hierarchy, snapshots, views, answers, tasks, memberships, membershipHierarchy, catalogs]) => {
         const projectData = {
           project: project,
           hierarchy: hierarchy,
           snapshots: snapshots,
+          projectViews: views,
+          projectAnswers: answers,
           tasks: tasks,
           memberships: [...memberships, ...membershipHierarchy],
           catalogs: catalogs
@@ -83,6 +153,8 @@ export function updateProject(data) {
           hierarchy,
           // everything else stays untouched:
           // snapshots: currentBundle.snapshots,
+          // projectViews: currentBundle.projectViews,
+          // projectAnswers: currentBundle.projectAnswers,
           // tasks: currentBundle.tasks,
           // memberships: currentBundle.memberships,
           // catalogs: currentBundle.catalogs,
@@ -338,19 +410,77 @@ export function rollbackSnapshot(snapshotId, data) {
   }
 }
 
-export function fetchProjectViews(viewIds) {
+export function getProjectView(viewId) {
   return function (dispatch) {
-    dispatch(addToPending('fetchProjectViews'))
-    dispatch({ type: actionTypes.FETCH_PROJECT_VIEWS_INIT })
+    dispatch(addToPending('fetchProjectView'))
+    dispatch({ type: actionTypes.FETCH_PROJECT_VIEW_INIT })
 
-    return Promise.all(viewIds.map(id => ViewsApi.fetchView(id)))
-      .then(projectViews => {
-        dispatch(removeFromPending('fetchProjectViews'))
-        dispatch({ type: actionTypes.FETCH_PROJECT_VIEWS_SUCCESS, projectViews })
+    return ProjectApi.fetchProjectView(projectId, viewId)
+      .then(view => {
+        dispatch(removeFromPending('fetchProjectView'))
+        dispatch({ type: actionTypes.FETCH_PROJECT_VIEW_SUCCESS, view })
+        return view
       })
       .catch(error => {
-        dispatch(removeFromPending('fetchProjectViews'))
-        dispatch({ type: actionTypes.FETCH_PROJECT_VIEWS_ERROR, error })
+        dispatch(removeFromPending('fetchProjectView'))
+        dispatch({ type: actionTypes.FETCH_PROJECT_VIEW_ERROR, error })
+        throw error
+      })
+  }
+}
+
+export function getProjectAnswers() {
+  return function (dispatch) {
+    dispatch(addToPending('fetchProjectAnswers'))
+    dispatch({ type: actionTypes.FETCH_PROJECT_ANSWERS_INIT })
+
+    return ProjectApi.fetchProjectAnswers(projectId)
+      .then(answers => {
+        dispatch(removeFromPending('fetchProjectAnswers'))
+        dispatch({ type: actionTypes.FETCH_PROJECT_ANSWERS_SUCCESS, answers })
+        return answers
+      })
+      .catch(error => {
+        dispatch(removeFromPending('fetchProjectAnswers'))
+        dispatch({ type: actionTypes.FETCH_PROJECT_ANSWERS_ERROR, error })
+        throw error
+      })
+  }
+}
+
+export function getSnapshotAnswers(snapshotId) {
+  return function (dispatch) {
+    dispatch(addToPending('fetchSnapshotAnswers'))
+    dispatch({ type: actionTypes.FETCH_SNAPSHOT_ANSWERS_INIT })
+
+    return ProjectApi.fetchSnapshotAnswers(projectId, snapshotId)
+      .then(view => {
+        dispatch(removeFromPending('fetchSnapshotAnswers'))
+        dispatch({ type: actionTypes.FETCH_SNAPSHOT_ANSWERS_SUCCESS, view })
+        return view
+      })
+      .catch(error => {
+        dispatch(removeFromPending('fetchSnapshotAnswers'))
+        dispatch({ type: actionTypes.FETCH_SNAPSHOT_ANSWERS_ERROR, error })
+        throw error
+      })
+  }
+}
+
+export function getSnapshotView(snapshotId, viewId) {
+  return function (dispatch) {
+    dispatch(addToPending('fetchSnapshotView'))
+    dispatch({ type: actionTypes.FETCH_SNAPSHOT_VIEW_INIT })
+
+    return ProjectApi.fetchSnapshotView(projectId, snapshotId, viewId)
+      .then(view => {
+        dispatch(removeFromPending('fetchSnapshotView'))
+        dispatch({ type: actionTypes.FETCH_SNAPSHOT_VIEW_SUCCESS, view })
+        return view
+      })
+      .catch(error => {
+        dispatch(removeFromPending('fetchSnapshotView'))
+        dispatch({ type: actionTypes.FETCH_SNAPSHOT_VIEW_ERROR, error })
         throw error
       })
   }

@@ -83,4 +83,30 @@ export default class ProjectApi extends BaseApi {
   static rollbackSnapshot(projectId, snapshotId, data) {
     return this.post(`/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/rollback`, data)
   }
+
+  static fetchProjectViews(projectId) {
+    return this.get(`/api/v1/projects/projects/${projectId}/views/`)
+  }
+
+  static fetchProjectView(projectId, viewId) {
+    return this.get(`/api/v1/projects/projects/${projectId}/views/${viewId}/`)
+  }
+
+  static fetchProjectAnswers(projectId) {
+    return this.get(`/api/v1/projects/projects/${projectId}/answers/`)
+  }
+
+  static fetchSnapshotAnswers(projectId, snapshotId) {
+    return this.get(`/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/answers/`)
+  }
+
+  static fetchSnapshotView(projectId, snapshotId, viewId) {
+    return this.get(`/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/views/${viewId}/`)
+  }
+
+  static downloadDocument(urlPath, format) {
+    const url = `/api/v1/projects/${urlPath}/export/${format}/`
+    window.open(url, '_blank', 'noopener')
+    return Promise.resolve()
+  }
 }

@@ -3,8 +3,8 @@ import * as actionTypes from '../actions/actionTypes'
 const initialState = {
   project: null,
   invites: null,
-  projectViews: [],
-  errors: []
+  errors: [],
+  currentView: null,
 }
 
 const clearErrors = (state) => ({
@@ -33,7 +33,8 @@ export default function projectReducer(state = initialState, action) {
     case actionTypes.LEAVE_PROJECT_INIT:
     case actionTypes.CREATE_SNAPSHOT_INIT:
     case actionTypes.UPDATE_SNAPSHOT_INIT:
-    case actionTypes.FETCH_PROJECT_VIEWS_INIT:
+    case actionTypes.FETCH_PROJECT_VIEW_INIT:
+    case actionTypes.FETCH_SNAPSHOT_ANSWERS_INIT:
     case actionTypes.CLEAR_PROJECT_ERRORS:
       return clearErrors(state)
     // ERROR actions - append error
@@ -50,7 +51,8 @@ export default function projectReducer(state = initialState, action) {
     case actionTypes.LEAVE_PROJECT_ERROR:
     case actionTypes.CREATE_SNAPSHOT_ERROR:
     case actionTypes.UPDATE_SNAPSHOT_ERROR:
-    case actionTypes.FETCH_PROJECT_VIEWS_ERROR:
+    case actionTypes.FETCH_PROJECT_VIEW_ERROR:
+    case actionTypes.FETCH_SNAPSHOT_ANSWERS_ERROR:
       return appendError(state, action)
     case actionTypes.FETCH_PROJECT_SUCCESS:
       return { ...state, project: action.project }
@@ -98,7 +100,6 @@ export default function projectReducer(state = initialState, action) {
         }
       }
     }
-    // NEW CASES
     case actionTypes.CREATE_SNAPSHOT_SUCCESS:
       return {
         ...state,
@@ -120,13 +121,19 @@ export default function projectReducer(state = initialState, action) {
         }
       }
     }
-    // Views -> to be changed with new endpoint
-    case actionTypes.FETCH_PROJECT_VIEWS_SUCCESS:
+    case actionTypes.FETCH_PROJECT_VIEW_SUCCESS:
+    case actionTypes.FETCH_SNAPSHOT_VIEW_SUCCESS:
+    case actionTypes.FETCH_SNAPSHOT_ANSWERS_SUCCESS:
+    case actionTypes.SET_PROJECT_ANSWERS:
       return {
         ...state,
-        projectViews: action.projectViews
+        currentView: action.view
       }
-    // END NEW CASES
+    case actionTypes.CLEAR_CURRENT_VIEW:
+      return {
+        ...state,
+        currentView: null
+      }
     default:
       return state
   }
