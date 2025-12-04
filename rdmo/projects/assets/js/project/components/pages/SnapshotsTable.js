@@ -1,20 +1,33 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 import { useFormattedDateTime } from 'rdmo/core/assets/js/hooks'
 import { language } from 'rdmo/core/assets/js/utils'
 
 import { useModal } from 'rdmo/core/assets/js/hooks'
 
+import { getSnapshotAnswers, setLocation } from '../../actions/projectActions'
 import SnapshotModal from './SnapshotModal'
 
 const SnapshotsTable = ({ snapshots }) => {
+  const dispatch = useDispatch()
   const { project } = useSelector((state) => state.project.project) || {}
   const perms = project?.permissions || {}
 
   const { show: showUpdate, open: openUpdate, close: closeUpdate } = useModal()
   // const { show: showRollback, open: openRollback, close: closeRollback } = useModal()
   const [selectedSnapshot, setSelectedSnapshot] = useState(null)
+
+  const handleShowAnswers = (snapshotId) => {
+    dispatch(getSnapshotAnswers(snapshotId))
+    dispatch(setLocation({
+      page: 'snapshots',
+      pageId: String(snapshotId),
+      action: 'answers',
+      actionId: undefined,
+      origin: 'snapshots'
+    }))
+  }
 
   const openUpdateModal = (snapshot) => {
     setSelectedSnapshot(snapshot)
@@ -55,6 +68,7 @@ const SnapshotsTable = ({ snapshots }) => {
                       className="btn btn-link p-0"
                       aria-label={gettext('View answers')}
                       title={gettext('View answers')}
+                      onClick={() => handleShowAnswers(snapshot.id)}
                     >
                       <i
                         className={'bi bi-eye'}
