@@ -105,7 +105,8 @@ export default class ProjectApi extends BaseApi {
   }
 
   static downloadDocument(urlPath, format) {
-    const url = `/api/v1/projects/${urlPath}/export/${format}/`
+    // const url = `/api/v1/projects/${urlPath}/export/${format}/`
+    const url = `/api/v1/projects${urlPath}export/${format}/`
     window.open(url, '_blank', 'noopener')
     return Promise.resolve()
   }

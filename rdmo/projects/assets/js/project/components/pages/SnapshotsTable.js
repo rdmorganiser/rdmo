@@ -6,8 +6,9 @@ import { language } from 'rdmo/core/assets/js/utils'
 
 import { useModal } from 'rdmo/core/assets/js/hooks'
 
-import { getSnapshotAnswers, setLocation } from '../../actions/projectActions'
+import { setLocation } from '../../actions/projectActions'
 import SnapshotModal from './SnapshotModal'
+import { buildLocationForView } from '../../utils/buildLocationForView'
 
 const SnapshotsTable = ({ snapshots }) => {
   const dispatch = useDispatch()
@@ -19,12 +20,9 @@ const SnapshotsTable = ({ snapshots }) => {
   const [selectedSnapshot, setSelectedSnapshot] = useState(null)
 
   const handleShowAnswers = (snapshotId) => {
-    dispatch(getSnapshotAnswers(snapshotId))
+    const location = buildLocationForView('answers', snapshotId)
     dispatch(setLocation({
-      page: 'snapshots',
-      pageId: String(snapshotId),
-      action: 'answers',
-      actionId: undefined,
+      ...location,
       origin: 'snapshots'
     }))
   }

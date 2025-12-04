@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import Html from 'rdmo/core/assets/js/components/Html'
 import { Tile } from '../helper'
 import { clearCurrentView, downloadDocument, openViewInContext, setLocation } from '../../actions/projectActions'
-import { buildApiPath, buildLocationForView } from '../../utils/buildPaths'
+import { buildLocationForView } from '../../utils/buildLocationForView'
 import { isEmpty } from 'lodash'
 
 const Documents = () => {
@@ -17,7 +17,8 @@ const Documents = () => {
   const exportFormats = useSelector((state) => state.settings.export_formats) ?? {}
   const perms = project?.permissions ?? {}
   const currentView = useSelector((state) => state.project.currentView)
-  const showTiles = !currentView && origin !== 'snapshots'
+  const hasActions = (action === 'views' && !!actionId) || action === 'answers'
+  const showTiles = !hasActions && origin !== 'snapshots'
 
   const answerView = !isEmpty(projectAnswers)
     ? {
@@ -28,115 +29,62 @@ const Documents = () => {
     : null
 
   useEffect(() => {
-    if (currentView) return
-    if (!action) return
+    if (!hasActions) return
 
-    let snapshotId = null
-    let viewId = null
+    const snapshotId =
+      page === 'snapshots' && pageId
+        ? pageId
+        : null
 
-    if (page === 'documents') {
-      if (action === 'answers') {
-        viewId = 'answers'
-      } else if (action === 'views' && actionId) {
-        viewId = actionId
-      }
-    } else if (page === 'snapshots' && pageId) {
-      snapshotId = pageId
-
-      if (action === 'answers') {
-        viewId = 'answers'
-      } else if (action === 'views' && actionId) {
-        viewId = actionId
-      }
-    }
+    const viewId = action === 'answers'
+      ? 'answers'
+      : actionId
 
     if (!viewId) return
 
+    const answersViewForProject =
+      viewId === 'answers' && !snapshotId
+        ? answerView
+        : undefined
+
     dispatch(openViewInContext({
       viewId,
       snapshotId,
-      projectAnswers: viewId === 'answers' && !snapshotId ? answerView : undefined,
+      projectAnswers: answersViewForProject,
     }))
-  }, [page, pageId, action, actionId, currentView, answerView, dispatch])
+  }, [page, pageId, action, actionId, projectAnswers, dispatch])
 
   const handleBack = () => {
     dispatch(clearCurrentView())
-
     if (origin === 'snapshots') {
-      dispatch(setLocation({
-        page: 'snapshots',
-        pageId: undefined,
-        action: undefined,
-        actionId: undefined,
-      }))
+      dispatch(setLocation(
+        buildLocationForView(null, null, { basePage: 'snapshots' })
+      ))
     } else if (page === 'snapshots' && pageId) {
-      dispatch(setLocation({
-        page: 'snapshots',
-        pageId: String(pageId),
-        action: undefined,
-        actionId: undefined,
-      }))
+      dispatch(setLocation(
+        buildLocationForView(null, pageId)
+      ))
     } else {
-      dispatch(setLocation({
-        page: 'documents',
-        pageId: undefined,
-        action: undefined,
-        actionId: undefined,
-      }))
+      dispatch(setLocation(
+        buildLocationForView(null, null)
+      ))
     }
-  }
-
-  const buildApiPathForView = (viewId, snapshotId) => {
-    if (viewId === 'answers') {
-      return snapshotId == null
-        ? buildApiPath('answers')
-        : buildApiPath('snapshots', snapshotId, 'answers')
-    }
-
-    return snapshotId == null
-      ? buildApiPath('views', viewId)
-      : buildApiPath('snapshots', snapshotId, 'views', viewId)
   }
 
   const handleSelectSnapshot = (snapshotId) => {
-    const viewId = currentView?.id || 'answers'
-    if (currentView) {
-      dispatch(openViewInContext({
-        viewId,
-        snapshotId,
-        answerView,
-      }))
-
+    if (hasActions) {
+      const viewId = currentView?.id || 'answers'
       const location = buildLocationForView(viewId, snapshotId)
       dispatch(setLocation(location))
     } else {
-      if (snapshotId == null) {
-        dispatch(setLocation({
-          page: 'documents',
-          pageId: undefined,
-          action: undefined,
-          actionId: undefined,
-        }))
-      } else {
-        dispatch(setLocation({
-          page: 'snapshots',
-          pageId: String(snapshotId),
-          action: undefined,
-          actionId: undefined,
-        }))
-      }
+      dispatch(setLocation(
+        buildLocationForView(null, snapshotId)
+      ))
     }
   }
 
-  const handleTileClick = (viewId, answerView = {}) => {
+  const handleTileClick = (viewId) => {
     const snapshotId = selectedSnapshotId
-
-    dispatch(openViewInContext({
-      viewId,
-      snapshotId,
-      projectAnswers: answerView
-    }))
-
     const location = buildLocationForView(viewId, snapshotId)
     dispatch(setLocation({
       ...location,
@@ -144,12 +92,7 @@ const Documents = () => {
     }))
   }
 
-  const handleDownload = (path, format) => {
-    dispatch(downloadDocument(path, format))
-  }
-
-  const renderExportFormatMenuItems = (viewId) => {
-    const apiPath = buildApiPathForView(viewId, selectedSnapshotId)
+  const renderExportFormatMenuItems = () => {
     if (!Array.isArray(exportFormats) || exportFormats.length === 0) {
       return (
         <li className="dropdown-item text-muted">
@@ -165,7 +108,7 @@ const Documents = () => {
           className="dropdown-item"
           onClick={(event) => {
             event.stopPropagation()  // prevent Tile onClick
-            handleDownload(apiPath, value)
+            dispatch(downloadDocument(window.location.pathname, value))
           }}
         >
           {label}
@@ -208,7 +151,7 @@ const Documents = () => {
               </button>
 
               <ul className="dropdown-menu dropdown-menu-end">
-                {renderExportFormatMenuItems(view.id)}
+                {renderExportFormatMenuItems()}
               </ul>
             </div>
           </div>
@@ -228,14 +171,14 @@ const Documents = () => {
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2 className="mb-0">{gettext('Documents')}</h2>
         <div className="d-flex align-items-center gap-2">
-          {currentView && <span className="dropdown">
+          {hasActions && <span className="dropdown">
             <button type="button" className="link link bi" data-bs-toggle="dropdown"
               title={gettext('Export')} aria-label={gettext('Export')}>
               {gettext('Export')}
               <i className="bi bi-caret-down-fill ms-1" />
             </button>
             <ul className="dropdown-menu dropdown-menu-end">
-              {renderExportFormatMenuItems(currentView?.id || 'answers')}
+              {renderExportFormatMenuItems()}
             </ul>
           </span>}
           {perms.can_view_snapshot && (
@@ -286,7 +229,7 @@ const Documents = () => {
       {showTiles ? (
         <>
           {!isEmpty(projectAnswers) &&
-            <Tile key={answerView.id} size={'compact'} onClick={() => handleTileClick(answerView.id, answerView)}>
+            <Tile key={answerView.id} size={'compact'} onClick={() => handleTileClick(answerView.id)}>
               {renderViewTile(answerView)}
             </Tile>}
           {projectViews?.length > 0 && (
