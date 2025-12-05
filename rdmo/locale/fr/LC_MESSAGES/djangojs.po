@@ -1582,7 +1582,7 @@ msgstr "Supprimer l'onglet"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:165
 msgid "Create tab"
-msgstr "Onglet Créer"
+msgstr "Créer un onglet"
 
 #: projects/assets/js/interview/components/main/page/PageHead.js:186
 msgid "Update tab"

@@ -27,7 +27,7 @@ msgstr "Nom de famille"
 
 #: accounts/forms.py:81 core/constants.py:22 projects/models/invite.py:28
 msgid "E-mail"
-msgstr "E-mail"
+msgstr "Courriel"
 
 #: accounts/forms.py:85
 msgid "Password"
@@ -258,11 +258,11 @@ msgstr ""
 
 #: accounts/templates/account/email.html:6
 msgid "E-mail Addresses"
-msgstr "Adresses mail"
+msgstr "Adresses courriel"
 
 #: accounts/templates/account/email.html:10
 msgid "The following e-mail addresses are associated with your account:"
-msgstr "Les adresses mail suivantes sont associées à votre compte:"
+msgstr "Les adresses courriel suivantes sont associées à votre compte:"
 
 #: accounts/templates/account/email.html:26
 msgid "Primary"
@@ -297,21 +297,21 @@ msgid ""
 "You currently do not have any e-mail address set up. You should really add "
 "an e-mail address so you can receive notifications, reset your password, etc."
 msgstr ""
-"Vous n'avez actuellement aucune adresse mail configurée. Vous devriez "
-"ajouter une adresse mail pour recevoir des notifications, réinitialiser "
+"Vous n'avez actuellement aucune adresse courriel configurée. Vous devriez "
+"ajouter une adresse courriel pour recevoir des notifications, réinitialiser "
 "votre mot de passe, etc."
 
 #: accounts/templates/account/email.html:56
 msgid "Add E-mail Address"
-msgstr "Ajouter une adresse mail"
+msgstr "Ajouter une adresse courriel"
 
 #: accounts/templates/account/email.html:63
 msgid "Add E-mail"
-msgstr "Ajouter un e-mail"
+msgstr "Ajouter un courriel"
 
 #: accounts/templates/account/email.html:71
 msgid "Do you really want to remove the selected e-mail address?"
-msgstr "Voulez-vous vraiment supprimer l'adresse mail sélectionnée?"
+msgstr "Voulez-vous vraiment supprimer l'adresse courriel sélectionnée?"
 
 #: accounts/templates/account/email/password_reset_key_message.txt:1
 #: projects/templates/projects/email/project_invite_message.txt:1
@@ -325,7 +325,7 @@ msgid ""
 "%(site_domain)s will be reset. It can be safely ignored if you did not "
 "request a password reset. Click the link below to reset your password."
 msgstr ""
-"Vous recevez cet e-mail parce que vous avez demandé la réinitialisation de "
+"Vous recevez ce courriel parce que vous avez demandé la réinitialisation de "
 "votre mot de passe sur %(site_domain)s. Vous pouvez l'ignorer si vous n'avez "
 "pas demandé la réinitialisation de votre mot de passe. Cliquez sur le lien "
 "ci-dessous pour réinitialiser votre mot de passe."
@@ -349,7 +349,7 @@ msgstr "Réinitialisation du mot de passe"
 
 #: accounts/templates/account/email_confirm.html:7
 msgid "Confirm E-mail Address"
-msgstr "Confirmez votre adresse mail"
+msgstr "Confirmez votre adresse courriel"
 
 #: accounts/templates/account/email_confirm.html:14
 #, python-format
@@ -358,7 +358,7 @@ msgid ""
 "address for user <strong>%(user_display)s</strong>."
 msgstr ""
 "Veuillez confirmer que <a href=\"mailto:%(email)s\">%(email)s</a> correspond "
-"à une adresse mail de l'utilisateur <strong>%(user_display)s</strong>."
+"à une adresse courriel de l'utilisateur <strong>%(user_display)s</strong>."
 
 #: accounts/templates/account/email_confirm.html:21
 msgid "Confirm"
@@ -370,7 +370,7 @@ msgid ""
 "This e-mail confirmation link expired or is invalid. Please <a "
 "href=\"%(email_url)s\">issue a new e-mail confirmation request</a>."
 msgstr ""
-"Ce lien de confirmation par e-mail a expiré ou n'est pas valide. Veuillez  "
+"Ce lien de confirmation par courriel a expiré ou n'est pas valide. Veuillez  "
 "<a href=\"%(email_url)s\"> faire une nouvelle demande de confirmation par e-"
 "mail </a>."
 
@@ -443,8 +443,8 @@ msgid ""
 "Forgotten your password? Enter your e-mail address below, and we'll send you "
 "an e-mail allowing you to reset it."
 msgstr ""
-"Avez-vous oublié votre mot de passe ? Entrez votre adresse mail ci-dessous, "
-"et nous vous enverrons un e-mail vous permettant de le réinitialiser."
+"Avez-vous oublié votre mot de passe ? Entrez votre adresse courriel ci-dessous, "
+"et nous vous enverrons un courriel vous permettant de le réinitialiser."
 
 #: accounts/templates/account/password_reset.html:21
 msgid "Reset my password"
@@ -459,7 +459,7 @@ msgid ""
 "We have sent you an e-mail. Please contact us if you do not receive it "
 "within a few minutes."
 msgstr ""
-"Nous vous avons envoyé un e-mail. Veuillez nous contacter si vous ne le "
+"Nous vous avons envoyé un courriel. Veuillez nous contacter si vous ne le "
 "recevez pas dans quelques minutes."
 
 #: accounts/templates/account/password_reset_done.html:19
@@ -467,7 +467,7 @@ msgid ""
 "If you don't receive an e-mail, please make sure you've entered the address "
 "you registered with, and check your spam folder."
 msgstr ""
-"Si vous ne recevez pas d'e-mail, assurez-vous d'avoir saisi l'adresse avec "
+"Si vous ne recevez pas de courriel, assurez-vous d'avoir saisi l'adresse avec "
 "laquelle vous êtes inscrit et vérifiez votre dossier spam."
 
 #: accounts/templates/account/password_reset_from_key.html:8
@@ -588,7 +588,7 @@ msgstr "Vous avez accepté les conditions d'utilisation."
 #: accounts/templates/account/verification_sent.html:7
 #: accounts/templates/account/verified_email_required.html:6
 msgid "Verify your e-mail address"
-msgstr "Vérifiez votre adresse mail"
+msgstr "Vérifiez votre adresse courriel"
 
 #: accounts/templates/account/verification_sent.html:11
 msgid ""
@@ -596,7 +596,7 @@ msgid ""
 "finalize the signup process. Please contact us if you do not receive it "
 "within a few minutes."
 msgstr ""
-"Nous vous avons envoyé un e-mail de vérification. Suivez le lien fourni pour "
+"Nous vous avons envoyé un courriel de vérification. Suivez le lien fourni pour "
 "finaliser le processus d'inscription. Veuillez nous contacter si vous ne le "
 "recevez pas dans quelques minutes."
 
@@ -608,7 +608,7 @@ msgid ""
 msgstr ""
 "Cette partie du site nous oblige à vérifier que vous êtes bien celui que "
 "vous prétendez être. À cette fin, nous vous demandons de confirmer votre "
-"adresse mail."
+"adresse courriel."
 
 #: accounts/templates/account/verified_email_required.html:15
 msgid ""
@@ -616,8 +616,8 @@ msgid ""
 "inside this e-mail. Please contact us if you do not receive it within a few "
 "minutes."
 msgstr ""
-"Nous vous avons envoyé un e-mail de vérification. Veuillez cliquer sur le "
-"lien à l'intérieur de cet e-mail. Veuillez nous contacter si vous ne le "
+"Nous vous avons envoyé un courriel de vérification. Veuillez cliquer sur le "
+"lien à l'intérieur de ce courriel. Veuillez nous contacter si vous ne le "
 "recevez pas dans quelques minutes."
 
 #: accounts/templates/account/verified_email_required.html:19
@@ -626,7 +626,7 @@ msgid ""
 "<strong>Note:</strong> you can still <a href=\"%(email_url)s\">change your e-"
 "mail address</a>."
 msgstr ""
-"<strong>Remarque:</strong> vous pouvez toujours  modifier votre adresse mail "
+"<strong>Remarque:</strong> vous pouvez toujours  modifier votre adresse courriel "
 "<a href=\"%(email_url)s\"></a>."
 
 #: accounts/templates/profile/profile_remove_closed.html:6
@@ -698,8 +698,8 @@ msgid ""
 msgstr ""
 "Veuillez mettre à jour les informations de votre compte. Vous pouvez "
 "modifier votre mot de passe en utilisant le <a href=\"%(password_url)s\"> "
-"formulaire de mot de passe </a> et vous pouvez modifier votre e-mail en "
-"utilisant le <a href=\"%(email_url)s\"> formulaire d'adresse mail </a>."
+"formulaire de mot de passe </a> et vous pouvez modifier votre courriel en "
+"utilisant le <a href=\"%(email_url)s\"> formulaire d'adresse courriel </a>."
 
 #: accounts/templates/profile/profile_update_form.html:33
 msgid ""
@@ -1191,7 +1191,7 @@ msgstr "Réinitialiser les info-bulles de tutoriel"
 
 #: core/templates/core/base_navigation_account.html:4
 msgid "Update e-mail"
-msgstr "Mettre à jour l'e-mail"
+msgstr "Mettre à jour le courriel"
 
 #: core/templates/core/bootstrap_form_field.html:69
 msgid ""
@@ -1832,11 +1832,11 @@ msgstr "La modification des vues est désactivée."
 
 #: projects/forms.py:274
 msgid "Username or e-mail"
-msgstr "Nom d'utilisateur ou e-mail"
+msgstr "Nom d'utilisateur ou courriel"
 
 #: projects/forms.py:276
 msgid "The username or e-mail of the new user."
-msgstr "Le nom d'utilisateur ou l'adresse mail du nouvel utilisateur."
+msgstr "Le nom d'utilisateur ou l'adresse courriel du nouvel utilisateur."
 
 #: projects/forms.py:288
 msgid "Add member silently"
@@ -1848,7 +1848,7 @@ msgid ""
 "via e-mail, when you check the following checkbox."
 msgstr ""
 "En tant que gestionnaire ou administrateur du site, vous pouvez ajouter "
-"directement des utilisateurs sans les avertir par e-mail, lorsque vous "
+"directement des utilisateurs sans les avertir par courriel, lorsque vous "
 "cochez la case suivante."
 
 #: projects/forms.py:304 projects/serializers/v1/__init__.py:214
@@ -1860,7 +1860,7 @@ msgid ""
 "A user with this username or e-mail was not found. Only registered users can "
 "be invited."
 msgstr ""
-"Un utilisateur avec cet identifiant ou e-mail n'a pas été trouvé. Seuls les "
+"Un utilisateur avec cet identifiant ou courriel n'a pas été trouvé. Seuls les "
 "utilisateurs enregistrés peuvent être invités."
 
 #: projects/forms.py:321
@@ -1904,7 +1904,7 @@ msgstr "Fichiers"
 #: projects/templates/projects/project_detail_snapshots.html:20
 #: projects/templates/projects/project_import.html:94
 msgid "Snapshot"
-msgstr "Snapshot"
+msgstr "Instantané"
 
 #: projects/forms.py:433
 msgid "Format"
@@ -2043,7 +2043,7 @@ msgstr "L'utilisateur pour ce rattachement."
 
 #: projects/models/invite.py:29
 msgid "The e-mail for this membership."
-msgstr "L'e-mail pour ce rattachement."
+msgstr "Le courriel pour ce rattachement."
 
 #: projects/models/invite.py:34
 msgid "The role for this invite."
@@ -2242,7 +2242,7 @@ msgstr "Le nombre de valeurs pour la barre de progression."
 
 #: projects/models/snapshot.py:18
 msgid "The project this snapshot belongs to."
-msgstr "Le projet auquel appartient ce snapshot."
+msgstr "Le projet auquel appartient cet instantané."
 
 #: projects/models/snapshot.py:23
 msgid "The title for this snapshot."
@@ -2250,14 +2250,14 @@ msgstr "Le titre de ce snapshot."
 
 #: projects/models/snapshot.py:28
 msgid "A description for this snapshot (optional)."
-msgstr "Une description de ce snapshot (facultatif)."
+msgstr "Une description de cet instantané (facultatif)."
 
 #: projects/models/snapshot.py:34
 #: projects/templates/projects/project_answers.html:9
 #: projects/templates/projects/project_detail_snapshots.html:12
 #: projects/templates/projects/project_view.html:23
 msgid "Snapshots"
-msgstr "Snapshots"
+msgstr "Instantanés"
 
 #: projects/models/value.py:33
 msgid "The project this value belongs to."
@@ -2265,7 +2265,7 @@ msgstr "Le projet auquel cette valeur appartient."
 
 #: projects/models/value.py:39
 msgid "The snapshot this value belongs to."
-msgstr "Le snapshot auquel cette valeur appartient."
+msgstr "L'instantané auquel cette valeur appartient."
 
 #: projects/models/value.py:45
 msgid "The attribute this value belongs to."
@@ -2460,15 +2460,15 @@ msgstr "Le secret d'un webhook pour fermer une tâche (facultatif)."
 
 #: projects/serializers/v1/__init__.py:219
 msgid "A user with that e-mail is already a member of the project."
-msgstr "Un utilisateur avec cet e-mail est déjà membre du projet."
+msgstr "Un utilisateur avec ce courriel est déjà membre du projet."
 
 #: projects/serializers/v1/__init__.py:227
 msgid "Either user or e-mail needs to be provided."
-msgstr "L'utilisateur ou l'e-mail doit être indiqué."
+msgstr "L'utilisateur ou le courriel doit être indiqué."
 
 #: projects/serializers/v1/__init__.py:229
 msgid "User and e-mail are mutually exclusive."
-msgstr "L'utilisateur et l'e-mail s'excluent mutuellement."
+msgstr "L'utilisateur et le courriel s'excluent mutuellement."
 
 #: projects/serializers/v1/page.py:121
 msgid "entry"
@@ -2526,7 +2526,7 @@ msgid ""
 "You are receiving this e-mail because you have been invited to collaborate "
 "on the project \"%(project_title)s\" by %(user_full_name)s."
 msgstr ""
-"Vous recevez cet e-mail parce que vous avez été invité à collaborer au "
+"Vous recevez ce courriel parce que vous avez été invité à collaborer au "
 "projet \"%(project_title)s\" par %(user_full_name)s."
 
 #: projects/templates/projects/email/project_invite_message.txt:8
@@ -2545,7 +2545,7 @@ msgstr ""
 #: projects/templates/projects/email/project_invite_message.txt:14
 msgid "If you were not expecting this invitation, you can ignore this e-mail."
 msgstr ""
-"Si vous n'attendiez pas cette invitation, vous pouvez ignorer cet e-mail."
+"Si vous n'attendiez pas cette invitation, vous pouvez ignorer ce courriel."
 
 #: projects/templates/projects/email/project_invite_subject.txt:1
 #, python-format
@@ -2644,7 +2644,7 @@ msgstr "Le lancement d'une tâche fera passer le statut à \"en cours\"."
 #: projects/templates/projects/issue_send_email.html:4
 #: projects/templates/projects/issue_send_email.html:30
 msgid "Send by mail"
-msgstr "Envoyer par e-mail"
+msgstr "Envoyer par courriel"
 
 #: projects/templates/projects/issue_send_integrations.html:3
 msgid "Send via integration"
@@ -2734,14 +2734,14 @@ msgid ""
 "here), or by their e-mail address."
 msgstr ""
 "Les utilisateurs peuvent être invités par leur nom d'utilisateur (s'ils ont "
-"déjà un compte ici), ou par leur adresse mail."
+"déjà un compte ici), ou par leur adresse courriel."
 
 #: projects/templates/projects/membership_form.html:32
 msgid ""
 "Users will receive an e-mail with a link to join the project with the "
 "assigned role."
 msgstr ""
-"Les utilisateurs recevront un e-mail avec un lien pour rejoindre le projet "
+"Les utilisateurs recevront un courriel avec un lien pour rejoindre le projet "
 "avec le rôle assigné."
 
 #: projects/templates/projects/membership_form.html:35
@@ -2878,7 +2878,7 @@ msgstr ""
 #: projects/templates/projects/project_detail_invites.html:15
 #: projects/templates/projects/project_detail_memberships.html:21
 msgid "E-Mail"
-msgstr "E-mail"
+msgstr "Courriel"
 
 #: projects/templates/projects/project_detail_issues.html:21
 #: tasks/templates/tasks/export/tasks.html:35
@@ -3023,7 +3023,7 @@ msgstr "Exporter le snapshot"
 
 #: projects/templates/projects/project_detail_snapshots.html:92
 msgid "No snapshots found."
-msgstr "Aucun snapshot n'a été trouvé."
+msgstr "Aucun instantané n'a été trouvé."
 
 #: projects/templates/projects/project_detail_snapshots_help.html:4
 msgid ""
@@ -3032,10 +3032,10 @@ msgid ""
 "create views, and the project can also be reset to a previous snapshot if "
 "needed."
 msgstr ""
-"Les snapshots  vous permettent de sauvegarder toutes les réponses à un "
-"moment donné et de préserver une certaine étape du projet. Plus tard, le "
-"snapshot peut être utilisé pour créer des vues, et le projet peut également "
-"être réinitialisé à un snapshot précédent si nécessaire."
+"Les instantanés vous permettent de sauvegarder toutes les réponses à un "
+"moment donné et de préserver une certaine étape du projet. Plus tard,"
+"l'instantané peut être utilisé pour créer des vues, et le projet peut également "
+"être réinitialisé à un instantané précédent si nécessaire."
 
 #: projects/templates/projects/project_detail_views.html:19 views/models.py:136
 msgid "View"
@@ -3196,7 +3196,7 @@ msgid ""
 "this form to send an email to the %(site_name)s support\""
 msgstr ""
 "Si vous avez une question ou un commentaire, n'hésitez pas à nous contacter. "
-"Vous pouvez utiliser ce formulaire pour envoyer un e-mail au support de "
+"Vous pouvez utiliser ce formulaire pour envoyer un courriel au support de "
 "%(site_name)s »."
 
 #: projects/templates/projects/project_interview_done.html:5
@@ -3235,7 +3235,7 @@ msgstr ""
 #: projects/templates/projects/project_interview_navigation_help.html:4
 msgid "Grey entries will be conditionally skipped based on your input."
 msgstr ""
-"Les entrées grises seront ignorées sous condition en fonction de vos données."
+"Les entrées grises seront ignorées sous condition en fonction de votre input."
 
 #: projects/templates/projects/project_interview_page_tabs_help.html:4
 msgid ""
@@ -3286,7 +3286,7 @@ msgid ""
 "strong>. All newer values will be deleted."
 msgstr ""
 "Vous êtes sur le point de réinitialiser toutes les valeurs au dernier "
-"snapshot <strong>%(title)s</strong>. Toutes les nouvelles valeurs seront "
+"instantané <strong>%(title)s</strong>. Toutes les nouvelles valeurs seront "
 "supprimées."
 
 #: projects/templates/projects/snapshot_rollback.html:17

@@ -2439,7 +2439,7 @@ msgstr "Utente e e-mail si escludono a vicenda."
 
 #: projects/serializers/v1/page.py:121
 msgid "entry"
-msgstr "ingresso"
+msgstr "elemento"
 
 #: projects/serializers/v1/page.py:160
 msgid "block"
@@ -2604,11 +2604,11 @@ msgstr "L'invio di un'attività imposterà lo stato a \"in corso\"."
 #: projects/templates/projects/issue_send_email.html:4
 #: projects/templates/projects/issue_send_email.html:30
 msgid "Send by mail"
-msgstr "Invia via mail"
+msgstr "Invia per posta elettronica"
 
 #: projects/templates/projects/issue_send_integrations.html:3
 msgid "Send via integration"
-msgstr "Invia via integrazione"
+msgstr "Invia per integrazione"
 
 #: projects/templates/projects/issue_send_integrations.html:10
 #: projects/templates/projects/project_detail_integrations.html:20
@@ -4492,7 +4492,7 @@ msgstr "Raccolta"
 #~ msgstr "Questa è una risposta predefinita che può essere personalizzata."
 
 #~ msgid "Erase input"
-#~ msgstr "Pulisci ingresso"
+#~ msgstr "Pulisci input"
 
 #~ msgid "Please type and select."
 #~ msgstr "Si prega di digitare e selezionare."

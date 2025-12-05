@@ -32,7 +32,7 @@ msgstr "Apellidos"
 
 #: accounts/forms.py:81 core/constants.py:22 projects/models/invite.py:28
 msgid "E-mail"
-msgstr "E-mail"
+msgstr "Correo electrónico"
 
 #: accounts/forms.py:85
 msgid "Password"
@@ -265,11 +265,11 @@ msgstr ""
 
 #: accounts/templates/account/email.html:6
 msgid "E-mail Addresses"
-msgstr "Dirección de e-mail"
+msgstr "Dirección de correo electrónico"
 
 #: accounts/templates/account/email.html:10
 msgid "The following e-mail addresses are associated with your account:"
-msgstr "Su usuario está asociado a las siguientes direcciones de e-mail:"
+msgstr "Su usuario está asociado a las siguientes direcciones de correo electrónico:"
 
 #: accounts/templates/account/email.html:26
 msgid "Primary"
@@ -304,20 +304,20 @@ msgid ""
 "You currently do not have any e-mail address set up. You should really add "
 "an e-mail address so you can receive notifications, reset your password, etc."
 msgstr ""
-"No hay configurada nunguna dirección de e-mail. Debería asociar una "
-"dirección de e-mail para recibir notificaciones, cambiar su contraseña, etc."
+"No hay configurada nunguna dirección de correo electrónico. Debería asociar una "
+"dirección de correo electrónico para recibir notificaciones, cambiar su contraseña, etc."
 
 #: accounts/templates/account/email.html:56
 msgid "Add E-mail Address"
-msgstr "Añadir dirección de e-mail"
+msgstr "Añadir dirección de correo electrónico"
 
 #: accounts/templates/account/email.html:63
 msgid "Add E-mail"
-msgstr "Añadir e-mail"
+msgstr "Añadir correo electrónico"
 
 #: accounts/templates/account/email.html:71
 msgid "Do you really want to remove the selected e-mail address?"
-msgstr "¿Desea de verdad eliminar la dirección de e-mail?"
+msgstr "¿Desea de verdad eliminar la dirección de correo electrónico?"
 
 #: accounts/templates/account/email/password_reset_key_message.txt:1
 #: projects/templates/projects/email/project_invite_message.txt:1
@@ -331,7 +331,7 @@ msgid ""
 "%(site_domain)s will be reset. It can be safely ignored if you did not "
 "request a password reset. Click the link below to reset your password."
 msgstr ""
-"Ha recibido este e-mail porque solicitó restablecer su contraseña en "
+"Ha recibido este correo electrónico porque solicitó restablecer su contraseña en "
 "%(site_domain)s. Puede ignorar de forma segura este mensaje si usted no ha "
 "solicitado restablecer su contraseña. Pulse en el enlace para restablecer su "
 "contraseña."
@@ -355,7 +355,7 @@ msgstr "Restablecer contraseña"
 
 #: accounts/templates/account/email_confirm.html:7
 msgid "Confirm E-mail Address"
-msgstr "Confirmar dirección de e-mail"
+msgstr "Confirmar dirección de correo electrónico"
 
 #: accounts/templates/account/email_confirm.html:14
 #, python-format
@@ -364,7 +364,7 @@ msgid ""
 "address for user <strong>%(user_display)s</strong>."
 msgstr ""
 "Por favor confirme que <a href=\"mailto:%(email)s\">%(email)s</a> es una "
-"dirección de e-mail para el usuario <strong>%(user_display)s</strong>."
+"dirección de correo electrónico para el usuario <strong>%(user_display)s</strong>."
 
 #: accounts/templates/account/email_confirm.html:21
 msgid "Confirm"
@@ -376,7 +376,7 @@ msgid ""
 "This e-mail confirmation link expired or is invalid. Please <a "
 "href=\"%(email_url)s\">issue a new e-mail confirmation request</a>."
 msgstr ""
-"Este enlace de confirmación del e-mail ha expirado o no es válido. Por favor "
+"Este enlace de confirmación del correo electrónico ha expirado o no es válido. Por favor "
 "<<a href=\"%(email_url)s\">emita un nueva petición de confirmación del e-"
 "mail</a>."
 
@@ -446,8 +446,8 @@ msgid ""
 "Forgotten your password? Enter your e-mail address below, and we'll send you "
 "an e-mail allowing you to reset it."
 msgstr ""
-"¿Olvidó su contraseña? Introduzca su dirección de e-mail y le enviaremos un "
-"e-mail para que pueda restablecerla."
+"¿Olvidó su contraseña? Introduzca su dirección de correo electrónico y le enviaremos un "
+"correo electrónico para que pueda restablecerla."
 
 #: accounts/templates/account/password_reset.html:21
 msgid "Reset my password"
@@ -462,7 +462,7 @@ msgid ""
 "We have sent you an e-mail. Please contact us if you do not receive it "
 "within a few minutes."
 msgstr ""
-"Le hemos enviado un e-mail. Por favor, contacte con nosotros si no lo recibe "
+"Le hemos enviado un correo electrónico. Por favor, contacte con nosotros si no lo recibe "
 "en unos pocos minutos."
 
 #: accounts/templates/account/password_reset_done.html:19
@@ -470,8 +470,8 @@ msgid ""
 "If you don't receive an e-mail, please make sure you've entered the address "
 "you registered with, and check your spam folder."
 msgstr ""
-"Si no ha recibido el e-mail, por favor compruebe que ha introducido "
-"correctamente la dirección de e-mail con la que se registró, y revise la "
+"Si no ha recibido el correo electrónico, por favor compruebe que ha introducido "
+"correctamente la dirección de correo electrónico con la que se registró, y revise la "
 "carpeta de spam."
 
 #: accounts/templates/account/password_reset_from_key.html:8
@@ -590,7 +590,7 @@ msgstr "Ha aceptado las condiciones de uso."
 #: accounts/templates/account/verification_sent.html:7
 #: accounts/templates/account/verified_email_required.html:6
 msgid "Verify your e-mail address"
-msgstr "Revise su dirección de e-mail"
+msgstr "Revise su dirección de correo electrónico"
 
 #: accounts/templates/account/verification_sent.html:11
 msgid ""
@@ -598,9 +598,9 @@ msgid ""
 "finalize the signup process. Please contact us if you do not receive it "
 "within a few minutes."
 msgstr ""
-"Le hemos enviado un e-mail para su comprovación. Siga el enlace que en él le "
+"Le hemos enviado un correo electrónico para su comprovación. Siga el enlace que en él le "
 "proporcionamos para finalizar el proceso de registro. Por favor, contáctenos "
-"si no recibe el e-mail en unos minutos."
+"si no recibe el correo electrónico en unos minutos."
 
 #: accounts/templates/account/verified_email_required.html:11
 msgid ""
@@ -609,7 +609,7 @@ msgid ""
 "address."
 msgstr ""
 "Esta parte del sitio requiere que comprobemos que usted es quien dice ser. A "
-"este fin, le pedidmos que demuestre la propiedad sobre su cuenta de e-mail."
+"este fin, le pedidmos que demuestre la propiedad sobre su cuenta de correo electrónico."
 
 #: accounts/templates/account/verified_email_required.html:15
 msgid ""
@@ -617,8 +617,8 @@ msgid ""
 "inside this e-mail. Please contact us if you do not receive it within a few "
 "minutes."
 msgstr ""
-"Le hemos remitido un e-mail para su comprobación. Por favor, pulse en el "
-"enlace contenido en el e-mail. Contáctenos si no recibe el e-mail en unos "
+"Le hemos remitido un correo electrónico para su comprobación. Por favor, pulse en el "
+"enlace contenido en el correo electrónico. Contáctenos si no lo recibe en unos "
 "pocos minutos."
 
 #: accounts/templates/account/verified_email_required.html:19
@@ -628,7 +628,7 @@ msgid ""
 "mail address</a>."
 msgstr ""
 "<strong>Nota:</strong> todavía puede <a href=\"%(email_url)s\">cambiar su "
-"dirección de e-mail</a>."
+"dirección de correo electrónico</a>."
 
 #: accounts/templates/profile/profile_remove_closed.html:6
 #: accounts/templates/profile/profile_remove_failed.html:6
@@ -697,7 +697,7 @@ msgid ""
 msgstr ""
 "Por favor actualice la información de su cuenta. Puede cambiar su contraseña "
 "mediante el <a href=\"%(password_url)s\">formulario para contraseña</a> y "
-"actualizar su e-mail mediante el <a href=\"%(email_url)s\">formulario para e-"
+"actualizar su correo electrónico mediante el <a href=\"%(email_url)s\">formulario para e-"
 "mail</a>."
 
 #: accounts/templates/profile/profile_update_form.html:33
@@ -1185,7 +1185,7 @@ msgstr "Restablecer superposiciones de tutoriales"
 
 #: core/templates/core/base_navigation_account.html:4
 msgid "Update e-mail"
-msgstr "Actualizar e-mail"
+msgstr "Actualizar correo electrónico"
 
 #: core/templates/core/bootstrap_form_field.html:69
 msgid ""
@@ -1823,11 +1823,11 @@ msgstr "La edición de vistas está desactivada."
 
 #: projects/forms.py:274
 msgid "Username or e-mail"
-msgstr "Nombre de usuario o e-mail"
+msgstr "Nombre de usuario o correo electrónico"
 
 #: projects/forms.py:276
 msgid "The username or e-mail of the new user."
-msgstr "Nombre o e-mail del nuevo usuario."
+msgstr "Nombre o correo electrónico del nuevo usuario."
 
 #: projects/forms.py:288
 msgid "Add member silently"
@@ -1839,7 +1839,7 @@ msgid ""
 "via e-mail, when you check the following checkbox."
 msgstr ""
 "Como gestor o administrador del sitio, usted puede añadir directament nuevos "
-"usuarios sin notificárselo via e-mail, marcando el siguiente checkbox."
+"usuarios sin notificárselo via correo electrónico, marcando el siguiente checkbox."
 
 #: projects/forms.py:304 projects/serializers/v1/__init__.py:214
 msgid "The user is already a member of the project."
@@ -1850,7 +1850,7 @@ msgid ""
 "A user with this username or e-mail was not found. Only registered users can "
 "be invited."
 msgstr ""
-"No se ha encontrado un usuario con este nombre o e-mail. Solo los usuarios "
+"No se ha encontrado un usuario con este nombre o correo electrónico. Solo los usuarios "
 "registrados pueden ser invitados."
 
 #: projects/forms.py:321
@@ -2033,7 +2033,7 @@ msgstr "El usuario para esta afiliación."
 
 #: projects/models/invite.py:29
 msgid "The e-mail for this membership."
-msgstr "El e-mail para esta afiliación."
+msgstr "El correo electrónico para esta afiliación."
 
 #: projects/models/invite.py:34
 msgid "The role for this invite."
@@ -2449,7 +2449,7 @@ msgstr "El secreto de un webhook para cerrar una tarea (opcional)."
 
 #: projects/serializers/v1/__init__.py:219
 msgid "A user with that e-mail is already a member of the project."
-msgstr "Un usuario con ese e-mail ya es miembro del proyecto."
+msgstr "Un usuario con ese correo electrónico ya es miembro del proyecto."
 
 #: projects/serializers/v1/__init__.py:227
 msgid "Either user or e-mail needs to be provided."
@@ -2631,7 +2631,7 @@ msgstr "Enviar una tarea establecerá su estado a \"en proceso\"."
 #: projects/templates/projects/issue_send_email.html:4
 #: projects/templates/projects/issue_send_email.html:30
 msgid "Send by mail"
-msgstr "Enviar por e-mail"
+msgstr "Enviar por correo electrónico"
 
 #: projects/templates/projects/issue_send_integrations.html:3
 msgid "Send via integration"
@@ -2720,14 +2720,14 @@ msgid ""
 "here), or by their e-mail address."
 msgstr ""
 "Los usuarios pueden ser invitados por su nombre (si ya tienen una cuenta "
-"aquí), o por su dirección de e-mail."
+"aquí), o por su dirección de correo electrónico."
 
 #: projects/templates/projects/membership_form.html:32
 msgid ""
 "Users will receive an e-mail with a link to join the project with the "
 "assigned role."
 msgstr ""
-"Los usuarios recibirán un e-mail con un enlace para unirse al proyecto con "
+"Los usuarios recibirán un correo electrónico con un enlace para unirse al proyecto con "
 "el rol asignado."
 
 #: projects/templates/projects/membership_form.html:35
@@ -2864,7 +2864,7 @@ msgstr ""
 #: projects/templates/projects/project_detail_invites.html:15
 #: projects/templates/projects/project_detail_memberships.html:21
 msgid "E-Mail"
-msgstr "E-Mail"
+msgstr "Correo electrónico"
 
 #: projects/templates/projects/project_detail_issues.html:21
 #: tasks/templates/tasks/export/tasks.html:35
