@@ -5,7 +5,7 @@
 ### Important changes ⭐
 
 * Rewrite progress bar and navigation using a new `AnswerTree` class (#1346)
-* Allow links in select dropdown by optionset provider plugins
+* Allow links in select dropdown by optionset provider plugins (#1408)
 
 ### Bug fixes 🐛
 
