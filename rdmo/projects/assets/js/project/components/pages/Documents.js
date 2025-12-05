@@ -92,7 +92,11 @@ const Documents = () => {
     }))
   }
 
-  const renderExportFormatMenuItems = () => {
+  const renderExportFormatMenuItems = (append = undefined) => {
+    const normPath = window.location.pathname
+      .replace(/\/documents(\/|$)/, '/')
+      .replace(/^\/+|\/+$/g, '')
+    const path = append ? `${normPath}/${append}` : normPath
     if (!Array.isArray(exportFormats) || exportFormats.length === 0) {
       return (
         <li className="dropdown-item text-muted">
@@ -108,7 +112,7 @@ const Documents = () => {
           className="dropdown-item"
           onClick={(event) => {
             event.stopPropagation()  // prevent Tile onClick
-            dispatch(downloadDocument(window.location.pathname, value))
+            dispatch(downloadDocument(path, value))
           }}
         >
           {label}
@@ -118,6 +122,7 @@ const Documents = () => {
   }
 
   const renderViewTile = (view) => {
+    const append = view.id === 'answers' ? 'answers' : `views/${view.id}`
     return (
       <div className="d-flex">
         <div
@@ -151,7 +156,7 @@ const Documents = () => {
               </button>
 
               <ul className="dropdown-menu dropdown-menu-end">
-                {renderExportFormatMenuItems()}
+                {renderExportFormatMenuItems(append)}
               </ul>
             </div>
           </div>
