@@ -14,6 +14,7 @@
 * Fix datepicker date conversion in interview (#1465)
 * Fix a bug with legacy management permissions and disable the latter in a multisite setup (#1425)
 * Fix a bug with verbose name that contain a space (#1453)
+* Fix a bug with site availability of catalogs in a multisite setup (#1481)
 
 ### Translations 🌍
 
@@ -28,7 +29,17 @@
 * Ignore fewer `ruff` rules (B007, B006, B018)
 * Use [zizmor](https://github.com/zizmorcore/zizmor) to harden CI setup
 * Update `poedit` management script to work on macOS
-* Add checks for shibboleth setup
+* Add checks for shibboleth setup (#1407)
+* Add cookies to window (#1473)
+* Use dynamic versioning (#1486)
+
+### Breaking changes ⚠️
+
+* the rules `is_editor_for_current_site` and `is_reviewer_for_current_site` were removed and the equivalent `is_editor` and `is_reviewer` can be used instead (#1431)
+* the filtering behaviour of sites in a multisite setup for catalogs, tasks and views was changed (#1488)
+  * From now on, a catalog that does not have any sites will not be available to any site in a multisite setup, a data migration for catalogs is included in this release.
+
+
 
 **Milestones**:
 [2.3.3](https://github.com/rdmorganiser/rdmo/milestone/24?closed=1),
