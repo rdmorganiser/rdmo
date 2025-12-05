@@ -113,6 +113,25 @@ const Documents = () => {
           onClick={(event) => {
             event.stopPropagation()  // prevent Tile onClick
             dispatch(downloadDocument(path, value))
+
+            // ---- manually close the dropdown ----
+            const menuEl = event.currentTarget.closest('.dropdown-menu')
+            if (menuEl) {
+              // remove Bootstrap's "show" class from the menu
+              menuEl.classList.remove('show')
+
+              // and from the parent .dropdown if present
+              const dropdownEl = menuEl.closest('.dropdown')
+              if (dropdownEl) {
+                dropdownEl.classList.remove('show')
+
+                // keep aria-expanded in sync for accessibility
+                const toggle = dropdownEl.querySelector('[data-bs-toggle="dropdown"]')
+                if (toggle) {
+                  toggle.setAttribute('aria-expanded', 'false')
+                }
+              }
+            }
           }}
         >
           {label}
