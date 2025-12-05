@@ -5,6 +5,7 @@
 ### Important changes ⭐
 
 * Rewrite progress bar and navigation using a new `AnswerTree` class (#1346)
+* Allow links in select dropdown by optionset provider plugins
 
 ### Bug fixes 🐛
 
@@ -18,7 +19,7 @@
 
 * Consistent naming of "Tabs" in every language (#1459)
 * Language improvements in the French localisation (#1397)
-* Several minor fixes
+* Several minor fixes (#1411, #1424)
 
 ### Maintenance and Dependencies 🔧
 
@@ -27,6 +28,7 @@
 * Ignore fewer `ruff` rules (B007, B006, B018)
 * Use [zizmor](https://github.com/zizmorcore/zizmor) to harden CI setup
 * Update `poedit` management script to work on macOS
+* Add checks for shibboleth setup
 
 **Milestones**:
 [2.3.3](https://github.com/rdmorganiser/rdmo/milestone/24?closed=1),
