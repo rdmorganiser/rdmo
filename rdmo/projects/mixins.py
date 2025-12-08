@@ -7,7 +7,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.config.plugin_resolver import list_and_filter_plugins
+from rdmo.config.models import Plugin
 from rdmo.core.imports import handle_uploaded_file
 from rdmo.questions.models import Question
 
@@ -63,17 +63,13 @@ class ProjectImportMixin:
                                                   .get(value.collection_index)
 
     def get_import_plugin(self, key, current_project=None):
-        plugins = list_and_filter_plugins(
-            plugin_type="project_import", project=current_project, user=self.request.user
-        )
+        plugins = Plugin.objects.for_context(plugin_type='project_import', project=current_project,
+                                             user=self.request.user, format=key)
         plugin = next((i for i in plugins if i.url_name == key), None)
-        if plugin is None:
-            # fallback: someone might still pass legacy "xml" as internal key
-            plugin = next((i for i in plugins if i.key == key), None)
         if plugin is None:
             raise Http404
 
-        import_plugin = plugin.get_plugin_instance()
+        import_plugin = plugin.initialize_class()
         import_plugin.request = self.request
         import_plugin.current_project = current_project
 
@@ -105,10 +101,11 @@ class ProjectImportMixin:
                 'errors': [_('There has been an error with your import. No uploaded or retrieved file could be found.')]
             }, status=400)
 
-        for plugin in list_and_filter_plugins(
-                plugin_type="project_import", project=current_project, user=self.request.user
+        for plugin in Plugin.objects.for_context(
+                plugin_type="project_import", project=current_project,
+                user=self.request.user, format=Path(import_file_name).suffix.lstrip('.')
             ):
-            import_plugin = plugin.get_plugin_instance()
+            import_plugin = plugin.initialize_class()
             import_plugin.current_project = current_project
             import_plugin.file_name = import_file_name
             import_plugin.source_title = import_source_title
