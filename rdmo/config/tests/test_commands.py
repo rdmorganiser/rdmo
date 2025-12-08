@@ -94,7 +94,8 @@ def test_setup_plugins_dry_run_never_raises(db, settings, monkeypatch):
     dotted = _install_dummy_plugin(
         monkeypatch, "dummy_mod.ExamplePlugin", key="monkeypatch_plugin", label="MonkeyPatchPlugin"
     )
-    settings.PLUGINS += [dotted]
+    # IMPORTANT: do not mutate the setting list in-place
+    settings.PLUGINS = [*settings.PLUGINS, dotted]
     count_before = Plugin.objects.count()
 
     stdout, stderr = io.StringIO(), io.StringIO()
