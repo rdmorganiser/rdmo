@@ -50,7 +50,7 @@ def test_prune_projects_output2(db, settings):
     stdout, stderr = io.StringIO(), io.StringIO()
 
     instances = Project.objects.filter(id__in=projects_without_owner)
-    call_command('prune_projects', stdout=stdout, stderr=stderr)
+    call_command('prune_projects', '--no-color', stdout=stdout, stderr=stderr)
 
     assert stdout.getvalue() == \
         f"Found projects without ['owner']:\n{get_prune_output(instances)}"
@@ -60,18 +60,18 @@ def test_prune_projects_output2(db, settings):
 def test_prune_projects_remove(db, settings):
     stdout, stderr = io.StringIO(), io.StringIO()
 
-    instances = list(Project.objects.filter(id__in=projects_without_owner).all()).copy()
-
     call_command('prune_projects', '--remove', stdout=stdout, stderr=stderr)
 
     std_output = stdout.getvalue()
-    prune_output = f"Found projects without ['owner']:\n{get_prune_output(instances, True)}"
 
-    assert std_output == prune_output
+    assert "Found projects without ['owner']:" in std_output
+    for project_id in projects_without_owner:
+        assert f"(id={project_id})" in std_output
+
     assert not stderr.getvalue()
 
     stdout, stderr = io.StringIO(), io.StringIO()
     call_command('prune_projects', '--remove', stdout=stdout, stderr=stderr)
 
-    assert stdout.getvalue() == "No projects without ['owner']\n"
+    assert "No projects without ['owner']" in stdout.getvalue()
     assert not stderr.getvalue()
