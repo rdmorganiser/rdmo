@@ -179,11 +179,13 @@ class ProjectExportView(ObjectPermissionMixin, DetailView):
 
     def get_export_plugin(self):
         export_plugins = Plugin.objects.for_context(
-            project=self.object, plugin_type='project_export', user=self.request.user, format=self.kwargs.get('format')
+            project=self.object, plugin_type='project_export',
+            user=self.request.user, format=self.kwargs.get('format')
         )
-        export_plugin_instance = export_plugins.first() if export_plugins else None
-        if export_plugin_instance is None:
+        if not export_plugins.exists():
             raise Http404
+
+        export_plugin_instance = export_plugins.first()
 
         export_plugin = export_plugin_instance.initialize_class()
         export_plugin.request = self.request
