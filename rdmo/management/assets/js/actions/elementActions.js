@@ -5,6 +5,7 @@ import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 import { siteId } from 'rdmo/core/assets/js/utils/meta'
 
 import ConditionsApi from '../api/ConditionsApi'
+import ConfigApi from '../api/ConfigApi'
 import DomainApi from '../api/DomainApi'
 import OptionsApi from '../api/OptionsApi'
 import QuestionsApi from '../api/QuestionsApi'
@@ -12,6 +13,7 @@ import TasksApi from '../api/TasksApi'
 import ViewsApi from '../api/ViewsApi'
 
 import ConditionsFactory from '../factories/ConditionsFactory'
+import ConfigFactory from '../factories/ConfigFactory'
 import DomainFactory from '../factories/DomainFactory'
 import OptionsFactory from '../factories/OptionsFactory'
 import QuestionsFactory from '../factories/QuestionsFactory'
@@ -86,6 +88,11 @@ export function fetchElements(elementType) {
       case 'views':
         action = (dispatch) => ViewsApi.fetchViews(true)
           .then(views => dispatch(fetchElementsSuccess({ views })))
+        break
+
+      case 'plugins':
+        action = (dispatch) => ConfigApi.fetchPlugins(true)
+          .then(plugins => dispatch(fetchElementsSuccess({ plugins })))
         break
     }
 
@@ -343,6 +350,18 @@ export function fetchElement(elementType, elementId, elementAction=null) {
           element, catalogs
         }))
         break
+
+      case 'plugins':
+        action = () => Promise.all([
+          ConfigApi.fetchPlugin(elementId),
+          QuestionsApi.fetchCatalogs('index'),
+        ]).then(([element, catalogs]) => {
+          if (elementAction == 'copy') {
+            delete element.catalogs
+          }
+          return { element, catalogs }
+        })
+        break
     }
 
     return dispatch(action)
@@ -432,6 +451,10 @@ export function storeElement(elementType, element, elementAction = null, back = 
 
       case 'views':
         action = () => ViewsApi.storeView(element, elementAction)
+        break
+
+      case 'plugins':
+        action = () => ConfigApi.storePlugin(element, elementAction)
         break
     }
 
@@ -589,6 +612,15 @@ export function createElement(elementType, parent={}) {
           element, catalogs
         }))
         break
+
+      case 'plugins':
+        action = () => Promise.all([
+          ConfigFactory.createPlugin(getState().config),
+          QuestionsApi.fetchCatalogs('index')
+        ]).then(([element, catalogs]) => ({
+          element, catalogs
+        }))
+        break
     }
 
     return dispatch(action)
@@ -663,6 +695,10 @@ export function deleteElement(elementType, element) {
 
       case 'views':
         action = () => ViewsApi.deleteView(element)
+        break
+
+      case 'plugins':
+        action = () => ConfigApi.deletePlugin(element)
         break
     }
 
