@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.db import models
-from django.db.models import Q
 
 from .constants import PERMISSIONS
 
@@ -21,22 +20,13 @@ class GroupsQuerySetMixin:
         return self.filter(models.Q(groups=None) | models.Q(groups__in=groups))
 
 
-class ForGroupQuerySetMixin:
-
-    def filter_for_groups(self, groups):
-        return self.filter(Q(groups=None) | Q(groups__in=groups))
-
-
 class ForSiteQuerySetMixin:
 
     def filter_for_site(self, site):
-        return self.filter(Q(sites=None) | Q(sites=site))
-
-
-class ForCatalogQuerySetMixin:
-
-    def filter_for_catalog(self, catalog):
-        return self.filter(models.Q(catalogs=None) | models.Q(catalogs=catalog))
+        if settings.MULTISITE:
+            return self.filter(sites=site)
+        else:
+            return self.filter(models.Q(sites=None) | models.Q(sites=site))
 
 
 class AvailabilityQuerySetMixin:
