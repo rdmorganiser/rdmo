@@ -29,7 +29,7 @@
     "sites": [],
     "editors": [],
     "groups": [],
-    "catalogs": []
+    "catalogs": [1]
   }
 },
 {
@@ -62,7 +62,7 @@
     "sites": [],
     "editors": [],
     "groups": [],
-    "catalogs": []
+    "catalogs": [1]
   }
 },
 {
@@ -95,7 +95,7 @@
     "sites": [],
     "editors": [],
     "groups": [],
-    "catalogs": []
+    "catalogs": [1]
   }
 },
 {
@@ -128,7 +128,7 @@
     "sites": [],
     "editors": [],
     "groups": [],
-    "catalogs": []
+    "catalogs": [1]
   }
 },
 {
@@ -194,7 +194,7 @@
     "sites": [],
     "editors": [],
     "groups": [],
-    "catalogs": []
+    "catalogs": [1]
   }
 },
 {
@@ -227,7 +227,7 @@
     "sites": [],
     "editors": [],
     "groups": [],
-    "catalogs": []
+    "catalogs": [1]
   }
 },
 {
@@ -293,7 +293,7 @@
     "sites": [],
     "editors": [],
     "groups": [],
-    "catalogs": []
+    "catalogs": [1]
   }
 },
   {
@@ -326,7 +326,7 @@
       "sites": [],
       "editors": [],
       "groups": [],
-      "catalogs": []
+      "catalogs": [1]
     }
   }
 ]
