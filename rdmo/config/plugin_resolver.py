@@ -4,9 +4,7 @@ from django.conf import settings
 from django.utils.module_loading import import_string
 
 from rdmo.config.helpers import DeclaredPlugin
-from rdmo.config.legacy import get_plugins_from_legacy_settings
 from rdmo.config.plugin_types import detect_plugin_type
-from rdmo.config.plugins import get_plugins_from_db
 from rdmo.config.utils import get_default_uri_prefix_for_python_path
 
 PLUGINS_URL_NAMES = {
@@ -16,16 +14,6 @@ PLUGINS_URL_NAMES = {
     "rdmo.projects.exports.JSONExport": "json",
     "rdmo.projects.imports.RDMOXMLImport": "xml",
 }
-
-
-def list_and_filter_plugins(plugin_type: str | None = None, project=None, user=None) -> list[DeclaredPlugin]:
-    if not settings.PLUGINS:  # plugins still need to be enabled via settings
-        legacy = get_plugins_from_legacy_settings(select_plugin_type=plugin_type)
-        return legacy
-
-    current = get_plugins_from_db(project=project, plugin_type=plugin_type, user=user)
-    filtered = [i for i in current if i.python_path in settings.PLUGINS]
-    return filtered
 
 
 def get_plugins_from_current_setting() -> list[DeclaredPlugin]:

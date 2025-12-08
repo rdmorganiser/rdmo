@@ -182,10 +182,19 @@ class Command(BaseCommand):
                 errors.append((d, exc))
                 self.stdout.write(self.style.ERROR(f"✖ import FAILED: {d.python_path} ({exc})"))
 
+
         if errors:
-            raise CommandError(
-                f"{len(errors)} plugin(s) failed preflight import; aborting before database changes."
-            )
+            msg = f"{len(errors)} plugin(s) failed preflight import; aborting before database changes."
+            for error in errors:
+                msg += f"\n- {error[0]}\n\t{error[1]}"
+
+            if dry_run:
+                # In dry-run mode, never raise: just report and exit
+                self.stdout.write(self.style.WARNING(msg))
+                self.stdout.write(self.style.SUCCESS("✔ dry-run complete; no changes committed."))
+                return
+            # Non-dry-run: keep strict behaviour
+            raise CommandError(msg)
 
         # -------------------- Upsert phase ---------------------------------
         results: list[str] = []
