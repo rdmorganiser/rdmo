@@ -6,8 +6,6 @@ from rdmo.core.managers import (
     AvailabilityQuerySetMixin,
     CurrentSiteManagerMixin,
     CurrentSiteQuerySetMixin,
-    ForCatalogQuerySetMixin,
-    ForGroupQuerySetMixin,
     ForSiteQuerySetMixin,
     GroupsManagerMixin,
     GroupsQuerySetMixin,
@@ -15,7 +13,7 @@ from rdmo.core.managers import (
 
 
 class PluginQuerySet(
-    ForSiteQuerySetMixin, ForGroupQuerySetMixin, ForCatalogQuerySetMixin,
+    ForSiteQuerySetMixin,
     CurrentSiteQuerySetMixin, GroupsQuerySetMixin, AvailabilityQuerySetMixin,
     models.QuerySet):
 
@@ -23,8 +21,8 @@ class PluginQuerySet(
         return (
             self
                 .filter_for_site(project.site)
-                .filter_for_catalog(project.catalog)
-                .filter_for_groups(project.groups)
+                .filter(catalogs=project.catalog)
+                .filter(models.Q(groups=None) | models.Q(groups__in=project.groups))
         )
     def filter_current_available(self, user):
         return (
@@ -43,21 +41,21 @@ class PluginQuerySet(
         if not file_format:
             return self
 
-        q = (
+        qs = (
             models.Q(url_name=file_format)
             | models.Q(uri_path=file_format)
-            | models.Q(uri_path__endswith='/' + file_format)
+            | models.Q(uri_path__endswith=f'/{file_format}')
         )
 
         # add a JSONField contains lookup if the current DB supports it
         connection = connections[self.db]
         if getattr(connection.features, 'supports_json_field_contains', False):
-            q |= models.Q(plugin_settings__contains={'format': format})
+            qs |= models.Q(plugin_settings__contains={'format': format})
         elif connection.vendor == 'sqlite':
             # SQLite: JSONField is stored as TEXT; emulate contains by string search.
-            q |= models.Q(plugin_settings__icontains=f'"format": "{format}"')
+            qs |= models.Q(plugin_settings__icontains=f'"format": "{format}"')
 
-        return self.filter(q)
+        return self.filter(qs)
 
 
     def for_context(self, project=None, plugin_type=None, user=None, format=None):
