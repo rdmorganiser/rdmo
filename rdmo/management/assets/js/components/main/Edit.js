@@ -12,6 +12,7 @@ import EditQuestionSet from '../edit/EditQuestionSet'
 import EditSection from '../edit/EditSection'
 import EditTask from '../edit/EditTask'
 import EditView from '../edit/EditView'
+import EditPlugin from '../edit/EditPlugin'
 
 import useScrollEffect from '../../hooks/useScrollEffect'
 
@@ -43,6 +44,9 @@ const Edit = ({ config, elements, elementActions }) => {
       return <EditTask config={config} task={element} elements={elements} elementActions={elementActions} />
     case 'views':
       return <EditView config={config} view={element} elements={elements} elementActions={elementActions} />
+
+    case 'plugins':
+      return <EditPlugin config={config} plugin={element} elements={elements} elementActions={elementActions} />
   }
 }
 
