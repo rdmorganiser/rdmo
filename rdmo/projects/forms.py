@@ -5,10 +5,11 @@ from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
 from django.db.models import Q
+from django.http import Http404
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.config.plugins import get_plugin
+from rdmo.config.models import Plugin
 from rdmo.core.constants import VALUE_TYPE_FILE
 from rdmo.core.utils import markdown2html
 
@@ -353,9 +354,17 @@ class IntegrationForm(forms.ModelForm):
 
         # get the provider
         if self.provider_key:
-            self.provider = get_plugin('PROJECT_ISSUE_PROVIDERS', self.provider_key)
+
+            plugins = Plugin.objects.for_context(
+                plugin_type="project_issue_provider", project=self.project, format=self.provider_key
+            )
+            if not plugins.exists():
+                raise Http404
+            self.provider = plugins.first().initialize_class()
         else:
             self.provider = self.instance.provider
+            if self.provider is None:
+                raise Http404
 
         # add fields for the integration options
         for field in self.provider.fields:
