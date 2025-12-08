@@ -24,12 +24,6 @@ class PluginQuerySet(
                 .filter(catalogs=project.catalog)
                 .filter(models.Q(groups=None) | models.Q(groups__in=project.groups))
         )
-    def filter_current_available(self, user):
-        return (
-            self
-            .filter_current_site()
-            .filter_availability(user)
-        )
 
     def filter_for_settings_plugins(self):
         if not settings.PLUGINS:
@@ -61,19 +55,27 @@ class PluginQuerySet(
     def for_context(self, project=None, plugin_type=None, user=None, format=None):
         qs = self
 
+        # filter by settings.PLUGINS
         qs = qs.filter_for_settings_plugins()
 
+        # filter by project .site,.catalog and .groups
         if project is not None:
             qs = qs.filter_for_project(project)
 
+        # filter by availability
         if user is not None:
-            qs = qs.filter_current_available(user)
+            qs = qs.filter_availability(user)
         else:
-            qs = qs.filter(available=True).filter_current_site()
+            qs = qs.filter(available=True)
 
+        # filter by current site
+        qs = qs.filter_current_site()
+
+        # filter by optional plugin type
         if plugin_type is not None:
             qs = qs.filter(plugin_type=plugin_type)
 
+        # filter by optional format
         if format is not None:
             qs = qs.filter_for_format(format)
 
@@ -89,9 +91,6 @@ class PluginManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityMan
 
     def filter_for_project(self, project):
         return self.get_queryset().filter_for_project(project)
-
-    def filter_current_available(self, user):
-        return self.get_queryset().filter_current_available(user)
 
     def filter_for_settings_plugins(self):
         return self.get_queryset().filter_for_settings_plugins()
