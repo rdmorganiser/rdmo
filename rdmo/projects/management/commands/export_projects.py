@@ -5,7 +5,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.db.models import Prefetch
 
-from rdmo.config.plugins import get_plugin
+from rdmo.config.models import Plugin
 from rdmo.core.utils import render_to_format
 from rdmo.projects.models import Project
 from rdmo.projects.utils import get_value_path
@@ -96,9 +96,12 @@ class Command(BaseCommand):
 
     def export_projects(self):
         for project in self.get_queryset():
-            export_plugin = get_plugin('PROJECT_EXPORTS', self.format)
-            if export_plugin is None:
+            export_plugins = Plugin.objects.for_context(
+                project=project, plugin_type='project_export',
+                format=self.format)
+            if export_plugins.exists() is not None:
                 raise CommandError(f'Format "{self.format}" is not supported.')
+            export_plugin = export_plugins.first()
 
             export_plugin.project = project
             export_plugin.snapshot = None
