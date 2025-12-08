@@ -36,7 +36,7 @@ class Integration(models.Model):
     def provider(self):
         plugins = (
             Plugin.objects.for_context(
-                plugin_type="issue_provider", project=self.project, format=self.provider_key)
+                plugin_type="project_issue_provider", project=self.project, format=self.provider_key)
         )
         if plugins.exists():
             return plugins.first().initialize_class()
