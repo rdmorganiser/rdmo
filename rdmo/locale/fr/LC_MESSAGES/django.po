@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-04 11:19+0000\n"
-"PO-Revision-Date: 2025-12-09 07:13+0100\n"
+"PO-Revision-Date: 2025-12-09 10:55+0100\n"
 "Last-Translator: Giacomo Lanza <giacomo.lanza@ptb.de>\n"
 "Language-Team: RDMO <dmp@cc.in2p3.fr>\n"
 "Language: fr\n"
@@ -100,8 +100,8 @@ msgid ""
 "The help text to be displayed next to the input element (in the primary "
 "language)."
 msgstr ""
-"Le texte d'aide à afficher à côté de l'élément de saisie (dans la langue "
-"première langue)."
+"Le texte d'aide à afficher à côté de l'élément de saisie (dans la première "
+"langue)."
 
 #: accounts/models.py:57 options/models.py:223 questions/models/catalog.py:116
 #: questions/models/page.py:141 questions/models/question.py:77
@@ -114,8 +114,8 @@ msgid ""
 "The help text to be displayed next to the input element (in the secondary "
 "language)."
 msgstr ""
-"Le texte d'aide à afficher à côté de l'élément de saisie (dans la langue "
-"deuxième langue)."
+"Le texte d'aide à afficher à côté de l'élément de saisie (dans la deuxième "
+"langue)."
 
 #: accounts/models.py:62 options/models.py:228 questions/models/catalog.py:121
 #: questions/models/page.py:146 questions/models/question.py:82
@@ -128,8 +128,8 @@ msgid ""
 "The help text to be displayed next to the input element (in the tertiary "
 "language)."
 msgstr ""
-"Le texte d'aide à afficher à côté de l'élément de saisie (dans la langue "
-"troisième langue)."
+"Le texte d'aide à afficher à côté de l'élément de saisie (dans la troisième "
+"langue)."
 
 #: accounts/models.py:67 options/models.py:233 questions/models/catalog.py:126
 #: questions/models/page.py:151 questions/models/question.py:87
@@ -142,8 +142,8 @@ msgid ""
 "The help text to be displayed next to the input element (in the quaternary "
 "language)."
 msgstr ""
-"Le texte d'aide à afficher à côté de l'élément de saisie (dans la langue "
-"quatrième langue)."
+"Le texte d'aide à afficher à côté de l'élément de saisie (dans la quatrième "
+"langue)."
 
 #: accounts/models.py:72 options/models.py:238 questions/models/catalog.py:131
 #: questions/models/page.py:156 questions/models/question.py:92
@@ -4018,7 +4018,7 @@ msgstr "Le titre de cet ensemble de questions (dans la troisième langue)."
 
 #: questions/models/questionset.py:97
 msgid "The title for this question set (in the quaternary language)."
-msgstr "Le titre de cet ensemble de questions (dans la langue quarternaire)."
+msgstr "Le titre de cet ensemble de questions (dans la quatrième langue)."
 
 #: questions/models/questionset.py:102
 msgid "The title for this question set (in the quinary language)."
@@ -4067,7 +4067,7 @@ msgstr ""
 #: questions/models/questionset.py:147
 msgid "The name displayed for this question set (in the quaternary language)."
 msgstr ""
-"Le nom affiché pour cet ensemble de questions (dans la langue quarternaire)."
+"Le nom affiché pour cet ensemble de questions (dans la quatrième langue)."
 
 #: questions/models/questionset.py:152
 msgid "The name displayed for this question set (in the quinary language)."
@@ -4331,7 +4331,7 @@ msgstr "Le titre de cette tâche (dans la troisième langue)."
 
 #: tasks/models.py:87
 msgid "The title for this task (in the quaternary language)."
-msgstr "Le titre de cette tâche (dans la langue quarternaire)."
+msgstr "Le titre de cette tâche (dans la quatrième langue)."
 
 #: tasks/models.py:92
 msgid "The title for this task (in the quinary language)."
@@ -4351,7 +4351,7 @@ msgstr "Le texte de cette tâche (dans la troisième langue)."
 
 #: tasks/models.py:112
 msgid "The text for this task (in the quaternary language)."
-msgstr "Le texte de cette tâche (dans la langue quarternaire)."
+msgstr "Le texte de cette tâche (dans la quatrième langue)."
 
 #: tasks/models.py:117
 msgid "The text for this task (in the quinary language)."
@@ -4494,7 +4494,7 @@ msgstr "Le texte d'aide pour cette vue (dans la troisième langue)."
 
 #: views/models.py:119
 msgid "The help text for this view (in the quaternary language)."
-msgstr "Le texte d'aide pour cette vue (dans la langue quarternaire)."
+msgstr "Le texte d'aide pour cette vue (dans la quatrième langue)."
 
 #: views/models.py:124
 msgid "The help text for this view (in the quinary language)."
