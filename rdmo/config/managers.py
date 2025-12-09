@@ -44,10 +44,10 @@ class PluginQuerySet(
         # add a JSONField contains lookup if the current DB supports it
         connection = connections[self.db]
         if getattr(connection.features, 'supports_json_field_contains', False):
-            qs |= models.Q(plugin_settings__contains={'format': format})
+            qs |= models.Q(plugin_settings__contains={'format': file_format})
         elif connection.vendor == 'sqlite':
             # SQLite: JSONField is stored as TEXT; emulate contains by string search.
-            qs |= models.Q(plugin_settings__icontains=f'"format": "{format}"')
+            qs |= models.Q(plugin_settings__icontains=f'"format": "{file_format}"')
 
         return self.filter(qs)
 
