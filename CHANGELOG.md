@@ -1,11 +1,21 @@
 # Changelog 📔
 
-## [RDMO 2.4.0](https://github.com/rdmorganiser/rdmo/releases/tag/2.4.0) (Nov, 2025)
+## [RDMO 2.4.0](https://github.com/rdmorganiser/rdmo/releases/tag/2.4.0) (December 15, 2025)
 
-### Important changes ⭐
+### Main improvements ⭐
 
 * Rewrite progress bar and navigation using a new `AnswerTree` class (#1346)
 * Allow links in select dropdown by optionset provider plugins (#1408)
+
+### Breaking changes ⚠️
+
+* The filtering behaviour of sites in a multisite setup for catalogs, tasks and views was changed (#1488).
+  From now on, but only when `settings.MULTISITE = True`, a catalog that does not have any sites associated
+  with it will not be available to **any site**. Before those catalogs were available to all sites. For non-multisite
+  instances, this behaviour will not change. A data migration for catalogs is included in this release, so that
+  no extra action is required when updating.
+* The rules `is_editor_for_current_site` and `is_reviewer_for_current_site` (which might be used in templates) were
+  removed and the equivalent `is_editor` and `is_reviewer` can be used instead (#1431).
 
 ### Bug fixes 🐛
 
@@ -26,20 +36,12 @@
 
 * Drop support for Python 3.9
 * Add `all` and `recommended` dependency groups
-* Ignore fewer `ruff` rules (B007, B006, B018)
+* Ignore fewer `ruff` rules (`B007`, `B006`, `B018`)
 * Use [zizmor](https://github.com/zizmorcore/zizmor) to harden CI setup
 * Update `poedit` management script to work on macOS
 * Add checks for shibboleth setup (#1407)
 * Add cookies to window (#1473)
 * Use dynamic versioning (#1486)
-
-### Breaking changes ⚠️
-
-* the rules `is_editor_for_current_site` and `is_reviewer_for_current_site` were removed and the equivalent `is_editor` and `is_reviewer` can be used instead (#1431)
-* the filtering behaviour of sites in a multisite setup for catalogs, tasks and views was changed (#1488)
-  * From now on, a catalog that does not have any sites will not be available to any site in a multisite setup, a data migration for catalogs is included in this release.
-
-
 
 **Milestones**:
 [2.3.3](https://github.com/rdmorganiser/rdmo/milestone/24?closed=1),
