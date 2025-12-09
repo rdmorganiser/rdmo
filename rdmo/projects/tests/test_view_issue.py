@@ -199,7 +199,7 @@ def test_issue_send_post_attachments(db, client, files, username, password, issu
 @pytest.mark.parametrize('issue_id', issues)
 def test_issue_send_post_integration(db, client, mocker, username, password, issue_id):
     mocked_send_issue = Mock(return_value=HttpResponseRedirect(redirect_to='https://example.com/login/oauth/authorize'))
-    mocker.patch('rdmo.projects.providers.SimpleIssueProvider.send_issue', mocked_send_issue)
+    mocker.patch('plugins.project_issue_providers.providers.SimpleIssueProvider.send_issue', mocked_send_issue)
 
     client.login(username=username, password=password)
     issue = Issue.objects.get(id=issue_id)
