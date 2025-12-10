@@ -1,4 +1,3 @@
-import importlib
 import json
 import logging
 import os
@@ -13,6 +12,7 @@ from django.template.loader import get_template, render_to_string
 from django.utils.dateparse import parse_date
 from django.utils.encoding import force_str
 from django.utils.formats import get_format
+from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 
 from defusedcsv import csv
@@ -95,15 +95,20 @@ def get_model_field_meta(model):
             if hasattr(field, 'help_text'):
                 meta[field.name]['help_text'] = field.help_text
 
-    if model.__name__ == 'Page':
+    if model._meta.verbose_name == 'Page':
         meta['elements'] = {
             'verbose_name': _('Elements'),
             'help_text': _('The questions and question sets for this page.')
         }
-    elif model.__name__ == 'QuestionSet':
+    elif model._meta.verbose_name == 'QuestionSet':
         meta['elements'] = {
             'verbose_name': _('Elements'),
             'help_text': _('The questions and question sets for this question set.')
+        }
+    elif model._meta.verbose_name == 'Plugin':
+        meta['python_path'] = {
+            **meta.get('python_path', {}),
+            'choices': [(python_path, python_path) for python_path in get_plugin_python_paths()]
         }
 
     return meta
@@ -204,9 +209,17 @@ def sanitize_url(s):
     return s
 
 
-def import_class(string):
-    module_name, class_name = string.rsplit('.', 1)
-    return getattr(importlib.import_module(module_name), class_name)
+def get_plugin_python_paths(raise_exception=False):
+    plugin_paths = []
+    for python_path in settings.PLUGINS:
+        try:
+            import_string(python_path)
+        except (ImportError, ValueError) as e:
+            if raise_exception:
+                raise e from e
+        else:
+            plugin_paths.append(python_path)
+    return plugin_paths
 
 
 def human2bytes(string):
