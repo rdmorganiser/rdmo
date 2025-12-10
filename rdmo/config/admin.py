@@ -1,13 +1,17 @@
+from django import forms
 from django.contrib import admin
 
 from rdmo.core.admin import ElementAdminForm
-from rdmo.core.utils import get_language_fields
+from rdmo.core.utils import get_language_fields, get_plugin_python_paths
 
 from .models import Plugin
 from .validators import PluginLockedValidator, PluginPythonPathValidator, PluginUniqueURIValidator
 
 
 class PluginAdminForm(ElementAdminForm):
+
+    python_path = forms.ChoiceField(choices=[(plugin, plugin) for plugin in get_plugin_python_paths()])
+
 
     class Meta:
         model = Plugin

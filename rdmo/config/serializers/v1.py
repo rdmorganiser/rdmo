@@ -7,9 +7,10 @@ from rdmo.core.serializers import (
     ReadOnlyObjectPermissionSerializerMixin,
     TranslationSerializerMixin,
 )
+from rdmo.core.utils import get_plugin_python_paths
 
 from ..models import Plugin
-from ..validators import PluginLockedValidator, PluginUniqueURIValidator
+from ..validators import PluginLockedValidator, PluginPythonPathValidator, PluginUniqueURIValidator
 
 
 class PluginSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
@@ -23,6 +24,7 @@ class PluginSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
     warning = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()
 
+    python_path = serializers.ChoiceField(choices=get_plugin_python_paths())
     plugin_type = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
@@ -57,7 +59,8 @@ class PluginSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
         }
         validators = (
             PluginUniqueURIValidator(),
-            PluginLockedValidator()
+            PluginLockedValidator(),
+            PluginPythonPathValidator(),
         )
         warning_fields = (
             'title',
