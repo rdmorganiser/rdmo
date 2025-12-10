@@ -112,6 +112,55 @@ def test_update(db, client, username, password):
         assert response.status_code == status_map['update'][username], response.json()
 
 
+@pytest.mark.parametrize('python_path', [
+    'rdmo.projects.exports.JSONExport',
+    'this.python.path.DoesNotExist',
+])
+@pytest.mark.parametrize('is_in_plugins', [ True, False ])
+def test_update_python_path(db, client, settings, python_path, is_in_plugins):
+    client.login(username='editor', password='editor')
+    instance = Plugin.objects.filter(python_path__contains='XMLExport').first()
+    assert instance.python_path != python_path  # check for arrangement
+    if is_in_plugins:
+        settings.PLUGINS = [instance.python_path, python_path]
+        assert python_path in settings.PLUGINS  # check for arrangement
+    else:
+        settings.PLUGINS = [instance.python_path]
+        assert python_path not in settings.PLUGINS  # check for arrangement
+
+    url = reverse(urlnames['detail'], args=[instance.pk])
+    data = {
+        'uri_prefix': instance.uri_prefix,
+        'uri_path': instance.uri_path,
+        'comment': instance.comment,
+        'title_en': instance.title_lang1,
+        'title_de': instance.title_lang2,
+        'help_en': instance.help_lang1,
+        'help_de': instance.help_lang2,
+        'python_path': python_path,
+    }
+
+    response = client.put(url, data, content_type='application/json')
+    if 'DoesNotExist' in python_path:
+        assert response.status_code == 400, response.json()
+        assert "not a valid choice" in response.json()['python_path'][0]
+
+        instance.refresh_from_db()
+        assert instance.python_path == instance.python_path  # nothing changed
+    elif is_in_plugins:
+        assert response.status_code == 200, response.json()
+        assert response.json()['python_path'] == python_path
+
+        instance.refresh_from_db()
+        assert instance.python_path == python_path
+    else:
+        assert response.status_code == 400, response.json()
+        assert 'This path is not in the configured paths.' in response.json()['python_path']
+
+        instance.refresh_from_db()
+        assert instance.python_path == instance.python_path  # nothing changed
+
+
 @pytest.mark.parametrize('username,password', users)
 def test_delete(db, client, username, password):
     client.login(username=username, password=password)
