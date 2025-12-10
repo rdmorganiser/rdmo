@@ -32,6 +32,10 @@ const EditPlugin = ({ config, plugin, elements, elementActions}) => {
 
   const info = <PluginInfo plugin={plugin} elements={elements} />
 
+  const pluginModel = plugin.model || 'config.plugin'
+  const pythonPathOptions = get(config, ['meta', pluginModel, 'python_path', 'choices'], [])
+    .map(([value, label]) => ({id: value, name: label}))
+
   return (
     <div className="panel panel-default panel-edit">
       <div className="panel-heading">
@@ -88,8 +92,8 @@ const EditPlugin = ({ config, plugin, elements, elementActions}) => {
           </div>
         </div>
 
-        <Text config={config} element={plugin} field="python_path"
-              onChange={updatePlugin} />
+        <Select config={config} element={plugin} field="python_path"
+                options={pythonPathOptions} onChange={updatePlugin} />
 
         <Tabs id="#plugin-tabs" defaultActiveKey={0} animation={false}>
           {
