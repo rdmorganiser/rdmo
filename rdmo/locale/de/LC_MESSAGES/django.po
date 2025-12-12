@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-04 11:19+0000\n"
-"PO-Revision-Date: 2025-12-12 12:02+0100\n"
+"PO-Revision-Date: 2025-12-12 13:00+0100\n"
 "Last-Translator: Jochen Klar <mail@jochenklar.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -884,7 +884,7 @@ msgstr "Gesperrt"
 
 #: conditions/models.py:56
 msgid "Designates whether this condition can be changed."
-msgstr "Bezeichnet, ob diese Bedingung geändert werden kann."
+msgstr "Legt fest, ob diese Bedingung geändert werden kann."
 
 #: conditions/models.py:60 domain/models.py:45 options/models.py:49
 #: options/models.py:176 questions/models/catalog.py:76
@@ -1528,7 +1528,7 @@ msgstr "Zusätzliche interne Informationen zur Option."
 
 #: options/models.py:172
 msgid "Designates whether this option can be changed."
-msgstr "Bezeichnet, ob diese Option geändert werden kann."
+msgstr "Legt fest, ob diese Option geändert werden kann."
 
 #: options/models.py:177
 msgid "The sites that can edit this option (in a multi site setup)."
@@ -3714,7 +3714,7 @@ msgstr "Zusätzliche interne Informationen zu dieser Frage."
 
 #: questions/models/question.py:48
 msgid "Designates whether this question can be changed."
-msgstr "Bezeichnet, ob diese Frage geändert werden kann."
+msgstr "Legt fest, ob diese Frage geändert werden kann."
 
 #: questions/models/question.py:53
 msgid "The attribute this question belongs to."
@@ -4205,7 +4205,7 @@ msgstr "Zusätzliche interne Informationen zu dieser Aufgabe."
 
 #: tasks/models.py:41
 msgid "Designates whether this task can be changed."
-msgstr "Bezeichnet, ob diese Aufgabe geändert werden kann."
+msgstr "Legt fest, ob diese Aufgabe geändert werden kann."
 
 #: tasks/models.py:46
 msgid "The position of this task in lists."
