@@ -1,5 +1,55 @@
 # Changelog 📔
 
+## [RDMO 2.4.0](https://github.com/rdmorganiser/rdmo/releases/tag/2.4.0) (December 15, 2025)
+
+### Main improvements ⭐
+
+* Rewrite progress bar and navigation using a new `AnswerTree` class (#1346)
+* Allow links in select dropdown by optionset provider plugins (#1408)
+
+### Breaking changes ⚠️
+
+* The filtering behaviour of sites in a multisite setup for catalogs, tasks and views was changed (#1488).
+  From now on, but only when `settings.MULTISITE = True`, a catalog that does not have any sites associated
+  with it will not be available to **any site**. Before those catalogs were available to all sites. For non-multisite
+  instances, this behaviour will not change. A data migration for catalogs is included in this release, so that
+  no extra action is required when updating.
+* The rules `is_editor_for_current_site` and `is_reviewer_for_current_site` (which might be used in templates) were
+  removed and the equivalent `is_editor` and `is_reviewer` can be used instead (#1431).
+
+### Bug fixes 🐛
+
+* Fix a bug with the autosave of checkboxes, radio buttons and additional input (#1406)
+* Fix a bug where text and icons overlap in the interview (#1398)
+* Fix datepicker date conversion in interview (#1465)
+* Fix a bug with legacy management permissions and disable the latter in a multisite setup (#1425)
+* Fix a bug with verbose name that contain a space (#1453)
+* Fix a bug with site availability of catalogs in a multisite setup (#1481)
+
+### Translations 🌍
+
+* Consistent naming of "Tabs" in every language (#1459)
+* Language improvements in the French localisation (#1397)
+* Several minor fixes (#1411, #1424)
+
+### Maintenance and Dependencies 🔧
+
+* Drop support for Python 3.9
+* Add `all` and `recommended` dependency groups
+* Ignore fewer `ruff` rules (`B007`, `B006`, `B018`)
+* Use [zizmor](https://github.com/zizmorcore/zizmor) to harden CI setup
+* Update `poedit` management script to work on macOS
+* Add checks for shibboleth setup (#1407)
+* Add cookies to window (#1473)
+* Use dynamic versioning (#1486)
+
+**Milestones**:
+[2.3.3](https://github.com/rdmorganiser/rdmo/milestone/24?closed=1),
+[2.4.0](https://github.com/rdmorganiser/rdmo/milestone/21?closed=1)
+
+**Commit history**: [2.3.2...2.4.0](https://github.com/rdmorganiser/rdmo/compare/2.3.2...2.4.0)
+
+
 ## [RDMO 2.3.2](https://github.com/rdmorganiser/rdmo/compare/2.3.1...2.3.2) (July 4, 2025)
 
 * Improve ORCID branding display and social connections page (#1376)
