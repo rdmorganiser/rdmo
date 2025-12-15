@@ -1,18 +1,14 @@
 import io
 from string import Template
-from typing import Union
 
 import pytest
 
 from django.core.management import CommandError, call_command
 
-from rdmo.conditions.models import Condition
 from rdmo.domain.models import Attribute
-from rdmo.options.models import Option
-from rdmo.questions.models import Page, Question, QuestionSet, Section
 from rdmo.views.models import View
 
-ElementType = Union[Section, Page, QuestionSet, Question, Option, Condition]
+# the element type can be Section, Page, QuestionSet, Question, Option, Condition
 
 ATTRIBUTE_RELATED_MODELS_FIELDS = [i for i in Attribute._meta.get_fields()
                                    if i.is_relation and not i.many_to_many

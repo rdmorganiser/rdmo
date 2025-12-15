@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from django.conf import settings
 from django.db import models
 from django.db.models import Q
@@ -70,22 +72,25 @@ class ProjectQuerySet(TreeQuerySet):
         return self.filter(memberships__in=memberships).distinct()
 
     def filter_projects_for_task_or_view(self, instance):
-        # if View/Task is not available it should not show for any project
-        if not instance.available:
-            return self.none()
-
         # projects that have an unavailable catalog should be disregarded
         qs = self.filter(catalog__available=True)
 
-        # when instance.catalogs is empty it applies to all
+        # when View/Task is not available it should not show for any project
+        if not instance.available:
+            return self.none()
+
+        # when View/Task has any catalogs it can be filtered for those
         if instance.catalogs.exists():
             qs = qs.filter(catalog__in=instance.catalogs.all())
 
-        # when instance.sites is empty it applies to all
+        # when View/Task has any sites it can be filtered for those
         if instance.sites.exists():
             qs = qs.filter(site__in=instance.sites.all())
+        elif settings.MULTISITE:
+            # when View/Task has no sites in a multi-site, it should not appear at all
+            return self.none()
 
-        # when instance.groups is empty it applies to all
+        # when  has any groups it can be filtered for those
         if instance.groups.exists():
             qs = qs.filter_groups(instance.groups.all())
 
@@ -241,6 +246,11 @@ class ValueQuerySet(models.QuerySet):
             Q(set_prefix__startswith=descendants_set_prefix)
         )
 
+    def compute_sets(self):
+        sets = defaultdict(set)
+        for attribute, set_prefix, set_index in self.distinct_list():
+            sets[attribute].add((set_prefix, set_index))
+        return sets
 
 class ProjectManager(CurrentSiteManagerMixin, TreeManager):
 
@@ -315,3 +325,6 @@ class ValueManager(CurrentSiteManagerMixin, models.Manager):
 
     def filter_user(self, user):
         return self.get_queryset().filter_user(user)
+
+    def compute_sets(self):
+        return self.get_queryset().compute_sets()

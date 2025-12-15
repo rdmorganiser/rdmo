@@ -1,4 +1,3 @@
-from typing import Optional
 
 from django.conf import settings
 from django.contrib.sites.models import Site
@@ -16,6 +15,7 @@ from rdmo.questions.models import Catalog
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
+from ..answers import AnswerTree
 from ..managers import ProjectManager
 
 
@@ -97,7 +97,7 @@ class Project(MPTTModel, Model):
         super().save(*args, **kwargs)
 
     @property
-    def catalog_uri(self) -> Optional[str]:
+    def catalog_uri(self) -> str | None:
         if self.catalog is not None:
             return self.catalog.uri
 
@@ -145,6 +145,13 @@ class Project(MPTTModel, Model):
         except AttributeError:
             # membership_list does not exist
             return self.user.filter(memberships__role=role)
+
+    def get_answer_tree(self, snapshot=None, verbose=None):
+        return AnswerTree(
+            self.catalog,
+            self.values.filter(snapshot=snapshot).select_related('attribute', 'option'),
+            verbose=verbose
+        ).compute()
 
 
 @receiver(pre_delete, sender=Project)

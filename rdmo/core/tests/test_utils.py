@@ -1,5 +1,4 @@
 import datetime
-from typing import Optional
 
 import pytest
 
@@ -80,7 +79,7 @@ def test_join_url():
 
 
 @pytest.mark.parametrize('human,bytes', human2bytes_test_values)
-def test_human2bytes(human: Optional[str], bytes: float):
+def test_human2bytes(human: str | None, bytes: float):
     assert human2bytes(human) == bytes
 
 

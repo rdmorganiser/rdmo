@@ -16,7 +16,8 @@ class BaseXMLRenderer(BaseRenderer):
     media_type = 'application/xml'
     format = 'xml'
 
-    def render(self, data, context={}):
+    def render(self, data, context=None):
+        context = context or {}
 
         if data is None:
             return ''

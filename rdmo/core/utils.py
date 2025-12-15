@@ -128,7 +128,7 @@ def get_language_fields(field_name):
 
 
 def get_language_warning(obj, field):
-    for lang_code, lang_string, lang_field in get_languages():
+    for _lang_code, _lang_string, lang_field in get_languages():
         if not getattr(obj, f'{field}_{lang_field}'):
             return True
     return False

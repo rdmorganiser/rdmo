@@ -55,7 +55,7 @@ def test_detail(db, client, username, password):
     for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.get(url)
-        assert response.status_code == status_map['detail'][username], response.json()
+        assert response.status_code == get_obj_perms_status_code(instance, username, 'detail'), response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -66,7 +66,7 @@ def test_nested(db, client, username, password):
     for instance in instances:
         url = reverse(urlnames['nested'], args=[instance.pk])
         response = client.get(url)
-        assert response.status_code == status_map['nested'][username], response.json()
+        assert response.status_code == get_obj_perms_status_code(instance, username, 'nested'), response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -211,9 +211,12 @@ def test_delete(db, client, username, password):
     instances = Section.objects.all()
 
     for instance in instances:
+        editors = list(instance.editors.values_list('domain', flat=True))
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.delete(url)
-        assert response.status_code == get_obj_perms_status_code(instance, username, 'delete'), response.json()
+        assert response.status_code == get_obj_perms_status_code(
+            instance, username, 'delete', editors=editors
+        ), response.json()
 
 
 @pytest.mark.parametrize('username,password', users)

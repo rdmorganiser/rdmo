@@ -34,7 +34,7 @@ class TranslationMixin:
         current_language = get_language()
 
         languages = get_languages()
-        for lang_code, lang_string, lang_field in languages:
+        for lang_code, _lang_string, lang_field in languages:
             if lang_code == current_language:
                 r = getattr(self, f'{field}_{lang_field}') or None
                 if r is not None:

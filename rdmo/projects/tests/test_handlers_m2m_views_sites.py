@@ -47,7 +47,7 @@ def test_project_views_sync_when_updating_view_sites(settings, enable_project_vi
     assert set(P[1].views.all()) == set()  # removed
     assert set(P[2].views.all()) == {V[2], V[1]}  # stays
     assert set(P[3].views.all()) == {V[3]}
-    assert_all_projects_are_synced_with_instance_m2m_field(V[2], 'sites')
+    assert_all_projects_are_synced_with_instance_m2m_field(V[1], 'sites')
 
     # === Update: remove C2 and add C3 to V1 → it should appear in P1 and P3 ===
     V[1].sites.remove(S[2])  # V1 → []
@@ -56,4 +56,4 @@ def test_project_views_sync_when_updating_view_sites(settings, enable_project_vi
     assert set(P[1].views.all()) == set()
     assert set(P[2].views.all()) == {V[2]}
     assert set(P[3].views.all()) == {V[3], V[1]}  # got V1
-    assert_all_projects_are_synced_with_instance_m2m_field(V[3], 'sites')
+    assert_all_projects_are_synced_with_instance_m2m_field(V[1], 'sites')

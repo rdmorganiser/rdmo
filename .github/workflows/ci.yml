@@ -27,68 +27,26 @@ env:
   PYTHONDONTWRITEBYTECODE: 1
   FORCE_COLOR: 1 # colored output by pytest etc.
 
+permissions: {}
+
 jobs:
 
   build-wheel:
     name: Build python wheel
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v4
-    # update the version
-    - name: Get short commit SHA
-      run: |
-        if [ "${{ github.event_name }}" = "pull_request" ]; then
-          SHA="${{ github.event.pull_request.head.sha }}"
-        else
-          SHA="${{ github.sha }}"
-        fi
-        echo "SHA=$(git rev-parse --short $SHA)" >> $GITHUB_ENV
-    - name: Get current version (MAJOR.MINOR.PATCH)
-      id: current-version
-      run: echo "current_version=$(grep -Po '(?<=__version__ = ")[\d\w.]+(?=")' rdmo/__init__.py)" >> $GITHUB_OUTPUT
-    - name: Generate new version (current version + SHA)
-      id: new-version
-      run: echo "new_version=${{ steps.current-version.outputs.current_version }}+$SHA" >> $GITHUB_OUTPUT
-    - name: Update version in rdmo/__init__.py
-      run: |
-        sed -i "s/__version__ = .*/__version__ = \"${{ steps.new-version.outputs.new_version }}\"/" rdmo/__init__.py
+    - uses: actions/checkout@v6
+      with:
+        persist-credentials: false
+        fetch-depth: 0  # important for setuptools_scm
     # build the webpack bundle
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v6
       with:
         node-version: 22
         cache: npm
     - run: npm ci && npm run build:dist
-    # build the wheel
-    - uses: actions/setup-python@v5
-      with:
-        python-version: '3.13'
-        cache: pip
-    - run: |
-        python -m pip install --upgrade pip build[uv] twine
-        python -m pip --version
-    - name: Build the wheel
-      run: python -m build --installer=uv
-    - name: Check the metadata of wheel and sdist
-      run: python -m twine check --strict dist/*
-    - name: Install package from built wheel
-      run: python -m pip install --no-compile dist/rdmo*.whl # do not create __pycache__/*.pyc files
-    - name: Write info to step summary
-      run: |
-          {
-            echo -e "# ✓ Wheel successfully built (v${{ steps.new-version.outputs.new_version }})\n\n"
-            echo '<details><summary>Information about installed wheel</summary>'
-            echo -e "\n\`\`\`console"
-            echo "$ python -m pip show --files --verbose rdmo"
-            python -m pip show --files --verbose rdmo
-            echo -e "\`\`\`\n</details>"
-          } >> $GITHUB_STEP_SUMMARY
-    - name: Upload wheel as artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: wheel
-        path: dist/rdmo*.whl
-        if-no-files-found: error
-        retention-days: 30
+    - name: Build and inspect package
+      uses: hynek/build-and-inspect-python-package@efb823f52190ad02594531168b7a2d5790e66516 # v2.14.0
 
   test:
     name: "Test (Python: ${{ matrix.python-version }}, DB: ${{ matrix.db-backend }})"
@@ -96,19 +54,21 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        python-version: ['3.9', '3.13']
+        python-version: ['3.10', '3.13']
         db-backend: [mysql, postgres]
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
+      with:
+        persist-credentials: false
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: ${{ matrix.python-version }}
         cache: pip
     - name: Download wheel
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v6
       with:
-        name: wheel
+        name: Packages
         path: dist
     - name: Install Dependencies
       run: |
@@ -141,10 +101,12 @@ jobs:
       env:
         GITHUB_DB_BACKEND: ${{ matrix.db-backend }}
     - name: Upload coverage data to coveralls.io
-      uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b # v2.3.6
+      uses: coverallsapp/github-action@5cbfd81b66ca5d10c19b062c04de0199c215fb6e # v2.3.7
       with:
         flag-name: '${{ matrix.db-backend }}: ${{ matrix.python-version }}'
         parallel: true
+        fail-on-error: false
+        allow-empty: true
 
   test-e2e:
     name: "End-to-end Test (Python: ${{ matrix.python-version }}, DB: ${{ matrix.db-backend }})"
@@ -155,16 +117,18 @@ jobs:
         python-version: ['3.13']
         db-backend: [postgres]
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
+      with:
+        persist-credentials: false
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: ${{ matrix.python-version }}
         cache: pip
     - name: Download wheel
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v6
       with:
-        name: wheel
+        name: Packages
         path: dist
     - name: Install Dependencies
       run: |
@@ -190,7 +154,7 @@ jobs:
       env:
         DJANGO_DEBUG: True
         GITHUB_DB_BACKEND: ${{ matrix.db-backend }}
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v5
       with:
         name: screenshots
         path: screenshots/**/*.png
@@ -202,9 +166,10 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
     - name: Run Coveralls finish
-      uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b # v2.3.6
+      uses: coverallsapp/github-action@5cbfd81b66ca5d10c19b062c04de0199c215fb6e # v2.3.7
       with:
         parallel-finished: true
+        fail-on-error: false
 
   dev-setup:
     # Ref: structlog (MIT licensed) <https://github.com/hynek/structlog/blob/main/.github/workflows/ci.yml>
@@ -214,8 +179,10 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.13"
           cache: pip
@@ -227,24 +194,26 @@ jobs:
     needs: build-wheel
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.13"
           cache: pip
       - name: Download wheel
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
-          name: wheel
+          name: Packages
           path: dist
       - name: Install os requirements for python-ldap
         run: sudo apt-get update && sudo apt-get install --yes libldap2-dev libsasl2-dev
       - run: python -m pip install --upgrade pip
       - name: Install rdmo wheel with all optional dependency groups
-        run: python -m pip install --no-compile "$(ls dist/*.whl)[allauth,ci,dev,gunicorn,ldap,mysql,postgres,pytest]"
+        run: python -m pip install --no-compile "$(ls dist/*.whl)[all]"
       - name: Verify installed packages have compatible dependencies
         run: python -m pip check
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: npm
@@ -286,6 +255,6 @@ jobs:
       - dependencies
     runs-on: ubuntu-24.04
     steps:
-      - uses: re-actors/alls-green@release/v1
+      - uses: re-actors/alls-green@05ac9388f0aebcb5727afa17fcccfecd6f8ec5fe # v1.2.2
         with:
           jobs: ${{ toJSON(needs) }}

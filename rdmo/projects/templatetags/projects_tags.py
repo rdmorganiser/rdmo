@@ -12,7 +12,7 @@ register = template.Library()
 def projects_indent(level):
     string = ''
     if level > 0:
-        for i in range(level - 1):
+        for _ in range(level - 1):
             string += '&ensp;&ensp;'
         string += '&#8226;&ensp;'
 

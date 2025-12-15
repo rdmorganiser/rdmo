@@ -53,7 +53,7 @@ def test_detail(db, client, username, password):
     for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.get(url)
-        assert response.status_code == status_map['detail'][username], response.json()
+        assert response.status_code == get_obj_perms_status_code(instance, username, 'detail'), response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -98,11 +98,14 @@ def test_update_multisite(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_delete_multisite(db, client, username, password):
+def test_delete(db, client, username, password):
     client.login(username=username, password=password)
     instances = Option.objects.all()
 
     for instance in instances:
+        editors = list(instance.editors.values_list('domain', flat=True))
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.delete(url)
-        assert response.status_code == get_obj_perms_status_code(instance, username, 'delete')
+        assert response.status_code == get_obj_perms_status_code(
+            instance, username, 'delete', editors=editors
+        ), response.json()

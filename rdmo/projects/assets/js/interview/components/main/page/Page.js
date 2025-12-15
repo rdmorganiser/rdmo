@@ -46,7 +46,12 @@ const Page = ({ config, settings, templates, overview, page, sets, values, fetch
     }
   }, [page.id])
 
-  const isManager = (overview.is_superuser || overview.is_editor || overview.is_reviewer)
+  const isManager = overview.permissions?.can_view_management
+  const disabled = (
+    !overview.permissions?.can_add_value ||
+    !overview.permissions?.can_change_value ||
+    !overview.permissions?.can_delete_value
+  )
 
   return (
     <div className="interview-page">
@@ -58,7 +63,7 @@ const Page = ({ config, settings, templates, overview, page, sets, values, fetch
         page={page}
         sets={sets.filter((set) => (set.set_prefix == currentSetPrefix) && (set.element == page))}
         values={isNil(page.attribute) ? [] : values.filter((value) => (value.attribute == page.attribute))}
-        disabled={overview.read_only}
+        disabled={disabled}
         currentSet={currentSet}
         activateSet={activateSet}
         createSet={createSet}
@@ -81,7 +86,7 @@ const Page = ({ config, settings, templates, overview, page, sets, values, fetch
                     questionset={element}
                     sets={sets}
                     values={values.filter((value) => element.attributes.includes(value.attribute))}
-                    disabled={overview.read_only}
+                    disabled={disabled}
                     isManager={isManager}
                     parentSet={currentSet}
                     createSet={createSet}
@@ -117,7 +122,7 @@ const Page = ({ config, settings, templates, overview, page, sets, values, fetch
                       value.set_prefix == currentSetPrefix &&
                       value.set_index != currentSetIndex
                     ))}
-                    disabled={overview.read_only}
+                    disabled={disabled}
                     isManager={isManager}
                     currentSet={currentSet}
                     createValue={createValue}

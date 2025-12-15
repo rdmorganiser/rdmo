@@ -18,6 +18,14 @@ class CatalogQuerySet(CurrentSiteQuerySetMixin, GroupsQuerySetMixin, Availabilit
     def prefetch_elements(self):
         return self.prefetch_related(*self.model.prefetch_lookups)
 
+    def filter_for_user(self, user):
+        return (
+            self.filter_current_site()
+                .filter_group(user)
+                .filter_availability(user)
+                .order_by('-available', 'order')
+        )
+
 
 class CatalogManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityManagerMixin, models.Manager):
 
@@ -29,6 +37,9 @@ class CatalogManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityMa
 
     def prefetch_elements(self):
         return self.get_queryset().prefetch_elements()
+
+    def filter_for_user(self, user):
+        return self.get_queryset().filter_for_user(user)
 
 
 class SectionQuerySet(models.QuerySet):

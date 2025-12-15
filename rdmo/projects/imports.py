@@ -93,7 +93,7 @@ class RDMOXMLImport(Import):
     }
 
     def check(self) -> bool:
-        file_type, encoding = mimetypes.guess_type(self.file_name)
+        file_type, _encoding = mimetypes.guess_type(self.file_name)
         if file_type in ('application/xml', 'text/xml'):
             self.root = read_xml_file(self.file_name)
             if self.root is not None and self.root.tag == 'project':
@@ -106,10 +106,7 @@ class RDMOXMLImport(Import):
         if self.current_project is None:
             catalog_uri = get_uri(self.root.find('catalog'), self.ns_map)
 
-            available_catalogs = Catalog.objects.filter_current_site() \
-                                                .filter_group(self.request.user) \
-                                                .filter_availability(self.request.user) \
-                                                .order_by('order')
+            available_catalogs = Catalog.objects.filter_for_user(self.request.user)
 
             try:
                 self.catalog = available_catalogs.get(uri=catalog_uri)

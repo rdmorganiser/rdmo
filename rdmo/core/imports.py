@@ -5,7 +5,6 @@ from collections import defaultdict
 from enum import Enum
 from os.path import join as pj
 from random import randint
-from typing import Optional, Union
 
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
@@ -54,7 +53,7 @@ def generate_tempfile_name():
     return fn
 
 
-def get_or_return_instance(model: models.Model, uri: Optional[str] = None) -> tuple[models.Model, bool]:
+def get_or_return_instance(model: models.Model, uri: str | None = None) -> tuple[models.Model, bool]:
     if uri is None:
         return model(), True
     try:
@@ -73,7 +72,7 @@ def get_rdmo_model_path(target_name: str, field_name: str):
             return RDMO_MODELS[field_name]
 
 
-def make_import_info_msg(verbose_name: str, created: bool, uri: Optional[str] = None):
+def make_import_info_msg(verbose_name: str, created: bool, uri: str | None = None):
     if uri is None:
         return f"{verbose_name}, no uri"
     if created:
@@ -105,8 +104,8 @@ def _append_error(element: dict, element_field: str, error: str):
 
 def track_messages_on_element(element: dict,
                               element_field: str,
-                              warning: Optional[str] = None,
-                              error: Optional[str] = None):
+                              warning: str | None = None,
+                              error: str | None = None):
     if warning is not None:
         _initialize_tracking_field(element, element_field)
         _append_warning(element, element_field, warning)
@@ -125,10 +124,10 @@ def _initialize_track_changes_element_field(element: dict, element_field: str) -
 
 def track_changes_on_element(element: dict,
                              element_field: str,
-                             new_value: Union[str, list[str], None] = None,
-                             instance_field: Optional[str] = None,
+                             new_value: str | list[str] | None = None,
+                             instance_field: str | None = None,
                              original=None,
-                             original_value: Optional[Union[str, list[str]]] = None):
+                             original_value: str | list[str] | None = None):
     if (original is None and original_value is None) or new_value is None:
         return
 
@@ -143,13 +142,13 @@ def track_changes_on_element(element: dict,
 
 
 def get_lang_field_values(field_name: str,
-                          element: Optional[dict] = None,
-                          instance: Optional[models.Model] = None):
+                          element: dict | None = None,
+                          instance: models.Model | None = None):
     if element is not None and instance is not None:
         raise ValueError("Please choose one of each")
 
     ret = []
-    for lang_code, lang_verbose_name, lang_field in get_languages():
+    for lang_code, _lang_verbose_name, lang_field in get_languages():
         name_code = f'{field_name}_{lang_code}'
         name_field = f'{field_name}_{lang_field}'
         row = {}
@@ -273,7 +272,7 @@ def set_foreign_field(instance, field_name, element, original=None) -> None:
 
 
 def set_extra_field(instance, field_name, element,
-                    extra_field_helper: Optional[ExtraFieldHelper] = None,
+                    extra_field_helper: ExtraFieldHelper | None = None,
                     ) -> None:
 
     extra_field_value = None
@@ -512,7 +511,7 @@ def set_reverse_m2m_through_instance(instance, element, field_name=None, source_
                 track_messages_on_element(element, field_name, error=message)
                 continue
             if save:
-                through_instance, created = through_model.objects.get_or_create(**{
+                through_instance, _created = through_model.objects.get_or_create(**{
                     source_name: instance,
                     target_name: target_instance
                 })
@@ -585,7 +584,7 @@ def validate_instance(instance, element, *validators):
                     element['locked'] = True
 
 
-def check_permissions(instance: models.Model, element_uri: str, user: models.Model) -> Optional[str]:
+def check_permissions(instance: models.Model, element_uri: str, user: models.Model) -> str | None:
     if user is None:
         return
 

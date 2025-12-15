@@ -2,16 +2,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-04 11:19+0000\n"
+"POT-Creation-Date: 2025-12-12 13:02+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Dario Pilori <d.pilori@inrim.it>\n"
+"Last-Translator: Giacomo Lanza <giacomo.lanza@ptb.de>\n"
 "Language-Team: \n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.8\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -27,7 +27,7 @@ msgstr "Cognome"
 
 #: accounts/forms.py:81 core/constants.py:22 projects/models/invite.py:28
 msgid "E-mail"
-msgstr "E-mail"
+msgstr "Posta elettronica"
 
 #: accounts/forms.py:85
 msgid "Password"
@@ -45,194 +45,194 @@ msgstr ""
 msgid "Consent could not be saved. Please try again."
 msgstr "Non è stato possibile salvare il consenso. Riprovare."
 
-#: accounts/models.py:27 options/models.py:181 questions/models/question.py:97
+#: accounts/models.py:28 options/models.py:181 questions/models/question.py:97
 #: tasks/models.py:96
 msgid "Text (primary)"
-msgstr "Testo (lingua principale)"
+msgstr "Testo (prima lingua)"
 
-#: accounts/models.py:28
+#: accounts/models.py:29
 msgid "The text for this additional field (in the primary language)."
-msgstr "Il testo di questo campo aggiuntivo (nella lingua principale)."
+msgstr "Il testo di questo campo aggiuntivo (nella prima lingua)."
 
-#: accounts/models.py:32 options/models.py:186 questions/models/question.py:102
+#: accounts/models.py:33 options/models.py:186 questions/models/question.py:102
 #: tasks/models.py:101
 msgid "Text (secondary)"
 msgstr "Testo (seconda lingua)"
 
-#: accounts/models.py:33
+#: accounts/models.py:34
 msgid "The text for this additional field (in the secondary language)."
-msgstr "Il testo di questo campo aggiuntivo (nella lingua secondaria)."
+msgstr "Il testo di questo campo aggiuntivo (nella seconda lingua)."
 
-#: accounts/models.py:37 options/models.py:191 questions/models/question.py:107
+#: accounts/models.py:38 options/models.py:191 questions/models/question.py:107
 #: tasks/models.py:106
 msgid "Text (tertiary)"
 msgstr "Testo (terza lingua)"
 
-#: accounts/models.py:38
+#: accounts/models.py:39
 msgid "The text for this additional field (in the tertiary language)."
-msgstr "Il testo di questo campo aggiuntivo (nella lingua secondaria)."
+msgstr "Il testo di questo campo aggiuntivo (nella terza lingua)."
 
-#: accounts/models.py:42 options/models.py:196 questions/models/question.py:112
+#: accounts/models.py:43 options/models.py:196 questions/models/question.py:112
 #: tasks/models.py:111
 msgid "Text (quaternary)"
 msgstr "Testo (quarta lingua)"
 
-#: accounts/models.py:43
+#: accounts/models.py:44
 msgid "The text for this additional field (in the quaternary language)."
-msgstr "Il testo di questo campo aggiuntivo (nella lingua quaternaria)."
+msgstr "Il testo di questo campo aggiuntivo (nella quarta lingua)."
 
-#: accounts/models.py:47 options/models.py:201 questions/models/question.py:117
+#: accounts/models.py:48 options/models.py:201 questions/models/question.py:117
 #: tasks/models.py:116
 msgid "Text (quinary)"
 msgstr "Testo (quinta lingua)"
 
-#: accounts/models.py:48
+#: accounts/models.py:49
 msgid "The text for this additional field (in the quinary language)."
-msgstr "Il testo di questo campo aggiuntivo (nel linguaggio quinario)."
+msgstr "Il testo di questo campo aggiuntivo (nella quinta lingua)."
 
-#: accounts/models.py:52 options/models.py:206 questions/models/catalog.py:111
+#: accounts/models.py:53 options/models.py:206 questions/models/catalog.py:112
 #: questions/models/page.py:136 questions/models/question.py:72
 #: questions/models/questionset.py:106 views/models.py:103
 msgid "Help (primary)"
-msgstr "Aiuto (lingua principale)"
+msgstr "Aiuto (prima lingua)"
 
-#: accounts/models.py:53
+#: accounts/models.py:54
 msgid ""
 "The help text to be displayed next to the input element (in the primary "
 "language)."
 msgstr ""
-"Il testo di aiuto da visualizzare accanto all'elemento di input (nella "
-"lingua principale)."
+"Il testo di aiuto da visualizzare accanto all'elemento di input (nella prima "
+"lingua)."
 
-#: accounts/models.py:57 options/models.py:211 questions/models/catalog.py:116
+#: accounts/models.py:58 options/models.py:211 questions/models/catalog.py:117
 #: questions/models/page.py:141 questions/models/question.py:77
 #: questions/models/questionset.py:111 views/models.py:108
 msgid "Help (secondary)"
 msgstr "Aiuto (seconda lingua)"
 
-#: accounts/models.py:58
+#: accounts/models.py:59
 msgid ""
 "The help text to be displayed next to the input element (in the secondary "
 "language)."
 msgstr ""
 "Il testo di aiuto da visualizzare accanto all'elemento di input (nella "
-"lingua secondaria)."
+"seconda lingua)."
 
-#: accounts/models.py:62 options/models.py:216 questions/models/catalog.py:121
+#: accounts/models.py:63 options/models.py:216 questions/models/catalog.py:122
 #: questions/models/page.py:146 questions/models/question.py:82
 #: questions/models/questionset.py:116 views/models.py:113
 msgid "Help (tertiary)"
 msgstr "Aiuto (terza lingua)"
 
-#: accounts/models.py:63
+#: accounts/models.py:64
 msgid ""
 "The help text to be displayed next to the input element (in the tertiary "
 "language)."
 msgstr ""
-"Il testo di aiuto da visualizzare accanto all'elemento di input (nella "
-"lingua terziaria)."
+"Il testo di aiuto da visualizzare accanto all'elemento di input (nella terza "
+"lingua)."
 
-#: accounts/models.py:67 options/models.py:221 questions/models/catalog.py:126
+#: accounts/models.py:68 options/models.py:221 questions/models/catalog.py:127
 #: questions/models/page.py:151 questions/models/question.py:87
 #: questions/models/questionset.py:121 views/models.py:118
 msgid "Help (quaternary)"
 msgstr "Aiuto (quarta lingua)"
 
-#: accounts/models.py:68
+#: accounts/models.py:69
 msgid ""
 "The help text to be displayed next to the input element (in the quaternary "
 "language)."
 msgstr ""
 "Il testo di aiuto da visualizzare accanto all'elemento di input (nella "
-"lingua quaternaria)."
+"quarta lingua)."
 
-#: accounts/models.py:72 options/models.py:226 questions/models/catalog.py:131
+#: accounts/models.py:73 options/models.py:226 questions/models/catalog.py:132
 #: questions/models/page.py:156 questions/models/question.py:92
 #: questions/models/questionset.py:126 views/models.py:123
 msgid "Help (quinary)"
 msgstr "Aiuto (quinta lingua)"
 
-#: accounts/models.py:73
+#: accounts/models.py:74
 msgid ""
 "The help text to be displayed next to the input element (in the quinary "
 "language)."
 msgstr ""
-"Il testo di aiuto da visualizzare accanto all'elemento di input (in lingua "
-"quinaria)."
+"Il testo di aiuto da visualizzare accanto all'elemento di input (nella "
+"quinta lingua)."
 
-#: accounts/models.py:76
+#: accounts/models.py:77
 msgid "Required"
 msgstr "Richiesto"
 
-#: accounts/models.py:77
+#: accounts/models.py:78
 msgid "Designates whether this additional field is required."
 msgstr "Indica se questo campo aggiuntivo è richiesto."
 
-#: accounts/models.py:82
+#: accounts/models.py:83
 msgid "Additional field"
 msgstr "Campo aggiuntivo"
 
-#: accounts/models.py:83
+#: accounts/models.py:84
 msgid "Additional fields"
 msgstr "Campi addizionali"
 
-#: accounts/models.py:106
+#: accounts/models.py:107
 msgid "Additional field value"
 msgstr "Valore del campo aggiuntivo"
 
-#: accounts/models.py:107
+#: accounts/models.py:108
 msgid "Additional field values"
 msgstr "Valori del campo aggiuntivo"
 
-#: accounts/models.py:124
+#: accounts/models.py:125
 msgid "Consent field value"
 msgstr "Valore del campo di conferma"
 
-#: accounts/models.py:125
+#: accounts/models.py:126
 msgid "Consent field values"
-msgstr "Valore dei campi di conferma"
+msgstr "Valori dei campi di conferma"
 
-#: accounts/models.py:181
+#: accounts/models.py:182
 msgid "Member"
 msgstr "Membro"
 
-#: accounts/models.py:182
+#: accounts/models.py:183
 msgid "The sites for which this user is a member."
 msgstr "I siti dei quali l'utente è membro."
 
-#: accounts/models.py:186 projects/constants.py:9
+#: accounts/models.py:187 projects/constants.py:9
 #: projects/models/membership.py:13
 msgid "Manager"
 msgstr "Gestore"
 
-#: accounts/models.py:187
+#: accounts/models.py:188
 msgid "The sites for which this user is manager."
 msgstr "I siti dei quali l'utente è gestore."
 
-#: accounts/models.py:191
+#: accounts/models.py:192
 msgid "Editor"
 msgstr "Editore"
 
-#: accounts/models.py:192
+#: accounts/models.py:193
 msgid "The sites for which this user is an editor."
 msgstr "I siti per i quali questo utente è un editore."
 
-#: accounts/models.py:196
+#: accounts/models.py:197
 msgid "Reviewer"
 msgstr "Recensore"
 
-#: accounts/models.py:197
+#: accounts/models.py:198
 msgid "The sites for which this user is a reviewer."
 msgstr "I siti per i quali questo utente è un recensore."
 
-#: accounts/models.py:202 projects/models/invite.py:33
+#: accounts/models.py:203 projects/forms.py:278 projects/models/invite.py:33
 #: projects/models/membership.py:30
 #: projects/templates/projects/project_detail_invites.html:16
 #: projects/templates/projects/project_detail_memberships.html:22
 msgid "Role"
 msgstr "Ruolo"
 
-#: accounts/models.py:203
+#: accounts/models.py:204
 msgid "Roles"
 msgstr "Ruoli"
 
@@ -259,11 +259,12 @@ msgstr ""
 
 #: accounts/templates/account/email.html:6
 msgid "E-mail Addresses"
-msgstr "Indirizzi e-mail"
+msgstr "Indirizzi di posta elettronica"
 
 #: accounts/templates/account/email.html:10
 msgid "The following e-mail addresses are associated with your account:"
-msgstr "I seguenti indirizzi e-mail sono associati al vostro account:"
+msgstr ""
+"I seguenti indirizzi di posta elettronica sono associati al vostro account:"
 
 #: accounts/templates/account/email.html:26
 msgid "Primary"
@@ -298,20 +299,22 @@ msgid ""
 "You currently do not have any e-mail address set up. You should really add "
 "an e-mail address so you can receive notifications, reset your password, etc."
 msgstr ""
-"Al momento non è stato configurato alcun indirizzo e-mail. Un indirizzo e-"
-"mail è importante per ricevere notifiche, reimpostare la password, ..."
+"Al momento non è stato configurato alcun indirizzo di posta elettronica. Un "
+"indirizzo di posta elettronica è importante per ricevere notifiche, "
+"reimpostare la password, ..."
 
 #: accounts/templates/account/email.html:56
 msgid "Add E-mail Address"
-msgstr "Aggiungi un indirizzo e-mail"
+msgstr "Aggiungi un indirizzo di posta elettronica"
 
 #: accounts/templates/account/email.html:63
 msgid "Add E-mail"
-msgstr "Aggiungi e-mail"
+msgstr "Aggiungi posta elettronica"
 
 #: accounts/templates/account/email.html:71
 msgid "Do you really want to remove the selected e-mail address?"
-msgstr "Confermare la rimozione dell'indirizzo e-mail selezionato?"
+msgstr ""
+"Confermare la rimozione dell'indirizzo di posta elettronica selezionato?"
 
 #: accounts/templates/account/email/password_reset_key_message.txt:1
 #: projects/templates/projects/email/project_invite_message.txt:1
@@ -325,9 +328,10 @@ msgid ""
 "%(site_domain)s will be reset. It can be safely ignored if you did not "
 "request a password reset. Click the link below to reset your password."
 msgstr ""
-"Hai ricevuto questa e-mail perché è stata richiesta la reimpostazione della "
-"password su %(site_domain)s. Se non hai richiesto la reimpostazione, ignora "
-"questo messaggio. Altrimenti, apri il link per reimpostare la password."
+"Hai ricevuto questo messaggio di posta elettronica perché è stata richiesta "
+"la reimpostazione della password su %(site_domain)s. Se non hai richiesto la "
+"reimpostazione, ignora questo messaggio. Altrimenti, apri il link per "
+"reimpostare la password."
 
 #: accounts/templates/account/email/password_reset_key_message.txt:11
 #, python-format
@@ -348,7 +352,7 @@ msgstr "Reimpostazione della password"
 
 #: accounts/templates/account/email_confirm.html:7
 msgid "Confirm E-mail Address"
-msgstr "Confermare indirizzo e-mail"
+msgstr "Confermare indirizzo di posta elettronica"
 
 #: accounts/templates/account/email_confirm.html:14
 #, python-format
@@ -356,8 +360,8 @@ msgid ""
 "Please confirm that <a href=\"mailto:%(email)s\">%(email)s</a> is an e-mail "
 "address for user <strong>%(user_display)s</strong>."
 msgstr ""
-"Confermare che <a href=\"mailto:%(email)s\">%(email)s</a> è un indirizzo e-"
-"mail per l'utente <strong>%(user_display)s</strong>."
+"Confermare che <a href=\"mailto:%(email)s\">%(email)s</a> è un indirizzo di "
+"posta elettronica per l'utente <strong>%(user_display)s</strong>."
 
 #: accounts/templates/account/email_confirm.html:21
 msgid "Confirm"
@@ -436,8 +440,8 @@ msgid ""
 "Forgotten your password? Enter your e-mail address below, and we'll send you "
 "an e-mail allowing you to reset it."
 msgstr ""
-"Password dimenticata? Inserire il proprio indirizzo e-mail per ricevere una "
-"mail di reimpostazione password."
+"Password dimenticata? Inserire il proprio indirizzo di posta elettronica per "
+"ricevere una e-mail di reimpostazione password."
 
 #: accounts/templates/account/password_reset.html:21
 msgid "Reset my password"
@@ -575,7 +579,7 @@ msgstr "Avete accettato le condizioni di utilizzo."
 #: accounts/templates/account/verification_sent.html:7
 #: accounts/templates/account/verified_email_required.html:6
 msgid "Verify your e-mail address"
-msgstr "Confermare il proprio indirizzo e-mail"
+msgstr "Confermare il proprio indirizzo di posta elettronica"
 
 #: accounts/templates/account/verification_sent.html:11
 msgid ""
@@ -594,7 +598,7 @@ msgid ""
 "address."
 msgstr ""
 "Questa parte del sito richiede una verifica dell'identità. Per questo "
-"motivo, è necessario verificare il proprio indirizzo e-mail."
+"motivo, è necessario verificare il proprio indirizzo di posta elettronica."
 
 #: accounts/templates/account/verified_email_required.html:15
 msgid ""
@@ -613,7 +617,8 @@ msgid ""
 "mail address</a>."
 msgstr ""
 "<strong>Attenzione:</strong> è ancora possibile <a "
-"href=\"%(email_url)s\">cambiare il proprio indirizzo e-mail</a>."
+"href=\"%(email_url)s\">cambiare il proprio indirizzo di posta elettronica</"
+"a>."
 
 #: accounts/templates/profile/profile_remove_closed.html:6
 #: accounts/templates/profile/profile_remove_failed.html:6
@@ -680,7 +685,7 @@ msgid ""
 msgstr ""
 "Inserire le informazioni aggiornate del proprio account. La password può "
 "essere cambiata con l'apposito <a href=\"%(password_url)s\">modulo</a>. Per "
-"modificare il proprio indirizzo e-mail, visitare <a "
+"modificare il proprio indirizzo di posta elettronica, visitare <a "
 "href=\"%(email_url)s\">questa pagina</a>."
 
 #: accounts/templates/profile/profile_update_form.html:33
@@ -799,7 +804,7 @@ msgstr "Condizioni"
 #: options/models.py:19 options/models.py:151
 #: options/templates/options/export/option.html:5
 #: options/templates/options/export/optionset.html:5
-#: questions/models/catalog.py:36 questions/models/page.py:35
+#: questions/models/catalog.py:37 questions/models/page.py:35
 #: questions/models/question.py:27 questions/models/questionset.py:30
 #: questions/models/section.py:34
 #: questions/templates/questions/export/catalog.html:6
@@ -819,7 +824,7 @@ msgstr ""
 "automaticamente)."
 
 #: conditions/models.py:40 domain/models.py:20 options/models.py:24
-#: options/models.py:156 questions/models/catalog.py:41
+#: options/models.py:156 questions/models/catalog.py:42
 #: questions/models/page.py:40 questions/models/question.py:32
 #: questions/models/questionset.py:35 questions/models/section.py:39
 #: tasks/models.py:25 views/models.py:27
@@ -831,7 +836,7 @@ msgid "The prefix for the URI of this condition."
 msgstr "Il prefisso dell'URI per questa condizione."
 
 #: conditions/models.py:45 options/models.py:29 options/models.py:161
-#: questions/models/catalog.py:46 questions/models/page.py:45
+#: questions/models/catalog.py:47 questions/models/page.py:45
 #: questions/models/question.py:37 questions/models/questionset.py:40
 #: questions/models/section.py:44 tasks/models.py:30 views/models.py:32
 msgid "URI Path"
@@ -844,7 +849,7 @@ msgstr "Il percorso dell'URI di questa condizione."
 #: conditions/models.py:50
 #: conditions/templates/conditions/export/conditions.html:21
 #: domain/models.py:35 options/models.py:34 options/models.py:166
-#: questions/models/catalog.py:51 questions/models/page.py:50
+#: questions/models/catalog.py:52 questions/models/page.py:50
 #: questions/models/question.py:42 questions/models/questionset.py:45
 #: questions/models/section.py:49
 #: questions/templates/questions/export/catalog.html:12
@@ -863,7 +868,7 @@ msgid "Additional internal information about this condition."
 msgstr "Informazioni interne addizionali su questa condizione."
 
 #: conditions/models.py:55 domain/models.py:40 options/models.py:39
-#: options/models.py:171 questions/models/catalog.py:56
+#: options/models.py:171 questions/models/catalog.py:57
 #: questions/models/page.py:55 questions/models/question.py:47
 #: questions/models/questionset.py:50 questions/models/section.py:54
 #: tasks/models.py:40 views/models.py:42
@@ -875,7 +880,7 @@ msgid "Designates whether this condition can be changed."
 msgstr "Indica se questa condizione può essere cambiata."
 
 #: conditions/models.py:60 domain/models.py:45 options/models.py:49
-#: options/models.py:176 questions/models/catalog.py:76
+#: options/models.py:176 questions/models/catalog.py:77
 #: questions/models/page.py:81 questions/models/question.py:67
 #: questions/models/questionset.py:76 questions/models/section.py:64
 #: tasks/models.py:61 views/models.py:63
@@ -984,7 +989,7 @@ msgstr "Opzione"
 msgid "File"
 msgstr "File"
 
-#: core/imports.py:601
+#: core/imports.py:600
 msgid "You have no permissions to import"
 msgstr "Non avete i permessi per importare"
 
@@ -1162,7 +1167,7 @@ msgstr "Azzerare le sovrapposizioni del tutorial"
 
 #: core/templates/core/base_navigation_account.html:4
 msgid "Update e-mail"
-msgstr "Aggiorna e-mail"
+msgstr "Aggiorna posta elettronica"
 
 #: core/templates/core/bootstrap_form_field.html:69
 msgid ""
@@ -1241,42 +1246,42 @@ msgstr "Un elemento superiore è bloccato."
 msgid "The element is locked."
 msgstr "L'elemento è bloccato."
 
-#: core/xml.py:27
+#: core/xml.py:26
 msgid "This file does not exists."
 msgstr "Questo file non esiste."
 
-#: core/xml.py:36 core/xml.py:90
+#: core/xml.py:35 core/xml.py:89
 msgid "XML Parsing Error"
 msgstr "Errore di parsing XML"
 
-#: core/xml.py:41
+#: core/xml.py:40
 msgid ""
 "The content of the XML file does not consist of well-formed data or markup."
 msgstr ""
 "Il contenuto del file XML non è costituito da dati o markup ben formati."
 
-#: core/xml.py:43
+#: core/xml.py:42
 msgid "This XML does not contain RDMO content."
 msgstr "Questo XML non contiene dati RDMO."
 
-#: core/xml.py:60
+#: core/xml.py:59
 msgid ""
 "The \"required\" attribute in this RDMO XML file is not a valid version."
 msgstr ""
 "L'attributo “required” in questo file XML RDMO non è una versione valida."
 
-#: core/xml.py:67
+#: core/xml.py:66
 msgid "This RDMO XML file requires a newer RDMO version to be imported."
 msgstr ""
 "Questo file RDMO XML richiede una versione RDMO più recente per essere "
 "importato."
 
-#: core/xml.py:78
+#: core/xml.py:77
 msgid "The \"version\" attribute in this RDMO XML file is not a valid version."
 msgstr ""
 "L'attributo “version” di questo file XML RDMO non è una versione valida."
 
-#: core/xml.py:91 core/xml.py:103
+#: core/xml.py:90 core/xml.py:102
 msgid "This is not a valid RDMO XML file."
 msgstr "Questo non è un file XML RDMO valido."
 
@@ -1401,12 +1406,12 @@ msgstr "Importa"
 msgid "Import elements"
 msgstr "Importa elementi"
 
-#: management/viewsets.py:41 management/viewsets.py:77 projects/viewsets.py:370
-#: projects/viewsets.py:371 projects/viewsets.py:542
+#: management/viewsets.py:40 management/viewsets.py:76 projects/viewsets.py:379
+#: projects/viewsets.py:380 projects/viewsets.py:549
 msgid "This field may not be blank."
 msgstr "Questo campo non può essere vuoto."
 
-#: management/viewsets.py:79
+#: management/viewsets.py:78
 msgid "This is not a valid RDMO import JSON."
 msgstr "Questo non è un JSON di importazione RDMO valido."
 
@@ -1446,7 +1451,7 @@ msgid "Designates whether this option set (and its options) can be changed."
 msgstr ""
 "Indica se questo insieme di opzioni (e le sue opzioni) può essere cambiato."
 
-#: options/models.py:44 questions/models/catalog.py:61 tasks/models.py:45
+#: options/models.py:44 questions/models/catalog.py:62 tasks/models.py:45
 #: views/models.py:47
 msgid "Order"
 msgstr "Ordine"
@@ -1525,43 +1530,43 @@ msgstr ""
 
 #: options/models.py:182
 msgid "The text for this option (in the primary language)."
-msgstr "Il testo di questa opzione (nella lingua principale)."
+msgstr "Il testo di questa opzione (nella prima lingua)."
 
 #: options/models.py:187
 msgid "The text for this option (in the secondary language)."
-msgstr "Il testo di questa opzione (nella lingua secondaria)."
+msgstr "Il testo di questa opzione (nella seconda lingua)."
 
 #: options/models.py:192
 msgid "The text for this option (in the tertiary language)."
-msgstr "Il testo di questa opzione (nella lingua terziaria)."
+msgstr "Il testo di questa opzione (nella terza lingua)."
 
 #: options/models.py:197
 msgid "The text for this option (in the quaternary language)."
-msgstr "Il testo di questa opzione (nella lingua quaternaria)."
+msgstr "Il testo di questa opzione (nella quarta lingua)."
 
 #: options/models.py:202
 msgid "The text for this option (in the quinary language)."
-msgstr "Il testo di questa opzione (in lingua quinaria)."
+msgstr "Il testo di questa opzione (nella quinta lingua)."
 
 #: options/models.py:207
 msgid "The help text for this option (in the primary language)."
-msgstr "Il testo della guida per questa opzione (nella lingua principale)."
+msgstr "Il testo della guida per questa opzione (nella prima lingua)."
 
 #: options/models.py:212
 msgid "The help text for this option (in the secondary language)."
-msgstr "Il testo di aiuto per questa opzione (nella lingua secondaria)."
+msgstr "Il testo di aiuto per questa opzione (nella seconda lingua)."
 
 #: options/models.py:217
 msgid "The help text for this option (in the tertiary language)."
-msgstr "Il testo di aiuto per questa opzione (nella lingua terziaria)."
+msgstr "Il testo di aiuto per questa opzione (nella terza lingua)."
 
 #: options/models.py:222
 msgid "The help text for this option (in the quaternary language)."
-msgstr "Il testo di aiuto per questa opzione (in lingua quaternaria)."
+msgstr "Il testo di aiuto per questa opzione (nella quarta lingua)."
 
 #: options/models.py:227
 msgid "The help text for this option (in the quinary language)."
-msgstr "Il testo di aiuto per questa opzione (in lingua quinaria)."
+msgstr "Il testo di aiuto per questa opzione (nella quinta lingua)."
 
 #: options/models.py:231 questions/models/question.py:122
 msgid "Default text value (primary)"
@@ -1573,7 +1578,7 @@ msgid ""
 "primary language)."
 msgstr ""
 "Il valore di testo predefinito per l'input aggiuntiva di questa opzione "
-"(nella lingua principale)."
+"(nella prima lingua)."
 
 #: options/models.py:236 questions/models/question.py:127
 msgid "Default text value (secondary)"
@@ -1585,7 +1590,7 @@ msgid ""
 "secondary language)."
 msgstr ""
 "Il valore di testo predefinito per l'input aggiuntiva di questa opzione "
-"(nella lingua secondaria)."
+"(nella seconda lingua)."
 
 #: options/models.py:241 questions/models/question.py:132
 msgid "Default text value (tertiary)"
@@ -1597,7 +1602,7 @@ msgid ""
 "tertiary language)."
 msgstr ""
 "Il valore di testo predefinito per l'input aggiuntivo di questa opzione "
-"(nella lingua terziaria)."
+"(nella terza lingua)."
 
 #: options/models.py:246 questions/models/question.py:137
 msgid "Default text value (quaternary)"
@@ -1609,7 +1614,7 @@ msgid ""
 "quaternary language)."
 msgstr ""
 "Il valore di testo predefinito per l'input aggiuntivo di questa opzione "
-"(nella lingua quaternaria)."
+"(nella quarta lingua)."
 
 #: options/models.py:251 questions/models/question.py:142
 msgid "Default text value (quinary)"
@@ -1621,7 +1626,7 @@ msgid ""
 "quinary language)."
 msgstr ""
 "Il valore di testo predefinito per l'input aggiuntivo di questa opzione "
-"(nella lingua quinaria)."
+"(nella quinta lingua)."
 
 #: options/models.py:256
 msgid "View text (primary)"
@@ -1629,8 +1634,7 @@ msgstr "Visualizza il testo (primario)"
 
 #: options/models.py:257
 msgid "The view text for this option (in the primary language)."
-msgstr ""
-"Il testo di visualizzazione di questa opzione (nella lingua principale)."
+msgstr "Il testo di visualizzazione di questa opzione (nella prima lingua)."
 
 #: options/models.py:261
 msgid "View text (secondary)"
@@ -1638,8 +1642,7 @@ msgstr "Visualizza il testo (secondario)"
 
 #: options/models.py:262
 msgid "The view text for this option (in the secondary language)."
-msgstr ""
-"Il testo di visualizzazione di questa opzione (nella lingua secondaria)."
+msgstr "Il testo di visualizzazione di questa opzione (nella seconda lingua)."
 
 #: options/models.py:266
 msgid "View text (tertiary)"
@@ -1647,8 +1650,7 @@ msgstr "Visualizza il testo (terziario)"
 
 #: options/models.py:267
 msgid "The view text for this option (in the tertiary language)."
-msgstr ""
-"Il testo di visualizzazione di questa opzione (nella lingua terziaria)."
+msgstr "Il testo di visualizzazione di questa opzione (nella terza lingua)."
 
 #: options/models.py:271
 msgid "View text (quaternary)"
@@ -1656,8 +1658,7 @@ msgstr "Visualizza il testo (quaternario)"
 
 #: options/models.py:272
 msgid "The view text for this option (in the quaternary language)."
-msgstr ""
-"Il testo di visualizzazione di questa opzione (nella lingua quaternaria)."
+msgstr "Il testo di visualizzazione di questa opzione (nella quarta lingua)."
 
 #: options/models.py:276
 msgid "View text (quinary)"
@@ -1665,7 +1666,7 @@ msgstr "Visualizza il testo (quinario)"
 
 #: options/models.py:277
 msgid "The view text for this option (in the quinary language)."
-msgstr "Il testo di visualizzazione di questa opzione (in lingua quinaria)."
+msgstr "Il testo di visualizzazione di questa opzione (nella quinta lingua)."
 
 #: options/models.py:281 options/templates/options/export/option.html:17
 msgid "Additional input"
@@ -1759,7 +1760,7 @@ msgid "Reset overlays"
 msgstr "Azzerare le sovrapposizioni"
 
 #: projects/admin.py:82 projects/models/visibility.py:20
-#: questions/models/catalog.py:71 tasks/models.py:56 views/models.py:58
+#: questions/models/catalog.py:72 tasks/models.py:56 views/models.py:58
 msgid "Sites"
 msgstr "Siti"
 
@@ -1796,17 +1797,17 @@ msgid "Editing tasks is disabled."
 msgstr "La modifica delle attività è disabilitata."
 
 #: projects/forms.py:213 projects/forms.py:231
-#: projects/serializers/v1/__init__.py:111
+#: projects/serializers/v1/__init__.py:108
 msgid "Editing views is disabled."
 msgstr "La modifica delle viste è disabilitata."
 
 #: projects/forms.py:274
 msgid "Username or e-mail"
-msgstr "Nome utente o e-mail"
+msgstr "Nome utente o posta elettronica"
 
 #: projects/forms.py:276
 msgid "The username or e-mail of the new user."
-msgstr "Il nome utente o l'e-mail del nuovo utente."
+msgstr "Il nome utente o la posta elettronica del nuovo utente."
 
 #: projects/forms.py:288
 msgid "Add member silently"
@@ -1818,10 +1819,10 @@ msgid ""
 "via e-mail, when you check the following checkbox."
 msgstr ""
 "Come gestore del sito o amministratore, puoi aggiungere direttamente gli "
-"utenti senza notificarli via e-mail, quando selezioni la seguente casella di "
-"controllo."
+"utenti senza notificarli via posta elettronica, quando selezioni la seguente "
+"casella di controllo."
 
-#: projects/forms.py:304 projects/serializers/v1/__init__.py:214
+#: projects/forms.py:304 projects/serializers/v1/__init__.py:211
 msgid "The user is already a member of the project."
 msgstr "L'utente è già membro del progetto."
 
@@ -1887,21 +1888,21 @@ msgstr "Destinatari"
 msgid "Enter recipients line by line"
 msgstr "Inserire i destinatari linea per linea"
 
-#: projects/imports.py:242
+#: projects/imports.py:239
 msgid "Import project from this URL"
 msgstr "Importa il progetto da questo URL"
 
-#: projects/mixins.py:79 projects/mixins.py:96 projects/mixins.py:111
-#: projects/mixins.py:134 projects/mixins.py:152 projects/mixins.py:167
-#: projects/mixins.py:202
+#: projects/mixins.py:80 projects/mixins.py:97 projects/mixins.py:112
+#: projects/mixins.py:135 projects/mixins.py:153 projects/mixins.py:168
+#: projects/mixins.py:203
 msgid "Import error"
 msgstr "Errore di importazione"
 
-#: projects/mixins.py:80 projects/mixins.py:153 projects/mixins.py:203
+#: projects/mixins.py:81 projects/mixins.py:154 projects/mixins.py:204
 msgid "There has been an error with your import."
 msgstr "C'è stato un errore nell'importazione."
 
-#: projects/mixins.py:97
+#: projects/mixins.py:98
 msgid ""
 "There has been an error with your import. No uploaded or retrieved file "
 "could be found."
@@ -1909,7 +1910,7 @@ msgstr ""
 "C'è stato un errore con la tua importazione. Nessun file caricato o "
 "recuperato è stato trovato."
 
-#: projects/mixins.py:135
+#: projects/mixins.py:136
 msgid "Files of this type cannot be imported."
 msgstr "Questa tipologia di file non può essere importata."
 
@@ -2169,7 +2170,7 @@ msgstr "Una descrizione di questo progetto (facoltativa)."
 #: projects/models/project.py:54
 #: projects/templates/projects/project_detail_header.html:24
 #: projects/templates/projects/project_import.html:31
-#: questions/models/catalog.py:142
+#: questions/models/catalog.py:143
 #: questions/templates/questions/export/catalog.html:3
 msgid "Catalog"
 msgstr "Catalogo"
@@ -2344,7 +2345,7 @@ msgid "The sites for which the project is visible (in a multi site setup)."
 msgstr ""
 "I siti per i quali il progetto è visibile (in una configurazione multi-sito)."
 
-#: projects/models/visibility.py:25 questions/models/catalog.py:81
+#: projects/models/visibility.py:25 questions/models/catalog.py:82
 #: tasks/models.py:66 views/models.py:68
 msgid "Group"
 msgstr "Gruppo"
@@ -2425,27 +2426,27 @@ msgstr "L'URL del progetto a cui inviare i compiti."
 msgid "The secret for a webhook to close a task (optional)."
 msgstr "Il segreto di un webhook per chiudere un'attività (opzionale)."
 
-#: projects/serializers/v1/__init__.py:219
+#: projects/serializers/v1/__init__.py:216
 msgid "A user with that e-mail is already a member of the project."
 msgstr "Un utente con quell'e-mail è già membro del progetto."
 
-#: projects/serializers/v1/__init__.py:227
+#: projects/serializers/v1/__init__.py:224
 msgid "Either user or e-mail needs to be provided."
 msgstr "È necessario indicare l'utente o l'e-mail."
 
-#: projects/serializers/v1/__init__.py:229
+#: projects/serializers/v1/__init__.py:226
 msgid "User and e-mail are mutually exclusive."
-msgstr "Utente e e-mail si escludono a vicenda."
+msgstr "Utente e indirizzo di posta elettronica si escludono a vicenda."
 
-#: projects/serializers/v1/page.py:121
+#: projects/serializers/v1/page.py:120
 msgid "entry"
-msgstr "ingresso"
+msgstr "elemento"
 
-#: projects/serializers/v1/page.py:160
+#: projects/serializers/v1/page.py:159
 msgid "block"
 msgstr "blocco"
 
-#: projects/serializers/v1/page.py:223
+#: projects/serializers/v1/page.py:222
 msgid "set"
 msgstr "raccolta"
 
@@ -2509,7 +2510,9 @@ msgstr "Se non hai ancora un account, sarai reindirizzato di conseguenza."
 
 #: projects/templates/projects/email/project_invite_message.txt:14
 msgid "If you were not expecting this invitation, you can ignore this e-mail."
-msgstr "Se non ti aspettavi questo invito, puoi ignorare questa e-mail."
+msgstr ""
+"Se non ti aspettavi questo invito, puoi ignorare questo messaggio di posta "
+"elettronica."
 
 #: projects/templates/projects/email/project_invite_subject.txt:1
 #, python-format
@@ -2604,11 +2607,11 @@ msgstr "L'invio di un'attività imposterà lo stato a \"in corso\"."
 #: projects/templates/projects/issue_send_email.html:4
 #: projects/templates/projects/issue_send_email.html:30
 msgid "Send by mail"
-msgstr "Invia via mail"
+msgstr "Invia per posta elettronica"
 
 #: projects/templates/projects/issue_send_integrations.html:3
 msgid "Send via integration"
-msgstr "Invia via integrazione"
+msgstr "Invia per integrazione"
 
 #: projects/templates/projects/issue_send_integrations.html:10
 #: projects/templates/projects/project_detail_integrations.html:20
@@ -2694,15 +2697,15 @@ msgid ""
 "here), or by their e-mail address."
 msgstr ""
 "Gli utenti possono essere invitati dal loro nome utente (se hanno già un "
-"account qui), o dal loro indirizzo e-mail."
+"account qui), o dal loro indirizzo di posta elettronica."
 
 #: projects/templates/projects/membership_form.html:32
 msgid ""
 "Users will receive an e-mail with a link to join the project with the "
 "assigned role."
 msgstr ""
-"Gli utenti riceveranno un'e-mail con un link per unirsi al progetto con il "
-"ruolo assegnato."
+"Gli utenti riceveranno un messaggio di posta elettronica con un link per "
+"unirsi al progetto con il ruolo assegnato."
 
 #: projects/templates/projects/membership_form.html:35
 msgid "Invite member"
@@ -2883,14 +2886,14 @@ msgstr "di"
 #: projects/templates/projects/project_detail_memberships_help.html:4
 msgid ""
 "Here you can see who can access the project and invite additional members. "
-"You can use the user roles to manage which rights the benefits have. Unless "
-"you are the last owner, you can leave the project with the button next to "
-"your name."
+"You can use the user roles to manage which rights the users have. Unless you "
+"are the last owner, you can leave the project with the button next to your "
+"name."
 msgstr ""
 "Qui puoi vedere chi può accedere al progetto e invitare altri membri. Puoi "
-"usare i ruoli utente per gestire quali diritti hanno i benefici. A meno che "
-"tu non sia l'ultimo proprietario, puoi lasciare il progetto con il pulsante "
-"accanto al tuo nome."
+"usare i ruoli utente per gestire quali privilegi hanno gli utenti. A meno "
+"che tu non sia l'ultimo proprietario, puoi lasciare il progetto con il "
+"pulsante accanto al tuo nome."
 
 #: projects/templates/projects/project_detail_sidebar.html:17
 msgid "Answer questions"
@@ -3147,7 +3150,7 @@ msgid ""
 "this form to send an email to the %(site_name)s support\""
 msgstr ""
 "Se avete domande o feedback, contattateci: potete utilizzare questo modulo "
-"per inviare un'e-mail al supporto di %(site_name)s”."
+"per inviare un messaggio di posta elettronica al supporto di %(site_name)s”."
 
 #: projects/templates/projects/project_interview_done.html:5
 msgid "Done!"
@@ -3199,7 +3202,7 @@ msgstr ""
 "modificare o eliminare le schede utilizzando i pulsanti in alto a destra."
 
 #: projects/templates/projects/project_view.html:90
-#: projects/views/project.py:145
+#: projects/views/project.py:137
 msgid "Error"
 msgstr "Errore"
 
@@ -3277,39 +3280,39 @@ msgstr "La quota di file per questo progetto è stata raggiunta."
 msgid "Enter a valid datetime."
 msgstr "Inserire una data valida."
 
-#: projects/views/project.py:125
+#: projects/views/project.py:117
 msgid "Sorry, your invitation has been expired."
 msgstr "Spiacente, il tuo invito è scaduto."
 
-#: projects/views/project.py:128
+#: projects/views/project.py:120
 #, python-format
 msgid "Sorry, but this invitation is for the user \"%s\"."
 msgstr "Spiacente, ma questo invito è per l'utente \"%s\"."
 
-#: projects/views/project.py:142
+#: projects/views/project.py:134
 msgid "Sorry, the invitation link is not valid."
 msgstr "Spiacente, il link di invito non è valido."
 
-#: projects/views/project_update.py:81 projects/views/project_update.py:86
-#: projects/views/project_update.py:91
+#: projects/views/project_update.py:79 projects/views/project_update.py:84
+#: projects/views/project_update.py:89
 msgid "Update visibility"
 msgstr "Rendere visibile"
 
-#: projects/views/project_update.py:82 projects/views/project_update.py:87
-#: projects/views/project_update.py:89 projects/views/project_update.py:92
-#: projects/views/project_update.py:94
+#: projects/views/project_update.py:80 projects/views/project_update.py:85
+#: projects/views/project_update.py:87 projects/views/project_update.py:90
+#: projects/views/project_update.py:92
 msgid "Remove visibility"
 msgstr "Rimuovere la visibilità"
 
-#: projects/views/project_update.py:84
+#: projects/views/project_update.py:82
 msgid "Make visible for this site"
 msgstr "Rendere visibile questo sito"
 
-#: projects/views/project_update.py:97
+#: projects/views/project_update.py:95
 msgid "Make visible"
 msgstr "Rendere visibile"
 
-#: projects/viewsets.py:659
+#: projects/viewsets.py:666
 msgid "You reached the file quota for this project."
 msgstr "Hai raggiunto la quota di file per questo progetto."
 
@@ -3345,24 +3348,24 @@ msgstr "Raccoglitore di date"
 msgid "File upload"
 msgstr "Caricamento dei file"
 
-#: questions/models/catalog.py:37
+#: questions/models/catalog.py:38
 msgid "The Uniform Resource Identifier of this catalog (auto-generated)."
 msgstr ""
 "L'Uniform Resource Identifier di questo catalogo (generato automaticamente)."
 
-#: questions/models/catalog.py:42
+#: questions/models/catalog.py:43
 msgid "The prefix for the URI of this catalog."
 msgstr "Il prefisso dell'URI per questo catalogo."
 
-#: questions/models/catalog.py:47
+#: questions/models/catalog.py:48
 msgid "The path for the URI of this catalog."
 msgstr "Il percorso dell'URI di questo catalogo."
 
-#: questions/models/catalog.py:52
+#: questions/models/catalog.py:53
 msgid "Additional internal information about this catalog."
-msgstr "Informazioni interne addizionali su questo catalogo."
+msgstr "Informazioni interne aggiuntive su questo catalogo."
 
-#: questions/models/catalog.py:57
+#: questions/models/catalog.py:58
 msgid ""
 "Designates whether this catalog (and its sections, question sets and "
 "questions) can be changed."
@@ -3370,111 +3373,111 @@ msgstr ""
 "Indica se questo catalogo (e le sue sezioni, set di domande e domande) può "
 "essere cambiato."
 
-#: questions/models/catalog.py:62
+#: questions/models/catalog.py:63
 msgid "The position of this catalog in lists."
 msgstr "La posizione di questo catalogo nelle liste."
 
-#: questions/models/catalog.py:66 questions/models/section.py:121
+#: questions/models/catalog.py:67 questions/models/section.py:121
 msgid "Sections"
 msgstr "Sezioni"
 
-#: questions/models/catalog.py:67
+#: questions/models/catalog.py:68
 msgid "The sections of this catalog."
 msgstr "Le sezioni di questo catalogo."
 
-#: questions/models/catalog.py:72
+#: questions/models/catalog.py:73
 msgid "The sites this catalog belongs to (in a multi site setup)."
 msgstr "Il sito a cui appartiene questo catalogo (per setup multi sito)."
 
-#: questions/models/catalog.py:77
+#: questions/models/catalog.py:78
 msgid "The sites that can edit this catalog (in a multi site setup)."
 msgstr ""
 "I siti che possono modificare questo catalogo (in una configurazione multi-"
 "sito)."
 
-#: questions/models/catalog.py:82
+#: questions/models/catalog.py:83
 msgid "The groups for which this catalog is active."
 msgstr "I gruppi per i quali questo catalogo è attivo."
 
-#: questions/models/catalog.py:86 questions/models/page.py:86
+#: questions/models/catalog.py:87 questions/models/page.py:86
 #: questions/models/questionset.py:81 questions/models/section.py:69
 #: tasks/models.py:71 views/models.py:78
 msgid "Title (primary)"
-msgstr "Titolo (lingua principale)"
+msgstr "Titolo (prima lingua)"
 
-#: questions/models/catalog.py:87
+#: questions/models/catalog.py:88
 msgid "The title for this catalog (in the primary language)."
-msgstr "Il titolo di questo catalogo (nella lingua principale)."
+msgstr "Il titolo di questo catalogo (nella prima lingua)."
 
-#: questions/models/catalog.py:91 questions/models/page.py:91
+#: questions/models/catalog.py:92 questions/models/page.py:91
 #: questions/models/questionset.py:86 questions/models/section.py:74
 #: tasks/models.py:76 views/models.py:83
 msgid "Title (secondary)"
 msgstr "Titolo (seconda lingua)"
 
-#: questions/models/catalog.py:92
+#: questions/models/catalog.py:93
 msgid "The title for this catalog (in the secondary language)."
-msgstr "Il titolo di questo catalogo (nella lingua secondaria)."
+msgstr "Il titolo di questo catalogo (nella seconda lingua)."
 
-#: questions/models/catalog.py:96 questions/models/page.py:96
+#: questions/models/catalog.py:97 questions/models/page.py:96
 #: questions/models/questionset.py:91 questions/models/section.py:79
 #: tasks/models.py:81 views/models.py:88
 msgid "Title (tertiary)"
 msgstr "Titolo (terza lingua)"
 
-#: questions/models/catalog.py:97
+#: questions/models/catalog.py:98
 msgid "The title for this catalog (in the tertiary language)."
-msgstr "Il titolo di questo catalogo (nella lingua terziaria)."
+msgstr "Il titolo di questo catalogo (nella terza lingua)."
 
-#: questions/models/catalog.py:101 questions/models/page.py:101
+#: questions/models/catalog.py:102 questions/models/page.py:101
 #: questions/models/questionset.py:96 questions/models/section.py:84
 #: tasks/models.py:86 views/models.py:93
 msgid "Title (quaternary)"
 msgstr "Titolo (quarta lingua)"
 
-#: questions/models/catalog.py:102
+#: questions/models/catalog.py:103
 msgid "The title for this catalog (in the quaternary language)."
-msgstr "Il titolo di questo catalogo (in lingua quaternaria)."
+msgstr "Il titolo di questo catalogo (nella quarta lingua)."
 
-#: questions/models/catalog.py:106 questions/models/page.py:106
+#: questions/models/catalog.py:107 questions/models/page.py:106
 #: questions/models/questionset.py:101 questions/models/section.py:89
 #: tasks/models.py:91 views/models.py:98
 msgid "Title (quinary)"
 msgstr "Titolo (quinta lingua)"
 
-#: questions/models/catalog.py:107
+#: questions/models/catalog.py:108
 msgid "The title for this catalog (in the quinary language)."
-msgstr "Il titolo di questo catalogo (in lingua quinaria)."
+msgstr "Il titolo di questo catalogo (nella quinta lingua)."
 
-#: questions/models/catalog.py:112
+#: questions/models/catalog.py:113
 msgid "The help text for this catalog (in the primary language)."
-msgstr "Il testo di aiuto per questo catalogo (nella lingua principale)."
+msgstr "Il testo di aiuto per questo catalogo (nella prima lingua)."
 
-#: questions/models/catalog.py:117
+#: questions/models/catalog.py:118
 msgid "The help text for this catalog (in the secondary language)."
-msgstr "Il testo di aiuto per questo catalogo (nella lingua secondaria)."
+msgstr "Il testo di aiuto per questo catalogo (nella seconda lingua)."
 
-#: questions/models/catalog.py:122
+#: questions/models/catalog.py:123
 msgid "The help text for this catalog (in the tertiary language)."
-msgstr "Il testo di aiuto per questo catalogo (nella lingua terziaria)."
+msgstr "Il testo di aiuto per questo catalogo (nella terza lingua)."
 
-#: questions/models/catalog.py:127
+#: questions/models/catalog.py:128
 msgid "The help text for this catalog (in the quaternary language)."
-msgstr "Il testo di aiuto per questo catalogo (in lingua quaternaria)."
+msgstr "Il testo di aiuto per questo catalogo (nella quarta lingua)."
 
-#: questions/models/catalog.py:132
+#: questions/models/catalog.py:133
 msgid "The help text for this catalog (in the quinary language)."
-msgstr "Il testo di aiuto per questo catalogo (in linguaggio quinario)."
+msgstr "Il testo di aiuto per questo catalogo (nella quinta lingua)."
 
-#: questions/models/catalog.py:136 tasks/models.py:147 views/models.py:128
+#: questions/models/catalog.py:137 tasks/models.py:147 views/models.py:128
 msgid "Available"
 msgstr "Disponibile"
 
-#: questions/models/catalog.py:137
+#: questions/models/catalog.py:138
 msgid "Designates whether this catalog is generally available for projects."
 msgstr "Indica se questo catalogo è disponibile generalmente per progetti."
 
-#: questions/models/catalog.py:143 tasks/models.py:50 views/models.py:52
+#: questions/models/catalog.py:144 tasks/models.py:50 views/models.py:52
 msgid "Catalogs"
 msgstr "Cataloghi"
 
@@ -3538,23 +3541,23 @@ msgstr ""
 
 #: questions/models/page.py:87
 msgid "The title for this page (in the primary language)."
-msgstr "Il titolo di questa pagina (nella lingua principale)."
+msgstr "Il titolo di questa pagina (nella prima lingua)."
 
 #: questions/models/page.py:92
 msgid "The title for this page (in the secondary language)."
-msgstr "Il titolo di questa pagina (nella lingua secondaria)."
+msgstr "Il titolo di questa pagina (nella seconda lingua)."
 
 #: questions/models/page.py:97
 msgid "The title for this page (in the tertiary language)."
-msgstr "Il titolo di questa pagina (nella lingua terziaria)."
+msgstr "Il titolo di questa pagina (nella terza lingua)."
 
 #: questions/models/page.py:102
 msgid "The title for this page (in the quaternary language)."
-msgstr "Il titolo di questa pagina (in lingua quaternaria)."
+msgstr "Il titolo di questa pagina (nella quarta lingua)."
 
 #: questions/models/page.py:107
 msgid "The title for this page (in the quinary language)."
-msgstr "Il titolo di questa pagina (in lingua quinaria)."
+msgstr "Il titolo di questa pagina (nella quinta lingua)."
 
 #: questions/models/page.py:111 questions/models/section.py:94
 msgid "Short title (primary)"
@@ -3565,7 +3568,7 @@ msgid ""
 "The short title for this page (in the primary language), used in the "
 "navigation."
 msgstr ""
-"Il titolo breve di questa pagina (nella lingua principale), utilizzato nella "
+"Il titolo breve di questa pagina (nella prima lingua), utilizzato nella "
 "navigazione."
 
 #: questions/models/page.py:116 questions/models/section.py:99
@@ -3577,7 +3580,7 @@ msgid ""
 "The short title for this page (in the secondary language), used in the "
 "navigation."
 msgstr ""
-"Il titolo breve di questa pagina (nella lingua secondaria), utilizzato nella "
+"Il titolo breve di questa pagina (nella seconda lingua), utilizzato nella "
 "navigazione."
 
 #: questions/models/page.py:121 questions/models/section.py:104
@@ -3589,7 +3592,7 @@ msgid ""
 "The short title for this page (in the tertiary language), used in the "
 "navigation."
 msgstr ""
-"Il titolo breve di questa pagina (nella lingua terziaria), utilizzato nella "
+"Il titolo breve di questa pagina (nella terza lingua), utilizzato nella "
 "navigazione."
 
 #: questions/models/page.py:126 questions/models/section.py:109
@@ -3601,7 +3604,7 @@ msgid ""
 "The short title for this page (in the quaternary language), used in the "
 "navigation."
 msgstr ""
-"Il titolo breve di questa pagina (in lingua quaternaria), utilizzato nella "
+"Il titolo breve di questa pagina (nella quarta lingua), utilizzato nella "
 "navigazione."
 
 #: questions/models/page.py:131 questions/models/section.py:114
@@ -3613,37 +3616,37 @@ msgid ""
 "The short title for this page (in the quinary language), used in the "
 "navigation."
 msgstr ""
-"Il titolo breve di questa pagina (in lingua quinaria), utilizzato nella "
+"Il titolo breve di questa pagina (nella quinta lingua), utilizzato nella "
 "navigazione."
 
 #: questions/models/page.py:137
 msgid "The help text for this page (in the primary language)."
-msgstr "Il testo di aiuto per questa pagina (nella lingua principale)."
+msgstr "Il testo di aiuto per questa pagina (nella prima lingua)."
 
 #: questions/models/page.py:142
 msgid "The help text for this page (in the secondary language)."
-msgstr "Il testo di aiuto di questa pagina (nella lingua secondaria)."
+msgstr "Il testo di aiuto di questa pagina (nella seconda lingua)."
 
 #: questions/models/page.py:147
 msgid "The help text for this page (in the tertiary language)."
-msgstr "Il testo di aiuto di questa pagina (nella lingua terziaria)."
+msgstr "Il testo di aiuto di questa pagina (nella terza lingua)."
 
 #: questions/models/page.py:152
 msgid "The help text for this page (in the quaternary language)."
-msgstr "Il testo di aiuto di questa pagina (in lingua quaternaria)."
+msgstr "Il testo di aiuto di questa pagina (nella quarta lingua)."
 
 #: questions/models/page.py:157
 msgid "The help text for this page (in the quinary language)."
-msgstr "Il testo di aiuto di questa pagina (in lingua quinaria)."
+msgstr "Il testo di aiuto di questa pagina (nella quinta lingua)."
 
 #: questions/models/page.py:161 questions/models/question.py:157
 #: questions/models/questionset.py:131
 msgid "Name (primary)"
-msgstr "Nome (lingua principale)"
+msgstr "Nome (prima lingua)"
 
 #: questions/models/page.py:162
 msgid "The name displayed for this page (in the primary language)."
-msgstr "Il nome visualizzato per questa pagina (nella lingua principale)."
+msgstr "Il nome visualizzato per questa pagina (nella prima lingua)."
 
 #: questions/models/page.py:166 questions/models/question.py:162
 #: questions/models/questionset.py:136
@@ -3652,7 +3655,7 @@ msgstr "Nome (seconda lingua)"
 
 #: questions/models/page.py:167
 msgid "The name displayed for this page (in the secondary language)."
-msgstr "Il nome visualizzato per questa pagina (nella lingua secondaria)."
+msgstr "Il nome visualizzato per questa pagina (nella seconda lingua)."
 
 #: questions/models/page.py:171 questions/models/question.py:167
 #: questions/models/questionset.py:141
@@ -3661,7 +3664,7 @@ msgstr "Nome (terza lingua)"
 
 #: questions/models/page.py:172
 msgid "The name displayed for this page (in the tertiary language)."
-msgstr "Il nome visualizzato per questa pagina (nella lingua terziaria)."
+msgstr "Il nome visualizzato per questa pagina (nella terza lingua)."
 
 #: questions/models/page.py:176 questions/models/question.py:172
 #: questions/models/questionset.py:146
@@ -3670,7 +3673,7 @@ msgstr "Nome (quarta lingua)"
 
 #: questions/models/page.py:177
 msgid "The name displayed for this page (in the quaternary language)."
-msgstr "Il nome visualizzato per questa pagina (nella lingua quaternaria)."
+msgstr "Il nome visualizzato per questa pagina (nella quarta lingua)."
 
 #: questions/models/page.py:181 questions/models/question.py:177
 #: questions/models/questionset.py:151
@@ -3679,7 +3682,7 @@ msgstr "Nome (quinta lingua)"
 
 #: questions/models/page.py:182
 msgid "The name displayed for this page (in the quinary language)."
-msgstr "Il nome visualizzato per questa pagina (nella lingua quinaria)."
+msgstr "Il nome visualizzato per questa pagina (nella quinta lingua)."
 
 #: questions/models/page.py:187
 msgid "List of conditions evaluated for this page."
@@ -3734,31 +3737,31 @@ msgstr ""
 
 #: questions/models/question.py:73
 msgid "The help text for this question (in the primary language)."
-msgstr "Il testo di aiuto per questa domanda (nella lingua principale)."
+msgstr "Il testo di aiuto per questa domanda (nella prima lingua)."
 
 #: questions/models/question.py:78
 msgid "The help text for this question (in the secondary language)."
-msgstr "Il testo di aiuto per questa domanda (nella lingua secondaria)."
+msgstr "Il testo di aiuto per questa domanda (nella seconda lingua)."
 
 #: questions/models/question.py:83
 msgid "The help text for this question (in the tertiary language)."
-msgstr "Il testo di aiuto per questa domanda (nella lingua terziaria)."
+msgstr "Il testo di aiuto per questa domanda (nella terza lingua)."
 
 #: questions/models/question.py:88
 msgid "The help text for this question (in the quaternary language)."
-msgstr "Il testo di aiuto per questa domanda (in lingua quaternaria)."
+msgstr "Il testo di aiuto per questa domanda (nella quarta lingua)."
 
 #: questions/models/question.py:93
 msgid "The help text for this question (in the quinary language)."
-msgstr "Il testo di aiuto per questa domanda (in lingua quinaria)."
+msgstr "Il testo di aiuto per questa domanda (nella quinta lingua)."
 
 #: questions/models/question.py:98
 msgid "The text for this question (in the primary language)."
-msgstr "Il testo di questa domanda (nella lingua principale)."
+msgstr "Il testo di questa domanda (nella prima lingua)."
 
 #: questions/models/question.py:103
 msgid "The text for this question (in the secondary language)."
-msgstr "Il testo per questa domanda (nella lingua secondaria)."
+msgstr "Il testo per questa domanda (nella seconda lingua)."
 
 #: questions/models/question.py:108
 msgid "The text for this question (in the tertiary language)."
@@ -3766,36 +3769,36 @@ msgstr "Il testo di questa domanda (nella lingua del terziario)."
 
 #: questions/models/question.py:113
 msgid "The text for this question (in the quaternary language)."
-msgstr "Il testo di questa domanda (in lingua quaternaria)."
+msgstr "Il testo di questa domanda (nella quarta lingua)."
 
 #: questions/models/question.py:118
 msgid "The text for this question (in the quinary language)."
-msgstr "Il testo di questa domanda (in lingua quinaria)."
+msgstr "Il testo di questa domanda (nella quinta lingua)."
 
 #: questions/models/question.py:123
 msgid "The default text value for this question (in the primary language)."
 msgstr ""
-"Il valore di testo predefinito per questa domanda (nella lingua principale)."
+"Il valore di testo predefinito per questa domanda (nella prima lingua)."
 
 #: questions/models/question.py:128
 msgid "The default text value for this question (in the secondary language)."
 msgstr ""
-"Il valore di testo predefinito per questa domanda (nella lingua secondaria)."
+"Il valore di testo predefinito per questa domanda (nella seconda lingua)."
 
 #: questions/models/question.py:133
 msgid "The default text value for this question (in the tertiary language)."
 msgstr ""
-"Il valore di testo predefinito per questa domanda (nella lingua terziaria)."
+"Il valore di testo predefinito per questa domanda (nella terza lingua)."
 
 #: questions/models/question.py:138
 msgid "The default text value for this question (in the quaternary language)."
 msgstr ""
-"Il valore di testo predefinito per questa domanda (nella lingua quaternaria)."
+"Il valore di testo predefinito per questa domanda (nella quarta lingua)."
 
 #: questions/models/question.py:143
 msgid "The default text value for this question (in the quinary language)."
 msgstr ""
-"Il valore di testo predefinito per questa domanda (nella lingua quinaria)."
+"Il valore di testo predefinito per questa domanda (nella quinta lingua)."
 
 #: questions/models/question.py:147
 msgid "Default option"
@@ -3817,28 +3820,28 @@ msgid ""
 "The default external id for this question. To be used with dynamic "
 "optionsets."
 msgstr ""
-"L'id esterno predefinito per questa domanda. Da usare con i set di opzioni "
-"dinamiche."
+"L'identificativo esterno predefinito per questa domanda. Da usare con i set "
+"di opzioni dinamiche."
 
 #: questions/models/question.py:158
 msgid "The name displayed for this question (in the primary language)."
-msgstr "Il nome visualizzato per questa domanda (nella lingua principale)."
+msgstr "Il nome visualizzato per questa domanda (nella prima lingua)."
 
 #: questions/models/question.py:163
 msgid "The name displayed for this question (in the secondary language)."
-msgstr "Il nome visualizzato per questa domanda (nella lingua secondaria)."
+msgstr "Il nome visualizzato per questa domanda (nella seconda lingua)."
 
 #: questions/models/question.py:168
 msgid "The name displayed for this question (in the tertiary language)."
-msgstr "Il nome visualizzato per questa domanda (nella lingua terziaria)."
+msgstr "Il nome visualizzato per questa domanda (nella terza lingua)."
 
 #: questions/models/question.py:173
 msgid "The name displayed for this question (in the quaternary language)."
-msgstr "Il nome visualizzato per questa domanda (nella lingua quaternaria)."
+msgstr "Il nome visualizzato per questa domanda (nella quarta lingua)."
 
 #: questions/models/question.py:178
 msgid "The name displayed for this question (in the quinary language)."
-msgstr "Il nome visualizzato per questa domanda (nel linguaggio quinario)."
+msgstr "Il nome visualizzato per questa domanda (nella quinta lingua)."
 
 #: questions/models/question.py:182
 msgid "Widget type"
@@ -3950,11 +3953,11 @@ msgstr ""
 
 #: questions/models/questionset.py:82
 msgid "The title for this question set (in the primary language)."
-msgstr "Il titolo di questa serie di domande (nella lingua principale)."
+msgstr "Il titolo di questa serie di domande (nella prima lingua)."
 
 #: questions/models/questionset.py:87
 msgid "The title for this question set (in the secondary language)."
-msgstr "Il titolo di questa serie di domande (nella lingua secondaria)."
+msgstr "Il titolo di questa serie di domande (nella seconda lingua)."
 
 #: questions/models/questionset.py:92
 msgid "The title for this question set (in the tertiary language)."
@@ -3962,56 +3965,51 @@ msgstr "Il titolo di questa serie di domande (nella lingua del terziario)."
 
 #: questions/models/questionset.py:97
 msgid "The title for this question set (in the quaternary language)."
-msgstr "Il titolo di questa serie di domande (in lingua quaternaria)."
+msgstr "Il titolo di questa serie di domande (nella quarta lingua)."
 
 #: questions/models/questionset.py:102
 msgid "The title for this question set (in the quinary language)."
-msgstr "Il titolo di questa serie di domande (in lingua quinaria)."
+msgstr "Il titolo di questa serie di domande (nella quinta lingua)."
 
 #: questions/models/questionset.py:107
 msgid "The help text for this question set (in the primary language)."
-msgstr "Il testo di aiuto per questo set di domande (nella lingua principale)."
+msgstr "Il testo di aiuto per questo set di domande (nella prima lingua)."
 
 #: questions/models/questionset.py:112
 msgid "The help text for this question set (in the secondary language)."
-msgstr "Il testo di aiuto per questo set di domande (nella lingua secondaria)."
+msgstr "Il testo di aiuto per questo set di domande (nella seconda lingua)."
 
 #: questions/models/questionset.py:117
 msgid "The help text for this question set (in the tertiary language)."
-msgstr "Il testo di aiuto per questo set di domande (nella lingua terziaria)."
+msgstr "Il testo di aiuto per questo set di domande (nella terza lingua)."
 
 #: questions/models/questionset.py:122
 msgid "The help text for this question set (in the quaternary language)."
-msgstr "Il testo di aiuto per questo set di domande (in lingua quaternaria)."
+msgstr "Il testo di aiuto per questo set di domande (nella quarta lingua)."
 
 #: questions/models/questionset.py:127
 msgid "The help text for this question set (in the quinary language)."
-msgstr "Il testo di aiuto per questo set di domande (in lingua quinaria)."
+msgstr "Il testo di aiuto per questo set di domande (nella quinta lingua)."
 
 #: questions/models/questionset.py:132
 msgid "The name displayed for this question set (in the primary language)."
-msgstr ""
-"Il nome visualizzato per questo set di domande (nella lingua principale)."
+msgstr "Il nome visualizzato per questo set di domande (nella prima lingua)."
 
 #: questions/models/questionset.py:137
 msgid "The name displayed for this question set (in the secondary language)."
-msgstr ""
-"Il nome visualizzato per questo set di domande (nella lingua secondaria)."
+msgstr "Il nome visualizzato per questo set di domande (nella seconda lingua)."
 
 #: questions/models/questionset.py:142
 msgid "The name displayed for this question set (in the tertiary language)."
-msgstr ""
-"Il nome visualizzato per questo set di domande (nella lingua terziaria)."
+msgstr "Il nome visualizzato per questo set di domande (nella terza lingua)."
 
 #: questions/models/questionset.py:147
 msgid "The name displayed for this question set (in the quaternary language)."
-msgstr ""
-"Il nome visualizzato per questo set di domande (nella lingua quaternaria)."
+msgstr "Il nome visualizzato per questo set di domande (nella quarta lingua)."
 
 #: questions/models/questionset.py:152
 msgid "The name displayed for this question set (in the quinary language)."
-msgstr ""
-"Il nome visualizzato per questo set di domande (nel linguaggio quinario)."
+msgstr "Il nome visualizzato per questo set di domande (nella quinta lingua)."
 
 #: questions/models/questionset.py:157
 msgid "List of conditions evaluated for this question set."
@@ -4059,46 +4057,46 @@ msgstr ""
 
 #: questions/models/section.py:70
 msgid "The title for this section (in the primary language)."
-msgstr "Il titolo di questa sezione (nella lingua principale)."
+msgstr "Il titolo di questa sezione (nella prima lingua)."
 
 #: questions/models/section.py:75
 msgid "The title for this section (in the secondary language)."
-msgstr "Il titolo di questa sezione (nella lingua secondaria)."
+msgstr "Il titolo di questa sezione (nella seconda lingua)."
 
 #: questions/models/section.py:80
 msgid "The title for this section (in the tertiary language)."
-msgstr "Il titolo di questa sezione (nella lingua terziaria)."
+msgstr "Il titolo di questa sezione (nella terza lingua)."
 
 #: questions/models/section.py:85
 msgid "The title for this section (in the quaternary language)."
-msgstr "Il titolo di questa sezione (in lingua quaternaria)."
+msgstr "Il titolo di questa sezione (nella quarta lingua)."
 
 #: questions/models/section.py:90
 msgid "The title for this section (in the quinary language)."
-msgstr "Il titolo di questa sezione (nel linguaggio quinario)."
+msgstr "Il titolo di questa sezione (nella quinta lingua)."
 
 #: questions/models/section.py:95
 msgid ""
 "The short title for this section (in the primary language), used in the "
 "navigation."
 msgstr ""
-"Il titolo breve di questa sezione (nella lingua principale), utilizzato "
-"nella navigazione."
+"Il titolo breve di questa sezione (nella prima lingua), utilizzato nella "
+"navigazione."
 
 #: questions/models/section.py:100
 msgid ""
 "The short title for this section (in the secondary language), used in the "
 "navigation."
 msgstr ""
-"Il titolo breve di questa sezione (nella lingua secondaria), utilizzato "
-"nella navigazione."
+"Il titolo breve di questa sezione (nella seconda lingua), utilizzato nella "
+"navigazione."
 
 #: questions/models/section.py:105
 msgid ""
 "The short title for this section (in the tertiary language), used in the "
 "navigation."
 msgstr ""
-"Il titolo breve di questa sezione (nella lingua terziaria), utilizzato nella "
+"Il titolo breve di questa sezione (nella terza lingua), utilizzato nella "
 "navigazione."
 
 #: questions/models/section.py:110
@@ -4106,7 +4104,7 @@ msgid ""
 "The short title for this section (in the quaternary language), used in the "
 "navigation."
 msgstr ""
-"Il titolo breve di questa sezione (in lingua quaternaria), utilizzato nella "
+"Il titolo breve di questa sezione (nella quarta lingua), utilizzato nella "
 "navigazione."
 
 #: questions/models/section.py:115
@@ -4114,8 +4112,8 @@ msgid ""
 "The short title for this section (in the quinary language), used in the "
 "navigation."
 msgstr ""
-"Il titolo breve di questa sezione (nel linguaggio quinario), utilizzato "
-"nella navigazione."
+"Il titolo breve di questa sezione (nella quinta lingua), utilizzato nella "
+"navigazione."
 
 #: questions/models/section.py:120
 #: questions/templates/questions/export/section.html:3
@@ -4256,43 +4254,43 @@ msgstr "I gruppi per i quali questa attività è attiva."
 
 #: tasks/models.py:72
 msgid "The title for this task (in the primary language)."
-msgstr "Il titolo di questo compito (nella lingua principale)."
+msgstr "Il titolo di questo compito (nella prima lingua)."
 
 #: tasks/models.py:77
 msgid "The title for this task (in the secondary language)."
-msgstr "Il titolo di questo compito (nella lingua secondaria)."
+msgstr "Il titolo di questo compito (nella seconda lingua)."
 
 #: tasks/models.py:82
 msgid "The title for this task (in the tertiary language)."
-msgstr "Il titolo di questo compito (nella lingua terziaria)."
+msgstr "Il titolo di questo compito (nella terza lingua)."
 
 #: tasks/models.py:87
 msgid "The title for this task (in the quaternary language)."
-msgstr "Il titolo di questo compito (in lingua quaternaria)."
+msgstr "Il titolo di questo compito (nella quarta lingua)."
 
 #: tasks/models.py:92
 msgid "The title for this task (in the quinary language)."
-msgstr "Il titolo di questo compito (nel linguaggio quinario)."
+msgstr "Il titolo di questo compito (nella quinta lingua)."
 
 #: tasks/models.py:97
 msgid "The text for this task (in the primary language)."
-msgstr "Il testo per questo compito (nella lingua principale)."
+msgstr "Il testo per questo compito (nella prima lingua)."
 
 #: tasks/models.py:102
 msgid "The text for this task (in the secondary language)."
-msgstr "Il testo per questo compito (nella lingua secondaria)."
+msgstr "Il testo per questo compito (nella seconda lingua)."
 
 #: tasks/models.py:107
 msgid "The text for this task (in the tertiary language)."
-msgstr "Il testo per questo compito (in lingua terziaria)."
+msgstr "Il testo per questo compito (nella terza lingua)."
 
 #: tasks/models.py:112
 msgid "The text for this task (in the quaternary language)."
-msgstr "Il testo per questo compito (in lingua quaternaria)."
+msgstr "Il testo per questo compito (nella quarta lingua)."
 
 #: tasks/models.py:117
 msgid "The text for this task (in the quinary language)."
-msgstr "Il testo per questo compito (in lingua quinaria)."
+msgstr "Il testo per questo compito (nella quinta lingua)."
 
 #: tasks/models.py:121 tasks/templates/tasks/export/tasks.html:39
 msgid "Start date attribute"
@@ -4397,43 +4395,43 @@ msgstr ""
 
 #: views/models.py:79
 msgid "The title for this view (in the primary language)."
-msgstr "Il titolo di questa vista (nella lingua principale)."
+msgstr "Il titolo di questa vista (nella prima lingua)."
 
 #: views/models.py:84
 msgid "The title for this view (in the secondary language)."
-msgstr "Il titolo di questa vista (nella lingua secondaria)."
+msgstr "Il titolo di questa vista (nella seconda lingua)."
 
 #: views/models.py:89
 msgid "The title for this view (in the tertiary language)."
-msgstr "Il titolo di questa vista (nella lingua terziaria)."
+msgstr "Il titolo di questa vista (nella terza lingua)."
 
 #: views/models.py:94
 msgid "The title for this view (in the quaternary language)."
-msgstr "Il titolo di questa vista (in lingua quaternaria)."
+msgstr "Il titolo di questa vista (nella quarta lingua)."
 
 #: views/models.py:99
 msgid "The title for this view (in the quinary language)."
-msgstr "Il titolo di questa vista (in linguaggio quinario)."
+msgstr "Il titolo di questa vista (nella quinta lingua)."
 
 #: views/models.py:104
 msgid "The help text for this view (in the primary language)."
-msgstr "Il testo di aiuto per questa vista (nella lingua principale)."
+msgstr "Il testo di aiuto per questa vista (nella prima lingua)."
 
 #: views/models.py:109
 msgid "The help text for this view (in the secondary language)."
-msgstr "Il testo di aiuto per questa vista (nella lingua secondaria)."
+msgstr "Il testo di aiuto per questa vista (nella seconda lingua)."
 
 #: views/models.py:114
 msgid "The help text for this view (in the tertiary language)."
-msgstr "Il testo di aiuto per questa vista (nella lingua terziaria)."
+msgstr "Il testo di aiuto per questa vista (nella terza lingua)."
 
 #: views/models.py:119
 msgid "The help text for this view (in the quaternary language)."
-msgstr "Il testo di aiuto per questa vista (in lingua quaternaria)."
+msgstr "Il testo di aiuto per questa vista (nella quarta lingua)."
 
 #: views/models.py:124
 msgid "The help text for this view (in the quinary language)."
-msgstr "Il testo di aiuto per questa vista (in linguaggio quinario)."
+msgstr "Il testo di aiuto per questa vista (nella quinta lingua)."
 
 #: views/models.py:129
 msgid "Designates whether this view is generally available for projects."
@@ -4451,347 +4449,3 @@ msgstr "file"
 #: views/templatetags/view_tags.py:210
 msgid "Set"
 msgstr "Raccolta"
-
-#~ msgid "Session Login"
-#~ msgstr "Accesso alla sessione"
-
-#~ msgid "You are logged in as: "
-#~ msgstr "Sei loggato come: "
-
-#~ msgid "Viewing as an anonymous user"
-#~ msgstr "Visualizzazione come utente anonimo"
-
-#~ msgid "Powered by "
-#~ msgstr "Alimentato da "
-
-#~ msgid "Autocomplete"
-#~ msgstr "Autocompletamento"
-
-#~ msgid "Free autocomplete"
-#~ msgstr "Completamento automatico vuoto"
-
-#~ msgid "Proceed"
-#~ msgstr "Continua"
-
-#~ msgid "Skip"
-#~ msgstr "Salta"
-
-#~ msgid "Save"
-#~ msgstr "Salva"
-
-#~ msgid "Save and proceed"
-#~ msgstr "Salva e continua"
-
-#~ msgid "Complete questionnaire"
-#~ msgstr "Completare il questionario"
-
-#~ msgid "Save and complete questionnaire"
-#~ msgstr "Salvare e completare il questionario"
-
-#~ msgid "This is a default answer that can be customized."
-#~ msgstr "Questa è una risposta predefinita che può essere personalizzata."
-
-#~ msgid "Erase input"
-#~ msgstr "Pulisci ingresso"
-
-#~ msgid "Please type and select."
-#~ msgstr "Si prega di digitare e selezionare."
-
-#~ msgid "Currently:"
-#~ msgstr "Attualmente:"
-
-#~ msgid "Update:"
-#~ msgstr "Aggiornamento:"
-
-#~ msgid "No options are available."
-#~ msgstr "Nessuna opzione è disponibile."
-
-#~ msgid "Please select"
-#~ msgstr "Selezionare"
-
-#~ msgid "You are about to permanently delete this tab."
-#~ msgstr "Si sta per eliminare definitivamente questa scheda."
-
-#~ msgid ""
-#~ "This includes all given answers for this tab on all pages, not just this "
-#~ "one."
-#~ msgstr ""
-#~ "Questo include tutte le risposte date per questa scheda in tutte le "
-#~ "pagine, non solo in questa."
-
-#~ msgid "Delete"
-#~ msgstr "Elimina"
-
-#~ msgid "Please give the tab a meaningful name."
-#~ msgstr "Si prega di dare alla scheda un nome significativo."
-
-#, python-format
-#~ msgid "(%(section_count)s of %(section_total)s)"
-#~ msgstr "(%(section_count)s di %(section_total)s)"
-
-#, python-format
-#~ msgid "(%(page_count)s of %(page_total)s)"
-#~ msgstr "(%(page_count)s di %(page_total)s)"
-
-#~ msgid "Using the navigation will save your input."
-#~ msgstr "L'uso della navigazione salverà il tuo input."
-
-#~ msgid ""
-#~ "Please note that using the navigation will discard any unsaved input."
-#~ msgstr ""
-#~ "Si prega di notare che l'utilizzo della navigazione eliminerà qualsiasi "
-#~ "input non salvato."
-
-#~ msgid "Reload page"
-#~ msgstr "Ricarica la pagina"
-
-#~ msgid "Back to my projects"
-#~ msgstr "Torna ai miei progetti"
-
-#~ msgid "(optional)"
-#~ msgstr "(opzionale)"
-
-#~ msgid "Edit tab"
-#~ msgstr "Scheda Modifica"
-
-#~ msgid "Remove tab"
-#~ msgstr "Rimuovere la scheda"
-
-#~ msgid "Remove block"
-#~ msgstr "Rimuovere il blocco"
-
-#~ msgid ""
-#~ "An error occurred while saving the answer. Please contact support if this "
-#~ "problem persists."
-#~ msgstr ""
-#~ "Si è verificato un errore durante il salvataggio della risposta. "
-#~ "Contattare l'assistenza se il problema persiste."
-
-#~ msgid "Overview"
-#~ msgstr "Panoramica"
-
-#~ msgid "Progress"
-#~ msgstr "Progresso"
-
-#~ msgid ""
-#~ "This field could not be saved, since somebody else did so while you were "
-#~ "editing. You will need to reload the page to make changes, but your input "
-#~ "will be overwritten."
-#~ msgstr ""
-#~ "Non è stato possibile salvare questo campo, poiché qualcun altro lo ha "
-#~ "fatto mentre si stava modificando. È necessario ricaricare la pagina per "
-#~ "apportare le modifiche, ma i dati inseriti verranno sovrascritti."
-
-#~ msgid ""
-#~ "This field could not be saved, since somebody else removed it while you "
-#~ "were editing. You will need to reload the page to proceed, but your input "
-#~ "will be lost."
-#~ msgstr ""
-#~ "Non è stato possibile salvare questo campo, poiché qualcun altro lo ha "
-#~ "rimosso durante la modifica. È necessario ricaricare la pagina per "
-#~ "procedere, ma i dati inseriti andranno persi."
-
-#, python-format
-#~ msgid "View all projects on %(site)s"
-#~ msgstr "Visualizza tutti i progetti in %(site)s"
-
-#~ msgid "Filter projects"
-#~ msgstr "Filtra i progetti"
-
-#~ msgid "Search project title"
-#~ msgstr "Ricerca titolo del progetto"
-
-#, python-format
-#~ msgid ""
-#~ "%(number_of_filtered_projects)s of %(number_of_projects)s projects shown"
-#~ msgstr ""
-#~ "%(number_of_filtered_projects)s di %(number_of_projects)s progetti "
-#~ "mostrati"
-
-#~ msgid "Import existing project"
-#~ msgstr "Importazione di un progetto esistente"
-
-#~ msgid "Pending invitations"
-#~ msgstr "Inviti in sospeso"
-
-#~ msgid "Click on one of the links to join the projects."
-#~ msgstr "Clicca su uno dei link per unirti ai progetti."
-
-#~ msgid "Last changed"
-#~ msgstr "Ultima modifica"
-
-#~ msgid "All catalogs"
-#~ msgstr "Tutti i cataloghi"
-
-#, python-format
-#~ msgid "All projects on %(site)s"
-#~ msgstr "Tutti i progetti su %(site)s"
-
-#~ msgid "GitHub repository"
-#~ msgstr "Repository GitHub"
-
-#~ msgid "Please use the form username/repository or organization/repository."
-#~ msgstr ""
-#~ "Si prega di utilizzare il modulo nome utente/repository o organizzazione/"
-#~ "repository."
-
-#~ msgid "File path"
-#~ msgstr "Percorso dei file"
-
-#~ msgid "Branch, tag, or commit"
-#~ msgstr "Branch, tag o commit"
-
-#~ msgid "GitLab repository"
-#~ msgstr "Repository GitLab"
-
-#~ msgid "Add GitHub integration"
-#~ msgstr "Aggiungi integrazione GitHub"
-
-#~ msgid "The GitHub repository to send issues to."
-#~ msgstr "Il repository GitHub al quale inviare issues."
-
-#~ msgid "Add GitLab integration"
-#~ msgstr "Aggiungere l'integrazione di GitLab"
-
-#~ msgid "Send to GitLab"
-#~ msgstr "Invia a GitLab"
-
-#, python-brace-format
-#~ msgid ""
-#~ "This integration allow the creation of issues in arbitrary repositories "
-#~ "on {self.gitlab_url}. The upload of attachments is not supported by "
-#~ "GitLab."
-#~ msgstr ""
-#~ "Questa integrazione consente la creazione di problemi in repository "
-#~ "arbitrari su {self.gitlab_url}. Il caricamento di allegati non è "
-#~ "supportato da GitLab."
-
-#~ msgid "The secret for a GitLab webhook to close a task."
-#~ msgstr "Il segreto per un webhook di GitLab per chiudere un compito."
-
-#~ msgid "item"
-#~ msgstr "elemento"
-
-#~ msgid "items"
-#~ msgstr "elementi"
-
-#~ msgid "sets"
-#~ msgstr "raccolte"
-
-#, python-format
-#~ msgid "Add %(name)s"
-#~ msgstr "Aggiungi %(name)s"
-
-#, python-format
-#~ msgid ""
-#~ "You are about to permanently delete the %(name)s <strong>%(object)s</"
-#~ "strong>."
-#~ msgstr ""
-#~ "%(name)s <strong>%(object)s</strong> sta per essere eliminato "
-#~ "permanentemente."
-
-#~ msgid ""
-#~ "Entries with <i class=\"fa fa-question-circle-o small\" aria-"
-#~ "hidden=\"true\"></i> might be skipped based on your input."
-#~ msgstr ""
-#~ "Le voci con <i class=\"fa-question-circle-o small\" aria-"
-#~ "hidden=\"true\"></i> potrebbero essere saltate in base al tuo input."
-
-#, python-format
-#~ msgid "Update %(name)s"
-#~ msgstr "Aggiorna %(name)s"
-
-#, python-format
-#~ msgid "Remove %(name)s"
-#~ msgstr "Rimuovi %(name)s"
-
-#~ msgid "Plural name (primary)"
-#~ msgstr "Nome plurale (lingua principale)"
-
-#~ msgid "The plural name displayed for this page in the primary language."
-#~ msgstr ""
-#~ "Il nome plurale visualizzato per questa pagina nella lingua principale."
-
-#~ msgid "Plural name (secondary)"
-#~ msgstr "Nome plurale (seconda lingua)"
-
-#~ msgid "The plural name displayed for this page in the secondary language."
-#~ msgstr ""
-#~ "Il nome plurale visualizzato per questa pagina nella lingua secondaria."
-
-#~ msgid "Plural name (tertiary)"
-#~ msgstr "Nome plurale (terza lingua)"
-
-#~ msgid "The plural name displayed for this page in the tertiary language."
-#~ msgstr ""
-#~ "Il nome plurale visualizzato per questa pagina nella lingua terziaria."
-
-#~ msgid "Plural name (quaternary)"
-#~ msgstr "Nome plurale (quarta lingua)"
-
-#~ msgid "The plural name displayed for this page in the quaternary language."
-#~ msgstr ""
-#~ "Il nome plurale visualizzato per questa pagina nella lingua quaternaria."
-
-#~ msgid "Plural name (quinary)"
-#~ msgstr "Nome plurale (quinta lingua)"
-
-#~ msgid "The plural name displayed for this page in the quinary language."
-#~ msgstr ""
-#~ "Il nome plurale visualizzato per questa pagina nella lingua quinaria."
-
-#~ msgid "The plural name displayed for this question in the primary language."
-#~ msgstr ""
-#~ "Il nome plurale visualizzato per questa domanda nella lingua principale."
-
-#~ msgid ""
-#~ "The plural name displayed for this question in the secondary language."
-#~ msgstr ""
-#~ "Il nome plurale visualizzato per questa domanda nella seconda lingua."
-
-#~ msgid ""
-#~ "The plural name displayed for this question in the tertiary language."
-#~ msgstr "Il nome plurale visualizzato per questa domanda nella terza lingua."
-
-#~ msgid ""
-#~ "The plural name displayed for this question in the quaternary language."
-#~ msgstr ""
-#~ "Il nome plurale visualizzato per questa domanda nella quarta lingua."
-
-#~ msgid "The plural name displayed for this question in the quinary language."
-#~ msgstr ""
-#~ "Il nome plurale visualizzato per questa domanda nella quinta lingua."
-
-#~ msgid ""
-#~ "The plural name displayed for this question set in the primary language."
-#~ msgstr ""
-#~ "Il nome plurale visualizzato per questo set di domande nella lingua "
-#~ "principale."
-
-#~ msgid ""
-#~ "The plural name displayed for this question set in the secondary language."
-#~ msgstr ""
-#~ "Il nome plurale visualizzato per questo set di domande nella lingua "
-#~ "secondaria."
-
-#~ msgid ""
-#~ "The plural name displayed for this question set in the tertiary language."
-#~ msgstr ""
-#~ "Il nome plurale visualizzato per questo set di domande nella lingua "
-#~ "terziaria."
-
-#~ msgid ""
-#~ "The plural name displayed for this question set in the quaternary "
-#~ "language."
-#~ msgstr ""
-#~ "Il nome plurale visualizzato per questo set di domande nella lingua "
-#~ "quaternaria."
-
-#~ msgid ""
-#~ "The plural name displayed for this question set in the quinary language."
-#~ msgstr ""
-#~ "Il nome plurale visualizzato per questo set di domande nella lingua "
-#~ "quinaria."
-
-#~ msgid "Verbose name plural"
-#~ msgstr "Nome plurale lungo"

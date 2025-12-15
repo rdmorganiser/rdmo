@@ -6,6 +6,7 @@ from pathlib import Path
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.timezone import now
@@ -13,6 +14,8 @@ from django.utils.timezone import now
 from rdmo.core.mail import send_mail
 from rdmo.core.plugins import get_plugins
 from rdmo.core.utils import remove_double_newlines
+from rdmo.tasks.managers import TaskQuerySet
+from rdmo.views.managers import ViewQuerySet
 
 logger = logging.getLogger(__name__)
 
@@ -289,7 +292,7 @@ def get_upload_accept():
         elif isinstance(import_plugin.accept, str):
             # legacy fallback for pre 2.3.0 RDMO, e.g. `accept = '.xml'`
             suffix = import_plugin.accept
-            mime_type, encoding = mimetypes.guess_type(f'example{suffix}')
+            mime_type, _encoding = mimetypes.guess_type(f'example{suffix}')
             if mime_type:
                 accept[mime_type].update([suffix])
 
@@ -368,3 +371,15 @@ def send_contact_message(request, subject, message):
     send_mail(subject, message,
               to=settings.PROJECT_CONTACT_RECIPIENTS,
               cc=[request.user.email], reply_to=[request.user.email])
+
+
+def filter_tasks_or_views_for_project(task_or_view, project) -> TaskQuerySet | ViewQuerySet:
+    queryset = ( task_or_view.objects
+        .filter(Q(catalogs=None) | Q(catalogs=project.catalog))
+        .filter(Q(groups=None) | Q(groups__in=project.groups))
+    )
+
+    if settings.MULTISITE:
+        return  queryset.filter(sites=project.site)
+    else:
+        return  queryset.filter(Q(sites=None) | Q(sites=project.site))
