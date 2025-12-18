@@ -1,19 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-// import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 import Modal from 'rdmo/core/assets/js/_bs53/components/Modal'
 
-// import { rollbackSnapshot } from '../../actions/projectActions'
+import { rollbackSnapshot } from '../../actions/projectActions'
 import { useFieldErrors } from '../../hooks/useFieldErrors'
 
 const SnapshotRollbackModal = ({ show, onClose, snapshot }) => {
-  // const dispatch = useDispatch()
-  // const { project } = useSelector((state) => state.project.project) ?? {}
+  const dispatch = useDispatch()
   const errors = useFieldErrors()
   const handleSubmit = () => {
-    console.log('rolling back snapshot')
+    try {
+      dispatch(rollbackSnapshot(snapshot.id))
+      onClose()
+    } catch {
+      // keep modal open; errors are shown via useFieldErrors
+    }
   }
 
   return (

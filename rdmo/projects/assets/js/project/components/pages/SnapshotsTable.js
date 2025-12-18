@@ -20,7 +20,6 @@ const SnapshotsTable = ({ snapshots }) => {
   const { show: showRollback, open: openRollback, close: closeRollback } = useModal()
   const [selectedSnapshot, setSelectedSnapshot] = useState(null)
 
-  console.log('selectedtSnapshot', selectedSnapshot)
   const handleShowAnswers = (snapshotId) => {
     const location = buildLocationForView('answers', snapshotId)
     dispatch(setLocation({
@@ -37,11 +36,6 @@ const SnapshotsTable = ({ snapshots }) => {
   const openUpdateModal = (snapshot) => {
     setSelectedSnapshot(snapshot)
     openUpdate()
-  }
-
-  const closeUpdateModal = () => {
-    setSelectedSnapshot(null)
-    closeUpdate()
   }
 
   return (
@@ -115,7 +109,7 @@ const SnapshotsTable = ({ snapshots }) => {
       {
         selectedSnapshot && (
           <>
-            <SnapshotModal show={showUpdate} onClose={closeUpdateModal} snapshot={selectedSnapshot} />
+            <SnapshotModal show={showUpdate} onClose={closeUpdate} snapshot={selectedSnapshot} />
             <SnapshotRollbackModal show={showRollback} onClose={closeRollback} snapshot={selectedSnapshot} />
           </>
         )

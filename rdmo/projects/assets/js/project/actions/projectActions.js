@@ -392,12 +392,12 @@ export function updateSnapshot(snapshotId, data) {
   }
 }
 
-export function rollbackSnapshot(snapshotId, data) {
+export function rollbackSnapshot(snapshotId) {
   return function (dispatch) {
     dispatch(addToPending('rollbackSnapshot'))
     dispatch({ type: actionTypes.ROLLBACK_SNAPSHOT_INIT })
 
-    return ProjectApi.rollbackSnapshot(projectId, snapshotId, data)
+    return ProjectApi.rollbackSnapshot(projectId, snapshotId)
       .then(snapshot => {
         dispatch(removeFromPending('rollbackSnapshot'))
         dispatch({ type: actionTypes.ROLLBACK_SNAPSHOT_SUCCESS, snapshot })
