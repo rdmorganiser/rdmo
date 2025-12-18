@@ -401,6 +401,7 @@ export function rollbackSnapshot(snapshotId) {
       .then(snapshot => {
         dispatch(removeFromPending('rollbackSnapshot'))
         dispatch({ type: actionTypes.ROLLBACK_SNAPSHOT_SUCCESS, snapshot })
+        dispatch(fetchProject())
       })
       .catch(error => {
         dispatch(removeFromPending('rollbackSnapshot'))
