@@ -117,15 +117,12 @@ const Documents = () => {
             // ---- manually close the dropdown ----
             const menuEl = event.currentTarget.closest('.dropdown-menu')
             if (menuEl) {
-              // remove Bootstrap's "show" class from the menu
               menuEl.classList.remove('show')
 
-              // and from the parent .dropdown if present
               const dropdownEl = menuEl.closest('.dropdown')
               if (dropdownEl) {
                 dropdownEl.classList.remove('show')
 
-                // keep aria-expanded in sync for accessibility
                 const toggle = dropdownEl.querySelector('[data-bs-toggle="dropdown"]')
                 if (toggle) {
                   toggle.setAttribute('aria-expanded', 'false')
@@ -252,10 +249,6 @@ const Documents = () => {
       </div>
       {showTiles ? (
         <>
-          {!isEmpty(projectAnswers) &&
-            <Tile key={answerView.id} size={'compact'} onClick={() => handleTileClick(answerView.id)}>
-              {renderViewTile(answerView)}
-            </Tile>}
           {projectViews?.length > 0 && (
             <div className="container-fluid">
               <h3 className="mb-3">{gettext('Data management plans')}</h3>
@@ -268,6 +261,13 @@ const Documents = () => {
               </div>
             </div>
           )}
+          {!isEmpty(projectAnswers) &&
+            <div className="container-fluid">
+              <h3 className="mb-3">{gettext('Other documents')}</h3>
+              <Tile key={answerView.id} size={'compact'} onClick={() => handleTileClick(answerView.id)}>
+                {renderViewTile(answerView)}
+              </Tile>
+            </div>}
         </>
       ) : (
         <div className="mt-3">
