@@ -80,8 +80,8 @@ export default class ProjectApi extends BaseApi {
     return this.put(`/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/`, data)
   }
 
-  static rollbackSnapshot(projectId, snapshotId, data) {
-    return this.post(`/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/rollback`, data)
+  static rollbackSnapshot(projectId, snapshotId) {
+    return this.post(`/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/rollback/`)
   }
 
   static fetchProjectViews(projectId) {
