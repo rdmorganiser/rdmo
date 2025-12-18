@@ -9,6 +9,7 @@ import { useModal } from 'rdmo/core/assets/js/hooks'
 import { setLocation } from '../../actions/projectActions'
 import SnapshotModal from './SnapshotModal'
 import { buildLocationForView } from '../../utils/buildLocationForView'
+import SnapshotRollbackModal from './SnapshotRollbackModal'
 
 const SnapshotsTable = ({ snapshots }) => {
   const dispatch = useDispatch()
@@ -16,15 +17,21 @@ const SnapshotsTable = ({ snapshots }) => {
   const perms = project?.permissions || {}
 
   const { show: showUpdate, open: openUpdate, close: closeUpdate } = useModal()
-  // const { show: showRollback, open: openRollback, close: closeRollback } = useModal()
+  const { show: showRollback, open: openRollback, close: closeRollback } = useModal()
   const [selectedSnapshot, setSelectedSnapshot] = useState(null)
 
+  console.log('selectedtSnapshot', selectedSnapshot)
   const handleShowAnswers = (snapshotId) => {
     const location = buildLocationForView('answers', snapshotId)
     dispatch(setLocation({
       ...location,
       origin: 'snapshots'
     }))
+  }
+
+  const openRollbackModal = (snapshot) => {
+    setSelectedSnapshot(snapshot)
+    openRollback()
   }
 
   const openUpdateModal = (snapshot) => {
@@ -92,7 +99,7 @@ const SnapshotsTable = ({ snapshots }) => {
                       className="btn btn-link p-0"
                       aria-label={gettext('Rollback to snapshot')}
                       title={gettext('Rollback to snapshot')}
-                    // onClick={() => openRollback()}
+                      onClick={() => openRollbackModal(snapshot)}
                     >
                       <i
                         className={'bi bi-reply-fill'}
@@ -107,7 +114,10 @@ const SnapshotsTable = ({ snapshots }) => {
       </table>
       {
         selectedSnapshot && (
-          <SnapshotModal show={showUpdate} onClose={closeUpdateModal} snapshot={selectedSnapshot} />
+          <>
+            <SnapshotModal show={showUpdate} onClose={closeUpdateModal} snapshot={selectedSnapshot} />
+            <SnapshotRollbackModal show={showRollback} onClose={closeRollback} snapshot={selectedSnapshot} />
+          </>
         )
       }
     </div>
