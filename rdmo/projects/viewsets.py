@@ -21,6 +21,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from rdmo.conditions.models import Condition
+from rdmo.config.models import Plugin
 from rdmo.core.permissions import HasModelPermission
 from rdmo.core.utils import human2bytes, is_truthy, return_file_response
 from rdmo.options.models import OptionSet
@@ -28,7 +29,6 @@ from rdmo.questions.models import Catalog, Page, Question, QuestionSet
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
-from ..config.models import Plugin
 from .filters import (
     AttributeFilterBackend,
     OptionFilterBackend,

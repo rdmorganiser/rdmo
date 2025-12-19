@@ -17,6 +17,7 @@ from rdmo.config.models import Plugin
 from rdmo.core.views import CSRFViewMixin, ObjectPermissionMixin, RedirectViewMixin, StoreIdViewMixin
 from rdmo.questions.models import Catalog
 
+from ...config.plugin_type_constants import PluginType
 from ...tasks.models import Task
 from ...views.models import View
 from ..models import Integration, Invite, Membership, Project
@@ -86,7 +87,11 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
         context['memberships'] = memberships.order_by('user__last_name', '-project__level')
         context['integrations'] = integrations.order_by('provider_key', '-project__level')
         if settings.PLUGINS:
-            plugins = Plugin.objects.for_context(plugin_type='issue_provider', project=project, user=self.request.user)
+            plugins = Plugin.objects.for_context(
+                plugin_type=PluginType.PROJECT_ISSUE_PROVIDER.value,
+                project=project,
+                user=self.request.user
+            )
             providers = {i.url_name: i.initialize_class() for i in plugins}
             context['providers'] = providers
         context['issues'] = [
@@ -179,7 +184,7 @@ class ProjectExportView(ObjectPermissionMixin, DetailView):
 
     def get_export_plugin(self):
         export_plugins = Plugin.objects.for_context(
-            project=self.object, plugin_type='project_export',
+            project=self.object, plugin_type=PluginType.PROJECT_EXPORT.value,
             user=self.request.user, format=self.kwargs.get('format')
         )
         if not export_plugins.exists():

@@ -9,6 +9,7 @@ from django.views.generic import CreateView, DeleteView, UpdateView, View
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 
 from ...config.models import Plugin
+from ...config.plugin_type_constants import PluginType
 from ..forms import IntegrationForm
 from ..models import Integration, Project
 
@@ -38,7 +39,7 @@ class IntegrationCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView
         plugins = (
             Plugin.objects
                 .for_context(
-                plugin_type="project_issue_provider", project=self.project,
+                plugin_type=PluginType.PROJECT_ISSUE_PROVIDER.value, project=self.project,
                 user=self.request.user,format=self.provider_key
             )
        )
