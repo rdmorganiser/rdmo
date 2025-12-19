@@ -5,12 +5,14 @@ from django.conf import settings
 from rdmo.config.helpers import DeclaredPlugin
 from rdmo.config.utils import get_default_uri_prefix_for_python_path
 
+from .plugin_type_constants import PluginType
+
 PLUGIN_TYPE_LEGACY_SETTING_MAP = {
-    "project_import": ("PROJECT_IMPORTS", "PROJECT_IMPORTS_LIST"),
-    "project_export": ("PROJECT_EXPORTS", None),
+    PluginType.PROJECT_IMPORT.value: ("PROJECT_IMPORTS", "PROJECT_IMPORTS_LIST"),
+    PluginType.PROJECT_EXPORT.value: ("PROJECT_EXPORTS", None),
     "project_snapshot_export": ("PROJECT_SNAPSHOT_EXPORTS", None),
-    "project_issue_provider": ("PROJECT_ISSUE_PROVIDERS", None),
-    "optionset_provider": ("OPTIONSET_PROVIDERS", None),
+    PluginType.PROJECT_ISSUE_PROVIDER.value: ("PROJECT_ISSUE_PROVIDERS", None),
+    PluginType.OPTIONSET_PROVIDER.value: ("OPTIONSET_PROVIDERS", None),
 }
 
 def get_plugins_from_legacy_settings(select_plugin_type=None) -> list[DeclaredPlugin]:

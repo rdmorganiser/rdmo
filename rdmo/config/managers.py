@@ -52,7 +52,8 @@ class PluginQuerySet(
         return self.filter(qs)
 
 
-    def for_context(self, project=None, plugin_type=None, user=None, format=None):
+    def for_context(self, project=None, plugin_type=None, plugin_types=None,
+                    user=None, format=None):
         qs = self
 
         # filter by settings.PLUGINS
@@ -71,9 +72,14 @@ class PluginQuerySet(
         # filter by current site
         qs = qs.filter_current_site()
 
-        # filter by optional plugin type
+        # filter by optional plugin type(s)
+        if plugin_type is not None and plugin_types is not None:
+            raise ValueError('Pass either plugin_type or plugin_types, not both.')
+
         if plugin_type is not None:
             qs = qs.filter(plugin_type=plugin_type)
+        elif plugin_types is not None:
+            qs = qs.filter(plugin_type__in=plugin_types)
 
         # filter by optional format
         if format is not None:
@@ -98,10 +104,12 @@ class PluginManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityMan
     def filter_for_format(self, file_format):
         return self.get_queryset().filter_for_format(file_format)
 
-    def for_context(self, project=None, plugin_type=None, user=None, format=None):
+    def for_context(self, project=None, plugin_type=None, plugin_types=None,
+                    user=None, format=None):
         return self.get_queryset().for_context(
             project=project,
             plugin_type=plugin_type,
+            plugin_types=plugin_types,
             user=user,
             format=format
         )
