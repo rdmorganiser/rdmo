@@ -1,5 +1,11 @@
 # Changelog 📔
 
+## [RDMO 2.5.0](https://github.com/rdmorganiser/rdmo/releases/tag/2.5.0)
+
+**Milestone**: [2.5.0](https://github.com/rdmorganiser/rdmo/milestone/26)
+
+**Commit history**: [2.4.0...2.5.0](https://github.com/rdmorganiser/rdmo/compare/2.4.0...2.5.0)
+
 ## [RDMO 2.4.4](https://github.com/rdmorganiser/rdmo/releases/tag/2.4.4) (March 26, 2026)
 
 ### Bug fixes 🐛
