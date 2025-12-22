@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from django.utils.module_loading import import_string
 
-from .plugin_type_constants import PluginType
+from .constants import PluginType
 
 
 def get_plugin_type_mapping():
