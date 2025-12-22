@@ -47,6 +47,7 @@ def deprecated_plugin_settings_check(app_configs, **kwargs):
             ))
     return issues
 
+
 def repr_new_settings(python_paths) -> str:
     if not python_paths:
         return ""
