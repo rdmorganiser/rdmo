@@ -1,12 +1,12 @@
 import pytest
 
+from rdmo.config.constants import PluginType
 from rdmo.config.models import Plugin
-from rdmo.config.plugin_type_constants import PluginType
 from rdmo.config.plugin_types import detect_plugin_type
 from rdmo.projects.models import Project
 
 
-def test_detect_plugin_type_known_plugins():
+def test_detect_plugin_type_internal_plugins():
     assert detect_plugin_type("rdmo.projects.exports.Export") == PluginType.PROJECT_EXPORT
     assert detect_plugin_type("rdmo.projects.imports.Import") == PluginType.PROJECT_IMPORT
     assert detect_plugin_type("rdmo.projects.providers.IssueProvider") == PluginType.PROJECT_ISSUE_PROVIDER

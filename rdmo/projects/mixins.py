@@ -7,8 +7,8 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 
+from rdmo.config.constants import PluginType
 from rdmo.config.models import Plugin
-from rdmo.config.plugin_type_constants import PluginType
 from rdmo.core.imports import handle_uploaded_file
 from rdmo.questions.models import Question
 
@@ -65,7 +65,7 @@ class ProjectImportMixin:
 
     def get_import_plugin(self, key, current_project=None):
         plugins = Plugin.objects.for_context(
-            plugin_type=PluginType.PROJECT_IMPORT.value,
+            plugin_type=PluginType.PROJECT_IMPORT,
             project=current_project,
             user=self.request.user,
             format=key

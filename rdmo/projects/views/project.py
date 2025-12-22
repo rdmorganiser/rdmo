@@ -13,11 +13,11 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import DeleteView, DetailView, TemplateView
 from django.views.generic.edit import FormMixin
 
+from rdmo.config.constants import PluginType
 from rdmo.config.models import Plugin
 from rdmo.core.views import CSRFViewMixin, ObjectPermissionMixin, RedirectViewMixin, StoreIdViewMixin
 from rdmo.questions.models import Catalog
 
-from ...config.plugin_type_constants import PluginType
 from ...tasks.models import Task
 from ...views.models import View
 from ..models import Integration, Invite, Membership, Project
@@ -88,7 +88,7 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
         context['integrations'] = integrations.order_by('provider_key', '-project__level')
         if settings.PLUGINS:
             plugins = Plugin.objects.for_context(
-                plugin_type=PluginType.PROJECT_ISSUE_PROVIDER.value,
+                plugin_type=PluginType.PROJECT_ISSUE_PROVIDER,
                 project=project,
                 user=self.request.user
             )
@@ -184,7 +184,7 @@ class ProjectExportView(ObjectPermissionMixin, DetailView):
 
     def get_export_plugin(self):
         export_plugins = Plugin.objects.for_context(
-            project=self.object, plugin_type=PluginType.PROJECT_EXPORT.value,
+            project=self.object, plugin_type=PluginType.PROJECT_EXPORT,
             user=self.request.user, format=self.kwargs.get('format')
         )
         if not export_plugins.exists():

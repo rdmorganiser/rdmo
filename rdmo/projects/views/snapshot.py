@@ -5,8 +5,8 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.generic import CreateView, DetailView, UpdateView
 
+from rdmo.config.constants import PluginType
 from rdmo.config.models import Plugin
-from rdmo.config.plugin_type_constants import PluginType
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 
 from ..forms import SnapshotCreateForm
@@ -81,7 +81,7 @@ class SnapshotExportView(ObjectPermissionMixin, DetailView):
     def get_export_plugin(self):
         export_plugins = Plugin.objects.for_context(
             project=self.get_object().project,
-            plugin_type=PluginType.PROJECT_EXPORT.value,
+            plugin_type=PluginType.PROJECT_EXPORT,
             user=self.request.user, format=self.kwargs.get('format')
         )
         if not export_plugins.exists():
