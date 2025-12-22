@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from django.conf import settings
 from django.utils.module_loading import import_string
 
@@ -16,7 +14,7 @@ PLUGINS_URL_NAMES = {
 }
 
 
-def get_plugins_from_current_setting() -> list[DeclaredPlugin]:
+def get_plugins_from_settings() -> list[DeclaredPlugin]:
     """
     Read python paths from settings.PLUGINS and infer key/title.
     Try to import the class to obtain nicer metadata when available.
