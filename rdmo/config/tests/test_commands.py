@@ -72,7 +72,6 @@ def test_command_setup_plugins_basic_from_settings(db, settings, clear_first, dr
         assert instances.count() >= 1
 
 
-# ---------------- new tests ----------------
 
 def _install_dummy_plugin(monkeypatch, dotted: str = "dummy_mod.DummyPlugin", **attrs) -> str:
     """
