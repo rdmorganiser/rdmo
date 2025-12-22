@@ -23,7 +23,6 @@ class PluginAdminForm(ElementAdminForm):
         PluginPythonPathValidator(self.instance)(self.cleaned_data)
 
 
-
 @admin.register(Plugin)
 class PluginAdmin(admin.ModelAdmin):
     form = PluginAdminForm
