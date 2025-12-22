@@ -88,21 +88,16 @@ class Command(BaseCommand):
 
     @transaction.atomic
     def handle(self, *args, **options):
-        from_settings_flag: bool = options["from_settings"]
-        replace: bool = options["replace"]
-        dry_run: bool = options["dry_run"]
-        do_clear: bool = options["clear"]
-        force: bool = options["force"]
-
-        declared_plugins: list[DeclaredPlugin] = []
 
         # Optional destructive phase first
-        if do_clear:
+        if options["clear"]:
             self.stdout.write(self.style.WARNING("⚠ --clear requested: ALL Plugin objects will be removed."))
-            self.clear_all_plugins(dry_run=dry_run, force=force)
+            self.clear_all_plugins(dry_run=options["dry_run"], force=options["force"])
 
         # Collect plugin declarations
-        if from_settings_flag:
+        declared_plugins: list[DeclaredPlugin] = []
+
+        if options["from_settings"]:
             legacy_plugins = get_plugins_from_legacy_settings()
             plugins = get_plugins_from_settings()
             declared_plugins.extend(
@@ -111,16 +106,18 @@ class Command(BaseCommand):
 
         # If no import source and only --clear, we are done.
         if not declared_plugins:
-            if do_clear:
+            if options["clear"]:
                 # never raise on dry-run; just say we are done.
-                msg = "✔ clear completed (dry-run; no changes committed)." if dry_run else "✔ clear completed."
-                self.stdout.write(self.style.SUCCESS(msg))
+                if options["dry_run"]:
+                    self.stdout.write(self.style.SUCCESS("✔ clear completed (dry-run; no changes committed)."))
+                else:
+                    self.stdout.write(self.style.SUCCESS("✔ clear completed."))
                 return
             raise CommandError(
                 "Nothing to do. Use --clear and/or --from-settings."
             )
 
-        if from_settings_flag:
+        if options["from_settings"]:
             self.stdout.write(self.style.WARNING(
                 "Reading legacy plugin settings. These are deprecated and will be removed in a future release."
             ))
@@ -142,7 +139,7 @@ class Command(BaseCommand):
             for error in errors:
                 msg += f"\n- {error[0]}\n\t{error[1]}"
 
-            if dry_run:
+            if options["dry_run"]:
                 # In dry-run mode, never raise: just report and exit
                 self.stdout.write(self.style.WARNING(msg))
                 self.stdout.write(self.style.SUCCESS("✔ dry-run complete; no changes committed."))
@@ -153,7 +150,7 @@ class Command(BaseCommand):
         results: list[str] = []
         for d in declared_plugins:
             try:
-                msg = save_declared_plugin(d, replace=replace, dry_run=dry_run)
+                msg = save_declared_plugin(d, replace=options["replace"], dry_run=options["dry_run"])
                 results.append(self.style.SUCCESS(f"✔ {msg}"))
             except Exception as exc:
                 results.append(self.style.ERROR(f"✖ {d.python_path} failed: {exc}"))
@@ -161,7 +158,7 @@ class Command(BaseCommand):
         for line in results:
             self.stdout.write(line)
 
-        if dry_run:
+        if options["dry_run"]:
             self.stdout.write(self.style.SUCCESS("✔ dry-run complete; no changes committed."))
             return
 
