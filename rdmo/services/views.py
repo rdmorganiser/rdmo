@@ -1,13 +1,13 @@
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.config.constants import PluginType
+from rdmo.config.constants import PLUGIN_TYPES
 from rdmo.config.models import Plugin
 
 PROVIDER_TYPES = [
-    PluginType.PROJECT_ISSUE_PROVIDER,
-    PluginType.PROJECT_EXPORT,
-    PluginType.PROJECT_IMPORT,
+    PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER,
+    PLUGIN_TYPES.PROJECT_EXPORT,
+    PLUGIN_TYPES.PROJECT_IMPORT,
 ]
 
 
