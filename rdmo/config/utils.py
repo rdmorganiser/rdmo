@@ -84,7 +84,11 @@ def get_plugins_from_settings() -> list[dict]:
             uri_path = getattr(plugin_class, "key", None) or url_name or plugin_class.__name__.lower()
             title = (getattr(plugin_class, "label", None) or getattr(plugin_class, "title", None)
                      or plugin_class.__name__)
-            uri_prefix = getattr(plugin_class, "uri_prefix", None) or settings.DEFAULT_URI_PREFIX
+            uri_prefix = (
+                    getattr(plugin_class, "uri_prefix", None)
+                    or getattr(plugin_class, "default_uri_prefix", None)
+                    or settings.DEFAULT_URI_PREFIX
+            )
         else:
             title = python_path.split(".")[-1]
             if url_name:
