@@ -4,6 +4,7 @@ from rdmo.projects.models import Project
 
 class SimpleImportPlugin(Import):
     accept = {"text/plain": [".txt"]}
+    default_uri_prefix = "https://rdmorganiser.github.io/terms"
 
     def check(self) -> bool:
         # Approve files ending with .txt
