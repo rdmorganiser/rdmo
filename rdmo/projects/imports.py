@@ -11,7 +11,7 @@ from django.utils.translation import gettext_lazy as _
 
 import requests
 
-from rdmo.config.plugins import PluginBase
+from rdmo.config.plugins import BasePlugin
 from rdmo.core.imports import handle_fetched_file
 from rdmo.core.xml import get_ns_map, get_uri, read_xml_file
 from rdmo.domain.models import Attribute
@@ -25,7 +25,7 @@ from .models import Project, Snapshot, Value
 log = logging.getLogger(__name__)
 
 
-class Import(PluginBase):
+class Import(BasePlugin):
 
     plugin_type = 'project_import'
     accept = None

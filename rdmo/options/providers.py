@@ -1,7 +1,7 @@
-from rdmo.config.plugins import PluginBase
+from rdmo.config.plugins import BasePlugin
 
 
-class Provider(PluginBase):
+class Provider(BasePlugin):
 
     plugin_type = 'optionset_provider'
 
