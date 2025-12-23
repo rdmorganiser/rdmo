@@ -2,7 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.config.constants import PluginType
+from rdmo.config.constants import PLUGIN_TYPES
 from rdmo.config.models import Plugin
 
 from ..managers import IntegrationManager
@@ -37,7 +37,7 @@ class Integration(models.Model):
     def provider(self):
         plugins = (
             Plugin.objects.for_context(
-                plugin_type=PluginType.PROJECT_ISSUE_PROVIDER,
+                plugin_type=PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER,
                 project=self.project,
                 format=self.provider_key)
         )

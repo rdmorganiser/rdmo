@@ -9,7 +9,7 @@ from django.http import Http404
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.config.constants import PluginType
+from rdmo.config.constants import PLUGIN_TYPES
 from rdmo.config.models import Plugin
 from rdmo.core.constants import VALUE_TYPE_FILE
 from rdmo.core.utils import markdown2html
@@ -357,7 +357,7 @@ class IntegrationForm(forms.ModelForm):
         if self.provider_key:
 
             plugins = Plugin.objects.for_context(
-                plugin_type=PluginType.PROJECT_ISSUE_PROVIDER, project=self.project, format=self.provider_key
+                plugin_type=PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER, project=self.project, format=self.provider_key
             )
             if not plugins.exists():
                 raise Http404
