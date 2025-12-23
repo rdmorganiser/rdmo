@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.db import models
 
 from rest_framework.decorators import action
@@ -148,6 +147,3 @@ class AdditionalInputsViewSet(ChoicesViewSet):
 
 class ProviderViewSet(ChoicesViewSet):
     permission_classes = (IsAuthenticated, )
-
-    def get_queryset(self):
-        return getattr(settings, 'OPTIONSET_PROVIDERS', [])
