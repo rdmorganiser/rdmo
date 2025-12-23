@@ -151,7 +151,7 @@ class Plugin(Model, TranslationMixin):
         verbose_name_plural = _('Plugins')
 
     def __str__(self):
-        return f"({self.python_path}, {self.plugin_type}) {self.uri}"
+        return self.uri
 
     def save(self, *args, **kwargs):
         self.uri = self.build_uri(self.uri_prefix, self.uri_path)
