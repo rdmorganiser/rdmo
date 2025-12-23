@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.db import models
@@ -106,7 +104,7 @@ class OptionSet(models.Model):
         return self.locked
 
     @cached_property
-    def elements(self) -> list[Option]:
+    def elements(self) -> list:
         return [element.option for element in sorted(self.optionset_options.all(), key=lambda e: e.order)]
 
     @classmethod
