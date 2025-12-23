@@ -337,9 +337,6 @@ MARKDOWN_CLEAN_KWARGS = {}  # see https://nh3.readthedocs.io for available kwarg
 
 PLUGINS = [  # introduced in 2.5
     'rdmo.projects.exports.RDMOXMLExport',
-    'rdmo.projects.exports.CSVCommaExport',
-    'rdmo.projects.exports.CSVSemicolonExport',
-    'rdmo.projects.exports.JSONExport',
     'rdmo.projects.imports.RDMOXMLImport',
 ]
 
