@@ -95,17 +95,17 @@ def get_model_field_meta(model):
             if hasattr(field, 'help_text'):
                 meta[field.name]['help_text'] = field.help_text
 
-    if model._meta.verbose_name == 'Page':
+    if model._meta.model_name == 'page':
         meta['elements'] = {
             'verbose_name': _('Elements'),
             'help_text': _('The questions and question sets for this page.')
         }
-    elif model._meta.verbose_name == 'QuestionSet':
+    elif model._meta.model_name == 'questionset':
         meta['elements'] = {
             'verbose_name': _('Elements'),
             'help_text': _('The questions and question sets for this question set.')
         }
-    elif model._meta.verbose_name == 'Plugin':
+    elif model._meta.model_name == 'plugin':
         meta['python_path'] = {
             **meta.get('python_path', {}),
             'choices': [(python_path, python_path) for python_path in get_plugin_python_paths()]
