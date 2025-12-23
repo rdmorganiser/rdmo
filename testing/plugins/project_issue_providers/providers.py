@@ -8,6 +8,7 @@ from rdmo.projects.providers import OauthIssueProvider
 
 
 class SimpleIssueProvider(OauthIssueProvider):
+    default_uri_prefix = "https://rdmorganiser.github.io/terms"
 
     add_label = _('Add Simple integration')
     send_label = _('Send to Simple')

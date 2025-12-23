@@ -2,7 +2,7 @@ import pytest
 
 from rdmo.config.constants import PLUGIN_TYPES
 from rdmo.config.models import Plugin
-from rdmo.config.utils import detect_plugin_type
+from rdmo.config.utils import detect_plugin_type, get_plugins_from_settings
 from rdmo.projects.models import Project
 
 
@@ -52,3 +52,10 @@ def test_plugin_save_sets_issue_provider_type():
 
     plugin = Plugin.objects.get(pk=instance.pk)
     assert plugin.plugin_type == PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER
+
+def test_get_plugins_from_settings_uses_default_uri_prefix(settings):
+
+    plugins = get_plugins_from_settings()
+    for plugin in plugins:
+        if plugin['python_path'].startswith('plugins.'):
+            assert plugin["uri_prefix"] == "https://rdmorganiser.github.io/terms"
