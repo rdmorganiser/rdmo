@@ -8,7 +8,7 @@ from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 
 from rdmo.config.managers import PluginManager
-from rdmo.config.plugin_types import detect_plugin_type
+from rdmo.config.utils import detect_plugin_type
 from rdmo.core.models import Model, TranslationMixin
 from rdmo.core.utils import join_url
 
@@ -185,13 +185,7 @@ class Plugin(Model, TranslationMixin):
         return getattr(self.get_class(), 'refresh', False)
 
     def get_class(self):
-        # TODO: return None here instead of raising exc?
-        try:
-            return import_string(self.python_path)
-        except ModuleNotFoundError as e:
-            raise e from e
-        except ImportError as e:
-            raise e from e
+        return import_string(self.python_path)
 
     def initialize_class(self, raise_on_error=False):
         cls = self.get_class()

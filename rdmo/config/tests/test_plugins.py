@@ -1,16 +1,16 @@
 import pytest
 
-from rdmo.config.constants import PluginType
+from rdmo.config.constants import PLUGIN_TYPES
 from rdmo.config.models import Plugin
-from rdmo.config.plugin_types import detect_plugin_type
+from rdmo.config.utils import detect_plugin_type
 from rdmo.projects.models import Project
 
 
 def test_detect_plugin_type_internal_plugins():
-    assert detect_plugin_type("rdmo.projects.exports.Export") == PluginType.PROJECT_EXPORT
-    assert detect_plugin_type("rdmo.projects.imports.Import") == PluginType.PROJECT_IMPORT
-    assert detect_plugin_type("rdmo.projects.providers.IssueProvider") == PluginType.PROJECT_ISSUE_PROVIDER
-    assert detect_plugin_type("rdmo.options.providers.Provider") == PluginType.OPTIONSET_PROVIDER
+    assert detect_plugin_type("rdmo.projects.exports.Export") == PLUGIN_TYPES.PROJECT_EXPORT
+    assert detect_plugin_type("rdmo.projects.imports.Import") == PLUGIN_TYPES.PROJECT_IMPORT
+    assert detect_plugin_type("rdmo.projects.providers.IssueProvider") == PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER
+    assert detect_plugin_type("rdmo.options.providers.Provider") == PLUGIN_TYPES.OPTIONSET_PROVIDER
 
 @pytest.mark.django_db
 def test_plugin_create_and_render():
@@ -31,7 +31,7 @@ def test_plugin_create_and_render():
     export_plugin.project = project
     export_plugin.snapshot = None
     # Call export (render) and assert behavior
-    assert instance.plugin_type == PluginType.PROJECT_EXPORT
+    assert instance.plugin_type == PLUGIN_TYPES.PROJECT_EXPORT
     response = export_plugin.render()
     assert response.status_code == 200
     text = response.content.decode()
@@ -51,4 +51,4 @@ def test_plugin_save_sets_issue_provider_type():
     )
 
     plugin = Plugin.objects.get(pk=instance.pk)
-    assert plugin.plugin_type == PluginType.PROJECT_ISSUE_PROVIDER
+    assert plugin.plugin_type == PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER
