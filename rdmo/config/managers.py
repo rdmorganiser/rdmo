@@ -12,10 +12,8 @@ from rdmo.core.managers import (
 )
 
 
-class PluginQuerySet(
-    ForSiteQuerySetMixin,
-    CurrentSiteQuerySetMixin, GroupsQuerySetMixin, AvailabilityQuerySetMixin,
-    models.QuerySet):
+class PluginQuerySet(ForSiteQuerySetMixin, CurrentSiteQuerySetMixin, GroupsQuerySetMixin,
+                     AvailabilityQuerySetMixin, models.QuerySet):
 
     def filter_for_project(self, project):
         return (
@@ -23,18 +21,16 @@ class PluginQuerySet(
                 .filter_for_site(project.site)
                 .filter(catalogs=project.catalog)
                 .filter(models.Q(groups=None) | models.Q(groups__in=project.groups))
+                .filter(available=True)
         )
 
-    def filter_for_settings_plugins(self):
+    def filter_for_settings(self):
         if not settings.PLUGINS:
-            return self
+            return self.none()
 
         return self.filter(python_path__in=settings.PLUGINS)
 
     def filter_for_format(self, file_format: str):
-        if not file_format:
-            return self
-
         qs = (
             models.Q(url_name=file_format)
             | models.Q(uri_path=file_format)
@@ -57,7 +53,7 @@ class PluginQuerySet(
         qs = self
 
         # filter by settings.PLUGINS
-        qs = qs.filter_for_settings_plugins()
+        qs = qs.filter_for_settings()
 
         # filter by project .site,.catalog and .groups
         if project is not None:
@@ -87,6 +83,7 @@ class PluginQuerySet(
 
         return qs
 
+
 class PluginManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityManagerMixin, models.Manager):
 
     def get_queryset(self) -> PluginQuerySet:
@@ -98,8 +95,8 @@ class PluginManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityMan
     def filter_for_project(self, project):
         return self.get_queryset().filter_for_project(project)
 
-    def filter_for_settings_plugins(self):
-        return self.get_queryset().filter_for_settings_plugins()
+    def filter_for_settings(self):
+        return self.get_queryset().filter_for_settings()
 
     def filter_for_format(self, file_format):
         return self.get_queryset().filter_for_format(file_format)

@@ -3,11 +3,11 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.config.plugins import PluginBase
+from rdmo.config.plugins import BasePlugin
 from rdmo.services.providers import OauthProviderMixin
 
 
-class IssueProvider(PluginBase):
+class IssueProvider(BasePlugin):
 
     plugin_type = 'project_issue_provider'
 

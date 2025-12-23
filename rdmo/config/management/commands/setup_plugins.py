@@ -1,23 +1,21 @@
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.config.helpers import DeclaredPlugin
 from rdmo.config.legacy import get_plugins_from_legacy_settings
 from rdmo.config.models import Plugin
-from rdmo.config.plugin_resolver import (
-    get_plugins_from_settings,
-)
+from rdmo.config.utils import get_plugins_from_settings
 
 
-def save_declared_plugin(declared: DeclaredPlugin, *, replace: bool, dry_run: bool) -> str:
-    uri_prefix = declared.uri_prefix or getattr(settings, "DEFAULT_URI_PREFIX", None)
+def save_declared_plugin(declared: dict, *, replace: bool, dry_run: bool) -> str:
+    uri_prefix = declared["uri_prefix"] or getattr(settings, "DEFAULT_URI_PREFIX", None)
     if not uri_prefix:
         raise CommandError("No uri_prefix available (neither provided nor DEFAULT_URI_PREFIX).")
 
-    uri_path = declared.uri_path or declared.url_name
+    uri_path = declared["uri_path"] or declared["url_name"]
 
     try:
         plugin = Plugin.objects.get(uri_prefix=uri_prefix, uri_path=uri_path)
@@ -28,32 +26,32 @@ def save_declared_plugin(declared: DeclaredPlugin, *, replace: bool, dry_run: bo
         plugin = Plugin(uri_prefix=uri_prefix, uri_path=uri_path)
         exists = False
 
-    plugin.title_lang1 = declared.title
-    plugin.python_path = declared.python_path
-    if declared.url_name is not None:
-        plugin.url_name = declared.url_name
+    plugin.title_lang1 = declared["title"]
+    plugin.python_path = declared["python_path"]
+    if declared["url_name"] is not None:
+        plugin.url_name = declared["url_name"]
     plugin.available = True
 
     action = "replaced" if (exists and replace) else ("created" if not exists else "updated")
     if dry_run:
         uri = f"{uri_prefix}/plugins/{uri_path}"
-        return f"{action} (dry-run): {declared.python_path} -> {uri}"
+        return f"{action} (dry-run): {declared['python_path']} -> {uri}"
 
     plugin.full_clean()
     plugin.save()
-    return f"{action}: {plugin.python_path} from {declared.source}-> {plugin.uri}"
+    return f"{action}: {plugin.python_path} from {declared['source']}-> {plugin.uri}"
 
 
 def merge_legacy_and_current_plugins(
-        legacy: list[DeclaredPlugin], modern: list[DeclaredPlugin]
-    ) -> list[DeclaredPlugin]:
-    legacy_uri_paths = {d.uri_path for d in legacy}
-    legacy_paths = {d.python_path for d in legacy}
-    filtered_modern = [
-        i for i in modern
-        if i.uri_path not in legacy_uri_paths and i.python_path not in legacy_paths
+        legacy_plugins: list[dict], plugins: list[dict]
+    ) -> list[dict]:
+    legacy_uri_paths = {d['uri_path'] for d in legacy_plugins}
+    legacy_paths = {d['python_path'] for d in legacy_plugins}
+    filtered_plugins = [
+        i for i in plugins
+        if i['uri_path'] not in legacy_uri_paths and i['python_path'] not in legacy_paths
     ]
-    return legacy + filtered_modern
+    return legacy_plugins + filtered_plugins
 
 
 class Command(BaseCommand):
@@ -95,17 +93,21 @@ class Command(BaseCommand):
             self.clear_all_plugins(dry_run=options["dry_run"], force=options["force"])
 
         # Collect plugin declarations
-        declared_plugins: list[DeclaredPlugin] = []
+        plugins_from_settings: list[dict] = []
 
         if options["from_settings"]:
             legacy_plugins = get_plugins_from_legacy_settings()
-            plugins = get_plugins_from_settings()
-            declared_plugins.extend(
+            try:
+                plugins = get_plugins_from_settings()
+            except ValidationError as e:
+                raise CommandError from e
+
+            plugins_from_settings.extend(
                 merge_legacy_and_current_plugins(legacy_plugins, plugins)  # prioritize legacy, skip duplicates
             )
 
         # If no import source and only --clear, we are done.
-        if not declared_plugins:
+        if not plugins_from_settings:
             if options["clear"]:
                 # never raise on dry-run; just say we are done.
                 if options["dry_run"]:
@@ -123,16 +125,16 @@ class Command(BaseCommand):
             ))
 
         # Deterministic order for output
-        declared_plugins.sort(key=lambda x: (x.python_path, x.uri_path or ""))
+        plugins_from_settings.sort(key=lambda x: (x["python_path"], x["uri_path"] or ""))
 
         # -------------------- import validation --------------------------
-        errors: list[tuple[DeclaredPlugin, Exception]] = []
-        for d in declared_plugins:
+        errors: list[tuple[dict, Exception]] = []
+        for plugin in plugins_from_settings:
             try:
-                import_string(d.python_path)
+                import_string(plugin["python_path"])
             except Exception as exc:
-                errors.append((d, exc))
-                self.stdout.write(self.style.ERROR(f"✖ import FAILED: {d.python_path} ({exc})"))
+                errors.append((plugin, exc))
+                self.stdout.write(self.style.ERROR(f"✖ import FAILED: {plugin['python_path']} ({exc})"))
 
         if errors:
             msg = f"{len(errors)} plugin(s) failed import validation; aborting before database changes."
@@ -148,12 +150,12 @@ class Command(BaseCommand):
             raise CommandError(msg)
 
         results: list[str] = []
-        for d in declared_plugins:
+        for plugin in plugins_from_settings:
             try:
-                msg = save_declared_plugin(d, replace=options["replace"], dry_run=options["dry_run"])
+                msg = save_declared_plugin(plugin, replace=options["replace"], dry_run=options["dry_run"])
                 results.append(self.style.SUCCESS(f"✔ {msg}"))
             except Exception as exc:
-                results.append(self.style.ERROR(f"✖ {d.python_path} failed: {exc}"))
+                results.append(self.style.ERROR(f"✖ {plugin['python_path']} failed: {exc}"))
 
         for line in results:
             self.stdout.write(line)
