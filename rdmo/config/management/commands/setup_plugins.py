@@ -39,7 +39,7 @@ def save_declared_plugin(declared: dict, *, replace: bool, dry_run: bool) -> str
 
     plugin.full_clean()
     plugin.save()
-    return f"{action}: {plugin.python_path} from {declared['source']}-> {plugin.uri}"
+    return f"{action}: {plugin.python_path} -> {plugin.uri}"
 
 
 def merge_legacy_and_current_plugins(
@@ -132,7 +132,7 @@ class Command(BaseCommand):
         for plugin in plugins_from_settings:
             try:
                 import_string(plugin["python_path"])
-            except Exception as exc:
+            except ImportError as exc:
                 errors.append((plugin, exc))
                 self.stdout.write(self.style.ERROR(f"✖ import FAILED: {plugin['python_path']} ({exc})"))
 
@@ -154,7 +154,7 @@ class Command(BaseCommand):
             try:
                 msg = save_declared_plugin(plugin, replace=options["replace"], dry_run=options["dry_run"])
                 results.append(self.style.SUCCESS(f"✔ {msg}"))
-            except Exception as exc:
+            except CommandError as exc:
                 results.append(self.style.ERROR(f"✖ {plugin['python_path']} failed: {exc}"))
 
         for line in results:

@@ -16,7 +16,7 @@ class Command(BaseCommand):
                 import_string(plugin.python_path)
                 url_name = f" url_name='{plugin.url_name}'" if plugin.url_name else ""
                 self.stdout.write(self.style.SUCCESS(f"✔ {plugin.python_path}, type={plugin.plugin_type}{url_name}."))
-            except Exception as e:
+            except ImportError as e:
                 if plugin.available:
                     self.stdout.write(self.style.ERROR(
                         f"✖ {plugin.python_path}, type={plugin.plugin_type} failed: {e}")

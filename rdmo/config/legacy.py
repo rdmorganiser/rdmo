@@ -26,7 +26,7 @@ def get_plugins_from_legacy_settings(select_plugin_type=None) -> list[dict]:
         for entry in legacy_plugins:
             try:
                 key, label, dotted = entry
-            except Exception as exc:
+            except ValueError as exc:
                 raise ValueError(
                     f"{legacy_setting} must be a sequence of 3-tuples "
                     f"(key, label, python-path); got {entry!r}"
