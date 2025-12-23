@@ -13,6 +13,8 @@ from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import is_truthy, render_to_format
 from rdmo.core.views import ChoicesViewSet
 
+from ..config.constants import PLUGIN_TYPES
+from ..config.models import Plugin
 from .models import Option, OptionSet
 from .renderers import OptionRenderer, OptionSetRenderer
 from .serializers.export import OptionExportSerializer, OptionSetExportSerializer
@@ -147,3 +149,16 @@ class AdditionalInputsViewSet(ChoicesViewSet):
 
 class ProviderViewSet(ChoicesViewSet):
     permission_classes = (IsAuthenticated, )
+
+    def get_queryset(self):
+        providers = {}
+
+        plugins = Plugin.objects.for_context(
+            plugin_type=PLUGIN_TYPES.OPTIONSET_PROVIDER,
+            user=self.request.user
+        )
+        for plugin in plugins:
+            key = plugin.url_name or plugin.uri_path
+            if key:
+                providers[key] = plugin.title
+        return list(providers.items())
