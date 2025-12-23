@@ -37,7 +37,7 @@ def detect_plugin_type(python_path) -> PLUGIN_TYPES | str:
     try:
         plugin_class = import_string(python_path)
     except ImportError as e:
-        raise ValidationError(_("Could not import plugin.")) from e
+        raise ValidationError(f"Could not import plugin from {python_path}: {e}") from e
 
     if hasattr(plugin_class, "plugin_type"):
         if plugin_class.plugin_type:
@@ -51,8 +51,8 @@ def detect_plugin_type(python_path) -> PLUGIN_TYPES | str:
     if not issubclass(plugin_class, BasePlugin):
         return "not_an_rdmo_plugin"
 
-    for plugin_type, plugin_class in get_plugin_type_mapping().items():
-        if issubclass(plugin_class, plugin_class):
+    for plugin_type, internal_plugin_class in get_plugin_type_mapping().items():
+        if issubclass(plugin_class, internal_plugin_class):
             return plugin_type
 
     return "unknown_plugin_type"
@@ -67,18 +67,23 @@ def get_plugins_from_settings() -> list[dict]:
         return []
 
     plugin_definitions = []
+    errors = []
     for python_path in settings.PLUGINS:
-
         url_name = PLUGINS_URL_NAMES.get(python_path, "")
         try:
             plugin_class = import_string(python_path)
-        except ImportError:
-            plugin_class = None
+        except ImportError as e:
+            errors.append(_("Could not import plugin from %(path)s: %(err)s") % {
+                "path": python_path,
+                "err": str(e),
+            })
+            continue
 
         try:
             plugin_type = detect_plugin_type(python_path)
         except ValidationError as e:
-            raise e from e
+            errors.extend(e.messages)
+            continue
 
         if plugin_class is not None:
             uri_path = getattr(plugin_class, "key", None) or url_name or plugin_class.__name__.lower()
@@ -105,4 +110,8 @@ def get_plugins_from_settings() -> list[dict]:
             "plugin_type": plugin_type,
             "url_name": url_name,
         })
+
+    if errors:
+        raise ValidationError(errors)
+
     return plugin_definitions

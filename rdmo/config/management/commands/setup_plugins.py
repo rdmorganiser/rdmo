@@ -86,7 +86,6 @@ class Command(BaseCommand):
 
     @transaction.atomic
     def handle(self, *args, **options):
-
         # Optional destructive phase first
         if options["clear"]:
             self.stdout.write(self.style.WARNING("⚠ --clear requested: ALL Plugin objects will be removed."))
@@ -100,7 +99,7 @@ class Command(BaseCommand):
             try:
                 plugins = get_plugins_from_settings()
             except ValidationError as e:
-                raise CommandError from e
+                raise CommandError("\n".join(e.messages)) from e
 
             plugins_from_settings.extend(
                 merge_legacy_and_current_plugins(legacy_plugins, plugins)  # prioritize legacy, skip duplicates
