@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { isEmpty } from 'lodash'
 
 import Html from 'rdmo/core/assets/js/components/Html'
-import { Tile } from '../helper'
+
 import { clearCurrentView, downloadDocument, openViewInContext, setLocation } from '../../actions/projectActions'
-import { buildLocationForView } from '../../utils/buildLocationForView'
-import { isEmpty } from 'lodash'
+import { buildLocationForView } from '../../utils/location'
+import { Tile } from '../helper'
 
 const Documents = () => {
   const dispatch = useDispatch()

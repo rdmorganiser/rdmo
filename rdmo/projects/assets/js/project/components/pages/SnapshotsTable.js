@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
+
 import { useFormattedDateTime } from 'rdmo/core/assets/js/hooks'
+import { useModal } from 'rdmo/core/assets/js/hooks'
 import { language } from 'rdmo/core/assets/js/utils'
 
-import { useModal } from 'rdmo/core/assets/js/hooks'
-
 import { setLocation } from '../../actions/projectActions'
+import { buildLocationForView } from '../../utils/location'
+
 import SnapshotModal from './SnapshotModal'
-import { buildLocationForView } from '../../utils/buildLocationForView'
 import SnapshotRollbackModal from './SnapshotRollbackModal'
 
 const SnapshotsTable = ({ snapshots }) => {
@@ -69,9 +70,7 @@ const SnapshotsTable = ({ snapshots }) => {
                       title={gettext('View answers')}
                       onClick={() => handleShowAnswers(snapshot.id)}
                     >
-                      <i
-                        className={'bi bi-eye'}
-                        aria-hidden="true" />
+                      <i className={'bi bi-eye'} aria-hidden="true" />
                     </button>
                   )}
                   {perms.can_change_snapshot && (
@@ -82,9 +81,7 @@ const SnapshotsTable = ({ snapshots }) => {
                       title={gettext('Update snapshot')}
                       onClick={() => openUpdateModal(snapshot)}
                     >
-                      <i
-                        className={'bi bi-pencil'}
-                        aria-hidden="true" />
+                      <i className={'bi bi-pencil'} aria-hidden="true" />
                     </button>
                   )}
                   {perms.can_rollback_snapshot && (
@@ -95,9 +92,7 @@ const SnapshotsTable = ({ snapshots }) => {
                       title={gettext('Rollback to snapshot')}
                       onClick={() => openRollbackModal(snapshot)}
                     >
-                      <i
-                        className={'bi bi-reply-fill'}
-                        aria-hidden="true" />
+                      <i className={'bi bi-reply-fill'} aria-hidden="true" />
                     </button>
                   )}
                 </td>
