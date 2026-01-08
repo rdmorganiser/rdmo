@@ -15,6 +15,7 @@ from django.utils.encoding import force_str
 from django.utils.formats import get_format
 from django.utils.translation import gettext_lazy as _
 
+import nh3
 from defusedcsv import csv
 from markdown import markdown
 
@@ -253,7 +254,11 @@ def markdown2html(markdown_string):
     # textblocks (e.g. for help texts) can be injected into free text fields as small templates via Markdown
     html = inject_textblocks(html)
 
-    return html
+    if settings.MARKDOWN_CLEAN:
+        # use nh3/ammonia to clean the html string
+        return nh3.clean(html, **settings.MARKDOWN_CLEAN_KWARGS)
+    else:
+        return html
 
 
 def inject_textblocks(html):
