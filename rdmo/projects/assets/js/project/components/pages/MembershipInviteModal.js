@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
+import { isEmpty } from 'lodash'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 import { Modal, Tooltip } from 'rdmo/core/assets/js/_bs53/components'
@@ -115,7 +116,7 @@ const MembershipInviteModal = ({ show, onClose }) => {
         </div>
         {/* Add member silently */}
         {perms.can_add_membership && (
-          <div className="mb-3">
+          <div>
             <label className="form-label fw-bold">{gettext('Add member silently')}</label>
             <Html html={templates.project_view_invite_member_silently_help} />
             <div className="form-check mt-1">
@@ -133,9 +134,17 @@ const MembershipInviteModal = ({ show, onClose }) => {
             </div>
           </div>
         )}
-        {errors.non_field_errors?.map((err, i) => (
-          <div key={i} className="text-danger mt-1">{err}</div>
-        ))}
+        {
+          !isEmpty(errors) && (
+            <div className="mt-3">
+              {
+                errors.non_field_errors?.map((err, i) => (
+                  <div key={i} className="text-danger mt-1">{err}</div>
+                ))
+              }
+            </div>
+          )
+        }
       </form>
     </Modal>
   )
