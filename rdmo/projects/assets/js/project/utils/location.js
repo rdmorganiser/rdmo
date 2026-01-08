@@ -12,7 +12,6 @@ export const parseLocation = () => {
   const patterns = [
     /\/projects\/\d+\/(?<page>[a-z-]+)\/(?<pageId>\d+)\/(?<action>[a-z-]+)\/(?<actionId>\d+)[/]*$/,
     /\/projects\/\d+\/(?<page>[a-z-]+)\/(?<pageId>\d+)\/(?<action>[a-z-]+)[/]*$/,
-    // NEW for snapshots/20/
     /\/projects\/\d+\/(?<page>[a-z-]+)\/(?<pageId>\d+)[/]*$/,
     /\/projects\/\d+\/(?<page>[a-z-]+)\/(?<action>[a-z-]+)\/(?<actionId>\d+)[/]*$/,
     /\/projects\/\d+\/(?<page>[a-z-]+)\/(?<action>[a-z-]+)[/]*$/,
@@ -48,4 +47,44 @@ export const buildPath = ({ page, pageId, action, actionId }) => {
   }
 
   return segments.join('/') + '/'
+}
+
+export const buildLocationForView = (viewId, snapshotId, { basePage = 'documents' } = {}) => {
+  const hasView = viewId !== null && viewId !== undefined
+  const hasSnapshot = snapshotId !== null && snapshotId !== undefined
+  const isAnswers = viewId === 'answers'
+
+  if (!hasView) {
+    if (!hasSnapshot) {
+      return {
+        page: basePage,
+        pageId: undefined,
+        action: undefined,
+        actionId: undefined,
+      }
+    }
+
+    return {
+      page: 'snapshots',
+      pageId: String(snapshotId),
+      action: undefined,
+      actionId: undefined,
+    }
+  }
+
+  if (!snapshotId) {
+    return {
+      page: 'documents',
+      pageId: undefined,
+      action: isAnswers ? 'answers' : 'views',
+      actionId: isAnswers ? undefined : String(viewId),
+    }
+  }
+
+  return {
+    page: 'snapshots',
+    pageId: String(snapshotId),
+    action: isAnswers ? 'answers' : 'views',
+    actionId: isAnswers ? undefined : String(viewId),
+  }
 }
