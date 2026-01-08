@@ -21,7 +21,7 @@ const JsonField = ({ config, element, field, onChange }) => {
 
   useEffect(() => {
     setValue(formatValue(element[field]))
-  }, [element, field])
+  }, [element.id, field])
 
   const className = classNames({
     'form-group': true,
@@ -31,8 +31,14 @@ const JsonField = ({ config, element, field, onChange }) => {
 
   const handleChange = (newValue) => {
     setValue(newValue)
+    if (parseError) {
+      setParseError(false)
+    }
+  }
+
+  const handleBlur = () => {
     try {
-      const parsed = newValue.trim() ? JSON.parse(newValue) : {}
+      const parsed = value.trim() ? JSON.parse(value) : {}
       setParseError(false)
       onChange(field, parsed)
     } catch (e) {
@@ -44,16 +50,30 @@ const JsonField = ({ config, element, field, onChange }) => {
     <div className={className}>
       <label className="control-label" htmlFor={id}>{label}</label>
 
-      <ReactCodeMirror className="codemirror form-control" id={id} value={value}
-                       extensions={[json()]}
-                       onChange={handleChange} disabled={element.read_only} />
+      <ReactCodeMirror
+        className="codemirror form-control"
+        id={id}
+        value={value}
+        extensions={[json()]}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        disabled={element.read_only}
+      />
 
       {help && <p className="help-block">{help}</p>}
-      {parseError && <p className="help-block text-warning">{gettext('Please provide valid JSON.')}</p>}
+      {parseError && (
+        <p className="help-block text-warning">
+          {gettext('Please provide valid JSON.')}
+        </p>
+      )}
 
-      {errors && <ul className="help-block list-unstyled">
-        {errors.map((error, index) => <li key={index}>{error}</li>)}
-      </ul>}
+      {errors && (
+        <ul className="help-block list-unstyled">
+          {errors.map((error, index) => (
+            <li key={index}>{error}</li>
+          ))}
+        </ul>
+      )}
     </div>
   )
 }

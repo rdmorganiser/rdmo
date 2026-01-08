@@ -101,6 +101,8 @@ const EditPlugin = ({ config, plugin, elements, elementActions}) => {
               <Tab className="pt-10" key={index} eventKey={index} title={lang}>
                 <Text config={config} element={plugin} field={`title_${lang_code }`}
                       onChange={updatePlugin} />
+                <Textarea config={config} element={plugin} field={`help_${lang_code }`}
+                      rows={4} onChange={updatePlugin} />
               </Tab>
             ))
           }

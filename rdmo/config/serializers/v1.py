@@ -17,7 +17,7 @@ class PluginSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
                      ElementWarningSerializerMixin, ReadOnlyObjectPermissionSerializerMixin,
                      MarkdownSerializerMixin, serializers.ModelSerializer):
 
-    markdown_fields = ('title', 'text')
+    markdown_fields = ('title', 'text', 'help')
 
     model = serializers.SerializerMethodField()
 
@@ -48,11 +48,13 @@ class PluginSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
             'editors',
             'groups',
             'title',
+            'help',
             'warning',
             'read_only',
         )
         trans_fields = (
             'title',
+            'help',
         )
         extra_kwargs = {
             'uri_path': {'required': True}
@@ -64,6 +66,7 @@ class PluginSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
         )
         warning_fields = (
             'title',
+            'help',
         )
 
     def get_plugin_type(self, obj) -> str:
