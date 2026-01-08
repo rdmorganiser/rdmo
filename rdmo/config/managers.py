@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.db import connections, models
+from django.db import models
 
 from rdmo.core.managers import (
     AvailabilityManagerMixin,
@@ -10,6 +10,7 @@ from rdmo.core.managers import (
     GroupsManagerMixin,
     GroupsQuerySetMixin,
 )
+from rdmo.core.utils import jsonfield_contains
 
 
 class PluginQuerySet(ForSiteQuerySetMixin, CurrentSiteQuerySetMixin, GroupsQuerySetMixin,
@@ -31,21 +32,17 @@ class PluginQuerySet(ForSiteQuerySetMixin, CurrentSiteQuerySetMixin, GroupsQuery
         return self.filter(python_path__in=settings.PLUGINS)
 
     def filter_for_format(self, file_format: str):
-        qs = (
+        queryset = (
             models.Q(url_name=file_format)
             | models.Q(uri_path=file_format)
             | models.Q(uri_path__endswith=f'/{file_format}')
         )
 
-        # add a JSONField contains lookup if the current DB supports it
-        connection = connections[self.db]
-        if getattr(connection.features, 'supports_json_field_contains', False):
-            qs |= models.Q(plugin_settings__contains={'format': file_format})
-        elif connection.vendor == 'sqlite':
-            # SQLite: JSONField is stored as TEXT; emulate contains by string search.
-            qs |= models.Q(plugin_settings__icontains=f'"format": "{file_format}"')
+        queryset_contains = jsonfield_contains(self.db, 'plugin_settings', 'format', file_format)
+        if queryset_contains is not None:
+            queryset |= queryset_contains
 
-        return self.filter(qs)
+        return self.filter(queryset)
 
 
     def for_context(self, project=None, plugin_type=None, plugin_types=None,
