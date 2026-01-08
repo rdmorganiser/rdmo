@@ -3,8 +3,6 @@ from django.core.exceptions import ValidationError
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.config.constants import PLUGIN_TYPES
-
 PLUGINS_URL_NAMES = {
     "rdmo.projects.exports.RDMOXMLExport": "xml",
     "rdmo.projects.exports.CSVCommaExport": "csvcomma",
@@ -14,48 +12,14 @@ PLUGINS_URL_NAMES = {
 }
 
 
-
-def get_plugin_type_mapping():
-    # imports at run-time only
-    from rdmo.options.providers import Provider
-    from rdmo.projects.exports import Export
-    from rdmo.projects.imports import Import
-    from rdmo.projects.providers import IssueProvider
-
-    plugin_type_mapping = {
-        PLUGIN_TYPES.PROJECT_EXPORT: Export,
-        PLUGIN_TYPES.PROJECT_IMPORT: Import,
-        PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER: IssueProvider,
-        PLUGIN_TYPES.OPTIONSET_PROVIDER: Provider,
-    }
-    return plugin_type_mapping
-
-
-def detect_plugin_type(python_path) -> PLUGIN_TYPES | str:
-    from rdmo.config.plugins import BasePlugin
-
+def get_plugin_type_from_class(plugin_class) -> str:
     try:
-        plugin_class = import_string(python_path)
-    except ImportError as e:
-        raise ValidationError(f"Could not import plugin from {python_path}: {e}") from e
-
-    if hasattr(plugin_class, "plugin_type"):
         if plugin_class.plugin_type:
-            try:
-                return PLUGIN_TYPES(plugin_class.plugin_type)
-            except ValueError:
-                return plugin_class.plugin_type
+            return plugin_class.plugin_type
         else:
-            return "has_plugin_type_but_empty"
-
-    if not issubclass(plugin_class, BasePlugin):
-        return "not_an_rdmo_plugin"
-
-    for plugin_type, internal_plugin_class in get_plugin_type_mapping().items():
-        if issubclass(plugin_class, internal_plugin_class):
-            return plugin_type
-
-    return "unknown_plugin_type"
+            raise ValueError("Plugin type defined but empty.") from None
+    except AttributeError as e:
+        raise ValueError("Plugin type missing.") from e
 
 
 def get_plugins_from_settings() -> list[dict]:
@@ -80,10 +44,14 @@ def get_plugins_from_settings() -> list[dict]:
             continue
 
         try:
-            plugin_type = detect_plugin_type(python_path)
-        except ValidationError as e:
-            errors.extend(e.messages)
+            plugin_type = get_plugin_type_from_class(plugin_class)
+        except ValueError as e:
+            errors.append(_("Could not get plugin type from %(path)s: %(err)s") % {
+                "path": python_path,
+                "err": str(e),
+            })
             continue
+
 
         if plugin_class is not None:
             uri_path = getattr(plugin_class, "key", None) or url_name or plugin_class.__name__.lower()

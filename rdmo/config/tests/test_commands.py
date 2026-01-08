@@ -84,6 +84,7 @@ def _install_dummy_plugin(monkeypatch, dotted: str = "dummy_mod.DummyPlugin", **
     # sensible defaults that the command can read if it imports the class
     cls.key = attrs.get("key", "dummy_key")
     cls.label = attrs.get("label", "Dummy Label")
+    cls.plugin_type = attrs.get("plugin_type", "dummy_type")
     mod.__dict__[class_name] = cls
     monkeypatch.setitem(sys.modules, module_name, mod)
     return dotted
