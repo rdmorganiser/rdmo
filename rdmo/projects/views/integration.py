@@ -43,7 +43,11 @@ class IntegrationCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView
                 user=self.request.user,format=self.provider_key
             )
        )
-        kwargs['provider'] = plugins.first().initialize_class() if plugins else None
+        try:
+            kwargs['provider'] = plugins.first().initialize_class()
+        except Plugin.DoesNotExist:
+            kwargs['provider'] = None
+
         return super().get_context_data(**kwargs)
 
     def get_success_url(self):
