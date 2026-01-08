@@ -8,7 +8,7 @@ from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 
 from rdmo.config.managers import PluginManager
-from rdmo.config.utils import detect_plugin_type
+from rdmo.config.utils import get_plugin_type_from_class
 from rdmo.core.models import Model, TranslationMixin
 from rdmo.core.utils import join_url
 
@@ -155,7 +155,22 @@ class Plugin(Model, TranslationMixin):
 
     def save(self, *args, **kwargs):
         self.uri = self.build_uri(self.uri_prefix, self.uri_path)
-        self.plugin_type = detect_plugin_type(self.python_path)
+
+        try:
+            plugin_class = self.get_class()
+        except ImportError as e:
+            raise RuntimeError(f"Could not import plugin from {self.python_path}: {e}") from e
+
+        try:
+            self.plugin_type = get_plugin_type_from_class(plugin_class)
+        except ValueError as e:
+            raise RuntimeError(f"Could not get plugin type from class {plugin_class}: {e}") from e
+
+        try:
+            self.initialize_class()
+        except ValueError as e:
+            raise RuntimeError(f"Could initialize the plugin from class {plugin_class}: {e}") from e
+
         super().save(*args, **kwargs)
 
     @property
@@ -187,10 +202,8 @@ class Plugin(Model, TranslationMixin):
     def get_class(self):
         return import_string(self.python_path)
 
-    def initialize_class(self, raise_on_error=False):
+    def initialize_class(self):
         cls = self.get_class()
-        if cls is None:
-            return None
         sig = signature(cls)
         if len(sig.parameters) == 0:
             return cls()
@@ -200,6 +213,4 @@ class Plugin(Model, TranslationMixin):
         if len(sig.parameters) == 3:  # the legacy signature, should not be called anymore
             key = self.url_name if self.url_name else self.uri_path
             return cls(key, self.title, self.python_path)
-        if raise_on_error:
-            raise ValueError(f'Could not initialize class {self.python_path} for {sig}')
-        return None
+        raise ValueError(f'Could not initialize class {self.python_path} for {sig}')

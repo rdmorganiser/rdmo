@@ -5,6 +5,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from rdmo.conditions.models import Condition
+from rdmo.config.models import Plugin
 from rdmo.core.models import TranslationMixin
 from rdmo.core.utils import join_url
 
@@ -61,8 +62,8 @@ class OptionSet(models.Model):
         verbose_name=_('Conditions'),
         help_text=_('The list of conditions evaluated for this option set.')
     )
-    plugins = models.ManyToManyField(  # can not import Plugin due to circular import
-        'config.Plugin', blank=True, related_name='optionsets',
+    plugins = models.ManyToManyField(
+        Plugin, blank=True, related_name='optionsets',
         verbose_name=_('Plugins'),
         help_text=_('The list of plugins evaluated for this option set.')
     )
