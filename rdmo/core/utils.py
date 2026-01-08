@@ -7,6 +7,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from django.conf import settings
+from django.db import connections, models
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.template.loader import get_template, render_to_string
 from django.utils.dateparse import parse_date
@@ -327,3 +328,17 @@ def parse_date_from_string(date: str) -> datetime.date:
             f"Invalid date format for: {date}. Valid formats {get_format('DATE_INPUT_FORMATS')}"
         )
     return parsed_date
+
+
+def jsonfield_contains(using: str, field: str, key: str, value) -> models.Q | None:
+    connection = connections[using]
+
+    if getattr(connection.features, 'supports_json_field_contains', False):
+        return models.Q(**{f'{field}__contains': {key: value}})
+
+    if connection.vendor == 'sqlite':
+        # e.g. '"format": "csv"' with proper JSON escaping for key/value
+        fragment = f'{json.dumps(key)}: {json.dumps(value)}'
+        return models.Q(**{f'{field}__icontains': fragment})
+
+    return None
