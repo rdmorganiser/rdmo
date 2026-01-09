@@ -278,13 +278,14 @@ export function fetchElement(elementType, elementId, elementAction=null) {
             OptionsApi.fetchOptionSet(elementId),
             ConditionsApi.fetchConditions('index'),
             OptionsApi.fetchOptions('index'),
-            QuestionsApi.fetchQuestions('index')
-          ]).then(([element, conditions, options, questions]) => {
+            QuestionsApi.fetchQuestions('index'),
+            ConfigApi.fetchPlugins('index', { plugin_type: 'optionset_provider' })
+          ]).then(([element, conditions, options, questions, plugins]) => {
             if (elementAction == 'copy') {
               delete element.questions
             }
             return {
-              element, conditions, options, questions
+              element, conditions, options, questions, plugins
             }
           })
         }
@@ -569,8 +570,9 @@ export function createElement(elementType, parent={}) {
         action = () => Promise.all([
           OptionsFactory.createOptionSet(getState().config, parent),
           OptionsApi.fetchOptions('index'),
-        ]).then(([element, options]) => ({
-            element, parent, options
+          ConfigApi.fetchPlugins('index', { plugin_type: 'optionset_provider' })
+          ]).then(([element, options, plugins]) => ({
+            element, parent, options, plugins
           }))
         break
 

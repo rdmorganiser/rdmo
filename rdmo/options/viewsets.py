@@ -55,6 +55,7 @@ class OptionSetViewSet(ModelViewSet):
                 'optionset_options__option',
                 'conditions',
                 'questions',
+                'plugins',
                 'editors',
             )
 
