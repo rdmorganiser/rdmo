@@ -45,6 +45,11 @@ OPTIONSET_URIS = {
     ],
     "http://example.com/terms/options/plugin": []
 }
+OPTIONSET_PLUGIN_URIS = {
+    "http://example.com/terms/options/plugin": [
+        "http://example.com/terms/plugins/testing/optionset-provider"
+    ]
+}
 LEGACY_SKIP_URIS = [
     "http://example.com/terms/options/one_two_three_other/textarea"
 ]
@@ -69,6 +74,10 @@ def test_create_optionsets(db, settings, delete_all_objects):
         db_ordered_options_uris = db_optionset.options.filter(uri__in=options_uris).order_by(
                                         'option_optionsets__order').values_list('uri',flat=True)
         assert options_uris == list(db_ordered_options_uris)
+    for optionset_uri, plugin_uris in OPTIONSET_PLUGIN_URIS.items():
+        db_optionset = OptionSet.objects.get(uri=optionset_uri)
+        db_plugin_uris = list(db_optionset.plugins.values_list('uri', flat=True))
+        assert db_plugin_uris == plugin_uris
 
 def test_update_optionsets(db, settings, delete_all_objects):
     delete_all_objects(OptionSet, Option)
