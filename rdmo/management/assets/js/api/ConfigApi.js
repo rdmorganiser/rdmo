@@ -4,9 +4,13 @@ import BaseApi from 'rdmo/core/assets/js/api/BaseApi'
 
 class ConfigApi extends BaseApi {
 
-  static fetchPlugins(action) {
+  static fetchPlugins(action, params = {}) {
     let url = '/api/v1/config/plugins/'
     if (action == 'index') url += 'index/'
+        const searchParams = new URLSearchParams(params)
+        if ([...searchParams].length) {
+          url += `?${searchParams.toString()}`
+    }
     return this.get(url)
   }
 
