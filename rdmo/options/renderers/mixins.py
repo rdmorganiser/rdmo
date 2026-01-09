@@ -25,6 +25,11 @@ class OptionSetRendererMixin:
                 self.render_text_element(xml, 'condition', {'dc:uri': condition['uri']}, None)
             xml.endElement('conditions')
 
+            xml.startElement('plugins', {})
+            for plugin in optionset.get('plugins', []):
+                self.render_text_element(xml, 'plugin', {'dc:uri': plugin['uri']}, None)
+            xml.endElement('plugins')
+
             xml.endElement('optionset')
 
         for optionset_option in optionset['optionset_options']:

@@ -108,7 +108,8 @@ class OptionSetViewSet(ModelViewSet):
         return {
             'attributes': full or is_truthy(self.request.GET.get('attributes')),
             'conditions': full or is_truthy(self.request.GET.get('conditions')),
-            'options': full or is_truthy(self.request.GET.get('options'))
+            'options': full or is_truthy(self.request.GET.get('options')),
+            'plugins': full or is_truthy(request.GET.get('plugins')),
         }
 
     def get_export_serializer_context(self, optionsets):
