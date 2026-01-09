@@ -1,4 +1,6 @@
 
+import xml.etree.ElementTree as et
+
 import pytest
 
 from django.urls import reverse
@@ -36,6 +38,7 @@ urlnames = {
     'index': 'v1-config:plugin-index',
     'detail': 'v1-config:plugin-detail',
     'export': 'v1-config:plugin-export',
+    'detail_export': 'v1-config:plugin-detail-export',
 }
 
 export_formats = ('xml', 'html')
@@ -60,6 +63,30 @@ def test_index(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('export_format', export_formats)
+def test_export(db, client, username, password, export_format):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['export']) + export_format + '/'
+    response = client.get(url)
+    assert response.status_code == status_map['list'][username], response.content
+
+    if response.status_code == 200 and export_format == 'xml':
+        root = et.fromstring(response.content)
+        assert root.tag == 'rdmo'
+        for child in root:
+            assert child.tag in ['plugin']
+
+
+def test_export_search(db, client):
+    client.login(username='editor', password='editor')
+
+    url = reverse(urlnames['export']) + 'xml/?search=testing'
+    response = client.get(url)
+    assert response.status_code == status_map['list']['editor'], response.content
+
+
+@pytest.mark.parametrize('username,password', users)
 def test_detail(db, client, username, password):
     client.login(username=username, password=password)
     instances = Plugin.objects.all()
@@ -68,6 +95,23 @@ def test_detail(db, client, username, password):
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.get(url)
         assert response.status_code == status_map['detail'][username], response.json()
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('export_format', export_formats)
+def test_detail_export(db, client, username, password, export_format):
+    client.login(username=username, password=password)
+    instance = Plugin.objects.first()
+
+    url = reverse(urlnames['detail_export'], args=[instance.pk]) + export_format + '/'
+    response = client.get(url)
+    assert response.status_code == status_map['detail'][username], response.content
+
+    if response.status_code == 200 and export_format == 'xml':
+        root = et.fromstring(response.content)
+        assert root.tag == 'rdmo'
+        for child in root:
+            assert child.tag in ['plugin']
 
 
 @pytest.mark.parametrize('username,password', users)

@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from rdmo.conditions.serializers.export import ConditionExportSerializer
+from rdmo.config.serializers.export import PluginExportSerializer
 from rdmo.core.serializers import TranslationSerializerMixin
 
 from ..models import Option, OptionSet, OptionSetOption
@@ -41,6 +42,7 @@ class OptionSetExportSerializer(serializers.ModelSerializer):
 
     optionset_options = OptionSetOptionExportSerializer(many=True)
     conditions = ConditionExportSerializer(many=True)
+    plugins = PluginExportSerializer(many=True)
 
     class Meta:
         model = OptionSet

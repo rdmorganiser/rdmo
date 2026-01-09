@@ -131,6 +131,8 @@
 		<dc:comment/>
 		<options/>
 		<conditions/>
-        <plugins/> # TODO needs the simple plugin
+        <plugins>
+		    <plugin dc:uri="http://example.com/terms/plugins/testing/optionset-provider" order="1"/>
+		</plugins>
 	</optionset>
 </rdmo>
