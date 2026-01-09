@@ -13,9 +13,8 @@ import_helper_optionset = ElementImportHelper(
     validators=(OptionSetLockedValidator, OptionSetUniqueURIValidator),
     extra_fields=(
         ExtraFieldHelper(field_name='order'),
-        ExtraFieldHelper(field_name='provider_key', value=''),
     ),
-    m2m_instance_fields=('conditions', ),
+    m2m_instance_fields=('conditions', 'plugins'),
     m2m_through_instance_fields=[
         ThroughInstanceMapper(
             field_name='options',

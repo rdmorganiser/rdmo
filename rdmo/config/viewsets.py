@@ -30,6 +30,7 @@ class PluginViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
         'uri_prefix',
         'uri_path',
         'comment',
+        'plugin_type',
         'sites',
         'editors'
     )

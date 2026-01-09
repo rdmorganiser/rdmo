@@ -134,7 +134,8 @@ def test_create_optionset(db, client, username, password):
                 'comment': instance.comment,
                 'text_en': instance.text_lang1,
                 'text_de': instance.text_lang2,
-                'optionsets': [optionset.id]
+                'optionsets': [optionset.id],
+                'plugins': [3],
             }
             response = client.post(url, data, content_type='application/json')
             assert response.status_code == status_map['create'][username], response.json()

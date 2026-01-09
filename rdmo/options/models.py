@@ -47,11 +47,6 @@ class OptionSet(models.Model):
         verbose_name=_('Editors'),
         help_text=_('The sites that can edit this option set (in a multi site setup).')
     )
-    provider_key = models.SlugField(
-        max_length=128, blank=True,
-        verbose_name=_('Provider'),
-        help_text=_('The provider for this optionset. If set, it will create dynamic options for this optionset.')
-    )
     options = models.ManyToManyField(
         'Option', through='OptionSetOption', blank=True, related_name='optionsets',
         verbose_name=_('Options'),

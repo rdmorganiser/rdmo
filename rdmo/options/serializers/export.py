@@ -50,7 +50,7 @@ class OptionSetExportSerializer(serializers.ModelSerializer):
             'uri_path',
             'comment',
             'order',
-            'provider_key',
             'optionset_options',
-            'conditions'
+            'conditions',
+            'plugins',
         )
