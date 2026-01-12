@@ -118,9 +118,9 @@ def test_setup_plugins_merge_legacy_prioritizes_legacy_and_dedupes(db, settings,
     call_command("setup_plugins", "--from-settings", stdout=stdout, stderr=stderr)
 
     # exactly one instance, with the legacy title
-    qs = Plugin.objects.filter(python_path=dotted)
-    assert qs.count() == 1
-    instance = qs.get()
+    queryset = Plugin.objects.filter(python_path=dotted)
+    assert queryset.count() == 1
+    instance = queryset.get()
     assert instance.title_lang1 == "Legacy Label"
 
 
