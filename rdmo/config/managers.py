@@ -47,38 +47,38 @@ class PluginQuerySet(ForSiteQuerySetMixin, CurrentSiteQuerySetMixin, GroupsQuery
 
     def for_context(self, project=None, plugin_type=None, plugin_types=None,
                     user=None, format=None):
-        qs = self
+        queryset = self
 
         # filter by settings.PLUGINS
-        qs = qs.filter_for_settings()
+        queryset = queryset.filter_for_settings()
 
         # filter by project .site,.catalog and .groups
         if project is not None:
-            qs = qs.filter_for_project(project)
+            queryset = queryset.filter_for_project(project)
 
         # filter by availability
         if user is not None:
-            qs = qs.filter_availability(user)
+            queryset = queryset.filter_availability(user)
         else:
-            qs = qs.filter(available=True)
+            queryset = queryset.filter(available=True)
 
         # filter by current site
-        qs = qs.filter_current_site()
+        queryset = queryset.filter_current_site()
 
         # filter by optional plugin type(s)
         if plugin_type is not None and plugin_types is not None:
             raise ValueError('Pass either plugin_type or plugin_types, not both.')
 
         if plugin_type is not None:
-            qs = qs.filter(plugin_type=plugin_type)
+            queryset = queryset.filter(plugin_type=plugin_type)
         elif plugin_types is not None:
-            qs = qs.filter(plugin_type__in=plugin_types)
+            queryset = queryset.filter(plugin_type__in=plugin_types)
 
         # filter by optional format
         if format is not None:
-            qs = qs.filter_for_format(format)
+            queryset = queryset.filter_for_format(format)
 
-        return qs
+        return queryset
 
 
 class PluginManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityManagerMixin, models.Manager):
