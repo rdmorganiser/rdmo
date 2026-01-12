@@ -29,6 +29,7 @@ from rdmo.questions.models import Catalog, Page, Question, QuestionSet
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
+from ..config.constants import PLUGIN_TYPES
 from .filters import (
     AttributeFilterBackend,
     OptionFilterBackend,
@@ -59,6 +60,7 @@ from .serializers.v1 import (
     IssueSerializer,
     MembershipSerializer,
     ProjectCopySerializer,
+    ProjectImportPluginSerializer,
     ProjectIntegrationSerializer,
     ProjectInviteSerializer,
     ProjectInviteUpdateSerializer,
@@ -395,17 +397,14 @@ class ProjectViewSet(ModelViewSet):
 
     @action(detail=False, url_path='upload-accept', permission_classes=(IsAuthenticated, ))
     def upload_accept(self, request):
-        return Response(get_upload_accept())
+        plugins = Plugin.objects.for_context(plugin_type=PLUGIN_TYPES.PROJECT_IMPORT, user=self.request.user)
+        return Response(get_upload_accept(plugins))
 
     @action(detail=False, permission_classes=(IsAuthenticated, ))
     def imports(self, request):
-        plugins = Plugin.objects.for_context(plugin_type="project_import", user=request.user)
-        return Response([{
-            "key": plugin.url_name,  # url_name or uri_path?
-            "label": plugin.title,
-            "class_name": plugin.python_path,
-            "href": reverse('project_create_import', args=[plugin.url_name]),
-        } for plugin in plugins])
+        plugins = Plugin.objects.for_context(plugin_type=PLUGIN_TYPES.PROJECT_IMPORT, user=request.user)
+        serializer = ProjectImportPluginSerializer(plugins, many=True)
+        return Response(serializer.data)
 
     def perform_create(self, serializer):
         project = serializer.save(site=get_current_site(self.request))

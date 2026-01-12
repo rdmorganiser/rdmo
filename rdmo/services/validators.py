@@ -8,11 +8,11 @@ class ProviderValidator:
 
     def __call__(self, data):
         provider_key = data.get('provider_key')
-        plugins = Plugin.objects.for_context(
+        plugin = Plugin.objects.for_context(
             plugin_type=PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER,
             format=provider_key
-        )
-        provider = plugins.first().initialize_class() if plugins else None
+        ).first()
+        provider = plugin.initialize_class() if plugin else None
         if provider is None:
             raise ValidationError({
                 'provider_key': 'Please provide a valid provider.'

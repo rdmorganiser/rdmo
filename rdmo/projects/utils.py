@@ -1,5 +1,4 @@
 import logging
-import mimetypes
 from collections import defaultdict
 from pathlib import Path
 
@@ -11,8 +10,6 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.timezone import now
 
-from rdmo.config.constants import PLUGIN_TYPES
-from rdmo.config.models import Plugin
 from rdmo.core.mail import send_mail
 from rdmo.core.utils import remove_double_newlines
 from rdmo.tasks.managers import TaskQuerySet
@@ -283,32 +280,14 @@ def set_context_querystring_with_filter_and_page(context: dict) -> dict:
     return context
 
 
-def get_upload_accept(project=None):
+def get_upload_accept(plugins):
     accept = defaultdict(set)
-    for plugin in Plugin.objects.for_context(plugin_type=PLUGIN_TYPES.PROJECT_IMPORT, project=project):
-        plugin_meta = plugin.plugin_meta or {}
-        if 'accept' in plugin_meta:
-            plugin_accept = plugin_meta.get('accept')
-        else:
-            plugin_accept = None
-
-        if isinstance(plugin_accept, dict):
-            for mime_type, suffixes in plugin_accept.items():
-                accept[mime_type].update(suffixes)
-
-        elif isinstance(plugin_accept, str):
-            # legacy fallback for pre 2.3.0 RDMO, e.g. `accept = '.xml'`
-            suffix = plugin_accept
-            mime_type, _encoding = mimetypes.guess_type(f'example{suffix}')
-            if mime_type:
-                accept[mime_type].update([suffix])
-
-        elif plugin_meta.get('upload') is True:
-            # if one of the plugins does not have the accept field, but is marked as upload plugin
-            # all file types are allowed
+    for plugin in plugins:
+        if plugin.upload_accept is None:
             return {}
-    return accept
-
+        for mime_type, suffixes in plugin.upload_accept.items():
+            accept[mime_type].update(suffixes)
+    return {mime_type: sorted(suffixes) for mime_type, suffixes in accept.items()}
 
 def compute_set_prefix_from_set_value(set_value, value):
     set_prefix_length = len(set_value.set_prefix.split('|')) if set_value.set_prefix else 0
