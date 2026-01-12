@@ -1,6 +1,7 @@
 from collections import defaultdict
 
 from django.core.checks import Warning, register
+from django.utils.module_loading import import_string
 
 
 @register()
@@ -38,7 +39,7 @@ def deprecated_plugin_settings_check(app_configs, **kwargs):
                  f"\n{repr_new_settings(_python_paths)}",
         ))
         # If both PLUGINS and any legacy key exist
-        if hasattr(settings, "PLUGINS"):
+        if settings.PLUGINS:
             issues.append(Warning(
                 "PLUGINS is set in addition to legacy settings; the legacy settings are ignored.",
                 id="rdmo.config.W002",
@@ -58,3 +59,20 @@ def repr_new_settings(python_paths) -> str:
         msg += f"\n\t{python_path}, "
     msg += "\n]"
     return msg
+
+
+@register()
+def plugins_importable_check(app_configs, **kwargs):
+    from django.conf import settings
+
+    issues = []
+    for plugin_path in settings.PLUGINS:
+        try:
+            import_string(plugin_path)
+        except ImportError as exc:
+            issues.append(Warning(
+                f"Plugin import failed: {plugin_path} ({exc})",
+                id="rdmo.config.W003",
+                hint="Ensure the plugin path is valid and the module is installed.",
+            ))
+    return issues

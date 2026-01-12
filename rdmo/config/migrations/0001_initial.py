@@ -40,6 +40,7 @@ class Migration(migrations.Migration):
                 ('available', models.BooleanField(default=True, help_text='Designates whether this plugin is generally available for projects.', verbose_name='Available')),
                 ('python_path', models.CharField(help_text='Python dotted path to the plugin class, e.g. "rdmo_plugins_provider.module.PluginClass"', max_length=512, verbose_name='Python path')),
                 ('plugin_settings', models.JSONField(blank=True, default=dict, help_text='Contains the settings for this plugin in JSON format.', verbose_name='Plugin settings')),
+                ('plugin_meta', models.JSONField(blank=True, default=dict, editable=False, help_text='Contains metadata derived from the plugin class.', verbose_name='Plugin metadata')),
                 ('plugin_type', models.SlugField(blank=True, default='', editable=False, help_text='The type of plugin this is, e.g. "project_export".', max_length=128, verbose_name='Plugin type')),
                 ('url_name', models.SlugField(blank=True, default='', help_text='The url_name for this plugin.', max_length=128, verbose_name='URL name')),
                 ('catalogs', models.ManyToManyField(blank=True, help_text='The catalogs this plugin can be used with. An empty list implies that this plugin can be used with every catalog.', to='questions.catalog', verbose_name='Catalogs')),

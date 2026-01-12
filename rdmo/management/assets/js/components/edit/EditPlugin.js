@@ -122,6 +122,9 @@ const EditPlugin = ({ config, plugin, elements, elementActions}) => {
 
         <JsonField config={config} element={plugin} field="plugin_settings"
                    onChange={updatePlugin} />
+
+        <JsonField config={config} element={plugin} field="plugin_meta"
+                   disabled />
       </div>
 
       <div className="panel-footer">
