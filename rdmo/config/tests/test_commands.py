@@ -57,7 +57,7 @@ def test_command_setup_plugins_basic_from_settings(db, settings, clear_first, dr
         Plugin.objects.all().delete()
 
     stdout, stderr = io.StringIO(), io.StringIO()
-    args = ("--from-settings", "--dry-run") if dry_run else ("--from-settings",)
+    args = ("--dry-run",) if dry_run else []
     call_command('setup_plugins', *args, stdout=stdout, stderr=stderr)
 
     instances = Plugin.objects.all()
@@ -100,7 +100,7 @@ def test_setup_plugins_dry_run_never_raises(db, settings, monkeypatch):
 
     stdout, stderr = io.StringIO(), io.StringIO()
     # should NOT raise CommandError now
-    call_command("setup_plugins", "--dry-run", "--from-settings", stdout=stdout, stderr=stderr)
+    call_command("setup_plugins", "--dry-run", stdout=stdout, stderr=stderr)
 
     out = stdout.getvalue().lower()
     assert "dry-run complete" in out
@@ -115,7 +115,7 @@ def test_setup_plugins_merge_legacy_prioritizes_legacy_and_dedupes(db, settings,
     settings.PLUGINS = [dotted]
 
     stdout, stderr = io.StringIO(), io.StringIO()
-    call_command("setup_plugins", "--from-settings", stdout=stdout, stderr=stderr)
+    call_command("setup_plugins", stdout=stdout, stderr=stderr)
 
     # exactly one instance, with the legacy title
     queryset = Plugin.objects.filter(python_path=dotted)
@@ -142,7 +142,7 @@ def test_setup_plugins_validate_failure(db, settings):
     settings.PLUGINS = ["nope.this.module.DoesNotExist"]
 
     with pytest.raises(CommandError):
-        call_command("setup_plugins", "--from-settings", stdout=io.StringIO(), stderr=io.StringIO())
+        call_command("setup_plugins", stdout=io.StringIO(), stderr=io.StringIO())
 
     assert not Plugin.objects.filter(python_path="nope.this.module.DoesNotExist").exists()
 
@@ -152,10 +152,4 @@ def test_setup_plugins_clear_only_dry_run_is_success_no_raise(db):
     stdout = io.StringIO()
     call_command("setup_plugins", "--clear", "--dry-run", stdout=stdout, stderr=io.StringIO())
     txt = stdout.getvalue().lower()
-    assert "clear completed" in txt
-    assert "dry-run" in txt
-
-
-def test_setup_plugins_no_sources_raises(db):
-    with pytest.raises(CommandError):
-        call_command("setup_plugins", stdout=io.StringIO(), stderr=io.StringIO())
+    assert "dry-run complete" in txt

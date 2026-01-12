@@ -130,11 +130,6 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
-            "--from-settings",
-            action="store_true",
-            help=_("Import Plugins from legacy settings and current settings.PLUGINS."),
-        )
-        parser.add_argument(
             "--replace",
             action="store_true",
             help=_("Replace existing rows instead of updating Plugin objects."),
@@ -165,16 +160,15 @@ class Command(BaseCommand):
         # Collect plugin declarations
         plugins_from_settings: list[dict] = []
 
-        if options["from_settings"]:
-            legacy_plugins = get_plugins_from_legacy_settings()
-            try:
-                plugins = get_plugins_from_settings()
-            except ValidationError as e:
-                raise CommandError("\n".join(e.messages)) from e
+        legacy_plugins = get_plugins_from_legacy_settings()
+        try:
+            plugins = get_plugins_from_settings()
+        except ValidationError as e:
+            raise CommandError("\n".join(e.messages)) from e
 
-            plugins_from_settings.extend(
-                merge_legacy_and_current_plugins(legacy_plugins, plugins)  # prioritize legacy, skip duplicates
-            )
+        plugins_from_settings.extend(
+            merge_legacy_and_current_plugins(legacy_plugins, plugins)  # prioritize legacy, skip duplicates
+        )
 
         # If no import source and only --clear, we are done.
         if not plugins_from_settings:
@@ -186,13 +180,12 @@ class Command(BaseCommand):
                     self.stdout.write(self.style.SUCCESS("✔ clear completed."))
                 return
             raise CommandError(
-                "Nothing to do. Use --clear and/or --from-settings."
+                "Nothing to do."
             )
 
-        if options["from_settings"]:
-            self.stdout.write(self.style.WARNING(
-                "Reading legacy plugin settings. These are deprecated and will be removed in a future release."
-            ))
+        self.stdout.write(self.style.WARNING(
+            "Reading legacy plugin settings. These are deprecated and will be removed in a future release."
+        ))
 
         # Deterministic order for output
         plugins_from_settings.sort(key=lambda x: (x["python_path"], x["uri_path"] or ""))
