@@ -24,6 +24,7 @@
     "help_lang5": "",
     "available": false,
     "python_path": "plugins.project_export.exports.SimpleExportPlugin",
+    "plugin_meta": {},
     "plugin_type": "project_export",
     "plugin_settings": {},
     "sites": [],
@@ -57,6 +58,14 @@
     "help_lang5": "",
     "available": false,
     "python_path": "plugins.project_import.imports.SimpleImportPlugin",
+    "plugin_meta": {
+      "accept": {
+        "text/plain": [
+          ".txt"
+        ]
+      },
+      "upload": true
+    },
     "plugin_type": "project_import",
     "plugin_settings": {},
     "sites": [],
@@ -91,6 +100,10 @@
     "available": false,
     "python_path": "plugins.optionset_providers.providers.SimpleProvider",
     "plugin_type": "optionset_provider",
+    "plugin_meta": {
+      "search": false,
+      "refresh": true
+    },
     "plugin_settings": {},
     "sites": [],
     "editors": [],
@@ -123,6 +136,7 @@
     "help_lang5": "",
     "available": true,
     "python_path": "rdmo.projects.exports.RDMOXMLExport",
+    "plugin_meta": {},
     "plugin_type": "project_export",
     "plugin_settings": {},
     "sites": [],
@@ -156,6 +170,9 @@
     "help_lang5": "",
     "available": true,
     "python_path": "rdmo.projects.exports.CSVCommaExport",
+    "plugin_meta": {
+      "delimiter": ","
+    },
     "plugin_type": "project_export",
     "plugin_settings": {},
     "sites": [],
@@ -189,6 +206,9 @@
     "help_lang5": "",
     "available": true,
     "python_path": "rdmo.projects.exports.CSVSemicolonExport",
+    "plugin_meta": {
+      "delimiter": ";"
+    },
     "plugin_type": "project_export",
     "plugin_settings": {},
     "sites": [],
@@ -221,7 +241,7 @@
     "help_lang4": "",
     "help_lang5": "",
     "available": true,
-    "python_path": "rdmo.projects.exports.CSVSemicolonExport",
+    "python_path": "rdmo.projects.exports.JSONExport",
     "plugin_type": "project_export",
     "plugin_settings": {},
     "sites": [],
@@ -255,6 +275,14 @@
     "help_lang5": "",
     "available": true,
     "python_path": "rdmo.projects.imports.RDMOXMLImport",
+    "plugin_meta": {
+      "accept": {
+        "application/xml": [
+          ".xml"
+        ]
+      },
+      "upload": true
+    },
     "plugin_type": "project_import",
     "plugin_settings": {},
     "sites": [],
@@ -288,6 +316,10 @@
     "help_lang5": "",
     "available": true,
     "python_path": "rdmo.projects.imports.URLImport",
+    "plugin_meta": {
+      "accept": false,
+      "upload": false
+    },
     "plugin_type": "project_import",
     "plugin_settings": {},
     "sites": [],
@@ -321,6 +353,7 @@
       "help_lang5": "",
       "available": true,
       "python_path": "plugins.project_issue_providers.providers.SimpleIssueProvider",
+      "plugin_meta": {},
       "plugin_type": "project_issue_provider",
       "plugin_settings": {},
       "sites": [],
