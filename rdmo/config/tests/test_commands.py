@@ -80,7 +80,7 @@ def _install_dummy_plugin(monkeypatch, dotted: str = "dummy_mod.DummyPlugin", **
     """
     module_name, class_name = dotted.rsplit(".", 1)
     mod = types.ModuleType(module_name)
-    cls = type(class_name, (), {})  # simple new-style class
+    cls = type(class_name, (), {"__module__": module_name})
     # sensible defaults that the command can read if it imports the class
     cls.key = attrs.get("key", "dummy_key")
     cls.label = attrs.get("label", "Dummy Label")
@@ -109,8 +109,7 @@ def test_setup_plugins_dry_run_never_raises(db, settings, monkeypatch):
 
 
 def test_setup_plugins_merge_legacy_prioritizes_legacy_and_dedupes(db, settings, monkeypatch):
-    dotted = _install_dummy_plugin(monkeypatch, "dummy_mod.ExamplePlugin", key="example", label="Imported Label")
-
+    dotted = _install_dummy_plugin(monkeypatch, "dummy.mod.ExamplePlugin", key="example", label="Imported Label")
     # legacy tuple wins (compat), PLUGINS contains the same python_path
     settings.PROJECT_EXPORTS = [('example', 'Legacy Label', dotted)]
     settings.PLUGINS = [dotted]

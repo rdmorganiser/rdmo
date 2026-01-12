@@ -9,7 +9,7 @@ import { json } from '@codemirror/lang-json'
 
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
-const JsonField = ({ config, element, field, onChange }) => {
+const JsonField = ({ config, element, field, onChange, disabled = false }) => {
   const id = getId(element, field),
         label = getLabel(config, element, field),
         help = getHelp(config, element, field),
@@ -37,6 +37,9 @@ const JsonField = ({ config, element, field, onChange }) => {
   }
 
   const handleBlur = () => {
+    if (disabled || element.read_only) {
+      return
+    }
     try {
       const parsed = value.trim() ? JSON.parse(value) : {}
       setParseError(false)
@@ -57,7 +60,7 @@ const JsonField = ({ config, element, field, onChange }) => {
         extensions={[json()]}
         onChange={handleChange}
         onBlur={handleBlur}
-        disabled={element.read_only}
+        disabled={element.read_only || disabled}
       />
 
       {help && <p className="help-block">{help}</p>}
@@ -92,7 +95,8 @@ JsonField.propTypes = {
   config: PropTypes.object,
   element: PropTypes.object,
   field: PropTypes.string,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  disabled: PropTypes.bool
 }
 
 export default JsonField

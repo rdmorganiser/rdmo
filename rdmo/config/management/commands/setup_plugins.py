@@ -1,14 +1,70 @@
 from django.conf import settings
+from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 
+from rest_framework.exceptions import ValidationError as RestFrameworkValidationError
+
 from rdmo.config.legacy import get_plugins_from_legacy_settings
 from rdmo.config.models import Plugin
+from rdmo.config.serializers.v1 import PluginSerializer
 from rdmo.config.utils import get_plugins_from_settings
+from rdmo.core.utils import get_languages
 
+
+def _ensure_plugin_meta(plugin: Plugin, plugin_class, *, dry_run: bool) -> str | None:
+    if plugin.plugin_meta:
+        return None
+
+    if dry_run:
+        return "would refresh plugin_meta"
+
+    plugin.plugin_meta = plugin.build_plugin_meta(plugin_class)
+    plugin.save(update_fields=['plugin_meta'])
+    return "refreshed plugin_meta"
+
+
+def _validate_declared_plugin(plugin: Plugin | None, declared: dict) -> None:
+    python_path = declared.get('python_path')
+    restore_plugins = None
+    if python_path and python_path not in settings.PLUGINS:
+        restore_plugins = list(settings.PLUGINS)
+        settings.PLUGINS = [*restore_plugins, python_path]
+
+    serializer_data = {
+        'uri_prefix': declared.get('uri_prefix'),
+        'uri_path': declared.get('uri_path'),
+        'python_path': declared.get('python_path'),
+        'url_name': declared.get('url_name'),
+        'available': declared.get('available', True),
+    }
+    if declared.get('title'):
+        languages = get_languages()
+        if languages:
+            serializer_data[f"title_{languages[0][0]}"] = declared.get('title')
+    serializer_data = {key: value for key, value in serializer_data.items() if value is not None}
+    serializer = PluginSerializer(instance=plugin, data=serializer_data, partial=True)
+
+    if python_path and python_path not in serializer.fields['python_path'].choices:
+        serializer.fields['python_path'].choices = [
+            *serializer.fields['python_path'].choices,
+            python_path,
+        ]
+
+    try:
+        serializer.is_valid(raise_exception=True)
+    except RestFrameworkValidationError as exc:
+        messages = []
+        for field, errors in exc.detail.items():
+            for error in errors:
+                messages.append(f"{field}: {error}")
+        raise CommandError("Validation failed: " + "; ".join(messages)) from exc
+    finally:
+        if restore_plugins is not None:
+            settings.PLUGINS = restore_plugins
 
 def save_declared_plugin(declared: dict, *, replace: bool, dry_run: bool) -> str:
     uri_prefix = declared["uri_prefix"] or getattr(settings, "DEFAULT_URI_PREFIX", None)
@@ -21,6 +77,14 @@ def save_declared_plugin(declared: dict, *, replace: bool, dry_run: bool) -> str
         plugin = Plugin.objects.get(uri_prefix=uri_prefix, uri_path=uri_path)
         exists = True
         if not replace:
+            try:
+                plugin_class = import_string(plugin.python_path)
+            except ImportError:
+                return f"skipped(exists): {plugin.python_path} -> {plugin.uri}"
+
+            refresh_msg = _ensure_plugin_meta(plugin, plugin_class, dry_run=dry_run)
+            if refresh_msg:
+                return f"skipped(exists, {refresh_msg}): {plugin.python_path} -> {plugin.uri}"
             return f"skipped(exists): {plugin.python_path} -> {plugin.uri}"
     except Plugin.DoesNotExist:
         plugin = Plugin(uri_prefix=uri_prefix, uri_path=uri_path)
@@ -32,6 +96,8 @@ def save_declared_plugin(declared: dict, *, replace: bool, dry_run: bool) -> str
         plugin.url_name = declared["url_name"]
     plugin.available = True
 
+    _validate_declared_plugin(plugin, declared)
+
     action = "replaced" if (exists and replace) else ("created" if not exists else "updated")
     if dry_run:
         uri = f"{uri_prefix}/plugins/{uri_path}"
@@ -39,6 +105,11 @@ def save_declared_plugin(declared: dict, *, replace: bool, dry_run: bool) -> str
 
     plugin.full_clean()
     plugin.save()
+    if settings.MULTISITE:
+        current_site = Site.objects.get_current()
+        plugin.editors.set([current_site])
+        plugin.sites.set([current_site])
+
     return f"{action}: {plugin.python_path} -> {plugin.uri}"
 
 

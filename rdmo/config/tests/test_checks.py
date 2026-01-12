@@ -1,7 +1,7 @@
 
 from django.core.checks import Warning
 
-from rdmo.config.checks import deprecated_plugin_settings_check, repr_new_settings
+from rdmo.config.checks import deprecated_plugin_settings_check, plugins_importable_check, repr_new_settings
 
 LEGACY_KEYS = [
     "PROJECT_EXPORTS",
@@ -18,7 +18,7 @@ def _clear_legacy_settings(settings):
     Helper to make sure none of the legacy settings are set.
     This keeps the tests independent from the global test settings.
     """
-    for key in [*LEGACY_KEYS, "PLUGINS"]:
+    for key in [*LEGACY_KEYS]:
         if hasattr(settings, key):
             delattr(settings, key)
 
@@ -39,9 +39,6 @@ def test_deprecated_plugin_settings_with_legacy_only(enable_legacy_plugins, sett
     With only legacy settings configured, we expect a single W001 warning
     and a hint that includes the PLUGINS example with python paths.
     """
-    # make sure PLUGINS is not set
-    if hasattr(settings, "PLUGINS"):
-        delattr(settings, "PLUGINS")
 
     issues = deprecated_plugin_settings_check(app_configs=None)
 
@@ -94,3 +91,19 @@ def test_repr_new_settings_formats_single_and_multiple_paths():
     assert "PLUGINS" in multi
     assert "a.b.Class" in multi
     assert "c.d.Other" in multi
+
+
+def test_plugins_importable_check_reports_invalid_plugin(settings):
+    _clear_legacy_settings(settings)
+
+    settings.PLUGINS = [
+        "plugins.project_export.exports.SimpleExportPlugin",
+        "plugins.plugin.does.not.Exist",
+    ]
+
+    issues = plugins_importable_check(app_configs=None)
+
+    assert len(issues) == 1
+    issue = issues[0]
+    assert isinstance(issue, Warning)
+    assert issue.id == "rdmo.config.W003"

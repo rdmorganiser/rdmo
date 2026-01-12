@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 @pytest.fixture
 def enable_legacy_plugins(settings):
 
-    delattr(settings, 'PLUGINS')
+    settings.PLUGINS = []
     # settings.INSTALLED_APPS has 'plugins' already
     # insert the relevant legacy plugin-tuples in settings,
     # e.g. PROJECT_EXPORTS, PROJECT_IMPORTS, OPTIONSET_PROVIDERS

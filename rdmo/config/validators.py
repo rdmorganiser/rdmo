@@ -4,7 +4,9 @@ from django.utils.translation import gettext_lazy as _
 from rdmo.core.utils import get_plugin_python_paths
 from rdmo.core.validators import InstanceValidator, LockedValidator, UniqueURIValidator
 
+from .constants import PLUGIN_TYPES
 from .models import Plugin
+from .utils import get_plugin_type_from_class
 
 
 class PluginUniqueURIValidator(UniqueURIValidator):
@@ -39,4 +41,34 @@ class PluginPythonPathValidator(InstanceValidator):
             except (ModuleNotFoundError, ImportError):
                 self.raise_validation_error({
                     'python_path': _("This path could not be not imported.")
+                })
+
+
+class PluginURLNameValidator(InstanceValidator):
+
+    model = Plugin
+
+    def __call__(self, data, serializer=None):
+        super().__call__(data, serializer)
+
+        if self.instance:
+            if self.instance.plugin_type:
+                plugin_type = self.instance.plugin_type
+            else:
+                plugin_type = get_plugin_type_from_class(self.instance.get_class())
+        else:
+            plugin_type = data.get('plugin_type')
+
+        try:
+            plugin_type = PLUGIN_TYPES(plugin_type)
+        except ValueError:
+            return
+
+        if plugin_type == PLUGIN_TYPES.PROJECT_IMPORT:
+            url_name = data.get('url_name')
+            if url_name is None and self.instance:
+                url_name = self.instance.url_name
+            if not url_name:
+                self.raise_validation_error({
+                    'url_name': _("This field is required for project import plugins.")
                 })
