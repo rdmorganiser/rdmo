@@ -11,6 +11,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.timezone import now
 
+from rdmo.config.constants import PLUGIN_TYPES
 from rdmo.config.models import Plugin
 from rdmo.core.mail import send_mail
 from rdmo.core.utils import remove_double_newlines
@@ -283,29 +284,29 @@ def set_context_querystring_with_filter_and_page(context: dict) -> dict:
 
 
 def get_upload_accept(project=None):
-
     accept = defaultdict(set)
-    for plugin in Plugin.objects.for_context(plugin_type="project_import", project=project):
-        import_plugin = plugin.initialize_class()
-        if import_plugin is None:
-            continue
+    for plugin in Plugin.objects.for_context(plugin_type=PLUGIN_TYPES.PROJECT_IMPORT, project=project):
+        plugin_meta = plugin.plugin_meta or {}
+        if 'accept' in plugin_meta:
+            plugin_accept = plugin_meta.get('accept')
+        else:
+            plugin_accept = None
 
-        if isinstance(import_plugin.accept, dict):
-            for mime_type, suffixes in import_plugin.accept.items():
+        if isinstance(plugin_accept, dict):
+            for mime_type, suffixes in plugin_accept.items():
                 accept[mime_type].update(suffixes)
 
-        elif isinstance(import_plugin.accept, str):
+        elif isinstance(plugin_accept, str):
             # legacy fallback for pre 2.3.0 RDMO, e.g. `accept = '.xml'`
-            suffix = import_plugin.accept
+            suffix = plugin_accept
             mime_type, _encoding = mimetypes.guess_type(f'example{suffix}')
             if mime_type:
                 accept[mime_type].update([suffix])
 
-        elif import_plugin.upload is True:
+        elif plugin_meta.get('upload') is True:
             # if one of the plugins does not have the accept field, but is marked as upload plugin
             # all file types are allowed
             return {}
-
     return accept
 
 

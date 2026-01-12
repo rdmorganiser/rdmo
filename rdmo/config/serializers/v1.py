@@ -10,7 +10,12 @@ from rdmo.core.serializers import (
 from rdmo.core.utils import get_plugin_python_paths
 
 from ..models import Plugin
-from ..validators import PluginLockedValidator, PluginPythonPathValidator, PluginUniqueURIValidator
+from ..validators import (
+    PluginLockedValidator,
+    PluginPythonPathValidator,
+    PluginUniqueURIValidator,
+    PluginURLNameValidator,
+)
 
 
 class PluginSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
@@ -26,6 +31,7 @@ class PluginSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
 
     python_path = serializers.ChoiceField(choices=get_plugin_python_paths())
     plugin_type = serializers.SerializerMethodField(read_only=True)
+    plugin_meta = serializers.JSONField(read_only=True)
 
     class Meta:
         model = Plugin
@@ -43,6 +49,7 @@ class PluginSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
             'python_path',
             'plugin_type',
             'plugin_settings',
+            'plugin_meta',
             'catalogs',
             'sites',
             'editors',
@@ -63,6 +70,7 @@ class PluginSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
             PluginUniqueURIValidator(),
             PluginLockedValidator(),
             PluginPythonPathValidator(),
+            PluginURLNameValidator(),
         )
         warning_fields = (
             'title',

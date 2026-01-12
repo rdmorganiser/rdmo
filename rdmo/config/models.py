@@ -129,6 +129,11 @@ class Plugin(Model, TranslationMixin):
         help_text=_('Python dotted path to the plugin class, e.g. "rdmo_plugins_provider.module.PluginClass"'),
 
     )
+    plugin_meta = models.JSONField(
+        blank=True, default=dict, editable=False,
+        verbose_name=_('Plugin metadata'),
+        help_text=_('Contains metadata derived from the plugin class.'),
+    )
     plugin_settings = models.JSONField(
         blank=True, default=dict,
         verbose_name=_('Plugin settings'),
@@ -171,6 +176,8 @@ class Plugin(Model, TranslationMixin):
         except ValueError as e:
             raise RuntimeError(f"Could initialize the plugin from class {plugin_class}: {e}") from e
 
+        self.plugin_meta = self.build_plugin_meta(plugin_class)
+
         super().save(*args, **kwargs)
 
     @property
@@ -201,6 +208,18 @@ class Plugin(Model, TranslationMixin):
 
     def get_class(self):
         return import_string(self.python_path)
+
+    def build_plugin_meta(self, plugin_class):
+        # Collect plugin metadata from class attributes.
+        # Metadata is merged from the plugin class' MRO (so base class defaults are
+        # included, but subclass overrides win) and only includes attributes that
+        # are explicitly defined on the plugin class or its BasePlugin ancestors.
+        meta_attributes = ('accept', 'upload', 'search', 'refresh', 'delimiter')
+        meta = {}
+        for attribute in meta_attributes:
+            if any(attribute in cls.__dict__ for cls in plugin_class.mro()):
+                meta[attribute] = getattr(plugin_class, attribute)
+        return meta
 
     def initialize_class(self):
         cls = self.get_class()

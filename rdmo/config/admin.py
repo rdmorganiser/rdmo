@@ -5,7 +5,12 @@ from rdmo.core.admin import ElementAdminForm
 from rdmo.core.utils import get_language_fields, get_plugin_python_paths
 
 from .models import Plugin
-from .validators import PluginLockedValidator, PluginPythonPathValidator, PluginUniqueURIValidator
+from .validators import (
+    PluginLockedValidator,
+    PluginPythonPathValidator,
+    PluginUniqueURIValidator,
+    PluginURLNameValidator,
+)
 
 
 class PluginAdminForm(ElementAdminForm):
@@ -21,6 +26,7 @@ class PluginAdminForm(ElementAdminForm):
         PluginUniqueURIValidator(self.instance)(self.cleaned_data)
         PluginLockedValidator(self.instance)(self.cleaned_data)
         PluginPythonPathValidator(self.instance)(self.cleaned_data)
+        PluginURLNameValidator(self.instance)(self.cleaned_data)
 
 
 @admin.register(Plugin)
