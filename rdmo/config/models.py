@@ -1,3 +1,4 @@
+import mimetypes
 from inspect import signature
 
 from django.conf import settings
@@ -172,7 +173,7 @@ class Plugin(Model, TranslationMixin):
             raise RuntimeError(f"Could not get plugin type from class {plugin_class}: {e}") from e
 
         try:
-            self.initialize_class()
+            self.initialize_class(plugin_class=plugin_class)
         except ValueError as e:
             raise RuntimeError(f"Could initialize the plugin from class {plugin_class}: {e}") from e
 
@@ -206,6 +207,32 @@ class Plugin(Model, TranslationMixin):
     def has_refresh(self):
         return getattr(self.get_class(), 'refresh', False)
 
+    @property
+    def upload_accept(self):
+        plugin_meta = self.plugin_meta or {}
+        plugin_accept = plugin_meta.get('accept')
+
+        if isinstance(plugin_accept, dict):
+            return {
+                mime_type: set(suffixes)
+                for mime_type, suffixes in plugin_accept.items()
+            }
+
+        if isinstance(plugin_accept, str):
+            # legacy fallback for pre 2.3.0 RDMO, e.g. `accept = '.xml'`
+            suffix = plugin_accept
+            mime_type, _encoding = mimetypes.guess_type(f'example{suffix}')
+            if mime_type:
+                return {mime_type: {suffix}}
+            return {}
+
+        if plugin_meta.get('upload') is True:
+            # if one of the plugins does not have the accept field, but is marked as upload plugin
+            # all file types are allowed
+            return None
+
+        return {}
+
     def get_class(self):
         return import_string(self.python_path)
 
@@ -221,8 +248,8 @@ class Plugin(Model, TranslationMixin):
                 meta[attribute] = getattr(plugin_class, attribute)
         return meta
 
-    def initialize_class(self):
-        cls = self.get_class()
+    def initialize_class(self, plugin_class=None):
+        cls = plugin_class or self.get_class()
         sig = signature(cls)
         if len(sig.parameters) == 0:
             return cls()
