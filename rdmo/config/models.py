@@ -201,16 +201,21 @@ class Plugin(Model, TranslationMixin):
 
     @property
     def has_search(self):
+        plugin_search = self.plugin_meta.get('search')
+        if plugin_search is not None:
+            return plugin_search
         return getattr(self.get_class(), 'search', False)
 
     @property
     def has_refresh(self):
+        plugin_refresh = self.plugin_meta.get('refresh')
+        if plugin_refresh is not None:
+            return plugin_refresh
         return getattr(self.get_class(), 'refresh', False)
 
     @property
     def upload_accept(self):
-        plugin_meta = self.plugin_meta or {}
-        plugin_accept = plugin_meta.get('accept')
+        plugin_accept = self.plugin_meta.get('accept')
 
         if isinstance(plugin_accept, dict):
             return {
@@ -226,7 +231,7 @@ class Plugin(Model, TranslationMixin):
                 return {mime_type: {suffix}}
             return {}
 
-        if plugin_meta.get('upload') is True:
+        if self.plugin_meta.get('upload') is True:
             # if one of the plugins does not have the accept field, but is marked as upload plugin
             # all file types are allowed
             return None
