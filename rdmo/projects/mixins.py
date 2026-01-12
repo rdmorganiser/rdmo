@@ -107,7 +107,7 @@ class ProjectImportMixin:
             }, status=400)
 
         for plugin in Plugin.objects.for_context(
-                plugin_type="project_import", project=current_project,
+                plugin_type=PLUGIN_TYPES.PROJECT_IMPORT, project=current_project,
                 user=self.request.user, format=Path(import_file_name).suffix.lstrip('.')
             ):
             import_plugin = plugin.initialize_class()
