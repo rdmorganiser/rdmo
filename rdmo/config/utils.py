@@ -50,21 +50,26 @@ def get_plugins_from_settings() -> list[dict]:
                 "err": str(e),
             })
             continue
-        # if "SimpleImporter" in python_path:
-        #     breakpoint()
-        url_name = PLUGINS_URL_NAMES.get(python_path, "")
-        if url_name is None:
-            url_name = (
-                getattr(plugin_class, "url_name", "")
-                or getattr(plugin_class, "key", "")
-            )
-        uri_path = getattr(plugin_class, "key", None) or url_name or plugin_class.__name__.lower()
-        title = (getattr(plugin_class, "label", None) or getattr(plugin_class, "title", None)
-                 or plugin_class.__name__)
+
+        url_name = (
+            PLUGINS_URL_NAMES.get(python_path)
+            or getattr(plugin_class, "url_name", None)
+            or getattr(plugin_class, "key", None)
+        )
+        uri_path = (
+            getattr(plugin_class, "uri_path", None)
+            or getattr(plugin_class, "key", None)
+            or url_name or plugin_class.__name__.lower()
+        )
         uri_prefix = (
-                getattr(plugin_class, "uri_prefix", None)
-                or getattr(plugin_class, "default_uri_prefix", None)
-                or settings.DEFAULT_URI_PREFIX
+            getattr(plugin_class, "uri_prefix", None)
+            or getattr(plugin_class, "default_uri_prefix", None)
+            or settings.DEFAULT_URI_PREFIX
+        )
+        title = (
+            getattr(plugin_class, "title", "")
+            or getattr(plugin_class, "label", "")
+            or plugin_class.__name__
         )
 
         plugin_definitions.append({
