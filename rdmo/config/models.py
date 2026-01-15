@@ -11,7 +11,7 @@ from django.utils.translation import gettext_lazy as _
 from rdmo.config.managers import PluginManager
 from rdmo.config.utils import get_plugin_type_from_class
 from rdmo.core.models import Model, TranslationMixin
-from rdmo.core.utils import join_url
+from rdmo.core.utils import get_distribution_name_from_class, get_distribution_version, join_url
 
 
 class Plugin(Model, TranslationMixin):
@@ -246,11 +246,27 @@ class Plugin(Model, TranslationMixin):
         # Metadata is merged from the plugin class' MRO (so base class defaults are
         # included, but subclass overrides win) and only includes attributes that
         # are explicitly defined on the plugin class or its BasePlugin ancestors.
-        meta_attributes = ('accept', 'upload', 'search', 'refresh', 'delimiter')
         meta = {}
-        for attribute in meta_attributes:
-            if any(attribute in cls.__dict__ for cls in plugin_class.mro()):
-                meta[attribute] = getattr(plugin_class, attribute)
+        mro = plugin_class.mro()
+        attrs = settings.PLUGIN_META_ATTRIBUTES
+
+        for attr in attrs:
+            if attr.startswith('distribution_'):
+                continue
+
+            if any(attr in cls.__dict__ for cls in mro):
+                meta[attr] = getattr(plugin_class, attr)
+
+        if 'distribution_name' in attrs or 'distribution_version' in attrs:
+            distribution_name = get_distribution_name_from_class(plugin_class)
+
+            if 'distribution_name' in attrs:
+                meta['distribution_name'] = distribution_name
+
+            if 'distribution_version' in attrs:
+                version = get_distribution_version(distribution_name)
+                meta['distribution_version'] = str(version) if version is not None else None
+
         return meta
 
     def initialize_class(self, plugin_class=None):

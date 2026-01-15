@@ -1,3 +1,5 @@
+from importlib import metadata
+
 import pytest
 
 from rdmo.config.constants import PLUGIN_TYPES
@@ -63,3 +65,19 @@ def test_get_plugins_from_settings_uses_default_uri_prefix(settings):
     for plugin in plugins:
         if plugin['python_path'].startswith('plugins.'):
             assert plugin["uri_prefix"] == "https://rdmorganiser.github.io/terms"
+
+def test_build_plugin_meta_includes_distribution_version(settings, monkeypatch):
+    settings.PLUGIN_META_ATTRIBUTES = ('distribution_name', 'distribution_version')
+
+    class MockPlugin:
+        __module__ = 'mocked_package.plugin'
+
+    monkeypatch.setattr(
+        metadata,
+        'packages_distributions',
+        lambda: {'mocked_package': ['mocked-dist']},
+    )
+    monkeypatch.setattr(metadata, 'version', lambda name: '0.0.1')
+
+    plugin = Plugin()
+    assert plugin.build_plugin_meta(MockPlugin) == {'distribution_name': 'mocked-dist', 'distribution_version': '0.0.1'}
