@@ -3,6 +3,7 @@ import logging
 import os
 import re
 from datetime import datetime
+from importlib import metadata
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -19,6 +20,7 @@ from django.utils.translation import gettext_lazy as _
 import nh3
 from defusedcsv import csv
 from markdown import markdown
+from packaging.version import Version
 
 from .constants import HUMAN2BYTES_MAPPER
 from .pandoc import get_pandoc_content, get_pandoc_content_disposition
@@ -347,3 +349,22 @@ def jsonfield_contains(using: str, field: str, key: str, value) -> models.Q | No
         return models.Q(**{f'{field}__icontains': fragment})
 
     return None
+
+
+def get_distribution_name_from_class(python_class):
+    module = getattr(python_class, "__module__", "")
+    top = module.split(".", 1)[0]
+    if not top:
+        return None
+
+    dist_names = metadata.packages_distributions().get(top, [])
+    return sorted(dist_names)[0] if dist_names else None
+
+
+def get_distribution_version(distribution_name):
+    if not distribution_name:
+        return None
+    try:
+        return Version(metadata.version(distribution_name))
+    except metadata.PackageNotFoundError:
+        return None

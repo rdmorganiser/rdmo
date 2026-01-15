@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from django.utils.module_loading import import_string
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext as _
 
 from rest_framework.exceptions import ValidationError as RestFrameworkValidationError
 
@@ -94,6 +94,8 @@ def save_declared_plugin(declared: dict, *, replace: bool, dry_run: bool) -> str
     plugin.python_path = declared["python_path"]
     if declared["url_name"] is not None:
         plugin.url_name = declared["url_name"]
+    # if not plugin.url_name and "SimpleImport" in plugin.python_path:
+    #     breakpoint()
     plugin.available = True
 
     _validate_declared_plugin(plugin, declared)
