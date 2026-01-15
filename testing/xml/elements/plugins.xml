@@ -19,5 +19,6 @@
     <python_path>plugins.project_import.imports.SimpleImportPlugin</python_path>
     <plugin_settings>{"filetypes": ["xml", "json"], "enabled": false}</plugin_settings>
     <order>1</order>
+    <url_name>simple</url_name>
   </plugin>
 </rdmo>

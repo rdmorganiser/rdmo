@@ -6,6 +6,7 @@ class SimpleImportPlugin(Import):
 
     accept = {"text/plain": [".txt"]}
     default_uri_prefix = "https://rdmorganiser.github.io/terms"
+    url_name = "simple"
 
     def check(self) -> bool:
         # Approve files ending with .txt
