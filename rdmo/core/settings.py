@@ -333,6 +333,16 @@ PLUGINS = [  # introduced in 2.5
     'rdmo.projects.imports.RDMOXMLImport',
 ]
 
+PLUGIN_META_ATTRIBUTES = (
+    'accept',
+    'upload',
+    'search',
+    'refresh',
+    'delimiter',
+    'distribution_name',
+    'distribution_version',
+)
+
 PROJECT_TABLE_PAGE_SIZE = 20
 
 PROJECT_VISIBILITY = True

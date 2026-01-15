@@ -14,8 +14,7 @@ class Command(BaseCommand):
         for plugin in Plugin.objects.order_by('python_path').all():
             try:
                 import_string(plugin.python_path)
-                url_name = f" url_name='{plugin.url_name}'" if plugin.url_name else ""
-                self.stdout.write(self.style.SUCCESS(f"✔ {plugin.python_path}, type={plugin.plugin_type}{url_name}."))
+                self.stdout.write(self.style.SUCCESS(f"✔ {plugin.python_path}, type={plugin.plugin_type}."))
             except ImportError as e:
                 if plugin.available:
                     self.stdout.write(self.style.ERROR(

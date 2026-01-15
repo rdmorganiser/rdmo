@@ -33,7 +33,6 @@ def get_plugins_from_settings() -> list[dict]:
     plugin_definitions = []
     errors = []
     for python_path in settings.PLUGINS:
-        url_name = PLUGINS_URL_NAMES.get(python_path, "")
         try:
             plugin_class = import_string(python_path)
         except ImportError as e:
@@ -51,24 +50,22 @@ def get_plugins_from_settings() -> list[dict]:
                 "err": str(e),
             })
             continue
-
-
-        if plugin_class is not None:
-            uri_path = getattr(plugin_class, "key", None) or url_name or plugin_class.__name__.lower()
-            title = (getattr(plugin_class, "label", None) or getattr(plugin_class, "title", None)
-                     or plugin_class.__name__)
-            uri_prefix = (
-                    getattr(plugin_class, "uri_prefix", None)
-                    or getattr(plugin_class, "default_uri_prefix", None)
-                    or settings.DEFAULT_URI_PREFIX
+        # if "SimpleImporter" in python_path:
+        #     breakpoint()
+        url_name = PLUGINS_URL_NAMES.get(python_path, "")
+        if url_name is None:
+            url_name = (
+                getattr(plugin_class, "url_name", "")
+                or getattr(plugin_class, "key", "")
             )
-        else:
-            title = python_path.split(".")[-1]
-            if url_name:
-                uri_path = url_name
-            else:
-                uri_path = python_path.replace(".", "-")
-            uri_prefix = settings.DEFAULT_URI_PREFIX
+        uri_path = getattr(plugin_class, "key", None) or url_name or plugin_class.__name__.lower()
+        title = (getattr(plugin_class, "label", None) or getattr(plugin_class, "title", None)
+                 or plugin_class.__name__)
+        uri_prefix = (
+                getattr(plugin_class, "uri_prefix", None)
+                or getattr(plugin_class, "default_uri_prefix", None)
+                or settings.DEFAULT_URI_PREFIX
+        )
 
         plugin_definitions.append({
             "title": title,
