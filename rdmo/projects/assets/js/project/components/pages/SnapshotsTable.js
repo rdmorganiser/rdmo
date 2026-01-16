@@ -6,8 +6,7 @@ import { useFormattedDateTime } from 'rdmo/core/assets/js/hooks'
 import { useModal } from 'rdmo/core/assets/js/hooks'
 import { language } from 'rdmo/core/assets/js/utils'
 
-import { setLocation } from '../../actions/projectActions'
-import { buildLocationForView } from '../../utils/location'
+import { navigateDashboard } from '../../actions/projectActions'
 
 import SnapshotModal from './SnapshotModal'
 import SnapshotRollbackModal from './SnapshotRollbackModal'
@@ -17,26 +16,22 @@ const SnapshotsTable = ({ snapshots }) => {
   const { project } = useSelector((state) => state.project.project) || {}
   const perms = project?.permissions || {}
 
-  const { show: showUpdate, open: openUpdate, close: closeUpdate } = useModal()
-  const { show: showRollback, open: openRollback, close: closeRollback } = useModal()
+  const updateModal = useModal()
+  const rollbackModal = useModal()
   const [selectedSnapshot, setSelectedSnapshot] = useState(null)
 
   const handleShowAnswers = (snapshotId) => {
-    const location = buildLocationForView('answers', snapshotId)
-    dispatch(setLocation({
-      ...location,
-      origin: 'snapshots'
-    }))
+    dispatch(navigateDashboard({ page: 'snapshots', pageId: snapshotId, action: 'answers' }))
   }
 
   const openRollbackModal = (snapshot) => {
     setSelectedSnapshot(snapshot)
-    openRollback()
+    rollbackModal.open()
   }
 
   const openUpdateModal = (snapshot) => {
     setSelectedSnapshot(snapshot)
-    openUpdate()
+    updateModal.open()
   }
 
   return (
@@ -104,8 +99,14 @@ const SnapshotsTable = ({ snapshots }) => {
       {
         selectedSnapshot && (
           <>
-            <SnapshotModal show={showUpdate} onClose={closeUpdate} snapshot={selectedSnapshot} />
-            <SnapshotRollbackModal show={showRollback} onClose={closeRollback} snapshot={selectedSnapshot} />
+            <SnapshotModal
+              show={updateModal.show}
+              onClose={updateModal.close}
+              snapshot={selectedSnapshot} />
+            <SnapshotRollbackModal
+              show={rollbackModal.show}
+              onClose={rollbackModal.close}
+              snapshot={selectedSnapshot} />
           </>
         )
       }

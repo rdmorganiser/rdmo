@@ -1,3 +1,5 @@
+import { isUndefined } from 'lodash'
+
 import CatalogsApi from 'rdmo/projects/assets/js/common/api/CatalogsApi'
 
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
@@ -11,81 +13,42 @@ import ProjectApi from '../api/ProjectApi'
 
 import * as actionTypes from './actionTypes'
 
-export function setLocation({ page, pageId, action, actionId, origin }) {
-  return function (dispatch) {
-    dispatch(updateConfig('page', page))
-    dispatch(updateConfig('pageId', pageId))
-    dispatch(updateConfig('action', action))
-    dispatch(updateConfig('actionId', actionId))
+// asynchronous actions
 
-    if (origin !== undefined) {
-      dispatch(updateConfig('origin', origin))
-    }
+export function navigateDashboard({ page, pageId, action, actionId }) {
+  return (dispatch) => {
+    dispatch(updateConfig('page', page, false))
+    dispatch(updateConfig('pageId', pageId, false))
+    dispatch(updateConfig('action', action, false))
+    dispatch(updateConfig('actionId', actionId, false))
 
     updateLocation({ page, pageId, action, actionId })
-  }
-}
 
-export function setPage(page) {
-  return setLocation({
-    page,
-    pageId: undefined,
-    action: undefined,
-    actionId: undefined,
-    origin: page
-  })
-}
-
-export function clearCurrentView() {
-  return { type: actionTypes.CLEAR_CURRENT_VIEW }
-}
-
-export function setProjectAnswers(view) {
-  return function (dispatch) {
-    dispatch({ type: actionTypes.SET_PROJECT_ANSWERS, view })
-  }
-}
-
-export function openViewInContext({ viewId, snapshotId = null, projectAnswers = null }) {
-  return function (dispatch) {
-    if (viewId === 'answers') {
-      if (snapshotId == null) {
-        if (projectAnswers) {
-          return dispatch(setProjectAnswers(projectAnswers))
+    switch (page) {
+      case 'documents':
+        switch (action) {
+          case 'answers':
+            return dispatch(fetchAnswers())
+          case 'views':
+            return dispatch(fetchView(actionId))
         }
-        return
-      }
-
-      return dispatch(getSnapshotAnswers(snapshotId))
+        break
+      case 'snapshots':
+        switch (action) {
+          case 'answers':
+            return dispatch(fetchAnswers(pageId, actionId))
+          case 'views':
+            return dispatch(fetchView(pageId, actionId))
+        }
+        break
     }
-
-    if (snapshotId == null) {
-      return dispatch(getProjectView(viewId))
-    }
-
-    return dispatch(getSnapshotView(snapshotId, viewId))
   }
 }
 
-export function downloadDocument(urlPath, format) {
-  return function (dispatch) {
-    dispatch(addToPending('downloadDocument'))
-    dispatch({ type: actionTypes.DOWNLOAD_DOCUMENT_INIT })
-
-    return ProjectApi.downloadDocument(urlPath, format)
-      .then(() => {
-        dispatch(removeFromPending('downloadDocument'))
-        dispatch({ type: actionTypes.DOWNLOAD_DOCUMENT_SUCCESS })
-      })
-      .catch(error => {
-        dispatch(removeFromPending('downloadDocument'))
-        dispatch({ type: actionTypes.DOWNLOAD_DOCUMENT_ERROR, error })
-        throw error
-      })
-  }
-}
+// project
 
 export function fetchProject() {
+
   return function (dispatch) {
     dispatch(addToPending('fetchProject'))
     dispatch({ type: actionTypes.FETCH_PROJECT_INIT })
@@ -190,6 +153,8 @@ export function deleteProject() {
       })
   }
 }
+
+// memberships / invites / leave
 
 export function fetchProjectInvites() {
   return function (dispatch) {
@@ -352,9 +317,7 @@ export function leaveProject(membershipId, { redirect = false } = {}) {
   }
 }
 
-export function clearProjectErrors() {
-  return { type: actionTypes.CLEAR_PROJECT_ERRORS }
-}
+// snapshots
 
 export function createSnapshot(data) {
   return function (dispatch) {
@@ -411,78 +374,80 @@ export function rollbackSnapshot(snapshotId) {
   }
 }
 
-export function getProjectView(viewId) {
-  return function (dispatch) {
-    dispatch(addToPending('fetchProjectView'))
-    dispatch({ type: actionTypes.FETCH_PROJECT_VIEW_INIT })
+// answers / views
 
-    return ProjectApi.fetchProjectView(projectId, viewId)
+export function fetchAnswers(snapshotId) {
+  const pendingId = isUndefined(snapshotId) ? `fetchView/${snapshotId}` : 'fetchAnswers'
+
+  return function (dispatch) {
+    dispatch(addToPending(pendingId))
+    dispatch({ type: actionTypes.FETCH_ANSWERS_INIT })
+
+    return ProjectApi.fetchProjectAnswers(projectId, snapshotId)
       .then(view => {
-        dispatch(removeFromPending('fetchProjectView'))
-        dispatch({ type: actionTypes.FETCH_PROJECT_VIEW_SUCCESS, view })
+        dispatch(removeFromPending(pendingId))
+        dispatch({ type: actionTypes.FETCH_ANSWERS_SUCCESS, view })
         return view
       })
       .catch(error => {
-        dispatch(removeFromPending('fetchProjectView'))
-        dispatch({ type: actionTypes.FETCH_PROJECT_VIEW_ERROR, error })
+        dispatch(removeFromPending(pendingId))
+        dispatch({ type: actionTypes.FETCH_ANSWERS_ERROR, error })
         throw error
       })
   }
 }
 
-export function getProjectAnswers() {
-  return function (dispatch) {
-    dispatch(addToPending('fetchProjectAnswers'))
-    dispatch({ type: actionTypes.FETCH_PROJECT_ANSWERS_INIT })
+export function fetchView(snapshotId, viewId) {
+  const pendingId = isUndefined(snapshotId) ? `fetchView/${snapshotId}/${viewId}` : `fetchView/${viewId}`
 
-    return ProjectApi.fetchProjectAnswers(projectId)
-      .then(answers => {
-        dispatch(removeFromPending('fetchProjectAnswers'))
-        dispatch({ type: actionTypes.FETCH_PROJECT_ANSWERS_SUCCESS, answers })
-        return answers
+  return function (dispatch) {
+    dispatch(addToPending(pendingId))
+    dispatch({ type: actionTypes.FETCH_VIEW_INIT })
+
+    return ProjectApi.fetchProjectView(projectId, snapshotId, viewId)
+      .then(view => {
+        dispatch(removeFromPending(pendingId))
+        dispatch({ type: actionTypes.FETCH_VIEW_SUCCESS, view })
       })
       .catch(error => {
-        dispatch(removeFromPending('fetchProjectAnswers'))
-        dispatch({ type: actionTypes.FETCH_PROJECT_ANSWERS_ERROR, error })
+        dispatch(removeFromPending(pendingId))
+        dispatch({ type: actionTypes.FETCH_VIEW_ERROR, error })
+      })
+  }
+}
+
+// download
+
+export function downloadDocument(urlPath, format) {
+  return function (dispatch) {
+    dispatch(addToPending('downloadDocument'))
+    dispatch({ type: actionTypes.DOWNLOAD_DOCUMENT_INIT })
+
+    return ProjectApi.downloadDocument(urlPath, format)
+      .then(() => {
+        dispatch(removeFromPending('downloadDocument'))
+        dispatch({ type: actionTypes.DOWNLOAD_DOCUMENT_SUCCESS })
+      })
+      .catch(error => {
+        dispatch(removeFromPending('downloadDocument'))
+        dispatch({ type: actionTypes.DOWNLOAD_DOCUMENT_ERROR, error })
         throw error
       })
   }
 }
 
-export function getSnapshotAnswers(snapshotId) {
-  return function (dispatch) {
-    dispatch(addToPending('fetchSnapshotAnswers'))
-    dispatch({ type: actionTypes.FETCH_SNAPSHOT_ANSWERS_INIT })
+// synchronous actions
 
-    return ProjectApi.fetchSnapshotAnswers(projectId, snapshotId)
-      .then(view => {
-        dispatch(removeFromPending('fetchSnapshotAnswers'))
-        dispatch({ type: actionTypes.FETCH_SNAPSHOT_ANSWERS_SUCCESS, view })
-        return view
-      })
-      .catch(error => {
-        dispatch(removeFromPending('fetchSnapshotAnswers'))
-        dispatch({ type: actionTypes.FETCH_SNAPSHOT_ANSWERS_ERROR, error })
-        throw error
-      })
-  }
+export function clearProjectErrors() {
+  return { type: actionTypes.CLEAR_PROJECT_ERRORS }
 }
 
-export function getSnapshotView(snapshotId, viewId) {
-  return function (dispatch) {
-    dispatch(addToPending('fetchSnapshotView'))
-    dispatch({ type: actionTypes.FETCH_SNAPSHOT_VIEW_INIT })
+export function clearCurrentView() {
+  return { type: actionTypes.CLEAR_CURRENT_VIEW }
+}
 
-    return ProjectApi.fetchSnapshotView(projectId, snapshotId, viewId)
-      .then(view => {
-        dispatch(removeFromPending('fetchSnapshotView'))
-        dispatch({ type: actionTypes.FETCH_SNAPSHOT_VIEW_SUCCESS, view })
-        return view
-      })
-      .catch(error => {
-        dispatch(removeFromPending('fetchSnapshotView'))
-        dispatch({ type: actionTypes.FETCH_SNAPSHOT_VIEW_ERROR, error })
-        throw error
-      })
+export function setProjectAnswers(view) {
+  return function (dispatch) {
+    dispatch({ type: actionTypes.SET_PROJECT_ANSWERS, view })
   }
 }
