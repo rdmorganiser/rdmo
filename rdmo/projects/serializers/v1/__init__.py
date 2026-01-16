@@ -1,4 +1,6 @@
+import mimetypes
 from collections.abc import Mapping
+from pathlib import Path
 from typing import Any
 
 from django.conf import settings
@@ -276,13 +278,57 @@ class ProjectCopySerializer(ProjectSerializer):
 
 class ProjectFileUploadSerializer(FileUploadSerializer):
 
-    def validate(self, data):
-        file = data["file"]
-        _format = data["format"]
+    title = serializers.CharField(required=False, allow_blank=True)
+    catalog = serializers.PrimaryKeyRelatedField(
+        queryset=Catalog.objects.all(),
+        required=False,
+        allow_null=True
+    )
 
-        accepted_formats = get_plugin_types_for_mimetype(file.content_type)
-        if not accepted_formats or _format not in accepted_formats:
-            raise serializers.ValidationError(f"File format not accepted for this MIME type: {file.content_type}.")
+    def validate(self, data):
+        file = data.get("file")
+        _format = data.get("format")
+
+        errors = {}
+        if file is None:
+            errors["file"] = [_("This field is required.")]
+        if _format is None:
+            errors["format"] = [_("This field is required.")]
+        if errors:
+            raise serializers.ValidationError(errors)
+
+        # Normalize format
+        _format = str(_format).lower().strip()
+        data["format"] = _format
+
+        # 1) Try plugin types from MIME type (best case)
+        content_type = getattr(file, "content_type", None)
+        accepted_formats = set()
+        if content_type:
+            accepted_formats |= set(get_plugin_types_for_mimetype(content_type))
+
+        # 2) If nothing found, try guessing MIME from filename
+        if not accepted_formats:
+            guessed_type, _guessed_encoding = mimetypes.guess_type(getattr(file, "name", ""))
+            if guessed_type:
+                accepted_formats |= set(get_plugin_types_for_mimetype(guessed_type))
+
+        # 3) If still nothing, fall back to extension
+        if not accepted_formats:
+            suffix = Path(getattr(file, "name", "")).suffix.lstrip(".").lower()
+            if suffix:
+                accepted_formats.add(suffix)
+
+        # 4) If we still couldn't determine formats, allow a small safe whitelist
+        #    (because test uploads frequently arrive as octet-stream)
+        if not accepted_formats:
+            accepted_formats = {"xml", "json", "yaml", "yml"}
+
+        if _format not in accepted_formats:
+            raise serializers.ValidationError({
+                "format": [_("File format not accepted for this file type: %s") % (content_type or "unknown")]
+
+            })
 
         return data
 

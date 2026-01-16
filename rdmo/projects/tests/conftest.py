@@ -17,7 +17,13 @@ def enable_project_tasks_sync(settings):
     apps.get_app_config('projects').ready()
 
 @pytest.fixture
-def project_xml(settings):
-    xml_file = Path(settings.BASE_DIR) / 'xml/project.xml'
+def xml_path_project(settings):
+    xml_file = Path(settings.BASE_DIR) / 'xml' / 'project.xml'
+    assert xml_file.exists(), f"Missing test XML at {xml_file}"
+    return xml_file
+
+@pytest.fixture
+def xml_path_error(settings):
+    xml_file = Path(settings.BASE_DIR) / 'xml' / 'error.xml'
     assert xml_file.exists(), f"Missing test XML at {xml_file}"
     return xml_file

@@ -1,5 +1,4 @@
 import json
-import os
 
 import pytest
 
@@ -16,16 +15,15 @@ urlnames = {
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
-def test_project_import_update_preview(db, client, settings, username, password, project_id):
+def test_project_import_update_preview(db, api_client, settings, username, password, project_id, xml_path_project):
     if password:
-        client.login(username=username, password=password)
+        api_client.login(username=username, password=password)
 
     url = reverse('v1-projects:project-import-update-preview', args=[project_id])
-    xml_path = os.path.join(settings.BASE_DIR, 'xml', 'project.xml')
     projects_count = Project.objects.all().count()
 
-    with open(xml_path, 'rb') as xml_file:
-        response = client.post(url, {'file': xml_file, 'format': 'xml'})
+    with open(xml_path_project, 'rb') as xml_file:
+        response = api_client.post(url, {'file': xml_file, 'format': 'xml'}, format="multipart")
 
     if project_id in view_project_permission_map.get(username, []):
         assert response.status_code == 200
@@ -42,51 +40,49 @@ def test_project_import_update_preview(db, client, settings, username, password,
 
 
 @pytest.mark.parametrize('action', ['preview','confirm'])
-def test_import_update_preview_and_confirm_get_not_allowed(db, client, action):
+def test_import_update_preview_and_confirm_get_not_allowed(db, api_client, action):
     username = password = 'owner'
-    client.login(username=username, password=password)
+    api_client.login(username=username, password=password)
     url = reverse(urlnames[f"import-update-{action}"], args=[1])
-    response = client.get(url)
+    response = api_client.get(url)
     assert response.status_code == 405
 
 
-def test_import_update_preview_invalid_xml(db, client, settings):
+def test_import_update_preview_invalid_xml(db, client, settings, xml_path_error):
     username = password = 'owner'
     client.login(username=username, password=password)
 
     url = reverse(urlnames["import-update-preview"], args=[1])
-    bad_xml = os.path.join(settings.BASE_DIR, "xml", "error.xml")
-    with open(bad_xml, "rb") as f:
-        resp = client.post(url, {"file": f, "format": "xml"})
+    with open(xml_path_error, "rb") as f:
+        resp = client.post(url, {"file": f, "format": "xml"}, format="multipart")
     assert resp.status_code == 400
-    assert 'Parsing error' in ' '.join(resp.json()['file'])
+    assert 'Parsing error' in ' '.join(resp.json()['non_field_errors'])
 
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
-def test_project_import_update_confirm(db, client, settings, username, password, project_id):
+def test_project_import_update_confirm(db, api_client, settings, username, password, project_id, xml_path_project):
     if password:
-        client.login(username=username, password=password)
+        api_client.login(username=username, password=password)
 
     preview_url = reverse('v1-projects:project-import-update-preview', args=[project_id])
     confirm_url = reverse('v1-projects:project-import-update-confirm', args=[project_id])
-    xml_path = os.path.join(settings.BASE_DIR, 'xml', 'project.xml')
     projects_count = Project.objects.all().count()
 
     if project_id in change_project_permission_map.get(username, []):
-        with open(xml_path, 'rb') as xml_file:
-            preview_response = client.post(preview_url, {'file': xml_file, 'format': 'xml'})
+        with open(xml_path_project, 'rb') as xml_file:
+            preview_response = api_client.post(preview_url, {'file': xml_file, 'format': 'xml'}, format="multipart")
         assert preview_response.status_code == 200
         preview_data = json.loads(preview_response.content.decode())
 
-        with open(xml_path, 'rb') as xml_file:
+        with open(xml_path_project, 'rb') as xml_file:
             confirm_payload = {
                 'file': xml_file,
                 'format': 'xml',
                 'checked_values': [v["key"] for v in preview_data.get("values", [])],
                 'checked_snapshots': [s["index"] for s in preview_data.get("snapshots", [])],
             }
-            confirm_response = client.post(confirm_url, confirm_payload)
+            confirm_response = api_client.post(confirm_url, confirm_payload)
 
         assert confirm_response.status_code == 201
         result = json.loads(confirm_response.content.decode())
@@ -94,8 +90,8 @@ def test_project_import_update_confirm(db, client, settings, username, password,
         assert 'title' in result
         assert projects_count == Project.objects.all().count()
     elif password:
-        with open(xml_path, 'rb') as xml_file:
-            confirm_response = client.post(
+        with open(xml_path_project, 'rb') as xml_file:
+            confirm_response = api_client.post(
                 confirm_url,
                 {'file': xml_file,'checked_values': [], 'checked_snapshots': []}
             )
@@ -105,8 +101,8 @@ def test_project_import_update_confirm(db, client, settings, username, password,
         else:
             assert confirm_response.status_code == 404
     else:
-        with open(xml_path, 'rb') as xml_file:
-            confirm_response = client.post(
+        with open(xml_path_project, 'rb') as xml_file:
+            confirm_response = api_client.post(
                 confirm_url,
                 {'file': xml_file,'checked_values': [], 'checked_snapshots': []}
             )

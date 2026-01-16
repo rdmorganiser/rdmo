@@ -12,6 +12,8 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.timezone import now
 
+from rest_framework import serializers
+
 from rdmo.accounts.utils import create_user_from_fields, find_user
 from rdmo.core.imports import store_temp_file
 from rdmo.core.mail import send_mail
@@ -427,13 +429,24 @@ def import_memberships(project, records, create_users = False):
 
 
 def validate_and_prepare_import_plugin(request, file=None, file_format=None, current_project=None):
-    tmp_path = store_temp_file(file)
+    if not file:
+        raise serializers.ValidationError({"file": ["This field is required."]})
+
+    if not file_format:
+        raise serializers.ValidationError({"format": ["This field is required."]})
+
+    file_format = str(file_format).lower().strip()
 
     plugin = get_plugin("PROJECT_IMPORTS", file_format)
     if plugin is None:
-        raise ValidationError({"detail": f'Format "{file_format}" not configured.'})
+        raise serializers.ValidationError({
+            "format": [f'Format "{file_format}" not configured.']
+        })
 
-    plugin.file_name = tmp_path
+    # ✅ Store upload in a temp file and give plugin a real path
+    tmp_path = store_temp_file(file)
+
+    plugin.file_name = str(tmp_path)
     plugin.request = request
     plugin.current_project = current_project
     plugin.raise_exception = True

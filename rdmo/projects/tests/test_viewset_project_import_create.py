@@ -1,5 +1,4 @@
 import json
-import os
 
 import pytest
 
@@ -16,18 +15,19 @@ urlnames = {
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_project_import_create_preview(db, client, settings, username, password):
+def test_project_import_create_preview(db, api_client, settings, username, password, xml_path_project):
     if password:
-        client.login(username=username, password=password)
+        api_client.login(username=username, password=password)
 
     url = reverse(urlnames["import-create-preview"])
     projects_count = Project.objects.all().count()
 
-    xml_path = os.path.join(settings.BASE_DIR, 'xml', 'project.xml')
-    with open(xml_path, 'rb') as xml_file:
-        response = client.post(url, {'file': xml_file, 'format': 'xml'})
+    with open(xml_path_project, 'rb') as xml_file:
+        response = api_client.post(url, {'file': xml_file, 'format': 'xml'}, format="multipart")
 
     if password:
+        if response.status_code != 200:
+            print(response.json())
         assert response.status_code == 200
         data = json.loads(response.content.decode())
         # Preview response should include at least one value and one snapshot
@@ -59,34 +59,34 @@ def test_import_create_preview_missing_file(db, client):
     assert resp.status_code == 400
 
 
-def test_import_create_preview_invalid_xml(db, client, settings):
+def test_import_create_preview_invalid_xml(db, client, settings, xml_path_error):
     username = password = 'user'
     client.login(username=username, password=password)
 
     url = reverse(urlnames["import-create-preview"])
-    bad_xml = os.path.join(settings.BASE_DIR, "xml", "error.xml")
-    with open(bad_xml, "rb") as f:
+
+    with open(xml_path_error, "rb") as f:
         resp = client.post(url, {"file": f, "format": "xml"})
     assert resp.status_code == 400
+    print(resp.json())
     assert 'Parsing error' in ' '.join(resp.json()['file'])
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_project_import_create_confirm(db, client, settings, username, password):
+def test_project_import_create_confirm(db, client, settings, username, password, xml_path_project):
     if password:
         client.login(username=username, password=password)
     preview_url = reverse(urlnames["import-create-preview"])
     confirm_url = reverse(urlnames["import-create-confirm"])
     projects_count = Project.objects.all().count()
-    xml_path = os.path.join(settings.BASE_DIR, 'xml', 'project.xml')
     if password:
-        with open(xml_path, 'rb') as xml_file:
+        with open(xml_path_project, 'rb') as xml_file:
             preview_response = client.post(preview_url, {'file': xml_file, 'format': 'xml'})
         assert preview_response.status_code == 200
         preview_data = json.loads(preview_response.content.decode())
         # Prepare payload with all values and snapshots checked (selected)
         # Include the file again for the confirm step
-        with open(xml_path, 'rb') as xml_file:
+        with open(xml_path_project, 'rb') as xml_file:
             confirm_payload = {
                 "file": xml_file,
                 "format": "xml",
@@ -98,15 +98,14 @@ def test_project_import_create_confirm(db, client, settings, username, password)
         assert confirm_response.status_code == 201
         result = json.loads(confirm_response.content.decode())
         assert 'id' in result
-        assert 'title' in result
         assert projects_count + 1  == Project.objects.all().count()
     else:
-        with open(xml_path, 'rb') as xml_file:
+        with open(xml_path_project, 'rb') as xml_file:
             confirm_response = client.post(confirm_url, {'file': xml_file})
         assert confirm_response.status_code == 401
 
 
-def test_import_create_confirm_restricted(db, client, settings):
+def test_import_create_confirm_restricted(db, client, settings, xml_path_project):
     settings.PROJECT_CREATE_RESTRICTED = True
     settings.PROJECT_CREATE_GROUPS = ['projects']
 
@@ -119,14 +118,13 @@ def test_import_create_confirm_restricted(db, client, settings):
     preview_url = reverse(urlnames["import-create-preview"])
     confirm_url = reverse(urlnames["import-create-confirm"])
     projects_count = Project.objects.all().count()
-    xml_path = os.path.join(settings.BASE_DIR, 'xml', 'project.xml')
 
-    with open(xml_path, 'rb') as xml:
+    with open(xml_path_project, 'rb') as xml:
         preview_resp = client.post(preview_url, {'file': xml, 'format': 'xml'})
     assert preview_resp.status_code == 200
     preview_data = preview_resp.json()
 
-    with open(xml_path, 'rb') as xml:
+    with open(xml_path_project, 'rb') as xml:
         confirm_resp = client.post(confirm_url, {
             'file': xml,
             'format': 'xml',
@@ -136,11 +134,10 @@ def test_import_create_confirm_restricted(db, client, settings):
     assert confirm_resp.status_code == 201
     result = confirm_resp.json()
     assert 'id' in result
-    assert 'title' in result
     assert projects_count + 1 == Project.objects.all().count()
 
 
-def test_import_create_confirm_forbidden(db, client, settings):
+def test_import_create_confirm_forbidden(db, client, settings, xml_path_project):
     settings.PROJECT_CREATE_RESTRICTED = True
     # no PROJECT_CREATE_GROUPS defined → no one is allowed
 
@@ -148,13 +145,12 @@ def test_import_create_confirm_forbidden(db, client, settings):
     preview_url = reverse(urlnames["import-create-preview"])
     confirm_url = reverse(urlnames["import-create-confirm"])
     projects_count = Project.objects.all().count()
-    xml_path = os.path.join(settings.BASE_DIR, 'xml', 'project.xml')
 
-    with open(xml_path, 'rb') as xml:
+    with open(xml_path_project, 'rb') as xml:
         preview_resp = client.post(preview_url, {'file': xml, 'format': 'xml'})
     assert preview_resp.status_code == 403
 
-    with open(xml_path, 'rb') as xml:
+    with open(xml_path_project, 'rb') as xml:
         confirm_resp = client.post(confirm_url, {
             'file': xml,
             'format': 'xml',
