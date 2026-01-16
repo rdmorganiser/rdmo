@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
-import { setPage } from '../actions/projectActions'
+import { navigateDashboard } from '../actions/projectActions'
 
 import ProjectBadge from './helper/ProjectBadge'
 
@@ -28,7 +28,7 @@ const ProjectSidebar = ({ menuItems }) => {
                   className={classnames('nav-link w-100 text-start d-flex align-items-center gap-2', {
                     active: page === item.id
                   })}
-                  onClick={() => dispatch(setPage(item.id))}
+                  onClick={() => dispatch(navigateDashboard({ page: item.id }))}
                 >
                   <i className={`bi ${item.icon}`}></i>
                   {item.name}

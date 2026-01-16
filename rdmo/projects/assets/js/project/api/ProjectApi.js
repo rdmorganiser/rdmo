@@ -1,3 +1,5 @@
+import { isUndefined } from 'lodash'
+
 import { encodeParams } from 'rdmo/core/assets/js/utils/api'
 
 import BaseApi from 'rdmo/core/assets/js/api/BaseApi'
@@ -84,24 +86,24 @@ export default class ProjectApi extends BaseApi {
     return this.post(`/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/rollback/`)
   }
 
+  static fetchProjectAnswers(projectId, snapshotId) {
+    if (isUndefined(snapshotId)) {
+      return this.get(`/api/v1/projects/projects/${projectId}/answers/`)
+    } else {
+      return this.get(`/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/answers/`)
+    }
+  }
+
   static fetchProjectViews(projectId) {
     return this.get(`/api/v1/projects/projects/${projectId}/views/`)
   }
 
-  static fetchProjectView(projectId, viewId) {
-    return this.get(`/api/v1/projects/projects/${projectId}/views/${viewId}/`)
-  }
-
-  static fetchProjectAnswers(projectId) {
-    return this.get(`/api/v1/projects/projects/${projectId}/answers/`)
-  }
-
-  static fetchSnapshotAnswers(projectId, snapshotId) {
-    return this.get(`/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/answers/`)
-  }
-
-  static fetchSnapshotView(projectId, snapshotId, viewId) {
-    return this.get(`/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/views/${viewId}/`)
+  static fetchProjectView(projectId, snapshotId, viewId) {
+    if (isUndefined(snapshotId)) {
+      return this.get(`/api/v1/projects/projects/${projectId}/views/${viewId}/`)
+    } else {
+      return this.get(`/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/views/${viewId}/`)
+    }
   }
 
   static downloadDocument(urlPath, format) {

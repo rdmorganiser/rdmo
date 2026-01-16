@@ -1,6 +1,6 @@
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 import { projectId } from '../utils/meta'
-import { isEmpty } from 'lodash'
+import { isUndefined } from 'lodash'
 
 export const parseLocation = () => {
   let pathname = window.location.pathname
@@ -38,53 +38,13 @@ export const updateLocation = ({ page, pageId, action, actionId }) => {
 export const buildPath = ({ page, pageId, action, actionId }) => {
   const segments = [baseUrl, 'projects', projectId]
 
-  if (!isEmpty(page)) {
+  if (!isUndefined(page)) {
     segments.push(page)
 
-    if (!isEmpty(pageId)) segments.push(pageId)
-    if (!isEmpty(action)) segments.push(action)
-    if (!isEmpty(actionId)) segments.push(actionId)
+    if (!isUndefined(pageId)) segments.push(pageId)
+    if (!isUndefined(action)) segments.push(action)
+    if (!isUndefined(actionId)) segments.push(actionId)
   }
 
   return segments.join('/') + '/'
-}
-
-export const buildLocationForView = (viewId, snapshotId, { basePage = 'documents' } = {}) => {
-  const hasView = viewId !== null && viewId !== undefined
-  const hasSnapshot = snapshotId !== null && snapshotId !== undefined
-  const isAnswers = viewId === 'answers'
-
-  if (!hasView) {
-    if (!hasSnapshot) {
-      return {
-        page: basePage,
-        pageId: undefined,
-        action: undefined,
-        actionId: undefined,
-      }
-    }
-
-    return {
-      page: 'snapshots',
-      pageId: String(snapshotId),
-      action: undefined,
-      actionId: undefined,
-    }
-  }
-
-  if (!snapshotId) {
-    return {
-      page: 'documents',
-      pageId: undefined,
-      action: isAnswers ? 'answers' : 'views',
-      actionId: isAnswers ? undefined : String(viewId),
-    }
-  }
-
-  return {
-    page: 'snapshots',
-    pageId: String(snapshotId),
-    action: isAnswers ? 'answers' : 'views',
-    actionId: isAnswers ? undefined : String(viewId),
-  }
 }
