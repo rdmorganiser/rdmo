@@ -7,8 +7,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.crypto import get_random_string
 from django.utils.text import slugify
 
-
-from .models import Role
 from .settings import GROUPS
 
 log = logging.getLogger(__name__)

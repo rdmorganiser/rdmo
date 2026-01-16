@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers, status
 from rest_framework.decorators import action
-from rest_framework.exceptions import NotFound, ValidationError
+from rest_framework.exceptions import NotFound
 from rest_framework.filters import SearchFilter
 from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin
 from rest_framework.pagination import PageNumberPagination
@@ -27,7 +27,7 @@ from rdmo.core.constants import VALUE_TYPE_FILE
 from rdmo.core.exports import XMLResponse
 from rdmo.core.permissions import HasModelPermission
 from rdmo.core.plugins import get_plugin
-from rdmo.core.utils import human2bytes, is_truthy, return_file_response
+from rdmo.core.utils import human2bytes, is_truthy, render_to_format, return_file_response
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet
 from rdmo.tasks.models import Task
@@ -73,8 +73,8 @@ from .serializers.v1 import (
     MembershipSerializer,
     ProjectAnswersSerializer,
     ProjectCopySerializer,
-    ProjectHierarchySerializer,
     ProjectFileUploadSerializer,
+    ProjectHierarchySerializer,
     ProjectImportConfirmSerializer,
     ProjectIntegrationSerializer,
     ProjectInviteCreateSerializer,
@@ -106,6 +106,7 @@ from .utils import (
     copy_project,
     get_contact_message,
     get_upload_accept,
+    get_value_path,
     send_contact_message,
     send_invite_email,
     validate_and_prepare_import_plugin,
