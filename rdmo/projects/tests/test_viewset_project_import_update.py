@@ -56,7 +56,7 @@ def test_import_update_preview_invalid_xml(db, client, settings, xml_path_error)
     with open(xml_path_error, "rb") as f:
         resp = client.post(url, {"file": f, "format": "xml"}, format="multipart")
     assert resp.status_code == 400
-    assert 'Parsing error' in ' '.join(resp.json()['non_field_errors'])
+    assert 'Parsing error' in ' '.join(resp.json()['file'])
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -82,18 +82,18 @@ def test_project_import_update_confirm(db, api_client, settings, username, passw
                 'checked_values': [v["key"] for v in preview_data.get("values", [])],
                 'checked_snapshots': [s["index"] for s in preview_data.get("snapshots", [])],
             }
-            confirm_response = api_client.post(confirm_url, confirm_payload)
+            confirm_response = api_client.post(confirm_url, confirm_payload, format="multipart")
 
-        assert confirm_response.status_code == 201
+        assert confirm_response.status_code == 200
         result = json.loads(confirm_response.content.decode())
         assert 'id' in result
-        assert 'title' in result
         assert projects_count == Project.objects.all().count()
     elif password:
         with open(xml_path_project, 'rb') as xml_file:
             confirm_response = api_client.post(
                 confirm_url,
-                {'file': xml_file,'checked_values': [], 'checked_snapshots': []}
+                {'file': xml_file, 'checked_values': [], 'checked_snapshots': []},
+                format="multipart"
             )
 
         if project_id in view_project_permission_map.get(username, []):
@@ -104,6 +104,7 @@ def test_project_import_update_confirm(db, api_client, settings, username, passw
         with open(xml_path_project, 'rb') as xml_file:
             confirm_response = api_client.post(
                 confirm_url,
-                {'file': xml_file,'checked_values': [], 'checked_snapshots': []}
+                {'file': xml_file, 'checked_values': [], 'checked_snapshots': []},
+                format="multipart"
             )
         assert confirm_response.status_code == 401

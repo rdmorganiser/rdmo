@@ -587,43 +587,7 @@ class ProjectViewSet(ModelViewSet):
         serializer_class=ProjectFileUploadSerializer
     )
     def import_create_preview(self, request, *args, **kwargs):
-        # 1) validate upload + optional overrides
-        upload = ProjectFileUploadSerializer(data=request.data, context={"request": request})
-        upload.is_valid(raise_exception=True)
-
-        file = upload.validated_data["file"]
-        file_format = upload.validated_data["format"]
-
-        title_override = upload.validated_data.get("title")
-        catalog_override = upload.validated_data.get("catalog")
-
-        # 2) let plugin parse the import file
-        plugin = validate_and_prepare_import_plugin(
-            request=request,
-            file=file,
-            file_format=file_format,
-            current_project=None,
-        )
-
-        try:
-            prepared = plugin.prepare_import()
-        except ValidationError as exc:
-            raise_as_drf_validation_error(exc)
-
-        # 3) apply override metadata (optional)
-        project_meta = prepared.get("project", {}) or {}
-
-        if title_override:
-            project_meta["title"] = title_override
-
-        if catalog_override is not None:
-            project_meta["catalog"] = catalog_override.pk
-
-        prepared["project"] = project_meta
-
-        # 4) return preview
-        out = ProjectImportPreviewResponseSerializer(prepared)
-        return Response(out.data, status=status.HTTP_200_OK)
+        return self.get_import_preview(request, current_project=None)
 
     @action(
         detail=False,
@@ -634,62 +598,19 @@ class ProjectViewSet(ModelViewSet):
         serializer_class=ProjectImportConfirmSerializer
     )
     def import_create_confirm(self, request, *args, **kwargs):
-        confirm = ProjectImportConfirmSerializer(data=request.data, context={"request": request})
-        confirm.is_valid(raise_exception=True)
-
-        file = confirm.validated_data["file"]
-        file_format = confirm.validated_data["format"]
-
-        title_override = confirm.validated_data.get("title")
-        catalog_override = confirm.validated_data.get("catalog")
-
-        checked_values = confirm.validated_data.get("checked_values", [])
-        checked_snapshots = confirm.validated_data.get("checked_snapshots", [])
-
-        plugin = validate_and_prepare_import_plugin(
-            request=request,
-            file=file,
-            file_format=file_format,
-            current_project=None,
-        )
-
-        # Import creates the project using the plugin parsed data
-        project = plugin.import_to_project(
-            checked_values=checked_values,
-            checked_snapshots=checked_snapshots,
-        )
-
-        # Apply overrides AFTER import if they were given
-        changed = False
-        if title_override:
-            project.title = title_override
-            changed = True
-
-        if catalog_override is not None:
-            project.catalog = catalog_override
-            changed = True
-
-        if changed:
-            project.save()
-
-        return Response({"id": project.pk}, status=status.HTTP_201_CREATED)
+        return self.get_import_confirm(request, current_project=None, status_code=status.HTTP_201_CREATED)
 
     @action(
         detail=True,
         methods=["post"],
         url_path="import-update-preview",
         parser_classes=[MultiPartParser, FormParser],
-        permission_classes=(HasModelPermission | HasProjectImportUpdatePermission,),
+        permission_classes=(HasModelPermission | HasProjectPermission,),
         serializer_class=ProjectFileUploadSerializer,
     )
     def import_update_preview(self, request, pk=None):
         project = self.get_object()
-
-        preview = self.handle_import_plugin_action(
-            plugin_kwargs={"current_project": project},
-            plugin_call=lambda plugin, _: plugin.prepare_import(),
-        )
-        return Response(preview, status=status.HTTP_200_OK)
+        return self.get_import_preview(request, current_project=project)
 
     @action(
         detail=True,
@@ -702,22 +623,13 @@ class ProjectViewSet(ModelViewSet):
     )
     def import_update_confirm(self, request, pk=None):
         project = self.get_object()
-
-        updated_project = self.handle_import_plugin_action(
-            plugin_kwargs={"current_project": project},
-            plugin_call=lambda plugin, data: plugin.import_to_project(
-                checked_values=set(data["checked_values"]),
-                checked_snapshots=set(data["checked_snapshots"])
-            ),
-        )
-        serializer = ProjectSerializer(updated_project, context={"request": request})
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return self.get_import_confirm(request, current_project=project, status_code=status.HTTP_200_OK)
 
     @action(
-        detail=True,
-        methods=["get"],
-        permission_classes=(HasModelPermission | HasProjectPermission,),
-        url_path="export(?:/(?P<export_format>[a-z]+))?",
+            detail=True,
+            methods=["get"],
+            permission_classes=(HasModelPermission | HasProjectPermission,),
+            url_path="export(?:/(?P<export_format>[a-z]+))?",
     )
     def export(self, request, pk=None, export_format='xml'):
         project = self.get_object()
@@ -763,31 +675,89 @@ class ProjectViewSet(ModelViewSet):
                 for view in views:
                     project.views.add(view)
 
-    def handle_import_plugin_action(
-        self,
-        plugin_kwargs=None,
-        plugin_call=None,
-    ):
-        serializer = self.get_serializer(data=self.request.data)
-        serializer.is_valid(raise_exception=True)
+    def apply_import_overrides(self, prepared: dict, title_override=None, catalog_override=None) -> dict:
+        project_meta = prepared.get("project", {}) or {}
 
-        plugin_kwargs = plugin_kwargs or {}
+        if title_override:
+            project_meta["title"] = title_override
+
+        if catalog_override is not None:
+            project_meta["catalog"] = catalog_override.pk
+
+        prepared["project"] = project_meta
+        return prepared
+
+    def get_import_preview(self, request, *, current_project=None) -> Response:
+        upload = ProjectFileUploadSerializer(data=request.data, context={"request": request, "view": self})
+        upload.is_valid(raise_exception=True)
+
+        file = upload.validated_data["file"]
+        file_format = upload.validated_data["format"]
+
+        title_override = upload.validated_data.get("title")
+        catalog_override = upload.validated_data.get("catalog")
+
+        plugin = validate_and_prepare_import_plugin(
+            request=request,
+            file=file,
+            file_format=file_format,
+            current_project=current_project,
+        )
+
         try:
-            plugin = validate_and_prepare_import_plugin(
-                self.request,
-                file=serializer.validated_data["file"],
-                file_format=serializer.validated_data["format"],
-                **plugin_kwargs,
-            )
-            plugin_result = plugin_call(plugin, serializer.validated_data)
+            prepared = plugin.prepare_import()
         except ValidationError as exc:
-            if hasattr(exc, "message_dict"):
-                raise serializers.ValidationError(exc.message_dict) from exc
-            else:
-                messages = getattr(exc, "messages", None) or [str(exc)]
-                raise serializers.ValidationError({"non_field_errors": messages}) from exc
-        else:
-            return plugin_result
+            raise_as_drf_validation_error(exc)
+
+        prepared = self.apply_import_overrides(
+            prepared,
+            title_override=title_override,
+            catalog_override=catalog_override,
+        )
+
+        out = ProjectImportPreviewResponseSerializer(prepared)
+        return Response(out.data, status=status.HTTP_200_OK)
+
+    def get_import_confirm(self, request, *, current_project=None, status_code=status.HTTP_201_CREATED) -> Response:
+        confirm = ProjectImportConfirmSerializer(data=request.data, context={"request": request, "view": self})
+        confirm.is_valid(raise_exception=True)
+
+        file = confirm.validated_data["file"]
+        file_format = confirm.validated_data["format"]
+
+        checked_values = confirm.validated_data.get("checked_values", [])
+        checked_snapshots = confirm.validated_data.get("checked_snapshots", [])
+
+        title_override = confirm.validated_data.get("title")
+        catalog_override = confirm.validated_data.get("catalog")
+
+        plugin = validate_and_prepare_import_plugin(
+            request=request,
+            file=file,
+            file_format=file_format,
+            current_project=current_project,
+        )
+
+        updated_project = plugin.import_to_project(
+            checked_values=checked_values,
+            checked_snapshots=checked_snapshots,
+        )
+
+        # Optional overrides apply after import (explicit, predictable)
+        changed = False
+        if title_override:
+            updated_project.title = title_override
+            changed = True
+
+        if catalog_override is not None:
+            updated_project.catalog = catalog_override
+            changed = True
+
+        if changed:
+            updated_project.save()
+
+        # keep response shape consistent and stable for tests
+        return Response({"id": updated_project.pk}, status=status_code)
 
 
 class ProjectNestedViewSetMixin(NestedViewSetMixin):
