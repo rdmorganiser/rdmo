@@ -49,7 +49,7 @@ class SnapshotSerializer(serializers.ModelSerializer):
     catalog = serializers.CharField(source='catalog.uri', default=None, read_only=True)
     tasks = serializers.SerializerMethodField()
     views = serializers.SerializerMethodField()
-    memberships = serializers.SerializerMethodField()  # optional from context
+    memberships = serializers.SerializerMethodField()  # optional, from context
 
     class Meta:
         model = Snapshot
@@ -80,7 +80,7 @@ class SnapshotSerializer(serializers.ModelSerializer):
     def get_memberships(self, obj):
         if not self.context.get("include_memberships"):
             return []
-        qs = obj.memberships.select_related("user").all()
+        qs = obj.project.memberships.select_related("user").all()
         return MembershipForExportSerializer(qs, many=True, context=self.context).data
 
 

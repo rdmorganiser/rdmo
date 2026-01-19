@@ -634,10 +634,15 @@ class ProjectViewSet(ModelViewSet):
     def export(self, request, pk=None, export_format='xml'):
         project = self.get_object()
         project.catalog.prefetch_elements()
-        context = self.get_export_renderer_context(request)
+
+        full = is_truthy(request.GET.get("full"))
+        context = {
+            "snapshots": full or is_truthy(request.GET.get("snapshots")),
+            "include_memberships": full or is_truthy(request.GET.get("include_memberships")),
+        }
 
         if export_format == 'xml':
-            serializer = ProjectExportSerializer(project)
+            serializer = ProjectExportSerializer(project, context=context)
             xml = XMLRenderer().render(serializer.data, context=context)
             return XMLResponse(xml, name=project.title)
         else:
@@ -646,13 +651,9 @@ class ProjectViewSet(ModelViewSet):
                 raise Http404
             plugin.project = project
             plugin.snapshot = None
+            plugin.include_memberships = context['include_memberships']
             return plugin.render()
 
-    def get_export_renderer_context(self, request):
-        full = is_truthy(request.GET.get('full'))
-        return {
-            'snapshots': full or is_truthy(request.GET.get('snapshots', True)),
-        }
 
     def perform_create(self, serializer):
         project = serializer.save(site=get_current_site(self.request))
@@ -935,6 +936,41 @@ class ProjectSnapshotViewSet(ProjectNestedViewSetMixin, CreateModelMixin, Retrie
         snapshot = self.get_object()
         snapshot.rollback()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(
+        detail=True,
+        methods=["get"],
+        permission_classes=(HasModelPermission | HasProjectPermission,),
+        url_path=r"export(?:/(?P<export_format>[a-z]+))?",
+    )
+    def export(self, request, pk=None, parent_lookup_project=None, export_format="xml"):
+        snapshot = self.get_object()
+        snapshot.project.catalog.prefetch_elements()
+
+        # Build same context semantics as project export
+        full = is_truthy(request.GET.get("full"))
+        context = {
+            "include_memberships": full or is_truthy(request.GET.get("include_memberships")),
+        }
+
+        # XML snapshot export
+        if export_format == "xml":
+            serializer = SnapshotSerializer(snapshot, context=context)
+            xml = XMLRenderer().render(serializer.data, context=context)
+
+            # name is the filename stem in Content-Disposition
+            name = snapshot.title or snapshot.project.title
+            return XMLResponse(xml, name=name)
+
+        # Plugin-based snapshot exports
+        plugin = get_plugin("SNAPSHOT_EXPORTS", export_format)
+        if plugin is None:
+            raise Http404
+
+        plugin.snapshot = snapshot
+        plugin.project = None
+        plugin.include_memberships = context['include_memberships']
+        return plugin.render()
 
 
 class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):

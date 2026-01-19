@@ -684,13 +684,18 @@ def test_imports(db, client, username, password):
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('export_format', export_formats)
-def test_export(db, client, username, password, export_format):
+@pytest.mark.parametrize('include_memberships', [False, True])
+def test_export(db, client, username, password, export_format, include_memberships):
     client.login(username=username, password=password)
 
     if export_format:
         url = reverse(urlnames["export"], kwargs={"pk": project_id, "export_format": export_format})
     else:
         url = reverse(urlnames["export"], kwargs={"pk": project_id})
+
+    if include_memberships:
+        # This needs to match your viewset parameter name
+        url += "?include_memberships=1"
 
     response = client.get(url)
 
@@ -702,9 +707,23 @@ def test_export(db, client, username, password, export_format):
         if export_format in (None, "xml"):
             root = et.fromstring(response.content)
             assert root.tag == "project"
+            expected_tags = [
+                "title", "description", "catalog", "tasks", "views",
+                "snapshots", "values", "memberships", "created", "updated"
+            ]
+
             for child in root:
-                assert child.tag in ['title', 'description', 'catalog', 'tasks', 'views',
-                                     'snapshots', 'values', 'created', 'updated']
+                assert child.tag in expected_tags
+
+            memberships_el = root.find("memberships")
+            if include_memberships:
+                assert memberships_el is not None
+                assert len(list(memberships_el)) > 0
+            else:
+                if memberships_el is None:
+                    pass
+                else:
+                    assert len(list(memberships_el)) == 0
 
         # JSON
         elif export_format == "json":

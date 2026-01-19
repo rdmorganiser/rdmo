@@ -800,6 +800,8 @@ class IssueSerializer(serializers.ModelSerializer):
 
 
 class SnapshotSerializer(serializers.ModelSerializer):
+    catalog = serializers.CharField(source="project.catalog.id", read_only=True)
+    memberships = serializers.SerializerMethodField()  # optional, enabled from context
 
     class Meta:
         model = Snapshot
@@ -808,9 +810,17 @@ class SnapshotSerializer(serializers.ModelSerializer):
             'project',
             'title',
             'description',
+            'catalog',
+            'memberships',  # optional, enabled from context
             'created',
             'updated'
         )
+
+    def get_memberships(self, obj):
+        if not self.context.get("include_memberships"):
+            return []
+        qs = obj.project.memberships.select_related("user").all()
+        return ProjectMembershipSerializer(qs, many=True, context=self.context).data
 
 
 class ValueSerializer(serializers.ModelSerializer):

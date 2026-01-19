@@ -165,7 +165,9 @@ class RDMOXMLExport(Export):
 
         else:
             content_disposition = f'attachment; filename="{self.snapshot.title}.xml"'
-            serializer = SnapshotExportSerializer(self.snapshot)
+            serializer = SnapshotExportSerializer(self.snapshot, context={
+                'include_memberships': self.include_memberships
+            })
 
         xmldata = XMLRenderer().render(serializer.data)
         response = HttpResponse(prettify_xml(xmldata), content_type="application/xml")
