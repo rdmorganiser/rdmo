@@ -32,12 +32,13 @@ const SnapshotRollbackModal = ({ show, onClose, snapshot }) => {
     >
       <Html
         html={
-          interpolate(
-            gettext('You are about to roll back all values to the snapshot <b>%s</b>.'), [snapshot?.title]) +
-          '<br>' +
-          gettext('All newer changes will be permanently discarded.') +
-          '<br><br>' +
-          gettext('This action cannot be undone!')
+          `<p>${interpolate(
+            gettext('You are about to roll back all values to the snapshot <b>%s</b>.'),
+            [snapshot?.title]
+          )
+          }</p>` +
+          `<p>${gettext('All newer changes will be permanently discarded.')}</p>` +
+          `<p>${gettext('This action cannot be undone!')}</p>`
         }
       />
       {errors.non_field_errors?.map((err, i) => (

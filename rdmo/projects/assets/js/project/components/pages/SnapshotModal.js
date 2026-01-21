@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
+import Html from 'rdmo/core/assets/js/components/Html'
+import { Input, Textarea } from 'rdmo/core/assets/js/components/forms'
 import { Modal } from 'rdmo/core/assets/js/_bs53/components'
 
 import {
@@ -14,6 +16,7 @@ import { useFieldErrors } from '../../hooks/useFieldErrors'
 const initialForm = { title: '', description: '' }
 
 const SnapshotModal = ({ show, onClose, snapshot }) => {
+  const templates = useSelector((state) => state.templates)
   const dispatch = useDispatch()
   const errors = useFieldErrors()
 
@@ -65,31 +68,25 @@ const SnapshotModal = ({ show, onClose, snapshot }) => {
       size="modal-lg"
     >
       <form id={formId} onSubmit={handleSubmit}>
-        <label className="form-label fw-bold" htmlFor="snapshot-title">
-          {gettext('Title')}
-        </label>
-        <div>{gettext('The title for this snapshot.')}</div>
-        <input
+        <Input
           id="snapshot-title"
           type="text"
-          className="form-control mt-2"
+          className="mt-2"
+          label={gettext('Title')}
           name="title"
           required
           value={formData.title}
           onChange={(e) => setField('title', e.target.value)}
         />
-
-        <label className="form-label fw-bold" htmlFor="snapshot-description">
-          {gettext('Description')}
-        </label>
-        <div>{gettext('The description for this snapshot.')}</div>
-        <input
+        <Textarea
           id="snapshot-description"
-          type="text"
-          className="form-control mt-2"
+          className="mt-2"
+          help={<Html html={templates.project_view_snapshot_description_help} />}
+          label={gettext('Description')}
           name="description"
           value={formData.description}
           onChange={(e) => setField('description', e.target.value)}
+          rows={4}
         />
 
         {errors.non_field_errors?.map((err, i) => (
