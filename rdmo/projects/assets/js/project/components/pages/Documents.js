@@ -144,16 +144,9 @@ const Documents = () => {
       <div className="d-flex">
         <div
           className="d-flex align-items-center justify-content-center me-3 flex-shrink-0"
-          style={{
-            width: '48px',
-            height: '48px',
-            backgroundColor: '#a8d5c2',
-            borderRadius: '8px',
-          }}
         >
           <i
             className="bi bi-file-earmark-text"
-            style={{ fontSize: '24px', color: '#fff' }}
           />
         </div>
 
@@ -169,7 +162,7 @@ const Documents = () => {
                 onClick={(event) => event.stopPropagation()}
                 title={gettext('Download')}
               >
-                <i className="bi bi-download" style={{ fontSize: '1.1rem' }} />
+                <i className="bi bi-download" />
               </button>
 
               <ul className="dropdown-menu dropdown-menu-end">
