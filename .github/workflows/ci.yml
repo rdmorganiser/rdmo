@@ -56,7 +56,7 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        python-version: ['3.10', '3.13']
+        python-version: ['3.10', '3.14']
         db-backend: [mysql, postgres]
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -96,7 +96,7 @@ jobs:
     - name: Run package status tests first
       run: |
         pytest rdmo/core/tests/test_package_status.py --nomigrations --verbose
-      if: matrix.python-version == '3.13' && matrix.db-backend == 'postgres'
+      if: matrix.python-version == '3.14' && matrix.db-backend == 'postgres'
     - name: Run Tests
       run: |
         pytest -p randomly -p no:cacheprovider --cov --reuse-db --numprocesses=auto --dist=loadscope
@@ -116,7 +116,7 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        python-version: ['3.13']
+        python-version: ['3.14']
         db-backend: [postgres]
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -186,7 +186,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
-          python-version: "3.13"
+          python-version: "3.14"
           cache: pip
       - run: python -Im pip install --editable .[dev]
       - run: python -Ic 'import rdmo; print(rdmo.__version__)'
@@ -201,7 +201,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
-          python-version: "3.13"
+          python-version: "3.14"
           cache: pip
       - name: Download package
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
