@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { get, isEmpty } from 'lodash'
 
 import { Link, Modal, SearchField } from 'rdmo/core/assets/js/components'
-import { useFormattedDateTime, useModal, useScrollToTop }  from 'rdmo/core/assets/js/hooks'
+import { useFormattedDateTime, useModal, useScrollToTop } from 'rdmo/core/assets/js/hooks'
 import { language } from 'rdmo/core/assets/js/utils'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
@@ -38,7 +38,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
   const displayMessage = interpolate(gettext('%s of %s projects are displayed'), [projects.length > projectsCount ? projectsCount : projects.length, projectsCount])
 
   const getProgressString = (row) => {
-    return (row.progress_total ?  interpolate(gettext('%s of %s'), [row.progress_count ?? 0, row.progress_total]) : null)
+    return (row.progress_total ? interpolate(gettext('%s of %s'), [row.progress_count ?? 0, row.progress_total]) : null)
   }
 
   const isAdminOrSiteManager = currentUser.is_superuser || currentUser.is_site_manager
@@ -78,8 +78,8 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
     const href = `${baseUrl}/projects/${current.id}`
 
     const parts = ancestors.map((ancestor, ancestorIndex) => {
-      const content = ancestors === current
-        ? <span className="fw-bold font-weight-bold">{ancestor.title}</span>
+      const content = ancestorIndex === ancestors.length - 1
+        ? <span className="fw-bold">{ancestor.title}</span>
         : ancestor.title
 
       return (
@@ -116,39 +116,54 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
 
   const renderLoadButtons = () => {
     return (
-          <div className="icon-container ml-auto">
-            {projects.length > 0 && showTopButton &&
-              <button type="button" className="elliptic-button" onClick={scrollToTop}
-                      title={gettext('Scroll to top')} aria-label={gettext('Scroll to top')}>
-                <i className="fa fa-arrow-up" aria-hidden="true"></i>
-              </button>
-            }
-            {hasNext &&
-            <button type="button" onClick={loadMore} className="elliptic-button">
-              {gettext('Load more')}
-            </button>
-            }
-          </div>
+      <div className="icon-container ml-auto">
+        {projects.length > 0 && showTopButton &&
+          <button type="button" className="elliptic-button" onClick={scrollToTop}
+            title={gettext('Scroll to top')} aria-label={gettext('Scroll to top')}>
+            <i className="fa fa-arrow-up" aria-hidden="true"></i>
+          </button>
+        }
+        {hasNext &&
+          <button type="button" onClick={loadMore} className="elliptic-button">
+            {gettext('Load more')}
+          </button>
+        }
+      </div>
     )
   }
 
-  /* order of elements in 'visibleColumns' corresponds to order of columns in table */
-  let visibleColumns = ['title', 'progress', 'last_changed', 'actions']
-  let columnWidths
+  const ordering = get(config, 'params.ordering')
+  const sortOrder = ordering ? (ordering.startsWith('-') ? 'desc' : 'asc') : undefined
+  const sortColumn = ordering ? (ordering.startsWith('-') ? ordering.substring(1) : ordering) : undefined
 
-  if (myProjects) {
-    visibleColumns.splice(2, 0, 'role')
-    columnWidths = ['40%', '18%', '18%', '18%', '6%']
-  } else {
-    visibleColumns.splice(2, 0, 'created')
-    visibleColumns.splice(2, 0, 'owner')
-    columnWidths = ['30%', '10%', '18%', '18%', '18%', '6%']
+  const handleHeaderClick = (column) => {
+    if (sortColumn === column) {
+      if (sortOrder === 'asc') {
+        configActions.updateConfig('params.ordering', `-${column}`)
+      } else if (sortOrder === 'desc') {
+        configActions.deleteConfig('params.ordering')
+      } else {
+        configActions.updateConfig('params.ordering', column)
+      }
+    } else {
+      configActions.updateConfig('params.ordering', column)
+    }
+    projectsActions.fetchProjects()
   }
+
+  /* order of elements in 'visibleColumns' corresponds to order of columns in table */
+  const visibleColumns = myProjects
+    ? ['title', 'progress', 'role', 'last_changed', 'actions']
+    : ['title', 'progress', 'owner', 'created', 'last_changed', 'actions']
+
+  const columnWidths = myProjects
+    ? ['40%', '18%', '18%', '18%', '6%']
+    : ['30%', '10%', '18%', '18%', '18%', '6%']
 
   const cellFormatters = {
     title: (_content, row) => renderTitle(row),
     role: (_content, row) => {
-      const rolesString  = roleOptions.find(option => option.value == row.current_role)?.label || ''
+      const rolesString = roleOptions.find(option => option.value == row.current_role)?.label || ''
 
       return <>
         {
@@ -259,12 +274,12 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
       <Table
         cellFormatters={cellFormatters}
         columnWidths={columnWidths}
-        config={config}
-        configActions={configActions}
         data={projects}
         headerFormatters={HEADER_FORMATTERS}
-        projectsActions={projectsActions}
+        onHeaderClick={handleHeaderClick}
         sortableColumns={SORTABLE_COLUMNS}
+        sortColumn={sortColumn}
+        sortOrder={sortOrder}
         visibleColumns={visibleColumns}
       />
 
