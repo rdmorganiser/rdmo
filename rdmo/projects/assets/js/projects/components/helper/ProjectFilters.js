@@ -1,15 +1,24 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { get } from 'lodash'
 import DatePicker from 'react-datepicker'
-import { formatISO, set  } from 'date-fns'
+import { formatISO, set } from 'date-fns'
 
 import { Link, Select } from 'rdmo/core/assets/js/components'
+import * as configActions from 'rdmo/core/assets/js/actions/configActions'
+import * as projectsActions from '../../actions/projectsActions'
+
 import useDatePicker from '../../hooks/useDatePicker'
 import { language } from 'rdmo/core/assets/js/utils'
 
-const ProjectFilters = ({ catalogs, config, configActions, isAdminOrSiteManager, projectsActions }) => {
+// const ProjectFilters = ({ catalogs, config, configActions, isAdminOrSiteManager, projectsActions }) => {
+const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
+  const dispatch = useDispatch()
+
+  const config = useSelector(state => state.config)
+
   const {
     dateRange,
     dateFormat,
@@ -19,35 +28,35 @@ const ProjectFilters = ({ catalogs, config, configActions, isAdminOrSiteManager,
   } = useDatePicker()
 
   const showFilters = [true, 'true'].includes(get(config, 'showFilters', false))
-  const toggleFilters = () => configActions.updateConfig('showFilters', !showFilters)
+  const toggleFilters = () => dispatch(configActions.updateConfig('showFilters', !showFilters))
 
   const resetAllFilters = () => {
-    configActions.deleteConfig('params.catalog')
-    configActions.deleteConfig('params.created_after')
+    dispatch(configActions.deleteConfig('params.catalog'))
+    dispatch(configActions.deleteConfig('params.created_after'))
     setStartDate('created', null)
-    configActions.deleteConfig('params.created_before')
+    dispatch(configActions.deleteConfig('params.created_before'))
     setEndDate('created', null)
-    configActions.deleteConfig('params.last_changed_after')
+    dispatch(configActions.deleteConfig('params.last_changed_after'))
     setStartDate('last_changed', null)
-    configActions.deleteConfig('params.last_changed_before')
+    dispatch(configActions.deleteConfig('params.last_changed_before'))
     setEndDate('last_changed', null)
-    configActions.updateConfig('params.page', '1')
-    projectsActions.fetchProjects()
+    dispatch(configActions.updateConfig('params.page', '1'))
+    dispatch(projectsActions.fetchProjects())
   }
 
   const catalogOptions = catalogs?.filter(catalog => isAdminOrSiteManager || catalog.available)
-                                  .map(catalog => ({
-                                    value: catalog.id.toString(),
-                                    label: (
-                                      <span className={catalog.available ? '' : 'text-muted'}>
-                                        {catalog.title}
-                                      </span>
-                                    ),
-                                  }))
+    .map(catalog => ({
+      value: catalog.id.toString(),
+      label: (
+        <span className={catalog.available ? '' : 'text-muted'}>
+          {catalog.title}
+        </span>
+      ),
+    }))
   const selectedCatalog = get(config, 'params.catalog', '')
   const updateCatalogFilter = (value) => {
-    value ? configActions.updateConfig('params.catalog', value) : configActions.deleteConfig('params.catalog')
-    projectsActions.fetchProjects()
+    value ? dispatch(configActions.updateConfig('params.catalog', value)) : dispatch(configActions.deleteConfig('params.catalog'))
+    dispatch(projectsActions.fetchProjects())
   }
 
   // Abstract function to handle date change
@@ -56,20 +65,20 @@ const ProjectFilters = ({ catalogs, config, configActions, isAdminOrSiteManager,
       setStartDate(type, date)
       if (date) {
         const startOfDayDate = set(date, { hours: 0, minutes: 0, seconds: 0, milliseconds: 0 })
-        configActions.updateConfig(`params.${type}_after`, formatISO(startOfDayDate, { representation: 'complete' }))
+        dispatch(configActions.updateConfig(`params.${type}_after`, formatISO(startOfDayDate, { representation: 'complete' })))
       } else {
-        configActions.deleteConfig(`params.${type}_after`)
+        dispatch(configActions.deleteConfig(`params.${type}_after`))
       }
     } else if (position === 'end') {
       setEndDate(type, date)
       if (date) {
         const endOfDayDate = set(date, { hours: 23, minutes: 59, seconds: 59, milliseconds: 999 })
-        configActions.updateConfig(`params.${type}_before`, formatISO(endOfDayDate, { representation: 'complete' }))
+        dispatch(configActions.updateConfig(`params.${type}_before`, formatISO(endOfDayDate, { representation: 'complete' })))
       } else {
-        configActions.deleteConfig(`params.${type}_before`)
+        dispatch(configActions.deleteConfig(`params.${type}_before`))
       }
     }
-    projectsActions.fetchProjects()
+    dispatch(projectsActions.fetchProjects())
   }
 
   return (
@@ -178,10 +187,7 @@ const ProjectFilters = ({ catalogs, config, configActions, isAdminOrSiteManager,
 
 ProjectFilters.propTypes = {
   catalogs: PropTypes.arrayOf(PropTypes.object).isRequired,
-  config: PropTypes.object.isRequired,
-  configActions: PropTypes.object.isRequired,
   isAdminOrSiteManager: PropTypes.bool.isRequired,
-  projectsActions: PropTypes.object.isRequired,
 }
 
 export default ProjectFilters

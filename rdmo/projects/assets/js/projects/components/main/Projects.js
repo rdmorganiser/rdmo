@@ -1,27 +1,35 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
+
 import { get, isEmpty } from 'lodash'
 
 import { Link, Modal, SearchField } from 'rdmo/core/assets/js/components'
 import { useFormattedDateTime, useModal, useScrollToTop } from 'rdmo/core/assets/js/hooks'
 import { language } from 'rdmo/core/assets/js/utils'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
+import * as configActions from 'rdmo/core/assets/js/actions/configActions'
+import * as projectsActions from '../../actions/projectsActions'
 
 import { PendingInvitations, ProjectFilters, ProjectImport, Table } from '../helper'
 import { HEADER_FORMATTERS, SORTABLE_COLUMNS } from '../../utils'
 import { roleOptions } from '../../../common/constants/roles'
 
+const Projects = () => {
+  const dispatch = useDispatch()
 
-const Projects = ({ config, configActions, currentUserObject, projectsActions, projectsObject }) => {
-  const { allowedTypes, catalogs, importUrls, invites, projects, projectsCount, hasNext } = projectsObject
-
-  const { currentUser } = currentUserObject
-  const { myProjects } = config
+  const config = useSelector(state => state.config)
+  const projectsObject = useSelector(state => state.projects)
+  const currentUserObject = useSelector(state => state.currentUser)
 
   const { showTopButton, scrollToTop } = useScrollToTop()
 
   const { show: showInvitations, open: openInvitations, close: closeInvitations } = useModal()
   const { show: showImport, open: openImport, close: closeImport } = useModal()
+
+  if (!projectsObject.ready) return null
+  const { allowedTypes, catalogs, importUrls, invites, projects, projectsCount, hasNext } = projectsObject
+  const { currentUser } = currentUserObject
+  const { myProjects } = config
 
   const invitationsModalProps = {
     title: gettext('Pending invitations'),
@@ -45,7 +53,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
 
   const searchString = get(config, 'params.search', '')
   const updateSearchString = (value) => {
-    value ? configActions.updateConfig('params.search', value) : configActions.deleteConfig('params.search')
+    value ? dispatch(configActions.updateConfig('params.search', value)) : dispatch(configActions.deleteConfig('params.search'))
   }
 
   const viewLinkText = myProjects ? gettext('View all projects') : gettext('View my projects')
@@ -59,8 +67,8 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
   }
 
   const handleView = () => {
-    configActions.updateConfig('myProjects', !myProjects)
-    projectsActions.fetchProjects()
+    dispatch(configActions.updateConfig('myProjects', !myProjects))
+    dispatch(projectsActions.fetchProjects())
   }
 
   const handleNew = () => {
@@ -68,7 +76,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
   }
 
   const handleImport = (file) => {
-    projectsActions.uploadProject('/projects/import/', file)
+    dispatch(projectsActions.uploadProject('/projects/import/', file))
   }
 
   const buildAncestorLink = (ancestors) => {
@@ -110,8 +118,8 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
 
   const loadMore = () => {
     const page = get(config, 'params.page') ?? 1
-    configActions.updateConfig('params.page', (parseInt(page) + 1).toString())
-    projectsActions.fetchProjects(false)
+    dispatch(configActions.updateConfig('params.page', (parseInt(page) + 1).toString()))
+    dispatch(projectsActions.fetchProjects(false))
   }
 
   const renderLoadButtons = () => {
@@ -139,16 +147,16 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
   const handleHeaderClick = (column) => {
     if (sortColumn === column) {
       if (sortOrder === 'asc') {
-        configActions.updateConfig('params.ordering', `-${column}`)
+        dispatch(configActions.updateConfig('params.ordering', `-${column}`))
       } else if (sortOrder === 'desc') {
-        configActions.deleteConfig('params.ordering')
+        dispatch(configActions.deleteConfig('params.ordering'))
       } else {
-        configActions.updateConfig('params.ordering', column)
+        dispatch(configActions.updateConfig('params.ordering', column))
       }
     } else {
-      configActions.updateConfig('params.ordering', column)
+      dispatch(configActions.updateConfig('params.ordering', column))
     }
-    projectsActions.fetchProjects()
+    dispatch(projectsActions.fetchProjects())
   }
 
   /* order of elements in 'visibleColumns' corresponds to order of columns in table */
@@ -258,17 +266,14 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
           <SearchField
             value={searchString}
             onChange={updateSearchString}
-            onSearch={() => projectsActions.fetchProjects()}
+            onSearch={() => dispatch(projectsActions.fetchProjects())}
             placeholder={gettext('Search projects')}
             className="search-field"
           />
         </div>
         <ProjectFilters
           catalogs={catalogs ?? []}
-          config={config}
-          configActions={configActions}
           isAdminOrSiteManager={isAdminOrSiteManager}
-          projectsActions={projectsActions}
         />
       </div>
       <Table
@@ -297,14 +302,6 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
       </Modal>
     </div>
   )
-}
-
-Projects.propTypes = {
-  config: PropTypes.object.isRequired,
-  configActions: PropTypes.object.isRequired,
-  currentUserObject: PropTypes.object.isRequired,
-  projectsActions: PropTypes.object.isRequired,
-  projectsObject: PropTypes.object.isRequired,
 }
 
 export default Projects
