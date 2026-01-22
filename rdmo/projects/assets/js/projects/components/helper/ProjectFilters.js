@@ -13,7 +13,6 @@ import * as projectsActions from '../../actions/projectsActions'
 import useDatePicker from '../../hooks/useDatePicker'
 import { language } from 'rdmo/core/assets/js/utils'
 
-// const ProjectFilters = ({ catalogs, config, configActions, isAdminOrSiteManager, projectsActions }) => {
 const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
   const dispatch = useDispatch()
 
