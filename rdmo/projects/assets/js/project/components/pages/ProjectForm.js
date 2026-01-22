@@ -74,7 +74,7 @@ const ProjectForm = ({ disabled }) => {
       <Input
         className="mb-3 form-label fw-bold"
         label={gettext('Title')}
-        help={<Html html={templates.project_view_title_help} />}
+        help={gettext('The title for this project.')}
         value={formData.title || ''}
         onChange={(value) => handleChange('title', value)}
         errors={errors.title}
@@ -84,7 +84,7 @@ const ProjectForm = ({ disabled }) => {
       <Textarea
         className="mb-3 form-label fw-bold"
         label={gettext('Description')}
-        help={<Html html={templates.project_view_description_help} />}
+        help={gettext('A description of the project (optional).')}
         rows={4}
         value={formData.description || ''}
         onChange={(value) => handleChange('description', value)}
@@ -97,7 +97,7 @@ const ProjectForm = ({ disabled }) => {
       <Select
         className="mb-3 form-label fw-bold"
         label={gettext('Project phase')}
-        help={gettext('The phase of the project at this time.')} // should rather be a template
+        help={gettext('The phase of the project at this time.')}
         // "Die Phase, in der sich Ihr Projekt zum aktuellen Zeitpunkt befindet."
         isClearable={true}
         options={[
