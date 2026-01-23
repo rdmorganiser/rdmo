@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import Html from 'rdmo/core/assets/js/components/Html'
 import Modal from 'rdmo/core/assets/js/_bs53/components/Modal'
 
-import { deleteProjectMember, deleteProjectInvite, leaveProject } from '../../actions/projectActions'
-import { useFieldErrors } from '../../hooks/useFieldErrors'
+import { deleteProjectMember, deleteProjectInvite, leaveProject } from '../../../actions/projectActions'
+import { useFieldErrors } from '../../../hooks/useFieldErrors'
 
 const MembershipDeleteModal = ({ type, show, person, onClose, isAdminOrSiteManager = false,
                                  isCurrentUser = false }) => {

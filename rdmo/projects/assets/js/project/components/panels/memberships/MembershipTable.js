@@ -6,8 +6,8 @@ import { useModal } from 'rdmo/core/assets/js/hooks'
 
 import Select from 'rdmo/core/assets/js/components/Select'
 
-import { updateProjectMember, updateProjectInvite } from '../../actions/projectActions'
-import { roleOptions } from '../../../common/constants/roles'
+import { updateProjectMember, updateProjectInvite } from '../../../actions/projectActions'
+import { roleOptions } from '../../../../common/constants/roles'
 
 import MembershipDeleteModal  from './MembershipDeleteModal'
 
@@ -41,9 +41,9 @@ const MembershipTable = ({ persons, type }) => {
       <table className="table border align-middle">
         <thead className="table-light">
           <tr>
-            <th style={{ width: '35%' }}>{gettext('Name').toUpperCase()}</th>
-            <th style={{ width: '40%' }}>{gettext('Email').toUpperCase()}</th>
-            <th style={{ width: '20%' }}>{gettext('Role').toUpperCase()}</th>
+            <th style={{ width: '35%' }}>{gettext('Name')}</th>
+            <th style={{ width: '40%' }}>{gettext('Email')}</th>
+            <th style={{ width: '20%' }}>{gettext('Role')}</th>
             <th style={{ width: '5%' }}></th>
           </tr>
         </thead>

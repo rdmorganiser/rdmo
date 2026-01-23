@@ -1,4 +1,4 @@
-import { isUndefined } from 'lodash'
+import { isNil } from 'lodash'
 
 import CatalogsApi from 'rdmo/projects/assets/js/common/api/CatalogsApi'
 
@@ -15,32 +15,20 @@ import * as actionTypes from './actionTypes'
 
 // asynchronous actions
 
-export function navigateDashboard({ page, pageId, action, actionId }) {
+export function navigateDashboard(location) {
   return (dispatch) => {
-    dispatch(updateConfig('page', page, false))
-    dispatch(updateConfig('pageId', pageId, false))
-    dispatch(updateConfig('action', action, false))
-    dispatch(updateConfig('actionId', actionId, false))
+    // update the location in the url
+    updateLocation(location)
 
-    updateLocation({ page, pageId, action, actionId })
+    // update the location in the config store
+    Object.keys(location).forEach(key => dispatch(updateConfig(key, location[key], false)))
 
-    switch (page) {
-      case 'documents':
-        switch (action) {
-          case 'answers':
-            return dispatch(fetchAnswers())
-          case 'views':
-            return dispatch(fetchView(actionId))
-        }
-        break
-      case 'snapshots':
-        switch (action) {
-          case 'answers':
-            return dispatch(fetchAnswers(pageId, actionId))
-          case 'views':
-            return dispatch(fetchView(pageId, actionId))
-        }
-        break
+    if (!isNil(location.viewId)) {
+      dispatch(fetchView(location.snapshotId, location.viewId))
+    } else if (location.detail == 'answers') {
+      dispatch(fetchAnswers(location.snapshotId))
+    } else {
+      dispatch({ type: actionTypes.CLEAR_CURRENT_VIEW })
     }
   }
 }
@@ -66,14 +54,14 @@ export function fetchProject() {
     ])
       .then(([project, hierarchy, snapshots, views, answers, tasks, memberships, membershipHierarchy, catalogs]) => {
         const projectData = {
-          project: project,
-          hierarchy: hierarchy,
-          snapshots: snapshots,
-          projectViews: views,
-          projectAnswers: answers,
-          tasks: tasks,
+          project,
+          hierarchy,
+          snapshots,
+          views,
+          answers,
+          tasks,
           memberships: [...memberships, ...membershipHierarchy],
-          catalogs: catalogs
+          catalogs
         }
 
         dispatch(removeFromPending('fetchProject'))
@@ -377,7 +365,7 @@ export function rollbackSnapshot(snapshotId) {
 // answers / views
 
 export function fetchAnswers(snapshotId) {
-  const pendingId = isUndefined(snapshotId) ? `fetchView/${snapshotId}` : 'fetchAnswers'
+  const pendingId = isNil(snapshotId) ? `fetchView/${snapshotId}` : 'fetchAnswers'
 
   return function (dispatch) {
     dispatch(addToPending(pendingId))
@@ -398,7 +386,7 @@ export function fetchAnswers(snapshotId) {
 }
 
 export function fetchView(snapshotId, viewId) {
-  const pendingId = isUndefined(snapshotId) ? `fetchView/${snapshotId}/${viewId}` : `fetchView/${viewId}`
+  const pendingId = isNil(snapshotId) ? `fetchView/${snapshotId}/${viewId}` : `fetchView/${viewId}`
 
   return function (dispatch) {
     dispatch(addToPending(pendingId))
@@ -418,21 +406,27 @@ export function fetchView(snapshotId, viewId) {
 
 // download
 
-export function downloadDocument(urlPath, format) {
+export function downloadAnswers(snapshotId, format) {
   return function (dispatch) {
-    dispatch(addToPending('downloadDocument'))
-    dispatch({ type: actionTypes.DOWNLOAD_DOCUMENT_INIT })
+    dispatch(addToPending('downloadAnswers'))
+    dispatch({ type: actionTypes.DOWNLOAD_ANSWERS_INIT })
 
-    return ProjectApi.downloadDocument(urlPath, format)
-      .then(() => {
-        dispatch(removeFromPending('downloadDocument'))
-        dispatch({ type: actionTypes.DOWNLOAD_DOCUMENT_SUCCESS })
-      })
-      .catch(error => {
-        dispatch(removeFromPending('downloadDocument'))
-        dispatch({ type: actionTypes.DOWNLOAD_DOCUMENT_ERROR, error })
-        throw error
-      })
+    return ProjectApi.downloadProjectAnswers(projectId, snapshotId, format)
+      .then(() => dispatch({ type: actionTypes.DOWNLOAD_ANSWERS_SUCCESS }))
+      .catch(error => dispatch({ type: actionTypes.DOWNLOAD_ANSWERS_ERROR, error }))
+      .finally(() => dispatch(removeFromPending('downloadAnswers')))
+  }
+}
+
+export function downloadView(snapshotId, viewId, format) {
+  return function (dispatch) {
+    dispatch(addToPending('downloadView'))
+    dispatch({ type: actionTypes.DOWNLOAD_VIEW_INIT })
+
+    return ProjectApi.downloadProjectView(projectId, snapshotId, viewId, format)
+      .then(() => dispatch({ type: actionTypes.DOWNLOAD_VIEW_SUCCESS }))
+      .catch(error => dispatch({ type: actionTypes.DOWNLOAD_VIEW_ERROR, error }))
+      .finally(() => dispatch(removeFromPending('downloadView')))
   }
 }
 
