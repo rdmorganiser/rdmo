@@ -1,41 +1,46 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 
-import Dashboard from './pages/Dashboard'
-import Documents from './pages/Documents'
-import Snapshots from './pages/Snapshots'
-import Membership from './pages/Membership'
-import ProjectData from './pages/ProjectData'
+import Dashboard from './panels/Dashboard'
+import Interview from './panels/Interview'
+import Documents from './panels/Documents'
+import Information from './panels/Information'
+import Memberships from './panels/Memberships'
+import Snapshots from './panels/Snapshots'
+import Plugins from './panels/Plugins'
+
+import View from './helper/View'
 
 const Main = () => {
-  const { page, pageId } = useSelector((state) => state.config)
+  const { panel } = useSelector((state) => state.config)
+  const { project, currentView } = useSelector((state) => state.project)
 
-  const renderPage = () => {
-    if (page === 'snapshots' && pageId) {
-      return <Documents />
-    }
-
-    switch (page) {
-      case '':
+  const renderPanel = () => {
+    switch (panel) {
+      case 'dashboard':
         return <Dashboard />
+      case 'interview':
+        return <Interview />
       case 'documents':
-        return <Documents />
+        return currentView ? <View /> : <Documents />
       case 'snapshots':
-        return <Snapshots />
-      case 'project-information':
-        return <ProjectData />
-      case 'membership':
-        return <Membership />
+        return currentView ? <View /> : <Snapshots />
+      case 'information':
+        return <Information />
+      case 'memberships':
+        return <Memberships />
+      case 'plugins':
+        return <Plugins />
       default:
         return <h2>Page Not Found</h2>
     }
   }
 
-  return (
+  return panel && project && (
     <div className="d-flex">
       <div className="flex-grow-1 pt-4">
         <div className="container">
-          {renderPage()}
+          {renderPanel()}
         </div>
       </div>
     </div>

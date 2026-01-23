@@ -6,9 +6,9 @@ import { isEmpty } from 'lodash'
 import Html from 'rdmo/core/assets/js/components/Html'
 import { Modal, Tooltip } from 'rdmo/core/assets/js/_bs53/components'
 
-import { createProjectMember, sendProjectInvite, clearProjectErrors } from '../../actions/projectActions'
-import { useFieldErrors } from '../../hooks/useFieldErrors'
-import { roleOptions } from '../../../common/constants/roles'
+import { createProjectMember, sendProjectInvite, clearProjectErrors } from '../../../actions/projectActions'
+import { useFieldErrors } from '../../../hooks/useFieldErrors'
+import { roleOptions } from '../../../../common/constants/roles'
 
 const initialForm = { lookup: '', role: 'author' }
 

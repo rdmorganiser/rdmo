@@ -1,50 +1,52 @@
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 import { projectId } from '../utils/meta'
-import { isUndefined } from 'lodash'
+import { isNil } from 'lodash'
 
 export const parseLocation = () => {
   let pathname = window.location.pathname
+  let location = {
+    'panel': 'dashboard'
+  }
 
   if (pathname.length > 1) {
     pathname = pathname.replace(/\/+$/, '')
   }
 
   const patterns = [
-    /\/projects\/\d+\/(?<page>[a-z-]+)\/(?<pageId>\d+)\/(?<action>[a-z-]+)\/(?<actionId>\d+)[/]*$/,
-    /\/projects\/\d+\/(?<page>[a-z-]+)\/(?<pageId>\d+)\/(?<action>[a-z-]+)[/]*$/,
-    /\/projects\/\d+\/(?<page>[a-z-]+)\/(?<pageId>\d+)[/]*$/,
-    /\/projects\/\d+\/(?<page>[a-z-]+)\/(?<action>[a-z-]+)\/(?<actionId>\d+)[/]*$/,
-    /\/projects\/\d+\/(?<page>[a-z-]+)\/(?<action>[a-z-]+)[/]*$/,
-    /\/projects\/\d+\/(?<page>[a-z-]+)[/]*$/
+    /\/projects\/\d+\/(?<panel>(snapshots))\/(?<snapshotId>\d+)\/views\/(?<viewId>\d+)[/]*$/,
+    /\/projects\/\d+\/(?<panel>(snapshots))\/(?<snapshotId>\d+)\/(?<detail>[a-z-]+)[/]*$/,
+    /\/projects\/\d+\/(?<panel>[a-z-]+)\/views\/(?<viewId>\d+)[/]*$/,
+    /\/projects\/\d+\/(?<panel>[a-z-]+)\/(?<detail>[a-z-]+)[/]*$/,
+    /\/projects\/\d+\/(?<panel>[a-z-]+)[/]*$/
   ]
 
   for (const pattern of patterns) {
     const match = pathname.match(pattern)
-    if (match) return match.groups
+    if (match) {
+      location = match.groups
+      break
+    }
   }
 
-  return {
-    page: ''
-  }
+  return location
 }
 
-export const updateLocation = ({ page, pageId, action, actionId }) => {
-  const pathname = buildPath({ page, pageId, action, actionId })
+export const updateLocation = (location) => {
+  const pathname = buildPath(location)
   if (pathname != window.location.pathname) {
     history.pushState(null, null, pathname)
   }
 }
 
-export const buildPath = ({ page, pageId, action, actionId }) => {
+export const buildPath = ({ panel, snapshotId, viewId, detail }) => {
   const segments = [baseUrl, 'projects', projectId]
 
-  if (!isUndefined(page)) {
-    segments.push(page)
-
-    if (!isUndefined(pageId)) segments.push(pageId)
-    if (!isUndefined(action)) segments.push(action)
-    if (!isUndefined(actionId)) segments.push(actionId)
+  if (!isNil(panel) && panel != 'dashboard') {
+    segments.push(panel)
   }
+  if (!isNil(snapshotId)) segments.push(snapshotId)
+  if (!isNil(viewId)) segments.push('views', viewId)
+  if (!isNil(detail)) segments.push(detail)
 
   return segments.join('/') + '/'
 }

@@ -12,30 +12,34 @@ const Sidebar = () => {
   const menuItems = [
     {
       title: '',
-      items: [{ id: '', name: gettext('Dashboard'), icon: 'bi-grid' }],
-    },
-    {
-      title: gettext('DATA MANAGEMENT PLAN'),
       items: [
-        { id: 'interview', name: gettext('Interview'), icon: 'bi-clipboard-check' },
-        { id: 'documents', name: gettext('Documents'), icon: 'bi-file-text' },
-        { id: 'snapshots', name: gettext('Snapshots'), icon: 'bi-stack' },
+        { panel: 'dashboard', name: gettext('Dashboard'), icon: 'bi-grid' }
       ],
     },
     {
-      title: gettext('PROJECT MANAGEMENT'),
+      title: gettext('Data management plan'),
       items: [
-        { id: 'project-information', name: gettext('Project data'), icon: 'bi-info-square' },
-        { id: 'membership', name: gettext('Membership'), icon: 'bi-people' },
-        { id: 'plugins', name: gettext('Plugins'), icon: 'bi-wrench' },
+        { panel: 'interview', name: gettext('Interview'), icon: 'bi-clipboard-check' },
+        { panel: 'documents', name: gettext('Documents'), icon: 'bi-file-text' },
+        { panel: 'snapshots', name: gettext('Snapshots'), icon: 'bi-stack' },
+      ],
+    },
+    {
+      title: gettext('Settings'),
+      items: [
+        { panel: 'information', name: gettext('Project data'), icon: 'bi-info-square' },
+        { panel: 'memberships', name: gettext('Membership'), icon: 'bi-people' },
+        { panel: 'plugins', name: gettext('Plugins'), icon: 'bi-wrench' },
       ],
     },
   ]
 
-  const page = useSelector((state) => state.config.page)
+  const { panel } = useSelector((state) => state.config)
+  const { project } = useSelector((state) => state.project)
+
   const dispatch = useDispatch()
 
-  return (
+  return project && (
     <div className="project-sidebar p-2">
       <ProjectBadge />
 
@@ -45,12 +49,12 @@ const Sidebar = () => {
             {section.title && <h6 className="text-muted mt-3 mb-2">{section.title}</h6>}
 
             {section.items.map((item) => (
-              <li key={item.id} className="nav-item">
+              <li key={item.panel} className="nav-item">
                 <button
                   className={classnames('nav-link w-100 text-start d-flex align-items-center gap-2', {
-                    active: page === item.id
+                    active: panel === item.panel
                   })}
-                  onClick={() => dispatch(navigateDashboard({ page: item.id }))}
+                  onClick={() => dispatch(navigateDashboard({ panel: item.panel }))}
                 >
                   <i className={`bi ${item.icon}`}></i>
                   {item.name}

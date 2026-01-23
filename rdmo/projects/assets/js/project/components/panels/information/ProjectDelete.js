@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Modal from 'rdmo/core/assets/js/_bs53/components/Modal'
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { deleteProject } from '../../actions/projectActions'
+import { deleteProject } from '../../../actions/projectActions'
 
 const ProjectDelete = () => {
   const dispatch = useDispatch()

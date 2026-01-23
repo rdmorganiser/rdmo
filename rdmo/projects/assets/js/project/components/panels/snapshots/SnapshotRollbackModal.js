@@ -5,8 +5,8 @@ import { useDispatch } from 'react-redux'
 import Html from 'rdmo/core/assets/js/components/Html'
 import Modal from 'rdmo/core/assets/js/_bs53/components/Modal'
 
-import { rollbackSnapshot } from '../../actions/projectActions'
-import { useFieldErrors } from '../../hooks/useFieldErrors'
+import { rollbackSnapshot } from '../../../actions/projectActions'
+import { useFieldErrors } from '../../../hooks/useFieldErrors'
 
 const SnapshotRollbackModal = ({ show, onClose, snapshot }) => {
   const dispatch = useDispatch()

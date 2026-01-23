@@ -6,12 +6,12 @@ import { useFormattedDateTime } from 'rdmo/core/assets/js/hooks'
 import { useModal } from 'rdmo/core/assets/js/hooks'
 import { language } from 'rdmo/core/assets/js/utils'
 
-import { navigateDashboard } from '../../actions/projectActions'
+import { navigateDashboard } from '../../../actions/projectActions'
 
 import SnapshotModal from './SnapshotModal'
 import SnapshotRollbackModal from './SnapshotRollbackModal'
 
-const SnapshotsTable = ({ snapshots }) => {
+const SnapshotTable = ({ snapshots }) => {
   const dispatch = useDispatch()
   const { project } = useSelector((state) => state.project.project) || {}
   const perms = project?.permissions || {}
@@ -21,7 +21,7 @@ const SnapshotsTable = ({ snapshots }) => {
   const [selectedSnapshot, setSelectedSnapshot] = useState(null)
 
   const handleShowAnswers = (snapshotId) => {
-    dispatch(navigateDashboard({ page: 'snapshots', pageId: snapshotId, action: 'answers' }))
+    dispatch(navigateDashboard({ panel: 'snapshots', snapshotId, detail: 'answers' }))
   }
 
   const openRollbackModal = (snapshot) => {
@@ -39,9 +39,9 @@ const SnapshotsTable = ({ snapshots }) => {
       <table className="table border align-middle">
         <thead className="table-light">
           <tr>
-            <th style={{ width: '35%' }}>{gettext('Snapshot').toUpperCase()}</th>
-            <th style={{ width: '40%' }}>{gettext('Description').toUpperCase()}</th>
-            <th style={{ width: '15%' }}>{gettext('Created').toUpperCase()}</th>
+            <th style={{ width: '35%' }}>{gettext('Snapshot')}</th>
+            <th style={{ width: '40%' }}>{gettext('Description')}</th>
+            <th style={{ width: '15%' }}>{gettext('Created')}</th>
             <th style={{ width: '10%' }}></th>
           </tr>
         </thead>
@@ -114,8 +114,8 @@ const SnapshotsTable = ({ snapshots }) => {
   )
 }
 
-SnapshotsTable.propTypes = {
+SnapshotTable.propTypes = {
   snapshots: PropTypes.array.isRequired,
 }
 
-export default SnapshotsTable
+export default SnapshotTable
