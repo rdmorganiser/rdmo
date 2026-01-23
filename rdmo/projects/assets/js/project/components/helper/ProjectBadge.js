@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 
 const ProjectBadge = () => {
-  const { project } = useSelector((state) => state.project.project || {})
+  const project = useSelector((state) => state.project.project?.project)
 
   if (!project?.title) return null
 
