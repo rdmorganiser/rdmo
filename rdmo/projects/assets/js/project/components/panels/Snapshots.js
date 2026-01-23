@@ -4,8 +4,8 @@ import { isEmpty } from 'lodash'
 
 import { useModal } from 'rdmo/core/assets/js/hooks'
 
-import SnapshotsTable from './SnapshotsTable'
-import SnapshotModal from './SnapshotModal'
+import SnapshotModal from './snapshots/SnapshotModal'
+import SnapshotTable from './snapshots/SnapshotTable'
 
 const Snapshots = () => {
   const { show: showSnapshot, open: openSnapshot, close: closeSnapshot } = useModal()
@@ -14,9 +14,9 @@ const Snapshots = () => {
   const perms = project?.permissions ?? {}
 
   return (
-    <>
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2 className="mb-0">{gettext('Snapshots')}</h2>
+    <div className="project-snapshots">
+      <div className="d-flex justify-content-between align-items-center mb-5">
+        <h1 className="mb-0">{gettext('Snapshots')}</h1>
         {perms.can_add_snapshot && (
           <>
             <button
@@ -32,11 +32,11 @@ const Snapshots = () => {
       </div>
       {
         !isEmpty(snapshots) && perms.can_view_snapshot && (
-          <SnapshotsTable snapshots={snapshots} />
+          <SnapshotTable snapshots={snapshots} />
         )
       }
       <SnapshotModal show={showSnapshot} onClose={closeSnapshot} />
-    </>
+    </div>
   )
 }
 

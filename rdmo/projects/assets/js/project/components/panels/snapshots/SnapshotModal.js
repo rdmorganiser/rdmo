@@ -6,12 +6,8 @@ import Html from 'rdmo/core/assets/js/components/Html'
 import { Input, Textarea } from 'rdmo/core/assets/js/components/forms'
 import { Modal } from 'rdmo/core/assets/js/_bs53/components'
 
-import {
-  createSnapshot,
-  updateSnapshot,
-  clearProjectErrors
-} from '../../actions/projectActions'
-import { useFieldErrors } from '../../hooks/useFieldErrors'
+import { createSnapshot, updateSnapshot, clearProjectErrors}  from '../../../actions/projectActions'
+import { useFieldErrors } from '../../../hooks/useFieldErrors'
 
 const initialForm = { title: '', description: '' }
 

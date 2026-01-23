@@ -25,16 +25,20 @@ const Dashboard = () => {
 
   return (
     <div>
-      <button className="btn btn-primary mb-3" onClick={toggleSize}>
-            Toggle Tile Size (Current: {tileSize})
-      </button>
+      <h1>{gettext('Dashboard')}</h1>
 
-      <TileGrid tiles={tiles} size={tileSize} />
+      <div className="mt-5">
+        <button className="btn btn-primary mb-3" onClick={toggleSize}>
+              Toggle Tile Size (Current: {tileSize})
+        </button>
 
-      <div>
-        <Tooltip title={<>TITLE</>} placement="top">
-          <span>TOOLTIP</span>
-        </Tooltip>
+        <TileGrid tiles={tiles} size={tileSize} />
+
+        <div>
+          <Tooltip title={<>TITLE</>} placement="top">
+            <span>TOOLTIP</span>
+          </Tooltip>
+        </div>
       </div>
     </div>
   )
