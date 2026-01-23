@@ -1,6 +1,9 @@
-.project,
-.project-sidebar {
+.project {
     min-height: calc(100vh - 56px);
+}
+
+.project-main,
+.project-sidebar {
 }
 
 .project-sidebar {
