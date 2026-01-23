@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -9,7 +8,30 @@ import { navigateDashboard } from '../actions/projectActions'
 
 import ProjectBadge from './helper/ProjectBadge'
 
-const ProjectSidebar = ({ menuItems }) => {
+const Sidebar = () => {
+  const menuItems = [
+    {
+      title: '',
+      items: [{ id: '', name: gettext('Dashboard'), icon: 'bi-grid' }],
+    },
+    {
+      title: gettext('DATA MANAGEMENT PLAN'),
+      items: [
+        { id: 'interview', name: gettext('Interview'), icon: 'bi-clipboard-check' },
+        { id: 'documents', name: gettext('Documents'), icon: 'bi-file-text' },
+        { id: 'snapshots', name: gettext('Snapshots'), icon: 'bi-stack' },
+      ],
+    },
+    {
+      title: gettext('PROJECT MANAGEMENT'),
+      items: [
+        { id: 'project-information', name: gettext('Project data'), icon: 'bi-info-square' },
+        { id: 'membership', name: gettext('Membership'), icon: 'bi-people' },
+        { id: 'plugins', name: gettext('Plugins'), icon: 'bi-wrench' },
+      ],
+    },
+  ]
+
   const page = useSelector((state) => state.config.page)
   const dispatch = useDispatch()
 
@@ -49,19 +71,4 @@ const ProjectSidebar = ({ menuItems }) => {
   )
 }
 
-ProjectSidebar.propTypes = {
-  menuItems: PropTypes.arrayOf(
-    PropTypes.shape({
-      title: PropTypes.string,
-      items: PropTypes.arrayOf(
-        PropTypes.shape({
-          id: PropTypes.string.isRequired,
-          name: PropTypes.string.isRequired,
-          icon: PropTypes.string,
-        })
-      ).isRequired,
-    })
-  ).isRequired
-}
-
-export default ProjectSidebar
+export default Sidebar
