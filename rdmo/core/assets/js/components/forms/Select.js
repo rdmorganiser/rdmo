@@ -61,7 +61,7 @@ const Select = ({ className, label, help, placeholder, isClearable, isDisabled, 
 Select.propTypes = {
   className: PropTypes.string,
   label: PropTypes.string,
-  help: PropTypes.string,
+  help: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
   placeholder: PropTypes.string,
   isClearable: PropTypes.bool,
   isDisabled: PropTypes.bool,
