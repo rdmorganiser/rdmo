@@ -60,7 +60,7 @@ Input.propTypes = {
   debounce: PropTypes.number,
   label: PropTypes.string,
   placeholder: PropTypes.string,
-  help: PropTypes.string,
+  help: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
   isDisabled: PropTypes.bool,
   errors: PropTypes.array,
   value: PropTypes.string.isRequired,
