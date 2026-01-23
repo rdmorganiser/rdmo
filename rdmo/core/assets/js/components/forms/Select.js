@@ -10,7 +10,7 @@ const Select = ({ className, label, help, placeholder, isClearable, isDisabled, 
   // lookup value(s) in the options array
   const getValue = () => (
     isArray(value) ? options.filter(option => (value.includes(option.value)))
-                   : options.find(option => (option.value == value))
+      : options.find(option => (option.value == value))
   )
 
   const handleChange = (option) => {
@@ -68,7 +68,7 @@ Select.propTypes = {
   isMulti: PropTypes.bool,
   options: PropTypes.array,
   errors: PropTypes.array,
-  value: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
+  value: PropTypes.oneOfType([PropTypes.array, PropTypes.string, PropTypes.number]),
   onChange: PropTypes.func.isRequired
 }
 
