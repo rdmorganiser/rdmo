@@ -19,12 +19,7 @@ const Memberships = () => {
       <div className="d-flex justify-content-between align-items-center mb-5">
         <h1 className="mb-0">{gettext('Memberships')}</h1>
         {perms.can_add_invite && (
-          <button
-            type="button"
-            id="add-member"
-            className="btn btn-link text-decoration-none"
-            onClick={openInvite}
-          >
+          <button type="button" className="btn link small" onClick={openInvite}>
             <i className="bi bi-plus" aria-hidden="true"></i> {gettext('Add member')}
           </button>
         )}
