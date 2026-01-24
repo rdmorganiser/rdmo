@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSelector, useDispatch } from 'react-redux'
+import classNames from 'classnames'
 
 import { useModal } from 'rdmo/core/assets/js/hooks'
 
@@ -101,15 +102,13 @@ const MembershipTable = ({ persons, type }) => {
                 </td>
                 <td className="text-end">
                   {showActions && (
-                    <button
-                      type="button"
-                      className="btn btn-link btn-sm p-0"
+                    <button type="button" className="btn link"
                       aria-label={isCurrentUser ? gettext('Leave') : gettext('Remove')}
                       title={isCurrentUser ? gettext('Leave') : gettext('Remove')}
                       onClick={() => openDeleteModal(person, isCurrentUser)}
                     >
                       <i
-                        className={`bi ${isCurrentUser ? 'bi-box-arrow-right' : 'bi-x'}`}
+                        className={classNames('bi', isCurrentUser ? 'bi-box-arrow-right' : 'bi-person-x')}
                         aria-hidden="true"
                       />
                     </button>
