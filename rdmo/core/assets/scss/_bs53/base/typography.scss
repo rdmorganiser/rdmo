@@ -62,6 +62,14 @@ button.unstyled {
     }
 }
 
+button.link.small {
+    font-size: var(--rdmo-font-size-small);
+}
+
+button.link.large {
+    font-size: var(--rdmo-font-size-large);
+}
+
 .btn-primary {
     --bs-btn-bg: var(--rdmo-color-link);
     --bs-btn-border-color: var(--rdmo-color-link);
