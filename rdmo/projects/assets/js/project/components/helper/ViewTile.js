@@ -1,32 +1,32 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Html from 'rdmo/core/assets/js/components/Html'
+import Img from 'rdmo/core/assets/js/components/Img'
+import Truncate from 'rdmo/core/assets/js/components/Truncate'
 
 import ExportsDropdown from './ExportsDropdown'
-import Tile from './Tile'
 
 const ViewTile = ({ title, help, onClick, onExport }) => (
-  <Tile size={'compact'} onClick={onClick}>
+  <div className="card card-tile mb-4" onClick={onClick}>
     <div className="d-flex">
-      <div className="d-flex align-items-center justify-content-center me-3 flex-shrink-0">
-        <i className="bi bi-file-earmark-text" />
-      </div>
-
-      <div className="flex-grow-1 d-flex flex-column">
-        <div className="d-flex justify-content-between align-items-start mb-1">
-          <div className="fw-bold">{title}</div>
-          <ExportsDropdown onExport={onExport} title={false} />
-        </div>
-
-        {help && (
-          <div className="text-muted small mb-2">
-            <Html html={help} />
+      <Img src="/core/img/document.png" className="img-fluid" alt={gettext('Document image')} />
+      <div className="card-body">
+        <div className="d-flex flex-column justify-content-center h-100 foo">
+          <div>
+            <h3 className="card-title mb-2">
+              <div>
+                <Truncate text={title} selector=".card-body" />
+              </div>
+            </h3>
+            <p className="card-text text-muted mb-2">
+              <Truncate text={help} selector=".card-body" />
+            </p>
+            <ExportsDropdown onExport={onExport} />
           </div>
-        )}
+        </div>
       </div>
     </div>
-  </Tile>
+  </div>
 )
 
 ViewTile.propTypes = {

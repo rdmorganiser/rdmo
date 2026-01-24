@@ -24,8 +24,9 @@ const SnapshotsDropdown = ({ onChange }) => {
     <div className="dropdown dropdown-menu-end">
       <button
         type="button"
-        className="link"
+        className="link text-nowrap"
         data-bs-toggle="dropdown"
+        data-bs-popper-config='{"strategy":"fixed"}'
         aria-expanded="false"
         onClick={(event) => event.stopPropagation()}
         title={gettext('Snapshots')}
