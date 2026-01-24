@@ -1,14 +1,19 @@
 import React from 'react'
-import classnames from 'classnames'
 import { useDispatch, useSelector } from 'react-redux'
+import classnames from 'classnames'
 
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import { navigateDashboard } from '../actions/projectActions'
 
-import ProjectBadge from './helper/ProjectBadge'
-
 const Sidebar = () => {
+  const dispatch = useDispatch()
+
+  const { panel } = useSelector((state) => state.config)
+  const { project } = useSelector((state) => state.project)
+
+  const catalog = project?.catalogs.find(catalog => catalog.id == project.project.catalog)
+
   const menuItems = [
     {
       title: '',
@@ -34,38 +39,49 @@ const Sidebar = () => {
     },
   ]
 
-  const { panel } = useSelector((state) => state.config)
-  const { project } = useSelector((state) => state.project)
-
-  const dispatch = useDispatch()
-
   return project && (
-    <div className="project-sidebar p-2">
-      <ProjectBadge />
+    <div className="d-flex flex-column h-100 p-4">
 
-      <ul className="nav nav-pills flex-column mb-auto">
-        {menuItems.map((section) => (
-          <div key={section.title}>
-            {section.title && <h6 className="text-muted mt-3 mb-2">{section.title}</h6>}
+      <div className="card w-100 mb-3">
+        <div className="card-body py-2">
+          <h2 className="font-large mb-2">{project.project.title}</h2>
+          <p className="font-normal text-muted m-0">{catalog.title}</p>
+        </div>
+      </div>
 
-            {section.items.map((item) => (
-              <li key={item.panel} className="nav-item">
-                <button
-                  className={classnames('nav-link w-100 text-start d-flex align-items-center gap-2', {
-                    active: panel === item.panel
-                  })}
-                  onClick={() => dispatch(navigateDashboard({ panel: item.panel }))}
-                >
-                  <i className={`bi ${item.icon}`}></i>
-                  {item.name}
-                </button>
-              </li>
-            ))}
+      <div className="flex-grow-1">
+      {
+        menuItems.map((group, groupIndex) => (
+          <div key={groupIndex}>
+            {
+              group.title && <h3 className="font-small px-3 my-3">{group.title}</h3>
+            }
+
+            <ul className="nav nav-pills nav-fill flex-column">
+            {
+              group.items.map((item, itemIndex) => (
+                <li key={itemIndex} className="nav-item">
+                  <button
+                    className={classnames('nav-link', { active: panel === item.panel })}
+                    onClick={() => dispatch(navigateDashboard({ panel: item.panel }))}
+                  >
+                    <div className="d-flex align-items-center gap-2">
+                      <i className={`bi ${item.icon}`}></i>
+                      {item.name}
+                    </div>
+                  </button>
+                </li>
+              ))
+            }
+            </ul>
           </div>
-        ))}
-      </ul>
+        ))
+      }
+      </div>
 
-      <div className="p-3 mt-auto">
+      <hr />
+
+      <div>
         <a href={`${baseUrl}/projects/`}
           className="nav-link text-dark w-100 text-start d-flex align-items-center gap-2">
           <i className="bi bi-arrow-left"></i> {gettext('Back to projects overview')}

@@ -37,11 +37,9 @@ const Main = () => {
   }
 
   return panel && project && (
-    <div className="d-flex">
-      <div className="flex-grow-1 pt-4">
-        <div className="container">
-          {renderPanel()}
-        </div>
+    <div className="py-4 ps-4 pe-5">
+      <div className="container gx-0">
+        {renderPanel()}
       </div>
     </div>
   )

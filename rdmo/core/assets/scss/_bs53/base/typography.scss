@@ -24,6 +24,22 @@ h3, .h3 {
     margin-bottom: 1rem;
 }
 
+.font-smaller {
+    font-size: 0.8em !important;
+}
+.font-small {
+    font-size: 0.9em !important;
+}
+.font-normal {
+    font-size: 1em !important;
+}
+.font-large {
+    font-size: 1.1em !important;
+}
+.font-larger {
+    font-size: 1.2em !important;
+}
+
 .home {
     h1 {
         font-size: 2.6rem;
@@ -60,14 +76,6 @@ button.unstyled {
     &.nav-link {
         padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
     }
-}
-
-button.link.small {
-    font-size: var(--rdmo-font-size-small);
-}
-
-button.link.large {
-    font-size: var(--rdmo-font-size-large);
 }
 
 .btn-primary {
