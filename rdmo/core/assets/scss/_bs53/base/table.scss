@@ -1,0 +1,19 @@
+table.table {
+    font-size: var(--rdmo-table-font-size);
+    line-height: var(--rdmo-table-line-height);
+
+    box-shadow: var(--rdmo-box-shadow);
+
+    th {
+        text-transform: uppercase;
+        background-color: var(--rdmo-table-th-bg);
+        border-bottom: none;
+    }
+    th, td {
+        padding: var(--rdmo-table-padding);
+    }
+
+    .bi {
+        font-size: 1rem;
+    }
+}
