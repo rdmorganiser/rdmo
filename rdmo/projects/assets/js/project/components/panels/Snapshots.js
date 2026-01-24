@@ -18,16 +18,9 @@ const Snapshots = () => {
       <div className="d-flex justify-content-between align-items-center mb-5">
         <h1 className="mb-0">{gettext('Snapshots')}</h1>
         {perms.can_add_snapshot && (
-          <>
-            <button
-              type="button"
-              id="add-snapshot"
-              className="btn btn-link text-decoration-none"
-              onClick={openSnapshot}
-            >
-              <i className="bi bi-plus" aria-hidden="true"></i> {gettext('Create snapshot')}
-            </button>
-          </>
+          <button type="button" className="btn link small" onClick={openSnapshot}>
+            <i className="bi bi-plus" aria-hidden="true"></i> {gettext('Create snapshot')}
+          </button>
         )}
       </div>
       {
