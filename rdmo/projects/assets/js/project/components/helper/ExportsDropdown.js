@@ -3,8 +3,10 @@ import PropTypes from 'prop-types'
 import { Dropdown } from 'bootstrap'
 import { useSelector } from 'react-redux'
 
-const ExportsDropdown = ({ onExport, title = true }) => {
+const ExportsDropdown = ({ onExport }) => {
+
   const exportFormats = useSelector((state) => state.settings.export_formats) ?? {}
+
 
   const handleClick = (event, format) => {
     event.stopPropagation()
@@ -20,17 +22,14 @@ const ExportsDropdown = ({ onExport, title = true }) => {
     <div className="dropdown dropdown-menu-end">
       <button
         type="button"
-        className="link"
+        className="link text-nowrap"
         data-bs-toggle="dropdown"
+        data-bs-popper-config='{"strategy":"fixed"}'
         aria-expanded="false"
         onClick={(event) => event.stopPropagation()}
         title={gettext('Download')}
       >
-        {
-          title ? <>
-            {gettext('Export')} <i className="bi bi-caret-down-fill ms-1" />
-          </> : <i className="bi bi-download" />
-        }
+        {gettext('Download')} <i className="bi bi-caret-down-fill ms-1" />
       </button>
 
       <ul className="dropdown-menu">
