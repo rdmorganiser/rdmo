@@ -36,8 +36,8 @@ const SnapshotTable = ({ snapshots }) => {
 
   return (
     <div>
-      <table className="table border align-middle">
-        <thead className="table-light">
+      <table className="table">
+        <thead>
           <tr>
             <th style={{ width: '35%' }}>{gettext('Snapshot')}</th>
             <th style={{ width: '40%' }}>{gettext('Description')}</th>
@@ -49,47 +49,51 @@ const SnapshotTable = ({ snapshots }) => {
           {snapshots?.map((snapshot) => {
             return (
               <tr key={snapshot.id}>
-                <td>{snapshot.title}</td>
+                <td>
+                  <strong>{snapshot.title}</strong>
+                </td>
                 <td>
                   {snapshot.description}
                 </td>
                 <td>
                   {useFormattedDateTime(snapshot.created, language)}
                 </td>
-                <td className="text-end">
-                  {perms.can_view_snapshot && (
-                    <button
-                      type="button"
-                      className="btn btn-link p-0"
-                      aria-label={gettext('View answers')}
-                      title={gettext('View answers')}
-                      onClick={() => handleShowAnswers(snapshot.id)}
-                    >
-                      <i className={'bi bi-eye'} aria-hidden="true" />
-                    </button>
-                  )}
-                  {perms.can_change_snapshot && (
-                    <button
-                      type="button"
-                      className="btn btn-link p-0"
-                      aria-label={gettext('Update snapshot')}
-                      title={gettext('Update snapshot')}
-                      onClick={() => openUpdateModal(snapshot)}
-                    >
-                      <i className={'bi bi-pencil'} aria-hidden="true" />
-                    </button>
-                  )}
-                  {perms.can_rollback_snapshot && (
-                    <button
-                      type="button"
-                      className="btn btn-link p-0"
-                      aria-label={gettext('Rollback to snapshot')}
-                      title={gettext('Rollback to snapshot')}
-                      onClick={() => openRollbackModal(snapshot)}
-                    >
-                      <i className={'bi bi-reply-fill'} aria-hidden="true" />
-                    </button>
-                  )}
+                <td>
+                  <div className="d-flex justify-content-end align-items-center gap-2">
+                    {perms.can_view_snapshot && (
+                      <button
+                        type="button"
+                        className="link"
+                        aria-label={gettext('View answers')}
+                        title={gettext('View answers')}
+                        onClick={() => handleShowAnswers(snapshot.id)}
+                      >
+                        <i className={'bi bi-eye'} aria-hidden="true" />
+                      </button>
+                    )}
+                    {perms.can_change_snapshot && (
+                      <button
+                        type="button"
+                        className="link"
+                        aria-label={gettext('Update snapshot')}
+                        title={gettext('Update snapshot')}
+                        onClick={() => openUpdateModal(snapshot)}
+                      >
+                        <i className={'bi bi-pencil'} aria-hidden="true" />
+                      </button>
+                    )}
+                    {perms.can_rollback_snapshot && (
+                      <button
+                        type="button"
+                        className="link"
+                        aria-label={gettext('Rollback to snapshot')}
+                        title={gettext('Rollback to snapshot')}
+                        onClick={() => openRollbackModal(snapshot)}
+                      >
+                        <i className={'bi bi-reply-fill'} aria-hidden="true" />
+                      </button>
+                    )}
+                  </div>
                 </td>
               </tr>
             )

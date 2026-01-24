@@ -38,8 +38,8 @@ const MembershipTable = ({ persons, type }) => {
 
   return (
     <div>
-      <table className="table border align-middle">
-        <thead className="table-light">
+      <table className="table align-middle">
+        <thead>
           <tr>
             <th style={{ width: '35%' }}>{gettext('Name')}</th>
             <th style={{ width: '40%' }}>{gettext('Email')}</th>
