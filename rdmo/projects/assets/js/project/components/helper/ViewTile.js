@@ -7,7 +7,7 @@ import Truncate from 'rdmo/core/assets/js/components/Truncate'
 import ExportsDropdown from './ExportsDropdown'
 
 const ViewTile = ({ title, help, onClick, onExport }) => (
-  <div className="card card-tile mb-4" onClick={onClick}>
+  <div className="card card-tile cursor-pointer mb-4" onClick={onClick}>
     <div className="d-flex">
       <Img src="/core/img/document.png" className="img-fluid" alt={gettext('Document image')} />
       <div className="card-body overflow-hidden">
