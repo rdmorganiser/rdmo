@@ -106,7 +106,7 @@
                         <li class="nav-item">
                             <form action="{{ settings.LOGOUT_URL }}" method="POST">
                                 {% csrf_token %}
-                                <button type="submit" class="nav-link link">
+                                <button type="submit" class="nav-link link w-100">
                                     {% trans 'Logout' %}
                                 </button>
                             </form>

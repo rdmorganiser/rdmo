@@ -1,16 +1,3 @@
-.project-sidebar {
-    position: fixed;
-    height: calc(100vh - 56px);
-    width: var(--rdmo-sidebar-width);
-
-    font-size: var(--rdmo-sidebar-font-size);
-    background-color: var(--rdmo-color-light-gray);
-}
-
-.project-main {
-    margin-left: var(--rdmo-sidebar-width);
-}
-
 .project-dropdown:focus-within .dropdown-menu {
   display: block;
 }

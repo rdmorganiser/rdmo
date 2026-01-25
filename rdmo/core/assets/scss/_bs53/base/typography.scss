@@ -1,6 +1,9 @@
 :root {
     --bs-font-sans-serif: var(--rdmo-font);
     --bs-body-font-size: 1rem;
+
+    --bs-body-color: var(--rdmo-body-color);
+    --bs-body-bg: var(--rdmo-body-bg);
 }
 
 h1, .h1,
@@ -52,13 +55,12 @@ h3, .h3 {
 a,
 span.link,
 button.link {
-    text-decoration: none;
-
-    color: var(--rdmo-color-link);
+    color: var(--rdmo-link-color);
     cursor: pointer;
+    text-decoration: var(--rdmo-link-decoration);
 
     &:hover {
-        color: var(--rdmo-color-link-hover);
+        color: var(--rdmo-link-hover-color);
     }
 }
 
