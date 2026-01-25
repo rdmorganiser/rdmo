@@ -69,8 +69,7 @@ const ProjectForm = ({ disabled }) => {
   }
 
   return (
-    <form className="container mt-3">
-
+    <form>
       <Input
         className="mb-3 form-label fw-bold"
         label={gettext('Title')}

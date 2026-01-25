@@ -10,13 +10,11 @@ const ViewTile = ({ title, help, onClick, onExport }) => (
   <div className="card card-tile mb-4" onClick={onClick}>
     <div className="d-flex">
       <Img src="/core/img/document.png" className="img-fluid" alt={gettext('Document image')} />
-      <div className="card-body">
+      <div className="card-body overflow-hidden">
         <div className="d-flex flex-column justify-content-center h-100 foo">
           <div>
             <h3 className="card-title mb-2">
-              <div>
-                <Truncate text={title} selector=".card-body" />
-              </div>
+              <Truncate text={title} selector=".card-body" />
             </h3>
             <p className="card-text text-muted mb-2">
               <Truncate text={help} selector=".card-body" />

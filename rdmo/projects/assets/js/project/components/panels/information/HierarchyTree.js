@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 const HierarchyTree = ({ hierarchy }) => {
-  const bulletStyle = { listStyleType: 'disc' }
   const isCurrentNode = (node) => node?.current === true || node?.current === 'true'
 
   const linkOrText = (node) => {
@@ -12,13 +11,13 @@ const HierarchyTree = ({ hierarchy }) => {
       ? <a href={`${baseUrl}/projects/${node.id}`}>{node.title}</a>
       : <>{node.title}</>
 
-    return isCurrent ? <span className="fw-bold">{content}</span> : content
+    return isCurrent ? <span>{content}</span> : content
   }
 
   const renderFullSubtree = (node) => {
     if (!node?.children?.length) return null
     return (
-      <ul style={bulletStyle}>
+      <ul>
         {node.children.map(child => (
           <li key={child.id}>
             {linkOrText(child)}
@@ -63,7 +62,7 @@ const HierarchyTree = ({ hierarchy }) => {
           {linkOrText(node)}
           {isAtCurrentInPath
             ? renderFullSubtree(node)
-            : <ul style={bulletStyle}>{renderPath(idx + 1)}</ul>}
+            : <ul>{renderPath(idx + 1)}</ul>}
         </>
       )
     }
@@ -73,13 +72,15 @@ const HierarchyTree = ({ hierarchy }) => {
         {linkOrText(node)}
         {isAtCurrentInPath
           ? renderFullSubtree(node)
-          : <ul style={bulletStyle}>{renderPath(idx + 1)}</ul>}
+          : <ul>{renderPath(idx + 1)}</ul>}
       </li>
     )
   }
 
   return (
-    <div className="ms-2">{renderPath(0)}</div>
+    <div className="project-hierarchy">
+      {renderPath(0)}
+    </div>
   )
 }
 
