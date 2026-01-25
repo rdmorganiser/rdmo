@@ -1,3 +1,5 @@
-.card {
+.card.card-tile {
+    --bs-card-border-radius: 0;
     box-shadow: var(--rdmo-box-shadow);
+    border: none;
 }

@@ -87,6 +87,10 @@ button.unstyled {
     text-overflow: ellipsis;
 }
 
+.cursor-pointer {
+    cursor: pointer;
+}
+
 .btn-primary {
     --bs-btn-bg: var(--rdmo-color-link);
     --bs-btn-border-color: var(--rdmo-color-link);

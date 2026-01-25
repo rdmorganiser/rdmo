@@ -57,7 +57,7 @@ const Sidebar = () => {
         menuItems.map((group, groupIndex) => (
           <div key={groupIndex}>
             {
-              group.title && <h3 className="font-small px-3 my-3">{group.title}</h3>
+              group.title && <h3 className="font-normal px-3 my-3">{group.title}</h3>
             }
 
             <nav className="nav nav-pills nav-fill flex-column">
@@ -85,8 +85,7 @@ const Sidebar = () => {
       <hr />
 
       <div>
-        <a href={`${baseUrl}/projects/`}
-          className="nav-link text-dark w-100 text-start d-flex align-items-center gap-2">
+        <a href={`${baseUrl}/projects/`}>
           <i className="bi bi-arrow-left"></i> {gettext('Back to projects overview')}
         </a>
       </div>
