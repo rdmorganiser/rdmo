@@ -2,6 +2,12 @@
   display: block;
 }
 
+.project-hierarchy {
+    ul {
+        margin-bottom: 0;
+    }
+}
+
 .card.card-tile {
     --bs-card-border-radius: 0;
 
@@ -10,9 +16,5 @@
 
     img {
         height: 7.5rem;
-    }
-
-    .card-body {
-        overflow: hidden;
     }
 }

@@ -20,20 +20,12 @@ const ProjectDelete = () => {
   }
 
   return (
-    <div className="p-4 pb-3">
-      <div className="mb-4">
-        <div className="fw-bold mb-2">{gettext('Delete project')}</div>
-        <div>{gettext('This action cannot be undone. The project will be permanently removed!')}</div>
-      </div>
+    <div>
+      <p className="mb-2">{gettext('This action cannot be undone. The project will be permanently removed!')}</p>
 
-      <div className="text-end mt-2">
-        <button
-          className="element-button btn btn-xs btn-danger"
-          onClick={openConfirm}
-        >
-          {gettext('Delete project')}
-        </button>
-      </div>
+      <button className="btn btn-danger" onClick={openConfirm}>
+        {gettext('Delete project')}
+      </button>
 
       <Modal
         title={gettext('Delete project?')}
@@ -42,7 +34,6 @@ const ProjectDelete = () => {
         onSubmit={handleDelete}
         submitLabel={gettext('Delete')}
         submitProps={{className: 'btn btn-danger'}}
-        size=""
       >
         <Html html={interpolate(gettext(
           'Are you sure you want to delete the project <b>%s</b>?'), [project.title ?? '']
