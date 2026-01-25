@@ -1,7 +1,9 @@
 table.table {
-    font-size: var(--rdmo-table-font-size);
-    line-height: var(--rdmo-table-line-height);
+    --rdmo-table-font-size: var(--rdmo-font-size-smaller);
+    --rdmo-table-padding: 1rem 1.5rem;
+    --rdmo-table-th-bg: var(--rdmo-sidebar-bg);
 
+    font-size: var(--rdmo-table-font-size);
     box-shadow: var(--rdmo-box-shadow);
 
     th {

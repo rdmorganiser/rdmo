@@ -1,0 +1,14 @@
+aside {
+    --bs-nav-link-font-size: var(--rdmo-font-size-small);
+
+    color: var(--rdmo-sidebar-color);
+    background-color: var(--rdmo-sidebar-bg);
+
+    position: fixed;
+    height: calc(100vh - 56px);
+    width: var(--rdmo-sidebar-width);
+}
+
+aside + main {
+    margin-left: var(--rdmo-sidebar-width);
+}
