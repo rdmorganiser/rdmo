@@ -3,6 +3,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import classnames from 'classnames'
 
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
+import { Link } from 'rdmo/core/assets/js/components'
+
+import { buildPath } from '../utils/location'
 
 import { navigateDashboard } from '../actions/projectActions'
 
@@ -32,7 +35,7 @@ const Sidebar = () => {
     {
       title: gettext('Settings'),
       items: [
-        { panel: 'information', name: gettext('Project data'), icon: 'bi-info-square' },
+        { panel: 'information', name: gettext('Project information'), icon: 'bi-info-square' },
         { panel: 'memberships', name: gettext('Membership'), icon: 'bi-people' },
         { panel: 'plugins', name: gettext('Plugins'), icon: 'bi-wrench' },
       ],
@@ -57,23 +60,23 @@ const Sidebar = () => {
               group.title && <h3 className="font-small px-3 my-3">{group.title}</h3>
             }
 
-            <ul className="nav nav-pills nav-fill flex-column">
+            <nav className="nav nav-pills nav-fill flex-column">
             {
               group.items.map((item, itemIndex) => (
-                <li key={itemIndex} className="nav-item">
-                  <button
-                    className={classnames('nav-link', { active: panel === item.panel })}
-                    onClick={() => dispatch(navigateDashboard({ panel: item.panel }))}
-                  >
-                    <div className="d-flex align-items-center gap-2">
-                      <i className={`bi ${item.icon}`}></i>
-                      {item.name}
-                    </div>
-                  </button>
-                </li>
+                <Link
+                  key={itemIndex}
+                  href={buildPath({ panel: item.panel })}
+                  className={classnames('nav-link', { active: panel === item.panel })}
+                  onClick={() => dispatch(navigateDashboard({ panel: item.panel }))}
+                >
+                  <div className="d-flex align-items-center gap-2">
+                    <i className={`bi ${item.icon}`}></i>
+                    {item.name}
+                  </div>
+                </Link>
               ))
             }
-            </ul>
+            </nav>
           </div>
         ))
       }
