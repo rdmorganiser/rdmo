@@ -42,7 +42,8 @@ const SnapshotsDropdown = ({ onChange }) => {
         {
           snapshots.map((snapshot) => (
             <li key={snapshot.id}>
-              <button className="dropdown-item" onClick={(event) => handleClick(event, snapshot)}>
+              <button className={classNames('dropdown-item', {active: snapshot.id == snapshotId})}
+                      onClick={(event) => handleClick(event, snapshot)}>
                 {snapshot.title}
               </button>
             </li>
