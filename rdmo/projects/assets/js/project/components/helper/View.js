@@ -31,9 +31,20 @@ const View = () => {
     }
   }
 
+  const handleBack = () => {
+    if (isNil(snapshotId)) {
+      dispatch(navigateDashboard({ panel: 'documents' }))
+    } else {
+      dispatch(navigateDashboard({ panel: 'snapshots' }))
+    }
+  }
+
   return currentView && (
     <div className="project-view">
       <div className="float-end d-flex gap-3">
+        <button className="link" onClick={handleBack}>
+          <i className="bi bi-arrow-left"></i> {gettext('Back')}
+        </button>
         <SnapshotsDropdown onChange={handleSnapshotChange}/>
         <ExportsDropdown onExport={handleExport} />
       </div>
