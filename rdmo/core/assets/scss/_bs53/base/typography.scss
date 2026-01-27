@@ -28,19 +28,19 @@ h3, .h3 {
 }
 
 .font-smaller {
-    font-size: 0.8em !important;
+    font-size: var(--rdmo-font-size-smaller) !important;
 }
 .font-small {
-    font-size: 0.9em !important;
+    font-size: var(--rdmo-font-size-small) !important;
 }
 .font-normal {
     font-size: 1em !important;
 }
 .font-large {
-    font-size: 1.1em !important;
+    font-size: var(--rdmo-font-size-large) !important;
 }
 .font-larger {
-    font-size: 1.2em !important;
+    font-size: var(--rdmo-font-size-larger) !important;
 }
 
 .home {
