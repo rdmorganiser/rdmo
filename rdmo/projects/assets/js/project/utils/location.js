@@ -2,6 +2,8 @@ import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 import { projectId } from '../utils/meta'
 import { isNil } from 'lodash'
 
+export const locationKeys = ['area', 'snapshotId', 'viewId', 'detail']
+
 export const parseLocation = () => {
   let pathname = window.location.pathname
   let location = {
@@ -15,6 +17,7 @@ export const parseLocation = () => {
   const patterns = [
     /\/projects\/\d+\/(?<area>(snapshots))\/(?<snapshotId>\d+)\/views\/(?<viewId>\d+)[/]*$/,
     /\/projects\/\d+\/(?<area>(snapshots))\/(?<snapshotId>\d+)\/(?<detail>[a-z-]+)[/]*$/,
+    /\/projects\/\d+\/(?<area>(snapshots))\/(?<snapshotId>\d+)[/]*$/,
     /\/projects\/\d+\/(?<area>[a-z-]+)\/views\/(?<viewId>\d+)[/]*$/,
     /\/projects\/\d+\/(?<area>[a-z-]+)\/(?<detail>[a-z-]+)[/]*$/,
     /\/projects\/\d+\/(?<area>[a-z-]+)[/]*$/

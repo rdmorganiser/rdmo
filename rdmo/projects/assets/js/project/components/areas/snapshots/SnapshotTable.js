@@ -21,7 +21,7 @@ const SnapshotTable = ({ snapshots }) => {
   const [selectedSnapshot, setSelectedSnapshot] = useState(null)
 
   const handleShowAnswers = (snapshotId) => {
-    dispatch(navigateDashboard({ area: 'snapshots', snapshotId, detail: 'answers' }))
+    dispatch(navigateDashboard({ area: 'snapshots', snapshotId }))
   }
 
   const openRollbackModal = (snapshot) => {
