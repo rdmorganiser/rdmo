@@ -5,7 +5,7 @@ import { isNil } from 'lodash'
 export const parseLocation = () => {
   let pathname = window.location.pathname
   let location = {
-    'panel': 'dashboard'
+    'area': 'dashboard'
   }
 
   if (pathname.length > 1) {
@@ -13,11 +13,11 @@ export const parseLocation = () => {
   }
 
   const patterns = [
-    /\/projects\/\d+\/(?<panel>(snapshots))\/(?<snapshotId>\d+)\/views\/(?<viewId>\d+)[/]*$/,
-    /\/projects\/\d+\/(?<panel>(snapshots))\/(?<snapshotId>\d+)\/(?<detail>[a-z-]+)[/]*$/,
-    /\/projects\/\d+\/(?<panel>[a-z-]+)\/views\/(?<viewId>\d+)[/]*$/,
-    /\/projects\/\d+\/(?<panel>[a-z-]+)\/(?<detail>[a-z-]+)[/]*$/,
-    /\/projects\/\d+\/(?<panel>[a-z-]+)[/]*$/
+    /\/projects\/\d+\/(?<area>(snapshots))\/(?<snapshotId>\d+)\/views\/(?<viewId>\d+)[/]*$/,
+    /\/projects\/\d+\/(?<area>(snapshots))\/(?<snapshotId>\d+)\/(?<detail>[a-z-]+)[/]*$/,
+    /\/projects\/\d+\/(?<area>[a-z-]+)\/views\/(?<viewId>\d+)[/]*$/,
+    /\/projects\/\d+\/(?<area>[a-z-]+)\/(?<detail>[a-z-]+)[/]*$/,
+    /\/projects\/\d+\/(?<area>[a-z-]+)[/]*$/
   ]
 
   for (const pattern of patterns) {
@@ -38,11 +38,11 @@ export const updateLocation = (location) => {
   }
 }
 
-export const buildPath = ({ panel, snapshotId, viewId, detail }) => {
+export const buildPath = ({ area, snapshotId, viewId, detail }) => {
   const segments = [baseUrl, 'projects', projectId]
 
-  if (!isNil(panel) && panel != 'dashboard') {
-    segments.push(panel)
+  if (!isNil(area) && area != 'dashboard') {
+    segments.push(area)
   }
   if (!isNil(snapshotId)) segments.push(snapshotId)
   if (!isNil(viewId)) segments.push('views', viewId)
