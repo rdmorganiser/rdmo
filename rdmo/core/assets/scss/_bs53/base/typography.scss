@@ -92,8 +92,8 @@ button.unstyled {
 }
 
 .btn-primary {
-    --bs-btn-bg: var(--rdmo-color-link);
-    --bs-btn-border-color: var(--rdmo-color-link);
-    --bs-btn-hover-bg: var(--rdmo-color-link-hover);
-    --bs-btn-hover-border-color: var(--rdmo-color-link-hover);
+    --bs-btn-bg: var(--rdmo-link-color);
+    --bs-btn-border-color: var(--rdmo-link-color);
+    --bs-btn-hover-bg: var(--rdmo-link-hover-color);
+    --bs-btn-hover-border-color: var(--rdmo-link-hover-color);
 }
