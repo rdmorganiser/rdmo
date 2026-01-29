@@ -12,7 +12,7 @@ import { navigateDashboard } from '../actions/projectActions'
 const Sidebar = () => {
   const dispatch = useDispatch()
 
-  const { panel } = useSelector((state) => state.config)
+  const { area } = useSelector((state) => state.config)
   const { project } = useSelector((state) => state.project)
 
   const catalog = project?.catalogs.find(catalog => catalog.id == project.project.catalog)
@@ -21,23 +21,23 @@ const Sidebar = () => {
     {
       title: '',
       items: [
-        { panel: 'dashboard', name: gettext('Dashboard'), icon: 'bi-grid' }
+        { area: 'dashboard', name: gettext('Dashboard'), icon: 'bi-grid' }
       ],
     },
     {
       title: gettext('Data management plan'),
       items: [
-        { panel: 'interview', name: gettext('Interview'), icon: 'bi-clipboard-check' },
-        { panel: 'documents', name: gettext('Documents'), icon: 'bi-file-text' },
-        { panel: 'snapshots', name: gettext('Snapshots'), icon: 'bi-stack' },
+        { area: 'interview', name: gettext('Interview'), icon: 'bi-clipboard-check' },
+        { area: 'documents', name: gettext('Documents'), icon: 'bi-file-text' },
+        { area: 'snapshots', name: gettext('Snapshots'), icon: 'bi-stack' },
       ],
     },
     {
       title: gettext('Settings'),
       items: [
-        { panel: 'information', name: gettext('Project information'), icon: 'bi-info-square' },
-        { panel: 'memberships', name: gettext('Membership'), icon: 'bi-people' },
-        { panel: 'plugins', name: gettext('Plugins'), icon: 'bi-wrench' },
+        { area: 'information', name: gettext('Project information'), icon: 'bi-info-square' },
+        { area: 'memberships', name: gettext('Membership'), icon: 'bi-people' },
+        { area: 'plugins', name: gettext('Plugins'), icon: 'bi-wrench' },
       ],
     },
   ]
@@ -65,9 +65,9 @@ const Sidebar = () => {
               group.items.map((item, itemIndex) => (
                 <Link
                   key={itemIndex}
-                  href={buildPath({ panel: item.panel })}
-                  className={classnames('nav-link', { active: panel === item.panel })}
-                  onClick={() => dispatch(navigateDashboard({ panel: item.panel }))}
+                  href={buildPath({ area: item.area })}
+                  className={classnames('nav-link', { active: area === item.area })}
+                  onClick={() => dispatch(navigateDashboard({ area: item.area }))}
                 >
                   <div className="d-flex align-items-center gap-2">
                     <i className={`bi ${item.icon}`}></i>

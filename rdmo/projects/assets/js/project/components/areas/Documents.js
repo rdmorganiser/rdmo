@@ -24,7 +24,7 @@ const Documents = () => {
               <ViewTile
                   title={view.title}
                   help={view.help}
-                  onClick={() => dispatch(navigateDashboard({ panel: 'documents', viewId: view.id }))}
+                  onClick={() => dispatch(navigateDashboard({ area: 'documents', viewId: view.id }))}
                   onExport={(format) => dispatch(downloadView(null, view.id, format))}
               />
             </div>
@@ -38,7 +38,7 @@ const Documents = () => {
           <ViewTile
             title={gettext('List all questions')}
             help={gettext('Overview of all questions')}
-            onClick={() => dispatch(navigateDashboard({ panel: 'documents', detail: 'questions' }))}
+            onClick={() => dispatch(navigateDashboard({ area: 'documents', detail: 'questions' }))}
             onExport={(format) => {console.log(format)}}
           />
         </div>
@@ -46,7 +46,7 @@ const Documents = () => {
           <ViewTile
             title={gettext('List all answers')}
             help={gettext('Overview of all questions and answers')}
-            onClick={() => dispatch(navigateDashboard({ panel: 'documents', detail: 'answers' }))}
+            onClick={() => dispatch(navigateDashboard({ area: 'documents', detail: 'answers' }))}
             onExport={(format) => dispatch(downloadAnswers(null, format))}
           />
         </div>
