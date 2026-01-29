@@ -12,7 +12,7 @@ import Plugins from './areas/Plugins'
 import View from './helper/View'
 
 const Main = () => {
-  const { area } = useSelector((state) => state.config)
+  const { area, snapshotId } = useSelector((state) => state.config)
   const { project, currentView } = useSelector((state) => state.project)
 
   const renderArea = () => {
@@ -24,7 +24,7 @@ const Main = () => {
       case 'documents':
         return currentView ? <View /> : <Documents />
       case 'snapshots':
-        return currentView ? <View /> : <Snapshots />
+        return currentView ? <View /> : (snapshotId ? <Documents /> : <Snapshots />)
       case 'information':
         return <Information />
       case 'memberships':

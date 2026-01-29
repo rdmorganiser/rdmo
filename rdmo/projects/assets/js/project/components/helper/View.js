@@ -35,7 +35,7 @@ const View = () => {
     if (isNil(snapshotId)) {
       dispatch(navigateDashboard({ area: 'documents' }))
     } else {
-      dispatch(navigateDashboard({ area: 'snapshots' }))
+      dispatch(navigateDashboard({ area: 'snapshots', snapshotId }))
     }
   }
 
