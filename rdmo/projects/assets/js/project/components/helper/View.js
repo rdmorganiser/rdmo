@@ -17,9 +17,9 @@ const View = () => {
 
   const handleSnapshotChange = (snapshot) => {
     if (isNil(snapshot)) {
-      dispatch(navigateDashboard({ panel: 'documents', snapshotId: null, viewId, detail }))
+      dispatch(navigateDashboard({ area: 'documents', snapshotId: null, viewId, detail }))
     } else {
-      dispatch(navigateDashboard({ panel: 'snapshots', snapshotId: snapshot.id, viewId, detail }))
+      dispatch(navigateDashboard({ area: 'snapshots', snapshotId: snapshot.id, viewId, detail }))
     }
   }
 
@@ -33,9 +33,9 @@ const View = () => {
 
   const handleBack = () => {
     if (isNil(snapshotId)) {
-      dispatch(navigateDashboard({ panel: 'documents' }))
+      dispatch(navigateDashboard({ area: 'documents' }))
     } else {
-      dispatch(navigateDashboard({ panel: 'snapshots' }))
+      dispatch(navigateDashboard({ area: 'snapshots' }))
     }
   }
 
