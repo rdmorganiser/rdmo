@@ -9,6 +9,9 @@ const SnapshotsDropdown = ({ onChange }) => {
   const { snapshotId } = useSelector((state) => state.config)
   const { snapshots } = useSelector((state) => state.project?.project)
 
+  const currentLabel = gettext('Current data')
+  const currentSnapshot = snapshots.find(snapshot => snapshot.id == snapshotId)
+
   const handleClick = (event, snapshot) => {
     event.stopPropagation()
 
@@ -31,13 +34,14 @@ const SnapshotsDropdown = ({ onChange }) => {
         onClick={(event) => event.stopPropagation()}
         title={gettext('Snapshots')}
       >
-        {gettext('Snapshot')} <i className="bi bi-caret-down-fill ms-1" />
+        <span>{currentSnapshot ? currentSnapshot?.title : currentLabel}</span>
+        <i className="bi bi-caret-down-fill ms-1" />
       </button>
 
       <ul className="dropdown-menu">
         <button className={classNames('dropdown-item', { active: isNil(snapshotId) })}
                 onClick={(event) => handleClick(event, null)}>
-          {gettext('Current')}
+          {currentLabel}
         </button>
         {
           snapshots.map((snapshot) => (

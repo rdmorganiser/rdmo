@@ -7,7 +7,7 @@ import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import { projectId } from '../utils/meta'
-import { updateLocation } from '../utils/location'
+import { locationKeys, updateLocation } from '../utils/location'
 
 import ProjectApi from '../api/ProjectApi'
 
@@ -21,7 +21,7 @@ export function navigateDashboard(location) {
     updateLocation(location)
 
     // update the location in the config store
-    Object.keys(location).forEach(key => dispatch(updateConfig(key, location[key], false)))
+    locationKeys.forEach(key => dispatch(updateConfig(key, location[key] ?? null, false)))
 
     if (!isNil(location.viewId)) {
       dispatch(fetchView(location.snapshotId, location.viewId))
