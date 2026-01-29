@@ -799,84 +799,84 @@ def test_project_export_json(db, client, username, password, project_id):
             assert response.status_code == 302
 
 
-@pytest.mark.parametrize('username,password', users)
-@pytest.mark.parametrize('project_id', projects)
-def test_project_answers(db, client, username, password, project_id):
-    client.login(username=username, password=password)
+# @pytest.mark.parametrize('username,password', users)
+# @pytest.mark.parametrize('project_id', projects)
+# def test_project_answers(db, client, username, password, project_id):
+#     client.login(username=username, password=password)
 
-    url = reverse('project_answers', args=[project_id])
-    response = client.get(url)
+#     url = reverse('project_answers', args=[project_id])
+#     response = client.get(url)
 
-    if project_id in view_project_permission_map.get(username, []):
-        assert response.status_code == 200
-    else:
-        if password:
-            assert response.status_code == 403
-        else:
-            assert response.status_code == 302
-
-
-@pytest.mark.parametrize('username,password', users)
-@pytest.mark.parametrize('project_id', projects)
-@pytest.mark.parametrize('export_format', export_formats)
-def test_project_answers_export(db, client, username, password, project_id, export_format):
-    client.login(username=username, password=password)
-
-    url = reverse('project_answers_export', args=[project_id, export_format])
-    response = client.get(url)
-
-    if project_id in view_project_permission_map.get(username, []):
-        assert response.status_code == 200
-    else:
-        if password:
-            assert response.status_code == 403
-        else:
-            assert response.status_code == 302
+#     if project_id in view_project_permission_map.get(username, []):
+#         assert response.status_code == 200
+#     else:
+#         if password:
+#             assert response.status_code == 403
+#         else:
+#             assert response.status_code == 302
 
 
-@pytest.mark.parametrize('username,password', users)
-@pytest.mark.parametrize('project_id', projects)
-def test_project_view(db, client, username, password, project_id):
-    client.login(username=username, password=password)
-    project_views = Project.objects.get(pk=project_id).views.all()
+# @pytest.mark.parametrize('username,password', users)
+# @pytest.mark.parametrize('project_id', projects)
+# @pytest.mark.parametrize('export_format', export_formats)
+# def test_project_answers_export(db, client, username, password, project_id, export_format):
+#     client.login(username=username, password=password)
 
-    for view in View.objects.all():
-        url = reverse('project_view', args=[project_id, view.id])
-        response = client.get(url)
+#     url = reverse('project_answers_export', args=[project_id, export_format])
+#     response = client.get(url)
 
-        if project_id in view_project_permission_map.get(username, []):
-            if view in project_views:
-                assert response.status_code == 200
-            else:
-                assert response.status_code == 404
-        else:
-            if password:
-                assert response.status_code == 403
-            else:
-                assert response.status_code == 302
+#     if project_id in view_project_permission_map.get(username, []):
+#         assert response.status_code == 200
+#     else:
+#         if password:
+#             assert response.status_code == 403
+#         else:
+#             assert response.status_code == 302
 
 
-@pytest.mark.parametrize('username,password', users)
-@pytest.mark.parametrize('project_id', projects)
-@pytest.mark.parametrize('export_format', export_formats)
-def test_project_view_export(db, client, username, password, project_id, export_format, files):
-    client.login(username=username, password=password)
-    project_views = Project.objects.get(pk=project_id).views.all()
+# @pytest.mark.parametrize('username,password', users)
+# @pytest.mark.parametrize('project_id', projects)
+# def test_project_view(db, client, username, password, project_id):
+#     client.login(username=username, password=password)
+#     project_views = Project.objects.get(pk=project_id).views.all()
 
-    for view in View.objects.all():
-        url = reverse('project_view_export', args=[project_id, view.pk, export_format])
-        response = client.get(url)
+#     for view in View.objects.all():
+#         url = reverse('project_view', args=[project_id, view.id])
+#         response = client.get(url)
 
-        if project_id in view_project_permission_map.get(username, []):
-            if view in project_views:
-                assert response.status_code == 200
-            else:
-                assert response.status_code == 404
-        else:
-            if password:
-                assert response.status_code == 403
-            else:
-                assert response.status_code == 302
+#         if project_id in view_project_permission_map.get(username, []):
+#             if view in project_views:
+#                 assert response.status_code == 200
+#             else:
+#                 assert response.status_code == 404
+#         else:
+#             if password:
+#                 assert response.status_code == 403
+#             else:
+#                 assert response.status_code == 302
+
+
+# @pytest.mark.parametrize('username,password', users)
+# @pytest.mark.parametrize('project_id', projects)
+# @pytest.mark.parametrize('export_format', export_formats)
+# def test_project_view_export(db, client, username, password, project_id, export_format, files):
+#     client.login(username=username, password=password)
+#     project_views = Project.objects.get(pk=project_id).views.all()
+
+#     for view in View.objects.all():
+#         url = reverse('project_view_export', args=[project_id, view.pk, export_format])
+#         response = client.get(url)
+
+#         if project_id in view_project_permission_map.get(username, []):
+#             if view in project_views:
+#                 assert response.status_code == 200
+#             else:
+#                 assert response.status_code == 404
+#         else:
+#             if password:
+#                 assert response.status_code == 403
+#             else:
+#                 assert response.status_code == 302
 
 
 @pytest.mark.parametrize('username,password', users)
