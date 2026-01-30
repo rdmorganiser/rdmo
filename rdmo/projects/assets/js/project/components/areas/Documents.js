@@ -16,9 +16,9 @@ const Documents = () => {
 
   const handleSnapshotChange = (snapshot) => {
     if (isNil(snapshot)) {
-      dispatch(navigateDashboard({ area, viewId, detail }))
+      dispatch(navigateDashboard({ area: 'documents', viewId, detail }))
     } else {
-      dispatch(navigateDashboard({ area, snapshotId: snapshot.id, viewId, detail }))
+      dispatch(navigateDashboard({ area: 'snapshots', snapshotId: snapshot.id, viewId, detail }))
     }
   }
 
