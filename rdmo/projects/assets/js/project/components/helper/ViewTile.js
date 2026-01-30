@@ -19,7 +19,7 @@ const ViewTile = ({ title, help, onClick, onExport }) => (
             <p className="card-text text-muted mb-2">
               <Truncate text={help} selector=".card-body" />
             </p>
-            <ExportsDropdown onExport={onExport} />
+            <ExportsDropdown onExport={onExport} align="start" />
           </div>
         </div>
       </div>

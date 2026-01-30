@@ -59,7 +59,7 @@ const SnapshotsDropdown = ({ onChange }) => {
 }
 
 SnapshotsDropdown.propTypes = {
-  onChange: PropTypes.func
+  onChange: PropTypes.func.isRequired
 }
 
 export default SnapshotsDropdown
