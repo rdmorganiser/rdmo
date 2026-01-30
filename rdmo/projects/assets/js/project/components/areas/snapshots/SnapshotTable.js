@@ -5,8 +5,10 @@ import PropTypes from 'prop-types'
 import { useFormattedDateTime } from 'rdmo/core/assets/js/hooks'
 import { useModal } from 'rdmo/core/assets/js/hooks'
 import { language } from 'rdmo/core/assets/js/utils'
+import { Link } from 'rdmo/core/assets/js/components'
 
 import { navigateDashboard } from '../../../actions/projectActions'
+import { buildPath } from '../../../utils/location'
 
 import SnapshotModal from './SnapshotModal'
 import SnapshotRollbackModal from './SnapshotRollbackModal'
@@ -19,10 +21,6 @@ const SnapshotTable = ({ snapshots }) => {
   const updateModal = useModal()
   const rollbackModal = useModal()
   const [selectedSnapshot, setSelectedSnapshot] = useState(null)
-
-  const handleShowAnswers = (snapshotId) => {
-    dispatch(navigateDashboard({ area: 'snapshots', snapshotId }))
-  }
 
   const openRollbackModal = (snapshot) => {
     setSelectedSnapshot(snapshot)
@@ -47,6 +45,7 @@ const SnapshotTable = ({ snapshots }) => {
         </thead>
         <tbody>
           {snapshots?.map((snapshot) => {
+            const documentsLocation = { area: 'snapshots', snapshotId: snapshot.id }
             return (
               <tr key={snapshot.id}>
                 <td>
@@ -61,15 +60,13 @@ const SnapshotTable = ({ snapshots }) => {
                 <td>
                   <div className="d-flex justify-content-end align-items-center gap-2">
                     {perms.can_view_snapshot && (
-                      <button
-                        type="button"
-                        className="link"
-                        aria-label={gettext('View answers')}
+                      <Link
                         title={gettext('View answers')}
-                        onClick={() => handleShowAnswers(snapshot.id)}
+                        href={buildPath(documentsLocation)}
+                        onClick={() => dispatch(navigateDashboard(documentsLocation))}
                       >
-                        <i className={'bi bi-eye'} aria-hidden="true" />
-                      </button>
+                        <i className={'bi bi-file-text'} aria-hidden="true" />
+                      </Link>
                     )}
                     {perms.can_change_snapshot && (
                       <button
