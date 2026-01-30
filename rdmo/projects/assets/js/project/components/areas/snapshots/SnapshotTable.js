@@ -61,7 +61,7 @@ const SnapshotTable = ({ snapshots }) => {
                   <div className="d-flex justify-content-end align-items-center gap-2">
                     {perms.can_view_snapshot && (
                       <Link
-                        title={gettext('View answers')}
+                        title={gettext('View documents')}
                         href={buildPath(documentsLocation)}
                         onClick={() => dispatch(navigateDashboard(documentsLocation))}
                       >
