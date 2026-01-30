@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Dropdown } from 'bootstrap'
 import { useSelector } from 'react-redux'
+import { Dropdown } from 'bootstrap'
+import classNames from 'classnames'
 
-const ExportsDropdown = ({ onExport }) => {
+const ExportsDropdown = ({ onExport, align = 'end' }) => {
 
   const exportFormats = useSelector((state) => state.settings.export_formats) ?? {}
 
@@ -19,7 +20,7 @@ const ExportsDropdown = ({ onExport }) => {
   }
 
   return (
-    <div className="dropdown dropdown-menu-end">
+    <div className={classNames('dropdown', {'dropdown-menu-end': align == 'end'})}>
       <button
         type="button"
         className="link text-nowrap"
@@ -48,8 +49,8 @@ const ExportsDropdown = ({ onExport }) => {
 }
 
 ExportsDropdown.propTypes = {
-  onExport: PropTypes.func,
-  title: PropTypes.bool,
+  onExport: PropTypes.func.isRequired,
+  align: PropTypes.oneOf(['start', 'end'])
 }
 
 export default ExportsDropdown
