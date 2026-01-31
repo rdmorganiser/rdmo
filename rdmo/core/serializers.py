@@ -263,3 +263,16 @@ class GroupSerializer(serializers.ModelSerializer):
             'id',
             'name'
         )
+
+
+class FileUploadSerializer(serializers.Serializer):
+    file = serializers.FileField(
+        help_text="The file to upload."
+    )
+    format = serializers.CharField(
+        default="xml",
+        required=False,
+        allow_blank=False,
+        allow_null=False,
+        help_text="Format that can be mapped to an import plugin key."
+    )

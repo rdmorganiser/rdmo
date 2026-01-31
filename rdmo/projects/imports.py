@@ -2,8 +2,10 @@ import base64
 import io
 import logging
 import mimetypes
+import xml.etree.ElementTree as et
 
 from django import forms
+from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.shortcuts import redirect, render
@@ -11,7 +13,7 @@ from django.utils.translation import gettext_lazy as _
 
 import requests
 
-from rdmo.core.imports import handle_fetched_file
+from rdmo.core.imports import store_temp_file
 from rdmo.core.plugins import Plugin
 from rdmo.core.xml import get_ns_map, get_uri, read_xml_file
 from rdmo.domain.models import Attribute
@@ -21,6 +23,14 @@ from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
 from .models import Project, Snapshot, Value
+from .utils import (
+    import_memberships,
+    save_import_snapshot_values,
+    save_import_tasks,
+    save_import_values,
+    save_import_views,
+    save_project_progress,
+)
 
 log = logging.getLogger(__name__)
 
@@ -29,6 +39,7 @@ class Import(Plugin):
 
     accept = None
     upload = True
+    raise_exception = False
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -48,6 +59,7 @@ class Import(Plugin):
         self.snapshots = []
         self.tasks = []
         self.views = []
+        self.memberships = []
 
     def render(self):
         raise NotImplementedError
@@ -85,17 +97,158 @@ class Import(Plugin):
         except KeyError:
             log.info('View %s not in db. Skipping.', view_uri)
 
+    def _clear_currents(self) -> None:
+        for value in self.values:
+            value.current = None
+        for snapshot in self.snapshots:
+            for val in snapshot.snapshot_values:
+                val.current = None
+
+    def _gather_checked_keys(self) -> tuple[set[str], set[str]]:
+        checked_values = {
+            f'{v.attribute.uri}[{v.set_prefix}][{v.set_index}][{v.collection_index}]'
+            for v in self.values
+            if v.attribute
+        }
+
+        checked_snapshots: set[str] = set()
+        for snapshot in self.snapshots:
+            for v in snapshot.snapshot_values:
+                if v.attribute:
+                    checked_snapshots.add(
+                        f'{v.attribute.uri}'
+                        f'[{snapshot.snapshot_index}]'
+                        f'[{v.set_prefix}][{v.set_index}][{v.collection_index}]'
+                    )
+
+        return checked_values, checked_snapshots
+
+    def prepare_import(self) -> dict:
+        """
+        Step 1: run check()/process(), clear currents, gather keys,
+        and return a JSON-serializable preview dict:
+        {
+          "values":   [{ "key": "...", "text": "...", "attribute": "...", "option": "..." }, …],
+          "snapshots":[ { "index": 0, "title": "...", "values": […] }, … ],
+          "tasks":    [{ "uri": "...", "title": "..." }, …],
+          "views":    [{ "uri": "...", "title": "..." }, …]
+        }
+        """
+        # run the standard plugin steps
+        if not self.check():
+            raise ValidationError({'file': ['Import plugin rejected the file.']})
+        self.process()
+
+        # clear any .current so we treat everything as new
+        self._clear_currents()
+
+        # build raw keys (we'll use them client-side to POST back selections)
+        checked_values, checked_snapshots = self._gather_checked_keys()
+
+        # build a minimal preview payload
+        preview = {"values": [], "snapshots": [], "tasks": [], "views": []}
+
+        for v in self.values:
+            key = f"{v.attribute.uri}[{v.set_prefix}][{v.set_index}][{v.collection_index}]"
+            preview["values"].append(
+                {
+                    "key": key,
+                    "text": v.text,
+                    "attribute": v.attribute.uri,
+                    "option": v.option.uri if v.option else None,
+                }
+            )
+
+        for snap in self.snapshots:
+            vals = []
+            for v in snap.snapshot_values:
+                key = f"{v.attribute.uri}[{snap.snapshot_index}][{v.set_prefix}][{v.set_index}][{v.collection_index}]"
+                vals.append(
+                    {
+                        "key": key,
+                        "text": v.text,
+                        "attribute": v.attribute.uri,
+                        "option": v.option.uri if v.option else None,
+                    }
+                )
+            preview["snapshots"].append({"index": snap.snapshot_index, "title": snap.title, "values": vals})
+
+        for task in self.tasks:
+            preview["tasks"].append({"uri": task.uri, "title": task.title})
+
+        for view in self.views:
+            preview["views"].append({"uri": view.uri, "title": view.title})
+
+        return preview
+
+    def import_to_project(
+        self, checked_values = None, checked_snapshots = None,
+            include_memberships = False, allow_creation_of_new_users = False
+    ) -> Project:
+        """
+        1) If we have not yet run check()/process(), do so now (so self.project
+           is created).
+        2) Clear any .current references.
+        3) Build or accept the passed key-sets.
+        4) Save the project (assigning Site if new).
+        5) Call save_import_values, snapshot_values, tasks, views.
+        6) optionally, import memberships to the project
+
+        Returns the saved Project.
+        """
+        # 1) Ensure the plugin has been run
+        if not self.check():
+            raise ValidationError({'file': ['Import plugin rejected the file.']})
+        self.process()
+
+        # 2) Clear any stale .current pointers
+        self._clear_currents()
+
+        # 3) Decide which keys to import
+        all_values, all_snapshots = self._gather_checked_keys()
+        cvs = checked_values if checked_values is not None else all_values
+        css = checked_snapshots if checked_snapshots is not None else all_snapshots
+
+        # 4) Persist the Project object
+        if self.current_project is None:
+            if self.project.pk is None:
+                self.project.site = Site.objects.get_current()
+                self.project.save()
+        else:
+            self.project = self.current_project
+
+        # 5) Write out values, snapshots, tasks, views
+        save_import_values(self.project, self.values, cvs)
+        save_import_snapshot_values(self.project, self.snapshots, css)
+        save_import_tasks(self.project, self.tasks)
+        save_import_views(self.project, self.views)
+        save_project_progress(self.project)
+
+        # 6) Optionally import memberships
+        if include_memberships and self.memberships:
+            created, skipped = import_memberships(
+                self.project, self.memberships, create_users=allow_creation_of_new_users
+            )
+            log.info('Imported memberships for project %s: %s created, %s skipped.',
+                     self.project.pk, created, skipped)
+
+        return self.project
+
 
 class RDMOXMLImport(Import):
 
     accept = {
-        'application/xml': ['.xml']
+        'application/xml': ['.xml'],
+        'text/xml': ['.xml'],
     }
 
     def check(self) -> bool:
         file_type, encoding = mimetypes.guess_type(self.file_name)
-        if file_type in ('application/xml', 'text/xml'):
-            self.root = read_xml_file(self.file_name)
+        if self.accept and file_type in self.accept:
+            try:
+                self.root = read_xml_file(self.file_name, raise_exception=self.raise_exception)
+            except et.ParseError as exc:
+                raise ValidationError({'file': [f'Parsing error: {exc}']}) from exc
             if self.root is not None and self.root.tag == 'project':
                 self.ns_map = get_ns_map(self.root)
                 return True
@@ -171,6 +324,26 @@ class RDMOXMLImport(Import):
                     snapshot.snapshot_values = snapshot_values
 
                     self.snapshots.append(snapshot)
+
+        memberships_node = self.root.find('memberships')
+        if memberships_node is not None:
+            for member_node in memberships_node.findall('member'):
+                role = (member_node.findtext('role') or '').strip() or 'guest'
+
+                user_node = member_node.find('user')
+                if user_node is None:
+                    continue
+
+                membership = {
+                    'role': role,
+                    'id': (user_node.findtext('id') or '').strip(),
+                    'username': (user_node.findtext('username') or '').strip(),
+                    'email': (user_node.findtext('email') or '').strip().lower(),
+                    'first_name': (user_node.findtext('first_name') or '').strip(),
+                    'last_name': (user_node.findtext('last_name') or '').strip(),
+                }
+                self.memberships.append(membership)
+
 
     def get_value(self, value_node):
         value = Value()
@@ -266,7 +439,7 @@ class URLImport(RDMOXMLImport):
             self.source_title = form.cleaned_data['url']
 
             response = requests.get(form.cleaned_data['url'])
-            self.request.session['import_file_name'] = handle_fetched_file(response.content)
+            self.request.session['import_file_name'] = store_temp_file(response.content)
 
             if self.current_project:
                 return redirect('project_update_import', self.current_project.id)

@@ -2,7 +2,8 @@ import base64
 
 from rest_framework import serializers
 
-from ..models import Project, Snapshot, Value
+from ..models import Membership, Project, Snapshot, Value
+from .v1 import ProjectUserSerializer
 
 
 class ValueSerializer(serializers.ModelSerializer):
@@ -31,8 +32,14 @@ class ValueSerializer(serializers.ModelSerializer):
         )
 
     def get_file_content(self, obj):
-        if obj.file:
+        if not obj.file:
+            return None
+
+        try:
             return base64.b64encode(obj.file.read())
+        except FileNotFoundError:
+            # file was saved but no longer exists
+            return None
 
 
 class SnapshotSerializer(serializers.ModelSerializer):
@@ -42,6 +49,7 @@ class SnapshotSerializer(serializers.ModelSerializer):
     catalog = serializers.CharField(source='catalog.uri', default=None, read_only=True)
     tasks = serializers.SerializerMethodField()
     views = serializers.SerializerMethodField()
+    memberships = serializers.SerializerMethodField()  # optional, from context
 
     class Meta:
         model = Snapshot
@@ -52,6 +60,7 @@ class SnapshotSerializer(serializers.ModelSerializer):
             'tasks',
             'views',
             'values',
+            'memberships',  # optional, from context
             'created',
             'updated'
         )
@@ -67,6 +76,12 @@ class SnapshotSerializer(serializers.ModelSerializer):
 
     def get_views(self, obj):
         return [view.uri for view in obj.project.views.all()]
+
+    def get_memberships(self, obj):
+        if not self.context.get("include_memberships"):
+            return []
+        qs = obj.project.memberships.select_related("user").all()
+        return MembershipForExportSerializer(qs, many=True, context=self.context).data
 
 
 class ProjectSnapshotSerializer(serializers.ModelSerializer):
@@ -93,6 +108,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     snapshots = ProjectSnapshotSerializer(many=True)
     values = serializers.SerializerMethodField()
+    memberships = serializers.SerializerMethodField()  # optional from context
 
     catalog = serializers.CharField(source='catalog.uri', default=None, read_only=True)
     tasks = serializers.SerializerMethodField()
@@ -108,6 +124,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             'views',
             'snapshots',
             'values',
+            'memberships',  # optional, from context
             'created',
             'updated'
         )
@@ -122,3 +139,17 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     def get_views(self, obj):
         return [view.uri for view in obj.views.all()]
+
+    def get_memberships(self, obj):
+        if not self.context.get("include_memberships"):
+            return []
+        qs = obj.memberships.select_related("user").all()
+        return MembershipForExportSerializer(qs, many=True, context=self.context).data
+
+
+class MembershipForExportSerializer(serializers.ModelSerializer):
+    user = ProjectUserSerializer(read_only=True)
+
+    class Meta:
+        model = Membership
+        fields = ("user", "role")

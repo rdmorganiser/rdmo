@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 
-from rdmo.core.imports import handle_uploaded_file
+from rdmo.core.imports import store_temp_file
 from rdmo.core.permissions import CanToggleElementCurrentSite
 from rdmo.core.utils import get_model_field_meta, is_truthy
 from rdmo.core.xml import parse_xml_to_elements
@@ -40,7 +40,7 @@ class UploadViewSet(viewsets.ViewSet):
         except KeyError as e:
             raise ValidationError({'file': [_('This field may not be blank.')]}) from e
         else:
-            import_tmpfile_name = handle_uploaded_file(uploaded_file)
+            import_tmpfile_name = store_temp_file(uploaded_file)
         try:
             # step 1.1: initialize parse_xml_to_elements
             # step 2-6: parse xml, validate and convert to

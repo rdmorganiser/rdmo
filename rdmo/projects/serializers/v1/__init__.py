@@ -1,4 +1,6 @@
+import mimetypes
 from collections.abc import Mapping
+from pathlib import Path
 from typing import Any
 
 from django.conf import settings
@@ -7,9 +9,12 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
+
 from rdmo.accounts.serializers.v1 import UserLookupSerializer
 from rdmo.accounts.utils import get_full_name
-from rdmo.core.serializers import TranslationSerializerMixin
+from rdmo.core.serializers import FileUploadSerializer, TranslationSerializerMixin
 from rdmo.domain.models import Attribute
 from rdmo.questions.models import Catalog
 from rdmo.services.validators import ProviderValidator
@@ -27,6 +32,7 @@ from ...models import (
     Value,
     Visibility,
 )
+from ...utils import get_plugin_types_for_mimetype
 from ...validators import ProjectParentValidator, ValueConflictValidator, ValueQuotaValidator, ValueTypeValidator
 
 
@@ -269,6 +275,95 @@ class ProjectCopySerializer(ProjectSerializer):
         model = Project
         fields = ProjectSerializer.Meta.fields
         read_only_fields = ProjectSerializer.Meta.read_only_fields
+
+class ProjectFileUploadSerializer(FileUploadSerializer):
+
+    title = serializers.CharField(required=False, allow_blank=True)
+    catalog = serializers.PrimaryKeyRelatedField(
+        queryset=Catalog.objects.all(),
+        required=False,
+        allow_null=True
+    )
+
+    def validate(self, data):
+        file = data.get("file")
+        _format = data.get("format")
+
+        errors = {}
+        if file is None:
+            errors["file"] = [_("This field is required.")]
+        if _format is None:
+            errors["format"] = [_("This field is required.")]
+        if errors:
+            raise serializers.ValidationError(errors)
+
+        # Normalize format
+        _format = str(_format).lower().strip()
+        data["format"] = _format
+
+        # 1) Try plugin types from MIME type (best case)
+        content_type = getattr(file, "content_type", None)
+        accepted_formats = set()
+        if content_type:
+            accepted_formats |= set(get_plugin_types_for_mimetype(content_type))
+
+        # 2) If nothing found, try guessing MIME from filename
+        if not accepted_formats:
+            guessed_type, _guessed_encoding = mimetypes.guess_type(getattr(file, "name", ""))
+            if guessed_type:
+                accepted_formats |= set(get_plugin_types_for_mimetype(guessed_type))
+
+        # 3) If still nothing, fall back to extension
+        if not accepted_formats:
+            suffix = Path(getattr(file, "name", "")).suffix.lstrip(".").lower()
+            if suffix:
+                accepted_formats.add(suffix)
+
+        # 4) If we still couldn't determine formats, allow a small safe whitelist
+        #    (because test uploads frequently arrive as octet-stream)
+        if not accepted_formats:
+            accepted_formats = {"xml", "json", "yaml", "yml"}
+
+        if _format not in accepted_formats:
+            raise serializers.ValidationError({
+                "format": [_("File format not accepted for this file type: %s") % (content_type or "unknown")]
+
+            })
+
+        return data
+
+class ProjectImportPreviewResponseSerializer(serializers.Serializer):
+    """
+    Mirrors the dict returned by plugin.prepare_import():
+      { values: […], snapshots: […], tasks: […], views: […] }
+    """
+    values = serializers.ListField(
+        child=serializers.DictField(),
+        help_text="List of all candidate values (with their 'key', 'text', etc.)"
+    )
+    snapshots = serializers.ListField(
+        child=serializers.DictField(),
+        help_text="List of snapshot groups (each with index, title and values)"
+    )
+    tasks = serializers.ListField(
+        child=serializers.DictField(),
+        help_text="List of available tasks (each dict with 'uri'/'title')"
+    )
+    views = serializers.ListField(
+        child=serializers.DictField(),
+        help_text="List of available views (each dict with 'uri'/'title')"
+    )
+
+
+class ProjectImportConfirmSerializer(ProjectFileUploadSerializer):
+    checked_values = serializers.ListField(
+        child=serializers.CharField(),
+        allow_empty=True,
+        help_text="List of value keys the user wants to import."
+    )
+    checked_snapshots = serializers.ListField(
+        child=serializers.CharField(), allow_empty=True, help_text="List of snapshot keys the user wants to import."
+    )
 
 
 class ProjectVisibilitySerializer(serializers.ModelSerializer):
@@ -707,6 +802,8 @@ class IssueSerializer(serializers.ModelSerializer):
 
 
 class SnapshotSerializer(serializers.ModelSerializer):
+    catalog = serializers.CharField(source="project.catalog.id", read_only=True)
+    memberships = serializers.SerializerMethodField()  # optional, enabled from context
 
     class Meta:
         model = Snapshot
@@ -715,9 +812,17 @@ class SnapshotSerializer(serializers.ModelSerializer):
             'project',
             'title',
             'description',
+            'catalog',
+            'memberships',  # optional, enabled from context
             'created',
             'updated'
         )
+
+    def get_memberships(self, obj):
+        if not self.context.get("include_memberships"):
+            return []
+        qs = obj.project.memberships.select_related("user").all()
+        return ProjectMembershipSerializer(qs, many=True, context=self.context).data
 
 
 class ValueSerializer(serializers.ModelSerializer):

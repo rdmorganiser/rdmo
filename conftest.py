@@ -8,6 +8,8 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.management import call_command
 
+from rest_framework.test import APIClient
+
 from rdmo.accounts.utils import set_group_permissions
 
 
@@ -75,3 +77,7 @@ def delete_all_objects():
         for model in models:
             model.objects.all().delete()
     return delete_all
+
+@pytest.fixture
+def api_client():
+    return APIClient()

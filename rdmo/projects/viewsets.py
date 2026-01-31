@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import F, OuterRef, Prefetch, Q, Subquery
 from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponseRedirect
@@ -9,10 +9,11 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers, status
 from rest_framework.decorators import action
-from rest_framework.exceptions import NotFound, ValidationError
+from rest_framework.exceptions import NotFound
 from rest_framework.filters import SearchFilter
 from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -23,7 +24,10 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from rdmo.conditions.models import Condition
 from rdmo.core.constants import VALUE_TYPE_FILE
+from rdmo.core.exceptions import raise_as_drf_validation_error
+from rdmo.core.exports import XMLResponse
 from rdmo.core.permissions import HasModelPermission
+from rdmo.core.plugins import get_plugin
 from rdmo.core.utils import human2bytes, is_truthy, render_to_format, return_file_response
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet
@@ -42,11 +46,13 @@ from .filters import (
 )
 from .models import Continuation, Integration, Invite, Issue, Membership, Project, Snapshot, Value, Visibility
 from .permissions import (
+    HasProjectImportUpdatePermission,
     HasProjectLeavePermission,
     HasProjectPagePermission,
     HasProjectPermission,
     HasProjectProgressModelPermission,
     HasProjectProgressObjectPermission,
+    HasProjectsImportCreatePermission,
     HasProjectsPermission,
     HasProjectVisibilityModelPermission,
     HasProjectVisibilityObjectPermission,
@@ -59,6 +65,8 @@ from .progress import (
     compute_show_page,
     resolve_conditions,
 )
+from .renderers import XMLRenderer
+from .serializers.export import ProjectSerializer as ProjectExportSerializer
 from .serializers.v1 import (
     IntegrationSerializer,
     InviteSerializer,
@@ -66,7 +74,10 @@ from .serializers.v1 import (
     MembershipSerializer,
     ProjectAnswersSerializer,
     ProjectCopySerializer,
+    ProjectFileUploadSerializer,
     ProjectHierarchySerializer,
+    ProjectImportConfirmSerializer,
+    ProjectImportPreviewResponseSerializer,
     ProjectIntegrationSerializer,
     ProjectInviteCreateSerializer,
     ProjectInviteSerializer,
@@ -100,6 +111,7 @@ from .utils import (
     get_value_path,
     send_contact_message,
     send_invite_email,
+    validate_and_prepare_import_plugin,
 )
 
 
@@ -402,7 +414,7 @@ class ProjectViewSet(ModelViewSet):
                     send_contact_message(request, subject, message)
                     return Response(status=status.HTTP_204_NO_CONTENT)
                 else:
-                    raise ValidationError({
+                    raise serializers.ValidationError({
                         'subject': [_('This field may not be blank.')] if not subject else [],
                         'message': [_('This field may not be blank.')] if not message else []
                     })
@@ -566,13 +578,89 @@ class ProjectViewSet(ModelViewSet):
             'href': reverse('project_create_import', args=[key])
         } for key, label, class_name in settings.PROJECT_IMPORTS if key in settings.PROJECT_IMPORTS_LIST] )
 
+    @action(
+        detail=False,
+        methods=["post"],
+        url_path="import-create-preview",
+        parser_classes=[MultiPartParser, FormParser],
+        permission_classes=[HasModelPermission | HasProjectsImportCreatePermission],
+        serializer_class=ProjectFileUploadSerializer
+    )
+    def import_create_preview(self, request, *args, **kwargs):
+        return self.get_import_preview(request, current_project=None)
+
+    @action(
+        detail=False,
+        methods=["post"],
+        url_path="import-create-confirm",
+        parser_classes=[MultiPartParser, FormParser],
+        permission_classes=[HasModelPermission | HasProjectsImportCreatePermission],
+        serializer_class=ProjectImportConfirmSerializer
+    )
+    def import_create_confirm(self, request, *args, **kwargs):
+        return self.get_import_confirm(request, current_project=None, status_code=status.HTTP_201_CREATED)
+
+    @action(
+        detail=True,
+        methods=["post"],
+        url_path="import-update-preview",
+        parser_classes=[MultiPartParser, FormParser],
+        permission_classes=(HasModelPermission | HasProjectPermission,),
+        serializer_class=ProjectFileUploadSerializer,
+    )
+    def import_update_preview(self, request, pk=None):
+        project = self.get_object()
+        return self.get_import_preview(request, current_project=project)
+
+    @action(
+        detail=True,
+        methods=["post"],
+        url_path="import-update-confirm",
+        parser_classes=[MultiPartParser, FormParser],
+        permission_classes=(HasModelPermission | HasProjectImportUpdatePermission,),
+        serializer_class=ProjectImportConfirmSerializer,
+
+    )
+    def import_update_confirm(self, request, pk=None):
+        project = self.get_object()
+        return self.get_import_confirm(request, current_project=project, status_code=status.HTTP_200_OK)
+
+    @action(
+            detail=True,
+            methods=["get"],
+            permission_classes=(HasModelPermission | HasProjectPermission,),
+            url_path="export(?:/(?P<export_format>[a-z]+))?",
+    )
+    def export(self, request, pk=None, export_format='xml'):
+        project = self.get_object()
+        project.catalog.prefetch_elements()
+
+        full = is_truthy(request.GET.get("full"))
+        context = {
+            "snapshots": full or is_truthy(request.GET.get("snapshots")),
+            "include_memberships": full or is_truthy(request.GET.get("include_memberships")),
+        }
+
+        if export_format == 'xml':
+            serializer = ProjectExportSerializer(project, context=context)
+            xml = XMLRenderer().render(serializer.data, context=context)
+            return XMLResponse(xml, name=project.title)
+        else:
+            plugin = get_plugin("PROJECT_EXPORTS", export_format)
+            if plugin is None:
+                raise Http404
+            plugin.project = project
+            plugin.snapshot = None
+            plugin.include_memberships = context['include_memberships']
+            return plugin.render()
+
+
     def perform_create(self, serializer):
         project = serializer.save(site=get_current_site(self.request))
 
         # add current user as owner
         membership = Membership(project=project, user=self.request.user, role='owner')
         membership.save()
-
 
         # add all tasks to project
         if self.request.data.get('tasks') is None:
@@ -587,6 +675,90 @@ class ProjectViewSet(ModelViewSet):
                 views = View.objects.filter_for_project(project).filter_availability(self.request.user)
                 for view in views:
                     project.views.add(view)
+
+    def apply_import_overrides(self, prepared: dict, title_override=None, catalog_override=None) -> dict:
+        project_meta = prepared.get("project", {}) or {}
+
+        if title_override:
+            project_meta["title"] = title_override
+
+        if catalog_override is not None:
+            project_meta["catalog"] = catalog_override.pk
+
+        prepared["project"] = project_meta
+        return prepared
+
+    def get_import_preview(self, request, *, current_project=None) -> Response:
+        upload = ProjectFileUploadSerializer(data=request.data, context={"request": request, "view": self})
+        upload.is_valid(raise_exception=True)
+
+        file = upload.validated_data["file"]
+        file_format = upload.validated_data["format"]
+
+        title_override = upload.validated_data.get("title")
+        catalog_override = upload.validated_data.get("catalog")
+
+        plugin = validate_and_prepare_import_plugin(
+            request=request,
+            file=file,
+            file_format=file_format,
+            current_project=current_project,
+        )
+
+        try:
+            prepared = plugin.prepare_import()
+        except ValidationError as exc:
+            raise_as_drf_validation_error(exc)
+
+        prepared = self.apply_import_overrides(
+            prepared,
+            title_override=title_override,
+            catalog_override=catalog_override,
+        )
+
+        out = ProjectImportPreviewResponseSerializer(prepared)
+        return Response(out.data, status=status.HTTP_200_OK)
+
+    def get_import_confirm(self, request, *, current_project=None, status_code=status.HTTP_201_CREATED) -> Response:
+        confirm = ProjectImportConfirmSerializer(data=request.data, context={"request": request, "view": self})
+        confirm.is_valid(raise_exception=True)
+
+        file = confirm.validated_data["file"]
+        file_format = confirm.validated_data["format"]
+
+        checked_values = confirm.validated_data.get("checked_values", [])
+        checked_snapshots = confirm.validated_data.get("checked_snapshots", [])
+
+        title_override = confirm.validated_data.get("title")
+        catalog_override = confirm.validated_data.get("catalog")
+
+        plugin = validate_and_prepare_import_plugin(
+            request=request,
+            file=file,
+            file_format=file_format,
+            current_project=current_project,
+        )
+
+        updated_project = plugin.import_to_project(
+            checked_values=checked_values,
+            checked_snapshots=checked_snapshots,
+        )
+
+        # Optional overrides apply after import (explicit, predictable)
+        changed = False
+        if title_override:
+            updated_project.title = title_override
+            changed = True
+
+        if catalog_override is not None:
+            updated_project.catalog = catalog_override
+            changed = True
+
+        if changed:
+            updated_project.save()
+
+        # keep response shape consistent and stable for tests
+        return Response({"id": updated_project.pk}, status=status_code)
 
 
 class ProjectNestedViewSetMixin(NestedViewSetMixin):
@@ -765,6 +937,41 @@ class ProjectSnapshotViewSet(ProjectNestedViewSetMixin, CreateModelMixin, Retrie
         snapshot.rollback()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    @action(
+        detail=True,
+        methods=["get"],
+        permission_classes=(HasModelPermission | HasProjectPermission,),
+        url_path=r"export(?:/(?P<export_format>[a-z]+))?",
+    )
+    def export(self, request, pk=None, parent_lookup_project=None, export_format="xml"):
+        snapshot = self.get_object()
+        snapshot.project.catalog.prefetch_elements()
+
+        # Build same context semantics as project export
+        full = is_truthy(request.GET.get("full"))
+        context = {
+            "include_memberships": full or is_truthy(request.GET.get("include_memberships")),
+        }
+
+        # XML snapshot export
+        if export_format == "xml":
+            serializer = SnapshotSerializer(snapshot, context=context)
+            xml = XMLRenderer().render(serializer.data, context=context)
+
+            # name is the filename stem in Content-Disposition
+            name = snapshot.title or snapshot.project.title
+            return XMLResponse(xml, name=name)
+
+        # Plugin-based snapshot exports
+        plugin = get_plugin("SNAPSHOT_EXPORTS", export_format)
+        if plugin is None:
+            raise Http404
+
+        plugin.snapshot = snapshot
+        plugin.project = None
+        plugin.include_memberships = context['include_memberships']
+        return plugin.render()
+
 
 class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     permission_classes = (HasModelPermission | HasProjectPermission, )
@@ -791,7 +998,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         try:
             copy_value_id = int(request.data.pop('copy_set_value'))
         except KeyError as e:
-            raise ValidationError({
+            raise serializers.ValidationError({
                 'copy_set_value': [_('This field may not be blank.')]
             }) from e
         except ValueError as e:

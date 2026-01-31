@@ -7,7 +7,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.core.imports import handle_uploaded_file
+from rdmo.core.imports import store_temp_file
 from rdmo.core.plugins import get_plugin, get_plugins
 from rdmo.questions.models import Question
 
@@ -80,7 +80,7 @@ class ProjectImportMixin:
                 'errors': [_('There has been an error with your import.')]
             }, status=400)
         else:
-            self.request.session['import_file_name'] = handle_uploaded_file(uploaded_file)
+            self.request.session['import_file_name'] = store_temp_file(uploaded_file)
             self.request.session['import_source_title'] = uploaded_file.name
 
             # redirect to the import form

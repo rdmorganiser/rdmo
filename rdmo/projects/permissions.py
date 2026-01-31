@@ -115,3 +115,22 @@ class HasProjectVisibilityObjectPermission(HasProjectPermission):
             return ('projects.delete_visibility_object', )
         else:
             return ('projects.view_visibility_object', )
+
+
+class HasProjectsImportCreatePermission(HasModelPermission):
+
+    def get_required_permissions(self, method, model_cls):
+        if method == 'POST':
+            return ('projects.can_add_project', )
+        else:
+            return ('projects.view_project', )
+
+
+
+class HasProjectImportUpdatePermission(HasProjectPermission):
+
+    def get_required_object_permissions(self, method, model_cls):
+        if method == 'POST':
+            return ('projects.change_project_object', )
+        else:
+            return ('projects.view_project_object', )

@@ -4,6 +4,8 @@ from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.crypto import get_random_string
+from django.utils.text import slugify
 
 from .settings import GROUPS
 
@@ -78,3 +80,59 @@ def get_user_from_db_or_none(username: str, email: str):
     except ObjectDoesNotExist:
         log.error('Retrieval of user "%s" with email "%s" failed, user does not exist', username, email)
         return None
+
+
+def find_user(user_id=None, username="", email=""):
+    username = (username or "").strip()
+    email = (email or "").strip().lower()
+
+    if user_id:
+        user = get_user_model().objects.filter(pk=user_id).first()
+        if user:
+            return user
+
+    if username:
+        user = get_user_model().objects.filter(username=username).first()
+        if user:
+            return user
+
+    if email:
+        return get_user_model().objects.filter(email__iexact=email).first()
+
+    return None
+
+
+def make_unique_username(seed: str) -> str:
+    base = slugify(seed) or "user"
+    user_model = get_user_model()
+    for suffix in range(0, 8):
+        candidate = base if suffix == 0 else f"{base}_{suffix}"
+        if not user_model.objects.filter(username=candidate).exists():
+            return candidate
+    # fallback
+    return f"{base}_{get_random_string(8)}"
+
+
+def create_user_from_fields(username, email, first_name, last_name):
+    username = (username or "").strip()
+    email = (email or "").strip().lower()
+    first_name = (first_name or "").strip()
+    last_name = (last_name or "").strip()
+
+    base = username or (email.split("@")[0] if email else "") or "imported"
+    unique = make_unique_username(base)
+
+    user = get_user_model().objects.create_user(
+        username=unique,
+        email=email,
+        first_name=first_name,
+        last_name=last_name,
+        is_active=True,
+    )
+    user.set_unusable_password()
+    user.save(update_fields=["password"])
+
+    if unique != base:
+        log.info("Username '%s' taken, created unique name '%s'.", base, unique)
+
+    return user

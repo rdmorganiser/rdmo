@@ -4,18 +4,26 @@ from collections import defaultdict
 from pathlib import Path
 
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.db import IntegrityError
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.timezone import now
 
+from rest_framework import serializers
+
+from rdmo.accounts.utils import create_user_from_fields, find_user
+from rdmo.core.imports import store_temp_file
 from rdmo.core.mail import send_mail
-from rdmo.core.plugins import get_plugins
+from rdmo.core.plugins import get_plugin, get_plugins
 from rdmo.core.utils import remove_double_newlines
+from rdmo.projects.models import Membership
+from rdmo.projects.progress import compute_progress
 
 logger = logging.getLogger(__name__)
-
+User = get_user_model()
 
 def get_value_path(project, snapshot=None):
     if snapshot is None:
@@ -237,6 +245,12 @@ def save_import_views(project, views):
     for view in views:
         project.views.add(view)
 
+def save_project_progress(project):
+    progress_count, progress_total = compute_progress(project)
+    project.progress_count = progress_count
+    project.progress_total = progress_total
+    project.save()
+
 
 def get_invite_email_project_path(invite) -> str:
     project_invite_path = reverse('project_join', args=[invite.token])
@@ -299,6 +313,15 @@ def get_upload_accept():
             return {}
 
     return accept
+
+
+def get_plugin_types_for_mimetype(mimetype: str) -> set[str]:
+    suffixes = get_upload_accept().get(mimetype)
+
+    if not suffixes:
+        return set()
+
+    return {suffix.lstrip('.') for suffix in suffixes}
 
 
 def compute_set_prefix_from_set_value(set_value, value):
@@ -368,3 +391,64 @@ def send_contact_message(request, subject, message):
     send_mail(subject, message,
               to=settings.PROJECT_CONTACT_RECIPIENTS,
               cc=[request.user.email], reply_to=[request.user.email])
+
+
+def import_memberships(project, records, create_users = False):
+    created = skipped = 0
+
+    for rec in records:
+
+        user_id = rec.get("id")
+        username = (rec.get("username") or "").strip()
+        email = (rec.get("email") or "").strip().lower()
+
+        # 1) resolve user
+        user = find_user(user_id=user_id, username=username, email=email)
+
+        # 2) optionally create
+        if not user:
+            if not create_users:
+                raise ValidationError(
+                    f"No existing user for user_id={user_id!r}, username={username!r}, email={email!r}"
+                )
+            first_name = (rec.get("first_name") or "").strip()
+            last_name = (rec.get("last_name") or "").strip()
+            user = create_user_from_fields(username, email, first_name, last_name)
+
+        # 3) assign/update membership
+        role = rec.get("role") or "guest"
+        try:
+            Membership.objects.update_or_create(project=project, user=user, defaults={"role": role})
+        except IntegrityError as exc:
+            logger.warning("Duplicate membership %s / %s: %s", project.pk, user.pk, exc)
+            skipped += 1
+        else:
+            created += 1
+
+    return created, skipped
+
+
+def validate_and_prepare_import_plugin(request, file=None, file_format=None, current_project=None):
+    if not file:
+        raise serializers.ValidationError({"file": ["This field is required."]})
+
+    if not file_format:
+        raise serializers.ValidationError({"format": ["This field is required."]})
+
+    file_format = str(file_format).lower().strip()
+
+    plugin = get_plugin("PROJECT_IMPORTS", file_format)
+    if plugin is None:
+        raise serializers.ValidationError({
+            "format": [f'Format "{file_format}" not configured.']
+        })
+
+    # ✅ Store upload in a temp file and give plugin a real path
+    tmp_path = store_temp_file(file)
+
+    plugin.file_name = str(tmp_path)
+    plugin.request = request
+    plugin.current_project = current_project
+    plugin.raise_exception = True
+
+    return plugin
