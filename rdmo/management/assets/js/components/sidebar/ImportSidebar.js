@@ -1,14 +1,21 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 
 import Link from 'rdmo/core/assets/js/components/Link'
-import {useImportElements} from '../../hooks/useImportElements'
+
+import { resetElements, importElements, selectElements, selectChangedElements,
+         showElements, showChangedElements } from '../../actions/importActions'
+
+import { useImportElements } from '../../hooks/useImportElements'
 
 
-const ImportSidebar = ({ config, imports, importActions }) => {
-  const { elements, success } = imports
+const ImportSidebar = () => {
+  const dispatch = useDispatch()
+
+  const { settings } = useSelector((state) => state.config)
+  const { elements, success } = useSelector((state) => state.imports)
 
    const {
     changedElements,
@@ -20,7 +27,7 @@ const ImportSidebar = ({ config, imports, importActions }) => {
 
   const updateUriPrefix = () => {
     if (!disabled) {
-      importActions.updateUriPrefix(uriPrefix)
+      dispatch(updateUriPrefix(uriPrefix))
     }
   }
 
@@ -30,7 +37,7 @@ const ImportSidebar = ({ config, imports, importActions }) => {
         <h2>{gettext('Import successful')}</h2>
 
         <p className="import-buttons">
-          <button type="button" className="btn btn-default" onClick={() => importActions.resetElements()}>
+          <button type="button" className="btn btn-light border" onClick={() => dispatch(resetElements())}>
             {gettext('Back')}
           </button>
         </p>
@@ -40,11 +47,11 @@ const ImportSidebar = ({ config, imports, importActions }) => {
     return (
       <div className="import-sidebar">
         <h2>{gettext('Import elements')}</h2>
-        <p className="import-buttons">
-          <button type="button" className="btn btn-success" onClick={() => importActions.importElements()}>
+        <p className="d-flex align-items-center gap-2">
+          <button type="button" className="btn btn-success" onClick={() => dispatch(importElements())}>
             {interpolate(ngettext('Import one element', 'Import %s elements', count), [count])}
           </button>
-          <button type="button" className="btn btn-default" onClick={() => importActions.resetElements()}>
+          <button type="button" className="btn btn-light border" onClick={() => dispatch(resetElements())}>
             {gettext('Back')}
           </button>
         </p>
@@ -53,25 +60,25 @@ const ImportSidebar = ({ config, imports, importActions }) => {
 
         <ul className="list-unstyled">
           <li>
-            <Link onClick={() => importActions.selectElements(true)}>
+            <Link onClick={() => dispatch(selectElements(true))}>
               {gettext('Select all')}
             </Link>
           </li>
           {changedElements.length > 0 &&
             <li>
-              <Link onClick={() => importActions.selectChangedElements(true)}>
+              <Link onClick={() => dispatch(selectChangedElements(true))}>
                 {gettext('Select changed')}
               </Link>
             </li>
           }
           <li>
-            <Link onClick={() => importActions.selectElements(false)}>
+            <Link onClick={() => dispatch(selectElements(false))}>
               {gettext('Deselect all')}
             </Link>
           </li>
           {changedElements.length > 0 &&
             <li>
-              <Link onClick={() => importActions.selectChangedElements(false)}>
+              <Link onClick={() => dispatch(selectChangedElements(false))}>
                 {gettext('Deselect changed')}
               </Link>
             </li>
@@ -81,25 +88,25 @@ const ImportSidebar = ({ config, imports, importActions }) => {
           <h2>{gettext('Show')}</h2>
           <ul className="list-unstyled">
           <li>
-            <Link onClick={() => importActions.showElements(true)}>
+            <Link onClick={() => dispatch(showElements(true))}>
               {gettext('Show all')}
             </Link>
           </li>
           {changedElements.length > 0 &&
             <li>
-              <Link onClick={() => importActions.showChangedElements(true)}>
+              <Link onClick={() => dispatch(showChangedElements(true))}>
                 {gettext('Show changes')}
               </Link>
             </li>
           }
           <li>
-            <Link onClick={() => importActions.showElements(false)}>
+            <Link onClick={() => dispatch(showElements(false))}>
               {gettext('Hide all')}
             </Link>
           </li>
             {changedElements.length > 0 &&
               <li>
-                <Link onClick={() => importActions.showChangedElements(false)}>
+                <Link onClick={() => dispatch(showChangedElements(false))}>
                   {gettext('Hide changes')}
                 </Link>
               </li>
@@ -108,37 +115,28 @@ const ImportSidebar = ({ config, imports, importActions }) => {
 
         <h2>{gettext('URI prefix')}</h2>
 
-        <div className="form-group">
-          <div className="input-group">
-            <input className="form-control" type="text"
-                   placeholder={gettext('URI prefix')} aria-label={gettext('URI prefix')}
-                   value={uriPrefix} onChange={event => setUriPrefix(event.target.value)} />
+        <div className="input-group">
+          <input type="text" className="form-control"
+                 placeholder={gettext('URI prefix')} aria-label={gettext('URI prefix')}
+                 value={uriPrefix} onChange={event => setUriPrefix(event.target.value)} />
 
-            <span className="input-group-btn">
-              <button type="button" className="btn btn-default"
-                title={gettext('Insert default URI Prefix')}
-                aria-label={gettext('Insert default URI Prefix')}
-                onClick={() => setUriPrefix(config.settings.default_uri_prefix)}>
-                <span className="fa fa-magic"></span>
-              </button>
-              <button type="button" className="btn btn-primary" disabled={disabled}
-                title={gettext('Set URI prefix for all elements')}
-                aria-label={gettext('Set URI prefix for all elements')}
-                onClick={updateUriPrefix}>
-                <span className="fa fa-arrow-right"></span>
-              </button>
-            </span>
-          </div>
+          <button type="button" className="btn btn-light border"
+                  title={gettext('Insert default URI Prefix')}
+                  aria-label={gettext('Insert default URI Prefix')}
+                  onClick={() => setUriPrefix(settings.default_uri_prefix)}>
+            <span className="bi bi-magic"></span>
+          </button>
+
+          <button type="button" className="btn btn-primary" disabled={disabled}
+                  title={gettext('Set URI prefix for all elements')}
+                  aria-label={gettext('Set URI prefix for all elements')}
+                  onClick={updateUriPrefix}>
+            <span className="bi bi-arrow-right"></span>
+          </button>
         </div>
       </div>
     )
   }
-}
-
-ImportSidebar.propTypes = {
-  config: PropTypes.object.isRequired,
-  imports: PropTypes.object.isRequired,
-  importActions: PropTypes.object.isRequired
 }
 
 export default ImportSidebar

@@ -1,55 +1,53 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import isEmpty from 'lodash/isEmpty'
-import isNil from 'lodash/isNil'
-import get from 'lodash/get'
+import { get, isEmpty, isNil, uniqueId } from 'lodash'
 
-import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
+import { getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
-const Radio = ({ config, element, field, options, onChange }) => {
-  const id = getId(element, field),
-        label = getLabel(config, element, field),
-        help = getHelp(config, element, field),
-        warnings = get(element, ['warnings', field]),
+import ErrorList from './ErrorList'
+import HelpText from './HelpText'
+
+const Radio = ({ element, field, options, onChange }) => {
+  const { meta } = useSelector((state) => state.config)
+
+  const label = getLabel(element, field, meta),
+        help = getHelp(element, field, meta),
         errors = get(element, ['errors', field])
-
-  const className = classNames({
-    'form-group': true,
-    'has-warning': !isEmpty(warnings),
-    'has-error': !isEmpty(errors)
-  })
 
   const value = isNil(element[field]) ? '' : element[field]
 
   return (
-    <div className={className}>
-      <label className="control-label" htmlFor={id}>{label}</label>
+    <div className="mb-3">
+      <label className="control-label">{label}</label>
 
-      <div>
+      <div className="d-flex align-items-center gap-5">
       {
-        options.map((option, index) => (
-          <label key={index} className="radio-inline">
-            <input type="radio" name="inlineRadioOptions" disabled={element.read_only}
-                   checked={value === option.id}
-                   value={option.id} onChange={event => onChange(field, event.target.value)}/>
-            <span>{option.text}</span>
-          </label>
-        ))
+        options.map((option, index) => {
+          const radioId = uniqueId('radio-')
+
+          return (
+            <div key={index} className="form-check">
+              <input type="radio" id={radioId} disabled={element.read_only}
+                     className={classNames('form-check-input', {'is-invalid': !isEmpty(errors)})}
+                     checked={value === option.id} value={option.id}
+                     onChange={event => onChange(field, event.target.value)} />
+              <label className="form-check-label" htmlFor={radioId}>{option.text}</label>
+            </div>
+          )
+        })
       }
       </div>
 
-      {help && <p className="help-block">{help}</p>}
-
-      {errors && <ul className="help-block list-unstyled">
-        {errors.map((error, index) => <li key={index}>{error}</li>)}
-      </ul>}
+      <ErrorList errors={errors} />
+      <HelpText help={help} />
     </div>
   )
 }
 
 Radio.propTypes = {
-  config: PropTypes.object,
+  className: PropTypes.array,
   element: PropTypes.object,
   field: PropTypes.string,
   options: PropTypes.array,

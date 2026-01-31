@@ -1,7 +1,9 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import isNil from 'lodash/isNil'
-import invert from 'lodash/invert'
+import { useDispatch, useSelector } from 'react-redux'
+import { isNil, isEmpty, invert } from 'lodash'
+
+import { fetchElements } from '../../actions/elementActions'
+import { uploadFile } from '../../actions/importActions'
 
 import { elementTypes, elementModules } from '../../constants/elements'
 
@@ -10,15 +12,22 @@ import { getExportParams } from '../../utils/filter'
 
 import Link from 'rdmo/core/assets/js/components/Link'
 
-import { UploadForm } from '../common/Forms'
+const ElementsSidebar = () => {
+  const dispatch = useDispatch()
 
-const ElementsSidebar = ({ config, elements, elementActions, importActions }) => {
-  const { elementType, elementId } = elements
+  const config = useSelector((state) => state.config)
+  const { elementType, elementId } = useSelector((state) => state.elements)
 
   const model = invert(elementTypes)[elementType]
   const exportUrl = isNil(elementId) ? buildApiPath(elementModules[model], elementType, 'export')
                                      : buildApiPath(elementModules[model], elementType, elementId, 'export')
   const exportParams = isNil(config.filter) ? '' : getExportParams(config.filter[elementType])
+
+  const handleFileUpload = (event) => {
+    if (!isEmpty(event.target.files)) {
+      dispatch(uploadFile(event.target.files[0]))
+    }
+  }
 
   return (
     <div className="elements-sidebar">
@@ -27,47 +36,47 @@ const ElementsSidebar = ({ config, elements, elementActions, importActions }) =>
       <ul className="list-unstyled">
         <li>
           <Link href={buildPath('catalogs')}
-                onClick={() => elementActions.fetchElements('catalogs')}>{gettext('Catalogs')}</Link>
+                onClick={() => dispatch(fetchElements('catalogs'))}>{gettext('Catalogs')}</Link>
         </li>
         <li>
           <Link href={buildPath('sections')}
-                onClick={() => elementActions.fetchElements('sections')}>{gettext('Sections')}</Link>
+                onClick={() => dispatch(fetchElements('sections'))}>{gettext('Sections')}</Link>
         </li>
         <li>
           <Link href={buildPath('pages')}
-                onClick={() => elementActions.fetchElements('pages')}>{gettext('Pages')}</Link>
+                onClick={() => dispatch(fetchElements('pages'))}>{gettext('Pages')}</Link>
         </li>
         <li>
           <Link href={buildPath('questionsets')}
-                onClick={() => elementActions.fetchElements('questionsets')}>{gettext('Question sets')}</Link>
+                onClick={() => dispatch(fetchElements('questionsets'))}>{gettext('Question sets')}</Link>
         </li>
         <li>
           <Link href={buildPath('questions')}
-                onClick={() => elementActions.fetchElements('questions')}>{gettext('Questions')}</Link>
+                onClick={() => dispatch(fetchElements('questions'))}>{gettext('Questions')}</Link>
         </li>
         <li>
           <Link href={buildPath('attributes')}
-                onClick={() => elementActions.fetchElements('attributes')}>{gettext('Attributes')}</Link>
+                onClick={() => dispatch(fetchElements('attributes'))}>{gettext('Attributes')}</Link>
         </li>
         <li>
           <Link href={buildPath('optionsets')}
-                onClick={() => elementActions.fetchElements('optionsets')}>{gettext('Option sets')}</Link>
+                onClick={() => dispatch(fetchElements('optionsets'))}>{gettext('Option sets')}</Link>
         </li>
         <li>
           <Link href={buildPath('options')}
-                onClick={() => elementActions.fetchElements('options')}>{gettext('Options')}</Link>
+                onClick={() => dispatch(fetchElements('options'))}>{gettext('Options')}</Link>
         </li>
         <li>
           <Link href={buildPath('conditions')}
-                onClick={() => elementActions.fetchElements('conditions')}>{gettext('Conditions')}</Link>
+                onClick={() => dispatch(fetchElements('conditions'))}>{gettext('Conditions')}</Link>
         </li>
         <li>
           <Link href={buildPath('tasks')}
-                onClick={() => elementActions.fetchElements('tasks')}>{gettext('Tasks')}</Link>
+                onClick={() => dispatch(fetchElements('tasks'))}>{gettext('Tasks')}</Link>
         </li>
         <li>
           <Link href={buildPath('views')}
-                onClick={() => elementActions.fetchElements('views')}>{gettext('Views')}</Link>
+                onClick={() => dispatch(fetchElements('views'))}>{gettext('Views')}</Link>
         </li>
       </ul>
 
@@ -130,16 +139,9 @@ const ElementsSidebar = ({ config, elements, elementActions, importActions }) =>
         {gettext('Import an RDMO XML file.')}
       </p>
 
-      <UploadForm onSubmit={file => importActions.uploadFile(file)} />
+      <input className="form-control" type="file" id="fileUpload" name="uploaded_file" onChange={handleFileUpload} />
     </div>
   )
-}
-
-ElementsSidebar.propTypes = {
-  config: PropTypes.object.isRequired,
-  elements: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired,
-  importActions: PropTypes.object.isRequired
 }
 
 export default ElementsSidebar

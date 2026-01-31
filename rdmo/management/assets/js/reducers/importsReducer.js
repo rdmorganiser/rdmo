@@ -2,8 +2,10 @@ import isArray from 'lodash/isArray'
 import isNil from 'lodash/isNil'
 import isUndefined from 'lodash/isUndefined'
 
+import * as actionTypes from '../actions/actionTypes'
+
 import { buildUri, buildPathForAttribute } from '../utils/elements'
-import processElementDiffs from '../utils/processElementDiffs'
+import { processElementDiffs } from '../utils/diff'
 
 
 const initialState = {
@@ -17,13 +19,14 @@ export default function importsReducer(state = initialState, action) {
   let index, elements, elementsMap = {}
 
   switch(action.type) {
-    // upload file
-    case 'import/uploadFileInit':
-      return {...state, ...initialState,  file: action.file}
-    case 'elements/fetchElementsInit':
-    case 'elements/fetchElementInit':
+    case actionTypes.FETCH_ELEMENTS_INIT:
+    case actionTypes.FETCH_ELEMENT_INIT:
       return {...state, elements: [], errors: [], success: false}
-    case 'import/uploadFileSuccess':
+
+    // upload file
+    case actionTypes.UPLOAD_IMPORT_FILE_INIT:
+      return {...state, ...initialState,  file: action.file}
+    case actionTypes.UPLOAD_IMPORT_FILE_SUCCESS:
       return {...state, elements: action.elements.map(element => {
         element = processElementDiffs(element)
         if (['questions.catalogs', 'tasks.task', 'views.view'].includes(element.model)) {
@@ -33,17 +36,17 @@ export default function importsReducer(state = initialState, action) {
         element.import = true
         return element
       })}
-    case 'import/uploadFileError':
+    case actionTypes.UPLOAD_IMPORT_FILE_ERROR:
       return {...state, errors: action.error.errors}
 
     // import elements
-    case 'import/importElementsSuccess':
-      return {...state, elements: action.elements, success: true}
-    case 'import/importElementsError':
+    case actionTypes.IMPORT_ELEMENTS_SUCCESS:
+      return {...state, elements: action.elements.map(element => processElementDiffs(element)), success: true}
+    case actionTypes.IMPORT_ELEMENTS_ERROR:
       return {...state, errors: action.error.errors}
 
     // update element
-    case 'import/updateElement':
+    case actionTypes.UPDATE_IMPORT_ELEMENT:
       index = state.elements.findIndex(element => element === action.element)
       if (index > -1) {
         const elements = [...state.elements]
@@ -59,11 +62,11 @@ export default function importsReducer(state = initialState, action) {
       } else {
         return state
       }
-    case 'import/selectElements':
+    case actionTypes.SELECT_IMPORT_ELEMENTS:
       return {...state, elements: state.elements.map(element => {
           return {...element, import: action.value}
       })}
-    case 'import/selectChangedElements':
+    case actionTypes.SELECT_CHANGED_IMPORT_ELEMENTS:
       return {...state, elements: state.elements.map(element => {
         if (element.changed || element.created ) {
           return {...element, import: action.value}
@@ -72,11 +75,11 @@ export default function importsReducer(state = initialState, action) {
           else { return element }
       }
       )}
-    case 'import/showElements':
+    case actionTypes.SHOW_IMPORT_ELEMENTS:
       return {...state, elements: state.elements.map(element => {
         return {...element, show: action.value}
       })}
-    case 'import/showChangedElements':
+    case actionTypes.SHOW_CHANGED_IMPORT_ELEMENTS:
       return {...state, elements: state.elements.map(element => {
         if (element.changed || element.created ) {
           return {...element, show: action.value}
@@ -85,7 +88,7 @@ export default function importsReducer(state = initialState, action) {
         else { return element }
       }
       )}
-    case 'import/updateUriPrefix':
+    case actionTypes.UPDATE_IMPORT_URI_PREFIX:
       elements = state.elements.map(element => {
         element.uri_prefix = action.uriPrefix
 
@@ -118,7 +121,7 @@ export default function importsReducer(state = initialState, action) {
       })
 
       return {...state, elements}
-    case 'import/resetElements':
+    case actionTypes.RESET_IMPORT_ELEMENTS:
       return {...state, elements: []}
     default:
       return state

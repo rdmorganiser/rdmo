@@ -33,17 +33,14 @@ const FieldRowDiffs = ({ element, field }) => {
   }
 
   return (changed &&
-     <div className="field-diff col-sm-12 mt-10 mb-10">
+    <div className="field-diff mt-1">
       <ReactDiffViewer
-          styles={newStyles}
-          oldValue={oldVal}
-          newValue={newVal}
-          splitView={splitView}
-          hideLineNumbers={hideLineNumbers}
-          // leftTitle={leftTitle}
-          // rightTitle={rightTitle}
-          >
-          </ReactDiffViewer>
+        styles={newStyles}
+        oldValue={oldVal}
+        newValue={newVal}
+        splitView={splitView}
+        hideLineNumbers={hideLineNumbers}
+      />
       {
         !isEmpty(warnings) && <>
           <Warnings elementWarnings={fieldDiffData.warnings}
@@ -56,7 +53,7 @@ const FieldRowDiffs = ({ element, field }) => {
           <Errors element={fieldDiffData} />
         </>
       }
-      </div>
+    </div>
   )
 }
 

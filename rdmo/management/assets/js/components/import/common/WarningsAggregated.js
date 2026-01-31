@@ -1,10 +1,13 @@
-// ImportAggregatedWarningsPanel.js
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import { ShowLink } from '../common/Links'
-import { generateWarningListItems } from './common/WarningsListGroup'
-import {isTruthy} from 'rdmo/core/assets/js/utils/config'
-import get from 'lodash/get'
+import classNames from 'classnames'
+import { get } from 'lodash'
+
+import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import { isTruthy } from 'rdmo/core/assets/js/utils/config'
+
+import { generateWarningListItems } from './WarningsListGroup'
 
 // Function to aggregate warnings from elements
 const aggregateWarnings = (elements) => {
@@ -16,10 +19,14 @@ const aggregateWarnings = (elements) => {
   }, [])
 }
 
-const ImportAggregatedWarningsPanel = ({ config, elements, configActions }) => {
+const WarningsAggregated = ({ elements }) => {
+  const dispatch = useDispatch()
+
+  const config = useSelector((state) => state.config)
+
   const updateShowWarnings = () => {
     const currentVal = isTruthy(get(config, 'filter.import.warnings.show', false))
-    configActions.updateConfig('filter.import.warnings.show', !currentVal)
+    dispatch(updateConfig('filter.import.warnings.show', !currentVal))
   }
 
   const showWarnings = isTruthy(get(config, 'filter.import.warnings.show', false))
@@ -30,15 +37,17 @@ const ImportAggregatedWarningsPanel = ({ config, elements, configActions }) => {
   const warningsHeadingText = <strong onClick={updateShowWarnings}>{gettext('Warnings')} ({elements.length}):</strong>
 
   return ( aggregatedWarnings.length > 0 &&
-    <div className="panel panel-warning panel-import-warnings mt-10">
-      <div className="panel-heading" onClick={updateShowWarnings}>
-        {warningsHeadingText}
-        <div className="pull-right">
-          <ShowLink show={showWarnings} onClick={() => {}}/>
+    <div className="card text-bg-warning mt-2">
+      <div className="card-header cursor-pointer" onClick={updateShowWarnings}>
+        <div className="d-flex align-items-center">
+          <div className="flex-grow-1">
+            {warningsHeadingText}
+          </div>
+          <span className={classNames('bi', {'bi-chevron-down': !showWarnings, 'bi-chevron-up': showWarnings})}></span>
         </div>
       </div>
       {showWarnings && (
-        <ul className="list-group mb-5 pb-5 pt-5 pl-5 pr-5">
+        <ul className="list-group list-group-flush">
           {aggregatedWarnings.map(({ elementWarnings, elementModel, elementURI }) =>
             generateWarningListItems(elementWarnings, elementModel, elementURI)
           )}
@@ -48,10 +57,8 @@ const ImportAggregatedWarningsPanel = ({ config, elements, configActions }) => {
   )
 }
 
-ImportAggregatedWarningsPanel.propTypes = {
-  config: PropTypes.object.isRequired,
-  elements: PropTypes.array.isRequired,
-  configActions: PropTypes.object.isRequired
+WarningsAggregated.propTypes = {
+  elements: PropTypes.array.isRequired
 }
 
-export default ImportAggregatedWarningsPanel
+export default WarningsAggregated

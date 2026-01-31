@@ -1,9 +1,13 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import { Tabs, Tab } from 'react-bootstrap'
-import get from 'lodash/get'
+
+import Html from 'rdmo/core/assets/js/components/Html'
+
+import { storeElement, deleteElement, updateElement } from '../../actions/elementActions'
 
 import Checkbox from './common/Checkbox'
+import LanguageTabs from './common/LanguageTabs'
 import Radio from './common/Radio'
 import Select from './common/Select'
 import Text from './common/Text'
@@ -18,118 +22,99 @@ import DeleteOptionModal from '../modals/DeleteOptionModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
 
-const EditOption = ({ config, option, elements, elementActions }) => {
+const EditOption = ({ option }) => {
+  const dispatch = useDispatch()
 
-  const { additionalInputs, sites } = config
-  const { elementAction, parent } = elements
+  const { additionalInputs, sites, settings } = useSelector((state) => state.config)
+  const { elementAction, parent } = useSelector((state) => state.elements)
 
-  const updateOption = (key, value) => elementActions.updateElement(option, {[key]: value})
-  const storeOption = (back) => elementActions.storeElement('options', option, elementAction, back)
-  const deleteOption = () => elementActions.deleteElement('options', option)
+  const updateOption = (key, value) => dispatch(updateElement(option, {[key]: value}))
+  const storeOption = (back) => dispatch(storeElement('options', option, elementAction, back))
+  const deleteOption = () => dispatch(deleteElement('options', option))
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
-  const info = <OptionInfo option={option} elements={elements} elementActions={elementActions} />
+  const info = <OptionInfo option={option} />
 
   return (
-    <div className="panel panel-default panel-edit">
-      <div className="panel-heading">
-        <div className="pull-right">
+    <div className="card">
+      <div className="card-header">
+        <div className="d-flex flex-wrap align-items-center gap-2">
+          <strong className="flex-grow-1">
+            {option.id ? gettext('Edit option') : gettext('Create option')}
+          </strong>
           <ReadOnlyIcon title={gettext('This option is read only')} show={option.read_only} />
           <BackButton />
           <SaveButton elementAction={elementAction} onClick={storeOption} disabled={option.read_only} />
           <SaveButton elementAction={elementAction} onClick={storeOption} disabled={option.read_only} back={true}/>
         </div>
-        {
-          option.id ? <>
-            <strong>{gettext('Option')}{': '}</strong>
-            <code className="code-options">{option.uri}</code>
-          </> : <strong>{gettext('Create option')}</strong>
-        }
       </div>
 
       {
-        parent && parent.optionset && <div className="panel-body panel-border">
-          <p dangerouslySetInnerHTML={{
-            __html:interpolate(gettext('This option will be added to the option set <code class="code-options">%s</code>.'), [parent.optionset.uri])
-          }} />
+        parent && parent.optionset && <div className="card-body border-bottom">
+          <Html html={interpolate(gettext(
+            'This option will be added to the option set <code class="code-options">%s</code>.'),
+            [parent.optionset.uri])} />
         </div>
       }
 
       {
-        option.id && <div className="panel-body panel-border">
+        option.id && <div className="card-body border-bottom">
           { info }
         </div>
       }
 
-      <div className="panel-body">
+      <div className="card-body pb-0">
         <div className="row">
           <div className="col-sm-6">
-            <UriPrefix config={config} element={option} field="uri_prefix"
-                       onChange={updateOption} />
+            <UriPrefix element={option} field="uri_prefix" onChange={updateOption} />
           </div>
           <div className="col-sm-6">
-            <Text config={config} element={option} field="uri_path"
-                  onChange={updateOption} />
+            <Text element={option} field="uri_path" onChange={updateOption} />
           </div>
         </div>
 
-        <Textarea config={config} element={option} field="comment"
-                  rows={4} onChange={updateOption} />
+        <Textarea element={option} field="comment" rows={4} onChange={updateOption} />
 
         <div className="row">
           <div className="col-sm-6">
-            <Checkbox config={config} element={option} field="locked"
-                      onChange={updateOption} />
+            <Checkbox element={option} field="locked" onChange={updateOption} />
           </div>
         </div>
 
-        <Tabs id="#option-tabs" defaultActiveKey={0} animation={false}>
-          {
-            config.settings && config.settings.languages.map(([lang_code, lang], index) => (
-              <Tab key={index} eventKey={index} title={lang}>
-                <div className="row">
-                  <div className="col-sm-12">
-                    <Text config={config} element={option} field={`text_${lang_code }`}
-                          onChange={updateOption} />
-                    <Textarea config={config} element={option} field={`help_${lang_code }`}
-                              onChange={updateOption} />
-                    <Textarea config={config} element={option} field={`view_text_${lang_code }`}
-                              onChange={updateOption} />
-                  </div>
-                </div>
-              </Tab>
-            ))
-          }
-        </Tabs>
+        <LanguageTabs render={(langCode) => (
+          <>
+            <Text element={option} field={`text_${langCode}`} onChange={updateOption} />
+            <Textarea element={option} field={`help_${langCode }`} onChange={updateOption} />
+            <Textarea element={option} field={`view_text_${langCode}`} onChange={updateOption} />
+          </>
+        )} />
 
-        <Radio config={config} element={option} field="additional_input"
-               options={additionalInputs} onChange={updateOption} />
+        <Radio element={option} field="additional_input" options={additionalInputs} onChange={updateOption} />
         {
           (option.additional_input === 'text' || option.additional_input === 'textarea') &&
-          config.settings &&
-          <Tabs id="#option-tabs2" defaultActiveKey={0} animation={false}>
-            {config.settings.languages.map(([lang_code, lang], index) => (
-            <Tab key={index} eventKey={index} title={lang}>
-              <Textarea key={index} config={config} element={option} field={`default_text_${lang_code}`}
-                      rows={1} onChange={updateOption} />
-            </Tab>
-
-          ))}
-          </Tabs>
+          settings && (
+            <LanguageTabs render={(langCode) => (
+              <Textarea element={option} field={`default_text_${langCode}`} rows={1} onChange={updateOption} />
+            )} />
+          )
         }
 
-        {get(config, 'settings.multisite') && <Select config={config} element={option} field="editors"
-                                                      options={sites} onChange={updateOption} isMulti />}
+        {
+          settings.multisite && (
+            <Select element={option} field="editors" options={sites} onChange={updateOption} isMulti />
+          )
+        }
+
       </div>
 
-      <div className="panel-footer">
-        <div className="pull-right">
-          <BackButton />
+      <div className="card-footer">
+        <div className="d-flex align-items-center gap-2">
+          {option.id && <DeleteButton onClick={openDeleteModal} disabled={option.read_only} />}
+          <BackButton className="ms-auto" />
           <SaveButton elementAction={elementAction} onClick={storeOption} disabled={option.read_only} />
           <SaveButton elementAction={elementAction} onClick={storeOption} disabled={option.read_only} back={true}/>
         </div>
-        {option.id && <DeleteButton onClick={openDeleteModal} disabled={option.read_only} />}
       </div>
 
       <DeleteOptionModal option={option} info={info} show={showDeleteModal}
@@ -139,10 +124,7 @@ const EditOption = ({ config, option, elements, elementActions }) => {
 }
 
 EditOption.propTypes = {
-  config: PropTypes.object.isRequired,
-  option: PropTypes.object.isRequired,
-  elements: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
+  option: PropTypes.object.isRequired
 }
 
 export default EditOption

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import isString from 'lodash/isString'
+import { isEmpty, isString } from 'lodash'
 
 const MainErrors = ({ errors }) => {
   return (
@@ -24,7 +24,7 @@ MainErrors.propTypes = {
 }
 
 const ElementErrors = ({ element }) => {
-  if (element.errors) {
+  if (!isEmpty(element.errors)) {
     const errorList = Object.values(element.errors).flat().reduce((acc, cur) => {
       if (isString(cur)) {
         acc.push(cur)
@@ -37,7 +37,7 @@ const ElementErrors = ({ element }) => {
       return acc
     }, [])
 
-    return element.errors && (
+    return (
       <ul className="list-unstyled text-danger mb-0">
         {errorList.map((error, index) => <li key={index}>{error}</li>)}
       </ul>

@@ -1,36 +1,48 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import get from 'lodash/get'
+import { useDispatch, useSelector } from 'react-redux'
+import classNames from 'classnames'
+import { get, isEmpty } from 'lodash'
 
+import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import { isTruthy } from 'rdmo/core/assets/js/utils/config'
+
+import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
 
 import { FilterString, FilterUriPrefix, FilterSite } from '../common/Filter'
-import { Checkbox } from '../common/Checkboxes'
 import { BackButton, NewButton } from '../common/Buttons'
 
 import Section from '../element/Section'
 
-const Sections = ({ config, sections, configActions, elementActions }) => {
+const Sections = () => {
+  const dispatch = useDispatch()
 
-  const updateFilterString = (value) => configActions.updateConfig('filter.sections.search', value)
-  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.sections.uri_prefix', value)
-  const updateFilterEditor = (value) => configActions.updateConfig('filter.editors', value)
+  const config = useSelector((state) => state.config)
+  const sections = useSelector((state) => state.elements.sections)
 
-  const updateDisplaySectionURI = (value) => configActions.updateConfig('display.uri.sections', value)
+  const updateFilterString = (value) => dispatch(updateConfig('filter.sections.search', value))
+  const updateFilterUriPrefix = (value) => dispatch(updateConfig('filter.sections.uri_prefix', value))
+  const updateFilterEditor = (value) => dispatch(updateConfig('filter.editors', value))
 
-  const createSection = () => elementActions.createElement('sections')
+  const displayUriSections = isTruthy(get(config, 'display.uri.sections', true))
+
+  const toggleDisplayUriSections = () => dispatch(updateConfig('display.uri.sections', !displayUriSections))
+
+  const createSection = () => dispatch(createElement('sections'))
+
+  const btnClass = (value) => classNames('btn border', value ? 'btn-light' : '')
 
   return (
-    <div className="panel panel-default">
-      <div className="panel-heading">
-        <div className="pull-right">
+    <div className="card">
+      <div className="card-header">
+        <div className="d-flex align-items-center gap-2">
+          <strong className="me-auto">{gettext('Sections')}</strong>
           <BackButton />
           <NewButton onClick={createSection} />
         </div>
-        <strong>{gettext('Sections')}</strong>
       </div>
 
-      <div className="panel-body">
+      <div className="card-body">
         <div className="row">
           <div className={config.settings.multisite ? 'col-sm-6' : 'col-sm-8'}>
             <FilterString value={get(config, 'filter.sections.search', '')} onChange={updateFilterString}
@@ -47,31 +59,28 @@ const Sections = ({ config, sections, configActions, elementActions }) => {
             </div>
           }
         </div>
-        <div className="checkboxes">
-          <span className="mr-10">{gettext('Show URIs:')}</span>
-          <Checkbox label={<code className="code-questions">{gettext('Sections')}</code>}
-                    value={get(config, 'display.uri.sections', true)} onChange={updateDisplaySectionURI} />
+        <div className="input-group input-group-sm">
+          <label className="input-group-text">{gettext('Show URIs')}</label>
+          <button type="button" onClick={toggleDisplayUriSections} className={btnClass(displayUriSections)}>
+            {gettext('Sections')}
+          </button>
         </div>
       </div>
 
-      <ul className="list-group">
       {
-        sections.map((section, index) => (
-          <Section key={index} config={config} section={section}
-                   configActions={configActions} elementActions={elementActions}
-                   filter="sections" filterEditors={true} />
-        ))
+        !isEmpty(sections) && (
+          <ul className="list-group list-group-flush">
+          {
+            sections.map((section, index) => (
+              <Section key={index} config={config} section={section}
+                       filter="sections" filterEditors={true} />
+            ))
+          }
+          </ul>
+        )
       }
-      </ul>
     </div>
   )
-}
-
-Sections.propTypes = {
-  config: PropTypes.object.isRequired,
-  sections: PropTypes.array.isRequired,
-  configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
 }
 
 export default Sections

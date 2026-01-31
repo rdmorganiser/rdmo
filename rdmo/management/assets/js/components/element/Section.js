@@ -1,7 +1,14 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
+
+import { isTruthy } from 'rdmo/core/assets/js/utils/config'
+
+import Html from 'rdmo/core/assets/js/components/Html'
+
+import { fetchElement, storeElement, createElement, dropElement } from '../../actions/elementActions'
 
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
@@ -14,52 +21,57 @@ import { ReadOnlyIcon } from '../common/Icons'
 import { Drag, Drop } from '../common/DragAndDrop'
 
 
-const Section = ({ config, section, configActions, elementActions, display='list', indent=0,
-                   filter=false, filterEditors=false, order }) => {
+const Section = ({ section, display='list', indent=0, filter=false, filterEditors=false, order }) => {
+  const dispatch = useDispatch()
+
+  const config = useSelector((state) => state.config)
 
   const showElement = filterElement(config, filter, false, filterEditors, section)
-  const showElements = get(config, `display.elements.sections.${section.id}`, true)
+  const showElements = isTruthy(get(config, `display.elements.sections.${section.id}`, true))
 
   const editUrl = buildPath('sections', section.id)
   const copyUrl = buildPath('sections', section.id, 'copy')
   const nestedUrl = buildPath('sections', section.id, 'nested')
   const exportUrl = buildApiPath('questions', 'sections', section.id, 'export')
 
-  const fetchEdit = () => elementActions.fetchElement('sections', section.id)
-  const fetchCopy = () => elementActions.fetchElement('sections', section.id, 'copy')
-  const fetchNested = () => elementActions.fetchElement('sections', section.id, 'nested')
-  const toggleLocked = () => elementActions.storeElement('sections', {...section, locked: !section.locked })
-  const toggleElements = () => elementActions.toggleElements(section)
+  const fetchEdit = () => dispatch(fetchElement('sections', section.id))
+  const fetchCopy = () => dispatch(fetchElement('sections', section.id, 'copy'))
+  const fetchNested = () => dispatch(fetchElement('sections', section.id, 'nested'))
+  const toggleLocked = () => dispatch(storeElement('sections', {...section, locked: !section.locked }))
+  const toggleElements = () => dispatch(toggleElements(section))
 
-  const createPage = () => elementActions.createElement('pages', { section })
+  const createPage = () => dispatch(createElement('pages', { section }))
+
+  const displayUriSections = isTruthy(get(config, 'display.uri.sections', true))
 
   const elementNode = (
-    <div className="element">
-      <div className="pull-right">
-        <ReadOnlyIcon title={gettext('This section is read only')} show={section.read_only} />
-        <NestedLink title={gettext('View section nested')} href={nestedUrl} onClick={fetchNested} show={display != 'nested'} />
-        <ShowElementsLink showElements={showElements} show={display == 'nested'} onClick={toggleElements} />
-        <EditLink title={gettext('Edit section')} href={editUrl} onClick={fetchEdit} />
-        <CopyLink title={gettext('Copy section')} href={copyUrl} onClick={fetchCopy} />
-        <AddLink title={gettext('Add page')} onClick={createPage} disabled={section.read_only} />
-        <LockedLink title={section.locked ? gettext('Unlock section')
-                                          : gettext('Lock section')}
-                    locked={section.locked} onClick={toggleLocked} disabled={section.read_only} />
-        <ExportLink title={gettext('Export section')} exportUrl={exportUrl}
-                    exportFormats={config.settings.export_formats} full={true} />
-        <Drag element={section} show={display == 'nested'} />
+    <div className="d-flex flex-column gap-2">
+      <div className="d-flex align-items-center gap-2">
+        <strong>{gettext('Section')}{':'}</strong>
+        <div className="flex-grow-1">
+          <Html html={section.title} />
+        </div>
+
+        <div className="d-flex align-items-center gap-1">
+          <ReadOnlyIcon title={gettext('This section is read only')} show={section.read_only} />
+          <NestedLink title={gettext('View section nested')} href={nestedUrl} onClick={fetchNested} show={display != 'nested'} />
+          <ShowElementsLink showElements={showElements} show={display == 'nested'} onClick={toggleElements} />
+          <EditLink title={gettext('Edit section')} href={editUrl} onClick={fetchEdit} />
+          <CopyLink title={gettext('Copy section')} href={copyUrl} onClick={fetchCopy} />
+          <AddLink title={gettext('Add page')} onClick={createPage} disabled={section.read_only} />
+          <LockedLink title={section.locked ? gettext('Unlock section')
+                                            : gettext('Lock section')}
+                      locked={section.locked} onClick={toggleLocked} disabled={section.read_only} />
+          <ExportLink title={gettext('Export section')} exportUrl={exportUrl}
+                      exportFormats={config.settings.export_formats} full={true} />
+          <Drag element={section} show={display == 'nested'} />
+        </div>
       </div>
-      <div>
-        <p>
-          <strong>{gettext('Section')}{': '}</strong>
-          <span dangerouslySetInnerHTML={{ __html: section.title }}></span>
-        </p>
-        {
-          get(config, 'display.uri.sections', true) &&
-          <CodeLink className="code-questions" uri={section.uri} href={editUrl} onClick={() => fetchEdit()} order={order} />
-        }
-        <ElementErrors element={section} />
-      </div>
+      {
+        displayUriSections &&
+        <CodeLink type="questions" uri={section.uri} href={editUrl} onClick={() => fetchEdit()} order={order} />
+      }
+      <ElementErrors element={section} />
     </div>
   )
 
@@ -72,12 +84,12 @@ const Section = ({ config, section, configActions, elementActions, display='list
       )
     case 'nested':
       return (
-        <>
+        <div className="position-relative">
           {
             showElement && (
-              <Drop element={section} elementActions={elementActions}>
-                <div className="panel panel-default panel-nested" style={{ marginLeft: 30 * indent }}>
-                  <div className="panel-heading">
+              <Drop element={section}>
+                <div className="card mt-2" style={{ marginLeft: `${indent}rem` }}>
+                  <div className="card-header">
                     { elementNode }
                   </div>
                 </div>
@@ -86,7 +98,8 @@ const Section = ({ config, section, configActions, elementActions, display='list
           }
           {
             !isEmpty(section.elements) &&
-            <Drop element={section.elements[0]} elementActions={elementActions} indent={indent + 1} mode="before" />
+            <Drop element={section.elements[0]} indent={indent + 1} mode="before"
+                  dropElement={(...args) => dispatch(dropElement(...args))} />
           }
           {
             showElements && section.elements.map((page, index) => {
@@ -98,8 +111,6 @@ const Section = ({ config, section, configActions, elementActions, display='list
                   key={index}
                   config={config}
                   page={page}
-                  configActions={configActions}
-                  elementActions={elementActions}
                   display="nested"
                   filter={filter}
                   indent={indent + 1}
@@ -108,8 +119,8 @@ const Section = ({ config, section, configActions, elementActions, display='list
               )
             })
           }
-          <Drop element={section} elementActions={elementActions} indent={indent} mode="after" />
-        </>
+          <Drop element={section} indent={indent} mode="after" />
+        </div>
       )
     case 'plain':
       return elementNode
@@ -117,10 +128,7 @@ const Section = ({ config, section, configActions, elementActions, display='list
 }
 
 Section.propTypes = {
-  config: PropTypes.object.isRequired,
   section: PropTypes.object.isRequired,
-  configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired,
   display: PropTypes.string,
   indent: PropTypes.number,
   filter: PropTypes.string,
