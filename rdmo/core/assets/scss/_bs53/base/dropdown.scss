@@ -1,6 +1,7 @@
 .dropdown-menu {
-    --bs-dropdown-border-radius: 0;
-    --bs-dropdown-font-size: 11pt;
+    --bs-dropdown-font-size: 0.9rem;
+    --bs-dropdown-link-active-color: white;
+    --bs-dropdown-link-active-bg: var(--rdmo-link-color);
 
     .dropdown-header {
         font-size: var(--bs-dropdown-font-size);

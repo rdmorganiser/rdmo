@@ -54,12 +54,9 @@ export default function configureStore() {
     applyMiddleware(...middlewares)
   )
 
-  const getConfigFromLocation = () => {
-    const { page, itemId, itemAction } = parseLocation()
-
-    store.dispatch(configActions.updateConfig('page', page, false))
-    store.dispatch(configActions.updateConfig('itemId', itemId, false))
-    store.dispatch(configActions.updateConfig('itemAction', itemAction, false))
+  const initDashboardFromLocation = () => {
+    const location = parseLocation()
+    store.dispatch(projectActions.navigateDashboard(location))
   }
 
   // this event is triggered when the page first loads
@@ -68,24 +65,23 @@ export default function configureStore() {
       store.dispatch(configActions.updateConfig(path, value))
     })
 
-    getConfigFromLocation()
-
-    store.dispatch(settingsActions.fetchSettings())
-    store.dispatch(templateActions.fetchTemplates())
-    store.dispatch(userActions.fetchCurrentUser())
-
-    store.dispatch(projectActions.fetchProject()).then(() => {
-      const { project: projectObj } = store.getState()
-      const permissions = projectObj.project.project.permissions || {}
+    Promise.all([
+      store.dispatch(settingsActions.fetchSettings()),
+      store.dispatch(templateActions.fetchTemplates()),
+      store.dispatch(userActions.fetchCurrentUser()),
+      store.dispatch(projectActions.fetchProject())
+    ]).then(() => {
+      const permissions = store.getState().project.project.project.permissions
       if (permissions.can_view_invite) {
         store.dispatch(projectActions.fetchProjectInvites(projectId))
       }
+      initDashboardFromLocation()
     })
   })
 
   // this event is triggered when when the forward/back buttons are used
   window.addEventListener('popstate', () => {
-    getConfigFromLocation()
+    initDashboardFromLocation()
   })
 
   return store

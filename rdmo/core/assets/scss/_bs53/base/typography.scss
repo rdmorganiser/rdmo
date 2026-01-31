@@ -1,6 +1,9 @@
 :root {
     --bs-font-sans-serif: var(--rdmo-font);
     --bs-body-font-size: 1rem;
+
+    --bs-body-color: var(--rdmo-body-color);
+    --bs-body-bg: var(--rdmo-body-bg);
 }
 
 h1, .h1,
@@ -24,6 +27,22 @@ h3, .h3 {
     margin-bottom: 1rem;
 }
 
+.font-smaller {
+    font-size: var(--rdmo-font-size-smaller) !important;
+}
+.font-small {
+    font-size: var(--rdmo-font-size-small) !important;
+}
+.font-normal {
+    font-size: 1em !important;
+}
+.font-large {
+    font-size: var(--rdmo-font-size-large) !important;
+}
+.font-larger {
+    font-size: var(--rdmo-font-size-larger) !important;
+}
+
 .home {
     h1 {
         font-size: 2.6rem;
@@ -36,13 +55,12 @@ h3, .h3 {
 a,
 span.link,
 button.link {
-    text-decoration: none;
-
-    color: var(--rdmo-color-link);
+    color: var(--rdmo-link-color);
     cursor: pointer;
+    text-decoration: var(--rdmo-link-decoration);
 
     &:hover {
-        color: var(--rdmo-color-link-hover);
+        color: var(--rdmo-link-hover-color);
     }
 }
 
@@ -62,9 +80,20 @@ button.unstyled {
     }
 }
 
+.truncate {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
 .btn-primary {
-    --bs-btn-bg: var(--rdmo-color-link);
-    --bs-btn-border-color: var(--rdmo-color-link);
-    --bs-btn-hover-bg: var(--rdmo-color-link-hover);
-    --bs-btn-hover-border-color: var(--rdmo-color-link-hover);
+    --bs-btn-bg: var(--rdmo-link-color);
+    --bs-btn-border-color: var(--rdmo-link-color);
+    --bs-btn-hover-bg: var(--rdmo-link-hover-color);
+    --bs-btn-hover-border-color: var(--rdmo-link-hover-color);
 }

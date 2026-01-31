@@ -2,12 +2,12 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { isEmpty } from 'lodash'
 
-import { useModal }  from 'rdmo/core/assets/js/hooks'
+import { useModal } from 'rdmo/core/assets/js/hooks'
 
-import MembershipInviteModal from './MembershipInviteModal'
-import MembershipTable from './MembershipTable'
+import MembershipInviteModal from './memberships/MembershipInviteModal'
+import MembershipTable from './memberships/MembershipTable'
 
-const Membership = () => {
+const Memberships = () => {
   const { show: showInvite, open: openInvite, close: closeInvite } = useModal()
 
   const { memberships, project } = useSelector((state) => state.project.project) ?? {}
@@ -16,19 +16,14 @@ const Membership = () => {
 
   return (
     <>
-      <header className="d-flex justify-content-between align-items-center mb-3">
-        <h5 className="mb-0">{gettext('Memberships')}</h5>
+      <div className="d-flex justify-content-between align-items-center mb-5">
+        <h1 className="mb-0">{gettext('Memberships')}</h1>
         {perms.can_add_invite && (
-          <button
-            type="button"
-            id="add-member"
-            className="btn btn-link text-decoration-none"
-            onClick={openInvite}
-          >
+          <button type="button" className="btn link small" onClick={openInvite}>
             <i className="bi bi-plus" aria-hidden="true"></i> {gettext('Add member')}
           </button>
         )}
-      </header>
+      </div>
       {
         !isEmpty(memberships) && (
           <MembershipTable persons={memberships} type="memberships" />
@@ -37,9 +32,9 @@ const Membership = () => {
       {
         !isEmpty(invites) && (
           <>
-            <header className="d-flex justify-content-between align-items-center mb-3">
-              <h5 className="mb-0">{gettext('Invites')}</h5>
-            </header>
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <h2 className="mb-0">{gettext('Invites')}</h2>
+            </div>
             <MembershipTable persons={invites} type="invites" />
           </>
         )
@@ -50,4 +45,4 @@ const Membership = () => {
   )
 }
 
-export default Membership
+export default Memberships

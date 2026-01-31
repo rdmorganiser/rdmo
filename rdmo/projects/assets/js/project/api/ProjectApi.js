@@ -1,3 +1,5 @@
+import { isNil } from 'lodash'
+
 import { encodeParams } from 'rdmo/core/assets/js/utils/api'
 
 import BaseApi from 'rdmo/core/assets/js/api/BaseApi'
@@ -30,10 +32,6 @@ export default class ProjectApi extends BaseApi {
 
   static fetchProjectInvites(projectId) {
     return this.get(`/api/v1/projects/projects/${projectId}/invites/`)
-  }
-
-  static fetchViews() {
-    return this.get('/api/v1/projects/views/views/')
   }
 
   static fetchProjects(params) {
@@ -74,5 +72,53 @@ export default class ProjectApi extends BaseApi {
 
   static deleteInvite(projectId, inviteId) {
     return this.delete(`/api/v1/projects/projects/${projectId}/invites/${inviteId}/`)
+  }
+
+  static createSnapshot(projectId, data) {
+    return this.post(`/api/v1/projects/projects/${projectId}/snapshots/`, data)
+  }
+
+  static updateSnapshot(projectId, snapshotId, data) {
+    return this.put(`/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/`, data)
+  }
+
+  static rollbackSnapshot(projectId, snapshotId) {
+    return this.post(`/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/rollback/`)
+  }
+
+  static fetchProjectAnswers(projectId, snapshotId) {
+    if (isNil(snapshotId)) {
+      return this.get(`/api/v1/projects/projects/${projectId}/answers/`)
+    } else {
+      return this.get(`/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/answers/`)
+    }
+  }
+
+  static downloadProjectAnswers(projectId, snapshotId, format) {
+    if (isNil(snapshotId)) {
+      return this.download(`/api/v1/projects/projects/${projectId}/answers/export/${format}/`)
+    } else {
+      return this.download(`/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/answers/export/${format}/`)
+    }
+  }
+
+  static fetchProjectViews(projectId) {
+    return this.get(`/api/v1/projects/projects/${projectId}/views/`)
+  }
+
+  static fetchProjectView(projectId, snapshotId, viewId) {
+    if (isNil(snapshotId)) {
+      return this.get(`/api/v1/projects/projects/${projectId}/views/${viewId}/`)
+    } else {
+      return this.get(`/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/views/${viewId}/`)
+    }
+  }
+
+  static downloadProjectView(projectId, snapshotId, viewId, format) {
+    if (isNil(snapshotId)) {
+      return this.download(`/api/v1/projects/projects/${projectId}/views/${viewId}/export/${format}/`)
+    } else {
+      return this.download(`/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/views/${viewId}/export/${format}/`)
+    }
   }
 }

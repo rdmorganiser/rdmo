@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSelector, useDispatch } from 'react-redux'
+import classNames from 'classnames'
 
 import { useModal } from 'rdmo/core/assets/js/hooks'
 
 import Select from 'rdmo/core/assets/js/components/Select'
 
-import { updateProjectMember, updateProjectInvite } from '../../actions/projectActions'
-import { roleOptions } from '../../../common/constants/roles'
+import { updateProjectMember, updateProjectInvite } from '../../../actions/projectActions'
+import { roleOptions } from '../../../../common/constants/roles'
 
 import MembershipDeleteModal  from './MembershipDeleteModal'
 
@@ -38,12 +39,12 @@ const MembershipTable = ({ persons, type }) => {
 
   return (
     <div>
-      <table className="table border align-middle">
-        <thead className="table-light">
+      <table className="table align-middle">
+        <thead>
           <tr>
-            <th style={{ width: '35%' }}>{gettext('Name').toUpperCase()}</th>
-            <th style={{ width: '40%' }}>{gettext('Email').toUpperCase()}</th>
-            <th style={{ width: '20%' }}>{gettext('Role').toUpperCase()}</th>
+            <th style={{ width: '35%' }}>{gettext('Name')}</th>
+            <th style={{ width: '40%' }}>{gettext('Email')}</th>
+            <th style={{ width: '20%' }}>{gettext('Role')}</th>
             <th style={{ width: '5%' }}></th>
           </tr>
         </thead>
@@ -101,15 +102,13 @@ const MembershipTable = ({ persons, type }) => {
                 </td>
                 <td className="text-end">
                   {showActions && (
-                    <button
-                      type="button"
-                      className="btn btn-link btn-sm p-0"
+                    <button type="button" className="btn link"
                       aria-label={isCurrentUser ? gettext('Leave') : gettext('Remove')}
                       title={isCurrentUser ? gettext('Leave') : gettext('Remove')}
                       onClick={() => openDeleteModal(person, isCurrentUser)}
                     >
                       <i
-                        className={`bi ${isCurrentUser ? 'bi-box-arrow-right' : 'bi-x'}`}
+                        className={classNames('bi', isCurrentUser ? 'bi-box-arrow-right' : 'bi-person-x')}
                         aria-hidden="true"
                       />
                     </button>

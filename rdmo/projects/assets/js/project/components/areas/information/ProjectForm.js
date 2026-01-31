@@ -9,10 +9,10 @@ import Html from 'rdmo/core/assets/js/components/Html'
 import Input from 'rdmo/core/assets/js/components/forms/Input'
 import Textarea from 'rdmo/core/assets/js/components/forms/Textarea'
 
-import { updateProject } from '../../actions/projectActions'
-import { useFieldErrors } from '../../hooks/useFieldErrors'
+import { updateProject } from '../../../actions/projectActions'
+import { useFieldErrors } from '../../../hooks/useFieldErrors'
 
-import ProjectApi from '../../api/ProjectApi'
+import ProjectApi from '../../../api/ProjectApi'
 
 const ProjectForm = ({ disabled }) => {
   const { project, catalogs } = useSelector((state) => state.project.project)
@@ -46,11 +46,11 @@ const ProjectForm = ({ disabled }) => {
     ProjectApi.fetchProjects({ search })
       .then(response => {
         const options = response.results
-        .filter(p => !project?.id || p.id !== project.id)
-        .map(project => ({
-          value: project.id,
-          label: project.title
-        }))
+          .filter(p => !project?.id || p.id !== project.id)
+          .map(project => ({
+            value: project.id,
+            label: project.title
+          }))
         setParentOptions(options)
         callback(options)
       })
@@ -63,19 +63,17 @@ const ProjectForm = ({ disabled }) => {
         const options = results
           .filter(p => !project?.id || p.id !== project.id)
           .map(p => ({ value: p.id, label: p.title }))
-          console.log('fetched projects for parent select', options)
         setParentOptions(options)
       })
     }
   }
 
   return (
-    <form className="container mt-3">
-
+    <form>
       <Input
         className="mb-3 form-label fw-bold"
         label={gettext('Title')}
-        help={gettext('The title for this project.')}
+        help={<Html html={templates.project_view_title_help} />}
         value={formData.title || ''}
         onChange={(value) => handleChange('title', value)}
         errors={errors.title}
@@ -85,7 +83,7 @@ const ProjectForm = ({ disabled }) => {
       <Textarea
         className="mb-3 form-label fw-bold"
         label={gettext('Description')}
-        help={gettext('A description of the project (optional).')}
+        help={<Html html={templates.project_view_description_help} />}
         rows={4}
         value={formData.description || ''}
         onChange={(value) => handleChange('description', value)}
@@ -98,7 +96,7 @@ const ProjectForm = ({ disabled }) => {
       <Select
         className="mb-3 form-label fw-bold"
         label={gettext('Project phase')}
-        help={gettext('The phase of the project at this time.')}
+        help={gettext('The phase of the project at this time.')} // should rather be a template
         // "Die Phase, in der sich Ihr Projekt zum aktuellen Zeitpunkt befindet."
         isClearable={true}
         options={[
@@ -157,24 +155,24 @@ const ProjectForm = ({ disabled }) => {
         </div>
 
         <AsyncSelect
-              classNamePrefix='react-select'
-              className='react-select mt-10'
-              placeholder={gettext('Search projects ...')}
-              noOptionsMessage={() => gettext('No projects matching your search.')}
-              loadingMessage={() => gettext('Loading ...')}
-              defaultOptions={parentOptions}
-              value={isEmpty(parentOptions) ? {
-                value: project.parent,
-                label: project.parent_title
-              } : parentOptions.find(p => p.value === formData.parent)}
-              onChange={(option) => handleChange('parent', option ? option.value : null)}
-              getOptionValue={(project) => project.value}
-              getOptionLabel={(project) => project.label}
-              isDisabled={!enableParent || disabled}
-              loadOptions={handleLoadProjects}
-              onMenuOpen={handleMenuOpen}
-              isClearable
-              backspaceRemovesValue={true}
+          classNamePrefix='react-select'
+          className='react-select mt-10'
+          placeholder={gettext('Search projects ...')}
+          noOptionsMessage={() => gettext('No projects matching your search.')}
+          loadingMessage={() => gettext('Loading ...')}
+          defaultOptions={parentOptions}
+          value={isEmpty(parentOptions) ? {
+            value: project.parent,
+            label: project.parent_title
+          } : parentOptions.find(p => p.value === formData.parent)}
+          onChange={(option) => handleChange('parent', option ? option.value : null)}
+          getOptionValue={(project) => project.value}
+          getOptionLabel={(project) => project.label}
+          isDisabled={!enableParent || disabled}
+          loadOptions={handleLoadProjects}
+          onMenuOpen={handleMenuOpen}
+          isClearable
+          backspaceRemovesValue={true}
         />
 
         {errors.parent?.map((err, i) => (

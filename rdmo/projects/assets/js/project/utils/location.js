@@ -1,51 +1,55 @@
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 import { projectId } from '../utils/meta'
-import { isEmpty } from 'lodash'
+import { isNil } from 'lodash'
+
+export const locationKeys = ['area', 'snapshotId', 'viewId', 'detail']
 
 export const parseLocation = () => {
-  const pathname = window.location.pathname
-
-  const m1 = pathname.match(/\/projects\/\d+\/(?<page>[a-z-]+)\/(?<itemId>\d+)\/(?<itemAction>[a-z-]+)[/]*$/)
-  if (m1) {
-    return m1.groups
+  let pathname = window.location.pathname
+  let location = {
+    'area': 'dashboard'
   }
 
-  const m2 = pathname.match(/\/projects\/\d+\/(?<page>[a-z-]+)\/(?<itemId>\d+)[/]*$/)
-  if (m2) {
-    return m2.groups
+  if (pathname.length > 1) {
+    pathname = pathname.replace(/\/+$/, '')
   }
 
-  const m3 = pathname.match(/\/projects\/\d+\/(?<page>[a-z-]+)[/]*$/)
-  if (m3) {
-    return m3.groups
+  const patterns = [
+    /\/projects\/\d+\/(?<area>(snapshots))\/(?<snapshotId>\d+)\/views\/(?<viewId>\d+)[/]*$/,
+    /\/projects\/\d+\/(?<area>(snapshots))\/(?<snapshotId>\d+)\/(?<detail>[a-z-]+)[/]*$/,
+    /\/projects\/\d+\/(?<area>(snapshots))\/(?<snapshotId>\d+)[/]*$/,
+    /\/projects\/\d+\/(?<area>[a-z-]+)\/views\/(?<viewId>\d+)[/]*$/,
+    /\/projects\/\d+\/(?<area>[a-z-]+)\/(?<detail>[a-z-]+)[/]*$/,
+    /\/projects\/\d+\/(?<area>[a-z-]+)[/]*$/
+  ]
+
+  for (const pattern of patterns) {
+    const match = pathname.match(pattern)
+    if (match) {
+      location = match.groups
+      break
+    }
   }
 
-  return {
-    page: ''
-  }
+  return location
 }
 
-export const updateLocation = (page, itemId, itemAction) => {
-  const pathname = buildPath(page, itemId, itemAction)
+export const updateLocation = (location) => {
+  const pathname = buildPath(location)
   if (pathname != window.location.pathname) {
     history.pushState(null, null, pathname)
   }
 }
 
-export const buildPath = (page, itemId, itemAction) => {
-  let path = `${baseUrl}/projects/${projectId}/`
+export const buildPath = ({ area, snapshotId, viewId, detail }) => {
+  const segments = [baseUrl, 'projects', projectId]
 
-  if (!isEmpty(page)) {
-    path += page + '/'
-
-    if (!isEmpty(itemId)) {
-      path += itemId + '/'
-
-      if (!isEmpty(itemAction)) {
-        path += itemAction + '/'
-      }
-    }
+  if (!isNil(area) && area != 'dashboard') {
+    segments.push(area)
   }
+  if (!isNil(snapshotId)) segments.push(snapshotId)
+  if (!isNil(viewId)) segments.push('views', viewId)
+  if (!isNil(detail)) segments.push(detail)
 
-  return path
+  return segments.join('/') + '/'
 }

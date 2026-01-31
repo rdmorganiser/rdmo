@@ -1,19 +1,27 @@
 :root {
-    --rdmo-color: #101F70;
-    --rdmo-color-bg: #ffffff;
-    --rdmo-color-alt-bg: #f8f9fa;
-    --rdmo-color-brand: #9d9d9d;
-    --rdmo-color-primary: #101F70;
-    --rdmo-color-link: #337ab7;
-    --rdmo-color-link-hover: #2a5d90;
-    --rdmo-color-light-gray: #f8f9fa;
-    --rdmo-color-dark-gray: #999;
-    --rdmo-color-header: #fff;
-    --rdmo-color-header-bg: #000;
-    --rdmo-color-header-height: 300px;
-    --rdmo-color-footer: #999;
-    --rdmo-color-footer-bg: #001;
-
     --rdmo-font: 'Open sans', sans-serif;
     --rdmo-font-headline: 'Roboto Slab', serif;
+
+    --rdmo-font-size-smaller: 0.8em;
+    --rdmo-font-size-small: 0.9em;
+    --rdmo-font-size-large: 1.1em;
+    --rdmo-font-size-large: 1.2em;
+
+    --rdmo-box-shadow: 0.25rem 0.25rem 1rem #eee;
+
+    --rdmo-body-bg: #fff;
+    --rdmo-body-color: #333;
+
+    --rdmo-navbar-bg: #101F70;
+    --rdmo-navbar-color: #aaa;
+    --rdmo-navbar-hover-color: #fff;
+
+    --rdmo-sidebar-bg: #efefef;
+    --rdmo-sidebar-color: var(--rdmo-body-color);
+    --rdmo-sidebar-width: 300px;
+    --rdmo-sidebar-font-size: 0.9rem;
+
+    --rdmo-link-color: #337ab7;
+    --rdmo-link-decoration: none;
+    --rdmo-link-hover-color: #2a5d90;
 }
