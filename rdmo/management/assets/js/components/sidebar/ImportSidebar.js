@@ -6,7 +6,7 @@ import isNil from 'lodash/isNil'
 import Link from 'rdmo/core/assets/js/components/Link'
 
 import { resetElements, importElements, selectElements, selectChangedElements,
-         showElements, showChangedElements } from '../../actions/importActions'
+         showElements, showChangedElements, updateUriPrefix } from '../../actions/importActions'
 
 import { useImportElements } from '../../hooks/useImportElements'
 
@@ -25,7 +25,7 @@ const ImportSidebar = () => {
   const [uriPrefix, setUriPrefix] = useState('')
   const disabled = isNil(uriPrefix) || isEmpty(uriPrefix)
 
-  const updateUriPrefix = () => {
+  const handleUpdateUriPrefix = () => {
     if (!disabled) {
       dispatch(updateUriPrefix(uriPrefix))
     }
@@ -133,6 +133,12 @@ const ImportSidebar = () => {
                   onClick={updateUriPrefix}>
             <span className="bi bi-arrow-right"></span>
           </button>
+            <button type="button" className="btn btn-primary" disabled={disabled}
+                    title={gettext('Set URI prefix for all elements')}
+                    aria-label={gettext('Set URI prefix for all elements')}
+                    onClick={handleUpdateUriPrefix}>
+              <span className="bi bi-arrow-right"></span>
+            </button>
         </div>
       </div>
     )
