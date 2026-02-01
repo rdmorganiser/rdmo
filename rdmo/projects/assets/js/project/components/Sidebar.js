@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import classnames from 'classnames'
+import classNames from 'classnames'
 
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 import { Link } from 'rdmo/core/assets/js/components'
@@ -66,7 +66,7 @@ const Sidebar = () => {
                 <Link
                   key={itemIndex}
                   href={buildPath({ area: item.area })}
-                  className={classnames('nav-link', { active: area === item.area })}
+                  className={classNames('nav-link', { active: area === item.area })}
                   onClick={() => dispatch(navigateDashboard({ area: item.area }))}
                 >
                   <div className="d-flex align-items-center gap-2">
