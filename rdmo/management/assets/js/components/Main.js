@@ -16,41 +16,51 @@ const Main = () => {
 
   const { element, elementType, elementId, elementAction } = elements
 
-  // check if anything was loaded yet
-  if (isNil(config.settings) || isNil(elementType)) {
+  const renderContainer = () => {
+    // check if anything was loaded yet
+    if (isNil(config.settings) || isNil(elementType)) {
+      return null
+    }
+
+    // check if an error occurred
+    if (!isNil(elements.errors.api)) {
+      return <MainErrors errors={elements.errors.api} />
+    } else if (get(elements, 'element.errors.api')) {
+      return <MainErrors errors={get(elements, 'element.errors.api')} />
+    } else if (!isNil(imports.errors.file)) {
+      return <MainErrors errors={imports.errors.file} />
+    }
+
+    if (!isEmpty(imports.elements)) {
+      return <Import />
+    }
+
+    // check if the nested components should be displayed
+    if (!isNil(element) && elementAction === 'nested') {
+      return <Nested />
+    }
+
+    // check if the edit components should be displayed
+    if (!isNil(element)) {
+      return <Edit />
+    }
+
+    // check if the list components should be displayed
+    if (isNil(elementId) && isNil(elementAction)) {
+      return <Elements />
+    }
+
+    // fetching the data is not complete yet, or no action was invoked yet
     return null
   }
 
-  // check if an error occurred
-  if (!isNil(elements.errors.api)) {
-    return <MainErrors errors={elements.errors.api} />
-  } else if (get(elements, 'element.errors.api')) {
-    return <MainErrors errors={get(elements, 'element.errors.api')} />
-  } else if (!isNil(imports.errors.file)) {
-    return <MainErrors errors={imports.errors.file} />
-  }
-
-  if (!isEmpty(imports.elements)) {
-    return <Import />
-  }
-
-  // check if the nested components should be displayed
-  if (!isNil(element) && elementAction === 'nested') {
-    return <Nested />
-  }
-
-  // check if the edit components should be displayed
-  if (!isNil(element)) {
-    return <Edit />
-  }
-
-  // check if the list components should be displayed
-  if (isNil(elementId) && isNil(elementAction)) {
-    return <Elements />
-  }
-
-  // fetching the data is not complete yet, or no action was invoked yet
-  return null
+  return (
+    <div className="py-4 ps-4 pe-5">
+      <div className="container gx-0">
+        {renderContainer()}
+      </div>
+    </div>
+  )
 }
 
 export default Main

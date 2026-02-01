@@ -1,6 +1,10 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import classNames from 'classnames'
 import { isNil, isEmpty, invert } from 'lodash'
+
+import Link from 'rdmo/core/assets/js/components/Link'
+import Select from 'rdmo/core/assets/js/components/Select'
 
 import { fetchElements } from '../../actions/elementActions'
 import { uploadFile } from '../../actions/importActions'
@@ -10,7 +14,6 @@ import { elementTypes, elementModules } from '../../constants/elements'
 import { buildApiPath, buildPath } from '../../utils/location'
 import { getExportParams } from '../../utils/filter'
 
-import Link from 'rdmo/core/assets/js/components/Link'
 
 const ElementsSidebar = () => {
   const dispatch = useDispatch()
@@ -23,123 +26,115 @@ const ElementsSidebar = () => {
                                      : buildApiPath(elementModules[model], elementType, elementId, 'export')
   const exportParams = isNil(config.filter) ? '' : getExportParams(config.filter[elementType])
 
+  const handleExport = (key) => {
+
+    const getUrl = () => {
+      let url = exportUrl
+
+      if (key == 'xml') {
+        url += '?'
+      } else if (key == 'xml_full') {
+        url += '?full=true'
+      } else {
+        url += `${key}?`
+      }
+
+      url += `&${exportParams}`
+
+      return url
+    }
+
+    const a = document.createElement('a')
+    a.href = getUrl()
+    a.target = ['pdf', 'html'].includes(key) ? '_blank' : '_self'
+    a.click()
+  }
+
   const handleFileUpload = (event) => {
     if (!isEmpty(event.target.files)) {
       dispatch(uploadFile(event.target.files[0]))
     }
   }
 
+  const navigation = {
+    catalogs: gettext('Catalogs'),
+    sections: gettext('Sections'),
+    pages: gettext('Pages'),
+    questionsets: gettext('Question sets'),
+    questions: gettext('Questions'),
+    attributes: gettext('Attributes'),
+    optionsets: gettext('Option sets'),
+    options: gettext('Options'),
+    conditions: gettext('Conditions'),
+    tasks: gettext('Tasks'),
+    views: gettext('Views'),
+  }
+
+  const exportOptions = [
+    { value: 'xml', label: gettext('XML') }
+  ]
+
+  if ([
+    'catalogs', 'sections', 'pages', 'questionsets', 'questions', 'optionsets', 'conditions', 'tasks'
+  ].includes(elementType)) {
+    exportOptions.push(
+      { value: 'xml_full', label: gettext('XML (full)') }
+    )
+  }
+
+  if (elementType == 'attributes') {
+    exportOptions.push(
+      { value: 'csvcomma', label: gettext('CSV comma separated') },
+      { value: 'csvsemicolon', label: gettext('CSV semicolon separated') }
+    )
+  }
+
+  if (config.settings.export_formats) {
+    exportOptions.push(...config.settings.export_formats.map(([key, label]) => (
+      { value: key, label }
+    )))
+  }
+
   return (
-    <div className="elements-sidebar">
-      <h2>Navigation</h2>
+    <div className="d-flex flex-column h-100 p-4">
 
-      <ul className="list-unstyled">
-        <li>
-          <Link href={buildPath('catalogs')}
-                onClick={() => dispatch(fetchElements('catalogs'))}>{gettext('Catalogs')}</Link>
-        </li>
-        <li>
-          <Link href={buildPath('sections')}
-                onClick={() => dispatch(fetchElements('sections'))}>{gettext('Sections')}</Link>
-        </li>
-        <li>
-          <Link href={buildPath('pages')}
-                onClick={() => dispatch(fetchElements('pages'))}>{gettext('Pages')}</Link>
-        </li>
-        <li>
-          <Link href={buildPath('questionsets')}
-                onClick={() => dispatch(fetchElements('questionsets'))}>{gettext('Question sets')}</Link>
-        </li>
-        <li>
-          <Link href={buildPath('questions')}
-                onClick={() => dispatch(fetchElements('questions'))}>{gettext('Questions')}</Link>
-        </li>
-        <li>
-          <Link href={buildPath('attributes')}
-                onClick={() => dispatch(fetchElements('attributes'))}>{gettext('Attributes')}</Link>
-        </li>
-        <li>
-          <Link href={buildPath('optionsets')}
-                onClick={() => dispatch(fetchElements('optionsets'))}>{gettext('Option sets')}</Link>
-        </li>
-        <li>
-          <Link href={buildPath('options')}
-                onClick={() => dispatch(fetchElements('options'))}>{gettext('Options')}</Link>
-        </li>
-        <li>
-          <Link href={buildPath('conditions')}
-                onClick={() => dispatch(fetchElements('conditions'))}>{gettext('Conditions')}</Link>
-        </li>
-        <li>
-          <Link href={buildPath('tasks')}
-                onClick={() => dispatch(fetchElements('tasks'))}>{gettext('Tasks')}</Link>
-        </li>
-        <li>
-          <Link href={buildPath('views')}
-                onClick={() => dispatch(fetchElements('views'))}>{gettext('Views')}</Link>
-        </li>
-      </ul>
+      <div className="px-3 my-3">
+        <h3>{gettext('Navigation')}</h3>
+      </div>
 
-      <h2>Export</h2>
-
-      <p className="text-muted">
-        {gettext('Export all visible elements.')}
-      </p>
-
-      <ul className="list-unstyled">
-        <li>
-          <a href={`${exportUrl}?${exportParams}`}>{gettext('XML')}</a>
-        </li>
+      <nav className="nav nav-pills nav-fill flex-column">
         {
-          [
-            'catalogs',
-            'sections',
-            'pages',
-            'questionsets',
-            'questions',
-            'optionsets',
-            'conditions',
-            'tasks'
-          ].includes(elementType) && (
-            <li>
-              <a href={`${exportUrl}?full=true&${exportParams}`}>{gettext('XML (full)')}</a>
-            </li>
-          )
+          Object.entries(navigation).map(([et, label]) => (
+            <Link key={et}
+                  href={buildPath(et)}
+                  className={classNames('nav-link text-start', { active: elementType === et })}
+                  onClick={() => dispatch(fetchElements(et))}>{label}</Link>
+          ))
         }
-      </ul>
+      </nav>
 
-      <ul className="list-unstyled">
-        {
-          elementType == 'attributes' && <>
-            <li>
-              <a href={`${exportUrl}csvcomma/?${exportParams}`}>
-                {gettext('CSV comma separated')}
-              </a>
-            </li>
-            <li>
-              <a href={`${exportUrl}csvsemicolon/?${exportParams}`}>
-                {gettext('CSV semicolon separated')}
-              </a>
-            </li>
-          </>
-        }
-        {
-          config.settings.export_formats &&
-          config.settings.export_formats.map(([key, label], index) => <li key={index}>
-            <a href={`${exportUrl}${key}/?${exportParams}`}
-               target={['pdf', 'html'].includes(key) ? '_blank' : '_self'}
-               rel="noreferrer">{label}</a>
-          </li>)
-        }
-      </ul>
+      <div className="px-3 my-3">
+        <h3>{gettext('Export')}</h3>
 
-      <h2>Import</h2>
+        <p className="text-muted">
+          {gettext('Export all visible elements.')}
+        </p>
 
-      <p className="text-muted">
-        {gettext('Import an RDMO XML file.')}
-      </p>
+        <Select options={exportOptions} onChange={handleExport} placeholder={gettext('Select format ...')}/>
 
-      <input className="form-control" type="file" id="fileUpload" name="uploaded_file" onChange={handleFileUpload} />
+      </div>
+
+      <div className="px-3 my-3">
+        <h3>{gettext('Import')}</h3>
+
+        <p className="text-muted">
+          {gettext('Import an RDMO XML file.')}
+        </p>
+
+        <input className="form-control" type="file" id="fileUpload" name="uploaded_file"
+               onChange={handleFileUpload} />
+      </div>
+
     </div>
   )
 }
