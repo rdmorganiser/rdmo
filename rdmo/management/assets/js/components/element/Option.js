@@ -68,7 +68,7 @@ const Option = ({ option, display='list', indent=0, filter=false, filterEditors=
       )
     case 'nested':
       return showElement && (
-        <div className="card mt-2" style={{ marginLeft: `${indent}rem` }}>
+        <div className="card mt-2" style={{ marginLeft: `calc(${indent} * var(--rdmo-management-indent))` }}>
           <div className="card-body">
             { elementNode }
           </div>

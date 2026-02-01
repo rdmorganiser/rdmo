@@ -123,8 +123,8 @@ const QuestionSet = ({ questionset, display='list', indent=0, filter=false, filt
           {
             showElement && (
               <Drop element={questionset}>
-                <div className="card mt-2" style={{ marginLeft: `${indent}rem` }}>
-                  <div className="card-header">
+                <div className="card mt-2" style={{ marginLeft: `calc(${indent} * var(--rdmo-management-indent))` }}>
+                  <div className="card-body">
                     { elementNode }
                   </div>
                 </div>

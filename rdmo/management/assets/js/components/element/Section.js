@@ -88,8 +88,8 @@ const Section = ({ section, display='list', indent=0, filter=false, filterEditor
           {
             showElement && (
               <Drop element={section}>
-                <div className="card mt-2" style={{ marginLeft: `${indent}rem` }}>
-                  <div className="card-header">
+                <div className="card mt-2" style={{ marginLeft: `calc(${indent} * var(--indent-factor))` }}>
+                  <div className="card-body">
                     { elementNode }
                   </div>
                 </div>
