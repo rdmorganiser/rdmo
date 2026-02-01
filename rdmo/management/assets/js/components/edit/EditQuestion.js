@@ -51,7 +51,7 @@ const EditQuestion = ({ question }) => {
   const createOptionText = gettext('Create new optionset')
 
   return (
-    <div className="card">
+    <div className="card card-tile">
       <div className="card-header">
         <div className="d-flex align-items-center gap-2">
           <strong className="flex-grow-1">

@@ -36,7 +36,7 @@ const Tasks = () => {
   const btnClass = (value) => classNames('btn border', value ? 'btn-light' : '')
 
   return (
-    <div className="card">
+    <div className="card card-tile">
       <div className="card-header">
         <div className="d-flex align-items-center gap-2">
           <strong className="me-auto">{gettext('Tasks')}</strong>

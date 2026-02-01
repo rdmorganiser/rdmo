@@ -25,7 +25,7 @@ const OptionSets = () => {
   const createOptionSet = () => dispatch(createElement('optionsets'))
 
   return (
-    <div className="card">
+    <div className="card card-tile">
       <div className="card-header">
         <div className="d-flex align-items-center gap-2">
           <strong className="me-auto">{gettext('Option sets')}</strong>
