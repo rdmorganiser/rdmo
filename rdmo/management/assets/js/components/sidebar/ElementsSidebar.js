@@ -97,12 +97,15 @@ const ElementsSidebar = () => {
 
   return (
     <div className="d-flex flex-column h-100 p-4">
+      <h2 className="px-3 mb-4">
+        {gettext('Management')}
+      </h2>
 
-      <div className="px-3 my-3">
-        <h3>{gettext('Navigation')}</h3>
-      </div>
+      <h3 className="px-3 mb-2">
+        {gettext('Navigation')}
+      </h3>
 
-      <nav className="nav nav-pills nav-fill flex-column">
+      <nav className="nav nav-pills nav-fill flex-column mb-4">
         {
           Object.entries(navigation).map(([et, label]) => (
             <Link key={et}
@@ -113,28 +116,30 @@ const ElementsSidebar = () => {
         }
       </nav>
 
-      <div className="px-3 my-3">
-        <h3>{gettext('Export')}</h3>
+      <h3 className="px-3 my-2">
+        {gettext('Export')}
+      </h3>
 
-        <p className="text-muted">
-          {gettext('Export all visible elements.')}
-        </p>
+      <p className="text-muted px-3 my-2">
+        {gettext('Export all visible elements.')}
+      </p>
 
+      <div className="text-muted px-3 mb-4">
         <Select options={exportOptions} onChange={handleExport} placeholder={gettext('Select format ...')}/>
-
       </div>
 
-      <div className="px-3 my-3">
-        <h3>{gettext('Import')}</h3>
+      <h3 className="px-3 mb-2">
+        {gettext('Import')}
+      </h3>
 
-        <p className="text-muted">
-          {gettext('Import an RDMO XML file.')}
-        </p>
+      <p className="text-muted px-3 mb-2">
+        {gettext('Import an RDMO XML file.')}
+      </p>
 
+      <div className="text-muted px-3 mb-4">
         <input className="form-control" type="file" id="fileUpload" name="uploaded_file"
                onChange={handleFileUpload} />
       </div>
-
     </div>
   )
 }
