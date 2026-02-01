@@ -7,7 +7,7 @@ import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { fetchElement, storeElement, createElement } from '../../actions/elementActions'
+import { fetchElement, storeElement, createElement, toggleElements } from '../../actions/elementActions'
 
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
@@ -40,7 +40,7 @@ const Page = ({ page, display='list', indent=0, filter=false, filterEditors=fals
   const fetchCopy = () => dispatch(fetchElement('pages', page.id, 'copy'))
   const fetchNested = () => dispatch(fetchElement('pages', page.id, 'nested'))
   const toggleLocked = () => dispatch(storeElement('pages', {...page, locked: !page.locked }))
-  const toggleElements = () => dispatch(toggleElements(page))
+  const toggleShowElements = () => dispatch(toggleElements(page))
 
   const createQuestionSet = () => dispatch(createElement('questionsets', { page }))
   const createQuestion = () => dispatch(createElement('questions', { page }))
@@ -63,7 +63,7 @@ const Page = ({ page, display='list', indent=0, filter=false, filterEditors=fals
         <div className="d-flex align-items-center gap-1">
           <ReadOnlyIcon title={gettext('This page is read only')} show={page.read_only} />
           <NestedLink title={gettext('View page nested')} href={nestedUrl} onClick={fetchNested} show={display != 'nested'} />
-          <ShowElementsLink showElements={showElements} show={display == 'nested'} onClick={toggleElements} />
+          <ShowElementsLink showElements={showElements} show={display == 'nested'} onClick={toggleShowElements} />
           <EditLink title={gettext('Edit page')} href={editUrl} onClick={fetchEdit} />
           <CopyLink title={gettext('Copy page')} href={copyUrl} onClick={fetchCopy} />
           <AddLink title={gettext('Add question')} altTitle={gettext('Add question set')}
