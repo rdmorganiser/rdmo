@@ -8,7 +8,7 @@ import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { fetchElement, storeElement, createElement, dropElement } from '../../actions/elementActions'
+import { fetchElement, storeElement, createElement, dropElement, toggleElements } from '../../actions/elementActions'
 
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
@@ -38,7 +38,7 @@ const Section = ({ section, display='list', indent=0, filter=false, filterEditor
   const fetchCopy = () => dispatch(fetchElement('sections', section.id, 'copy'))
   const fetchNested = () => dispatch(fetchElement('sections', section.id, 'nested'))
   const toggleLocked = () => dispatch(storeElement('sections', {...section, locked: !section.locked }))
-  const toggleElements = () => dispatch(toggleElements(section))
+  const toggleShowElements = () => dispatch(toggleElements(section))
 
   const createPage = () => dispatch(createElement('pages', { section }))
 
@@ -55,7 +55,7 @@ const Section = ({ section, display='list', indent=0, filter=false, filterEditor
         <div className="d-flex align-items-center gap-1">
           <ReadOnlyIcon title={gettext('This section is read only')} show={section.read_only} />
           <NestedLink title={gettext('View section nested')} href={nestedUrl} onClick={fetchNested} show={display != 'nested'} />
-          <ShowElementsLink showElements={showElements} show={display == 'nested'} onClick={toggleElements} />
+          <ShowElementsLink showElements={showElements} show={display == 'nested'} onClick={toggleShowElements} />
           <EditLink title={gettext('Edit section')} href={editUrl} onClick={fetchEdit} />
           <CopyLink title={gettext('Copy section')} href={copyUrl} onClick={fetchCopy} />
           <AddLink title={gettext('Add page')} onClick={createPage} disabled={section.read_only} />
