@@ -41,7 +41,7 @@ const EditTask = ({ task }) => {
   const info = <TaskInfo task={task} />
 
   return (
-    <div className="card">
+    <div className="card card-tile">
       <div className="card-header">
         <div className="d-flex flex-wrap align-items-center gap-2">
           <strong className="flex-grow-1">

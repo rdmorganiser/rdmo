@@ -50,7 +50,7 @@ const NestedCatalog = ({ catalog }) => {
 
   return (
     <div className="position-relative">
-      <div className="card">
+      <div className="card card-tile">
         <div className="card-header">
           <Catalog catalog={catalog} display="plain" backButton={true} />
         </div>
@@ -106,22 +106,24 @@ const NestedCatalog = ({ catalog }) => {
             </button>
           </div>
         </div>
+
+        <div className="card-body">
+          {
+            !isEmpty(catalog.elements) &&
+            <Drop element={catalog.elements[0]} indent={0} mode="before" />
+          }
+          {
+            catalog.elements.map((section, index) => {
+              const sectionInfo = catalog.sections.find(info => info.section === section.id)
+              const sectionOrder = sectionInfo ? sectionInfo.order : undefined
+
+              return (
+                <Section key={index} section={section} display="nested" filter="catalog" indent={0} order={sectionOrder} />
+              )
+            })
+          }
+        </div>
       </div>
-      {
-        !isEmpty(catalog.elements) &&
-        <Drop element={catalog.elements[0]} indent={0} mode="before" />
-      }
-      {
-        catalog.elements.map((section, index) => {
-          const sectionInfo = catalog.sections.find(info => info.section === section.id)
-          const sectionOrder = sectionInfo ? sectionInfo.order : undefined
-
-          return (
-            <Section key={index} section={section} display="nested" filter="catalog" indent={0} order={sectionOrder} />
-          )
-        })
-      }
-
     </div>
   )
 }

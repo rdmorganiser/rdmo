@@ -1,4 +1,6 @@
 .management {
+    --rdmo-management-indent: 2rem;
+
     .card-body {
         padding: var(--bs-card-cap-padding-y) var(--bs-card-cap-padding-x);
 
@@ -19,10 +21,10 @@
     }
 
     .drag {
-        color: var(--rdmo-color-link);
+        color: var(--rdmo-link-color);
 
         &:hover {
-            color: var(--rdmo-color-link-hover);
+            color: var(--rdmo-link-hover-color);
         }
 
         cursor: grab;
@@ -49,13 +51,13 @@
 
         &.over {
             &::after {
-                background-color: var(--rdmo-color-link);
+                background-color: var(--rdmo-link-color);
             }
         }
     }
     .drop-in {
         &.over .card {
-            border: 2px solid var(--rdmo-color-link);
+            border: 2px solid var(--rdmo-link-color);
 
             .card-header {
                 // adjust for the thicker border

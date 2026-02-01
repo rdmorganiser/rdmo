@@ -25,7 +25,7 @@ const Conditions = () => {
   const createCondition = () => dispatch(createElement('conditions'))
 
   return (
-    <div className="card">
+    <div className="card card-tile">
       <div className="card-header">
         <div className="d-flex align-items-center gap-2">
           <strong className="me-auto">{gettext('Conditions')}</strong>
