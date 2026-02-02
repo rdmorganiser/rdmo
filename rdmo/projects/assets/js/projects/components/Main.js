@@ -8,11 +8,11 @@ import { useFormattedDateTime, useModal, useScrollToTop } from 'rdmo/core/assets
 import { language } from 'rdmo/core/assets/js/utils'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
-import * as projectsActions from '../../actions/projectsActions'
+import * as projectsActions from '../actions/projectsActions'
 
-import { PendingInvitations, ProjectFilters, ProjectImport, Table } from '../helper'
-import { HEADER_FORMATTERS, SORTABLE_COLUMNS } from '../../utils'
-import { roleOptions } from '../../../common/constants/roles'
+import { PendingInvitations, ProjectFilters, ProjectImport, Table } from './helper'
+import { HEADER_FORMATTERS, SORTABLE_COLUMNS } from '../utils'
+import { roleOptions } from '../../common/constants/roles'
 
 const Projects = () => {
   const dispatch = useDispatch()
