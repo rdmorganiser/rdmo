@@ -48,7 +48,7 @@ a[aria-disabled="true"] {
   }
 
   .cm-gutter {
-    background-color: white;
+    background-color: var(--bs-body-bg);
   }
 
   .cm-focused {
@@ -67,7 +67,8 @@ a[aria-disabled="true"] {
   padding: 10px 0;
 
   .disabled {
-    color: #ccc !important;
+    color: var(--bs-secondary-color) !important;
+    opacity: 0.5;
     cursor: not-allowed !important;
   }
 }
@@ -123,7 +124,7 @@ a[aria-disabled="true"] {
 }
 
 .panel-filters {
-  border-color: #ccc;
+  border-color: var(--bs-border-color);
 
   .react-datepicker-wrapper {
     width: 100%;
@@ -207,7 +208,7 @@ a[aria-disabled="true"] {
   content: '';
   width: 100%;
   height: 1px;
-  background-color: #ccc;
+  background-color: var(--bs-border-color);
   margin-top: 10px;
   margin-bottom: 10px;
 }
@@ -258,8 +259,8 @@ a[aria-disabled="true"] {
 }
 
 .projects-datepicker .react-datepicker__close-icon::after {
-  background-color: #fff;
-  color: black;
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
   font-size: 1.5em;
 }
 
@@ -273,7 +274,7 @@ a[aria-disabled="true"] {
 }
 
 .dropzone {
-  border: 2px dashed #cccccc;
+  border: 2px dashed var(--bs-border-color);
   border-radius: 5px;
   padding: 20px;
   text-align: center;
@@ -281,12 +282,12 @@ a[aria-disabled="true"] {
 }
 
 .dropzone:focus {
-  border-color: #2196f3;
+  border-color: var(--bs-primary);
 }
 
 /* Add additional styling for when files are being dragged over the dropzone */
 .dropzone.drag-active {
-  border-color: #2196f3;
+  border-color: var(--bs-primary);
 }
 
 /* Add styles for when the dropzone is disabled */
@@ -296,6 +297,5 @@ a[aria-disabled="true"] {
 
 /* Selected style for muted select options */
 .react-select__menu .react-select__option--is-selected .text-muted {
-  color: white;
-  /* White when selected */
+  color: var(--bs-white);
 }
