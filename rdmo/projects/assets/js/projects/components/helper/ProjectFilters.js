@@ -83,11 +83,11 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
   return (
     <>
       {showFilters && (
-        <div className="panel panel-default panel-filters mt-10 mb-0">
-          <div className="panel-body">
+        <div className="card panel-filters mt-3 mb-0">
+          <div className="card-body">
             <div className="row">
               <div className={`col-md-${isAdminOrSiteManager ? 4 : 8}`}>
-                <label className="control-label text-muted">{gettext('Filter by catalog')}</label>
+                <label className="form-label text-muted">{gettext('Filter by catalog')}</label>
                 <div className="search-container">
                   <Select
                     className="select-custom"
@@ -100,7 +100,7 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
               </div>
               {isAdminOrSiteManager && (
                 <div className="col-md-4">
-                  <label className="control-label text-muted">{gettext('Filter by created date')}</label>
+                  <label className="form-label text-muted">{gettext('Filter by created date')}</label>
                   <div className="projects-datepicker">
                     <div className="row">
                       <div className="col-md-6">
@@ -134,7 +134,7 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
                 </div>
               )}
               <div className="col-md-4">
-                <label className="control-label text-muted">{gettext('Filter by last changed date')}</label>
+                <label className="form-label text-muted">{gettext('Filter by last changed date')}</label>
                 <div className="projects-datepicker">
                   <div className="row">
                     <div className="col-md-6">
@@ -170,13 +170,13 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
           </div>
         </div>
       )}
-      <div className="pull-right mt-5">
+      <div className="d-flex justify-content-end gap-2 mt-2">
         {showFilters && !Object.keys(config.params).every(key => ['ordering', 'page', 'search', 'user'].includes(key)) && (
-          <Link className="element-link mr-10 mb-10" onClick={resetAllFilters}>
+          <Link className="element-link" onClick={resetAllFilters}>
             {gettext('Reset all filters')}
           </Link>
         )}
-        <Link className="element-link mb-10" onClick={toggleFilters}>
+        <Link className="element-link" onClick={toggleFilters}>
           {showFilters ? gettext('Hide filters') : gettext('Show filters')}
         </Link>
       </div>
