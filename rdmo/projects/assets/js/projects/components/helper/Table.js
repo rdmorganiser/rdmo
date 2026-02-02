@@ -15,19 +15,21 @@ const Table = ({
 }) => {
   const renderSortIcon = (column) => {
     const isSortColumn = sortColumn === column
-    const isAsc = sortOrder === 'asc'
+
+    let icon = 'bi-chevron-expand'
+    if (isSortColumn && sortOrder === 'asc') icon = 'bi-chevron-up'
+    if (isSortColumn && sortOrder === 'desc') icon = 'bi-chevron-down'
 
     return (
-      <span className="ml-5 sort-icon">
-        <i className={`fa fa-sort${isSortColumn ? isAsc ? '-asc' : '-desc' : ''} ${isSortColumn ? '' : 'text-muted'}`}
-          aria-hidden="true" />
+      <span className="ms-1 sort-icon">
+        <i className={`bi ${icon}`} aria-hidden="true" />
       </span>
     )
   }
 
   const renderHeaders = () => {
     return (
-      <thead className="thead-dark">
+      <thead>
         <tr>
           {visibleColumns.map((column, index) => {
             const headerFormatter = headerFormatters[column]
@@ -35,7 +37,7 @@ const Table = ({
             const columnHeaderLabel = headerFormatter && headerFormatter.label ? headerFormatter.label(column) : columnHeaderContent
 
             return (
-              <th key={column} style={{ width: columnWidths[index] }} onClick={() => onHeaderClick(column)}
+              <th className={sortableColumns.includes(column) ? 'cursor-pointer' : undefined} key={column} style={{ width: columnWidths[index] }} onClick={() => onHeaderClick(column)}
                 aria-label={columnHeaderLabel}>
                 {columnHeaderContent}
                 {sortableColumns.includes(column) && renderSortIcon(column)}
