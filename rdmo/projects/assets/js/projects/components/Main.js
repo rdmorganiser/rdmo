@@ -110,7 +110,7 @@ const Main = () => {
         {buildAncestorLink(row.ancestors)}
         {
           catalog && (
-            <div className='text-muted' dangerouslySetInnerHTML={{ __html: catalog.title }} ></div>
+            <div className="text-muted">{catalog.title}</div>
           )
         }
       </div>
@@ -125,11 +125,11 @@ const Main = () => {
 
   const renderLoadButtons = () => {
     return (
-      <div className="icon-container ml-auto">
+      <div className="icon-container ms-auto">
         {projects.length > 0 && showTopButton &&
           <button type="button" className="elliptic-button" onClick={scrollToTop}
             title={gettext('Scroll to top')} aria-label={gettext('Scroll to top')}>
-            <i className="fa fa-arrow-up" aria-hidden="true"></i>
+            <i className="bi bi-arrow-up" aria-hidden="true"></i>
           </button>
         }
         {hasNext &&
@@ -204,14 +204,14 @@ const Main = () => {
         <div className="icon-container">
           <Link
             href={`${rowUrl}/copy/`}
-            className="fa fa-copy"
+            className="bi bi-files"
             title={labels.copy}
             onClick={() => window.location.href = `${rowUrl}/copy/${params}`}
           />
           {perms.can_change_project &&
             <Link
               href={`${rowUrl}/update/`}
-              className="fa fa-pencil"
+              className="bi bi-pencil"
               title={labels.update}
               onClick={() => window.location.href = `${rowUrl}/update/${params}`}
             />
@@ -219,7 +219,7 @@ const Main = () => {
           {perms.can_delete_project &&
             <Link
               href={`${rowUrl}/delete/`}
-              className="fa fa-trash"
+              className="bi bi-trash"
               title={labels.delete}
               onClick={() => window.location.href = `${rowUrl}/delete/${params}`}
             />
@@ -237,7 +237,7 @@ const Main = () => {
           {
             !isEmpty(invites) && myProjects && (
               <button type="button" className="btn btn-link" onClick={openInvitations}>
-                <span className="badge badge-primary badge-invitations">
+                <span className="badge text-bg-primary">
                   {invites.length}
                 </span>
                 {gettext('Pending invitations')}
@@ -252,15 +252,15 @@ const Main = () => {
             )
           }
           <button type="button" id="import-project" className="btn btn-link" onClick={openImport}>
-            <i className="fa fa-download" aria-hidden="true"></i> {gettext('Import project')}
+            <i className="bi bi-download" aria-hidden="true"></i> {gettext('Import project')}
           </button>
           <button type="button" id="create-project" className="btn btn-link" onClick={handleNew}>
-            <i className="fa fa-plus" aria-hidden="true"></i> {gettext('New project')}
+            <i className="bi bi-plus" aria-hidden="true"></i> {gettext('New project')}
           </button>
         </div>
       </div>
       <div className="projects-form">
-        <div className="text-muted mb-10">
+        <div className="text-muted mb-3">
           {displayMessage}
         </div>
         <div className="search-container">
