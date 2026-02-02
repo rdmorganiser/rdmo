@@ -1,27 +1,35 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
+
 import { get, isEmpty } from 'lodash'
 
 import { Link, Modal, SearchField } from 'rdmo/core/assets/js/components'
-import { useFormattedDateTime, useModal, useScrollToTop }  from 'rdmo/core/assets/js/hooks'
+import { useFormattedDateTime, useModal, useScrollToTop } from 'rdmo/core/assets/js/hooks'
 import { language } from 'rdmo/core/assets/js/utils'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
+import * as configActions from 'rdmo/core/assets/js/actions/configActions'
+import * as projectsActions from '../../actions/projectsActions'
 
 import { PendingInvitations, ProjectFilters, ProjectImport, Table } from '../helper'
 import { HEADER_FORMATTERS, SORTABLE_COLUMNS } from '../../utils'
 import { roleOptions } from '../../../common/constants/roles'
 
+const Projects = () => {
+  const dispatch = useDispatch()
 
-const Projects = ({ config, configActions, currentUserObject, projectsActions, projectsObject }) => {
-  const { allowedTypes, catalogs, importUrls, invites, projects, projectsCount, hasNext } = projectsObject
-
-  const { currentUser } = currentUserObject
-  const { myProjects } = config
+  const config = useSelector(state => state.config)
+  const projectsObject = useSelector(state => state.projects)
+  const currentUserObject = useSelector(state => state.currentUser)
 
   const { showTopButton, scrollToTop } = useScrollToTop()
 
   const { show: showInvitations, open: openInvitations, close: closeInvitations } = useModal()
   const { show: showImport, open: openImport, close: closeImport } = useModal()
+
+  if (!projectsObject.ready) return null
+  const { allowedTypes, catalogs, importUrls, invites, projects, projectsCount, hasNext } = projectsObject
+  const { currentUser } = currentUserObject
+  const { myProjects } = config
 
   const invitationsModalProps = {
     title: gettext('Pending invitations'),
@@ -38,14 +46,14 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
   const displayMessage = interpolate(gettext('%s of %s projects are displayed'), [projects.length > projectsCount ? projectsCount : projects.length, projectsCount])
 
   const getProgressString = (row) => {
-    return (row.progress_total ?  interpolate(gettext('%s of %s'), [row.progress_count ?? 0, row.progress_total]) : null)
+    return (row.progress_total ? interpolate(gettext('%s of %s'), [row.progress_count ?? 0, row.progress_total]) : null)
   }
 
   const isAdminOrSiteManager = currentUser.is_superuser || currentUser.is_site_manager
 
   const searchString = get(config, 'params.search', '')
   const updateSearchString = (value) => {
-    value ? configActions.updateConfig('params.search', value) : configActions.deleteConfig('params.search')
+    value ? dispatch(configActions.updateConfig('params.search', value)) : dispatch(configActions.deleteConfig('params.search'))
   }
 
   const viewLinkText = myProjects ? gettext('View all projects') : gettext('View my projects')
@@ -59,8 +67,8 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
   }
 
   const handleView = () => {
-    configActions.updateConfig('myProjects', !myProjects)
-    projectsActions.fetchProjects()
+    dispatch(configActions.updateConfig('myProjects', !myProjects))
+    dispatch(projectsActions.fetchProjects())
   }
 
   const handleNew = () => {
@@ -68,7 +76,7 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
   }
 
   const handleImport = (file) => {
-    projectsActions.uploadProject('/projects/import/', file)
+    dispatch(projectsActions.uploadProject('/projects/import/', file))
   }
 
   const buildAncestorLink = (ancestors) => {
@@ -78,8 +86,8 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
     const href = `${baseUrl}/projects/${current.id}`
 
     const parts = ancestors.map((ancestor, ancestorIndex) => {
-      const content = ancestors === current
-        ? <span className="fw-bold font-weight-bold">{ancestor.title}</span>
+      const content = ancestorIndex === ancestors.length - 1
+        ? <span className="fw-bold">{ancestor.title}</span>
         : ancestor.title
 
       return (
@@ -110,45 +118,60 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
 
   const loadMore = () => {
     const page = get(config, 'params.page') ?? 1
-    configActions.updateConfig('params.page', (parseInt(page) + 1).toString())
-    projectsActions.fetchProjects(false)
+    dispatch(configActions.updateConfig('params.page', (parseInt(page) + 1).toString()))
+    dispatch(projectsActions.fetchProjects(false))
   }
 
   const renderLoadButtons = () => {
     return (
-          <div className="icon-container ml-auto">
-            {projects.length > 0 && showTopButton &&
-              <button type="button" className="elliptic-button" onClick={scrollToTop}
-                      title={gettext('Scroll to top')} aria-label={gettext('Scroll to top')}>
-                <i className="fa fa-arrow-up" aria-hidden="true"></i>
-              </button>
-            }
-            {hasNext &&
-            <button type="button" onClick={loadMore} className="elliptic-button">
-              {gettext('Load more')}
-            </button>
-            }
-          </div>
+      <div className="icon-container ml-auto">
+        {projects.length > 0 && showTopButton &&
+          <button type="button" className="elliptic-button" onClick={scrollToTop}
+            title={gettext('Scroll to top')} aria-label={gettext('Scroll to top')}>
+            <i className="fa fa-arrow-up" aria-hidden="true"></i>
+          </button>
+        }
+        {hasNext &&
+          <button type="button" onClick={loadMore} className="elliptic-button">
+            {gettext('Load more')}
+          </button>
+        }
+      </div>
     )
   }
 
-  /* order of elements in 'visibleColumns' corresponds to order of columns in table */
-  let visibleColumns = ['title', 'progress', 'last_changed', 'actions']
-  let columnWidths
+  const ordering = get(config, 'params.ordering')
+  const sortOrder = ordering ? (ordering.startsWith('-') ? 'desc' : 'asc') : undefined
+  const sortColumn = ordering ? (ordering.startsWith('-') ? ordering.substring(1) : ordering) : undefined
 
-  if (myProjects) {
-    visibleColumns.splice(2, 0, 'role')
-    columnWidths = ['40%', '18%', '18%', '18%', '6%']
-  } else {
-    visibleColumns.splice(2, 0, 'created')
-    visibleColumns.splice(2, 0, 'owner')
-    columnWidths = ['30%', '10%', '18%', '18%', '18%', '6%']
+  const handleHeaderClick = (column) => {
+    if (sortColumn === column) {
+      if (sortOrder === 'asc') {
+        dispatch(configActions.updateConfig('params.ordering', `-${column}`))
+      } else if (sortOrder === 'desc') {
+        dispatch(configActions.deleteConfig('params.ordering'))
+      } else {
+        dispatch(configActions.updateConfig('params.ordering', column))
+      }
+    } else {
+      dispatch(configActions.updateConfig('params.ordering', column))
+    }
+    dispatch(projectsActions.fetchProjects())
   }
+
+  /* order of elements in 'visibleColumns' corresponds to order of columns in table */
+  const visibleColumns = myProjects
+    ? ['title', 'progress', 'role', 'last_changed', 'actions']
+    : ['title', 'progress', 'owner', 'created', 'last_changed', 'actions']
+
+  const columnWidths = myProjects
+    ? ['40%', '18%', '18%', '18%', '6%']
+    : ['30%', '10%', '18%', '18%', '18%', '6%']
 
   const cellFormatters = {
     title: (_content, row) => renderTitle(row),
     role: (_content, row) => {
-      const rolesString  = roleOptions.find(option => option.value == row.current_role)?.label || ''
+      const rolesString = roleOptions.find(option => option.value == row.current_role)?.label || ''
 
       return <>
         {
@@ -243,28 +266,25 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
           <SearchField
             value={searchString}
             onChange={updateSearchString}
-            onSearch={() => projectsActions.fetchProjects()}
+            onSearch={() => dispatch(projectsActions.fetchProjects())}
             placeholder={gettext('Search projects')}
             className="search-field"
           />
         </div>
         <ProjectFilters
           catalogs={catalogs ?? []}
-          config={config}
-          configActions={configActions}
           isAdminOrSiteManager={isAdminOrSiteManager}
-          projectsActions={projectsActions}
         />
       </div>
       <Table
         cellFormatters={cellFormatters}
         columnWidths={columnWidths}
-        config={config}
-        configActions={configActions}
         data={projects}
         headerFormatters={HEADER_FORMATTERS}
-        projectsActions={projectsActions}
+        onHeaderClick={handleHeaderClick}
         sortableColumns={SORTABLE_COLUMNS}
+        sortColumn={sortColumn}
+        sortOrder={sortOrder}
         visibleColumns={visibleColumns}
       />
 
@@ -282,14 +302,6 @@ const Projects = ({ config, configActions, currentUserObject, projectsActions, p
       </Modal>
     </div>
   )
-}
-
-Projects.propTypes = {
-  config: PropTypes.object.isRequired,
-  configActions: PropTypes.object.isRequired,
-  currentUserObject: PropTypes.object.isRequired,
-  projectsActions: PropTypes.object.isRequired,
-  projectsObject: PropTypes.object.isRequired,
 }
 
 export default Projects
