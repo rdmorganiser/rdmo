@@ -1,9 +1,13 @@
-a.disabled {
+@import "react-datepicker/dist/react-datepicker.css";
+
+a.disabled,
+a[aria-disabled="true"] {
   cursor: not-allowed;
+  pointer-events: none;
 }
 
 .flip {
-  transform: rotate(180deg) scaleX(-1);
+  transform: scaleX(-1);
 }
 
 .form-group {
@@ -126,7 +130,7 @@ a.disabled {
   }
 
   @media (max-width: 1199.98px) {
-    .control-label {
+    .form-label {
       margin-bottom: 10px;
     }
 
@@ -136,7 +140,7 @@ a.disabled {
     }
 
     // remove the margin from the last datepicker
-    .panel-body>.row>div:last-child .row>div:last-child .react-datepicker-wrapper {
+    .card-body>.row>div:last-child .row>div:last-child .react-datepicker-wrapper {
       margin-bottom: 0;
     }
   }
@@ -194,7 +198,7 @@ a.disabled {
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  color: #666;
+  color: var(--bs-secondary-color);
   padding-left: 5px;
 }
 
