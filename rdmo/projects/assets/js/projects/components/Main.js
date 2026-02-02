@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { get, isEmpty } from 'lodash'
 
-import { Link, Modal, SearchField } from 'rdmo/core/assets/js/components'
+import { Link, SearchField } from 'rdmo/core/assets/js/components'
+import { Modal } from 'rdmo/core/assets/js/_bs53/components'
 import { useFormattedDateTime, useModal, useScrollToTop } from 'rdmo/core/assets/js/hooks'
 import { language } from 'rdmo/core/assets/js/utils'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
