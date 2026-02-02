@@ -1,4 +1,5 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import DatePicker from 'react-datepicker'
 import { formatISO, set, isValid, parseISO } from 'date-fns'
@@ -8,18 +9,29 @@ import { getDateFormat, getLocale, parseDate } from 'rdmo/core/assets/js/utils/d
 
 import { Link, Select } from 'rdmo/core/assets/js/components'
 
-const ProjectFilters = ({ catalogs, config, configActions, isAdminOrSiteManager, projectsActions }) => {
+import * as configActions from 'rdmo/core/assets/js/actions/configActions'
+import * as projectsActions from '../../actions/projectsActions'
+
+const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
+  const dispatch = useDispatch()
+
+  const config = useSelector(state => state.config)
+
   const showFilters = [true, 'true'].includes(get(config, 'showFilters', false))
-  const toggleFilters = () => configActions.updateConfig('showFilters', !showFilters)
+  const toggleFilters = () => dispatch(configActions.updateConfig('showFilters', !showFilters))
 
   const resetAllFilters = () => {
-    configActions.deleteConfig('params.catalog')
-    configActions.deleteConfig('params.created_after')
-    configActions.deleteConfig('params.created_before')
-    configActions.deleteConfig('params.last_changed_after')
-    configActions.deleteConfig('params.last_changed_before')
-    configActions.updateConfig('params.page', '1')
-    projectsActions.fetchProjects()
+    dispatch(configActions.deleteConfig('params.catalog'))
+    dispatch(configActions.deleteConfig('params.created_after'))
+    setStartDate('created', null)
+    dispatch(configActions.deleteConfig('params.created_before'))
+    setEndDate('created', null)
+    dispatch(configActions.deleteConfig('params.last_changed_after'))
+    setStartDate('last_changed', null)
+    dispatch(configActions.deleteConfig('params.last_changed_before'))
+    setEndDate('last_changed', null)
+    dispatch(configActions.updateConfig('params.page', '1'))
+    dispatch(projectsActions.fetchProjects())
   }
 
   const catalogOptions = catalogs?.filter(catalog => isAdminOrSiteManager || catalog.available)
@@ -31,31 +43,29 @@ const ProjectFilters = ({ catalogs, config, configActions, isAdminOrSiteManager,
         </span>
       ),
     }))
-
   const selectedCatalog = get(config, 'params.catalog', '')
-
   const updateCatalogFilter = (value) => {
-    value ? configActions.updateConfig('params.catalog', value) : configActions.deleteConfig('params.catalog')
-    projectsActions.fetchProjects()
+    value ? dispatch(configActions.updateConfig('params.catalog', value)) : dispatch(configActions.deleteConfig('params.catalog'))
+    dispatch(projectsActions.fetchProjects())
   }
 
   const handleDateChange = (type, date) => {
     if (type.endsWith('_after')) {
       if (date) {
         const startOfDayDate = set(date, { hours: 0, minutes: 0, seconds: 0, milliseconds: 0 })
-        configActions.updateConfig(`params.${type}`, formatISO(startOfDayDate, { representation: 'complete' }))
+        dispatch(configActions.updateConfig(`params.${type}`, formatISO(startOfDayDate, { representation: 'complete' })))
       } else {
-        configActions.deleteConfig(`params.${type}`)
+        dispatch(configActions.deleteConfig(`params.${type}`))
       }
     } else if (type.endsWith('_before')) {
       if (date) {
         const endOfDayDate = set(date, { hours: 23, minutes: 59, seconds: 59, milliseconds: 999 })
-        configActions.updateConfig(`params.${type}`, formatISO(endOfDayDate, { representation: 'complete' }))
+        dispatch(configActions.updateConfig(`params.${type}`, formatISO(endOfDayDate, { representation: 'complete' })))
       } else {
-        configActions.deleteConfig(`params.${type}`)
+        dispatch(configActions.deleteConfig(`params.${type}`))
       }
     }
-    projectsActions.fetchProjects()
+    dispatch(projectsActions.fetchProjects())
   }
 
   const handleDateChangeRaw = (type, event) => {
@@ -184,10 +194,7 @@ const ProjectFilters = ({ catalogs, config, configActions, isAdminOrSiteManager,
 
 ProjectFilters.propTypes = {
   catalogs: PropTypes.arrayOf(PropTypes.object).isRequired,
-  config: PropTypes.object.isRequired,
-  configActions: PropTypes.object.isRequired,
   isAdminOrSiteManager: PropTypes.bool.isRequired,
-  projectsActions: PropTypes.object.isRequired,
 }
 
 export default ProjectFilters
