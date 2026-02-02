@@ -67,9 +67,9 @@ a[aria-disabled="true"] {
   padding: 10px 0;
 
   .disabled {
-    color: var(--bs-secondary-color) !important;
+    color: var(--bs-secondary-color);
     opacity: 0.5;
-    cursor: not-allowed !important;
+    cursor: not-allowed;
   }
 }
 
