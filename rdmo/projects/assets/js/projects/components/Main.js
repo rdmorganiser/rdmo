@@ -14,7 +14,7 @@ import { PendingInvitations, ProjectFilters, ProjectImport, Table } from './help
 import { HEADER_FORMATTERS, SORTABLE_COLUMNS } from '../utils'
 import { roleOptions } from '../../common/constants/roles'
 
-const Projects = () => {
+const Main = () => {
   const dispatch = useDispatch()
 
   const config = useSelector(state => state.config)
@@ -304,4 +304,4 @@ const Projects = () => {
   )
 }
 
-export default Projects
+export default Main
