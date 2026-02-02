@@ -6,6 +6,10 @@ a[aria-disabled="true"] {
   pointer-events: none;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 .flip {
   transform: scaleX(-1);
 }
@@ -262,10 +266,6 @@ a[aria-disabled="true"] {
   background-color: var(--bs-body-bg);
   color: var(--bs-body-color);
   font-size: 1.5em;
-}
-
-.table-dark th {
-  cursor: pointer;
 }
 
 .dropzone-container {
