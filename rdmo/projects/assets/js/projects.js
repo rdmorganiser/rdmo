@@ -7,14 +7,22 @@ import configureStore from './projects/store/configureStore'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 
-import Projects from './projects/components/main/Projects'
+import Pending from '../../../core/assets/js/containers/Pending'
+
+import Main from './projects/components/Main'
 
 const store = configureStore()
 
 createRoot(document.getElementById('main')).render(
   <DndProvider backend={HTML5Backend}>
     <Provider store={store}>
-      <Projects />
+      <Main />
     </Provider>
   </DndProvider>
+)
+
+createRoot(document.getElementById('pending')).render(
+  <Provider store={store}>
+    <Pending />
+  </Provider>
 )
