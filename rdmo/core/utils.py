@@ -18,10 +18,16 @@ from django.utils.translation import gettext_lazy as _
 from defusedcsv import csv
 from markdown import markdown
 
-from .constants import HUMAN2BYTES_MAPPER
+from .constants import HUMAN2BYTES_MAPPER, PERMISSIONS
 from .pandoc import get_pandoc_content, get_pandoc_content_disposition
 
 log = logging.getLogger(__name__)
+
+
+def can_view_unavailable(user, model) -> bool:
+    if not user:
+        return False
+    return user.has_perms(PERMISSIONS[model._meta.label_lower])
 
 
 def get_script_alias(request):

@@ -13,7 +13,7 @@ from django.utils.timezone import now
 
 from rdmo.core.mail import send_mail
 from rdmo.core.plugins import get_plugins
-from rdmo.core.utils import remove_double_newlines
+from rdmo.core.utils import can_view_unavailable, remove_double_newlines
 from rdmo.tasks.managers import TaskQuerySet
 from rdmo.views.managers import ViewQuerySet
 
@@ -378,6 +378,12 @@ def filter_tasks_or_views_for_project(
     project,
     user=None,
 ) -> TaskQuerySet | ViewQuerySet:
+    if user is not None:
+        if not can_view_unavailable(user, task_or_view._meta.model) and not task_or_view.available:
+            return task_or_view.objects.none()
+    elif not task_or_view.available:
+        return task_or_view.objects.none()
+
     queryset = (task_or_view.objects
         .filter(catalogs=project.catalog)
         .filter(groups__in=project.groups)

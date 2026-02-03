@@ -8,8 +8,8 @@ from mptt.models import TreeManager
 from mptt.querysets import TreeQuerySet
 
 from rdmo.accounts.utils import is_site_manager
-from rdmo.core.constants import PERMISSIONS
 from rdmo.core.managers import CurrentSiteManagerMixin
+from rdmo.core.utils import can_view_unavailable
 
 
 class ProjectQuerySet(TreeQuerySet):
@@ -78,7 +78,7 @@ class ProjectQuerySet(TreeQuerySet):
 
         # when View/Task is not available it should not show for any project
         if user is not None:
-            if not user.has_perms(PERMISSIONS[instance._meta.label_lower]) and not instance.available:
+            if not can_view_unavailable(user, instance._meta.model) and not instance.available:
                 return self.none()
         elif not instance.available:
             return self.none()
