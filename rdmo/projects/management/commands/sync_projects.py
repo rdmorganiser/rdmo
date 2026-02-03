@@ -62,15 +62,13 @@ class Command(BaseCommand):
             self.stdout.write(f'Project "{project.title}" [id={project.id}]:')
             self.stdout.write(f'- Catalog: {project.catalog.uri}')
 
-            if task_uris:
-                self.stdout.write("- Tasks:")
-                for task_uri in task_uris:
-                    self.stdout.write(f"  - {task_uri}")
+            self.stdout.write("- Tasks:")
+            for task_uri in task_uris:
+                self.stdout.write(f"  - {task_uri}")
 
-            if view_uris:
-                self.stdout.write("- Views:")
-                for view_uri in view_uris:
-                    self.stdout.write(f"  - {view_uri}")
+            self.stdout.write("- Views:")
+            for view_uri in view_uris:
+                self.stdout.write(f"  - {view_uri}")
 
             self.stdout.write()  # add an empty line for spacing between projects
 

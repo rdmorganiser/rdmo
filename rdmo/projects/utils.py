@@ -379,8 +379,8 @@ def filter_tasks_or_views_for_project(
     user=None,
 ) -> TaskQuerySet | ViewQuerySet:
     queryset = (task_or_view.objects
-        .filter(Q(catalogs=None) | Q(catalogs=project.catalog))
-        .filter(Q(groups=None) | Q(groups__in=project.groups))
+        .filter(catalogs=project.catalog)
+        .filter(groups__in=project.groups)
     )
 
     if user is not None:

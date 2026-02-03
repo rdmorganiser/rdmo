@@ -1,5 +1,6 @@
 from contextlib import contextmanager
 from unittest.mock import patch
+from uuid import uuid4
 
 from django.contrib.auth.models import Group, User
 from django.contrib.sites.models import Site
@@ -33,6 +34,13 @@ def arrange_projects_catalogs_and_views():
             )
             for n in one_two_three
         }
+        # Create groups, users and project memberships
+        shared_group = Group.objects.get(name="view_test")
+        for n in one_two_three:
+            _user = User.objects.create(username=f"Sync U{n}-{uuid4().hex}")
+            _user.groups.set([shared_group])
+            # this sets P[n].groups -> U[n].groups
+            Membership.objects.create(user_id=_user.id, project_id=P[n].id, role='owner')
 
         # Arrange the catalogs
         for catalog in C.values():
@@ -53,8 +61,8 @@ def arrange_projects_catalogs_and_views():
             view.available = True
             view.save()
             view.sites.clear()
-            view.groups.clear()
             view.catalogs.set([C[n]])
+            view.groups.set([shared_group])
 
         # Ensure each project starts with its matching view only
         for n in one_two_three:
@@ -78,6 +86,13 @@ def arrange_projects_sites_and_views():
             )
             for n in one_two_three
         }
+        # Create groups, users and project memberships
+        shared_group = Group.objects.get(name="view_test")
+        for n in one_two_three:
+            _user = User.objects.create(username=f"Sync U{n}-{uuid4().hex}")
+            _user.groups.set([shared_group])
+            # this sets P[n].groups -> U[n].groups
+            Membership.objects.create(user_id=_user.id, project_id=P[n].id, role='owner')
 
         # Arrange the catalogs
         for catalog in C.values():
@@ -97,9 +112,9 @@ def arrange_projects_sites_and_views():
         for n, view in V.items():
             view.available = True
             view.save()
-            view.catalogs.clear()
-            view.groups.clear()
             view.sites.set([S[n]])
+            view.catalogs.set(list(C.values()))
+            view.groups.set([shared_group])
 
         for n in one_two_three:
             P[n].views.set([V[n]])
@@ -123,9 +138,13 @@ def arrange_projects_groups_and_views():
             for n in one_two_three
         }
         # Create groups, users and project memberships
-        G = {n: Group.objects.create(name=f"Sync G{n}") for n in one_two_three}
+        G = {
+            1: Group.objects.get(name="view_test"),
+            2: Group.objects.get(name="editor"),
+            3: Group.objects.get(name="reviewer"),
+        }
         for n in one_two_three:
-            _user = User.objects.create(username=f"Sync U{n}")
+            _user = User.objects.create(username=f"Sync U{n}-{uuid4().hex}")
             _user.groups.set([G[n]])
             # this sets P[1].groups -> U[n].groups
             Membership.objects.create(user_id=_user.id, project_id=P[n].id, role='owner')
@@ -148,8 +167,8 @@ def arrange_projects_groups_and_views():
         for n, view in V.items():
             view.available = True
             view.save()
-            view.catalogs.clear()
             view.sites.clear()
+            view.catalogs.set(list(C.values()))
             view.groups.set([G[n]])  # set groups as last so that will be state
 
         for n in one_two_three:

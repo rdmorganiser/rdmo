@@ -28,27 +28,26 @@ def assert_all_projects_are_synced_with_instance_m2m_field(instance: Task | View
         project_instances = getattr(project, m2m_field).all()
         project_has_instance = instance in project_instances
 
-        # (e.g. Task/View has no catalogs / no sites / no groups)
-        if not instance_field.exists():
-            if instance_project_field == 'site' and settings.MULTISITE:
-                # MULTISITE=True and no sites on the instance:
-                project_should_have_instance = False
-            else:
-                # For catalogs and groups, and for sites when MULTISITE=False:
-                #   empty field means "applies to all projects"
-                project_should_have_instance = True
+        # Base rules: catalogs + groups must match; sites must match in multisite.
+        if not instance.catalogs.exists():
+            project_should_have_instance = False
+        elif not instance.groups.exists():
+            project_should_have_instance = False
+        elif settings.MULTISITE and not instance.sites.exists():
+            project_should_have_instance = False
         else:
-            if instance_project_field == 'catalog':
-                project_should_have_instance = bool(project.catalog in instance_field.all())
-            elif instance_project_field == 'site':
-                project_should_have_instance = bool(project.site in instance_field.all())
-            elif instance_project_field == 'groups':
-                instance_ids = set(instance_field.values_list('id', flat=True))
-                project_groups_ids = {group.id for group in getattr(project, instance_project_field)}
-                # project must have at least one group and all must be within instance_ids
-                project_should_have_instance = bool(project_groups_ids and project_groups_ids <= instance_ids)
+            catalog_matches = project.catalog in instance.catalogs.all()
+            if instance.sites.exists():
+                site_matches = project.site in instance.sites.all()
             else:
-                raise ValueError("Project field not recognized, should be 'site', 'catalog' or 'groups'")
+                site_matches = not settings.MULTISITE
+            instance_group_ids = set(instance.groups.values_list('id', flat=True))
+            project_group_ids = {group.id for group in project.groups}
+            group_matches = bool(instance_group_ids & project_group_ids)
+            project_should_have_instance = bool(catalog_matches and site_matches and group_matches)
+
+        if instance_project_field == 'site' and not instance_field.exists() and settings.MULTISITE:
+            project_should_have_instance = False
 
         if project_should_have_instance:
             if not project_has_instance:

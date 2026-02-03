@@ -86,6 +86,8 @@ class ProjectQuerySet(TreeQuerySet):
         # when View/Task has any catalogs it can be filtered for those
         if instance.catalogs.exists():
             qs = qs.filter(catalog__in=instance.catalogs.all())
+        else:
+            return self.none()
 
         # when View/Task has any sites it can be filtered for those
         if instance.sites.exists():
@@ -97,6 +99,8 @@ class ProjectQuerySet(TreeQuerySet):
         # when  has any groups it can be filtered for those
         if instance.groups.exists():
             qs = qs.filter_groups(instance.groups.all())
+        else:
+            return self.none()
 
         return qs
 
