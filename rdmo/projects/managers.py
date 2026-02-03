@@ -8,6 +8,7 @@ from mptt.models import TreeManager
 from mptt.querysets import TreeQuerySet
 
 from rdmo.accounts.utils import is_site_manager
+from rdmo.core.constants import PERMISSIONS
 from rdmo.core.managers import CurrentSiteManagerMixin
 
 
@@ -71,12 +72,15 @@ class ProjectQuerySet(TreeQuerySet):
         # projects that have those memberships
         return self.filter(memberships__in=memberships).distinct()
 
-    def filter_projects_for_task_or_view(self, instance):
+    def filter_projects_for_task_or_view(self, instance, user=None):
         # projects that have an unavailable catalog should be disregarded
         qs = self.filter(catalog__available=True)
 
         # when View/Task is not available it should not show for any project
-        if not instance.available:
+        if user is not None:
+            if not user.has_perms(PERMISSIONS[instance._meta.label_lower]) and not instance.available:
+                return self.none()
+        elif not instance.available:
             return self.none()
 
         # when View/Task has any catalogs it can be filtered for those
@@ -266,8 +270,8 @@ class ProjectManager(CurrentSiteManagerMixin, TreeManager):
     def filter_groups(self, groups):
         return self.get_queryset().filter_groups(groups)
 
-    def filter_projects_for_task_or_view(self, instance):
-        return self.get_queryset().filter_projects_for_task_or_view(instance)
+    def filter_projects_for_task_or_view(self, instance, user=None):
+        return self.get_queryset().filter_projects_for_task_or_view(instance, user=user)
 
 
 class MembershipManager(CurrentSiteManagerMixin, models.Manager):

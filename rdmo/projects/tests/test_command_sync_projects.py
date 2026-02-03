@@ -61,6 +61,38 @@ def test_command_sync_projects_for_views(settings, enable_project_views_sync):
 
 
 @pytest.mark.django_db
+def test_command_sync_projects_removes_unavailable_views(settings, enable_project_views_sync):
+    assert settings.PROJECT_VIEWS_SYNC
+
+    P, _, V = arrange_projects_catalogs_and_views()
+
+    assert set(P[1].views.all()) == {V[1]}
+
+    V[1].available = False
+    V[1].save()
+
+    call_command('sync_projects', '--views')
+
+    assert set(P[1].views.all()) == set()
+
+
+@pytest.mark.django_db
+def test_command_sync_projects_removes_unavailable_tasks(settings, enable_project_tasks_sync):
+    assert settings.PROJECT_TASKS_SYNC
+
+    P, _, T = arrange_projects_catalogs_and_tasks()
+
+    assert set(P[1].tasks.all()) == {T[1]}
+
+    T[1].available = False
+    T[1].save()
+
+    call_command('sync_projects', '--tasks')
+
+    assert set(P[1].tasks.all()) == set()
+
+
+@pytest.mark.django_db
 def test_command_sync_projects_show_and_tasks_displays_output(settings, enable_project_tasks_sync, capsys):
 
     call_command('sync_projects', '--tasks', '--show')
