@@ -335,6 +335,9 @@ MARKDOWN_TEMPLATES: dict[str, str] = {
     # for example: 'not_empty': 'core/text_blocks/template_for_not_empty.html',
 }
 
+MARKDOWN_CLEAN = True
+MARKDOWN_CLEAN_KWARGS = {}  # see https://nh3.readthedocs.io for available kwargs
+
 PROJECT_TABLE_PAGE_SIZE = 20
 
 PROJECT_VISIBILITY = True
