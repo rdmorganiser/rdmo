@@ -75,6 +75,8 @@ TEMPLATES = [
     },
 ]
 
+MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
+
 COMPRESS_PRECOMPILERS = (
     ('text/x-scss', 'django_libsass.SassCompiler'),
 )
@@ -162,6 +164,8 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
 )
+
+STATICFILES_STORAGE = 'rdmo.core.storage.VersionedStaticFilesStorage'
 
 DATABASES = {
     'default': {
