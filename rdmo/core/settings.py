@@ -165,6 +165,8 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 
+STATICFILES_STORAGE = 'rdmo.core.storage.VersionedStaticFilesStorage'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
