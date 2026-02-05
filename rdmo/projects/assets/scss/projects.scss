@@ -225,43 +225,6 @@ a[aria-disabled="true"] {
   }
 }
 
-.projects-datepicker .react-datepicker {
-  font-size: 1em;
-}
-
-.projects-datepicker .react-datepicker__header {
-  padding-top: 0.8em;
-}
-
-.projects-datepicker .react-datepicker__month {
-  margin: 0.4em 1em;
-}
-
-.projects-datepicker .react-datepicker__day-name,
-.projects-datepicker .react-datepicker__day {
-  width: 1.9em;
-  line-height: 1.9em;
-  margin: 0.166em;
-}
-
-.projects-datepicker .react-datepicker__current-month {
-  font-size: 1em;
-}
-
-.projects-datepicker .react-datepicker__navigation {
-  top: 1em;
-  line-height: 1.7em;
-  border: 0.45em solid transparent;
-}
-
-.projects-datepicker .react-datepicker__navigation--previous {
-  left: 1em;
-}
-
-.projects-datepicker .react-datepicker__navigation--next {
-  right: 1em;
-}
-
 .projects-datepicker .react-datepicker__close-icon::after {
   background-color: var(--bs-body-bg);
   color: var(--bs-body-color);
