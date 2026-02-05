@@ -8,26 +8,26 @@ import { ROLE_LABELS } from '../../utils'
 const PendingInvitations = ({ invitations }) => {
 
   return (
-      invitations?.map(item => (
-        <div key={item.id} className="row-container">
-          <div className="w-100 mb-5">
-            <b>{item.title}</b>
-          </div>
-          <div className="w-50">
-            {ROLE_LABELS[item.role]}
-          </div>
-          <div className="w-50 align-right">
-            <button type="button" className="btn btn-xs btn-success ml-10"
-                    onClick={() => { window.location.href = `${baseUrl}/projects/join/${item.token}/` }}>
-              {gettext('Accept')}
-            </button>
-            <button type="button" className="btn btn-xs btn-danger ml-10"
-                    onClick={() => { window.location.href = `${baseUrl}/projects/cancel/${item.token}/` }}>
-              {gettext('Decline')}
-            </button>
-          </div>
+    invitations?.map(item => (
+      <div key={item.id} className="row g-2 align-items-center">
+        <div className="w-100 mb-5">
+          <b>{item.title}</b>
         </div>
-      ))
+        <div className="w-50">
+          {ROLE_LABELS[item.role]}
+        </div>
+        <div className="w-50 d-flex justify-content-end gap-2">
+          <button type="button" className="btn btn-sm btn-success"
+            onClick={() => { window.location.href = `${baseUrl}/projects/join/${item.token}/` }}>
+            {gettext('Accept')}
+          </button>
+          <button type="button" className="btn btn-sm btn-danger"
+            onClick={() => { window.location.href = `${baseUrl}/projects/cancel/${item.token}/` }}>
+            {gettext('Decline')}
+          </button>
+        </div>
+      </div>
+    ))
   )
 }
 
