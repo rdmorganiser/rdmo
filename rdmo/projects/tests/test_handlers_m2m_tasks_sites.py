@@ -24,7 +24,7 @@ def test_project_tasks_sync_when_updating_task_sites(settings, enable_project_ta
     assert set(P[2].tasks.all()) == {T[2], T[1]}
     assert set(P[3].tasks.all()) == {T[3], T[1]}
     # additionally, all of the projects should have T1
-    assert Project.objects.filter(tasks=T[1]).count() == Project.objects.all().count()
+    assert Project.objects.filter(tasks=T[1]).count() == len(P)
     assert_all_projects_are_synced_with_instance_m2m_field(T[1], 'sites')
 
     # === Update: (from empty) add C1 to V1 → it should appear in P1 only again ===

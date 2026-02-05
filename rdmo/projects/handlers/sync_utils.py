@@ -11,11 +11,11 @@ from rdmo.views.models import View
 logger = logging.getLogger(__name__)
 
 
-def sync_task_or_view_to_projects(instance):
+def sync_task_or_view_to_projects(instance, user=None):
     """Ensure the instance is linked to exactly the correct set of projects."""
     project_m2m_field = get_related_field_name_on_model_for_instance(Project, instance)
 
-    target_projects = Project.objects.filter_projects_for_task_or_view(instance)
+    target_projects = Project.objects.filter_projects_for_task_or_view(instance, user=user)
     current_projects = Project.objects.filter(**{project_m2m_field: instance})
 
     to_remove = current_projects.exclude(pk__in=target_projects)
@@ -51,7 +51,7 @@ def sync_tasks_or_views_on_a_project(project, task_or_view):
     """Ensure the project is linked to exactly the correct instances of a model (View/Task)."""
     project_m2m_field = get_related_field_name_on_model_for_instance(Project, task_or_view)
 
-    desired_instances = filter_tasks_or_views_for_project(task_or_view, project)
+    desired_instances = filter_tasks_or_views_for_project(task_or_view, project, user=None)
     current_instances = getattr(project, project_m2m_field).all()
 
     to_remove = current_instances.exclude(pk__in=desired_instances)

@@ -13,7 +13,7 @@ from django.utils.timezone import now
 
 from rdmo.core.mail import send_mail
 from rdmo.core.plugins import get_plugins
-from rdmo.core.utils import remove_double_newlines
+from rdmo.core.utils import can_view_unavailable, remove_double_newlines
 from rdmo.tasks.managers import TaskQuerySet
 from rdmo.views.managers import ViewQuerySet
 
@@ -373,11 +373,26 @@ def send_contact_message(request, subject, message):
               cc=[request.user.email], reply_to=[request.user.email])
 
 
-def filter_tasks_or_views_for_project(task_or_view, project) -> TaskQuerySet | ViewQuerySet:
-    queryset = ( task_or_view.objects
-        .filter(Q(catalogs=None) | Q(catalogs=project.catalog))
-        .filter(Q(groups=None) | Q(groups__in=project.groups))
+def filter_tasks_or_views_for_project(
+    task_or_view,
+    project,
+    user=None,
+) -> TaskQuerySet | ViewQuerySet:
+    if user is not None:
+        if not can_view_unavailable(user, task_or_view._meta.model) and not task_or_view.available:
+            return task_or_view.objects.none()
+    elif not task_or_view.available:
+        return task_or_view.objects.none()
+
+    queryset = (task_or_view.objects
+        .filter(catalogs=project.catalog)
+        .filter(groups__in=project.groups)
     )
+
+    if user is not None:
+        queryset = queryset.filter_availability(user)
+    else:
+        queryset = queryset.filter(available=True)
 
     if settings.MULTISITE:
         return  queryset.filter(sites=project.site)

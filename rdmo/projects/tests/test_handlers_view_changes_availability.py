@@ -35,3 +35,15 @@ def test_project_views_sync_when_updating_available_on_a_view(settings, enable_p
     assert set(P[1].views.all()) == {V[1]}
     assert set(P[2].views.all()) == {V[2], V[1]}
     assert set(P[3].views.all()) == {V[3]}  # in non-multisite it can be added
+
+
+@pytest.mark.django_db
+def test_sync_project_views_filters_unavailable_views():
+    P, _, V = arrange_projects_catalogs_and_views()
+
+    assert set(P[1].views.all()) == {V[1]}
+
+    V[1].available = False
+    V[1].save()
+
+    assert  set(P[1].views.all()) == set()

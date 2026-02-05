@@ -18,13 +18,13 @@ def test_project_tasks_sync_when_updating_task_groups(settings, enable_project_t
     assert set(P[2].tasks.all()) == {T[2]}
     assert set(P[3].tasks.all()) == {T[3]}
 
-    # === Update: V1 has no catalogs → it should appear in all projects ===
+    # === Update: V1 has no groups → it should not appear in any projects ===
     T[1].groups.clear()
-    assert set(P[1].tasks.all()) == {T[1]}  # should remain unchanged
-    assert set(P[2].tasks.all()) == {T[2], T[1]}
-    assert set(P[3].tasks.all()) == {T[3], T[1]}
-    # additionally, all of the projects should have T1
-    assert Project.objects.filter(tasks=T[1]).count() == Project.objects.all().count()
+    assert set(P[1].tasks.all()) == set()
+    assert set(P[2].tasks.all()) == {T[2]}
+    assert set(P[3].tasks.all()) == {T[3]}
+    # additionally, no project should have T1
+    assert Project.objects.filter(tasks=T[1]).count() == 0
     assert_all_projects_are_synced_with_instance_m2m_field(T[1], 'groups')
 
     # === Update: (from empty) add C1 to V1 → it should appear in P1 only again ===

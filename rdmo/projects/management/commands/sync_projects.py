@@ -41,11 +41,11 @@ class Command(BaseCommand):
             self.show_project_tasks_and_views()
 
     def sync_all_tasks_or_views_to_projects(self, model):
-        queryset = model.objects.filter(available=True)
+        queryset = model.objects.all()
         model_name = model._meta.verbose_name_plural
         qs_count = queryset.count()
 
-        self.stdout.write(self.style.SUCCESS(f'Starting sync for {qs_count} available {model_name}...'))
+        self.stdout.write(self.style.SUCCESS(f'Starting sync for {qs_count} {model_name}...'))
         for instance in queryset:
             self.stdout.write(f'- Syncing: {instance}')
             sync_task_or_view_to_projects(instance)
@@ -62,15 +62,13 @@ class Command(BaseCommand):
             self.stdout.write(f'Project "{project.title}" [id={project.id}]:')
             self.stdout.write(f'- Catalog: {project.catalog.uri}')
 
-            if task_uris:
-                self.stdout.write("- Tasks:")
-                for task_uri in task_uris:
-                    self.stdout.write(f"  - {task_uri}")
+            self.stdout.write("- Tasks:")
+            for task_uri in task_uris:
+                self.stdout.write(f"  - {task_uri}")
 
-            if view_uris:
-                self.stdout.write("- Views:")
-                for view_uri in view_uris:
-                    self.stdout.write(f"  - {view_uri}")
+            self.stdout.write("- Views:")
+            for view_uri in view_uris:
+                self.stdout.write(f"  - {view_uri}")
 
             self.stdout.write()  # add an empty line for spacing between projects
 

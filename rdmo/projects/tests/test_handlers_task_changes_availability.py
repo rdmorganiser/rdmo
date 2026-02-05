@@ -36,3 +36,15 @@ def test_project_tasks_sync_when_updating_available_on_a_task(settings, enable_p
     assert set(P[1].tasks.all()) == {T[1]}
     assert set(P[2].tasks.all()) == {T[2], T[1]}
     assert set(P[3].tasks.all()) == {T[3]}
+
+
+@pytest.mark.django_db
+def test_sync_project_tasks_filters_unavailable_tasks():
+    P, _, T = arrange_projects_catalogs_and_tasks()
+
+    assert T[1] in set(P[1].tasks.all())
+
+    T[1].available = False
+    T[1].save()
+
+    assert set(P[1].tasks.all()) == set()

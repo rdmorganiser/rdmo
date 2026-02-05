@@ -67,7 +67,7 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
             context['tasks_available'] = project.tasks.exists()
         else:
             context['tasks_available'] = (
-                filter_tasks_or_views_for_project(Task, project).filter_availability(self.request.user).exists()
+                filter_tasks_or_views_for_project(Task, project, user=self.request.user).exists()
             )
 
         if settings.PROJECT_VIEWS_SYNC:
@@ -75,7 +75,7 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
             context['views_available'] = project.views.exists()
         else:
             context['views_available'] = (
-                filter_tasks_or_views_for_project(View, project).filter_availability(self.request.user).exists()
+                filter_tasks_or_views_for_project(View, project, user=self.request.user).exists()
             )
 
         ancestors_import = []

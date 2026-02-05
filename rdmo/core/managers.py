@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.db import models
 
-from .constants import PERMISSIONS
+from .utils import can_view_unavailable
 
 
 class CurrentSiteQuerySetMixin:
@@ -23,7 +23,7 @@ class GroupsQuerySetMixin:
 class AvailabilityQuerySetMixin:
 
     def filter_availability(self, user):
-        if user.has_perms(PERMISSIONS[self.model._meta.label_lower]):
+        if can_view_unavailable(user, self.model):
             return self
         else:
             return self.filter(available=True)
