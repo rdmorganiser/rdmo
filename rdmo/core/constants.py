@@ -58,7 +58,10 @@ PERMISSIONS = {
     ),
     'views.view': (
         'views.add_view', 'views.change_view', 'views.delete_view'
-    )
+    ),
+    'config.plugin': (
+        'config.add_plugin', 'config.change_plugin', 'config.delete_plugin'
+    ),
 }
 
 HUMAN2BYTES_MAPPER = {
@@ -91,5 +94,6 @@ RDMO_MODELS = {
   'section': 'questions.section',
   'catalog': 'questions.catalog',
   'task': 'tasks.task',
-  'view': 'views.view'
+  'view': 'views.view',
+  'plugin': 'config.plugin'
 }

@@ -1,13 +1,18 @@
 from rest_framework.serializers import ValidationError
 
-from rdmo.core.plugins import get_plugin
+from rdmo.config.constants import PLUGIN_TYPES
+from rdmo.config.models import Plugin
 
 
 class ProviderValidator:
 
     def __call__(self, data):
         provider_key = data.get('provider_key')
-        provider = get_plugin('PROJECT_ISSUE_PROVIDERS', provider_key)
+        plugin = Plugin.objects.for_context(
+            plugin_type=PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER,
+            format=provider_key
+        ).first()
+        provider = plugin.initialize_class() if plugin else None
         if provider is None:
             raise ValidationError({
                 'provider_key': 'Please provide a valid provider.'

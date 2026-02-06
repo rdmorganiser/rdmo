@@ -3,8 +3,8 @@ import re
 from django.conf import settings
 from django.http import HttpResponse
 
+from rdmo.config.plugins import BasePlugin
 from rdmo.core.exports import prettify_xml
-from rdmo.core.plugins import Plugin
 from rdmo.core.utils import render_to_csv, render_to_json
 from rdmo.views.templatetags import view_tags
 from rdmo.views.utils import ProjectWrapper
@@ -14,11 +14,11 @@ from .serializers.export import ProjectSerializer as ProjectExportSerializer
 from .serializers.export import SnapshotSerializer as SnapshotExportSerializer
 
 
-class Export(Plugin):
+class Export(BasePlugin):
+
+    plugin_type = 'project_export'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
         self.project = None
         self.snapshot = None
 

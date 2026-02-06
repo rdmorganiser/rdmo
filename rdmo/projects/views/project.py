@@ -13,7 +13,8 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import DeleteView, DetailView, TemplateView
 from django.views.generic.edit import FormMixin
 
-from rdmo.core.plugins import get_plugin, get_plugins
+from rdmo.config.constants import PLUGIN_TYPES
+from rdmo.config.models import Plugin
 from rdmo.core.views import CSRFViewMixin, ObjectPermissionMixin, RedirectViewMixin, StoreIdViewMixin
 from rdmo.questions.models import Catalog
 
@@ -85,7 +86,15 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
         context['ancestors_import'] = ancestors_import
         context['memberships'] = memberships.order_by('user__last_name', '-project__level')
         context['integrations'] = integrations.order_by('provider_key', '-project__level')
-        context['providers'] = get_plugins('PROJECT_ISSUE_PROVIDERS')
+        context['providers'] = {}
+        for plugin in Plugin.objects.for_context(
+            plugin_type=PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER,
+            project=project,
+            user=self.request.user
+        ):
+            if plugin.url_name:
+                context['providers'][plugin.url_name] = plugin.initialize_class()
+
         context['issues'] = [
             issue for issue in project.issues.order_by('-status', 'task__order', 'task__uri') if issue.resolve(values)
         ]
@@ -93,8 +102,11 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
         context['snapshots'] = project.snapshots.all()
         context['invites'] = project.invites.all()
         context['membership'] = Membership.objects.filter(project=project, user=self.request.user).first()
+        upload_plugins = Plugin.objects.for_context(
+            plugin_type=PLUGIN_TYPES.PROJECT_IMPORT, project=project,user=self.request.user
+        )
         context['upload_accept'] = ','.join([
-            suffix for suffixes in get_upload_accept().values() for suffix in suffixes
+            suffix for suffixes in get_upload_accept(upload_plugins).values() for suffix in suffixes
         ])
         return context
 
@@ -175,10 +187,14 @@ class ProjectExportView(ObjectPermissionMixin, DetailView):
     permission_required = 'projects.export_project_object'
 
     def get_export_plugin(self):
-        export_plugin = get_plugin('PROJECT_EXPORTS', self.kwargs.get('format'))
-        if export_plugin is None:
+        export_plugin_instance = Plugin.objects.for_context(
+            project=self.object, plugin_type=PLUGIN_TYPES.PROJECT_EXPORT,
+            user=self.request.user, format=self.kwargs.get('format')
+        ).first()
+        if export_plugin_instance is None:
             raise Http404
 
+        export_plugin = export_plugin_instance.initialize_class()
         export_plugin.request = self.request
         export_plugin.project = self.object
 

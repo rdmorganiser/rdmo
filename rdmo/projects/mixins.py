@@ -7,8 +7,9 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 
+from rdmo.config.constants import PLUGIN_TYPES
+from rdmo.config.models import Plugin
 from rdmo.core.imports import handle_uploaded_file
-from rdmo.core.plugins import get_plugin, get_plugins
 from rdmo.questions.models import Question
 
 from .models import Membership, Project
@@ -63,10 +64,17 @@ class ProjectImportMixin:
                                                   .get(value.collection_index)
 
     def get_import_plugin(self, key, current_project=None):
-        import_plugin = get_plugin('PROJECT_IMPORTS', key)
-        if import_plugin is None:
+        plugins = Plugin.objects.for_context(
+            plugin_type=PLUGIN_TYPES.PROJECT_IMPORT,
+            project=current_project,
+            user=self.request.user,
+            format=key
+        )
+        plugin = next((i for i in plugins if i.url_name == key), None)
+        if plugin is None:
             raise Http404
 
+        import_plugin = plugin.initialize_class()
         import_plugin.request = self.request
         import_plugin.current_project = current_project
 
@@ -98,7 +106,11 @@ class ProjectImportMixin:
                 'errors': [_('There has been an error with your import. No uploaded or retrieved file could be found.')]
             }, status=400)
 
-        for import_key, import_plugin in get_plugins('PROJECT_IMPORTS').items():
+        for plugin in Plugin.objects.for_context(
+                plugin_type=PLUGIN_TYPES.PROJECT_IMPORT, project=current_project,
+                user=self.request.user, format=Path(import_file_name).suffix.lstrip('.')
+            ):
+            import_plugin = plugin.initialize_class()
             import_plugin.current_project = current_project
             import_plugin.file_name = import_file_name
             import_plugin.source_title = import_source_title
@@ -114,7 +126,7 @@ class ProjectImportMixin:
                     }, status=400)
 
                 # store information in session for ProjectCreateImportView
-                self.request.session['import_key'] = import_key
+                self.request.session['import_key'] = plugin.url_name
 
                 # attach questions and current values
                 self.update_values(current_project, import_plugin.catalog,

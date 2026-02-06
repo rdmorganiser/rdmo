@@ -19,7 +19,8 @@ const initialState = {
   widgetTypes: [],
   valueTypes: [],
   tasks: [],
-  views: []
+  views: [],
+  plugins: []
 }
 
 export default function elementsReducer(state = initialState, action) {

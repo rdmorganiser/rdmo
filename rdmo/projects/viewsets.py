@@ -21,6 +21,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from rdmo.conditions.models import Condition
+from rdmo.config.models import Plugin
 from rdmo.core.permissions import HasModelPermission
 from rdmo.core.utils import human2bytes, is_truthy, return_file_response
 from rdmo.options.models import OptionSet
@@ -28,6 +29,7 @@ from rdmo.questions.models import Catalog, Page, Question, QuestionSet
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
+from ..config.constants import PLUGIN_TYPES
 from .filters import (
     AttributeFilterBackend,
     OptionFilterBackend,
@@ -58,6 +60,7 @@ from .serializers.v1 import (
     IssueSerializer,
     MembershipSerializer,
     ProjectCopySerializer,
+    ProjectImportPluginSerializer,
     ProjectIntegrationSerializer,
     ProjectInviteSerializer,
     ProjectInviteUpdateSerializer,
@@ -261,21 +264,28 @@ class ProjectViewSet(ModelViewSet):
 
             # check if the optionset belongs to this catalog and if it has a provider
             project.catalog.prefetch_elements()
-            if Question.objects.filter_by_catalog(project.catalog).filter(optionsets=optionset) and \
-                    optionset.provider is not None:
+            if (
+                Question.objects.filter_by_catalog(project.catalog).filter(optionsets=optionset).exists()
+                and optionset.has_plugins
+            ):
                 options = []
-                for option in optionset.provider.get_options(project, search=request.GET.get('search'),
-                                                             user=request.user, site=request.site):
-                    if 'id' not in option:
-                        raise RuntimeError(f"'id' is missing in options of '{optionset.provider.class_name}'")
-                    elif 'text' not in option:
-                        raise RuntimeError(f"'text' is missing in options of '{optionset.provider.class_name}'")
-                    if 'text_and_help' not in option:
-                        if 'help' in option:
-                            option['text_and_help'] = '{text} [{help}]'.format(**option)
-                        else:
-                            option['text_and_help'] = '{text}'.format(**option)
-                    options.append(option)
+                for plugin in optionset.plugins.all():
+                    provider = plugin.initialize_class()
+                    if provider is None:
+                        continue  # skip when plugin class initialization fails
+
+                    for option in provider.get_options(project, search=request.GET.get('search'),
+                                         user=request.user, site=request.site):
+                        if 'id' not in option:
+                            raise RuntimeError(f"'id' is missing in options of '{provider.class_name}'")
+                        elif 'text' not in option:
+                            raise RuntimeError(f"'text' is missing in options of '{provider.class_name}'")
+                        if 'text_and_help' not in option:
+                            if 'help' in option:
+                                option['text_and_help'] = '{text} [{help}]'.format(**option)
+                            else:
+                                option['text_and_help'] = '{text}'.format(**option)
+                        options.append(option)
 
                 return Response(options)
 
@@ -387,16 +397,14 @@ class ProjectViewSet(ModelViewSet):
 
     @action(detail=False, url_path='upload-accept', permission_classes=(IsAuthenticated, ))
     def upload_accept(self, request):
-        return Response(get_upload_accept())
+        plugins = Plugin.objects.for_context(plugin_type=PLUGIN_TYPES.PROJECT_IMPORT, user=self.request.user)
+        return Response(get_upload_accept(plugins))
 
     @action(detail=False, permission_classes=(IsAuthenticated, ))
     def imports(self, request):
-        return Response([{
-            'key': key,
-            'label': label,
-            'class_name': class_name,
-            'href': reverse('project_create_import', args=[key])
-        } for key, label, class_name in settings.PROJECT_IMPORTS if key in settings.PROJECT_IMPORTS_LIST] )
+        plugins = Plugin.objects.for_context(plugin_type=PLUGIN_TYPES.PROJECT_IMPORT, user=request.user)
+        serializer = ProjectImportPluginSerializer(plugins, many=True)
+        return Response(serializer.data)
 
     def perform_create(self, serializer):
         project = serializer.save(site=get_current_site(self.request))
