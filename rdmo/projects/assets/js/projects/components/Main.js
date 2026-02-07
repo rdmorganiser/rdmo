@@ -110,7 +110,7 @@ const Main = () => {
         {buildAncestorLink(row.ancestors)}
         {
           catalog && (
-            <div className="text-muted">{catalog.title}</div>
+            <div className="text-secondary">{catalog.title}</div>
           )
         }
       </div>
@@ -125,15 +125,16 @@ const Main = () => {
 
   const renderLoadButtons = () => {
     return (
-      <div className="icon-container ms-auto">
+      <div className="d-flex position-relative">
         {projects.length > 0 && showTopButton &&
-          <button type="button" className="elliptic-button" onClick={scrollToTop}
+          <button type="button" className="btn btn-light btn-rounded font-small" onClick={scrollToTop}
             title={gettext('Scroll to top')} aria-label={gettext('Scroll to top')}>
             <i className="bi bi-arrow-up" aria-hidden="true"></i>
           </button>
         }
         {hasNext &&
-          <button type="button" onClick={loadMore} className="elliptic-button">
+          <button type="button" onClick={loadMore}
+                  className="btn btn-light btn-rounded font-small position-absolute start-50 translate-middle-x">
             {gettext('Load more')}
           </button>
         }
@@ -167,7 +168,7 @@ const Main = () => {
 
   const columnWidths = myProjects
     ? ['40%', '18%', '18%', '18%', '6%']
-    : ['30%', '10%', '18%', '18%', '18%', '6%']
+    : ['30%', '16%', '16%', '16%', '16%', '6%']
 
   const cellFormatters = {
     title: (_content, row) => renderTitle(row),
@@ -176,20 +177,20 @@ const Main = () => {
 
       return <>
         {
-          rolesString && <p>{rolesString}</p>
+          rolesString && <div>{rolesString}</div>
         }
         {
-          row.visibility && <p className="text-muted">{row.visibility}</p>
+          row.visibility && <div className="text-secondary">{row.visibility}</div>
         }
       </>
     },
     owner: (_content, row) => (
       <>
-        <p>
+        <div>
           {row.owners.map(owner => owner.full_name).join('; ')}
-        </p>
+        </div>
         {
-          row.visibility && <p className="text-muted">{row.visibility}</p>
+          row.visibility && <div className="text-secondary">{row.visibility}</div>
         }
       </>
     ),
@@ -201,10 +202,10 @@ const Main = () => {
       const params = `?next=${window.location.pathname}`
       const perms = row.permissions || {}
       return (
-        <div className="icon-container">
+        <div className="d-flex align-items-center gap-1">
           <Link
             href={`${rowUrl}/copy/`}
-            className="bi bi-files"
+            className="bi bi-copy"
             title={labels.copy}
             onClick={() => window.location.href = `${rowUrl}/copy/${params}`}
           />
@@ -230,77 +231,83 @@ const Main = () => {
   }
 
   return (
-    <div className="projects">
-      <div className="projects-header-container">
-        <h1>{headline}</h1>
-        <div className="projects-header-buttons">
-          {
-            !isEmpty(invites) && myProjects && (
-              <button type="button" className="btn btn-link" onClick={openInvitations}>
-                <span className="badge text-bg-primary">
-                  {invites.length}
-                </span>
-                {gettext('Pending invitations')}
-              </button>
-            )
-          }
-          {
-            isAdminOrSiteManager && (
-              <button type="button" className="btn btn-link" onClick={handleView}>
-                {viewLinkText}
-              </button>
-            )
-          }
-          <button type="button" id="import-project" className="btn btn-link" onClick={openImport}>
-            <i className="bi bi-download" aria-hidden="true"></i> {gettext('Import project')}
-          </button>
-          <button type="button" id="create-project" className="btn btn-link" onClick={handleNew}>
-            <i className="bi bi-plus" aria-hidden="true"></i> {gettext('New project')}
-          </button>
-        </div>
-      </div>
-      <div className="projects-form">
-        <div className="text-muted mb-3">
-          {displayMessage}
-        </div>
-        <div className="search-container">
-          <SearchField
-            value={searchString}
-            onChange={updateSearchString}
-            onSearch={() => dispatch(projectsActions.fetchProjects())}
-            placeholder={gettext('Search projects')}
-            className="search-field"
+    <div className="px-4 py-5">
+      <div className="container gx-0">
+        <div className="projects">
+          <div className="d-flex align-items-center gap-3 mb-3">
+            <h1 className="me-auto mb-0">{headline}</h1>
+            {
+              !isEmpty(invites) && myProjects && (
+                <button type="button" className="link" onClick={openInvitations}>
+                  <div className="d-flex align-items-center gap-1">
+                    <span className="badge rounded-pill text-bg-primary">
+                      {invites.length}
+                    </span>
+                    {gettext('Pending invitations')}
+                  </div>
+                </button>
+              )
+            }
+            {
+              isAdminOrSiteManager && (
+                <button type="button" className="link font-small" onClick={handleView}>
+                  {viewLinkText}
+                </button>
+              )
+            }
+            <button type="button" className="link font-small" onClick={openImport}>
+              <i className="bi bi-download" aria-hidden="true"></i> {gettext('Import project')}
+            </button>
+            <button type="button" className="link font-small" onClick={handleNew}>
+              <i className="bi bi-plus" aria-hidden="true"></i> {gettext('New project')}
+            </button>
+          </div>
+
+          <div className="projects-form my-5">
+            <div className="text-muted mb-3">
+              {displayMessage}
+            </div>
+            <div className="search-container">
+              <SearchField
+                value={searchString}
+                onChange={updateSearchString}
+                onSearch={() => dispatch(projectsActions.fetchProjects())}
+                placeholder={gettext('Search projects')}
+                className="search-field"
+              />
+            </div>
+            <ProjectFilters
+              catalogs={catalogs ?? []}
+              isAdminOrSiteManager={isAdminOrSiteManager}
+            />
+          </div>
+
+          <Table
+            cellFormatters={cellFormatters}
+            columnWidths={columnWidths}
+            data={projects}
+            headerFormatters={HEADER_FORMATTERS}
+            onHeaderClick={handleHeaderClick}
+            sortableColumns={SORTABLE_COLUMNS}
+            sortColumn={sortColumn}
+            sortOrder={sortOrder}
+            visibleColumns={visibleColumns}
           />
+
+          {renderLoadButtons()}
+
+          <Modal {...invitationsModalProps}>
+            <PendingInvitations invitations={invites} />
+          </Modal>
+
+          <Modal {...importModalProps}>
+            <ProjectImport
+              allowedTypes={allowedTypes}
+              handleImport={handleImport}
+              importUrls={importUrls ?? []} />
+          </Modal>
         </div>
-        <ProjectFilters
-          catalogs={catalogs ?? []}
-          isAdminOrSiteManager={isAdminOrSiteManager}
-        />
       </div>
-      <Table
-        cellFormatters={cellFormatters}
-        columnWidths={columnWidths}
-        data={projects}
-        headerFormatters={HEADER_FORMATTERS}
-        onHeaderClick={handleHeaderClick}
-        sortableColumns={SORTABLE_COLUMNS}
-        sortColumn={sortColumn}
-        sortOrder={sortOrder}
-        visibleColumns={visibleColumns}
-      />
-
-      {renderLoadButtons()}
-
-      <Modal {...invitationsModalProps}>
-        <PendingInvitations invitations={invites} />
-      </Modal>
-
-      <Modal {...importModalProps}>
-        <ProjectImport
-          allowedTypes={allowedTypes}
-          handleImport={handleImport}
-          importUrls={importUrls ?? []} />
-      </Modal>
     </div>
   )
 }
