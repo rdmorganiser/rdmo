@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { UploadDropZone } from 'rdmo/core/assets/js/components'
+import Dropzone from 'rdmo/core/assets/js/components/Dropzone'
 
 const ProjectImport = ({ allowedTypes, handleImport, importUrls }) => {
 
@@ -25,7 +25,7 @@ const ProjectImport = ({ allowedTypes, handleImport, importUrls }) => {
   return (
     <>
       <label className="form-label">{gettext('Import from file')}</label>
-      <UploadDropZone
+      <Dropzone
         acceptedTypes={allowedTypes}
         onImportFile={handleImport} />
       {importUrls.length > 0 && renderDirectImportLinks()}
