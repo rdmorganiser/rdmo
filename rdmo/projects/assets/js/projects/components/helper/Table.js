@@ -1,4 +1,5 @@
 import React from 'react'
+import classNames from 'classnames'
 import PropTypes from 'prop-types'
 
 const Table = ({
@@ -16,13 +17,13 @@ const Table = ({
   const renderSortIcon = (column) => {
     const isSortColumn = sortColumn === column
 
-    let icon = 'bi-chevron-expand'
-    if (isSortColumn && sortOrder === 'asc') icon = 'bi-chevron-up'
-    if (isSortColumn && sortOrder === 'desc') icon = 'bi-chevron-down'
+    let icon = 'bi-caret-down'
+    if (isSortColumn && sortOrder === 'asc') icon = 'bi-caret-down-fill'
+    if (isSortColumn && sortOrder === 'desc') icon = 'bi-caret-up-fill'
 
     return (
       <span className="ms-1 sort-icon">
-        <i className={`bi ${icon}`} aria-hidden="true" />
+        <i className={classNames('bi font-smaller', icon)} aria-hidden="true" />
       </span>
     )
   }
@@ -74,7 +75,7 @@ const Table = ({
 
   return (
     <div id="projects-table" className="table-container">
-      <table className="table table-borderless">
+      <table className="table">
         {renderHeaders()}
         {renderRows()}
       </table>

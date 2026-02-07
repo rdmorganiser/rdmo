@@ -43,6 +43,10 @@ h3, .h3 {
     font-size: var(--rdmo-font-size-larger) !important;
 }
 
+.flip {
+  transform: scaleX(-1);
+}
+
 .home {
     h1 {
         font-size: 2.6rem;
@@ -105,6 +109,10 @@ button.unstyled {
     --bs-btn-hover-border-color: var(--rdmo-color-link-hover);
     --bs-btn-active-bg: var(--rdmo-color-link-hover);
     --bs-btn-active-border-color: var(--rdmo-color-link-hover);
+}
+
+.text-bg-primary {
+    background-color: var(--rdmo-link-color) !important;
 }
 
 .bi {
