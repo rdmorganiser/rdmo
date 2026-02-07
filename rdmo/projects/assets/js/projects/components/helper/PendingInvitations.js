@@ -5,31 +5,28 @@ import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import { ROLE_LABELS } from '../../utils'
 
-const PendingInvitations = ({ invitations }) => {
-
-  return (
-    invitations?.map(item => (
-      <div key={item.id} className="row g-2 align-items-center">
-        <div className="w-100 mb-5">
-          <b>{item.title}</b>
-        </div>
-        <div className="w-50">
+const PendingInvitations = ({ invitations }) => (
+  invitations?.map(item => (
+    <div key={item.id} className="row g-2 align-items-center">
+      <div className="mb-1">
+        <b>{item.title}</b>
+      </div>
+      <div className="d-flex gap-2">
+        <div className="me-auto">
           {ROLE_LABELS[item.role]}
         </div>
-        <div className="w-50 d-flex justify-content-end gap-2">
-          <button type="button" className="btn btn-sm btn-success"
-            onClick={() => { window.location.href = `${baseUrl}/projects/join/${item.token}/` }}>
-            {gettext('Accept')}
-          </button>
-          <button type="button" className="btn btn-sm btn-danger"
-            onClick={() => { window.location.href = `${baseUrl}/projects/cancel/${item.token}/` }}>
-            {gettext('Decline')}
-          </button>
-        </div>
+        <button type="button" className="btn btn-sm btn-success"
+          onClick={() => { window.location.href = `${baseUrl}/projects/join/${item.token}/` }}>
+          {gettext('Accept')}
+        </button>
+        <button type="button" className="btn btn-sm btn-danger"
+          onClick={() => { window.location.href = `${baseUrl}/projects/cancel/${item.token}/` }}>
+          {gettext('Decline')}
+        </button>
       </div>
-    ))
-  )
-}
+    </div>
+  ))
+)
 
 PendingInvitations.propTypes = {
   invitations: PropTypes.arrayOf(PropTypes.shape({
