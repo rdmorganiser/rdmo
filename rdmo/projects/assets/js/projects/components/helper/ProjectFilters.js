@@ -7,7 +7,7 @@ import { get } from 'lodash'
 
 import { getDateFormat, getLocale, parseDate } from 'rdmo/core/assets/js/utils/date'
 
-import { Link, Select } from 'rdmo/core/assets/js/components'
+import { Select } from 'rdmo/core/assets/js/components'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import * as projectsActions from '../../actions/projectsActions'
@@ -23,13 +23,9 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
   const resetAllFilters = () => {
     dispatch(configActions.deleteConfig('params.catalog'))
     dispatch(configActions.deleteConfig('params.created_after'))
-    setStartDate('created', null)
     dispatch(configActions.deleteConfig('params.created_before'))
-    setEndDate('created', null)
     dispatch(configActions.deleteConfig('params.last_changed_after'))
-    setStartDate('last_changed', null)
     dispatch(configActions.deleteConfig('params.last_changed_before'))
-    setEndDate('last_changed', null)
     dispatch(configActions.updateConfig('params.page', '1'))
     dispatch(projectsActions.fetchProjects())
   }
@@ -83,62 +79,20 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
   return (
     <>
       {showFilters && (
-        <div className="card panel-filters mt-3 mb-0">
-          <div className="card-body">
-            <div className="row">
-              <div className={`col-md-${isAdminOrSiteManager ? 4 : 8}`}>
-                <label className="form-label text-muted">{gettext('Filter by catalog')}</label>
-                <div className="search-container">
-                  <Select
-                    className="select-custom"
-                    onChange={updateCatalogFilter}
-                    options={catalogOptions ?? []}
-                    placeholder={gettext('Select catalog')}
-                    value={selectedCatalog}
-                  />
-                </div>
-              </div>
-              {isAdminOrSiteManager && (
-                <div className="col-md-4">
-                  <label className="form-label text-muted">{gettext('Filter by created date')}</label>
-                  <div className="projects-datepicker">
-                    <div className="row">
-                      <div className="col-md-6">
-                        <DatePicker
-                          autoComplete="off"
-                          className="form-control"
-                          dateFormat={getDateFormat()}
-                          id="created-after-date-picker"
-                          isClearable
-                          locale={getLocale()}
-                          onChange={date => handleDateChange('created_after', date)}
-                          onChangeRaw={event => handleDateChangeRaw('created_after', event)}
-                          placeholderText={gettext('Select start date')}
-                          selected={getSelected('created_after')}
-                          openToDate={getSelected('created_after')}
-                        />
-                      </div>
-                      <div className="col-md-6">
-                        <DatePicker
-                          autoComplete="off"
-                          className="form-control"
-                          dateFormat={getDateFormat()}
-                          id="created-before-date-picker"
-                          isClearable
-                          locale={getLocale()}
-                          onChange={date => handleDateChange('created_before', date)}
-                          onChangeRaw={event => handleDateChangeRaw('created_before', event)}
-                          placeholderText={gettext('Select end date')}
-                          selected={getSelected('created_before')}
-                          openToDate={getSelected('created_before')}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
+        <div className="mt-2">
+          <div className="row">
+            <div className={`col-md-${isAdminOrSiteManager ? 4 : 8}`}>
+              <label className="form-label text-secondary">{gettext('Filter by catalog')}</label>
+              <Select
+                onChange={updateCatalogFilter}
+                options={catalogOptions ?? []}
+                placeholder={gettext('Select catalog')}
+                value={selectedCatalog}
+              />
+            </div>
+            {isAdminOrSiteManager && (
               <div className="col-md-4">
-                <label className="form-label text-muted">{gettext('Filter by last changed date')}</label>
+                <label className="form-label text-muted">{gettext('Filter by created date')}</label>
                 <div className="projects-datepicker">
                   <div className="row">
                     <div className="col-md-6">
@@ -146,14 +100,14 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
                         autoComplete="off"
                         className="form-control"
                         dateFormat={getDateFormat()}
-                        id="last-changed-after-date-picker"
+                        id="created-after-date-picker"
                         isClearable
                         locale={getLocale()}
-                        onChange={date => handleDateChange('last_changed_after', date)}
-                        onChangeRaw={event => handleDateChangeRaw('last_changed_after', event)}
+                        onChange={date => handleDateChange('created_after', date)}
+                        onChangeRaw={event => handleDateChangeRaw('created_after', event)}
                         placeholderText={gettext('Select start date')}
-                        selected={getSelected('last_changed_after')}
-                        openToDate={getSelected('last_changed_after')}
+                        selected={getSelected('created_after')}
+                        openToDate={getSelected('created_after')}
                       />
                     </div>
                     <div className="col-md-6">
@@ -161,16 +115,53 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
                         autoComplete="off"
                         className="form-control"
                         dateFormat={getDateFormat()}
-                        id="last-changed-before-date-picker"
+                        id="created-before-date-picker"
                         isClearable
                         locale={getLocale()}
-                        onChange={date => handleDateChange('last_changed_before', date)}
-                        onChangeRaw={event => handleDateChangeRaw('last_changed_before', event)}
+                        onChange={date => handleDateChange('created_before', date)}
+                        onChangeRaw={event => handleDateChangeRaw('created_before', event)}
                         placeholderText={gettext('Select end date')}
-                        selected={getSelected('last_changed_before')}
-                        openToDate={getSelected('last_changed_before')}
+                        selected={getSelected('created_before')}
+                        openToDate={getSelected('created_before')}
                       />
                     </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            <div className="col-md-4">
+              <label className="form-label text-muted">{gettext('Filter by last changed date')}</label>
+              <div className="projects-datepicker">
+                <div className="row">
+                  <div className="col-md-6">
+                    <DatePicker
+                      autoComplete="off"
+                      className="form-control"
+                      dateFormat={getDateFormat()}
+                      id="last-changed-after-date-picker"
+                      isClearable
+                      locale={getLocale()}
+                      onChange={date => handleDateChange('last_changed_after', date)}
+                      onChangeRaw={event => handleDateChangeRaw('last_changed_after', event)}
+                      placeholderText={gettext('Select start date')}
+                      selected={getSelected('last_changed_after')}
+                      openToDate={getSelected('last_changed_after')}
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <DatePicker
+                      autoComplete="off"
+                      className="form-control"
+                      dateFormat={getDateFormat()}
+                      id="last-changed-before-date-picker"
+                      isClearable
+                      locale={getLocale()}
+                      onChange={date => handleDateChange('last_changed_before', date)}
+                      onChangeRaw={event => handleDateChangeRaw('last_changed_before', event)}
+                      placeholderText={gettext('Select end date')}
+                      selected={getSelected('last_changed_before')}
+                      openToDate={getSelected('last_changed_before')}
+                    />
                   </div>
                 </div>
               </div>
@@ -178,15 +169,17 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
           </div>
         </div>
       )}
-      <div className="d-flex justify-content-end gap-2 mt-2">
+      <div className="d-flex justify-content-between mt-2">
+        <button type="button" className="link font-small" onClick={toggleFilters}>
+          <i className="bi bi-filter"></i> {
+            showFilters ? gettext('Hide additional filters') : gettext('Show additional filters')
+          }
+        </button>
         {showFilters && !Object.keys(config.params).every(key => ['ordering', 'page', 'search', 'user'].includes(key)) && (
-          <Link className="element-link" onClick={resetAllFilters}>
-            {gettext('Reset all filters')}
-          </Link>
+          <button type="button" className="link font-small" onClick={resetAllFilters}>
+            <i className="bi bi-x-circle"></i> {gettext('Reset all filters')}
+          </button>
         )}
-        <Link className="element-link" onClick={toggleFilters}>
-          {showFilters ? gettext('Hide filters') : gettext('Show filters')}
-        </Link>
       </div>
     </>
   )
