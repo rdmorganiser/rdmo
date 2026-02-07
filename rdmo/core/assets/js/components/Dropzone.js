@@ -1,5 +1,6 @@
 import React,  { useState } from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import { useDropzone } from 'react-dropzone'
 
 const UploadDropZone = ({ acceptedTypes, onImportFile }) => {
@@ -19,23 +20,21 @@ const UploadDropZone = ({ acceptedTypes, onImportFile }) => {
   })
 
   return (
-    <section className="dropzone-container">
-      <div {...getRootProps({className: 'dropzone'})}>
-        <input {...getInputProps()} />
-        {
-          isDragActive ? (
-            <div>
-              {gettext('Drop the file here ...')}
-            </div>
-          ) : (
-            <div>
-              {gettext('Drag and drop a file here or click to select a file')}
-            </div>
-          )
-        }
-        {errorMessage && <div className="alert alert-danger mt-2">{errorMessage}</div>}
-      </div>
-    </section>
+    <div {...getRootProps({className: classNames('dropzone', {'drag-active': isDragActive})})} >
+      <input {...getInputProps()} />
+      {
+        isDragActive ? (
+          <div>
+            {gettext('Drop the file here ...')}
+          </div>
+        ) : (
+          <div>
+            {gettext('Drag and drop a file here or click to select a file')}
+          </div>
+        )
+      }
+      {errorMessage && <div className="alert alert-danger mt-2">{errorMessage}</div>}
+    </div>
   )
 }
 
