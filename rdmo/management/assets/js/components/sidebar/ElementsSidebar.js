@@ -70,6 +70,20 @@ const ElementsSidebar = () => {
     views: gettext('Views'),
   }
 
+  const icons = {
+    catalogs: 'book',
+    sections: 'files',
+    pages: 'file',
+    questionsets: 'question-square',
+    questions: 'question-circle',
+    attributes: 'code-slash',
+    optionsets: 'card-checklist',
+    options: 'list-check',
+    conditions: 'check-circle',
+    tasks: 'exclamation-circle',
+    views: 'file-earmark-text',
+  }
+
   const exportOptions = [
     { value: 'xml', label: gettext('XML') }
   ]
@@ -111,7 +125,12 @@ const ElementsSidebar = () => {
             <Link key={et}
                   href={buildPath(et)}
                   className={classNames('nav-link text-start', { active: elementType === et })}
-                  onClick={() => dispatch(fetchElements(et))}>{label}</Link>
+                  onClick={() => dispatch(fetchElements(et))}>
+              <div className="d-flex align-items-center gap-2">
+                <i className={`bi bi-${icons[et]}`} />
+                {label}
+              </div>
+            </Link>
           ))
         }
       </nav>
