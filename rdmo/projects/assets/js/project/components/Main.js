@@ -37,10 +37,8 @@ const Main = () => {
   }
 
   return area && project && (
-    <div className="py-4 ps-4 pe-5">
-      <div className="container gx-0">
-        {renderArea()}
-      </div>
+    <div className="container-lg gx-0">
+      {renderArea()}
     </div>
   )
 }
