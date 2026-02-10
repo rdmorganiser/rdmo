@@ -96,14 +96,10 @@ const ElementsSidebar = () => {
   }
 
   return (
-    <div className="d-flex flex-column h-100 p-4">
+    <div className="d-flex flex-column">
       <h2 className="px-3 mb-4">
         {gettext('Management')}
       </h2>
-
-      <h3 className="px-3 mb-2">
-        {gettext('Navigation')}
-      </h3>
 
       <nav className="nav nav-pills nav-fill flex-column mb-4">
         {
@@ -136,7 +132,7 @@ const ElementsSidebar = () => {
         {gettext('Import an RDMO XML file.')}
       </p>
 
-      <div className="text-muted px-3 mb-4">
+      <div className="text-muted px-3">
         <input className="form-control" type="file" id="fileUpload" name="uploaded_file"
                onChange={handleFileUpload} />
       </div>
