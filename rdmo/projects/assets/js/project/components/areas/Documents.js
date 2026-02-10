@@ -24,8 +24,8 @@ const Documents = () => {
 
   return (
     <div className="project-documents">
-      <div className="d-flex justify-content-between align-items-center mb-5">
-        <h1 className="mb-0">{gettext('Documents')}</h1>
+      <div className="d-lg-flex justify-content-between align-items-center mb-5">
+        <h1 className="mb-lg-0">{gettext('Documents')}</h1>
         <SnapshotsDropdown onChange={handleSnapshotChange}/>
       </div>
 
