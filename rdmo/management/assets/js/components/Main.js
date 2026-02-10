@@ -16,7 +16,7 @@ const Main = () => {
 
   const { element, elementType, elementId, elementAction } = elements
 
-  const renderContainer = () => {
+  const render = () => {
     // check if anything was loaded yet
     if (isNil(config.settings) || isNil(elementType)) {
       return null
@@ -55,10 +55,8 @@ const Main = () => {
   }
 
   return (
-    <div className="py-4 ps-4 pe-5">
-      <div className="container gx-0">
-        {renderContainer()}
-      </div>
+    <div className="container-lg gx-0">
+      {render()}
     </div>
   )
 }
