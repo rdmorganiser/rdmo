@@ -43,21 +43,21 @@ const Sidebar = () => {
   ]
 
   return project && (
-    <div className="d-flex flex-column h-100 p-4">
+    <div className="d-flex flex-column h-100">
 
-      <div className="card w-100 mb-3">
+      <div className="d-none d-lg-block card w-100 mb-3">
         <div className="card-body py-2">
           <h2 className="font-large mb-2">{project.project.title}</h2>
           <p className="font-normal text-muted m-0">{catalog.title}</p>
         </div>
       </div>
 
-      <div className="flex-grow-1">
+      <div className="flex-lg-grow-1">
       {
         menuItems.map((group, groupIndex) => (
           <div key={groupIndex}>
             {
-              group.title && <h3 className="font-normal px-3 my-3">{group.title}</h3>
+              group.title && <h3 className="d-none d-lg-block font-normal px-3 my-3">{group.title}</h3>
             }
 
             <nav className="nav nav-pills nav-fill flex-column">
@@ -66,12 +66,13 @@ const Sidebar = () => {
                 <Link
                   key={itemIndex}
                   href={buildPath({ area: item.area })}
+                  title={item.name}
                   className={classNames('nav-link', { active: area === item.area })}
                   onClick={() => dispatch(navigateDashboard({ area: item.area }))}
                 >
                   <div className="d-flex align-items-center gap-2">
                     <i className={`bi ${item.icon}`}></i>
-                    {item.name}
+                    <span className="d-none d-lg-inline">{item.name}</span>
                   </div>
                 </Link>
               ))
@@ -84,9 +85,12 @@ const Sidebar = () => {
 
       <hr />
 
-      <div>
+      <div className="text-center text-lg-start ms-lg-2">
         <a href={`${baseUrl}/projects/`}>
-          <i className="bi bi-arrow-left"></i> {gettext('Back to projects overview')}
+          <i className="bi bi-arrow-left"></i>
+          <span className="d-none d-lg-inline ms-2">
+            {gettext('Back to projects overview')}
+          </span>
         </a>
       </div>
     </div>
