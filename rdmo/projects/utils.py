@@ -11,6 +11,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.timezone import now
 
+from rdmo.core.constants import PERMISSIONS
 from rdmo.core.mail import send_mail
 from rdmo.core.plugins import get_plugins
 from rdmo.core.utils import remove_double_newlines
@@ -374,12 +375,20 @@ def send_contact_message(request, subject, message):
 
 
 def filter_tasks_or_views_for_project(task_or_view, project) -> TaskQuerySet | ViewQuerySet:
-    queryset = ( task_or_view.objects
-        .filter(Q(catalogs=None) | Q(catalogs=project.catalog))
-        .filter(Q(groups=None) | Q(groups__in=project.groups))
+    queryset = (
+        task_or_view.objects.filter(Q(catalogs=None) | Q(catalogs=project.catalog))
+                            .filter(Q(groups=None) | Q(groups__in=project.groups))
     )
 
-    if settings.MULTISITE:
-        return  queryset.filter(sites=project.site)
+    if project.owners and all(
+        user.has_perms(PERMISSIONS[task_or_view._meta.label_lower]) for user in project.owners
+    ):
+        # if all owners have model permissions, tasks/views do not need to be checked for availability
+        pass
     else:
-        return  queryset.filter(Q(sites=None) | Q(sites=project.site))
+        queryset = queryset.filter(available=True)
+
+    if settings.MULTISITE:
+        return queryset.filter(sites=project.site)
+    else:
+        return queryset.filter(Q(sites=None) | Q(sites=project.site))
