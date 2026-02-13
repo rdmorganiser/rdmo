@@ -56,6 +56,12 @@ class Snapshot(Model):
                 if value.file:
                     value.copy_file(value.file_name, value.file)
 
+    def delete(self):
+        # remove the files for this snapshot individually, to ensure cleanup
+        for value in self.values.filter(value_type=VALUE_TYPE_FILE):
+            value.file.delete(save=False)
+        super().delete()
+
     def rollback(self):
         # remove all current values for this project
         self.project.values.filter(snapshot=None).delete()
@@ -72,8 +78,4 @@ class Snapshot(Model):
         # remove all snapshot created later and the current_snapshot
         # this also removes the values of these snapshots
         for snapshot in self.project.snapshots.filter(created__gte=self.created):
-            # remove the files for this snapshot
-            for value in snapshot.values.filter(value_type=VALUE_TYPE_FILE):
-                value.file.delete(save=False)
-
             snapshot.delete()
