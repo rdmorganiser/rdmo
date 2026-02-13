@@ -168,20 +168,24 @@ def test_rollback(db, client, files, username, password, snapshot_id):
     snapshot_count = snapshot.project.snapshots.count()
     values_count = snapshot.project.values.count()
 
+    # we want to keep all the snapshots before the rolled back snapshot
     snapshots_kept = sorted(
         snapshot.project.snapshots.filter(created__lt=snapshot.created).values_list('id', flat=True)
     )
+    # we want to keep all the values of snapshots before the rolled back snapshot
     values_kept = sorted(
         snapshot.project.values.filter(
             snapshot__in=snapshot.project.snapshots.filter(created__lte=snapshot.created)
         ).values_list('id', flat=True)
     )
+    # we want to keep all the files for values of snapshots before the rolled back snapshot
     files_kept = sorted(
         snapshot.project.values.filter(
-            snapshot__in=snapshot.project.snapshots.filter(created__lt=snapshot.created),
+            snapshot__in=snapshot.project.snapshots.filter(created__lte=snapshot.created),
             value_type=VALUE_TYPE_FILE
         ).values_list('file', flat=True)
     )
+    # we want to remove all the files for values of snapshots after the rolled back snapshot
     files_removed = sorted(
         snapshot.project.values.filter(
             snapshot__in=snapshot.project.snapshots.filter(created__gt=snapshot.created),
@@ -192,28 +196,34 @@ def test_rollback(db, client, files, username, password, snapshot_id):
     url = reverse(urlnames['rollback'], args=[snapshot.project_id, snapshot_id])
     response = client.post(url)
 
-    if snapshot.project_id in rollback_snapshot_permission_map.get(username, []):
+    # chatgpt told me to refetch the project
+    project = Project.objects.get(id=snapshot.project_id)
+
+    if project.id in rollback_snapshot_permission_map.get(username, []):
         assert response.status_code == 204
 
-        # check that we still have all the snapshots before the rolled back snapshot
-        assert sorted(snapshot.project.snapshots.values_list('id', flat=True)) == snapshots_kept
+        # check that we still have all the snapshots we want to keep
+        assert sorted(project.snapshots.values_list('id', flat=True)) == snapshots_kept
 
-        # check that we still have all the values
-        assert sorted(snapshot.project.values.values_list('id', flat=True)) == values_kept
+        # check that we still have all the values we want to keep
+        assert sorted(project.values.values_list('id', flat=True)) == values_kept
 
+        # check that we still have all the files we want to keep
         for file_path in files_kept:
             assert Path(settings.MEDIA_ROOT).joinpath(file_path).exists()
 
+        # check that we deleted the files we want to remove
         for file_path in files_removed:
             assert not Path(settings.MEDIA_ROOT).joinpath(file_path).exists()
 
-    elif snapshot.project_id in view_snapshot_permission_map.get(username, []):
-        assert response.status_code == 403
     else:
-        assert response.status_code == 404
+        if project.id in view_snapshot_permission_map.get(username, []):
+            assert response.status_code == 403
+        else:
+            assert response.status_code == 404
 
-        assert snapshot.project.snapshots.count() == snapshot_count
-        assert snapshot.project.values.count() == values_count
+        assert project.snapshots.count() == snapshot_count
+        assert project.values.count() == values_count
 
         for file_path in files_kept + files_removed:
             assert Path(settings.MEDIA_ROOT).joinpath(file_path).exists()
@@ -227,17 +237,59 @@ def test_delete(db, client, files, username, password, snapshot_id):
 
     snapshot_count = snapshot.project.snapshots.count()
     values_count = snapshot.project.values.count()
-    values_files = [value.file.name for value in snapshot.project.values.filter(value_type=VALUE_TYPE_FILE)]
+
+    # we want to keep all the snapshots but the one to delete
+    snapshots_kept = sorted(
+        snapshot.project.snapshots.exclude(id=snapshot_id).values_list('id', flat=True)
+    )
+    # we want to keep all the values of snapshots but the values for the snapshot to delete
+    values_kept = sorted(
+        snapshot.project.values.exclude(snapshot_id=snapshot_id).values_list('id', flat=True)
+    )
+    # we want to keep all the files of values of snapshots but the ones for the snapshot to delete
+    files_kept = sorted(
+        snapshot.project.values.exclude(snapshot_id=snapshot_id)
+                               .filter(value_type=VALUE_TYPE_FILE)
+                               .values_list('file', flat=True)
+    )
+    # we want to remove all the files of values of the snapshot to delete
+    files_removed = sorted(
+        snapshot.project.values.filter(snapshot_id=snapshot_id)
+                               .filter(value_type=VALUE_TYPE_FILE)
+                               .values_list('file', flat=True)
+    )
 
     url = reverse(urlnames['detail'], args=[snapshot.project_id, snapshot_id])
     response = client.delete(url)
 
-    if snapshot.project_id in view_snapshot_permission_map.get(username, []):
-        assert response.status_code == 405
-    else:
-        assert response.status_code == 404
+    # chatgpt told me to refetch the project
+    project = Project.objects.get(id=snapshot.project_id)
 
-    assert snapshot.project.snapshots.count() == snapshot_count
-    assert snapshot.project.values.count() == values_count
-    for file_value in values_files:
-        assert Path(settings.MEDIA_ROOT).joinpath(file_value).exists()
+    if project.id in delete_snapshot_permission_map.get(username, []):
+        assert response.status_code == 204
+
+        # check that we still have all the other snapshots
+        assert sorted(project.snapshots.values_list('id', flat=True)) == snapshots_kept
+
+        # check that we still have all the values we want to keep
+        assert sorted(project.values.values_list('id', flat=True)) == values_kept
+
+        # check that we still have all the files we want to keep
+        for file_path in files_kept:
+            assert Path(settings.MEDIA_ROOT).joinpath(file_path).exists()
+
+        # check that we deleted the files we want to remove
+        for file_path in files_removed:
+            assert not Path(settings.MEDIA_ROOT).joinpath(file_path).exists()
+
+    else:
+        if project.id in view_snapshot_permission_map.get(username, []):
+            assert response.status_code == 403
+        else:
+            assert response.status_code == 404
+
+        assert project.snapshots.count() == snapshot_count
+        assert project.values.count() == values_count
+
+        for file_path in files_kept + files_removed:
+            assert Path(settings.MEDIA_ROOT).joinpath(file_path).exists()

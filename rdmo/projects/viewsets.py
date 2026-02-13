@@ -11,7 +11,7 @@ from rest_framework import serializers, status
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.filters import SearchFilter
-from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin
+from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, UpdateModelMixin
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -776,8 +776,7 @@ class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveMod
         return Issue.objects.filter(project=self.project).prefetch_related('resources')
 
 
-class ProjectSnapshotViewSet(ProjectNestedViewSetMixin, CreateModelMixin, RetrieveModelMixin,
-                             UpdateModelMixin, ListModelMixin, GenericViewSet):
+class ProjectSnapshotViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     permission_classes = (HasModelPermission | HasProjectPermission, )
     serializer_class = ProjectSnapshotSerializer
 
