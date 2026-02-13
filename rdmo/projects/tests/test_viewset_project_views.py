@@ -108,6 +108,32 @@ def test_view_snapshot(db, client, username, password, snapshot_id, view_id):
 
 
 @pytest.mark.parametrize('username,password', users)
+def test_view_snapshot_snapshot_not_found(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['view-snapshot'], args=[1, 100, 1])
+    response = client.get(url)
+
+    if password:
+        assert response.status_code == 404
+    else:
+        assert response.status_code == 401
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_view_snapshot_view_not_found(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['view-snapshot'], args=[1, 1, 100])
+    response = client.get(url)
+
+    if password:
+        assert response.status_code == 404
+    else:
+        assert response.status_code == 401
+
+
+@pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('view_id', views)
 @pytest.mark.parametrize('export_format', export_formats)
@@ -147,3 +173,29 @@ def test_view_snapshot_export(db, client, username, password, snapshot_id, view_
             assert response.status_code == 404
         else:
             assert response.status_code == 401
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_view_snapshot_export_snapshot_not_found(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['view-export-snapshot'], args=[1, 100, 1, 'html'])
+    response = client.get(url)
+
+    if password:
+        assert response.status_code == 404
+    else:
+        assert response.status_code == 401
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_view_snapshot_export_view_not_found(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['view-export-snapshot'], args=[1, 1, 100, 'html'])
+    response = client.get(url)
+
+    if password:
+        assert response.status_code == 404
+    else:
+        assert response.status_code == 401

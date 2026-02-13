@@ -78,6 +78,19 @@ def test_view_snapshot(db, client, username, password, snapshot_id):
 
 
 @pytest.mark.parametrize('username,password', users)
+def test_view_snapshot_not_found(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['answers-snapshot'], args=[1, 100])
+    response = client.get(url)
+
+    if password:
+        assert response.status_code == 404
+    else:
+        assert response.status_code == 401
+
+
+@pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('export_format', export_formats)
 def test_view_export(db, client, username, password, project_id, export_format):
@@ -112,3 +125,16 @@ def test_view_snapshot_export(db, client, username, password, snapshot_id, expor
             assert response.status_code == 404
         else:
             assert response.status_code == 401
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_view_snapshot_export_not_found(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['answers-export-snapshot'], args=[1, 100, 'html'])
+    response = client.get(url)
+
+    if password:
+        assert response.status_code == 404
+    else:
+        assert response.status_code == 401
