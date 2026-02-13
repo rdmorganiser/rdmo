@@ -15,6 +15,7 @@ from rdmo.questions.models import Catalog
 from rdmo.services.validators import ProviderValidator
 from rdmo.views.models import View
 
+from ...constants import ROLE_CHOICES
 from ...models import (
     Integration,
     IntegrationOption,
@@ -136,7 +137,8 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     permissions = serializers.SerializerMethodField()
 
-    current_role = serializers.CharField(read_only=True)
+    current_role = serializers.SerializerMethodField()
+    highest_role = serializers.SerializerMethodField()
     last_changed = serializers.DateTimeField(read_only=True)
 
     visibility = serializers.CharField(source='visibility.get_help_display', read_only=True)
@@ -159,6 +161,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             'created',
             'updated',
             'current_role',
+            'highest_role',
             'last_changed',
             'site',
             'views',
@@ -220,6 +223,22 @@ class ProjectSerializer(serializers.ModelSerializer):
             'can_change_value': request.user.has_perm('projects.change_value_object', obj),
             'can_delete_value': request.user.has_perm('projects.delete_value_object', obj)
         }
+
+    def get_current_role(self, obj):
+        if hasattr(obj, 'current_role') and obj.current_role is not None:
+            return {
+                'role': obj.current_role,
+                'role_display': dict(ROLE_CHOICES)[obj.current_role]
+            }
+
+    def get_highest_role(self, obj):
+        if hasattr(obj, 'highest_role') and obj.highest_role is not None:
+            return {
+                'role': obj.highest_role,
+                'role_display': dict(ROLE_CHOICES)[obj.highest_role],
+                'project_id': obj.highest_role_project_id,
+                'project_title':  obj.highest_role_project_title
+            }
 
 
 class ProjectListSerializer(ProjectSerializer):
