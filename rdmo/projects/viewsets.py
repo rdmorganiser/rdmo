@@ -321,12 +321,6 @@ class ProjectViewSet(ModelViewSet):
         # if it didn't work return 404
         raise NotFound()
 
-    @action(detail=True, permission_classes=(HasModelPermission | HasProjectPermission, ))
-    def answers(self, request, pk=None):
-        project = self.get_object()
-        project.catalog.prefetch_elements()
-        return Response(project.get_answer_tree(verbose=request.GET.getlist('verbose')))
-
     @action(detail=True, methods=['get', 'post'],
             permission_classes=(HasProjectProgressModelPermission | HasProjectProgressObjectPermission, ))
     def progress(self, request, pk=None):
@@ -433,6 +427,31 @@ class ProjectViewSet(ModelViewSet):
 
     @action(
         detail=True,
+        url_path=r'answers-tree',
+        permission_classes=(HasModelPermission | HasProjectPermission, )
+    )
+    def answers_tree(self, request, pk, snapshot_id=None):
+        project = self.get_object()
+        project.catalog.prefetch_elements()
+
+        try:
+            snapshot = project.snapshots.get(pk=snapshot_id) if snapshot_id else None
+        except Snapshot.DoesNotExist as e:
+            raise Http404 from e
+
+        return Response(project.get_answer_tree(snapshot=snapshot, verbose=request.GET.getlist('verbose')))
+
+    @action(
+        detail=True,
+        url_path=r'snapshots/(?P<snapshot_id>\d+)/answers-tree',
+        permission_classes=(HasModelPermission | HasProjectPermission, )
+    )
+    def answers_tree_snapshot(self, request, pk, snapshot_id):
+        # extra method since DRF does not officially support optional named parameters inside url_path
+        return self.answers_tree(request, pk, snapshot_id)
+
+    @action(
+        detail=True,
         methods=['get'],
         url_path=r'answers',
         permission_classes=(HasModelPermission | HasProjectPermission, )
@@ -443,8 +462,8 @@ class ProjectViewSet(ModelViewSet):
 
         try:
             snapshot = project.snapshots.get(pk=snapshot_id) if snapshot_id else None
-        except Snapshot.DoesNotExist:
-            snapshot = None
+        except Snapshot.DoesNotExist as e:
+            raise Http404 from e
 
         serializer = ProjectAnswersSerializer({
             'html': render_to_string('projects/project_answers.html', {
@@ -479,8 +498,8 @@ class ProjectViewSet(ModelViewSet):
 
         try:
             snapshot = project.snapshots.get(pk=snapshot_id) if snapshot_id else None
-        except Snapshot.DoesNotExist:
-            snapshot = None
+        except Snapshot.DoesNotExist as e:
+            raise Http404 from e
 
         return render_to_format(self.request, export_format, project.title, 'projects/project_answers_export.html', {
             'project': project,
@@ -518,8 +537,8 @@ class ProjectViewSet(ModelViewSet):
 
         try:
             snapshot = project.snapshots.get(pk=snapshot_id) if snapshot_id else None
-        except Snapshot.DoesNotExist:
-            snapshot = None
+        except Snapshot.DoesNotExist as e:
+            raise Http404 from e
 
         serializer = ProjectViewSerializer(view, context={
             'html': view.render(project, snapshot),
@@ -546,8 +565,8 @@ class ProjectViewSet(ModelViewSet):
 
         try:
             snapshot = project.snapshots.get(pk=snapshot_id) if snapshot_id else None
-        except Snapshot.DoesNotExist:
-            snapshot = None
+        except Snapshot.DoesNotExist as e:
+            raise Http404 from e
 
         return render_to_format(self.request, export_format, project.title, 'projects/project_view_export.html', {
             'project': project,
