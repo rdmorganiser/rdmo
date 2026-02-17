@@ -1,4 +1,4 @@
-import { isNil, toNumber } from 'lodash'
+import { isNil, toNumber, uniqueId } from 'lodash'
 
 import { projectId } from '../utils/meta'
 
@@ -7,6 +7,7 @@ class ValueFactory {
   static create({ attribute, set_prefix, set_index, collection_index, set_collection,
                   text, option, file, external_id, unit, value_type }) {
     const value = {
+      tmp_id: uniqueId('tmp_'),
       project: projectId,
       attribute: attribute,
       set_prefix: isNil(set_prefix) ? '' : set_prefix,

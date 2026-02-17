@@ -67,15 +67,23 @@ export default function interviewReducer(state = initialState, action) {
         (value) => value.id == action.value.id ? {...value, ...action.attrs} : value
       )}
     case STORE_VALUE_SUCCESS:
-      if (action.valueIndex > -1) {
-        return { ...state, values: state.values.map(
-          (value, valueIndex) => valueIndex == action.valueIndex ? action.value : value
-        )}
+      if (state.values.map((value) => (value.id || value.tmp_id)).includes(action.valueId)) {
+        return {
+          ...state,
+          values: state.values.map((value) => (
+            (value.id || value.tmp_id) == action.valueId ? action.value : value
+          ))
+        }
       } else {
         return { ...state, values: [...state.values, action.value] }
       }
     case DELETE_VALUE_SUCCESS:
-      return {...state, values: state.values.filter((value) => value.id !== action.value.id)}
+      return {
+        ...state,
+        values: state.values.filter((value) => (
+          (value.id || value.tmp_id) != action.valueId
+        ))
+      }
     case CREATE_SET:
       return { ...state, values: action.values, sets: action.sets }
     case DELETE_SET_SUCCESS:
@@ -95,15 +103,15 @@ export default function interviewReducer(state = initialState, action) {
     case STORE_VALUE_INIT:
        return {
         ...state,
-        values: state.values.map((value, valueIndex) => (
-          valueIndex == action.valueIndex ? {...value, error: null, pending: true} : value
+        values: state.values.map((value) => (
+          (value.id || value.tmp_id) == action.valueId ? {...value, error: null, pending: true} : value
         ))
       }
     case DELETE_VALUE_INIT:
        return {
         ...state,
         values: state.values.map((value) => (
-          value.id == action.value.id ? {...value, pending: true} : value
+          (value.id || value.tmp_id) == action.valueId ? {...value, pending: true} : value
         ))
       }
     case DELETE_SET_INIT:
