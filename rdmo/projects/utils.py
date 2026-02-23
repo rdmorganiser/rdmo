@@ -375,15 +375,18 @@ def send_contact_message(request, subject, message):
 
 
 def filter_tasks_or_views_for_project(task_or_view, project) -> TaskQuerySet | ViewQuerySet:
+    permission = f'{task_or_view._meta.app_label}.view_{task_or_view._meta.model_name}'
+
     queryset = (
         task_or_view.objects.filter(Q(catalogs=None) | Q(catalogs=project.catalog))
                             .filter(Q(groups=None) | Q(groups__in=project.groups))
     )
 
-    if project.owners and all(
-        user.has_perms(PERMISSIONS[task_or_view._meta.label_lower]) for user in project.owners
+    memberships = project.memberships.all()
+    if memberships and all(
+        membership.user.has_perm(permission) for membership in memberships
     ):
-        # if all owners have model permissions, tasks/views do not need to be checked for availability
+        # if all users have model permissions, tasks/views do not need to be checked for availability
         pass
     else:
         queryset = queryset.filter(available=True)
