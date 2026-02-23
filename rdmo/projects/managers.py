@@ -2,7 +2,7 @@ from collections import defaultdict
 
 from django.conf import settings
 from django.db import models
-from django.db.models import Q
+from django.db.models import Exists, OuterRef, Q
 
 from mptt.models import TreeManager
 from mptt.querysets import TreeQuerySet
@@ -62,29 +62,45 @@ class ProjectQuerySet(TreeQuerySet):
         return self.filter(memberships__in=memberships).distinct()
 
     def filter_projects_for_task_or_view(self, instance):
-        # projects that have an unavailable catalog should be disregarded
-        qs = self.filter(catalog__available=True)
+        from .models import Membership
 
-        # when View/Task is not available it should not show for any project
-        if not instance.available:
-            return self.none()
+        if instance.available:
+            queryset = self
+        else:
+            # perform a subquery to check if the project has any users which do not have
+            # the view permission for the instance
+            users_without_permissions_subquery = (
+                Membership.objects.filter(project_id=OuterRef('pk')).exclude(
+                    Q(user__is_superuser=True) |
+                    Q(user__groups__permissions__content_type__app_label=instance._meta.app_label,
+                      user__groups__permissions__codename=f'view_{instance._meta.model_name}') |
+                    Q(user__role__editor=OuterRef('site_id')) |
+                    Q(user__role__reviewer=OuterRef('site_id'))
+                )
+            )
+
+            queryset = (
+                self.exclude(memberships=None)
+                    .annotate(has_users_without_permissions=Exists(users_without_permissions_subquery))
+                    .exclude(has_users_without_permissions=True)
+            )
 
         # when View/Task has any catalogs it can be filtered for those
         if instance.catalogs.exists():
-            qs = qs.filter(catalog__in=instance.catalogs.all())
+            queryset = queryset.filter(catalog__in=instance.catalogs.all())
 
         # when View/Task has any sites it can be filtered for those
         if instance.sites.exists():
-            qs = qs.filter(site__in=instance.sites.all())
+            queryset = queryset.filter(site__in=instance.sites.all())
         elif settings.MULTISITE:
             # when View/Task has no sites in a multi-site, it should not appear at all
             return self.none()
 
         # when  has any groups it can be filtered for those
         if instance.groups.exists():
-            qs = qs.filter_groups(instance.groups.all())
+            queryset = queryset.filter_groups(instance.groups.all())
 
-        return qs
+        return queryset
 
 
 class MembershipQuerySet(models.QuerySet):
