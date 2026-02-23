@@ -270,6 +270,10 @@ export function resolveConditionError(error) {
 
 export function storeValue(value) {
   const valueId = value.id || value.tmp_id
+  if (isNil(valueId)) {
+    throw new Error('Could not determine valueId in storeValue')
+  }
+
   const pendingId = `storeValue/${valueId}`
 
   if (value.pending) {
@@ -460,6 +464,10 @@ export function copyValue(question, ...originalValues) {
 
 export function deleteValue(value) {
   const valueId = value.id || value.tmp_id
+  if (isNil(valueId)) {
+    throw new Error('Could not determine valueId in deleteValue')
+  }
+
   const pendingId = `deleteValue/${valueId}`
 
   if (value.pending) {
