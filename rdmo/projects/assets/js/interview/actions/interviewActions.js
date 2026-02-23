@@ -269,7 +269,12 @@ export function resolveConditionError(error) {
 }
 
 export function storeValue(value) {
-  const pendingId = `storeValue/${value.attribute}/${value.set_prefix}/${value.set_index}/${value.collection_index}`
+  const valueId = value.id || value.tmp_id
+  if (isNil(valueId)) {
+    throw new Error('Could not determine valueId in storeValue')
+  }
+
+  const pendingId = `storeValue/${valueId}`
 
   if (value.pending) {
     return {type: NOOP}
@@ -281,13 +286,12 @@ export function storeValue(value) {
       const refresh = question && question.optionsets.some((optionset) => optionset.has_refresh)
       const widget_type = question && question.widget_type
 
-      const valueIndex = getState().interview.values.findIndex((v) => compareValues(v, value, widget_type))
       const valueText = value.text
       const valueFile = value.file
       const valueSuccess = value.success
 
       dispatch(addToPending(pendingId))
-      dispatch(storeValueInit(valueIndex))
+      dispatch(storeValueInit(valueId))
 
       return ValueApi.storeValue(projectId, { ...value, widget_type })
         .then((value) => {
@@ -320,38 +324,38 @@ export function storeValue(value) {
           // check if there is a file or if a filename is set (when the file was just erased)
           if (isNil(valueFile) && isNil(value.file_name)) {
             dispatch(removeFromPending(pendingId))
-            dispatch(storeValueSuccess(value, valueIndex))
+            dispatch(storeValueSuccess(value, valueId))
           } else {
             // upload file after the value is created
             return ValueApi.storeFile(projectId, value, valueFile)
               .then((value) => {
                 dispatch(removeFromPending(pendingId))
-                dispatch(storeValueSuccess(value, valueIndex))
+                dispatch(storeValueSuccess(value, valueId))
               })
               .catch((error) => {
                 dispatch(removeFromPending(pendingId))
-                dispatch(storeValueError(error, valueIndex))
+                dispatch(storeValueError(error, valueId))
               })
           }
         })
         .catch((error) => {
           dispatch(removeFromPending(pendingId))
-          dispatch(storeValueError(error, valueIndex))
+          dispatch(storeValueError(error, valueId))
         })
     }
   }
 }
 
-export function storeValueInit(valueIndex) {
-  return {type: STORE_VALUE_INIT, valueIndex}
+export function storeValueInit(valueId) {
+  return {type: STORE_VALUE_INIT, valueId}
 }
 
-export function storeValueSuccess(value, valueIndex) {
-  return {type: STORE_VALUE_SUCCESS, value, valueIndex}
+export function storeValueSuccess(value, valueId) {
+  return {type: STORE_VALUE_SUCCESS, value, valueId}
 }
 
-export function storeValueError(error, valueIndex) {
-  return {type: STORE_VALUE_ERROR, error, valueIndex}
+export function storeValueError(error, valueId) {
+  return {type: STORE_VALUE_ERROR, error, valueId}
 }
 
 export function createValue(attrs, store) {
@@ -459,17 +463,22 @@ export function copyValue(question, ...originalValues) {
 }
 
 export function deleteValue(value) {
-  const pendingId = `deleteValue/${value.id}`
+  const valueId = value.id || value.tmp_id
+  if (isNil(valueId)) {
+    throw new Error('Could not determine valueId in deleteValue')
+  }
+
+  const pendingId = `deleteValue/${valueId}`
 
   if (value.pending) {
     return {type: NOOP}
   } else {
     return (dispatch, getState) => {
       dispatch(addToPending(pendingId))
-      dispatch(deleteValueInit(value))
+      dispatch(deleteValueInit(valueId))
 
       if (isNil(value.id)) {
-        return dispatch(deleteValueSuccess(value))
+        return dispatch(deleteValueSuccess(valueId))
       } else {
         return ValueApi.deleteValue(projectId, value)
           .then(() => {
@@ -490,7 +499,7 @@ export function deleteValue(value) {
             }
 
             dispatch(removeFromPending(pendingId))
-            dispatch(deleteValueSuccess(value))
+            dispatch(deleteValueSuccess(valueId))
           })
           .catch((errors) => {
             dispatch(removeFromPending(pendingId))
@@ -501,12 +510,12 @@ export function deleteValue(value) {
   }
 }
 
-export function deleteValueInit(value) {
-  return {type: DELETE_VALUE_INIT, value}
+export function deleteValueInit(valueId) {
+  return {type: DELETE_VALUE_INIT, valueId}
 }
 
-export function deleteValueSuccess(value) {
-  return {type: DELETE_VALUE_SUCCESS, value}
+export function deleteValueSuccess(valueId) {
+  return {type: DELETE_VALUE_SUCCESS, valueId}
 }
 
 export function deleteValueError(errors) {
@@ -655,7 +664,8 @@ export function copySet(currentSet, copySetValue, attrs) {
 
       const page = state.page
       const values = [
-        ...state.values.filter(v => !setValues.some(sv => compareValues(v, sv))),  // remove updated values
+        // remove updated values, when importing into an existing set
+        ...state.values.filter(v => !setValues.some(sv => compareValues(v, sv))),
         ...setValues
       ]
       const sets = gatherSets(values, page)

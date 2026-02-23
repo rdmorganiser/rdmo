@@ -85,20 +85,24 @@ const initRange = (question, value) => {
 }
 
 const compareValues = (a, b, widget_type = null) => {
-  if (isNil(a.id) || isNil(b.id)) {
-    if (widget_type === 'checkbox') {
-      return (a.attribute == b.attribute) &&
-             (a.set_prefix == b.set_prefix) &&
-             (a.set_index == b.set_index) &&
-             (a.option == b.option)
-    } else {
-      return (a.attribute == b.attribute) &&
-             (a.set_prefix == b.set_prefix) &&
-             (a.set_index == b.set_index) &&
-             (a.collection_index == b.collection_index)
-    }
-  } else {
+  if (!isNil(a.id) && !isNil(b.id)) {
     return a.id == b.id
+  }
+
+  if (!isNil(a.tmp_id) && !isNil(b.tmp_id)) {
+    return a.tmp_id == b.tmp_id
+  }
+
+  if (widget_type === 'checkbox') {
+    return (a.attribute == b.attribute) &&
+           (a.set_prefix == b.set_prefix) &&
+           (a.set_index == b.set_index) &&
+           (a.option == b.option)
+  } else {
+    return (a.attribute == b.attribute) &&
+           (a.set_prefix == b.set_prefix) &&
+           (a.set_index == b.set_index) &&
+           (a.collection_index == b.collection_index)
   }
 }
 
