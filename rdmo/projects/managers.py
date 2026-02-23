@@ -44,16 +44,6 @@ class ProjectQuerySet(TreeQuerySet):
         else:
             return self.none()
 
-    def filter_catalogs(self, catalogs=None, exclude_catalogs=None, exclude_null=True):
-        catalogs_filter = Q()
-        if exclude_null:
-          catalogs_filter &= Q(catalog__isnull=False)
-        if catalogs:
-            catalogs_filter &= Q(catalog__in=catalogs)
-        if exclude_catalogs:
-            catalogs_filter &= ~Q(catalog__in=exclude_catalogs)
-        return self.filter(catalogs_filter)
-
     def filter_groups(self, groups):
         if not groups:
             return self
@@ -260,9 +250,6 @@ class ProjectManager(CurrentSiteManagerMixin, TreeManager):
     def filter_user(self, user, filter_for_user=False):
         return self.get_queryset().filter_user(user, filter_for_user)
 
-    def filter_catalogs(self, catalogs=None, exclude_catalogs=None, exclude_null=True):
-        return self.get_queryset().filter_catalogs(catalogs=catalogs, exclude_catalogs=exclude_catalogs,
-                                                   exclude_null=exclude_null)
     def filter_groups(self, groups):
         return self.get_queryset().filter_groups(groups)
 
