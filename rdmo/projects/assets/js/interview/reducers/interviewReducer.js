@@ -67,7 +67,7 @@ export default function interviewReducer(state = initialState, action) {
         (value) => value.id == action.value.id ? {...value, ...action.attrs} : value
       )}
     case STORE_VALUE_SUCCESS:
-      if (state.values.map((value) => (value.id || value.tmp_id)).includes(action.valueId)) {
+      if (state.values.some((value) => (value.id || value.tmp_id) == action.valueId)) {
         return {
           ...state,
           values: state.values.map((value) => (
