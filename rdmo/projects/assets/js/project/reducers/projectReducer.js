@@ -33,6 +33,7 @@ export default function projectReducer(state = initialState, action) {
     case actionTypes.LEAVE_PROJECT_INIT:
     case actionTypes.CREATE_SNAPSHOT_INIT:
     case actionTypes.UPDATE_SNAPSHOT_INIT:
+    case actionTypes.DELETE_SNAPSHOT_INIT:
     case actionTypes.FETCH_ANSWERS_INIT:
     case actionTypes.FETCH_VIEW_INIT:
     case actionTypes.CLEAR_PROJECT_ERRORS:
@@ -51,6 +52,7 @@ export default function projectReducer(state = initialState, action) {
     case actionTypes.LEAVE_PROJECT_ERROR:
     case actionTypes.CREATE_SNAPSHOT_ERROR:
     case actionTypes.UPDATE_SNAPSHOT_ERROR:
+    case actionTypes.DELETE_SNAPSHOT_ERROR:
     case actionTypes.FETCH_ANSWERS_ERROR:
     case actionTypes.FETCH_VIEW_ERROR:
       return appendError(state, action)
@@ -108,6 +110,16 @@ export default function projectReducer(state = initialState, action) {
           snapshots: [...(state.project?.snapshots || []), action.snapshot]
         }
       }
+    case actionTypes.DELETE_SNAPSHOT_SUCCESS: {
+      return {
+        ...state,
+        project: {
+          ...state.project,
+          snapshots: state.project?.snapshots.filter(s => s.id !== action.snapshotId)
+        }
+      }
+    }
+
     case actionTypes.UPDATE_SNAPSHOT_SUCCESS: {
       return {
         ...state,
