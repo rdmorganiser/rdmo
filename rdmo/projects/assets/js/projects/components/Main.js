@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { get, isEmpty } from 'lodash'
@@ -11,6 +11,7 @@ import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import * as projectsActions from '../actions/projectsActions'
 
+import ProjectForm from '../../project/components/areas/information/ProjectForm'
 import { PendingInvitations, ProjectFilters, ProjectImport, Table } from './helper'
 import { HEADER_FORMATTERS, SORTABLE_COLUMNS } from '../utils'
 import { roleOptions } from '../../common/constants/roles'
@@ -22,10 +23,14 @@ const Main = () => {
   const projectsObject = useSelector(state => state.projects)
   const currentUserObject = useSelector(state => state.currentUser)
 
+  const [selectedProject, setSelectedProject] = useState(null)
+
   const { showTopButton, scrollToTop } = useScrollToTop()
 
   const { show: showInvitations, open: openInvitations, close: closeInvitations } = useModal()
   const { show: showImport, open: openImport, close: closeImport } = useModal()
+  const { show: showEdit, open: openEdit, close: closeEdit } = useModal()
+  const { show: showCreate, open: openCreate, close: closeCreate } = useModal()
 
   if (!projectsObject.ready) return null
   const { allowedTypes, catalogs, importUrls, invites, projects, projectsCount, hasNext } = projectsObject
@@ -42,6 +47,35 @@ const Main = () => {
     title: gettext('Import project'),
     show: showImport,
     onClose: closeImport
+  }
+
+  const createModalProps = {
+    title: gettext('Create new project'),
+    show: showCreate,
+    onClose: () => {
+      closeCreate()
+    },
+    onSubmit: () => { },
+    submitLabel: gettext('Create project'),
+    submitProps: {
+      type: 'submit',
+      form: 'project-create-form'
+    }
+  }
+
+  const editModalProps = {
+    title: gettext('Update project'),
+    show: showEdit,
+    onClose: () => {
+      setSelectedProject(null)
+      closeEdit()
+    },
+    onSubmit: () => { },
+    submitLabel: gettext('Save'),
+    submitProps: {
+      type: 'submit',
+      form: 'project-edit-form'
+    }
   }
 
   const displayMessage = interpolate(gettext('%s of %s projects are displayed'), [projects.length > projectsCount ? projectsCount : projects.length, projectsCount])
@@ -72,9 +106,9 @@ const Main = () => {
     dispatch(projectsActions.fetchProjects())
   }
 
-  const handleNew = () => {
-    window.location.href = `${baseUrl}/projects/create/`
-  }
+  // const handleNew = () => {
+  //   window.location.href = `${baseUrl}/projects/create/`
+  // }
 
   const handleImport = (file) => {
     dispatch(projectsActions.uploadProject('/projects/import/', file))
@@ -134,7 +168,7 @@ const Main = () => {
         }
         {hasNext &&
           <button type="button" onClick={loadMore}
-                  className="btn btn-light btn-rounded font-small position-absolute start-50 translate-middle-x">
+            className="btn btn-light btn-rounded font-small position-absolute start-50 translate-middle-x">
             {gettext('Load more')}
           </button>
         }
@@ -211,10 +245,12 @@ const Main = () => {
           />
           {perms.can_change_project &&
             <Link
-              href={`${rowUrl}/update/`}
               className="bi bi-pencil"
               title={labels.update}
-              onClick={() => window.location.href = `${rowUrl}/update/${params}`}
+              onClick={() => {
+                setSelectedProject(row)
+                openEdit()
+              }}
             />
           }
           {perms.can_delete_project &&
@@ -258,7 +294,7 @@ const Main = () => {
             <button type="button" className="link font-small" onClick={openImport}>
               <i className="bi bi-download" aria-hidden="true"></i> {gettext('Import project')}
             </button>
-            <button type="button" className="link font-small" onClick={handleNew}>
+            <button type="button" className="link font-small" onClick={openCreate}>
               <i className="bi bi-plus" aria-hidden="true"></i> {gettext('New project')}
             </button>
           </div>
@@ -305,6 +341,36 @@ const Main = () => {
               allowedTypes={allowedTypes}
               handleImport={handleImport}
               importUrls={importUrls ?? []} />
+          </Modal>
+          <Modal {...editModalProps}>
+            {selectedProject && (
+              <ProjectForm
+                disabled={false}
+                formId='project-edit-form'
+                submitMode="submit"
+                mode="edit"
+                initialProject={selectedProject}
+                catalogs={catalogs ?? []}
+                onSaved={() => {
+                  setSelectedProject(null)
+                  closeEdit()
+                  dispatch(projectsActions.refetchLoadedPages())
+                }}
+              />
+            )}
+          </Modal>
+          <Modal {...createModalProps}>
+            <ProjectForm
+              disabled={false}
+              formId='project-create-form'
+              submitMode="submit"
+              mode="create"
+              catalogs={catalogs ?? []}
+              onSaved={() => {
+                closeCreate()
+                dispatch(projectsActions.refetchLoadedPages())
+              }}
+            />
           </Modal>
         </div>
       </div>
