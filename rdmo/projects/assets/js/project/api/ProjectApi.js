@@ -82,6 +82,10 @@ export default class ProjectApi extends BaseApi {
     return this.put(`/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/`, data)
   }
 
+  static deleteSnapshot(projectId, snapshotId) {
+    return this.delete(`/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/`)
+  }
+
   static rollbackSnapshot(projectId, snapshotId) {
     return this.post(`/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/rollback/`)
   }
