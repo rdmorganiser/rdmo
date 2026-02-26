@@ -75,6 +75,7 @@ from .serializers.v1 import (
 )
 from .serializers.v1.overview import CatalogSerializer, ProjectOverviewSerializer
 from .serializers.v1.page import PageSerializer
+from .signals import value_created, value_deleted, value_updated
 from .utils import (
     check_conditions,
     check_options,
@@ -531,6 +532,24 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         'option',
         'option__uri',
     )
+
+    def perform_create(self, serializer):
+        page = self.request.data.pop('page', None)
+        question = self.request.data.pop('question', None)
+        super().perform_create(serializer)
+        value_created.send(sender=Value, instance=serializer.instance, page=page, question=question)
+
+    def perform_update(self, serializer):
+        page = self.request.data.pop('page', None)
+        question = self.request.data.pop('question', None)
+        super().perform_update(serializer)
+        value_updated.send(sender=Value, instance=serializer.instance, page=page, question=question)
+
+    def perform_destroy(self, instance):
+        page = self.request.data.pop('page', None)
+        question = self.request.data.pop('question', None)
+        super().perform_destroy(instance)
+        value_deleted.send(sender=Value, instance=instance, page=page, question=question)
 
     def get_queryset(self):
         return self.project.values.filter(snapshot=None).select_related('attribute', 'option')

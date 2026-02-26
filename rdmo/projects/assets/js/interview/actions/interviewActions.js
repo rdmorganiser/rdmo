@@ -293,7 +293,7 @@ export function storeValue(value) {
       dispatch(addToPending(pendingId))
       dispatch(storeValueInit(valueId))
 
-      return ValueApi.storeValue(projectId, { ...value, widget_type })
+      return ValueApi.storeValue(projectId, { ...value, widget_type, page: page.id, question: question && question.id })
         .then((value) => {
 
           dispatch(fetchNavigation(page))
@@ -480,12 +480,13 @@ export function deleteValue(value) {
       if (isNil(value.id)) {
         return dispatch(deleteValueSuccess(valueId))
       } else {
-        return ValueApi.deleteValue(projectId, value)
+        const page = getState().interview.page
+        const sets = getState().interview.sets
+        const question = page.questions.find((question) => question.attribute === value.attribute)
+        const refresh = question.optionsets.some((optionset) => optionset.has_refresh)
+
+        return ValueApi.deleteValue(projectId, value, { page: page.id, question: question && question.id })
           .then(() => {
-            const page = getState().interview.page
-            const sets = getState().interview.sets
-            const question = page.questions.find((question) => question.attribute === value.attribute)
-            const refresh = question.optionsets.some((optionset) => optionset.has_refresh)
 
             dispatch(fetchNavigation(page))
             dispatch(updateProgress())
