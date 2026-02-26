@@ -8,10 +8,12 @@ import configReducer from 'rdmo/core/assets/js/reducers/configReducer'
 import pendingReducer from 'rdmo/core/assets/js/reducers/pendingReducer'
 import projectsReducer from '../reducers/projectsReducer'
 import settingsReducer from 'rdmo/core/assets/js/reducers/settingsReducer'
+import templateReducer from 'rdmo/core/assets/js/reducers/templateReducer'
 import userReducer from 'rdmo/core/assets/js/reducers/userReducer'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import * as settingsActions from 'rdmo/core/assets/js/actions/settingsActions'
+import * as templateActions from 'rdmo/core/assets/js/actions/templateActions'
 import * as userActions from 'rdmo/core/assets/js/actions/userActions'
 
 import * as projectsActions from '../actions/projectsActions'
@@ -26,6 +28,7 @@ export default function configureStore() {
     pending: pendingReducer,
     projects: projectsReducer,
     settings: settingsReducer,
+    templates: templateReducer,
   })
 
   const initialState = {
@@ -52,6 +55,7 @@ export default function configureStore() {
 
     Promise.all([
       store.dispatch(settingsActions.fetchSettings()),
+      store.dispatch(templateActions.fetchTemplates()),
       store.dispatch(userActions.fetchCurrentUser()),
       store.dispatch(projectsActions.fetchCatalogs())
     ]).then(() => {

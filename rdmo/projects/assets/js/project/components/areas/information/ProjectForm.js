@@ -16,7 +16,7 @@ import { useFieldErrors } from '../../../hooks/useFieldErrors'
 import ProjectApi from '../../../api/ProjectApi'
 
 const ProjectForm = ({ disabled, submitMode = 'auto', mode = 'edit', initialProject = null,
-  catalogs: catalogsProp = null, }) => {
+  catalogs: catalogsProp = null, formId = 'project-form', onSaved }) => {
   const dispatch = useDispatch()
   const errors = useFieldErrors()
   const templates = useSelector((state) => state.templates)
@@ -27,7 +27,6 @@ const ProjectForm = ({ disabled, submitMode = 'auto', mode = 'edit', initialProj
   const catalogs = catalogsProp ?? storeData?.catalogs
 
   const [formData, setFormData] = useState(project || {})
-  // const [enableParent, setEnableParent] = useState(!!project.parent)
   const [enableParent, setEnableParent] = useState(!!project?.parent)
   const [parentOptions, setParentOptions] = useState([])
 
@@ -39,7 +38,7 @@ const ProjectForm = ({ disabled, submitMode = 'auto', mode = 'edit', initialProj
   )
 
   const saveProject = (newFormData) => {
-    dispatch(
+    return dispatch(
       mode === 'create'
         ? createProject(newFormData)
         : updateProject(newFormData)
@@ -64,7 +63,7 @@ const ProjectForm = ({ disabled, submitMode = 'auto', mode = 'edit', initialProj
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    saveProject({ ...formData })
+    saveProject({ ...formData })?.then(() => onSaved?.())
   }
 
   const handleLoadProjects = useDebouncedCallback((search, callback) => {
@@ -94,8 +93,7 @@ const ProjectForm = ({ disabled, submitMode = 'auto', mode = 'edit', initialProj
   }
 
   return (
-    <form className="container mt-3" onSubmit={submitMode === 'submit' ? handleSubmit : undefined}>
-
+    <form id={formId} className="container mt-3" onSubmit={submitMode === 'submit' ? handleSubmit : undefined}>
       <Input
         className="mb-3 form-label fw-bold"
         label={gettext('Title')}
@@ -238,13 +236,6 @@ const ProjectForm = ({ disabled, submitMode = 'auto', mode = 'edit', initialProj
           </label>
         </div> */}
       </div>
-
-      {/* <button type="submit" className="btn btn-primary" onClick={handleSubmit}>{gettext('Submit')}</button> */}
-      {submitMode === 'submit' && (
-        <button type="submit" className="btn btn-primary mt-3" disabled={disabled}>
-          {mode === 'create' ? gettext('Create') : gettext('Save')}
-        </button>
-      )}
     </form>
   )
 }
@@ -252,9 +243,11 @@ const ProjectForm = ({ disabled, submitMode = 'auto', mode = 'edit', initialProj
 ProjectForm.propTypes = {
   catalogs: PropTypes.array,
   disabled: PropTypes.bool,
+  formId: PropTypes.string,
   initialProject: PropTypes.object,
   mode: PropTypes.oneOf(['create', 'edit']),
   submitMode: PropTypes.oneOf(['auto', 'submit']),
+  onSaved: PropTypes.func
 }
 
 export default ProjectForm

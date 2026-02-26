@@ -75,11 +75,29 @@ export function fetchProject() {
   }
 }
 
+export function createProject(data) {
+  return function (dispatch) {
+    dispatch(addToPending('createProject'))
+    dispatch({ type: actionTypes.CREATE_PROJECT_INIT })
+
+    return ProjectApi.createProject(data)
+      .then(project => {
+        dispatch(removeFromPending('createProject'))
+        dispatch({ type: actionTypes.CREATE_PROJECT_SUCCESS, project })
+      })
+      .catch(error => {
+        dispatch(removeFromPending('createProject'))
+        dispatch({ type: actionTypes.CREATE_PROJECT_ERROR, error })
+        throw error
+      })
+  }
+}
+
 export function updateProject(data) {
   return function (dispatch, getState) {
     const state = getState()
-    const currentBundle = state.project.project
-    const id = currentBundle?.project?.id
+    const currentBundle = state.project?.project
+    const id = data?.id ?? currentBundle?.project?.id
 
     if (!id) {
       console.warn('No project ID available for update.')
