@@ -97,17 +97,17 @@ const SnapshotTable = ({ snapshots }) => {
                         <i className={'bi bi-reply-fill'} aria-hidden="true" />
                       </button>
                     )}
-                    {/* {perms.can_delete_snapshot && ( */}
-                    <button
-                      type="button"
-                      className="link"
-                      aria-label={gettext('Delete snapshot')}
-                      title={gettext('Delete snapshot')}
-                      onClick={() => openDeleteModal(snapshot)}
-                    >
-                      <i className={'bi bi-trash'} aria-hidden="true" />
-                    </button>
-                    {/* )} */}
+                    {perms.can_delete_snapshot && (
+                      <button
+                        type="button"
+                        className="link"
+                        aria-label={gettext('Delete snapshot')}
+                        title={gettext('Delete snapshot')}
+                        onClick={() => openDeleteModal(snapshot)}
+                      >
+                        <i className={'bi bi-trash'} aria-hidden="true" />
+                      </button>
+                    )}
                   </div>
                 </td>
               </tr>
