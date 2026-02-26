@@ -25,6 +25,7 @@ from rdmo.conditions.models import Condition
 from rdmo.core.constants import VALUE_TYPE_FILE
 from rdmo.core.permissions import HasModelPermission
 from rdmo.core.utils import human2bytes, is_truthy, render_to_format, return_file_response
+from rdmo.core.views import ChoicesViewSet
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet
 from rdmo.tasks.models import Task
@@ -1223,3 +1224,8 @@ class CatalogViewSet(ListModelMixin, GenericViewSet):
             queryset.filter(Q(pk__in=availability_subquery) | Q(projects__user=self.request.user))
             .order_by('-available', 'order', 'id').distinct()
         )
+
+
+class RoleViewSet(ChoicesViewSet):
+    permission_classes = (IsAuthenticated, )
+    queryset = ROLE_CHOICES
