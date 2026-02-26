@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import AsyncSelect from 'react-select/async'
@@ -8,24 +8,42 @@ import { isEmpty } from 'lodash'
 import Html from 'rdmo/core/assets/js/components/Html'
 import Input from 'rdmo/core/assets/js/components/forms/Input'
 import Textarea from 'rdmo/core/assets/js/components/forms/Textarea'
+import Select from 'rdmo/core/assets/js/components/forms/Select'
 
-import { updateProject } from '../../../actions/projectActions'
+import { createProject, updateProject } from '../../../actions/projectActions'
 import { useFieldErrors } from '../../../hooks/useFieldErrors'
 
 import ProjectApi from '../../../api/ProjectApi'
 
-const ProjectForm = ({ disabled }) => {
-  const { project, catalogs } = useSelector((state) => state.project.project)
-  const templates = useSelector((state) => state.templates)
+const ProjectForm = ({ disabled, submitMode = 'auto', mode = 'edit', initialProject = null,
+  catalogs: catalogsProp = null, }) => {
   const dispatch = useDispatch()
   const errors = useFieldErrors()
+  const templates = useSelector((state) => state.templates)
+  const selectCatalog = useSelector((state) => state.settings?.project_select_catalog)
+  const storeData = useSelector((state) => state.project?.project)
+
+  const project = initialProject ?? storeData?.project
+  const catalogs = catalogsProp ?? storeData?.catalogs
 
   const [formData, setFormData] = useState(project || {})
-  const [enableParent, setEnableParent] = useState(!!project.parent)
+  // const [enableParent, setEnableParent] = useState(!!project.parent)
+  const [enableParent, setEnableParent] = useState(!!project?.parent)
   const [parentOptions, setParentOptions] = useState([])
 
+  const catalogOptions = useMemo(
+    () => (catalogs || [])
+      .filter(c => c.available)
+      .map(c => ({ value: c.id, label: c.title })),
+    [catalogs]
+  )
+
   const saveProject = (newFormData) => {
-    dispatch(updateProject(newFormData))
+    dispatch(
+      mode === 'create'
+        ? createProject(newFormData)
+        : updateProject(newFormData)
+    )
   }
 
   const debouncedSaveShort = useDebouncedCallback(saveProject, 500)
@@ -35,6 +53,8 @@ const ProjectForm = ({ disabled }) => {
     const updatedFormData = { ...formData, [key]: value }
     setFormData(updatedFormData)
 
+    if (submitMode !== 'auto' || mode !== 'edit') return
+
     if (key === 'description') {
       debouncedSaveLong(updatedFormData)
     } else {
@@ -42,11 +62,16 @@ const ProjectForm = ({ disabled }) => {
     }
   }
 
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    saveProject({ ...formData })
+  }
+
   const handleLoadProjects = useDebouncedCallback((search, callback) => {
     ProjectApi.fetchProjects({ search })
       .then(response => {
         const options = response.results
-          .filter(p => !project?.id || p.id !== project.id)
+          .filter(p => !project?.id || p.id !== project?.id)
           .map(project => ({
             value: project.id,
             label: project.title
@@ -61,7 +86,7 @@ const ProjectForm = ({ disabled }) => {
     if (enableParent) {
       ProjectApi.fetchProjects({ search: '' }).then(({ results }) => {
         const options = results
-          .filter(p => !project?.id || p.id !== project.id)
+          .filter(p => !project?.id || p.id !== project?.id)
           .map(p => ({ value: p.id, label: p.title }))
         setParentOptions(options)
       })
@@ -69,7 +94,8 @@ const ProjectForm = ({ disabled }) => {
   }
 
   return (
-    <form>
+    <form className="container mt-3" onSubmit={submitMode === 'submit' ? handleSubmit : undefined}>
+
       <Input
         className="mb-3 form-label fw-bold"
         label={gettext('Title')}
@@ -96,7 +122,7 @@ const ProjectForm = ({ disabled }) => {
       <Select
         className="mb-3 form-label fw-bold"
         label={gettext('Project phase')}
-        help={gettext('The phase of the project at this time.')} // should rather be a template
+        help={gettext('The phase of the project at this time.')}
         // "Die Phase, in der sich Ihr Projekt zum aktuellen Zeitpunkt befindet."
         isClearable={true}
         options={[
@@ -114,23 +140,37 @@ const ProjectForm = ({ disabled }) => {
       <div className="mb-3">
         <label className="form-label fw-bold">{gettext('Catalog')}</label>
         <div className="form-text">{gettext('The catalog used for this project.')}</div>
-        {catalogs?.filter(catalog => catalog.available).map((catalog) => (
-          <div key={catalog.id} className="form-check">
-            <input
-              type="radio"
-              className="form-check-input"
-              id={`catalog-${catalog.id}`}
-              name="catalog"
-              value={catalog.id}
-              checked={formData.catalog == catalog.id}
-              onChange={(e) => handleChange('catalog', e.target.value)}
-              disabled={disabled}
-            />
-            <label className="form-check-label" htmlFor={`catalog-${catalog.id}`}>
-              {catalog.title}
-            </label>
-          </div>
-        ))}
+
+        {selectCatalog == 'select' ? (
+          <Select
+            className="mt-2"
+            placeholder={gettext('Select catalog')}
+            isClearable={false}
+            isDisabled={disabled}
+            options={catalogOptions}
+            value={formData.catalog}
+            onChange={(value) => handleChange('catalog', value)}
+          />
+        ) : (
+          catalogOptions.map((opt) => (
+            <div key={opt.value} className="form-check">
+              <input
+                type="radio"
+                className="form-check-input"
+                id={`catalog-${opt.value}`}
+                name="catalog"
+                value={opt.value}
+                checked={formData.catalog === opt.value}
+                onChange={(e) => handleChange('catalog', Number(e.target.value))}
+                disabled={disabled}
+              />
+              <label className="form-check-label" htmlFor={`catalog-${opt.value}`}>
+                {opt.label}
+              </label>
+            </div>
+          ))
+        )}
+
         {errors.catalog?.map((err, i) => (
           <div key={i} className="text-danger mt-1">{err}</div>
         ))}
@@ -161,10 +201,12 @@ const ProjectForm = ({ disabled }) => {
           noOptionsMessage={() => gettext('No projects matching your search.')}
           loadingMessage={() => gettext('Loading ...')}
           defaultOptions={parentOptions}
-          value={isEmpty(parentOptions) ? {
-            value: project.parent,
-            label: project.parent_title
-          } : parentOptions.find(p => p.value === formData.parent)}
+          value={isEmpty(parentOptions) ? (
+            project ? {
+              value: project.parent,
+              label: project.parent_title
+            } : null
+          ) : parentOptions.find(p => p.value === formData.parent)}
           onChange={(option) => handleChange('parent', option ? option.value : null)}
           getOptionValue={(project) => project.value}
           getOptionLabel={(project) => project.label}
@@ -198,12 +240,21 @@ const ProjectForm = ({ disabled }) => {
       </div>
 
       {/* <button type="submit" className="btn btn-primary" onClick={handleSubmit}>{gettext('Submit')}</button> */}
+      {submitMode === 'submit' && (
+        <button type="submit" className="btn btn-primary mt-3" disabled={disabled}>
+          {mode === 'create' ? gettext('Create') : gettext('Save')}
+        </button>
+      )}
     </form>
   )
 }
 
 ProjectForm.propTypes = {
-  disabled: PropTypes.bool
+  catalogs: PropTypes.array,
+  disabled: PropTypes.bool,
+  initialProject: PropTypes.object,
+  mode: PropTypes.oneOf(['create', 'edit']),
+  submitMode: PropTypes.oneOf(['auto', 'submit']),
 }
 
 export default ProjectForm

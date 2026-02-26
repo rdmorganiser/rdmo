@@ -10,7 +10,7 @@ const Select = ({ className, label, help, placeholder, isClearable, isDisabled, 
   // lookup value(s) in the options array
   const getValue = () => (
     isArray(value) ? options.filter(option => (value.includes(option.value)))
-                   : options.find(option => (option.value == value))
+      : options.find(option => (option.value == value))
   )
 
   const handleChange = (option) => {
@@ -33,7 +33,7 @@ const Select = ({ className, label, help, placeholder, isClearable, isDisabled, 
           'is-invalid': !isEmpty(errors)
         })}
         classNames={{
-          control: () => classNames('form-select')
+          control: () => classNames('form-control')
         }}
         placeholder={placeholder}
         isClearable={isClearable}
