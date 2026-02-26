@@ -1,67 +1,36 @@
 import React from 'react'
+import classNames from 'classnames'
 import PropTypes from 'prop-types'
-import { get } from 'lodash'
 
 const Table = ({
   cellFormatters,
   columnWidths,
-  config,
-  configActions,
   data,
   headerFormatters,
-  projectsActions,
+  onHeaderClick,
   sortableColumns,
+  sortColumn,
+  sortOrder,
   /* order of elements in 'visibleColumns' corresponds to order of columns in table */
   visibleColumns,
 }) => {
-  const extractSortingParams = (params) => {
-    const { ordering } = params || {}
-
-    if (!ordering) {
-        return { sortOrder: undefined, sortColumn: undefined }
-    }
-
-    const sortOrder = ordering.startsWith('-') ? 'desc' : 'asc'
-    const sortColumn = sortOrder === 'desc' ? ordering.substring(1) : ordering
-
-    return { sortColumn, sortOrder }
-  }
-
-  const params = get(config, 'params', {})
-  const { sortColumn, sortOrder } = extractSortingParams(params)
-
-  const handleHeaderClick = (column) => {
-    if (sortableColumns.includes(column)) {
-      if (sortColumn === column) {
-        if (sortOrder === 'asc') {
-          configActions.updateConfig('params.ordering', `-${column}`)
-        } else if (sortOrder === 'desc') {
-          configActions.deleteConfig('params.ordering')
-        } else {
-        configActions.updateConfig('params.ordering', column)
-        }
-      } else {
-        configActions.updateConfig('params.ordering', column)
-      }
-      projectsActions.fetchProjects()
-    }
-  }
-
   const renderSortIcon = (column) => {
     const isSortColumn = sortColumn === column
-    const isAsc = sortOrder === 'asc'
+
+    let icon = 'bi-caret-down'
+    if (isSortColumn && sortOrder === 'asc') icon = 'bi-caret-down-fill'
+    if (isSortColumn && sortOrder === 'desc') icon = 'bi-caret-up-fill'
 
     return (
-      <span className="ml-5 sort-icon">
-        <i className={`fa fa-sort${isSortColumn ? isAsc ? '-asc' : '-desc' : ''} ${isSortColumn ? '' : 'text-muted'}`}
-           aria-hidden="true"/>
+      <span className="ms-1 sort-icon">
+        <i className={classNames('bi font-smaller', icon)} aria-hidden="true" />
       </span>
     )
   }
 
   const renderHeaders = () => {
     return (
-      <thead className="thead-dark">
+      <thead>
         <tr>
           {visibleColumns.map((column, index) => {
             const headerFormatter = headerFormatters[column]
@@ -69,8 +38,8 @@ const Table = ({
             const columnHeaderLabel = headerFormatter && headerFormatter.label ? headerFormatter.label(column) : columnHeaderContent
 
             return (
-              <th key={column} style={{ width: columnWidths[index] }} onClick={() => handleHeaderClick(column)}
-                  aria-label={columnHeaderLabel}>
+              <th className={sortableColumns.includes(column) ? 'cursor-pointer' : undefined} key={column} style={{ width: columnWidths[index] }} onClick={() => onHeaderClick(column)}
+                aria-label={columnHeaderLabel}>
                 {columnHeaderContent}
                 {sortableColumns.includes(column) && renderSortIcon(column)}
               </th>
@@ -91,8 +60,8 @@ const Table = ({
   const renderRows = () => {
     return (
       <tbody>
-        {data.map((row, index) => (
-          <tr key={index}>
+        {data.map((row) => (
+          <tr key={row.id}>
             {visibleColumns.map((column, index) => (
               <td key={column} style={{ width: columnWidths[index] }}>
                 {formatCellContent(row, column, row[column])}
@@ -106,7 +75,7 @@ const Table = ({
 
   return (
     <div id="projects-table" className="table-container">
-      <table className="table table-borderless">
+      <table className="table">
         {renderHeaders()}
         {renderRows()}
       </table>
@@ -117,12 +86,12 @@ const Table = ({
 Table.propTypes = {
   cellFormatters: PropTypes.object,
   columnWidths: PropTypes.arrayOf(PropTypes.string),
-  config: PropTypes.object,
-  configActions: PropTypes.object,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   headerFormatters: PropTypes.object,
-  projectsActions: PropTypes.object,
+  onHeaderClick: PropTypes.func,
   sortableColumns: PropTypes.arrayOf(PropTypes.string),
+  sortColumn: PropTypes.string,
+  sortOrder: PropTypes.string,
   visibleColumns: PropTypes.arrayOf(PropTypes.string),
 }
 

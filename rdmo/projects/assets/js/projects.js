@@ -9,7 +9,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 
 import Pending from '../../../core/assets/js/containers/Pending'
 
-import Main from './projects/containers/Main'
+import Main from './projects/components/Main'
 
 const store = configureStore()
 

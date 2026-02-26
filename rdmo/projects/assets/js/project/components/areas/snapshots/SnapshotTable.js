@@ -58,7 +58,7 @@ const SnapshotTable = ({ snapshots }) => {
                   {useFormattedDateTime(snapshot.created, language)}
                 </td>
                 <td>
-                  <div className="d-flex justify-content-end align-items-center gap-2">
+                  <div className="d-flex justify-content-end align-items-center gap-1">
                     {perms.can_view_snapshot && (
                       <Link
                         title={gettext('View documents')}

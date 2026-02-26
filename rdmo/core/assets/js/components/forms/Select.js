@@ -68,7 +68,7 @@ Select.propTypes = {
   isMulti: PropTypes.bool,
   options: PropTypes.array,
   errors: PropTypes.array,
-  value: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
+  value: PropTypes.oneOfType([PropTypes.array, PropTypes.string, PropTypes.number]),
   onChange: PropTypes.func.isRequired
 }
 
