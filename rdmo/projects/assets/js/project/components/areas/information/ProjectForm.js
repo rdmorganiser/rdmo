@@ -3,20 +3,28 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import AsyncSelect from 'react-select/async'
 import { useDebouncedCallback } from 'use-debounce'
-import { isEmpty } from 'lodash'
+// import { isEmpty } from 'lodash'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 import Input from 'rdmo/core/assets/js/components/forms/Input'
 import Textarea from 'rdmo/core/assets/js/components/forms/Textarea'
 import Select from 'rdmo/core/assets/js/components/forms/Select'
 
-import { createProject, updateProject } from '../../../actions/projectActions'
+import { createProject } from '../../../../projects/actions/projectsActions'
+import { updateProject } from '../../../actions/projectActions'
 import { useFieldErrors } from '../../../hooks/useFieldErrors'
 
 import ProjectApi from '../../../api/ProjectApi'
 
-const ProjectForm = ({ disabled, submitMode = 'auto', mode = 'edit', initialProject = null,
-  catalogs: catalogsProp = null, formId = 'project-form', onSaved }) => {
+const ProjectForm = ({
+  catalogs: catalogsProp = null,
+  disabled,
+  formId = 'project-form',
+  initialProject = null,
+  mode = 'edit',
+  onSaved,
+  submitMode = 'auto'
+}) => {
   const dispatch = useDispatch()
   const errors = useFieldErrors()
   const templates = useSelector((state) => state.templates)
@@ -82,7 +90,7 @@ const ProjectForm = ({ disabled, submitMode = 'auto', mode = 'edit', initialProj
 
   // Fetch a first page only when the menu is opened and nothing is selected/loaded yet
   const handleMenuOpen = () => {
-    if (enableParent) {
+    if (enableParent || submitMode === 'submit') {
       ProjectApi.fetchProjects({ search: '' }).then(({ results }) => {
         const options = results
           .filter(p => !project?.id || p.id !== project?.id)
@@ -175,19 +183,28 @@ const ProjectForm = ({ disabled, submitMode = 'auto', mode = 'edit', initialProj
       </div>
 
       <div className="mb-3">
-        <div className="form-check form-switch">
-          <input
-            type="checkbox"
-            className="form-check-input"
-            id="parentToggle"
-            checked={enableParent}
-            disabled={disabled}
-            onChange={(e) => setEnableParent(e.target.checked)}
-          />
+        {/* {mode == 'edit' && */}
+        {submitMode === 'auto' &&
+          < div className="form-check form-switch">
+            <input
+              type="checkbox"
+              className="form-check-input"
+              id="parentToggle"
+              checked={enableParent}
+              disabled={disabled}
+              onChange={(e) => setEnableParent(e.target.checked)}
+            />
+            <label className="form-label fw-bold m-0" htmlFor="parentToggle">
+              {gettext('Select parent project')}
+            </label>
+          </div>
+        }
+        {/* {mode == 'create' && */}
+        {submitMode == 'submit' &&
           <label className="form-label fw-bold m-0" htmlFor="parentToggle">
             {gettext('Select parent project')}
           </label>
-        </div>
+        }
         <div className="form-text">
           <Html html={templates.project_view_parent_help} />
         </div>
@@ -199,16 +216,24 @@ const ProjectForm = ({ disabled, submitMode = 'auto', mode = 'edit', initialProj
           noOptionsMessage={() => gettext('No projects matching your search.')}
           loadingMessage={() => gettext('Loading ...')}
           defaultOptions={parentOptions}
-          value={isEmpty(parentOptions) ? (
-            project ? {
-              value: project.parent,
-              label: project.parent_title
-            } : null
-          ) : parentOptions.find(p => p.value === formData.parent)}
+          // value={isEmpty(parentOptions) ? (
+          //   project ? {
+          //     value: project.parent,
+          //     label: project.parent_title
+          //   } : null
+          // ) : parentOptions.find(p => p.value === formData.parent)}
+          value={
+            formData.parent
+              ? parentOptions.find(p => p.value === formData.parent) ?? {
+                value: formData.parent,
+                label: project?.parent_title
+              }
+              : null
+          }
           onChange={(option) => handleChange('parent', option ? option.value : null)}
           getOptionValue={(project) => project.value}
           getOptionLabel={(project) => project.label}
-          isDisabled={!enableParent || disabled}
+          isDisabled={(!enableParent && submitMode === 'auto') || disabled}
           loadOptions={handleLoadProjects}
           onMenuOpen={handleMenuOpen}
           isClearable
@@ -236,7 +261,7 @@ const ProjectForm = ({ disabled, submitMode = 'auto', mode = 'edit', initialProj
           </label>
         </div> */}
       </div>
-    </form>
+    </form >
   )
 }
 
@@ -246,8 +271,8 @@ ProjectForm.propTypes = {
   formId: PropTypes.string,
   initialProject: PropTypes.object,
   mode: PropTypes.oneOf(['create', 'edit']),
+  onSaved: PropTypes.func,
   submitMode: PropTypes.oneOf(['auto', 'submit']),
-  onSaved: PropTypes.func
 }
 
 export default ProjectForm
