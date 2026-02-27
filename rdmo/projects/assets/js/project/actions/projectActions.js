@@ -75,24 +75,6 @@ export function fetchProject() {
   }
 }
 
-export function createProject(data) {
-  return function (dispatch) {
-    dispatch(addToPending('createProject'))
-    dispatch({ type: actionTypes.CREATE_PROJECT_INIT })
-
-    return ProjectApi.createProject(data)
-      .then(project => {
-        dispatch(removeFromPending('createProject'))
-        dispatch({ type: actionTypes.CREATE_PROJECT_SUCCESS, project })
-      })
-      .catch(error => {
-        dispatch(removeFromPending('createProject'))
-        dispatch({ type: actionTypes.CREATE_PROJECT_ERROR, error })
-        throw error
-      })
-  }
-}
-
 export function updateProject(data) {
   return function (dispatch, getState) {
     const state = getState()
