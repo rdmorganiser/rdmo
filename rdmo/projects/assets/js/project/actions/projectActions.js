@@ -352,7 +352,6 @@ export function deleteSnapshot(snapshotId) {
       .then(() => {
         dispatch(removeFromPending('deleteSnapshot'))
         dispatch({ type: actionTypes.DELETE_SNAPSHOT_SUCCESS, snapshotId })
-        // dispatch(fetchProject())
       })
       .catch(error => {
         dispatch(removeFromPending('deleteSnapshot'))
