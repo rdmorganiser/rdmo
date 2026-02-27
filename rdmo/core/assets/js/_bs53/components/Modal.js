@@ -14,10 +14,23 @@ const Modal = ({ title, show, onClose, onSubmit, submitLabel, submitProps, child
       keyboard: true,
       ...modalProps
     })
+
+    const handleHide = () => {
+      if (show) {
+        onClose()
+      }
+    }
+
+    modalElement.addEventListener('hide.bs.modal', handleHide)
+
     if (show) {
       modal.show()
     }
-    return () => modal.hide()
+
+    return () => {
+      modalElement.removeEventListener('hide.bs.modal', handleHide)
+      modal.hide()
+    }
   }, [show])
 
   return (
