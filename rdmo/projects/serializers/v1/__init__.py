@@ -128,6 +128,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     catalog = CatalogField(required=True)
 
     parent = ParentField(required=False, allow_null=True)
+    parent_title = serializers.CharField(source='parent.title', read_only=True)
 
     ancestors = serializers.SerializerMethodField()
     permissions = serializers.SerializerMethodField()
@@ -147,6 +148,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             'catalog',
             'catalog_uri',
             'parent',
+            'parent_title',
             'created',
             'updated',
             'current_role',
