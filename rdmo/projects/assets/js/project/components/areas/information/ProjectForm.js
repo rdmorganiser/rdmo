@@ -1,9 +1,8 @@
-import React, { useState, useMemo } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import AsyncSelect from 'react-select/async'
 import { useDebouncedCallback } from 'use-debounce'
-// import { isEmpty } from 'lodash'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 import Input from 'rdmo/core/assets/js/components/forms/Input'
@@ -35,8 +34,32 @@ const ProjectForm = ({
   const catalogs = catalogsProp ?? storeData?.catalogs
 
   const [formData, setFormData] = useState(project || {})
+
   const [enableParent, setEnableParent] = useState(!!project?.parent)
-  const [parentOptions, setParentOptions] = useState([])
+  const [parentOptions, setParentOptions] = useState(() => {
+    if (mode === 'edit' && project?.parent) {
+      return [{ value: project.parent, label: project.parent_title }]
+    }
+    return []
+  })
+  const [parentFetchError, setParentFetchError] = useState(null)
+
+  useEffect(() => {
+    if (mode !== 'create') return
+    if (!initialProject?.parent) return
+
+    ProjectApi.fetchProject(initialProject.parent)
+      .then(parent => {
+        setParentOptions([{
+          value: parent.id,
+          label: parent.title
+        }])
+      })
+      .catch(() => {
+        setParentFetchError(interpolate(gettext('You do not have permission to use the original parent project "%s".'), [initialProject?.parent_title])
+        )
+      })
+  }, [])
 
   const catalogOptions = useMemo(
     () => (catalogs || [])
@@ -45,12 +68,33 @@ const ProjectForm = ({
     [catalogs]
   )
 
+  const mergeParentOptions = (prevOptions, newOptions) => {
+    const merged = [...prevOptions]
+
+    newOptions.forEach(opt => {
+      if (!merged.some(p => p.value === opt.value)) {
+        merged.push(opt)
+      }
+    })
+
+    return merged
+  }
+
   const saveProject = (newFormData) => {
-    return dispatch(
-      mode === 'create'
-        ? createProject(newFormData)
-        : updateProject(newFormData)
-    )
+    if (mode === 'create') {
+      return dispatch(createProject(newFormData))
+    }
+
+    const originalParent = project?.parent ?? null
+    const currentParent = newFormData.parent ?? null
+
+    const payload = { ...newFormData }
+
+    if (originalParent === currentParent) {
+      delete payload.parent
+    }
+
+    return dispatch(updateProject(payload))
   }
 
   const debouncedSaveShort = useDebouncedCallback(saveProject, 500)
@@ -83,7 +127,7 @@ const ProjectForm = ({
             value: project.id,
             label: project.title
           }))
-        setParentOptions(options)
+        setParentOptions(prev => mergeParentOptions(prev, options))
         callback(options)
       })
   }, 500)
@@ -95,7 +139,7 @@ const ProjectForm = ({
         const options = results
           .filter(p => !project?.id || p.id !== project?.id)
           .map(p => ({ value: p.id, label: p.title }))
-        setParentOptions(options)
+        setParentOptions(prev => mergeParentOptions(prev, options))
       })
     }
   }
@@ -183,7 +227,6 @@ const ProjectForm = ({
       </div>
 
       <div className="mb-3">
-        {/* {mode == 'edit' && */}
         {submitMode === 'auto' &&
           < div className="form-check form-switch">
             <input
@@ -199,7 +242,6 @@ const ProjectForm = ({
             </label>
           </div>
         }
-        {/* {mode == 'create' && */}
         {submitMode == 'submit' &&
           <label className="form-label fw-bold m-0" htmlFor="parentToggle">
             {gettext('Select parent project')}
@@ -216,20 +258,7 @@ const ProjectForm = ({
           noOptionsMessage={() => gettext('No projects matching your search.')}
           loadingMessage={() => gettext('Loading ...')}
           defaultOptions={parentOptions}
-          // value={isEmpty(parentOptions) ? (
-          //   project ? {
-          //     value: project.parent,
-          //     label: project.parent_title
-          //   } : null
-          // ) : parentOptions.find(p => p.value === formData.parent)}
-          value={
-            formData.parent
-              ? parentOptions.find(p => p.value === formData.parent) ?? {
-                value: formData.parent,
-                label: project?.parent_title
-              }
-              : null
-          }
+          value={parentOptions.find(p => p.value === formData.parent) || null}
           onChange={(option) => handleChange('parent', option ? option.value : null)}
           getOptionValue={(project) => project.value}
           getOptionLabel={(project) => project.label}
@@ -244,6 +273,12 @@ const ProjectForm = ({
           <div key={i} className="text-danger mt-1">{err}</div>
         ))}
 
+        {parentFetchError && (
+          <div className="text-danger mt-1">
+            {parentFetchError}
+          </div>
+        )}
+        {/* TODO feature inherit parent defaults / mode create */}
         {/* <div className="form-check mt-2">
           <input
             type="checkbox"
