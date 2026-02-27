@@ -18,7 +18,10 @@ import {
   FETCH_IMPORT_URLS_SUCCESS,
   UPLOAD_PROJECT_ERROR,
   UPLOAD_PROJECT_INIT,
-  UPLOAD_PROJECT_SUCCESS
+  UPLOAD_PROJECT_SUCCESS,
+  CREATE_PROJECT_ERROR,
+  CREATE_PROJECT_INIT,
+  CREATE_PROJECT_SUCCESS
 } from './actionTypes'
 
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
@@ -63,6 +66,24 @@ export function fetchProjectsError(error) {
     } else {
       dispatch({ type: FETCH_PROJECTS_ERROR, error })
     }
+  }
+}
+
+export function createProject(data) {
+  return function (dispatch) {
+    dispatch(addToPending('createProject'))
+    dispatch({ type: CREATE_PROJECT_INIT })
+
+    return ProjectsApi.createProject(data)
+      .then(project => {
+        dispatch(removeFromPending('createProject'))
+        dispatch({ type: CREATE_PROJECT_SUCCESS, project })
+      })
+      .catch(error => {
+        dispatch(removeFromPending('createProject'))
+        dispatch({ type: CREATE_PROJECT_ERROR, error })
+        throw error
+      })
   }
 }
 

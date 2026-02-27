@@ -49,12 +49,15 @@ const Main = () => {
     onClose: closeImport
   }
 
+  const handleCloseCreate = () => {
+    setSelectedProject(null)
+    closeCreate()
+  }
+
   const createModalProps = {
     title: gettext('Create new project'),
     show: showCreate,
-    onClose: () => {
-      closeCreate()
-    },
+    onClose: handleCloseCreate,
     onSubmit: () => { },
     submitLabel: gettext('Create project'),
     submitProps: {
@@ -63,13 +66,15 @@ const Main = () => {
     }
   }
 
+  const handleCloseEdit = () => {
+    setSelectedProject(null)
+    closeEdit()
+  }
+
   const editModalProps = {
     title: gettext('Update project'),
     show: showEdit,
-    onClose: () => {
-      setSelectedProject(null)
-      closeEdit()
-    },
+    onClose: handleCloseEdit,
     onSubmit: () => { },
     submitLabel: gettext('Save'),
     submitProps: {
@@ -105,10 +110,6 @@ const Main = () => {
     dispatch(configActions.updateConfig('myProjects', !myProjects))
     dispatch(projectsActions.fetchProjects())
   }
-
-  // const handleNew = () => {
-  //   window.location.href = `${baseUrl}/projects/create/`
-  // }
 
   const handleImport = (file) => {
     dispatch(projectsActions.uploadProject('/projects/import/', file))
@@ -237,11 +238,19 @@ const Main = () => {
       const perms = row.permissions || {}
       return (
         <div className="d-flex align-items-center gap-1">
-          <Link
+          {/* <Link
             href={`${rowUrl}/copy/`}
             className="bi bi-copy"
             title={labels.copy}
             onClick={() => window.location.href = `${rowUrl}/copy/${params}`}
+          /> */}
+          <Link
+            className="bi bi-copy"
+            title={labels.copy}
+            onClick={() => {
+              setSelectedProject(row)
+              openCreate()
+            }}
           />
           {perms.can_change_project &&
             <Link
@@ -345,6 +354,7 @@ const Main = () => {
           <Modal {...editModalProps}>
             {selectedProject && (
               <ProjectForm
+                key={`edit-${selectedProject.id}`}
                 disabled={false}
                 formId='project-edit-form'
                 submitMode="submit"
@@ -352,8 +362,7 @@ const Main = () => {
                 initialProject={selectedProject}
                 catalogs={catalogs ?? []}
                 onSaved={() => {
-                  setSelectedProject(null)
-                  closeEdit()
+                  handleCloseEdit()
                   dispatch(projectsActions.refetchLoadedPages())
                 }}
               />
@@ -361,15 +370,14 @@ const Main = () => {
           </Modal>
           <Modal {...createModalProps}>
             <ProjectForm
+              key={`create-${showCreate}`}
               disabled={false}
               formId='project-create-form'
               submitMode="submit"
               mode="create"
+              initialProject={selectedProject ?? null}
               catalogs={catalogs ?? []}
-              onSaved={() => {
-                closeCreate()
-                dispatch(projectsActions.refetchLoadedPages())
-              }}
+              onSaved={handleCloseCreate}
             />
           </Modal>
         </div>
