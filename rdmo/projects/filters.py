@@ -35,6 +35,19 @@ class ProjectUserFilterBackend(BaseFilterBackend):
         return queryset
 
 
+class ProjectRoleFilterBackend(BaseFilterBackend):
+
+    def filter_queryset(self, request, queryset, view):
+        if view.detail:
+            return queryset
+
+        role = request.GET.get('role')
+        if role:
+            queryset = queryset.filter(Q(current_role=role) | Q(highest_role=role))
+
+        return queryset
+
+
 class ProjectSearchFilterBackend(SearchFilter):
 
     def filter_queryset(self, request, queryset, view):
