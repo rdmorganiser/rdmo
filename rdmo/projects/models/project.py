@@ -111,19 +111,19 @@ class Project(MPTTModel, Model):
 
     @property
     def owners(self) -> list:
-        return self.get_members('owner')
+        return self.user.filter(memberships__role='owner')
 
     @property
     def managers(self) -> list:
-        return self.get_members('manager')
+        return self.user.filter(memberships__role='manager')
 
     @property
     def authors(self) -> list:
-        return self.get_members('author')
+        return self.user.filter(memberships__role='author')
 
     @property
     def guests(self) -> list:
-        return self.get_members('guest')
+        return self.user.filter(memberships__role='guest')
 
     @cached_property
     def groups_str(self) -> str:
@@ -131,20 +131,12 @@ class Project(MPTTModel, Model):
 
     @property
     def groups(self) -> list:
-        return {group for user in self.get_members('owner') for group in user.groups.all()}
+        return {group for user in self.owners for group in user.groups.all()}
 
     @property
     def file_size(self) -> int:
         queryset = self.values.filter(snapshot=None).exclude(models.Q(file='') | models.Q(file=None))
         return sum([value.file.size for value in queryset])
-
-    def get_members(self, role):
-        try:
-            # membership_list is created by the Prefetch call in the viewset
-            return [membership.user for membership in self.memberships_list if membership.role == role]
-        except AttributeError:
-            # membership_list does not exist
-            return self.user.filter(memberships__role=role)
 
     def get_answer_tree(self, snapshot=None, verbose=None):
         return AnswerTree(

@@ -28,22 +28,34 @@ def is_current_project_member(user, project):
 
 @rules.predicate
 def is_project_owner(user, project):
-    return user in project.owners or (project.parent and is_project_owner(user, project.parent))
+    try:
+        return project.highest_role == 'owner'
+    except AttributeError:
+        return user in project.owners or (project.parent and is_project_owner(user, project.parent))
 
 
 @rules.predicate
 def is_project_manager(user, project):
-    return user in project.managers or (project.parent and is_project_manager(user, project.parent))
+    try:
+        return project.highest_role == 'manager'
+    except AttributeError:
+        return user in project.managers or (project.parent and is_project_manager(user, project.parent))
 
 
 @rules.predicate
 def is_project_author(user, project):
-    return user in project.authors or (project.parent and is_project_author(user, project.parent))
+    try:
+        return project.highest_role == 'author'
+    except AttributeError:
+        return user in project.authors or (project.parent and is_project_author(user, project.parent))
 
 
 @rules.predicate
 def is_project_guest(user, project):
-    return user in project.guests or (project.parent and is_project_guest(user, project.parent))
+    try:
+        return project.highest_role == 'guest'
+    except AttributeError:
+        return user in project.guests or (project.parent and is_project_guest(user, project.parent))
 
 
 @rules.predicate
