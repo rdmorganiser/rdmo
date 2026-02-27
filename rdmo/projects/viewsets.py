@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Case, F, IntegerField, Max, OuterRef, Prefetch, Q, Subquery, When
+from django.db.models import Case, F, IntegerField, OuterRef, Q, Subquery, When
 from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponseRedirect
 from django.template.loader import render_to_string
@@ -152,7 +152,6 @@ class ProjectViewSet(ModelViewSet):
         queryset = Project.objects.filter_user(self.request.user, filter_for_user).distinct().prefetch_related(
             'snapshots',
             'views',
-            Prefetch('memberships', queryset=membership_queryset, to_attr='memberships_list')
         ).select_related('catalog', 'visibility')
 
         # prepare subquery for the role of the current user
@@ -169,7 +168,7 @@ class ProjectViewSet(ModelViewSet):
         )
 
         # prepare subquery for the highest role in the hierarchy for the current user
-        highest_role_membership_id_subquery = Subquery(
+        highest_role_membership_subquery = (
             Membership.objects.filter(
                 user=self.request.user,
                 project__tree_id=OuterRef('tree_id'),
@@ -177,20 +176,7 @@ class ProjectViewSet(ModelViewSet):
                 project__rght__gte=OuterRef('rght'),
             )
             .annotate(role_rank=role_rank_case)
-            .values('project__tree_id')
-            .annotate(max_role=Max('role_rank'))
-            .values('id')
-        )
-
-        # prepare subqueries for the corresponding project.id, project.title, and role
-        highest_role_subquery = Subquery(
-            Membership.objects.filter(id=OuterRef('highest_role_membership_id')).values('role')
-        )
-        highest_role_project_id_subquery = Subquery(
-            Membership.objects.filter(id=OuterRef('highest_role_membership_id')).values('project_id')
-        )
-        highest_role_project_title_subquery = Subquery(
-            Membership.objects.filter(id=OuterRef('highest_role_membership_id')).values('project__title')
+            .order_by('-role_rank')
         )
 
         # prepare subquery for last_changed
@@ -201,10 +187,12 @@ class ProjectViewSet(ModelViewSet):
         # annotate the queryset with the subqueries
         queryset = queryset.annotate(
             current_role=current_role_subquery,
-            highest_role_membership_id=highest_role_membership_id_subquery,
-            highest_role=highest_role_subquery,
-            highest_role_project_id=highest_role_project_id_subquery,
-            highest_role_project_title=highest_role_project_title_subquery,
+            # it is important that each highest_role field has its own subquery since you cannot use
+            # something like OuterRef('highest_role_membership_id') in a different subquery
+            highest_role=Subquery(highest_role_membership_subquery.values('role')[:1]),
+            highest_role_project_id=Subquery(highest_role_membership_subquery.values('project_id')[:1]),
+            highest_role_project_title=Subquery(highest_role_membership_subquery.values('project__title')[:1]),
+            highest_role_membership_id=Subquery(highest_role_membership_subquery.values('id')[:1]),
             # the 'updated' field from a Project always returns a valid DateTime value
             # when Greatest returns null, then Coalesce will return the value for 'updated' as a fall-back
             # when Greatest returns a value, then Coalesce will return this value
