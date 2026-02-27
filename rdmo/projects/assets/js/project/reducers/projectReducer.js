@@ -107,7 +107,7 @@ export default function projectReducer(state = initialState, action) {
         ...state,
         project: {
           ...state.project,
-          snapshots: [...(state.project?.snapshots || []), action.snapshot]
+          snapshots: [action.snapshot, ...(state.project?.snapshots || [])]
         }
       }
     case actionTypes.DELETE_SNAPSHOT_SUCCESS: {
