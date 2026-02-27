@@ -2,10 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import DatePicker from 'react-datepicker'
 import classNames from 'classnames'
+import { parse, format, isValid } from 'date-fns'
 import { enGB, de, it, es, fr } from 'date-fns/locale'
+import { useDebouncedCallback } from 'use-debounce'
 
 import lang from 'rdmo/core/assets/js/utils/lang'
-import { getDateFromDatetime } from 'rdmo/core/assets/js/utils/date'
 
 import { getQuestionTextId, getQuestionHelpId } from '../../../utils/question'
 import { isDefaultValue } from '../../../utils/value'
@@ -43,9 +44,17 @@ const DateInput = ({ question, value, disabled, updateValue, buttons }) => {
   }
 
   const handleChange = (date) => {
-    const text = getDateFromDatetime(date)
+    const text = format(date, 'yyyy-MM-dd')
     updateValue(value, { text, unit: question.unit, value_type: question.value_type })
   }
+
+  const handleRawChange = useDebouncedCallback((event) => {
+    const value = event.target.value
+    const date = parse(value, getDateFormat(), new Date())
+    if (isValid(date)) {
+      handleChange(date)
+    }
+  }, 500)
 
   const classnames = classNames({
     'form-control': true,
@@ -61,6 +70,7 @@ const DateInput = ({ question, value, disabled, updateValue, buttons }) => {
           className={classnames}
           selected={value.text}
           onChange={(date) => handleChange(date)}
+          onChangeRaw={(event) => handleRawChange(event)}
           locale={getLocale()}
           dateFormat={getDateFormat()}
           disabled={disabled}
