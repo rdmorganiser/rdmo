@@ -12,6 +12,7 @@ import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import * as projectsActions from '../actions/projectsActions'
 
 import ProjectForm from '../../project/components/areas/information/ProjectForm'
+import ProjectDeleteModal from '../../project/components/areas/information/ProjectDeleteModal'
 import { PendingInvitations, ProjectFilters, ProjectImport, Table } from './helper'
 import { HEADER_FORMATTERS, SORTABLE_COLUMNS } from '../utils'
 import { roleOptions } from '../../common/constants/roles'
@@ -31,6 +32,7 @@ const Main = () => {
   const { show: showImport, open: openImport, close: closeImport } = useModal()
   const { show: showEdit, open: openEdit, close: closeEdit } = useModal()
   const { show: showCreate, open: openCreate, close: closeCreate } = useModal()
+  const { show: showDelete, open: openDelete, close: closeDelete } = useModal()
 
   if (!projectsObject.ready) return null
   const { allowedTypes, catalogs, importUrls, invites, projects, projectsCount, hasNext } = projectsObject
@@ -81,6 +83,11 @@ const Main = () => {
       type: 'submit',
       form: 'project-edit-form'
     }
+  }
+
+  const handleCloseDelete = () => {
+    setSelectedProject(null)
+    closeDelete()
   }
 
   const displayMessage = interpolate(gettext('%s of %s projects are displayed'), [projects.length > projectsCount ? projectsCount : projects.length, projectsCount])
@@ -233,8 +240,8 @@ const Main = () => {
     created: content => useFormattedDateTime(content, language),
     last_changed: content => useFormattedDateTime(content, language),
     actions: (_content, row) => {
-      const rowUrl = `${baseUrl}/projects/${row.id}`
-      const params = `?next=${window.location.pathname}`
+      // const rowUrl = `${baseUrl}/projects/${row.id}`
+      // const params = `?next=${window.location.pathname}`
       const perms = row.permissions || {}
       return (
         <div className="d-flex align-items-center gap-1">
@@ -264,12 +271,22 @@ const Main = () => {
           }
           {perms.can_delete_project &&
             <Link
+              className="bi bi-trash"
+              title={labels.delete}
+              onClick={() => {
+                setSelectedProject(row)
+                openDelete()
+              }}
+            />
+          }
+          {/* {perms.can_delete_project &&
+            <Link
               href={`${rowUrl}/delete/`}
               className="bi bi-trash"
               title={labels.delete}
               onClick={() => window.location.href = `${rowUrl}/delete/${params}`}
             />
-          }
+          } */}
         </div>
       )
     }
@@ -380,6 +397,12 @@ const Main = () => {
               onSaved={handleCloseCreate}
             />
           </Modal>
+          <ProjectDeleteModal
+            project={selectedProject}
+            show={showDelete}
+            onClose={handleCloseDelete}
+            onDeleted={() => dispatch(projectsActions.refetchLoadedPages())}
+          />
         </div>
       </div>
     </div>
