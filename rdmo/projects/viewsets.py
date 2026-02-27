@@ -41,6 +41,7 @@ from .filters import (
     OptionFilterBackend,
     ProjectDateFilterBackend,
     ProjectOrderingFilter,
+    ProjectRoleFilterBackend,
     ProjectSearchFilterBackend,
     ProjectUserFilterBackend,
     SnapshotFilterBackend,
@@ -119,6 +120,7 @@ class ProjectViewSet(ModelViewSet):
     filter_backends = (
         DjangoFilterBackend,
         ProjectUserFilterBackend,
+        ProjectRoleFilterBackend,
         ProjectDateFilterBackend,
         ProjectOrderingFilter,
         ProjectSearchFilterBackend,
