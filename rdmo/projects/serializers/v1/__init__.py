@@ -129,6 +129,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     parent = ParentField(required=False, allow_null=True)
 
+    ancestors = serializers.SerializerMethodField()
     permissions = serializers.SerializerMethodField()
 
     current_role = serializers.SerializerMethodField()
@@ -156,6 +157,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             'progress_total',
             'progress_count',
             'visibility',
+            'ancestors',
             'permissions',
         )
         read_only_fields = (
@@ -164,6 +166,17 @@ class ProjectSerializer(serializers.ModelSerializer):
         validators = [
             ProjectParentValidator()
         ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if self.instance:
+            # this prefetches the ancestors of all instances for the serializer in one
+            # query and caches them in the project instances
+            projects = self.instance if isinstance(self.instance, list) else [self.instance]
+            prefetched = Project.objects.prefetch_ancestors(projects)
+            for project in projects:
+                project._cached_ancestors = prefetched[project.id]
 
     def validate_views(self, value):
         """Block updates to views if syncing is enabled."""
@@ -229,32 +242,16 @@ class ProjectSerializer(serializers.ModelSerializer):
                 'membership_id': obj.highest_role_membership_id,
             }
 
+    def get_ancestors(self, obj) -> list[dict[str, Any]]:
+        return ProjectAncestorSerializer(obj.get_cached_ancestors(), many=True, context=self.context).data
+
 
 class ProjectListSerializer(ProjectSerializer):
 
-    permissions = serializers.SerializerMethodField()
-    ancestors = serializers.SerializerMethodField()
-
     class Meta:
         model = Project
-        fields = [
-            *ProjectSerializer.Meta.fields,
-            'permissions',
-            'ancestors'
-        ]
+        fields = ProjectSerializer.Meta.fields
         read_only_fields = ProjectSerializer.Meta.read_only_fields
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        if self.instance:
-            # this prefetches the ancestors of all instances for the serializer in one
-            # query and caches them in the instance
-            projects = self.instance if isinstance(self.instance, list) else [self.instance]
-            self._prefetched_ancestors = Project.objects.prefetch_ancestors(projects)
-        else:
-            # prevent AttributeError for create
-            self._prefetched_ancestors = {}
 
     def get_permissions(self, obj) -> dict[str, bool]:
         request = self.context.get('request')
@@ -263,10 +260,6 @@ class ProjectListSerializer(ProjectSerializer):
             'can_change_project': request.user.has_perm('projects.change_project_object', obj),
             'can_delete_project': request.user.has_perm('projects.delete_project_object', obj)
         }
-
-    def get_ancestors(self, obj) -> list[dict[str, Any]]:
-        ancestors = self._prefetched_ancestors.get(obj.id, obj.get_ancestors())
-        return ProjectAncestorSerializer(ancestors, many=True, context=self.context).data
 
 
 class ProjectCopySerializer(ProjectSerializer):

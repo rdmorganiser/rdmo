@@ -153,6 +153,13 @@ class Project(MPTTModel, Model):
             verbose=verbose
         ).compute()
 
+    def get_cached_ancestors(self):
+        # this caches the ancestors, different to a @cached_property, this is also done
+        # in the __init__ of ProjectSerializer
+        if not hasattr(self, '_cached_ancestors'):
+            self._cached_ancestors = self.get_ancestors()
+        return self._cached_ancestors
+
 
 @receiver(pre_delete, sender=Project)
 def reparent_children(sender, instance, **kwargs):
