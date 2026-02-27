@@ -130,6 +130,8 @@ class ProjectViewSet(ModelViewSet):
         'title',
         'progress',
         'role',
+        'current_role',
+        'highest_role',
         'owner',
         'updated',
         'created',
