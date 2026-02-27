@@ -128,12 +128,6 @@ class ProjectSerializer(serializers.ModelSerializer):
     catalog = CatalogField(required=True)
 
     parent = ParentField(required=False, allow_null=True)
-    parent_title = serializers.CharField(source='parent.title', read_only=True)
-
-    owners = ProjectUserSerializer(many=True, read_only=True)
-    managers = ProjectUserSerializer(many=True, read_only=True)
-    authors = ProjectUserSerializer(many=True, read_only=True)
-    guests = ProjectUserSerializer(many=True, read_only=True)
 
     permissions = serializers.SerializerMethodField()
 
@@ -151,13 +145,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             'description',
             'catalog',
             'catalog_uri',
-            'snapshots',
             'parent',
-            'parent_title',
-            'owners',
-            'managers',
-            'authors',
-            'guests',
             'created',
             'updated',
             'current_role',
@@ -168,7 +156,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             'progress_total',
             'progress_count',
             'visibility',
-            'permissions'
+            'permissions',
         )
         read_only_fields = (
             'snapshots',
