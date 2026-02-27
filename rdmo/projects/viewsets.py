@@ -150,10 +150,10 @@ class ProjectViewSet(ModelViewSet):
         if settings.SOCIALACCOUNT:
             membership_queryset = membership_queryset.prefetch_related('user__socialaccount_set')
 
-        queryset = Project.objects.filter_user(self.request.user, filter_for_user).distinct().prefetch_related(
-            'snapshots',
-            'views',
-        ).select_related('catalog', 'visibility')
+        queryset = (
+            Project.objects.filter_user(self.request.user, filter_for_user).distinct()
+                           .select_related('catalog', 'visibility')
+        )
 
         # prepare subquery for the role of the current user
         current_role_subquery = Subquery(
