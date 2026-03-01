@@ -212,6 +212,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             'can_view_snapshot': request.user.has_perm('projects.view_snapshot_object', obj),
             'can_add_snapshot': request.user.has_perm('projects.add_snapshot_object', obj),
             'can_change_snapshot': request.user.has_perm('projects.change_snapshot_object', obj),
+            'can_delete_snapshot': request.user.has_perm('projects.delete_snapshot_object', obj),
             'can_rollback_snapshot': request.user.has_perm('projects.rollback_snapshot_object', obj),
             'can_export_snapshot': request.user.has_perm('projects.export_snapshot_object', obj),
             'can_view_value': request.user.has_perm('projects.view_value_object', obj),

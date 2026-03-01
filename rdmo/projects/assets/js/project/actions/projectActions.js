@@ -343,6 +343,24 @@ export function updateSnapshot(snapshotId, data) {
   }
 }
 
+export function deleteSnapshot(snapshotId) {
+  return function (dispatch) {
+    dispatch(addToPending('deleteSnapshot'))
+    dispatch({ type: actionTypes.DELETE_SNAPSHOT_INIT })
+
+    return ProjectApi.deleteSnapshot(projectId, snapshotId)
+      .then(() => {
+        dispatch(removeFromPending('deleteSnapshot'))
+        dispatch({ type: actionTypes.DELETE_SNAPSHOT_SUCCESS, snapshotId })
+      })
+      .catch(error => {
+        dispatch(removeFromPending('deleteSnapshot'))
+        dispatch({ type: actionTypes.DELETE_SNAPSHOT_ERROR, error })
+        throw error
+      })
+  }
+}
+
 export function rollbackSnapshot(snapshotId) {
   return function (dispatch) {
     dispatch(addToPending('rollbackSnapshot'))

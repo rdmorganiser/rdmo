@@ -6,7 +6,7 @@ import Html from 'rdmo/core/assets/js/components/Html'
 import { Input, Textarea } from 'rdmo/core/assets/js/components/forms'
 import { Modal } from 'rdmo/core/assets/js/_bs53/components'
 
-import { createSnapshot, updateSnapshot, clearProjectErrors}  from '../../../actions/projectActions'
+import { createSnapshot, updateSnapshot, clearProjectErrors } from '../../../actions/projectActions'
 import { useFieldErrors } from '../../../hooks/useFieldErrors'
 
 const initialForm = { title: '', description: '' }
@@ -72,7 +72,7 @@ const SnapshotModal = ({ show, onClose, snapshot }) => {
           name="title"
           required
           value={formData.title}
-          onChange={(e) => setField('title', e.target.value)}
+          onChange={(value) => setField('title', value)}
         />
         <Textarea
           id="snapshot-description"
@@ -81,7 +81,7 @@ const SnapshotModal = ({ show, onClose, snapshot }) => {
           label={gettext('Description')}
           name="description"
           value={formData.description}
-          onChange={(e) => setField('description', e.target.value)}
+          onChange={(value) => setField('description', value)}
           rows={4}
         />
 

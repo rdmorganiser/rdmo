@@ -12,6 +12,7 @@ import { buildPath } from '../../../utils/location'
 
 import SnapshotModal from './SnapshotModal'
 import SnapshotRollbackModal from './SnapshotRollbackModal'
+import SnapshotDeleteModal from './SnapshotDeleteModal'
 
 const SnapshotTable = ({ snapshots }) => {
   const dispatch = useDispatch()
@@ -20,6 +21,7 @@ const SnapshotTable = ({ snapshots }) => {
 
   const updateModal = useModal()
   const rollbackModal = useModal()
+  const deleteModal = useModal()
   const [selectedSnapshot, setSelectedSnapshot] = useState(null)
 
   const openRollbackModal = (snapshot) => {
@@ -30,6 +32,11 @@ const SnapshotTable = ({ snapshots }) => {
   const openUpdateModal = (snapshot) => {
     setSelectedSnapshot(snapshot)
     updateModal.open()
+  }
+
+  const openDeleteModal = (snapshot) => {
+    setSelectedSnapshot(snapshot)
+    deleteModal.open()
   }
 
   return (
@@ -90,6 +97,17 @@ const SnapshotTable = ({ snapshots }) => {
                         <i className={'bi bi-reply-fill'} aria-hidden="true" />
                       </button>
                     )}
+                    {perms.can_delete_snapshot && (
+                      <button
+                        type="button"
+                        className="link"
+                        aria-label={gettext('Delete snapshot')}
+                        title={gettext('Delete snapshot')}
+                        onClick={() => openDeleteModal(snapshot)}
+                      >
+                        <i className={'bi bi-trash'} aria-hidden="true" />
+                      </button>
+                    )}
                   </div>
                 </td>
               </tr>
@@ -107,6 +125,10 @@ const SnapshotTable = ({ snapshots }) => {
             <SnapshotRollbackModal
               show={rollbackModal.show}
               onClose={rollbackModal.close}
+              snapshot={selectedSnapshot} />
+            <SnapshotDeleteModal
+              show={deleteModal.show}
+              onClose={deleteModal.close}
               snapshot={selectedSnapshot} />
           </>
         )
