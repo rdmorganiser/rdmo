@@ -75,7 +75,7 @@ ci = [
   "pytest-github-actions-annotate-failures>=0.2.0,<0.4.0",
 ]
 allauth = [
-  "django-allauth[socialaccount,openid]>=64.1.0,<65.14.0",
+  "django-allauth[socialaccount,openid]>=64.1.0,<65.15.0",
 ]
 dev = [
   "pipdeptree>=2.13,<3.0",
