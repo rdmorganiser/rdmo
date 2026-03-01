@@ -123,7 +123,7 @@ class Project(MPTTModel, Model):
 
     @property
     def groups(self) -> list:
-        return {group for user in self.owners for group in user.groups.all()}
+        return [group for user in self.owners for group in user.groups.all()]
 
     @cached_property
     def owners_str(self) -> str:
