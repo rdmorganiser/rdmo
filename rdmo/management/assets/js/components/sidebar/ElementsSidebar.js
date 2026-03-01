@@ -14,6 +14,33 @@ import { elementTypes, elementModules } from '../../constants/elements'
 import { buildApiPath, buildPath } from '../../utils/location'
 import { getExportParams } from '../../utils/filter'
 
+const navigation = {
+  catalogs: gettext('Catalogs'),
+  sections: gettext('Sections'),
+  pages: gettext('Pages'),
+  questionsets: gettext('Question sets'),
+  questions: gettext('Questions'),
+  attributes: gettext('Attributes'),
+  optionsets: gettext('Option sets'),
+  options: gettext('Options'),
+  conditions: gettext('Conditions'),
+  tasks: gettext('Tasks'),
+  views: gettext('Views'),
+}
+
+const icons = {
+  catalogs: 'book',
+  sections: 'files',
+  pages: 'file',
+  questionsets: 'question-square',
+  questions: 'question-circle',
+  attributes: 'code-slash',
+  optionsets: 'card-checklist',
+  options: 'list-check',
+  conditions: 'check-circle',
+  tasks: 'exclamation-circle',
+  views: 'file-earmark-text',
+}
 
 const ElementsSidebar = () => {
   const dispatch = useDispatch()
@@ -54,20 +81,6 @@ const ElementsSidebar = () => {
     if (!isEmpty(event.target.files)) {
       dispatch(uploadFile(event.target.files[0]))
     }
-  }
-
-  const navigation = {
-    catalogs: gettext('Catalogs'),
-    sections: gettext('Sections'),
-    pages: gettext('Pages'),
-    questionsets: gettext('Question sets'),
-    questions: gettext('Questions'),
-    attributes: gettext('Attributes'),
-    optionsets: gettext('Option sets'),
-    options: gettext('Options'),
-    conditions: gettext('Conditions'),
-    tasks: gettext('Tasks'),
-    views: gettext('Views'),
   }
 
   const exportOptions = [
@@ -111,7 +124,12 @@ const ElementsSidebar = () => {
             <Link key={et}
                   href={buildPath(et)}
                   className={classNames('nav-link text-start', { active: elementType === et })}
-                  onClick={() => dispatch(fetchElements(et))}>{label}</Link>
+                  onClick={() => dispatch(fetchElements(et))}>
+              <div className="d-flex align-items-center gap-2">
+                <i className={`bi bi-${icons[et]}`} aria-hidden="true" />
+                {label}
+              </div>
+            </Link>
           ))
         }
       </nav>
