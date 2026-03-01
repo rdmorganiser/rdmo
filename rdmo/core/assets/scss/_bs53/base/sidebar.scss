@@ -16,7 +16,7 @@ aside {
     width: var(--rdmo-sidebar-width);
     height: calc(100vh - 56px);
 
-    padding: 1rem 0.5rem;  // same as py-2 py-2
+    padding: 1rem 0.5rem;  // same as py-3 px-2
 
     @media only screen and (max-width: $grid-breakpoint-lg) {
         .nav-link {
@@ -27,7 +27,7 @@ aside {
     @media only screen and (min-width: $grid-breakpoint-lg) {
         width: var(--rdmo-sidebar-lg-width);
         padding: 1.5rem;  // same as p-4
-        overflow-y: scroll;
+        overflow-y: auto;
     }
 }
 

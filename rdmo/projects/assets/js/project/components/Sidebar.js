@@ -44,7 +44,6 @@ const Sidebar = () => {
 
   return project && (
     <div className="d-flex flex-column h-100">
-
       <div className="d-none d-lg-block card w-100 mb-3">
         <div className="card-body py-2">
           <h2 className="font-large mb-2">{project.project.title}</h2>
@@ -85,7 +84,7 @@ const Sidebar = () => {
 
       <hr />
 
-      <div className="text-center text-lg-start ms-lg-2">
+      <div className="text-center text-lg-start ms-lg-2 pb-3">
         <a href={`${baseUrl}/projects/`}>
           <i className="bi bi-arrow-left"></i>
           <span className="d-none d-lg-inline ms-2">
