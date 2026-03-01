@@ -249,7 +249,7 @@ class ProjectSerializer(serializers.ModelSerializer):
                 'role': obj.highest_role,
                 'role_display': dict(ROLE_CHOICES)[obj.highest_role],
                 'project_id': obj.highest_role_project_id,
-                'project_title':  obj.highest_role_project_title,
+                'project_title': obj.highest_role_project_title,
                 'membership_id': obj.highest_role_membership_id,
             }
 
