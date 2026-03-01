@@ -6,17 +6,13 @@ from pathlib import Path
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.timezone import now
 
-from rdmo.core.constants import PERMISSIONS
 from rdmo.core.mail import send_mail
 from rdmo.core.plugins import get_plugins
 from rdmo.core.utils import remove_double_newlines
-from rdmo.tasks.managers import TaskQuerySet
-from rdmo.views.managers import ViewQuerySet
 
 logger = logging.getLogger(__name__)
 

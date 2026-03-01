@@ -331,7 +331,7 @@ def test_create_tasks(db, client, settings, username, password, project_id, sync
         if username in ('admin', 'api'):
             available_tasks = Task.objects.filter(sites=site_id)
         else:
-            available_tasks = Task.objects.filter(sites=site_id).exclude(id=view_id)
+            available_tasks = Task.objects.filter(sites=site_id).exclude(id=task_id)
 
         assert {t.id for t in available_tasks} == {t.id for t in project.tasks.all()}
     else:
@@ -342,7 +342,7 @@ def test_create_tasks(db, client, settings, username, password, project_id, sync
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('sync', [True, False])
 def test_create_views(db, client, settings, username, password, project_id, sync):
-    settings.PROJECT_TASKS_SYNC = sync
+    settings.PROJECT_VIEWS_SYNC = sync
 
     client.login(username=username, password=password)
 

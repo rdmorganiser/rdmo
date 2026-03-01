@@ -14,7 +14,7 @@ def pre_save_check_if_catalog_was_changed(sender, instance, raw, update_fields, 
     if (settings.PROJECT_TASKS_SYNC or settings.PROJECT_VIEWS_SYNC) and not raw:
         instance._catalog_was_changed = False
 
-        if instance.id is not None and 'catalog' in update_fields:
+        if instance.id is not None and (update_fields is None or 'catalog' in update_fields):
             # Fetch the original catalog from the database
             if sender.objects.get(id=instance.id).catalog == instance.catalog:
                 # Do nothing if the catalog has not changed

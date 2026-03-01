@@ -27,21 +27,17 @@ def sync_task_or_view_to_projects(instance):
     to_add = target_projects.exclude(pk__in=current_projects)
 
     if not to_remove and not to_add:
-        logger.debug(
-            'No projects to change for %s(id=%s)', type(instance).__name__, instance.id
-        )
+        logger.debug('No projects to change for %s(id=%s)', type(instance).__name__, instance.id)
         return
 
     if to_remove:
-        logger.debug(
-            'Removing %s(id=%s) from Projects: %s', type(instance).__name__, instance.id, [p.id for p in to_remove]
-        )
+        logger.debug('Removing %s(id=%s) from Projects: %s', type(instance).__name__, instance.id,
+                     to_remove.values_list('id', flat=True))
         instance.projects.remove(*to_remove)
 
     if to_add:
-        logger.debug(
-            'Adding %s(id=%s) to Projects: %s', type(instance).__name__, instance.id, [p.id for p in to_add]
-        )
+        logger.debug('Adding %s(id=%s) to Projects: %s', type(instance).__name__, instance.id,
+                     to_add.values_list('id', flat=True))
         instance.projects.add(*to_add)
 
 
@@ -68,35 +64,38 @@ def sync_tasks_or_views_for_project(model, project):
 
     if to_remove:
         logger.debug(
-            'Removing %s %s from Project(id=%s)', model, [i.id for i in to_remove], project.id
+            'Removing %s %s from Project(id=%s)', model, to_remove.values_list('id', flat=True), project.id
         )
         getattr(project, field).remove(*to_remove)
 
     if to_add:
         logger.debug(
-            'Adding %s %s to Project(id=%s)', model, [i.id for i in to_add], project.id
+            'Adding %s %s to Project(id=%s)', model, to_add.values_list('id', flat=True), project.id
         )
         getattr(project, field).add(*to_add)
 
 
 def filter_tasks_or_views_for_project(model, project):
-    # get eiter tasks.view_task or views.view_view
-    permission = f'{model._meta.app_label}.view_{model._meta.model_name}'
-
     # get all tasks/views which have no catalog/group or the catalog/group of the project
     queryset = (
         model.objects.filter(Q(catalogs=None) | Q(catalogs=project.catalog))
                      .filter(Q(groups=None) | Q(groups__in=project.groups))
     )
 
-    # check if all members of the project have tasks.view_task/views.view_view
-    memberships = project.memberships.all()
-    if memberships and all(
-        membership.user.has_perm(permission) for membership in memberships
-    ):
-        # if all users have model permissions, tasks/views do not need to be checked for availability
-        pass
-    else:
+    # check if there is a member of the without tasks.view_task/views.view_view
+    members_without_permission = Membership.objects.filter(
+        project=project
+    ).exclude(
+        Q(user__is_superuser=True) |
+        Q(user__user_permissions__content_type__app_label=model._meta.app_label,
+          user__user_permissions__codename=f'view_{model._meta.model_name}') |
+        Q(user__groups__permissions__content_type__app_label=model._meta.app_label,
+          user__groups__permissions__codename=f'view_{model._meta.model_name}') |
+        Q(user__role__editor=project.site_id) |
+        Q(user__role__reviewer=project.site_id)
+    ).distinct()
+
+    if members_without_permission.exists():
         queryset = queryset.filter(available=True)
 
     if settings.MULTISITE:
@@ -114,6 +113,8 @@ def filter_projects_for_task_or_view(instance):
         users_without_permissions_subquery = (
             Membership.objects.filter(project_id=OuterRef('pk')).exclude(
                 Q(user__is_superuser=True) |
+                Q(user__user_permissions__content_type__app_label=instance._meta.app_label,
+                  user__user_permissions__codename=f'view_{instance._meta.model_name}') |
                 Q(user__groups__permissions__content_type__app_label=instance._meta.app_label,
                   user__groups__permissions__codename=f'view_{instance._meta.model_name}') |
                 Q(user__role__editor=OuterRef('site_id')) |
@@ -142,4 +143,4 @@ def filter_projects_for_task_or_view(instance):
     if instance.groups.exists():
         queryset = queryset.filter_groups(instance.groups.all())
 
-    return queryset.all()
+    return queryset.distinct()

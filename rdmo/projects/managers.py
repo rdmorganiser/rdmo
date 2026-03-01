@@ -2,7 +2,7 @@ from collections import defaultdict
 
 from django.conf import settings
 from django.db import models
-from django.db.models import Exists, OuterRef, Q
+from django.db.models import Q
 
 from mptt.models import TreeManager
 from mptt.querysets import TreeQuerySet
@@ -216,6 +216,7 @@ class ValueQuerySet(models.QuerySet):
         for attribute, set_prefix, set_index in self.distinct_list():
             sets[attribute].add((set_prefix, set_index))
         return sets
+
 
 class ProjectManager(CurrentSiteManagerMixin, TreeManager):
 

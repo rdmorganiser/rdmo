@@ -313,7 +313,7 @@ def test_project_create_post_tasks(db, client, settings, username, password, syn
         if username in ('editor', 'reviewer', 'api'):
             available_tasks = Task.objects.filter(sites=site_id)
         else:
-            available_tasks = Task.objects.filter(sites=site_id).exclude(id=view_id)
+            available_tasks = Task.objects.filter(sites=site_id).exclude(id=task_id)
 
         assert {t.id for t in available_tasks} == {t.id for t in project.tasks.all()}
 
