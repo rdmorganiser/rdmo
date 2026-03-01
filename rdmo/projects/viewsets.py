@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import F, OuterRef, Prefetch, Q, Subquery
+from django.db.models import Case, F, IntegerField, OuterRef, Prefetch, Q, Subquery, When
 from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponseRedirect
 from django.template.loader import render_to_string
@@ -25,17 +25,20 @@ from rdmo.conditions.models import Condition
 from rdmo.core.constants import VALUE_TYPE_FILE
 from rdmo.core.permissions import HasModelPermission
 from rdmo.core.utils import human2bytes, is_truthy, render_to_format, return_file_response
+from rdmo.core.views import ChoicesViewSet
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 from rdmo.views.utils import ProjectWrapper
 
+from .constants import ROLE_CHOICES
 from .filters import (
     AttributeFilterBackend,
     OptionFilterBackend,
     ProjectDateFilterBackend,
     ProjectOrderingFilter,
+    ProjectRoleFilterBackend,
     ProjectSearchFilterBackend,
     ProjectUserFilterBackend,
     SnapshotFilterBackend,
@@ -112,6 +115,7 @@ class ProjectViewSet(ModelViewSet):
     filter_backends = (
         DjangoFilterBackend,
         ProjectUserFilterBackend,
+        ProjectRoleFilterBackend,
         ProjectDateFilterBackend,
         ProjectOrderingFilter,
         ProjectSearchFilterBackend,
@@ -126,6 +130,8 @@ class ProjectViewSet(ModelViewSet):
         'title',
         'progress',
         'role',
+        'current_role',
+        'highest_role',
         'owner',
         'updated',
         'created',
@@ -140,30 +146,62 @@ class ProjectViewSet(ModelViewSet):
         # projects for the current user regardless of their permissions, e.g. for admins
         filter_for_user = (self.action == 'user')
 
+        # create a query to prefetch the memberships incl. the socialaccounts
         membership_queryset = Membership.objects.select_related('user')
         if settings.SOCIALACCOUNT:
             membership_queryset = membership_queryset.prefetch_related('user__socialaccount_set')
 
-        queryset = Project.objects.filter_user(self.request.user, filter_for_user).distinct().prefetch_related(
-            'snapshots',
-            'views',
-            Prefetch('memberships', queryset=membership_queryset, to_attr='memberships_list')
-        ).select_related('catalog', 'visibility')
+        queryset = (
+            Project.objects.filter_user(self.request.user, filter_for_user).distinct()
+                           .prefetch_related(
+                                'views',
+                                Prefetch('memberships', queryset=membership_queryset, to_attr='prefetched_memberships')
+                            )
+                           .select_related('catalog', 'visibility')
+        )
 
         # prepare subquery for the role of the current user
-        membership_subquery = Subquery(
+        current_role_subquery = Subquery(
             Membership.objects.filter(project=OuterRef('pk'), user=self.request.user).values('role')
+        )
+
+        # create a numbered list of the ROLE_CHOICES
+        role_ranks = list(enumerate(reversed([role for role, _ in ROLE_CHOICES])))
+
+        # create a case for the highest role in the hierarchy, and the other way around
+        role_rank_case = Case(
+            *[When(role=role, then=rank) for rank, role in role_ranks], output_field=IntegerField()
+        )
+
+        # prepare subquery for the highest role in the hierarchy for the current user
+        highest_role_membership_subquery = (
+            Membership.objects.filter(
+                user=self.request.user,
+                project__tree_id=OuterRef('tree_id'),
+                project__lft__lte=OuterRef('lft'),
+                project__rght__gte=OuterRef('rght'),
+            )
+            .annotate(role_rank=role_rank_case)
+            .order_by('-role_rank')
         )
 
         # prepare subquery for last_changed
         last_changed_subquery = Subquery(
             Value.objects.filter(project=OuterRef('pk')).order_by('-updated').values('updated')[:1]
         )
-        # the 'updated' field from a Project always returns a valid DateTime value
-        # when Greatest returns null, then Coalesce will return the value for 'updated' as a fall-back
-        # when Greatest returns a value, then Coalesce will return this value
+
+        # annotate the queryset with the subqueries
         queryset = queryset.annotate(
-            current_role=membership_subquery,
+            current_role=current_role_subquery,
+            # it is important that each highest_role field has its own subquery since you cannot use
+            # something like OuterRef('highest_role_membership_id') in a different subquery
+            highest_role=Subquery(highest_role_membership_subquery.values('role')[:1]),
+            highest_role_project_id=Subquery(highest_role_membership_subquery.values('project_id')[:1]),
+            highest_role_project_title=Subquery(highest_role_membership_subquery.values('project__title')[:1]),
+            highest_role_membership_id=Subquery(highest_role_membership_subquery.values('id')[:1]),
+            # the 'updated' field from a Project always returns a valid DateTime value
+            # when Greatest returns null, then Coalesce will return the value for 'updated' as a fall-back
+            # when Greatest returns a value, then Coalesce will return this value
             last_changed=Coalesce(Greatest(last_changed_subquery, 'updated'), 'updated')
         )
 
@@ -1201,3 +1239,8 @@ class CatalogViewSet(ListModelMixin, GenericViewSet):
             queryset.filter(Q(pk__in=availability_subquery) | Q(projects__user=self.request.user))
             .order_by('-available', 'order', 'id').distinct()
         )
+
+
+class RoleViewSet(ChoicesViewSet):
+    permission_classes = (IsAuthenticated, )
+    queryset = ROLE_CHOICES
