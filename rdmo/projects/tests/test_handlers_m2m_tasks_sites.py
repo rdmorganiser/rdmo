@@ -8,8 +8,8 @@ from rdmo.projects.tests.helpers.sync.assert_project_views_or_tasks import (
 
 
 @pytest.mark.django_db
-def test_project_tasks_sync_when_updating_task_sites(settings, enable_project_tasks_sync):
-    assert settings.PROJECT_TASKS_SYNC
+def test_project_tasks_sync_when_updating_task_sites(settings):
+    settings.PROJECT_TASKS_SYNC = True
 
     P, T, S = arrange_projects_sites_and_tasks()
     # === Initial state ===

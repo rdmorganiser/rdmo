@@ -2,6 +2,8 @@ import pytest
 
 from django.urls import reverse
 
+from rdmo.questions.models import Catalog
+
 users = (
     ('owner', 'owner'),
     ('manager', 'manager'),
@@ -48,8 +50,11 @@ def test_list(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_list_with_cleared_sites(db, client, clear_sites_from_other_catalogs, username, password):
+def test_list_with_cleared_sites(db, client, settings, username, password):
     client.login(username=username, password=password)
+
+    for catalog in Catalog.objects.exclude(sites=settings.SITE_ID):
+        catalog.sites.clear()
 
     url = reverse(urlnames['list'])
     response = client.get(url)

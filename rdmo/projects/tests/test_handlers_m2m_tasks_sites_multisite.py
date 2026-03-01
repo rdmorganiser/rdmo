@@ -6,13 +6,11 @@ from rdmo.projects.tests.helpers.sync.assert_project_views_or_tasks import (
     assert_all_projects_are_synced_with_instance_m2m_field,
 )
 
-pytestmark = pytest.mark.usefixtures("enable_multisite")
-
 
 @pytest.mark.django_db
-def test_project_tasks_sync_when_updating_task_sites_multisite(settings, enable_project_tasks_sync):
-    assert settings.PROJECT_TASKS_SYNC
-    assert settings.MULTISITE  # just a double-check
+def test_project_tasks_sync_when_updating_task_sites_multisite(settings):
+    settings.PROJECT_TASKS_SYNC = True
+    settings.MULTISITE = True
 
     P, T, S = arrange_projects_sites_and_tasks()
     # === Initial state ===

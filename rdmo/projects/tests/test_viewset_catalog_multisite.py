@@ -2,6 +2,8 @@ import pytest
 
 from django.urls import reverse
 
+from rdmo.questions.models import Catalog
+
 users = (
     ('owner', 'owner'),
     ('manager', 'manager'),
@@ -37,10 +39,10 @@ urlnames = {
     'list': 'v1-projects:catalog-list',
 }
 
-pytestmark = pytest.mark.usefixtures("enable_multisite")
-
 @pytest.mark.parametrize('username,password', users)
 def test_list(db, settings, client, username, password):
+    settings.MULTISITE = True
+
     client.login(username=username, password=password)
 
     url = reverse(urlnames['list'])
@@ -56,8 +58,12 @@ def test_list(db, settings, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_list_with_cleared_sites(db, settings, clear_sites_from_other_catalogs,
-                                 client, username, password):
+def test_list_with_cleared_sites(db, settings, client, username, password):
+    settings.MULTISITE = True
+
+    for catalog in Catalog.objects.exclude(sites=settings.SITE_ID):
+        catalog.sites.clear()
+
     client.login(username=username, password=password)
 
     url = reverse(urlnames['list'])

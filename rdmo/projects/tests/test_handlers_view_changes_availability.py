@@ -4,8 +4,8 @@ from rdmo.projects.tests.helpers.sync.arrange_project_views import arrange_proje
 
 
 @pytest.mark.django_db
-def test_project_views_sync_when_updating_available_on_a_view(settings, enable_project_views_sync):
-    assert settings.PROJECT_VIEWS_SYNC
+def test_project_views_sync_when_updating_available_on_a_view(settings):
+    settings.PROJECT_VIEWS_SYNC = True
 
     P, C, V = arrange_projects_catalogs_and_views()
     # === Initial state ===

@@ -4,8 +4,8 @@ from rdmo.projects.tests.helpers.sync.arrange_project_tasks import arrange_proje
 
 
 @pytest.mark.django_db
-def test_project_tasks_sync_when_updating_available_on_a_task(settings, enable_project_tasks_sync):
-    assert settings.PROJECT_TASKS_SYNC
+def test_project_tasks_sync_when_updating_available_on_a_task(settings):
+    settings.PROJECT_TASKS_SYNC = True
 
     P, C, T = arrange_projects_catalogs_and_tasks()
     # === Initial state ===

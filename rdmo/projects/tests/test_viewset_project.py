@@ -567,8 +567,8 @@ def test_update_parent(db, client, username, password, project_id):
         assert Project.objects.get(pk=project_id).parent == project.parent
 
 
-def test_update_project_views_not_allowed(db, client, settings, enable_project_views_sync):
-    assert settings.PROJECT_VIEWS_SYNC
+def test_update_project_views_not_allowed(db, client, settings):
+    settings.PROJECT_VIEWS_SYNC = True
 
     client.login(username='owner', password='owner')
     url = reverse(urlnames['detail'], args=[project_id])

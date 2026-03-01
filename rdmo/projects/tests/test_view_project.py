@@ -526,8 +526,9 @@ def test_project_update_tasks_get(db, client, settings, username, password, proj
             assert response.status_code == 302
 
 
-def test_project_update_tasks_get_not_allowed(db, client, settings, enable_project_tasks_sync):
-    assert settings.PROJECT_TASKS_SYNC
+def test_project_update_tasks_get_not_allowed(db, client, settings):
+    settings.PROJECT_TASKS_SYNC = True
+
     client.login(username='owner', password='owner')
 
     url = reverse('project_update_tasks', args=[project_id])
@@ -562,8 +563,9 @@ def test_project_update_tasks_post(db, client, settings, username, password, pro
         assert list(Project.objects.get(pk=project_id).tasks.values('id')) == list(project.tasks.values('id'))
 
 
-def test_project_update_tasks_post_not_allowed(db, client, settings, enable_project_tasks_sync):
-    assert settings.PROJECT_TASKS_SYNC
+def test_project_update_tasks_post_not_allowed(db, client, settings):
+    settings.PROJECT_TASKS_SYNC = True
+
     client.login(username='owner', password='owner')
 
     url = reverse('project_update_tasks', args=[project_id])
@@ -592,8 +594,9 @@ def test_project_update_views_get(db, client, settings, username, password, proj
             assert response.status_code == 302
 
 
-def test_project_update_views_get_not_allowed(db, client, settings, enable_project_views_sync):
-    assert settings.PROJECT_VIEWS_SYNC
+def test_project_update_views_get_not_allowed(db, client, settings):
+    settings.PROJECT_VIEWS_SYNC = True
+
     client.login(username='owner', password='owner')
 
     url = reverse('project_update_views', args=[project_id])
@@ -629,8 +632,9 @@ def test_project_update_views_post(db, client, settings, username, password, pro
         assert list(Project.objects.get(pk=project_id).views.values('id')) == list(project.views.values('id'))
 
 
-def test_project_update_views_post_not_allowed(db, client, settings, enable_project_views_sync):
-    assert settings.PROJECT_VIEWS_SYNC
+def test_project_update_views_post_not_allowed(db, client, settings):
+    settings.PROJECT_VIEWS_SYNC = True
+
     client.login(username='owner', password='owner')
 
     url = reverse('project_update_views', args=[project_id])
