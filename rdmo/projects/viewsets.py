@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Case, F, IntegerField, OuterRef, Q, Subquery, When
+from django.db.models import Case, F, IntegerField, OuterRef, Prefetch, Q, Subquery, When
 from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponseRedirect
 from django.template.loader import render_to_string
@@ -147,12 +147,17 @@ class ProjectViewSet(ModelViewSet):
         # projects for the current user regardless of their permissions, e.g. for admins
         filter_for_user = (self.action == 'user')
 
+        # create a query to prefetch the memberships incl. the socialaccounts
         membership_queryset = Membership.objects.select_related('user')
         if settings.SOCIALACCOUNT:
             membership_queryset = membership_queryset.prefetch_related('user__socialaccount_set')
 
         queryset = (
             Project.objects.filter_user(self.request.user, filter_for_user).distinct()
+                           .prefetch_related(
+                                'views',
+                                Prefetch('memberships', queryset=membership_queryset, to_attr='prefetched_memberships')
+                            )
                            .select_related('catalog', 'visibility')
         )
 
