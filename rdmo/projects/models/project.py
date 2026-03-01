@@ -103,35 +103,35 @@ class Project(MPTTModel, Model):
 
     @cached_property
     def member(self) -> list:
-        return self.user.all()
-
-    @cached_property
-    def owners_str(self) -> str:
-        return ', '.join(['' if x is None else str(x) for x in self.user.filter(membership__role='owner')])
+        return self.get_prefetched_members()
 
     @property
     def owners(self) -> list:
-        return self.user.filter(memberships__role='owner')
+        return self.get_prefetched_members('owner')
 
     @property
     def managers(self) -> list:
-        return self.user.filter(memberships__role='manager')
+        return self.get_prefetched_members('manager')
 
     @property
     def authors(self) -> list:
-        return self.user.filter(memberships__role='author')
+        return self.get_prefetched_members('author')
 
     @property
     def guests(self) -> list:
-        return self.user.filter(memberships__role='guest')
-
-    @cached_property
-    def groups_str(self) -> str:
-        return ', '.join(str(i) for i in self.groups if i is not None)
+        return self.get_prefetched_members('guest')
 
     @property
     def groups(self) -> list:
         return {group for user in self.owners for group in user.groups.all()}
+
+    @cached_property
+    def owners_str(self) -> str:
+        return ', '.join(['' if user is None else str(user) for user in self.owners])
+
+    @cached_property
+    def groups_str(self) -> str:
+        return ', '.join(str(i) for i in self.groups if i is not None)
 
     @property
     def file_size(self) -> int:
@@ -151,6 +151,18 @@ class Project(MPTTModel, Model):
         if not hasattr(self, '_cached_ancestors'):
             self._cached_ancestors = self.get_ancestors()
         return self._cached_ancestors
+
+    def get_prefetched_members(self, role=None):
+        try:
+            # prefetched_memberships is created by the Prefetch call in the viewset
+            return [
+                membership.user
+                for membership in self.prefetched_memberships
+                if role in [None, membership.role]
+            ]
+        except AttributeError:
+            # membership_list does not exist
+            return self.user.filter(memberships__role=role) if role is not None else self.user.all()
 
 
 @receiver(pre_delete, sender=Project)

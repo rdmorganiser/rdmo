@@ -130,6 +130,11 @@ class ProjectSerializer(serializers.ModelSerializer):
     parent = ParentField(required=False, allow_null=True)
     parent_title = serializers.CharField(source='parent.title', read_only=True)
 
+    owners = ProjectUserSerializer(many=True, read_only=True)
+    managers = ProjectUserSerializer(many=True, read_only=True)
+    authors = ProjectUserSerializer(many=True, read_only=True)
+    guests = ProjectUserSerializer(many=True, read_only=True)
+
     ancestors = serializers.SerializerMethodField()
     permissions = serializers.SerializerMethodField()
 
@@ -149,6 +154,10 @@ class ProjectSerializer(serializers.ModelSerializer):
             'catalog_uri',
             'parent',
             'parent_title',
+            'owners',
+            'managers',
+            'authors',
+            'guests',
             'created',
             'updated',
             'current_role',
